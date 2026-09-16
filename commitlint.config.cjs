@@ -24,6 +24,7 @@ module.exports = {
         'infra',
         'docs',
         'adr',
+        'skills',
         'ci',
         'deps',
       ],
