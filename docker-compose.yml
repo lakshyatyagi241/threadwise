@@ -1,0 +1,121 @@
+name: crm-platform
+
+services:
+  postgres:
+    # pgvector image so ai_embeddings works later without swapping the image
+    image: pgvector/pgvector:pg16
+    container_name: crm-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: crm
+      POSTGRES_DB: crm
+    command:
+      - postgres
+      - -c
+      - max_connections=200
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - work_mem=16MB
+      # every business query is tenant-scoped; keep the planner honest about jsonb
+      - -c
+      - default_statistics_target=200
+      - -c
+      - log_min_duration_statement=500
+    ports:
+      # Host ports are configurable because a dev machine often already runs
+      # another project's Postgres on 5432. Container-side ports never change.
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Creates the non-superuser login roles the app connects as. Superusers
+      # bypass RLS, so connecting as POSTGRES_USER would silently disable every
+      # isolation policy. Runs once, on first start of an empty volume.
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U crm -d crm']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Stand-in for the production read replica. Same image, separate database.
+  # Production wires DATABASE_REPLICA_URL to a real streaming replica — all
+  # partner/public read traffic goes here and never touches the primary.
+  postgres_replica:
+    image: pgvector/pgvector:pg16
+    container_name: crm-postgres-replica
+    restart: unless-stopped
+    profiles: ['replica']
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: crm
+      POSTGRES_DB: crm
+    ports:
+      - '${POSTGRES_REPLICA_PORT:-5433}:5432'
+    volumes:
+      - pgdata_replica:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: crm-redis
+    restart: unless-stopped
+    command: ['redis-server', '--appendonly', 'yes', '--maxmemory-policy', 'noeviction']
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    container_name: crm-minio
+    restart: unless-stopped
+    command: ['server', '/data', '--console-address', ':9001']
+    environment:
+      MINIO_ROOT_USER: crmminio
+      MINIO_ROOT_PASSWORD: crmminio123
+    ports:
+      - '${MINIO_PORT:-9000}:9000'
+      - '${MINIO_CONSOLE_PORT:-9001}:9001'
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  minio_init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      until (mc alias set local http://minio:9000 crmminio crmminio123) do sleep 2; done;
+      mc mb --ignore-existing local/crm-media;
+      mc mb --ignore-existing local/crm-documents;
+      mc mb --ignore-existing local/crm-exports;
+      exit 0;
+      "
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: crm-mailpit
+    restart: unless-stopped
+    ports:
+      - '${MAILPIT_SMTP_PORT:-1025}:1025' # SMTP
+      - '${MAILPIT_UI_PORT:-8025}:8025' # web UI
+    environment:
+      MP_MAX_MESSAGES: 500
+
+volumes:
+  pgdata:
+  pgdata_replica:
+  redisdata:
+  miniodata:

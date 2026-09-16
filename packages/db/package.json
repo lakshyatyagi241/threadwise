@@ -1,0 +1,42 @@
+{
+  "name": "@crm/db",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Drizzle schema, hand-written SQL migrations, migration runner, seeds",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "default": "./dist/schema/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "migrate": "tsx src/cli/migrate.ts up",
+    "status": "tsx src/cli/migrate.ts status",
+    "new": "tsx src/cli/migrate.ts new",
+    "seed": "tsx src/cli/seed.ts",
+    "reset": "tsx src/cli/migrate.ts reset && tsx src/cli/seed.ts",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38.4",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@node-rs/argon2": "^2.0.2",
+    "@types/node": "^22.10.6",
+    "@types/pg": "^8.11.10",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

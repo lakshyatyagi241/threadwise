@@ -1,0 +1,31 @@
+node_modules/
+dist/
+build/
+coverage/
+.next/
+out/
+.turbo/
+
+.env
+.env.*
+!.env.example
+
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# local infra volumes
+.docker-data/
+
+# generated api client / spec
+apps/api/openapi.json
+packages/contracts/generated/
+
+# legacy migration dumps — never commit customer data
+tools/migration/dumps/
+tools/migration/out/
