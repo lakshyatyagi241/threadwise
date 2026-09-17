@@ -18,6 +18,7 @@ import { KernelModule } from './kernel/kernel.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
+import { AdminModule } from './modules/admin';
 import { CrmModule } from './modules/crm';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
@@ -95,6 +96,7 @@ import { HealthModule } from './health/health.module';
     HealthModule,
 
     // Apps
+    AdminModule,
     CrmModule,
     PartnerModule,
     PublicApiModule,

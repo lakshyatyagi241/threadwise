@@ -15,3 +15,5 @@ export * from './common/enums';
 export * from './crm/contact';
 export * from './partner/partner-agent';
 export * from './public/lead-read';
+export * from './admin/user';
+export * from './admin/role';

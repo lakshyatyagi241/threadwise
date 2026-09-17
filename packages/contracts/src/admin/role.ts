@@ -1,0 +1,51 @@
+import { z } from 'zod';
+import { uuidSchema } from '../common/ids';
+import { recordScopeSchema } from '../common/enums';
+
+/**
+ * Roles & Permissions — Settings > Users & Permissions.
+ *
+ * A role is a name plus a set of grants. Grant merge semantics (deny beats
+ * allow, widest scope wins) live server-side in RbacService; this is just the
+ * wire shape for defining them.
+ */
+export const permissionDefResponseSchema = z.object({
+  key: z.string(),
+  label: z.string(),
+  category: z.string(),
+  supportsScope: z.boolean(),
+});
+export type PermissionDefResponse = z.infer<typeof permissionDefResponseSchema>;
+
+export const roleGrantSchema = z.object({
+  permissionKey: z.string(),
+  effect: z.enum(['allow', 'deny']),
+  recordScope: recordScopeSchema,
+});
+export type RoleGrant = z.infer<typeof roleGrantSchema>;
+
+export const roleResponseSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  systemKey: z.string().nullable(),
+  isLocked: z.boolean(),
+  grants: z.array(roleGrantSchema),
+  rowVersion: z.number().int(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+export type RoleResponse = z.infer<typeof roleResponseSchema>;
+
+export const createRoleSchema = z.object({
+  name: z.string().min(1).max(120),
+  grants: z.array(roleGrantSchema).default([]),
+});
+export type CreateRoleInput = z.infer<typeof createRoleSchema>;
+
+export const updateRoleSchema = z.object({
+  name: z.string().min(1).max(120).optional(),
+  /** Full replacement of the role's grant set, when present. */
+  grants: z.array(roleGrantSchema).optional(),
+  rowVersion: z.number().int().positive(),
+});
+export type UpdateRoleInput = z.infer<typeof updateRoleSchema>;
