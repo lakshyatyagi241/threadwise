@@ -27,10 +27,10 @@ argument with two systems disagreeing.
 ## API surface
 
 ```
-POST /v1/auth/partner/login     { orgSlug, email, password } -> tokens
-POST /v1/partner/leads          submit a lead
-GET  /v1/partner/leads          this agent's leads (cursor paginated)
-GET  /v1/partner/leads/:id      live view of one lead
+POST /v2/auth/partner/login     { orgSlug, email, password } -> tokens
+POST /v2/partner/leads          submit a lead
+GET  /v2/partner/leads          this agent's leads (cursor paginated)
+GET  /v2/partner/leads/:id      live view of one lead
 ```
 
 Every read is served from the database read replica, so agent polling never

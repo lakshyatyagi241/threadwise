@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { ClerkService } from './clerk.service';
 import { TokenService } from './token.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
@@ -19,7 +20,7 @@ import { PermissionsGuard } from './guards/permissions.guard';
 @Module({
   imports: [JwtModule.register({})],
   controllers: [AuthController],
-  providers: [AuthService, TokenService, JwtAuthGuard, PermissionsGuard],
-  exports: [AuthService, TokenService, JwtAuthGuard, PermissionsGuard],
+  providers: [AuthService, TokenService, ClerkService, JwtAuthGuard, PermissionsGuard],
+  exports: [AuthService, TokenService, ClerkService, JwtAuthGuard, PermissionsGuard],
 })
 export class AuthModule {}

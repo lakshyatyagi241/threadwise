@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { schema } from '@crm/db';
 import type { PermissionDefResponse } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../../common/decorators';
@@ -10,8 +10,10 @@ import { DatabaseService } from '../../../infra/db/database.service';
  * this to render "what can a role be granted", not to enforce anything itself.
  */
 @ApiTags('permissions')
+// Phase 2 (docs/phase-plan.md) — same exclusion reason as users.controller.ts.
+@ApiExcludeController()
 @ActorKinds('user')
-@Controller({ path: 'permissions', version: '1' })
+@Controller({ path: 'permissions', version: '2' })
 export class PermissionsController {
   constructor(private readonly db: DatabaseService) {}
 

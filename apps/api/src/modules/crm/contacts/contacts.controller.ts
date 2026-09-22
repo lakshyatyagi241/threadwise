@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createContactSchema,
   listContactsQuerySchema,
@@ -39,8 +39,13 @@ import { ContactsService } from './contacts.service';
  * parameter, not a special code path.
  */
 @ApiTags('contacts')
+// Phase 11 (docs/phase-plan.md) is only 5/51 routes done — stays out of
+// /docs until every route in that phase's exit criteria is built and has a
+// docs/api-testing.md entry. Routes work fine via Postman/curl in the
+// meantime; this only hides them from the generated Swagger UI.
+@ApiExcludeController()
 @ActorKinds('user')
-@Controller({ path: 'contacts', version: '1' })
+@Controller({ path: 'contacts', version: '2' })
 export class ContactsController {
   constructor(private readonly contacts: ContactsService) {}
 

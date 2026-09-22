@@ -19,7 +19,7 @@ async function bootstrap(): Promise<void> {
   const config = app.get(ConfigService<Env, true>);
   const logger = new Logger('bootstrap');
 
-  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
+  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '2' });
   app.enableShutdownHooks();
 
   const origins = config.get('CORS_ORIGINS', { infer: true });
@@ -46,10 +46,11 @@ async function bootstrap(): Promise<void> {
         .setVersion('0.1.0')
         .addBearerAuth()
         .addTag('auth')
-        .addTag('users')
-        .addTag('roles')
-        .addTag('permissions')
-        .addTag('contacts')
+        // 'users' / 'roles' / 'permissions' / 'contacts' stay off this list —
+        // per docs/phase-plan.md, a page's tag is added only once every route
+        // in its docs/api-inventory.md row is built and has a
+        // docs/api-testing.md entry. Their controllers carry
+        // @ApiExcludeController() until then.
         .addTag('partner-portal')
         .addTag('public-api')
         .addTag('health')

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createUserSchema,
   listUsersQuerySchema,
@@ -13,8 +13,12 @@ import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
+// Phase 2 (docs/phase-plan.md) is missing hard-delete-user and the
+// permission-tree shape — stays out of /docs until that phase's exit
+// criteria are fully met. See contacts.controller.ts for the same pattern.
+@ApiExcludeController()
 @ActorKinds('user')
-@Controller({ path: 'users', version: '1' })
+@Controller({ path: 'users', version: '2' })
 export class UsersController {
   constructor(private readonly users: UsersService) {}
 

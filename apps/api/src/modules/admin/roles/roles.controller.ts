@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createRoleSchema,
   paginationQuerySchema,
@@ -25,8 +25,10 @@ import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { RolesService } from './roles.service';
 
 @ApiTags('roles')
+// Phase 2 (docs/phase-plan.md) — same exclusion reason as users.controller.ts.
+@ApiExcludeController()
 @ActorKinds('user')
-@Controller({ path: 'roles', version: '1' })
+@Controller({ path: 'roles', version: '2' })
 export class RolesController {
   constructor(private readonly roles: RolesService) {}
 
