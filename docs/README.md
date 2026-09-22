@@ -61,6 +61,18 @@ Format: [MADR](https://adr.github.io/madr/). Template:
 [db/README.md](db/README.md) — the ERD, and where the implementation currently
 differs from it.
 
+## API inventory
+
+[api-inventory.md](api-inventory.md) — every frontend page, the API groups it
+needs, individual API names, and the actual `/v1/...` route once built. Update
+it as each phase lands.
+
+## API testing guide
+
+[api-testing.md](api-testing.md) — Postman steps, sample request, and real
+captured response for every endpoint currently live. Add a section here when
+a new endpoint ships.
+
 ## Writing an ADR
 
 Write one when a decision would be expensive to reverse, or when the next

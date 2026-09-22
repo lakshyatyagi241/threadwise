@@ -2,7 +2,7 @@
   "name": "@crm/api",
   "version": "0.1.0",
   "private": true,
-  "description": "CRM platform API \u2014 HTTP, WebSocket and BullMQ worker in one deployable",
+  "description": "CRM platform API — HTTP, WebSocket and BullMQ worker in one deployable",
   "main": "dist/src/main.js",
   "scripts": {
     "dev": "nest start --watch -b swc",
@@ -21,6 +21,7 @@
     "arch": "depcruise --config .dependency-cruiser.cjs src"
   },
   "dependencies": {
+    "@clerk/backend": "^3.18.1",
     "@crm/contracts": "workspace:*",
     "@crm/db": "workspace:*",
     "@nestjs/bullmq": "^11.0.1",
@@ -59,6 +60,7 @@
     "@types/pg": "^8.11.10",
     "@types/supertest": "^6.0.2",
     "@vitest/coverage-v8": "^2.1.8",
+    "dependency-cruiser": "^16.9.0",
     "dotenv": "^16.4.7",
     "pino-pretty": "^13.0.0",
     "supertest": "^7.0.0",
@@ -66,7 +68,6 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "unplugin-swc": "^1.5.1",
-    "vitest": "^2.1.8",
-    "dependency-cruiser": "^16.9.0"
+    "vitest": "^2.1.8"
   }
 }

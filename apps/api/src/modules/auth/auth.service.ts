@@ -3,6 +3,7 @@ import { verify } from '@node-rs/argon2';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AppError } from '../../common/errors/app-error';
+import { ClerkService } from './clerk.service';
 import { TokenService, type TokenPair } from './token.service';
 
 interface LoginRow {
@@ -27,6 +28,7 @@ export class AuthService {
   constructor(
     private readonly db: DatabaseService,
     private readonly tokens: TokenService,
+    private readonly clerk: ClerkService,
   ) {}
 
   async loginStaff(orgSlug: string, email: string, password: string): Promise<TokenPair> {
@@ -69,6 +71,53 @@ export class AuthService {
 
     this.logger.log({ orgId, agentId: row!.id }, 'partner agent login');
     return this.tokens.issue({ sub: row!.id, org: orgId, typ: 'partner_agent', uid: row!.uuid });
+  }
+
+  /**
+   * Staff login via Clerk. Clerk already verified the password/Google
+   * credential — `clerkToken` is the session token from that, not a
+   * password. This resolves it to a local `users` row (linking by
+   * auth_subject, falling back to email, auto-provisioning if neither
+   * matches) and issues our own token pair exactly like loginStaff.
+   */
+  async loginViaClerk(orgSlug: string, clerkToken: string): Promise<TokenPair> {
+    const identity = await this.clerk.verifySession(clerkToken);
+    const orgId = await this.resolveOrgId(orgSlug);
+
+    const row = await this.db.txAs({ orgId }, async (tx) => {
+      const byAuthSubject = await tx.execute(sql`
+        SELECT id, uuid FROM users
+        WHERE org_id = ${orgId} AND auth_subject = ${identity.clerkUserId}
+      `);
+      if (byAuthSubject.rows[0]) return byAuthSubject.rows[0] as { id: number; uuid: string };
+
+      // Pre-existing row (created by an admin, or from before Clerk) that
+      // matches on email — link it to this Clerk identity rather than
+      // forking a second account for the same person.
+      const byEmail = await tx.execute(sql`
+        UPDATE users SET auth_subject = ${identity.clerkUserId}
+        WHERE org_id = ${orgId} AND email = ${identity.email} AND auth_subject IS NULL
+        RETURNING id, uuid
+      `);
+      if (byEmail.rows[0]) return byEmail.rows[0] as { id: number; uuid: string };
+
+      const created = await tx.execute(sql`
+        INSERT INTO users (org_id, email, full_name, auth_subject)
+        VALUES (${orgId}, ${identity.email}, ${identity.fullName}, ${identity.clerkUserId})
+        ON CONFLICT (org_id, email) DO UPDATE SET auth_subject = EXCLUDED.auth_subject
+        RETURNING id, uuid
+      `);
+      return created.rows[0] as { id: number; uuid: string };
+    });
+
+    if (!row) {
+      // Should be unreachable — insert always returns a row — but a thrown
+      // AppError beats a null-deref three lines down.
+      throw AppError.unauthenticated('Could not resolve Clerk identity to a user');
+    }
+
+    this.logger.log({ orgId, userId: row.id, clerkUserId: identity.clerkUserId }, 'clerk login');
+    return this.tokens.issue({ sub: row.id, org: orgId, typ: 'user', uid: row.uuid });
   }
 
   async refresh(refreshToken: string): Promise<TokenPair> {

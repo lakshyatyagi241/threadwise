@@ -21,7 +21,7 @@ const listQuerySchema = z.object({
  */
 @ApiTags('partner-portal')
 @ActorKinds('partner_agent')
-@Controller({ path: 'partner', version: '1' })
+@Controller({ path: 'partner', version: '2' })
 export class PartnerController {
   constructor(private readonly partner: PartnerService) {}
 
