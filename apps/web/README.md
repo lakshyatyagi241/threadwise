@@ -35,7 +35,7 @@ production.
 ```ts
 import { contactResponseSchema, type ContactResponse } from '@crm/contracts';
 
-const res = await fetch(`${API_URL}/v1/contacts`, {
+const res = await fetch(`${API_URL}/v2/contacts`, {
   headers: { Authorization: `Bearer ${accessToken}` },
 });
 // Parse at the boundary — the server is a different deployable and can be

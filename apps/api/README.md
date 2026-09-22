@@ -76,7 +76,7 @@ because otherwise every other assertion in it would be vacuous.
 
 - `rawBody: true` is enabled in `main.ts`. Webhook and public-API signatures are
   computed over the bytes as sent; re-serialised JSON has a different digest.
-- Health is version-neutral: `/health` and `/ready`, not `/v1/health`. An
+- Health is version-neutral: `/health` and `/ready`, not `/v2/health`. An
   orchestrator probe should not need updating when the API moves to v2.
 - `/public/v1` is also version-neutral, so global URI versioning does not
-  prefix it into `/v1/public/v1`.
+  prefix it into `/v2/public/v1`.

@@ -52,6 +52,15 @@ export const envSchema = z.object({
   JWT_REFRESH_TTL: z.string().default('30d'),
 
   /**
+   * Clerk verifies the credential (password, Google) client-side and hands
+   * the frontend a Clerk session token. This backend never sees a password —
+   * it verifies that token server-side with this key, then issues its own
+   * short-lived JWT pair as usual so every existing guard/service is
+   * unchanged. See modules/auth/clerk.service.ts.
+   */
+  CLERK_SECRET_KEY: z.string().min(1),
+
+  /**
    * AES-256-GCM key for reversible secrets (channel tokens, API-key HMAC
    * secrets, gateway credentials). 32 bytes, base64: openssl rand -base64 32
    */

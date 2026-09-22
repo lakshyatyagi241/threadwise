@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import {
   bigint,
   boolean,
@@ -56,6 +57,9 @@ export const users = pgTable(
     uniqueIndex('users_org_id_uuid_key').on(t.orgId, t.uuid),
     uniqueIndex('users_org_id_email_key').on(t.orgId, t.email),
     index('idx_users_org_status').on(t.orgId, t.status),
+    uniqueIndex('users_org_id_auth_subject_key')
+      .on(t.orgId, t.authSubject)
+      .where(sql`${t.authSubject} IS NOT NULL`),
   ],
 );
 

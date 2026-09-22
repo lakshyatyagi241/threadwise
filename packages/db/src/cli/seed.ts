@@ -27,8 +27,8 @@ interface SeedOrg {
 }
 
 const ORGS: SeedOrg[] = [
-  { slug: 'studyfromuae', name: 'Study From UAE', adminEmail: 'admin@studyfromuae.test' },
-  { slug: 'othertenant', name: 'Other Tenant (isolation fixture)', adminEmail: 'admin@other.test' },
+  { slug: 'Admin', name: 'Admin', adminEmail: 'nachiket.challawar@geta.ai' },
+  { slug: 'test_tenent', name: 'test_tenent', adminEmail: 'nachiket.challawar+ten@geta.ai' },
 ];
 
 async function main(): Promise<void> {
@@ -109,12 +109,15 @@ async function main(): Promise<void> {
       );
 
       // --- users -----------------------------------------------------------
+      // No password_hash: staff sign in via Clerk now (see AuthService.loginViaClerk).
+      // auth_subject starts null and gets linked on that user's first Clerk login —
+      // matched by (org_id, email), same row, same role, no re-provisioning.
       const { rows: userRows } = await client.query<{ id: number }>(
-        `INSERT INTO users (org_id, email, full_name, password_hash)
-         VALUES ($1, $2, 'Demo Admin', $3)
-         ON CONFLICT (org_id, email) DO UPDATE SET password_hash = EXCLUDED.password_hash
+        `INSERT INTO users (org_id, email, full_name)
+         VALUES ($1, $2, 'Demo Admin')
+         ON CONFLICT (org_id, email) DO UPDATE SET full_name = EXCLUDED.full_name
          RETURNING id`,
-        [orgId, org.adminEmail, passwordHash],
+        [orgId, org.adminEmail],
       );
       const adminUserId = userRows[0]!.id;
 
@@ -182,9 +185,12 @@ async function main(): Promise<void> {
 
     await client.query('COMMIT');
     console.log(
-      `\ndone. Staff login: ${ORGS[0]!.adminEmail} / ${DEMO_PASSWORD} (org: ${ORGS[0]!.slug})`,
+      `\ndone. Staff login (Clerk): sign in as ${ORGS[0]!.adminEmail} (org: ${ORGS[0]!.slug}) — ` +
+        'first login links this seeded row automatically, no password set.',
     );
-    console.log(`     Agent login: agent@${ORGS[0]!.slug}.test / ${DEMO_PASSWORD}`);
+    console.log(
+      `     Agent login (password, unchanged): agent@${ORGS[0]!.slug}.test / ${DEMO_PASSWORD}`,
+    );
   } catch (err) {
     await client.query('ROLLBACK').catch(() => undefined);
     throw err;
