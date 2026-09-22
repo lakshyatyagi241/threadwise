@@ -11,7 +11,7 @@ A multi-tenant, metadata-driven CRM platform: a **kernel** plus five **apps**
                     │  apps/web   │  │apps/partner │
                     │ staff CRM   │  │ sub-agents  │
                     └──────┬──────┘  └──────┬──────┘
-                           │ /v1            │ /v1/partner
+                           │ /v2            │ /v2/partner
                            ▼                ▼
    external ──ApiKey──> ┌──────────────────────────────┐
    systems  +HMAC       │          apps/api            │

@@ -33,15 +33,15 @@ Status legend: ✅ built · ⬜ not built · 🔶 partially built (see note)
 
 | API Group      | API Name                                             | Route              | Status                                                         |
 | -------------- | ---------------------------------------------------- | ------------------ | -------------------------------------------------------------- |
-| Verify Account | Verify Account (user, permissions, roles, workspace) | `GET /v1/users/me` | 🔶 returns user + roles; not yet permissions/workspace payload |
+| Verify Account | Verify Account (user, permissions, roles, workspace) | `GET /v2/users/me` | 🔶 returns user + roles; not yet permissions/workspace payload |
 
 ## Login
 
 | API Group | API Name            | Route                         | Status |
 | --------- | ------------------- | ----------------------------- | ------ |
-| Login     | Staff Login         | `POST /v1/auth/staff/login`   | ✅     |
-| Login     | Partner/Agent Login | `POST /v1/auth/partner/login` | ✅     |
-| Login     | Refresh Token       | `POST /v1/auth/refresh`       | ✅     |
+| Login     | Staff Login         | `POST /v2/auth/staff/login`   | ✅     |
+| Login     | Partner/Agent Login | `POST /v2/auth/partner/login` | ✅     |
+| Login     | Refresh Token       | `POST /v2/auth/refresh`       | ✅     |
 
 ## Dashboard
 
@@ -74,26 +74,26 @@ Blocked on frontend — UI + API integration pending. No API list provided yet.
 
 | API Group   | API Name                                                       | Route                                | Status                                                               |
 | ----------- | -------------------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| Users       | Get Single User                                                | `GET /v1/users/:id`                  | ✅                                                                   |
-| Users       | List Users (pagination + search)                               | `GET /v1/users`                      | ✅                                                                   |
-| Users       | Create User                                                    | `POST /v1/users`                     | ✅                                                                   |
-| Users       | Update User                                                    | `PATCH /v1/users/:id`                | ✅                                                                   |
+| Users       | Get Single User                                                | `GET /v2/users/:id`                  | ✅                                                                   |
+| Users       | List Users (pagination + search)                               | `GET /v2/users`                      | ✅                                                                   |
+| Users       | Create User                                                    | `POST /v2/users`                     | ✅                                                                   |
+| Users       | Update User                                                    | `PATCH /v2/users/:id`                | ✅                                                                   |
 | Users       | Delete User                                                    | —                                    | ⬜ (deactivate via `status` on PATCH exists; hard delete not built)  |
-| Roles       | List Roles                                                     | `GET /v1/roles`                      | ✅                                                                   |
-| Roles       | Create Role                                                    | `POST /v1/roles`                     | ✅                                                                   |
-| Roles       | Update Role Label                                              | `PATCH /v1/roles/:id`                | ✅                                                                   |
-| Roles       | Delete Role                                                    | `DELETE /v1/roles/:id`               | ✅                                                                   |
-| Roles       | Assignable Roles Dropdown                                      | `GET /v1/roles` (reuse)              | 🔶 no lightweight dropdown variant yet                               |
-| Permissions | Access-Level Options (dynamic vs hardcoded — decision pending) | `GET /v1/permissions`                | 🔶 flat list built; scope-option decision not made                   |
+| Roles       | List Roles                                                     | `GET /v2/roles`                      | ✅                                                                   |
+| Roles       | Create Role                                                    | `POST /v2/roles`                     | ✅                                                                   |
+| Roles       | Update Role Label                                              | `PATCH /v2/roles/:id`                | ✅                                                                   |
+| Roles       | Delete Role                                                    | `DELETE /v2/roles/:id`               | ✅                                                                   |
+| Roles       | Assignable Roles Dropdown                                      | `GET /v2/roles` (reuse)              | 🔶 no lightweight dropdown variant yet                               |
+| Permissions | Access-Level Options (dynamic vs hardcoded — decision pending) | `GET /v2/permissions`                | 🔶 flat list built; scope-option decision not made                   |
 | Permissions | Get Blank Permission Template                                  | —                                    | ⬜                                                                   |
 | Permissions | Get Role Permission Tree                                       | —                                    | ⬜ (current model is flat grants array, not a tree — needs decision) |
-| Permissions | Save Role Permission Tree                                      | `PATCH /v1/roles/:id` (grants array) | 🔶 flat grants save works; tree shape not built                      |
+| Permissions | Save Role Permission Tree                                      | `PATCH /v2/roles/:id` (grants array) | 🔶 flat grants save works; tree shape not built                      |
 
 ## Contacts
 
 | API Group            | API Name                                   | Route              | Status                                                     |
 | -------------------- | ------------------------------------------ | ------------------ | ---------------------------------------------------------- |
-| List/View/Bulk       | getContactsList                            | `GET /v1/contacts` | 🔶 basic list built; not grid/module-record variants below |
+| List/View/Bulk       | getContactsList                            | `GET /v2/contacts` | 🔶 basic list built; not grid/module-record variants below |
 | List/View/Bulk       | getContactsListDataAsPerModuleRecord       | —                  | ⬜                                                         |
 | List/View/Bulk       | getContactsSelectData                      | —                  | ⬜                                                         |
 | List/View/Bulk       | getContactGridView                         | —                  | ⬜                                                         |
@@ -146,7 +146,7 @@ Blocked on frontend — UI + API integration pending. No API list provided yet.
 | Dropdown helper      | getAllVisibleContactPropertiesFieldOptions | —                  | ⬜                                                         |
 
 Create/Update/Get-by-id/Delete for a single contact already exist as
-`POST/GET/PATCH/DELETE /v1/contacts[/:id]` (Phase 1 reference slice) — the 51
+`POST/GET/PATCH/DELETE /v2/contacts[/:id]` (Phase 1 reference slice) — the 51
 items above are the list/bulk/view/task/misc layer on top, none of which are
 built yet.
 
@@ -797,7 +797,7 @@ endpoints once broken out.
 | Settings (remaining)      | 92                                    | 0                            |
 | **Total**                 | **~582** (+ Dashboard/Automation TBD) | **~14**                      |
 
-Base contact CRUD (`GET/POST/PATCH/DELETE /v1/contacts[/:id]`) is built as the
+Base contact CRUD (`GET/POST/PATCH/DELETE /v2/contacts[/:id]`) is built as the
 reference slice per [contacts.controller.ts](../apps/api/src/modules/crm/contacts/contacts.controller.ts)
 — counted once above, not against each of the 51 Contacts-page line items,
 since those are a different (list/bulk/view) layer on top of it.

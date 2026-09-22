@@ -88,10 +88,10 @@ duplicate.
 ## API
 
 ```
-POST /v1/auth/partner/login   { orgSlug, email, password } -> tokens
-POST /v1/partner/leads        submit (Idempotency-Key honoured)
-GET  /v1/partner/leads        own leads, cursor paginated
-GET  /v1/partner/leads/:id    live view of one lead
+POST /v2/auth/partner/login   { orgSlug, email, password } -> tokens
+POST /v2/partner/leads        submit (Idempotency-Key honoured)
+GET  /v2/partner/leads        own leads, cursor paginated
+GET  /v2/partner/leads/:id    live view of one lead
 ```
 
 Response fields are exactly what was agreed: name, email, mobile, lifecycle

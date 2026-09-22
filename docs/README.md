@@ -61,10 +61,17 @@ Format: [MADR](https://adr.github.io/madr/). Template:
 [db/README.md](db/README.md) — the ERD, and where the implementation currently
 differs from it.
 
+## Phase plan
+
+[phase-plan.md](phase-plan.md) — build order, one phase per frontend page,
+dependency-ordered and audited. Read this before starting a new phase; it
+also defines the Swagger-gating rule (a page's routes stay out of `/docs`
+until its phase is fully done).
+
 ## API inventory
 
 [api-inventory.md](api-inventory.md) — every frontend page, the API groups it
-needs, individual API names, and the actual `/v1/...` route once built. Update
+needs, individual API names, and the actual `/v2/...` route once built. Update
 it as each phase lands.
 
 ## API testing guide
