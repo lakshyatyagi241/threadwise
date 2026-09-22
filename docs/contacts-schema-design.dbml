@@ -1,0 +1,200 @@
+// Contacts backend schema design — for review in drawDB
+// Existing tables (contacts, companies, contact_identities, organizations,
+// users) shown greyed for context; new tables in color.
+// org_id present on every tenant table (RLS key) but omitted from most
+// relationship labels below for readability — every FK is really (org_id, id).
+
+Table organizations {
+  id bigint [pk]
+  uuid uuid
+  name text
+  Note: "existing"
+}
+
+Table users {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  full_name text
+  email citext
+  Note: "existing"
+}
+
+Table companies {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text
+  data jsonb
+  Note: "existing"
+}
+
+Table contacts {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text
+  email citext
+  phone text
+  company_id bigint
+  owner_id bigint
+  lifecycle_stage text
+  status text
+  data jsonb [note: "Tier-2 custom fields, keyed by fields.key"]
+  lead_score integer [note: "NEW"]
+  whatsapp_opt_in boolean [note: "NEW"]
+  email_opt_in boolean [note: "NEW"]
+  sms_opt_in boolean [note: "NEW"]
+  row_version integer
+  created_at timestamptz
+  Note: "existing + 4 new columns"
+}
+
+Table contact_identities {
+  org_id bigint
+  id bigint [pk]
+  contact_id bigint
+  kind text [note: "phone | email | whatsapp | web_visitor"]
+  value text
+  is_primary boolean
+  Note: "existing — auto-merge backbone"
+}
+
+// ---------------------------------------------------------------------
+// NEW: Tier-2 custom-field registry (kernel-owned, reused later by
+// Company Properties via the same module_key column)
+// ---------------------------------------------------------------------
+
+Table field_sections {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  module_key text [note: "'contacts', later 'companies'"]
+  name text [note: "e.g. Contact Information, Pre Book"]
+  position integer
+  is_active boolean
+}
+
+Table fields {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  module_key text
+  section_id bigint
+  key text [note: "storage key inside contacts.data"]
+  label text
+  field_type text [note: "text|number|boolean|date|datetime|select|multiselect|email|phone|url"]
+  is_required boolean
+  is_hidden boolean
+  is_active boolean [note: "soft-delete"]
+  position integer
+  config jsonb [note: "placeholder, min/max, regex — never options"]
+  replaces_field_id bigint [note: "self-FK: type-change versioning"]
+}
+
+Table field_options {
+  org_id bigint
+  id bigint [pk]
+  field_id bigint
+  value text
+  label text
+  position integer
+  is_hidden boolean
+  parent_option_id bigint [note: "self-FK: e.g. State depends on Country"]
+}
+
+Table field_dependencies {
+  org_id bigint
+  id bigint [pk]
+  field_id bigint [note: "the dependent field"]
+  depends_on_field_id bigint
+  depends_on_option_id bigint
+  depends_on_value text
+}
+
+Table status_options {
+  org_id bigint
+  id bigint [pk]
+  module_key text
+  option_group text [note: "'lifecycle_stage' | 'marketing_status'"]
+  value text
+  label text
+  color text
+  position integer
+  is_default boolean
+  is_active boolean
+}
+
+// ---------------------------------------------------------------------
+// NEW: Contacts list/bulk/view surface
+// ---------------------------------------------------------------------
+
+Table tags {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name citext [note: "case-insensitive, unique per org"]
+  color text
+}
+
+Table contact_tags {
+  org_id bigint
+  contact_id bigint
+  tag_id bigint
+  created_by bigint
+  created_at timestamptz
+  Note: "composite PK (org_id, contact_id, tag_id) — pure membership, no row_version"
+}
+
+Table contact_notes {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  body text
+  created_by bigint
+  updated_by bigint
+  row_version integer
+}
+
+Table contact_views {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text [note: "'All Contacts', 'My Contacts', custom..."]
+  filter jsonb [note: "AND/OR condition tree"]
+  position integer
+  is_shared boolean [note: "false = personal, true = org-wide"]
+  created_by bigint
+}
+
+Table contact_view_favorites {
+  org_id bigint
+  view_id bigint
+  user_id bigint
+  created_at timestamptz
+  Note: "composite PK (org_id, view_id, user_id) — favoriting is per-viewer"
+}
+
+// ---------------------------------------------------------------------
+// Relationships
+// ---------------------------------------------------------------------
+
+Ref: contacts.company_id > companies.id
+Ref: contacts.owner_id > users.id
+Ref: contact_identities.contact_id > contacts.id
+
+Ref: fields.section_id > field_sections.id
+Ref: fields.replaces_field_id > fields.id
+Ref: field_options.field_id > fields.id
+Ref: field_options.parent_option_id > field_options.id
+Ref: field_dependencies.field_id > fields.id
+Ref: field_dependencies.depends_on_field_id > fields.id
+Ref: field_dependencies.depends_on_option_id > field_options.id
+
+Ref: contact_tags.contact_id > contacts.id
+Ref: contact_tags.tag_id > tags.id
+Ref: contact_notes.contact_id > contacts.id
+Ref: contact_views.created_by > users.id
+Ref: contact_view_favorites.view_id > contact_views.id
+Ref: contact_view_favorites.user_id > users.id
