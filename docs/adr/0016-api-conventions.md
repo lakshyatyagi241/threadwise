@@ -24,7 +24,7 @@ and removes a whole class of exposure.
 ### 2. Cursor pagination everywhere
 
 ```
-GET /v1/contacts?limit=50&cursor=eyJ...
+GET /v2/contacts?limit=50&cursor=eyJ...
 → { "data": [...], "page": { "nextCursor": "...", "hasMore": true, "limit": 50 } }
 ```
 
@@ -46,7 +46,7 @@ under the reader.
   "title": "Conflict",
   "status": 409,
   "detail": "Wallet balance is insufficient for this campaign.",
-  "instance": "/v1/campaigns/abc/start",
+  "instance": "/v2/campaigns/abc/start",
   "code": "WALLET_INSUFFICIENT_FUNDS",
   "requestId": "3f2a...",
   "errors": [{ "path": "email", "message": "..." }]

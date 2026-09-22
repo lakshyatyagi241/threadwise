@@ -11,7 +11,7 @@ server and client is the recurring cost.
 
 ## Decision
 
-REST with URI versioning (`/v1/...`), documented by `@nestjs/swagger`.
+REST with URI versioning (`/v2/...`), documented by `@nestjs/swagger`.
 
 Request and response shapes live in `@crm/contracts` as Zod schemas, with
 TypeScript types inferred from them. The API validates with those exact schemas

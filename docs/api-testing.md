@@ -32,10 +32,10 @@ nothing to test for a route that doesn't exist yet.
 
 ## Auth
 
-### POST /v1/auth/staff/login
+### POST /v2/auth/staff/login
 
 - **Auth**: none (`@Public()`)
-- **Postman**: Method `POST`, URL `{{baseUrl}}/v1/auth/staff/login`, Body → raw → JSON
+- **Postman**: Method `POST`, URL `{{baseUrl}}/v2/auth/staff/login`, Body → raw → JSON
 
 Request:
 
@@ -70,12 +70,12 @@ was wrong):
 }
 ```
 
-### POST /v1/auth/partner/login
+### POST /v2/auth/partner/login
 
 Same shape as staff login, different pool (`partner_agents` table — sub-agent
 portal, not staff).
 
-- **Postman**: `POST {{baseUrl}}/v1/auth/partner/login`
+- **Postman**: `POST {{baseUrl}}/v2/auth/partner/login`
 
 Request:
 
@@ -88,13 +88,13 @@ Request:
 ```
 
 Response — `200 OK`: same `{ accessToken, refreshToken, expiresIn }` shape as
-staff login. Use this token only against `/v1/partner/*` routes — it carries
+staff login. Use this token only against `/v2/partner/*` routes — it carries
 `typ: "partner_agent"`, not `"user"`, so staff routes reject it.
 
-### POST /v1/auth/refresh
+### POST /v2/auth/refresh
 
 - **Auth**: none — the refresh token itself is the credential
-- **Postman**: `POST {{baseUrl}}/v1/auth/refresh`
+- **Postman**: `POST {{baseUrl}}/v2/auth/refresh`
 
 Request:
 
@@ -121,12 +121,12 @@ Response — `201 Created` (Nest's default POST status; body is a fresh pair):
 Run **Login** first so `{{accessToken}}` is set. All routes below need
 `Authorization: Bearer {{accessToken}}` (inherited from collection auth).
 
-### GET /v1/users/me
+### GET /v2/users/me
 
 No permission needed beyond being logged in — always returns the caller's own
 profile.
 
-- **Postman**: `GET {{baseUrl}}/v1/users/me`, no body
+- **Postman**: `GET {{baseUrl}}/v2/users/me`, no body
 
 Response — `200 OK`:
 
@@ -143,10 +143,10 @@ Response — `200 OK`:
 }
 ```
 
-### GET /v1/users
+### GET /v2/users
 
 - **Permission**: `admin.user.manage`
-- **Postman**: `GET {{baseUrl}}/v1/users?limit=2`
+- **Postman**: `GET {{baseUrl}}/v2/users?limit=2`
 
 Response — `200 OK`:
 
@@ -171,10 +171,10 @@ Response — `200 OK`:
 Pass the next page with `?limit=2&cursor={{page.nextCursor}}` when `hasMore`
 is `true`. Filters: `?q=agent` (name/email search), `?status=active`.
 
-### GET /v1/users/:id
+### GET /v2/users/:id
 
 - **Permission**: `admin.user.manage`
-- **Postman**: `GET {{baseUrl}}/v1/users/02118b2e-96db-4ec0-9d76-aea6e18ac4c4`
+- **Postman**: `GET {{baseUrl}}/v2/users/02118b2e-96db-4ec0-9d76-aea6e18ac4c4`
 
 Response — `200 OK`: same shape as `/users/me` above, for the given id.
 
@@ -190,10 +190,10 @@ Invalid uuid format → `400`:
 }
 ```
 
-### POST /v1/users
+### POST /v2/users
 
 - **Permission**: `admin.user.manage`
-- **Postman**: `POST {{baseUrl}}/v1/users`, Body → raw → JSON
+- **Postman**: `POST {{baseUrl}}/v2/users`, Body → raw → JSON
 
 Request:
 
@@ -234,10 +234,10 @@ Same email again → `422`:
 }
 ```
 
-### PATCH /v1/users/:id
+### PATCH /v2/users/:id
 
 - **Permission**: `admin.user.manage`
-- **Postman**: `PATCH {{baseUrl}}/v1/users/<id>`, Body → raw → JSON
+- **Postman**: `PATCH {{baseUrl}}/v2/users/<id>`, Body → raw → JSON
 - Read the user first (GET) to get its current `rowVersion` — this call is
   optimistic-locked.
 
@@ -273,10 +273,10 @@ not a merge. Omit the field entirely to leave roles untouched.
 
 ## Roles
 
-### GET /v1/roles
+### GET /v2/roles
 
 - **Permission**: `admin.role.manage`
-- **Postman**: `GET {{baseUrl}}/v1/roles?limit=2`
+- **Postman**: `GET {{baseUrl}}/v2/roles?limit=2`
 
 Response — `200 OK`:
 
@@ -300,17 +300,17 @@ Response — `200 OK`:
 }
 ```
 
-### GET /v1/roles/:id
+### GET /v2/roles/:id
 
 - **Permission**: `admin.role.manage`
-- **Postman**: `GET {{baseUrl}}/v1/roles/<id>`
+- **Postman**: `GET {{baseUrl}}/v2/roles/<id>`
 
 Response — `200 OK`: single role object, same shape as one item above.
 
-### POST /v1/roles
+### POST /v2/roles
 
 - **Permission**: `admin.role.manage`
-- **Postman**: `POST {{baseUrl}}/v1/roles`, Body → raw → JSON
+- **Postman**: `POST {{baseUrl}}/v2/roles`, Body → raw → JSON
 
 Request:
 
@@ -321,7 +321,7 @@ Request:
 }
 ```
 
-`recordScope` is one of `all` | `team` | `own`. See `GET /v1/permissions` for
+`recordScope` is one of `all` | `team` | `own`. See `GET /v2/permissions` for
 the full list of valid `permissionKey` values.
 
 Response — `201 Created`:
@@ -339,10 +339,10 @@ Response — `201 Created`:
 }
 ```
 
-### PATCH /v1/roles/:id
+### PATCH /v2/roles/:id
 
 - **Permission**: `admin.role.manage`
-- **Postman**: `PATCH {{baseUrl}}/v1/roles/<id>`, Body → raw → JSON
+- **Postman**: `PATCH {{baseUrl}}/v2/roles/<id>`, Body → raw → JSON
 
 Request:
 
@@ -370,10 +370,10 @@ e.g. seeded "Admin") is rejected regardless of `rowVersion`:
 }
 ```
 
-### DELETE /v1/roles/:id
+### DELETE /v2/roles/:id
 
 - **Permission**: `admin.role.manage`
-- **Postman**: `DELETE {{baseUrl}}/v1/roles/<id>`
+- **Postman**: `DELETE {{baseUrl}}/v2/roles/<id>`
 
 Response — `204 No Content`, empty body.
 
@@ -384,11 +384,11 @@ shape as above.
 
 ## Permissions
 
-### GET /v1/permissions
+### GET /v2/permissions
 
 - **Permission**: `admin.role.manage` (read-only registry, gated the same as
   role management since it's only useful there)
-- **Postman**: `GET {{baseUrl}}/v1/permissions`
+- **Postman**: `GET {{baseUrl}}/v2/permissions`
 
 Response — `200 OK` (33 rows total in the seeded registry; truncated here):
 
@@ -412,16 +412,16 @@ Response — `200 OK` (33 rows total in the seeded registry; truncated here):
 ```
 
 Use the `key` values here as `permissionKey` when building `grants` for
-`POST`/`PATCH /v1/roles`.
+`POST`/`PATCH /v2/roles`.
 
 ---
 
 ## Contacts
 
-### GET /v1/contacts
+### GET /v2/contacts
 
 - **Permission**: `record.contacts.read`
-- **Postman**: `GET {{baseUrl}}/v1/contacts?limit=2`
+- **Postman**: `GET {{baseUrl}}/v2/contacts?limit=2`
 
 Response — `200 OK` (truncated to 1 of many rows):
 
@@ -453,17 +453,17 @@ Response — `200 OK` (truncated to 1 of many rows):
 Filters: `?q=fatima` (name/email/phone search), `?ownerId=<uuid>`,
 `?lifecycleStage=new`, `?includeArchived=true`.
 
-### GET /v1/contacts/:id
+### GET /v2/contacts/:id
 
 - **Permission**: `record.contacts.read`
-- **Postman**: `GET {{baseUrl}}/v1/contacts/<id>`
+- **Postman**: `GET {{baseUrl}}/v2/contacts/<id>`
 
 Response — `200 OK`: single contact, same shape as one list item above.
 
-### POST /v1/contacts
+### POST /v2/contacts
 
 - **Permission**: `record.contacts.create`
-- **Postman**: `POST {{baseUrl}}/v1/contacts`, Body → raw → JSON
+- **Postman**: `POST {{baseUrl}}/v2/contacts`, Body → raw → JSON
 
 Request:
 
@@ -528,10 +528,10 @@ No/expired token on any contacts route → `401`:
 }
 ```
 
-### PATCH /v1/contacts/:id
+### PATCH /v2/contacts/:id
 
 - **Permission**: `record.contacts.update`
-- **Postman**: `PATCH {{baseUrl}}/v1/contacts/<id>`, Body → raw → JSON
+- **Postman**: `PATCH {{baseUrl}}/v2/contacts/<id>`, Body → raw → JSON
 - Read the contact first (GET) for its current `rowVersion`.
 
 Request:
@@ -549,10 +549,10 @@ sent here are **merged** into the existing object, not replaced.
 Stale `rowVersion` → `409 ROW_VERSION_CONFLICT` (same shape as the Users
 section above).
 
-### DELETE /v1/contacts/:id
+### DELETE /v2/contacts/:id
 
 - **Permission**: `record.contacts.delete`
-- **Postman**: `DELETE {{baseUrl}}/v1/contacts/<id>`
+- **Postman**: `DELETE {{baseUrl}}/v2/contacts/<id>`
 
 Response — `204 No Content`, empty body. Hard delete (per ADR-0009) — the
 audit log is the only trail left, not a soft-delete flag.
@@ -561,13 +561,13 @@ audit log is the only trail left, not a soft-delete flag.
 
 ## Partner Portal (sub-agent pool — separate login, separate token)
 
-Run **POST /v1/auth/partner/login** first; these routes reject a staff
+Run **POST /v2/auth/partner/login** first; these routes reject a staff
 (`typ: "user"`) token.
 
-### POST /v1/partner/leads
+### POST /v2/partner/leads
 
 - **Auth**: partner-agent bearer token
-- **Postman**: `POST {{baseUrl}}/v1/partner/leads`, Body → raw → JSON
+- **Postman**: `POST {{baseUrl}}/v2/partner/leads`, Body → raw → JSON
 
 Request:
 
@@ -600,18 +600,18 @@ Behind the scenes this creates (or matches, via identity dedup) a row in the
 same `contacts` table Contacts uses — the agent only ever sees the
 lead-shaped view above, never the full contact record.
 
-### GET /v1/partner/leads
+### GET /v2/partner/leads
 
-- **Postman**: `GET {{baseUrl}}/v1/partner/leads`
+- **Postman**: `GET {{baseUrl}}/v2/partner/leads`
 
 Response — `200 OK`: `{ data: [...leads this agent submitted], page: {...} }`
 — same envelope shape as every other list endpoint. Structurally scoped: this
 agent can never see another agent's leads, there is no scope parameter to ask
 for it.
 
-### GET /v1/partner/leads/:id
+### GET /v2/partner/leads/:id
 
-- **Postman**: `GET {{baseUrl}}/v1/partner/leads/<id>`
+- **Postman**: `GET {{baseUrl}}/v2/partner/leads/<id>`
 
 Response — `200 OK`: single lead, same shape as the POST response above.
 
