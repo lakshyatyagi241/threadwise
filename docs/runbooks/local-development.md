@@ -99,14 +99,14 @@ pnpm infra:nuke          # also deletes volumes — all local data gone
 ## Try the API
 
 ```bash
-TOKEN=$(curl -s -X POST localhost:3000/v1/auth/staff/login \
+TOKEN=$(curl -s -X POST localhost:3000/v2/auth/staff/login \
   -H 'content-type: application/json' \
   -d '{"orgSlug":"studyfromuae","email":"admin@studyfromuae.test","password":"Passw0rd!"}' \
   | jq -r .accessToken)
 
-curl "localhost:3000/v1/contacts?limit=5" -H "authorization: Bearer $TOKEN"
+curl "localhost:3000/v2/contacts?limit=5" -H "authorization: Bearer $TOKEN"
 
-curl -X POST localhost:3000/v1/contacts \
+curl -X POST localhost:3000/v2/contacts \
   -H "authorization: Bearer $TOKEN" \
   -H 'content-type: application/json' \
   -H 'idempotency-key: my-key-1' \
