@@ -24,7 +24,7 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 | 5   | Verify Account (app init)                       | 1    | ⬜ not started |
 | 6   | Subscription / Billing                          | 30   | ⬜ not started |
 | 7   | Settings > Data Management > Company Properties | 23   | ⬜ not started |
-| 8   | Settings > Data Management > Contact Properties | 24   | ⬜ not started |
+| 8   | Settings > Data Management > Contact Properties | 24   | 🔶 partial     |
 | 9   | File Manager                                    | 9    | ⬜ not started |
 | 10  | Api Library                                     | 10   | ⬜ not started |
 | 11  | Contacts                                        | 51   | 🔶 partial     |
@@ -122,13 +122,15 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 
 ## Phase 8 — Settings > Data Management > Contact Properties
 
-**API count:** 24 · **Status:** not started
+**API count:** 24 · **Status:** partial
 
 **Why here:** Schema root for the whole Contacts data model — contacts, segments, forms, deals, tasks, and every broadcast/automation feature reads or writes through it, so it must exist before contacts. Its only real dependency is users-permissions, for gating who may mutate tenant-wide schema.
 
 **Entry criteria:** users-permissions available to gate schema-mutation permissions.
 
 **Exit criteria:** Every route listed for contact-properties in docs/api-inventory.md is implemented and has a real captured request/response entry in docs/api-testing.md. Specifically: sections/fields/field-types CRUD is tenant-scoped, field-type changes and deletions are soft-delete/versioned (never a naive DELETE against live contact data), and any conditional field-dependency support has cycle detection before it ships.
+
+**Current state (partial, not done):** the field-metadata registry (ADR-0017) is built and RLS-verified — `FieldSectionsController`/`FieldsController`/`StatusOptionsController` in `apps/api/src/modules/crm/{field-sections,fields,status-options}` cover sections, fields (+ options + field-level and option-level dependencies, cycle-checked), and status-option groups, all soft-delete/versioned as required above. Not yet done: the 24 rows in docs/api-inventory.md's Contact Properties table are named after the legacy system's RPC-style endpoints (`getListProperties`, `reorderFieldPosition`, `syncToSubaccounts`, ...), not a 1:1 match to this REST surface — that table needs a pass to re-map or supersede those names against the actual routes above. `syncToSubaccounts` (multi-account/franchise sync) has no equivalent here yet; there is no sub-accounts hierarchy in this schema to sync to. No docs/api-testing.md entries exist yet, so controllers stay `@ApiExcludeController()` per this doc's Swagger-gating rule.
 
 ## Phase 9 — File Manager
 
