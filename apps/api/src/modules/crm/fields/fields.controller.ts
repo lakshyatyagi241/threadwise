@@ -92,6 +92,7 @@ export class FieldsController {
   }
 
   @Post('reorder')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission(...anyPropertyPermission('update'))
   @ApiOperation({ summary: 'Reorder fields within a section' })
   async reorder(@Body(zodPipe(reorderFieldsSchema)) body: ReorderFieldsInput) {
@@ -140,6 +141,7 @@ export class FieldsController {
   }
 
   @Post(':id/options/reorder')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission(...anyPropertyPermission('update'))
   @ApiOperation({ summary: "Reorder a field's options" })
   async reorderOptions(

@@ -70,6 +70,7 @@ export class StatusOptionsController {
   }
 
   @Post('reorder')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission(...anyPropertyPermission('update'))
   @ApiOperation({ summary: 'Reorder options within a group' })
   async reorder(@Body(zodPipe(reorderStatusOptionsSchema)) body: ReorderStatusOptionsInput) {
