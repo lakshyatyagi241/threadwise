@@ -67,6 +67,7 @@ export class ContactViewsController {
   }
 
   @Post('reorder')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.contact-views.update')
   @ApiOperation({ summary: 'Reorder views' })
   async reorder(@Body(zodPipe(reorderContactViewsSchema)) body: ReorderContactViewsInput) {

@@ -70,6 +70,7 @@ export class FieldSectionsController {
   }
 
   @Post('reorder')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission(...anyPropertyPermission('update'))
   @ApiOperation({ summary: 'Reorder sections within a module' })
   async reorder(@Body(zodPipe(reorderFieldSectionsSchema)) body: ReorderFieldSectionsInput) {
