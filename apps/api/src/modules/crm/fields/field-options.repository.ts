@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 
 const { fieldOptions, fields } = schema;
@@ -61,7 +61,7 @@ export class FieldOptionsRepository {
   ): Promise<Map<number, FieldOptionRow[]>> {
     if (fieldIds.length === 0) return new Map();
     const rows = await this.baseQuery(tx)
-      .where(and(eq(fieldOptions.orgId, orgId), sql`${fieldOptions.fieldId} = ANY(${fieldIds})`))
+      .where(and(eq(fieldOptions.orgId, orgId), inArray(fieldOptions.fieldId, fieldIds)))
       .orderBy(asc(fieldOptions.position), asc(fieldOptions.id));
 
     const byField = new Map<number, FieldOptionRow[]>();
