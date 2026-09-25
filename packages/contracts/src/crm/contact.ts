@@ -18,13 +18,31 @@ export const contactResponseSchema = z.object({
   id: uuidSchema,
   displayId: z.string().nullable(),
   name: z.string().nullable(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
   email: z.string().nullable(),
   phone: z.string().nullable(),
   companyId: uuidSchema.nullable(),
   ownerId: uuidSchema.nullable(),
   lifecycleState: recordLifecycleSchema,
   lifecycleStage: z.string().nullable(),
+  /** When the current lifecycleStage was set — server-maintained, never client-set. */
+  lifecycleStageDate: z.string().datetime().nullable(),
+  previousLifecycleStage: z.string().nullable(),
+  previousLifecycleStageDate: z.string().datetime().nullable(),
   status: z.string().nullable(),
+  /** Meaningful only when status is a "closed lost" value. Options via status_options. */
+  lostReason: z.string().nullable(),
+  otherLostReason: z.string().nullable(),
+  leadScore: z.number().int().nullable(),
+  /** Values are org-configurable via status_options, not a fixed enum here. */
+  whatsappSubscriptionStatus: z.string().nullable(),
+  smsSubscriptionStatus: z.string().nullable(),
+  emailSubscriptionStatus: z.string().nullable(),
+  emailConfirmed: z.boolean(),
+  faxNumber: z.string().nullable(),
+  /** Bumped by note/activity/meeting writes — server-maintained. */
+  lastActivityAt: z.string().datetime().nullable(),
   customFields: z.record(z.unknown()),
   isArchived: z.boolean(),
   rowVersion: z.number().int(),
@@ -36,12 +54,22 @@ export type ContactResponse = z.infer<typeof contactResponseSchema>;
 export const createContactSchema = z
   .object({
     name: z.string().min(1).max(255).optional(),
+    firstName: z.string().min(1).max(255).optional(),
+    lastName: z.string().min(1).max(255).optional(),
     email: emailSchema.optional(),
     phone: phoneSchema.optional(),
     companyId: uuidSchema.optional(),
     ownerId: uuidSchema.optional(),
     lifecycleStage: lifecycleStageSchema.or(z.string().min(1)).optional(),
     status: z.string().max(64).optional(),
+    lostReason: z.string().max(255).optional(),
+    otherLostReason: z.string().max(500).optional(),
+    leadScore: z.number().int().min(0).max(100).optional(),
+    whatsappSubscriptionStatus: z.string().max(64).optional(),
+    smsSubscriptionStatus: z.string().max(64).optional(),
+    emailSubscriptionStatus: z.string().max(64).optional(),
+    emailConfirmed: z.boolean().optional(),
+    faxNumber: z.string().max(32).optional(),
     customFields: z.record(z.unknown()).default({}),
   })
   // A contact with neither a phone nor an email cannot be reached, cannot be
@@ -54,12 +82,22 @@ export type CreateContactInput = z.infer<typeof createContactSchema>;
 
 export const updateContactSchema = z.object({
   name: z.string().min(1).max(255).nullish(),
+  firstName: z.string().min(1).max(255).nullish(),
+  lastName: z.string().min(1).max(255).nullish(),
   email: emailSchema.nullish(),
   phone: phoneSchema.nullish(),
   companyId: uuidSchema.nullish(),
   ownerId: uuidSchema.nullish(),
   lifecycleStage: z.string().min(1).nullish(),
   status: z.string().max(64).nullish(),
+  lostReason: z.string().max(255).nullish(),
+  otherLostReason: z.string().max(500).nullish(),
+  leadScore: z.number().int().min(0).max(100).nullish(),
+  whatsappSubscriptionStatus: z.string().max(64).nullish(),
+  smsSubscriptionStatus: z.string().max(64).nullish(),
+  emailSubscriptionStatus: z.string().max(64).nullish(),
+  emailConfirmed: z.boolean().optional(),
+  faxNumber: z.string().max(32).nullish(),
   customFields: z.record(z.unknown()).optional(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409. */
   rowVersion: z.number().int().positive(),
@@ -130,3 +168,22 @@ export const assigneeResponseSchema = z.object({
   email: z.string(),
 });
 export type AssigneeResponse = z.infer<typeof assigneeResponseSchema>;
+
+/**
+ * Field history — one entry per changed field, flattened out of the
+ * existing audit_log rather than a dedicated table: every contact write
+ * already records a field-level delta there (see AuditService.diff), so
+ * "what changed and when" is a read over data that already exists.
+ */
+export const fieldHistoryEntrySchema = z.object({
+  fieldKey: z.string(),
+  oldValue: z.unknown(),
+  newValue: z.unknown(),
+  actorType: z.string(),
+  changedByUserId: uuidSchema.nullable(),
+  changedAt: z.string().datetime(),
+});
+export type FieldHistoryEntry = z.infer<typeof fieldHistoryEntrySchema>;
+
+export const listFieldHistoryQuerySchema = paginationQuerySchema;
+export type ListFieldHistoryQuery = z.infer<typeof listFieldHistoryQuerySchema>;

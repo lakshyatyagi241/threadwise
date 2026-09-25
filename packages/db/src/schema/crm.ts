@@ -1,4 +1,14 @@
-import { boolean, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import {
   citext,
   createdAt,
@@ -42,6 +52,9 @@ export const contacts = pgTable(
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull(),
     name: text('name'),
+    /** Additive alongside `name` — see ADR discussion in docs/global-schema-design.dbml. */
+    firstName: text('first_name'),
+    lastName: text('last_name'),
     email: citext('email'),
     phone: text('phone'),
     companyId: idColumn('company_id'),
@@ -55,6 +68,21 @@ export const contacts = pgTable(
     status: text('status'),
     /** Funnel position — what the sub-agent portal reads live. */
     lifecycleStage: text('lifecycle_stage').notNull().default('new'),
+    lifecycleStageDate: timestamp('lifecycle_stage_date', { withTimezone: true }),
+    previousLifecycleStage: text('previous_lifecycle_stage'),
+    previousLifecycleStageDate: timestamp('previous_lifecycle_stage_date', { withTimezone: true }),
+    /** Only meaningful when status='closed_lost'. Options via status_options. */
+    lostReason: text('lost_reason'),
+    otherLostReason: text('other_lost_reason'),
+    leadScore: integer('lead_score'),
+    /** Enum values are org-configurable via status_options, not a fixed set here. */
+    whatsappSubscriptionStatus: text('whatsapp_subscription_status'),
+    smsSubscriptionStatus: text('sms_subscription_status'),
+    emailSubscriptionStatus: text('email_subscription_status'),
+    emailConfirmed: boolean('email_confirmed').notNull().default(false),
+    faxNumber: text('fax_number'),
+    /** Bumped on note/activity/meeting write. Backs the list 'Last Activity' column. */
+    lastActivityAt: timestamp('last_activity_at', { withTimezone: true }),
 
     data: dataJsonb(),
     displayId: text('display_id'),
@@ -79,6 +107,7 @@ export const contacts = pgTable(
     index('idx_contacts_org_created').on(t.orgId, t.createdAt, t.id),
     index('idx_contacts_org_owner').on(t.orgId, t.ownerId, t.createdAt),
     index('idx_contacts_org_stage').on(t.orgId, t.lifecycleStage, t.createdAt),
+    index('idx_contacts_org_last_activity').on(t.orgId, t.lastActivityAt),
   ],
 );
 

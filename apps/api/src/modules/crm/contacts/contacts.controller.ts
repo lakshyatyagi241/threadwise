@@ -18,6 +18,7 @@ import {
   contactSelectQuerySchema,
   createContactSchema,
   listContactsQuerySchema,
+  listFieldHistoryQuerySchema,
   setContactAssigneeSchema,
   updateContactSchema,
   type BulkContactIdsInput,
@@ -25,6 +26,7 @@ import {
   type ContactSelectQuery,
   type CreateContactInput,
   type ListContactsQuery,
+  type ListFieldHistoryQuery,
   type RecordScope,
   type SetContactAssigneeInput,
   type UpdateContactInput,
@@ -173,5 +175,18 @@ export class ContactsController {
     @Param('tagId', ParseUUIDPipe) tagId: string,
   ): Promise<void> {
     await this.tags.detachFromContact(id, tagId);
+  }
+
+  @Get(':id/field-history')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({
+    summary: 'Field-level change history for a contact',
+    description: 'One entry per changed field, newest first — reads the existing audit trail.',
+  })
+  async fieldHistory(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(listFieldHistoryQuerySchema)) query: ListFieldHistoryQuery,
+  ) {
+    return this.contacts.listFieldHistory(id, query);
   }
 }
