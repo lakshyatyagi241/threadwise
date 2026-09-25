@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createContactActivitySchema,
   listContactActivitiesQuerySchema,
@@ -16,7 +16,6 @@ import { ContactActivitiesService } from './contact-activities.service';
  * permission set).
  */
 @ApiTags('contact-activities')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'contacts/:contactId/activities', version: '2' })
 export class ContactActivitiesController {

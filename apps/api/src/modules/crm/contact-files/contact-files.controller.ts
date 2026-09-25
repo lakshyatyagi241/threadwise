@@ -10,7 +10,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createContactFileSchema,
   listContactFilesQuerySchema,
@@ -27,7 +27,6 @@ import { ContactFilesService } from './contact-files.service';
  * Gated behind record.contacts.* (not its own permission set).
  */
 @ApiTags('contact-files')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'contacts/:contactId/files', version: '2' })
 export class ContactFilesController {
