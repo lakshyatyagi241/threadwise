@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { and, asc, desc, eq, gt, ilike, lt, or, sql, type SQL } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, ilike, inArray, lt, or, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { RecordScope } from '@crm/contracts';
 import { decodeCursor } from '../../../common/pagination/cursor';
@@ -11,6 +11,8 @@ export interface ContactRow {
   uuid: string;
   displayId: string | null;
   name: string | null;
+  firstName: string | null;
+  lastName: string | null;
   email: string | null;
   phone: string | null;
   companyId: number | null;
@@ -19,7 +21,19 @@ export interface ContactRow {
   ownerUuid: string | null;
   lifecycleState: 'draft' | 'active' | 'archived' | 'deleted';
   lifecycleStage: string;
+  lifecycleStageDate: Date | null;
+  previousLifecycleStage: string | null;
+  previousLifecycleStageDate: Date | null;
   status: string | null;
+  lostReason: string | null;
+  otherLostReason: string | null;
+  leadScore: number | null;
+  whatsappSubscriptionStatus: string | null;
+  smsSubscriptionStatus: string | null;
+  emailSubscriptionStatus: string | null;
+  emailConfirmed: boolean;
+  faxNumber: string | null;
+  lastActivityAt: Date | null;
   data: Record<string, unknown>;
   isArchived: boolean;
   rowVersion: number;
@@ -58,6 +72,8 @@ export class ContactsRepository {
       uuid: contacts.uuid,
       displayId: contacts.displayId,
       name: contacts.name,
+      firstName: contacts.firstName,
+      lastName: contacts.lastName,
       email: contacts.email,
       phone: contacts.phone,
       companyId: contacts.companyId,
@@ -66,7 +82,19 @@ export class ContactsRepository {
       ownerUuid: users.uuid,
       lifecycleState: contacts.lifecycleState,
       lifecycleStage: contacts.lifecycleStage,
+      lifecycleStageDate: contacts.lifecycleStageDate,
+      previousLifecycleStage: contacts.previousLifecycleStage,
+      previousLifecycleStageDate: contacts.previousLifecycleStageDate,
       status: contacts.status,
+      lostReason: contacts.lostReason,
+      otherLostReason: contacts.otherLostReason,
+      leadScore: contacts.leadScore,
+      whatsappSubscriptionStatus: contacts.whatsappSubscriptionStatus,
+      smsSubscriptionStatus: contacts.smsSubscriptionStatus,
+      emailSubscriptionStatus: contacts.emailSubscriptionStatus,
+      emailConfirmed: contacts.emailConfirmed,
+      faxNumber: contacts.faxNumber,
+      lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
       isArchived: contacts.isArchived,
       rowVersion: contacts.rowVersion,
@@ -179,12 +207,20 @@ export class ContactsRepository {
     orgId: number,
     values: {
       name?: string | null;
+      firstName?: string | null;
+      lastName?: string | null;
       email?: string | null;
       phone?: string | null;
       companyId?: number | null;
       ownerId?: number | null;
       lifecycleStage?: string;
       status?: string | null;
+      leadScore?: number | null;
+      whatsappSubscriptionStatus?: string | null;
+      smsSubscriptionStatus?: string | null;
+      emailSubscriptionStatus?: string | null;
+      emailConfirmed?: boolean;
+      faxNumber?: string | null;
       data: Record<string, unknown>;
       displayId: string;
       createdBy: number | null;
@@ -197,12 +233,21 @@ export class ContactsRepository {
         orgId,
         uuid: sql`gen_random_uuid()`,
         name: values.name ?? null,
+        firstName: values.firstName ?? null,
+        lastName: values.lastName ?? null,
         email: values.email ?? null,
         phone: values.phone ?? null,
         companyId: values.companyId ?? null,
         ownerId: values.ownerId ?? null,
         lifecycleStage: values.lifecycleStage ?? 'new',
+        lifecycleStageDate: sql`now()`,
         status: values.status ?? null,
+        leadScore: values.leadScore ?? null,
+        whatsappSubscriptionStatus: values.whatsappSubscriptionStatus ?? null,
+        smsSubscriptionStatus: values.smsSubscriptionStatus ?? null,
+        emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,
+        emailConfirmed: values.emailConfirmed ?? false,
+        faxNumber: values.faxNumber ?? null,
         data: values.data,
         displayId: values.displayId,
         createdBy: values.createdBy,
@@ -260,6 +305,16 @@ export class ContactsRepository {
       .from(users)
       .where(and(eq(users.orgId, orgId), eq(users.uuid, uuid)));
     return rows[0]?.id;
+  }
+
+  /** Batch reverse lookup — id -> uuid, for resolving a page of audit actor ids in one query. */
+  async resolveUserUuids(tx: Tx, orgId: number, ids: number[]): Promise<Map<number, string>> {
+    if (ids.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: users.id, uuid: users.uuid })
+      .from(users)
+      .where(and(eq(users.orgId, orgId), inArray(users.id, ids)));
+    return new Map(rows.map((r) => [r.id, r.uuid]));
   }
 
   async resolveCompanyId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
@@ -363,5 +418,22 @@ export class ContactsRepository {
       .where(and(eq(users.orgId, orgId), eq(users.status, 'active')))
       .orderBy(asc(users.fullName));
     return rows as Array<{ id: string; fullName: string; email: string }>;
+  }
+
+  /** Called by contact-notes/activities/meetings on write — backs the list "Last Activity" column. */
+  async bumpLastActivity(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx
+      .update(contacts)
+      .set({ lastActivityAt: sql`now()` })
+      .where(and(eq(contacts.orgId, orgId), eq(contacts.id, id)));
+  }
+
+  /** Resolves a contact's external uuid to its internal id — for sub-resource modules (notes, files, ...). */
+  async resolveContactId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
+    const rows = await tx
+      .select({ id: contacts.id })
+      .from(contacts)
+      .where(and(eq(contacts.orgId, orgId), eq(contacts.uuid, uuid)));
+    return rows[0]?.id;
   }
 }
