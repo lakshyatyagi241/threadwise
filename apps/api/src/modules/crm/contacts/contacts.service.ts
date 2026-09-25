@@ -381,7 +381,10 @@ export class ContactsService {
           module: MODULE_KEY,
           recordId: id,
           action: 'update',
-          delta: { ownerId: { old: undefined, new: ownerId } },
+          // input.ownerId, not the resolved internal `ownerId` above — every
+          // response, field-history included, exposes uuids, never the
+          // internal bigint PK (ADR-0016).
+          delta: { ownerId: { old: undefined, new: input.ownerId } },
         });
         await this.outbox.emit(rowTx, {
           aggregateModule: MODULE_KEY,
