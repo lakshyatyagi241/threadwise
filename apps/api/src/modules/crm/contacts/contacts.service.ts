@@ -10,7 +10,9 @@ import type {
   ContactSelectItem,
   ContactSelectQuery,
   CreateContactInput,
+  FieldHistoryEntry,
   ListContactsQuery,
+  ListFieldHistoryQuery,
   PageResponse,
   RecordScope,
   SetContactAssigneeInput,
@@ -128,12 +130,20 @@ export class ContactsService {
 
       const created = await this.repo.insert(tx, ctx.orgId, {
         name: input.name,
+        firstName: input.firstName,
+        lastName: input.lastName,
         email: input.email,
         phone: input.phone,
         companyId,
         ownerId,
         lifecycleStage: input.lifecycleStage,
         status: input.status,
+        leadScore: input.leadScore,
+        whatsappSubscriptionStatus: input.whatsappSubscriptionStatus,
+        smsSubscriptionStatus: input.smsSubscriptionStatus,
+        emailSubscriptionStatus: input.emailSubscriptionStatus,
+        emailConfirmed: input.emailConfirmed,
+        faxNumber: input.faxNumber,
         data: input.customFields,
         displayId,
         createdBy: ctx.userId,
@@ -175,10 +185,33 @@ export class ContactsService {
 
       const values: Record<string, unknown> = { updatedBy: ctx.userId };
       if (input.name !== undefined) values.name = input.name;
+      if (input.firstName !== undefined) values.firstName = input.firstName;
+      if (input.lastName !== undefined) values.lastName = input.lastName;
       if (input.email !== undefined) values.email = input.email;
       if (input.phone !== undefined) values.phone = input.phone;
       if (input.status !== undefined) values.status = input.status;
-      if (input.lifecycleStage !== undefined) values.lifecycleStage = input.lifecycleStage;
+      if (input.lostReason !== undefined) values.lostReason = input.lostReason;
+      if (input.otherLostReason !== undefined) values.otherLostReason = input.otherLostReason;
+      if (input.leadScore !== undefined) values.leadScore = input.leadScore;
+      if (input.whatsappSubscriptionStatus !== undefined) {
+        values.whatsappSubscriptionStatus = input.whatsappSubscriptionStatus;
+      }
+      if (input.smsSubscriptionStatus !== undefined) {
+        values.smsSubscriptionStatus = input.smsSubscriptionStatus;
+      }
+      if (input.emailSubscriptionStatus !== undefined) {
+        values.emailSubscriptionStatus = input.emailSubscriptionStatus;
+      }
+      if (input.emailConfirmed !== undefined) values.emailConfirmed = input.emailConfirmed;
+      if (input.faxNumber !== undefined) values.faxNumber = input.faxNumber;
+      if (input.lifecycleStage !== undefined && input.lifecycleStage !== existing.lifecycleStage) {
+        // Track the transition, not just the current value — the sub-agent
+        // portal and the pipeline UI both read "what was it before".
+        values.lifecycleStage = input.lifecycleStage;
+        values.lifecycleStageDate = new Date();
+        values.previousLifecycleStage = existing.lifecycleStage;
+        values.previousLifecycleStageDate = existing.lifecycleStageDate;
+      }
       if (input.customFields !== undefined) {
         // Merge, don't replace: a client that sends three fields must not wipe
         // the other forty the org has defined.
@@ -284,6 +317,43 @@ export class ContactsService {
     const id = await this.repo.resolveCompanyId(tx, orgId, uuid);
     if (id === undefined) throw AppError.notFound('Company', uuid);
     return id;
+  }
+
+  async listFieldHistory(
+    uuid: string,
+    query: ListFieldHistoryQuery,
+  ): Promise<PageResponse<FieldHistoryEntry>> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const contact = await this.repo.findByUuid(tx, ctx.orgId, uuid);
+      if (!contact) throw AppError.notFound('Contact', uuid);
+
+      const { items, nextCursor, hasMore } = await this.audit.listByRecord(
+        tx,
+        ctx.orgId,
+        MODULE_KEY,
+        contact.id,
+        { limit: query.limit, cursor: query.cursor },
+      );
+
+      const actorIds = [
+        ...new Set(items.map((i) => i.actorId).filter((id): id is number => id !== null)),
+      ];
+      const actorUuids = await this.repo.resolveUserUuids(tx, ctx.orgId, actorIds);
+
+      const entries: FieldHistoryEntry[] = items.flatMap((entry) =>
+        Object.entries(entry.delta ?? {}).map(([fieldKey, change]) => ({
+          fieldKey,
+          oldValue: (change as { old: unknown }).old,
+          newValue: (change as { new: unknown }).new,
+          actorType: entry.actorType,
+          changedByUserId: entry.actorId !== null ? (actorUuids.get(entry.actorId) ?? null) : null,
+          changedAt: entry.at.toISOString(),
+        })),
+      );
+
+      return { data: entries, page: { nextCursor, hasMore, limit: query.limit } };
+    });
   }
 
   async selectData(query: ContactSelectQuery): Promise<ContactSelectItem[]> {

@@ -44,3 +44,27 @@ export {
   toContactViewResponse,
 } from './contact-views';
 export type { ContactViewRow } from './contact-views';
+export {
+  ContactNotesService,
+  ContactNotesRepository,
+  toContactNoteResponse,
+} from './contact-notes';
+export type { ContactNoteRow } from './contact-notes';
+export {
+  ContactFilesService,
+  ContactFilesRepository,
+  toContactFileResponse,
+} from './contact-files';
+export type { ContactFileRow } from './contact-files';
+export {
+  ContactActivitiesService,
+  ContactActivitiesRepository,
+  toContactActivityResponse,
+} from './contact-activities';
+export type { ContactActivityRow } from './contact-activities';
+export {
+  ContactMeetingsService,
+  ContactMeetingsRepository,
+  toContactMeetingResponse,
+} from './contact-meetings';
+export type { ContactMeetingRow } from './contact-meetings';

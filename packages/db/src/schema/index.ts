@@ -11,6 +11,7 @@
 export * from './columns';
 export * from './enums';
 export * from './foundation';
+export * from './contact-detail';
 export * from './contact-views';
 export * from './crm';
 export * from './field-metadata';
