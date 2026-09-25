@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createFieldDependencySchema,
   createFieldOptionDependencySchema,
@@ -41,12 +41,9 @@ import { FieldsService } from './fields.service';
  * Settings > Data Management > Contact Properties AND Company Properties
  * (moduleKey picks which): the field registry itself, plus its options and
  * dependency edges as nested sub-resources — neither makes sense outside the
- * context of one field. Phase 7 + Phase 8 (docs/phase-plan.md) —
- * @ApiExcludeController until every route in both phases' exit criteria is
- * built and has a docs/api-testing.md entry.
+ * context of one field. Phase 7 + Phase 8 (docs/phase-plan.md).
  */
 @ApiTags('fields')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'fields', version: '2' })
 export class FieldsController {
