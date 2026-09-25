@@ -303,4 +303,65 @@ export class ContactsRepository {
       ON CONFLICT (org_id, kind, value) DO NOTHING
     `);
   }
+
+  /** Lightweight rows for pickers/typeaheads — never the full record. */
+  async selectData(
+    tx: Tx,
+    orgId: number,
+    filter: { q?: string; limit: number },
+  ): Promise<
+    Array<{ id: string; name: string | null; email: string | null; phone: string | null }>
+  > {
+    const conditions: SQL[] = [eq(contacts.orgId, orgId), eq(contacts.isArchived, false)];
+    if (filter.q) {
+      const pattern = `%${filter.q}%`;
+      const match = or(
+        ilike(contacts.name, pattern),
+        ilike(sql`${contacts.email}::text`, pattern),
+        ilike(contacts.phone, pattern),
+      );
+      if (match) conditions.push(match);
+    }
+
+    const rows = await tx
+      .select({
+        id: contacts.uuid,
+        name: contacts.name,
+        email: contacts.email,
+        phone: contacts.phone,
+      })
+      .from(contacts)
+      .where(and(...conditions))
+      .orderBy(asc(contacts.name))
+      .limit(filter.limit);
+    return rows;
+  }
+
+  /** Bulk-edit write — no optimistic-lock check (the contract has no rowVersion field for this path). */
+  async updateFieldsById(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    values: Record<string, unknown>,
+  ): Promise<boolean> {
+    const result = await tx
+      .update(contacts)
+      .set(values)
+      .where(and(eq(contacts.orgId, orgId), eq(contacts.id, id)))
+      .returning({ id: contacts.id });
+    return result.length > 0;
+  }
+
+  /** Active staff users this org can assign a contact to. */
+  async listAssignable(
+    tx: Tx,
+    orgId: number,
+  ): Promise<Array<{ id: string; fullName: string; email: string }>> {
+    const rows = await tx
+      .select({ id: users.uuid, fullName: users.fullName, email: users.email })
+      .from(users)
+      .where(and(eq(users.orgId, orgId), eq(users.status, 'active')))
+      .orderBy(asc(users.fullName));
+    return rows as Array<{ id: string; fullName: string; email: string }>;
+  }
 }

@@ -13,12 +13,20 @@ import {
 } from '@nestjs/common';
 import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  bulkContactIdsSchema,
+  bulkUpdateContactsSchema,
+  contactSelectQuerySchema,
   createContactSchema,
   listContactsQuerySchema,
+  setContactAssigneeSchema,
   updateContactSchema,
+  type BulkContactIdsInput,
+  type BulkUpdateContactsInput,
+  type ContactSelectQuery,
   type CreateContactInput,
   type ListContactsQuery,
   type RecordScope,
+  type SetContactAssigneeInput,
   type UpdateContactInput,
 } from '@crm/contracts';
 import {
@@ -28,6 +36,7 @@ import {
   RequirePermission,
 } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
+import { TagsService } from '../tags';
 import { ContactsService } from './contacts.service';
 
 /**
@@ -39,15 +48,18 @@ import { ContactsService } from './contacts.service';
  * parameter, not a special code path.
  */
 @ApiTags('contacts')
-// Phase 11 (docs/phase-plan.md) is only 5/51 routes done — stays out of
-// /docs until every route in that phase's exit criteria is built and has a
-// docs/api-testing.md entry. Routes work fine via Postman/curl in the
-// meantime; this only hides them from the generated Swagger UI.
+// Phase 11 (docs/phase-plan.md) is partial — stays out of /docs until every
+// route in that phase's exit criteria is built and has a docs/api-testing.md
+// entry. Routes work fine via Postman/curl in the meantime; this only hides
+// them from the generated Swagger UI.
 @ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'contacts', version: '2' })
 export class ContactsController {
-  constructor(private readonly contacts: ContactsService) {}
+  constructor(
+    private readonly contacts: ContactsService,
+    private readonly tags: TagsService,
+  ) {}
 
   @Get()
   @RequirePermission('record.contacts.read')
@@ -57,6 +69,52 @@ export class ContactsController {
     @GrantedScope('record.contacts.read') scope: RecordScope,
   ) {
     return this.contacts.list(query, scope);
+  }
+
+  // Literal routes below MUST be registered before ':id' — Nest/Express
+  // matches by declaration order, and a wildcard 1-segment ':id' route
+  // would otherwise swallow e.g. GET /contacts/select-data as id="select-data".
+
+  @Get('select-data')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({ summary: 'Lightweight rows for pickers/typeaheads' })
+  async selectData(@Query(zodPipe(contactSelectQuerySchema)) query: ContactSelectQuery) {
+    return this.contacts.selectData(query);
+  }
+
+  @Get('assignees')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({ summary: 'Active staff users a contact can be assigned to' })
+  async assignees() {
+    return this.contacts.listAssignees();
+  }
+
+  @Post('bulk/update')
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({
+    summary: 'Bulk-edit contacts',
+    description:
+      'Each id is transactional independently — one bad id fails on its own, reported in `failed`, without affecting the rest of the batch.',
+  })
+  async bulkUpdate(@Body(zodPipe(bulkUpdateContactsSchema)) body: BulkUpdateContactsInput) {
+    return this.contacts.bulkUpdate(body);
+  }
+
+  @Post('bulk/delete')
+  @RequirePermission('record.contacts.delete')
+  @ApiOperation({
+    summary: 'Bulk-delete contacts',
+    description: 'Same per-id partial-failure semantics as bulk/update.',
+  })
+  async bulkDelete(@Body(zodPipe(bulkContactIdsSchema)) body: BulkContactIdsInput) {
+    return this.contacts.bulkDelete(body);
+  }
+
+  @Post('assignee')
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({ summary: 'Set (or clear, with ownerId: null) the owner on multiple contacts' })
+  async setAssignee(@Body(zodPipe(setContactAssigneeSchema)) body: SetContactAssigneeInput) {
+    return this.contacts.setAssignee(body);
   }
 
   @Get(':id')
@@ -97,5 +155,23 @@ export class ContactsController {
   @ApiOperation({ summary: 'Delete a contact (hard delete — see ADR-0009)' })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.contacts.remove(id);
+  }
+
+  @Get(':id/tags')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({ summary: "List a contact's tags" })
+  async listTags(@Param('id', ParseUUIDPipe) id: string) {
+    return this.tags.listForContact(id);
+  }
+
+  @Delete(':id/tags/:tagId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({ summary: 'Detach a tag from a contact' })
+  async removeTag(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('tagId', ParseUUIDPipe) tagId: string,
+  ): Promise<void> {
+    await this.tags.detachFromContact(id, tagId);
   }
 }

@@ -1,0 +1,437 @@
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { ERROR_CODES } from '@crm/contracts';
+import type {
+  CreateFieldDependencyInput,
+  CreateFieldInput,
+  CreateFieldOptionDependencyInput,
+  CreateFieldOptionInput,
+  FieldDependencyResponse,
+  FieldOptionDependencyResponse,
+  FieldOptionResponse,
+  FieldResponse,
+  ListFieldsQuery,
+  PageResponse,
+  ReorderFieldOptionsInput,
+  ReorderFieldsInput,
+  UpdateFieldInput,
+  UpdateFieldOptionInput,
+} from '@crm/contracts';
+import { RequestContextStore } from '../../../common/context/request-context';
+import { AppError } from '../../../common/errors/app-error';
+import { DatabaseService } from '../../../infra/db/database.service';
+import { AuditService } from '../../../kernel/audit/audit.service';
+import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { FieldDependenciesRepository } from './field-dependencies.repository';
+import { FieldOptionsRepository } from './field-options.repository';
+import {
+  toFieldDependencyResponse,
+  toFieldOptionDependencyResponse,
+  toFieldOptionResponse,
+  toFieldResponse,
+} from './fields.mapper';
+import { FieldsRepository } from './fields.repository';
+
+const MODULE_KEY = 'fields';
+/** Types whose values come from a fixed choice list. */
+const OPTION_BACKED_TYPES = new Set(['select', 'multiselect', 'radio']);
+
+@Injectable()
+export class FieldsService {
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly repo: FieldsRepository,
+    private readonly optionsRepo: FieldOptionsRepository,
+    private readonly dependenciesRepo: FieldDependenciesRepository,
+    private readonly outbox: OutboxService,
+    private readonly audit: AuditService,
+  ) {}
+
+  // --- fields ---------------------------------------------------------
+
+  async list(query: ListFieldsQuery): Promise<PageResponse<FieldResponse>> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const sectionId = query.sectionId
+        ? await this.repo.resolveSectionId(tx, ctx.orgId, query.sectionId)
+        : undefined;
+      if (query.sectionId && sectionId === undefined) {
+        return { data: [], page: { nextCursor: null, hasMore: false, limit: query.limit } };
+      }
+
+      const rows = await this.repo.listByModule(tx, ctx.orgId, {
+        moduleKey: query.moduleKey,
+        sectionId,
+        includeInactive: query.includeInactive,
+      });
+
+      const optionBacked = rows.filter((r) => OPTION_BACKED_TYPES.has(r.fieldType));
+      const optionsByField = await this.optionsRepo.listByFieldIds(
+        tx,
+        ctx.orgId,
+        optionBacked.map((r) => r.id),
+      );
+
+      return {
+        data: rows.map((row) => toFieldResponse(row, optionsByField.get(row.id))),
+        page: { nextCursor: null, hasMore: false, limit: query.limit },
+      };
+    });
+  }
+
+  async getByUuid(uuid: string): Promise<FieldResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const row = await this.requireField(tx, ctx.orgId, uuid);
+      const options = OPTION_BACKED_TYPES.has(row.fieldType)
+        ? await this.optionsRepo.listByField(tx, ctx.orgId, row.id)
+        : undefined;
+      return toFieldResponse(row, options);
+    });
+  }
+
+  async create(input: CreateFieldInput): Promise<FieldResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const sectionId = await this.repo.resolveSectionId(tx, ctx.orgId, input.sectionId);
+      if (sectionId === undefined) throw AppError.notFound('FieldSection', input.sectionId);
+
+      const existing = await this.repo.findByKey(tx, ctx.orgId, input.moduleKey, input.key);
+      if (existing) {
+        throw new AppError(
+          ERROR_CODES.FIELD_KEY_TAKEN,
+          `Field key "${input.key}" is already used in ${input.moduleKey}`,
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      const position =
+        input.position ?? (await this.repo.nextPosition(tx, ctx.orgId, input.moduleKey, sectionId));
+
+      const created = await this.repo.insert(tx, ctx.orgId, {
+        moduleKey: input.moduleKey,
+        sectionId,
+        key: input.key,
+        label: input.label,
+        fieldType: input.fieldType,
+        isRequired: input.isRequired,
+        isHidden: input.isHidden,
+        isReadOnly: input.isReadOnly,
+        isMasked: input.isMasked,
+        isUnique: input.isUnique,
+        isQuickCreate: input.isQuickCreate,
+        isGlobalSearch: input.isGlobalSearch,
+        config: input.config,
+        position,
+      });
+
+      if (input.options?.length) {
+        for (const [index, option] of input.options.entries()) {
+          await this.optionsRepo.insert(tx, ctx.orgId, {
+            fieldId: created.id,
+            value: option.value,
+            label: option.label,
+            position: option.position ?? index,
+          });
+        }
+      }
+
+      await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
+      await this.outbox.emit(tx, {
+        aggregateModule: MODULE_KEY,
+        aggregateId: created.id,
+        eventType: 'field.created',
+        payload: { uuid: created.uuid, moduleKey: input.moduleKey, key: input.key },
+      });
+
+      return this.getByUuid(created.uuid);
+    });
+  }
+
+  async update(uuid: string, input: UpdateFieldInput): Promise<FieldResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const existing = await this.requireField(tx, ctx.orgId, uuid);
+
+      const values: Record<string, unknown> = {};
+      if (input.label !== undefined) values.label = input.label;
+      if (input.isRequired !== undefined) values.isRequired = input.isRequired;
+      if (input.isHidden !== undefined) values.isHidden = input.isHidden;
+      if (input.isReadOnly !== undefined) values.isReadOnly = input.isReadOnly;
+      if (input.isMasked !== undefined) values.isMasked = input.isMasked;
+      if (input.isUnique !== undefined) values.isUnique = input.isUnique;
+      if (input.isQuickCreate !== undefined) values.isQuickCreate = input.isQuickCreate;
+      if (input.isGlobalSearch !== undefined) values.isGlobalSearch = input.isGlobalSearch;
+      if (input.isActive !== undefined) values.isActive = input.isActive;
+      if (input.config !== undefined) values.config = input.config;
+      if (input.sectionId !== undefined) {
+        const sectionId = await this.repo.resolveSectionId(tx, ctx.orgId, input.sectionId);
+        if (sectionId === undefined) throw AppError.notFound('FieldSection', input.sectionId);
+        values.sectionId = sectionId;
+      }
+
+      const updated = await this.repo.updateWithVersion(
+        tx,
+        ctx.orgId,
+        existing.id,
+        input.rowVersion,
+        values,
+      );
+      if (!updated) throw AppError.rowVersionConflict('Field');
+
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'update',
+        delta: this.audit.diff(existing as unknown as Record<string, unknown>, values),
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: MODULE_KEY,
+        aggregateId: existing.id,
+        eventType: 'field.updated',
+        payload: { uuid, key: existing.key },
+      });
+
+      return this.getByUuid(uuid);
+    });
+  }
+
+  async reorder(input: ReorderFieldsInput): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const ids: number[] = [];
+      for (const uuid of input.orderedIds) {
+        const row = await this.requireField(tx, ctx.orgId, uuid);
+        ids.push(row.id);
+      }
+      await this.repo.reorder(tx, ctx.orgId, ids);
+    });
+  }
+
+  async remove(uuid: string): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const existing = await this.requireField(tx, ctx.orgId, uuid);
+      // System fields (first_name, email, ...) render with a "Locked" badge
+      // in Data Management for exactly this reason — deleting the ones every
+      // other module reads by key is not a per-org decision to allow.
+      if (existing.isSystem) {
+        throw new AppError(
+          ERROR_CODES.FIELD_IS_SYSTEM,
+          `Field "${existing.key}" is system-managed and cannot be deleted`,
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
+      await this.outbox.emit(tx, {
+        aggregateModule: MODULE_KEY,
+        aggregateId: existing.id,
+        eventType: 'field.deleted',
+        payload: { uuid, key: existing.key },
+      });
+
+      // Soft delete: existing contacts.data still has this key, so the
+      // column can't disappear from under live records — see Phase 8 exit
+      // criteria (versioned/soft-delete, never a naive DELETE).
+      await this.repo.deactivate(tx, ctx.orgId, existing.id);
+    });
+  }
+
+  // --- field options ----------------------------------------------------
+
+  async listOptions(fieldUuid: string): Promise<FieldOptionResponse[]> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      const rows = await this.optionsRepo.listByField(tx, ctx.orgId, field.id);
+      return rows.map(toFieldOptionResponse);
+    });
+  }
+
+  async createOption(
+    fieldUuid: string,
+    input: CreateFieldOptionInput,
+  ): Promise<FieldOptionResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      const position =
+        input.position ?? (await this.optionsRepo.nextPosition(tx, ctx.orgId, field.id));
+
+      const created = await this.optionsRepo.insert(tx, ctx.orgId, {
+        fieldId: field.id,
+        value: input.value,
+        label: input.label,
+        position,
+      });
+
+      const row = await this.optionsRepo.findById(tx, ctx.orgId, created.id);
+      return toFieldOptionResponse(row!);
+    });
+  }
+
+  async updateOption(
+    optionUuid: string,
+    input: UpdateFieldOptionInput,
+  ): Promise<FieldOptionResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const existing = await this.optionsRepo.findByUuid(tx, ctx.orgId, optionUuid);
+      if (!existing) throw AppError.notFound('FieldOption', optionUuid);
+
+      const values: Record<string, unknown> = {};
+      if (input.value !== undefined) values.value = input.value;
+      if (input.label !== undefined) values.label = input.label;
+      if (input.isHidden !== undefined) values.isHidden = input.isHidden;
+
+      const updated = await this.optionsRepo.updateWithVersion(
+        tx,
+        ctx.orgId,
+        existing.id,
+        input.rowVersion,
+        values,
+      );
+      if (!updated) throw AppError.rowVersionConflict('FieldOption');
+
+      const row = await this.optionsRepo.findById(tx, ctx.orgId, existing.id);
+      return toFieldOptionResponse(row!);
+    });
+  }
+
+  async reorderOptions(fieldUuid: string, input: ReorderFieldOptionsInput): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      await this.requireField(tx, ctx.orgId, fieldUuid);
+      const ids: number[] = [];
+      for (const uuid of input.orderedIds) {
+        const row = await this.optionsRepo.findByUuid(tx, ctx.orgId, uuid);
+        if (!row) throw AppError.notFound('FieldOption', uuid);
+        ids.push(row.id);
+      }
+      await this.optionsRepo.reorder(tx, ctx.orgId, ids);
+    });
+  }
+
+  async removeOption(optionUuid: string): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const existing = await this.optionsRepo.findByUuid(tx, ctx.orgId, optionUuid);
+      if (!existing) throw AppError.notFound('FieldOption', optionUuid);
+      await this.optionsRepo.deleteById(tx, ctx.orgId, existing.id);
+    });
+  }
+
+  // --- field dependencies -----------------------------------------------
+
+  async listDependencies(fieldUuid: string): Promise<FieldDependencyResponse[]> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      const rows = await this.dependenciesRepo.listByField(tx, ctx.orgId, field.id);
+      return rows.map(toFieldDependencyResponse);
+    });
+  }
+
+  async createDependency(input: CreateFieldDependencyInput): Promise<FieldDependencyResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const field = await this.requireField(tx, ctx.orgId, input.fieldId);
+      const dependsOnField = await this.requireField(tx, ctx.orgId, input.dependsOnFieldId);
+
+      const dependsOnOptionId = input.dependsOnOptionId
+        ? (await this.optionsRepo.findByUuid(tx, ctx.orgId, input.dependsOnOptionId))?.id
+        : undefined;
+      if (input.dependsOnOptionId && dependsOnOptionId === undefined) {
+        throw AppError.notFound('FieldOption', input.dependsOnOptionId);
+      }
+
+      if (
+        await this.dependenciesRepo.wouldCreateCycle(tx, ctx.orgId, field.id, dependsOnField.id)
+      ) {
+        throw new AppError(
+          ERROR_CODES.DEPENDENCY_CYCLE_DETECTED,
+          `Making "${field.key}" depend on "${dependsOnField.key}" would create a cycle`,
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      const created = await this.dependenciesRepo.insertFieldDependency(tx, ctx.orgId, {
+        fieldId: field.id,
+        dependsOnFieldId: dependsOnField.id,
+        dependsOnOptionId,
+        dependsOnValue: input.dependsOnValue,
+      });
+
+      const row = await this.dependenciesRepo.findDependencyByUuid(tx, ctx.orgId, created.uuid);
+      return toFieldDependencyResponse(row!);
+    });
+  }
+
+  async removeDependency(uuid: string): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const existing = await this.dependenciesRepo.findDependencyByUuid(tx, ctx.orgId, uuid);
+      if (!existing) throw AppError.notFound('FieldDependency', uuid);
+      await this.dependenciesRepo.deleteFieldDependency(tx, ctx.orgId, existing.id);
+    });
+  }
+
+  // --- field option dependencies -----------------------------------------
+
+  async listOptionDependencies(parentOptionUuid: string): Promise<FieldOptionDependencyResponse[]> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const parent = await this.optionsRepo.findByUuid(tx, ctx.orgId, parentOptionUuid);
+      if (!parent) throw AppError.notFound('FieldOption', parentOptionUuid);
+      const rows = await this.dependenciesRepo.listOptionDependenciesByParent(
+        tx,
+        ctx.orgId,
+        parent.id,
+      );
+      return rows.map(toFieldOptionDependencyResponse);
+    });
+  }
+
+  async createOptionDependency(
+    input: CreateFieldOptionDependencyInput,
+  ): Promise<FieldOptionDependencyResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const parent = await this.optionsRepo.findByUuid(tx, ctx.orgId, input.parentOptionId);
+      if (!parent) throw AppError.notFound('FieldOption', input.parentOptionId);
+      const child = await this.optionsRepo.findByUuid(tx, ctx.orgId, input.childOptionId);
+      if (!child) throw AppError.notFound('FieldOption', input.childOptionId);
+
+      const created = await this.dependenciesRepo.insertOptionDependency(tx, ctx.orgId, {
+        parentOptionId: parent.id,
+        childOptionId: child.id,
+      });
+
+      const row = await this.dependenciesRepo.findOptionDependencyByUuid(
+        tx,
+        ctx.orgId,
+        created.uuid,
+      );
+      return toFieldOptionDependencyResponse(row!);
+    });
+  }
+
+  async removeOptionDependency(uuid: string): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const existing = await this.dependenciesRepo.findOptionDependencyByUuid(tx, ctx.orgId, uuid);
+      if (!existing) throw AppError.notFound('FieldOptionDependency', uuid);
+      await this.dependenciesRepo.deleteOptionDependency(tx, ctx.orgId, existing.id);
+    });
+  }
+
+  private async requireField(
+    tx: Parameters<FieldsRepository['findByUuid']>[0],
+    orgId: number,
+    uuid: string,
+  ) {
+    const row = await this.repo.findByUuid(tx, orgId, uuid);
+    if (!row) throw AppError.notFound('Field', uuid);
+    return row;
+  }
+}
