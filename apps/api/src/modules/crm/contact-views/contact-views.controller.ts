@@ -83,6 +83,7 @@ export class ContactViewsController {
   }
 
   @Post(':id/favorite')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.contact-views.read')
   @ApiOperation({ summary: "Pin a shared view onto the caller's own sidebar" })
   async favorite(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
