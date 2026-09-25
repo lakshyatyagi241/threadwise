@@ -47,6 +47,7 @@ Format: [MADR](https://adr.github.io/madr/). Template:
 | [0014](adr/0014-sub-agent-model.md)             | Sub-agents: own pool, live stage reads      | accepted                                 |
 | [0015](adr/0015-legacy-geta-migration.md)       | Migrating off the legacy Geta system        | **proposed**                             |
 | [0016](adr/0016-api-conventions.md)             | uuids, cursors, problem+json, idempotency   | accepted                                 |
+| [0017](adr/0017-field-metadata-registry.md)     | Generic field-metadata registry (Tier-2)    | accepted                                 |
 
 ## Runbooks
 

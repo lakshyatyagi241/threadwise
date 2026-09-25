@@ -13,6 +13,7 @@ export * from './common/pagination';
 export * from './common/errors';
 export * from './common/enums';
 export * from './crm/contact';
+export * from './crm/field-metadata';
 export * from './partner/partner-agent';
 export * from './public/lead-read';
 export * from './admin/user';

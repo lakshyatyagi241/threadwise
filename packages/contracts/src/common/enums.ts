@@ -62,6 +62,40 @@ export const applicationStatusSchema = z.enum([
  * concern, so orgs can extend them via `status_options` — these are the
  * platform defaults.
  */
+/**
+ * Which business object a Tier-2 field/section/status-option belongs to.
+ * Mirrors no DB enum (module_key is `text` — new modules land as new
+ * values here, no migration needed) but is closed here to catch typos.
+ */
+export const moduleKeySchema = z.enum(['contacts', 'companies']);
+export type ModuleKey = z.infer<typeof moduleKeySchema>;
+
+/** Mirrors the `chk_fields_type` CHECK constraint on `fields.field_type`. */
+export const fieldTypeSchema = z.enum([
+  'text',
+  'long_text',
+  'integer',
+  'big_integer',
+  'decimal',
+  'percentage',
+  'currency',
+  'boolean',
+  'checkbox',
+  'radio',
+  'date',
+  'datetime',
+  'url',
+  'email',
+  'phone',
+  'select',
+  'multiselect',
+  'lookup',
+  'rating',
+  'timezone',
+  'formula',
+]);
+export type FieldType = z.infer<typeof fieldTypeSchema>;
+
 export const lifecycleStageSchema = z.enum([
   'new',
   'contacted',
