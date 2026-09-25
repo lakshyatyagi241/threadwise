@@ -23,7 +23,7 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 | 4   | OTP Verification                                | 4    | ⬜ not started |
 | 5   | Verify Account (app init)                       | 1    | ⬜ not started |
 | 6   | Subscription / Billing                          | 30   | ⬜ not started |
-| 7   | Settings > Data Management > Company Properties | 23   | ⬜ not started |
+| 7   | Settings > Data Management > Company Properties | 23   | 🔶 partial     |
 | 8   | Settings > Data Management > Contact Properties | 24   | 🔶 partial     |
 | 9   | File Manager                                    | 9    | ⬜ not started |
 | 10  | Api Library                                     | 10   | ⬜ not started |
@@ -112,13 +112,15 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 
 ## Phase 7 — Settings > Data Management > Company Properties
 
-**API count:** 23 · **Status:** not started
+**API count:** 23 · **Status:** partial
 
 **Why here:** No dependencies — it's foundational schema for Company, so scheduling it now (in parallel with the auth cluster settling) means Company, Forms, and Segments never have to be built against a moving custom-field schema.
 
 **Entry criteria:** None beyond base scaffold (tenant model from auth-signup conceptually exists, but no other page's backend is required).
 
 **Exit criteria:** Every route listed for company-properties in docs/api-inventory.md is implemented and has a real captured request/response entry in docs/api-testing.md. Specifically: property group/definition CRUD with core field types, ordered-schema retrieval endpoint, and a defined soft-delete/versioning strategy for field-type changes and dropdown-option removal so existing Company records never end up with dangling values.
+
+**Current state (partial, not done):** Phase 8's field-metadata registry (ADR-0017) is generic over `moduleKey` by design, so Company Properties is served by the _same_ `FieldSectionsController`/`FieldsController`/`StatusOptionsController` as Contact Properties, called with `moduleKey=companies` — `companies.data jsonb` (0004_crm_contacts.sql) already exists to hold the Tier-2 values. What Phase 7 actually added: `record.company-properties.{read,create,update,delete}` (0018_add_company_properties_permissions.sql) as permission keys distinct from contact-properties', plus the enforcement to make that split real — `@RequirePermission` is static route metadata and can't see a request's moduleKey, so each controller route now accepts _either_ module's key as a coarse gate, and every service method (field-sections/fields/status-options) does the precise per-moduleKey check itself once it knows which row is actually being touched (see `field-metadata-permission.ts`). Reorder endpoints additionally verify every id in `orderedIds` actually belongs to the declared moduleKey (and, for field options, the declared field) — without that, a caller could smuggle another module's row into a same-permission reorder call. Not yet done: no docs/api-testing.md entries exist yet (same Swagger-gating rule as Phase 8), so these controllers stay `@ApiExcludeController()`; and the 23 rows in docs/api-inventory.md's Company Properties table are legacy RPC-style names not yet remapped onto this REST surface (same gap as Phase 8's table).
 
 ## Phase 8 — Settings > Data Management > Contact Properties
 
@@ -130,7 +132,7 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 
 **Exit criteria:** Every route listed for contact-properties in docs/api-inventory.md is implemented and has a real captured request/response entry in docs/api-testing.md. Specifically: sections/fields/field-types CRUD is tenant-scoped, field-type changes and deletions are soft-delete/versioned (never a naive DELETE against live contact data), and any conditional field-dependency support has cycle detection before it ships.
 
-**Current state (partial, not done):** the field-metadata registry (ADR-0017) is built and RLS-verified — `FieldSectionsController`/`FieldsController`/`StatusOptionsController` in `apps/api/src/modules/crm/{field-sections,fields,status-options}` cover sections, fields (+ options + field-level and option-level dependencies, cycle-checked), and status-option groups, all soft-delete/versioned as required above. Not yet done: the 24 rows in docs/api-inventory.md's Contact Properties table are named after the legacy system's RPC-style endpoints (`getListProperties`, `reorderFieldPosition`, `syncToSubaccounts`, ...), not a 1:1 match to this REST surface — that table needs a pass to re-map or supersede those names against the actual routes above. `syncToSubaccounts` (multi-account/franchise sync) has no equivalent here yet; there is no sub-accounts hierarchy in this schema to sync to. No docs/api-testing.md entries exist yet, so controllers stay `@ApiExcludeController()` per this doc's Swagger-gating rule.
+**Current state (partial, not done):** the field-metadata registry (ADR-0017) is built and RLS-verified — `FieldSectionsController`/`FieldsController`/`StatusOptionsController` in `apps/api/src/modules/crm/{field-sections,fields,status-options}` cover sections, fields (+ options + field-level and option-level dependencies, cycle-checked), and status-option groups, all soft-delete/versioned as required above. These same controllers also serve Phase 7 (Company Properties) via `moduleKey=companies`, gated by their own `record.company-properties.*` permission keys — see Phase 7's entry. Not yet done: the 24 rows in docs/api-inventory.md's Contact Properties table are named after the legacy system's RPC-style endpoints (`getListProperties`, `reorderFieldPosition`, `syncToSubaccounts`, ...), not a 1:1 match to this REST surface — that table needs a pass to re-map or supersede those names against the actual routes above. `syncToSubaccounts` (multi-account/franchise sync) has no equivalent here yet; there is no sub-accounts hierarchy in this schema to sync to. No docs/api-testing.md entries exist yet, so controllers stay `@ApiExcludeController()` per this doc's Swagger-gating rule.
 
 ## Phase 9 — File Manager
 

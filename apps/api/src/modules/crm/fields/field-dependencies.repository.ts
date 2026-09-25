@@ -10,6 +10,8 @@ export interface FieldDependencyRow {
   uuid: string;
   fieldId: number;
   fieldUuid: string;
+  /** The dependent field's moduleKey (fieldId, not dependsOnFieldId) — that's the row being gated. */
+  moduleKey: string;
   dependsOnFieldId: number;
   dependsOnFieldUuid: string;
   dependsOnOptionId: number | null;
@@ -23,6 +25,8 @@ export interface FieldOptionDependencyRow {
   uuid: string;
   parentOptionId: number;
   parentOptionUuid: string;
+  /** The parent option's owning field's moduleKey — same reasoning as above. */
+  moduleKey: string;
   childOptionId: number;
   childOptionUuid: string;
   createdAt: Date;
@@ -33,6 +37,7 @@ const parentField = alias(fields, 'parent_field');
 const dependsOnOption = alias(fieldOptions, 'depends_on_option');
 const parentOption = alias(fieldOptions, 'parent_option');
 const childOption = alias(fieldOptions, 'child_option');
+const parentOptionField = alias(fields, 'parent_option_field');
 
 /**
  * Data access for the two dependency tables. field_dependencies is
@@ -47,6 +52,7 @@ export class FieldDependenciesRepository {
       uuid: fieldDependencies.uuid,
       fieldId: fieldDependencies.fieldId,
       fieldUuid: dependentField.uuid,
+      moduleKey: dependentField.moduleKey,
       dependsOnFieldId: fieldDependencies.dependsOnFieldId,
       dependsOnFieldUuid: parentField.uuid,
       dependsOnOptionId: fieldDependencies.dependsOnOptionId,
@@ -184,6 +190,7 @@ export class FieldDependenciesRepository {
       uuid: fieldOptionDependencies.uuid,
       parentOptionId: fieldOptionDependencies.parentOptionId,
       parentOptionUuid: parentOption.uuid,
+      moduleKey: parentOptionField.moduleKey,
       childOptionId: fieldOptionDependencies.childOptionId,
       childOptionUuid: childOption.uuid,
       createdAt: fieldOptionDependencies.createdAt,
@@ -206,6 +213,13 @@ export class FieldDependenciesRepository {
         and(
           eq(childOption.orgId, fieldOptionDependencies.orgId),
           eq(childOption.id, fieldOptionDependencies.childOptionId),
+        ),
+      )
+      .innerJoin(
+        parentOptionField,
+        and(
+          eq(parentOptionField.orgId, parentOption.orgId),
+          eq(parentOptionField.id, parentOption.fieldId),
         ),
       );
   }

@@ -9,6 +9,8 @@ export interface FieldOptionRow {
   uuid: string;
   fieldId: number;
   fieldUuid: string;
+  /** The owning field's moduleKey — field_options carries no module_key of its own. */
+  moduleKey: string;
   value: string;
   label: string;
   position: number;
@@ -25,6 +27,7 @@ export class FieldOptionsRepository {
       uuid: fieldOptions.uuid,
       fieldId: fieldOptions.fieldId,
       fieldUuid: fields.uuid,
+      moduleKey: fields.moduleKey,
       value: fieldOptions.value,
       label: fieldOptions.label,
       position: fieldOptions.position,

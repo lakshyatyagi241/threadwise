@@ -10,6 +10,7 @@ import type {
   FieldOptionResponse,
   FieldResponse,
   ListFieldsQuery,
+  ModuleKey,
   PageResponse,
   ReorderFieldOptionsInput,
   ReorderFieldsInput,
@@ -21,6 +22,8 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { propertyPermissionKey, type PropertyAction } from '../field-metadata-permission';
 import { FieldDependenciesRepository } from './field-dependencies.repository';
 import { FieldOptionsRepository } from './field-options.repository';
 import {
@@ -29,7 +32,8 @@ import {
   toFieldOptionResponse,
   toFieldResponse,
 } from './fields.mapper';
-import { FieldsRepository } from './fields.repository';
+import { FieldsRepository, type FieldRow } from './fields.repository';
+import type { Tx } from '@crm/db';
 
 const MODULE_KEY = 'fields';
 /** Types whose values come from a fixed choice list. */
@@ -44,12 +48,28 @@ export class FieldsService {
     private readonly dependenciesRepo: FieldDependenciesRepository,
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
+    private readonly rbac: RbacService,
   ) {}
+
+  /** See FieldSectionsService.requireModulePermission — same rationale. */
+  private requireModulePermission(moduleKey: ModuleKey, action: PropertyAction) {
+    const ctx = RequestContextStore.require();
+    const key = propertyPermissionKey(moduleKey, action);
+    if (!this.rbac.can(ctx.grants!, key).allowed) throw AppError.forbidden(key);
+  }
+
+  private async buildFieldResponse(tx: Tx, orgId: number, row: FieldRow): Promise<FieldResponse> {
+    const options = OPTION_BACKED_TYPES.has(row.fieldType)
+      ? await this.optionsRepo.listByField(tx, orgId, row.id)
+      : undefined;
+    return toFieldResponse(row, options);
+  }
 
   // --- fields ---------------------------------------------------------
 
   async list(query: ListFieldsQuery): Promise<PageResponse<FieldResponse>> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
     return this.db.tx(async (tx) => {
       const sectionId = query.sectionId
         ? await this.repo.resolveSectionId(tx, ctx.orgId, query.sectionId)
@@ -82,15 +102,14 @@ export class FieldsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.requireField(tx, ctx.orgId, uuid);
-      const options = OPTION_BACKED_TYPES.has(row.fieldType)
-        ? await this.optionsRepo.listByField(tx, ctx.orgId, row.id)
-        : undefined;
-      return toFieldResponse(row, options);
+      this.requireModulePermission(row.moduleKey as ModuleKey, 'read');
+      return this.buildFieldResponse(tx, ctx.orgId, row);
     });
   }
 
   async create(input: CreateFieldInput): Promise<FieldResponse> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(input.moduleKey, 'create');
     return this.db.tx(async (tx) => {
       const sectionId = await this.repo.resolveSectionId(tx, ctx.orgId, input.sectionId);
       if (sectionId === undefined) throw AppError.notFound('FieldSection', input.sectionId);
@@ -143,7 +162,8 @@ export class FieldsService {
         payload: { uuid: created.uuid, moduleKey: input.moduleKey, key: input.key },
       });
 
-      return this.getByUuid(created.uuid);
+      const createdRow = await this.requireField(tx, ctx.orgId, created.uuid);
+      return this.buildFieldResponse(tx, ctx.orgId, createdRow);
     });
   }
 
@@ -151,6 +171,7 @@ export class FieldsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const existing = await this.requireField(tx, ctx.orgId, uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'update');
 
       const values: Record<string, unknown> = {};
       if (input.label !== undefined) values.label = input.label;
@@ -191,16 +212,19 @@ export class FieldsService {
         payload: { uuid, key: existing.key },
       });
 
-      return this.getByUuid(uuid);
+      const updatedRow = await this.requireField(tx, ctx.orgId, uuid);
+      return this.buildFieldResponse(tx, ctx.orgId, updatedRow);
     });
   }
 
   async reorder(input: ReorderFieldsInput): Promise<void> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(input.moduleKey, 'update');
     await this.db.tx(async (tx) => {
       const ids: number[] = [];
       for (const uuid of input.orderedIds) {
         const row = await this.requireField(tx, ctx.orgId, uuid);
+        if (row.moduleKey !== input.moduleKey) throw AppError.notFound('Field', uuid);
         ids.push(row.id);
       }
       await this.repo.reorder(tx, ctx.orgId, ids);
@@ -211,6 +235,7 @@ export class FieldsService {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
       const existing = await this.requireField(tx, ctx.orgId, uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'delete');
       // System fields (first_name, email, ...) render with a "Locked" badge
       // in Data Management for exactly this reason — deleting the ones every
       // other module reads by key is not a per-org decision to allow.
@@ -243,6 +268,7 @@ export class FieldsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      this.requireModulePermission(field.moduleKey as ModuleKey, 'read');
       const rows = await this.optionsRepo.listByField(tx, ctx.orgId, field.id);
       return rows.map(toFieldOptionResponse);
     });
@@ -255,6 +281,7 @@ export class FieldsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      this.requireModulePermission(field.moduleKey as ModuleKey, 'create');
       const position =
         input.position ?? (await this.optionsRepo.nextPosition(tx, ctx.orgId, field.id));
 
@@ -278,6 +305,7 @@ export class FieldsService {
     return this.db.tx(async (tx) => {
       const existing = await this.optionsRepo.findByUuid(tx, ctx.orgId, optionUuid);
       if (!existing) throw AppError.notFound('FieldOption', optionUuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'update');
 
       const values: Record<string, unknown> = {};
       if (input.value !== undefined) values.value = input.value;
@@ -300,12 +328,16 @@ export class FieldsService {
 
   async reorderOptions(fieldUuid: string, input: ReorderFieldOptionsInput): Promise<void> {
     const ctx = RequestContextStore.require();
-    await this.db.tx(async (tx) => {
-      await this.requireField(tx, ctx.orgId, fieldUuid);
+    return this.db.tx(async (tx) => {
+      const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      this.requireModulePermission(field.moduleKey as ModuleKey, 'update');
       const ids: number[] = [];
       for (const uuid of input.orderedIds) {
         const row = await this.optionsRepo.findByUuid(tx, ctx.orgId, uuid);
-        if (!row) throw AppError.notFound('FieldOption', uuid);
+        // Not just "exists" — must belong to *this* field, or a caller could
+        // reorder another field's (possibly another module's) options via
+        // this endpoint's permission check.
+        if (!row || row.fieldId !== field.id) throw AppError.notFound('FieldOption', uuid);
         ids.push(row.id);
       }
       await this.optionsRepo.reorder(tx, ctx.orgId, ids);
@@ -317,6 +349,7 @@ export class FieldsService {
     await this.db.tx(async (tx) => {
       const existing = await this.optionsRepo.findByUuid(tx, ctx.orgId, optionUuid);
       if (!existing) throw AppError.notFound('FieldOption', optionUuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'delete');
       await this.optionsRepo.deleteById(tx, ctx.orgId, existing.id);
     });
   }
@@ -327,6 +360,7 @@ export class FieldsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      this.requireModulePermission(field.moduleKey as ModuleKey, 'read');
       const rows = await this.dependenciesRepo.listByField(tx, ctx.orgId, field.id);
       return rows.map(toFieldDependencyResponse);
     });
@@ -336,6 +370,7 @@ export class FieldsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const field = await this.requireField(tx, ctx.orgId, input.fieldId);
+      this.requireModulePermission(field.moduleKey as ModuleKey, 'create');
       const dependsOnField = await this.requireField(tx, ctx.orgId, input.dependsOnFieldId);
 
       const dependsOnOptionId = input.dependsOnOptionId
@@ -372,6 +407,7 @@ export class FieldsService {
     await this.db.tx(async (tx) => {
       const existing = await this.dependenciesRepo.findDependencyByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('FieldDependency', uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'delete');
       await this.dependenciesRepo.deleteFieldDependency(tx, ctx.orgId, existing.id);
     });
   }
@@ -383,6 +419,7 @@ export class FieldsService {
     return this.db.tx(async (tx) => {
       const parent = await this.optionsRepo.findByUuid(tx, ctx.orgId, parentOptionUuid);
       if (!parent) throw AppError.notFound('FieldOption', parentOptionUuid);
+      this.requireModulePermission(parent.moduleKey as ModuleKey, 'read');
       const rows = await this.dependenciesRepo.listOptionDependenciesByParent(
         tx,
         ctx.orgId,
@@ -399,6 +436,7 @@ export class FieldsService {
     return this.db.tx(async (tx) => {
       const parent = await this.optionsRepo.findByUuid(tx, ctx.orgId, input.parentOptionId);
       if (!parent) throw AppError.notFound('FieldOption', input.parentOptionId);
+      this.requireModulePermission(parent.moduleKey as ModuleKey, 'create');
       const child = await this.optionsRepo.findByUuid(tx, ctx.orgId, input.childOptionId);
       if (!child) throw AppError.notFound('FieldOption', input.childOptionId);
 
@@ -421,6 +459,7 @@ export class FieldsService {
     await this.db.tx(async (tx) => {
       const existing = await this.dependenciesRepo.findOptionDependencyByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('FieldOptionDependency', uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'delete');
       await this.dependenciesRepo.deleteOptionDependency(tx, ctx.orgId, existing.id);
     });
   }
