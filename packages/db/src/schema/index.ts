@@ -12,5 +12,6 @@ export * from './columns';
 export * from './enums';
 export * from './foundation';
 export * from './crm';
+export * from './field-metadata';
 export * from './partner';
 export * from './ops';
