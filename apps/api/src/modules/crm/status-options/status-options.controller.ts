@@ -24,12 +24,14 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
+import { anyPropertyPermission } from '../field-metadata-permission';
 import { StatusOptionsService } from './status-options.service';
 
 /**
  * Settings > Data Management: org-extensible enum groups (lifecycle_stage,
- * deal_status, subscription statuses, ...). Phase 8 (docs/phase-plan.md) —
- * @ApiExcludeController until every route in that phase's exit criteria is
+ * deal_status, subscription statuses, ...) for both Contacts and Companies
+ * (moduleKey picks which). Phase 7 + Phase 8 (docs/phase-plan.md) —
+ * @ApiExcludeController until every route in both phases' exit criteria is
  * built and has a docs/api-testing.md entry.
  */
 @ApiTags('status-options')
@@ -40,7 +42,7 @@ export class StatusOptionsController {
   constructor(private readonly statusOptions: StatusOptionsService) {}
 
   @Get()
-  @RequirePermission('record.contact-properties.read')
+  @RequirePermission(...anyPropertyPermission('read'))
   @ApiOperation({ summary: 'List status options for a module, optionally one group' })
   async list(@Query(zodPipe(listStatusOptionsQuerySchema)) query: ListStatusOptionsQuery) {
     return this.statusOptions.list(query);
@@ -48,14 +50,14 @@ export class StatusOptionsController {
 
   @Post()
   @Idempotent()
-  @RequirePermission('record.contact-properties.create')
+  @RequirePermission(...anyPropertyPermission('create'))
   @ApiOperation({ summary: 'Add a status option to a group' })
   async create(@Body(zodPipe(createStatusOptionSchema)) body: CreateStatusOptionInput) {
     return this.statusOptions.create(body);
   }
 
   @Patch(':id')
-  @RequirePermission('record.contact-properties.update')
+  @RequirePermission(...anyPropertyPermission('update'))
   @ApiOperation({
     summary: 'Update a status option',
     description: 'Requires the rowVersion you read. A mismatch returns 409 ROW_VERSION_CONFLICT.',
@@ -68,7 +70,7 @@ export class StatusOptionsController {
   }
 
   @Post('reorder')
-  @RequirePermission('record.contact-properties.update')
+  @RequirePermission(...anyPropertyPermission('update'))
   @ApiOperation({ summary: 'Reorder options within a group' })
   async reorder(@Body(zodPipe(reorderStatusOptionsSchema)) body: ReorderStatusOptionsInput) {
     await this.statusOptions.reorder(body);
@@ -76,7 +78,7 @@ export class StatusOptionsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @RequirePermission('record.contact-properties.delete')
+  @RequirePermission(...anyPropertyPermission('delete'))
   @ApiOperation({ summary: 'Delete a status option' })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.statusOptions.remove(id);

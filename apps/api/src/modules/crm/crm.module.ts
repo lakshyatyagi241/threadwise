@@ -41,7 +41,10 @@ import { TagsService } from './tags/tags.service';
  * audit trail, see AuditService.listByRecord, rather than its own table).
  * Field sections, fields (+ options + dependencies) and status options are
  * Phase 8's field-metadata registry (Settings > Data Management > Contact
- * Properties) that Contacts' add/edit form and bulk-edit read from. Deals,
+ * Properties) that Contacts' add/edit form and bulk-edit read from — the same
+ * registry, keyed by moduleKey='companies', also serves Phase 7 (Company
+ * Properties); see field-metadata-permission.ts for how the two stay
+ * permission-isolated from each other. Deals,
  * leads, pipelines, invoices and tickets follow the same four files
  * (controller / service / repository / mapper) — copy a folder here rather
  * than inventing a new arrangement.

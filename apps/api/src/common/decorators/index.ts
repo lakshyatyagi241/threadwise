@@ -12,13 +12,18 @@ export const ACTOR_KINDS_KEY = 'auth:actor-kinds';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 
 /**
- * Capability required to reach this handler.
+ * Capability required to reach this handler. Pass more than one key when a
+ * route serves several moduleKeys under one path (e.g. field-metadata's
+ * contact-properties vs company-properties) and any one of them should let
+ * the caller in — this is a coarse OR gate only, decorator metadata can't see
+ * the request body. The service layer still must check the *specific*
+ * moduleKey's key once it knows which row is actually being touched.
  *
  * The guard resolves the caller's merged grants (deny beats allow) and also
- * stashes the matching record scope, so the service layer can narrow the query
- * to team/own without re-reading the grant.
+ * stashes the full grant set, so the service layer can do that finer check
+ * (or narrow a query to team/own) without re-reading the grant.
  */
-export const RequirePermission = (key: string) => SetMetadata(REQUIRED_PERMISSION_KEY, key);
+export const RequirePermission = (...keys: string[]) => SetMetadata(REQUIRED_PERMISSION_KEY, keys);
 
 /**
  * Route this handler's reads to the replica.
