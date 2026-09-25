@@ -36,3 +36,11 @@ export {
   toStatusOptionResponse,
 } from './status-options';
 export type { StatusOptionRow } from './status-options';
+export { TagsService, TagsRepository, toTagResponse } from './tags';
+export type { TagRow } from './tags';
+export {
+  ContactViewsService,
+  ContactViewsRepository,
+  toContactViewResponse,
+} from './contact-views';
+export type { ContactViewRow } from './contact-views';
