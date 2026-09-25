@@ -1,10 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
+import type { Tx } from '@crm/db';
+import { ERROR_CODES } from '@crm/contracts';
 import type {
+  AssigneeResponse,
+  BulkContactIdsInput,
+  BulkResult,
+  BulkUpdateContactsInput,
   ContactResponse,
+  ContactSelectItem,
+  ContactSelectQuery,
   CreateContactInput,
   ListContactsQuery,
   PageResponse,
   RecordScope,
+  SetContactAssigneeInput,
   UpdateContactInput,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
@@ -275,5 +284,142 @@ export class ContactsService {
     const id = await this.repo.resolveCompanyId(tx, orgId, uuid);
     if (id === undefined) throw AppError.notFound('Company', uuid);
     return id;
+  }
+
+  async selectData(query: ContactSelectQuery): Promise<ContactSelectItem[]> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx((tx) => this.repo.selectData(tx, ctx.orgId, query));
+  }
+
+  async listAssignees(): Promise<AssigneeResponse[]> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx((tx) => this.repo.listAssignable(tx, ctx.orgId));
+  }
+
+  async setAssignee(input: SetContactAssigneeInput): Promise<BulkResult> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const ownerId = input.ownerId ? await this.requireUser(tx, ctx.orgId, input.ownerId) : null;
+      return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
+        const updated = await this.repo.updateFieldsById(rowTx, ctx.orgId, id, {
+          ownerId,
+          updatedBy: ctx.userId,
+        });
+        if (!updated) throw AppError.notFound('Contact');
+
+        await this.audit.record(rowTx, {
+          module: MODULE_KEY,
+          recordId: id,
+          action: 'update',
+          delta: { ownerId: { old: undefined, new: ownerId } },
+        });
+        await this.outbox.emit(rowTx, {
+          aggregateModule: MODULE_KEY,
+          aggregateId: id,
+          eventType: 'contact.updated',
+          payload: { uuid, ownerId: input.ownerId },
+        });
+      });
+    });
+  }
+
+  /**
+   * Bulk-edit: every id in one outer transaction, but each row's write runs
+   * in its own SAVEPOINT (via nested `tx.transaction()`) so one bad id rolls
+   * back only that row — never the whole batch. Merges customFields the same
+   * way `update()` does (a partial patch, not a replace).
+   */
+  async bulkUpdate(input: BulkUpdateContactsInput): Promise<BulkResult> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const ownerId = input.values.ownerId
+        ? await this.requireUser(tx, ctx.orgId, input.values.ownerId)
+        : input.values.ownerId; // null (unset) or undefined (leave alone) pass through
+
+      return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
+        const existing = await this.repo.findById(rowTx, ctx.orgId, id);
+        if (!existing) throw AppError.notFound('Contact');
+
+        const values: Record<string, unknown> = { updatedBy: ctx.userId };
+        if (input.values.ownerId !== undefined) values.ownerId = ownerId;
+        if (input.values.lifecycleStage !== undefined)
+          values.lifecycleStage = input.values.lifecycleStage;
+        if (input.values.status !== undefined) values.status = input.values.status;
+        if (input.values.customFields !== undefined) {
+          values.data = { ...(existing.data ?? {}), ...input.values.customFields };
+        }
+
+        await this.repo.updateFieldsById(rowTx, ctx.orgId, id, values);
+        await this.audit.record(rowTx, { module: MODULE_KEY, recordId: id, action: 'update' });
+        await this.outbox.emit(rowTx, {
+          aggregateModule: MODULE_KEY,
+          aggregateId: id,
+          eventType:
+            input.values.lifecycleStage !== undefined &&
+            input.values.lifecycleStage !== existing.lifecycleStage
+              ? 'contact.stage_changed'
+              : 'contact.updated',
+          payload: {
+            uuid,
+            previousStage: existing.lifecycleStage,
+            stage: input.values.lifecycleStage ?? existing.lifecycleStage,
+          },
+        });
+      });
+    });
+  }
+
+  async bulkDelete(input: BulkContactIdsInput): Promise<BulkResult> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
+        const existing = await this.repo.findById(rowTx, ctx.orgId, id);
+        if (!existing) throw AppError.notFound('Contact');
+
+        await this.audit.record(rowTx, { module: MODULE_KEY, recordId: id, action: 'delete' });
+        await this.outbox.emit(rowTx, {
+          aggregateModule: MODULE_KEY,
+          aggregateId: id,
+          eventType: 'contact.deleted',
+          payload: { uuid, displayId: existing.displayId },
+        });
+        await this.repo.deleteById(rowTx, ctx.orgId, id);
+      });
+    });
+  }
+
+  /**
+   * Resolves every uuid to an internal id up front (a uuid that does not
+   * exist fails immediately, no savepoint needed), then runs `fn` for each
+   * resolved row inside its own SAVEPOINT so a mid-batch failure — a 404
+   * that raced with a concurrent delete, a constraint violation — rolls
+   * back only that row.
+   */
+  private async forEachRowIsolated(
+    tx: Tx,
+    orgId: number,
+    uuids: string[],
+    fn: (rowTx: Tx, id: number, uuid: string) => Promise<void>,
+  ): Promise<BulkResult> {
+    const succeeded: string[] = [];
+    const failed: BulkResult['failed'] = [];
+
+    for (const uuid of uuids) {
+      const row = await this.repo.findByUuid(tx, orgId, uuid);
+      if (!row) {
+        failed.push({ id: uuid, code: ERROR_CODES.NOT_FOUND, message: 'Contact not found' });
+        continue;
+      }
+      try {
+        await tx.transaction((rowTx) => fn(rowTx, row.id, uuid));
+        succeeded.push(uuid);
+      } catch (err) {
+        const message = err instanceof AppError ? err.message : 'Unexpected error';
+        const code = err instanceof AppError ? err.code : ERROR_CODES.INTERNAL;
+        failed.push({ id: uuid, code, message });
+      }
+    }
+
+    return { succeeded, failed };
   }
 }
