@@ -393,9 +393,21 @@ export class ContactsService {
 
   async setAssignee(input: SetContactAssigneeInput): Promise<BulkResult> {
     const ctx = RequestContextStore.require();
+    const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
     return this.db.tx(async (tx) => {
       const ownerId = input.ownerId ? await this.requireUser(tx, ctx.orgId, input.ownerId) : null;
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
+        const existing = await this.repo.findById(rowTx, ctx.orgId, id);
+        if (!existing) throw AppError.notFound('Contact');
+        await assertContactScope(
+          rowTx,
+          this.repo,
+          ctx.orgId,
+          updateScope,
+          ctx.userId!,
+          existing.ownerId,
+        );
+
         const updated = await this.repo.updateFieldsById(rowTx, ctx.orgId, id, {
           ownerId,
           updatedBy: ctx.userId,
