@@ -13,6 +13,8 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { propertyPermissionKey, type PropertyAction } from '../field-metadata-permission';
 import { toStatusOptionResponse } from './status-options.mapper';
 import { StatusOptionsRepository } from './status-options.repository';
 
@@ -26,10 +28,19 @@ export class StatusOptionsService {
     private readonly repo: StatusOptionsRepository,
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
+    private readonly rbac: RbacService,
   ) {}
+
+  /** See FieldSectionsService.requireModulePermission — same rationale. */
+  private requireModulePermission(moduleKey: ModuleKey, action: PropertyAction) {
+    const ctx = RequestContextStore.require();
+    const key = propertyPermissionKey(moduleKey, action);
+    if (!this.rbac.can(ctx.grants!, key).allowed) throw AppError.forbidden(key);
+  }
 
   async list(query: ListStatusOptionsQuery): Promise<PageResponse<StatusOptionResponse>> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, ctx.orgId, query.moduleKey, query.optionGroup);
       return {
@@ -41,6 +52,7 @@ export class StatusOptionsService {
 
   async create(input: CreateStatusOptionInput): Promise<StatusOptionResponse> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(input.moduleKey, 'create');
     return this.db.tx(async (tx) => {
       const position =
         input.position ??
@@ -83,6 +95,7 @@ export class StatusOptionsService {
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('StatusOption', uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'update');
 
       if (input.isDefault) {
         await this.repo.clearDefault(
@@ -132,11 +145,13 @@ export class StatusOptionsService {
 
   async reorder(input: ReorderStatusOptionsInput): Promise<void> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(input.moduleKey, 'update');
     await this.db.tx(async (tx) => {
       const ids: number[] = [];
       for (const uuid of input.orderedIds) {
         const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
-        if (!row) throw AppError.notFound('StatusOption', uuid);
+        if (!row || row.moduleKey !== input.moduleKey)
+          throw AppError.notFound('StatusOption', uuid);
         ids.push(row.id);
       }
       await this.repo.reorder(tx, ctx.orgId, ids);
@@ -148,6 +163,7 @@ export class StatusOptionsService {
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('StatusOption', uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'delete');
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
       await this.outbox.emit(tx, {

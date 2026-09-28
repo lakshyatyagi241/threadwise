@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createContactNoteSchema,
   listContactNotesQuerySchema,
@@ -30,7 +30,6 @@ import { ContactNotesService } from './contact-notes.service';
  * a contact, same precedent as contact_identities.
  */
 @ApiTags('contact-notes')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'contacts/:contactId/notes', version: '2' })
 export class ContactNotesController {

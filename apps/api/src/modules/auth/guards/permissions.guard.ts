@@ -30,22 +30,22 @@ export class PermissionsGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     if (context.getType() !== 'http') return true;
 
-    const required = this.reflector.getAllAndOverride<string>(REQUIRED_PERMISSION_KEY, [
+    const required = this.reflector.getAllAndOverride<string[]>(REQUIRED_PERMISSION_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-    if (!required) return true;
+    if (!required || required.length === 0) return true;
 
     const ctx = RequestContextStore.require();
     if (ctx.actorType !== 'user' || !ctx.userId) {
-      throw AppError.forbidden(required);
+      throw AppError.forbidden(required[0]!);
     }
 
     const grants = await this.rbac.grantsForUser(ctx.orgId, ctx.userId);
     ctx.grants = grants;
 
-    const { allowed } = this.rbac.can(grants, required);
-    if (!allowed) throw AppError.forbidden(required);
+    const allowed = required.some((key) => this.rbac.can(grants, key).allowed);
+    if (!allowed) throw AppError.forbidden(required[0]!);
 
     return true;
   }

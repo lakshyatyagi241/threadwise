@@ -3,6 +3,7 @@ import type {
   CreateFieldSectionInput,
   FieldSectionResponse,
   ListFieldSectionsQuery,
+  ModuleKey,
   PageResponse,
   ReorderFieldSectionsInput,
   UpdateFieldSectionInput,
@@ -12,6 +13,8 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { propertyPermissionKey, type PropertyAction } from '../field-metadata-permission';
 import { toFieldSectionResponse } from './field-sections.mapper';
 import { FieldSectionsRepository } from './field-sections.repository';
 
@@ -32,10 +35,24 @@ export class FieldSectionsService {
     private readonly repo: FieldSectionsRepository,
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
+    private readonly rbac: RbacService,
   ) {}
+
+  /**
+   * @RequirePermission on the controller only checks "some properties
+   * permission for this action" (it's static metadata, blind to moduleKey).
+   * This is the real, per-moduleKey check — contact-properties and
+   * company-properties must not unlock each other.
+   */
+  private requireModulePermission(moduleKey: ModuleKey, action: PropertyAction) {
+    const ctx = RequestContextStore.require();
+    const key = propertyPermissionKey(moduleKey, action);
+    if (!this.rbac.can(ctx.grants!, key).allowed) throw AppError.forbidden(key);
+  }
 
   async list(query: ListFieldSectionsQuery): Promise<PageResponse<FieldSectionResponse>> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
     return this.db.tx(async (tx) => {
       const rows = await this.repo.listByModule(tx, ctx.orgId, query.moduleKey);
       return {
@@ -47,6 +64,7 @@ export class FieldSectionsService {
 
   async create(input: CreateFieldSectionInput): Promise<FieldSectionResponse> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(input.moduleKey, 'create');
     return this.db.tx(async (tx) => {
       const position =
         input.position ?? (await this.repo.nextPosition(tx, ctx.orgId, input.moduleKey));
@@ -75,6 +93,7 @@ export class FieldSectionsService {
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('FieldSection', uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'update');
 
       const values: Record<string, unknown> = {};
       if (input.name !== undefined) values.name = input.name;
@@ -113,11 +132,16 @@ export class FieldSectionsService {
 
   async reorder(input: ReorderFieldSectionsInput): Promise<void> {
     const ctx = RequestContextStore.require();
+    this.requireModulePermission(input.moduleKey, 'update');
     await this.db.tx(async (tx) => {
       const ids: number[] = [];
       for (const uuid of input.orderedIds) {
         const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
-        if (!row) throw AppError.notFound('FieldSection', uuid);
+        // A uuid from a different moduleKey is treated as not found here
+        // rather than reordered — orderedIds must all belong to the module
+        // the caller declared and was checked against above.
+        if (!row || row.moduleKey !== input.moduleKey)
+          throw AppError.notFound('FieldSection', uuid);
         ids.push(row.id);
       }
       await this.repo.reorder(tx, ctx.orgId, ids);
@@ -129,6 +153,7 @@ export class FieldSectionsService {
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('FieldSection', uuid);
+      this.requireModulePermission(existing.moduleKey as ModuleKey, 'delete');
 
       // Fields in this section are not deleted — the FK is ON DELETE SET
       // NULL, so they just become sectionless rather than disappearing.
