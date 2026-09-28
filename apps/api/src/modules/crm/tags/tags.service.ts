@@ -15,6 +15,8 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { assertContactScope, ContactsRepository } from '../contacts';
 import { toTagResponse } from './tags.mapper';
 import { TagsRepository } from './tags.repository';
 
@@ -25,8 +27,10 @@ export class TagsService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: TagsRepository,
+    private readonly contactsRepo: ContactsRepository,
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
+    private readonly rbac: RbacService,
   ) {}
 
   async list(query: ListTagsQuery): Promise<PageResponse<TagResponse>> {
@@ -153,23 +157,39 @@ export class TagsService {
   async detachFromContact(contactUuid: string, tagUuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
-      const contactIdByUuid = await this.repo.resolveContactIdMap(tx, ctx.orgId, [contactUuid]);
-      const contactId = contactIdByUuid.get(contactUuid);
-      if (!contactId) throw AppError.notFound('Contact', contactUuid);
+      const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
+      if (!contact) throw AppError.notFound('Contact', contactUuid);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        contact.ownerId,
+      );
       const tag = await this.repo.findByUuid(tx, ctx.orgId, tagUuid);
       if (!tag) throw AppError.notFound('Tag', tagUuid);
 
-      await this.repo.detach(tx, ctx.orgId, contactId, tag.id);
+      await this.repo.detach(tx, ctx.orgId, contact.id, tag.id);
     });
   }
 
   async listForContact(contactUuid: string): Promise<TagResponse[]> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const contactIdByUuid = await this.repo.resolveContactIdMap(tx, ctx.orgId, [contactUuid]);
-      const contactId = contactIdByUuid.get(contactUuid);
-      if (!contactId) throw AppError.notFound('Contact', contactUuid);
-      const rows = await this.repo.listByContact(tx, ctx.orgId, contactId);
+      const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
+      if (!contact) throw AppError.notFound('Contact', contactUuid);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        contact.ownerId,
+      );
+      const rows = await this.repo.listByContact(tx, ctx.orgId, contact.id);
       return rows.map(toTagResponse);
     });
   }
