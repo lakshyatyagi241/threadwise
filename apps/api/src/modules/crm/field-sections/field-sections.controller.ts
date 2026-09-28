@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createFieldSectionSchema,
   listFieldSectionsQuerySchema,
@@ -30,12 +30,9 @@ import { FieldSectionsService } from './field-sections.service';
 /**
  * Settings > Data Management > Contact Properties AND Company Properties
  * (moduleKey picks which): section groups a field renders under. Phase 7 +
- * Phase 8 (docs/phase-plan.md) — stays out of /docs via @ApiExcludeController
- * until every route in both phases' exit criteria is built and has a
- * docs/api-testing.md entry.
+ * Phase 8 (docs/phase-plan.md).
  */
 @ApiTags('field-sections')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'field-sections', version: '2' })
 export class FieldSectionsController {

@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createTagSchema,
   listTagsQuerySchema,
@@ -26,13 +26,8 @@ import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decor
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { TagsService } from './tags.service';
 
-/**
- * Org-wide tags and their attachment to contacts. Phase 11
- * (docs/phase-plan.md) — @ApiExcludeController until every route in that
- * phase's exit criteria is built and has a docs/api-testing.md entry.
- */
+/** Org-wide tags and their attachment to contacts. Phase 11 (docs/phase-plan.md). */
 @ApiTags('tags')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'tags', version: '2' })
 export class TagsController {

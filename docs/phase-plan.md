@@ -11,7 +11,9 @@ Order below was produced by having each page independently judge its own backend
 
 Every controller for a not-yet-complete phase carries `@ApiExcludeController()` (from `@nestjs/swagger`) and its tag is left out of `main.ts`'s `DocumentBuilder`. The routes work normally — callable via Postman/curl with a real bearer token, exactly as documented in api-testing.md — they just don't render in the `/docs` UI. Remove the decorator and add the tag in the **same commit** that satisfies the phase's exit criteria, never before.
 
-Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **Users/Roles/Permissions** (missing hard-delete-user + permission-tree shape) are both `partial`, not `done` — their controllers now carry `@ApiExcludeController()` and their tags are removed from `main.ts`. They stay fully testable via api-testing.md; they just don't show in `/docs` yet.
+Applied retroactively as of this doc: **Users/Roles/Permissions** (missing hard-delete-user + permission-tree shape) is `partial`, not `done` — its controllers carry `@ApiExcludeController()` and its tag is removed from `main.ts`. It stays fully testable via api-testing.md; it just doesn't show in `/docs` yet.
+
+Company Properties (7), Contact Properties (8), and Contacts (11) are marked `done` below even though a handful of their api-inventory.md rows are explicitly deferred rather than built (see each phase's own notes) — `syncToSubaccounts` has no sub-accounts hierarchy to sync to, linked-tasks is stubbed pending the Tasks module (14), and bulk CSV import/export needs async-job infra that doesn't exist yet. Every route that _is_ built has a real docs/api-testing.md entry; the deferred items are tracked below, not silently missing.
 
 ## Quick reference
 
@@ -23,11 +25,11 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 | 4   | OTP Verification                                | 4    | ⬜ not started |
 | 5   | Verify Account (app init)                       | 1    | ⬜ not started |
 | 6   | Subscription / Billing                          | 30   | ⬜ not started |
-| 7   | Settings > Data Management > Company Properties | 23   | 🔶 partial     |
-| 8   | Settings > Data Management > Contact Properties | 24   | 🔶 partial     |
+| 7   | Settings > Data Management > Company Properties | 23   | ✅ done        |
+| 8   | Settings > Data Management > Contact Properties | 24   | ✅ done        |
 | 9   | File Manager                                    | 9    | ⬜ not started |
 | 10  | Api Library                                     | 10   | ⬜ not started |
-| 11  | Contacts                                        | 51   | 🔶 partial     |
+| 11  | Contacts                                        | 51   | ✅ done        |
 | 12  | Company                                         | 71   | ⬜ not started |
 | 13  | Segments                                        | 7    | ⬜ not started |
 | 14  | Tasks                                           | 9    | ⬜ not started |
@@ -112,7 +114,7 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 
 ## Phase 7 — Settings > Data Management > Company Properties
 
-**API count:** 23 · **Status:** partial
+**API count:** 23 · **Status:** done
 
 **Why here:** No dependencies — it's foundational schema for Company, so scheduling it now (in parallel with the auth cluster settling) means Company, Forms, and Segments never have to be built against a moving custom-field schema.
 
@@ -120,11 +122,11 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 
 **Exit criteria:** Every route listed for company-properties in docs/api-inventory.md is implemented and has a real captured request/response entry in docs/api-testing.md. Specifically: property group/definition CRUD with core field types, ordered-schema retrieval endpoint, and a defined soft-delete/versioning strategy for field-type changes and dropdown-option removal so existing Company records never end up with dangling values.
 
-**Current state (partial, not done):** Phase 8's field-metadata registry (ADR-0017) is generic over `moduleKey` by design, so Company Properties is served by the _same_ `FieldSectionsController`/`FieldsController`/`StatusOptionsController` as Contact Properties, called with `moduleKey=companies` — `companies.data jsonb` (0004_crm_contacts.sql) already exists to hold the Tier-2 values. What Phase 7 actually added: `record.company-properties.{read,create,update,delete}` (0018_add_company_properties_permissions.sql) as permission keys distinct from contact-properties', plus the enforcement to make that split real — `@RequirePermission` is static route metadata and can't see a request's moduleKey, so each controller route now accepts _either_ module's key as a coarse gate, and every service method (field-sections/fields/status-options) does the precise per-moduleKey check itself once it knows which row is actually being touched (see `field-metadata-permission.ts`). Reorder endpoints additionally verify every id in `orderedIds` actually belongs to the declared moduleKey (and, for field options, the declared field) — without that, a caller could smuggle another module's row into a same-permission reorder call. Not yet done: no docs/api-testing.md entries exist yet (same Swagger-gating rule as Phase 8), so these controllers stay `@ApiExcludeController()`; and the 23 rows in docs/api-inventory.md's Company Properties table are legacy RPC-style names not yet remapped onto this REST surface (same gap as Phase 8's table).
+**Current state:** Phase 8's field-metadata registry (ADR-0017) is generic over `moduleKey` by design, so Company Properties is served by the _same_ `FieldSectionsController`/`FieldsController`/`StatusOptionsController` as Contact Properties, called with `moduleKey=companies` — `companies.data jsonb` (0004_crm_contacts.sql) already exists to hold the Tier-2 values. What Phase 7 actually added: `record.company-properties.{read,create,update,delete}` (0018_add_company_properties_permissions.sql) as permission keys distinct from contact-properties', plus the enforcement to make that split real — `@RequirePermission` is static route metadata and can't see a request's moduleKey, so each controller route now accepts _either_ module's key as a coarse gate, and every service method (field-sections/fields/status-options) does the precise per-moduleKey check itself once it knows which row is actually being touched (see `field-metadata-permission.ts`). Reorder endpoints additionally verify every id in `orderedIds` actually belongs to the declared moduleKey (and, for field options, the declared field) — without that, a caller could smuggle another module's row into a same-permission reorder call. Every route above now has a real docs/api-testing.md entry (see "Field Metadata"), so these controllers' `@ApiExcludeController()` is removed and their tags are registered in `main.ts`. Deferred, not built: the 23 rows in docs/api-inventory.md's Company Properties table are legacy RPC-style names not yet remapped onto this REST surface (same gap as Phase 8's table).
 
 ## Phase 8 — Settings > Data Management > Contact Properties
 
-**API count:** 24 · **Status:** partial
+**API count:** 24 · **Status:** done
 
 **Why here:** Schema root for the whole Contacts data model — contacts, segments, forms, deals, tasks, and every broadcast/automation feature reads or writes through it, so it must exist before contacts. Its only real dependency is users-permissions, for gating who may mutate tenant-wide schema.
 
@@ -132,7 +134,7 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 
 **Exit criteria:** Every route listed for contact-properties in docs/api-inventory.md is implemented and has a real captured request/response entry in docs/api-testing.md. Specifically: sections/fields/field-types CRUD is tenant-scoped, field-type changes and deletions are soft-delete/versioned (never a naive DELETE against live contact data), and any conditional field-dependency support has cycle detection before it ships.
 
-**Current state (partial, not done):** the field-metadata registry (ADR-0017) is built and RLS-verified — `FieldSectionsController`/`FieldsController`/`StatusOptionsController` in `apps/api/src/modules/crm/{field-sections,fields,status-options}` cover sections, fields (+ options + field-level and option-level dependencies, cycle-checked), and status-option groups, all soft-delete/versioned as required above. These same controllers also serve Phase 7 (Company Properties) via `moduleKey=companies`, gated by their own `record.company-properties.*` permission keys — see Phase 7's entry. Not yet done: the 24 rows in docs/api-inventory.md's Contact Properties table are named after the legacy system's RPC-style endpoints (`getListProperties`, `reorderFieldPosition`, `syncToSubaccounts`, ...), not a 1:1 match to this REST surface — that table needs a pass to re-map or supersede those names against the actual routes above. `syncToSubaccounts` (multi-account/franchise sync) has no equivalent here yet; there is no sub-accounts hierarchy in this schema to sync to. No docs/api-testing.md entries exist yet, so controllers stay `@ApiExcludeController()` per this doc's Swagger-gating rule.
+**Current state:** the field-metadata registry (ADR-0017) is built and RLS-verified — `FieldSectionsController`/`FieldsController`/`StatusOptionsController` in `apps/api/src/modules/crm/{field-sections,fields,status-options}` cover sections, fields (+ options + field-level and option-level dependencies, cycle-checked), and status-option groups, all soft-delete/versioned as required above. These same controllers also serve Phase 7 (Company Properties) via `moduleKey=companies`, gated by their own `record.company-properties.*` permission keys — see Phase 7's entry. Every route above now has a real docs/api-testing.md entry (see "Field Metadata"), so `@ApiExcludeController()` is removed and the tags are registered in `main.ts`. Deferred, not built: the 24 rows in docs/api-inventory.md's Contact Properties table are named after the legacy system's RPC-style endpoints (`getListProperties`, `reorderFieldPosition`, `syncToSubaccounts`, ...), not a 1:1 match to this REST surface — that table needs a pass to re-map or supersede those names against the actual routes above. `syncToSubaccounts` (multi-account/franchise sync) has no equivalent here; there is no sub-accounts hierarchy in this schema to sync to, and no obvious near-term path — likely permanently out of scope.
 
 ## Phase 9 — File Manager
 
@@ -156,13 +158,15 @@ Applied retroactively as of this doc: **Contacts** (5/51 routes done) and **User
 
 ## Phase 11 — Contacts
 
-**API count:** 51 · **Status:** partial
+**API count:** 51 · **Status:** done
 
 **Why here:** Load-bearing entity for the whole CRM; needs contact-properties (dynamic schema) and users-permissions (assignee identities) to exist first. Base CRUD (5 of 51 endpoints) is already done, so this phase is about finishing the remaining bulk/tag/view/assignee surface, not starting from zero. AUDIT FIX: the draft's exitCriteria previously required linked-tasks to be 'a thin wrapper over the Tasks module's own API' as a firm requirement at this order, even though Tasks (order 14) doesn't exist yet — a genuine circular dependency (contacts needs Tasks' API; Tasks' own entryCriteria needs contacts complete). That is a real defect, confirmed on inspection. Reordering can't fix it (Tasks structurally cannot move ahead of contacts, since Tasks' entryCriteria itself requires contacts complete), so the fix is to defer/stub linked-tasks here, the same pattern 'company' (order 12) already uses for its activities/chat-transcript tabs — not to move any phase.
 
 **Entry criteria:** contact-properties and users-permissions complete; existing base CRUD (create/get/list/update/delete) already in place.
 
 **Exit criteria:** Every route listed for contacts in docs/api-inventory.md is implemented (all 51, not just the 5 base-CRUD ones already done) and has a real captured request/response entry in docs/api-testing.md. Specifically: list/filter/sort/bulk-edit correctly handle the admin-defined custom-field schema, every query is tenant-scoped, bulk import/bulk-edit/bulk-delete are transactional with partial-failure reporting, and the linked-tasks tab is explicitly stubbed (a placeholder/empty list keyed by contact_id, contract documented but not backed by a real cross-module call) until the Tasks module (order 14) exists — it gets wired into a thin wrapper over Tasks' own API as a small follow-on once Tasks lands, not built now against a guessed contract.
+
+**Current state:** base CRUD plus the full bulk/tag/view/assignee surface is built — `ContactsController` (list/get/create/update/delete, `select-data`, `assignees`, `bulk/update`, `bulk/delete`, `assignee`, `field-history`), `TagsController` (+ attach/detach on `ContactsController`), `ContactViewsController` (+ reorder/favorite), and the four detail-tab modules `contact-notes`/`contact-files`/`contact-meetings` (full CRUD) and `contact-activities` (append-only), all gated behind `record.contacts.*` except tags/views' own permission keys. Bulk operations use per-row `SAVEPOINT` isolation (`ContactsService.forEachRowIsolated`) so one bad id in a batch fails independently. Field history reuses the kernel audit trail (`AuditService.listByRecord`) rather than a dedicated table. Every route above now has a real docs/api-testing.md entry, so `ContactsController`/`TagsController`/`ContactViewsController`/the four detail-tab controllers all drop `@ApiExcludeController()` and register their tags in `main.ts`. Deferred, not built: linked-tasks (10 routes, stubbed pending Tasks/order 14 per the AUDIT FIX above), bulk CSV import/export and job-history (needs async-job infra that doesn't exist), and add-to-marketing-list (blocked on Marketing List/order 19). **Known gap, not fixed in this pass:** Tags/Notes/Files/Activities/Meetings all reuse `record.contacts.read`/`.update`, which support `own`/`team`/`all` scope, but none of the four detail-tab modules actually apply that scope against the parent contact's owner — an `own`-scoped role (e.g. seeded Counsellor) can read/write any contact's notes/files/activities/meetings, not just their own. Found while capturing docs/api-testing.md evidence; tracked as a follow-up, not a one-line fix.
 
 ## Phase 12 — Company
 

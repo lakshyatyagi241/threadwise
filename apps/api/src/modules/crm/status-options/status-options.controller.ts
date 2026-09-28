@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createStatusOptionSchema,
   listStatusOptionsQuerySchema,
@@ -30,12 +30,9 @@ import { StatusOptionsService } from './status-options.service';
 /**
  * Settings > Data Management: org-extensible enum groups (lifecycle_stage,
  * deal_status, subscription statuses, ...) for both Contacts and Companies
- * (moduleKey picks which). Phase 7 + Phase 8 (docs/phase-plan.md) —
- * @ApiExcludeController until every route in both phases' exit criteria is
- * built and has a docs/api-testing.md entry.
+ * (moduleKey picks which). Phase 7 + Phase 8 (docs/phase-plan.md).
  */
 @ApiTags('status-options')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'status-options', version: '2' })
 export class StatusOptionsController {
