@@ -381,9 +381,11 @@ export class ContactsService {
     });
   }
 
-  async selectData(query: ContactSelectQuery): Promise<ContactSelectItem[]> {
+  async selectData(query: ContactSelectQuery, scope: RecordScope): Promise<ContactSelectItem[]> {
     const ctx = RequestContextStore.require();
-    return this.db.tx((tx) => this.repo.selectData(tx, ctx.orgId, query));
+    return this.db.tx((tx) =>
+      this.repo.selectData(tx, ctx.orgId, { ...query, scope, actorUserId: ctx.userId }),
+    );
   }
 
   async listAssignees(): Promise<AssigneeResponse[]> {

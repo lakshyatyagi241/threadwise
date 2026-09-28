@@ -103,6 +103,33 @@ export class ContactsRepository {
     };
   }
 
+  /**
+   * Record scope, as a WHERE condition against `contacts.owner_id`. 'all'
+   * returns undefined (adds nothing); 'own' and 'team' narrow the query.
+   * A caller with no user id (should not happen on a real route) collapses
+   * to a predicate that matches nothing rather than to "everything".
+   */
+  private scopeCondition(
+    orgId: number,
+    scope: RecordScope,
+    actorUserId: number | null,
+  ): SQL | undefined {
+    if (scope === 'all') return undefined;
+    if (scope === 'own') {
+      return actorUserId ? eq(contacts.ownerId, actorUserId) : sql`false`;
+    }
+    if (!actorUserId) return sql`false`;
+    return sql`
+      ${contacts.ownerId} IN (
+        SELECT tm2.user_id
+        FROM ${teamMembers} tm1
+        JOIN ${teamMembers} tm2
+          ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
+        WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}
+      )
+    `;
+  }
+
   /** Select + joins, without a WHERE — each caller adds its own. */
   private baseQuery(tx: Tx) {
     return tx
@@ -139,24 +166,8 @@ export class ContactsRepository {
       if (match) conditions.push(match);
     }
 
-    // Record scope. 'all' adds nothing; 'own' and 'team' narrow it. A caller
-    // with no user id (should not happen on this route) collapses to a
-    // predicate that matches nothing rather than to "everything".
-    if (filter.scope === 'own') {
-      conditions.push(filter.actorUserId ? eq(contacts.ownerId, filter.actorUserId) : sql`false`);
-    } else if (filter.scope === 'team' && filter.actorUserId) {
-      conditions.push(sql`
-        ${contacts.ownerId} IN (
-          SELECT tm2.user_id
-          FROM ${teamMembers} tm1
-          JOIN ${teamMembers} tm2
-            ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-          WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${filter.actorUserId}
-        )
-      `);
-    } else if (filter.scope === 'team') {
-      conditions.push(sql`false`);
-    }
+    const scopeCondition = this.scopeCondition(orgId, filter.scope, filter.actorUserId);
+    if (scopeCondition) conditions.push(scopeCondition);
 
     // Keyset boundary over the (created_at, id) tuple. Row-value comparison so
     // the planner can use the composite index directly.
@@ -363,7 +374,7 @@ export class ContactsRepository {
   async selectData(
     tx: Tx,
     orgId: number,
-    filter: { q?: string; limit: number },
+    filter: { q?: string; limit: number; scope: RecordScope; actorUserId: number | null },
   ): Promise<
     Array<{ id: string; name: string | null; email: string | null; phone: string | null }>
   > {
@@ -377,6 +388,8 @@ export class ContactsRepository {
       );
       if (match) conditions.push(match);
     }
+    const scopeCondition = this.scopeCondition(orgId, filter.scope, filter.actorUserId);
+    if (scopeCondition) conditions.push(scopeCondition);
 
     const rows = await tx
       .select({
