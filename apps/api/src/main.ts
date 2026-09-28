@@ -46,11 +46,21 @@ async function bootstrap(): Promise<void> {
         .setVersion('0.1.0')
         .addBearerAuth()
         .addTag('auth')
-        // 'users' / 'roles' / 'permissions' / 'contacts' stay off this list —
-        // per docs/phase-plan.md, a page's tag is added only once every route
-        // in its docs/api-inventory.md row is built and has a
+        // 'users' / 'roles' / 'permissions' stay off this list — per
+        // docs/phase-plan.md, a page's tag is added only once every route in
+        // its docs/api-inventory.md row is built and has a
         // docs/api-testing.md entry. Their controllers carry
         // @ApiExcludeController() until then.
+        .addTag('contacts')
+        .addTag('field-sections')
+        .addTag('fields')
+        .addTag('status-options')
+        .addTag('tags')
+        .addTag('contact-views')
+        .addTag('contact-notes')
+        .addTag('contact-files')
+        .addTag('contact-activities')
+        .addTag('contact-meetings')
         .addTag('partner-portal')
         .addTag('public-api')
         .addTag('health')
