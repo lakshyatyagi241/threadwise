@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 
 const { fieldOptions, fields } = schema;
@@ -9,6 +9,8 @@ export interface FieldOptionRow {
   uuid: string;
   fieldId: number;
   fieldUuid: string;
+  /** The owning field's moduleKey — field_options carries no module_key of its own. */
+  moduleKey: string;
   value: string;
   label: string;
   position: number;
@@ -25,6 +27,7 @@ export class FieldOptionsRepository {
       uuid: fieldOptions.uuid,
       fieldId: fieldOptions.fieldId,
       fieldUuid: fields.uuid,
+      moduleKey: fields.moduleKey,
       value: fieldOptions.value,
       label: fieldOptions.label,
       position: fieldOptions.position,
@@ -58,7 +61,7 @@ export class FieldOptionsRepository {
   ): Promise<Map<number, FieldOptionRow[]>> {
     if (fieldIds.length === 0) return new Map();
     const rows = await this.baseQuery(tx)
-      .where(and(eq(fieldOptions.orgId, orgId), sql`${fieldOptions.fieldId} = ANY(${fieldIds})`))
+      .where(and(eq(fieldOptions.orgId, orgId), inArray(fieldOptions.fieldId, fieldIds)))
       .orderBy(asc(fieldOptions.position), asc(fieldOptions.id));
 
     const byField = new Map<number, FieldOptionRow[]>();

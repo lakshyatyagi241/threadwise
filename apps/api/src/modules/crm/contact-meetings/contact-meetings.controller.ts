@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createContactMeetingSchema,
   listContactMeetingsQuerySchema,
@@ -29,7 +29,6 @@ import { ContactMeetingsService } from './contact-meetings.service';
  * record.contacts.* (not its own permission set).
  */
 @ApiTags('contact-meetings')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'contacts/:contactId/meetings', version: '2' })
 export class ContactMeetingsController {

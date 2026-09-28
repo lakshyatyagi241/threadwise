@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createContactViewSchema,
   listContactViewsQuerySchema,
@@ -26,13 +26,8 @@ import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decor
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { ContactViewsService } from './contact-views.service';
 
-/**
- * Saved contact list views. Phase 11 (docs/phase-plan.md) —
- * @ApiExcludeController until every route in that phase's exit criteria is
- * built and has a docs/api-testing.md entry.
- */
+/** Saved contact list views. Phase 11 (docs/phase-plan.md). */
 @ApiTags('contact-views')
-@ApiExcludeController()
 @ActorKinds('user')
 @Controller({ path: 'contact-views', version: '2' })
 export class ContactViewsController {
@@ -67,6 +62,7 @@ export class ContactViewsController {
   }
 
   @Post('reorder')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.contact-views.update')
   @ApiOperation({ summary: 'Reorder views' })
   async reorder(@Body(zodPipe(reorderContactViewsSchema)) body: ReorderContactViewsInput) {
@@ -82,6 +78,7 @@ export class ContactViewsController {
   }
 
   @Post(':id/favorite')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.contact-views.read')
   @ApiOperation({ summary: "Pin a shared view onto the caller's own sidebar" })
   async favorite(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
