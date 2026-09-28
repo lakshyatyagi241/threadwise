@@ -91,64 +91,71 @@ Blocked on frontend — UI + API integration pending. No API list provided yet.
 
 ## Contacts
 
-| API Group            | API Name                                   | Route              | Status                                                     |
-| -------------------- | ------------------------------------------ | ------------------ | ---------------------------------------------------------- |
-| List/View/Bulk       | getContactsList                            | `GET /v2/contacts` | 🔶 basic list built; not grid/module-record variants below |
-| List/View/Bulk       | getContactsListDataAsPerModuleRecord       | —                  | ⬜                                                         |
-| List/View/Bulk       | getContactsSelectData                      | —                  | ⬜                                                         |
-| List/View/Bulk       | getContactGridView                         | —                  | ⬜                                                         |
-| List/View/Bulk       | ContactGridViewUpdate                      | —                  | ⬜                                                         |
-| List/View/Bulk       | GetMoreContacts                            | —                  | ⬜                                                         |
-| List/View/Bulk       | deleteKanbanContacts                       | —                  | ⬜                                                         |
-| List/View/Bulk       | bulkUpdateContact                          | —                  | ⬜                                                         |
-| List/View/Bulk       | getBulkUpdateFields                        | —                  | ⬜                                                         |
-| List/View/Bulk       | deleteBulkContact                          | —                  | ⬜                                                         |
-| List/View/Bulk       | bulkExport                                 | —                  | ⬜                                                         |
-| List/View/Bulk       | GetExportedContacts                        | —                  | ⬜                                                         |
-| List/View/Bulk       | DownloadExportedContacts                   | —                  | ⬜                                                         |
-| List/View/Bulk       | getContactsTagsList                        | —                  | ⬜                                                         |
-| List/View/Bulk       | addTagsList                                | —                  | ⬜                                                         |
-| List/View/Bulk       | getAssigneeList                            | —                  | ⬜                                                         |
-| List/View/Bulk       | addAssignee                                | —                  | ⬜                                                         |
-| List/View/Bulk       | getAddToList                               | —                  | ⬜                                                         |
-| List/View/Bulk       | addToList                                  | —                  | ⬜                                                         |
-| List/View/Bulk       | getAllContactsViews                        | —                  | ⬜                                                         |
-| List/View/Bulk       | createContactView                          | —                  | ⬜                                                         |
-| List/View/Bulk       | updateContactView                          | —                  | ⬜                                                         |
-| List/View/Bulk       | reOrderContactView                         | —                  | ⬜                                                         |
-| List/View/Bulk       | deleteContactView                          | —                  | ⬜                                                         |
-| List/View/Bulk       | addContactView                             | —                  | ⬜                                                         |
-| List/View/Bulk       | closeContactView                           | —                  | ⬜                                                         |
-| Add/Edit Form        | saveContactsSocialMedia                    | —                  | ⬜                                                         |
-| Add/Edit Form        | getAddContactsFilds                        | —                  | ⬜                                                         |
-| Add/Edit Form        | getEditContactsFilds                       | —                  | ⬜                                                         |
-| Add/Edit Form        | getAddContactsDropDown                     | —                  | ⬜                                                         |
-| Add/Edit Form        | getContactsDropDownForUndependant          | —                  | ⬜                                                         |
-| Add/Edit Form        | getReviewedNotes                           | —                  | ⬜                                                         |
-| Contact-linked Tasks | getContectList                             | —                  | ⬜                                                         |
-| Contact-linked Tasks | getTaskDetailsOptions                      | —                  | ⬜                                                         |
-| Contact-linked Tasks | createTask                                 | —                  | ⬜                                                         |
-| Contact-linked Tasks | getAllTask                                 | —                  | ⬜                                                         |
-| Contact-linked Tasks | getSingleTask                              | —                  | ⬜                                                         |
-| Contact-linked Tasks | updateTask                                 | —                  | ⬜                                                         |
-| Contact-linked Tasks | getAllTaskByContactId                      | —                  | ⬜                                                         |
-| Contact-linked Tasks | deleteTaskByIds                            | —                  | ⬜                                                         |
-| Contact-linked Tasks | deleteOutcomeById                          | —                  | ⬜                                                         |
-| Contact-linked Tasks | setOutcome                                 | —                  | ⬜                                                         |
-| Misc                 | getLeadsTableColumnNetwork                 | —                  | ⬜                                                         |
-| Misc                 | leadsForContactNetwork                     | —                  | ⬜                                                         |
-| Misc                 | getMarketingStatusOption                   | —                  | ⬜                                                         |
-| Misc                 | getLifeCycleStage                          | —                  | ⬜                                                         |
-| Misc                 | getEcommerceContactOrderList               | —                  | ⬜                                                         |
-| Misc                 | getBroadcastLimit                          | —                  | ⬜                                                         |
-| Dropdown helper      | getContactPropertiesFieldOptions           | —                  | ⬜                                                         |
-| Dropdown helper      | getContactPropertiesList                   | —                  | ⬜                                                         |
-| Dropdown helper      | getAllVisibleContactPropertiesFieldOptions | —                  | ⬜                                                         |
+| API Group            | API Name                                   | Route                                                                   | Status                                                                                            |
+| -------------------- | ------------------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| List/View/Bulk       | getContactsList                            | `GET /v2/contacts`                                                      | 🔶 basic list built; not grid/module-record variants below                                        |
+| List/View/Bulk       | getContactsListDataAsPerModuleRecord       | —                                                                       | ⬜ dropped — no grid/kanban "module record" list shape in this schema                             |
+| List/View/Bulk       | getContactsSelectData                      | `GET /v2/contacts/select-data`                                          | ✅                                                                                                |
+| List/View/Bulk       | getContactGridView                         | —                                                                       | ⬜ dropped — no kanban/grid board view built                                                      |
+| List/View/Bulk       | ContactGridViewUpdate                      | —                                                                       | ⬜ dropped — same, no grid view                                                                   |
+| List/View/Bulk       | GetMoreContacts                            | `GET /v2/contacts` (`?cursor=`)                                         | ✅ same list route, cursor pagination                                                             |
+| List/View/Bulk       | deleteKanbanContacts                       | —                                                                       | ⬜ dropped — no kanban view                                                                       |
+| List/View/Bulk       | bulkUpdateContact                          | `POST /v2/contacts/bulk/update`                                         | ✅                                                                                                |
+| List/View/Bulk       | getBulkUpdateFields                        | —                                                                       | ⬜ dropped — client derives bulk-editable fields from `GET /v2/fields?moduleKey=contacts` instead |
+| List/View/Bulk       | deleteBulkContact                          | `POST /v2/contacts/bulk/delete`                                         | ✅                                                                                                |
+| List/View/Bulk       | bulkExport                                 | —                                                                       | ⬜ needs async-job infra, not built                                                               |
+| List/View/Bulk       | GetExportedContacts                        | —                                                                       | ⬜ needs async-job infra, not built                                                               |
+| List/View/Bulk       | DownloadExportedContacts                   | —                                                                       | ⬜ needs async-job infra, not built                                                               |
+| List/View/Bulk       | getContactsTagsList                        | `GET /v2/tags`                                                          | ✅                                                                                                |
+| List/View/Bulk       | addTagsList                                | `POST /v2/tags/attach`                                                  | ✅                                                                                                |
+| List/View/Bulk       | getAssigneeList                            | `GET /v2/contacts/assignees`                                            | ✅                                                                                                |
+| List/View/Bulk       | addAssignee                                | `POST /v2/contacts/assignee`                                            | ✅                                                                                                |
+| List/View/Bulk       | getAddToList                               | —                                                                       | ⬜ blocked on Marketing List (Phase 19)                                                           |
+| List/View/Bulk       | addToList                                  | —                                                                       | ⬜ blocked on Marketing List (Phase 19)                                                           |
+| List/View/Bulk       | getAllContactsViews                        | `GET /v2/contact-views`                                                 | ✅                                                                                                |
+| List/View/Bulk       | createContactView                          | `POST /v2/contact-views`                                                | ✅                                                                                                |
+| List/View/Bulk       | updateContactView                          | `PATCH /v2/contact-views/:id`                                           | ✅                                                                                                |
+| List/View/Bulk       | reOrderContactView                         | `POST /v2/contact-views/reorder`                                        | ✅                                                                                                |
+| List/View/Bulk       | deleteContactView                          | `DELETE /v2/contact-views/:id`                                          | ✅                                                                                                |
+| List/View/Bulk       | addContactView                             | `POST /v2/contact-views/:id/favorite`                                   | 🔶 best-guess mapping (pin a shared view) — not confirmed against original frontend call site     |
+| List/View/Bulk       | closeContactView                           | `DELETE /v2/contact-views/:id/favorite`                                 | 🔶 best-guess mapping (unpin) — not confirmed against original frontend call site                 |
+| Add/Edit Form        | saveContactsSocialMedia                    | —                                                                       | ⬜ dropped — no social-media fields concept in this schema                                        |
+| Add/Edit Form        | getAddContactsFilds                        | `GET /v2/fields?moduleKey=contacts`                                     | ✅                                                                                                |
+| Add/Edit Form        | getEditContactsFilds                       | `GET /v2/fields?moduleKey=contacts`                                     | ✅ same registry backs both add and edit forms                                                    |
+| Add/Edit Form        | getAddContactsDropDown                     | `GET /v2/fields/:id/options`                                            | ✅                                                                                                |
+| Add/Edit Form        | getContactsDropDownForUndependant          | `GET /v2/fields/options/:optionId/dependencies`                         | 🔶 best-guess mapping (dependency-aware dropdown) — not confirmed against original call site      |
+| Add/Edit Form        | getReviewedNotes                           | `GET /v2/contacts/:contactId/notes`                                     | ✅                                                                                                |
+| Contact-linked Tasks | getContectList                             | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14) — see Phase 11's AUDIT FIX in phase-plan.md            |
+| Contact-linked Tasks | getTaskDetailsOptions                      | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | createTask                                 | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | getAllTask                                 | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | getSingleTask                              | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | updateTask                                 | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | getAllTaskByContactId                      | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | deleteTaskByIds                            | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | deleteOutcomeById                          | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Contact-linked Tasks | setOutcome                                 | —                                                                       | ⬜ stubbed pending Tasks module (Phase 14)                                                        |
+| Misc                 | getLeadsTableColumnNetwork                 | —                                                                       | ⬜ dropped — no leads-table/column-config concept in this schema                                  |
+| Misc                 | leadsForContactNetwork                     | —                                                                       | ⬜ dropped — no leads concept separate from contacts in this schema                               |
+| Misc                 | getMarketingStatusOption                   | `GET /v2/status-options?moduleKey=contacts`                             | 🔶 best-guess mapping (subscription-status option groups) — not confirmed against call site       |
+| Misc                 | getLifeCycleStage                          | `GET /v2/status-options?moduleKey=contacts&optionGroup=lifecycle_stage` | ✅                                                                                                |
+| Misc                 | getEcommerceContactOrderList               | —                                                                       | ⬜ dropped — no ecommerce/orders concept in this schema                                           |
+| Misc                 | getBroadcastLimit                          | —                                                                       | ⬜ not built — wallet/quota concept belongs to Phase 6 (Subscription/Billing), not built          |
+| Dropdown helper      | getContactPropertiesFieldOptions           | `GET /v2/fields/:id/options`                                            | ✅                                                                                                |
+| Dropdown helper      | getContactPropertiesList                   | `GET /v2/fields?moduleKey=contacts`                                     | ✅                                                                                                |
+| Dropdown helper      | getAllVisibleContactPropertiesFieldOptions | `GET /v2/fields?moduleKey=contacts`                                     | ✅ client filters `isHidden` — no separate "visible only" endpoint                                |
 
 Create/Update/Get-by-id/Delete for a single contact already exist as
 `POST/GET/PATCH/DELETE /v2/contacts[/:id]` (Phase 1 reference slice) — the 51
-items above are the list/bulk/view/task/misc layer on top, none of which are
-built yet.
+items above are the list/bulk/view/task/misc layer on top. Most are now built
+(see the routes above); remaining gaps are the 10 Contact-linked Tasks rows
+(stubbed pending Phase 14), CSV export/import (needs async-job infra), and
+add-to-marketing-list (blocked on Phase 19) — none of which block this
+workstream's own completion bar (every route that _is_ built has a
+docs/api-testing.md entry). A handful of rows (marked 🔶 above) are
+best-guess mappings onto the closest built route rather than a confirmed
+match against the original frontend call site, since that source file isn't
+available here — worth a second pass by whoever has it.
 
 ## Company
 
@@ -274,60 +281,60 @@ built yet.
 
 ## Settings → Data Management → Company Properties
 
-| API Group          | API Name                       | Route | Status |
-| ------------------ | ------------------------------ | ----- | ------ |
-| Company Properties | getListProperties              | —     | ⬜     |
-| Company Properties | updateFieldProperties          | —     | ⬜     |
-| Company Properties | ChangeOrderFieldProperties     | —     | ⬜     |
-| Company Properties | AddCompanyPropertiesSection    | —     | ⬜     |
-| Company Properties | DeleteCompanyPropertiesSection | —     | ⬜     |
-| Company Properties | UpdateCompanyPropertiesSection | —     | ⬜     |
-| Company Properties | AddCompanyPropertiesFields     | —     | ⬜     |
-| Company Properties | UpdateCompanyProperties        | —     | ⬜     |
-| Company Properties | HideCompanyProperties          | —     | ⬜     |
-| Company Properties | DeleteCompanyProperties        | —     | ⬜     |
-| Company Properties | GetAllSectionDetails           | —     | ⬜     |
-| Company Properties | GetAllOptions                  | —     | ⬜     |
-| Company Properties | reorderFieldPosition           | —     | ⬜     |
-| Company Properties | GetHiddenField                 | —     | ⬜     |
-| Company Properties | UpdateHiddenField              | —     | ⬜     |
-| Company Properties | GetDependencyProperties        | —     | ⬜     |
-| Company Properties | GetDependencyOptions           | —     | ⬜     |
-| Company Properties | CreateDependencyMapping        | —     | ⬜     |
-| Company Properties | GetMappingByID                 | —     | ⬜     |
-| Company Properties | GetDependencyList              | —     | ⬜     |
-| Company Properties | DeleteDependency               | —     | ⬜     |
-| Company Properties | DeleteCompanyPropertiesField   | —     | ⬜     |
-| Company Properties | changeFieldPosition            | —     | ⬜     |
+| API Group          | API Name                       | Route                                                                                    | Status                                                                                                 |
+| ------------------ | ------------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Company Properties | getListProperties              | `GET /v2/fields?moduleKey=companies`                                                     | ✅                                                                                                     |
+| Company Properties | updateFieldProperties          | `PATCH /v2/fields/:id`                                                                   | ✅                                                                                                     |
+| Company Properties | ChangeOrderFieldProperties     | `POST /v2/fields/reorder`                                                                | ✅                                                                                                     |
+| Company Properties | AddCompanyPropertiesSection    | `POST /v2/field-sections`                                                                | ✅                                                                                                     |
+| Company Properties | DeleteCompanyPropertiesSection | `DELETE /v2/field-sections/:id`                                                          | ✅                                                                                                     |
+| Company Properties | UpdateCompanyPropertiesSection | `PATCH /v2/field-sections/:id`                                                           | ✅                                                                                                     |
+| Company Properties | AddCompanyPropertiesFields     | `POST /v2/fields`                                                                        | ✅                                                                                                     |
+| Company Properties | UpdateCompanyProperties        | `PATCH /v2/fields/:id`                                                                   | ✅                                                                                                     |
+| Company Properties | HideCompanyProperties          | `PATCH /v2/fields/:id` (`isHidden: true`)                                                | ✅                                                                                                     |
+| Company Properties | DeleteCompanyProperties        | `DELETE /v2/fields/:id`                                                                  | ✅                                                                                                     |
+| Company Properties | GetAllSectionDetails           | `GET /v2/field-sections?moduleKey=companies`                                             | ✅                                                                                                     |
+| Company Properties | GetAllOptions                  | `GET /v2/fields/:id/options`                                                             | ✅                                                                                                     |
+| Company Properties | reorderFieldPosition           | `POST /v2/fields/reorder`                                                                | ✅                                                                                                     |
+| Company Properties | GetHiddenField                 | `GET /v2/fields?moduleKey=companies`                                                     | ✅ client filters `isHidden` — no separate hidden-only endpoint                                        |
+| Company Properties | UpdateHiddenField              | `PATCH /v2/fields/:id` (`isHidden`)                                                      | ✅                                                                                                     |
+| Company Properties | GetDependencyProperties        | `GET /v2/fields/:id/dependencies`                                                        | ✅                                                                                                     |
+| Company Properties | GetDependencyOptions           | `GET /v2/fields/options/:optionId/dependencies`                                          | ✅                                                                                                     |
+| Company Properties | CreateDependencyMapping        | `POST /v2/fields/dependencies` (field-level) / `.../options/dependencies` (option-level) | ✅                                                                                                     |
+| Company Properties | GetMappingByID                 | —                                                                                        | ⬜ dropped — no fetch-one-dependency-by-its-own-id route, only list-by-parent (`GET .../dependencies`) |
+| Company Properties | GetDependencyList              | `GET /v2/fields/:id/dependencies`                                                        | ✅                                                                                                     |
+| Company Properties | DeleteDependency               | `DELETE /v2/fields/dependencies/:dependencyId`                                           | ✅                                                                                                     |
+| Company Properties | DeleteCompanyPropertiesField   | `DELETE /v2/fields/:id`                                                                  | ✅                                                                                                     |
+| Company Properties | changeFieldPosition            | `POST /v2/fields/reorder`                                                                | ✅                                                                                                     |
 
 ## Settings → Data Management → Contact Properties
 
-| API Group          | API Name                       | Route | Status |
-| ------------------ | ------------------------------ | ----- | ------ |
-| Contact Properties | getListProperties              | —     | ⬜     |
-| Contact Properties | updateFieldProperties          | —     | ⬜     |
-| Contact Properties | ChangeOrderFieldProperties     | —     | ⬜     |
-| Contact Properties | AddContactPropertiesSection    | —     | ⬜     |
-| Contact Properties | DeleteContactPropertiesSection | —     | ⬜     |
-| Contact Properties | UpdateContactPropertiesSection | —     | ⬜     |
-| Contact Properties | AddContactPropertiesFields     | —     | ⬜     |
-| Contact Properties | UpdateContactProperties        | —     | ⬜     |
-| Contact Properties | HideContactProperties          | —     | ⬜     |
-| Contact Properties | DeleteContactProperties        | —     | ⬜     |
-| Contact Properties | GetAllSectionDetails           | —     | ⬜     |
-| Contact Properties | GetAllOptions                  | —     | ⬜     |
-| Contact Properties | reorderFieldPosition           | —     | ⬜     |
-| Contact Properties | GetHiddenField                 | —     | ⬜     |
-| Contact Properties | UpdateHiddenField              | —     | ⬜     |
-| Contact Properties | GetDependencyProperties        | —     | ⬜     |
-| Contact Properties | GetDependencyOptions           | —     | ⬜     |
-| Contact Properties | CreateDependencyMapping        | —     | ⬜     |
-| Contact Properties | GetMappingByID                 | —     | ⬜     |
-| Contact Properties | GetDependencyList              | —     | ⬜     |
-| Contact Properties | DeleteDependency               | —     | ⬜     |
-| Contact Properties | DeleteContactPropertiesField   | —     | ⬜     |
-| Contact Properties | changeFieldPosition            | —     | ⬜     |
-| Contact Properties | syncToSubaccounts              | —     | ⬜     |
+| API Group          | API Name                       | Route                                                                                    | Status                                                                                                 |
+| ------------------ | ------------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Contact Properties | getListProperties              | `GET /v2/fields?moduleKey=contacts`                                                      | ✅                                                                                                     |
+| Contact Properties | updateFieldProperties          | `PATCH /v2/fields/:id`                                                                   | ✅                                                                                                     |
+| Contact Properties | ChangeOrderFieldProperties     | `POST /v2/fields/reorder`                                                                | ✅                                                                                                     |
+| Contact Properties | AddContactPropertiesSection    | `POST /v2/field-sections`                                                                | ✅                                                                                                     |
+| Contact Properties | DeleteContactPropertiesSection | `DELETE /v2/field-sections/:id`                                                          | ✅                                                                                                     |
+| Contact Properties | UpdateContactPropertiesSection | `PATCH /v2/field-sections/:id`                                                           | ✅                                                                                                     |
+| Contact Properties | AddContactPropertiesFields     | `POST /v2/fields`                                                                        | ✅                                                                                                     |
+| Contact Properties | UpdateContactProperties        | `PATCH /v2/fields/:id`                                                                   | ✅                                                                                                     |
+| Contact Properties | HideContactProperties          | `PATCH /v2/fields/:id` (`isHidden: true`)                                                | ✅                                                                                                     |
+| Contact Properties | DeleteContactProperties        | `DELETE /v2/fields/:id`                                                                  | ✅                                                                                                     |
+| Contact Properties | GetAllSectionDetails           | `GET /v2/field-sections?moduleKey=contacts`                                              | ✅                                                                                                     |
+| Contact Properties | GetAllOptions                  | `GET /v2/fields/:id/options`                                                             | ✅                                                                                                     |
+| Contact Properties | reorderFieldPosition           | `POST /v2/fields/reorder`                                                                | ✅                                                                                                     |
+| Contact Properties | GetHiddenField                 | `GET /v2/fields?moduleKey=contacts`                                                      | ✅ client filters `isHidden` — no separate hidden-only endpoint                                        |
+| Contact Properties | UpdateHiddenField              | `PATCH /v2/fields/:id` (`isHidden`)                                                      | ✅                                                                                                     |
+| Contact Properties | GetDependencyProperties        | `GET /v2/fields/:id/dependencies`                                                        | ✅                                                                                                     |
+| Contact Properties | GetDependencyOptions           | `GET /v2/fields/options/:optionId/dependencies`                                          | ✅                                                                                                     |
+| Contact Properties | CreateDependencyMapping        | `POST /v2/fields/dependencies` (field-level) / `.../options/dependencies` (option-level) | ✅                                                                                                     |
+| Contact Properties | GetMappingByID                 | —                                                                                        | ⬜ dropped — no fetch-one-dependency-by-its-own-id route, only list-by-parent (`GET .../dependencies`) |
+| Contact Properties | GetDependencyList              | `GET /v2/fields/:id/dependencies`                                                        | ✅                                                                                                     |
+| Contact Properties | DeleteDependency               | `DELETE /v2/fields/dependencies/:dependencyId`                                           | ✅                                                                                                     |
+| Contact Properties | DeleteContactPropertiesField   | `DELETE /v2/fields/:id`                                                                  | ✅                                                                                                     |
+| Contact Properties | changeFieldPosition            | `POST /v2/fields/reorder`                                                                | ✅                                                                                                     |
+| Contact Properties | syncToSubaccounts              | —                                                                                        | ⬜ dropped — no sub-accounts/franchise hierarchy in this schema, no obvious near-term path             |
 
 ## WhatsApp Broadcast
 
