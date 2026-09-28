@@ -25,6 +25,8 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { DisplayIdService } from '../../../kernel/identifiers/display-id.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { assertContactScope } from './contact-scope';
 import { toContactResponse } from './contacts.mapper';
 import { ContactsRepository } from './contacts.repository';
 
@@ -50,6 +52,7 @@ export class ContactsService {
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
     private readonly displayIds: DisplayIdService,
+    private readonly rbac: RbacService,
   ) {}
 
   async list(query: ListContactsQuery, scope: RecordScope): Promise<PageResponse<ContactResponse>> {
@@ -88,6 +91,8 @@ export class ContactsService {
     return this.db.tx(async (tx) => {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Contact', uuid);
+      const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
+      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
       return toContactResponse(row);
     });
   }
@@ -182,6 +187,15 @@ export class ContactsService {
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact', uuid);
+      const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
+      await assertContactScope(
+        tx,
+        this.repo,
+        ctx.orgId,
+        updateScope,
+        ctx.userId!,
+        existing.ownerId,
+      );
 
       const values: Record<string, unknown> = { updatedBy: ctx.userId };
       if (input.name !== undefined) values.name = input.name;
@@ -280,6 +294,15 @@ export class ContactsService {
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact', uuid);
+      const deleteScope = this.rbac.can(ctx.grants!, 'record.contacts.delete').scope;
+      await assertContactScope(
+        tx,
+        this.repo,
+        ctx.orgId,
+        deleteScope,
+        ctx.userId!,
+        existing.ownerId,
+      );
 
       // Hard delete, as decided in ADR-0009. The audit row and the outbox
       // event are written first so the trail survives the row.
@@ -327,6 +350,8 @@ export class ContactsService {
     return this.db.tx(async (tx) => {
       const contact = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!contact) throw AppError.notFound('Contact', uuid);
+      const readScope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
+      await assertContactScope(tx, this.repo, ctx.orgId, readScope, ctx.userId!, contact.ownerId);
 
       const { items, nextCursor, hasMore } = await this.audit.listByRecord(
         tx,
@@ -356,9 +381,11 @@ export class ContactsService {
     });
   }
 
-  async selectData(query: ContactSelectQuery): Promise<ContactSelectItem[]> {
+  async selectData(query: ContactSelectQuery, scope: RecordScope): Promise<ContactSelectItem[]> {
     const ctx = RequestContextStore.require();
-    return this.db.tx((tx) => this.repo.selectData(tx, ctx.orgId, query));
+    return this.db.tx((tx) =>
+      this.repo.selectData(tx, ctx.orgId, { ...query, scope, actorUserId: ctx.userId }),
+    );
   }
 
   async listAssignees(): Promise<AssigneeResponse[]> {
@@ -368,9 +395,21 @@ export class ContactsService {
 
   async setAssignee(input: SetContactAssigneeInput): Promise<BulkResult> {
     const ctx = RequestContextStore.require();
+    const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
     return this.db.tx(async (tx) => {
       const ownerId = input.ownerId ? await this.requireUser(tx, ctx.orgId, input.ownerId) : null;
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
+        const existing = await this.repo.findById(rowTx, ctx.orgId, id);
+        if (!existing) throw AppError.notFound('Contact');
+        await assertContactScope(
+          rowTx,
+          this.repo,
+          ctx.orgId,
+          updateScope,
+          ctx.userId!,
+          existing.ownerId,
+        );
+
         const updated = await this.repo.updateFieldsById(rowTx, ctx.orgId, id, {
           ownerId,
           updatedBy: ctx.userId,
@@ -404,6 +443,7 @@ export class ContactsService {
    */
   async bulkUpdate(input: BulkUpdateContactsInput): Promise<BulkResult> {
     const ctx = RequestContextStore.require();
+    const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
     return this.db.tx(async (tx) => {
       const ownerId = input.values.ownerId
         ? await this.requireUser(tx, ctx.orgId, input.values.ownerId)
@@ -412,6 +452,14 @@ export class ContactsService {
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
+        await assertContactScope(
+          rowTx,
+          this.repo,
+          ctx.orgId,
+          updateScope,
+          ctx.userId!,
+          existing.ownerId,
+        );
 
         const values: Record<string, unknown> = { updatedBy: ctx.userId };
         if (input.values.ownerId !== undefined) values.ownerId = ownerId;
@@ -444,10 +492,19 @@ export class ContactsService {
 
   async bulkDelete(input: BulkContactIdsInput): Promise<BulkResult> {
     const ctx = RequestContextStore.require();
+    const deleteScope = this.rbac.can(ctx.grants!, 'record.contacts.delete').scope;
     return this.db.tx(async (tx) => {
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
+        await assertContactScope(
+          rowTx,
+          this.repo,
+          ctx.orgId,
+          deleteScope,
+          ctx.userId!,
+          existing.ownerId,
+        );
 
         await this.audit.record(rowTx, { module: MODULE_KEY, recordId: id, action: 'delete' });
         await this.outbox.emit(rowTx, {

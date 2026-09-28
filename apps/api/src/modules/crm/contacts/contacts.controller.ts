@@ -75,8 +75,11 @@ export class ContactsController {
   @Get('select-data')
   @RequirePermission('record.contacts.read')
   @ApiOperation({ summary: 'Lightweight rows for pickers/typeaheads' })
-  async selectData(@Query(zodPipe(contactSelectQuerySchema)) query: ContactSelectQuery) {
-    return this.contacts.selectData(query);
+  async selectData(
+    @Query(zodPipe(contactSelectQuerySchema)) query: ContactSelectQuery,
+    @GrantedScope('record.contacts.read') scope: RecordScope,
+  ) {
+    return this.contacts.selectData(query, scope);
   }
 
   @Get('assignees')

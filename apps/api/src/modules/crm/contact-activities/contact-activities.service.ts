@@ -11,7 +11,8 @@ import { encodeCursor } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
-import { ContactsRepository } from '../contacts';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { assertContactScope, ContactsRepository } from '../contacts';
 import { toContactActivityResponse } from './contact-activities.mapper';
 import { ContactActivitiesRepository } from './contact-activities.repository';
 
@@ -25,6 +26,7 @@ export class ContactActivitiesService {
     private readonly contactsRepo: ContactsRepository,
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
+    private readonly rbac: RbacService,
   ) {}
 
   async list(
@@ -33,8 +35,17 @@ export class ContactActivitiesService {
   ): Promise<PageResponse<ContactActivityResponse>> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const contactId = await this.requireContactId(tx, ctx.orgId, contactUuid);
-      const rows = await this.repo.listByContact(tx, ctx.orgId, contactId, {
+      const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        contact.ownerId,
+      );
+      const rows = await this.repo.listByContact(tx, ctx.orgId, contact.id, {
         limit: query.limit,
         cursor: query.cursor,
       });
@@ -64,7 +75,17 @@ export class ContactActivitiesService {
   ): Promise<ContactActivityResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const contactId = await this.requireContactId(tx, ctx.orgId, contactUuid);
+      const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        contact.ownerId,
+      );
+      const contactId = contact.id;
 
       const created = await this.repo.insert(tx, ctx.orgId, {
         contactId,
@@ -90,13 +111,13 @@ export class ContactActivitiesService {
     });
   }
 
-  private async requireContactId(
-    tx: Parameters<ContactsRepository['resolveContactId']>[0],
+  private async requireContact(
+    tx: Parameters<ContactsRepository['resolveContactRef']>[0],
     orgId: number,
     uuid: string,
-  ): Promise<number> {
-    const id = await this.contactsRepo.resolveContactId(tx, orgId, uuid);
-    if (id === undefined) throw AppError.notFound('Contact', uuid);
-    return id;
+  ) {
+    const ref = await this.contactsRepo.resolveContactRef(tx, orgId, uuid);
+    if (!ref) throw AppError.notFound('Contact', uuid);
+    return ref;
   }
 }
