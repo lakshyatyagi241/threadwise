@@ -436,4 +436,38 @@ export class ContactsRepository {
       .where(and(eq(contacts.orgId, orgId), eq(contacts.uuid, uuid)));
     return rows[0]?.id;
   }
+
+  /**
+   * Same as resolveContactId, plus the owner — sub-resource modules need
+   * this to enforce the caller's own/team record scope against the parent
+   * contact (see contact-scope.ts), not just to resolve the FK.
+   */
+  async resolveContactRef(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+  ): Promise<{ id: number; ownerId: number | null } | undefined> {
+    const rows = await tx
+      .select({ id: contacts.id, ownerId: contacts.ownerId })
+      .from(contacts)
+      .where(and(eq(contacts.orgId, orgId), eq(contacts.uuid, uuid)));
+    return rows[0];
+  }
+
+  /** True if `ownerId` is on any team `actorUserId` also belongs to — the 'team' record-scope check. */
+  async isOwnerInActorTeam(
+    tx: Tx,
+    orgId: number,
+    actorUserId: number,
+    ownerId: number,
+  ): Promise<boolean> {
+    const rows = await tx.execute(sql`
+      SELECT 1
+      FROM ${teamMembers} tm1
+      JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
+      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${ownerId}
+      LIMIT 1
+    `);
+    return rows.rows.length > 0;
+  }
 }

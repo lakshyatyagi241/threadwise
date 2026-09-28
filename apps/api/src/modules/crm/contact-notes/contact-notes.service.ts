@@ -12,7 +12,8 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
-import { ContactsRepository } from '../contacts';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { assertContactScope, ContactsRepository } from '../contacts';
 import { toContactNoteResponse } from './contact-notes.mapper';
 import { ContactNotesRepository } from './contact-notes.repository';
 
@@ -26,6 +27,7 @@ export class ContactNotesService {
     private readonly contactsRepo: ContactsRepository,
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
+    private readonly rbac: RbacService,
   ) {}
 
   async list(
@@ -34,8 +36,17 @@ export class ContactNotesService {
   ): Promise<PageResponse<ContactNoteResponse>> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const contactId = await this.requireContactId(tx, ctx.orgId, contactUuid);
-      const rows = await this.repo.listByContact(tx, ctx.orgId, contactId, {
+      const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        contact.ownerId,
+      );
+      const rows = await this.repo.listByContact(tx, ctx.orgId, contact.id, {
         limit: query.limit,
         cursor: query.cursor,
       });
@@ -47,7 +58,17 @@ export class ContactNotesService {
   async create(contactUuid: string, input: CreateContactNoteInput): Promise<ContactNoteResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const contactId = await this.requireContactId(tx, ctx.orgId, contactUuid);
+      const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        contact.ownerId,
+      );
+      const contactId = contact.id;
 
       const created = await this.repo.insert(tx, ctx.orgId, {
         contactId,
@@ -74,6 +95,16 @@ export class ContactNotesService {
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('ContactNote', uuid);
+      const parent = await this.contactsRepo.findById(tx, ctx.orgId, existing.contactId);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        parent?.ownerId ?? null,
+      );
 
       const updated = await this.repo.updateWithVersion(
         tx,
@@ -110,6 +141,16 @@ export class ContactNotesService {
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('ContactNote', uuid);
+      const parent = await this.contactsRepo.findById(tx, ctx.orgId, existing.contactId);
+      const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
+      await assertContactScope(
+        tx,
+        this.contactsRepo,
+        ctx.orgId,
+        scope,
+        ctx.userId!,
+        parent?.ownerId ?? null,
+      );
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
       await this.outbox.emit(tx, {
@@ -122,13 +163,13 @@ export class ContactNotesService {
     });
   }
 
-  private async requireContactId(
-    tx: Parameters<ContactsRepository['resolveContactId']>[0],
+  private async requireContact(
+    tx: Parameters<ContactsRepository['resolveContactRef']>[0],
     orgId: number,
     uuid: string,
-  ): Promise<number> {
-    const id = await this.contactsRepo.resolveContactId(tx, orgId, uuid);
-    if (id === undefined) throw AppError.notFound('Contact', uuid);
-    return id;
+  ) {
+    const ref = await this.contactsRepo.resolveContactRef(tx, orgId, uuid);
+    if (!ref) throw AppError.notFound('Contact', uuid);
+    return ref;
   }
 }
