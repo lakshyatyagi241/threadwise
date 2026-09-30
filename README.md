@@ -16,7 +16,7 @@ threadwise-port/
 ├── CLAUDE.md                  orientation for Claude Code sessions opened at the repo root
 ├── .claude/skills  ->  crm-platform/.claude/skills      (symlink, so skills load from the root too)
 ├── crm-platform/              the build target: geta-ai/crm-platform with its full git history, plus the port docs and skills
-│   ├── apps/  packages/       API, worker, db, contracts (web app not built yet)
+│   ├── apps/  packages/       API, worker, db, contracts, web (Next.js) and ui (shared components)
 │   ├── docs/threadwise-port/      status, inventory, target-map, conflict-map (start with README.md there)
 │   └── .claude/skills/        the repo's own skills + 11 threadwise-* skills
 ├── reference/          EMPTY on purpose: put your own licensed Reference copy here (see its README); git ignores it
@@ -44,7 +44,7 @@ Prerequisites: Git, Node 22+, Docker running, `corepack enable pnpm`, and [Claud
    bash .claude/skills/setup/scripts/setup.sh
    ```
 
-   Then run it (two terminals, both in `crm-platform/`):
+   Then run it (three terminals, all in `crm-platform/`):
 
    ```bash
    pnpm dev
@@ -54,7 +54,11 @@ Prerequisites: Git, Node 22+, Docker running, `corepack enable pnpm`, and [Claud
    pnpm dev:worker
    ```
 
-   API on http://localhost:3000, docs at `/docs`. The API refuses to boot without `CLERK_SECRET_KEY`; `.env.example` ships a placeholder
+   ```bash
+   pnpm dev:web
+   ```
+
+   API on http://localhost:3000, docs at `/docs`; web app on http://localhost:3001 (sign in with the seeded staff user the setup script prints). The API refuses to boot without `CLERK_SECRET_KEY`; `.env.example` ships a placeholder
    (`sk_test_replace_me`), which is enough to run locally but means Clerk login will not work until you set a real key.
 
 3. **(Optional) Reference reference app**, for side-by-side behavior checks. Put your licensed copy in `reference/`
@@ -77,8 +81,8 @@ findings so far, the decisions the team lead still owes, and the ordered runbook
 | ---- | ---- | ----- |
 | 1 | Decide scope (the inventory so far is thousands of dev-days, so P0 plus a chosen slice of P1), domain codes/owners, and the open kernel decisions D1-D7 | status README, "Decisions needed" |
 | 2 | Finish the feature inventory (26 of 62 domains written; the rest is resumable) and sweep the coverage gaps | `_work/workflows/threadwise-inventory.mjs`, `threadwise-inventory-refresh` skill |
-| 3 | Per-domain port-maps, then split the domains three ways (linked features to one person, exclusive directories), write `ownership.json`, `tracker/<owner>.md` | `threadwise-parity-tracker`, `threadwise-ownership-guard` |
-| 4 | Land the **skeleton PR** (shared registries turned into per-domain files, timestamp migrations, decorator registries), then the foundation wave (web shell, super-admin layer, channel model, worker/outbox/realtime plumbing) | [`conflict-map.md`](crm-platform/docs/threadwise-port/conflict-map.md) section 2 |
+| 3 | Per-domain port-maps (the three-way split is done: `crm-platform/docs/threadwise-port/assignments.md`, `ownership.json`, `tracker/<owner>.md`; regenerate after changes) | `threadwise-parity-tracker`, `threadwise-ownership-guard` |
+| 4 | Land the **skeleton PR** (shared registries turned into per-domain files, timestamp migrations, decorator registries), then the rest of the foundation wave (super-admin layer, channel model, worker/outbox/realtime plumbing; the web shell is started, see `crm-platform/docs/threadwise-port/base-changes.md`) | [`conflict-map.md`](crm-platform/docs/threadwise-port/conflict-map.md) section 2 |
 | 5 | Port features one at a time in your own zones | `threadwise-port-feature` |
 
 Each feature follows the same loop: read its inventory entry, see Reference do it, build the vertical slice (migration, contracts, module,
