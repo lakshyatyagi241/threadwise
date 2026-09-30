@@ -26,8 +26,8 @@ package builds, database roles, migrations, seed data, and a real boot-and
 bash .claude/skills/setup/scripts/setup.sh
 ```
 
-Run it from anywhere inside the repo — it finds the repo root itself via
-`git rev-parse --show-toplevel`. Just run it; it needs no arguments and asks
+Run it from anywhere inside the repo — it finds the repo root itself from its own
+location. Just run it; it needs no arguments and asks
 no questions. Give the Bash tool call a generous timeout (5 minutes) — a
 first run pulls four Docker images and that alone can take a couple of
 minutes on a slow connection.

@@ -5,7 +5,7 @@
 # before doing anything, so a second run only touches what's missing.
 set -euo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 cd "$REPO_ROOT"
 
 # ---- output helpers ---------------------------------------------------------
