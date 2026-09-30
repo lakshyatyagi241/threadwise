@@ -10,14 +10,14 @@ WaDesk is reference only: never copy its code, assets or text.
 
 | What                                                                     | Where                                                                                                                                                                   |
 | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Workspace                                                                | the repo root: `wadesk-reference/` (WaDesk, read-only), `crm-platform/` (this repo), `_work/` (manifests, tools, reports, workflow script; not in git)     |
+| Workspace                                                                | the repo root: `wadesk-reference/` (WaDesk, read-only), `crm-platform/` (this repo), `_work/` (manifests, tools, reports, workflow script; not in git)                  |
 | Inventory format                                                         | [inventory-spec.md](inventory-spec.md)                                                                                                                                  |
 | Inventory (one file per domain)                                          | [inventory/](inventory/)                                                                                                                                                |
 | What the target repo already has (and lacks)                             | [target-map.md](target-map.md)                                                                                                                                          |
 | Merge-conflict hotspots, skeleton PR, ownership zones, rules of the road | [conflict-map.md](conflict-map.md)                                                                                                                                      |
 | Skills (`.claude/skills/wadesk-*`)                                       | run-reference, feature-lookup, parity-tracker, ownership-guard, inventory-refresh, data-model-port, port-feature, e2e-tests, verify-parity, frontend-port, channel-port |
 | Coverage report (regenerate)                                             | `python3 .claude/skills/wadesk-inventory-refresh/scripts/audit_coverage.py`                                                                                             |
-| Resumable inventory workflow                                             | `_work/workflows/wadesk-inventory.mjs`                                                                                                          |
+| Resumable inventory workflow                                             | `_work/workflows/wadesk-inventory.mjs`                                                                                                                                  |
 
 Not written yet: `port-map/`, `ownership.json`, `assignments.md`, `tracker/*.md`, `parity/*.md`, `docs/api/`. The ownership guard and tracker scripts are finished and tested but need `ownership.json` to do anything.
 
