@@ -1,0 +1,654 @@
+// Global schema design — entire platform DB, for review in drawDB.
+// Source of truth split:
+//   - Tables/columns with no [note: "NEW..."] = already migrated, taken
+//     verbatim from packages/db/migrations/000*.sql — not invented here.
+//   - [note: "NEW..."] = proposed, not yet migrated (see
+//     docs/contacts-schema-design.dbml for the contacts-detail slice this
+//     was assembled from).
+// org_id present on every tenant table (composite PK (org_id, id), every FK
+// composite (org_id, x) -> (org_id, id) per CONTRIBUTING.md) but omitted from
+// relationship labels below for readability.
+
+// ---------------------------------------------------------------------
+// Enums (packages/db/migrations/0002_enums.sql — append-only, no removals)
+// ---------------------------------------------------------------------
+
+Enum record_lifecycle {
+  draft
+  active
+  archived
+  deleted
+}
+
+Enum perm_effect {
+  allow
+  deny
+}
+
+Enum record_scope {
+  all
+  team
+  own
+}
+
+Enum partner_agent_status {
+  active
+  suspended
+}
+
+Enum api_key_status {
+  active
+  revoked
+}
+
+// ---------------------------------------------------------------------
+// 0003_foundation — tenants, staff users, teams, RBAC
+// ---------------------------------------------------------------------
+
+Table organizations {
+  id bigint [pk]
+  uuid uuid
+  slug text [note: "unique"]
+  name text
+  status text [note: "default 'active'"]
+  plan text [note: "default 'starter'"]
+  tier text [note: "'standard' | 'whale' — whales get dedicated time-subpartitions"]
+  settings jsonb
+  roles_version integer [note: "bumped on any role/grant change — included in RBAC cache key"]
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table users {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  email citext
+  full_name text
+  password_hash text
+  auth_subject text [note: "Clerk user id (ADR-0006) — null until first SSO login; partial unique (org_id, auth_subject) WHERE NOT NULL"]
+  status text
+  settings jsonb
+  row_version integer
+  created_at timestamptz
+  updated_at timestamptz
+
+  Indexes {
+    (org_id, uuid) [unique, name: 'uq_users_org_id_uuid']
+    (org_id, email) [unique, name: 'uq_users_org_id_email']
+    (org_id, status) [name: 'idx_users_org_id_status']
+  }
+}
+
+Table teams {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text
+  created_at timestamptz
+  updated_at timestamptz
+  row_version integer
+
+  Indexes {
+    (org_id, uuid) [unique, name: 'uq_teams_org_id_uuid']
+    (org_id, name) [unique, name: 'uq_teams_org_id_name']
+  }
+}
+
+Table team_members {
+  org_id bigint
+  team_id bigint
+  user_id bigint
+  Note: "pure membership"
+
+  Indexes {
+    (org_id, team_id, user_id) [pk, name: 'pk_team_members_org_id_team_id_user_id']
+    (org_id, user_id) [name: 'idx_team_members_org_id_user_id']
+  }
+}
+
+Table permission_defs {
+  key text [pk]
+  label text
+  category text
+  supports_scope boolean
+  Note: "global capability registry — NOT tenant-scoped"
+}
+
+Table roles {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text
+  system_key text [note: "'admin'|'manager'|'agent'|'readonly' for platform presets, null for org-defined role"]
+  is_locked boolean [note: "Admin preset immutable — enforced by trg_role_grants_protect"]
+  created_at timestamptz
+  updated_at timestamptz
+  row_version integer
+
+  Indexes {
+    (org_id, uuid) [unique, name: 'uq_roles_org_id_uuid']
+    (org_id, name) [unique, name: 'uq_roles_org_id_name']
+  }
+}
+
+Table user_roles {
+  org_id bigint
+  user_id bigint
+  role_id bigint
+
+  Indexes {
+    (org_id, user_id, role_id) [pk, name: 'pk_user_roles_org_id_user_id_role_id']
+  }
+}
+
+Table role_grants {
+  org_id bigint
+  id bigint [pk]
+  role_id bigint
+  permission_key text
+  effect perm_effect [note: "deny beats allow when multiple roles' grants merge"]
+  record_scope record_scope
+
+  Indexes {
+    (org_id, role_id, permission_key) [unique, name: 'uq_role_grants_org_id_role_id_permission_key']
+  }
+}
+
+Table sequence_counters {
+  org_id bigint
+  module_key text
+  current_value bigint [note: "claimed in batches of 100 by the app"]
+
+  Indexes {
+    (org_id, module_key) [pk, name: 'pk_sequence_counters_org_id_module_key']
+  }
+}
+
+// ---------------------------------------------------------------------
+// 0004_crm_contacts — reference vertical slice
+// ---------------------------------------------------------------------
+
+Table companies {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text
+  domain text
+  owner_id bigint
+  lifecycle_state record_lifecycle
+  status text
+  data jsonb [note: "Tier-2 custom fields — Company Properties, same fields/field_sections registry via module_key='companies'"]
+  display_id text
+  is_archived boolean
+  created_at timestamptz
+  updated_at timestamptz
+  row_version integer
+
+  Indexes {
+    (org_id, uuid) [unique, name: 'uq_companies_org_id_uuid']
+  }
+}
+
+Table contacts {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  first_name text [note: "NEW — replaces name; backfill by splitting name on first space"]
+  last_name text [note: "NEW"]
+  email citext
+  phone text
+  company_id bigint
+  owner_id bigint
+  normalized_email citext [note: "dedup match key, maintained by trigger — non-unique on purpose"]
+  normalized_phone text [note: "dedup match key, maintained by trigger — non-unique on purpose"]
+  lifecycle_state record_lifecycle [note: "platform state, distinct from business status"]
+  status text [note: "deal/pipeline status shown as 'Status' pill (e.g. Closed Won) — options via status_options option_group='deal_status'"]
+  lifecycle_stage text [note: "funnel position — the field the sub-agent portal polls live (ADR-0014)"]
+  lifecycle_stage_date timestamptz [note: "NEW — when current lifecycle_stage was set"]
+  previous_lifecycle_stage text [note: "NEW"]
+  previous_lifecycle_stage_date timestamptz [note: "NEW"]
+  lost_reason text [note: "NEW — Dependent on status='closed_lost', options via status_options"]
+  other_lost_reason text [note: "NEW — free text when lost_reason='other'"]
+  data jsonb [note: "Tier-2 custom fields, keyed by fields.key"]
+  display_id text
+  is_archived boolean
+  search_vector tsvector [note: "gin-indexed; weights name/email/phone/data->>college_tag"]
+  legacy_id text [note: "id in legacy Geta system, migration reconciliation only (ADR-0015); partial unique WHERE NOT NULL"]
+  lead_score integer [note: "NEW"]
+  whatsapp_subscription_status text [note: "NEW — replaces whatsapp_opt_in boolean; enum via status_options option_group='whatsapp_subscription'"]
+  sms_subscription_status text [note: "NEW — replaces sms_opt_in boolean; enum via status_options option_group='sms_subscription'"]
+  email_subscription_status text [note: "NEW — replaces email_opt_in boolean; enum via status_options option_group='email_subscription'"]
+  email_confirmed boolean [note: "NEW"]
+  fax_number text [note: "NEW"]
+  last_activity_at timestamptz [note: "NEW — bumped on note/task/meeting/conversation write; backs list 'Last Activity' column"]
+  submitted_by_agent_id bigint [note: "denormalised — which partner_agent submitted this lead, survives even if the mapping row is purged"]
+  created_by bigint
+  updated_by bigint
+  created_at timestamptz
+  updated_at timestamptz
+  row_version integer
+
+  Indexes {
+    (org_id, uuid) [unique, name: 'uq_contacts_org_id_uuid']
+    (org_id, created_at, id) [note: "WHERE is_archived = false — hot-path recent-first list", name: 'idx_contacts_org_id_created_at_id']
+    (org_id, owner_id, created_at) [name: 'idx_contacts_org_id_owner_id_created_at']
+    (org_id, lifecycle_stage, created_at) [name: 'idx_contacts_org_id_lifecycle_stage_created_at']
+    (org_id, normalized_email) [note: "WHERE normalized_email IS NOT NULL", name: 'idx_contacts_org_id_normalized_email']
+    (org_id, normalized_phone) [note: "WHERE normalized_phone IS NOT NULL", name: 'idx_contacts_org_id_normalized_phone']
+    (org_id, legacy_id) [unique, note: "WHERE legacy_id IS NOT NULL", name: 'uq_contacts_org_id_legacy_id']
+  }
+}
+
+Table contact_identities {
+  org_id bigint
+  id bigint [pk]
+  contact_id bigint
+  kind text [note: "phone | email | whatsapp | web_visitor"]
+  value text [note: "normalised: E.164, lowercased email, visitor uuid"]
+  is_primary boolean
+  verified boolean
+  created_at timestamptz
+  Note: "existing — auto-merge backbone: unique(org_id, kind, value) means an identity resolves to exactly one contact"
+
+  Indexes {
+    (org_id, kind, value) [unique, name: 'uq_contact_identities_org_id_kind_value']
+    (org_id, contact_id) [name: 'idx_contact_identities_org_id_contact_id']
+  }
+}
+
+// ---------------------------------------------------------------------
+// 0005_partner_agents — sub-agents / channel partners + API keys
+// ---------------------------------------------------------------------
+
+Table partner_agents {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  code text [note: "shown on lead as 'Submitted by', e.g. AG-SHUBHAM"]
+  name text
+  email citext
+  phone text
+  password_hash text
+  status partner_agent_status
+  settings jsonb [note: "commission %, region, allowed colleges"]
+  last_login_at timestamptz
+  created_at timestamptz
+  updated_at timestamptz
+  row_version integer
+
+  Indexes {
+    (org_id, uuid) [unique, name: 'uq_partner_agents_org_id_uuid']
+    (org_id, email) [unique, name: 'uq_partner_agents_org_id_email']
+    (org_id, code) [unique, name: 'uq_partner_agents_org_id_code']
+  }
+}
+
+Table partner_agent_leads {
+  org_id bigint
+  id bigint [pk]
+  agent_id bigint
+  contact_id bigint
+  submitted_payload jsonb [note: "verbatim snapshot of what the agent typed — what a commission dispute turns on"]
+  college_tag text
+  submitted_at timestamptz
+  Note: "id mapping only — stage/name read live from CRM, no two-way sync"
+
+  Indexes {
+    (org_id, agent_id, contact_id) [unique, note: "one agent can't claim the same contact twice", name: 'uq_partner_agent_leads_org_id_agent_id_contact_id']
+    (org_id, contact_id) [name: 'idx_partner_agent_leads_org_id_contact_id']
+  }
+}
+
+Table api_keys {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text
+  key_prefix text [note: "public lookup prefix, e.g. pk_live_7f3a — globally unique"]
+  key_hash text [note: "Argon2 hash of the secret half"]
+  signing_secret_enc text [note: "HMAC signing secret, encrypted at the app layer"]
+  scopes "text[]"
+  status api_key_status
+  rate_limit_per_minute integer
+  last_used_at timestamptz
+  expires_at timestamptz
+  created_by bigint
+  created_at timestamptz
+  updated_at timestamptz
+  row_version integer
+
+  Indexes {
+    (org_id, uuid) [unique, name: 'uq_api_keys_org_id_uuid']
+    key_prefix [unique, name: 'uq_api_keys_key_prefix', note: "global — must resolve to an org without knowing the org yet"]
+    (org_id, status) [name: 'idx_api_keys_org_id_status']
+  }
+}
+
+// ---------------------------------------------------------------------
+// 0006_outbox_audit — transactional outbox + audit log
+// Shape differs from every table above: PK is (id, created_at)/(id, at), not
+// (org_id, id) — Postgres requires the partition key in the PK, and these
+// are append-only streams read by time, monthly RANGE-partitioned.
+// ---------------------------------------------------------------------
+
+Table event_outbox {
+  id bigint [pk]
+  org_id bigint
+  aggregate_module text [note: "polymorphic — no FK possible, intentional"]
+  aggregate_id bigint
+  event_type text [note: "contact.created, campaign.completed, ..."]
+  payload jsonb
+  status text [note: "pending|processing|done|dead"]
+  attempts integer
+  last_error text
+  available_at timestamptz [note: "retry backoff"]
+  processed_at timestamptz
+  created_at timestamptz [pk]
+
+  Indexes {
+    (available_at, id) [note: "WHERE status='pending' — the drain query", name: 'idx_event_outbox_available_at_id']
+    (org_id, created_at) [name: 'idx_event_outbox_org_id_created_at']
+  }
+}
+
+Table audit_log {
+  id bigint [pk]
+  org_id bigint
+  actor_id bigint
+  actor_type text [note: "user|partner_agent|candidate|bot|system|api_key"]
+  module text
+  record_id bigint [note: "polymorphic"]
+  action text [note: "insert|update|delete|merge|login"]
+  delta jsonb [note: "field-level {old,new} — paper trail, not event sourcing; tables stay source of truth"]
+  request_id text
+  ip text
+  at timestamptz [pk]
+
+  Indexes {
+    (org_id, module, record_id, at) [name: 'idx_audit_log_org_id_module_record_id_at']
+    (org_id, actor_id, at) [name: 'idx_audit_log_org_id_actor_id_at']
+  }
+}
+
+// ---------------------------------------------------------------------
+// NEW: Tier-2 custom-field registry (kernel-owned, reused by Company
+// Properties via the same module_key column)
+// ---------------------------------------------------------------------
+
+Table field_sections {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  module_key text [note: "'contacts', later 'companies'"]
+  name text [note: "e.g. Contact Information, Pre Book"]
+  position integer
+  is_active boolean
+}
+
+Table fields {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  module_key text
+  section_id bigint
+  key text [note: "storage key inside contacts.data / companies.data"]
+  label text
+  field_type text [note: "text|long_text|integer|big_integer|decimal|percentage|currency|boolean|checkbox|radio|date|datetime|url|email|phone|select|multiselect|lookup|rating|timezone|formula"]
+  is_required boolean
+  is_hidden boolean [note: "inverse of grid's IN FORM column"]
+  is_read_only boolean [note: "grid's READ-ONLY column"]
+  is_masked boolean [note: "grid's MASKED column"]
+  is_unique boolean [note: "'Do not allow duplicate values' — enforced via partial unique index on (org_id, key, data->>key)"]
+  is_quick_create boolean [note: "'Appear in quick creation form'"]
+  is_global_search boolean [note: "'Appear in global search results'"]
+  is_system boolean [note: "System badge — key/field_type immutable, cannot delete"]
+  is_active boolean [note: "soft-delete"]
+  position integer
+  config jsonb [note: "type-specific: currency->{code}, rating->{max}, timezone->{default}, decimal/percentage->{precision}, formula->{expression, source_field_keys}, lookup->{target_module_key}, else placeholder/tooltip/min/max/regex — never options"]
+  replaces_field_id bigint [note: "self-FK: type-change versioning"]
+}
+
+Table field_options {
+  org_id bigint
+  id bigint [pk]
+  field_id bigint
+  value text
+  label text
+  position integer
+  is_hidden boolean
+}
+
+Table field_dependencies {
+  org_id bigint
+  id bigint [pk]
+  field_id bigint [note: "the dependent field"]
+  depends_on_field_id bigint
+  depends_on_option_id bigint
+  depends_on_value text
+  Note: "field-level: shows/hides the whole dependent field"
+}
+
+Table field_option_dependencies {
+  org_id bigint
+  id bigint [pk]
+  parent_option_id bigint [note: "FK field_options.id — option on the controlling field, e.g. Lifecycle Stage=Opportunity"]
+  child_option_id bigint [note: "FK field_options.id — option allowed on the dependent field, e.g. Lifecycle Stage Status=Open"]
+  Note: "option-level, many:many — filters which options of the dependent field are selectable per parent option"
+
+  Indexes {
+    (org_id, parent_option_id, child_option_id) [unique, name: 'uq_field_option_dependencies_org_id_parent_option_id_child_option_id']
+  }
+}
+
+Table status_options {
+  org_id bigint
+  id bigint [pk]
+  module_key text
+  option_group text [note: "'lifecycle_stage' | 'marketing_status' | 'deal_status' | 'whatsapp_subscription' | 'sms_subscription' | 'email_subscription' — extensible per module_key"]
+  value text
+  label text
+  color text
+  position integer
+  is_default boolean
+  is_active boolean
+}
+
+// ---------------------------------------------------------------------
+// NEW: Contacts list/bulk/view surface
+// ---------------------------------------------------------------------
+
+Table tags {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name citext [note: "case-insensitive, unique per org"]
+  color text
+}
+
+Table contact_tags {
+  org_id bigint
+  contact_id bigint
+  tag_id bigint
+  created_by bigint
+  created_at timestamptz
+  Note: "pure membership, no row_version"
+
+  Indexes {
+    (org_id, contact_id, tag_id) [pk, name: 'pk_contact_tags_org_id_contact_id_tag_id']
+  }
+}
+
+Table contact_notes {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  body text
+  created_by bigint
+  updated_by bigint
+  row_version integer
+}
+
+Table contact_views {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text [note: "'All Contacts', 'My Contacts', custom..."]
+  filter jsonb [note: "AND/OR condition tree"]
+  position integer
+  is_shared boolean [note: "false = personal, true = org-wide"]
+  created_by bigint
+}
+
+Table contact_view_favorites {
+  org_id bigint
+  view_id bigint
+  user_id bigint
+  created_at timestamptz
+  Note: "favoriting is per-viewer"
+
+  Indexes {
+    (org_id, view_id, user_id) [pk, name: 'pk_contact_view_favorites_org_id_view_id_user_id']
+  }
+}
+
+// ---------------------------------------------------------------------
+// NEW: contact detail page — files, activity timeline, tasks, meetings,
+// field-change audit.
+//
+// OUT OF SCOPE (deliberately not modeled here — owned by other modules):
+//   - Conversations tab -> existing chat/messaging module
+//   - Communication Stats tab -> existing messaging/campaign send-log module
+//   - Web Analytics tab -> no visitor-analytics events table; contact_identities
+//     (kind='web_visitor') only links the identity, doesn't store events
+// ---------------------------------------------------------------------
+
+Table contact_files {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  file_name text
+  file_size_bytes bigint
+  storage_key text [note: "object storage path"]
+  mime_type text
+  uploaded_by bigint
+  created_at timestamptz
+  Note: "NEW — backs detail page Files tab"
+}
+
+Table contact_activities {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  activity_type text [note: "note|call|email|stage_change|form_submission|... system+manual events"]
+  title text
+  body text
+  source text [note: "'system' | 'user' | 'bot'"]
+  actor_id bigint [note: "user who performed it, null if system/bot"]
+  occurred_at timestamptz
+  created_at timestamptz
+  Note: "NEW — backs Activities > Activity Timeline sub-tab"
+}
+
+Table contact_tasks {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  title text
+  due_at timestamptz
+  is_done boolean
+  assigned_to bigint
+  created_by bigint
+  row_version integer
+  created_at timestamptz
+  Note: "NEW — backs Activities > Tasks sub-tab and '...' menu Add Task"
+}
+
+Table contact_meetings {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  title text
+  starts_at timestamptz
+  ends_at timestamptz
+  location text
+  created_by bigint
+  created_at timestamptz
+  Note: "NEW — backs Activities > Meetings sub-tab"
+}
+
+Table contact_field_history {
+  org_id bigint
+  id bigint [pk]
+  contact_id bigint
+  field_key text [note: "column name, or fields.key for a Tier-2 field"]
+  old_value jsonb
+  new_value jsonb
+  changed_by bigint [note: "null if system/bot-driven change"]
+  changed_at timestamptz
+  Note: "NEW — append-only audit, backs 'Field History' / 'Contact Field History' buttons"
+}
+
+// ---------------------------------------------------------------------
+// Relationships
+// ---------------------------------------------------------------------
+
+Ref: users.org_id > organizations.id
+Ref: teams.org_id > organizations.id
+Ref: team_members.team_id > teams.id
+Ref: team_members.user_id > users.id
+Ref: roles.org_id > organizations.id
+Ref: user_roles.user_id > users.id
+Ref: user_roles.role_id > roles.id
+Ref: role_grants.role_id > roles.id
+Ref: role_grants.permission_key > permission_defs.key
+Ref: sequence_counters.org_id > organizations.id
+
+Ref: companies.org_id > organizations.id
+Ref: companies.owner_id > users.id
+Ref: contacts.org_id > organizations.id
+Ref: contacts.company_id > companies.id
+Ref: contacts.owner_id > users.id
+Ref: contacts.created_by > users.id
+Ref: contacts.updated_by > users.id
+Ref: contacts.submitted_by_agent_id > partner_agents.id
+Ref: contact_identities.contact_id > contacts.id
+
+Ref: partner_agents.org_id > organizations.id
+Ref: partner_agent_leads.agent_id > partner_agents.id
+Ref: partner_agent_leads.contact_id > contacts.id
+Ref: api_keys.org_id > organizations.id
+Ref: api_keys.created_by > users.id
+
+Ref: fields.section_id > field_sections.id
+Ref: fields.replaces_field_id > fields.id
+Ref: field_options.field_id > fields.id
+Ref: field_dependencies.field_id > fields.id
+Ref: field_dependencies.depends_on_field_id > fields.id
+Ref: field_dependencies.depends_on_option_id > field_options.id
+Ref: field_option_dependencies.parent_option_id > field_options.id
+Ref: field_option_dependencies.child_option_id > field_options.id
+
+Ref: contact_tags.contact_id > contacts.id
+Ref: contact_tags.tag_id > tags.id
+Ref: contact_notes.contact_id > contacts.id
+Ref: contact_views.created_by > users.id
+Ref: contact_view_favorites.view_id > contact_views.id
+Ref: contact_view_favorites.user_id > users.id
+
+Ref: contact_files.contact_id > contacts.id
+Ref: contact_files.uploaded_by > users.id
+Ref: contact_activities.contact_id > contacts.id
+Ref: contact_activities.actor_id > users.id
+Ref: contact_tasks.contact_id > contacts.id
+Ref: contact_tasks.assigned_to > users.id
+Ref: contact_tasks.created_by > users.id
+Ref: contact_meetings.contact_id > contacts.id
+Ref: contact_meetings.created_by > users.id
+Ref: contact_field_history.contact_id > contacts.id
+Ref: contact_field_history.changed_by > users.id

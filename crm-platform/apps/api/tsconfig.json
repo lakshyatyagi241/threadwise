@@ -1,0 +1,16 @@
+{
+  "extends": "../../packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    /* rootDir must be `src` (not `.`) or the build emits dist/src/main.js and
+       every start command, Dockerfile CMD and deploy script has to know it. */
+    "rootDir": "src",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "types": ["node"],
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

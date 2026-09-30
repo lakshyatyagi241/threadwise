@@ -1,0 +1,2436 @@
+// Auto-generated DBML export of Twenty CRM database schema
+// Schemas: core (metadata/auth/workspace mgmt), workspace_<id> (CRM data)
+
+Table "core"."_typeorm_generated_columns_and_materialized_views" {
+  "type" varchar [not null]
+  "database" varchar
+  "schema" varchar
+  "table" varchar
+  "name" varchar
+  "value" text
+}
+
+Table "core"."_typeorm_migrations" {
+  "id" integer [pk, not null]
+  "timestamp" bigint [not null]
+  "name" varchar [not null]
+}
+
+Table "core"."agent" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "label" varchar [not null]
+  "icon" varchar
+  "description" text
+  "prompt" text [not null]
+  "modelId" varchar [not null, default: `\'workspace-default-model\'::character varying`]
+  "responseFormat" jsonb [default: `\'{"type": "text"}\'::jsonb`]
+  "workspaceId" uuid [not null]
+  "isCustom" boolean [not null, default: `false`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "applicationId" uuid [not null]
+  "modelConfiguration" jsonb
+  "universalIdentifier" uuid [not null]
+  "evaluationInputs" ARRAY [not null, default: `\'{}\'::text[]`]
+}
+
+Table "core"."agentChatThread" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userWorkspaceId" uuid [not null]
+  "title" varchar
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "totalInputTokens" integer [not null, default: `0`]
+  "totalOutputTokens" integer [not null, default: `0`]
+  "contextWindowTokens" integer
+  "totalInputCredits" bigint [not null, default: `0`]
+  "totalOutputCredits" bigint [not null, default: `0`]
+  "conversationSize" integer [not null, default: `0`]
+  "activeStreamId" varchar
+  "workspaceId" uuid [not null]
+  "totalCacheReadTokens" bigint [not null, default: `0`]
+  "totalCacheCreationTokens" bigint [not null, default: `0`]
+  "deletedAt" timestamptz
+  "lastStreamError" jsonb
+  "pendingQuestionMessageId" uuid
+}
+
+Table "core"."agentMessage" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "threadId" uuid [not null]
+  "turnId" uuid
+  "agentId" uuid
+  "role" enum [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "status" enum [not null, default: `\'sent\'::core."agentMessage_status_enum"`]
+  "processedAt" timestamptz
+  "workspaceId" uuid [not null]
+  "isHidden" boolean [not null, default: `false`]
+}
+
+Table "core"."agentMessagePart" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "messageId" uuid [not null]
+  "orderIndex" integer [not null]
+  "type" varchar [not null]
+  "textContent" text
+  "reasoningContent" text
+  "toolName" varchar
+  "toolCallId" varchar
+  "toolInput" jsonb
+  "toolOutput" jsonb
+  "state" varchar
+  "errorMessage" text
+  "errorDetails" jsonb
+  "sourceUrlSourceId" varchar
+  "sourceUrlUrl" varchar
+  "sourceUrlTitle" varchar
+  "sourceDocumentSourceId" varchar
+  "sourceDocumentMediaType" varchar
+  "sourceDocumentTitle" varchar
+  "sourceDocumentFilename" varchar
+  "fileFilename" varchar
+  "providerMetadata" jsonb
+  "createdAt" timestamptz [not null, default: `now()`]
+  "fileId" uuid
+  "workspaceId" uuid [not null]
+  "providerExecuted" boolean
+}
+
+Table "core"."agentTurn" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "threadId" uuid [not null]
+  "agentId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "workspaceId" uuid [not null]
+}
+
+Table "core"."agentTurnEvaluation" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "turnId" uuid [not null]
+  "score" integer [not null]
+  "comment" text
+  "createdAt" timestamptz [not null, default: `now()`]
+  "workspaceId" uuid [not null]
+}
+
+Table "core"."apiKey" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "expiresAt" timestamptz [not null]
+  "revokedAt" timestamptz
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."appToken" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userId" uuid
+  "workspaceId" uuid
+  "type" text [not null, default: `\'REFRESH_TOKEN\'::text`]
+  "value" text
+  "expiresAt" timestamptz [not null]
+  "deletedAt" timestamptz
+  "revokedAt" timestamptz
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "context" jsonb
+}
+
+Table "core"."application" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "universalIdentifier" uuid [not null]
+  "name" text [not null]
+  "description" text
+  "version" text
+  "sourceType" text [not null, default: `\'local\'::text`]
+  "sourcePath" text [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "logicFunctionLayerId" uuid
+  "canBeUninstalled" boolean [not null, default: `true`]
+  "defaultRoleId" uuid
+  "packageJsonChecksum" text
+  "packageJsonFileId" uuid
+  "yarnLockChecksum" text
+  "yarnLockFileId" uuid
+  "availablePackages" jsonb [not null, default: `\'{}\'::jsonb`]
+  "settingsCustomTabFrontComponentId" uuid
+  "applicationRegistrationId" uuid
+  "isSdkLayerStale" boolean [not null, default: `false`]
+  "logo" text
+  "primaryPublicDomainId" uuid
+  "logoFileId" uuid
+  "autoUpgrade" boolean [not null, default: `false`]
+  "sdkClientCoreChecksum" text
+  "frontComponentSharedDependenciesChecksum" text
+  "frontComponentSharedDependenciesBuiltPath" text
+  "uninstallLogicFunctionId" uuid
+  "uninstallHookCompletedForRequestedAt" timestamptz
+  "state" text [not null, default: `\'INSTALLED\'::text`]
+  "billing" jsonb [not null, default: `\'{}\'::jsonb`]
+  "healthCheckLogicFunctionId" uuid
+  "grantedCapabilities" ARRAY [not null, default: `\'{}\'::character varying[]`]
+}
+
+Table "core"."applicationAuthorization" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "applicationId" uuid [not null]
+  "userWorkspaceId" uuid [not null]
+  "scopes" ARRAY
+  "lastAuthorizedAt" timestamptz
+  "lastUsedAt" timestamptz [not null]
+  "revokedAt" timestamptz
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."applicationRegistration" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "universalIdentifier" uuid [not null]
+  "name" text [not null]
+  "oAuthClientId" text [not null]
+  "oAuthClientSecretHash" text
+  "oAuthRedirectUris" ARRAY [not null, default: `\'{}\'::text[]`]
+  "oAuthScopes" ARRAY [not null, default: `\'{}\'::text[]`]
+  "createdByUserId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "workspaceId" uuid
+  "sourceType" text [not null, default: `\'local\'::text`]
+  "sourcePackage" text
+  "tarballFileId" uuid
+  "latestAvailableVersion" text
+  "isVetted" boolean [not null, default: `false`]
+  "manifest" jsonb
+  "isListed" boolean [not null, default: `false`]
+  "isPreInstalled" boolean [not null, default: `false`]
+  "logo" text
+  "description" text
+  "author" text
+  "category" text
+  "websiteUrl" text
+  "aboutDescription" text
+  "termsUrl" text
+  "emailSupport" text
+  "issueReportUrl" text
+  "screenshots" ARRAY [not null, default: `\'{}\'::text[]`]
+  "galleryImages" jsonb
+  "logoFileId" uuid
+  "pricingDescription" text
+}
+
+Table "core"."applicationRegistrationVariable" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "key" text [not null]
+  "encryptedValue" text [not null]
+  "description" text [not null, default: `\'\'::text`]
+  "isSecret" boolean [not null, default: `true`]
+  "isRequired" boolean [not null, default: `false`]
+  "applicationRegistrationId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "type" text [not null, default: `\'TEXT\'::text`]
+  "options" jsonb
+  "isDeprecated" boolean [not null, default: `false`]
+}
+
+Table "core"."applicationTranslation" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "applicationRegistrationId" uuid
+  "locale" text [not null]
+  "messages" jsonb [not null, default: `\'{}\'::jsonb`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+}
+
+Table "core"."applicationVariable" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "key" text [not null]
+  "value" text [not null]
+  "description" text [not null, default: `\'\'::text`]
+  "isSecret" boolean [not null, default: `false`]
+  "applicationId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "type" text [not null, default: `\'TEXT\'::text`]
+  "options" jsonb
+  "isDeprecated" boolean [not null, default: `false`]
+  "label" text [not null, default: `\'\'::text`]
+  "isRequired" boolean [not null, default: `false`]
+}
+
+Table "core"."approvedAccessDomain" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "domain" varchar [not null]
+  "isValidated" boolean [not null, default: `false`]
+  "workspaceId" uuid [not null]
+}
+
+Table "core"."calendarChannel" {
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "handle" varchar [not null]
+  "syncStatus" enum [not null, default: `\'NOT_SYNCED\'::core."calendarChannel_syncstatus_enum"`]
+  "syncStage" enum [not null]
+  "visibility" enum [not null]
+  "isContactAutoCreationEnabled" boolean [not null, default: `true`]
+  "contactAutoCreationPolicy" enum [not null, default: `\'AS_PARTICIPANT_AND_ORGANIZER\'::core."calendarChannel_contactautocreationpolicy_enum"`]
+  "isSyncEnabled" boolean [not null, default: `true`]
+  "syncCursor" varchar
+  "syncedAt" timestamptz
+  "syncStageStartedAt" timestamptz
+  "throttleFailureCount" integer [not null, default: `0`]
+  "connectedAccountId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "webhookSubscriptionExternalId" varchar
+  "webhookSubscriptionExternalResourceId" varchar
+  "webhookSubscriptionClientState" varchar
+  "webhookSubscriptionStatus" enum
+  "webhookSubscriptionExpiresAt" timestamptz
+}
+
+Table "core"."campaignDelivery" {
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "campaignId" uuid [not null]
+  "personId" uuid [not null]
+  "recipientEmail" varchar [not null]
+  "state" varchar [not null, default: `\'QUEUED\'::character varying`]
+  "skipReason" varchar
+  "failureReason" varchar
+  "claimToken" uuid
+  "claimExpiresAt" timestamptz
+  "providerMessageId" varchar
+  "sentAt" timestamptz
+  "deliveredAt" timestamptz
+  "bouncedAt" timestamptz
+  "complainedAt" timestamptz
+  "rejectedAt" timestamptz
+  "renderingFailedAt" timestamptz
+}
+
+Table "core"."commandMenuItem" {
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "workflowVersionId" uuid
+  "label" varchar [not null]
+  "icon" varchar
+  "isPinned" boolean [not null, default: `false`]
+  "availabilityType" enum [not null, default: `\'GLOBAL\'::core."commandMenuItem_availabilitytype_enum"`]
+  "availabilityObjectMetadataId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "frontComponentId" uuid
+  "conditionalAvailabilityExpression" varchar
+  "shortLabel" varchar
+  "position" double [not null, default: `\'0\'::double precision`]
+  "engineComponentKey" varchar [not null]
+  "hotKeys" ARRAY
+  "payload" jsonb
+  "pageLayoutId" uuid
+  "overrides" jsonb
+  "isActive" boolean [not null, default: `true`]
+  "isSystemSideEffect" boolean [not null, default: `false`]
+  "navigationTargetObjectMetadataId" uuid
+  "conditionalPinnedExpression" varchar
+  "coreWorkflowVersionId" uuid
+}
+
+Table "core"."connectedAccount" {
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "handle" varchar [not null]
+  "provider" varchar [not null]
+  "accessToken" varchar
+  "refreshToken" varchar
+  "lastCredentialsRefreshedAt" timestamptz
+  "authFailedAt" timestamptz
+  "handleAliases" ARRAY
+  "scopes" ARRAY
+  "connectionParameters" jsonb
+  "lastSignedInAt" timestamptz
+  "oidcTokenClaims" jsonb
+  "userWorkspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "connectionProviderId" uuid
+  "applicationId" uuid
+  "name" varchar
+  "visibility" varchar [not null, default: `\'user\'::character varying`]
+  "archivedAt" timestamptz
+  "authFailedReason" varchar
+}
+
+Table "core"."connectionProvider" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "workspaceId" uuid [not null]
+  "applicationId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "name" varchar [not null]
+  "displayName" varchar [not null]
+  "type" varchar [not null]
+  "oauthConfig" jsonb
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "onConnectLogicFunctionUniversalIdentifier" uuid
+  "onDisconnectLogicFunctionUniversalIdentifier" uuid
+  "logo" varchar
+}
+
+Table "core"."dataSource" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "label" varchar
+  "url" varchar
+  "schema" varchar
+  "type" enum [not null, default: `\'postgres\'::core."dataSource_type_enum"`]
+  "isRemote" boolean [not null, default: `false`]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."deferredWorkspaceMigrationAction" {
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "applicationUniversalIdentifier" varchar [not null]
+  "actionHandlerKey" varchar [not null]
+  "payload" jsonb [not null]
+  "position" integer [not null]
+  "runByVersion" varchar
+  "status" varchar [not null, default: `\'PENDING\'::character varying`]
+  "attempts" integer [not null, default: `0`]
+  "lastError" text
+  "startedAt" timestamptz
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."dpaAgreement" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "type" enum [not null]
+  "templateVersion" varchar [not null]
+  "region" varchar [not null]
+  "processorEntity" varchar [not null]
+  "customerLegalEntityName" varchar
+  "signatoryName" varchar
+  "signatoryTitle" varchar
+  "signedFileId" uuid
+  "acceptedByUserId" uuid
+  "acceptedByEmail" varchar
+  "acceptedAt" timestamptz [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "workspaceId" uuid [not null]
+}
+
+Table "core"."emailingDomain" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "domain" varchar [not null]
+  "status" enum [not null, default: `\'PENDING\'::core."emailingDomain_status_enum"`]
+  "verificationRecords" jsonb
+  "verifiedAt" timestamptz
+  "workspaceId" uuid [not null]
+  "tenantStatus" enum [not null, default: `\'ACTIVE\'::core."emailingDomain_tenantstatus_enum"`]
+  "unsubscribeHostname" varchar
+  "unsubscribeHostnameId" varchar
+  "unsubscribeHostnameStatus" enum
+}
+
+Table "core"."featureFlag" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "key" text [not null]
+  "workspaceId" uuid [not null]
+  "value" boolean [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."fieldMetadata" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "objectMetadataId" uuid [not null]
+  "type" varchar [not null]
+  "name" varchar [not null]
+  "label" varchar [not null]
+  "defaultValue" jsonb
+  "description" text
+  "icon" varchar
+  "options" jsonb
+  "settings" jsonb
+  "isActive" boolean [not null, default: `false`]
+  "isSystem" boolean [not null, default: `false`]
+  "isUIReadOnly" boolean [not null, default: `false`]
+  "isNullable" boolean [default: `true`]
+  "workspaceId" uuid [not null]
+  "isLabelSyncedWithName" boolean [not null, default: `false`]
+  "relationTargetFieldMetadataId" uuid
+  "relationTargetObjectMetadataId" uuid
+  "morphId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "isUIEditable" boolean [not null, default: `true`]
+  "isSystemSideEffect" boolean [not null, default: `false`]
+  "overrides" jsonb
+  "writability" enum [not null, default: `\'OPEN\'::core."fieldMetadata_writability_enum"`]
+  "isAuditLogged" boolean [not null, default: `true`]
+}
+
+Table "core"."fieldPermission" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "roleId" uuid [not null]
+  "objectMetadataId" uuid [not null]
+  "fieldMetadataId" uuid [not null]
+  "canReadFieldValue" boolean
+  "canUpdateFieldValue" boolean
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+}
+
+Table "core"."file" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "size" bigint [not null]
+  "workspaceId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "applicationId" uuid
+  "path" varchar [not null]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "isStaticAsset" boolean [not null, default: `false`]
+  "settings" jsonb
+  "mimeType" varchar [not null, default: `\'application/octet-stream\'::character varying`]
+  "status" enum [not null, default: `\'UPLOADED\'::core.file_status_enum`]
+  "applicationRegistrationId" uuid
+}
+
+Table "core"."frontComponent" {
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "description" varchar
+  "sourceComponentPath" varchar [not null]
+  "builtComponentPath" varchar [not null]
+  "componentName" varchar [not null]
+  "builtComponentChecksum" varchar [not null]
+  "isHeadless" boolean [not null, default: `false`]
+  "usesSdkClient" boolean [not null, default: `false`]
+}
+
+Table "core"."indexFieldMetadata" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "indexMetadataId" uuid [not null]
+  "fieldMetadataId" uuid [not null]
+  "order" integer [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "workspaceId" uuid [not null]
+  "subFieldName" text
+}
+
+Table "core"."indexMetadata" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "name" varchar [not null]
+  "workspaceId" uuid [not null]
+  "objectMetadataId" uuid [not null]
+  "isCustom" boolean [not null, default: `false`]
+  "isUnique" boolean [not null, default: `false`]
+  "indexWhereClause" text
+  "indexType" enum [not null, default: `\'BTREE\'::core."indexMetadata_indextype_enum"`]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "isSystemSideEffect" boolean [not null, default: `false`]
+}
+
+Table "core"."keyValuePair" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userId" uuid
+  "workspaceId" uuid
+  "key" text [not null]
+  "value" jsonb
+  "textValueDeprecated" text
+  "type" enum [not null, default: `\'USER_VARIABLE\'::core."keyValuePair_type_enum"`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "applicationId" uuid
+}
+
+Table "core"."logicFunction" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "description" varchar
+  "runtime" varchar [not null, default: `\'nodejs22.x\'::character varying`]
+  "timeoutSeconds" integer [not null, default: `300`]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "checksum" text
+  "sourceHandlerPath" varchar [not null]
+  "handlerName" varchar [not null]
+  "builtHandlerPath" varchar [not null]
+  "cronTriggerSettings" jsonb
+  "databaseEventTriggerSettings" jsonb
+  "httpRouteTriggerSettings" jsonb
+  "isBuildUpToDate" boolean [not null, default: `true`]
+  "toolTriggerSettings" jsonb
+  "workflowActionTriggerSettings" jsonb
+  "executionMode" enum [not null, default: `\'LIVE\'::core."logicFunction_executionmode_enum"`]
+  "serverRouteTriggerSettings" jsonb
+}
+
+Table "core"."logicFunctionLayer" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "packageJson" jsonb [not null]
+  "yarnLock" text [not null]
+  "yarnLockChecksum" text [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "packageJsonChecksum" text
+  "availablePackages" jsonb [not null, default: `\'{}\'::jsonb`]
+}
+
+Table "core"."messageChannel" {
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "visibility" enum [not null]
+  "handle" varchar [not null]
+  "type" enum [not null]
+  "isContactAutoCreationEnabled" boolean [not null, default: `true`]
+  "contactAutoCreationPolicy" enum [not null, default: `\'SENT\'::core."messageChannel_contactautocreationpolicy_enum"`]
+  "messageFolderImportPolicy" enum [not null, default: `\'ALL_FOLDERS\'::core."messageChannel_messagefolderimportpolicy_enum"`]
+  "excludeNonProfessionalEmails" boolean [not null, default: `true`]
+  "excludeGroupEmails" boolean [not null, default: `true`]
+  "pendingGroupEmailsAction" enum [not null]
+  "isSyncEnabled" boolean [not null, default: `true`]
+  "syncCursor" varchar
+  "syncedAt" timestamptz
+  "syncStatus" enum [not null, default: `\'NOT_SYNCED\'::core."messageChannel_syncstatus_enum"`]
+  "syncStage" enum [not null]
+  "syncStageStartedAt" timestamptz
+  "throttleFailureCount" integer [not null, default: `0`]
+  "throttleRetryAfter" timestamptz
+  "connectedAccountId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "webhookSubscriptionExternalId" varchar
+  "webhookSubscriptionClientState" varchar
+  "webhookSubscriptionStatus" enum
+  "webhookSubscriptionExpiresAt" timestamptz
+  "displayName" varchar
+}
+
+Table "core"."messageFolder" {
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar
+  "syncCursor" varchar
+  "isSentFolder" boolean [not null]
+  "isSynced" boolean [not null]
+  "parentFolderId" varchar
+  "externalId" varchar
+  "pendingSyncAction" enum [not null, default: `\'NONE\'::core."messageFolder_pendingsyncaction_enum"`]
+  "messageChannelId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."messageSuppression" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "emailAddress" varchar [not null]
+  "reason" enum [not null]
+  "source" enum [not null]
+  "providerEventId" varchar
+  "unsubscribeTopicId" uuid
+  "workspaceId" uuid [not null]
+}
+
+Table "core"."navigationMenuItem" {
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userWorkspaceId" uuid
+  "targetRecordId" uuid
+  "targetObjectMetadataId" uuid
+  "viewId" uuid
+  "name" text
+  "folderId" uuid
+  "position" double [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "link" text
+  "color" text
+  "icon" text
+  "type" enum [not null]
+  "pageLayoutId" uuid
+}
+
+Table "core"."objectMetadata" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "dataSourceId" uuid
+  "nameSingular" varchar [not null]
+  "namePlural" varchar [not null]
+  "labelSingular" varchar [not null]
+  "labelPlural" varchar [not null]
+  "description" text
+  "icon" varchar
+  "targetTableName" varchar [not null]
+  "isRemote" boolean [not null, default: `false`]
+  "isActive" boolean [not null, default: `false`]
+  "isSystem" boolean [not null, default: `false`]
+  "isUIReadOnly" boolean [not null, default: `false`]
+  "isAuditLogged" boolean [not null, default: `true`]
+  "isSearchable" boolean [not null, default: `false`]
+  "duplicateCriteria" jsonb
+  "shortcut" varchar
+  "labelIdentifierFieldMetadataId" uuid
+  "imageIdentifierFieldMetadataId" uuid
+  "isLabelSyncedWithName" boolean [not null, default: `false`]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "applicationId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "color" text
+  "isUIEditable" boolean [not null, default: `true`]
+  "isUICreatable" boolean [not null, default: `true`]
+  "overrides" jsonb
+  "openRecordIn" enum [not null, default: `\'USER_CHOICE\'::core."objectMetadata_openrecordin_enum"`]
+  "writability" enum [not null, default: `\'OPEN\'::core."objectMetadata_writability_enum"`]
+  "readability" enum [not null, default: `\'OPEN\'::core."objectMetadata_readability_enum"`]
+  "readabilityParentFieldUniversalIdentifiers" ARRAY
+}
+
+Table "core"."objectPermission" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "roleId" uuid [not null]
+  "objectMetadataId" uuid [not null]
+  "canReadObjectRecords" boolean
+  "canUpdateObjectRecords" boolean
+  "canSoftDeleteObjectRecords" boolean
+  "canDestroyObjectRecords" boolean
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+}
+
+Table "core"."pageLayout" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "workspaceId" uuid [not null]
+  "type" enum [not null, default: `\'RECORD_PAGE\'::core."pageLayout_type_enum"`]
+  "objectMetadataId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "defaultTabToFocusOnMobileAndSidePanelId" uuid
+  "isSystemSideEffect" boolean [not null, default: `false`]
+  "isFirstTabPinned" boolean [not null, default: `true`]
+}
+
+Table "core"."pageLayoutTab" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "title" varchar [not null]
+  "workspaceId" uuid [not null]
+  "position" double [not null, default: `\'0\'::double precision`]
+  "pageLayoutId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "icon" varchar
+  "layoutMode" enum [not null, default: `\'GRID\'::core."pageLayoutTab_layoutmode_enum"`]
+  "overrides" jsonb
+  "isActive" boolean [not null, default: `true`]
+  "isSystemSideEffect" boolean [not null, default: `false`]
+}
+
+Table "core"."pageLayoutWidget" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "pageLayoutTabId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "title" varchar [not null]
+  "type" enum [not null, default: `\'VIEW\'::core."pageLayoutWidget_type_enum"`]
+  "objectMetadataId" uuid
+  "gridPosition" jsonb [not null]
+  "configuration" jsonb [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "conditionalDisplay" jsonb
+  "position" jsonb
+  "overrides" jsonb
+  "isActive" boolean [not null, default: `true`]
+  "conditionalAvailabilityExpression" varchar
+  "isSystemSideEffect" boolean [not null, default: `false`]
+}
+
+Table "core"."permissionFlag" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "workspaceId" uuid [not null]
+  "applicationId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "key" varchar [not null]
+  "label" varchar [not null]
+  "description" text
+  "icon" varchar
+  "permissionType" varchar [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."publicDomain" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "domain" varchar [not null]
+  "isValidated" boolean [not null, default: `false`]
+  "workspaceId" uuid [not null]
+  "applicationId" uuid [not null]
+}
+
+Table "core"."role" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "label" varchar [not null]
+  "canUpdateAllSettings" boolean [not null, default: `false`]
+  "canAccessAllTools" boolean [not null, default: `false`]
+  "canReadAllObjectRecords" boolean [not null, default: `false`]
+  "canUpdateAllObjectRecords" boolean [not null, default: `false`]
+  "canSoftDeleteAllObjectRecords" boolean [not null, default: `false`]
+  "canDestroyAllObjectRecords" boolean [not null, default: `false`]
+  "description" text
+  "icon" varchar
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "isEditable" boolean [not null, default: `true`]
+  "canBeAssignedToUsers" boolean [not null, default: `true`]
+  "canBeAssignedToAgents" boolean [not null, default: `true`]
+  "canBeAssignedToApiKeys" boolean [not null, default: `true`]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+}
+
+Table "core"."rolePermissionFlag" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "roleId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "permissionFlagId" uuid [not null]
+}
+
+Table "core"."roleTarget" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "workspaceId" uuid [not null]
+  "roleId" uuid [not null]
+  "userWorkspaceId" uuid
+  "agentId" uuid
+  "apiKeyId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+}
+
+Table "core"."rowLevelPermissionPredicate" {
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "fieldMetadataId" uuid [not null]
+  "objectMetadataId" uuid [not null]
+  "operand" enum [not null, default: `\'CONTAINS\'::core."rowLevelPermissionPredicate_operand_enum"`]
+  "value" jsonb
+  "subFieldName" text
+  "workspaceMemberFieldMetadataId" uuid
+  "workspaceMemberSubFieldName" text
+  "rowLevelPermissionPredicateGroupId" uuid
+  "positionInRowLevelPermissionPredicateGroup" double
+  "workspaceId" uuid [not null]
+  "roleId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+}
+
+Table "core"."rowLevelPermissionPredicateGroup" {
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "parentRowLevelPermissionPredicateGroupId" uuid
+  "logicalOperator" enum [not null, default: `\'AND\'::core."rowLevelPermissionPredicateGroup_logicaloperator_enum"`]
+  "positionInRowLevelPermissionPredicateGroup" double
+  "workspaceId" uuid [not null]
+  "roleId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "objectMetadataId" uuid [not null]
+}
+
+Table "core"."searchFieldMetadata" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "objectMetadataId" uuid [not null]
+  "fieldMetadataId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "position" double [not null]
+  "tsVectorFieldMetadataId" uuid [not null]
+  "isSystemSideEffect" boolean [not null, default: `true`]
+}
+
+Table "core"."settingsMenuItem" {
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "frontComponentId" uuid [not null]
+  "title" varchar [not null]
+  "icon" varchar
+  "position" double [not null, default: `\'0\'::double precision`]
+  "scope" enum [not null, default: `\'WORKSPACE\'::core."settingsMenuItem_scope_enum"`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."signingKey" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "publicKey" varchar [not null]
+  "privateKey" varchar
+  "isCurrent" boolean [not null, default: `false`]
+  "revokedAt" timestamptz
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."skill" {
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "label" varchar [not null]
+  "icon" varchar
+  "description" text
+  "content" text [not null]
+  "isCustom" boolean [not null, default: `false`]
+  "isActive" boolean [not null, default: `true`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "isSystem" boolean [not null, default: `false`]
+}
+
+Table "core"."timelineActivityType" {
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "label" varchar [not null]
+  "action" varchar
+  "icon" varchar
+  "objectUniversalIdentifier" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "frontComponentUniversalIdentifier" uuid
+  "targetRelationFieldUniversalIdentifier" uuid
+  "triggerFieldUniversalIdentifiers" ARRAY
+  "replacesTimelineActivityTypeUniversalIdentifier" uuid
+  "overrides" jsonb
+  "isActive" boolean [not null, default: `true`]
+  "happensAtFieldUniversalIdentifier" uuid
+}
+
+Table "core"."twoFactorAuthenticationMethod" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userWorkspaceId" uuid [not null]
+  "secret" text [not null]
+  "status" enum [not null]
+  "strategy" enum [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "workspaceId" uuid [not null]
+}
+
+Table "core"."unsubscribeTopic" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "name" varchar
+  "description" varchar
+  "visibility" enum [not null, default: `\'PRIVATE\'::core."unsubscribeTopic_visibility_enum"`]
+  "workspaceId" uuid [not null]
+}
+
+Table "core"."upgradeMigration" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "status" varchar [not null]
+  "attempt" integer [not null, default: `1`]
+  "executedByVersion" varchar [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "workspaceId" uuid
+  "errorMessage" text
+  "isInitial" boolean [not null, default: `false`]
+}
+
+Table "core"."usageLimit" {
+  "workspaceId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "resourceType" varchar [not null]
+  "operationType" varchar [not null]
+  "spenderType" varchar [not null]
+  "spenderId" varchar [not null, default: `\'\'::character varying`]
+  "limitKind" varchar [not null]
+  "periodCount" integer [not null]
+  "limitValue" bigint [not null]
+  "burstValue" bigint
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "periodUnit" varchar [not null]
+  "meter" varchar [not null]
+}
+
+Table "core"."user" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "firstName" varchar [not null, default: `\'\'::character varying`]
+  "lastName" varchar [not null, default: `\'\'::character varying`]
+  "email" enum [not null]
+  "isEmailVerified" boolean [not null, default: `false`]
+  "disabled" boolean [not null, default: `false`]
+  "passwordHash" varchar
+  "canImpersonate" boolean [not null, default: `false`]
+  "canAccessFullAdminPanel" boolean [not null, default: `false`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "locale" varchar [not null, default: `\'en\'::character varying`]
+}
+
+Table "core"."userSession" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "tokenHash" text [not null]
+  "userId" uuid [not null]
+  "workspaceId" uuid
+  "userWorkspaceId" uuid
+  "authProvider" text [not null]
+  "isImpersonating" boolean [not null, default: `false`]
+  "impersonatorUserWorkspaceId" uuid
+  "impersonatedUserWorkspaceId" uuid
+  "userAgent" text
+  "ipAddress" text
+  "expiresAt" timestamptz [not null]
+  "lastActiveAt" timestamptz [not null]
+  "revokedAt" timestamptz
+  "revokedReason" text
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "core"."userWorkspace" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "defaultAvatarUrl" varchar
+  "locale" varchar [not null, default: `\'en\'::character varying`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+}
+
+Table "core"."view" {
+  "universalIdentifier" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" text [not null, default: `\'\'::text`]
+  "objectMetadataId" uuid [not null]
+  "type" enum [not null, default: `\'TABLE\'::core.view_type_enum`]
+  "key" enum
+  "icon" text [not null]
+  "position" double [not null, default: `\'0\'::double precision`]
+  "isCompact" boolean [not null, default: `false`]
+  "isCustom" boolean [not null, default: `false`]
+  "openRecordIn" enum [not null, default: `\'SIDE_PANEL\'::core.view_openrecordin_enum`]
+  "kanbanAggregateOperation" enum
+  "kanbanAggregateOperationFieldMetadataId" uuid
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "anyFieldFilterValue" text
+  "calendarLayout" enum
+  "calendarFieldMetadataId" uuid
+  "applicationId" uuid [not null]
+  "visibility" enum [not null, default: `\'WORKSPACE\'::core.view_visibility_enum`]
+  "createdByUserWorkspaceId" uuid
+  "mainGroupByFieldMetadataId" uuid
+  "shouldHideEmptyGroups" boolean [not null, default: `false`]
+  "overrides" jsonb
+  "isActive" boolean [not null, default: `true`]
+  "isSystemSideEffect" boolean [not null, default: `false`]
+  "kanbanColumnWidth" integer
+  "calendarEndFieldMetadataId" uuid
+  "groupLoadLimit" integer [not null, default: `8`]
+}
+
+Table "core"."viewField" {
+  "universalIdentifier" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "fieldMetadataId" uuid [not null]
+  "isVisible" boolean [not null, default: `true`]
+  "size" integer [not null, default: `0`]
+  "position" double [not null, default: `\'0\'::double precision`]
+  "aggregateOperation" enum
+  "viewId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "applicationId" uuid [not null]
+  "viewFieldGroupId" uuid
+  "overrides" jsonb
+  "isActive" boolean [not null, default: `true`]
+  "isSystemSideEffect" boolean [not null, default: `false`]
+}
+
+Table "core"."viewFieldGroup" {
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" text [not null]
+  "position" double [not null, default: `\'0\'::double precision`]
+  "isVisible" boolean [not null, default: `true`]
+  "viewId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "overrides" jsonb
+  "isActive" boolean [not null, default: `true`]
+  "isSystemSideEffect" boolean [not null, default: `false`]
+}
+
+Table "core"."viewFilter" {
+  "universalIdentifier" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "fieldMetadataId" uuid [not null]
+  "operand" enum [not null, default: `\'CONTAINS\'::core."viewFilter_operand_enum"`]
+  "value" jsonb [not null]
+  "viewFilterGroupId" uuid
+  "positionInViewFilterGroup" double
+  "subFieldName" text
+  "viewId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "applicationId" uuid [not null]
+  "relationTargetFieldMetadataId" uuid
+}
+
+Table "core"."viewFilterGroup" {
+  "universalIdentifier" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "parentViewFilterGroupId" uuid
+  "logicalOperator" enum [not null, default: `\'AND\'::core."viewFilterGroup_logicaloperator_enum"`]
+  "positionInViewFilterGroup" double
+  "viewId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "applicationId" uuid [not null]
+}
+
+Table "core"."viewGroup" {
+  "universalIdentifier" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "isVisible" boolean [not null, default: `true`]
+  "fieldValue" text [not null]
+  "position" double [not null, default: `\'0\'::double precision`]
+  "viewId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "applicationId" uuid [not null]
+}
+
+Table "core"."viewSort" {
+  "universalIdentifier" uuid [not null]
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "fieldMetadataId" uuid [not null]
+  "direction" enum [not null, default: `\'ASC\'::core."viewSort_direction_enum"`]
+  "viewId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "applicationId" uuid [not null]
+  "subFieldName" varchar
+}
+
+Table "core"."webhook" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "targetUrl" varchar [not null]
+  "operations" ARRAY [not null, default: `\'{*.*}\'::text[]`]
+  "description" varchar
+  "secret" varchar [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+}
+
+Table "core"."workflow" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" text
+  "lastPublishedVersionId" uuid
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "workspaceWorkflowId" uuid
+  "lastPublishedCoreWorkflowVersionId" uuid
+  "visibility" varchar [not null, default: `\'WORKSPACE\'::character varying`]
+  "createdByUserWorkspaceId" uuid
+}
+
+Table "core"."workflowVersion" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "triggers" jsonb
+  "steps" jsonb
+  "status" enum [not null, default: `\'DRAFT\'::core."workflowVersion_status_enum"`]
+  "workflowId" uuid
+  "workspaceId" uuid [not null]
+  "universalIdentifier" uuid [not null]
+  "applicationId" uuid [not null]
+  "coreWorkflowId" uuid
+  "workspaceWorkflowVersionId" uuid
+}
+
+Table "core"."workspace" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "displayName" varchar
+  "logo" varchar
+  "inviteHash" varchar
+  "deletedAt" timestamptz
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "allowImpersonation" boolean [not null, default: `true`]
+  "isPublicInviteLinkEnabled" boolean [not null, default: `true`]
+  "activationStatus" enum [not null, default: `\'INACTIVE\'::core."workspace_activationStatus_enum"`]
+  "metadataVersion" integer [not null, default: `1`]
+  "databaseSchema" varchar
+  "subdomain" varchar [not null]
+  "customDomain" varchar
+  "isGoogleAuthEnabled" boolean [not null, default: `true`]
+  "isTwoFactorAuthenticationEnforced" boolean [not null, default: `false`]
+  "isPasswordAuthEnabled" boolean [not null, default: `true`]
+  "isMicrosoftAuthEnabled" boolean [not null, default: `true`]
+  "isCustomDomainEnabled" boolean [not null, default: `false`]
+  "defaultRoleId" uuid
+  "trashRetentionDays" integer [not null, default: `14`]
+  "isGoogleAuthBypassEnabled" boolean [not null, default: `false`]
+  "isPasswordAuthBypassEnabled" boolean [not null, default: `false`]
+  "isMicrosoftAuthBypassEnabled" boolean [not null, default: `false`]
+  "workspaceCustomApplicationId" uuid [not null]
+  "editableProfileFields" ARRAY [default: `\'{email,profilePicture,firstName,lastName}\'::character varying[]`]
+  "eventLogRetentionDays" integer [not null, default: `90`]
+  "suspendedAt" timestamptz
+  "aiAdditionalInstructions" text
+  "logoFileId" uuid
+  "isInternalMessagesImportEnabled" boolean [not null, default: `false`]
+  "workspaceDiscoverability" enum [not null, default: `\'PUBLIC\'::core.workspace_discoverability_enum`]
+  "aiChatModelTier" varchar [not null, default: `\'fast\'::character varying`]
+  "aiAgentModelTier" varchar [not null, default: `\'fast\'::character varying`]
+  "isAutoModelSelectionEnabled" boolean [not null, default: `true`]
+  "aiModelIdByTier" jsonb [not null, default: `\'{}\'::jsonb`]
+  "aiEvaluationModelId" text
+}
+
+Table "core"."workspaceSSOIdentityProvider" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "name" varchar [not null]
+  "status" enum [not null, default: `\'Active\'::core."workspaceSSOIdentityProvider_status_enum"`]
+  "workspaceId" uuid [not null]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "type" enum [not null, default: `\'OIDC\'::core."workspaceSSOIdentityProvider_type_enum"`]
+  "issuer" varchar [not null]
+  "clientID" varchar
+  "clientSecret" varchar
+  "ssoURL" varchar
+  "certificate" varchar
+  "fingerprint" varchar
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentChatThread" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "userWorkspaceId" uuid [not null]
+  "title" text
+  "totalInputTokens" double [not null, default: `\'0\'::double precision`]
+  "totalOutputTokens" double [not null, default: `\'0\'::double precision`]
+  "contextWindowTokens" double
+  "conversationSize" double [not null, default: `\'0\'::double precision`]
+  "totalInputCredits" numeric [not null, default: `\'0\'::numeric`]
+  "totalOutputCredits" numeric [not null, default: `\'0\'::numeric`]
+  "totalCacheReadTokens" numeric [not null, default: `\'0\'::numeric`]
+  "totalCacheCreationTokens" numeric [not null, default: `\'0\'::numeric`]
+  "activeStreamId" text
+  "pendingQuestionMessageId" uuid
+  "lastStreamError" jsonb
+  "deletedAt" timestamptz
+  "archivedAt" timestamptz
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentMessage" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "agentId" uuid
+  "role" text [not null]
+  "status" text [not null, default: `\'sent\'::text`]
+  "isHidden" boolean [not null, default: `false`]
+  "processedAt" timestamptz
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "threadId" uuid
+  "turnId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentMessagePart" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "orderIndex" double [not null]
+  "type" text [not null]
+  "textContent" text
+  "reasoningContent" text
+  "toolName" text
+  "toolCallId" text
+  "toolInput" jsonb
+  "toolOutput" jsonb
+  "state" text
+  "providerExecuted" boolean
+  "errorMessage" text
+  "errorDetails" jsonb
+  "sourceUrlSourceId" text
+  "sourceUrlUrl" text
+  "sourceUrlTitle" text
+  "sourceDocumentSourceId" text
+  "sourceDocumentMediaType" text
+  "sourceDocumentTitle" text
+  "sourceDocumentFilename" text
+  "fileFilename" text
+  "fileId" uuid
+  "providerMetadata" jsonb
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "messageId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentTurn" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "agentId" uuid
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "threadId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentTurnEvaluation" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "score" double [not null]
+  "comment" text
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "turnId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "name" text
+  "file" jsonb
+  "fullPath" text
+  "fileCategory" enum [not null, default: `\'OTHER\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."attachment_fileCategory_enum"`]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."attachment_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."attachment_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "targetTaskId" uuid
+  "targetNoteId" uuid
+  "targetPersonId" uuid
+  "targetCompanyId" uuid
+  "targetOpportunityId" uuid
+  "targetDashboardId" uuid
+  "targetWorkflowId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."blocklist" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."blocklist_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."blocklist_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "handle" text
+  "scope" enum [not null, default: `\'WORKSPACE_MEMBER\'::workspace_3vsiuoi1ajstklwx5s60z6ceo.blocklist_scope_enum`]
+  "workspaceMemberId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarChannelEventAssociation" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarChannelEventAssociation_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarChannelEventAssociation_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "eventExternalId" text
+  "recurringEventExternalId" text
+  "calendarChannelId" uuid [not null]
+  "calendarEventId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEvent" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarEvent_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarEvent_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "title" text
+  "isCanceled" boolean [not null, default: `false`]
+  "isFullDay" boolean [not null, default: `false`]
+  "startsAt" timestamptz
+  "endsAt" timestamptz
+  "externalCreatedAt" timestamptz
+  "externalUpdatedAt" timestamptz
+  "description" text
+  "location" text
+  "iCalUid" text
+  "conferenceSolution" text
+  "conferenceLinkPrimaryLinkLabel" text
+  "conferenceLinkPrimaryLinkUrl" text
+  "conferenceLinkSecondaryLinks" jsonb
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventParticipant" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarEventParticipant_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarEventParticipant_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "handle" text
+  "displayName" text
+  "isOrganizer" boolean [not null, default: `false`]
+  "responseStatus" enum [not null, default: `\'NEEDS_ACTION\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarEventParticipant_responseStatus_enum"`]
+  "calendarEventId" uuid
+  "personId" uuid
+  "workspaceMemberId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventTarget" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarEventTarget_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."calendarEventTarget_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "isAutomaticallyAssigned" boolean [not null, default: `false`]
+  "isManuallyAssigned" boolean [not null, default: `true`]
+  "calendarEventId" uuid
+  "targetPersonId" uuid
+  "targetCompanyId" uuid
+  "targetOpportunityId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."callRecording" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "title" text
+  "status" enum [not null, default: `\'SCHEDULED\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."callRecording_status_enum"`]
+  "recordingRequestStatus" enum [not null, default: `\'REQUESTED\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."callRecording_recordingRequestStatus_enum"`]
+  "applicationId" uuid
+  "externalBotId" text
+  "externalRecordingId" text
+  "startedAt" timestamptz
+  "endedAt" timestamptz
+  "video" jsonb
+  "audio" jsonb
+  "transcript" jsonb
+  "summaryBlocknote" text
+  "summaryMarkdown" text
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."callRecording_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."callRecording_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "calendarEventId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "name" text
+  "domainNamePrimaryLinkLabel" text
+  "domainNamePrimaryLinkUrl" text
+  "domainNameSecondaryLinks" jsonb
+  "addressAddressStreet1" text
+  "addressAddressStreet2" text
+  "addressAddressCity" text
+  "addressAddressPostcode" text
+  "addressAddressState" text
+  "addressAddressCountry" text
+  "addressAddressLat" numeric
+  "addressAddressLng" numeric
+  "linkedinLinkPrimaryLinkLabel" text
+  "linkedinLinkPrimaryLinkUrl" text
+  "linkedinLinkSecondaryLinks" jsonb
+  "annualRevenueAmountMicros" numeric
+  "annualRevenueCurrencyCode" text
+  "position" double [not null, default: `\'0\'::double precision`]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."company_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."company_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "searchVector" tsvector
+  "accountOwnerId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."dashboard" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "title" text
+  "position" double [not null, default: `\'0\'::double precision`]
+  "pageLayoutId" uuid
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."dashboard_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."dashboard_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "searchVector" tsvector
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."message" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."message_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."message_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "headerMessageId" text
+  "subject" text
+  "text" text
+  "receivedAt" timestamptz
+  "isDraft" boolean [not null, default: `false`]
+  "messageCampaignId" uuid
+  "messageThreadId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageCampaign" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageCampaign_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageCampaign_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "name" text [not null, default: `\'\'::text`]
+  "subject" text
+  "bodyTemplate" text
+  "fromAddressPrimaryEmail" text
+  "fromAddressAdditionalEmails" jsonb
+  "status" enum [not null, default: `\'DRAFT\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageCampaign_status_enum"`]
+  "scheduledAt" timestamptz
+  "sentAt" timestamptz
+  "sentCount" double [not null, default: `\'0\'::double precision`]
+  "deliveredCount" double [not null, default: `\'0\'::double precision`]
+  "failedCount" double [not null, default: `\'0\'::double precision`]
+  "bouncedCount" double [not null, default: `\'0\'::double precision`]
+  "complainedCount" double [not null, default: `\'0\'::double precision`]
+  "skippedCount" double [not null, default: `\'0\'::double precision`]
+  "unsubscribeTopicId" uuid
+  "listId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageChannelMessageAssociation" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageChannelMessageAssociation_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageChannelMessageAssociation_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "messageExternalId" text
+  "messageThreadExternalId" text
+  "direction" enum [not null, default: `\'INCOMING\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageChannelMessageAssociation_direction_enum"`]
+  "messageChannelId" uuid
+  "messageId" uuid
+  "messageThreadId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageChannelMessageAssociationMessageFolder" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageChannelMessageAssociationMessageFolder_createdBySource_e"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageChannelMessageAssociationMessageFolder_updatedBySource_e"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "messageFolderId" uuid [not null]
+  "messageChannelMessageAssociationId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageList" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageList_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageList_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "name" text
+  "description" text
+  "searchVector" tsvector
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageListMember" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageListMember_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageListMember_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "listId" uuid
+  "personId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageParticipant" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageParticipant_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageParticipant_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "role" enum [not null, default: `\'FROM\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageParticipant_role_enum"`]
+  "handle" text
+  "displayName" text
+  "messageCampaignId" uuid
+  "messageId" uuid
+  "personId" uuid
+  "workspaceMemberId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThread" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageThread_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageThread_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "subject" text
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThreadTarget" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageThreadTarget_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."messageThreadTarget_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "isAutomaticallyAssigned" boolean [not null, default: `false`]
+  "isManuallyAssigned" boolean [not null, default: `true`]
+  "targetCompanyId" uuid
+  "messageThreadId" uuid
+  "targetPersonId" uuid
+  "targetOpportunityId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."note" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "position" double [not null, default: `\'0\'::double precision`]
+  "title" text
+  "bodyV2Blocknote" text
+  "bodyV2Markdown" text
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."note_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."note_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "searchVector" tsvector
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."noteTarget" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."noteTarget_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."noteTarget_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "targetCompanyId" uuid
+  "noteId" uuid
+  "targetPersonId" uuid
+  "targetOpportunityId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "name" text
+  "amountAmountMicros" numeric
+  "amountCurrencyCode" text
+  "closeDate" timestamptz
+  "stage" enum [not null, default: `\'NEW\'::workspace_3vsiuoi1ajstklwx5s60z6ceo.opportunity_stage_enum`]
+  "position" double [not null, default: `\'0\'::double precision`]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."opportunity_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."opportunity_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "searchVector" tsvector
+  "companyId" uuid
+  "pointOfContactId" uuid
+  "ownerId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "nameFirstName" text
+  "nameLastName" text
+  "emailsPrimaryEmail" text
+  "emailsAdditionalEmails" jsonb
+  "linkedinLinkPrimaryLinkLabel" text
+  "linkedinLinkPrimaryLinkUrl" text
+  "linkedinLinkSecondaryLinks" jsonb
+  "jobTitle" text
+  "phonesPrimaryPhoneNumber" text
+  "phonesPrimaryPhoneCountryCode" text
+  "phonesPrimaryPhoneCallingCode" text
+  "phonesAdditionalPhones" jsonb
+  "avatarUrl" text
+  "avatarFile" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."person_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."person_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "searchVector" tsvector
+  "companyId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."recordShare" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "recordId" uuid [not null]
+  "objectMetadataId" uuid [not null]
+  "principalId" uuid [not null]
+  "principalType" enum [not null]
+  "accessLevel" enum [not null]
+  "rowCause" enum [not null]
+  "sourceId" uuid [not null]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."recordShare_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."recordShare_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."task" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "position" double [not null, default: `\'0\'::double precision`]
+  "title" text
+  "bodyV2Blocknote" text
+  "bodyV2Markdown" text
+  "dueAt" timestamptz
+  "status" enum [default: `\'TODO\'::workspace_3vsiuoi1ajstklwx5s60z6ceo.task_status_enum`]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."task_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."task_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "searchVector" tsvector
+  "assigneeId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."taskTarget" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."taskTarget_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."taskTarget_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "targetCompanyId" uuid
+  "targetOpportunityId" uuid
+  "targetPersonId" uuid
+  "taskId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."timelineActivity_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."timelineActivity_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "happensAt" timestamptz [not null, default: `now()`]
+  "timelineActivityTypeId" uuid
+  "timelineActivityTypeSnapshot" jsonb
+  "properties" jsonb
+  "linkedRecordCachedName" text
+  "linkedRecordId" uuid
+  "linkedObjectMetadataId" uuid
+  "searchVector" tsvector
+  "targetCompanyId" uuid
+  "targetDashboardId" uuid
+  "targetMessageCampaignId" uuid
+  "targetMessageListId" uuid
+  "targetNoteId" uuid
+  "targetOpportunityId" uuid
+  "targetPersonId" uuid
+  "targetTaskId" uuid
+  "workspaceMemberId" uuid
+  "targetWorkflowId" uuid
+  "targetWorkflowVersionId" uuid
+  "targetWorkflowRunId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflow" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "name" text
+  "lastPublishedVersionId" text
+  "coreWorkflowId" uuid
+  "statuses" ARRAY
+  "position" double [not null, default: `\'0\'::double precision`]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflow_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflow_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "searchVector" tsvector
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowAutomatedTrigger" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowAutomatedTrigger_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowAutomatedTrigger_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "type" enum [not null, default: `\'DATABASE_EVENT\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowAutomatedTrigger_type_enum"`]
+  "settings" jsonb [not null]
+  "workflowId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowRun" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "name" text
+  "enqueuedAt" timestamptz
+  "startedAt" timestamptz
+  "endedAt" timestamptz
+  "status" enum [not null, default: `\'NOT_STARTED\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowRun_status_enum"`]
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowRun_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowRun_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "state" jsonb [not null]
+  "stepLogs" jsonb
+  "coreWorkflowId" uuid
+  "coreWorkflowVersionId" uuid
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "workflowId" uuid
+  "workflowVersionId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowVersion" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowVersion_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowVersion_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+  "name" text
+  "trigger" jsonb
+  "steps" jsonb
+  "coreWorkflowVersionId" uuid
+  "status" enum [not null, default: `\'DRAFT\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workflowVersion_status_enum"`]
+  "position" double [not null, default: `\'0\'::double precision`]
+  "searchVector" tsvector
+  "workflowId" uuid
+}
+
+Table "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "createdAt" timestamptz [not null, default: `now()`]
+  "updatedAt" timestamptz [not null, default: `now()`]
+  "deletedAt" timestamptz
+  "position" double [not null, default: `\'0\'::double precision`]
+  "nameFirstName" text
+  "nameLastName" text
+  "colorScheme" text [not null, default: `\'System\'::text`]
+  "uiScale" text [not null, default: `\'Default\'::text`]
+  "openRecordIn" text [not null, default: `\'SIDE_PANEL\'::text`]
+  "locale" text [not null, default: `\'en\'::text`]
+  "avatarUrl" text
+  "userEmail" text
+  "jobTitle" text
+  "calendarStartDay" double [not null, default: `\'7\'::double precision`]
+  "userId" uuid [not null]
+  "timeZone" text [not null, default: `\'system\'::text`]
+  "dateFormat" enum [not null, default: `\'SYSTEM\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workspaceMember_dateFormat_enum"`]
+  "timeFormat" enum [not null, default: `\'SYSTEM\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workspaceMember_timeFormat_enum"`]
+  "numberFormat" enum [not null, default: `\'SYSTEM\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workspaceMember_numberFormat_enum"`]
+  "searchVector" tsvector
+  "createdBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workspaceMember_createdBySource_enum"`]
+  "createdByWorkspaceMemberId" uuid
+  "createdByName" text [not null, default: `\'System\'::text`]
+  "createdByContext" jsonb
+  "updatedBySource" enum [not null, default: `\'MANUAL\'::workspace_3vsiuoi1ajstklwx5s60z6ceo."workspaceMember_updatedBySource_enum"`]
+  "updatedByWorkspaceMemberId" uuid
+  "updatedByName" text [not null, default: `\'System\'::text`]
+  "updatedByContext" jsonb
+}
+
+// Foreign keys
+Ref: "core"."indexFieldMetadata"."indexMetadataId" > "core"."indexMetadata"."id"
+Ref: "core"."indexFieldMetadata"."fieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."apiKey"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."keyValuePair"."userId" > "core"."user"."id"
+Ref: "core"."keyValuePair"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."twoFactorAuthenticationMethod"."userWorkspaceId" > "core"."userWorkspace"."id"
+Ref: "core"."userWorkspace"."userId" > "core"."user"."id"
+Ref: "core"."userWorkspace"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."appToken"."userId" > "core"."user"."id"
+Ref: "core"."appToken"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."approvedAccessDomain"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."featureFlag"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."workspaceSSOIdentityProvider"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."objectPermission"."roleId" > "core"."role"."id"
+Ref: "core"."objectPermission"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."fieldPermission"."roleId" > "core"."role"."id"
+Ref: "core"."fieldPermission"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."fieldPermission"."fieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."fieldPermission"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."indexMetadata"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentTurnEvaluation"."turnId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentTurn"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentMessagePart"."messageId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentMessage"."id"
+Ref: "core"."fieldMetadata"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."fieldMetadata"."relationTargetFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."fieldMetadata"."relationTargetObjectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."viewFilter"."fieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."viewFilter"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewFilter"."viewId" > "core"."view"."id"
+Ref: "core"."viewFilter"."viewFilterGroupId" > "core"."viewFilterGroup"."id"
+Ref: "core"."viewFilterGroup"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewFilterGroup"."viewId" > "core"."view"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentMessage"."threadId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentChatThread"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentMessage"."turnId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentTurn"."id"
+Ref: "core"."viewGroup"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewGroup"."viewId" > "core"."view"."id"
+Ref: "core"."viewSort"."fieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."viewSort"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewSort"."viewId" > "core"."view"."id"
+Ref: "core"."view"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."view"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewField"."fieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."viewField"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewField"."viewId" > "core"."view"."id"
+Ref: "core"."webhook"."workspaceId" > "core"."workspace"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentTurn"."threadId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."agentChatThread"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment"."targetTaskId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."task"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment"."targetNoteId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."note"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment"."targetPersonId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "core"."agentChatThread"."userWorkspaceId" > "core"."userWorkspace"."id"
+Ref: "core"."agent"."workspaceId" > "core"."workspace"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment"."targetCompanyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment"."targetOpportunityId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment"."targetDashboardId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."dashboard"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."attachment"."targetWorkflowId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflow"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."blocklist"."workspaceMemberId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarChannelEventAssociation"."calendarEventId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEvent"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventParticipant"."calendarEventId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEvent"."id"
+Ref: "core"."pageLayoutWidget"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."pageLayoutWidget"."pageLayoutTabId" > "core"."pageLayoutTab"."id"
+Ref: "core"."pageLayoutWidget"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."pageLayoutTab"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."pageLayoutTab"."pageLayoutId" > "core"."pageLayout"."id"
+Ref: "core"."pageLayout"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."pageLayout"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."publicDomain"."workspaceId" > "core"."workspace"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventParticipant"."personId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventParticipant"."workspaceMemberId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventTarget"."calendarEventId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEvent"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."callRecording"."calendarEventId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEvent"."id"
+Ref: "core"."searchFieldMetadata"."workspaceId" > "core"."workspace"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventTarget"."targetPersonId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventTarget"."targetCompanyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."calendarEventTarget"."targetOpportunityId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."id"
+Ref: "core"."emailingDomain"."workspaceId" > "core"."workspace"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."companyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."accountOwnerId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."taskTarget"."targetCompanyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."noteTarget"."targetCompanyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThreadTarget"."targetCompanyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."companyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetCompanyId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."company"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetDashboardId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."dashboard"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageCampaign"."listId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageList"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetMessageCampaignId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageCampaign"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."message"."messageCampaignId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageCampaign"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageParticipant"."messageCampaignId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageCampaign"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageListMember"."listId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageList"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetMessageListId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageList"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageListMember"."personId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."message"."messageThreadId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThread"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageParticipant"."messageId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."message"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageChannelMessageAssociation"."messageId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."message"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageChannelMessageAssociation"."messageThreadId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThread"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageChannelMessageAssociationMessageFolder"."messageChannelMessageAssociationId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageChannelMessageAssociation"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageParticipant"."personId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageParticipant"."workspaceMemberId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThreadTarget"."messageThreadId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThread"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThreadTarget"."targetPersonId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."messageThreadTarget"."targetOpportunityId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."noteTarget"."noteId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."note"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetNoteId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."note"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."noteTarget"."targetPersonId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "core"."view"."kanbanAggregateOperationFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."view"."calendarFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."application"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."view"."createdByUserWorkspaceId" > "core"."userWorkspace"."id"
+Ref: "core"."agentTurn"."threadId" > "core"."agentChatThread"."id"
+Ref: "core"."agentMessage"."threadId" > "core"."agentChatThread"."id"
+Ref: "core"."agentMessage"."turnId" > "core"."agentTurn"."id"
+Ref: "core"."agentMessagePart"."messageId" > "core"."agentMessage"."id"
+Ref: "core"."agentTurnEvaluation"."turnId" > "core"."agentTurn"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."noteTarget"."targetOpportunityId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."id"
+Ref: "core"."roleTarget"."roleId" > "core"."role"."id"
+Ref: "core"."roleTarget"."apiKeyId" > "core"."apiKey"."id"
+Ref: "core"."view"."mainGroupByFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."pointOfContactId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."taskTarget"."targetOpportunityId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetOpportunityId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."opportunity"."ownerId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember"."id"
+Ref: "core"."rowLevelPermissionPredicate"."fieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."rowLevelPermissionPredicate"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."rowLevelPermissionPredicate"."workspaceMemberFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."rowLevelPermissionPredicate"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."rowLevelPermissionPredicate"."roleId" > "core"."role"."id"
+Ref: "core"."rowLevelPermissionPredicate"."rowLevelPermissionPredicateGroupId" > "core"."rowLevelPermissionPredicateGroup"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."taskTarget"."targetPersonId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "core"."rowLevelPermissionPredicateGroup"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."rowLevelPermissionPredicateGroup"."roleId" > "core"."role"."id"
+Ref: "core"."rowLevelPermissionPredicateGroup"."parentRowLevelPermissionPredicateGroupId" > "core"."rowLevelPermissionPredicateGroup"."id"
+Ref: "core"."indexMetadata"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."roleTarget"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."role"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."fieldMetadata"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."objectMetadata"."workspaceId" > "core"."workspace"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetPersonId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."person"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."taskTarget"."taskId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."task"."id"
+Ref: "core"."objectPermission"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."skill"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewFilterGroup"."parentViewFilterGroupId" > "core"."viewFilterGroup"."id"
+Ref: "core"."dataSource"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."fieldMetadata"."applicationId" > "core"."application"."id"
+Ref: "core"."rowLevelPermissionPredicateGroup"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."objectMetadata"."applicationId" > "core"."application"."id"
+Ref: "core"."view"."applicationId" > "core"."application"."id"
+Ref: "core"."viewField"."applicationId" > "core"."application"."id"
+Ref: "core"."viewFilter"."applicationId" > "core"."application"."id"
+Ref: "core"."viewGroup"."applicationId" > "core"."application"."id"
+Ref: "core"."agent"."applicationId" > "core"."application"."id"
+Ref: "core"."role"."applicationId" > "core"."application"."id"
+Ref: "core"."frontComponent"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."frontComponent"."applicationId" > "core"."application"."id"
+Ref: "core"."commandMenuItem"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."commandMenuItem"."applicationId" > "core"."application"."id"
+Ref: "core"."commandMenuItem"."availabilityObjectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."file"."applicationId" > "core"."application"."id"
+Ref: "core"."objectPermission"."applicationId" > "core"."application"."id"
+Ref: "core"."fieldPermission"."applicationId" > "core"."application"."id"
+Ref: "core"."connectionProvider"."applicationId" > "core"."application"."id"
+Ref: "core"."connectedAccount"."connectionProviderId" > "core"."connectionProvider"."id"
+Ref: "core"."connectedAccount"."applicationId" > "core"."application"."id"
+Ref: "core"."applicationVariable"."applicationId" > "core"."application"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."task"."assigneeId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember"."id"
+Ref: "core"."navigationMenuItem"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."navigationMenuItem"."applicationId" > "core"."application"."id"
+Ref: "core"."navigationMenuItem"."userWorkspaceId" > "core"."userWorkspace"."id"
+Ref: "core"."navigationMenuItem"."targetObjectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."navigationMenuItem"."folderId" > "core"."navigationMenuItem"."id"
+Ref: "core"."indexMetadata"."applicationId" > "core"."application"."id"
+Ref: "core"."roleTarget"."applicationId" > "core"."application"."id"
+Ref: "core"."rowLevelPermissionPredicate"."applicationId" > "core"."application"."id"
+Ref: "core"."rowLevelPermissionPredicateGroup"."applicationId" > "core"."application"."id"
+Ref: "core"."viewFilterGroup"."applicationId" > "core"."application"."id"
+Ref: "core"."viewSort"."applicationId" > "core"."application"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetTaskId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."task"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."workspaceMemberId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workspaceMember"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetWorkflowId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflow"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetWorkflowVersionId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowVersion"."id"
+Ref: "core"."skill"."applicationId" > "core"."application"."id"
+Ref: "core"."pageLayoutWidget"."applicationId" > "core"."application"."id"
+Ref: "core"."pageLayout"."applicationId" > "core"."application"."id"
+Ref: "core"."pageLayoutTab"."applicationId" > "core"."application"."id"
+Ref: "core"."navigationMenuItem"."viewId" > "core"."view"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."timelineActivity"."targetWorkflowRunId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowRun"."id"
+Ref: "core"."webhook"."applicationId" > "core"."application"."id"
+Ref: "core"."logicFunctionLayer"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."logicFunction"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."logicFunction"."applicationId" > "core"."application"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowVersion"."workflowId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflow"."id"
+Ref: "core"."commandMenuItem"."frontComponentId" > "core"."frontComponent"."id"
+Ref: "core"."pageLayout"."defaultTabToFocusOnMobileAndSidePanelId" > "core"."pageLayoutTab"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowRun"."workflowId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflow"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowAutomatedTrigger"."workflowId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflow"."id"
+Ref: "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowRun"."workflowVersionId" > "workspace_3vsiuoi1ajstklwx5s60z6ceo"."workflowVersion"."id"
+Ref: "core"."workspace"."workspaceCustomApplicationId" > "core"."application"."id"
+Ref: "core"."application"."packageJsonFileId" > "core"."file"."id"
+Ref: "core"."application"."yarnLockFileId" > "core"."file"."id"
+Ref: "core"."viewFieldGroup"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."viewFieldGroup"."applicationId" > "core"."application"."id"
+Ref: "core"."viewFieldGroup"."viewId" > "core"."view"."id"
+Ref: "core"."viewField"."viewFieldGroupId" > "core"."viewFieldGroup"."id"
+Ref: "core"."workspace"."logoFileId" > "core"."file"."id"
+Ref: "core"."applicationRegistration"."createdByUserId" > "core"."user"."id"
+Ref: "core"."applicationRegistrationVariable"."applicationRegistrationId" > "core"."applicationRegistration"."id"
+Ref: "core"."application"."applicationRegistrationId" > "core"."applicationRegistration"."id"
+Ref: "core"."applicationRegistration"."tarballFileId" > "core"."file"."id"
+Ref: "core"."agentMessagePart"."fileId" > "core"."file"."id"
+Ref: "core"."applicationRegistration"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."connectedAccount"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."messageChannel"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."messageChannel"."connectedAccountId" > "core"."connectedAccount"."id"
+Ref: "core"."messageFolder"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."messageFolder"."messageChannelId" > "core"."messageChannel"."id"
+Ref: "core"."calendarChannel"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."calendarChannel"."connectedAccountId" > "core"."connectedAccount"."id"
+Ref: "core"."upgradeMigration"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."applicationVariable"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."indexFieldMetadata"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."twoFactorAuthenticationMethod"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."agentMessagePart"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."agentTurnEvaluation"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."agentChatThread"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."agentTurn"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."agentMessage"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."navigationMenuItem"."pageLayoutId" > "core"."pageLayout"."id"
+Ref: "core"."commandMenuItem"."pageLayoutId" > "core"."pageLayout"."id"
+Ref: "core"."connectionProvider"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."publicDomain"."applicationId" > "core"."application"."id"
+Ref: "core"."rolePermissionFlag"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."rolePermissionFlag"."applicationId" > "core"."application"."id"
+Ref: "core"."rolePermissionFlag"."roleId" > "core"."role"."id"
+Ref: "core"."permissionFlag"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."timelineActivityType"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."timelineActivityType"."applicationId" > "core"."application"."id"
+Ref: "core"."campaignDelivery"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."permissionFlag"."applicationId" > "core"."application"."id"
+Ref: "core"."rolePermissionFlag"."permissionFlagId" > "core"."permissionFlag"."id"
+Ref: "core"."viewFilter"."relationTargetFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."messageSuppression"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."unsubscribeTopic"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."searchFieldMetadata"."applicationId" > "core"."application"."id"
+Ref: "core"."application"."primaryPublicDomainId" > "core"."publicDomain"."id"
+Ref: "core"."dpaAgreement"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."applicationTranslation"."applicationRegistrationId" > "core"."applicationRegistration"."id"
+Ref: "core"."searchFieldMetadata"."tsVectorFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."searchFieldMetadata"."objectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."searchFieldMetadata"."fieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."application"."logoFileId" > "core"."file"."id"
+Ref: "core"."file"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."file"."applicationRegistrationId" > "core"."applicationRegistration"."id"
+Ref: "core"."workflowVersion"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."workflow"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."workflow"."applicationId" > "core"."application"."id"
+Ref: "core"."workflowVersion"."applicationId" > "core"."application"."id"
+Ref: "core"."view"."calendarEndFieldMetadataId" > "core"."fieldMetadata"."id"
+Ref: "core"."commandMenuItem"."navigationTargetObjectMetadataId" > "core"."objectMetadata"."id"
+Ref: "core"."usageLimit"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."applicationRegistration"."logoFileId" > "core"."file"."id"
+Ref: "core"."keyValuePair"."applicationId" > "core"."application"."id"
+Ref: "core"."roleTarget"."agentId" > "core"."agent"."id"
+Ref: "core"."userSession"."userId" > "core"."user"."id"
+Ref: "core"."userSession"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."userSession"."userWorkspaceId" > "core"."userWorkspace"."id"
+Ref: "core"."applicationAuthorization"."userId" > "core"."user"."id"
+Ref: "core"."applicationAuthorization"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."applicationAuthorization"."applicationId" > "core"."application"."id"
+Ref: "core"."applicationAuthorization"."userWorkspaceId" > "core"."userWorkspace"."id"
+Ref: "core"."workflow"."createdByUserWorkspaceId" > "core"."userWorkspace"."id"
+Ref: "core"."deferredWorkspaceMigrationAction"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."settingsMenuItem"."workspaceId" > "core"."workspace"."id"
+Ref: "core"."settingsMenuItem"."applicationId" > "core"."application"."id"
+Ref: "core"."settingsMenuItem"."frontComponentId" > "core"."frontComponent"."id"

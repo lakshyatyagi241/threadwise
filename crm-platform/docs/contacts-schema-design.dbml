@@ -1,0 +1,335 @@
+// Contacts backend schema design — for review in drawDB
+// Existing tables (contacts, companies, contact_identities, organizations,
+// users) shown greyed for context; new tables in color.
+// org_id present on every tenant table (RLS key) but omitted from most
+// relationship labels below for readability — every FK is really (org_id, id).
+
+Table organizations {
+  id bigint [pk]
+  uuid uuid
+  name text
+  Note: "existing"
+}
+
+Table users {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  full_name text
+  email citext
+  Note: "existing"
+}
+
+Table companies {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text
+  data jsonb
+  Note: "existing"
+}
+
+Table contacts {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  first_name text [note: "NEW — replaces name; backfill by splitting name on first space"]
+  last_name text [note: "NEW"]
+  email citext
+  phone text
+  company_id bigint
+  owner_id bigint
+  lifecycle_stage text
+  lifecycle_stage_date timestamptz [note: "NEW — when current lifecycle_stage was set"]
+  previous_lifecycle_stage text [note: "NEW"]
+  previous_lifecycle_stage_date timestamptz [note: "NEW"]
+  status text [note: "deal/pipeline status shown as 'Status' pill (e.g. Closed Won) — separate from lifecycle_stage, options via status_options option_group='deal_status'"]
+  lost_reason text [note: "NEW — Dependent on status='closed_lost', options via status_options"]
+  other_lost_reason text [note: "NEW — free text when lost_reason='other'"]
+  data jsonb [note: "Tier-2 custom fields, keyed by fields.key"]
+  lead_score integer [note: "NEW"]
+  whatsapp_subscription_status text [note: "NEW — replaces whatsapp_opt_in boolean; enum via status_options option_group='whatsapp_subscription'"]
+  sms_subscription_status text [note: "NEW — replaces sms_opt_in boolean; enum via status_options option_group='sms_subscription'"]
+  email_subscription_status text [note: "NEW — replaces email_opt_in boolean; enum via status_options option_group='email_subscription'"]
+  email_confirmed boolean [note: "NEW"]
+  fax_number text [note: "NEW"]
+  last_activity_at timestamptz [note: "NEW — bumped on note/task/meeting/conversation write; backs list 'Last Activity' column"]
+  created_by bigint [note: "NEW — FK users.id"]
+  updated_by bigint [note: "NEW — FK users.id"]
+  updated_at timestamptz [note: "NEW"]
+  row_version integer
+  created_at timestamptz
+  Note: "existing + new columns (name split into first_name/last_name, lifecycle history, lost_reason, subscription-status enums replacing opt-in booleans, lead_score, last_activity_at, created_by/updated_by audit)"
+}
+
+Table contact_identities {
+  org_id bigint
+  id bigint [pk]
+  contact_id bigint
+  kind text [note: "phone | email | whatsapp | web_visitor"]
+  value text
+  is_primary boolean
+  Note: "existing — auto-merge backbone"
+}
+
+// ---------------------------------------------------------------------
+// NEW: Tier-2 custom-field registry (kernel-owned, reused later by
+// Company Properties via the same module_key column)
+// ---------------------------------------------------------------------
+
+Table field_sections {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  module_key text [note: "'contacts', later 'companies'"]
+  name text [note: "e.g. Contact Information, Pre Book"]
+  position integer
+  is_active boolean
+}
+
+Table fields {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  module_key text
+  section_id bigint
+  key text [note: "storage key inside contacts.data"]
+  label text
+  field_type text [note: "text|long_text|integer|big_integer|decimal|percentage|currency|boolean|checkbox|radio|date|datetime|url|email|phone|select|multiselect|lookup|rating|timezone|formula"]
+  is_required boolean
+  is_hidden boolean [note: "inverse of grid's IN FORM column"]
+  is_read_only boolean [note: "grid's READ-ONLY column"]
+  is_masked boolean [note: "grid's MASKED column"]
+  is_unique boolean [note: "'Do not allow duplicate values' — enforced via partial unique index on (org_id, key, data->>key)"]
+  is_quick_create boolean [note: "'Appear in quick creation form'"]
+  is_global_search boolean [note: "'Appear in global search results'"]
+  is_system boolean [note: "System badge — key/field_type immutable, cannot delete"]
+  is_active boolean [note: "soft-delete"]
+  position integer
+  config jsonb [note: "type-specific: currency->{code}, rating->{max}, timezone->{default}, decimal/percentage->{precision}, formula->{expression, source_field_keys}, lookup->{target_module_key}, else placeholder/tooltip/min/max/regex — never options"]
+  replaces_field_id bigint [note: "self-FK: type-change versioning"]
+}
+
+Table field_options {
+  org_id bigint
+  id bigint [pk]
+  field_id bigint
+  value text
+  label text
+  position integer
+  is_hidden boolean
+}
+
+Table field_dependencies {
+  org_id bigint
+  id bigint [pk]
+  field_id bigint [note: "the dependent field"]
+  depends_on_field_id bigint
+  depends_on_option_id bigint
+  depends_on_value text
+  Note: "field-level: shows/hides the whole dependent field"
+}
+
+Table field_option_dependencies {
+  org_id bigint
+  id bigint [pk]
+  parent_option_id bigint [note: "FK field_options.id — option on the controlling field, e.g. Lifecycle Stage=Opportunity"]
+  child_option_id bigint [note: "FK field_options.id — option allowed on the dependent field, e.g. Lifecycle Stage Status=Open"]
+  Note: "option-level, many:many — filters which options of the dependent field are selectable per parent option"
+
+  Indexes {
+    (org_id, parent_option_id, child_option_id) [unique]
+  }
+}
+
+Table status_options {
+  org_id bigint
+  id bigint [pk]
+  module_key text
+  option_group text [note: "'lifecycle_stage' | 'marketing_status' | 'deal_status' (Overview 'Status' pill) — extensible per module_key"]
+  value text
+  label text
+  color text
+  position integer
+  is_default boolean
+  is_active boolean
+}
+
+// ---------------------------------------------------------------------
+// NEW: Contacts list/bulk/view surface
+// ---------------------------------------------------------------------
+
+Table tags {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name citext [note: "case-insensitive, unique per org"]
+  color text
+}
+
+Table contact_tags {
+  org_id bigint
+  contact_id bigint
+  tag_id bigint
+  created_by bigint
+  created_at timestamptz
+  Note: "pure membership, no row_version"
+
+  Indexes {
+    (org_id, contact_id, tag_id) [pk]
+  }
+}
+
+Table contact_notes {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  body text
+  created_by bigint
+  updated_by bigint
+  row_version integer
+}
+
+Table contact_views {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  name text [note: "'All Contacts', 'My Contacts', custom..."]
+  filter jsonb [note: "AND/OR condition tree"]
+  position integer
+  is_shared boolean [note: "false = personal, true = org-wide"]
+  created_by bigint
+}
+
+Table contact_view_favorites {
+  org_id bigint
+  view_id bigint
+  user_id bigint
+  created_at timestamptz
+  Note: "favoriting is per-viewer"
+
+  Indexes {
+    (org_id, view_id, user_id) [pk]
+  }
+}
+
+// ---------------------------------------------------------------------
+// NEW: contact detail page — files, activity timeline, tasks, meetings,
+// field-change audit. Gaps found reviewing the live contacts page against
+// this schema (list view + every detail tab).
+//
+// OUT OF SCOPE (deliberately not modeled here — owned by other modules):
+//   - Conversations tab -> existing chat/messaging module
+//   - Communication Stats tab -> existing messaging/campaign send-log module
+//   - Web Analytics tab -> no visitor-analytics events table; contact_identities
+//     (kind='web_visitor') only links the identity, doesn't store events
+// ---------------------------------------------------------------------
+
+Table contact_files {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  file_name text
+  file_size_bytes bigint
+  storage_key text [note: "object storage path"]
+  mime_type text
+  uploaded_by bigint
+  created_at timestamptz
+  Note: "NEW — backs detail page Files tab"
+}
+
+Table contact_activities {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  activity_type text [note: "note|call|email|stage_change|form_submission|... system+manual events"]
+  title text
+  body text
+  source text [note: "'system' | 'user' | 'bot'"]
+  actor_id bigint [note: "user who performed it, null if system/bot"]
+  occurred_at timestamptz
+  created_at timestamptz
+  Note: "NEW — backs Activities > Activity Timeline sub-tab"
+}
+
+Table contact_tasks {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  title text
+  due_at timestamptz
+  is_done boolean
+  assigned_to bigint
+  created_by bigint
+  row_version integer
+  created_at timestamptz
+  Note: "NEW — backs Activities > Tasks sub-tab and '...' menu Add Task"
+}
+
+Table contact_meetings {
+  org_id bigint
+  id bigint [pk]
+  uuid uuid
+  contact_id bigint
+  title text
+  starts_at timestamptz
+  ends_at timestamptz
+  location text
+  created_by bigint
+  created_at timestamptz
+  Note: "NEW — backs Activities > Meetings sub-tab"
+}
+
+Table contact_field_history {
+  org_id bigint
+  id bigint [pk]
+  contact_id bigint
+  field_key text [note: "column name, or fields.key for a Tier-2 field"]
+  old_value jsonb
+  new_value jsonb
+  changed_by bigint [note: "null if system/bot-driven change"]
+  changed_at timestamptz
+  Note: "NEW — append-only audit, backs 'Field History' / 'Contact Field History' buttons"
+}
+
+// ---------------------------------------------------------------------
+// Relationships
+// ---------------------------------------------------------------------
+
+Ref: contacts.company_id > companies.id
+Ref: contacts.owner_id > users.id
+Ref: contacts.created_by > users.id
+Ref: contacts.updated_by > users.id
+Ref: contact_identities.contact_id > contacts.id
+
+Ref: fields.section_id > field_sections.id
+Ref: fields.replaces_field_id > fields.id
+Ref: field_options.field_id > fields.id
+Ref: field_dependencies.field_id > fields.id
+Ref: field_dependencies.depends_on_field_id > fields.id
+Ref: field_dependencies.depends_on_option_id > field_options.id
+Ref: field_option_dependencies.parent_option_id > field_options.id
+Ref: field_option_dependencies.child_option_id > field_options.id
+
+Ref: contact_tags.contact_id > contacts.id
+Ref: contact_tags.tag_id > tags.id
+Ref: contact_notes.contact_id > contacts.id
+Ref: contact_views.created_by > users.id
+Ref: contact_view_favorites.view_id > contact_views.id
+Ref: contact_view_favorites.user_id > users.id
+
+Ref: contact_files.contact_id > contacts.id
+Ref: contact_files.uploaded_by > users.id
+Ref: contact_activities.contact_id > contacts.id
+Ref: contact_activities.actor_id > users.id
+Ref: contact_tasks.contact_id > contacts.id
+Ref: contact_tasks.assigned_to > users.id
+Ref: contact_tasks.created_by > users.id
+Ref: contact_meetings.contact_id > contacts.id
+Ref: contact_meetings.created_by > users.id
+Ref: contact_field_history.contact_id > contacts.id
+Ref: contact_field_history.changed_by > users.id
