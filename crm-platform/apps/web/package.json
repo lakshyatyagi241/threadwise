@@ -1,0 +1,33 @@
+{
+  "name": "@crm/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Staff CRM web app (Next.js App Router)",
+  "scripts": {
+    "dev": "node scripts/gen-registry.mjs && next dev -p 3001",
+    "build": "node scripts/gen-registry.mjs && next build",
+    "start": "next start -p 3001",
+    "typecheck": "node scripts/gen-registry.mjs && next typegen && tsc --noEmit",
+    "lint": "node scripts/gen-registry.mjs && eslint src",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@crm/contracts": "workspace:*",
+    "@crm/ui": "workspace:*",
+    "@tanstack/react-query": "^5.104.0",
+    "next": "^16.3.7",
+    "next-intl": "^4.14.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "server-only": "^0.0.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^4.3.3",
+    "vitest": "^2.1.9"
+  }
+}
