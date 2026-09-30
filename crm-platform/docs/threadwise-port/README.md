@@ -19,7 +19,7 @@ Reference is reference only: never copy its code, assets or text.
 | Coverage report (regenerate)                                             | `python3 .claude/skills/threadwise-inventory-refresh/scripts/audit_coverage.py`                                                                                             |
 | Resumable inventory workflow                                             | `_work/workflows/threadwise-inventory.mjs`                                                                                                                                  |
 
-Not written yet: `port-map/`, `ownership.json`, `assignments.md`, `tracker/*.md`, `parity/*.md`, `docs/api/`. The ownership guard and tracker scripts are finished and tested but need `ownership.json` to do anything.
+Not written yet: `port-map/`, `parity/*.md`, `docs/api/`. Ownership is generated: edit `assignment-input.json`, run `gen_ownership.py`, then `tracker.py init --all`.
 
 ## State at stop
 

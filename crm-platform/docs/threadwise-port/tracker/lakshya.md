@@ -1,0 +1,799 @@
+# Reference port tracker — Lakshya Tyagi
+
+Only Lakshya Tyagi edits this file (`threadwise-ownership-guard` enforces it). Statuses: todo · in-progress · backend-done · frontend-done · done · verified · blocked · wontfix.
+Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.py set TW-XXX-001 in-progress --pr 123`
+
+## auth-registration-security (auth)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-AUTH-001 | todo |  |  |
+| TW-AUTH-002 | todo |  |  |
+| TW-AUTH-003 | todo |  |  |
+| TW-AUTH-004 | todo |  |  |
+| TW-AUTH-005 | todo |  |  |
+| TW-AUTH-006 | todo |  |  |
+| TW-AUTH-007 | todo |  |  |
+| TW-AUTH-008 | todo |  |  |
+| TW-AUTH-009 | todo |  |  |
+| TW-AUTH-010 | todo |  |  |
+| TW-AUTH-011 | todo |  |  |
+| TW-AUTH-012 | todo |  |  |
+| TW-AUTH-013 | todo |  |  |
+| TW-AUTH-014 | todo |  |  |
+| TW-AUTH-015 | todo |  |  |
+| TW-AUTH-016 | todo |  |  |
+| TW-AUTH-017 | todo |  |  |
+| TW-AUTH-018 | todo |  |  |
+| TW-AUTH-019 | todo |  |  |
+| TW-AUTH-020 | todo |  |  |
+| TW-AUTH-021 | todo |  |  |
+| TW-AUTH-022 | todo |  |  |
+| TW-AUTH-023 | todo |  |  |
+| TW-AUTH-024 | todo |  |  |
+| TW-AUTH-025 | todo |  |  |
+| TW-AUTH-026 | todo |  |  |
+| TW-AUTH-027 | todo |  |  |
+| TW-AUTH-028 | todo |  |  |
+| TW-AUTH-029 | todo |  |  |
+| TW-AUTH-030 | todo |  |  |
+| TW-AUTH-031 | todo |  |  |
+| TW-AUTH-032 | todo |  |  |
+| TW-AUTH-033 | todo |  |  |
+| TW-AUTH-034 | todo |  |  |
+| TW-AUTH-035 | todo |  |  |
+| TW-AUTH-036 | todo |  |  |
+| TW-AUTH-037 | todo |  |  |
+| TW-AUTH-038 | todo |  |  |
+| TW-AUTH-039 | todo |  |  |
+| TW-AUTH-040 | todo |  |  |
+| TW-AUTH-041 | todo |  |  |
+| TW-AUTH-042 | todo |  |  |
+| TW-AUTH-043 | todo |  |  |
+| TW-AUTH-044 | todo |  |  |
+| TW-AUTH-045 | todo |  |  |
+| TW-AUTH-046 | todo |  |  |
+| TW-AUTH-047 | todo |  |  |
+| TW-AUTH-048 | todo |  |  |
+| TW-AUTH-049 | todo |  |  |
+
+## workspaces-teams-tenancy (wsp)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-WSP-001 | todo |  |  |
+| TW-WSP-002 | todo |  |  |
+| TW-WSP-003 | todo |  |  |
+| TW-WSP-004 | todo |  |  |
+| TW-WSP-005 | todo |  |  |
+| TW-WSP-006 | todo |  |  |
+| TW-WSP-007 | todo |  |  |
+| TW-WSP-008 | todo |  |  |
+| TW-WSP-009 | todo |  |  |
+| TW-WSP-010 | todo |  |  |
+| TW-WSP-011 | todo |  |  |
+| TW-WSP-012 | todo |  |  |
+| TW-WSP-013 | todo |  |  |
+| TW-WSP-014 | todo |  |  |
+| TW-WSP-015 | todo |  |  |
+| TW-WSP-016 | todo |  |  |
+| TW-WSP-017 | todo |  |  |
+| TW-WSP-018 | todo |  |  |
+| TW-WSP-019 | todo |  |  |
+| TW-WSP-020 | todo |  |  |
+| TW-WSP-021 | todo |  |  |
+| TW-WSP-022 | todo |  |  |
+| TW-WSP-023 | todo |  |  |
+| TW-WSP-024 | todo |  |  |
+| TW-WSP-025 | todo |  |  |
+| TW-WSP-026 | todo |  |  |
+| TW-WSP-027 | todo |  |  |
+| TW-WSP-028 | todo |  |  |
+| TW-WSP-029 | todo |  |  |
+| TW-WSP-030 | todo |  |  |
+| TW-WSP-031 | todo |  |  |
+| TW-WSP-032 | todo |  |  |
+| TW-WSP-033 | todo |  |  |
+| TW-WSP-034 | todo |  |  |
+| TW-WSP-035 | todo |  |  |
+| TW-WSP-036 | todo |  |  |
+| TW-WSP-037 | todo |  |  |
+| TW-WSP-038 | todo |  |  |
+| TW-WSP-039 | todo |  |  |
+| TW-WSP-040 | todo |  |  |
+| TW-WSP-041 | todo |  |  |
+| TW-WSP-042 | todo |  |  |
+| TW-WSP-043 | todo |  |  |
+| TW-WSP-044 | todo |  |  |
+| TW-WSP-045 | todo |  |  |
+| TW-WSP-046 | todo |  |  |
+| TW-WSP-047 | todo |  |  |
+
+## roles-permissions (rbac)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-RBAC-001 | todo |  |  |
+| TW-RBAC-002 | todo |  |  |
+| TW-RBAC-003 | todo |  |  |
+| TW-RBAC-004 | todo |  |  |
+| TW-RBAC-005 | todo |  |  |
+| TW-RBAC-006 | todo |  |  |
+| TW-RBAC-007 | todo |  |  |
+| TW-RBAC-008 | todo |  |  |
+| TW-RBAC-009 | todo |  |  |
+| TW-RBAC-010 | todo |  |  |
+| TW-RBAC-011 | todo |  |  |
+| TW-RBAC-012 | todo |  |  |
+| TW-RBAC-013 | todo |  |  |
+| TW-RBAC-014 | todo |  |  |
+| TW-RBAC-015 | todo |  |  |
+| TW-RBAC-016 | todo |  |  |
+| TW-RBAC-017 | todo |  |  |
+| TW-RBAC-018 | todo |  |  |
+| TW-RBAC-019 | todo |  |  |
+| TW-RBAC-020 | todo |  |  |
+| TW-RBAC-021 | todo |  |  |
+| TW-RBAC-022 | todo |  |  |
+| TW-RBAC-023 | todo |  |  |
+| TW-RBAC-024 | todo |  |  |
+| TW-RBAC-025 | todo |  |  |
+| TW-RBAC-026 | todo |  |  |
+| TW-RBAC-027 | todo |  |  |
+| TW-RBAC-028 | todo |  |  |
+| TW-RBAC-029 | todo |  |  |
+| TW-RBAC-030 | todo |  |  |
+| TW-RBAC-031 | todo |  |  |
+| TW-RBAC-032 | todo |  |  |
+| TW-RBAC-033 | todo |  |  |
+| TW-RBAC-034 | todo |  |  |
+| TW-RBAC-035 | todo |  |  |
+| TW-RBAC-036 | todo |  |  |
+| TW-RBAC-037 | todo |  |  |
+
+## admin-console-shell (ashell)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-ASHELL-001 | todo |  |  |
+| TW-ASHELL-002 | todo |  |  |
+| TW-ASHELL-003 | todo |  |  |
+| TW-ASHELL-004 | todo |  |  |
+| TW-ASHELL-005 | todo |  |  |
+| TW-ASHELL-006 | todo |  |  |
+| TW-ASHELL-007 | todo |  |  |
+| TW-ASHELL-008 | todo |  |  |
+| TW-ASHELL-009 | todo |  |  |
+| TW-ASHELL-010 | todo |  |  |
+| TW-ASHELL-011 | todo |  |  |
+| TW-ASHELL-012 | todo |  |  |
+| TW-ASHELL-013 | todo |  |  |
+| TW-ASHELL-014 | todo |  |  |
+| TW-ASHELL-015 | todo |  |  |
+| TW-ASHELL-016 | todo |  |  |
+| TW-ASHELL-017 | todo |  |  |
+| TW-ASHELL-018 | todo |  |  |
+| TW-ASHELL-019 | todo |  |  |
+| TW-ASHELL-020 | todo |  |  |
+| TW-ASHELL-021 | todo |  |  |
+| TW-ASHELL-022 | todo |  |  |
+| TW-ASHELL-023 | todo |  |  |
+| TW-ASHELL-024 | todo |  |  |
+| TW-ASHELL-025 | todo |  |  |
+| TW-ASHELL-026 | todo |  |  |
+| TW-ASHELL-027 | todo |  |  |
+| TW-ASHELL-028 | todo |  |  |
+| TW-ASHELL-029 | todo |  |  |
+| TW-ASHELL-030 | todo |  |  |
+| TW-ASHELL-031 | todo |  |  |
+| TW-ASHELL-032 | todo |  |  |
+| TW-ASHELL-033 | todo |  |  |
+| TW-ASHELL-034 | todo |  |  |
+| TW-ASHELL-035 | todo |  |  |
+| TW-ASHELL-036 | todo |  |  |
+| TW-ASHELL-037 | todo |  |  |
+| TW-ASHELL-038 | todo |  |  |
+| TW-ASHELL-039 | todo |  |  |
+| TW-ASHELL-040 | todo |  |  |
+| TW-ASHELL-041 | todo |  |  |
+| TW-ASHELL-042 | todo |  |  |
+| TW-ASHELL-043 | todo |  |  |
+| TW-ASHELL-044 | todo |  |  |
+| TW-ASHELL-045 | todo |  |  |
+| TW-ASHELL-046 | todo |  |  |
+| TW-ASHELL-047 | todo |  |  |
+
+## platform-settings-branding-storage (set)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-SET-001 | todo |  |  |
+| TW-SET-002 | todo |  |  |
+| TW-SET-003 | todo |  |  |
+| TW-SET-004 | todo |  |  |
+| TW-SET-005 | todo |  |  |
+| TW-SET-006 | todo |  |  |
+| TW-SET-007 | todo |  |  |
+| TW-SET-008 | todo |  |  |
+| TW-SET-009 | todo |  |  |
+| TW-SET-010 | todo |  |  |
+| TW-SET-011 | todo |  |  |
+| TW-SET-012 | todo |  |  |
+| TW-SET-013 | todo |  |  |
+| TW-SET-014 | todo |  |  |
+| TW-SET-015 | todo |  |  |
+| TW-SET-016 | todo |  |  |
+| TW-SET-017 | todo |  |  |
+| TW-SET-018 | todo |  |  |
+| TW-SET-019 | todo |  |  |
+| TW-SET-020 | todo |  |  |
+| TW-SET-021 | todo |  |  |
+| TW-SET-022 | todo |  |  |
+| TW-SET-023 | todo |  |  |
+| TW-SET-024 | todo |  |  |
+| TW-SET-025 | todo |  |  |
+| TW-SET-026 | todo |  |  |
+| TW-SET-027 | todo |  |  |
+| TW-SET-028 | todo |  |  |
+| TW-SET-029 | todo |  |  |
+| TW-SET-030 | todo |  |  |
+| TW-SET-031 | todo |  |  |
+| TW-SET-032 | todo |  |  |
+| TW-SET-033 | todo |  |  |
+| TW-SET-034 | todo |  |  |
+| TW-SET-035 | todo |  |  |
+| TW-SET-036 | todo |  |  |
+| TW-SET-037 | todo |  |  |
+| TW-SET-038 | todo |  |  |
+| TW-SET-039 | todo |  |  |
+| TW-SET-040 | todo |  |  |
+| TW-SET-041 | todo |  |  |
+| TW-SET-042 | todo |  |  |
+| TW-SET-043 | todo |  |  |
+| TW-SET-044 | todo |  |  |
+| TW-SET-045 | todo |  |  |
+| TW-SET-046 | todo |  |  |
+
+## localization-translation (i18n)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-I18N-001 | todo |  |  |
+| TW-I18N-002 | todo |  |  |
+| TW-I18N-003 | todo |  |  |
+| TW-I18N-004 | todo |  |  |
+| TW-I18N-005 | todo |  |  |
+| TW-I18N-006 | todo |  |  |
+| TW-I18N-007 | todo |  |  |
+| TW-I18N-008 | todo |  |  |
+| TW-I18N-009 | todo |  |  |
+| TW-I18N-010 | todo |  |  |
+| TW-I18N-011 | todo |  |  |
+| TW-I18N-012 | todo |  |  |
+| TW-I18N-013 | todo |  |  |
+| TW-I18N-014 | todo |  |  |
+| TW-I18N-015 | todo |  |  |
+| TW-I18N-016 | todo |  |  |
+| TW-I18N-017 | todo |  |  |
+| TW-I18N-018 | todo |  |  |
+| TW-I18N-019 | todo |  |  |
+| TW-I18N-020 | todo |  |  |
+| TW-I18N-021 | todo |  |  |
+| TW-I18N-022 | todo |  |  |
+| TW-I18N-023 | todo |  |  |
+| TW-I18N-024 | todo |  |  |
+| TW-I18N-025 | todo |  |  |
+| TW-I18N-026 | todo |  |  |
+| TW-I18N-027 | todo |  |  |
+| TW-I18N-028 | todo |  |  |
+| TW-I18N-029 | todo |  |  |
+| TW-I18N-030 | todo |  |  |
+| TW-I18N-031 | todo |  |  |
+| TW-I18N-032 | todo |  |  |
+| TW-I18N-033 | todo |  |  |
+| TW-I18N-034 | todo |  |  |
+| TW-I18N-035 | todo |  |  |
+| TW-I18N-036 | todo |  |  |
+| TW-I18N-037 | todo |  |  |
+| TW-I18N-038 | todo |  |  |
+| TW-I18N-039 | todo |  |  |
+
+## install-update-licensing (inst)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-INST-001 | todo |  |  |
+| TW-INST-002 | todo |  |  |
+| TW-INST-003 | todo |  |  |
+| TW-INST-004 | todo |  |  |
+| TW-INST-005 | todo |  |  |
+| TW-INST-006 | todo |  |  |
+| TW-INST-007 | todo |  |  |
+| TW-INST-008 | todo |  |  |
+| TW-INST-009 | todo |  |  |
+| TW-INST-010 | todo |  |  |
+| TW-INST-011 | todo |  |  |
+| TW-INST-012 | todo |  |  |
+| TW-INST-013 | todo |  |  |
+| TW-INST-014 | todo |  |  |
+| TW-INST-015 | todo |  |  |
+| TW-INST-016 | todo |  |  |
+| TW-INST-017 | todo |  |  |
+| TW-INST-018 | todo |  |  |
+| TW-INST-019 | todo |  |  |
+| TW-INST-020 | todo |  |  |
+| TW-INST-021 | todo |  |  |
+| TW-INST-022 | todo |  |  |
+| TW-INST-023 | todo |  |  |
+| TW-INST-024 | todo |  |  |
+| TW-INST-025 | todo |  |  |
+| TW-INST-026 | todo |  |  |
+| TW-INST-027 | todo |  |  |
+| TW-INST-028 | todo |  |  |
+| TW-INST-029 | todo |  |  |
+
+## plans-subscriptions-trials (plan)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-PLAN-001 | todo |  |  |
+| TW-PLAN-002 | todo |  |  |
+| TW-PLAN-003 | todo |  |  |
+| TW-PLAN-004 | todo |  |  |
+| TW-PLAN-005 | todo |  |  |
+| TW-PLAN-006 | todo |  |  |
+| TW-PLAN-007 | todo |  |  |
+| TW-PLAN-008 | todo |  |  |
+| TW-PLAN-009 | todo |  |  |
+| TW-PLAN-010 | todo |  |  |
+| TW-PLAN-011 | todo |  |  |
+| TW-PLAN-012 | todo |  |  |
+| TW-PLAN-013 | todo |  |  |
+| TW-PLAN-014 | todo |  |  |
+| TW-PLAN-015 | todo |  |  |
+| TW-PLAN-016 | todo |  |  |
+| TW-PLAN-017 | todo |  |  |
+| TW-PLAN-018 | todo |  |  |
+| TW-PLAN-019 | todo |  |  |
+| TW-PLAN-020 | todo |  |  |
+| TW-PLAN-021 | todo |  |  |
+| TW-PLAN-022 | todo |  |  |
+| TW-PLAN-023 | todo |  |  |
+| TW-PLAN-024 | todo |  |  |
+| TW-PLAN-025 | todo |  |  |
+| TW-PLAN-026 | todo |  |  |
+| TW-PLAN-027 | todo |  |  |
+| TW-PLAN-028 | todo |  |  |
+
+## wallet-message-billing (wallet)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-WALLET-001 | todo |  |  |
+| TW-WALLET-002 | todo |  |  |
+| TW-WALLET-003 | todo |  |  |
+| TW-WALLET-004 | todo |  |  |
+| TW-WALLET-005 | todo |  |  |
+| TW-WALLET-006 | todo |  |  |
+| TW-WALLET-007 | todo |  |  |
+| TW-WALLET-008 | todo |  |  |
+| TW-WALLET-009 | todo |  |  |
+| TW-WALLET-010 | todo |  |  |
+| TW-WALLET-011 | todo |  |  |
+| TW-WALLET-012 | todo |  |  |
+| TW-WALLET-013 | todo |  |  |
+| TW-WALLET-014 | todo |  |  |
+| TW-WALLET-015 | todo |  |  |
+| TW-WALLET-016 | todo |  |  |
+| TW-WALLET-017 | todo |  |  |
+| TW-WALLET-018 | todo |  |  |
+| TW-WALLET-019 | todo |  |  |
+| TW-WALLET-020 | todo |  |  |
+| TW-WALLET-021 | todo |  |  |
+| TW-WALLET-022 | todo |  |  |
+| TW-WALLET-023 | todo |  |  |
+| TW-WALLET-024 | todo |  |  |
+| TW-WALLET-025 | todo |  |  |
+| TW-WALLET-026 | todo |  |  |
+| TW-WALLET-027 | todo |  |  |
+| TW-WALLET-028 | todo |  |  |
+| TW-WALLET-029 | todo |  |  |
+| TW-WALLET-030 | todo |  |  |
+| TW-WALLET-031 | todo |  |  |
+| TW-WALLET-032 | todo |  |  |
+| TW-WALLET-033 | todo |  |  |
+
+## notifications-activity-audit (notif)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-NOTIF-001 | todo |  |  |
+| TW-NOTIF-002 | todo |  |  |
+| TW-NOTIF-003 | todo |  |  |
+| TW-NOTIF-004 | todo |  |  |
+| TW-NOTIF-005 | todo |  |  |
+| TW-NOTIF-006 | todo |  |  |
+| TW-NOTIF-007 | todo |  |  |
+| TW-NOTIF-008 | todo |  |  |
+| TW-NOTIF-009 | todo |  |  |
+| TW-NOTIF-010 | todo |  |  |
+| TW-NOTIF-011 | todo |  |  |
+| TW-NOTIF-012 | todo |  |  |
+| TW-NOTIF-013 | todo |  |  |
+| TW-NOTIF-014 | todo |  |  |
+| TW-NOTIF-015 | todo |  |  |
+| TW-NOTIF-016 | todo |  |  |
+| TW-NOTIF-017 | todo |  |  |
+| TW-NOTIF-018 | todo |  |  |
+| TW-NOTIF-019 | todo |  |  |
+| TW-NOTIF-020 | todo |  |  |
+| TW-NOTIF-021 | todo |  |  |
+| TW-NOTIF-022 | todo |  |  |
+| TW-NOTIF-023 | todo |  |  |
+| TW-NOTIF-024 | todo |  |  |
+| TW-NOTIF-025 | todo |  |  |
+| TW-NOTIF-026 | todo |  |  |
+| TW-NOTIF-027 | todo |  |  |
+| TW-NOTIF-028 | todo |  |  |
+| TW-NOTIF-029 | todo |  |  |
+| TW-NOTIF-030 | todo |  |  |
+| TW-NOTIF-031 | todo |  |  |
+| TW-NOTIF-032 | todo |  |  |
+| TW-NOTIF-033 | todo |  |  |
+| TW-NOTIF-034 | todo |  |  |
+| TW-NOTIF-035 | todo |  |  |
+| TW-NOTIF-036 | todo |  |  |
+| TW-NOTIF-037 | todo |  |  |
+| TW-NOTIF-038 | todo |  |  |
+| TW-NOTIF-039 | todo |  |  |
+| TW-NOTIF-040 | todo |  |  |
+| TW-NOTIF-041 | todo |  |  |
+| TW-NOTIF-042 | todo |  |  |
+| TW-NOTIF-043 | todo |  |  |
+| TW-NOTIF-044 | todo |  |  |
+| TW-NOTIF-045 | todo |  |  |
+
+## platform-payment-gateways (paygw)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-PAYGW-001 | todo |  |  |
+| TW-PAYGW-002 | todo |  |  |
+| TW-PAYGW-003 | todo |  |  |
+| TW-PAYGW-004 | todo |  |  |
+| TW-PAYGW-005 | todo |  |  |
+| TW-PAYGW-006 | todo |  |  |
+| TW-PAYGW-007 | todo |  |  |
+| TW-PAYGW-008 | todo |  |  |
+| TW-PAYGW-009 | todo |  |  |
+| TW-PAYGW-010 | todo |  |  |
+| TW-PAYGW-011 | todo |  |  |
+| TW-PAYGW-012 | todo |  |  |
+| TW-PAYGW-013 | todo |  |  |
+| TW-PAYGW-014 | todo |  |  |
+| TW-PAYGW-015 | todo |  |  |
+| TW-PAYGW-016 | todo |  |  |
+| TW-PAYGW-017 | todo |  |  |
+| TW-PAYGW-018 | todo |  |  |
+| TW-PAYGW-019 | todo |  |  |
+| TW-PAYGW-020 | todo |  |  |
+| TW-PAYGW-021 | todo |  |  |
+| TW-PAYGW-022 | todo |  |  |
+| TW-PAYGW-023 | todo |  |  |
+| TW-PAYGW-024 | todo |  |  |
+| TW-PAYGW-025 | todo |  |  |
+| TW-PAYGW-026 | todo |  |  |
+| TW-PAYGW-027 | todo |  |  |
+| TW-PAYGW-028 | todo |  |  |
+| TW-PAYGW-029 | todo |  |  |
+| TW-PAYGW-030 | todo |  |  |
+| TW-PAYGW-031 | todo |  |  |
+| TW-PAYGW-032 | todo |  |  |
+| TW-PAYGW-033 | todo |  |  |
+| TW-PAYGW-034 | todo |  |  |
+| TW-PAYGW-035 | todo |  |  |
+| TW-PAYGW-036 | todo |  |  |
+| TW-PAYGW-037 | todo |  |  |
+| TW-PAYGW-038 | todo |  |  |
+| TW-PAYGW-039 | todo |  |  |
+| TW-PAYGW-040 | todo |  |  |
+| TW-PAYGW-041 | todo |  |  |
+| TW-PAYGW-042 | todo |  |  |
+| TW-PAYGW-043 | todo |  |  |
+| TW-PAYGW-044 | todo |  |  |
+| TW-PAYGW-045 | todo |  |  |
+| TW-PAYGW-046 | todo |  |  |
+| TW-PAYGW-047 | todo |  |  |
+| TW-PAYGW-048 | todo |  |  |
+
+## coupons-credits-referral-currency (cpn)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-CPN-001 | todo |  |  |
+| TW-CPN-002 | todo |  |  |
+| TW-CPN-003 | todo |  |  |
+| TW-CPN-004 | todo |  |  |
+| TW-CPN-005 | todo |  |  |
+| TW-CPN-006 | todo |  |  |
+| TW-CPN-007 | todo |  |  |
+| TW-CPN-008 | todo |  |  |
+| TW-CPN-009 | todo |  |  |
+| TW-CPN-010 | todo |  |  |
+| TW-CPN-011 | todo |  |  |
+| TW-CPN-012 | todo |  |  |
+| TW-CPN-013 | todo |  |  |
+| TW-CPN-014 | todo |  |  |
+| TW-CPN-015 | todo |  |  |
+| TW-CPN-016 | todo |  |  |
+| TW-CPN-017 | todo |  |  |
+| TW-CPN-018 | todo |  |  |
+| TW-CPN-019 | todo |  |  |
+| TW-CPN-020 | todo |  |  |
+| TW-CPN-021 | todo |  |  |
+| TW-CPN-022 | todo |  |  |
+| TW-CPN-023 | todo |  |  |
+| TW-CPN-024 | todo |  |  |
+| TW-CPN-025 | todo |  |  |
+| TW-CPN-026 | todo |  |  |
+| TW-CPN-027 | todo |  |  |
+| TW-CPN-028 | todo |  |  |
+| TW-CPN-029 | todo |  |  |
+| TW-CPN-030 | todo |  |  |
+| TW-CPN-031 | todo |  |  |
+| TW-CPN-032 | todo |  |  |
+| TW-CPN-033 | todo |  |  |
+| TW-CPN-034 | todo |  |  |
+| TW-CPN-035 | todo |  |  |
+| TW-CPN-036 | todo |  |  |
+| TW-CPN-037 | todo |  |  |
+| TW-CPN-038 | todo |  |  |
+
+## addons-extension-registry (add)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-ADD-001 | todo |  |  |
+| TW-ADD-002 | todo |  |  |
+| TW-ADD-003 | todo |  |  |
+| TW-ADD-004 | todo |  |  |
+| TW-ADD-005 | todo |  |  |
+| TW-ADD-006 | todo |  |  |
+| TW-ADD-007 | todo |  |  |
+| TW-ADD-008 | todo |  |  |
+| TW-ADD-009 | todo |  |  |
+| TW-ADD-010 | todo |  |  |
+| TW-ADD-011 | todo |  |  |
+| TW-ADD-012 | todo |  |  |
+| TW-ADD-013 | todo |  |  |
+| TW-ADD-014 | todo |  |  |
+| TW-ADD-015 | todo |  |  |
+| TW-ADD-016 | todo |  |  |
+| TW-ADD-017 | todo |  |  |
+| TW-ADD-018 | todo |  |  |
+| TW-ADD-019 | todo |  |  |
+| TW-ADD-020 | todo |  |  |
+| TW-ADD-021 | todo |  |  |
+| TW-ADD-022 | todo |  |  |
+| TW-ADD-023 | todo |  |  |
+| TW-ADD-024 | todo |  |  |
+| TW-ADD-025 | todo |  |  |
+| TW-ADD-026 | todo |  |  |
+| TW-ADD-027 | todo |  |  |
+| TW-ADD-028 | todo |  |  |
+| TW-ADD-029 | todo |  |  |
+| TW-ADD-030 | todo |  |  |
+| TW-ADD-031 | todo |  |  |
+| TW-ADD-032 | todo |  |  |
+| TW-ADD-033 | todo |  |  |
+| TW-ADD-034 | todo |  |  |
+| TW-ADD-035 | todo |  |  |
+
+## marketing-site-cms (cms)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-CMS-001 | todo |  |  |
+| TW-CMS-002 | todo |  |  |
+| TW-CMS-003 | todo |  |  |
+| TW-CMS-004 | todo |  |  |
+| TW-CMS-005 | todo |  |  |
+| TW-CMS-006 | todo |  |  |
+| TW-CMS-007 | todo |  |  |
+| TW-CMS-008 | todo |  |  |
+| TW-CMS-009 | todo |  |  |
+| TW-CMS-010 | todo |  |  |
+| TW-CMS-011 | todo |  |  |
+| TW-CMS-012 | todo |  |  |
+| TW-CMS-013 | todo |  |  |
+| TW-CMS-014 | todo |  |  |
+| TW-CMS-015 | todo |  |  |
+| TW-CMS-016 | todo |  |  |
+| TW-CMS-017 | todo |  |  |
+| TW-CMS-018 | todo |  |  |
+| TW-CMS-019 | todo |  |  |
+| TW-CMS-020 | todo |  |  |
+| TW-CMS-021 | todo |  |  |
+| TW-CMS-022 | todo |  |  |
+| TW-CMS-023 | todo |  |  |
+| TW-CMS-024 | todo |  |  |
+| TW-CMS-025 | todo |  |  |
+| TW-CMS-026 | todo |  |  |
+| TW-CMS-027 | todo |  |  |
+| TW-CMS-028 | todo |  |  |
+| TW-CMS-029 | todo |  |  |
+| TW-CMS-030 | todo |  |  |
+| TW-CMS-031 | todo |  |  |
+| TW-CMS-032 | todo |  |  |
+| TW-CMS-033 | todo |  |  |
+| TW-CMS-034 | todo |  |  |
+| TW-CMS-035 | todo |  |  |
+| TW-CMS-036 | todo |  |  |
+| TW-CMS-037 | todo |  |  |
+| TW-CMS-038 | todo |  |  |
+| TW-CMS-039 | todo |  |  |
+| TW-CMS-040 | todo |  |  |
+| TW-CMS-041 | todo |  |  |
+| TW-CMS-042 | todo |  |  |
+| TW-CMS-043 | todo |  |  |
+| TW-CMS-044 | todo |  |  |
+| TW-CMS-045 | todo |  |  |
+| TW-CMS-046 | todo |  |  |
+| TW-CMS-047 | todo |  |  |
+| TW-CMS-048 | todo |  |  |
+| TW-CMS-049 | todo |  |  |
+| TW-CMS-050 | todo |  |  |
+| TW-CMS-051 | todo |  |  |
+| TW-CMS-052 | todo |  |  |
+| TW-CMS-053 | todo |  |  |
+
+## dashboards-analytics-charts (dash)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-DASH-001 | todo |  |  |
+| TW-DASH-002 | todo |  |  |
+| TW-DASH-003 | todo |  |  |
+| TW-DASH-004 | todo |  |  |
+| TW-DASH-005 | todo |  |  |
+| TW-DASH-006 | todo |  |  |
+| TW-DASH-007 | todo |  |  |
+| TW-DASH-008 | todo |  |  |
+| TW-DASH-009 | todo |  |  |
+| TW-DASH-010 | todo |  |  |
+| TW-DASH-011 | todo |  |  |
+| TW-DASH-012 | todo |  |  |
+| TW-DASH-013 | todo |  |  |
+| TW-DASH-014 | todo |  |  |
+| TW-DASH-015 | todo |  |  |
+| TW-DASH-016 | todo |  |  |
+| TW-DASH-017 | todo |  |  |
+| TW-DASH-018 | todo |  |  |
+| TW-DASH-019 | todo |  |  |
+| TW-DASH-020 | todo |  |  |
+| TW-DASH-021 | todo |  |  |
+| TW-DASH-022 | todo |  |  |
+| TW-DASH-023 | todo |  |  |
+| TW-DASH-024 | todo |  |  |
+| TW-DASH-025 | todo |  |  |
+| TW-DASH-026 | todo |  |  |
+| TW-DASH-027 | todo |  |  |
+| TW-DASH-028 | todo |  |  |
+| TW-DASH-029 | todo |  |  |
+| TW-DASH-030 | todo |  |  |
+| TW-DASH-031 | todo |  |  |
+| TW-DASH-032 | todo |  |  |
+| TW-DASH-033 | todo |  |  |
+| TW-DASH-034 | todo |  |  |
+| TW-DASH-035 | todo |  |  |
+| TW-DASH-036 | todo |  |  |
+| TW-DASH-037 | todo |  |  |
+| TW-DASH-038 | todo |  |  |
+| TW-DASH-039 | todo |  |  |
+| TW-DASH-040 | todo |  |  |
+| TW-DASH-041 | todo |  |  |
+| TW-DASH-042 | todo |  |  |
+| TW-DASH-043 | todo |  |  |
+| TW-DASH-044 | todo |  |  |
+| TW-DASH-045 | todo |  |  |
+| TW-DASH-046 | todo |  |  |
+| TW-DASH-047 | todo |  |  |
+| TW-DASH-048 | todo |  |  |
+| TW-DASH-049 | todo |  |  |
+| TW-DASH-050 | todo |  |  |
+| TW-DASH-051 | todo |  |  |
+| TW-DASH-052 | todo |  |  |
+| TW-DASH-053 | todo |  |  |
+| TW-DASH-054 | todo |  |  |
+
+## platform-support-desk (supp)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-SUPP-001 | todo |  |  |
+| TW-SUPP-002 | todo |  |  |
+| TW-SUPP-003 | todo |  |  |
+| TW-SUPP-004 | todo |  |  |
+| TW-SUPP-005 | todo |  |  |
+| TW-SUPP-006 | todo |  |  |
+| TW-SUPP-007 | todo |  |  |
+| TW-SUPP-008 | todo |  |  |
+| TW-SUPP-009 | todo |  |  |
+| TW-SUPP-010 | todo |  |  |
+| TW-SUPP-011 | todo |  |  |
+| TW-SUPP-012 | todo |  |  |
+| TW-SUPP-013 | todo |  |  |
+| TW-SUPP-014 | todo |  |  |
+| TW-SUPP-015 | todo |  |  |
+| TW-SUPP-016 | todo |  |  |
+| TW-SUPP-017 | todo |  |  |
+| TW-SUPP-018 | todo |  |  |
+| TW-SUPP-019 | todo |  |  |
+| TW-SUPP-020 | todo |  |  |
+| TW-SUPP-021 | todo |  |  |
+| TW-SUPP-022 | todo |  |  |
+| TW-SUPP-023 | todo |  |  |
+| TW-SUPP-024 | todo |  |  |
+| TW-SUPP-025 | todo |  |  |
+| TW-SUPP-026 | todo |  |  |
+| TW-SUPP-027 | todo |  |  |
+| TW-SUPP-028 | todo |  |  |
+| TW-SUPP-029 | todo |  |  |
+| TW-SUPP-030 | todo |  |  |
+| TW-SUPP-031 | todo |  |  |
+| TW-SUPP-032 | todo |  |  |
+| TW-SUPP-033 | todo |  |  |
+| TW-SUPP-034 | todo |  |  |
+| TW-SUPP-035 | todo |  |  |
+| TW-SUPP-036 | todo |  |  |
+| TW-SUPP-037 | todo |  |  |
+| TW-SUPP-038 | todo |  |  |
+| TW-SUPP-039 | todo |  |  |
+| TW-SUPP-040 | todo |  |  |
+| TW-SUPP-041 | todo |  |  |
+| TW-SUPP-042 | todo |  |  |
+| TW-SUPP-043 | todo |  |  |
+| TW-SUPP-044 | todo |  |  |
+| TW-SUPP-045 | todo |  |  |
+| TW-SUPP-046 | todo |  |  |
+
+## bsp-billing-engine (bsp)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-BSP-001 | todo |  |  |
+| TW-BSP-002 | todo |  |  |
+| TW-BSP-003 | todo |  |  |
+| TW-BSP-004 | todo |  |  |
+| TW-BSP-005 | todo |  |  |
+| TW-BSP-006 | todo |  |  |
+| TW-BSP-007 | todo |  |  |
+| TW-BSP-008 | todo |  |  |
+| TW-BSP-009 | todo |  |  |
+| TW-BSP-010 | todo |  |  |
+| TW-BSP-011 | todo |  |  |
+| TW-BSP-012 | todo |  |  |
+| TW-BSP-013 | todo |  |  |
+| TW-BSP-014 | todo |  |  |
+| TW-BSP-015 | todo |  |  |
+| TW-BSP-016 | todo |  |  |
+| TW-BSP-017 | todo |  |  |
+| TW-BSP-018 | todo |  |  |
+| TW-BSP-019 | todo |  |  |
+| TW-BSP-020 | todo |  |  |
+| TW-BSP-021 | todo |  |  |
+
+## ai-keys-usage-admin (aiadm)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-AIADM-001 | todo |  |  |
+| TW-AIADM-002 | todo |  |  |
+| TW-AIADM-003 | todo |  |  |
+| TW-AIADM-004 | todo |  |  |
+| TW-AIADM-005 | todo |  |  |
+| TW-AIADM-006 | todo |  |  |
+| TW-AIADM-007 | todo |  |  |
+| TW-AIADM-008 | todo |  |  |
+| TW-AIADM-009 | todo |  |  |
+| TW-AIADM-010 | todo |  |  |

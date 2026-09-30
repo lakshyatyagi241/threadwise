@@ -1,0 +1,651 @@
+{
+  "version": 1,
+  "owners": {
+    "lakshya": {
+      "name": "Lakshya Tyagi",
+      "aliases": ["lakshya.tyagi@geta.ai", "lakshyatyagi241"]
+    },
+    "vedant": {
+      "name": "Vedant",
+      "aliases": []
+    },
+    "punya": {
+      "name": "Punya",
+      "aliases": []
+    }
+  },
+  "clusters": {
+    "platform": {
+      "owner": "lakshya",
+      "title": "Platform, identity, billing, admin and developer surface",
+      "why": "Everything that defines who a user is, which workspace/plan they are on, what they pay, how admins run the platform and how outsiders integrate. Shares one data spine (users, workspaces, plans, wallet) and the kernel work (skeleton PR, web shell, operator layer), so one person owning it avoids the most cross-talk."
+    },
+    "messaging": {
+      "owner": "vedant",
+      "title": "WhatsApp core, inbox and automation",
+      "why": "The WhatsApp connection engines, the Node bridge, chat, team inbox, broadcasts, campaigns, templates, auto-reply and the flow builder/runtime all read and write the same conversation, message and queue tables and share the channel core, so they must move together."
+    },
+    "crm": {
+      "owner": "punya",
+      "title": "CRM, commerce, AI and the other channels",
+      "why": "Contacts and the sales objects around them (deals, companies, tasks, proposals, invoices, appointments), the commerce stack (catalog, storefront, checkout, shop integrations), AI agents and the nine non-WhatsApp channel adapters. The channels are siblings of one adapter pattern, so one person builds them consistently once the channel core exists."
+    }
+  },
+  "domains": [
+    {
+      "id": "auth-registration-security",
+      "code": "auth",
+      "cluster": "platform",
+      "days": 127.5,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "auth"
+    },
+    {
+      "id": "workspaces-teams-tenancy",
+      "code": "wsp",
+      "cluster": "platform",
+      "days": 145,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "workspaces"
+    },
+    {
+      "id": "roles-permissions",
+      "code": "rbac",
+      "cluster": "platform",
+      "days": 95.5,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "roles"
+    },
+    {
+      "id": "admin-console-shell",
+      "code": "ashell",
+      "cluster": "platform",
+      "days": 160,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "shell"
+    },
+    {
+      "id": "platform-settings-branding-storage",
+      "code": "set",
+      "cluster": "platform",
+      "days": 137,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "settings"
+    },
+    {
+      "id": "localization-translation",
+      "code": "i18n",
+      "cluster": "platform",
+      "days": 105,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "i18n"
+    },
+    {
+      "id": "platform-infrastructure",
+      "code": "infra",
+      "cluster": "platform",
+      "days": 130,
+      "wave": 1,
+      "inventory": "pending",
+      "routeBase": "infra"
+    },
+    {
+      "id": "install-update-licensing",
+      "code": "inst",
+      "cluster": "platform",
+      "days": 84,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "install"
+    },
+    {
+      "id": "plans-subscriptions-trials",
+      "code": "plan",
+      "cluster": "platform",
+      "days": 105.5,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "plans"
+    },
+    {
+      "id": "wallet-message-billing",
+      "code": "wallet",
+      "cluster": "platform",
+      "days": 105,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "wallet"
+    },
+    {
+      "id": "notifications-activity-audit",
+      "code": "notif",
+      "cluster": "platform",
+      "days": 114,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "notifications"
+    },
+    {
+      "id": "platform-payment-gateways",
+      "code": "paygw",
+      "cluster": "platform",
+      "days": 216.5,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "payment-gateways"
+    },
+    {
+      "id": "coupons-credits-referral-currency",
+      "code": "cpn",
+      "cluster": "platform",
+      "days": 88.5,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "coupons"
+    },
+    {
+      "id": "developer-rest-api-v1",
+      "code": "api",
+      "cluster": "platform",
+      "days": 130,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "developer"
+    },
+    {
+      "id": "mobile-app-api",
+      "code": "mob",
+      "cluster": "platform",
+      "days": 140,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "mobile"
+    },
+    {
+      "id": "integrations-hubspot-slack-trello-google-webhooks",
+      "code": "intg",
+      "cluster": "platform",
+      "days": 150,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "integrations"
+    },
+    {
+      "id": "chrome-extension-sheets-addon",
+      "code": "ext",
+      "cluster": "platform",
+      "days": 70,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "extension"
+    },
+    {
+      "id": "addons-extension-registry",
+      "code": "add",
+      "cluster": "platform",
+      "days": 100.5,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "addons"
+    },
+    {
+      "id": "marketing-site-cms",
+      "code": "cms",
+      "cluster": "platform",
+      "days": 152,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "cms"
+    },
+    {
+      "id": "dashboards-analytics-charts",
+      "code": "dash",
+      "cluster": "platform",
+      "days": 132.5,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "dashboard"
+    },
+    {
+      "id": "platform-support-desk",
+      "code": "supp",
+      "cluster": "platform",
+      "days": 122,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "support"
+    },
+    {
+      "id": "bsp-billing-engine",
+      "code": "bsp",
+      "cluster": "platform",
+      "days": 64.5,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "bsp"
+    },
+    {
+      "id": "ai-keys-usage-admin",
+      "code": "aiadm",
+      "cluster": "platform",
+      "days": 90,
+      "wave": 3,
+      "inventory": "partial",
+      "routeBase": "ai-admin"
+    },
+    {
+      "id": "whatsapp-devices-baileys",
+      "code": "wadev",
+      "cluster": "messaging",
+      "days": 161,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "devices"
+    },
+    {
+      "id": "whatsapp-cloud-api-waba",
+      "code": "waba",
+      "cluster": "messaging",
+      "days": 215.5,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "waba"
+    },
+    {
+      "id": "node-bridge-runtime",
+      "code": "node",
+      "cluster": "messaging",
+      "days": 250,
+      "wave": 1,
+      "inventory": "partial",
+      "routeBase": "bridge"
+    },
+    {
+      "id": "chat-conversations",
+      "code": "chat",
+      "cluster": "messaging",
+      "days": 134.5,
+      "wave": 1,
+      "inventory": "written",
+      "routeBase": "chat"
+    },
+    {
+      "id": "team-inbox-conversations",
+      "code": "tib1",
+      "cluster": "messaging",
+      "days": 221.5,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "inbox"
+    },
+    {
+      "id": "team-inbox-routing-sla",
+      "code": "tib2",
+      "cluster": "messaging",
+      "days": 128.5,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "inbox-routing"
+    },
+    {
+      "id": "message-templates",
+      "code": "tpl",
+      "cluster": "messaging",
+      "days": 130,
+      "wave": 2,
+      "inventory": "partial",
+      "routeBase": "templates"
+    },
+    {
+      "id": "broadcasts",
+      "code": "bcast",
+      "cluster": "messaging",
+      "days": 167.5,
+      "wave": 2,
+      "inventory": "written",
+      "routeBase": "broadcasts"
+    },
+    {
+      "id": "campaigns",
+      "code": "camp",
+      "cluster": "messaging",
+      "days": 150,
+      "wave": 2,
+      "inventory": "pending",
+      "routeBase": "campaigns"
+    },
+    {
+      "id": "scheduled-queue-warmer",
+      "code": "sched",
+      "cluster": "messaging",
+      "days": 120,
+      "wave": 2,
+      "inventory": "partial",
+      "routeBase": "scheduled"
+    },
+    {
+      "id": "auto-reply-keywords",
+      "code": "ar",
+      "cluster": "messaging",
+      "days": 151,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "auto-reply"
+    },
+    {
+      "id": "flow-builder-editor",
+      "code": "flb",
+      "cluster": "messaging",
+      "days": 260,
+      "wave": 3,
+      "inventory": "partial",
+      "routeBase": "flows"
+    },
+    {
+      "id": "flow-runtime-engine",
+      "code": "flr",
+      "cluster": "messaging",
+      "days": 220,
+      "wave": 3,
+      "inventory": "partial",
+      "routeBase": "flow-runtime"
+    },
+    {
+      "id": "chatbot-widget",
+      "code": "wgt",
+      "cluster": "messaging",
+      "days": 101,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "widgets"
+    },
+    {
+      "id": "forms-links-groups",
+      "code": "wfl",
+      "cluster": "messaging",
+      "days": 110,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "forms"
+    },
+    {
+      "id": "team-chat",
+      "code": "tchat",
+      "cluster": "messaging",
+      "days": 82,
+      "wave": 3,
+      "inventory": "written",
+      "routeBase": "team-chat"
+    },
+    {
+      "id": "calling-voice",
+      "code": "call",
+      "cluster": "messaging",
+      "days": 200,
+      "wave": 4,
+      "inventory": "partial",
+      "routeBase": "calling"
+    },
+    {
+      "id": "contacts-attributes-tags",
+      "code": "con",
+      "cluster": "crm",
+      "days": 200,
+      "wave": 1,
+      "inventory": "pending",
+      "routeBase": "contacts"
+    },
+    {
+      "id": "deals-pipelines",
+      "code": "deal",
+      "cluster": "crm",
+      "days": 120,
+      "wave": 2,
+      "inventory": "pending",
+      "routeBase": "deals"
+    },
+    {
+      "id": "companies-projects-tasks",
+      "code": "ctp",
+      "cluster": "crm",
+      "days": 140,
+      "wave": 2,
+      "inventory": "pending",
+      "routeBase": "companies"
+    },
+    {
+      "id": "sales-docs-proposals",
+      "code": "sales",
+      "cluster": "crm",
+      "days": 110,
+      "wave": 2,
+      "inventory": "pending",
+      "routeBase": "proposals"
+    },
+    {
+      "id": "invoicing",
+      "code": "inv",
+      "cluster": "crm",
+      "days": 120,
+      "wave": 2,
+      "inventory": "pending",
+      "routeBase": "invoices"
+    },
+    {
+      "id": "appointments-booking",
+      "code": "appt",
+      "cluster": "crm",
+      "days": 130,
+      "wave": 2,
+      "inventory": "pending",
+      "routeBase": "appointments"
+    },
+    {
+      "id": "catalog-products",
+      "code": "cat",
+      "cluster": "crm",
+      "days": 110,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "catalog"
+    },
+    {
+      "id": "storefront-builder",
+      "code": "store",
+      "cluster": "crm",
+      "days": 150,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "store"
+    },
+    {
+      "id": "checkout-orders-merchant-payments",
+      "code": "chk",
+      "cluster": "crm",
+      "days": 190,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "checkout"
+    },
+    {
+      "id": "shopify-woocommerce",
+      "code": "ecom",
+      "cluster": "crm",
+      "days": 130,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "ecommerce"
+    },
+    {
+      "id": "meta-ads",
+      "code": "mads",
+      "cluster": "crm",
+      "days": 120,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "meta-ads"
+    },
+    {
+      "id": "ai-agents-training",
+      "code": "aiag",
+      "cluster": "crm",
+      "days": 180,
+      "wave": 4,
+      "inventory": "pending",
+      "routeBase": "ai-agents"
+    },
+    {
+      "id": "ai-copilot-lead-finder",
+      "code": "aicrm",
+      "cluster": "crm",
+      "days": 130,
+      "wave": 4,
+      "inventory": "pending",
+      "routeBase": "ai-copilot"
+    },
+    {
+      "id": "channel-facebook",
+      "code": "fb",
+      "cluster": "crm",
+      "days": 130,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "facebook"
+    },
+    {
+      "id": "channel-instagram",
+      "code": "ig",
+      "cluster": "crm",
+      "days": 90,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "instagram"
+    },
+    {
+      "id": "channel-telegram",
+      "code": "tg",
+      "cluster": "crm",
+      "days": 100,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "telegram"
+    },
+    {
+      "id": "channel-tiktok",
+      "code": "tt",
+      "cluster": "crm",
+      "days": 110,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "tiktok"
+    },
+    {
+      "id": "channel-line",
+      "code": "line",
+      "cluster": "crm",
+      "days": 100,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "line"
+    },
+    {
+      "id": "channel-wechat",
+      "code": "wech",
+      "cluster": "crm",
+      "days": 100,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "wechat"
+    },
+    {
+      "id": "channel-viber",
+      "code": "vib",
+      "cluster": "crm",
+      "days": 80,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "viber"
+    },
+    {
+      "id": "channel-sms",
+      "code": "sms",
+      "cluster": "crm",
+      "days": 90,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "sms"
+    },
+    {
+      "id": "channel-email",
+      "code": "mail",
+      "cluster": "crm",
+      "days": 110,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "email"
+    }
+  ],
+  "foundation": [
+    {
+      "id": "F0",
+      "title": "Skeleton PR: per-domain shells, generated registries, timestamp migrations, decorator registries, per-domain docs (conflict-map section 2)",
+      "owner": "lakshya",
+      "days": 6,
+      "wave": 0
+    },
+    {
+      "id": "F1",
+      "title": "Web foundation: app shells, @crm/ui, session/BFF, API client, i18n with RTL, nav registry",
+      "owner": "lakshya",
+      "days": 12,
+      "wave": 0
+    },
+    {
+      "id": "F2",
+      "title": "Operator layer: super-admin actor kind, workspace signup/onboarding, plan and limit gating hook (ADRs for D4, D5)",
+      "owner": "lakshya",
+      "days": 30,
+      "wave": 1
+    },
+    {
+      "id": "F3",
+      "title": "Channel core: channels table and credential vault, provider ports, ingest pipeline, unified message model",
+      "owner": "vedant",
+      "days": 40,
+      "wave": 1
+    },
+    {
+      "id": "F4",
+      "title": "Worker plumbing: queue registry, outbox subscribers, realtime bridge (redis-emitter)",
+      "owner": "vedant",
+      "days": 15,
+      "wave": 1
+    },
+    {
+      "id": "F5",
+      "title": "Storage and mail: S3 client, uploads with quota and MIME checks, signed URLs, mailer",
+      "owner": "punya",
+      "days": 12,
+      "wave": 1
+    },
+    {
+      "id": "F6",
+      "title": "Test harness and CI: API e2e harness, web e2e, CI jobs for web",
+      "owner": "punya",
+      "days": 10,
+      "wave": 0
+    }
+  ],
+  "stewards": {
+    "K1 tenancy, RLS, RBAC, auth": "lakshya",
+    "K2 outbox, queues, realtime, infra": "vedant",
+    "K3 db client, contracts common, CI, generators, skills": "punya",
+    "K4 web shell, ui kit, nav registry": "lakshya"
+  }
+}

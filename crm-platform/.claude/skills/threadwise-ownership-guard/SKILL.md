@@ -59,5 +59,13 @@ codes against the interface and stubs until it lands (mark `blocked` in the trac
 
 ## Changing ownership
 
-Edit `docs/threadwise-port/ownership.json` (domain `owner`) and `assignments.md` in one PR approved by all
-three, run `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.py init --all`, then `validate`.
+`ownership.json` and `assignments.md` are generated. Edit `docs/threadwise-port/assignment-input.json` (a cluster's or a domain's `owner`,
+`wave`, `days`), then:
+
+```bash
+python3 .claude/skills/threadwise-ownership-guard/scripts/gen_ownership.py           # regenerate (add --check to verify)
+python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.py init --all      # keeps every existing status
+python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.py validate
+```
+
+The change needs all three developers' approval in one PR. Never hand-edit the generated files.
