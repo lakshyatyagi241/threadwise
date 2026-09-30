@@ -48,6 +48,7 @@ Format: [MADR](https://adr.github.io/madr/). Template:
 | [0015](adr/0015-legacy-geta-migration.md)       | Migrating off the legacy Geta system        | **proposed**                             |
 | [0016](adr/0016-api-conventions.md)             | uuids, cursors, problem+json, idempotency   | accepted                                 |
 | [0017](adr/0017-field-metadata-registry.md)     | Generic field-metadata registry (Tier-2)    | accepted                                 |
+| [0018](adr/0018-web-app-stack-and-session.md)   | Web app stack and httpOnly-cookie session   | proposed                                 |
 
 ## Runbooks
 
