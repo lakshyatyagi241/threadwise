@@ -8,7 +8,7 @@
 # cross-tenant query" are different claims, and only one of them matters.
 set -euo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 cd "$REPO_ROOT"
 [ -f .env ] || { echo "No .env found. Run the setup skill first."; exit 1; }
 # shellcheck disable=SC1091

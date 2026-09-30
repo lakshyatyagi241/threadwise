@@ -6,7 +6,7 @@
 # ADR silently rewritten in place.
 set -uo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 cd "$REPO_ROOT"
 
 WARN=0
@@ -88,8 +88,8 @@ echo "== changes to existing ADRs =="
 #    tell the difference from the text alone.
 # ---------------------------------------------------------------------------
 changed_adrs="$(
-  git diff --name-only HEAD -- "$ADR_DIR" 2>/dev/null
-  git diff --name-only --cached -- "$ADR_DIR" 2>/dev/null
+  git diff --relative --name-only HEAD -- "$ADR_DIR" 2>/dev/null
+  git diff --relative --name-only --cached -- "$ADR_DIR" 2>/dev/null
   git ls-files --others --exclude-standard -- "$ADR_DIR" 2>/dev/null
 )"
 changed_adrs="$(echo "$changed_adrs" | sort -u | sed '/^$/d')"

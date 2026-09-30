@@ -5,7 +5,7 @@
 # correct. The skill's own checklist covers what still needs a real read.
 set -uo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 cd "$REPO_ROOT"
 
 WARN=0
@@ -58,7 +58,7 @@ warn_block "@RequirePermission key with no matching entry in any migration" "$(e
 # ---------------------------------------------------------------------------
 echo
 echo "-- RLS check on tables touched by changed/new migrations --"
-changed_migrations="$(git diff --name-only HEAD 2>/dev/null; git diff --name-only --cached 2>/dev/null; git status --porcelain 2>/dev/null | awk '{print $2}')"
+changed_migrations="$(git diff --relative --name-only HEAD 2>/dev/null; git diff --relative --name-only --cached 2>/dev/null; git ls-files --others --exclude-standard 2>/dev/null)"
 changed_migrations="$(echo "$changed_migrations" | grep -E '^packages/db/migrations/.*\.sql$' | sort -u || true)"
 
 if [ -z "$changed_migrations" ]; then

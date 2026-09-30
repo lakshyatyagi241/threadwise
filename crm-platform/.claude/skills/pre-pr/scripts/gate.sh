@@ -5,7 +5,7 @@
 # which check failed and the command to reproduce it in isolation.
 set -uo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 cd "$REPO_ROOT"
 
 c_reset=$'\033[0m'; c_bold=$'\033[1m'; c_green=$'\033[32m'; c_red=$'\033[31m'; c_blue=$'\033[34m'
@@ -28,7 +28,7 @@ run() {
 # What changed, relative to the merge-base with the default branch (falls
 # back to comparing against the last commit if there's no upstream yet).
 BASE="$(git merge-base HEAD origin/main 2>/dev/null || git rev-parse HEAD~1 2>/dev/null || echo HEAD)"
-CHANGED="$(git diff --name-only "$BASE"...HEAD 2>/dev/null; git diff --name-only 2>/dev/null; git diff --name-only --cached 2>/dev/null)"
+CHANGED="$(git diff --relative --name-only "$BASE"...HEAD 2>/dev/null; git diff --relative --name-only 2>/dev/null; git diff --relative --name-only --cached 2>/dev/null)"
 CHANGED="$(echo "$CHANGED" | sort -u)"
 
 touches() { echo "$CHANGED" | grep -qE "$1"; }
