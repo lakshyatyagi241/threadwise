@@ -1,0 +1,25 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "Overview",
+      "messaging": "Messaging",
+      "crm": "CRM",
+      "automation": "Automation",
+      "growth": "Growth",
+      "commerce": "Commerce",
+      "ai": "AI",
+      "settings": "Settings"
+    },
+    "locked": "Upgrade",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "logout": "Log out",
+    "openMenu": "Open menu",
+    "admin": {
+      "title": "Platform console",
+      "note": "Platform-admin screens land here once the super-admin actor exists."
+    }
+  }
+}

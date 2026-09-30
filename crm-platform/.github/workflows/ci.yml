@@ -37,6 +37,9 @@ jobs:
       - name: Architecture boundaries
         run: pnpm arch:check
 
+      - name: Web app builds
+        run: pnpm --filter @crm/web build
+
   test:
     name: Unit + integration
     runs-on: ubuntu-latest

@@ -1,0 +1,14 @@
+{
+  "contacts-attributes-tags": {
+    "nav": { "title": "Contacts" },
+    "list": {
+      "title": "Contacts",
+      "searchPlaceholder": "Search name, email or phone",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "stage": "Stage",
+      "empty": "No contacts match."
+    }
+  }
+}

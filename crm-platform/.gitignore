@@ -29,3 +29,7 @@ packages/contracts/generated/
 # legacy migration dumps — never commit customer data
 tools/migration/dumps/
 tools/migration/out/
+
+# web app
+next-env.d.ts
+apps/web/src/features/_registry/nav.generated.ts

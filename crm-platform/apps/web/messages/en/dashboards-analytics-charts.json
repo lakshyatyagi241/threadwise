@@ -1,0 +1,6 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": { "title": "Dashboard" },
+    "home": { "title": "Dashboard", "welcome": "Welcome to your workspace." }
+  }
+}

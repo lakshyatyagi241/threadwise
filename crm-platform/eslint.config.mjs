@@ -2,6 +2,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   {
@@ -16,6 +17,9 @@ export default tseslint.config(
       // Tooling config, not application code — outside every tsconfig project.
       '**/.dependency-cruiser.cjs',
       'commitlint.config.cjs',
+      // Plain-node build helper, outside the app tsconfig.
+      'apps/web/scripts/**',
+      '**/next-env.d.ts',
     ],
   },
   eslint.configs.recommended,
@@ -66,6 +70,18 @@ export default tseslint.config(
       '**/*.test.ts',
     ],
     rules: { 'no-console': 'off' },
+  },
+  {
+    // React apps: hooks rules, and JSX event handlers may be async (the promise is handled inside).
+    files: ['apps/web/**/*.{ts,tsx}', 'packages/ui/**/*.{ts,tsx}'],
+    plugins: { 'react-hooks': reactHooks },
+    rules: {
+      ...reactHooks.configs['recommended-latest'].rules,
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        { checksVoidReturn: { attributes: false } },
+      ],
+    },
   },
   prettier,
 );
