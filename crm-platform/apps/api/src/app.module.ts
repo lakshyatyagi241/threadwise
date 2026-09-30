@@ -1,0 +1,119 @@
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggerModule } from 'nestjs-pino';
+import { ConfigService } from '@nestjs/config';
+import { randomUUID } from 'node:crypto';
+import { AppConfigModule } from './config/config.module';
+import type { Env } from './config/env.schema';
+import { CryptoService } from './common/crypto/crypto.service';
+import { ProblemExceptionFilter } from './common/filters/problem-exception.filter';
+import { IdempotencyInterceptor } from './common/interceptors/idempotency.interceptor';
+import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
+import { RequestContextStore } from './common/context/request-context';
+import { DbModule } from './infra/db/db.module';
+import { RedisModule } from './infra/redis/redis.module';
+import { QueueModule } from './infra/queue/queue.module';
+import { ProvidersModule } from './infra/providers/providers.module';
+import { KernelModule } from './kernel/kernel.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
+import { AdminModule } from './modules/admin';
+import { CrmModule } from './modules/crm';
+import { PartnerModule } from './modules/partner/partner.module';
+import { PublicApiModule } from './modules/public-api/public-api.module';
+import { RealtimeModule } from './realtime/realtime.module';
+import { HealthModule } from './health/health.module';
+
+/**
+ * The HTTP application.
+ *
+ * Order matters in two places:
+ *   - JwtAuthGuard runs before PermissionsGuard, because you cannot check a
+ *     user's grants before you know who they are.
+ *   - RequestContextMiddleware runs before both, so guards write into a context
+ *     that already exists.
+ *
+ * Background work is deliberately absent — see worker.ts.
+ */
+@Module({
+  imports: [
+    AppConfigModule,
+
+    LoggerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Env, true>) => ({
+        pinoHttp: {
+          level: config.get('LOG_LEVEL', { infer: true }),
+          transport:
+            config.get('NODE_ENV', { infer: true }) === 'development'
+              ? { target: 'pino-pretty', options: { singleLine: true, translateTime: 'HH:MM:ss' } }
+              : undefined,
+          genReqId: (req) => (req.headers['x-request-id'] as string) ?? randomUUID(),
+          // Every log line carries the tenant and actor, so a production
+          // question ("what did org 42 do at 14:03") is a filter, not a grep.
+          customProps: () => {
+            const ctx = RequestContextStore.peek();
+            return ctx
+              ? {
+                  requestId: ctx.requestId,
+                  orgId: ctx.orgId || undefined,
+                  actorType: ctx.actorType,
+                  actorId: ctx.actorId ?? undefined,
+                }
+              : {};
+          },
+          redact: {
+            paths: [
+              'req.headers.authorization',
+              'req.headers.cookie',
+              'req.headers["x-api-key"]',
+              'req.body.password',
+              'req.body.credentials',
+              'res.headers["set-cookie"]',
+            ],
+            remove: true,
+          },
+          autoLogging: {
+            // Health probes fire every few seconds; logging them buries
+            // everything that matters.
+            ignore: (req) => req.url === '/health' || req.url === '/ready',
+          },
+        },
+      }),
+    }),
+
+    // Infrastructure
+    DbModule,
+    RedisModule,
+    QueueModule,
+    ProvidersModule,
+
+    // Platform
+    KernelModule,
+    AuthModule,
+    RealtimeModule,
+    HealthModule,
+
+    // Apps
+    AdminModule,
+    CrmModule,
+    PartnerModule,
+    PublicApiModule,
+    // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
+    // module's README for the intended shape.
+  ],
+  providers: [
+    CryptoService,
+    { provide: APP_FILTER, useClass: ProblemExceptionFilter },
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: PermissionsGuard },
+    { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
+  ],
+  exports: [CryptoService],
+})
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@crm/config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared build/lint/test configuration for every workspace package",
+  "files": [
+    "tsconfig.base.json",
+    "tsconfig.node.json",
+    "vitest.base.ts"
+  ],
+  "scripts": {
+    "lint": "echo \"[config] nothing to lint\"",
+    "typecheck": "echo \"[config] nothing to typecheck\""
+  }
+}

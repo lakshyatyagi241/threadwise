@@ -1,0 +1,97 @@
+# Single-VM production topology (ADR-0011).
+#
+#   caddy -> api (HTTP + WebSocket)
+#            worker (no inbound traffic)
+#            postgres, redis
+#
+# Deliberately not Kubernetes: at this scale the orchestration overhead costs
+# more engineering time than it saves, and the migration path (build an image,
+# run it elsewhere) stays open because nothing here depends on compose.
+#
+#   docker compose -f docker-compose.prod.yml up -d
+
+name: crm-platform-prod
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      WORKER_MODE: 'false'
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    ports:
+      - '127.0.0.1:3000:3000'
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    # Same image, different entrypoint. No port is published: this process
+    # accepts no inbound traffic at all.
+    command: ['node', 'dist/src/worker.js']
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      WORKER_MODE: 'true'
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    command:
+      - postgres
+      - -c
+      - max_connections=300
+      - -c
+      - shared_buffers=4GB
+      - -c
+      - effective_cache_size=12GB
+      - -c
+      - work_mem=32MB
+      - -c
+      - maintenance_work_mem=1GB
+      - -c
+      - random_page_cost=1.1 # SSD
+      - -c
+      - wal_level=replica # required for a streaming replica
+      - -c
+      - max_wal_senders=5
+      - -c
+      - log_min_duration_statement=500
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # noeviction: BullMQ job state is not a cache. Evicting it loses jobs.
+    command: ['redis-server', '--appendonly', 'yes', '--maxmemory-policy', 'noeviction']
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:
+  redisdata:

@@ -1,0 +1,11 @@
+{
+  /* Tests live outside rootDir, so they get their own no-emit project.
+     `pnpm typecheck` runs both. */
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "noEmit": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}
