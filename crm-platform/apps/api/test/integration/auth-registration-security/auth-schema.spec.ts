@@ -263,7 +263,7 @@ describe('auth schema, RLS and gateways', () => {
       await app.query(`SELECT set_config('app.org_id', $1, true)`, [String(orgA)]);
       await q(
         app,
-        `INSERT INTO security_events (org_id, actor_type, event, status) VALUES ($1,'user','auth.failed','failure')`,
+        `INSERT INTO security_events (subject_org_id, actor_type, event, status) VALUES ($1,'user','auth.failed','failure')`,
         [orgA],
       );
       // The writer cannot read back its own event: only operators can.
