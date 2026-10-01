@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import type { PauseNote } from './pacing';
 import { aggregates, outcome, shouldAdvance, type RecipientCounts } from './recipient-status';
 
 const MODULE_KEY = 'broadcasts';
@@ -86,6 +87,22 @@ export class BroadcastProgressService {
     const status = outcome(c);
     if (status) await this.setStatus(tx, orgId, broadcastId, status);
     return status;
+  }
+
+  /** Stops a run without losing anyone: the status is `paused` and the reason is kept for the screen and the resumer. */
+  async pause(tx: Tx, orgId: number, broadcastId: number, note: PauseNote): Promise<void> {
+    await tx.execute(sql`
+      UPDATE broadcasts SET messages_log = jsonb_set(coalesce(messages_log, '{}'::jsonb), '{pause}', ${JSON.stringify(note)}::jsonb)
+      WHERE org_id = ${orgId} AND id = ${broadcastId}`);
+    await this.setStatus(tx, orgId, broadcastId, 'paused');
+  }
+
+  /** Back to running: the pause note goes away. The unsent recipients are still `pending`, so the sender picks them up. */
+  async resume(tx: Tx, orgId: number, broadcastId: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE broadcasts SET messages_log = messages_log - 'pause', node_schedule_id = NULL
+      WHERE org_id = ${orgId} AND id = ${broadcastId}`);
+    await this.setStatus(tx, orgId, broadcastId, 'processing');
   }
 
   async setStatus(tx: Tx, orgId: number, broadcastId: number, status: string): Promise<void> {

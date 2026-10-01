@@ -33,6 +33,7 @@ export interface BroadcastReadRow {
   createdAt: Date;
   createdAtIso: string;
   updatedAt: Date;
+  messagesLog: unknown;
 }
 
 interface Raw {
@@ -59,6 +60,7 @@ interface Raw {
   created_at: Date | string;
   created_at_iso: string;
   updated_at: Date | string;
+  messages_log: unknown;
 }
 
 const toRow = (r: Raw): BroadcastReadRow => ({
@@ -85,6 +87,7 @@ const toRow = (r: Raw): BroadcastReadRow => ({
   createdAt: new Date(r.created_at),
   createdAtIso: r.created_at_iso,
   updatedAt: new Date(r.updated_at),
+  messagesLog: r.messages_log,
 });
 
 export interface RecipientReadRow {
@@ -122,7 +125,7 @@ export class BroadcastsReadRepository {
                 WHEN c.id IS NOT NULL THEN c.provider || ':' || c.uuid::text END AS sender_key,
            b.template_id, t.uuid AS template_uuid, t.template_name, b.timezone, b.scheduled_at, b.completed_at,
            b.total_recipients, b.success_count, b.delivered_count, b.read_count, b.clicked_count, b.fail_count,
-           b.row_version, b.created_at, to_char(b.created_at AT TIME ZONE 'UTC', ${ISO}) AS created_at_iso, b.updated_at
+           b.row_version, b.created_at, to_char(b.created_at AT TIME ZONE 'UTC', ${ISO}) AS created_at_iso, b.updated_at, b.messages_log
     FROM broadcasts b
     LEFT JOIN wa_templates t ON t.org_id = b.org_id AND t.id = b.template_id
     LEFT JOIN devices d ON d.org_id = b.org_id AND d.id = b.device_id AND b.provider = 'baileys'

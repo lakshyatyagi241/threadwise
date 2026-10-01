@@ -5,6 +5,7 @@ WaDesk 1.7.0 vs branch `punya/broadcasts/WD-BCAST-009-store-request`. Covers WD-
 
 Evidence is automated, no screen yet:
 
+- `apps/api/test/e2e/broadcasts/broadcasts-pacing.e2e.spec.ts`: 14 scenarios for the gap, batches, the cap, pause, resume and the sender lease.
 - `apps/api/test/e2e/broadcasts/broadcasts-tracking.e2e.spec.ts`: 11 scenarios for wrapping, the redirect, bots, expiry and the counters.
 - `apps/api/test/e2e/broadcasts/broadcasts-actions.e2e.spec.ts`: 16 scenarios for delete, retry, the sweep and the CSV export.
 - `apps/api/test/e2e/broadcasts/broadcasts-read.e2e.spec.ts`: 20 scenarios for the list, tiles, detail, recipients and live counters.
@@ -12,7 +13,7 @@ Evidence is automated, no screen yet:
 - `apps/api/test/e2e/broadcasts/broadcasts-dispatch.e2e.spec.ts`: 14 scenarios for queueing and sending, against real Postgres with a fake engine adapter.
 - `apps/api/test/e2e/broadcasts/broadcasts-create.e2e.spec.ts`: 17 scenarios through HTTP against real Postgres (every
   Given/When/Then of 009, 010, 014, 015, the OTP-template refusal of 012, tenant isolation, permission, auth).
-- `apps/api/test/unit/broadcasts/*`: 130 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
+- `apps/api/test/unit/broadcasts/*`: 138 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
 
 ## Status of each feature in this PR
 
@@ -75,6 +76,11 @@ Evidence is automated, no screen yet:
 | 34 | Tenant lookup for the public route | Plain query, no row-level security | A SECURITY DEFINER function returns four columns for one token (`bcast_link_lookup`); the click is then recorded under the tenant context. **Reviewer decision:** this is a new place that resolves a tenant before one exists, like the API-key and login lookups, but it is not `privileged()`; `multi-tenancy.md` lists four sanctioned uses and does not mention it. |
 | 35 | Settings | `waba_link_tracking_enabled` and `wa_link_tracking_ttl_days` system settings | Environment `LINK_TRACKING_ENABLED` and `LINK_TRACKING_TTL_DAYS` until the settings domain exposes them. |
 | 36 | Unique visitor and rate | A one-hour cache per link and address | Same, in Redis; plus a 600 hits a minute cap per address on the public route. |
+| 37 | Pause | `paused` was rejected by Laravel's own callback (422), so a pause never reached the database and nothing resumed the run | A real `paused` status with the reason, a manual resume, and an automatic resume for a daily cap and for a lifted halt. |
+| 38 | Daily cap tally | In Node's memory, so a restart reset it; the setting was never fetched so it was always 4000 | In Redis, shared by every worker; the cap is a setting (default 4000). |
+| 39 | Concurrency | Strictly sequential per broadcast, no limit across broadcasts of one sender | One run per sender at a time, by a lease. |
+| 40 | Socket-drop pause | Baileys socket check before each recipient | Belongs to the Baileys adapter (WADEV), not built; the emergency halt pause is the one that exists. |
+| 41 | `waba` falling back to Baileys | A `waba` row with incomplete settings silently took the Baileys path and failed for lack of a socket | A `waba` broadcast whose credentials are missing fails at dispatch with a clear reason. |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
@@ -83,7 +89,7 @@ Evidence is automated, no screen yet:
 | `SenderDirectory`   | WADEV / WABA (`WorkspaceEngine`) | Reads `devices` and `wa_provider_configs` directly; "connected" is `status = 'connected'` (and `active` for Baileys).                                                                                                                               |
 | `TemplateDirectory` | TPL                              | Reads `wa_templates` directly. Stored media paths cannot be turned into URLs, so the media check only runs for absolute URLs. The `waba_templates_v2_enabled` platform switch is read as off, so the Meta approval/pause/RED guards do not run yet. |
 | `WalletGate`        | WALLET (`SendGate` precheck)     | No balance check.                                                                                                                                                                                                                                   |
-| `WarmerGate`        | SCHED (`WarmerService`)          | No warm-up holds.                                                                                                                                                                                                                                   |
+| `WarmerGate`        | SCHED (`WarmerService`)          | No warm-up holds and no warm-up gap range.                                                                                                                                                                                                          |
 | `BroadcastPlanGate` | PLAN                             | The `broadcast` feature flag is not in the plan catalogue (only the numeric cap `broadcasts` is), so it is not enforced.                                                                                                                            |
 
 Also not there yet, so this PR sends text templates only:

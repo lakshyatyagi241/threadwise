@@ -80,6 +80,11 @@ export interface WarmerSlice {
   recipients: number;
 }
 export interface WarmerGate {
+  /** A warming number's own gap between messages, in seconds; null when the number is not warming. */
+  gap(
+    tx: Tx,
+    sender: ResolvedSender | DispatchSender,
+  ): Promise<{ min: number; max: number } | null>;
   /** Reasons a warming number must hold this send; empty means go. Passing slices are reserved. */
   hold(
     tx: Tx,

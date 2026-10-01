@@ -14,7 +14,7 @@ Done: 009, 010, 011 (partly), 012, 013 (stub), 014, 015, 016, 017, 025, 026, 027
 | B1  | Read API: list, detail, live stats (DONE) | 001, 002, 030-036     | Everything on screen reads these; the web cannot start without them              |
 | B2  | Retry, delete, CSV export (DONE)          | 037, 038, 039, 040    | Completes the operator actions the detail page offers                            |
 | B3  | Link tracking and click analytics (DONE)  | 018, 042              | Wraps URL buttons at build time (017) and counts clicks; needs a public redirect |
-| B4  | Pacing, batching, daily cap, pause        | 022 (021 is done)     | Safe sending: the worker loop becomes paced instead of back to back              |
+| B4  | Pacing, batching, daily cap, pause (DONE) | 022 (021 is done)     | Safe sending: the worker loop becomes paced instead of back to back              |
 | B5  | Receipts and status webhooks              | 024, 027 (webhooks)   | Delivered and read states: uses the state machine already in place               |
 | B6  | Events: outbound webhooks, notifications  | 029                   | Emits from the state changes built above                                         |
 | B7  | Inbox mirroring                           | 028                   | Needs the inbox domain; shim behind an interface if it is not there              |

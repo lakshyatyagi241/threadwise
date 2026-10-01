@@ -2,7 +2,12 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Readable } from 'node:stream';
 import type { Queue } from 'bullmq';
-import { DELETABLE_STATUSES, ERROR_CODES, type RetryBroadcastResponse } from '@crm/contracts';
+import {
+  DELETABLE_STATUSES,
+  ERROR_CODES,
+  type ResumeBroadcastResponse,
+  type RetryBroadcastResponse,
+} from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
@@ -122,6 +127,40 @@ export class BroadcastsActionsService {
         payload: { uuid, retried, auto: false },
       });
       return { retried, status: 'processing' };
+    });
+  }
+
+  /**
+   * Starts a paused broadcast again: the unsent recipients are still `pending`, so the sender picks up where it stopped and
+   * nobody is messaged twice. A pause that was a daily cap stops again at once if the cap is still reached.
+   */
+  async resume(uuid: string): Promise<ResumeBroadcastResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const row = await this.repo.lock(tx, ctx.orgId, uuid);
+      if (!row) throw AppError.notFound('Broadcast', uuid);
+      if (row.status !== 'paused') {
+        throw refuse(
+          'BCAST_NOT_RESUMABLE',
+          'Only a paused broadcast can be resumed.',
+          HttpStatus.CONFLICT,
+        );
+      }
+      await this.sendPolicy.screenBulk(ctx.orgId, '', { source: 'broadcast' });
+      await this.progress.resume(tx, ctx.orgId, row.id);
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: row.id,
+        action: 'update',
+        delta: { status: { old: 'paused', new: 'processing' } },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: MODULE_KEY,
+        aggregateId: row.id,
+        eventType: 'broadcast.resumed',
+        payload: { uuid, auto: false },
+      });
+      return { status: 'processing' };
     });
   }
 

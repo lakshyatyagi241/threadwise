@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { PacingRuntime } from '../../../src/modules/broadcasts/send-safety';
 import { ERROR_CODES } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { AppError } from '../../../src/common/errors/app-error';
@@ -46,6 +47,8 @@ const fakeAdapter = {
 
 beforeAll(async () => {
   h = await startHarness();
+  // No real waiting between messages: the gaps are checked in broadcasts-pacing.e2e.spec.ts.
+  h.app.get(PacingRuntime).sleep = () => Promise.resolve();
   api = new Api(h);
   registry = h.app.get(EngineSenderRegistry);
   dispatch = h.app.get(BroadcastDispatchService);

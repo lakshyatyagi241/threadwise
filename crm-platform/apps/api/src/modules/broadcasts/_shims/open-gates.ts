@@ -15,6 +15,10 @@ export class OpenWarmerGate implements WarmerGate {
   hold(): Promise<string[]> {
     return Promise.resolve([]);
   }
+
+  gap(): Promise<null> {
+    return Promise.resolve(null);
+  }
 }
 
 /** The `broadcast` plan flag is not in the plan catalogue yet, so the flag check passes; the numeric cap is enforced. */

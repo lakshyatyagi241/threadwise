@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { PacingRuntime } from '../../../src/modules/broadcasts/send-safety';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { BroadcastDispatchService } from '../../../src/modules/broadcasts/broadcast-dispatch.service';
@@ -31,6 +32,8 @@ const BROWSER =
 
 beforeAll(async () => {
   h = await startHarness();
+  // No real waiting between messages: the gaps are checked in broadcasts-pacing.e2e.spec.ts.
+  h.app.get(PacingRuntime).sleep = () => Promise.resolve();
   api = new Api(h);
   db = h.app.get(DatabaseService);
   tracker = h.app.get(LinkTracker);
