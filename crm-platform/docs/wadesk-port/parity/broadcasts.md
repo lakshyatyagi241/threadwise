@@ -36,6 +36,7 @@ Evidence is automated, no screen yet:
 | WD-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                                                          |
 | WD-BCAST-026        | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                                                                                              |
 | WD-BCAST-027        | backend-done | Counters moved by delta, one state machine for every source, the outcome re-derived after a late failure. Only the routes that receive Meta and Twilio reports are not here.                                      |
+| WD-BCAST-029        | backend-done | Outbox events carry the WaDesk webhook events and the bell entries (`webhook-events.ts`). Delivery to customer URLs and writing `notifications` rows are the INTG and NOTIF domains' (no subscriber exists yet).  |
 
 ## Intended differences from WaDesk
 
@@ -87,6 +88,9 @@ Evidence is automated, no screen yet:
 | 43 | Twilio status | Updated the recipient but never the broadcast's counters, so the list lagged | The same service for every provider, counters included. |
 | 44 | Counters | Recounted the recipient table after every event | Moved by the recipient's change of tier (a constant-time update), re-derived only when a failure changes how the broadcast ended. |
 | 45 | Tenant for a receipt | Looked up with no tenant isolation | A SECURITY DEFINER function (`bcast_receipt_lookup`) returns three ids for one message id. **Reviewer decision**, same note as difference 34. |
+| 46 | Webhook ids | Numeric database ids for broadcast, template and contact | Public uuids; `workspace_id` is added by the deliverer from the event's organization. |
+| 47 | Per-message events | Fired for every message | Written to the outbox only while the organization has an active webhook subscribed to the event (or to `*`), so campaign volume does not fill it. Receipts add `broadcast_message_status_updated` and the `message_*` event, as the reference does for Meta status webhooks. A repeat of the same status is not an event. |
+| 48 | Bell entries | One per save (created, updated x N, deleted) | Created, finished (completed, completed with errors, failed) and deleted only, as the reference's own port note asks. |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
@@ -101,7 +105,7 @@ Evidence is automated, no screen yet:
 Also not there yet, so this PR sends text templates only:
 
 - Engines: only `waba` (Meta Cloud API) has an adapter. `baileys`, `twilio` and `sms` broadcasts fail at dispatch with a clear log until their adapters exist (WADEV, NODE and the SMS channel).
-- Link tracking (018), pacing, batching and the daily cap (022), delivery and read receipts (024, with 027's webhooks), retry of failed recipients (038, 039), team-inbox mirroring (028), outbound webhooks and notifications (029).
+- Link tracking (018), pacing, batching and the daily cap (022), delivery and read receipts (024, with 027's webhooks), retry of failed recipients (038, 039), outbound webhook and notification payloads (029; delivery is INTG and NOTIF), team-inbox mirroring (028).
 - The WABA credentials format (`credentials_json`) is read as encrypted JSON with `access_token` and `phone_number_id`; the WABA domain owns the final format.
 
 Header media paths: only an absolute URL is turned into a link until the storage domain exposes `media_url`; a stored relative path leaves the header out of the payload.

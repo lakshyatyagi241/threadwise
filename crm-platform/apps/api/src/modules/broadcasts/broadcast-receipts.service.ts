@@ -64,6 +64,25 @@ export class BroadcastReceiptsService {
       await this.progress.bumpCounters(tx, orgId, broadcastId, counterDelta(from, receipt.status));
       if (receipt.status === 'failed' || from === 'failed')
         await this.progress.refreshOutcome(tx, orgId, broadcastId);
+      // A repeat of the same status is accepted but is not news: no event.
+      if (from !== receipt.status)
+        await this.progress.emitMessage(
+          tx,
+          orgId,
+          broadcastId,
+          contactId,
+          receipt.status,
+          'receipt',
+          {
+            providerMessageId: receipt.providerMessageId,
+            errorCode: receipt.errorCode ?? null,
+            errorReason:
+              receipt.status === 'failed'
+                ? failureText(receipt.errorMessage, receipt.errorCode)
+                : null,
+            at: receipt.occurredAt,
+          },
+        );
     });
     return true;
   }

@@ -17,6 +17,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { SendPolicyService } from '../auth';
 import { BroadcastProgressService } from './broadcast-progress.service';
+import { deletedNotification } from './webhook-events';
 import { CSV_HEADER, csvFileName, csvLine, csvRow } from './broadcast-csv';
 import { BroadcastsRepository } from './broadcasts.repository';
 import { BroadcastsReadRepository, type RecipientReadRow } from './broadcasts-read.repository';
@@ -62,13 +63,18 @@ export class BroadcastsActionsService {
       if (!(DELETABLE_STATUSES as readonly string[]).includes(row.status)) {
         throw refuse('BCAST_NOT_DELETABLE', 'Only scheduled or failed broadcasts can be deleted.');
       }
+      const snap = await this.progress.snapshot(tx, ctx.orgId, row.id);
       await this.repo.remove(tx, ctx.orgId, row.id);
       await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'delete' });
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,
         aggregateId: row.id,
         eventType: 'broadcast.deleted',
-        payload: { uuid, status: row.status },
+        payload: {
+          uuid,
+          status: row.status,
+          ...(snap ? { notification: deletedNotification(snap.name) } : {}),
+        },
       });
     });
     // Best effort, after the row is gone: a queued job for it is withdrawn, and one that already started finds nothing.
