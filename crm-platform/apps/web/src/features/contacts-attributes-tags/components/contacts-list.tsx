@@ -1,14 +1,50 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { Badge, cn } from '@crm/ui';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
+import { Fragment, useState, type ReactNode } from 'react';
+import { MenuItem, MenuSeparator, cn } from '@crm/ui';
 import { isAttrId, type ColumnDef, type ColumnId } from '../lib/columns';
-import { formatDmy } from '../lib/format';
+import { formatDateTime } from '../lib/format';
+import { menuActions, quickActions } from '../lib/row-actions';
 import type { CheckState } from '../lib/selection';
 import type { RowView } from '../lib/row-view';
-import { AttributeChip, ContactAvatar, GroupChip, MoreChip, TagChip } from './chips';
-import { PencilIcon, TrashIcon } from './icons';
+import {
+  frozenEdge,
+  isScrolledSideways,
+  SELECT_W,
+  STICKY_NAME,
+  STICKY_NAME_HEAD,
+  STICKY_SELECT,
+  STICKY_SELECT_HEAD,
+} from '../lib/sticky';
+import {
+  AttributeChip,
+  ContactAvatar,
+  GroupChip,
+  MoreChip,
+  OutlineTag,
+  StageBadge,
+  TagChip,
+} from './chips';
+import {
+  CalendarIcon,
+  EyeIcon,
+  FlagIcon,
+  GlobeIcon,
+  HashIcon,
+  MailIcon,
+  NoteIcon,
+  PencilIcon,
+  PhoneIcon,
+  TagIcon,
+  TrashIcon,
+  UserIcon,
+  UsersIcon,
+  UsersPlusIcon,
+  WhatsAppIcon,
+} from './icons';
+import { RowMenu } from './row-menu';
 
 export interface ListHandlers {
   selected: ReadonlySet<string>;
@@ -17,8 +53,13 @@ export interface ListHandlers {
   stageLabel: (value: string) => string;
   statusLabel: (value: string) => string;
   onToggle: (id: string) => void;
+  onView: (id: string) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  /** Open the group picker for this one contact. */
+  onAddToGroup: (id: string) => void;
+  /** Open the tag picker for this one contact. */
+  onTag: (id: string) => void;
   /** Tag chips become filter links when the API can filter by tag. */
   onFilterTag?: (tagId: string) => void;
 }
@@ -28,23 +69,47 @@ const CHIPS_SHOWN = 2;
 
 /** Column widths in px; the table is fixed-layout and scrolls sideways inside its card when they do not fit. */
 const WIDTH: Record<string, number> = {
-  name: 260,
-  phone: 170,
+  name: 340,
+  phone: 190,
   attr: 150,
-  email: 240,
+  email: 260,
   tags: 240,
   groups: 220,
-  stage: 170,
+  stage: 180,
   language: 130,
   memo: 220,
-  createdOn: 140,
+  createdOn: 190,
 };
 const widthOf = (id: ColumnId) => WIDTH[isAttrId(id) ? 'attr' : id] ?? 160;
-const SELECT_W = 48;
-const ACTIONS_W = 104;
 
 export function tableMinWidth(columns: readonly ColumnDef[]): number {
-  return SELECT_W + ACTIONS_W + columns.reduce((sum, c) => sum + widthOf(c.id), 0);
+  return SELECT_W + columns.reduce((sum, c) => sum + widthOf(c.id), 0);
+}
+
+/** Leading icon of a column header, by the kind of data the column holds. */
+function HeaderIcon({ id }: { id: ColumnId }) {
+  const cls = 'size-3.5 shrink-0 opacity-70';
+  if (isAttrId(id)) return <HashIcon className={cls} />;
+  switch (id) {
+    case 'name':
+      return <UserIcon className={cls} />;
+    case 'phone':
+      return <PhoneIcon className={cls} />;
+    case 'email':
+      return <MailIcon className={cls} />;
+    case 'tags':
+      return <TagIcon className={cls} />;
+    case 'groups':
+      return <UsersIcon className={cls} />;
+    case 'stage':
+      return <FlagIcon className={cls} />;
+    case 'language':
+      return <GlobeIcon className={cls} />;
+    case 'memo':
+      return <NoteIcon className={cls} />;
+    case 'createdOn':
+      return <CalendarIcon className={cls} />;
+  }
 }
 
 /** The checkbox that selects every loaded row; `some` shows the mixed state. */
@@ -73,33 +138,121 @@ function HeaderCheckbox({
 
 const Dash = () => <span className="text-muted-foreground">-</span>;
 
-function RowActions({ row, h }: { row: RowView; h: ListHandlers }) {
-  const t = useTranslations('contacts-attributes-tags.list');
-  if (!h.canEdit && !h.canDelete) return null;
+const quickBtn =
+  'inline-flex size-7 shrink-0 items-center justify-center rounded-md outline-none transition focus-visible:ring-2 focus-visible:ring-primary';
+const quickOn = 'text-muted-foreground hover:bg-muted hover:text-foreground';
+const quickOff = 'cursor-not-allowed text-muted-foreground/40';
+
+/** One round icon button: a link while there is somewhere to go, a disabled button when there is not. */
+function QuickLink({
+  href,
+  label,
+  missing,
+  color,
+  external,
+  children,
+}: {
+  href: string | null;
+  label: string;
+  /** Tooltip while disabled. */
+  missing: string;
+  color?: string;
+  external?: boolean;
+  children: ReactNode;
+}) {
+  if (!href) {
+    return (
+      <button type="button" disabled title={missing} aria-label={missing} className={cn(quickBtn, quickOff)}>
+        {children}
+      </button>
+    );
+  }
   return (
-    <div className="inline-flex items-center gap-1 whitespace-nowrap">
-      {h.canEdit && (
-        <button
-          type="button"
-          onClick={() => h.onEdit(row.id)}
-          title={t('edit')}
-          aria-label={t('editNamed', { name: row.name })}
-          className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          <PencilIcon className="size-3.5" />
-        </button>
-      )}
-      {h.canDelete && (
-        <button
-          type="button"
-          onClick={() => h.onDelete(row.id)}
-          title={t('delete')}
-          aria-label={t('deleteNamed', { name: row.name })}
-          className="inline-flex size-8 items-center justify-center rounded-md border border-border text-danger outline-none hover:bg-danger/10 focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          <TrashIcon className="size-3.5" />
-        </button>
-      )}
+    <a
+      href={href}
+      title={label}
+      aria-label={label}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      className={cn(quickBtn, quickOn, color)}
+    >
+      {children}
+    </a>
+  );
+}
+
+/**
+ * The compact cluster beside a contact's name: call, WhatsApp, email and the "..." menu (view, edit, add to group,
+ * tag, delete). Calling, WhatsApp and email are disabled, not hidden, when the contact has no number or address.
+ */
+function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
+  const t = useTranslations('contacts-attributes-tags.list');
+  const links = quickActions(row);
+  const name = row.name || t('unnamed');
+  const items = menuActions({ edit: h.canEdit, delete: h.canDelete });
+  return (
+    <div className="flex shrink-0 items-center gap-0.5">
+      <QuickLink href={links.call} label={t('callNamed', { name })} missing={t('noPhone')}>
+        <PhoneIcon className="size-4" />
+      </QuickLink>
+      <QuickLink
+        href={links.whatsapp}
+        label={t('whatsappNamed', { name })}
+        missing={t('noWhatsapp')}
+        color="text-[#16a34a] hover:text-[#15803d] dark:text-[#4ade80]"
+        external
+      >
+        <WhatsAppIcon className="size-4" />
+      </QuickLink>
+      <QuickLink href={links.email} label={t('emailNamed', { name })} missing={t('noEmail')}>
+        <MailIcon className="size-4" />
+      </QuickLink>
+      <RowMenu label={t('moreFor', { name })}>
+        {(close) => (
+          <>
+            {items.map((a) => {
+              const run = (fn: (id: string) => void) => () => {
+                close();
+                fn(row.id);
+              };
+              switch (a) {
+                case 'view':
+                  return (
+                    <MenuItem key={a} onSelect={run(h.onView)}>
+                      <EyeIcon /> {t('view')}
+                    </MenuItem>
+                  );
+                case 'edit':
+                  return (
+                    <MenuItem key={a} onSelect={run(h.onEdit)}>
+                      <PencilIcon /> {t('edit')}
+                    </MenuItem>
+                  );
+                case 'group':
+                  return (
+                    <MenuItem key={a} onSelect={run(h.onAddToGroup)}>
+                      <UsersPlusIcon /> {t('addToGroup')}
+                    </MenuItem>
+                  );
+                case 'tag':
+                  return (
+                    <MenuItem key={a} onSelect={run(h.onTag)}>
+                      <TagIcon /> {t('tag')}
+                    </MenuItem>
+                  );
+                case 'delete':
+                  return (
+                    <Fragment key={a}>
+                      <MenuSeparator />
+                      <MenuItem danger onSelect={run(h.onDelete)}>
+                        <TrashIcon /> {t('delete')}
+                      </MenuItem>
+                    </Fragment>
+                  );
+              }
+            })}
+          </>
+        )}
+      </RowMenu>
     </div>
   );
 }
@@ -108,10 +261,21 @@ function StatusCell({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
   if (!row.stage && !row.status && !row.optedOut) return <Dash />;
   return (
-    <div className="flex flex-wrap gap-1">
-      {row.stage && <Badge>{h.stageLabel(row.stage)}</Badge>}
-      {row.status && <Badge tone="success">{h.statusLabel(row.status)}</Badge>}
-      {row.optedOut && <Badge tone="warning">{t('optedOut')}</Badge>}
+    <div className="flex min-w-0 flex-wrap items-center gap-1">
+      {row.stage && <StageBadge stage={row.stage} label={h.stageLabel(row.stage)} />}
+      {row.status && (
+        <span
+          title={h.statusLabel(row.status)}
+          className="inline-flex max-w-full items-center rounded-full border border-success/30 bg-success/10 px-2 py-0.5 text-xs font-medium text-success"
+        >
+          <span className="truncate">{h.statusLabel(row.status)}</span>
+        </span>
+      )}
+      {row.optedOut && (
+        <span className="inline-flex items-center rounded-full border border-warning/30 bg-warning/10 px-2 py-0.5 text-xs font-medium text-warning">
+          {t('optedOut')}
+        </span>
+      )}
     </div>
   );
 }
@@ -175,32 +339,62 @@ function Clip({ value, ltr, mono }: { value: string; ltr?: boolean; mono?: boole
   );
 }
 
-function NameCell({ row }: { row: RowView }) {
+/** A rounded outlined pill with a small leading icon; the value truncates and the full text is the tooltip. */
+function Pill({ value, icon }: { value: string; icon: ReactNode }) {
+  if (!value) return <Dash />;
+  return (
+    <span
+      title={value}
+      dir="ltr"
+      className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs tabular-nums"
+    >
+      <span className="shrink-0 text-muted-foreground">{icon}</span>
+      <span className="truncate">{value}</span>
+    </span>
+  );
+}
+
+function NameCell({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
   return (
-    <div className="flex min-w-0 items-center gap-2.5">
-      <ContactAvatar id={row.id} name={row.name} />
-      <Link
-        href={`/contacts/${row.id}`}
-        title={row.name || undefined}
-        className="min-w-0 truncate font-medium outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        {row.name || t('unnamed')}
-      </Link>
+    <div className="flex min-w-0 flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5 self-stretch">
+        <ContactAvatar id={row.id} name={row.name} className="hidden sm:inline-flex" />
+        <Link
+          href={`/contacts/${row.id}`}
+          title={row.name || undefined}
+          className="min-w-0 truncate font-medium outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {row.name || t('unnamed')}
+        </Link>
+      </div>
+      <QuickActions row={row} h={h} />
     </div>
   );
 }
 
-function Cell({ column, row, h }: { column: ColumnDef; row: RowView; h: ListHandlers }) {
+function Cell({
+  column,
+  row,
+  h,
+  locale,
+  timeZone,
+}: {
+  column: ColumnDef;
+  row: RowView;
+  h: ListHandlers;
+  locale: string;
+  timeZone: string | undefined;
+}) {
   const id = column.id;
   if (isAttrId(id)) return <Clip value={row.custom[column.attributeKey ?? ''] ?? ''} />;
   switch (id) {
     case 'name':
-      return <NameCell row={row} />;
+      return <NameCell row={row} h={h} />;
     case 'phone':
-      return <Clip value={row.phone} ltr mono />;
+      return <Pill value={row.phone} icon={<PhoneIcon className="size-3" />} />;
     case 'email':
-      return <Clip value={row.email} ltr />;
+      return <Pill value={row.email} icon={<MailIcon className="size-3" />} />;
     case 'tags':
       return <TagsCell row={row} h={h} />;
     case 'groups':
@@ -208,11 +402,11 @@ function Cell({ column, row, h }: { column: ColumnDef; row: RowView; h: ListHand
     case 'stage':
       return <StatusCell row={row} h={h} />;
     case 'language':
-      return <Clip value={row.language} />;
+      return row.language ? <OutlineTag value={row.language} /> : <Dash />;
     case 'memo':
       return <Clip value={row.memo} />;
     case 'createdOn':
-      return <Clip value={formatDmy(row.createdAt)} ltr mono />;
+      return <Clip value={formatDateTime(row.createdAt, locale, timeZone)} mono />;
   }
 }
 
@@ -229,36 +423,51 @@ export function ContactsTable({
   onToggleAll: (checked: boolean) => void;
 } & ListHandlers) {
   const t = useTranslations('contacts-attributes-tags.list');
-  const th = 'px-3 py-3.5 text-start text-sm font-semibold text-foreground';
-  const actions = h.canEdit || h.canDelete;
+  const locale = useLocale();
+  const timeZone = useTimeZone();
+  // The shadow along the frozen edge shows only once something has scrolled underneath it.
+  const [scrolled, setScrolled] = useState(false);
+  const th =
+    'sticky top-0 z-20 border-b border-border bg-muted px-3 py-3 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
   return (
-    <div className="overflow-x-auto">
+    <div
+      role="region"
+      aria-label={t('scrollArea')}
+      tabIndex={0}
+      onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
+      className="thin-scrollbar h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+    >
       <table
-        className="w-full table-fixed text-sm"
-        style={{ minWidth: tableMinWidth(columns) - (actions ? 0 : ACTIONS_W) }}
+        className="w-full table-fixed border-separate border-spacing-0 text-sm"
+        style={{ minWidth: tableMinWidth(columns) }}
       >
         <colgroup>
           <col style={{ width: SELECT_W }} />
           {columns.map((c) => (
-            <col key={c.id} style={{ width: widthOf(c.id) }} />
+            <col
+              key={c.id}
+              className={c.id === 'name' ? 'w-[200px] sm:w-[340px]' : undefined}
+              style={c.id === 'name' ? undefined : { width: widthOf(c.id) }}
+            />
           ))}
-          {actions && <col style={{ width: ACTIONS_W }} />}
         </colgroup>
-        <thead className="bg-muted/50">
+        <thead>
           <tr>
-            <th className="py-3.5 ps-4 pe-2 text-start">
+            <th className={cn(th, 'py-3 ps-4 pe-2', STICKY_SELECT_HEAD)}>
               <HeaderCheckbox state={headerState} onChange={onToggleAll} label={t('selectAll')} />
             </th>
             {columns.map((c) => (
-              <th key={c.id} scope="col" className={cn(th, 'truncate')}>
-                {'key' in c.label ? t(c.label.key) : c.label.text}
+              <th
+                key={c.id}
+                scope="col"
+                className={cn(th, c.id === 'name' && `${STICKY_NAME_HEAD} ${frozenEdge(scrolled)}`)}
+              >
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <HeaderIcon id={c.id} />
+                  <span className="truncate">{'key' in c.label ? t(c.label.key) : c.label.text}</span>
+                </span>
               </th>
             ))}
-            {actions && (
-              <th scope="col" className={cn(th, 'pe-4 text-end')}>
-                {t('colActions')}
-              </th>
-            )}
           </tr>
         </thead>
         <tbody>
@@ -267,12 +476,13 @@ export function ContactsTable({
             return (
               <tr
                 key={row.id}
+                data-selected={isSel}
                 className={cn(
-                  'h-14 border-t border-border align-middle transition-colors hover:bg-muted/40',
-                  isSel && 'bg-brand/5 hover:bg-brand/10',
+                  'group h-16 align-middle transition-colors hover:bg-muted',
+                  isSel && 'bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]',
                 )}
               >
-                <td className="ps-4 pe-2">
+                <td className={cn('border-b border-border ps-4 pe-2', STICKY_SELECT)}>
                   <input
                     type="checkbox"
                     checked={isSel}
@@ -282,15 +492,16 @@ export function ContactsTable({
                   />
                 </td>
                 {columns.map((c) => (
-                  <td key={c.id} className="max-w-0 px-3 py-2">
-                    <Cell column={c} row={row} h={h} />
+                  <td
+                    key={c.id}
+                    className={cn(
+                      'max-w-0 border-b border-border px-3 py-2',
+                      c.id === 'name' && `${STICKY_NAME} ${frozenEdge(scrolled)}`,
+                    )}
+                  >
+                    <Cell column={c} row={row} h={h} locale={locale} timeZone={timeZone} />
                   </td>
                 ))}
-                {actions && (
-                  <td className="pe-4 ps-3 text-end">
-                    <RowActions row={row} h={h} />
-                  </td>
-                )}
               </tr>
             );
           })}
@@ -303,6 +514,8 @@ export function ContactsTable({
 /** Card layout of the same rows: the mobile-friendly alternative to the wide table. */
 export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers) {
   const t = useTranslations('contacts-attributes-tags.list');
+  const locale = useLocale();
+  const timeZone = useTimeZone();
   return (
     <ul className="grid gap-3 p-4 sm:grid-cols-2 min-[1700px]:grid-cols-3">
       {rows.map((row) => {
@@ -338,7 +551,7 @@ export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers)
                   {row.phone || '-'}
                 </div>
               </div>
-              <RowActions row={row} h={h} />
+              <QuickActions row={row} h={h} />
             </div>
             <StatusCell row={row} h={h} />
             {row.groups.length > 0 && <GroupsCell row={row} />}
@@ -351,7 +564,8 @@ export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers)
               </div>
             )}
             <div className="text-xs text-muted-foreground">
-              {t('colCreatedOn')}: <span className="tabular-nums">{formatDmy(row.createdAt) || '-'}</span>
+              {t('colCreatedOn')}:{' '}
+              <span className="tabular-nums">{formatDateTime(row.createdAt, locale, timeZone) || '-'}</span>
             </div>
             {row.memo && <p className="line-clamp-2 text-xs text-muted-foreground">{row.memo}</p>}
           </li>

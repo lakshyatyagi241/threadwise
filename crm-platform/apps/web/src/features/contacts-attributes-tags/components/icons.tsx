@@ -129,3 +129,88 @@ export const BookUserIcon = (p: IconProps) => (
     <path d="M8 16.5c.6-1.6 2-2.3 4-2.3s3.4.7 4 2.3M5 8H3M5 12H3M5 16H3" />
   </Svg>
 );
+export const PhoneIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" />
+  </Svg>
+);
+export const MailIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="M3 7l9 6 9-6" />
+  </Svg>
+);
+/** The WhatsApp handset-in-a-bubble mark, drawn in the current colour. */
+export const WhatsAppIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 21l1.6-4.7A8.5 8.5 0 1112 20.5a8.4 8.4 0 01-4-1L3 21z" />
+    <path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8a4.5 4.5 0 01-2-2l.8-1-1-2L9 8.5z" />
+  </Svg>
+);
+export const MoreIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 12h.01M12 12h.01M19 12h.01" strokeWidth="3" />
+  </Svg>
+);
+export const RefreshIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M20 11a8 8 0 00-14.5-4M4 5v4h4M4 13a8 8 0 0014.5 4M20 19v-4h-4" />
+  </Svg>
+);
+export const SettingsIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 2.5l1.6 2.3 2.8-.5.9 2.7 2.6 1.2-.7 2.8 1.8 2.2-1.8 2.2.7 2.8-2.6 1.2-.9 2.7-2.8-.5L12 21.5l-1.6-2.3-2.8.5-.9-2.7-2.6-1.2.7-2.8L2.9 12l1.8-2.2-.7-2.8 2.6-1.2.9-2.7 2.8.5L12 2.5z" />
+  </Svg>
+);
+export const EyeIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+    <circle cx="12" cy="12" r="3" />
+  </Svg>
+);
+export const TagIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 12V4h8l10 10-8 8L3 12z" />
+    <path d="M7.5 8.5h.01" strokeWidth="3" />
+  </Svg>
+);
+export const UserIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+  </Svg>
+);
+export const CalendarIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3" y="5" width="18" height="16" rx="2" />
+    <path d="M3 10h18M8 3v4M16 3v4" />
+  </Svg>
+);
+export const FlagIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 21V4M5 4h11l-2 4 2 4H5" />
+  </Svg>
+);
+export const GlobeIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" />
+  </Svg>
+);
+export const NoteIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 4h14v12l-4 4H5V4zM15 20v-4h4M8 9h8M8 13h5" />
+  </Svg>
+);
+export const HashIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 9h14M5 15h14M10 4L8 20M16 4l-2 16" />
+  </Svg>
+);
+export const CircleDotIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="3" fill="currentColor" />
+  </Svg>
+);
