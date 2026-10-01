@@ -64,7 +64,6 @@ declare their keys, foreign keys, indexes and checks in Drizzle, not only their 
 - The check compares what Drizzle can express. Partial-index predicates, `ON DELETE SET NULL (col)` column lists, triggers and policy
   bodies are not compared; RLS is checked by presence and by the invariants test, not by policy text.
 - The older hand-written Drizzle files still produce warnings (undeclared foreign keys). They are not errors and not fixed here.
-- `PARTITIONED_TABLES` is still a code constant; until it is made dynamic the new streams only have their bootstrap partitions.
 
 ### Neutral
 

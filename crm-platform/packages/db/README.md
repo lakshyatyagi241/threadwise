@@ -27,6 +27,8 @@ src/
 | `0006_outbox_audit`                | event_outbox, audit_log — RANGE-partitioned monthly, with default partitions                                                      |
 | `0007_rls_policies`                | RLS enabled **and forced**, policies, runtime roles, default privileges                                                           |
 | `0008_seed_permission_defs`        | the global capability registry                                                                                                    |
+| `20261001110000_partition_definer` | `ensure_monthly_partition()` becomes `SECURITY DEFINER` so the worker role can create partitions (ADR-0021)                       |
+| `20261001110100_partition_rls`     | every partition mirrors its parent's RLS and policy; grants for the `0006` partitions; `inherit_partition_rls()` (ADR-0021)       |
 | `2026100110*_<code>_threadwise_schema` | the Reference data model, one migration per domain: 202 tables ([docs/threadwise-port/schema](../../docs/threadwise-port/schema/README.md))  |
 
 The inbox, broadcast, billing, AI and automation tables that the Reference port
