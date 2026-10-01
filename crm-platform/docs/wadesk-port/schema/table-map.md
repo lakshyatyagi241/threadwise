@@ -434,17 +434,17 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 
 ### `security_audit_log` -> security_events (auth_core)
 
-| WaDesk column  | lives in                   |
-| -------------- | -------------------------- |
-| `id`           | security_events.id         |
-| `user_id`      | security_events.actor_id   |
-| `workspace_id` | security_events.org_id     |
-| `event`        | security_events.event      |
-| `status`       | security_events.status     |
-| `ip`           | security_events.ip         |
-| `user_agent`   | security_events.user_agent |
-| `payload`      | security_events.payload    |
-| `created_at`   | security_events.at         |
+| WaDesk column  | lives in                       |
+| -------------- | ------------------------------ |
+| `id`           | security_events.id             |
+| `user_id`      | security_events.actor_id       |
+| `workspace_id` | security_events.subject_org_id |
+| `event`        | security_events.event          |
+| `status`       | security_events.status         |
+| `ip`           | security_events.ip             |
+| `user_agent`   | security_events.user_agent     |
+| `payload`      | security_events.payload        |
+| `created_at`   | security_events.at             |
 
 ### `system_settings` -> platform_settings (auth_core)
 
