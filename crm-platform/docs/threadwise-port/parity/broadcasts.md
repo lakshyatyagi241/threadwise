@@ -5,12 +5,13 @@ Reference 1.7.0 vs branch `punya/broadcasts/TW-BCAST-009-store-request`. Covers 
 
 Evidence is automated, no screen yet:
 
+- `apps/api/test/e2e/broadcasts/broadcasts-actions.e2e.spec.ts`: 16 scenarios for delete, retry, the sweep and the CSV export.
 - `apps/api/test/e2e/broadcasts/broadcasts-read.e2e.spec.ts`: 20 scenarios for the list, tiles, detail, recipients and live counters.
 - `apps/api/test/e2e/broadcasts/broadcasts-payload.e2e.spec.ts`: 10 scenarios for the payload and overrides (acceptance criteria of TW-BCAST-017 and 015 rule 3).
 - `apps/api/test/e2e/broadcasts/broadcasts-dispatch.e2e.spec.ts`: 14 scenarios for queueing and sending, against real Postgres with a fake engine adapter.
 - `apps/api/test/e2e/broadcasts/broadcasts-create.e2e.spec.ts`: 17 scenarios through HTTP against real Postgres (every
   Given/When/Then of 009, 010, 014, 015, the OTP-template refusal of 012, tenant isolation, permission, auth).
-- `apps/api/test/unit/broadcasts/*`: 109 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
+- `apps/api/test/unit/broadcasts/*`: 120 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
 
 ## Status of each feature in this PR
 
@@ -61,6 +62,13 @@ Evidence is automated, no screen yet:
 | 22 | Unknown contact | "Contact #id" | "Unknown contact" (internal ids do not leave the system). |
 | 23 | Detail sender | Looked up in `devices` even for a Cloud API slice, so the label could be wrong | The sender row the broadcast names, in its own table. |
 | 24 | Statistics response | `{success, stats}` | Plain counts (the envelope belongs to the old HTML routes). |
+| 25 | Manual retry precondition | No status check, so a retry during a run started a second concurrent loop; none of the guards were re-checked | Refused while `processing` or `scheduled` (409); halt and wallet checked again (the TW-BCAST-038 port notes). |
+| 26 | Retry resets | `send_attempts` untouched | Reset to 0, so the automatic retry starts fresh after an operator retry. |
+| 27 | Sweep trigger | The Node heartbeat, at most once per 120 s, only while a Baileys socket is up | Its own 60 s interval in the worker, for every engine. |
+| 28 | Sweep candidates | Includes a still-running broadcast, so a second loop could start on it | Finished broadcasts only; permanent failures (no number, Meta undeliverable) are left for manual review. |
+| 29 | Delete | Best-effort cancel call to Node, then delete | The queued job is withdrawn, then delete; a run that already started finds the row gone and stops. |
+| 30 | CSV times | The workspace time zone, while the detail page used the broadcast's | The broadcast's own zone, the same as the detail page. The `Failed` time is the recipient's last update (there is no `failed_at`). |
+| 31 | CSV file name | `broadcast-<numeric id>-...` | `broadcast-<uuid>-...` (internal ids do not leave the system). |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 

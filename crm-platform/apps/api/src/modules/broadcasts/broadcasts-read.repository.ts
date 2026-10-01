@@ -103,6 +103,7 @@ export interface RecipientReadRow {
   sentAt: Date | null;
   deliveredAt: Date | null;
   readAt: Date | null;
+  updatedAt: Date;
   clicks: number;
   lastClickAt: Date | null;
 }
@@ -268,7 +269,7 @@ export class BroadcastsReadRepository {
       SELECT bc.id, bc.created_at, to_char(bc.created_at AT TIME ZONE 'UTC', ${ISO}) AS created_at_iso,
              c.uuid AS contact_uuid, c.name AS contact_name, c.first_name, c.last_name, c.phone, c.country_code,
              bc.status, bc.error_message AS error, bc.whatsapp_message_id AS provider_message_id,
-             bc.sent_at, bc.delivered_at, bc.read_at,
+             bc.sent_at, bc.delivered_at, bc.read_at, bc.updated_at,
              coalesce(k.clicks, 0)::int AS clicks, k.last_click_at
       FROM broadcast_contacts bc
       JOIN contacts c ON c.org_id = bc.org_id AND c.id = bc.contact_id
@@ -296,6 +297,7 @@ export class BroadcastsReadRepository {
       sentAt: d(r.sent_at),
       deliveredAt: d(r.delivered_at),
       readAt: d(r.read_at),
+      updatedAt: new Date(r.updated_at as string),
       clicks: Number(r.clicks),
       lastClickAt: d(r.last_click_at),
     }));

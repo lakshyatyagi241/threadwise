@@ -143,3 +143,22 @@ piece is an endpoint a screen composes.
 
 An id of another organization is a 404, a malformed id a 400. Percentages: delivery is delivered over sent, read is read over
 delivered, failed is failed over sent on the tiles; on the detail header sent, delivered and failed are over the audience.
+
+## Actions: delete, retry, export (TW-BCAST-037, 038, 039, 040)
+
+| Route                                  | Permission                | What                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| -------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DELETE /v2/broadcasts/:id`            | `bcast.broadcasts.delete` | 204. Only a `scheduled` or `failed` broadcast; any other status is 422 `BCAST_NOT_DELETABLE` ("Only scheduled or failed broadcasts can be deleted."). Its recipients go with it, a queued job for it is withdrawn, an audit row and `broadcast.deleted` are written.                                                                                                                                                                                         |
+| `POST /v2/broadcasts/:id/retry-failed` | `bcast.broadcasts.retry`  | 200 `{ retried, status: "processing" }`. Failed recipients go back to `pending` with the error and provider id cleared, the broadcast becomes due again and the sender sends only those; delivered recipients are never messaged again. 409 `BCAST_NOT_RETRYABLE` while the broadcast is `processing` or `scheduled`; 422 `BCAST_NO_FAILED_RECIPIENTS` when nothing failed. The emergency halt and the wallet are checked again. Needs an `Idempotency-Key`. |
+| `GET /v2/broadcasts/:id/export`        | `bcast.broadcasts.export` | The recipients as a streamed CSV, `broadcast-<id>-recipients-<YYYYMMDD-HHMMSS>.csv`. Columns: Recipient, Phone (digits), Status, Clicked, Queued, Sent, Delivered, Read, Failed, Last event, Error. Times are `YYYY-MM-DD HH:mm` in the broadcast's own zone. A name or error that begins with `=`, `+`, `-` or `@` gets a leading apostrophe so a spreadsheet does not run it. Read in pages of 1000, so a broadcast of any size is never held in memory.   |
+
+### The automatic retry sweep
+
+Runs in the worker every 60 seconds (Reference ran it from the Node heartbeat, which a workspace with no Baileys socket never
+produced). It takes finished broadcasts (`completed`, `completed_with_errors`, `failed`) from the last 7 days that still have
+a failed recipient a retry could fix, whose `next_attempt_at` is due and whose `send_attempts` is below the limit. For each it
+records the attempt and the wait first, puts the retryable failures back to `pending` and makes the broadcast due again.
+The wait before attempt n is `min(3600, base x 2^(n-1))` seconds. Defaults: 3 attempts, base 60 s. Per-organization
+overrides: `org_plan_state.overrides` keys `broadcast_retry_attempts` and `broadcast_retry_backoff_sec`. A recipient without a
+number and a Meta "undeliverable" (#131026, #131021, #131051) are not retried. A broadcast that has used its attempts is
+left for manual review.
