@@ -344,7 +344,7 @@ id = "(dropped: keyed by key)"
 
 [map.security_audit_log]
 user_id = "security_events.actor_id"
-workspace_id = "security_events.org_id"
+workspace_id = "security_events.subject_org_id"
 created_at = "security_events.at"
 id = "security_events.id"
 
