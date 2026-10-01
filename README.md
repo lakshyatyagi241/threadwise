@@ -90,6 +90,19 @@ permissions, worker, web) with the repo's skills, write a test per acceptance cr
 run the gate, mark the tracker. Rules of the road for three people are in `conflict-map.md` section 5: stay in your zones, small branches, rebase not merge,
 dependencies in their own PR, prefix everything with your domain code.
 
+## Punya's branch and PR workflow
+
+Applies to Punya's modules (channel-facebook, channel-instagram, channel-telegram, channel-tiktok, channel-line, channel-wechat,
+channel-viber, channel-sms, channel-email, shopify-woocommerce, broadcasts, campaigns), and to every Claude Code session working for Punya.
+
+- **One branch only: `punya/punyafix`.** All of Punya's work is committed to it and pushed to it. Do not create any other branch
+  (no per-feature, per-module or per-docs branches), and never commit to `main`.
+- **Always push to `punya/punyafix`** after committing (`git push origin punya/punyafix`).
+- **Pull request:** one open PR from `punya/punyafix` into `main`, with **Lakshya (`lakshyatyagi241`) as reviewer**, always. If the PR is
+  already open, a push updates it; if it was merged, sync `punya/punyafix` with the latest `main` (rebase) and open a new PR.
+  `gh pr create --base main --head punya/punyafix --reviewer lakshyatyagi241`
+- Commit messages are conventional (`feat(bcast): ...`) and end with the `Co-Authored-By` line.
+
 ## Skills
 
 Everything is a Claude Code skill in `crm-platform/.claude/skills/`. The repo's own skills (`setup`, `new-module`, `add-migration`,

@@ -122,13 +122,13 @@ consumers (other screens, middleware, emails, API, plan gates that read it). Los
 ## 8. Process
 
 - One feature per branch/PR: `<owner>/<domain>/<WD-id>-<slug>`; stay in your ownership zones.
-- **Branch and PR flow (Punya, set 2026-10-01):** work module by module, feature by feature. Each feature lives in its own
-  branch cut from the latest `main` and named `punya/<domain>/<WD-id>-<slug>`; when it passes the definition of done (section 6)
-  it gets its own PR into `main`. Never commit to `main`, never mix two modules or two features in one branch, never push
-  without being asked (the PR is raised only when the human says so).
+- **Branch and PR flow (Punya, set 2026-10-02):** work module by module, feature by feature, all on ONE branch,
+  `punya/punyafix`, pushed to `origin` after every commit. Never create another branch and never commit to `main`. One PR from
+  `punya/punyafix` into `main`, with Lakshya (`lakshyatyagi241`) as reviewer, always. See the root `README.md`
+  ("Punya's branch and PR workflow").
 - Punya's modules: channel-facebook, channel-instagram, channel-telegram, channel-tiktok, channel-line, channel-wechat,
   channel-viber, channel-sms, channel-email, shopify-woocommerce, broadcasts, campaigns. `ownership.json` is the source for
   zones; if it disagrees with this list, fix `assignment-input.json` and regenerate (see README), do not edit around it.
-- Nothing is committed or pushed unless the human asks; this workspace has no auto-commit.
+- Commit and push to `punya/punyafix` as the workflow above says; never force-push, never push to `main`.
 - Never copy secrets, licence keys or the contents of `WaDesk/.env` anywhere.
 - Never run reference migrations or seeders against any database except the local `wadesk-ref-mariadb`.
