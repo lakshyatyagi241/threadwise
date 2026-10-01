@@ -75,7 +75,9 @@ export function fullLimits(raw: unknown): PlanLimits {
 }
 
 export function fullFeatures(raw: unknown): PlanFeatures {
-  return Object.fromEntries(PLAN_FEATURE_KEYS.map((k) => [k, storedFeature(raw, k)])) as PlanFeatures;
+  return Object.fromEntries(
+    PLAN_FEATURE_KEYS.map((k) => [k, storedFeature(raw, k)]),
+  ) as PlanFeatures;
 }
 
 const iso = (v: string | Date): string => new Date(v).toISOString();

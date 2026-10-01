@@ -88,7 +88,11 @@ describe('GoogleOAuthAdapter', () => {
 describe('FacebookOAuthAdapter', () => {
   it('builds the dialog URL', () => {
     const url = new URL(
-      new FacebookOAuthAdapter().authorizeUrl(creds, redirectUri.replace('google', 'facebook'), 's'),
+      new FacebookOAuthAdapter().authorizeUrl(
+        creds,
+        redirectUri.replace('google', 'facebook'),
+        's',
+      ),
     );
     expect(url.hostname).toBe('www.facebook.com');
     expect(url.searchParams.get('scope')).toBe('email,public_profile');
