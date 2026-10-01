@@ -1,0 +1,401 @@
+# Judgement calls for the Reference -> crm-platform schema translation.
+# Everything the generator cannot derive from the Reference schema itself lives here, so a reviewer
+# can read and change decisions in one place and re-run the generator. See docs/threadwise-port/schema/README.md.
+
+[meta]
+first_migration_stamp = "20261001100000"   # after 20261001090000_auth_core; one minute apart, in dependency order
+partition_months_back = 1
+partition_months_ahead = 2
+# financial/audit-critical domains: a NOT NULL reference to a tenant row blocks the parent delete instead of cascading
+user_owned_cascade = ["user_settings"]
+restrict_domains = ["inv", "wallet", "paygw", "plan", "chk", "sales", "bsp", "cpn"]
+
+# --- table -> domain (slug from ownership.json). Every one of the 227 Reference tables appears exactly once. ---
+[domain]
+"auth-registration-security" = ["user_otps", "sessions", "password_reset_tokens", "personal_access_tokens", "security_audit_log", "users"]
+"workspaces-teams-tenancy" = ["workspaces", "workspace_user", "teams", "team_user", "user_device_tokens", "workspace_addons", "workspace_email_accounts", "workspace_flags", "workspace_ig_accounts", "workspace_payment_configs", "impersonation_sessions"]
+"roles-permissions" = ["roles", "permissions", "model_has_roles", "model_has_permissions", "role_has_permissions"]
+"platform-settings-branding-storage" = ["system_settings"]
+"localization-translation" = ["languages", "translation_providers", "translation_usage"]
+"platform-infrastructure" = ["cache", "cache_locks", "jobs", "job_batches", "failed_jobs", "migrations"]
+"plans-subscriptions-trials" = ["packages", "package_features", "plan_usage", "subscriptions"]
+"wallet-message-billing" = ["wallet_transactions", "message_charges", "message_rates"]
+"notifications-activity-audit" = ["notifications", "inbox_notifications", "push_subscriptions", "audit_logs"]
+"platform-payment-gateways" = ["payment_gateways", "orders", "payments"]
+"coupons-credits-referral-currency" = ["coupons", "credit_packages", "currencies", "referrals"]
+"addons-extension-registry" = ["extensions", "extension_api_tokens"]
+"marketing-site-cms" = ["announcements", "blog_categories", "blog_posts", "contact_messages", "frontend_content", "guidebook_articles", "legal_pages", "pricing_faqs"]
+"platform-support-desk" = ["support_agents", "support_assignments", "support_messages", "support_tickets", "platform_notes", "playbooks"]
+"bsp-billing-engine" = ["bsp_credit_allocations"]
+"ai-keys-usage-admin" = ["admin_ai_keys", "ai_provider_keys", "ai_token_usage"]
+"whatsapp-devices-baileys" = ["devices", "wa_provider_configs"]
+"whatsapp-cloud-api-waba" = ["waba_groups", "wa_customer_profiles"]
+"node-bridge-runtime" = ["google_form_sessions"]
+"chat-conversations" = ["conversations", "conversation_events", "conversation_notes", "conversation_participants", "messages"]
+"team-inbox-conversations" = ["inbox_messages", "saved_replies", "tags", "conversation_tag", "outbound_webhooks"]
+"team-inbox-routing-sla" = ["routing_rules", "sla_policies", "sla_breaches", "agent_statuses"]
+"message-templates" = ["wa_templates", "chat_templates"]
+"broadcasts" = ["broadcasts", "broadcast_contacts", "wa_link_clicks"]
+"campaigns" = ["wpcampaigns", "wp_campaign_contacts"]
+"scheduled-queue-warmer" = ["scheduled_messages", "scheduled_message_contacts", "warmer_daily_sends"]
+"auto-reply-keywords" = ["keyword_replies", "keyword_reply_contents", "keyword_reply_logs", "auto_reply_lookups"]
+"flow-builder-editor" = ["flows", "flow_templates", "flow_connected_devices"]
+"flow-runtime-engine" = ["flow_subscribers", "flow_retry_logs"]
+"chatbot-widget" = ["chatbot_widgets", "chatbot_widget_visitors"]
+"forms-links-groups" = ["wa_forms", "wa_form_submissions", "wa_chat_links", "wa_groups", "wa_group_members"]
+"team-chat" = ["team_chat_channels", "team_chat_channel_members", "team_chat_invitations", "team_chat_messages", "team_chat_reactions", "team_chat_reads"]
+"calling-voice" = ["wa_calls", "wa_call_events", "wa_call_permissions", "ai_call_assistants", "ai_call_assistant_tools", "ai_call_logs", "ai_voice_usage_daily"]
+"contacts-attributes-tags" = ["contacts", "contact_groups", "contact_tag", "attributes", "contact_custom_fields", "csat_responses"]
+"deals-pipelines" = ["deals", "deal_activities", "pipelines", "pipeline_stages"]
+"companies-projects-tasks" = ["companies", "projects", "tasks"]
+"sales-docs-proposals" = ["sales_docs"]
+"invoicing" = ["invoices", "invoice_items", "invoice_logs", "invoice_number_sequences", "invoice_settings", "invoice_tax_summary", "invoice_webhook_events"]
+"appointments-booking" = ["appointments", "booking_availability_overrides", "booking_availability_rules", "booking_financials", "booking_integrations", "booking_questions", "booking_reminders", "booking_templates", "booking_types", "slot_reservations"]
+"catalog-products" = ["wa_catalogs", "wa_products", "wa_product_sets", "wa_product_reviews", "wa_stock_reservations"]
+"storefront-builder" = ["wa_storefronts", "wa_storefront_views", "storefront_cart_recoveries"]
+"checkout-orders-merchant-payments" = ["wa_orders", "wa_order_items", "wa_pending_orders", "wa_coupons", "wa_merchant_gateways"]
+"shopify-woocommerce" = ["shopify_integrations", "shopify_integration_events", "shopify_integration_logs", "shopify_cart_recoveries", "shopify_cod_confirmations", "shopify_stock_waitlist", "woocommerce_integrations", "woocommerce_integration_events", "woocommerce_integration_logs", "woocommerce_cart_recoveries", "woocommerce_cod_confirmations", "woocommerce_stock_waitlist"]
+"meta-ads" = ["meta_campaigns"]
+"ai-agents-training" = ["ai_agents", "ai_chat_assistants", "ai_training_sources"]
+"ai-copilot-lead-finder" = ["ai_crm_actions", "crm_briefs", "leads"]
+"channel-facebook" = ["facebook_pages", "facebook_posts", "facebook_broadcasts", "facebook_broadcast_recipients"]
+"channel-telegram" = ["telegram_accounts", "telegram_bots", "telegram_broadcasts", "telegram_broadcast_recipients", "telegram_flow_sessions"]
+"channel-tiktok" = ["tiktok_accounts", "tiktok_posts", "tiktok_shops"]
+"channel-line" = ["line_channels", "line_broadcasts", "line_broadcast_recipients", "line_flow_sessions", "line_rich_menus"]
+"channel-wechat" = ["wechat_channels", "wechat_broadcasts", "wechat_broadcast_recipients", "wechat_flow_sessions"]
+"channel-viber" = ["viber_channels", "viber_broadcasts", "viber_broadcast_recipients", "viber_flow_sessions"]
+"integrations-hubspot-slack-trello-google-webhooks" = ["hubspot_integrations", "hubspot_integration_logs", "slack_integrations", "slack_integration_logs", "trello_integrations", "trello_integration_logs", "webhooks", "webhook_deliveries", "incoming_webhooks", "incoming_webhook_events"]
+"developer-rest-api-v1" = ["api_keys"]
+
+# --- table classes (anything not listed here with a workspace_id is a plain tenant table; without one, a tenant child) ---
+[class]
+# Laravel plumbing replaced by the platform (BullMQ, Redis, the auth_core session/token tables, migration journal).
+drop = { cache = "Laravel cache store: Redis here", cache_locks = "Laravel cache locks: Redis here", jobs = "Laravel queue: BullMQ", job_batches = "Laravel queue batches: BullMQ", failed_jobs = "Laravel failed jobs: BullMQ failed set + dead outbox rows", migrations = "Laravel migration journal: _migrations", password_reset_tokens = "auth_core user_tokens", sessions = "auth_core auth_sessions", personal_access_tokens = "api_keys + auth_core user_tokens", user_otps = "auth_core user_tokens (kind otp)", message_charges = "renamed usage_charges (ADR-0012 level-1 ledger), see [virtual.usage_charges]" }
+
+# Reference table that is the same thing as a table this repo already has. Not generated: overlays/*.sql adds only what is missing.
+existing = { users = "users + user_profiles (auth_core)", workspaces = "organizations (+ workspace_settings overlay)", workspace_user = "users + user_roles", teams = "teams", team_user = "team_members", roles = "roles", permissions = "permission_defs", model_has_roles = "user_roles", model_has_permissions = "role_grants", role_has_permissions = "role_grants", api_keys = "api_keys", contacts = "contacts", companies = "companies", tags = "tags", contact_tag = "contact_tags", attributes = "fields (field metadata registry, ADR-0017)", contact_custom_fields = "fields (field metadata registry, ADR-0017)", system_settings = "platform_settings (auth_core)", security_audit_log = "security_events (auth_core)", audit_logs = "audit_log" }
+
+# Platform catalogue, no org_id. Any tenant may read; only the privileged (operator/worker) role may write.
+global_read = ["languages", "currencies", "packages", "package_features", "message_rates", "credit_packages", "pricing_faqs", "legal_pages", "guidebook_articles", "announcements", "blog_categories", "blog_posts", "flow_templates", "frontend_content"]
+
+# Platform-operator data, no org_id. Invisible to tenant transactions (policy satisfied only by app_is_privileged()).
+platform_only = ["admin_ai_keys", "payment_gateways", "coupons", "translation_providers", "extensions", "contact_messages", "impersonation_sessions", "referrals", "invoice_webhook_events"]
+
+# Append-only streams: RANGE partitioned monthly, PK (id, <key>), explicit sequence, no FK in or out. value = partition key column.
+[streams]
+messages = "created_at"
+inbox_messages = "created_at"
+conversation_events = "created_at"
+flow_retry_logs = "created_at"
+keyword_reply_logs = "fired_at"
+hubspot_integration_logs = "created_at"
+slack_integration_logs = "created_at"
+trello_integration_logs = "created_at"
+shopify_integration_logs = "created_at"
+woocommerce_integration_logs = "created_at"
+invoice_logs = "created_at"
+incoming_webhook_events = "received_at"
+webhook_deliveries = "fired_at"
+wa_call_events = "received_at"
+wa_link_clicks = "created_at"
+ai_call_logs = "created_at"
+ai_token_usage = "created_at"
+translation_usage = "created_at"
+
+# --- virtual tables ---------------------------------------------------------------------------------------------------
+# workspaces is the tenant itself (organizations). Its name/slug/plan/status live there; every other workspace column is a
+# per-tenant setting and goes to a 1:1 extension table so `organizations` (a kernel table) stays small.
+[virtual.workspace_settings]
+domain = "workspaces-teams-tenancy"
+from = "workspaces"
+skip = ["name", "slug", "plan", "status"]
+unique_org = true
+why = "1:1 with organizations: the Reference workspaces columns that are not name/slug/plan/status"
+
+# contacts.contact_group is an encrypted JSON array of group ids in Reference; a join table gives it real foreign keys.
+[virtual.contact_group_members]
+domain = "contacts-attributes-tags"
+columns = [ { name = "contact_id" }, { name = "group_id" } ]
+unique = [["contact_id", "group_id"]]
+index = [["group_id"]]
+why = "normalises Reference contacts.contact_group (JSON list of contact_groups ids)"
+
+# --- relation overrides: "table.column" = "threadwise table" | "none" (loose: polymorphic or external id) --------------------
+[relations]
+"referral_codes.owner_org_id" = "workspaces"
+"referral_codes.user_id" = "none"
+"user_settings.user_id" = "users"
+"workspace_settings.default_voice_ai_agent_id" = "ai_agents"
+"contact_group_members.contact_id" = "contacts"
+"contact_group_members.group_id" = "contact_groups"
+"notifications.source_id" = "none"
+"scheduled_messages.campaign_id" = "wpcampaigns"
+"wa_link_clicks.campaign_id" = "wpcampaigns"
+"wa_pending_orders.order_id" = "wa_orders"
+"wa_product_reviews.order_id" = "wa_orders"
+"wa_stock_reservations.order_id" = "wa_orders"
+"impersonation_sessions.original_workspace_id" = "workspaces"
+
+# ADR-0012 level-1 ledger: one row per billable unit, partitioned, rate frozen at charge time. Same columns as Reference message_charges.
+[virtual.usage_charges]
+domain = "wallet-message-billing"
+from = "message_charges"
+stream_key = "created_at"
+why = "Reference message_charges under the name ADR-0012 gives the level-1 ledger"
+
+# ADR-0012 wallet: balance and reserved, invariant enforced by CHECK. Reference keeps two balances on users (wallet_credits for
+# message credits, wallet_currency_minor + wallet_currency_code for money); here that is one row per (org, unit).
+[virtual.wallets]
+domain = "wallet-message-billing"
+why = "ADR-0012 prepaid wallet. unit is 'credits' or an ISO currency code. Replaces users.wallet_credits / wallet_currency_minor / wallet_currency_code"
+columns = [
+  { name = "unit", ctype = "varchar(16)", nullable = false },
+  { name = "balance", ctype = "decimal(20,4)", nullable = false, default = "0" },
+  { name = "reserved", ctype = "decimal(20,4)", nullable = false, default = "0" },
+]
+unique = [["unit"]]
+checks = [ { name = "chk_wallet_invariant", sql = "balance >= 0 AND reserved >= 0 AND reserved <= balance" } ]
+
+# ADR-0012: wallet_transactions carries a real unique (org_id, idempotency_key) so a gateway retry cannot double-post.
+[extra.wallet_transactions]
+columns = [ { name = "idempotency_key", ctype = "varchar(191)", nullable = false } ]
+unique = [["idempotency_key"]]
+
+# users.* columns that auth_core's user_profiles/user_security do not carry. 1:1 with users.
+[virtual.user_settings]
+domain = "auth-registration-security"
+why = "per-user Reference columns with no home in auth_core: postal address, onboarding/UI state, Sheets add-on key"
+columns = [
+  { name = "user_id" },
+  { name = "address", ctype = "text", nullable = true },
+  { name = "city", ctype = "varchar(255)", nullable = true },
+  { name = "state", ctype = "varchar(255)", nullable = true },
+  { name = "country", ctype = "varchar(255)", nullable = true },
+  { name = "zip", ctype = "varchar(255)", nullable = true },
+  { name = "country_code", ctype = "varchar(255)", nullable = true },
+  { name = "notes", ctype = "text", nullable = true },
+  { name = "welcome_email_sent_at", ctype = "timestamp", nullable = true },
+  { name = "auto_ai_summarize_enabled", ctype = "tinyint(1)", nullable = false, default = "0" },
+  { name = "inbox_last_seen_at", ctype = "timestamp", nullable = true },
+  { name = "quick_access", ctype = "longtext", nullable = true },
+  { name = "has_seen_intro", ctype = "tinyint(1)", nullable = false, default = "0" },
+  { name = "sheets_key_hash", ctype = "varchar(64)", nullable = true },
+  { name = "sheets_key_suffix", ctype = "varchar(16)", nullable = true },
+  { name = "sheets_key_created_at", ctype = "timestamp", nullable = true },
+  { name = "sheets_key_last_used_at", ctype = "timestamp", nullable = true },
+]
+unique = [["user_id"]]
+index = [["sheets_key_hash"]]
+unique_org = false
+
+# users.referral_code: entered at signup, before any tenant context exists, so the lookup table is platform-level.
+[virtual.referral_codes]
+domain = "coupons-credits-referral-currency"
+class = "platform_only"
+why = "Reference users.referral_code; looked up by code at signup before an org is known"
+columns = [
+  { name = "owner_org_id" },
+  { name = "user_id" },
+  { name = "code", ctype = "varchar(64)", nullable = false },
+]
+unique = [["code"]]
+
+# --- column maps for Reference tables that already exist here (or were dropped): column -> where it lives ----------------------
+# A column not listed maps to the same name on the target table when that exists; the table-map doc flags anything left over.
+[map.users]
+id = "users.id (new identity; Reference ids only matter to the data migration)"
+name = "users.full_name"
+display_name = "user_profiles.display_name"
+email = "users.email"
+locale = "user_profiles.locale"
+site_name = "organizations.slug (the workspace site slug Reference generates at signup)"
+referral_code = "referral_codes.code"
+referred_by_user_id = "referrals.referrer_user_id (cross-org, loose)"
+wallet_credits = "wallets.balance where unit = 'credits'"
+wallet_currency_minor = "wallets.balance where unit = the currency code (minor units become a numeric amount)"
+wallet_currency_code = "wallets.unit"
+mobile = "user_profiles.phone_e164"
+mobile_verified_at = "user_profiles.phone_verified_at"
+address = "user_settings.address"
+city = "user_settings.city"
+state = "user_settings.state"
+country = "user_settings.country"
+zip = "user_settings.zip"
+notes = "user_settings.notes"
+country_code = "user_settings.country_code"
+force_password_change = "user_security.force_password_change"
+welcome_email_sent_at = "user_settings.welcome_email_sent_at"
+avatar_path = "user_avatars (bytes for now, object storage when the storage adapter lands)"
+role = "user_roles -> roles (admin / manager / agent presets)"
+email_verified_at = "user_security.email_verified_at"
+password = "users.password_hash"
+passcode = "(dropped: legacy PIN, replaced by two-factor in Reference itself)"
+password_changed_at = "user_security.password_changed_at"
+social_provider = "social_identities.provider"
+social_provider_id = "social_identities.subject"
+two_factor_enabled = "user_security.mfa_enabled"
+two_factor_secret = "user_security.mfa_secret_enc"
+two_factor_confirmed_at = "user_security.mfa_confirmed_at"
+two_factor_recovery_codes = "user_security.mfa_recovery_hashes"
+theme_preference = "user_profiles.theme"
+auto_ai_summarize_enabled = "user_settings.auto_ai_summarize_enabled"
+remember_token = "(dropped: Laravel remember-me cookie, replaced by auth_sessions)"
+inbox_last_seen_at = "user_settings.inbox_last_seen_at"
+current_workspace_id = "(dropped: a user belongs to exactly one org)"
+quick_access = "user_settings.quick_access"
+has_seen_intro = "user_settings.has_seen_intro"
+sheets_api_key_hash = "user_settings.sheets_key_hash"
+sheets_api_key_suffix = "user_settings.sheets_key_suffix"
+sheets_api_key_created_at = "user_settings.sheets_key_created_at"
+sheets_api_key_last_used_at = "user_settings.sheets_key_last_used_at"
+deleted_at = "(dropped: hard delete + audit row, ADR-0009)"
+
+[map.workspaces]
+id = "organizations.id"
+name = "organizations.name"
+slug = "organizations.slug"
+plan = "organizations.plan"
+status = "organizations.status ('active' / 'suspended')"
+deleted_at = "(dropped: hard delete + audit row, ADR-0009)"
+_default = "workspace_settings.<same column>"
+
+[map.workspace_user]
+id = "(dropped: membership is the users row itself)"
+workspace_id = "users.org_id"
+user_id = "users.id"
+role = "user_roles -> roles"
+invited_at = "users.invited_at"
+joined_at = "users.joined_at"
+
+[map.teams]
+workspace_id = "teams.org_id"
+default_assignee_user_id = "teams.default_assignee_id"
+deleted_at = "(dropped: hard delete + audit row, ADR-0009)"
+
+[map.team_user]
+created_at = "(dropped: team_members rows carry no timestamps)"
+updated_at = "(dropped: team_members rows carry no timestamps)"
+id = "(dropped: team_members is keyed by (org_id, team_id, user_id))"
+is_lead = "team_members.is_lead"
+capacity = "team_members.capacity"
+
+[map.tags]
+workspace_id = "tags.org_id"
+slug = "(dropped: derived from name)"
+description = "tags.description"
+
+[map.contact_tag]
+updated_at = "(dropped: join rows are not updated)"
+id = "(dropped: contact_tags is keyed by (org_id, contact_id, tag_id))"
+added_by = "contact_tags.created_by"
+
+[map.contacts]
+user_id = "contacts.owner_id"
+mobile = "contacts.phone"
+mobile_hash = "(dropped: PII is stored plain under RLS, schema decision P1)"
+contact_group = "contact_group_members (one row per group id in the JSON list)"
+custom_attributes = "contacts.data (Tier-2, defined by the fields registry)"
+msg = "contacts.message"
+image = "contacts.image_url"
+workspace_id = "contacts.org_id"
+
+[map.companies]
+workspace_id = "companies.org_id"
+user_id = "(dropped: creator is recorded in audit_log)"
+owner_user_id = "companies.owner_id"
+website = "companies.domain"
+custom_attributes = "companies.data"
+
+[map.api_keys]
+prefix = "api_keys.key_prefix"
+key_hash = "api_keys.key_hash"
+workspace_id = "api_keys.org_id"
+scopes = "api_keys.scopes (text[])"
+
+[map.attributes]
+_default = "fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config"
+
+[map.contact_custom_fields]
+_default = "fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config"
+
+[map.roles]
+_default = "roles (per-org rows seeded from the presets) / permission_defs for the platform-level names; RBAC domain maps Reference's 101 keys"
+
+[map.permissions]
+_default = "permission_defs (global capability registry): Reference permission names become <code>.<resource>.<action> keys seeded by the RBAC domain"
+
+[map.model_has_roles]
+_default = "user_roles (model_type is always the user model)"
+
+[map.model_has_permissions]
+_default = "role_grants (direct user permissions become a per-user role)"
+
+[map.role_has_permissions]
+_default = "role_grants (effect allow, record_scope all unless the feature scopes it)"
+
+[map.system_settings]
+created_at = "(dropped: platform_settings tracks updated_at and updated_by only)"
+updated_at = "platform_settings.updated_at"
+key = "platform_settings.key"
+value = "platform_settings.value (jsonb)"
+type = "(dropped: platform_settings.value is jsonb, the type is the JSON type)"
+description = "(dropped: documented in the settings registry code)"
+id = "(dropped: keyed by key)"
+
+[map.security_audit_log]
+user_id = "security_events.actor_id"
+workspace_id = "security_events.org_id"
+created_at = "security_events.at"
+id = "security_events.id"
+
+[map.audit_logs]
+layer = "(dropped: platform rows are audit rows with no org context)"
+workspace_id = "audit_log.org_id"
+actor_user_id = "audit_log.actor_id"
+subject_type = "audit_log.module"
+subject_id = "audit_log.record_id"
+payload = "audit_log.delta"
+result = "audit_log.delta (result key)"
+user_agent = "(dropped: request_id carries the trace; user agent is in the access log)"
+created_at = "audit_log.at"
+
+# --- stream vs regular, changed after reviewers read how the code uses each table ---------------------------------------------
+[stream_changes]
+ai_call_logs = "regular"            # inserted at connect, updated on terminate/recording; wa_calls points at it
+wa_link_clicks = "regular"          # tracked-link row looked up by token and updated on every click
+flow_retry_logs = "regular"         # inserted queued, then updated with the outcome
+incoming_webhook_events = "regular" # updated right after insert; receiver keeps only the newest 100 per hook
+ai_crm_actions = "created_at"       # insert-only audit of AI copilot tool calls
+auto_reply_lookups = "created_at"   # insert-only, one row per inbound keyword lookup
+
+[json]
+user_settings = ["quick_access"]
+
+# --- child tables: which column is the tenancy parent. "org" = org_id alone (the natural parent is polymorphic) ---------------
+[parent]
+keyword_reply_contents = "keyword_reply_id"
+team_chat_channel_members = "channel_id"
+warmer_daily_sends = "org"   # device_id is a devices id for the Baileys engine and a wa_provider_configs id for Cloud API: no single parent
+
+# --- uniqueness that stays global ---------------------------------------------------------------------------------------------
+# A Reference unique key without workspace_id is made per tenant here (a value another tenant already holds must not block this one,
+# and the conflict would leak that it exists). Only values the platform issues, or provider ids that identify one remote object
+# and are looked up before any tenant context exists, stay globally unique.
+[global_unique]
+keys = [
+  "appointments.manage_token", "chatbot_widgets.embed_token", "crm_briefs.public_token", "incoming_webhooks.token",
+  "invoices.public_token", "sales_docs.public_token", "google_form_sessions.webhook_token", "line_channels.webhook_token",
+  "telegram_bots.webhook_token", "viber_channels.webhook_token", "wechat_channels.webhook_token", "wa_chat_links.slug",
+  "wa_storefronts.slug", "wa_storefronts.custom_domain", "orders.order_number", "support_tickets.ticket_number",
+  "user_device_tokens.token_hash", "push_subscriptions.endpoint_hash", "chatbot_widget_visitors.visitor_uuid",
+  "wa_calls.correlation_id", "wa_calls.meta_call_id", "ai_call_logs.twilio_call_sid", "wa_templates.meta_template_id",
+  "slack_integrations.team_id", "wa_link_clicks.token",
+]
+
+# --- column type overrides --------------------------------------------------------------------------------------------------
+# ADR-0012: money in the wallet and its ledger is numeric and stays a string end to end. Reference keeps integer credits / minor units
+# here; the ledger follows the ADR so it can be summed against wallets.balance without a unit change. Other *_minor columns keep
+# Reference's integer minor units (exact, no float).
+[column_type]
+"wallet_transactions.amount" = "decimal(20,4)"
+"wallet_transactions.balance_after" = "decimal(20,4)"

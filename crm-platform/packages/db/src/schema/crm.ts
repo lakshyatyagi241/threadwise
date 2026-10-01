@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import {
   boolean,
   index,
@@ -29,6 +30,13 @@ export const companies = pgTable(
     uuid: uuid('uuid').notNull(),
     name: text('name'),
     domain: text('domain'),
+    /** Reference company fields (ctp overlay). */
+    email: citext('email'),
+    phone: text('phone'),
+    industry: text('industry'),
+    sizeRange: text('size_range'),
+    address: text('address'),
+    notes: text('notes'),
     ownerId: idColumn('owner_id'),
     lifecycleState: recordLifecycleEnum('lifecycle_state').notNull().default('active'),
     status: text('status'),
@@ -95,6 +103,20 @@ export const contacts = pgTable(
     /** Attribution for leads that came in through a channel partner. */
     submittedByAgentId: idColumn('submitted_by_agent_id'),
 
+    /** Reference contact fields (con overlay). `mobile` is `phone`; `contact_group` is contact_group_members. */
+    title: text('title'),
+    middleName: text('middle_name'),
+    language: text('language'),
+    address: text('address'),
+    countryCode: text('country_code'),
+    channel: text('channel'),
+    channelUid: text('channel_uid'),
+    imageUrl: text('image_url'),
+    subject: text('subject'),
+    message: text('message'),
+    isUnsubscribed: boolean('is_unsubscribed').notNull().default(false),
+    unsubscribedAt: timestamp('unsubscribed_at', { withTimezone: true }),
+
     createdBy: idColumn('created_by'),
     updatedBy: idColumn('updated_by'),
     createdAt: createdAt(),
@@ -104,6 +126,12 @@ export const contacts = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     uniqueIndex('contacts_org_id_uuid_key').on(t.orgId, t.uuid),
+    uniqueIndex('uq_contacts_org_channel_uid')
+      .on(t.orgId, t.channel, t.channelUid)
+      .where(sql`${t.channel} IS NOT NULL AND ${t.channelUid} IS NOT NULL`),
+    index('idx_contacts_org_unsubscribed')
+      .on(t.orgId)
+      .where(sql`${t.isUnsubscribed}`),
     index('idx_contacts_org_created').on(t.orgId, t.createdAt, t.id),
     index('idx_contacts_org_owner').on(t.orgId, t.ownerId, t.createdAt),
     index('idx_contacts_org_stage').on(t.orgId, t.lifecycleStage, t.createdAt),
