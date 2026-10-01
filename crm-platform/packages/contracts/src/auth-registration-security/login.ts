@@ -49,7 +49,8 @@ export const accountFlagsSchema = z.object({
 export type AccountFlags = z.infer<typeof accountFlagsSchema>;
 
 export const loginRequestSchema = z.object({
-  orgSlug: orgSlugSchema,
+  /** Optional: when absent the server finds the workspace from the email (WaDesk signs in with email + password only). */
+  orgSlug: orgSlugSchema.optional(),
   email: emailSchema,
   password: z.string().min(1).max(256),
   /** "Keep me signed in": longer refresh lifetime, exempt from idle timeout. */
