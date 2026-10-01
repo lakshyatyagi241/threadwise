@@ -19,7 +19,7 @@ import { TokenService } from '../token.service';
  * hurry is protected by default; the failure mode of the opposite convention
  * is an unauthenticated endpoint nobody notices until it is on the internet.
  *
- * Beyond the signature check (ADR-0019) it enforces, per request and from
+ * Beyond the signature check it enforces, per request and from
  * Redis only:
  *   - the platform epoch (revoke-all invalidates older tokens at once)
  *   - the session tombstone (sign out / revoke / reset kills a still-valid

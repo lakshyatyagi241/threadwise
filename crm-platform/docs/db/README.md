@@ -26,16 +26,16 @@ see [`packages/db/README.md`](../../packages/db/README.md) for the exact list.
 
 These came out of the requirements discussion after the diagram was drawn:
 
-| Addition                         | Why                                                             | Reference                                              |
-| -------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------ |
-| `partner_agents`                 | sub-agents are a third identity pool, not a role                | [ADR-0014](../adr/0014-sub-agent-model.md)             |
-| `partner_agent_leads`            | agent → contact mapping; the only thing the partner side stores | [ADR-0014](../adr/0014-sub-agent-model.md)             |
-| `contacts.submitted_by_agent_id` | "Submitted by" on staff lists without a join                    | [ADR-0014](../adr/0014-sub-agent-model.md)             |
-| `api_keys`                       | missing from the diagram; required for any external caller      | [ADR-0013](../adr/0013-read-replica-and-public-api.md) |
-| `contacts.lifecycle_stage`       | the funnel field the partner portal reads live                  | [ADR-0014](../adr/0014-sub-agent-model.md)             |
-| `contacts.legacy_id`             | reconciliation key for the Geta migration                       | [ADR-0015](../adr/0015-legacy-geta-migration.md)       |
-| `organizations.roles_version`    | RBAC cache invalidation for a whole org at once                 | [ADR-0006](../adr/0006-rbac-at-middleware.md)          |
-| `event_outbox.available_at`      | retry backoff without a separate scheduler                      | [ADR-0005](../adr/0005-transactional-outbox.md)        |
+| Addition                         | Why                                                             |
+| -------------------------------- | --------------------------------------------------------------- |
+| `partner_agents`                 | sub-agents are a third identity pool, not a role                |
+| `partner_agent_leads`            | agent → contact mapping; the only thing the partner side stores |
+| `contacts.submitted_by_agent_id` | "Submitted by" on staff lists without a join                    |
+| `api_keys`                       | missing from the diagram; required for any external caller      |
+| `contacts.lifecycle_stage`       | the funnel field the partner portal reads live                  |
+| `contacts.legacy_id`             | reconciliation key for the Geta migration                       |
+| `organizations.roles_version`    | RBAC cache invalidation for a whole org at once                 |
+| `event_outbox.available_at`      | retry backoff without a separate scheduler                      |
 
 If you update the diagram, update this table too.
 

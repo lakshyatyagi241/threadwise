@@ -29,7 +29,7 @@ hand in `source/overlays/` and mirrored in their Drizzle files.
 ## The ORM question
 
 Drizzle stays. The schema has composite primary and foreign keys on every tenant table, forced row-level security, monthly range
-partitions, partial and expression indexes and trigger-maintained columns. Prisma and TypeORM cannot model those (ADR-0003 has the
+partitions, partial and expression indexes and trigger-maintained columns. Prisma and TypeORM cannot model those (has the
 detail), and Kysely would give up `$inferSelect` in service signatures for no gain. What was missing was not a different ORM but a
 Drizzle schema that is a complete, checked reference. That is what this adds:
 
@@ -37,8 +37,8 @@ Drizzle schema that is a complete, checked reference. That is what this adds:
   in Drizzle, not just its columns;
 - `pnpm db:verify-schema` compares every Drizzle table with the live catalog and fails on anything that would break at runtime (missing or
   mistyped column, nullability or default disagreement, a key or index that is not there, a tenant table without forced RLS and a policy);
-- the SQL migrations stay the source of truth and Drizzle never generates DDL (ADR-0004), so partitions, policies and triggers are not
-  fought with a generator. See [ADR-0020](../../adr/0020-wadesk-data-model.md).
+- the SQL migrations stay the source of truth and Drizzle never generates DDL, so partitions, policies and triggers are not
+  fought with a generator.
 
 The check ran against the existing tables too and found one real mismatch (`organizations.roles_version` was `integer` in SQL and
 `bigint` in Drizzle, fixed). It also reports 112 warnings about the older hand-written Drizzle files (undeclared foreign keys and the
@@ -57,7 +57,7 @@ The check ran against the existing tables too and found one real mismatch (`orga
 | `longtext` that holds JSON        | `jsonb`; found from the Eloquent casts, a `_json` name, or a reviewer reading the code                                                       |
 | `enum(...)`                       | `text` plus a `CHECK`                                                                                                                        |
 | `datetime`, `timestamp`           | `timestamptz`                                                                                                                                |
-| `deleted_at`                      | gone: hard delete plus an audit row (ADR-0009)                                                                                               |
+| `deleted_at`                      | gone: hard delete plus an audit row                                                                                                          |
 | token, secret, credential columns | `text` holding AES-GCM ciphertext; a secret that is looked up by value (it has an index) stays plain or hashed, ciphertext cannot be indexed |
 | unique key without `workspace_id` | per tenant, except platform-issued tokens, slugs and provider ids (the allowlist in `decisions.toml`)                                        |
 | logs, events, per-message rows    | streams: monthly `RANGE` partition, primary key `(id, <time>)`, explicit sequence, default partition, no foreign keys in or out              |
@@ -72,7 +72,7 @@ only the second, the same shape `auth_core` uses for the operator tables.
 These are in `decisions.toml` and easy to change; none of them is a decision about WaDesk's behaviour.
 
 1. **PII is stored plain under RLS, with no lookup hash** (P1). WaDesk encrypts contact name, number and email and keeps a hash for
-   search. This repo already stores contacts plain behind RLS, so `contacts.mobile_hash` is not carried. Needs an ADR before anyone
+   search. This repo already stores contacts plain behind RLS, so `contacts.mobile_hash` is not carried. Needs a decision before anyone
    encrypts PII here; until then secrets are ciphertext and personal data is not.
 2. **A reference to a user is nullable and `SET NULL`** (P2). WaDesk `user_id` columns are mostly `NOT NULL`, which would make deleting a
    user either impossible or destructive. Per-user settings rows (`user_settings`) are the exception and cascade.
@@ -81,10 +81,10 @@ These are in `decisions.toml` and easy to change; none of them is a decision abo
    not vanish because a contact was deleted. WaDesk's own explicit foreign-key rules win over all of this.
 4. **Streams** (P4). 17 tables, chosen by whether they are append-only and high-volume, then corrected after reviewers read how the code
    uses each (for example `wa_link_clicks`, `flow_retry_logs` and `ai_call_logs` are updated after insert, so they are regular tables).
-5. **ADR-0012 wins where it already names a table** (P5). `wallets` (balance, reserved, the `balance >= 0 AND reserved >= 0 AND
+5. **The billing design wins where it already names a table** (P5). `wallets` (balance, reserved, the `balance >= 0 AND reserved >= 0 AND
 reserved <= balance` check) replaces the two balances WaDesk keeps on `users`; `usage_charges` is `message_charges`;
    `wallet_transactions` gets the `(org_id, idempotency_key)` unique and `numeric(20,4)` amounts. A wallet has a `unit` (`credits` or a currency code) because WaDesk
-   has two balances where the ADR assumes one.
+   has two balances where the billing design assumes one.
 6. **Loose references** (P6). A numeric `*_id` with no single target stays a plain column: polymorphic pairs, provider ids, streams (no
    foreign keys), and platform tables pointing at tenant rows. 57 of them, each listed in [review-notes.md](review-notes.md).
 7. **Access to platform tables** (P7). `platform_only` tables (`payment_gateways`, `coupons`, `admin_ai_keys`, ...) cannot be read from a
@@ -95,14 +95,14 @@ reserved <= balance` check) replaces the two balances WaDesk keeps on `users`; `
 
 1. **One channel model.** `device_id` on `broadcasts`, `keyword_replies`, `auto_reply_lookups`, `scheduled_messages`,
    `warmer_daily_sends` and `conversations` is a `devices.id` for the Baileys engine and a `wa_provider_configs.id` for Cloud API, and
-   WaDesk's own code warns that the ids collide. Here they are loose columns. The channel core (F3) needs an ADR that replaces both with
+   WaDesk's own code warns that the ids collide. Here they are loose columns. The channel core (F3) needs a decision that replaces both with
    one channel table, then these columns get a real foreign key.
 2. **PII encryption** (see P1).
 3. **Reading platform tables from a tenant context** (see P7), part of the operator-layer work (F2, D4/D5).
 4. **Partition maintenance.** Done (conflict-map H11). `apps/api/src/workers/partition-maintenance.service.ts` reads `pg_partitioned_table`
    (`RANGE` parents in `public`, partitions excluded) on every run, so the 17 new streams are kept three months ahead like `event_outbox`
    and `audit_log` with no list to edit. The worker runs as `crm_app_user`, which cannot create a partition, so
-   `ensure_monthly_partition()` is `SECURITY DEFINER` (migration `20261001110000_partition_definer`, ADR-0021, proposed: the db steward
+   `ensure_monthly_partition()` is `SECURITY DEFINER` (migration `20261001110000_partition_definer`, proposed: the db steward
    should review it, as it is the schema's first definer function). Two follow-ups in `20261001110100_partition_rls`: every partition
    now carries its parent's RLS and policy (`inherit_partition_rls()`; before, a query naming a partition read every tenant's rows), and
    the `0006` partitions got the app-role grants they lacked, so a pass ends by logging a warning when a `_default` partition holds rows.
@@ -116,7 +116,7 @@ reserved <= balance` check) replaces the two balances WaDesk keeps on `users`; `
 7. **JSON shapes.** 173 `jsonb` columns, no validation. Each needs a Zod schema in `@crm/contracts` before a feature depends on it.
    Several hold Laravel ciphertext in WaDesk, so a data migration must decrypt and re-encrypt them.
 8. **Money representation.** WaDesk stores money as integer minor units (`*_minor`) and credits as integers, which is exact and was kept
-   everywhere except the wallet and its ledger (`numeric(20,4)`, ADR-0012). Decide whether `usage_charges.revenue_minor`/`cost_minor`
+   everywhere except the wallet and its ledger (`numeric(20,4)`). Decide whether `usage_charges.revenue_minor`/`cost_minor`
    and the order, invoice and plan amounts move to `numeric` too before the billing code is written.
 9. **Foreign-key indexes.** Only WaDesk's own indexes were carried. A hard-delete of a parent with many children scans the child table
    unless the column is indexed; add the index where a feature deletes at scale.

@@ -69,7 +69,7 @@ Prerequisites: Git, Node 22+, Docker running, `corepack enable pnpm`, and [Claud
    bash .claude/skills/wadesk-run-reference/scripts/start.sh
    ```
 
-4. **Open Claude Code inside `crm-platform/`** when writing code, so the repo's own `CLAUDE.md`, ADR rules and skills apply.
+4. **Open Claude Code inside `crm-platform/`** when writing code, so the repo's own `CLAUDE.md` and skills apply.
    Opening it at the repo root also works (skills load through the symlink; on Windows enable symlinks or copy the folder).
 
 ## How to proceed
@@ -77,13 +77,13 @@ Prerequisites: Git, Node 22+, Docker running, `corepack enable pnpm`, and [Claud
 Read [`crm-platform/docs/wadesk-port/README.md`](crm-platform/docs/wadesk-port/README.md) first: it has the current status, the
 findings so far, the decisions the team lead still owes, and the ordered runbook. In short:
 
-| Step | What | Where |
-| ---- | ---- | ----- |
-| 1 | Decide scope (the inventory so far is thousands of dev-days, so P0 plus a chosen slice of P1), domain codes/owners, and the open kernel decisions D1-D7 | status README, "Decisions needed" |
-| 2 | Finish the feature inventory (26 of 62 domains written; the rest is resumable) and sweep the coverage gaps | `_work/workflows/wadesk-inventory.mjs`, `wadesk-inventory-refresh` skill |
-| 3 | Per-domain port-maps (the three-way split is done: `crm-platform/docs/wadesk-port/assignments.md`, `ownership.json`, `tracker/<owner>.md`; regenerate after changes) | `wadesk-parity-tracker`, `wadesk-ownership-guard` |
-| 4 | Land the **skeleton PR** (shared registries turned into per-domain files, timestamp migrations, decorator registries), then the rest of the foundation wave (super-admin layer, channel model, worker/outbox/realtime plumbing; the web shell is started, see `crm-platform/docs/wadesk-port/base-changes.md`) | [`conflict-map.md`](crm-platform/docs/wadesk-port/conflict-map.md) section 2 |
-| 5 | Port features one at a time in your own zones | `wadesk-port-feature` |
+| Step | What                                                                                                                                                                                                                                                                                                           | Where                                                                        |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 1    | Decide scope (the inventory so far is thousands of dev-days, so P0 plus a chosen slice of P1), domain codes/owners, and the open kernel decisions D1-D7                                                                                                                                                        | status README, "Decisions needed"                                            |
+| 2    | Finish the feature inventory (26 of 62 domains written; the rest is resumable) and sweep the coverage gaps                                                                                                                                                                                                     | `_work/workflows/wadesk-inventory.mjs`, `wadesk-inventory-refresh` skill     |
+| 3    | Per-domain port-maps (the three-way split is done: `crm-platform/docs/wadesk-port/assignments.md`, `ownership.json`, `tracker/<owner>.md`; regenerate after changes)                                                                                                                                           | `wadesk-parity-tracker`, `wadesk-ownership-guard`                            |
+| 4    | Land the **skeleton PR** (shared registries turned into per-domain files, timestamp migrations, decorator registries), then the rest of the foundation wave (super-admin layer, channel model, worker/outbox/realtime plumbing; the web shell is started, see `crm-platform/docs/wadesk-port/base-changes.md`) | [`conflict-map.md`](crm-platform/docs/wadesk-port/conflict-map.md) section 2 |
+| 5    | Port features one at a time in your own zones                                                                                                                                                                                                                                                                  | `wadesk-port-feature`                                                        |
 
 Each feature follows the same loop: read its inventory entry, see WaDesk do it, build the vertical slice (migration, contracts, module,
 permissions, worker, web) with the repo's skills, write a test per acceptance criterion, compare against WaDesk and record the evidence,
@@ -94,21 +94,21 @@ dependencies in their own PR, prefix everything with your domain code.
 
 Everything is a Claude Code skill in `crm-platform/.claude/skills/`. The repo's own skills (`setup`, `new-module`, `add-migration`,
 `contracts-change`, `rbac-permission`, `outbox-event`, `worker-job`, `provider-adapter`, `webhook-handler`, `frontend-api-call`,
-`write-adr`, `adr-diff-guard`, `adr-compliance-review`, `pre-pr`) are unchanged in behavior. The port adds:
+`pre-pr`) are unchanged in behavior. The port adds:
 
-| Skill | Use it to |
-| ----- | --------- |
-| `wadesk-port-feature` | port one feature end to end (the entry point; it calls the others) |
-| `wadesk-feature-lookup` | find and read an inventory entry by id, route, table or keyword |
-| `wadesk-data-model-port` | draft a Postgres migration from a WaDesk MySQL table (tested on all 149 tenant tables) |
-| `wadesk-channel-port` | port a messaging channel or provider, in the right order and with the ADR decisions named |
-| `wadesk-frontend-port` | rebuild a WaDesk screen in the Next.js app |
-| `wadesk-e2e-tests` | turn acceptance criteria into unit, integration and e2e tests |
-| `wadesk-verify-parity` | compare with the running WaDesk and record evidence |
-| `wadesk-parity-tracker` | per-person progress tracking that cannot conflict |
-| `wadesk-ownership-guard` | check your diff against your zones; shared-kernel protocol |
-| `wadesk-inventory-refresh` | regenerate manifests and audit inventory coverage |
-| `wadesk-run-reference` | start, stop and first-time-install the local WaDesk |
+| Skill                      | Use it to                                                                                  |
+| -------------------------- | ------------------------------------------------------------------------------------------ |
+| `wadesk-port-feature`      | port one feature end to end (the entry point; it calls the others)                         |
+| `wadesk-feature-lookup`    | find and read an inventory entry by id, route, table or keyword                            |
+| `wadesk-data-model-port`   | draft a Postgres migration from a WaDesk MySQL table (tested on all 149 tenant tables)     |
+| `wadesk-channel-port`      | port a messaging channel or provider, in the right order and with the open decisions named |
+| `wadesk-frontend-port`     | rebuild a WaDesk screen in the Next.js app                                                 |
+| `wadesk-e2e-tests`         | turn acceptance criteria into unit, integration and e2e tests                              |
+| `wadesk-verify-parity`     | compare with the running WaDesk and record evidence                                        |
+| `wadesk-parity-tracker`    | per-person progress tracking that cannot conflict                                          |
+| `wadesk-ownership-guard`   | check your diff against your zones; shared-kernel protocol                                 |
+| `wadesk-inventory-refresh` | regenerate manifests and audit inventory coverage                                          |
+| `wadesk-run-reference`     | start, stop and first-time-install the local WaDesk                                        |
 
 ## Relationship to geta-ai/crm-platform
 
@@ -124,7 +124,7 @@ Product code that should land in `geta-ai/crm-platform` has to be moved there (a
 `git subtree push`, which has not been exercised here). Decide as a team whether this repository or that one is the
 day-to-day home before feature work starts, so code does not live in two places.
 
-Six of the repo's skill scripts (`setup`, `pre-pr`, `adr-diff-guard`, `adr-compliance-review`, `write-adr`, `add-migration`)
+Some of the repo's skill scripts (`setup`, `pre-pr`, `add-migration`)
 assumed `crm-platform` was the git root. They now derive the root from their own location and use `git diff --relative`, so
 they behave the same here and in the original repository. That change is its own commit and could be sent upstream.
 
@@ -136,4 +136,4 @@ they behave the same here and in the original repository. That change is its own
 - The inventory is unfinished (see the status README). Partial files are listed there and must be completed or rewritten.
 - The local test credentials in the skills (`test@example.com` / `password`, database `wadesk` / `wadesk_local_pw`) are throwaway defaults for the
   reference app on your own machine, not real secrets. Never reuse them anywhere else.
-- `crm-platform` has a pre-existing Clerk login issue (cross-tenant self-enrolment, no ADR); see finding 6 in the status README.
+- `crm-platform` has a pre-existing Clerk login issue (cross-tenant self-enrolment); see finding 6 in the status README.

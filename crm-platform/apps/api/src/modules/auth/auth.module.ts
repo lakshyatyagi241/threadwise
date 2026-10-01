@@ -59,7 +59,7 @@ import { TokenService } from './token.service';
 
 /**
  * Authentication, sessions, account security and the platform operator layer
- * (ADR-0007, ADR-0019).
+ *.
  *
  * Global because the guards are registered app-wide in app.module.ts, and
  * because the send-path services (SendPolicyService, EmergencyHaltService) and

@@ -135,7 +135,7 @@ export function validateEnv(raw: Record<string, unknown>): Env {
   if (parsed.data.NODE_ENV === 'production') {
     if (!parsed.data.DATABASE_REPLICA_URL) {
       throw new Error(
-        'DATABASE_REPLICA_URL is required in production: partner and public API reads must not hit the primary (ADR-0013).',
+        'DATABASE_REPLICA_URL is required in production: partner and public API reads must not hit the primary.',
       );
     }
     if (parsed.data.JWT_ACCESS_SECRET.startsWith('dev-only')) {

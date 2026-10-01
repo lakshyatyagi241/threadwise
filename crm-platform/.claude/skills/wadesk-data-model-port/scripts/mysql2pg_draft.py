@@ -45,7 +45,7 @@ def pg_type(col, table):
         t = "bigint"
     elif dtype == "decimal":
         t = f"numeric({m.group(2)})" if m and m.group(2) else "numeric"
-        notes.append("money/amount: keep numeric, string end to end (ADR-0012)")
+        notes.append("money/amount: keep numeric, string end to end")
     elif dtype in ("float", "double"):
         t = "double precision"
         if re.search(r"(amount|price|total|balance|fee|cost|rate)", name):
@@ -134,7 +134,7 @@ def draft(table, tenants):
         if n in ("id", "workspace_id", "created_at", "updated_at"):
             continue
         if n == "deleted_at":
-            skipped.append("deleted_at: WaDesk soft delete. Target is hard delete + audit row (ADR-0009); use is_archived/lifecycle only if the feature needs archive-in-place")
+            skipped.append("deleted_at: WaDesk soft delete. Target is hard delete + audit row; use is_archived/lifecycle only if the feature needs archive-in-place")
             continue
         t, d, notes = pg_type(c, table)
         nn = " NOT NULL" if c["null"] == "NO" and "auto_increment" not in c["extra"] else ""
@@ -206,7 +206,7 @@ def draft(table, tenants):
     for s in skipped:
         L.append(f"-- NOTE skipped {s}")
     if any(n.endswith("_hash") for n in names):
-        L.append("-- NOTE this table has *_hash columns: WaDesk stores PII encrypted plus a lookup hash. Decide encrypt-at-rest + hash vs plain under RLS; record it in an ADR if applied broadly.")
+        L.append("-- NOTE this table has *_hash columns: WaDesk stores PII encrypted plus a lookup hash. Decide encrypt-at-rest + hash vs plain under RLS; record the decision if applied broadly.")
     if table in ("messages", "message_logs") or re.search(r"(_logs?|_events?|_history)$", table):
         L.append("-- NOTE looks like an append-only stream: consider RANGE partitioning by created_at (rule 7, copy 0006_outbox_audit.sql), no FK into it, retention = drop partition")
     return "\n".join(L)

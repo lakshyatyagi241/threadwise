@@ -1,7 +1,7 @@
 # Legacy Geta migration
 
 **Status: planned. Nothing here is built yet, deliberately** — the open
-questions in [ADR-0015](../../docs/adr/0015-legacy-geta-migration.md) change the
+questions about the legacy system change the
 design, and building before they are answered wastes the work.
 
 ## What we are migrating from

@@ -6,7 +6,7 @@ import { networkError } from './errors';
 
 /**
  * Calls a session-issuing BFF route (`/api/auth/*`, same origin). The response body never
- * carries tokens: they are put into httpOnly cookies by the server (ADR-0018).
+ * carries tokens: they are put into httpOnly cookies by the server.
  */
 export async function postBff<T>(
   action: string,

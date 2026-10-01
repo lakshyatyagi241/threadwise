@@ -1035,7 +1035,7 @@ This domain is everything WaDesk does with **Meta's WhatsApp Business Cloud API 
   - Given an invalid signature, no ownership proof and a payload with an inbound message, Then 401 and nothing is written.
   - Given an invalid signature and a payload with only delivery statuses, Then statuses are applied by wamid and the response is 200 `status-only`.
 - **Source refs:** `app/Http/Controllers/WaWebhookController.php` (`receive`, `receiveMeta`, `confirmsOwnership`), `bootstrap/app.php`, `Documentation/pages/channels/whatsapp.html`.
-- **Port notes:** Target `MetaCloudProvider` already verifies the platform signature on the raw body (Nest `rawBody:true`); extend to a `WebhookSecretResolver` (platform secret then per-connection secret keyed by waba id) and make the ownership fallback a config flag default OFF with an ADR (it lets an attacker who knows a live phone_number_id inject messages). Ack fast: verify, write the raw event to a `webhook_events` table/queue (`WEBHOOK_INGEST`) and process in a worker (WaDesk processes inline and can cause Meta retries on slow requests).
+- **Port notes:** Target `MetaCloudProvider` already verifies the platform signature on the raw body (Nest `rawBody:true`); extend to a `WebhookSecretResolver` (platform secret then per-connection secret keyed by waba id) and make the ownership fallback a config flag default OFF and document why (it lets an attacker who knows a live phone_number_id inject messages). Ack fast: verify, write the raw event to a `webhook_events` table/queue (`WEBHOOK_INGEST`) and process in a worker (WaDesk processes inline and can cause Meta retries on slow requests).
 
 ### WD-WABA-031 — Webhook entry routing, config resolution and field dispatch
 

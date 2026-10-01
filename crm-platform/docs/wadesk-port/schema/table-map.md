@@ -17,246 +17,246 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 
 ## Every WaDesk table
 
-| WaDesk table                     | becomes                                                                               | class         | domain | owner   | WaDesk cols | FKs | loose refs |
-| -------------------------------- | ------------------------------------------------------------------------------------- | ------------- | ------ | ------- | ----------- | --- | ---------- |
-| `admin_ai_keys`                  | `admin_ai_keys` (20261001100900_aiadm_wadesk_schema.sql)                              | platform_only | aiadm  | lakshya | 10          | 0   | 0          |
-| `agent_statuses`                 | `agent_statuses` (20261001102700_tib2_wadesk_schema.sql)                              | tenant        | tib2   | vedant  | 13          | 1   | 0          |
-| `ai_agents`                      | `ai_agents` (20261001102000_aiag_wadesk_schema.sql)                                   | tenant        | aiag   | punya   | 31          | 1   | 0          |
-| `ai_call_assistant_tools`        | `ai_call_assistant_tools` (20261001103700_call_wadesk_schema.sql)                     | child         | call   | vedant  | 11          | 1   | 0          |
-| `ai_call_assistants`             | `ai_call_assistants` (20261001103700_call_wadesk_schema.sql)                          | tenant        | call   | vedant  | 30          | 1   | 0          |
-| `ai_call_logs`                   | `ai_call_logs` (20261001103700_call_wadesk_schema.sql)                                | tenant        | call   | vedant  | 27          | 2   | 0          |
-| `ai_chat_assistants`             | `ai_chat_assistants` (20261001102000_aiag_wadesk_schema.sql)                          | tenant        | aiag   | punya   | 21          | 1   | 0          |
-| `ai_crm_actions`                 | `ai_crm_actions` (20261001102100_aicrm_wadesk_schema.sql)                             | stream        | aicrm  | punya   | 16          | 0   | 2          |
-| `ai_provider_keys`               | `ai_provider_keys` (20261001100900_aiadm_wadesk_schema.sql)                           | tenant        | aiadm  | lakshya | 7           | 0   | 0          |
-| `ai_token_usage`                 | `ai_token_usage` (20261001100900_aiadm_wadesk_schema.sql)                             | stream        | aiadm  | lakshya | 9           | 0   | 0          |
-| `ai_training_sources`            | `ai_training_sources` (20261001102000_aiag_wadesk_schema.sql)                         | tenant        | aiag   | punya   | 17          | 2   | 0          |
-| `ai_voice_usage_daily`           | `ai_voice_usage_daily` (20261001103700_call_wadesk_schema.sql)                        | tenant        | call   | vedant  | 12          | 1   | 0          |
-| `announcements`                  | `announcements` (20261001100700_cms_wadesk_schema.sql)                                | global_read   | cms    | lakshya | 12          | 0   | 0          |
-| `api_keys`                       | mapped to api_keys                                                                    | existing      | api    | lakshya | 13          | -   | -          |
-| `appointments`                   | `appointments` (20261001104800_appt_wadesk_schema.sql)                                | tenant        | appt   | punya   | 34          | 5   | 1          |
-| `attributes`                     | mapped to fields (field metadata registry, ADR-0017)                                  | existing      | con    | punya   | 11          | -   | -          |
-| `audit_logs`                     | mapped to audit_log                                                                   | existing      | notif  | lakshya | 12          | -   | -          |
-| `auto_reply_lookups`             | `auto_reply_lookups` (20261001103200_ar_wadesk_schema.sql)                            | stream        | ar     | vedant  | 8           | 0   | 2          |
-| `blog_categories`                | `blog_categories` (20261001100700_cms_wadesk_schema.sql)                              | global_read   | cms    | lakshya | 7           | 0   | 0          |
-| `blog_posts`                     | `blog_posts` (20261001100700_cms_wadesk_schema.sql)                                   | global_read   | cms    | lakshya | 21          | 1   | 0          |
-| `booking_availability_overrides` | `booking_availability_overrides` (20261001104800_appt_wadesk_schema.sql)              | tenant        | appt   | punya   | 10          | 1   | 0          |
-| `booking_availability_rules`     | `booking_availability_rules` (20261001104800_appt_wadesk_schema.sql)                  | tenant        | appt   | punya   | 9           | 1   | 1          |
-| `booking_financials`             | `booking_financials` (20261001104800_appt_wadesk_schema.sql)                          | tenant        | appt   | punya   | 15          | 1   | 0          |
-| `booking_integrations`           | `booking_integrations` (20261001104800_appt_wadesk_schema.sql)                        | tenant        | appt   | punya   | 9           | 1   | 0          |
-| `booking_questions`              | `booking_questions` (20261001104800_appt_wadesk_schema.sql)                           | tenant        | appt   | punya   | 11          | 1   | 0          |
-| `booking_reminders`              | `booking_reminders` (20261001104800_appt_wadesk_schema.sql)                           | tenant        | appt   | punya   | 10          | 1   | 0          |
-| `booking_templates`              | `booking_templates` (20261001104800_appt_wadesk_schema.sql)                           | tenant        | appt   | punya   | 12          | 3   | 0          |
-| `booking_types`                  | `booking_types` (20261001104800_appt_wadesk_schema.sql)                               | tenant        | appt   | punya   | 25          | 1   | 0          |
-| `broadcast_contacts`             | `broadcast_contacts` (20261001102900_bcast_wadesk_schema.sql)                         | child         | bcast  | vedant  | 11          | 2   | 0          |
-| `broadcasts`                     | `broadcasts` (20261001102900_bcast_wadesk_schema.sql)                                 | tenant        | bcast  | vedant  | 32          | 2   | 1          |
-| `bsp_credit_allocations`         | `bsp_credit_allocations` (20261001100800_bsp_wadesk_schema.sql)                       | tenant        | bsp    | lakshya | 12          | 0   | 0          |
-| `cache`                          | dropped: Laravel cache store: Redis here                                              | drop          | infra  | lakshya | 3           | -   | -          |
-| `cache_locks`                    | dropped: Laravel cache locks: Redis here                                              | drop          | infra  | lakshya | 3           | -   | -          |
-| `chat_templates`                 | `chat_templates` (20261001101300_tpl_wadesk_schema.sql)                               | child         | tpl    | vedant  | 11          | 1   | 0          |
-| `chatbot_widget_visitors`        | `chatbot_widget_visitors` (20261001103300_wgt_wadesk_schema.sql)                      | tenant        | wgt    | vedant  | 15          | 2   | 0          |
-| `chatbot_widgets`                | `chatbot_widgets` (20261001103300_wgt_wadesk_schema.sql)                              | tenant        | wgt    | vedant  | 35          | 2   | 0          |
-| `companies`                      | mapped to companies                                                                   | existing      | ctp    | punya   | 15          | -   | -          |
-| `contact_custom_fields`          | mapped to fields (field metadata registry, ADR-0017)                                  | existing      | con    | punya   | 11          | -   | -          |
-| `contact_groups`                 | `contact_groups` (20261001103500_con_wadesk_schema.sql)                               | tenant        | con    | punya   | 9           | 1   | 0          |
-| `contact_messages`               | `contact_messages` (20261001100700_cms_wadesk_schema.sql)                             | platform_only | cms    | lakshya | 11          | 0   | 0          |
-| `contact_tag`                    | mapped to contact_tags                                                                | existing      | con    | punya   | 6           | -   | -          |
-| `contacts`                       | mapped to contacts                                                                    | existing      | con    | punya   | 26          | -   | -          |
-| `conversation_events`            | `conversation_events` (20261001103600_chat_wadesk_schema.sql)                         | stream        | chat   | vedant  | 8           | 0   | 2          |
-| `conversation_notes`             | `conversation_notes` (20261001103600_chat_wadesk_schema.sql)                          | tenant        | chat   | vedant  | 11          | 2   | 0          |
-| `conversation_participants`      | `conversation_participants` (20261001103600_chat_wadesk_schema.sql)                   | tenant        | chat   | vedant  | 10          | 2   | 0          |
-| `conversation_tag`               | `conversation_tag` (20261001102600_tib1_wadesk_schema.sql)                            | child         | tib1   | vedant  | 6           | 3   | 0          |
-| `conversations`                  | `conversations` (20261001103600_chat_wadesk_schema.sql)                               | tenant        | chat   | vedant  | 50          | 10  | 1          |
-| `coupons`                        | `coupons` (20261001100500_cpn_wadesk_schema.sql)                                      | platform_only | cpn    | lakshya | 20          | 0   | 0          |
-| `credit_packages`                | `credit_packages` (20261001100500_cpn_wadesk_schema.sql)                              | global_read   | cpn    | lakshya | 13          | 0   | 0          |
-| `crm_briefs`                     | `crm_briefs` (20261001102100_aicrm_wadesk_schema.sql)                                 | tenant        | aicrm  | punya   | 12          | 1   | 1          |
-| `csat_responses`                 | `csat_responses` (20261001103500_con_wadesk_schema.sql)                               | tenant        | con    | punya   | 10          | 2   | 0          |
-| `currencies`                     | `currencies` (20261001100500_cpn_wadesk_schema.sql)                                   | global_read   | cpn    | lakshya | 9           | 0   | 0          |
-| `deal_activities`                | `deal_activities` (20261001103800_deal_wadesk_schema.sql)                             | tenant        | deal   | punya   | 12          | 2   | 0          |
-| `deals`                          | `deals` (20261001103800_deal_wadesk_schema.sql)                                       | tenant        | deal   | punya   | 23          | 6   | 1          |
-| `devices`                        | `devices` (20261001101000_wadev_wadesk_schema.sql)                                    | tenant        | wadev  | vedant  | 28          | 2   | 0          |
-| `extension_api_tokens`           | `extension_api_tokens` (20261001100600_add_wadesk_schema.sql)                         | child         | add    | lakshya | 8           | 1   | 0          |
-| `extensions`                     | `extensions` (20261001100600_add_wadesk_schema.sql)                                   | platform_only | add    | lakshya | 12          | 0   | 1          |
-| `facebook_broadcast_recipients`  | `facebook_broadcast_recipients` (20261001104000_fb_wadesk_schema.sql)                 | child         | fb     | punya   | 11          | 2   | 0          |
-| `facebook_broadcasts`            | `facebook_broadcasts` (20261001104000_fb_wadesk_schema.sql)                           | tenant        | fb     | punya   | 18          | 3   | 0          |
-| `facebook_pages`                 | `facebook_pages` (20261001104000_fb_wadesk_schema.sql)                                | tenant        | fb     | punya   | 20          | 1   | 0          |
-| `facebook_posts`                 | `facebook_posts` (20261001104000_fb_wadesk_schema.sql)                                | tenant        | fb     | punya   | 16          | 2   | 0          |
-| `failed_jobs`                    | dropped: Laravel failed jobs: BullMQ failed set + dead outbox rows                    | drop          | infra  | lakshya | 7           | -   | -          |
-| `flow_connected_devices`         | `flow_connected_devices` (20261001101400_flb_wadesk_schema.sql)                       | child         | flb    | vedant  | 9           | 1   | 0          |
-| `flow_retry_logs`                | `flow_retry_logs` (20261001101500_flr_wadesk_schema.sql)                              | tenant        | flr    | vedant  | 12          | 4   | 0          |
-| `flow_subscribers`               | `flow_subscribers` (20261001101500_flr_wadesk_schema.sql)                             | child         | flr    | vedant  | 12          | 2   | 0          |
-| `flow_templates`                 | `flow_templates` (20261001101400_flb_wadesk_schema.sql)                               | global_read   | flb    | vedant  | 12          | 0   | 1          |
-| `flows`                          | `flows` (20261001101400_flb_wadesk_schema.sql)                                        | tenant        | flb    | vedant  | 20          | 1   | 2          |
-| `frontend_content`               | `frontend_content` (20261001100700_cms_wadesk_schema.sql)                             | global_read   | cms    | lakshya | 8           | 0   | 1          |
-| `google_form_sessions`           | `google_form_sessions` (20261001101200_node_wadesk_schema.sql)                        | tenant        | node   | vedant  | 13          | 0   | 0          |
-| `guidebook_articles`             | `guidebook_articles` (20261001100700_cms_wadesk_schema.sql)                           | global_read   | cms    | lakshya | 14          | 0   | 0          |
-| `hubspot_integration_logs`       | `hubspot_integration_logs` (20261001102300_intg_wadesk_schema.sql)                    | stream        | intg   | lakshya | 9           | 0   | 1          |
-| `hubspot_integrations`           | `hubspot_integrations` (20261001102300_intg_wadesk_schema.sql)                        | tenant        | intg   | lakshya | 16          | 1   | 0          |
-| `impersonation_sessions`         | `impersonation_sessions` (20261001102500_wsp_wadesk_schema.sql)                       | platform_only | wsp    | lakshya | 11          | 2   | 1          |
-| `inbox_messages`                 | `inbox_messages` (20261001102600_tib1_wadesk_schema.sql)                              | stream        | tib1   | vedant  | 37          | 0   | 6          |
-| `inbox_notifications`            | `inbox_notifications` (20261001100400_notif_wadesk_schema.sql)                        | tenant        | notif  | lakshya | 11          | 1   | 0          |
-| `incoming_webhook_events`        | `incoming_webhook_events` (20261001102300_intg_wadesk_schema.sql)                     | child         | intg   | lakshya | 15          | 2   | 0          |
-| `incoming_webhooks`              | `incoming_webhooks` (20261001102300_intg_wadesk_schema.sql)                           | tenant        | intg   | lakshya | 14          | 1   | 0          |
-| `invoice_items`                  | `invoice_items` (20261001104600_inv_wadesk_schema.sql)                                | child         | inv    | punya   | 17          | 1   | 0          |
-| `invoice_logs`                   | `invoice_logs` (20261001104600_inv_wadesk_schema.sql)                                 | stream        | inv    | punya   | 7           | 0   | 1          |
-| `invoice_number_sequences`       | `invoice_number_sequences` (20261001104600_inv_wadesk_schema.sql)                     | tenant        | inv    | punya   | 6           | 0   | 0          |
-| `invoice_settings`               | `invoice_settings` (20261001104600_inv_wadesk_schema.sql)                             | tenant        | inv    | punya   | 36          | 1   | 0          |
-| `invoice_tax_summary`            | `invoice_tax_summary` (20261001104600_inv_wadesk_schema.sql)                          | child         | inv    | punya   | 8           | 1   | 0          |
-| `invoice_webhook_events`         | `invoice_webhook_events` (20261001104600_inv_wadesk_schema.sql)                       | platform_only | inv    | punya   | 8           | 0   | 0          |
-| `invoices`                       | `invoices` (20261001104600_inv_wadesk_schema.sql)                                     | tenant        | inv    | punya   | 47          | 2   | 0          |
-| `job_batches`                    | dropped: Laravel queue batches: BullMQ                                                | drop          | infra  | lakshya | 10          | -   | -          |
-| `jobs`                           | dropped: Laravel queue: BullMQ                                                        | drop          | infra  | lakshya | 7           | -   | -          |
-| `keyword_replies`                | `keyword_replies` (20261001103200_ar_wadesk_schema.sql)                               | tenant        | ar     | vedant  | 35          | 4   | 1          |
-| `keyword_reply_contents`         | `keyword_reply_contents` (20261001103200_ar_wadesk_schema.sql)                        | child         | ar     | vedant  | 15          | 2   | 0          |
-| `keyword_reply_logs`             | `keyword_reply_logs` (20261001103200_ar_wadesk_schema.sql)                            | stream        | ar     | vedant  | 10          | 0   | 2          |
-| `languages`                      | `languages` (20261001100100_i18n_wadesk_schema.sql)                                   | global_read   | i18n   | lakshya | 9           | 0   | 0          |
-| `leads`                          | `leads` (20261001102100_aicrm_wadesk_schema.sql)                                      | tenant        | aicrm  | punya   | 20          | 2   | 0          |
-| `legal_pages`                    | `legal_pages` (20261001100700_cms_wadesk_schema.sql)                                  | global_read   | cms    | lakshya | 11          | 0   | 0          |
-| `line_broadcast_recipients`      | `line_broadcast_recipients` (20261001104200_line_wadesk_schema.sql)                   | child         | line   | punya   | 11          | 2   | 0          |
-| `line_broadcasts`                | `line_broadcasts` (20261001104200_line_wadesk_schema.sql)                             | tenant        | line   | punya   | 20          | 3   | 0          |
-| `line_channels`                  | `line_channels` (20261001104200_line_wadesk_schema.sql)                               | tenant        | line   | punya   | 21          | 1   | 0          |
-| `line_flow_sessions`             | `line_flow_sessions` (20261001104200_line_wadesk_schema.sql)                          | tenant        | line   | punya   | 16          | 3   | 0          |
-| `line_rich_menus`                | `line_rich_menus` (20261001104200_line_wadesk_schema.sql)                             | tenant        | line   | punya   | 16          | 2   | 0          |
-| `message_charges`                | dropped: renamed usage_charges (ADR-0012 level-1 ledger), see [virtual.usage_charges] | drop          | wallet | lakshya | 16          | -   | -          |
-| `message_rates`                  | `message_rates` (20261001100300_wallet_wadesk_schema.sql)                             | global_read   | wallet | lakshya | 9           | 0   | 0          |
-| `messages`                       | `messages` (20261001103600_chat_wadesk_schema.sql)                                    | stream        | chat   | vedant  | 31          | 0   | 5          |
-| `meta_campaigns`                 | `meta_campaigns` (20261001101900_mads_wadesk_schema.sql)                              | tenant        | mads   | punya   | 35          | 1   | 0          |
-| `migrations`                     | dropped: Laravel migration journal: _migrations                                       | drop          | infra  | lakshya | 3           | -   | -          |
-| `model_has_permissions`          | mapped to role_grants                                                                 | existing      | rbac   | lakshya | 3           | -   | -          |
-| `model_has_roles`                | mapped to user_roles                                                                  | existing      | rbac   | lakshya | 3           | -   | -          |
-| `notifications`                  | `notifications` (20261001100400_notif_wadesk_schema.sql)                              | tenant        | notif  | lakshya | 17          | 1   | 1          |
-| `orders`                         | `orders` (20261001104700_paygw_wadesk_schema.sql)                                     | tenant        | paygw  | lakshya | 43          | 6   | 0          |
-| `outbound_webhooks`              | `outbound_webhooks` (20261001102600_tib1_wadesk_schema.sql)                           | tenant        | tib1   | vedant  | 13          | 0   | 0          |
-| `package_features`               | `package_features` (20261001100200_plan_wadesk_schema.sql)                            | global_read   | plan   | lakshya | 6           | 0   | 0          |
-| `packages`                       | `packages` (20261001100200_plan_wadesk_schema.sql)                                    | global_read   | plan   | lakshya | 146         | 0   | 0          |
-| `password_reset_tokens`          | dropped: auth_core user_tokens                                                        | drop          | auth   | lakshya | 3           | -   | -          |
-| `payment_gateways`               | `payment_gateways` (20261001104700_paygw_wadesk_schema.sql)                           | platform_only | paygw  | lakshya | 12          | 0   | 0          |
-| `payments`                       | `payments` (20261001104700_paygw_wadesk_schema.sql)                                   | tenant        | paygw  | lakshya | 19          | 6   | 0          |
-| `permissions`                    | mapped to permission_defs                                                             | existing      | rbac   | lakshya | 5           | -   | -          |
-| `personal_access_tokens`         | dropped: api_keys + auth_core user_tokens                                             | drop          | auth   | lakshya | 10          | -   | -          |
-| `pipeline_stages`                | `pipeline_stages` (20261001103800_deal_wadesk_schema.sql)                             | tenant        | deal   | punya   | 11          | 1   | 0          |
-| `pipelines`                      | `pipelines` (20261001103800_deal_wadesk_schema.sql)                                   | tenant        | deal   | punya   | 8           | 0   | 0          |
-| `plan_usage`                     | `plan_usage` (20261001100200_plan_wadesk_schema.sql)                                  | tenant        | plan   | lakshya | 7           | 0   | 0          |
-| `platform_notes`                 | `platform_notes` (20261001102800_supp_wadesk_schema.sql)                              | tenant        | supp   | lakshya | 8           | 2   | 0          |
-| `playbooks`                      | `playbooks` (20261001102800_supp_wadesk_schema.sql)                                   | tenant        | supp   | lakshya | 11          | 0   | 0          |
-| `pricing_faqs`                   | `pricing_faqs` (20261001100700_cms_wadesk_schema.sql)                                 | global_read   | cms    | lakshya | 8           | 0   | 0          |
-| `projects`                       | `projects` (20261001103900_ctp_wadesk_schema.sql)                                     | tenant        | ctp    | punya   | 16          | 5   | 0          |
-| `push_subscriptions`             | `push_subscriptions` (20261001100400_notif_wadesk_schema.sql)                         | tenant        | notif  | lakshya | 12          | 1   | 0          |
-| `referrals`                      | `referrals` (20261001100500_cpn_wadesk_schema.sql)                                    | platform_only | cpn    | lakshya | 7           | 0   | 3          |
-| `role_has_permissions`           | mapped to role_grants                                                                 | existing      | rbac   | lakshya | 2           | -   | -          |
-| `roles`                          | mapped to roles                                                                       | existing      | rbac   | lakshya | 5           | -   | -          |
-| `routing_rules`                  | `routing_rules` (20261001102700_tib2_wadesk_schema.sql)                               | tenant        | tib2   | vedant  | 13          | 0   | 0          |
-| `sales_docs`                     | `sales_docs` (20261001104500_sales_wadesk_schema.sql)                                 | tenant        | sales  | punya   | 31          | 6   | 0          |
-| `saved_replies`                  | `saved_replies` (20261001102600_tib1_wadesk_schema.sql)                               | tenant        | tib1   | vedant  | 11          | 1   | 0          |
-| `scheduled_message_contacts`     | `scheduled_message_contacts` (20261001103100_sched_wadesk_schema.sql)                 | child         | sched  | vedant  | 13          | 2   | 0          |
-| `scheduled_messages`             | `scheduled_messages` (20261001103100_sched_wadesk_schema.sql)                         | tenant        | sched  | vedant  | 46          | 3   | 1          |
-| `security_audit_log`             | mapped to security_events (auth_core)                                                 | existing      | auth   | lakshya | 9           | -   | -          |
-| `sessions`                       | dropped: auth_core auth_sessions                                                      | drop          | auth   | lakshya | 6           | -   | -          |
-| `shopify_cart_recoveries`        | `shopify_cart_recoveries` (20261001101800_ecom_wadesk_schema.sql)                     | tenant        | ecom   | punya   | 10          | 1   | 0          |
-| `shopify_cod_confirmations`      | `shopify_cod_confirmations` (20261001101800_ecom_wadesk_schema.sql)                   | tenant        | ecom   | punya   | 9           | 1   | 0          |
-| `shopify_integration_events`     | `shopify_integration_events` (20261001101800_ecom_wadesk_schema.sql)                  | child         | ecom   | punya   | 11          | 2   | 0          |
-| `shopify_integration_logs`       | `shopify_integration_logs` (20261001101800_ecom_wadesk_schema.sql)                    | stream        | ecom   | punya   | 9           | 0   | 1          |
-| `shopify_integrations`           | `shopify_integrations` (20261001101800_ecom_wadesk_schema.sql)                        | tenant        | ecom   | punya   | 24          | 1   | 0          |
-| `shopify_stock_waitlist`         | `shopify_stock_waitlist` (20261001101800_ecom_wadesk_schema.sql)                      | tenant        | ecom   | punya   | 10          | 1   | 0          |
-| `sla_breaches`                   | `sla_breaches` (20261001102700_tib2_wadesk_schema.sql)                                | child         | tib2   | vedant  | 7           | 2   | 0          |
-| `sla_policies`                   | `sla_policies` (20261001102700_tib2_wadesk_schema.sql)                                | tenant        | tib2   | vedant  | 12          | 0   | 0          |
-| `slack_integration_logs`         | `slack_integration_logs` (20261001102300_intg_wadesk_schema.sql)                      | stream        | intg   | lakshya | 8           | 0   | 1          |
-| `slack_integrations`             | `slack_integrations` (20261001102300_intg_wadesk_schema.sql)                          | tenant        | intg   | lakshya | 15          | 1   | 0          |
-| `slot_reservations`              | `slot_reservations` (20261001104800_appt_wadesk_schema.sql)                           | tenant        | appt   | punya   | 11          | 1   | 0          |
-| `storefront_cart_recoveries`     | `storefront_cart_recoveries` (20261001101700_store_wadesk_schema.sql)                 | tenant        | store  | punya   | 12          | 1   | 0          |
-| `subscriptions`                  | `subscriptions` (20261001100200_plan_wadesk_schema.sql)                               | tenant        | plan   | lakshya | 19          | 2   | 0          |
-| `support_agents`                 | `support_agents` (20261001102800_supp_wadesk_schema.sql)                              | tenant        | supp   | lakshya | 8           | 1   | 0          |
-| `support_assignments`            | `support_assignments` (20261001102800_supp_wadesk_schema.sql)                         | child         | supp   | lakshya | 6           | 2   | 0          |
-| `support_messages`               | `support_messages` (20261001102800_supp_wadesk_schema.sql)                            | child         | supp   | lakshya | 8           | 2   | 0          |
-| `support_tickets`                | `support_tickets` (20261001102800_supp_wadesk_schema.sql)                             | tenant        | supp   | lakshya | 21          | 3   | 0          |
-| `system_settings`                | mapped to platform_settings (auth_core)                                               | existing      | set    | lakshya | 7           | -   | -          |
-| `tags`                           | mapped to tags                                                                        | existing      | tib1   | vedant  | 8           | -   | -          |
-| `tasks`                          | `tasks` (20261001103900_ctp_wadesk_schema.sql)                                        | tenant        | ctp    | punya   | 15          | 2   | 1          |
-| `team_chat_channel_members`      | `team_chat_channel_members` (20261001101600_tchat_wadesk_schema.sql)                  | child         | tchat  | vedant  | 9           | 3   | 0          |
-| `team_chat_channels`             | `team_chat_channels` (20261001101600_tchat_wadesk_schema.sql)                         | tenant        | tchat  | vedant  | 11          | 1   | 0          |
-| `team_chat_invitations`          | `team_chat_invitations` (20261001101600_tchat_wadesk_schema.sql)                      | tenant        | tchat  | vedant  | 13          | 4   | 0          |
-| `team_chat_messages`             | `team_chat_messages` (20261001101600_tchat_wadesk_schema.sql)                         | tenant        | tchat  | vedant  | 16          | 4   | 0          |
-| `team_chat_reactions`            | `team_chat_reactions` (20261001101600_tchat_wadesk_schema.sql)                        | tenant        | tchat  | vedant  | 7           | 2   | 0          |
-| `team_chat_reads`                | `team_chat_reads` (20261001101600_tchat_wadesk_schema.sql)                            | tenant        | tchat  | vedant  | 7           | 2   | 0          |
-| `team_user`                      | mapped to team_members                                                                | existing      | wsp    | lakshya | 7           | -   | -          |
-| `teams`                          | mapped to teams                                                                       | existing      | wsp    | lakshya | 16          | -   | -          |
-| `telegram_accounts`              | `telegram_accounts` (20261001104100_tg_wadesk_schema.sql)                             | tenant        | tg     | punya   | 13          | 1   | 0          |
-| `telegram_bots`                  | `telegram_bots` (20261001104100_tg_wadesk_schema.sql)                                 | tenant        | tg     | punya   | 17          | 1   | 0          |
-| `telegram_broadcast_recipients`  | `telegram_broadcast_recipients` (20261001104100_tg_wadesk_schema.sql)                 | child         | tg     | punya   | 12          | 2   | 0          |
-| `telegram_broadcasts`            | `telegram_broadcasts` (20261001104100_tg_wadesk_schema.sql)                           | tenant        | tg     | punya   | 21          | 3   | 0          |
-| `telegram_flow_sessions`         | `telegram_flow_sessions` (20261001104100_tg_wadesk_schema.sql)                        | tenant        | tg     | punya   | 20          | 3   | 0          |
-| `tiktok_accounts`                | `tiktok_accounts` (20261001102200_tt_wadesk_schema.sql)                               | tenant        | tt     | punya   | 25          | 1   | 0          |
-| `tiktok_posts`                   | `tiktok_posts` (20261001102200_tt_wadesk_schema.sql)                                  | tenant        | tt     | punya   | 16          | 2   | 0          |
-| `tiktok_shops`                   | `tiktok_shops` (20261001102200_tt_wadesk_schema.sql)                                  | tenant        | tt     | punya   | 18          | 1   | 0          |
-| `translation_providers`          | `translation_providers` (20261001100100_i18n_wadesk_schema.sql)                       | platform_only | i18n   | lakshya | 11          | 0   | 0          |
-| `translation_usage`              | `translation_usage` (20261001100100_i18n_wadesk_schema.sql)                           | stream        | i18n   | lakshya | 10          | 0   | 0          |
-| `trello_integration_logs`        | `trello_integration_logs` (20261001102300_intg_wadesk_schema.sql)                     | stream        | intg   | lakshya | 8           | 0   | 1          |
-| `trello_integrations`            | `trello_integrations` (20261001102300_intg_wadesk_schema.sql)                         | tenant        | intg   | lakshya | 19          | 1   | 0          |
-| `user_device_tokens`             | `user_device_tokens` (20261001102500_wsp_wadesk_schema.sql)                           | tenant        | wsp    | lakshya | 11          | 2   | 0          |
-| `user_otps`                      | dropped: auth_core user_tokens (kind otp)                                             | drop          | auth   | lakshya | 6           | -   | -          |
-| `users`                          | mapped to users + user_profiles (auth_core)                                           | existing      | auth   | lakshya | 48          | -   | -          |
-| `viber_broadcast_recipients`     | `viber_broadcast_recipients` (20261001104400_vib_wadesk_schema.sql)                   | child         | vib    | punya   | 10          | 2   | 0          |
-| `viber_broadcasts`               | `viber_broadcasts` (20261001104400_vib_wadesk_schema.sql)                             | tenant        | vib    | punya   | 19          | 3   | 0          |
-| `viber_channels`                 | `viber_channels` (20261001104400_vib_wadesk_schema.sql)                               | tenant        | vib    | punya   | 15          | 1   | 0          |
-| `viber_flow_sessions`            | `viber_flow_sessions` (20261001104400_vib_wadesk_schema.sql)                          | tenant        | vib    | punya   | 16          | 3   | 0          |
-| `wa_call_events`                 | `wa_call_events` (20261001103700_call_wadesk_schema.sql)                              | stream        | call   | vedant  | 5           | 0   | 1          |
-| `wa_call_permissions`            | `wa_call_permissions` (20261001103700_call_wadesk_schema.sql)                         | tenant        | call   | vedant  | 9           | 1   | 0          |
-| `wa_calls`                       | `wa_calls` (20261001103700_call_wadesk_schema.sql)                                    | tenant        | call   | vedant  | 29          | 6   | 1          |
-| `wa_catalogs`                    | `wa_catalogs` (20261001105000_cat_wadesk_schema.sql)                                  | tenant        | cat    | punya   | 14          | 0   | 0          |
-| `wa_chat_links`                  | `wa_chat_links` (20261001103400_wfl_wadesk_schema.sql)                                | tenant        | wfl    | vedant  | 18          | 1   | 0          |
-| `wa_coupons`                     | `wa_coupons` (20261001104900_chk_wadesk_schema.sql)                                   | tenant        | chk    | punya   | 16          | 1   | 0          |
-| `wa_customer_profiles`           | `wa_customer_profiles` (20261001101100_waba_wadesk_schema.sql)                        | tenant        | waba   | vedant  | 8           | 0   | 0          |
-| `wa_form_submissions`            | `wa_form_submissions` (20261001103400_wfl_wadesk_schema.sql)                          | tenant        | wfl    | vedant  | 12          | 3   | 0          |
-| `wa_forms`                       | `wa_forms` (20261001103400_wfl_wadesk_schema.sql)                                     | tenant        | wfl    | vedant  | 21          | 2   | 0          |
-| `wa_group_members`               | `wa_group_members` (20261001103400_wfl_wadesk_schema.sql)                             | tenant        | wfl    | vedant  | 8           | 0   | 0          |
-| `wa_groups`                      | `wa_groups` (20261001103400_wfl_wadesk_schema.sql)                                    | tenant        | wfl    | vedant  | 11          | 0   | 0          |
-| `wa_link_clicks`                 | `wa_link_clicks` (20261001102900_bcast_wadesk_schema.sql)                             | tenant        | bcast  | vedant  | 19          | 4   | 1          |
-| `wa_merchant_gateways`           | `wa_merchant_gateways` (20261001104900_chk_wadesk_schema.sql)                         | tenant        | chk    | punya   | 11          | 1   | 0          |
-| `wa_order_items`                 | `wa_order_items` (20261001104900_chk_wadesk_schema.sql)                               | child         | chk    | punya   | 12          | 2   | 0          |
-| `wa_orders`                      | `wa_orders` (20261001104900_chk_wadesk_schema.sql)                                    | tenant        | chk    | punya   | 34          | 2   | 0          |
-| `wa_pending_orders`              | `wa_pending_orders` (20261001104900_chk_wadesk_schema.sql)                            | tenant        | chk    | punya   | 21          | 1   | 0          |
-| `wa_product_reviews`             | `wa_product_reviews` (20261001105000_cat_wadesk_schema.sql)                           | tenant        | cat    | punya   | 11          | 3   | 0          |
-| `wa_product_sets`                | `wa_product_sets` (20261001105000_cat_wadesk_schema.sql)                              | tenant        | cat    | punya   | 11          | 1   | 0          |
-| `wa_products`                    | `wa_products` (20261001105000_cat_wadesk_schema.sql)                                  | tenant        | cat    | punya   | 38          | 2   | 0          |
-| `wa_provider_configs`            | `wa_provider_configs` (20261001101000_wadev_wadesk_schema.sql)                        | tenant        | wadev  | vedant  | 19          | 0   | 0          |
-| `wa_stock_reservations`          | `wa_stock_reservations` (20261001105000_cat_wadesk_schema.sql)                        | tenant        | cat    | punya   | 10          | 2   | 0          |
-| `wa_storefront_views`            | `wa_storefront_views` (20261001101700_store_wadesk_schema.sql)                        | child         | store  | punya   | 4           | 1   | 0          |
-| `wa_storefronts`                 | `wa_storefronts` (20261001101700_store_wadesk_schema.sql)                             | tenant        | store  | punya   | 16          | 1   | 0          |
-| `wa_templates`                   | `wa_templates` (20261001101300_tpl_wadesk_schema.sql)                                 | tenant        | tpl    | vedant  | 35          | 2   | 0          |
-| `waba_groups`                    | `waba_groups` (20261001101100_waba_wadesk_schema.sql)                                 | tenant        | waba   | vedant  | 15          | 1   | 0          |
-| `wallet_transactions`            | `wallet_transactions` (20261001100300_wallet_wadesk_schema.sql)                       | child         | wallet | lakshya | 13          | 1   | 1          |
-| `warmer_daily_sends`             | `warmer_daily_sends` (20261001103100_sched_wadesk_schema.sql)                         | child         | sched  | vedant  | 7           | 0   | 1          |
-| `webhook_deliveries`             | `webhook_deliveries` (20261001102300_intg_wadesk_schema.sql)                          | stream        | intg   | lakshya | 13          | 0   | 1          |
-| `webhooks`                       | `webhooks` (20261001102300_intg_wadesk_schema.sql)                                    | tenant        | intg   | lakshya | 21          | 1   | 0          |
-| `wechat_broadcast_recipients`    | `wechat_broadcast_recipients` (20261001104300_wech_wadesk_schema.sql)                 | child         | wech   | punya   | 10          | 2   | 0          |
-| `wechat_broadcasts`              | `wechat_broadcasts` (20261001104300_wech_wadesk_schema.sql)                           | tenant        | wech   | punya   | 20          | 3   | 0          |
-| `wechat_channels`                | `wechat_channels` (20261001104300_wech_wadesk_schema.sql)                             | tenant        | wech   | punya   | 20          | 1   | 0          |
-| `wechat_flow_sessions`           | `wechat_flow_sessions` (20261001104300_wech_wadesk_schema.sql)                        | tenant        | wech   | punya   | 16          | 3   | 0          |
-| `woocommerce_cart_recoveries`    | `woocommerce_cart_recoveries` (20261001101800_ecom_wadesk_schema.sql)                 | tenant        | ecom   | punya   | 10          | 1   | 0          |
-| `woocommerce_cod_confirmations`  | `woocommerce_cod_confirmations` (20261001101800_ecom_wadesk_schema.sql)               | tenant        | ecom   | punya   | 9           | 1   | 0          |
-| `woocommerce_integration_events` | `woocommerce_integration_events` (20261001101800_ecom_wadesk_schema.sql)              | child         | ecom   | punya   | 11          | 2   | 0          |
-| `woocommerce_integration_logs`   | `woocommerce_integration_logs` (20261001101800_ecom_wadesk_schema.sql)                | stream        | ecom   | punya   | 9           | 0   | 1          |
-| `woocommerce_integrations`       | `woocommerce_integrations` (20261001101800_ecom_wadesk_schema.sql)                    | tenant        | ecom   | punya   | 21          | 1   | 0          |
-| `woocommerce_stock_waitlist`     | `woocommerce_stock_waitlist` (20261001101800_ecom_wadesk_schema.sql)                  | tenant        | ecom   | punya   | 10          | 1   | 0          |
-| `workspace_addons`               | `workspace_addons` (20261001102500_wsp_wadesk_schema.sql)                             | tenant        | wsp    | lakshya | 9           | 2   | 0          |
-| `workspace_email_accounts`       | `workspace_email_accounts` (20261001102500_wsp_wadesk_schema.sql)                     | tenant        | wsp    | lakshya | 12          | 0   | 3          |
-| `workspace_flags`                | `workspace_flags` (20261001102500_wsp_wadesk_schema.sql)                              | tenant        | wsp    | lakshya | 9           | 2   | 0          |
-| `workspace_ig_accounts`          | `workspace_ig_accounts` (20261001102500_wsp_wadesk_schema.sql)                        | tenant        | wsp    | lakshya | 11          | 0   | 0          |
-| `workspace_payment_configs`      | `workspace_payment_configs` (20261001102500_wsp_wadesk_schema.sql)                    | tenant        | wsp    | lakshya | 12          | 1   | 0          |
-| `workspace_user`                 | mapped to users + user_roles                                                          | existing      | wsp    | lakshya | 8           | -   | -          |
-| `workspaces`                     | mapped to organizations (+ workspace_settings overlay)                                | existing      | wsp    | lakshya | 56          | -   | -          |
-| `wp_campaign_contacts`           | `wp_campaign_contacts` (20261001103000_camp_wadesk_schema.sql)                        | child         | camp   | vedant  | 25          | 2   | 0          |
-| `wpcampaigns`                    | `wpcampaigns` (20261001103000_camp_wadesk_schema.sql)                                 | tenant        | camp   | vedant  | 58          | 7   | 1          |
+| WaDesk table                     | becomes                                                                      | class         | domain | owner   | WaDesk cols | FKs | loose refs |
+| -------------------------------- | ---------------------------------------------------------------------------- | ------------- | ------ | ------- | ----------- | --- | ---------- |
+| `admin_ai_keys`                  | `admin_ai_keys` (20261001100900_aiadm_wadesk_schema.sql)                     | platform_only | aiadm  | lakshya | 10          | 0   | 0          |
+| `agent_statuses`                 | `agent_statuses` (20261001102700_tib2_wadesk_schema.sql)                     | tenant        | tib2   | vedant  | 13          | 1   | 0          |
+| `ai_agents`                      | `ai_agents` (20261001102000_aiag_wadesk_schema.sql)                          | tenant        | aiag   | punya   | 31          | 1   | 0          |
+| `ai_call_assistant_tools`        | `ai_call_assistant_tools` (20261001103700_call_wadesk_schema.sql)            | child         | call   | vedant  | 11          | 1   | 0          |
+| `ai_call_assistants`             | `ai_call_assistants` (20261001103700_call_wadesk_schema.sql)                 | tenant        | call   | vedant  | 30          | 1   | 0          |
+| `ai_call_logs`                   | `ai_call_logs` (20261001103700_call_wadesk_schema.sql)                       | tenant        | call   | vedant  | 27          | 2   | 0          |
+| `ai_chat_assistants`             | `ai_chat_assistants` (20261001102000_aiag_wadesk_schema.sql)                 | tenant        | aiag   | punya   | 21          | 1   | 0          |
+| `ai_crm_actions`                 | `ai_crm_actions` (20261001102100_aicrm_wadesk_schema.sql)                    | stream        | aicrm  | punya   | 16          | 0   | 2          |
+| `ai_provider_keys`               | `ai_provider_keys` (20261001100900_aiadm_wadesk_schema.sql)                  | tenant        | aiadm  | lakshya | 7           | 0   | 0          |
+| `ai_token_usage`                 | `ai_token_usage` (20261001100900_aiadm_wadesk_schema.sql)                    | stream        | aiadm  | lakshya | 9           | 0   | 0          |
+| `ai_training_sources`            | `ai_training_sources` (20261001102000_aiag_wadesk_schema.sql)                | tenant        | aiag   | punya   | 17          | 2   | 0          |
+| `ai_voice_usage_daily`           | `ai_voice_usage_daily` (20261001103700_call_wadesk_schema.sql)               | tenant        | call   | vedant  | 12          | 1   | 0          |
+| `announcements`                  | `announcements` (20261001100700_cms_wadesk_schema.sql)                       | global_read   | cms    | lakshya | 12          | 0   | 0          |
+| `api_keys`                       | mapped to api_keys                                                           | existing      | api    | lakshya | 13          | -   | -          |
+| `appointments`                   | `appointments` (20261001104800_appt_wadesk_schema.sql)                       | tenant        | appt   | punya   | 34          | 5   | 1          |
+| `attributes`                     | mapped to fields (field metadata registry)                                   | existing      | con    | punya   | 11          | -   | -          |
+| `audit_logs`                     | mapped to audit_log                                                          | existing      | notif  | lakshya | 12          | -   | -          |
+| `auto_reply_lookups`             | `auto_reply_lookups` (20261001103200_ar_wadesk_schema.sql)                   | stream        | ar     | vedant  | 8           | 0   | 2          |
+| `blog_categories`                | `blog_categories` (20261001100700_cms_wadesk_schema.sql)                     | global_read   | cms    | lakshya | 7           | 0   | 0          |
+| `blog_posts`                     | `blog_posts` (20261001100700_cms_wadesk_schema.sql)                          | global_read   | cms    | lakshya | 21          | 1   | 0          |
+| `booking_availability_overrides` | `booking_availability_overrides` (20261001104800_appt_wadesk_schema.sql)     | tenant        | appt   | punya   | 10          | 1   | 0          |
+| `booking_availability_rules`     | `booking_availability_rules` (20261001104800_appt_wadesk_schema.sql)         | tenant        | appt   | punya   | 9           | 1   | 1          |
+| `booking_financials`             | `booking_financials` (20261001104800_appt_wadesk_schema.sql)                 | tenant        | appt   | punya   | 15          | 1   | 0          |
+| `booking_integrations`           | `booking_integrations` (20261001104800_appt_wadesk_schema.sql)               | tenant        | appt   | punya   | 9           | 1   | 0          |
+| `booking_questions`              | `booking_questions` (20261001104800_appt_wadesk_schema.sql)                  | tenant        | appt   | punya   | 11          | 1   | 0          |
+| `booking_reminders`              | `booking_reminders` (20261001104800_appt_wadesk_schema.sql)                  | tenant        | appt   | punya   | 10          | 1   | 0          |
+| `booking_templates`              | `booking_templates` (20261001104800_appt_wadesk_schema.sql)                  | tenant        | appt   | punya   | 12          | 3   | 0          |
+| `booking_types`                  | `booking_types` (20261001104800_appt_wadesk_schema.sql)                      | tenant        | appt   | punya   | 25          | 1   | 0          |
+| `broadcast_contacts`             | `broadcast_contacts` (20261001102900_bcast_wadesk_schema.sql)                | child         | bcast  | vedant  | 11          | 2   | 0          |
+| `broadcasts`                     | `broadcasts` (20261001102900_bcast_wadesk_schema.sql)                        | tenant        | bcast  | vedant  | 32          | 2   | 1          |
+| `bsp_credit_allocations`         | `bsp_credit_allocations` (20261001100800_bsp_wadesk_schema.sql)              | tenant        | bsp    | lakshya | 12          | 0   | 0          |
+| `cache`                          | dropped: Laravel cache store: Redis here                                     | drop          | infra  | lakshya | 3           | -   | -          |
+| `cache_locks`                    | dropped: Laravel cache locks: Redis here                                     | drop          | infra  | lakshya | 3           | -   | -          |
+| `chat_templates`                 | `chat_templates` (20261001101300_tpl_wadesk_schema.sql)                      | child         | tpl    | vedant  | 11          | 1   | 0          |
+| `chatbot_widget_visitors`        | `chatbot_widget_visitors` (20261001103300_wgt_wadesk_schema.sql)             | tenant        | wgt    | vedant  | 15          | 2   | 0          |
+| `chatbot_widgets`                | `chatbot_widgets` (20261001103300_wgt_wadesk_schema.sql)                     | tenant        | wgt    | vedant  | 35          | 2   | 0          |
+| `companies`                      | mapped to companies                                                          | existing      | ctp    | punya   | 15          | -   | -          |
+| `contact_custom_fields`          | mapped to fields (field metadata registry)                                   | existing      | con    | punya   | 11          | -   | -          |
+| `contact_groups`                 | `contact_groups` (20261001103500_con_wadesk_schema.sql)                      | tenant        | con    | punya   | 9           | 1   | 0          |
+| `contact_messages`               | `contact_messages` (20261001100700_cms_wadesk_schema.sql)                    | platform_only | cms    | lakshya | 11          | 0   | 0          |
+| `contact_tag`                    | mapped to contact_tags                                                       | existing      | con    | punya   | 6           | -   | -          |
+| `contacts`                       | mapped to contacts                                                           | existing      | con    | punya   | 26          | -   | -          |
+| `conversation_events`            | `conversation_events` (20261001103600_chat_wadesk_schema.sql)                | stream        | chat   | vedant  | 8           | 0   | 2          |
+| `conversation_notes`             | `conversation_notes` (20261001103600_chat_wadesk_schema.sql)                 | tenant        | chat   | vedant  | 11          | 2   | 0          |
+| `conversation_participants`      | `conversation_participants` (20261001103600_chat_wadesk_schema.sql)          | tenant        | chat   | vedant  | 10          | 2   | 0          |
+| `conversation_tag`               | `conversation_tag` (20261001102600_tib1_wadesk_schema.sql)                   | child         | tib1   | vedant  | 6           | 3   | 0          |
+| `conversations`                  | `conversations` (20261001103600_chat_wadesk_schema.sql)                      | tenant        | chat   | vedant  | 50          | 10  | 1          |
+| `coupons`                        | `coupons` (20261001100500_cpn_wadesk_schema.sql)                             | platform_only | cpn    | lakshya | 20          | 0   | 0          |
+| `credit_packages`                | `credit_packages` (20261001100500_cpn_wadesk_schema.sql)                     | global_read   | cpn    | lakshya | 13          | 0   | 0          |
+| `crm_briefs`                     | `crm_briefs` (20261001102100_aicrm_wadesk_schema.sql)                        | tenant        | aicrm  | punya   | 12          | 1   | 1          |
+| `csat_responses`                 | `csat_responses` (20261001103500_con_wadesk_schema.sql)                      | tenant        | con    | punya   | 10          | 2   | 0          |
+| `currencies`                     | `currencies` (20261001100500_cpn_wadesk_schema.sql)                          | global_read   | cpn    | lakshya | 9           | 0   | 0          |
+| `deal_activities`                | `deal_activities` (20261001103800_deal_wadesk_schema.sql)                    | tenant        | deal   | punya   | 12          | 2   | 0          |
+| `deals`                          | `deals` (20261001103800_deal_wadesk_schema.sql)                              | tenant        | deal   | punya   | 23          | 6   | 1          |
+| `devices`                        | `devices` (20261001101000_wadev_wadesk_schema.sql)                           | tenant        | wadev  | vedant  | 28          | 2   | 0          |
+| `extension_api_tokens`           | `extension_api_tokens` (20261001100600_add_wadesk_schema.sql)                | child         | add    | lakshya | 8           | 1   | 0          |
+| `extensions`                     | `extensions` (20261001100600_add_wadesk_schema.sql)                          | platform_only | add    | lakshya | 12          | 0   | 1          |
+| `facebook_broadcast_recipients`  | `facebook_broadcast_recipients` (20261001104000_fb_wadesk_schema.sql)        | child         | fb     | punya   | 11          | 2   | 0          |
+| `facebook_broadcasts`            | `facebook_broadcasts` (20261001104000_fb_wadesk_schema.sql)                  | tenant        | fb     | punya   | 18          | 3   | 0          |
+| `facebook_pages`                 | `facebook_pages` (20261001104000_fb_wadesk_schema.sql)                       | tenant        | fb     | punya   | 20          | 1   | 0          |
+| `facebook_posts`                 | `facebook_posts` (20261001104000_fb_wadesk_schema.sql)                       | tenant        | fb     | punya   | 16          | 2   | 0          |
+| `failed_jobs`                    | dropped: Laravel failed jobs: BullMQ failed set + dead outbox rows           | drop          | infra  | lakshya | 7           | -   | -          |
+| `flow_connected_devices`         | `flow_connected_devices` (20261001101400_flb_wadesk_schema.sql)              | child         | flb    | vedant  | 9           | 1   | 0          |
+| `flow_retry_logs`                | `flow_retry_logs` (20261001101500_flr_wadesk_schema.sql)                     | tenant        | flr    | vedant  | 12          | 4   | 0          |
+| `flow_subscribers`               | `flow_subscribers` (20261001101500_flr_wadesk_schema.sql)                    | child         | flr    | vedant  | 12          | 2   | 0          |
+| `flow_templates`                 | `flow_templates` (20261001101400_flb_wadesk_schema.sql)                      | global_read   | flb    | vedant  | 12          | 0   | 1          |
+| `flows`                          | `flows` (20261001101400_flb_wadesk_schema.sql)                               | tenant        | flb    | vedant  | 20          | 1   | 2          |
+| `frontend_content`               | `frontend_content` (20261001100700_cms_wadesk_schema.sql)                    | global_read   | cms    | lakshya | 8           | 0   | 1          |
+| `google_form_sessions`           | `google_form_sessions` (20261001101200_node_wadesk_schema.sql)               | tenant        | node   | vedant  | 13          | 0   | 0          |
+| `guidebook_articles`             | `guidebook_articles` (20261001100700_cms_wadesk_schema.sql)                  | global_read   | cms    | lakshya | 14          | 0   | 0          |
+| `hubspot_integration_logs`       | `hubspot_integration_logs` (20261001102300_intg_wadesk_schema.sql)           | stream        | intg   | lakshya | 9           | 0   | 1          |
+| `hubspot_integrations`           | `hubspot_integrations` (20261001102300_intg_wadesk_schema.sql)               | tenant        | intg   | lakshya | 16          | 1   | 0          |
+| `impersonation_sessions`         | `impersonation_sessions` (20261001102500_wsp_wadesk_schema.sql)              | platform_only | wsp    | lakshya | 11          | 2   | 1          |
+| `inbox_messages`                 | `inbox_messages` (20261001102600_tib1_wadesk_schema.sql)                     | stream        | tib1   | vedant  | 37          | 0   | 6          |
+| `inbox_notifications`            | `inbox_notifications` (20261001100400_notif_wadesk_schema.sql)               | tenant        | notif  | lakshya | 11          | 1   | 0          |
+| `incoming_webhook_events`        | `incoming_webhook_events` (20261001102300_intg_wadesk_schema.sql)            | child         | intg   | lakshya | 15          | 2   | 0          |
+| `incoming_webhooks`              | `incoming_webhooks` (20261001102300_intg_wadesk_schema.sql)                  | tenant        | intg   | lakshya | 14          | 1   | 0          |
+| `invoice_items`                  | `invoice_items` (20261001104600_inv_wadesk_schema.sql)                       | child         | inv    | punya   | 17          | 1   | 0          |
+| `invoice_logs`                   | `invoice_logs` (20261001104600_inv_wadesk_schema.sql)                        | stream        | inv    | punya   | 7           | 0   | 1          |
+| `invoice_number_sequences`       | `invoice_number_sequences` (20261001104600_inv_wadesk_schema.sql)            | tenant        | inv    | punya   | 6           | 0   | 0          |
+| `invoice_settings`               | `invoice_settings` (20261001104600_inv_wadesk_schema.sql)                    | tenant        | inv    | punya   | 36          | 1   | 0          |
+| `invoice_tax_summary`            | `invoice_tax_summary` (20261001104600_inv_wadesk_schema.sql)                 | child         | inv    | punya   | 8           | 1   | 0          |
+| `invoice_webhook_events`         | `invoice_webhook_events` (20261001104600_inv_wadesk_schema.sql)              | platform_only | inv    | punya   | 8           | 0   | 0          |
+| `invoices`                       | `invoices` (20261001104600_inv_wadesk_schema.sql)                            | tenant        | inv    | punya   | 47          | 2   | 0          |
+| `job_batches`                    | dropped: Laravel queue batches: BullMQ                                       | drop          | infra  | lakshya | 10          | -   | -          |
+| `jobs`                           | dropped: Laravel queue: BullMQ                                               | drop          | infra  | lakshya | 7           | -   | -          |
+| `keyword_replies`                | `keyword_replies` (20261001103200_ar_wadesk_schema.sql)                      | tenant        | ar     | vedant  | 35          | 4   | 1          |
+| `keyword_reply_contents`         | `keyword_reply_contents` (20261001103200_ar_wadesk_schema.sql)               | child         | ar     | vedant  | 15          | 2   | 0          |
+| `keyword_reply_logs`             | `keyword_reply_logs` (20261001103200_ar_wadesk_schema.sql)                   | stream        | ar     | vedant  | 10          | 0   | 2          |
+| `languages`                      | `languages` (20261001100100_i18n_wadesk_schema.sql)                          | global_read   | i18n   | lakshya | 9           | 0   | 0          |
+| `leads`                          | `leads` (20261001102100_aicrm_wadesk_schema.sql)                             | tenant        | aicrm  | punya   | 20          | 2   | 0          |
+| `legal_pages`                    | `legal_pages` (20261001100700_cms_wadesk_schema.sql)                         | global_read   | cms    | lakshya | 11          | 0   | 0          |
+| `line_broadcast_recipients`      | `line_broadcast_recipients` (20261001104200_line_wadesk_schema.sql)          | child         | line   | punya   | 11          | 2   | 0          |
+| `line_broadcasts`                | `line_broadcasts` (20261001104200_line_wadesk_schema.sql)                    | tenant        | line   | punya   | 20          | 3   | 0          |
+| `line_channels`                  | `line_channels` (20261001104200_line_wadesk_schema.sql)                      | tenant        | line   | punya   | 21          | 1   | 0          |
+| `line_flow_sessions`             | `line_flow_sessions` (20261001104200_line_wadesk_schema.sql)                 | tenant        | line   | punya   | 16          | 3   | 0          |
+| `line_rich_menus`                | `line_rich_menus` (20261001104200_line_wadesk_schema.sql)                    | tenant        | line   | punya   | 16          | 2   | 0          |
+| `message_charges`                | dropped: renamed usage_charges (level-1 ledger), see [virtual.usage_charges] | drop          | wallet | lakshya | 16          | -   | -          |
+| `message_rates`                  | `message_rates` (20261001100300_wallet_wadesk_schema.sql)                    | global_read   | wallet | lakshya | 9           | 0   | 0          |
+| `messages`                       | `messages` (20261001103600_chat_wadesk_schema.sql)                           | stream        | chat   | vedant  | 31          | 0   | 5          |
+| `meta_campaigns`                 | `meta_campaigns` (20261001101900_mads_wadesk_schema.sql)                     | tenant        | mads   | punya   | 35          | 1   | 0          |
+| `migrations`                     | dropped: Laravel migration journal: _migrations                              | drop          | infra  | lakshya | 3           | -   | -          |
+| `model_has_permissions`          | mapped to role_grants                                                        | existing      | rbac   | lakshya | 3           | -   | -          |
+| `model_has_roles`                | mapped to user_roles                                                         | existing      | rbac   | lakshya | 3           | -   | -          |
+| `notifications`                  | `notifications` (20261001100400_notif_wadesk_schema.sql)                     | tenant        | notif  | lakshya | 17          | 1   | 1          |
+| `orders`                         | `orders` (20261001104700_paygw_wadesk_schema.sql)                            | tenant        | paygw  | lakshya | 43          | 6   | 0          |
+| `outbound_webhooks`              | `outbound_webhooks` (20261001102600_tib1_wadesk_schema.sql)                  | tenant        | tib1   | vedant  | 13          | 0   | 0          |
+| `package_features`               | `package_features` (20261001100200_plan_wadesk_schema.sql)                   | global_read   | plan   | lakshya | 6           | 0   | 0          |
+| `packages`                       | `packages` (20261001100200_plan_wadesk_schema.sql)                           | global_read   | plan   | lakshya | 146         | 0   | 0          |
+| `password_reset_tokens`          | dropped: auth_core user_tokens                                               | drop          | auth   | lakshya | 3           | -   | -          |
+| `payment_gateways`               | `payment_gateways` (20261001104700_paygw_wadesk_schema.sql)                  | platform_only | paygw  | lakshya | 12          | 0   | 0          |
+| `payments`                       | `payments` (20261001104700_paygw_wadesk_schema.sql)                          | tenant        | paygw  | lakshya | 19          | 6   | 0          |
+| `permissions`                    | mapped to permission_defs                                                    | existing      | rbac   | lakshya | 5           | -   | -          |
+| `personal_access_tokens`         | dropped: api_keys + auth_core user_tokens                                    | drop          | auth   | lakshya | 10          | -   | -          |
+| `pipeline_stages`                | `pipeline_stages` (20261001103800_deal_wadesk_schema.sql)                    | tenant        | deal   | punya   | 11          | 1   | 0          |
+| `pipelines`                      | `pipelines` (20261001103800_deal_wadesk_schema.sql)                          | tenant        | deal   | punya   | 8           | 0   | 0          |
+| `plan_usage`                     | `plan_usage` (20261001100200_plan_wadesk_schema.sql)                         | tenant        | plan   | lakshya | 7           | 0   | 0          |
+| `platform_notes`                 | `platform_notes` (20261001102800_supp_wadesk_schema.sql)                     | tenant        | supp   | lakshya | 8           | 2   | 0          |
+| `playbooks`                      | `playbooks` (20261001102800_supp_wadesk_schema.sql)                          | tenant        | supp   | lakshya | 11          | 0   | 0          |
+| `pricing_faqs`                   | `pricing_faqs` (20261001100700_cms_wadesk_schema.sql)                        | global_read   | cms    | lakshya | 8           | 0   | 0          |
+| `projects`                       | `projects` (20261001103900_ctp_wadesk_schema.sql)                            | tenant        | ctp    | punya   | 16          | 5   | 0          |
+| `push_subscriptions`             | `push_subscriptions` (20261001100400_notif_wadesk_schema.sql)                | tenant        | notif  | lakshya | 12          | 1   | 0          |
+| `referrals`                      | `referrals` (20261001100500_cpn_wadesk_schema.sql)                           | platform_only | cpn    | lakshya | 7           | 0   | 3          |
+| `role_has_permissions`           | mapped to role_grants                                                        | existing      | rbac   | lakshya | 2           | -   | -          |
+| `roles`                          | mapped to roles                                                              | existing      | rbac   | lakshya | 5           | -   | -          |
+| `routing_rules`                  | `routing_rules` (20261001102700_tib2_wadesk_schema.sql)                      | tenant        | tib2   | vedant  | 13          | 0   | 0          |
+| `sales_docs`                     | `sales_docs` (20261001104500_sales_wadesk_schema.sql)                        | tenant        | sales  | punya   | 31          | 6   | 0          |
+| `saved_replies`                  | `saved_replies` (20261001102600_tib1_wadesk_schema.sql)                      | tenant        | tib1   | vedant  | 11          | 1   | 0          |
+| `scheduled_message_contacts`     | `scheduled_message_contacts` (20261001103100_sched_wadesk_schema.sql)        | child         | sched  | vedant  | 13          | 2   | 0          |
+| `scheduled_messages`             | `scheduled_messages` (20261001103100_sched_wadesk_schema.sql)                | tenant        | sched  | vedant  | 46          | 3   | 1          |
+| `security_audit_log`             | mapped to security_events (auth_core)                                        | existing      | auth   | lakshya | 9           | -   | -          |
+| `sessions`                       | dropped: auth_core auth_sessions                                             | drop          | auth   | lakshya | 6           | -   | -          |
+| `shopify_cart_recoveries`        | `shopify_cart_recoveries` (20261001101800_ecom_wadesk_schema.sql)            | tenant        | ecom   | punya   | 10          | 1   | 0          |
+| `shopify_cod_confirmations`      | `shopify_cod_confirmations` (20261001101800_ecom_wadesk_schema.sql)          | tenant        | ecom   | punya   | 9           | 1   | 0          |
+| `shopify_integration_events`     | `shopify_integration_events` (20261001101800_ecom_wadesk_schema.sql)         | child         | ecom   | punya   | 11          | 2   | 0          |
+| `shopify_integration_logs`       | `shopify_integration_logs` (20261001101800_ecom_wadesk_schema.sql)           | stream        | ecom   | punya   | 9           | 0   | 1          |
+| `shopify_integrations`           | `shopify_integrations` (20261001101800_ecom_wadesk_schema.sql)               | tenant        | ecom   | punya   | 24          | 1   | 0          |
+| `shopify_stock_waitlist`         | `shopify_stock_waitlist` (20261001101800_ecom_wadesk_schema.sql)             | tenant        | ecom   | punya   | 10          | 1   | 0          |
+| `sla_breaches`                   | `sla_breaches` (20261001102700_tib2_wadesk_schema.sql)                       | child         | tib2   | vedant  | 7           | 2   | 0          |
+| `sla_policies`                   | `sla_policies` (20261001102700_tib2_wadesk_schema.sql)                       | tenant        | tib2   | vedant  | 12          | 0   | 0          |
+| `slack_integration_logs`         | `slack_integration_logs` (20261001102300_intg_wadesk_schema.sql)             | stream        | intg   | lakshya | 8           | 0   | 1          |
+| `slack_integrations`             | `slack_integrations` (20261001102300_intg_wadesk_schema.sql)                 | tenant        | intg   | lakshya | 15          | 1   | 0          |
+| `slot_reservations`              | `slot_reservations` (20261001104800_appt_wadesk_schema.sql)                  | tenant        | appt   | punya   | 11          | 1   | 0          |
+| `storefront_cart_recoveries`     | `storefront_cart_recoveries` (20261001101700_store_wadesk_schema.sql)        | tenant        | store  | punya   | 12          | 1   | 0          |
+| `subscriptions`                  | `subscriptions` (20261001100200_plan_wadesk_schema.sql)                      | tenant        | plan   | lakshya | 19          | 2   | 0          |
+| `support_agents`                 | `support_agents` (20261001102800_supp_wadesk_schema.sql)                     | tenant        | supp   | lakshya | 8           | 1   | 0          |
+| `support_assignments`            | `support_assignments` (20261001102800_supp_wadesk_schema.sql)                | child         | supp   | lakshya | 6           | 2   | 0          |
+| `support_messages`               | `support_messages` (20261001102800_supp_wadesk_schema.sql)                   | child         | supp   | lakshya | 8           | 2   | 0          |
+| `support_tickets`                | `support_tickets` (20261001102800_supp_wadesk_schema.sql)                    | tenant        | supp   | lakshya | 21          | 3   | 0          |
+| `system_settings`                | mapped to platform_settings (auth_core)                                      | existing      | set    | lakshya | 7           | -   | -          |
+| `tags`                           | mapped to tags                                                               | existing      | tib1   | vedant  | 8           | -   | -          |
+| `tasks`                          | `tasks` (20261001103900_ctp_wadesk_schema.sql)                               | tenant        | ctp    | punya   | 15          | 2   | 1          |
+| `team_chat_channel_members`      | `team_chat_channel_members` (20261001101600_tchat_wadesk_schema.sql)         | child         | tchat  | vedant  | 9           | 3   | 0          |
+| `team_chat_channels`             | `team_chat_channels` (20261001101600_tchat_wadesk_schema.sql)                | tenant        | tchat  | vedant  | 11          | 1   | 0          |
+| `team_chat_invitations`          | `team_chat_invitations` (20261001101600_tchat_wadesk_schema.sql)             | tenant        | tchat  | vedant  | 13          | 4   | 0          |
+| `team_chat_messages`             | `team_chat_messages` (20261001101600_tchat_wadesk_schema.sql)                | tenant        | tchat  | vedant  | 16          | 4   | 0          |
+| `team_chat_reactions`            | `team_chat_reactions` (20261001101600_tchat_wadesk_schema.sql)               | tenant        | tchat  | vedant  | 7           | 2   | 0          |
+| `team_chat_reads`                | `team_chat_reads` (20261001101600_tchat_wadesk_schema.sql)                   | tenant        | tchat  | vedant  | 7           | 2   | 0          |
+| `team_user`                      | mapped to team_members                                                       | existing      | wsp    | lakshya | 7           | -   | -          |
+| `teams`                          | mapped to teams                                                              | existing      | wsp    | lakshya | 16          | -   | -          |
+| `telegram_accounts`              | `telegram_accounts` (20261001104100_tg_wadesk_schema.sql)                    | tenant        | tg     | punya   | 13          | 1   | 0          |
+| `telegram_bots`                  | `telegram_bots` (20261001104100_tg_wadesk_schema.sql)                        | tenant        | tg     | punya   | 17          | 1   | 0          |
+| `telegram_broadcast_recipients`  | `telegram_broadcast_recipients` (20261001104100_tg_wadesk_schema.sql)        | child         | tg     | punya   | 12          | 2   | 0          |
+| `telegram_broadcasts`            | `telegram_broadcasts` (20261001104100_tg_wadesk_schema.sql)                  | tenant        | tg     | punya   | 21          | 3   | 0          |
+| `telegram_flow_sessions`         | `telegram_flow_sessions` (20261001104100_tg_wadesk_schema.sql)               | tenant        | tg     | punya   | 20          | 3   | 0          |
+| `tiktok_accounts`                | `tiktok_accounts` (20261001102200_tt_wadesk_schema.sql)                      | tenant        | tt     | punya   | 25          | 1   | 0          |
+| `tiktok_posts`                   | `tiktok_posts` (20261001102200_tt_wadesk_schema.sql)                         | tenant        | tt     | punya   | 16          | 2   | 0          |
+| `tiktok_shops`                   | `tiktok_shops` (20261001102200_tt_wadesk_schema.sql)                         | tenant        | tt     | punya   | 18          | 1   | 0          |
+| `translation_providers`          | `translation_providers` (20261001100100_i18n_wadesk_schema.sql)              | platform_only | i18n   | lakshya | 11          | 0   | 0          |
+| `translation_usage`              | `translation_usage` (20261001100100_i18n_wadesk_schema.sql)                  | stream        | i18n   | lakshya | 10          | 0   | 0          |
+| `trello_integration_logs`        | `trello_integration_logs` (20261001102300_intg_wadesk_schema.sql)            | stream        | intg   | lakshya | 8           | 0   | 1          |
+| `trello_integrations`            | `trello_integrations` (20261001102300_intg_wadesk_schema.sql)                | tenant        | intg   | lakshya | 19          | 1   | 0          |
+| `user_device_tokens`             | `user_device_tokens` (20261001102500_wsp_wadesk_schema.sql)                  | tenant        | wsp    | lakshya | 11          | 2   | 0          |
+| `user_otps`                      | dropped: auth_core user_tokens (kind otp)                                    | drop          | auth   | lakshya | 6           | -   | -          |
+| `users`                          | mapped to users + user_profiles (auth_core)                                  | existing      | auth   | lakshya | 48          | -   | -          |
+| `viber_broadcast_recipients`     | `viber_broadcast_recipients` (20261001104400_vib_wadesk_schema.sql)          | child         | vib    | punya   | 10          | 2   | 0          |
+| `viber_broadcasts`               | `viber_broadcasts` (20261001104400_vib_wadesk_schema.sql)                    | tenant        | vib    | punya   | 19          | 3   | 0          |
+| `viber_channels`                 | `viber_channels` (20261001104400_vib_wadesk_schema.sql)                      | tenant        | vib    | punya   | 15          | 1   | 0          |
+| `viber_flow_sessions`            | `viber_flow_sessions` (20261001104400_vib_wadesk_schema.sql)                 | tenant        | vib    | punya   | 16          | 3   | 0          |
+| `wa_call_events`                 | `wa_call_events` (20261001103700_call_wadesk_schema.sql)                     | stream        | call   | vedant  | 5           | 0   | 1          |
+| `wa_call_permissions`            | `wa_call_permissions` (20261001103700_call_wadesk_schema.sql)                | tenant        | call   | vedant  | 9           | 1   | 0          |
+| `wa_calls`                       | `wa_calls` (20261001103700_call_wadesk_schema.sql)                           | tenant        | call   | vedant  | 29          | 6   | 1          |
+| `wa_catalogs`                    | `wa_catalogs` (20261001105000_cat_wadesk_schema.sql)                         | tenant        | cat    | punya   | 14          | 0   | 0          |
+| `wa_chat_links`                  | `wa_chat_links` (20261001103400_wfl_wadesk_schema.sql)                       | tenant        | wfl    | vedant  | 18          | 1   | 0          |
+| `wa_coupons`                     | `wa_coupons` (20261001104900_chk_wadesk_schema.sql)                          | tenant        | chk    | punya   | 16          | 1   | 0          |
+| `wa_customer_profiles`           | `wa_customer_profiles` (20261001101100_waba_wadesk_schema.sql)               | tenant        | waba   | vedant  | 8           | 0   | 0          |
+| `wa_form_submissions`            | `wa_form_submissions` (20261001103400_wfl_wadesk_schema.sql)                 | tenant        | wfl    | vedant  | 12          | 3   | 0          |
+| `wa_forms`                       | `wa_forms` (20261001103400_wfl_wadesk_schema.sql)                            | tenant        | wfl    | vedant  | 21          | 2   | 0          |
+| `wa_group_members`               | `wa_group_members` (20261001103400_wfl_wadesk_schema.sql)                    | tenant        | wfl    | vedant  | 8           | 0   | 0          |
+| `wa_groups`                      | `wa_groups` (20261001103400_wfl_wadesk_schema.sql)                           | tenant        | wfl    | vedant  | 11          | 0   | 0          |
+| `wa_link_clicks`                 | `wa_link_clicks` (20261001102900_bcast_wadesk_schema.sql)                    | tenant        | bcast  | vedant  | 19          | 4   | 1          |
+| `wa_merchant_gateways`           | `wa_merchant_gateways` (20261001104900_chk_wadesk_schema.sql)                | tenant        | chk    | punya   | 11          | 1   | 0          |
+| `wa_order_items`                 | `wa_order_items` (20261001104900_chk_wadesk_schema.sql)                      | child         | chk    | punya   | 12          | 2   | 0          |
+| `wa_orders`                      | `wa_orders` (20261001104900_chk_wadesk_schema.sql)                           | tenant        | chk    | punya   | 34          | 2   | 0          |
+| `wa_pending_orders`              | `wa_pending_orders` (20261001104900_chk_wadesk_schema.sql)                   | tenant        | chk    | punya   | 21          | 1   | 0          |
+| `wa_product_reviews`             | `wa_product_reviews` (20261001105000_cat_wadesk_schema.sql)                  | tenant        | cat    | punya   | 11          | 3   | 0          |
+| `wa_product_sets`                | `wa_product_sets` (20261001105000_cat_wadesk_schema.sql)                     | tenant        | cat    | punya   | 11          | 1   | 0          |
+| `wa_products`                    | `wa_products` (20261001105000_cat_wadesk_schema.sql)                         | tenant        | cat    | punya   | 38          | 2   | 0          |
+| `wa_provider_configs`            | `wa_provider_configs` (20261001101000_wadev_wadesk_schema.sql)               | tenant        | wadev  | vedant  | 19          | 0   | 0          |
+| `wa_stock_reservations`          | `wa_stock_reservations` (20261001105000_cat_wadesk_schema.sql)               | tenant        | cat    | punya   | 10          | 2   | 0          |
+| `wa_storefront_views`            | `wa_storefront_views` (20261001101700_store_wadesk_schema.sql)               | child         | store  | punya   | 4           | 1   | 0          |
+| `wa_storefronts`                 | `wa_storefronts` (20261001101700_store_wadesk_schema.sql)                    | tenant        | store  | punya   | 16          | 1   | 0          |
+| `wa_templates`                   | `wa_templates` (20261001101300_tpl_wadesk_schema.sql)                        | tenant        | tpl    | vedant  | 35          | 2   | 0          |
+| `waba_groups`                    | `waba_groups` (20261001101100_waba_wadesk_schema.sql)                        | tenant        | waba   | vedant  | 15          | 1   | 0          |
+| `wallet_transactions`            | `wallet_transactions` (20261001100300_wallet_wadesk_schema.sql)              | child         | wallet | lakshya | 13          | 1   | 1          |
+| `warmer_daily_sends`             | `warmer_daily_sends` (20261001103100_sched_wadesk_schema.sql)                | child         | sched  | vedant  | 7           | 0   | 1          |
+| `webhook_deliveries`             | `webhook_deliveries` (20261001102300_intg_wadesk_schema.sql)                 | stream        | intg   | lakshya | 13          | 0   | 1          |
+| `webhooks`                       | `webhooks` (20261001102300_intg_wadesk_schema.sql)                           | tenant        | intg   | lakshya | 21          | 1   | 0          |
+| `wechat_broadcast_recipients`    | `wechat_broadcast_recipients` (20261001104300_wech_wadesk_schema.sql)        | child         | wech   | punya   | 10          | 2   | 0          |
+| `wechat_broadcasts`              | `wechat_broadcasts` (20261001104300_wech_wadesk_schema.sql)                  | tenant        | wech   | punya   | 20          | 3   | 0          |
+| `wechat_channels`                | `wechat_channels` (20261001104300_wech_wadesk_schema.sql)                    | tenant        | wech   | punya   | 20          | 1   | 0          |
+| `wechat_flow_sessions`           | `wechat_flow_sessions` (20261001104300_wech_wadesk_schema.sql)               | tenant        | wech   | punya   | 16          | 3   | 0          |
+| `woocommerce_cart_recoveries`    | `woocommerce_cart_recoveries` (20261001101800_ecom_wadesk_schema.sql)        | tenant        | ecom   | punya   | 10          | 1   | 0          |
+| `woocommerce_cod_confirmations`  | `woocommerce_cod_confirmations` (20261001101800_ecom_wadesk_schema.sql)      | tenant        | ecom   | punya   | 9           | 1   | 0          |
+| `woocommerce_integration_events` | `woocommerce_integration_events` (20261001101800_ecom_wadesk_schema.sql)     | child         | ecom   | punya   | 11          | 2   | 0          |
+| `woocommerce_integration_logs`   | `woocommerce_integration_logs` (20261001101800_ecom_wadesk_schema.sql)       | stream        | ecom   | punya   | 9           | 0   | 1          |
+| `woocommerce_integrations`       | `woocommerce_integrations` (20261001101800_ecom_wadesk_schema.sql)           | tenant        | ecom   | punya   | 21          | 1   | 0          |
+| `woocommerce_stock_waitlist`     | `woocommerce_stock_waitlist` (20261001101800_ecom_wadesk_schema.sql)         | tenant        | ecom   | punya   | 10          | 1   | 0          |
+| `workspace_addons`               | `workspace_addons` (20261001102500_wsp_wadesk_schema.sql)                    | tenant        | wsp    | lakshya | 9           | 2   | 0          |
+| `workspace_email_accounts`       | `workspace_email_accounts` (20261001102500_wsp_wadesk_schema.sql)            | tenant        | wsp    | lakshya | 12          | 0   | 3          |
+| `workspace_flags`                | `workspace_flags` (20261001102500_wsp_wadesk_schema.sql)                     | tenant        | wsp    | lakshya | 9           | 2   | 0          |
+| `workspace_ig_accounts`          | `workspace_ig_accounts` (20261001102500_wsp_wadesk_schema.sql)               | tenant        | wsp    | lakshya | 11          | 0   | 0          |
+| `workspace_payment_configs`      | `workspace_payment_configs` (20261001102500_wsp_wadesk_schema.sql)           | tenant        | wsp    | lakshya | 12          | 1   | 0          |
+| `workspace_user`                 | mapped to users + user_roles                                                 | existing      | wsp    | lakshya | 8           | -   | -          |
+| `workspaces`                     | mapped to organizations (+ workspace_settings overlay)                       | existing      | wsp    | lakshya | 56          | -   | -          |
+| `wp_campaign_contacts`           | `wp_campaign_contacts` (20261001103000_camp_wadesk_schema.sql)               | child         | camp   | vedant  | 25          | 2   | 0          |
+| `wpcampaigns`                    | `wpcampaigns` (20261001103000_camp_wadesk_schema.sql)                        | tenant        | camp   | vedant  | 58          | 7   | 1          |
 
 ## Virtual tables
 
-| table                   | domain | built from               | why                                                                                                                                              |
-| ----------------------- | ------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `workspace_settings`    | wsp    | WaDesk `workspaces`      | 1:1 with organizations: the WaDesk workspaces columns that are not name/slug/plan/status                                                         |
-| `contact_group_members` | con    | new                      | normalises WaDesk contacts.contact_group (JSON list of contact_groups ids)                                                                       |
-| `usage_charges`         | wallet | WaDesk `message_charges` | WaDesk message_charges under the name ADR-0012 gives the level-1 ledger                                                                          |
-| `wallets`               | wallet | new                      | ADR-0012 prepaid wallet. unit is 'credits' or an ISO currency code. Replaces users.wallet_credits / wallet_currency_minor / wallet_currency_code |
-| `user_settings`         | auth   | new                      | per-user WaDesk columns with no home in auth_core: postal address, onboarding/UI state, Sheets add-on key                                        |
-| `referral_codes`        | cpn    | new                      | WaDesk users.referral_code; looked up by code at signup before an org is known                                                                   |
+| table                   | domain | built from               | why                                                                                                                                                             |
+| ----------------------- | ------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `workspace_settings`    | wsp    | WaDesk `workspaces`      | 1:1 with organizations: the WaDesk workspaces columns that are not name/slug/plan/status                                                                        |
+| `contact_group_members` | con    | new                      | normalises WaDesk contacts.contact_group (JSON list of contact_groups ids)                                                                                      |
+| `usage_charges`         | wallet | WaDesk `message_charges` | WaDesk message_charges under the name the billing design gives the level-1 ledger                                                                               |
+| `wallets`               | wallet | new                      | Prepaid wallet from the billing design. unit is 'credits' or an ISO currency code. Replaces users.wallet_credits / wallet_currency_minor / wallet_currency_code |
+| `user_settings`         | auth   | new                      | per-user WaDesk columns with no home in auth_core: postal address, onboarding/UI state, Sheets add-on key                                                       |
+| `referral_codes`        | cpn    | new                      | WaDesk users.referral_code; looked up by code at signup before an org is known                                                                                  |
 
 ## Column maps for tables that already exist here
 
@@ -278,21 +278,21 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 | `created_at`   | api_keys.created_at      |
 | `updated_at`   | api_keys.updated_at      |
 
-### `attributes` -> fields (field metadata registry, ADR-0017)
+### `attributes` -> fields (field metadata registry)
 
-| WaDesk column     | lives in                                                                                                                                                                                                        |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`              | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `user_id`         | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `workspace_id`    | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `attribute_name`  | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `attribute_key`   | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `attribute_value` | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `description`     | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `type`            | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `status`          | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `created_at`      | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
-| `updated_at`      | fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| WaDesk column     | lives in                                                                                                                                                                                               |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`              | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `user_id`         | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `workspace_id`    | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `attribute_name`  | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `attribute_key`   | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `attribute_value` | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `description`     | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `type`            | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `status`          | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `created_at`      | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
+| `updated_at`      | fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config |
 
 ### `audit_logs` -> audit_log
 
@@ -331,21 +331,21 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 | `created_at`        | companies.created_at                        |
 | `updated_at`        | companies.updated_at                        |
 
-### `contact_custom_fields` -> fields (field metadata registry, ADR-0017)
+### `contact_custom_fields` -> fields (field metadata registry)
 
-| WaDesk column   | lives in                                                                                                                                                             |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`            | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `workspace_id`  | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `key`           | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `label`         | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `type`          | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `options`       | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `required`      | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `show_in_panel` | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `sort`          | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `created_at`    | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
-| `updated_at`    | fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| WaDesk column   | lives in                                                                                                                                                  |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`            | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `workspace_id`  | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `key`           | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `label`         | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `type`          | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `options`       | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `required`      | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `show_in_panel` | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `sort`          | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `created_at`    | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
+| `updated_at`    | fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config |
 
 ### `contact_tag` -> contact_tags
 
@@ -485,24 +485,24 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 
 ### `teams` -> teams
 
-| WaDesk column              | lives in                                     |
-| -------------------------- | -------------------------------------------- |
-| `id`                       | teams.id                                     |
-| `workspace_id`             | teams.org_id                                 |
-| `name`                     | teams.name                                   |
-| `slug`                     | teams.slug                                   |
-| `color`                    | teams.color                                  |
-| `description`              | teams.description                            |
-| `default_assignee_user_id` | teams.default_assignee_id                    |
-| `assignment_strategy`      | teams.assignment_strategy                    |
-| `business_hours`           | teams.business_hours                         |
-| `timezone`                 | teams.timezone                               |
-| `device_ids`               | teams.device_ids                             |
-| `is_default`               | teams.is_default                             |
-| `sort`                     | teams.sort                                   |
-| `deleted_at`               | (dropped: hard delete + audit row, ADR-0009) |
-| `created_at`               | teams.created_at                             |
-| `updated_at`               | teams.updated_at                             |
+| WaDesk column              | lives in                           |
+| -------------------------- | ---------------------------------- |
+| `id`                       | teams.id                           |
+| `workspace_id`             | teams.org_id                       |
+| `name`                     | teams.name                         |
+| `slug`                     | teams.slug                         |
+| `color`                    | teams.color                        |
+| `description`              | teams.description                  |
+| `default_assignee_user_id` | teams.default_assignee_id          |
+| `assignment_strategy`      | teams.assignment_strategy          |
+| `business_hours`           | teams.business_hours               |
+| `timezone`                 | teams.timezone                     |
+| `device_ids`               | teams.device_ids                   |
+| `is_default`               | teams.is_default                   |
+| `sort`                     | teams.sort                         |
+| `deleted_at`               | (dropped: hard delete + audit row) |
+| `created_at`               | teams.created_at                   |
+| `updated_at`               | teams.updated_at                   |
 
 ### `users` -> users + user_profiles (auth_core)
 
@@ -555,7 +555,7 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 | `sheets_api_key_suffix`       | user_settings.sheets_key_suffix                                                      |
 | `sheets_api_key_created_at`   | user_settings.sheets_key_created_at                                                  |
 | `sheets_api_key_last_used_at` | user_settings.sheets_key_last_used_at                                                |
-| `deleted_at`                  | (dropped: hard delete + audit row, ADR-0009)                                         |
+| `deleted_at`                  | (dropped: hard delete + audit row)                                                   |
 
 ### `workspace_user` -> users + user_roles
 
@@ -618,7 +618,7 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 | `size_range`                | workspace_settings.size_range                 |
 | `status`                    | organizations.status ('active' / 'suspended') |
 | `last_active_at`            | workspace_settings.last_active_at             |
-| `deleted_at`                | (dropped: hard delete + audit row, ADR-0009)  |
+| `deleted_at`                | (dropped: hard delete + audit row)            |
 | `created_at`                | workspace_settings.created_at                 |
 | `updated_at`                | workspace_settings.updated_at                 |
 | `skip_onboarding_email`     | workspace_settings.skip_onboarding_email      |

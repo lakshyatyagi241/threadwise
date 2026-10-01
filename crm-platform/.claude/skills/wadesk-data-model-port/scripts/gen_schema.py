@@ -433,7 +433,7 @@ def build():
             if n in ("created_at", "updated_at"):
                 continue
             if n == "deleted_at":
-                tb.skipped.append((n, "soft delete: hard delete + audit row (ADR-0009)"))
+                tb.skipped.append((n, "soft delete: hard delete + audit row"))
                 continue
             if n in ("uuid", "row_version") or (n == "org_id" and tb.tenant_scoped):
                 sys.exit(f"{t}.{n} collides with a platform column")
@@ -1041,7 +1041,7 @@ def emit_docs(out, order_d, manifest):
         for nm, cs, g in tb.uniques:
             if g == "global":
                 R.append(f"- `{tb.name}`: `{nm}` on ({', '.join(cs)})")
-    R += ["", "## Soft deletes dropped", "", "WaDesk soft-deletes these tables; here a delete is a hard delete plus an audit row (ADR-0009). If a feature needs restore, add `is_archived` for that table.", ""]
+    R += ["", "## Soft deletes dropped", "", "WaDesk soft-deletes these tables; here a delete is a hard delete plus an audit row. If a feature needs restore, add `is_archived` for that table.", ""]
     for tb in sorted(TABLES.values(), key=lambda x: x.name):
         if any(c == "deleted_at" for c, _ in tb.skipped):
             R.append(f"- `{tb.name}`")
@@ -1192,7 +1192,7 @@ def main():
         body, used, ext = render_domain_ts(d, order, None)
         ddir = os.path.join(out, "schema", d)
         os.makedirs(ddir, exist_ok=True)
-        hdr = ["/**", f" * {d}: tables ported from WaDesk. Mirrors migrations/{fname}.", " * The SQL migration is the source of truth (ADR-0004); `pnpm db:verify-schema` fails if this file and the database disagree.", " */"]
+        hdr = ["/**", f" * {d}: tables ported from WaDesk. Mirrors migrations/{fname}.", " * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.", " */"]
         pg = sorted(x for x in used if x != "sql")
         imp = ["import {"] + [f"  {x}," for x in pg] + ["} from 'drizzle-orm/pg-core';"]
         if "sql" in used:

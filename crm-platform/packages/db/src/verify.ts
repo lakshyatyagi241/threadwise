@@ -4,7 +4,7 @@ import type { Client } from 'pg';
 import * as schema from './schema';
 
 /**
- * Drift check between the Drizzle schema and the live database (ADR-0004: the SQL
+ * Drift check between the Drizzle schema and the live database (the SQL
  * migrations are the source of truth, the Drizzle schema mirrors them for typing).
  *
  * Run it against a database that has had every migration applied:

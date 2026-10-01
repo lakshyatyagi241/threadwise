@@ -9,7 +9,7 @@ import {
 import { isSameOrigin, problem } from '@/lib/auth/proxy';
 import { apiBase, refreshTokens } from '@/lib/auth/server';
 
-/** Platform-operator sign-in (a separate identity pool and cookie set, ADR-0019). */
+/** Platform-operator sign-in (a separate identity pool and cookie set). */
 const UPSTREAM: Record<string, string> = {
   login: '/v2/platform/auth/login',
   mfa: '/v2/platform/auth/login/mfa',

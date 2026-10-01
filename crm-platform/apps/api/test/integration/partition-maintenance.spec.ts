@@ -18,7 +18,7 @@ import { PartitionMaintenanceService } from '../../src/workers/partition-mainten
  *
  * The service runs as `crm_app_user`, the role the worker really connects as.
  * That role owns no table and cannot create one, so partition creation only
- * works through the SECURITY DEFINER ensure_monthly_partition (ADR-0021).
+ * works through the SECURITY DEFINER ensure_monthly_partition.
  * Running as the owner here would pass for any partition-creating code,
  * including code that can only ever work on a laptop.
  */

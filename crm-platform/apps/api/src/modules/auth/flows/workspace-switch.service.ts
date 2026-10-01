@@ -12,7 +12,7 @@ import { LoginService, type ClientMeta } from './login.service';
  * Workspace switch (WD-AUTH-010).
  *
  * Users are per-organization rows, so "the same person" in two organizations
- * means: the same email, verified in both (ADR-0019). The current session
+ * means: the same email, verified in both. The current session
  * already proves control of the verified inbox, so no password is asked; but a
  * target account with MFA still produces a step-up challenge.
  */

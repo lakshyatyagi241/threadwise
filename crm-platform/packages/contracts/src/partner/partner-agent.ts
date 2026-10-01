@@ -4,7 +4,7 @@ import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
 /**
  * Sub-agent / channel-partner contracts.
  *
- * Context (ADR-0014): sub-agents are external lead sources. They log into
+ * Context: sub-agents are external lead sources. They log into
  * their own portal, submit a lead, and then want to see that lead's stage
  * move. They are NOT staff — they never appear in the staff user table, never
  * get assigned a conversation, and can only ever see leads they submitted.

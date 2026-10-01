@@ -59,7 +59,7 @@ const OTP_SENDS_PER_IP_PER_HOUR = 15;
 
 /**
  * Account creation (WD-AUTH-005/006/008-prep). Creates the organization and its
- * first user together (ADR-0019); there is no global "user first" step.
+ * first user together; there is no global "user first" step.
  *
  * With registration OTP active, nothing is created until the WhatsApp code is
  * confirmed: no ghost accounts. The staged request keeps an argon2 hash of the

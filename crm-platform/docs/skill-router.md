@@ -30,10 +30,7 @@ in the line (`new-module → add-migration — schema change needed`).
 | integrate vendor API (BSP, SMS, email, payment, voice)                                                                                | `provider-adapter`         |
 | inbound webhook endpoint, provider callback                                                                                           | `webhook-handler`          |
 | frontend fetch from apps/web or apps/partner, data hook, form submit to API                                                           | `frontend-api-call`        |
-| decision expensive to reverse, "why did we do X", new dependency choice                                                               | `write-adr`                |
-| docs/adr/*.md touched, "is ADR bookkeeping ok"                                                                                        | `adr-diff-guard`           |
 | "open a PR", "is this ready", "run the checks"                                                                                        | `pre-pr`                   |
-| review diff/PR against this repo's own rules (tenant scoping, RLS, AppError, outbox)                                                  | `adr-compliance-review`    |
 | any feature, screen, endpoint, contract, migration or worker job just built or changed; "compare with wadesk", "parity", "playwright" | `wadesk-playwright-parity` |
 | general code review (bugs, simplification, not repo-specific)                                                                         | `code-review`              |
 | explicit "simplify this"                                                                                                              | `simplify`                 |
@@ -44,12 +41,10 @@ in the line (`new-module → add-migration — schema change needed`).
 "add a deals module"
   new-module -> add-migration -> contracts-change -> rbac-permission
             -> outbox-event
-            -> pre-pr -> adr-diff-guard
-                      -> adr-compliance-review
+            -> pre-pr
 
 "integrate Gupshup"
   provider-adapter -> webhook-handler -> worker-job
-                  -> write-adr -> adr-diff-guard
                   -> pre-pr
 
 "add a field to the contact API"

@@ -75,7 +75,6 @@ offset pagination. Do not touch files outside your zones; run `ownership_check.p
 2. `wadesk-playwright-parity`: **automatic**, do not wait for the Stop hook that enforces it. Runs the feature on the running WaDesk and on ours in Playwright (UI, UX, functionality, the full edge-case matrix), reports every difference as same / intended / defect, spawns fix sub-agents for the defects and re-runs until clean, writes the evidence rows and a stamp.
 3. `wadesk-verify-parity`: only for what the twin run marks as not automatable (live provider sessions) and to finish the evidence file `docs/wadesk-port/parity/<domain>.md` (the twin run supplies the rows).
 4. `bash .claude/skills/pre-pr/scripts/gate.sh`, `python3 .claude/skills/wadesk-ownership-guard/scripts/ownership_check.py`,
-   `adr-compliance-review`, `adr-diff-guard` (an architectural call needs an ADR in the same PR, `write-adr`).
 5. Open the PR via `pre-pr`. Description: WD ids, acceptance-criteria checklist, parity evidence link, intentional
    deviations from WaDesk and why, follow-ups.
 

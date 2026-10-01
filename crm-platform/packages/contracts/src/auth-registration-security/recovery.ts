@@ -20,7 +20,7 @@ export const resetPasswordRequestSchema = z.object({
 });
 export type ResetPasswordRequest = z.infer<typeof resetPasswordRequestSchema>;
 
-/** Verification never signs anyone in (WaDesk's link did; ADR-0019 does not). */
+/** Verification never signs anyone in (WaDesk's link did; this does not). */
 export const verifyEmailRequestSchema = z.object({
   orgSlug: orgSlugSchema,
   token: z.string().min(16).max(128),

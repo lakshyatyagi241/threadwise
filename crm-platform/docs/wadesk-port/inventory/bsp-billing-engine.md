@@ -185,7 +185,7 @@ sidebar group "Billing").
   - Given a WABA config row without a `waba_id`, When the picker renders, Then that row is absent.
   - Given a non-admin, When they request the page, Then 403.
 - **Source refs:** `app/Bsp/Http/Controllers/Admin/BspCreditController.php` (`index`, `connectedWabaAccounts`), `resources/views/bsp/credit/index.blade.php`, `Documentation/pages/bsp-billing/admin-pages.html`, `Documentation/pages/bsp-billing/meta-setup.html`.
-- **Port notes:** New Next.js admin page under `apps/web` admin area (Billing > Reseller). API: `GET /admin/reseller/settings`, `GET /admin/reseller/allocations?cursor`, `GET /admin/reseller/waba-candidates`. Never return the token. The WABA id lives in an encrypted credentials blob in WaDesk; in the target, keep `waba_id` as a plain column on the WABA connection table so the picker is a simple query and filter on `status='connected'`. This page is platform-scope (super-admin pool), not tenant-scoped; the allocation table itself carries `workspace_id` and needs RLS treatment consistent with the platform tables ADR (0002/0007).
+- **Port notes:** New Next.js admin page under `apps/web` admin area (Billing > Reseller). API: `GET /admin/reseller/settings`, `GET /admin/reseller/allocations?cursor`, `GET /admin/reseller/waba-candidates`. Never return the token. The WABA id lives in an encrypted credentials blob in WaDesk; in the target, keep `waba_id` as a plain column on the WABA connection table so the picker is a simple query and filter on `status='connected'`. This page is platform-scope (super-admin pool), not tenant-scoped; the allocation table itself carries `workspace_id` and needs RLS treatment consistent with the platform tables (tenancy and identity-pool design).
 
 ### WD-BSP-004 — Save Meta reseller connection settings
 
@@ -548,7 +548,7 @@ sidebar group "Billing").
   - Given no charged rows this month, When the page loads, Then all tiles show zero and the per-workspace table shows the empty message.
   - Given the alias URL `admin/bsp/dashboard`, When opened, Then the same page renders.
 - **Source refs:** `app/Bsp/Http/Controllers/Admin/BspDashboardController.php`, `app/Bsp/Services/ReportService.php` (`platformTotals`), `resources/views/bsp/dashboard/index.blade.php`, `app/Support/FormatSettings.php`, `Documentation/pages/bsp-billing/admin-pages.html`.
-- **Port notes:** Build as a reporting query (read replica per ADR 0013 candidate) over the charges table with an explicit period filter and a stored platform currency. Keep the exclusion of free/refunded rows. Add month picker and CSV export (not in WaDesk). Platform-scope page for the super-admin pool.
+- **Port notes:** Build as a reporting query (read replica per replica and public-API design candidate) over the charges table with an explicit period filter and a stored platform currency. Keep the exclusion of free/refunded rows. Add month picker and CSV export (not in WaDesk). Platform-scope page for the super-admin pool.
 
 ### WD-BSP-015 — Reseller P&L dashboard: per-workspace table
 

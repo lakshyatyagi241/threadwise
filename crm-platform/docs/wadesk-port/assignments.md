@@ -31,7 +31,7 @@ The people are interchangeable: to swap two clusters, change `owner` in `assignm
 |---|---|---|---|---|
 | F0 | Skeleton PR: per-domain shells, generated registries, timestamp migrations, decorator registries, per-domain docs (conflict-map section 2) | `lakshya` | 6 | 0 |
 | F1 | Web foundation: app shells, @crm/ui, session/BFF, API client, i18n with RTL, nav registry | `lakshya` | 12 | 0 |
-| F2 | Operator layer: super-admin actor kind, workspace signup/onboarding, plan and limit gating hook (ADRs for D4, D5) | `lakshya` | 30 | 1 |
+| F2 | Operator layer: super-admin actor kind, workspace signup/onboarding, plan and limit gating hook (decisions for D4, D5) | `lakshya` | 30 | 1 |
 | F3 | Channel core: channels table and credential vault, provider ports, ingest pipeline, unified message model | `vedant` | 40 | 1 |
 | F4 | Worker plumbing: queue registry, outbox subscribers, realtime bridge (redis-emitter) | `vedant` | 15 | 1 |
 | F5 | Storage and mail: S3 client, uploads with quota and MIME checks, signed URLs, mailer | `punya` | 12 | 1 |

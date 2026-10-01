@@ -29,7 +29,7 @@ const ROLE_TONE: Record<OperatorRole, 'success' | 'neutral'> = {
 };
 
 /**
- * The platform console shell (ADR-0019): sidebar, header, drawer on phones. A super
+ * The platform console shell: sidebar, header, drawer on phones. A super
  * admin who has not enrolled two-factor authentication gets nothing but the enrolment
  * page: the API refuses everything else, so the shell sends every other path there.
  */

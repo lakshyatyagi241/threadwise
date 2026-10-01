@@ -9,7 +9,7 @@ import type { z } from 'zod';
 
 /**
  * What the session-issuing BFF routes return: the contract bodies minus the token pair, which
- * the server moves into httpOnly cookies (ADR-0018).
+ * the server moves into httpOnly cookies.
  *
  * The union is discriminated by hand: composing contract schemas with this app's own `zod` import
  * mixes two builds of zod (CJS contracts, ESM web), and `z.discriminatedUnion` cannot read the other's literals.

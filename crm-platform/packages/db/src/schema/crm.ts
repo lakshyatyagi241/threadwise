@@ -60,7 +60,7 @@ export const contacts = pgTable(
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull(),
     name: text('name'),
-    /** Additive alongside `name` — see ADR discussion in docs/global-schema-design.dbml. */
+    /** Additive alongside `name` — see docs/global-schema-design.dbml. */
     firstName: text('first_name'),
     lastName: text('last_name'),
     email: citext('email'),

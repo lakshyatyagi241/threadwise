@@ -11,7 +11,7 @@ import { DatabaseService } from '../../infra/db/database.service';
  * on (the catalogue is the operator's, not a tenant's), so every operator
  * mutation and every cross-tenant count goes through here. A grep for
  * `.privileged(` in this module must find this file and nothing else
- * (unit-tested), the same rule ADR-0019 sets for the auth module.
+ * (unit-tested), the same rule the auth module follows.
  *
  * A unique violation (two operators creating the same slug, or flagging two
  * defaults at the same instant) is the one failure two correct requests can

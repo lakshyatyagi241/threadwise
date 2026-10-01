@@ -134,19 +134,17 @@ pnpm test:integration # if you can — this is what actually exercises RLS end-t
 
 ## 6. Related skills — invoke them, don't just note them
 
-| If this migration…                                                | Invoke             |
-| ----------------------------------------------------------------- | ------------------ |
-| adds a table a new API module will use                            | `new-module`       |
-| adds permission keys                                              | `rbac-permission`  |
-| adds/changes an enum the API exposes                              | `contracts-change` |
-| changes something an ADR governs (tenancy, partitioning, billing) | `adr-diff-guard`   |
-| is finished and needs verifying                                   | `pre-pr`           |
+| If this migration…                     | Invoke             |
+| -------------------------------------- | ------------------ |
+| adds a table a new API module will use | `new-module`       |
+| adds permission keys                   | `rbac-permission`  |
+| adds/changes an enum the API exposes   | `contracts-change` |
+| is finished and needs verifying        | `pre-pr`           |
 
 ## 7. Mirror the change in Drizzle
 
 `packages/db/src/schema/*.ts` is typed access to the same tables — it does
-NOT generate the SQL (see
-[docs/adr/0004-handwritten-sql-migrations.md](../../../docs/adr/0004-handwritten-sql-migrations.md)).
+NOT generate the SQL.
 Add the table there in the same commit. Nothing checks that the two agree
 automatically; a mismatch is a runtime error, which is exactly why this step
 is easy to forget and important not to.

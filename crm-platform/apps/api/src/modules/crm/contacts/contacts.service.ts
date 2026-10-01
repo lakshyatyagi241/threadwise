@@ -304,7 +304,7 @@ export class ContactsService {
         existing.ownerId,
       );
 
-      // Hard delete, as decided in ADR-0009. The audit row and the outbox
+      // Hard delete. The audit row and the outbox
       // event are written first so the trail survives the row.
       await this.audit.record(tx, {
         module: MODULE_KEY,
@@ -422,7 +422,7 @@ export class ContactsService {
           action: 'update',
           // input.ownerId, not the resolved internal `ownerId` above — every
           // response, field-history included, exposes uuids, never the
-          // internal bigint PK (ADR-0016).
+          // internal bigint PK.
           delta: { ownerId: { old: undefined, new: input.ownerId } },
         });
         await this.outbox.emit(rowTx, {

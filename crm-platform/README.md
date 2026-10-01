@@ -45,7 +45,6 @@ packages/
   config/       shared tsconfig
 docs/
   architecture/ how it works
-  adr/          why it works that way — 16 decision records
   runbooks/     how to operate it
   db/           the ERD
 tools/migration/ legacy Geta migration (planned)
@@ -67,18 +66,18 @@ already made — read it before starting.
 
 ## The ten decisions worth knowing
 
-| Decision                               | Why it matters                                             | ADR                                                  |
-| -------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------- |
-| One NestJS app, split by module        | two engineers, one deploy                                  | [0001](docs/adr/0001-modular-monolith.md)            |
-| Shared schema + **forced** RLS         | a forgotten WHERE returns nothing, not someone else's data | [0002](docs/adr/0002-postgres-rls-multitenancy.md)   |
-| App connects as a **non-superuser**    | superusers bypass RLS — this is load-bearing               | [0002](docs/adr/0002-postgres-rls-multitenancy.md)   |
-| Drizzle as a query builder             | composite keys, RLS, partitions, JSONB                     | [0003](docs/adr/0003-drizzle-over-orm.md)            |
-| Hand-written SQL migrations            | generators cannot emit policies or partitions              | [0004](docs/adr/0004-handwritten-sql-migrations.md)  |
-| Transactional outbox                   | "row committed" and "event exists" cannot diverge          | [0005](docs/adr/0005-transactional-outbox.md)        |
-| RBAC in guards, RLS for isolation only | query plans that do not depend on who is asking            | [0006](docs/adr/0006-rbac-at-middleware.md)          |
-| Separate identity pools                | an external agent cannot appear in a staff dropdown        | [0007](docs/adr/0007-three-identity-pools.md)        |
-| Worker as a separate process           | a campaign burst cannot starve HTTP latency                | [0010](docs/adr/0010-bullmq-worker-process.md)       |
-| External reads on a replica            | partner polling never competes with staff writes           | [0013](docs/adr/0013-read-replica-and-public-api.md) |
+| Decision                               | Why it matters                                             |
+| -------------------------------------- | ---------------------------------------------------------- |
+| One NestJS app, split by module        | two engineers, one deploy                                  |
+| Shared schema + **forced** RLS         | a forgotten WHERE returns nothing, not someone else's data |
+| App connects as a **non-superuser**    | superusers bypass RLS — this is load-bearing               |
+| Drizzle as a query builder             | composite keys, RLS, partitions, JSONB                     |
+| Hand-written SQL migrations            | generators cannot emit policies or partitions              |
+| Transactional outbox                   | "row committed" and "event exists" cannot diverge          |
+| RBAC in guards, RLS for isolation only | query plans that do not depend on who is asking            |
+| Separate identity pools                | an external agent cannot appear in a staff dropdown        |
+| Worker as a separate process           | a campaign burst cannot starve HTTP latency                |
+| External reads on a replica            | partner polling never competes with staff writes           |
 
 ## Commands
 
@@ -103,14 +102,12 @@ Then read the [PR checklist](.github/PULL_REQUEST_TEMPLATE.md).
 
 ## Documentation
 
-Start at [docs/README.md](docs/README.md). If you are about to ask "why is it
-done this way", the answer is in [docs/adr/](docs/adr/).
+Start at [docs/README.md](docs/README.md).
 
 ## Before production
 
-See [ADR-0011](docs/adr/0011-single-vm-deploy.md#required-before-this-is-production-safe)
-— backups with a **tested** restore, monitoring, disk alerts, log shipping.
+A single-VM deploy needs backups with a **tested** restore, monitoring, disk
+alerts and log shipping first.
 
-And [ADR-0012](docs/adr/0012-payments-and-settlements.md#compliance--read-before-enabling-settlements)
-— exam-fee settlements are **blocked** on an RBI PA/PG compliance review. Test
+Exam-fee settlements are **blocked** on an RBI PA/PG compliance review. Test
 mode only until that is closed.

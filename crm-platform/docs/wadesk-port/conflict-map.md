@@ -81,8 +81,6 @@ assumption, not a measured number.
 | H27 | `.github/` has no `CODEOWNERS`; PR template has no ownership item                                                                               | Nothing tells GitHub who must review what.                                                                                                                                                                                                                                                                                                                                | all                                                    | S3  | Generated CODEOWNERS from the ownership manifest.                                                                                                                      | S1, S6  |
 | H28 | `.claude/skills/*`: `new-module:181`, `worker-job:38,60`, `provider-adapter:54`, `add-migration:25`, `rbac-permission:43-46`, `outbox-event:80` | The skills tell an agent (or dev) to edit exactly the hotspot files above. `new-module:117` also shows `version: '1'` while every real controller uses `'2'`.                                                                                                                                                                                                             | every agent-assisted PR                                | S1  | Rewrite the skills listed in S9. Otherwise the conflicts return.                                                                                                       | S9      |
 | H29 | `docs/api-inventory.md` (78 KB), `docs/api-testing.md` (55 KB), `docs/phase-plan.md`                                                            | `README.md:72,78` and `api-inventory.md:9` say to update the first two "whenever a phase lands / a new endpoint ships"; phase-plan has the status table (`:18`) and Swagger-gating rules. phase-plan was touched 5 times, the most of any doc. Not enforced by CI, purely convention.                                                                                     | any dev finishing an endpoint                          | S2  | Freeze the three files (legacy pages 1-28); new work uses `docs/api/<domain>.md`.                                                                                      | S8      |
-| H30 | `docs/README.md:26-50` (ADR index), `:72-82`                                                                                                    | One table of ADRs; `adr-guard.sh` checks that every ADR file has a row here. Two ADRs added the same week both append at the end of the table.                                                                                                                                                                                                                            | ADR authors                                            | S3  | Per-owner subsections (verified: git merges those cleanly, same-section appends conflict).                                                                             | S8      |
-| H31 | `.claude/skills/write-adr/scripts/new-adr.sh:16-21`                                                                                             | Next number = highest existing + 1, so two ADRs written in parallel get the same number (different slug = no git conflict, duplicate numbers).                                                                                                                                                                                                                            | ADR authors                                            | S3  | Per-owner number blocks via `ADR_BLOCK_START`.                                                                                                                         | S8      |
 | H32 | `docs/architecture/rbac.md:116`, `docs/runbooks/migrations.md:22`                                                                               | Stale guidance: "add the key to 0008" (contradicts immutability); `db:new` "creates 0009\_...". `local-development.md:83` already says "timestamped".                                                                                                                                                                                                                     | readers                                                | S4  | Fix wording in S8/S9.                                                                                                                                                  | S8, S9  |
 | H33 | `docs/wadesk-port/inventory/*.md`, `port-map/*.md`, `tracker/<owner>.md`                                                                        | Already one file per domain / per owner. **Not a hotspot.** But at the time of writing 11 new markdown files under `docs/wadesk-port` and the wadesk skills fail `pnpm format:check` (measured).                                                                                                                                                                          | authors                                                | S3  | `.prettierignore` the inventory dirs or run `prettier --write` once.                                                                                                   | S1      |
 | H34 | Global-vs-tenant helper lists                                                                                                                   | No code list of tenant tables exists (`tenant.ts` has none). RLS is per-migration; 0007's `tenant_tables` array only covers tables from 0003-0006. `check-rls.sh` takes table names as arguments.                                                                                                                                                                         | n/a                                                    | S4  | None needed beyond H21.                                                                                                                                                | none    |
@@ -117,10 +115,9 @@ assumption, not a measured number.
   grants in migrations. Dev seed gives Admin all keys and Counsellor 5 keys. A trigger (`protect_locked_role`,
   `0003_foundation.sql:134-153`) refuses any grant change on a locked role, so how a **production** org's Admin role gets a new
   key is undefined in the repo (see 2.0 D4).
-- **Shared docs every PR "must" edit.** `api-inventory.md`, `api-testing.md`, `phase-plan.md`, `docs/README.md` (ADR index),
+- **Shared docs every PR "must" edit.** `api-inventory.md`, `api-testing.md`, `phase-plan.md`, `docs/README.md`,
   `packages/db/README.md`, `docs/db/README.md`. CONTRIBUTING and `pre-pr`/`gate.sh` require **none** of these; `gate.sh` runs
-  format, lint, typecheck, arch, unit, and conditionally db/integration. `adr-guard.sh` checks only ADR files against the
-  `docs/README.md` index, at WARN level, and is **not** run in CI (`ci.yml`) or by `gate.sh`. So every docs collision is
+  format, lint, typecheck, arch, unit, and conditionally db/integration. So every docs collision is
   convention-driven (docs README, skills), which is why the fix is convention plus skills, not CI.
 - **CI / deps / infra.** CI: `static` (format, lint, typecheck, arch) and `test` (db:migrate from scratch, db:status, unit,
   integration) and `build` (docker). Nothing checks docs, ownership or migration naming.
@@ -134,7 +131,7 @@ assumption, not a measured number.
 | D1  | The domain manifest: for every domain `id` (kebab, from `inventory/`), `code` (`^[a-z][a-z0-9]{1,11}$`, unique), `owner`, `routeBase` (unique first URL segment, default = id), `webRoute`. The sibling skill reads `docs/wadesk-port/ownership.json`. | Extend `ownership.json` `domains.<id>` with `code`/`routeBase`; the generator reads it, so there is one source of truth. Reserve `core` (kernel). Legacy prefixes `crm`, `inbox`, `broadcast`, `billing`, `exam`, `partner`, `admin`, `record` go to the successor domain. |
 | D2  | Migration ordering scheme.                                                                                                                                                                                                                             | Timestamp + code (section 2 S2). Alternative (owner number blocks) rejected: fresh-DB order becomes "all of A, then all of B" and cross-owner FKs silently depend on block order.                                                                                          |
 | D3  | How a worker job pushes to sockets (the gateway lives only in the API process).                                                                                                                                                                        | Add `@socket.io/redis-emitter` in the kernel PR that introduces the room registry; not in the skeleton.                                                                                                                                                                    |
-| D4  | How real orgs' locked Admin role receives new permission keys.                                                                                                                                                                                         | Kernel ADR before the first permission ships to a real tenant (treat `system_key='admin'` as allow-all in `RbacService`, or an unlock/grant/lock migration helper). Dev seed already covers local.                                                                         |
+| D4  | How real orgs' locked Admin role receives new permission keys.                                                                                                                                                                                         | Kernel decision before the first permission ships to a real tenant (treat `system_key='admin'` as allow-all in `RbacService`, or an unlock/grant/lock migration helper). Dev seed already covers local.                                                                    |
 | D5  | Super-admin actor kind. `ActorType` (`request-context.ts:4`) has no platform-admin; several inventory domains are admin-console features.                                                                                                              | Decide before admin domains start; it is a K1 kernel change (guards, contracts, token claims).                                                                                                                                                                             |
 | D6  | Which Next.js app moves into `apps/web`, its Next version and i18n library.                                                                                                                                                                            | Part B is written library-agnostic; confirm before starting it.                                                                                                                                                                                                            |
 | D7  | GitHub settings: CODEOWNERS enforcement, "require branch up to date", merge queue.                                                                                                                                                                     | Turn on (repo settings, not verifiable from here).                                                                                                                                                                                                                         |
@@ -150,7 +147,7 @@ New commands this PR creates (they do **not** exist today): `pnpm domains:sync`,
 Commands that exist today and are used for verification: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`,
 `pnpm arch:check`, `pnpm test`, `pnpm test:integration`, `pnpm db:migrate`, `pnpm db:status`,
 `pnpm --filter @crm/contracts build`, `pnpm --filter @crm/db build`, `pnpm --filter @crm/api build`,
-`bash .claude/skills/pre-pr/scripts/gate.sh`, `bash .claude/skills/adr-diff-guard/scripts/adr-guard.sh`.
+`bash .claude/skills/pre-pr/scripts/gate.sh`.
 
 #### S1. Repo hygiene (0.5 h) — removes H23, H25, H27, H33
 
@@ -406,7 +403,7 @@ Verify: `pnpm domains:sync` twice (second run is a no-op); `pnpm domains:check`;
 
 #### S7. Kernel extension points (3 h)
 
-These are kernel changes made once, with the ADR in S8. Each replaces an "edit the list" instruction with "decorate your class".
+These are kernel changes made once. Each replaces an "edit the list" instruction with "decorate your class".
 
 **S7a. Outbox subscribers — removes H04.** New `apps/api/src/kernel/outbox/outbox-subscriber.ts`:
 
@@ -476,7 +473,7 @@ against real Redis before others copy it (Section 6, item 5).
 Verify S7: `pnpm test` (new unit tests), `pnpm typecheck`, `pnpm arch:check`, `pnpm dev:worker` boots and the outbox drain
 still logs; `pnpm test:integration`.
 
-#### S8. Docs restructure and ADR bookkeeping (1.5 h) — removes H22, H29, H30, H31, H32
+#### S8. Docs restructure (1.5 h) — removes H22, H29, H32
 
 - New `docs/api/README.md` (template) and a per-domain file `docs/api/<domain>.md` created by owners on demand: a route table
   (`Route | WD id | Status`) plus captured request/response evidence. This merges what `api-inventory.md` and `api-testing.md`
@@ -485,32 +482,11 @@ still logs; `pnpm test:integration`.
   pages 1-28 only, edited by <legacy owner>. New work: docs/api/<domain>.md."** In `docs/README.md` (`:72-82`) point the
   API inventory and testing sections at `docs/api/`. In `phase-plan.md` fix the gating paragraph (tag lists do not gate;
   `@ApiExcludeController()` does) and say the "docs/api-testing.md entry" requirement now means the domain's `docs/api/<domain>.md`.
-- `docs/README.md` ADR table (`:26-50`): keep 0001-0017; below it add subsections `### ADRs 0100-0199 (<owner-a>)`,
-  `### ADRs 0200-0299 (<owner-b>)`, `### ADRs 0300-0399 (<owner-c>)`, one table each. Verified: git merges edits in separate
-  sections cleanly and conflicts when two people append to the same section (Appendix A.6). `adr-guard.sh` greps only for the
-  `(adr/<file>)` link, so it works unchanged.
-- `write-adr/scripts/new-adr.sh:16-21`: honour `ADR_BLOCK_START` (set once per dev with `git config crm.adrBlock 100`):
-
-  ```bash
-  start="${ADR_BLOCK_START:-$(git config --get crm.adrBlock || true)}"
-  if [ -n "$start" ]; then
-    last="$(ls docs/adr/[0-9][0-9][0-9][0-9]-*.md | awk -v s="$start" -v e="$((start+99))" \
-      '{n=substr($0,10,4)+0} n>=s && n<=e {l=$0} END{print l}')"
-    if [ -z "$last" ]; then next=$start; else next=$((10#$(basename "$last" | cut -d- -f1) + 1)); fi
-  fi
-  ```
-
-- **ADR-0018** via the `write-adr` skill (kernel block 0018-0099), status accepted on merge: "Parallel-development seams".
-  Extends ADR-0004 (naming only; the runner and immutability are unchanged) and ADR-0010 (queues registered per domain rather
-  than only in `queues.ts`; per-domain worker modules). Supersedes nothing, so `adr-diff-guard` (which flags edits to
-  accepted ADRs) stays quiet. Negative consequences to state honestly: 60 generated shells, eager wiring of every domain
-  into both processes, migration order is author-time not merge-time (mitigated by the monotonic lint), and a decorator-based
-  registry is less greppable than an explicit list.
 - `packages/db/README.md` "Migrations applied today" (`:17`): replace with "see `pnpm db:status`". `docs/db/README.md`:
   add a note that domain deviations from the ERD are recorded in each inventory's "Data model" section.
 - `docs/architecture/rbac.md:116` and `docs/runbooks/migrations.md:22` and the "Writing one" section: new command, new naming.
 
-Verify: `bash .claude/skills/adr-diff-guard/scripts/adr-guard.sh` clean; `pnpm format:check`.
+Verify: `pnpm format:check`.
 
 #### S9. Skills, CONTRIBUTING, CLAUDE.md (1.5 h) — removes H28, H10 (rule), H32
 
@@ -530,8 +506,7 @@ Edit exactly these instructions; each currently sends a developer or an agent to
 | `CONTRIBUTING.md`, `CLAUDE.md`, `docs/skill-router.md` | scopes, pointers | Scopes are now domain ids/codes (S1); add "Parallel-work seams: read `docs/wadesk-port/conflict-map.md` section 3-5"; router rows for the new rules.                                                                            |
 
 Verify: grep the skills for `app.module`, `queues.ts`, `workers.module`, `providers.module`, `0008_seed`, `pnpm db:new <name>`:
-no remaining instruction to edit them. `bash .claude/skills/adr-compliance-review/scripts/scan.sh` still resolves permission
-keys.
+no remaining instruction to edit them.
 
 #### S10. CI and the conflict-freedom drill (1 h) — closes H24, H26
 
@@ -647,7 +622,6 @@ the code or the installed library.
 | Partition discovery                   | `ensure_monthly_partition(regclass, date)` is generic (`0001_extensions.sql:60`); `defaultPartitionCounts` assumes `<table>_default`. Read.                                                                                                           | OK; keep the `_default` convention.                                    |
 | Permission prefix lint                | `scan.sh:46-53` greps literal `@RequirePermission('...')` and `'key'` in `migrations/*.sql` (non-recursive); `PermissionsGuard` compares exact key strings. Read.                                                                                     | Works if keys stay literals and migrations stay flat.                  |
 | Ownership globs                       | `ownership_check.py` `g2r` supports `*`, `**`, `?`, trailing `/`, and escapes parentheses. Read.                                                                                                                                                      | Works for the zone template; GitHub CODEOWNERS `?` support unverified. |
-| Per-owner ADR sections                | Separate sections merge cleanly (tested); `adr-guard.sh` greps only `(adr/<file>)`. Read.                                                                                                                                                             | OK.                                                                    |
 | Relaxed commit scopes                 | `scope-enum` is level 1 (warn); `.husky/commit-msg` runs commitlint. Read.                                                                                                                                                                            | OK.                                                                    |
 | Generator in `apps/api/src/tools`     | `eslint.config.mjs:63` gives that directory a `no-console` override and `emit-openapi.ts` is precedent; root `tools/*.mjs` is outside every tsconfig and lint script, so linting it is uncertain. Read.                                               | Put it in `apps/api/src/tools`.                                        |
 | Generated files vs prettier           | CI `format:check` covers `.ts`; `.prettierignore` skips only `**/*.sql`, lockfile, `docs/db/*.dbml`. Read.                                                                                                                                            | The generator runs prettier on its own output.                         |
@@ -690,7 +664,7 @@ Syntax matches `wadesk-ownership-guard` (`*` = one path segment, `**` = many, `?
 | Web features             | `apps/web/src/features/<domain>/`                                                                                                                | public surface only via `index.ts`; nav in `nav.ts`.                                                                                                                                                                                                                                                                     |
 | Web messages             | `apps/web/messages/*/<domain>.json`                                                                                                              | keys `<domain>.<screen>.<key>`.                                                                                                                                                                                                                                                                                          |
 | Web e2e                  | `apps/web/e2e/<domain>/`                                                                                                                         |                                                                                                                                                                                                                                                                                                                          |
-| Docs                     | `docs/wadesk-port/inventory/<domain>.md`, `docs/wadesk-port/port-map/<domain>.md`, `docs/wadesk-port/tracker/<owner>.md`, `docs/api/<domain>.md` | plus the owner's ADR number block and own ADR-index subsection.                                                                                                                                                                                                                                                          |
+| Docs                     | `docs/wadesk-port/inventory/<domain>.md`, `docs/wadesk-port/port-map/<domain>.md`, `docs/wadesk-port/tracker/<owner>.md`, `docs/api/<domain>.md` |                                                                                                                                                                                                                                                                                                                          |
 
 Domain zone template for `ownership.json` (a later step instantiates `{domain}`, `{code}`, `{owner}`):
 
@@ -729,7 +703,7 @@ packages/db/migrations/00*.sql                                    (legacy, immut
 packages/contracts/{package.json,src/index.ts,src/common/**}
 packages/ui/**  packages/config/**  apps/web/src/{app/layout.tsx,app/providers.tsx,app/(app)/layout.tsx,app/(admin)/layout.tsx,middleware.ts,lib/**,features/_registry/**}
 .github/** docker/** docker-compose*.yml turbo.json package.json pnpm-workspace.yaml .npmrc eslint.config.mjs commitlint.config.cjs .husky/** .claude/skills/**
-CLAUDE.md CONTRIBUTING.md docs/{adr,architecture,runbooks,db}/** docs/{README.md,skill-router.md} tools/**
+CLAUDE.md CONTRIBUTING.md docs/{architecture,runbooks,db}/** docs/{README.md,skill-router.md} tools/**
 ```
 
 **Legacy areas** get one owner each, decided in the assignments (they are not kernel): `apps/api/src/modules/crm/**` +
@@ -743,7 +717,6 @@ successor); `modules/admin/**` + `contracts/src/admin/**` (roles-permissions suc
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `pnpm-lock.yaml`, `package.json`, `apps/*/package.json`, `packages/*/package.json`                                                                                                                                                      | deps lane only; never hand-merge the lockfile; kernel steward reviews                                              |
 | marker blocks in `packages/contracts/src/index.ts`, `packages/db/src/schema/index.ts`, `apps/api/src/config/env.schema.ts`, `apps/api/src/domains.generated.ts`, `apps/web/src/features/_registry/*.generated.ts`, `.github/CODEOWNERS` | generated; change only by editing the manifest and running `pnpm domains:sync`; on conflict take main's and re-run |
-| `docs/README.md`                                                                                                                                                                                                                        | only rows inside your own ADR subsection                                                                           |
 | `.env.example`                                                                                                                                                                                                                          | kernel only (domain vars are optional and documented in the fragment)                                              |
 | `docs/wadesk-port/ownership.json`, `.github/CODEOWNERS` source                                                                                                                                                                          | changes need all three developers' approval                                                                        |
 
@@ -766,10 +739,10 @@ CODEOWNER; a different developer gives the second approval.
 
 - **Class 0 — additive and compatible** (new export, new optional field, new decorator option, bug fix with no behaviour
   change; roughly under 50 lines): open a PR titled `kernel(<area>): ...` with label `kernel`, one approval from the steward,
-  target turnaround the same working day. No ADR.
+  target turnaround the same working day.
 - **Class 1 — behaviour or contract change** (RBAC/tenancy/outbox semantics, kernel table, new dependency, guard order, actor
-  kind): first a GitHub issue labelled `kernel-request` (what, why, API sketch, who is affected), then an ADR through
-  `write-adr` (`adr-diff-guard` must pass), steward approval **plus** an ack from the other two developers, landed alone.
+  kind): first a GitHub issue labelled `kernel-request` (what, why, API sketch, who is affected), then a written decision in the issue,
+  steward approval **plus** an ack from the other two developers, landed alone.
 - **Class 2 — breaking**: two phases. Add the new path alongside the old one (Class 0/1), then each domain owner migrates
   their own call sites in their own PRs, then a later kernel PR removes the old path. Nobody edits another owner's files to
   migrate them.
@@ -816,11 +789,9 @@ migration that already ran anywhere is never edited (fix forward with a new stam
    against the interface, stub it, mark `blocked` with the feature id.
 9. **Docs:** edit only your own files (`docs/api/<domain>.md`, inventory, tracker). Never touch `docs/api-inventory.md`,
    `docs/api-testing.md`, `docs/phase-plan.md` (frozen).
-10. **ADRs:** use your number block (`git config crm.adrBlock <start>`), add the row only inside your own subsection of
-    `docs/README.md`, then run `adr-diff-guard`.
-11. **Gate before push:** `bash .claude/skills/pre-pr/scripts/gate.sh` plus `pnpm domains:check` and `pnpm db:lint`. No
+10. **Gate before push:** `bash .claude/skills/pre-pr/scripts/gate.sh` plus `pnpm domains:check` and `pnpm db:lint`. No
     `--no-verify`; lint-staged and commitlint exist for a reason.
-12. **Permission keys are literals** `<code>.<resource>.<action>` in `@RequirePermission(...)` and registered in your own
+11. **Permission keys are literals** `<code>.<resource>.<action>` in `@RequirePermission(...)` and registered in your own
     migration; new queues, env vars, rooms and subscribers are added by decorating or registering inside your own directory.
 
 ## 6. Unverified assumptions

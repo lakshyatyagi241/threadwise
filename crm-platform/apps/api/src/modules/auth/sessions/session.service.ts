@@ -51,7 +51,7 @@ type RotateDecision =
   | { kind: 'reject'; reason: string; audit?: 'reuse' | 'idle' };
 
 /**
- * Server-side sessions with refresh-token rotation (ADR-0019).
+ * Server-side sessions with refresh-token rotation.
  *
  * One `auth_sessions` row per login. The refresh token is a signed JWT that
  * carries a counter `rv`; no token material is stored. Rotating bumps the
@@ -160,7 +160,7 @@ export class SessionService {
   async refresh(refreshToken: string): Promise<SessionTokens> {
     const claims = await this.tokens.verifyRefresh(refreshToken);
     if (claims.typ !== 'user' || !claims.sid || claims.rv === undefined) {
-      // Sessions pre-dating ADR-0019 (or another pool) cannot be rotated here.
+      // Sessions from before server-side sessions (or another pool) cannot be rotated here.
       throw AppError.unauthenticated('Invalid or expired refresh token');
     }
     const ep = await this.epoch.current();
