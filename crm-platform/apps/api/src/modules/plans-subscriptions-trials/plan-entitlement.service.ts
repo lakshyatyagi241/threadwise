@@ -212,7 +212,8 @@ export function resolveFeature(e: Entitlements, key: PlanFeatureKey): boolean {
 export function resolveLimit(e: Entitlements, key: PlanLimitKey): number {
   if (e.platformOwned) return 0;
   const override = e.overrides.limits?.[key];
-  if (typeof override === 'number' && Number.isInteger(override)) return override > 0 ? override : 0;
+  if (typeof override === 'number' && Number.isInteger(override))
+    return override > 0 ? override : 0;
   if (!e.planKnown) return 0;
   return storedLimit(e.planLimits, key);
 }
