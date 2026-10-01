@@ -16,3 +16,6 @@ dist/
 /_work/reports/
 __pycache__/
 *.pyc
+
+# Generated workbook
+/_work/out/
