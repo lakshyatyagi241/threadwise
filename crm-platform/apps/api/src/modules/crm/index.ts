@@ -94,5 +94,8 @@ export {
   toDealResponse,
 } from './deals';
 export type { DealRow } from './deals';
+export { TasksService, TasksRepository, toTaskResponse } from './tasks';
+export type { TaskRow } from './tasks';
+export { TasksWorkerModule } from './tasks/tasks-worker.module';
 export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
 export type { PipelineRow, StageRow } from './pipelines';

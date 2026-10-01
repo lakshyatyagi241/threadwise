@@ -194,6 +194,9 @@ export const dealActivities = pgTable(
     dueAt: timestamp('due_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
+    // The mirrored row in `tasks` (migration 20261004100000). The composite FK to tasks lives in the migration: declaring it
+    // here would make the two schema files import each other.
+    taskId: idColumn('task_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

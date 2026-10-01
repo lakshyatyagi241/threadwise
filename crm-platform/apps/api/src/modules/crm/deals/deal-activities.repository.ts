@@ -30,6 +30,8 @@ export interface ActivityRow {
   assigneeUuid: string | null;
   assigneeName: string | null;
   rowVersion: number;
+  /** The mirrored row in `tasks` (timeline tasks only), if it still exists. */
+  taskId: number | null;
   /** Tasks: the sort key used by the task list cursor. */
   dueKey: string | null;
 }
@@ -55,6 +57,7 @@ const toRow = (r: Raw): ActivityRow => ({
   assigneeUuid: (r.assignee_uuid as string | null) ?? null,
   assigneeName: (r.assignee_name as string | null) ?? null,
   rowVersion: Number(r.row_version),
+  taskId: r.task_id === null || r.task_id === undefined ? null : Number(r.task_id),
   dueKey: (r.due_key as string | null) ?? null,
 });
 
@@ -63,7 +66,7 @@ const SELECT = sql`
          to_char(a.created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso,
          to_char(coalesce(a.due_at, 'infinity'::timestamptz) at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS due_key,
          a.created_at, a.updated_at, a.deal_id, d.uuid AS deal_uuid, d.title AS deal_title, a.type, a.body, a.meta,
-         a.due_at, a.done_at, a.row_version,
+         a.due_at, a.done_at, a.row_version, a.task_id,
          au.uuid AS author_uuid, au.full_name AS author_name, asg.uuid AS assignee_uuid, asg.full_name AS assignee_name
   FROM deal_activities a
   JOIN deals d ON d.org_id = a.org_id AND d.id = a.deal_id

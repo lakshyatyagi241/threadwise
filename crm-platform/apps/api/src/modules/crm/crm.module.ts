@@ -66,6 +66,13 @@ import {
 import { LostReasonsService } from './pipelines/lost-reasons.service';
 import { PipelinesRepository } from './pipelines/pipelines.repository';
 import { PipelinesService } from './pipelines/pipelines.service';
+import {
+  ContactTasksController,
+  DealTasksController,
+  TasksController,
+} from './tasks/tasks.controller';
+import { TasksRepository } from './tasks/tasks.repository';
+import { TasksService } from './tasks/tasks.service';
 import { StatusOptionsController } from './status-options/status-options.controller';
 import { StatusOptionsRepository } from './status-options/status-options.repository';
 import { StatusOptionsService } from './status-options/status-options.service';
@@ -120,6 +127,10 @@ import { TagsService } from './tags/tags.service';
     PipelineStagesController,
     LostReasonsController,
     DealSettingsController,
+    // Tasks: `tasks/my`, `tasks/counts` and `tasks/bulk/...` are literal paths declared before `tasks/:id` inside the controller.
+    TasksController,
+    ContactTasksController,
+    DealTasksController,
   ],
   providers: [
     // Encrypts deal timeline bodies at rest (the same service the public API provides for its own module).
@@ -171,6 +182,8 @@ import { TagsService } from './tags/tags.service';
     PipelinesRepository,
     PipelinesService,
     LostReasonsService,
+    TasksRepository,
+    TasksService,
   ],
   exports: [
     ContactsService,
@@ -191,6 +204,7 @@ import { TagsService } from './tags/tags.service';
     ContactMeetingsService,
     DealsService,
     PipelinesService,
+    TasksService,
   ],
 })
 export class CrmModule {}

@@ -186,7 +186,11 @@ export class TenantDirectory {
           (${orgId}, ${agentRoleId}, 'record.deals.read', 'allow', 'own'),
           (${orgId}, ${agentRoleId}, 'record.deals.create', 'allow', 'all'),
           (${orgId}, ${agentRoleId}, 'record.deals.update', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.pipelines.read', 'allow', 'all')
+          (${orgId}, ${agentRoleId}, 'record.pipelines.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.delete', 'allow', 'own')
       `);
 
       const userRes = await tx.execute(sql`
