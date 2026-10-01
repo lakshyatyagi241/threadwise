@@ -27,6 +27,21 @@ Done: 009, 010, 011 (partly), 012, 013 (stub), 014, 015, 016, 017, 025, 026, 027
 Inventory is `pending`: first write the inventory from the reference (routes, tables, wiring), then follow the same order as BCAST:
 create flow, sender, read API, actions, tracking, receipts, events, web, parity.
 
+Reference surface (scoped 2026-10-02, nothing written yet):
+
+- Routes: `routes/web.php` prefix `wa-campaigns` (index, create, store, edit, update, destroy, show, export, sample-csv, bulk-delete,
+  cancel, resume, send-now, resend, AI model list and AI generate) and `routes/api.php` Node callbacks (`nodeCampaignStatus`,
+  `nodeContactStatus`, `nodeStatusByMessageId`, `nodeTrackResponse`, `nodeUnsubscribe`, `nodeCampaignDrain`).
+- Code: `app/Http/Controllers/WaCampaignsController.php` (5,881 lines), models `WpCampaign` and `WpCampaignContact`,
+  `app/Services/CampaignScheduleSweeper.php`; webhook events `campaign_created`, `campaign_status_updated`,
+  `campaign_contact_status_updated`, `campaign_contact_replied`, `contact_opt_in`.
+- Screens: `resources/views/user/wa-campaigns/{index,create,edit,detail,_cards}.blade.php` and their scripts
+  `user-wa-campaigns-{index,create,edit,detail}.js`. (`user/campaigns` and `meta-ads` are the separate Meta Ads product, not CAMP.)
+- Shared with BCAST and reusable as is: the template picker and overrides panel, the sender and audience pickers, the link
+  tracker, pacing, the receipt state machine, the webhook and bell mappers.
+- Order: read the controller in slices (store and validation, audiences and CSV, A/B and AI, send and sweeper, callbacks, detail),
+  writing one inventory entry per behavior, then the same build order as BCAST. This is a multi-session job; do it one slice per commit.
+
 ## Channels and ECOM
 
 facebook, instagram, telegram, shopify-woocommerce: each is `pending` too (tiktok, line, wechat, viber, sms, email are ignored on the user's word, 2026-10-02). For each:
