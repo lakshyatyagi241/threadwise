@@ -266,3 +266,18 @@ body is skipped. A failure to mirror is logged and never fails the send or the r
 
 `GET /v2/broadcasts?includeTotal=true` adds `meta: { total }`, the number of broadcasts matching `status`, `range` and `q` (not
 the page), so the screen can say "Showing 12 of 30 filtered broadcasts" and number its pages. Without the flag there is no `meta`.
+
+## Compose data (TW-BCAST-004 to 006)
+
+`GET /v2/broadcasts/compose` (permission `bcast.broadcasts.create`) is what the compose page opens with. The audience comes from
+the contacts, groups and tags endpoints.
+
+- `templates`: the templates a broadcast may send, newest first. On a Meta (WABA) workspace only those Meta approved (a Meta id,
+  status APPROVED, not paused); on any other engine the locally approved or public ones. A template tied to a WABA number that is
+  no longer connected is hidden. Each has `id, name, header, body, footer, category, type, language, buttons, variableMap,
+attachmentType, attachmentUrl, senderLabel, twilioReady`; `category` is `meta_category`, else the local category when it is a
+  WhatsApp one, else `utility`.
+- `senders`: connected numbers (`key` is `<engine>:<uuid>`, what `senderKeys` takes), default engine first, with `label, phone,
+engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers are
+  left out.
+- `twilioEnabled`: a Twilio number is connected, so the picker marks each template "Twilio ready" or "plain text only".

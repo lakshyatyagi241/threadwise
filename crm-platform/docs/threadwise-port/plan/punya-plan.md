@@ -9,18 +9,18 @@ decision that belongs to another domain or to the product owner, and record it i
 
 Done: 009, 010, 011 (partly), 012, 013 (stub), 014, 015, 016, 017, 025, 026, 027 (core).
 
-| #   | Step                                            | TW ids                | Why this order                                                                   |
-| --- | ----------------------------------------------- | --------------------- | -------------------------------------------------------------------------------- |
-| B1  | Read API: list, detail, live stats (DONE)       | 001, 002, 030-036     | Everything on screen reads these; the web cannot start without them              |
-| B2  | Retry, delete, CSV export (DONE)                | 037, 038, 039, 040    | Completes the operator actions the detail page offers                            |
-| B3  | Link tracking and click analytics (DONE)        | 018, 042              | Wraps URL buttons at build time (017) and counts clicks; needs a public redirect |
-| B4  | Pacing, batching, daily cap, pause (DONE)       | 022 (021 is done)     | Safe sending: the worker loop becomes paced instead of back to back              |
-| B5  | Receipts and status webhooks (DONE)             | 024, 027 (webhooks)   | Delivered and read states: uses the state machine already in place               |
-| B6  | Events: outbound webhooks, notifications (DONE) | 029                   | Emits from the state changes built above                                         |
-| B7  | Inbox mirroring (DONE)                          | 028                   | Needs the inbox domain; shim behind an interface if it is not there              |
-| B8  | Web: list (DONE), detail (DONE), compose (next) | 001, 003-008, 030-034 | UI over the API, same screens as the reference (PORTING_RULES section 3)         |
-| B9  | Playwright twin run, parity evidence            | all                   | Compare every screen with the running Reference, fix differences, record the stamp  |
-| B10 | Instagram reply-only                            | 019                   | Smaller variant. 020 (SMS runner) is skipped: channel-sms is on the ignore list  |
+| #   | Step                                                                         | TW ids                | Why this order                                                                   |
+| --- | ---------------------------------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------- |
+| B1  | Read API: list, detail, live stats (DONE)                                    | 001, 002, 030-036     | Everything on screen reads these; the web cannot start without them              |
+| B2  | Retry, delete, CSV export (DONE)                                             | 037, 038, 039, 040    | Completes the operator actions the detail page offers                            |
+| B3  | Link tracking and click analytics (DONE)                                     | 018, 042              | Wraps URL buttons at build time (017) and counts clicks; needs a public redirect |
+| B4  | Pacing, batching, daily cap, pause (DONE)                                    | 022 (021 is done)     | Safe sending: the worker loop becomes paced instead of back to back              |
+| B5  | Receipts and status webhooks (DONE)                                          | 024, 027 (webhooks)   | Delivered and read states: uses the state machine already in place               |
+| B6  | Events: outbound webhooks, notifications (DONE)                              | 029                   | Emits from the state changes built above                                         |
+| B7  | Inbox mirroring (DONE)                                                       | 028                   | Needs the inbox domain; shim behind an interface if it is not there              |
+| B8  | Web: list (DONE), detail (DONE), compose core (DONE), overrides panel (next) | 001, 003-008, 030-034 | UI over the API, same screens as the reference (PORTING_RULES section 3)         |
+| B9  | Playwright twin run, parity evidence                                         | all                   | Compare every screen with the running Reference, fix differences, record the stamp  |
+| B10 | Instagram reply-only                                                         | 019                   | Smaller variant. 020 (SMS runner) is skipped: channel-sms is on the ignore list  |
 
 ## CAMP (campaigns, Reference wa-campaigns)
 

@@ -8,6 +8,7 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { BroadcastsComposeService } from './broadcasts-compose.service';
 import { BroadcastsReadService } from './broadcasts-read.service';
 
 /** The broadcast screens' data: list, tiles, detail, recipients and live counters (TW-BCAST-001, 002, 030 to 036). */
@@ -15,7 +16,10 @@ import { BroadcastsReadService } from './broadcasts-read.service';
 @ActorKinds('user')
 @Controller({ path: 'broadcasts', version: '2' })
 export class BroadcastsReadController {
-  constructor(private readonly read: BroadcastsReadService) {}
+  constructor(
+    private readonly read: BroadcastsReadService,
+    private readonly composer: BroadcastsComposeService,
+  ) {}
 
   @Get()
   @RequirePermission('bcast.broadcasts.read')
@@ -24,7 +28,16 @@ export class BroadcastsReadController {
     return this.read.list(query);
   }
 
-  // Declared before `:id` so "summary" is never read as an id.
+  // Declared before `:id` so "compose" and "summary" are never read as an id.
+  @Get('compose')
+  @RequirePermission('bcast.broadcasts.create')
+  @ApiOperation({
+    summary: 'What the compose page opens with: approved templates and connected sending numbers',
+  })
+  compose() {
+    return this.composer.compose();
+  }
+
   @Get('summary')
   @RequirePermission('bcast.broadcasts.read')
   @ApiOperation({

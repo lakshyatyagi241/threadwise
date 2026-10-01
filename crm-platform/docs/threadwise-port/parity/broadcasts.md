@@ -32,6 +32,11 @@ Evidence is automated, no screen yet:
 | TW-BCAST-001        | screen-done  | `/broadcasts`: status views, range, search, numbered pages, row actions (analytics, export, delete), 15 s refresh. `includeTotal` added to the list for "Showing N of M". Playwright twin run not done yet.                            |
 | TW-BCAST-002        | screen-done  | Six tiles and the status counts on the rail. Processing and Queued come from the recipient rows.                                                                                                                                       |
 | TW-BCAST-003        | blocked      | The channel chooser shows a card per connected extra channel (Telegram, SMS, Instagram). Those channels are not built (SMS is ignored), so "New broadcast" goes straight to the WhatsApp composer, as in Reference with no extra channel. |
+| TW-BCAST-004        | screen-done  | `/broadcasts/create`: header, setup, sender and audience pickers, schedule and the preview; opens from `GET /broadcasts/compose`. Playwright twin run not done yet.                                                                    |
+| TW-BCAST-005        | partial      | Template picker and the live phone preview with sample values are done. The send-time overrides panel (variables, header media, button links) is not built yet.                                                                        |
+| TW-BCAST-006        | screen-done  | One number is a fixed row, several are a tick list with share weights and live percentages, grouped by engine when there is more than one.                                                                                             |
+| TW-BCAST-007        | screen-done  | Tag and group chips plus the newest 500 contacts with search and select-all.                                                                                                                                                           |
+| TW-BCAST-008        | screen-done  | Send now or later with date, time and zone (today and now + 30 minutes by default).                                                                                                                                                    |
 | TW-BCAST-030 to 036 | screen-done  | `/broadcasts/:id`: header (status, retry, resume, delete), six live tiles, Overview, Recipients, Failures and Events tabs; live counters, statistics and export as endpoints. Playwright twin run not done yet.                        |
 | TW-BCAST-024        | backend-done | `BroadcastReceiptsService` applies a delivery report; Baileys and Twilio mappers. The routes that receive the reports (Cloud API webhook, Twilio callback, the Baileys adapter) are the WABA and device domains'.                      |
 | TW-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                                                                               |
@@ -102,6 +107,9 @@ Evidence is automated, no screen yet:
 | 55 | Recipients tab | All rows loaded and filtered in the browser | Search and status filter are applied by the API and rows load a page at a time ("Load more"), so a 100k-recipient broadcast opens. |
 | 56 | Live tiles | The poll rewrote the read tile's percentage over the audience, the page had it over delivered | Percentages are computed from the live counts with the header's own bases, so they never flip. |
 | 57 | Pause | Not shown (a pause was dropped) | A paused broadcast shows why and when it resumes, with a Resume button (TW-BCAST-022). |
+| 58 | Compose data | Rendered into the page by the controller | `GET /broadcasts/compose`; the page needs no other broadcast endpoint. |
+| 59 | Preview samples | Workspace attribute demo values, then built-in stand-ins | Built-in stand-ins only for now; the attribute demo values come when the attributes endpoint exposes them. |
+| 60 | Submit | Native form post and redirect | A request from the page; a refusal (plan, audience, template, wallet) is shown above the form; success returns to the list. |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
@@ -123,7 +131,7 @@ Header media paths: only an absolute URL is turned into a link until the storage
 
 ## Not verified
 
-- The list and detail screens have not been through the Playwright twin run against the running Reference, and have not been looked at in a browser here (typecheck, lint and component tests only). The compose page (TW-BCAST-004..008) is not built yet.
+- The list and detail screens have not been through the Playwright twin run against the running Reference, and have not been looked at in a browser here (typecheck, lint and component tests only). The send-time overrides panel on the compose page (TW-BCAST-005) is not built yet.
 - A real send to Meta has not been run (no credentials here). The adapter is covered by a payload unit test and the pipeline by the fake-adapter e2e; the live stack was checked up to the provider call.
 - The three Meta guardrails are covered by unit tests only, because the switch that turns them on is stubbed.
 - The tracker (`tracker.py`) and the ownership check could not be used: `ownership.json` still lists broadcasts under another owner.
