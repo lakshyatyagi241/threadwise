@@ -107,7 +107,11 @@ async function main(): Promise<void> {
            ($1, $2, 'record.deals.read',   'allow', 'own'),
            ($1, $2, 'record.deals.create', 'allow', 'all'),
            ($1, $2, 'record.deals.update', 'allow', 'own'),
-           ($1, $2, 'record.pipelines.read', 'allow', 'all')
+           ($1, $2, 'record.pipelines.read', 'allow', 'all'),
+           ($1, $2, 'record.tasks.read',   'allow', 'own'),
+           ($1, $2, 'record.tasks.create', 'allow', 'all'),
+           ($1, $2, 'record.tasks.update', 'allow', 'own'),
+           ($1, $2, 'record.tasks.delete', 'allow', 'own')
          ON CONFLICT (org_id, role_id, permission_key) DO NOTHING`,
         [orgId, counsellorRoleId],
       );

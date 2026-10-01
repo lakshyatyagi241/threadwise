@@ -42,6 +42,8 @@ export const ERROR_CODES = {
   FIELD_KEY_TAKEN: 'FIELD_KEY_TAKEN',
   FIELD_IS_SYSTEM: 'FIELD_IS_SYSTEM',
   DEPENDENCY_CYCLE_DETECTED: 'DEPENDENCY_CYCLE_DETECTED',
+  /** A status option still held by contacts: repeat the delete with `moveTo`. */
+  STATUS_OPTION_IN_USE: 'STATUS_OPTION_IN_USE',
 
   // auth, registration and account security
   AUTH_INVALID_CREDENTIALS: 'AUTH_INVALID_CREDENTIALS',
@@ -125,6 +127,10 @@ export const ERROR_CODES = {
   DEAL_STAGE_LAST: 'DEAL_STAGE_LAST',
   DEAL_ORDER_INVALID: 'DEAL_ORDER_INVALID',
   DEAL_LOST_REASON_NAME_TAKEN: 'DEAL_LOST_REASON_NAME_TAKEN',
+
+  // tasks (WD-TASK)
+  /** The assignee is not an active member of this workspace (WaDesk silently replaced or dropped it). */
+  TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

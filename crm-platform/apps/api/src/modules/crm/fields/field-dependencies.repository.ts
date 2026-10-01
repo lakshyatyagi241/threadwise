@@ -95,6 +95,13 @@ export class FieldDependenciesRepository {
     ) as Promise<FieldDependencyRow[]>;
   }
 
+  /** Every dependency of the fields of one module, for the properties list and the contact form. */
+  async listByModule(tx: Tx, orgId: number, moduleKey: string): Promise<FieldDependencyRow[]> {
+    return this.dependencyBaseQuery(tx).where(
+      and(eq(fieldDependencies.orgId, orgId), eq(dependentField.moduleKey, moduleKey)),
+    ) as Promise<FieldDependencyRow[]>;
+  }
+
   /** Every field-dependency edge in the org — cheap; this table is a handful of rows per org. */
   private async listAllEdges(
     tx: Tx,

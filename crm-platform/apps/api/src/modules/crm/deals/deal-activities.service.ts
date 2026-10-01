@@ -24,6 +24,7 @@ import {
 import { DEAL_MODULE } from './deal-engine.service';
 import { DealsRepository, dealScopeCondition } from './deals.repository';
 import { DealsService } from './deals.service';
+import { TasksService } from '../tasks/tasks.service';
 
 /**
  * The deal timeline and its tasks (WD-DEAL-015, 016). A body is encrypted at rest (as in WaDesk) and decrypted here; nothing
@@ -39,6 +40,7 @@ export class DealActivitiesService {
     private readonly repo: DealActivitiesRepository,
     private readonly dealsRepo: DealsRepository,
     private readonly deals: DealsService,
+    private readonly taskList: TasksService,
     private readonly crypto: CryptoService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
@@ -95,6 +97,15 @@ export class DealActivitiesService {
         dueAt: input.type === 'task' && input.dueAt ? new Date(input.dueAt) : null,
         assigneeUserId: assigneeId,
       });
+      // A timeline task is also a row in `tasks` (D-14), so it shows in the one task list; the two stay in step.
+      if (input.type === 'task') {
+        await this.taskList.mirrorFromDeal(tx, deal, {
+          activityId: id,
+          body: input.body,
+          dueAt: input.dueAt ? new Date(input.dueAt) : null,
+          assigneeId,
+        });
+      }
       const row = (await this.repo.findById(tx, ctx.orgId, id))!;
       await this.audit.record(tx, {
         module: DEAL_MODULE,
@@ -203,6 +214,7 @@ export class DealActivitiesService {
       const wasDone = before.doneAt !== null;
       if (wasDone !== done) {
         await this.repo.setDone(tx, ctx.orgId, deal.id, activityUuid, done);
+        await this.taskList.syncFromActivity(tx, before.id, done);
         await this.audit.record(tx, {
           module: DEAL_MODULE,
           recordId: deal.id,
