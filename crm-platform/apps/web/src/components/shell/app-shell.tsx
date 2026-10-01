@@ -17,6 +17,8 @@ interface Props {
   theme: 'light' | 'dark';
   /** Workspace switcher and similar header content owned by a domain. */
   headerStart?: ReactNode;
+  /** Card pinned under the menu (the workspace switcher). It reads `useNavCollapsed()` to shrink with the rail. */
+  navFooter?: ReactNode;
   /** Persistent notices above the page (email verification, trial). */
   banners?: ReactNode;
   /** Optional pill in the middle of the top bar (see `AnnouncementPill`). */
@@ -33,14 +35,15 @@ const BELL_ID = 'notifications';
 const GEAR_ID = 'account';
 
 /**
- * The signed-in frame: a top bar, a slim icon rail (a labelled panel when pinned open; a drawer on phones) and the
- * page. The menu comes entirely from the resolved registry; nothing here names a domain's screens.
+ * The signed-in frame: a dark navigation column (a slim icon rail, a labelled panel when pinned open, a drawer on
+ * phones) beside a top bar and the page. The menu comes entirely from the resolved registry; nothing here names a domain's screens.
  */
 export function AppShell({
   user,
   nav,
   theme,
   headerStart,
+  navFooter,
   banners,
   announcement,
   wallet,
@@ -61,37 +64,37 @@ export function AppShell({
   const gear = nav.find((i) => i.id === GEAR_ID);
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <TopBar
-        user={user}
-        theme={theme}
-        onOpenMenu={() => setDrawer(true)}
-        menuButtonRef={menuButton}
-        headerStart={headerStart}
-        announcement={announcement}
-        wallet={wallet}
-        notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
-        notificationCount={notificationCount}
-        settingsHref={gear && !gear.comingSoon ? gear.href : undefined}
+    <div className="flex min-h-dvh">
+      <NavRail
+        sections={sections}
+        activeId={activeId}
+        pinned={pinned}
+        onTogglePinned={() => setPinned(pinned ? '0' : '1')}
+        footer={navFooter}
       />
-      <div className="flex min-w-0 flex-1">
-        <NavRail
-          sections={sections}
-          activeId={activeId}
-          pinned={pinned}
-          onTogglePinned={() => setPinned(pinned ? '0' : '1')}
+      <NavDrawer
+        open={drawer}
+        onClose={closeDrawer}
+        sections={sections}
+        activeId={activeId}
+        returnFocusTo={menuButton}
+        footer={navFooter}
+      />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <TopBar
+          user={user}
+          theme={theme}
+          onOpenMenu={() => setDrawer(true)}
+          menuButtonRef={menuButton}
+          headerStart={headerStart}
+          announcement={announcement}
+          wallet={wallet}
+          notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
+          notificationCount={notificationCount}
+          settingsHref={gear && !gear.comingSoon ? gear.href : undefined}
         />
-        <NavDrawer
-          open={drawer}
-          onClose={closeDrawer}
-          sections={sections}
-          activeId={activeId}
-          returnFocusTo={menuButton}
-        />
-        <div className="flex min-w-0 flex-1 flex-col">
-          {banners}
-          <main className="flex-1 p-4 md:p-6">{children}</main>
-        </div>
+        {banners}
+        <main className="flex-1 p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

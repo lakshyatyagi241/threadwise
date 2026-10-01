@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   Button,
@@ -19,14 +20,15 @@ import type { Choice } from '../lib/option-sets';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import {
   ChevronDownIcon,
-  ColumnsIcon,
   DownloadIcon,
   FilterIcon,
   GridIcon,
   ListIcon,
   MergeIcon,
+  RefreshIcon,
   SearchIcon,
   SendIcon,
+  SettingsIcon,
   UploadIcon,
   UsersPlusIcon,
 } from './icons';
@@ -93,10 +95,25 @@ export interface ContactsToolbarProps {
 
   view: 'list' | 'grid';
   onView: (v: 'list' | 'grid') => void;
+
+  onRefresh: () => void;
+  /** The list is being fetched (the refresh icon spins). */
+  refreshing: boolean;
 }
 
 const n = (v: number | undefined) => (v === undefined ? undefined : v.toLocaleString());
-const trigger = 'h-10 gap-2 whitespace-nowrap';
+const trigger = 'h-9 gap-2 whitespace-nowrap';
+const iconBtn =
+  'inline-flex size-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary';
+
+/** "Ctrl K", or the Command-key form on Apple platforms (known only on the client, so the first render says Ctrl). */
+function useShortcutLabel() {
+  return useSyncExternalStore(
+    () => () => undefined,
+    () => (/mac|iphone|ipad/i.test(navigator.platform) ? '⌘ K' : 'Ctrl K'),
+    () => 'Ctrl K',
+  );
+}
 
 /**
  * The single toolbar row of the Contact Hub: search, segment, tag, filters, Send campaign, More actions, and Modify
@@ -117,6 +134,19 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
   const tagLabel = p.tags.find((x) => x.id === p.tag)?.name ?? t('selectTag');
   const filtersOn = Number(p.stage !== '') + Number(p.consent !== '');
   const none = !p.anySelected;
+  const search = useRef<HTMLInputElement>(null);
+  const shortcut = useShortcutLabel();
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        search.current?.focus();
+        search.current?.select();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <div className="space-y-2">
@@ -124,13 +154,24 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
         <div className="relative min-w-[12rem] flex-1 sm:max-w-xs">
           <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
+            ref={search}
             type="search"
             value={p.q}
             onChange={(e) => p.onQ(e.target.value)}
             placeholder={t('searchPlaceholder')}
             aria-label={t('search')}
-            className="ps-9"
+            aria-keyshortcuts="Control+K Meta+K"
+            className="h-9 ps-9 pe-16 [&::-webkit-search-cancel-button]:hidden"
           />
+          {p.q === '' && (
+            <kbd
+              aria-hidden="true"
+              dir="ltr"
+              className="pointer-events-none absolute end-2 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-sans text-[10px] font-medium text-muted-foreground"
+            >
+              {shortcut}
+            </kbd>
+          )}
         </div>
 
         <Menu
@@ -338,14 +379,9 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           <Menu
             label={t('modifyColumns')}
             align="end"
-            triggerClassName={trigger}
-            trigger={
-              <>
-                <ColumnsIcon className="size-4 text-muted-foreground" />
-                {t('modifyColumns')}
-                <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-              </>
-            }
+            triggerClassName={cn(iconBtn, 'px-0')}
+            triggerProps={{ 'aria-label': t('modifyColumns'), title: t('modifyColumns') }}
+            trigger={<SettingsIcon className="size-4" />}
           >
             {p.allColumns.map((c) => {
               const locked = c.id === 'name';
@@ -365,6 +401,15 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
               {t('resetColumns')}
             </MenuItem>
           </Menu>
+          <button
+            type="button"
+            onClick={p.onRefresh}
+            title={t('refresh')}
+            aria-label={t('refresh')}
+            className={iconBtn}
+          >
+            <RefreshIcon className={cn('size-4', p.refreshing && 'animate-spin')} />
+          </button>
           <div
             role="group"
             aria-label={t('viewToggle')}
@@ -379,7 +424,7 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
                 aria-label={t(v === 'list' ? 'listView' : 'gridView')}
                 onClick={() => p.onView(v)}
                 className={cn(
-                  'inline-flex size-10 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+                  'inline-flex size-9 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
                   p.view === v ? 'bg-brand text-brand-foreground' : 'hover:bg-muted',
                 )}
               >

@@ -17,23 +17,29 @@ export function clampPage(page: number, pages: number): number {
 }
 
 /**
- * The numbered buttons: always the first and last page, the current one with `siblings` on each side, and a `gap`
- * where pages are skipped (never for a single skipped page, which is shown instead). `[1, 'gap', 4, 5, 6, 'gap', 20]`.
+ * The numbered buttons: a sliding run of `size` pages around the current one (1 2 3 4 5 at the start), the first and
+ * last page when the run does not reach them, and a `gap` where pages are skipped (never for a single skipped page,
+ * which is shown instead). Few pages are all listed. `[1, 'gap', 8, 9, 10, 11, 12, 'gap', 20]`.
  */
-export function pageWindow(current: number, pages: number, siblings = 1): PageSlot[] {
+export function pageWindow(current: number, pages: number, size = 5): PageSlot[] {
   if (pages <= 1) return [1];
-  const keep = new Set<number>([1, pages]);
-  for (let p = current - siblings; p <= current + siblings; p++) {
-    if (p >= 1 && p <= pages) keep.add(p);
-  }
-  const sorted = [...keep].sort((a, b) => a - b);
+  const run = Math.max(3, size);
+  if (pages <= run + 2) return Array.from({ length: pages }, (_, i) => i + 1);
+  const at = clampPage(current, pages);
+  const start = Math.min(Math.max(1, at - Math.floor(run / 2)), pages - run + 1);
+  const end = start + run - 1;
   const out: PageSlot[] = [];
-  sorted.forEach((p, i) => {
-    const prev = sorted[i - 1];
-    if (prev !== undefined && p - prev === 2) out.push(prev + 1);
-    else if (prev !== undefined && p - prev > 2) out.push('gap');
-    out.push(p);
-  });
+  if (start > 1) {
+    out.push(1);
+    if (start === 3) out.push(2);
+    else if (start > 3) out.push('gap');
+  }
+  for (let p = start; p <= end; p++) out.push(p);
+  if (end < pages) {
+    if (end === pages - 2) out.push(pages - 1);
+    else if (end < pages - 2) out.push('gap');
+    out.push(pages);
+  }
   return out;
 }
 

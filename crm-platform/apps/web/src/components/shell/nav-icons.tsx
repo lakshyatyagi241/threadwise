@@ -204,6 +204,50 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M5 6h5M5 8h5" />
     </>
   ),
+  tasks: (
+    <>
+      <path d="M2.5 4.2 3.7 5.4 5.7 3.2M2.5 8.7l1.2 1.2 2-2.2M2.5 13.2l1.2 1.2 2-2.2" />
+      <path d="M8.5 4.5h5M8.5 9h5M8.5 13.5h5" />
+    </>
+  ),
+  companies: (
+    <>
+      <path d="M3 14V3.5A1 1 0 0 1 4 2.5h5a1 1 0 0 1 1 1V14M10 7h2.5a1 1 0 0 1 1 1v6M2 14h12" />
+      <path d="M5.5 5h2M5.5 7.5h2M5.5 10h2" />
+    </>
+  ),
+  pipelines: (
+    <>
+      <circle cx="4.5" cy="3.5" r="1.5" />
+      <circle cx="4.5" cy="12.5" r="1.5" />
+      <circle cx="11.5" cy="6" r="1.5" />
+      <path d="M4.5 5v6M11.5 7.5c0 2.5-2.5 2.5-5.5 3.3" />
+    </>
+  ),
+  proposal: (
+    <>
+      <path d="M4 2h5.5L13 5.5V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1Z" />
+      <path d="M9 2v4h4M5.5 8.5h5M5.5 11h5" />
+    </>
+  ),
+  estimate: (
+    <>
+      <rect x="3" y="3" width="10" height="11" rx="1.5" />
+      <path d="M6 3V2h4v1M5.7 8.7l1.7 1.7 3-3.4" />
+    </>
+  ),
+  invoice: (
+    <>
+      <path d="M3.5 14V2.5l1.6 1 1.6-1 1.6 1 1.6-1 1.6 1 1.6-1V14l-1.6-1-1.6 1-1.6-1-1.6 1-1.6-1Z" />
+      <path d="M6 6h4.5M6 8.5h4.5" />
+    </>
+  ),
+  payment: (
+    <>
+      <rect x="2" y="3.5" width="12" height="9" rx="1.5" />
+      <path d="M2 6.5h12M4.5 10h2.5" />
+    </>
+  ),
   settings: (
     <>
       <circle cx="8" cy="8" r="2" />
@@ -242,6 +286,23 @@ export function NavIcon({
 }
 
 /** Small glyphs the chrome itself uses (not menu entries). */
+export function ChevronsUpDownIcon({ className = 'size-4' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={`shrink-0 ${className}`}
+    >
+      <path d="M4.5 6 8 2.5 11.5 6M4.5 10 8 13.5 11.5 10" />
+    </svg>
+  );
+}
+
 export function ChevronIcon({
   dir,
   className = 'size-4',

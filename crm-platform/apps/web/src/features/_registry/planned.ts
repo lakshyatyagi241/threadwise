@@ -14,7 +14,7 @@ import type { NavItem } from './types';
 const L = (id: string) => `shell.nav.${id}`;
 
 export const PLANNED_NAV: readonly NavItem[] = [
-  // Overview (Dashboard is a real screen)
+  // Platform (Dashboard is a real screen)
   { id: 'analytics', group: 'overview', labelKey: L('analytics'), href: '/analytics', order: 10, icon: 'analytics' },
   { id: 'notifications', group: 'overview', labelKey: L('notifications'), href: '/notifications', order: 20, icon: 'bell' },
 
@@ -25,9 +25,20 @@ export const PLANNED_NAV: readonly NavItem[] = [
   { id: 'team-chat', group: 'inbox', labelKey: L('teamChat'), href: '/team-chat', order: 30, icon: 'team-chat' },
   { id: 'team-members', group: 'inbox', labelKey: L('teamMembers'), href: '/team-members', order: 40, icon: 'team' },
 
-  // Audience (Contacts, Attributes and Contact groups are real screens)
+  // CRM (Contacts, Attributes, Contact groups and Deals are real screens). Orders keep the menu sequence:
+  // Contacts 0, Attributes 1, Contact groups 2, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
   { id: 'lead-finder', group: 'audience', labelKey: L('leadFinder'), href: '/lead-finder', order: 30, icon: 'pin', badge: 'new' },
-  { id: 'deals', group: 'audience', labelKey: L('deals'), href: '/deals', order: 40, icon: 'deal' },
+  { id: 'pipelines', group: 'audience', labelKey: L('pipelines'), href: '/pipelines', order: 50, icon: 'pipelines' },
+  { id: 'tasks', group: 'audience', labelKey: L('tasks'), href: '/tasks', order: 60, icon: 'tasks' },
+  { id: 'companies', group: 'audience', labelKey: L('companies'), href: '/companies', order: 70, icon: 'companies' },
+  { id: 'email-templates', group: 'audience', labelKey: L('emailTemplates'), href: '/email-templates', order: 80, icon: 'mail' },
+
+  // Sales (WaDesk's SalesDocs engine: proposals and estimates; invoices and payments from its auto-invoice module)
+  { id: 'crm-dashboard', group: 'sales', labelKey: L('crmDashboard'), href: '/crm', order: 0, icon: 'crm' },
+  { id: 'proposals', group: 'sales', labelKey: L('proposals'), href: '/proposals', order: 10, icon: 'proposal' },
+  { id: 'estimates', group: 'sales', labelKey: L('estimates'), href: '/estimates', order: 20, icon: 'estimate' },
+  { id: 'invoices', group: 'sales', labelKey: L('invoices'), href: '/invoices', order: 30, icon: 'invoice' },
+  { id: 'payments', group: 'sales', labelKey: L('payments'), href: '/payments', order: 40, icon: 'payment' },
 
   // Campaigns
   { id: 'campaigns', group: 'campaigns', labelKey: L('campaigns'), href: '/campaigns', order: 0, icon: 'campaign' },
@@ -52,9 +63,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
   { id: 'wechat', group: 'channels', labelKey: L('wechat'), href: '/wechat', order: 50, icon: 'team-chat' },
   { id: 'email', group: 'channels', labelKey: L('email'), href: '/email', order: 60, icon: 'mail' },
   { id: 'wa-links', group: 'channels', labelKey: L('waLinks'), href: '/wa-links', order: 70, icon: 'link' },
-
-  // Sales & CRM
-  { id: 'crm-dashboard', group: 'sales', labelKey: L('crmDashboard'), href: '/crm', order: 0, icon: 'crm' },
 
   // Store
   { id: 'store', group: 'store', labelKey: L('store'), href: '/store', order: 0, icon: 'store' },
