@@ -12,10 +12,10 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-AUTH-003 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-004 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-005 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| TW-AUTH-006 | frontend-done |  | page + API done; real WhatsApp sender adapter waits for channel core (dev logger adapter); page checked with stubbed responses |
-| TW-AUTH-007 | frontend-done |  | knobs done; Create-and-submit-template button shown disabled until the TPL domain |
-| TW-AUTH-008 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| TW-AUTH-009 | frontend-done |  | skip/complete works; plan list empty until the PLAN domain |
+| TW-AUTH-006 | frontend-done |  | page + API done; real senders (Meta Cloud API, Twilio, Node bridge) behind OTP_SENDER_PORT via an auth-zone sender registry; verified against local stubs only (no real Meta/Twilio credentials) |
+| TW-AUTH-007 | frontend-done |  | senders, template create/refresh (+ worker poll every 5 min), test send done in the auth zone; Meta calls verified against local stubs only; the WABA template domain can replace the template client later |
+| TW-AUTH-008 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc); sign-up now assigns the default plan + trial in the same transaction (PLAN resolver) |
+| TW-AUTH-009 | frontend-done |  | real plan cards from GET /v2/plans (price, offer, period, messages, 3 chips, popular, current); free = continue, custom = /support, paid = /account/plans placeholder (checkout waits for billing); browser-verified |
 | TW-AUTH-010 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-011 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-012 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
@@ -35,7 +35,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-AUTH-026 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-027 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-028 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| TW-AUTH-029 | frontend-done |  | branding UI + API; plan gate (remove_branding) is a shim until PLAN lands |
+| TW-AUTH-029 | frontend-done |  | branding gate is real: 422 PLAN_FEATURE_LOCKED without remove_branding, canEdit from the plan, locked state with upgrade link; browser-verified locked and editable |
 | TW-AUTH-030 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-031 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-032 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
@@ -43,11 +43,11 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-AUTH-034 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-035 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | TW-AUTH-036 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| TW-AUTH-037 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| TW-AUTH-037 | frontend-done |  | backend + web; apiRateLimitPerMinute is a platform ceiling over each API key's limit, audit retention prunes audit_log + security_events daily; browser-verified |
 | TW-AUTH-038 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| TW-AUTH-039 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| TW-AUTH-040 | frontend-done |  | operator UI + service done; outbound pipelines must call EmergencyHaltService.assertNotHalted (not built yet) |
-| TW-AUTH-041 | frontend-done |  | operator UI + SendPolicyService done; wiring into send pipelines pending those domains |
+| TW-AUTH-039 | frontend-done |  | backend + web; webhook rotation reports the real count through WebhookSecretRegistry (0 until the integrations domain registers a rotator) |
+| TW-AUTH-040 | frontend-done |  | operator UI + service; enforced at every WhatsApp provider send (OUTBOUND_SEND_GUARD), re-checked at send time; e2e proves halt and resume |
+| TW-AUTH-041 | frontend-done |  | operator UI + SendPolicyService; enforced at the provider boundary (content, per-minute and per-day caps, bulk skips rate caps); e2e covers enforce mode and the audit rows |
 | TW-AUTH-042 | wontfix |  | dead code in Reference (mask_phone returns the number unchanged); do not port |
 | TW-AUTH-043 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
 | TW-AUTH-044 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
@@ -336,23 +336,23 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-PLAN-001 | todo |  |  |
-| TW-PLAN-002 | todo |  |  |
-| TW-PLAN-003 | todo |  |  |
-| TW-PLAN-004 | todo |  |  |
-| TW-PLAN-005 | todo |  |  |
-| TW-PLAN-006 | todo |  |  |
-| TW-PLAN-007 | todo |  |  |
-| TW-PLAN-008 | todo |  |  |
+| TW-PLAN-001 | in-progress |  | operator /admin/plans: KPI strip (total/active/free/paid), table + cards, in-use counts; no MRR/subscribers/analytics link |
+| TW-PLAN-002 | in-progress |  | single modal with 4 grouped sections (identity, pricing, limits, features) instead of a 4-step wizard; no live review panel |
+| TW-PLAN-003 | in-progress |  | create/update validation shared via @crm/contracts (checkPlanRules), slug rules, one default; slug immutable; audited |
+| TW-PLAN-004 | in-progress |  | PATCH /v2/platform/plans/:id/active; refuses to deactivate the signup default |
+| TW-PLAN-005 | in-progress |  | DELETE refuses any org on the plan (PLAN_IN_USE) and the signup default; single slug reference so nothing is missed |
+| TW-PLAN-006 | in-progress |  | thin slice: 9 limit keys in a contracts registry (0 = unlimited, overrides, assertWithinLimit); no usage meters/ledger, nothing enforced yet |
+| TW-PLAN-007 | in-progress |  | thin slice: 7 feature flags in a registry; only remove_branding is enforced (branding); no route middleware/paywall |
+| TW-PLAN-008 | in-progress |  | 4-step default resolver + trial rule done and tested; registration default is a dropdown of active plans; billing_plan_scope not built |
 | TW-PLAN-009 | todo |  |  |
 | TW-PLAN-010 | todo |  |  |
-| TW-PLAN-011 | todo |  |  |
+| TW-PLAN-011 | in-progress |  | partial: GET /v2/plans cards with the upgrade/downgrade/current classification (server side); /account/plans is a placeholder, no yearly toggle/FAQ/compare/checkout |
 | TW-PLAN-012 | todo |  |  |
 | TW-PLAN-013 | todo |  |  |
 | TW-PLAN-014 | todo |  |  |
 | TW-PLAN-015 | todo |  |  |
 | TW-PLAN-016 | todo |  |  |
-| TW-PLAN-017 | todo |  |  |
+| TW-PLAN-017 | in-progress |  | partial: assertFeature/assertWithinLimit and the 422 PLAN_FEATURE_LOCKED / PLAN_LIMIT_REACHED problem; no quota ledger, no route guard |
 | TW-PLAN-018 | todo |  |  |
 | TW-PLAN-019 | todo |  |  |
 | TW-PLAN-020 | todo |  |  |
