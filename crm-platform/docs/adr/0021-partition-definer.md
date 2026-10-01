@@ -20,6 +20,13 @@ integration test that ran the service as the runtime role; every earlier check r
 The consequence is silent: the bootstrap partitions run out after about two months and rows
 accumulate in `_default`, which also blocks creating the partition for the range they sit in.
 
+Two more gaps sat next to it. A query that names a partition skips the parent's row-level
+security and uses the partition's own policies, and no partition had any, so with the grants
+`crm_app` gets by default it read every tenant's rows (95 partitions today). And the ten
+`event_outbox` / `audit_log` partitions from `0006` predate the default privileges of `0007`, so
+the app role could not read them at all, which is why `defaultPartitionCounts()` could not run as
+the worker and was never wired to an alert.
+
 Constraints: the runtime role must stay unable to bypass or alter row-level security (ADR-0002),
 which rules out making it the owner; migrations stay hand-written SQL (ADR-0004); the worker is
 a separate process from the same image with the same database URL (ADR-0010).
@@ -37,9 +44,20 @@ longer do that:
 - A transaction-scoped advisory lock on the partition name serialises concurrent callers.
 - `EXECUTE` is revoked from `PUBLIC` and granted to `crm_app` and `crm_worker`.
 
+Every partition also carries its parent's row-level security. `inherit_partition_rls(partition)`
+copies the parent's RLS flags and policies onto it (an owner-only helper, not granted to the app
+roles). `ensure_monthly_partition()` calls it for each partition it creates, and the migration
+`20261001110100_partition_rls` applied it to every existing partition and granted the `0006`
+ones the default app-role privileges. A migration that creates a partition by hand, such as a
+stream's `_default`, calls the helper itself. A parent without RLS leaves its partitions open.
+`PartitionMaintenanceService` now ends each pass with `defaultPartitionCounts()`, which reads the
+`_default` partitions as the worker role, and logs a warning when any holds rows.
+
 The signature is unchanged, so migrations that already call it are unaffected. A catalog test in
 `schema-invariants.spec.ts` requires every `SECURITY DEFINER` function in `public` to pin
-`search_path` and to be closed to `PUBLIC`, so the next one cannot skip those steps.
+`search_path` and to be closed to `PUBLIC`, so the next one cannot skip those steps, and requires
+every partition of an RLS-protected parent to force RLS behind a policy that names
+`current_org_id()`, so a hand-made partition cannot skip the helper.
 
 ## Consequences
 
@@ -49,6 +67,9 @@ The signature is unchanged, so migrations that already call it are unaffected. A
   rather than as the owner.
 - The runtime role gains no ability to create arbitrary tables, own anything, or touch policies.
 - Several workers starting together no longer race on the same partition.
+- A query that names a partition is tenant-filtered like one on the parent, and fails closed
+  without a tenant context.
+- Rows in a `_default` partition are reported by the job that is supposed to prevent them.
 
 ### Negative
 
@@ -62,15 +83,19 @@ The signature is unchanged, so migrations that already call it are unaffected. A
   means re-creating it under that role, or the new owner must own every partitioned parent.
 - `CREATE TABLE ... PARTITION OF` takes a brief `ACCESS EXCLUSIVE` lock on the parent. Unchanged
   from before, but it now actually runs in production.
-- New partitions get the default table privileges for `crm_app`, like the bootstrap ones. Row
-  security is enforced on the parent, so a direct query against a partition by a caller with
-  that grant is not filtered by tenant. The application never does this; it is a separate
-  hardening item, not introduced here.
+- Every partition now holds a copy of its parent's policy: 95 today, one more per stream per
+  month, until retention drops them. A later change to a parent's policy is not propagated; the
+  author must re-run `inherit_partition_rls()` on its partitions, and the invariant test only
+  checks that each policy names `current_org_id()`, not that it equals the parent's.
+- The partition policies stop a query that reaches the wrong relation. They do not stop a caller
+  who can run arbitrary SQL as the app role: `app_is_privileged()` reads a setting that role can
+  set, on a partition as on the parent. ADR-0002 already records that limit.
+- The alert is a log warning. There is no metrics pipeline to page from yet.
 
 ### Neutral
 
-- `defaultPartitionCounts()` still cannot be used as the app role: it reads `_default`
-  partitions directly and the two created before `0007` have no grant for it.
+- `defaultPartitionCounts()` scans each `_default` partition, which is empty in a healthy system.
+  If it is ever large, the daily count is a sequential scan of rows that are already misplaced.
 
 ## Alternatives considered
 
@@ -85,6 +110,15 @@ be contained by RLS. The definer function exposes one validated operation instea
 
 The owner can disable row security and drop policies. Granting `CREATE` on the schema lets the
 role create any table. Both give the runtime role more than the job needs.
+
+### Revoke the app role's grants on partitions
+
+Closes direct access instead of filtering it, and needs no per-partition policy. Rejected
+because the one direct reader the application needs, the default-partition alert, would then
+need a second `SECURITY DEFINER` function, and because the default privileges of `0007` re-grant
+on every partition a later migration creates, so each stream migration would have to remember
+the revoke. The policy copy has the same remember-to-call cost, but the invariant test catches
+it, and it keeps one model: partitions behave like their parent.
 
 ### Create several years of partitions in a migration
 

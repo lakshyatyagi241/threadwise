@@ -163,6 +163,36 @@ describe('schema invariants', () => {
     expect(rows[0]).toEqual({ rolsuper: false, rolbypassrls: false });
   });
 
+  it('every partition of a protected parent enforces the same tenant policy itself', async () => {
+    const { rows } = await owner.query<{
+      table: string;
+      enabled: boolean;
+      forced: boolean;
+      has_policy: boolean;
+    }>(`
+      SELECT c.relname AS "table", c.relrowsecurity AS enabled, c.relforcerowsecurity AS forced,
+             EXISTS (
+               SELECT 1 FROM pg_policy pol
+               WHERE pol.polrelid = c.oid
+                 AND pg_get_expr(pol.polqual, pol.polrelid) LIKE '%current_org_id()%'
+                 AND pg_get_expr(pol.polwithcheck, pol.polrelid) LIKE '%current_org_id()%'
+             ) AS has_policy
+      FROM pg_class c
+      JOIN pg_inherits i ON i.inhrelid = c.oid
+      JOIN pg_class parent ON parent.oid = i.inhparent
+      WHERE c.relkind IN ('r', 'p') AND c.relnamespace = 'public'::regnamespace
+        AND parent.relrowsecurity
+    `);
+    expect(rows.length).toBeGreaterThan(80);
+    // A query that names a partition skips the parent's policies and uses the partition's own, so a
+    // partition with none returns every tenant's rows. A migration that creates a partition by hand
+    // (a stream's _default) must call inherit_partition_rls() on it.
+    const unprotected = rows
+      .filter((r) => !r.enabled || !r.forced || !r.has_policy)
+      .map((r) => r.table);
+    expect(unprotected).toEqual([]);
+  });
+
   it('every SECURITY DEFINER function pins its search_path and is closed to PUBLIC', async () => {
     const { rows } = await owner.query<{ name: string; pinned: boolean; open_to_public: boolean }>(`
       SELECT p.proname AS name,

@@ -30,12 +30,23 @@ describe('partition maintenance', () => {
   let app: Client;
   let clients: DbClientPair;
   let service: PartitionMaintenanceService;
-  /** Same service on the owner connection, only for what the app role cannot read yet. */
-  let ownerClients: DbClientPair;
-  let ownerService: PartitionMaintenanceService;
 
   const appUrl = () =>
     `postgres://crm_app_user:test@${container.getHost()}:${container.getPort()}/crm`;
+
+  /** Rows the app role sees in `relation` with the given tenant context, as a request would. */
+  async function countAs(orgId: number | null, relation: string): Promise<number> {
+    await app.query('BEGIN');
+    try {
+      if (orgId !== null) {
+        await app.query(`SELECT set_config('app.org_id', $1, true)`, [String(orgId)]);
+      }
+      const { rows } = await app.query<{ n: number }>(`SELECT count(*)::int AS n FROM ${relation}`);
+      return rows[0]!.n;
+    } finally {
+      await app.query('ROLLBACK');
+    }
+  }
 
   /** Calls the function the way the worker does and returns the error text, or null. */
   async function callAs(client: Client, parent: string, at: string): Promise<string | null> {
@@ -95,13 +106,10 @@ describe('partition maintenance', () => {
     await app.connect();
     clients = createDbClientPair({ url: appUrl(), poolMax: 2 });
     service = new PartitionMaintenanceService(new DatabaseService(clients));
-    ownerClients = createDbClientPair({ url: container.getConnectionUri(), poolMax: 2 });
-    ownerService = new PartitionMaintenanceService(new DatabaseService(ownerClients));
   }, 180_000);
 
   afterAll(async () => {
     await clients?.close();
-    await ownerClients?.close();
     await app?.end();
     await owner?.end();
     await container?.stop();
@@ -223,7 +231,7 @@ describe('partition maintenance', () => {
     await owner.query(`DROP TABLE numeric_ranged`);
   });
 
-  it('reports rows sitting in default partitions, and only for tables that have one', async () => {
+  it('reports rows sitting in default partitions as the app role, and only for tables that have one', async () => {
     await owner.query(`
       CREATE TABLE strays (id bigint NOT NULL, created_at timestamptz NOT NULL)
         PARTITION BY RANGE (created_at);
@@ -231,18 +239,41 @@ describe('partition maintenance', () => {
       INSERT INTO strays VALUES (1, '2040-06-15'), (2, '2040-07-15');
     `);
 
-    const counts = await ownerService.defaultPartitionCounts();
+    const counts = await service.defaultPartitionCounts();
 
     expect(counts['strays']).toBe(2);
+    // the 0006 default partitions: the app role could not read these before 20261001110100
     expect(counts['event_outbox']).toBe(0);
     expect(counts['audit_log']).toBe(0);
     // brand_new_stream was created with no default partition: nothing to count, and no error.
     expect(counts).not.toHaveProperty('brand_new_stream');
   });
 
-  it.todo(
-    'defaultPartitionCounts as crm_app_user: needs SELECT on event_outbox_default and audit_log_default, which predate 0007 and have no grant',
-  );
+  it('warns after a run while rows are sitting in a default partition', async () => {
+    const spy = vi.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
+    let warned: unknown[][];
+    try {
+      await service.ensurePartitions();
+    } finally {
+      warned = [...spy.mock.calls];
+      spy.mockRestore();
+    }
+
+    expect(warned).toEqual([
+      [{ defaultPartitionRows: { strays: 2 } }, expect.stringContaining('default partitions')],
+    ]);
+  });
+
+  it('stops warning once the default partitions are empty', async () => {
+    await owner.query(`TRUNCATE strays`);
+    const spy = vi.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
+    try {
+      await service.ensurePartitions();
+      expect(spy).not.toHaveBeenCalled();
+    } finally {
+      spy.mockRestore();
+    }
+  });
 
   it('creates partitions owned by the table owner, not by the role that asked', async () => {
     const { rows } = await owner.query<{ owner: string }>(
@@ -250,6 +281,49 @@ describe('partition maintenance', () => {
       [`brand_new_stream_${await month(3)}`],
     );
     expect(rows[0]!.owner).toBe('crm');
+  });
+
+  it("a partition enforces its parent's tenant policy when queried directly", async () => {
+    await owner.query(`
+      CREATE TABLE tenant_stream (
+        org_id bigint NOT NULL, id bigint NOT NULL, created_at timestamptz NOT NULL DEFAULT now()
+      ) PARTITION BY RANGE (created_at);
+      ALTER TABLE tenant_stream ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE tenant_stream FORCE ROW LEVEL SECURITY;
+      CREATE POLICY tenant_isolation ON tenant_stream FOR ALL
+        USING (org_id = current_org_id() OR app_is_privileged())
+        WITH CHECK (org_id = current_org_id() OR app_is_privileged());
+    `);
+    await service.ensurePartitions();
+    // the owner is a superuser, so this seeds across tenants regardless of policy
+    await owner.query(`INSERT INTO tenant_stream (org_id, id) VALUES (1, 1), (1, 2), (2, 3)`);
+    const partition = `tenant_stream_${await month(0)}`;
+
+    expect(await countAs(1, partition)).toBe(2);
+    expect(await countAs(2, partition)).toBe(1);
+    // no tenant context fails closed, as on the parent
+    expect(await countAs(null, partition)).toBe(0);
+    expect(await countAs(1, 'tenant_stream')).toBe(2);
+  });
+
+  it('the partitions a migration bootstrapped are readable by the app role and tenant-filtered', async () => {
+    // before 20261001110100 these were not granted to crm_app at all
+    for (const relation of ['event_outbox_default', 'audit_log_default']) {
+      expect(await countAs(null, relation), relation).toBe(0);
+    }
+    const { rows } = await owner.query<{ forced: boolean }>(
+      `SELECT relforcerowsecurity AS forced FROM pg_class WHERE relname = $1`,
+      [`event_outbox_${await month(0)}`],
+    );
+    expect(rows[0]!.forced).toBe(true);
+  });
+
+  it('leaves the partitions of a parent without RLS open, like the parent', async () => {
+    const { rows } = await owner.query<{ rls: boolean }>(
+      `SELECT relrowsecurity AS rls FROM pg_class WHERE relname = $1`,
+      [`brand_new_stream_${await month(3)}`],
+    );
+    expect(rows[0]!.rls).toBe(false);
   });
 
   it('two workers starting together do not collide on the same partition', async () => {

@@ -262,7 +262,7 @@ Tables: `api_keys` (privileged prefix lookup; `last_used_at` touch), `contacts`,
 ### 2.8 realtime, workers, health
 
 - `realtime/` — see section 1; `RealtimeGateway` exported by `RealtimeModule`, nothing imports it.
-- `workers/` — `OutboxDrainService`, `PartitionMaintenanceService` (on every run it reads the `RANGE`-partitioned parents in `public` from `pg_partitioned_table`, so a new stream needs no code change; creates 3 months ahead, one transaction per table so a bad table cannot block `event_outbox`; `defaultPartitionCounts()` alert hook has no caller). Creation goes through the `SECURITY DEFINER` `ensure_monthly_partition()` so the app role can do it (ADR-0021).
+- `workers/` — `OutboxDrainService`, `PartitionMaintenanceService` (on every run it reads the `RANGE`-partitioned parents in `public` from `pg_partitioned_table`, so a new stream needs no code change; creates 3 months ahead, one transaction per table so a bad table cannot block `event_outbox`; a pass ends by logging a warning if any `_default` partition holds rows). Creation goes through the `SECURITY DEFINER` `ensure_monthly_partition()` so the app role can do it (ADR-0021).
 - `health/` — `GET /health` (liveness, no deps), `GET /ready` (primary, replica, redis; 503 unless primary+redis up); `@Public`, `VERSION_NEUTRAL`.
 
 ### 2.9 README-only modules (`apps/api/src/modules/<x>/README.md`; nothing else in the folder)
@@ -542,7 +542,7 @@ Working-tree note: five untracked `wadesk-*` skills (`ownership-guard`, `parity-
 - `OutboxService.emit` takes a bigint `aggregateId` and `AuditService.record` a bigint `recordId`; `AuditService.record` cannot run without an ambient context.
 - Enum additions: `ALTER TYPE … ADD VALUE` needs `-- @no-transaction`, is append-only, and must be mirrored in `contracts/common/enums.ts`.
 - `contacts.create` returns the _existing_ contact on an identity match, so it is not an upsert for imports; imports need their own path (and `contacts.legacy_id` exists for reconciliation only).
-- The partition list is read from the catalog (`pg_partitioned_table`); `DEFAULT` partitions come from each migration; the `_default` alert is `defaultPartitionCounts()`, which has no caller. Partitions are created by the `SECURITY DEFINER` `ensure_monthly_partition()` (ADR-0021); `crm_app_user` cannot create one directly.
+- The partition list is read from the catalog (`pg_partitioned_table`); `DEFAULT` partitions come from each migration; the `_default` alert is a log warning from `defaultPartitionCounts()` at the end of each pass. Partitions are created by the `SECURITY DEFINER` `ensure_monthly_partition()` (ADR-0021); `crm_app_user` cannot create one directly.
 - `privileged()` has 7 call sites: sanctioned = `AuthService.resolveOrgId`, `ApiKeyGuard.lookupKey`, `OutboxDrainService`, `PartitionMaintenanceService` (x3); **unsanctioned but reachable from HTTP** = `RbacService.rolesVersion`, `RbacService.bumpRolesVersion`. A new site needs an argument (and an ADR-0002 amendment), not a copy.
 - Decisions likely needing ADRs: platform-operator pool; onboarding/privileged use; Clerk vs own auth; unofficial/QR WhatsApp provider; file storage + upload path; worker-to-realtime bridge; plan/limit gating; i18n; mandatory idempotency; Tier-3 `records` for module-like WaDesk objects.
 
@@ -551,7 +551,6 @@ Working-tree note: five untracked `wadesk-*` skills (`ownership-guard`, `parity-
 ## 8. Unverified
 
 - Nothing was executed: no migrations applied, no tests/lint/typecheck/`arch:check`, no server boot, so "working" means "code and docs agree", not "passes".
-- Whether RLS on a **partitioned parent** protects direct queries against a partition (`event_outbox_202609` etc.); the app never queries partitions directly except `defaultPartitionCounts()`, but `crm_app` holds default grants on them.
 - Whether the Drizzle mirrors match the SQL column-for-column (spot-checked; e.g. `organizations.roles_version` is `bigint` in Drizzle, `integer` in SQL; `audit_log.ip` absent in Drizzle).
 - Whether `pnpm install --frozen-lockfile` in `apps/api/Dockerfile` still works once `apps/web` gets a `package.json` (the deps stage copies only four manifests).
 - Which host ports `apps/web` (3001?) and `apps/partner` (3002?) are meant to use; `CORS_ORIGINS` suggests but does not say.

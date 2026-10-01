@@ -67,11 +67,9 @@ dropped audit rows and a stalled outbox. Three months of runway means the job
 can be broken for weeks before it wakes anyone up.
 
 Every partitioned table also has a `DEFAULT` partition as a catch-all. Rows in
-it mean maintenance fell behind:
-
-```ts
-await partitionMaintenance.defaultPartitionCounts(); // alert if non-zero
-```
+it mean maintenance fell behind. The job ends each pass by counting them
+(`defaultPartitionCounts()`) and logs a `rows in default partitions` warning for
+any table where the count is non-zero.
 
 A non-empty default partition also blocks creating new partitions for the
 ranges it covers, so it must be drained, not ignored.

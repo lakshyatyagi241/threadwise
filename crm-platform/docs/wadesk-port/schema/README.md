@@ -102,13 +102,12 @@ reserved <= balance` check) replaces the two balances WaDesk keeps on `users`; `
 4. **Partition maintenance.** Done (conflict-map H11). `apps/api/src/workers/partition-maintenance.service.ts` reads `pg_partitioned_table`
    (`RANGE` parents in `public`, partitions excluded) on every run, so the 17 new streams are kept three months ahead like `event_outbox`
    and `audit_log` with no list to edit. The worker runs as `crm_app_user`, which cannot create a partition, so
-   `ensure_monthly_partition()` is now `SECURITY DEFINER` (migration `20261001110000_partition_definer`, ADR-0021, proposed: the db
-   steward should review it, as it is the schema's first definer function).
-   `apps/api/test/integration/partition-maintenance.spec.ts` runs it as the app role and proves a table created after the service was
-   written gets next month's partition. **Still open:** `defaultPartitionCounts()` cannot read `event_outbox_default` / `audit_log_default` as
-   the app role (they predate 0007, no grant), so it is still not wired to an alert. New partitions inherit the default grants to `crm_app`
-   and carry no policy of their own, so a direct query against a partition is not tenant-filtered; the app never does that, but it is
-   worth a decision (revoke the grant on partitions, or add policies to them).
+   `ensure_monthly_partition()` is `SECURITY DEFINER` (migration `20261001110000_partition_definer`, ADR-0021, proposed: the db steward
+   should review it, as it is the schema's first definer function). Two follow-ups in `20261001110100_partition_rls`: every partition
+   now carries its parent's RLS and policy (`inherit_partition_rls()`; before, a query naming a partition read every tenant's rows), and
+   the `0006` partitions got the app-role grants they lacked, so a pass ends by logging a warning when a `_default` partition holds rows.
+   `apps/api/test/integration/partition-maintenance.spec.ts` runs all of it as the app role. A migration that creates a partition by hand
+   (a stream's `_default`) must call `inherit_partition_rls()` on it; `schema-invariants.spec.ts` fails if one does not.
 5. **`usage_charges` cannot keep a unique `wamid`.** WaDesk enforces one charge per WhatsApp message id; a partitioned table can only be
    unique over a key that includes the partition column. The ledger's idempotency has to be a `(org_id, wamid, created_at)` unique or
    an application check.

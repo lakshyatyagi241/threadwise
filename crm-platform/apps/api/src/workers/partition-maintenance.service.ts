@@ -73,6 +73,7 @@ export class PartitionMaintenanceService implements OnApplicationBootstrap {
     if (failed.length === 0) {
       this.logger.log({ tables, monthsAhead: MONTHS_AHEAD }, 'partitions ensured');
     }
+    await this.warnOnDefaultPartitionRows();
   }
 
   /**
@@ -94,6 +95,26 @@ export class PartitionMaintenanceService implements OnApplicationBootstrap {
       }
       return counts;
     });
+  }
+
+  /**
+   * Runs after every pass, including a failed one: the failure is the likely
+   * reason rows are in a default partition, and the one the alert is for.
+   */
+  private async warnOnDefaultPartitionRows(): Promise<void> {
+    try {
+      const behind = Object.entries(await this.defaultPartitionCounts()).filter(
+        ([, rows]) => rows > 0,
+      );
+      if (behind.length > 0) {
+        this.logger.warn(
+          { defaultPartitionRows: Object.fromEntries(behind) },
+          'rows in default partitions: partition maintenance fell behind',
+        );
+      }
+    } catch (err) {
+      this.logger.error({ err }, 'default partition check failed');
+    }
   }
 
   /**
