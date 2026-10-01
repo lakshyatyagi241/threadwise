@@ -26,3 +26,4 @@ export * from './admin/user';
 export * from './admin/role';
 export * from './auth-registration-security';
 export * from './plans-subscriptions-trials';
+export * from './contacts-attributes-tags';

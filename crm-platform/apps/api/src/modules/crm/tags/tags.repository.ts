@@ -10,6 +10,8 @@ export interface TagRow {
   uuid: string;
   name: string;
   color: string | null;
+  /** Only on a list asked for counts. */
+  contactCount?: number;
   rowVersion: number;
   createdAt: Date;
   updatedAt: Date;
@@ -19,6 +21,7 @@ export interface ListTagsFilter {
   limit: number;
   cursor?: string;
   q?: string;
+  includeCounts?: boolean;
 }
 
 /** Data access for `tags` and their membership on contacts (`contact_tags`). */
@@ -51,13 +54,52 @@ export class TagsRepository {
       );
     }
 
+    const selection = filter.includeCounts
+      ? {
+          ...this.selection(),
+          contactCount: sql<number>`(
+            SELECT count(*)::int FROM contact_tags ct
+            WHERE ct.org_id = ${tags.orgId} AND ct.tag_id = ${tags.id}
+          )`.mapWith(Number),
+        }
+      : this.selection();
     const rows = await tx
-      .select(this.selection())
+      .select(selection)
       .from(tags)
       .where(and(...conditions))
       .orderBy(desc(tags.createdAt), desc(tags.id))
       .limit(filter.limit + 1);
     return rows as TagRow[];
+  }
+
+  /** Case-insensitive: `name` is citext, unique per org. */
+  async findByName(tx: Tx, orgId: number, name: string): Promise<TagRow | undefined> {
+    const rows = await tx
+      .select(this.selection())
+      .from(tags)
+      .where(and(eq(tags.orgId, orgId), sql`${tags.name} = ${name}`));
+    return rows[0] as TagRow | undefined;
+  }
+
+  async countAll(tx: Tx, orgId: number): Promise<number> {
+    const res = await tx.execute(sql`SELECT count(*)::int AS n FROM tags WHERE org_id = ${orgId}`);
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
+  /** Insert, or nothing when the name (any case) is taken. */
+  async insertIfAbsent(
+    tx: Tx,
+    orgId: number,
+    values: { name: string; color?: string | null },
+  ): Promise<{ id: number; uuid: string } | undefined> {
+    const res = await tx.execute(sql`
+      INSERT INTO tags (org_id, name, color)
+      VALUES (${orgId}, ${values.name}, ${values.color ?? null})
+      ON CONFLICT (org_id, name) DO NOTHING
+      RETURNING id, uuid
+    `);
+    const row = res.rows[0] as { id: number; uuid: string } | undefined;
+    return row ? { id: Number(row.id), uuid: row.uuid } : undefined;
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<TagRow | undefined> {
@@ -111,7 +153,8 @@ export class TagsRepository {
   ): Promise<boolean> {
     const result = await tx
       .update(tags)
-      .set(values)
+      // an empty patch still has to be a valid UPDATE: it just touches the row
+      .set(Object.keys(values).length > 0 ? values : { updatedAt: new Date() })
       .where(and(eq(tags.orgId, orgId), eq(tags.id, id), eq(tags.rowVersion, expectedVersion)))
       .returning({ id: tags.id });
     return result.length > 0;
@@ -142,15 +185,19 @@ export class TagsRepository {
     contactIds: number[],
     tagIds: number[],
     createdBy: number | null,
-  ): Promise<void> {
+  ): Promise<Array<{ contactId: number; tagId: number }>> {
+    const added: Array<{ contactId: number; tagId: number }> = [];
     for (const contactId of contactIds) {
       for (const tagId of tagIds) {
-        await tx
+        const rows = await tx
           .insert(contactTags)
           .values({ orgId, contactId, tagId, createdBy })
-          .onConflictDoNothing();
+          .onConflictDoNothing()
+          .returning({ contactId: contactTags.contactId, tagId: contactTags.tagId });
+        if (rows[0]) added.push(rows[0]);
       }
     }
+    return added;
   }
 
   async detach(tx: Tx, orgId: number, contactId: number, tagId: number): Promise<boolean> {

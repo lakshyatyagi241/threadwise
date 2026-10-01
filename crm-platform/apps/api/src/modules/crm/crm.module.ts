@@ -1,4 +1,25 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { AttributesController } from './attributes/attributes.controller';
+import { AttributesRepository } from './attributes/attributes.repository';
+import { AttributesService } from './attributes/attributes.service';
+import { MergeTagService } from './attributes/merge-tag.service';
+import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
+import { ContactBulkRepository } from './contact-bulk/contact-bulk.repository';
+import { ContactBulkService } from './contact-bulk/contact-bulk.service';
+import { ContactDedupeController } from './contact-dedupe/contact-dedupe.controller';
+import { ContactDedupeService } from './contact-dedupe/contact-dedupe.service';
+import {
+  ContactGroupMembershipController,
+  ContactGroupsController,
+} from './contact-groups/contact-groups.controller';
+import { ContactGroupsRepository } from './contact-groups/contact-groups.repository';
+import { ContactGroupsService } from './contact-groups/contact-groups.service';
+import { ContactImportController } from './contact-import/contact-import.controller';
+import { ContactImportEngine } from './contact-import/contact-import.engine';
+import { ContactImportRepository } from './contact-import/contact-import.repository';
+import { ContactImportService } from './contact-import/contact-import.service';
+import { ContactQuotaService } from './contacts/contact-quota.service';
 import { ContactActivitiesController } from './contact-activities/contact-activities.controller';
 import { ContactActivitiesRepository } from './contact-activities/contact-activities.repository';
 import { ContactActivitiesService } from './contact-activities/contact-activities.service';
@@ -50,8 +71,19 @@ import { TagsService } from './tags/tags.service';
  * than inventing a new arrangement.
  */
 @Module({
+  // PlansCoreModule: the contact and tag caps (WD-CON-026) are plan entitlements.
+  imports: [PlansCoreModule],
   controllers: [
+    // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
+    // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`
+    // or Express reads "stats" as an id.
+    ContactBulkController,
+    ContactDedupeController,
+    ContactImportController,
     ContactsController,
+    ContactGroupsController,
+    ContactGroupMembershipController,
+    AttributesController,
     FieldSectionsController,
     FieldsController,
     StatusOptionsController,
@@ -65,6 +97,18 @@ import { TagsService } from './tags/tags.service';
   providers: [
     ContactsService,
     ContactsRepository,
+    ContactQuotaService,
+    ContactGroupsService,
+    ContactGroupsRepository,
+    ContactBulkService,
+    ContactBulkRepository,
+    ContactDedupeService,
+    ContactImportService,
+    ContactImportEngine,
+    ContactImportRepository,
+    AttributesService,
+    AttributesRepository,
+    MergeTagService,
     FieldSectionsService,
     FieldSectionsRepository,
     FieldsService,
@@ -89,6 +133,11 @@ import { TagsService } from './tags/tags.service';
   exports: [
     ContactsService,
     ContactsRepository,
+    ContactQuotaService,
+    ContactGroupsService,
+    ContactBulkService,
+    ContactImportEngine,
+    MergeTagService,
     FieldSectionsService,
     FieldsService,
     StatusOptionsService,

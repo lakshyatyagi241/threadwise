@@ -19,3 +19,4 @@ export * from './partner';
 export * from './ops';
 export * from './auth-registration-security';
 export * from './plans-subscriptions-trials';
+export * from './contacts-attributes-tags';

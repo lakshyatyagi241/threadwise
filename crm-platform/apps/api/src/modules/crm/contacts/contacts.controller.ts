@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
-  bulkContactIdsSchema,
+  attachContactTagSchema,
   bulkUpdateContactsSchema,
   contactSelectQuerySchema,
   createContactSchema,
@@ -21,7 +21,7 @@ import {
   listFieldHistoryQuerySchema,
   setContactAssigneeSchema,
   updateContactSchema,
-  type BulkContactIdsInput,
+  type AttachContactTagInput,
   type BulkUpdateContactsInput,
   type ContactSelectQuery,
   type CreateContactInput,
@@ -100,16 +100,6 @@ export class ContactsController {
     return this.contacts.bulkUpdate(body);
   }
 
-  @Post('bulk/delete')
-  @RequirePermission('record.contacts.delete')
-  @ApiOperation({
-    summary: 'Bulk-delete contacts',
-    description: 'Same per-id partial-failure semantics as bulk/update.',
-  })
-  async bulkDelete(@Body(zodPipe(bulkContactIdsSchema)) body: BulkContactIdsInput) {
-    return this.contacts.bulkDelete(body);
-  }
-
   @Post('assignee')
   @RequirePermission('record.contacts.update')
   @ApiOperation({ summary: 'Set (or clear, with ownerId: null) the owner on multiple contacts' })
@@ -162,6 +152,20 @@ export class ContactsController {
   @ApiOperation({ summary: "List a contact's tags" })
   async listTags(@Param('id', ParseUUIDPipe) id: string) {
     return this.tags.listForContact(id);
+  }
+
+  @Post(':id/tags')
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({
+    summary: 'Attach a tag to a contact, by id or by name',
+    description:
+      'A name that matches no tag creates one: that needs record.tags.create and counts against the plan tag limit. Attaching an already attached tag is a no-op.',
+  })
+  async attachTag(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(attachContactTagSchema)) body: AttachContactTagInput,
+  ) {
+    return this.tags.attachToContact(id, body);
   }
 
   @Delete(':id/tags/:tagId')
