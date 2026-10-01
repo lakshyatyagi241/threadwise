@@ -62,7 +62,7 @@ export class AuthAuditService {
     const payload = JSON.stringify(redact(input.payload ?? {}));
 
     await tx.execute(sql`
-      INSERT INTO security_events (org_id, actor_type, actor_id, event, status, ip, user_agent, request_id, payload)
+      INSERT INTO security_events (subject_org_id, actor_type, actor_id, event, status, ip, user_agent, request_id, payload)
       VALUES (${orgId}, ${actorType}, ${actorId}, ${input.event}, ${input.status},
               ${ip}::inet, ${ctx?.userAgent ?? null}, ${ctx?.requestId ?? null}, ${payload}::jsonb)
     `);
@@ -91,7 +91,7 @@ export class AuthAuditService {
         const c = RequestContextStore.peek();
         const ip = normalizeIp(c?.ip);
         await this.db.primary.execute(sql`
-          INSERT INTO security_events (org_id, actor_type, actor_id, event, status, ip, user_agent, request_id, payload)
+          INSERT INTO security_events (subject_org_id, actor_type, actor_id, event, status, ip, user_agent, request_id, payload)
           VALUES (${null}, ${input.actorType ?? c?.actorType ?? 'system'}, ${input.actorId ?? c?.actorId ?? null},
                   ${input.event}, ${input.status}, ${ip}::inet, ${c?.userAgent ?? null},
                   ${c?.requestId ?? null}, ${JSON.stringify(redact(input.payload ?? {}))}::jsonb)

@@ -876,7 +876,7 @@ describe('sign-up plan assignment', () => {
     expect(new Date(evt.trialEndsAt as string).getTime()).toBe(ends);
 
     const audit = await h.owner.query(
-      `SELECT payload FROM security_events WHERE event = 'auth.signup' AND org_id = $1`,
+      `SELECT payload FROM security_events WHERE event = 'auth.signup' AND subject_org_id = $1`,
       [a.orgId],
     );
     expect(audit.rows[0].payload).toMatchObject({ plan: free.slug, trial: true });
@@ -933,7 +933,7 @@ describe('sign-up plan assignment', () => {
     const plans = await api().get('/v2/plans').set(bearer(a.access));
     expect(plans.body.trialEndsAt).toBeNull();
     const audit = await h.owner.query(
-      `SELECT payload FROM security_events WHERE event = 'auth.signup' AND org_id = $1`,
+      `SELECT payload FROM security_events WHERE event = 'auth.signup' AND subject_org_id = $1`,
       [a.orgId],
     );
     expect(audit.rows[0].payload).toMatchObject({ plan: paid.slug, trial: false });
