@@ -232,3 +232,22 @@ once, from the report. A failure keeps the provider's message, or `error_code:<c
 The broadcast's counters move by the recipient's change of tier (a read recipient is also delivered and sent), not by a recount,
 so a repeat is never applied twice. A failure (or a failure that is later undone) re-derives how a finished broadcast ended,
 so `completed` becomes `completed_with_errors`, and `failed` when every recipient failed. A broadcast still running keeps its status.
+
+## Outbound webhook events and bell entries (TW-BCAST-029)
+
+Nothing new over HTTP. The outbox events a broadcast already wrote now carry the finished result for whoever delivers them
+(`payload.webhook` is a list of `{ event, data }` with Reference's event names and keys; `payload.notification` is a bell entry).
+The webhooks module posts `webhook` to the organization's subscribed URLs and adds `workspace_id`; the notifications module
+writes `notification`. Ids are public uuids.
+
+| Outbox event               | Webhook events in `payload.webhook`                                                                                                                          | Bell entry                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| `broadcast.created`        | `broadcast_created`                                                                                                                                          | "Broadcast created: name", links to the broadcast |
+| `broadcast.status_changed` | `broadcast_status_updated` (previous_status, success/delivered/read/fail counts)                                                                             | only completed, completed with errors, failed     |
+| `broadcast.deleted`        | none                                                                                                                                                         | "Broadcast deleted: name", warning, no link       |
+| `broadcast.message_status` | `message_sent/delivered/read/failed` with an `aggregate` block; a provider receipt also `broadcast_message_status_updated` (phone, error_code, error_reason) | none                                              |
+| `broadcast.link_clicked`   | `campaign_contact_clicked` (original_url, token, click_at, ip, user_agent)                                                                                   | none                                              |
+
+`broadcast.message_status` is written only while the organization has an active webhook subscribed to the event or to `*`, and
+never twice for the same status. The `aggregate` block (`sent, delivered, read, failed, clicked, total`) is exact at the moment of
+the event.

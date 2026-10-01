@@ -164,6 +164,15 @@ describe('TW-BCAST-015: persisting a broadcast', () => {
     });
     expect(res.status).toBe(201);
     expect((await api.events(t.orgId, 'broadcast.created')).length).toBe(before + 1);
+    const created = (await api.events(t.orgId, 'broadcast.created')).at(-1) as {
+      webhook: Array<{ event: string; data: Record<string, unknown> }>;
+      notification: { title: string; actionUrl: string };
+    };
+    expect(created.webhook[0]).toMatchObject({
+      event: 'broadcast_created',
+      data: { broadcast_name: 'Evt', template_id: tpl, total_recipients: 1 },
+    });
+    expect(created.notification.title).toBe('Broadcast created');
     expect(await api.auditCount(t.orgId, 'broadcasts', 'insert')).toBeGreaterThan(0);
   });
 

@@ -246,6 +246,9 @@ export class BroadcastDispatchService {
                 status: 'failed',
                 error: 'No usable phone number',
               });
+              await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'failed', 'send', {
+                errorReason: 'No usable phone number',
+              });
               return false;
             }
             const res = await tx.execute(sql`
@@ -279,12 +282,16 @@ export class BroadcastDispatchService {
               clientReference: `bcast-${broadcastId}-${contactId}`,
               ...(built ? { components: built.components } : {}),
             });
-            await this.db.tx((tx) =>
-              this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+            await this.db.tx(async (tx) => {
+              const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
                 status: 'sent',
                 providerMessageId: sent.providerMessageId,
-              }),
-            );
+              });
+              if (from !== null)
+                await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
+                  providerMessageId: sent.providerMessageId,
+                });
+            });
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
             if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
@@ -302,12 +309,25 @@ export class BroadcastDispatchService {
               this.logger.warn({ orgId, broadcastId }, '[BCAST] paused by the emergency halt');
               return 'paused';
             }
-            await this.db.tx((tx) =>
-              this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+            const reason = err instanceof Error ? err.message : String(err);
+            await this.db.tx(async (tx) => {
+              const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
                 status: 'failed',
-                error: err instanceof Error ? err.message : String(err),
-              }),
-            );
+                error: reason,
+              });
+              if (from !== null)
+                await this.progress.emitMessage(
+                  tx,
+                  orgId,
+                  broadcastId,
+                  contactId,
+                  'failed',
+                  'send',
+                  {
+                    errorReason: reason,
+                  },
+                );
+            });
           }
 
           // A human-paced gap between messages, and a longer rest between batches. Not after the last recipient.

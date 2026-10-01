@@ -4,6 +4,16 @@ import type { Tx } from '@crm/db';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import type { PauseNote } from './pacing';
 import { aggregates, outcome, shouldAdvance, type RecipientCounts } from './recipient-status';
+import {
+  createdNotification,
+  createdWebhook,
+  MESSAGE_EVENTS,
+  messageWebhooks,
+  statusNotification,
+  statusWebhook,
+  type BroadcastSnapshot,
+  type MessageStatus,
+} from './webhook-events';
 
 const MODULE_KEY = 'broadcasts';
 
@@ -133,7 +143,117 @@ export class BroadcastProgressService {
     await this.setStatus(tx, orgId, broadcastId, 'processing');
   }
 
+  /** The broadcast as the outside world sees it: name, template and the cached counters. Null when the row is gone. */
+  async snapshot(tx: Tx, orgId: number, broadcastId: number): Promise<BroadcastSnapshot | null> {
+    const res = await tx.execute(sql`
+      SELECT b.uuid, b.name, t.uuid AS template_uuid, b.status, b.total_recipients, b.success_count,
+             b.delivered_count, b.read_count, b.fail_count, b.clicked_count
+      FROM broadcasts b
+      LEFT JOIN wa_templates t ON t.org_id = b.org_id AND t.id = b.template_id
+      WHERE b.org_id = ${orgId} AND b.id = ${broadcastId}`);
+    const r = res.rows[0] as Record<string, unknown> | undefined;
+    if (!r) return null;
+    return {
+      uuid: r.uuid as string,
+      name: r.name as string,
+      templateUuid: (r.template_uuid as string | null) ?? null,
+      status: r.status as string,
+      totalRecipients: Number(r.total_recipients),
+      successCount: Number(r.success_count),
+      deliveredCount: Number(r.delivered_count),
+      readCount: Number(r.read_count),
+      failCount: Number(r.fail_count),
+      clickedCount: Number(r.clicked_count),
+    };
+  }
+
+  /** True when the org has an active webhook subscribed to one of these events (or to `*`): per-message events are only written then. */
+  async hasSubscriber(tx: Tx, orgId: number, events: readonly string[]): Promise<boolean> {
+    const names = sql.join(
+      [...events, '*'].map((e) => sql`${e}`),
+      sql`, `,
+    );
+    const res = await tx.execute(sql`
+      SELECT 1 FROM webhooks WHERE org_id = ${orgId} AND status AND events ?| ARRAY[${names}]::text[] LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
+  /**
+   * One recipient's message as outbound webhook events (`message_*`, plus `broadcast_message_status_updated` for provider
+   * receipts). Not every message goes through the outbox: at campaign volume that would drown it, so nothing is written
+   * unless a customer webhook is listening. Call after the counters moved so the aggregate block is current.
+   */
+  async emitMessage(
+    tx: Tx,
+    orgId: number,
+    broadcastId: number,
+    contactId: number,
+    status: string,
+    source: 'send' | 'receipt',
+    detail: {
+      providerMessageId?: string | null;
+      errorCode?: string | null;
+      errorReason?: string | null;
+      at?: Date;
+    } = {},
+  ): Promise<void> {
+    if (!(status in MESSAGE_EVENTS)) return;
+    const tier = status as MessageStatus;
+    const wanted = [
+      MESSAGE_EVENTS[tier],
+      ...(source === 'receipt' ? ['broadcast_message_status_updated'] : []),
+    ];
+    if (!(await this.hasSubscriber(tx, orgId, wanted))) return;
+
+    const b = await this.snapshot(tx, orgId, broadcastId);
+    if (!b) return;
+    // The worker recomputes the cached counters in batches; the aggregate block must be exact now.
+    const live = aggregates(await this.counts(tx, orgId, broadcastId));
+    const exact = {
+      ...b,
+      successCount: live.successCount,
+      deliveredCount: live.deliveredCount,
+      readCount: live.readCount,
+      failCount: live.failCount,
+    };
+    const who = await tx.execute(sql`
+      SELECT c.uuid, c.phone, bc.whatsapp_message_id
+      FROM broadcast_contacts bc JOIN contacts c ON c.org_id = bc.org_id AND c.id = bc.contact_id
+      WHERE bc.org_id = ${orgId} AND bc.broadcast_id = ${broadcastId} AND bc.contact_id = ${contactId}`);
+    const c = who.rows[0] as
+      { uuid: string; phone: string | null; whatsapp_message_id: string | null } | undefined;
+    if (!c) return;
+
+    await this.outbox.emit(tx, {
+      orgId,
+      aggregateModule: MODULE_KEY,
+      aggregateId: broadcastId,
+      eventType: 'broadcast.message_status',
+      payload: {
+        uuid: b.uuid,
+        status,
+        webhook: messageWebhooks(
+          exact,
+          {
+            status: tier,
+            contactUuid: c.uuid,
+            phone: c.phone,
+            providerMessageId: detail.providerMessageId ?? c.whatsapp_message_id,
+            errorCode: detail.errorCode,
+            errorReason: detail.errorReason,
+            at: detail.at ?? new Date(),
+          },
+          source,
+        ),
+      },
+    });
+  }
+
   async setStatus(tx: Tx, orgId: number, broadcastId: number, status: string): Promise<void> {
+    const prev = await tx.execute(
+      sql`SELECT status FROM broadcasts WHERE org_id = ${orgId} AND id = ${broadcastId} FOR UPDATE`,
+    );
+    const previous = (prev.rows[0] as { status: string } | undefined)?.status ?? null;
     const res = await tx.execute(sql`
       UPDATE broadcasts SET status = ${status},
         completed_at = CASE WHEN ${status} IN ('completed','completed_with_errors','failed')
@@ -142,12 +262,32 @@ export class BroadcastProgressService {
       RETURNING uuid`);
     const row = res.rows[0] as { uuid: string } | undefined;
     if (!row) return;
+    const b = await this.snapshot(tx, orgId, broadcastId);
+    const note = b ? statusNotification(b) : null;
     await this.outbox.emit(tx, {
       orgId,
       aggregateModule: MODULE_KEY,
       aggregateId: broadcastId,
       eventType: 'broadcast.status_changed',
-      payload: { uuid: row.uuid, status },
+      payload: {
+        uuid: row.uuid,
+        status,
+        previousStatus: previous,
+        webhook: b ? statusWebhook(b, previous, new Date()) : [],
+        ...(note ? { notification: note } : {}),
+      },
     });
+  }
+
+  /** The `broadcast.created` payload for a broadcast that was just inserted. */
+  async createdPayload(
+    tx: Tx,
+    orgId: number,
+    broadcastId: number,
+  ): Promise<Record<string, unknown>> {
+    const b = await this.snapshot(tx, orgId, broadcastId);
+    return b
+      ? { webhook: createdWebhook(b, new Date()), notification: createdNotification(b) }
+      : {};
   }
 }

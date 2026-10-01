@@ -6,6 +6,8 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { BroadcastProgressService } from '../broadcast-progress.service';
+import { clickWebhook } from '../webhook-events';
 import { isBot, isTokenShape } from './link-rules';
 
 const IP_UNIQUE_SECONDS = 3600;
@@ -33,6 +35,7 @@ export class LinkRedirectService {
   constructor(
     private readonly db: DatabaseService,
     private readonly outbox: OutboxService,
+    private readonly progress: BroadcastProgressService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
@@ -135,12 +138,47 @@ export class LinkRedirectService {
           sql`UPDATE broadcasts SET clicked_count = clicked_count + 1 WHERE org_id = ${orgId} AND id = ${broadcastId}`,
         );
       }
+      const who = await tx.execute(sql`
+        SELECT c.uuid AS contact_uuid, l.phone, l.original_url, l.token, t.uuid AS template_uuid
+        FROM wa_link_clicks l
+        JOIN contacts c ON c.org_id = l.org_id AND c.id = l.contact_id
+        LEFT JOIN wa_templates t ON t.org_id = l.org_id AND t.id = l.template_id
+        WHERE l.org_id = ${orgId} AND l.id = ${linkId}`);
+      const w = who.rows[0] as
+        | {
+            contact_uuid: string;
+            phone: string | null;
+            original_url: string;
+            token: string;
+            template_uuid: string | null;
+          }
+        | undefined;
+      const snap = w ? await this.progress.snapshot(tx, orgId, broadcastId) : null;
       await this.outbox.emit(tx, {
         orgId,
         aggregateModule: 'broadcasts',
         aggregateId: broadcastId,
         eventType: 'broadcast.link_clicked',
-        payload: { contactId, linkId, unique: ipNew },
+        payload: {
+          contactId,
+          linkId,
+          unique: ipNew,
+          webhook:
+            w && snap
+              ? clickWebhook(snap, {
+                  campaignId: null,
+                  messageId: null,
+                  contactUuid: w.contact_uuid,
+                  templateUuid: w.template_uuid,
+                  phone: w.phone,
+                  originalUrl: w.original_url,
+                  token: w.token,
+                  ip,
+                  userAgent,
+                  at: new Date(),
+                })
+              : [],
+        },
       });
     });
   }

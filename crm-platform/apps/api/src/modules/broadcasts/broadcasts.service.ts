@@ -10,6 +10,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { BroadcastProgressService } from './broadcast-progress.service';
 import { SendPolicyService } from '../auth';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { splitAudience } from './audience-split';
@@ -55,6 +56,7 @@ export class BroadcastsService {
     private readonly entitlements: PlanEntitlementService,
     private readonly sendPolicy: SendPolicyService,
     private readonly outbox: OutboxService,
+    private readonly progress: BroadcastProgressService,
     private readonly audit: AuditService,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
@@ -179,7 +181,13 @@ export class BroadcastsService {
           aggregateModule: MODULE_KEY,
           aggregateId: row.id,
           eventType: 'broadcast.created',
-          payload: { uuid: row.uuid, status: row.status, isNow, totalRecipients: slice.length },
+          payload: {
+            uuid: row.uuid,
+            status: row.status,
+            isNow,
+            totalRecipients: slice.length,
+            ...(await this.progress.createdPayload(tx, orgId, row.id)),
+          },
         });
         created.push(toBroadcastResponse(row, sender ? sender.key : null));
       }
