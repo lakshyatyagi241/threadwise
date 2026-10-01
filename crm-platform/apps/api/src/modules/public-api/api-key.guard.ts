@@ -12,6 +12,7 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { SecurityPolicyService } from '../auth';
 
 interface ApiKeyRow {
   org_id: number;
@@ -22,6 +23,17 @@ interface ApiKeyRow {
   status: string;
   expires_at: Date | null;
   rate_limit_per_minute: number;
+}
+
+/**
+ * The limit a request is held to: the key's own limit, never above the platform
+ * ceiling from the security policy (`apiRateLimitPerMinute`, 0 = no ceiling).
+ * A key with no limit of its own gets the ceiling; neither set means unlimited.
+ */
+export function effectiveRateLimit(keyLimit: number, platformCeiling: number): number {
+  const own = keyLimit > 0 ? keyLimit : Number.POSITIVE_INFINITY;
+  const ceiling = platformCeiling > 0 ? platformCeiling : Number.POSITIVE_INFINITY;
+  return Math.min(own, ceiling);
 }
 
 /**
@@ -46,6 +58,7 @@ export class ApiKeyGuard implements CanActivate {
     private readonly crypto: CryptoService,
     private readonly config: ConfigService<Env, true>,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly securityPolicy: SecurityPolicyService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -75,7 +88,11 @@ export class ApiKeyGuard implements CanActivate {
     }
 
     this.verifySignature(request, key);
-    await this.enforceRateLimit(prefix, key.rate_limit_per_minute);
+    const ceiling = await this.securityPolicy
+      .policy()
+      .then((p) => p.apiRateLimitPerMinute)
+      .catch(() => 0);
+    await this.enforceRateLimit(prefix, effectiveRateLimit(key.rate_limit_per_minute, ceiling));
 
     const ctx = RequestContextStore.require();
     ctx.orgId = key.org_id;
@@ -138,6 +155,7 @@ export class ApiKeyGuard implements CanActivate {
     const bucket = Math.floor(Date.now() / 60_000);
     const key = `ratelimit:apikey:${prefix}:${bucket}`;
 
+    if (!Number.isFinite(limit)) return;
     const count = await this.redis.incr(key).catch(() => 0);
     if (count === 1) {
       await this.redis.expire(key, 120).catch(() => undefined);

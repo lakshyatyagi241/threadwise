@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import type { Env } from '../../../config/env.schema';
@@ -11,6 +11,7 @@ import type {
   SendTextParams,
   WhatsAppProvider,
 } from './whatsapp.port';
+import { OUTBOUND_SEND_GUARD, type OutboundSendGuard } from './send-guard.port';
 
 /**
  * Meta WhatsApp Cloud API adapter.
@@ -25,7 +26,10 @@ export class MetaCloudProvider implements WhatsAppProvider {
   readonly name = 'meta_cloud';
   private readonly logger = new Logger(MetaCloudProvider.name);
 
-  constructor(private readonly config: ConfigService<Env, true>) {}
+  constructor(
+    private readonly config: ConfigService<Env, true>,
+    @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
+  ) {}
 
   private baseUrl(credentials: ChannelCredentials): string {
     const version = this.config.get('META_GRAPH_VERSION', { infer: true });
@@ -36,6 +40,11 @@ export class MetaCloudProvider implements WhatsAppProvider {
     credentials: ChannelCredentials,
     params: SendTemplateParams,
   ): Promise<SendResult> {
+    await this.guard.beforeSend({
+      body: Object.values(params.variables).join(' '),
+      bulk: params.screen?.bulk,
+      source: params.screen?.source,
+    });
     this.logger.warn(
       { to: params.to, template: params.templateName, url: this.baseUrl(credentials) },
       'sendTemplate not implemented yet — broadcast pipeline lands with the Broadcast module',
@@ -44,6 +53,11 @@ export class MetaCloudProvider implements WhatsAppProvider {
   }
 
   async sendText(credentials: ChannelCredentials, params: SendTextParams): Promise<SendResult> {
+    await this.guard.beforeSend({
+      body: params.body,
+      bulk: params.screen?.bulk,
+      source: params.screen?.source,
+    });
     this.logger.warn(
       { to: params.to, url: this.baseUrl(credentials) },
       'sendText not implemented yet — inbox reply pipeline lands with the Inbox module',

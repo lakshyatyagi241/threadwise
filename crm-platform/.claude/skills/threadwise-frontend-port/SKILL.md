@@ -53,5 +53,5 @@ Nav entries come from your `features/<domain>/nav.ts` through the generated regi
 
 ## Verify
 
-Browser e2e for each acceptance criterion that has a UI (`threadwise-e2e-tests`), then `threadwise-verify-parity` with Reference open beside it.
+Browser e2e for each acceptance criterion that has a UI (`threadwise-e2e-tests`), then `threadwise-playwright-parity`: it opens the same screen on Reference and on ours, compares structure, states, validation, keyboard, responsive and a11y behaviour with the full edge-case matrix, and fixes what is missing.
 Type-check and lint the web workspace with the commands in `apps/web/README.md`, then the repo gate.

@@ -19,7 +19,21 @@ Reference is reference only: never copy its code, assets or text.
 | Coverage report (regenerate)                                             | `python3 .claude/skills/threadwise-inventory-refresh/scripts/audit_coverage.py`                                                                                             |
 | Resumable inventory workflow                                             | `_work/workflows/threadwise-inventory.mjs`                                                                                                                                  |
 
-Not written yet: `port-map/`, `parity/*.md`, `docs/api/`. Ownership is generated: edit `assignment-input.json`, run `gen_ownership.py`, then `tracker.py init --all`.
+Written so far: `parity/auth-registration-security.md`, `docs/api/auth-registration-security.md`. Not written yet: the other `port-map/`, `parity/*.md`, `docs/api/` files. Ownership is generated: edit `assignment-input.json`, run `gen_ownership.py`, then `tracker.py init --all`.
+
+## AUTH domain (2026-10-01): built end to end, on branch `lakshya/auth/auth-domain-core`, not committed
+
+All 49 features: 46 built backend + web (tracker `frontend-done`, with notes on the five that wait for other domains), 3 `wontfix`
+(042, 048, 049). Architecture: [ADR-0019](../adr/0019-auth-sessions-mfa-and-platform-operators.md) (status `proposed`, needs the team's
+approval; it amends ADR-0002 and ADR-0007). API reference: [docs/api/auth-registration-security.md](../api/auth-registration-security.md).
+Evidence, intentional differences from Reference and what is not verified: [parity/auth-registration-security.md](parity/auth-registration-security.md).
+
+Run it: `pnpm --filter @crm/api seed:auth` (dev users, password `Passw0rd!`), `pnpm --filter @crm/api operator:create` (platform operator),
+then API on 3100, web on 3001, mail on Mailpit 58025. Tests: `pnpm --filter @crm/api test`, `test:integration`, `test:e2e`, `pnpm --filter @crm/web test`.
+
+Other domains must hook into AUTH here: `SendPolicyService` and `EmergencyHaltService` in every send pipeline (040, 041), the
+`auth.user.registered` outbox event for plan/trial/referral (008, 009, 019), `PlanFeatureGate` (029), a real OTP sender adapter
+(006), template creation (007), webhook secret rotation and the API rate limit (037, 039), the `audit_log` retention job (NOTIF).
 
 ## State at stop
 

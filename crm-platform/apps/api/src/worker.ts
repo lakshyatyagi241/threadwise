@@ -10,6 +10,7 @@ import { RedisModule } from './infra/redis/redis.module';
 import { QueueModule } from './infra/queue/queue.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
+import { SendGuardModule } from './modules/auth';
 import { WorkersModule } from './workers/workers.module';
 
 /**
@@ -42,6 +43,7 @@ import { WorkersModule } from './workers/workers.module';
     RedisModule,
     QueueModule,
     ProvidersModule,
+    SendGuardModule,
     KernelModule,
     WorkersModule,
   ],

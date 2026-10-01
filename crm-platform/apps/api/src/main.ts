@@ -19,6 +19,17 @@ async function bootstrap(): Promise<void> {
   const config = app.get(ConfigService<Env, true>);
   const logger = new Logger('bootstrap');
 
+  // Client IP for lockout, allowlist and audit: believe only the configured proxies.
+  const trust = config.get('TRUST_PROXY', { infer: true });
+  (app.getHttpAdapter().getInstance() as { set: (k: string, v: unknown) => void }).set(
+    'trust proxy',
+    /^\d+$/.test(trust)
+      ? Number(trust)
+      : trust.includes(',')
+        ? trust.split(',').map((s) => s.trim())
+        : trust,
+  );
+
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '2' });
   app.enableShutdownHooks();
 

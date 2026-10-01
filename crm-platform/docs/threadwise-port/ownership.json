@@ -118,7 +118,10 @@
     "apps/web/messages/*/auth-registration-security.json",
     "apps/web/e2e/auth-registration-security/",
     "docs/api/auth-registration-security.md",
-    "apps/api/src/modules/auth/"
+    "apps/api/src/modules/auth/",
+    "apps/web/messages/*/auth-registration-security.*.json",
+    "apps/web/src/app/(gate)/",
+    "apps/web/src/app/(operator-auth)/"
    ]
   },
   "workspaces-teams-tenancy": {
@@ -208,6 +211,7 @@
     "apps/web/src/app/(app)/layout.tsx",
     "apps/web/src/app/(admin)/layout.tsx",
     "apps/web/src/app/globals.css",
+    "apps/web/src/app/page.tsx",
     "apps/web/src/lib/",
     "apps/web/src/i18n/",
     "apps/web/scripts/",
@@ -1825,6 +1829,8 @@
   "apps/api/src/health/",
   "apps/api/src/workers/",
   "apps/api/src/tools/",
+  ".env.example",
+  ".gitignore",
   "apps/api/src/config/env.schema.ts",
   "apps/api/src/config/config.module.ts",
   "apps/api/src/config/zod-helpers.ts",
