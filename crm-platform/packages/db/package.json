@@ -23,6 +23,7 @@
     "migrate": "tsx src/cli/migrate.ts up",
     "status": "tsx src/cli/migrate.ts status",
     "new": "tsx src/cli/migrate.ts new",
+    "verify-schema": "tsx src/cli/verify-schema.ts",
     "seed": "tsx src/cli/seed.ts",
     "reset": "tsx src/cli/migrate.ts reset && tsx src/cli/seed.ts",
     "clean": "rm -rf dist *.tsbuildinfo"

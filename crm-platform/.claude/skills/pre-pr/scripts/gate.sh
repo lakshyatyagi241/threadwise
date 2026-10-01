@@ -43,10 +43,11 @@ run "typecheck"     pnpm typecheck
 run "architecture boundaries" pnpm arch:check
 run "unit tests"    pnpm test
 
-if touches '^packages/db/migrations/'; then
-  step "Migrations changed — checking they apply and match the journal"
+if touches '^packages/db/(migrations|src/schema)/'; then
+  step "Migrations or schema changed — checking they apply, match the journal and match Drizzle"
   run "db:migrate" pnpm db:migrate
   run "db:status"  pnpm db:status
+  run "db:verify-schema" pnpm db:verify-schema
 else
   echo "(no migration files changed — skipping db:migrate/db:status)"
 fi

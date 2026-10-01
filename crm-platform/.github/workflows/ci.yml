@@ -91,6 +91,9 @@ jobs:
       - name: Migrations are immutable and in sync
         run: pnpm db:status
 
+      - name: Drizzle schema matches the migrated database
+        run: pnpm db:verify-schema
+
       - run: pnpm test
 
       # Testcontainers spins its own Postgres — these tests must not depend on
