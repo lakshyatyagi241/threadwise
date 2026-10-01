@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastDispatchService } from './broadcast-dispatch.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
@@ -23,7 +24,7 @@ import {
  * the real service to the same token (see _shims/README.md).
  */
 @Module({
-  imports: [PlansCoreModule],
+  imports: [PlansCoreModule, CrmModule],
   controllers: [BroadcastsController],
   exports: [BroadcastProgressService, BroadcastDispatchService, EngineSenderRegistry],
   providers: [

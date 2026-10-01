@@ -86,7 +86,7 @@ export interface NewBroadcast {
   provider: string;
   deviceId: number | null;
   templateId: number;
-  templateOverrides: Record<string, unknown> | null;
+  templateOverrides: object | null;
   name: string;
   timezone: string;
   status: 'scheduled' | 'processing';
