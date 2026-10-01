@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import type { ResolvedSender, SenderDirectory } from './tokens';
+import { senderDigits } from '../recipient-phone';
+import type { DispatchSender, ResolvedSender, SenderDirectory } from './tokens';
 
 const ENGINES = new Set(['baileys', 'waba', 'twilio', 'sms']);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -39,5 +40,57 @@ export class SqlSenderDirectory implements SenderDirectory {
     );
     const engine = (res.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
     return engine && ENGINES.has(engine) ? engine : 'baileys';
+  }
+
+  async resolveForDispatch(
+    tx: Tx,
+    orgId: number,
+    broadcast: { provider: string | null; deviceId: number | null },
+  ): Promise<DispatchSender | null> {
+    const engine =
+      broadcast.provider && ENGINES.has(broadcast.provider) ? broadcast.provider : 'baileys';
+
+    if (engine === 'baileys') {
+      const res = await tx.execute(sql`
+        SELECT id, country_code, phone_number, coalesce(nullif(device_name, ''), phone_number) AS label
+        FROM devices
+        WHERE org_id = ${orgId}
+          AND (id = ${broadcast.deviceId} OR status = 'connected')
+        ORDER BY (id = ${broadcast.deviceId}) DESC NULLS LAST, id DESC
+        LIMIT 1`);
+      const r = res.rows[0] as
+        | {
+            id: number | string;
+            country_code: string | null;
+            phone_number: string | null;
+            label: string | null;
+          }
+        | undefined;
+      if (!r) return null;
+      return {
+        engine,
+        id: Number(r.id),
+        phoneDigits: senderDigits(r.country_code, r.phone_number),
+        label: r.label ?? '',
+      };
+    }
+
+    // The row the broadcast names, else the organization's primary connected config of the same provider.
+    const res = await tx.execute(sql`
+      SELECT id, phone_number, coalesce(nullif(display_label, ''), phone_number) AS label
+      FROM wa_provider_configs
+      WHERE org_id = ${orgId} AND provider = ${engine}
+        AND (id = ${broadcast.deviceId} OR status = 'connected')
+      ORDER BY (id = ${broadcast.deviceId}) DESC NULLS LAST, is_primary DESC, id DESC
+      LIMIT 1`);
+    const r = res.rows[0] as
+      { id: number | string; phone_number: string | null; label: string | null } | undefined;
+    if (!r) return null;
+    return {
+      engine,
+      id: Number(r.id),
+      phoneDigits: senderDigits(null, r.phone_number),
+      label: r.label ?? '',
+    };
   }
 }
