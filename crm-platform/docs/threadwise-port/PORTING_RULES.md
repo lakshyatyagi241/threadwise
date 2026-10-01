@@ -58,20 +58,20 @@ No private design system per domain.
 
 ## 4. Stack mapping (Reference -> ours)
 
-| Reference (reference)                        | Ours                                                                                                             |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Laravel controllers, services, jobs       | NestJS module: controller / service / repository / mapper, BullMQ job in the worker (`new-module`, `worker-job`) |
-| Blade + Alpine/vanilla JS                 | Next.js App Router, server components by default, client components only for interactivity; Tailwind; `@crm/ui` |
+| Reference (reference)                        | Ours                                                                                                              |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Laravel controllers, services, jobs       | NestJS module: controller / service / repository / mapper, BullMQ job in the worker (`new-module`, `worker-job`)  |
+| Blade + Alpine/vanilla JS                 | Next.js App Router, server components by default, client components only for interactivity; Tailwind; `@crm/ui`   |
 | MySQL, auto-increment ids, `workspace_id` | Postgres, bigint identity + uuid, `org_id`, forced RLS, composite FKs (`threadwise-data-model-port`, `add-migration`) |
-| Eloquent events, observers, listeners     | Transactional outbox event + consumer (`outbox-event`); never a side effect after commit in a handler            |
-| Laravel queue / scheduler                 | BullMQ + repeatable jobs in the `apps/api` worker                                                                |
+| Eloquent events, observers, listeners     | Transactional outbox event + consumer (`outbox-event`); never a side effect after commit in a handler             |
+| Laravel queue / scheduler                 | BullMQ + repeatable jobs in the `apps/api` worker                                                                 |
 | Session auth, Spatie permissions          | Our auth module, `@RequirePermission('<code>.<resource>.<action>')` registered in a migration (`rbac-permission`) |
-| Request validation                        | Zod schemas in `@crm/contracts`, shared by API and web (`contracts-change`)                                      |
-| Third-party SDK calls inline              | Port interface + adapter per vendor (`provider-adapter`, `threadwise-channel-port`)                                  |
-| Webhook controllers                       | `webhook-handler` skill: verify signature, idempotent, enqueue, ack fast                                         |
-| Node/Baileys bridge                       | Open decision E in the README; until decided, behind the channel port, no direct coupling                        |
-| Translations (`lang/`)                    | `next-intl`, `apps/web/messages/<lang>/<domain>.json`                                                            |
-| Polling / Echo                            | Socket.IO rooms via the realtime module                                                                          |
+| Request validation                        | Zod schemas in `@crm/contracts`, shared by API and web (`contracts-change`)                                       |
+| Third-party SDK calls inline              | Port interface + adapter per vendor (`provider-adapter`, `threadwise-channel-port`)                                   |
+| Webhook controllers                       | `webhook-handler` skill: verify signature, idempotent, enqueue, ack fast                                          |
+| Node/Baileys bridge                       | Open decision E in the README; until decided, behind the channel port, no direct coupling                         |
+| Translations (`lang/`)                    | `next-intl`, `apps/web/messages/<lang>/<domain>.json`                                                             |
+| Polling / Echo                            | Socket.IO rooms via the realtime module                                                                           |
 
 ## 5. Backend and wiring: "proper" means
 
