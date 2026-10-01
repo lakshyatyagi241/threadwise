@@ -22,9 +22,23 @@ export interface RowView {
   groups: Array<{ id: string; name: string; color: string | null }>;
   tags: RowTag[];
   attributes: AttributeChip[];
+  /** Every custom attribute value of the contact as display text, by key (for the attribute columns). */
+  custom: Record<string, string>;
+  /** ISO timestamp the contact was created. */
+  createdAt: string;
 }
 
 const text = (v: unknown) => (typeof v === 'string' ? v : '');
+
+/** Scalar custom values as text (booleans, numbers, strings); objects and empty values are left out. */
+export function customValues(fields: Record<string, unknown>): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(fields)) {
+    if (typeof value === 'string' && value.trim() !== '') out[key] = value;
+    else if (typeof value === 'number' || typeof value === 'boolean') out[key] = String(value);
+  }
+  return out;
+}
 
 export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, string>): RowView {
   return {
@@ -41,5 +55,7 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     groups: (row.groups ?? []).map((g) => ({ id: g.id, name: g.name, color: g.color })),
     tags: row.tags ?? [],
     attributes: attributeChips(row.customFields, attributeLabels),
+    custom: customValues(row.customFields),
+    createdAt: row.createdAt,
   };
 }

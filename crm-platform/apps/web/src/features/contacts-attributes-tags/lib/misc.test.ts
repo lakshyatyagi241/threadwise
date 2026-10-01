@@ -126,6 +126,19 @@ describe('rowView', () => {
     expect(v.attributes.map((a) => a.full)).toEqual(['Order ID: A12']);
   });
 
+  it('keeps every scalar custom value for the attribute columns, and the creation time', () => {
+    const v = rowView(
+      {
+        ...baseRow,
+        createdAt: '2026-03-05T10:00:00.000Z',
+        customFields: { order_count: 3, vip: true, note: '  ', nested: { a: 1 }, order_id: 'A12' },
+      },
+      new Map(),
+    );
+    expect(v.custom).toEqual({ order_count: '3', vip: 'true', order_id: 'A12' });
+    expect(v.createdAt).toBe('2026-03-05T10:00:00.000Z');
+  });
+
   it('flags an opted-out contact', () => {
     expect(rowView({ ...baseRow, isUnsubscribed: true }, new Map()).optedOut).toBe(true);
   });

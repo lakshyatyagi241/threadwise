@@ -132,8 +132,6 @@ describe('message keys used in code', () => {
         `attributes.tips.${s}.body`,
       ]),
       ...(['one', 'two', 'three'] as const).flatMap((s) => [
-        `list.help.${s}.title`,
-        `list.help.${s}.body`,
         `groups.help.${s}.title`,
         `groups.help.${s}.body`,
       ]),

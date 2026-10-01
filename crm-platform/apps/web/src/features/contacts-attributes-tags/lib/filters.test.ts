@@ -9,7 +9,7 @@ describe('parseFilters', () => {
     expect(parseFilters(new URLSearchParams(''))).toEqual(DEFAULT_FILTERS);
     const bad = parseFilters(
       new URLSearchParams(
-        'group=abc&tag=1&per=7&stage=DROP TABLE&order=sideways&consent=maybe&imported=yes',
+        'group=abc&tag=1&per=7&stage=DROP TABLE&order=sideways&consent=maybe&imported=yes&page=-3',
       ),
     );
     expect(bad).toEqual(DEFAULT_FILTERS);
@@ -32,6 +32,19 @@ describe('parseFilters', () => {
     });
   });
 
+  it('reads the page number and falls back to 1 for anything else', () => {
+    expect(parseFilters(new URLSearchParams('page=7')).page).toBe(7);
+    for (const bad of ['0', '-1', '2.5', 'x', '']) {
+      expect(parseFilters(new URLSearchParams(`page=${bad}`)).page, bad).toBe(1);
+    }
+    expect(parseFilters(new URLSearchParams('page=99999999')).page).toBe(100_000);
+  });
+
+  it('defaults to ten rows per screen', () => {
+    expect(DEFAULT_FILTERS.limit).toBe(10);
+    expect(parseFilters(new URLSearchParams('per=10')).limit).toBe(10);
+  });
+
   it('accepts the no_group view only for the group filter', () => {
     expect(parseFilters(new URLSearchParams('group=no_group')).group).toBe('no_group');
     expect(parseFilters(new URLSearchParams('tag=no_group')).tag).toBe('');
@@ -42,6 +55,8 @@ describe('filtersToSearch', () => {
   it('writes only what differs from the defaults, so the clean URL is bare', () => {
     expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
     expect(filtersToSearch({ ...DEFAULT_FILTERS, q: ' acme ', limit: 50 })).toBe('?q=acme&per=50');
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, page: 1 })).toBe('');
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, page: 3 })).toBe('?page=3');
   });
 
   it('round-trips', () => {
@@ -55,6 +70,7 @@ describe('filtersToSearch', () => {
       imported: true,
       order: 'asc' as const,
       limit: 100 as const,
+      page: 4,
     };
     expect(parseFilters(new URLSearchParams(filtersToSearch(f)))).toEqual(f);
   });
@@ -62,7 +78,7 @@ describe('filtersToSearch', () => {
 
 describe('hasActiveFilter', () => {
   it('ignores page size and sort order', () => {
-    expect(hasActiveFilter({ ...DEFAULT_FILTERS, limit: 100, order: 'asc' })).toBe(false);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, limit: 100, order: 'asc', page: 4 })).toBe(false);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, q: 'a' })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, group: 'no_group' })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, consent: 'unsubscribed' })).toBe(true);
@@ -104,6 +120,11 @@ describe('contactFilterBody / listQuery', () => {
       false,
     );
     expect(contactFilterBody({ ...DEFAULT_FILTERS, q: '  ' }).q).toBeUndefined();
+  });
+
+  it('keeps the page number out of the request filter (the cursor carries the position)', () => {
+    expect(listQuery({ ...DEFAULT_FILTERS, page: 5 })).not.toHaveProperty('page');
+    expect(listQuery({ ...DEFAULT_FILTERS, page: 5 })).toEqual(listQuery(DEFAULT_FILTERS));
   });
 
   it('asks the list for group and tag chips and the matching total', () => {

@@ -100,3 +100,29 @@ export function AttributeChip({
     </span>
   );
 }
+
+/** Small outlined pill for table cells: the tag's colour only on the outline, the text stays readable in any theme. */
+export function TagChip({ name, color }: { name: string; color?: string | null }) {
+  const c = color || FALLBACK_COLOR;
+  return (
+    <span
+      title={name}
+      className="inline-flex max-w-[8.5rem] items-center rounded-full border px-2.5 py-0.5 text-xs text-foreground"
+      style={{ borderColor: `color-mix(in srgb, ${c} 55%, var(--border))` }}
+    >
+      <span className="truncate">{name}</span>
+    </span>
+  );
+}
+
+/** "+3" after the chips that fit; the full list is in the tooltip. */
+export function MoreChip({ count, title }: { count: number; title: string }) {
+  return (
+    <span
+      title={title}
+      className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+    >
+      +{count}
+    </span>
+  );
+}

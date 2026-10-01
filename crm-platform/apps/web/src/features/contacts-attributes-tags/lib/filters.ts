@@ -7,7 +7,7 @@ import {
 } from '../api/contacts';
 
 /**
- * The list filters live in the URL (`?q=&group=&tag=&stage=&consent=&imported=&per=&order=`), as they did in Reference,
+ * The list filters live in the URL (`?q=&group=&tag=&stage=&consent=&imported=&per=&order=&page=`), as they did in Reference,
  * so a filtered view can be bookmarked or shared and the back button restores it. Unknown or malformed values fall
  * back to the defaults: a hand-edited URL never breaks the page.
  */
@@ -20,6 +20,12 @@ function cleanId(v: string | null, allowNoGroup: boolean): string {
   if (!v) return '';
   if (allowNoGroup && v === 'no_group') return v;
   return UUID.test(v) ? v : '';
+}
+
+/** A 1-based page number; anything else is page 1. Capped so a hand-edited URL cannot ask for a million pages. */
+function cleanPage(v: string | null): number {
+  const n = Number(v);
+  return Number.isInteger(n) && n >= 1 ? Math.min(n, 100_000) : 1;
 }
 
 export function parseFilters(params: Params): ContactFilters {
@@ -39,6 +45,7 @@ export function parseFilters(params: Params): ContactFilters {
     imported: params.get('imported') === '1',
     order: params.get('order') === 'asc' ? 'asc' : 'desc',
     limit,
+    page: cleanPage(params.get('page')),
   };
 }
 
@@ -53,6 +60,7 @@ export function filtersToSearch(f: ContactFilters): string {
   if (f.imported) p.set('imported', '1');
   if (f.order !== DEFAULT_FILTERS.order) p.set('order', f.order);
   if (f.limit !== DEFAULT_FILTERS.limit) p.set('per', String(f.limit));
+  if (f.page > 1) p.set('page', String(f.page));
   const s = p.toString();
   return s ? `?${s}` : '';
 }

@@ -96,3 +96,36 @@ export const FileIcon = (p: IconProps) => (
     <path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5zM14 3v5h5" />
   </Svg>
 );
+export const ChevronRightIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M9 5l7 7-7 7" />
+  </Svg>
+);
+export const ChevronDownIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 9l7 7 7-7" />
+  </Svg>
+);
+export const ColumnsIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M9 4v16M15 4v16" />
+  </Svg>
+);
+export const FilterIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 5h16l-6 8v6l-4-2v-4L4 5z" />
+  </Svg>
+);
+export const SendIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M21 3L10 14M21 3l-7 18-4-7-7-4 18-7z" />
+  </Svg>
+);
+export const BookUserIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 4h12a2 2 0 012 2v14H7a2 2 0 01-2-2V4z" />
+    <circle cx="12" cy="10" r="2.5" />
+    <path d="M8 16.5c.6-1.6 2-2.3 4-2.3s3.4.7 4 2.3M5 8H3M5 12H3M5 16H3" />
+  </Svg>
+);

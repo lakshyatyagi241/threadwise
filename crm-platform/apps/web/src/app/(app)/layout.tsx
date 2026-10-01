@@ -7,6 +7,7 @@ import { AccountGate } from '@/features/auth-registration-security/account/accou
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
+import { PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
 import { getSession } from '@/lib/auth/server';
@@ -35,7 +36,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           email: session.user.email,
           avatarUrl: session.user.avatarUrl,
         }}
-        nav={resolveNav(NAV, capabilities)}
+        nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
         theme={theme}
         headerStart={<WorkspaceSwitcher />}
         banners={<AccountBanners />}

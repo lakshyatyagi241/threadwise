@@ -1,12 +1,19 @@
 'use client';
 
-import { useInfiniteQuery, useQuery, type QueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { apiFetch } from '@/lib/api/client';
 import {
   contactPageSchema,
   contactResponseSchema,
   contactStatsSchema,
   contactGroupsSchema,
+  type ContactPage,
   type ContactRow,
 } from './schemas';
 
@@ -22,8 +29,8 @@ export const KEYS = {
   stats: ['cat', 'stats'] as const,
 };
 
-/** Reference's page sizes (the API accepts any size up to 1000). */
-export const PAGE_SIZES = [12, 25, 50, 100, 500, 1000] as const;
+/** Rows per screen (the API accepts any size up to 1000); ten is the default, as in the Contact Hub. */
+export const PAGE_SIZES = [10, 25, 50, 100, 500, 1000] as const;
 export type PageSize = (typeof PAGE_SIZES)[number];
 
 export type ConsentFilter = '' | 'subscribed' | 'unsubscribed';
@@ -40,6 +47,8 @@ export interface ContactFilters {
   imported: boolean;
   order: 'asc' | 'desc';
   limit: PageSize;
+  /** 1-based page number; it is not part of the saved filter of a bulk action. */
+  page: number;
 }
 
 export const DEFAULT_FILTERS: ContactFilters = {
@@ -50,7 +59,8 @@ export const DEFAULT_FILTERS: ContactFilters = {
   consent: '',
   imported: false,
   order: 'desc',
-  limit: 25,
+  limit: 10,
+  page: 1,
 };
 
 /** The filter half of a list request, also the saved filter of a bulk action ("select all N matching"). */
@@ -86,26 +96,86 @@ export function listQuery(f: ContactFilters) {
   };
 }
 
-export function useContactsList(filters: ContactFilters) {
+/** One loaded page: the response and the 0-based index it really is (a jump past the end lands on the last page). */
+export interface ContactPageResult {
+  response: ContactPage;
+  index: number;
+}
+
+type ListQuery = ReturnType<typeof listQuery>;
+
+const pageKey = (query: ListQuery, index: number) =>
+  [...KEYS.contacts, 'page', query, index] as const;
+
+/**
+ * Loads page `index` (0-based) of a cursor API. The cursor of page N is the `nextCursor` of page N-1, so each loaded
+ * page is cached under its own key and the next call starts from the nearest cached page before the target. Going to
+ * the next page or back is one request; jumping ahead walks the pages in between one after another (a cursor cannot
+ * be computed), caching each. If the list ends first, the last page is returned with its real index.
+ */
+export async function loadContactPage(
+  qc: QueryClient,
+  query: ListQuery,
+  index: number,
+  signal?: AbortSignal,
+): Promise<ContactPageResult> {
+  let at = index;
+  let cursor: string | undefined;
+  for (; at > 0; at--) {
+    const prev = qc.getQueryData<ContactPageResult>(pageKey(query, at - 1));
+    const next = prev?.response.page;
+    if (next?.hasMore && next.nextCursor) {
+      cursor = next.nextCursor;
+      break;
+    }
+  }
+  for (;;) {
+    const response = await apiFetch('/contacts', {
+      query: { ...query, cursor },
+      schema: contactPageSchema,
+      signal,
+    });
+    const result: ContactPageResult = { response, index: at };
+    qc.setQueryData(pageKey(query, at), result);
+    if (at >= index || !response.page.hasMore || !response.page.nextCursor) return result;
+    cursor = response.page.nextCursor;
+    at++;
+  }
+}
+
+/**
+ * One numbered page of contacts (`page` is 1-based) with the total from `includeTotal`. The previous page stays on
+ * screen while the next loads, and the page after the current one is fetched ahead.
+ */
+export function useContactsPage(filters: ContactFilters, page: number) {
+  const qc = useQueryClient();
   const query = listQuery(filters);
-  const q = useInfiniteQuery({
-    queryKey: [...KEYS.contacts, query],
-    initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam, signal }) =>
-      apiFetch('/contacts', {
-        query: { ...query, cursor: pageParam },
-        schema: contactPageSchema,
-        signal,
-      }),
-    getNextPageParam: (last) =>
-      last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
+  const index = Math.max(0, page - 1);
+  const q = useQuery({
+    queryKey: pageKey(query, index),
+    queryFn: ({ signal }) => loadContactPage(qc, query, index, signal),
+    placeholderData: keepPreviousData,
   });
-  const pages = q.data?.pages ?? [];
+  const result = q.data;
+  const hasMore = result?.response.page.hasMore ?? false;
+  const queryKey = JSON.stringify(query);
+  useEffect(() => {
+    if (!hasMore || q.isPlaceholderData) return;
+    void qc.prefetchQuery({
+      queryKey: pageKey(query, index + 1),
+      queryFn: ({ signal }) => loadContactPage(qc, query, index + 1, signal),
+    });
+    // `query` is rebuilt every render; its serialisation is the stable identity.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasMore, q.isPlaceholderData, index, queryKey, qc]);
   return {
     ...q,
-    items: pages.flatMap((p) => p.data),
-    /** Every contact matching the filter, from the first page's `meta.total`. */
-    total: pages[0]?.meta?.total,
+    items: result?.response.data ?? [],
+    /** The page actually shown (1-based); lower than asked for when the list is shorter. */
+    page: result ? result.index + 1 : page,
+    hasNextPage: hasMore,
+    /** Every contact matching the filter, from `meta.total`. */
+    total: result?.response.meta?.total,
   };
 }
 
