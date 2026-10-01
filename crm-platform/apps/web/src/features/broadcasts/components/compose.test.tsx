@@ -13,6 +13,7 @@ import type {
 } from '@crm/contracts';
 import { AudiencePicker } from './audience-picker';
 import { ComposePreview } from './compose-preview';
+import { OverridesPanel } from './overrides-panel';
 import { ScheduleSection } from './schedule-section';
 import { SenderPicker } from './sender-picker';
 
@@ -161,6 +162,7 @@ describe('compose preview', () => {
     footer: 'STOP',
     category: 'marketing',
     type: 'standard',
+    engine: 'waba',
     language: 'en_US',
     buttons: [{ type: 'url', text: 'Shop' }],
     variableMap: { body: [{ num: 1, key: 'first_name' }] },
@@ -184,6 +186,107 @@ describe('compose preview', () => {
       '>12<',
       'Later',
     ])
+      expect(out).toContain(s);
+  });
+});
+
+describe('overrides panel', () => {
+  const t = (o: Partial<ComposeTemplate> = {}): ComposeTemplate => ({
+    id: 't',
+    name: 'promo',
+    header: 'Sale {{name}}',
+    body: 'Hi {{1}} order {{2}}',
+    footer: null,
+    category: 'marketing',
+    type: 'standard',
+    engine: 'waba',
+    language: 'en_US',
+    buttons: [
+      { type: 'url', text: 'Shop', value: 'https://x.test/{{1}}' },
+      { type: 'quick_reply', text: 'Yes' },
+    ],
+    variableMap: {
+      body: [
+        { num: 1, key: 'first_name' },
+        { num: 2, key: 'order_id' },
+      ],
+    },
+    attachmentType: null,
+    attachmentUrl: null,
+    senderLabel: null,
+    twilioReady: false,
+    ...o,
+  });
+  const catalog = {
+    groups: [
+      {
+        group: 'contact' as const,
+        items: [
+          { key: 'first_name', label: 'First name', sample: 'Asha' },
+          { key: 'email', label: 'Email', sample: null },
+        ],
+      },
+    ],
+  };
+
+  it('one row per slot with its own name, what a blank fills with, chips and the button value', () => {
+    const out = html(<OverridesPanel template={t()} catalog={catalog} onChange={none} />);
+    for (const s of [
+      'Fill in this send',
+      'First name',
+      'Auto-fills from',
+      'Asha',
+      '{{order_id}}',
+      'Button values',
+      'Shop',
+      'Leave blank to auto-fill',
+    ])
+      expect(out).toContain(s);
+    expect(out).not.toContain('>Yes<'); // a quick reply carries no send-time value
+  });
+  it('a slot with no matching attribute and no default warns that it sends empty', () => {
+    expect(
+      html(
+        <OverridesPanel
+          template={t({ body: 'Hi {{1}}', variableMap: {} })}
+          catalog={catalog}
+          onChange={none}
+        />,
+      ),
+    ).toContain('this will send empty');
+  });
+  it('auth templates are locked; Twilio keeps variables but drops buttons; a template with nothing to fill says so', () => {
+    expect(
+      html(<OverridesPanel template={t({ type: 'auth' })} catalog={catalog} onChange={none} />),
+    ).toContain('freshly generated OTP');
+    const tw = html(
+      <OverridesPanel template={t({ engine: 'twilio' })} catalog={catalog} onChange={none} />,
+    );
+    expect(tw).toContain('Content SID');
+    expect(tw).not.toContain('Button values');
+    expect(
+      html(
+        <OverridesPanel
+          template={t({ header: null, body: 'Hello', buttons: [], variableMap: {} })}
+          catalog={catalog}
+          onChange={none}
+        />,
+      ),
+    ).toContain('sends exactly as written');
+  });
+  it('a media header offers a link field with the type limit', () => {
+    const out = html(
+      <OverridesPanel
+        template={t({
+          header: null,
+          attachmentType: 'IMAGE',
+          attachmentUrl: 'https://x.test/a.png',
+        })}
+        catalog={catalog}
+        onChange={none}
+      />,
+    );
+    for (const s of ['Header media', 'JPG or PNG', 'public HTTPS link', 'https://x.test/a.png'])
       expect(out).toContain(s);
   });
 });

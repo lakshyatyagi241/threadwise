@@ -21,6 +21,19 @@ export function effectiveCategory(meta: string | null, local: string | null): st
   return WA_CATEGORIES.has(l) ? l : 'utility';
 }
 
+/** The engine a template targets: its stored channel, else Twilio when it has a Content SID, WABA when it has a Meta id or a number, else Baileys. */
+export function templateEngine(r: {
+  channel: string | null;
+  twilio_content_sid: string | null;
+  meta_template_id: string | null;
+  provider_config_id: number | string | null;
+}): string {
+  if (r.channel && ['baileys', 'waba', 'twilio'].includes(r.channel)) return r.channel;
+  if (r.twilio_content_sid) return 'twilio';
+  if (r.meta_template_id || r.provider_config_id) return 'waba';
+  return 'baileys';
+}
+
 interface TemplateRaw {
   uuid: string;
   template_name: string;
@@ -36,6 +49,9 @@ interface TemplateRaw {
   attachment_type: string | null;
   attachment_file: string | null;
   twilio_content_sid: string | null;
+  meta_template_id: string | null;
+  provider_config_id: number | string | null;
+  channel: string | null;
   sender_label: string | null;
 }
 
@@ -77,7 +93,7 @@ export class BroadcastsComposeService {
           : sql`t.status IN ('approved', 'public')`;
       const tpl = await tx.execute(sql`
         SELECT t.uuid, t.template_name, t.header, t.template_body, t.footer, t.category, t.meta_category, t.template_type,
-               t.language, t.buttons, t.variable_map, t.attachment_type, t.attachment_file, t.twilio_content_sid,
+               t.language, t.buttons, t.variable_map, t.attachment_type, t.attachment_file, t.twilio_content_sid, t.meta_template_id, t.provider_config_id, t.channel,
                coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
         FROM wa_templates t
         LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
@@ -107,6 +123,7 @@ export class BroadcastsComposeService {
           footer: r.footer,
           category: effectiveCategory(r.meta_category, r.category),
           type: r.template_type,
+          engine: templateEngine(r),
           language: r.language,
           buttons: r.buttons ?? [],
           variableMap: r.variable_map ?? {},

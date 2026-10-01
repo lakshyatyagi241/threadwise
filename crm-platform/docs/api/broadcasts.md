@@ -281,3 +281,6 @@ attachmentType, attachmentUrl, senderLabel, twilioReady`; `category` is `meta_ca
 engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers are
   left out.
 - `twilioEnabled`: a Twilio number is connected, so the picker marks each template "Twilio ready" or "plain text only".
+
+`templates[].engine` is `baileys`, `waba` or `twilio`: the stored channel, else Twilio when the template has a Content SID, WABA when
+it has a Meta id or a number, else Baileys. A Twilio template cannot take new header media or button links at send time.

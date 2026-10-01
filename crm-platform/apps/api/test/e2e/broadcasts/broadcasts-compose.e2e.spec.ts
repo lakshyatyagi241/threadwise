@@ -89,6 +89,10 @@ describe('TW-BCAST-004..006: compose data', () => {
       twilioReady: false,
     });
     expect(res.body.templates[1].category).toBe('utility');
+    expect(res.body.templates.map((x: { engine: string }) => x.engine)).toEqual([
+      'baileys',
+      'baileys',
+    ]);
   });
 
   it('a Meta workspace lists only templates Meta approved and not paused', async () => {
@@ -131,6 +135,20 @@ describe('TW-BCAST-004..006: compose data', () => {
     expect(res.body.templates.find((x: { name: string }) => x.name === 'on-live').senderLabel).toBe(
       'Main',
     );
+  });
+
+  it('the engine follows the Content SID, then the Meta id or number, else Baileys', async () => {
+    const t = await api.signup('c8');
+    await template(t, { name: 'tw', sid: 'HX1' });
+    await template(t, { name: 'meta', meta: true, metaStatus: 'APPROVED' });
+    await template(t, { name: 'plain' });
+    const by = Object.fromEntries(
+      (await get(t)).body.templates.map((x: { name: string; engine: string }) => [
+        x.name,
+        x.engine,
+      ]),
+    );
+    expect(by).toEqual({ tw: 'twilio', meta: 'waba', plain: 'baileys' });
   });
 
   it('senders are the connected numbers, default engine first, sms and disconnected left out', async () => {

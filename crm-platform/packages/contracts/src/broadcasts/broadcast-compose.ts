@@ -16,6 +16,8 @@ export const composeTemplateSchema = z.object({
   /** meta_category, else category when it is a WhatsApp category, else `utility`. */
   category: z.string(),
   type: z.string(),
+  /** Which engine the template targets: baileys, waba or twilio. Twilio sends a template by its Content SID, so its media and buttons cannot be changed at send time. */
+  engine: z.string(),
   language: z.string(),
   buttons: z.unknown(),
   variableMap: z.unknown(),
