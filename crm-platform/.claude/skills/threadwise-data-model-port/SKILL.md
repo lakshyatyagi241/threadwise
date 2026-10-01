@@ -20,6 +20,17 @@ or user-scoped. Our rules (CONTRIBUTING, ADR-0002/0004/0009/0016, rule numbers a
 `docs/threadwise-port/target-map.md` §6) turn that into a mechanical translation plus a short list
 of decisions a person must make. The script does the mechanical part and tags the decisions.
 
+## 0. The baseline already exists
+
+All 227 Reference tables are translated: one migration per domain (`packages/db/migrations/2026100110*_<code>_threadwise_schema.sql`), Drizzle
+in `packages/db/src/schema/<domain>/`, and the answers in `docs/threadwise-port/schema/` (read `README.md`, then find your table in
+`table-map.md`; `review-notes.md` lists what is still open per table). For a feature, do not draft a table: read the existing one, and
+change it with a new migration (`add-migration`) plus the Drizzle edit in the same commit, then `pnpm db:verify-schema`. The section
+below (the single-table draft script) is for a Reference table that is somehow not in the table map, or for comparing a design.
+
+`scripts/gen_schema.py` is the whole-schema generator behind the baseline (inputs and decisions in
+`docs/threadwise-port/schema/source/`). Run it into a scratch `--out` to compare; never over the repo.
+
 ## 1. Draft
 
 ```bash
@@ -55,7 +66,7 @@ rule for migrations in `docs/threadwise-port/conflict-map.md` before creating th
 | `user_id` (owner/creator)                                        | the staff `users (org_id, id)`; Reference users are workspace owners, ours are one pool per org                                                             |
 | token / secret / password / api key columns                      | AES-GCM encrypted at rest through the provider-adapter credential pattern; never plain text                                                              |
 | `*_hash` next to an encrypted PII column                         | Reference stores PII encrypted + lookup hash. Decide once (encrypt+hash vs plain under RLS) and ADR it                                                      |
-| logs / events / history / messages tables                        | append-only streams: RANGE partition by `created_at`, PK `(id, created_at)`, no FK into them (copy `0006_outbox_audit.sql`, add to `PARTITIONED_TABLES`) |
+| logs / events / history / messages tables                        | append-only streams: RANGE partition by `created_at`, PK `(id, created_at)`, no FK into them (copy `0006_outbox_audit.sql`, maintenance finds it itself) |
 | global tables (plans, languages, providers)                      | no `org_id`, no RLS, like `permission_defs`, but only if certain; platform-operator tables need the operator pool ADR first (target-map §7)              |
 | fulltext keys                                                    | `pg_trgm`/`tsvector` GIN index if the feature really searches                                                                                            |
 | duplicate Reference indexes                                         | kept once (the script notes the duplicate)                                                                                                               |

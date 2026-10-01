@@ -6,7 +6,7 @@
  * DDL, and drizzle-kit push is deliberately not wired up (ADR-0004).
  *
  * If you change a table, change the SQL migration first, then mirror it here
- * in the same commit. `pnpm db:status --verify` diffs the two in CI.
+ * in the same commit. `pnpm db:verify-schema` diffs the two in CI.
  */
 export * from './columns';
 export * from './enums';

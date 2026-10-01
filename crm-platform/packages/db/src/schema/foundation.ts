@@ -2,11 +2,15 @@ import { sql } from 'drizzle-orm';
 import {
   bigint,
   boolean,
+  foreignKey,
   index,
+  integer,
   jsonb,
   pgTable,
   primaryKey,
   text,
+  timestamp,
+  unique,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
@@ -31,7 +35,7 @@ export const organizations = pgTable('organizations', {
   tier: text('tier').notNull().default('standard'),
   settings: jsonb('settings').$type<Record<string, unknown>>().notNull().default({}),
   /** Bumped on any role/grant change — part of the RBAC cache key. */
-  rolesVersion: bigint('roles_version', { mode: 'number' }).notNull().default(1),
+  rolesVersion: integer('roles_version').notNull().default(1),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });
@@ -48,6 +52,9 @@ export const users = pgTable(
     authSubject: text('auth_subject'),
     status: text('status').notNull().default('active'),
     settings: jsonb('settings').$type<Record<string, unknown>>().notNull().default({}),
+    /** Reference workspace_user.invited_at / joined_at (wsp overlay). */
+    invitedAt: timestamp('invited_at', { withTimezone: true }),
+    joinedAt: timestamp('joined_at', { withTimezone: true }),
     rowVersion: rowVersion(),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -70,6 +77,17 @@ export const teams = pgTable(
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull(),
     name: text('name').notNull(),
+    /** Reference team settings (wsp overlay). */
+    slug: text('slug'),
+    color: text('color').notNull().default('#075E54'),
+    description: text('description'),
+    defaultAssigneeId: idColumn('default_assignee_id'),
+    assignmentStrategy: text('assignment_strategy').notNull().default('manual'),
+    businessHours: jsonb('business_hours'),
+    timezone: text('timezone'),
+    deviceIds: jsonb('device_ids'),
+    isDefault: boolean('is_default').notNull().default(false),
+    sort: integer('sort').notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -77,6 +95,13 @@ export const teams = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     uniqueIndex('teams_org_id_name_key').on(t.orgId, t.name),
+    unique('uq_teams_org_slug').on(t.orgId, t.slug),
+    index('idx_teams_org_default').on(t.orgId, t.isDefault),
+    foreignKey({
+      name: 'fk_teams_default_assignee_id',
+      columns: [t.orgId, t.defaultAssigneeId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
   ],
 );
 
@@ -86,6 +111,9 @@ export const teamMembers = pgTable(
     orgId: orgIdColumn(),
     teamId: idColumn('team_id').notNull(),
     userId: idColumn('user_id').notNull(),
+    /** Reference team_user.is_lead / capacity (wsp overlay). */
+    isLead: boolean('is_lead').notNull().default(false),
+    capacity: integer('capacity').notNull().default(20),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.teamId, t.userId] }),
