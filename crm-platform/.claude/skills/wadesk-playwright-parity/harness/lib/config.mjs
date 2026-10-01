@@ -51,10 +51,10 @@ export function loadConfig(env = process.env) {
     ours: {
       webUrl: env.PARITY_WEB_URL || '', // empty = apps/web not running/built yet
       apiUrl: env.PARITY_API_URL || 'http://localhost:3000',
-      org: env.PARITY_ORG || 'studyfromuae',
+      org: env.PARITY_ORG || 'Admin',
       users: {
         admin: {
-          email: env.PARITY_EMAIL || 'admin@studyfromuae.test',
+          email: env.PARITY_EMAIL || 'nachiket.challawar@geta.ai',
           password: env.PARITY_PASSWORD || 'Passw0rd!',
         },
       },
