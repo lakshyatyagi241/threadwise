@@ -44,6 +44,7 @@ export interface TemplateRecord {
   language: string;
   templateBody: string;
   header: string | null;
+  footer: string | null;
   headerLocation: unknown;
   parameterFormat: string | null;
   variableMap: unknown;

@@ -3,6 +3,7 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastDispatchService } from './broadcast-dispatch.service';
+import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
@@ -60,6 +61,7 @@ import {
     BroadcastsReadService,
     BroadcastsActionsService,
     BroadcastReceiptsService,
+    BroadcastInboxMirrorService,
     LinkTracker,
     PacingRuntime,
     CapTally,
