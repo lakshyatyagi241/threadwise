@@ -24,20 +24,20 @@ export interface RecipientUpdate {
 export class BroadcastProgressService {
   constructor(private readonly outbox: OutboxService) {}
 
-  /** Moves one recipient forward. False when the state machine refuses (a late or repeated report) or the row is unknown. */
+  /** Moves one recipient forward. Returns the status it had before, or null when the state machine refuses (a late or repeated report) or the row is unknown. */
   async applyRecipient(
     tx: Tx,
     orgId: number,
     broadcastId: number,
     contactId: number,
     update: RecipientUpdate,
-  ): Promise<boolean> {
+  ): Promise<string | null> {
     const cur = await tx.execute(sql`
       SELECT status FROM broadcast_contacts
       WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND contact_id = ${contactId}
       FOR UPDATE`);
     const row = cur.rows[0] as { status: string } | undefined;
-    if (!row || !shouldAdvance(row.status, update.status)) return false;
+    if (!row || !shouldAdvance(row.status, update.status)) return null;
 
     const at = (update.at ?? new Date()).toISOString();
     await tx.execute(sql`
@@ -49,7 +49,7 @@ export class BroadcastProgressService {
         delivered_at = CASE WHEN ${update.status} IN ('delivered','read') THEN coalesce(delivered_at, ${at}::timestamptz) ELSE delivered_at END,
         read_at = CASE WHEN ${update.status} = 'read' THEN coalesce(read_at, ${at}::timestamptz) ELSE read_at END
       WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND contact_id = ${contactId}`);
-    return true;
+    return row.status;
   }
 
   async counts(tx: Tx, orgId: number, broadcastId: number): Promise<RecipientCounts> {
@@ -68,6 +68,34 @@ export class BroadcastProgressService {
       if (r.status in c) c[r.status as keyof RecipientCounts] += Number(r.n);
     }
     return c;
+  }
+
+  /** Moves the cached counters by one recipient's change of tier; a repeat of the same change is never applied twice. */
+  async bumpCounters(
+    tx: Tx,
+    orgId: number,
+    broadcastId: number,
+    d: { success: number; delivered: number; read: number; fail: number },
+  ): Promise<void> {
+    if (d.success === 0 && d.delivered === 0 && d.read === 0 && d.fail === 0) return;
+    await tx.execute(sql`
+      UPDATE broadcasts SET
+        success_count = greatest(0, success_count + ${d.success}),
+        delivered_count = greatest(0, delivered_count + ${d.delivered}),
+        read_count = greatest(0, read_count + ${d.read}),
+        fail_count = greatest(0, fail_count + ${d.fail})
+      WHERE org_id = ${orgId} AND id = ${broadcastId}`);
+  }
+
+  /** A late failure (or a failure that turned out fine) can change how a finished broadcast ended: derive it again. */
+  async refreshOutcome(tx: Tx, orgId: number, broadcastId: number): Promise<void> {
+    const res = await tx.execute(
+      sql`SELECT status FROM broadcasts WHERE org_id = ${orgId} AND id = ${broadcastId}`,
+    );
+    const status = (res.rows[0] as { status: string } | undefined)?.status;
+    if (status && ['completed', 'completed_with_errors', 'failed'].includes(status)) {
+      await this.finish(tx, orgId, broadcastId);
+    }
   }
 
   /** Rewrites the cached counters from the rows (success includes delivered includes read). `clicked` is not touched. */
