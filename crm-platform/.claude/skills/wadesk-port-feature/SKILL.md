@@ -10,8 +10,8 @@ description: >-
   a WaDesk screen/behavior to rebuild. It sequences the other skills (lookup,
   ownership, data-model, new-module, contracts-change, rbac-permission,
   outbox-event, worker-job, provider-adapter, webhook-handler, frontend-port,
-  e2e-tests, verify-parity, parity-tracker, pre-pr); never port a feature
-  by improvising outside this flow.
+  e2e-tests, playwright-parity, verify-parity, parity-tracker, pre-pr); never
+  port a feature by improvising outside this flow.
 ---
 
 # Port one WaDesk feature
@@ -72,10 +72,11 @@ offset pagination. Do not touch files outside your zones; run `ownership_check.p
 ## 3. Prove it
 
 1. `wadesk-e2e-tests`: automated tests covering every Given/When/Then in the entry (add missing criteria to the entry).
-2. `wadesk-verify-parity`: compare against the running WaDesk, record evidence in `docs/wadesk-port/parity/<domain>.md`.
-3. `bash .claude/skills/pre-pr/scripts/gate.sh`, `python3 .claude/skills/wadesk-ownership-guard/scripts/ownership_check.py`,
+2. `wadesk-playwright-parity`: **automatic**, do not wait for the Stop hook that enforces it. Runs the feature on the running WaDesk and on ours in Playwright (UI, UX, functionality, the full edge-case matrix), reports every difference as same / intended / defect, spawns fix sub-agents for the defects and re-runs until clean, writes the evidence rows and a stamp.
+3. `wadesk-verify-parity`: only for what the twin run marks as not automatable (live provider sessions) and to finish the evidence file `docs/wadesk-port/parity/<domain>.md` (the twin run supplies the rows).
+4. `bash .claude/skills/pre-pr/scripts/gate.sh`, `python3 .claude/skills/wadesk-ownership-guard/scripts/ownership_check.py`,
    `adr-compliance-review`, `adr-diff-guard` (an architectural call needs an ADR in the same PR, `write-adr`).
-4. Open the PR via `pre-pr`. Description: WD ids, acceptance-criteria checklist, parity evidence link, intentional
+5. Open the PR via `pre-pr`. Description: WD ids, acceptance-criteria checklist, parity evidence link, intentional
    deviations from WaDesk and why, follow-ups.
 
 ## 4. Close
@@ -87,6 +88,7 @@ turned out to be missing from the inventory, add it (next id) rather than buildi
 
 - [ ] every acceptance criterion has an automated test that passes; gate script green
 - [ ] RLS verified by script on every new table; no cross-tenant path
+- [ ] twin run recorded: stamp `clean` or `fixed`, no open defect, every `review` item decided, twin spec committed under `apps/web/e2e/<domain>/parity/`
 - [ ] behavior compared with WaDesk; differences listed and intentional
 - [ ] inventory entry, `docs/api/<domain>.md`, tracker row updated in this PR
 - [ ] ownership check clean (only your zones, seams edited per policy)

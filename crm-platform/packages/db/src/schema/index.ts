@@ -17,3 +17,5 @@ export * from './crm';
 export * from './field-metadata';
 export * from './partner';
 export * from './ops';
+export * from './auth-registration-security';
+export * from './plans-subscriptions-trials';

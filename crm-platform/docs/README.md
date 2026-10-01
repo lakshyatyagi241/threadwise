@@ -29,26 +29,27 @@ Every architectural decision, with the alternatives that were rejected and why.
 Format: [MADR](https://adr.github.io/madr/). Template:
 [0000-template.md](adr/0000-template.md).
 
-| #                                               | Decision                                    | Status                                   |
-| ----------------------------------------------- | ------------------------------------------- | ---------------------------------------- |
-| [0001](adr/0001-modular-monolith.md)            | One NestJS app, split by domain module      | accepted                                 |
-| [0002](adr/0002-postgres-rls-multitenancy.md)   | Shared schema + forced RLS                  | accepted                                 |
-| [0003](adr/0003-drizzle-over-orm.md)            | Drizzle as a query builder, not an ORM      | accepted                                 |
-| [0004](adr/0004-handwritten-sql-migrations.md)  | Hand-written SQL migrations + custom runner | accepted                                 |
-| [0005](adr/0005-transactional-outbox.md)        | Transactional outbox, not event sourcing    | accepted                                 |
-| [0006](adr/0006-rbac-at-middleware.md)          | RBAC in guards; RLS does isolation only     | accepted                                 |
-| [0007](adr/0007-three-identity-pools.md)        | Separate identity pools, own JWT auth       | accepted                                 |
-| [0008](adr/0008-rest-openapi-zod.md)            | REST + OpenAPI, Zod contracts               | accepted                                 |
-| [0009](adr/0009-hard-delete-with-audit.md)      | Hard delete, audit log as the record        | accepted                                 |
-| [0010](adr/0010-bullmq-worker-process.md)       | BullMQ, worker as a separate process        | accepted                                 |
-| [0011](adr/0011-single-vm-deploy.md)            | Single VM + docker compose for v1           | accepted                                 |
-| [0012](adr/0012-payments-and-settlements.md)    | Wallet, two-level ledger, settlement gate   | **schema accepted, settlements blocked** |
-| [0013](adr/0013-read-replica-and-public-api.md) | External reads on a replica, API key + HMAC | accepted                                 |
-| [0014](adr/0014-sub-agent-model.md)             | Sub-agents: own pool, live stage reads      | accepted                                 |
-| [0015](adr/0015-legacy-geta-migration.md)       | Migrating off the legacy Geta system        | **proposed**                             |
-| [0016](adr/0016-api-conventions.md)             | uuids, cursors, problem+json, idempotency   | accepted                                 |
-| [0017](adr/0017-field-metadata-registry.md)     | Generic field-metadata registry (Tier-2)    | accepted                                 |
-| [0018](adr/0018-web-app-stack-and-session.md)   | Web app stack and httpOnly-cookie session   | proposed                                 |
+| #                                                            | Decision                                           | Status                                   |
+| ------------------------------------------------------------ | -------------------------------------------------- | ---------------------------------------- |
+| [0001](adr/0001-modular-monolith.md)                         | One NestJS app, split by domain module             | accepted                                 |
+| [0002](adr/0002-postgres-rls-multitenancy.md)                | Shared schema + forced RLS                         | accepted                                 |
+| [0003](adr/0003-drizzle-over-orm.md)                         | Drizzle as a query builder, not an ORM             | accepted                                 |
+| [0004](adr/0004-handwritten-sql-migrations.md)               | Hand-written SQL migrations + custom runner        | accepted                                 |
+| [0005](adr/0005-transactional-outbox.md)                     | Transactional outbox, not event sourcing           | accepted                                 |
+| [0006](adr/0006-rbac-at-middleware.md)                       | RBAC in guards; RLS does isolation only            | accepted                                 |
+| [0007](adr/0007-three-identity-pools.md)                     | Separate identity pools, own JWT auth              | accepted                                 |
+| [0008](adr/0008-rest-openapi-zod.md)                         | REST + OpenAPI, Zod contracts                      | accepted                                 |
+| [0009](adr/0009-hard-delete-with-audit.md)                   | Hard delete, audit log as the record               | accepted                                 |
+| [0010](adr/0010-bullmq-worker-process.md)                    | BullMQ, worker as a separate process               | accepted                                 |
+| [0011](adr/0011-single-vm-deploy.md)                         | Single VM + docker compose for v1                  | accepted                                 |
+| [0012](adr/0012-payments-and-settlements.md)                 | Wallet, two-level ledger, settlement gate          | **schema accepted, settlements blocked** |
+| [0013](adr/0013-read-replica-and-public-api.md)              | External reads on a replica, API key + HMAC        | accepted                                 |
+| [0014](adr/0014-sub-agent-model.md)                          | Sub-agents: own pool, live stage reads             | accepted                                 |
+| [0015](adr/0015-legacy-geta-migration.md)                    | Migrating off the legacy Geta system               | **proposed**                             |
+| [0016](adr/0016-api-conventions.md)                          | uuids, cursors, problem+json, idempotency          | accepted                                 |
+| [0017](adr/0017-field-metadata-registry.md)                  | Generic field-metadata registry (Tier-2)           | accepted                                 |
+| [0018](adr/0018-web-app-stack-and-session.md)                | Web app stack and httpOnly-cookie session          | proposed                                 |
+| [0019](adr/0019-auth-sessions-mfa-and-platform-operators.md) | Server-side sessions, TOTP MFA, platform operators | proposed                                 |
 
 ## Runbooks
 

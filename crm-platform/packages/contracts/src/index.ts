@@ -24,3 +24,5 @@ export * from './partner/partner-agent';
 export * from './public/lead-read';
 export * from './admin/user';
 export * from './admin/role';
+export * from './auth-registration-security';
+export * from './plans-subscriptions-trials';

@@ -7,55 +7,55 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-AUTH-001 | todo |  |  |
-| WD-AUTH-002 | todo |  |  |
-| WD-AUTH-003 | todo |  |  |
-| WD-AUTH-004 | todo |  |  |
-| WD-AUTH-005 | todo |  |  |
-| WD-AUTH-006 | todo |  |  |
-| WD-AUTH-007 | todo |  |  |
-| WD-AUTH-008 | todo |  |  |
-| WD-AUTH-009 | todo |  |  |
-| WD-AUTH-010 | todo |  |  |
-| WD-AUTH-011 | todo |  |  |
-| WD-AUTH-012 | todo |  |  |
-| WD-AUTH-013 | todo |  |  |
-| WD-AUTH-014 | todo |  |  |
-| WD-AUTH-015 | todo |  |  |
-| WD-AUTH-016 | todo |  |  |
-| WD-AUTH-017 | todo |  |  |
-| WD-AUTH-018 | todo |  |  |
-| WD-AUTH-019 | todo |  |  |
-| WD-AUTH-020 | todo |  |  |
-| WD-AUTH-021 | todo |  |  |
-| WD-AUTH-022 | todo |  |  |
-| WD-AUTH-023 | todo |  |  |
-| WD-AUTH-024 | todo |  |  |
-| WD-AUTH-025 | todo |  |  |
-| WD-AUTH-026 | todo |  |  |
-| WD-AUTH-027 | todo |  |  |
-| WD-AUTH-028 | todo |  |  |
-| WD-AUTH-029 | todo |  |  |
-| WD-AUTH-030 | todo |  |  |
-| WD-AUTH-031 | todo |  |  |
-| WD-AUTH-032 | todo |  |  |
-| WD-AUTH-033 | todo |  |  |
-| WD-AUTH-034 | todo |  |  |
-| WD-AUTH-035 | todo |  |  |
-| WD-AUTH-036 | todo |  |  |
-| WD-AUTH-037 | todo |  |  |
-| WD-AUTH-038 | todo |  |  |
-| WD-AUTH-039 | todo |  |  |
-| WD-AUTH-040 | todo |  |  |
-| WD-AUTH-041 | todo |  |  |
-| WD-AUTH-042 | todo |  |  |
-| WD-AUTH-043 | todo |  |  |
-| WD-AUTH-044 | todo |  |  |
-| WD-AUTH-045 | todo |  |  |
-| WD-AUTH-046 | todo |  |  |
-| WD-AUTH-047 | todo |  |  |
-| WD-AUTH-048 | todo |  |  |
-| WD-AUTH-049 | todo |  |  |
+| WD-AUTH-001 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-002 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-003 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-004 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-005 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-006 | frontend-done |  | page + API done; real WhatsApp sender adapter waits for channel core (dev logger adapter); page checked with stubbed responses |
+| WD-AUTH-007 | frontend-done |  | knobs done; Create-and-submit-template button shown disabled until the TPL domain |
+| WD-AUTH-008 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-009 | frontend-done |  | skip/complete works; plan list empty until the PLAN domain |
+| WD-AUTH-010 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-011 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-012 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-013 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-014 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-015 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-016 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-017 | backend-done |  | login side effects are server-side only; covered by e2e (no screen) |
+| WD-AUTH-018 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
+| WD-AUTH-019 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-020 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-021 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-022 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-023 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-024 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-025 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-026 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-027 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-028 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-029 | frontend-done |  | branding UI + API; plan gate (remove_branding) is a shim until PLAN lands |
+| WD-AUTH-030 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-031 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-032 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-033 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-034 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-035 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-036 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-037 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-038 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-039 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-040 | frontend-done |  | operator UI + service done; outbound pipelines must call EmergencyHaltService.assertNotHalted (not built yet) |
+| WD-AUTH-041 | frontend-done |  | operator UI + SendPolicyService done; wiring into send pipelines pending those domains |
+| WD-AUTH-042 | wontfix |  | dead code in WaDesk (mask_phone returns the number unchanged); do not port |
+| WD-AUTH-043 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
+| WD-AUTH-044 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
+| WD-AUTH-045 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
+| WD-AUTH-046 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-047 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
+| WD-AUTH-048 | wontfix |  | unrouted legacy controller; its better rules (remember toggle, password max age, safe next path) are implemented in 001/035 |
+| WD-AUTH-049 | wontfix |  | no installer in the target |
 
 ## workspaces-teams-tenancy (wsp)
 

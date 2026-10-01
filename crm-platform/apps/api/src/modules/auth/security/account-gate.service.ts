@@ -1,0 +1,157 @@
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
+import { Redis } from 'ioredis';
+import type { AccountFlags } from '@crm/contracts';
+import { DatabaseService } from '../../../infra/db/database.service';
+import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { SecurityPolicyService } from '../platform/security-policy.service';
+import { toDate, type DateLike } from '../support/dates';
+import { isPasswordStale } from '../support/password-policy';
+import { AuthKeys, Ttl } from '../support/redis-keys';
+
+export interface AccountGateState {
+  suspended: boolean;
+  emailUnverified: boolean;
+  /** Policy 'block': unverified accounts cannot use the API. */
+  emailBlocking: boolean;
+  mfaEnrolmentRequired: boolean;
+  passwordChangeRequired: boolean;
+  mfaEnabled: boolean;
+  isAdmin: boolean;
+  isOwner: boolean;
+}
+
+/**
+ * Computes what, if anything, stands between a signed-in user and the app:
+ * suspension, an unverified email, a required-but-missing second factor, or a
+ * password that must change (WD-AUTH-016/032/035).
+ *
+ * The result is cached for 30 seconds per user; writes that change it
+ * (verify email, enable MFA, change password) call `invalidate`. A policy
+ * change reaches users within the TTL.
+ */
+@Injectable()
+export class AccountGateService {
+  private readonly logger = new Logger(AccountGateService.name);
+
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly policy: SecurityPolicyService,
+    @Inject(REDIS_CLIENT) private readonly redis: Redis,
+  ) {}
+
+  async stateFor(orgId: number, userId: number): Promise<AccountGateState> {
+    const key = AuthKeys.gate(orgId, userId);
+    const cached = await this.redis.get(key).catch(() => null);
+    if (cached) return JSON.parse(cached) as AccountGateState;
+
+    const state = await this.compute(orgId, userId);
+    await this.redis.setex(key, Ttl.gateSeconds, JSON.stringify(state)).catch((err: unknown) => {
+      this.logger.warn({ err }, 'could not cache gate state');
+    });
+    return state;
+  }
+
+  async invalidate(orgId: number, userId: number): Promise<void> {
+    await this.redis.del(AuthKeys.gate(orgId, userId)).catch(() => undefined);
+  }
+
+  /**
+   * Drops every cached gate state. A policy change or a platform-wide force
+   * reset must reach people now, not when each user's 30-second cache expires.
+   */
+  async invalidateAll(): Promise<void> {
+    try {
+      let cursor = '0';
+      do {
+        const [next, keys] = await this.redis.scan(cursor, 'MATCH', 'auth:gate:*', 'COUNT', 500);
+        cursor = next;
+        if (keys.length > 0) await this.redis.unlink(...keys);
+      } while (cursor !== '0');
+    } catch (err) {
+      this.logger.warn({ err }, 'could not clear gate cache');
+    }
+  }
+
+  toFlags(state: AccountGateState): AccountFlags {
+    return {
+      suspended: state.suspended,
+      emailUnverified: state.emailUnverified,
+      emailBlocked: state.emailBlocking,
+      mfaEnrolmentRequired: state.mfaEnrolmentRequired,
+      passwordChangeRequired: state.passwordChangeRequired,
+    };
+  }
+
+  private async compute(orgId: number, userId: number): Promise<AccountGateState> {
+    const [policy, registration] = await Promise.all([
+      this.policy.policy(),
+      this.policy.registration(),
+    ]);
+
+    const res = await this.db.txAs({ orgId, userId }, async (tx) =>
+      tx.execute(sql`
+        SELECT u.status,
+               s.email_verified_at, s.force_password_change, s.password_changed_at,
+               COALESCE(s.mfa_enabled, false) AS mfa_enabled,
+               EXISTS (
+                 SELECT 1 FROM user_roles ur
+                 JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
+                 WHERE ur.org_id = u.org_id AND ur.user_id = u.id AND r.system_key = 'admin'
+               ) AS is_admin,
+               (o.settings ->> 'ownerUserId') = u.uuid::text AS is_owner
+        FROM users u
+        JOIN organizations o ON o.id = u.org_id
+        LEFT JOIN user_security s ON s.org_id = u.org_id AND s.user_id = u.id
+        WHERE u.org_id = ${orgId} AND u.id = ${userId}
+      `),
+    );
+    const row = res.rows[0] as unknown as
+      | {
+          status: string;
+          email_verified_at: DateLike | null;
+          force_password_change: boolean | null;
+          password_changed_at: DateLike | null;
+          mfa_enabled: boolean;
+          is_admin: boolean;
+          is_owner: boolean | null;
+        }
+      | undefined;
+
+    if (!row) {
+      return {
+        suspended: true,
+        emailUnverified: false,
+        emailBlocking: false,
+        mfaEnrolmentRequired: false,
+        passwordChangeRequired: false,
+        mfaEnabled: false,
+        isAdmin: false,
+        isOwner: false,
+      };
+    }
+
+    const isOwner = row.is_owner === true;
+    const emailUnverified = !row.email_verified_at && registration.emailVerification !== 'off';
+    const covered =
+      policy.requireMfaForAll ||
+      (policy.requireMfaForAdmins && row.is_admin) ||
+      (policy.requireMfaForOwners && isOwner);
+
+    return {
+      suspended: row.status !== 'active',
+      emailUnverified,
+      emailBlocking: emailUnverified && registration.emailVerification === 'block',
+      mfaEnrolmentRequired: covered && !row.mfa_enabled,
+      passwordChangeRequired:
+        row.force_password_change === true ||
+        isPasswordStale(
+          row.password_changed_at ? toDate(row.password_changed_at) : null,
+          policy.passwordMaxAgeDays,
+        ),
+      mfaEnabled: row.mfa_enabled,
+      isAdmin: row.is_admin,
+      isOwner,
+    };
+  }
+}

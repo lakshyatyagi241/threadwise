@@ -1,0 +1,13 @@
+{
+  "name": "wadesk-playwright-parity-harness",
+  "private": true,
+  "type": "module",
+  "description": "Playwright twin-run harness: drives WaDesk (reference) and the new platform with the same scenarios and diffs the observations. Not part of the pnpm workspace; install with ../scripts/bootstrap.sh",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "axe-core": "4.10.3",
+    "playwright": "1.60.0"
+  }
+}
