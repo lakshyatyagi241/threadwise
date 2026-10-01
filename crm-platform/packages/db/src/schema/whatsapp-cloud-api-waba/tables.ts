@@ -1,0 +1,89 @@
+/**
+ * whatsapp-cloud-api-waba: tables ported from Reference. Mirrors migrations/20261001101100_waba_threadwise_schema.sql.
+ * The SQL migration is the source of truth (ADR-0004); `pnpm db:verify-schema` fails if this file and the database disagree.
+ */
+import {
+  boolean,
+  foreignKey,
+  integer,
+  jsonb,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core';
+import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
+import { organizations } from '../foundation';
+import { waProviderConfigs } from '../whatsapp-devices-baileys/tables';
+
+export const wabaGroups = pgTable(
+  'waba_groups',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    providerConfigId: idColumn('provider_config_id').notNull(),
+    groupId: text('group_id').notNull(),
+    subject: text('subject'),
+    description: text('description'),
+    inviteLink: text('invite_link'),
+    joinApprovalMode: text('join_approval_mode'),
+    participantCount: integer('participant_count').notNull().default(0),
+    suspended: boolean('suspended').notNull().default(false),
+    creationTimestamp: timestamp('creation_timestamp', { withTimezone: true }),
+    syncedAt: timestamp('synced_at', { withTimezone: true }),
+    metaJson: jsonb('meta_json'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_waba_groups_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_waba_groups_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_waba_groups_provider_config_id_group_id').on(t.orgId, t.providerConfigId, t.groupId),
+    foreignKey({
+      name: 'fk_waba_groups_provider_config_id',
+      columns: [t.orgId, t.providerConfigId],
+      foreignColumns: [waProviderConfigs.orgId, waProviderConfigs.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type WabaGroupsRow = typeof wabaGroups.$inferSelect;
+export type NewWabaGroupsRow = typeof wabaGroups.$inferInsert;
+
+export const waCustomerProfiles = pgTable(
+  'wa_customer_profiles',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    phone: text('phone').notNull(),
+    name: text('name'),
+    company: text('company'),
+    address: text('address'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_wa_customer_profiles_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_wa_customer_profiles_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_wa_customer_profiles_phone').on(t.orgId, t.phone),
+  ],
+);
+
+export type WaCustomerProfilesRow = typeof waCustomerProfiles.$inferSelect;
+export type NewWaCustomerProfilesRow = typeof waCustomerProfiles.$inferInsert;
