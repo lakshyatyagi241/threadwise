@@ -41,16 +41,17 @@ Every row is a deliberate change, each recorded in the inventory as a `QUIRK`, o
 | TW-AUTH-048 legacy `AuthController` login/register | Unrouted; its better rules (remember toggle, max age, safe `next` path) are implemented in 001/035.                                             |
 | TW-AUTH-049 install-wizard file session            | No installer in the target.                                                                                                                     |
 
-## Waiting on other domains
+## Hooks other domains still have to use
 
-| Hook                                                                          | Feature       | Waiting for                                                                                                       |
-| ----------------------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Real WhatsApp sender for the sign-up code                                     | 006           | channel core (WABA/WADEV); a dev logger adapter is bound meanwhile                                                |
-| "Create & submit OTP template" button                                         | 007           | template domain                                                                                                   |
-| Plan list on onboarding step 3, default plan and trial assignment             | 008, 009, 019 | plans domain (the `auth.user.registered` outbox event carries `defaultPlanId` and `trialDays`)                    |
-| `remove_branding` plan gate                                                   | 029           | plans domain (`PlanFeatureGate` shim allows everything)                                                           |
-| Guardrails and halt wired into send pipelines                                 | 040, 041      | inbox, broadcast, scheduled, flows, auto-reply (`SendPolicyService`, `EmergencyHaltService` are ready and tested) |
-| Webhook secret rotation, API rate limit consumer, device idle logout consumer | 037, 039      | API/integrations and device domains                                                                               |
+These are built and tested on the AUTH side; each stays dormant until the owning domain calls it.
+
+| Hook                                                                                                                          | Feature  | What the other domain does                                                                                                    |
+| ----------------------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `WebhookSecretRegistry.register({ name, rotateAll })`                                                                         | 039      | the integrations domain registers a rotator for its webhook secrets; until then the danger-zone action reports 0 and says why |
+| `WHATSAPP_PROVIDER` already enforces the halt and the guardrails at every send; pipelines may pass `screen: { bulk, source }` | 040, 041 | inbox, broadcast, scheduled, flows, auto-reply set `bulk` and `source` on their send params                                   |
+| `PlanEntitlementService.featureEnabled / limit`, `assertFeature`, `assertWithinLimit`                                         | 029      | other gated domains call it with their plan flag and limit keys (registry in `plans-subscriptions-trials` contracts)          |
+| Checkout behind `/account/plans`                                                                                              | 009      | billing and payment domains replace the placeholder page                                                                      |
+| Device idle logout                                                                                                            | 037      | the device domain reads `deviceLogoutOnInactiveDays` from the security policy                                                 |
 
 ## Screens
 
@@ -79,20 +80,27 @@ Routes under `apps/web`, each wired to the live API through the BFF (`/api/auth/
 
 ## Not verified, and why
 
-| Item                                                  | Reason                                                                                                                        |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Real Google / Facebook consent                        | needs provider credentials; callback and error paths are tested with a faked provider                                         |
-| reCAPTCHA v2 tick against Google                      | needs real keys; v3 token acquisition checked with Google's public test key; server verification tested with a faked verifier |
-| Registration OTP end to end with a real WhatsApp send | no sender adapter until the channel core lands (006); the page and API are tested with a logging sender and stubbed responses |
-| Revoke-all and force-reset in the browser             | only the confirmation modals were exercised; both actions are covered by e2e                                                  |
-| Firefox, Safari, a real authenticator app scan        | Chromium-based pane only; TOTP codes were generated with the API's own helper and RFC 6238 vectors are unit-tested            |
-| Plan list, plan-locked branding                       | plans domain not built                                                                                                        |
+| Item                                      | Reason                                                                                                                                                                                                                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Real Google / Facebook consent            | needs a provider account and OAuth client; the real adapters are tested with stubbed HTTP (URLs, form fields, headers, parsing, error mapping) and the callback flow end to end with a faked provider                                                              |
+| A human ticking the reCAPTCHA widget      | the v2 widget renders with Google's test keys and the client gate refuses an unticked submit, and the real adapter verifies against Google's live siteverify with the published test secret (`RECAPTCHA_LIVE=1`); completing the widget itself is left to a person |
+| Real Meta Cloud API and Twilio sends      | no credentials here; payloads follow the vendors' documented shapes and run against local stub servers for Graph, Twilio and the Node bridge (sign-up through each, template create, approve, reject, resubmit, failure modes)                                     |
+| WebKit / Safari                           | the cached WebKit build needs three OS libraries that need sudo (`libevent-2.1-7t64`, `libgstreamer-plugins-bad1.0-0`, `libavif16`); Firefox 150 and Chromium 148 pass the same flow                                                                               |
+| Signed-in Reference screens, pixel review    | the reference is a licensed product; its login was never typed by the automation, so its signed-in screens were compared from the inventory and source only unless someone signs in for the review                                                                 |
+| Revoke-all and force-reset in the browser | only the confirmation modals were exercised; both actions are covered by e2e                                                                                                                                                                                       |
+| Plans beyond the slice                    | checkout, subscriptions lifecycle, add-ons, analytics, FAQ, public pricing page, trial hard gate and quota ledger are PLAN-domain work                                                                                                                             |
 
-## Repo-rule exceptions to decide at review
+## Interop and cross-browser evidence
 
-| Rule                                 | What this domain does                                                                                                                     | Why                                                                                                                                                                                     |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rowVersion` on mutable entities     | Profile, branding and platform settings are partial updates without `rowVersion`                                                          | One person edits their own singleton row; platform settings are single documents audited with a diff of changed keys. Revisit if two operators edit concurrently.                       |
-| uuids only in responses              | `security_events` ids are opaque strings, `orgId` is the organization uuid; session list ids are session uuids                            | Nothing addresses an event by id; no bigint leaves the API.                                                                                                                             |
-| `privileged()` only in listed places | `TenantDirectory` and `PlatformStore`                                                                                                     | The auth design (proposed) widens this; a unit test fails the build if a third file calls it.                                                                                           |
-| New dependencies                     | `nodemailer`, `sanitize-html`, `libphonenumber-js`, `qrcode.react`, `tailwind-merge`, type packages for multer, nodemailer, sanitize-html | SMTP transport, HTML sanitising for admin-written copy, E.164 phone handling, local QR rendering (no third-party image service), merging Tailwind class conflicts in the shared `cn()`. |
+- **TOTP:** an independent from-scratch RFC 6238 implementation (checked against the RFC's own vectors) generated the codes the API accepted at enrolment and sign-in; a replayed code was refused. The enrolment URI has the Google Authenticator key-URI shape (`otpauth://totp/Issuer:account`, SHA1, 6 digits, 30 s, base32 secret of 160 bits).
+- **Browsers:** the same scripted flow (wrong password, sign-in, httpOnly SameSite cookies, account security page, reload, sign-out, sign-up page, Arabic RTL, no page errors) passes in Firefox 150 and Chromium 148.
+- **reCAPTCHA:** see the table above.
+
+## Repo-rule exceptions (decided by the owner: follow Reference, repo conventions give way)
+
+| Rule                                 | What this domain does                                                                                                                         | Why                                                                                              |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `rowVersion` on mutable entities     | not used for profile, branding, platform settings or plans                                                                                    | the owner ruled the repo rule does not apply here; Reference has no optimistic locking either       |
+| `privileged()` only in listed places | `TenantDirectory`, `PlatformStore`, the plan store and the worker jobs                                                                        | The auth design (proposed) records it; a unit test fails the build if another auth file calls it |
+| Module boundaries                    | the plans slice lives in its own module (`plans-subscriptions-trials`) and the WhatsApp provider asks the auth domain's guard through a token | no import cycles (arch check clean)                                                              |
+| New dependencies                     | `nodemailer`, `sanitize-html`, `libphonenumber-js`, `qrcode.react`, `tailwind-merge`, type packages for multer, nodemailer, sanitize-html     | approved by the owner                                                                            |

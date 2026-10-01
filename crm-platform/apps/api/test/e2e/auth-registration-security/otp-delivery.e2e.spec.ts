@@ -40,7 +40,7 @@ async function call(
   token = opAccess,
 ) {
   const req = api()[method](`/v2/platform/settings${path}`).set(bearer(token));
-  const res = body === undefined ? await req : await req.send(body);
+  const res = body === undefined ? await req : await req.send(body as object);
   seen.push(JSON.stringify(res.body));
   return res;
 }
