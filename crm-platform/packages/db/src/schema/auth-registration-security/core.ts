@@ -17,7 +17,7 @@ import {
 import { citext, createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 
 /**
- * Mirror of 20261001090000_auth_core.sql (ADR-0019). The SQL is the source of
+ * Mirror of 20261001090000_auth_core.sql. The SQL is the source of
  * truth; this file exists so queries are typed.
  */
 

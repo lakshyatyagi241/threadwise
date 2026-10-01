@@ -42,8 +42,7 @@ export interface ProvisionResult {
 }
 
 /**
- * Cross-tenant operations the auth flows cannot avoid (ADR-0019, amending
- * ADR-0002). Each method is one fixed statement or transaction with
+ * Cross-tenant operations the auth flows cannot avoid. Each method is one fixed statement or transaction with
  * parameterised inputs; none accepts SQL from a caller.
  *
  *   findOrgBySlug / orgsForVerifiedEmail   identity directory (login, switch)

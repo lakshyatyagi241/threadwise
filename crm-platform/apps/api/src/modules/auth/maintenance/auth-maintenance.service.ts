@@ -6,7 +6,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 /**
  * Daily housekeeping for the auth tables. Runs in the worker process only
  * (registered by WorkersModule), cross-tenant by nature, so it is one of the
- * sanctioned worker uses of `privileged()` (ADR-0002, ADR-0019).
+ * sanctioned worker uses of `privileged()`.
  *
  *   user_tokens        consumed or expired more than 7 days ago
  *   auth_sessions      ended more than 90 days ago (the history feeds the new-device alert)

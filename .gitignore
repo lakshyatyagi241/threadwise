@@ -1,6 +1,17 @@
-# Licensed third-party source (CodeCanyon Reference): never commit it. Only the placeholder README is tracked.
-/reference/*
-!/reference/README.md
+# Reference reference (licensed CodeCanyon product, tracked on purpose, see reference/README.md).
+# Only the product source is tracked. Anything created by installing or running it stays out: secrets, dependencies,
+# local database, WhatsApp session state, uploads, logs, compiled assets.
+/reference/app/vendor/
+/reference/app/public/build/
+/reference/app/public/uploads/
+/reference/app/public/storage
+/reference/app/database/database.sqlite
+/reference/app/node/baileys_auth/
+/reference/app/storage/logs/*
+/reference/app/storage/framework/cache/*
+/reference/app/storage/framework/sessions/*
+/reference/app/storage/framework/views/*
+/reference/app/storage/app/*
 
 # Local environment, secrets, build output
 .env

@@ -5,13 +5,12 @@ The business has three layers:
 ```
 Institute / college      the client
         ↑
-Study From UAE           us — the CRM tenant
+Our organisation         us — the CRM tenant
         ↑
 Sub-agents               external partners who source students
 ```
 
-Sub-agents submit leads and want to watch them move. See
-[ADR-0014](../adr/0014-sub-agent-model.md) for the reasoning.
+Sub-agents submit leads and want to watch them move.
 
 ## The one rule
 

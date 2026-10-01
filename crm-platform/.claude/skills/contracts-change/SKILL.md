@@ -13,7 +13,6 @@ description: >-
 
 # Change @crm/contracts
 
-Full reasoning: [docs/adr/0008-rest-openapi-zod.md](../../../docs/adr/0008-rest-openapi-zod.md).
 Short version: one Zod schema, type inferred from it, imported by both sides
 — the API validates with the literal same schema object the frontend imports
 for its types, so a field rename breaks the frontend _build_, not a user's
@@ -75,8 +74,7 @@ Rules that aren't optional:
   TypeScript `interface` and then a matching Zod schema; the schema IS the
   type via `z.infer`.
 - **Every identifier is `uuidSchema`.** If you're tempted to put a number id
-  in a contract, the internal bigint is leaking — see
-  [docs/adr/0016-api-conventions.md](../../../docs/adr/0016-api-conventions.md).
+  in a contract, the internal bigint is leaking.
 - **camelCase, always.** The database is snake_case; the mapping happens in
   the API's `<entity>.mapper.ts`, never in the contract.
 - **List queries extend `paginationQuerySchema`** from `common/pagination.ts`

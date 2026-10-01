@@ -152,7 +152,7 @@ export class ContactsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.contacts.delete')
-  @ApiOperation({ summary: 'Delete a contact (hard delete — see ADR-0009)' })
+  @ApiOperation({ summary: 'Delete a contact (hard delete)' })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.contacts.remove(id);
   }

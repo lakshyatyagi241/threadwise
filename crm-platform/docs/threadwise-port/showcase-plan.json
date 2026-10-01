@@ -30,8 +30,8 @@
     {
       "block": "1. Base setup",
       "area": "Base",
-      "task": "Agree ADR-0018 (web stack and cookie session) with Shubham, Vedant and Punya, or amend it, before building more on it",
-      "done_when": "ADR status changes from proposed to accepted, or edits are merged",
+      "task": "Agree the web stack and cookie-session design with Shubham, Vedant and Punya, or amend it, before building more on it",
+      "done_when": "Design agreed, or edits are merged",
       "hours": 0.3,
       "priority": "Must",
       "wd": ""
@@ -39,8 +39,8 @@
     {
       "block": "1. Base setup",
       "area": "Base",
-      "task": "Write the ADR for the privileged onboarding path: signup creates an organization, which needs one new sanctioned use of privileged() (an ADR-0002 amendment)",
-      "done_when": "ADR merged and adr-diff-guard passes",
+      "task": "Decide the privileged onboarding path: signup creates an organization, which needs one new sanctioned use of privileged()",
+      "done_when": "Decision agreed",
       "hours": 0.5,
       "priority": "Must",
       "wd": "TW-WSP-002"
@@ -306,14 +306,14 @@
       "owner": "Lakshya Tyagi"
     },
     {
-      "item": "Approve or amend ADR-0018 (web stack and cookie session)",
+      "item": "Approve or amend the web stack and cookie-session design",
       "why": "Every screen builds on it",
       "rec": "Approve; revisit when realtime needs a token endpoint",
       "owner": "Lakshya Tyagi"
     },
     {
-      "item": "Privileged onboarding path (ADR): signup creating an organization",
-      "why": "Needs one new sanctioned use of the privileged database path (ADR-0002 amendment)",
+      "item": "Privileged onboarding path: signup creating an organization",
+      "why": "Needs one new sanctioned use of the privileged database path (amendment)",
       "rec": "Approve with a narrow, audited onboarding function",
       "owner": "Lakshya Tyagi"
     },
@@ -350,7 +350,7 @@
     {
       "item": "D4: how production Admin roles receive new permission keys",
       "why": "The locked-role trigger blocks grants, so new keys do not reach existing Admin roles",
-      "rec": "Kernel ADR plus a migration helper that unlocks, grants and relocks",
+      "rec": "Kernel decision plus a migration helper that unlocks, grants and relocks",
       "owner": "Lakshya Tyagi"
     },
     {
@@ -367,7 +367,7 @@
     },
     {
       "item": "D6: confirm Next.js 16 and next-intl",
-      "why": "Chosen by default in ADR-0018",
+      "why": "Chosen by default in the web app design",
       "rec": "Confirm",
       "owner": "Lakshya Tyagi"
     },
@@ -379,7 +379,7 @@
     },
     {
       "item": "Channel strategy: keep the unofficial WhatsApp QR engine or use the Cloud API only",
-      "why": "Reference's own docs list ban risk; needs an ADR either way",
+      "why": "Reference's own docs list ban risk; needs a decision either way",
       "rec": "Decide before the channel core is built",
       "owner": "Lakshya Tyagi"
     },
@@ -415,7 +415,7 @@
     },
     {
       "item": "Ticket for the Clerk login security issue",
-      "why": "Any valid Clerk identity can create a user in any organization; no ADR covers it",
+      "why": "Any valid Clerk identity can create a user in any organization; nothing covers it",
       "rec": "Fix or remove the exchange before production",
       "owner": "Lakshya Tyagi"
     },

@@ -18,7 +18,7 @@ import { authApi } from '../api';
 import { blockerOf, phraseMatches, type DeleteBlocker } from './delete-rules';
 
 /**
- * Delete account (TW-AUTH-028). The API hard-deletes the user (ADR-0009): the
+ * Delete account (TW-AUTH-028). The API hard-deletes the user: the
  * sign-in, profile, photo and devices are gone for good and the audit trail
  * keeps the record. It is refused for the only member and the only
  * administrator, which is stated here after the attempt. Reference's copy claimed

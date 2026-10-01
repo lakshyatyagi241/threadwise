@@ -52,8 +52,7 @@ const contacts = page.data.map((row: unknown) => contactResponseSchema.parse(row
 const res = await api(`/v1/contacts?limit=50${cursor ? `&cursor=${cursor}` : ''}`);
 ```
 
-There is no total count and no page number — that's deliberate
-([ADR-0016](../../../docs/adr/0016-api-conventions.md)): `OFFSET` on a
+There is no total count and no page number — that's deliberate: `OFFSET` on a
 partitioned table is the query that turns a 20ms list endpoint into a 2s one.
 Build "load more" / infinite scroll, not numbered pages. If a screen truly
 needs page numbers, that's a design conversation, not a fetch-layer
@@ -120,8 +119,7 @@ conversations.
 
 The partner app stores **only the contact id** — name, stage and details are
 read live on every view. Don't cache lifecycle stage client-side beyond a
-normal request cache; there's exactly one source of truth for it
-([ADR-0014](../../../docs/adr/0014-sub-agent-model.md)).
+normal request cache; there's exactly one source of truth for it.
 
 ## If the endpoint doesn't exist yet
 

@@ -145,7 +145,7 @@ export async function uploadAvatar(file: File): Promise<string> {
 
 /**
  * What the session-issuing BFF routes return: the contract body without the
- * token pair (the server moves it into httpOnly cookies, ADR-0018). Unions are
+ * token pair (the server moves it into httpOnly cookies). Unions are
  * picked by hand: composing contract schemas with this app's own `zod` import
  * mixes two builds of zod (CJS contracts, ESM web) and `z.discriminatedUnion`
  * cannot read the other build's literals.

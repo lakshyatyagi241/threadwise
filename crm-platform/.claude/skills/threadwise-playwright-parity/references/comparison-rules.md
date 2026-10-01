@@ -62,7 +62,7 @@ Automatic (matched on the key, with the rule id and reference in the report), fr
 | `idempotency-key`    | `double-submit` request/row counts, ours lower | repeated submits are replayed                                |
 | `permission-keys`    | `enum.permissionModel`                         | permission keys instead of role names                        |
 
-Everything else needs an `intended[]` entry in the spec with a reason and, for a deliberate fix of a Reference bug, the `quirk`. Adding a rule to `lib/intended.mjs` is for decisions the repo has already made in an ADR or CONTRIBUTING, never to make a finding go away. A new architectural call needs an ADR in the same PR (`write-adr`, `adr-diff-guard`).
+Everything else needs an `intended[]` entry in the spec with a reason and, for a deliberate fix of a Reference bug, the `quirk`. Adding a rule to `lib/intended.mjs` is for decisions the repo has already made in CONTRIBUTING, never to make a finding go away.
 
 ## Known comparability limits (say so in the report)
 

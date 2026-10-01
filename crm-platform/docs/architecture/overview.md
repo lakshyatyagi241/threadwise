@@ -56,18 +56,18 @@ The dependency rule, enforced in CI by dependency-cruiser:
 
 ## The ten decisions that shape everything else
 
-| #   | Decision                                                  | ADR                                                                                        |
-| --- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| 1   | One NestJS app, split by domain module                    | [0001](../adr/0001-modular-monolith.md)                                                    |
-| 2   | Shared schema + forced RLS for tenant isolation           | [0002](../adr/0002-postgres-rls-multitenancy.md)                                           |
-| 3   | Drizzle as a query builder, hand-written SQL migrations   | [0003](../adr/0003-drizzle-over-orm.md), [0004](../adr/0004-handwritten-sql-migrations.md) |
-| 4   | Transactional outbox, not event sourcing                  | [0005](../adr/0005-transactional-outbox.md)                                                |
-| 5   | RBAC in guards; RLS does isolation only                   | [0006](../adr/0006-rbac-at-middleware.md)                                                  |
-| 6   | Separate identity pools (staff / agent / candidate / key) | [0007](../adr/0007-three-identity-pools.md)                                                |
-| 7   | REST + OpenAPI, Zod contracts shared with the frontend    | [0008](../adr/0008-rest-openapi-zod.md)                                                    |
-| 8   | Hard delete, audit log as the record                      | [0009](../adr/0009-hard-delete-with-audit.md)                                              |
-| 9   | BullMQ worker as a separate process from the same image   | [0010](../adr/0010-bullmq-worker-process.md)                                               |
-| 10  | External reads on a replica, behind API key + HMAC        | [0013](../adr/0013-read-replica-and-public-api.md)                                         |
+| #   | Decision                                                  |
+| --- | --------------------------------------------------------- |
+| 1   | One NestJS app, split by domain module                    |
+| 2   | Shared schema + forced RLS for tenant isolation           |
+| 3   | Drizzle as a query builder, hand-written SQL migrations   |
+| 4   | Transactional outbox, not event sourcing                  |
+| 5   | RBAC in guards; RLS does isolation only                   |
+| 6   | Separate identity pools (staff / agent / candidate / key) |
+| 7   | REST + OpenAPI, Zod contracts shared with the frontend    |
+| 8   | Hard delete, audit log as the record                      |
+| 9   | BullMQ worker as a separate process from the same image   |
+| 10  | External reads on a replica, behind API key + HMAC        |
 
 ## Hybrid storage — three tiers
 

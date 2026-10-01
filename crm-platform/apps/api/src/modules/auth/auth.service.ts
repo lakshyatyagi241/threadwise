@@ -19,9 +19,9 @@ interface LoginRow {
 
 /**
  * The pools that are not staff password login: partner agents (stateless
- * refresh, ADR-0014), the Clerk exchange, and the refresh dispatcher.
+ * refresh), the Clerk exchange, and the refresh dispatcher.
  *
- * Staff login, MFA, sign-up and recovery live in `flows/` (ADR-0019).
+ * Staff login, MFA, sign-up and recovery live in `flows/`.
  */
 @Injectable()
 export class AuthService {
@@ -67,7 +67,7 @@ export class AuthService {
    *
    * It no longer creates users. The old version auto-provisioned a user for
    * any valid Clerk identity in any organization the caller named, which let
-   * anyone with a Clerk account join any tenant (ADR-0019, known issue). A
+   * anyone with a Clerk account join any tenant (known issue). A
    * person with no row is now told to ask for an invitation.
    */
   async loginViaClerk(orgSlug: string, clerkToken: string, meta: ClientMeta) {
@@ -105,7 +105,7 @@ export class AuthService {
 
   /**
    * Staff tokens rotate through server-side sessions; partner agents keep the
-   * stateless re-issue ADR-0014 describes.
+   * stateless re-issue.
    */
   async refresh(refreshToken: string): Promise<TokenPair> {
     const claims = await this.tokens.verifyRefresh(refreshToken);

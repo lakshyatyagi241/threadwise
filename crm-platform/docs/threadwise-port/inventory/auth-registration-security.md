@@ -148,7 +148,7 @@ TW-AUTH-008).
   - Given a user with no workspace, when they sign in, then they land on `/register/workspace`.
   - Given a soft-deleted account, when its owner posts the old credentials, then sign-in fails with the generic error.
 - **Source refs:** `app/Http/Controllers/AuthPagesController.php`, `resources/views/auth/login.blade.php`, `resources/views/auth/_login_form.blade.php`, `resources/views/auth/_social.blade.php`, `resources/js/charts/auth-login.js`, `routes/web.php`, `bootstrap/app.php` (redirectGuestsTo), `app/Support/PlatformPermissions.php`, `Documentation/pages/security/authentication.html`.
-- **Port notes:** `apps/api/src/modules/auth` already has staff login (org slug + email + password, argon2id, access/refresh JWT) and a Clerk session exchange (ADR-0007). Reference has no org slug at login; decide how a global-email login maps to org-scoped users (a per-email org picker, or login on a tenant domain). "Keep me signed in" maps to refresh-token lifetime; landing decision (platform staff vs workspace role) becomes a `landing` hint in the login response consumed by `apps/web`. Do not replicate the ignored `next` handling; validate any return path as a relative path only.
+- **Port notes:** `apps/api/src/modules/auth` already has staff login (org slug + email + password, argon2id, access/refresh JWT) and a Clerk session exchange. Reference has no org slug at login; decide how a global-email login maps to org-scoped users (a per-email org picker, or login on a tenant domain). "Keep me signed in" maps to refresh-token lifetime; landing decision (platform staff vs workspace role) becomes a `landing` hint in the login response consumed by `apps/web`. Do not replicate the ignored `next` handling; validate any return path as a relative path only.
 
 ### TW-AUTH-002 — Login brute-force lockout
 
@@ -177,7 +177,7 @@ TW-AUTH-008).
   - Given 3 failures followed by a correct login, when the same user fails again later, then the counter starts from 0.
   - Given threshold 0 stored in settings, when a user fails many times, then no lockout applies.
 - **Source refs:** `app/Http/Controllers/AuthPagesController.php`, `app/Support/SecurityPolicy.php`, `app/Http/Controllers/Admin/SecurityController.php`.
-- **Port notes:** implement as a Redis counter (`login:{org}:{email}:{ip}`) in the auth service; write the audit event through the outbox/audit path (ADR-0005). Consider also an IP-only limiter, which Reference lacks.
+- **Port notes:** implement as a Redis counter (`login:{org}:{email}:{ip}`) in the auth service; write the audit event through the outbox/audit path. Consider also an IP-only limiter, which Reference lacks.
 
 ### TW-AUTH-003 — reCAPTCHA gate on login and register
 
@@ -244,7 +244,7 @@ TW-AUTH-008).
   - Given Facebook returns no email and no prior provider link, when the callback runs, then sign-in is refused with the no-email message.
   - Given provider disabled, when `/auth/facebook/redirect` is opened, then the user is sent back to `/login` with the not-available message.
 - **Source refs:** `app/Http/Controllers/SocialAuthController.php`, `app/Services/SocialAuthService.php`, `resources/views/auth/_social.blade.php`, `app/Models/User.php`, `database/migrations/2026_06_03_090000_add_social_login_to_users.php`.
-- **Port notes:** `apps/api/src/modules/auth` has a Clerk exchange that overlaps conceptually; decide whether social login is Clerk-brokered (then only the account-linking rules above matter) or a native OAuth adapter (provider-adapter skill). Keep the state check, the trashed-account handling analogue (users are hard-deleted with audit per ADR-0009, so that branch disappears), and add a unique index on (provider, provider_id) which Reference lacks. Also apply the 2FA challenge to social logins.
+- **Port notes:** `apps/api/src/modules/auth` has a Clerk exchange that overlaps conceptually; decide whether social login is Clerk-brokered (then only the account-linking rules above matter) or a native OAuth adapter (provider-adapter skill). Keep the state check, the trashed-account handling analogue (users are hard-deleted with audit per hard-delete rule, so that branch disappears), and add a unique index on (provider, provider_id) which Reference lacks. Also apply the 2FA challenge to social logins.
 
 ### TW-AUTH-005 — Sign-up: account creation (step 1)
 
@@ -1038,7 +1038,7 @@ The plain save of these knobs rides on `POST admin/settings/providers` (`setting
   - Given a wrong-case phrase, then 422 mismatch.
   - Given deletion succeeded, then the old email can register again.
 - **Source refs:** `app/Http/Controllers/AccountController.php`, `resources/js/charts/user-account-index.js`, `resources/views/user/account/index.blade.php`, `app/Models/User.php`, `Documentation/pages/account/account-billing.html`.
-- **Port notes:** ADR-0009 says hard delete with audit; implement erase + audit, revoke all tokens, transfer/close owned orgs explicitly, and fix the owner-only-workspace orphan behaviour. Wallet balance handling should be explicit (WALLET).
+- **Port notes:** hard-delete rule says hard delete with audit; implement erase + audit, revoke all tokens, transfer/close owned orgs explicitly, and fix the owner-only-workspace orphan behaviour. Wallet balance handling should be explicit (WALLET).
 
 ### TW-AUTH-029 — Workspace message footer (branding)
 
@@ -1500,7 +1500,7 @@ Save and danger actions are in TW-AUTH-037 and TW-AUTH-039.
   - Given `mask_phone("919145808988")`, then the same number is returned (parity with v1.7.0).
   - Given a POST to the mask route, then the setting is saved and an audit row written but no visible behaviour changes.
 - **Source refs:** `app/Support/security_helpers.php`, `app/Http/Controllers/Admin/SecurityController.php`.
-- **Port notes:** do NOT port as active. If masking is desired later, implement it as an RBAC field-level permission (agents see masked, admins see full) instead of a global toggle; this decision needs an ADR-level note (privacy tradeoff).
+- **Port notes:** do NOT port as active. If masking is desired later, implement it as an RBAC field-level permission (agents see masked, admins see full) instead of a global toggle; this decision needs an explicit sign-off (privacy tradeoff).
 
 ### TW-AUTH-043 — Secure upload guard
 
@@ -1608,7 +1608,7 @@ Save and danger actions are in TW-AUTH-037 and TW-AUTH-039.
   - Given a wrong TOTP code on enrolment, then a row event `two_factor_failed` status `failed` with IP and user agent exists.
   - Given the audit insert throws, then the user action still completes.
 - **Source refs:** `app/Support/SecurityAuditLogger.php`, `app/Http/Controllers/SettingsTabsController.php`.
-- **Port notes:** collapse into the single audit stream (`audit` table written in the same transaction as the change, ADR-0005/0009); add `mfa.*`, `session.*`, `password.changed` event names; give it a viewer in the admin module.
+- **Port notes:** collapse into the single audit stream (`audit` table written in the same transaction as the change); add `mfa.*`, `session.*`, `password.changed` event names; give it a viewer in the admin module.
 
 ### TW-AUTH-047 — Encryption at rest of auth secrets
 
@@ -1635,7 +1635,7 @@ Save and danger actions are in TW-AUTH-037 and TW-AUTH-039.
   - Given 2FA enabled, then `users.two_factor_secret` in the database is ciphertext.
   - Given a user serialised to JSON, then password, passcode, remember token and 2FA fields are absent.
 - **Source refs:** `app/Models/User.php`, `app/Models/SystemSetting.php`, `app/Support/Audit.php`, `Documentation/pages/security/data-privacy.html`.
-- **Port notes:** use envelope encryption (KMS/`pgcrypto` or app-level AES-GCM with key id) for secrets, argon2id for passwords (ADR-0007), and never return secrets over the API. Key rotation must be possible, unlike Reference.
+- **Port notes:** use envelope encryption (KMS/`pgcrypto` or app-level AES-GCM with key id) for secrets, argon2id for passwords, and never return secrets over the API. Key rotation must be possible, unlike Reference.
 
 ### TW-AUTH-048 — Legacy AuthController login and register
 

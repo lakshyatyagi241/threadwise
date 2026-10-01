@@ -608,7 +608,7 @@
     },
     {
       "id": "F2",
-      "title": "Operator layer: super-admin actor kind, workspace signup/onboarding, plan and limit gating hook (ADRs for D4, D5)",
+      "title": "Operator layer: super-admin actor kind, workspace signup/onboarding, plan and limit gating hook (decisions for D4, D5)",
       "owner": "lakshya",
       "days": 30,
       "wave": 1

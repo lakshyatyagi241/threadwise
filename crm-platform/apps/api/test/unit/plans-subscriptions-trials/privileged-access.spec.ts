@@ -41,7 +41,7 @@ function rawArguments(src: string): string[] {
  * `org_plan_state` accept writes only under the privileged flag. Every
  * privileged transaction in this module goes through PlanStore, so the
  * cross-tenant surface of the plans domain is one file that can be read in
- * a minute (the same rule ADR-0019 sets for the auth module).
+ * a minute (the same rule the auth module follows).
  */
 describe('privileged database access in the plans module', () => {
   it('finds the module sources (the scan is not vacuous)', () => {

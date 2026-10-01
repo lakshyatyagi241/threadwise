@@ -59,7 +59,7 @@ run it and relay the output.
    normally created automatically on first container start; this step
    self-heals the rare case of an older data volume that predates it.
 7. **Migrations** — `pnpm db:migrate`.
-8. **Seed data** — skipped if `organizations.slug = 'studyfromuae'` already
+8. **Seed data** — skipped if `organizations.slug = 'Admin'` already
    exists, because the seed script isn't safe to run twice (it would insert
    a second batch of demo contacts).
 9. **Verify** — builds the API, boots it in the background, polls `/health`

@@ -1,6 +1,6 @@
 /**
  * channel-wechat: tables ported from Reference. Mirrors migrations/20261001104300_wech_threadwise_schema.sql.
- * The SQL migration is the source of truth (ADR-0004); `pnpm db:verify-schema` fails if this file and the database disagree.
+ * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {
   boolean,

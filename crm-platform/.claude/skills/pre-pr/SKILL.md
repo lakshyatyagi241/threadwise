@@ -56,20 +56,6 @@ the kind of thing that looks fine on inspection and breaks under an actual
 Postgres connection or an actual cross-module import. The gate is what turns
 "looks right" into "verified." Run it, then report the result.
 
-## Also run these, via the Skill tool
-
-The gate script checks what a script can check. Two things it can't, which
-you should invoke as skills before reporting ready:
-
-1. **`adr-diff-guard`** — always. It verifies ADR bookkeeping is consistent
-   and prompts on the question no script can answer from a diff: does this
-   change behave differently from what an accepted ADR says? That's a repo
-   rule (see [CLAUDE.md](../../../CLAUDE.md)), not a nice-to-have.
-2. **`adr-compliance-review`** — when the change touches `apps/api` or
-   `packages/db`. It scans for convention violations (bare `throw new
-Error`, `db.primary` misuse, unregistered permission keys) and walks a
-   judgment checklist the gate has no way to express.
-
 ## The manual bits
 
 If the gate is green, the [PR checklist](../../../.github/PULL_REQUEST_TEMPLATE.md)

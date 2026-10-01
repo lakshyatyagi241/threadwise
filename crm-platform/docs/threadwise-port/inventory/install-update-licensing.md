@@ -93,7 +93,7 @@ Connections to other domains: SET (`system_settings` stores `envato_purchase_cod
   - Given no `.env` but a writable project root with `.env.example`, When the first request hits any URL, Then `.env` exists afterwards and contains a valid `APP_KEY=base64:...` line.
   - Given the install is not finished, When the wizard sets a session value on one request, Then the next request reads it back using cookie `threadwise_install_session` and file storage even though `APP_NAME` was rewritten in between.
 - **Source refs:** app/Http/Middleware/EnsureInstalled.php; app/Http/Middleware/UseFileSession.php; bootstrap/app.php (middleware->web prepend, alias install.session); routes/web.php (install group comment); Documentation/pages/installation/troubleshooting.html; Documentation/pages/faqs/installation.html.
-- **Port notes:** Nothing similar exists in `crm-platform` (no installer). The NestJS stack should not copy a filesystem marker: use (a) the migration runner in `packages/db/src/migrator.ts` (ADR-0004) for schema, (b) an "is there a platform admin yet" check for first-run bootstrap (see TW-INST-008/014), (c) `apps/api/src/config/env.schema.ts` for env validation at boot instead of writing `.env`. Keep the idea of a first-run lock; make it a DB row or a signed one-time setup token so containers with read-only filesystems work. Guard the setup endpoint to be unreachable once an admin exists.
+- **Port notes:** Nothing similar exists in `crm-platform` (no installer). The NestJS stack should not copy a filesystem marker: use (a) the migration runner in `packages/db/src/migrator.ts` for schema, (b) an "is there a platform admin yet" check for first-run bootstrap (see TW-INST-008/014), (c) `apps/api/src/config/env.schema.ts` for env validation at boot instead of writing `.env`. Keep the idea of a first-run lock; make it a DB row or a signed one-time setup token so containers with read-only filesystems work. Guard the setup endpoint to be unreachable once an admin exists.
 
 ### TW-INST-002 — Wizard shell, step state machine and no-reload navigation
 
@@ -339,7 +339,7 @@ Connections to other domains: SET (`system_settings` stores `envato_purchase_cod
   - Given valid values, When submitted, Then session `admin_data` holds four keys and the Node bridge step opens.
   - Given `install_step` is below 4, When `/install/admin` is requested, Then redirect to welcome.
 - **Source refs:** app/Http/Controllers/InstallController.php (admin, saveAdmin); resources/views/install/admin.blade.php; Documentation/pages/installation/web-installer.html (Step 5).
-- **Port notes:** Map to a one-time `platform-admin` bootstrap in `apps/api/src/modules/admin/users` (RBAC, identity pools per ADR-0007). Hash immediately (never hold the plaintext), enforce a stronger policy, require email verification or a one-time token. The "private first workspace" becomes the first `org`; creation must go through the audit+outbox path (ADR-0005/0009).
+- **Port notes:** Map to a one-time `platform-admin` bootstrap in `apps/api/src/modules/admin/users` (RBAC, identity pools per identity-pool design. Hash immediately (never hold the plaintext), enforce a stronger policy, require email verification or a one-time token. The "private first workspace" becomes the first `org`; creation must go through the audit+outbox path.
 
 ### TW-INST-009 — Node bridge step
 
@@ -480,7 +480,7 @@ Connections to other domains: SET (`system_settings` stores `envato_purchase_cod
   - Given step 2 already ran, When it runs again, Then it succeeds and no new rows are added.
   - Given the DB user lacks CREATE privilege, When step 2 runs, Then the client shows the generic failure and the log names the SQL error.
 - **Source refs:** app/Http/Controllers/InstallController.php (stepRunMigrations); database/migrations/* (350 files); _work/manifests/migrations.txt; Documentation/pages/faqs/installation.html (database not creating tables).
-- **Port notes:** Replaced by `packages/db` hand-written SQL migrations applied by the checksum-tracked runner (ADR-0004); run it before the API starts (deploy step / container entrypoint), not inside an HTTP request. The Reference migration history itself is not portable; each domain writer's Data model section defines the new tables.
+- **Port notes:** Replaced by `packages/db` hand-written SQL migrations applied by the checksum-tracked runner; run it before the API starts (deploy step / container entrypoint), not inside an HTTP request. The Reference migration history itself is not portable; each domain writer's Data model section defines the new tables.
 
 ### TW-INST-013 — Install sub-step 3: seed essential default data
 
@@ -679,7 +679,7 @@ Connections to other domains: SET (`system_settings` stores `envato_purchase_cod
   - Given the bridge secret differs between api and bridge, When the stack boots, Then a clear startup error or health failure names the mismatch (Reference only logs 401/403 in the bridge heartbeat).
   - Given a missing required env var, When the API boots, Then it exits with an actionable validation error (Reference silently produced 500s).
 - **Source refs:** Documentation/pages/installation/web-installer.html; Documentation/pages/installation/server-requirements.html; Documentation/pages/installation/post-install.html; Documentation/pages/installation/troubleshooting.html; Documentation/pages/faqs/installation.html; Documentation/pages/faqs/errors-solutions.html.
-- **Port notes:** Feed into the deployment runbook for ADR-0011 (single VM, docker compose): health/readiness endpoint, env validation, secret sharing with the Node bridge, background scheduler ownership. Nothing to build as a product feature.
+- **Port notes:** Feed into the deployment runbook for single-VM deploy plan (single VM, docker compose): health/readiness endpoint, env validation, secret sharing with the Node bridge, background scheduler ownership. Nothing to build as a product feature.
 
 ### TW-INST-019 — Admin Updater screen and client-side step orchestration
 
@@ -789,7 +789,7 @@ Connections to other domains: SET (`system_settings` stores `envato_purchase_cod
   - Given a text value containing a newline and a quote, When dumped and restored (TW-INST-026), Then it round-trips unchanged.
   - Given `storage/app/backups` is not writable, When backup runs, Then a 500 with a "Backup failed" message returns and the log shows `[UPDATER-BACKUP]`.
 - **Source refs:** app/Http/Controllers/Admin/UpdateController.php (backup); app/Services/UpdaterService.php (createBackup, zipCodeFiles, dumpDatabase, dumpDatabasePhp, writeTableRows, primaryKeyColumn, logFatalsForUpdater, BACKUP_SKIP_DIRS, BACKUP_SKIP_ROWS); Documentation/pages/update-details/update-process.html.
-- **Port notes:** Replace with Postgres tooling (`pg_dump` on the VM, WAL/replica per ADR-0011/0013) and object-storage backups; no PHP-level dump. Reuse the concept "schema always, rows skipped for ephemeral tables" for outbox/jobs tables. Never include secrets in code snapshots.
+- **Port notes:** Replace with Postgres tooling (`pg_dump` on the VM, WAL/replica per single-VM deploy plan and replica and public-API design and object-storage backups; no PHP-level dump. Reuse the concept "schema always, rows skipped for ephemeral tables" for outbox/jobs tables. Never include secrets in code snapshots.
 
 ### TW-INST-022 — Updater step 2: upload and validate the update ZIP
 
@@ -903,7 +903,7 @@ Connections to other domains: SET (`system_settings` stores `envato_purchase_cod
   - Given a migration with a genuine SQL syntax error, When Migrate runs, Then a 500 with the migration name and error is returned and later migrations are not run.
   - Given nothing pending, When Migrate runs, Then it returns success quickly with "Nothing to migrate".
 - **Source refs:** app/Http/Controllers/Admin/UpdateController.php (migrate); app/Services/UpdaterService.php (runMigrations, migrationAlreadyApplied); database/migrations (per-release deltas in TW-INST-027).
-- **Port notes:** Covered by the checksum-tracked runner (ADR-0004): never mark a failed file as applied; if idempotent re-runs are needed, write migrations with `IF NOT EXISTS`. Do not copy the "swallow already-exists" behaviour: it hides drift.
+- **Port notes:** Covered by the checksum-tracked runner: never mark a failed file as applied; if idempotent re-runs are needed, write migrations with `IF NOT EXISTS`. Do not copy the "swallow already-exists" behaviour: it hides drift.
 
 ### TW-INST-025 — Updater step 5: finalize, clear caches and health check
 
@@ -1030,7 +1030,7 @@ Connections to other domains: SET (`system_settings` stores `envato_purchase_cod
   - Given a release that adds a plan-gated channel, When migrations run, Then plan flags are seeded and documented (Reference defaulted Email off with no in-app reminder).
   - Given an upgrade that skips a version, When the migrator runs, Then it applies all missing migrations in order (this is the behavior Reference's docs deny but its code allows).
 - **Source refs:** Documentation/pages/update-details/update-process.html; Documentation/pages/update-details/changelog.html; Documentation/pages/faqs/installation.html (Updates and Maintenance).
-- **Port notes:** Adopt the intent "additive, forward-only migrations + explicit release notes with required actions"; ADR-0004 already forbids down migrations and edited applied files.
+- **Port notes:** Adopt the intent "additive, forward-only migrations + explicit release notes with required actions"; migration rules already forbids down migrations and edited applied files.
 
 ### TW-INST-029 — Live-demo guard (DEMO_MODE middleware)
 

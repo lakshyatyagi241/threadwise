@@ -55,8 +55,8 @@ you reach the step — don't treat them as reading suggestions:
 ### `<entity>.mapper.ts` — write this first
 
 The **only** place that translates a database row into an API response.
-snake_case → camelCase, internal `bigint` id → external `uuid`. See
-`docs/adr/0016-api-conventions.md` for why ids are never exposed raw.
+snake_case → camelCase, internal `bigint` id → external `uuid`.
+Ids are never exposed raw.
 
 ```ts
 export function toXResponse(row: XRow): XResponse {
@@ -98,8 +98,7 @@ async create(input: CreateXInput): Promise<XResponse> {
 ```
 
 Why all in one transaction: if the outbox emit is outside it, a crash between
-the write and the emit leaves a row nobody was ever notified about. See
-`docs/adr/0005-transactional-outbox.md`.
+the write and the emit leaves a row nobody was ever notified about.
 
 For updates, diff old vs new with `this.audit.diff(before, after)` — only
 changed fields go in the audit row, not a full snapshot.
@@ -190,7 +189,6 @@ grant insert, not as an obvious error.
 typecheck, `arch:check`, unit tests, and migration/integration checks when
 relevant files changed) rather than you running a partial subset by hand.
 
-Then **invoke the `adr-compliance-review` skill** if this module touches
-tenancy, auth, billing or the outbox — it checks the diff against the rules
-those ADRs set, which is a different question from "does it compile and pass
-tests."
+If this module touches tenancy, auth, billing or the outbox, walk the PR
+checklist by hand: "does it compile and pass tests" is a different question
+from "does it follow the tenancy and outbox rules."

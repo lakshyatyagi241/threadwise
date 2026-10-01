@@ -15,7 +15,6 @@ description: >-
 
 # Outbox events
 
-Background: [ADR-0005](../../../docs/adr/0005-transactional-outbox.md).
 The rule in one line: **the event row is written in the same transaction as
 the business change**, so "row committed" and "event exists" can never
 disagree.
@@ -107,7 +106,6 @@ that.
 Emitting a new event type is usually not an architectural decision, but
 **adding a new consumer that changes system behavior can be**. If the event
 introduces a new cross-module dependency or a new external side effect,
-invoke the `adr-diff-guard` skill to check whether an existing ADR covers it
-and needs updating.
+say so in the PR description.
 
 Then run the gate — invoke the `pre-pr` skill.

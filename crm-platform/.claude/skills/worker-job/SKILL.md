@@ -14,7 +14,6 @@ description: >-
 
 # Background jobs
 
-Background: [ADR-0010](../../../docs/adr/0010-bullmq-worker-process.md).
 The API and worker are the same image with different entrypoints
 (`main.ts` vs `worker.ts`). The API only ever **enqueues**; processors are
 registered only in the worker, so an HTTP pod never picks up a job it

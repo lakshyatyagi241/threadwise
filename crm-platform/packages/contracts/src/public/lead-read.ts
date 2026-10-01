@@ -7,7 +7,7 @@ import { uuidSchema } from '../common/ids';
  * Versioned and frozen independently of internal DTOs: an internal refactor
  * must never break a partner's integration. Authenticated by API key + HMAC
  * request signature, rate limited per key, and served exclusively from the
- * read replica (ADR-0013).
+ * read replica.
  *
  * Scope is deliberately the minimum agreed in the requirements call:
  * name, email, mobile, lifecycle stage, college tag, last-updated.

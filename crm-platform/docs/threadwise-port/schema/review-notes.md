@@ -262,7 +262,7 @@ A Reference unique key without `workspace_id` stays global (it is stricter, and 
 
 ## Soft deletes dropped
 
-Reference soft-deletes these tables; here a delete is a hard delete plus an audit row (ADR-0009). If a feature needs restore, add `is_archived` for that table.
+Reference soft-deletes these tables; here a delete is a hard delete plus an audit row. If a feature needs restore, add `is_archived` for that table.
 
 - `ai_call_assistants`
 - `ai_chat_assistants`

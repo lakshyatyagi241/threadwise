@@ -28,10 +28,10 @@ open  localhost:3000/docs     # Swagger
 
 ### Seeded logins
 
-| Who         | Credentials                                                  |
-| ----------- | ------------------------------------------------------------ |
-| Staff admin | `admin@studyfromuae.test` / `Passw0rd!` (org `studyfromuae`) |
-| Sub-agent   | `agent@studyfromuae.test` / `Passw0rd!`                      |
+| Who         | Credentials                                                                   |
+| ----------- | ----------------------------------------------------------------------------- |
+| Staff admin | `nachiket.challawar@geta.ai` (org `Admin`, Clerk sign-in, no seeded password) |
+| Sub-agent   | `agent@Admin.test` / `Passw0rd!` (org `Admin`)                                |
 
 A **second tenant** (`othertenant`) is seeded on purpose. Isolation tests need
 an org the first one must not be able to see — seeding one tenant makes working
@@ -101,7 +101,7 @@ pnpm infra:nuke          # also deletes volumes — all local data gone
 ```bash
 TOKEN=$(curl -s -X POST localhost:3000/v2/auth/staff/login \
   -H 'content-type: application/json' \
-  -d '{"orgSlug":"studyfromuae","email":"admin@studyfromuae.test","password":"Passw0rd!"}' \
+  -d '{"orgSlug":"Admin","email":"admin@example.test","password":"Passw0rd!"}' \
   | jq -r .accessToken)
 
 curl "localhost:3000/v2/contacts?limit=5" -H "authorization: Bearer $TOKEN"

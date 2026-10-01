@@ -70,10 +70,10 @@ restrict_domains = ["inv", "wallet", "paygw", "plan", "chk", "sales", "bsp", "cp
 # --- table classes (anything not listed here with a workspace_id is a plain tenant table; without one, a tenant child) ---
 [class]
 # Laravel plumbing replaced by the platform (BullMQ, Redis, the auth_core session/token tables, migration journal).
-drop = { cache = "Laravel cache store: Redis here", cache_locks = "Laravel cache locks: Redis here", jobs = "Laravel queue: BullMQ", job_batches = "Laravel queue batches: BullMQ", failed_jobs = "Laravel failed jobs: BullMQ failed set + dead outbox rows", migrations = "Laravel migration journal: _migrations", password_reset_tokens = "auth_core user_tokens", sessions = "auth_core auth_sessions", personal_access_tokens = "api_keys + auth_core user_tokens", user_otps = "auth_core user_tokens (kind otp)", message_charges = "renamed usage_charges (ADR-0012 level-1 ledger), see [virtual.usage_charges]" }
+drop = { cache = "Laravel cache store: Redis here", cache_locks = "Laravel cache locks: Redis here", jobs = "Laravel queue: BullMQ", job_batches = "Laravel queue batches: BullMQ", failed_jobs = "Laravel failed jobs: BullMQ failed set + dead outbox rows", migrations = "Laravel migration journal: _migrations", password_reset_tokens = "auth_core user_tokens", sessions = "auth_core auth_sessions", personal_access_tokens = "api_keys + auth_core user_tokens", user_otps = "auth_core user_tokens (kind otp)", message_charges = "renamed usage_charges (level-1 ledger), see [virtual.usage_charges]" }
 
 # Reference table that is the same thing as a table this repo already has. Not generated: overlays/*.sql adds only what is missing.
-existing = { users = "users + user_profiles (auth_core)", workspaces = "organizations (+ workspace_settings overlay)", workspace_user = "users + user_roles", teams = "teams", team_user = "team_members", roles = "roles", permissions = "permission_defs", model_has_roles = "user_roles", model_has_permissions = "role_grants", role_has_permissions = "role_grants", api_keys = "api_keys", contacts = "contacts", companies = "companies", tags = "tags", contact_tag = "contact_tags", attributes = "fields (field metadata registry, ADR-0017)", contact_custom_fields = "fields (field metadata registry, ADR-0017)", system_settings = "platform_settings (auth_core)", security_audit_log = "security_events (auth_core)", audit_logs = "audit_log" }
+existing = { users = "users + user_profiles (auth_core)", workspaces = "organizations (+ workspace_settings overlay)", workspace_user = "users + user_roles", teams = "teams", team_user = "team_members", roles = "roles", permissions = "permission_defs", model_has_roles = "user_roles", model_has_permissions = "role_grants", role_has_permissions = "role_grants", api_keys = "api_keys", contacts = "contacts", companies = "companies", tags = "tags", contact_tag = "contact_tags", attributes = "fields (field metadata registry)", contact_custom_fields = "fields (field metadata registry)", system_settings = "platform_settings (auth_core)", security_audit_log = "security_events (auth_core)", audit_logs = "audit_log" }
 
 # Platform catalogue, no org_id. Any tenant may read; only the privileged (operator/worker) role may write.
 global_read = ["languages", "currencies", "packages", "package_features", "message_rates", "credit_packages", "pricing_faqs", "legal_pages", "guidebook_articles", "announcements", "blog_categories", "blog_posts", "flow_templates", "frontend_content"]
@@ -136,18 +136,18 @@ why = "normalises Reference contacts.contact_group (JSON list of contact_groups 
 "wa_stock_reservations.order_id" = "wa_orders"
 "impersonation_sessions.original_workspace_id" = "workspaces"
 
-# ADR-0012 level-1 ledger: one row per billable unit, partitioned, rate frozen at charge time. Same columns as Reference message_charges.
+# Billing design, level-1 ledger: one row per billable unit, partitioned, rate frozen at charge time. Same columns as Reference message_charges.
 [virtual.usage_charges]
 domain = "wallet-message-billing"
 from = "message_charges"
 stream_key = "created_at"
-why = "Reference message_charges under the name ADR-0012 gives the level-1 ledger"
+why = "Reference message_charges under the name the billing design gives the level-1 ledger"
 
-# ADR-0012 wallet: balance and reserved, invariant enforced by CHECK. Reference keeps two balances on users (wallet_credits for
+# Billing design, wallet: balance and reserved, invariant enforced by CHECK. Reference keeps two balances on users (wallet_credits for
 # message credits, wallet_currency_minor + wallet_currency_code for money); here that is one row per (org, unit).
 [virtual.wallets]
 domain = "wallet-message-billing"
-why = "ADR-0012 prepaid wallet. unit is 'credits' or an ISO currency code. Replaces users.wallet_credits / wallet_currency_minor / wallet_currency_code"
+why = "Prepaid wallet from the billing design. unit is 'credits' or an ISO currency code. Replaces users.wallet_credits / wallet_currency_minor / wallet_currency_code"
 columns = [
   { name = "unit", ctype = "varchar(16)", nullable = false },
   { name = "balance", ctype = "decimal(20,4)", nullable = false, default = "0" },
@@ -156,7 +156,7 @@ columns = [
 unique = [["unit"]]
 checks = [ { name = "chk_wallet_invariant", sql = "balance >= 0 AND reserved >= 0 AND reserved <= balance" } ]
 
-# ADR-0012: wallet_transactions carries a real unique (org_id, idempotency_key) so a gateway retry cannot double-post.
+# Billing design: wallet_transactions carries a real unique (org_id, idempotency_key) so a gateway retry cannot double-post.
 [extra.wallet_transactions]
 columns = [ { name = "idempotency_key", ctype = "varchar(191)", nullable = false } ]
 unique = [["idempotency_key"]]
@@ -248,7 +248,7 @@ sheets_api_key_hash = "user_settings.sheets_key_hash"
 sheets_api_key_suffix = "user_settings.sheets_key_suffix"
 sheets_api_key_created_at = "user_settings.sheets_key_created_at"
 sheets_api_key_last_used_at = "user_settings.sheets_key_last_used_at"
-deleted_at = "(dropped: hard delete + audit row, ADR-0009)"
+deleted_at = "(dropped: hard delete + audit row)"
 
 [map.workspaces]
 id = "organizations.id"
@@ -256,7 +256,7 @@ name = "organizations.name"
 slug = "organizations.slug"
 plan = "organizations.plan"
 status = "organizations.status ('active' / 'suspended')"
-deleted_at = "(dropped: hard delete + audit row, ADR-0009)"
+deleted_at = "(dropped: hard delete + audit row)"
 _default = "workspace_settings.<same column>"
 
 [map.workspace_user]
@@ -270,7 +270,7 @@ joined_at = "users.joined_at"
 [map.teams]
 workspace_id = "teams.org_id"
 default_assignee_user_id = "teams.default_assignee_id"
-deleted_at = "(dropped: hard delete + audit row, ADR-0009)"
+deleted_at = "(dropped: hard delete + audit row)"
 
 [map.team_user]
 created_at = "(dropped: team_members rows carry no timestamps)"
@@ -313,10 +313,10 @@ workspace_id = "api_keys.org_id"
 scopes = "api_keys.scopes (text[])"
 
 [map.attributes]
-_default = "fields (ADR-0017 field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config"
+_default = "fields (field metadata registry): attribute_key -> fields.key, attribute_name -> fields.label, type -> fields.field_type, status -> fields.is_active, attribute_value and description -> fields.config"
 
 [map.contact_custom_fields]
-_default = "fields (ADR-0017): key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config"
+_default = "fields: key -> key, label -> label, type -> field_type, required -> is_required, sort -> position, options -> field_options rows, show_in_panel -> config"
 
 [map.roles]
 _default = "roles (per-org rows seeded from the presets) / permission_defs for the platform-level names; RBAC domain maps Reference's 101 keys"
@@ -393,8 +393,8 @@ keys = [
 ]
 
 # --- column type overrides --------------------------------------------------------------------------------------------------
-# ADR-0012: money in the wallet and its ledger is numeric and stays a string end to end. Reference keeps integer credits / minor units
-# here; the ledger follows the ADR so it can be summed against wallets.balance without a unit change. Other *_minor columns keep
+# Billing design: money in the wallet and its ledger is numeric and stays a string end to end. Reference keeps integer credits / minor units
+# here; the ledger follows the billing design so it can be summed against wallets.balance without a unit change. Other *_minor columns keep
 # Reference's integer minor units (exact, no float).
 [column_type]
 "wallet_transactions.amount" = "decimal(20,4)"

@@ -67,7 +67,7 @@ async function post(path: string, body: unknown): Promise<unknown> {
   return json;
 }
 
-/** Sign-in for platform operators (ADR-0019): credentials, optional captcha, then the MFA step. */
+/** Sign-in for platform operators: credentials, optional captcha, then the MFA step. */
 export function OperatorLogin({
   expired,
   next,

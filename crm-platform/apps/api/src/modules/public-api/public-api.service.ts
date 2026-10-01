@@ -23,7 +23,7 @@ interface PublicLeadRow {
  * systems poll: a partner backend checking lead stages every minute, a
  * college's system pulling updates. That traffic is unbounded and untrusted,
  * and it has no business sharing capacity with the primary that staff writes
- * depend on (ADR-0013).
+ * depend on.
  *
  * The response shape is frozen independently of internal DTOs. Internal
  * refactors must not break an integration we cannot redeploy.

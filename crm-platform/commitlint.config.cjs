@@ -23,7 +23,6 @@ module.exports = {
         'realtime',
         'infra',
         'docs',
-        'adr',
         'skills',
         'ci',
         'deps',
