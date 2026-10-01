@@ -20,6 +20,17 @@ or user-scoped. Our rules (CONTRIBUTING, ADR-0002/0004/0009/0016, rule numbers a
 `docs/wadesk-port/target-map.md` §6) turn that into a mechanical translation plus a short list
 of decisions a person must make. The script does the mechanical part and tags the decisions.
 
+## 0. The baseline already exists
+
+All 227 WaDesk tables are translated: one migration per domain (`packages/db/migrations/2026100110*_<code>_wadesk_schema.sql`), Drizzle
+in `packages/db/src/schema/<domain>/`, and the answers in `docs/wadesk-port/schema/` (read `README.md`, then find your table in
+`table-map.md`; `review-notes.md` lists what is still open per table). For a feature, do not draft a table: read the existing one, and
+change it with a new migration (`add-migration`) plus the Drizzle edit in the same commit, then `pnpm db:verify-schema`. The section
+below (the single-table draft script) is for a WaDesk table that is somehow not in the table map, or for comparing a design.
+
+`scripts/gen_schema.py` is the whole-schema generator behind the baseline (inputs and decisions in
+`docs/wadesk-port/schema/source/`). Run it into a scratch `--out` to compare; never over the repo.
+
 ## 1. Draft
 
 ```bash

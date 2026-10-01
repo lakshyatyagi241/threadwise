@@ -13,8 +13,9 @@
 4. **New tables need RLS.** Table privileges are inherited from
    `ALTER DEFAULT PRIVILEGES`; enabling and forcing RLS and writing the policy
    is per-table and cannot be defaulted.
-5. **Update the Drizzle schema in the same commit.** Nothing checks this for
-   you — a mismatch is a runtime error.
+5. **Update the Drizzle schema in the same commit**, then run
+   `pnpm db:verify-schema`. It compares every Drizzle table with the migrated
+   database and fails on anything that would break at runtime; CI runs it too.
 
 ## Writing one
 

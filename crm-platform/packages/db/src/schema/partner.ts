@@ -1,4 +1,5 @@
 import {
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -11,6 +12,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { citext, createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from './columns';
 import { apiKeyStatusEnum, partnerAgentStatusEnum } from './enums';
+import { users } from './foundation';
 
 /**
  * Sub-agents / channel partners: a third identity pool, separate from staff
@@ -95,6 +97,9 @@ export const apiKeys = pgTable(
     rateLimitPerMinute: integer('rate_limit_per_minute').notNull().default(120),
     lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
+    /** WaDesk api_keys.revoked_at / user_id (api overlay). */
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    userId: idColumn('user_id'),
     createdBy: idColumn('created_by'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -103,6 +108,11 @@ export const apiKeys = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     uniqueIndex('uq_api_keys_prefix').on(t.keyPrefix),
+    foreignKey({
+      name: 'fk_api_keys_user_id',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
     index('idx_api_keys_org_status').on(t.orgId, t.status),
   ],
 );

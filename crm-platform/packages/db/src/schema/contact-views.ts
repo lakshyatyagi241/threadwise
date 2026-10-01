@@ -21,6 +21,8 @@ export const tags = pgTable(
     uuid: uuid('uuid').notNull(),
     name: citext('name').notNull(),
     color: text('color'),
+    /** WaDesk tags.description (tib1 overlay). */
+    description: text('description'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
