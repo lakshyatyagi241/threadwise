@@ -36,6 +36,7 @@ Evidence is automated, no screen yet:
 | WD-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                                                          |
 | WD-BCAST-026        | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                                                                                              |
 | WD-BCAST-027        | backend-done | Counters moved by delta, one state machine for every source, the outcome re-derived after a late failure. Only the routes that receive Meta and Twilio reports are not here.                                      |
+| WD-BCAST-028        | backend-done | `BroadcastInboxMirrorService`: a recipient with a thread gets one resolved bubble on sent, delivered or read. Writes `messages` and `conversations` directly until the team-inbox domain exports its mirror.      |
 | WD-BCAST-029        | backend-done | Outbox events carry the WaDesk webhook events and the bell entries (`webhook-events.ts`). Delivery to customer URLs and writing `notifications` rows are the INTG and NOTIF domains' (no subscriber exists yet).  |
 
 ## Intended differences from WaDesk
@@ -91,6 +92,8 @@ Evidence is automated, no screen yet:
 | 46 | Webhook ids | Numeric database ids for broadcast, template and contact | Public uuids; `workspace_id` is added by the deliverer from the event's organization. |
 | 47 | Per-message events | Fired for every message | Written to the outbox only while the organization has an active webhook subscribed to the event (or to `*`), so campaign volume does not fill it. Receipts add `broadcast_message_status_updated` and the `message_*` event, as the reference does for Meta status webhooks. A repeat of the same status is not an event. |
 | 48 | Bell entries | One per save (created, updated x N, deleted) | Created, finished (completed, completed with errors, failed) and deleted only, as the reference's own port note asks. |
+| 49 | Inbox mirror triggers | Trigger A (before the provider id is known, skipped above 2000 recipients) and trigger B (per status report), which could double the bubble | One path: after a recipient is reported sent, delivered or read. One bubble per (broadcast, contact), found by provider message id or `src_key`, serialised so two reports at once cannot both insert. No 2000 cap is needed. |
+| 50 | Thread of another number | Skipped through `ConversationResolver` when the workspace has 2+ numbers | A Baileys broadcast skips a thread bound to a different device; other engines match by contact or phone digits. |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
@@ -102,10 +105,10 @@ Evidence is automated, no screen yet:
 | `WarmerGate`        | SCHED (`WarmerService`)          | No warm-up holds and no warm-up gap range.                                                                                                                                                                                                          |
 | `BroadcastPlanGate` | PLAN                             | The `broadcast` feature flag is not in the plan catalogue (only the numeric cap `broadcasts` is), so it is not enforced.                                                                                                                            |
 
-Also not there yet, so this PR sends text templates only:
+Also not there yet:
 
 - Engines: only `waba` (Meta Cloud API) has an adapter. `baileys`, `twilio` and `sms` broadcasts fail at dispatch with a clear log until their adapters exist (WADEV, NODE and the SMS channel).
-- Link tracking (018), pacing, batching and the daily cap (022), delivery and read receipts (024, with 027's webhooks), retry of failed recipients (038, 039), outbound webhook and notification payloads (029; delivery is INTG and NOTIF), team-inbox mirroring (028).
+- Delivery of the webhook events (INTG) and the bell entries (NOTIF): the broadcast writes them to the outbox, nothing posts or stores them yet. The team-inbox mirror writes `messages` directly until the inbox domain has one.
 - The WABA credentials format (`credentials_json`) is read as encrypted JSON with `access_token` and `phone_number_id`; the WABA domain owns the final format.
 
 Header media paths: only an absolute URL is turned into a link until the storage domain exposes `media_url`; a stored relative path leaves the header out of the payload.

@@ -5,6 +5,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { buildSend, type TemplateShape } from '../../infra/providers/whatsapp/meta-send-payload';
 import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
+import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry } from './engine-senders';
 import {
@@ -82,6 +83,7 @@ export class BroadcastDispatchService {
   constructor(
     private readonly db: DatabaseService,
     private readonly progress: BroadcastProgressService,
+    private readonly mirror: BroadcastInboxMirrorService,
     private readonly engines: EngineSenderRegistry,
     private readonly merge: MergeTagService,
     private readonly tracker: LinkTracker,
@@ -287,6 +289,13 @@ export class BroadcastDispatchService {
                 status: 'sent',
                 providerMessageId: sent.providerMessageId,
               });
+              await this.mirror.mirror(
+                orgId,
+                broadcastId,
+                contactId,
+                'sent',
+                sent.providerMessageId,
+              );
               if (from !== null)
                 await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
                   providerMessageId: sent.providerMessageId,

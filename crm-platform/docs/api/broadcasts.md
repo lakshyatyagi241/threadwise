@@ -251,3 +251,13 @@ writes `notification`. Ids are public uuids.
 `broadcast.message_status` is written only while the organization has an active webhook subscribed to the event or to `*`, and
 never twice for the same status. The `aggregate` block (`sent, delivered, read, failed, clicked, total`) is exact at the moment of
 the event.
+
+## Team-inbox mirroring (WD-BCAST-028)
+
+No endpoint. When a recipient is reported `sent`, `delivered` or `read` (by the sender or by a receipt) and already has a
+conversation, the message appears in that thread as one outbound bubble: the template's header, body and footer with this
+recipient's values filled in (a blank name reads "there"), `meta` with `source: broadcast`, `type`, `template_name`, `buttons`,
+`broadcast_id`, `wa_message_id` and `src_key`. The conversation's `last_message_at`, `last_outbound_at` and `preview` (first 200
+characters) move; `unread_count` does not. A recipient with no thread gets none. One bubble per (broadcast, contact): found by
+the provider's message id or `src_key`, so a `sent` that was lost is healed by `delivered`, and repeats add nothing. An empty
+body is skipped. A failure to mirror is logged and never fails the send or the receipt.

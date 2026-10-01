@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
+import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { counterDelta, failureText } from './receipt-rules';
 
@@ -30,6 +31,7 @@ export class BroadcastReceiptsService {
   constructor(
     private readonly db: DatabaseService,
     private readonly progress: BroadcastProgressService,
+    private readonly mirror: BroadcastInboxMirrorService,
   ) {}
 
   /** True when the message belongs to a broadcast (whether or not the receipt changed anything); false for any other message. */
@@ -84,6 +86,14 @@ export class BroadcastReceiptsService {
           },
         );
     });
+    // After the receipt is committed, and never failing it: the bubble is best effort.
+    await this.mirror.mirror(
+      orgId,
+      broadcastId,
+      contactId,
+      receipt.status,
+      receipt.providerMessageId,
+    );
     return true;
   }
 
