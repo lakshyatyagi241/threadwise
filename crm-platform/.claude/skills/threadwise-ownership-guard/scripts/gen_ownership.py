@@ -44,7 +44,11 @@ LEGACY = {
         "packages/db/src/schema/contact-views.ts", "packages/db/src/schema/field-metadata.ts",
     ],
     "roles-permissions": ["apps/api/src/modules/admin/", "packages/contracts/src/admin/"],
-    "auth-registration-security": ["apps/api/src/modules/auth/"],
+    # Sign-in/sign-up, the lock screens, the operator console and their message files (split by audience).
+    "auth-registration-security": [
+        "apps/api/src/modules/auth/", "apps/web/messages/*/auth-registration-security.*.json",
+        "apps/web/src/app/(gate)/", "apps/web/src/app/(operator-auth)/",
+    ],
     "developer-rest-api-v1": [
         "apps/api/src/modules/partner/", "apps/api/src/modules/public-api/",
         "packages/contracts/src/partner/", "packages/contracts/src/public/", "packages/db/src/schema/partner.ts",
@@ -53,7 +57,7 @@ LEGACY = {
     "admin-console-shell": [
         "apps/web/src/components/shell/", "apps/web/src/app/layout.tsx", "apps/web/src/app/providers.tsx",
         "apps/web/src/app/(app)/layout.tsx", "apps/web/src/app/(admin)/layout.tsx",
-        "apps/web/src/app/globals.css", "apps/web/src/lib/", "apps/web/src/i18n/", "apps/web/scripts/",
+        "apps/web/src/app/globals.css", "apps/web/src/app/page.tsx", "apps/web/src/lib/", "apps/web/src/i18n/", "apps/web/scripts/",
         "apps/web/src/features/_registry/", "apps/web/src/app/api/",
         "apps/web/src/app/(auth)/", "apps/web/next.config.ts", "packages/ui/",
     ],
@@ -63,7 +67,7 @@ KERNEL = [
     "apps/api/src/app.module.ts", "apps/api/src/main.ts", "apps/api/src/worker.ts", "apps/api/src/domains.generated.ts",
     "apps/api/src/kernel/", "apps/api/src/common/", "apps/api/src/realtime/", "apps/api/src/health/",
     "apps/api/src/workers/", "apps/api/src/tools/",
-    "apps/api/src/config/env.schema.ts", "apps/api/src/config/config.module.ts", "apps/api/src/config/zod-helpers.ts",
+    ".env.example", ".gitignore", "apps/api/src/config/env.schema.ts", "apps/api/src/config/config.module.ts", "apps/api/src/config/zod-helpers.ts",
     "apps/api/src/infra/db/", "apps/api/src/infra/redis/", "apps/api/src/infra/queue/",
     "apps/api/src/infra/providers/providers.module.ts", "apps/api/src/infra/providers/whatsapp/",
     "apps/api/src/infra/providers/payments/", "apps/api/test/support/",

@@ -17,6 +17,8 @@ export interface SendTemplateParams {
   variables: Record<string, string>;
   /** Correlates the provider's async delivery receipts back to our message row. */
   clientReference: string;
+  /** What the pre-send guard needs to know; see `OutboundSendGuard`. */
+  screen?: { bulk?: boolean; source?: string };
 }
 
 export interface SendTextParams {
@@ -25,6 +27,8 @@ export interface SendTextParams {
   clientReference: string;
   /** Only legal inside the 24h customer service window. */
   replyToProviderMessageId?: string;
+  /** What the pre-send guard needs to know; see `OutboundSendGuard`. */
+  screen?: { bulk?: boolean; source?: string };
 }
 
 export interface SendResult {

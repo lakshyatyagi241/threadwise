@@ -33,3 +33,6 @@ tools/migration/out/
 # web app
 next-env.d.ts
 apps/web/src/features/_registry/nav.generated.ts
+
+# TypeScript incremental build caches
+*.tsbuildinfo

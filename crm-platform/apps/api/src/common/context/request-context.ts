@@ -1,7 +1,8 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 /** Who is making the call. Four distinct pools, never conflated. */
-export type ActorType = 'user' | 'partner_agent' | 'candidate' | 'bot' | 'api_key' | 'system';
+export type ActorType =
+  'user' | 'partner_agent' | 'candidate' | 'bot' | 'api_key' | 'system' | 'platform_operator';
 
 export interface RequestContext {
   requestId: string;
@@ -14,6 +15,11 @@ export interface RequestContext {
   /** Resolved capability keys, populated by the permissions guard. */
   grants?: Map<string, { effect: 'allow' | 'deny'; scope: 'all' | 'team' | 'own' }>;
   ip?: string;
+  userAgent?: string;
+  /** The auth_sessions / platform_sessions uuid behind this request, when there is one. */
+  sessionId?: string;
+  /** Operator role, only for actorType 'platform_operator'. */
+  operatorRole?: 'super_admin' | 'support' | 'auditor';
 }
 
 const storage = new AsyncLocalStorage<RequestContext>();

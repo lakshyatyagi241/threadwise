@@ -19,6 +19,12 @@ export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
   APP_URL: z.string().url().default('http://localhost:3000'),
+  /**
+   * Which proxies' X-Forwarded-For to believe (express `trust proxy`): a hop count, 'loopback', or a
+   * comma-separated list of addresses/CIDRs. The client IP feeds the login lockout, the operator IP
+   * allowlist and the audit trail, so a spoofable value weakens all three (Reference trusted every proxy).
+   */
+  TRUST_PROXY: z.string().default('loopback'),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
   CORS_ORIGINS: z
     .string()
@@ -82,6 +88,14 @@ export const envSchema = z.object({
   SMTP_HOST: z.string().default('localhost'),
   SMTP_PORT: z.coerce.number().int().default(1025),
   SMTP_FROM: z.string().default('no-reply@localhost'),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_SECURE: booleanish.default(false),
+
+  // --- web app / branding (links in transactional mail, OAuth redirects) ----
+  WEB_APP_URL: z.string().url().default('http://localhost:3001'),
+  /** Brand name used in mail and the TOTP issuer until the branding domain lands. */
+  APP_NAME: z.string().default('CRM Platform'),
 
   // --- providers -----------------------------------------------------------
   META_GRAPH_VERSION: z.string().default('v21.0'),

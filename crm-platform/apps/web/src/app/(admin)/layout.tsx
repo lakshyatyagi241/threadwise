@@ -1,9 +1,11 @@
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { getSession } from '@/lib/auth/server';
+import { OperatorShell } from '@/features/auth-registration-security/platform/operator-shell';
+import { getOperatorSession } from '@/lib/auth/server';
 
+/** Platform-operator console (ADR-0019): a separate identity pool from workspace staff. */
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const session = await getSession();
-  if (!session.user) redirect(session.expired ? '/api/auth/refresh?next=/admin' : '/login');
-  return <div className="min-h-screen p-6">{children}</div>;
+  const { session, expired } = await getOperatorSession();
+  if (!session) redirect(expired ? '/api/platform-auth/refresh?next=/admin' : '/admin/login');
+  return <OperatorShell operator={session}>{children}</OperatorShell>;
 }

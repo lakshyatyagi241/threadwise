@@ -1,0 +1,7 @@
+import type { ReactNode } from 'react';
+import { AccountShell } from '@/features/auth-registration-security/account/hub/account-shell';
+
+/** The account hub frame shared by /account/profile, /branding, /security and /delete (TW-AUTH-024). */
+export default function AccountLayout({ children }: { children: ReactNode }) {
+  return <AccountShell>{children}</AccountShell>;
+}

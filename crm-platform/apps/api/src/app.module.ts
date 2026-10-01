@@ -16,10 +16,13 @@ import { QueueModule } from './infra/queue/queue.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { SendGuardModule } from './modules/auth/security/send-guard.module';
+import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { CrmModule } from './modules/crm';
+import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -92,6 +95,8 @@ import { HealthModule } from './health/health.module';
     // Platform
     KernelModule,
     AuthModule,
+    PlansModule,
+    SendGuardModule,
     RealtimeModule,
     HealthModule,
 
@@ -107,6 +112,10 @@ import { HealthModule } from './health/health.module';
     CryptoService,
     { provide: APP_FILTER, useClass: ProblemExceptionFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    // After authentication, before permissions: a gated account (suspended,
+    // unverified under 'block', MFA or password change required) is refused
+    // here with a code the web app maps to the right lock screen.
+    { provide: APP_GUARD, useClass: AccountGateGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
   ],

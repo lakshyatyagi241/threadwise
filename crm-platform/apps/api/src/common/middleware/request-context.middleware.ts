@@ -26,6 +26,7 @@ export class RequestContextMiddleware implements NestMiddleware {
       actorId: null,
       userId: null,
       ip: req.ip,
+      userAgent: req.header('user-agent')?.slice(0, 512),
     };
 
     res.setHeader('x-request-id', requestId);

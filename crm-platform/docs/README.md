@@ -49,8 +49,10 @@ Format: [MADR](https://adr.github.io/madr/). Template:
 | [0016](adr/0016-api-conventions.md)             | uuids, cursors, problem+json, idempotency   | accepted                                 |
 | [0017](adr/0017-field-metadata-registry.md)     | Generic field-metadata registry (Tier-2)    | accepted                                 |
 | [0018](adr/0018-web-app-stack-and-session.md)   | Web app stack and httpOnly-cookie session   | proposed                                 |
+| [0019](adr/0019-auth-sessions-mfa-and-platform-operators.md) | Server-side sessions, TOTP MFA, platform operators | proposed             |
 | [0020](adr/0020-threadwise-data-model.md)           | Reference data model; schema drift check       | proposed                                 |
 | [0021](adr/0021-partition-definer.md)           | Partition maintenance: SECURITY DEFINER     | proposed                                 |
+
 
 ## Runbooks
 

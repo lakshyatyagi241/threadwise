@@ -1,0 +1,387 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "Sign in",
+            "title": "Welcome",
+            "accent": "back",
+            "subtitle": "Enter your details to get back into your workspace."
+          },
+          "register": {
+            "eyebrow": "Create account",
+            "title": "Create your",
+            "accent": "account",
+            "subtitle": "A few details and your workspace is ready."
+          },
+          "forgot": {
+            "eyebrow": "Forgot password",
+            "title": "Reset your",
+            "accent": "password",
+            "subtitle": "Tell us where you sign in and we will send a one-time link."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "Everything in one place",
+            "hero_desc": "Chats, campaigns and contacts stay together, so nobody hunts for context.",
+            "stat1_num": "24/7",
+            "stat1_label": "shared team inbox",
+            "stat2_num": "5 min",
+            "stat2_label": "typical setup",
+            "stat3_num": "1 place",
+            "stat3_label": "for chats and contacts",
+            "feat1_title": "Shared inbox",
+            "feat1_desc": "Assign, reply and hand over chats without losing the thread.",
+            "feat2_title": "Broadcasts",
+            "feat2_desc": "Reach many contacts at once with pacing and delivery tracking.",
+            "feat3_title": "Automations",
+            "feat3_desc": "Route, reply and follow up with flows you design yourself.",
+            "feat4_title": "Team control",
+            "feat4_desc": "Roles, permissions and audit trails keep every workspace in check.",
+            "inside_heading": "Inside your workspace",
+            "chip1": "Inbox",
+            "chip2": "Broadcasts",
+            "chip3": "Flows",
+            "chip4": "Contacts",
+            "chip5": "Reports",
+            "chip6": "Templates",
+            "footer": "Protected by encrypted storage and two-factor sign-in."
+          },
+          "register": {
+            "hero_title": "Start free",
+            "hero_desc": "Set up your workspace first and choose a plan when you are ready.",
+            "stat1_num": "3 steps",
+            "stat1_label": "to a working workspace",
+            "stat2_num": "5 min",
+            "stat2_label": "typical setup",
+            "stat3_num": "Day 1",
+            "stat3_label": "invite your team",
+            "feat1_title": "Quick setup",
+            "feat1_desc": "Name your workspace, set your time zone and you are in.",
+            "feat2_title": "Bring your team",
+            "feat2_desc": "Invite colleagues and give each one exactly the access they need.",
+            "feat3_title": "Connect channels",
+            "feat3_desc": "Link your messaging numbers and start talking to customers.",
+            "feat4_title": "Stay in control",
+            "feat4_desc": "Two-factor sign-in and session controls protect every account.",
+            "inside_heading": "What you get",
+            "chip1": "Shared inbox",
+            "chip2": "Broadcasts",
+            "chip3": "Flows",
+            "chip4": "Contacts",
+            "chip5": "Reports",
+            "chip6": "Team roles",
+            "footer": "No spam. You can leave any time."
+          },
+          "forgot": {
+            "hero_title": "A fresh link, used once",
+            "hero_desc": "We email a secure link that works a single time and expires soon."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "Team inbox for WhatsApp",
+            "heading": "Every customer chat,",
+            "headingAccent": "one calm workspace",
+            "subheading": "Broadcasts, automations and a shared inbox for teams that answer fast."
+          },
+          "register": {
+            "eyebrow": "Start in minutes",
+            "heading": "Set up your",
+            "headingAccent": "workspace",
+            "subheading": "Create your workspace, then bring your team and your first channel in."
+          },
+          "forgot": {
+            "eyebrow": "Account recovery",
+            "heading": "Back in",
+            "headingAccent": "a minute",
+            "subheading": "Enter your email and we will send you a secure link to choose a new password."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "Language",
+        "theme": "Switch theme",
+        "themeToLight": "Light",
+        "themeToDark": "Dark"
+      },
+      "pages": {
+        "login": {
+          "title": "Sign in"
+        },
+        "signup": {
+          "title": "Create your account"
+        },
+        "verifyOtp": {
+          "title": "Verify your number",
+          "eyebrow": "Verify your number",
+          "heading": "Check your",
+          "accent": "WhatsApp",
+          "subtitle": "Enter the one-time code we sent to finish creating your workspace."
+        },
+        "forgot": {
+          "title": "Reset your password"
+        },
+        "reset": {
+          "title": "Choose a new password",
+          "eyebrow": "Reset password",
+          "heading": "Choose a new",
+          "accent": "password",
+          "subtitle": "Pick something strong. You will sign in with it right after."
+        },
+        "verifyEmail": {
+          "title": "Confirm your email",
+          "eyebrow": "Email confirmation",
+          "heading": "Confirm your",
+          "accent": "email",
+          "subtitle": "This page checks the link you opened from your inbox."
+        },
+        "findWorkspace": {
+          "title": "Find my workspace",
+          "eyebrow": "Find my workspace",
+          "heading": "Find your",
+          "accent": "workspace",
+          "subtitle": "Enter your email and we will mail you the workspace addresses you can sign in to."
+        },
+        "confirmEmailChange": {
+          "title": "Confirm your new email",
+          "eyebrow": "Email change",
+          "heading": "Confirm your",
+          "accent": "new email",
+          "subtitle": "This page checks the link you opened from your inbox."
+        },
+        "socialCallback": {
+          "title": "Signing you in",
+          "eyebrow": "Social sign-in",
+          "heading": "Signing you",
+          "accent": "in",
+          "subtitle": "Finishing your sign-in."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "Those details do not match. Check the workspace, email and password.",
+        "locked": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+        "rateLimited": "Too many attempts. Please wait a moment and try again.",
+        "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
+        "suspended": "This account is suspended. Contact your workspace administrator.",
+        "captcha": "Please complete the captcha and try again.",
+        "signupClosed": "Registration is closed. Ask an administrator for an invitation.",
+        "slugTaken": "That workspace address is already taken.",
+        "emailTaken": "That email is already used in this workspace.",
+        "passwordPolicy": "That password does not meet the security policy:",
+        "tokenInvalid": "This link is invalid or has expired.",
+        "emailUnverified": "Confirm your email address first.",
+        "mfaInvalid": "That code is not valid. Check the code and try again.",
+        "mfaExpired": "Your verification expired. Sign in again.",
+        "otpInvalid": "That code is not correct. Try again.",
+        "otpExpired": "That code has expired. Request a new one.",
+        "otpTooMany": "Too many attempts. Request a new code.",
+        "otpCooldown": "Please wait a moment before requesting another code.",
+        "otpSendFailed": "We could not send the verification code. Check the number and try again.",
+        "socialUnavailable": "That sign-in method is not available.",
+        "socialExpired": "Sign-in expired. Please try again.",
+        "socialFailed": "We could not complete that sign-in. Please try again.",
+        "socialNoEmail": "That account did not share an email address. Use email and password instead.",
+        "ipBlocked": "Sign-in is not allowed from this network.",
+        "workspaceUnavailable": "That workspace is not available.",
+        "validation": "Please check the highlighted fields.",
+        "sessionExpired": "Your session expired for security. Reload the page and try again.",
+        "reload": "Reload the page",
+        "network": "We could not reach the server. Check your connection and try again.",
+        "unexpected": "Something went wrong on our side. Please try again.",
+        "requestId": "Request id",
+        "signupExpired": "Please start registration again.",
+        "policyRules": {
+          "min_length": "Use at least {min, plural, one {# character} other {# characters}}.",
+          "upper_lower": "Mix upper and lower case letters.",
+          "number": "Include at least one number.",
+          "symbol": "Include at least one symbol.",
+          "common": "That password is too easy to guess."
+        }
+      },
+      "validation": {
+        "orgSlug": "Enter your workspace address (letters, numbers, dash or underscore).",
+        "orgSlugForSocial": "Enter your workspace address first so we know where to sign you in.",
+        "email": "Enter a valid email address.",
+        "password": "Enter a password of at least 8 characters.",
+        "passwordRequired": "Enter your password.",
+        "fullName": "Enter your full name.",
+        "orgName": "Name your workspace (at least 2 characters).",
+        "orgNameForSocial": "Name your workspace first, then continue with Google or Facebook.",
+        "phoneRequired": "Enter your mobile number.",
+        "phone": "Enter a valid mobile number for the selected country.",
+        "newPassword": "Use at least 8 characters.",
+        "confirmPassword": "The two passwords do not match.",
+        "acceptTerms": "You must accept the terms to continue.",
+        "referralCode": "Referral codes use letters and numbers only.",
+        "code": "Enter the {length}-digit code."
+      },
+      "legal": {
+        "login": "By signing in you agree to our <terms>Terms</terms> and <privacy>Privacy policy</privacy>.",
+        "signup": "I agree to the <terms>Terms</terms> and <privacy>Privacy policy</privacy>.",
+        "cookies": "<cookies>Cookie policy</cookies>"
+      },
+      "captcha": {
+        "protected": "Protected by reCAPTCHA."
+      },
+      "social": {
+        "divider": "or with email",
+        "redirecting": "Opening the provider",
+        "login": {
+          "google": "Continue with Google",
+          "facebook": "Continue with Facebook"
+        },
+        "signup": {
+          "google": "Sign up with Google",
+          "facebook": "Sign up with Facebook"
+        }
+      },
+      "login": {
+        "workspace": "Workspace",
+        "workspaceHint": "The address your team uses, like acme.",
+        "workspacePlaceholder": "your-workspace",
+        "email": "Email",
+        "emailPlaceholder": "you@company.com",
+        "password": "Password",
+        "forgot": "Forgot password?",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "remember": "Keep me signed in for 30 days",
+        "submit": "Sign in",
+        "submitting": "Signing in",
+        "newHere": "New here?",
+        "createAccount": "Create an account",
+        "lostWorkspace": "Not sure of your workspace address?",
+        "findWorkspace": "Find my workspace",
+        "loggedOut": "You've been signed out.",
+        "flashReset": "Password reset. Sign in with your new password.",
+        "flashExpired": "Your session expired. Please sign in again.",
+        "mfaExpired": "Your verification took too long. Sign in again.",
+        "flashDeleted": "Your account was deleted."
+      },
+      "mfa": {
+        "title": "Two-step verification",
+        "descriptionCode": "Enter the 6-digit code from your authenticator app.",
+        "descriptionRecovery": "Enter one of your single-use recovery codes.",
+        "codeLabel": "Authenticator code",
+        "recoveryLabel": "Recovery code",
+        "recoveryHint": "Each recovery code works once.",
+        "invalidCode": "Enter the 6-digit code.",
+        "invalidRecovery": "Enter a recovery code (8 to 32 characters).",
+        "verify": "Verify",
+        "verifying": "Verifying",
+        "useRecovery": "Use a recovery code instead",
+        "useApp": "Use the authenticator code instead",
+        "back": "Back to sign in",
+        "expiresIn": "Verification expires in {time}"
+      },
+      "signup": {
+        "steps": {
+          "label": "Sign-up progress",
+          "position": "Step {current} of {total}",
+          "account": "Account",
+          "workspace": "Workspace",
+          "plan": "Plan"
+        },
+        "fullName": "Full name",
+        "fullNamePlaceholder": "Your name",
+        "email": "Work email",
+        "orgName": "Workspace name",
+        "orgNamePlaceholder": "Acme Inc.",
+        "orgNameHint": "Your team signs in with the address {slug}.",
+        "orgNameHintEmpty": "This is the name your team sees.",
+        "customiseSlug": "Choose a custom workspace address",
+        "orgSlug": "Workspace address",
+        "orgSlugHint": "Letters, numbers, dash or underscore. Your team enters this when signing in.",
+        "orgSlugPlaceholder": "your-workspace",
+        "phone": "Mobile number",
+        "phoneHint": "We use it to verify your account and for important updates.",
+        "phonePlaceholder": "Number without country code",
+        "country": "Country",
+        "referral": "Referral code",
+        "optional": "optional",
+        "referralPlaceholder": "Got a friend's code?",
+        "password": "Password",
+        "passwordHint": "At least 8 characters.",
+        "confirmPassword": "Confirm password",
+        "submit": "Continue",
+        "submitting": "Creating your account",
+        "haveAccount": "Already have an account?",
+        "signIn": "Sign in",
+        "closedBody": "Registration is closed. Ask an administrator for an invitation.",
+        "closedBack": "Back to sign in",
+        "restart": "Please start registration again."
+      },
+      "otp": {
+        "sentTo": "We sent a code to",
+        "code": "Verification code",
+        "expiresIn": "The code expires in {time}.",
+        "expired": "This code has expired. Request a new one.",
+        "verify": "Verify and continue",
+        "verifying": "Verifying",
+        "resend": "Resend code",
+        "resendIn": "Resend code in {time}",
+        "resending": "Sending",
+        "resent": "A new code is on its way to your WhatsApp.",
+        "wrongNumber": "Wrong number?",
+        "goBack": "Go back"
+      },
+      "forgot": {
+        "submit": "Email reset link",
+        "submitting": "Sending",
+        "remembered": "Remembered it?",
+        "back": "Back to sign in",
+        "doneTitle": "Check your inbox",
+        "doneBody": "If that email belongs to an account in that workspace, a reset link is on its way. It works once and expires soon.",
+        "doneHint": "Nothing yet? Check your spam folder, or try again in a minute.",
+        "tryAnother": "Use a different email"
+      },
+      "reset": {
+        "password": "New password",
+        "passwordHint": "At least 8 characters. Your workspace may ask for more.",
+        "confirmPassword": "Confirm new password",
+        "submit": "Save new password",
+        "submitting": "Saving",
+        "back": "Back to sign in",
+        "invalidTitle": "This link no longer works",
+        "invalidBody": "Reset links work once and expire after a short time. Ask for a new one to continue.",
+        "requestNew": "Request a new link"
+      },
+      "verifyEmail": {
+        "working": "Confirming your email",
+        "doneTitle": "Email confirmed",
+        "doneBody": "Thanks, your address is verified. Sign in to continue.",
+        "failedTitle": "We could not confirm your email",
+        "failedHint": "Sign in and ask for a new verification email from the banner at the top of the app.",
+        "signIn": "Go to sign in"
+      },
+      "confirmEmailChange": {
+        "working": "Confirming your new email",
+        "doneTitle": "Email address updated",
+        "doneBody": "Use your new address the next time you sign in.",
+        "failedTitle": "We could not confirm the change",
+        "failedHint": "Sign in and start the email change again from your account page.",
+        "signIn": "Go to sign in"
+      },
+      "findWorkspace": {
+        "submit": "Email me my workspaces",
+        "submitting": "Sending",
+        "back": "Back to sign in",
+        "doneTitle": "Check your inbox",
+        "doneBody": "If that address belongs to a verified account, we have emailed the workspace addresses you can sign in to.",
+        "doneHint": "Nothing yet? Check your spam folder, or try a different email.",
+        "tryAnother": "Use a different email"
+      },
+      "callback": {
+        "working": "Finishing your sign-in",
+        "failedTitle": "Sign-in did not finish",
+        "cancelled": "Sign-in was cancelled.",
+        "backToSignIn": "Back to sign in",
+        "createAccount": "Create an account instead"
+      }
+    }
+  }
+}

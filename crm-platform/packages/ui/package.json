@@ -19,5 +19,8 @@
   "devDependencies": {
     "@types/react": "^19.0.0",
     "react": "^19.0.0"
+  },
+  "dependencies": {
+    "tailwind-merge": "^3.7.0"
   }
 }

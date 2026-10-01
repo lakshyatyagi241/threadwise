@@ -10,13 +10,17 @@ import { NAV_GROUPS, type ResolvedNavItem } from '@/features/_registry/types';
 import { setLocale, setTheme } from './actions';
 
 interface Props {
-  user: { fullName: string; email: string };
+  user: { fullName: string; email: string; avatarUrl?: string | null };
   nav: ResolvedNavItem[];
   theme: 'light' | 'dark';
+  /** Workspace switcher and similar header content owned by a domain. */
+  headerStart?: ReactNode;
+  /** Persistent notices above the page (email verification, trial). */
+  banners?: ReactNode;
   children: ReactNode;
 }
 
-export function AppShell({ user, nav, theme, children }: Props) {
+export function AppShell({ user, nav, theme, headerStart, banners, children }: Props) {
   const t = useTranslations();
   const locale = useLocale();
   const pathname = usePathname();
@@ -86,6 +90,7 @@ export function AppShell({ user, nav, theme, children }: Props) {
           >
             ☰
           </Button>
+          <div className="min-w-0">{headerStart}</div>
           <div className="ms-auto flex items-center gap-2">
             <select
               aria-label={t('shell.language')}
@@ -112,14 +117,26 @@ export function AppShell({ user, nav, theme, children }: Props) {
             >
               {current === 'dark' ? t('shell.themeLight') : t('shell.themeDark')}
             </Button>
-            <span className="hidden text-sm text-muted-foreground sm:inline" title={user.email}>
-              {user.fullName}
-            </span>
+            <Link
+              href="/account"
+              className="flex items-center gap-2 rounded-md px-1 text-sm hover:bg-muted"
+              title={user.email}
+            >
+              {user.avatarUrl ? (
+                <img src={user.avatarUrl} alt="" className="size-7 rounded-full object-cover" />
+              ) : (
+                <span className="flex size-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                  {user.fullName.slice(0, 1).toUpperCase()}
+                </span>
+              )}
+              <span className="hidden text-muted-foreground sm:inline">{user.fullName}</span>
+            </Link>
             <Button variant="ghost" size="sm" onClick={() => void logout()}>
               {t('shell.logout')}
             </Button>
           </div>
         </header>
+        {banners}
         <main className="flex-1 p-4 md:p-6">{children}</main>
       </div>
     </div>

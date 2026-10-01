@@ -1,0 +1,475 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "Account"
+      },
+      "common": {
+        "cancel": "Cancel",
+        "loading": "Loading",
+        "reset": "Reset",
+        "retry": "Try again",
+        "save": "Save changes",
+        "saving": "Saving",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "signOut": "Sign out"
+      },
+      "errors": {
+        "unexpected": "Something went wrong on our side. Please try again.",
+        "network": "We could not reach the server. Check your connection and try again.",
+        "forbidden": "You do not have permission to do that.",
+        "signedOut": "Your session has ended. Please sign in again.",
+        "rateLimited": "Too many attempts. Please wait a moment and try again.",
+        "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
+        "requestId": "Request id"
+      },
+      "hub": {
+        "railLabel": "Account",
+        "menuLabel": "Account sections",
+        "groups": {
+          "account": "Account",
+          "security": "Security"
+        },
+        "tabs": {
+          "profile": "Profile",
+          "branding": "Branding",
+          "security": "Password & security",
+          "delete": "Delete account"
+        },
+        "pages": {
+          "profile": {
+            "title": "Profile",
+            "description": "Update your photo, name and contact details."
+          },
+          "branding": {
+            "title": "Branding",
+            "description": "The line that ends the messages your workspace sends."
+          },
+          "security": {
+            "title": "Password & security",
+            "description": "Change your password, turn on two-factor authentication and review where you are signed in."
+          },
+          "delete": {
+            "title": "Delete account",
+            "description": "Permanently remove your account from this workspace."
+          }
+        }
+      },
+      "avatar": {
+        "alt": "Photo of {name}",
+        "change": "Change photo",
+        "remove": "Remove photo",
+        "uploading": "Uploading photo",
+        "removing": "Removing photo",
+        "updated": "Photo updated.",
+        "removed": "Photo removed.",
+        "errors": {
+          "type": "Choose a JPG, PNG, WebP or GIF image.",
+          "too-large": "That image is too large. Choose one under 20 MB.",
+          "decode": "We could not read that image. Try another file.",
+          "encode": "We could not prepare that image. Try another file.",
+          "rejected": "That file was not accepted. Use a JPG, PNG, WebP or GIF image."
+        }
+      },
+      "timezone": {
+        "label": "Timezone",
+        "placeholder": "Search timezones, for example Kolkata or UTC+05:30",
+        "empty": "No timezone matches your search."
+      },
+      "phone": {
+        "country": "Country",
+        "countryPlaceholder": "Search countries",
+        "countryEmpty": "No country matches your search.",
+        "number": "Phone number",
+        "numberPlaceholder": "Phone number"
+      },
+      "profile": {
+        "personalInfo": "Personal info",
+        "fullName": "Full name",
+        "displayName": "Display name",
+        "displayNameHint": "How your name appears to teammates. Leave blank to use your full name.",
+        "email": "Email",
+        "changeEmail": "Change email",
+        "verified": "Verified",
+        "unverified": "Not verified",
+        "pendingEmail": "We sent a confirmation link to {email}. Your sign-in email changes after you open it.",
+        "phone": "Phone",
+        "phoneHint": "Optional. Choose a country, then enter the number.",
+        "language": "Language",
+        "languageHint": "The language of the app for you.",
+        "languageDefault": "Use the default",
+        "theme": "Theme",
+        "themes": {
+          "paper": "Paper",
+          "bright": "Bright",
+          "dark": "Dark"
+        },
+        "workspaceTimezone": "Workspace timezone",
+        "workspaceTimezoneHint": "Applies to the whole workspace. Only owners and administrators can change it.",
+        "saved": "Profile saved.",
+        "errors": {
+          "fullNameRequired": "Enter your full name.",
+          "phoneInvalid": "Enter a valid phone number for the chosen country.",
+          "invalid": "This value is not valid.",
+          "timezoneInvalid": "Choose a timezone from the list.",
+          "timezoneForbidden": "Only owners and administrators can change the workspace timezone."
+        }
+      },
+      "emailChange": {
+        "title": "Change your email",
+        "intro": "Enter the new address and your current password. We will send a confirmation link to the new address; your sign-in email changes only after you open it.",
+        "newEmail": "New email address",
+        "password": "Current password",
+        "passwordHint": "The new address becomes your sign-in id, so we ask for your password.",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "cancel": "Cancel",
+        "submit": "Send confirmation link",
+        "sending": "Sending",
+        "errors": {
+          "invalidEmail": "Enter a valid email address.",
+          "same": "That is already your email address.",
+          "taken": "That email address is already used in this workspace.",
+          "passwordRequired": "Enter your current password.",
+          "passwordWrong": "That password is not correct."
+        }
+      },
+      "branding": {
+        "title": "Message footer",
+        "description": "The line added at the bottom of plain text and interactive messages sent from automations, scheduled sends and team inbox replies. Approved templates carry their own text and skip it.",
+        "label": "Custom footer ({max} characters at most)",
+        "hint": "Leave blank to send messages with no footer.",
+        "preview": "Preview",
+        "sampleMessage": "Hello! Here is the information you asked for.",
+        "noFooter": "(no footer)",
+        "usingDefault": "Your workspace uses the platform default footer: \"{footer}\". Save a footer of your own to replace it.",
+        "save": "Save footer",
+        "saving": "Saving",
+        "clear": "Clear",
+        "reset": "Reset to platform default",
+        "saved": "Footer updated. It applies from the next message you send.",
+        "resetDone": "Footer reset to the platform default. It applies from the next message you send.",
+        "tooLong": "The footer can be at most {max} characters.",
+        "forbidden": "You are not allowed to change the footer.",
+        "current": "Current footer",
+        "currentDefault": "Current footer (platform default)",
+        "planLocked": "Your plan does not include a custom footer, so messages carry the platform default. Changing it needs a plan that removes platform branding.",
+        "permissionLocked": "Only workspace administrators can change the footer. You can see it here, but not edit it.",
+        "upgrade": "See plans"
+      },
+      "password": {
+        "title": "Change password",
+        "subtitle": "Choose a strong password you do not use anywhere else.",
+        "current": "Current password",
+        "new": "New password",
+        "newHint": "At least 8 characters. Your administrator may require more, such as mixed case, a number or a symbol.",
+        "confirm": "Confirm new password",
+        "submit": "Update password",
+        "updating": "Updating",
+        "forcedBanner": "You need to set a new password before you can continue. Choose one below.",
+        "forcedDone": "Password updated. Welcome back.",
+        "success": "Password updated. {count, plural, =0 {You stay signed in on this device.} one {1 other device was signed out.} other {# other devices were signed out.}}",
+        "errors": {
+          "currentRequired": "Enter your current password.",
+          "currentWrong": "That password is not correct.",
+          "tooShort": "Use at least 8 characters.",
+          "tooLong": "Use at most 256 characters.",
+          "sameAsCurrent": "Choose a password different from your current one.",
+          "mismatch": "The two passwords do not match.",
+          "policy": "That password does not meet your workspace's rules:"
+        },
+        "rules": {
+          "min_length": "Use at least {count} characters.",
+          "upper_lower": "Mix upper and lower case letters.",
+          "number": "Include at least one number.",
+          "symbol": "Include at least one symbol.",
+          "common": "That password is too easy to guess."
+        }
+      },
+      "passwordConfirm": {
+        "password": "Current password",
+        "required": "Enter your current password.",
+        "wrong": "That password is not correct.",
+        "show": "Show password",
+        "hide": "Hide password",
+        "cancel": "Cancel",
+        "working": "Working"
+      },
+      "mfa": {
+        "title": "Two-factor authentication",
+        "subtitle": "Ask for a code from an authenticator app every time you sign in.",
+        "forcedBanner": "Your organization requires two-factor authentication. Set it up to keep using the app.",
+        "forcedDone": "Two-factor authentication is on. Welcome back.",
+        "offDescription": "Two-factor authentication is off. Turn it on to protect your account even if your password leaks.",
+        "setUp": "Set up authenticator app",
+        "starting": "Starting",
+        "step1": "Open an authenticator app on your phone (Google Authenticator, Microsoft Authenticator, 1Password and similar).",
+        "step2": "Scan the QR code, or type the setup key by hand.",
+        "step3": "Enter the six-digit code the app shows to finish.",
+        "qrLabel": "QR code for your authenticator app",
+        "manualKey": "Setup key",
+        "manualKeyHint": "Use this if you cannot scan the code. Keep it private.",
+        "copy": "Copy",
+        "copied": "Copied",
+        "codeLabel": "Six-digit code",
+        "codeHint": "The code changes every 30 seconds.",
+        "codeInvalid": "Enter the six digits from your app.",
+        "codeWrong": "That code is not right or has expired. Wait for a new one and try again.",
+        "enable": "Turn on",
+        "enabling": "Turning on",
+        "cancel": "Cancel",
+        "expired": "This setup expired. Start again to get a new code.",
+        "restart": "Start again",
+        "on": "On",
+        "since": "Since {date}",
+        "onDescription": "You will be asked for a code from your authenticator app each time you sign in.",
+        "remaining": "{count, plural, =0 {You have no recovery codes left.} one {1 recovery code left.} other {# recovery codes left.}}",
+        "remainingLow": "Generate new ones soon.",
+        "regenerate": "Replace recovery codes",
+        "regenerateTitle": "Replace recovery codes",
+        "regenerateDescription": "This creates ten new codes and makes the old ones stop working. Enter your password to continue.",
+        "regenerateConfirm": "Replace codes",
+        "disable": "Turn off",
+        "disableTitle": "Turn off two-factor authentication",
+        "disableDescription": "Your account will be protected by your password alone. Enter your password to confirm.",
+        "disableConfirm": "Turn off",
+        "disabledDone": "Two-factor authentication is off.",
+        "codesTitleEnabled": "Two-factor authentication is on. Save your recovery codes.",
+        "codesTitleRegenerated": "Your new recovery codes"
+      },
+      "recovery": {
+        "intro": "If you lose your phone, each of these codes lets you sign in once.",
+        "onlyOnce": "These codes are shown only once. Store them somewhere safe, such as a password manager.",
+        "listLabel": "Recovery codes",
+        "copy": "Copy codes",
+        "copied": "Copied",
+        "copyFailed": "Your browser did not allow copying. Select the codes and copy them by hand, or download them.",
+        "download": "Download",
+        "fileHeader": "Recovery codes. Each works once.",
+        "confirmSaved": "I have saved these codes in a safe place.",
+        "done": "I saved them"
+      },
+      "sessions": {
+        "title": "Where you are signed in",
+        "subtitle": "Devices that are signed in to your account. Sign out any you do not recognize.",
+        "thisDevice": "This device",
+        "remembered": "Stays signed in",
+        "ipUnknown": "Address unknown",
+        "lastActive": "Last active {when}",
+        "signOut": "Sign out",
+        "signOutOthers": "Sign out of all other devices",
+        "signingOut": "Signing out",
+        "empty": "No active sessions.",
+        "confirmOneTitle": "Sign out this device?",
+        "confirmOneBody": "{device} will be signed out and will need your password to sign in again.",
+        "confirmOthersTitle": "Sign out of all other devices?",
+        "confirmOthersBody": "{count, plural, one {1 other device} other {# other devices}} will be signed out. This device stays signed in.",
+        "revoked": "{device} was signed out.",
+        "revokedOthers": "{count, plural, =0 {No other devices were signed in.} one {1 device was signed out.} other {# devices were signed out.}}"
+      },
+      "delete": {
+        "title": "Delete your account",
+        "warning": "This permanently deletes your account: your sign-in, profile, photo and devices.",
+        "irreversible": "This cannot be undone.",
+        "consequencesTitle": "What happens",
+        "consequence1": "You are signed out everywhere and cannot sign in with this account again.",
+        "consequence2": "The workspace and its other members stay. Work you did remains with the workspace.",
+        "consequence3": "A record that the account was deleted is kept for audit.",
+        "blocked": {
+          "sole_member": {
+            "title": "You are the only member of this workspace.",
+            "body": "The account cannot be deleted on its own. Ask the platform team to close the workspace."
+          },
+          "sole_admin": {
+            "title": "You are the only administrator.",
+            "body": "Make another member an administrator first, then come back to delete your account."
+          }
+        },
+        "phraseLabel": "Type {phrase} to confirm",
+        "phraseHint": "Exactly as shown, including capital letters.",
+        "password": "Current password",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "cancel": "Cancel",
+        "submit": "Permanently delete account",
+        "deleting": "Deleting",
+        "errors": {
+          "phrase": "Type the phrase exactly as shown.",
+          "passwordRequired": "Enter your current password.",
+          "passwordWrong": "That password is not correct."
+        }
+      },
+      "switcher": {
+        "heading": "Workspaces",
+        "label": "Workspace: {name}. Switch workspace",
+        "switching": "Switching workspace",
+        "switched": "Switched to {name}",
+        "failed": "We could not switch workspaces. Please try again.",
+        "notAvailable": "You cannot switch to that workspace.",
+        "rateLimited": "Too many attempts. Please wait a moment and try again.",
+        "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}."
+      },
+      "mfaChallenge": {
+        "title": "Confirm it is you",
+        "intro": "{name} uses two-factor authentication. Enter the code from your authenticator app to switch.",
+        "codeLabel": "Six-digit code",
+        "codeHint": "The code changes every 30 seconds.",
+        "codeInvalid": "Enter the six digits from your app.",
+        "codeWrong": "That code is not right or has expired. Try the next one.",
+        "recoveryLabel": "Recovery code",
+        "recoveryHint": "Each recovery code works once.",
+        "recoveryInvalid": "Enter a recovery code.",
+        "recoveryWrong": "That recovery code is not valid.",
+        "expired": "This sign-in step expired. Close this window and choose the workspace again.",
+        "useRecovery": "Use a recovery code instead",
+        "useCode": "Use an authenticator code instead",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "verifying": "Verifying"
+      },
+      "banners": {
+        "dismiss": "Dismiss",
+        "verifyMessage": "Please verify your email address ({email}). We sent you a link when you signed up.",
+        "resend": "Resend email",
+        "resendIn": "Resend in {seconds}s",
+        "resendWait": "You can ask for another email shortly.",
+        "sending": "Sending",
+        "sent": "Email sent.",
+        "notSent": "We could not send the email just now.",
+        "throttled": "Please wait before asking again.",
+        "alreadyVerified": "Your email is already verified."
+      },
+      "suspended": {
+        "title": "Your account is suspended",
+        "greeting": "Hi {name}, an administrator has suspended this account. You can still sign in, but the rest of the app is locked until it is reactivated.",
+        "support": "If you think this is a mistake, ask your workspace owner or administrator to reactivate your account.",
+        "signOut": "Sign out",
+        "checking": "Checking"
+      },
+      "verifyRequired": {
+        "title": "Please verify your email",
+        "body": "We sent a verification link to the address below. Open it to unlock your workspace.",
+        "resend": "Resend verification email",
+        "resendIn": "Resend in {seconds}s",
+        "sending": "Sending",
+        "sent": "We sent a new link to {email}.",
+        "notSent": "We could not send the email just now. Please try again in a minute.",
+        "throttled": "A link was sent a moment ago. Please wait before asking again.",
+        "alreadyVerified": "Your email is already verified. Taking you in.",
+        "signOut": "Sign out",
+        "help": "Did not get it? Check your spam folder. If you opened the link on another device, come back to this tab and we will pick it up."
+      },
+      "onboarding": {
+        "metaTitle": "Set up your workspace",
+        "notAllowed": {
+          "title": "Setup is not finished",
+          "body": "Your workspace is still being set up. An administrator needs to finish it before you can continue."
+        },
+        "stepper": {
+          "label": "Step {current} of {total} / {name}",
+          "progress": "Setup progress",
+          "account": "Account",
+          "workspace": "Workspace",
+          "plan": "Plan"
+        },
+        "workspace": {
+          "title": "Set up your workspace",
+          "subtitle": "A few details so the app fits your team.",
+          "name": "Workspace name",
+          "nameHint": "A friendly label your team sees at the top of the app.",
+          "namePlaceholder": "For example Bloomly Marketing",
+          "industry": "Industry",
+          "industryPlaceholder": "Select an industry",
+          "industries": {
+            "ecommerce": "Ecommerce",
+            "saas": "SaaS",
+            "agency": "Agency",
+            "education": "Education",
+            "healthcare": "Healthcare",
+            "finance": "Finance",
+            "travel": "Travel",
+            "hospitality": "Hospitality",
+            "other": "Other"
+          },
+          "size": "Team size",
+          "sizePlaceholder": "Select a team size",
+          "timezone": "Timezone",
+          "timezoneHint": "Type to search any timezone. Schedules and reports use it.",
+          "currency": "Currency",
+          "currencyHint": "Optional. Used for prices and reports.",
+          "currencyNone": "Not set",
+          "currencyPlaceholder": "Search currencies",
+          "currencyEmpty": "No currency matches your search.",
+          "phone": "Mobile number",
+          "phoneHint": "We use it to reach you about your account and important updates.",
+          "continue": "Continue",
+          "saving": "Saving",
+          "errors": {
+            "nameInvalid": "Enter a workspace name of 2 to 120 characters.",
+            "timezoneRequired": "Choose a timezone.",
+            "timezoneInvalid": "Choose a timezone from the list.",
+            "phoneRequired": "Enter your mobile number.",
+            "phoneInvalid": "Enter a valid phone number for the chosen country.",
+            "invalid": "This value is not valid.",
+            "forbidden": "Only a workspace administrator can set up the workspace."
+          }
+        },
+        "plan": {
+          "title": "Pick a plan",
+          "intro": "Each plan includes a monthly message allowance. Start free, or pick a plan to unlock more. You can change this later.",
+          "empty": "No plans are set up yet. You can start free now and choose a plan later.",
+          "listLabel": "Available plans",
+          "free": "Free",
+          "back": "Back",
+          "startFree": "Start free / skip for now",
+          "finishing": "Finishing",
+          "welcome": "You are all set. Welcome!"
+        }
+      },
+      "plans": {
+        "title": "Plans",
+        "description": "Choose how much your workspace can do.",
+        "currentPlan": "Your plan",
+        "noPlan": "No plan",
+        "trialEnds": "Free trial ends {date}",
+        "comingSoon": "Choosing and paying for a plan arrives with billing, which is not part of this release yet. Until then, contact support and we will move your workspace to the plan you need.",
+        "contactSupport": "Contact support",
+        "back": "Back to the account",
+        "card": {
+          "popular": "Most popular",
+          "current": "Current plan",
+          "free": "Free",
+          "custom": "Custom",
+          "lifetime": "one-time",
+          "messagesUnlimited": "Unlimited messages",
+          "messagesLimited": "{count, number} messages / month",
+          "chipsLabel": "Included features",
+          "period": {
+            "days": "{count, plural, one {/ day} other {/ # days}}",
+            "weeks": "{count, plural, one {/ week} other {/ # weeks}}",
+            "months": "{count, plural, one {/ month} other {/ # months}}",
+            "years": "{count, plural, one {/ year} other {/ # years}}"
+          },
+          "chips": {
+            "analytics": "Analytics",
+            "automation": "Automation",
+            "ai_assistants": "AI assistants",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "WhatsApp calling",
+            "remove_branding": "White-label"
+          },
+          "cta": {
+            "continueFree": "Continue free",
+            "talkToSales": "Talk to sales",
+            "upgrade": "Upgrade to {name}",
+            "downgradeUnavailable": "Downgrade unavailable",
+            "downgradeHint": "Downgrades are not available online. Contact support to move to a lower plan.",
+            "working": "Working"
+          }
+        }
+      }
+    }
+  }
+}
