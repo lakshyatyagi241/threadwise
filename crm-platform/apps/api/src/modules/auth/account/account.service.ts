@@ -460,7 +460,7 @@ export class AccountService {
       );
     }
 
-    // ADR-0009: hard delete, and the audit row is the record. It is written in
+    // Hard delete, and the audit row is the record. It is written in
     // the same transaction, before the row disappears.
     await this.db.txAs({ orgId, userId }, async (tx) => {
       await this.audit.record(tx, {

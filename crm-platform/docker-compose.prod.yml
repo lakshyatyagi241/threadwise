@@ -1,4 +1,4 @@
-# Single-VM production topology (ADR-0011).
+# Single-VM production topology.
 #
 #   caddy -> api (HTTP + WebSocket)
 #            worker (no inbound traffic)

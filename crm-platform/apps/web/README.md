@@ -1,7 +1,7 @@
 # apps/web: staff CRM (Next.js App Router)
 
 `@crm/web`. Next.js 16, React 19, Tailwind CSS 4, next-intl, TanStack Query. Shared tokens and primitives live in `packages/ui`
-(`@crm/ui`). Decisions and reasons: [ADR-0018](../../docs/adr/0018-web-app-stack-and-session.md).
+(`@crm/ui`).
 
 ## Run it
 

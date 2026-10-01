@@ -45,6 +45,5 @@ month must still reconcile next year.
 ## Compliance
 
 Exam fees mean we hold money belonging to an institute before settling it.
-That carries an **RBI PA/PG compliance track** — see
-[ADR-0012](../../../../../docs/adr/0012-payments-and-settlements.md). The schema
+That carries an **RBI PA/PG compliance track**. The schema
 is ready; do not switch on real settlements until that is signed off.

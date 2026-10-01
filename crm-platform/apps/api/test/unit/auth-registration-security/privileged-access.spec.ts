@@ -12,9 +12,9 @@ function files(dir: string): string[] {
 }
 
 /**
- * ADR-0019: `.privileged(` is reachable from request handlers in exactly two
+ * `.privileged(` is reachable from request handlers in exactly two
  * places. A third caller would widen the cross-tenant surface without anyone
- * deciding to, so this fails the build until the ADR is amended.
+ * deciding to, so this fails the build until the allow-list here is changed on purpose.
  */
 describe('privileged database access in the auth module', () => {
   it('is confined to the platform store, the tenant directory and the worker-only maintenance job', () => {

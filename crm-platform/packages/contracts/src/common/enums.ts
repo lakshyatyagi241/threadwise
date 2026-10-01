@@ -57,7 +57,7 @@ export const applicationStatusSchema = z.enum([
 /**
  * Lifecycle stage of a lead/contact in the funnel.
  *
- * This is the field the sub-agent panel polls for (see ADR-0014): the agent
+ * This is the field the sub-agent panel polls for: the agent
  * submits a lead and then wants to watch it move. Values are a business
  * concern, so orgs can extend them via `status_options` — these are the
  * platform defaults.

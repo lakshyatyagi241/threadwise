@@ -17,7 +17,7 @@ export interface TokenClaims {
   typ: Extract<ActorType, 'user' | 'partner_agent' | 'candidate' | 'platform_operator'>;
   /** External uuid, so a client never has to handle the internal id. */
   uid: string;
-  /** Session id (uuid). Present for staff users and operators (ADR-0019). */
+  /** Session id (uuid). Present for staff users and operators. */
   sid?: string;
   /** Platform token epoch at issue time; a bump invalidates every older token. */
   ep?: number;

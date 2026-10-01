@@ -79,7 +79,7 @@ export function createDbClient(options: DbClientOptions): DbClient {
  * Read-replica pair.
  *
  * `primary` takes every write and every read inside a write transaction.
- * `replica` serves partner-portal and /public/v1 reads (ADR-0013). Replication
+ * `replica` serves partner-portal and /public/v1 reads. Replication
  * lag is real: never read your own write from the replica.
  */
 export interface DbClientPair {

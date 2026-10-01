@@ -13,12 +13,12 @@ After triage, every real defect (and every `review` item you confirmed as a miss
 
 ## Statuses an agent may return
 
-| Status     | Meaning                                                                                    | You do                                                                             |
-| ---------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| `fixed`    | change made, its own re-run is clean                                                       | verify with your re-run                                                            |
-| `partial`  | some scenarios fixed, the rest named with the reason                                       | next round for the rest                                                            |
-| `disputed` | the agent believes the finding is a false positive or the right behaviour; gives evidence  | re-triage: fix the spec (spec-issue), record `intended` with a reason, or overrule |
-| `blocked`  | needs a kernel change, another owner's zone, an ADR, a decision, or an unavailable service | report it, mark the tracker row `blocked` with the id/owner it waits for           |
+| Status     | Meaning                                                                                   | You do                                                                             |
+| ---------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `fixed`    | change made, its own re-run is clean                                                      | verify with your re-run                                                            |
+| `partial`  | some scenarios fixed, the rest named with the reason                                      | next round for the rest                                                            |
+| `disputed` | the agent believes the finding is a false positive or the right behaviour; gives evidence | re-triage: fix the spec (spec-issue), record `intended` with a reason, or overrule |
+| `blocked`  | needs a kernel change, another owner's zone, a decision, or an unavailable service        | report it, mark the tracker row `blocked` with the id/owner it waits for           |
 
 ## The brief (fill the placeholders)
 
@@ -27,7 +27,7 @@ You are fixing parity defects between WaDesk (the reference product we are porti
 
 Rules that override everything else
 - WaDesk is behaviour reference only. Never copy its code, markup, CSS, images, copy text or migrations into this repo. Read the inventory entry and the evidence below, then build our own version in this repo's patterns. Evidence screenshots and snapshots are for understanding behaviour; do not paste their text into code, messages, tests or docs.
-- Follow this repo's rules (CLAUDE.md, CONTRIBUTING.md, the ADRs) and use the repo's skills for each kind of change instead of writing from memory: add-migration, contracts-change, new-module, rbac-permission, outbox-event, worker-job, provider-adapter, webhook-handler, wadesk-frontend-port, frontend-api-call.
+- Follow this repo's rules (CLAUDE.md, CONTRIBUTING.md) and use the repo's skills for each kind of change instead of writing from memory: add-migration, contracts-change, new-module, rbac-permission, outbox-event, worker-job, provider-adapter, webhook-handler, wadesk-frontend-port, frontend-api-call.
 - Stay inside the zones of domain <domain> (<list of zone globs from docs/wadesk-port/ownership.json or detect_scope.py>). A fix that needs the shared kernel, another domain's files, a new dependency or an architectural decision is not yours to make: stop, return status `blocked`, say exactly what and who.
 - Do NOT edit the twin spec, the harness, the inventory or the `intended` list to make a finding disappear. If you believe a finding is wrong, return `disputed` with evidence.
 - Do not commit or push. Do not touch WaDesk (read-only). Never delete or change data that this run did not create (test data carries the prefix <tag base>).
@@ -50,7 +50,7 @@ status: fixed | partial | disputed | blocked
 files changed: <paths>
 scenarios now passing: <ids>
 still failing / not addressed: <ids and why>
-needs from others: <kernel change / owner / ADR / decision, or none>
+needs from others: <kernel change / owner / decision, or none>
 notes: <one short paragraph, behaviour terms only>
 ```
 

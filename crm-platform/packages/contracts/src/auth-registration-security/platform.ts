@@ -9,7 +9,7 @@ import {
 } from './otp-senders';
 import { authPageContentSchema } from './signup';
 
-/** Platform-operator layer (ADR-0019): `/v2/platform/*`. */
+/** Platform-operator layer: `/v2/platform/*`. */
 
 export const operatorRoleSchema = z.enum(['super_admin', 'support', 'auditor']);
 export type OperatorRole = z.infer<typeof operatorRoleSchema>;

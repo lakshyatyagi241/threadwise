@@ -22,7 +22,7 @@ interface PartnerLeadRow {
 /**
  * Sub-agent portal.
  *
- * The design decision that shapes this whole file (ADR-0014): the partner side
+ * The design decision that shapes this whole file: the partner side
  * stores only the agent -> contact mapping. Name, stage and everything else are
  * read LIVE from the CRM on every view.
  *

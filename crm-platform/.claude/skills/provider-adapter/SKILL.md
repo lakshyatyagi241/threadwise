@@ -103,8 +103,6 @@ sign the logic belongs in a service that _calls_ the adapter, not inside it.
 
 Adding a provider for a **new channel type** is usually an architectural
 decision (new billing unit types, new consent semantics, new compliance
-surface) — invoke the `adr-diff-guard` skill to check whether it contradicts
-or extends an existing ADR, and the `write-adr` skill if it warrants its own
-record.
+surface) — say so in the PR description.
 
 Then invoke the `pre-pr` skill.

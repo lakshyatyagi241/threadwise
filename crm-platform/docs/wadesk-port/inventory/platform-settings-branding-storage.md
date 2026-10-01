@@ -1348,7 +1348,7 @@ can claim them, and the complete `system_settings` key catalogue (all 313 keys f
   - Given an R2 endpoint pasted with the bucket suffix, then generated URLs contain the bucket once.
   - Given the cloud disk fails to register, then `media_disk()` returns `public` and the upload succeeds locally.
 - **Source refs:** app/Services/CloudStorageManager.php; app/Support/fc_helpers.php (cloud_storage, media_disk, media_storage, media_url); app/Providers/AppServiceProvider.php (ensurePublicStorage, configureBaseUrl); app/Http/Controllers/ChatController.php; app/Http/Controllers/TemplatesController.php; app/Http/Controllers/AutoReplyController.php; app/Http/Controllers/FlowsController.php; app/Http/Controllers/WaProductController.php; app/Http/Controllers/TeamChatController.php; app/Http/Controllers/CheckoutController.php; app/Http/Controllers/AccountController.php; app/Http/Controllers/InvoicesController.php; app/Http/Controllers/Api/ExtensionApiController.php; config/filesystems.php; Documentation/pages/admin-panel/cloud-storage.html.
-- **Port notes:** Single `MediaStorageService` (port + S3 adapter) in `apps/api` used by every module: presigned PUT for browser uploads, `objectKey = <org_id>/<domain>/<uuid>-<name>`, signed GET URLs for private objects (real implementation of what WaDesk only labels), CDN URL rewrite from settings, background orphan sweeper (ADR 0009 mentions orphan objects). Store asset rows (`assets` table with RLS) instead of bare paths. Provide a one-off migration tool for legacy local files if legacy data is imported.
+- **Port notes:** Single `MediaStorageService` (port + S3 adapter) in `apps/api` used by every module: presigned PUT for browser uploads, `objectKey = <org_id>/<domain>/<uuid>-<name>`, signed GET URLs for private objects (real implementation of what WaDesk only labels), CDN URL rewrite from settings, background orphan sweeper (the hard-delete design mentions orphan objects). Store asset rows (`assets` table with RLS) instead of bare paths. Provide a one-off migration tool for legacy local files if legacy data is imported.
 
 ### WD-SET-041 — Real-time (Pusher) settings and connection test
 
@@ -1418,7 +1418,7 @@ can claim them, and the complete `system_settings` key catalogue (all 313 keys f
   - Given real-time disabled, then the meta tags are empty and `window.__realtime.enabled` is false.
   - Given Pusher unreachable, then the triggering action still succeeds.
 - **Source refs:** app/Support/RealtimeSettings.php; app/Broadcasting/PusherHttpBroadcaster.php; app/Providers/AppServiceProvider.php; routes/channels.php; bootstrap/app.php (withBroadcasting); config/broadcasting.php; resources/js/echo.js; resources/views/components/layouts/user.blade.php; app/Events/Inbox/*.php; app/Events/DeviceStatusChanged.php; app/Events/TeamChat/MessagePosted.php.
-- **Port notes:** Already partly built: `apps/api/src/realtime/realtime.gateway.ts` (Socket.IO + Redis adapter). Tenancy rule: rooms named `org:<uuid>:inbox`, `conv:<uuid>`; authorise in the gateway handshake via the same RBAC + org membership, and publish from the outbox consumer (never inline in request handlers, ADR 0005). Broadcast payloads should be minimal signals (ids), matching WaDesk's "lightweight signal" design.
+- **Port notes:** Already partly built: `apps/api/src/realtime/realtime.gateway.ts` (Socket.IO + Redis adapter). Tenancy rule: rooms named `org:<uuid>:inbox`, `conv:<uuid>`; authorise in the gateway handshake via the same RBAC + org membership, and publish from the outbox consumer (never inline in request handlers, outbox design. Broadcast payloads should be minimal signals (ids), matching WaDesk's "lightweight signal" design.
 
 ### WD-SET-043 — Premium plans dashboard
 
@@ -1451,7 +1451,7 @@ can claim them, and the complete `system_settings` key catalogue (all 313 keys f
   - Given `?window=bogus`, then the 30-day range is used.
   - Given (target behavior) workspaces on slug `pro`, then plan mix counts them under "Pro".
 - **Source refs:** app/Http/Controllers/Admin/PremiumController.php; resources/views/admin/premium/index.blade.php; resources/js/charts/admin-premium.js; app/Models/Package.php; routes/admin.php.
-- **Port notes:** Belongs in DASH/PLAN read models; implement as SQL aggregates over plan subscriptions with the correct key, normalised to a single reporting currency, MRR normalised per billing interval. Read replica friendly (ADR 0013).
+- **Port notes:** Belongs in DASH/PLAN read models; implement as SQL aggregates over plan subscriptions with the correct key, normalised to a single reporting currency, MRR normalised per billing interval. Read replica friendly.
 
 ### WD-SET-044 — Currency display and conversion helpers
 

@@ -40,7 +40,7 @@ interface OAuthState {
 /**
  * Google / Facebook sign-in (WD-AUTH-004), authorization-code flow.
  *
- * Differences from WaDesk that matter (ADR-0019):
+ * Differences from WaDesk that matter:
  *   - the OAuth `state` is single use and bound to the provider
  *   - the web origin of the redirect URI must match WEB_APP_URL
  *   - it NEVER creates a user inside an existing organization (that would let

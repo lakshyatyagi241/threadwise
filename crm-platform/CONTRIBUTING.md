@@ -11,13 +11,13 @@ Conventional commits, enforced by commitlint on `commit-msg`:
 ```
 feat(crm): add company merge endpoint
 fix(billing): stop double-posting on gateway webhook retry
-docs(adr): record the sub-agent identity decision
+docs(db): document the sub-agent identity model
 refactor(kernel): extract scope-to-SQL translation
 ```
 
 Scopes: `api`, `web`, `partner`, `db`, `contracts`, `config`, `kernel`, `crm`,
 `inbox`, `broadcast`, `billing`, `exams`, `identity`, `partner-api`,
-`public-api`, `realtime`, `infra`, `docs`, `adr`, `ci`, `deps`.
+`public-api`, `realtime`, `infra`, `docs`, `ci`, `deps`.
 
 ## The rules that are not negotiable
 
@@ -123,12 +123,3 @@ Integration tests use testcontainers and run real migrations against real
 Postgres. Isolation, optimistic locking, constraint enforcement and trigger
 behaviour **cannot** be tested with mocks — a mock will happily confirm whatever
 you assumed.
-
-## Adding a decision record
-
-If you make a call that would be expensive to reverse, or that the next person
-would reasonably question, write an ADR. See
-[docs/README.md](docs/README.md#writing-an-adr).
-
-Be honest in **Consequences → Negative**. An ADR with no downsides has not been
-thought through, and nobody trusts it.

@@ -197,7 +197,7 @@ ok "Migrations up to date"
 # =============================================================================
 step "Seeding demo data"
 SEEDED="$(docker exec crm-postgres psql -U crm -d crm -tAc \
-  "SELECT 1 FROM organizations WHERE slug='studyfromuae'" 2>/dev/null || true)"
+  "SELECT 1 FROM organizations WHERE slug='Admin'" 2>/dev/null || true)"
 if [ "$SEEDED" = "1" ]; then
   ok "Demo data already seeded — skipping"
 else
@@ -250,7 +250,7 @@ echo "    pnpm dev:worker     # background jobs, in a second terminal"
 echo
 echo "  API docs:  http://localhost:$API_PORT/docs"
 echo
-echo "  ${c_bold}Staff login${c_reset}  admin@studyfromuae.test / Passw0rd!   (org: studyfromuae)"
-echo "  ${c_bold}Agent login${c_reset}  agent@studyfromuae.test / Passw0rd!"
+echo "  ${c_bold}Staff login${c_reset}  nachiket.challawar@geta.ai   (org: Admin; Clerk sign-in, the seed sets no password)"
+echo "  ${c_bold}Agent login${c_reset}  agent@Admin.test / Passw0rd!"
 echo
 echo "  Troubleshooting: docs/runbooks/local-development.md"

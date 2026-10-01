@@ -14,7 +14,7 @@ import { completeSignIn } from './sign-in-complete';
 import { useCountdown } from './use-countdown';
 
 /**
- * Second factor at sign-in (ADR-0019): the six-digit authenticator code, or one of the single-use
+ * Second factor at sign-in: the six-digit authenticator code, or one of the single-use
  * recovery codes. The challenge lives about five minutes; when it lapses the visitor starts over.
  */
 export function MfaStep({

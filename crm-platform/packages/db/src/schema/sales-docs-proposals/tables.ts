@@ -1,6 +1,6 @@
 /**
  * sales-docs-proposals: tables ported from WaDesk. Mirrors migrations/20261001104500_sales_wadesk_schema.sql.
- * The SQL migration is the source of truth (ADR-0004); `pnpm db:verify-schema` fails if this file and the database disagree.
+ * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {
   bigint,

@@ -94,8 +94,7 @@ await this.db.tx(async (tx) => {
 ```
 
 `emit` takes a `tx`, not a database handle, so it cannot be called outside the
-transaction it is supposed to be part of. See
-[ADR-0005](../adr/0005-transactional-outbox.md).
+transaction it is supposed to be part of.
 
 **In the outbox:** record CRUD, conversation lifecycle, campaign lifecycle,
 application status, wallet postings.

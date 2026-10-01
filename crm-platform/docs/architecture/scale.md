@@ -60,7 +60,7 @@ partitions **three months ahead**. It finds the tables itself by reading
 `pg_partitioned_table` (RANGE parents in `public`), so a new stream needs no
 code change. The worker role cannot create tables itself, so creation goes
 through `ensure_monthly_partition()`, a `SECURITY DEFINER` function that
-validates its arguments ([ADR-0021](../adr/0021-partition-definer.md)).
+validates its arguments.
 
 A missing partition is not a slow query — it is a failing INSERT, which means
 dropped audit rows and a stalled outbox. Three months of runway means the job
@@ -121,8 +121,7 @@ centre.
   instead of bloating it.
 - **Composite indexes lead with `org_id`**, so the RLS predicate is
   index-friendly rather than a filter applied after the fact.
-- **Keyset pagination** on `(created_at, id)` — see
-  [ADR-0016](../adr/0016-api-conventions.md).
+- **Keyset pagination** on `(created_at, id)`.
 - **Expression indexes on JSONB**, created `CONCURRENTLY` and governed by
   `field_indexes`.
 

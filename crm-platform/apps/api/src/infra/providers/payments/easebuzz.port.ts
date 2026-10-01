@@ -6,7 +6,7 @@
  *   2. exam fee        — candidate pays us, later settled to the institute
  *
  * Flow 2 makes us an intermediary holding third-party money. That has an RBI
- * PA/PG compliance track attached — see ADR-0012. The schema is ready; do not
+ * PA/PG compliance track attached. The schema is ready; do not
  * switch it on for real money until that is signed off.
  */
 

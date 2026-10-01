@@ -1,7 +1,7 @@
 # API Testing Guide (Postman)
 
 Every sample request/response below was captured live against a running dev
-server (`pnpm dev`, seeded org `studyfromuae`) — not hand-written. Re-run the
+server (`pnpm dev`, seeded org `Admin`) — not hand-written. Re-run the
 `curl` equivalent yourself if a response ever looks stale; IDs are real rows
 from the seed data and will differ on your machine after a fresh
 `pnpm db:seed`.
@@ -41,8 +41,8 @@ Request:
 
 ```json
 {
-  "orgSlug": "studyfromuae",
-  "email": "admin@studyfromuae.test",
+  "orgSlug": "Admin",
+  "email": "admin@example.test",
   "password": "Passw0rd!"
 }
 ```
@@ -81,8 +81,8 @@ Request:
 
 ```json
 {
-  "orgSlug": "studyfromuae",
-  "email": "agent@studyfromuae.test",
+  "orgSlug": "Admin",
+  "email": "agent@Admin.test",
   "password": "Passw0rd!"
 }
 ```
@@ -133,7 +133,7 @@ Response — `200 OK`:
 ```json
 {
   "id": "02118b2e-96db-4ec0-9d76-aea6e18ac4c4",
-  "email": "admin@studyfromuae.test",
+  "email": "admin@example.test",
   "fullName": "Demo Admin",
   "status": "active",
   "roles": [{ "id": "af710257-a613-4f6e-9668-17ca28e79679", "name": "Admin" }],
@@ -155,7 +155,7 @@ Response — `200 OK`:
   "data": [
     {
       "id": "631ad5e1-9aff-4a80-af19-2189f37b4e25",
-      "email": "agent1@studyfromuae.test",
+      "email": "agent1@example.test",
       "fullName": "Agent One",
       "status": "active",
       "roles": [{ "id": "6f6c8bf2-3b15-47a8-9182-423cc9c06286", "name": "Support Agent" }],
@@ -199,7 +199,7 @@ Request:
 
 ```json
 {
-  "email": "neha.verma@studyfromuae.test",
+  "email": "neha.verma@example.test",
   "fullName": "Neha Verma",
   "password": "Passw0rd!",
   "roleIds": []
@@ -211,7 +211,7 @@ Response — `201 Created`:
 ```json
 {
   "id": "c8eec1d8-34f2-4e6e-8565-85729ec2bb09",
-  "email": "neha.verma@studyfromuae.test",
+  "email": "neha.verma@example.test",
   "fullName": "Neha Verma",
   "status": "active",
   "roles": [],
@@ -554,14 +554,14 @@ section above).
 - **Permission**: `record.contacts.delete`
 - **Postman**: `DELETE {{baseUrl}}/v2/contacts/<id>`
 
-Response — `204 No Content`, empty body. Hard delete (per ADR-0009) — the
+Response — `204 No Content`, empty body. Hard delete — the
 audit log is the only trail left, not a soft-delete flag.
 
 ---
 
 ## Field Metadata (Settings > Data Management — Contact Properties + Company Properties)
 
-One generic registry (Phase 8, `ADR-0017`) serves both Contact Properties and
+One generic registry (Phase 8) serves both Contact Properties and
 Company Properties — every route below takes a `moduleKey` of `contacts` or
 `companies`, and the two are permission-isolated from each other:
 `record.contact-properties.*` and `record.company-properties.*` are
@@ -1438,7 +1438,7 @@ never the full `ContactResponse`:
   {
     "id": "dba6966c-1093-4f42-ad14-ac7d3b96b9fe",
     "name": "Demo Contact 1",
-    "email": "demo1@studyfromuae.test",
+    "email": "demo1@Admin.test",
     "phone": "+919876500001"
   }
 ]
@@ -1457,7 +1457,7 @@ Response — `200 OK`: the org's full active-staff list (used to pick a valid
   {
     "id": "631ad5e1-9aff-4a80-af19-2189f37b4e25",
     "fullName": "Agent One",
-    "email": "agent1@studyfromuae.test"
+    "email": "agent1@example.test"
   }
 ]
 ```
@@ -1569,7 +1569,7 @@ Response — `200 OK`: reuses the kernel `audit_log` via
 _internal bigint_ owner id as `newValue` (e.g. `6`), not a uuid —
 `ContactsService.setAssignee`'s audit delta used the already-resolved
 internal id instead of the caller-supplied uuid. Every other field/route in
-this API resolves ids to uuid at the response edge (ADR-0016); this was the
+this API resolves ids to uuid at the response edge; this was the
 one place that leaked one. Fixed; the `ownerId` entry above is the real,
 current response. An entry with no prior value (like `ownerId` here, on a
 contact that had no previous owner change recorded in this trail) simply
@@ -1925,7 +1925,7 @@ Response — `200 OK`: single lead, same shape as the POST response above.
 
 ### GET /public/v1/leads/:id
 
-- **Auth**: `X-Api-Key` header + HMAC signature (see [ADR-0013](adr/0013-read-replica-and-public-api.md))
+- **Auth**: `X-Api-Key` header + HMAC signature
 - **Postman**: `GET {{baseUrl}}/public/v1/leads/<id>` — generating a valid
   signed request needs an issued API key + secret, which isn't part of the
   seed data. Not covered here yet; add once an API-key issuance endpoint

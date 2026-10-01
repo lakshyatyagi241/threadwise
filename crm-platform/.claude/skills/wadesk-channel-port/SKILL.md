@@ -9,7 +9,7 @@ description: >-
   channel X", "inbound webhook for Y", "send message through Z", "channel
   connect flow", "node bridge", or works on any WD feature whose source refs
   include a *Webhook controller, a Services/<Channel> directory or node/ files.
-  It orders the work and names the decisions that need an ADR before code.
+  It orders the work and names the decisions to settle before code.
 ---
 
 # Port a channel
@@ -20,7 +20,7 @@ the inbox → outbound send → delivery status → templates/broadcasts/flow no
 whose send methods throw, no `channels` table, no credential storage, no session-based provider, no queue producers,
 no outbox consumers. Do the foundation pieces first, through the kernel protocol, then the channel.
 
-## Decide before coding (each needs an ADR via `write-adr`, owner = whoever does the first channel)
+## Decide before coding (each is a team decision to settle first, owner = whoever does the first channel)
 
 1. **Channel model:** a `channels` (connected account) table per org, status/health, encrypted credentials (AES-GCM at rest,
    the pattern in `provider-adapter`), multiple connected numbers/accounts per org, sender selection.
@@ -44,7 +44,7 @@ no outbox consumers. Do the foundation pieces first, through the kernel protocol
    outbox event (`outbox-event`) → realtime.
 5. **Send path:** queue `<code>-send`, idempotent, rate limited per WaDesk's send-safety rules (see the SCHED/NODE inventories),
    consent and service-window checks (`CONSENT_OPTED_OUT`, `SERVICE_WINDOW_CLOSED`, `TEMPLATE_NOT_APPROVED` exist in contracts),
-   wallet charge in the same transaction where the channel bills (ADR-0012; `Idempotency-Key` mandatory), retries with backoff.
+   wallet charge in the same transaction where the channel bills (`Idempotency-Key` mandatory), retries with backoff.
 6. **Delivery/status webhooks** → message status updates (monotonic).
 7. Then the channel extras in the inventory: templates, broadcasts, flow nodes, insights, rich menus/bots.
 

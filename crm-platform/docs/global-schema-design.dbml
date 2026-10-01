@@ -66,7 +66,7 @@ Table users {
   email citext
   full_name text
   password_hash text
-  auth_subject text [note: "Clerk user id (ADR-0006) — null until first SSO login; partial unique (org_id, auth_subject) WHERE NOT NULL"]
+  auth_subject text [note: "Clerk user id — null until first SSO login; partial unique (org_id, auth_subject) WHERE NOT NULL"]
   status text
   settings jsonb
   row_version integer
@@ -204,7 +204,7 @@ Table contacts {
   normalized_phone text [note: "dedup match key, maintained by trigger — non-unique on purpose"]
   lifecycle_state record_lifecycle [note: "platform state, distinct from business status"]
   status text [note: "deal/pipeline status shown as 'Status' pill (e.g. Closed Won) — options via status_options option_group='deal_status'"]
-  lifecycle_stage text [note: "funnel position — the field the sub-agent portal polls live (ADR-0014)"]
+  lifecycle_stage text [note: "funnel position — the field the sub-agent portal polls live"]
   lifecycle_stage_date timestamptz [note: "NEW — when current lifecycle_stage was set"]
   previous_lifecycle_stage text [note: "NEW"]
   previous_lifecycle_stage_date timestamptz [note: "NEW"]
@@ -214,7 +214,7 @@ Table contacts {
   display_id text
   is_archived boolean
   search_vector tsvector [note: "gin-indexed; weights name/email/phone/data->>college_tag"]
-  legacy_id text [note: "id in legacy Geta system, migration reconciliation only (ADR-0015); partial unique WHERE NOT NULL"]
+  legacy_id text [note: "id in legacy Geta system, migration reconciliation only; partial unique WHERE NOT NULL"]
   lead_score integer [note: "NEW"]
   whatsapp_subscription_status text [note: "NEW — replaces whatsapp_opt_in boolean; enum via status_options option_group='whatsapp_subscription'"]
   sms_subscription_status text [note: "NEW — replaces sms_opt_in boolean; enum via status_options option_group='sms_subscription'"]

@@ -1,7 +1,6 @@
 # Billing
 
-Not built yet. The schema and the decisions are settled — see
-[ADR-0012](../adr/0012-payments-and-settlements.md).
+Not built yet. The schema and the decisions are settled.
 
 ## The whole flow in one picture
 
@@ -16,7 +15,7 @@ campaign start
 exam fee
    candidate pays via Easebuzz → payment_transactions
                                → periodic settlements to the institute
-                               ⚠ RBI PA/PG compliance gate — see ADR-0012
+                               ⚠ RBI PA/PG compliance gate
 ```
 
 ## Two-level ledger
@@ -86,7 +85,6 @@ period — is required before this is trusted, not after.
 ## Compliance gate
 
 Exam fees mean holding money that belongs to an institute. Under the RBI
-PA/PG framework that is regulated activity. The checklist is in
-[ADR-0012](../adr/0012-payments-and-settlements.md#compliance--read-before-enabling-settlements).
+PA/PG framework that is regulated activity. Before it goes live: a legal opinion on whether the flow is payment aggregation, routing through an authorised PA (or an escrow/nodal account) if it is, agreed settlement timelines, GST and TDS treatment, and a refund and chargeback flow.
 
 **Test mode only until it is closed.**

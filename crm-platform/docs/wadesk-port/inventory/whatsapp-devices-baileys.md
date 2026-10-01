@@ -182,7 +182,7 @@ Important truths a rebuilder must not miss (details in the features and in Open 
   - Given the admin saves with a blank token field, When the form posts, Then the stored token is unchanged and the URL updates.
   - Given a non-http URL, When tested, Then a 422 with the invalid-URL message is returned.
 - **Source refs:** app/Http/Controllers/AdminPagesController.php (settingsNodeBridgeUpdate, testNodeBridge), app/Support/fc_helpers.php (node_token, wd_node_url), app/Services/NodeCacheBuster.php, Documentation/pages/getting-started/channel-settings.html, Documentation/pages/getting-started/connect-channel.html.
-- **Port notes:** the port's bridge is a separate worker service (`apps/baileys-bridge` or a queue-driven worker under ADR-0010); replace the shared-secret HTTP with mutual auth (signed JWT or mTLS) and per-org bridge routing. Keep a "test connection" endpoint that verifies both reachability and credential acceptance.
+- **Port notes:** the port's bridge is a separate worker service (`apps/baileys-bridge` or a queue-driven worker under worker design; replace the shared-secret HTTP with mutual auth (signed JWT or mTLS) and per-org bridge routing. Keep a "test connection" endpoint that verifies both reachability and credential acceptance.
 
 ### WD-WADEV-004 — Unified device cap (plan `device_limit`)
 
@@ -500,7 +500,7 @@ Important truths a rebuilder must not miss (details in the features and in Open 
   - Given a device of another workspace, When DELETE, Then 404.
   - Given a delete, When counts are re-read, Then the plan-limit footer shows one fewer number.
 - **Source refs:** app/Http/Controllers/DevicesController.php (destroy), app/Models/Conversation.php (scopeDeviceAlive), resources/js/charts/user-devices-index.js (deleteDevice).
-- **Port notes:** deleting a channel account must first enqueue a bridge logout and only then remove the row (or soft-delete and reap), cascade or null the FK on conversations/campaigns, and write an audit row with the actor (ADR-0009 hard delete with audit).
+- **Port notes:** deleting a channel account must first enqueue a bridge logout and only then remove the row (or soft-delete and reap), cascade or null the FK on conversations/campaigns, and write an audit row with the actor (hard delete with audit).
 
 ### WD-WADEV-014 — Manual and background status check with grace window
 
@@ -560,7 +560,7 @@ Important truths a rebuilder must not miss (details in the features and in Open 
   - Given a webhook subscribed to `device_status_updated`, When a device row's status changes via an Eloquent save, Then a payload with `previous_status` and `status` is delivered.
   - Given a bulk update by the bridge-down reset, When rows change, Then no webhook is emitted (documented limitation).
 - **Source refs:** app/Http/Controllers/DevicesController.php (notifyDeviceState), app/Models/Device.php (booted), app/Events/DeviceStatusChanged.php, app/Observers/AuditableObserver.php, app/Providers/AppServiceProvider.php, routes/channels.php, app/Services/WebhookService.php.
-- **Port notes:** emit one `channel.status_changed` domain event through the transactional outbox (ADR-0005) from the single place that changes status, and fan out from it to notification, webhook, audit and websocket consumers; authorize the org-scoped websocket channel; notify all admins, not only the owner.
+- **Port notes:** emit one `channel.status_changed` domain event through the transactional outbox from the single place that changes status, and fan out from it to notification, webhook, audit and websocket consumers; authorize the org-scoped websocket channel; notify all admins, not only the owner.
 
 ### WD-WADEV-016 — Per-number proxy: save (plan-gated)
 
@@ -863,7 +863,7 @@ Important truths a rebuilder must not miss (details in the features and in Open 
   - Given a NULL-workspace device paired by user U, When U (not impersonating) lists devices, Then it appears; When an admin impersonates a workspace, Then the admin's own NULL-workspace devices do not.
   - Given a device stored with cc `91` and phone `7690059356`, When the bridge posts an inbound with `device_phone=917690059356`, Then the device is resolved.
 - **Source refs:** app/Models/Device.php, app/Services/WorkspaceEngine.php (ownsSender, orphanPairerUserId), app/Http/Controllers/WaInboundController.php, app/Models/Conversation.php, app/Http/Controllers/TeamInboxController.php (device_status), app/Support/security_helpers.php (mask_phone), database/migrations/2026_05_19_120000_add_workspace_id_to_legacy_tables.php.
-- **Port notes:** RLS on `channel_accounts` by `org_id` (ADR-0002); add a deterministic blind index (HMAC of normalized E.164) column for lookups and a unique index `(org_id, phone_hash)`; drop the NULL-workspace fallback by migrating legacy rows.
+- **Port notes:** RLS on `channel_accounts` by `org_id`; add a deterministic blind index (HMAC of normalized E.164) column for lookups and a unique index `(org_id, phone_hash)`; drop the NULL-workspace fallback by migrating legacy rows.
 
 ### WD-WADEV-025 — Twilio WhatsApp connect
 
@@ -1254,7 +1254,7 @@ Important truths a rebuilder must not miss (details in the features and in Open 
   - Given `?q=acme`, When loaded, Then rows whose workspace, owner or device name contain "acme" show and the KPIs are unchanged.
   - Given a non-admin user, When requesting the route, Then access is denied by the admin middleware.
 - **Source refs:** app/Http/Controllers/AdminPagesController.php (devices), resources/views/admin/devices/index.blade.php, resources/js/charts/devices-index.js.
-- **Port notes:** `apps/api/src/modules/admin/channels` behind the platform-admin pool (ADR-0007) reading through a read model that bypasses tenant RLS with an explicit admin role; paginate and search in SQL using the blind index and joined names.
+- **Port notes:** `apps/api/src/modules/admin/channels` behind the platform-admin pool reading through a read model that bypasses tenant RLS with an explicit admin role; paginate and search in SQL using the blind index and joined names.
 
 ### WD-WADEV-038 — Admin device detail and analytics
 
@@ -1432,7 +1432,7 @@ Important truths a rebuilder must not miss (details in the features and in Open 
 - **Data:** `permissions` rows `devices.view`, `devices.create`, `devices.edit`, `devices.delete`, `devices.pair`, `devices.disconnect` created by `RolePermissionSeeder`.
 - **Rules & edge cases:**
   1. Granting or revoking these keys changes nothing in v1.7.0; access is decided by `EnsureWorkspaceRole:admin` (workspace roles owner/admin) and platform-admin middleware.
-  2. Effective mapping to preserve when rebuilding: view = see `/devices` and analytics, create = add device/connect Twilio, edit = edit/proxy, delete = delete, pair = QR/pairing code, disconnect = kill-session; the port should enforce these keys for workspace members (with owner/admin default) via the RBAC middleware (ADR-0006).
+  2. Effective mapping to preserve when rebuilding: view = see `/devices` and analytics, create = add device/connect Twilio, edit = edit/proxy, delete = delete, pair = QR/pairing code, disconnect = kill-session; the port should enforce these keys for workspace members (with owner/admin default) via the RBAC middleware.
 - **Async & events:** none.
 - **External systems:** none.
 - **Settings:** none.

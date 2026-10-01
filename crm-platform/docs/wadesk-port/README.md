@@ -25,8 +25,7 @@ Written so far: `parity/auth-registration-security.md`, `docs/api/auth-registrat
 ## AUTH domain (2026-10-01): built end to end, on branch `lakshya/auth/auth-domain-core`, not committed
 
 All 49 features: 46 built backend + web (tracker `frontend-done`, with notes on the five that wait for other domains), 3 `wontfix`
-(042, 048, 049). Architecture: [ADR-0019](../adr/0019-auth-sessions-mfa-and-platform-operators.md) (status `proposed`, needs the team's
-approval; it amends ADR-0002 and ADR-0007). API reference: [docs/api/auth-registration-security.md](../api/auth-registration-security.md).
+(042, 048, 049). The auth design (server-side sessions, TOTP MFA, platform operators) still needs the team's approval. API reference: [docs/api/auth-registration-security.md](../api/auth-registration-security.md).
 Evidence, intentional differences from WaDesk and what is not verified: [parity/auth-registration-security.md](parity/auth-registration-security.md).
 
 Run it: `pnpm --filter @crm/api seed:auth` (dev users, password `Passw0rd!`), `pnpm --filter @crm/api operator:create` (platform operator),
@@ -132,7 +131,7 @@ Numbers are from the 26 finished domains only (42% of domains by count); the rem
    domain in every layer, switches migrations to `<timestamp>_<code>_<name>.sql`, adds decorator-based outbox/realtime registries, moves docs to per-domain/per-owner
    files and ends with a 3-branch merge drill. After it, each person edits only their own directories.
 6. **Existing problem in crm-platform, unrelated to this port:** Clerk staff login takes the org slug from the request body and creates a user in any org for a valid Clerk
-   identity (cross-tenant self-enrolment), it skips the deactivated-user check, and it has no ADR (ADR-0007 rejected Clerk). Worth its own ticket.
+   identity (cross-tenant self-enrolment), it skips the deactivated-user check, and it was never agreed (Clerk was rejected earlier). Worth its own ticket.
 7. Smaller target findings: new permission keys are not auto-granted to existing Admin roles (locked-role trigger), contact custom-field values are never validated,
    docs drift on seed logins and `/v1` vs `/v2`, and no HTTP-level test harness exists yet (supertest and @nestjs/testing are installed but unused).
 
@@ -144,11 +143,11 @@ Numbers are from the 26 finished domains only (42% of domains by count); the rem
 | D1  | Domain manifest: code, routeBase, owner per domain (goes in `ownership.json`)                 | Generate from this inventory; codes must be lowercase 2-12 chars and `core` is reserved (the CORE inventory domain needs another code, e.g. `infra`) |
 | D2  | Migration ordering                                                                            | Timestamp + domain code (conflict-map 2.0)                                                                                                           |
 | D3  | How worker jobs push to sockets                                                               | `@socket.io/redis-emitter`, in the kernel PR that adds the room registry                                                                             |
-| D4  | How production Admin roles get new permission keys                                            | Kernel ADR before the first permission ships to a real tenant                                                                                        |
+| D4  | How production Admin roles get new permission keys                                            | Kernel decision before the first permission ships to a real tenant                                                                                   |
 | D5  | Platform super-admin actor kind                                                               | Decide before any admin-console domain starts (kernel change)                                                                                        |
 | D6  | Which Next.js app moves into `apps/web`, Next version, i18n library                           | Needed before the web skeleton                                                                                                                       |
 | D7  | GitHub settings: CODEOWNERS enforcement, up-to-date branches, merge queue                     | Turn on                                                                                                                                              |
-| E   | Channel strategy: keep the unofficial WhatsApp (Baileys/QR) engine or Cloud API only          | WaDesk's own docs list ban risk; needs an ADR either way                                                                                             |
+| E   | Channel strategy: keep the unofficial WhatsApp (Baileys/QR) engine or Cloud API only          | WaDesk's own docs list ban risk; needs a decision either way                                                                                         |
 
 ## Next session, in order
 
