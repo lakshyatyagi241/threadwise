@@ -110,6 +110,22 @@ async function recipient(
 }
 
 describe('WD-BCAST-001: the list', () => {
+  it('includeTotal adds meta.total for the filter, not for the page; without it there is no meta', async () => {
+    const t = await api.signup('l0');
+    for (let i = 0; i < 15; i++)
+      await broadcast(t, { name: `T${i}`, status: i < 4 ? 'failed' : 'completed' });
+    const all = await get(t, '/v2/broadcasts?includeTotal=true');
+    expect(all.body.data).toHaveLength(12);
+    expect(all.body.meta).toEqual({ total: 15 });
+    expect((await get(t, '/v2/broadcasts?includeTotal=true&status=failed')).body.meta).toEqual({
+      total: 4,
+    });
+    expect((await get(t, '/v2/broadcasts?includeTotal=true&q=T1')).body.meta).toEqual({ total: 6 });
+    expect((await get(t, '/v2/broadcasts')).body.meta).toBeUndefined();
+    const other = await api.signup('l0b');
+    expect((await get(other, '/v2/broadcasts?includeTotal=true')).body.meta).toEqual({ total: 0 });
+  });
+
   it('30 broadcasts: 12 newest first, then the next pages by cursor', async () => {
     const t = await api.signup('l1');
     for (let i = 1; i <= 30; i++)

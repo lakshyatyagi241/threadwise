@@ -261,3 +261,8 @@ recipient's values filled in (a blank name reads "there"), `meta` with `source: 
 characters) move; `unread_count` does not. A recipient with no thread gets none. One bubble per (broadcast, contact): found by
 the provider's message id or `src_key`, so a `sent` that was lost is healed by `delivered`, and repeats add nothing. An empty
 body is skipped. A failure to mirror is logged and never fails the send or the receipt.
+
+## List total
+
+`GET /v2/broadcasts?includeTotal=true` adds `meta: { total }`, the number of broadcasts matching `status`, `range` and `q` (not
+the page), so the screen can say "Showing 12 of 30 filtered broadcasts" and number its pages. Without the flag there is no `meta`.

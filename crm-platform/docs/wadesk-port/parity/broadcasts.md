@@ -18,26 +18,27 @@ Evidence is automated, no screen yet:
 
 ## Status of each feature in this PR
 
-| Id                  | Status       | Note                                                                                                                                                                                                              |
-| ------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WD-BCAST-009        | backend-done | Plan cap, validation, order of checks. Plan **feature flag** `broadcast` is stubbed (see below). No screen yet.                                                                                                   |
-| WD-BCAST-010        | backend-done | Contacts, groups, tags, opt-out removal, tenant scoping.                                                                                                                                                          |
-| WD-BCAST-011        | stubbed      | `SendPolicyService` (emergency halt, content screen) is wired for real. The **wallet precheck** is a shim until the wallet domain exposes it.                                                                     |
-| WD-BCAST-012        | backend-done | OTP-template refusal, public-https media check, Meta approval/pause/RED guards. Two inputs are stubbed (below).                                                                                                   |
-| WD-BCAST-013        | stubbed      | Warmer hold is a shim that never holds until the warmer domain exposes it.                                                                                                                                        |
-| WD-BCAST-014        | backend-done | Weighted split, floor plus largest-fraction remainder, empty slices skipped.                                                                                                                                      |
-| WD-BCAST-015        | backend-done | Rows and recipients in one transaction, audit and `broadcast.created` outbox event.                                                                                                                               |
-| WD-BCAST-016        | backend-done | Due broadcasts go to BullMQ, a worker resolves sender and template and sends each recipient. Only the `waba` engine has an adapter; see below.                                                                    |
-| WD-BCAST-017        | backend-done | Per-recipient Cloud API components (variables, header text and media, buttons, carousel, catalog) and the send-time overrides. `waba` only; see the differences below.                                            |
-| WD-BCAST-001        | backend-done | List with status, range and name filters, cursor pages. No screen yet.                                                                                                                                            |
-| WD-BCAST-002        | backend-done | Tiles and status counts; Processing and Queued now come from the recipient rows.                                                                                                                                  |
-| WD-BCAST-030 to 036 | backend-done | Detail, recipients, live counters and statistics as endpoints; the overview charts' data, the failure histogram and the events are in the detail response. No screen yet.                                         |
-| WD-BCAST-024        | backend-done | `BroadcastReceiptsService` applies a delivery report; Baileys and Twilio mappers. The routes that receive the reports (Cloud API webhook, Twilio callback, the Baileys adapter) are the WABA and device domains'. |
-| WD-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                                                          |
-| WD-BCAST-026        | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                                                                                              |
-| WD-BCAST-027        | backend-done | Counters moved by delta, one state machine for every source, the outcome re-derived after a late failure. Only the routes that receive Meta and Twilio reports are not here.                                      |
-| WD-BCAST-028        | backend-done | `BroadcastInboxMirrorService`: a recipient with a thread gets one resolved bubble on sent, delivered or read. Writes `messages` and `conversations` directly until the team-inbox domain exports its mirror.      |
-| WD-BCAST-029        | backend-done | Outbox events carry the WaDesk webhook events and the bell entries (`webhook-events.ts`). Delivery to customer URLs and writing `notifications` rows are the INTG and NOTIF domains' (no subscriber exists yet).  |
+| Id                  | Status       | Note                                                                                                                                                                                                                                   |
+| ------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WD-BCAST-009        | backend-done | Plan cap, validation, order of checks. Plan **feature flag** `broadcast` is stubbed (see below). No screen yet.                                                                                                                        |
+| WD-BCAST-010        | backend-done | Contacts, groups, tags, opt-out removal, tenant scoping.                                                                                                                                                                               |
+| WD-BCAST-011        | stubbed      | `SendPolicyService` (emergency halt, content screen) is wired for real. The **wallet precheck** is a shim until the wallet domain exposes it.                                                                                          |
+| WD-BCAST-012        | backend-done | OTP-template refusal, public-https media check, Meta approval/pause/RED guards. Two inputs are stubbed (below).                                                                                                                        |
+| WD-BCAST-013        | stubbed      | Warmer hold is a shim that never holds until the warmer domain exposes it.                                                                                                                                                             |
+| WD-BCAST-014        | backend-done | Weighted split, floor plus largest-fraction remainder, empty slices skipped.                                                                                                                                                           |
+| WD-BCAST-015        | backend-done | Rows and recipients in one transaction, audit and `broadcast.created` outbox event.                                                                                                                                                    |
+| WD-BCAST-016        | backend-done | Due broadcasts go to BullMQ, a worker resolves sender and template and sends each recipient. Only the `waba` engine has an adapter; see below.                                                                                         |
+| WD-BCAST-017        | backend-done | Per-recipient Cloud API components (variables, header text and media, buttons, carousel, catalog) and the send-time overrides. `waba` only; see the differences below.                                                                 |
+| WD-BCAST-001        | screen-done  | `/broadcasts`: status views, range, search, numbered pages, row actions (analytics, export, delete), 15 s refresh. `includeTotal` added to the list for "Showing N of M". Playwright twin run not done yet.                            |
+| WD-BCAST-002        | screen-done  | Six tiles and the status counts on the rail. Processing and Queued come from the recipient rows.                                                                                                                                       |
+| WD-BCAST-003        | blocked      | The channel chooser shows a card per connected extra channel (Telegram, SMS, Instagram). Those channels are not built (SMS is ignored), so "New broadcast" goes straight to the WhatsApp composer, as in WaDesk with no extra channel. |
+| WD-BCAST-030 to 036 | backend-done | Detail, recipients, live counters and statistics as endpoints; the overview charts' data, the failure histogram and the events are in the detail response. No screen yet.                                                              |
+| WD-BCAST-024        | backend-done | `BroadcastReceiptsService` applies a delivery report; Baileys and Twilio mappers. The routes that receive the reports (Cloud API webhook, Twilio callback, the Baileys adapter) are the WABA and device domains'.                      |
+| WD-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                                                                               |
+| WD-BCAST-026        | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                                                                                                                   |
+| WD-BCAST-027        | backend-done | Counters moved by delta, one state machine for every source, the outcome re-derived after a late failure. Only the routes that receive Meta and Twilio reports are not here.                                                           |
+| WD-BCAST-028        | backend-done | `BroadcastInboxMirrorService`: a recipient with a thread gets one resolved bubble on sent, delivered or read. Writes `messages` and `conversations` directly until the team-inbox domain exports its mirror.                           |
+| WD-BCAST-029        | backend-done | Outbox events carry the WaDesk webhook events and the bell entries (`webhook-events.ts`). Delivery to customer URLs and writing `notifications` rows are the INTG and NOTIF domains' (no subscriber exists yet).                       |
 
 ## Intended differences from WaDesk
 
@@ -94,6 +95,9 @@ Evidence is automated, no screen yet:
 | 48 | Bell entries | One per save (created, updated x N, deleted) | Created, finished (completed, completed with errors, failed) and deleted only, as the reference's own port note asks. |
 | 49 | Inbox mirror triggers | Trigger A (before the provider id is known, skipped above 2000 recipients) and trigger B (per status report), which could double the bubble | One path: after a recipient is reported sent, delivered or read. One bubble per (broadcast, contact), found by provider message id or `src_key`, serialised so two reports at once cannot both insert. No 2000 cap is needed. |
 | 50 | Thread of another number | Skipped through `ConversationResolver` when the workspace has 2+ numbers | A Baileys broadcast skips a thread bound to a different device; other engines match by contact or phone digits. |
+| 51 | Row reference | `Broadcast #BR-0042` from the numeric id | `BR-` plus the start of the uuid (ids are uuids here). |
+| 52 | Delete from the list | Browser confirm dialog, then reload of the rows | The same confirmation in a dialog; the list and tiles refresh from the API. |
+| 53 | Rendering | Blade partials swapped in by JSON, WaDesk palette | A React screen on the app's tokens and components; same layout, copy and behavior. Only English copy so far (other languages fall back to English). |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
@@ -115,8 +119,7 @@ Header media paths: only an absolute URL is turned into a link until the storage
 
 ## Not verified
 
-- No screen exists yet, so the Playwright twin run against the running WaDesk has not been done for this PR. The compose page
-  (WD-BCAST-003..008) and the list page are the next PRs.
+- The list screen has not been through the Playwright twin run against the running WaDesk. The detail screen and the compose page (WD-BCAST-004..008) are not built yet.
 - A real send to Meta has not been run (no credentials here). The adapter is covered by a payload unit test and the pipeline by the fake-adapter e2e; the live stack was checked up to the provider call.
 - The three Meta guardrails are covered by unit tests only, because the switch that turns them on is stubbed.
 - The tracker (`tracker.py`) and the ownership check could not be used: `ownership.json` still lists broadcasts under another owner.

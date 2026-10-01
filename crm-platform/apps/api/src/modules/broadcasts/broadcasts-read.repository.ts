@@ -133,12 +133,17 @@ export class BroadcastsReadRepository {
   `;
 
   /** Newest first; `limit + 1` rows. The workspace's own broadcasts only: no engine scope (WaDesk hid a disabled engine's rows). */
-  async list(tx: Tx, orgId: number, q: ListBroadcastsQuery): Promise<BroadcastReadRow[]> {
+  private filters(orgId: number, q: ListBroadcastsQuery) {
     const where = [sql`b.org_id = ${orgId}`];
     if (q.status) where.push(sql`b.status = ${q.status}`);
     const days = RANGE_DAYS[q.range];
     if (days) where.push(sql`b.created_at >= now() - ${`${days} days`}::interval`);
     if (q.q) where.push(sql`b.name ILIKE ${`%${escapeLike(q.q)}%`}`);
+    return where;
+  }
+
+  async list(tx: Tx, orgId: number, q: ListBroadcastsQuery): Promise<BroadcastReadRow[]> {
+    const where = this.filters(orgId, q);
     if (q.cursor) {
       const c = decodeCursor(q.cursor);
       where.push(
@@ -149,6 +154,14 @@ export class BroadcastsReadRepository {
       ${this.select} WHERE ${sql.join(where, sql` AND `)}
       ORDER BY b.created_at DESC, b.id DESC LIMIT ${q.limit + 1}`);
     return (res.rows as unknown as Raw[]).map(toRow);
+  }
+
+  /** Every broadcast matching the filter, ignoring the cursor. */
+  async count(tx: Tx, orgId: number, q: ListBroadcastsQuery): Promise<number> {
+    const res = await tx.execute(
+      sql`SELECT count(*)::int AS n FROM broadcasts b WHERE ${sql.join(this.filters(orgId, q), sql` AND `)}`,
+    );
+    return Number((res.rows[0] as { n: number }).n);
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<BroadcastReadRow | undefined> {
