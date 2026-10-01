@@ -4,9 +4,18 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import type { BroadcastListItem, BroadcastSummary } from '@crm/contracts';
+import type {
+  BroadcastDetail,
+  BroadcastListItem,
+  BroadcastRecipient,
+  BroadcastSummary,
+} from '@crm/contracts';
 import { BroadcastsTable } from './broadcasts-table';
 import { pageWindow } from './broadcasts-pagination';
+import { Donut, HBars } from './charts';
+import { EventsTab } from './events-tab';
+import { OverviewTab } from './overview-tab';
+import { RecipientsTable } from './recipients-table';
 import { KpiStrip } from './kpi-strip';
 import { ListRail } from './list-rail';
 
@@ -156,5 +165,147 @@ describe('page window', () => {
     expect(pageWindow(1, 3)).toEqual([1, 2, 3]);
     expect(pageWindow(1, 20)).toEqual([1, 2, 3, 'gap', 20]);
     expect(pageWindow(10, 20)).toEqual([1, 'gap', 8, 9, 10, 11, 12, 'gap', 20]);
+  });
+});
+
+describe('detail tabs', () => {
+  const detail: BroadcastDetail = {
+    broadcast: item(),
+    template: {
+      id: 'tpl',
+      name: 'promo_oct',
+      category: 'marketing',
+      type: 'standard',
+      language: 'en_US',
+      header: 'Sale',
+      body: 'Hi there',
+      footer: 'Reply STOP',
+      buttons: null,
+    },
+    sender: null,
+    counts: { total: 10, sent: 8, delivered: 6, read: 3, failed: 2, queued: 0, clicked: 1 },
+    pct: { sent: 80, delivered: 60, read: 50, failed: 20, clicked: 16.7 },
+    donut: {
+      labels: ['Sent', 'Delivered', 'Read', 'Queued', 'Failed'],
+      series: [2, 3, 3, 0, 2],
+      successPct: 80,
+    },
+    deliveryCurve: { labels: ['9:00', '10:00'], sent: [2, 6], delivered: [1, 5], read: [0, 3] },
+    failureReasons: [{ reason: 'Undeliverable', count: 2 }],
+    pause: null,
+    events: {
+      createdAt: '2026-10-02T10:00:00.000Z',
+      scheduledAt: null,
+      status: 'completed',
+      completedAt: '2026-10-02T11:00:00.000Z',
+    },
+  };
+
+  it('overview: the funnel, the donut centre, the preview and a chart', () => {
+    const out = html(<OverviewTab detail={detail} />);
+    for (const s of [
+      'From send to read',
+      '80%',
+      'promo_oct',
+      'Reply STOP',
+      'Marketing',
+      '8 / 80%',
+      'role="img"',
+    ])
+      expect(out).toContain(s);
+  });
+
+  it('overview: no template means no preview; no curve data says so', () => {
+    const out = html(
+      <OverviewTab
+        detail={{
+          ...detail,
+          template: null,
+          deliveryCurve: { labels: [], sent: [], delivered: [], read: [] },
+        }}
+      />,
+    );
+    expect(out).not.toContain('Template preview');
+    expect(out).toContain('No sends yet.');
+  });
+
+  it('events: the four lifecycle rows in the broadcast zone', () => {
+    const out = html(<EventsTab detail={detail} />);
+    for (const s of [
+      'Created',
+      'Scheduled at',
+      'Completed',
+      'Oct 2, 10:00:00',
+      'Oct 2, 11:00:00',
+      '—',
+    ])
+      expect(out).toContain(s);
+  });
+
+  it('recipients: error or message id, clicks and the empty line', () => {
+    const r = (over: Partial<BroadcastRecipient>): BroadcastRecipient => ({
+      contactId: 'c1',
+      name: 'Asha',
+      phone: '+919800000001',
+      status: 'failed',
+      error: 'Undeliverable',
+      providerMessageId: null,
+      queuedAt: '2026-10-02T10:00:00.000Z',
+      sentAt: null,
+      deliveredAt: null,
+      readAt: null,
+      clicks: 0,
+      lastClickAt: null,
+      ...over,
+    });
+    const out = html(
+      <RecipientsTable
+        rows={[
+          r({}),
+          r({
+            contactId: 'c2',
+            status: 'read',
+            error: null,
+            providerMessageId: 'wamid.HBgMOTE5ODc2NTQzMjEw',
+            clicks: 3,
+          }),
+        ]}
+        timezone="UTC"
+        empty="No recipients attached."
+      />,
+    );
+    for (const s of ['Undeliverable', 'wamid.HBgMOTE5OD...', '>3<']) expect(out).toContain(s);
+    expect(
+      html(<RecipientsTable rows={[]} timezone="UTC" empty="No recipients attached." />),
+    ).toContain('No recipients attached.');
+  });
+});
+
+describe('charts', () => {
+  it('the donut skips empty slices and the bars scale to the largest', () => {
+    const d = renderToStaticMarkup(
+      <Donut
+        label="mix"
+        centre="50%"
+        caption="Success"
+        slices={[
+          { label: 'A', value: 5, color: 'red' },
+          { label: 'B', value: 0, color: 'blue' },
+        ]}
+      />,
+    );
+    expect(d.match(/<circle/g)).toHaveLength(2);
+    const bars = renderToStaticMarkup(
+      <HBars
+        label="x"
+        color="red"
+        rows={[
+          { label: 'a', value: 10 },
+          { label: 'b', value: 5 },
+        ]}
+      />,
+    );
+    expect(bars).toContain('width:100%');
+    expect(bars).toContain('width:50%');
   });
 });

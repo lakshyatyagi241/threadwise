@@ -1,7 +1,11 @@
 {
   "broadcasts": {
-    "nav": { "title": "Broadcasts" },
-    "common": { "dismiss": "Dismiss" },
+    "nav": {
+      "title": "Broadcasts"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
     "list": {
       "workspace": "Workspace",
       "title": "Template",
@@ -40,7 +44,12 @@
       },
       "listKicker": "Broadcast list",
       "listTitle": "Recent broadcasts",
-      "range": { "all": "All time", "7d": "7d", "30d": "30d", "90d": "90d" },
+      "range": {
+        "all": "All time",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d"
+      },
       "search": "Search broadcasts",
       "col": {
         "name": "Name",
@@ -85,6 +94,124 @@
         "k3": "Help - 03",
         "t3": "How do I improve results?",
         "b3": "Keep the audience focused, choose the most relevant template, and review failed counts before sending again."
+      }
+    },
+    "detail": {
+      "back": "Back",
+      "crumb": "Broadcasts / Analytics / #{ref}",
+      "kicker": "Broadcast",
+      "title": "Broadcast analytics",
+      "intro": "Per-recipient delivery, read, and failure timeline for this template send.",
+      "draft": "Draft",
+      "retry": "Retry failed",
+      "retryHint": "Re-send to recipients that failed",
+      "retryTitle": "Retry failed recipients?",
+      "retryBody": "Re-send to all previously-failed recipients?",
+      "retryConfirm": "Retry",
+      "retrying": "Retrying…",
+      "retrySubmitted": "Retry submitted.",
+      "retryNone": "There are no failed recipients to retry.",
+      "resume": "Resume",
+      "resumeHint": "Start this paused broadcast again",
+      "resumed": "Broadcast resumed.",
+      "paused": {
+        "daily_cap": "Paused: the daily sending cap was reached. It resumes by itself after {when}.",
+        "halt": "Paused: sending is halted for this workspace. It resumes when the halt is lifted.",
+        "manual": "Paused."
+      },
+      "delete": "Delete",
+      "deleteTitle": "Delete broadcast?",
+      "deleteBody": "Delete this broadcast? This can't be undone.",
+      "cancel": "Cancel",
+      "deleted": "Broadcast deleted.",
+      "notFound": "Broadcast not found",
+      "notFoundBody": "It may have been deleted.",
+      "backToList": "Back to broadcasts",
+      "loadError": "Could not load this broadcast.",
+      "tryAgain": "Try again",
+      "loading": "Loading",
+      "tile": {
+        "sent": "Sent",
+        "sentPct": "{pct}% of audience",
+        "delivered": "Delivered",
+        "deliveredPct": "{pct}% delivery rate",
+        "read": "Read",
+        "readPct": "{pct}% of delivered",
+        "audience": "Audience",
+        "audienceHint": "total recipients",
+        "queued": "Queued",
+        "queuedHint": "awaiting send",
+        "failed": "Failed",
+        "failedPct": "{pct}% failure rate"
+      },
+      "tab": {
+        "overview": "Overview",
+        "recipients": "Recipients",
+        "failures": "Failures",
+        "events": "Events"
+      },
+      "overview": {
+        "curveKicker": "Delivery curve",
+        "curveTitle": "Sent, delivered, read over time",
+        "empty": "No sends yet.",
+        "mixKicker": "Status mix",
+        "mixTitle": "Where each message landed",
+        "success": "Success",
+        "funnelKicker": "Conversion funnel",
+        "funnelTitle": "From send to read",
+        "audience": "Audience",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "failed": "Failed",
+        "queued": "Queued",
+        "previewKicker": "Template preview"
+      },
+      "recipients": {
+        "kicker": "Recipients",
+        "title": "Who got it, when",
+        "search": "Search name / phone",
+        "export": "Export rows",
+        "exportFailed": "Could not export the recipients.",
+        "allStatuses": "All statuses",
+        "pending": "Pending",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "failed": "Failed",
+        "name": "Name",
+        "phone": "Phone",
+        "status": "Status",
+        "sentAt": "Sent",
+        "deliveredAt": "Delivered",
+        "readAt": "Read",
+        "clicks": "Clicks",
+        "errorOrId": "Error / WA id",
+        "lastClick": "Last click: {when}",
+        "empty": "No recipients attached.",
+        "more": "Load more",
+        "loading": "Loading"
+      },
+      "failures": {
+        "kicker": "Failure reasons",
+        "title": "Top errors",
+        "none": "No failures so far. Every recipient was reached.",
+        "affectedKicker": "Affected recipients",
+        "count": "{count, plural, one {# failure} other {# failures}}",
+        "name": "Name",
+        "phone": "Phone",
+        "error": "Error",
+        "unknown": "Unknown",
+        "more": "Load more",
+        "loading": "Loading"
+      },
+      "events": {
+        "kicker": "Lifecycle",
+        "title": "Timeline of this broadcast",
+        "created": "Created",
+        "scheduledAt": "Scheduled at",
+        "status": "Status",
+        "completed": "Completed"
       }
     }
   }

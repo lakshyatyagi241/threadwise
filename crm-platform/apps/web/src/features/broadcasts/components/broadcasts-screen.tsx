@@ -18,6 +18,7 @@ import {
   useRecentBroadcasts,
 } from '../api/broadcasts';
 import { parseState, RANGES, stateToSearch, type ListState } from '../lib/list-model';
+import { downloadBlob } from '../lib/download';
 import { BroadcastsPagination } from './broadcasts-pagination';
 import { BroadcastsTable } from './broadcasts-table';
 import { PlusIcon, RefreshIcon, SearchIcon } from './icons';
@@ -25,17 +26,6 @@ import { KpiStrip } from './kpi-strip';
 import { ListRail } from './list-rail';
 
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
-
-function download(filename: string, blob: Blob) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 
 /**
  * `/broadcasts` (WD-BCAST-001, 002): the status views, the six tiles, and the broadcast table with its range, search and pages.
@@ -103,7 +93,7 @@ export function BroadcastsScreen() {
   const exportRows = async (b: BroadcastListItem) => {
     try {
       const { blob, filename } = await exportBroadcast(b.id);
-      download(filename, blob);
+      downloadBlob(filename, blob);
     } catch (e) {
       toast(message(e, t('exportFailed')), 'danger');
     }

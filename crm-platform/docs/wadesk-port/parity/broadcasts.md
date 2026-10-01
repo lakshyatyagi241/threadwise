@@ -32,7 +32,7 @@ Evidence is automated, no screen yet:
 | WD-BCAST-001        | screen-done  | `/broadcasts`: status views, range, search, numbered pages, row actions (analytics, export, delete), 15 s refresh. `includeTotal` added to the list for "Showing N of M". Playwright twin run not done yet.                            |
 | WD-BCAST-002        | screen-done  | Six tiles and the status counts on the rail. Processing and Queued come from the recipient rows.                                                                                                                                       |
 | WD-BCAST-003        | blocked      | The channel chooser shows a card per connected extra channel (Telegram, SMS, Instagram). Those channels are not built (SMS is ignored), so "New broadcast" goes straight to the WhatsApp composer, as in WaDesk with no extra channel. |
-| WD-BCAST-030 to 036 | backend-done | Detail, recipients, live counters and statistics as endpoints; the overview charts' data, the failure histogram and the events are in the detail response. No screen yet.                                                              |
+| WD-BCAST-030 to 036 | screen-done  | `/broadcasts/:id`: header (status, retry, resume, delete), six live tiles, Overview, Recipients, Failures and Events tabs; live counters, statistics and export as endpoints. Playwright twin run not done yet.                        |
 | WD-BCAST-024        | backend-done | `BroadcastReceiptsService` applies a delivery report; Baileys and Twilio mappers. The routes that receive the reports (Cloud API webhook, Twilio callback, the Baileys adapter) are the WABA and device domains'.                      |
 | WD-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                                                                               |
 | WD-BCAST-026        | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                                                                                                                   |
@@ -98,6 +98,10 @@ Evidence is automated, no screen yet:
 | 51 | Row reference | `Broadcast #BR-0042` from the numeric id | `BR-` plus the start of the uuid (ids are uuids here). |
 | 52 | Delete from the list | Browser confirm dialog, then reload of the rows | The same confirmation in a dialog; the list and tiles refresh from the API. |
 | 53 | Rendering | Blade partials swapped in by JSON, WaDesk palette | A React screen on the app's tokens and components; same layout, copy and behavior. Only English copy so far (other languages fall back to English). |
+| 54 | Charts | ApexCharts (area, donut, bar) | Hand-drawn SVG with the same three charts and legends; no chart library added. |
+| 55 | Recipients tab | All rows loaded and filtered in the browser | Search and status filter are applied by the API and rows load a page at a time ("Load more"), so a 100k-recipient broadcast opens. |
+| 56 | Live tiles | The poll rewrote the read tile's percentage over the audience, the page had it over delivered | Percentages are computed from the live counts with the header's own bases, so they never flip. |
+| 57 | Pause | Not shown (a pause was dropped) | A paused broadcast shows why and when it resumes, with a Resume button (WD-BCAST-022). |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
@@ -119,7 +123,7 @@ Header media paths: only an absolute URL is turned into a link until the storage
 
 ## Not verified
 
-- The list screen has not been through the Playwright twin run against the running WaDesk. The detail screen and the compose page (WD-BCAST-004..008) are not built yet.
+- The list and detail screens have not been through the Playwright twin run against the running WaDesk, and have not been looked at in a browser here (typecheck, lint and component tests only). The compose page (WD-BCAST-004..008) is not built yet.
 - A real send to Meta has not been run (no credentials here). The adapter is covered by a payload unit test and the pipeline by the fake-adapter e2e; the live stack was checked up to the provider call.
 - The three Meta guardrails are covered by unit tests only, because the switch that turns them on is stubbed.
 - The tracker (`tracker.py`) and the ownership check could not be used: `ownership.json` still lists broadcasts under another owner.

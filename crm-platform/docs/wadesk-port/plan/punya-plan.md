@@ -18,7 +18,7 @@ Done: 009, 010, 011 (partly), 012, 013 (stub), 014, 015, 016, 017, 025, 026, 027
 | B5  | Receipts and status webhooks (DONE)             | 024, 027 (webhooks)   | Delivered and read states: uses the state machine already in place               |
 | B6  | Events: outbound webhooks, notifications (DONE) | 029                   | Emits from the state changes built above                                         |
 | B7  | Inbox mirroring (DONE)                          | 028                   | Needs the inbox domain; shim behind an interface if it is not there              |
-| B8  | Web: list, detail, compose                      | 001, 003-008, 030-034 | UI over the API, same screens as the reference (PORTING_RULES section 3)         |
+| B8  | Web: list (DONE), detail (DONE), compose (next) | 001, 003-008, 030-034 | UI over the API, same screens as the reference (PORTING_RULES section 3)         |
 | B9  | Playwright twin run, parity evidence            | all                   | Compare every screen with the running WaDesk, fix differences, record the stamp  |
 | B10 | Instagram reply-only                            | 019                   | Smaller variant. 020 (SMS runner) is skipped: channel-sms is on the ignore list  |
 
