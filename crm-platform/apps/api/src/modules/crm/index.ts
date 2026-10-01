@@ -86,3 +86,13 @@ export type { ContactImportJobData } from './contact-import';
 export { ContactDedupeService } from './contact-dedupe';
 export { AttributesService, MergeTagService, renderMergeTags, resolveToken } from './attributes';
 export type { MergeContact, MergeContext } from './attributes';
+export {
+  DealsService,
+  DealBoardService,
+  DealReportsService,
+  DealEngine,
+  toDealResponse,
+} from './deals';
+export type { DealRow } from './deals';
+export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
+export type { PipelineRow, StageRow } from './pipelines';
