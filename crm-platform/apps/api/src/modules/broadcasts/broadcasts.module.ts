@@ -22,6 +22,7 @@ import { BroadcastsActionsController } from './broadcasts-actions.controller';
 import { BroadcastsActionsService } from './broadcasts-actions.service';
 import { BroadcastsReadController } from './broadcasts-read.controller';
 import { BroadcastsReadRepository } from './broadcasts-read.repository';
+import { BroadcastsComposeService } from './broadcasts-compose.service';
 import { BroadcastsReadService } from './broadcasts-read.service';
 import { BroadcastsRepository } from './broadcasts.repository';
 import { BroadcastsService } from './broadcasts.service';
@@ -59,6 +60,7 @@ import {
     BroadcastsService,
     BroadcastsRepository,
     BroadcastsReadService,
+    BroadcastsComposeService,
     BroadcastsActionsService,
     BroadcastReceiptsService,
     BroadcastInboxMirrorService,
