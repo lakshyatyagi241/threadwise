@@ -56,7 +56,7 @@ Error: `AUTH_WORKSPACE_NOT_AVAILABLE` (403).
 
 ### `GET /auth/registration-config` (Public)
 
-Drives the guest pages: `registrationOpen`, `emailVerification` (`off | banner | block`), `trialDays`, `rememberMeEnabled`, `otp.enabled`,
+Drives the guest pages: `registrationOpen`, `emailVerification` (`off | banner | block`), `trialDays`, `rememberMeEnabled`, `otp.enabled` (the real activation rule, see "Sign-up code delivery" below: switch on AND a sender that can deliver AND, for a WhatsApp Business sender, an APPROVED template),
 `captcha` (`null` or `{version, siteKey}`), `social.{google,facebook}`, `defaultCountryIso`, `authPages` (variant 1–5, `login | register | forgot`
 copy with shipped English defaults applied, `defaulted` = per page the text fields the administrator left empty so a localised client can use its own copy, `extra` showcase fields), `links` (terms, privacy, cookies).
 
@@ -95,7 +95,7 @@ password and of the code, never either in clear.
 
 ### `GET /onboarding`, `POST /onboarding/workspace`, `POST /onboarding/complete` (User, gate-exempt)
 
-`GET` → `{ step: "workspace|plan|done", workspace, suggestedName, needsPhone, plans: [], defaultTimezone }` (plans arrive with the plan domain).
+`GET` → `{ step: "workspace|plan|done", workspace, suggestedName, needsPhone, plans, defaultTimezone }`; `plans` are the plan cards of `GET /plans` (see "Plans" below).
 `POST /onboarding/workspace` (`admin.settings.manage`): `{ name, industry?, sizeRange?, timezone, currency?, phone? }`.
 
 ## Recovery and verification (all Public, neutral answers)
@@ -129,17 +129,95 @@ A separate identity pool (`typ: platform_operator`, roles `super_admin | support
 `super_admin`). Every route also applies the operator IP allowlist. Create the first operator with
 `OPERATOR_PASSWORD=… pnpm --filter @crm/api operator:create -- --email … --name …`.
 
-| Endpoint                                                                                                               | Role                 | Notes                                                                                                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `POST /platform/auth/login`, `…/login/mfa`, `…/refresh` (Public)                                                       |                      | `login` → `{ status:"authenticated", tokens, operator, mfaEnrolmentRequired }` or `mfa_required`.                                                                                          |
-| `POST /platform/auth/logout`, `GET …/session`, `POST …/mfa/setup`, `POST …/mfa/enable`                                 | any                  | enrolment routes are gate-exempt.                                                                                                                                                          |
-| `GET /platform/security`                                                                                               | any                  | policy, `emergencyHalt`, KPIs (score, open and high risks, blocked attempts 24 h, warnings 24 h, operator MFA, webhook failure %), risk queue, coverage, **enforcement matrix**, `yourIp`. |
-| `PATCH /platform/security/policy`                                                                                      | super_admin, support | partial update; one audit event with the diff; rejects a list that would lock the caller out of the IP allowlist.                                                                          |
-| `GET /platform/security/events`                                                                                        | any                  | cursor-paginated `security_events`, filter by `event`, `status`.                                                                                                                           |
-| `POST /platform/security/danger/{revoke-sessions,force-password-reset,rotate-webhook-secrets,halt-sends,resume-sends}` | super_admin          | refusal for other roles is itself audited (`platform.security.danger_action_denied`).                                                                                                      |
-| `GET/PATCH /platform/settings/registration`                                                                            |                      | public registration, email verification mode, default plan, trial days, timezone/country, legal links, OTP knobs.                                                                          |
-| `GET/PATCH /platform/settings/social-captcha`                                                                          |                      | secrets are write-only (`hasSecret`); a blank secret keeps the stored one.                                                                                                                 |
-| `GET/PATCH /platform/settings/auth-pages`                                                                              |                      | variant 1–5, per-page copy, media URL, showcase fields; empty string restores the shipped default.                                                                                         |
+| Endpoint                                                                                                                              | Role                 | Notes                                                                                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /platform/auth/login`, `…/login/mfa`, `…/refresh` (Public)                                                                      |                      | `login` → `{ status:"authenticated", tokens, operator, mfaEnrolmentRequired }` or `mfa_required`.                                                                                                                                                                         |
+| `POST /platform/auth/logout`, `GET …/session`, `POST …/mfa/setup`, `POST …/mfa/enable`                                                | any                  | enrolment routes are gate-exempt.                                                                                                                                                                                                                                         |
+| `GET /platform/security`                                                                                                              | any                  | policy, `emergencyHalt`, KPIs (score, open and high risks, blocked attempts 24 h, warnings 24 h, operator MFA, webhook failure %), risk queue, coverage, **enforcement matrix**, `yourIp`.                                                                                |
+| `PATCH /platform/security/policy`                                                                                                     | super_admin, support | partial update; one audit event with the diff; rejects a list that would lock the caller out of the IP allowlist.                                                                                                                                                         |
+| `GET /platform/security/events`                                                                                                       | any                  | cursor-paginated `security_events`, filter by `event`, `status`.                                                                                                                                                                                                          |
+| `POST /platform/security/danger/{revoke-sessions,force-password-reset,rotate-webhook-secrets,halt-sends,resume-sends}`                | super_admin          | refusal for other roles is itself audited (`platform.security.danger_action_denied`).                                                                                                                                                                                     |
+| `GET/PATCH /platform/settings/registration`                                                                                           |                      | public registration, email verification mode, default plan, trial days, timezone/country, legal links, OTP knobs. Both return the settings plus `otpStatus` (`{active, reason}`); `otp.sender` must be a registered sender; `otp.template` is server-managed (see below). |
+| `GET/POST/PATCH/DELETE /platform/settings/senders[/{id}]`, `POST …/registration/otp-template`, `…/otp-template/refresh`, `…/otp-test` | writes: super_admin  | the sign-up code senders, template and test send: see "Sign-up code delivery" below.                                                                                                                                                                                      |
+| `GET/PATCH /platform/settings/social-captcha`                                                                                         |                      | secrets are write-only (`hasSecret`); a blank secret keeps the stored one.                                                                                                                                                                                                |
+| `GET/PATCH /platform/settings/auth-pages`                                                                                             |                      | variant 1–5, per-page copy, media URL, showcase fields; empty string restores the shipped default.                                                                                                                                                                        |
+
+## Sign-up code delivery (TW-AUTH-006 sender side, TW-AUTH-007)
+
+The code is delivered by `OTP_SENDER_PORT`, bound to `ConfiguredOtpSender`, which reads the registration settings at send time (no restart
+needed) and calls the adapter of the chosen sender kind. Until the channel domains (WABA, WADEV, Twilio) own their connections, the auth zone keeps
+a small **sender registry** (platform setting `otp.senders`); `registration.otp.sender` stores `<kind>:<id>` and resolves against it. Those domains
+can replace the registry behind the same reference.
+
+| Kind     | Fields (besides `label`)                                                               | Secret (write-only)           | Delivery                                                                                                                                       |
+| -------- | -------------------------------------------------------------------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `waba`   | `phoneNumberId`, `wabaId`, `graphBaseUrl` (default `https://graph.facebook.com/v21.0`) | Meta access token             | `POST {graph}/{phoneNumberId}/messages`, the approved authentication template with the code as body variable and copy-code button, Bearer auth |
+| `twilio` | `accountSid`, `fromNumber`, `apiBaseUrl` (default `https://api.twilio.com`)            | Twilio auth token             | `POST {api}/2010-04-01/Accounts/{sid}/Messages.json`, form `From=whatsapp:+<from>`, `To=whatsapp:+<digits>`, Basic auth                        |
+| `device` | `bridgeUrl`, `senderNumber`                                                            | bridge token (`X-Node-Token`) | `POST {bridge}/api/send-message/{senderNumber}` with `{targetPhoneNumber, message}`                                                            |
+| `dev`    | none                                                                                   | none                          | logs the code; refused when `NODE_ENV=production`                                                                                              |
+
+Every call times out after 20 s and redirects are not followed. Failures are typed (`not_configured`, `template_not_approved`, `invalid_number`,
+`auth_failed`, `rejected`, `provider_error`, `connection_refused`, `timeout`, `transport_error`) with a safe message: the stored secret and the code are
+scrubbed from anything echoed back. Non-template senders send the template body with `{{1}}`/`{{code}}`/`{{otp}}` replaced, else a plain sentence with
+the code, the expiry and a do-not-share line.
+
+**Activation** (`otpStatus.reason`): `active` only when the switch is on, the sender exists and has all its fields and its secret, and, for `waba`, the
+template for that sender is `approved`. Otherwise sign-up silently skips the code: `disabled`, `no_sender`, `sender_missing`, `sender_incomplete`,
+`dev_in_production`, `template_missing`, `template_pending`, `template_rejected`. When the code step runs but the send fails, sign-up answers
+`AUTH_OTP_SEND_FAILED` (502) and creates nothing; a failed resend keeps the staged sign-up and its first code.
+
+**Senders** (`/platform/settings/senders`, reads: any operator, writes: super_admin, audited without secrets):
+
+- `GET` → `{ senders: [{ id, kind, label, …fields, hasSecret }], devAllowed }`. `id` is a short stable string (8 hex chars).
+- `POST` `{ kind, label, …fields, secret }` → the sender. `PATCH /{id}` partial: a blank or omitted `secret` keeps the stored one, `clearSecret: true` deletes it;
+  fields of another kind are refused. `DELETE /{id}` → `{ ok, selectionCleared }` (removing the sender sign-up uses clears `otp.sender` and `otp.template`).
+- Addresses must be http(s) without credentials and not a cloud-metadata host; Meta and Twilio addresses must be https in production.
+
+**Template** (`otp.template` in the registration settings: `{ name, kind: waba|local, sender, language, body, metaTemplateId, status: pending|approved|rejected|local, codeExpirationMinutes, submittedAt, checkedAt, rejectedReason }`):
+
+- `POST /platform/settings/registration/otp-template` `{ otp: { sender?, enabled?, ttlMinutes?, length?, resendCooldownSec?, maxAttempts? } }` is the "Create & submit template"
+  button: the sender is required (422 on `otp.sender`), the knobs are saved in the same request (same clamping as `PATCH`), then for `waba` an
+  AUTHENTICATION template (`BODY` with the security line, `FOOTER` `code_expiration_minutes` = TTL, one `OTP`/`COPY_CODE` button, `en_US`) is submitted to
+  `POST {graph}/{wabaId}/message_templates` and stored `pending` with Meta's id; for the other kinds a local template is stored (`local`, usable at once).
+  Answer `{ outcome, registration }`, outcome: `submitted`, `resubmitted` (a rejected or other-expiry template is edited with `POST {graph}/{id}`), `local_ready`,
+  `already_pending`, `already_approved`. Meta refusing, an empty id back or Meta being unreachable is `AUTH_OTP_TEMPLATE_FAILED` (502, `errors[0] = {path:"reason"}`).
+- `POST …/otp-template/refresh` reads `GET {graph}/{id}?fields=id,name,status,rejected_reason` and stores the status (`409` when nothing was submitted to Meta).
+  The worker does the same every 5 minutes while a template is `pending` (`OtpTemplateRefreshService`, a Redis lock keeps several workers from all asking).
+
+**Test send** `POST /platform/settings/registration/otp-test` `{ to: E.164, sender? }` (super_admin): a real code through the saved (or named) sender with the
+saved knobs and template; 5 per hour per operator, failed attempts included (`RATE_LIMITED` with `retryAfterSeconds`). The answer is
+`{ ok, sender, sentTo: "+91 •••• ••21", remainingThisHour }`: the code is never returned. A failed send is `AUTH_OTP_SEND_FAILED` with the reason in `errors[0]`.
+
+Audit events (never carrying secrets or codes): `platform.settings.otp_sender_created | otp_sender_updated | otp_sender_deleted | otp_template_saved |
+otp_template_submitted | otp_template_status_changed | otp_template_failed | otp_test_sent`.
+
+## Plans (the thin PLAN slice AUTH depends on)
+
+Code in `apps/api/src/modules/plans-subscriptions-trials/`, contracts in `packages/contracts/src/plans-subscriptions-trials/`, migration
+`20261002090000_plan_core.sql`. Not built (PLAN owns them): checkout, subscriptions, add-ons, analytics, FAQ, public pricing, trial hard gate, quota ledger.
+
+- **Data.** `plans` is a platform catalogue (no `org_id`): every transaction may read it, only the privileged flag may write it, one flagged default
+  at most (partial unique index), `limits` and `features` are jsonb keyed by the registry in contracts (limits: whole numbers, 0 = unlimited; features: booleans).
+  `organizations.plan` stays the one authoritative reference (a slug, never an id: Reference's slug-or-id split broke its counts and delete guard).
+  `org_plan_state` (tenant table, readable by the org, written only by privileged code) holds `trial_ends_at`, `plan_ends_at`, `billing_cycle`
+  (`trial|monthly|yearly`), `overrides` (`{ limits: { key: -1|n }, features: { key: bool } }`) and `platform_owned` (never limited).
+- **Sign-up.** `TenantDirectory.provisionOrganization` resolves the plan in the same transaction: the registration setting's plan if active, else the
+  first active flagged default, else the first active free plan by sort order, else the literal `starter` (even when no such plan exists). Only a free
+  plan with `trialDays > 0` gets `trial_ends_at = now + days` and cycle `trial`. The `auth.user.registered` payload carries `planSlug` and `trialEndsAt`.
+- **`GET /plans`** (User, gate-exempt) → `{ data: PlanCard[], currentSlug, trialEndsAt }`: active plans by `sort_order, amount`; a card has `kind`
+  (`free|paid|custom_quote`), `price { amount, offerAmount, currency, period { unit, count } | null }` (decimal strings), `monthlyMessages` (0 = unlimited),
+  `chips` (first three enabled of analytics, automation, ai_assistants, woocommerce, shopify, calling, remove_branding), `highlighted`, `current`,
+  `action` (`current|continue_free|contact_sales|upgrade|choose|downgrade_unavailable`, ranked by list price) and `ctaLabel`.
+- **`/platform/plans`** (operator): `GET` list with in-use counts and a KPI summary and `GET /{id}` (any role); `POST`, `PATCH /{id}`, `PATCH /{id}/active`,
+  `DELETE /{id}` (super_admin). The slug is derived once (`Pro Plus` → `pro_plus`, `pro_plus_2`) and never changes. Rules (422 with `errors[]`): offer below
+  price, free = price 0 and no offer, custom quote = no price and not free, a priced plan must not be 0, the default must be active. A new default clears the
+  previous one. `PLAN_DEFAULT_PROTECTED` (409): the signup default (registration setting or flagged) cannot be deactivated or deleted; `PLAN_IN_USE` (409, `errors[]`
+  `{ path: "inUse", message: n }`): an organization is on it. Every write is a `security_events` row `platform.plan.created|updated|activated|deactivated|deleted`.
+  `PATCH /platform/settings/registration` refuses a `defaultPlanId` that is not an active plan.
+- **Gate.** `PlanEntitlementService.featureEnabled / limit / assertFeature / assertWithinLimit` (order: platform-owned, org override, plan, and when the plan slug
+  has no catalogue row nothing is locked, logged once). A locked feature is `422 PLAN_FEATURE_LOCKED` with `errors[]` `feature`, `reason`, `upgradeUrl`
+  (`/account/plans`); `PATCH /account/branding` needs `remove_branding`, and `GET /account/branding` reports `canEdit`.
+- Dev seed (`pnpm --filter @crm/api seed:auth`): free Starter (sign-up default, 14-day trial), paid Growth (highlighted), paid Scale (offer price, every feature).
 
 ## Services other domains call (no HTTP)
 
@@ -147,3 +225,16 @@ Exported from `modules/auth/index.ts`: `SendPolicyService.screen / screenBulk` (
 `UploadPolicyService.validate`, `HtmlSanitizerService.sanitize`, `PasswordService`, `AuthAuditService`, `AllowWhileGated`.
 Outbound pipelines (inbox reply, broadcast, scheduled, flows, auto-reply) must call `screen`/`screenBulk` before a provider send, and the
 send workers must re-check the halt at send time.
+
+## Platform enforcement hooks
+
+- **Send guard.** `WHATSAPP_PROVIDER.sendText` / `sendTemplate` call `OUTBOUND_SEND_GUARD.beforeSend` first: the emergency halt (`AUTH_SEND_HALTED`, 503),
+  then, per the security policy's `waGuardrailsMode`, content filters and per-minute and per-day caps (`AUTH_SEND_BLOCKED`, 422, audited as
+  `security.send_blocked` / `security.send_flagged`). Callers may pass `screen: { bulk, source }`; a bulk batch skips the per-message rate caps.
+  The HTTP app and the worker both import `SendGuardModule`, so a process without the guard fails to boot instead of sending unguarded.
+- **API rate ceiling.** The public API key guard holds each key to its own `rate_limit_per_minute`, never above the policy's `apiRateLimitPerMinute`
+  (0 = no ceiling).
+- **Retention.** The worker's daily sweep deletes `security_events` and `audit_log` rows older than `auditLogRetentionDays` (0 = keep forever), the
+  audit log in batches of 10 000.
+- **Webhook secret rotation.** `WebhookSecretRegistry.register({ name, rotateAll })`; the danger-zone action sums every registered rotator, audits the
+  per-rotator counts and reports `affected`.
