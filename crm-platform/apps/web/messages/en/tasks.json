@@ -1,0 +1,324 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Tasks"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "hub": {
+      "title": "Tasks",
+      "subtitle": "Follow-ups and to-dos. Assign them, set a priority and a due date, and tick them off.",
+      "newTask": "New task",
+      "tableLabel": "Tasks",
+      "loading": "Loading tasks",
+      "useSampleData": "Use sample data (development)",
+      "emptyFilteredTitle": "No tasks match",
+      "emptyFiltered": "Try a different search or clear the filters.",
+      "resetFilters": "Clear filters",
+      "empty": {
+        "mine": {
+          "title": "Nothing assigned to you",
+          "message": "Tasks assigned to you will show here. Add one above, or look at All tasks."
+        },
+        "all": {
+          "title": "No tasks yet",
+          "message": "Add a follow-up or a to-do with the box above and it will show here."
+        },
+        "overdue": {
+          "title": "Nothing overdue",
+          "message": "Every open task is on time."
+        },
+        "today": {
+          "title": "Nothing due today",
+          "message": "No open task is due for the rest of today."
+        },
+        "upcoming": {
+          "title": "Nothing coming up",
+          "message": "Open tasks due on a later day will show here."
+        },
+        "completed": {
+          "title": "No completed tasks yet",
+          "message": "Tasks you tick off will show here, latest first."
+        }
+      },
+      "showing": "{count, plural, one {# task loaded} other {# tasks loaded}}",
+      "loadMore": "Load more",
+      "allLoaded": "All tasks loaded",
+      "deleteTitle": "Delete this task?",
+      "deleteMessage": "\"{title}\" will be deleted for everyone. This cannot be undone.",
+      "delete": "Delete",
+      "keep": "Keep"
+    },
+    "tabs": {
+      "label": "Task lists",
+      "mine": "My tasks",
+      "all": "All tasks",
+      "overdue": "Overdue",
+      "today": "Today",
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "count": "{count, plural, one {# task} other {# tasks}}"
+    },
+    "toolbar": {
+      "label": "Task filters",
+      "search": "Search tasks",
+      "status": "Status",
+      "statusOpen": "Open",
+      "statusDone": "Completed",
+      "statusAll": "Open and completed",
+      "priority": "Priority",
+      "allPriorities": "All priorities",
+      "priorities": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "assignee": "Assignee",
+      "allAssignees": "All assignees",
+      "unassigned": "Unassigned",
+      "linked": "Linked to",
+      "anyLink": "Any record",
+      "linkContact": "A contact",
+      "linkDeal": "A deal",
+      "clear": "Clear",
+      "modifyColumns": "Modify columns",
+      "resetColumns": "Reset columns",
+      "columns": {
+        "title": "Task",
+        "priority": "Priority",
+        "due": "Due",
+        "assignee": "Assignee",
+        "contact": "Contact",
+        "deal": "Deal",
+        "created": "Created",
+        "completed": "Completed on"
+      },
+      "refresh": "Refresh",
+      "shortcuts": "Keyboard shortcuts",
+      "view": "Layout",
+      "views": {
+        "list": "List",
+        "board": "Board by due date"
+      }
+    },
+    "table": {
+      "scrollArea": "Tasks table",
+      "selectAll": "Select all loaded tasks",
+      "selectRow": "Select {title}",
+      "columns": {
+        "title": "Task",
+        "priority": "Priority",
+        "due": "Due",
+        "assignee": "Assignee",
+        "contact": "Contact",
+        "deal": "Deal",
+        "created": "Created",
+        "completed": "Completed on"
+      }
+    },
+    "row": {
+      "complete": "Mark complete",
+      "reopen": "Reopen",
+      "completeNamed": "Mark \"{title}\" complete",
+      "reopenNamed": "Reopen \"{title}\"",
+      "moreFor": "More actions for {title}",
+      "open": "Open",
+      "edit": "Edit",
+      "delete": "Delete",
+      "unassigned": "Unassigned"
+    },
+    "bulk": {
+      "label": "Actions for the selected tasks",
+      "selected": "{count, plural, one {# task selected} other {# tasks selected}}",
+      "working": "Working",
+      "complete": "Complete",
+      "assign": "Assign",
+      "assignTo": "Assign to",
+      "me": "{name} (me)",
+      "unassign": "Unassign",
+      "delete": "Delete",
+      "clear": "Clear selection",
+      "failed": "That did not work.",
+      "someFailed": "{count, plural, one {# task could not be changed.} other {# tasks could not be changed.}}",
+      "completed": "{count, plural, one {# task completed.} other {# tasks completed.}}",
+      "assigned": "{count, plural, one {# task assigned to {name}.} other {# tasks assigned to {name}.}}",
+      "unassigned": "{count, plural, one {# task unassigned.} other {# tasks unassigned.}}",
+      "deleted": "{count, plural, one {# task deleted.} other {# tasks deleted.}}",
+      "deleteTitle": "Delete the selected tasks?",
+      "deleteMessage": "{count, plural, one {# task will be deleted for everyone. This cannot be undone.} other {# tasks will be deleted for everyone. This cannot be undone.}}",
+      "keep": "Keep"
+    },
+    "quick": {
+      "label": "Add a task",
+      "placeholder": "Add a task and press Enter",
+      "priority": "Priority",
+      "priorities": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "due": "Due date and time",
+      "add": "Add",
+      "titleRequired": "Type what needs doing."
+    },
+    "form": {
+      "eyebrow": "Task",
+      "newTitle": "New task",
+      "editTitle": "Edit task",
+      "close": "Close",
+      "cancel": "Cancel",
+      "create": "Create task",
+      "save": "Save changes",
+      "title": "Task",
+      "titlePlaceholder": "e.g. Call Acme about the renewal",
+      "priority": "Priority",
+      "priorities": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "assignee": "Assign to",
+      "unassigned": "Nobody",
+      "me": "{name} (me)",
+      "due": "Due",
+      "dueHint": "Leave empty for a task with no date.",
+      "presets": {
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "nextWeek": "Next week"
+      },
+      "clearDue": "Clear date",
+      "contact": "Contact",
+      "deal": "Deal",
+      "notes": "Notes",
+      "reminderHint": "The assignee gets a reminder when the task becomes due.",
+      "problems": {
+        "titleRequired": "Type what needs doing.",
+        "titleTooLong": "The task is too long (255 characters at most).",
+        "notesTooLong": "The notes are too long (5000 characters at most).",
+        "dueInvalid": "That date is not valid.",
+        "assigneeInvalid": "That person is not an active member of this workspace."
+      }
+    },
+    "drawer": {
+      "loading": "Loading task",
+      "close": "Close",
+      "eyebrow": "Task",
+      "name": "Task name",
+      "titleRequired": "A task needs a name.",
+      "statusOpen": "Open",
+      "statusDone": "Completed",
+      "complete": "Mark complete",
+      "reopen": "Reopen",
+      "edit": "Edit",
+      "delete": "Delete",
+      "details": "Details",
+      "notes": "Notes",
+      "notesPlaceholder": "Add context for whoever picks this up",
+      "linked": "Linked records",
+      "company": "Company",
+      "noLinks": "Not linked to a contact or a deal.",
+      "activity": "Activity",
+      "events": {
+        "created": "Task created",
+        "createdBy": "Created by {name}",
+        "reminded": "Due reminder sent",
+        "completed": "Marked complete"
+      },
+      "deleteTitle": "Delete this task?",
+      "deleteMessage": "\"{title}\" will be deleted for everyone. This cannot be undone.",
+      "cancel": "Keep"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Overdue",
+        "today": "Today",
+        "upcoming": "Upcoming",
+        "no_date": "No date"
+      },
+      "empty": "Nothing here."
+    },
+    "due": {
+      "none": "No date",
+      "overdue": "Overdue",
+      "today": "Today, {time}",
+      "tomorrow": "Tomorrow, {time}",
+      "yesterday": "Yesterday, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "link": {
+      "unnamedContact": "Unnamed contact",
+      "unnamedDeal": "Deal"
+    },
+    "picker": {
+      "searchContact": "Search contacts",
+      "searchDeal": "Search deals",
+      "results": "Search results",
+      "searching": "Searching",
+      "unavailable": "Search is not available right now.",
+      "none": "No matches.",
+      "unlink": "Remove the link"
+    },
+    "errors": {
+      "network": "We could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again to continue.",
+      "conflict": "Someone else changed this task. Reload and try again.",
+      "validation": "Some of the details are not valid.",
+      "unavailable": "The tasks service is not available yet on this server.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "notFound": "That task could not be found. It may have been deleted.",
+      "planDisabled": "Your plan does not include tasks. Upgrade to unlock them.",
+      "assigneeInvalid": "That person is not an active member of this workspace.",
+      "unexpected": "Something went wrong. Try again in a moment.",
+      "requestId": "Request id",
+      "retry": "Try again"
+    },
+    "toast": {
+      "completed": "Task completed.",
+      "reopened": "Task reopened.",
+      "created": "Task created.",
+      "saved": "Task saved.",
+      "deleted": "Task deleted.",
+      "conflict": "Someone else changed this task. The list was reloaded; try again.",
+      "failed": "Could not update the task.",
+      "saveFailed": "Could not save the task.",
+      "deleteFailed": "Could not delete the task.",
+      "createFailed": "Could not create the task."
+    },
+    "shortcuts": {
+      "title": "Keyboard shortcuts",
+      "close": "Close",
+      "intro": "Work through the list without the mouse. Shortcuts pause while you type in a field.",
+      "actions": {
+        "next": "Next task",
+        "prev": "Previous task",
+        "open": "Open the task",
+        "toggleComplete": "Complete or reopen",
+        "toggleSelect": "Select or unselect",
+        "newTask": "New task",
+        "focusSearch": "Search",
+        "clearSelection": "Clear the selection",
+        "help": "Show this list"
+      }
+    },
+    "linked": {
+      "title": "Tasks",
+      "viewAll": "View all",
+      "loading": "Loading tasks",
+      "unavailableTitle": "Tasks are not available yet",
+      "unavailable": "The tasks service is not available yet on this server.",
+      "empty": "No open tasks.",
+      "loadMore": "Load more",
+      "loadMoreDone": "Load more completed",
+      "showDone": "Show completed",
+      "hideDone": "Hide completed"
+    }
+  }
+}
