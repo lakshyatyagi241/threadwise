@@ -36,12 +36,13 @@ an actual Postgres connection or an actual cross-tenant request.
 
 **Deciding and verifying**
 
-| Skill                                           | Use it when                                               |
-| ----------------------------------------------- | --------------------------------------------------------- |
-| [write-adr](write-adr/)                         | recording a decision that would be expensive to reverse   |
-| [adr-diff-guard](adr-diff-guard/)               | ADR bookkeeping — enforced, see below                     |
-| [pre-pr](pre-pr/)                               | before opening a PR — runs the same checks as CI, locally |
-| [adr-compliance-review](adr-compliance-review/) | reviewing a diff against this repo's specific rules       |
+| Skill                                                 | Use it when                                                                                                              |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [write-adr](write-adr/)                               | recording a decision that would be expensive to reverse                                                                  |
+| [adr-diff-guard](adr-diff-guard/)                     | ADR bookkeeping — enforced, see below                                                                                    |
+| [pre-pr](pre-pr/)                                     | before opening a PR — runs the same checks as CI, locally                                                                |
+| [adr-compliance-review](adr-compliance-review/)       | reviewing a diff against this repo's specific rules                                                                      |
+| [threadwise-playwright-parity](threadwise-playwright-parity/) | **after every feature, automatically**: Playwright twin test against the running Reference, fix sub-agents for what differs |
 
 ## Skills call each other
 

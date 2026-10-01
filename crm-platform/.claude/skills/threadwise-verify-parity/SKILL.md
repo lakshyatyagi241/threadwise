@@ -16,6 +16,11 @@ description: >-
 Passing tests prove the code does what _you_ understood. This proves it does what _Threadwise_ does. Run it after
 `threadwise-e2e-tests` are green.
 
+**Automated first.** `threadwise-playwright-parity` runs this comparison in Playwright on both apps with the full
+edge-case matrix, classifies every difference (same / intended / defect) and spawns fix agents; its
+`parity-rows.md` is the evidence for the table below. Use the manual procedure for what it cannot do (anything
+needing a live provider session) and to finish the file.
+
 ## Setup
 
 1. Reference app: invoke `threadwise-run-reference` (`start.sh`), log in as the seeded admin. It runs on a local test
