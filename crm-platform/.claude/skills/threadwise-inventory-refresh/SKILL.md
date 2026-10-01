@@ -49,3 +49,17 @@ Reference ships as a base plus update zips (`Update/update_1.2.zip` ... `1.7`). 
 lands in the reference app: run migrations there, regenerate manifests, run the audit, and treat
 the new orphans as the diff to inventory. Record the new `threadwise_version` in each touched
 domain's front matter.
+
+## Checklist workbook (Google Sheets)
+
+`build_checklist_xlsx.py` turns the inventory, `ownership.json`, `assignment-input.json` and `showcase-plan.json` into one
+workbook: a `Features` tab with one row per `### WD-...` feature (all spec fields, owner, wave, status dropdowns), a `Modules`
+tab with live rollups, plus `Today`, `Foundation`, `Decisions` and `Guide`. Nothing is retyped, so no feature can be dropped.
+
+```bash
+python3 .claude/skills/threadwise-inventory-refresh/scripts/build_checklist_xlsx.py      # -> ../_work/out/Threadwise-Port-Checklist.xlsx
+```
+
+Import it with Drive > New > File upload > Open with Google Sheets. Rebuild after the inventory or the assignment changes, then
+copy the status columns across (the generated file starts every row at Not started). `showcase-plan.json` holds the Today and
+Decisions rows and is hand-edited.
