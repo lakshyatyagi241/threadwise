@@ -207,3 +207,28 @@ The sender sends to one recipient at a time, the way Reference's Node loop did, 
 
 The pacing numbers (`msg_gap`, batches, the cap) are Reference's defaults until the settings domain exposes them; they sit behind
 `PACING_SETTINGS`. The clock and the dice of a run are injectable (`PacingRuntime`), which is how the tests run instantly.
+
+## Delivery receipts (TW-BCAST-024, 027)
+
+`BroadcastReceiptsService.handle(receipt)` (exported from `modules/broadcasts`) applies a delivery report about a sent message to
+the broadcast recipient it belongs to. It is called by whatever receives the report, which has already checked who is speaking
+(the Cloud API webhook handler and signature, the Twilio status callback and its token, the Baileys adapter): the WABA and
+device domains own those routes. It returns `true` when the message belongs to a broadcast and `false` for any other message,
+so the caller can fall through to the chat path.
+
+```ts
+{ providerMessageId: 'wamid...', status: 'sent' | 'delivered' | 'read' | 'failed', occurredAt: Date, errorMessage?, errorCode? }
+```
+
+Mappers for the providers: `mapBaileysAck(3 | 4 | 5)` gives delivered or read (1 and 2 say nothing new), `mapTwilioStatus` gives
+sent, delivered, read or failed (queued, accepted and sending say nothing new).
+
+No tenant is needed: the recipient row carries the provider's message id, and `bcast_receipt_lookup(id)` (a SECURITY DEFINER
+function returning three ids) names the organization; the receipt is then applied under that organization's context.
+
+One state machine for every source. A recipient only moves forward (pending, sent, delivered, read); `failed` is final; a read
+recipient ignores a late delivered, sent or failed; the same report twice changes nothing. Delivered and read stamp their time
+once, from the report. A failure keeps the provider's message, or `error_code:<code>`, cut to 512 characters.
+The broadcast's counters move by the recipient's change of tier (a read recipient is also delivered and sent), not by a recount,
+so a repeat is never applied twice. A failure (or a failure that is later undone) re-derives how a finished broadcast ended,
+so `completed` becomes `completed_with_errors`, and `failed` when every recipient failed. A broadcast still running keeps its status.

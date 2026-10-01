@@ -16,6 +16,7 @@ import {
   PacingRuntime,
   SenderLease,
 } from './send-safety';
+import { BroadcastReceiptsService } from './broadcast-receipts.service';
 import { BroadcastsActionsController } from './broadcasts-actions.controller';
 import { BroadcastsActionsService } from './broadcasts-actions.service';
 import { BroadcastsReadController } from './broadcasts-read.controller';
@@ -58,6 +59,7 @@ import {
     BroadcastsRepository,
     BroadcastsReadService,
     BroadcastsActionsService,
+    BroadcastReceiptsService,
     LinkTracker,
     PacingRuntime,
     CapTally,

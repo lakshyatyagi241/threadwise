@@ -5,6 +5,7 @@ Reference 1.7.0 vs branch `punya/broadcasts/TW-BCAST-009-store-request`. Covers 
 
 Evidence is automated, no screen yet:
 
+- `apps/api/test/e2e/broadcasts/broadcasts-receipts.e2e.spec.ts`: 13 scenarios for receipts, the state machine, the counters and tenant isolation.
 - `apps/api/test/e2e/broadcasts/broadcasts-pacing.e2e.spec.ts`: 14 scenarios for the gap, batches, the cap, pause, resume and the sender lease.
 - `apps/api/test/e2e/broadcasts/broadcasts-tracking.e2e.spec.ts`: 11 scenarios for wrapping, the redirect, bots, expiry and the counters.
 - `apps/api/test/e2e/broadcasts/broadcasts-actions.e2e.spec.ts`: 16 scenarios for delete, retry, the sweep and the CSV export.
@@ -13,27 +14,28 @@ Evidence is automated, no screen yet:
 - `apps/api/test/e2e/broadcasts/broadcasts-dispatch.e2e.spec.ts`: 14 scenarios for queueing and sending, against real Postgres with a fake engine adapter.
 - `apps/api/test/e2e/broadcasts/broadcasts-create.e2e.spec.ts`: 17 scenarios through HTTP against real Postgres (every
   Given/When/Then of 009, 010, 014, 015, the OTP-template refusal of 012, tenant isolation, permission, auth).
-- `apps/api/test/unit/broadcasts/*`: 138 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
+- `apps/api/test/unit/broadcasts/*`: 146 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
 
 ## Status of each feature in this PR
 
-| Id                  | Status       | Note                                                                                                                                                                      |
-| ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| TW-BCAST-009        | backend-done | Plan cap, validation, order of checks. Plan **feature flag** `broadcast` is stubbed (see below). No screen yet.                                                           |
-| TW-BCAST-010        | backend-done | Contacts, groups, tags, opt-out removal, tenant scoping.                                                                                                                  |
-| TW-BCAST-011        | stubbed      | `SendPolicyService` (emergency halt, content screen) is wired for real. The **wallet precheck** is a shim until the wallet domain exposes it.                             |
-| TW-BCAST-012        | backend-done | OTP-template refusal, public-https media check, Meta approval/pause/RED guards. Two inputs are stubbed (below).                                                           |
-| TW-BCAST-013        | stubbed      | Warmer hold is a shim that never holds until the warmer domain exposes it.                                                                                                |
-| TW-BCAST-014        | backend-done | Weighted split, floor plus largest-fraction remainder, empty slices skipped.                                                                                              |
-| TW-BCAST-015        | backend-done | Rows and recipients in one transaction, audit and `broadcast.created` outbox event.                                                                                       |
-| TW-BCAST-016        | backend-done | Due broadcasts go to BullMQ, a worker resolves sender and template and sends each recipient. Only the `waba` engine has an adapter; see below.                            |
-| TW-BCAST-017        | backend-done | Per-recipient Cloud API components (variables, header text and media, buttons, carousel, catalog) and the send-time overrides. `waba` only; see the differences below.    |
-| TW-BCAST-001        | backend-done | List with status, range and name filters, cursor pages. No screen yet.                                                                                                    |
-| TW-BCAST-002        | backend-done | Tiles and status counts; Processing and Queued now come from the recipient rows.                                                                                          |
-| TW-BCAST-030 to 036 | backend-done | Detail, recipients, live counters and statistics as endpoints; the overview charts' data, the failure histogram and the events are in the detail response. No screen yet. |
-| TW-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                  |
-| TW-BCAST-026        | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                                                      |
-| TW-BCAST-027        | partial      | Counters and the state machine are in. The Meta and Twilio webhook branches that call it are the WABA domain's.                                                           |
+| Id                  | Status       | Note                                                                                                                                                                                                              |
+| ------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TW-BCAST-009        | backend-done | Plan cap, validation, order of checks. Plan **feature flag** `broadcast` is stubbed (see below). No screen yet.                                                                                                   |
+| TW-BCAST-010        | backend-done | Contacts, groups, tags, opt-out removal, tenant scoping.                                                                                                                                                          |
+| TW-BCAST-011        | stubbed      | `SendPolicyService` (emergency halt, content screen) is wired for real. The **wallet precheck** is a shim until the wallet domain exposes it.                                                                     |
+| TW-BCAST-012        | backend-done | OTP-template refusal, public-https media check, Meta approval/pause/RED guards. Two inputs are stubbed (below).                                                                                                   |
+| TW-BCAST-013        | stubbed      | Warmer hold is a shim that never holds until the warmer domain exposes it.                                                                                                                                        |
+| TW-BCAST-014        | backend-done | Weighted split, floor plus largest-fraction remainder, empty slices skipped.                                                                                                                                      |
+| TW-BCAST-015        | backend-done | Rows and recipients in one transaction, audit and `broadcast.created` outbox event.                                                                                                                               |
+| TW-BCAST-016        | backend-done | Due broadcasts go to BullMQ, a worker resolves sender and template and sends each recipient. Only the `waba` engine has an adapter; see below.                                                                    |
+| TW-BCAST-017        | backend-done | Per-recipient Cloud API components (variables, header text and media, buttons, carousel, catalog) and the send-time overrides. `waba` only; see the differences below.                                            |
+| TW-BCAST-001        | backend-done | List with status, range and name filters, cursor pages. No screen yet.                                                                                                                                            |
+| TW-BCAST-002        | backend-done | Tiles and status counts; Processing and Queued now come from the recipient rows.                                                                                                                                  |
+| TW-BCAST-030 to 036 | backend-done | Detail, recipients, live counters and statistics as endpoints; the overview charts' data, the failure histogram and the events are in the detail response. No screen yet.                                         |
+| TW-BCAST-024        | backend-done | `BroadcastReceiptsService` applies a delivery report; Baileys and Twilio mappers. The routes that receive the reports (Cloud API webhook, Twilio callback, the Baileys adapter) are the WABA and device domains'. |
+| TW-BCAST-025        | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).                                                                          |
+| TW-BCAST-026        | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                                                                                              |
+| TW-BCAST-027        | backend-done | Counters moved by delta, one state machine for every source, the outcome re-derived after a late failure. Only the routes that receive Meta and Twilio reports are not here.                                      |
 
 ## Intended differences from Reference
 
@@ -81,6 +83,10 @@ Evidence is automated, no screen yet:
 | 39 | Concurrency | Strictly sequential per broadcast, no limit across broadcasts of one sender | One run per sender at a time, by a lease. |
 | 40 | Socket-drop pause | Baileys socket check before each recipient | Belongs to the Baileys adapter (WADEV), not built; the emergency halt pause is the one that exists. |
 | 41 | `waba` falling back to Baileys | A `waba` row with incomplete settings silently took the Baileys path and failed for lack of a socket | A `waba` broadcast whose credentials are missing fails at dispatch with a clear reason. |
+| 42 | Receipts | Node posted each one to a Laravel callback; a receipt for a message Node no longer remembered (after a restart) went to the chat endpoint and was lost for the broadcast | Matched on the provider message id stored on the recipient row, so a restart loses nothing. |
+| 43 | Twilio status | Updated the recipient but never the broadcast's counters, so the list lagged | The same service for every provider, counters included. |
+| 44 | Counters | Recounted the recipient table after every event | Moved by the recipient's change of tier (a constant-time update), re-derived only when a failure changes how the broadcast ended. |
+| 45 | Tenant for a receipt | Looked up with no tenant isolation | A SECURITY DEFINER function (`bcast_receipt_lookup`) returns three ids for one message id. **Reviewer decision**, same note as difference 34. |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
