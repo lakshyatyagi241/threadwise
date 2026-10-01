@@ -1,0 +1,588 @@
+'use client';
+
+import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import {
+  Alert,
+  Button,
+  Field,
+  Input,
+  Modal,
+  Select,
+  Spinner,
+  Switch,
+  Textarea,
+  useToast,
+} from '@crm/ui';
+import {
+  PhoneField,
+  type PhoneValue,
+} from '@/features/auth-registration-security/shared/phone-field';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import {
+  createContact,
+  fetchContact,
+  invalidateContacts,
+  KEYS,
+  updateContact,
+} from '../api/contacts';
+import { useAttributes, useStatusOptions } from '../api/attributes';
+import { setContactGroups, useGroups } from '../api/groups';
+import { attachTagToContact, detachTag, useContactTags, useTags } from '../api/tags';
+import type { ContactRow } from '../api/schemas';
+import {
+  contactToForm,
+  EMPTY_FORM,
+  TITLES,
+  toCreatePayload,
+  toUpdatePayload,
+  validateForm,
+  type ContactFormValues,
+} from '../lib/contact-model';
+import { fieldErrors, errorKind } from '../lib/errors';
+import { stageChoices, statusChoices } from '../lib/option-sets';
+import { ErrorLine } from './error-line';
+import { GroupChip } from './chips';
+import { TagsEditor, type TagLite } from './tags-editor';
+
+export interface ContactFormModalProps {
+  open: boolean;
+  /** Present = edit this contact; absent = add a new one. */
+  contact?: ContactRow;
+  onClose: () => void;
+  onSaved?: (contact: ContactRow) => void;
+}
+
+/** Add / edit contact (WD-CON-009, 010). The form is mounted only while open, so it always starts from the contact's saved state. */
+export function ContactFormModal({ open, contact, onClose, onSaved }: ContactFormModalProps) {
+  const t = useTranslations('contacts-attributes-tags.form');
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      size="lg"
+      eyebrow={contact ? t('editEyebrow') : t('addEyebrow')}
+      title={contact ? t('editTitle') : t('addTitle')}
+      closeLabel={t('close')}
+    >
+      {open && (
+        <ContactForm
+          key={contact?.id ?? 'new'}
+          contact={contact}
+          onClose={onClose}
+          onSaved={onSaved}
+        />
+      )}
+    </Modal>
+  );
+}
+
+function ContactForm({
+  contact,
+  onClose,
+  onSaved,
+}: {
+  contact?: ContactRow;
+  onClose: () => void;
+  onSaved?: (c: ContactRow) => void;
+}) {
+  const t = useTranslations('contacts-attributes-tags.form');
+  const tt = useTranslations('contacts-attributes-tags.tags');
+  const qc = useQueryClient();
+  const { toast } = useToast();
+  const canCreateTags = useCan('record.tags.create');
+  const uid = useId();
+  const id = (name: string) => `${uid}-${name}`;
+
+  const editing = contact !== undefined;
+  const [values, setValues] = useState<ContactFormValues>(() =>
+    contact ? contactToForm(contact) : EMPTY_FORM,
+  );
+  const [phone, setPhone] = useState<PhoneValue>({
+    e164: contact?.phone ?? null,
+    empty: !contact?.phone,
+    problem: null,
+  });
+  const [problems, setProblems] = useState<
+    Partial<Record<'firstName' | 'phone' | 'email', string>>
+  >({});
+  const [serverFields, setServerFields] = useState<Record<string, string>>({});
+  const [version, setVersion] = useState(contact?.rowVersion ?? 0);
+  const [conflict, setConflict] = useState(false);
+  const [pendingTags, setPendingTags] = useState<TagLite[]>([]);
+
+  const attributes = useAttributes();
+  const statusOptions = useStatusOptions();
+  const groups = useGroups();
+  const allTags = useTags();
+  const contactTags = useContactTags(contact?.id ?? null);
+  const initialGroups = useRef((contact?.groups ?? []).map((g) => g.id));
+
+  const activeAttributes = useMemo(
+    () => (attributes.data ?? []).filter((a) => a.active),
+    [attributes.data],
+  );
+  const attributeKeys = useMemo(() => activeAttributes.map((a) => a.key), [activeAttributes]);
+  const stages = useMemo(
+    () => stageChoices(statusOptions.data, values.lifecycleStage),
+    [statusOptions.data, values.lifecycleStage],
+  );
+  const statuses = useMemo(
+    () => statusChoices(statusOptions.data, (v) => t(`statuses.${v}`), values.status),
+    [statusOptions.data, values.status, t],
+  );
+
+  const set = <K extends keyof ContactFormValues>(key: K, value: ContactFormValues[K]) =>
+    setValues((v) => ({ ...v, [key]: value }));
+
+  // --- tags: immediate when editing (as WaDesk), a pending list until the contact exists when adding ---
+  const tagMutation = useMutation({
+    mutationFn: async (op: { kind: 'attach' | 'detach'; tag: TagLite }) => {
+      if (!contact) return;
+      if (op.kind === 'detach') {
+        if (op.tag.id) await detachTag(contact.id, op.tag.id);
+        return;
+      }
+      await attachTagToContact(contact.id, op.tag);
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: KEYS.contactTags(contact?.id ?? '') }),
+        qc.invalidateQueries({ queryKey: KEYS.tags }),
+        invalidateContacts(qc),
+      ]);
+    },
+    onError: () => toast(tt('failed'), 'danger'),
+  });
+
+  const attachedTags: TagLite[] = editing
+    ? (contactTags.data ?? []).map((x) => ({ id: x.id, name: x.name, color: x.color }))
+    : pendingTags;
+  const knownTags: TagLite[] = (allTags.data ?? []).map((x) => ({
+    id: x.id,
+    name: x.name,
+    color: x.color,
+  }));
+
+  function attachTag(tag: TagLite) {
+    if (editing) tagMutation.mutate({ kind: 'attach', tag });
+    else setPendingTags((p) => [...p, tag]);
+  }
+  function detachTagFromForm(tag: TagLite) {
+    if (editing) tagMutation.mutate({ kind: 'detach', tag });
+    else setPendingTags((p) => p.filter((x) => x.name !== tag.name));
+  }
+
+  // --- save ---
+  const knownGroupIds = new Set((groups.data ?? []).map((g) => g.id));
+
+  const save = useMutation({
+    mutationFn: async (): Promise<{
+      saved: ContactRow;
+      duplicate: boolean;
+      warnings: string[];
+    }> => {
+      const warnings: string[] = [];
+      let saved: ContactRow;
+      let duplicate = false;
+      if (contact) {
+        saved = await updateContact(
+          contact.id,
+          toUpdatePayload(
+            values,
+            attributeKeys,
+            version,
+            contact.isUnsubscribed,
+            contact.customFields,
+          ),
+        );
+        const before = initialGroups.current;
+        const same =
+          before.length === values.groupIds.length &&
+          values.groupIds.every((g) => before.includes(g));
+        if (!same) {
+          try {
+            await setContactGroups(saved.id, values.groupIds);
+          } catch {
+            warnings.push('groups');
+          }
+        }
+      } else {
+        const started = Date.now();
+        saved = await createContact(toCreatePayload(values, attributeKeys));
+        // Creating a contact whose phone or email already belongs to someone returns that person instead of a copy.
+        duplicate = Date.parse(saved.createdAt) < started - 2000;
+        if (!duplicate) {
+          for (const tg of pendingTags) {
+            try {
+              await attachTagToContact(saved.id, tg);
+            } catch {
+              if (!warnings.includes('tags')) warnings.push('tags');
+            }
+          }
+          if (values.groupIds.length > 0) {
+            try {
+              await setContactGroups(saved.id, values.groupIds);
+            } catch {
+              warnings.push('groups');
+            }
+          }
+        }
+      }
+      // The write contract may not carry the consent flag yet: say so instead of pretending it was saved.
+      if (!duplicate && saved.isUnsubscribed !== values.optedOut) warnings.push('optOut');
+      return { saved, duplicate, warnings };
+    },
+    onSuccess: async ({ saved, duplicate, warnings }) => {
+      await Promise.all([
+        invalidateContacts(qc),
+        qc.invalidateQueries({ queryKey: KEYS.contact(saved.id) }),
+        qc.invalidateQueries({ queryKey: KEYS.contactTags(saved.id) }),
+        qc.invalidateQueries({ queryKey: KEYS.groups }),
+        qc.invalidateQueries({ queryKey: KEYS.tags }),
+      ]);
+      if (duplicate) toast(t('duplicate'), 'info');
+      else toast(editing ? t('updated') : t('added'), 'success');
+      for (const w of warnings)
+        toast(
+          t(w === 'tags' ? 'tagsFailed' : w === 'groups' ? 'groupsFailed' : 'optOutNotApplied'),
+          'danger',
+        );
+      onSaved?.(saved);
+      onClose();
+    },
+    onError: (e) => {
+      if (errorKind(e) === 'conflict') setConflict(true);
+      setServerFields(fieldErrors(e));
+    },
+  });
+
+  async function reloadLatest() {
+    if (!contact) return;
+    const latest = await qc.fetchQuery({
+      queryKey: KEYS.contact(contact.id),
+      queryFn: () => fetchContact(contact.id),
+      staleTime: 0,
+    });
+    setValues(contactToForm(latest));
+    setPhone({ e164: latest.phone, empty: !latest.phone, problem: null });
+    setVersion(latest.rowVersion);
+    setConflict(false);
+    save.reset();
+  }
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    // The phone field owns its number; the form values carry the E.164 it last reported.
+    const merged = { ...values, phone: phone.e164 };
+    const found = validateForm(merged, phone.problem !== null);
+    const next = Object.fromEntries(Object.entries(found).map(([k, v]) => [k, t(`problems.${v}`)]));
+    setProblems(next);
+    setServerFields({});
+    if (Object.keys(next).length > 0) {
+      const first = Object.keys(next)[0];
+      document.getElementById(id(first === 'firstName' ? 'first' : first))?.focus();
+      return;
+    }
+    setValues(merged);
+    save.mutate();
+  }
+
+  const loadingLookups = attributes.isPending;
+  const err = (key: 'firstName' | 'phone' | 'email') => problems[key] ?? serverFields[key];
+
+  return (
+    <form onSubmit={onSubmit} noValidate className="space-y-4">
+      {conflict && (
+        <Alert tone="warning">
+          {t('conflict')}
+          <Button
+            variant="secondary"
+            size="sm"
+            className="ms-2"
+            onClick={() => void reloadLatest()}
+          >
+            {t('reload')}
+          </Button>
+        </Alert>
+      )}
+      {save.isError && !conflict && <ErrorLine error={save.error} />}
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Field label={t('title')} htmlFor={id('title')}>
+          <Select
+            id={id('title')}
+            value={values.title}
+            onChange={(e) => set('title', e.target.value)}
+          >
+            <option value="">{t('titleNone')}</option>
+            {TITLES.map((x) => (
+              <option key={x} value={x}>
+                {t(`titles.${x.toLowerCase()}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={`${t('firstName')} *`} htmlFor={id('first')} error={err('firstName')}>
+          <Input
+            id={id('first')}
+            value={values.firstName}
+            maxLength={255}
+            required
+            invalid={Boolean(err('firstName'))}
+            placeholder={t('firstNamePlaceholder')}
+            onChange={(e) => set('firstName', e.target.value)}
+            autoFocus
+          />
+        </Field>
+        <Field label={t('middleName')} htmlFor={id('middle')}>
+          <Input
+            id={id('middle')}
+            value={values.middleName}
+            maxLength={255}
+            placeholder={t('optional')}
+            onChange={(e) => set('middleName', e.target.value)}
+          />
+        </Field>
+        <Field label={t('lastName')} htmlFor={id('last')}>
+          <Input
+            id={id('last')}
+            value={values.lastName}
+            maxLength={255}
+            placeholder={t('lastNamePlaceholder')}
+            onChange={(e) => set('lastName', e.target.value)}
+          />
+        </Field>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field
+          className="sm:col-span-2"
+          label={`${t('phone')} *`}
+          htmlFor={id('phone')}
+          error={err('phone')}
+          hint={t('phoneHint')}
+        >
+          <PhoneField
+            id={id('phone')}
+            initial={contact?.phone}
+            invalid={Boolean(err('phone'))}
+            onChange={(v) => {
+              setPhone(v);
+              setValues((x) => ({ ...x, phone: v.e164 }));
+            }}
+          />
+        </Field>
+        <Field label={t('email')} htmlFor={id('email')} error={err('email')}>
+          <Input
+            id={id('email')}
+            type="email"
+            value={values.email}
+            maxLength={191}
+            invalid={Boolean(err('email'))}
+            placeholder={t('emailPlaceholder')}
+            onChange={(e) => set('email', e.target.value)}
+          />
+        </Field>
+        <Field label={t('language')} htmlFor={id('language')}>
+          <Input
+            id={id('language')}
+            value={values.language}
+            maxLength={80}
+            placeholder={t('languagePlaceholder')}
+            onChange={(e) => set('language', e.target.value)}
+          />
+        </Field>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label={t('memo')} htmlFor={id('memo')}>
+          <Textarea
+            id={id('memo')}
+            rows={3}
+            maxLength={2000}
+            value={values.memo}
+            placeholder={t('memoPlaceholder')}
+            onChange={(e) => set('memo', e.target.value)}
+          />
+        </Field>
+        <Field label={t('address')} htmlFor={id('address')}>
+          <Textarea
+            id={id('address')}
+            rows={3}
+            maxLength={1000}
+            value={values.address}
+            placeholder={t('addressPlaceholder')}
+            onChange={(e) => set('address', e.target.value)}
+          />
+        </Field>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Field label={t('source')} htmlFor={id('source')}>
+          <Input
+            id={id('source')}
+            value={values.source}
+            maxLength={128}
+            placeholder={t('sourcePlaceholder')}
+            onChange={(e) => set('source', e.target.value)}
+          />
+        </Field>
+        <Field label={t('status')} htmlFor={id('status')}>
+          <Select
+            id={id('status')}
+            value={values.status}
+            onChange={(e) => set('status', e.target.value)}
+          >
+            <option value="">{t('statusNone')}</option>
+            {statuses.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t('stage')} htmlFor={id('stage')}>
+          <Select
+            id={id('stage')}
+            value={values.lifecycleStage}
+            onChange={(e) => set('lifecycleStage', e.target.value)}
+          >
+            {!editing && <option value="">{t('stageDefault')}</option>}
+            {stages.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      </div>
+
+      <div className="flex items-start justify-between gap-4 rounded-md border border-border p-3">
+        <div className="min-w-0 text-sm">
+          <label htmlFor={id('optout')} className="block font-medium">
+            {t('optOut')}
+          </label>
+          <p className="text-xs text-muted-foreground">{t('optOutHint')}</p>
+        </div>
+        <Switch
+          id={id('optout')}
+          checked={values.optedOut}
+          onCheckedChange={(v) => set('optedOut', v)}
+          label={t('optOut')}
+        />
+      </div>
+
+      <fieldset className="space-y-1.5">
+        <legend className="text-sm font-medium">{t('groups')}</legend>
+        <div className="flex min-h-[2.5rem] flex-wrap gap-1.5 rounded-md border border-border p-2">
+          {groups.isPending ? (
+            <Spinner label={t('loadingGroups')} />
+          ) : groups.isError ? (
+            <span className="px-1 text-sm text-muted-foreground">
+              {errorKind(groups.error) === 'unavailable'
+                ? t('groupsUnavailable')
+                : t('groupsLoadFailed')}
+            </span>
+          ) : (groups.data ?? []).length === 0 ? (
+            <span className="px-1 text-sm text-muted-foreground">
+              {editing ? t('noGroups') : t('noGroupsCreate')}
+            </span>
+          ) : (
+            (groups.data ?? []).map((g) => {
+              const checked = values.groupIds.includes(g.id);
+              return (
+                <label
+                  key={g.id}
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-border px-2 py-0.5 text-xs font-medium hover:bg-muted has-[:checked]:border-primary has-[:checked]:bg-primary/10"
+                >
+                  <input
+                    type="checkbox"
+                    className="size-3 accent-[var(--primary)]"
+                    checked={checked}
+                    onChange={() =>
+                      set(
+                        'groupIds',
+                        checked
+                          ? values.groupIds.filter((x) => x !== g.id)
+                          : [...values.groupIds, g.id],
+                      )
+                    }
+                  />
+                  <GroupChip name={g.name} color={g.color} />
+                </label>
+              );
+            })
+          )}
+        </div>
+        {groups.isSuccess && values.groupIds.some((g) => !knownGroupIds.has(g)) && (
+          <p className="text-xs text-muted-foreground">{t('groupsGone')}</p>
+        )}
+      </fieldset>
+
+      <div className="space-y-1.5">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-sm font-medium">{tt('title')}</span>
+          <span className="text-xs text-muted-foreground">
+            {editing ? tt('hintEdit') : tt('hintAdd')}
+          </span>
+        </div>
+        <TagsEditor
+          attached={attachedTags}
+          all={knownTags}
+          loading={editing ? contactTags.isPending || allTags.isPending : allTags.isPending}
+          busy={tagMutation.isPending}
+          canCreate={canCreateTags}
+          onAttach={attachTag}
+          onDetach={detachTagFromForm}
+        />
+      </div>
+
+      {activeAttributes.length > 0 && (
+        <fieldset className="space-y-1.5">
+          <legend className="flex w-full items-baseline justify-between gap-2 text-sm font-medium">
+            <span>{t('attributes')}</span>
+            <span className="text-xs font-normal text-muted-foreground">{t('attributesHint')}</span>
+          </legend>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {activeAttributes.map((a) => (
+              <Field
+                key={a.id}
+                htmlFor={id(`attr-${a.key}`)}
+                label={
+                  <>
+                    {a.name}{' '}
+                    <span dir="ltr" className="font-mono text-xs text-muted-foreground">
+                      /{a.key}
+                    </span>
+                  </>
+                }
+              >
+                <Input
+                  id={id(`attr-${a.key}`)}
+                  value={values.attributes[a.key] ?? ''}
+                  maxLength={1000}
+                  placeholder={a.description || a.defaultValue}
+                  onChange={(e) =>
+                    set('attributes', { ...values.attributes, [a.key]: e.target.value })
+                  }
+                />
+              </Field>
+            ))}
+          </div>
+        </fieldset>
+      )}
+
+      <div className="flex justify-end gap-2 border-t border-border pt-4">
+        <Button variant="secondary" onClick={onClose} disabled={save.isPending}>
+          {t('cancel')}
+        </Button>
+        <Button type="submit" disabled={save.isPending || loadingLookups || conflict}>
+          {save.isPending && <Spinner />}
+          {editing ? t('saveChanges') : t('saveContact')}
+        </Button>
+      </div>
+    </form>
+  );
+}

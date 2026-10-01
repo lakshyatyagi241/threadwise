@@ -13,3 +13,8 @@ export { Spinner } from './components/spinner';
 export { Tabs, type TabItem, type TabsProps } from './components/tabs';
 export { Modal, type ModalProps } from './components/modal';
 export { PasswordInput, type PasswordInputProps } from './components/password-input';
+export { ConfirmDialog, type ConfirmDialogProps } from './components/confirm-dialog';
+export { EmptyState, type EmptyStateProps } from './components/empty-state';
+export { StatTile, type StatTileProps } from './components/stat-tile';
+export { Popover, type PopoverProps } from './components/popover';
+export { ToastProvider, useToast, type ToastTone } from './components/toast';
