@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { hash } from '@node-rs/argon2';
 import type {
   CreateUserInput,
   ListUsersQuery,
@@ -14,6 +13,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { PasswordService } from '../../auth';
 import { toUserResponse } from './users.mapper';
 import { UsersRepository } from './users.repository';
 
@@ -30,6 +30,7 @@ export class UsersService {
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    private readonly passwords: PasswordService,
   ) {}
 
   async list(query: ListUsersQuery): Promise<PageResponse<UserResponse>> {
@@ -95,7 +96,13 @@ export class UsersService {
         ]);
       }
 
-      const passwordHash = await hash(input.password);
+      // Same rules as sign-up, reset and change (WD-AUTH-035): an admin-set
+      // password is not exempt from the policy.
+      await this.passwords.assertAcceptable(input.password, {
+        email: input.email,
+        fullName: input.fullName,
+      });
+      const passwordHash = await this.passwords.hash(input.password);
       const created = await this.repo.insert(tx, ctx.orgId, {
         email: input.email,
         fullName: input.fullName,

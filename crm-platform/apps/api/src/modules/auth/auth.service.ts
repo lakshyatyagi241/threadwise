@@ -1,10 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { verify } from '@node-rs/argon2';
 import { sql } from 'drizzle-orm';
+import type { TokenPair } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AppError } from '../../common/errors/app-error';
 import { ClerkService } from './clerk.service';
-import { TokenService, type TokenPair } from './token.service';
+import { LoginService, type ClientMeta } from './flows/login.service';
+import { TenantDirectory } from './platform/tenant-directory';
+import { SessionService } from './sessions/session.service';
+import { TokenService } from './token.service';
 
 interface LoginRow {
   id: number;
@@ -14,12 +18,10 @@ interface LoginRow {
 }
 
 /**
- * Login for the two human pools that exist today: staff users and partner
- * agents. Candidates join with the Exams module and follow the same shape.
+ * The pools that are not staff password login: partner agents (stateless
+ * refresh, ADR-0014), the Clerk exchange, and the refresh dispatcher.
  *
- * Both paths take the org slug because a bare email is not unique across
- * tenants — the same person can be staff at two orgs, and silently picking one
- * of them is worse than asking.
+ * Staff login, MFA, sign-up and recovery live in `flows/` (ADR-0019).
  */
 @Injectable()
 export class AuthService {
@@ -29,25 +31,10 @@ export class AuthService {
     private readonly db: DatabaseService,
     private readonly tokens: TokenService,
     private readonly clerk: ClerkService,
+    private readonly tenants: TenantDirectory,
+    private readonly sessions: SessionService,
+    private readonly login: LoginService,
   ) {}
-
-  async loginStaff(orgSlug: string, email: string, password: string): Promise<TokenPair> {
-    const orgId = await this.resolveOrgId(orgSlug);
-
-    const row = await this.db.txAs({ orgId }, async (tx) => {
-      const result = await tx.execute(sql`
-        SELECT id, uuid, password_hash, status
-        FROM users
-        WHERE org_id = ${orgId} AND email = ${email}
-      `);
-      return result.rows[0] as unknown as LoginRow | undefined;
-    });
-
-    await this.assertPassword(row, password);
-
-    this.logger.log({ orgId, userId: row!.id }, 'staff login');
-    return this.tokens.issue({ sub: row!.id, org: orgId, typ: 'user', uid: row!.uuid });
-  }
 
   async loginPartnerAgent(orgSlug: string, email: string, password: string): Promise<TokenPair> {
     const orgId = await this.resolveOrgId(orgSlug);
@@ -74,54 +61,60 @@ export class AuthService {
   }
 
   /**
-   * Staff login via Clerk. Clerk already verified the password/Google
-   * credential — `clerkToken` is the session token from that, not a
-   * password. This resolves it to a local `users` row (linking by
-   * auth_subject, falling back to email, auto-provisioning if neither
-   * matches) and issues our own token pair exactly like loginStaff.
+   * Staff login through a Clerk session token. Clerk verified the credential;
+   * this links it to an EXISTING local user, by `auth_subject` and then by
+   * email, and opens a normal session.
+   *
+   * It no longer creates users. The old version auto-provisioned a user for
+   * any valid Clerk identity in any organization the caller named, which let
+   * anyone with a Clerk account join any tenant (ADR-0019, known issue). A
+   * person with no row is now told to ask for an invitation.
    */
-  async loginViaClerk(orgSlug: string, clerkToken: string): Promise<TokenPair> {
+  async loginViaClerk(orgSlug: string, clerkToken: string, meta: ClientMeta) {
     const identity = await this.clerk.verifySession(clerkToken);
-    const orgId = await this.resolveOrgId(orgSlug);
+    const org = await this.tenants.findOrgBySlug(orgSlug);
+    if (!org || org.status !== 'active') throw AppError.unauthenticated('Invalid credentials');
 
-    const row = await this.db.txAs({ orgId }, async (tx) => {
-      const byAuthSubject = await tx.execute(sql`
-        SELECT id, uuid FROM users
-        WHERE org_id = ${orgId} AND auth_subject = ${identity.clerkUserId}
+    const row = await this.db.txAs({ orgId: org.id }, async (tx) => {
+      const bySubject = await tx.execute(sql`
+        SELECT id, uuid, email, full_name, status FROM users
+        WHERE org_id = ${org.id} AND auth_subject = ${identity.clerkUserId}
       `);
-      if (byAuthSubject.rows[0]) return byAuthSubject.rows[0] as { id: number; uuid: string };
-
-      // Pre-existing row (created by an admin, or from before Clerk) that
-      // matches on email — link it to this Clerk identity rather than
-      // forking a second account for the same person.
-      const byEmail = await tx.execute(sql`
+      if (bySubject.rows[0]) return bySubject.rows[0];
+      const linked = await tx.execute(sql`
         UPDATE users SET auth_subject = ${identity.clerkUserId}
-        WHERE org_id = ${orgId} AND email = ${identity.email} AND auth_subject IS NULL
-        RETURNING id, uuid
+        WHERE org_id = ${org.id} AND email = ${identity.email} AND auth_subject IS NULL
+        RETURNING id, uuid, email, full_name, status
       `);
-      if (byEmail.rows[0]) return byEmail.rows[0] as { id: number; uuid: string };
-
-      const created = await tx.execute(sql`
-        INSERT INTO users (org_id, email, full_name, auth_subject)
-        VALUES (${orgId}, ${identity.email}, ${identity.fullName}, ${identity.clerkUserId})
-        ON CONFLICT (org_id, email) DO UPDATE SET auth_subject = EXCLUDED.auth_subject
-        RETURNING id, uuid
-      `);
-      return created.rows[0] as { id: number; uuid: string };
+      return linked.rows[0];
     });
+    const user = row as unknown as
+      { id: number; uuid: string; email: string; full_name: string; status: string } | undefined;
+    if (!user || user.status !== 'active') throw AppError.unauthenticated('Invalid credentials');
 
-    if (!row) {
-      // Should be unreachable — insert always returns a row — but a thrown
-      // AppError beats a null-deref three lines down.
-      throw AppError.unauthenticated('Could not resolve Clerk identity to a user');
-    }
-
-    this.logger.log({ orgId, userId: row.id, clerkUserId: identity.clerkUserId }, 'clerk login');
-    return this.tokens.issue({ sub: row.id, org: orgId, typ: 'user', uid: row.uuid });
+    this.logger.log({ orgId: org.id, userId: user.id }, 'clerk login');
+    return this.login.completeLogin({
+      org,
+      user: { id: user.id, uuid: user.uuid, email: user.email, fullName: user.full_name },
+      remember: false,
+      mfaVerified: false,
+      method: 'social',
+      meta,
+    });
   }
 
+  /**
+   * Staff tokens rotate through server-side sessions; partner agents keep the
+   * stateless re-issue ADR-0014 describes.
+   */
   async refresh(refreshToken: string): Promise<TokenPair> {
     const claims = await this.tokens.verifyRefresh(refreshToken);
+    if (claims.typ === 'user') {
+      return (await this.sessions.refresh(refreshToken)).tokens;
+    }
+    if (claims.typ === 'platform_operator') {
+      throw AppError.unauthenticated('Invalid or expired refresh token');
+    }
     return this.tokens.issue({
       sub: claims.sub,
       org: claims.org,
@@ -130,16 +123,9 @@ export class AuthService {
     });
   }
 
-  /**
-   * The org lookup runs privileged — by definition there is no tenant context
-   * yet, since establishing it is the whole point of logging in.
-   */
   private async resolveOrgId(slug: string): Promise<number> {
-    const result = await this.db.privileged(async (tx) =>
-      tx.execute(sql`SELECT id FROM organizations WHERE slug = ${slug} AND status = 'active'`),
-    );
-    const org = result.rows[0] as { id: number } | undefined;
-    if (!org) {
+    const org = await this.tenants.findOrgBySlug(slug);
+    if (!org || org.status !== 'active') {
       // Same error as a bad password: distinguishing them would turn this into
       // an org-slug enumeration endpoint.
       throw AppError.unauthenticated('Invalid credentials');
@@ -153,8 +139,7 @@ export class AuthService {
     activeStatus = 'active',
   ): Promise<void> {
     // Verify against a dummy hash even when the row is missing, so a
-    // non-existent account takes the same time as a wrong password. Without
-    // this, response timing tells an attacker which emails are real.
+    // non-existent account takes the same time as a wrong password.
     const hashToCheck = row?.password_hash ?? DUMMY_HASH;
     const ok = await verify(hashToCheck, password).catch(() => false);
 

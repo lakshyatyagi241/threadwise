@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -15,8 +16,19 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
  * counter flush, bulk import/export.
  */
 @Module({
-  imports: [ScheduleModule.forRoot()],
-  providers: [OutboxDrainService, PartitionMaintenanceService],
-  exports: [OutboxDrainService, PartitionMaintenanceService],
+  // AuthModule: the OTP template poll reuses the sender registry and the Meta template client.
+  imports: [ScheduleModule.forRoot(), AuthModule],
+  providers: [
+    OutboxDrainService,
+    PartitionMaintenanceService,
+    AuthMaintenanceService,
+    OtpTemplateRefreshService,
+  ],
+  exports: [
+    OutboxDrainService,
+    PartitionMaintenanceService,
+    AuthMaintenanceService,
+    OtpTemplateRefreshService,
+  ],
 })
 export class WorkersModule {}

@@ -1,0 +1,1495 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "Platform console",
+        "skipToContent": "Skip to content",
+        "navLabel": "Console navigation",
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu",
+        "language": "Language",
+        "themeToLight": "Switch to light theme",
+        "themeToDark": "Switch to dark theme",
+        "accountLink": "Account and security ({email})",
+        "signOut": "Sign out",
+        "signingOut": "Signing out",
+        "redirecting": "Opening two-factor setup",
+        "roles": {
+          "super_admin": "Super admin",
+          "support": "Support",
+          "auditor": "Auditor"
+        },
+        "mfaRequired": {
+          "title": "Two-factor authentication is required",
+          "body": "Super admins must turn on an authenticator app before using the console. Finish the setup below to unlock every page."
+        }
+      },
+      "nav": {
+        "securityCenter": "Security Center",
+        "securityEvents": "Security events",
+        "registration": "Registration policy",
+        "socialLogin": "Social login and captcha",
+        "authPages": "Auth pages",
+        "plans": "Plans",
+        "account": "Account and two-factor",
+        "groups": {
+          "security": "Security",
+          "guestPages": "Sign-in and sign-up",
+          "plans": "Plans",
+          "account": "Your account"
+        }
+      },
+      "common": {
+        "copy": "Copy",
+        "copied": "Copied",
+        "copyFailed": "Could not copy",
+        "loading": "Loading",
+        "retry": "Try again",
+        "requestId": "Request id",
+        "errors": {
+          "forbidden": "Your role does not allow this.",
+          "request": "The request was refused. Reload the page and try again.",
+          "unexpected": "Something went wrong on our side. Try again in a moment."
+        },
+        "readOnly": {
+          "superAdmin": "Only super admins can change these settings. Your role ({role}) can look at them.",
+          "superAdminSupport": "Only super admins and support can change these settings. Your role ({role}) can look at them."
+        }
+      },
+      "login": {
+        "title": "Operator sign-in",
+        "intro": "This console is for the people who run the platform. Workspace users sign in on the main sign-in page.",
+        "requestId": "Request id",
+        "submit": "Sign in",
+        "submitting": "Signing in",
+        "fields": {
+          "email": "Email",
+          "emailPlaceholder": "you@company.com",
+          "password": "Password",
+          "showPassword": "Show password",
+          "hidePassword": "Hide password"
+        },
+        "errors": {
+          "email": "Enter a valid email address.",
+          "passwordRequired": "Enter your password.",
+          "captchaRequired": "Tick the box to show you are not a robot.",
+          "codeFormat": "Enter the 6 digits from your authenticator app.",
+          "recoveryFormat": "A recovery code has 8 to 32 letters, digits or dashes."
+        },
+        "notices": {
+          "expired": "Your session ended. Sign in again to continue."
+        },
+        "problems": {
+          "invalid": "Those credentials do not match.",
+          "invalidCode": "That code is not valid. Check the code and try again.",
+          "locked": "Too many failed attempts. Sign-in is paused for a while.",
+          "tryAgainIn": "Try again in {time}",
+          "ipBlocked": "Access from {ip} is not allowed.",
+          "ipBlockedUnknown": "Access from this address is not allowed.",
+          "ipBlockedHelp": "The operator allowlist does not include this address. Ask a super admin to add it.",
+          "captcha": "The captcha check failed. Complete it and try again.",
+          "challengeExpired": "That sign-in expired. Enter your password again.",
+          "rateLimited": "Too many requests. Wait a moment and try again.",
+          "unexpected": "We could not sign you in. Try again in a moment."
+        },
+        "captcha": {
+          "loadFailed": "The captcha could not load. Check your connection or a content blocker, then retry.",
+          "retry": "Retry captcha",
+          "v3Notice": "This page is protected by an invisible captcha check."
+        },
+        "mfa": {
+          "title": "Two-factor check",
+          "intro": "Enter the 6-digit code from your authenticator app.",
+          "recoveryIntro": "Enter one of your recovery codes. Each code works once.",
+          "codeLabel": "Authentication code",
+          "codeHint": "The code changes every 30 seconds.",
+          "recoveryLabel": "Recovery code",
+          "recoveryHint": "Letters, digits and dashes, exactly as saved.",
+          "windowLeft": "This sign-in stays open for {time}.",
+          "windowClosed": "This sign-in window has closed. Go back and enter your password again.",
+          "verify": "Verify and sign in",
+          "verifying": "Checking",
+          "useRecovery": "Use a recovery code",
+          "useAuthenticator": "Use the authenticator app",
+          "back": "Back to sign-in"
+        }
+      },
+      "mfa": {
+        "eyebrow": "Your account",
+        "title": "Two-factor authentication",
+        "description": "Protect {email} with an authenticator app. Operator accounts are the highest-trust accounts on the platform.",
+        "requestId": "Request id",
+        "status": {
+          "title": "Authenticator app",
+          "on": "On",
+          "body": "Two-factor authentication is on for this account. You will be asked for a code each time you sign in. Recovery codes were shown once when you turned it on."
+        },
+        "intro": {
+          "title": "Set up an authenticator app",
+          "step1": "Install an authenticator app such as Google Authenticator, Microsoft Authenticator or 1Password.",
+          "step2": "Scan the QR code we show you, or type the setup key by hand.",
+          "step3": "Enter the 6-digit code the app displays to confirm. You then receive recovery codes.",
+          "begin": "Begin setup",
+          "starting": "Preparing"
+        },
+        "setup": {
+          "qrLabel": "QR code for your authenticator app",
+          "title": "Scan, then confirm",
+          "scan": "Open your authenticator app, add an account and scan this code. It is drawn in your browser and never sent to another site.",
+          "manualTitle": "Cannot scan?",
+          "manualHint": "Enter this setup key in the app instead. Time-based, 6 digits.",
+          "codeLabel": "6-digit code",
+          "codeHint": "Enter the code the app shows right now.",
+          "enable": "Turn on two-factor",
+          "enabling": "Turning on",
+          "cancel": "Cancel setup"
+        },
+        "codes": {
+          "enabled": "Two-factor authentication is on.",
+          "title": "Save your recovery codes",
+          "body": "If you lose your phone, each of these codes lets you sign in once. They are shown only now. Store them somewhere safe, apart from your password.",
+          "copyAll": "Copy all",
+          "download": "Download as text file",
+          "saved": "I have stored these recovery codes safely.",
+          "continue": "Continue to the console",
+          "fileHeader": "Platform console recovery codes for {email}. Each code works once."
+        },
+        "errors": {
+          "unexpected": "We could not complete that step. Try again in a moment.",
+          "codeFormat": "Enter the 6 digits shown in your app.",
+          "codeInvalid": "That code is not valid. Check the clock on your phone and try the next code.",
+          "setupExpired": "The setup expired. Begin again."
+        }
+      },
+      "security": {
+        "kicker": "Security Center",
+        "title": "Security and compliance",
+        "description": "Protect operator access, WhatsApp sending, devices and webhooks. Every change is saved as one update and written to the security event log.",
+        "viewEvents": "View security events",
+        "save": "Save settings",
+        "saving": "Saving",
+        "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
+        "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
+        "requestId": "Request id",
+        "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
+        "discard": "Discard changes",
+        "errors": {
+          "forbidden": "Your role is not allowed to change these settings.",
+          "unexpected": "The settings could not be saved. Try again in a moment."
+        },
+        "tabs": {
+          "summary": "Summary",
+          "login": "Login and MFA",
+          "whatsapp": "WhatsApp guardrails",
+          "abuse": "Abuse filters",
+          "api": "API and webhooks",
+          "devices": "Devices",
+          "danger": "Danger zone"
+        },
+        "common": {
+          "range": "Allowed: {min} to {max}.",
+          "rangeWithZero": "Allowed: 0 (off), or {min} to {max}.",
+          "blankKeeps": "Blank keeps the saved value."
+        },
+        "problems": {
+          "range": "Enter a whole number from {min} to {max}.",
+          "rangeWithZero": "Enter 0, or a whole number from {min} to {max}.",
+          "tooMany": "No more than {max} entries.",
+          "tooLong": "Each entry can be at most {max} characters.",
+          "invalidEntry": "{entry} is not a valid address or range."
+        },
+        "kpis": {
+          "score": {
+            "label": "Security score",
+            "strong": "strong controls active",
+            "attention": "attention needed"
+          },
+          "openRisks": {
+            "label": "Open risks",
+            "note": "{count} high priority"
+          },
+          "blocked": {
+            "label": "Blocked attempts"
+          },
+          "last24h": "last 24 hours",
+          "warnings": {
+            "label": "Warnings"
+          },
+          "mfa": {
+            "label": "Operator MFA coverage",
+            "note": "{enrolled}/{total} operators enrolled"
+          },
+          "webhooks": {
+            "label": "Webhook failures",
+            "normal": "normal",
+            "review": "review"
+          }
+        },
+        "risks": {
+          "kicker": "Priority queue",
+          "title": "Risk items to review",
+          "seeAll": "See all failures",
+          "empty": "All clear. No failures or warnings in the last 7 days.",
+          "columns": {
+            "severity": "Severity",
+            "signal": "Signal",
+            "workspace": "Workspace",
+            "owner": "Owner",
+            "action": "Action"
+          },
+          "severity": {
+            "high": "High",
+            "medium": "Medium",
+            "watch": "Watch"
+          },
+          "platform": "Platform",
+          "inspect": "Inspect"
+        },
+        "coverage": {
+          "kicker": "Coverage",
+          "title": "Controls enabled",
+          "buckets": {
+            "admin_access": "Admin access",
+            "send_abuse": "WhatsApp abuse prevention",
+            "api_hardening": "API hardening",
+            "incident_readiness": "Incident readiness"
+          }
+        },
+        "quickActions": {
+          "kicker": "Quick actions",
+          "rotate": "Rotate webhook secrets",
+          "forceReset": "Force password reset",
+          "resume": "Resume sends",
+          "halt": "Emergency stop sends",
+          "scopeAll": "all",
+          "scopeUsers": "all users",
+          "scopeGlobal": "global",
+          "halted": "currently halted",
+          "superAdminOnly": "Only a super admin can run these actions."
+        },
+        "enforcement": {
+          "kicker": "Honest controls",
+          "title": "What each control does today",
+          "description": "Saving a setting is not the same as the platform acting on it. Enforced means something checks it now, partial means only some paths check it, reserved means it is stored for later.",
+          "show": "Show",
+          "hide": "Hide",
+          "columns": {
+            "control": "Control",
+            "consumer": "What uses it",
+            "status": "Status"
+          },
+          "enforced": "Enforced",
+          "partial": "Partial",
+          "reserved": "Reserved"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "Require 2FA for all users",
+            "hint": "Every workspace user must set up an authenticator app before continuing."
+          },
+          "requireMfaForAdmins": {
+            "label": "Require 2FA for admins",
+            "hint": "Users with the Admin role in any workspace must set up an authenticator app."
+          },
+          "requireMfaForOwners": {
+            "label": "Require 2FA for workspace owners",
+            "hint": "The owner of each workspace must set up an authenticator app."
+          },
+          "allowedMfaMethods": {
+            "label": "Allowed 2FA methods",
+            "hint": "At least one stays selected: leaving none ticked keeps the saved list. Only authenticator apps exist today.",
+            "methods": {
+              "totp": "Authenticator app",
+              "email": "Email code",
+              "telegram": "Telegram bot"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "Session timeout (minutes)",
+            "hint": "Idle time before a browser-session sign-in ends. Sessions kept for 30 days are exempt."
+          },
+          "maxConcurrentSessions": {
+            "label": "Max concurrent sessions per user",
+            "hint": "When exceeded, the oldest session is signed out. 0 means unlimited."
+          },
+          "rememberMeEnabled": {
+            "label": "Allow keep me signed in",
+            "hint": "Off means every session ends when the browser closes."
+          },
+          "lockoutAfterFailures": {
+            "label": "Max login attempts",
+            "hint": "Failed sign-ins within the window before the account is paused."
+          },
+          "lockoutWindowMinutes": {
+            "label": "Lockout window (minutes)",
+            "hint": "How long failures are counted and how long the pause lasts."
+          },
+          "passwordMinLength": {
+            "label": "Minimum length"
+          },
+          "passwordRequireUpper": {
+            "label": "Require an uppercase letter"
+          },
+          "passwordRequireNumber": {
+            "label": "Require a number"
+          },
+          "passwordRequireSymbol": {
+            "label": "Require a symbol"
+          },
+          "passwordMaxAgeDays": {
+            "label": "Password age limit (days)",
+            "hint": "0 means passwords never expire."
+          },
+          "waGuardrailsMode": {
+            "label": "Mode",
+            "options": {
+              "off": "Off (no checks)",
+              "monitor": "Monitor (log only)",
+              "enforce": "Enforce (block)"
+            },
+            "explain": {
+              "off": "No checks run. The caps and filters on these tabs have no effect.",
+              "monitor": "Checks run and matches are written to the event log, but no message is stopped. Use this to confirm the rules before enforcing them.",
+              "enforce": "Matching messages are blocked before they are sent."
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "Max sends per minute",
+            "hint": "Per workspace. 0 means unlimited."
+          },
+          "waMaxSendsPerDay": {
+            "label": "Max sends per day",
+            "hint": "Per workspace. 0 means unlimited."
+          },
+          "waHoldOnLinksCount": {
+            "label": "Hold if links exceed",
+            "hint": "Messages with more links than this are held. 0 means no limit."
+          },
+          "waHoldOnScamPattern": {
+            "label": "Hold sends matching scam patterns",
+            "hint": "Prize, urgent-account and verification-trap phrasing."
+          },
+          "waRequireTemplateReview": {
+            "label": "Require template review before send",
+            "hint": "Counts toward the security score only; nothing checks it yet."
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "Block finance and get-rich terms",
+            "hint": "Fake investment, guaranteed returns and payment redirection patterns."
+          },
+          "abuseBlockShortLinks": {
+            "label": "Block short and suspicious links",
+            "hint": "Link shorteners that hide where a message leads."
+          },
+          "abuseBlockKeywordList": {
+            "label": "Custom keyword blocklist",
+            "hint": "One per line, or separated by commas. Matching is not case sensitive. Matching messages are flagged or blocked according to the guardrail mode.",
+            "placeholder": "forex\nquick money\nguaranteed return"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "API requests per minute",
+            "hint": "Default for each workspace key. A plan can override it."
+          },
+          "webhookSignatureRequired": {
+            "label": "Require HMAC signatures",
+            "hint": "A webhook endpoint cannot be created without a signing secret."
+          },
+          "webhookReplayWindowSec": {
+            "label": "Webhook replay window (seconds)",
+            "hint": "Stored for later; incoming provider webhooks are already signature-checked."
+          },
+          "deviceTrustRequired": {
+            "label": "Require trusted browser",
+            "hint": "Stored for later; there is no device-trust flow yet."
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "Auto-logout after inactive (days)",
+            "hint": "Linked WhatsApp devices unseen for this long are marked disconnected. 0 means never."
+          },
+          "ipAllowlistEnabled": {
+            "label": "Enable allowlist",
+            "hint": "Only the addresses below can reach this console."
+          },
+          "ipAllowlistCidrs": {
+            "label": "Allowed addresses"
+          },
+          "alertOnNewDevice": {
+            "label": "New-device alerts",
+            "hint": "Email the user when a sign-in comes from a device not seen before."
+          },
+          "alertOnNewCountry": {
+            "label": "Network-change alerts",
+            "hint": "Email the user when a sign-in comes from a different network than usual."
+          },
+          "alertChannel": {
+            "label": "Where login alerts go",
+            "hint": "Only email is sent today; the WhatsApp channel is recorded for later.",
+            "options": {
+              "email": "Email",
+              "whatsapp": "WhatsApp",
+              "both": "Email and WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "Keep security events for (days)",
+            "hint": "0 means keep them for ever."
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "Login protection",
+              "title": "Account lockout rules"
+            },
+            "password": {
+              "title": "New-password rules",
+              "note": "Applied when a password is created or changed, never to an existing sign-in, so tightening them cannot lock anyone out."
+            },
+            "mfa": {
+              "kicker": "Multi-factor authentication",
+              "title": "2FA enforcement",
+              "description": "Applies to workspace users. Platform operators who are super admins always need 2FA."
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "Master switch",
+              "title": "Guardrail enforcement",
+              "description": "The caps and filters on these tabs only act according to this mode. Choose a mode and read what it does."
+            },
+            "caps": {
+              "kicker": "Send rate",
+              "title": "Hard caps"
+            },
+            "spam": {
+              "kicker": "Content rules",
+              "title": "Anti-spam controls"
+            },
+            "health": {
+              "kicker": "Trust quality",
+              "title": "Workspace health",
+              "body": "Block and flag counts per workspace appear here once the sending pipelines report them. Until then, use the security event log to see what the guardrails caught."
+            }
+          },
+          "abuse": {
+            "kicker": "Abuse filters",
+            "title": "Illegal-use prevention",
+            "aside": {
+              "title": "Keep this policy strict",
+              "body": "These filters keep scams, phishing and harassment out of the channels your customers use. They follow the guardrail mode set on the WhatsApp guardrails tab."
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "Traffic control",
+              "title": "Rate limits"
+            },
+            "integrity": {
+              "kicker": "Webhook defense",
+              "title": "Integrity"
+            },
+            "allowlist": {
+              "kicker": "IP allowlist",
+              "title": "Console access",
+              "description": "Restricts this operator console only. Workspace users, the public API and webhooks are not affected. An empty list lets everyone in, so it can never lock all operators out.",
+              "cidrs": "Allowed addresses",
+              "cidrsHint": "One address or range per line, for example 203.0.113.9 or 203.0.113.0/24. Commas also work.",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "Your address as the API sees it:",
+              "yourIpUnknown": "We could not detect your address, so we cannot warn you about locking yourself out.",
+              "addMine": "Add my IP",
+              "alreadyListed": "Already listed",
+              "lockoutWarning": "Your address {ip} is not on this list. Saving would lock you out, so the server will refuse it. Add your address first."
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "Device integrity",
+              "title": "Trust and session policy"
+            },
+            "alerts": {
+              "kicker": "Login alerts channel",
+              "title": "Where alerts go"
+            },
+            "audit": {
+              "kicker": "Audit trail",
+              "title": "Retention",
+              "description": "Security events older than this are pruned once the prune job exists.",
+              "link": "Open the security event log"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "Danger zone",
+          "title": "Irreversible platform-wide actions",
+          "description": "Each action asks you to type its name before anything happens, and each one is written to the security event log.",
+          "superAdminOnly": "These actions are for super admins only. Your role is {role}.",
+          "haltState": "Outbound sends:",
+          "haltOn": "Halted",
+          "haltOff": "Running",
+          "revoke": {
+            "title": "Revoke all sessions",
+            "detail": "signs everyone out"
+          },
+          "forceReset": {
+            "title": "Force password reset for all users",
+            "detail": "flags every user"
+          },
+          "rotate": {
+            "title": "Rotate all webhook secrets",
+            "detail": "existing integrations break",
+            "note": "Webhook signing secrets belong to the integrations area, which does not exist yet, so this reports 0 rotated for now."
+          },
+          "halt": {
+            "title": "Emergency stop all sends",
+            "detail": "platform-wide kill switch"
+          },
+          "resume": {
+            "title": "Resume sends",
+            "detail": "currently halted"
+          },
+          "logged": {
+            "kicker": "What gets logged",
+            "title": "Every action writes an event",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "When every session is ended, including yours.",
+              "forceReset": "When every user is told to choose a new password.",
+              "rotate": "When secrets are rotated, with the count.",
+              "halt": "When the stop is engaged, and again when sends resume.",
+              "policy": "On any setting change above, with the old and new values."
+            }
+          },
+          "halted": {
+            "title": "Emergency stop is on",
+            "body": "Every outbound message is blocked platform-wide until sends are resumed.",
+            "resume": "Resume sends"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "Revoke all sessions",
+              "body": "Everyone signed in to a workspace or to this console is signed out, including you.",
+              "effect1": "Each person must sign in again, with two-factor if it is on.",
+              "effect2": "Work they have not saved in the browser may be lost.",
+              "confirm": "Revoke all sessions",
+              "done": "{count, plural, =0 {No sessions were active.} one {# session revoked.} other {# sessions revoked.}}",
+              "signedOut": "You have been signed out as well. Sign in again to continue."
+            },
+            "force_password_reset": {
+              "title": "Force password reset for all users",
+              "body": "Every workspace user will be asked to choose a new password the next time they use the app.",
+              "effect1": "Nobody is signed out right now; the prompt appears on their next request.",
+              "effect2": "People who ignore the prompt cannot use the app until they change it.",
+              "confirm": "Force reset",
+              "done": "{count, plural, =0 {No users were flagged.} one {# user must choose a new password.} other {# users must choose a new password.}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "Rotate all webhook secrets",
+              "body": "Every webhook signing secret is replaced with a new one.",
+              "effect1": "Integrations that verify signatures stop working until they use the new secret.",
+              "effect2": "There is no way to bring back the old secrets.",
+              "confirm": "Rotate secrets",
+              "done": "{count, plural, =0 {0 secrets rotated.} one {# secret rotated.} other {# secrets rotated.}}",
+              "noneRotated": "Nothing was rotated because the integrations area does not store webhook secrets yet."
+            },
+            "halt_sends": {
+              "title": "Emergency stop all sends",
+              "body": "Every outbound message across all workspaces is refused until you resume sends.",
+              "effect1": "Customers receive nothing, including replies, campaigns and automations.",
+              "effect2": "Use resume sends to switch messaging back on.",
+              "confirm": "Halt all sends",
+              "done": "Emergency stop is on. All outbound sends are blocked."
+            },
+            "resume_sends": {
+              "title": "Resume sends",
+              "body": "Outbound messaging switches back on for every workspace.",
+              "effect1": "Messages that were refused during the stop are not sent automatically.",
+              "effect2": "Check the event log first if you stopped sends because of an incident.",
+              "confirm": "Resume sends",
+              "done": "Sends have resumed."
+            },
+            "typeToConfirm": "Type <code>{phrase}</code> to confirm",
+            "phraseHint": "Capital letters and extra spaces are ignored.",
+            "cancel": "Cancel",
+            "working": "Working",
+            "close": "Close",
+            "signInAgain": "Sign in again",
+            "requestId": "Request id",
+            "errors": {
+              "forbidden": "Only a super admin can run this action.",
+              "unexpected": "The action did not complete. Check the event log before trying again."
+            }
+          }
+        },
+        "tabsLabel": "Security Center sections"
+      },
+      "events": {
+        "kicker": "Security Center",
+        "title": "Security events",
+        "description": "Sign-ins, lockouts, policy changes and danger actions, newest first.",
+        "refresh": "Refresh",
+        "refreshing": "Refreshing",
+        "filters": {
+          "label": "Filter events",
+          "event": "Event name",
+          "eventHint": "Exact name, for example auth.failed. Pick a suggestion or type your own.",
+          "status": "Status",
+          "anyStatus": "Any status",
+          "apply": "Apply",
+          "clear": "Clear filters"
+        },
+        "status": {
+          "success": "Success",
+          "failure": "Failure",
+          "warning": "Warning",
+          "info": "Info"
+        },
+        "empty": "No security events have been recorded yet.",
+        "emptyFiltered": "No events match these filters.",
+        "listLabel": "Security events",
+        "actor": "Actor: {actor}",
+        "ip": "IP",
+        "showPayload": "Show details",
+        "hidePayload": "Hide details",
+        "noPayload": "This event has no extra details.",
+        "payloadLabel": "Details of {event}",
+        "loadMore": "Load more",
+        "loading": "Loading",
+        "end": "{count, plural, one {Showing the only event.} other {Showing all # events.}}"
+      },
+      "registration": {
+        "kicker": "Guest pages",
+        "title": "Registration policy",
+        "description": "Decide who can sign up, how email is verified, which plan new workspaces start on and how the sign-up code works.",
+        "save": "Save settings",
+        "saving": "Saving",
+        "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
+        "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
+        "requestId": "Request id",
+        "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
+        "discard": "Discard changes",
+        "errors": {
+          "unexpected": "The settings could not be saved. Try again in a moment."
+        },
+        "problems": {
+          "range": "Enter a whole number from {min} to {max}.",
+          "tooLong": "At most {max} characters.",
+          "required": "This field is required.",
+          "link": "Use a site path such as /legal/terms, or a full http or https address.",
+          "senderFormat": "Choose one of the senders from the list.",
+          "countryFormat": "Use a two-letter country code.",
+          "senderRequired": "Choose a sender channel before creating the template."
+        },
+        "policy": {
+          "kicker": "Sign-up",
+          "title": "Who can register",
+          "description": "These settings apply to new sign-ups, including social sign-up."
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "Public registration",
+            "hintOn": "Anyone can create a workspace from the sign-up page.",
+            "hintOff": "The sign-up page shows a registration closed message. Existing users are not affected."
+          },
+          "emailVerification": {
+            "label": "Email verification",
+            "options": {
+              "off": "Off: accounts are verified automatically",
+              "banner": "Banner: allowed, with a reminder",
+              "block": "Block: verify before continuing"
+            },
+            "explain": {
+              "off": "New accounts count as verified straight away. No verification email is needed.",
+              "banner": "People can use the app right away and see a reminder until they verify.",
+              "block": "People must verify their email before they can use anything else."
+            }
+          },
+          "defaultPlanId": {
+            "label": "Default plan",
+            "hint": "The plan new workspaces start on. Automatic uses the plan marked as the sign-up default, else the first active free plan.",
+            "placeholder": "plan slug",
+            "auto": "Automatic",
+            "unavailable": "{slug} (not an active plan)",
+            "loadFailed": "The plan list could not be loaded.",
+            "kinds": {
+              "free": "Free",
+              "paid": "Paid",
+              "custom_quote": "Custom quote"
+            }
+          },
+          "trialDays": {
+            "label": "Free trial (days)",
+            "hint": "Whole number from {min} to {max}. 0 means no trial. Leave blank to keep the saved value."
+          },
+          "defaultTimezone": {
+            "label": "Default timezone",
+            "hint": "Used for new workspaces until they choose their own."
+          },
+          "defaultCountryIso": {
+            "label": "Default country",
+            "hint": "Pre-selects the phone country on sign-up.",
+            "none": "No default"
+          },
+          "termsUrl": {
+            "label": "Terms link",
+            "hint": "A site path or a full address, shown on the sign-up and sign-in pages."
+          },
+          "privacyUrl": {
+            "label": "Privacy link"
+          },
+          "cookiesUrl": {
+            "label": "Cookies link",
+            "hint": "Optional. Leave empty to hide it."
+          },
+          "otpEnabled": {
+            "label": "Sign-up code over WhatsApp",
+            "hint": "New accounts must confirm their phone number with a one-time code before the workspace is created."
+          },
+          "otpSender": {
+            "label": "Sender",
+            "hint": "The connected number that sends the code. Add one with Manage senders."
+          },
+          "ttlMinutes": {
+            "label": "Code validity (minutes)"
+          },
+          "length": {
+            "label": "Code length (digits)"
+          },
+          "resendCooldownSec": {
+            "label": "Resend cooldown (seconds)"
+          },
+          "maxAttempts": {
+            "label": "Max attempts"
+          }
+        },
+        "otp": {
+          "kicker": "Verification",
+          "title": "Sign-up code",
+          "description": "Settings for the one-time code sent when someone signs up.",
+          "knobHint": "{min} to {max}. Blank uses {default}.",
+          "status": {
+            "on": "Running",
+            "off": "Not running",
+            "unsavedNote": "This shows the saved settings. Save your changes to see how they apply.",
+            "reason": {
+              "active": "New sign-ups must confirm their phone number with a code.",
+              "disabled": "The switch is off, so sign-up does not ask for a code.",
+              "no_sender": "No sender is chosen, so sign-up skips the code step.",
+              "sender_missing": "The chosen sender no longer exists, so sign-up skips the code step.",
+              "sender_incomplete": "The chosen sender is missing credentials, so sign-up skips the code step.",
+              "dev_in_production": "The log sender cannot run in production, so sign-up skips the code step.",
+              "template_missing": "A WhatsApp Business sender needs an approved template. Create and submit one below; until then sign-up skips the code step.",
+              "template_pending": "Meta is still reviewing the template, so sign-up skips the code step until it is approved.",
+              "template_rejected": "Meta rejected the template, so sign-up skips the code step. Fix it and submit again."
+            }
+          },
+          "sender": {
+            "none": "No sender",
+            "option": "{label} ({kind})",
+            "unknown": "Unknown sender ({ref})",
+            "manage": "Manage senders",
+            "empty": "No senders yet. Add one with Manage senders.",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "Unofficial session",
+              "dev": "Log only"
+            }
+          },
+          "template": {
+            "title": "Message template",
+            "states": {
+              "none": "Not created",
+              "pending": "Waiting for Meta",
+              "approved": "Approved",
+              "rejected": "Rejected",
+              "local": "Ready"
+            },
+            "explain": {
+              "none": "Create the message once the sender and the code settings above are right. WhatsApp Business needs Meta's approval; the other channels use the message at once.",
+              "waba": "Submitted to Meta as an authentication template. The code step switches on by itself once Meta approves it, usually within a few minutes.",
+              "local": "Saved as plain text for this channel. No review is needed, so it is in use now."
+            },
+            "name": "Name",
+            "metaId": "Meta template id",
+            "validFor": "Code valid for",
+            "minutes": "{count, plural, one {# minute} other {# minutes}}",
+            "submitted": "Created",
+            "checked": "Last checked",
+            "never": "Not yet",
+            "reason": "Reason",
+            "stale": "This template was made for a code valid for {count, plural, one {# minute} other {# minutes}}. Create and submit again to match the validity above.",
+            "create": "Create & submit template",
+            "creating": "Working",
+            "refresh": "Refresh status",
+            "refreshing": "Checking",
+            "outcome": {
+              "submitted": "The template was submitted to Meta for review. The code step switches on by itself once Meta approves it.",
+              "resubmitted": "The template was sent to Meta again for review. The code step stays off until it is approved.",
+              "local_ready": "The message is saved and in use now. This channel needs no review.",
+              "already_pending": "The template is already with Meta for review. Use Refresh status to check on it.",
+              "already_approved": "The template is already approved. Nothing needed to be sent.",
+              "refreshed": "Status checked."
+            },
+            "refreshed": {
+              "pending": "Meta is still reviewing the template.",
+              "approved": "Meta approved the template. The code step is ready.",
+              "rejected": "Meta rejected the template.",
+              "local": "This template needs no review."
+            },
+            "errors": {
+              "submit": "Meta did not take the template. Your other code settings were saved.",
+              "check": "The status could not be read from Meta.",
+              "rejected": "The template could not be created.",
+              "unexpected": "Something went wrong. Try again in a moment."
+            }
+          },
+          "test": {
+            "about": "Send a real code to a phone to check that the sender works before sign-ups depend on it.",
+            "button": "Send a test code",
+            "title": "Send a test code",
+            "intro": "A real code goes to the number you enter, through the sender below. It uses the saved code settings and template. You can send 5 an hour.",
+            "to": "Phone number",
+            "toHint": "With the country code, for example +91 98765 43221.",
+            "sender": "Sender",
+            "senderHint": "Leave it on the saved sender, or try another from the list.",
+            "savedSender": "Saved sender",
+            "send": "Send code",
+            "sending": "Sending",
+            "close": "Close",
+            "sent": "A test code was sent to {to}.",
+            "remaining": "{count, plural, one {# test left this hour.} other {# tests left this hour.}}",
+            "notShown": "The code is not shown here; read it on the phone.",
+            "requestId": "Request id",
+            "errors": {
+              "invalidNumber": "Enter the number with its country code, for example +91 98765 43221.",
+              "rateLimited": "Too many test codes this hour. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+              "failed": "The code could not be sent.",
+              "rejected": "The test was not sent.",
+              "unexpected": "Something went wrong. Try again in a moment."
+            },
+            "reasons": {
+              "not_configured": "The sender is missing or incomplete.",
+              "template_not_approved": "The template is not approved yet.",
+              "invalid_number": "That number is not valid.",
+              "auth_failed": "The provider refused the credentials. Check the secret in Manage senders.",
+              "rejected": "The provider refused the message.",
+              "provider_error": "The provider had a problem. Try again shortly.",
+              "connection_refused": "The provider address refused the connection.",
+              "timeout": "The provider did not answer in time.",
+              "transport_error": "The provider could not be reached."
+            }
+          }
+        },
+        "senders": {
+          "title": "Manage senders",
+          "intro": "The connections that can send the sign-up code. Secrets are stored encrypted and never shown again.",
+          "loading": "Loading",
+          "working": "Working",
+          "empty": "No senders yet.",
+          "add": "Add sender",
+          "edit": "Edit",
+          "remove": "Remove",
+          "close": "Close",
+          "cancel": "Cancel",
+          "save": "Save sender",
+          "keep": "Keep",
+          "addTitle": "New sender",
+          "editTitle": "Edit {label}",
+          "kind": "Kind",
+          "kinds": {
+            "waba": "WhatsApp Business (Meta Cloud API)",
+            "twilio": "Twilio WhatsApp",
+            "device": "Unofficial session (Node bridge)",
+            "dev": "Log only (development)"
+          },
+          "kindHint": {
+            "waba": "Sends an approved authentication template through Meta. Needs a template review.",
+            "twilio": "Sends a WhatsApp message through Twilio. No template review.",
+            "device": "Sends through a QR-paired session on your Node bridge. No template review.",
+            "dev": "Writes the code to the server log instead of sending it. Never available in production."
+          },
+          "fields": {
+            "label": "Name",
+            "phoneNumberId": "Phone number id",
+            "wabaId": "WhatsApp Business account id",
+            "graphBaseUrl": "Graph API address",
+            "accountSid": "Account SID",
+            "fromNumber": "WhatsApp number (From)",
+            "apiBaseUrl": "Twilio API address",
+            "bridgeUrl": "Bridge address",
+            "senderNumber": "Session number"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "From Meta, in the API setup of the WhatsApp number.",
+              "wabaId": "Needed to submit the template to Meta.",
+              "graphBaseUrl": "Leave empty to use Meta's address."
+            },
+            "twilio": {
+              "accountSid": "From the Twilio console.",
+              "fromNumber": "The WhatsApp-enabled number, with its country code.",
+              "apiBaseUrl": "Leave empty to use Twilio's address."
+            },
+            "device": {
+              "bridgeUrl": "Where your Node bridge listens, for example http://127.0.0.1:3003.",
+              "senderNumber": "The paired number the bridge sends from, with its country code."
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v21.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "Access token",
+            "twilio": "Auth token",
+            "device": "Bridge token",
+            "dev": "Secret"
+          },
+          "secretHint": "Stored encrypted and never shown again.",
+          "secretHintSaved": "Stored encrypted. Leave blank to keep the saved one.",
+          "secretSaved": "saved, leave blank to keep",
+          "showSecret": "Show secret",
+          "hideSecret": "Hide secret",
+          "removeSecret": "Remove saved secret",
+          "removeSecretBody": "The sender stops working until a new secret is saved.",
+          "removeSecretConfirm": "Remove secret",
+          "hasSecret": "Secret saved",
+          "noSecret": "No secret",
+          "inUse": "Used for sign-up",
+          "removeBody": "Remove {label}? Its saved secret is deleted too.",
+          "removeBodyInUse": "Remove {label}? Sign-up uses it, so the code step turns off. Its saved secret is deleted too.",
+          "removeConfirm": "Remove sender",
+          "added": "Sender added",
+          "saved": "Sender saved",
+          "removed": "Sender removed",
+          "secretRemoved": "Saved secret removed",
+          "requestId": "Request id",
+          "problems": {
+            "required": "This field is required.",
+            "tooLong": "At most {max} characters.",
+            "digits": "Digits only, 5 to 24.",
+            "url": "Use a full http or https address, without a username or password.",
+            "accountSid": "An account SID starts with AC and has 34 characters.",
+            "phone": "Enter the number with its country code, 7 to 15 digits."
+          },
+          "errors": {
+            "unexpected": "The sender could not be saved. Try again in a moment."
+          }
+        }
+      },
+      "social": {
+        "kicker": "Guest pages",
+        "title": "Social login and captcha",
+        "description": "Let people sign in with Google or Facebook and protect the sign-in and sign-up pages with reCAPTCHA. Each one only appears once it is enabled and its keys are saved.",
+        "save": "Save changes",
+        "saving": "Saving",
+        "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
+        "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
+        "requestId": "Request id",
+        "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
+        "discard": "Discard changes",
+        "errors": {
+          "unexpected": "The settings could not be saved. Try again in a moment."
+        },
+        "problems": {
+          "tooLong": "At most {max} characters.",
+          "threshold": "Enter a number from 0 to 1."
+        },
+        "labels": {
+          "google": {
+            "clientId": "Google client id",
+            "clientSecret": "Google client secret",
+            "enabled": "Google sign-in"
+          },
+          "facebook": {
+            "clientId": "Facebook app id",
+            "clientSecret": "Facebook app secret",
+            "enabled": "Facebook sign-in"
+          },
+          "recaptcha": {
+            "siteKey": "reCAPTCHA site key",
+            "secret": "reCAPTCHA secret key",
+            "v3Threshold": "reCAPTCHA score threshold",
+            "version": "reCAPTCHA version",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "Enable",
+        "secretSaved": "saved, leave blank to keep",
+        "secretHint": "Stored encrypted and never shown again. Leave blank to keep the saved one.",
+        "showSecret": "Show secret",
+        "hideSecret": "Hide secret",
+        "google": {
+          "kicker": "OAuth 2.0 with Google Cloud",
+          "title": "Google sign-in",
+          "idLabel": "Client id",
+          "idHint": "From Google Cloud, under credentials, the OAuth client of type web application.",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "Client secret",
+          "secretPlaceholder": "client secret",
+          "redirectLabel": "Authorized redirect URI",
+          "redirectHint": "Paste this exactly into the OAuth client, or Google refuses the sign-in with a redirect mismatch."
+        },
+        "facebook": {
+          "kicker": "Facebook Login with Meta for Developers",
+          "title": "Facebook sign-in",
+          "idLabel": "App id",
+          "idHint": "From your app settings, under basic, the app id.",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "App secret",
+          "secretPlaceholder": "32-character app secret",
+          "redirectLabel": "Valid OAuth redirect URI",
+          "redirectHint": "Add this under Facebook Login settings. The app needs the email and public profile permissions."
+        },
+        "recaptcha": {
+          "kicker": "Bot protection with Google reCAPTCHA",
+          "title": "reCAPTCHA",
+          "versionLabel": "Version",
+          "versionHint": "v2 shows a checkbox. v3 is invisible and scores each request.",
+          "versions": {
+            "v2": "v2: I am not a robot checkbox",
+            "v3": "v3: invisible score"
+          },
+          "thresholdLabel": "v3 score threshold",
+          "thresholdHint": "v3 only. 0 is most likely a bot, 1 most likely a person. Blank uses 0.5.",
+          "siteKeyLabel": "Site key",
+          "siteKeyHint": "The public key sent to the browser, from the reCAPTCHA console.",
+          "secretLabel": "Secret key"
+        },
+        "live": {
+          "kicker": "Status",
+          "title": "What is live right now",
+          "google": "Google live",
+          "facebook": "Facebook live",
+          "recaptcha": "reCAPTCHA live",
+          "yes": "live",
+          "no": "not live",
+          "note": "A provider is live only when it is enabled and both its keys are saved. These show what is saved, not unsaved edits."
+        },
+        "guide": {
+          "kicker": "Quick setup",
+          "google": {
+            "title": "Google in four steps",
+            "step1": "Open the Google Cloud console and pick or create a project.",
+            "step2": "Set up the OAuth consent screen as an external app with your support email.",
+            "step3": "Create credentials, choose OAuth client id, then Web application.",
+            "step4": "Add the redirect URI from the form, then paste the client id and secret here.",
+            "link": "Open Google Cloud credentials"
+          },
+          "facebook": {
+            "title": "Facebook in four steps",
+            "step1": "Open Meta for Developers and create an app for authenticating users.",
+            "step2": "Add the Facebook Login product to the app.",
+            "step3": "In its settings add the redirect URI from the form.",
+            "step4": "Copy the app id and secret from basic settings, paste them here, then set the app live.",
+            "link": "Open Meta for Developers"
+          },
+          "recaptcha": {
+            "title": "reCAPTCHA keys",
+            "body": "Register your site in the reCAPTCHA console, choose v2 or v3, and paste the site key and secret key here.",
+            "link": "Open the reCAPTCHA console"
+          },
+          "noSdk": {
+            "badge": "Good to know",
+            "body": "Sign-in uses the standard OAuth addresses directly, so there is nothing to install. Paste the keys and switch it on."
+          }
+        },
+        "removeSecret": {
+          "action": "Remove saved secret",
+          "title": "Remove the saved {name} secret",
+          "body": "The saved secret for {name} is deleted from the server and cannot be shown or recovered. To use {name} again you will have to save a new secret.",
+          "liveWarning": "{name} is working right now. Removing its secret switches it off until a new one is saved.",
+          "confirm": "Remove secret",
+          "cancel": "Cancel",
+          "working": "Removing",
+          "error": "The secret could not be removed. Try again in a moment.",
+          "requestId": "Request id",
+          "done": "The saved {name} secret was removed.",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "Plans",
+        "title": "Plans",
+        "description": "The catalogue workspaces choose from. New sign-ups land on the default plan; paying for a plan arrives with billing.",
+        "new": "New plan",
+        "kpi": {
+          "label": "Catalogue summary",
+          "total": "Total plans",
+          "active": "Active",
+          "free": "Free",
+          "paid": "Paid"
+        },
+        "empty": {
+          "title": "No plans yet",
+          "body": "Create the first plan. Until one exists, new workspaces start on a plan called starter that limits nothing.",
+          "action": "Create the first plan"
+        },
+        "table": {
+          "label": "Plans",
+          "plan": "Plan",
+          "price": "Price",
+          "messages": "Messages",
+          "workspaces": "Workspaces",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "badges": {
+          "popular": "Popular",
+          "signupDefault": "Signup default"
+        },
+        "price": {
+          "free": "Free",
+          "custom": "Custom quote",
+          "lifetime": "one-time"
+        },
+        "period": {
+          "days": "{count, plural, one {/ day} other {/ # days}}",
+          "weeks": "{count, plural, one {/ week} other {/ # weeks}}",
+          "months": "{count, plural, one {/ month} other {/ # months}}",
+          "years": "{count, plural, one {/ year} other {/ # years}}"
+        },
+        "messages": {
+          "unlimited": "Unlimited",
+          "limited": "{count, number} / month"
+        },
+        "active": {
+          "on": "Active",
+          "off": "Inactive",
+          "toggle": "Active: {name}"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "editName": "Edit {name}",
+          "deleteName": "Delete {name}"
+        },
+        "toasts": {
+          "created": "Plan {name} created.",
+          "updated": "Plan {name} saved.",
+          "activated": "{name} is now active.",
+          "deactivated": "{name} is now inactive.",
+          "deleted": "Plan {name} deleted."
+        },
+        "delete": {
+          "title": "Delete {name}?",
+          "body": "This cannot be undone. Deactivating a plan instead hides it from buyers and keeps the workspaces that are on it.",
+          "inUseHint": "{count, plural, one {# workspace is on this plan.} other {# workspaces are on this plan.}} Deleting is refused until they have been moved.",
+          "confirm": "Delete plan",
+          "cancel": "Cancel",
+          "deleting": "Deleting"
+        },
+        "errors": {
+          "inUse": "{count, plural, one {Cannot delete: # workspace currently uses this plan.} other {Cannot delete: # workspaces currently use this plan.}} Move them to another plan, or deactivate this one instead.",
+          "defaultProtected": "This plan is the signup default, so it cannot be deactivated or deleted. Choose another default plan first.",
+          "notFound": "This plan no longer exists. Reload the list.",
+          "forbidden": "Only super admins can change plans.",
+          "generic": "Something went wrong. Try again."
+        },
+        "editor": {
+          "createTitle": "New plan",
+          "editTitle": "Edit {name}",
+          "slugLabel": "Slug:",
+          "slugNote": "It is set when the plan is created and never changes.",
+          "save": "Save changes",
+          "create": "Create plan",
+          "saving": "Saving",
+          "cancel": "Cancel",
+          "discard": "Discard your changes?",
+          "failed": "The plan could not be saved. Try again.",
+          "unlimited": "Unlimited",
+          "units": {
+            "days": "Days",
+            "weeks": "Weeks",
+            "months": "Months",
+            "years": "Years"
+          },
+          "sections": {
+            "identity": {
+              "title": "Identity",
+              "description": "How the plan is named and shown."
+            },
+            "pricing": {
+              "title": "Pricing",
+              "description": "What it costs and how often it bills."
+            },
+            "limits": {
+              "title": "Limits",
+              "description": "Leave a cap blank for unlimited."
+            },
+            "features": {
+              "title": "Features",
+              "description": "Switch off what the plan does not include."
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "Plan name"
+            },
+            "subtitle": {
+              "label": "Subtitle",
+              "hint": "One short line under the name (up to {max} characters)."
+            },
+            "detail": {
+              "label": "Description",
+              "hint": "Shown on pricing pages (up to {max} characters)."
+            },
+            "ctaLabel": {
+              "label": "Button label",
+              "hint": "Up to {max} characters."
+            },
+            "sortOrder": {
+              "label": "Sort order",
+              "hint": "Lower comes first."
+            },
+            "currency": {
+              "label": "Currency",
+              "placeholder": "Search currencies",
+              "empty": "No currency matches your search."
+            },
+            "amount": {
+              "label": "Price",
+              "hint": "For example 19 or 19.99.",
+              "locked": "Free and custom-quote plans have no price.",
+              "none": "none"
+            },
+            "offerAmount": {
+              "label": "Offer price",
+              "hint": "Optional. Must be lower than the price."
+            },
+            "billingDuration": {
+              "label": "Billing period",
+              "hint": "From {min} to {max}."
+            },
+            "billingUnit": {
+              "label": "Unit"
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "Active",
+              "hint": "Inactive plans are hidden from buyers; workspaces already on one keep it."
+            },
+            "isDefault": {
+              "label": "Default for sign-ups",
+              "hint": "New workspaces start here unless the registration policy names another plan. Only one plan can be the default."
+            },
+            "isHighlighted": {
+              "label": "Highlight as popular",
+              "hint": "Shows a Most popular badge."
+            },
+            "isFree": {
+              "label": "Free plan",
+              "hint": "No price. New workspaces on a free plan get the free trial."
+            },
+            "isCustomQuote": {
+              "label": "Custom quote",
+              "hint": "No price is shown. Buyers are sent to talk to sales."
+            },
+            "isLifetime": {
+              "label": "One-time price",
+              "hint": "Charged once, not for each billing period."
+            }
+          },
+          "limitGroups": {
+            "messaging": "Messaging",
+            "workspace": "Workspace",
+            "content": "Content"
+          },
+          "limitKeys": {
+            "monthly_messages": "Messages per month",
+            "broadcasts": "Broadcasts",
+            "devices": "Connected numbers",
+            "users": "Team seats",
+            "contacts": "Contacts",
+            "tags": "Tags",
+            "templates": "Message templates",
+            "flows": "Flows",
+            "autoreplies": "Keyword auto-replies"
+          },
+          "featureGroups": {
+            "messaging": "Messaging",
+            "aiCalling": "AI and calling",
+            "integrations": "Integrations",
+            "advanced": "Advanced"
+          },
+          "featureKeys": {
+            "automation": "Automation",
+            "ai_assistants": "AI assistants",
+            "calling": "WhatsApp calling",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "Analytics",
+            "remove_branding": "White-label (removes platform branding)"
+          },
+          "problems": {
+            "required": "This field is required.",
+            "tooLong": "At most {max} characters.",
+            "money": "Enter an amount such as 19 or 19.99.",
+            "range": "Enter a whole number from {min} to {max}.",
+            "whole": "Enter a whole number, or leave blank for unlimited.",
+            "server": "The server refused this value.",
+            "free_needs_zero_price": "A free plan must have a price of 0.",
+            "free_no_offer": "A free plan cannot have an offer price.",
+            "custom_no_price": "A custom-quote plan shows no price: leave the price and offer empty.",
+            "custom_not_free": "A plan cannot be both free and custom quote.",
+            "paid_needs_price": "Set a price above 0, or mark the plan as free.",
+            "offer_not_lower": "The offer price must be lower than the plan price.",
+            "default_needs_active": "The signup default plan must be active."
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "Guest pages",
+        "title": "Auth pages",
+        "description": "Choose a design for the sign-in, sign-up and forgot-password pages, then edit the words and colour of each. The preview shows your unsaved changes exactly as visitors will see them.",
+        "save": "Save changes",
+        "saving": "Saving",
+        "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
+        "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
+        "requestId": "Request id",
+        "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
+        "discard": "Discard changes",
+        "errors": {
+          "unexpected": "The settings could not be saved. Try again in a moment."
+        },
+        "problems": {
+          "accent": "Use a colour in the form #rrggbb.",
+          "mediaUrl": "Use a full https address."
+        },
+        "pages": {
+          "login": "Login",
+          "register": "Register",
+          "forgot": "Forgot password"
+        },
+        "designs": {
+          "legend": "Design template",
+          "legendNote": "One choice for all three pages",
+          "split": {
+            "name": "Split showcase",
+            "description": "Marketing panel on one side, form on the other."
+          },
+          "cinematic": {
+            "name": "Cinematic",
+            "description": "Full-screen picture or video behind a centred card."
+          },
+          "minimal": {
+            "name": "Minimal",
+            "description": "A plain centred card with no artwork."
+          },
+          "spotlight": {
+            "name": "Brand spotlight",
+            "description": "A bold panel in your accent colour beside the form."
+          },
+          "aurora": {
+            "name": "Aurora",
+            "description": "Soft glowing colour behind a frosted card."
+          }
+        },
+        "fields": {
+          "accent": "Accent colour",
+          "accentHint": "Used for the highlighted word, buttons and the brand panel. Reset returns to the shipped colour.",
+          "accentPicker": "Pick the accent colour",
+          "accentHex": "Accent colour as hex",
+          "accentReset": "Reset to default",
+          "mediaUrl": "Media address",
+          "mediaType": "Media type",
+          "eyebrow": "Eyebrow",
+          "heading": "Heading",
+          "headingAccent": "Heading accent word",
+          "subheading": "Sub-text",
+          "emptyHint": "Up to {max} characters. Leave empty to use the shipped text shown in grey."
+        },
+        "media": {
+          "title": "Side media",
+          "description": "A picture, GIF or looping video for the design panel. Hosting is on you for now: paste a public https address.",
+          "url": "Media address",
+          "urlHint": "Must start with https. Leave empty for no media.",
+          "type": "Media type",
+          "types": {
+            "image": "Image",
+            "gif": "Animated GIF",
+            "video": "Looping video"
+          },
+          "clear": "Clear media"
+        },
+        "showcase": {
+          "title": "Showcase panel text",
+          "description": "Shown by the Split showcase design. Empty fields keep the shipped text.",
+          "groups": {
+            "hero": "Highlight card",
+            "stats": "Statistics",
+            "features": "Feature cards",
+            "chips": "Chips",
+            "footer": "Footer line"
+          },
+          "keys": {
+            "hero_title": "Highlight title",
+            "hero_desc": "Highlight text",
+            "stat1_num": "Statistic 1 value",
+            "stat1_label": "Statistic 1 label",
+            "stat2_num": "Statistic 2 value",
+            "stat2_label": "Statistic 2 label",
+            "stat3_num": "Statistic 3 value",
+            "stat3_label": "Statistic 3 label",
+            "feat1_title": "Feature 1 title",
+            "feat1_desc": "Feature 1 text",
+            "feat2_title": "Feature 2 title",
+            "feat2_desc": "Feature 2 text",
+            "feat3_title": "Feature 3 title",
+            "feat3_desc": "Feature 3 text",
+            "feat4_title": "Feature 4 title",
+            "feat4_desc": "Feature 4 text",
+            "inside_heading": "Chips heading",
+            "chip1": "Chip 1",
+            "chip2": "Chip 2",
+            "chip3": "Chip 3",
+            "chip4": "Chip 4",
+            "chip5": "Chip 5",
+            "chip6": "Chip 6",
+            "footer": "Footer text"
+          }
+        },
+        "preview": {
+          "title": "Live preview",
+          "note": "Showing the {page} page with your unsaved changes.",
+          "showcaseNote": "Only the Split showcase design shows the showcase panel text.",
+          "device": "Preview size",
+          "devices": {
+            "desktop": "Desktop",
+            "mobile": "Phone"
+          },
+          "frameLabel": "Preview of the page",
+          "frameTitle": "Preview of the {page} page",
+          "form": {
+            "org": "Workspace name",
+            "name": "Your name",
+            "email": "Email",
+            "password": "Password",
+            "remember": "Keep me signed in for 30 days",
+            "submit": {
+              "login": "Sign in",
+              "register": "Create workspace",
+              "forgot": "Send reset link"
+            }
+          },
+          "enlarge": "Enlarge preview",
+          "shrink": "Side by side"
+        },
+        "pagesLabel": "Page to edit"
+      }
+    }
+  }
+}
