@@ -32,9 +32,11 @@ Evidence, intentional differences from WaDesk and what is not verified: [parity/
 Run it: `pnpm --filter @crm/api seed:auth` (dev users, password `Passw0rd!`), `pnpm --filter @crm/api operator:create` (platform operator),
 then API on 3100, web on 3001, mail on Mailpit 58025. Tests: `pnpm --filter @crm/api test`, `test:integration`, `test:e2e`, `pnpm --filter @crm/web test`.
 
-Other domains must hook into AUTH here: `SendPolicyService` and `EmergencyHaltService` in every send pipeline (040, 041), the
-`auth.user.registered` outbox event for plan/trial/referral (008, 009, 019), `PlanFeatureGate` (029), a real OTP sender adapter
-(006), template creation (007), webhook secret rotation and the API rate limit (037, 039), the `audit_log` retention job (NOTIF).
+AUTH built beyond its own screens, so other domains can rely on it: the WhatsApp provider enforces the emergency halt and the send
+guardrails at every send (pipelines only pass `screen: { bulk, source }`), the sign-up OTP has real Meta Cloud, Twilio and Node-bridge senders
+with template creation, `PlanEntitlementService` and a plans catalogue exist for the PLAN domain to extend, and `WebhookSecretRegistry`
+lets the integrations domain take part in the danger-zone rotation. Still open and owned elsewhere: checkout and the rest of PLAN,
+the device idle-logout consumer (037), a WebKit/Safari pass and a signed-in WaDesk pixel review (see the parity doc).
 
 ## State at stop
 

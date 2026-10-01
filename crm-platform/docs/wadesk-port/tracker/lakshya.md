@@ -12,10 +12,10 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-AUTH-003 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-004 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-005 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| WD-AUTH-006 | frontend-done |  | page + API done; real WhatsApp sender adapter waits for channel core (dev logger adapter); page checked with stubbed responses |
-| WD-AUTH-007 | frontend-done |  | knobs done; Create-and-submit-template button shown disabled until the TPL domain |
-| WD-AUTH-008 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| WD-AUTH-009 | frontend-done |  | skip/complete works; plan list empty until the PLAN domain |
+| WD-AUTH-006 | frontend-done |  | page + API done; real senders (Meta Cloud API, Twilio, Node bridge) behind OTP_SENDER_PORT via an auth-zone sender registry; verified against local stubs only (no real Meta/Twilio credentials) |
+| WD-AUTH-007 | frontend-done |  | senders, template create/refresh (+ worker poll every 5 min), test send done in the auth zone; Meta calls verified against local stubs only; the WABA template domain can replace the template client later |
+| WD-AUTH-008 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc); sign-up now assigns the default plan + trial in the same transaction (PLAN resolver) |
+| WD-AUTH-009 | frontend-done |  | real plan cards from GET /v2/plans (price, offer, period, messages, 3 chips, popular, current); free = continue, custom = /support, paid = /account/plans placeholder (checkout waits for billing); browser-verified |
 | WD-AUTH-010 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-011 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-012 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
@@ -35,7 +35,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-AUTH-026 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-027 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-028 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| WD-AUTH-029 | frontend-done |  | branding UI + API; plan gate (remove_branding) is a shim until PLAN lands |
+| WD-AUTH-029 | frontend-done |  | branding gate is real: 422 PLAN_FEATURE_LOCKED without remove_branding, canEdit from the plan, locked state with upgrade link; browser-verified locked and editable |
 | WD-AUTH-030 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-031 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-032 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
@@ -43,11 +43,11 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-AUTH-034 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-035 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
 | WD-AUTH-036 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| WD-AUTH-037 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
+| WD-AUTH-037 | frontend-done |  | backend + web; apiRateLimitPerMinute is a platform ceiling over each API key's limit, audit retention prunes audit_log + security_events daily; browser-verified |
 | WD-AUTH-038 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| WD-AUTH-039 | frontend-done |  | backend + web, 55 e2e + 397 web unit tests; browser-verified (parity doc) |
-| WD-AUTH-040 | frontend-done |  | operator UI + service done; outbound pipelines must call EmergencyHaltService.assertNotHalted (not built yet) |
-| WD-AUTH-041 | frontend-done |  | operator UI + SendPolicyService done; wiring into send pipelines pending those domains |
+| WD-AUTH-039 | frontend-done |  | backend + web; webhook rotation reports the real count through WebhookSecretRegistry (0 until the integrations domain registers a rotator) |
+| WD-AUTH-040 | frontend-done |  | operator UI + service; enforced at every WhatsApp provider send (OUTBOUND_SEND_GUARD), re-checked at send time; e2e proves halt and resume |
+| WD-AUTH-041 | frontend-done |  | operator UI + SendPolicyService; enforced at the provider boundary (content, per-minute and per-day caps, bulk skips rate caps); e2e covers enforce mode and the audit rows |
 | WD-AUTH-042 | wontfix |  | dead code in WaDesk (mask_phone returns the number unchanged); do not port |
 | WD-AUTH-043 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
 | WD-AUTH-044 | backend-done |  | server-side only; covered by unit/e2e tests (no screen of its own) |
@@ -336,23 +336,23 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-PLAN-001 | todo |  |  |
-| WD-PLAN-002 | todo |  |  |
-| WD-PLAN-003 | todo |  |  |
-| WD-PLAN-004 | todo |  |  |
-| WD-PLAN-005 | todo |  |  |
-| WD-PLAN-006 | todo |  |  |
-| WD-PLAN-007 | todo |  |  |
-| WD-PLAN-008 | todo |  |  |
+| WD-PLAN-001 | in-progress |  | operator /admin/plans: KPI strip (total/active/free/paid), table + cards, in-use counts; no MRR/subscribers/analytics link |
+| WD-PLAN-002 | in-progress |  | single modal with 4 grouped sections (identity, pricing, limits, features) instead of a 4-step wizard; no live review panel |
+| WD-PLAN-003 | in-progress |  | create/update validation shared via @crm/contracts (checkPlanRules), slug rules, one default; slug immutable; audited |
+| WD-PLAN-004 | in-progress |  | PATCH /v2/platform/plans/:id/active; refuses to deactivate the signup default |
+| WD-PLAN-005 | in-progress |  | DELETE refuses any org on the plan (PLAN_IN_USE) and the signup default; single slug reference so nothing is missed |
+| WD-PLAN-006 | in-progress |  | thin slice: 9 limit keys in a contracts registry (0 = unlimited, overrides, assertWithinLimit); no usage meters/ledger, nothing enforced yet |
+| WD-PLAN-007 | in-progress |  | thin slice: 7 feature flags in a registry; only remove_branding is enforced (branding); no route middleware/paywall |
+| WD-PLAN-008 | in-progress |  | 4-step default resolver + trial rule done and tested; registration default is a dropdown of active plans; billing_plan_scope not built |
 | WD-PLAN-009 | todo |  |  |
 | WD-PLAN-010 | todo |  |  |
-| WD-PLAN-011 | todo |  |  |
+| WD-PLAN-011 | in-progress |  | partial: GET /v2/plans cards with the upgrade/downgrade/current classification (server side); /account/plans is a placeholder, no yearly toggle/FAQ/compare/checkout |
 | WD-PLAN-012 | todo |  |  |
 | WD-PLAN-013 | todo |  |  |
 | WD-PLAN-014 | todo |  |  |
 | WD-PLAN-015 | todo |  |  |
 | WD-PLAN-016 | todo |  |  |
-| WD-PLAN-017 | todo |  |  |
+| WD-PLAN-017 | in-progress |  | partial: assertFeature/assertWithinLimit and the 422 PLAN_FEATURE_LOCKED / PLAN_LIMIT_REACHED problem; no quota ledger, no route guard |
 | WD-PLAN-018 | todo |  |  |
 | WD-PLAN-019 | todo |  |  |
 | WD-PLAN-020 | todo |  |  |
