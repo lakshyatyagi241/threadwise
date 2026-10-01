@@ -8,6 +8,13 @@ interface Raw {
   uuid: string;
   template_name: string;
   language: string;
+  template_body: string;
+  header: string | null;
+  header_location: unknown;
+  parameter_format: string | null;
+  variable_map: unknown;
+  buttons: unknown;
+  carousel_data: unknown;
   template_type: string;
   attachment_type: string | null;
   attachment_file: string | null;
@@ -34,7 +41,8 @@ export class SqlTemplateDirectory implements TemplateDirectory {
     orgId: number,
   ): Promise<TemplateRecord | undefined> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, template_name, language, template_type, attachment_type, attachment_file, meta_template_id,
+      SELECT id, uuid, template_name, language, template_body, header, header_location, parameter_format,
+             variable_map, buttons, carousel_data, template_type, attachment_type, attachment_file, meta_template_id,
              meta_status, paused_until, quality_score
       FROM wa_templates WHERE org_id = ${orgId} AND ${where}`);
     const r = res.rows[0] as unknown as Raw | undefined;
@@ -44,6 +52,13 @@ export class SqlTemplateDirectory implements TemplateDirectory {
       uuid: r.uuid,
       templateName: r.template_name,
       language: r.language,
+      templateBody: r.template_body,
+      header: r.header,
+      headerLocation: r.header_location,
+      parameterFormat: r.parameter_format,
+      variableMap: r.variable_map,
+      buttons: r.buttons,
+      carouselData: r.carousel_data,
       templateType: r.template_type,
       attachmentType: r.attachment_type,
       attachmentFile: r.attachment_file,

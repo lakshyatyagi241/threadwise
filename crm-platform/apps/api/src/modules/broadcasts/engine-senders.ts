@@ -15,6 +15,8 @@ export interface OutgoingMessage {
   language: string;
   /** Correlates the provider's receipts back to the recipient row. */
   clientReference: string;
+  /** The recipient's own Cloud API components (header media, buttons, carousel, variables); only the waba engine uses them. */
+  components?: unknown[];
 }
 
 /** A sender with its credentials loaded once for the whole run. */
@@ -80,6 +82,7 @@ export class WabaEngineSender implements EngineSender {
             templateName: m.templateName,
             language: m.language,
             variables: {},
+            ...(m.components ? { components: m.components } : {}),
             clientReference: m.clientReference,
             screen: { bulk: true, source: 'broadcast' },
           },

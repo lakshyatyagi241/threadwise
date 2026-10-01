@@ -14,7 +14,11 @@ Permission `bcast.broadcasts.create` (granted to the locked Admin role). Require
 {
   "name": "Diwali offer",
   "templateId": "7c6f…",                // wa_templates uuid, required
-  "templateOverrides": null,             // optional object; blank values are dropped, all-blank stores null
+  "templateOverrides": {                 // optional send-time edits; see below. All blank stores null
+    "header": { "mode": "text", "text": "Hi {{first_name}}" },   // or { "mode": "media", "mediaUrl": "https://..." }
+    "body": ["VIP", ""],                  // positional slots; a blank slot keeps the template value
+    "buttons": [{ "index": 0, "subType": "url", "value": "https://shop.example.com/{{first_name}}" }]
+  },
   "contactIds": ["…"],                   // contacts, groups and tags are merged, first occurrence wins
   "groupIds": ["…"],
   "tagIds": ["…"],
@@ -107,3 +111,18 @@ variables). `baileys`, `twilio` and `sms` have no adapter yet; register one on `
 
 Safe to run twice: a recipient already claimed is never sent again, a claim older than 10 minutes is failed as
 interrupted, and a finished or failed broadcast is skipped.
+
+### Send-time overrides and the per-recipient payload (TW-BCAST-017)
+
+`templateOverrides` is cleaned before it is stored and anything unrecognised is dropped, never stored: a header is `text`
+(cut to 1024) or `media` (an http or https URL), `body` and `footer` are lists of slots (trimmed, cut to 1024, all-blank
+dropped), and `buttons` need an `index` and a value (`subType` is `url`, `quick_reply` or `copy_code`, anything else
+becomes `url`). Nothing usable stores `null`. A filled slot wins over the template's own variable map for that slot only.
+`{{tokens}}` typed in a slot resolve per recipient with the same resolver as everywhere else (contact column, contact
+attribute, workspace default, `today`, `business_name`), and an unknown token is an empty string, never the braces.
+
+For the `waba` engine the sender builds the Cloud API components for every recipient: body variables in variable-map order,
+header text or media, buttons, carousel cards. The rules are Meta's: the parameter count equals what the approved template
+declares (padded or cut, none when there is no placeholder); a blank value is back-filled (the template's example, then the
+placeholder name, then `-`) because Meta rejects an empty parameter; a button gets a parameter only when it takes one (a
+static URL or a phone button does not; a quick reply with no value is left out).

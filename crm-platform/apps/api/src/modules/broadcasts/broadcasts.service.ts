@@ -13,6 +13,7 @@ import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { SendPolicyService } from '../auth';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { splitAudience } from './audience-split';
+import { sanitizeOverrides } from './payload/template-overrides';
 import { toBroadcastResponse } from './broadcasts.mapper';
 import { BroadcastsRepository } from './broadcasts.repository';
 import { isKnownTimeZone, wallTimeToUtc } from './schedule';
@@ -35,24 +36,6 @@ const MODULE_KEY = 'broadcasts';
 
 const refuse = (code: keyof typeof ERROR_CODES, message: string) =>
   new AppError(ERROR_CODES[code], message, HttpStatus.UNPROCESSABLE_ENTITY);
-
-/**
- * Overrides are only worth storing when something is filled in (Reference: `TemplateOverrideResolver::sanitize` returns null
- * when nothing valid remains). The full shape check belongs to TW-BCAST-017; until then a blank value is dropped.
- */
-const sanitizeOverrides = (
-  raw: Record<string, unknown> | null | undefined,
-): Record<string, unknown> | null => {
-  if (!raw) return null;
-  const kept = Object.entries(raw).filter(([, v]) => {
-    if (v === null || v === undefined) return false;
-    if (typeof v === 'string') return v.trim() !== '';
-    if (Array.isArray(v)) return v.length > 0;
-    if (typeof v === 'object') return Object.keys(v as object).length > 0;
-    return true;
-  });
-  return kept.length ? Object.fromEntries(kept) : null;
-};
 
 /**
  * Creating a broadcast (TW-BCAST-009, 010, 011, 012, 013, 014, 015).

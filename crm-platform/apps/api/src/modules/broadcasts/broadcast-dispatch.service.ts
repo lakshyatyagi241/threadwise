@@ -3,8 +3,16 @@ import { ERROR_CODES } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { buildSend, type TemplateShape } from '../../infra/providers/whatsapp/meta-send-payload';
+import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry } from './engine-senders';
+import {
+  applyOverrides,
+  sanitizeOverrides,
+  type TemplateOverrides,
+} from './payload/template-overrides';
+import { buildRecipientVars } from './payload/template-vars';
 import { assemblePhone } from './recipient-phone';
 import {
   SENDER_DIRECTORY,
@@ -23,6 +31,7 @@ const STALE_MINUTES = 10;
 export type DispatchResult = 'skipped' | 'failed' | 'paused' | 'finished';
 
 interface BroadcastRow {
+  template_overrides: unknown;
   status: string;
   provider: string | null;
   device_id: number | string | null;
@@ -54,6 +63,7 @@ export class BroadcastDispatchService {
     private readonly db: DatabaseService,
     private readonly progress: BroadcastProgressService,
     private readonly engines: EngineSenderRegistry,
+    private readonly merge: MergeTagService,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
   ) {}
@@ -62,7 +72,7 @@ export class BroadcastDispatchService {
   async run(orgId: number, broadcastId: number): Promise<DispatchResult> {
     const prep = await this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT status, provider, device_id, template_id FROM broadcasts
+        SELECT status, provider, device_id, template_id, template_overrides FROM broadcasts
         WHERE org_id = ${orgId} AND id = ${broadcastId} FOR UPDATE`);
       const b = res.rows[0] as unknown as BroadcastRow | undefined;
       if (!b || !['processing', 'scheduled'].includes(b.status)) return { skip: true as const };
@@ -96,12 +106,45 @@ export class BroadcastDispatchService {
         WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND status = 'processing'
           AND updated_at < now() - ${`${STALE_MINUTES} minutes`}::interval`);
 
-      return { skip: false as const, failed: false as const, template, sender, adapter };
+      // Cloud API components are built per recipient for the waba engine (TW-BCAST-017). Other engines send from their own
+      // template rendering, which does not read the overrides yet (see parity/broadcasts.md).
+      const shape: TemplateShape & { headerLocation: unknown } = {
+        templateName: template.templateName,
+        language: template.language,
+        templateType: template.templateType,
+        templateBody: template.templateBody,
+        header: template.header,
+        attachmentType: template.attachmentType,
+        attachmentFile: template.attachmentFile,
+        parameterFormat: template.parameterFormat,
+        variableMap: template.variableMap,
+        buttons: template.buttons,
+        carouselData: template.carouselData,
+        headerLocation: template.headerLocation,
+      };
+      const overrides = sanitizeOverrides(b.template_overrides);
+      const mergeBase = sender.engine === 'waba' ? await this.merge.baseContext(tx, orgId) : null;
+
+      return {
+        skip: false as const,
+        failed: false as const,
+        template,
+        sender,
+        adapter,
+        shape,
+        overrides,
+        mergeBase,
+      };
     });
 
     if (prep.skip) return 'skipped';
     if (prep.failed) return 'failed';
-    const { template, sender, adapter } = prep;
+    const { template, sender, adapter, shape, overrides, mergeBase } = prep;
+    if (mergeBase)
+      this.logger.log(
+        { orgId, broadcastId, engine: sender.engine },
+        '[BCAST] meta_payloads are built per recipient',
+      );
 
     let opened;
     try {
@@ -151,11 +194,15 @@ export class BroadcastDispatchService {
         if (!claimed) continue;
 
         try {
+          const built = mergeBase
+            ? await this.payloadFor(orgId, broadcastId, contactId, shape, overrides, mergeBase)
+            : null;
           const sent = await opened.send({
             to,
-            templateName: template.templateName,
+            templateName: built ? built.name : template.templateName,
             language: template.language,
             clientReference: `bcast-${broadcastId}-${contactId}`,
+            ...(built ? { components: built.components } : {}),
           });
           await this.db.tx((tx) =>
             this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
@@ -194,5 +241,35 @@ export class BroadcastDispatchService {
     const final = await this.db.tx((tx) => this.progress.finish(tx, orgId, broadcastId));
     this.logger.log({ orgId, broadcastId, final }, '[BCAST] dispatch finished');
     return 'finished';
+  }
+
+  /**
+   * The Cloud API template object for one recipient: the template's variables resolved against this contact (column,
+   * attribute, workspace default, system token), the send-time overrides laid over them, then the Meta rules applied.
+   */
+  private async payloadFor(
+    orgId: number,
+    broadcastId: number,
+    contactId: number,
+    shape: TemplateShape & { headerLocation: unknown },
+    overrides: TemplateOverrides | null,
+    base: Omit<MergeContext, 'contact'>,
+  ): Promise<{ name: string; components: unknown[] }> {
+    const contact = await this.db.tx((tx) => this.merge.contactFor(tx, orgId, contactId));
+    const ctx: MergeContext = { ...base, contact };
+    const vars = buildRecipientVars(shape, {
+      pull: (key) => resolveToken(key, ctx).value,
+      mediaUrl: (path) => this.templates.mediaUrl(path),
+    });
+    const applied = applyOverrides(vars, overrides, (text) => renderMergeTags(text, ctx).rendered);
+    if (applied.ignoredButtons.length) {
+      // The UI offered a button slot this template cannot take; Meta would reject a parameter for it (#132000).
+      this.logger.warn(
+        { orgId, broadcastId, buttons: applied.ignoredButtons },
+        '[BCAST] button overrides ignored: not parameterised in the template',
+      );
+    }
+    const send = buildSend(shape, applied.vars);
+    return { name: send.name, components: send.components };
   }
 }

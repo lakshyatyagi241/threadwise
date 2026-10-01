@@ -42,6 +42,13 @@ export interface TemplateRecord {
   uuid: string;
   templateName: string;
   language: string;
+  templateBody: string;
+  header: string | null;
+  headerLocation: unknown;
+  parameterFormat: string | null;
+  variableMap: unknown;
+  buttons: unknown;
+  carouselData: unknown;
   templateType: string;
   attachmentType: string | null;
   attachmentFile: string | null;
