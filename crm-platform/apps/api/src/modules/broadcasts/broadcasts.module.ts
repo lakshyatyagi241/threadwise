@@ -6,6 +6,9 @@ import { BroadcastDispatchService } from './broadcast-dispatch.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
+import { BroadcastsReadController } from './broadcasts-read.controller';
+import { BroadcastsReadRepository } from './broadcasts-read.repository';
+import { BroadcastsReadService } from './broadcasts-read.service';
 import { BroadcastsRepository } from './broadcasts.repository';
 import { BroadcastsService } from './broadcasts.service';
 import { OpenBroadcastPlanGate, OpenWalletGate, OpenWarmerGate } from './_shims/open-gates';
@@ -25,12 +28,14 @@ import {
  */
 @Module({
   imports: [PlansCoreModule, CrmModule],
-  controllers: [BroadcastsController],
+  controllers: [BroadcastsController, BroadcastsReadController],
   exports: [BroadcastProgressService, BroadcastDispatchService, EngineSenderRegistry],
   providers: [
     CryptoService,
     BroadcastsService,
     BroadcastsRepository,
+    BroadcastsReadService,
+    BroadcastsReadRepository,
     BroadcastProgressService,
     BroadcastDispatchService,
     WabaEngineSender,
