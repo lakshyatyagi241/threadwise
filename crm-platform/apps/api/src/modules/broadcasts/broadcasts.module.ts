@@ -6,6 +6,8 @@ import { BroadcastDispatchService } from './broadcast-dispatch.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
+import { BroadcastsActionsController } from './broadcasts-actions.controller';
+import { BroadcastsActionsService } from './broadcasts-actions.service';
 import { BroadcastsReadController } from './broadcasts-read.controller';
 import { BroadcastsReadRepository } from './broadcasts-read.repository';
 import { BroadcastsReadService } from './broadcasts-read.service';
@@ -28,13 +30,19 @@ import {
  */
 @Module({
   imports: [PlansCoreModule, CrmModule],
-  controllers: [BroadcastsController, BroadcastsReadController],
-  exports: [BroadcastProgressService, BroadcastDispatchService, EngineSenderRegistry],
+  controllers: [BroadcastsController, BroadcastsReadController, BroadcastsActionsController],
+  exports: [
+    BroadcastProgressService,
+    BroadcastDispatchService,
+    EngineSenderRegistry,
+    BroadcastsRepository,
+  ],
   providers: [
     CryptoService,
     BroadcastsService,
     BroadcastsRepository,
     BroadcastsReadService,
+    BroadcastsActionsService,
     BroadcastsReadRepository,
     BroadcastProgressService,
     BroadcastDispatchService,

@@ -162,3 +162,13 @@ export const broadcastRecipientSchema = z.object({
 export type BroadcastRecipient = z.infer<typeof broadcastRecipientSchema>;
 export const listBroadcastRecipientsResponseSchema = pageResponseSchema(broadcastRecipientSchema);
 export type ListBroadcastRecipientsResponse = z.infer<typeof listBroadcastRecipientsResponseSchema>;
+
+/** Statuses a broadcast can be deleted in: it has not started, or it failed. Anything else keeps its history. */
+export const DELETABLE_STATUSES = ['scheduled', 'failed'] as const;
+
+export const retryBroadcastResponseSchema = z.object({
+  /** Recipients put back to `pending`. */
+  retried: z.number().int(),
+  status: z.string(),
+});
+export type RetryBroadcastResponse = z.infer<typeof retryBroadcastResponseSchema>;

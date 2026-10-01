@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { PERMANENT_FAILURE_SQL_REGEX } from './retry-policy';
 
 /** `IN (...)` lists are chunked so a 100k-contact audience never builds one giant statement. */
 const CHUNK = 2_000;
@@ -193,5 +194,49 @@ export class BroadcastsRepository {
           sql`, `,
         )}`);
     }
+  }
+
+  /** The row, locked, so a concurrent retry, delete or run waits for this decision. */
+  async lock(tx: Tx, orgId: number, uuid: string) {
+    const res = await tx.execute(sql`
+      SELECT id, status FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
+    const r = res.rows[0] as { id: number | string; status: string } | undefined;
+    return r ? { id: Number(r.id), status: r.status } : undefined;
+  }
+
+  /** Recipients go with it (foreign key cascade). */
+  async remove(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`DELETE FROM broadcasts WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  async failedCount(tx: Tx, orgId: number, id: number): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM broadcast_contacts
+      WHERE org_id = ${orgId} AND broadcast_id = ${id} AND status IN ('failed', 'undelivered')`);
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
+  /** Failed recipients back to `pending`, error and provider id cleared. `skipPermanent` leaves the ones a retry cannot fix. */
+  async resetFailed(tx: Tx, orgId: number, id: number, skipPermanent: boolean): Promise<number> {
+    const res = await tx.execute(sql`
+      UPDATE broadcast_contacts SET status = 'pending', error_message = NULL, whatsapp_message_id = NULL
+      WHERE org_id = ${orgId} AND broadcast_id = ${id} AND status IN ('failed', 'undelivered')
+        ${skipPermanent ? sql`AND (error_message IS NULL OR error_message !~ ${PERMANENT_FAILURE_SQL_REGEX})` : sql``}
+      RETURNING id`);
+    return res.rows.length;
+  }
+
+  /** Make the broadcast due again: the sender queues it on its next pass. */
+  async reopen(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    attempts: { sendAttempts: number; delaySeconds: number } | null,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE broadcasts SET node_schedule_id = NULL,
+        send_attempts = ${attempts ? attempts.sendAttempts : 0},
+        next_attempt_at = ${attempts ? sql`now() + ${`${attempts.delaySeconds} seconds`}::interval` : sql`NULL`}
+      WHERE org_id = ${orgId} AND id = ${id}`);
   }
 }

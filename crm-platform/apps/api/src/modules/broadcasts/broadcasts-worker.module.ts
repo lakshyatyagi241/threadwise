@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { BroadcastDispatchProcessor } from './broadcast-dispatch.processor';
 import { BroadcastDueService } from './broadcast-due.service';
+import { BroadcastRetrySweeper } from './broadcast-retry-sweeper.service';
 import { BroadcastsModule } from './broadcasts.module';
 
 /**
@@ -9,6 +10,6 @@ import { BroadcastsModule } from './broadcasts.module';
  */
 @Module({
   imports: [BroadcastsModule],
-  providers: [BroadcastDueService, BroadcastDispatchProcessor],
+  providers: [BroadcastDueService, BroadcastDispatchProcessor, BroadcastRetrySweeper],
 })
 export class BroadcastsWorkerModule {}
