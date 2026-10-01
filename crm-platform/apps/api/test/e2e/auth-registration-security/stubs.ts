@@ -110,7 +110,7 @@ export class GraphStub extends StubServer {
   /** The id a created template gets; '' simulates Meta answering without one. */
   createdTemplateId = 'tpl_90001';
 
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.templateStatus = 'PENDING';
     this.templateRejectedReason = null;

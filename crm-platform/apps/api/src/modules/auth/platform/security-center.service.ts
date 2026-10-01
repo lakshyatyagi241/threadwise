@@ -301,7 +301,7 @@ export class SecurityCenterService {
     return this.store.tx(async (tx) => {
       const res = await tx.execute(sql`
         SELECT e.at, e.event, e.status, e.actor_type, e.payload, o.name AS org_name
-        FROM security_events e LEFT JOIN organizations o ON o.id = e.org_id
+        FROM security_events e LEFT JOIN organizations o ON o.id = e.subject_org_id
         WHERE e.status IN ('failure','warning') AND e.at > now() - interval '7 days'
         ORDER BY e.at DESC LIMIT 4
       `);
@@ -455,7 +455,7 @@ export class SecurityCenterService {
       }
       const res = await tx.execute(sql`
         SELECT e.id, e.at, e.event, e.status, e.actor_type, o.uuid AS org_uuid, host(e.ip) AS ip, e.payload
-        FROM security_events e LEFT JOIN organizations o ON o.id = e.org_id
+        FROM security_events e LEFT JOIN organizations o ON o.id = e.subject_org_id
         WHERE (${query.event ?? null}::text IS NULL OR e.event = ${query.event ?? null})
           AND (${query.status ?? null}::text IS NULL OR e.status = ${query.status ?? null})
           AND (${cursor?.at ?? null}::timestamptz IS NULL OR (e.at, e.id) < (${cursor?.at ?? null}::timestamptz, ${cursor?.id ?? null}::bigint))

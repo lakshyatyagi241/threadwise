@@ -157,7 +157,11 @@ export class PlanAdminService {
       await this.record(tx, 'platform.plan.created', operatorId, {
         slug,
         name: row.name,
-        kind: planKind({ isFree: row.is_free, isCustomQuote: row.is_custom_quote, amount: row.amount }),
+        kind: planKind({
+          isFree: row.is_free,
+          isCustomQuote: row.is_custom_quote,
+          amount: row.amount,
+        }),
         amount: row.amount,
         currency: row.currency,
         isActive: row.is_active,
@@ -310,7 +314,8 @@ export class PlanAdminService {
     registrationDefaultSlug: string | null,
     nextActive: boolean,
   ): void {
-    if (!nextActive && row.is_active) this.assertNotDefault(row, registrationDefaultSlug, 'deactivate');
+    if (!nextActive && row.is_active)
+      this.assertNotDefault(row, registrationDefaultSlug, 'deactivate');
   }
 
   private assertNotDefault(
@@ -345,7 +350,10 @@ export class PlanAdminService {
 }
 
 /** Field-by-field before/after for the audit event; unchanged fields are left out. */
-function diffFields(before: PlanFields, after: PlanFields): Record<string, { from: unknown; to: unknown }> {
+function diffFields(
+  before: PlanFields,
+  after: PlanFields,
+): Record<string, { from: unknown; to: unknown }> {
   const changes: Record<string, { from: unknown; to: unknown }> = {};
   for (const key of Object.keys(after) as Array<keyof PlanFields>) {
     if (JSON.stringify(before[key]) !== JSON.stringify(after[key])) {

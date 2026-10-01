@@ -53,6 +53,11 @@ function fakeFetch(status: number, body: unknown) {
 }
 const headerOf = (c: Call, name: string) => new Headers(c.init.headers).get(name);
 
+/** A send that was supposed to fail but resolved: surface it instead of typing the result away. */
+const expectedFailure = (): never => {
+  throw new Error('expected the call to reject');
+};
+
 describe('WabaOtpSender', () => {
   it('posts the approved template to the phone number with a bearer token', async () => {
     const { calls, fetchImpl } = fakeFetch(200, { messages: [{ id: 'wamid.1' }] });
@@ -94,7 +99,7 @@ describe('WabaOtpSender', () => {
         { fetchImpl: fakeFetch(status, {}).fetchImpl },
       )
         .send(INPUT)
-        .catch((e: unknown) => e as OtpSendError);
+        .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect((await run(401)).reason).toBe('auth_failed');
     expect((await run(403)).reason).toBe('auth_failed');
     expect((await run(500)).reason).toBe('provider_error');
@@ -105,7 +110,7 @@ describe('WabaOtpSender', () => {
     const { calls, fetchImpl } = fakeFetch(200, {});
     const err = await new WabaOtpSender(waba, { name: 'n', language: 'en_US' }, { fetchImpl })
       .send({ ...INPUT, to: '+12' })
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err.reason).toBe('invalid_number');
     expect(calls).toHaveLength(0);
   });
@@ -155,7 +160,7 @@ describe('TwilioOtpSender', () => {
       { fetchImpl },
     )
       .send(INPUT)
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err.message).toContain('63007');
     expect(err.message).not.toContain(twilio.authToken);
   });
@@ -183,7 +188,7 @@ describe('BridgeOtpSender', () => {
       { fetchImpl },
     )
       .send(INPUT)
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err.reason).toBe('rejected');
     expect(err.message).toContain('session offline');
   });
@@ -196,7 +201,7 @@ describe('BridgeOtpSender', () => {
       { fetchImpl },
     )
       .send(INPUT)
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err.reason).toBe('provider_error');
     expect(err.message).not.toContain('482915');
   });
@@ -222,7 +227,7 @@ describe('network failures (real sockets)', () => {
       { timeoutMs: 150 },
     )
       .send(INPUT)
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err).toBeInstanceOf(OtpSendError);
     expect(err.reason).toBe('timeout');
   });
@@ -238,7 +243,7 @@ describe('network failures (real sockets)', () => {
       { timeoutMs: 2000 },
     )
       .send(INPUT)
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err.reason).toBe('connection_refused');
   });
 
@@ -255,7 +260,7 @@ describe('network failures (real sockets)', () => {
       { timeoutMs: 2000 },
     )
       .send(INPUT)
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err).toBeInstanceOf(OtpSendError);
   });
 });
@@ -301,7 +306,7 @@ describe('MetaTemplateClient', () => {
     const { client } = clientWith(200, { status: 'PENDING' });
     const err = await client
       .create(access, { name: 'n', language: 'en_US', ttlMinutes: 5 })
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err).toBeInstanceOf(OtpSendError);
     expect(err.message).toMatch(/no template id/i);
   });
@@ -312,7 +317,7 @@ describe('MetaTemplateClient', () => {
     });
     const err = await client
       .create(access, { name: 'n', language: 'en_US', ttlMinutes: 5 })
-      .catch((e: unknown) => e as OtpSendError);
+      .then(expectedFailure, (e: unknown) => e as OtpSendError);
     expect(err.message).toContain('Name already used');
     expect(err.message).not.toContain(TOKEN);
   });
