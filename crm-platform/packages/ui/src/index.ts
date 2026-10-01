@@ -18,3 +18,12 @@ export { EmptyState, type EmptyStateProps } from './components/empty-state';
 export { StatTile, type StatTileProps } from './components/stat-tile';
 export { Popover, type PopoverProps } from './components/popover';
 export { ToastProvider, useToast, type ToastTone } from './components/toast';
+export {
+  Menu,
+  MenuCheckboxItem,
+  MenuItem,
+  MenuLabel,
+  MenuRadioItem,
+  MenuSeparator,
+  type MenuProps,
+} from './components/menu';

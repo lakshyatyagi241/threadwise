@@ -5,6 +5,7 @@ import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { EmptyState, StatTile } from '@crm/ui';
+import { allColumns, visibleColumns, type ColumnId } from '../lib/columns';
 import type { RowView } from '../lib/row-view';
 import { ContactAvatar, GroupChip, TagPill } from './chips';
 import { ContactsGrid, ContactsTable, type ListHandlers } from './contacts-list';
@@ -34,6 +35,8 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   groups: [{ id: 'g1', name: 'VIP', color: '#7C3AED' }],
   tags: [{ id: 't1', name: 'Hot lead', color: '#2E7D32' }],
   attributes: [{ key: 'order_id', label: 'Order Id', text: 'A12', full: 'Order Id: A12' }],
+  custom: { order_id: 'A12' },
+  createdAt: '2026-03-05T12:00:00.000Z',
   ...over,
 });
 
@@ -49,28 +52,37 @@ const handlers = (over: Partial<ListHandlers> = {}): ListHandlers => ({
   ...over,
 });
 
+const ATTRS = [{ key: 'order_id', name: 'Order Id' }];
+const EVERY_COLUMN = visibleColumns(
+  allColumns(ATTRS).map((c) => c.id),
+  ATTRS,
+);
+
 describe('ContactsTable', () => {
   const table = (
     rows: RowView[],
     over: Partial<ListHandlers> = {},
     state: 'none' | 'some' | 'all' = 'none',
+    columns = EVERY_COLUMN,
   ) =>
     html(
       <ContactsTable
         rows={rows}
+        columns={columns}
         headerState={state}
         onToggleAll={() => undefined}
         {...handlers(over)}
       />,
     );
 
-  it('shows name, language, attribute chips, groups, tags, email, phone, memo and stage', () => {
+  it('shows name, language, attribute value, groups, tags, email, phone, memo, stage and date', () => {
     const out = table([row()]);
     for (const text of [
       'Aarav Sharma',
       'English',
-      'Order Id:',
+      'Order Id',
       'A12',
+      '05/03/2026',
       'VIP',
       'Hot lead',
       'aarav@example.com',
@@ -97,9 +109,44 @@ describe('ContactsTable', () => {
     expect(out.match(/checked=""/g)?.length).toBe(2);
   });
 
-  it('shows dashes for an empty groups, tags, email and phone', () => {
-    const out = table([row({ groups: [], tags: [], email: '', phone: '' })]);
-    expect(out.match(/&mdash;|—/g)?.length).toBeGreaterThanOrEqual(4);
+  it('shows a plain dash for every empty value', () => {
+    const out = table([row({ groups: [], tags: [], email: '', phone: '', custom: {}, createdAt: '' })]);
+    expect(out.match(/>-<\/span>/g)?.length).toBeGreaterThanOrEqual(6);
+    expect(out).not.toContain('—');
+  });
+
+  it('falls back to "No Name" for a contact without a name', () => {
+    expect(table([row({ name: '' })])).toContain('No Name');
+  });
+
+  it('draws only the chosen columns, with bold titles, plus the actions column', () => {
+    const chosen: ColumnId[] = ['name', 'phone', 'email', 'tags', 'createdOn'];
+    const out = table([row()], {}, 'none', visibleColumns(chosen, ATTRS));
+    for (const title of ['Contact Name', 'Phone Number', 'Email ID', 'Tags', 'Created On', 'Action']) {
+      expect(out, title).toContain(title);
+    }
+    for (const gone of ['Order Id', 'Groups', 'Language', 'Memo', 'Stage']) {
+      expect(out, gone).not.toContain(`>${gone}<`);
+    }
+    expect(out).not.toContain('Met at the fair');
+    expect(out).toContain('font-semibold');
+  });
+
+  it('shows two tag chips and folds the rest into +N with the full list on hover', () => {
+    const tags = ['One', 'Two', 'Three', 'Four'].map((name, i) => ({ id: `t${i}`, name, color: null }));
+    const out = table([row({ tags })]);
+    expect(out).toContain('>One<');
+    expect(out).toContain('>Two<');
+    expect(out).not.toContain('>Three<');
+    expect(out).toContain('>+2<');
+    expect(out).toContain('title="Three, Four"');
+  });
+
+  it('truncates long emails with an ellipsis and keeps the full address as the tooltip', () => {
+    const email = 'a.very.long.address.for.testing@some-long-domain-name.example.com';
+    const out = table([row({ email })]);
+    expect(out).toContain('truncate');
+    expect(out).toContain(`title="${email}"`);
   });
 
   it('badges an opted-out contact', () => {

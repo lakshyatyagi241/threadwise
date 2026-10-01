@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Badge, cn } from '@crm/ui';
+import { isAttrId, type ColumnDef, type ColumnId } from '../lib/columns';
+import { formatDmy } from '../lib/format';
 import type { CheckState } from '../lib/selection';
 import type { RowView } from '../lib/row-view';
-import { AttributeChip, ContactAvatar, GroupChip, TagPill } from './chips';
+import { AttributeChip, ContactAvatar, GroupChip, MoreChip, TagChip } from './chips';
 import { PencilIcon, TrashIcon } from './icons';
 
 export interface ListHandlers {
@@ -19,6 +21,30 @@ export interface ListHandlers {
   onDelete: (id: string) => void;
   /** Tag chips become filter links when the API can filter by tag. */
   onFilterTag?: (tagId: string) => void;
+}
+
+/** How many chips a cell shows before collapsing the rest into "+N". */
+const CHIPS_SHOWN = 2;
+
+/** Column widths in px; the table is fixed-layout and scrolls sideways inside its card when they do not fit. */
+const WIDTH: Record<string, number> = {
+  name: 260,
+  phone: 170,
+  attr: 150,
+  email: 240,
+  tags: 240,
+  groups: 220,
+  stage: 170,
+  language: 130,
+  memo: 220,
+  createdOn: 140,
+};
+const widthOf = (id: ColumnId) => WIDTH[isAttrId(id) ? 'attr' : id] ?? 160;
+const SELECT_W = 48;
+const ACTIONS_W = 104;
+
+export function tableMinWidth(columns: readonly ColumnDef[]): number {
+  return SELECT_W + ACTIONS_W + columns.reduce((sum, c) => sum + widthOf(c.id), 0);
 }
 
 /** The checkbox that selects every loaded row; `some` shows the mixed state. */
@@ -40,10 +66,12 @@ function HeaderCheckbox({
         if (el) el.indeterminate = state === 'some';
       }}
       onChange={(e) => onChange(e.target.checked)}
-      className="size-4 accent-[var(--primary)]"
+      className="size-4 cursor-pointer accent-[var(--brand)]"
     />
   );
 }
+
+const Dash = () => <span className="text-muted-foreground">-</span>;
 
 function RowActions({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
@@ -56,7 +84,7 @@ function RowActions({ row, h }: { row: RowView; h: ListHandlers }) {
           onClick={() => h.onEdit(row.id)}
           title={t('edit')}
           aria-label={t('editNamed', { name: row.name })}
-          className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
         >
           <PencilIcon className="size-3.5" />
         </button>
@@ -67,7 +95,7 @@ function RowActions({ row, h }: { row: RowView; h: ListHandlers }) {
           onClick={() => h.onDelete(row.id)}
           title={t('delete')}
           aria-label={t('deleteNamed', { name: row.name })}
-          className="inline-flex size-8 items-center justify-center rounded-md border border-border text-danger hover:bg-danger/10"
+          className="inline-flex size-8 items-center justify-center rounded-md border border-border text-danger outline-none hover:bg-danger/10 focus-visible:ring-2 focus-visible:ring-primary"
         >
           <TrashIcon className="size-3.5" />
         </button>
@@ -78,8 +106,7 @@ function RowActions({ row, h }: { row: RowView; h: ListHandlers }) {
 
 function StatusCell({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
-  if (!row.stage && !row.status && !row.optedOut)
-    return <span className="text-muted-foreground">&mdash;</span>;
+  if (!row.stage && !row.status && !row.optedOut) return <Dash />;
   return (
     <div className="flex flex-wrap gap-1">
       {row.stage && <Badge>{h.stageLabel(row.stage)}</Badge>}
@@ -89,146 +116,181 @@ function StatusCell({ row, h }: { row: RowView; h: ListHandlers }) {
   );
 }
 
-function ChipsOf({ row, h }: { row: RowView; h: ListHandlers }) {
+function TagsCell({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
-  if (row.tags.length === 0) return <span className="text-muted-foreground">&mdash;</span>;
+  if (row.tags.length === 0) return <Dash />;
+  const shown = row.tags.slice(0, CHIPS_SHOWN);
+  const rest = row.tags.slice(CHIPS_SHOWN);
   return (
-    <div className="flex flex-wrap gap-1">
-      {row.tags.map((tag) =>
+    <div className="flex min-w-0 flex-nowrap items-center gap-1 overflow-hidden">
+      {shown.map((tag) =>
         h.onFilterTag ? (
           <button
             key={tag.id}
             type="button"
             title={t('filterByTag', { name: tag.name })}
             onClick={() => h.onFilterTag?.(tag.id)}
-            className="hover:opacity-80"
+            className="min-w-0 rounded-full outline-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <TagPill name={tag.name} color={tag.color} />
+            <TagChip name={tag.name} color={tag.color} />
           </button>
         ) : (
-          <TagPill key={tag.id} name={tag.name} color={tag.color} />
+          <TagChip key={tag.id} name={tag.name} color={tag.color} />
         ),
+      )}
+      {rest.length > 0 && (
+        <MoreChip count={rest.length} title={rest.map((x) => x.name).join(', ')} />
       )}
     </div>
   );
 }
 
+function GroupsCell({ row }: { row: RowView }) {
+  if (row.groups.length === 0) return <Dash />;
+  // Group chips carry a name and a dot, so only one fits the column.
+  const rest = row.groups.slice(1);
+  return (
+    <div className="flex min-w-0 flex-nowrap items-center gap-1 overflow-hidden">
+      {row.groups.slice(0, 1).map((g) => (
+        <GroupChip key={g.id} name={g.name} color={g.color} />
+      ))}
+      {rest.length > 0 && (
+        <MoreChip count={rest.length} title={rest.map((x) => x.name).join(', ')} />
+      )}
+    </div>
+  );
+}
+
+/** Text that ends in an ellipsis, with the full value on hover; "-" when there is none. */
+function Clip({ value, ltr, mono }: { value: string; ltr?: boolean; mono?: boolean }) {
+  if (!value) return <Dash />;
+  return (
+    <span
+      title={value}
+      dir={ltr ? 'ltr' : undefined}
+      className={cn('block truncate text-start', mono && 'tabular-nums')}
+    >
+      {value}
+    </span>
+  );
+}
+
+function NameCell({ row }: { row: RowView }) {
+  const t = useTranslations('contacts-attributes-tags.list');
+  return (
+    <div className="flex min-w-0 items-center gap-2.5">
+      <ContactAvatar id={row.id} name={row.name} />
+      <Link
+        href={`/contacts/${row.id}`}
+        title={row.name || undefined}
+        className="min-w-0 truncate font-medium outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        {row.name || t('unnamed')}
+      </Link>
+    </div>
+  );
+}
+
+function Cell({ column, row, h }: { column: ColumnDef; row: RowView; h: ListHandlers }) {
+  const id = column.id;
+  if (isAttrId(id)) return <Clip value={row.custom[column.attributeKey ?? ''] ?? ''} />;
+  switch (id) {
+    case 'name':
+      return <NameCell row={row} />;
+    case 'phone':
+      return <Clip value={row.phone} ltr mono />;
+    case 'email':
+      return <Clip value={row.email} ltr />;
+    case 'tags':
+      return <TagsCell row={row} h={h} />;
+    case 'groups':
+      return <GroupsCell row={row} />;
+    case 'stage':
+      return <StatusCell row={row} h={h} />;
+    case 'language':
+      return <Clip value={row.language} />;
+    case 'memo':
+      return <Clip value={row.memo} />;
+    case 'createdOn':
+      return <Clip value={formatDmy(row.createdAt)} ltr mono />;
+  }
+}
+
 export function ContactsTable({
   rows,
+  columns,
   headerState,
   onToggleAll,
   ...h
 }: {
   rows: RowView[];
+  columns: readonly ColumnDef[];
   headerState: CheckState;
   onToggleAll: (checked: boolean) => void;
 } & ListHandlers) {
   const t = useTranslations('contacts-attributes-tags.list');
-  const th = 'px-3 py-2.5 text-start text-[11px] font-semibold uppercase tracking-wider';
+  const th = 'px-3 py-3.5 text-start text-sm font-semibold text-foreground';
+  const actions = h.canEdit || h.canDelete;
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[68rem] table-fixed text-sm">
+      <table
+        className="w-full table-fixed text-sm"
+        style={{ minWidth: tableMinWidth(columns) - (actions ? 0 : ACTIONS_W) }}
+      >
         <colgroup>
-          <col className="w-11" />
-          <col className="w-60" />
-          <col className="w-48" />
-          <col className="w-44" />
-          <col className="w-52" />
-          <col className="w-40" />
-          <col className="w-40" />
-          <col />
-          <col className="w-24" />
+          <col style={{ width: SELECT_W }} />
+          {columns.map((c) => (
+            <col key={c.id} style={{ width: widthOf(c.id) }} />
+          ))}
+          {actions && <col style={{ width: ACTIONS_W }} />}
         </colgroup>
-        <thead className="border-b border-border bg-muted text-muted-foreground">
+        <thead className="bg-muted/50">
           <tr>
-            <th className="py-2.5 ps-4 pe-2 text-start">
+            <th className="py-3.5 ps-4 pe-2 text-start">
               <HeaderCheckbox state={headerState} onChange={onToggleAll} label={t('selectAll')} />
             </th>
-            <th className={th}>{t('colName')}</th>
-            <th className={th}>{t('colGroups')}</th>
-            <th className={th}>{t('colTags')}</th>
-            <th className={th}>{t('colEmail')}</th>
-            <th className={th}>{t('colMobile')}</th>
-            <th className={th}>{t('colStatus')}</th>
-            <th className={th}>{t('colMemo')}</th>
-            <th className={cn(th, 'pe-4 text-end')}>{t('colActions')}</th>
+            {columns.map((c) => (
+              <th key={c.id} scope="col" className={cn(th, 'truncate')}>
+                {'key' in c.label ? t(c.label.key) : c.label.text}
+              </th>
+            ))}
+            {actions && (
+              <th scope="col" className={cn(th, 'pe-4 text-end')}>
+                {t('colActions')}
+              </th>
+            )}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border">
+        <tbody>
           {rows.map((row) => {
             const isSel = h.selected.has(row.id);
             return (
-              <tr key={row.id} className={cn('align-middle', isSel && 'bg-primary/5')}>
-                <td className="py-2 ps-4 pe-2">
+              <tr
+                key={row.id}
+                className={cn(
+                  'h-14 border-t border-border align-middle transition-colors hover:bg-muted/40',
+                  isSel && 'bg-brand/5 hover:bg-brand/10',
+                )}
+              >
+                <td className="ps-4 pe-2">
                   <input
                     type="checkbox"
                     checked={isSel}
                     onChange={() => h.onToggle(row.id)}
-                    aria-label={t('selectRow', { name: row.name })}
-                    className="size-4 accent-[var(--primary)]"
+                    aria-label={t('selectRow', { name: row.name || t('unnamed') })}
+                    className="size-4 cursor-pointer accent-[var(--brand)]"
                   />
                 </td>
-                <td className="px-3 py-2">
-                  <div className="flex min-w-0 items-center gap-2.5">
-                    <ContactAvatar id={row.id} name={row.name} />
-                    <div className="min-w-0">
-                      <Link
-                        href={`/contacts/${row.id}`}
-                        className="block truncate font-semibold hover:text-primary hover:underline"
-                      >
-                        {row.name || t('unnamed')}
-                      </Link>
-                      {row.language && (
-                        <div className="truncate text-[11px] text-muted-foreground">
-                          {row.language}
-                        </div>
-                      )}
-                      {row.attributes.length > 0 && (
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {row.attributes.map((a) => (
-                            <AttributeChip
-                              key={a.key}
-                              label={a.label}
-                              text={a.text}
-                              full={a.full}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-3 py-2">
-                  {row.groups.length === 0 ? (
-                    <span className="text-muted-foreground">&mdash;</span>
-                  ) : (
-                    <div className="flex flex-wrap gap-1">
-                      {row.groups.map((g) => (
-                        <GroupChip key={g.id} name={g.name} color={g.color} />
-                      ))}
-                    </div>
-                  )}
-                </td>
-                <td className="px-3 py-2">
-                  <ChipsOf row={row} h={h} />
-                </td>
-                <td className="truncate px-3 py-2 text-[13px]" dir="ltr">
-                  <span className="block truncate text-start">
-                    {row.email || <span className="text-muted-foreground">&mdash;</span>}
-                  </span>
-                </td>
-                <td className="truncate px-3 py-2 font-mono text-xs" dir="ltr">
-                  <span className="block truncate text-start">
-                    {row.phone || <span className="text-muted-foreground">&mdash;</span>}
-                  </span>
-                </td>
-                <td className="px-3 py-2">
-                  <StatusCell row={row} h={h} />
-                </td>
-                <td className="truncate px-3 py-2 text-xs text-muted-foreground">{row.memo}</td>
-                <td className="py-2 pe-4 ps-3 text-end">
-                  <RowActions row={row} h={h} />
-                </td>
+                {columns.map((c) => (
+                  <td key={c.id} className="max-w-0 px-3 py-2">
+                    <Cell column={c} row={row} h={h} />
+                  </td>
+                ))}
+                {actions && (
+                  <td className="pe-4 ps-3 text-end">
+                    <RowActions row={row} h={h} />
+                  </td>
+                )}
               </tr>
             );
           })}
@@ -249,8 +311,8 @@ export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers)
           <li
             key={row.id}
             className={cn(
-              'flex flex-col gap-3 rounded-md border border-border p-4',
-              isSel && 'border-primary/50 bg-primary/5',
+              'flex flex-col gap-3 rounded-lg border border-border p-4',
+              isSel && 'border-brand/50 bg-brand/5',
             )}
           >
             <div className="flex items-start gap-3">
@@ -258,8 +320,8 @@ export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers)
                 type="checkbox"
                 checked={isSel}
                 onChange={() => h.onToggle(row.id)}
-                aria-label={t('selectRow', { name: row.name })}
-                className="mt-2 size-4 accent-[var(--primary)]"
+                aria-label={t('selectRow', { name: row.name || t('unnamed') })}
+                className="mt-2 size-4 cursor-pointer accent-[var(--brand)]"
               />
               <ContactAvatar id={row.id} name={row.name} />
               <div className="min-w-0 flex-1">
@@ -270,23 +332,17 @@ export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers)
                   {row.name || t('unnamed')}
                 </Link>
                 <div className="truncate text-xs text-muted-foreground" dir="ltr">
-                  <span className="text-start">{row.email}</span>
+                  <span className="text-start">{row.email || '-'}</span>
                 </div>
-                <div className="truncate font-mono text-xs" dir="ltr">
-                  {row.phone}
+                <div className="truncate text-xs tabular-nums" dir="ltr">
+                  {row.phone || '-'}
                 </div>
               </div>
               <RowActions row={row} h={h} />
             </div>
             <StatusCell row={row} h={h} />
-            {row.groups.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {row.groups.map((g) => (
-                  <GroupChip key={g.id} name={g.name} color={g.color} />
-                ))}
-              </div>
-            )}
-            {row.tags.length > 0 && <ChipsOf row={row} h={h} />}
+            {row.groups.length > 0 && <GroupsCell row={row} />}
+            {row.tags.length > 0 && <TagsCell row={row} h={h} />}
             {row.attributes.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {row.attributes.map((a) => (
@@ -294,6 +350,9 @@ export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers)
                 ))}
               </div>
             )}
+            <div className="text-xs text-muted-foreground">
+              {t('colCreatedOn')}: <span className="tabular-nums">{formatDmy(row.createdAt) || '-'}</span>
+            </div>
             {row.memo && <p className="line-clamp-2 text-xs text-muted-foreground">{row.memo}</p>}
           </li>
         );

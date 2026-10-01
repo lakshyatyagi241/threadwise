@@ -1,13 +1,11 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Input, Popover, Select, Spinner } from '@crm/ui';
 import { useGroups } from '../api/groups';
 import { sameTagName, TAG_NAME_MAX, useTags } from '../api/tags';
 import { errorKind } from '../lib/errors';
-
-type Picker = 'groupAdd' | 'groupRemove' | 'tagAdd' | 'tagRemove' | null;
 
 export interface TagChoice {
   tagId?: string;
@@ -15,130 +13,46 @@ export interface TagChoice {
   name?: string;
 }
 
-export interface BulkBarProps {
-  /** Selected rows, or `null` when the selection stands for every contact matching the filter. */
-  count: number | null;
-  busy: boolean;
-  canUpdate: boolean;
-  canDelete: boolean;
-  canExport: boolean;
-  canCreateTags: boolean;
-  onExport: () => void;
-  onDelete: () => void;
-  onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
-  onTag: (action: 'add' | 'remove', choice: TagChoice) => Promise<boolean>;
-  onClear: () => void;
-}
+/** Which bulk picker is open (they open from the "More actions" menu). */
+export type BulkPicker = 'groupAdd' | 'groupRemove' | 'tagAdd' | 'tagRemove' | null;
 
-/** Actions on the selection (WD-CON-019..024). Shown only while something is selected. */
-export function BulkBar({
-  count,
-  busy,
-  canUpdate,
-  canDelete,
-  canExport,
+/**
+ * The group and tag pickers of the bulk actions (WD-CON-019..024). They are popovers anchored to the "More actions"
+ * button: the menu item sets `picker`, and applying (or cancelling) closes it.
+ */
+export function BulkPickers({
+  picker,
   canCreateTags,
-  onExport,
-  onDelete,
+  onClose,
   onGroup,
   onTag,
-  onClear,
-}: BulkBarProps) {
-  const t = useTranslations('contacts-attributes-tags.bulk');
-  const [picker, setPicker] = useState<Picker>(null);
-  const close = useCallback(() => setPicker(null), []);
-
-  const btn = 'whitespace-nowrap';
+}: {
+  picker: BulkPicker;
+  canCreateTags: boolean;
+  onClose: () => void;
+  onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
+  onTag: (action: 'add' | 'remove', choice: TagChoice) => Promise<boolean>;
+}) {
   return (
-    <div
-      role="toolbar"
-      aria-label={t('label')}
-      className="relative flex flex-wrap items-center gap-1.5"
-    >
-      <span className="text-xs text-muted-foreground" aria-live="polite">
-        {count === null ? t('allMatching') : t('selected', { count })}
-      </span>
-      {canExport && (
-        <Button variant="secondary" size="sm" className={btn} onClick={onExport} disabled={busy}>
-          {t('export')}
-        </Button>
-      )}
-      {canUpdate && (
-        <>
-          <Button
-            variant="secondary"
-            size="sm"
-            className={btn}
-            onClick={() => setPicker('groupAdd')}
-            disabled={busy}
-          >
-            {t('addToGroup')}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            className={btn}
-            onClick={() => setPicker('groupRemove')}
-            disabled={busy}
-          >
-            {t('removeFromGroup')}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            className={btn}
-            onClick={() => setPicker('tagAdd')}
-            disabled={busy}
-          >
-            {t('tag')}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            className={btn}
-            onClick={() => setPicker('tagRemove')}
-            disabled={busy}
-          >
-            {t('untag')}
-          </Button>
-        </>
-      )}
-      {canDelete && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className={`${btn} border-danger text-danger hover:bg-danger/10`}
-          onClick={onDelete}
-          disabled={busy}
-        >
-          {t('delete')}
-        </Button>
-      )}
-      {busy && <Spinner label={t('working')} />}
-      <Button variant="ghost" size="sm" className={btn} onClick={onClear} disabled={busy}>
-        {t('clear')}
-      </Button>
-
+    <>
       <GroupPicker
         open={picker === 'groupAdd' || picker === 'groupRemove'}
         action={picker === 'groupRemove' ? 'remove' : 'add'}
-        onClose={close}
+        onClose={onClose}
         onApply={async (action, id) => {
-          const ok = await onGroup(action, id);
-          if (ok) close();
+          if (await onGroup(action, id)) onClose();
         }}
       />
       <TagPicker
         open={picker === 'tagAdd' || picker === 'tagRemove'}
         action={picker === 'tagRemove' ? 'remove' : 'add'}
         canCreate={canCreateTags}
-        onClose={close}
+        onClose={onClose}
         onApply={async (action, choice) => {
-          const ok = await onTag(action, choice);
-          if (ok) close();
+          if (await onTag(action, choice)) onClose();
         }}
       />
-    </div>
+    </>
   );
 }
 

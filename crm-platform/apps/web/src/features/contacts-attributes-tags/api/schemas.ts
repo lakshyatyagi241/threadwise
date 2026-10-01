@@ -79,6 +79,8 @@ export const contactPageSchema = pageResponseSchema(contactResponseSchema).exten
   meta: z.object({ total: z.number().int().nonnegative() }).optional(),
 });
 
+export type ContactPage = z.infer<typeof contactPageSchema>;
+
 /** A contact's tags: the endpoint answers a plain array, not the cursor envelope. */
 export const contactTagsSchema = z.array(tagResponseSchema);
 
