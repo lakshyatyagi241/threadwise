@@ -294,3 +294,65 @@ describe('validateForm', () => {
     expect(validateForm({ ...EMPTY_FORM, firstName: 'A' }, true).phone).toBe('phoneInvalid');
   });
 });
+
+describe('typed contact properties', () => {
+  const types = new Map<string, { fieldType: 'integer' | 'multiselect' | 'checkbox' | 'date' | 'text' }>([
+    ['seats', { fieldType: 'integer' }],
+    ['interests', { fieldType: 'multiselect' }],
+    ['vip', { fieldType: 'checkbox' }],
+    ['renewal', { fieldType: 'date' }],
+    ['city', { fieldType: 'text' }],
+  ]);
+  const keys = [...types.keys()];
+
+  it('reads lists back into the form and keeps scalars as text', () => {
+    const f = contactToForm(
+      row({ customFields: { seats: 4, interests: ['a', 'b'], vip: true, nested: { x: 1 } } }),
+    );
+    expect(f.attributes).toEqual({ seats: '4', interests: ['a', 'b'], vip: 'true' });
+  });
+
+  it('writes each value as its type: numbers as numbers, lists as lists, checkboxes as booleans', () => {
+    const payload = toCreatePayload(
+      {
+        ...EMPTY_FORM,
+        firstName: 'A',
+        attributes: {
+          seats: '4',
+          interests: ['a', 'b'],
+          vip: 'true',
+          renewal: '2026-12-01',
+          city: ' Pune ',
+        },
+      },
+      keys,
+      types,
+    );
+    expect(payload.customFields).toMatchObject({
+      seats: 4,
+      interests: ['a', 'b'],
+      vip: true,
+      renewal: '2026-12-01',
+      city: 'Pune',
+    });
+  });
+
+  it('leaves an empty value out on create and clears it with null on update', () => {
+    const empty = { ...EMPTY_FORM, firstName: 'A', attributes: { seats: '', interests: [], city: '' } };
+    const created = toCreatePayload(empty, keys, types).customFields;
+    expect(created).not.toHaveProperty('seats');
+    expect(created).not.toHaveProperty('interests');
+    const updated = toUpdatePayload(empty, keys, 2, false, { seats: 4, interests: ['a'] }, types);
+    expect(updated.customFields).toMatchObject({ seats: null, interests: null });
+    expect(updated.customFields).not.toHaveProperty('city');
+  });
+
+  it('does not write an unticked checkbox on a contact that never had a value', () => {
+    const v = { ...EMPTY_FORM, firstName: 'A', attributes: { vip: 'false' } };
+    expect(toUpdatePayload(v, keys, 1, false, {}, types).customFields).not.toHaveProperty('vip');
+    // but unticking one that was ticked is a change
+    expect(toUpdatePayload(v, keys, 1, false, { vip: true }, types).customFields).toMatchObject({
+      vip: false,
+    });
+  });
+});

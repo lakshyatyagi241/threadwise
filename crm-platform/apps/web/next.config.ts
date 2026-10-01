@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', '*.localhost'],
   // Next generates AGENTS.md/CLAUDE.md files on every dev start; this repo keeps its own agent guidance.
   agentRules: false,
+  // Dev only: keep Next's round badge off the bottom-left, where the menu's workspace card lives.
+  devIndicators: { position: 'bottom-right' },
   // Auth pages must never be cached (WD-AUTH-020, WD-AUTH-045); framing is refused everywhere.
   async headers() {
     const security = [

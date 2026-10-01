@@ -1,5 +1,6 @@
 import { cn } from '@crm/ui';
 import { avatarTone, initials } from '../lib/contact-model';
+import { optionColor } from '../lib/stage-model';
 import { CircleDotIcon } from './icons';
 
 const FALLBACK_COLOR = 'var(--primary)';
@@ -128,32 +129,18 @@ export function MoreChip({ count, title }: { count: number; title: string }) {
   );
 }
 
-/** A stage's soft colour: progress stages cool to warm, the end states green and red, anything custom a stable hue. */
-const STAGE_COLOR: Record<string, string> = {
-  new: '#0284c7',
-  contacted: '#4f46e5',
-  qualified: '#7c3aed',
-  application_started: '#0d9488',
-  application_submitted: '#0891b2',
-  interview_scheduled: '#d97706',
-  offer_received: '#c026d3',
-  admission_confirmed: '#16a34a',
-  enrolled: '#15803d',
-  lost: '#dc2626',
-};
-const CUSTOM_STAGE_COLORS = ['#0284c7', '#7c3aed', '#0d9488', '#d97706', '#c026d3', '#4f46e5'];
-
-export function stageColor(stage: string): string {
-  const known = STAGE_COLOR[stage];
-  if (known) return known;
-  let h = 0;
-  for (const ch of stage) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-  return CUSTOM_STAGE_COLORS[h % CUSTOM_STAGE_COLORS.length]!;
-}
-
 /** Stage as a soft filled badge with a dot icon, in the stage's colour. */
-export function StageBadge({ stage, label }: { stage: string; label: string }) {
-  const c = stageColor(stage);
+export function StageBadge({
+  stage,
+  label,
+  color,
+}: {
+  stage: string;
+  label: string;
+  /** The workspace's colour for this stage; the stable fallback for the value when absent. */
+  color?: string | null;
+}) {
+  const c = optionColor({ value: stage, color });
   return (
     <span
       title={label}

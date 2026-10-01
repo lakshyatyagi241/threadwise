@@ -1,5 +1,7 @@
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import type { FieldResponse } from '@crm/contracts';
 import type { ContactRow } from '../api/schemas';
+import { inputToValue, type InputValue } from './field-values';
 
 /**
  * Contact display and form rules (WD-CON-008, 010, 012, 015, 016, 017), kept free of React so they can be tested.
@@ -159,8 +161,11 @@ export interface ContactFormValues {
   source: string;
   /** Group ids (uuid). Empty array = no groups, which clears them on save. */
   groupIds: string[];
-  /** Attribute key -> typed text. */
-  attributes: Record<string, string>;
+  /**
+   * Property key -> what the form holds: text for most types (a number, a date, 'true' for a ticked checkbox) and a
+   * list for a multi-select. `customFieldsFromForm` converts back to the stored type.
+   */
+  attributes: Record<string, InputValue>;
   optedOut: boolean;
 }
 
@@ -191,9 +196,11 @@ export function contactToForm(
 ): ContactFormValues {
   const cf = c.customFields;
   // Every custom value the contact holds; only the keys of the workspace's active attributes are shown and written back.
-  const attributes: Record<string, string> = {};
+  const attributes: Record<string, InputValue> = {};
   for (const [key, value] of Object.entries(cf)) {
-    if (!RESERVED_CUSTOM_KEYS.has(key.toLowerCase()) && scalar(value)) attributes[key] = str(value);
+    if (RESERVED_CUSTOM_KEYS.has(key.toLowerCase())) continue;
+    if (scalar(value)) attributes[key] = str(value);
+    else if (Array.isArray(value) && value.every(scalar)) attributes[key] = value.map(String);
   }
   const hasParts = Boolean(clean(c.firstName) || clean(c.lastName));
   return {
@@ -217,12 +224,16 @@ export function contactToForm(
 
 const orNull = (v: string): string | null => (clean(v) === '' ? null : clean(v));
 
-/** `customFields` for a write: extras plus the workspace attributes. Blank values are sent as null so they clear. */
+/**
+ * `customFields` for a write: extras plus the workspace's properties. Blank values are sent as null so they clear.
+ * `fields` (the registry rows by key) turns each form value into its stored type; a key with no row is text.
+ */
 export function customFieldsFromForm(
   v: ContactFormValues,
   attributeKeys: readonly string[],
-): Record<string, string | null> {
-  const out: Record<string, string | null> = {
+  fields: ReadonlyMap<string, Pick<FieldResponse, 'fieldType'>> = new Map(),
+): Record<string, unknown> {
+  const out: Record<string, unknown> = {
     [EXTRA_KEYS.title]: orNull(v.title),
     [EXTRA_KEYS.middleName]: orNull(v.middleName),
     [EXTRA_KEYS.language]: orNull(v.language),
@@ -230,19 +241,25 @@ export function customFieldsFromForm(
     [EXTRA_KEYS.memo]: orNull(v.memo),
     [EXTRA_KEYS.source]: orNull(v.source),
   };
-  for (const key of attributeKeys) out[key] = orNull(v.attributes[key] ?? '');
+  for (const key of attributeKeys) {
+    const input = v.attributes[key];
+    const field = fields.get(key);
+    if (field) out[key] = inputToValue(field, input);
+    else out[key] = Array.isArray(input) ? (input.length ? input : null) : orNull(input ?? '');
+  }
   return out;
 }
 
 /** The same, for create: keys with nothing in them are left out instead of sent as null. */
-function withoutNulls(o: Record<string, string | null>): Record<string, string> {
-  return Object.fromEntries(Object.entries(o).filter(([, x]) => x !== null)) as Record<
-    string,
-    string
-  >;
+function withoutNulls(o: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(Object.entries(o).filter(([, x]) => x !== null));
 }
 
-export function toCreatePayload(v: ContactFormValues, attributeKeys: readonly string[]) {
+export function toCreatePayload(
+  v: ContactFormValues,
+  attributeKeys: readonly string[],
+  fields?: ReadonlyMap<string, Pick<FieldResponse, 'fieldType'>>,
+) {
   const name = composeName(v);
   return {
     ...(name ? { name } : {}),
@@ -254,7 +271,7 @@ export function toCreatePayload(v: ContactFormValues, attributeKeys: readonly st
     ...(clean(v.status) ? { status: clean(v.status) } : {}),
     ...(clean(v.source) ? { source: clean(v.source) } : {}),
     ...(v.optedOut ? { isUnsubscribed: true } : {}),
-    customFields: withoutNulls(customFieldsFromForm(v, attributeKeys)),
+    customFields: withoutNulls(customFieldsFromForm(v, attributeKeys, fields)),
   };
 }
 
@@ -265,6 +282,7 @@ export function toUpdatePayload(
   rowVersion: number,
   wasOptedOut: boolean,
   previous: Record<string, unknown> = {},
+  fields?: ReadonlyMap<string, Pick<FieldResponse, 'fieldType'>>,
 ) {
   const name = composeName(v);
   return {
@@ -281,9 +299,11 @@ export function toUpdatePayload(
     // A blank value clears a key the contact had; a key that was empty and still is stays out of the write
     // (it would only add a null to the stored values).
     customFields: Object.fromEntries(
-      Object.entries(customFieldsFromForm(v, attributeKeys)).filter(
-        ([key, value]) => value !== null || (previous[key] ?? null) !== null,
-      ),
+      Object.entries(customFieldsFromForm(v, attributeKeys, fields)).filter(([key, value]) => {
+        const had = (previous[key] ?? null) !== null;
+        // an unticked checkbox on a contact that never had a value is not a change
+        return value === false ? had : value !== null || had;
+      }),
     ),
     rowVersion,
   };
