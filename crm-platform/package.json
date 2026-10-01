@@ -28,6 +28,7 @@
     "db:migrate": "pnpm --filter @crm/db migrate",
     "db:status": "pnpm --filter @crm/db status",
     "db:new": "pnpm --filter @crm/db new",
+    "db:verify-schema": "pnpm --filter @crm/db verify-schema",
     "db:seed": "pnpm --filter @crm/db seed",
     "db:reset": "pnpm --filter @crm/db reset",
     "prepare": "husky"
