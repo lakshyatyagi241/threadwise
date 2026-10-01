@@ -27,7 +27,8 @@ import {
   KEYS,
   updateContact,
 } from '../api/contacts';
-import { useAttributes, useStatusOptions } from '../api/attributes';
+import { useStatusOptions } from '../api/attributes';
+import { useContactFields, useFieldDependencies, useFieldSections } from '../api/properties';
 import { setContactGroups, useGroups } from '../api/groups';
 import { attachTagToContact, detachTag, useContactTags, useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
@@ -41,7 +42,9 @@ import {
   type ContactFormValues,
 } from '../lib/contact-model';
 import { fieldErrors, errorKind } from '../lib/errors';
+import { checkValue, isFieldApplicable } from '../lib/field-values';
 import { stageChoices, statusChoices } from '../lib/option-sets';
+import { CustomFieldsSection, isFormField } from './custom-fields-section';
 import { ErrorLine } from './error-line';
 import { GroupChip } from './chips';
 import { TagsEditor, type TagLite } from './tags-editor';
@@ -108,22 +111,29 @@ function ContactForm({
     Partial<Record<'firstName' | 'phone' | 'email', string>>
   >({});
   const [serverFields, setServerFields] = useState<Record<string, string>>({});
+  const [fieldProblems, setFieldProblems] = useState<Record<string, string>>({});
   const [version, setVersion] = useState(contact?.rowVersion ?? 0);
   const [conflict, setConflict] = useState(false);
   const [pendingTags, setPendingTags] = useState<TagLite[]>([]);
 
-  const attributes = useAttributes();
+  const registry = useContactFields();
+  const sections = useFieldSections();
+  const dependencies = useFieldDependencies();
   const statusOptions = useStatusOptions();
   const groups = useGroups();
   const allTags = useTags();
   const contactTags = useContactTags(contact?.id ?? null);
   const initialGroups = useRef((contact?.groups ?? []).map((g) => g.id));
 
-  const activeAttributes = useMemo(
-    () => (attributes.data ?? []).filter((a) => a.active),
-    [attributes.data],
-  );
-  const attributeKeys = useMemo(() => activeAttributes.map((a) => a.key), [activeAttributes]);
+  // The workspace's contact properties (Settings, Contact properties): active, not hidden. They are the fields
+  // this form writes into the contact's custom values; a read-only one is shown but never sent, and one whose
+  // "show only when" rule is unmet is neither shown nor sent.
+  const formFields = useMemo(() => (registry.data ?? []).filter(isFormField), [registry.data]);
+  const fieldsById = useMemo(() => new Map(formFields.map((f) => [f.id, f])), [formFields]);
+  const fieldsByKey = useMemo(() => new Map(formFields.map((f) => [f.key, f])), [formFields]);
+  const applicable = (f: (typeof formFields)[number]) =>
+    isFieldApplicable(f, dependencies.data ?? [], fieldsById, values.attributes);
+  const attributeKeys = formFields.filter((f) => !f.isReadOnly && applicable(f)).map((f) => f.key);
   const stages = useMemo(
     () => stageChoices(statusOptions.data, values.lifecycleStage),
     [statusOptions.data, values.lifecycleStage],
@@ -195,6 +205,7 @@ function ContactForm({
             version,
             contact.isUnsubscribed,
             contact.customFields,
+            fieldsByKey,
           ),
         );
         const before = initialGroups.current;
@@ -210,7 +221,7 @@ function ContactForm({
         }
       } else {
         const started = Date.now();
-        saved = await createContact(toCreatePayload(values, attributeKeys));
+        saved = await createContact(toCreatePayload(values, attributeKeys, fieldsByKey));
         // Creating a contact whose phone or email already belongs to someone returns that person instead of a copy.
         duplicate = Date.parse(saved.createdAt) < started - 2000;
         if (!duplicate) {
@@ -280,16 +291,28 @@ function ContactForm({
     const next = Object.fromEntries(Object.entries(found).map(([k, v]) => [k, t(`problems.${v}`)]));
     setProblems(next);
     setServerFields({});
+    const fp: Record<string, string> = {};
+    for (const f of formFields) {
+      if (f.isReadOnly || !applicable(f)) continue;
+      const found = checkValue(f, merged.attributes[f.key]);
+      if (found) fp[f.key] = t(`fieldProblem.${found}`);
+    }
+    setFieldProblems(fp);
     if (Object.keys(next).length > 0) {
       const first = Object.keys(next)[0];
       document.getElementById(id(first === 'firstName' ? 'first' : first))?.focus();
+      return;
+    }
+    const firstField = Object.keys(fp)[0];
+    if (firstField) {
+      document.getElementById(id(`prop-${firstField}`))?.focus();
       return;
     }
     setValues(merged);
     save.mutate();
   }
 
-  const loadingLookups = attributes.isPending;
+  const loadingLookups = registry.isPending;
   const err = (key: 'firstName' | 'phone' | 'email') => problems[key] ?? serverFields[key];
 
   return (
@@ -539,40 +562,18 @@ function ContactForm({
         />
       </div>
 
-      {activeAttributes.length > 0 && (
-        <fieldset className="space-y-1.5">
-          <legend className="flex w-full items-baseline justify-between gap-2 text-sm font-medium">
-            <span>{t('attributes')}</span>
-            <span className="text-xs font-normal text-muted-foreground">{t('attributesHint')}</span>
-          </legend>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {activeAttributes.map((a) => (
-              <Field
-                key={a.id}
-                htmlFor={id(`attr-${a.key}`)}
-                label={
-                  <>
-                    {a.name}{' '}
-                    <span dir="ltr" className="font-mono text-xs text-muted-foreground">
-                      /{a.key}
-                    </span>
-                  </>
-                }
-              >
-                <Input
-                  id={id(`attr-${a.key}`)}
-                  value={values.attributes[a.key] ?? ''}
-                  maxLength={1000}
-                  placeholder={a.description || a.defaultValue}
-                  onChange={(e) =>
-                    set('attributes', { ...values.attributes, [a.key]: e.target.value })
-                  }
-                />
-              </Field>
-            ))}
-          </div>
-        </fieldset>
-      )}
+      <CustomFieldsSection
+        fields={formFields}
+        sections={sections.data ?? []}
+        dependencies={dependencies.data ?? []}
+        values={values.attributes}
+        errors={fieldProblems}
+        idPrefix={uid}
+        onChange={(key, value) => {
+          set('attributes', { ...values.attributes, [key]: value });
+          if (fieldProblems[key]) setFieldProblems(({ [key]: _gone, ...rest }) => rest);
+        }}
+      />
 
       <div className="flex justify-end gap-2 border-t border-border pt-4">
         <Button variant="secondary" onClick={onClose} disabled={save.isPending}>

@@ -21,6 +21,7 @@ import {
   KEYS,
   useContactsPage,
   useContactStats,
+  updateContact,
   type ContactFilters,
 } from '../api/contacts';
 import { useGroups } from '../api/groups';
@@ -77,6 +78,7 @@ export function ContactsScreen() {
   const t = useTranslations('contacts-attributes-tags.list');
   const tb = useTranslations('contacts-attributes-tags.bulk');
   const tf = useTranslations('contacts-attributes-tags.form');
+  const ts = useTranslations('contacts-attributes-tags.stageMenu');
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
@@ -208,6 +210,7 @@ export function ContactsScreen() {
     setPickerRow(null);
   };
   const [busy, setBusy] = useState(false);
+  const [stageBusy, setStageBusy] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
   const deleteTarget = rows.find((r) => r.id === deleteId);
 
@@ -287,6 +290,27 @@ export function ContactsScreen() {
     return true;
   }
 
+  /** The stage cell's menu: saves the new stage of one contact, with the row version the table last read. */
+  async function changeStage(id: string, stage: string) {
+    const row = rows.find((r) => r.id === id);
+    if (!row) return;
+    setStageBusy(id);
+    try {
+      await updateContact(id, { lifecycleStage: stage, rowVersion: row.rowVersion });
+      await refresh();
+      toast(ts('changed', { stage: stages.find((x) => x.value === stage)?.label ?? stage }), 'success');
+    } catch (e) {
+      const kind = errorKind(e);
+      toast(
+        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
+        'danger',
+      );
+      if (kind === 'conflict') await refresh();
+    } finally {
+      setStageBusy(null);
+    }
+  }
+
   async function onDeleteOne() {
     if (!deleteTarget) return;
     const out = await guarded(() => deleteContact(deleteTarget.id).then(() => true as const));
@@ -306,6 +330,9 @@ export function ContactsScreen() {
     canEdit: canUpdate,
     canDelete,
     stageLabel: (v: string) => stages.find((x) => x.value === v)?.label ?? v,
+    stageChoices: stages,
+    onStageChange: canUpdate ? (id: string, stage: string) => void changeStage(id, stage) : undefined,
+    stageBusyId: stageBusy,
     statusLabel: (v: string) => statuses.find((x) => x.value === v)?.label ?? v,
     onToggle: (id: string) => dispatch({ type: 'toggle', id }),
     onView: (id: string) => router.push(`/contacts/${id}`),

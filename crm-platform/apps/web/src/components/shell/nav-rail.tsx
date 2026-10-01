@@ -208,7 +208,53 @@ export function NavRail({
         )}
       >
         <PanelBrand collapsed={!pinned} />
+        {pinned && (
+          <div className="ms-auto">
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  setTip(null);
+                  onTogglePinned();
+                }}
+                aria-expanded={pinned}
+                aria-label={toggleLabel}
+                title={pinned ? undefined : toggleLabel}
+                className={cn(
+                  'flex items-center gap-3 rounded-xl text-sm text-nav-muted outline-none transition',
+                  'hover:bg-nav-hover hover:text-nav-active-foreground focus-visible:ring-2 focus-visible:ring-nav-ring',
+                  'size-9 justify-center',
+                )}
+              >
+                <ChevronIcon dir={pinned === rtl ? 'right' : 'left'} className="size-[18px]" />
+              </button>
+            </>
+          </div>
+        )}
       </div>
+      {!pinned && (
+        <div className="flex shrink-0 justify-center border-b border-nav-border py-2">
+          <>
+            <button
+              type="button"
+              onClick={() => {
+                setTip(null);
+                onTogglePinned();
+              }}
+              aria-expanded={pinned}
+              aria-label={toggleLabel}
+              title={pinned ? undefined : toggleLabel}
+              className={cn(
+                'flex items-center gap-3 rounded-xl text-sm text-nav-muted outline-none transition',
+                'hover:bg-nav-hover hover:text-nav-active-foreground focus-visible:ring-2 focus-visible:ring-nav-ring',
+                'size-9 justify-center',
+              )}
+            >
+              <ChevronIcon dir={pinned === rtl ? 'right' : 'left'} className="size-[18px]" />
+            </button>
+          </>
+        </div>
+      )}
       <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         {pinned ? (
           <NavPanel sections={sections} activeId={activeId} />
@@ -225,26 +271,6 @@ export function NavRail({
         {footer && (
           <NavCollapsedContext.Provider value={!pinned}>{footer}</NavCollapsedContext.Provider>
         )}
-        <div className={cn(!pinned && 'flex justify-center')}>
-          <button
-            type="button"
-            onClick={() => {
-              setTip(null);
-              onTogglePinned();
-            }}
-            aria-expanded={pinned}
-            aria-label={toggleLabel}
-            title={pinned ? undefined : toggleLabel}
-            className={cn(
-              'flex items-center gap-3 rounded-xl text-sm text-nav-muted outline-none transition',
-              'hover:bg-nav-hover hover:text-nav-active-foreground focus-visible:ring-2 focus-visible:ring-nav-ring',
-              pinned ? 'w-full px-3 py-2' : 'size-11 justify-center',
-            )}
-          >
-            <ChevronIcon dir={pinned === rtl ? 'right' : 'left'} className="size-[18px]" />
-            {pinned && <span>{t('shell.collapseMenu')}</span>}
-          </button>
-        </div>
       </div>
       {/* Portalled to <body>: inside the aside the page content would paint over the label. */}
       {tip &&

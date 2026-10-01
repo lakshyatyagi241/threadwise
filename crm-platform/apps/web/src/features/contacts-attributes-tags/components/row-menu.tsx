@@ -15,10 +15,16 @@ const PANEL_W = 208;
 export function RowMenu({
   label,
   className,
+  trigger,
+  width = PANEL_W,
   children,
 }: {
   label: string;
   className?: string;
+  /** Replaces the "..." icon (and its square look) with your own trigger content, e.g. a stage badge. */
+  trigger?: ReactNode;
+  /** Panel width in px. */
+  width?: number;
   /** Items; a function receives `close`. */
   children: (close: () => void) => ReactNode;
 }) {
@@ -34,9 +40,9 @@ export function RowMenu({
     const height = panel.current?.offsetHeight ?? 240;
     const below = r.bottom + 4;
     const top = below + height > window.innerHeight - 8 ? Math.max(8, r.top - height - 4) : below;
-    const left = Math.min(Math.max(8, r.left), window.innerWidth - PANEL_W - 8);
+    const left = Math.min(Math.max(8, r.left), window.innerWidth - width - 8);
     setPos({ top, left });
-  }, [open]);
+  }, [open, width]);
 
   useEffect(() => {
     if (!open) return;
@@ -87,12 +93,14 @@ export function RowMenu({
         title={label}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'inline-flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary',
-          open && 'bg-muted text-foreground',
+          trigger
+            ? 'inline-flex max-w-full min-w-0 items-center rounded-full outline-none transition hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary'
+            : 'inline-flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary',
+          !trigger && open && 'bg-muted text-foreground',
           className,
         )}
       >
-        <MoreIcon className="size-4" />
+        {trigger ?? <MoreIcon className="size-4" />}
       </button>
       {open &&
         createPortal(
@@ -100,7 +108,7 @@ export function RowMenu({
             ref={panel}
             role="menu"
             aria-label={label}
-            style={{ top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: PANEL_W }}
+            style={{ top: pos?.top ?? -9999, left: pos?.left ?? -9999, width }}
             className="fixed z-[60] rounded-md border border-border bg-background p-1 text-start shadow-lg"
           >
             {children(close)}

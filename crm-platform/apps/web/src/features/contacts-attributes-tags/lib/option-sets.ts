@@ -4,6 +4,8 @@ import { FALLBACK_STATUSES, titleCaseKey } from './contact-model';
 export interface Choice {
   value: string;
   label: string;
+  /** The workspace's colour for the option (hex), when one is set. */
+  color?: string;
 }
 
 const active = (o: StatusOptionResponse) => o.isActive;
@@ -15,7 +17,7 @@ function fromGroup(
   return (options ?? [])
     .filter((o) => active(o) && groups.includes(o.optionGroup))
     .sort((a, b) => a.position - b.position)
-    .map((o) => ({ value: o.value, label: o.label }));
+    .map((o) => ({ value: o.value, label: o.label, ...(o.color ? { color: o.color } : {}) }));
 }
 
 /**

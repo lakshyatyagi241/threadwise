@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -23,7 +24,7 @@ import { errorKind } from '../lib/errors';
 import { useDebounced } from '../lib/use-debounced';
 import { AttributeModal } from './attribute-modal';
 import { ErrorLine } from './error-line';
-import { PencilIcon, PlusIcon, SearchIcon, TrashIcon } from './icons';
+import { ArrowRightIcon, PencilIcon, PlusIcon, SearchIcon, TrashIcon } from './icons';
 import { SlashTextarea } from './slash-picker';
 
 const STATUS_KEYS: StatusFilter[] = ['all', 'active', 'inactive'];
@@ -172,6 +173,19 @@ export function AttributesScreen() {
               <PlusIcon /> {t('new')}
             </Button>
           )}
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
+          <div className="min-w-0 max-w-2xl">
+            <div className="font-semibold">{t('related.title')}</div>
+            <p className="text-muted-foreground">{t('related.body')}</p>
+          </div>
+          <Link
+            href="/contact-properties"
+            className="inline-flex shrink-0 items-center gap-1.5 font-medium text-primary hover:underline"
+          >
+            {t('related.link')} <ArrowRightIcon className="size-3.5 rtl:rotate-180" />
+          </Link>
         </div>
 
         <div className="grid grid-cols-3 gap-3">

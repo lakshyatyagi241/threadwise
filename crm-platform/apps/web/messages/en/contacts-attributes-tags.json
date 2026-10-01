@@ -3,7 +3,9 @@
     "nav": {
       "contacts": "Contacts",
       "groups": "Groups",
-      "attributes": "Attributes"
+      "attributes": "Attributes",
+      "stages": "Contact stages",
+      "properties": "Contact properties"
     },
     "common": {
       "dismiss": "Dismiss"
@@ -26,7 +28,9 @@
       "nameTaken": "That name is already taken.",
       "importFile": "That file could not be read as a contacts CSV.",
       "tooLarge": "That is more than can be done in one go. Narrow it down and try again.",
-      "mergeScope": "Merging duplicates needs access to every contact. Ask an admin."
+      "mergeScope": "Merging duplicates needs access to every contact. Ask an admin.",
+      "statusInUse": "Some contacts still hold this value. Choose where to move them.",
+      "dependencyCycle": "That condition would make two properties wait for each other."
     },
     "list": {
       "title": "Contact Hub",
@@ -236,7 +240,6 @@
       "noGroupsCreate": "No groups yet - create one first.",
       "groupsGone": "This contact is in a group that no longer exists.",
       "attributes": "Attributes",
-      "attributesHint": "fills variables in templates & flows",
       "cancel": "Cancel",
       "saveChanges": "Save changes",
       "saveContact": "Save contact",
@@ -253,7 +256,19 @@
         "emailInvalid": "Enter a valid email address.",
         "phoneInvalid": "Enter a valid mobile number for the chosen country."
       },
-      "optOutNotApplied": "The contact was saved, but the server did not apply the marketing opt-out yet."
+      "optOutNotApplied": "The contact was saved, but the server did not apply the marketing opt-out yet.",
+      "optionPlaceholder": "Select",
+      "customProperties": "Contact properties",
+      "customPropertiesHint": "set up under Settings, Contact properties",
+      "fieldProblem": {
+        "required": "This property is required.",
+        "number": "Enter a number.",
+        "integer": "Enter a whole number.",
+        "email": "Enter a valid email address.",
+        "url": "Enter a full link starting with http:// or https://."
+      },
+      "readOnlyField": "Read only",
+      "yes": "Yes"
     },
     "tags": {
       "title": "Tags",
@@ -449,7 +464,9 @@
       "optedIn": "Allowed",
       "timeline": "Activity timeline",
       "noActivity": "No activity yet for this contact.",
-      "loadMore": "Load more"
+      "loadMore": "Load more",
+      "yes": "Yes",
+      "no": "No"
     },
     "attributes": {
       "eyebrow": "More / Attributes",
@@ -603,7 +620,12 @@
       "loadMore": "Load more",
       "inUseTitle": "Contacts hold values for this attribute",
       "inUseMessage": "{count, plural, one {# contact holds} other {# contacts hold}} a value for \"{name}\". Deleting the attribute keeps those values, but templates and flows that use it will render blank. Delete anyway?",
-      "deleteAnyway": "Delete anyway"
+      "deleteAnyway": "Delete anyway",
+      "related": {
+        "title": "Attributes are contact properties",
+        "body": "Every attribute is a custom contact property with a key you can use as a variable. Properties add more types (dropdown, date, checkbox and others), sections and rules for the contact form.",
+        "link": "Open Contact properties"
+      }
     },
     "dedupe": {
       "title": "Remove duplicates?",
@@ -619,6 +641,357 @@
       "more": "{count, plural, one {and # more number} other {and # more numbers}}",
       "keeps": "The earliest contact of each number stays; the others are folded into it.",
       "done": "{count, plural, one {Merged # duplicate contact, keeping the earliest of each number.} other {Merged # duplicate contacts, keeping the earliest of each number.}}"
+    },
+    "stageMenu": {
+      "change": "Change stage of {name}",
+      "moveTo": "Move to stage",
+      "changed": "Stage changed to {stage}.",
+      "conflict": "Someone else changed this contact. The list was refreshed; try again.",
+      "forbidden": "You do not have permission to change contacts.",
+      "failed": "The stage could not be changed. Try again."
+    },
+    "stages": {
+      "eyebrow": "Settings and workspace",
+      "title": "Contact stages",
+      "subtitle": "Decide the lifecycle stages and statuses your team can give a contact: their order, names and colours.",
+      "toProperties": "Contact properties",
+      "loading": "Loading",
+      "usageFailed": "The number of contacts per option could not be loaded.",
+      "readOnly": "You can view these options but not change them.",
+      "tabs": {
+        "stage": "Lifecycle stages",
+        "status": "Statuses"
+      },
+      "stage": {
+        "eyebrow": "Lifecycle stage",
+        "addTitle": "Add a stage",
+        "namePlaceholder": "Interview scheduled",
+        "listLabel": "Lifecycle stages",
+        "help": "Every contact is in exactly one stage. Drag the rows or use the arrows to set the order they are offered in.",
+        "add": "Add stage",
+        "unconfiguredTitle": "Using the platform stages",
+        "unconfigured": "This workspace has not set up its own stages, so contacts use the ten standard ones. Customise them to rename, recolour, reorder, add or remove stages.",
+        "seed": "Customise the standard stages",
+        "startFresh": "Start with my own",
+        "how": {
+          "title": "How stages work",
+          "body": "A contact starts in the default stage. Change it from the contacts table, the contact page or the edit form. Deleting a stage that contacts are in asks where to move them."
+        }
+      },
+      "status": {
+        "eyebrow": "Contact status",
+        "addTitle": "Add a status",
+        "namePlaceholder": "Key account",
+        "listLabel": "Contact statuses",
+        "help": "A status is an optional label on a contact, such as VIP or Customer. A contact can have one, or none.",
+        "add": "Add status",
+        "unconfiguredTitle": "Using the platform statuses",
+        "unconfigured": "This workspace has not set up its own statuses, so contacts use Active, Prospect, Customer and VIP. Customise them to make them yours.",
+        "seed": "Customise the standard statuses",
+        "startFresh": "Start with my own",
+        "how": {
+          "title": "How statuses work",
+          "body": "Statuses are free labels you can filter and report on. Unlike stages, a contact does not need one. Deleting a status that contacts hold asks where to move them."
+        }
+      },
+      "row": {
+        "drag": "Drag to reorder",
+        "default": "Default",
+        "hidden": "Hidden",
+        "contacts": "{count, plural, one {# contact} other {# contacts}}",
+        "moveUp": "Move {name} up",
+        "moveDown": "Move {name} down",
+        "makeDefault": "Make {name} the default",
+        "edit": "Edit {name}",
+        "delete": "Delete {name}"
+      },
+      "toast": {
+        "conflict": "Someone else changed this list. It was refreshed; try again.",
+        "forbidden": "You do not have permission to change this.",
+        "failed": "That could not be saved. Try again.",
+        "defaultSet": "{name} is now the default."
+      },
+      "seed": {
+        "done": "The standard options were added. You can edit them now."
+      },
+      "preview": {
+        "title": "Live preview",
+        "empty": "Add an option to see how it looks.",
+        "picker": "In the pickers",
+        "table": "In the contacts table",
+        "sample": "Aarav Sharma"
+      },
+      "modal": {
+        "close": "Close",
+        "editTitle": "Edit option",
+        "updated": "Saved.",
+        "added": "Added.",
+        "reload": "Reload the list",
+        "preview": "Preview",
+        "previewEmpty": "Name",
+        "name": "Name",
+        "keyFixed": "Stored as",
+        "keyHint": "Stored as",
+        "color": "Colour",
+        "customColor": "Custom colour",
+        "default": "Default for new contacts",
+        "defaultHint": "New contacts start in this stage unless one is chosen.",
+        "active": "Available",
+        "activeHint": "Turn off to hide it from pickers. Contacts already in it keep it.",
+        "defaultInactive": "This is the default stage. Pick another default before hiding it, or new contacts will start in the standard first stage.",
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "add": "Add",
+        "problem": {
+          "required": "Enter a name.",
+          "tooLong": "Use at most 255 characters.",
+          "taken": "Another option already has this name."
+        }
+      },
+      "delete": {
+        "title": "Delete {name}?",
+        "done": "{name} was deleted.",
+        "checking": "Checking which contacts use it",
+        "unused": "No contact uses this option. It will be removed.",
+        "onlyOne": "{count, plural, one {# contact is} other {# contacts are}} using this and it is the only option, so it cannot be deleted. Add another first.",
+        "inUse": "{count, plural, one {# contact is} other {# contacts are}} using {name}. They must be moved before it can be deleted.",
+        "moveTo": "Move them to",
+        "wasDefault": "This is the default stage. New contacts will start in the first available stage after it is gone.",
+        "close": "Close",
+        "keep": "Keep it",
+        "moveAndDelete": "Move {count, plural, one {# contact} other {# contacts}} to {target} and delete",
+        "confirm": "Delete"
+      }
+    },
+    "properties": {
+      "eyebrow": "Settings and workspace",
+      "title": "Contact properties",
+      "subtitle": "Everything a contact can store, in one place: the built-in properties and your own, grouped into sections.",
+      "newSection": "New section",
+      "newProperty": "New property",
+      "related": {
+        "attributesTitle": "Properties and attributes",
+        "attributesBody": "Your own properties are the same records as Attributes. Each one has a key you can type as a variable in templates, broadcasts and flows. Attributes is the quick view for those variables.",
+        "attributesLink": "Open Attributes",
+        "stagesTitle": "Stages and statuses",
+        "stagesBody": "Lifecycle stage and status are lists you manage separately, with their own order, colours and default.",
+        "stagesLink": "Open Contact stages"
+      },
+      "searchPlaceholder": "Search by name or key",
+      "search": "Search properties",
+      "showInactive": "Show inactive ({count})",
+      "loading": "Loading properties",
+      "emptyTitle": "No custom properties yet",
+      "empty": "Create a section, then add the properties your team needs, such as a dropdown for source city or a date for renewal.",
+      "noMatchTitle": "Nothing matches",
+      "noMatch": "No property has that name or key.",
+      "clearSearch": "Clear search",
+      "noSection": "No section",
+      "noSectionHint": "These properties lost their section. Edit one to give it a section again.",
+      "sectionCount": "{count, plural, one {# property} other {# properties}}",
+      "addHere": "Add property",
+      "sectionEmpty": "No properties in this section yet.",
+      "yes": "Yes",
+      "col": {
+        "name": "Name",
+        "key": "Key",
+        "type": "Type",
+        "required": "Required",
+        "visible": "Visible",
+        "inUse": "In use",
+        "actions": "Actions"
+      },
+      "section": {
+        "moveUp": "Move section {name} up",
+        "moveDown": "Move section {name} down",
+        "rename": "Rename section {name}",
+        "delete": "Delete section {name}",
+        "deleteTitle": "Delete the section {name}?",
+        "deleteWithFields": "{count, plural, one {# property is} other {# properties are}} in this section. They are not deleted: they move to No section until you give them another.",
+        "deleteEmpty": "The section is empty and will be removed.",
+        "deleteConfirm": "Delete section",
+        "eyebrow": "Section",
+        "renameTitle": "Rename section",
+        "newTitle": "New section",
+        "renamed": "Section renamed.",
+        "created": "Section created.",
+        "problem": {
+          "required": "Enter a name.",
+          "tooLong": "Use at most 255 characters.",
+          "taken": "Another section already has this name."
+        },
+        "name": "Name",
+        "hint": "Sections group properties on the contact form and the contact page.",
+        "placeholder": "Education",
+        "create": "Create section"
+      },
+      "row": {
+        "drag": "Drag to reorder",
+        "inactive": "Inactive",
+        "readOnly": "Read only",
+        "shownWhen": "Shown when {field} is {value}",
+        "optionCount": "{count, plural, one {# option} other {# options}}",
+        "hidden": "Hidden",
+        "contacts": "{count, plural, one {# contact} other {# contacts}}",
+        "moveUp": "Move {name} up",
+        "moveDown": "Move {name} down",
+        "edit": "Edit {name}",
+        "deactivate": "Deactivate {name}",
+        "reactivate": "Reactivate"
+      },
+      "toast": {
+        "conflict": "Someone else changed this. The list was refreshed; try again.",
+        "forbidden": "You do not have permission to change this.",
+        "failed": "That could not be saved. Try again.",
+        "reactivated": "Property reactivated.",
+        "deactivated": "Property deactivated.",
+        "sectionDeleted": "Section deleted.",
+        "needSection": "Create a section first; properties live inside sections."
+      },
+      "deactivate": {
+        "title": "Deactivate {name}?",
+        "inUse": "{count, plural, one {# contact has} other {# contacts have}} a value for this property. The values are kept, but the property disappears from the contact form and the contact page.",
+        "unused": "No contact has a value for this property yet.",
+        "mergeTag": "Templates and flows that use {key} as a variable will render it blank.",
+        "dependents": "{count, plural, one {# other property is} other {# other properties are}} shown only when this one has a value. They will no longer be shown.",
+        "undo": "You can reactivate it at any time.",
+        "confirm": "Deactivate",
+        "keep": "Keep it"
+      },
+      "builtin": {
+        "title": "Title",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "phone": "Mobile number",
+        "email": "Email",
+        "middle_name": "Middle name",
+        "language": "Language",
+        "address": "Address",
+        "memo": "Memo",
+        "source": "Source",
+        "lifecycle_stage": "Lifecycle stage",
+        "status": "Status",
+        "groups": "Groups",
+        "opt_out": "Marketing opt-out"
+      },
+      "types": {
+        "text": "Text",
+        "long_text": "Long text",
+        "integer": "Number",
+        "big_integer": "Large number",
+        "decimal": "Decimal number",
+        "percentage": "Percentage",
+        "currency": "Currency",
+        "boolean": "Yes or no",
+        "checkbox": "Checkbox",
+        "radio": "Radio buttons",
+        "date": "Date",
+        "datetime": "Date and time",
+        "url": "Link (URL)",
+        "email": "Email",
+        "phone": "Phone",
+        "select": "Dropdown",
+        "multiselect": "Multi-select",
+        "lookup": "Lookup",
+        "rating": "Rating",
+        "timezone": "Time zone",
+        "formula": "Formula"
+      },
+      "typeHelp": {
+        "text": "A single line of text.",
+        "long_text": "Several lines of text, such as notes.",
+        "integer": "A whole number.",
+        "decimal": "A number with decimals.",
+        "date": "A calendar date.",
+        "select": "Pick one option from a list.",
+        "multiselect": "Pick several options from a list.",
+        "checkbox": "A yes or no tick box.",
+        "url": "A web link.",
+        "email": "An email address.",
+        "phone": "A phone number."
+      },
+      "modal": {
+        "close": "Close",
+        "editEyebrow": "Edit property",
+        "newEyebrow": "New property",
+        "editTitle": "Edit property",
+        "newTitle": "Add a contact property",
+        "updated": "Property saved.",
+        "created": "Property created.",
+        "partial": "Some of your changes may have been saved. Close this window and open the property again to check.",
+        "name": "Name",
+        "namePlaceholder": "Renewal date",
+        "key": "Key",
+        "keyFixed": "The key never changes after creation.",
+        "keyHint": "Used to store the value and as the variable name. Lower case letters, digits and underscores.",
+        "type": "Type",
+        "typeFixed": "The type cannot change after creation.",
+        "section": "Section",
+        "sectionNone": "No section",
+        "description": "Help text",
+        "descriptionHint": "Shown under the field on the contact form.",
+        "options": "Options",
+        "optionLabel": "Option {n}",
+        "optionUp": "Move option {n} up",
+        "optionDown": "Move option {n} down",
+        "optionRemove": "Remove option {n}",
+        "optionNew": "New option",
+        "optionPlaceholder": "Type an option and press Enter",
+        "optionAdd": "Add",
+        "optionsNote": "Removing an option does not change contacts that already have it; they keep the stored value.",
+        "required": "Required",
+        "requiredHint": "The contact form will not save without a value.",
+        "visible": "Visible",
+        "visibleHint": "Show it on the contact form and the contact page.",
+        "readOnly": "Read only",
+        "readOnlyHint": "Shown on the form but filled by imports and the API.",
+        "active": "Active",
+        "activeHint": "Inactive properties are hidden everywhere. Values are kept.",
+        "conditions": "Show only when",
+        "conditionsHint": "Hide this property on the contact form until another property has a value.",
+        "when": "When",
+        "conditionField": "Property",
+        "conditionPick": "Choose",
+        "is": "is",
+        "conditionValue": "Value",
+        "yes": "Yes",
+        "no": "No",
+        "conditionText": "Value",
+        "conditionRemove": "Remove condition",
+        "conditionAdd": "Add condition",
+        "deactivateNote": "Saving will hide this property from the form and the contact page. Values contacts hold are kept.",
+        "closeAfterError": "Close",
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create property",
+        "problem": {
+          "label": {
+            "required": "Enter a name.",
+            "tooLong": "Use at most 255 characters."
+          },
+          "key": {
+            "required": "Enter a key.",
+            "format": "Use lower case letters, digits and underscores, starting with a letter.",
+            "tooLong": "Use at most 64 characters.",
+            "taken": "Another property already uses this key.",
+            "reserved": "This key is reserved for a built-in token. Choose another."
+          },
+          "section": "Choose a section.",
+          "options": {
+            "required": "Add at least one option.",
+            "emptyLabel": "Every option needs a name.",
+            "duplicate": "Two options have the same name."
+          },
+          "condition": "Choose the property and the value for every condition."
+        }
+      },
+      "builtinCard": {
+        "title": "Built-in properties",
+        "subtitle": "Every contact has these. Their type is fixed; the form always shows them.",
+        "manageStages": "Manage stages",
+        "manageGroups": "Manage groups",
+        "locked": "Fixed"
+      }
     }
   }
 }

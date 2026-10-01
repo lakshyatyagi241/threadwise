@@ -6,6 +6,7 @@ import { Fragment, useState, type ReactNode } from 'react';
 import { MenuItem, MenuSeparator, cn } from '@crm/ui';
 import { isAttrId, type ColumnDef, type ColumnId } from '../lib/columns';
 import { formatDateTime } from '../lib/format';
+import type { Choice } from '../lib/option-sets';
 import { menuActions, quickActions } from '../lib/row-actions';
 import type { CheckState } from '../lib/selection';
 import type { RowView } from '../lib/row-view';
@@ -24,7 +25,6 @@ import {
   GroupChip,
   MoreChip,
   OutlineTag,
-  StageBadge,
   TagChip,
 } from './chips';
 import {
@@ -45,12 +45,19 @@ import {
   WhatsAppIcon,
 } from './icons';
 import { RowMenu } from './row-menu';
+import { StageMenu } from './stage-menu';
 
 export interface ListHandlers {
   selected: ReadonlySet<string>;
   canEdit: boolean;
   canDelete: boolean;
   stageLabel: (value: string) => string;
+  /** The workspace's stages in order, for the stage cell's menu. */
+  stageChoices?: readonly Choice[];
+  /** Present when the person may edit contacts: the stage cell then opens a menu that calls this. */
+  onStageChange?: (id: string, stage: string) => void;
+  /** Id of the contact whose stage is being saved. */
+  stageBusyId?: string | null;
   statusLabel: (value: string) => string;
   onToggle: (id: string) => void;
   onView: (id: string) => void;
@@ -262,7 +269,16 @@ function StatusCell({ row, h }: { row: RowView; h: ListHandlers }) {
   if (!row.stage && !row.status && !row.optedOut) return <Dash />;
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-1">
-      {row.stage && <StageBadge stage={row.stage} label={h.stageLabel(row.stage)} />}
+      {row.stage && (
+        <StageMenu
+          value={row.stage}
+          choices={h.stageChoices ?? []}
+          label={h.stageLabel(row.stage)}
+          name={row.name || t('unnamed')}
+          busy={h.stageBusyId === row.id}
+          onChange={h.onStageChange ? (v) => h.onStageChange?.(row.id, v) : undefined}
+        />
+      )}
       {row.status && (
         <span
           title={h.statusLabel(row.status)}

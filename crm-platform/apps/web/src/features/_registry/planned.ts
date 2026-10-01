@@ -29,7 +29,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
   // Contacts 0, Attributes 1, Contact groups 2, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
   { id: 'lead-finder', group: 'audience', labelKey: L('leadFinder'), href: '/lead-finder', order: 30, icon: 'pin', badge: 'new' },
   { id: 'pipelines', group: 'audience', labelKey: L('pipelines'), href: '/pipelines', order: 50, icon: 'pipelines' },
-  { id: 'tasks', group: 'audience', labelKey: L('tasks'), href: '/tasks', order: 60, icon: 'tasks' },
   { id: 'companies', group: 'audience', labelKey: L('companies'), href: '/companies', order: 70, icon: 'companies' },
   { id: 'email-templates', group: 'audience', labelKey: L('emailTemplates'), href: '/email-templates', order: 80, icon: 'mail' },
 
