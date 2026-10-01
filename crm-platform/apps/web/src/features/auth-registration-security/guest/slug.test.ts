@@ -4,7 +4,7 @@ import { suggestSlug } from './slug';
 describe('suggestSlug', () => {
   it('lower-cases, strips accents and joins words with dashes', () => {
     expect(suggestSlug('Acme Café & Co.')).toBe('acme-cafe-co');
-    expect(suggestSlug('  Study From UAE ')).toBe('study-from-uae');
+    expect(suggestSlug('  Acme Education ')).toBe('acme-education');
   });
   it('caps at 32 characters without a trailing dash', () => {
     const s = suggestSlug('a'.repeat(31) + ' bbbbbb');

@@ -5,7 +5,7 @@ The business has three layers:
 ```
 Institute / college      the client
         ↑
-Study From UAE           us — the CRM tenant
+Our organisation         us — the CRM tenant
         ↑
 Sub-agents               external partners who source students
 ```

@@ -28,8 +28,9 @@ curl localhost:3000/health             # {"status":"ok",...}
 open  localhost:3000/docs              # Swagger
 ```
 
-Seeded staff login: `admin@studyfromuae.test` / `Passw0rd!` (org
-`studyfromuae`). Full walkthrough:
+Seeded staff login: `nachiket.challawar@geta.ai` (org `Admin`, Clerk
+sign-in, the seed sets no password); sub-agent: `agent@Admin.test` /
+`Passw0rd!`. Full walkthrough:
 [docs/runbooks/local-development.md](docs/runbooks/local-development.md).
 
 ## Layout
