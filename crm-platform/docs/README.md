@@ -50,6 +50,7 @@ Format: [MADR](https://adr.github.io/madr/). Template:
 | [0017](adr/0017-field-metadata-registry.md)     | Generic field-metadata registry (Tier-2)    | accepted                                 |
 | [0018](adr/0018-web-app-stack-and-session.md)   | Web app stack and httpOnly-cookie session   | proposed                                 |
 | [0020](adr/0020-wadesk-data-model.md)           | WaDesk data model; schema drift check       | proposed                                 |
+| [0021](adr/0021-partition-definer.md)           | Partition maintenance: SECURITY DEFINER     | proposed                                 |
 
 ## Runbooks
 

@@ -99,9 +99,15 @@ reserved <= balance` check) replaces the two balances WaDesk keeps on `users`; `
    one channel table, then these columns get a real foreign key.
 2. **PII encryption** (see P1).
 3. **Reading platform tables from a tenant context** (see P7), part of the operator-layer work (F2, D4/D5).
-4. **`PARTITIONED_TABLES`.** `apps/api/src/workers/partition-maintenance.service.ts` still lists only `event_outbox` and `audit_log`.
-   The 17 new streams have the bootstrap partitions (previous, current and next two months) and a `_default`, so nothing fails, but no
-   one creates next quarter's partitions until that list includes them or the service reads `pg_partitioned_table`. Conflict-map H11.
+4. **Partition maintenance.** Done (conflict-map H11). `apps/api/src/workers/partition-maintenance.service.ts` reads `pg_partitioned_table`
+   (`RANGE` parents in `public`, partitions excluded) on every run, so the 17 new streams are kept three months ahead like `event_outbox`
+   and `audit_log` with no list to edit. The worker runs as `crm_app_user`, which cannot create a partition, so
+   `ensure_monthly_partition()` is `SECURITY DEFINER` (migration `20261001110000_partition_definer`, ADR-0021, proposed: the db steward
+   should review it, as it is the schema's first definer function). Two follow-ups in `20261001110100_partition_rls`: every partition
+   now carries its parent's RLS and policy (`inherit_partition_rls()`; before, a query naming a partition read every tenant's rows), and
+   the `0006` partitions got the app-role grants they lacked, so a pass ends by logging a warning when a `_default` partition holds rows.
+   `apps/api/test/integration/partition-maintenance.spec.ts` runs all of it as the app role. A migration that creates a partition by hand
+   (a stream's `_default`) must call `inherit_partition_rls()` on it; `schema-invariants.spec.ts` fails if one does not.
 5. **`usage_charges` cannot keep a unique `wamid`.** WaDesk enforces one charge per WhatsApp message id; a partitioned table can only be
    unique over a key that includes the partition column. The ledger's idempotency has to be a `(org_id, wamid, created_at)` unique or
    an application check.

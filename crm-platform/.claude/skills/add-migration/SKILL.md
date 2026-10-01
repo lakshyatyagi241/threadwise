@@ -97,7 +97,12 @@ unique constraint, and they use an explicit `CREATE SEQUENCE` since a
 partitioned parent can't own an identity column. Copy
 `0006_outbox_audit.sql` for this shape rather than the plain-table one above
 — including the `ensure_monthly_partition()` bootstrap loop and the
-`_default` catch-all partition.
+`_default` catch-all partition. Row-level security is not inherited by a
+partition: a query that names one skips the parent's policies, so run
+`SELECT inherit_partition_rls('<table>_default')` on the default partition you
+create by hand (`ensure_monthly_partition()` already does it for monthly ones).
+`schema-invariants.spec.ts` fails if a partition of a protected parent has no
+policy of its own.
 
 ## 4. Statements that can't run in a transaction
 
