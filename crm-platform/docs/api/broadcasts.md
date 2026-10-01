@@ -162,3 +162,27 @@ The wait before attempt n is `min(3600, base x 2^(n-1))` seconds. Defaults: 3 at
 overrides: `org_plan_state.overrides` keys `broadcast_retry_attempts` and `broadcast_retry_backoff_sec`. A recipient without a
 number and a Meta "undeliverable" (#131026, #131021, #131051) are not retried. A broadcast that has used its attempts is
 left for manual review.
+
+## Link tracking (TW-BCAST-018, 042)
+
+Every URL button of a `waba` broadcast that takes a parameter is replaced, per recipient, by a short link
+`<APP_URL>/r/<token>` (a 12 character base62 token). A static URL button is never sent as a parameter, so it gets no link.
+The same link for the same recipient in the same broadcast reuses its token (a retry never mints a new one and counters never
+mix between broadcasts); a link lives `LINK_TRACKING_TTL_DAYS` days (default 90, never below 7). Links that are not http or
+https (`tel:`, `mailto:`) and links that are already ours are left alone. `LINK_TRACKING_ENABLED=false` turns wrapping off.
+For the engines that send a text body, `LinkTracker.wrapText` replaces every link in a recipient's body the same way.
+
+`GET /r/<token>` is public (no sign-in, not versioned, because the link is printed in messages):
+
+| Result | When                                                                                                                                                                                                                                |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 302    | To the original address. A real visitor is counted; a link-preview crawler or tool (WhatsApp, Facebook, Meta, Slack, Twitter, LinkedIn, Google, Bing, Discord, Embedly, curl, wget, python-requests) is redirected but not counted. |
+| 404    | An unknown token, or one that is not a token at all.                                                                                                                                                                                |
+| 410    | `BCAST_LINK_EXPIRED`.                                                                                                                                                                                                               |
+| 429    | More than 600 hits a minute from one address.                                                                                                                                                                                       |
+
+A counted tap adds one to the link's `clicks`, adds one to `unique_clicks` when the address was not seen on that link in the
+last hour, stamps first and last click, address and user agent, and writes the outbox event `broadcast.link_clicked`.
+`broadcasts.clicked_count` is the number of **contacts** who clicked: it goes up the first time any of a contact's links in
+the broadcast is tapped. The detail shows `counts.clicked` and `pct.clicked` (contacts who clicked over delivered); the
+summary tiles show the clicked total; the recipients list shows each contact's clicks and last click.

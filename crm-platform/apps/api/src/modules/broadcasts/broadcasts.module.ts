@@ -6,6 +6,9 @@ import { BroadcastDispatchService } from './broadcast-dispatch.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
+import { LinkRedirectController } from './tracking/link-redirect.controller';
+import { LinkRedirectService } from './tracking/link-redirect.service';
+import { LinkTracker } from './tracking/link-tracker';
 import { BroadcastsActionsController } from './broadcasts-actions.controller';
 import { BroadcastsActionsService } from './broadcasts-actions.service';
 import { BroadcastsReadController } from './broadcasts-read.controller';
@@ -30,7 +33,12 @@ import {
  */
 @Module({
   imports: [PlansCoreModule, CrmModule],
-  controllers: [BroadcastsController, BroadcastsReadController, BroadcastsActionsController],
+  controllers: [
+    BroadcastsController,
+    BroadcastsReadController,
+    BroadcastsActionsController,
+    LinkRedirectController,
+  ],
   exports: [
     BroadcastProgressService,
     BroadcastDispatchService,
@@ -43,6 +51,8 @@ import {
     BroadcastsRepository,
     BroadcastsReadService,
     BroadcastsActionsService,
+    LinkTracker,
+    LinkRedirectService,
     BroadcastsReadRepository,
     BroadcastProgressService,
     BroadcastDispatchService,

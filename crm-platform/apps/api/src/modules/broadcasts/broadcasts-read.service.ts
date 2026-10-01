@@ -147,6 +147,7 @@ export class BroadcastsReadService {
         b.templateId === null ? undefined : await this.repo.template(tx, ctx.orgId, b.templateId);
       const sender = await this.repo.sender(tx, ctx.orgId, b.provider, b.deviceId);
       const failures = await this.repo.failureReasons(tx, ctx.orgId, b.id);
+      const clicked = await this.repo.clickedContacts(tx, ctx.orgId, b.id);
 
       return {
         broadcast: toListItem(b),
@@ -177,8 +178,9 @@ export class BroadcastsReadService {
           read: k.read,
           failed: k.failed,
           queued: k.queued,
+          clicked,
         },
-        pct: headerPct(k),
+        pct: headerPct(k, clicked),
         donut: donut(counts),
         deliveryCurve: {
           labels: curve.labels,

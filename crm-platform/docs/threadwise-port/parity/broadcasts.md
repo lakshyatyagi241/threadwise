@@ -5,13 +5,14 @@ Reference 1.7.0 vs branch `punya/broadcasts/TW-BCAST-009-store-request`. Covers 
 
 Evidence is automated, no screen yet:
 
+- `apps/api/test/e2e/broadcasts/broadcasts-tracking.e2e.spec.ts`: 11 scenarios for wrapping, the redirect, bots, expiry and the counters.
 - `apps/api/test/e2e/broadcasts/broadcasts-actions.e2e.spec.ts`: 16 scenarios for delete, retry, the sweep and the CSV export.
 - `apps/api/test/e2e/broadcasts/broadcasts-read.e2e.spec.ts`: 20 scenarios for the list, tiles, detail, recipients and live counters.
 - `apps/api/test/e2e/broadcasts/broadcasts-payload.e2e.spec.ts`: 10 scenarios for the payload and overrides (acceptance criteria of TW-BCAST-017 and 015 rule 3).
 - `apps/api/test/e2e/broadcasts/broadcasts-dispatch.e2e.spec.ts`: 14 scenarios for queueing and sending, against real Postgres with a fake engine adapter.
 - `apps/api/test/e2e/broadcasts/broadcasts-create.e2e.spec.ts`: 17 scenarios through HTTP against real Postgres (every
   Given/When/Then of 009, 010, 014, 015, the OTP-template refusal of 012, tenant isolation, permission, auth).
-- `apps/api/test/unit/broadcasts/*`: 120 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
+- `apps/api/test/unit/broadcasts/*`: 130 tests for the audience split, template guards, schedule instant, recipient state machine, phone assembly, the Meta payload builder, the variables and the overrides.
 
 ## Status of each feature in this PR
 
@@ -69,6 +70,11 @@ Evidence is automated, no screen yet:
 | 29 | Delete | Best-effort cancel call to Node, then delete | The queued job is withdrawn, then delete; a run that already started finds the row gone and stops. |
 | 30 | CSV times | The workspace time zone, while the detail page used the broadcast's | The broadcast's own zone, the same as the detail page. The `Failed` time is the recipient's last update (there is no `failed_at`). |
 | 31 | CSV file name | `broadcast-<numeric id>-...` | `broadcast-<uuid>-...` (internal ids do not leave the system). |
+| 32 | Clicked count | Counted a contact again when a second address tapped the same link (the check compared row ids), and not at all for a first tap from a crawler that was counted as a unique hit | Contacts who clicked: once per contact per broadcast, serialised so two taps at once cannot both be first. |
+| 33 | Static URL buttons | Wrapped (a link row was minted) even though a static URL is never sent as a parameter | Only buttons the template gives a parameter to are wrapped. |
+| 34 | Tenant lookup for the public route | Plain query, no row-level security | A SECURITY DEFINER function returns four columns for one token (`bcast_link_lookup`); the click is then recorded under the tenant context. **Reviewer decision:** this is a new place that resolves a tenant before one exists, like the API-key and login lookups, but it is not `privileged()`; `multi-tenancy.md` lists four sanctioned uses and does not mention it. |
+| 35 | Settings | `waba_link_tracking_enabled` and `wa_link_tracking_ttl_days` system settings | Environment `LINK_TRACKING_ENABLED` and `LINK_TRACKING_TTL_DAYS` until the settings domain exposes them. |
+| 36 | Unique visitor and rate | A one-hour cache per link and address | Same, in Redis; plus a 600 hits a minute cap per address on the public route. |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 

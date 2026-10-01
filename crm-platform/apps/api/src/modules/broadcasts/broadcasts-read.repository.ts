@@ -237,6 +237,14 @@ export class BroadcastsReadRepository {
     };
   }
 
+  /** Contacts who tapped any tracked link of the broadcast. */
+  async clickedContacts(tx: Tx, orgId: number, broadcastId: number): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(DISTINCT contact_id)::int AS n FROM wa_link_clicks
+      WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND clicks > 0 AND contact_id IS NOT NULL`);
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
   async failureReasons(tx: Tx, orgId: number, broadcastId: number) {
     const res = await tx.execute(sql`
       SELECT error_message AS reason, count(*)::int AS count FROM broadcast_contacts

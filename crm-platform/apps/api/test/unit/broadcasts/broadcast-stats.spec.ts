@@ -41,11 +41,25 @@ describe('cascade and header percentages (TW-BCAST-030)', () => {
 
   it('sent, delivered and failed are over the audience, read over delivered', () => {
     const k = cascade(c({ sent: 2, delivered: 1, read: 1, failed: 1, pending: 1 })); // total 6
-    expect(headerPct(k)).toEqual({ sent: 66.7, delivered: 33.3, read: 50, failed: 16.7 });
+    expect(headerPct(k)).toEqual({
+      sent: 66.7,
+      delivered: 33.3,
+      read: 50,
+      failed: 16.7,
+      clicked: 0,
+    });
+    // 2 of the 2 delivered contacts clicked: the click-through rate is over delivered.
+    expect(headerPct(k, 1).clicked).toBe(50);
   });
 
   it('is all zero for an empty broadcast', () => {
-    expect(headerPct(cascade(c()))).toEqual({ sent: 0, delivered: 0, read: 0, failed: 0 });
+    expect(headerPct(cascade(c()))).toEqual({
+      sent: 0,
+      delivered: 0,
+      read: 0,
+      failed: 0,
+      clicked: 0,
+    });
   });
 });
 

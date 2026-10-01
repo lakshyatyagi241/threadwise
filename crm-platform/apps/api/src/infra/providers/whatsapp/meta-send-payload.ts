@@ -125,7 +125,7 @@ export function buttonSubType(type: string): string | null {
 }
 
 /** Does this approved button take a send-time parameter? */
-function shouldEmitButtonParam(btn: ButtonVar, tplButtons: unknown[]): boolean {
+export function shouldEmitButtonParam(btn: ButtonVar, tplButtons: unknown[]): boolean {
   const sub = btn.subType.toLowerCase();
   if (['quick_reply', 'copy_code', 'voice_call'].includes(sub)) return true;
   if (sub !== 'url') return false;

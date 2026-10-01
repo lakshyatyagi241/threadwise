@@ -231,16 +231,17 @@ describe('TW-BCAST-017: the payload built for each recipient', () => {
       },
       ['Ana'],
     );
-    await sendAll(a);
+    const id = await sendAll(a);
     const buttons = comps(wabaSent[0]!).filter((c) => c.type === 'button');
-    expect(buttons).toEqual([
-      {
-        type: 'button',
-        sub_type: 'url',
-        index: 1,
-        parameters: [{ type: 'text', text: 'https://shop.example.com/Ana' }],
-      },
-    ]);
+    // Only the URL button takes a parameter, and it carries the recipient's own tracked link to the resolved address.
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0]).toMatchObject({ type: 'button', sub_type: 'url', index: 1 });
+    expect(String(buttons[0]!.parameters![0]!.text)).toMatch(/\/r\/[A-Za-z0-9]{12}$/);
+    const rows = await h.owner.query(
+      `SELECT original_url FROM wa_link_clicks WHERE broadcast_id = $1`,
+      [id],
+    );
+    expect(rows.rows.map((r) => r.original_url)).toEqual(['https://shop.example.com/Ana']);
   });
 });
 
@@ -321,7 +322,11 @@ describe('TW-BCAST-015 rule 3 and TW-BCAST-017 rule 9: send-time overrides', () 
       },
     });
     const btn = comps(wabaSent[0]!).find((c) => c.type === 'button');
-    expect(btn?.parameters).toEqual([{ type: 'text', text: 'https://promo.example.com/Ana' }]);
+    expect(String(btn?.parameters?.[0]?.text)).toMatch(/\/r\/[A-Za-z0-9]{12}$/);
+    const links = await h.owner.query(`SELECT original_url FROM wa_link_clicks WHERE org_id = $1`, [
+      a.t.orgId,
+    ]);
+    expect(links.rows.map((r) => r.original_url)).toEqual(['https://promo.example.com/Ana']);
   });
 
   it('on a baileys slice the overrides are not applied and no Cloud API components are sent (Reference quirk, kept)', async () => {

@@ -13,6 +13,7 @@ import {
   type TemplateOverrides,
 } from './payload/template-overrides';
 import { buildRecipientVars } from './payload/template-vars';
+import { LinkTracker } from './tracking/link-tracker';
 import { assemblePhone } from './recipient-phone';
 import {
   SENDER_DIRECTORY,
@@ -64,6 +65,7 @@ export class BroadcastDispatchService {
     private readonly progress: BroadcastProgressService,
     private readonly engines: EngineSenderRegistry,
     private readonly merge: MergeTagService,
+    private readonly tracker: LinkTracker,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
   ) {}
@@ -195,7 +197,16 @@ export class BroadcastDispatchService {
 
         try {
           const built = mergeBase
-            ? await this.payloadFor(orgId, broadcastId, contactId, shape, overrides, mergeBase)
+            ? await this.payloadFor(
+                orgId,
+                broadcastId,
+                contactId,
+                template.id,
+                to,
+                shape,
+                overrides,
+                mergeBase,
+              )
             : null;
           const sent = await opened.send({
             to,
@@ -251,6 +262,8 @@ export class BroadcastDispatchService {
     orgId: number,
     broadcastId: number,
     contactId: number,
+    templateId: number,
+    phone: string,
     shape: TemplateShape & { headerLocation: unknown },
     overrides: TemplateOverrides | null,
     base: Omit<MergeContext, 'contact'>,
@@ -269,7 +282,17 @@ export class BroadcastDispatchService {
         '[BCAST] button overrides ignored: not parameterised in the template',
       );
     }
-    const send = buildSend(shape, applied.vars);
+    // Every URL button gets this recipient's own short link, so a tap is attributed to them (TW-BCAST-018).
+    const tracked = await this.db.tx((tx) =>
+      this.tracker.wrapVars(
+        tx,
+        orgId,
+        applied.vars,
+        { broadcastId, contactId, templateId, phone },
+        { buttons: shape.buttons, carouselData: shape.carouselData },
+      ),
+    );
+    const send = buildSend(shape, tracked);
     return { name: send.name, components: send.components };
   }
 }

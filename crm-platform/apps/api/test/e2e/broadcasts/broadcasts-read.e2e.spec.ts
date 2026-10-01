@@ -271,8 +271,16 @@ describe('TW-BCAST-030, 031, 033, 034: the detail', () => {
       await recipient(t, b.id, { status });
     }
     const d = (await get(t, `/v2/broadcasts/${b.uuid}`)).body;
-    expect(d.counts).toEqual({ total: 6, sent: 4, delivered: 3, read: 1, failed: 1, queued: 1 });
-    expect(d.pct).toEqual({ sent: 66.7, delivered: 50, read: 33.3, failed: 16.7 });
+    expect(d.counts).toEqual({
+      total: 6,
+      sent: 4,
+      delivered: 3,
+      read: 1,
+      failed: 1,
+      queued: 1,
+      clicked: 0,
+    });
+    expect(d.pct).toEqual({ sent: 66.7, delivered: 50, read: 33.3, failed: 16.7, clicked: 0 });
     expect(d.donut).toEqual({
       labels: ['Sent', 'Delivered', 'Read', 'Queued', 'Failed'],
       series: [1, 2, 1, 1, 1],
