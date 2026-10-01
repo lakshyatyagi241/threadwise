@@ -1,6 +1,17 @@
-# Licensed third-party source (CodeCanyon WaDesk): never commit it. Only the placeholder README is tracked.
-/wadesk-reference/*
-!/wadesk-reference/README.md
+# WaDesk reference (licensed CodeCanyon product, tracked on purpose, see wadesk-reference/README.md).
+# Only the product source is tracked. Anything created by installing or running it stays out: secrets, dependencies,
+# local database, WhatsApp session state, uploads, logs, compiled assets.
+/wadesk-reference/WaDesk/vendor/
+/wadesk-reference/WaDesk/public/build/
+/wadesk-reference/WaDesk/public/uploads/
+/wadesk-reference/WaDesk/public/storage
+/wadesk-reference/WaDesk/database/database.sqlite
+/wadesk-reference/WaDesk/node/baileys_auth/
+/wadesk-reference/WaDesk/storage/logs/*
+/wadesk-reference/WaDesk/storage/framework/cache/*
+/wadesk-reference/WaDesk/storage/framework/sessions/*
+/wadesk-reference/WaDesk/storage/framework/views/*
+/wadesk-reference/WaDesk/storage/app/*
 
 # Local environment, secrets, build output
 .env
