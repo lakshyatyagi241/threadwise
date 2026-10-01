@@ -78,8 +78,7 @@ it paid." Never trust the browser redirect's query parameters — the user
 controls those, and treating them as proof is how a free order happens.
 
 Verify the gateway's hash, then post to the wallet idempotently on
-`gateway_txn_id`. See
-[ADR-0012](../../../docs/adr/0012-payments-and-settlements.md) — and note
+`gateway_txn_id`. Note
 exam-fee settlements are compliance-gated, test mode only.
 
 ## Routing and auth
@@ -94,5 +93,5 @@ limiting.
 ## Before finishing
 
 Invoke the `pre-pr` skill. If this webhook introduces a new external trust
-boundary, invoke `adr-diff-guard` — new inbound attack surface is the kind of
-thing an ADR should cover.
+boundary, say so in the PR description — new inbound attack surface needs
+explicit review.

@@ -38,10 +38,7 @@ an actual Postgres connection or an actual cross-tenant request.
 
 | Skill                                                 | Use it when                                                                                                              |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [write-adr](write-adr/)                               | recording a decision that would be expensive to reverse                                                                  |
-| [adr-diff-guard](adr-diff-guard/)                     | ADR bookkeeping — enforced, see below                                                                                    |
 | [pre-pr](pre-pr/)                                     | before opening a PR — runs the same checks as CI, locally                                                                |
-| [adr-compliance-review](adr-compliance-review/)       | reviewing a diff against this repo's specific rules                                                                      |
 | [threadwise-playwright-parity](threadwise-playwright-parity/) | **after every feature, automatically**: Playwright twin test against the running Reference, fix sub-agents for what differs |
 
 ## Skills call each other
@@ -53,12 +50,10 @@ other via the Skill tool rather than just linking. The common chains:
 "add a deals module"
   new-module ──> add-migration ──> contracts-change ──> rbac-permission
             └──> outbox-event
-            └──> pre-pr ──> adr-diff-guard
-                       └──> adr-compliance-review
+            └──> pre-pr
 
 "integrate Gupshup"
   provider-adapter ──> webhook-handler ──> worker-job
-                  └──> write-adr ──> adr-diff-guard
                   └──> pre-pr
 
 "add a field to the contact API"
@@ -70,25 +65,12 @@ other via the Skill tool rather than just linking. The common chains:
 When a skill says **"invoke the X skill"**, do it — that's what keeps a
 four-step task from drifting on step three.
 
-## ADRs are enforced
-
-Per [CLAUDE.md](../../CLAUDE.md): any change to `docs/adr/*.md`, or any code
-change that behaves differently from what an accepted ADR's Decision says,
-must be documented in the same change. `adr-diff-guard` checks the
-mechanical half (index consistency, dangling references, accepted ADRs
-edited in place instead of superseded); `pre-pr` and `adr-compliance-review`
-both invoke it. The half no script can check — whether code silently
-contradicts an ADR it never touched — is called out explicitly in that
-skill.
-
 ## Why scripts, not just prose
 
 Where a rule is mechanically checkable — RLS actually enabled and forced on a
-live table, a permission key actually registered, the ADR index actually in
-sync, the CI gate actually passing — the skill runs a script against real
+live table, a permission key actually registered, the CI gate actually passing — the skill runs a script against real
 state instead of asking the agent to reason about whether it _should_ be
-true. `add-migration`'s `check-rls.sh`, `adr-diff-guard`'s `adr-guard.sh` and
-`adr-compliance-review`'s `scan.sh` exist because "I added the policy" and
+true. `add-migration`'s `check-rls.sh` exists because "I added the policy" and
 "the policy actually blocks a cross-tenant query" are different claims, and
 only the second one matters.
 

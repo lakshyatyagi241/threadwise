@@ -7,8 +7,7 @@ wrote them.
 ## Read first
 
 [CONTRIBUTING.md](CONTRIBUTING.md) — the non-negotiable rules and why each
-one exists. [docs/README.md](docs/README.md) — the map of everything else,
-including all 16+ ADRs.
+one exists. [docs/README.md](docs/README.md) — the map of everything else.
 
 ## Use the project skills
 
@@ -27,21 +26,6 @@ the `X` skill now," actually do it via the Skill tool rather than treating it
 as a reading suggestion — that's what keeps a multi-step task (new table →
 new module → new permission → verify) from drifting off the rails partway
 through.
-
-## ADRs are enforced, not just written
-
-**Any change to `docs/adr/*.md`, or any code change that behaves differently
-from what an existing accepted ADR's Decision section says, must be
-documented in the same change** — either the ADR is edited (only valid while
-its status is still `proposed`) or it's marked `superseded by ADR-00NN` and a
-new one is written via the `write-adr` skill. An ADR that code has silently
-drifted away from is worse than no ADR — it actively misleads the next
-reader.
-
-This is checked mechanically by the `adr-diff-guard` skill, and both `pre-pr`
-and `adr-compliance-review` invoke it. If you're making an architectural
-call — a new dependency, a schema pattern applied broadly, an auth/security
-tradeoff — write the ADR as part of the same change, not as a follow-up.
 
 ## Every feature gets a Reference parity run (automatic)
 

@@ -1,8 +1,7 @@
 # RBAC
 
 Permissions are checked in a guard, before the handler runs. RLS does tenant
-isolation and nothing else. See
-[ADR-0006](../adr/0006-rbac-at-middleware.md).
+isolation and nothing else.
 
 ## Model
 

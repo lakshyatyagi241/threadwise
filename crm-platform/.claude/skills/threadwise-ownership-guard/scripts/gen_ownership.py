@@ -78,7 +78,7 @@ KERNEL = [
     "packages/contracts/package.json", "packages/contracts/src/index.ts", "packages/contracts/src/common/",
     "packages/config/", ".github/", "docker/", "docker-compose*.yml", "turbo.json", "package.json",
     "pnpm-workspace.yaml", ".npmrc", "eslint.config.mjs", "commitlint.config.cjs", ".husky/", ".claude/skills/",
-    "CLAUDE.md", "CONTRIBUTING.md", "docs/adr/", "docs/architecture/", "docs/runbooks/", "docs/db/",
+    "CLAUDE.md", "CONTRIBUTING.md", "docs/architecture/", "docs/runbooks/", "docs/db/",
     "docs/README.md", "docs/skill-router.md", "tools/",
     "apps/web/package.json", "apps/web/tsconfig.json", "apps/web/postcss.config.mjs", "apps/web/vitest.config.ts",
     "apps/web/Dockerfile", "apps/api/Dockerfile",

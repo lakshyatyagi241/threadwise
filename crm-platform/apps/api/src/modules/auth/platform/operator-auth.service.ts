@@ -62,7 +62,7 @@ const toSummary = (o: OperatorRow): OperatorSummary => ({
 });
 
 /**
- * Platform operators (ADR-0019): staff of the company running the platform, not
+ * Platform operators: staff of the company running the platform, not
  * of a customer. Same mechanics as tenant login (lockout, captcha, MFA step-up,
  * refresh rotation), different table and a stricter profile: 12-hour sessions,
  * no "remember me", MFA mandatory for `super_admin`, IP allowlist applied.

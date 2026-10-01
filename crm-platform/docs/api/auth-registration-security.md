@@ -2,7 +2,7 @@
 
 Domain `auth` (TW-AUTH-001 .. 049). Base path `/v2`. Errors are `application/problem+json` with a stable `code`
 (`AUTH_*` in `@crm/contracts` `common/errors.ts`) and a `requestId`. Request and response shapes live in
-`packages/contracts/src/auth-registration-security/`. Decisions: ADR-0007, ADR-0019. Live docs: `/docs`.
+`packages/contracts/src/auth-registration-security/`. Live docs: `/docs`.
 
 Conventions used below: **Public** = no token. **User** = staff bearer token. **Operator** = platform operator bearer token.
 "Gated" routes are refused with `AUTH_PASSWORD_CHANGE_REQUIRED`, `AUTH_MFA_ENROLMENT_REQUIRED` or `AUTH_EMAIL_UNVERIFIED`

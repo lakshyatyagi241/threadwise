@@ -46,8 +46,7 @@ Result classes per changed file (committed vs base, working tree, and untracked)
 ## Shared-kernel protocol
 
 1. Say in the team channel what you need and why, before coding, and check nobody has it in flight.
-2. Land the kernel change as its **own small PR**, additive and backwards compatible, with the ADR
-   bookkeeping the repo requires (`write-adr` / `adr-diff-guard`). Do not mix it with feature work.
+2. Land the kernel change as its **own small PR**, additive and backwards compatible. Do not mix it with feature work.
 3. The reviewer is named in `ownership.json` (`seams[].reviewer` / kernel owner). Rebase feature branches after it merges.
 4. Never fix a kernel bug by copying kernel code into your module.
 

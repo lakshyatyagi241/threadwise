@@ -4,7 +4,7 @@
 
 ## Why
 
-<!-- The problem, not the solution. Link the issue/ADR if there is one. -->
+<!-- The problem, not the solution. Link the issue if there is one. -->
 
 ## Checklist
 
@@ -17,7 +17,6 @@
 - [ ] Money/message-sending endpoints accept `Idempotency-Key`
 - [ ] `withPrivileged` is not reachable from an HTTP handler
 - [ ] Contracts changed in `@crm/contracts`, not duplicated in the app
-- [ ] An ADR was added if this changes an architectural decision
 
 ## Risk
 

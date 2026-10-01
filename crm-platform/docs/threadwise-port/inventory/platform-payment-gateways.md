@@ -123,7 +123,7 @@ Connections: PLAN (packages, `Workspace::package()`, plan_ends_at, add-ons, `Wor
   - Given a catalogue slug with no row, when an admin opens the gateway list, then the row is created inactive with sort_order max+1 and appears in the list.
   - Given an unknown slug in a webhook URL, when `POST /payment/webhook/nope` is called, then the response is 404 JSON `{ok:false}`.
 - **Source refs:** app/Services/Payment/PaymentGatewayManager.php; app/Models/PaymentGateway.php; database/seeders/PaymentGatewaySeeder.php; migrations 2026_05_17_040000_create_payment_gateways_table.php; Documentation/pages/admin-panel/payment-gateways.html.
-- **Port notes:** Suggested home `apps/api/src/modules/billing/payments/` with a `PaymentGatewayRegistry` (slug to adapter class implementing a port, follow the `provider-adapter` skill; `apps/api/src/infra/providers/payments/easebuzz.port.ts` is the existing single-gateway port and is far narrower than this contract). `payment_gateways` is PLATFORM data, not tenant data: no `org_id`, no RLS, only super-admin routes may write it (ADR-0007 identity pools); tenant code only reads active rows through a service. Build the catalogue as code (not a UI-installed thing) and the row as config; do not port the "30 vs 33" copy drift.
+- **Port notes:** Suggested home `apps/api/src/modules/billing/payments/` with a `PaymentGatewayRegistry` (slug to adapter class implementing a port, follow the `provider-adapter` skill; `apps/api/src/infra/providers/payments/easebuzz.port.ts` is the existing single-gateway port and is far narrower than this contract). `payment_gateways` is PLATFORM data, not tenant data: no `org_id`, no RLS, only super-admin routes may write it (identity pools); tenant code only reads active rows through a service. Build the catalogue as code (not a UI-installed thing) and the row as config; do not port the "30 vs 33" copy drift.
 
 ### TW-PAYGW-002 — Admin gateway list screen
 
@@ -1048,7 +1048,7 @@ Provider: `POST {base}/transactions`, `GET {base}/transactions/{id}`, `POST {bas
   - Given the order is finalised twice sequentially, then the second call changes nothing.
   - Given a coupon on the order, then its `uses_count` grows by exactly 1.
 - **Source refs:** app/Http/Controllers/CheckoutController.php (finalizeOrder, markPaidManually); app/Services/WalletService.php; app/Models/WorkspaceAddon.php; app/Services/ReferralService.php.
-- **Port notes:** implement as a domain service `OrderFulfilmentService.fulfil(orderId)` run on the worker after the webhook/return transitions the order (outbox `order.paid` consumer), idempotent by order id; PLAN owns the "apply plan to workspace" function it calls (`plan_ends_at` stacking rule above is the behavior to reproduce), WALLET owns credit posting with idempotency key = order id (matches ADR-0012 unique `(org_id, idempotency_key)`).
+- **Port notes:** implement as a domain service `OrderFulfilmentService.fulfil(orderId)` run on the worker after the webhook/return transitions the order (outbox `order.paid` consumer), idempotent by order id; PLAN owns the "apply plan to workspace" function it calls (`plan_ends_at` stacking rule above is the behavior to reproduce), WALLET owns credit posting with idempotency key = order id (matches billing design unique `(org_id, idempotency_key)`).
 
 ### TW-PAYGW-029 — Subscription lifecycle and webhook events
 
@@ -1594,7 +1594,7 @@ Provider: `POST {base}/transactions`, `GET {base}/transactions/{id}`, `POST {bas
   - Given a paid invoice, when void or delete is attempted, then the error message shows and the row is unchanged.
   - Given a pending invoice deleted, then the row is gone and the admin lands on the list.
 - **Source refs:** app/Http/Controllers/Admin/InvoicesController.php (markPaid, void, destroy).
-- **Port notes:** unify with 038 (one `markPaid` domain action with an option `applyFulfilment`), add audit rows, soft-delete with retention (ADR-0009 hard delete with audit is the repo rule: hard-delete is fine if audited).
+- **Port notes:** unify with 038 (one `markPaid` domain action with an option `applyFulfilment`), add audit rows, soft-delete with retention (hard delete with audit is the repo rule: hard-delete is fine if audited).
 
 ### TW-PAYGW-046 — Platform invoice view and print
 

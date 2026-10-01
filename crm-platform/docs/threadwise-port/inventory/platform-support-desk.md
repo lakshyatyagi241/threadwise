@@ -1089,7 +1089,7 @@ Connections: RBAC (platform roles/permissions used by the platform inbox; `suppo
   - Given a status change, then `support.status_change` exists with the new status.
   - Given the port, when any staff mutation occurs (including toggles/deletes), then an audit row in the platform layer exists.
 - **Source refs:** app/Support/Audit.php; app/Services/Inbox/AuditLogger.php; all Admin/Support controllers.
-- **Port notes:** Emit audit events in the same transaction as the mutation (ADR 0005 outbox + audit) with `layer='platform'`; audit every mutation.
+- **Port notes:** Emit audit events in the same transaction as the mutation (outbox design outbox + audit) with `layer='platform'`; audit every mutation.
 
 ### TW-SUPP-034 — Support permission keys (seeded, never enforced)
 
@@ -1112,7 +1112,7 @@ Connections: RBAC (platform roles/permissions used by the platform inbox; `suppo
   - Given the Reference baseline, when a platform admin without `support.edit` calls the reply endpoint, then it still succeeds (parity, flagged).
   - Given the port, then support routes require the equivalents of view/create/edit/delete permissions.
 - **Source refs:** database/seeders/RolePermissionSeeder.php; routes/admin.php.
-- **Port notes:** Map to `support.tickets.read|reply|assign|manage`, `support.sla.manage`, `support.playbooks.manage`, `support.reports.read` under ADR 0006 middleware RBAC and add `Platform Support` staff access so the role has a real purpose.
+- **Port notes:** Map to `support.tickets.read|reply|assign|manage`, `support.sla.manage`, `support.playbooks.manage`, `support.reports.read` under RBAC design middleware RBAC and add `Platform Support` staff access so the role has a real purpose.
 
 ### TW-SUPP-035 — Advertised but missing: reply-by-email, auto-close, admin alerts
 
@@ -1465,7 +1465,7 @@ Connections: RBAC (platform roles/permissions used by the platform inbox; `suppo
   - Given a user with the Auditor role (port), then queue/show/audit succeed and note/spam/flag/suspend are 403.
   - Given a legacy-role admin with no Spatie permission, then permission-checked endpoints return 403 (Reference behavior, flagged).
 - **Source refs:** app/Support/PlatformPermissions.php; database/seeders/RolePermissionSeeder.php; app/Http/Controllers/Admin/AdminTeamInboxController.php.
-- **Port notes:** Under ADR 0006 map to `platform.inbox.read`, `platform.inbox.note`, `platform.inbox.spam`, `platform.workspace.flag`, `platform.workspace.suspend`; let `Platform Support` and `Auditor` staff roles reach exactly these routes through a staff guard instead of the blanket admin gate.
+- **Port notes:** Under RBAC design map to `platform.inbox.read`, `platform.inbox.note`, `platform.inbox.spam`, `platform.workspace.flag`, `platform.workspace.suspend`; let `Platform Support` and `Auditor` staff roles reach exactly these routes through a staff guard instead of the blanket admin gate.
 
 ## Data model
 

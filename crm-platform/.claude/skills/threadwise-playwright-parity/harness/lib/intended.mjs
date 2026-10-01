@@ -3,7 +3,7 @@
 // in the feature's twin spec (`intended: [{scenario, key, rule|quirk, reason}]`, reason is mandatory).
 //
 // The rule ids and references mirror threadwise-verify-parity's list of legal reasons. Add a rule here only when the
-// repo decided it (ADR / CONTRIBUTING); do not add one to make a finding go away.
+// repo decided it (CONTRIBUTING); do not add one to make a finding go away.
 
 export const RULES = [
   {

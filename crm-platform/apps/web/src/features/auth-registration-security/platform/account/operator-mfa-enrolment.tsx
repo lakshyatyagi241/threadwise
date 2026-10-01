@@ -26,7 +26,7 @@ type Stage =
   | { name: 'setup'; setup: MfaSetupResponse }
   | { name: 'codes'; codes: string[] };
 
-/** Operator two-factor enrolment (ADR-0019): QR + manual secret, a confirming code, recovery codes shown once. */
+/** Operator two-factor enrolment: QR + manual secret, a confirming code, recovery codes shown once. */
 export function OperatorMfaEnrolment() {
   const t = useTranslations(NS);
   const router = useRouter();

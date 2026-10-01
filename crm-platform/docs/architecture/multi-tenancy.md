@@ -3,9 +3,6 @@
 One database, one schema, every row tagged with `org_id`, and Postgres
 enforcing that nobody sees anyone else's.
 
-See [ADR-0002](../adr/0002-postgres-rls-multitenancy.md) for why this model over
-database-per-tenant or schema-per-tenant.
-
 ## The four mechanisms
 
 ### 1. `org_id` on every business table

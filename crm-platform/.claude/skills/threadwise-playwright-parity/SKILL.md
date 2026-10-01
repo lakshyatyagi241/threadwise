@@ -103,16 +103,16 @@ The run prints a VERDICT and the report paths. Exit codes: 0 clean, 1 defects or
 
 Open `report.md`. For each row:
 
-| What you see                                           | Decision                                                                                                                  |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| defect, behaviour really differs                       | real: goes to a fix agent                                                                                                 |
-| defect `missing` / locator not found on ours           | check with `explore ours`: really absent (build it) or wrong locator (fix the spec)                                       |
-| difference the repo decided (ADR, CONTRIBUTING, QUIRK) | `intended[]` with the reason and reference; architecture rules are matched automatically                                  |
-| ours stricter or better than Reference                    | still a difference: record it as `intended` (a deliberate fix of a Reference bug) with the reason, or revert                 |
-| `review` structure items                               | look at `gallery.html` / `shots/` (read the PNGs); a missing element is a defect, otherwise ignore or `severity` override |
-| `spec-issue`                                           | the test is wrong: fix the spec and re-run; never touch the app                                                           |
+| What you see                                      | Decision                                                                                                                  |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| defect, behaviour really differs                  | real: goes to a fix agent                                                                                                 |
+| defect `missing` / locator not found on ours      | check with `explore ours`: really absent (build it) or wrong locator (fix the spec)                                       |
+| difference the repo decided (CONTRIBUTING, QUIRK) | `intended[]` with the reason and reference; architecture rules are matched automatically                                  |
+| ours stricter or better than Reference               | still a difference: record it as `intended` (a deliberate fix of a Reference bug) with the reason, or revert                 |
+| `review` structure items                          | look at `gallery.html` / `shots/` (read the PNGs); a missing element is a defect, otherwise ignore or `severity` override |
+| `spec-issue`                                      | the test is wrong: fix the spec and re-run; never touch the app                                                           |
 
-Architectural decisions that are not yet written down (a new rule, a deliberate behaviour change) go to the user, with an ADR via `write-adr`, before they become `intended`.
+Architectural decisions that are not yet written down (a new rule, a deliberate behaviour change) go to the user before they become `intended`.
 
 ### 6. Fix with sub-agents
 

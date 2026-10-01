@@ -3,7 +3,7 @@ import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../../infra/db/database.service';
 
 /**
- * The only door to the platform-wide tables (ADR-0019): platform_settings,
+ * The only door to the platform-wide tables: platform_settings,
  * platform_operators, platform_sessions and the read side of security_events.
  *
  * Their RLS policies are satisfied only by the privileged flag, so every access

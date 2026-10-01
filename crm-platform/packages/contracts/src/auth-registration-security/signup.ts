@@ -3,8 +3,7 @@ import { emailSchema, phoneSchema } from '../common/ids';
 import { authenticatedSchema, orgSlugSchema, passwordSchema } from './login';
 
 /**
- * Sign-up creates an organization and its first user together (TW-AUTH-005,
- * ADR-0019). There is no "global user first" step.
+ * Sign-up creates an organization and its first user together (TW-AUTH-005). There is no "global user first" step.
  */
 export const signupRequestSchema = z.object({
   orgName: z.string().trim().min(2).max(120),

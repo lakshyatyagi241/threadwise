@@ -16,8 +16,7 @@ import { users } from './foundation';
 
 /**
  * Sub-agents / channel partners: a third identity pool, separate from staff
- * `users` and from exam `candidates`. See ADR-0014 for why this is a table and
- * not a role.
+ * `users` and from exam `candidates`. A table, not a role.
  */
 export const partnerAgents = pgTable(
   'partner_agents',

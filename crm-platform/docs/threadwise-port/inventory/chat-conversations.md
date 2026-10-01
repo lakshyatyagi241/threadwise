@@ -1164,7 +1164,7 @@ This domain covers the two operator screens that the Reference docs call **Chat 
   - Given a message created without provider inside a conversation stamped `waba`, When saved, Then `provider='waba'`.
   - Given a legacy row with NULL workspace owned by user 7, When user 8 lists messages, Then it is invisible to user 8.
 - **Source refs:** app/Models/Message.php; database migrations 2026_05_05_000002_create_messages_table, 2026_05_08_160000_add_message_actions_to_messages, 2026_05_09_120000_add_meta_to_messages, 2026_05_13_001000_add_quality_to_messages, 2026_05_26_140000_add_provider_to_conversations, 2026_05_26_160000_restamp_message_provider_from_conversation, 2026_06_05_181500_make_messages_conversation_id_nullable; app/Console/Commands/BackfillEncryptedPlaintext.php.
-- **Port notes:** Use application-level field encryption only where required (numbers → normalized/hashed columns for lookup; body may remain plaintext under RLS + disk encryption, per the repo's crypto ADRs). Add `provider_message_id`, `error_code` and `attempts` columns; keep the status vocabulary and make transitions forward-only.
+- **Port notes:** Use application-level field encryption only where required (numbers → normalized/hashed columns for lookup; body may remain plaintext under RLS + disk encryption, per the repo's crypto design). Add `provider_message_id`, `error_code` and `attempts` columns; keep the status vocabulary and make transitions forward-only.
 
 ### TW-CHAT-037 — Auto-save typed recipients as Contacts
 

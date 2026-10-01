@@ -554,14 +554,14 @@ section above).
 - **Permission**: `record.contacts.delete`
 - **Postman**: `DELETE {{baseUrl}}/v2/contacts/<id>`
 
-Response — `204 No Content`, empty body. Hard delete (per ADR-0009) — the
+Response — `204 No Content`, empty body. Hard delete — the
 audit log is the only trail left, not a soft-delete flag.
 
 ---
 
 ## Field Metadata (Settings > Data Management — Contact Properties + Company Properties)
 
-One generic registry (Phase 8, `ADR-0017`) serves both Contact Properties and
+One generic registry (Phase 8) serves both Contact Properties and
 Company Properties — every route below takes a `moduleKey` of `contacts` or
 `companies`, and the two are permission-isolated from each other:
 `record.contact-properties.*` and `record.company-properties.*` are
@@ -1569,7 +1569,7 @@ Response — `200 OK`: reuses the kernel `audit_log` via
 _internal bigint_ owner id as `newValue` (e.g. `6`), not a uuid —
 `ContactsService.setAssignee`'s audit delta used the already-resolved
 internal id instead of the caller-supplied uuid. Every other field/route in
-this API resolves ids to uuid at the response edge (ADR-0016); this was the
+this API resolves ids to uuid at the response edge; this was the
 one place that leaked one. Fixed; the `ownerId` entry above is the real,
 current response. An entry with no prior value (like `ownerId` here, on a
 contact that had no previous owner change recorded in this trail) simply
@@ -1925,7 +1925,7 @@ Response — `200 OK`: single lead, same shape as the POST response above.
 
 ### GET /public/v1/leads/:id
 
-- **Auth**: `X-Api-Key` header + HMAC signature (see [ADR-0013](adr/0013-read-replica-and-public-api.md))
+- **Auth**: `X-Api-Key` header + HMAC signature
 - **Postman**: `GET {{baseUrl}}/public/v1/leads/<id>` — generating a valid
   signed request needs an issued API key + secret, which isn't part of the
   seed data. Not covered here yet; add once an API-key issuance endpoint

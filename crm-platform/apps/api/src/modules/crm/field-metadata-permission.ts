@@ -7,7 +7,7 @@ import type { ModuleKey } from '@crm/contracts';
  * contact-properties must not also unlock company-properties, or vice versa.
  *
  * These keys are built from this template, not written as literal strings —
- * adr-compliance-review's scan.sh greps for literal
+ * a permission scan greps for literal
  * `@RequirePermission('record.x.y')` calls to catch a permission key with no
  * matching `permission_defs` migration, and can't see a key assembled at
  * runtime. Checked by hand instead: `record.contact-properties.*` is

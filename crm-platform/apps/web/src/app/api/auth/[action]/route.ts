@@ -13,7 +13,7 @@ import { isSameOrigin, problem } from '@/lib/auth/proxy';
 import { apiBase, refreshTokens } from '@/lib/auth/server';
 
 /**
- * Session-issuing endpoints (ADR-0018): the browser calls these, the server calls
+ * Session-issuing endpoints: the browser calls these, the server calls
  * the API, and any token pair that comes back goes into httpOnly cookies. The
  * response body never contains a token, only what the page needs to route on.
  */

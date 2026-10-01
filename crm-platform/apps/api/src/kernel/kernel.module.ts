@@ -17,7 +17,7 @@ import { RbacService } from './rbac/rbac.service';
  *
  * Still to land here: the metadata registry (modules/fields/relationships),
  * the query AST -> SQL compiler, the generic `records` store, and rollup
- * recomputation. Each arrives with its own migration + ADR.
+ * recomputation. Each arrives with its own migration.
  */
 @Global()
 @Module({
