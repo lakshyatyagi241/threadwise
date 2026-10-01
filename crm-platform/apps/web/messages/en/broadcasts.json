@@ -280,6 +280,37 @@
       "later": "Later",
       "media": "{kind} preview",
       "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags."
+    },
+    "overrides": {
+      "title": "Fill in this send",
+      "scope": "applies to this send only",
+      "intro": "Values here override the template for this send only — the template itself is unchanged. Leave a field blank to keep what the template already does.",
+      "lockedAuth": "Authentication templates send a freshly generated OTP per recipient. A fixed value would be the same code for everyone, so these can't be edited at send time.",
+      "lockedTwilio": "Twilio sends this template by Content SID — the header media and button links are fixed on Twilio's side. Variable values can still be edited below.",
+      "nothing": "This template has no variables, media, or button links to fill in — it sends exactly as written.",
+      "header": "Header",
+      "headerMedia": "Header media",
+      "message": "Message",
+      "footer": "Footer",
+      "buttons": "Button values",
+      "variable": "Variable {n}",
+      "autoFrom": "Auto-fills from",
+      "noMatch": "No matching attribute — this will send empty unless you fill it in",
+      "placeholder": "Leave blank to auto-fill, or type a value",
+      "insert": "Insert an attribute",
+      "searchAttributes": "Search attributes",
+      "templateDefault": "(template default)",
+      "pasteLink": "Header media link",
+      "pasteLinkHint": "Must be a public HTTPS link — WhatsApp fetches the file from its own servers.",
+      "limit": {
+        "image": "JPG or PNG · up to 5 MB",
+        "video": "MP4 · up to 16 MB",
+        "document": "PDF, DOC or XLS · up to 100 MB"
+      },
+      "link": "Link",
+      "code": "Code",
+      "value": "Value",
+      "keepTemplate": "Leave blank to keep the template value"
     }
   }
 }

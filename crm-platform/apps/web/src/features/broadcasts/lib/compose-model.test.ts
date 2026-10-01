@@ -124,6 +124,7 @@ describe('preview text', () => {
     footer: 'STOP',
     category: 'marketing',
     type: 'standard',
+    engine: 'waba',
     language: 'en_US',
     buttons: [{ type: 'url', text: 'Shop' }, { type: 'url' }],
     variableMap: { body: [{ num: 1, key: 'first_name' }], header: [{ num: 1, key: 'name' }] },

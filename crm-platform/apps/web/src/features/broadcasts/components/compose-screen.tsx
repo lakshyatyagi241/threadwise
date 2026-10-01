@@ -11,6 +11,7 @@ import { ApiError } from '@/lib/api/errors';
 import { KEYS } from '../api/broadcasts';
 import {
   createBroadcast,
+  useAttributeCatalog,
   useAudienceContacts,
   useAudienceGroups,
   useAudienceTags,
@@ -26,6 +27,7 @@ import {
 } from '../lib/compose-model';
 import { AudiencePicker } from './audience-picker';
 import { ComposePreview } from './compose-preview';
+import { OverridesPanel } from './overrides-panel';
 import { ChevronLeftIcon } from './icons';
 import { ScheduleSection } from './schedule-section';
 import { SenderPicker } from './sender-picker';
@@ -51,6 +53,7 @@ export function ComposeScreen() {
   const contacts = useAudienceContacts(canContacts);
   const groups = useAudienceGroups(canGroups);
   const tags = useAudienceTags(canTags);
+  const catalog = useAttributeCatalog();
 
   const zone = session.org.timezone ?? 'UTC';
   const [form, setForm] = useState<ComposeForm>(() => ({
@@ -243,6 +246,14 @@ export function ComposeScreen() {
                   </Select>
                 </Field>
               </div>
+              {template && (
+                <OverridesPanel
+                  key={template.id}
+                  template={template}
+                  catalog={catalog.data}
+                  onChange={(overrides) => patch({ overrides })}
+                />
+              )}
               {data.templates.length === 0 && (
                 <div className="-mt-3 text-[10.5px] text-danger">
                   {t('noTemplates')}{' '}

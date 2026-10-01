@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
+  attributeCatalogSchema,
   broadcastComposeSchema,
   contactGroupResponseSchema,
   contactResponseSchema,
@@ -67,3 +68,14 @@ export function useAudienceTags(enabled: boolean) {
 
 export const createBroadcast = (body: CreateBroadcastInput) =>
   apiFetch('/broadcasts', { method: 'POST', body, schema: createBroadcastResponseSchema });
+
+/** The click-to-insert attributes: contact fields, custom fields, workspace values and system tokens, each with a sample. */
+export function useAttributeCatalog() {
+  return useQuery({
+    queryKey: [...KEYS.all, 'attribute-catalog'],
+    queryFn: ({ signal }) =>
+      apiFetch('/attributes/catalog', { schema: attributeCatalogSchema, signal }),
+    staleTime: 60_000,
+    retry: false,
+  });
+}
