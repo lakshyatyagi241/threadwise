@@ -1,13 +1,14 @@
-# Parity evidence: broadcasts (BCAST), create flow
+# Parity evidence: broadcasts (BCAST), create flow and sender
 
 Reference 1.7.0 vs branch `punya/broadcasts/TW-BCAST-009-store-request`. Covers TW-BCAST-009, 010, 011, 012, 013, 014 and 015: the
-`POST /broadcasts` create flow. API reference: [docs/api/broadcasts.md](../../api/broadcasts.md).
+`POST /broadcasts` create flow, plus the sender (TW-BCAST-016 and the simple core of 025, 026, 027). API reference: [docs/api/broadcasts.md](../../api/broadcasts.md).
 
 Evidence is automated, no screen yet:
 
+- `apps/api/test/e2e/broadcasts/broadcasts-dispatch.e2e.spec.ts`: 14 scenarios for queueing and sending, against real Postgres with a fake engine adapter.
 - `apps/api/test/e2e/broadcasts/broadcasts-create.e2e.spec.ts`: 17 scenarios through HTTP against real Postgres (every
   Given/When/Then of 009, 010, 014, 015, the OTP-template refusal of 012, tenant isolation, permission, auth).
-- `apps/api/test/unit/broadcasts/*`: 33 tests for the audience split, template guards and media check, and the schedule instant.
+- `apps/api/test/unit/broadcasts/*`: 54 tests for the audience split, template guards and media check, schedule instant, recipient state machine and outcome, phone assembly and the Meta payload.
 
 ## Status of each feature in this PR
 
@@ -15,34 +16,49 @@ Evidence is automated, no screen yet:
 | ------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | TW-BCAST-009 | backend-done | Plan cap, validation, order of checks. Plan **feature flag** `broadcast` is stubbed (see below). No screen yet.                                |
 | TW-BCAST-010 | backend-done | Contacts, groups, tags, opt-out removal, tenant scoping.                                                                                       |
-| TW-BCAST-011 | stubbed      | `SendPolicyService` (emergency halt, content screen) is wired for real. The **wallet precheck** is a shim until the wallet domain exposes it. |
+| TW-BCAST-011 | stubbed      | `SendPolicyService` (emergency halt, content screen) is wired for real. The **wallet precheck** is a shim until the wallet domain exposes it.  |
 | TW-BCAST-012 | backend-done | OTP-template refusal, public-https media check, Meta approval/pause/RED guards. Two inputs are stubbed (below).                                |
 | TW-BCAST-013 | stubbed      | Warmer hold is a shim that never holds until the warmer domain exposes it.                                                                     |
 | TW-BCAST-014 | backend-done | Weighted split, floor plus largest-fraction remainder, empty slices skipped.                                                                   |
-| TW-BCAST-015 | backend-done | Rows and recipients in one transaction, audit and `broadcast.created` outbox event. Dispatch (016) is the next PR.                            |
+| TW-BCAST-015 | backend-done | Rows and recipients in one transaction, audit and `broadcast.created` outbox event.                                                            |
+| TW-BCAST-016 | backend-done | Due broadcasts go to BullMQ, a worker resolves sender and template and sends each recipient. Only the `waba` engine has an adapter; see below. |
+| TW-BCAST-025 | partial      | Recipient status through one state machine (`BroadcastProgressService`). The HTTP callback is not needed (the worker calls the service).       |
+| TW-BCAST-026 | partial      | Terminal status derived from the recipient rows. Counts are recomputed, not trusted.                                                           |
+| TW-BCAST-027 | partial      | Counters and the state machine are in. The Meta and Twilio webhook branches that call it are the WABA domain's.                                |
 
 ## Intended differences from Reference
 
-| #   | Area               | Reference                                                                                                | Here                                                                                                                         |
-| --- | ------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Scheduled instant  | Date and time read in the server zone; the chosen zone is only stored (09:00 Kolkata fires 09:00 UTC) | Read in the chosen zone and stored as UTC (09:00 Kolkata is 03:30 UTC). The inventory's port requirement (TW-BCAST-015).     |
-| 2   | Template required  | Optional on the server although the form requires it; every recipient then fails at send             | `templateId` is required (TW-BCAST-009 quirk 6).                                                                             |
-| 3   | Bad schedule input | Unparsable time throws (HTTP 500)                                                                     | 422 validation on `sendDate`, `sendTime` and `timezone`.                                                                     |
-| 4   | Ids and keys       | Integer ids; sender keys `engine:id` or a bare id                                                     | Uuids; sender keys `engine:uuid`. A bare id is not accepted.                                                                 |
-| 5   | Archived contacts  | No such state                                                                                         | Archived contacts are not in the audience (they are the CRM's hidden contacts).                                              |
-| 6   | Cross-tenant ids   | Global `exists:` checks, then workspace scoping drops foreign ids                                     | Uuids are only looked up inside the caller's organization; a foreign id is indistinguishable from an unknown one.            |
+| #   | Area               | Reference                                                                                                | Here                                                                                                                        |
+| --- | ------------------ | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Scheduled instant  | Date and time read in the server zone; the chosen zone is only stored (09:00 Kolkata fires 09:00 UTC) | Read in the chosen zone and stored as UTC (09:00 Kolkata is 03:30 UTC). The inventory's port requirement (TW-BCAST-015).    |
+| 2   | Template required  | Optional on the server although the form requires it; every recipient then fails at send              | `templateId` is required (TW-BCAST-009 quirk 6).                                                                            |
+| 3   | Bad schedule input | Unparsable time throws (HTTP 500)                                                                     | 422 validation on `sendDate`, `sendTime` and `timezone`.                                                                    |
+| 4   | Ids and keys       | Integer ids; sender keys `engine:id` or a bare id                                                     | Uuids; sender keys `engine:uuid`. A bare id is not accepted.                                                                |
+| 5   | Archived contacts  | No such state                                                                                         | Archived contacts are not in the audience (they are the CRM's hidden contacts).                                             |
+| 6   | Cross-tenant ids   | Global `exists:` checks, then workspace scoping drops foreign ids                                     | Uuids are only looked up inside the caller's organization; a foreign id is indistinguishable from an unknown one.           |
 | 7   | Past schedule      | No check; Node waits for the next yearly cron match                                                   | No check either; the runner will treat a past instant as due immediately (TW-BCAST-021 replaces Node's in-memory schedule). |
-| 8   | Response           | Redirect with a flash, or `{ok, broadcast_id, broadcast_ids, devices_count}` for JSON callers         | `201 { broadcasts[], devicesCount }`; the web screen builds its own message.                                                 |
+| 8   | Response           | Redirect with a flash, or `{ok, broadcast_id, broadcast_ids, devices_count}` for JSON callers         | `201 { broadcasts[], devicesCount }`; the web screen builds its own message.                                                |
+
+| 9 | Dispatch | Synchronous HTTP call to Node (15 s per slice); a scheduled broadcast lives only in Node's memory | BullMQ job per broadcast; the broadcast row is the schedule, so a restart loses nothing. |
+| 10 | Recipient without a number | Stays `pending` forever, kept out of the payload | Failed with `No usable phone number`, so the broadcast can finish. |
+| 11 | Run outcome | Node posts counts that can overwrite the totals; `paused` was rejected with 422 | Derived from the recipient rows; `paused` (emergency halt) is accepted. |
+| 12 | State machine | Only the Meta and Twilio paths had one; Node callbacks could move a row backwards | One machine for every source. |
 
 ## Stubbed inputs (blocked on other domains), all behind interfaces in `modules/broadcasts/_shims/`
 
-| Shim                | Real owner                       | What is missing until then                                                                                                                                                                                                                       |
-| ------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SenderDirectory`   | WADEV / WABA (`WorkspaceEngine`) | Reads `devices` and `wa_provider_configs` directly; "connected" is `status = 'connected'` (and `active` for Baileys).                                                                                                                            |
+| Shim                | Real owner                       | What is missing until then                                                                                                                                                                                                                          |
+| ------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SenderDirectory`   | WADEV / WABA (`WorkspaceEngine`) | Reads `devices` and `wa_provider_configs` directly; "connected" is `status = 'connected'` (and `active` for Baileys).                                                                                                                               |
 | `TemplateDirectory` | TPL                              | Reads `wa_templates` directly. Stored media paths cannot be turned into URLs, so the media check only runs for absolute URLs. The `waba_templates_v2_enabled` platform switch is read as off, so the Meta approval/pause/RED guards do not run yet. |
-| `WalletGate`        | WALLET (`SendGate` precheck)     | No balance check.                                                                                                                                                                                                                                |
-| `WarmerGate`        | SCHED (`WarmerService`)          | No warm-up holds.                                                                                                                                                                                                                                |
-| `BroadcastPlanGate` | PLAN                             | The `broadcast` feature flag is not in the plan catalogue (only the numeric cap `broadcasts` is), so it is not enforced.                                                                                                                         |
+| `WalletGate`        | WALLET (`SendGate` precheck)     | No balance check.                                                                                                                                                                                                                                   |
+| `WarmerGate`        | SCHED (`WarmerService`)          | No warm-up holds.                                                                                                                                                                                                                                   |
+| `BroadcastPlanGate` | PLAN                             | The `broadcast` feature flag is not in the plan catalogue (only the numeric cap `broadcasts` is), so it is not enforced.                                                                                                                            |
+
+Also not there yet, so this PR sends text templates only:
+
+- Engines: only `waba` (Meta Cloud API) has an adapter. `baileys`, `twilio` and `sms` broadcasts fail at dispatch with a clear log until their adapters exist (WADEV, NODE and the SMS channel).
+- Per-recipient variables, header media, buttons and carousel (TW-BCAST-017), link tracking (018), pacing, batching and the daily cap (022), delivery and read receipts (024, with 027's webhooks), retry of failed recipients (038, 039), team-inbox mirroring (028), outbound webhooks and notifications (029).
+- The WABA credentials format (`credentials_json`) is read as encrypted JSON with `access_token` and `phone_number_id`; the WABA domain owns the final format.
 
 Also stubbed: `templateOverrides` are only stripped of blank values; the full shape check is TW-BCAST-017.
 
@@ -50,6 +66,6 @@ Also stubbed: `templateOverrides` are only stripped of blank values; the full sh
 
 - No screen exists yet, so the Playwright twin run against the running Reference has not been done for this PR. The compose page
   (TW-BCAST-003..008) and the list page are the next PRs.
-- Live sending is not part of this PR. Sending through BullMQ is TW-BCAST-016.
+- A real send to Meta has not been run (no credentials here). The adapter is covered by a payload unit test and the pipeline by the fake-adapter e2e; the live stack was checked up to the provider call.
 - The three Meta guardrails are covered by unit tests only, because the switch that turns them on is stubbed.
 - The tracker (`tracker.py`) and the ownership check could not be used: `ownership.json` still lists broadcasts under another owner.

@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { BroadcastDispatchService } from './broadcast-dispatch.service';
+import { BroadcastProgressService } from './broadcast-progress.service';
+import { EngineSenderRegistry, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
 import { BroadcastsRepository } from './broadcasts.repository';
 import { BroadcastsService } from './broadcasts.service';
@@ -21,9 +25,15 @@ import {
 @Module({
   imports: [PlansCoreModule],
   controllers: [BroadcastsController],
+  exports: [BroadcastProgressService, BroadcastDispatchService, EngineSenderRegistry],
   providers: [
+    CryptoService,
     BroadcastsService,
     BroadcastsRepository,
+    BroadcastProgressService,
+    BroadcastDispatchService,
+    WabaEngineSender,
+    EngineSenderRegistry,
     { provide: SENDER_DIRECTORY, useClass: SqlSenderDirectory },
     { provide: TEMPLATE_DIRECTORY, useClass: SqlTemplateDirectory },
     { provide: WALLET_GATE, useClass: OpenWalletGate },
