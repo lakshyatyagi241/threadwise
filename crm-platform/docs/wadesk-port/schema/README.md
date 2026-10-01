@@ -99,9 +99,16 @@ reserved <= balance` check) replaces the two balances WaDesk keeps on `users`; `
    one channel table, then these columns get a real foreign key.
 2. **PII encryption** (see P1).
 3. **Reading platform tables from a tenant context** (see P7), part of the operator-layer work (F2, D4/D5).
-4. **`PARTITIONED_TABLES`.** `apps/api/src/workers/partition-maintenance.service.ts` still lists only `event_outbox` and `audit_log`.
-   The 17 new streams have the bootstrap partitions (previous, current and next two months) and a `_default`, so nothing fails, but no
-   one creates next quarter's partitions until that list includes them or the service reads `pg_partitioned_table`. Conflict-map H11.
+4. **Partition maintenance.** Done (conflict-map H11). `apps/api/src/workers/partition-maintenance.service.ts` reads `pg_partitioned_table`
+   (`RANGE` parents in `public`, partitions excluded) on every run, so the 17 new streams are kept three months ahead like `event_outbox`
+   and `audit_log` with no list to edit. The worker runs as `crm_app_user`, which cannot create a partition, so
+   `ensure_monthly_partition()` is now `SECURITY DEFINER` (migration `20261001110000_partition_definer`, ADR-0021, proposed: the db
+   steward should review it, as it is the schema's first definer function).
+   `apps/api/test/integration/partition-maintenance.spec.ts` runs it as the app role and proves a table created after the service was
+   written gets next month's partition. **Still open:** `defaultPartitionCounts()` cannot read `event_outbox_default` / `audit_log_default` as
+   the app role (they predate 0007, no grant), so it is still not wired to an alert. New partitions inherit the default grants to `crm_app`
+   and carry no policy of their own, so a direct query against a partition is not tenant-filtered; the app never does that, but it is
+   worth a decision (revoke the grant on partitions, or add policies to them).
 5. **`usage_charges` cannot keep a unique `wamid`.** WaDesk enforces one charge per WhatsApp message id; a partitioned table can only be
    unique over a key that includes the partition column. The ledger's idempotency has to be a `(org_id, wamid, created_at)` unique or
    an application check.

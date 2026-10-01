@@ -163,6 +163,24 @@ describe('schema invariants', () => {
     expect(rows[0]).toEqual({ rolsuper: false, rolbypassrls: false });
   });
 
+  it('every SECURITY DEFINER function pins its search_path and is closed to PUBLIC', async () => {
+    const { rows } = await owner.query<{ name: string; pinned: boolean; open_to_public: boolean }>(`
+      SELECT p.proname AS name,
+             EXISTS (SELECT 1 FROM unnest(p.proconfig) cfg WHERE cfg LIKE 'search\\_path=%') AS pinned,
+             -- a NULL ACL is the default grant, which includes PUBLIC
+             (p.proacl IS NULL OR EXISTS (
+               SELECT 1 FROM aclexplode(p.proacl) a WHERE a.grantee = 0 AND a.privilege_type = 'EXECUTE'
+             )) AS open_to_public
+      FROM pg_proc p
+      WHERE p.pronamespace = 'public'::regnamespace AND p.prosecdef
+    `);
+    // Such a function runs with its owner's rights; an unpinned search_path lets a caller
+    // redirect names it resolves, and an open EXECUTE lets any role at all call it.
+    expect(rows.map((r) => r.name)).toContain('ensure_monthly_partition');
+    expect(rows.filter((r) => !r.pinned).map((r) => r.name)).toEqual([]);
+    expect(rows.filter((r) => r.open_to_public).map((r) => r.name)).toEqual([]);
+  });
+
   it('the Drizzle schema describes what the migrations built', async () => {
     const result = await verifySchema(owner);
     // Warnings are drift that cannot break a query (an undeclared FK, a default Drizzle does not know);

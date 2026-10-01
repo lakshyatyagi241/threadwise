@@ -27,6 +27,7 @@ src/
 | `0006_outbox_audit`                | event_outbox, audit_log — RANGE-partitioned monthly, with default partitions                                                      |
 | `0007_rls_policies`                | RLS enabled **and forced**, policies, runtime roles, default privileges                                                           |
 | `0008_seed_permission_defs`        | the global capability registry                                                                                                    |
+| `20261001110000_partition_definer` | `ensure_monthly_partition()` becomes `SECURITY DEFINER` so the worker role can create partitions (ADR-0021)                       |
 | `2026100110*_<code>_wadesk_schema` | the WaDesk data model, one migration per domain: 202 tables ([docs/wadesk-port/schema](../../docs/wadesk-port/schema/README.md))  |
 
 The inbox, broadcast, billing, AI and automation tables that the WaDesk port
