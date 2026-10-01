@@ -14,6 +14,8 @@ const { companies, contacts, teamMembers, users } = schema;
 
 export interface ContactRow {
   id: number;
+  /** created_at at microsecond precision (keyset cursor). */
+  createdAtIso?: string;
   uuid: string;
   displayId: string | null;
   name: string | null;
@@ -83,6 +85,8 @@ export class ContactsRepository {
     return {
       id: contacts.id,
       uuid: contacts.uuid,
+      // Full-precision created_at for the keyset cursor (a JS Date drops the microseconds).
+      createdAtIso: sql<string>`to_char(${contacts.createdAt} at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`,
       displayId: contacts.displayId,
       name: contacts.name,
       firstName: contacts.firstName,
@@ -151,15 +155,17 @@ export class ContactsRepository {
     // the planner can use the composite index directly.
     if (filter.cursor) {
       const cursor = decodeCursor(filter.cursor);
+      // Compare against the microsecond-precision instant, not the millisecond Date.
+      const bound = sql`${cursor.createdAtIso ?? cursor.createdAt.toISOString()}::timestamptz`;
       conditions.push(
         filter.order === 'desc'
           ? or(
-              lt(contacts.createdAt, cursor.createdAt),
-              and(eq(contacts.createdAt, cursor.createdAt), lt(contacts.id, cursor.id)),
+              sql`${contacts.createdAt} < ${bound}`,
+              and(sql`${contacts.createdAt} = ${bound}`, lt(contacts.id, cursor.id)),
             )!
           : or(
-              gt(contacts.createdAt, cursor.createdAt),
-              and(eq(contacts.createdAt, cursor.createdAt), gt(contacts.id, cursor.id)),
+              sql`${contacts.createdAt} > ${bound}`,
+              and(sql`${contacts.createdAt} = ${bound}`, gt(contacts.id, cursor.id)),
             )!,
       );
     }
