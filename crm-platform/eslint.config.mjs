@@ -19,6 +19,8 @@ export default tseslint.config(
       'commitlint.config.cjs',
       // Plain-node build helper, outside the app tsconfig.
       'apps/web/scripts/**',
+      // Claude skills ship Node tooling (parity harness, scripts), not application code: no tsconfig covers it.
+      '.claude/**',
       '**/next-env.d.ts',
     ],
   },

@@ -43,6 +43,15 @@ and `adr-compliance-review` invoke it. If you're making an architectural
 call — a new dependency, a schema pattern applied broadly, an auth/security
 tradeoff — write the ADR as part of the same change, not as a follow-up.
 
+## Every feature gets a WaDesk parity run (automatic)
+
+After you build or change **any** feature, small or big (an endpoint, a screen, a contract, a migration, a worker
+job), invoke the `wadesk-playwright-parity` skill before saying it is done. It runs the same scenarios on the
+running WaDesk reference and on our app in Playwright, compares UI, UX and functionality with the full set of edge
+cases, reports every difference, spawns fix sub-agents for the defects and records a stamp. A Stop hook in
+`.claude/settings.json` blocks the end of the turn until a stamp covers the current state of the feature files, so
+do not wait for it. Skip only on the user's explicit word (`stamp.py write --status skipped --user-approved "..."`).
+
 ## Before calling anything done
 
 ```bash
