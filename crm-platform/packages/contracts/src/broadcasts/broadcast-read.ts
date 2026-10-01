@@ -108,8 +108,11 @@ export const broadcastDetailSchema = z.object({
     read: z.number().int(),
     failed: z.number().int(),
     queued: z.number().int(),
+    /** Contacts who tapped a tracked link (WD-BCAST-042). */
+    clicked: z.number().int(),
   }),
-  pct: pctSchema,
+  /** `clicked` is the click-through rate: contacts who clicked over delivered. */
+  pct: pctSchema.extend({ clicked: z.number() }),
   donut: z.object({
     labels: z.array(z.string()),
     series: z.array(z.number().int()),

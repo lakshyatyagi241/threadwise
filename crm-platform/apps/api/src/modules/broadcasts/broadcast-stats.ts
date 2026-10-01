@@ -24,13 +24,14 @@ export function cascade(c: RecipientCounts) {
   };
 }
 
-/** The detail header: sent% delivered% and failed% over the audience, read% over delivered. */
-export function headerPct(c: ReturnType<typeof cascade>) {
+/** The detail header: sent% delivered% and failed% over the audience, read% and the click-through rate over delivered. */
+export function headerPct(c: ReturnType<typeof cascade>, clicked = 0) {
   return {
     sent: pct(c.sent, c.total),
     delivered: pct(c.delivered, c.total),
     read: pct(c.read, c.delivered),
     failed: pct(c.failed, c.total),
+    clicked: pct(clicked, c.delivered),
   };
 }
 
