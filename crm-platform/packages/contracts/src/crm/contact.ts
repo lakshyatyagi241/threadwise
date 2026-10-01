@@ -2,6 +2,9 @@ import { z } from 'zod';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
 import { lifecycleStageSchema, recordLifecycleSchema } from '../common/enums';
 import { paginationQuerySchema } from '../common/pagination';
+import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
+import { contactGroupRefSchema } from '../contacts-attributes-tags/contact-group';
+import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
 
 /**
  * Contact — the reference vertical slice.
@@ -44,7 +47,16 @@ export const contactResponseSchema = z.object({
   /** Bumped by note/activity/meeting writes — server-maintained. */
   lastActivityAt: z.string().datetime().nullable(),
   customFields: z.record(z.unknown()),
+  /** Where the contact came from: the import's source knob, "import", an API client... */
+  source: z.string().nullable(),
+  /** Marketing opt-out (TW-CON-017). */
+  isUnsubscribed: z.boolean(),
   isArchived: z.boolean(),
+  /** Only when the request asked for them with `expand`. */
+  groups: z.array(contactGroupRefSchema).optional(),
+  tags: z
+    .array(z.object({ id: uuidSchema, name: z.string(), color: z.string().nullable() }))
+    .optional(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -70,6 +82,8 @@ export const createContactSchema = z
     emailSubscriptionStatus: z.string().max(64).optional(),
     emailConfirmed: z.boolean().optional(),
     faxNumber: z.string().max(32).optional(),
+    /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
+    source: z.string().trim().max(128).optional(),
     customFields: z.record(z.unknown()).default({}),
   })
   // A contact with neither a phone nor an email cannot be reached, cannot be
@@ -98,19 +112,42 @@ export const updateContactSchema = z.object({
   emailSubscriptionStatus: z.string().max(64).nullish(),
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
+  source: z.string().trim().max(128).nullish(),
   customFields: z.record(z.unknown()).optional(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409. */
   rowVersion: z.number().int().positive(),
 });
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
 
-export const listContactsQuerySchema = paginationQuerySchema.extend({
-  q: z.string().min(1).max(200).optional().describe('Free-text search over name/email/phone'),
-  ownerId: uuidSchema.optional(),
-  lifecycleStage: z.string().optional(),
-  includeArchived: z.coerce.boolean().default(false),
-});
+/** Page sizes: Reference offered 12/50/100/500/1000 and snapped anything else to 12; here any size up to 1000. */
+export const CONTACT_LIST_MAX_LIMIT = 1000;
+
+export const listContactsQuerySchema = paginationQuerySchema
+  .extend({
+    ...contactFilterShape,
+    limit: z.coerce.number().int().min(1).max(CONTACT_LIST_MAX_LIMIT).default(50),
+    /** `groups`, `tags` or `groups,tags`: adds the chips for each row. */
+    expand: queryList(z.enum(['groups', 'tags'])).optional(),
+    /** Adds `meta.total`, the count of every contact matching the filter ("Showing 1-50 of N"). */
+    includeTotal: queryBoolean().default(false),
+    /** A single tag, the way Reference's chip link sends it; merged into `tagIds`. */
+    tagId: z.string().uuid().optional(),
+  })
+  .refine((v) => !(v.groupId && v.noGroup), {
+    message: 'groupId and noGroup cannot be combined',
+    path: ['noGroup'],
+  })
+  .describe(
+    'Free-text search over name/email/phone digits, plus group, tag, source and consent filters',
+  );
 export type ListContactsQuery = z.infer<typeof listContactsQuerySchema>;
+
+/** The page envelope, plus `meta.total` when the request asked for `includeTotal`. */
+export type ContactListResponse = {
+  data: ContactResponse[];
+  page: { nextCursor: string | null; hasMore: boolean; limit: number };
+  meta?: { total: number };
+};
 
 /** Lightweight rows for pickers/typeaheads — never the full record. */
 export const contactSelectItemSchema = z.object({
