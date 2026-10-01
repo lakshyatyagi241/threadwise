@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
+import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
 import { broadcastResponseSchema } from './broadcast';
 
 /**
@@ -18,6 +19,8 @@ export const listBroadcastsQuerySchema = paginationQuerySchema.omit({ order: tru
   range: z.enum(BROADCAST_RANGES).default('all'),
   /** Case-insensitive substring of the name. */
   q: z.string().trim().min(1).max(100).optional(),
+  /** Adds `meta.total`, the count of every broadcast matching the filter ("Showing 12 of N"). */
+  includeTotal: queryBoolean().default(false),
 });
 export type ListBroadcastsQuery = z.infer<typeof listBroadcastsQuerySchema>;
 
@@ -25,7 +28,9 @@ export const broadcastListItemSchema = broadcastResponseSchema.extend({
   templateName: z.string().nullable(),
 });
 export type BroadcastListItem = z.infer<typeof broadcastListItemSchema>;
-export const listBroadcastsResponseSchema = pageResponseSchema(broadcastListItemSchema);
+export const listBroadcastsResponseSchema = pageResponseSchema(broadcastListItemSchema).extend({
+  meta: z.object({ total: z.number().int() }).optional(),
+});
 export type ListBroadcastsResponse = z.infer<typeof listBroadcastsResponseSchema>;
 
 /** The six tiles above the list and the counts on the status pills; workspace-wide, they ignore the list filter. */

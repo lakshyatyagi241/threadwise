@@ -105,7 +105,12 @@ export class BroadcastsReadService {
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, ctx.orgId, query);
       const { items, page } = buildPage(rows, query.limit);
-      return { data: items.map(toListItem), page };
+      const total = query.includeTotal ? await this.repo.count(tx, ctx.orgId, query) : undefined;
+      return {
+        data: items.map(toListItem),
+        page,
+        ...(total !== undefined ? { meta: { total } } : {}),
+      };
     });
   }
 
