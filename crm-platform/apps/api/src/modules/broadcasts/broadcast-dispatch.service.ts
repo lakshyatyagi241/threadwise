@@ -14,12 +14,28 @@ import {
 } from './payload/template-overrides';
 import { buildRecipientVars } from './payload/template-vars';
 import { LinkTracker } from './tracking/link-tracker';
+import {
+  batchCooldownMs,
+  batchingApplies,
+  capRemaining,
+  nextGapMs,
+  nextUtcMidnight,
+} from './pacing';
+import {
+  CapTally,
+  PACING_SETTINGS,
+  PacingRuntime,
+  SenderLease,
+  type PacingSettingsSource,
+} from './send-safety';
 import { assemblePhone } from './recipient-phone';
 import {
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
+  WARMER_GATE,
   type SenderDirectory,
   type TemplateDirectory,
+  type WarmerGate,
 } from './_shims/tokens';
 
 /** Recipients are read and sent in small slices so a long broadcast never holds a transaction or a big array. */
@@ -28,8 +44,11 @@ const BATCH = 200;
 const COUNTER_EVERY = 25;
 /** A recipient claimed for sending but not settled this long ago belongs to a worker that died. */
 const STALE_MINUTES = 10;
+/** While resting, the sender lease is renewed this often. */
+const HEARTBEAT_MS = 20_000;
 
-export type DispatchResult = 'skipped' | 'failed' | 'paused' | 'finished';
+/** `busy`: another run holds this sender; the job is put back for later. */
+export type DispatchResult = 'skipped' | 'failed' | 'paused' | 'finished' | 'busy';
 
 interface BroadcastRow {
   template_overrides: unknown;
@@ -68,6 +87,11 @@ export class BroadcastDispatchService {
     private readonly tracker: LinkTracker,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
+    @Inject(WARMER_GATE) private readonly warmer: WarmerGate,
+    @Inject(PACING_SETTINGS) private readonly pacingSettings: PacingSettingsSource,
+    private readonly runtime: PacingRuntime,
+    private readonly cap: CapTally,
+    private readonly lease: SenderLease,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -126,6 +150,12 @@ export class BroadcastDispatchService {
       };
       const overrides = sanitizeOverrides(b.template_overrides);
       const mergeBase = sender.engine === 'waba' ? await this.merge.baseContext(tx, orgId) : null;
+      const pacing = await this.pacingSettings.get(tx, orgId);
+      const warm = await this.warmer.gap(tx, sender);
+      const pending = await tx.execute(sql`
+        SELECT count(*)::int AS n FROM broadcast_contacts
+        WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND status = 'pending'`);
+      const pendingTotal = Number((pending.rows[0] as { n: number }).n);
 
       return {
         skip: false as const,
@@ -136,12 +166,16 @@ export class BroadcastDispatchService {
         shape,
         overrides,
         mergeBase,
+        pacing,
+        warm,
+        pendingTotal,
       };
     });
 
     if (prep.skip) return 'skipped';
     if (prep.failed) return 'failed';
-    const { template, sender, adapter, shape, overrides, mergeBase } = prep;
+    const { template, sender, adapter, shape, overrides, mergeBase, pacing, warm, pendingTotal } =
+      prep;
     if (mergeBase)
       this.logger.log(
         { orgId, broadcastId, engine: sender.engine },
@@ -160,98 +194,154 @@ export class BroadcastDispatchService {
       return 'failed';
     }
 
-    let lastId = 0;
-    let sinceCounters = 0;
-    for (;;) {
-      const batch = await this.db.tx(async (tx) => {
-        const res = await tx.execute(sql`
+    // One run at a time per sender: two through the same number would break the gaps its quality depends on.
+    const leaseKey = SenderLease.key(orgId, sender.engine, sender.id);
+    const leaseToken = await this.lease.acquire(leaseKey);
+    if (!leaseToken) return 'busy';
+    try {
+      const batching = batchingApplies(pacing, pendingTotal);
+      let processed = 0;
+      let sinceBatch = 0;
+      let lastId = 0;
+      let sinceCounters = 0;
+      for (;;) {
+        const batch = await this.db.tx(async (tx) => {
+          const res = await tx.execute(sql`
           SELECT bc.id AS bc_id, bc.contact_id, c.phone, c.country_code
           FROM broadcast_contacts bc
           JOIN contacts c ON c.org_id = bc.org_id AND c.id = bc.contact_id
           WHERE bc.org_id = ${orgId} AND bc.broadcast_id = ${broadcastId} AND bc.status = 'pending' AND bc.id > ${lastId}
           ORDER BY bc.id LIMIT ${BATCH}`);
-        return res.rows as unknown as RecipientRow[];
-      });
-      if (batch.length === 0) break;
+          return res.rows as unknown as RecipientRow[];
+        });
+        if (batch.length === 0) break;
 
-      for (const r of batch) {
-        lastId = Number(r.bc_id);
-        const contactId = Number(r.contact_id);
-        const to = assemblePhone(r.phone, r.country_code);
+        for (const r of batch) {
+          lastId = Number(r.bc_id);
+          const contactId = Number(r.contact_id);
+          const to = assemblePhone(r.phone, r.country_code);
 
-        const claimed = await this.db.tx(async (tx) => {
-          if (!to) {
-            await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
-              status: 'failed',
-              error: 'No usable phone number',
-            });
-            return false;
+          // The unofficial engine has a daily cap per number (Reference's default 4000). At the cap the run stops, nobody is lost,
+          // and it resumes after midnight UTC.
+          if (to && sender.engine === 'baileys') {
+            const used = await this.cap.sentToday(orgId, sender.engine, sender.id);
+            if (capRemaining(pacing.baileysDailyCap, used) <= 0) {
+              const now = this.runtime.now();
+              await this.db.tx(async (tx) => {
+                await this.progress.recompute(tx, orgId, broadcastId);
+                await this.progress.pause(tx, orgId, broadcastId, {
+                  reason: 'daily_cap',
+                  at: now.toISOString(),
+                  resumeAfter: nextUtcMidnight(now).toISOString(),
+                });
+              });
+              this.logger.warn({ orgId, broadcastId, used }, '[BCAST] paused: daily cap reached');
+              return 'paused';
+            }
           }
-          const res = await tx.execute(sql`
+
+          const claimed = await this.db.tx(async (tx) => {
+            if (!to) {
+              await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+                status: 'failed',
+                error: 'No usable phone number',
+              });
+              return false;
+            }
+            const res = await tx.execute(sql`
             UPDATE broadcast_contacts SET status = 'processing'
             WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND contact_id = ${contactId} AND status = 'pending'
             RETURNING id`);
-          return res.rows.length > 0;
-        });
-        if (!claimed) continue;
-
-        try {
-          const built = mergeBase
-            ? await this.payloadFor(
-                orgId,
-                broadcastId,
-                contactId,
-                template.id,
-                to,
-                shape,
-                overrides,
-                mergeBase,
-              )
-            : null;
-          const sent = await opened.send({
-            to,
-            templateName: built ? built.name : template.templateName,
-            language: template.language,
-            clientReference: `bcast-${broadcastId}-${contactId}`,
-            ...(built ? { components: built.components } : {}),
+            return res.rows.length > 0;
           });
-          await this.db.tx((tx) =>
-            this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
-              status: 'sent',
-              providerMessageId: sent.providerMessageId,
-            }),
-          );
-        } catch (err) {
-          if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
-            // The emergency halt is on: put this recipient back and stop. Nothing is lost; the run resumes when it is lifted.
-            await this.db.tx(async (tx) => {
-              await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
-                status: 'pending',
-              });
-              await this.progress.recompute(tx, orgId, broadcastId);
-              await this.progress.setStatus(tx, orgId, broadcastId, 'paused');
-            });
-            this.logger.warn({ orgId, broadcastId }, '[BCAST] paused by the emergency halt');
-            return 'paused';
+          if (!claimed) {
+            processed++;
+            continue;
           }
-          await this.db.tx((tx) =>
-            this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
-              status: 'failed',
-              error: err instanceof Error ? err.message : String(err),
-            }),
-          );
-        }
 
-        if (++sinceCounters >= COUNTER_EVERY) {
-          sinceCounters = 0;
-          await this.db.tx((tx) => this.progress.recompute(tx, orgId, broadcastId));
+          try {
+            const built = mergeBase
+              ? await this.payloadFor(
+                  orgId,
+                  broadcastId,
+                  contactId,
+                  template.id,
+                  to,
+                  shape,
+                  overrides,
+                  mergeBase,
+                )
+              : null;
+            const sent = await opened.send({
+              to,
+              templateName: built ? built.name : template.templateName,
+              language: template.language,
+              clientReference: `bcast-${broadcastId}-${contactId}`,
+              ...(built ? { components: built.components } : {}),
+            });
+            await this.db.tx((tx) =>
+              this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+                status: 'sent',
+                providerMessageId: sent.providerMessageId,
+              }),
+            );
+            if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
+          } catch (err) {
+            if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
+              // The emergency halt is on: put this recipient back and stop. Nothing is lost; the run resumes when it is lifted.
+              await this.db.tx(async (tx) => {
+                await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+                  status: 'pending',
+                });
+                await this.progress.recompute(tx, orgId, broadcastId);
+                await this.progress.pause(tx, orgId, broadcastId, {
+                  reason: 'halt',
+                  at: this.runtime.now().toISOString(),
+                });
+              });
+              this.logger.warn({ orgId, broadcastId }, '[BCAST] paused by the emergency halt');
+              return 'paused';
+            }
+            await this.db.tx((tx) =>
+              this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+                status: 'failed',
+                error: err instanceof Error ? err.message : String(err),
+              }),
+            );
+          }
+
+          // A human-paced gap between messages, and a longer rest between batches. Not after the last recipient.
+          processed++;
+          if (processed < pendingTotal) {
+            if (batching && ++sinceBatch >= pacing.batchSize) {
+              sinceBatch = 0;
+              await this.rest(batchCooldownMs(pacing, this.runtime.random), leaseKey, leaseToken);
+            } else {
+              await this.rest(nextGapMs(pacing, warm, this.runtime.random), leaseKey, leaseToken);
+            }
+          }
+
+          if (++sinceCounters >= COUNTER_EVERY) {
+            sinceCounters = 0;
+            await this.db.tx((tx) => this.progress.recompute(tx, orgId, broadcastId));
+          }
         }
       }
-    }
 
-    const final = await this.db.tx((tx) => this.progress.finish(tx, orgId, broadcastId));
-    this.logger.log({ orgId, broadcastId, final }, '[BCAST] dispatch finished');
-    return 'finished';
+      const final = await this.db.tx((tx) => this.progress.finish(tx, orgId, broadcastId));
+      this.logger.log({ orgId, broadcastId, final }, '[BCAST] dispatch finished');
+      return 'finished';
+    } finally {
+      await this.lease.release(leaseKey, leaseToken);
+    }
+  }
+
+  /** Waits `ms`, renewing the sender lease so a long cooldown does not give the number away. */
+  private async rest(ms: number, leaseKey: string, token: string): Promise<void> {
+    for (let left = ms; left > 0; left -= HEARTBEAT_MS) {
+      await this.runtime.sleep(Math.min(left, HEARTBEAT_MS));
+      await this.lease.renew(leaseKey, token);
+    }
   }
 
   /**

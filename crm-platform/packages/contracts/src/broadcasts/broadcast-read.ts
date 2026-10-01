@@ -128,6 +128,14 @@ export const broadcastDetailSchema = z.object({
   }),
   /** Top 8 failure reasons by count, the rest summed into `Other`. */
   failureReasons: z.array(z.object({ reason: z.string(), count: z.number().int() })),
+  /** Why a paused broadcast stopped, and when it can resume by itself (a daily cap); null when it is not paused. */
+  pause: z
+    .object({
+      reason: z.enum(['daily_cap', 'halt', 'manual']),
+      at: z.string().datetime(),
+      resumeAfter: z.string().datetime().nullable(),
+    })
+    .nullable(),
   events: z.object({
     createdAt: z.string().datetime(),
     scheduledAt: z.string().datetime().nullable(),
@@ -175,3 +183,8 @@ export const retryBroadcastResponseSchema = z.object({
   status: z.string(),
 });
 export type RetryBroadcastResponse = z.infer<typeof retryBroadcastResponseSchema>;
+
+export const resumeBroadcastResponseSchema = z.object({
+  status: z.string(),
+});
+export type ResumeBroadcastResponse = z.infer<typeof resumeBroadcastResponseSchema>;

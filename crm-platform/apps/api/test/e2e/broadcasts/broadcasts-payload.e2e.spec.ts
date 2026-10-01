@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { PacingRuntime } from '../../../src/modules/broadcasts/send-safety';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { BroadcastDispatchService } from '../../../src/modules/broadcasts/broadcast-dispatch.service';
 import {
@@ -28,6 +29,8 @@ let baileysSent: OutgoingMessage[] = [];
 
 beforeAll(async () => {
   h = await startHarness();
+  // No real waiting between messages: the gaps are checked in broadcasts-pacing.e2e.spec.ts.
+  h.app.get(PacingRuntime).sleep = () => Promise.resolve();
   api = new Api(h);
   registry = h.app.get(EngineSenderRegistry);
   dispatch = h.app.get(BroadcastDispatchService);

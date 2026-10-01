@@ -47,6 +47,19 @@ export class BroadcastsActionsController {
     return this.actions.retryFailed(id);
   }
 
+  @Post(':id/resume')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('bcast.broadcasts.resume')
+  @ApiOperation({
+    summary: 'Resume a paused broadcast where it stopped',
+    description:
+      '409 BCAST_NOT_RESUMABLE unless the broadcast is paused. Unsent recipients are still pending, so nobody is messaged twice.',
+  })
+  resume(@Param('id', ParseUUIDPipe) id: string) {
+    return this.actions.resume(id);
+  }
+
   @Get(':id/export')
   @RequirePermission('bcast.broadcasts.export')
   @ApiOperation({ summary: 'Download the recipients as CSV (streamed)' })

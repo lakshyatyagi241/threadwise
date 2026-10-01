@@ -9,6 +9,13 @@ import { BroadcastsController } from './broadcasts.controller';
 import { LinkRedirectController } from './tracking/link-redirect.controller';
 import { LinkRedirectService } from './tracking/link-redirect.service';
 import { LinkTracker } from './tracking/link-tracker';
+import {
+  CapTally,
+  DefaultPacingSettings,
+  PACING_SETTINGS,
+  PacingRuntime,
+  SenderLease,
+} from './send-safety';
 import { BroadcastsActionsController } from './broadcasts-actions.controller';
 import { BroadcastsActionsService } from './broadcasts-actions.service';
 import { BroadcastsReadController } from './broadcasts-read.controller';
@@ -52,6 +59,10 @@ import {
     BroadcastsReadService,
     BroadcastsActionsService,
     LinkTracker,
+    PacingRuntime,
+    CapTally,
+    SenderLease,
+    { provide: PACING_SETTINGS, useClass: DefaultPacingSettings },
     LinkRedirectService,
     BroadcastsReadRepository,
     BroadcastProgressService,

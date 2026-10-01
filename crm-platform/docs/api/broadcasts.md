@@ -186,3 +186,24 @@ last hour, stamps first and last click, address and user agent, and writes the o
 `broadcasts.clicked_count` is the number of **contacts** who clicked: it goes up the first time any of a contact's links in
 the broadcast is tapped. The detail shows `counts.clicked` and `pct.clicked` (contacts who clicked over delivered); the
 summary tiles show the clicked total; the recipients list shows each contact's clicks and last click.
+
+## Pacing, the daily cap, pause and resume (TW-BCAST-022)
+
+The sender sends to one recipient at a time, the way Reference's Node loop did, and paces itself.
+
+- **Gap.** After each message it waits the `msg_gap` setting (default 3 s) plus or minus 20%, so 2.4 to 3.6 s. A warming number
+  uses its own range instead (never under 1 s). No wait after the last recipient, and none for a recipient without a number.
+- **Batches.** When they are on and the audience is bigger than one batch (default 50), it rests `bw_msg_gap` minutes
+  (default 5, plus or minus 20%) after each full batch. A long rest is taken in short beats that keep the sender's lease alive.
+- **Daily cap.** On the unofficial engine a number sends at most `baileys_daily_cap` messages per UTC day (default 4000), tallied
+  in Redis, so every worker shares it and a restart does not reset it. At the cap the broadcast becomes `paused` with
+  `{ reason: "daily_cap", resumeAfter: <next midnight UTC> }`, and nobody is lost: the unsent recipients stay `pending`.
+- **One run per sender.** Two broadcasts through the same number would break the gaps its quality depends on, so a second run is
+  put back for 15 seconds and tries again. The lease expires by itself if a worker dies.
+- **Pause reasons.** `daily_cap`, `halt` (the emergency halt) and `manual`. The detail shows `pause` while paused.
+- **Resume.** `POST /v2/broadcasts/:id/resume` (permission `bcast.broadcasts.resume`, `Idempotency-Key`): 200 `{ status: "processing" }`
+  for a paused broadcast, 409 `BCAST_NOT_RESUMABLE` for any other. It carries on where it stopped. The worker also resumes by
+  itself, every 60 seconds, a daily-cap pause after its `resumeAfter` and a halt pause once the halt is lifted.
+
+The pacing numbers (`msg_gap`, batches, the cap) are Reference's defaults until the settings domain exposes them; they sit behind
+`PACING_SETTINGS`. The clock and the dice of a run are injectable (`PacingRuntime`), which is how the tests run instantly.

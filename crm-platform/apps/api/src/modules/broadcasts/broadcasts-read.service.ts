@@ -60,6 +60,17 @@ const toListItem = (r: BroadcastReadRow) => ({
   templateName: r.templateName,
 });
 
+/** The pause note kept on a paused broadcast, or null. */
+const pauseOf = (log: unknown) => {
+  const p = (log as { pause?: { reason?: string; at?: string; resumeAfter?: string } } | null)
+    ?.pause;
+  if (!p || !p.reason || !p.at) return null;
+  const reason = ['daily_cap', 'halt', 'manual'].includes(p.reason)
+    ? (p.reason as 'daily_cap' | 'halt' | 'manual')
+    : 'manual';
+  return { reason, at: p.at, resumeAfter: p.resumeAfter ?? null };
+};
+
 const recipientName = (r: RecipientReadRow) =>
   r.contactName?.trim() ||
   [r.firstName, r.lastName].filter(Boolean).join(' ').trim() ||
@@ -189,6 +200,7 @@ export class BroadcastsReadService {
           read: curve.read,
         },
         failureReasons: failureHistogram(failures),
+        pause: pauseOf(b.messagesLog),
         events: {
           createdAt: b.createdAt.toISOString(),
           scheduledAt: b.scheduledAt?.toISOString() ?? null,
