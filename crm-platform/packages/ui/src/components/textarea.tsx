@@ -1,7 +1,7 @@
-import type { TextareaHTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
 import { cn } from '../cn';
 
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps extends ComponentProps<'textarea'> {
   invalid?: boolean;
 }
 

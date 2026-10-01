@@ -7,5 +7,6 @@ export const nav: NavItem[] = [
     labelKey: 'auth-registration-security.account.nav.title',
     href: '/account',
     order: 90,
+    icon: 'settings',
   },
 ];

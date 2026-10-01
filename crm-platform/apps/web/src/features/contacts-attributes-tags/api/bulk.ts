@@ -1,0 +1,106 @@
+'use client';
+
+import { BULK_IDS_MAX } from '@crm/contracts';
+import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
+import type { BulkTarget } from '../lib/selection';
+import { contactFilterBody } from './contacts';
+import { bulkSelectionResultSchema, dedupePreviewSchema, dedupeResultSchema } from './schemas';
+
+/**
+ * Bulk actions over a selection (WD-CON-019..025). A target is explicit ids or the saved filter behind
+ * "select all N matching"; the API resolves a filter itself, so every action works for both. One request per
+ * action, one result shape: how many matched, how many changed, which ones failed.
+ */
+
+/** The `ids` / `filter` half of every bulk body. */
+export function selectionBody(target: BulkTarget) {
+  return target.kind === 'ids' ? { ids: target.ids } : { filter: contactFilterBody(target.filter) };
+}
+
+export interface BulkOutcome {
+  matched: number;
+  changed: number;
+  failed: number;
+}
+
+/** Explicit id lists are capped per request; a longer one is sent in slices and the outcomes added up. */
+async function run(path: string, target: BulkTarget, extra: object = {}): Promise<BulkOutcome> {
+  const bodies =
+    target.kind === 'ids' && target.ids.length > BULK_IDS_MAX
+      ? Array.from({ length: Math.ceil(target.ids.length / BULK_IDS_MAX) }, (_, i) => ({
+          ids: target.ids.slice(i * BULK_IDS_MAX, (i + 1) * BULK_IDS_MAX),
+        }))
+      : [selectionBody(target)];
+  const total: BulkOutcome = { matched: 0, changed: 0, failed: 0 };
+  for (const body of bodies) {
+    const r = await apiFetch(path, {
+      method: 'POST',
+      body: { ...body, ...extra },
+      schema: bulkSelectionResultSchema,
+    });
+    total.matched += r.matched;
+    total.changed += r.changed;
+    total.failed += r.failedCount;
+  }
+  return total;
+}
+
+export const bulkDelete = (target: BulkTarget) => run('/contacts/bulk/delete', target);
+
+export const bulkGroupMembership = (
+  target: BulkTarget,
+  groupId: string,
+  action: 'add' | 'remove',
+) => run('/contacts/bulk/group', target, { groupId, action });
+
+/** By tag id, or by name (adding a name that matches no tag creates the tag). */
+export const bulkTag = (
+  target: BulkTarget,
+  action: 'add' | 'remove',
+  tag: { tagId?: string; name?: string },
+) => run('/contacts/bulk/tag', target, { action, ...tag });
+
+/**
+ * Exports as CSV. The API streams the file (at most 200,000 rows), so this reads the response as a blob rather than
+ * through the JSON client. Returns the file and the filename the server suggested.
+ */
+export async function exportContacts(
+  target: BulkTarget,
+  signal?: AbortSignal,
+): Promise<{ blob: Blob; filename: string }> {
+  const res = await fetch('/api/v2/contacts/export', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'text/csv, application/json',
+      'X-Request-Id': crypto.randomUUID(),
+      'Idempotency-Key': crypto.randomUUID(),
+    },
+    body: JSON.stringify({ ...selectionBody(target), bom: true }),
+    credentials: 'same-origin',
+    signal,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    let json: unknown;
+    try {
+      json = text ? JSON.parse(text) : undefined;
+    } catch {
+      json = undefined;
+    }
+    throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  }
+  const disposition = res.headers.get('content-disposition') ?? '';
+  const filename = /filename="?([^";]+)"?/.exec(disposition)?.[1] ?? 'contacts-export.csv';
+  return { blob: await res.blob(), filename };
+}
+
+// --- dedupe (WD-CON-025): preview the duplicate sets, then merge them into the oldest of each ---
+
+export const previewDuplicates = (signal?: AbortSignal) =>
+  apiFetch('/contacts/duplicates', { schema: dedupePreviewSchema, signal });
+
+/** Merges up to `maxSets` sets per call; the answer says how many are left, so callers loop until it is 0. */
+export const mergeDuplicates = (maxSets = 1000) =>
+  apiFetch('/contacts/dedupe', { method: 'POST', body: { maxSets }, schema: dedupeResultSchema });

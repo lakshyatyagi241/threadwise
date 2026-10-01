@@ -1,7 +1,11 @@
 # WaDesk port workspace
 
 Goal: rebuild every WaDesk feature in `crm-platform/` (NestJS, Postgres+RLS, Drizzle, BullMQ, Next.js), three people in parallel
-(Lakshya, Vedant, Punya). WaDesk is behavior reference only: never copy its code, views, assets, migrations or text.
+(Lakshya, Vedant, Punya). The project owner holds the license for WaDesk and has authorized using its source directly as the
+reference: read the Laravel code, views, JS/CSS, migrations and docs, and port them into NestJS and Next.js (same behavior, same
+data model, same screens and flows, same copy where it fits). The port is a rewrite in our stack, not a paste: translate the logic into
+our conventions (RLS, Drizzle, contracts, module boundaries); do not drop Laravel/PHP/Blade code into `crm-platform/`. Do not publish the
+WaDesk source itself outside the project.
 
 Start here: `crm-platform/docs/wadesk-port/README.md` (status, findings, decisions needed, next-session runbook).
 

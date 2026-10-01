@@ -76,7 +76,7 @@ up_infra() {
     say "infra containers are not healthy: running pnpm infra:up"
     ( cd "$repo" && pnpm infra:up >"$state/infra.log" 2>&1 ) || { say "pnpm infra:up failed, see $state/infra.log (first time here? run the setup skill)"; return 1; }
     for _ in $(seq 1 40); do
-      [ "$(docker inspect -f '{{.State.Health.Status}}' crm-postgres 2>/dev/null)" = healthy ] && [ "$(docker inspect -f '{{.State.Health.Status}}' crm-redis 2>/dev/null)" = healthy ] && return 0
+      [ "$(docker inspect -f '{{.State.Health.Status}}' crm-platform-postgres 2>/dev/null)" = healthy ] && [ "$(docker inspect -f '{{.State.Health.Status}}' crm-platform-redis 2>/dev/null)" = healthy ] && return 0
       sleep 2
     done
     say "infra did not become healthy in 80 s"; return 1

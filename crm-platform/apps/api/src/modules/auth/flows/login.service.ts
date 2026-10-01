@@ -93,7 +93,8 @@ export class LoginService {
     const policy = await this.policy.policy();
     const ip = normalizeIp(meta.ip) ?? 'unknown';
 
-    const org = await this.tenants.findOrgBySlug(req.orgSlug);
+    const slug = req.orgSlug ?? (await this.slugForEmail(req.email));
+    const org = slug ? await this.tenants.findOrgBySlug(slug) : null;
     if (!org || org.status !== 'active') {
       // Same work and same answer as a wrong password: no organization oracle.
       await this.passwords.verifyOrDummy(null, req.password);
@@ -382,6 +383,22 @@ export class LoginService {
   }
 
   // --- helpers ---------------------------------------------------------------------------------------------
+
+  /**
+   * Sign-in without a workspace: one matching account decides it. Several matches cannot be told
+   * apart before the password is checked, so the client is asked for the workspace (no list is returned).
+   */
+  private async slugForEmail(email: string): Promise<string | null> {
+    const slugs = await this.tenants.activeOrgSlugsForEmail(email);
+    if (slugs.length > 1) {
+      throw new AppError(
+        ERROR_CODES.AUTH_WORKSPACE_REQUIRED,
+        'This email is used in more than one workspace. Enter your workspace to continue.',
+        HttpStatus.CONFLICT,
+      );
+    }
+    return slugs[0] ?? null;
+  }
 
   private invalid(): AppError {
     return new AppError(
