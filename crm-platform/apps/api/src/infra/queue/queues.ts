@@ -24,6 +24,8 @@ export const QUEUES = {
   PARTITION_MAINTENANCE: 'partition-maintenance',
   /** Bulk import/export jobs — long-running, off the OLTP path. */
   BULK_JOBS: 'bulk-jobs',
+  /** Contact CSV imports above the synchronous size (TW-CON-027). Own queue: a huge file must not delay another bulk job. */
+  CON_IMPORT: 'con-import',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

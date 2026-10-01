@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { and, asc, desc, eq, gt, ilike, inArray, lt, or, sql, type SQL } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, lt, or, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { RecordScope } from '@crm/contracts';
 import { decodeCursor } from '../../../common/pagination/cursor';
+import {
+  contactConditions,
+  contactScopeCondition,
+  whereOf,
+  type ResolvedContactFilter,
+} from './contact-conditions';
 
 const { companies, contacts, teamMembers, users } = schema;
 
 export interface ContactRow {
   id: number;
+  /** created_at at microsecond precision (keyset cursor). */
+  createdAtIso?: string;
   uuid: string;
   displayId: string | null;
   name: string | null;
@@ -35,6 +43,8 @@ export interface ContactRow {
   faxNumber: string | null;
   lastActivityAt: Date | null;
   data: Record<string, unknown>;
+  source: string | null;
+  isUnsubscribed: boolean;
   isArchived: boolean;
   rowVersion: number;
   createdAt: Date;
@@ -45,14 +55,19 @@ export interface ListContactsFilter {
   limit: number;
   cursor?: string;
   order: 'asc' | 'desc';
-  q?: string;
-  ownerId?: number;
-  lifecycleStage?: string;
-  includeArchived: boolean;
+  filter: ResolvedContactFilter;
   /** Row visibility from the caller's RBAC grant. */
   scope: RecordScope;
   /** The caller — needed to resolve 'own' and 'team' scopes. */
   actorUserId: number | null;
+}
+
+/** A group or tag chip on a contact row. */
+export interface ContactChip {
+  contactId: number;
+  uuid: string;
+  name: string;
+  color: string | null;
 }
 
 /**
@@ -70,6 +85,8 @@ export class ContactsRepository {
     return {
       id: contacts.id,
       uuid: contacts.uuid,
+      // Full-precision created_at for the keyset cursor (a JS Date drops the microseconds).
+      createdAtIso: sql<string>`to_char(${contacts.createdAt} at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`,
       displayId: contacts.displayId,
       name: contacts.name,
       firstName: contacts.firstName,
@@ -96,6 +113,8 @@ export class ContactsRepository {
       faxNumber: contacts.faxNumber,
       lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
+      source: contacts.source,
+      isUnsubscribed: contacts.isUnsubscribed,
       isArchived: contacts.isArchived,
       rowVersion: contacts.rowVersion,
       createdAt: contacts.createdAt,
@@ -103,31 +122,13 @@ export class ContactsRepository {
     };
   }
 
-  /**
-   * Record scope, as a WHERE condition against `contacts.owner_id`. 'all'
-   * returns undefined (adds nothing); 'own' and 'team' narrow the query.
-   * A caller with no user id (should not happen on a real route) collapses
-   * to a predicate that matches nothing rather than to "everything".
-   */
+  /** See contactScopeCondition; kept here so existing callers read the same. */
   private scopeCondition(
     orgId: number,
     scope: RecordScope,
     actorUserId: number | null,
   ): SQL | undefined {
-    if (scope === 'all') return undefined;
-    if (scope === 'own') {
-      return actorUserId ? eq(contacts.ownerId, actorUserId) : sql`false`;
-    }
-    if (!actorUserId) return sql`false`;
-    return sql`
-      ${contacts.ownerId} IN (
-        SELECT tm2.user_id
-        FROM ${teamMembers} tm1
-        JOIN ${teamMembers} tm2
-          ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-        WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}
-      )
-    `;
+    return contactScopeCondition(orgId, scope, actorUserId);
   }
 
   /** Select + joins, without a WHERE — each caller adds its own. */
@@ -144,44 +145,27 @@ export class ContactsRepository {
 
   /** Returns `limit + 1` rows; the caller turns the extra one into `hasMore`. */
   async list(tx: Tx, orgId: number, filter: ListContactsFilter): Promise<ContactRow[]> {
-    const conditions: SQL[] = [eq(contacts.orgId, orgId)];
-
-    if (!filter.includeArchived) {
-      conditions.push(eq(contacts.isArchived, false));
-    }
-    if (filter.ownerId !== undefined) {
-      conditions.push(eq(contacts.ownerId, filter.ownerId));
-    }
-    if (filter.lifecycleStage) {
-      conditions.push(eq(contacts.lifecycleStage, filter.lifecycleStage));
-    }
-
-    if (filter.q) {
-      const pattern = `%${filter.q}%`;
-      const match = or(
-        ilike(contacts.name, pattern),
-        ilike(sql`${contacts.email}::text`, pattern),
-        ilike(contacts.phone, pattern),
-      );
-      if (match) conditions.push(match);
-    }
-
-    const scopeCondition = this.scopeCondition(orgId, filter.scope, filter.actorUserId);
-    if (scopeCondition) conditions.push(scopeCondition);
+    const conditions = contactConditions(
+      orgId,
+      filter.filter,
+      this.scopeCondition(orgId, filter.scope, filter.actorUserId),
+    );
 
     // Keyset boundary over the (created_at, id) tuple. Row-value comparison so
     // the planner can use the composite index directly.
     if (filter.cursor) {
       const cursor = decodeCursor(filter.cursor);
+      // Compare against the microsecond-precision instant, not the millisecond Date.
+      const bound = sql`${cursor.createdAtIso ?? cursor.createdAt.toISOString()}::timestamptz`;
       conditions.push(
         filter.order === 'desc'
           ? or(
-              lt(contacts.createdAt, cursor.createdAt),
-              and(eq(contacts.createdAt, cursor.createdAt), lt(contacts.id, cursor.id)),
+              sql`${contacts.createdAt} < ${bound}`,
+              and(sql`${contacts.createdAt} = ${bound}`, lt(contacts.id, cursor.id)),
             )!
           : or(
-              gt(contacts.createdAt, cursor.createdAt),
-              and(eq(contacts.createdAt, cursor.createdAt), gt(contacts.id, cursor.id)),
+              sql`${contacts.createdAt} > ${bound}`,
+              and(sql`${contacts.createdAt} = ${bound}`, gt(contacts.id, cursor.id)),
             )!,
       );
     }
@@ -197,6 +181,116 @@ export class ContactsRepository {
       .limit(filter.limit + 1);
 
     return rows as ContactRow[];
+  }
+
+  /** How many contacts match a filter ("Showing 1-50 of N"). */
+  async count(
+    tx: Tx,
+    orgId: number,
+    filter: ResolvedContactFilter,
+    scope: RecordScope,
+    actorUserId: number | null,
+  ): Promise<number> {
+    const where = whereOf(
+      contactConditions(orgId, filter, this.scopeCondition(orgId, scope, actorUserId)),
+    );
+    const rows = await tx.execute(sql`SELECT count(*)::int AS n FROM ${contacts} WHERE ${where}`);
+    return Number((rows.rows[0] as { n: number }).n);
+  }
+
+  /**
+   * The tiles and sidebar badges, in one pass: workspace-wide (a filter would defeat the
+   * point), but still inside the caller's record scope and, like the list, without archived rows.
+   */
+  async stats(
+    tx: Tx,
+    orgId: number,
+    scope: RecordScope,
+    actorUserId: number | null,
+  ): Promise<{
+    total: number;
+    subscribed: number;
+    unsubscribed: number;
+    noGroup: number;
+    imported: number;
+    groups: number;
+  }> {
+    const where = whereOf(
+      contactConditions(
+        orgId,
+        { includeArchived: false, tagMode: 'any' },
+        this.scopeCondition(orgId, scope, actorUserId),
+      ),
+    );
+    const rows = await tx.execute(sql`
+      SELECT count(*)::int AS total,
+             count(*) FILTER (WHERE NOT ${contacts.isUnsubscribed})::int AS subscribed,
+             count(*) FILTER (WHERE ${contacts.isUnsubscribed})::int AS unsubscribed,
+             count(*) FILTER (WHERE ${contacts.importJobId} IS NOT NULL)::int AS imported,
+             count(*) FILTER (WHERE NOT EXISTS (
+               SELECT 1 FROM contact_group_members m
+               WHERE m.org_id = ${orgId} AND m.contact_id = ${contacts.id}
+             ))::int AS no_group
+      FROM ${contacts} WHERE ${where}
+    `);
+    const r = rows.rows[0] as {
+      total: number;
+      subscribed: number;
+      unsubscribed: number;
+      imported: number;
+      no_group: number;
+    };
+    const g = await tx.execute(
+      sql`SELECT count(*)::int AS n FROM contact_groups WHERE org_id = ${orgId}`,
+    );
+    return {
+      total: Number(r.total),
+      subscribed: Number(r.subscribed),
+      unsubscribed: Number(r.unsubscribed),
+      noGroup: Number(r.no_group),
+      imported: Number(r.imported),
+      groups: Number((g.rows[0] as { n: number }).n),
+    };
+  }
+
+  /** Group chips for a page of contacts, one query. */
+  async groupChips(tx: Tx, orgId: number, contactIds: number[]): Promise<ContactChip[]> {
+    if (contactIds.length === 0) return [];
+    const rows = await tx.execute(sql`
+      SELECT m.contact_id AS "contactId", g.uuid, g.name, g.color
+      FROM contact_group_members m
+      JOIN contact_groups g ON g.org_id = m.org_id AND g.id = m.group_id
+      WHERE m.org_id = ${orgId}
+        AND m.contact_id IN (${sql.join(
+          contactIds.map((id) => sql`${id}`),
+          sql`, `,
+        )})
+      ORDER BY lower(g.name)
+    `);
+    return rows.rows.map((r) => ({
+      ...(r as unknown as ContactChip),
+      contactId: Number((r as { contactId: number }).contactId),
+    }));
+  }
+
+  /** Tag chips for a page of contacts, one query. */
+  async tagChips(tx: Tx, orgId: number, contactIds: number[]): Promise<ContactChip[]> {
+    if (contactIds.length === 0) return [];
+    const rows = await tx.execute(sql`
+      SELECT ct.contact_id AS "contactId", t.uuid, t.name::text AS name, t.color
+      FROM contact_tags ct
+      JOIN tags t ON t.org_id = ct.org_id AND t.id = ct.tag_id
+      WHERE ct.org_id = ${orgId}
+        AND ct.contact_id IN (${sql.join(
+          contactIds.map((id) => sql`${id}`),
+          sql`, `,
+        )})
+      ORDER BY lower(t.name::text)
+    `);
+    return rows.rows.map((r) => ({
+      ...(r as unknown as ContactChip),
+      contactId: Number((r as { contactId: number }).contactId),
+    }));
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<ContactRow | undefined> {
@@ -232,6 +326,7 @@ export class ContactsRepository {
       emailSubscriptionStatus?: string | null;
       emailConfirmed?: boolean;
       faxNumber?: string | null;
+      source?: string | null;
       data: Record<string, unknown>;
       displayId: string;
       createdBy: number | null;
@@ -259,6 +354,7 @@ export class ContactsRepository {
         emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
+        source: values.source ?? null,
         data: values.data,
         displayId: values.displayId,
         createdBy: values.createdBy,
@@ -378,18 +474,12 @@ export class ContactsRepository {
   ): Promise<
     Array<{ id: string; name: string | null; email: string | null; phone: string | null }>
   > {
-    const conditions: SQL[] = [eq(contacts.orgId, orgId), eq(contacts.isArchived, false)];
-    if (filter.q) {
-      const pattern = `%${filter.q}%`;
-      const match = or(
-        ilike(contacts.name, pattern),
-        ilike(sql`${contacts.email}::text`, pattern),
-        ilike(contacts.phone, pattern),
-      );
-      if (match) conditions.push(match);
-    }
-    const scopeCondition = this.scopeCondition(orgId, filter.scope, filter.actorUserId);
-    if (scopeCondition) conditions.push(scopeCondition);
+    // The same word-by-word search as the list, so a picker finds what the list finds.
+    const conditions = contactConditions(
+      orgId,
+      { q: filter.q, includeArchived: false, tagMode: 'any' },
+      this.scopeCondition(orgId, filter.scope, filter.actorUserId),
+    );
 
     const rows = await tx
       .select({

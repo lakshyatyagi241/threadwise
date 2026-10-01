@@ -1,0 +1,281 @@
+# API: contacts list and filters, contact groups, bulk actions, CSV import, duplicates, tags and attributes
+
+Domain `con` (TW-CON-001 .. 049). Base path `/v2`. Errors are `application/problem+json` with a stable `code` and a
+`requestId`; the codes this domain adds are `CON_*` in `@crm/contracts` `common/errors.ts`. Request and response shapes live in
+`packages/contracts/src/contacts-attributes-tags/` (and `crm/contact.ts`, `crm/tag.ts`). Live docs: `/docs`. Every id on the wire is a
+uuid. Decisions where the port differs from Reference: "Port decisions" in
+`docs/threadwise-port/inventory/contacts-attributes-tags.md`.
+
+All routes need a staff bearer token. The capability each one needs is in brackets; "scope" means the caller's record scope
+(`all`, `team`, `own`) is applied to which contacts the call can see or change. Routes under `/contacts/...` that are literal words
+(`stats`, `duplicates`, `import`, `bulk/...`, `export`, `dedupe`) are registered before `/contacts/:id`.
+
+## Contact list (extends `GET /contacts`)
+
+### `GET /contacts` [`record.contacts.read`, scope]
+
+Query (all optional, all filters combine with AND):
+
+| Param                                                              | Meaning                                                                                                              |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `limit` 1-1000 (50), `cursor`, `order` (`desc`)                    | cursor pagination over `(created_at, id)`, newest first                                                              |
+| `q`                                                                | every word must match the name, first/last name, email or phone; a numeric word also matches the digits of the phone |
+| `ownerId`, `lifecycleStage`, `status`, `source`, `includeArchived` | as before; `status`/`source` are exact                                                                               |
+| `groupId` / `noGroup=true`                                         | members of one group / contacts in no group (not together)                                                           |
+| `tagIds=a,b` (or `tagId=a`) + `tagMode=any\|all`                   | contacts carrying any / all of these tags                                                                            |
+| `imported=true\|false`                                             | created by a CSV import, or not                                                                                      |
+| `unsubscribed=true\|false`                                         | opted out / subscribed                                                                                               |
+| `expand=groups,tags`                                               | adds the chips of each row                                                                                           |
+| `includeTotal=true`                                                | adds `meta.total`, the count of every contact matching the filter                                                    |
+
+```json
+// GET /v2/contacts?q=aarav&groupId=2f6c…&expand=groups&includeTotal=true&limit=12
+{
+  "data": [
+    {
+      "id": "9b1e…",
+      "name": "Aarav Sharma",
+      "phone": "+919812345678",
+      "email": "aarav@example.com",
+      "source": "import",
+      "isUnsubscribed": false,
+      "status": null,
+      "customFields": {},
+      "groups": [{ "id": "2f6c…", "name": "VIP", "color": "#22C55E" }],
+      "rowVersion": 1,
+      "…": "…"
+    }
+  ],
+  "page": { "nextCursor": "MjAyNi0xMC0wMVQwOTowMDowMC4wMDBafDQy", "hasMore": false, "limit": 12 },
+  "meta": { "total": 1 }
+}
+```
+
+A uuid in a filter that is not in this workspace (a deleted group, a stale tag, another workspace's owner) matches nothing; it never
+widens the result. `limit` above 1000, a `tagId` that is not a uuid, or `groupId` with `noGroup` is 422 `VALIDATION_FAILED`.
+
+### `GET /contacts/stats` [`record.contacts.read`, scope]
+
+Workspace-wide, ignores any filter: `{ "total": 10, "groups": 3, "subscribed": 8, "unsubscribed": 2, "noGroup": 7, "grouped": 3, "imported": 0 }`.
+
+### `POST /contacts`, `PATCH /contacts/:id` (existing)
+
+New in this domain: `source` (<= 128), the phone is canonicalised (E.164) and written as the same identity key an import uses (an existing
+match is returned, 201), the display name is the typed `name` else `firstName lastName` (never a title), and a create at the plan's contact
+cap is 422 `PLAN_LIMIT_REACHED` (`errors`: `limit`, `used`, `limitValue`, `upgradeUrl`).
+
+### `GET /contacts/:id/groups`, `PUT /contacts/:id/groups` [`record.contacts.read` / `record.contacts.update`, scope]
+
+`PUT { "groupIds": ["2f6c…"] }` replaces the contact's groups with exactly that array (an empty array removes the last one). Returns
+`[{ "id", "name", "color" }]`. Unknown group: 404. Emits `contact.group_added` / `contact.group_removed` per change.
+
+## Contact groups
+
+### `GET /contact-groups` [`record.contact-groups.read`]
+
+`limit`, `cursor`, `q` (name). Newest first, each with the SQL member count:
+`{ "data": [ { "id", "name", "note", "color", "memberCount", "rowVersion", "createdAt", "updatedAt" } ], "page": { … } }`.
+
+### `GET /contact-groups/:id` [`record.contact-groups.read`] · `POST /contact-groups` [`record.contact-groups.create`]
+
+```json
+// POST { "name": "VIP", "note": "Top accounts", "color": "#7C3AED" }
+// 201 { "id": "2f6c…", "name": "VIP", "note": "Top accounts", "color": "#7C3AED", "memberCount": 0, "rowVersion": 1, "existing": false, … }
+// the same name again, any case or padding: 200 with the existing group untouched
+// 200 { "id": "2f6c…", "name": "VIP", …, "existing": true }
+```
+
+Name 1-191 (trimmed), note <= 500, colour `#RRGGBB`. Audit `insert` and outbox `contact_group.created` in the same transaction.
+
+### `PATCH /contact-groups/:id` [`record.contact-groups.update`]
+
+`{ "name"?, "note"?, "color"?, "rowVersion" }`. Absent keeps, `null` clears note and colour. 409 `ROW_VERSION_CONFLICT` for a stale version;
+409 `CON_GROUP_NAME_TAKEN` (with `errors:[{path:"existingId"}]`) for a name another group has.
+
+### `DELETE /contact-groups/:id` [`record.contact-groups.delete`] → 204
+
+Contacts stay and lose only the membership (foreign-key cascade). Audit `delete` and `contact_group.deleted` (`detachedContacts`).
+
+## Bulk actions (selection: ids OR a filter)
+
+Every body below carries a **selection**: either `"ids": [uuid…]` (1-5,000) or `"filter": { …same fields as the list, as JSON… }` with
+optional `"excludeIds"` (the rows un-ticked after "select all matching"), never both. A filter that matches more than 50,000 contacts is 422
+`CON_SELECTION_TOO_LARGE`.
+
+```json
+// 200 — same shape for every action
+{
+  "matched": 40,
+  "changed": 38,
+  "succeeded": [],
+  "failed": [{ "id": "…", "code": "NOT_FOUND", "message": "Contact not found" }],
+  "failedCount": 1
+}
+```
+
+`matched` is what the selection resolved to inside the caller's scope; `changed` is what actually changed (already in the group, already
+tagged, ...). `succeeded` lists uuids for an `ids` selection and is empty for a filter. `failed` (at most 100 entries, `failedCount` is the real
+number) holds ids that do not exist in this workspace or are outside the caller's scope.
+
+| Route                        | Needs                           | Extra body                                           | Effect                                                                                                                                                                                                                              |
+| ---------------------------- | ------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /contacts/bulk/delete` | `record.contacts.delete`, scope |                                                      | hard delete in batches of 500; one audit row and one `contact.deleted` event per contact                                                                                                                                            |
+| `POST /contacts/bulk/group`  | `record.contacts.update`, scope | `groupId`, `action: add\|remove`                     | set-based; one `contact.group_added\|removed` per contact that changed, one audit row and one `contact_group.members_changed` for the action. Group of another workspace: 404                                                       |
+| `POST /contacts/bulk/tag`    | `record.contacts.update`, scope | `action: add\|remove`, `tagId` and/or `name` (<= 64) | by id, else by name (any case). `add` with an unknown name creates the tag (needs `record.tags.create`, counts against the plan tag limit, 422 `PLAN_LIMIT_REACHED`); `remove` never creates. Neither found: 422 `CON_TAG_REQUIRED` |
+| `POST /contacts/export`      | `record.contacts.export`, scope | `bom` (true)                                         | streams `text/csv`, see below; audit `export`                                                                                                                                                                                       |
+
+### Export format
+
+Header: `name,first_name,last_name,phone,country_code,email,groups,tags,language,title,address,memo,status,source,unsubscribed,created_at`
+then `attr:<key>` per active attribute. Newest first. `phone` is E.164; `groups` and `tags` are names joined with `", "`; free-text cells starting
+with `= + - @` get a leading `'`; a UTF-8 BOM leads the file unless `bom` is false. At most 200,000 rows (422 `CON_EXPORT_TOO_LARGE`: narrow the filter).
+
+## Duplicates
+
+### `GET /contacts/duplicates` [`record.contacts.merge` at scope `all`]
+
+`{ "totalSets": 1, "totalDuplicates": 2, "sets": [ { "phone": "+919812345678", "survivorId": "9b1e…", "duplicateIds": ["…", "…"] } ] }` (first 100 sets).
+Contacts with the same canonical phone are duplicates; the oldest survives.
+
+### `POST /contacts/dedupe` [`record.contacts.merge` at scope `all`]
+
+`{ "maxSets": 1000 }` → `{ "mergedSets": 1, "removed": 2, "remainingSets": 0 }`. The survivor takes the fields it lacks, the union of groups and tags, the
+attribute values it lacks, keeps any opt-out, and receives every row that pointed at a duplicate. Audit `merge` on the survivor and `delete` per duplicate;
+events `contact.merged` and `contact.deleted` (`mergedInto`). Other scopes: 403 `CON_MERGE_SCOPE_REQUIRED`.
+
+## CSV import
+
+Needs `record.contacts.import` and `record.contacts.create`; creating groups or tags the file names needs `record.contact-groups.create` /
+`record.tags.create` (403 otherwise). Upload as `multipart/form-data`: `file` (.csv or .txt, up to 20 MB, 200,000 rows; UTF-8, else Windows-1252;
+comma, semicolon, tab or pipe) and optionally `options` (a JSON string):
+
+```json
+{
+  "mapping": { "phone": 1, "name": 0, "email": null },
+  "delimiter": ";",
+  "defaultCountryCode": "+91",
+  "status": "customer",
+  "source": "Spring 2026",
+  "groupId": "2f6c…",
+  "tagIds": ["5d3a…"],
+  "triggerAutomations": false
+}
+```
+
+Columns are detected from the header (name, first_name, last_name, mobile/phone/whatsapp..., email, country_code, group(s)/list(s), tags, language, title,
+address, notes/memo, status, source); `mapping` (field -> column index, `null` to ignore) overrides it. A phone and some name are required.
+
+### `GET /contacts/import/sample` → `text/csv` attachment `contacts-sample.csv` (3 lines, Reference's header)
+
+### `POST /contacts/import/preview` → 200, writes nothing
+
+```json
+{
+  "fileName": "people.csv",
+  "delimiter": ",",
+  "headers": ["Phone", "Name"],
+  "detected": { "phone": 0, "name": 1 },
+  "mapping": { "phone": 0, "name": 1, "email": null, "…": null },
+  "missingRequired": [],
+  "sampleRows": [{ "Phone": "+919812300500", "Name": "Person 0" }],
+  "totals": {
+    "rows": 8,
+    "valid": 8,
+    "invalid": 0,
+    "duplicateInFile": 0,
+    "willCreate": 8,
+    "willUpdate": 0
+  },
+  "invalidSamples": [{ "row": 5, "reason": "missing_name", "values": { "Phone": "…" } }],
+  "newGroups": ["Brand new group"],
+  "newTags": ["Hot"],
+  "quota": { "limit": 500, "used": 120, "remaining": 380 },
+  "runsAsJob": false
+}
+```
+
+### `POST /contacts/import`
+
+Plan check first (422 `PLAN_LIMIT_REACHED` at the cap, before the file is read), then validation (422 `CON_IMPORT_FILE_INVALID`: not text, empty, header only, a
+required column missing; 413 over the size limit). Up to 1,000 data rows run inside the request → **200**; larger files are queued on `con-import` → **202**.
+
+```json
+{
+  "id": "c0de…",
+  "status": "completed",
+  "fileName": "people.csv",
+  "totalRows": 4,
+  "processedRows": 4,
+  "created": 2,
+  "updated": 0,
+  "invalid": 2,
+  "duplicatesInFile": 0,
+  "limitExceeded": 0,
+  "error": null,
+  "startedAt": "…",
+  "finishedAt": "…",
+  "createdAt": "…"
+}
+```
+
+Each outcome has its own counter: `created`, `updated` (an existing contact matched by canonical phone; the oldest of several), `duplicatesInFile` (a repeat of a
+number earlier in the file, merged into it), `invalid` (rejected rows), `limitExceeded` (new contacts the plan cap stopped). Created contacts get `source` (the knob,
+else the row's, else `import`), `status`, the owner (the importer) and `import_job_id`; updated ones keep their status and source but join the knob group and tags.
+
+### `GET /contacts/import/jobs`, `GET /contacts/import/jobs/:id` → the job above (poll a 202 here: `queued` → `running` → `completed` | `failed` with `error`)
+
+### `GET /contacts/import/jobs/:id/rejects` → `text/csv`: `row,reason,<original columns>` for up to 1,000 rejected rows
+
+Reasons: `missing_name`, `missing_phone`, `invalid_phone`, `invalid_email`, `group_name_too_long`, `tag_name_too_long`, `plan_limit_reached`.
+
+## Tags (extends `/tags`)
+
+| Route                              | Needs                           | Notes                                                                                                                                                                                     |
+| ---------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /tags?includeCounts=true`     | `record.tags.read`              | adds `contactCount` to each tag                                                                                                                                                           |
+| `POST /tags`                       | `record.tags.create`            | name 1-64; unique ignoring case (409 `CON_TAG_NAME_TAKEN`); counts against the plan tag limit (422 `PLAN_LIMIT_REACHED`)                                                                  |
+| `POST /contacts/:id/tags`          | `record.contacts.update`, scope | `{ "tagId"?, "name"? }`: by id, else by name (created when new: also needs `record.tags.create`). Idempotent; 201 with the tag; `contact.tag_added` once. Neither: 422 `CON_TAG_REQUIRED` |
+| `DELETE /contacts/:id/tags/:tagId` | `record.contacts.update`, scope | 204; `contact.tag_removed` only when something was removed                                                                                                                                |
+| `GET /contacts/:id/tags`           | `record.contacts.read`, scope   | the contact's tags                                                                                                                                                                        |
+
+## Attributes (merge variables)
+
+Rows of the contact field registry (`fields`, `module_key = "contacts"`, section "Custom attributes"). Management needs the Contact Properties capabilities.
+
+| Route                                                         | Needs                              | Notes                                                                                                                                                                                 |
+| ------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /attributes?q&status=all\|active\|inactive&limit&cursor` | `record.contact-properties.read`   | `{ data, page, counts: { all, active, inactive } }`; counts are workspace-wide                                                                                                        |
+| `GET /attributes/:id`                                         | `record.contact-properties.read`   |                                                                                                                                                                                       |
+| `POST /attributes`                                            | `record.contact-properties.create` | `{ "name", "key", "type"?, "defaultValue"?, "description"?, "isActive"? }`; key `^[a-z][a-z0-9_]{0,63}$`; reserved keys 422 `CON_ATTRIBUTE_KEY_RESERVED`; taken 409 `FIELD_KEY_TAKEN` |
+| `PATCH /attributes/:id`                                       | `record.contact-properties.update` | `{ "name"?, "defaultValue"?, "description"?, "isActive"?, "rowVersion" }`; the key and type never change; `null`/`""` clears                                                          |
+| `DELETE /attributes/:id?force=true`                           | `record.contact-properties.delete` | 204; contacts keep their values; 409 `CON_ATTRIBUTE_IN_USE` (`errors:[{path:"contacts"}]`) until `force=true`                                                                         |
+| `GET /attributes/picker`                                      | `record.contacts.read`             | `{ system: [10 built-in tokens], custom: [active attributes with `value`] }`                                                                                                          |
+| `GET /attributes/catalog`                                     | `record.contacts.read`             | groups `contact`, `custom_field` (keys found on recent contacts), `workspace`, `system`; each key once, with a sample from the newest contact                                         |
+| `POST /attributes/resolve`                                    | `record.contacts.read`, scope      | `{ "template", "contactId"? }` → `{ "rendered", "tokens": [ { "token", "key", "resolved", "source" } ] }`                                                                             |
+
+```json
+// POST /v2/attributes/resolve { "template": "Hi {{Customer Name}} from {{city}}{{nope}}", "contactId": "9b1e…" }
+{
+  "rendered": "Hi Aarav Sharma from Pune",
+  "tokens": [
+    { "token": "{{Customer Name}}", "key": "name", "resolved": true, "source": "contact" },
+    { "token": "{{city}}", "key": "city", "resolved": true, "source": "contact_attribute" },
+    { "token": "{{nope}}", "key": "nope", "resolved": false, "source": "unresolved" }
+  ]
+}
+```
+
+Resolution order for each `{{token}}` (key normalised, aliases applied): contact column, the contact's own attribute value, the active attribute's default,
+system token (`today`, `business_name`, `company_name`). Unresolved is the empty string. Other domains call `MergeTagService` (exported by the CRM barrel);
+`validatePositionalPlaceholders` (contracts) is the `{{1}}..{{n}}` gap check for the templates and campaign save paths.
+
+## Permissions added
+
+`record.contact-groups.read|create|update|delete`, `record.contacts.import` (migration `20261002100200_con_permissions`; the Admin preset of every existing and new
+workspace has them). Everything else reuses `record.contacts.*`, `record.tags.*` and `record.contact-properties.*`.
+
+## Events (outbox)
+
+`contact_group.created|updated|deleted|members_changed`, `contact.group_added|group_removed|tag_added|tag_removed`, `tag.contacts_changed`,
+`contact.merged`, `contact.deleted` (also from merges, with `mergedInto`), `contact.exported`, `contact.import_started|import_completed`, and (only with
+`triggerAutomations`) `contact.created` per imported contact.

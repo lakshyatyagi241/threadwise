@@ -7,5 +7,6 @@ export const nav: NavItem[] = [
     labelKey: 'dashboards-analytics-charts.nav.title',
     href: '/dashboard',
     order: 0,
+    icon: 'home',
   },
 ];

@@ -92,6 +92,21 @@ export class TenantDirectory {
     });
   }
 
+  /** Slugs of active organizations holding an active user with this email (login without a workspace). Max 2 rows: only "none, one or many" matters. */
+  async activeOrgSlugsForEmail(email: string): Promise<string[]> {
+    return this.db.privileged(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT o.slug
+        FROM users u
+        JOIN organizations o ON o.id = u.org_id
+        WHERE u.email = ${email} AND u.status = 'active' AND o.status = 'active'
+        ORDER BY o.id
+        LIMIT 2
+      `);
+      return (res.rows as unknown as Array<{ slug: string }>).map((r) => r.slug);
+    });
+  }
+
   async slugExists(slug: string): Promise<boolean> {
     return this.db.privileged(async (tx) => {
       const res = await tx.execute(

@@ -6,7 +6,12 @@
  * outside fails the architecture check.
  */
 export { CrmModule } from './crm.module';
-export { ContactsService, ContactsRepository, toContactResponse } from './contacts';
+export {
+  ContactsService,
+  ContactsRepository,
+  ContactQuotaService,
+  toContactResponse,
+} from './contacts';
 export type { ContactRow } from './contacts';
 export {
   FieldSectionsService,
@@ -68,3 +73,16 @@ export {
   toContactMeetingResponse,
 } from './contact-meetings';
 export type { ContactMeetingRow } from './contact-meetings';
+export {
+  ContactGroupsService,
+  ContactGroupsRepository,
+  toContactGroupResponse,
+} from './contact-groups';
+export type { ContactGroupRow } from './contact-groups';
+export { ContactBulkService } from './contact-bulk';
+export { ContactImportEngine, ContactImportProcessor } from './contact-import';
+export { ContactImportWorkerModule } from './contact-import/contact-import-worker.module';
+export type { ContactImportJobData } from './contact-import';
+export { ContactDedupeService } from './contact-dedupe';
+export { AttributesService, MergeTagService, renderMergeTags, resolveToken } from './attributes';
+export type { MergeContact, MergeContext } from './attributes';

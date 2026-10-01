@@ -187,6 +187,7 @@
         "socialNoEmail": "That account did not share an email address. Use email and password instead.",
         "ipBlocked": "Sign-in is not allowed from this network.",
         "workspaceUnavailable": "That workspace is not available.",
+        "workspaceRequired": "This email is used in more than one workspace. Enter your workspace to continue.",
         "validation": "Please check the highlighted fields.",
         "sessionExpired": "Your session expired for security. Reload the page and try again.",
         "reload": "Reload the page",
