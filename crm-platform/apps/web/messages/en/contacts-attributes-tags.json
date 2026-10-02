@@ -149,7 +149,23 @@
       "next": "Next",
       "totalCount": "Total count",
       "recount": "Count again",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "segmentApprox": "about {count, number}",
+      "quickHeading": "Contacts",
+      "segmentFallback": "Segment",
+      "segmentSearch": "Search groups and segments",
+      "segmentsHeading": "Segments",
+      "segmentsLoading": "Loading segments",
+      "segmentsFailed": "Segments could not be loaded.",
+      "segmentsRetry": "Try again",
+      "segmentsNone": "No segments yet.",
+      "segmentsCreate": "Create one",
+      "segmentNoMatch": "No group or segment matches your search.",
+      "saveAsSegment": "Save as segment",
+      "saveAsSegmentHint": "Turn the filters you have on into a segment that keeps itself up to date",
+      "segmentInvalid": "{count, plural, one {# condition of this segment points at something that was deleted, so it matches fewer contacts than it should.} other {# conditions of this segment point at something that was deleted, so it matches fewer contacts than it should.}}",
+      "segmentFix": "Fix the rules",
+      "approxTotal": "about {total, number}"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -1058,6 +1074,26 @@
       "cancel": "Cancel",
       "close": "Close",
       "contactFallback": "this contact"
+    },
+    "segmentSave": {
+      "eyebrow": "New segment",
+      "title": "Save these filters as a segment",
+      "close": "Close",
+      "intro": "A segment keeps itself up to date: contacts join and leave as they start or stop matching these filters. You can refine the rules next.",
+      "name": "Segment name",
+      "namePlaceholder": "For example: Qualified VIPs",
+      "nameRequired": "Give the segment a name.",
+      "nameTaken": "Another segment already has this name.",
+      "visibility": "Who can see it",
+      "private": "Private",
+      "shared": "Shared",
+      "privateHint": "Only you, and people who can edit every segment.",
+      "sharedHint": "Everyone who can view segments.",
+      "cancel": "Cancel",
+      "save": "Save and open rules",
+      "created": "Created the segment \"{name}\". Refine its rules below.",
+      "forbidden": "You do not have permission to create segments.",
+      "failed": "The segment could not be created. Try again."
     }
   }
 }

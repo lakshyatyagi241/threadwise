@@ -23,6 +23,17 @@ import { propertyPermissionKey, type PropertyAction } from '../field-metadata-pe
 import { contactColumnFor } from './status-option-columns';
 import { toStatusOptionResponse } from './status-options.mapper';
 import { StatusOptionsRepository } from './status-options.repository';
+import { segmentNamesUsing, segmentUsageCounts } from '../segments/segment-usage';
+
+/** Which kind of segment reference a contact option group is (stages and statuses; the lost reason is not filterable). */
+function segmentKindOfOptionGroup(
+  moduleKey: string,
+  optionGroup: string,
+): 'stage' | 'status' | undefined {
+  if (moduleKey !== 'contacts') return undefined;
+  if (optionGroup === 'lifecycle_stage') return 'stage';
+  return optionGroup === 'status' || optionGroup === 'contact_status' ? 'status' : undefined;
+}
 
 const MODULE_KEY = 'status_options';
 
@@ -292,8 +303,17 @@ export class StatusOptionsService {
       const counts = column
         ? await this.repo.countContactsByValue(tx, ctx.orgId, column)
         : new Map<string, number>();
+      const kind = segmentKindOfOptionGroup(query.moduleKey, query.optionGroup);
+      const segments = kind
+        ? await segmentUsageCounts(tx, ctx.orgId, kind)
+        : new Map<string, number>();
       return {
-        data: rows.map((r) => ({ id: r.uuid, value: r.value, count: counts.get(r.value) ?? 0 })),
+        data: rows.map((r) => ({
+          id: r.uuid,
+          value: r.value,
+          count: counts.get(r.value) ?? 0,
+          segments: segments.get(r.value) ?? 0,
+        })),
       };
     });
   }
@@ -355,17 +375,28 @@ export class StatusOptionsService {
         await this.repo.unscopeStatuses(tx, ctx.orgId, existing.id);
       }
 
+      // Segments that point at this stage or status are not blocked: their condition now matches nothing and is
+      // flagged (invalidConditions). The audit row and the event say which ones, so it is traceable.
+      const kind = segmentKindOfOptionGroup(moduleKey, existing.optionGroup);
+      const segmentNames = kind ? await segmentNamesUsing(tx, ctx.orgId, kind, existing.value) : [];
       await this.audit.record(tx, {
         module: MODULE_KEY,
         recordId: existing.id,
         action: 'delete',
-        ...(moved > 0 ? { delta: { movedContacts: { old: 0, new: moved } } } : {}),
+        ...(moved > 0 || segmentNames.length > 0
+          ? {
+              delta: {
+                ...(moved > 0 ? { movedContacts: { old: 0, new: moved } } : {}),
+                ...(segmentNames.length > 0 ? { segments: { old: segmentNames, new: null } } : {}),
+              },
+            }
+          : {}),
       });
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,
         aggregateId: existing.id,
         eventType: 'status_option.deleted',
-        payload: { uuid, movedContacts: moved },
+        payload: { uuid, movedContacts: moved, segments: segmentNames },
       });
 
       await this.repo.deleteById(tx, ctx.orgId, existing.id);

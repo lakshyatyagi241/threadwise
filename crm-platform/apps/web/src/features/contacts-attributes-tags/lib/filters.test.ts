@@ -96,6 +96,7 @@ describe('contactFilterBody / listQuery', () => {
         tag: GROUP,
         consent: 'unsubscribed',
         imported: true,
+        segment: '',
       }),
     ).toEqual({
       q: 'acme',
@@ -133,5 +134,36 @@ describe('contactFilterBody / listQuery', () => {
       includeTotal: true,
       order: 'desc',
     });
+  });
+});
+
+describe('segment filter', () => {
+  const SEG = '4f0a1d6e-6b52-4a55-9d0a-0d8a3b2f1c11';
+
+  it('reads a segment id from the URL and ignores anything that is not a uuid', () => {
+    expect(parseFilters(new URLSearchParams(`segment=${SEG}`)).segment).toBe(SEG);
+    expect(parseFilters(new URLSearchParams('segment=abc')).segment).toBe('');
+    expect(parseFilters(new URLSearchParams("segment=1' OR '1'='1")).segment).toBe('');
+    expect(parseFilters(new URLSearchParams('')).segment).toBe('');
+  });
+
+  it('writes it back, together with the other filters (they combine)', () => {
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, segment: SEG })).toBe(`?segment=${SEG}`);
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, segment: SEG, tag: SEG, q: 'a' })).toBe(
+      `?q=a&tag=${SEG}&segment=${SEG}`,
+    );
+    const f = parseFilters(new URLSearchParams(`stage=won&segment=${SEG}&page=2`));
+    expect(parseFilters(new URLSearchParams(filtersToSearch(f).slice(1)))).toEqual(f);
+  });
+
+  it('counts as an active filter, so the empty state offers "Reset filters"', () => {
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, segment: SEG })).toBe(true);
+  });
+
+  it('is sent as segmentId in the list request and in the saved filter of a bulk action or export', () => {
+    expect(listQuery({ ...DEFAULT_FILTERS, segment: SEG })).toMatchObject({ segmentId: SEG });
+    expect(contactFilterBody({ ...DEFAULT_FILTERS, segment: SEG }).segmentId).toBe(SEG);
+    expect(contactFilterBody(DEFAULT_FILTERS).segmentId).toBeUndefined();
+    expect(listQuery(DEFAULT_FILTERS).segmentId).toBeUndefined();
   });
 });

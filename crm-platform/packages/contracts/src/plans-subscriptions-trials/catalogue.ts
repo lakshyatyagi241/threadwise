@@ -22,6 +22,8 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'contacts', group: 'workspace' },
   { key: 'tags', group: 'workspace' },
   { key: 'pipelines', group: 'workspace' },
+  // Appointments booked per calendar month of the booking's start (TW-APPT-035). 0 = unlimited.
+  { key: 'appointments', group: 'workspace' },
   { key: 'templates', group: 'content' },
   { key: 'flows', group: 'content' },
   { key: 'autoreplies', group: 'content' },
@@ -48,6 +50,8 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'remove_branding', group: 'advanced', default: false },
   // The deals + tasks + pipelines area (TW-DEAL-001). Default true: every plan row that predates the key keeps the area it had.
   { key: 'sales_pipeline', group: 'advanced', default: true },
+  // Booking types, appointments and the public booking pages (TW-APPT-001). Default true: Reference's column default.
+  { key: 'appointment_booking', group: 'advanced', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -67,6 +71,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'calling',
   'remove_branding',
   'sales_pipeline',
+  'appointment_booking',
 ];
 export const PLAN_CHIP_MAX = 3;
 

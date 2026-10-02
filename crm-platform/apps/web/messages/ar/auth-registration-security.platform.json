@@ -1316,6 +1316,7 @@
             "contacts": "جهات الاتصال",
             "tags": "الوسوم",
             "pipelines": "مسارات المبيعات",
+            "appointments": "المواعيد شهرياً",
             "templates": "قوالب الرسائل",
             "flows": "التدفقات",
             "autoreplies": "الردود التلقائية بالكلمات المفتاحية"
@@ -1334,7 +1335,8 @@
             "shopify": "Shopify",
             "analytics": "التحليلات",
             "remove_branding": "العلامة البيضاء (إزالة علامة المنصة)",
-            "sales_pipeline": "مسار المبيعات (الصفقات والمهام)"
+            "sales_pipeline": "مسار المبيعات (الصفقات والمهام)",
+            "appointment_booking": "المواعيد وصفحات الحجز"
           },
           "problems": {
             "required": "هذا الحقل مطلوب.",

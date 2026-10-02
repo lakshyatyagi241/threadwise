@@ -57,6 +57,7 @@ describe('registry', () => {
       'calling',
       'remove_branding',
       'sales_pipeline',
+      'appointment_booking',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

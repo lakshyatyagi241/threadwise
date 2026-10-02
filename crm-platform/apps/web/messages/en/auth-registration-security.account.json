@@ -459,7 +459,8 @@
             "shopify": "Shopify",
             "calling": "WhatsApp calling",
             "remove_branding": "White-label",
-            "sales_pipeline": "Sales pipeline"
+            "sales_pipeline": "Sales pipeline",
+            "appointment_booking": "Appointments"
           },
           "cta": {
             "continueFree": "Continue free",

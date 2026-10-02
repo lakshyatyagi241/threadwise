@@ -41,7 +41,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         theme={theme}
         navFooter={<WorkspaceSwitcher />}
         banners={<AccountBanners key="banners" />}
-        bell={<NotificationBell />}
+        bell={<NotificationBell key="bell" />}
       >
         <AccountGate>{children}</AccountGate>
       </AppShell>

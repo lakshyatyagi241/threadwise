@@ -78,6 +78,22 @@ export class ProblemExceptionFilter implements ExceptionFilter {
       };
     }
 
+    // Errors raised by the body parser before Nest routes the request (http-errors shape: a 4xx
+    // `status`, `expose: true` and a `type`): an oversized body is a 413 and unreadable JSON a 400,
+    // not an internal error.
+    const parsed = this.bodyParserError(exception);
+    if (parsed) {
+      return {
+        type: 'about:blank',
+        title: this.titleFor(parsed.status),
+        status: parsed.status,
+        detail: parsed.detail,
+        instance: path,
+        code: this.codeForStatus(parsed.status),
+        requestId,
+      };
+    }
+
     // Unknown: never leak internals to the caller. The stack is in the log,
     // correlated by requestId.
     return {
@@ -89,6 +105,22 @@ export class ProblemExceptionFilter implements ExceptionFilter {
       code: ERROR_CODES.INTERNAL,
       requestId,
     };
+  }
+
+  private bodyParserError(exception: unknown): { status: number; detail: string } | null {
+    if (typeof exception !== 'object' || exception === null) return null;
+    const e = exception as { type?: unknown; status?: unknown; statusCode?: unknown };
+    const status = typeof e.status === 'number' ? e.status : e.statusCode;
+    if (e.type === 'entity.too.large' && status === HttpStatus.PAYLOAD_TOO_LARGE) {
+      return { status, detail: 'The request body is too large.' };
+    }
+    if (
+      (e.type === 'entity.parse.failed' || e.type === 'encoding.unsupported') &&
+      status === HttpStatus.BAD_REQUEST
+    ) {
+      return { status, detail: 'The request body could not be read.' };
+    }
+    return null;
   }
 
   private codeForStatus(status: number): string {
@@ -103,6 +135,8 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         return ERROR_CODES.CONFLICT;
       case HttpStatus.TOO_MANY_REQUESTS:
         return ERROR_CODES.RATE_LIMITED;
+      case HttpStatus.PAYLOAD_TOO_LARGE:
+        return ERROR_CODES.PAYLOAD_TOO_LARGE;
       case HttpStatus.BAD_REQUEST:
       case HttpStatus.UNPROCESSABLE_ENTITY:
         return ERROR_CODES.VALIDATION_FAILED;
@@ -118,6 +152,7 @@ export class ProblemExceptionFilter implements ExceptionFilter {
       403: 'Forbidden',
       404: 'Not Found',
       409: 'Conflict',
+      413: 'Payload Too Large',
       422: 'Unprocessable Entity',
       429: 'Too Many Requests',
       500: 'Internal Server Error',

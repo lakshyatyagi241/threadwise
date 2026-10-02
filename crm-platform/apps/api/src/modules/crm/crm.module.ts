@@ -130,6 +130,11 @@ import { TasksService } from './tasks/tasks.service';
 import { StatusOptionsController } from './status-options/status-options.controller';
 import { StatusOptionsRepository } from './status-options/status-options.repository';
 import { StatusOptionsService } from './status-options/status-options.service';
+import { SegmentActionsService } from './segments/segment-actions.service';
+import { SegmentThrottle } from './segments/segment-throttle';
+import { SegmentsController } from './segments/segments.controller';
+import { SegmentsRepository } from './segments/segments.repository';
+import { SegmentsService } from './segments/segments.service';
 import { TagsController } from './tags/tags.controller';
 import { TagsRepository } from './tags/tags.repository';
 import { TagsService } from './tags/tags.service';
@@ -170,6 +175,8 @@ import { TagsService } from './tags/tags.service';
     StatusOptionsController,
     TagsController,
     ContactViewsController,
+    // Segments: `segments/usage`, `preview` and `from-filters` are literal paths declared before `segments/:id` inside the controller.
+    SegmentsController,
     ContactNotesController,
     ContactFilesController,
     ContactActivitiesController,
@@ -236,6 +243,10 @@ import { TagsService } from './tags/tags.service';
     TagsRepository,
     ContactViewsService,
     ContactViewsRepository,
+    SegmentsService,
+    SegmentsRepository,
+    SegmentActionsService,
+    SegmentThrottle,
     ContactNotesService,
     ContactNotesRepository,
     ContactFilesService,
@@ -309,6 +320,9 @@ import { TagsService } from './tags/tags.service';
     StatusOptionsService,
     TagsService,
     ContactViewsService,
+    SegmentsService,
+    SegmentsRepository,
+    SegmentActionsService,
     ContactNotesService,
     ContactFilesService,
     ContactActivitiesService,

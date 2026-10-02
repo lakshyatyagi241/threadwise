@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
+import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
   SalesDocsWorkerModule,
+  SegmentsWorkerModule,
   TasksWorkerModule,
 } from '../modules/crm';
 import { NotificationsWorkerModule } from '../modules/notifications';
@@ -30,9 +32,11 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     AuthModule,
     ContactImportWorkerModule,
     TasksWorkerModule,
+    SegmentsWorkerModule,
     SalesDocsWorkerModule,
     InvoicingWorkerModule,
     NotificationsWorkerModule,
+    AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
   ],
   providers: [

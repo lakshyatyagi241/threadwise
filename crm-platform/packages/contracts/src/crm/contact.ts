@@ -5,6 +5,7 @@ import { paginationQuerySchema } from '../common/pagination';
 import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
 import { contactGroupRefSchema } from '../contacts-attributes-tags/contact-group';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
+import type { InvalidCondition } from '../segments/rules';
 
 /**
  * Contact — the reference vertical slice.
@@ -153,7 +154,10 @@ export type ListContactsQuery = z.infer<typeof listContactsQuerySchema>;
 export type ContactListResponse = {
   data: ContactResponse[];
   page: { nextCursor: string | null; hasMore: boolean; limit: number };
-  meta?: { total: number };
+  /** `approximate`: the total of a segment's contacts could not be counted in 3 seconds and is the last known value or an estimate. */
+  meta?: { total: number; approximate?: boolean };
+  /** Only when the request filtered by `segmentId`: the segment's conditions that match nothing because something they point at was deleted. */
+  segment?: { id: string; invalidConditions: InvalidCondition[] };
 };
 
 /** Lightweight rows for pickers/typeaheads — never the full record. */

@@ -158,6 +158,7 @@ describe('selectionBody (TW-CON-019)', () => {
     tag: '',
     consent: 'unsubscribed' as const,
     imported: false,
+    segment: '',
   };
 
   it('sends explicit ids as they are', () => {

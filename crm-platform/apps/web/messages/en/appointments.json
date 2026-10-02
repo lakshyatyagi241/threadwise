@@ -1,0 +1,1017 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "Appointments"
+    },
+    "common": {
+      "dismiss": "Dismiss",
+      "loading": "Loading",
+      "cancel": "Cancel",
+      "save": "Save",
+      "close": "Close",
+      "back": "Back",
+      "minutes": "{count, plural, one {# minute} other {# minutes}}",
+      "minShort": "{count} min",
+      "hoursMinutes": "{hours} h {minutes} min",
+      "hours": "{hours} h"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "no_show": "No-show",
+      "declined": "Declined"
+    },
+    "errors": {
+      "network": "The server could not be reached. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again to continue.",
+      "conflict": "This was changed by someone else. Reload to see the latest version.",
+      "validation": "Some of the information is not valid. Check the highlighted fields.",
+      "unavailable": "Appointments are not available on this server yet.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "notFound": "That could not be found. It may have been removed.",
+      "planDisabled": "Appointments are not included in your plan.",
+      "slotTaken": "That time was just taken. Please pick another.",
+      "gone": "This booking can no longer be changed.",
+      "unexpected": "Something went wrong. Try again in a moment.",
+      "requestId": "Request ID",
+      "retry": "Try again",
+      "invalidTransition": "That booking is not in a state where this can be done. Reload to see where it is.",
+      "notStarted": "This can be done only after the booking has started.",
+      "alreadyStarted": "This booking has already started, so it can no longer be changed.",
+      "bookingOff": "Booking is not available for this service right now.",
+      "notDeletable": "This cannot be deleted while it has bookings to come."
+    },
+    "picker": {
+      "timeZone": "Time zone",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "pickDay": "Pick a day",
+      "times": "Available times",
+      "timesAvailable": "{count, plural, one {# time available} other {# times available}}",
+      "seatsLeft": "{count} left",
+      "noTimes": "No open times in the coming days.",
+      "noTimesDay": "No times this day. Pick another day.",
+      "loading": "Loading times",
+      "loadFailed": "The times could not be loaded.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "retry": "Try again",
+      "typeZone": "This service runs in {zone}."
+    },
+    "hours": {
+      "openDay": "Open on {day}",
+      "daySummary": "{hours} h {minutes} min",
+      "closed": "Closed",
+      "from": "{day}, interval {n}, start time",
+      "to": "{day}, interval {n}, end time",
+      "removeInterval": "Remove interval {n} on {day}",
+      "addInterval": "Add interval",
+      "copyTo": "Copy {day} hours to other days",
+      "copyDay": "Copy to",
+      "copyWeekdays": "Monday to Friday",
+      "copyAll": "All days",
+      "problems": {
+        "incomplete": "Fill in both times.",
+        "order": "The end must be after the start.",
+        "overlap": "This overlaps another interval."
+      }
+    },
+    "hub": {
+      "breadcrumb": "Breadcrumb",
+      "integrations": "Integrations",
+      "appointments": "Appointments",
+      "title": "Your bookings",
+      "subtitle": "Let customers book appointments inside the chat. Create a booking type with your services, hours and reminders, and customers pick a slot and get confirmed automatically.",
+      "newType": "New booking type",
+      "types": "Booking types",
+      "settings": "Settings",
+      "weekTitle": "Week",
+      "monthTitle": "Month",
+      "inRange": "{count, plural, =0 {No bookings} one {# booking} other {# bookings}} in view",
+      "tableLabel": "Bookings",
+      "loading": "Loading bookings",
+      "useSampleData": "Use sample data (development)",
+      "empty": {
+        "upcoming": {
+          "title": "No upcoming bookings",
+          "message": "Create a booking type with your services and hours, then drop a \"Book appointment\" node into any flow. Confirmed bookings show up here."
+        },
+        "past": {
+          "title": "No past bookings",
+          "message": "Bookings that have already taken place appear here, with their outcome."
+        },
+        "filtered": {
+          "title": "No bookings match",
+          "message": "Nothing matches the search and filters. Clear them to see every booking."
+        }
+      },
+      "resetFilters": "Clear filters",
+      "truncated": "Showing the first {count} bookings of this range. Narrow the filters to see the rest.",
+      "showing": "{count, plural, one {Showing # booking} other {Showing # bookings}}",
+      "loadMore": "Load more",
+      "endOfList": "End of the list",
+      "cancelTitle": "Cancel this appointment?",
+      "cancelMessage": "The booking is cancelled and its time becomes free again. The customer is told, and the reminders are removed.",
+      "cancelConfirm": "Cancel appointment",
+      "keep": "Keep it",
+      "declineTitle": "Decline this request?",
+      "declineMessage": "The customer is told the request was declined and the time becomes free again.",
+      "declineConfirm": "Decline request"
+    },
+    "tabs": {
+      "label": "Booking lists",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "count": "{count, plural, one {# booking} other {# bookings}}"
+    },
+    "toolbar": {
+      "label": "Filters and views",
+      "search": "Search customer, phone, email or service",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "type": "Booking type",
+      "allTypes": "All booking types",
+      "clear": "Clear",
+      "navigate": "Calendar navigation",
+      "previous": "Previous",
+      "next": "Next",
+      "today": "Today",
+      "refresh": "Refresh",
+      "view": "View",
+      "views": {
+        "list": "List",
+        "week": "Week",
+        "month": "Month"
+      }
+    },
+    "table": {
+      "when": "When",
+      "customer": "Customer",
+      "service": "Service",
+      "status": "Status",
+      "actions": "Actions",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "yesterday": "Yesterday",
+      "rowLabel": "Open booking: {title}",
+      "noName": "No name",
+      "needsReview": "Needs review"
+    },
+    "row": {
+      "moreFor": "More actions for {title}",
+      "open": "Open",
+      "confirm": "Confirm",
+      "complete": "Mark completed",
+      "noShow": "Mark no-show",
+      "reschedule": "Reschedule",
+      "copyLink": "Copy manage link",
+      "cancel": "Cancel",
+      "decline": "Decline"
+    },
+    "calendar": {
+      "emptyWeek": "No bookings this week.",
+      "monthGrid": "Month calendar",
+      "more": "+{count} more",
+      "dayAgenda": "Bookings of the selected day",
+      "emptyDay": "No bookings this day."
+    },
+    "drawer": {
+      "loading": "Loading booking",
+      "close": "Close",
+      "noType": "Deleted booking type",
+      "pendingHint": "Waiting for confirmation",
+      "minutes": "{count} min",
+      "customerTime": "For the customer: {time} ({zone})",
+      "confirm": "Confirm",
+      "complete": "Mark completed",
+      "noShow": "No-show",
+      "reschedule": "Reschedule",
+      "cancel": "Cancel",
+      "customer": "Customer",
+      "openContact": "Open contact",
+      "linkedContact": "Linked contact",
+      "noName": "No name given",
+      "where": "Where",
+      "joinCall": "Join video call",
+      "answers": "Answers to the booking questions",
+      "noAnswers": "This service asked no questions, or the customer answered none.",
+      "payment": "Payment",
+      "depositPaid": "{amount} paid",
+      "notes": "Notes",
+      "notesPlaceholder": "Private notes about this booking",
+      "saveNotes": "Save notes",
+      "reminders": "Reminders",
+      "noReminders": "No reminders are set for this service.",
+      "before": "{count, plural, one {# minute before} other {# minutes before}}",
+      "reminder": {
+        "scheduled": "Scheduled",
+        "skipped": "Not sent",
+        "due": "Time reached"
+      },
+      "manageLink": "Manage link",
+      "manageHint": "Share this link with the customer so they can reschedule or cancel on their own.",
+      "copy": "Copy",
+      "openLink": "Open the manage page",
+      "noManageLink": "This booking has no manage link.",
+      "source": "Booked from",
+      "bookedOn": "Booked on",
+      "cancelTitle": "Cancel this appointment?",
+      "cancelMessage": "The booking is cancelled and its time becomes free again. The customer is told, and the reminders are removed.",
+      "cancelConfirm": "Cancel appointment",
+      "keep": "Keep it",
+      "decline": "Decline",
+      "host": "Host",
+      "needsReview": "Ended, not marked yet",
+      "needsReviewHint": "This booking ended and nobody marked it completed or no-show.",
+      "cancelledBy": "{who} cancelled this booking",
+      "cancelledByStaff": "Staff",
+      "cancelledByInvitee": "The customer",
+      "cancelledBySystem": "The system",
+      "cancelReason": "Reason",
+      "declineTitle": "Decline this request?",
+      "declineMessage": "The customer is told the request was declined and the time becomes free again.",
+      "declineConfirm": "Decline request",
+      "remindersNote": "Reminders follow the booking type. Delivery is not tracked per reminder."
+    },
+    "source": {
+      "chat": "A chat flow",
+      "manual": "Staff",
+      "api": "The API",
+      "link": "The booking page"
+    },
+    "payment": {
+      "none": "No payment",
+      "pending": "Payment pending",
+      "paid": "Paid",
+      "refunded": "Refunded",
+      "partial": "Partly paid"
+    },
+    "reschedule": {
+      "eyebrow": "Reschedule",
+      "close": "Close",
+      "cancel": "Cancel",
+      "confirm": "Confirm new time",
+      "current": "Now: {day}, {time} {zone}",
+      "noType": "The booking type of this booking was deleted, so it has no open times to move to.",
+      "taken": "That time was just taken. Pick another.",
+      "newTime": "New time: {day}, {time}",
+      "notify": "Tell the customer about the new time"
+    },
+    "toast": {
+      "conflict": "This booking was changed by someone else. It has been reloaded.",
+      "failed": "That did not work.",
+      "confirmed": "Booking confirmed.",
+      "cancelled": "Appointment cancelled.",
+      "completed": "Marked as completed.",
+      "noShow": "Marked as no-show.",
+      "notesSaved": "Notes saved.",
+      "rescheduled": "Booking moved to the new time.",
+      "linkCopied": "Manage link copied.",
+      "copyFailed": "The link could not be copied.",
+      "declined": "Request declined."
+    },
+    "typesList": {
+      "breadcrumb": "Breadcrumb",
+      "appointments": "Appointments",
+      "services": "Services",
+      "title": "Booking types",
+      "subtitle": "Each service has its own duration, availability, pricing, questionnaire and reminders. Customers book it from chat or from its own booking page.",
+      "newType": "New booking type",
+      "allBookings": "All bookings",
+      "settings": "Settings",
+      "toolbar": "Filters",
+      "search": "Search booking types",
+      "statusFilter": "Status",
+      "allStatuses": "All statuses",
+      "active": "Active",
+      "pausedLabel": "Paused",
+      "clear": "Clear",
+      "tableLabel": "Booking types",
+      "loading": "Loading booking types",
+      "useSampleData": "Use sample data (development)",
+      "emptyFilteredTitle": "No booking types match",
+      "emptyFiltered": "Nothing matches the search and filter.",
+      "emptyTitle": "No booking types yet",
+      "emptyMessage": "Create your first service. Set its duration, hours and price, and customers can book it from chat.",
+      "name": "Name",
+      "details": "Details",
+      "price": "Price",
+      "booked": "Booked",
+      "status": "Status",
+      "actions": "Actions",
+      "minutes": "{count} min",
+      "location": {
+        "address": "In person",
+        "virtual": "Virtual",
+        "phone": "Phone call",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "{count, plural, one {# seat} other {# seats}} per slot",
+      "approval": "Needs approval",
+      "free": "Free",
+      "toggle": "Active: {name}",
+      "moreFor": "More actions for {name}",
+      "edit": "Edit",
+      "copyLink": "Copy public link",
+      "openPage": "Open booking page",
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "showing": "{count, plural, one {# booking type} other {# booking types}}",
+      "deleteTitle": "Delete \"{name}\"?",
+      "deleteMessage": "Delete this booking type? Existing bookings stay.",
+      "deleteConfirm": "Delete booking type",
+      "keep": "Keep it",
+      "activated": "\"{name}\" is active.",
+      "paused": "\"{name}\" is paused.",
+      "duplicated": "Created \"{name}\" (paused).",
+      "deleted": "\"{name}\" deleted.",
+      "failed": "That did not work.",
+      "linkCopied": "Public link copied.",
+      "copyFailed": "The link could not be copied.",
+      "copyLinkFor": "Copy the public link of {name}",
+      "copyLinkPaused": "Activate this booking type to get a public link"
+    },
+    "editor": {
+      "forbidden": "You do not have permission to create or edit booking types.",
+      "notFoundTitle": "Booking type not found",
+      "notFound": "That booking type could not be found. It may have been deleted.",
+      "loading": "Loading the booking type",
+      "header": {
+        "back": "Back to booking types",
+        "kickerNew": "Appointments / New",
+        "kickerEdit": "Appointments / Edit",
+        "titleNew": "Create a booking type",
+        "titleEdit": "Edit booking type",
+        "draft": "Draft / unsaved",
+        "unsaved": "Unsaved changes"
+      },
+      "steps": {
+        "label": "Steps",
+        "service": "Service",
+        "timing": "Timing",
+        "availability": "Availability",
+        "pricing": "Pricing",
+        "messaging": "Messaging",
+        "hasProblem": "needs attention",
+        "stepOf": "Step {n} of {total}: {name}"
+      },
+      "nav": {
+        "back": "Back",
+        "cancel": "Cancel",
+        "next": "Next",
+        "create": "Create booking type",
+        "save": "Save changes",
+        "saving": "Saving"
+      },
+      "toast": {
+        "created": "Booking type \"{name}\" created.",
+        "updated": "Booking type \"{name}\" updated."
+      },
+      "saveError": {
+        "conflict": "This booking type was changed by someone else while you were editing it. Reload to see their version. Your unsaved edits here will be lost.",
+        "reload": "Reload the latest version"
+      },
+      "leave": {
+        "title": "Discard your changes?",
+        "message": "You have changes that are not saved. If you leave now they will be lost.",
+        "discard": "Discard changes",
+        "keep": "Keep editing"
+      },
+      "problems": {
+        "nameRequired": "Enter a name for this booking type.",
+        "nameTooLong": "The name can be at most {nameMax} characters.",
+        "slugInvalid": "Use lowercase letters, numbers and single hyphens, up to {slugMax} characters.",
+        "durationInvalid": "Duration must be a whole number from {durationMin} to {durationMax} minutes.",
+        "incrementInvalid": "The start step must be a whole number from {incrementMin} to {incrementMax} minutes.",
+        "bufferInvalid": "Enter a whole number of minutes from 0 to {bufferMax}.",
+        "minNoticeInvalid": "Enter a whole number of minutes from 0 to {minNoticeMax}.",
+        "maxAdvanceInvalid": "Enter a whole number of days from {maxAdvanceMin} to {maxAdvanceMax}.",
+        "maxPerDayInvalid": "Leave this empty for no limit, or enter a number from 1 to {maxPerDayMax}.",
+        "capacityInvalid": "Capacity must be a whole number from 1 to {capacityMax}.",
+        "timezoneInvalid": "Choose a valid time zone.",
+        "colorInvalid": "Use a hex colour such as #075E54.",
+        "feeInvalid": "Enter an amount such as 150.00.",
+        "taxInvalid": "Enter a percentage from 0 to 100 with at most two decimals.",
+        "depositInvalid": "Enter a deposit amount greater than 0.",
+        "depositTooHigh": "The deposit cannot be more than the total (fee plus tax).",
+        "cancelFeeInvalid": "Enter an amount such as 25.00.",
+        "cancelWindowInvalid": "Enter a whole number of minutes from 0 to {cancelWindowMax}.",
+        "reminderInvalid": "Enter whole minutes before the start, from 1 to {reminderMax}.",
+        "remindersDuplicate": "Each reminder needs a different time.",
+        "remindersTooMany": "A booking type can have at most {reminders} reminders.",
+        "questionLabelRequired": "Give the question a label (up to {questionLabelMax} characters).",
+        "questionsTooMany": "A booking type can have at most {questions} questions.",
+        "questionOptionsRequired": "Add at least one choice, one per line.",
+        "hoursInvalid": "Fix the weekly hours marked below.",
+        "overridesInvalid": "Fix the dates marked in the list of date overrides.",
+        "descriptionTooLong": "The description can be at most {descriptionMax} characters.",
+        "locationTooLong": "The location can be at most {locationMax} characters.",
+        "server": "The server did not accept this value. Check it and try again."
+      },
+      "service": {
+        "title": "Service details",
+        "hint": "Name the service and where it happens.",
+        "name": "Name",
+        "namePlaceholder": "30-min Demo",
+        "description": "Description",
+        "descriptionPlaceholder": "What the person is booking, shown on the booking page.",
+        "locationType": "Location type",
+        "locationTypes": {
+          "address": "In person (address)",
+          "virtual": "Virtual (video)",
+          "phone": "Phone call",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "Location / address",
+        "locationPlaceholders": {
+          "address": "Street address",
+          "virtual": "Video link (optional)",
+          "phone": "Phone number to call (optional)",
+          "whatsapp": "WhatsApp number (optional)"
+        },
+        "appearanceTitle": "Colour",
+        "appearanceHint": "Marks this service on the calendar and on the booking page.",
+        "color": "Colour",
+        "colorSwatches": "Choose a colour",
+        "linkTitle": "Public link",
+        "linkHint": "Visitors book on this address. It works once the booking type is saved and active.",
+        "slug": "Link name",
+        "slugHint": "Made from the name until you change it. Lowercase letters, numbers and hyphens.",
+        "slugPlaceholder": "discovery-call",
+        "publicUrl": "Public page",
+        "copy": "Copy link",
+        "copied": "Link copied.",
+        "copyFailed": "The link could not be copied. Select it and copy it by hand.",
+        "rulesTitle": "Booking rules",
+        "requiresApproval": "Require approval",
+        "requiresApprovalHint": "New bookings wait as Pending until someone on your team confirms them.",
+        "isActive": "Active",
+        "isActiveHint": "Turn this off to pause the service: its public page stops taking bookings."
+      },
+      "timing": {
+        "title": "Timing",
+        "hint": "How long each booking runs and how far ahead people can book.",
+        "duration": "Duration (min)",
+        "durationHint": "How long one booking lasts. 60 = 1 hour.",
+        "increment": "Start step (min)",
+        "incrementHint": "Gap between offered start times. 30 offers 9:00, 9:30, 10:00.",
+        "capacity": "Capacity (per slot)",
+        "capacityHint": "People who can share one time. 1 for one-to-one.",
+        "bufferBefore": "Buffer before (min)",
+        "bufferAfter": "Buffer after (min)",
+        "bufferHint": "Free time kept around each booking.",
+        "minNotice": "Min notice (min)",
+        "minNoticeHint": "How soon before the start people can book. 240 = 4 hours.",
+        "maxAdvance": "Book up to (days)",
+        "maxAdvanceHint": "How far ahead people can book. 30 = a month.",
+        "maxPerDay": "Max per day",
+        "maxPerDayHint": "Most bookings in one day. Leave empty for no limit.",
+        "noLimit": "No limit",
+        "zoneTitle": "Time zone",
+        "zoneHint": "Weekly hours and dates are read in this zone. Visitors see times in their own.",
+        "zone": "Time zone of this service",
+        "zoneSearch": "Search zones",
+        "zonePick": "Select a time zone",
+        "zoneNone": "No zone matches that search."
+      },
+      "availability": {
+        "title": "Weekly hours",
+        "hint": "Add the times you take bookings each day. The right panel previews the real bookable slots.",
+        "empty": "No hours are set, so nothing can be booked yet.",
+        "total": "{hours} h {minutes} min of bookable time in a week."
+      },
+      "overrides": {
+        "title": "Date overrides and holidays",
+        "hint": "Close a day for a holiday, or give one date its own hours. Everything else follows the weekly hours.",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month",
+        "legend": "Legend",
+        "status": {
+          "closed": "Closed",
+          "custom": "Custom hours",
+          "open": "Open (weekly hours)",
+          "off": "Closed (weekly hours)"
+        },
+        "clickHint": "Click a day to close it. Click a marked day again to give it back its weekly hours.",
+        "rangeTitle": "Close a range",
+        "rangeHint": "Close several days in one go, such as a holiday week. Days that already have an override keep it.",
+        "rangeFrom": "From",
+        "rangeTo": "To (optional)",
+        "reason": "Reason",
+        "reasonPlaceholder": "Reason (optional)",
+        "rangeProblems": {
+          "invalid": "Pick a start date, and an end date that is not before it.",
+          "tooLong": "A range can cover at most a year.",
+          "full": "The limit of date overrides is reached."
+        },
+        "closeRange": "Close these days",
+        "listTitle": "Overrides",
+        "count": "{count, plural, =0 {No dates} one {# date} other {# dates}}",
+        "limit": "You reached the limit of {max} dates. Remove some to add more.",
+        "empty": "No dates yet. Click a day in the calendar to close it.",
+        "remove": "Remove the override on {date}",
+        "mode": "{date}: closed or custom hours",
+        "modeClosed": "Closed all day",
+        "modeCustom": "Custom hours",
+        "from": "{date}, start time",
+        "to": "{date}, end time",
+        "reasonOf": "{date}, reason",
+        "problems": {
+          "incomplete": "Fill in both times.",
+          "order": "The end must be after the start.",
+          "dayClosedHours": "A closed day has no hours."
+        }
+      },
+      "pricing": {
+        "title": "Pricing (optional)",
+        "hint": "Leave the fee at 0 for free bookings.",
+        "currency": "Currency",
+        "currencyHint": "Defaults to your workspace currency.",
+        "fee": "Fee ({currency})",
+        "feeHint": "Write the amount, e.g. {example}.",
+        "tax": "Tax %",
+        "taxHint": "Added on top of the fee.",
+        "deposit": "Deposit",
+        "depositModes": {
+          "none": "No prepayment",
+          "partial": "Partial deposit",
+          "full": "Full amount"
+        },
+        "depositAmount": "Deposit amount ({currency})",
+        "paymentNote": "Online payment collection is not connected yet. The deposit is recorded with each booking but nothing is charged.",
+        "cancelFee": "Cancel fee ({currency})",
+        "noShowFee": "No-show fee ({currency})",
+        "cancelWindow": "Cancel window (min)",
+        "cancelWindowHint": "How long before the start a booking may be cancelled for free. 1440 = 24 hours.",
+        "recordedOnly": "Cancel and no-show fees and the cancel window are recorded only.",
+        "totalsLabel": "What a booking costs",
+        "totalFee": "Fee",
+        "totalTax": "Tax",
+        "totalSum": "Total",
+        "totalDue": "Due now"
+      },
+      "calendar": {
+        "title": "Google Calendar (optional)",
+        "hint": "Bookings work without this. Connect only to sync free/busy, add Meet links and log to Sheets.",
+        "unavailable": "Calendar sync is not available yet. These settings are kept with the booking type for when it is.",
+        "calendarId": "Calendar",
+        "calendarPlaceholder": "primary",
+        "spreadsheetId": "Sheet append (optional)",
+        "spreadsheetPlaceholder": "Spreadsheet ID",
+        "createMeet": "Create a Google Meet link for each booking"
+      },
+      "messages": {
+        "title": "Lifecycle messages",
+        "hint": "What the customer is sent when a booking is confirmed, reminded, cancelled or moved. Leave a box empty to use the workspace default.",
+        "placeholdersTitle": "Placeholders you can use",
+        "placeholdersHint": "Click one to insert it where the cursor is in the message you were editing ({event}).",
+        "placeholderMeaning": {
+          "type": "the name of the booking type",
+          "slot": "the date and time of the booking",
+          "name": "the customer's name",
+          "manage_link": "the link to manage the booking"
+        },
+        "events": {
+          "confirmation": "Confirmation",
+          "reminder": "Reminder",
+          "cancellation": "Cancellation",
+          "reschedule": "Reschedule"
+        },
+        "placeholders": {
+          "confirmation": "Hi {name}, your {type} is booked for {slot}. Manage it here: {manage_link}",
+          "reminder": "Hi {name}, a reminder: your {type} is at {slot}.",
+          "cancellation": "Hi {name}, your {type} on {slot} was cancelled.",
+          "reschedule": "Hi {name}, your {type} moved to {slot}. Details: {manage_link}"
+        },
+        "templatesNote": "Approved WhatsApp templates cannot be chosen yet. Messages go out as the plain text above."
+      },
+      "reminders": {
+        "title": "Reminders",
+        "hint": "Times must be distinct (1440 = 24 h before, 180 = 3 h before). Up to {max}.",
+        "add": "Add reminder",
+        "quickAdd": "Quick add",
+        "quick": {
+          "h24": "24 h",
+          "h3": "3 h",
+          "h1": "1 h",
+          "m15": "15 min"
+        },
+        "empty": "No reminders. Customers only get the confirmation.",
+        "offsetOf": "Reminder {n}, minutes before the start",
+        "minBefore": "min before",
+        "labelPlaceholder": "24h",
+        "labelOf": "Reminder {n}, label",
+        "remove": "Remove reminder {n}",
+        "count": "{count} of {max} reminders"
+      },
+      "questions": {
+        "title": "Questionnaire",
+        "hint": "Questions asked when someone books. Up to {max}.",
+        "add": "Add question",
+        "intro": "Intro message",
+        "introHint": "Shown above the questions.",
+        "empty": "No questions. People only give their name, email and phone.",
+        "labelPlaceholder": "Question label",
+        "labelOf": "Question {n}, label",
+        "typeOf": "Question {n}, answer type",
+        "types": {
+          "text": "Text",
+          "textarea": "Long text",
+          "select": "Choice",
+          "number": "Number",
+          "email": "Email",
+          "phone": "Phone",
+          "date": "Date"
+        },
+        "optionsOf": "Question {n}, choices",
+        "optionsPlaceholder": "One choice per line",
+        "optionsHint": "Up to {max} choices.",
+        "map": "Save the answer to",
+        "mapOf": "Question {n}, contact field",
+        "mapNone": "Nothing",
+        "mapFields": {
+          "email": "Email",
+          "name": "Name",
+          "mobile": "Mobile"
+        },
+        "required": "Required",
+        "moveUp": "Move question {n} up",
+        "moveDown": "Move question {n} down",
+        "remove": "Remove question {n}",
+        "count": "{count} of {max} questions"
+      },
+      "rail": {
+        "title": "Live summary",
+        "viewPublic": "View public page",
+        "cardLabel": "Preview of the booking card",
+        "newService": "New service",
+        "needsApproval": "Bookings wait for your approval.",
+        "fee": "Fee",
+        "free": "Free",
+        "tax": "Tax",
+        "total": "Total",
+        "dueNow": "Due now",
+        "slotsTitle": "Slot preview",
+        "refresh": "Refresh",
+        "loading": "Loading",
+        "slotsIdle": "Set your weekly hours, duration and time zone to preview real bookable times.",
+        "slotsFailed": "Preview failed.",
+        "slotsNone": "No bookable times for this configuration in the next {days} days.",
+        "slotsSummary": "{count, plural, one {# slot} other {# slots}} · times in {zone}"
+      }
+    },
+    "public": {
+      "brandFallback": "Online booking",
+      "brandName": "CRM",
+      "poweredBy": "Powered by {brand}",
+      "language": "Language",
+      "loading": "Loading",
+      "problem": {
+        "retry": "Try again",
+        "back": "See all services",
+        "notFoundOrg": {
+          "title": "We could not find this booking page",
+          "message": "The address may be mistyped, or this business does not take online bookings. Ask them for the link."
+        },
+        "notFoundService": {
+          "title": "This service is not available",
+          "message": "It may be paused, or it is no longer offered. You can look at the other services this business has."
+        },
+        "notFoundLink": {
+          "title": "This link is not valid",
+          "message": "The booking may have been removed, or the link is incomplete. Use the link from your confirmation, or ask the business for a new one."
+        },
+        "paused": {
+          "title": "This service is paused",
+          "message": "It is not taking bookings right now. Try again later, or look at the other services this business has."
+        },
+        "closed": {
+          "title": "This booking can no longer be changed",
+          "message": "It was already cancelled or completed. Contact the business if you need anything else."
+        },
+        "rateLimited": {
+          "title": "Too many requests",
+          "message": "Please wait a moment and try again."
+        },
+        "unavailable": {
+          "title": "Online booking is not available right now",
+          "message": "The booking service could not be reached. Try again in a few minutes."
+        },
+        "network": {
+          "title": "We could not load this page",
+          "message": "Check your connection and try again. If it keeps happening, contact the business."
+        }
+      },
+      "directory": {
+        "title": "Book an appointment",
+        "subtitle": "Choose a service to see the open times at {name}.",
+        "services": "Services",
+        "choose": "Choose a time",
+        "empty": {
+          "title": "Nothing to book right now",
+          "message": "This business has no services open for online booking at the moment. Please check back later."
+        }
+      },
+      "location": {
+        "address": "In person",
+        "virtual": "Video call",
+        "phone": "Phone call",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "All services",
+        "approvalNote": "The business confirms each booking. You will get a request first, then the confirmation."
+      },
+      "step": {
+        "time": "Pick a day and a time",
+        "pickHint": "Choose a day, then a time, to continue.",
+        "continue": "Continue",
+        "changeTime": "Change the time",
+        "details": "Your details"
+      },
+      "when": {
+        "atService": "Where the service is based: {day}, {range} ({zone})"
+      },
+      "where": {
+        "join": "Join video call",
+        "videoLater": "Video call",
+        "phone": "Phone call on"
+      },
+      "form": {
+        "name": "Your name",
+        "email": "Email",
+        "phone": "Phone",
+        "optional": "(optional)",
+        "choose": "Choose an option",
+        "required": "This field is required.",
+        "tooLong": "This is too long.",
+        "serverInvalid": "This could not be accepted. Check it and try again.",
+        "invalid": {
+          "text": "Check this value.",
+          "textarea": "Check this value.",
+          "email": "Enter a valid email address.",
+          "phone": "Enter a valid phone number, with the country code if it is not local.",
+          "number": "Enter a number.",
+          "date": "Choose a valid date.",
+          "select": "Choose one of the options."
+        }
+      },
+      "price": {
+        "title": "Price",
+        "inclTax": "incl. {pct}% tax",
+        "fee": "Fee",
+        "tax": "Tax ({pct}%)",
+        "total": "Total",
+        "dueNow": "Due at booking",
+        "notCollected": "Nothing is charged on this page. Online payment is not available yet."
+      },
+      "book": {
+        "confirm": "Confirm booking",
+        "request": "Request booking",
+        "sending": "Sending your booking",
+        "slotTaken": "That time was just taken. Please pick another.",
+        "slotTakenHint": "Your details are kept. The times below are up to date.",
+        "notice": {
+          "validation": {
+            "title": "Some of the information could not be accepted",
+            "message": "Check the highlighted fields and try again."
+          },
+          "rateLimited": {
+            "title": "Too many requests",
+            "message": "Please wait a moment and press the button again."
+          },
+          "network": {
+            "title": "The booking could not be sent",
+            "message": "Check your connection and press the button again. You will not be booked twice."
+          },
+          "unavailable": {
+            "title": "This service is no longer available",
+            "message": "It may have been paused. Go back to the list of services and try another."
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "Your booking is confirmed",
+        "confirmedMessage": "{name} has your booking. Keep the link below to change or cancel it.",
+        "pendingTitle": "Request received, waiting for confirmation",
+        "pendingMessage": "{name} will confirm your booking. Keep the link below to check on it, change it or cancel it.",
+        "pendingNote": "Until it is confirmed, the time is held for you but may still change.",
+        "manage": "Manage booking",
+        "bookAnother": "Book another service"
+      },
+      "calendar": {
+        "title": "Add to calendar",
+        "download": "Download .ics file",
+        "google": "Google Calendar",
+        "opensNewTab": "(opens in a new tab)"
+      },
+      "manageLink": {
+        "title": "Your booking link",
+        "hint": "Save this link. It is the only way to change or cancel your booking, and anyone who has it can do so.",
+        "copy": "Copy",
+        "copied": "Copied"
+      },
+      "manage": {
+        "title": "Your booking",
+        "reschedule": "Reschedule",
+        "cancel": "Cancel",
+        "flash": {
+          "rescheduled": "Your booking has been rescheduled.",
+          "cancelled": "Your booking has been cancelled."
+        },
+        "failure": {
+          "closed": "This booking can no longer be changed.",
+          "rateLimited": "Too many requests. Wait a moment and try again.",
+          "network": "The booking could not be changed. Check your connection and try again."
+        },
+        "confirmCancel": {
+          "title": "Cancel this booking?",
+          "message": "Your booking for {what} will be cancelled and the time given up. This cannot be undone.",
+          "confirm": "Yes, cancel booking",
+          "keep": "Keep booking"
+        },
+        "state": {
+          "pending": {
+            "title": "Waiting for confirmation",
+            "message": "The business has not confirmed this booking yet."
+          },
+          "cancelled": {
+            "title": "This booking was cancelled",
+            "message": "It can no longer be changed."
+          },
+          "no_show": {
+            "title": "This booking was marked as missed",
+            "message": "It can no longer be changed. Contact the business if this is a mistake."
+          },
+          "completed": {
+            "title": "This appointment is complete",
+            "message": "It can no longer be changed."
+          },
+          "passed": {
+            "title": "This appointment has already started",
+            "message": "It can no longer be changed online. Contact the business if you need to."
+          }
+        }
+      },
+      "reschedule": {
+        "title": "Reschedule",
+        "back": "Back to your booking",
+        "backToBooking": "Back to your booking",
+        "current": "Current time",
+        "saving": "Saving the new time",
+        "confirm": "Confirm new time · {when}",
+        "failure": {
+          "slotTaken": "That time was just taken — please pick another.",
+          "closed": "This booking can no longer be changed.",
+          "rateLimited": "Too many requests. Wait a moment and try again.",
+          "validation": "That time could not be accepted. Pick another.",
+          "network": "The new time could not be saved. Check your connection and try again."
+        },
+        "closed": {
+          "closed": {
+            "title": "This booking can no longer be changed",
+            "message": "It was already cancelled or completed, so there is no time to move."
+          },
+          "passed": {
+            "title": "This appointment has already started",
+            "message": "A booking cannot be moved after it has started. Contact the business if you need to."
+          }
+        }
+      }
+    },
+    "settings": {
+      "title": "Booking settings",
+      "subtitle": "Defaults, business hours and messages for bookings in this workspace.",
+      "breadcrumb": {
+        "label": "Breadcrumb",
+        "integrations": "Integrations",
+        "appointments": "Appointments",
+        "settings": "Settings"
+      },
+      "back": "Back to bookings",
+      "save": "Save settings",
+      "saving": "Saving...",
+      "saved": "Booking settings saved.",
+      "discard": "Discard changes",
+      "unsaved": "You have unsaved changes.",
+      "allSaved": "All changes saved.",
+      "loading": "Loading settings",
+      "forbidden": "You do not have permission to view booking settings.",
+      "readOnly": "You can view these settings but not change them.",
+      "fixFirst": "Fix the highlighted fields first.",
+      "issues": "{count, plural, one {# field needs attention before this can be saved.} other {# fields need attention before this can be saved.}}",
+      "conflict": {
+        "message": "These settings were changed elsewhere since you opened them. Reload to see the latest version; your edits here will be replaced.",
+        "reload": "Reload latest"
+      },
+      "leave": {
+        "title": "Leave without saving?",
+        "message": "Your changes to the booking settings have not been saved.",
+        "leave": "Leave",
+        "stay": "Keep editing"
+      },
+      "calendar": {
+        "title": "Calendar integration",
+        "description": "Connect a calendar so bookings and your busy times stay in step.",
+        "provider": "Google Calendar",
+        "providerSub": "Appointment booking",
+        "status": {
+          "unavailable": "Not available",
+          "disconnected": "Not connected",
+          "connected": "Connected"
+        },
+        "unavailableTitle": "Calendar sync is not available in this workspace yet",
+        "unavailableBody": "There is nothing to connect for now. Your bookings are not affected.",
+        "connectedTo": "Calendar: {name}",
+        "connectedAgo": "Connected {when}",
+        "whatTitle": "What this does",
+        "what": {
+          "freeBusy": "Reads free and busy times from your calendar.",
+          "nextSlots": "Offers the next free slots to customers.",
+          "writeBack": "Writes confirmed bookings back to your calendar as events."
+        },
+        "hint": "Bookings work without it. Open times come from your business hours and booking rules below."
+      },
+      "timezone": {
+        "title": "Time zone",
+        "description": "The zone your business hours and booking times are read in.",
+        "label": "Workspace time zone",
+        "hint": "Customers see times in their own zone; yours are shown in this one."
+      },
+      "hours": {
+        "title": "Business hours",
+        "description": "When customers can book. Switch a day off to close it, or add intervals for a break.",
+        "noHours": "No day is open, so nobody can book."
+      },
+      "defaults": {
+        "title": "Booking rules",
+        "description": "The defaults for bookings in this workspace.",
+        "fields": {
+          "slotDurationMinutes": "Slot duration (minutes)",
+          "maxPerDay": "Max bookings per day",
+          "bufferBeforeMinutes": "Buffer before (minutes)",
+          "bufferAfterMinutes": "Buffer after (minutes)",
+          "advanceDays": "Advance booking window (days)",
+          "reminderMinutesBefore": "Reminder (minutes before)",
+          "defaultLocation": "Default location (optional)"
+        },
+        "hints": {
+          "slotDurationMinutes": "{min} to {max} minutes.",
+          "maxPerDay": "{min} to {max} bookings.",
+          "bufferBeforeMinutes": "{min} to {max} minutes.",
+          "bufferAfterMinutes": "{min} to {max} minutes.",
+          "advanceDays": "{min} to {max} days ahead.",
+          "reminderMinutesBefore": "{min} to {max} minutes. 0 turns reminders off."
+        },
+        "locationHint": "Up to 191 characters.",
+        "locationPlaceholder": "e.g. 12 MG Road, Bangalore"
+      },
+      "templates": {
+        "title": "Message templates",
+        "description": "The plain-text messages customers receive. Placeholders are filled in for each booking.",
+        "placeholders": "Placeholders",
+        "placeholder": {
+          "type": "The booking type's name",
+          "slot": "The date and time",
+          "name": "The customer's name",
+          "manage_link": "The link to manage the booking"
+        },
+        "events": {
+          "confirmation": "Confirmation",
+          "reminder": "Reminder",
+          "cancellation": "Cancellation",
+          "reschedule": "Reschedule"
+        },
+        "reset": "Reset to default",
+        "unknown": "Not a known placeholder, it will be sent as written: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "This is required.",
+        "notInteger": "Enter a whole number.",
+        "tooSmall": "Must be at least {min}.",
+        "tooLarge": "Must be at most {max}.",
+        "tooLong": "Must be at most {max} characters.",
+        "badZone": "Pick a time zone from the list.",
+        "badHours": "Fix the highlighted times in the business hours."
+      },
+      "notAvailable": "Workspace-wide booking settings are not available on this server. Each booking type carries its own hours, time zone, reminders and messages instead.",
+      "openTypes": "Open booking types"
+    },
+    "linked": {
+      "title": "Appointments",
+      "openBookings": "Open bookings",
+      "showPast": "Show past",
+      "hidePast": "Hide past",
+      "empty": "No upcoming appointments.",
+      "emptyBoth": "No appointments yet.",
+      "loading": "Loading appointments",
+      "unavailable": "Appointments are not available on this server yet.",
+      "loadMore": "Load more",
+      "loadMorePast": "Load more past",
+      "noType": "Appointment"
+    }
+  }
+}

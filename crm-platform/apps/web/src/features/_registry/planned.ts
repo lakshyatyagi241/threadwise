@@ -25,8 +25,8 @@ export const PLANNED_NAV: readonly NavItem[] = [
   { id: 'team-chat', group: 'inbox', labelKey: L('teamChat'), href: '/team-chat', order: 30, icon: 'team-chat' },
   { id: 'team-members', group: 'inbox', labelKey: L('teamMembers'), href: '/team-members', order: 40, icon: 'team' },
 
-  // CRM (Contacts, Attributes, Contact groups and Deals are real screens). Orders keep the menu sequence:
-  // Contacts 0, Attributes 1, Contact groups 2, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
+  // CRM (Contacts, Attributes, Contact groups, Segments and Deals are real screens). Orders keep the menu sequence:
+  // Contacts 0, Attributes 1, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
   { id: 'lead-finder', group: 'audience', labelKey: L('leadFinder'), href: '/lead-finder', order: 30, icon: 'pin', badge: 'new' },
   { id: 'pipelines', group: 'audience', labelKey: L('pipelines'), href: '/pipelines', order: 50, icon: 'pipelines' },
   { id: 'companies', group: 'audience', labelKey: L('companies'), href: '/companies', order: 70, icon: 'companies' },
@@ -41,11 +41,10 @@ export const PLANNED_NAV: readonly NavItem[] = [
   { id: 'templates', group: 'campaigns', labelKey: L('templates'), href: '/templates', order: 30, icon: 'template' },
   { id: 'history', group: 'campaigns', labelKey: L('history'), href: '/message-history', order: 40, icon: 'history' },
 
-  // Automation
+  // Automation (Appointments is a real screen in features/appointments)
   { id: 'flows', group: 'automation', labelKey: L('flows'), href: '/flows', order: 0, icon: 'flow' },
   { id: 'ai-assistants', group: 'automation', labelKey: L('aiAssistants'), href: '/ai-assistants', order: 10, icon: 'bot', badge: 'new' },
   { id: 'auto-reply', group: 'automation', labelKey: L('autoReply'), href: '/auto-reply', order: 20, icon: 'reply' },
-  { id: 'appointments', group: 'automation', labelKey: L('appointments'), href: '/appointments', order: 30, icon: 'calendar' },
   { id: 'chat-widget', group: 'automation', labelKey: L('chatWidget'), href: '/chatbot-widgets', order: 40, icon: 'widget' },
 
   // Channels

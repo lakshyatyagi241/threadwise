@@ -158,7 +158,7 @@ export function NotificationRow({
           <span className="line-clamp-2 break-words text-xs text-muted-foreground">{body}</span>
         )}
         <span className="mt-0.5 block text-xs text-muted-foreground">
-          {format.relativeTime(new Date(n.createdAt))}
+          {format.relativeTime(new Date(n.createdAt), new Date())}
         </span>
       </span>
       {unread && <span className="sr-only">{t('bell.unread')}</span>}

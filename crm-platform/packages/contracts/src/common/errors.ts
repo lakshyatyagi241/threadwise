@@ -12,6 +12,8 @@ export const ERROR_CODES = {
   FORBIDDEN: 'FORBIDDEN',
   CONFLICT: 'CONFLICT',
   RATE_LIMITED: 'RATE_LIMITED',
+  /** The request body is larger than the server accepts (body-parser limit). */
+  PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
   INTERNAL: 'INTERNAL',
 
   // platform invariants
@@ -114,6 +116,12 @@ export const ERROR_CODES = {
   CON_LOST_REASON_REQUIRED: 'CON_LOST_REASON_REQUIRED',
   /** A status that belongs to another lifecycle stage was set on a contact (details: path `status`, names the stage). */
   CON_STATUS_STAGE_MISMATCH: 'CON_STATUS_STAGE_MISMATCH',
+
+  // segments (product extension)
+  /** Another segment in the workspace has this name (any case). */
+  SEG_NAME_TAKEN: 'SEG_NAME_TAKEN',
+  /** The rules point at something that does not exist (a tag, group, stage, status, user or property) or use an operator the property's type does not have. */
+  SEG_RULES_INVALID: 'SEG_RULES_INVALID',
 
   // broadcasts (TW-BCAST)
   BCAST_NO_RECIPIENTS: 'BCAST_NO_RECIPIENTS',
@@ -248,6 +256,34 @@ export const ERROR_CODES = {
   REC_ENDED: 'REC_ENDED',
   /** The start date is further back than the catch-up window allows. */
   REC_START_TOO_OLD: 'REC_START_TOO_OLD',
+
+  // appointments and booking (TW-APPT)
+  /** The slot has no free seat any more (another booking won it). */
+  APPT_SLOT_TAKEN: 'APPT_SLOT_TAKEN',
+  /** The time is not one the booking type offers (outside the hours, inside the notice, past the horizon, on a closed date). */
+  APPT_SLOT_UNAVAILABLE: 'APPT_SLOT_UNAVAILABLE',
+  /** The move is not allowed from the appointment's status (details: `from`, `to`). */
+  APPT_INVALID_TRANSITION: 'APPT_INVALID_TRANSITION',
+  /** Complete, no-show and check-in need the appointment to have started. */
+  APPT_NOT_STARTED: 'APPT_NOT_STARTED',
+  /** The appointment has started: it can no longer be moved or cancelled by the customer. */
+  APPT_ALREADY_STARTED: 'APPT_ALREADY_STARTED',
+  /** Only an appointment in a final status is deleted. */
+  APPT_NOT_DELETABLE: 'APPT_NOT_DELETABLE',
+  /** The booking type was deleted or paused: the booking cannot move. */
+  APPT_TYPE_UNAVAILABLE: 'APPT_TYPE_UNAVAILABLE',
+  /** An answer is missing, of the wrong type, or not one of the choices (details: one path per question). */
+  APPT_ANSWERS_INVALID: 'APPT_ANSWERS_INVALID',
+  /** The host is not an active member of this workspace. */
+  APPT_HOST_INVALID: 'APPT_HOST_INVALID',
+  /** An amount the currency cannot represent, or a payment the booking does not need. */
+  APPT_AMOUNT_INVALID: 'APPT_AMOUNT_INVALID',
+  /** The manage link belongs to a booking that is over (cancelled, completed, ...). */
+  APPT_LINK_UNAVAILABLE: 'APPT_LINK_UNAVAILABLE',
+  /** Online booking is off for this workspace (plan flag, plan cap) or the service is not bookable. */
+  APPT_BOOKING_UNAVAILABLE: 'APPT_BOOKING_UNAVAILABLE',
+  /** A booking type with pending or confirmed bookings still to come is not deleted. */
+  BOOKING_TYPE_HAS_UPCOMING: 'BOOKING_TYPE_HAS_UPCOMING',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
