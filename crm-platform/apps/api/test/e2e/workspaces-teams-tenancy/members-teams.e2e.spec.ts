@@ -1007,7 +1007,11 @@ describe('WD-WSP-018 and WD-WSP-047: remove a member (soft), and invite the addr
       .post('/v2/auth/login')
       .set('x-forwarded-for', ip())
       .send({ orgSlug: t.slug, email: agent.email, password: PASSWORD });
-    expect(login.status).toBeGreaterThanOrEqual(400);
+    // A removed member is an inactive account, which WaDesk lets sign in and then holds at the lock screen (WD-AUTH-016):
+    // the sign-in succeeds but every workspace call is refused.
+    expect(login.status).toBe(201);
+    const held = await api.as(login.body.tokens.accessToken as string).get('/v2/workspace/members');
+    expect(held.status).toBe(403);
     // The teams keep working without them.
     const teams = (await api.as(t.admin).get('/v2/workspace/teams')).body.data as Team[];
     expect(teams.every((x) => x.members.every((m) => m.id !== agent.uuid))).toBe(true);
@@ -1289,8 +1293,10 @@ describe('WD-WSP-020: the role model, the permission matrix and the role gates',
     const viewer = await addMember(t, 'Viewer20', 'Viewer');
     const perms = await permissionsOf(viewer.token);
     expect(Object.keys(perms).length).toBeGreaterThan(0);
-    // support.ticket.* is a baseline every preset holds by design (own tickets), not a viewer write.
-    for (const k of Object.keys(perms).filter((k) => !k.startsWith('support.ticket.')))
+    // support.ticket.* and wallet.statement.export are baselines every preset holds by design (own tickets, own statement), not viewer writes.
+    for (const k of Object.keys(perms).filter(
+      (k) => !k.startsWith('support.ticket.') && k !== 'wallet.statement.export',
+    ))
       expect(k.endsWith('.read'), k).toBe(true);
     expect((await createTeam(viewer.token, { name: 'Nope20' })).status).toBe(403);
     expect(

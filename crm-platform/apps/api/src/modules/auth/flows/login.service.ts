@@ -132,8 +132,7 @@ export class LoginService {
 
     const row = await this.findUser(org.id, req.email);
     const passwordOk = await this.passwords.verifyOrDummy(row?.password_hash, req.password);
-    // A removed member (status 'inactive') has no way back in until invited again (WSP members).
-    if (!row || row.status === 'inactive' || !passwordOk) {
+    if (!row || !passwordOk) {
       await this.recordFailedSignIn(lockKey, policy);
       await this.countIpFailure('login', ip);
       await this.audit.recordStandalone({
