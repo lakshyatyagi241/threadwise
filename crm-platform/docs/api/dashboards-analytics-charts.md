@@ -96,3 +96,30 @@ per day. A cell starting with `=`, `+`, `-` or `@` (other than a plain number) i
 | `dash.analytics.read` | no    | analytics overview and export |
 
 The Admin preset holds both; nobody else by default.
+
+## Operator system health (WD-DASH-048, 049, 050, 051)
+
+Console endpoints under `/v2/platform/health`, behind the operator guard. They read platform plumbing only, never a tenant table.
+
+### GET /v2/platform/health[?fresh=1]
+
+Every operator role. Returns `{ overall, checks, queues, vitals, ts }`. `checks` are five probes in a fixed order (`database`,
+`cache`, `queue`, `bridge`, `storage`), each `{ key, state: up|warn|down|idle, value, detail, ping }`. `overall` is `down` if any probe
+is down, else `warn` if any is, else `up` (idle does not count).
+
+- database: `SELECT 1`.
+- cache: writes and reads back `health:probe`.
+- queue: sums waiting, paused, delayed and prioritized jobs (pending) and failed jobs over every BullMQ queue; `warn` for any failed
+  job or more than 500 pending.
+- bridge: calls `NODE_BRIDGE_URL` with `X-Node-Token` (`NODE_BRIDGE_TOKEN`); any HTTP answer is `up`, a refused connection `down`,
+  an unset URL `warn`.
+- storage: `idle` without `S3_ENDPOINT`, otherwise checks that the endpoint answers.
+
+`queues` lists pending and failed per queue. `vitals` holds Node and app version, environment, uptime, memory and disk free/used.
+One probe run is shared for 3 seconds (`?fresh=1` skips the share).
+
+### POST /v2/platform/health/clear-queue
+
+Super admin only. Body `{ queue? }` (a queue name; omit for all). Drains waiting and delayed jobs and deletes failed jobs; running
+jobs are untouched. Returns `{ ok, clearedPending, clearedFailed, message }` and writes a `platform.health.queues_cleared` security
+event. An unknown name is `422`.

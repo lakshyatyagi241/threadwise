@@ -50,6 +50,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  {
+    id: 'system-health',
+    href: '/admin/health',
+    labelKey: 'dashboards-analytics-charts.health.nav',
+    groupKey: 'dashboards-analytics-charts.health.group',
+  },
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */

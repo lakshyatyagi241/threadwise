@@ -50,7 +50,10 @@ SVG/CSS from the page's colour tokens (no chart dependency may be added), each w
 
 1. Permissions migration, contracts, pure window and metric rules, repository, service, controllers: done and tested.
 2. Dashboard and analytics screens: done, typechecked, linted; client logic and message keys unit-tested.
-3. Not built: the admin surfaces WD-DASH-034..051 (need a platform door and the console nav owned by ASHELL), the home-router
+3. Operator system health (WD-DASH-048, 049 bars, 050 vitals, 051): done and tested. `GET /v2/platform/health`,
+   `POST /v2/platform/health/clear-queue`, console page `/admin/health`, entry merged into the console menu. No cross-tenant read.
+4. Not built: the admin overview, analytics and financial surfaces WD-DASH-034..047 and the platform-wide parts of 049 and 050 (need
+   a cross-tenant read door, see parity/dashboards-analytics-charts.md), the home-router
    redirect rules (WD-DASH-001, in the web shell's landing logic), Active contacts (006), wallet card (007), Instagram band (008),
    Quick access (009, 010; needs a per-user preference store), pipeline strip (011), campaign, device, template, inbox, flow and
    activity cards (013..020; need BCAST, WADEV, TPL, TIB1, FLR, NOTIF), per-device, geography and team performance (026, 029, 030),
