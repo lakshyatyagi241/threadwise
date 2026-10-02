@@ -6,6 +6,8 @@ export interface PreviewDocInput {
   launcher: WidgetLauncher;
   whatsappUrl: string | null;
   device: 'desktop' | 'mobile';
+  /** See `PreviewSource.inertStart`. */
+  inertStart?: boolean;
   /** Keeps the panel open across a repaint of the preview. */
   startOpen: boolean;
 }
@@ -24,6 +26,7 @@ export function previewDocument(i: PreviewDocInput): string {
     preview: true,
     device: i.device,
     startOpen: i.startOpen,
+    inertStart: i.inertStart,
   });
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

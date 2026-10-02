@@ -342,11 +342,7 @@
         "mobile": "Mobile",
         "frameTitle": "Live preview of your WhatsApp widget",
         "hint": "Collapse the panel with the round button, open it again from the launcher, and try Start Conversation.",
-        "businessName": "Your business",
-        "chatTitle": "Chat with us",
-        "chatWelcome": "Hi! How can we help today?",
-        "chatSend": "Send",
-        "chatHint": "A picture of your settings: collapse the panel with the round button and open it again from the launcher. The real chat loads on your site."
+        "businessName": "Your business"
       }
     }
   }

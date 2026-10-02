@@ -146,13 +146,14 @@ export default (h) => {
     bgImage: { threadwise: '[data-field=body_bg_image_url]', ours: '#wgt-f-bodyBgImageUrl' },
     snippet: { threadwise: '#cbw-snippet', ours: '[data-testid=snippet]' },
     pill: { threadwise: '#cbw-state-pill', ours: '[data-testid=state-pill]' },
-    // ours draws the preview in a frame (the same open panel for every engine), so its header is found through the frame
+    // ours draws the preview in a frame, as the one messenger panel for every engine, whose colour is the gradient of its
+    // Start Conversation button: the first colour stop is the wizard's header colour
     previewHeader: {
       threadwise: '#cbw-prev-header',
       ours: (page) =>
         page
           .frameLocator('[data-testid=launcher-preview-frame]')
-          .locator('[data-testid=preview-header]'),
+          .locator('[data-testid=wgt-start]'),
     },
   };
   const at = (c, spec) => c.loc(typeof spec === 'function' ? spec : (spec[c.side] ?? spec));
@@ -863,8 +864,10 @@ export default (h) => {
       await at(c, B.headerTitle).fill('Hello');
       await at(c, B.headerBg).fill('#112233');
       await c.page.waitForTimeout(700); // ours repaints its preview frame a moment after the keystroke
-      const bg = await at(c, B.previewHeader).evaluate(
-        (el) => getComputedStyle(el).backgroundColor,
+      const bg = await at(c, B.previewHeader).evaluate((el) =>
+        el.dataset.testid === 'wgt-start'
+          ? (/rgb\([^)]*\)/.exec(el.style.background)?.[0] ?? '')
+          : getComputedStyle(el).backgroundColor,
       );
       o.enum('preview.headerBg', bg);
       await clickNext(c);

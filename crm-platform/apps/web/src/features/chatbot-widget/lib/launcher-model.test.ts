@@ -4,13 +4,14 @@ import {
   launcherPayload,
   newState,
   previewLauncher,
+  previewSource,
   previewWhatsappLink,
+  wizardLauncher,
   toPayload,
   validateWhatsapp,
   validSpacing,
   type BuilderState,
 } from './builder-model';
-import { chatPreviewDocument, chatPreviewInput, safePreviewColour } from './chat-preview-doc';
 import { previewDocument } from './launcher-preview-doc';
 
 /** TW-WGT-028: the WhatsApp widget page's model (user-requested Interakt reference). */
@@ -225,8 +226,7 @@ describe('the preview backdrop', () => {
   });
 });
 
-describe('the wizard preview (Smart agent and Smart + WhatsApp)', () => {
-  const texts = { title: 'Chat with us', welcome: 'Hi!', send: 'Send' };
+describe('one preview for every engine', () => {
   const wizard = (over: Partial<BuilderState> = {}): BuilderState => ({
     ...newState(),
     mode: 'both',
@@ -237,98 +237,65 @@ describe('the wizard preview (Smart agent and Smart + WhatsApp)', () => {
     ...over,
   });
 
-  it('takes every setting of the wizard: header, bubble, canvas, button, intake, side and launcher', () => {
-    const i = chatPreviewInput(
+  it('Smart agent and Smart + WhatsApp fill the same panel from the wizard: name, opening line, header colour, image, side', () => {
+    const src = previewSource(
       wizard({
-        headerTitle: 'Acme Support',
+        name: 'Test By JD',
+        welcomeMessage: 'Welcome in',
         headerBg: '#112233',
-        headerTextColor: '#EEEEEE',
-        welcomeMessage: 'Welcome',
-        messageBubbleColor: '#F0F0F0',
-        messageTextColor: '#111111',
-        bodyBgKind: 'image',
-        bodyBgImageUrl: 'https://cdn.example/bg.png',
-        buttonLabel: 'Ask',
-        actionButtonBg: '#010203',
-        actionButtonTextColor: '#FAFAFA',
-        collectName: true,
-        collectEmail: true,
-        collectPhone: false,
-        position: 'bottom_left',
-        buttonColor: '#336699',
         buttonImageUrl: 'https://cdn.example/logo.png',
+        position: 'bottom_left',
       }),
-      'mobile',
-      true,
-      texts,
+      'Your business',
     );
-    expect(i).toMatchObject({
-      mode: 'both',
-      headerTitle: 'Acme Support',
-      headerBg: '#112233',
-      headerText: '#EEEEEE',
-      welcome: 'Welcome',
-      bubbleColor: '#F0F0F0',
-      bubbleText: '#111111',
-      bodyKind: 'image',
-      bodyImage: 'https://cdn.example/bg.png',
-      buttonLabel: 'Ask',
-      buttonBg: '#010203',
-      buttonText: '#FAFAFA',
-      collect: { name: true, email: true, phone: false },
-      whatsapp: true,
-      side: 'left',
-      launcherColour: '#336699',
-      launcherImage: 'https://cdn.example/logo.png',
-      device: 'mobile',
-      startOpen: true,
+    expect(src.name).toBe('Test By JD');
+    expect(src.launcher).toMatchObject({
+      colour: '#112233',
+      avatar: 'https://cdn.example/logo.png',
+      greeting: '',
+      introMessage: 'Welcome in',
+      desktop: { side: 'left' },
+      mobile: { side: 'left' },
     });
   });
 
-  it('empty fields fall back to the builder defaults; a script address or odd colour is never handed to a style', () => {
-    const i = chatPreviewInput(
-      wizard({
-        headerTitle: '  ',
-        welcomeMessage: '',
-        buttonLabel: '',
-        headerBg: 'url(javascript:alert(1))',
-        bodyBgKind: 'image',
-        bodyBgImageUrl: 'javascript:alert(1)',
-      }),
-      'desktop',
-      true,
-      texts,
+  it('a header colour that is not a hex falls back to the launcher fill, then to the original green; an odd image to the default', () => {
+    expect(wizardLauncher(wizard({ headerBg: 'red', buttonColor: '#336699' })).colour).toBe(
+      '#336699',
     );
-    expect(i.headerTitle).toBe('Chat with us');
-    expect(i.welcome).toBe('Hi!');
-    expect(i.buttonLabel).toBe('Send');
-    expect(i.headerBg).toBe('#075E54');
-    expect(i.bodyImage).toBeNull();
-    expect(safePreviewColour('#abc', '#000')).toBe('#abc');
-    expect(safePreviewColour('red;background:url(x)', '#000')).toBe('#000');
+    expect(wizardLauncher(wizard({ headerBg: 'red', buttonColor: 'blue' })).colour).toBe(
+      'original',
+    );
+    expect(wizardLauncher(wizard({ buttonImageUrl: 'javascript:alert(1)' })).avatar).toBe(
+      'preset:support',
+    );
+    expect(wizardLauncher(wizard({ welcomeMessage: '  ' })).introMessage).toContain(
+      'We are here to help',
+    );
   });
 
-  it('the WhatsApp action shows for the Both engine with a number, never for the Smart agent engine', () => {
-    expect(chatPreviewInput(wizard(), 'desktop', true, texts).whatsapp).toBe(true);
-    expect(chatPreviewInput(wizard({ mode: 'ai' }), 'desktop', true, texts).whatsapp).toBe(false);
-    expect(
-      chatPreviewInput(wizard({ targetWhatsappNumber: '12' }), 'desktop', true, texts).whatsapp,
-    ).toBe(false);
+  it('Both opens WhatsApp with the number and the pre-typed message; Smart agent has no link and its button is inert, not disabled', () => {
+    const both = previewSource(wizard({ prefilledMessage: 'Hello there' }), 'x');
+    expect(both.whatsappUrl).toBe('https://wa.me/919876543210?text=Hello+there');
+    expect(both.inertStart).toBe(false);
+    const ai = previewSource(wizard({ mode: 'ai' }), 'x');
+    expect(ai.whatsappUrl).toBeNull();
+    expect(ai.inertStart).toBe(true);
   });
 
-  it('the document is the open panel (startOpen), keeps saved text inert, and has one script element', () => {
-    const doc = chatPreviewDocument(
-      chatPreviewInput(
-        wizard({ headerTitle: '</script><img src=x onerror=alert(1)>' }),
-        'desktop',
-        true,
-        texts,
-      ),
-    );
-    expect(doc).toContain('"startOpen":true');
-    expect(doc).toContain('Typically replies within 5 mins');
-    expect(doc).toContain('data-testid');
-    expect(doc.match(/<\/script>/g)).toHaveLength(1);
-    expect(doc).not.toContain('<img src=x');
+  it('the WhatsApp page keeps its own options as the source', () => {
+    const src = previewSource(ready({ name: '' }), 'Your business');
+    expect(src.name).toBe('Your business');
+    expect(src.launcher.greeting).toBe('HI THERE!');
+    expect(src.inertStart).toBe(false);
+  });
+
+  it('the document is the open panel for every engine, pinned to the device', () => {
+    for (const s of [wizard(), wizard({ mode: 'ai' }), ready()]) {
+      const doc = previewDocument({ ...previewSource(s, 'x'), device: 'mobile', startOpen: true });
+      expect(doc).toContain('"startOpen":true');
+      expect(doc).toContain('"device":"mobile"');
+      expect(doc).toContain('Start Conversation');
+    }
   });
 });

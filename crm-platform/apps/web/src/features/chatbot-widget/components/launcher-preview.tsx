@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
-import { previewLauncher, previewWhatsappLink, type BuilderState } from '../lib/builder-model';
-import { chatPreviewDocument, chatPreviewInput } from '../lib/chat-preview-doc';
+import { previewSource, type BuilderState } from '../lib/builder-model';
 import { previewDocument } from '../lib/launcher-preview-doc';
 
 export type PreviewDevice = 'desktop' | 'mobile';
@@ -12,11 +11,10 @@ export type PreviewDevice = 'desktop' | 'mobile';
 const REPAINT_MS = 120;
 
 /**
- * The live preview shared by all three engines (TW-WGT-028): a stand-in website frame with the messenger panel OPEN, as tall
- * as the real one, repainted a moment after every change. For a WhatsApp widget it runs the real embed script (Start
- * Conversation opens WhatsApp for the configured number); for Smart agent and Smart + WhatsApp it draws the wizard's fields
- * in the same panel (header, welcome bubble, intake, input and send, the WhatsApp action). The visitor's own collapse and
- * re-open of the panel are remembered across repaints.
+ * The one live preview of the builder (TW-WGT-028), the same for all three engines: a stand-in website frame running the
+ * real WhatsApp messenger script with the panel OPEN, as tall as the real one, repainted a moment after every change. The
+ * content comes from the WhatsApp page's options, or, for Smart agent and Smart + WhatsApp, from the wizard's fields. The
+ * visitor's own collapse and re-open of the panel are remembered across repaints.
  */
 export function LauncherPreview({
   s,
@@ -26,30 +24,19 @@ export function LauncherPreview({
 }: {
   s: BuilderState;
   device: PreviewDevice;
-  /** The wizard has no placement card, so the preview carries its own Desktop / Mobile switch. */
+  /** The wizard has no placement card, so its preview carries its own Desktop / Mobile switch. */
   onDevice?: (device: PreviewDevice) => void;
   children?: React.ReactNode;
 }) {
   const t = useTranslations('chatbotWidget.whatsappBuilder.preview');
   const frame = useRef<HTMLIFrameElement>(null);
   const open = useRef(true);
-  const chat = s.mode !== 'whatsapp';
 
   const fallbackName = t('businessName');
-  const texts = { title: t('chatTitle'), welcome: t('chatWelcome'), send: t('chatSend') };
   const build = (startOpen: boolean) =>
-    chat
-      ? chatPreviewDocument(chatPreviewInput(s, device, startOpen, texts))
-      : previewDocument({
-          name: s.name.trim() || fallbackName,
-          launcher: previewLauncher(s.launcher),
-          whatsappUrl: previewWhatsappLink(s),
-          device,
-          startOpen,
-        });
+    previewDocument({ ...previewSource(s, fallbackName), device, startOpen });
   // Repaint only when what the frame draws changes, never on an unrelated re-render of the builder.
   const fresh = build(true);
-  const key = fresh;
   const latest = useRef(build);
   useEffect(() => {
     latest.current = build;
@@ -59,7 +46,7 @@ export function LauncherPreview({
   useEffect(() => {
     const timer = window.setTimeout(() => setDoc(latest.current(open.current)), REPAINT_MS);
     return () => window.clearTimeout(timer);
-  }, [key]);
+  }, [fresh]);
 
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
@@ -72,7 +59,6 @@ export function LauncherPreview({
     return () => window.removeEventListener('message', onMessage);
   }, []);
 
-  const height = chat ? 700 : device === 'mobile' ? 700 : 620;
   return (
     <aside className="space-y-4 xl:sticky xl:top-[92px]" aria-label={t('title')}>
       <div className="rounded-2xl border border-border bg-background p-4 shadow-sm">
@@ -116,7 +102,7 @@ export function LauncherPreview({
               ? 'w-[372px] max-w-full rounded-[32px] border-[6px] border-foreground/80'
               : 'w-full rounded-xl border border-border',
           )}
-          style={{ height }}
+          style={{ height: device === 'mobile' ? 700 : 620 }}
         >
           <iframe
             ref={frame}
@@ -127,9 +113,7 @@ export function LauncherPreview({
             className="size-full border-0"
           />
         </div>
-        <p className="mt-3 text-center text-[11px] text-muted-foreground">
-          {t(chat ? 'chatHint' : 'hint')}
-        </p>
+        <p className="mt-3 text-center text-[11px] text-muted-foreground">{t('hint')}</p>
       </div>
       {children}
     </aside>

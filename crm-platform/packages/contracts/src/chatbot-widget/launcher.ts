@@ -321,6 +321,8 @@ export interface LauncherScriptInput {
   /** `auto` follows the window width (`max-width: 768px` is mobile); the preview pins one of the two. */
   device?: 'auto' | 'desktop' | 'mobile';
   startOpen?: boolean;
+  /** Builder preview only: Start Conversation keeps its normal look and does nothing when there is no link. */
+  inertStart?: boolean;
 }
 
 /** A string as a JavaScript literal that is also safe inside an inline `<script>` element. */
@@ -400,7 +402,7 @@ const RUNTIME = `
   var time = el('span', 'position:absolute;right:10px;bottom:5px;font-size:11px;color:#667781');
   try { time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }); } catch (e) { time.textContent = ''; }
   bubble.appendChild(tail);
-  bubble.appendChild(greet);
+  if (C.greeting) bubble.appendChild(greet);
   bubble.appendChild(introText);
   bubble.appendChild(time);
   body.appendChild(bubble);
@@ -415,7 +417,7 @@ const RUNTIME = `
   start.appendChild(el('span', '', C.text.start));
   if (C.wa) {
     start.addEventListener('click', function () { win.open(C.wa, '_blank', 'noopener'); });
-  } else {
+  } else if (!C.inert) {
     start.disabled = true;
     start.style.opacity = '.55';
     start.style.cursor = 'not-allowed';
@@ -507,6 +509,7 @@ export function buildLauncherScript(i: LauncherScriptInput): string {
     preview: i.preview === true,
     device: i.device ?? 'auto',
     startOpen: i.startOpen === true,
+    inert: i.inertStart === true,
     text: {
       pill: LAUNCHER_TEXT.pill,
       open: LAUNCHER_TEXT.openLabel,

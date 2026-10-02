@@ -530,3 +530,26 @@ describe('the panel looks like the real messenger', () => {
     expect(who.children[1]!.style.cssText).toContain('font-weight:700');
   });
 });
+
+describe('the builder preview flags', () => {
+  it('an empty greeting leaves only the intro in the bubble', () => {
+    const r = run({ launcher: { ...DEFAULT_LAUNCHER, greeting: '', introMessage: 'Only this' } });
+    const bubble = r.created.find((e) => e.attrs['data-testid'] === 'wgt-intro')!;
+    expect(bubble.children.map((c) => c.textContent).filter(Boolean)[0]).toBe('Only this');
+    expect(
+      r.created.some(
+        (e) => e.attrs['data-testid'] === 'wgt-greeting' && bubble.children.includes(e),
+      ),
+    ).toBe(false);
+  });
+
+  it('an inert Start Conversation keeps its look and opens nothing; without the flag a missing link disables it', () => {
+    const inert = run({ whatsappUrl: null, inertStart: true });
+    const start = inert.byId(`wgt-start-${SHORT}`);
+    expect(start.disabled).toBe(false);
+    expect(start.style.opacity).toBeUndefined();
+    inert.click(start);
+    expect(inert.opened).toEqual([]);
+    expect(run({ whatsappUrl: null }).byId(`wgt-start-${SHORT}`).disabled).toBe(true);
+  });
+});
