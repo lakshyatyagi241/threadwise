@@ -34,3 +34,25 @@ are started.
 | Provider  | `apps/api/src/infra/providers/node-bridge-runtime/node-bridge.probe.ts`                                                                 |
 | Web       | `apps/web/src/features/node-bridge-runtime/`, route `/admin/node-bridge`, menu entry via `operator-nav.ts`                              |
 | Tests     | `apps/api/test/e2e/node-bridge-runtime/node-bridge.e2e.spec.ts` (18), `apps/web/src/features/node-bridge-runtime/lib/draft.test.ts` (3) |
+
+## Media fetch safety (TW-NODE-028)
+
+| Rule                                                   | Where                                                                                 | Notes                                                                                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Blocked address ranges, every resolved address checked | `infra/providers/node-bridge-runtime/safe-fetch.ts` (`isBlockedAddress`, `SafeFetch`) | adds multicast/reserved and IPv4-mapped forms                                                              |
+| Redirects: max 3, each hop re-checked                  | same                                                                                  | Reference checked the first hop only (a bypass); fixed, see parity notes                                      |
+| Local file paths                                       | not accepted                                                                          | Reference allowed a read allow-list (`MEDIA_READ_BASES`); media comes from a URL or storage, see parity notes |
+| MIME and extension                                     | same (`resolveMime`, `extensionFor`)                                                  | server type, then extension, then `application/octet-stream`; default `.jpg`                               |
+| `assertHttpsMedia` (broadcast pipeline)                | BCAST `template-guards.ts`                                                            | already ported there                                                                                       |
+| Inline `attachment_base64`                             | with TW-NODE-023                                                                      | consumer of `SafeFetch`; not built yet                                                                     |
+
+## How the other NODE features map to our architecture
+
+| Group                                | Features                                                                     | Where it lives or what happens                                                                                                                    |
+| ------------------------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Collapses, nothing to build          | 003, 005, 026                                                                | CORS and body limits exist in `main.ts`; in-memory registry becomes Redis leases and BullMQ jobs; engine and credentials come from the device row |
+| Already built in BCAST               | 029 (jitter, daily cap, lease), 037, 038, 014 (tick), 027 (Cloud API sender) | `apps/api/src/modules/broadcasts`; the Baileys and Twilio engine adapters are the missing piece                                                   |
+| Needs the socket runtime (`baileys`) | 007-013, 016-025, 021, 020                                                   | waits for the dependency PR and TW-NODE-011                                                                                                       |
+| Scheduler                            | 030-036                                                                      | SCHED domain on BullMQ                                                                                                                            |
+| Collapses into the owning domain     | 019, 041-051                                                                 | flows (FLR), calling (CALL), Google (INTG), commerce and booking (CHK, APPT), channels; built there, not as bridge endpoints                      |
+| Not ported                           | 039, 053, 054                                                                | dead code in Reference, developer-only endpoint, smoke scripts                                                                                       |

@@ -5,3 +5,7 @@
 export { NodeBridgeRuntimeModule } from './node-bridge-runtime.module';
 export { NodeBridgeSettingsService } from './node-bridge-settings.service';
 export { NodeTokenGuard } from './node-token.guard';
+export {
+  SafeFetch,
+  UnsafeMediaUrlError,
+} from '../../infra/providers/node-bridge-runtime/safe-fetch';
