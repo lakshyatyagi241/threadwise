@@ -70,7 +70,7 @@ Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-facebook.md` (
 | ---- | ---------------------------------------------------------------------------------------------------------------- | ------------------ |
 | F1   | Pages: connect (login, popup, token), manage, webhook in, inbox ingest, backfill, reply, health sweep (DONE)     | 001-006, 007-011   |
 | F2   | Messenger broadcasts: audience, compose, BullMQ sender, start, pause, retry, delete (DONE)                       | 012, 013, 014      |
-| F3   | Messenger setup: Get Started, greeting, persistent menu, ice breakers                                            | 015                |
+| F3   | Messenger setup: Get Started, greeting, persistent menu, ice breakers (DONE)                                     | 015                |
 | F4   | Posts: composer, schedule, list, publish now, delete, my posts, insights                                         | 016, 017, 018, 019 |
 | F5   | Web: hub, broadcasts, setup, posts, composer, my posts, insights                                                 | 001, 012-019       |
 | F6   | AI composer tools, flow hand-off and node callbacks, social calendar (BLOCKED: AI provider, flow runtime, owner) | 020, 021, 023      |

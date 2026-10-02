@@ -22,6 +22,8 @@ import { PagesController } from './pages.controller';
 import { PagesRepository } from './pages.repository';
 import { PagesService } from './pages.service';
 import { SenderService } from './sender.service';
+import { SetupController } from './setup.controller';
+import { SetupService } from './setup.service';
 import { FacebookPublicController } from './webhook.controller';
 
 /**
@@ -29,7 +31,7 @@ import { FacebookPublicController } from './webhook.controller';
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  controllers: [PagesController, FbBroadcastsController, FacebookPublicController],
+  controllers: [PagesController, FbBroadcastsController, SetupController, FacebookPublicController],
   providers: [
     CryptoService,
     PagesService,
@@ -40,6 +42,7 @@ import { FacebookPublicController } from './webhook.controller';
     FbBroadcastsService,
     FbBroadcastsRepository,
     FbBroadcastSenderService,
+    SetupService,
     FacebookGraphClients,
     { provide: FACEBOOK_GRAPH, useExisting: FacebookGraphClients },
     { provide: FACEBOOK_PLAN_GATE, useClass: OpenFacebookPlanGate },

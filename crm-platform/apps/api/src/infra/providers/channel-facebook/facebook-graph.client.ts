@@ -230,6 +230,46 @@ class PageApi implements FacebookPageApi {
     });
   }
 
+  async getMessengerProfile(): Promise<Record<string, unknown>> {
+    const r = await this.get(`${this.pageId}/messenger_profile`, {
+      fields:
+        'get_started,greeting,ice_breakers,persistent_menu,whitelisted_domains,account_linking_url,commands,subject_to_new_eu_privacy_rules',
+    });
+    // Meta answers `data: [{greeting: [...]}, {get_started: {...}}, ...]`: one property per object, merged here.
+    const merged: Record<string, unknown> = {};
+    if (r.ok && Array.isArray(r.data?.data)) {
+      for (const row of r.data.data) Object.assign(merged, obj(row));
+    }
+    return merged;
+  }
+
+  setMessengerProfile(
+    payload: Record<string, unknown>,
+    graphVersion?: string,
+  ): Promise<GraphResult> {
+    return call(
+      graphVersion?.replace(/^\/+/, '') || this.version,
+      'POST',
+      `${this.pageId}/messenger_profile`,
+      {
+        token: this.token,
+        json: payload,
+      },
+    );
+  }
+
+  deleteMessengerProfile(fields: readonly string[], graphVersion?: string): Promise<GraphResult> {
+    return call(
+      graphVersion?.replace(/^\/+/, '') || this.version,
+      'DELETE',
+      `${this.pageId}/messenger_profile`,
+      {
+        token: this.token,
+        json: { fields: [...fields] },
+      },
+    );
+  }
+
   async replyComment(objectId: string, text: string): Promise<GraphResult<{ id: string }>> {
     const r = await call(this.version, 'POST', `${objectId}/comments`, {
       token: this.token,
@@ -288,6 +328,7 @@ export class FacebookGraphClients implements FacebookGraphFactory {
       configId: get('FB_CONFIG_ID'),
       graphVersion:
         get('FB_GRAPH_VERSION') ?? (config.get('META_GRAPH_VERSION', { infer: true }) as string),
+      greetingFallbackVersion: config.get('FB_GREETING_GRAPH_VERSION', { infer: true }),
       verifyToken: get('FB_WEBHOOK_VERIFY_TOKEN') ?? get('WHATSAPP_VERIFY_TOKEN'),
       signingSecrets: [
         ...new Set([fbSecret, waSecret].filter((s): s is string => Boolean(s?.trim()))),

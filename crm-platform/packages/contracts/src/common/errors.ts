@@ -180,6 +180,10 @@ export const ERROR_CODES = {
   FB_NOTHING_TO_SEND: 'FB_NOTHING_TO_SEND',
   /** Retry: nobody failed. */
   FB_NOTHING_TO_RETRY: 'FB_NOTHING_TO_RETRY',
+  /** Meta refused a Messenger profile change; the message carries its reason. */
+  FB_SETUP_REJECTED: 'FB_SETUP_REJECTED',
+  /** Meta's Graph version no longer accepts the field (the welcome greeting). */
+  FB_SETUP_UNSUPPORTED: 'FB_SETUP_UNSUPPORTED',
 
   // campaigns (WD-CAMP)
   /** Nobody on the audience can be messaged. */

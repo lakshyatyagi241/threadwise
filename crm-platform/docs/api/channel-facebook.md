@@ -46,6 +46,24 @@ moment of each send.
 
 Events: `facebook.broadcast.created`, `.started`, `.paused`, `.retry_requested`, `.deleted`.
 
+## Messenger setup (WD-FB-015)
+
+Needs `fb.setup.manage` for every route. Each save goes straight to Meta; nothing is stored here. A write answers `200 {message}`
+("Greeting saved.", "Persistent menu removed." ...). 422 `FB_PAGE_UNAVAILABLE` for a Page that is not connected; 422 `FB_SETUP_REJECTED` with
+"Facebook rejected the change: <Meta's reason>"; 422 `FB_SETUP_UNSUPPORTED` when the Graph version no longer has the welcome greeting.
+
+| Method and path                               | What                                                                                                                                                                                                     |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /facebook/setup?page=<uuid>`             | `{pages, page, getStarted, greeting, menu: {items, composerInputDisabled}, iceBreakers}`: the connected Pages and the picked one's live profile.                                                         |
+| `PUT /facebook/setup/:pageId/get-started`     | Body `{payload}`; a blank payload removes the button.                                                                                                                                                    |
+| `DELETE /facebook/setup/:pageId/get-started`  | Remove it.                                                                                                                                                                                               |
+| `PUT /facebook/setup/:pageId/greeting`        | Body `{greeting}`; cut to 160 characters; blank removes it. Retried once on `FB_GREETING_GRAPH_VERSION` when Meta has dropped the field.                                                                 |
+| `DELETE /facebook/setup/:pageId/greeting`     | Remove it. A version that no longer stores a greeting counts as removed.                                                                                                                                 |
+| `PUT /facebook/setup/:pageId/menu`            | Body `{items: [{title, type: web_url\|postback, url, payload}], composerInputDisabled}`; at most three items; a Get Started button is created first when there is none; no usable item removes the menu. |
+| `DELETE /facebook/setup/:pageId/menu`         | Remove it.                                                                                                                                                                                               |
+| `PUT /facebook/setup/:pageId/ice-breakers`    | Body `{items: [{question, payload}]}`; at most four; none removes them all.                                                                                                                              |
+| `DELETE /facebook/setup/:pageId/ice-breakers` | Remove all.                                                                                                                                                                                              |
+
 ## Module surface for other domains
 
 `FacebookSenderService.reply(orgId, {rawJid, text, media})` returns `{ok, providerMessageId, error}` and never throws. The team inbox calls
