@@ -14,8 +14,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Once setup is complete the page is gone: anyone landing here is sent to sign-in. */
 export default async function SetupPage() {
-  const res = await fetch(`${apiBase()}/v2/setup/status`, { cache: 'no-store' });
-  const status = setupStatusResponseSchema.parse(await res.json());
+  const t = await getTranslations('install-update-licensing.setup');
+  let status;
+  try {
+    const res = await fetch(`${apiBase()}/v2/setup/status`, { cache: 'no-store' });
+    status = setupStatusResponseSchema.parse(await res.json());
+  } catch {
+    return (
+      <p
+        role="alert"
+        className="relative z-10 max-w-md rounded-2xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger"
+      >
+        {t('unavailable')}
+      </p>
+    );
+  }
   if (status.state === 'completed') redirect('/login');
   return <SetupWizard status={status} />;
 }

@@ -1,9 +1,12 @@
 import type { z } from 'zod';
 import {
-  setupBootstrapResponseSchema,
+  setupDatabaseDefaultsResponseSchema,
+  setupDatabaseTestResponseSchema,
+  setupRequirementsResponseSchema,
+  setupRunResponseSchema,
   setupStatusResponseSchema,
   verifySetupTokenResponseSchema,
-  type SetupBootstrapRequest,
+  type SetupRunRequest,
 } from '@crm/contracts';
 import { toApiError } from '@/lib/api/errors';
 
@@ -38,10 +41,30 @@ async function call<T>(
   return schema.parse(json);
 }
 
+const post = <T>(path: string, schema: z.ZodType<T, z.ZodTypeDef, unknown>, body: unknown) =>
+  call(path, schema, { method: 'POST', body });
+
 export const fetchSetupStatus = () => call('status', setupStatusResponseSchema);
 
 export const verifySetupToken = (setupToken: string) =>
-  call('verify-token', verifySetupTokenResponseSchema, { method: 'POST', body: { setupToken } });
+  post('verify-token', verifySetupTokenResponseSchema, { setupToken });
 
-export const bootstrapPlatform = (body: SetupBootstrapRequest) =>
-  call('bootstrap', setupBootstrapResponseSchema, { method: 'POST', body });
+export const fetchRequirements = (setupToken: string) =>
+  post('requirements', setupRequirementsResponseSchema, { setupToken });
+
+export const fetchDatabaseDefaults = (setupToken: string) =>
+  post('database-defaults', setupDatabaseDefaultsResponseSchema, { setupToken });
+
+export const testDatabase = (body: {
+  setupToken: string;
+  host: string;
+  port: number;
+  database: string;
+  username: string;
+  password: string;
+}) => post('test-database', setupDatabaseTestResponseSchema, body);
+
+export const verifyLicence = (setupToken: string, purchaseCode: string) =>
+  post('verify-licence', verifySetupTokenResponseSchema, { setupToken, purchaseCode });
+
+export const runSetupStep = (body: SetupRunRequest) => post('run', setupRunResponseSchema, body);

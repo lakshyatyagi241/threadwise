@@ -1,12 +1,6 @@
-import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
-import { SystemView } from '@/features/install-update-licensing/system/system-view';
+import { redirect } from 'next/navigation';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('install-update-licensing.system');
-  return { title: t('title') };
-}
-
-export default function SystemPage() {
-  return <SystemView />;
+/** The first build served the page here; the Updater now lives at Reference's address, so old links keep working. */
+export default function SystemPage(): never {
+  redirect('/admin/update');
 }
