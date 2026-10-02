@@ -1,10 +1,17 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import {
+  CONVERSATION_MESSAGE_STORE,
+  type ConversationMessageStore,
+} from './conversation-message-store';
+import type { InboundOutcome, OutboundOutcome } from './conversation-outcomes';
 import { languageDisplayName } from './language-detector';
 import { TranslationService } from './translation.service';
 import { translationAllowed } from './translation-settings.service';
+
+export type { InboundOutcome, OutboundOutcome };
 
 export interface ConversationTranslationConfig {
   /** The plan includes translation AND the workspace switch is on. */
@@ -21,16 +28,6 @@ export interface InboundInput {
   alreadyTranslated?: boolean;
 }
 
-/** What to store on the message and the conversation. Nothing here writes: the inbox domain owns those rows. */
-export interface InboundOutcome {
-  detectedLanguage: string | null;
-  /** The team-language reading, only when the message is in another language. */
-  translatedBody: string | null;
-  isTranslated: boolean;
-  /** Set only when the conversation had no language yet; later messages never move it. */
-  pinLanguage: string | null;
-}
-
 export interface OutboundInput {
   orgId: number;
   /** What the agent typed. */
@@ -41,16 +38,6 @@ export interface OutboundInput {
   alreadyTranslated?: boolean;
 }
 
-export interface OutboundOutcome {
-  /** What to deliver. */
-  body: string;
-  /** The agent's original, kept for the thread view; set only when the text was translated. */
-  original: string | null;
-  /** The language delivered, set only when translated. */
-  language: string | null;
-  isTranslated: boolean;
-}
-
 /** The unchanged-text outcome: nothing translated, nothing flagged. */
 const asTyped = (body: string): OutboundOutcome => ({
   body,
@@ -59,11 +46,33 @@ const asTyped = (body: string): OutboundOutcome => ({
   isTranslated: false,
 });
 
+/** One message as the thread payload carries it (WD-I18N-038). */
+export interface ThreadTranslationFields {
+  translatedBody: string | null;
+  detectedLanguage: string | null;
+  isTranslated: boolean;
+}
+
 /**
- * Conversation translation (WD-I18N-036..039): the decisions about inbound and outbound messages, separated from the
- * inbox so they can be tested and reused. The inbox domain (not built yet) calls `translateInbound` after storing a
- * message and `translateOutbound` in the send worker before the branding footer, and persists the outcome. Both
- * decide with explicit workspace context; neither throws, a failed translation means the text is simply not translated.
+ * The translation fields of a thread payload. While translation is not live (plan below the feature, or the switch
+ * off) the stored translation is hidden and `isTranslated` is false, but the detected language is still returned and
+ * nothing is deleted: turning translation back on shows the old readings again.
+ */
+export function visibleTranslation(
+  live: boolean,
+  m: ThreadTranslationFields,
+): ThreadTranslationFields {
+  return live
+    ? m
+    : { translatedBody: null, detectedLanguage: m.detectedLanguage, isTranslated: false };
+}
+
+/**
+ * Conversation translation (WD-I18N-036..039): the decisions about inbound and outbound messages. The inbox domain
+ * (not built yet) calls `translateInboundMessage` after it stores a message and `translateOutboundMessage` in the send
+ * worker before the branding footer, and `threadView` when it builds a thread payload. Messages are reached through
+ * `ConversationMessageStore`. Everything decides with explicit workspace context and never throws: a failed
+ * translation means the text is simply not translated.
  */
 @Injectable()
 export class ConversationTranslationService {
@@ -73,6 +82,7 @@ export class ConversationTranslationService {
     private readonly db: DatabaseService,
     private readonly plans: PlanEntitlementService,
     private readonly translation: TranslationService,
+    @Inject(CONVERSATION_MESSAGE_STORE) private readonly messages: ConversationMessageStore,
   ) {}
 
   /** The gate every conversation feature checks: plan AND workspace switch (WD-I18N-038 reads it for display too). */
@@ -159,5 +169,63 @@ export class ConversationTranslationService {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * WD-I18N-036 for a stored message: detects, stores the reading and pins the language. Only inbound messages with
+   * text that are not already translated are touched; returns what was stored, or null when nothing was.
+   */
+  async translateInboundMessage(orgId: number, messageId: number): Promise<InboundOutcome | null> {
+    try {
+      const m = await this.messages.load(orgId, messageId);
+      if (!m || m.direction !== 'in') return null;
+      const outcome = await this.translateInbound({
+        orgId,
+        body: m.body ?? '',
+        pinnedLanguage: m.customerLanguage,
+        alreadyTranslated: m.isTranslated,
+      });
+      if (outcome) await this.messages.saveInbound(orgId, m, outcome);
+      return outcome;
+    } catch (err) {
+      this.logger.warn({ err, messageId }, 'inbound translation could not be stored');
+      return null;
+    }
+  }
+
+  /**
+   * WD-I18N-037 for a stored message: the text to deliver (translated into the customer's language, or exactly as
+   * typed). The agent's original is stored beside it when the text was translated.
+   */
+  async translateOutboundMessage(
+    orgId: number,
+    messageId: number,
+  ): Promise<OutboundOutcome | null> {
+    try {
+      const m = await this.messages.load(orgId, messageId);
+      if (!m || m.direction !== 'out') return null;
+      const outcome = await this.translateOutbound({
+        orgId,
+        body: m.body ?? '',
+        customerLanguage: m.customerLanguage,
+        isTemplate: m.isTemplate,
+        isForwarded: m.isForwarded,
+        alreadyTranslated: m.isTranslated,
+      });
+      if (outcome.isTranslated) await this.messages.saveOutbound(orgId, m, outcome);
+      return outcome;
+    } catch (err) {
+      this.logger.warn({ err, messageId }, 'outbound translation could not be stored');
+      return null;
+    }
+  }
+
+  /** WD-I18N-038. The gate is read once for the whole thread, not once per message. */
+  async threadView<T extends ThreadTranslationFields>(
+    orgId: number,
+    messages: readonly T[],
+  ): Promise<T[]> {
+    const { enabled } = await this.config(orgId);
+    return messages.map((m) => ({ ...m, ...visibleTranslation(enabled, m) }));
   }
 }
