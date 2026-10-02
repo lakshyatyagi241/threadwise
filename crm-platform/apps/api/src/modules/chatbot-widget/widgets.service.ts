@@ -35,9 +35,7 @@ export const PLAN_FEATURE = 'access_chatbot_widgets';
 
 const parse = <T>(
   schema: {
-    safeParse(
-      v: unknown,
-    ):
+    safeParse(v: unknown):
       | { success: true; data: T }
       | {
           success: false;
