@@ -7,6 +7,10 @@ data model, same screens and flows, same copy where it fits). The port is a rewr
 our conventions (RLS, Drizzle, contracts, module boundaries); do not drop Laravel/PHP/Blade code into `crm-platform/`. Do not publish the
 WaDesk source itself outside the project.
 
+**HARD RULES for every session and chat: no WaDesk feature lost or changed, same UI rebuilt on our stack, real backend wiring,
+read the feature's wiring map first.** Full text: `crm-platform/docs/wadesk-port/PORTING_RULES.md` (read first); wiring maps:
+`crm-platform/docs/wadesk-port/wiring/`. Do not start port work without them.
+
 Start here: `crm-platform/docs/wadesk-port/README.md` (status, findings, decisions needed, next-session runbook).
 
 | Folder              | What                                                                                   | Rules                                                    |

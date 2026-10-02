@@ -22,6 +22,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
+import { BroadcastsModule } from './modules/broadcasts';
 import { CrmModule } from './modules/crm';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PartnerModule } from './modules/partner/partner.module';
@@ -105,6 +106,7 @@ import { HealthModule } from './health/health.module';
     // Apps
     AdminModule,
     CrmModule,
+    BroadcastsModule,
     PartnerModule,
     PublicApiModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
