@@ -1,7 +1,13 @@
 {
   "dashboards-analytics-charts": {
-    "nav": { "title": "Dashboard", "analytics": "Analytics" },
-    "home": { "title": "Dashboard", "welcome": "Welcome to your workspace." },
+    "nav": {
+      "title": "Dashboard",
+      "analytics": "Analytics"
+    },
+    "home": {
+      "title": "Dashboard",
+      "welcome": "Welcome to your workspace."
+    },
     "chart": {
       "empty": "No data in this window yet.",
       "bucket": "Period",
@@ -77,7 +83,10 @@
         "title": "Last 20 hours",
         "subtitle": "Messages sent per hour, oldest first"
       },
-      "funnel": { "title": "Engagement funnel", "viewAll": "View analytics" }
+      "funnel": {
+        "title": "Engagement funnel",
+        "viewAll": "View analytics"
+      }
     },
     "analytics": {
       "title": "Analytics",
@@ -103,13 +112,21 @@
         "queued": "Queued"
       },
       "empty": "Nothing to show in this window.",
-      "volume": { "title": "Messages over time", "subtitle": "Sent, delivered and failed per day" },
-      "rates": { "title": "Delivery rates", "subtitle": "Delivered, queued and failed share" },
+      "volume": {
+        "title": "Messages over time",
+        "subtitle": "Sent, delivered and failed per day"
+      },
+      "rates": {
+        "title": "Delivery rates",
+        "subtitle": "Delivered, queued and failed share"
+      },
       "totals": {
         "title": "Daily totals",
         "subtitle": "Delivered, queued and failed per day, stacked"
       },
-      "funnel": { "title": "Engagement funnel" },
+      "funnel": {
+        "title": "Engagement funnel"
+      },
       "types": {
         "title": "Message types",
         "subtitle": "Outbound messages by kind",
@@ -125,6 +142,71 @@
         "empty": "No message volume in this window.",
         "footer": "Computed from {total} messages, time zone {tz}"
       }
+    },
+    "health": {
+      "nav": "System health",
+      "group": "System",
+      "title": "System health",
+      "kicker": "Platform",
+      "description": "Live checks of the services the platform runs on.",
+      "banner": {
+        "up": "All systems - Operational",
+        "warn": "All systems - Degraded",
+        "down": "All systems - Down",
+        "checked": "Last checked {time} · auto-refreshes every 20s",
+        "refresh": "Refresh now",
+        "refreshing": "Checking..."
+      },
+      "core": "Core services",
+      "state": {
+        "up": "Operational",
+        "warn": "Degraded",
+        "down": "Down",
+        "idle": "Idle"
+      },
+      "check": {
+        "database": "Database",
+        "cache": "Cache",
+        "queue": "Queue",
+        "bridge": "Node bridge",
+        "storage": "Media storage"
+      },
+      "latency": {
+        "title": "Response time",
+        "empty": "No timing data.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "Queues",
+        "name": "Queue",
+        "pending": "Pending",
+        "failed": "Failed"
+      },
+      "clear": {
+        "button": "Clear pending jobs",
+        "busy": "Clearing...",
+        "confirmTitle": "Clear pending and failed jobs?",
+        "confirmBody": "Waiting and delayed jobs are removed and failed jobs are deleted from every queue. Jobs that are running are left alone.",
+        "confirm": "Clear jobs",
+        "cancel": "Cancel",
+        "done": "Cleared {pending} pending and {failed} failed job(s).",
+        "failed": "Failed: {message}",
+        "superOnly": "Only a super admin can clear jobs."
+      },
+      "vitals": {
+        "title": "Host vitals",
+        "node": "Node",
+        "app": "App version",
+        "environment": "Environment",
+        "uptime": "Uptime",
+        "memory": "Memory (RSS)",
+        "heap": "Heap in use",
+        "diskFree": "Disk free",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Disk used {pct}%",
+        "noDisk": "Not available"
+      },
+      "error": "The health checks could not be loaded. Try again in a moment."
     }
   }
 }
