@@ -10,6 +10,7 @@ export const FIXED_COLUMN_IDS = [
   'tags',
   'groups',
   'stage',
+  'status',
   'language',
   'memo',
   'createdOn',
@@ -26,6 +27,8 @@ export const DEFAULT_FIXED: readonly FixedColumnId[] = [
   'phone',
   'email',
   'tags',
+  'stage',
+  'status',
   'createdOn',
 ];
 
@@ -56,6 +59,7 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   tags: 'colTags',
   groups: 'colGroups',
   stage: 'colStage',
+  status: 'colStatus',
   language: 'colLanguage',
   memo: 'colMemo',
   createdOn: 'colCreatedOn',
@@ -79,6 +83,7 @@ export function allColumns(attributes: readonly AttributeColumn[]): ColumnDef[] 
     fixed('tags'),
     fixed('groups'),
     fixed('stage'),
+    fixed('status'),
     fixed('language'),
     fixed('memo'),
     fixed('createdOn'),
