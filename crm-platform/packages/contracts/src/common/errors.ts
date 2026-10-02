@@ -203,6 +203,18 @@ export const ERROR_CODES = {
   /** The engine refused to start the flow. */
   IG_FLOW_RUN_FAILED: 'IG_FLOW_RUN_FAILED',
 
+  // Shopify and WooCommerce integrations (TW-ECOM)
+  /** The Shopify app is off on this install, or has no client id. */
+  ECOM_NOT_CONFIGURED: 'ECOM_NOT_CONFIGURED',
+  /** The WooCommerce integration is switched off by the platform. */
+  ECOM_DISABLED: 'ECOM_DISABLED',
+  /** The Shopify domain is not `<handle>.myshopify.com`. */
+  ECOM_SHOP_INVALID: 'ECOM_SHOP_INVALID',
+  /** The WooCommerce store address has no host. */
+  ECOM_STORE_INVALID: 'ECOM_STORE_INVALID',
+  /** The WooCommerce store did not accept the keys, or could not be reached. */
+  ECOM_STORE_UNREACHABLE: 'ECOM_STORE_UNREACHABLE',
+
   // campaigns (TW-CAMP)
   /** Nobody on the audience can be messaged. */
   CAMP_NO_RECIPIENTS: 'CAMP_NO_RECIPIENTS',
