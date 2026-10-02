@@ -1,4 +1,4 @@
-import { All, Controller, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { All, Controller, HttpCode, Param, Post, Query, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { Public } from '../../common/decorators';
@@ -43,6 +43,7 @@ export class PaymentsController {
   }
 
   @Post('webhook/:slug')
+  @HttpCode(200)
   @ApiOperation({
     summary: 'Asynchronous provider notification (signature-verified, 200 once authenticated)',
   })

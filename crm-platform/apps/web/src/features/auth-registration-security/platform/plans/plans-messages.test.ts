@@ -66,7 +66,10 @@ describe('plan catalogue messages (operator console)', () => {
   });
 
   it('labels every nav item the console menu lists', () => {
-    for (const item of OPERATOR_NAV) {
+    // Entries other domains add to the menu carry their own namespace; that domain's message test covers them.
+    for (const item of OPERATOR_NAV.filter((i) =>
+      i.labelKey.startsWith('auth-registration-security.platform.'),
+    )) {
       const key = item.labelKey.replace('auth-registration-security.platform.', '');
       expect(en[key], key).toBeTypeOf('string');
     }

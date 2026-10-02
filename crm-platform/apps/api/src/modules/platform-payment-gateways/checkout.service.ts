@@ -224,7 +224,9 @@ export class CheckoutService {
       period,
       periods: [
         ...(plan.billingUnit === 'years' ? [] : (['monthly'] as const)),
-        ...(billingPeriodFor(plan, 'yearly', s.yearlyToggleEnabled) === 'yearly' ? (['yearly'] as const) : []),
+        ...(billingPeriodFor(plan, 'yearly', s.yearlyToggleEnabled) === 'yearly'
+          ? (['yearly'] as const)
+          : []),
       ],
       currency,
       available: list,
