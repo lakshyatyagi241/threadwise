@@ -1,12 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { authPagesPatchSchema, type AuthPagesResponse } from '@crm/contracts';
 import {
+  REAL_PAGE_PATHS,
   SHOWCASE_GROUPS,
+  SHOWCASE_GROUPS_BY_PAGE,
+  SHOWCASE_PAGES,
   authPagesFieldForPath,
   authPagesPatchSize,
   authPagesToDraft,
   buildAuthPagesPatch,
   guessMediaType,
+  isAcceptedAccent,
   isHttpsUrl,
   resolvePreviewContent,
   resolvePreviewExtra,
@@ -27,7 +31,7 @@ const base: AuthPagesResponse = {
   login: {},
   register: {},
   forgot: {},
-  extra: { login: {}, register: {} },
+  extra: { login: {}, register: {}, forgot: {} },
 };
 
 describe('buildAuthPagesPatch', () => {
@@ -111,13 +115,37 @@ describe('buildAuthPagesPatch', () => {
   it('sends only the showcase keys that changed, and "" to clear one', () => {
     const stored: AuthPagesResponse = {
       ...base,
-      extra: { login: { chip1: 'Old', hero_title: 'Keep' }, register: {} },
+      extra: { login: { chip1: 'Old', hero_title: 'Keep' }, register: {}, forgot: {} },
     };
     const d = authPagesToDraft(stored);
     d.extra.login.chip1 = '';
     d.extra.login.chip2 = ' New ';
     expect(buildAuthPagesPatch(stored, d).patch).toEqual({
       extra: { login: { chip1: '', chip2: 'New' } },
+    });
+  });
+
+  it('edits the forgot page footer and hero text and sends them under extra.forgot', () => {
+    const stored: AuthPagesResponse = {
+      ...base,
+      extra: { login: {}, register: {}, forgot: { footer: 'Old footer' } },
+    };
+    const d = authPagesToDraft(stored);
+    expect(d.extra.forgot.footer).toBe('Old footer');
+    d.extra.forgot.footer = ' New footer ';
+    d.extra.forgot.hero_title = 'Hello';
+    const { patch } = buildAuthPagesPatch(stored, d);
+    expect(patch).toEqual({ extra: { forgot: { footer: 'New footer', hero_title: 'Hello' } } });
+    expect(authPagesPatchSchema.safeParse(patch).success).toBe(true);
+    expect(authPagesPatchSize(patch)).toBe(2);
+  });
+
+  it('starts the forgot extras empty when an older server does not send them', () => {
+    const noForgot: AuthPagesResponse = { ...base, extra: { login: {}, register: {} } };
+    expect(authPagesToDraft(noForgot).extra.forgot).toEqual({});
+    expect(buildAuthPagesPatch(noForgot, authPagesToDraft(noForgot))).toEqual({
+      patch: {},
+      problems: {},
     });
   });
 
@@ -200,6 +228,10 @@ describe('helpers', () => {
       page: 'register',
       control: 'extra-register-chip3',
     });
+    expect(authPagesFieldForPath('extra.forgot.footer')).toEqual({
+      page: 'forgot',
+      control: 'extra-forgot-footer',
+    });
     expect(authPagesFieldForPath('variant')).toEqual({ page: null, control: 'variant' });
     expect(authPagesFieldForPath('nope')).toBeNull();
   });
@@ -207,5 +239,40 @@ describe('helpers', () => {
     const keys = Object.values(SHOWCASE_GROUPS).flat();
     expect(new Set(keys).size).toBe(keys.length);
     expect(keys).toHaveLength(24);
+  });
+});
+
+describe('isAcceptedAccent', () => {
+  it('accepts what the contract accepts: six-digit hex in either case, or empty to reset', () => {
+    expect(isAcceptedAccent('#0f766e')).toBe(true);
+    expect(isAcceptedAccent('#0F766E')).toBe(true);
+    expect(isAcceptedAccent('')).toBe(true);
+  });
+  it('refuses short, long, named and unprefixed colours, as the contract does', () => {
+    for (const v of ['#fff', '#0f766eaa', 'teal', '0f766e', 'rgb(1,2,3)', '#12345g'])
+      expect(isAcceptedAccent(v)).toBe(false);
+  });
+});
+
+describe('showcase fields per page', () => {
+  it('offers the hero card and footer on the forgot page and everything on the others', () => {
+    expect(SHOWCASE_PAGES).toEqual(['login', 'register', 'forgot']);
+    expect(SHOWCASE_GROUPS_BY_PAGE.forgot).toEqual(['hero', 'footer']);
+    expect(SHOWCASE_GROUPS_BY_PAGE.login).toEqual(['hero', 'stats', 'features', 'chips', 'footer']);
+    expect(SHOWCASE_GROUPS_BY_PAGE.register).toEqual(SHOWCASE_GROUPS_BY_PAGE.login);
+  });
+  it('only names groups the editor has fields for', () => {
+    for (const groups of Object.values(SHOWCASE_GROUPS_BY_PAGE))
+      for (const g of groups) expect(Object.keys(SHOWCASE_GROUPS)).toContain(g);
+  });
+});
+
+describe('REAL_PAGE_PATHS', () => {
+  it('points at the pages visitors use', () => {
+    expect(REAL_PAGE_PATHS).toEqual({
+      login: '/login',
+      register: '/signup',
+      forgot: '/forgot-password',
+    });
   });
 });

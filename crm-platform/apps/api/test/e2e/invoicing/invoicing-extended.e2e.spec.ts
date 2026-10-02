@@ -31,7 +31,8 @@ afterAll(async () => {
 });
 
 const code = (res: { body: { code?: string } }) => res.body.code;
-const sqlN = async (sql: string, params: unknown[] = []) => Number((await h.owner.query(sql, params)).rows[0].n);
+const sqlN = async (sql: string, params: unknown[] = []) =>
+  Number((await h.owner.query(sql, params)).rows[0].n);
 const ymd = (offset = 0) => new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
 
 interface Inv {
@@ -52,24 +53,35 @@ const LINES = [
 ];
 
 async function issuedInvoice(token: string, body: Record<string, unknown> = {}): Promise<Inv> {
-  const made = await api.as(token).post('/v2/invoices').send({ buyerName: 'Credit Co', currency: 'USD', lines: LINES, ...body });
+  const made = await api
+    .as(token)
+    .post('/v2/invoices')
+    .send({ buyerName: 'Credit Co', currency: 'USD', lines: LINES, ...body });
   expect(made.status, JSON.stringify(made.body)).toBe(201);
   const res = await api.as(token).post(`/v2/invoices/${made.body.id}/issue`).send({});
   expect(res.status, JSON.stringify(res.body)).toBe(200);
   return res.body as Inv;
 }
-const getInv = async (token: string, id: string): Promise<Inv> => (await api.as(token).get(`/v2/invoices/${id}`)).body as Inv;
+const getInv = async (token: string, id: string): Promise<Inv> =>
+  (await api.as(token).get(`/v2/invoices/${id}`)).body as Inv;
 async function payInv(token: string, id: string, amount: string) {
-  const res = await api.as(token).post(`/v2/invoices/${id}/payments`).send({ amount, method: 'bank' });
+  const res = await api
+    .as(token)
+    .post(`/v2/invoices/${id}/payments`)
+    .send({ amount, method: 'bank' });
   expect(res.status, JSON.stringify(res.body)).toBe(201);
   return res.body;
 }
 async function creditNote(token: string, body: Record<string, unknown>) {
-  const res = await api.as(token).post('/v2/credit-notes').send({ reason: 'return', settlement: 'balance', ...body });
+  const res = await api
+    .as(token)
+    .post('/v2/credit-notes')
+    .send({ reason: 'return', settlement: 'balance', ...body });
   expect(res.status, JSON.stringify(res.body)).toBe(201);
   return res.body;
 }
-const issueCn = (token: string, id: string) => api.as(token).post(`/v2/credit-notes/${id}/issue`).send({});
+const issueCn = (token: string, id: string) =>
+  api.as(token).post(`/v2/credit-notes/${id}/issue`).send({});
 
 describe('credit notes', () => {
   let t: Tenant;
@@ -79,7 +91,10 @@ describe('credit notes', () => {
 
   it('a partial credit by quantity reduces the balance, takes its own CRN number, and an issued note is frozen', async () => {
     const inv = await issuedInvoice(t.admin);
-    const cn = await creditNote(t.admin, { invoiceId: inv.id, lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '1' }] });
+    const cn = await creditNote(t.admin, {
+      invoiceId: inv.id,
+      lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '1' }],
+    });
     expect(cn).toMatchObject({ status: 'draft', number: null });
     expect(cn.amounts.total).toBe('25.00');
     const done = (await issueCn(t.admin, cn.id)).body;
@@ -88,21 +103,52 @@ describe('credit notes', () => {
     const after = await getInv(t.admin, inv.id);
     expect(after.amounts).toMatchObject({ credited: '25.00', balance: '175.00' });
     // frozen: editing or deleting an issued note is refused
-    expect((await api.as(t.admin).patch(`/v2/credit-notes/${cn.id}`).send({ rowVersion: done.rowVersion, note: 'x' })).status).toBe(409);
+    expect(
+      (
+        await api
+          .as(t.admin)
+          .patch(`/v2/credit-notes/${cn.id}`)
+          .send({ rowVersion: done.rowVersion, note: 'x' })
+      ).status,
+    ).toBe(409);
     expect((await api.as(t.admin).delete(`/v2/credit-notes/${cn.id}`)).status).toBe(409);
     expect((await issueCn(t.admin, cn.id)).status).toBe(409);
   });
 
   it('credits can never add up to more than the invoice: the line quantity, the invoice total and the credit already given all cap', async () => {
     const inv = await issuedInvoice(t.admin);
-    const over = await api.as(t.admin).post('/v2/credit-notes').send({ invoiceId: inv.id, reason: 'return', lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '5' }] });
+    const over = await api
+      .as(t.admin)
+      .post('/v2/credit-notes')
+      .send({
+        invoiceId: inv.id,
+        reason: 'return',
+        lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '5' }],
+      });
     expect(over.status).toBe(422);
-    const big = await api.as(t.admin).post('/v2/credit-notes').send({ invoiceId: inv.id, reason: 'goodwill', lines: [{ description: 'Goodwill', amount: '999.00' }] });
+    const big = await api
+      .as(t.admin)
+      .post('/v2/credit-notes')
+      .send({
+        invoiceId: inv.id,
+        reason: 'goodwill',
+        lines: [{ description: 'Goodwill', amount: '999.00' }],
+      });
     expect(big.status).toBe(422);
     expect(code(big)).toBe('CN_EXCEEDS_INVOICE');
-    const first = await creditNote(t.admin, { invoiceId: inv.id, lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '3' }] });
+    const first = await creditNote(t.admin, {
+      invoiceId: inv.id,
+      lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '3' }],
+    });
     await issueCn(t.admin, first.id);
-    const rest = await api.as(t.admin).post('/v2/credit-notes').send({ invoiceId: inv.id, reason: 'return', lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '2' }] });
+    const rest = await api
+      .as(t.admin)
+      .post('/v2/credit-notes')
+      .send({
+        invoiceId: inv.id,
+        reason: 'return',
+        lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '2' }],
+      });
     expect(rest.status).toBe(422); // one unit of that line is left
     const full = await creditNote(t.admin, { invoiceId: inv.id, full: true });
     expect(full.amounts.total).toBe('125.00'); // everything still creditable: 1 widget + the gadget
@@ -110,7 +156,10 @@ describe('credit notes', () => {
     const after = await getInv(t.admin, inv.id);
     expect(after.amounts).toMatchObject({ credited: '200.00', balance: '0.00' });
     expect(after.paymentStatus).toBe('paid');
-    const nothing = await api.as(t.admin).post('/v2/credit-notes').send({ invoiceId: inv.id, reason: 'return', full: true });
+    const nothing = await api
+      .as(t.admin)
+      .post('/v2/credit-notes')
+      .send({ invoiceId: inv.id, reason: 'return', full: true });
     expect(nothing.status).toBe(422);
     expect(code(nothing)).toBe('CN_NOTHING_TO_CREDIT');
   });
@@ -128,13 +177,23 @@ describe('credit notes', () => {
   it('a refund settlement returns the cash it must: the over-paid part, newest payment first, through the ledger (negative linked entries)', async () => {
     const inv = await issuedInvoice(t.admin);
     await payInv(t.admin, inv.id, '200');
-    const cn = await creditNote(t.admin, { invoiceId: inv.id, settlement: 'refund', lines: [{ invoiceLineId: inv.lines[1]!.id }] });
+    const cn = await creditNote(t.admin, {
+      invoiceId: inv.id,
+      settlement: 'refund',
+      lines: [{ invoiceLineId: inv.lines[1]!.id }],
+    });
     const done = (await issueCn(t.admin, cn.id)).body;
     expect(done.refunded).toBe('100.00');
     const after = await getInv(t.admin, inv.id);
-    expect(after.amounts).toMatchObject({ paid: '100.00', refunded: '100.00', credited: '100.00', balance: '0.00' });
+    expect(after.amounts).toMatchObject({
+      paid: '100.00',
+      refunded: '100.00',
+      credited: '100.00',
+      balance: '0.00',
+    });
     expect(after.paymentStatus).toBe('paid');
-    const ledger = (await api.as(t.admin).get(`/v2/payments?invoiceId=${inv.id}`)).body.data as Array<{ kind: string; amount: string }>;
+    const ledger = (await api.as(t.admin).get(`/v2/payments?invoiceId=${inv.id}`)).body
+      .data as Array<{ kind: string; amount: string }>;
     expect(ledger.filter((p) => p.kind === 'refund').map((p) => p.amount)).toEqual(['-100.00']);
     // cash went back: the note cannot be voided (the refund stands in the ledger)
     const v = await api.as(t.admin).post(`/v2/credit-notes/${cn.id}/void`).send({ reason: 'oops' });
@@ -144,61 +203,113 @@ describe('credit notes', () => {
 
   it('a balance settlement never moves cash; voiding it (no refund) gives the balance back; the invoice cannot be voided while credit notes stand', async () => {
     const inv = await issuedInvoice(t.admin);
-    const cn = await creditNote(t.admin, { invoiceId: inv.id, lines: [{ invoiceLineId: inv.lines[1]!.id }] });
+    const cn = await creditNote(t.admin, {
+      invoiceId: inv.id,
+      lines: [{ invoiceLineId: inv.lines[1]!.id }],
+    });
     const done = (await issueCn(t.admin, cn.id)).body;
     expect(done.refunded).toBe('0.00');
     const blocked = await api.as(t.admin).post(`/v2/invoices/${inv.id}/void`).send({ reason: 'x' });
     expect(blocked.status).toBe(409);
     expect(code(blocked)).toBe('INV_HAS_CREDITS');
-    const v = await api.as(t.admin).post(`/v2/credit-notes/${cn.id}/void`).send({ reason: 'issued by mistake' });
+    const v = await api
+      .as(t.admin)
+      .post(`/v2/credit-notes/${cn.id}/void`)
+      .send({ reason: 'issued by mistake' });
     expect(v.status).toBe(200);
     expect(v.body.status).toBe('void');
-    expect((await getInv(t.admin, inv.id)).amounts).toMatchObject({ credited: '0.00', balance: '200.00' });
-    expect((await api.as(t.admin).post(`/v2/credit-notes/${cn.id}/void`).send({ reason: 'again' })).status).toBe(409);
+    expect((await getInv(t.admin, inv.id)).amounts).toMatchObject({
+      credited: '0.00',
+      balance: '200.00',
+    });
+    expect(
+      (await api.as(t.admin).post(`/v2/credit-notes/${cn.id}/void`).send({ reason: 'again' }))
+        .status,
+    ).toBe(409);
   });
 
   it('a draft invoice cannot be credited; a draft note can be edited and deleted; the PDF renders; the list filters by invoice', async () => {
     const draft = await api.as(t.admin).post('/v2/invoices').send({ buyerName: 'D', lines: LINES });
-    const r = await api.as(t.admin).post('/v2/credit-notes').send({ invoiceId: draft.body.id, reason: 'return', full: true });
+    const r = await api
+      .as(t.admin)
+      .post('/v2/credit-notes')
+      .send({ invoiceId: draft.body.id, reason: 'return', full: true });
     expect(r.status).toBe(409);
     expect(code(r)).toBe('INV_NOT_ISSUED');
     const inv = await issuedInvoice(t.admin);
-    const cn = await creditNote(t.admin, { invoiceId: inv.id, lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '1' }] });
-    const edited = await api.as(t.admin).patch(`/v2/credit-notes/${cn.id}`).send({ rowVersion: cn.rowVersion, note: 'for the return', lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '2' }] });
+    const cn = await creditNote(t.admin, {
+      invoiceId: inv.id,
+      lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '1' }],
+    });
+    const edited = await api
+      .as(t.admin)
+      .patch(`/v2/credit-notes/${cn.id}`)
+      .send({
+        rowVersion: cn.rowVersion,
+        note: 'for the return',
+        lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '2' }],
+      });
     expect(edited.status, JSON.stringify(edited.body)).toBe(200);
     expect(edited.body.amounts.total).toBe('50.00');
-    const stale = await api.as(t.admin).patch(`/v2/credit-notes/${cn.id}`).send({ rowVersion: cn.rowVersion, note: 'x' });
+    const stale = await api
+      .as(t.admin)
+      .patch(`/v2/credit-notes/${cn.id}`)
+      .send({ rowVersion: cn.rowVersion, note: 'x' });
     expect(stale.status).toBe(409);
     const pdf = await api.as(t.admin).get(`/v2/credit-notes/${cn.id}/pdf`);
     expect(pdf.status).toBe(200);
     expect(pdf.headers['content-type']).toContain('application/pdf');
-    const list = (await api.as(t.admin).get(`/v2/credit-notes?invoiceId=${inv.id}`)).body.data as Array<{ id: string }>;
+    const list = (await api.as(t.admin).get(`/v2/credit-notes?invoiceId=${inv.id}`)).body
+      .data as Array<{ id: string }>;
     expect(list.map((x) => x.id)).toEqual([cn.id]);
     expect((await api.as(t.admin).delete(`/v2/credit-notes/${cn.id}`)).status).toBe(204);
     expect((await api.as(t.admin).get(`/v2/credit-notes/${cn.id}`)).status).toBe(404);
   });
 
   it('a free-form credit can carry a tax rate; a taxed line is credited with its own tax', async () => {
-    const rate = (await api.as(t.admin).post('/v2/tax-rates').send({ name: 'VAT10', rate: '10' })).body;
-    const inv = await issuedInvoice(t.admin, { lines: [{ description: 'Taxed', qty: '2', unitPrice: '50.00', taxRateId: rate.id }] });
+    const rate = (await api.as(t.admin).post('/v2/tax-rates').send({ name: 'VAT10', rate: '10' }))
+      .body;
+    const inv = await issuedInvoice(t.admin, {
+      lines: [{ description: 'Taxed', qty: '2', unitPrice: '50.00', taxRateId: rate.id }],
+    });
     expect(inv.amounts.total).toBe('110.00');
-    const part = await creditNote(t.admin, { invoiceId: inv.id, lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '1' }] });
+    const part = await creditNote(t.admin, {
+      invoiceId: inv.id,
+      lines: [{ invoiceLineId: inv.lines[0]!.id, qty: '1' }],
+    });
     expect(part.amounts).toMatchObject({ subtotal: '50.00', tax: '5.00', total: '55.00' });
-    const free = await creditNote(t.admin, { invoiceId: inv.id, lines: [{ description: 'Late delivery', amount: '10.00', taxRateId: rate.id }] });
+    const free = await creditNote(t.admin, {
+      invoiceId: inv.id,
+      lines: [{ description: 'Late delivery', amount: '10.00', taxRateId: rate.id }],
+    });
     expect(free.amounts).toMatchObject({ subtotal: '10.00', tax: '1.00', total: '11.00' });
   });
 
-  it('permissions and scope: a reader reads but cannot create, issue or void; an own-scope reader does not see another person\'s credit notes (404)', async () => {
+  it("permissions and scope: a reader reads but cannot create, issue or void; an own-scope reader does not see another person's credit notes (404)", async () => {
     const inv = await issuedInvoice(t.admin);
     const cn = await creditNote(t.admin, { invoiceId: inv.id, full: true });
     const reader = await api.member(t, 'cnreader', [['record.credit-notes.read']] as Grant[]);
     expect((await api.as(reader.token).get(`/v2/credit-notes/${cn.id}`)).status).toBe(200);
-    expect((await api.as(reader.token).post('/v2/credit-notes').send({ invoiceId: inv.id, reason: 'return', full: true })).status).toBe(403);
-    expect((await api.as(reader.token).post(`/v2/credit-notes/${cn.id}/issue`).send({})).status).toBe(403);
-    expect((await api.as(reader.token).post(`/v2/credit-notes/${cn.id}/void`).send({ reason: 'x' })).status).toBe(403);
+    expect(
+      (
+        await api
+          .as(reader.token)
+          .post('/v2/credit-notes')
+          .send({ invoiceId: inv.id, reason: 'return', full: true })
+      ).status,
+    ).toBe(403);
+    expect(
+      (await api.as(reader.token).post(`/v2/credit-notes/${cn.id}/issue`).send({})).status,
+    ).toBe(403);
+    expect(
+      (await api.as(reader.token).post(`/v2/credit-notes/${cn.id}/void`).send({ reason: 'x' }))
+        .status,
+    ).toBe(403);
     const own = await api.member(t, 'cnown', [['record.credit-notes.read', 'own']] as Grant[]);
     expect((await api.as(own.token).get(`/v2/credit-notes/${cn.id}`)).status).toBe(404);
-    expect(((await api.as(own.token).get('/v2/credit-notes')).body.data as unknown[]).length).toBe(0);
+    expect(((await api.as(own.token).get('/v2/credit-notes')).body.data as unknown[]).length).toBe(
+      0,
+    );
   });
 
   it('tenant isolation, audit and outbox: another workspace cannot see or credit it; the issue wrote one audit row and the credit_note.issued event in its transaction', async () => {
@@ -206,11 +317,20 @@ describe('credit notes', () => {
     const inv = await issuedInvoice(t.admin);
     const cn = await creditNote(t.admin, { invoiceId: inv.id, full: true });
     expect((await api.as(other.admin).get(`/v2/credit-notes/${cn.id}`)).status).toBe(404);
-    expect((await api.as(other.admin).post('/v2/credit-notes').send({ invoiceId: inv.id, reason: 'return', full: true })).status).toBe(404);
+    expect(
+      (
+        await api
+          .as(other.admin)
+          .post('/v2/credit-notes')
+          .send({ invoiceId: inv.id, reason: 'return', full: true })
+      ).status,
+    ).toBe(404);
     const before = await api.auditCount(t.orgId, 'credit-notes', 'update');
     await issueCn(t.admin, cn.id);
     expect(await api.auditCount(t.orgId, 'credit-notes', 'update')).toBe(before + 1);
-    expect((await api.events(t.orgId, 'credit_note.issued')).some((e) => e.uuid === cn.id)).toBe(true);
+    expect((await api.events(t.orgId, 'credit_note.issued')).some((e) => e.uuid === cn.id)).toBe(
+      true,
+    );
   });
 });
 
@@ -228,21 +348,58 @@ describe('recurring invoices', () => {
     ...over,
   });
   const create = async (body: Record<string, unknown>) => {
-    const res = await api.as(t.admin).post('/v2/recurring-invoices').send({ name: 'Retainer', frequency: 'month', interval: 1, startDate: ymd(0), mode: 'issue', template: template(), ...body });
+    const res = await api
+      .as(t.admin)
+      .post('/v2/recurring-invoices')
+      .send({
+        name: 'Retainer',
+        frequency: 'month',
+        interval: 1,
+        startDate: ymd(0),
+        mode: 'issue',
+        template: template(),
+        ...body,
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
-    return res.body as { id: string; nextRunDate: string | null; status: string; runCount: number; rowVersion: number; upcoming: string[]; amount: string };
+    return res.body as {
+      id: string;
+      nextRunDate: string | null;
+      status: string;
+      runCount: number;
+      rowVersion: number;
+      upcoming: string[];
+      amount: string;
+    };
   };
-  const runsOf = async (id: string) => (await api.as(t.admin).get(`/v2/recurring-invoices/${id}/runs`)).body.data as Array<{ periodIndex: number; status: string; invoice: { id: string; number: string | null } | null; error: string | null }>;
+  const runsOf = async (id: string) =>
+    (await api.as(t.admin).get(`/v2/recurring-invoices/${id}/runs`)).body.data as Array<{
+      periodIndex: number;
+      status: string;
+      invoice: { id: string; number: string | null } | null;
+      error: string | null;
+    }>;
 
   it('a schedule is created with its next five dates and the amount the template prices to; a start date further back than 12 periods is refused', async () => {
     const r = await create({ startDate: ymd(5) });
     expect(r.amount).toBe('500.00');
     expect(r.upcoming).toHaveLength(5);
     expect(r.nextRunDate).toBe(ymd(5));
-    const old = await api.as(t.admin).post('/v2/recurring-invoices').send({ name: 'Old', frequency: 'day', interval: 1, startDate: ymd(-60), template: template() });
+    const old = await api
+      .as(t.admin)
+      .post('/v2/recurring-invoices')
+      .send({
+        name: 'Old',
+        frequency: 'day',
+        interval: 1,
+        startDate: ymd(-60),
+        template: template(),
+      });
     expect(old.status).toBe(422);
     expect(code(old)).toBe('REC_START_TOO_OLD');
-    const empty = await api.as(t.admin).post('/v2/recurring-invoices').send({ name: 'x', frequency: 'month', startDate: ymd(0) });
+    const empty = await api
+      .as(t.admin)
+      .post('/v2/recurring-invoices')
+      .send({ name: 'x', frequency: 'month', startDate: ymd(0) });
     expect(empty.status).toBe(422);
   });
 
@@ -256,8 +413,18 @@ describe('recurring invoices', () => {
     const nums = runs.map((x) => x.invoice!.number);
     expect(new Set(nums).size).toBe(3);
     await Promise.all([sweep.sweep(), sweep.sweep()]);
-    expect(await sqlN(`SELECT count(*)::int AS n FROM recurring_invoice_runs WHERE org_id = $1 AND recurring_id = (SELECT id FROM recurring_invoices WHERE uuid = $2)`, [t.orgId, r.id])).toBe(3);
-    expect(await sqlN(`SELECT count(*)::int AS n FROM invoices WHERE org_id = $1 AND recurring_id = (SELECT id FROM recurring_invoices WHERE uuid = $2)`, [t.orgId, r.id])).toBe(3);
+    expect(
+      await sqlN(
+        `SELECT count(*)::int AS n FROM recurring_invoice_runs WHERE org_id = $1 AND recurring_id = (SELECT id FROM recurring_invoices WHERE uuid = $2)`,
+        [t.orgId, r.id],
+      ),
+    ).toBe(3);
+    expect(
+      await sqlN(
+        `SELECT count(*)::int AS n FROM invoices WHERE org_id = $1 AND recurring_id = (SELECT id FROM recurring_invoices WHERE uuid = $2)`,
+        [t.orgId, r.id],
+      ),
+    ).toBe(3);
     const after = (await api.as(t.admin).get(`/v2/recurring-invoices/${r.id}`)).body;
     expect(after).toMatchObject({ runCount: 3, failureCount: 0, nextRunDate: ymd(1) });
     // each invoice carries its period's date as its issue date and links back to the schedule
@@ -288,7 +455,10 @@ describe('recurring invoices', () => {
     expect(ran.body).toMatchObject({ runCount: 1, nextRunDate: ymd(4) });
     const paused = await api.as(t.admin).post(`/v2/recurring-invoices/${r.id}/pause`).send({});
     expect(paused.body.status).toBe('paused');
-    await h.owner.query(`UPDATE recurring_invoices SET next_run_date = $2 WHERE uuid = $1`, [r.id, ymd(-1)]);
+    await h.owner.query(`UPDATE recurring_invoices SET next_run_date = $2 WHERE uuid = $1`, [
+      r.id,
+      ymd(-1),
+    ]);
     await sweep.sweep();
     expect(await runsOf(r.id)).toHaveLength(1); // paused: untouched
     const resumed = await api.as(t.admin).post(`/v2/recurring-invoices/${r.id}/resume`).send({});
@@ -297,8 +467,15 @@ describe('recurring invoices', () => {
   });
 
   it('a period that cannot be generated is recorded as failed with the reason and the other schedules go on; the failure does not repeat the period', async () => {
-    const rate = (await api.as(t.admin).post('/v2/tax-rates').send({ name: 'Gone', rate: '5' })).body;
-    const r = await create({ startDate: ymd(0), name: 'Broken', template: template({ lines: [{ description: 'x', qty: '1', unitPrice: '10.00', taxRateId: rate.id }] }) });
+    const rate = (await api.as(t.admin).post('/v2/tax-rates').send({ name: 'Gone', rate: '5' }))
+      .body;
+    const r = await create({
+      startDate: ymd(0),
+      name: 'Broken',
+      template: template({
+        lines: [{ description: 'x', qty: '1', unitPrice: '10.00', taxRateId: rate.id }],
+      }),
+    });
     await h.owner.query(`UPDATE tax_rates SET is_active = false WHERE uuid = $1`, [rate.id]);
     const ok = await create({ startDate: ymd(0), name: 'Fine' });
     await sweep.sweep();
@@ -318,42 +495,76 @@ describe('recurring invoices', () => {
     await sweep.sweep();
     const s = (await api.as(t.admin).get(`/v2/recurring-invoices/${r.id}`)).body;
     expect(s).toMatchObject({ status: 'ended', runCount: 2, nextRunDate: null, upcoming: [] });
-    expect((await api.as(t.admin).post(`/v2/recurring-invoices/${r.id}/run`).send({})).status).toBe(409);
-    expect((await api.as(t.admin).post(`/v2/recurring-invoices/${r.id}/pause`).send({})).status).toBe(409);
-    expect((await api.events(t.orgId, 'recurring_invoice.ended')).some((e) => e.uuid === r.id)).toBe(true);
+    expect((await api.as(t.admin).post(`/v2/recurring-invoices/${r.id}/run`).send({})).status).toBe(
+      409,
+    );
+    expect(
+      (await api.as(t.admin).post(`/v2/recurring-invoices/${r.id}/pause`).send({})).status,
+    ).toBe(409);
+    expect(
+      (await api.events(t.orgId, 'recurring_invoice.ended')).some((e) => e.uuid === r.id),
+    ).toBe(true);
   });
 
   it('an edit replaces the template for FUTURE invoices only; a copy from an existing invoice carries its lines; delete keeps the invoices already made', async () => {
     const r = await create({ startDate: ymd(0), name: 'Edit me' });
     await sweep.sweep();
     const first = (await runsOf(r.id))[0]!.invoice!.id;
-    const current = (await api.as(t.admin).get(`/v2/recurring-invoices/${r.id}`)).body.rowVersion as number;
-    const edited = await api.as(t.admin).patch(`/v2/recurring-invoices/${r.id}`).send({ rowVersion: current, template: template({ lines: [{ description: 'Retainer v2', qty: '1', unitPrice: '650.00', taxRateId: null }] }) });
+    const current = (await api.as(t.admin).get(`/v2/recurring-invoices/${r.id}`)).body
+      .rowVersion as number;
+    const edited = await api
+      .as(t.admin)
+      .patch(`/v2/recurring-invoices/${r.id}`)
+      .send({
+        rowVersion: current,
+        template: template({
+          lines: [{ description: 'Retainer v2', qty: '1', unitPrice: '650.00', taxRateId: null }],
+        }),
+      });
     expect(edited.status, JSON.stringify(edited.body)).toBe(200);
     expect(edited.body.amount).toBe('650.00');
     expect((await getInv(t.admin, first)).amounts.total).toBe('500.00');
-    const stale = await api.as(t.admin).patch(`/v2/recurring-invoices/${r.id}`).send({ rowVersion: current, name: 'x' });
+    const stale = await api
+      .as(t.admin)
+      .patch(`/v2/recurring-invoices/${r.id}`)
+      .send({ rowVersion: current, name: 'x' });
     expect(stale.status).toBe(409);
     const base = await issuedInvoice(t.admin, { buyerName: 'Copy Co' });
-    const copy = await api.as(t.admin).post('/v2/recurring-invoices').send({ name: 'From invoice', frequency: 'week', startDate: ymd(7), fromInvoiceId: base.id });
+    const copy = await api
+      .as(t.admin)
+      .post('/v2/recurring-invoices')
+      .send({ name: 'From invoice', frequency: 'week', startDate: ymd(7), fromInvoiceId: base.id });
     expect(copy.status, JSON.stringify(copy.body)).toBe(201);
     expect(copy.body.amount).toBe('200.00');
     expect((await api.as(t.admin).delete(`/v2/recurring-invoices/${r.id}`)).status).toBe(204);
     expect((await getInv(t.admin, first)).status).toBe('issued');
-    expect(await sqlN(`SELECT count(*)::int AS n FROM invoices WHERE org_id = $1 AND uuid = $2 AND recurring_id IS NULL`, [t.orgId, first])).toBe(1);
+    expect(
+      await sqlN(
+        `SELECT count(*)::int AS n FROM invoices WHERE org_id = $1 AND uuid = $2 AND recurring_id IS NULL`,
+        [t.orgId, first],
+      ),
+    ).toBe(1);
   });
 
   it('permissions, scope and tenant isolation', async () => {
     const r = await create({ startDate: ymd(9), name: 'Private' });
-    const reader = await api.member(t, 'recreader', [['record.recurring-invoices.read']] as Grant[]);
+    const reader = await api.member(t, 'recreader', [
+      ['record.recurring-invoices.read'],
+    ] as Grant[]);
     expect((await api.as(reader.token).get(`/v2/recurring-invoices/${r.id}`)).status).toBe(200);
-    expect((await api.as(reader.token).post(`/v2/recurring-invoices/${r.id}/pause`).send({})).status).toBe(403);
+    expect(
+      (await api.as(reader.token).post(`/v2/recurring-invoices/${r.id}/pause`).send({})).status,
+    ).toBe(403);
     expect((await api.as(reader.token).delete(`/v2/recurring-invoices/${r.id}`)).status).toBe(403);
-    const own = await api.member(t, 'recown', [['record.recurring-invoices.read', 'own']] as Grant[]);
+    const own = await api.member(t, 'recown', [
+      ['record.recurring-invoices.read', 'own'],
+    ] as Grant[]);
     expect((await api.as(own.token).get(`/v2/recurring-invoices/${r.id}`)).status).toBe(404);
     const other = await api.signup('irc2');
     expect((await api.as(other.admin).get(`/v2/recurring-invoices/${r.id}`)).status).toBe(404);
-    expect((await api.as(other.admin).post(`/v2/recurring-invoices/${r.id}/run`).send({})).status).toBe(404);
+    expect(
+      (await api.as(other.admin).post(`/v2/recurring-invoices/${r.id}/run`).send({})).status,
+    ).toBe(404);
   });
 });
 
@@ -368,7 +579,16 @@ describe('sales orders', () => {
     { description: 'Desk', qty: '2', unitPrice: '200.00', taxRateId: null },
   ];
   async function order(body: Record<string, unknown> = {}) {
-    const res = await api.as(t.admin).post('/v2/sales-orders').send({ buyerName: 'Order Co', currency: 'USD', shipping: '10.00', lines: ORDER_LINES, ...body });
+    const res = await api
+      .as(t.admin)
+      .post('/v2/sales-orders')
+      .send({
+        buyerName: 'Order Co',
+        currency: 'USD',
+        shipping: '10.00',
+        lines: ORDER_LINES,
+        ...body,
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     return res.body as {
       id: string;
@@ -378,49 +598,88 @@ describe('sales orders', () => {
       invoicingStatus: string;
       fulfilmentStatus: string;
       amounts: Record<string, string>;
-      lines: Array<{ id: string; qty: string; qtyInvoiced: string; qtyToInvoice: string; qtyFulfilled: string }>;
+      lines: Array<{
+        id: string;
+        qty: string;
+        qtyInvoiced: string;
+        qtyToInvoice: string;
+        qtyFulfilled: string;
+      }>;
       invoices: Array<{ id: string }>;
     };
   }
   const confirm = (id: string) => api.as(t.admin).post(`/v2/sales-orders/${id}/confirm`).send({});
-  const fetchOrder = async (id: string) => (await api.as(t.admin).get(`/v2/sales-orders/${id}`)).body as Awaited<ReturnType<typeof order>>;
+  const fetchOrder = async (id: string) =>
+    (await api.as(t.admin).get(`/v2/sales-orders/${id}`)).body as Awaited<ReturnType<typeof order>>;
 
   it('an order is a priced draft with its own SO number; only a confirmed one is invoiced or delivered; a confirmed order is frozen', async () => {
     const o = await order();
-    expect(o).toMatchObject({ status: 'draft', invoicingStatus: 'not_invoiced', fulfilmentStatus: 'unfulfilled' });
+    expect(o).toMatchObject({
+      status: 'draft',
+      invoicingStatus: 'not_invoiced',
+      fulfilmentStatus: 'unfulfilled',
+    });
     expect(o.number).toMatch(/^SO-/);
     expect(o.amounts).toMatchObject({ subtotal: '700.00', shipping: '10.00', total: '710.00' });
-    const early = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true });
+    const early = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/invoice`)
+      .send({ all: true });
     expect(early.status).toBe(409);
     expect(code(early)).toBe('SO_NOT_CONFIRMED');
-    expect((await api.as(t.admin).post(`/v2/sales-orders/${o.id}/fulfil`).send({ all: true })).status).toBe(409);
-    const ed = await api.as(t.admin).patch(`/v2/sales-orders/${o.id}`).send({ rowVersion: o.rowVersion, notes: 'Deliver to dock 4' });
+    expect(
+      (await api.as(t.admin).post(`/v2/sales-orders/${o.id}/fulfil`).send({ all: true })).status,
+    ).toBe(409);
+    const ed = await api
+      .as(t.admin)
+      .patch(`/v2/sales-orders/${o.id}`)
+      .send({ rowVersion: o.rowVersion, notes: 'Deliver to dock 4' });
     expect(ed.status).toBe(200);
     expect((await confirm(o.id)).status).toBe(200);
-    const frozen = await api.as(t.admin).patch(`/v2/sales-orders/${o.id}`).send({ rowVersion: ed.body.rowVersion + 1, notes: 'x' });
+    const frozen = await api
+      .as(t.admin)
+      .patch(`/v2/sales-orders/${o.id}`)
+      .send({ rowVersion: ed.body.rowVersion + 1, notes: 'x' });
     expect(frozen.status).toBe(409);
     expect(code(frozen)).toBe('SO_NOT_DRAFT');
     expect((await api.as(t.admin).delete(`/v2/sales-orders/${o.id}`)).status).toBe(409);
     // the database refuses a price change on a confirmed order even around the API
-    await expect(h.owner.query(`UPDATE sales_order_items SET unit_price_minor = 1 WHERE order_id = (SELECT id FROM sales_orders WHERE uuid = $1)`, [o.id])).rejects.toThrow(/frozen|check|violates/i);
+    await expect(
+      h.owner.query(
+        `UPDATE sales_order_items SET unit_price_minor = 1 WHERE order_id = (SELECT id FROM sales_orders WHERE uuid = $1)`,
+        [o.id],
+      ),
+    ).rejects.toThrow(/frozen|check|violates/i);
   });
 
   it('partial invoicing: each invoice bills exactly the quantities named (shipping once, with the first), the order tracks what is left, and over-billing is refused', async () => {
     const o = await order();
     await confirm(o.id);
     const chair = o.lines[0]!.id;
-    const first = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ lines: [{ lineId: chair, qty: '4' }] });
+    const first = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/invoice`)
+      .send({ lines: [{ lineId: chair, qty: '4' }] });
     expect(first.status, JSON.stringify(first.body)).toBe(200);
     expect(first.body.invoice).toMatchObject({ status: 'draft', source: 'sales_order' });
     // the invoice names its order, so the page can link to it (and the order's invoices link back)
-    expect((await getInv(t.admin, first.body.invoice.id)).salesOrder).toEqual({ id: o.id, number: o.number });
+    expect((await getInv(t.admin, first.body.invoice.id)).salesOrder).toEqual({
+      id: o.id,
+      number: o.number,
+    });
     expect(first.body.invoice.amounts.total).toBe('130.00'); // 4 x 30.00 + 10.00 shipping
     expect(first.body.order.invoicingStatus).toBe('partially_invoiced');
     expect(first.body.order.lines[0]).toMatchObject({ qtyInvoiced: '4', qtyToInvoice: '6' });
-    const over = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ lines: [{ lineId: chair, qty: '7' }] });
+    const over = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/invoice`)
+      .send({ lines: [{ lineId: chair, qty: '7' }] });
     expect(over.status).toBe(422);
     expect(code(over)).toBe('SO_QUANTITY_EXCEEDS');
-    const rest = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true, issue: true });
+    const rest = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/invoice`)
+      .send({ all: true, issue: true });
     expect(rest.status, JSON.stringify(rest.body)).toBe(200);
     expect(rest.body.invoice.amounts.total).toBe('580.00'); // 6 chairs + 2 desks, no second shipping charge
     expect(rest.body.invoice.status).toBe('issued');
@@ -430,23 +689,37 @@ describe('sales orders', () => {
     expect(none.status).toBe(422);
     expect(code(none)).toBe('SO_NOTHING_TO_INVOICE');
     // the two invoices add up to the order
-    expect(Number(first.body.invoice.amounts.total) + Number(rest.body.invoice.amounts.total)).toBe(710);
+    expect(Number(first.body.invoice.amounts.total) + Number(rest.body.invoice.amounts.total)).toBe(
+      710,
+    );
   });
 
   it('voiding or deleting an order invoice gives its quantities (and shipping) back; the lines of such an invoice cannot be edited', async () => {
     const o = await order();
     await confirm(o.id);
-    const a = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true, issue: true });
+    const a = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/invoice`)
+      .send({ all: true, issue: true });
     const inv = a.body.invoice as { id: string; rowVersion: number };
     expect((await fetchOrder(o.id)).invoicingStatus).toBe('invoiced');
-    expect((await api.as(t.admin).post(`/v2/invoices/${inv.id}/void`).send({ reason: 'wrong buyer' })).status).toBe(200);
+    expect(
+      (await api.as(t.admin).post(`/v2/invoices/${inv.id}/void`).send({ reason: 'wrong buyer' }))
+        .status,
+    ).toBe(200);
     const back = await fetchOrder(o.id);
     expect(back.invoicingStatus).toBe('not_invoiced');
     expect(back.lines.map((l) => l.qtyToInvoice)).toEqual(['10', '2']);
     const d = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true });
     expect(d.status).toBe(200);
     expect(d.body.invoice.amounts.total).toBe('710.00'); // shipping is billable again
-    const edit = await api.as(t.admin).patch(`/v2/invoices/${d.body.invoice.id}`).send({ rowVersion: d.body.invoice.rowVersion, lines: [{ description: 'x', unitPrice: '1' }] });
+    const edit = await api
+      .as(t.admin)
+      .patch(`/v2/invoices/${d.body.invoice.id}`)
+      .send({
+        rowVersion: d.body.invoice.rowVersion,
+        lines: [{ description: 'x', unitPrice: '1' }],
+      });
     expect(edit.status).toBe(409);
     expect(code(edit)).toBe('INV_ORDER_LINKED');
     expect((await api.as(t.admin).delete(`/v2/invoices/${d.body.invoice.id}`)).status).toBe(204);
@@ -458,7 +731,12 @@ describe('sales orders', () => {
     await confirm(o.id);
     const chair = o.lines[0]!.id;
     const res = await Promise.all(
-      [1, 2, 3].map(() => api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ lines: [{ lineId: chair, qty: '6' }] })),
+      [1, 2, 3].map(() =>
+        api
+          .as(t.admin)
+          .post(`/v2/sales-orders/${o.id}/invoice`)
+          .send({ lines: [{ lineId: chair, qty: '6' }] }),
+      ),
     );
     expect(res.map((r) => r.status).sort()).toEqual([200, 422, 422]);
     expect((await fetchOrder(o.id)).lines[0]!.qtyInvoiced).toBe('6');
@@ -468,39 +746,73 @@ describe('sales orders', () => {
     const o = await order();
     await confirm(o.id);
     const chair = o.lines[0]!.id;
-    const part = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/fulfil`).send({ lines: [{ lineId: chair, qty: '3' }] });
+    const part = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/fulfil`)
+      .send({ lines: [{ lineId: chair, qty: '3' }] });
     expect(part.status, JSON.stringify(part.body)).toBe(200);
-    expect(part.body).toMatchObject({ fulfilmentStatus: 'partially_fulfilled', invoicingStatus: 'not_invoiced' });
-    const over = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/fulfil`).send({ lines: [{ lineId: chair, qty: '8' }] });
+    expect(part.body).toMatchObject({
+      fulfilmentStatus: 'partially_fulfilled',
+      invoicingStatus: 'not_invoiced',
+    });
+    const over = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/fulfil`)
+      .send({ lines: [{ lineId: chair, qty: '8' }] });
     expect(over.status).toBe(422);
     expect(code(over)).toBe('SO_QUANTITY_EXCEEDS');
     await api.as(t.admin).post(`/v2/sales-orders/${o.id}/fulfil`).send({ all: true });
     expect((await fetchOrder(o.id)).status).toBe('confirmed'); // delivered but not billed
     await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true });
     const closed = await fetchOrder(o.id);
-    expect(closed).toMatchObject({ status: 'closed', invoicingStatus: 'invoiced', fulfilmentStatus: 'fulfilled' });
+    expect(closed).toMatchObject({
+      status: 'closed',
+      invoicingStatus: 'invoiced',
+      fulfilmentStatus: 'fulfilled',
+    });
   });
 
   it('cancel: refused while a live invoice exists; allowed once it is void; a cancelled order cannot be invoiced or reopened', async () => {
     const o = await order();
     await confirm(o.id);
-    const a = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true, issue: true });
-    const live = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/cancel`).send({ reason: 'buyer left' });
+    const a = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/invoice`)
+      .send({ all: true, issue: true });
+    const live = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/cancel`)
+      .send({ reason: 'buyer left' });
     expect(live.status).toBe(409);
     expect(code(live)).toBe('SO_HAS_INVOICES');
-    await api.as(t.admin).post(`/v2/invoices/${a.body.invoice.id}/void`).send({ reason: 'cancelled order' });
-    const ok = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/cancel`).send({ reason: 'buyer left' });
+    await api
+      .as(t.admin)
+      .post(`/v2/invoices/${a.body.invoice.id}/void`)
+      .send({ reason: 'cancelled order' });
+    const ok = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/cancel`)
+      .send({ reason: 'buyer left' });
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
     expect(ok.body).toMatchObject({ status: 'cancelled', cancelReason: 'buyer left' });
-    const again = await api.as(t.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true });
+    const again = await api
+      .as(t.admin)
+      .post(`/v2/sales-orders/${o.id}/invoice`)
+      .send({ all: true });
     expect(code(again)).toBe('SO_CANCELLED');
-    await expect(h.owner.query(`UPDATE sales_orders SET status = 'confirmed' WHERE uuid = $1`, [o.id])).rejects.toThrow(/reopened|check|violates/i);
+    await expect(
+      h.owner.query(`UPDATE sales_orders SET status = 'confirmed' WHERE uuid = $1`, [o.id]),
+    ).rejects.toThrow(/reopened|check|violates/i);
   });
 
-  it('from an accepted estimate: one live order per offer, with the offer\'s lines, rates and folded discount; a draft offer is refused', async () => {
+  it("from an accepted estimate: one live order per offer, with the offer's lines, rates and folded discount; a draft offer is refused", async () => {
     const [cid] = await api.seedContacts(t, [{ name: 'Offer Buyer', email: 'o@buyer.test' }]);
     const body = {
-      kind: 'estimate', contactId: cid, currency: 'USD', taxRate: '10', discount: { kind: 'amount', value: '10.00' },
+      kind: 'estimate',
+      contactId: cid,
+      currency: 'USD',
+      taxRate: '10',
+      discount: { kind: 'amount', value: '10.00' },
       lines: [
         { description: 'A', qty: '1', unitPrice: '100.00' },
         { description: 'B', qty: '2', unitPrice: '50.00', taxRate: '0' },
@@ -514,7 +826,10 @@ describe('sales orders', () => {
     await api.as(t.admin).post(`/v2/sales-docs/${doc.body.id}/accept`).send({});
     const so = await api.as(t.admin).post('/v2/sales-orders').send({ quoteId: doc.body.id });
     expect(so.status, JSON.stringify(so.body)).toBe(201);
-    expect(so.body).toMatchObject({ buyerName: 'Offer Buyer', quote: { id: doc.body.id, kind: 'estimate' } });
+    expect(so.body).toMatchObject({
+      buyerName: 'Offer Buyer',
+      quote: { id: doc.body.id, kind: 'estimate' },
+    });
     expect(so.body.lines).toHaveLength(2);
     expect(so.body.amounts.discount).toBe('10.00');
     const twice = await api.as(t.admin).post('/v2/sales-orders').send({ quoteId: doc.body.id });
@@ -522,7 +837,9 @@ describe('sales orders', () => {
     expect(code(twice)).toBe('SO_QUOTE_TAKEN');
     // cancelling frees the offer
     await api.as(t.admin).post(`/v2/sales-orders/${so.body.id}/cancel`).send({ reason: 'redo' });
-    expect((await api.as(t.admin).post('/v2/sales-orders').send({ quoteId: doc.body.id })).status).toBe(201);
+    expect(
+      (await api.as(t.admin).post('/v2/sales-orders').send({ quoteId: doc.body.id })).status,
+    ).toBe(201);
   });
 
   it('counts, filters, permissions, scope and tenant isolation', async () => {
@@ -532,17 +849,29 @@ describe('sales orders', () => {
     expect(counts.confirmed).toBeGreaterThanOrEqual(1);
     expect(counts.toInvoice).toBeGreaterThanOrEqual(1);
     expect(counts.openValue[0]).toMatchObject({ currency: 'USD' });
-    const f = (await api.as(t.admin).get('/v2/sales-orders?invoicingStatus=not_invoiced&q=Filter')).body.data as Array<{ id: string }>;
+    const f = (await api.as(t.admin).get('/v2/sales-orders?invoicingStatus=not_invoiced&q=Filter'))
+      .body.data as Array<{ id: string }>;
     expect(f.map((x) => x.id)).toContain(o.id);
     const reader = await api.member(t, 'soreader', [['record.sales-orders.read']] as Grant[]);
     expect((await api.as(reader.token).get(`/v2/sales-orders/${o.id}`)).status).toBe(200);
-    expect((await api.as(reader.token).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true })).status).toBe(403);
-    expect((await api.as(reader.token).post(`/v2/sales-orders/${o.id}/cancel`).send({ reason: 'x' })).status).toBe(403);
+    expect(
+      (await api.as(reader.token).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true }))
+        .status,
+    ).toBe(403);
+    expect(
+      (await api.as(reader.token).post(`/v2/sales-orders/${o.id}/cancel`).send({ reason: 'x' }))
+        .status,
+    ).toBe(403);
     const own = await api.member(t, 'soown', [['record.sales-orders.read', 'own']] as Grant[]);
     expect((await api.as(own.token).get(`/v2/sales-orders/${o.id}`)).status).toBe(404);
     const other = await api.signup('iso2');
     expect((await api.as(other.admin).get(`/v2/sales-orders/${o.id}`)).status).toBe(404);
-    expect((await api.as(other.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true })).status).toBe(404);
-    expect((await api.events(t.orgId, 'sales_order.confirmed')).some((e) => e.uuid === o.id)).toBe(true);
+    expect(
+      (await api.as(other.admin).post(`/v2/sales-orders/${o.id}/invoice`).send({ all: true }))
+        .status,
+    ).toBe(404);
+    expect((await api.events(t.orgId, 'sales_order.confirmed')).some((e) => e.uuid === o.id)).toBe(
+      true,
+    );
   });
 });

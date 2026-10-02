@@ -5,9 +5,13 @@ import { z } from 'zod';
  * never on the human-readable message — messages get reworded, codes do not.
  */
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
+import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
+import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
+  ...RBAC_ERROR_CODES,
+  ...WSP_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -82,6 +86,7 @@ export const ERROR_CODES = {
   AUTH_SOCIAL_STATE_INVALID: 'AUTH_SOCIAL_STATE_INVALID',
   AUTH_SOCIAL_FAILED: 'AUTH_SOCIAL_FAILED',
   AUTH_SOCIAL_NO_EMAIL: 'AUTH_SOCIAL_NO_EMAIL',
+  AUTH_SOCIAL_NO_ACCOUNT: 'AUTH_SOCIAL_NO_ACCOUNT',
   AUTH_SESSION_NOT_FOUND: 'AUTH_SESSION_NOT_FOUND',
   AUTH_CANNOT_REVOKE_CURRENT: 'AUTH_CANNOT_REVOKE_CURRENT',
   AUTH_WORKSPACE_NOT_AVAILABLE: 'AUTH_WORKSPACE_NOT_AVAILABLE',
@@ -160,6 +165,12 @@ export const ERROR_CODES = {
   DEAL_STAGE_LAST: 'DEAL_STAGE_LAST',
   DEAL_ORDER_INVALID: 'DEAL_ORDER_INVALID',
   DEAL_LOST_REASON_NAME_TAKEN: 'DEAL_LOST_REASON_NAME_TAKEN',
+
+  // website chatbot widget (WD-WGT)
+  /** Mode `ai` or `both` saved without a smart agent. */
+  WGT_ASSISTANT_REQUIRED: 'WGT_ASSISTANT_REQUIRED',
+  /** The smart agent is not one of this workspace's. */
+  WGT_ASSISTANT_NOT_IN_WORKSPACE: 'WGT_ASSISTANT_NOT_IN_WORKSPACE',
 
   // tasks (WD-TASK)
   /** The assignee is not an active member of this workspace (WaDesk silently replaced or dropped it). */

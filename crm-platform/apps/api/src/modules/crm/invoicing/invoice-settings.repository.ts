@@ -152,7 +152,15 @@ export class InvoiceSettingsRepository {
     provider: string,
     forUpdate = false,
   ): Promise<
-    | { id: number; uuid: string; enabled: boolean; mode: 'test' | 'live'; secretCipher: string | null; rowVersion: number; updatedAt: Date }
+    | {
+        id: number;
+        uuid: string;
+        enabled: boolean;
+        mode: 'test' | 'live';
+        secretCipher: string | null;
+        rowVersion: number;
+        updatedAt: Date;
+      }
     | undefined
   > {
     const res = await tx.execute(sql`

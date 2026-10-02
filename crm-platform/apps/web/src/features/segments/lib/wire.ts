@@ -37,7 +37,9 @@ function toWireValue(c: Condition, catalog: readonly FieldDef[]): SegmentValue |
         ? { from: Number(v.from), to: Number(v.to) }
         : undefined;
     case 'dateRange':
-      return typeof v === 'object' && v !== null && !Array.isArray(v) ? { from: v.from, to: v.to } : undefined;
+      return typeof v === 'object' && v !== null && !Array.isArray(v)
+        ? { from: v.from, to: v.to }
+        : undefined;
     case 'text':
       return typeof v === 'string' ? v.trim() : undefined;
     case 'date':
@@ -87,7 +89,12 @@ function toEditorValue(v: SegmentValue | undefined): EditorValue {
 
 function nodeFromWire(n: SegmentNode): RuleNode {
   if (n.type === 'group') {
-    return { kind: 'group', id: nextId(), combinator: n.combinator, children: n.children.map(nodeFromWire) };
+    return {
+      kind: 'group',
+      id: nextId(),
+      combinator: n.combinator,
+      children: n.children.map(nodeFromWire),
+    };
   }
   return {
     kind: 'condition',

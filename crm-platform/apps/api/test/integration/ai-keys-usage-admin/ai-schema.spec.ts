@@ -191,13 +191,14 @@ describe('AI keys schema, seed and row-level security', () => {
     expect(after.rows[0].row_version).toBe(before.rows[0].row_version + 1);
   });
 
-  it('registers the three workspace capability keys', async () => {
+  it('registers the workspace capability keys', async () => {
     const defs = await owner.query(
       `SELECT key FROM permission_defs WHERE key LIKE 'aiadm.%' ORDER BY key`,
     );
     expect(defs.rows.map((r) => r.key)).toEqual([
       'aiadm.keys.manage',
       'aiadm.keys.read',
+      'aiadm.models.read',
       'aiadm.usage.read',
     ]);
   });

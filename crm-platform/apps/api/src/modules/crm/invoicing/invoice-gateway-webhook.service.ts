@@ -59,7 +59,11 @@ export class InvoiceGatewayWebhookService {
   ) {}
 
   private unauthorized(): AppError {
-    return new AppError(ERROR_CODES.PAY_SIGNATURE_INVALID, 'Invalid signature', HttpStatus.UNAUTHORIZED);
+    return new AppError(
+      ERROR_CODES.PAY_SIGNATURE_INVALID,
+      'Invalid signature',
+      HttpStatus.UNAUTHORIZED,
+    );
   }
 
   async handle(
@@ -68,7 +72,11 @@ export class InvoiceGatewayWebhookService {
     headers: WebhookHeaders,
     ip: string | undefined,
   ): Promise<{ status: WebhookOutcome }> {
-    await this.limiter.hit('webhook', `${endpointId.slice(0, 36)}:${ip ?? 'unknown'}`, WEBHOOK_PER_MINUTE);
+    await this.limiter.hit(
+      'webhook',
+      `${endpointId.slice(0, 36)}:${ip ?? 'unknown'}`,
+      WEBHOOK_PER_MINUTE,
+    );
     if (!UUID.test(endpointId) || !rawBody || rawBody.length === 0 || rawBody.length > 256_000)
       throw this.unauthorized();
 
@@ -76,7 +84,13 @@ export class InvoiceGatewayWebhookService {
       sql`SELECT org_id, connection_id, provider, secret_cipher, enabled FROM invoice_gateway_by_endpoint(${endpointId}::uuid)`,
     );
     const c = res.rows[0] as
-      | { org_id: number | string; connection_id: number | string; provider: string; secret_cipher: string | null; enabled: boolean }
+      | {
+          org_id: number | string;
+          connection_id: number | string;
+          provider: string;
+          secret_cipher: string | null;
+          enabled: boolean;
+        }
       | undefined;
     const gateway = c ? this.gateways.get(c.provider) : undefined;
     // Fail closed: nothing to verify against means nothing is accepted.
@@ -85,7 +99,10 @@ export class InvoiceGatewayWebhookService {
     try {
       secret = this.crypto.decrypt(c.secret_cipher);
     } catch (err) {
-      this.logger.error({ err, connection: c.connection_id }, 'could not decrypt the webhook secret');
+      this.logger.error(
+        { err, connection: c.connection_id },
+        'could not decrypt the webhook secret',
+      );
       throw this.unauthorized();
     }
     if (!gateway.verifyWebhookSignature(rawBody, headers, secret)) throw this.unauthorized();
@@ -104,7 +121,11 @@ export class InvoiceGatewayWebhookService {
       event = parsed.data;
     } catch (err) {
       if (err instanceof AppError) throw err;
-      throw new AppError(ERROR_CODES.VALIDATION_FAILED, 'The body is not valid JSON', HttpStatus.BAD_REQUEST);
+      throw new AppError(
+        ERROR_CODES.VALIDATION_FAILED,
+        'The body is not valid JSON',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const orgId = Number(c.org_id);
@@ -139,7 +160,11 @@ export class InvoiceGatewayWebhookService {
     `);
     const eventRowId = (ins.rows[0] as { id: number | string } | undefined)?.id;
     if (eventRowId === undefined) return { status: 'duplicate' };
-    const settle = async (outcome: 'applied' | 'ignored' | 'rejected', detail: string | null, attemptId: number | null) => {
+    const settle = async (
+      outcome: 'applied' | 'ignored' | 'rejected',
+      detail: string | null,
+      attemptId: number | null,
+    ) => {
       await tx.execute(sql`
         UPDATE invoice_gateway_events SET outcome = ${outcome}, detail = ${detail}, attempt_id = ${attemptId}
         WHERE org_id = ${orgId} AND id = ${Number(eventRowId)}
@@ -153,7 +178,13 @@ export class InvoiceGatewayWebhookService {
       WHERE org_id = ${orgId} AND connection_id = ${connectionId} AND uuid = ${event.data.reference}::uuid FOR UPDATE
     `);
     const attempt = a.rows[0] as
-      | { id: number | string; invoice_id: number | string; amount_minor: string; currency: string; status: string }
+      | {
+          id: number | string;
+          invoice_id: number | string;
+          amount_minor: string;
+          currency: string;
+          status: string;
+        }
       | undefined;
     if (!attempt) return settle('ignored', 'unknown_reference', null);
     const attemptId = Number(attempt.id);
@@ -167,15 +198,33 @@ export class InvoiceGatewayWebhookService {
 
     // Amount and currency come from the attempt we created, never from the event alone.
     const paid = parseScaled(event.data.amount, currencyExponent(attempt.currency));
-    if (event.data.currency.toUpperCase() !== attempt.currency || paid === null || paid !== BigInt(attempt.amount_minor)) {
-      await this.rejected(tx, orgId, event, attemptId, Number(attempt.invoice_id), 'amount_or_currency_mismatch');
+    if (
+      event.data.currency.toUpperCase() !== attempt.currency ||
+      paid === null ||
+      paid !== BigInt(attempt.amount_minor)
+    ) {
+      await this.rejected(
+        tx,
+        orgId,
+        event,
+        attemptId,
+        Number(attempt.invoice_id),
+        'amount_or_currency_mismatch',
+      );
       return settle('rejected', 'amount_or_currency_mismatch', attemptId);
     }
 
     const tz = await this.invoices.zone(tx, orgId);
     const inv = await this.invoicesRepo.findById(tx, orgId, Number(attempt.invoice_id), tz, true);
     if (!inv || inv.storedStatus !== 'issued') {
-      await this.rejected(tx, orgId, event, attemptId, Number(attempt.invoice_id), 'invoice_not_payable');
+      await this.rejected(
+        tx,
+        orgId,
+        event,
+        attemptId,
+        Number(attempt.invoice_id),
+        'invoice_not_payable',
+      );
       return settle('rejected', 'invoice_not_payable', attemptId);
     }
     // Money that really arrived is recorded even if the invoice was settled another way meanwhile (the excess shows as a credit):
@@ -194,14 +243,16 @@ export class InvoiceGatewayWebhookService {
       metaJson: { eventId: event.id },
     });
     await tx.execute(sql`
-      UPDATE invoice_payment_attempts SET status = 'succeeded', payment_id = ${payment ? (await this.paymentId(tx, orgId, payment.uuid)) : null}
+      UPDATE invoice_payment_attempts SET status = 'succeeded', payment_id = ${payment ? await this.paymentId(tx, orgId, payment.uuid) : null}
       WHERE org_id = ${orgId} AND id = ${attemptId}
     `);
     return settle('applied', payment ? null : 'already_recorded', attemptId);
   }
 
   private async paymentId(tx: Tx, orgId: number, uuid: string): Promise<number> {
-    const r = await tx.execute(sql`SELECT id FROM payments WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`);
+    const r = await tx.execute(
+      sql`SELECT id FROM payments WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+    );
     return Number((r.rows[0] as { id: number | string }).id);
   }
 
@@ -230,7 +281,12 @@ export class InvoiceGatewayWebhookService {
       aggregateModule: 'invoices',
       aggregateId: invoiceId,
       eventType: 'payment.rejected',
-      payload: { eventId: event.id, reason, amount: event.data.amount, currency: event.data.currency },
+      payload: {
+        eventId: event.id,
+        reason,
+        amount: event.data.amount,
+        currency: event.data.currency,
+      },
     });
   }
 }

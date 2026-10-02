@@ -6,7 +6,14 @@ import { isSameOrigin, problem } from '@/lib/auth/proxy';
  * token is the only credential and a staff member opening the link in their own browser must not act as staff. Only the public
  * invoice paths are reachable here (the invoice, its print view and PDF, and `pay`); the response is never cached or indexed.
  */
-const FORWARD_REQUEST = ['content-type', 'accept', 'idempotency-key', 'x-request-id', 'accept-language', 'user-agent'];
+const FORWARD_REQUEST = [
+  'content-type',
+  'accept',
+  'idempotency-key',
+  'x-request-id',
+  'accept-language',
+  'user-agent',
+];
 const FORWARD_RESPONSE = ['content-type', 'content-disposition', 'x-request-id', 'retry-after'];
 const TOKEN = /^[A-Za-z0-9_-]{16,128}$/;
 const READ_ACTIONS = new Set(['print', 'pdf']);
@@ -16,8 +23,10 @@ async function handler(req: Request, ctx: { params: Promise<{ path: string[] }> 
   const [token, action, ...rest] = path;
   const mutating = req.method === 'POST';
   const known = mutating ? action === 'pay' : action === undefined || READ_ACTIONS.has(action);
-  if (!token || !TOKEN.test(token) || rest.length > 0 || !known) return problem(404, 'NOT_FOUND', 'Not found');
-  if (mutating && !isSameOrigin(req)) return problem(403, 'FORBIDDEN', 'Cross-origin request refused');
+  if (!token || !TOKEN.test(token) || rest.length > 0 || !known)
+    return problem(404, 'NOT_FOUND', 'Not found');
+  if (mutating && !isSameOrigin(req))
+    return problem(403, 'FORBIDDEN', 'Cross-origin request refused');
 
   const headers = new Headers();
   for (const h of FORWARD_REQUEST) {

@@ -29,73 +29,73 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 
 ## Feature index
 
-| Id         | Feature                                                              | Status       | Priority | Effort | Depends on                          |
-| ---------- | -------------------------------------------------------------------- | ------------ | -------- | ------ | ----------------------------------- |
-| WD-CON-001 | Contacts list page (scope, access, load, ordering)                   | implemented  | P0       | M      | none                                |
-| WD-CON-002 | Contacts search (`q`)                                                | implemented  | P0       | S      | WD-CON-001                          |
-| WD-CON-003 | Group filter and sidebar group list                                  | implemented  | P0       | S      | WD-CON-001, WD-CON-037              |
-| WD-CON-004 | Tag filter                                                           | partial      | P1       | S      | WD-CON-001, WD-CON-041              |
-| WD-CON-005 | Pagination and page size                                             | implemented  | P0       | S      | WD-CON-001                          |
-| WD-CON-006 | Stat tiles, sidebar counts, Imported / No-group quick filters        | partial      | P1       | S      | WD-CON-001                          |
-| WD-CON-007 | List / grid view toggle                                              | implemented  | P2       | S      | WD-CON-001                          |
-| WD-CON-008 | Contact row rendering (columns, phone display, attribute chips)      | implemented  | P0       | S      | WD-CON-001                          |
-| WD-CON-009 | Add contact (modal + `POST /contacts`)                               | implemented  | P0       | M      | WD-CON-012, WD-CON-013, WD-CON-026  |
-| WD-CON-010 | Edit contact (modal + `PUT /contacts/{id}`)                          | implemented  | P0       | M      | WD-CON-009                          |
-| WD-CON-011 | Delete a single contact                                              | implemented  | P0       | S      | WD-CON-001                          |
-| WD-CON-012 | Display-name composition and title handling                          | implemented  | P0       | S      | none                                |
-| WD-CON-013 | Phone storage, canonical form and `mobile_hash`                      | implemented  | P0       | M      | none                                |
-| WD-CON-014 | Contact avatar image upload                                          | partial      | P2       | S      | WD-CON-009                          |
-| WD-CON-015 | Status and Source values                                             | partial      | P1       | S      | WD-CON-009                          |
-| WD-CON-016 | Per-contact custom attribute values                                  | implemented  | P1       | M      | WD-CON-043                          |
-| WD-CON-017 | Marketing opt-out flag (`is_unsubscribed`, `unsubscribed_at`)        | partial      | P0       | M      | WD-CON-013                          |
-| WD-CON-018 | Contact 360 page (`GET /contacts/{id}`)                              | dead-code    | P2       | M      | WD-CON-001                          |
-| WD-CON-019 | Selection model and bulk bar (page vs "all matching")                | partial      | P0       | M      | WD-CON-001                          |
-| WD-CON-020 | Bulk delete                                                          | implemented  | P0       | S      | WD-CON-019                          |
-| WD-CON-021 | Export selected contacts (CSV)                                       | implemented  | P1       | S      | WD-CON-019                          |
-| WD-CON-022 | Export all contacts in the current view (CSV)                        | implemented  | P1       | S      | WD-CON-021                          |
-| WD-CON-023 | Bulk add / remove group                                              | implemented  | P0       | M      | WD-CON-019, WD-CON-037              |
-| WD-CON-024 | Bulk tag / untag                                                     | implemented  | P1       | M      | WD-CON-019, WD-CON-041              |
-| WD-CON-025 | Remove duplicates (workspace dedupe)                                 | implemented  | P1       | M      | WD-CON-013                          |
-| WD-CON-026 | Plan gate `contacts_limit`                                           | partial      | P0       | S      | PLN plan model                      |
-| WD-CON-027 | CSV import (upload, process, result summary)                         | implemented  | P0       | L      | WD-CON-028..030, WD-CON-026         |
-| WD-CON-028 | Import column auto-detection                                         | implemented  | P0       | S      | WD-CON-027                          |
-| WD-CON-029 | Import "apply to every contact" knobs (status, source, group, tags)  | partial      | P1       | S      | WD-CON-027                          |
-| WD-CON-030 | Import duplicate handling (update in place)                          | implemented  | P0       | M      | WD-CON-013, WD-CON-027              |
-| WD-CON-031 | Import preview endpoint                                              | dead-code    | P2       | S      | WD-CON-028                          |
-| WD-CON-032 | Sample CSV download                                                  | implemented  | P2       | S      | none                                |
-| WD-CON-033 | Groups panel (cards, empty tile, sidebar)                            | implemented  | P0       | S      | WD-CON-037                          |
-| WD-CON-034 | Create group                                                         | implemented  | P0       | S      | WD-CON-037                          |
-| WD-CON-035 | Edit group                                                           | implemented  | P1       | S      | WD-CON-034                          |
-| WD-CON-036 | Delete group (detaches from contacts)                                | implemented  | P0       | S      | WD-CON-037                          |
-| WD-CON-037 | Group membership model, counts and orphan ids                        | implemented  | P0       | M      | none                                |
-| WD-CON-038 | Contact tags: load a contact's tags + workspace tag list             | implemented  | P1       | S      | WD-CON-041                          |
-| WD-CON-039 | Attach tag to a contact (find-or-create)                             | implemented  | P1       | S      | WD-CON-038, WD-CON-053              |
-| WD-CON-040 | Detach tag from a contact                                            | implemented  | P1       | S      | WD-CON-038                          |
-| WD-CON-041 | Tag data model on contacts, chips in list, starter tags              | implemented  | P1       | S      | TIB1 tag master list                |
-| WD-CON-042 | Attributes list page (`/attributes`)                                 | implemented  | P1       | M      | none                                |
-| WD-CON-043 | Create attribute                                                     | partial      | P1       | S      | WD-CON-042                          |
-| WD-CON-044 | Edit attribute                                                       | partial      | P1       | S      | WD-CON-042                          |
-| WD-CON-045 | Delete attribute                                                     | implemented  | P1       | S      | WD-CON-042                          |
-| WD-CON-046 | Attribute picker feed (`/attributes/api/list`) and slash picker      | implemented  | P1       | M      | WD-CON-043                          |
-| WD-CON-047 | Built-in (system) attribute catalog and send-screen catalog          | implemented  | P1       | M      | WD-CON-046                          |
-| WD-CON-048 | Merge-tag resolution at send time                                    | implemented  | P0       | L      | WD-CON-016, WD-CON-043              |
-| WD-CON-049 | Positional placeholder validator                                     | implemented  | P1       | S      | none                                |
-| WD-CON-050 | Attribute feeds for Node bridge, mobile app and browser extension    | implemented  | P1       | S      | WD-CON-043                          |
-| WD-CON-051 | `contact_custom_fields` typed field schema                           | dead-code    | P2       | S      | none                                |
-| WD-CON-052 | Contact outbound webhooks (created, updated, opt-in)                 | partial      | P1       | M      | INTG webhooks                       |
-| WD-CON-053 | Flow audience triggers fired by contact changes                      | implemented  | P1       | M      | flow runtime                        |
-| WD-CON-054 | In-app activity notifications on contact/group/attribute model events| implemented | P2       | S      | notifications domain                |
-| WD-CON-055 | Contact auto-capture and other contact creators                      | implemented  | P0       | M      | WD-CON-013                          |
-| WD-CON-056 | Public API: auth, envelope, rate limit, errors (contacts scope)      | implemented  | P1       | M      | API keys                            |
-| WD-CON-057 | API: list contacts                                                   | implemented  | P1       | S      | WD-CON-056                          |
-| WD-CON-058 | API: read one contact                                                | implemented  | P1       | S      | WD-CON-056                          |
-| WD-CON-059 | API: create contact                                                  | implemented  | P1       | M      | WD-CON-056, WD-CON-012, WD-CON-013  |
-| WD-CON-060 | API: update contact                                                  | implemented  | P1       | M      | WD-CON-059                          |
-| WD-CON-061 | API: delete contact                                                  | implemented  | P1       | S      | WD-CON-056                          |
-| WD-CON-062 | API: list contact groups                                             | implemented  | P1       | S      | WD-CON-056                          |
-| WD-CON-063 | API: create contact group                                            | implemented  | P1       | S      | WD-CON-056                          |
-| WD-CON-064 | API: delete contact group                                            | implemented  | P1       | S      | WD-CON-056                          |
-| WD-CON-065 | Contacts UI shell: toasts, loading, errors, keyboard, responsive, i18n | implemented | P1       | M      | WD-CON-001                          |
+| Id         | Feature                                                                | Status      | Priority | Effort | Depends on                         |
+| ---------- | ---------------------------------------------------------------------- | ----------- | -------- | ------ | ---------------------------------- |
+| WD-CON-001 | Contacts list page (scope, access, load, ordering)                     | implemented | P0       | M      | none                               |
+| WD-CON-002 | Contacts search (`q`)                                                  | implemented | P0       | S      | WD-CON-001                         |
+| WD-CON-003 | Group filter and sidebar group list                                    | implemented | P0       | S      | WD-CON-001, WD-CON-037             |
+| WD-CON-004 | Tag filter                                                             | partial     | P1       | S      | WD-CON-001, WD-CON-041             |
+| WD-CON-005 | Pagination and page size                                               | implemented | P0       | S      | WD-CON-001                         |
+| WD-CON-006 | Stat tiles, sidebar counts, Imported / No-group quick filters          | partial     | P1       | S      | WD-CON-001                         |
+| WD-CON-007 | List / grid view toggle                                                | implemented | P2       | S      | WD-CON-001                         |
+| WD-CON-008 | Contact row rendering (columns, phone display, attribute chips)        | implemented | P0       | S      | WD-CON-001                         |
+| WD-CON-009 | Add contact (modal + `POST /contacts`)                                 | implemented | P0       | M      | WD-CON-012, WD-CON-013, WD-CON-026 |
+| WD-CON-010 | Edit contact (modal + `PUT /contacts/{id}`)                            | implemented | P0       | M      | WD-CON-009                         |
+| WD-CON-011 | Delete a single contact                                                | implemented | P0       | S      | WD-CON-001                         |
+| WD-CON-012 | Display-name composition and title handling                            | implemented | P0       | S      | none                               |
+| WD-CON-013 | Phone storage, canonical form and `mobile_hash`                        | implemented | P0       | M      | none                               |
+| WD-CON-014 | Contact avatar image upload                                            | partial     | P2       | S      | WD-CON-009                         |
+| WD-CON-015 | Status and Source values                                               | partial     | P1       | S      | WD-CON-009                         |
+| WD-CON-016 | Per-contact custom attribute values                                    | implemented | P1       | M      | WD-CON-043                         |
+| WD-CON-017 | Marketing opt-out flag (`is_unsubscribed`, `unsubscribed_at`)          | partial     | P0       | M      | WD-CON-013                         |
+| WD-CON-018 | Contact 360 page (`GET /contacts/{id}`)                                | dead-code   | P2       | M      | WD-CON-001                         |
+| WD-CON-019 | Selection model and bulk bar (page vs "all matching")                  | partial     | P0       | M      | WD-CON-001                         |
+| WD-CON-020 | Bulk delete                                                            | implemented | P0       | S      | WD-CON-019                         |
+| WD-CON-021 | Export selected contacts (CSV)                                         | implemented | P1       | S      | WD-CON-019                         |
+| WD-CON-022 | Export all contacts in the current view (CSV)                          | implemented | P1       | S      | WD-CON-021                         |
+| WD-CON-023 | Bulk add / remove group                                                | implemented | P0       | M      | WD-CON-019, WD-CON-037             |
+| WD-CON-024 | Bulk tag / untag                                                       | implemented | P1       | M      | WD-CON-019, WD-CON-041             |
+| WD-CON-025 | Remove duplicates (workspace dedupe)                                   | implemented | P1       | M      | WD-CON-013                         |
+| WD-CON-026 | Plan gate `contacts_limit`                                             | partial     | P0       | S      | PLN plan model                     |
+| WD-CON-027 | CSV import (upload, process, result summary)                           | implemented | P0       | L      | WD-CON-028..030, WD-CON-026        |
+| WD-CON-028 | Import column auto-detection                                           | implemented | P0       | S      | WD-CON-027                         |
+| WD-CON-029 | Import "apply to every contact" knobs (status, source, group, tags)    | partial     | P1       | S      | WD-CON-027                         |
+| WD-CON-030 | Import duplicate handling (update in place)                            | implemented | P0       | M      | WD-CON-013, WD-CON-027             |
+| WD-CON-031 | Import preview endpoint                                                | dead-code   | P2       | S      | WD-CON-028                         |
+| WD-CON-032 | Sample CSV download                                                    | implemented | P2       | S      | none                               |
+| WD-CON-033 | Groups panel (cards, empty tile, sidebar)                              | implemented | P0       | S      | WD-CON-037                         |
+| WD-CON-034 | Create group                                                           | implemented | P0       | S      | WD-CON-037                         |
+| WD-CON-035 | Edit group                                                             | implemented | P1       | S      | WD-CON-034                         |
+| WD-CON-036 | Delete group (detaches from contacts)                                  | implemented | P0       | S      | WD-CON-037                         |
+| WD-CON-037 | Group membership model, counts and orphan ids                          | implemented | P0       | M      | none                               |
+| WD-CON-038 | Contact tags: load a contact's tags + workspace tag list               | implemented | P1       | S      | WD-CON-041                         |
+| WD-CON-039 | Attach tag to a contact (find-or-create)                               | implemented | P1       | S      | WD-CON-038, WD-CON-053             |
+| WD-CON-040 | Detach tag from a contact                                              | implemented | P1       | S      | WD-CON-038                         |
+| WD-CON-041 | Tag data model on contacts, chips in list, starter tags                | implemented | P1       | S      | TIB1 tag master list               |
+| WD-CON-042 | Attributes list page (`/attributes`)                                   | implemented | P1       | M      | none                               |
+| WD-CON-043 | Create attribute                                                       | partial     | P1       | S      | WD-CON-042                         |
+| WD-CON-044 | Edit attribute                                                         | partial     | P1       | S      | WD-CON-042                         |
+| WD-CON-045 | Delete attribute                                                       | implemented | P1       | S      | WD-CON-042                         |
+| WD-CON-046 | Attribute picker feed (`/attributes/api/list`) and slash picker        | implemented | P1       | M      | WD-CON-043                         |
+| WD-CON-047 | Built-in (system) attribute catalog and send-screen catalog            | implemented | P1       | M      | WD-CON-046                         |
+| WD-CON-048 | Merge-tag resolution at send time                                      | implemented | P0       | L      | WD-CON-016, WD-CON-043             |
+| WD-CON-049 | Positional placeholder validator                                       | implemented | P1       | S      | none                               |
+| WD-CON-050 | Attribute feeds for Node bridge, mobile app and browser extension      | implemented | P1       | S      | WD-CON-043                         |
+| WD-CON-051 | `contact_custom_fields` typed field schema                             | dead-code   | P2       | S      | none                               |
+| WD-CON-052 | Contact outbound webhooks (created, updated, opt-in)                   | partial     | P1       | M      | INTG webhooks                      |
+| WD-CON-053 | Flow audience triggers fired by contact changes                        | implemented | P1       | M      | flow runtime                       |
+| WD-CON-054 | In-app activity notifications on contact/group/attribute model events  | implemented | P2       | S      | notifications domain               |
+| WD-CON-055 | Contact auto-capture and other contact creators                        | implemented | P0       | M      | WD-CON-013                         |
+| WD-CON-056 | Public API: auth, envelope, rate limit, errors (contacts scope)        | implemented | P1       | M      | API keys                           |
+| WD-CON-057 | API: list contacts                                                     | implemented | P1       | S      | WD-CON-056                         |
+| WD-CON-058 | API: read one contact                                                  | implemented | P1       | S      | WD-CON-056                         |
+| WD-CON-059 | API: create contact                                                    | implemented | P1       | M      | WD-CON-056, WD-CON-012, WD-CON-013 |
+| WD-CON-060 | API: update contact                                                    | implemented | P1       | M      | WD-CON-059                         |
+| WD-CON-061 | API: delete contact                                                    | implemented | P1       | S      | WD-CON-056                         |
+| WD-CON-062 | API: list contact groups                                               | implemented | P1       | S      | WD-CON-056                         |
+| WD-CON-063 | API: create contact group                                              | implemented | P1       | S      | WD-CON-056                         |
+| WD-CON-064 | API: delete contact group                                              | implemented | P1       | S      | WD-CON-056                         |
+| WD-CON-065 | Contacts UI shell: toasts, loading, errors, keyboard, responsive, i18n | implemented | P1       | M      | WD-CON-001                         |
 
 ## Features
 
@@ -110,10 +110,10 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** `resources/views/user/contacts/index.blade.php` (page key `user-contacts-index`). Layout: left rail (260px, sticky on large screens) with a "Tip" card, a "Contact views" card (All contacts, Groups, Imported, No group, each with a count), a "Groups" card (All groups + one button per group with member count) and an "Import format" help card. Main column: eyebrow "Workspace - <workspace name>", H1 "Your contacts", subtitle, header buttons (Remove duplicates, Export all, Bulk upload, New group, Add contact), four stat tiles, a toolbar card (tabs All contacts / Groups, bulk bar, search box, group select, page-size select, list/grid toggle), the table, the pagination bar, the hidden Groups panel, and three static help cards ("What is a contact?", "How should I use groups?", "How do I keep lists clean?"). Modals: contactModal (add), editModal, bulkModal (CSV import), groupModal, deleteModal (bulk delete confirm).
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/contacts` | `user.contacts` | ContactsController@index | web, auth, workspace.role:manager | query `q`, `group`, `tag`, `per_page`, `page` | HTML (Blade `user.contacts.index`) |
-| GET `/contact-groups` | `user.contact-groups` | ContactsController@groupIndex | same | same | identical HTML (it just calls `index`); does NOT open the Groups tab |
+| Method + URI          | Route name            | Action                        | Middleware                        | Request                                       | Response                                                             |
+| --------------------- | --------------------- | ----------------------------- | --------------------------------- | --------------------------------------------- | -------------------------------------------------------------------- |
+| GET `/contacts`       | `user.contacts`       | ContactsController@index      | web, auth, workspace.role:manager | query `q`, `group`, `tag`, `per_page`, `page` | HTML (Blade `user.contacts.index`)                                   |
+| GET `/contact-groups` | `user.contact-groups` | ContactsController@groupIndex | same                              | same                                          | identical HTML (it just calls `index`); does NOT open the Groups tab |
 
 - **Data:** reads `contacts` (all rows of the workspace, with `tags` eager-loaded), `contact_groups`, `tags`, `attributes` (active only, for the modals' attribute inputs), `contact_tag`. Visibility clause everywhere: `workspace_id = current` OR (`workspace_id IS NULL` AND `user_id = me`) — the second branch exists only for pre-workspace legacy rows. Order: `created_at` DESC (no tie-break). Groups: `created_at` DESC for the modals/panel, `id` DESC for the sidebar list.
 - **Rules & edge cases:**
@@ -327,9 +327,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** `#contactModal` (max-w-3xl). Fields: Title select (Mr, Mrs, Miss, Ms, Dr; no blank option; Mr preselected), First name (required), Middle name, Last name, Contact image (file, "PNG or JPG / up to 2 MB"), Language (placeholder "English"), Mobile number (required, intl-tel-input with flags, country search, separate dial code; hidden `country_code` input holds "+<dial>"), Email, Memo (maxlength 1024 in the browser), Address, Status select (none, Active, Prospect, Customer, VIP), Source (free text, maxlength 128, placeholder "e.g. Website form"), Contact groups (checkbox chips, or "No groups yet - create one first."), and Attributes (one text input per ACTIVE workspace attribute, labelled "<name> /<key>", placeholder = attribute description, maxlength 1000). Buttons Cancel / Save contact. There is no Unsubscribed toggle and no tags control in the add modal (tags are added via edit). On success: toast "Contact added.", modal closes, form resets, phone picker resets to India (+91) - hard-coded - and the row is prepended.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request fields | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `/contacts` | `user.contacts.store` | ContactsController@store | web, auth, workspace.role:manager | see Rules | JSON when `Accept: application/json`: `{ok:true, message:"Contact added.", contact:{id,name,first_name,middle_name,last_name,title,mobile,mobile_masked,country_code,email,language,address,msg,group_ids[],groups[{id,name,color}],status,source,custom_attributes{}}}`; otherwise redirect to `/contacts` with flash status |
+| Method + URI     | Route name            | Action                   | Middleware                        | Request fields | Response                                                                                                                                                                                                                                                                                                                      |
+| ---------------- | --------------------- | ------------------------ | --------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST `/contacts` | `user.contacts.store` | ContactsController@store | web, auth, workspace.role:manager | see Rules      | JSON when `Accept: application/json`: `{ok:true, message:"Contact added.", contact:{id,name,first_name,middle_name,last_name,title,mobile,mobile_masked,country_code,email,language,address,msg,group_ids[],groups[{id,name,color}],status,source,custom_attributes{}}}`; otherwise redirect to `/contacts` with flash status |
 
 - **Data:** writes `contacts` (user_id = actor, workspace_id = current, all fields below, `custom_attributes` JSON, `contact_group` encrypted array of strings, `mobile_hash`, `image` path). Reads `contact_groups` for the chip payload.
 - **Rules & edge cases:**
@@ -366,8 +366,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** `#editModal`: same fields as add, plus a Tags block (chips with remove "x", a multi-select picker of all workspace tags where clicking toggles attach/detach immediately, a text input with datalist "Add or pick a tag..." and an "Add tag" button; hint that adding a tag can auto-enroll into a flow). No contact image field. The phone input is prefilled by stripping the country-code digits from the stored number and letting the picker detect the country from an E.164 string; the hidden country code is re-read from the picker. First name is required in the browser (falls back to the display name when `first_name` is empty). Groups are preselected from the row's group ids.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI         | Route name             | Action                    | Middleware                        | Request                                                  | Response                                                                                              |
+| -------------------- | ---------------------- | ------------------------- | --------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | PUT `/contacts/{id}` | `user.contacts.update` | ContactsController@update | web, auth, workspace.role:manager | same fields as store but all nullable; `mobile` nullable | JSON `{ok:true, message:"Contact updated.", contact:{...}}` or redirect with flash "Contact updated." |
 
 - **Data:** updates the contact row; may replace `image`.
@@ -406,9 +406,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** trash icon in the row; confirm dialog titled "Delete?" with message "Delete this contact?"; on success the row is removed silently (no toast for destructive AJAX) and counts refresh client-side only.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE `/contacts/{id}` | `user.contacts.destroy` | ContactsController@destroy | web, auth, workspace.role:manager | none | JSON `{ok:true, message:"Contact deleted.", id}` or redirect with flash "Contact deleted." |
+| Method + URI            | Route name              | Action                     | Middleware                        | Request | Response                                                                                   |
+| ----------------------- | ----------------------- | -------------------------- | --------------------------------- | ------- | ------------------------------------------------------------------------------------------ |
+| DELETE `/contacts/{id}` | `user.contacts.destroy` | ContactsController@destroy | web, auth, workspace.role:manager | none    | JSON `{ok:true, message:"Contact deleted.", id}` or redirect with flash "Contact deleted." |
 
 - **Data:** deletes the `contacts` row (no soft delete). Nothing else is cleaned.
 - **Rules & edge cases:**
@@ -605,9 +605,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** `resources/views/user/contacts/show.blade.php`: back link "All contacts", avatar initial, name, phone, email, company link, tag pills, three KPI tiles (Open deals, Won revenue, Timeline events), "Activity timeline" and "Deals" cards with empty copy "No activity yet for this contact." / "No deals yet.". It shows no groups, attributes, status, source or consent.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/contacts/{id}` (numeric) | `user.contacts.show` | ContactsController@show | web, auth, workspace.role:manager | none | HTML |
+| Method + URI                   | Route name           | Action                  | Middleware                        | Request | Response |
+| ------------------------------ | -------------------- | ----------------------- | --------------------------------- | ------- | -------- |
+| GET `/contacts/{id}` (numeric) | `user.contacts.show` | ContactsController@show | web, auth, workspace.role:manager | none    | HTML     |
 
 - **Data:** reads the contact with tags, up to 50 deals (open first, then id desc), `pipeline_stages` names, up to 40 `deal_activities`, up to 30 `inbox_messages` from up to 20 conversations whose `raw_jid` contains the contact's canonical phone (substring `LIKE`), and the linked `company`. Timeline = merged events sorted by time, top 60. Rollup: open deal count, won value (value_minor/100).
 - **Rules & edge cases:**
@@ -660,8 +660,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** modal "Delete selected contacts?" - "This removes the selected contacts from all lists and groups. This action cannot be undone." with buttons "Keep contacts" and "Delete". Rows are removed from the table on success.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI                 | Route name                  | Action                        | Middleware                        | Request                                                       | Response                                                                                          |
+| ---------------------------- | --------------------------- | ----------------------------- | --------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | POST `/contacts/bulk-delete` | `user.contacts.bulk-delete` | ContactsController@bulkDelete | web, auth, workspace.role:manager | `ids[]` required array, each integer and `exists:contacts,id` | JSON `{ok:true, message:"Deleted N contact(s).", ids:[all requested ids]}` or redirect with flash |
 
 - **Data:** mass-deletes rows `id IN ids` restricted to the workspace (plus the owner's legacy rows).
@@ -692,8 +692,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** "Export" in the bulk bar fills a hidden POST form with `ids[]` and submits it so the browser downloads the file (no AJAX).
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI                 | Route name                  | Action                        | Middleware                        | Request                                                    | Response                                                    |
+| ---------------------------- | --------------------------- | ----------------------------- | --------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------- |
 | POST `/contacts/bulk-export` | `user.contacts.bulk-export` | ContactsController@bulkExport | web, auth, workspace.role:manager | `ids[]` required array of integers (when `all` is not set) | `text/csv; charset=UTF-8`, attachment `contacts-export.csv` |
 
 - **Data:** header row `name, last_name, country_code, mobile, email, group, language, memo`; one row per contact ordered by `created_at` desc. `group` is the comma+space joined names of the contact's still-existing groups; `memo` is `contacts.msg`. Values are decrypted.
@@ -745,8 +745,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** bulk bar "Add to group" / "Remove from group" open a popover with a group select and Apply; success reloads the page with the server message.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI                | Route name                 | Action                       | Middleware                        | Request                                                                                                                                                               | Response                                                                                      |
+| --------------------------- | -------------------------- | ---------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | POST `/contacts/bulk-group` | `user.contacts.bulk-group` | ContactsController@bulkGroup | web, auth, workspace.role:manager | `ids[]` array (required unless `all`), `group_id` required integer, `action` required in {add, remove}, `all` nullable boolean, plus `q`, `group`, `tag` when `all=1` | JSON `{ok:true, message:"N contact(s) added to \"<group>\"." (or "removed from"), changed:N}` |
 
 - **Data:** rewrites each affected contact's `contact_group` array.
@@ -778,9 +778,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** bulk bar "Tag" / "Untag" popover: select of workspace tags `Name (count)`, a text input "...or type a new tag name" (max 80, add mode only), Cancel / Apply. Only the page's ticked ids are sent.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `/contacts/bulk-tag` | `user.contacts.bulk-tag` | ContactsController@bulkTag | web, auth, workspace.role:manager | `ids[]` required array of integers (non-empty), `tag_id` nullable integer, `name` nullable max 80, `action` required in {add, remove} | JSON `{ok:true, message:"N contact(s) tagged|untagged \"<tag>\".", changed:N, tag:{id,name,color}}`; 422 `{ok:false, error:"no_workspace"|"tag_required"}` |
+| Method + URI              | Route name               | Action                     | Middleware                        | Request                                                                                                                               | Response                                     |
+| ------------------------- | ------------------------ | -------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| POST `/contacts/bulk-tag` | `user.contacts.bulk-tag` | ContactsController@bulkTag | web, auth, workspace.role:manager | `ids[]` required array of integers (non-empty), `tag_id` nullable integer, `name` nullable max 80, `action` required in {add, remove} | JSON `{ok:true, message:"N contact(s) tagged | untagged \"<tag>\".", changed:N, tag:{id,name,color}}`; 422 `{ok:false, error:"no_workspace" | "tag_required"}` |
 
 - **Data:** `contact_tag` rows (contact_id, tag_id, added_by = actor, timestamps); `tags` row created if needed.
 - **Rules & edge cases:**
@@ -810,9 +810,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** header button "Remove duplicates" (title "Remove duplicate phone numbers, keeping the earliest of each"); confirm dialog "Remove duplicates? This deletes contacts that repeat the same phone number, keeping the earliest of each. This cannot be undone." (danger tone). On success the page reloads with the server message.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `/contacts/dedupe` | `user.contacts.dedupe` | ContactsController@dedupe | web, auth, workspace.role:manager | none | JSON `{ok:true, message, removed:N}` |
+| Method + URI            | Route name             | Action                    | Middleware                        | Request | Response                             |
+| ----------------------- | ---------------------- | ------------------------- | --------------------------------- | ------- | ------------------------------------ |
+| POST `/contacts/dedupe` | `user.contacts.dedupe` | ContactsController@dedupe | web, auth, workspace.role:manager | none    | JSON `{ok:true, message, removed:N}` |
 
 - **Data:** reads (id, country_code, mobile) of the workspace's contacts ordered by id; deletes losers.
 - **Rules & edge cases:**
@@ -870,8 +870,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** "Bulk upload" opens `#bulkModal` ("Upload contacts from a file"): file tile "Choose CSV file" with the label "CSV / max 5 MB" (QUIRK: the server allows 50 MB), accept `.csv,.txt`; a "Smart column detection" hint (needs a header row; recognises name, phone/mobile/whatsapp, email, group, country_code, language; unknown columns ignored) with a "Download sample CSV" link; an "Apply to every imported contact" panel (Status select, Source text max 128, Group select of up to 200 newest groups, explanatory line "All imported contacts get added to this group. Per-row CSV groups also apply."). Submit shows a spinner "Working...", then a toast with the summary and a page reload. There is no preview step, no column-mapping UI, no progress bar and no per-row error list.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI            | Route name             | Action                    | Middleware                        | Request                                                                                                                                                                                                                                        | Response                                                                                 |
+| ----------------------- | ---------------------- | ------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | POST `/contacts/import` | `user.contacts.import` | ContactsController@import | web, auth, workspace.role:manager | multipart `file` required, mimetypes `text/csv, text/plain, application/csv, application/vnd.ms-excel`, max 51200 KB; `status` nullable max 64; `source` nullable max 128; `group_id` nullable integer; `tag_ids[]` nullable array of integers | JSON `{ok:true, message, imported, skipped, duplicates}` or redirect with flash `status` |
 
 - **Data:** writes `contacts` (user_id = importer, workspace_id, name, first_name, last_name, mobile, mobile_hash, email, country_code, language, contact_group, custom_attributes), `contact_groups` (new names).
@@ -991,8 +991,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none in the shipped UI; the documentation advertises a two-step preview-first flow.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI                    | Route name                     | Action                           | Middleware                        | Request                                      | Response                                                                                                                      |
+| ------------------------------- | ------------------------------ | -------------------------------- | --------------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | POST `/contacts/import-preview` | `user.contacts.import-preview` | ContactsController@importPreview | web, auth, workspace.role:manager | `file` required, same mimetypes, max 5120 KB | JSON `{ok:true, headers:[trimmed header strings], detected:{field:columnIndex}, rows:[up to 5 assoc arrays keyed by header]}` |
 
 - **Data:** reads the file only; writes nothing.
@@ -1018,9 +1018,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** anchor in the import modal.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/contacts/sample-csv` | `user.contacts.sample-csv` | ContactsController@sampleCsv | web, auth, workspace.role:manager | none | `text/csv; charset=UTF-8` attachment `contacts-sample.csv` |
+| Method + URI               | Route name                 | Action                       | Middleware                        | Request | Response                                                   |
+| -------------------------- | -------------------------- | ---------------------------- | --------------------------------- | ------- | ---------------------------------------------------------- |
+| GET `/contacts/sample-csv` | `user.contacts.sample-csv` | ContactsController@sampleCsv | web, auth, workspace.role:manager | none    | `text/csv; charset=UTF-8` attachment `contacts-sample.csv` |
 
 - **Data:** static content: header `name,last_name,country_code,mobile,email,group,language` and two rows ("Aarav Sharma, Sharma, 91, 9812345678, aarav@example.com, group cell "VIP, New leads" (quoted), en" and "Priya Patel, Patel, 91, 9898765432, priya@example.com, Customers, en"). Newline line endings, trailing newline.
 - **Rules & edge cases:** the route is declared after the numeric `{id}` routes but `{id}` is constrained to digits, so it does not collide.
@@ -1067,9 +1067,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** `#groupModal` titled "Create or edit group": Group name (required), Note (textarea max 1024 in browser), Accent colour (five radio swatches: #7C3AED (default), #22C55E, #E87A5D, #E5A04E, #13478A), buttons Cancel / Save group. On success the modal closes first (to avoid double submits), sidebar button, select option, bulk-group option, group card and the group checkboxes in the add/edit modals are updated without reload.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `/contact-groups` | `user.contact-groups.store` | ContactsController@groupStore | web, auth, workspace.role:manager | `name` required max 191; `note` nullable max 500; `color` nullable max 32 | JSON `{ok:true, message:"Group created."|"Group already exists.", existing:bool, group:{id,name,note,color,members_count:0}}`; non-JSON: back with flash |
+| Method + URI           | Route name                  | Action                        | Middleware                        | Request                                                                   | Response                                 |
+| ---------------------- | --------------------------- | ----------------------------- | --------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------- |
+| POST `/contact-groups` | `user.contact-groups.store` | ContactsController@groupStore | web, auth, workspace.role:manager | `name` required max 191; `note` nullable max 500; `color` nullable max 32 | JSON `{ok:true, message:"Group created." | "Group already exists.", existing:bool, group:{id,name,note,color,members_count:0}}`; non-JSON: back with flash |
 
 - **Data:** `contact_groups` (user_id, workspace_id, user_group [encrypted], note [encrypted], color, status default 1).
 - **Rules & edge cases:**
@@ -1085,7 +1085,7 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **External systems:** none.
 - **Settings:** none.
 - **Acceptance criteria:**
-  - Given group "VIP", when creating "  vip ", then the response has `existing` true and no row is added.
+  - Given group "VIP", when creating " vip ", then the response has `existing` true and no row is added.
   - Given name "Leads" with colour #22C55E, then a group with that colour is returned with `members_count` 0.
   - Given no name, then 422.
 - **Source refs:** ContactsController@groupStore; index.blade.php (groupModal); user-contacts-index.js.
@@ -1102,8 +1102,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** the pencil on a group card opens the same modal prefilled (the colour radio matching the group's colour is checked, else the first swatch); submitted as PUT.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI               | Route name                   | Action                         | Middleware                        | Request                                                                   | Response                                                                             |
+| -------------------------- | ---------------------------- | ------------------------------ | --------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | PUT `/contact-groups/{id}` | `user.contact-groups.update` | ContactsController@groupUpdate | web, auth, workspace.role:manager | `name` required max 191; `note` nullable max 500; `color` nullable max 32 | JSON `{ok:true, message:"Group updated.", group:{id,name,note,color,members_count}}` |
 
 - **Data:** updates `user_group`, `note`, `color`.
@@ -1129,9 +1129,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** trash icon on the card, confirm "Delete this group?"; silent on success; card and sidebar entry disappear; filter resets to all.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE `/contact-groups/{id}` | `user.contact-groups.destroy` | ContactsController@groupDestroy | web, auth, workspace.role:manager | none | JSON `{ok:true, message:"Group deleted.", id}` or back with flash `Contact group "<name>" deleted.` |
+| Method + URI                  | Route name                    | Action                          | Middleware                        | Request | Response                                                                                            |
+| ----------------------------- | ----------------------------- | ------------------------------- | --------------------------------- | ------- | --------------------------------------------------------------------------------------------------- |
+| DELETE `/contact-groups/{id}` | `user.contact-groups.destroy` | ContactsController@groupDestroy | web, auth, workspace.role:manager | none    | JSON `{ok:true, message:"Group deleted.", id}` or back with flash `Contact group "<name>" deleted.` |
 
 - **Data:** loads all workspace contacts with only `id` and `contact_group`, rewrites any list containing the id, saves, then deletes the group row.
 - **Rules & edge cases:**
@@ -1189,9 +1189,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** opened when the edit modal opens; renders attached chips (colour dot, name, x), the chip picker (every workspace tag as a toggle, tick on attached), the datalist for typed names. Empty copy: "No tags yet." and "No tags in this workspace yet - type a name below to create the first one."
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/contacts/{id}/tags` | `user.contacts.tags` | ContactsController@contactTags | web, auth, workspace.role:manager | none | `{ok:true, tags:[{id,name,color}], all:[{id,name,color}]}`; `all` ordered by name, from the session workspace |
+| Method + URI              | Route name           | Action                         | Middleware                        | Request | Response                                                                                                      |
+| ------------------------- | -------------------- | ------------------------------ | --------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| GET `/contacts/{id}/tags` | `user.contacts.tags` | ContactsController@contactTags | web, auth, workspace.role:manager | none    | `{ok:true, tags:[{id,name,color}], all:[{id,name,color}]}`; `all` ordered by name, from the session workspace |
 
 - **Data:** `contact_tag` joined to `tags`; `tags` of the workspace.
 - **Rules & edge cases:** tags of other workspaces never appear (the join is through the pivot, so orphan pivot rows are hidden); no pagination of `all`.
@@ -1216,8 +1216,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** chip toggle in the picker (by id), or typed name + "Add tag" / Enter (the JS reuses an existing tag id when the typed name matches case-insensitively, else sends the name).
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI               | Route name                  | Action                       | Middleware                        | Request                                                | Response                                                                                             |
+| -------------------------- | --------------------------- | ---------------------------- | --------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
 | POST `/contacts/{id}/tags` | `user.contacts.tags.attach` | ContactsController@attachTag | web, auth, workspace.role:manager | JSON `tag_id` nullable integer, `name` nullable max 80 | `{ok:true, tag:{id,name,color}}`; 422 `{ok:false, error:"no_workspace"}` or `{error:"tag_required"}` |
 
 - **Data:** `contact_tag(contact_id, tag_id, added_by, timestamps)` unique (contact, tag); `tags` find-or-create by (workspace_id, slug).
@@ -1249,9 +1249,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** "x" on the chip or toggling an attached chip in the picker.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE `/contacts/{id}/tags/{tagId}` | `user.contacts.tags.detach` | ContactsController@detachTag | web, auth, workspace.role:manager | none | `{ok:true}` |
+| Method + URI                         | Route name                  | Action                       | Middleware                        | Request | Response    |
+| ------------------------------------ | --------------------------- | ---------------------------- | --------------------------------- | ------- | ----------- |
+| DELETE `/contacts/{id}/tags/{tagId}` | `user.contacts.tags.detach` | ContactsController@detachTag | web, auth, workspace.role:manager | none    | `{ok:true}` |
 
 - **Data:** deletes the pivot row.
 - **Rules & edge cases:** 404 if the contact is not in the workspace; the tag id is not checked (detaching an unattached or unknown tag still returns ok); no flow trigger, no webhook.
@@ -1303,9 +1303,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** `resources/views/user/attributes/index.blade.php` + `_rows`. Left rail: status filter buttons All / Active / Inactive with counts, a "How attributes work" card, a "Quick reference" card (slash picker keys), a "Where to use" card (Templates, Broadcasts, Campaigns, Flow builder). Main: eyebrow "More / Attributes", H1 "Template attributes", three tiles (Total, Active "show in slash picker", Inactive "hidden from picker"), results header "Showing N of M filtered", search box ("Search by name, key, description..."), list/grid toggle, table (Name, Key, Default, Description, Status badge Active/Off, Actions edit/delete) with "/" shown for empty default/description, pagination, three tip cards and a "Default values save you" banner. Empty state: "No attributes match the current filters. Create attributes to store reusable customer fields." with Reset filters and Create attribute buttons.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/attributes` | `user.attributes` | AttributesController@index | web, auth | `q`, `status` (all/active/inactive, default all), `page`, `partial` | HTML, or with `partial=1` JSON `{ok, rows:<html>, counts:{all,active,inactive}, pagination:<html>, shown, total, page}` |
+| Method + URI      | Route name        | Action                     | Middleware | Request                                                             | Response                                                                                                                |
+| ----------------- | ----------------- | -------------------------- | ---------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| GET `/attributes` | `user.attributes` | AttributesController@index | web, auth  | `q`, `status` (all/active/inactive, default all), `page`, `partial` | HTML, or with `partial=1` JSON `{ok, rows:<html>, counts:{all,active,inactive}, pagination:<html>, shown, total, page}` |
 
 - **Data:** reads `attributes` of the workspace ordered by `id` desc; filtering is in PHP (description is encrypted). Fixed page size 12 (shared in-memory paginator, page clamped).
 - **Rules & edge cases:**
@@ -1335,9 +1335,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** "New attribute" modal: Display name (required, max 120), Key (required, max 64, HTML pattern `[a-z0-9_-]+`, hint "a-z, 0-9, dash, underscore. Unique."), Default value (max 255, "(optional fallback)"), Description (max 500), checkbox "Active / show in the slash-popover when composing" (checked). Plain form POST: success redirects to `/attributes` with flash "Attribute saved."; validation errors reopen the modal and show error toasts.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `/attributes` | `user.attributes.store` | AttributesController@store | web, auth | `attribute_name` required string max 120; `attribute_key` required string max 64, `alpha_dash`, unique in `attributes.attribute_key` within the workspace; `attribute_value` nullable max 255; `description` nullable max 500; `status` nullable boolean | redirect with flash |
+| Method + URI       | Route name              | Action                     | Middleware | Request                                                                                                                                                                                                                                                  | Response            |
+| ------------------ | ----------------------- | -------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| POST `/attributes` | `user.attributes.store` | AttributesController@store | web, auth  | `attribute_name` required string max 120; `attribute_key` required string max 64, `alpha_dash`, unique in `attributes.attribute_key` within the workspace; `attribute_value` nullable max 255; `description` nullable max 500; `status` nullable boolean | redirect with flash |
 
 - **Data:** `attributes(user_id, workspace_id, attribute_name, attribute_key, attribute_value [encrypted text], description [encrypted text], type, status)`; `type` is always "custom".
 - **Rules & edge cases:**
@@ -1369,9 +1369,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** edit modal opened from the row pencil (payload in a data attribute): disabled Key field with "Read-only." and a note that the key cannot change because it is in use in templates; other fields as in create; "Save changes"; success = redirect back with flash "Attribute updated.".
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| PUT `/attributes/{id}` | `user.attributes.update` | AttributesController@update | web, auth | `attribute_name` required max 120; `attribute_value` nullable max 255; `description` nullable max 500; `status` nullable boolean | back with flash |
+| Method + URI           | Route name               | Action                      | Middleware | Request                                                                                                                          | Response        |
+| ---------------------- | ------------------------ | --------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| PUT `/attributes/{id}` | `user.attributes.update` | AttributesController@update | web, auth  | `attribute_name` required max 120; `attribute_value` nullable max 255; `description` nullable max 500; `status` nullable boolean | back with flash |
 
 - **Data:** updates the four fields; 404 when the id is not in the workspace.
 - **Rules & edge cases:** QUIRK: unchecking "Active" sends no `status`, which is treated as TRUE, so an attribute can never be deactivated through the UI; blank default/description are stored as null; renaming does not affect templates (they reference the key).
@@ -1396,9 +1396,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** trash icon, confirm dialog "Delete attribute? Delete "<name>"?", toast "Attribute deleted", table refreshes (counts update).
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE `/attributes/{id}` | `user.attributes.destroy` | AttributesController@destroy | web, auth | none | `{ok:true}` (404 when not in workspace) |
+| Method + URI              | Route name                | Action                       | Middleware | Request | Response                                |
+| ------------------------- | ------------------------- | ---------------------------- | ---------- | ------- | --------------------------------------- |
+| DELETE `/attributes/{id}` | `user.attributes.destroy` | AttributesController@destroy | web, auth  | none    | `{ok:true}` (404 when not in workspace) |
 
 - **Data:** deletes the row; values already stored in contacts' `custom_attributes` stay; saved templates, flows and campaigns that reference the key are not checked or rewritten (their merge tags then resolve to blank at send time).
 - **Rules & edge cases:** no "in use" protection; "Attribute deleted" notification via the model event.
@@ -1423,9 +1423,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** `resources/js/attribute-picker.js`: any textarea/input with `data-attr-input` opts in. Typing "/" opens a 300px popover "Insert attribute" with a live "/query" display; rows show a badge S (system) or C (custom), name, and "key / description"; filter by key, name or description; mouse hover or arrow selection, Enter, Tab or click inserts, Esc closes, ArrowUp/ArrowDown cycle (wrapping); empty state "No attributes match. Create one." (link to `/attributes`). The popover opens only when the slash starts a token (start of text or preceded by whitespace); it closes when the query contains whitespace or exceeds 24 characters, on outside click, page scroll, resize or input blur. On viewports narrower than 640px it is pinned to the bottom of the screen at full width; otherwise it floats at the caret (measured with a mirror element) and flips above when there is no room below. The inserted token is the NAMED form `{{key}}` (the user docs say positional `{{1}}`; the code inserts the key and relies on server-side normalisation, plus a hidden `data-attr-map` JSON of slot->key). The feed is cached per page load in JS (fetch failure = empty list).
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/attributes/api/list` | `user.attributes.api.list` | AttributesController@apiList | web, auth, throttle:120,1 | none | `{ok:true, system:[{key,name,description}], custom:[{name,key,description,value}]}` |
+| Method + URI               | Route name                 | Action                       | Middleware                | Request | Response                                                                            |
+| -------------------------- | -------------------------- | ---------------------------- | ------------------------- | ------- | ----------------------------------------------------------------------------------- |
+| GET `/attributes/api/list` | `user.attributes.api.list` | AttributesController@apiList | web, auth, throttle:120,1 | none    | `{ok:true, system:[{key,name,description}], custom:[{name,key,description,value}]}` |
 
 - **Data:** `custom` = ACTIVE attributes of the workspace (decrypted default value in `value`); `system` = the fixed list.
 - **Rules & edge cases:** system list: first_name, name, last_name, phone_number, email, country_code, address, language, business_name, today; only active custom attributes appear; no ordering guarantee beyond DB order; inactive attributes are hidden here but still resolved at send time (WD-CON-048).
@@ -1524,11 +1524,11 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Response |
-| --- | --- | --- | --- | --- |
-| GET `/api/workspace-attributes/{workspaceId}` | `api.workspace-attributes` | closure in routes/api.php | api; header `X-Node-Token` must equal the node token (401 `{ok:false,error:"unauthorized"}`) | `{ok:true, attributes:{key:defaultValue,...}}` (ALL attributes incl. inactive) |
-| GET `/api/app/attributes` | `app.` (ContentController@attributes) | Api\App\ContentController@attributes | api, sanctum, app.workspace | `{success, data[], attributes[], total, counts{fixed,custom}}` with 10 fixed contact fields, `contact_custom_fields` rows and keys discovered in the first 5,000 contacts' `custom_attributes` |
-| GET `/api/attributes` | `ext.attributes` | Api\ExtensionApiController@attributes | api, extension token | `{custom_attributes:[{attribute_key, attribute_name}]}` for the workspace OR any attribute of the same user |
+| Method + URI                                  | Route name                            | Action                                | Middleware                                                                                   | Response                                                                                                                                                                                       |
+| --------------------------------------------- | ------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET `/api/workspace-attributes/{workspaceId}` | `api.workspace-attributes`            | closure in routes/api.php             | api; header `X-Node-Token` must equal the node token (401 `{ok:false,error:"unauthorized"}`) | `{ok:true, attributes:{key:defaultValue,...}}` (ALL attributes incl. inactive)                                                                                                                 |
+| GET `/api/app/attributes`                     | `app.` (ContentController@attributes) | Api\App\ContentController@attributes  | api, sanctum, app.workspace                                                                  | `{success, data[], attributes[], total, counts{fixed,custom}}` with 10 fixed contact fields, `contact_custom_fields` rows and keys discovered in the first 5,000 contacts' `custom_attributes` |
+| GET `/api/attributes`                         | `ext.attributes`                      | Api\ExtensionApiController@attributes | api, extension token                                                                         | `{custom_attributes:[{attribute_key, attribute_name}]}` for the workspace OR any attribute of the same user                                                                                    |
 
 - **Data:** `attributes`, `contact_custom_fields`, `contacts.custom_attributes`.
 - **Rules & edge cases:** the Node feed is workspace-id based with no ownership check beyond the shared secret; contact attributes take precedence over these defaults on key collision (merged Node side); inactive attributes are included; the mobile feed ignores the `attributes` table entirely and uses `contact_custom_fields` (an empty table with no writer) plus discovered keys.
@@ -1708,8 +1708,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI           | Route name              | Action                         | Middleware                             | Request                                                                         | Response                                                       |
+| ---------------------- | ----------------------- | ------------------------------ | -------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | GET `/api/v1/contacts` | `api.v1.contacts.index` | Api\V1\ContactController@index | api, auth.apikey, auth.apikey.throttle | `per_page` (default 25, clamped 1-100), `page` (default 1, minimum 1), `search` | `{data:[contact...], meta:{page, per_page, total, last_page}}` |
 
 - **Data:** contact object (ContactResource): `id`, `name`, `phone` (see rule 4), `email`, `tags` (array of `{id,name}` of the contact's GROUPS, not tags), `attributes` (object, `{}` when empty), `created_at` (ISO 8601). No first/last name, country code, language, address, note, consent flag, updated_at or real tags.
@@ -1742,9 +1742,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/api/v1/contacts/{id}` | `api.v1.contacts.show` | Api\V1\ContactController@show | api, auth.apikey, throttle; id numeric | none | `{data:{contact}}`; 404 `{error:{code:"not_found", message:"Contact not found."}}` |
+| Method + URI                | Route name             | Action                        | Middleware                             | Request | Response                                                                           |
+| --------------------------- | ---------------------- | ----------------------------- | -------------------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| GET `/api/v1/contacts/{id}` | `api.v1.contacts.show` | Api\V1\ContactController@show | api, auth.apikey, throttle; id numeric | none    | `{data:{contact}}`; 404 `{error:{code:"not_found", message:"Contact not found."}}` |
 
 - **Data:** as WD-CON-057.
 - **Rules & edge cases:** contacts of other workspaces return 404 (not 403).
@@ -1769,8 +1769,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI            | Route name              | Action                         | Middleware                 | Request              | Response               |
+| ----------------------- | ----------------------- | ------------------------------ | -------------------------- | -------------------- | ---------------------- |
 | POST `/api/v1/contacts` | `api.v1.contacts.store` | Api\V1\ContactController@store | api, auth.apikey, throttle | JSON body, see rules | 201 `{data:{contact}}` |
 
 - **Data:** writes a contact (same columns as the UI path; `msg` receives `note`; `custom_attributes` receives `attributes`).
@@ -1803,8 +1803,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI                | Route name               | Action                          | Middleware                 | Request                                           | Response                            |
+| --------------------------- | ------------------------ | ------------------------------- | -------------------------- | ------------------------------------------------- | ----------------------------------- |
 | PUT `/api/v1/contacts/{id}` | `api.v1.contacts.update` | Api\V1\ContactController@update | api, auth.apikey, throttle | JSON; all fields nullable (same shapes as create) | `{data:{contact}}`; 404 `not_found` |
 
 - **Data:** updates the row.
@@ -1837,9 +1837,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE `/api/v1/contacts/{id}` | `api.v1.contacts.destroy` | Api\V1\ContactController@destroy | api, auth.apikey, throttle | none | 200 `{data:{id, deleted:true}}`; 404 `not_found` |
+| Method + URI                   | Route name                | Action                           | Middleware                 | Request | Response                                         |
+| ------------------------------ | ------------------------- | -------------------------------- | -------------------------- | ------- | ------------------------------------------------ |
+| DELETE `/api/v1/contacts/{id}` | `api.v1.contacts.destroy` | Api\V1\ContactController@destroy | api, auth.apikey, throttle | none    | 200 `{data:{id, deleted:true}}`; 404 `not_found` |
 
 - **Data:** deletes the row (model delete, so the notification fires); no cascade (see WD-CON-011); no webhook.
 - **Rules & edge cases:** not idempotent (second call = 404).
@@ -1864,9 +1864,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `/api/v1/contact-groups` | `api.v1.contact-groups.index` | Api\V1\ContactGroupController@index | api, auth.apikey, throttle | none | `{data:[{id,name,note,color,contacts_count,created_at}], meta:{count}}` |
+| Method + URI                 | Route name                    | Action                              | Middleware                 | Request | Response                                                                |
+| ---------------------------- | ----------------------------- | ----------------------------------- | -------------------------- | ------- | ----------------------------------------------------------------------- |
+| GET `/api/v1/contact-groups` | `api.v1.contact-groups.index` | Api\V1\ContactGroupController@index | api, auth.apikey, throttle | none    | `{data:[{id,name,note,color,contacts_count,created_at}], meta:{count}}` |
 
 - **Data:** groups newest id first; `contacts_count` computed in one PHP pass over the workspace's contacts; `note` decrypted; `created_at` ISO 8601.
 - **Rules & edge cases:** no pagination or filters; `meta` is `{count: N}` and is present (non-empty) even for 0 groups.
@@ -1891,8 +1891,8 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI                  | Route name                    | Action                              | Middleware                 | Request                                                                   | Response                                                      |
+| ----------------------------- | ----------------------------- | ----------------------------------- | -------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | POST `/api/v1/contact-groups` | `api.v1.contact-groups.store` | Api\V1\ContactGroupController@store | api, auth.apikey, throttle | `name` required max 191, `note` nullable max 500, `color` nullable max 32 | 201 `{data:{id,name,note,color,contacts_count:0,created_at}}` |
 
 - **Data:** one `contact_groups` row (user_id = key owner).
@@ -1918,9 +1918,9 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method + URI | Route name | Action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE `/api/v1/contact-groups/{id}` | `api.v1.contact-groups.destroy` | Api\V1\ContactGroupController@destroy | api, auth.apikey, throttle | none | `{data:{id, deleted:true}}`; 404 `{error:{code:"not_found", message:"Contact group not found."}}` |
+| Method + URI                         | Route name                      | Action                                | Middleware                 | Request | Response                                                                                          |
+| ------------------------------------ | ------------------------------- | ------------------------------------- | -------------------------- | ------- | ------------------------------------------------------------------------------------------------- |
+| DELETE `/api/v1/contact-groups/{id}` | `api.v1.contact-groups.destroy` | Api\V1\ContactGroupController@destroy | api, auth.apikey, throttle | none    | `{data:{id, deleted:true}}`; 404 `{error:{code:"not_found", message:"Contact group not found."}}` |
 
 - **Data:** same detach loop as WD-CON-036 (including the `mobile_hash` null-out quirk).
 - **Rules & edge cases:** workspace scoped; not idempotent.
@@ -1942,7 +1942,7 @@ Connections: WSP/workspaces-teams-tenancy (workspace scoping, roles, starter tag
 - **Depends on:** WD-CON-001
 - **Summary:** Cross-cutting behaviour of the contacts and attributes screens.
 - **Actors & access:** all users of these screens.
-- **UX & screens:** 
+- **UX & screens:**
   - Loading: submit buttons are disabled and show a spinner with "Working..." during AJAX (add, edit, group save, import, bulk delete); the page itself is server-rendered (no skeletons).
   - Success feedback: toasts via `window.toast(message, 'success')`; destructive AJAX (delete contact/group/bulk delete) is silent; bulk group/tag/dedupe/import persist the toast across a page reload with sessionStorage key `wadeskPendingToast`.
   - Errors: network failure toast "Network error. Please try again."; 422 toasts the first validation message; other failures toast the JSON `message` or "Request failed (status)."; the attributes page uses `WaToaster` ("Refresh failed: ...", "Delete failed: ...", "Could not load attribute").
@@ -1973,46 +1973,46 @@ All tables use MySQL utf8mb4_unicode_ci in the reference app. Encrypted columns 
 
 ### `contacts` (read/written by WD-CON-001..027, 055, 057..061)
 
-| Column | Type | Null / default | Notes |
-| --- | --- | --- | --- |
-| id | bigint unsigned PK auto | no | |
-| user_id | bigint unsigned | yes | creator/owner; NULL for system-captured; indexed; no FK |
-| workspace_id | bigint unsigned | yes | indexed; FK to workspaces ON DELETE SET NULL (so a deleted workspace turns its contacts into legacy "owner-visible" rows) |
-| company_id | bigint unsigned | yes | indexed; set by the Companies domain; no FK |
-| title | varchar(255) | yes | plaintext |
-| first_name, middle_name, last_name | varchar(255) | yes | plaintext |
-| name | text | yes | ENCRYPTED display name |
-| language | varchar(255) | yes | plaintext |
-| address | text | yes | plaintext |
-| contact_group | longtext | yes | ENCRYPTED JSON array of string group ids |
-| email | text | yes | ENCRYPTED |
-| country_code | varchar(255) | yes | plaintext, "+91" or "91" |
-| mobile | text | yes | ENCRYPTED, shape varies (see WD-CON-013) |
-| mobile_hash | varchar(64) | yes | indexed; SHA-256 of canonical digits; NULL when no digits |
-| channel | varchar(32) | yes | social channel key (tiktok, telegram, facebook, instagram, viber, line, wechat, email) |
-| channel_uid | varchar(191) | yes | sender id; UNIQUE (workspace_id, channel, channel_uid) named contacts_ws_channel_uid_unique |
-| msg | text | yes | the "Memo" |
-| subject | text | yes | unused by this domain (legacy) |
-| image | varchar(255) | yes | media-disk path or remote URL |
-| is_unsubscribed | tinyint(1) | no, default 0 | |
-| unsubscribed_at | timestamp | yes | |
-| custom_attributes | json | yes | plaintext object: `status`, `source`, attribute values, integration keys |
-| created_at, updated_at | timestamp | yes | list ordering uses created_at |
+| Column                             | Type                    | Null / default | Notes                                                                                                                     |
+| ---------------------------------- | ----------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| id                                 | bigint unsigned PK auto | no             |                                                                                                                           |
+| user_id                            | bigint unsigned         | yes            | creator/owner; NULL for system-captured; indexed; no FK                                                                   |
+| workspace_id                       | bigint unsigned         | yes            | indexed; FK to workspaces ON DELETE SET NULL (so a deleted workspace turns its contacts into legacy "owner-visible" rows) |
+| company_id                         | bigint unsigned         | yes            | indexed; set by the Companies domain; no FK                                                                               |
+| title                              | varchar(255)            | yes            | plaintext                                                                                                                 |
+| first_name, middle_name, last_name | varchar(255)            | yes            | plaintext                                                                                                                 |
+| name                               | text                    | yes            | ENCRYPTED display name                                                                                                    |
+| language                           | varchar(255)            | yes            | plaintext                                                                                                                 |
+| address                            | text                    | yes            | plaintext                                                                                                                 |
+| contact_group                      | longtext                | yes            | ENCRYPTED JSON array of string group ids                                                                                  |
+| email                              | text                    | yes            | ENCRYPTED                                                                                                                 |
+| country_code                       | varchar(255)            | yes            | plaintext, "+91" or "91"                                                                                                  |
+| mobile                             | text                    | yes            | ENCRYPTED, shape varies (see WD-CON-013)                                                                                  |
+| mobile_hash                        | varchar(64)             | yes            | indexed; SHA-256 of canonical digits; NULL when no digits                                                                 |
+| channel                            | varchar(32)             | yes            | social channel key (tiktok, telegram, facebook, instagram, viber, line, wechat, email)                                    |
+| channel_uid                        | varchar(191)            | yes            | sender id; UNIQUE (workspace_id, channel, channel_uid) named contacts_ws_channel_uid_unique                               |
+| msg                                | text                    | yes            | the "Memo"                                                                                                                |
+| subject                            | text                    | yes            | unused by this domain (legacy)                                                                                            |
+| image                              | varchar(255)            | yes            | media-disk path or remote URL                                                                                             |
+| is_unsubscribed                    | tinyint(1)              | no, default 0  |                                                                                                                           |
+| unsubscribed_at                    | timestamp               | yes            |                                                                                                                           |
+| custom_attributes                  | json                    | yes            | plaintext object: `status`, `source`, attribute values, integration keys                                                  |
+| created_at, updated_at             | timestamp               | yes            | list ordering uses created_at                                                                                             |
 
 No `source` or `status` column exists (the code probes for `source` and finds none). Row volume: tens to hundreds of thousands per workspace (import sized for ~500k rows); every list request loads all of them.
 
 ### `contact_groups` (WD-CON-033..037, 062..064)
 
-| Column | Type | Null / default | Notes |
-| --- | --- | --- | --- |
-| id | bigint unsigned PK | no | |
-| user_id | bigint unsigned | yes | indexed |
-| workspace_id | bigint unsigned | yes | indexed; FK workspaces ON DELETE SET NULL |
-| user_group | varchar(255) | yes | ENCRYPTED group name; ciphertext is ~200 chars for a short name (seed rows: 200-228), so longer names probably overflow the column (see WD-CON-034) |
-| note | longtext | yes | ENCRYPTED |
-| status | tinyint(1) | no, default 1 | unused |
-| color | varchar(32) | yes | free string; UI swatches #7C3AED, #22C55E, #E87A5D, #E5A04E, #13478A |
-| created_at, updated_at | timestamp | yes | |
+| Column                 | Type               | Null / default | Notes                                                                                                                                               |
+| ---------------------- | ------------------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id                     | bigint unsigned PK | no             |                                                                                                                                                     |
+| user_id                | bigint unsigned    | yes            | indexed                                                                                                                                             |
+| workspace_id           | bigint unsigned    | yes            | indexed; FK workspaces ON DELETE SET NULL                                                                                                           |
+| user_group             | varchar(255)       | yes            | ENCRYPTED group name; ciphertext is ~200 chars for a short name (seed rows: 200-228), so longer names probably overflow the column (see WD-CON-034) |
+| note                   | longtext           | yes            | ENCRYPTED                                                                                                                                           |
+| status                 | tinyint(1)         | no, default 1  | unused                                                                                                                                              |
+| color                  | varchar(32)        | yes            | free string; UI swatches #7C3AED, #22C55E, #E87A5D, #E5A04E, #13478A                                                                                |
+| created_at, updated_at | timestamp          | yes            |                                                                                                                                                     |
 
 No unique constraint on name.
 
@@ -2026,18 +2026,18 @@ No unique constraint on name.
 
 ### `attributes` (WD-CON-042..050)
 
-| Column | Type | Null / default | Notes |
-| --- | --- | --- | --- |
-| id | bigint PK | no | |
-| user_id | bigint unsigned | no | creator; indexed |
-| workspace_id | bigint unsigned | yes | indexed; UNIQUE (workspace_id, attribute_key) |
-| attribute_name | varchar(255) | no | display name |
-| attribute_key | varchar(255) | no | the token key; app limits to 64 chars |
-| attribute_value | text | yes | ENCRYPTED default value (app limit 255) |
-| description | text | yes | ENCRYPTED (app limit 500) |
-| type | varchar(16) | no, default custom | always "custom"; "system" unused |
-| status | tinyint(1) | no, default 1 | active flag; UI cannot clear it |
-| created_at, updated_at | timestamp | yes | |
+| Column                 | Type            | Null / default     | Notes                                         |
+| ---------------------- | --------------- | ------------------ | --------------------------------------------- |
+| id                     | bigint PK       | no                 |                                               |
+| user_id                | bigint unsigned | no                 | creator; indexed                              |
+| workspace_id           | bigint unsigned | yes                | indexed; UNIQUE (workspace_id, attribute_key) |
+| attribute_name         | varchar(255)    | no                 | display name                                  |
+| attribute_key          | varchar(255)    | no                 | the token key; app limits to 64 chars         |
+| attribute_value        | text            | yes                | ENCRYPTED default value (app limit 255)       |
+| description            | text            | yes                | ENCRYPTED (app limit 500)                     |
+| type                   | varchar(16)     | no, default custom | always "custom"; "system" unused              |
+| status                 | tinyint(1)      | no, default 1      | active flag; UI cannot clear it               |
+| created_at, updated_at | timestamp       | yes                |                                               |
 
 ### `contact_custom_fields` (WD-CON-051, dead)
 
@@ -2085,38 +2085,38 @@ Target mapping reminders (see docs/wadesk-port/target-map.md): contacts, tags, c
 
 ### Differences to decide
 
-| # | WaDesk behaviour | Why it looks wrong | Recommendation |
-| --- | --- | --- | --- |
-| 1 | UI add sends a default title "Mr" and composes the name from it ("Mr Aarav") | Pollutes every display name and every merge-tag `{{name}}` | No default title; keep title optional; compute `display_name` from first/last only (title shown separately if set) |
-| 2 | Import writes the full CSV name into `first_name` and also fills `last_name`; later edits rebuild `name` as first+last | Surname duplicated after any edit | Split the name on import (first token / rest) or store only `display_name`; never rebuild from overlapping parts |
-| 3 | Two phone canonicalisers (one strips "00"); no unique key; dedupe/import use the weaker one | Same person can be duplicate or distinct depending on the code path | One libphonenumber E.164 normaliser; unique `(workspace, e164)` identity (use `contact_identities`); keep raw input for display |
-| 4 | Phone stored inconsistently ("+91 98..." vs separate country code vs bare digits); API `phone` omits country code for imported contacts | Unreliable display, search and API output | Store E.164 + national + country; API always returns E.164 |
-| 5 | Import updates the NEWEST duplicate; "Remove duplicates" keeps the OLDEST and deletes the rest without merging | Inconsistent winner; data (groups, tags, attributes, history) lost | Single upsert on the unique identity; merge duplicates (union groups/tags/attributes, re-point history) with a preview and audit |
-| 6 | Group membership as encrypted JSON on the contact; all lists/counts/filters/audiences are full-book PHP scans; orphan ids; group delete can null `mobile_hash` | Does not scale, inconsistent counts, data-loss bug | Junction table with FKs/cascade; SQL counts; never resave contacts for membership changes |
-| 7 | Per-field encryption is partial (name/mobile/email/groups encrypted; first/last name, address, memo, custom attributes plaintext) | False sense of protection and blocks search | Rely on DB-level encryption + RLS; encrypt only fields with an explicit requirement, consistently |
-| 8 | "Imported" filter/badge always 0; status and source hidden inside `custom_attributes`, not shown or filterable | Dead UI; source tracking unusable | Real `source` and `status` columns, set by import/API/capture, shown and filterable |
-| 9 | Import "tags" knob accepted but ignored; no preview/mapping UI although endpoint exists; modal says 5 MB vs server 50 MB; docs overpromise | Misleading product surface | Build the wizard (preview, mapping, tags, consent, limits) and align copy and limits |
-| 10 | Import ignores group/status/source/tag knobs for existing contacts it updates | Selected group is not applied to part of the file | Apply additive knobs (group, tags) to updated rows too |
-| 11 | `contacts_limit` checked only at import start and only in the UI; API create and auto-capture ignore it | Limit can be exceeded arbitrarily | Enforce remaining quota in the service for every writer; import truncates/rejects with a report |
-| 12 | UI `contact_group.*` validated with a global `exists`; import `group_id` not validated | Cross-tenant group id references | Validate group ids against the workspace (RLS makes it automatic) |
-| 13 | Edit form cannot clear the last group or any text field (null-coalescing, unchecked boxes post nothing) | Data cannot be removed via UI | PATCH with explicit nulls and an explicit groups array |
-| 14 | No UI control for opt-out; manual/API changes do not set `unsubscribed_at` or emit the opt-in webhook | Consent evidence gaps | Consent toggle with required timestamp+source on every change, audit entry, one event |
-| 15 | Bulk bar shows "T selected" for all-matching but only group actions honour it; Export/Tag/Delete use page rows | Misleading, partial operations | Every bulk action accepts ids or a filter; large ones run as jobs with progress |
-| 16 | Bulk delete 422s on any stale id; response echoes requested ids | All-or-nothing and false positives | Ignore unknown ids, return actual deleted ids and per-row failures (`{succeeded, failed[]}`) |
-| 17 | Deletes leave dangling `contact_id` in conversations, deals, campaigns, flow subscribers and `contact_tag` | Orphans and ghost rows | FK with SET NULL/cascade, or soft delete with a retention policy |
-| 18 | Tags created from Contacts skip `tag.manage` and `tags_limit`; name validated at 80 but column 64; slug-based identity; non-Latin names get random slugs | Rule bypass, 500s, duplicate tags | One tag service: name <= 64, unique `(workspace, lower(name))`, same permission and limit everywhere (or a deliberate documented exception) |
-| 19 | Tag filter has no control, cannot be cleared, drops on group change | Hidden state | Tag multi-select with AND/OR and removable pills |
-| 20 | Attribute active checkbox cannot be unticked (absent field defaults true); inactive attributes still resolve at send time | The inactive state is unreachable and semantically unclear | Send explicit booleans; define inactive as hidden from pickers and not resolved (or document otherwise) |
-| 21 | Attributes CRUD open to every role incl. viewers; keys allow uppercase/unicode and collide with built-ins/`status`/`source`; delete ignores usage | Security and integrity gaps | Require a settings permission; key regex `^[a-z][a-z0-9_]{0,63}$`, reserved-word list, in-use check on delete |
-| 22 | Attributes have no types; a typed `contact_custom_fields` table exists but is unused; mobile feed reads that empty table | Two competing models | Single typed custom-field registry (text, number, date, select, bool, url, email); drop `contact_custom_fields` |
-| 23 | Slash picker inserts named tokens while docs claim positional; two resolvers with opposite unresolved-token behaviour (blank vs literal) | Inconsistent merge behaviour | One token format end to end, one resolver; blank on unresolved for sends |
-| 24 | CSV export prefixes `'` to numbers starting with `+`, omits tags/attributes/consent, memo is not importable, no BOM | Lossy, ugly, non round-trippable | Export E.164, include tags/attributes/consent, apply formula guard only to free-text cells, round-trip with import |
-| 25 | Notification per touched contact on bulk group changes; notifications carry decrypted names; group notification link is a 404 | Noise and PII duplication | Audit log entries and one aggregated notification per bulk action, no PII in text |
-| 26 | Public API: `tags` key actually returns groups; 422 shape differs from the error envelope; `per_page=abc` becomes 1; PUT can null the phone; no group update, no tag endpoints, no filters; API update/delete emit no webhooks; key scopes unenforced | Confusing and unsafe public contract | Rename to `groups`, add real `tags`, problem+json errors, validate paging, forbid clearing the phone, add group PATCH and filters, emit events on every write, enforce scopes |
-| 27 | Webhooks fire only from UI add/edit and API create; flows fire on create/group/tag/opt-in but not on import or system capture; contacts with NULL `user_id` never trigger flows; group bulk adds launch flows synchronously per contact | Inconsistent automation behaviour and slow requests | Domain events through the outbox for all write paths with an explicit "trigger automations" option on import; flow subscribers consume asynchronously and resolve the workspace directly (not through the owner user) |
-| 28 | Contact 360 page crashes (route name); avatar image uploaded but never shown; old file not deleted | Dead or broken features | Build the real detail screen; drop or show avatars and delete replaced files |
-| 29 | Group create de-dups by name only on the UI; rename and API/import can create duplicates; free-form colour string; unused `status`; encrypted name in a varchar(255) column probably overflows for names over ~30-35 chars | Inconsistent group identity and a latent 500 | Unique `(workspace, lower(name))`, hex colour validation, drop `status`, plain `text`/varchar(191) name column |
-| 30 | Memo limit 1024 in the browser vs 2000 on the server; import copy says 5 MB; many hard-coded English strings | UX inconsistencies | Single source of limits shared via contracts; full i18n |
+| #   | WaDesk behaviour                                                                                                                                                                                                                                      | Why it looks wrong                                                  | Recommendation                                                                                                                                                                                                        |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | UI add sends a default title "Mr" and composes the name from it ("Mr Aarav")                                                                                                                                                                          | Pollutes every display name and every merge-tag `{{name}}`          | No default title; keep title optional; compute `display_name` from first/last only (title shown separately if set)                                                                                                    |
+| 2   | Import writes the full CSV name into `first_name` and also fills `last_name`; later edits rebuild `name` as first+last                                                                                                                                | Surname duplicated after any edit                                   | Split the name on import (first token / rest) or store only `display_name`; never rebuild from overlapping parts                                                                                                      |
+| 3   | Two phone canonicalisers (one strips "00"); no unique key; dedupe/import use the weaker one                                                                                                                                                           | Same person can be duplicate or distinct depending on the code path | One libphonenumber E.164 normaliser; unique `(workspace, e164)` identity (use `contact_identities`); keep raw input for display                                                                                       |
+| 4   | Phone stored inconsistently ("+91 98..." vs separate country code vs bare digits); API `phone` omits country code for imported contacts                                                                                                               | Unreliable display, search and API output                           | Store E.164 + national + country; API always returns E.164                                                                                                                                                            |
+| 5   | Import updates the NEWEST duplicate; "Remove duplicates" keeps the OLDEST and deletes the rest without merging                                                                                                                                        | Inconsistent winner; data (groups, tags, attributes, history) lost  | Single upsert on the unique identity; merge duplicates (union groups/tags/attributes, re-point history) with a preview and audit                                                                                      |
+| 6   | Group membership as encrypted JSON on the contact; all lists/counts/filters/audiences are full-book PHP scans; orphan ids; group delete can null `mobile_hash`                                                                                        | Does not scale, inconsistent counts, data-loss bug                  | Junction table with FKs/cascade; SQL counts; never resave contacts for membership changes                                                                                                                             |
+| 7   | Per-field encryption is partial (name/mobile/email/groups encrypted; first/last name, address, memo, custom attributes plaintext)                                                                                                                     | False sense of protection and blocks search                         | Rely on DB-level encryption + RLS; encrypt only fields with an explicit requirement, consistently                                                                                                                     |
+| 8   | "Imported" filter/badge always 0; status and source hidden inside `custom_attributes`, not shown or filterable                                                                                                                                        | Dead UI; source tracking unusable                                   | Real `source` and `status` columns, set by import/API/capture, shown and filterable                                                                                                                                   |
+| 9   | Import "tags" knob accepted but ignored; no preview/mapping UI although endpoint exists; modal says 5 MB vs server 50 MB; docs overpromise                                                                                                            | Misleading product surface                                          | Build the wizard (preview, mapping, tags, consent, limits) and align copy and limits                                                                                                                                  |
+| 10  | Import ignores group/status/source/tag knobs for existing contacts it updates                                                                                                                                                                         | Selected group is not applied to part of the file                   | Apply additive knobs (group, tags) to updated rows too                                                                                                                                                                |
+| 11  | `contacts_limit` checked only at import start and only in the UI; API create and auto-capture ignore it                                                                                                                                               | Limit can be exceeded arbitrarily                                   | Enforce remaining quota in the service for every writer; import truncates/rejects with a report                                                                                                                       |
+| 12  | UI `contact_group.*` validated with a global `exists`; import `group_id` not validated                                                                                                                                                                | Cross-tenant group id references                                    | Validate group ids against the workspace (RLS makes it automatic)                                                                                                                                                     |
+| 13  | Edit form cannot clear the last group or any text field (null-coalescing, unchecked boxes post nothing)                                                                                                                                               | Data cannot be removed via UI                                       | PATCH with explicit nulls and an explicit groups array                                                                                                                                                                |
+| 14  | No UI control for opt-out; manual/API changes do not set `unsubscribed_at` or emit the opt-in webhook                                                                                                                                                 | Consent evidence gaps                                               | Consent toggle with required timestamp+source on every change, audit entry, one event                                                                                                                                 |
+| 15  | Bulk bar shows "T selected" for all-matching but only group actions honour it; Export/Tag/Delete use page rows                                                                                                                                        | Misleading, partial operations                                      | Every bulk action accepts ids or a filter; large ones run as jobs with progress                                                                                                                                       |
+| 16  | Bulk delete 422s on any stale id; response echoes requested ids                                                                                                                                                                                       | All-or-nothing and false positives                                  | Ignore unknown ids, return actual deleted ids and per-row failures (`{succeeded, failed[]}`)                                                                                                                          |
+| 17  | Deletes leave dangling `contact_id` in conversations, deals, campaigns, flow subscribers and `contact_tag`                                                                                                                                            | Orphans and ghost rows                                              | FK with SET NULL/cascade, or soft delete with a retention policy                                                                                                                                                      |
+| 18  | Tags created from Contacts skip `tag.manage` and `tags_limit`; name validated at 80 but column 64; slug-based identity; non-Latin names get random slugs                                                                                              | Rule bypass, 500s, duplicate tags                                   | One tag service: name <= 64, unique `(workspace, lower(name))`, same permission and limit everywhere (or a deliberate documented exception)                                                                           |
+| 19  | Tag filter has no control, cannot be cleared, drops on group change                                                                                                                                                                                   | Hidden state                                                        | Tag multi-select with AND/OR and removable pills                                                                                                                                                                      |
+| 20  | Attribute active checkbox cannot be unticked (absent field defaults true); inactive attributes still resolve at send time                                                                                                                             | The inactive state is unreachable and semantically unclear          | Send explicit booleans; define inactive as hidden from pickers and not resolved (or document otherwise)                                                                                                               |
+| 21  | Attributes CRUD open to every role incl. viewers; keys allow uppercase/unicode and collide with built-ins/`status`/`source`; delete ignores usage                                                                                                     | Security and integrity gaps                                         | Require a settings permission; key regex `^[a-z][a-z0-9_]{0,63}$`, reserved-word list, in-use check on delete                                                                                                         |
+| 22  | Attributes have no types; a typed `contact_custom_fields` table exists but is unused; mobile feed reads that empty table                                                                                                                              | Two competing models                                                | Single typed custom-field registry (text, number, date, select, bool, url, email); drop `contact_custom_fields`                                                                                                       |
+| 23  | Slash picker inserts named tokens while docs claim positional; two resolvers with opposite unresolved-token behaviour (blank vs literal)                                                                                                              | Inconsistent merge behaviour                                        | One token format end to end, one resolver; blank on unresolved for sends                                                                                                                                              |
+| 24  | CSV export prefixes `'` to numbers starting with `+`, omits tags/attributes/consent, memo is not importable, no BOM                                                                                                                                   | Lossy, ugly, non round-trippable                                    | Export E.164, include tags/attributes/consent, apply formula guard only to free-text cells, round-trip with import                                                                                                    |
+| 25  | Notification per touched contact on bulk group changes; notifications carry decrypted names; group notification link is a 404                                                                                                                         | Noise and PII duplication                                           | Audit log entries and one aggregated notification per bulk action, no PII in text                                                                                                                                     |
+| 26  | Public API: `tags` key actually returns groups; 422 shape differs from the error envelope; `per_page=abc` becomes 1; PUT can null the phone; no group update, no tag endpoints, no filters; API update/delete emit no webhooks; key scopes unenforced | Confusing and unsafe public contract                                | Rename to `groups`, add real `tags`, problem+json errors, validate paging, forbid clearing the phone, add group PATCH and filters, emit events on every write, enforce scopes                                         |
+| 27  | Webhooks fire only from UI add/edit and API create; flows fire on create/group/tag/opt-in but not on import or system capture; contacts with NULL `user_id` never trigger flows; group bulk adds launch flows synchronously per contact               | Inconsistent automation behaviour and slow requests                 | Domain events through the outbox for all write paths with an explicit "trigger automations" option on import; flow subscribers consume asynchronously and resolve the workspace directly (not through the owner user) |
+| 28  | Contact 360 page crashes (route name); avatar image uploaded but never shown; old file not deleted                                                                                                                                                    | Dead or broken features                                             | Build the real detail screen; drop or show avatars and delete replaced files                                                                                                                                          |
+| 29  | Group create de-dups by name only on the UI; rename and API/import can create duplicates; free-form colour string; unused `status`; encrypted name in a varchar(255) column probably overflows for names over ~30-35 chars                            | Inconsistent group identity and a latent 500                        | Unique `(workspace, lower(name))`, hex colour validation, drop `status`, plain `text`/varchar(191) name column                                                                                                        |
+| 30  | Memo limit 1024 in the browser vs 2000 on the server; import copy says 5 MB; many hard-coded English strings                                                                                                                                          | UX inconsistencies                                                  | Single source of limits shared via contracts; full i18n                                                                                                                                                               |
 
 ## Port decisions
 
@@ -2128,62 +2128,62 @@ contracts in `packages/contracts/src/contacts-attributes-tags/`, endpoints in `d
 
 ### Decided as recommended (fixes)
 
-| Diff # | Decision | Where |
-| --- | --- | --- |
-| 1 | No default title. The display name is the typed name, else first + middle + last; the title is never part of it. Applies to create (API) and import. | WD-CON-012 |
-| 2 | An import stores the CSV name as `name` and fills `first_name` / `last_name` only from their own columns. The full name is no longer copied into `first_name`, so nothing rebuilds "Aarav Sharma Sharma". | WD-CON-012, 030 |
-| 3, 4 | ONE canonicaliser (`canonicalizePhone` in `@crm/contracts`) for create, import, dedupe and every identity lookup: digits; a leading `+` or `00` means "already international" (the `00` is dropped); else the row's country code (or the import's `defaultCountryCode`) is prefixed unless the digits already start with it; 7-15 digits, no leading 0. Phones are stored E.164 and exported E.164. Create/update normalise the phone and write the same `contact_identities` key the importer writes, so creating a number an import made returns the imported contact. | WD-CON-013 |
-| 5 | Import updates the OLDEST duplicate, dedupe keeps the oldest: one winner. Dedupe merges instead of deleting (below). | WD-CON-025, 030 |
-| 6 | Group membership is the join table `contact_group_members` (composite FKs, ON DELETE CASCADE, forced RLS). Counts, filters and "no group" are SQL; deleting a group is one `DELETE` and touches no contact (the `mobile_hash` null-out bug cannot occur). Orphan ids cannot exist, so a contact that lost its only group is simply "no group". | WD-CON-036, 037 |
-| 8 | `contacts.source` is a column (and `status` already was); `contacts.import_job_id` makes "Imported" a real filter (`imported=true`) and a real stat. Create/update accept `source`. An import with no source knob stamps `source = 'import'`. | WD-CON-006, 015 |
-| 9 | Import wizard backend: preview (`POST /contacts/import/preview`), explicit mapping, the group/tag/status/source knobs with tags really applied, rejects report, one limit (20 MB, 200,000 rows) in `@crm/contracts`. | WD-CON-027..031 |
-| 10 | Group and tag knobs (and the file's own group/tag columns) apply to rows the file only UPDATES. Status and source are stamped on CREATED contacts only, so an import never overwrites a contact's existing status or source. | WD-CON-029 |
-| 11 | The plan contact cap is enforced for every writer that goes through the service: contact create (API) and import. The import refuses at the cap before reading the file (WD-CON-026 #1), and counts the cap PER NEW CONTACT inside a run: rows that would exceed it are reported `plan_limit_reached` and counted in `limitExceeded`, rows that only update still apply. Inbound capture is an inbox-domain writer and must call `ContactQuotaService` when it is ported. | WD-CON-026 |
-| 12 | Every uuid in a filter, selection, knob or membership is resolved inside the caller's workspace; a foreign group/tag is 404, a stale one in a filter matches nothing (never "ignore the condition"). | WD-CON-009, 029 |
-| 13 | Group membership is set with an explicit array (`PUT /contacts/:id/groups`), so the last group can be removed. Notes and colours clear with an explicit `null`, absent keeps. | WD-CON-010, 035 |
-| 15 | Every bulk action (delete, group add/remove, tag/untag, export) takes ids OR a saved filter plus `excludeIds`. "Select all matching" is the same filter code as the list, run set-based. Caps: 5,000 explicit ids, 50,000 contacts per filter-based change (422 `CON_SELECTION_TOO_LARGE` beyond it), 200,000 rows per export. | WD-CON-019..024 |
-| 16 | Bulk delete never 422s on a stale id: unknown ids and ids outside the caller's record scope are listed in `failed`, the rest are deleted, and the answer reports what was actually changed. | WD-CON-020 |
-| 17 | Deleting a contact relies on the existing FKs (CASCADE for notes/files/tags/groups/identities, SET NULL for deals, conversations, campaign recipients...). Dedupe re-points those rows to the survivor first. | WD-CON-011, 025 |
-| 18 | One tag rule: name 1-64 characters, unique per workspace ignoring case (409 `CON_TAG_NAME_TAKEN`), creating a tag from Contacts (bulk, attach-by-name, import, CSV tags column) needs `record.tags.create` and counts against the plan `tags` limit, exactly like `POST /tags`. Attaching an EXISTING tag needs only `record.contacts.update`. | WD-CON-024, 039 |
-| 19 | The tag filter is `tagIds` (list) with `tagMode=any|all`; the single `tagId` chip-link spelling still works. A value that is not a uuid is a 422 instead of being silently ignored. | WD-CON-004 |
-| 20 | `isActive` is an explicit boolean on create and update, so an attribute can be switched off. An inactive attribute is hidden from the picker AND not resolved at send time. | WD-CON-043, 044, 048 |
-| 21 | Attribute management needs the Contact Properties permissions (`record.contact-properties.*`); viewers and agents without them get 403. Keys are `^[a-z][a-z0-9_]{0,63}$`, unique, and may not be a built-in token, a contact column, `status` or `source` (422 `CON_ATTRIBUTE_KEY_RESERVED`). Deleting an attribute that contacts hold a value for is 409 `CON_ATTRIBUTE_IN_USE` until `force=true`; the values stay on the contacts either way. | WD-CON-043..045 |
-| 22 | Attributes are rows of the typed field registry (`fields`, `module_key = 'contacts'`, section "Custom attributes"; default value and description in `config`). Types: text, long_text, integer, decimal, boolean, date, datetime, url, email, phone. `contact_custom_fields` is not ported. | WD-CON-043, 051 |
-| 23 | One token format (named `{{key}}`), one resolver (`MergeTagService` / `renderMergeTags`) with the WaDesk precedence (contact column, contact attribute, workspace default, system) and one alias table. An unresolved token is the empty string, never the braces. `groups` resolves to group NAMES. | WD-CON-047, 048 |
-| 24 | Export columns: `name, first_name, last_name, phone (E.164), country_code, email, groups, tags, language, title, address, memo, status, source, unsubscribed, created_at`, then one `attr:<key>` column per active attribute. Groups and tags by name. UTF-8 BOM by default (`bom=false` to drop). The formula-injection guard applies to free-text cells only, so `+91...` is not turned into `'+91...`. | WD-CON-021, 022 |
-| 25 | A bulk action writes ONE audit row and ONE aggregated outbox event (`contact_group.members_changed`, `tag.contacts_changed`), plus one `contact.group_added|removed` / `contact.tag_added|removed` event per contact that really changed (what flows subscribe to). No notification per contact, no PII in event text. | WD-CON-023, 024 |
-| 29 | Groups: unique `(org, lower(name))` by index (simultaneous creates cannot both win), name 1-191, `#RRGGBB` colour or null, note <= 500, no `status` column. Create of an existing name still returns that group (200, `existing: true`); renaming onto a taken name is 409 `CON_GROUP_NAME_TAKEN`. | WD-CON-034, 035 |
-| 30 | Limits live once in `@crm/contracts` (page size, names, import size/rows, bulk caps). | all |
+| Diff # | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Where                                                                                                                           |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | No default title. The display name is the typed name, else first + middle + last; the title is never part of it. Applies to create (API) and import.                                                                                                                                                                                                                                                                                                                                                                                                                     | WD-CON-012                                                                                                                      |
+| 2      | An import stores the CSV name as `name` and fills `first_name` / `last_name` only from their own columns. The full name is no longer copied into `first_name`, so nothing rebuilds "Aarav Sharma Sharma".                                                                                                                                                                                                                                                                                                                                                                | WD-CON-012, 030                                                                                                                 |
+| 3, 4   | ONE canonicaliser (`canonicalizePhone` in `@crm/contracts`) for create, import, dedupe and every identity lookup: digits; a leading `+` or `00` means "already international" (the `00` is dropped); else the row's country code (or the import's `defaultCountryCode`) is prefixed unless the digits already start with it; 7-15 digits, no leading 0. Phones are stored E.164 and exported E.164. Create/update normalise the phone and write the same `contact_identities` key the importer writes, so creating a number an import made returns the imported contact. | WD-CON-013                                                                                                                      |
+| 5      | Import updates the OLDEST duplicate, dedupe keeps the oldest: one winner. Dedupe merges instead of deleting (below).                                                                                                                                                                                                                                                                                                                                                                                                                                                     | WD-CON-025, 030                                                                                                                 |
+| 6      | Group membership is the join table `contact_group_members` (composite FKs, ON DELETE CASCADE, forced RLS). Counts, filters and "no group" are SQL; deleting a group is one `DELETE` and touches no contact (the `mobile_hash` null-out bug cannot occur). Orphan ids cannot exist, so a contact that lost its only group is simply "no group".                                                                                                                                                                                                                           | WD-CON-036, 037                                                                                                                 |
+| 8      | `contacts.source` is a column (and `status` already was); `contacts.import_job_id` makes "Imported" a real filter (`imported=true`) and a real stat. Create/update accept `source`. An import with no source knob stamps `source = 'import'`.                                                                                                                                                                                                                                                                                                                            | WD-CON-006, 015                                                                                                                 |
+| 9      | Import wizard backend: preview (`POST /contacts/import/preview`), explicit mapping, the group/tag/status/source knobs with tags really applied, rejects report, one limit (20 MB, 200,000 rows) in `@crm/contracts`.                                                                                                                                                                                                                                                                                                                                                     | WD-CON-027..031                                                                                                                 |
+| 10     | Group and tag knobs (and the file's own group/tag columns) apply to rows the file only UPDATES. Status and source are stamped on CREATED contacts only, so an import never overwrites a contact's existing status or source.                                                                                                                                                                                                                                                                                                                                             | WD-CON-029                                                                                                                      |
+| 11     | The plan contact cap is enforced for every writer that goes through the service: contact create (API) and import. The import refuses at the cap before reading the file (WD-CON-026 #1), and counts the cap PER NEW CONTACT inside a run: rows that would exceed it are reported `plan_limit_reached` and counted in `limitExceeded`, rows that only update still apply. Inbound capture is an inbox-domain writer and must call `ContactQuotaService` when it is ported.                                                                                                | WD-CON-026                                                                                                                      |
+| 12     | Every uuid in a filter, selection, knob or membership is resolved inside the caller's workspace; a foreign group/tag is 404, a stale one in a filter matches nothing (never "ignore the condition").                                                                                                                                                                                                                                                                                                                                                                     | WD-CON-009, 029                                                                                                                 |
+| 13     | Group membership is set with an explicit array (`PUT /contacts/:id/groups`), so the last group can be removed. Notes and colours clear with an explicit `null`, absent keeps.                                                                                                                                                                                                                                                                                                                                                                                            | WD-CON-010, 035                                                                                                                 |
+| 15     | Every bulk action (delete, group add/remove, tag/untag, export) takes ids OR a saved filter plus `excludeIds`. "Select all matching" is the same filter code as the list, run set-based. Caps: 5,000 explicit ids, 50,000 contacts per filter-based change (422 `CON_SELECTION_TOO_LARGE` beyond it), 200,000 rows per export.                                                                                                                                                                                                                                           | WD-CON-019..024                                                                                                                 |
+| 16     | Bulk delete never 422s on a stale id: unknown ids and ids outside the caller's record scope are listed in `failed`, the rest are deleted, and the answer reports what was actually changed.                                                                                                                                                                                                                                                                                                                                                                              | WD-CON-020                                                                                                                      |
+| 17     | Deleting a contact relies on the existing FKs (CASCADE for notes/files/tags/groups/identities, SET NULL for deals, conversations, campaign recipients...). Dedupe re-points those rows to the survivor first.                                                                                                                                                                                                                                                                                                                                                            | WD-CON-011, 025                                                                                                                 |
+| 18     | One tag rule: name 1-64 characters, unique per workspace ignoring case (409 `CON_TAG_NAME_TAKEN`), creating a tag from Contacts (bulk, attach-by-name, import, CSV tags column) needs `record.tags.create` and counts against the plan `tags` limit, exactly like `POST /tags`. Attaching an EXISTING tag needs only `record.contacts.update`.                                                                                                                                                                                                                           | WD-CON-024, 039                                                                                                                 |
+| 19     | The tag filter is `tagIds` (list) with `tagMode=any                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | all`; the single `tagId` chip-link spelling still works. A value that is not a uuid is a 422 instead of being silently ignored. | WD-CON-004                                                                                                                   |
+| 20     | `isActive` is an explicit boolean on create and update, so an attribute can be switched off. An inactive attribute is hidden from the picker AND not resolved at send time.                                                                                                                                                                                                                                                                                                                                                                                              | WD-CON-043, 044, 048                                                                                                            |
+| 21     | Attribute management needs the Contact Properties permissions (`record.contact-properties.*`); viewers and agents without them get 403. Keys are `^[a-z][a-z0-9_]{0,63}$`, unique, and may not be a built-in token, a contact column, `status` or `source` (422 `CON_ATTRIBUTE_KEY_RESERVED`). Deleting an attribute that contacts hold a value for is 409 `CON_ATTRIBUTE_IN_USE` until `force=true`; the values stay on the contacts either way.                                                                                                                        | WD-CON-043..045                                                                                                                 |
+| 22     | Attributes are rows of the typed field registry (`fields`, `module_key = 'contacts'`, section "Custom attributes"; default value and description in `config`). Types: text, long_text, integer, decimal, boolean, date, datetime, url, email, phone. `contact_custom_fields` is not ported.                                                                                                                                                                                                                                                                              | WD-CON-043, 051                                                                                                                 |
+| 23     | One token format (named `{{key}}`), one resolver (`MergeTagService` / `renderMergeTags`) with the WaDesk precedence (contact column, contact attribute, workspace default, system) and one alias table. An unresolved token is the empty string, never the braces. `groups` resolves to group NAMES.                                                                                                                                                                                                                                                                     | WD-CON-047, 048                                                                                                                 |
+| 24     | Export columns: `name, first_name, last_name, phone (E.164), country_code, email, groups, tags, language, title, address, memo, status, source, unsubscribed, created_at`, then one `attr:<key>` column per active attribute. Groups and tags by name. UTF-8 BOM by default (`bom=false` to drop). The formula-injection guard applies to free-text cells only, so `+91...` is not turned into `'+91...`.                                                                                                                                                                | WD-CON-021, 022                                                                                                                 |
+| 25     | A bulk action writes ONE audit row and ONE aggregated outbox event (`contact_group.members_changed`, `tag.contacts_changed`), plus one `contact.group_added                                                                                                                                                                                                                                                                                                                                                                                                              | removed`/`contact.tag_added                                                                                                     | removed` event per contact that really changed (what flows subscribe to). No notification per contact, no PII in event text. | WD-CON-023, 024 |
+| 29     | Groups: unique `(org, lower(name))` by index (simultaneous creates cannot both win), name 1-191, `#RRGGBB` colour or null, note <= 500, no `status` column. Create of an existing name still returns that group (200, `existing: true`); renaming onto a taken name is 409 `CON_GROUP_NAME_TAKEN`.                                                                                                                                                                                                                                                                       | WD-CON-034, 035                                                                                                                 |
+| 30     | Limits live once in `@crm/contracts` (page size, names, import size/rows, bulk caps).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | all                                                                                                                             |
 
 ### Decided differently from the recommendation, or left as WaDesk
 
-| Item | Decision |
-| --- | --- |
-| Dedupe is two calls | `GET /contacts/duplicates` previews the sets; `POST /contacts/dedupe` merges (default 1,000 sets per call, `remainingSets` says whether to call again). It needs `record.contacts.merge` at scope `all` (a merge reaches across owners); `own`/`team` get 403 `CON_MERGE_SCOPE_REQUIRED`. The survivor keeps its own fields and takes the ones it lacks, unions groups and tags, merges attribute values (its own value wins), keeps an opt-out, and receives every row that pointed at a duplicate (savepoint per table; a unique clash leaves that row to cascade or SET NULL). |
-| Trunk zero | A number like `09812345678` with country code `91` canonicalises to `9109812345678`, i.e. WaDesk's literal rule (prefix unless the digits already start with the code). A national trunk `0` is not stripped, because for some countries it is part of the number. Such a number is not detected as a duplicate of `+919812345678`. |
-| No-country-code numbers | With no country code on the row and no `defaultCountryCode`, the digits are taken to include their own country code (bare `919812345678`). A number that cannot be 7-15 digits is rejected `invalid_phone`. |
-| Column mapping | `First Name` / `Last Name` / `Title` / `Address` / `Notes` / `Tags` / `Status` / `Source` are recognised. WD-CON-028 #2 (`Name, First Name` ignores the second) changes: with both, `name` takes column 0 and `firstName` takes the second, as a separate field. `Mail Address` is still not recognised (WD-CON-028 #1). |
-| Required columns | A phone and some name (`name`, `firstName` or `lastName`). A file without them is 422 `CON_IMPORT_FILE_INVALID` naming the missing field (WaDesk answered ok with "imported 0"). A row with no name or no valid phone is rejected with a reason; a bad email is rejected (WaDesk imported both). Blank lines are not rows. |
-| Sync threshold | Up to 1,000 data rows run inside the request (200 with the finished job); above that the file is stored on the job row, queued on `con-import` and answered 202. The worker commits every 500 rows and resumes from `processed_rows` after a crash. The uploaded text is cleared when the job finishes. The sample header is WaDesk's. |
-| Import events | An import writes `contact.import_started` / `contact.import_completed` only. Per-contact `contact.created` / group / tag events are emitted when the request sets `triggerAutomations: true`; WaDesk never triggered flows from an import and the default keeps that. |
-| Contact list paging | Cursor pagination (any `limit` 1-1000, default 50) replaces page numbers and the 12/50/100/500/1000 whitelist; `includeTotal=true` adds `meta.total`. Sorting stays newest first. `expand=groups,tags` adds the row chips. |
-| Search | Every whitespace-separated word must match name, first/last name, email or phone (ILIKE, trigram-indexed), and a numeric word also matches the digits of the phone. WD-CON-002 #2 changes: `acme x` now matches `x@acme.io`. `%` and `_` are literal. |
-| Legacy NULL-workspace rows | Not ported (the table is tenant-scoped by `org_id`). The page gate is the capability, not a hard-coded role. |
-| Stats | `GET /contacts/stats` (total, groups, subscribed, unsubscribed, noGroup, grouped, imported) is workspace-wide, inside the caller's record scope, archived excluded like the list. |
-| Detach | Detaching a tag the contact does not carry is a quiet 204; a tag id that does not exist in the workspace is 404 (WaDesk answered ok for any id). |
-| Picker rate limit | The 120 requests/minute throttle on the attribute feed is not applied (no throttler in the API yet); `GET /attributes/picker` is cheap and cached by the client. |
+| Item                       | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dedupe is two calls        | `GET /contacts/duplicates` previews the sets; `POST /contacts/dedupe` merges (default 1,000 sets per call, `remainingSets` says whether to call again). It needs `record.contacts.merge` at scope `all` (a merge reaches across owners); `own`/`team` get 403 `CON_MERGE_SCOPE_REQUIRED`. The survivor keeps its own fields and takes the ones it lacks, unions groups and tags, merges attribute values (its own value wins), keeps an opt-out, and receives every row that pointed at a duplicate (savepoint per table; a unique clash leaves that row to cascade or SET NULL). |
+| Trunk zero                 | A number like `09812345678` with country code `91` canonicalises to `9109812345678`, i.e. WaDesk's literal rule (prefix unless the digits already start with the code). A national trunk `0` is not stripped, because for some countries it is part of the number. Such a number is not detected as a duplicate of `+919812345678`.                                                                                                                                                                                                                                               |
+| No-country-code numbers    | With no country code on the row and no `defaultCountryCode`, the digits are taken to include their own country code (bare `919812345678`). A number that cannot be 7-15 digits is rejected `invalid_phone`.                                                                                                                                                                                                                                                                                                                                                                       |
+| Column mapping             | `First Name` / `Last Name` / `Title` / `Address` / `Notes` / `Tags` / `Status` / `Source` are recognised. WD-CON-028 #2 (`Name, First Name` ignores the second) changes: with both, `name` takes column 0 and `firstName` takes the second, as a separate field. `Mail Address` is still not recognised (WD-CON-028 #1).                                                                                                                                                                                                                                                          |
+| Required columns           | A phone and some name (`name`, `firstName` or `lastName`). A file without them is 422 `CON_IMPORT_FILE_INVALID` naming the missing field (WaDesk answered ok with "imported 0"). A row with no name or no valid phone is rejected with a reason; a bad email is rejected (WaDesk imported both). Blank lines are not rows.                                                                                                                                                                                                                                                        |
+| Sync threshold             | Up to 1,000 data rows run inside the request (200 with the finished job); above that the file is stored on the job row, queued on `con-import` and answered 202. The worker commits every 500 rows and resumes from `processed_rows` after a crash. The uploaded text is cleared when the job finishes. The sample header is WaDesk's.                                                                                                                                                                                                                                            |
+| Import events              | An import writes `contact.import_started` / `contact.import_completed` only. Per-contact `contact.created` / group / tag events are emitted when the request sets `triggerAutomations: true`; WaDesk never triggered flows from an import and the default keeps that.                                                                                                                                                                                                                                                                                                             |
+| Contact list paging        | Cursor pagination (any `limit` 1-1000, default 50) replaces page numbers and the 12/50/100/500/1000 whitelist; `includeTotal=true` adds `meta.total`. Sorting stays newest first. `expand=groups,tags` adds the row chips.                                                                                                                                                                                                                                                                                                                                                        |
+| Search                     | Every whitespace-separated word must match name, first/last name, email or phone (ILIKE, trigram-indexed), and a numeric word also matches the digits of the phone. WD-CON-002 #2 changes: `acme x` now matches `x@acme.io`. `%` and `_` are literal.                                                                                                                                                                                                                                                                                                                             |
+| Legacy NULL-workspace rows | Not ported (the table is tenant-scoped by `org_id`). The page gate is the capability, not a hard-coded role.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Stats                      | `GET /contacts/stats` (total, groups, subscribed, unsubscribed, noGroup, grouped, imported) is workspace-wide, inside the caller's record scope, archived excluded like the list.                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Detach                     | Detaching a tag the contact does not carry is a quiet 204; a tag id that does not exist in the workspace is 404 (WaDesk answered ok for any id).                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Picker rate limit          | The 120 requests/minute throttle on the attribute feed is not applied (no throttler in the API yet); `GET /attributes/picker` is cheap and cached by the client.                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ### Not done in this slice
 
-| Item | Why |
-| --- | --- |
-| WD-CON-041 starter tags for new workspaces | Provisioning lives in `modules/auth` (`TenantDirectory.provisionOrganization`); it needs one call to `TagsService.findOrCreateByName` for the six names. Tags created that way count against the plan tag limit. |
-| WD-CON-050 attribute feeds for the Node bridge, mobile app and extension | Belong to the node-bridge / mobile / extension domains; they should read `AttributesRepository.listActive` / the field registry. |
-| WD-CON-052, 053 webhooks and flow triggers | The events they need are emitted (`contact.created`, `contact.updated`, `contact.group_added`, `contact.tag_added`, `contact.opted_in` is not emitted: consent has no write path yet); the consumers belong to the INTG and FLW domains. |
-| WD-CON-014 avatar upload, WD-CON-017 consent UI/endpoint, WD-CON-018 contact 360, WD-CON-055 auto-capture, WD-CON-056..064 public API | Out of this scope (other tracks); the quota service and the canonicaliser are what they should call. |
-| Per-type validation of attribute values on contacts | `contacts.data` stays free-form (the contact PATCH merges `customFields`); only the definitions are typed. |
-| Background export for very large workspaces | Export streams in batches of 2,000 up to 200,000 rows per call; above that the caller narrows the filter. |
-| A stuck-job recovery sweep for `con-import` | BullMQ retries and stalled-job handling cover a dead worker; no separate sweeper. |
+| Item                                                                                                                                  | Why                                                                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WD-CON-041 starter tags for new workspaces                                                                                            | Provisioning lives in `modules/auth` (`TenantDirectory.provisionOrganization`); it needs one call to `TagsService.findOrCreateByName` for the six names. Tags created that way count against the plan tag limit.                         |
+| WD-CON-050 attribute feeds for the Node bridge, mobile app and extension                                                              | Belong to the node-bridge / mobile / extension domains; they should read `AttributesRepository.listActive` / the field registry.                                                                                                         |
+| WD-CON-052, 053 webhooks and flow triggers                                                                                            | The events they need are emitted (`contact.created`, `contact.updated`, `contact.group_added`, `contact.tag_added`, `contact.opted_in` is not emitted: consent has no write path yet); the consumers belong to the INTG and FLW domains. |
+| WD-CON-014 avatar upload, WD-CON-017 consent UI/endpoint, WD-CON-018 contact 360, WD-CON-055 auto-capture, WD-CON-056..064 public API | Out of this scope (other tracks); the quota service and the canonicaliser are what they should call.                                                                                                                                     |
+| Per-type validation of attribute values on contacts                                                                                   | `contacts.data` stays free-form (the contact PATCH merges `customFields`); only the definitions are typed.                                                                                                                               |
+| Background export for very large workspaces                                                                                           | Export streams in batches of 2,000 up to 200,000 rows per call; above that the caller narrows the filter.                                                                                                                                |
+| A stuck-job recovery sweep for `con-import`                                                                                           | BullMQ retries and stalled-job handling cover a dead worker; no separate sweeper.                                                                                                                                                        |
 
 ### Port decision: Lifecycle stage and Status are linked (not in WaDesk)
 
@@ -2250,12 +2250,16 @@ WaDesk keeps `status` (a free label on the contact) and the lifecycle stage as t
     "app/Http/Controllers/Api/V1/ContactController.php",
     "app/Http/Controllers/Api/V1/ContactGroupController.php"
   ],
-  "services": [
-    "app/Services/AttributeResolver.php",
-    "app/Services/SendAttributes.php"
-  ],
+  "services": ["app/Services/AttributeResolver.php", "app/Services/SendAttributes.php"],
   "models": ["Contact", "ContactGroup", "Attribute", "Tag", "ContactCustomField"],
-  "tables": ["contacts", "contact_groups", "contact_tag", "tags", "attributes", "contact_custom_fields"],
+  "tables": [
+    "contacts",
+    "contact_groups",
+    "contact_tag",
+    "tags",
+    "attributes",
+    "contact_custom_fields"
+  ],
   "views": [
     "resources/views/user/contacts/index.blade.php",
     "resources/views/user/contacts/show.blade.php",
@@ -2326,11 +2330,10 @@ WaDesk keeps `status` (a free label on the contact) and the lifecycle stage as t
 }
 ```
 
-
 ## Follow-ups closed: stage flags, required properties
 
-| What | Decision |
-| --- | --- |
+| What                        | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Won / lost lifecycle stages | `status_options.is_won` / `is_lost` (mutually exclusive by a CHECK; the API accepts them on contacts' `lifecycle_stage` group only, else 422 `STATUS_OPTION_FLAG_INVALID`) and `contacts.won_at` / `lost_at`. Entering a won stage stamps `won_at`, a lost stage stamps `lost_at` and needs `lostReason` (a `lost_reason` option) or `otherLostReason` (422 `CON_LOST_REASON_REQUIRED`), leaving clears the stamps and the reasons. Nothing is flagged by the migration; a new workspace seeded from the platform stages gets `enrolled` as won and `lost` as lost. The web app asks for the reason in a dialog when a stage menu moves a contact to a lost stage and inline in the edit form. |
-| One default stage per group | A partial unique index (`uq_status_options_one_default`); the migration keeps the lowest-id default where a group had two. |
-| Required properties | Enforced on `POST /contacts` and on a `PATCH /contacts/:id` that carries `customFields` (422 `CON_REQUIRED_PROPERTY_MISSING`, one `customFields.<key>` entry per property), honouring "show only when" dependencies. Skipped: system, inactive, hidden and read-only properties, formulas and checkboxes. A stage or owner change alone is not held to the rules, so contacts that predate a newly required property stay editable; bulk edit may only not blank what it sets. CSV import is unchanged (it does not enforce them). |
+| One default stage per group | A partial unique index (`uq_status_options_one_default`); the migration keeps the lowest-id default where a group had two.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Required properties         | Enforced on `POST /contacts` and on a `PATCH /contacts/:id` that carries `customFields` (422 `CON_REQUIRED_PROPERTY_MISSING`, one `customFields.<key>` entry per property), honouring "show only when" dependencies. Skipped: system, inactive, hidden and read-only properties, formulas and checkboxes. A stage or owner change alone is not held to the rules, so contacts that predate a newly required property stay editable; bulk edit may only not blank what it sets. CSV import is unchanged (it does not enforce them).                                                                                                                                                             |

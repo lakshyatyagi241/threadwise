@@ -65,24 +65,24 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WSP-002 | todo |  |  |
 | WD-WSP-003 | todo |  |  |
 | WD-WSP-004 | todo |  |  |
-| WD-WSP-005 | todo |  |  |
+| WD-WSP-005 | done |  | built by AUTH-010 |
 | WD-WSP-006 | todo |  |  |
 | WD-WSP-007 | todo |  |  |
 | WD-WSP-008 | todo |  |  |
 | WD-WSP-009 | todo |  |  |
 | WD-WSP-010 | todo |  |  |
 | WD-WSP-011 | todo |  |  |
-| WD-WSP-012 | todo |  |  |
+| WD-WSP-012 | done |  | kernel tenant context |
 | WD-WSP-013 | todo |  |  |
 | WD-WSP-014 | todo |  |  |
-| WD-WSP-015 | todo |  |  |
-| WD-WSP-016 | todo |  |  |
-| WD-WSP-017 | todo |  |  |
-| WD-WSP-018 | todo |  |  |
-| WD-WSP-019 | todo |  |  |
-| WD-WSP-020 | todo |  |  |
-| WD-WSP-021 | todo |  |  |
-| WD-WSP-022 | todo |  |  |
+| WD-WSP-015 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| WD-WSP-016 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| WD-WSP-017 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| WD-WSP-018 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| WD-WSP-019 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| WD-WSP-020 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| WD-WSP-021 | wontfix |  | invite token acceptance replaces login-time activation (port note) |
+| WD-WSP-022 | frontend-done |  | teams CRUD done; device scoping picker blocked until channels (devices) domain exists |
 | WD-WSP-023 | todo |  |  |
 | WD-WSP-024 | todo |  |  |
 | WD-WSP-025 | todo |  |  |
@@ -94,7 +94,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WSP-031 | todo |  |  |
 | WD-WSP-032 | todo |  |  |
 | WD-WSP-033 | todo |  |  |
-| WD-WSP-034 | todo |  |  |
+| WD-WSP-034 | wontfix |  | platform staff are platform_operators, outside tenant orgs |
 | WD-WSP-035 | todo |  |  |
 | WD-WSP-036 | todo |  |  |
 | WD-WSP-037 | todo |  |  |
@@ -106,50 +106,50 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WSP-043 | todo |  |  |
 | WD-WSP-044 | todo |  |  |
 | WD-WSP-045 | todo |  |  |
-| WD-WSP-046 | todo |  |  |
-| WD-WSP-047 | todo |  |  |
+| WD-WSP-046 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| WD-WSP-047 | done |  | built by AUTH; members contract carries invitedAt/joinedAt |
 
 ## roles-permissions (rbac)
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-RBAC-001 | todo |  |  |
-| WD-RBAC-002 | todo |  |  |
-| WD-RBAC-003 | todo |  |  |
-| WD-RBAC-004 | todo |  |  |
-| WD-RBAC-005 | todo |  |  |
-| WD-RBAC-006 | todo |  |  |
-| WD-RBAC-007 | todo |  |  |
-| WD-RBAC-008 | todo |  |  |
-| WD-RBAC-009 | todo |  |  |
-| WD-RBAC-010 | todo |  |  |
-| WD-RBAC-011 | todo |  |  |
-| WD-RBAC-012 | todo |  |  |
-| WD-RBAC-013 | todo |  |  |
-| WD-RBAC-014 | todo |  |  |
-| WD-RBAC-015 | todo |  |  |
-| WD-RBAC-016 | todo |  |  |
-| WD-RBAC-017 | todo |  |  |
-| WD-RBAC-018 | todo |  |  |
-| WD-RBAC-019 | todo |  |  |
-| WD-RBAC-020 | todo |  |  |
-| WD-RBAC-021 | todo |  |  |
-| WD-RBAC-022 | todo |  |  |
-| WD-RBAC-023 | todo |  |  |
-| WD-RBAC-024 | todo |  |  |
-| WD-RBAC-025 | todo |  |  |
-| WD-RBAC-026 | todo |  |  |
-| WD-RBAC-027 | todo |  |  |
-| WD-RBAC-028 | todo |  |  |
-| WD-RBAC-029 | todo |  |  |
-| WD-RBAC-030 | todo |  |  |
-| WD-RBAC-031 | todo |  |  |
-| WD-RBAC-032 | todo |  |  |
-| WD-RBAC-033 | todo |  |  |
-| WD-RBAC-034 | todo |  |  |
-| WD-RBAC-035 | todo |  |  |
-| WD-RBAC-036 | todo |  |  |
-| WD-RBAC-037 | todo |  |  |
+| WD-RBAC-001 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-002 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-003 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-004 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-005 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-006 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-007 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-008 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-009 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-010 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-011 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-012 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-013 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-014 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-015 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-016 | wontfix |  | operator identity pool replaces role-name staff recognition (D-RBAC-04) |
+| WD-RBAC-017 | wontfix |  | legacy users.role not ported (D-RBAC-04); plan/billing bypass is a PLAN/BILL flag |
+| WD-RBAC-018 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-019 | blocked |  | guard + keys ready; waiting on platform inbox routes (ASHELL/SUPP) |
+| WD-RBAC-020 | blocked |  | waiting on WD-WSP impersonation tokens |
+| WD-RBAC-021 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-022 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-023 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-024 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-025 | blocked |  | each domain adopts its own permission keys; see wiring map |
+| WD-RBAC-026 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change and on the WSP members screen (invite, resend, remove, reset, role change) |
+| WD-RBAC-028 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-029 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-030 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-031 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-032 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-033 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-034 | blocked |  | keys org.owner_settings.manage / org.delete registered; SET, TCHAT, CHK adopt them |
+| WD-RBAC-035 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-036 | blocked |  | one guard for all actor kinds already; API-key scopes belong to the public API domain |
+| WD-RBAC-037 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
 
 ## admin-console-shell (ashell)
 

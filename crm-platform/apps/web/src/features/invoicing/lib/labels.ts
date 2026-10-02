@@ -23,11 +23,24 @@ export const TIMELINE_EVENTS = [
   'credit_note_issued',
 ] as const;
 export type TimelineEvent = (typeof TIMELINE_EVENTS)[number];
-export const isTimelineEvent = (type: string): type is TimelineEvent => (TIMELINE_EVENTS as readonly string[]).includes(type);
+export const isTimelineEvent = (type: string): type is TimelineEvent =>
+  (TIMELINE_EVENTS as readonly string[]).includes(type);
 
 /** Who an event is attributed to when it was not a person (`invoicing.activity.actors.<kind>`). */
 export const SYSTEM_ACTORS = ['buyer', 'gateway', 'system'] as const;
 
 /** Where an invoice came from (`invoicing.detail.sources.<source>`): every source the contracts know. */
-export const SOURCE_LABELS = ['manual', 'quote', 'order', 'woocommerce', 'shopify', 'own', 'api', 'ai', 'recurring', 'sales_order'] as const satisfies readonly InvoiceSource[];
-export const isKnownSource = (source: string): boolean => (SOURCE_LABELS as readonly string[]).includes(source);
+export const SOURCE_LABELS = [
+  'manual',
+  'quote',
+  'order',
+  'woocommerce',
+  'shopify',
+  'own',
+  'api',
+  'ai',
+  'recurring',
+  'sales_order',
+] as const satisfies readonly InvoiceSource[];
+export const isKnownSource = (source: string): boolean =>
+  (SOURCE_LABELS as readonly string[]).includes(source);

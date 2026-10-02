@@ -67,7 +67,12 @@ export function groupByBucket(
   now: Date,
   timeZone?: string,
 ): Record<TaskBucket, TaskResponse[]> {
-  const out: Record<TaskBucket, TaskResponse[]> = { overdue: [], today: [], upcoming: [], no_date: [] };
+  const out: Record<TaskBucket, TaskResponse[]> = {
+    overdue: [],
+    today: [],
+    upcoming: [],
+    no_date: [],
+  };
   for (const t of tasks) {
     const b = bucketOf(t.dueAt, t.status, now, timeZone);
     if (b) out[b].push(t);

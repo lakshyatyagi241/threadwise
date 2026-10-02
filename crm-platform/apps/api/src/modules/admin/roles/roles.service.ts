@@ -1,20 +1,32 @@
-import { Injectable, Logger } from '@nestjs/common';
-import type {
-  CreateRoleInput,
-  PaginationQuery,
-  RoleResponse,
-  UpdateRoleInput,
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  ERROR_CODES,
+  type CreateRoleInput,
+  type PaginationQuery,
+  type RoleResponse,
+  type UpdateRoleInput,
 } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
-import { toRoleResponse } from './roles.mapper';
-import { RolesRepository } from './roles.repository';
+import { WorkspaceRoleRulesService } from '../../roles-permissions';
+import { toRoleResponse, type RoleViewContext } from './roles.mapper';
+import { RolesRepository, type RoleRow } from './roles.repository';
 
 const MODULE_KEY = 'roles';
+
+/** Owner, Admin, Manager, Agent and Viewer are the ladder every grant rule compares against: they stay, under their names. */
+const presetError = (name: string, what: string) =>
+  new AppError(
+    ERROR_CODES.RBAC_PRESET_ROLE,
+    `The ${name} role is a preset and ${what}.`,
+    HttpStatus.UNPROCESSABLE_ENTITY,
+    [{ path: 'id', message: `The ${name} role is a preset and ${what}.` }],
+  );
 
 /** Roles & Permissions — Settings > Users & Permissions. */
 @Injectable()
@@ -26,6 +38,7 @@ export class RolesService {
     private readonly repo: RolesRepository,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    private readonly roleRules: WorkspaceRoleRulesService,
   ) {}
 
   async list(query: PaginationQuery) {
@@ -49,8 +62,11 @@ export class RolesService {
         grantsByRole.set(g.roleId, [...(grantsByRole.get(g.roleId) ?? []), g]);
       }
 
+      const views = await this.views(tx, ctx.orgId, ctx.userId!, items);
       return {
-        data: items.map((row) => toRoleResponse(row, grantsByRole.get(row.id) ?? [])),
+        data: items.map((row) =>
+          toRoleResponse(row, grantsByRole.get(row.id) ?? [], views.get(row.id)!),
+        ),
         page,
       };
     });
@@ -62,7 +78,11 @@ export class RolesService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Role', uuid);
       const grantRows = await this.repo.grantsForRoles(tx, ctx.orgId, [row.id]);
-      return toRoleResponse(row, grantRows);
+      return toRoleResponse(
+        row,
+        grantRows,
+        (await this.views(tx, ctx.orgId, ctx.userId!, [row])).get(row.id)!,
+      );
     });
   }
 
@@ -77,6 +97,15 @@ export class RolesService {
         ]);
       }
 
+      // A new role cannot carry anything its creator does not hold (WD-RBAC-026: no handing out more than you have).
+      await this.roleRules.assertCanEditGrants(
+        tx,
+        ctx.orgId,
+        ctx.userId!,
+        { id: 0, name: input.name, systemKey: null },
+        [],
+        input.grants,
+      );
       const created = await this.repo.insert(tx, ctx.orgId, input.name);
       if (input.grants.length > 0) {
         await this.repo.replaceGrants(tx, ctx.orgId, created.id, input.grants);
@@ -87,7 +116,11 @@ export class RolesService {
 
       const row = await this.repo.findByUuid(tx, ctx.orgId, created.uuid);
       const grantRows = await this.repo.grantsForRoles(tx, ctx.orgId, [created.id]);
-      return toRoleResponse(row!, grantRows);
+      return toRoleResponse(
+        row!,
+        grantRows,
+        (await this.views(tx, ctx.orgId, ctx.userId!, [row!])).get(row!.id)!,
+      );
     });
   }
 
@@ -103,8 +136,25 @@ export class RolesService {
         ]);
       }
 
+      if (existing.systemKey && input.name !== undefined && input.name !== existing.name) {
+        throw presetError(existing.name, 'cannot be renamed');
+      }
+      if (input.grants !== undefined) {
+        const current = await this.repo.grantsForRoles(tx, ctx.orgId, [existing.id]);
+        await this.roleRules.assertCanEditGrants(
+          tx,
+          ctx.orgId,
+          ctx.userId!,
+          { id: existing.id, name: existing.name, systemKey: existing.systemKey },
+          current,
+          input.grants,
+        );
+      }
+
       const values: Record<string, unknown> = {};
       if (input.name !== undefined) values.name = input.name;
+      // A grants-only edit still takes the optimistic lock (and bumps the version): rewrite the name unchanged.
+      if (input.grants !== undefined && values.name === undefined) values.name = existing.name;
 
       if (Object.keys(values).length > 0) {
         const updated = await this.repo.updateWithVersion(
@@ -127,7 +177,11 @@ export class RolesService {
 
       const after = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       const grantRows = await this.repo.grantsForRoles(tx, ctx.orgId, [existing.id]);
-      return toRoleResponse(after!, grantRows);
+      return toRoleResponse(
+        after!,
+        grantRows,
+        (await this.views(tx, ctx.orgId, ctx.userId!, [after!])).get(after!.id)!,
+      );
     });
   }
 
@@ -143,9 +197,45 @@ export class RolesService {
         ]);
       }
 
+      if (existing.systemKey) throw presetError(existing.name, 'cannot be deleted');
+      const holders =
+        (await this.repo.userCounts(tx, ctx.orgId, [existing.id])).get(existing.id) ?? 0;
+      if (holders > 0) {
+        throw new AppError(
+          ERROR_CODES.RBAC_ROLE_IN_USE,
+          `${holders} member(s) still hold the ${existing.name} role. Move them to another role first.`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'id', message: `${holders} member(s) still hold this role.` }],
+        );
+      }
+
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
       await this.repo.deleteById(tx, ctx.orgId, existing.id);
       await this.rbac.bumpRolesVersion(ctx.orgId);
     });
+  }
+
+  /** What the caller may do with each role: how many members it has, whether they can hand it out, whether they can edit it. */
+  private async views(
+    tx: Tx,
+    orgId: number,
+    actorUserId: number,
+    rows: RoleRow[],
+  ): Promise<Map<number, RoleViewContext>> {
+    const counts = await this.repo.userCounts(
+      tx,
+      orgId,
+      rows.map((r) => r.id),
+    );
+    const grantable = new Set(await this.roleRules.grantableRoleIds(tx, orgId, actorUserId));
+    const out = new Map<number, RoleViewContext>();
+    for (const r of rows) {
+      out.set(r.id, {
+        userCount: counts.get(r.id) ?? 0,
+        grantable: grantable.has(r.id),
+        editable: await this.roleRules.canEditRole(tx, orgId, actorUserId, r),
+      });
+    }
+    return out;
   }
 }

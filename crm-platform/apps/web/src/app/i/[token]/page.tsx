@@ -8,7 +8,11 @@ export const metadata: Metadata = {
   referrer: 'no-referrer',
 };
 
-export default async function PublicInvoicePage({ params }: { params: Promise<{ token: string }> }) {
+export default async function PublicInvoicePage({
+  params,
+}: {
+  params: Promise<{ token: string }>;
+}) {
   const { token } = await params;
   return <PublicInvoice token={token} />;
 }

@@ -1427,9 +1427,10 @@ describe('plan cards: GET /v2/plans and the onboarding plan step', () => {
 
   it('is reachable while the account is gated by an unverified email, and still needs a tenant sign-in', async () => {
     await seedCatalogue();
-    const a = await signup();
+    // Sign-up verifies the address in the default mode, so the gate must be on before the account exists.
     await setRegistration({ emailVerification: 'block' });
     try {
+      const a = await signup();
       const gated = await api().get('/v2/users/me').set(bearer(a.access));
       expect(gated.body.code).toBe('AUTH_EMAIL_UNVERIFIED');
       const plans = await api().get('/v2/plans').set(bearer(a.access));
@@ -1438,7 +1439,7 @@ describe('plan cards: GET /v2/plans and the onboarding plan step', () => {
       expect((await api().get('/v2/onboarding').set(bearer(a.access))).status).toBe(200);
       expect((await api().get('/v2/plans')).status).toBe(401);
     } finally {
-      await setRegistration({ emailVerification: 'banner' });
+      await setRegistration({ emailVerification: 'off' });
     }
   });
 });

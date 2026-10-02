@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { PLAN_FEATURE_KEYS } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
+import { OWN_TABS } from './hub/hub-tabs';
 
 /**
  * The account zone's strings live in messages/<locale>/auth-registration-security.account.json.
@@ -110,8 +111,20 @@ describe('translation keys used by the components', () => {
   const dynamic: Array<[string, string[]]> = [
     ['delete.blocked', ['sole_member', 'sole_admin']],
     ['hub.groups', ['account', 'security']],
-    ['hub.tabs', ['profile', 'branding', 'security', 'delete']],
-    ['avatar.errors', ['type', 'too-large', 'decode', 'encode']],
+    ['hub.tabs', ['profile', 'plan', 'branding', 'security', 'delete']],
+    [
+      'avatar.errors',
+      [
+        'type',
+        'source-too-large',
+        'too-large',
+        'decode',
+        'encode',
+        'forbidden',
+        'expired',
+        'rejected',
+      ],
+    ],
     [
       'onboarding.workspace.industries',
       [
@@ -128,6 +141,7 @@ describe('translation keys used by the components', () => {
     ],
     ['profile.themes', ['paper', 'bright', 'dark']],
     ['password.rules', ['min_length', 'upper_lower', 'number', 'symbol', 'common']],
+    ['password.requirement', ['mixedCase', 'number', 'symbol']],
     ['onboarding.stepper', ['account', 'workspace', 'plan']],
     ['plans.card.period', ['days', 'weeks', 'months', 'years']],
     // Every feature the catalogue can grant needs a chip label, so a new registry key cannot ship unlabeled.
@@ -147,6 +161,13 @@ describe('translation keys used by the components', () => {
       ).toBe(true);
     },
   );
+  it.each(
+    OWN_TABS.flatMap((tab) => [tab.labelKey, tab.titleKey, tab.descriptionKey]).filter(Boolean),
+  )('hub pane key %s exists in English and Arabic', (key) => {
+    const short = (key as string).slice(NAMESPACE.length + 1);
+    expect(en[short], `en ${short}`).toBeTypeOf('string');
+    expect(ar[short], `ar ${short}`).toBeTypeOf('string');
+  });
   it.each(['profile', 'branding', 'security', 'delete'])('hub page copy for %s exists', (tab) => {
     expect(en[`hub.pages.${tab}.title`]).toBeTypeOf('string');
     expect(en[`hub.pages.${tab}.description`]).toBeTypeOf('string');

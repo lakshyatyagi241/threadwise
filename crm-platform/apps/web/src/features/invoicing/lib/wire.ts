@@ -48,4 +48,5 @@ export function majorToMinor(major: string | null | undefined, exponent: number)
 }
 
 /** A percent string ("18", "9.975") for display: trailing zeros trimmed. */
-export const percentLabel = (rate: string): string => (rate.includes('.') ? rate.replace(/0+$/, '').replace(/\.$/, '') : rate);
+export const percentLabel = (rate: string): string =>
+  rate.includes('.') ? rate.replace(/0+$/, '').replace(/\.$/, '') : rate;

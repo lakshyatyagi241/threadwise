@@ -93,7 +93,17 @@ export class OtpSenderRegistryService {
     await this.settings.set(DOC_KEY, { senders: list }, by);
   }
 
+  /**
+   * The view with `connected` filled in: the sender can deliver right now. WaDesk's picker lists only
+   * connected devices and provider configs; the registry keeps the rest (an unfinished sender) so the
+   * Manage list can finish them, and the picker filters on this flag.
+   */
   private async view(s: StoredOtpSender): Promise<OtpSenderView> {
+    const core = await this.viewCore(s);
+    return { ...core, connected: core.kind === 'dev' ? this.devAllowed : isComplete(core) };
+  }
+
+  private async viewCore(s: StoredOtpSender): Promise<OtpSenderView> {
     const base = { id: s.id, label: s.label };
     switch (s.kind) {
       case 'waba':
@@ -143,7 +153,7 @@ export class OtpSenderRegistryService {
     const stored = (await this.load()).find((s) => s.id === parsed.id && s.kind === parsed.kind);
     if (!stored) return 'missing';
     if (stored.kind === 'dev') return this.devAllowed ? 'ok' : 'dev_in_production';
-    const view = await this.view(stored);
+    const view = await this.viewCore(stored);
     return isComplete(view) ? 'ok' : 'incomplete';
   }
 

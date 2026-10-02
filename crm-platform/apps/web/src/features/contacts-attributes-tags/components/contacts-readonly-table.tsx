@@ -6,11 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
 import type { ContactRow } from '../api/schemas';
-import {
-  parseStoredColumns,
-  STORAGE_KEY as COLUMNS_KEY,
-  visibleColumns,
-} from '../lib/columns';
+import { parseStoredColumns, STORAGE_KEY as COLUMNS_KEY, visibleColumns } from '../lib/columns';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { rowView } from '../lib/row-view';
 import { ContactsTable } from './contacts-list';
@@ -30,7 +26,8 @@ export function ContactsReadonlyTable({ rows }: { rows: readonly ContactRow[] })
   const statusOptions = useStatusOptions();
   const [storedColumns] = useStoredValue(COLUMNS_KEY);
   const attributeColumns = useMemo(
-    () => (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
+    () =>
+      (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   const columns = useMemo(

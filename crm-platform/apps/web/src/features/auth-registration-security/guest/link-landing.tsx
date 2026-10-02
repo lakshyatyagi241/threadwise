@@ -1,13 +1,13 @@
 'use client';
 
 import { neutralAckSchema } from '@crm/contracts';
-import { Spinner } from '@crm/ui';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { callApi } from './bff';
 import { ApiError } from '@/lib/api/errors';
 import { mapAuthError, type MappedError } from './errors';
+import { Alert, PRIMARY_LINK, Spinner } from './ui';
 
 type Kind = 'verifyEmail' | 'confirmEmailChange';
 
@@ -78,10 +78,7 @@ export function LinkLanding({
   }, [kind, org, token, usable]);
 
   const signIn = (
-    <Link
-      href={org ? `/login?org=${encodeURIComponent(org)}` : '/login'}
-      className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90"
-    >
+    <Link href={org ? `/login?org=${encodeURIComponent(org)}` : '/login'} className={PRIMARY_LINK}>
       {t('signIn')}
     </Link>
   );
@@ -89,7 +86,7 @@ export function LinkLanding({
   if (state.phase === 'working') {
     return (
       <div
-        className="flex items-center justify-center gap-3 py-6 text-sm text-muted-foreground"
+        className="flex items-center justify-center gap-3 py-6 text-[13px] text-(--auth-ink-600)"
         role="status"
       >
         <Spinner label={t('working')} />
@@ -101,13 +98,10 @@ export function LinkLanding({
   if (state.phase === 'done') {
     return (
       <div className="space-y-4">
-        <div
-          role="status"
-          className="rounded-md border border-success/40 bg-success/10 px-3 py-2 text-sm text-success"
-        >
-          <p className="font-medium">{t('doneTitle')}</p>
+        <Alert tone="success" className="space-y-0.5">
+          <p className="font-semibold">{t('doneTitle')}</p>
           <p>{t('doneBody')}</p>
-        </div>
+        </Alert>
         {signIn}
       </div>
     );
@@ -116,11 +110,8 @@ export function LinkLanding({
   const { error } = state;
   return (
     <div className="space-y-4">
-      <div
-        role="alert"
-        className="rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger"
-      >
-        <p className="font-medium">{t('failedTitle')}</p>
+      <Alert tone="danger" className="space-y-0.5">
+        <p className="font-semibold">{t('failedTitle')}</p>
         <p>
           {error.key === 'tokenInvalid' ||
           error.key === 'emailTaken' ||
@@ -128,8 +119,8 @@ export function LinkLanding({
             ? te(error.key === 'sessionExpired' ? 'tokenInvalid' : error.key)
             : te(error.key, error.params)}
         </p>
-        <p className="mt-1 text-xs">{t('failedHint')}</p>
-      </div>
+        <p className="mt-1 text-[11.5px]">{t('failedHint')}</p>
+      </Alert>
       {signIn}
     </div>
   );

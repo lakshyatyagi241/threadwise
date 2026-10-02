@@ -11,7 +11,7 @@ import { NAV } from '@/features/_registry/nav.generated';
 import { PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
-import { getSession } from '@/lib/auth/server';
+import { getSession, signedOutTarget } from '@/lib/auth/server';
 
 /**
  * Customer workspace shell. Guards the session, hands the whole session
@@ -20,8 +20,8 @@ import { getSession } from '@/lib/auth/server';
  * real permissions.
  */
 export default async function AppLayout({ children }: { children: ReactNode }) {
-  const { session, expired } = await getSession();
-  if (!session) redirect(expired ? '/api/auth/refresh?next=/' : '/login');
+  const { session, expired, idleMinutes } = await getSession();
+  if (!session) redirect(await signedOutTarget(expired, idleMinutes));
 
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   const capabilities = {

@@ -149,7 +149,9 @@ export const salesOrderSummarySchema = z.object({
   buyerName: z.string().nullable(),
   contact: z.object({ id: uuidSchema, name: z.string().nullable() }).nullable(),
   deal: z.object({ id: uuidSchema, title: z.string() }).nullable(),
-  quote: z.object({ id: uuidSchema, number: z.string(), kind: z.enum(['proposal', 'estimate']) }).nullable(),
+  quote: z
+    .object({ id: uuidSchema, number: z.string(), kind: z.enum(['proposal', 'estimate']) })
+    .nullable(),
   owner: z.object({ id: uuidSchema, name: z.string() }).nullable(),
   currency: z.string(),
   total: z.string(),

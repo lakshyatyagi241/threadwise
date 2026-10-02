@@ -11,6 +11,17 @@ import { callProvider, httpFailure, joinUrl, metaErrorText, type CallOptions } f
 type Transport = Pick<CallOptions, 'timeoutMs' | 'fetchImpl'>;
 type WabaAccess = Pick<WabaOtpConfig, 'wabaId' | 'graphBaseUrl' | 'accessToken'>;
 
+/** How many approved authentication templates the picker lists at most (WaDesk lists up to 300). */
+export const META_TEMPLATE_LIST_LIMIT = 300;
+
+export interface MetaApprovedTemplate {
+  id: string;
+  name: string;
+  language: string;
+  /** The copy-code button text, when the template has one. */
+  buttonLabel: string | null;
+}
+
 export interface MetaTemplateSubmission {
   /** Meta's id for the template. */
   id: string;
@@ -92,4 +103,62 @@ export class MetaTemplateClient {
       typeof body.rejected_reason === 'string' ? body.rejected_reason : null,
     );
   }
+
+  /**
+   * `GET {graph}/{wabaId}/message_templates?category=AUTHENTICATION&status=APPROVED&limit=300`:
+   * the approved authentication templates of the account, newest first as Meta returns them. Rows
+   * without an id or a name are dropped; the filter is repeated locally because a stub or an older
+   * Graph version may ignore the query filters.
+   */
+  async listApprovedAuthentication(access: WabaAccess): Promise<MetaApprovedTemplate[]> {
+    const { opts, headers } = this.auth(access);
+    const query = new URLSearchParams({
+      fields: 'id,name,status,language,category,components',
+      category: 'AUTHENTICATION',
+      status: 'APPROVED',
+      limit: String(META_TEMPLATE_LIST_LIMIT),
+    });
+    const url = `${joinUrl(access.graphBaseUrl, access.wabaId, 'message_templates')}?${query}`;
+    const res = await callProvider(url, { method: 'GET', headers }, opts);
+    if (!res.ok) throw httpFailure(res, metaErrorText(res.json), opts);
+    const rows = (res.json as { data?: unknown } | undefined)?.data;
+    if (!Array.isArray(rows)) return [];
+    const out: MetaApprovedTemplate[] = [];
+    for (const raw of rows as Array<Record<string, unknown>>) {
+      if (out.length >= META_TEMPLATE_LIST_LIMIT) break;
+      const id = typeof raw.id === 'string' || typeof raw.id === 'number' ? String(raw.id) : '';
+      const name = typeof raw.name === 'string' ? raw.name : '';
+      if (!id || !name) continue;
+      if (typeof raw.status === 'string' && raw.status.toUpperCase() !== 'APPROVED') continue;
+      if (typeof raw.category === 'string' && raw.category.toUpperCase() !== 'AUTHENTICATION') {
+        continue;
+      }
+      out.push({
+        id,
+        name,
+        language: typeof raw.language === 'string' ? raw.language : '',
+        buttonLabel: otpButtonLabel(raw.components),
+      });
+    }
+    return out;
+  }
+}
+
+/** The text of the first OTP (copy-code / one-tap) button among a template's components. */
+function otpButtonLabel(components: unknown): string | null {
+  if (!Array.isArray(components)) return null;
+  for (const c of components as Array<{ type?: unknown; buttons?: unknown }>) {
+    if (typeof c?.type !== 'string' || c.type.toUpperCase() !== 'BUTTONS') continue;
+    if (!Array.isArray(c.buttons)) continue;
+    for (const b of c.buttons as Array<{ type?: unknown; text?: unknown }>) {
+      if (
+        typeof b?.type === 'string' &&
+        b.type.toUpperCase() === 'OTP' &&
+        typeof b.text === 'string'
+      ) {
+        return b.text.slice(0, 40);
+      }
+    }
+  }
+  return null;
 }

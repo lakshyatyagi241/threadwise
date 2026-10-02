@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Roles & permissions",
+      "roles": "Roles",
+      "permissions": "Permissions",
+      "staff": "Staff roles"
+    },
+    "common": {
+      "admin": "Admin",
+      "breadcrumb": "Breadcrumb",
+      "loading": "Loading…",
+      "retry": "Try again",
+      "requestId": "Request id",
+      "cancel": "Cancel",
+      "noAccess": {
+        "title": "You do not have access to this screen",
+        "body": "Your roles do not include the platform permission this screen needs. Ask a Super Admin to grant it.",
+        "bodyWithKey": "This screen needs the platform permission {permission}. Ask a Super Admin to add it to one of your roles.",
+        "back": "Back to the console"
+      },
+      "errors": {
+        "unexpected": "Something went wrong on our side. Try again; if it keeps happening, quote the request id.",
+        "request": "The request could not be completed.",
+        "validation": "Check the form and try again.",
+        "validationField": "{message}",
+        "conflict": "Someone else changed this role while you were editing. Reload to see their version, then re-apply your changes.",
+        "noAccess": "You need the platform permission {permission} for this.",
+        "nameTaken": "The name has already been taken.",
+        "nameRequired": "The role name is required.",
+        "permissionNameRequired": "The permission name is required.",
+        "permissionNameFormat": "Use lowercase letters, digits and underscores, with dots between parts.",
+        "locked": "Super Admin is system-locked: it cannot be renamed, stripped of permissions or deleted.",
+        "lockedDelete": "Super Admin role is system-locked and cannot be deleted.",
+        "permissionSystem": "This permission is checked by the platform and cannot be deleted.",
+        "permissionUnknown": "These permissions are not in the catalogue: {names}.",
+        "reassignSame": "Pick a different role to move users into.",
+        "lastSuperAdmin": "There must be at least one active Super Admin.",
+        "privilegedRole": "Only a Super Admin can grant or revoke the Super Admin role.",
+        "notFound": "This item no longer exists. It may have been deleted."
+      }
+    },
+    "list": {
+      "crumb": "Roles",
+      "eyebrow": "Admin · Users & access · Roles",
+      "titleLead": "Roles &",
+      "titleAccent": "permissions",
+      "description": "Define what each role can do across the platform. Each user is assigned one role; permissions are bundled per role.",
+      "managePermissions": "Manage permissions",
+      "addRole": "Add role",
+      "kpi": {
+        "label": "Role totals",
+        "total": "Total roles",
+        "totalHint": "{system} system · {custom} custom",
+        "permissions": "Total permissions",
+        "permissionsHint": "across modules",
+        "users": "Users with role",
+        "usersHint": "across all roles",
+        "noUsers": "Roles without users",
+        "noUsersHint": "consider archiving"
+      },
+      "filter": {
+        "label": "Filter roles by type",
+        "all": "All",
+        "system": "System",
+        "custom": "Custom",
+        "search": "Search roles…",
+        "searchLabel": "Search roles"
+      },
+      "table": {
+        "caption": "Platform roles",
+        "index": "#",
+        "name": "Role name",
+        "type": "Type",
+        "users": "Users",
+        "permissions": "Permissions",
+        "lastEdited": "Last edited",
+        "actions": "Actions"
+      },
+      "systemRole": "System role",
+      "customRole": "Custom role",
+      "systemBadge": "System",
+      "customBadge": "Custom",
+      "row": {
+        "menu": "Actions for {name}",
+        "edit": "Edit role",
+        "delete": "Delete"
+      },
+      "footer": {
+        "showing": "Showing {shown} of {total} roles",
+        "add": "+ Add role"
+      },
+      "empty": {
+        "none": "No roles defined yet. <link>Create the first role</link>.",
+        "noMatch": "No roles match your filters.",
+        "clear": "Clear filters"
+      },
+      "delete": {
+        "title": "Delete role",
+        "message": "Delete role {name}? Users assigned to this role will lose all its permissions. This cannot be undone.",
+        "confirm": "Yes, delete",
+        "cancel": "Cancel"
+      },
+      "toasts": {
+        "deleted": "Role \"{name}\" deleted."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Roles",
+      "crumbNew": "New",
+      "eyebrowNew": "Admin · Roles · New",
+      "eyebrowEdit": "Admin · Editing role",
+      "titleLead": "Create a new",
+      "titleAccent": "role",
+      "description": "Pick a name, then check the boxes to grant this role access to specific modules. You can edit this any time.",
+      "summary": "{count} / {total} permissions · last edited {date}.",
+      "userChip": "{count, plural, one {# user} other {# users}}",
+      "save": "Save changes",
+      "create": "Create role",
+      "saving": "Saving…",
+      "reload": "Reload the role",
+      "discard": "You have unsaved changes. Leave without saving?",
+      "duplicatedBanner": "Role duplicated as \"{name}\". Edit the copy below.",
+      "lockedNotice": "{name} is system-locked: it cannot be renamed, stripped of permissions or deleted.",
+      "details": "Role details",
+      "name": "Role name",
+      "namePlaceholder": "e.g. Sales Lead",
+      "template": "Start from template",
+      "templateBlank": "Blank · no permissions",
+      "templateOption": "{name} · {count, plural, one {# permission} other {# permissions}}",
+      "templateBusy": "Loading the template…",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "What does this role do? Visible to admins.",
+      "toasts": {
+        "created": "Role \"{name}\" created.",
+        "updated": "Role \"{name}\" updated."
+      }
+    },
+    "matrix": {
+      "title": "Assign permissions",
+      "counter": "{count, number} / {total, number} selected",
+      "selectAll": "Select all permissions",
+      "module": "Module",
+      "selectAllColumn": "Select all",
+      "available": "Available permissions",
+      "selectAllModule": "Select all",
+      "selectAllOf": "Select all {module} permissions",
+      "empty": "No permissions defined yet. <link>Create one</link>.",
+      "emptyPlain": "No permissions defined yet."
+    },
+    "dangerZone": {
+      "title": "Danger zone",
+      "irreversible": "irreversible",
+      "duplicate": {
+        "title": "Duplicate role",
+        "hint": "Create a copy with same permissions",
+        "action": "Duplicate",
+        "busy": "Duplicating…"
+      },
+      "reassign": {
+        "title": "Reassign all users",
+        "hint": "Move {count, plural, one {# user} other {# users}} to another role",
+        "targetLabel": "Move users to",
+        "placeholder": "To…",
+        "action": "Move",
+        "busy": "Moving…"
+      },
+      "moved": "{count} user(s) moved from \"{from}\" to \"{to}\".",
+      "delete": {
+        "title": "Delete role",
+        "hint": "Removes the role and detaches all users.",
+        "action": "Delete",
+        "dialogTitle": "Delete role",
+        "dialogMessage": "Delete role {name}? Users assigned to this role will lose all its permissions. This cannot be undone.",
+        "confirm": "Yes, delete",
+        "cancel": "Cancel"
+      },
+      "deleted": "Role \"{name}\" deleted."
+    },
+    "permissions": {
+      "crumb": "Permissions",
+      "eyebrow": "Admin · Users & access · Permissions",
+      "titleLead": "All",
+      "titleAccent": "permissions",
+      "description": "Every permission flag the platform recognises, grouped by module. Add a new flag here, then attach it to roles in the role editor.",
+      "backToRoles": "Back to roles",
+      "add": "Add permission",
+      "kpi": {
+        "label": "Permission totals",
+        "total": "Total permissions",
+        "totalHint": "across {modules, plural, one {# module} other {# modules}}",
+        "used": "Used in roles",
+        "usedHint": "attached to ≥ 1 role",
+        "orphans": "Orphan permissions",
+        "orphansHint": "attached to 0 roles",
+        "last": "Last added"
+      },
+      "filter": {
+        "search": "Search permission name…",
+        "searchLabel": "Search permission name",
+        "moduleLabel": "Module",
+        "allModules": "All modules",
+        "count": "{count, plural, one {# permission} other {# permissions}} in {modules, plural, one {# module} other {# modules}}"
+      },
+      "groupsLabel": "Permissions by module",
+      "groupCount": "{count, plural, one {# permission} other {# permissions}}",
+      "orphan": "orphan",
+      "system": "system",
+      "systemHint": "Checked by the platform, so it cannot be deleted.",
+      "inRoles": "in {count, plural, one {# role} other {# roles}}",
+      "deleteName": "Delete permission {name}",
+      "empty": {
+        "none": "No permissions defined yet. <link>Create the first one</link>.",
+        "noMatch": "No permissions match your search."
+      },
+      "delete": {
+        "action": "Delete",
+        "title": "Delete permission",
+        "message": "Delete permission {name}? Any role using it loses that capability immediately.",
+        "confirm": "Yes, delete",
+        "cancel": "Cancel"
+      },
+      "toasts": {
+        "deleted": "Permission \"{name}\" deleted."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Permissions",
+      "crumbNew": "New",
+      "eyebrow": "Admin · Permissions · New",
+      "titleLead": "Create a new",
+      "titleAccent": "permission",
+      "description": "Add a fine-grained capability flag. Once created, attach it to one or more roles in the role editor.",
+      "create": "Create permission",
+      "creating": "Creating…",
+      "details": "Permission details",
+      "module": "Module",
+      "modulePlaceholder": "Pick a module",
+      "moduleHint": "Permissions are grouped by module in the role editor.",
+      "action": "Action",
+      "actionHint": "Lowercase, no spaces. Will be combined as",
+      "actionPlaceholder": "e.g. export · refund · approve",
+      "name": "Permission name",
+      "namePlaceholder": "module.action — auto-filled from above",
+      "nameHint": "Auto-filled from module + action. Edit only if you need a custom string.",
+      "tip": "<b>Naming convention:</b> use <code>module.action</code> in lowercase. Examples: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Permission preview",
+        "appearsUnder": "Will appear under <b>{module}</b> in the role editor.",
+        "selectedModule": "selected module"
+      },
+      "code": {
+        "title": "Code reference",
+        "hint": "Use <code>@PlatformPermission()</code> on a platform route to require this permission."
+      },
+      "tipCard": "<b>Tip:</b> permissions named like <code>module.action</code> automatically group together in the role editor.",
+      "toasts": {
+        "created": "Permission \"{name}\" created."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Roles",
+      "crumb": "Staff roles",
+      "eyebrow": "Admin · Users & access · Staff roles",
+      "titleLead": "Staff",
+      "titleAccent": "roles",
+      "description": "Give each operator of this console the platform roles that decide what they may do. Saving replaces the operator's roles with exactly the ones ticked.",
+      "backToRoles": "Back to roles",
+      "caption": "Operators and their platform roles",
+      "table": {
+        "operator": "Operator",
+        "tier": "Console access",
+        "status": "Status",
+        "roles": "Platform roles",
+        "actions": "Actions"
+      },
+      "tier": {
+        "super_admin": "Super admin",
+        "support": "Support",
+        "auditor": "Auditor"
+      },
+      "status": {
+        "active": "Active",
+        "suspended": "Suspended"
+      },
+      "noRoles": "No roles",
+      "rolesOf": "Roles of {name}",
+      "assign": "Assign roles",
+      "assignFor": "Assign roles to {name}",
+      "empty": "No operators yet.",
+      "dialog": {
+        "title": "Assign roles to {name}",
+        "close": "Close",
+        "cancel": "Cancel",
+        "save": "Save roles",
+        "saving": "Saving…",
+        "hint": "Tick every role this operator should hold.",
+        "superOnly": "Only a Super Admin can grant or revoke this role.",
+        "count": "{count, plural, =0 {No roles selected} one {# role selected} other {# roles selected}}"
+      },
+      "toasts": {
+        "saved": "Roles updated for \"{name}\"."
+      }
+    }
+  }
+}

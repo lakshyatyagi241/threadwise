@@ -109,11 +109,11 @@ def changed_files(base=None):
     base = base_ref(base)
     out = {}
     if base:
-        for line in git("diff", "--name-status", f"{base}...HEAD").splitlines():
+        for line in git("diff", "--relative", "--name-status", f"{base}...HEAD").splitlines():
             parts = line.split("\t")
             if len(parts) >= 2:
                 out[parts[-1]] = "deleted" if parts[0].startswith("D") else "committed"
-    for line in git("diff", "--name-status", "HEAD").splitlines():
+    for line in git("diff", "--relative", "--name-status", "HEAD").splitlines():
         parts = line.split("\t")
         if len(parts) >= 2:
             out[parts[-1]] = "deleted" if parts[0].startswith("D") else "modified"
