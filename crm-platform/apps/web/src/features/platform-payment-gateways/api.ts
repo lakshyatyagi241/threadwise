@@ -1,9 +1,11 @@
 import {
+  applyCouponResponseSchema,
   paygwGatewayItemSchema,
   paygwGatewayListResponseSchema,
   paygwOrdersResponseSchema,
   paygwQuoteSchema,
   placeOrderResponseSchema,
+  type ApplyCouponRequest,
   type PaygwQuoteQuery,
   type PlacePlanOrderRequest,
   type PlaceWalletOrderRequest,
@@ -46,6 +48,14 @@ export const fetchPlanQuote = (planSlug: string, q: PaygwQuoteQuery, signal?: Ab
 
 export const fetchWalletQuote = (q: PaygwQuoteQuery & { amount: string }, signal?: AbortSignal) =>
   apiFetch('/billing/checkout/wallet/quote', { query: q, schema: paygwQuoteSchema, signal });
+
+/** TW-CPN-007: checks a code against the plan; the server prices the order itself and returns the whole summary. */
+export const applyPlanCoupon = (planSlug: string, body: ApplyCouponRequest) =>
+  apiFetch(`/billing/checkout/plans/${encodeURIComponent(planSlug)}/coupon`, {
+    method: 'POST',
+    body,
+    schema: applyCouponResponseSchema,
+  });
 
 export const placePlanOrder = (
   planSlug: string,

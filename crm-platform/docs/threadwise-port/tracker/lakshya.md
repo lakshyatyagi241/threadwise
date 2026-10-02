@@ -510,44 +510,44 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-CPN-001 | todo |  |  |
-| TW-CPN-002 | todo |  |  |
-| TW-CPN-003 | todo |  |  |
-| TW-CPN-004 | todo |  |  |
-| TW-CPN-005 | todo |  |  |
-| TW-CPN-006 | todo |  |  |
-| TW-CPN-007 | todo |  |  |
-| TW-CPN-008 | todo |  |  |
-| TW-CPN-009 | todo |  |  |
-| TW-CPN-010 | todo |  |  |
-| TW-CPN-011 | todo |  |  |
-| TW-CPN-012 | todo |  |  |
-| TW-CPN-013 | todo |  |  |
-| TW-CPN-014 | todo |  |  |
-| TW-CPN-015 | todo |  |  |
-| TW-CPN-016 | todo |  |  |
-| TW-CPN-017 | todo |  |  |
-| TW-CPN-018 | todo |  |  |
-| TW-CPN-019 | todo |  |  |
-| TW-CPN-020 | todo |  |  |
-| TW-CPN-021 | todo |  |  |
-| TW-CPN-022 | todo |  |  |
-| TW-CPN-023 | todo |  |  |
-| TW-CPN-024 | todo |  |  |
-| TW-CPN-025 | todo |  |  |
-| TW-CPN-026 | todo |  |  |
-| TW-CPN-027 | todo |  |  |
-| TW-CPN-028 | todo |  |  |
-| TW-CPN-029 | todo |  |  |
-| TW-CPN-030 | todo |  |  |
-| TW-CPN-031 | todo |  |  |
-| TW-CPN-032 | todo |  |  |
-| TW-CPN-033 | todo |  |  |
-| TW-CPN-034 | todo |  |  |
-| TW-CPN-035 | todo |  |  |
-| TW-CPN-036 | todo |  |  |
-| TW-CPN-037 | todo |  |  |
-| TW-CPN-038 | todo |  |  |
+| TW-CPN-001 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-002 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-003 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-004 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-005 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-006 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-007 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-008 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-009 | done |  | built by WALLET TW-WALLET-019 (/admin/wallet/packages) |
+| TW-CPN-010 | done |  | built by WALLET TW-WALLET-019 (/admin/wallet/packages) |
+| TW-CPN-011 | done |  | built by WALLET TW-WALLET-019 (/admin/wallet/packages) |
+| TW-CPN-012 | done |  | built by WALLET TW-WALLET-019 (/admin/wallet/packages) |
+| TW-CPN-013 | done |  | built by WALLET TW-WALLET-019 (/admin/wallet/packages) |
+| TW-CPN-014 | done |  | sign-up plan step top-up link via ONBOARDING_BILLING_SOURCE; wallet grid stays off as in 1.7.0 |
+| TW-CPN-015 | wontfix |  | bundle checkout retired in Reference 1.7.0; top-ups are any-amount (WALLET/PAYGW) |
+| TW-CPN-016 | wontfix |  | bundle checkout retired in Reference 1.7.0; top-ups are any-amount (WALLET/PAYGW) |
+| TW-CPN-017 | wontfix |  | security defect: unauthenticated self-credit route, do not port |
+| TW-CPN-018 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-019 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-020 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-021 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-022 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-023 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-024 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-025 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-026 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-027 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-028 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-029 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-030 | done |  | built by AUTH (proxy.ts, guest/referral.ts); verified |
+| TW-CPN-031 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-032 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-033 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-034 | done |  | built by WALLET economics (referralSignupMinor) |
+| TW-CPN-035 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-036 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-037 | done |  | API+web+tests; browser twin run vs reference not possible in this sandbox (see parity/coupons-credits-referral-currency.md) |
+| TW-CPN-038 | wontfix |  | docs-only claim, no commission implemented; no copy promises it |
 
 ## addons-extension-registry (add)
 

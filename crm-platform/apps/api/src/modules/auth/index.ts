@@ -30,3 +30,8 @@ export { AccountGateService } from './security/account-gate.service';
 export { LoginService } from './flows/login.service';
 export { UserTokensService, type TokenKind } from './flows/user-tokens.service';
 export { MailService } from './mail/mail.service';
+export {
+  ONBOARDING_BILLING_SOURCE,
+  type OnboardingBillingHints,
+  type OnboardingBillingSource,
+} from './flows/onboarding-billing.port';

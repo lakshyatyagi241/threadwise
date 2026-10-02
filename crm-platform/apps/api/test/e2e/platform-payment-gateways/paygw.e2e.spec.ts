@@ -474,7 +474,7 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
     expect(audit.rows.map((r) => r.action)).toEqual(['insert']);
   });
 
-  it('refuses an inactive gateway before creating anything, an unsupported currency, and a coupon (CPN not built)', async () => {
+  it('refuses an inactive gateway before creating anything, an unknown gateway, and a coupon the resolver rejects (CPN)', async () => {
     const razorpay = await gateway('razorpay');
     const before = Number((await h.owner.query(`SELECT count(*)::int AS n FROM orders`)).rows[0].n);
     const inactive = await placePlan('growth', { gatewayId: razorpay.id });
@@ -484,7 +484,11 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
       detail: 'That gateway is not currently available.',
     });
     const coupon = await placePlan('growth', { gatewayId: stripeId, coupon: 'SAVE10' });
-    expect(coupon.body.code).toBe('PAYGW_COUPON_UNAVAILABLE');
+    expect(coupon.status).toBe(422);
+    expect(coupon.body).toMatchObject({
+      code: 'CPN_COUPON_REJECTED',
+      detail: 'Coupon "SAVE10" not recognised.',
+    });
     const missing = await placePlan('growth', {
       gatewayId: '00000000-0000-4000-8000-000000000000',
     });
@@ -761,10 +765,9 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
       hook.post(),
     ]);
     const wallet = (
-      await h.owner.query(
-        `SELECT balance::text AS balance FROM wallets WHERE org_id = $1`,
-        [buyer.orgId],
-      )
+      await h.owner.query(`SELECT balance::text AS balance FROM wallets WHERE org_id = $1`, [
+        buyer.orgId,
+      ])
     ).rows;
     expect(wallet).toHaveLength(1);
     // The wallet holds whole currency units: a 10.00 top-up is 10, and the ledger entry says the same.

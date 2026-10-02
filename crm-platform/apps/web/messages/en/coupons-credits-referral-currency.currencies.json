@@ -1,0 +1,156 @@
+{
+  "coupons-credits-referral-currency": {
+    "currencies": {
+      "nav": { "item": "Currencies" },
+      "tile": {
+        "label": "Currency",
+        "description": "The currency your prices, invoices and wallet are shown in.",
+        "keywords": "money, display currency, usd, eur, inr, exchange, symbol"
+      },
+      "admin": {
+        "title": "Platform currencies",
+        "eyebrow": "Admin · System · Localization",
+        "breadcrumb": "Breadcrumb",
+        "admin": "Admin",
+        "crumb": "Currencies",
+        "subtitle": "Manage the currencies workspaces can pick. Exchange rates are stored relative to USD. Changing the default applies to every dashboard, invoice and wallet display that has no currency of its own.",
+        "readOnly": "You are signed in as {role}. Only super admins can change currencies.",
+        "fetchRates": "Fetch live rates",
+        "fetchingRates": "Fetching rates...",
+        "addCurrency": "Add currency",
+        "ratesUpdated": "Updated {count} currencies from {provider}.",
+        "loading": "Loading currencies...",
+        "retry": "Try again",
+        "requestId": "Request ID",
+        "kpi": {
+          "total": "Total",
+          "totalHint": "currencies configured",
+          "active": "Active",
+          "activeHint": "visible to workspaces",
+          "default": "System default",
+          "defaultHint": "fallback for new workspaces",
+          "inactive": "Inactive",
+          "inactiveHint": "hidden from workspace settings"
+        },
+        "default": {
+          "eyebrow": "System default",
+          "title": "Platform-wide currency fallback",
+          "body": "Workspaces without an explicit currency choice use this one. Saving here takes effect on the next page load anywhere in the app.",
+          "label": "Default currency",
+          "set": "Set default",
+          "saved": "Default currency set to {code}."
+        },
+        "form": {
+          "eyebrow": "New entry",
+          "title": "Add a currency",
+          "name": "Name *",
+          "namePlaceholder": "Indian Rupee",
+          "code": "ISO code *",
+          "codePlaceholder": "INR",
+          "symbol": "Symbol",
+          "symbolPlaceholder": "₹",
+          "precision": "Decimals *",
+          "rate": "Exchange rate (1 USD = ?) *",
+          "rateHint": "Hit \"Fetch live rates\" above to auto-fill from open.er-api.com.",
+          "active": "Active immediately",
+          "cancel": "Cancel",
+          "submit": "Add currency",
+          "saving": "Saving...",
+          "added": "Currency added.",
+          "errors": {
+            "name": "Enter a name of up to 120 characters.",
+            "code": "Use the ISO code, 2 to 10 letters or digits, such as CHF.",
+            "symbol": "The symbol can be up to 20 characters.",
+            "precision": "Decimals must be a whole number from 0 to 6.",
+            "exchangeRate": "Enter a rate of at least 0.000001, with up to 6 decimals.",
+            "codeTaken": "This code is already in the catalog."
+          }
+        },
+        "catalog": {
+          "eyebrow": "Catalog",
+          "title": "All currencies",
+          "searchLabel": "Search currencies",
+          "searchPlaceholder": "Code, name, or symbol...",
+          "tableLabel": "Currencies"
+        },
+        "columns": {
+          "code": "Code",
+          "name": "Name",
+          "symbol": "Symbol",
+          "rate": "Rate (1 USD →)",
+          "precision": "Decimals",
+          "active": "Active",
+          "actions": "Actions"
+        },
+        "defaultBadge": "Default",
+        "on": "On",
+        "off": "Off",
+        "toggleOn": "Switch {code} off",
+        "toggleOff": "Switch {code} on",
+        "activated": "Activated.",
+        "deactivated": "Deactivated.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleteTitle": "Delete currency",
+        "deleteBody": "Delete {code}? This cannot be undone. A currency that is still used by a workspace, plan, gateway or coupon cannot be deleted; switch it off instead.",
+        "deleteConfirm": "Yes, delete",
+        "deleteCancel": "Cancel",
+        "removed": "Currency removed.",
+        "editing": {
+          "title": "Edit {code}",
+          "codeNote": "The code cannot be changed once a currency is saved.",
+          "save": "Save",
+          "saving": "Saving...",
+          "cancel": "Cancel",
+          "saved": "Currency updated."
+        },
+        "empty": {
+          "search": "No matches for \"{q}\".",
+          "none": "No currencies yet."
+        },
+        "pagination": {
+          "label": "Pagination",
+          "showing": "Showing {from}-{to} of {total}",
+          "prev": "Previous",
+          "next": "Next"
+        },
+        "errors": {
+          "isDefault": "The system default currency cannot be deleted or switched off. Set another currency as the default first.",
+          "inUse": "{code} is still used by {used}. Switch it off instead of deleting it.",
+          "inUseUnknown": "This currency is still used by a workspace, plan, gateway or coupon. Switch it off instead of deleting it.",
+          "notActive": "That currency is switched off. Activate it before making it the default.",
+          "codeTaken": "This code is already in the catalog.",
+          "ratesFailed": "Rates were not updated: {detail}",
+          "conflict": "Someone else changed this currency. Reload and try again.",
+          "validation": "Some values were not accepted. Check the fields and try again.",
+          "forbidden": "Only super admins can change currencies.",
+          "network": "Could not reach the server. Check your connection and try again.",
+          "generic": "Something went wrong. Try again."
+        }
+      },
+      "workspace": {
+        "title": "Currency",
+        "description": "The currency your workspace sees prices, invoices and wallet amounts in.",
+        "back": "Back to Settings",
+        "label": "Currency",
+        "hint": "Used on plan checkout, invoices, and wallet display",
+        "platformDefault": "Platform default ({code})",
+        "current": "Currently showing amounts in {code}.",
+        "ownerOnly": "Only the workspace owner can edit these.",
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "saved": "Currency saved.",
+        "loading": "Loading currency...",
+        "retry": "Try again",
+        "errors": {
+          "invalid": "Choose a currency from the list.",
+          "forbidden": "Only the workspace owner can edit these.",
+          "validation": "That currency was not accepted. Choose one from the list.",
+          "network": "Could not reach the server. Check your connection and try again.",
+          "generic": "Something went wrong. Try again."
+        }
+      }
+    }
+  }
+}

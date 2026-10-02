@@ -24,6 +24,7 @@ import {
   PlatformStore,
   TenantDirectory,
 } from '../auth';
+import { seedPlatformDefaults } from '../coupons-credits-referral-currency';
 import { SettingsService } from '../platform-settings-branding-storage';
 import { DatabaseTestService } from './database-test.service';
 import { LicenceService } from './licence.service';
@@ -243,6 +244,8 @@ export class SetupService {
           break;
         case 'defaults':
           this.requireReady(snap, 'permissions');
+          // Currencies, demo coupons and credit-package bundles (TW-CPN-025): idempotent, never overwrites an operator's edits.
+          await this.store.tx((tx) => seedPlatformDefaults(tx));
           break;
         case 'account':
           await this.account(input);

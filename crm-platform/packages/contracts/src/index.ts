@@ -46,6 +46,7 @@ export * from './dashboards-analytics-charts';
 export * from './platform-payment-gateways';
 export * from './bsp-billing-engine';
 export * from './wallet-message-billing';
+export * from './coupons-credits-referral-currency';
 export * from './team-chat';
 export * from './segments';
 export * from './sales-docs';

@@ -1,0 +1,209 @@
+{
+  "coupons-credits-referral-currency": {
+    "coupons": {
+      "nav": { "coupons": "Coupons" },
+      "common": {
+        "admin": "Admin",
+        "breadcrumb": "Breadcrumb",
+        "crumb": "Coupons",
+        "loading": "Loading",
+        "retry": "Try again",
+        "requestId": "Request ID",
+        "readOnly": "You can look at coupons but not change them: your role ({role}) is read-only here.",
+        "deniedTitle": "Super admins only",
+        "deniedBody": "Creating and editing coupons needs the super admin role."
+      },
+      "errors": {
+        "notFound": "That coupon no longer exists.",
+        "conflict": "Someone else changed this coupon. Reload to see the latest version, then apply your change again.",
+        "forbidden": "You do not have permission to do that.",
+        "validation": "Some fields are not valid. Check the form and try again.",
+        "taken": "Another coupon already uses this code.",
+        "unknownPlan": "One of the chosen plans no longer exists.",
+        "throttled": "Too many requests. Wait a moment and try again.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "generic": "Something went wrong. Try again."
+      },
+      "list": {
+        "eyebrow": "Admin · Billing & plans · Coupons",
+        "title": "Discount coupons",
+        "description": "Codes customers apply at checkout. Percent or fixed amount, time-bounded, plan-scoped, capped redemptions — admin's choice.",
+        "new": "New coupon",
+        "kpi": {
+          "total": { "label": "Total coupons", "hint": "in catalog" },
+          "active": { "label": "Active", "hint": "accepting redemptions" },
+          "expired": { "label": "Expired", "hint": "past expiry date" },
+          "redeemed": { "label": "Total redemptions", "hint": "all-time uses" }
+        },
+        "filters": {
+          "label": "Filter by status",
+          "all": "All",
+          "active": "Active",
+          "disabled": "Disabled",
+          "expired": "Expired"
+        },
+        "search": {
+          "label": "Search coupons",
+          "placeholder": "Search code or description..."
+        },
+        "columns": {
+          "label": "Coupons",
+          "code": "Code",
+          "discount": "Discount",
+          "uses": "Uses",
+          "validity": "Validity",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "validity": {
+          "now": "now",
+          "forever": "forever",
+          "range": "{start} → {end}"
+        },
+        "menu": { "label": "Actions for {code}", "edit": "Edit", "delete": "Delete" },
+        "switchLabel": "Active: {code}",
+        "empty": {
+          "title": "No coupons match.",
+          "before": "Try clearing the filters or",
+          "link": "create the first one",
+          "after": "."
+        },
+        "footer": {
+          "showing": "Showing {from}–{to} of {total} coupons",
+          "pages": "Pages",
+          "prev": "Previous",
+          "next": "Next"
+        },
+        "flash": {
+          "created": "Coupon created.",
+          "updated": "Coupon updated.",
+          "activated": "Activated.",
+          "deactivated": "Deactivated.",
+          "removed": "Coupon removed."
+        },
+        "delete": {
+          "title": "Delete coupon",
+          "message": "Delete coupon {code}? Workspaces that already redeemed it keep their discount.",
+          "confirm": "Yes, delete",
+          "cancel": "Cancel"
+        }
+      },
+      "form": {
+        "newEyebrow": "Admin · Billing & plans · Coupons · New",
+        "editEyebrow": "Admin · Billing & plans · Coupons · Edit",
+        "newCrumb": "New",
+        "newTitle": "New coupon",
+        "cancel": "Cancel",
+        "create": "Create coupon",
+        "save": "Save changes",
+        "saving": "Saving",
+        "notFound": "That coupon does not exist (it may have been deleted).",
+        "back": "Back to coupons",
+        "errorsTitle": "Please fix the following",
+        "stale": {
+          "title": "This coupon changed while you were editing",
+          "body": "Someone else saved a newer version. Reload to see it, then apply your change again.",
+          "reload": "Reload"
+        },
+        "status": { "active": "Active", "disabled": "Disabled" },
+        "redeemed": "Redeemed {used} times",
+        "redeemedOf": "Redeemed {used} / {max} times",
+        "expires": "expires {when}",
+        "sections": {
+          "identity": "Identity",
+          "discount": "Discount",
+          "eligibility": "Eligibility",
+          "limits": "Limits & behavior"
+        },
+        "fields": {
+          "code": {
+            "label": "Code",
+            "placeholder": "WELCOME10",
+            "hint": "Uppercased on save. This is what customers type at checkout."
+          },
+          "description": {
+            "label": "Description",
+            "note": "(shown to customer)",
+            "placeholder": "10% off the first month for new signups"
+          },
+          "adminNote": {
+            "label": "Admin note",
+            "note": "(internal, not shown)",
+            "placeholder": "Black Friday batch · Slack #marketing · expires after promo"
+          },
+          "isActive": {
+            "label": "Active",
+            "hint": "Customers can redeem it at checkout"
+          },
+          "type": {
+            "label": "Type",
+            "percent": "Percent (%)",
+            "fixed": "Fixed amount"
+          },
+          "amount": {
+            "label": "Amount",
+            "placeholder": "10",
+            "hint": "% type: 10 = 10%. Fixed: 10 = 10 currency units."
+          },
+          "maxDiscountAmount": {
+            "label": "Max discount cap",
+            "note": "(% type only)",
+            "placeholder": "blank = no cap",
+            "hint": "e.g. 20% off, but never more than $50."
+          },
+          "currencyCode": {
+            "label": "Currency lock",
+            "any": "Any currency",
+            "hint": "Restrict redemption to one currency (fixed-amount coupons)."
+          },
+          "minOrderAmount": {
+            "label": "Minimum order amount",
+            "placeholder": "0 = no minimum"
+          },
+          "applicablePlanSlugs": {
+            "label": "Applicable plans",
+            "note": "(empty = any plan)",
+            "placeholder": "Pick one or more plans...",
+            "hint": "Type to filter. Click to add. Click chip × to remove.",
+            "remove": "Remove {name}",
+            "clear": "Clear all",
+            "none": "No plans match.",
+            "chosen": "Chosen plans",
+            "options": "Available plans"
+          },
+          "startsAt": { "label": "Starts at", "hint": "Blank = available now." },
+          "expiresAt": { "label": "Expires at", "hint": "Blank = never expires." },
+          "maxUses": {
+            "label": "Max total redemptions",
+            "placeholder": "blank = unlimited",
+            "hint": "Across all customers."
+          },
+          "perUserLimit": {
+            "label": "Per-user limit",
+            "placeholder": "blank = unlimited",
+            "hint": "How many times one customer can redeem."
+          },
+          "firstPurchaseOnly": {
+            "label": "First purchase only",
+            "hint": "Workspaces with no paid orders yet"
+          },
+          "stackableWithOther": {
+            "label": "Stackable with other coupons",
+            "hint": "Allow combining with another active code at checkout"
+          }
+        },
+        "problems": {
+          "required": "{field} is required.",
+          "money": "{field} must be a number such as 10 or 10.50.",
+          "count": "{field} must be a whole number of at least 1.",
+          "tooLong": "{field} is too long.",
+          "date": "{field} is not a valid date.",
+          "window": "{field} must be on or after Starts at.",
+          "taken": "{field} is already used by another coupon.",
+          "unknownPlan": "{field} includes a plan that does not exist.",
+          "invalid": "{field} is not valid."
+        }
+      }
+    }
+  }
+}

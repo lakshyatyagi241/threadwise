@@ -183,6 +183,23 @@ export class SettingsService {
         (k) => JSON.stringify(after[k]) !== JSON.stringify(before[k]),
       );
 
+      // The default currency has two writers (this form and the currency page); both hold it to the same rule (TW-CPN-024 rule 3):
+      // once a catalog exists it must name an ACTIVE currency from it.
+      if (group === 'general' && changed.includes('defaultCurrency')) {
+        const code = String(after.defaultCurrency);
+        const catalog = await tx.execute(sql`
+          SELECT count(*)::int AS total, count(*) FILTER (WHERE code = ${code} AND is_active)::int AS usable FROM currencies`);
+        const c = catalog.rows[0] as { total: number; usable: number };
+        if (c.total > 0 && c.usable === 0) {
+          throw AppError.validation('Settings are not valid', [
+            {
+              path: 'defaultCurrency',
+              message: `${code} is not an active currency in the catalog.`,
+            },
+          ]);
+        }
+      }
+
       // Blank keeps the stored secret; null removes it; anything else replaces it.
       const secretWrites = Object.entries(body.secrets).filter(
         ([f, v]) => secretFields.includes(f) && v !== '',

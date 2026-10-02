@@ -112,11 +112,22 @@
         "notPurchasable": "This plan cannot be bought online.",
         "downgrade": "Downgrades are not available online. Contact support to move to a lower plan.",
         "amountTooLow": "Enter a larger amount to add to your wallet.",
-        "couponUnavailable": "Coupons are not available yet.",
         "forbidden": "You do not have permission to buy.",
         "notFound": "We could not find that plan.",
         "widgetBlocked": "The payment window could not open. Check that your browser allows it and try again.",
-        "generic": "Something went wrong. Try again."
+        "generic": "Something went wrong. Try again.",
+        "couponRejected": "That coupon cannot be used for this order."
+      },
+      "coupon": {
+        "label": "Coupon code",
+        "placeholder": "Have a coupon code?",
+        "apply": "Apply",
+        "checking": "Checking coupon",
+        "applied": "Coupon applied.",
+        "enterCode": "Enter a coupon code.",
+        "networkError": "Could not check coupon. Try again.",
+        "throttled": "Too many coupon checks. Wait a moment and try again.",
+        "discountRow": "Coupon · {code}"
       }
     },
     "orders": {

@@ -4,19 +4,32 @@ import { useMemo, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
-import type { PaygwBilling, PaygwPeriod, PaygwQuote } from '@crm/contracts';
-import { Alert, Button, Card, Field, Input, Select, Spinner } from '@crm/ui';
+import type { ApplyCouponResponse, PaygwBilling, PaygwPeriod, PaygwQuote } from '@crm/contracts';
+import {
+  Alert,
+  Button,
+  Card,
+  Field,
+  Input,
+  Select,
+  Spinner,
+  ToastProvider,
+  useToast,
+} from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import {
+  applyPlanCoupon,
   checkoutKey,
   fetchPlanQuote,
   fetchWalletQuote,
   placePlanOrder,
   placeWalletOrder,
 } from '../api';
+import { couponFailureOf, interpretApply, isCouponRejected, summaryView } from '../lib/coupon';
 import { formatMoney } from '../lib/money';
 import { nextStep } from '../lib/next-action';
 import { openRazorpay } from '../lib/razorpay';
+import { CouponCard } from './coupon-card';
 
 const NS = 'platform-payment-gateways.checkout';
 
@@ -35,8 +48,18 @@ const EMPTY: Record<keyof PaygwBilling, string> = {
 
 /** Checkout for a plan or a wallet top-up: the server prices, the buyer picks a gateway, the API says what happens next. */
 export function CheckoutPage({ target }: { target: CheckoutTarget }) {
+  return (
+    <ToastProvider>
+      <CheckoutPageInner target={target} />
+    </ToastProvider>
+  );
+}
+
+function CheckoutPageInner({ target }: { target: CheckoutTarget }) {
   const t = useTranslations(NS);
+  const tcp = useTranslations(`${NS}.coupon`);
   const te = useTranslations(`${NS}.errors`);
+  const { toast } = useToast();
   const locale = useLocale();
   const router = useRouter();
   const params = useSearchParams();
@@ -51,6 +74,16 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const [gatewayId, setGatewayId] = useState<string | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const [launching, setLaunching] = useState(false);
+  // TW-CPN-007: the coupon check for plan checkout. The response carries the server-computed summary; the browser never
+  // recomputes tax. Any change of currency or period drops the code and the discount (a result in flight is ignored).
+  const [couponInput, setCouponInput] = useState('');
+  const [applied, setApplied] = useState<ApplyCouponResponse | null>(null);
+  const couponEpoch = useRef(0);
+  const resetCoupon = () => {
+    couponEpoch.current += 1;
+    setCouponInput('');
+    setApplied(null);
+  };
   const amount = params.get('amount') ?? '';
   // One key per distinct submission: a retry of the same form replays the order instead of creating a second one.
   const attempt = useRef<{ sig: string; key: string } | null>(null);
@@ -76,6 +109,39 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
     return q.gateways.find((g) => g.id === gatewayId) ?? q.gateways[0] ?? null;
   }, [q, gatewayId]);
 
+  const applyCoupon = useMutation({
+    mutationFn: async (v: { code: string; currency: string; period: PaygwPeriod }) => {
+      if (target.kind !== 'plan') throw new Error('plan only');
+      return { epoch: couponEpoch.current, res: await applyPlanCoupon(target.planSlug, v) };
+    },
+    onSuccess: ({ epoch, res }) => {
+      if (epoch !== couponEpoch.current) return;
+      const check = interpretApply(res);
+      if (check.kind === 'applied') {
+        setApplied(check.response);
+        setCouponInput(check.response.code ?? couponInput);
+        toast(check.response.message || tcp('applied'), 'success');
+      } else {
+        setApplied(null);
+        toast(check.message, 'danger');
+      }
+    },
+    onError: (e) => {
+      setApplied(null);
+      toast(couponFailureOf(e) === 'throttled' ? tcp('throttled') : tcp('networkError'), 'danger');
+    },
+  });
+  const submitCoupon = () => {
+    const code = couponInput.trim().toUpperCase();
+    if (!q || target.kind !== 'plan' || applyCoupon.isPending) return;
+    if (!code) {
+      setApplied(null);
+      toast(tcp('enterCode'), 'danger');
+      return;
+    }
+    applyCoupon.mutate({ code, currency: q.currency, period: q.billingPeriod });
+  };
+
   const explain = (e: unknown): string => {
     if (e instanceof ApiError) {
       const known: Record<string, string> = {
@@ -85,7 +151,6 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         PAYGW_PLAN_NOT_PURCHASABLE: 'notPurchasable',
         PAYGW_DOWNGRADE_NOT_ALLOWED: 'downgrade',
         PAYGW_AMOUNT_TOO_LOW: 'amountTooLow',
-        PAYGW_COUPON_UNAVAILABLE: 'couponUnavailable',
         FORBIDDEN: 'forbidden',
         NOT_FOUND: 'notFound',
       };
@@ -98,6 +163,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const pay = useMutation({
     mutationFn: async () => {
       if (!selected || !q) throw new Error('no gateway');
+      const couponCode = target.kind === 'plan' ? summaryView(q, applied).couponCode : null;
       const payload = Object.fromEntries(
         Object.entries(billing).filter(([, v]) => v.trim() !== ''),
       ) as PaygwBilling;
@@ -108,6 +174,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         q.billingPeriod,
         amount,
         payload,
+        couponCode,
       ]);
       if (attempt.current?.sig !== sig) attempt.current = { sig, key: crypto.randomUUID() };
       const key = attempt.current.key;
@@ -119,6 +186,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               currency: q.currency,
               period: q.billingPeriod,
               billing: payload,
+              ...(couponCode ? { coupon: couponCode } : {}),
             },
             key,
           )
@@ -145,12 +213,19 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         router.push(`/billing/orders?payment=success&order=${encodeURIComponent(res.orderNumber)}`);
       }
     },
-    onError: (e) => setProblem(explain(e)),
+    onError: (e) => {
+      if (isCouponRejected(e)) {
+        // The order was NOT created: say why, and drop the discount so the summary is honest again.
+        setApplied(null);
+        setProblem(e.message || te('couponRejected'));
+      } else setProblem(explain(e));
+    },
   });
 
   const set = (k: keyof PaygwBilling) => (e: { target: { value: string } }) =>
     setBilling((b) => ({ ...b, [k]: e.target.value }));
   const money = (v: string) => (q ? formatMoney(v, q.currency, locale) : v);
+  const view = q ? summaryView(q, applied) : null;
   const title = target.kind === 'plan' ? t('title') : t('walletTitle');
 
   if (quote.isError && !q) {
@@ -258,7 +333,10 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               <Select
                 id="co-currency"
                 value={q.currency}
-                onChange={(e) => setCurrency(e.target.value)}
+                onChange={(e) => {
+                  resetCoupon();
+                  setCurrency(e.target.value);
+                }}
               >
                 {q.availableCurrencies.map((c) => (
                   <option key={c} value={c}>
@@ -276,7 +354,10 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               <Select
                 id="co-period"
                 value={q.billingPeriod}
-                onChange={(e) => setPeriod(e.target.value as PaygwPeriod)}
+                onChange={(e) => {
+                  resetCoupon();
+                  setPeriod(e.target.value as PaygwPeriod);
+                }}
               >
                 {q.periods.map((p) => (
                   <option key={p} value={p}>
@@ -286,6 +367,15 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               </Select>
             </Field>
           </Card>
+        )}
+
+        {target.kind === 'plan' && (
+          <CouponCard
+            value={couponInput}
+            onChange={setCouponInput}
+            onApply={submitCoupon}
+            busy={applyCoupon.isPending}
+          />
         )}
 
         <Card className="space-y-3 p-4">
@@ -325,7 +415,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
             ? t('noGatewayButton')
             : pay.isPending || launching
               ? t('processing')
-              : t('pay', { amount: money(q.total) })}
+              : t('pay', { amount: money(view!.total) })}
         </Button>
       </form>
 
@@ -344,18 +434,24 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         <dl className="space-y-1.5 text-sm">
           <div className="flex justify-between">
             <dt>{t('subtotal')}</dt>
-            <dd className="tabular-nums">{money(q.subtotal)}</dd>
+            <dd className="tabular-nums">{money(view!.subtotal)}</dd>
           </div>
-          {Number(q.tax) > 0 && (
+          {view!.couponCode && view!.discount !== null && (
+            <div className="flex justify-between text-success" data-testid="checkout-discount">
+              <dt>{tcp('discountRow', { code: view!.couponCode })}</dt>
+              <dd className="tabular-nums">−{money(view!.discount)}</dd>
+            </div>
+          )}
+          {Number(view!.tax) > 0 && (
             <div className="flex justify-between">
               <dt>{t('tax', { label: q.taxLabel, rate: q.taxRate })}</dt>
-              <dd className="tabular-nums">{money(q.tax)}</dd>
+              <dd className="tabular-nums">{money(view!.tax)}</dd>
             </div>
           )}
           <div className="flex justify-between border-t border-border pt-2 font-semibold">
             <dt>{t('total')}</dt>
             <dd className="tabular-nums" data-testid="checkout-total">
-              {money(q.total)}
+              {money(view!.total)}
             </dd>
           </div>
         </dl>

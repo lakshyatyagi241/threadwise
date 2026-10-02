@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { type OnboardingResponse, type OnboardingWorkspaceRequest } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
@@ -10,6 +10,7 @@ import { PlatformSettingsService } from '../platform/platform-settings.service';
 import { SecurityPolicyService } from '../platform/security-policy.service';
 import { AuthAuditService } from '../security/auth-audit.service';
 import { isValidTimezone } from '../support/text';
+import { ONBOARDING_BILLING_SOURCE, type OnboardingBillingSource } from './onboarding-billing.port';
 import { suggestWorkspaceName } from './workspace-name';
 
 type Step = 'workspace' | 'plan' | 'done';
@@ -18,7 +19,7 @@ type Step = 'workspace' | 'plan' | 'done';
 export const ONBOARDING_BILLING_KEY = 'onboarding.billing';
 const DEFAULT_CREDITS_PER_MESSAGE = 1;
 const DEFAULT_CURRENCY = 'USD';
-/** Until credit-package checkout exists, "Top up" leads to the plans page the billing domain will replace. */
+/** With no billing domain answering, "Top up" leads to the plans page. */
 const DEFAULT_TOP_UP_URL = '/account/plans';
 
 interface BillingHints {
@@ -53,6 +54,9 @@ export class OnboardingService {
     private readonly outbox: OutboxService,
     private readonly entitlements: PlanEntitlementService,
     private readonly settings: PlatformSettingsService,
+    @Optional()
+    @Inject(ONBOARDING_BILLING_SOURCE)
+    private readonly billingSource?: OnboardingBillingSource,
   ) {}
 
   private actor(): { orgId: number; userId: number } {
@@ -63,10 +67,12 @@ export class OnboardingService {
 
   async get(): Promise<OnboardingResponse> {
     const { orgId, userId } = this.actor();
-    const [registration, plans, billing, res] = await Promise.all([
+    const [registration, plans, billing, fromSource, res] = await Promise.all([
       this.policy.registration(),
       this.entitlements.cardsForOrg(orgId),
       this.settings.get<BillingHints>(ONBOARDING_BILLING_KEY),
+      // A source that fails must not stop onboarding: the defaults apply.
+      this.billingSource?.hints().catch(() => undefined),
       this.db.txAs({ orgId, userId }, async (tx) =>
         tx.execute(sql`
           SELECT o.name, o.settings, u.email, p.phone_e164
@@ -97,7 +103,7 @@ export class OnboardingService {
       needsPhone: !row.phone_e164,
       plans: plans.data,
       defaultTimezone: registration.defaultTimezone,
-      billing: billingFor(billing, row.settings.currency),
+      billing: billingFor([billing, fromSource], row.settings.currency),
     };
   }
 
@@ -189,30 +195,39 @@ export class OnboardingService {
 }
 
 /**
- * The plan step's credits explainer and top-up link, from the `onboarding.billing` platform setting
- * when CPN has set it, else Reference's defaults (1 credit per message, USD, the plans page).
+ * The plan step's credits explainer and top-up link. Each field comes from the first valid answer of: the operator's
+ * `onboarding.billing` setting, the billing domains (through the port), then Reference's defaults (1 credit per message, USD, the
+ * plans page). A malformed override falls through to the next answer instead of replacing it.
  */
 function billingFor(
-  hints: BillingHints | undefined,
+  sources: ReadonlyArray<BillingHints | undefined>,
   workspaceCurrency: string | undefined,
 ): OnboardingResponse['billing'] {
-  const credits = hints?.creditsPerMessage;
-  const currency = hints?.defaultCurrency;
-  const url = hints?.topUpUrl;
-  const platformCurrency =
-    typeof currency === 'string' && /^[A-Za-z]{3}$/.test(currency)
-      ? currency.toUpperCase()
-      : DEFAULT_CURRENCY;
+  const credits = (h?: BillingHints) =>
+    typeof h?.creditsPerMessage === 'number' &&
+    Number.isInteger(h.creditsPerMessage) &&
+    h.creditsPerMessage >= 1
+      ? h.creditsPerMessage
+      : undefined;
+  const currency = (h?: BillingHints) =>
+    typeof h?.defaultCurrency === 'string' && /^[A-Za-z]{3}$/.test(h.defaultCurrency)
+      ? h.defaultCurrency.toUpperCase()
+      : undefined;
+  // Same-site paths only: this value ends up in a link.
+  const url = (h?: BillingHints) =>
+    typeof h?.topUpUrl === 'string' && /^\/(?![/\\])/.test(h.topUpUrl) && h.topUpUrl.length <= 512
+      ? h.topUpUrl
+      : undefined;
+  const first = <T>(pick: (h?: BillingHints) => T | undefined, fallback: T): T => {
+    for (const h of sources) {
+      const v = pick(h);
+      if (v !== undefined) return v;
+    }
+    return fallback;
+  };
   return {
-    creditsPerMessage:
-      typeof credits === 'number' && Number.isInteger(credits) && credits >= 1
-        ? credits
-        : DEFAULT_CREDITS_PER_MESSAGE,
-    displayCurrency: workspaceCurrency ?? platformCurrency,
-    // Same-site paths only: this value ends up in a link.
-    topUpUrl:
-      typeof url === 'string' && /^\/(?![/\\])/.test(url) && url.length <= 512
-        ? url
-        : DEFAULT_TOP_UP_URL,
+    creditsPerMessage: first(credits, DEFAULT_CREDITS_PER_MESSAGE),
+    displayCurrency: workspaceCurrency ?? first(currency, DEFAULT_CURRENCY),
+    topUpUrl: first(url, DEFAULT_TOP_UP_URL),
   };
 }

@@ -1,0 +1,133 @@
+{
+  "coupons-credits-referral-currency": {
+    "affiliate": {
+      "nav": {
+        "pane": "Affiliate"
+      },
+      "common": {
+        "loading": "Loading…",
+        "retry": "Try again",
+        "requestId": "Request id",
+        "dismiss": "Dismiss"
+      },
+      "errors": {
+        "forbidden": "You do not have access to the affiliate program.",
+        "network": "We could not reach the server. Check your connection and try again.",
+        "generic": "Something went wrong. Try again in a moment."
+      },
+      "toast": {
+        "copied": "Share link copied!",
+        "copiedClipboard": "Copied to clipboard",
+        "copyFailed": "Could not copy."
+      },
+      "history": {
+        "title": "Affiliate history",
+        "breadcrumb": "Account / Affiliate history",
+        "back": "Back to Affiliate",
+        "rangeLabel": "Date range",
+        "range": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days",
+          "all": "All time"
+        },
+        "export": "Export CSV",
+        "exporting": "Preparing the file",
+        "exported": "Saved {fileName}",
+        "copyShare": "Copy share link"
+      },
+      "kpi": {
+        "signupsLifetime": "Signups (lifetime)",
+        "vsPrev": "{delta} vs prev",
+        "people": "people",
+        "earned": "Credits earned",
+        "lifetime": "lifetime",
+        "signups30d": "Signups (30d)",
+        "last30": "last 30 days",
+        "avg": "Avg per signup",
+        "perSignup": "/ signup",
+        "yourCode": "Your code",
+        "shareToEarn": "share to earn",
+        "rewardPerSignup": "{reward} per signup"
+      },
+      "chart": {
+        "eyebrow": "Volume",
+        "title": "Signups & credits over time",
+        "label": "Signups and credits earned over time",
+        "bucketLabel": "Group by",
+        "bucket": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly"
+        },
+        "signups": "Signups",
+        "credits": "Credits",
+        "empty": "No signups in this range."
+      },
+      "top": {
+        "title": "Top codes",
+        "empty": "No signups found. Share your code to start earning.",
+        "signups": "{count, plural, one {# signup} other {# signups}}"
+      },
+      "table": {
+        "searchPlaceholder": "Search by referee name, email, or code...",
+        "reset": "Reset",
+        "when": "When",
+        "referee": "Referee",
+        "codeUsed": "Code used",
+        "credits": "Credits",
+        "statusHeading": "Status",
+        "walletTx": "Wallet tx",
+        "status": {
+          "paid": "Paid",
+          "noPayout": "No payout"
+        },
+        "empty": "No referrals match the current filters. Share your link and new signups will appear here.",
+        "showing": "Showing",
+        "of": "of",
+        "prev": "Prev",
+        "next": "Next"
+      },
+      "share": {
+        "title": "Your share link",
+        "body": "{reward} per signup. Share this link anywhere — bio, email signature, group chats.",
+        "copy": "Copy link"
+      },
+      "payouts": {
+        "title": "Recent payouts",
+        "wallet": "Wallet →",
+        "empty": "No payouts found. Share your link to earn credits.",
+        "meta": "{when} · balance {balance}"
+      },
+      "how": {
+        "title": "How it works",
+        "share": "Share your link ?ref={code}",
+        "signup": "Friend signs up using it",
+        "lands": "{reward} lands in your wallet",
+        "spend": "Credits spend at {price} per message"
+      },
+      "pane": {
+        "title": "Affiliate",
+        "description": "Your code, your link and the people who joined through it.",
+        "fullHistory": "Full history",
+        "codeTitle": "Your affiliate code",
+        "noCode": "NO-CODE",
+        "codeBody": "Share your unique link. Every new sign-up earns you <money>{reward}</money>, deposited straight into your wallet.",
+        "copyLink": "Copy link",
+        "signups30d": "Sign-ups (30d)",
+        "viaLink": "via your link",
+        "signupsTotal": "Sign-ups (total)",
+        "lifetime": "lifetime",
+        "earned": "Earned",
+        "earnedMessages": "≈ {count, plural, one {# message} other {# messages}}",
+        "recentTitle": "Recent referrals",
+        "user": "User",
+        "codeUsed": "Code used",
+        "joined": "Joined",
+        "status": "Status",
+        "earnedColumn": "Earned",
+        "empty": "No referrals found. Share your link and new signups will appear here."
+      }
+    }
+  }
+}

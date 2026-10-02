@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PlatformSettingsService } from '../auth';
+import { SettingsService } from '../platform-settings-branding-storage';
 
 export interface CheckoutSettings {
   taxEnabled: boolean;
@@ -19,11 +20,14 @@ export interface CheckoutSettings {
  */
 @Injectable()
 export class CheckoutSettingsService {
-  constructor(private readonly settings: PlatformSettingsService) {}
+  constructor(
+    private readonly settings: PlatformSettingsService,
+    private readonly general: SettingsService,
+  ) {}
 
   async load(): Promise<CheckoutSettings> {
     const g = <T>(k: string) => this.settings.get<T>(k);
-    const [taxEnabled, taxRate, taxLabel, toggle, discount, requireSecret, currency] =
+    const [taxEnabled, taxRate, taxLabel, toggle, discount, requireSecret, general] =
       await Promise.all([
         g<boolean>('checkout.tax_enabled'),
         g<number | string>('checkout.tax_rate'),
@@ -31,7 +35,8 @@ export class CheckoutSettingsService {
         g<boolean>('pricing.yearly_toggle_enabled'),
         g<number>('pricing.yearly_discount_pct'),
         g<boolean>('payment.require_webhook_secret'),
-        g<string>('default_currency'),
+        // The platform default currency has ONE home: the General settings group (the currency page writes it there).
+        this.general.values('general'),
       ]);
     const rate = String(taxRate ?? '0');
     const pct = Number(discount ?? 20);
@@ -43,8 +48,7 @@ export class CheckoutSettingsService {
       yearlyToggleEnabled: toggle !== false,
       yearlyDiscountPct: Number.isInteger(pct) && pct >= 0 && pct <= 100 ? pct : 20,
       requireWebhookSecret: requireSecret !== false,
-      defaultCurrency:
-        typeof currency === 'string' && /^[A-Z]{3}$/.test(currency) ? currency : 'USD',
+      defaultCurrency: /^[A-Z]{3}$/.test(general.defaultCurrency) ? general.defaultCurrency : 'USD',
     };
   }
 }

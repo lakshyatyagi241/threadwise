@@ -348,10 +348,11 @@ describe('onboarding', () => {
   it('gives the plan step what it needs for the credits explainer and the top-up link', async () => {
     const a = await signup({ phone: '+919811100004' });
     const state = await api().get('/v2/onboarding').set(bearer(a.access));
+    // the billing domains answer: one message costs the flat price (1.00 = 100 credits), the platform currency, the wallet page
     expect(state.body.billing).toEqual({
-      creditsPerMessage: 1,
+      creditsPerMessage: 100,
       displayCurrency: 'USD',
-      topUpUrl: '/account/plans',
+      topUpUrl: '/billing/wallet',
     });
 
     // the workspace currency, once chosen, is the one to show prices in
@@ -360,7 +361,7 @@ describe('onboarding', () => {
       displayCurrency: 'INR',
     });
 
-    // CPN's values win when it has set them; anything malformed falls back to the defaults
+    // The operator's own values win when set; anything malformed falls through to what the billing domains say
     const settings = h.app.get(PlatformSettingsService);
     const b = await signup({ phone: '+919811100005' });
     try {
@@ -380,9 +381,9 @@ describe('onboarding', () => {
         null,
       );
       expect((await api().get('/v2/onboarding').set(bearer(b.access))).body.billing).toEqual({
-        creditsPerMessage: 1,
+        creditsPerMessage: 100,
         displayCurrency: 'USD',
-        topUpUrl: '/account/plans',
+        topUpUrl: '/billing/wallet',
       });
     } finally {
       await h.owner.query(`DELETE FROM platform_settings WHERE key = 'onboarding.billing'`);

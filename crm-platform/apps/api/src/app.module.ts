@@ -25,6 +25,7 @@ import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
+import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
@@ -142,6 +143,7 @@ import { HealthModule } from './health/health.module';
     PlatformPaymentGatewaysModule,
     BspBillingEngineModule,
     WalletMessageBillingModule,
+    CouponsCreditsReferralCurrencyModule,
     SendGuardModule,
     RealtimeModule,
     // The one door chat media goes through (store, link, the authenticated media route), over the platform's storage and upload policy.

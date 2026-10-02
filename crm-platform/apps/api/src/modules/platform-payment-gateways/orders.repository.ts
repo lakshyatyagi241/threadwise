@@ -19,6 +19,7 @@ export interface OrderRow {
   taxRate: string;
   taxAmount: string;
   totalAmount: string;
+  couponId: number | null;
   couponCode: string | null;
   gatewayId: number | null;
   gatewaySlug: string | null;
@@ -39,7 +40,7 @@ export interface OrderRow {
 const COLS = sql.raw(`
   o.id, o.org_id, o.uuid, o.order_number, o.user_id, o.kind, o.plan_slug, o.billing_period, o.currency,
   o.amount::text AS amount, o.discount_amount::text AS discount_amount, o.tax_rate::text AS tax_rate,
-  o.tax_amount::text AS tax_amount, o.total_amount::text AS total_amount, o.coupon_code, o.gateway_id,
+  o.tax_amount::text AS tax_amount, o.total_amount::text AS total_amount, o.coupon_id, o.coupon_code, o.gateway_id,
   o.gateway_slug, o.status, o.gateway_order_id, o.gateway_payment_id, o.failure_reason, o.wallet_topup_minor,
   o.return_token, o.customer_name, o.customer_email, o.created_at, o.paid_at, o.row_version,
   to_char(o.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
@@ -63,6 +64,7 @@ function toRow(r: Raw): OrderRow {
     taxRate: r.tax_rate as string,
     taxAmount: r.tax_amount as string,
     totalAmount: r.total_amount as string,
+    couponId: num(r.coupon_id),
     couponCode: (r.coupon_code as string | null) ?? null,
     gatewayId: num(r.gateway_id),
     gatewaySlug: (r.gateway_slug as string | null) ?? null,
@@ -96,6 +98,9 @@ export interface NewOrder {
   taxRate: string;
   taxAmount: string;
   totalAmount: string;
+  /** The coupon that priced this order (TW-CPN-008): its id (nulls out if the coupon is deleted) and the code as it was then. */
+  couponId: number | null;
+  couponCode: string | null;
   customerName: string | null;
   customerEmail: string | null;
   billingCompany: string | null;
@@ -114,10 +119,10 @@ export class OrdersRepository {
   async insert(tx: Tx, o: NewOrder): Promise<OrderRow> {
     const res = await tx.execute(sql`
       INSERT INTO orders AS o (org_id, user_id, order_number, kind, plan_slug, billing_period, auto_renew, gateway_id, gateway_slug,
-        currency, amount, discount_amount, tax_rate, tax_amount, total_amount, customer_name, customer_email, billing_company,
+        currency, amount, discount_amount, tax_rate, tax_amount, total_amount, coupon_id, coupon_code, customer_name, customer_email, billing_company,
         billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, idempotency_key, status)
       VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, ${o.kind}, ${o.planSlug}, ${o.billingPeriod}, false, ${o.gatewayId},
-        ${o.gatewaySlug}, ${o.currency}, ${o.totalAmount}, ${o.discountAmount}, ${o.taxRate}, ${o.taxAmount}, ${o.totalAmount},
+        ${o.gatewaySlug}, ${o.currency}, ${o.totalAmount}, ${o.discountAmount}, ${o.taxRate}, ${o.taxAmount}, ${o.totalAmount}, ${o.couponId}, ${o.couponCode},
         ${o.customerName}, ${o.customerEmail}, ${o.billingCompany}, ${o.billingAddress}, ${o.billingCity}, ${o.billingPostal},
         ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.idempotencyKey}, 'pending')
       RETURNING ${COLS}`);

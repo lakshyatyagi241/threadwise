@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { AddonFulfilmentService } from '../addons-extension-registry';
+import { CouponResolverService } from '../coupons-credits-referral-currency';
 import { WalletLedgerService, WalletSettingsService } from '../wallet-message-billing';
 import { nextPlanEnd, type BillingUnit } from './fulfilment-rules';
 import { recordOrderEvent } from './order-events';
@@ -34,6 +35,7 @@ export class FulfilmentService {
     private readonly addons: AddonFulfilmentService,
     private readonly wallet: WalletLedgerService,
     private readonly walletSettings: WalletSettingsService,
+    private readonly coupons: CouponResolverService,
   ) {}
 
   /** `applied` is false when the order was already paid (a replay), in which case nothing was changed. */
@@ -47,6 +49,8 @@ export class FulfilmentService {
         facts.payload,
       );
       if (!paid) return { applied: false };
+      // One redemption per paid order: the conditional "mark paid" above is what a replayed webhook never gets past (TW-CPN-008).
+      await this.coupons.recordRedemption(tx, paid.couponId);
       const effect = await this.apply(tx, paid);
       await recordOrderEvent(tx, this.outbox, paid, 'paid', { applied: effect });
       return { applied: true };

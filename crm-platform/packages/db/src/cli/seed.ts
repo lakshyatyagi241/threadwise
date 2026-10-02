@@ -3,6 +3,11 @@ import { resolve } from 'node:path';
 import { hash } from '@node-rs/argon2';
 import { config as loadEnv } from 'dotenv';
 import { Client } from 'pg';
+import {
+  CPN_CREDIT_PACKAGES,
+  CPN_CURRENCIES,
+  CPN_DEMO_COUPONS,
+} from '../seeds/coupons-credits-referral-currency';
 
 loadEnv({ path: resolve(__dirname, '../../../../.env') });
 loadEnv({ path: resolve(process.cwd(), '.env') });
@@ -191,6 +196,39 @@ async function main(): Promise<void> {
       console.log(`seeded org ${org.slug} (id=${orgId})`);
     }
 
+    // Platform defaults of the coupons / credits / currency domain (TW-CPN-025): never overwrites an existing row.
+    for (const c of CPN_CURRENCIES) {
+      await client.query(
+        `INSERT INTO currencies (name, code, symbol, "precision", exchange_rate, is_active)
+         VALUES ($1, $2, $3, $4, $5, true) ON CONFLICT (code) DO NOTHING`,
+        [c.name, c.code, c.symbol, c.precision, c.rate],
+      );
+    }
+    const { rowCount: coupons } = await client.query('SELECT 1 FROM coupons LIMIT 1');
+    if (!coupons) {
+      for (const c of CPN_DEMO_COUPONS) {
+        await client.query(
+          `INSERT INTO coupons (code, description, type, amount, is_active) VALUES ($1, $2, $3, $4, true) ON CONFLICT (code) DO NOTHING`,
+          [c.code, c.description, c.type, c.amount],
+        );
+      }
+    }
+    for (const p of CPN_CREDIT_PACKAGES) {
+      await client.query(
+        `INSERT INTO credit_packages (name, slug, price_minor, currency_code, credits, badge, is_active, is_featured, sort_order)
+         VALUES ($1, $2, $3, $4, $5, $6, true, $7, $8) ON CONFLICT (slug) DO NOTHING`,
+        [
+          p.name,
+          p.slug,
+          p.priceMinor,
+          p.currencyCode,
+          p.credits,
+          p.badge,
+          p.isFeatured,
+          p.sortOrder,
+        ],
+      );
+    }
     await client.query('COMMIT');
     console.log(
       `\ndone. Staff login: ${ORGS[0]!.adminEmail} / ${DEMO_PASSWORD} (org: ${ORGS[0]!.slug}). ` +

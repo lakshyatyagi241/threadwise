@@ -1,12 +1,14 @@
 import { Body, Controller, Get, Headers, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  applyCouponRequestSchema,
   paygwOrdersQuerySchema,
   paygwPlanSlugParamSchema,
   paygwQuoteQuerySchema,
   paygwWalletQuoteQuerySchema,
   placePlanOrderRequestSchema,
   placeWalletOrderRequestSchema,
+  type ApplyCouponRequest,
   type PaygwOrdersQuery,
   type PaygwQuoteQuery,
   type PaygwWalletQuoteQuery,
@@ -56,6 +58,20 @@ export class CheckoutController {
     @Query(zodPipe(paygwQuoteQuerySchema)) q: PaygwQuoteQuery,
   ) {
     return this.checkout.quotePlan(planSlug, q);
+  }
+
+  @Post('checkout/plans/:planSlug/coupon')
+  @RequirePermission('paygw.checkout.create')
+  @ApiOperation({
+    summary: 'Check a coupon against this plan (priced by the server) and return the order summary',
+    description:
+      'Advisory and throttled: nothing is reserved. The order re-checks the code against the same price.',
+  })
+  applyCoupon(
+    @Param('planSlug', zodPipe(paygwPlanSlugParamSchema)) planSlug: string,
+    @Body(zodPipe(applyCouponRequestSchema)) body: ApplyCouponRequest,
+  ) {
+    return this.checkout.applyCoupon(planSlug, body);
   }
 
   @Post('checkout/plans/:planSlug/orders')

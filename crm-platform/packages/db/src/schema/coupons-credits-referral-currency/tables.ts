@@ -8,7 +8,6 @@ import {
   foreignKey,
   index,
   integer,
-  jsonb,
   numeric,
   pgTable,
   smallint,
@@ -36,7 +35,7 @@ export const coupons = pgTable(
     maxUses: integer('max_uses'),
     perUserLimit: integer('per_user_limit'),
     usesCount: integer('uses_count').notNull().default(0),
-    applicablePackageIds: jsonb('applicable_package_ids'),
+    applicablePlanSlugs: text('applicable_plan_slugs').array().notNull().default([]),
     startsAt: timestamp('starts_at', { withTimezone: true }),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
     isActive: boolean('is_active').notNull().default(true),
@@ -117,16 +116,18 @@ export const referrals = pgTable(
     referrerUserId: idColumn('referrer_user_id').notNull(),
     referredUserId: idColumn('referred_user_id').notNull(),
     codeUsed: text('code_used').notNull(),
-    creditsAwarded: integer('credits_awarded').notNull().default(0),
+    referrerOrgId: idColumn('referrer_org_id').notNull(),
+    referredOrgId: idColumn('referred_org_id').notNull(),
+    creditsAwarded: bigint('credits_awarded', { mode: 'number' }).notNull().default(0),
     awardTransactionId: idColumn('award_transaction_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
   (t) => [
-    unique('uq_referrals_referred_user_id').on(t.referredUserId),
+    unique('uq_referrals_referred').on(t.referredOrgId, t.referredUserId),
     index('idx_referrals_code_used').on(t.codeUsed),
-    index('idx_referrals_referrer_user_id').on(t.referrerUserId),
+    index('idx_referrals_referrer').on(t.referrerOrgId, t.referrerUserId, t.createdAt),
   ],
 );
 
@@ -147,11 +148,12 @@ export const referralCodes = pgTable(
   },
   (t) => [
     unique('uq_referral_codes_code').on(t.code),
+    unique('uq_referral_codes_user').on(t.ownerOrgId, t.userId),
     foreignKey({
       name: 'fk_referral_codes_owner_org_id',
       columns: [t.ownerOrgId],
       foreignColumns: [organizations.id],
-    }).onDelete('restrict'),
+    }).onDelete('cascade'),
   ],
 );
 

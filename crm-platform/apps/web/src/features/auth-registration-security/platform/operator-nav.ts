@@ -83,6 +83,13 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'localization-translation.nav.usage',
     groupKey: 'localization-translation.nav.group',
   },
+  // Coupons, credits, referral and currency domain (seam edit): Reference's Admin - System - Localization group.
+  {
+    id: 'currencies',
+    href: '/admin/currencies',
+    labelKey: 'coupons-credits-referral-currency.currencies.nav.item',
+    groupKey: 'localization-translation.nav.group',
+  },
   {
     id: 'system',
     href: '/admin/system',
@@ -199,6 +206,13 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     id: 'wallet-logs',
     href: '/admin/wallet/logs',
     labelKey: `${WALLET}.logs`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  // Coupons domain (seam edit): Billing group, after the wallet pages.
+  {
+    id: 'coupons',
+    href: '/admin/coupons',
+    labelKey: 'coupons-credits-referral-currency.coupons.nav.coupons',
     groupKey: `${BSP}.groups.billing`,
   },
 ];

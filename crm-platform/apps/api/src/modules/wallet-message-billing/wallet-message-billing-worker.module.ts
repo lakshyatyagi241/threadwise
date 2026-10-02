@@ -39,5 +39,7 @@ import { WalletRepository } from './wallet.repository';
     WalletNotificationsConsumer,
     WalletReconcileJob,
   ],
+  // The referral payout posts through the ledger from its own worker module.
+  exports: [WalletLedgerService, WalletSettingsService],
 })
 export class WalletMessageBillingWorkerModule {}

@@ -13,6 +13,7 @@ import { CONVERSATION_ERROR_CODES } from '../chat-conversations/conversation-err
 import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
 import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
+import { CPN_ERROR_CODES } from '../coupons-credits-referral-currency/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
@@ -24,6 +25,7 @@ export const ERROR_CODES = {
   ...INBOX_ERROR_CODES,
   ...WSP_ERROR_CODES,
   ...WALLET_ERROR_CODES,
+  ...CPN_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',

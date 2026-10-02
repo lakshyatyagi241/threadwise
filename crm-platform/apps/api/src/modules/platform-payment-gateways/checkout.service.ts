@@ -5,6 +5,8 @@ import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   currencyExponent,
+  type ApplyCouponRequest,
+  type ApplyCouponResponse,
   type ErrorCode,
   type PaygwBilling,
   type PaygwQuote,
@@ -20,6 +22,8 @@ import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { RateLimitService } from '../auth';
+import { CouponResolverService, type CouponDecision } from '../coupons-credits-referral-currency';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
 import { FulfilmentService } from './fulfilment.service';
@@ -59,8 +63,13 @@ interface Priced {
   available: string[];
   gateways: GatewayRow[];
   parts: Breakdown;
+  /** The period price before any coupon, in `currency` minor units (what a coupon applies to). */
+  subtotalMinor: bigint;
+  taxRate: string;
   walletCreditMinor: number | null;
   planSlug: string | null;
+  /** The coupon that priced this order, when one did (TW-CPN-008). */
+  coupon?: { id: number; code: string };
 }
 
 const unavailable = (message: string, code: ErrorCode = ERROR_CODES.PAYGW_GATEWAY_UNAVAILABLE) =>
@@ -88,6 +97,8 @@ export class CheckoutService {
     private readonly fulfilment: FulfilmentService,
     private readonly outbox: OutboxService,
     private readonly config: ConfigService<Env, true>,
+    private readonly coupons: CouponResolverService,
+    private readonly rate: RateLimitService,
   ) {}
 
   // ---- reads ---------------------------------------------------------------------------------------------------------
@@ -254,6 +265,8 @@ export class CheckoutService {
       available: list,
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
+      subtotalMinor: subtotal,
+      taxRate: s.taxEnabled ? s.taxRate : '0',
       walletCreditMinor: null,
       planSlug: plan.slug,
     };
@@ -302,6 +315,8 @@ export class CheckoutService {
       available: list,
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
+      subtotalMinor: billed,
+      taxRate: s.taxEnabled ? s.taxRate : '0',
       walletCreditMinor: Number(back),
       planSlug: null,
     };
@@ -344,6 +359,79 @@ export class CheckoutService {
     return this.toQuote(priced, s);
   }
 
+  // ---- coupons (TW-CPN-007, 008) -------------------------------------------------------------------------------------
+
+  private couponRequest(priced: Priced, code: string) {
+    const ctx = RequestContextStore.require();
+    return {
+      code,
+      orgId: ctx.orgId,
+      userId: ctx.userId ?? null,
+      planSlug: priced.planSlug ?? '',
+      subtotalMinor: priced.subtotalMinor,
+      currency: priced.currency,
+    };
+  }
+
+  /** The same plan priced again with a coupon's discount off the subtotal, tax on what remains. */
+  private withDiscount(priced: Priced, decision: Extract<CouponDecision, { ok: true }>): Priced {
+    return {
+      ...priced,
+      parts: breakdown(
+        priced.subtotalMinor,
+        priced.currency,
+        decision.discountMinor,
+        priced.taxRate,
+      ),
+      coupon: { id: decision.couponId, code: decision.code },
+    };
+  }
+
+  /**
+   * The checkout's "Apply" button. The server prices the plan itself (the browser's idea of the subtotal is never read, Reference
+   * trusted it), runs the same resolver the order will, and answers with the summary to show. Nothing is reserved or written.
+   * Throttled per workspace member: a code could otherwise be guessed by trying them one after another (TW-CPN-007 rule 3).
+   */
+  async applyCoupon(planSlug: string, req: ApplyCouponRequest): Promise<ApplyCouponResponse> {
+    const ctx = RequestContextStore.require();
+    if (!ctx.userId) throw AppError.unauthenticated();
+    if (!(await this.rate.allow(`cpn:coupon:${ctx.orgId}:${ctx.userId}`, 20, 60))) {
+      throw new AppError(
+        ERROR_CODES.CPN_COUPON_THROTTLED,
+        'Too many coupon checks. Wait a minute and try again.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+    const s = await this.settings.load();
+    const priced = await this.db.tx((tx) =>
+      this.pricePlan(tx, planSlug, { currency: req.currency, period: req.period }, s),
+    );
+    const decision = await this.coupons.resolve(this.couponRequest(priced, req.code));
+    if (!decision.ok) {
+      return {
+        ok: false,
+        message: decision.message,
+        discount: priced.parts.discount,
+        code: null,
+        currency: priced.currency,
+        subtotal: priced.parts.subtotal,
+        tax: priced.parts.tax,
+        total: priced.parts.total,
+      };
+    }
+    const after = this.withDiscount(priced, decision).parts;
+    return {
+      ok: true,
+      message: decision.message,
+      discount: after.discount,
+      code: decision.code,
+      currency: priced.currency,
+      subtotal: after.subtotal,
+      tax: after.tax,
+      total: after.total,
+    };
+  }
+
   // ---- placing an order ----------------------------------------------------------------------------------------------
 
   placePlanOrder(
@@ -382,23 +470,34 @@ export class CheckoutService {
   ): Promise<PlaceOrderResponse> {
     const ctx = RequestContextStore.require();
     if (!ctx.userId) throw AppError.unauthenticated();
-    // Coupons belong to CPN, which is not built: refuse rather than silently charge full price for a code the buyer typed.
-    if (coupon) {
-      throw unavailable('Coupons are not available yet.', ERROR_CODES.PAYGW_COUPON_UNAVAILABLE);
-    }
     const s = await this.settings.load();
 
     // 1. validate + price, no writes. The gateway check precedes creation: an inactive gateway leaves no order behind.
     const gateway = await this.gateways.byUuid(gatewayUuid);
     if (!gateway || !gateway.is_active)
       throw unavailable('That gateway is not currently available.');
-    const { priced, user } = await this.db.tx(async (tx) => {
+    const { priced: listed, user } = await this.db.tx(async (tx) => {
       const p = await price(tx, s);
       const u = await tx.execute(
         sql`SELECT full_name, email::text AS email FROM users WHERE org_id = ${ctx.orgId} AND id = ${ctx.userId}`,
       );
       return { priced: p, user: u.rows[0] as { full_name: string; email: string } | undefined };
     });
+    // The coupon binds here, against the price the server just computed: a refused code leaves no order behind (TW-CPN-008).
+    // Wallet top-ups never take a coupon (the caller passes none).
+    let priced = listed;
+    if (coupon && coupon.trim() !== '') {
+      const decision = await this.coupons.resolve(this.couponRequest(listed, coupon));
+      if (!decision.ok) {
+        throw new AppError(
+          ERROR_CODES.CPN_COUPON_REJECTED,
+          decision.message,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'coupon', message: decision.message }],
+        );
+      }
+      priced = this.withDiscount(listed, decision);
+    }
     if (!acceptsCurrency(gateway.supported_currencies, priced.currency)) {
       throw unavailable(
         `${gateway.name} does not support ${priced.currency}.`,
@@ -417,6 +516,13 @@ export class CheckoutService {
       s,
       idempotencyKey,
     );
+
+    // A coupon can take the whole price off: there is nothing for a gateway to charge, so the order is fulfilled now. (Reference
+    // sent a zero-amount order to the gateway and never verified what that did.)
+    if (priced.parts.totalMinor === 0n) {
+      await this.fulfilment.fulfil(order, { payload: { reason: 'fully_discounted' } });
+      return { orderNumber: order.orderNumber, orderId: order.uuid, next: { type: 'paid' } };
+    }
 
     // 3. the provider, outside any transaction.
     const driverOrder: DriverOrder = {
@@ -526,6 +632,8 @@ export class CheckoutService {
             taxRate: s.taxEnabled ? s.taxRate : '0',
             taxAmount: p.parts.tax,
             totalAmount: p.parts.total,
+            couponId: p.coupon?.id ?? null,
+            couponCode: p.coupon?.code ?? null,
             customerName: b.customerName ?? user?.full_name ?? null,
             customerEmail: b.customerEmail ?? user?.email ?? null,
             billingCompany: b.company ?? orgName,

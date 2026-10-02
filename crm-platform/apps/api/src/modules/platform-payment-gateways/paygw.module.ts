@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AddonsExtensionRegistryModule } from '../addons-extension-registry';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { CouponsCreditsReferralCurrencyModule } from '../coupons-credits-referral-currency';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CheckoutController } from './checkout.controller';
 import { CheckoutService } from './checkout.service';
@@ -19,7 +21,12 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
  * and the kernel are global providers, as in PlansModule.
  */
 @Module({
-  imports: [AddonsExtensionRegistryModule, WalletMessageBillingModule],
+  imports: [
+    AddonsExtensionRegistryModule,
+    WalletMessageBillingModule,
+    CouponsCreditsReferralCurrencyModule,
+    PlatformSettingsModule,
+  ],
   controllers: [PlatformGatewaysController, CheckoutController, PaymentsController],
   providers: [
     CryptoService,
