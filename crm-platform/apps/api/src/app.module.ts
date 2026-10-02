@@ -23,6 +23,7 @@ import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { CrmModule } from './modules/crm';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
+import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -96,6 +97,7 @@ import { HealthModule } from './health/health.module';
     KernelModule,
     AuthModule,
     PlansModule,
+    PlatformSettingsModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,
