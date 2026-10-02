@@ -37,7 +37,12 @@ function build(s: Setup = {}) {
       return s.result ?? { language: null, text: null };
     },
   };
-  const svc = new ConversationTranslationService(db as never, plans as never, translation as never);
+  const svc = new ConversationTranslationService(
+    db as never,
+    plans as never,
+    translation as never,
+    {} as never, // the message store is not used by the decision methods
+  );
   return { svc, calls };
 }
 
