@@ -348,6 +348,8 @@ export class ContactsRepository {
       emailConfirmed?: boolean;
       faxNumber?: string | null;
       source?: string | null;
+      isUnsubscribed?: boolean;
+      unsubscribedAt?: Date | null;
       data: Record<string, unknown>;
       displayId: string;
       createdBy: number | null;
@@ -380,6 +382,8 @@ export class ContactsRepository {
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
         source: values.source ?? null,
+        isUnsubscribed: values.isUnsubscribed ?? false,
+        unsubscribedAt: values.unsubscribedAt ?? null,
         data: values.data,
         displayId: values.displayId,
         createdBy: values.createdBy,
@@ -643,6 +647,24 @@ export class ContactsRepository {
       INSERT INTO contact_identities (org_id, contact_id, kind, value, is_primary)
       VALUES (${orgId}, ${contactId}, ${kind}, ${value}, true)
       ON CONFLICT (org_id, kind, value) DO NOTHING
+    `);
+  }
+
+  /**
+   * Drops the identity key a contact no longer holds (its old phone or email after an edit or a clear). Without this
+   * the key keeps pointing at the contact, so a later create with that number or address is answered with this
+   * contact instead of making a new one, and an import would update the wrong person.
+   */
+  async removeIdentity(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    kind: 'email' | 'phone',
+    value: string,
+  ): Promise<void> {
+    await tx.execute(sql`
+      DELETE FROM contact_identities
+      WHERE org_id = ${orgId} AND contact_id = ${contactId} AND kind = ${kind} AND value = ${value}
     `);
   }
 

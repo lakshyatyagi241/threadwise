@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { calendarDaySchema } from '../sales-docs/input-guards';
 import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryList } from '../contacts-attributes-tags/query-helpers';
@@ -28,7 +29,7 @@ export const RECURRING_RUN_STATUSES = ['created', 'failed'] as const;
 /** The most periods one worker pass catches up for one schedule. */
 export const RECURRING_CATCH_UP_MAX = 12;
 
-const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'a date as YYYY-MM-DD');
+const date = calendarDaySchema;
 
 // --- the schedule, as pure date maths (the worker and the preview use the same function) ------------------------------------------
 

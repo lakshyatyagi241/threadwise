@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { calendarDaySchema } from '../sales-docs/input-guards';
 import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
@@ -45,10 +46,7 @@ const amount = z
   .string()
   .trim()
   .regex(/^\d{1,12}(\.\d{1,4})?$/, 'a positive decimal such as "100.50"');
-const when = z.union([
-  z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'a date as YYYY-MM-DD'),
-  z.string().datetime({ offset: true }),
-]);
+const when = z.union([calendarDaySchema, z.string().datetime({ offset: true })]);
 
 /** Record money received against an issued invoice. */
 export const recordPaymentSchema = z.object({
@@ -154,14 +152,8 @@ export const listPaymentsQuerySchema = z.object({
     .transform((v) => v.toUpperCase())
     .optional(),
   /** Payments dated on or after / before (inclusive), `YYYY-MM-DD` in the workspace calendar. */
-  from: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .optional(),
-  to: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .optional(),
+  from: calendarDaySchema.optional(),
+  to: calendarDaySchema.optional(),
   /** Reference, receipt number or invoice number. */
   q: z.string().trim().min(1).max(100).optional(),
 });

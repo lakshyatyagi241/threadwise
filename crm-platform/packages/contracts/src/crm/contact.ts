@@ -87,6 +87,8 @@ export const createContactSchema = z
     faxNumber: z.string().max(32).optional(),
     /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
     source: z.string().trim().max(128).optional(),
+    /** Marketing opt-out (TW-CON-017): broadcasts and campaigns skip an opted-out contact. */
+    isUnsubscribed: z.boolean().optional(),
     customFields: z.record(z.unknown()).default({}),
   })
   // A contact with neither a phone nor an email cannot be reached, cannot be
@@ -116,6 +118,8 @@ export const updateContactSchema = z.object({
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
   source: z.string().trim().max(128).nullish(),
+  /** Marketing opt-out. Turning it on stamps `unsubscribedAt`; turning it off clears it. */
+  isUnsubscribed: z.boolean().optional(),
   customFields: z.record(z.unknown()).optional(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409. */
   rowVersion: z.number().int().positive(),

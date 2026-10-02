@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { calendarDaySchema } from '../sales-docs/input-guards';
 import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
@@ -44,7 +45,7 @@ const percent = z
     /^\d{1,3}(\.\d{1,4})?$/,
     'a percent with at most 4 decimals, such as "18", "7.25" or "9.975"',
   );
-const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'a date as YYYY-MM-DD');
+const date = calendarDaySchema;
 const country = z
   .string()
   .trim()

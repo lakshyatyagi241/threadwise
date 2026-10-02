@@ -649,15 +649,27 @@ describe('lists, filters, paging and counts (TW-TASK-002, 009, D-04, D-06, D-08)
   });
 
   it("D-08: the day buckets follow the workspace time zone, not the server's", async () => {
-    // Kiritimati is UTC+14 all year, so its midnight is 10:00 UTC: a fixed edge to place two tasks around.
+    // Two zones with a fixed offset and different midnights (Kiritimati UTC+14: 10:00 UTC; UTC-5: 05:00 UTC). The test needs a
+    // local midnight at least two hours ahead so both tasks sit on a fixed edge (one hour either side) whatever the hour of
+    // the run: Kiritimati is unusable from 08:00 to 10:00 UTC and UTC-5 from 03:00 to 05:00 UTC, never both at once.
     const now = Date.now();
     const d = new Date(now);
-    let edge = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 10);
-    while (edge - now < 2 * HOUR) edge += 24 * HOUR;
+    const zone = [
+      { name: 'Pacific/Kiritimati', hourUtc: 10 },
+      { name: 'Etc/GMT+5', hourUtc: 5 },
+    ]
+      .map((z) => {
+        let edge = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), z.hourUtc);
+        if (edge <= now) edge += 24 * HOUR;
+        return { ...z, edge };
+      })
+      .find((z) => z.edge - now >= 2 * HOUR);
+    if (!zone) throw new Error('no zone has a local midnight two hours ahead');
+    const edge = zone.edge;
     const tz = await api.signup('ttz');
     await h.owner.query(
-      `UPDATE organizations SET settings = settings || '{"timezone":"Pacific/Kiritimati"}'::jsonb WHERE id = $1`,
-      [tz.orgId],
+      `UPDATE organizations SET settings = settings || jsonb_build_object('timezone', $2::text) WHERE id = $1`,
+      [tz.orgId, zone.name],
     );
     await task(tz.admin, {
       title: 'Last hour of the day',
