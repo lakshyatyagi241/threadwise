@@ -2,6 +2,7 @@ import { Module, type OnModuleInit } from '@nestjs/common';
 import { BroadcastReceiptsService, BroadcastsModule } from '../broadcasts';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule, ReceiptRouter } from '../node-bridge-runtime';
+import { ScheduledQueueWarmerModule } from './scheduled-queue-warmer.module';
 import { ScheduledDueService } from './scheduled-due.service';
 import { ScheduledRunProcessor } from './scheduled-run.processor';
 import { ScheduledReceiptsService } from './scheduled-receipts.service';
@@ -13,7 +14,7 @@ import { ScheduledRunService } from './scheduled-run.service';
  * cap and one-run-per-number lease, so a number is never in a broadcast and a schedule at once.
  */
 @Module({
-  imports: [NodeBridgeRuntimeModule, BroadcastsModule, CrmModule],
+  imports: [NodeBridgeRuntimeModule, BroadcastsModule, CrmModule, ScheduledQueueWarmerModule],
   providers: [
     ScheduledDueService,
     ScheduledRunService,

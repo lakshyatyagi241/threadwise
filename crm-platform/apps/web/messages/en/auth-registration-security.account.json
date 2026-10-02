@@ -523,7 +523,9 @@
             "inbox_sla": "Inbox SLA",
             "inbox_routing": "Inbox routing",
             "inbox_kanban": "Inbox Kanban",
-            "team_performance": "Team performance"
+            "team_performance": "Team performance",
+            "scheduled_messages": "Scheduled messages",
+            "whatsapp_warmer": "WhatsApp warmer"
           },
           "cta": {
             "continueFree": "Continue free",

@@ -523,7 +523,9 @@
             "inbox_sla": "اتفاقية مستوى الخدمة",
             "inbox_routing": "توجيه المحادثات",
             "inbox_kanban": "لوحة كانبان",
-            "team_performance": "أداء الفريق"
+            "team_performance": "أداء الفريق",
+            "scheduled_messages": "الرسائل المجدولة",
+            "whatsapp_warmer": "إحماء واتساب"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

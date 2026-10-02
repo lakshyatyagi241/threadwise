@@ -17,6 +17,8 @@ export type PlanLimitGroup = (typeof PLAN_LIMIT_GROUPS)[number];
 export const PLAN_LIMIT_DEFS = [
   { key: 'monthly_messages', group: 'messaging' },
   { key: 'broadcasts', group: 'messaging' },
+  // Scheduled messages the workspace holds, every status counted, deleted ones freed (TW-SCHED-019). 0 = unlimited.
+  { key: 'scheduled_messages', group: 'messaging' },
   // Campaigns CREATED over the life of a plan period, deleted ones included (the delete-proof quota ledger, TW-PLAN-018). 0 = unlimited.
   { key: 'total_campaigns', group: 'messaging' },
   { key: 'devices', group: 'workspace' },
@@ -67,6 +69,9 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'inbox_routing', group: 'messaging', default: true },
   { key: 'inbox_kanban', group: 'messaging', default: true },
   { key: 'team_performance', group: 'advanced', default: true },
+  // Scheduled messages and the number warmer (TW-SCHED-019, 041). Default true: neither was gated here before, so every plan row that predates them keeps the area.
+  { key: 'scheduled_messages', group: 'messaging', default: true },
+  { key: 'whatsapp_warmer', group: 'messaging', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -87,6 +92,8 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   inbox_routing: 'Routing rules',
   inbox_kanban: 'Kanban view',
   team_performance: 'Team performance',
+  scheduled_messages: 'Scheduled messages',
+  whatsapp_warmer: 'WhatsApp warmer',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -110,6 +117,8 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'inbox_routing',
   'inbox_kanban',
   'team_performance',
+  'scheduled_messages',
+  'whatsapp_warmer',
 ];
 export const PLAN_CHIP_MAX = 3;
 
