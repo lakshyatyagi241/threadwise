@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common';
+import { WabaProvidersModule } from './whatsapp-cloud-api-waba/waba-providers.module';
 import { MetaCloudProvider } from './whatsapp/meta-cloud.provider';
 import { WHATSAPP_PROVIDER } from './whatsapp/whatsapp.port';
 
@@ -10,6 +11,7 @@ import { WHATSAPP_PROVIDER } from './whatsapp/whatsapp.port';
  */
 @Global()
 @Module({
+  imports: [WabaProvidersModule],
   providers: [MetaCloudProvider, { provide: WHATSAPP_PROVIDER, useExisting: MetaCloudProvider }],
   exports: [WHATSAPP_PROVIDER, MetaCloudProvider],
 })

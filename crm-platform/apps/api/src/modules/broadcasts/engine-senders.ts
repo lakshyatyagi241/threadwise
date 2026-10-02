@@ -15,6 +15,8 @@ export interface OutgoingMessage {
   language: string;
   /** Correlates the provider's receipts back to the recipient row. */
   clientReference: string;
+  /** Template category, so a marketing send on a Marketing-Messages-Lite number takes the cheaper endpoint. */
+  category?: string;
   /** The recipient's own Cloud API components (header media, buttons, carousel, variables); only the waba engine uses them. */
   components?: unknown[];
 }
@@ -84,27 +86,38 @@ export class WabaEngineSender implements EngineSender {
     }
     const meta = row?.meta_json ?? {};
     const accessToken = String(creds.access_token ?? '');
+    const authKey = String(creds.auth_key ?? '');
     const senderId = String(creds.phone_number_id ?? meta.phone_number_id ?? '');
-    if (!accessToken || !senderId) {
+    const wabaId = String(meta.waba_id ?? '');
+    // `provider` in meta_json says which route reaches the number; rows from the manual connect predate it and are direct.
+    const route = meta.provider === 'interakt' ? 'interakt' : 'meta';
+    const usable = route === 'interakt' ? Boolean(authKey && wabaId) : Boolean(accessToken);
+    if (!usable || !senderId) {
       throw new Error(
         'This WhatsApp Cloud API number has no access token or phone number id. Reconnect the number.',
       );
     }
+    const credentials = {
+      senderId,
+      accessToken,
+      route,
+      ...(route === 'interakt' ? { authKey } : {}),
+      ...(wabaId ? { businessAccountId: wabaId } : {}),
+      marketingLite: meta.is_mm_lite_onboarded === true,
+    } as const;
 
     return {
       send: async (m) => {
-        const res = await this.provider.sendTemplate(
-          { senderId, accessToken },
-          {
-            to: m.to,
-            templateName: m.templateName,
-            language: m.language,
-            variables: {},
-            ...(m.components ? { components: m.components } : {}),
-            clientReference: m.clientReference,
-            screen: { bulk: true, source: 'broadcast' },
-          },
-        );
+        const res = await this.provider.sendTemplate(credentials, {
+          to: m.to,
+          templateName: m.templateName,
+          language: m.language,
+          ...(m.category ? { category: m.category } : {}),
+          variables: {},
+          ...(m.components ? { components: m.components } : {}),
+          clientReference: m.clientReference,
+          screen: { bulk: true, source: 'broadcast' },
+        });
         return { providerMessageId: res.providerMessageId };
       },
     };

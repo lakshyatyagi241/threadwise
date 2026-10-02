@@ -22,7 +22,6 @@ const tile = (
 export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   // Channels (these were the menu's Channels group)
   tile('channels', 'channels', '/channels', 'channels', 0),
-  tile('channels', 'whatsapp', '/channels/whatsapp', 'whatsapp', 10),
   tile('channels', 'facebook', '/channels/facebook', 'facebook', 20),
   tile('channels', 'instagram', '/channels/instagram', 'instagram', 30),
   tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50),

@@ -47,6 +47,8 @@ import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { TeamChatModule } from './modules/team-chat';
+import { MessageTemplatesModule } from './modules/message-templates';
+import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
@@ -162,6 +164,8 @@ import { HealthModule } from './health/health.module';
     PublicApiModule,
     PlatformSupportDeskModule,
     TeamChatModule,
+    WabaModule,
+    MessageTemplatesModule,
     ChatConversationsModule,
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
