@@ -35,7 +35,9 @@ export function isPrivateAddress(address: string): boolean {
     );
   }
   if (isIP(v) === 6) {
-    return v === '::' || v === '::1' || v.startsWith('fc') || v.startsWith('fd') || /^fe[89ab]/.test(v);
+    return (
+      v === '::' || v === '::1' || v.startsWith('fc') || v.startsWith('fd') || /^fe[89ab]/.test(v)
+    );
   }
   return true; // not an address at all: refuse
 }
@@ -59,15 +61,22 @@ export class HttpEngineHandshakeAdapter implements EngineHandshakePort {
       target = new URL(req.url + PATH);
       if (target.protocol !== 'http:' && target.protocol !== 'https:') throw new Error('scheme');
     } catch {
-      return { ok: false, reason: instagram ? `Could not reach ${req.brand} at that URL (invalid address).` : generic };
+      return {
+        ok: false,
+        reason: instagram ? `Could not reach ${req.brand} at that URL (invalid address).` : generic,
+      };
     }
 
     let res: { status: number; body: string };
     try {
-      res = await this.get(target, {
-        [HEADER[req.engine]]: req.secret,
-        Accept: 'application/json',
-      }, TIMEOUT_MS[req.engine]);
+      res = await this.get(
+        target,
+        {
+          [HEADER[req.engine]]: req.secret,
+          Accept: 'application/json',
+        },
+        TIMEOUT_MS[req.engine],
+      );
     } catch (err) {
       if (!instagram) return { ok: false, reason: generic };
       return {
@@ -89,7 +98,10 @@ export class HttpEngineHandshakeAdapter implements EngineHandshakePort {
     }
     return this.acknowledges(res.body, req.engine)
       ? { ok: true, reason: null }
-      : { ok: false, reason: `Reached the URL but it did not respond as an ${req.brand} deployment.` };
+      : {
+          ok: false,
+          reason: `Reached the URL but it did not respond as an ${req.brand} deployment.`,
+        };
   }
 
   /** 2xx counts only when the JSON says `ok === true` or names the right service. */
@@ -137,7 +149,11 @@ export class HttpEngineHandshakeAdapter implements EngineHandshakePort {
               if ((options as { all?: boolean }).all) {
                 return (cb as (e: null, a: LookupAddress[]) => void)(null, list);
               }
-              return (cb as (e: null, a: string, f: number) => void)(null, list[0]!.address, list[0]!.family);
+              return (cb as (e: null, a: string, f: number) => void)(
+                null,
+                list[0]!.address,
+                list[0]!.family,
+              );
             });
           },
         },

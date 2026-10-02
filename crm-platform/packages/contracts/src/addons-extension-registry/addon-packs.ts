@@ -74,13 +74,11 @@ export function checkAddonRules(
   return [];
 }
 
-export const createAddonRequestSchema = z
-  .object(addonFieldsShape)
-  .superRefine((value, ctx) => {
-    for (const issue of checkAddonRules(value)) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
-    }
-  });
+export const createAddonRequestSchema = z.object(addonFieldsShape).superRefine((value, ctx) => {
+  for (const issue of checkAddonRules(value)) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
+  }
+});
 export type CreateAddonRequest = z.input<typeof createAddonRequestSchema>;
 export type CreateAddonPayload = z.output<typeof createAddonRequestSchema>;
 

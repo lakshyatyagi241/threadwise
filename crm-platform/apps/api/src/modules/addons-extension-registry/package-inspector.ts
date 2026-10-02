@@ -42,7 +42,8 @@ export function inspectPackage(
     if (!looksLikeZip(buf)) throw new ZipError('not a ZIP');
     entries = readZip(buf, { maxEntries: opts.maxEntries });
   } catch (err) {
-    if (err instanceof ZipError && /entries/.test(err.message)) throw invalid(`The package ${err.message}.`);
+    if (err instanceof ZipError && /entries/.test(err.message))
+      throw invalid(`The package ${err.message}.`);
     throw invalid('The upload is not a readable ZIP archive.');
   }
 
@@ -58,8 +59,12 @@ export function inspectPackage(
   const manifestEntry =
     entries.find((e) => !e.isDirectory && e.name === 'extension.json') ??
     entries.find((e) => !e.isDirectory && /^[^/]+\/extension\.json$/.test(e.name));
-  if (!manifestEntry) throw invalid('This is not an extension package: extension.json was not found.');
-  const rootPrefix = manifestEntry.name.slice(0, manifestEntry.name.length - 'extension.json'.length);
+  if (!manifestEntry)
+    throw invalid('This is not an extension package: extension.json was not found.');
+  const rootPrefix = manifestEntry.name.slice(
+    0,
+    manifestEntry.name.length - 'extension.json'.length,
+  );
 
   let text: string;
   try {

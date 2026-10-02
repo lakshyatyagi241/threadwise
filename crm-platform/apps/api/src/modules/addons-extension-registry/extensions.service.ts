@@ -142,7 +142,11 @@ export class ExtensionsService {
     // 1. the server re-verifies; the page's Verify step is advisory
     const licence = this.checkPurchaseCode(purchaseCode);
     if (!licence.ok) {
-      throw new AppError(ERROR_CODES.ADD_PACKAGE_INVALID, licence.message, HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new AppError(
+        ERROR_CODES.ADD_PACKAGE_INVALID,
+        licence.message,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
     if (zip.length > cfg.ADDONS_MAX_PACKAGE_BYTES) {
       throw new AppError(
@@ -209,7 +213,9 @@ export class ExtensionsService {
     this.registry.invalidate();
     this.logger.log({ slug: manifest.slug, files: installed.files.written }, 'extension installed');
 
-    const skippedNote = installed.files.skipped ? ` ${installed.files.skipped} protected or unsafe path(s) skipped.` : '';
+    const skippedNote = installed.files.skipped
+      ? ` ${installed.files.skipped} protected or unsafe path(s) skipped.`
+      : '';
     return {
       ok: true,
       message: `${manifest.name} ${manifest.version} installed - ${installed.files.written} file(s) written.${skippedNote}`,
@@ -275,7 +281,8 @@ export class ExtensionsService {
   async toggleModule(slug: string): Promise<ToggleModuleResponse> {
     const operatorId = this.operatorId();
     const cfg = addonsConfig();
-    const unknown = () => new AppError(ERROR_CODES.NOT_FOUND, 'Unknown module.', HttpStatus.NOT_FOUND);
+    const unknown = () =>
+      new AppError(ERROR_CODES.NOT_FOUND, 'Unknown module.', HttpStatus.NOT_FOUND);
     if (!EXTENSION_SLUG_RE.test(slug)) throw unknown();
     const mod = (await scanModules(cfg.modulesDir)).get(slug);
     if (!mod) throw unknown();
@@ -313,7 +320,9 @@ export class ExtensionsService {
     return {
       ok: true,
       active: !nowDisabled,
-      message: nowDisabled ? `${mod.manifest.name} deactivated.` : `${mod.manifest.name} re-activated.`,
+      message: nowDisabled
+        ? `${mod.manifest.name} deactivated.`
+        : `${mod.manifest.name} re-activated.`,
     };
   }
 }
