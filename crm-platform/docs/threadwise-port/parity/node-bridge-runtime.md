@@ -110,7 +110,7 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
 
 ## Not verified (scheduler)
 
-- Real transports: the engine is tested with a fake transport. The Cloud API text transport exists; Baileys and Twilio register their own when built.
+- Real transports: the engine is tested with a fake transport. The Cloud API (text and media), Baileys and Twilio transports exist; none was run against a live number or account.
 - Not built here: wallet and plan metering of each message (WALLET, PLAN), the warmer's daily budget and hold (SCHED), re-resolving tags and groups at fire time
   (the SCHED screens write the audience), a run-history table (none in the schema), delivered and read states (TW-NODE-020 receipts), media from storage and
   templates (they fail the schedule up front with the reason).
@@ -122,5 +122,11 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
   that the harness does not drive. Checked by hand instead (below). The twin spec is still to write.
 - **Against the real Node bridge.** The reference runs without its bridge here, so "Test connection" was exercised against a stand-in that answers
   like `/api/refresh-settings` (200, 401, 403, 500, connection refused), not the bridge itself.
-- Not built: bridge-side endpoints of TW-NODE-004 (`/`, `/health`, `current-settings`), the daily cap and jitter of TW-NODE-029, and every other NODE
-  feature. They depend on the decision on the bridge's runtime shape (decision E).
+- Not built: bridge-side endpoints of TW-NODE-004 (`/`, `/health`, `current-settings`): the bridge process is replaced by the in-app worker, which has no HTTP
+  surface of its own.
+
+## Not verified (Cloud API and broadcasts)
+
+- Cloud API sends go through the shared `MetaCloudProvider` (WABA domain); the NODE transport sends text and media (by public https link) through it, and Interakt numbers use the same credential rules as broadcasts. Tested with a fake provider only.
+- Broadcasts on the unofficial engine and Twilio render the template body with the contact's values and send it as text or media (header, body, footer
+  as lines). Send-time overrides, buttons and carousels are Cloud API components and are not applied on these engines.

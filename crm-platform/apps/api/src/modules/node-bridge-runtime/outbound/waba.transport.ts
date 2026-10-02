@@ -4,6 +4,7 @@ import { CryptoService } from '../../../common/crypto/crypto.service';
 import { DatabaseService } from '../../../infra/db/database.service';
 import {
   WHATSAPP_PROVIDER,
+  type ChannelCredentials,
   type WhatsAppProvider,
 } from '../../../infra/providers/whatsapp/whatsapp.port';
 import {
@@ -14,15 +15,29 @@ import {
   type SenderRef,
 } from './outbound';
 
+type MediaCommand = Extract<SendCommand, { type: 'media' }>;
+
+/** The Meta media type: from the MIME type, or the file extension when none is given; anything else is a document. */
+function mediaKind(c: MediaCommand): 'image' | 'video' | 'audio' | 'document' {
+  if (c.voiceNote) return 'audio';
+  const mime = c.mimeType?.toLowerCase() ?? '';
+  const ext = /\.([a-z0-9]+)(?:[?#]|$)/i.exec(c.fileName ?? c.mediaUrl)?.[1]?.toLowerCase() ?? '';
+  if (mime.startsWith('image/') || ['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return 'image';
+  if (mime.startsWith('video/') || ['mp4', '3gp'].includes(ext)) return 'video';
+  if (mime.startsWith('audio/') || ['mp3', 'ogg', 'aac', 'm4a', 'opus'].includes(ext))
+    return 'audio';
+  return 'document';
+}
+
 interface ConfigRow {
   credentials_json: string | null;
   meta_json: Record<string, unknown> | null;
 }
 
 /**
- * WhatsApp Cloud API numbers (engine `waba`), through the shared Meta provider. Plain text only: Meta delivers free text
- * inside the 24-hour customer window, and Reference's single sends on this engine were text only too ("send it as a
- * campaign/broadcast" for media and locations). Templates go through the broadcast pipeline.
+ * WhatsApp Cloud API numbers (engine `waba`), through the shared Meta provider. Text and media: Meta delivers free text
+ * inside the 24-hour customer window; media goes by public https link. Locations and contacts stay on the broadcast
+ * pipeline, as Reference did. Templates go through the broadcast pipeline.
  */
 @Injectable()
 export class WabaTransport implements EngineTransport {
@@ -52,29 +67,62 @@ export class WabaTransport implements EngineTransport {
     }
     const meta = row?.meta_json ?? {};
     const accessToken = String(creds.access_token ?? '');
+    const authKey = String(creds.auth_key ?? '');
     const senderId = String(creds.phone_number_id ?? meta.phone_number_id ?? '');
-    if (!accessToken || !senderId) {
+    const wabaId = String(meta.waba_id ?? '');
+    // `provider` in meta_json says which route reaches the number; rows from the manual connect predate it and are direct.
+    const route = meta.provider === 'interakt' ? 'interakt' : 'meta';
+    const usable = route === 'interakt' ? Boolean(authKey && wabaId) : Boolean(accessToken);
+    if (!usable || !senderId) {
       throw new Error(
         'This WhatsApp Cloud API number has no access token or phone number id. Reconnect the number.',
       );
     }
+    const credentials: ChannelCredentials = {
+      senderId,
+      accessToken,
+      route,
+      ...(route === 'interakt' ? { authKey } : {}),
+      ...(wabaId ? { businessAccountId: wabaId } : {}),
+      marketingLite: meta.is_mm_lite_onboarded === true,
+    };
 
     return {
       send: async (command: SendCommand, context) => {
+        const screen = context.screen ? { screen: context.screen } : {};
+        if (command.type === 'media') {
+          // Meta fetches the file itself from a public https link.
+          if (!/^https:\/\//i.test(command.mediaUrl)) {
+            throw new UnsupportedSendError(
+              'The WhatsApp Cloud API needs a public https link for media.',
+            );
+          }
+          const kind = mediaKind(command);
+          // The envelope is the provider's; `body` is what Meta documents under the type key (no caption on audio).
+          const res = await this.provider.sendMessage(credentials, {
+            to: command.to,
+            type: kind,
+            body: {
+              link: command.mediaUrl,
+              ...(command.caption && kind !== 'audio' ? { caption: command.caption } : {}),
+              ...(kind === 'document' && command.fileName ? { filename: command.fileName } : {}),
+            },
+            clientReference: context.clientReference,
+            ...screen,
+          });
+          return { providerMessageId: res.providerMessageId };
+        }
         if (command.type !== 'text') {
           throw new UnsupportedSendError(
             `A single ${command.type} message is not supported on the WhatsApp Cloud API. Send it as a campaign or broadcast.`,
           );
         }
-        const res = await this.provider.sendText(
-          { senderId, accessToken },
-          {
-            to: command.to,
-            body: command.body,
-            clientReference: context.clientReference,
-            ...(context.screen ? { screen: context.screen } : {}),
-          },
-        );
+        const res = await this.provider.sendText(credentials, {
+          to: command.to,
+          body: command.body,
+          clientReference: context.clientReference,
+          ...screen,
+        });
         return { providerMessageId: res.providerMessageId };
       },
     };
