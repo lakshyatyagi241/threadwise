@@ -212,6 +212,21 @@ async function main(): Promise<void> {
       );
     }
 
+    // Manager and Viewer presets (WSP) and the organization owner, for organizations the base seed created after the
+    // migration ran. Both are no-ops for an organization that already has them.
+    await client.query(`SELECT wsp_seed_role_presets(id) FROM organizations`);
+    await client.query(
+      `UPDATE organizations o
+          SET settings = o.settings || jsonb_build_object('ownerUserId', x.uuid::text)
+         FROM (SELECT DISTINCT ON (u.org_id) u.org_id, u.uuid
+                 FROM users u
+                 JOIN user_roles ur ON ur.org_id = u.org_id AND ur.user_id = u.id
+                 JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
+                WHERE r.system_key = 'admin'
+                ORDER BY u.org_id, u.created_at, u.id) x
+        WHERE o.id = x.org_id AND NOT (o.settings ? 'ownerUserId')`,
+    );
+
     // One non-admin agent in the first organization, for role-aware landing demos.
     const first = await client.query<{ id: number; slug: string }>(
       `SELECT id, slug FROM organizations ORDER BY id LIMIT 1`,

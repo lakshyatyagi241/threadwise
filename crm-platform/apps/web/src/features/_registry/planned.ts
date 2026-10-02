@@ -23,7 +23,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
   { id: 'quick-chat', group: 'inbox', labelKey: L('quickChat'), href: '/chat', order: 10, icon: 'chat' },
   { id: 'call-logs', group: 'inbox', labelKey: L('callLogs'), href: '/call-logs', order: 20, icon: 'phone' },
   { id: 'team-chat', group: 'inbox', labelKey: L('teamChat'), href: '/team-chat', order: 30, icon: 'team-chat' },
-  { id: 'team-members', group: 'inbox', labelKey: L('teamMembers'), href: '/team-members', order: 40, icon: 'team' },
 
   // CRM (Contacts, Attributes, Contact groups, Segments and Deals are real screens). Orders keep the menu sequence:
   // Contacts 0, Attributes 1, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
