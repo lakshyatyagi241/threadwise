@@ -1,0 +1,222 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Add-ons and modules",
+      "packs": "Billing add-ons",
+      "extensions": "Modules",
+      "workspace": "Add-ons"
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "close": "Close",
+      "dismiss": "Dismiss",
+      "readOnly": "You can look at this page but only a super admin can change it.",
+      "requestId": "Request id",
+      "errors": {
+        "forbidden": "You do not have access to this page.",
+        "request": "The request could not be completed.",
+        "unexpected": "Something went wrong. Try again in a moment.",
+        "conflict": "Someone else changed this just now. Reload and try again."
+      }
+    },
+    "packs": {
+      "eyebrow": "Billing",
+      "title": "Billing add-ons",
+      "description": "Feature and limit packs a workspace can buy on top of its plan. Modules that add code are managed on the Modules page.",
+      "modulesLink": "Manage modules",
+      "new": "New add-on",
+      "kpi": { "label": "Add-ons", "total": "Total", "active": "On sale" },
+      "empty": {
+        "title": "No add-ons yet",
+        "body": "Create a pack to sell extra features or higher limits.",
+        "action": "Create the first add-on"
+      },
+      "table": {
+        "label": "Add-ons",
+        "name": "Add-on",
+        "price": "Price",
+        "grants": "Grants",
+        "owners": "Workspaces",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "price": { "free": "Free", "lifetime": "one-time" },
+      "period": {
+        "days": "{count, plural, one {per day} other {every # days}}",
+        "weeks": "{count, plural, one {per week} other {every # weeks}}",
+        "months": "{count, plural, one {per month} other {every # months}}",
+        "years": "{count, plural, one {per year} other {every # years}}"
+      },
+      "grants": {
+        "none": "Nothing granted",
+        "unlimited": "{name}: unlimited",
+        "add": "{name}: +{amount}"
+      },
+      "active": {
+        "toggle": "Put {name} on sale",
+        "on": "On sale",
+        "off": "Off sale"
+      },
+      "actions": { "edit": "Edit", "delete": "Delete" },
+      "toasts": {
+        "created": "{name} created",
+        "updated": "{name} saved",
+        "activated": "{name} is on sale",
+        "deactivated": "{name} is off sale",
+        "deleted": "{name} deleted"
+      },
+      "delete": {
+        "title": "Delete {name}?",
+        "body": "A pack nobody owns is removed for good.",
+        "confirm": "Delete",
+        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Take it off sale instead.} other {# workspaces own this add-on, so it cannot be deleted. Take it off sale instead.}}"
+      },
+      "errors": {
+        "generic": "The add-on could not be saved.",
+        "forbidden": "Only a super admin can change add-ons.",
+        "notFound": "This add-on no longer exists."
+      },
+      "editor": {
+        "titleNew": "New add-on",
+        "titleEdit": "Edit {name}",
+        "basics": "Basics",
+        "pricing": "Pricing",
+        "grants": "What it grants",
+        "grantsHint": "Features are switched on. A limit adds to the plan's cap; enter -1 for unlimited and leave it empty to grant nothing.",
+        "features": "Features",
+        "limits": "Limits",
+        "fields": {
+          "name": "Name",
+          "subtitle": "Subtitle",
+          "detail": "Details",
+          "amount": "Price",
+          "offerAmount": "Offer price",
+          "offerHint": "Lower than the price. Leave empty or 0 for no offer.",
+          "currency": "Currency",
+          "billingUnit": "Billed every",
+          "billingDuration": "Number of units",
+          "isLifetime": "One-time purchase that never expires",
+          "isActive": "On sale",
+          "sortOrder": "Sort order"
+        },
+        "units": { "days": "Days", "weeks": "Weeks", "months": "Months", "years": "Years" },
+        "problems": {
+          "name": "Enter a name.",
+          "amount": "Enter an amount such as 19 or 19.99.",
+          "offerAmount": "The offer must be lower than the price.",
+          "currency": "Use a three-letter currency code.",
+          "billingDuration": "Enter a whole number of 1 or more.",
+          "sortOrder": "Enter a whole number.",
+          "limits": "Limits are whole numbers, or -1 for unlimited.",
+          "form": "Check the highlighted fields."
+        },
+        "unsaved": "You have unsaved changes."
+      }
+    },
+    "extensions": {
+      "eyebrow": "Settings",
+      "title": "Modules",
+      "description": "Install add-on code, see what is installed and connect companion products.",
+      "packsLink": "Those are billing add-ons. This page installs code. Manage billing add-ons",
+      "coreVersion": "Core version {version}",
+      "installed": {
+        "title": "Installed",
+        "count": "{count, plural, one {# module} other {# modules}}",
+        "empty": "Nothing installed yet. Check your purchase code above, then upload a package.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# file} other {# files}}",
+        "installedAt": "installed {when}",
+        "inPlace": "In-place module",
+        "filesKept": "files kept on disk",
+        "active": "Active",
+        "disabled": "Disabled",
+        "inactive": "Inactive",
+        "enable": "Enable",
+        "disable": "Disable",
+        "remove": "Remove",
+        "reactivate": "Re-activate",
+        "footnote": "Removing a module deletes only the files it installed. Its data stays in the database."
+      },
+      "verify": {
+        "title": "Step 1. Check your purchase code",
+        "label": "Purchase code",
+        "action": "Check",
+        "checking": "Checking",
+        "empty": "Enter your purchase code first.",
+        "ok": "Purchase code accepted. You can upload a package."
+      },
+      "upload": {
+        "title": "Step 2. Upload the package",
+        "locked": "Check your purchase code first.",
+        "file": "Package (.zip)",
+        "action": "Install",
+        "installing": "Installing",
+        "done": "{name} {version} installed.",
+        "upgraded": "{name} upgraded to {version}."
+      },
+      "confirm": {
+        "removeTitle": "Remove {name}?",
+        "removeBody": "Its files are deleted. Its data stays in the database.",
+        "moduleTitle": "Deactivate {name}?",
+        "moduleBody": "The module is switched off. Its files and data stay and you can re-activate it.",
+        "remove": "Remove",
+        "deactivate": "Deactivate"
+      },
+      "engines": {
+        "instagram": {
+          "title": "Instagram engine",
+          "body": "Connect a standalone Instagram engine by its address and shared secret."
+        },
+        "email": {
+          "title": "Email engine",
+          "body": "Connect a standalone email engine by its address and shared secret."
+        },
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "blocked": "Blocked: the native Instagram module is installed",
+        "checkedAt": "last checked {when}",
+        "connect": "Connect",
+        "manage": "Manage",
+        "disconnect": "Disconnect",
+        "url": "Address",
+        "brand": "Display name",
+        "secret": "Shared secret",
+        "secretSaved": "A secret is saved. Leave empty to keep it.",
+        "save": "Save and test",
+        "testing": "Testing",
+        "failed": "The connection test failed: {reason}"
+      },
+      "errors": {
+        "generic": "That did not work.",
+        "forbidden": "Only a super admin can change modules.",
+        "invalidPackage": "The package is not valid.",
+        "tooLarge": "The package is too large.",
+        "coreTooOld": "This package needs a newer core version.",
+        "engineConflict": "Instagram runs one engine at a time. Disconnect the other one first."
+      }
+    },
+    "workspace": {
+      "title": "Add-ons",
+      "description": "Extra features and higher limits on top of your plan.",
+      "ownedTitle": "Your add-ons",
+      "ownedNone": "You have not bought any add-ons yet.",
+      "lifetime": "Never expires",
+      "endsAt": "Until {date}",
+      "catalogTitle": "Available add-ons",
+      "notEligible": "Add-ons are available on an active paid plan. Upgrade your plan to buy one.",
+      "empty": "No add-ons are on sale right now.",
+      "state": { "buy": "Available", "active": "Active", "buyAgain": "Add more" },
+      "bullets": {
+        "feature": "{name} included",
+        "unlimited": "Unlimited {name}",
+        "add": "+{amount} {name}"
+      },
+      "price": { "free": "Free", "lifetime": "one-time" },
+      "error": "The add-ons could not be loaded."
+    }
+  }
+}

@@ -34,5 +34,6 @@ describe('groupNav', () => {
       'i18n-providers',
       'i18n-usage',
     ]);
+    expect(groups[3]!.items.map((i) => i.id)).toEqual(['addon-packs', 'extensions']);
   });
 });
