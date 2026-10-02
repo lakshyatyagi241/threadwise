@@ -74,7 +74,12 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
   const auth = input.metaCategory === 'AUTHENTICATION' || input.templateType === 'auth';
   const named = input.parameterFormat === 'NAMED';
 
-  let text: { header: string | null; body: string; footer: string | null; variableMap: VariableMap };
+  let text: {
+    header: string | null;
+    body: string;
+    footer: string | null;
+    variableMap: VariableMap;
+  };
   if (named) {
     // Named variables stay as typed; the slots just list them in order.
     const header = input.header ? input.header : null;
@@ -101,7 +106,8 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
     templateType: auth ? 'auth' : input.templateType,
     header: auth || attachment ? null : text.header,
     attachmentType: auth ? null : attachment,
-    headerHandle: auth || !attachment || attachment === 'location' ? null : (input.headerHandle ?? null),
+    headerHandle:
+      auth || !attachment || attachment === 'location' ? null : (input.headerHandle ?? null),
     headerSampleUrl: auth || !attachment ? null : (input.headerSampleUrl ?? null),
     body: text.body,
     footer: auth ? null : text.footer,

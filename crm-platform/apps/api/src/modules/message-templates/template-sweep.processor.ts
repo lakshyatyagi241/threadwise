@@ -62,9 +62,7 @@ export class TemplateSweepProcessor extends WorkerHost {
 
   async process(job: Job<TemplateSweepJob>): Promise<{ checked: number; changed: number }> {
     // Stale rows span every organization, like the outbox drain.
-    const targets = await this.db.privileged((tx) =>
-      this.repo.staleTargets(tx, BATCH, new Date()),
-    );
+    const targets = await this.db.privileged((tx) => this.repo.staleTargets(tx, BATCH, new Date()));
     let changed = 0;
     for (const t of targets) {
       const moved = await RequestContextStore.run(
