@@ -698,12 +698,13 @@ describe('checkout, return, webhook and fulfilment (WD-PAYGW-009, 011, 026..028,
     ]);
     const wallet = (
       await h.owner.query(
-        `SELECT balance::text AS balance FROM wallets WHERE org_id = $1 AND unit = 'credits'`,
+        `SELECT balance::text AS balance FROM wallets WHERE org_id = $1`,
         [buyer.orgId],
       )
     ).rows;
     expect(wallet).toHaveLength(1);
-    expect(Number(wallet[0].balance)).toBe(1000);
+    // The wallet holds whole currency units: a 10.00 top-up is 10, and the ledger entry says the same.
+    expect(Number(wallet[0].balance)).toBe(10);
     const ledger = await h.owner.query(
       `SELECT amount::text AS amount, balance_after::text AS after, idempotency_key FROM wallet_transactions WHERE org_id = $1`,
       [buyer.orgId],
