@@ -15,6 +15,12 @@ export interface EventConfig {
   delaySeconds: number;
 }
 
+/** An automation row as the screen shows it, with its template's name and how often its event was logged. */
+export interface AutomationRow extends EventConfig {
+  templateUuid: string | null;
+  templateName: string | null;
+}
+
 export type LogStatus = 'received' | 'processed' | 'skipped' | 'sent' | 'failed';
 export interface LogRef {
   id: number;
@@ -33,6 +39,17 @@ const tables = (kind: StoreKind): { events: SQL; logs: SQL } =>
 const strings = (v: unknown): string[] | null =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : null;
 
+const toConfig = (r: Record<string, unknown>): EventConfig => ({
+  id: Number(r.id),
+  eventType: r.event_type as string,
+  isActive: r.is_active === true,
+  templateId: r.template_id === null ? null : Number(r.template_id),
+  varMap: strings(r.var_map),
+  sendTo: r.send_to === 'admin' || r.send_to === 'both' ? r.send_to : 'customer',
+  adminNumber: typeof r.admin_number === 'string' ? r.admin_number : null,
+  delaySeconds: Number(r.delay_seconds ?? 0),
+});
+
 /** The automation mapping and the activity log of a store, always inside the caller's tenant transaction. */
 @Injectable()
 export class EventsRepository {
@@ -49,18 +66,60 @@ export class EventsRepository {
       FROM ${t.events}
       WHERE org_id = ${orgId} AND integration_id = ${storeId} AND event_type = ${eventType}`);
     const r = res.rows[0] as Record<string, unknown> | undefined;
-    if (!r) return undefined;
-    const sendTo = r.send_to === 'admin' || r.send_to === 'both' ? r.send_to : 'customer';
-    return {
-      id: Number(r.id),
-      eventType: r.event_type as string,
-      isActive: r.is_active === true,
-      templateId: r.template_id === null ? null : Number(r.template_id),
-      varMap: strings(r.var_map),
-      sendTo,
-      adminNumber: typeof r.admin_number === 'string' ? r.admin_number : null,
-      delaySeconds: Number(r.delay_seconds ?? 0),
-    };
+    return r ? toConfig(r) : undefined;
+  }
+
+  async list(tx: Tx, orgId: number, kind: StoreKind, storeId: number): Promise<AutomationRow[]> {
+    const t = tables(kind);
+    const res = await tx.execute(sql`
+      SELECT e.id, e.event_type, e.is_active, e.template_id, e.var_map, e.send_to, e.admin_number, e.delay_seconds,
+             w.uuid AS template_uuid, w.template_name
+      FROM ${t.events} e
+      LEFT JOIN wa_templates w ON w.org_id = e.org_id AND w.id = e.template_id
+      WHERE e.org_id = ${orgId} AND e.integration_id = ${storeId}`);
+    return (res.rows as Array<Record<string, unknown>>).map((r) => ({
+      ...toConfig(r),
+      templateUuid: typeof r.template_uuid === 'string' ? r.template_uuid : null,
+      templateName: typeof r.template_name === 'string' ? r.template_name : null,
+    }));
+  }
+
+  /** Deliveries logged per event type. */
+  async fired(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    storeId: number,
+  ): Promise<Map<string, number>> {
+    const t = tables(kind);
+    const res = await tx.execute(sql`
+      SELECT event_type, count(*)::int AS n FROM ${t.logs}
+      WHERE org_id = ${orgId} AND integration_id = ${storeId} GROUP BY event_type`);
+    return new Map(
+      (res.rows as Array<{ event_type: string; n: number }>).map((r) => [
+        r.event_type,
+        Number(r.n),
+      ]),
+    );
+  }
+
+  /** Creates or updates the automation of one event (unique per store and event). */
+  async upsert(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    storeId: number,
+    c: Omit<EventConfig, 'id'>,
+  ): Promise<void> {
+    const t = tables(kind);
+    await tx.execute(sql`
+      INSERT INTO ${t.events} (org_id, integration_id, event_type, is_active, template_id, var_map, send_to, admin_number, delay_seconds)
+      VALUES (${orgId}, ${storeId}, ${c.eventType}, ${c.isActive}, ${c.templateId},
+              ${c.varMap ? JSON.stringify(c.varMap) : null}::jsonb, ${c.sendTo}, ${c.adminNumber}, ${c.delaySeconds})
+      ON CONFLICT (org_id, integration_id, event_type) DO UPDATE SET
+        is_active = EXCLUDED.is_active, template_id = EXCLUDED.template_id, var_map = EXCLUDED.var_map,
+        send_to = EXCLUDED.send_to, admin_number = EXCLUDED.admin_number, delay_seconds = EXCLUDED.delay_seconds,
+        updated_at = now(), row_version = ${t.events}.row_version + 1`);
   }
 
   /** Writes the log row of a delivery. Returns the key of the partitioned row (id and created_at) so it can be updated. */

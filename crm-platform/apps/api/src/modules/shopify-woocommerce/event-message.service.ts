@@ -101,13 +101,21 @@ export class EventMessageService {
         response: null,
       };
 
+    const chosen = (store.metadata as { senderKey?: unknown } | null)?.senderKey;
+    const senderKey = kind === 'woocommerce' && typeof chosen === 'string' ? chosen : null;
     const params = bodyParams(template.body, ctx.positional);
     const sent: string[] = [];
     const errors: string[] = [];
     const response: unknown[] = [];
     for (const dest of [...new Set(to)]) {
       try {
-        const out = await this.sender.send(orgId, { to: dest, template, params, reference });
+        const out = await this.sender.send(orgId, {
+          to: dest,
+          template,
+          params,
+          reference,
+          senderKey,
+        });
         sent.push(dest);
         response.push({ to: dest, id: out.providerMessageId });
       } catch (err) {

@@ -63,6 +63,8 @@ export interface EcomTemplate {
 export interface EcomTemplates {
   /** The template when it exists and can be sent now: not submitted to Meta, or approved by it. */
   sendable(tx: Tx, orgId: number, id: number): Promise<EcomTemplate | undefined>;
+  /** The id of the organization's template with this uuid; another tenant's template is simply not found. */
+  idOf(tx: Tx, orgId: number, uuid: string): Promise<number | undefined>;
 }
 export const ECOM_TEMPLATES = Symbol('ECOM_TEMPLATES');
 
@@ -70,7 +72,14 @@ export const ECOM_TEMPLATES = Symbol('ECOM_TEMPLATES');
 export interface CommerceSender {
   send(
     orgId: number,
-    m: { to: string; template: EcomTemplate; params: string[]; reference: string },
+    m: {
+      to: string;
+      template: EcomTemplate;
+      params: string[];
+      reference: string;
+      /** `engine:uuid` of the number to send from (TW-ECOM-033); absent means the workspace's primary number. */
+      senderKey?: string | null;
+    },
   ): Promise<{ providerMessageId: string | null }>;
 }
 export const COMMERCE_SENDER = Symbol('ECOM_COMMERCE_SENDER');

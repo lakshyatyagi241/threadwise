@@ -30,4 +30,12 @@ export class SqlEcomTemplates implements EcomTemplates {
         }
       : undefined;
   }
+
+  async idOf(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
+    const res = await tx.execute(
+      sql`SELECT id FROM wa_templates WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+    );
+    const r = res.rows[0] as { id: number | string } | undefined;
+    return r ? Number(r.id) : undefined;
+  }
 }

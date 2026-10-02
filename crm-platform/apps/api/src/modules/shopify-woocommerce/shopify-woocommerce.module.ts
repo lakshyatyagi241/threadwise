@@ -10,6 +10,8 @@ import { SqlEcomTemplates } from './_shims/sql-ecom-templates';
 import { COMMERCE_SENDER, ECOM_PLAN_GATE, ECOM_TEMPLATES, STORE_MIRROR } from './_shims/tokens';
 import { WabaCommerceSender } from './_shims/waba-commerce-sender';
 import { EcomPublicController } from './ecom-public.controller';
+import { AutomationsController } from './automations.controller';
+import { AutomationsService } from './automations.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { ImportService } from './import.service';
@@ -36,6 +38,7 @@ import { WoocommerceService } from './woocommerce.service';
     WoocommerceController,
     EcomPublicController,
     EcomWebhookController,
+    AutomationsController,
   ],
   providers: [
     CryptoService,
@@ -45,6 +48,7 @@ import { WoocommerceService } from './woocommerce.service';
     WoocommerceService,
     ImportService,
     EventsRepository,
+    AutomationsService,
     EventMessageService,
     WebhookService,
     WebhookPipelineService,

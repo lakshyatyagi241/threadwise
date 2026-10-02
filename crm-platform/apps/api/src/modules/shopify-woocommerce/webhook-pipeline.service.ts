@@ -99,7 +99,8 @@ export class WebhookPipelineService {
       await this.setLog(job, log, { status: 'processed' });
       return;
     }
-    if (mayDelay && cfg.delaySeconds > 0) {
+    // Only the cart steps wait (as in Reference); every other automation sends at once whatever delay was saved.
+    if (mayDelay && cfg.delaySeconds > 0 && cfg.eventType.startsWith('cart/')) {
       await this.queue.add(
         'send',
         {
