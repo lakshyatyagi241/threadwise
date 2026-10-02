@@ -117,6 +117,42 @@ describe('billing add-on packs', () => {
     expect((await ops('delete', `/addons/${free.id}`)).status).toBe(200);
     expect((await ops('get', `/addons/${free.id}`)).status).toBe(404);
   });
+
+  it('takes a pack off sale without touching what owners hold (TW-ADD-029)', async () => {
+    const pack = (await ops('post', '/addons').send({ ...body, name: 'Sale Switch' })).body;
+    const org = await h.owner.query(
+      `INSERT INTO organizations (slug, name) VALUES ('addon-e2e-sale', 'x') RETURNING id`,
+    );
+    await h.owner.query(
+      `INSERT INTO workspace_addons (org_id, package_id, status)
+       SELECT $1, id, 'active' FROM plans WHERE uuid = $2`,
+      [org.rows[0].id, pack.id],
+    );
+    const flip = (isActive: boolean, rowVersion: number, token = superToken) =>
+      ops('patch', `/addons/${pack.id}/active`, token).send({ isActive, rowVersion });
+
+    expect((await flip(false, pack.rowVersion, supportToken)).status).toBe(403);
+    const off = await flip(false, pack.rowVersion);
+    expect(off.status, JSON.stringify(off.body)).toBe(200);
+    // off sale, yet the workspace that owns it is still an active owner
+    expect(off.body).toMatchObject({ isActive: false, activePurchases: 1 });
+    const still = await h.owner.query(
+      `SELECT count(*)::int AS n FROM workspace_addons WHERE status = 'active' AND org_id = $1`,
+      [org.rows[0].id],
+    );
+    expect(still.rows[0].n).toBe(1);
+    // a stale rowVersion is a conflict; the right one puts it back on sale
+    expect((await flip(true, pack.rowVersion)).status).toBe(409);
+    const on = await flip(true, off.body.rowVersion);
+    expect(on.body.isActive).toBe(true);
+    const ev = await h.owner.query(
+      `SELECT event FROM security_events
+       WHERE event IN ('platform.addon.deactivated', 'platform.addon.activated')`,
+    );
+    expect(ev.rows.map((r: { event: string }) => r.event)).toEqual(
+      expect.arrayContaining(['platform.addon.deactivated', 'platform.addon.activated']),
+    );
+  });
 });
 
 describe('extensions: install, toggle, remove', () => {
