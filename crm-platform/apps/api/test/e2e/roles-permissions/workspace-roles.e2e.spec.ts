@@ -445,6 +445,40 @@ describe('landing and the permission map (TW-RBAC-033, 035)', () => {
   });
 });
 
+describe('role edits keep the optimistic lock', () => {
+  it('a grants-only edit bumps the version, and a stale one is refused; member managers can list roles', async () => {
+    const org = await signupOrg();
+    const role = await api()
+      .post('/v2/roles')
+      .set(bearer(org.owner))
+      .set('Idempotency-Key', crypto.randomUUID())
+      .send({ name: 'Lock me', grants: [] });
+    const grants = [{ permissionKey: 'record.contacts.read', effect: 'allow', recordScope: 'all' }];
+    const first = await api()
+      .patch(`/v2/roles/${role.body.id}`)
+      .set(bearer(org.owner))
+      .send({ grants, rowVersion: role.body.rowVersion });
+    expect(first.status).toBe(200);
+    expect(first.body.rowVersion).toBeGreaterThan(role.body.rowVersion);
+    const stale = await api()
+      .patch(`/v2/roles/${role.body.id}`)
+      .set(bearer(org.owner))
+      .send({ grants: [], rowVersion: role.body.rowVersion });
+    expect(stale.body.code).toBe('ROW_VERSION_CONFLICT');
+    const custom = await api()
+      .post('/v2/roles')
+      .set(bearer(org.owner))
+      .set('Idempotency-Key', crypto.randomUUID())
+      .send({
+        name: 'People manager',
+        grants: [{ permissionKey: 'admin.user.manage', effect: 'allow', recordScope: 'all' }],
+      });
+    const m = await addMember(org, 'Agent');
+    await setRoles(org.owner, m.uuid, [custom.body.id]);
+    expect((await api().get('/v2/roles').set(bearer(m.token))).status).toBe(200);
+  });
+});
+
 describe('a workspace admin manages roles and members (screens: /settings/roles, /settings/team)', () => {
   const rolesOf = async (token: string) =>
     (await api().get('/v2/roles').set(bearer(token))).body.data as Array<{

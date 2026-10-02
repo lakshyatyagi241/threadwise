@@ -54,7 +54,7 @@ function routesOf(path: string): Route[] {
       const start = Math.max(body.lastIndexOf('\n\n', m.index), 0);
       const end = body.indexOf('\n  async ', m.index);
       if (end === -1) continue;
-      const handler = /\n  async (\w+)/.exec(body.slice(end))?.[1] ?? '?';
+      const handler = /\n {2}async (\w+)/.exec(body.slice(end))?.[1] ?? '?';
       out.push({ file, handler, gated: classLevel || GATE.test(body.slice(start, end)) });
     }
   }

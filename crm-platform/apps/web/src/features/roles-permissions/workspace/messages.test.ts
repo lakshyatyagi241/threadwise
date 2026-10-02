@@ -114,7 +114,7 @@ describe('workspace nav', () => {
     for (const item of nav) expect(NAV.some((n) => n.id === item.id)).toBe(true);
   });
 
-  it('gates Team members and Roles on their permissions and replaces the planned entry', () => {
+  it('gates Team members and Roles on their permissions and leaves the planned inbox entry alone', () => {
     const none = resolveNav(NAV, { permissions: new Set(), planFeatures: null, channels: null });
     expect(none.some((i) => i.href === '/settings/team' || i.href === '/settings/roles')).toBe(
       false,
@@ -128,7 +128,7 @@ describe('workspace nav', () => {
       },
       { planned: PLANNED_NAV },
     );
-    const team = all.filter((i) => i.id === 'team-members');
+    const team = all.filter((i) => i.id === 'workspace-team');
     expect(team).toHaveLength(1);
     expect(team[0]).toMatchObject({ href: '/settings/team', group: 'settings', comingSoon: false });
     expect(all.find((i) => i.href === '/settings/roles')?.group).toBe('settings');

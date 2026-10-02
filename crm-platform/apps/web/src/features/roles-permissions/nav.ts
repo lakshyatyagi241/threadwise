@@ -3,11 +3,11 @@ import type { NavItem } from '../_registry/types';
 /**
  * Workspace (customer) menu: Team members and Roles, under Settings. This file is named nav.ts on purpose so the
  * registry generator picks it up; the operator console entries live in `operator-nav.ts`, which it must not import.
- * `team-members` replaces the planned "coming soon" entry of the same id.
+
  */
 export const nav: NavItem[] = [
   {
-    id: 'team-members',
+    id: 'workspace-team',
     group: 'settings',
     labelKey: 'roles-permissions-workspace.nav.team',
     href: '/settings/team',

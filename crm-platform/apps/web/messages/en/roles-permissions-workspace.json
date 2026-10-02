@@ -38,7 +38,7 @@
       "validationField": "Check this field and try again.",
       "forbidden": "You do not have permission to do this.",
       "conflict": "Someone else changed this while you were editing. Reload to see their version, then re-apply your changes.",
-      "grantRole": "You cannot give that role: it is above your own. Only an Owner can hand out the Owner and Admin roles.",
+      "grantRole": "You cannot do this: that role (or the member's current role) is above your own. Only an Owner can give, change or deactivate Owners and Admins.",
       "grantPermission": "You cannot grant {permission}: you do not hold it yourself.",
       "selfRoleChange": "You cannot change your own role.",
       "lastOwner": "The workspace must keep at least one Owner. Make someone else an Owner first.",
