@@ -6,6 +6,8 @@ export { AuthModule } from './auth.module';
 export { AllowWhileGated, OperatorRoles } from './guards/auth-gates';
 export { OperatorGuard } from './guards/operator.guard';
 export { AuthAuditService, type SecurityEventInput } from './security/auth-audit.service';
+export { CaptchaService } from './security/captcha.service';
+export { RateLimitService } from './security/rate-limit.service';
 export { EmergencyHaltService } from './security/emergency-halt.service';
 export {
   WebhookSecretRegistry,
@@ -18,6 +20,8 @@ export { SendPolicyService, type ScreenContext } from './security/send-policy.se
 export { UploadPolicyService, type UploadKind } from './security/upload-policy.service';
 export { SecurityPolicyService } from './platform/security-policy.service';
 export { PlatformSettingsService } from './platform/platform-settings.service';
+export { PlatformStore } from './platform/platform-store';
+export { TenantDirectory } from './platform/tenant-directory';
 export { SessionService } from './sessions/session.service';
 export { TokenService, type TokenClaims } from './token.service';
 export { AuthMaintenanceService } from './maintenance/auth-maintenance.service';

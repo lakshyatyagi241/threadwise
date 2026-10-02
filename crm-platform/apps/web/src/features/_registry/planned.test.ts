@@ -33,7 +33,7 @@ describe('planned screens', () => {
         .sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
         .map((i) => i.id);
     expect(ids('audience')).toEqual(['lead-finder', 'pipelines', 'companies', 'email-templates']);
-    expect(ids('sales')).toEqual(['crm-dashboard', 'proposals', 'estimates', 'invoices', 'payments']);
+    expect(ids('sales')).toEqual(['crm-dashboard']);
   });
 
   it('cover the Reference groups the real screens do not', () => {

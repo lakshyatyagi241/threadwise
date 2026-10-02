@@ -99,7 +99,7 @@ export class AccountService {
                o.settings AS org_settings,
                EXISTS (
                  SELECT 1 FROM user_roles ur JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
-                 WHERE ur.org_id = u.org_id AND ur.user_id = u.id AND r.system_key = 'admin'
+                 WHERE ur.org_id = u.org_id AND ur.user_id = u.id AND r.system_key IN ('admin', 'workspace_admin')
                ) AS is_admin,
                COALESCE((o.settings ->> 'ownerUserId') = u.uuid::text, false) AS is_owner
         FROM users u
@@ -497,8 +497,11 @@ export class AccountService {
     const settings = p.org_settings as { messageFooter?: string | null };
     return {
       messageFooter: settings.messageFooter ?? null,
+      // The footer is edited on the platform General settings page (TW-SET-012), which stores it in `set.general`.
       platformDefault:
-        (await this.settings.get<string>('platform.branding_footer')) ?? `Sent via ${this.appName}`,
+        (await this.settings.get<{ platformFooter?: string }>('set.general'))?.platformFooter ??
+        (await this.settings.get<string>('platform.branding_footer')) ??
+        `Sent via ${this.appName}`,
       canEdit: await this.planGate.has(orgId, 'remove_branding'),
     };
   }

@@ -1,0 +1,144 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "Set up your platform",
+      "intro": "Create the platform owner and the first workspace. This page works once; afterwards it closes for good.",
+      "stepsLabel": "Setup steps",
+      "steps": {
+        "token": "Setup token",
+        "operator": "Platform owner",
+        "organization": "First workspace",
+        "review": "Review"
+      },
+      "disabled": "Setup is switched off because no setup token is configured on the server. Set SETUP_TOKEN, or create the first operator from the command line.",
+      "notReady": "The server is not ready for setup yet.",
+      "prerequisites": {
+        "database": "Database reachable",
+        "migrations": "Database migrations applied",
+        "permissions": "Permission definitions seeded"
+      },
+      "token": {
+        "label": "Setup token",
+        "hint": "The SETUP_TOKEN value from your deployment configuration."
+      },
+      "operator": {
+        "fullName": "Full name",
+        "email": "Email",
+        "emailHint": "This is the sign-in for the platform console.",
+        "password": "Password",
+        "confirm": "Confirm password",
+        "rulesLabel": "Password requirements",
+        "rules": {
+          "length": "At least 12 characters",
+          "upper": "An uppercase letter",
+          "lower": "A lowercase letter",
+          "number": "A number",
+          "symbol": "A symbol",
+          "personal": "Must not contain your name or email"
+        }
+      },
+      "organization": {
+        "name": "Workspace name",
+        "slug": "Workspace address",
+        "slugHint": "Lowercase letters, numbers and hyphens. Used to sign in to the workspace.",
+        "timezone": "Time zone",
+        "locale": "Language"
+      },
+      "review": {
+        "intro": "Check these details, then create the platform.",
+        "mfaNote": "The platform owner must set up two-factor sign-in at first sign-in."
+      },
+      "done": {
+        "title": "Setup is complete",
+        "body": "{email} is the platform owner and {org} is ready.",
+        "mfaBadge": "Next",
+        "mfaNote": "Sign in to the console and enrol two-factor authentication.",
+        "console": "Open the platform console",
+        "workspace": "Open the workspace sign-in"
+      },
+      "completed": {
+        "body": "Setup has already been completed on this deployment.",
+        "login": "Go to sign-in"
+      },
+      "show": "Show",
+      "hide": "Hide",
+      "back": "Back",
+      "continue": "Continue",
+      "verify": "Verify token",
+      "create": "Create platform",
+      "working": "Working",
+      "errors": {
+        "unexpected": "Something went wrong. Try again.",
+        "tokenWrong": "That setup token is not correct.",
+        "tokenLength": "The setup token is at least 32 characters.",
+        "slugTaken": "That workspace address is taken.",
+        "required": "This field is required.",
+        "email": "Enter a valid email address.",
+        "passwordWeak": "The password does not meet the requirements.",
+        "passwordMismatch": "The passwords do not match.",
+        "orgName": "Enter a workspace name of at least 2 characters.",
+        "slug": "Use 3 to 40 lowercase letters, numbers or hyphens.",
+        "timezone": "Choose a valid time zone.",
+        "locale": "Choose a valid language."
+      }
+    },
+    "system": {
+      "nav": { "group": "System", "item": "System status" },
+      "title": "System status",
+      "description": "Version, database migrations and dependency health for this deployment. Read-only.",
+      "kicker": "System",
+      "release": {
+        "title": "Release",
+        "version": "Version",
+        "gitSha": "Build commit",
+        "buildNumber": "Build number",
+        "builtAt": "Built at",
+        "environment": "Environment",
+        "uptime": "Uptime",
+        "none": "Not recorded",
+        "demo": "Demo mode is on: writes are refused unless allow-listed."
+      },
+      "setup": {
+        "title": "First-run setup",
+        "open": "Open",
+        "completed": "Completed",
+        "completedAt": "Completed {date} on version {version}"
+      },
+      "checks": {
+        "title": "Dependencies",
+        "database": "Database",
+        "redis": "Redis",
+        "migrations": "Migrations",
+        "up": "Up",
+        "down": "Down",
+        "degraded": "Degraded",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "title": "Migrations",
+        "summary": "{count} applied",
+        "status": {
+          "current": "Up to date",
+          "pending": "Pending migrations",
+          "drift": "A migration file changed after it was applied",
+          "unknown": "Migration files are not shipped with this build"
+        },
+        "state": {
+          "applied": "Applied",
+          "pending": "Pending",
+          "modified": "Modified",
+          "missing-file": "File missing"
+        },
+        "id": "Migration",
+        "stateLabel": "State",
+        "appliedAt": "Applied at"
+      },
+      "refresh": "Refresh",
+      "loading": "Loading",
+      "errorForbidden": "You cannot view this page.",
+      "errorUnexpected": "Could not load the system status.",
+      "requestId": "Request id",
+      "retry": "Try again"
+    }
+  }
+}

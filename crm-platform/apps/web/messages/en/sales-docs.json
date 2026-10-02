@@ -1,0 +1,642 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "nav": {
+      "proposals": "Proposals",
+      "estimates": "Estimates"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "Proposal",
+        "plural": "proposals"
+      },
+      "estimate": {
+        "singular": "Estimate",
+        "plural": "estimates"
+      }
+    },
+    "status": {
+      "draft": "Draft",
+      "sent": "Sent",
+      "viewed": "Viewed",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "expired": "Expired",
+      "converted": "Converted"
+    },
+    "tabs": {
+      "label": "Status",
+      "all": "All",
+      "draft": "Draft",
+      "sent": "Sent",
+      "viewed": "Viewed",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "expired": "Expired",
+      "converted": "Converted",
+      "count": "{count, plural, one {# document} other {# documents}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "Proposals",
+        "subtitle": "Pitch scope and price, track what the buyer does, and turn the winner into an invoice.",
+        "new": "New proposal",
+        "emptyTitle": "No proposals yet",
+        "emptyMessage": "Create your first proposal, send the link to your buyer and watch it move from sent to accepted."
+      },
+      "estimate": {
+        "title": "Estimates",
+        "subtitle": "Quote a price before you invoice. Send it, get it accepted, convert it in one click.",
+        "new": "New estimate",
+        "emptyTitle": "No estimates yet",
+        "emptyMessage": "Create your first estimate, send the link to your buyer and convert it to an invoice once accepted."
+      },
+      "openValue": "Open value",
+      "tableLabel": "Documents",
+      "loading": "Loading",
+      "showing": "{count, plural, one {Showing # document} other {Showing # documents}}",
+      "loadMore": "Load more",
+      "allLoaded": "All loaded",
+      "useSampleData": "Use sample data",
+      "emptyFilteredTitle": "Nothing matches",
+      "emptyFiltered": "No document matches the search and filters. Try fewer filters or a different word.",
+      "resetFilters": "Clear filters",
+      "emptyTabTitle": "No {status} documents",
+      "emptyTab": "When one of your {kind} reaches this status it will show up here.",
+      "statusWord": {
+        "all": "all",
+        "draft": "draft",
+        "sent": "sent",
+        "viewed": "viewed",
+        "accepted": "accepted",
+        "declined": "declined",
+        "expired": "expired",
+        "converted": "converted"
+      }
+    },
+    "toolbar": {
+      "label": "Filters",
+      "search": "Search number, title or buyer",
+      "owner": "Owner",
+      "allOwners": "All owners",
+      "validity": "Valid until",
+      "anyValidity": "Any date",
+      "validWeek": "Expires within 7 days",
+      "validLapsed": "Date has passed",
+      "clear": "Clear",
+      "refresh": "Refresh",
+      "shortcuts": "Keyboard shortcuts",
+      "contactFilter": "Contact",
+      "dealFilter": "Deal",
+      "removeFilter": "Remove this filter",
+      "mine": "Mine"
+    },
+    "table": {
+      "scrollArea": "Documents table",
+      "selectAll": "Select all loaded documents",
+      "selectRow": "Select {number}",
+      "columns": {
+        "number": "Number",
+        "title": "Title / Buyer",
+        "contact": "Contact",
+        "amount": "Amount",
+        "status": "Status",
+        "validUntil": "Valid until",
+        "owner": "Owner",
+        "created": "Created"
+      }
+    },
+    "row": {
+      "moreFor": "Actions for {number}",
+      "untitled": "Untitled",
+      "noBuyer": "No buyer yet",
+      "unowned": "No owner"
+    },
+    "bulk": {
+      "label": "Bulk actions",
+      "selected": "{count, plural, one {# selected} other {# selected}}",
+      "working": "Working",
+      "delete": "Delete",
+      "clear": "Clear selection",
+      "deleteTitle": "Delete the selected documents?",
+      "deleteMessage": "{count, plural, one {# document will be deleted for good. Its public link stops working.} other {# documents will be deleted for good. Their public links stop working.}} Converted documents are kept.",
+      "deleteConfirm": "Delete",
+      "keep": "Keep",
+      "deleted": "{count, plural, one {# document deleted} other {# documents deleted}}",
+      "someFailed": "{count, plural, one {# document could not be deleted} other {# documents could not be deleted}}",
+      "failed": "Delete failed."
+    },
+    "shortcuts": {
+      "title": "Keyboard shortcuts",
+      "close": "Close",
+      "list": "On the list",
+      "builder": "In the builder",
+      "actions": {
+        "next": "Next row",
+        "prev": "Previous row",
+        "open": "Open the row",
+        "toggleSelect": "Select or deselect the row",
+        "newDoc": "New document",
+        "focusSearch": "Search",
+        "clearSelection": "Clear selection",
+        "help": "Show this list",
+        "save": "Save draft",
+        "send": "Send",
+        "addRow": "Add a line item"
+      }
+    },
+    "actions": {
+      "open": "Open",
+      "edit": "Edit",
+      "send": "Send",
+      "copyLink": "Copy public link",
+      "markSent": "Mark as sent",
+      "convertInvoice": "Convert to invoice",
+      "createSalesOrder": "Create sales order",
+      "convertDeal": "Create a deal",
+      "duplicate": "Duplicate",
+      "print": "Print / PDF",
+      "activity": "Activity",
+      "delete": "Delete",
+      "accept": "Record as accepted",
+      "decline": "Record as declined",
+      "revise": "Revise (back to draft)",
+      "extend": "Extend validity"
+    },
+    "confirm": {
+      "cancel": "Cancel",
+      "linkCopied": "Link copied",
+      "copyFailed": "Could not copy the link. Select it and copy by hand.",
+      "markSent": {
+        "title": "Mark {number} as sent?",
+        "message": "This records that the {kind} was shared with the buyer by hand (the link was copied). It does not send anything; use Send for that.",
+        "confirm": "Mark as sent"
+      },
+      "convertInvoice": {
+        "title": "Convert {number} to an invoice?",
+        "message": "An invoice draft is created with the same lines and totals and this {kind} is locked as converted. This cannot be undone.",
+        "confirm": "Convert to invoice"
+      },
+      "convertDeal": {
+        "title": "Create a deal from {number}?",
+        "message": "A deal is created with this {kind}'s total and contact, and linked back to it.",
+        "confirm": "Create deal"
+      },
+      "delete": {
+        "title": "Delete {number}?",
+        "message": "The {kind} is deleted for good and its public link stops working. Its number is never reused.",
+        "confirm": "Delete"
+      },
+      "close": "Close",
+      "theBuyer": "the buyer",
+      "linkCopiedInactive": "Link copied. The buyer cannot open it until the document is sent.",
+      "accept": {
+        "title": "Record {number} as accepted?",
+        "message": "Use this when {name} agreed outside the link, by phone or with a signed copy. It is recorded in the activity as entered by you, not as the buyer's own signature.",
+        "confirm": "Record as accepted"
+      },
+      "decline": {
+        "title": "Record {number} as declined?",
+        "message": "Use this when {name} said no outside the link. The {kind} closes as declined; you can revise it into a new draft later.",
+        "confirm": "Record as declined"
+      },
+      "extend": {
+        "title": "Extend {number}",
+        "message": "Give this {kind} a new valid-until date. An expired one becomes open again for {name}.",
+        "confirm": "Extend",
+        "date": "New valid-until date",
+        "past": "The date cannot be in the past."
+      },
+      "revise": {
+        "title": "Revise {number}?",
+        "message": "The {kind} goes back to a draft so you can change it (the revision number goes up and the old content is kept). The buyer cannot accept the old version once you change it.",
+        "confirm": "Revise"
+      },
+      "note": "Note (optional)",
+      "noteHint": "Kept in the activity with this decision."
+    },
+    "toast": {
+      "created": "{number} created",
+      "saved": "{number} saved",
+      "duplicated": "Draft {number} created",
+      "convertedInvoice": "{number} converted to an invoice",
+      "convertedDeal": "Deal {deal} created from {number}",
+      "deleted": "{number} deleted",
+      "accepted": "{number} recorded as accepted",
+      "declined": "{number} recorded as declined",
+      "revised": "{number} is a draft again (revision {revision})",
+      "extended": "{number} extended",
+      "delivery": {
+        "sent": "{number} emailed to the buyer",
+        "queued": "{number} queued for WhatsApp delivery",
+        "shared": "{number} marked as sent"
+      }
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again.",
+      "conflict": "Someone else changed this document. It was reloaded; review it and try again.",
+      "validation": "Some of the values were not accepted. Check the highlighted fields.",
+      "unavailable": "Proposals and estimates are not available on this server yet.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "notFound": "This document was not found. It may have been deleted.",
+      "planDisabled": "Your plan does not include proposals and estimates.",
+      "invalidTransition": "That change is not allowed from the document's current status. It was reloaded.",
+      "notEditable": "Only a draft can be edited. Revise the document to go back to a draft.",
+      "notDeletable": "Accepted and converted documents are kept as a record and cannot be deleted.",
+      "alreadyDecided": "This document was already decided. It was reloaded.",
+      "alreadyConverted": "This document was already converted to an invoice.",
+      "alreadyLinkedDeal": "This document already has a deal linked.",
+      "linkUnavailable": "The public link was revoked or has expired. Make a new link first.",
+      "noRecipient": "Add the buyer's email or phone first, then send.",
+      "sendFailed": "The message could not be delivered, so the document was not marked as sent. Try again.",
+      "expired": "This document has passed its valid-until date. Extend it first.",
+      "ownerInvalid": "The owner must be an active member of the workspace.",
+      "invoicingUnavailable": "Invoicing is not available yet, so this document cannot be converted.",
+      "unexpected": "Something went wrong. Try again.",
+      "requestId": "Request id",
+      "retry": "Try again"
+    },
+    "link": {
+      "unnamedContact": "Unnamed contact"
+    },
+    "picker": {
+      "unnamed": "Unnamed",
+      "unlinkContact": "Unlink the contact",
+      "unlinkDeal": "Unlink the deal",
+      "searchContact": "Search contacts by name, email or phone",
+      "searchDeal": "Search deals",
+      "results": "Results",
+      "searching": "Searching",
+      "unavailable": "Could not load the list.",
+      "none": "No match.",
+      "create": "Create a contact",
+      "createNamed": "Create contact \"{name}\"",
+      "createTitle": "Create a contact",
+      "createEyebrow": "New contact",
+      "close": "Close",
+      "cancel": "Cancel",
+      "createConfirm": "Create and link",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone",
+      "phoneHint": "With the country code, for example +971 50 123 4567.",
+      "nameInvalid": "Enter a name.",
+      "emailInvalid": "Enter a valid email.",
+      "phoneInvalid": "Enter a valid phone number.",
+      "forbidden": "You do not have permission to create contacts.",
+      "createFailed": "The contact could not be created. Try again.",
+      "contactCreated": "Contact {name} created"
+    },
+    "send": {
+      "eyebrow": "Send to the buyer",
+      "title": "Send {number}",
+      "close": "Close",
+      "done": "Done",
+      "channels": "How to send",
+      "tabs": {
+        "link": "Link",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "Public link",
+      "linkHint": "Anyone with this link can view the document and accept or decline it. Share it only with the buyer.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copiedToast": "Link copied",
+      "copyFailed": "Could not copy the link. Select it and copy by hand.",
+      "to": "To",
+      "emailInvalid": "Enter a valid email address.",
+      "noEmail": "This document has no buyer email. Type one here.",
+      "message": "Message",
+      "messageDefault": "Hello {name}, here is our document. It shows the scope and the price, and you can accept it online.",
+      "messageHint": "The link to the document is added under your message.",
+      "sendEmail": "Send email",
+      "waTo": "Send to",
+      "noPhone": "This document has no buyer phone number. Add one in the buyer details first.",
+      "waPreview": "Message",
+      "waTotal": "Total",
+      "waView": "View and accept",
+      "sendWhatsapp": "Send on WhatsApp",
+      "openWhatsapp": "Open in WhatsApp",
+      "markSent": "I shared it: mark as sent",
+      "linkLoading": "Loading the link",
+      "linkUnavailable": "The link is not available on this server yet.",
+      "stateDraft": "The link opens once the document is sent. Until then the buyer sees nothing.",
+      "stateRevoked": "This link was revoked: the buyer cannot open it. Make a new one to share again.",
+      "stateActive": "{views, plural, =0 {Not opened yet.} one {Opened once.} other {Opened # times.}}",
+      "stateInactive": "This link has expired and the buyer cannot open it. Make a new one.",
+      "regenerate": "Make a new link",
+      "revoke": "Revoke link",
+      "regenerateWarning": "The old link stops working at once. Anyone who has it will see that it is no longer available.",
+      "keepLink": "Keep the current link",
+      "regenerateConfirm": "Make a new link",
+      "regenerated": "New link created",
+      "revoked": "Link revoked",
+      "waHint": "Send queues the message on your connected WhatsApp and marks the document as sent. Open in WhatsApp lets you send it yourself; then use the Link tab to mark it as sent."
+    },
+    "activity": {
+      "title": "Activity of {number}",
+      "subtitle": "Everything that happened to this document, newest first.",
+      "close": "Close",
+      "loading": "Loading",
+      "unavailable": "The activity history is not available on this server yet.",
+      "empty": "Nothing has happened to this document yet.",
+      "buyer": "the buyer",
+      "system": "the system",
+      "someone": "Someone",
+      "via": "Sent by {channel}",
+      "signedBy": "Signed by {name}",
+      "reason": "Reason: {reason}",
+      "channels": {
+        "link": "link",
+        "email": "email",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "Created by {who}",
+        "edited": "Edited by {who}",
+        "sent": "Sent by {who}",
+        "viewed": "Viewed by {who}",
+        "accepted": "Accepted by {who}",
+        "declined": "Declined by {who}",
+        "expired": "Expired",
+        "duplicated": "Duplicated by {who}",
+        "revised": "Revised by {who}",
+        "extended": "Validity extended by {who}",
+        "converted_invoice": "Converted to an invoice by {who}",
+        "converted_deal": "Deal created by {who}",
+        "link_regenerated": "New link made by {who}",
+        "link_revoked": "Link revoked by {who}"
+      },
+      "withSignature": "A drawn signature was recorded",
+      "recordedByStaff": "Recorded by a team member on the buyer's behalf",
+      "note": "Note: {note}",
+      "revision": "Revision {revision}",
+      "fromAddress": "From network address {ip}"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "Your company",
+      "numberPending": "Number assigned on save",
+      "untitled": "Untitled {kind}",
+      "preparedFor": "Prepared for",
+      "noBuyer": "No buyer yet",
+      "issued": "Issued",
+      "validUntil": "Valid until",
+      "description": "Description",
+      "qty": "Qty",
+      "unit": "Unit price",
+      "discount": "Disc.",
+      "tax": "Tax",
+      "amount": "Amount",
+      "noItems": "No items.",
+      "subtotal": "Subtotal",
+      "discountPercent": "Discount ({percent}%)",
+      "discountRow": "Discount",
+      "taxRow": "Tax ({percent}%)",
+      "total": "Total",
+      "notes": "Notes",
+      "terms": "Terms"
+    },
+    "builder": {
+      "loading": "Loading",
+      "notFoundTitle": "Document not found",
+      "notFound": "This document does not exist or was deleted.",
+      "back": {
+        "proposal": "All proposals",
+        "estimate": "All estimates"
+      },
+      "formLabel": "Document details",
+      "newTitle": {
+        "proposal": "New proposal",
+        "estimate": "New estimate"
+      },
+      "newSubtitle": "Fill in the buyer and the line items. The number is assigned when you save this {kind}.",
+      "untitledSub": "Untitled",
+      "unsaved": "Unsaved changes",
+      "save": "Save draft",
+      "send": "Send",
+      "more": "More actions",
+      "fixErrors": "Some fields need attention before this can be saved.",
+      "panes": "Form or preview",
+      "pane": {
+        "edit": "Edit",
+        "preview": "Preview"
+      },
+      "locked": {
+        "sent": "This document is out with the buyer, so it cannot be edited. Revise it to go back to a draft, or duplicate it for a new one.",
+        "accepted": "This document was accepted and is kept as a record. Convert it to an invoice, or duplicate it for a new one.",
+        "converted": "This document was converted to an invoice and is locked.",
+        "openInvoice": "Open the invoice",
+        "revise": "Revise",
+        "duplicate": "Duplicate as draft"
+      },
+      "buyer": {
+        "title": "Buyer",
+        "hint": "Pick a contact or type the buyer's details. Their email and phone are used to send.",
+        "contact": "Contact",
+        "name": "Buyer name",
+        "email": "Buyer email",
+        "phone": "Buyer phone",
+        "phoneHint": "With the country code. Needed to send on WhatsApp."
+      },
+      "details": {
+        "title": "Details",
+        "docTitle": "Title",
+        "titlePlaceholder": {
+          "proposal": "e.g. Website redesign, phase 1",
+          "estimate": "e.g. Kitchen fit-out quick quote"
+        },
+        "deal": "Deal",
+        "currency": "Currency",
+        "validUntil": "Valid until",
+        "plusDays": "+{days} days",
+        "noExpiry": "No expiry"
+      },
+      "items": {
+        "title": "Line items",
+        "hint": "Quantities can have decimals. Discount is a percentage or an amount (tap the sign in the box to switch); a blank tax uses the document's rate.",
+        "description": "Description",
+        "qty": "Qty",
+        "unit": "Unit price",
+        "discount": "Disc. %",
+        "tax": "Tax %",
+        "amount": "Amount",
+        "drag": "Drag to reorder",
+        "row": "Row {n}",
+        "descriptionPlaceholder": "What you are charging for",
+        "descriptionFor": "Description of row {n}",
+        "qtyFor": "Quantity of row {n}",
+        "unitFor": "Unit price of row {n}",
+        "discountFor": "Discount percent of row {n}",
+        "taxFor": "Tax percent of row {n}",
+        "amountFor": "Amount of row {n}",
+        "moveUp": "Move row {n} up",
+        "moveDown": "Move row {n} down",
+        "duplicate": "Duplicate row {n}",
+        "remove": "Remove row {n}",
+        "add": "Add row",
+        "discountToAmount": "Row {n}: discount is a percentage; switch to an amount",
+        "discountToPercent": "Row {n}: discount is an amount; switch to a percentage"
+      },
+      "problems": {
+        "noItems": "Add at least one line item with a description and a price.",
+        "descriptionRequired": "Enter a description.",
+        "descriptionTooLong": "The description is too long (500 characters at most).",
+        "qtyInvalid": "Quantity must be a number, 0 or more, with up to 4 decimals.",
+        "priceInvalid": "Enter the unit price as a number, 0 or more.",
+        "discountInvalid": "Discount must be a percentage from 0 to 100.",
+        "taxInvalid": "Tax must be a percentage from 0 to 100.",
+        "docDiscountInvalid": "Enter the discount as a number, 0 or more.",
+        "docTaxInvalid": "Tax must be a percentage from 0 to 100.",
+        "emailInvalid": "Enter a valid email address.",
+        "phoneInvalid": "Enter the phone with the country code, for example +971 50 123 4567.",
+        "titleTooLong": "The title is too long (255 characters at most).",
+        "notesTooLong": "The notes are too long (5,000 characters at most).",
+        "termsTooLong": "The terms are too long (10,000 characters at most).",
+        "dateInvalid": "Enter a valid date.",
+        "tooLarge": "An amount is too large. Reduce a quantity or a price."
+      },
+      "totals": {
+        "defaultTax": "Tax rate",
+        "defaultTaxHint": "Applied to every row that has no tax of its own.",
+        "discount": "Discount on the whole document",
+        "discountKind": "Discount type",
+        "subtotal": "Subtotal",
+        "discountRow": "Discount",
+        "taxRow": "Tax ({percent}%)",
+        "total": "Total"
+      },
+      "notes": {
+        "title": "Notes and terms",
+        "notes": "Notes to the buyer",
+        "terms": "Terms",
+        "insertTemplate": "Use a template",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "Preview",
+        "print": "Print / PDF",
+        "hint": "This is what the buyer sees and what prints. Totals use the same rounding as the saved document."
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "Thank you",
+          "text": "Thank you for the opportunity to work with you. We look forward to getting started."
+        },
+        "scope": {
+          "label": "Scope reminder",
+          "text": "This document covers only the items listed above. Anything outside this scope will be quoted separately."
+        },
+        "followUp": {
+          "label": "Next steps",
+          "text": "To go ahead, accept this document online. We will confirm the start date within one business day."
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "Payment in 14 days",
+          "text": "Payment is due within 14 days of the invoice date."
+        },
+        "net30": {
+          "label": "Payment in 30 days",
+          "text": "Payment is due within 30 days of the invoice date."
+        },
+        "deposit50": {
+          "label": "50% deposit",
+          "text": "A 50% deposit is due on acceptance. The balance is due on completion."
+        },
+        "warranty": {
+          "label": "Warranty",
+          "text": "Work is warranted for 90 days from delivery against defects in workmanship."
+        }
+      }
+    },
+    "linked": {
+      "title": "Proposals and estimates",
+      "newProposal": "Proposal",
+      "newEstimate": "Estimate",
+      "loading": "Loading",
+      "unavailableTitle": "Not available yet",
+      "unavailable": "Proposals and estimates are not available on this server yet.",
+      "empty": "No proposals or estimates yet.",
+      "kind": {
+        "proposal": "Proposal",
+        "estimate": "Estimate"
+      },
+      "viewProposals": "All proposals",
+      "viewEstimates": "All estimates"
+    },
+    "signature": {
+      "area": "Signature box: draw your signature with your finger, pen or mouse",
+      "placeholder": "Sign here",
+      "clear": "Clear signature"
+    },
+    "public": {
+      "loading": "Loading the document",
+      "brandFallback": "Your supplier",
+      "language": "Language",
+      "print": "Print / PDF",
+      "invalid": {
+        "title": "This link is not valid",
+        "message": "The document may have been removed, or the link is incomplete. Ask the sender for a new link."
+      },
+      "error": {
+        "title": "We could not load the document",
+        "message": "Check your connection and try again. If it keeps happening, contact the sender.",
+        "retry": "Try again"
+      },
+      "banner": {
+        "accepted": "You accepted this {kind}. {seller} has been notified and will follow up.",
+        "signedBy": "Signed by {name}",
+        "declined": "This {kind} was declined.",
+        "declinedHint": "If this was a mistake, please contact {seller}.",
+        "converted": "Accepted. An invoice has been issued for this {kind}.",
+        "expired": "This {kind} expired on {date}.",
+        "expiredHint": "It can no longer be accepted. Contact {seller} to ask for a new one."
+      },
+      "footer": "This {kind} was generated by {seller}.",
+      "decision": {
+        "title": "Your decision",
+        "intro": "Accepting this {kind} for {total} confirms the scope and pricing above with {seller}.",
+        "name": "Your full name",
+        "nameHint": "Typed as your name on the record (at least 2 characters).",
+        "nameRequired": "Enter your full name.",
+        "signature": "Signature",
+        "typedPlaceholder": "Your name appears here",
+        "useTyped": "Sign with my typed name instead of drawing",
+        "signatureRequired": "Draw your signature, or choose to sign with your typed name.",
+        "agree": "I have read this {kind} and I accept its scope, price and terms.",
+        "agreeRequired": "Tick the box to confirm.",
+        "accept": "Accept this {kind}",
+        "decline": "Decline",
+        "note": "Your name, signature, the time and your network address are recorded with your decision.",
+        "declineTitle": "Decline this {kind}?",
+        "declineMessage": "{seller} will be told you declined. You will not be able to change this afterwards.",
+        "reason": "Reason (optional)",
+        "reasonHint": "A short note helps {seller} understand what to adjust.",
+        "keep": "Go back",
+        "declineConfirm": "Decline",
+        "close": "Close",
+        "problem": {
+          "expired": "This document has expired and can no longer be accepted.",
+          "closed": "This document was already decided. The page has been refreshed.",
+          "rateLimited": "Too many attempts. Wait a minute and try again.",
+          "validation": "Some of your details were not accepted. Check your name and try again.",
+          "generic": "We could not record your decision. Check your connection and try again.",
+          "gone": "This link is no longer active."
+        }
+      },
+      "gone": {
+        "title": "This link is no longer active",
+        "message": "The sender turned this link off or it ran out. Ask them for a new link."
+      }
+    }
+  }
+}

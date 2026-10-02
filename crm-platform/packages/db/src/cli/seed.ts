@@ -64,27 +64,12 @@ async function main(): Promise<void> {
       const orgId = orgRows[0]!.id;
 
       // --- roles -----------------------------------------------------------
-      // Admin is created locked. The role_grants trigger then refuses further
-      // grant changes, so its grants are inserted BEFORE the lock is set.
-      const { rows: adminRoleRows } = await client.query<{ id: number }>(
-        `INSERT INTO roles (org_id, name, system_key, is_locked)
-         VALUES ($1, 'Admin', 'admin', false)
-         ON CONFLICT (org_id, name) DO UPDATE SET is_locked = false
-         RETURNING id`,
+      // The five workspace presets (Owner, Admin, Manager, Agent, Viewer) with their grants, from the same SQL function sign-up uses.
+      const { rows: ownerRows } = await client.query<{ id: string }>(
+        `SELECT provision_workspace_presets($1) AS id`,
         [orgId],
       );
-      const adminRoleId = adminRoleRows[0]!.id;
-
-      await client.query(
-        `INSERT INTO role_grants (org_id, role_id, permission_key, effect, record_scope)
-         SELECT $1, $2, key, 'allow', 'all' FROM permission_defs
-         ON CONFLICT (org_id, role_id, permission_key) DO NOTHING`,
-        [orgId, adminRoleId],
-      );
-      await client.query(`UPDATE roles SET is_locked = true WHERE org_id = $1 AND id = $2`, [
-        orgId,
-        adminRoleId,
-      ]);
+      const adminRoleId = Number(ownerRows[0]!.id);
 
       const { rows: agentRoleRows } = await client.query<{ id: number }>(
         `INSERT INTO roles (org_id, name, system_key)
@@ -111,7 +96,19 @@ async function main(): Promise<void> {
            ($1, $2, 'record.tasks.read',   'allow', 'own'),
            ($1, $2, 'record.tasks.create', 'allow', 'all'),
            ($1, $2, 'record.tasks.update', 'allow', 'own'),
-           ($1, $2, 'record.tasks.delete', 'allow', 'own')
+           ($1, $2, 'record.tasks.delete', 'allow', 'own'),
+           ($1, $2, 'record.segments.read',   'allow', 'all'),
+           ($1, $2, 'record.segments.create', 'allow', 'all'),
+           ($1, $2, 'record.segments.update', 'allow', 'own'),
+           ($1, $2, 'record.segments.delete', 'allow', 'own'),
+           ($1, $2, 'record.sales-docs.read',   'allow', 'own'),
+           ($1, $2, 'record.sales-docs.create', 'allow', 'all'),
+           ($1, $2, 'record.sales-docs.update', 'allow', 'own'),
+           ($1, $2, 'record.sales-docs.send',   'allow', 'own'),
+           ($1, $2, 'record.booking-types.read', 'allow', 'all'),
+           ($1, $2, 'record.appointments.read',   'allow', 'own'),
+           ($1, $2, 'record.appointments.create', 'allow', 'all'),
+           ($1, $2, 'record.appointments.update', 'allow', 'own')
          ON CONFLICT (org_id, role_id, permission_key) DO NOTHING`,
         [orgId, counsellorRoleId],
       );

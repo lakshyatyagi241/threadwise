@@ -10,3 +10,4 @@ export * from './contact-group';
 export * from './contact-bulk';
 export * from './contact-import';
 export * from './attribute';
+export * from './status-stage';

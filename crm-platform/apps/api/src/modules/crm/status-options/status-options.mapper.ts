@@ -12,6 +12,9 @@ export function toStatusOptionResponse(row: StatusOptionRow): StatusOptionRespon
     position: row.position,
     isDefault: row.isDefault,
     isActive: row.isActive,
+    isWon: row.isWon,
+    isLost: row.isLost,
+    stageOptionId: row.stageOptionUuid,
     rowVersion: row.rowVersion,
   };
 }

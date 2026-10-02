@@ -1,0 +1,269 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Add-ons and modules",
+      "packs": "Add-ons (billing)",
+      "extensions": "Add-ons (code)",
+      "workspace": "Add-ons"
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "close": "Close",
+      "dismiss": "Dismiss",
+      "admin": "Admin",
+      "settings": "Settings",
+      "optional": "optional",
+      "required": "required",
+      "readOnly": "You can look at this page but only a super admin can change it.",
+      "requestId": "Request id",
+      "errors": {
+        "forbidden": "You do not have access to this page.",
+        "request": "The request could not be completed.",
+        "unexpected": "Something went wrong. Try again in a moment.",
+        "conflict": "Someone else changed this just now. Reload and try again."
+      }
+    },
+    "packs": {
+      "crumbHere": "Add-ons",
+      "eyebrow": "Admin · Billing & plans · Add-ons",
+      "titleLead": "Add",
+      "titleAccent": "-ons",
+      "title": "Add-ons",
+      "description": "À-la-carte feature packs a customer buys on top of their plan, such as \"Campaigns add-on\" or \"+1 WhatsApp number\". Each add-on grants the feature toggles and limits you set on it, merged onto the customer's plan. They appear on the customer's Account page once they are on an active plan.",
+      "new": "New add-on",
+      "empty": {
+        "title": "No add-ons yet.",
+        "action": "Create your first add-on"
+      },
+      "table": {
+        "label": "Add-ons",
+        "name": "Name",
+        "price": "Price",
+        "period": "Period",
+        "grants": "Grants",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "price": { "free": "Free", "lifetime": "one-time" },
+      "period": {
+        "days": "{count} days",
+        "weeks": "{count} weeks",
+        "months": "{count} months",
+        "years": "{count} years"
+      },
+      "grants": {
+        "none": "nothing set",
+        "unlimited": "Unlimited {name}",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": { "active": "Active", "off": "Off" },
+      "actions": { "edit": "Edit", "enable": "Enable", "disable": "Disable", "delete": "Delete" },
+      "toasts": {
+        "created": "Add-on created.",
+        "updated": "Add-on updated.",
+        "activated": "{name} enabled",
+        "deactivated": "{name} disabled",
+        "deleted": "{name} deleted"
+      },
+      "delete": {
+        "title": "Delete {name}?",
+        "body": "Delete this add-on? Workspaces that bought it keep it until it expires.",
+        "confirm": "Delete",
+        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.} other {# workspaces own this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.}}"
+      },
+      "errors": {
+        "generic": "The add-on could not be saved.",
+        "forbidden": "Only a super admin can change add-ons.",
+        "notFound": "This add-on no longer exists."
+      },
+      "editor": {
+        "crumbHere": "Add-ons",
+        "crumbNew": "New",
+        "crumbEdit": "Edit",
+        "eyebrowNew": "Admin · Add-ons · New",
+        "eyebrowEdit": "Admin · Add-ons · Edit",
+        "titleNewLead": "Create an",
+        "titleEditLead": "Edit",
+        "titleAccent": "add-on",
+        "intro": "An add-on grants ONLY what you switch on and nothing else. A limit left blank is not touched, so there is no accidental \"unlimited\".",
+        "fixTitle": "Please fix the following:",
+        "cancel": "Cancel",
+        "create": "Create add-on",
+        "saveChanges": "Save changes",
+        "basics": "Add-on basics",
+        "features": "Features this add-on unlocks",
+        "featuresHint": "Tick only what this add-on grants. Everything unticked stays governed by the customer's plan.",
+        "limits": "Limit boosts",
+        "limitsHint": "Blank = the add-on does not touch this limit. Enter a number to ADD on top of the plan (for example +2 devices). Use -1 for unlimited.",
+        "fields": {
+          "name": "Name",
+          "namePlaceholder": "Campaigns add-on",
+          "subtitle": "Subtitle",
+          "subtitlePlaceholder": "Unlock campaigns",
+          "amount": "Price",
+          "offerAmount": "Offer price (optional)",
+          "currency": "Currency",
+          "billingDuration": "Duration",
+          "billingUnit": "Unit",
+          "sortOrder": "Sort order",
+          "isActive": "Active",
+          "isLifetime": "Lifetime (one-time)"
+        },
+        "units": { "days": "Days", "weeks": "Weeks", "months": "Months", "years": "Years" },
+        "problems": {
+          "name": "Enter a name.",
+          "amount": "Enter an amount such as 19 or 19.99.",
+          "offerAmount": "The offer must be lower than the price.",
+          "currency": "Use a three-letter currency code.",
+          "billingDuration": "Enter a whole number of 1 or more.",
+          "sortOrder": "Enter a whole number.",
+          "limits": "Limits are whole numbers, or -1 for unlimited.",
+          "form": "Check the highlighted fields."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Add-ons",
+      "eyebrow": "Admin · Add-ons",
+      "titleLead": "Install an",
+      "titleAccent": "add-on",
+      "title": "Add-ons",
+      "description": "Add-ons merge extra features into this installation. Instagram is the first. Verify your purchase code, upload the package, and it installs in place. Your data and settings are untouched.",
+      "coreVersion": "Core",
+      "packsLead": "Looking for the paid feature packs customers buy on top of a plan?",
+      "packsLink": "Those are plan add-ons (billing)",
+      "packsTail": ". This page installs code.",
+      "installed": {
+        "title": "Installed add-ons",
+        "empty": "No add-ons installed yet. Verify your purchase code above, then upload a package.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# file} other {# files}}",
+        "inPlace": "In-place module",
+        "filesKept": "files kept on disk",
+        "active": "Active",
+        "disabled": "Disabled",
+        "inactive": "Inactive",
+        "enable": "Enable",
+        "disable": "Disable",
+        "remove": "Remove",
+        "reactivate": "Re-activate",
+        "footnote": "Removing an add-on deletes only the files it installed, tracked from the moment it was added, so core files are never touched. Data stays in the database."
+      },
+      "verify": {
+        "title": "Verify your purchase code",
+        "body": "The same {brand} licence that unlocks updates. Add-ons are tied to it.",
+        "placeholder": "e.g. 8f2c1a44-...",
+        "label": "Purchase code",
+        "action": "Verify",
+        "checking": "Verifying…",
+        "empty": "Enter your purchase code first.",
+        "failed": "Verification failed."
+      },
+      "upload": {
+        "title": "Upload the add-on package",
+        "body": "The ZIP is inspected before anything is written. A malformed or incompatible package is refused with your install untouched.",
+        "choose": "Choose an add-on .zip",
+        "max": "Max 100 MB",
+        "action": "Install",
+        "installing": "Installing…",
+        "progress": "Uploading and merging. Do not close this tab."
+      },
+      "confirm": {
+        "removeTitle": "Remove {name}?",
+        "removeBody": "This deletes the files it installed. Its data stays in the database.",
+        "remove": "Remove",
+        "moduleOffTitle": "Remove {name}?",
+        "moduleOffBody": "This deactivates the add-on, so its pages and automations stop running. The files are kept, so you can re-activate it any time. Nothing is deleted, and its data stays in the database.",
+        "moduleOnTitle": "Re-activate {name}?",
+        "moduleOnBody": "This turns the add-on back on. Its files are still on disk, so it starts working again immediately.",
+        "reactivate": "Re-activate"
+      },
+      "engines": {
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "connect": "Connect",
+        "manage": "Manage",
+        "disconnect": "Disconnect",
+        "disconnectYes": "Yes, disconnect",
+        "save": "Save & connect",
+        "testing": "Connecting…",
+        "displayName": "Display name",
+        "secret": "Shared secret token",
+        "secretSaved": "•••••••• saved, leave blank to keep",
+        "secretNew": "paste the shared secret",
+        "lastChecked": "Last checked",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Runs as a separate {brand} deployment. Connect by URL + secret, no upload.",
+          "blocked": "Blocked: native add-on active",
+          "blockedNote": "Native Instagram add-on is installed. Remove it below to connect a remote {brand}.",
+          "modalTitle": "Connect Instagram",
+          "modalBody": "Paste your {brand} deployment URL and the shared secret token. {app} verifies the connection over API. Nothing is uploaded.",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Shown on every \"Sync from …\", \"Manage on …\" and \"… URL\" label across the app.",
+          "disconnectTitle": "Disconnect Instagram?",
+          "disconnectBody": "This disconnects Instagram from {app}. Instagram will immediately disappear from the dashboard, analytics, inbox, flows, templates and auto-replies for every workspace, and none of it can be used until you reconnect. Continue?"
+        },
+        "email": {
+          "title": "Email",
+          "body": "Connecting links the {brand} email platform so mail lands in the team inbox, by URL + secret, no upload.",
+          "modalTitle": "Connect email",
+          "modalBody": "Paste your {brand} deployment URL and the shared secret token. {app} verifies the connection over API. Nothing is uploaded.",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Shown on every email label across the app.",
+          "disconnectTitle": "Disconnect email?",
+          "disconnectBody": "This disconnects the email platform from {app}. Mail stops landing in the team inbox for every workspace until you reconnect. Continue?"
+        }
+      },
+      "errors": {
+        "generic": "That did not work.",
+        "forbidden": "Only a super admin can change modules.",
+        "invalidPackage": "The package is not valid.",
+        "tooLarge": "The package is too large.",
+        "coreTooOld": "This package needs a newer core version.",
+        "engineConflict": "Instagram runs one engine at a time. Disconnect the other one first."
+      }
+    },
+    "workspace": {
+      "title": "Add-ons",
+      "description": "Extra feature packs you buy on top of your subscription.",
+      "needPlanTitle": "Add-ons need an active plan",
+      "needPlanBody": "Add-ons are extra feature packs you buy on top of your subscription. Choose a plan first, then come back here to add features.",
+      "viewPlans": "View plans",
+      "noneTitle": "No add-ons available",
+      "noneBody": "There are no add-ons offered right now. Check back later.",
+      "ownedTitle": "Your add-ons",
+      "ownedBody": "Active packs merged onto your current plan.",
+      "ends": "Ends {date}",
+      "lifetime": "Lifetime",
+      "active": "Active",
+      "cardEyebrow": "Add-on",
+      "catalogTitle": "Add-ons",
+      "catalogBody": "Unlock extra features on top of your current plan. No plan change needed.",
+      "count": "{count, plural, one {# add-on} other {# add-ons}}",
+      "free": "Free",
+      "lifetimePrice": "one-time",
+      "per": "/ {unit}",
+      "units": { "days": "days", "weeks": "weeks", "months": "months", "years": "years" },
+      "buy": "Add to plan",
+      "buyAgain": "Buy again",
+      "owned": "Owned ×{count} · buying again adds more",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "Unlimited {name}",
+        "add": "+{amount} {name}"
+      },
+      "error": "The add-ons could not be loaded."
+    }
+  }
+}

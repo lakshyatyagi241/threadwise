@@ -1,0 +1,33 @@
+import type { PlaceOrderResponse } from '@crm/contracts';
+
+export type NextStep =
+  | { kind: 'navigate'; url: string }
+  | { kind: 'razorpay'; options: Record<string, unknown>; returnUrl: string }
+  | { kind: 'done' };
+
+/** Turns the API's `next` into what the browser does. The widget options are built here from plain parameters, never from HTML. */
+export function nextStep(res: PlaceOrderResponse): NextStep {
+  const n = res.next;
+  if (n.type === 'redirect') return { kind: 'navigate', url: n.url };
+  if (n.type === 'paid') return { kind: 'done' };
+  const p = n.params;
+  return {
+    kind: 'razorpay',
+    returnUrl: String(p.callbackUrl),
+    options: {
+      key: p.keyId,
+      order_id: p.orderId,
+      amount: p.amountMinor,
+      currency: p.currency,
+      name: p.name,
+      description: p.description,
+      prefill: { name: p.prefillName, email: p.prefillEmail },
+    },
+  };
+}
+
+/** Where the return endpoint sent the buyer: `?payment=` plus the order number. */
+export type PaymentOutcome = 'success' | 'failed' | 'cancelled' | 'pending' | 'notfound';
+const OUTCOMES: readonly string[] = ['success', 'failed', 'cancelled', 'pending', 'notfound'];
+export const parseOutcome = (v: string | null): PaymentOutcome | null =>
+  v && OUTCOMES.includes(v) ? (v as PaymentOutcome) : null;

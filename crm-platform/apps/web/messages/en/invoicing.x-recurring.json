@@ -1,0 +1,332 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "This schedule has ended, so there is nothing left to change or run.",
+        "REC_NOT_ACTIVE": "This schedule is not active. Resume it first.",
+        "REC_START_TOO_OLD": "The start date is too far in the past. At most 12 past periods are made, so start from a later date.",
+        "INV_RECURRING_INVALID": "The template could not be used to make an invoice. Check the buyer, the lines and the tax, then save again."
+      }
+    },
+    "recurring": {
+      "title": "Recurring invoices",
+      "subtitle": "Schedules that make invoices by themselves, on the dates you set.",
+      "new": "New schedule",
+      "invoices": "Invoices",
+      "tabsLabel": "Schedule status",
+      "tabs": { "all": "All", "active": "Active", "paused": "Paused", "ended": "Ended" },
+      "search": "Search the loaded schedules",
+      "refresh": "Refresh",
+      "tableLabel": "Recurring invoice schedules",
+      "scrollArea": "Schedules table, scrolls sideways",
+      "loading": "Loading schedules",
+      "empty": {
+        "all": {
+          "title": "No recurring invoices yet",
+          "message": "Set a schedule once and the invoice is made for you every week, month or year."
+        },
+        "active": {
+          "title": "Nothing is running",
+          "message": "Active schedules, the ones that will make their next invoice on time, appear here."
+        },
+        "paused": {
+          "title": "No paused schedules",
+          "message": "A schedule you pause stops making invoices until you resume it."
+        },
+        "ended": {
+          "title": "No ended schedules",
+          "message": "A schedule ends after its last run or its end date."
+        }
+      },
+      "emptySearchTitle": "No schedule matches",
+      "emptySearch": "Nothing in the loaded rows matches. Clear the search or load more.",
+      "clearSearch": "Clear search",
+      "showing": "{count, plural, one {Showing 1 schedule} other {Showing # schedules}}",
+      "showingMatches": "{count} of {loaded} loaded schedules match",
+      "loadMore": "Load more",
+      "allLoaded": "All schedules loaded",
+      "searchLoadedOnly": "The search looks only at the schedules already loaded. Load more to search further.",
+      "columns": {
+        "name": "Schedule",
+        "buyer": "Buyer",
+        "every": "Repeats",
+        "next": "Next run",
+        "last": "Last run",
+        "runs": "Runs",
+        "failures": "Failures",
+        "amount": "Per invoice",
+        "mode": "Each invoice is",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "lineCount": "{count, plural, one {1 line} other {# lines}}",
+      "onHold": "On hold",
+      "runsOf": "{done} of {max}",
+      "failuresTitle": "{count, plural, one {1 period failed. Open the history.} other {# periods failed. Open the history.}}",
+      "channel": { "link": "Link", "email": "Email", "whatsapp": "WhatsApp" },
+      "moreFor": "More actions for {name}",
+      "open": "Open",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Resume",
+      "cancel": "Cancel",
+      "runNow": {
+        "action": "Run now",
+        "title": "Run {name} now?",
+        "confirm": "Run now",
+        "message": {
+          "draft": "This makes the invoice for {date} now, as a draft you can review, and the schedule moves on to the next period.",
+          "issue": "This makes the invoice for {date} now and issues it (it gets its number at once). The schedule moves on to the next period.",
+          "issue_send": "This makes the invoice for {date} now, issues it and sends it to the buyer. The schedule moves on to the next period."
+        }
+      },
+      "delete": {
+        "action": "Delete",
+        "title": "Delete {name}?",
+        "message": "{name} stops making invoices. The invoices it already made stay in your list.",
+        "confirm": "Delete schedule",
+        "keep": "Keep it"
+      },
+      "toast": {
+        "paused": "{name} is paused.",
+        "resumed": "{name} is running again. Next invoice: {date}.",
+        "resumedEnded": "{name} had no periods left, so it has ended.",
+        "ran": "An invoice was made from {name}.",
+        "runFailed": "The run for {name} failed and was recorded. Open the history to see why.",
+        "deleted": "{name} was deleted."
+      },
+      "every": {
+        "day": "{interval, plural, one {Every day} other {Every # days}}",
+        "week": "{interval, plural, one {Every week} other {Every # weeks}}",
+        "month": "{interval, plural, one {Every month} other {Every # months}}",
+        "year": "{interval, plural, one {Every year} other {Every # years}}"
+      },
+      "status": { "active": "Active", "paused": "Paused", "ended": "Ended" },
+      "runStatus": { "created": "Created", "failed": "Failed" },
+      "modeShort": { "draft": "A draft", "issue": "Issued", "issue_send": "Issued and sent" },
+      "modeSent": {
+        "email": "Issued and emailed",
+        "link": "Issued, shared by link",
+        "whatsapp": "Issued and sent on WhatsApp"
+      },
+      "frequency": { "day": "Days", "week": "Weeks", "month": "Months", "year": "Years" },
+      "modeCards": {
+        "draft": {
+          "title": "Leave as a draft",
+          "hint": "Each invoice waits for your review before it is issued."
+        },
+        "issue": {
+          "title": "Issue it",
+          "hint": "Each invoice is numbered and ready the day it is due."
+        },
+        "issue_send": {
+          "title": "Issue and send",
+          "hint": "Each invoice is issued and sent to the buyer on its own."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "There is no buyer email in the template, so an email send will fail. Add an email or send by link."
+      },
+      "preview": {
+        "title": "Next runs",
+        "incomplete": "Fill in the schedule to see when invoices will be made.",
+        "sentence": "{every} from {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, one {1 invoice} other {# invoices}}} end {, until {end}} both {, {count, plural, one {1 invoice} other {# invoices}}, until {end}} other {}}",
+        "outcome": {
+          "draft": "Each invoice is left as a draft for you to review.",
+          "issue": "Each invoice is issued automatically.",
+          "issue_email": "Each invoice is issued and emailed to the buyer.",
+          "issue_link": "Each invoice is issued and recorded as shared by link.",
+          "issue_whatsapp": "Each invoice is issued and sent on WhatsApp."
+        },
+        "eachInvoice": "Each invoice comes to about",
+        "lastDay": "Last day of the month",
+        "noRuns": "No runs fall inside this schedule.",
+        "endsMaxRuns": "{count, plural, one {It stops after 1 invoice.} other {It stops after # invoices.}}",
+        "endsEndDate": "{count, plural, one {Nothing runs after {date}: 1 invoice in all.} other {Nothing runs after {date}: # invoices in all.}}",
+        "moreBounded": "{count, plural, one {1 invoice in all.} other {# invoices in all, the rest follow the same rhythm.}}",
+        "moreForever": "It keeps going until you pause or delete it.",
+        "clampNote": "This schedule starts on day {day}. A month without a day {day} runs on its last day instead, and the next month goes back to day {day}.",
+        "catchUp": "{count, plural, one {1 period is already past: its invoice is made right away.} other {# periods are already past: their invoices are made right away, one each.}}",
+        "catchUpTooOld": "{count} periods are already past, and at most {max} are made. Start from a later date."
+      },
+      "builder": {
+        "loading": "Loading",
+        "endedNoEdit": "This schedule has ended, so it can no longer be edited.",
+        "openSchedule": "Open the schedule",
+        "back": "Back",
+        "newTitle": "New recurring invoice",
+        "editTitle": "Edit {name}",
+        "newSubtitle": "Set the rhythm and the invoice it makes. The next runs show on the side.",
+        "editSubtitle": "Change the rhythm or the invoice for the periods still to come.",
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create schedule",
+        "conflict": "Someone else changed this schedule while you were editing. Reload to see their version. Your edits here will be lost.",
+        "reload": "Reload",
+        "fixProblems": "Fix the highlighted fields first.",
+        "nothingToSave": "Nothing was changed.",
+        "saved": "Schedule saved.",
+        "created": "{name} will now make invoices on schedule.",
+        "schedule": "Schedule",
+        "name": "Name",
+        "nameHint": "Only you see it, for example Monthly retainer.",
+        "every": "Repeat every",
+        "frequency": "Unit",
+        "startDate": "First invoice on",
+        "startFixed": "The start date cannot be changed. Create a new schedule to start from another date.",
+        "startHint": "A date in the past makes the periods already due right away, up to 12.",
+        "endDate": "Stop after (optional)",
+        "endHint": "No invoice is made after this date.",
+        "maxRuns": "Number of invoices (optional)",
+        "maxRunsHint": "The schedule ends after this many invoices.",
+        "noLimit": "No limit",
+        "scheduleEditNote": "A changed rhythm continues from today and never repeats a period that already ran.",
+        "mode": "What happens to each invoice",
+        "sendChannel": "Send by",
+        "sendChannelHint": "Link records that you share the link yourself. Email and WhatsApp send it for you.",
+        "templateTitle": "Invoice template",
+        "templateFuture": "A new template applies to the invoices still to come. Invoices already made are not changed.",
+        "replaceTemplate": "Replace the template",
+        "keepTemplate": "Keep the current template"
+      },
+      "template": {
+        "title": "Invoice template",
+        "hint": "Every period gets a new invoice made from this one, dated for that period.",
+        "hintEdit": "Build the new template here. It replaces the current one for future invoices.",
+        "sourceLabel": "Where the template comes from",
+        "source": {
+          "invoice": {
+            "title": "Copy an invoice",
+            "hint": "Use the buyer and lines of an invoice you already made."
+          },
+          "build": { "title": "Build a template", "hint": "Fill in the buyer and the lines here." }
+        },
+        "draftInvoice": "Draft invoice",
+        "copyOf": "A copy of this invoice, totalling",
+        "change": "Change",
+        "choose": "Choose an invoice",
+        "copyNote": "The buyer, lines, tax and notes are copied when you save. Later changes to the original do not reach the schedule.",
+        "startFromInvoice": "Start from an invoice",
+        "startFromInvoiceHint": "Loads its buyer and lines here so you can adjust them.",
+        "billTo": "Bill to",
+        "contact": "Contact",
+        "contactHint": "Pick a contact to link each invoice to them, or type the buyer below.",
+        "buyerName": "Name on the invoice",
+        "buyerEmail": "Email",
+        "buyerPhone": "Phone",
+        "buyerCountry": "Country",
+        "buyerCountryHint": "Two letters, like IN or DE.",
+        "buyerTaxId": "Tax ID",
+        "buyerAddress": "Billing address",
+        "details": "Currency and tax",
+        "currency": "Currency",
+        "docType": "Document",
+        "docTypes": { "tax_invoice": "Tax invoice", "proforma": "Proforma invoice" },
+        "taxMode": "Tax",
+        "taxModes": { "rates": "By tax rate", "auto": "Automatic" },
+        "taxModeAutoHint": "The tax engine decides the taxes from the seller and buyer countries.",
+        "supplyType": "Supply",
+        "supply": { "goods": "Goods", "services": "Services", "digital": "Digital services" },
+        "paymentTerms": "Payment terms",
+        "paymentTermsHint": "Counted from the day each invoice is issued.",
+        "termsDefault": "Workspace default",
+        "termsOnReceipt": "Due on receipt",
+        "termsNet": "Net {days}",
+        "lines": "Line items",
+        "adjustments": "Discount and shipping",
+        "discountKind": "Discount on the whole invoice",
+        "discountNone": "No discount",
+        "discountPercent": "Percentage",
+        "discountAmount": "Fixed amount ({currency})",
+        "discountValue": "Discount value",
+        "shipping": "Shipping ({currency})",
+        "notes": "Note to the customer",
+        "notesHint": "Printed on every invoice.",
+        "termsText": "Terms and conditions",
+        "termsTextHint": "Printed at the bottom of every invoice.",
+        "kept": "{count, plural, one {The template has 1 line, billed to} other {The template has # lines, billed to}}"
+      },
+      "problems": {
+        "generic": "Check this field.",
+        "nameRequired": "Give the schedule a name.",
+        "nameTooLong": "Use at most 120 characters.",
+        "intervalInvalid": "Enter a whole number from 1 to 365.",
+        "startInvalid": "Enter a valid start date.",
+        "startTooOld": "That start date is {count} periods back, and at most {max} past periods are made. Pick a later date.",
+        "endInvalid": "Enter a valid end date.",
+        "endBeforeStart": "The end date is before the start date.",
+        "maxRunsInvalid": "Enter a whole number from 1 to 1000, or leave it empty.",
+        "invoiceRequired": "Choose the invoice to copy.",
+        "termsInvalid": "Enter 0 to 365 days.",
+        "descriptionRequired": "Describe this line.",
+        "qtyInvalid": "Enter a quantity above zero.",
+        "priceInvalid": "Enter a valid price.",
+        "lineDiscountInvalid": "Enter a percentage from 0 to 100.",
+        "hsnRequired": "Enter the HSN or SAC code.",
+        "hsnInvalid": "An HSN or SAC code is 2 to 12 letters or digits.",
+        "taxRateRemoved": "This tax rate no longer exists. Pick another.",
+        "currencyInvalid": "Enter a three-letter currency code.",
+        "noLines": "Add at least one line.",
+        "discountInvalid": "Enter a valid discount.",
+        "shippingInvalid": "Enter a valid amount.",
+        "emailInvalid": "Enter a valid email address.",
+        "amountZero": "The invoice total must be more than zero.",
+        "amountInvalid": "This amount is not valid.",
+        "contactRequired": "Pick a contact or type the buyer name. Invoices that are issued by themselves need a buyer.",
+        "countryInvalid": "Use a two-letter country code.",
+        "regionInvalid": "Enter a valid state or region code.",
+        "autoNeedsSellerCountry": "Automatic tax needs your country in the invoicing settings."
+      },
+      "detail": {
+        "loading": "Loading the schedule",
+        "backToList": "Back to recurring invoices",
+        "back": "Back to recurring invoices",
+        "failures": "{count, plural, one {1 period failed to make its invoice.} other {# periods failed to make their invoice.}}",
+        "seeHistory": "See why",
+        "pausedNote": "This schedule is paused. Periods that fall while it is paused are skipped: when you resume, the next invoice is for today or later.",
+        "endedNote": "This schedule has ended. Nothing more will be made, and it can no longer be edited.",
+        "nextRun": "Next run",
+        "lastRun": "Last run",
+        "runs": "Invoices made",
+        "failedCount": "{count, plural, one {1 failure} other {# failures}}",
+        "amount": "Per invoice",
+        "amountNote": "What the template comes to today",
+        "upcoming": "Upcoming dates",
+        "noUpcoming": "No more runs are due.",
+        "template": "Template",
+        "buyer": "Buyer",
+        "lines": "Lines",
+        "currency": "Currency",
+        "mode": "Each invoice is",
+        "starts": "Started",
+        "ends": "Ends",
+        "never": "No end date",
+        "limit": "Limit",
+        "noLimit": "No limit",
+        "invoicesCount": "{count, plural, one {1 invoice} other {# invoices}}",
+        "templateNote": "Editing the template changes the invoices still to come, never the ones already made."
+      },
+      "runs": {
+        "title": "Run history",
+        "subtitle": "One row for each period, newest first.",
+        "loading": "Loading the history",
+        "scrollArea": "Run history table, scrolls sideways",
+        "emptyTitle": "No runs yet",
+        "emptyMessage": "The first invoice is made on the next run date.",
+        "period": "Period {n}",
+        "draftInvoice": "Draft",
+        "showing": "{count, plural, one {Showing 1 run} other {Showing # runs}}",
+        "loadMore": "Load more",
+        "allLoaded": "Whole history shown",
+        "columns": {
+          "period": "Period date",
+          "status": "Result",
+          "invoice": "Invoice",
+          "error": "Why it failed",
+          "at": "Made at"
+        }
+      }
+    }
+  }
+}

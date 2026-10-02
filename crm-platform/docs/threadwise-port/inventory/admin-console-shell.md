@@ -234,7 +234,7 @@ WADEV (connect-device flow inside the popover), AIADM (BYOK key model and shared
 - **External systems:** none.
 - **Settings:** none directly; extension enable state (ADD).
 - **Acceptance criteria:**
-  - Given 12,500 users, when the sidebar renders, then the Users badge reads `12.5k`.
+  - Given 12,500 users, when the sidebar renders, then the Users badge reads `13k` (verified on the running Reference: one decimal below 10,000, none from there, so the earlier `12.5k` here was wrong).
   - Given 3 open tickets and 2 unread contact messages, when the sidebar renders, then the Support group badge reads `5` in the coral style.
   - Given an installed extension whose manifest declares an admin nav item, when the sidebar renders, then that item appears at the end of the System block; when the extension is disabled, then it disappears without a code change.
   - Given the active key is `support-sla`, when the sidebar renders, then the Support group is expanded and only that child is highlighted.

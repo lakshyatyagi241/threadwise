@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Bank transfer",
+      "manual": "Manual",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Online store"
+    },
+    "toolbar": {
+      "currency": "Currency",
+      "currencyPlaceholder": "USD",
+      "issued": "Issued",
+      "issuedWindow": "Issue date range",
+      "due": "Due",
+      "dueWindow": "Due date range",
+      "dueFrom": "Due from",
+      "dueTo": "Due to",
+      "docType": "Document type",
+      "anyDocType": "All types",
+      "mine": "My invoices",
+      "docTypes": {
+        "tax_invoice": "Tax invoice",
+        "proforma": "Proforma",
+        "receipt": "Receipt"
+      }
+    },
+    "strip": {
+      "label": "Money still owed",
+      "outstanding": "Outstanding ({currency})",
+      "overdue": "Of which overdue"
+    },
+    "row": {
+      "creditNote": "Create credit note",
+      "downloadPdf": "Download PDF"
+    },
+    "bulk": {
+      "sendLink": "Mark link as sent",
+      "someSkipped": "{count, plural, one {# selected invoice was skipped because it does not accept this action.} other {# selected invoices were skipped because they do not accept this action.}}",
+      "done": {
+        "send": "{count, plural, one {# invoice marked as sent.} other {# invoices marked as sent.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, one {# draft will be deleted for good. Invoices that are not drafts are left alone.} other {# drafts will be deleted for good. Invoices that are not drafts are left alone.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Void selected invoices",
+        "close": "Close",
+        "keep": "Keep invoices",
+        "confirm": "{count, plural, one {Void # invoice} other {Void # invoices}}",
+        "warning": "{count, plural, one {# invoice will be voided. It keeps its number but can no longer be paid or edited.} other {# invoices will be voided. They keep their numbers but can no longer be paid or edited.}}",
+        "skipped": "{count, plural, one {# selected invoice is skipped: only issued invoices with no payment and no credit note can be voided.} other {# selected invoices are skipped: only issued invoices with no payment and no credit note can be voided.}}",
+        "reason": "Reason (kept on every invoice)",
+        "reasonRequired": "Say why these invoices are being voided."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Recorded as sent with the link.",
+        "email": "Invoice sent by email.",
+        "whatsapp": "Invoice sent on WhatsApp."
+      },
+      "markedPaid": "Marked as paid.",
+      "linkRegenerated": "New link created. The old one no longer works.",
+      "linkRevoked": "Link turned off.",
+      "linkUnavailable": "This invoice has no active link. Open the invoice to create a new one."
+    },
+    "voidDialog": {
+      "reasonHint": "Required. Kept in the invoice's timeline.",
+      "reasonRequired": "Say why the invoice is being voided.",
+      "refundFirst": "This invoice has received payments. Refund them first (from the Payments list on the invoice), then void it.",
+      "creditsFirst": "This invoice has credit notes against it. Void the credit notes first, then void the invoice."
+    },
+    "sendDialog": {
+      "loading": "Loading invoice",
+      "channel": "How do you send it?",
+      "channels": {
+        "link": "Share the link myself",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Mark as sent",
+        "email": "Send email",
+        "whatsapp": "Send on WhatsApp"
+      },
+      "linkOff": "This invoice has no active link. Create a new one from the link card on the invoice, then share it.",
+      "linkRecords": "Sharing the link yourself only records that it was sent.",
+      "noEmail": "No email address on this invoice",
+      "noPhone": "No phone number on this invoice",
+      "noEmailHelp": "This invoice has no buyer email. Close this window, use Edit details to add one, and try again.",
+      "noPhoneHelp": "This invoice has no buyer phone number. Close this window, use Edit details to add one, and try again.",
+      "message": "Message",
+      "messageHint": "Optional. Added to the message that goes with the invoice.",
+      "deliveryNote": "The invoice is queued for delivery to the buyer. The timeline shows when it was sent."
+    },
+    "editDialog": {
+      "title": "Edit details",
+      "close": "Close",
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "saved": "Invoice details saved.",
+      "reload": "Reload the invoice",
+      "conflict": "Someone else changed this invoice while you were editing. Reload it to see the latest version, then make your change again.",
+      "intro": "An issued invoice keeps its lines, amounts and numbering. These details can still change.",
+      "email": "Buyer email",
+      "phone": "Buyer phone",
+      "phoneHint": "With the country code, for example +14155550123",
+      "contact": "Contact",
+      "owner": "Owner",
+      "dueDate": "Due date",
+      "dueHint": "Extend or shorten the payment terms.",
+      "reference": "Reference",
+      "notes": "Notes",
+      "terms": "Terms"
+    },
+    "payDialog": {
+      "overpayNote": "This is {extra} more than the balance. You will be asked to confirm before it is recorded as a credit.",
+      "overpayConfirm": "{extra} more than the balance will be recorded and shown as a credit on the invoice. Press the button again to confirm.",
+      "problems": {
+        "tooMuch": "That is more than the invoice still owes."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Mark as paid",
+      "close": "Close",
+      "cancel": "Cancel",
+      "confirm": "Record payment",
+      "message": "Record the full balance of {amount} as received today?",
+      "method": "Received by"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "The refund date cannot be in the future."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Refund",
+      "receipt": "Receipt",
+      "refundOf": "returns {receipt}",
+      "refundedSoFar": "{amount} refunded so far"
+    },
+    "activity": {
+      "none": "Nothing has happened yet.",
+      "actors": {
+        "buyer": "The buyer",
+        "gateway": "Payment gateway",
+        "system": "System"
+      },
+      "events": {
+        "sent": "Sent to the buyer",
+        "overdue": "Became overdue",
+        "partially_paid": "Partly paid",
+        "link_regenerated": "Public link replaced",
+        "link_revoked": "Public link turned off",
+        "pay_attempt": "Online payment attempted",
+        "credit_note_issued": "Credit note"
+      }
+    },
+    "linked": {
+      "invoiced": "Invoiced",
+      "paid": "Paid",
+      "outstanding": "Owed",
+      "overdue": "Overdue",
+      "latest": "{count, plural, one {Showing the latest invoice.} other {Showing the latest # invoices.}}"
+    },
+    "detail": {
+      "editDetails": "Edit details",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Create credit note",
+      "linkOffBanner": "The buyer's link is switched off, so the buyer cannot open this invoice. Create a new link in the link card.",
+      "refunded": "Refunded",
+      "credited": "Credited",
+      "credit": "Credit",
+      "detailsLabel": "Invoice details",
+      "contact": "Contact",
+      "company": "Company",
+      "quote": "Quote",
+      "salesOrder": "Sales order",
+      "recurring": "Recurring schedule",
+      "makeRecurring": "Make recurring",
+      "reference": "Reference",
+      "owner": "Owner",
+      "createdBy": "Created by",
+      "overpaid": "More was received or credited than this invoice asks for. The excess shows as a credit.",
+      "voidNeedsRefund": "To void this invoice, refund its payments first. It also needs to have no credit notes.",
+      "sources": {
+        "manual": "Created by hand",
+        "quote": "From a quote",
+        "order": "From an order",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Online store",
+        "api": "API",
+        "ai": "AI assistant",
+        "recurring": "Recurring invoice",
+        "sales_order": "Sales order"
+      },
+      "creditNotes": {
+        "title": "Credit notes",
+        "create": "Create credit note",
+        "loading": "Loading credit notes",
+        "none": "No credit notes against this invoice.",
+        "draft": "Draft",
+        "status": {
+          "draft": "Draft",
+          "issued": "Issued",
+          "void": "Void"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Public link",
+      "address": "Link address",
+      "state": {
+        "active": "Active",
+        "revoked": "Turned off",
+        "expired": "Expired"
+      },
+      "off": {
+        "revoked": "The link was turned off. The buyer sees a page saying the invoice is unavailable.",
+        "expired": "The link has expired. The buyer sees a page saying the invoice is unavailable."
+      },
+      "copy": "Copy",
+      "copied": "Copied",
+      "expires": "Expires",
+      "revokedAt": "Turned off",
+      "views": "Times opened",
+      "firstViewed": "First opened",
+      "lastViewed": "Last opened",
+      "open": "Open the buyer's page",
+      "regenerate": "New link",
+      "revoke": "Turn off",
+      "close": "Close",
+      "cancel": "Cancel",
+      "regenerateTitle": "Create a new link",
+      "regenerateWarning": "The current link stops working at once. Anyone who has it will see that the invoice is unavailable.",
+      "regenerateConfirm": "Create new link",
+      "expiry": "The new link works for",
+      "expiryNever": "No expiry",
+      "expiryDays": "{count, plural, one {# day} other {# days}}",
+      "revokeTitle": "Turn off the link?",
+      "revokeMessage": "The buyer will no longer be able to open or pay this invoice from the link. You can create a new link later.",
+      "revokeConfirm": "Turn off link"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "This invoice is already issued, so its lines and amounts can no longer change.",
+        "INV_NOT_ISSUED": "Only an issued invoice can do that. Issue the draft first.",
+        "INV_ALREADY_VOID": "This invoice is already void.",
+        "INV_HAS_PAYMENTS": "This invoice still has payments. Refund them first, then void the invoice.",
+        "INV_HAS_CREDITS": "This invoice has credit notes against it. Void the credit notes first, then void the invoice.",
+        "INV_NOT_DELETABLE": "Only a draft can be deleted. Void this invoice instead.",
+        "INV_NO_RECIPIENT": "The invoice has no email address or phone number for that channel. Add one with Edit details and try again.",
+        "INV_LINK_UNAVAILABLE": "This invoice has no active link. Create a new one from the link card.",
+        "INV_OWNER_INVALID": "That person is not an active member of this workspace. Pick another owner.",
+        "PAY_OVERPAYMENT": "That is more than the invoice still owes. Lower the amount, or confirm that you are recording a credit.",
+        "PAY_FUTURE_DATE": "The payment date cannot be in the future.",
+        "PAY_CURRENCY_MISMATCH": "The payment must be in the same currency as the invoice.",
+        "PAY_REFUND_EXCEEDS": "That is more than can still be refunded on this payment.",
+        "PAY_NOT_REFUNDABLE": "This entry cannot be refunded. Only a payment with something left can be.",
+        "PAY_NOTHING_TO_PAY": "This invoice has nothing left to pay.",
+        "ROW_VERSION_CONFLICT": "Someone else changed this invoice just now. Reload to see the latest version, then try again."
+      }
+    }
+  }
+}

@@ -51,6 +51,8 @@ const FEATURES_OFF = {
   shopify: false,
   analytics: false,
   remove_branding: false,
+  // Deals, tasks and pipelines: on for every sample plan (Reference's sales pipeline is a base feature); the cap is the lever.
+  sales_pipeline: true,
 };
 const SAMPLE_PLANS: SeedPlan[] = [
   {
@@ -72,6 +74,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       flows: 1,
       tags: 20,
       autoreplies: 5,
+      pipelines: 2,
     },
     features: FEATURES_OFF,
   },
@@ -94,6 +97,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       flows: 10,
       tags: 100,
       autoreplies: 50,
+      pipelines: 10,
     },
     features: {
       ...FEATURES_OFF,
@@ -122,6 +126,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       flows: 0,
       tags: 0,
       autoreplies: 0,
+      pipelines: 0,
     },
     features: {
       automation: true,
@@ -131,6 +136,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       shopify: true,
       analytics: true,
       remove_branding: true,
+      sales_pipeline: true,
     },
   },
 ];

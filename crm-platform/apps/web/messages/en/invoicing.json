@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "Invoices",
+      "payments": "Payments",
+      "taxRates": "Tax rates",
+      "recurring": "Recurring invoices",
+      "salesOrders": "Sales orders",
+      "businessProfile": "Business profile"
+    },
+    "common": {
+      "unnamedContact": "Unnamed contact",
+      "dismiss": "Dismiss"
+    },
+    "status": {
+      "draft": "Draft",
+      "issued": "Issued",
+      "partially_paid": "Partially paid",
+      "overdue": "Overdue",
+      "paid": "Paid",
+      "void": "Void"
+    },
+    "method": {
+      "bank_transfer": "Bank transfer",
+      "cash": "Cash",
+      "card": "Card",
+      "upi": "UPI",
+      "cheque": "Cheque",
+      "gateway": "Online",
+      "other": "Other"
+    },
+    "errors": {
+      "network": "We could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again.",
+      "conflict": "Someone else changed this just now. Reload to see the latest version.",
+      "validation": "Some of the information is not valid. Check the highlighted fields.",
+      "unavailable": "Invoicing is not available on this server yet.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "notFound": "This invoice no longer exists.",
+      "planDisabled": "Your plan does not include invoicing.",
+      "invalidState": "That is not possible in the invoice's current state. Reload and check its status.",
+      "unexpected": "Something went wrong on our side. Try again.",
+      "requestId": "Request ID",
+      "retry": "Try again"
+    },
+    "picker": {
+      "unlink": "Remove contact",
+      "searchContact": "Search contacts by name",
+      "results": "Matching contacts",
+      "searching": "Searching...",
+      "unavailable": "Contacts could not be loaded.",
+      "none": "No contacts found."
+    },
+    "actions": {
+      "failed": "That did not work.",
+      "issued": "Invoice {number} issued.",
+      "sent": "Marked as sent.",
+      "voided": "Invoice {number} voided.",
+      "duplicated": "Copy created as a draft.",
+      "deleted": "Draft deleted.",
+      "linkCopied": "Link copied.",
+      "linkCopyFailed": "Your browser blocked copying. Select the link and copy it by hand."
+    },
+    "payDialog": {
+      "title": "Record payment",
+      "forInvoice": "Invoice {number}",
+      "close": "Close",
+      "cancel": "Cancel",
+      "record": "Record payment",
+      "markPaid": "Record and mark as paid",
+      "recordAnyway": "Record anyway",
+      "balance": "Balance due",
+      "amount": "Amount ({currency})",
+      "method": "Method",
+      "paidOn": "Paid on",
+      "reference": "Reference",
+      "referenceHint": "Transaction ID or cheque number",
+      "note": "Note",
+      "recorded": "Payment of {amount} recorded.",
+      "partialNote": "This is a partial payment. {left} will still be due.",
+      "overpayNote": "This is {extra} more than the balance. Check the amount before you record it.",
+      "problems": {
+        "amountInvalid": "Enter an amount, for example 125.50.",
+        "amountZero": "The amount must be more than zero.",
+        "dateInvalid": "Enter a valid date.",
+        "dateFuture": "The payment date cannot be in the future.",
+        "tooMuch": "That is more than can be refunded.",
+        "referenceTooLong": "The reference is too long (191 characters at most).",
+        "noteTooLong": "The note is too long (2000 characters at most)."
+      }
+    },
+    "refundDialog": {
+      "title": "Refund payment",
+      "close": "Close",
+      "cancel": "Cancel",
+      "refund": "Refund",
+      "available": "Up to {amount} can be refunded.",
+      "amount": "Amount ({currency})",
+      "date": "Refunded on",
+      "reason": "Reason",
+      "effect": "The invoice will owe the refunded amount again.",
+      "refunded": "Refunded {amount}.",
+      "problems": {
+        "amountInvalid": "Enter an amount, for example 125.50.",
+        "amountZero": "The amount must be more than zero.",
+        "tooMuch": "That is more than can be refunded."
+      }
+    },
+    "voidDialog": {
+      "title": "Void invoice",
+      "close": "Close",
+      "keep": "Keep invoice",
+      "void": "Void invoice",
+      "warning": "A voided invoice keeps its number but can no longer be paid, edited or reopened. The buyer's link will show it as cancelled.",
+      "reason": "Reason",
+      "reasonHint": "Optional. Kept in the invoice's activity."
+    },
+    "sendDialog": {
+      "title": "Share invoice",
+      "issueTitle": "Issue invoice",
+      "close": "Close",
+      "cancel": "Cancel",
+      "issue": "Issue invoice",
+      "done": "Done",
+      "issueIntro": "Issuing makes this invoice official:",
+      "issueNumber": "It gets the next invoice number.",
+      "issueFrozen": "Its lines, prices and taxes can no longer be edited.",
+      "issueLink": "A link for your customer becomes available.",
+      "link": "Link for your customer",
+      "linkHint": "Anyone with this link can see the invoice and how to pay it.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Your browser blocked copying. Select the link and copy it by hand.",
+      "open": "Open the customer's page",
+      "email": "Email it to",
+      "emailHint": "Optional. Leave empty to share the link yourself and only mark the invoice as sent.",
+      "alreadySent": "This invoice was already marked as sent."
+    },
+    "deleteDialog": {
+      "title": "Delete draft?",
+      "message": "{name} will be deleted for good. Only drafts can be deleted.",
+      "delete": "Delete draft",
+      "keep": "Keep"
+    },
+    "row": {
+      "moreFor": "Actions for {name}",
+      "draft": "draft",
+      "open": "Open",
+      "edit": "Edit",
+      "issue": "Issue and send",
+      "send": "Share link / mark sent",
+      "copyLink": "Copy link",
+      "recordPayment": "Record payment",
+      "markPaid": "Mark as paid",
+      "duplicate": "Duplicate",
+      "print": "Download / print",
+      "void": "Void",
+      "delete": "Delete draft"
+    },
+    "table": {
+      "columns": {
+        "number": "Invoice",
+        "contact": "Customer",
+        "issued": "Issued",
+        "due": "Due",
+        "total": "Total",
+        "paid": "Paid",
+        "balance": "Balance",
+        "status": "Status"
+      },
+      "draft": "Draft",
+      "daysLate": "{count, plural, one {# day late} other {# days late}}",
+      "selectAll": "Select all loaded invoices",
+      "selectRow": "Select {name}",
+      "scrollArea": "Invoices table"
+    },
+    "tabs": {
+      "label": "Invoice status",
+      "all": "All",
+      "draft": "Draft",
+      "issued": "Issued",
+      "partially_paid": "Partially paid",
+      "overdue": "Overdue",
+      "paid": "Paid",
+      "void": "Void",
+      "count": "{count, plural, one {# invoice} other {# invoices}}"
+    },
+    "toolbar": {
+      "search": "Search by number or customer",
+      "contactLoading": "Customer",
+      "from": "From",
+      "to": "To",
+      "issuedFrom": "Issued from",
+      "issuedTo": "Issued to",
+      "sort": "Sort invoices",
+      "sorts": {
+        "newest": "Newest first",
+        "oldest": "Oldest first",
+        "due": "Due date",
+        "amount": "Highest amount"
+      },
+      "reset": "Clear filters",
+      "refresh": "Refresh"
+    },
+    "bulk": {
+      "label": "Bulk actions",
+      "selected": "{count, plural, one {# invoice selected} other {# invoices selected}}",
+      "working": "Working...",
+      "issue": "Issue drafts",
+      "void": "Void",
+      "delete": "Delete drafts",
+      "clear": "Clear selection",
+      "failed": "That did not work.",
+      "keep": "Keep",
+      "someFailed": "{count, plural, one {# invoice could not be changed.} other {# invoices could not be changed.}}",
+      "done": {
+        "issue": "{count, plural, one {# draft issued.} other {# drafts issued.}}",
+        "void": "{count, plural, one {# invoice voided.} other {# invoices voided.}}",
+        "delete": "{count, plural, one {# draft deleted.} other {# drafts deleted.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "Void selected invoices?",
+          "message": "{count, plural, one {# selected invoice will be voided. Invoices that have payments are skipped.} other {# selected invoices will be voided. Invoices that have payments are skipped.}}",
+          "confirm": "Void invoices"
+        },
+        "delete": {
+          "title": "Delete selected drafts?",
+          "message": "{count, plural, one {# selected invoice will be considered. Only drafts are deleted, for good.} other {# selected invoices will be considered. Only drafts are deleted, for good.}}",
+          "confirm": "Delete drafts"
+        }
+      }
+    },
+    "list": {
+      "title": "Invoices",
+      "subtitle": "Bill your customers, follow what is paid and what is late.",
+      "payments": "Payments",
+      "newInvoice": "New invoice",
+      "tableLabel": "Invoice list",
+      "empty": {
+        "all": {
+          "title": "No invoices yet",
+          "message": "Create your first invoice, or start one from an accepted proposal or estimate."
+        },
+        "draft": {
+          "title": "No drafts",
+          "message": "Invoices you are still writing appear here."
+        },
+        "issued": {
+          "title": "Nothing waiting for payment",
+          "message": "Issued invoices with no payment yet appear here."
+        },
+        "partially_paid": {
+          "title": "No partly paid invoices",
+          "message": "Invoices with a payment but a balance left appear here."
+        },
+        "overdue": {
+          "title": "Nothing is overdue",
+          "message": "Invoices past their due date with a balance left appear here."
+        },
+        "paid": {
+          "title": "No paid invoices yet",
+          "message": "Invoices that are paid in full appear here."
+        },
+        "void": {
+          "title": "No voided invoices",
+          "message": "Cancelled invoices appear here and keep their numbers."
+        }
+      },
+      "emptyFilteredTitle": "No invoices match",
+      "emptyFiltered": "Try a different search or clear the filters.",
+      "resetFilters": "Clear filters",
+      "loading": "Loading invoices",
+      "showing": "{count, plural, one {# invoice loaded} other {# invoices loaded}}",
+      "loadMore": "Load more",
+      "allLoaded": "That is all of them"
+    },
+    "lines": {
+      "lineN": "Line {n}",
+      "description": "Description",
+      "descriptionPlaceholder": "What are you billing for?",
+      "removeLine": "Remove line {n}",
+      "qty": "Qty",
+      "price": "Unit price ({currency})",
+      "discount": "Discount %",
+      "tax": "Tax",
+      "noTax": "No tax",
+      "inclusive": "incl.",
+      "removedRate": "Tax rate removed",
+      "inactive": "inactive",
+      "amount": "Amount",
+      "addLine": "Add a line",
+      "problems": {
+        "descriptionRequired": "Describe this line.",
+        "qtyInvalid": "Enter a quantity above zero.",
+        "priceInvalid": "Enter a price, for example 49.90.",
+        "lineDiscountInvalid": "Enter a percentage from 0 to 100.",
+        "noLines": "Add at least one line before issuing.",
+        "amountZero": "The invoice total must be more than zero."
+      }
+    },
+    "totals": {
+      "label": "Invoice totals",
+      "title": "Totals",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "builder": {
+      "creatingFromDocument": "Creating the invoice from the document...",
+      "loading": "Loading",
+      "notEditable": "This invoice has been issued, so it can no longer be edited. Duplicate it to start a corrected one.",
+      "openInvoice": "Open the invoice",
+      "newTitle": "New invoice",
+      "editTitle": "Edit draft",
+      "back": "Back",
+      "unsaved": "Unsaved changes",
+      "cancel": "Cancel",
+      "saveDraft": "Save draft",
+      "saveAndIssue": "Save and issue",
+      "conflict": "Someone else changed this draft while you were editing. Reload to see their version; your edits here will be lost.",
+      "reload": "Reload",
+      "viewLabel": "Builder view",
+      "views": {
+        "edit": "Edit",
+        "preview": "Preview"
+      },
+      "billTo": "Bill to",
+      "contact": "Contact",
+      "contactHint": "Pick a contact to link the invoice to them, or type the buyer below.",
+      "buyerName": "Name on the invoice",
+      "buyerEmail": "Email",
+      "buyerPhone": "Phone",
+      "buyerAddress": "Billing address",
+      "details": "Dates and currency",
+      "currency": "Currency",
+      "currencyHint": "Three letters, like USD or KWD. Decimals follow the currency.",
+      "issueDate": "Issue date",
+      "terms": "Payment terms",
+      "noDueDate": "No due date",
+      "dueDate": "Due date",
+      "lineItems": "Line items",
+      "orderLinkedNote": "The lines of an invoice made from a sales order are fixed. Void or delete this invoice and invoice the order again to change them.",
+      "adjustments": "Discount",
+      "discountKind": "Discount on the whole invoice",
+      "discountNone": "No discount",
+      "discountPercent": "Percentage",
+      "discountAmount": "Fixed amount ({currency})",
+      "discountValue": "Discount value",
+      "notesAndTerms": "Notes and terms",
+      "notes": "Note to the customer",
+      "notesHint": "Shown on the invoice.",
+      "termsText": "Terms and conditions",
+      "termsHint": "Shown at the bottom of the invoice.",
+      "preview": "Preview",
+      "saved": "Draft saved.",
+      "fixProblems": "Fix the highlighted fields first.",
+      "serverRejected": "The server did not accept some of the values. Check the fields and try again.",
+      "problems": {
+        "contactRequired": "Pick a contact or type the buyer's name.",
+        "currencyInvalid": "Enter a three-letter currency code.",
+        "issueDateInvalid": "Enter a valid issue date.",
+        "dueBeforeIssue": "The due date cannot be before the issue date.",
+        "dueInvalid": "Enter a valid due date.",
+        "noLines": "Add at least one line before issuing.",
+        "discountInvalid": "Enter a valid discount.",
+        "emailInvalid": "Enter a valid email address.",
+        "amountZero": "The invoice total must be more than zero.",
+        "descriptionRequired": "Describe this line.",
+        "priceInvalid": "Enter a valid price.",
+        "qtyInvalid": "Enter a quantity above zero.",
+        "lineDiscountInvalid": "Enter a percentage from 0 to 100."
+      }
+    },
+    "terms": {
+      "onReceipt": "Due on receipt",
+      "net": "Net {days}",
+      "custom": "Custom date"
+    },
+    "paper": {
+      "label": "Invoice {number}",
+      "labelDraft": "Draft invoice preview",
+      "sellerFallback": "Your business name",
+      "title": "Invoice",
+      "draftNumber": "Draft",
+      "billedTo": "Billed to",
+      "buyerFallback": "Customer",
+      "issued": "Issued",
+      "due": "Due",
+      "onReceipt": "On receipt",
+      "item": "Item",
+      "qty": "Qty",
+      "price": "Price",
+      "tax": "Tax",
+      "amount": "Amount",
+      "noLines": "No lines yet",
+      "noDescription": "No description",
+      "lineDiscount": "{percent}% discount",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "discountPercent": "Discount ({percent}%)",
+      "total": "Total",
+      "includesTax": "Tax included in prices",
+      "paid": "Paid",
+      "balanceDue": "Balance due",
+      "notes": "Notes",
+      "terms": "Terms"
+    },
+    "detail": {
+      "loading": "Loading invoice",
+      "backToList": "Back to invoices",
+      "draftTitle": "Draft invoice",
+      "edit": "Edit",
+      "issueAndSend": "Issue and send",
+      "shareAgain": "Share again",
+      "send": "Share and send",
+      "recordPayment": "Record payment",
+      "markPaid": "Mark as paid",
+      "copyLink": "Copy link",
+      "print": "Download / print",
+      "duplicate": "Duplicate",
+      "void": "Void",
+      "delete": "Delete draft",
+      "voidedBanner": "This invoice was voided on {date}. It keeps its number but can no longer be paid.",
+      "voidNeedsRefund": "To void this invoice, refund its payments first.",
+      "overpaid": "More has been paid than this invoice asks for.",
+      "amountsLabel": "Amounts",
+      "total": "Total",
+      "paid": "Paid",
+      "balance": "Balance due",
+      "issued": "Issued",
+      "due": "Due",
+      "noDue": "No due date",
+      "daysLate": "{count, plural, one {# day late} other {# days late}}",
+      "sentAt": "Sent",
+      "paidAt": "Paid in full",
+      "source": "Created from",
+      "sourceKind": {
+        "proposal": "Proposal",
+        "estimate": "Estimate"
+      },
+      "deal": "Deal",
+      "dealFallback": "Open deal"
+    },
+    "paymentsSection": {
+      "title": "Payments",
+      "loading": "Loading payments",
+      "none": "No payments recorded yet.",
+      "refund": "Refund"
+    },
+    "activity": {
+      "title": "Activity",
+      "loading": "Loading activity",
+      "events": {
+        "created": "Draft created",
+        "edited": "Draft edited",
+        "issued": "Invoice issued",
+        "sent": "Marked as sent",
+        "viewed": "Opened by the customer",
+        "payment_recorded": "Payment recorded",
+        "payment_refunded": "Payment refunded",
+        "paid": "Paid in full",
+        "reminder_sent": "Reminder sent",
+        "voided": "Invoice voided"
+      }
+    },
+    "pickInvoice": {
+      "title": "Which invoice was paid?",
+      "close": "Close",
+      "cancel": "Cancel",
+      "search": "Search by number or customer",
+      "loading": "Loading invoices",
+      "noMatch": "No outstanding invoice matches.",
+      "nothingOwed": "Nothing is owed right now.",
+      "balance": "Balance",
+      "more": "Show more"
+    },
+    "aging": {
+      "loading": "Loading the aging report",
+      "emptyTitle": "Nothing is owed",
+      "emptyMessage": "Every issued invoice is paid. Unpaid invoices will show here, grouped by how late they are.",
+      "asOf": "As of {date}. Lateness counts from the due date.",
+      "currencyLabel": "Outstanding in {currency}",
+      "outstanding": "Outstanding",
+      "invoices": "{count, plural, one {# invoice} other {# invoices}}",
+      "barLabel": "Share of the outstanding amount in each age group",
+      "buckets": {
+        "current": "Not yet due",
+        "d1_30": "1-30 days late",
+        "d31_60": "31-60 days late",
+        "d61_90": "61-90 days late",
+        "d90_plus": "Over 90 days late"
+      },
+      "total": "Total",
+      "unnamed": "Unnamed contact",
+      "noContact": "No contact"
+    },
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Money received against your invoices, and what is still owed.",
+      "invoices": "Invoices",
+      "record": "Record payment",
+      "viewLabel": "Payments view",
+      "views": {
+        "ledger": "Ledger",
+        "aging": "Aging"
+      },
+      "tableLabel": "Payment ledger",
+      "loading": "Loading payments",
+      "emptyFilteredTitle": "No payments match",
+      "emptyFiltered": "Try a different search or clear the filters.",
+      "emptyTitle": "No payments yet",
+      "emptyMessage": "When a customer pays an invoice, record it here or from the invoice.",
+      "resetFilters": "Clear filters",
+      "showing": "{count, plural, one {# payment loaded} other {# payments loaded}}",
+      "loadMore": "Load more",
+      "allLoaded": "That is all of them",
+      "strip": {
+        "loading": "Loading totals",
+        "label": "Payment totals",
+        "window": "{from} to {to}",
+        "none": "No payments in this period.",
+        "collected": "Collected ({currency})",
+        "count": "Payments",
+        "refunded": "Refunded"
+      },
+      "toolbar": {
+        "search": "Search reference, invoice or customer",
+        "method": "Method",
+        "allMethods": "All methods",
+        "from": "From",
+        "to": "To",
+        "paidFrom": "Paid from",
+        "paidTo": "Paid to",
+        "reset": "Clear filters",
+        "refresh": "Refresh"
+      },
+      "table": {
+        "scrollArea": "Payments table",
+        "columns": {
+          "date": "Date",
+          "invoice": "Invoice",
+          "contact": "Customer",
+          "method": "Method",
+          "reference": "Reference",
+          "amount": "Amount",
+          "refunded": "Refunded",
+          "recordedBy": "Recorded by",
+          "actions": "Actions"
+        },
+        "moreFor": "Actions for the payment of {date}",
+        "openInvoice": "Open invoice",
+        "refund": "Refund"
+      }
+    },
+    "taxRates": {
+      "title": "Tax rates",
+      "subtitle": "The taxes you add to invoice lines. One is the default for new lines.",
+      "new": "New tax rate",
+      "tableLabel": "Tax rates",
+      "loading": "Loading tax rates",
+      "emptyTitle": "No tax rates yet",
+      "emptyMessage": "Add the taxes you charge, like VAT or GST, to pick them on invoice lines.",
+      "scrollArea": "Tax rates table",
+      "columns": {
+        "name": "Name",
+        "rate": "Rate",
+        "type": "Type",
+        "status": "Status",
+        "effective": "Effective from",
+        "used": "Lines",
+        "actions": "Actions"
+      },
+      "default": "Default",
+      "inclusive": "Inclusive",
+      "exclusive": "Exclusive",
+      "active": "Active",
+      "inactive": "Inactive",
+      "always": "Always",
+      "moreFor": "Actions for {name}",
+      "edit": "Edit",
+      "makeDefault": "Make default",
+      "madeDefault": "{name} is now the default.",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "deactivated": "{name} deactivated.",
+      "activated": "{name} activated.",
+      "delete": "Delete",
+      "deleteTitle": "Delete this tax rate?",
+      "keep": "Keep",
+      "deleted": "{name} deleted.",
+      "count": "{count, plural, one {# tax rate} other {# tax rates}}",
+      "hint": "Changing a rate never changes invoices already issued: each invoice keeps the rate it was made with.",
+      "errors": {
+        "isDefault": "This is the default rate. Make another rate the default first."
+      },
+      "form": {
+        "eyebrow": "Tax rate",
+        "editTitle": "Edit tax rate",
+        "newTitle": "New tax rate",
+        "close": "Close",
+        "cancel": "Cancel",
+        "save": "Save",
+        "name": "Name",
+        "namePlaceholder": "VAT, GST, Sales tax",
+        "rate": "Rate",
+        "type": "How it applies",
+        "exclusive": "Exclusive: added on top",
+        "inclusive": "Inclusive: already in the price",
+        "typeHint": {
+          "exclusive": "The customer pays the price plus the tax.",
+          "inclusive": "The price already contains the tax; the invoice shows how much of it is tax."
+        },
+        "effectiveFrom": "Effective from",
+        "effectiveHint": "Optional. Use it for a rate that changes on a date.",
+        "description": "Description",
+        "makeDefault": "Default for new lines",
+        "defaultHint": "New invoice lines start with this rate.",
+        "active": "Active",
+        "activeHint": "Inactive rates cannot be picked on new lines.",
+        "saved": "{name} saved.",
+        "created": "{name} added.",
+        "problems": {
+          "nameRequired": "Enter a name.",
+          "nameTaken": "A tax rate with this name already exists.",
+          "rateInvalid": "Enter a percentage from 0 to 100.",
+          "dateInvalid": "Enter a valid date.",
+          "conflict": "Someone else changed this rate. Close and reopen it."
+        }
+      }
+    },
+    "public": {
+      "loading": "Loading invoice",
+      "errorTitle": "We could not load this invoice",
+      "errorMessage": "Check your connection and try again.",
+      "retry": "Try again",
+      "title": "Invoice from {seller}",
+      "dueOn": "due {date}",
+      "print": "Print",
+      "download": "Download PDF",
+      "paidBanner": "This invoice is paid in full. Thank you.",
+      "voidBanner": "This invoice was cancelled and does not need to be paid.",
+      "payNow": "How to pay",
+      "amountDue": "Amount due:",
+      "bankIntro": "Pay by bank transfer and use {number} as the payment reference.",
+      "copied": "Copied",
+      "payButton": "Pay {amount}",
+      "gatewayNote": "You will go to the payment page of the seller's payment provider.",
+      "questions": "Questions about this invoice?"
+    },
+    "linked": {
+      "title": "Invoices",
+      "new": "New invoice",
+      "viewAll": "View all",
+      "loading": "Loading invoices",
+      "none": "No invoices yet.",
+      "draft": "Draft",
+      "owes": "owes"
+    }
+  }
+}

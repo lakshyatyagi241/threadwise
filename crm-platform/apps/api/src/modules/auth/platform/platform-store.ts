@@ -10,7 +10,8 @@ import { DatabaseService } from '../../../infra/db/database.service';
  * goes through here and a grep for `.privileged(` in the auth module must find
  * this file and tenant-directory.ts and nothing else (unit-tested).
  *
- * It never touches a tenant table.
+ * It never touches a tenant table itself; a domain that reads one across workspaces for an operator screen (the AI
+ * usage dashboard) passes its own SQL and stays behind OperatorGuard.
  */
 @Injectable()
 export class PlatformStore {

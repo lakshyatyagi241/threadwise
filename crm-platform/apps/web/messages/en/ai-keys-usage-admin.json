@@ -1,0 +1,210 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "AI usage",
+      "keys": "AI provider keys"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "AI provider keys",
+        "dashboard": "AI usage"
+      }
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "requestId": "Request id",
+      "dismiss": "Dismiss",
+      "tokens": "{count, number} tokens",
+      "dash": "-",
+      "errors": {
+        "forbidden": "You do not have permission to see this.",
+        "request": "That request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again in a moment.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "conflict": "Someone else changed this. The page was reloaded: apply your change again.",
+        "keyRequired": "Add an API key before turning this provider on.",
+        "validation": "Some values are not valid. Check the highlighted fields.",
+        "notFound": "That item no longer exists."
+      }
+    },
+    "windows": {
+      "label": "Time window",
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days",
+      "1y": "1 year"
+    },
+    "keys": {
+      "eyebrow": "Admin / System / AI providers",
+      "title": "AI provider keys",
+      "description": "One shared key per AI vendor. Workspaces without their own key use these. Keys are encrypted at rest and are never shown again after saving.",
+      "superOnly": "Only a super admin can manage the platform's AI keys.",
+      "summary": {
+        "providers": "Providers",
+        "providersHint": "available",
+        "active": "Active",
+        "activeHint": "turned on for everyone",
+        "ready": "Ready",
+        "readyHint": "on, with a working key",
+        "noKey": "No key",
+        "noKeyHint": "paste a key to use one"
+      },
+      "groups": {
+        "llm": "Language models",
+        "voice": "Voice"
+      },
+      "card": {
+        "active": "Active",
+        "off": "Off",
+        "keySaved": "Key saved",
+        "keySavedLast4": "Key saved, ends in {last4}",
+        "noKey": "No key",
+        "unreadable": "Saved key cannot be read, paste it again",
+        "slug": "Provider id",
+        "apiKey": "API key",
+        "apiKeyHint": "Leave blank to keep the saved key.",
+        "apiKeyPlaceholder": "Paste key here",
+        "apiKeySavedPlaceholder": "Saved. Paste a new key to replace it",
+        "defaultModel": "Default model",
+        "pickModel": "Pick a default model",
+        "customModel": "{model} (custom)",
+        "sortOrder": "Order",
+        "maxTokens": "Max tokens per request",
+        "maxTokensHint": "Optional ceiling on a reply's length for every workspace. Blank means no ceiling.",
+        "extraModels": "Extra models",
+        "extraModelsHint": "Optional. Model ids to offer next to the default, separated by commas.",
+        "save": "Save {name}",
+        "saving": "Saving",
+        "turnOn": "Turn on",
+        "turnOff": "Turn off",
+        "removeKey": "Remove key",
+        "removeTitle": "Remove the {name} key?",
+        "removeBody": "Workspaces will stop using {name} until you add a key again. The provider is turned off.",
+        "removeConfirm": "Remove key",
+        "cancel": "Cancel"
+      },
+      "toasts": {
+        "saved": "{name} saved.",
+        "savedOn": "{name} saved and turned on.",
+        "on": "{name} turned on.",
+        "off": "{name} turned off.",
+        "removed": "{name} key removed."
+      },
+      "help": {
+        "title": "How these keys are used",
+        "body": "A workspace's own key wins only when its plan allows it. Otherwise the matching active provider here is used. Turning a provider off means workspaces without their own key cannot use it."
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Admin / System / AI",
+      "title": "AI usage",
+      "description": "Token use across every workspace, split by who paid, with an estimated cost and the state of each key.",
+      "kpis": {
+        "tokens": "Tokens",
+        "calls": "{count, plural, one {# call} other {# calls}}",
+        "platform": "Platform keys",
+        "ownKeys": "Workspace keys",
+        "cost": "Estimated cost",
+        "costHint": "blended rates, not a bill",
+        "providers": "Providers used",
+        "workspaces": "Workspaces"
+      },
+      "daily": "Daily tokens",
+      "byProvider": "Tokens by provider",
+      "split": "Who paid",
+      "splitPlatform": "Platform keys",
+      "splitOwn": "Workspace keys",
+      "topWorkspaces": "Busiest workspaces",
+      "topModels": "Top models",
+      "keyHealth": "Key health",
+      "byok": "Workspace keys",
+      "byokSummary": "{count, plural, one {# active key} other {# active keys}} in {workspaces, plural, one {# workspace} other {# workspaces}}",
+      "live": "Live",
+      "notLive": "Not live",
+      "empty": "No AI calls in this window yet.",
+      "columns": {
+        "workspace": "Workspace",
+        "model": "Model",
+        "provider": "Provider",
+        "tokens": "Tokens",
+        "calls": "Calls",
+        "ownKey": "Own key"
+      }
+    },
+    "usage": {
+      "title": "AI usage",
+      "description": "What your AI features used in this window, and how much of your plan's monthly allowance is left.",
+      "kpis": {
+        "tokens": "Tokens",
+        "calls": "{count, plural, one {# call} other {# calls}}",
+        "platform": "Plan keys",
+        "ownKeys": "Your own keys",
+        "cost": "Estimated cost",
+        "costHint": "blended rates, not a bill",
+        "providers": "Providers",
+        "models": "Models"
+      },
+      "cap": {
+        "title": "Monthly allowance",
+        "used": "{used, number} of {limit, number} tokens used this month",
+        "unlimited": "{used, number} tokens used this month. Your plan has no monthly limit.",
+        "reached": "You have used this month's allowance. Upgrade your plan, or add your own provider keys to keep using AI features.",
+        "note": "Only tokens used with the platform's keys count. Your own keys do not."
+      },
+      "daily": "Daily tokens",
+      "byProvider": "Tokens by provider",
+      "split": "Whose key",
+      "splitPlatform": "Plan keys",
+      "splitOwn": "Your own keys",
+      "models": "Models",
+      "columns": {
+        "model": "Model",
+        "provider": "Provider",
+        "tokens": "Tokens",
+        "calls": "Calls",
+        "prompt": "Prompt",
+        "completion": "Reply"
+      },
+      "empty": "Nothing used in this window yet."
+    },
+    "own": {
+      "title": "Your AI provider keys",
+      "description": "Add your own key for a vendor so your AI features use your account instead of the shared one. Keys are encrypted and never shown again.",
+      "allowed": "Your plan lets your own keys take precedence.",
+      "notAllowed": "Your plan does not include your own keys yet. You can save them now, but calls will keep using the shared key until you upgrade.",
+      "add": "Add a key",
+      "provider": "Provider",
+      "apiKey": "API key",
+      "apiKeyHint": "At least 8 characters.",
+      "save": "Save key",
+      "replace": "Replace key",
+      "saving": "Saving",
+      "on": "On",
+      "off": "Off",
+      "ends": "Ends in {last4}",
+      "using": "Calls use",
+      "usingOwn": "your key",
+      "usingShared": "the shared key",
+      "usingNone": "no key (nothing available)",
+      "turnOn": "Turn on",
+      "turnOff": "Turn off",
+      "remove": "Remove",
+      "removeTitle": "Remove your {name} key?",
+      "removeBody": "Calls fall back to the shared key if one is available.",
+      "removeConfirm": "Remove key",
+      "cancel": "Cancel",
+      "empty": "You have not added any keys.",
+      "toasts": {
+        "saved": "{name} key saved.",
+        "on": "{name} key turned on.",
+        "off": "{name} key turned off.",
+        "removed": "{name} key removed."
+      },
+      "errors": {
+        "tooShort": "A key is at least 8 characters."
+      }
+    }
+  }
+}
