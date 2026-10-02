@@ -150,6 +150,17 @@ export class UsersService {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('User', uuid);
 
+      if (input.status === 'inactive' && existing.status !== 'inactive') {
+        const held = await this.repo.currentRoles(tx, ctx.orgId, existing.id);
+        await this.roleRules.assertCanDeactivate(
+          tx,
+          ctx.orgId,
+          ctx.userId!,
+          existing.id,
+          held.map((r) => r.id),
+        );
+      }
+
       const values: Record<string, unknown> = {};
       if (input.fullName !== undefined) values.fullName = input.fullName;
       if (input.status !== undefined) values.status = input.status;
