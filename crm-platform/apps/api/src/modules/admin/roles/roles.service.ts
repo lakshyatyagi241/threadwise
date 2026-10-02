@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
-import type {
-  CreateRoleInput,
-  PaginationQuery,
-  RoleResponse,
-  UpdateRoleInput,
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  ERROR_CODES,
+  type CreateRoleInput,
+  type PaginationQuery,
+  type RoleResponse,
+  type UpdateRoleInput,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
@@ -11,10 +12,20 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { WorkspaceRoleRulesService } from '../../roles-permissions';
 import { toRoleResponse } from './roles.mapper';
 import { RolesRepository } from './roles.repository';
 
 const MODULE_KEY = 'roles';
+
+/** Owner, Admin, Manager, Agent and Viewer are the ladder every grant rule compares against: they stay, under their names. */
+const presetError = (name: string, what: string) =>
+  new AppError(
+    ERROR_CODES.RBAC_PRESET_ROLE,
+    `The ${name} role is a preset and ${what}.`,
+    HttpStatus.UNPROCESSABLE_ENTITY,
+    [{ path: 'id', message: `The ${name} role is a preset and ${what}.` }],
+  );
 
 /** Roles & Permissions — Settings > Users & Permissions. */
 @Injectable()
@@ -26,6 +37,7 @@ export class RolesService {
     private readonly repo: RolesRepository,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    private readonly roleRules: WorkspaceRoleRulesService,
   ) {}
 
   async list(query: PaginationQuery) {
@@ -77,6 +89,15 @@ export class RolesService {
         ]);
       }
 
+      // A new role cannot carry anything its creator does not hold (WD-RBAC-026: no handing out more than you have).
+      await this.roleRules.assertCanEditGrants(
+        tx,
+        ctx.orgId,
+        ctx.userId!,
+        { id: 0, name: input.name, systemKey: null },
+        [],
+        input.grants,
+      );
       const created = await this.repo.insert(tx, ctx.orgId, input.name);
       if (input.grants.length > 0) {
         await this.repo.replaceGrants(tx, ctx.orgId, created.id, input.grants);
@@ -101,6 +122,21 @@ export class RolesService {
         throw AppError.validation('System roles cannot be modified', [
           { path: 'id', message: 'role is locked' },
         ]);
+      }
+
+      if (existing.systemKey && input.name !== undefined && input.name !== existing.name) {
+        throw presetError(existing.name, 'cannot be renamed');
+      }
+      if (input.grants !== undefined) {
+        const current = await this.repo.grantsForRoles(tx, ctx.orgId, [existing.id]);
+        await this.roleRules.assertCanEditGrants(
+          tx,
+          ctx.orgId,
+          ctx.userId!,
+          { id: existing.id, name: existing.name, systemKey: existing.systemKey },
+          current,
+          input.grants,
+        );
       }
 
       const values: Record<string, unknown> = {};
@@ -142,6 +178,8 @@ export class RolesService {
           { path: 'id', message: 'role is locked' },
         ]);
       }
+
+      if (existing.systemKey) throw presetError(existing.name, 'cannot be deleted');
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
       await this.repo.deleteById(tx, ctx.orgId, existing.id);

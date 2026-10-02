@@ -44,7 +44,11 @@ const ASHELL_ITEMS: readonly OperatorNavItem[] = [
 export const CONSOLE_NAV_ITEMS: readonly OperatorNavItem[] = [...OPERATOR_NAV, ...ASHELL_ITEMS];
 
 /** Which operator-nav items carry a live count, and under which count name. */
-const BADGE_KEYS: Readonly<Record<string, string>> = { plans: 'plans' };
+const BADGE_KEYS: Readonly<Record<string, string>> = {
+  plans: 'plans',
+  roles: 'roles',
+  permissions: 'permissions',
+};
 
 /**
  * The rail: the console's own Overview leaf, then one group per heading the other
