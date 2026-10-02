@@ -90,7 +90,7 @@ describe('add-on schema, RLS and fulfilment', () => {
     Number(
       (
         await owner.query(
-          `INSERT INTO orders (org_id, order_number, currency, amount) VALUES ($1, $2, 'USD', 9) RETURNING id`,
+          `INSERT INTO orders (org_id, order_number, currency, amount, plan_slug) VALUES ($1, $2, 'USD', 9, 'seats_5') RETURNING id`,
           [org, `T-${++seq}`],
         )
       ).rows[0].id,
