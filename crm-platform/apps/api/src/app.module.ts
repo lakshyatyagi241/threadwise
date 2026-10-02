@@ -33,6 +33,7 @@ import { InstallUpdateLicensingModule } from './modules/install-update-licensing
 import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
 import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
+import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -113,6 +114,7 @@ import { HealthModule } from './health/health.module';
     AiKeysUsageAdminModule,
     CmsModule,
     AdminConsoleShellModule,
+    PlatformPaymentGatewaysModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,

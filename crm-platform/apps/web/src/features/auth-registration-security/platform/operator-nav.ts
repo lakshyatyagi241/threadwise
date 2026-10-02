@@ -138,6 +138,11 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/health',
     labelKey: 'dashboards-analytics-charts.health.nav',
     groupKey: 'dashboards-analytics-charts.health.group',
+  {
+    id: 'payment-gateways',
+    href: '/admin/payment-gateways',
+    labelKey: 'platform-payment-gateways.nav.gateways',
+    groupKey: 'platform-payment-gateways.nav.group',
   },
 ];
 

@@ -171,12 +171,20 @@ export const orders = pgTable(
     reviewedAt: timestamp('reviewed_at', { withTimezone: true }),
     reviewNote: text('review_note'),
     paidAt: timestamp('paid_at', { withTimezone: true }),
+    // 20261005100000_paygw_core.sql
+    kind: text('kind').notNull().default('plan'),
+    planSlug: text('plan_slug'),
+    returnToken: text('return_token').notNull(),
+    walletTopupMinor: bigint('wallet_topup_minor', { mode: 'number' }),
+    idempotencyKey: text('idempotency_key'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_orders_return_token').on(t.returnToken),
+    unique('uq_orders_idempotency_key').on(t.orgId, t.idempotencyKey),
     unique('uq_orders_org_id_uuid').on(t.orgId, t.uuid),
     foreignKey({
       name: 'fk_orders_org',
