@@ -1,4 +1,15 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   agingQuerySchema,
@@ -15,7 +26,12 @@ import {
   type RecordScope,
   type RefundPaymentInput,
 } from '@crm/contracts';
-import { ActorKinds, GrantedScope, Idempotent, RequirePermission } from '../../../common/decorators';
+import {
+  ActorKinds,
+  GrantedScope,
+  Idempotent,
+  RequirePermission,
+} from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { PaymentsService } from './payments.service';
@@ -34,7 +50,8 @@ export class PaymentsController {
   @RequirePermission('record.payments.read')
   @ApiOperation({
     summary: 'List ledger entries (cursor paginated)',
-    description: 'Newest first. Filters: invoiceId, contactId, companyId, dealId, kind (payment | refund), method, currency, from/to (payment date), q (reference, receipt or invoice number).',
+    description:
+      'Newest first. Filters: invoiceId, contactId, companyId, dealId, kind (payment | refund), method, currency, from/to (payment date), q (reference, receipt or invoice number).',
   })
   async list(
     @Query(zodPipe(listPaymentsQuerySchema)) query: ListPaymentsQuery,
@@ -60,7 +77,8 @@ export class PaymentsController {
   @RequirePermission('record.payments.read')
   @ApiOperation({
     summary: 'Aging report: open balances by days past due',
-    description: 'Buckets: current (not yet due), 1-30, 31-60, 61-90, 90+ days past the due date (the issue date when there is none), per currency.',
+    description:
+      'Buckets: current (not yet due), 1-30, 31-60, 61-90, 90+ days past the due date (the issue date when there is none), per currency.',
   })
   async aging(
     @Query(zodPipe(agingQuerySchema)) query: AgingQuery,

@@ -7,7 +7,16 @@ import { Button, EmptyState, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useTasksList, useTasksSetup } from '../api/hooks';
 import { isUnavailable } from '../lib/errors';
-import { Avatar, CompleteCheck, DueText, ErrorLine, PriorityChip, useNow, useTasksCan, useWorkspaceZone } from './parts';
+import {
+  Avatar,
+  CompleteCheck,
+  DueText,
+  ErrorLine,
+  PriorityChip,
+  useNow,
+  useTasksCan,
+  useWorkspaceZone,
+} from './parts';
 import { QuickAdd, type QuickAddValue } from './quick-add';
 import { useTaskActions } from './use-task-actions';
 
@@ -30,7 +39,16 @@ export interface LinkedTasksProps {
 export function LinkedTasks({ kind, id, compact, className, onChanged }: LinkedTasksProps) {
   const can = useTasksCan();
   if (!can.read) return null;
-  return <Panel kind={kind} id={id} compact={compact} className={className} onChanged={onChanged} can={can} />;
+  return (
+    <Panel
+      kind={kind}
+      id={id}
+      compact={compact}
+      className={className}
+      onChanged={onChanged}
+      can={can}
+    />
+  );
 }
 
 function Panel({
@@ -50,7 +68,11 @@ function Panel({
   useTasksSetup();
   const source = { kind, id } as const;
   const open = useTasksList(source, { status: 'open' }, { limit: 50 });
-  const done = useTasksList(source, { status: 'done', sort: 'completed' }, { limit: 50, enabled: showDone });
+  const done = useTasksList(
+    source,
+    { status: 'done', sort: 'completed' },
+    { limit: 50, enabled: showDone },
+  );
   const heading = `linked-tasks-${kind}-${id}`;
   const hub = `/tasks?tab=all&status=all&${kind}=${id}`;
 
@@ -72,7 +94,9 @@ function Panel({
     <section
       aria-labelledby={heading}
       className={cn(
-        compact ? 'space-y-3' : 'space-y-3 rounded-md border border-border bg-background p-4 sm:p-5',
+        compact
+          ? 'space-y-3'
+          : 'space-y-3 rounded-md border border-border bg-background p-4 sm:p-5',
         className,
       )}
     >

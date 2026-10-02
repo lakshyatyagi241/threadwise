@@ -45,7 +45,8 @@ type Raw = Record<string, unknown>;
 const s = (v: unknown): string | null => (v === null || v === undefined ? null : (v as string));
 
 /** "9.0000" -> "9", "9.9750" -> "9.975", "10" -> "10". */
-const trimPercent = (p: string): string => (p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p);
+const trimPercent = (p: string): string =>
+  p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p;
 
 /** Components are stored as { type, ratePercent }; a row written before exact percentages stored { type, rateBp }. */
 function normaliseComponents(v: unknown): TaxRateRow['components'] {
@@ -183,7 +184,8 @@ export class TaxRatesRepository {
     const add = (col: string, v: unknown) => sets.push(sql`${sql.raw(col)} = ${v}`);
     if (patch.name !== undefined) add('name', patch.name);
     if (patch.taxType !== undefined) add('tax_type', patch.taxType);
-    if (patch.ratePercent !== undefined) sets.push(sql`rate_percent = ${patch.ratePercent}::numeric`);
+    if (patch.ratePercent !== undefined)
+      sets.push(sql`rate_percent = ${patch.ratePercent}::numeric`);
     if (patch.inclusive !== undefined) add('inclusive', patch.inclusive);
     if (patch.isActive !== undefined) add('is_active', patch.isActive);
     if (patch.isDefault !== undefined) add('is_default', patch.isDefault);
@@ -191,8 +193,11 @@ export class TaxRatesRepository {
     if (patch.country !== undefined) add('country', patch.country);
     if (patch.region !== undefined) add('region', patch.region);
     if (patch.components !== undefined)
-      sets.push(sql`components = ${patch.components ? JSON.stringify(patch.components) : null}::jsonb`);
-    if (patch.effectiveFrom !== undefined) sets.push(sql`effective_from = ${patch.effectiveFrom}::date`);
+      sets.push(
+        sql`components = ${patch.components ? JSON.stringify(patch.components) : null}::jsonb`,
+      );
+    if (patch.effectiveFrom !== undefined)
+      sets.push(sql`effective_from = ${patch.effectiveFrom}::date`);
     if (patch.effectiveTo !== undefined) sets.push(sql`effective_to = ${patch.effectiveTo}::date`);
     if (patch.defaultHsnSac !== undefined) add('default_hsn_sac', patch.defaultHsnSac);
     if (sets.length === 0) sets.push(sql`updated_at = now()`);

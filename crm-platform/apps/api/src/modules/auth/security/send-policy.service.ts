@@ -22,33 +22,51 @@ export interface ScreenContext {
   source?: string;
 }
 
-const LINK = /https?:\/\/[^\s<>"']+/gi;
+/** Every scheme marker counts, even two links with no space between them. */
+const LINK_MARKER = /https?:\/\//gi;
 
-/** Phrases typical of phishing and prize scams. Own wording; extend via the keyword list. */
+/**
+ * Phrases typical of phishing and prize scams, written as patterns over the
+ * lower-cased message. Each one stands for a family of wordings, not one
+ * sentence: "account is / has been / was suspended / locked / blocked /
+ * deactivated", "click (here) to confirm / verify / claim / reactivate / unlock",
+ * "KYC ... required / pending / update", and so on. Extend with the keyword list.
+ */
 const SCAM = [
-  /\byou(?:'ve| have)? (?:won|been selected)\b/i,
-  /\bclaim (?:your )?(?:prize|reward|gift)\b/i,
-  /\bverify (?:your )?account\b/i,
-  /\baccount (?:is )?(?:suspended|blocked|locked)\b/i,
-  /\bclick (?:here )?to (?:confirm|verify|unlock)\b/i,
-  /\burgent action required\b/i,
-  /\b(?:update|complete) (?:your )?kyc\b/i,
-  /\b(?:double|triple) your (?:money|investment)\b/i,
-  /\brisk[- ]free (?:profit|returns?)\b/i,
+  /\byou(?:'?ve|\s+have|\s+ve)?\s+(?:won|been\s+selected)\b/,
+  /\bcongratulations\b[^\n]{0,24}\b(?:won|selected|winner)\b/,
+  /\bclaim\s+(?:your\s+)?(?:prize|reward|gift)\b/,
+  /\bverify\s+(?:your\s+)?account\b/,
+  /\baccount\s+(?:is\s+|has\s+been\s+|was\s+)?(?:suspended|locked|blocked|deactivated)\b/,
+  /\bclick\s+(?:here\s+)?to\s+(?:confirm|verify|claim|reactivate|unlock)\b/,
+  /\burgent\b[^\n]{0,24}\baction\s+required\b/,
+  /\bkyc\b[^\n]{0,24}\b(?:required|pending|update)\b/,
+  /\b(?:update|complete)\s+(?:your\s+)?kyc\b/,
+  /\b(?:double|triple)\s+your\s+(?:money|investment)\b/,
+  /\brisk[- ]free\s+(?:profits?|returns?)\b/,
 ];
 
+/** Restricted financial phrasing, phrase-based so legitimate fintech copy is not flagged by one word. */
 const FINANCE = [
-  /\bguaranteed (?:returns?|profits?)\b/i,
-  /\bbinary options?\b/i,
-  /\bforex signals?\b/i,
-  /\bcrypto (?:doubling|giveaway)\b/i,
-  /\bloan (?:approved|offer)\b/i,
-  /\bearn \S+ (?:per|a) day\b/i,
-  /\binvestment opportunity\b/i,
-  /\bget rich quick\b/i,
+  /\bguaranteed\s+(?:returns?|profits?|income)\b/,
+  /\bbinary\s+options?\b/,
+  /\bforex\s+(?:signals?|trading|tips)\b/,
+  /\bcrypto(?:currency)?\s+(?:investment|doubling|signals?|giveaway)\b/,
+  /\bloan\s+(?:approved|offer)\b/,
+  /\binstant\s+(?:personal\s+)?loan\b/,
+  /\binterest[- ]free\s+loan\b/,
+  /\bearn\b[^\n]{0,18}\b(?:per\s+day|a\s+day|daily|weekly)\b/,
+  /\binvestment\s+opportunity\b/,
+  /\bget\s+rich\s+quick\b/,
 ];
 
-const SHORTENERS = new Set([
+/**
+ * Link shorteners. Matched ANYWHERE in the text on word boundaries, the way
+ * the reference does: a link with no scheme ("visit bit.ly/x") and a subdomain
+ * ("go.bit.ly/x") are shortened links too. A longer word that merely ends the
+ * same way ("habit.ly") is not.
+ */
+const SHORTENER_DOMAINS = [
   'bit.ly',
   'tinyurl.com',
   't.co',
@@ -62,36 +80,41 @@ const SHORTENERS = new Set([
   'shorturl.at',
   'tiny.cc',
   'bit.do',
+  'soo.gd',
   'clck.ru',
+  't2m.io',
   'shorte.st',
   'adf.ly',
   'short.io',
-]);
+];
+const SHORT_LINK = new RegExp(
+  `\\b(?:${SHORTENER_DOMAINS.map((d) => d.replace(/\./g, '\\.')).join('|')})\\b`,
+);
 
 export function evaluateContent(body: string, policy: SecurityPolicy): ScreenReason | null {
   const text = body.trim();
   if (!text) return null;
-  const links = text.match(LINK) ?? [];
-
-  if (policy.waHoldOnLinksCount > 0 && links.length > policy.waHoldOnLinksCount)
-    return 'link_count';
-  if (policy.waHoldOnScamPattern && SCAM.some((re) => re.test(text))) return 'scam_pattern';
-  if (policy.abuseBlockFinanceTerms && FINANCE.some((re) => re.test(text))) return 'finance_terms';
-  if (policy.abuseBlockShortLinks) {
-    for (const url of links) {
-      try {
-        if (SHORTENERS.has(new URL(url).hostname.replace(/^www\./, '').toLowerCase()))
-          return 'short_link';
-      } catch {
-        // an unparsable URL is not a shortener
-      }
-    }
-  }
   const lower = text.toLowerCase();
+
+  if (policy.waHoldOnLinksCount > 0) {
+    const links = text.match(LINK_MARKER)?.length ?? 0;
+    if (links > policy.waHoldOnLinksCount) return 'link_count';
+  }
+  if (policy.waHoldOnScamPattern && SCAM.some((re) => re.test(lower))) return 'scam_pattern';
+  if (policy.abuseBlockFinanceTerms && FINANCE.some((re) => re.test(lower))) return 'finance_terms';
+  if (policy.abuseBlockShortLinks && SHORT_LINK.test(lower)) return 'short_link';
   if (policy.abuseBlockKeywordList.some((k) => k && lower.includes(k.toLowerCase())))
     return 'keyword';
   return null;
 }
+
+const COUNT_UNLESS_AT_CAP = `
+local used = tonumber(redis.call('GET', KEYS[1]) or '0')
+if used >= tonumber(ARGV[1]) then return 1 end
+redis.call('INCR', KEYS[1])
+redis.call('EXPIRE', KEYS[1], tonumber(ARGV[2]))
+return 0
+`;
 
 /** Calendar-bucket stamps: minute `YYYYMMDDHHmm`, day `YYYYMMDD`, UTC. */
 const stamp = (d: Date, len: 12 | 8): string => d.toISOString().replace(/[-:T]/g, '').slice(0, len);
@@ -147,23 +170,28 @@ export class SendPolicyService {
 
   /**
    * A check at or over the cap returns the violation without counting; one
-   * under it counts. Windows are fixed calendar buckets, not sliding.
+   * under it counts. Windows are fixed calendar buckets, not sliding. The
+   * read-compare-increment is ONE script, so two sends racing at cap-1 cannot
+   * both pass. As in the reference, the minute counter has already moved when
+   * the day cap then refuses.
    */
   private async checkRates(orgId: number, policy: SecurityPolicy): Promise<ScreenReason | null> {
     const now = new Date();
     if (policy.waMaxSendsPerMinute > 0) {
       const key = AuthKeys.sendMinute(orgId, stamp(now, 12));
-      const used = Number((await this.redis.get(key)) ?? 0);
-      if (used >= policy.waMaxSendsPerMinute) return 'rate_per_minute';
-      await this.redis.multi().incr(key).expire(key, 120).exec();
+      if (await this.countAgainst(key, policy.waMaxSendsPerMinute, 120)) return 'rate_per_minute';
     }
     if (policy.waMaxSendsPerDay > 0) {
       const key = AuthKeys.sendDay(orgId, stamp(now, 8));
-      const used = Number((await this.redis.get(key)) ?? 0);
-      if (used >= policy.waMaxSendsPerDay) return 'rate_per_day';
-      await this.redis.multi().incr(key).expire(key, 90_000).exec();
+      if (await this.countAgainst(key, policy.waMaxSendsPerDay, 90_000)) return 'rate_per_day';
     }
     return null;
+  }
+
+  /** True when the counter is already at the cap (and is left alone); otherwise counts this send. */
+  private async countAgainst(key: string, cap: number, ttlSeconds: number): Promise<boolean> {
+    const over = await this.redis.eval(COUNT_UNLESS_AT_CAP, 1, key, cap, ttlSeconds);
+    return Number(over) === 1;
   }
 
   private async decide(

@@ -18,21 +18,21 @@ or `all`. A record outside the scope is `404`, never `403`. `POST` routes accept
 
 ## Capabilities
 
-| Key                                  | Scope | Grants                                                           |
-| ------------------------------------ | ----- | ---------------------------------------------------------------- |
-| `record.invoices.read`               | yes   | list, counts, get, events, pdf, a contact's and a deal's invoices |
-| `record.invoices.create`             | no    | create a draft, duplicate                                        |
-| `record.invoices.update`             | yes   | edit, regenerate and revoke the public link                      |
-| `record.invoices.issue`              | yes   | issue, send                                                      |
-| `record.invoices.void` / `.delete`   | yes   | void an issued invoice, delete a draft                           |
-| `record.invoices.settings`           | no    | the invoicing profile and the online-payment connection          |
-| `record.payments.read`               | yes   | ledger, summary, aging, outstanding, receipts                    |
-| `record.payments.create`             | yes   | record a payment                                                 |
-| `record.payments.refund`             | yes   | refund                                                           |
-| `record.tax-rates.read` / `.create` / `.update` / `.delete` | no | tax rates and country presets                    |
-| `record.credit-notes.read` / `.create` / `.issue` / `.void` / `.delete` | yes (read) | credit notes                     |
-| `record.recurring-invoices.read` / `.create` / `.update` / `.delete`    | yes (read) | recurring schedules              |
-| `record.sales-orders.read` / `.create` / `.update` / `.invoice` / `.delete` | yes (read) | sales orders                 |
+| Key                                                                         | Scope      | Grants                                                            |
+| --------------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------- |
+| `record.invoices.read`                                                      | yes        | list, counts, get, events, pdf, a contact's and a deal's invoices |
+| `record.invoices.create`                                                    | no         | create a draft, duplicate                                         |
+| `record.invoices.update`                                                    | yes        | edit, regenerate and revoke the public link                       |
+| `record.invoices.issue`                                                     | yes        | issue, send                                                       |
+| `record.invoices.void` / `.delete`                                          | yes        | void an issued invoice, delete a draft                            |
+| `record.invoices.settings`                                                  | no         | the invoicing profile and the online-payment connection           |
+| `record.payments.read`                                                      | yes        | ledger, summary, aging, outstanding, receipts                     |
+| `record.payments.create`                                                    | yes        | record a payment                                                  |
+| `record.payments.refund`                                                    | yes        | refund                                                            |
+| `record.tax-rates.read` / `.create` / `.update` / `.delete`                 | no         | tax rates and country presets                                     |
+| `record.credit-notes.read` / `.create` / `.issue` / `.void` / `.delete`     | yes (read) | credit notes                                                      |
+| `record.recurring-invoices.read` / `.create` / `.update` / `.delete`        | yes (read) | recurring schedules                                               |
+| `record.sales-orders.read` / `.create` / `.update` / `.invoice` / `.delete` | yes (read) | sales orders                                                      |
 
 The Admin preset holds all of them. The Agent preset (sign-up) creates and reads/edits its own invoices, records payments on them,
 reads tax rates, and creates sales orders; issuing, voiding, deleting, refunding, credit notes and the settings stay with the roles a
@@ -40,26 +40,26 @@ workspace widens.
 
 ## Invoices
 
-| Method and path                              | Capability              | Notes |
-| -------------------------------------------- | ----------------------- | ----- |
-| `GET /invoices`                              | invoices.read           | cursor pagination (microsecond cursor), newest first (`order=asc` too). Filters: `status` (comma list of `draft, issued, partially_paid, paid, overdue, void`), `docType`, `q`, `contactId`, `companyId`, `dealId`, `ownerId`, `mine`, `currency`, `issuedFrom/To`, `dueFrom/To` |
-| `GET /invoices/counts`                       | invoices.read           | counts per derived status (same filters as the list) |
-| `POST /invoices`                             | invoices.create         | a priced **draft**: no number, no link |
-| `GET /invoices/:id`                          | invoices.read           | |
-| `PATCH /invoices/:id`                        | invoices.update         | `rowVersion` required. A draft is edited whole; once issued only due date, notes, terms, reference, owner, links and contact details move (`409 INV_NOT_DRAFT`). Lines of an invoice made from a sales order are fixed (`409 INV_ORDER_LINKED`) |
-| `DELETE /invoices/:id`                       | invoices.delete         | drafts only (`409 INV_NOT_DELETABLE`); gives order quantities back |
-| `POST /invoices/:id/issue`                   | invoices.issue          | number from the locked per-series allocator, due date, public link, frozen seller block, in one transaction |
-| `POST /invoices/:id/send`                    | invoices.issue          | `{channel: email \| whatsapp \| link}`; raises `invoice.sent` (a delivery adapter consumes it) |
-| `POST /invoices/:id/void`                    | invoices.void           | `{reason}`; refused while payments (`INV_HAS_PAYMENTS`) or credit notes (`INV_HAS_CREDITS`) stand |
-| `POST /invoices/:id/duplicate`               | invoices.create         | a new draft from the stored lines |
-| `POST /invoices/:id/public-link/regenerate`  | invoices.update         | new token, optional expiry; the old link stops |
-| `POST /invoices/:id/public-link/revoke`      | invoices.update         | |
-| `GET /invoices/:id/events`                   | invoices.read           | the activity timeline |
-| `GET /invoices/:id/payments`                 | payments.read           | |
-| `POST /invoices/:id/payments`                | payments.create         | |
-| `GET /invoices/:id/pdf`                      | invoices.read           | `application/pdf`, rendered from the stored document |
-| `GET /contacts/:contactId/invoices`          | invoices.read + contacts.read | the contact detail page |
-| `GET /deals/:dealId/invoices`                | invoices.read + deals.read    | the deal detail page |
+| Method and path                             | Capability                    | Notes                                                                                                                                                                                                                                                                            |
+| ------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /invoices`                             | invoices.read                 | cursor pagination (microsecond cursor), newest first (`order=asc` too). Filters: `status` (comma list of `draft, issued, partially_paid, paid, overdue, void`), `docType`, `q`, `contactId`, `companyId`, `dealId`, `ownerId`, `mine`, `currency`, `issuedFrom/To`, `dueFrom/To` |
+| `GET /invoices/counts`                      | invoices.read                 | counts per derived status (same filters as the list)                                                                                                                                                                                                                             |
+| `POST /invoices`                            | invoices.create               | a priced **draft**: no number, no link                                                                                                                                                                                                                                           |
+| `GET /invoices/:id`                         | invoices.read                 |                                                                                                                                                                                                                                                                                  |
+| `PATCH /invoices/:id`                       | invoices.update               | `rowVersion` required. A draft is edited whole; once issued only due date, notes, terms, reference, owner, links and contact details move (`409 INV_NOT_DRAFT`). Lines of an invoice made from a sales order are fixed (`409 INV_ORDER_LINKED`)                                  |
+| `DELETE /invoices/:id`                      | invoices.delete               | drafts only (`409 INV_NOT_DELETABLE`); gives order quantities back                                                                                                                                                                                                               |
+| `POST /invoices/:id/issue`                  | invoices.issue                | number from the locked per-series allocator, due date, public link, frozen seller block, in one transaction                                                                                                                                                                      |
+| `POST /invoices/:id/send`                   | invoices.issue                | `{channel: email \| whatsapp \| link}`; raises `invoice.sent` (a delivery adapter consumes it)                                                                                                                                                                                   |
+| `POST /invoices/:id/void`                   | invoices.void                 | `{reason}`; refused while payments (`INV_HAS_PAYMENTS`) or credit notes (`INV_HAS_CREDITS`) stand                                                                                                                                                                                |
+| `POST /invoices/:id/duplicate`              | invoices.create               | a new draft from the stored lines                                                                                                                                                                                                                                                |
+| `POST /invoices/:id/public-link/regenerate` | invoices.update               | new token, optional expiry; the old link stops                                                                                                                                                                                                                                   |
+| `POST /invoices/:id/public-link/revoke`     | invoices.update               |                                                                                                                                                                                                                                                                                  |
+| `GET /invoices/:id/events`                  | invoices.read                 | the activity timeline                                                                                                                                                                                                                                                            |
+| `GET /invoices/:id/payments`                | payments.read                 |                                                                                                                                                                                                                                                                                  |
+| `POST /invoices/:id/payments`               | payments.create               |                                                                                                                                                                                                                                                                                  |
+| `GET /invoices/:id/pdf`                     | invoices.read                 | `application/pdf`, rendered from the stored document                                                                                                                                                                                                                             |
+| `GET /contacts/:contactId/invoices`         | invoices.read + contacts.read | the contact detail page                                                                                                                                                                                                                                                          |
+| `GET /deals/:dealId/invoices`               | invoices.read + deals.read    | the deal detail page                                                                                                                                                                                                                                                             |
 
 **Status.** Stored: `draft`, `issued`, `void`. Payment status (kept by the database from the ledger and the credit notes): `unpaid`,
 `partially_paid`, `paid`. The status clients show is derived: `void` / `paid` / `overdue` (issued, open, due date before today in the
@@ -76,20 +76,77 @@ by largest remainder, the currency's own exponent (JPY 0, KWD 3). The database r
 
 ```json
 {
-  "id": "…", "number": "INV-2026-000012", "docType": "tax_invoice", "source": "manual",
-  "status": "overdue", "storedStatus": "issued", "paymentStatus": "partially_paid", "overdue": true, "daysOverdue": 3,
-  "currency": "INR", "currencyExponent": 2,
-  "amounts": { "subtotal": "1000.00", "discount": "0.00", "shipping": "0.00", "tax": "180.00", "taxAdded": "180.00", "total": "1180.00",
-               "paid": "500.00", "refunded": "0.00", "balance": "680.00", "credit": "0.00", "credited": "0.00" },
+  "id": "…",
+  "number": "INV-2026-000012",
+  "docType": "tax_invoice",
+  "source": "manual",
+  "status": "overdue",
+  "storedStatus": "issued",
+  "paymentStatus": "partially_paid",
+  "overdue": true,
+  "daysOverdue": 3,
+  "currency": "INR",
+  "currencyExponent": 2,
+  "amounts": {
+    "subtotal": "1000.00",
+    "discount": "0.00",
+    "shipping": "0.00",
+    "tax": "180.00",
+    "taxAdded": "180.00",
+    "total": "1180.00",
+    "paid": "500.00",
+    "refunded": "0.00",
+    "balance": "680.00",
+    "credit": "0.00",
+    "credited": "0.00"
+  },
   "amountsMinor": { "…": "same keys, bigint strings" },
-  "buyer": { "name": "…", "email": "…", "phone": "…", "address": "…", "taxId": "…", "country": "IN" },
+  "buyer": {
+    "name": "…",
+    "email": "…",
+    "phone": "…",
+    "address": "…",
+    "taxId": "…",
+    "country": "IN"
+  },
   "seller": { "name": "…", "taxId": "…", "bankDetails": {} },
-  "taxRegime": "gst", "placeOfSupply": "IN-MH", "reverseCharge": false, "legalNotes": null, "taxExplanation": null,
-  "lines": [{ "id": "…", "description": "…", "qty": "1", "unitPrice": "1000.00", "taxName": "GST 18%", "taxRate": "18",
-              "taxComponents": [{ "type": "CGST", "rate": "9", "amount": "90.00" }, { "type": "SGST", "rate": "9", "amount": "90.00" }],
-              "amounts": { "gross": "…", "discount": "…", "net": "…", "docDiscountShare": "…", "tax": "…", "total": "…" } }],
-  "taxSummary": [{ "name": "CGST 9%", "rate": "9", "base": "1000.00", "tax": "90.00", "inclusive": false }],
-  "publicLink": { "token": "…", "path": "/i/…", "expiresAt": null, "revokedAt": null, "active": true },
+  "taxRegime": "gst",
+  "placeOfSupply": "IN-MH",
+  "reverseCharge": false,
+  "legalNotes": null,
+  "taxExplanation": null,
+  "lines": [
+    {
+      "id": "…",
+      "description": "…",
+      "qty": "1",
+      "unitPrice": "1000.00",
+      "taxName": "GST 18%",
+      "taxRate": "18",
+      "taxComponents": [
+        { "type": "CGST", "rate": "9", "amount": "90.00" },
+        { "type": "SGST", "rate": "9", "amount": "90.00" }
+      ],
+      "amounts": {
+        "gross": "…",
+        "discount": "…",
+        "net": "…",
+        "docDiscountShare": "…",
+        "tax": "…",
+        "total": "…"
+      }
+    }
+  ],
+  "taxSummary": [
+    { "name": "CGST 9%", "rate": "9", "base": "1000.00", "tax": "90.00", "inclusive": false }
+  ],
+  "publicLink": {
+    "token": "…",
+    "path": "/i/…",
+    "expiresAt": null,
+    "revokedAt": null,
+    "active": true
+  },
   "rowVersion": 4
 }
 ```
@@ -100,15 +157,15 @@ The detail also names where the invoice came from, so a page can link to it: `qu
 
 ## Payments (the ledger)
 
-| Method and path                  | Capability       | Notes |
-| -------------------------------- | ---------------- | ----- |
-| `GET /payments`                  | payments.read    | cursor paginated. Filters: `invoiceId`, `contactId`, `companyId`, `dealId`, `kind` (payment, refund), `method`, `currency`, `from/to`, `q` |
-| `POST /payments`                 | payments.create  | same body as `POST /invoices/:id/payments` plus `invoiceId` |
-| `GET /payments/summary`          | payments.read    | collected in the last N days, refunded, outstanding, overdue: **per currency**, never summed across currencies |
-| `GET /payments/aging`            | payments.read    | open balances by days past the **due date** (issue date when none): current, 1-30, 31-60, 61-90, 90+, per currency |
-| `GET /payments/outstanding`      | payments.read    | what each contact owes, biggest debt first |
-| `GET /payments/:id`, `/receipt`  | payments.read    | the receipt carries its own `RCT-` number |
-| `POST /payments/:id/refund`      | payments.refund  | a **negative linked** ledger entry; default amount: everything not refunded |
+| Method and path                 | Capability      | Notes                                                                                                                                      |
+| ------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET /payments`                 | payments.read   | cursor paginated. Filters: `invoiceId`, `contactId`, `companyId`, `dealId`, `kind` (payment, refund), `method`, `currency`, `from/to`, `q` |
+| `POST /payments`                | payments.create | same body as `POST /invoices/:id/payments` plus `invoiceId`                                                                                |
+| `GET /payments/summary`         | payments.read   | collected in the last N days, refunded, outstanding, overdue: **per currency**, never summed across currencies                             |
+| `GET /payments/aging`           | payments.read   | open balances by days past the **due date** (issue date when none): current, 1-30, 31-60, 61-90, 90+, per currency                         |
+| `GET /payments/outstanding`     | payments.read   | what each contact owes, biggest debt first                                                                                                 |
+| `GET /payments/:id`, `/receipt` | payments.read   | the receipt carries its own `RCT-` number                                                                                                  |
+| `POST /payments/:id/refund`     | payments.refund | a **negative linked** ledger entry; default amount: everything not refunded                                                                |
 
 The ledger is append-only (the database refuses UPDATE and DELETE of an entry). A payment above the balance is `422 PAY_OVERPAYMENT`
 unless the body sets `allowOverpayment: true` (the excess is held as credit); another currency than the invoice's is
@@ -154,15 +211,15 @@ to nothing). The payment goes through the same ledger code as a staff payment (`
 
 ## Credit notes
 
-| Method and path                 | Capability                 | Notes |
-| ------------------------------- | -------------------------- | ----- |
-| `GET /credit-notes`             | credit-notes.read          | cursor paginated; `invoiceId`, `contactId`, `status`, `q` |
-| `POST /credit-notes`            | credit-notes.create        | a **draft** against an issued invoice |
-| `GET /credit-notes/:id`, `/pdf` | credit-notes.read          | |
-| `PATCH /credit-notes/:id`       | credit-notes.create        | draft only, `rowVersion` required |
-| `POST /credit-notes/:id/issue`  | credit-notes.issue         | takes its `CRN-` number, reduces the invoice balance, records returned cash for `settlement: refund` |
-| `POST /credit-notes/:id/void`   | credit-notes.void          | only if no cash was returned (`409 CN_HAS_REFUND`) |
-| `DELETE /credit-notes/:id`      | credit-notes.delete        | drafts only |
+| Method and path                 | Capability          | Notes                                                                                                |
+| ------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
+| `GET /credit-notes`             | credit-notes.read   | cursor paginated; `invoiceId`, `contactId`, `status`, `q`                                            |
+| `POST /credit-notes`            | credit-notes.create | a **draft** against an issued invoice                                                                |
+| `GET /credit-notes/:id`, `/pdf` | credit-notes.read   |                                                                                                      |
+| `PATCH /credit-notes/:id`       | credit-notes.create | draft only, `rowVersion` required                                                                    |
+| `POST /credit-notes/:id/issue`  | credit-notes.issue  | takes its `CRN-` number, reduces the invoice balance, records returned cash for `settlement: refund` |
+| `POST /credit-notes/:id/void`   | credit-notes.void   | only if no cash was returned (`409 CN_HAS_REFUND`)                                                   |
+| `DELETE /credit-notes/:id`      | credit-notes.delete | drafts only                                                                                          |
 
 Create: `{invoiceId, reason (return, price_adjustment, billing_error, cancellation, goodwill, other), settlement (balance | refund),
 note, full: true}` or `lines: [{invoiceLineId, qty?}]` (part or all of a line: the credit takes the amount the buyer was actually

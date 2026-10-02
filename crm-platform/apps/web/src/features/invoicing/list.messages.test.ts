@@ -1,4 +1,11 @@
-import { INVOICE_EVENT_TYPES, INVOICE_SEND_CHANNELS, INVOICE_SOURCES, INVOICE_STATUSES, INVOICE_DOC_TYPES, PAYMENT_METHODS } from '@crm/contracts';
+import {
+  INVOICE_EVENT_TYPES,
+  INVOICE_SEND_CHANNELS,
+  INVOICE_SOURCES,
+  INVOICE_STATUSES,
+  INVOICE_DOC_TYPES,
+  PAYMENT_METHODS,
+} from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { INVOICE_COLUMNS } from './lib/sticky';
 import { ORDERS } from './lib/filters';
@@ -20,13 +27,19 @@ describe('invoice list and detail messages', () => {
 
   it('has the toolbar choices: document types and the two orders', () => {
     expect(
-      missingKeys([...INVOICE_DOC_TYPES.map((d) => `toolbar.docTypes.${d}`), ...ORDERS.map((o) => (o === 'desc' ? 'toolbar.sorts.newest' : 'toolbar.sorts.oldest'))]),
+      missingKeys([
+        ...INVOICE_DOC_TYPES.map((d) => `toolbar.docTypes.${d}`),
+        ...ORDERS.map((o) => (o === 'desc' ? 'toolbar.sorts.newest' : 'toolbar.sorts.oldest')),
+      ]),
     ).toEqual([]);
   });
 
   it('names every payment method and invoice source', () => {
     expect(
-      missingKeys([...PAYMENT_METHODS.map((m) => `method.${m}`), ...INVOICE_SOURCES.map((s) => `detail.sources.${s}`)]),
+      missingKeys([
+        ...PAYMENT_METHODS.map((m) => `method.${m}`),
+        ...INVOICE_SOURCES.map((s) => `detail.sources.${s}`),
+      ]),
     ).toEqual([]);
   });
 
@@ -45,7 +58,11 @@ describe('invoice list and detail messages', () => {
   it('has the send channels, their buttons and their toasts', () => {
     expect(
       missingKeys(
-        INVOICE_SEND_CHANNELS.flatMap((c) => [`sendDialog.channels.${c}`, `sendDialog.action.${c}`, `actions.sentVia.${c}`]),
+        INVOICE_SEND_CHANNELS.flatMap((c) => [
+          `sendDialog.channels.${c}`,
+          `sendDialog.action.${c}`,
+          `actions.sentVia.${c}`,
+        ]),
       ),
     ).toEqual([]);
   });
@@ -67,9 +84,21 @@ describe('invoice list and detail messages', () => {
   });
 
   it('has the form problems of the payment and refund dialogs', () => {
-    const pay = ['amountInvalid', 'amountZero', 'dateInvalid', 'dateFuture', 'referenceTooLong', 'noteTooLong'];
+    const pay = [
+      'amountInvalid',
+      'amountZero',
+      'dateInvalid',
+      'dateFuture',
+      'referenceTooLong',
+      'noteTooLong',
+    ];
     const refund = ['amountInvalid', 'amountZero', 'tooMuch', 'dateFuture'];
-    expect(missingKeys([...pay.map((p) => `payDialog.problems.${p}`), ...refund.map((p) => `refundDialog.problems.${p}`)])).toEqual([]);
+    expect(
+      missingKeys([
+        ...pay.map((p) => `payDialog.problems.${p}`),
+        ...refund.map((p) => `refundDialog.problems.${p}`),
+      ]),
+    ).toEqual([]);
   });
 
   it('has a sentence for every error code the screens map', () => {

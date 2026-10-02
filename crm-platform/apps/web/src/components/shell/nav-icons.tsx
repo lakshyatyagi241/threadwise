@@ -15,7 +15,9 @@ const PATHS: Record<string, ReactNode> = {
     </>
   ),
   analytics: <path d="M2 13V3M2 13h12M5 11V7M8 11V4M11 11V8" />,
-  bell: <path d="M8 2a4 4 0 0 0-4 4v2.5L3 11h10l-1-2.5V6a4 4 0 0 0-4-4zM6.5 13a1.7 1.7 0 0 0 3 0" />,
+  bell: (
+    <path d="M8 2a4 4 0 0 0-4 4v2.5L3 11h10l-1-2.5V6a4 4 0 0 0-4-4zM6.5 13a1.7 1.7 0 0 0 3 0" />
+  ),
   inbox: (
     <>
       <rect x="2" y="3" width="12" height="9" rx="1.5" />

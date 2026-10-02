@@ -112,7 +112,8 @@ export interface Board {
   unconverted: string[];
 }
 
-export type ActivityType = 'note' | 'call' | 'message' | 'email' | 'meeting' | 'task' | 'stage_change';
+export type ActivityType =
+  'note' | 'call' | 'message' | 'email' | 'meeting' | 'task' | 'stage_change';
 
 export interface Activity {
   id: string;

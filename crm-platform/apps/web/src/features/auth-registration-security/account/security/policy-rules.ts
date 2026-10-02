@@ -50,3 +50,18 @@ export function policyViolations(error: unknown, field = 'newPassword'): PolicyV
   }
   return out;
 }
+
+export type Requirement = 'mixedCase' | 'number' | 'symbol';
+
+/** The character kinds the live policy asks for besides length, in the order the hint lists them. */
+export function requirementsOf(policy: {
+  requireMixedCase: boolean;
+  requireNumber: boolean;
+  requireSymbol: boolean;
+}): Requirement[] {
+  const out: Requirement[] = [];
+  if (policy.requireMixedCase) out.push('mixedCase');
+  if (policy.requireNumber) out.push('number');
+  if (policy.requireSymbol) out.push('symbol');
+  return out;
+}

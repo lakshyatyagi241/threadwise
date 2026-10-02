@@ -15,7 +15,13 @@ export function SegmentProviders({ children }: { children: ReactNode }) {
 }
 
 /** The colour dot of a segment (its accent), a funnel tile when none was chosen. */
-export function ColorDot({ color, className }: { color: string | null | undefined; className?: string }) {
+export function ColorDot({
+  color,
+  className,
+}: {
+  color: string | null | undefined;
+  className?: string;
+}) {
   return (
     <span
       aria-hidden="true"

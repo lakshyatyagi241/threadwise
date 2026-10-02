@@ -5,6 +5,7 @@ import { useState, type FormEvent } from 'react';
 import { dangerActionResponseSchema, type DangerActionResponse } from '@crm/contracts';
 import { Alert, Button, Field, Input, Modal, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
+import { isRoleRefusal } from '../lib/api-errors';
 import { DANGER_ACTIONS, endsCallersSession, phraseMatches, type DangerKind } from '../lib/danger';
 import { operatorFetch } from '../operator-fetch';
 import { SECURITY_NS } from './policy-form';
@@ -64,7 +65,7 @@ function DialogBody({
     } catch (err) {
       const api = err instanceof ApiError ? err : null;
       setError({
-        message: api?.status === 403 ? t('errors.forbidden') : t('errors.unexpected'),
+        message: isRoleRefusal(err) ? t('errors.forbidden') : t('errors.unexpected'),
         requestId: api?.requestId,
       });
     } finally {

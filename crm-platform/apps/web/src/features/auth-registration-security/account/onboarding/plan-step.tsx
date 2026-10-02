@@ -2,10 +2,11 @@
 
 import type { OnboardingResponse } from '@crm/contracts';
 import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { Alert, Button, Spinner } from '@crm/ui';
+import { Alert, Button, LINK, Spinner } from '../../guest/ui';
 import { ErrorNote } from '../../shared/error-note';
 import { showFlash } from '../../shared/flash';
 import { redirectOnGateError } from '../../shared/gate-errors';
@@ -18,11 +19,15 @@ import { PlanCardView } from '../plans/plan-card-view';
  * active catalogue with the workspace's current plan marked; the workspace was
  * already put on the default plan at sign-up, so "start free / skip for now"
  * and the free card only finish onboarding. A paid card leads to /account/plans
- * (checkout arrives with the billing domain), a custom quote to /support. The
- * "top up credits" link WaDesk showed is left out: there is no wallet yet.
+ * (checkout arrives with the billing domain), a custom quote to /support.
+ *
+ * Above the cards a note explains what happens when the monthly allowance runs
+ * out (extra sends cost wallet credits at the platform's rate), and below them a
+ * link leads to topping the credits up. Both read `billing` from the response.
  */
 export function PlanStep({ data, onBack }: { data: OnboardingResponse; onBack: () => void }) {
   const t = useTranslations('auth-registration-security.account.onboarding.plan');
+  const tg = useTranslations('auth-registration-security.gate.onboarding.plan');
   const router = useRouter();
   const queryClient = useQueryClient();
   const [pending, setPending] = useState(false);
@@ -48,14 +53,36 @@ export function PlanStep({ data, onBack }: { data: OnboardingResponse; onBack: (
   }
 
   return (
-    <div className="space-y-5">
-      <p className="text-sm text-muted-foreground">{t('intro')}</p>
+    <div>
+      <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-(--auth-green)/30 bg-(--auth-mint)/40 p-3.5">
+        <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-lg bg-(--auth-green)/25 text-(--auth-link)">
+          <svg
+            viewBox="0 0 16 16"
+            className="size-3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            aria-hidden="true"
+          >
+            <circle cx="8" cy="8" r="6" />
+            <path d="M8 5.5v.5M7.5 8h.5v3h.5" />
+          </svg>
+        </span>
+        <p className="text-[11.5px] leading-relaxed text-(--auth-ink-700)">
+          {tg.rich('credits', {
+            credits: data.billing.creditsPerMessage,
+            rate: (chunks) => <span className="font-semibold">{chunks}</span>,
+          })}
+        </p>
+      </div>
 
       {data.plans.length === 0 ? (
-        <Alert tone="info">{t('empty')}</Alert>
+        <Alert tone="info" className="border-dashed p-5 text-center">
+          {t('empty')}
+        </Alert>
       ) : (
         <ul
-          className="max-h-[28rem] space-y-4 overflow-y-auto px-1 pb-1 pt-3"
+          className="max-h-[440px] space-y-2.5 overflow-y-auto px-1 pb-1 pt-3"
           aria-label={t('listLabel')}
         >
           {data.plans.map((plan) => (
@@ -66,17 +93,36 @@ export function PlanStep({ data, onBack }: { data: OnboardingResponse; onBack: (
         </ul>
       )}
 
-      <ErrorNote error={error} />
+      <ErrorNote error={error} className="mt-3" />
 
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
-        <Button type="button" variant="ghost" onClick={onBack} disabled={pending}>
+      <Button
+        type="button"
+        variant="secondary"
+        className="mt-4 w-full py-2.5 font-semibold"
+        onClick={() => void finish()}
+        disabled={pending}
+      >
+        {pending ? <Spinner label={t('finishing')} /> : null}
+        {pending ? t('finishing') : t('startFree')}
+      </Button>
+
+      <p className="mt-3 text-center text-[11.5px] text-(--auth-ink-500)">
+        {tg('topUpPrompt')}{' '}
+        <Link href={data.billing.topUpUrl || '/account/wallet'} className={LINK}>
+          {tg('topUp')}
+        </Link>
+      </p>
+
+      <p className="mt-2 text-center">
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={pending}
+          className="text-[12px] text-(--auth-ink-500) hover:text-foreground disabled:opacity-60"
+        >
           {t('back')}
-        </Button>
-        <Button type="button" onClick={() => void finish()} disabled={pending}>
-          {pending && <Spinner label={t('finishing')} />}
-          {pending ? t('finishing') : t('startFree')}
-        </Button>
-      </div>
+        </button>
+      </p>
     </div>
   );
 }

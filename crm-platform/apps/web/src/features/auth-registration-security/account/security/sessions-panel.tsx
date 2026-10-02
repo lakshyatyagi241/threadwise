@@ -1,7 +1,7 @@
 'use client';
 
 import { ERROR_CODES, type SessionItem } from '@crm/contracts';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -13,6 +13,7 @@ import { GlobeIcon, MonitorIcon, PhoneIcon } from '../../shared/icons';
 import { formatRelative } from '../../shared/relative-time';
 import { useGateRedirect } from '../../shared/use-gate-redirect';
 import { authApi, keys } from '../api';
+import { SESSIONS_PER_PAGE, durationLabel, pageRange } from './session-page';
 
 const DEVICE_ICON = { desktop: MonitorIcon, mobile: PhoneIcon, unknown: GlobeIcon } as const;
 
@@ -31,7 +32,15 @@ export function SessionsPanel() {
   const format = useFormatter();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const query = useQuery({ queryKey: keys.sessions, queryFn: authApi.sessions, staleTime: 0 });
+  // Pages are by cursor: `trail` holds the cursors already followed, so "Prev" is one step back.
+  const [trail, setTrail] = useState<string[]>([]);
+  const cursor = trail.at(-1);
+  const query = useQuery({
+    queryKey: [...keys.sessions, cursor ?? 'first'],
+    queryFn: () => authApi.sessions(cursor),
+    staleTime: 0,
+    placeholderData: keepPreviousData,
+  });
   useGateRedirect(query.error);
   const [confirm, setConfirm] = useState<Confirm>(null);
   const [busy, setBusy] = useState(false);
@@ -39,9 +48,18 @@ export function SessionsPanel() {
   const [notice, setNotice] = useState<string | null>(null);
 
   const sessions = query.data?.data ?? [];
+  const total = query.data?.total ?? 0;
+  const meta = query.data?.meta;
+  const nextCursor = query.data?.page.hasMore ? query.data.page.nextCursor : null;
+  const range = pageRange(trail.length, sessions.length, total, SESSIONS_PER_PAGE);
+  // Revoking the last row of a later page leaves it empty: step back (state adjusted while rendering).
+  if (query.isSuccess && !query.isPlaceholderData && sessions.length === 0 && trail.length > 0) {
+    setTrail(trail.slice(0, -1));
+  }
   // Relative times are measured from when the list was fetched, so the render stays pure.
   const now = query.dataUpdatedAt;
-  const others = sessions.filter((s) => !s.current);
+  // The current device leads the first page, so the others are the total less one.
+  const otherCount = Math.max(0, total - 1);
 
   async function run(action: () => Promise<string>) {
     setBusy(true);
@@ -81,12 +99,25 @@ export function SessionsPanel() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">{t('title')}</h2>
-          <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
+          <p className="text-sm text-muted-foreground">
+            {t('subtitle')}
+            {meta && (
+              <>
+                {' '}
+                {t('lifetimes', {
+                  session: durationLabel(meta.sessionLifetimeSeconds, locale),
+                  remembered: durationLabel(meta.rememberLifetimeSeconds, locale),
+                })}
+                {meta.idleTimeoutMinutes > 0 &&
+                  ` ${t('idle', { idle: durationLabel(meta.idleTimeoutMinutes * 60, locale) })}`}
+              </>
+            )}
+          </p>
         </div>
         <Button
           variant="secondary"
           size="sm"
-          disabled={busy || others.length === 0}
+          disabled={busy || otherCount === 0}
           onClick={() => setConfirm({ kind: 'others' })}
         >
           {t('signOutOthers')}
@@ -114,52 +145,119 @@ export function SessionsPanel() {
       )}
 
       {sessions.length > 0 && (
-        <ul className="divide-y divide-border rounded-md border border-border">
-          {sessions.map((s) => {
-            const Icon = DEVICE_ICON[s.deviceKind];
-            const last = formatRelative(s.lastUsedAt, now, locale);
-            return (
-              <li key={s.id} className="flex flex-wrap items-center gap-3 p-3">
-                <span
-                  aria-hidden="true"
-                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground"
-                >
-                  <Icon className="size-5" />
-                </span>
-                <div className="min-w-0 flex-1 basis-48">
-                  <p className="flex flex-wrap items-center gap-2 text-sm font-medium">
-                    <span className="truncate">{s.device}</span>
-                    {s.current && <Badge tone="success">{t('thisDevice')}</Badge>}
-                    {s.remember && <Badge>{t('remembered')}</Badge>}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    <span dir="ltr">{s.ip ?? t('ipUnknown')}</span>
-                    <span aria-hidden="true"> · </span>
-                    <time
-                      dateTime={s.lastUsedAt}
-                      title={format.dateTime(new Date(s.lastUsedAt), {
-                        dateStyle: 'medium',
-                        timeStyle: 'short',
-                      })}
-                    >
-                      {t('lastActive', { when: last })}
-                    </time>
-                  </p>
-                </div>
-                {!s.current && (
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    disabled={busy}
-                    onClick={() => setConfirm({ kind: 'one', session: s })}
+        <div className="overflow-hidden rounded-md border border-border">
+          <div className="relative overflow-x-auto">
+            <table className="w-full min-w-[34rem] text-sm">
+              <thead className="border-b border-border bg-muted text-muted-foreground">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-4 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]"
                   >
-                    {t('signOut')}
-                  </Button>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+                    {t('columns.device')}
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]"
+                  >
+                    {t('columns.ip')}
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]"
+                  >
+                    {t('columns.lastActive')}
+                  </th>
+                  <th scope="col" className="w-24 px-4 py-2.5">
+                    <span className="sr-only">{t('columns.actions')}</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {sessions.map((s) => {
+                  const Icon = DEVICE_ICON[s.deviceKind];
+                  const last = formatRelative(s.lastUsedAt, now, locale);
+                  return (
+                    <tr key={s.id} className={s.current ? 'bg-success/5' : undefined}>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <span
+                            aria-hidden="true"
+                            className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
+                          >
+                            <Icon className="size-4" />
+                          </span>
+                          <div className="min-w-0">
+                            <p className="truncate font-semibold">{s.device}</p>
+                            <p className="flex flex-wrap items-center gap-1.5">
+                              {s.current && <Badge tone="success">{t('thisDevice')}</Badge>}
+                              {s.remember && <Badge>{t('remembered')}</Badge>}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-3 py-3 font-mono text-xs text-muted-foreground">
+                        <span dir="ltr">{s.ip ?? t('ipUnknown')}</span>
+                      </td>
+                      <td className="px-3 py-3 font-mono text-xs text-muted-foreground">
+                        <time
+                          dateTime={s.lastUsedAt}
+                          title={format.dateTime(new Date(s.lastUsedAt), {
+                            dateStyle: 'medium',
+                            timeStyle: 'short',
+                          })}
+                        >
+                          {last}
+                        </time>
+                      </td>
+                      <td className="px-4 py-3 text-end">
+                        {!s.current && (
+                          <button
+                            type="button"
+                            disabled={busy}
+                            onClick={() => setConfirm({ kind: 'one', session: s })}
+                            className="rounded text-xs font-semibold text-danger hover:underline focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+                          >
+                            {t('revoke')}
+                            <span className="sr-only"> {s.device}</span>
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {(range.pages > 1 || trail.length > 0) && (
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/40 px-4 py-2.5 text-xs text-muted-foreground">
+              <p className="font-mono" aria-live="polite">
+                {t('showing', { from: range.from, to: range.to, total })}
+              </p>
+              <div className="flex items-center gap-1.5">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  disabled={trail.length === 0 || query.isPlaceholderData}
+                  onClick={() => setTrail((t) => t.slice(0, -1))}
+                >
+                  {t('prev')}
+                </Button>
+                <span className="px-2 font-mono" dir="ltr">
+                  {range.page} / {range.pages}
+                </span>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  disabled={!nextCursor || query.isPlaceholderData}
+                  onClick={() => nextCursor && setTrail((t) => [...t, nextCursor])}
+                >
+                  {t('next')}
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {confirm && (
@@ -180,7 +278,7 @@ export function SessionsPanel() {
                 }
               >
                 {busy && <Spinner label={t('signingOut')} />}
-                {confirm.kind === 'one' ? t('signOut') : t('signOutOthers')}
+                {confirm.kind === 'one' ? t('revoke') : t('signOutOthers')}
               </Button>
             </>
           }
@@ -188,7 +286,7 @@ export function SessionsPanel() {
           <p className="text-sm text-muted-foreground">
             {confirm.kind === 'one'
               ? t('confirmOneBody', { device: confirm.session.device })
-              : t('confirmOthersBody', { count: others.length })}
+              : t('confirmOthersBody', { count: otherCount })}
           </p>
         </Modal>
       )}

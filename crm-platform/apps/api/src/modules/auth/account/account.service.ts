@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
+import { Redis } from 'ioredis';
 import {
   DELETE_CONFIRMATION_PHRASE,
   ERROR_CODES,
@@ -9,7 +10,8 @@ import {
   type ChangePasswordRequest,
   type DeleteAccountRequest,
   type ProfileResponse,
-  type SessionItem,
+  type SessionListResponse,
+  type SessionListQuery,
   type SessionResponse,
   type UpdateBrandingRequest,
   type UpdateProfileRequest,
@@ -18,17 +20,27 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import type { Env } from '../../../config/env.schema';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { LoginService } from '../flows/login.service';
 import { MailService } from '../mail/mail.service';
 import { PlatformSettingsService } from '../platform/platform-settings.service';
+import { SecurityPolicyService } from '../platform/security-policy.service';
 import { SessionService } from '../sessions/session.service';
 import { AccountGateService } from '../security/account-gate.service';
 import { AuthAuditService } from '../security/auth-audit.service';
+import {
+  bustFooterCache,
+  pickFooter,
+  platformFooterFrom,
+  readSavedPlatformFooter,
+} from '../security/branding-footer.service';
 import { PasswordService } from '../security/password.service';
 import { UploadPolicyService } from '../security/upload-policy.service';
+import { Ttl } from '../support/redis-keys';
 import { isValidTimezone } from '../support/text';
+import { TokenService } from '../token.service';
 import { PlanFeatureGate } from './plan-feature-gate';
 
 interface ProfileRow {
@@ -50,9 +62,24 @@ interface ProfileRow {
   org_settings: Record<string, unknown>;
   is_admin: boolean;
   is_owner: boolean;
+  /** The workspace names an owner (sign-up does; seeded and admin-created workspaces may not). */
+  has_owner: boolean;
 }
 
-const AVATAR_MAX_BYTES = 1024 * 1024;
+export const AVATAR_MAX_BYTES = 1024 * 1024;
+
+/**
+ * Who may change the workspace timezone (WaDesk: the owner only, anyone else is
+ * silently ignored). A workspace that records no owner has nobody the rule can
+ * name, so there its administrators stand in rather than leaving it frozen.
+ */
+export function canEditWorkspaceTimezone(p: {
+  is_owner: boolean;
+  has_owner: boolean;
+  is_admin: boolean;
+}): boolean {
+  return p.is_owner || (!p.has_owner && p.is_admin);
+}
 
 /**
  * Self-service account operations (WD-AUTH-024..029): the session probe the web
@@ -77,6 +104,9 @@ export class AccountService {
     private readonly uploads: UploadPolicyService,
     private readonly settings: PlatformSettingsService,
     private readonly planGate: PlanFeatureGate,
+    private readonly tokens: TokenService,
+    private readonly policy: SecurityPolicyService,
+    @Inject(REDIS_CLIENT) private readonly redis: Redis,
     config: ConfigService<Env, true>,
   ) {
     this.appName = config.get('APP_NAME', { infer: true });
@@ -101,7 +131,8 @@ export class AccountService {
                  SELECT 1 FROM user_roles ur JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
                  WHERE ur.org_id = u.org_id AND ur.user_id = u.id AND r.system_key IN ('admin', 'workspace_admin')
                ) AS is_admin,
-               COALESCE((o.settings ->> 'ownerUserId') = u.uuid::text, false) AS is_owner
+               COALESCE((o.settings ->> 'ownerUserId') = u.uuid::text, false) AS is_owner,
+               (o.settings ->> 'ownerUserId') IS NOT NULL AS has_owner
         FROM users u
         JOIN organizations o ON o.id = u.org_id
         LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
@@ -207,10 +238,9 @@ export class AccountService {
       locale: p.locale,
       theme: p.theme ?? 'paper',
       avatarUrl: p.avatar_etag ? `/api/v2/account/avatar?v=${p.avatar_etag}` : null,
+      avatarMaxBytes: AVATAR_MAX_BYTES,
       workspaceTimezone: settings.timezone ?? null,
-      // WaDesk: owner only. Seeded and admin-created organizations have no
-      // recorded owner, so admins can edit too.
-      canEditWorkspaceTimezone: p.is_owner || p.is_admin,
+      canEditWorkspaceTimezone: canEditWorkspaceTimezone(p),
     };
   }
 
@@ -218,15 +248,16 @@ export class AccountService {
     const { orgId, userId } = this.actor();
     const p = await this.loadProfile(orgId, userId);
 
-    if (body.workspaceTimezone !== undefined) {
-      if (!(p.is_owner || p.is_admin)) {
-        throw AppError.forbidden('workspace owner');
-      }
-      if (!isValidTimezone(body.workspaceTimezone)) {
-        throw AppError.validation('Unknown timezone', [
-          { path: 'workspaceTimezone', message: 'Not an IANA timezone.' },
-        ]);
-      }
+    // Only the owner changes the workspace timezone. For anyone else the field is
+    // dropped without an error (WaDesk) and the unchanged value comes back, so the
+    // rest of a profile save still goes through.
+    const mayEditTimezone = canEditWorkspaceTimezone(p);
+    const timezoneIgnored = body.workspaceTimezone !== undefined && !mayEditTimezone;
+    const newTimezone = mayEditTimezone ? body.workspaceTimezone : undefined;
+    if (newTimezone !== undefined && !isValidTimezone(newTimezone)) {
+      throw AppError.validation('Unknown timezone', [
+        { path: 'workspaceTimezone', message: 'Not an IANA timezone.' },
+      ]);
     }
 
     await this.db.txAs({ orgId, userId }, async (tx) => {
@@ -246,12 +277,15 @@ export class AccountService {
           locale       = ${body.locale === undefined ? sql`user_profiles.locale` : sql`${body.locale}`},
           theme        = ${body.theme === undefined ? sql`user_profiles.theme` : sql`${body.theme}`}
       `);
-      if (body.workspaceTimezone !== undefined) {
+      if (newTimezone !== undefined) {
         await tx.execute(sql`
-          UPDATE organizations SET settings = settings || ${JSON.stringify({ timezone: body.workspaceTimezone })}::jsonb
+          UPDATE organizations SET settings = settings || ${JSON.stringify({ timezone: newTimezone })}::jsonb
           WHERE id = ${orgId}
         `);
       }
+      const fields = Object.keys(body).filter(
+        (k) => !(timezoneIgnored && k === 'workspaceTimezone'),
+      );
       await this.audit.record(tx, {
         event: 'auth.profile_updated',
         status: 'success',
@@ -259,7 +293,15 @@ export class AccountService {
         actorType: 'user',
         actorId: userId,
         recordId: userId,
-        payload: { fields: Object.keys(body) },
+        payload: { fields, ...(timezoneIgnored ? { workspaceTimezoneIgnored: true } : {}) },
+      });
+      // WaDesk drops an in-app "Profile updated" notification here; NOTIF consumes this.
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: 'auth',
+        aggregateId: userId,
+        eventType: 'auth.user.profile_updated',
+        payload: { userUuid: p.uuid, fields },
       });
     });
     return this.getProfile();
@@ -338,10 +380,11 @@ export class AccountService {
     const { orgId, userId, sessionId } = this.actor();
     const res = await this.db.txAs({ orgId, userId }, async (tx) =>
       tx.execute(
-        sql`SELECT email, full_name, password_hash FROM users WHERE org_id = ${orgId} AND id = ${userId}`,
+        sql`SELECT uuid, email, full_name, password_hash FROM users WHERE org_id = ${orgId} AND id = ${userId}`,
       ),
     );
     const row = res.rows[0] as unknown as {
+      uuid: string;
       email: string;
       full_name: string;
       password_hash: string | null;
@@ -384,6 +427,15 @@ export class AccountService {
         actorType: 'user',
         actorId: userId,
         recordId: userId,
+      });
+      // An urgent in-app notice ("Password changed"): if this was not the person,
+      // it is the one that tells them. NOTIF consumes it.
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: 'auth',
+        aggregateId: userId,
+        eventType: 'auth.user.password_changed',
+        payload: { userUuid: row.uuid, urgent: true },
       });
     });
 
@@ -494,15 +546,15 @@ export class AccountService {
   async getBranding(): Promise<BrandingResponse> {
     const { orgId, userId } = this.actor();
     const p = await this.loadProfile(orgId, userId);
-    const settings = p.org_settings as { messageFooter?: string | null };
+    const own = (p.org_settings as { messageFooter?: string | null }).messageFooter ?? null;
+    const canEdit = await this.planGate.has(orgId, 'remove_branding');
+    const platform = platformFooterFrom(await readSavedPlatformFooter(this.settings), this.appName);
     return {
-      messageFooter: settings.messageFooter ?? null,
-      // The footer is edited on the platform General settings page (WD-SET-012), which stores it in `set.general`.
-      platformDefault:
-        (await this.settings.get<{ platformFooter?: string }>('set.general'))?.platformFooter ??
-        (await this.settings.get<string>('platform.branding_footer')) ??
-        `Sent via ${this.appName}`,
-      canEdit: await this.planGate.has(orgId, 'remove_branding'),
+      messageFooter: own,
+      platformDefault: platform ?? '',
+      canEdit,
+      // The same table the send path uses, so the screen shows what goes out.
+      effective: pickFooter({ removesBranding: canEdit, own, platform }),
     };
   }
 
@@ -514,7 +566,7 @@ export class AccountService {
       'remove_branding',
       'Your plan does not include removing branding.',
     );
-    // null clears back to the platform default; '' is a deliberate "no footer".
+    // null clears the saved text; '' is a deliberate "no footer".
     await this.db.txAs({ orgId, userId }, async (tx) => {
       if (body.messageFooter === null) {
         await tx.execute(
@@ -534,7 +586,8 @@ export class AccountService {
         actorId: userId,
         recordId: userId,
       });
-      // The send pipelines (inbox, broadcast) and the Node bridge cache this.
+      // The send pipelines read the footer through BrandingFooterService, which
+      // drops its cached copy on this event.
       await this.outbox.emit(tx, {
         orgId,
         aggregateModule: 'organizations',
@@ -543,14 +596,29 @@ export class AccountService {
         payload: { messageFooter: body.messageFooter },
       });
     });
+    // Right after commit, so the next send anywhere already sees it; the outbox
+    // event above is the backstop if this call is lost.
+    await bustFooterCache(this.redis, orgId);
     return this.getBranding();
   }
 
   // --- devices -----------------------------------------------------------------------------------------------------------------------------
 
-  async listSessions(): Promise<SessionItem[]> {
+  async listSessions(query: SessionListQuery): Promise<SessionListResponse> {
     const { orgId, userId, sessionId } = this.actor();
-    return this.sessions.list(orgId, userId, sessionId);
+    const [page, policy] = await Promise.all([
+      this.sessions.listPage(orgId, userId, sessionId, query),
+      this.policy.policy(),
+    ]);
+    const remember = this.tokens.refreshTtlSeconds();
+    return {
+      ...page,
+      meta: {
+        sessionLifetimeSeconds: Math.min(Ttl.sessionNoRememberSeconds, remember),
+        rememberLifetimeSeconds: remember,
+        idleTimeoutMinutes: policy.sessionTimeoutMinutes,
+      },
+    };
   }
 
   async revokeSession(targetUuid: string): Promise<void> {

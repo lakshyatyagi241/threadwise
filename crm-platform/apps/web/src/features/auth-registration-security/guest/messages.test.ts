@@ -60,6 +60,8 @@ describe('guest messages', () => {
   it('ships original showcase copy for every optional field of both editable pages', () => {
     for (const page of ['login', 'register']) {
       for (const key of AUTH_PAGE_EXTRA_KEYS) {
+        // The closing line has no stored default: it is built from the year, the product and the country.
+        if (key === 'footer') continue;
         expect(en[`shell.defaults.${page}.${key}`], `${page}.${key}`).toBeTruthy();
       }
     }

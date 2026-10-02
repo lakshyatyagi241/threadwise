@@ -46,8 +46,12 @@ import { TaxRatesRepository } from './tax-rates.repository';
 export const CREDIT_NOTE_MODULE = 'credit-notes';
 
 const major = (m: bigint, c: string) => minorToMajor(m, c);
-const bad = (code: string, message: string, status: HttpStatus, details?: Array<{ path: string; message: string }>) =>
-  new AppError(code as never, message, status, details);
+const bad = (
+  code: string,
+  message: string,
+  status: HttpStatus,
+  details?: Array<{ path: string; message: string }>,
+) => new AppError(code as never, message, status, details);
 
 export function toCreditNoteSummary(r: CreditNoteRow): CreditNoteSummary {
   return {
@@ -90,10 +94,18 @@ export class CreditNotesService {
 
   // --- reads ---------------------------------------------------------------------------------------------------------------------
 
-  async list(query: ListCreditNotesQuery, scope: RecordScope): Promise<PageResponse<CreditNoteSummary>> {
+  async list(
+    query: ListCreditNotesQuery,
+    scope: RecordScope,
+  ): Promise<PageResponse<CreditNoteSummary>> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const rows = await this.repo.list(tx, ctx.orgId, query, creditNoteScopeCondition(ctx.orgId, scope, ctx.userId));
+      const rows = await this.repo.list(
+        tx,
+        ctx.orgId,
+        query,
+        creditNoteScopeCondition(ctx.orgId, scope, ctx.userId),
+      );
       const page = buildPage(rows, query.limit);
       return { data: page.items.map(toCreditNoteSummary), page: page.page };
     });
@@ -116,7 +128,12 @@ export class CreditNotesService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Credit note', uuid);
       await this.assertScope(tx, scope, row);
-      const inv = (await this.invoicesRepo.findById(tx, ctx.orgId, row.invoiceId, await this.invoices.zone(tx, ctx.orgId)))!;
+      const inv = (await this.invoicesRepo.findById(
+        tx,
+        ctx.orgId,
+        row.invoiceId,
+        await this.invoices.zone(tx, ctx.orgId),
+      ))!;
       const items = await this.repo.items(tx, ctx.orgId, row.id);
       return this.toDocument(row, items, inv);
     });
@@ -132,7 +149,11 @@ export class CreditNotesService {
       if (!inv) throw AppError.notFound('Invoice', input.invoiceId);
       await this.invoices.assertScope(tx, scope, inv);
       if (inv.storedStatus !== 'issued')
-        throw bad(ERROR_CODES.INV_NOT_ISSUED, 'A credit note needs an issued invoice', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.INV_NOT_ISSUED,
+          'A credit note needs an issued invoice',
+          HttpStatus.CONFLICT,
+        );
       const built = await this.build(tx, ctx.orgId, inv, input);
       const id = await this.repo.insert(tx, ctx.orgId, {
         invoiceId: inv.id,
@@ -157,19 +178,40 @@ export class CreditNotesService {
           reason: { old: null, new: row.reason },
         },
       });
-      await this.invoicesRepo.log(tx, ctx.orgId, inv.id, { event: 'credit_note_issued', detail: 'draft credit note created', actorKind: 'user', actorUserId: ctx.userId, meta: { creditNote: row.uuid, draft: true } });
+      await this.invoicesRepo.log(tx, ctx.orgId, inv.id, {
+        event: 'credit_note_issued',
+        detail: 'draft credit note created',
+        actorKind: 'user',
+        actorUserId: ctx.userId,
+        meta: { creditNote: row.uuid, draft: true },
+      });
       await this.emit(tx, 'credit_note.created', row);
       return this.toResponse(tx, row);
     });
   }
 
-  async update(uuid: string, input: UpdateCreditNoteInput, scope: RecordScope): Promise<CreditNoteResponse> {
+  async update(
+    uuid: string,
+    input: UpdateCreditNoteInput,
+    scope: RecordScope,
+  ): Promise<CreditNoteResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lock(tx, uuid, scope);
       if (input.rowVersion !== row.rowVersion) throw AppError.rowVersionConflict('Credit note');
-      if (row.status !== 'draft') throw bad(ERROR_CODES.CN_NOT_DRAFT, 'Only a draft credit note is edited', HttpStatus.CONFLICT);
-      const inv = (await this.invoicesRepo.findById(tx, ctx.orgId, row.invoiceId, await this.invoices.zone(tx, ctx.orgId), true))!;
+      if (row.status !== 'draft')
+        throw bad(
+          ERROR_CODES.CN_NOT_DRAFT,
+          'Only a draft credit note is edited',
+          HttpStatus.CONFLICT,
+        );
+      const inv = (await this.invoicesRepo.findById(
+        tx,
+        ctx.orgId,
+        row.invoiceId,
+        await this.invoices.zone(tx, ctx.orgId),
+        true,
+      ))!;
       const patch: Parameters<CreditNotesRepository['updateDraft']>[4] = {};
       const delta: Record<string, { old: unknown; new: unknown }> = {};
       if (input.reason !== undefined && input.reason !== row.reason) {
@@ -187,17 +229,31 @@ export class CreditNotesService {
       if (input.issueDate !== undefined) patch.issueDate = input.issueDate ?? null;
       let items: CreditNoteItemInsert[] | null = null;
       if (input.lines !== undefined || input.full !== undefined) {
-        const built = await this.build(tx, ctx.orgId, inv, { full: input.full ?? false, lines: input.lines }, row.id);
+        const built = await this.build(
+          tx,
+          ctx.orgId,
+          inv,
+          { full: input.full ?? false, lines: input.lines },
+          row.id,
+        );
         Object.assign(patch, built.totals);
         items = built.items;
-        delta.total = { old: major(row.totalMinor, row.currency), new: major(built.totals.totalMinor, row.currency) };
+        delta.total = {
+          old: major(row.totalMinor, row.currency),
+          new: major(built.totals.totalMinor, row.currency),
+        };
       }
       const ok = await this.repo.updateDraft(tx, ctx.orgId, row.id, input.rowVersion, patch);
       if (!ok) throw AppError.rowVersionConflict('Credit note');
       if (items) await this.repo.replaceItems(tx, ctx.orgId, row.id, items);
       const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
       if (Object.keys(delta).length > 0)
-        await this.audit.record(tx, { module: CREDIT_NOTE_MODULE, recordId: row.id, action: 'update', delta });
+        await this.audit.record(tx, {
+          module: CREDIT_NOTE_MODULE,
+          recordId: row.id,
+          action: 'update',
+          delta,
+        });
       await this.emit(tx, 'credit_note.updated', after);
       return this.toResponse(tx, after);
     });
@@ -208,7 +264,11 @@ export class CreditNotesService {
    * through the ledger when the settlement is `refund` and the invoice is over-paid by the credit, then flip the note (the database
    * re-checks the cap and recomputes the invoice's credited amount and payment status).
    */
-  async issue(uuid: string, input: IssueCreditNoteInput, scope: RecordScope): Promise<CreditNoteResponse> {
+  async issue(
+    uuid: string,
+    input: IssueCreditNoteInput,
+    scope: RecordScope,
+  ): Promise<CreditNoteResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = await this.invoices.zone(tx, ctx.orgId);
@@ -217,13 +277,32 @@ export class CreditNotesService {
       // Lock order: invoice first, then the credit note (the database triggers take them in the same order).
       const inv = (await this.invoicesRepo.findById(tx, ctx.orgId, pre.invoiceId, tz, true))!;
       const row = await this.lock(tx, uuid, scope);
-      if (input.rowVersion !== undefined && input.rowVersion !== row.rowVersion) throw AppError.rowVersionConflict('Credit note');
-      if (row.status === 'void') throw bad(ERROR_CODES.CN_ALREADY_VOID, 'A void credit note cannot be issued', HttpStatus.CONFLICT);
-      if (row.status !== 'draft') throw bad(ERROR_CODES.CN_NOT_DRAFT, 'The credit note is already issued', HttpStatus.CONFLICT);
+      if (input.rowVersion !== undefined && input.rowVersion !== row.rowVersion)
+        throw AppError.rowVersionConflict('Credit note');
+      if (row.status === 'void')
+        throw bad(
+          ERROR_CODES.CN_ALREADY_VOID,
+          'A void credit note cannot be issued',
+          HttpStatus.CONFLICT,
+        );
+      if (row.status !== 'draft')
+        throw bad(
+          ERROR_CODES.CN_NOT_DRAFT,
+          'The credit note is already issued',
+          HttpStatus.CONFLICT,
+        );
       if (inv.storedStatus !== 'issued')
-        throw bad(ERROR_CODES.INV_NOT_ISSUED, 'A credit note needs an issued invoice', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.INV_NOT_ISSUED,
+          'A credit note needs an issued invoice',
+          HttpStatus.CONFLICT,
+        );
       if (row.totalMinor <= 0n)
-        throw bad(ERROR_CODES.CN_NOTHING_TO_CREDIT, 'The credit note has nothing to credit', HttpStatus.UNPROCESSABLE_ENTITY);
+        throw bad(
+          ERROR_CODES.CN_NOTHING_TO_CREDIT,
+          'The credit note has nothing to credit',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
       const creditable = inv.totalMinor - inv.creditedMinor;
       if (row.totalMinor > creditable) throw this.exceeds(creditable, inv.currency);
 
@@ -240,23 +319,38 @@ export class CreditNotesService {
         const owedAfter = inv.totalMinor - inv.creditedMinor - row.totalMinor;
         let toReturn = inv.paidMinor - owedAfter;
         if (toReturn > row.totalMinor) toReturn = row.totalMinor;
-        for (const p of toReturn > 0n ? await this.repo.refundablePayments(tx, ctx.orgId, inv.id) : []) {
+        for (const p of toReturn > 0n
+          ? await this.repo.refundablePayments(tx, ctx.orgId, inv.id)
+          : []) {
           if (toReturn <= 0n) break;
           const take = p.refundableMinor < toReturn ? p.refundableMinor : toReturn;
           const payment = (await this.payments.findPayment(tx, ctx.orgId, p.id))!;
-          await this.payments.refundIn(tx, ctx.orgId, ctx.userId, payment, take, { reason: `Credit note ${number}`, creditNote: number });
+          await this.payments.refundIn(tx, ctx.orgId, ctx.userId, payment, take, {
+            reason: `Credit note ${number}`,
+            creditNote: number,
+          });
           refunded += take;
           toReturn -= take;
         }
       }
-      await this.repo.markIssued(tx, ctx.orgId, row.id, { series, number, seq, issueDate, refundedMinor: refunded });
+      await this.repo.markIssued(tx, ctx.orgId, row.id, {
+        series,
+        number,
+        seq,
+        issueDate,
+        refundedMinor: refunded,
+      });
       const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
       const invAfter = (await this.invoicesRepo.findById(tx, ctx.orgId, inv.id, tz))!;
       await this.audit.record(tx, {
         module: CREDIT_NOTE_MODULE,
         recordId: row.id,
         action: 'update',
-        delta: { status: { old: 'draft', new: 'issued' }, number: { old: null, new: number }, refunded: { old: '0', new: major(refunded, row.currency) } },
+        delta: {
+          status: { old: 'draft', new: 'issued' },
+          number: { old: null, new: number },
+          refunded: { old: '0', new: major(refunded, row.currency) },
+        },
       });
       await this.invoicesRepo.log(tx, ctx.orgId, inv.id, {
         event: 'credit_note_issued',
@@ -265,29 +359,61 @@ export class CreditNotesService {
         actorUserId: ctx.userId,
         meta: { creditNote: row.uuid, number, refunded: refunded.toString() },
       });
-      await this.emit(tx, 'credit_note.issued', after, { refundedMinor: refunded.toString(), invoicePaymentStatus: invAfter.paymentStatus });
+      await this.emit(tx, 'credit_note.issued', after, {
+        refundedMinor: refunded.toString(),
+        invoicePaymentStatus: invAfter.paymentStatus,
+      });
       if (inv.paymentStatus !== 'paid' && invAfter.paymentStatus === 'paid') {
-        await this.invoicesRepo.log(tx, ctx.orgId, inv.id, { event: 'paid', detail: `settled by ${number}`, actorKind: 'system' });
+        await this.invoicesRepo.log(tx, ctx.orgId, inv.id, {
+          event: 'paid',
+          detail: `settled by ${number}`,
+          actorKind: 'system',
+        });
         await this.outbox.emit(tx, {
           aggregateModule: 'invoices',
           aggregateId: inv.id,
           eventType: 'invoice.paid',
-          payload: { uuid: inv.uuid, number: inv.number, currency: inv.currency, settledBy: number },
+          payload: {
+            uuid: inv.uuid,
+            number: inv.number,
+            currency: inv.currency,
+            settledBy: number,
+          },
         });
       }
       return this.toResponse(tx, after);
     });
   }
 
-  async void(uuid: string, input: VoidCreditNoteInput, scope: RecordScope): Promise<CreditNoteResponse> {
+  async void(
+    uuid: string,
+    input: VoidCreditNoteInput,
+    scope: RecordScope,
+  ): Promise<CreditNoteResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const pre = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!pre) throw AppError.notFound('Credit note', uuid);
-      await this.invoicesRepo.findById(tx, ctx.orgId, pre.invoiceId, await this.invoices.zone(tx, ctx.orgId), true);
+      await this.invoicesRepo.findById(
+        tx,
+        ctx.orgId,
+        pre.invoiceId,
+        await this.invoices.zone(tx, ctx.orgId),
+        true,
+      );
       const row = await this.lock(tx, uuid, scope);
-      if (row.status === 'void') throw bad(ERROR_CODES.CN_ALREADY_VOID, 'The credit note is already void', HttpStatus.CONFLICT);
-      if (row.status === 'draft') throw bad(ERROR_CODES.CN_NOT_DRAFT, 'A draft credit note is deleted, not voided', HttpStatus.CONFLICT);
+      if (row.status === 'void')
+        throw bad(
+          ERROR_CODES.CN_ALREADY_VOID,
+          'The credit note is already void',
+          HttpStatus.CONFLICT,
+        );
+      if (row.status === 'draft')
+        throw bad(
+          ERROR_CODES.CN_NOT_DRAFT,
+          'A draft credit note is deleted, not voided',
+          HttpStatus.CONFLICT,
+        );
       if (row.refundedMinor > 0n)
         throw bad(
           ERROR_CODES.CN_HAS_REFUND,
@@ -301,9 +427,18 @@ export class CreditNotesService {
         module: CREDIT_NOTE_MODULE,
         recordId: row.id,
         action: 'update',
-        delta: { status: { old: 'issued', new: 'void' }, voidReason: { old: null, new: input.reason } },
+        delta: {
+          status: { old: 'issued', new: 'void' },
+          voidReason: { old: null, new: input.reason },
+        },
       });
-      await this.invoicesRepo.log(tx, ctx.orgId, row.invoiceId, { event: 'credit_note_issued', detail: `${row.number} voided: ${input.reason}`, actorKind: 'user', actorUserId: ctx.userId, meta: { creditNote: row.uuid, voided: true } });
+      await this.invoicesRepo.log(tx, ctx.orgId, row.invoiceId, {
+        event: 'credit_note_issued',
+        detail: `${row.number} voided: ${input.reason}`,
+        actorKind: 'user',
+        actorUserId: ctx.userId,
+        meta: { creditNote: row.uuid, voided: true },
+      });
       await this.emit(tx, 'credit_note.voided', after, { reason: input.reason });
       return this.toResponse(tx, after);
     });
@@ -313,7 +448,12 @@ export class CreditNotesService {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
       const row = await this.lock(tx, uuid, scope);
-      if (row.status !== 'draft') throw bad(ERROR_CODES.CN_NOT_DRAFT, 'Only a draft credit note is deleted', HttpStatus.CONFLICT);
+      if (row.status !== 'draft')
+        throw bad(
+          ERROR_CODES.CN_NOT_DRAFT,
+          'Only a draft credit note is deleted',
+          HttpStatus.CONFLICT,
+        );
       await this.audit.record(tx, {
         module: CREDIT_NOTE_MODULE,
         recordId: row.id,
@@ -364,13 +504,22 @@ export class CreditNotesService {
       const remainingQty = lineQty - doneQty;
       const remainingAmount = taxable(l) - (done?.amountMinor ?? 0n);
       if (remainingQty <= 0n || remainingAmount <= 0n)
-        throw bad(ERROR_CODES.CN_NOTHING_TO_CREDIT, `Nothing is left to credit on "${l.description}"`, HttpStatus.UNPROCESSABLE_ENTITY, [{ path, message: 'fully credited' }]);
+        throw bad(
+          ERROR_CODES.CN_NOTHING_TO_CREDIT,
+          `Nothing is left to credit on "${l.description}"`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path, message: 'fully credited' }],
+        );
       const q = qtyWanted === undefined ? remainingQty : parseQty(qtyWanted);
       if (q === null || q <= 0n || q > remainingQty)
-        throw bad(ERROR_CODES.CN_LINE_INVALID, `At most ${formatQty(remainingQty)} of "${l.description}" can still be credited`, HttpStatus.UNPROCESSABLE_ENTITY, [
-          { path: `${path}.qty`, message: `at most ${formatQty(remainingQty)}` },
-        ]);
-      const amount = q === remainingQty ? remainingAmount : divRound(taxable(l) * q, lineQty, 'half_up');
+        throw bad(
+          ERROR_CODES.CN_LINE_INVALID,
+          `At most ${formatQty(remainingQty)} of "${l.description}" can still be credited`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: `${path}.qty`, message: `at most ${formatQty(remainingQty)}` }],
+        );
+      const amount =
+        q === remainingQty ? remainingAmount : divRound(taxable(l) * q, lineQty, 'half_up');
       const base = fixed[i]!;
       specs.push({
         description: `${l.description} (credit)`,
@@ -388,37 +537,76 @@ export class CreditNotesService {
       invLines.forEach((l, i) => {
         const done = credited.get(l.id);
         const left = (parseQty(l.qty) ?? 0n) - (done ? (parseQty(done.qty) ?? 0n) : 0n);
-        if (left > 0n && taxable(l) - (done?.amountMinor ?? 0n) > 0n) take(l, i, undefined, `lines.${i}`);
+        if (left > 0n && taxable(l) - (done?.amountMinor ?? 0n) > 0n)
+          take(l, i, undefined, `lines.${i}`);
       });
       if (inv.shippingMinor > 0n && !(await this.repo.hasIssued(tx, orgId, inv.id))) {
-        specs.push({ description: 'Shipping (credit)', sku: null, hsnSac: null, qty: '1', unitPrice: minorToMajor(inv.shippingMinor, inv.currency), discount: null, tax: null });
+        specs.push({
+          description: 'Shipping (credit)',
+          sku: null,
+          hsnSac: null,
+          qty: '1',
+          unitPrice: minorToMajor(inv.shippingMinor, inv.currency),
+          discount: null,
+          tax: null,
+        });
         metas.push({ invoiceItemId: null, qty: '1' });
       }
     } else {
       for (const [k, l] of (input.lines ?? []).entries()) {
         if (l.invoiceLineId) {
           const line = byUuid.get(l.invoiceLineId);
-          if (!line) throw bad(ERROR_CODES.CN_LINE_INVALID, 'That line is not on the invoice', HttpStatus.UNPROCESSABLE_ENTITY, [{ path: `lines.${k}.invoiceLineId`, message: 'not a line of this invoice' }]);
+          if (!line)
+            throw bad(
+              ERROR_CODES.CN_LINE_INVALID,
+              'That line is not on the invoice',
+              HttpStatus.UNPROCESSABLE_ENTITY,
+              [{ path: `lines.${k}.invoiceLineId`, message: 'not a line of this invoice' }],
+            );
           take(line, invLines.indexOf(line), l.qty, `lines.${k}`);
         } else {
           const amount = parseMajor(l.amount!, inv.currency);
           if (amount === null || amount <= 0n)
-            throw bad(ERROR_CODES.CN_LINE_INVALID, `An amount is above 0 with at most ${currencyExponent(inv.currency)} decimals`, HttpStatus.UNPROCESSABLE_ENTITY, [{ path: `lines.${k}.amount`, message: 'invalid' }]);
+            throw bad(
+              ERROR_CODES.CN_LINE_INVALID,
+              `An amount is above 0 with at most ${currencyExponent(inv.currency)} decimals`,
+              HttpStatus.UNPROCESSABLE_ENTITY,
+              [{ path: `lines.${k}.amount`, message: 'invalid' }],
+            );
           let tax = null;
           if (l.taxRateId) {
             const rate = await this.taxRates.findByUuid(tx, orgId, l.taxRateId);
             if (!rate) throw AppError.notFound('Tax rate', l.taxRateId);
             tax = taxSpecOfRate(rate);
           }
-          specs.push({ description: l.description!, sku: null, hsnSac: null, qty: '1', unitPrice: l.amount!, discount: null, tax });
+          specs.push({
+            description: l.description!,
+            sku: null,
+            hsnSac: null,
+            qty: '1',
+            unitPrice: l.amount!,
+            discount: null,
+            tax,
+          });
           metas.push({ invoiceItemId: null, qty: '1' });
         }
       }
     }
     if (specs.length === 0)
-      throw bad(ERROR_CODES.CN_NOTHING_TO_CREDIT, 'Nothing to credit: name lines, or send full: true', HttpStatus.UNPROCESSABLE_ENTITY, [{ path: 'lines', message: 'required' }]);
+      throw bad(
+        ERROR_CODES.CN_NOTHING_TO_CREDIT,
+        'Nothing to credit: name lines, or send full: true',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'lines', message: 'required' }],
+      );
 
-    const priced = priceInvoice({ currency: inv.currency, specs, discount: null, shipping: null, reverseCharge: inv.reverseCharge });
+    const priced = priceInvoice({
+      currency: inv.currency,
+      specs,
+      discount: null,
+      shipping: null,
+      reverseCharge: inv.reverseCharge,
+    });
     const t = priced.totals;
     const creditable = inv.totalMinor - inv.creditedMinor;
     if (t.totalMinor > creditable) throw this.exceeds(creditable, inv.currency);
@@ -467,7 +655,12 @@ export class CreditNotesService {
 
   // --- helpers ---------------------------------------------------------------------------------------------------------------------
 
-  private emit(tx: Tx, eventType: string, row: CreditNoteRow, extra: Record<string, unknown> = {}): Promise<void> {
+  private emit(
+    tx: Tx,
+    eventType: string,
+    row: CreditNoteRow,
+    extra: Record<string, unknown> = {},
+  ): Promise<void> {
     return this.outbox.emit(tx, {
       aggregateModule: CREDIT_NOTE_MODULE,
       aggregateId: row.id,
@@ -497,7 +690,12 @@ export class CreditNotesService {
 
   private async assertScope(tx: Tx, scope: RecordScope, row: CreditNoteRow): Promise<void> {
     const ctx = RequestContextStore.require();
-    const inv = await this.invoicesRepo.findById(tx, ctx.orgId, row.invoiceId, await this.invoices.zone(tx, ctx.orgId));
+    const inv = await this.invoicesRepo.findById(
+      tx,
+      ctx.orgId,
+      row.invoiceId,
+      await this.invoices.zone(tx, ctx.orgId),
+    );
     if (!inv) throw AppError.notFound('Credit note');
     try {
       await this.invoices.assertScope(tx, scope, inv);
@@ -510,7 +708,12 @@ export class CreditNotesService {
     const ctx = RequestContextStore.require();
     const [items, inv] = await Promise.all([
       this.repo.items(tx, ctx.orgId, row.id),
-      this.invoicesRepo.findById(tx, ctx.orgId, row.invoiceId, await this.invoices.zone(tx, ctx.orgId)),
+      this.invoicesRepo.findById(
+        tx,
+        ctx.orgId,
+        row.invoiceId,
+        await this.invoices.zone(tx, ctx.orgId),
+      ),
     ]);
     const c = row.currency;
     const settled = inv!.paidMinor + inv!.creditedMinor;
@@ -527,7 +730,9 @@ export class CreditNotesService {
         qty: l.qty.replace(/\.?0+$/, '') || '0',
         unitPrice: major(l.amountMinor, c),
         taxName: l.taxName,
-        taxRate: l.taxRatePercent.includes('.') ? l.taxRatePercent.replace(/0+$/, '').replace(/\.$/, '') : l.taxRatePercent,
+        taxRate: l.taxRatePercent.includes('.')
+          ? l.taxRatePercent.replace(/0+$/, '').replace(/\.$/, '')
+          : l.taxRatePercent,
         taxInclusive: l.taxInclusive,
         amounts: {
           net: major(l.taxInclusive ? l.amountMinor - l.taxMinor : l.amountMinor, c),
@@ -538,7 +743,9 @@ export class CreditNotesService {
       taxSummary: (row.taxSummary ?? []).map((g) => ({
         name: g.name,
         type: (g.type as never) ?? null,
-        rate: g.ratePercent.includes('.') ? g.ratePercent.replace(/0+$/, '').replace(/\.$/, '') : g.ratePercent,
+        rate: g.ratePercent.includes('.')
+          ? g.ratePercent.replace(/0+$/, '').replace(/\.$/, '')
+          : g.ratePercent,
         inclusive: g.inclusive,
         base: major(BigInt(g.baseMinor), c),
         tax: major(BigInt(g.taxMinor), c),
@@ -568,13 +775,27 @@ export class CreditNotesService {
     };
   }
 
-  private toDocument(row: CreditNoteRow, items: CreditNoteItemRow[], inv: InvoiceRow): PublicInvoice {
+  private toDocument(
+    row: CreditNoteRow,
+    items: CreditNoteItemRow[],
+    inv: InvoiceRow,
+  ): PublicInvoice {
     const c = row.currency;
     const seller = toSeller(inv.sellerSnapshot) ?? {
-      name: null, address: null, country: null, state: null, taxId: null, registrationNo: null, phone: null, email: null, extra: [], bankDetails: null,
+      name: null,
+      address: null,
+      country: null,
+      state: null,
+      taxId: null,
+      registrationNo: null,
+      phone: null,
+      email: null,
+      extra: [],
+      bankDetails: null,
     };
     const snap = inv.sellerSnapshot ?? {};
-    const str = (k: string): string | null => (typeof snap[k] === 'string' && snap[k] !== '' ? (snap[k] as string) : null);
+    const str = (k: string): string | null =>
+      typeof snap[k] === 'string' && snap[k] !== '' ? (snap[k] as string) : null;
     const trim = (p: string) => (p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p);
     return {
       number: row.number ?? 'DRAFT',
@@ -600,14 +821,36 @@ export class CreditNotesService {
         taxRate: trim(l.taxRatePercent),
         taxInclusive: l.taxInclusive,
         taxComponents: null,
-        amounts: { gross: major(l.amountMinor, c), discount: '0', net: major(l.amountMinor, c), docDiscountShare: '0', tax: major(l.taxMinor, c), total: major(l.totalMinor, c) },
+        amounts: {
+          gross: major(l.amountMinor, c),
+          discount: '0',
+          net: major(l.amountMinor, c),
+          docDiscountShare: '0',
+          tax: major(l.taxMinor, c),
+          total: major(l.totalMinor, c),
+        },
       })) as PublicInvoice['lines'],
       taxSummary: (row.taxSummary ?? []).map((g) => ({
-        name: g.name, type: null, rate: trim(g.ratePercent), inclusive: g.inclusive, base: major(BigInt(g.baseMinor), c), tax: major(BigInt(g.taxMinor), c), components: null,
+        name: g.name,
+        type: null,
+        rate: trim(g.ratePercent),
+        inclusive: g.inclusive,
+        base: major(BigInt(g.baseMinor), c),
+        tax: major(BigInt(g.taxMinor), c),
+        components: null,
       })),
       amounts: {
-        subtotal: major(row.subtotalMinor, c), discount: major(0n, c), shipping: major(0n, c), tax: major(row.taxMinor, c), taxAdded: major(row.taxAddedMinor, c),
-        total: major(row.totalMinor, c), paid: major(0n, c), refunded: major(row.refundedMinor, c), balance: major(0n, c), credit: major(0n, c), credited: major(0n, c),
+        subtotal: major(row.subtotalMinor, c),
+        discount: major(0n, c),
+        shipping: major(0n, c),
+        tax: major(row.taxMinor, c),
+        taxAdded: major(row.taxAddedMinor, c),
+        total: major(row.totalMinor, c),
+        paid: major(0n, c),
+        refunded: major(row.refundedMinor, c),
+        balance: major(0n, c),
+        credit: major(0n, c),
+        credited: major(0n, c),
       },
       reverseCharge: inv.reverseCharge,
       legalNotes: inv.legalNotes,

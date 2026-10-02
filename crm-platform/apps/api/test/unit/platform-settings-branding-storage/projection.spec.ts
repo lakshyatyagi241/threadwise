@@ -40,8 +40,8 @@ describe('manifest and robots (WD-SET-028, 036)', () => {
   const make = (docs: Record<string, Record<string, unknown>>) =>
     new ProjectionService(
       {
-      values: async (g: keyof typeof SET_GROUP_SCHEMAS) =>
-        SET_GROUP_SCHEMAS[g].parse(docs[g] ?? {}),
+        values: async (g: keyof typeof SET_GROUP_SCHEMAS) =>
+          SET_GROUP_SCHEMAS[g].parse(docs[g] ?? {}),
       } as never,
       { read: async () => null } as never,
     );
@@ -77,7 +77,9 @@ describe('manifest and robots (WD-SET-028, 036)', () => {
     expect(await make({ general: { appUrl: 'https://acme.test/' } }).robots()).toContain(
       'Sitemap: https://acme.test/sitemap.xml',
     );
-    expect(await make({}).robots()).toBe('User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api\n');
+    expect(await make({}).robots()).toBe(
+      'User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api\n',
+    );
   });
 });
 
@@ -85,8 +87,8 @@ describe('public site config (WD-SET-010, 023, 030, 033, 034)', () => {
   const make = (docs: Record<string, Record<string, unknown>>) =>
     new ProjectionService(
       {
-      values: async (g: keyof typeof SET_GROUP_SCHEMAS) =>
-        SET_GROUP_SCHEMAS[g].parse(docs[g] ?? {}),
+        values: async (g: keyof typeof SET_GROUP_SCHEMAS) =>
+          SET_GROUP_SCHEMAS[g].parse(docs[g] ?? {}),
       } as never,
       { read: async () => null } as never,
     );

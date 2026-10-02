@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { registrationSettingsSchema } from '@crm/contracts';
+import {
+  otpTemplateCreateRequestSchema,
+  registrationSettingsPatchSchema,
+  registrationSettingsSchema,
+} from '@crm/contracts';
 import {
   buildOtpTemplateRequest,
   buildRegistrationPatch,
@@ -83,7 +87,7 @@ describe('buildRegistrationPatch', () => {
     expect(patch).toEqual({ otp: { enabled: true, sender: 'device:12', ttlMinutes: 10 } });
   });
 
-  it('falls back to the documented default when an OTP knob is blank, never to 0', () => {
+  it('sends null for a blank OTP knob (the default applies), never 0', () => {
     const custom = {
       ...base,
       otp: { ...base.otp, ttlMinutes: 20, length: 8, resendCooldownSec: 120, maxAttempts: 9 },
@@ -97,7 +101,33 @@ describe('buildRegistrationPatch', () => {
         maxAttempts: '',
       }),
     );
-    expect(patch.otp).toEqual({ ttlMinutes: 5, length: 6, resendCooldownSec: 60, maxAttempts: 5 });
+    expect(patch.otp).toEqual({
+      ttlMinutes: null,
+      length: null,
+      resendCooldownSec: null,
+      maxAttempts: null,
+    });
+    expect(JSON.stringify(patch)).not.toMatch(/:0[,}]/);
+  });
+
+  it('sends nothing for a blank knob when the default already applies', () => {
+    const { patch } = buildRegistrationPatch(
+      base,
+      draftOf({ ttlMinutes: '', length: '', resendCooldownSec: '', maxAttempts: '' }),
+    );
+    expect(patch.otp).toBeUndefined();
+  });
+
+  it('accepts the contract: a blank knob parses as null and 0 is refused', () => {
+    const custom = { ...base, otp: { ...base.otp, ttlMinutes: 20 } };
+    const { patch } = buildRegistrationPatch(
+      custom,
+      registrationToDraftWith(custom, { ttlMinutes: '' }),
+    );
+    expect(registrationSettingsPatchSchema.parse(patch).otp?.ttlMinutes).toBeNull();
+    expect(registrationSettingsPatchSchema.safeParse({ otp: { ttlMinutes: 0 } }).success).toBe(
+      false,
+    );
   });
 
   it('checks the OTP knob ranges and the sender format', () => {
@@ -178,7 +208,7 @@ describe('buildOtpTemplateRequest', () => {
     });
   });
 
-  it('sends only the sender when nothing else changed, and uses defaults for blank knobs', () => {
+  it('sends only the sender when nothing else changed, and sends null for blank knobs', () => {
     expect(buildOtpTemplateRequest(base, draftOf({ otpSender: 'twilio:cd34' })).body).toEqual({
       otp: { sender: 'twilio:cd34' },
     });
@@ -188,7 +218,12 @@ describe('buildOtpTemplateRequest', () => {
     };
     expect(
       buildOtpTemplateRequest(custom, { ...registrationToDraft(custom), ttlMinutes: '' }).body,
-    ).toEqual({ otp: { sender: 'twilio:cd34', ttlMinutes: 5 } });
+    ).toEqual({ otp: { sender: 'twilio:cd34', ttlMinutes: null } });
+    expect(
+      otpTemplateCreateRequestSchema.parse(
+        buildOtpTemplateRequest(custom, { ...registrationToDraft(custom), ttlMinutes: '' }).body,
+      ).otp.ttlMinutes,
+    ).toBeNull();
   });
 
   it('checks the OTP fields only: a bad field elsewhere does not block the action', () => {

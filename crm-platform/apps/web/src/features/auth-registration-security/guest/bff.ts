@@ -1,6 +1,7 @@
 'use client';
 
 import { ApiError, toApiError } from '@/lib/api/errors';
+import { redirectOnIdle } from '@/lib/auth/idle-redirect';
 import { apiFetch, type ApiRequest } from '@/lib/api/client';
 import { networkError } from './errors';
 
@@ -35,7 +36,17 @@ export async function postBff<T>(
   } catch {
     json = undefined;
   }
-  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  if (!res.ok) {
+    const error = toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
+    // A workspace switch is an authenticated call: it can find the session ended for inactivity.
+    redirectOnIdle(error);
+    throw error;
+  }
   return schema.parse(json);
 }
 
