@@ -56,7 +56,7 @@ What an update does, in this order:
 2. **Button tap** (`callback_query`): answered so the button stops spinning; a tap whose data is `tqr:<label>` is replayed as a
    typed message with that label.
 3. **`chat_join_request`, `poll_answer`**: acknowledged only (the bot's last-inbound time moves).
-4. **A message** (`message`, `channel_post`, `edited_message`, `edited_channel_post`): written into the inbox.
+4. **A message** (`message`, `channel_post`, `edited_message`, `edited_channel_post`): written into the inbox. A bot is a chat channel of kind `telegram` (one `channels` row per bot, `external_id` = the bot's row id, created on its first thread) and each Telegram chat is the peer (`peer_key` = chat id) of one thread on it; messages take the thread's next `msg_seq`.
    - Thread `channel = telegram`, key `tg:<bot row id>:<chat id>` (one per bot and chat, serialised so two updates at once make one).
      Title: chat title, chat username, sender username, first and last name, else "Telegram". Unread goes up by one, a resolved
      thread reopens, the preview is the first 120 characters.

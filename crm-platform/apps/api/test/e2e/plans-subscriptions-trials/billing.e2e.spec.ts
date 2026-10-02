@@ -1,4 +1,5 @@
-import { randomUUID } from 'node:crypto';
+import { createHmac, randomUUID } from 'node:crypto';
+import { hash as argonHash } from '@node-rs/argon2';
 import request from 'supertest';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
@@ -15,6 +16,7 @@ import {
   PlanQuotaService,
   PlanUsageService,
 } from '../../../src/modules/plans-subscriptions-trials';
+import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { RbacService } from '../../../src/kernel/rbac/rbac.service';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import {
@@ -1193,5 +1195,104 @@ describe('everything is configurable from the super admin panel (per plan, overr
     expect((await guard().catch((e) => e)).code).toBe('PLAN_LIMIT_REACHED');
     w = workspacePlanSchema.parse(res.body);
     expect(w.overrides).toEqual({ limits: {}, features: {}, dataRetentionDays: null });
+  });
+});
+
+describe('route gate, paywall data and the per-plan API rate limit (WD-PLAN-019, 020, 022)', () => {
+  it('refuses a gated route on a plan without the feature (reads too) and allows it once the plan has it', async () => {
+    await paidPlan('no_analytics', '10', { features: { analytics: false } });
+    await paidPlan('with_analytics', '20', { features: { analytics: true } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'no_analytics', null, null);
+    const locked = await as(a, 'get', '/v2/analytics/overview');
+    expect(locked.status, JSON.stringify(locked.body)).toBe(422);
+    expect(locked.body.code).toBe('PLAN_FEATURE_LOCKED');
+    expect(JSON.stringify(locked.body)).toContain('analytics');
+    await setOrgState(a.orgId, 'with_analytics', null, null);
+    await h.owner.query(`UPDATE org_plan_state SET overrides = '{}'::jsonb WHERE org_id = $1`, [
+      a.orgId,
+    ]);
+    const open = await as(a, 'get', '/v2/analytics/overview');
+    expect(open.status, JSON.stringify(open.body)).not.toBe(422);
+  });
+
+  it('caps a workspace’s API keys by its plan; 0 falls back to the platform default; an override of -1 lifts it', async () => {
+    await paidPlan('api_cap', '10', { limits: { api_rate_limit_per_minute: 2 } });
+    await paidPlan('api_default', '20', { limits: { api_rate_limit_per_minute: 0 } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'api_cap', null, null);
+    const crypto = h.app.get(CryptoService);
+    const signingSecret = 'sign-secret-for-test';
+    const prefix = `pk_${randomUUID().slice(0, 8)}`;
+    const secret = 'plain-secret';
+    await h.owner.query(
+      `INSERT INTO api_keys (org_id, name, key_prefix, key_hash, signing_secret_enc, scopes, rate_limit_per_minute)
+       VALUES ($1, 'k', $2, $3, $4, '{}', 1000)`,
+      [a.orgId, prefix, await argonHash(secret), crypto.encrypt(signingSecret)],
+    );
+    const call = () => {
+      const path = `/public/v1/leads/${randomUUID()}`;
+      const ts = String(Math.floor(Date.now() / 1000));
+      const sig = createHmac('sha256', signingSecret).update(`${ts}.GET.${path}.`).digest('hex');
+      return api()
+        .get(path)
+        .set({
+          authorization: `ApiKey ${prefix}.${secret}`,
+          'x-timestamp': ts,
+          'x-signature': sig,
+        });
+    };
+    const first = await call();
+    expect(first.status, JSON.stringify(first.body)).not.toBe(429);
+    expect(first.headers['x-ratelimit-limit']).toBe('2');
+    await call();
+    const third = await call();
+    expect(third.status).toBe(429);
+    expect(third.headers['retry-after']).toBeDefined();
+
+    await h.owner.query(
+      `UPDATE org_plan_state SET overrides = jsonb_build_object('limits', jsonb_build_object('api_rate_limit_per_minute', -1)) WHERE org_id = $1`,
+      [a.orgId],
+    );
+    await new Promise((r) => setTimeout(r, 5500)); // the entitlement read is cached for a few seconds
+    expect((await call()).status).not.toBe(429);
+  });
+
+  it('answers the entitlement keys and narrows the plan list to plans that unlock a feature', async () => {
+    await paidPlan('basic', '10', { sortOrder: 1, features: { analytics: false } });
+    await paidPlan('plus', '30', { sortOrder: 2, features: { analytics: true } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'basic', null, null);
+    const ent = await as(a, 'get', '/v2/billing/entitlements');
+    expect(ent.status, JSON.stringify(ent.body)).toBe(200);
+    expect(ent.body.features).not.toContain('analytics');
+    const unlock = await as(a, 'get', '/v2/billing/plans?unlocks=analytics');
+    expect(billingPlansResponseSchema.parse(unlock.body).data.map((p) => p.slug)).toEqual(['plus']);
+    expect((await as(a, 'get', '/v2/billing/plans?unlocks=bogus')).status).toBe(422);
+  });
+});
+
+describe('plan analytics, financial and premium reports (WD-PLAN-024..027)', () => {
+  it('serves the reports to a super admin only, in the default currency, and exports the same numbers as CSV', async () => {
+    await freePlan('rep_free', { sortOrder: 1 });
+    await paidPlan('rep_paid', '25', { sortOrder: 2 });
+    const a = await signup();
+    await setOrgState(a.orgId, 'rep_paid', null, new Date(Date.now() + 20 * DAY));
+
+    for (const path of ['/plan-analytics', '/financial', '/premium', '/plan-analytics/export']) {
+      expect((await ops('get', path, supportToken)).status, path).toBe(403);
+    }
+    const overview = await ops('get', '/plan-analytics?days=7');
+    expect(overview.status, JSON.stringify(overview.body)).toBe(200);
+    expect(overview.body.days).toBe(90);
+    expect(typeof overview.body.currency).toBe('string');
+    const fin = await ops('get', '/financial?window=nonsense');
+    expect(fin.status, JSON.stringify(fin.body)).toBe(200);
+    const prem = await ops('get', '/premium');
+    expect(prem.status, JSON.stringify(prem.body)).toBe(200);
+    const csv = await ops('get', '/plan-analytics/export');
+    expect(csv.status).toBe(200);
+    expect(csv.headers['content-type']).toContain('text/csv');
+    expect(csv.headers['content-disposition']).toContain('attachment');
   });
 });

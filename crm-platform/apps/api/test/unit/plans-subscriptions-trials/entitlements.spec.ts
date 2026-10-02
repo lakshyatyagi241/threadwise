@@ -512,6 +512,7 @@ const planRow = (over: Partial<PlanRow> & { slug: string }): PlanRow => ({
   is_custom_quote: false,
   sort_order: 0,
   cta_label: 'Get started',
+  data_retention_days: 0,
   limits: {},
   features: {},
   created_at: '2026-10-01T00:00:00.000Z',

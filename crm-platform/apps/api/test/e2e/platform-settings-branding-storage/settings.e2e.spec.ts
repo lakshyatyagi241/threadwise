@@ -1,4 +1,5 @@
 import { createServer, type Server } from 'node:http';
+import { SET_GROUPS } from '@crm/contracts';
 import type { AddressInfo } from 'node:net';
 import request from 'supertest';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -373,7 +374,7 @@ describe('WD-SET-004 export and WD-SET-003 hub', () => {
     const hub = setHubResponseSchema.parse((await ops('get', '/groups')).body);
     expect(hub.kpis).toMatchObject({
       savedGroups: 0,
-      totalGroups: 12,
+      totalGroups: SET_GROUPS.length,
       needsTest: [],
       secretFields: 0,
       lastUpdatedAt: null,
@@ -866,7 +867,11 @@ describe('WD-SET-011 and 012 brand helpers and the platform footer', () => {
 describe('WD-SET-003 hub health and WD-SET-030 legal links', () => {
   it('counts saved groups that hold a value as healthy', async () => {
     let hub = setHubResponseSchema.parse((await ops('get', '/groups')).body);
-    expect(hub.kpis).toMatchObject({ savedGroups: 0, healthyGroups: 0, totalGroups: 12 });
+    expect(hub.kpis).toMatchObject({
+      savedGroups: 0,
+      healthyGroups: 0,
+      totalGroups: SET_GROUPS.length,
+    });
     await save('general', { appName: 'Acme' });
     await save('seo', { robots: 'index, follow' });
     hub = setHubResponseSchema.parse((await ops('get', '/groups')).body);

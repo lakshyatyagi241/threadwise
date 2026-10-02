@@ -124,9 +124,11 @@ const message = (chat: object, extra: object = {}) => ({
 });
 const convs = async (t: Tenant) =>
   (
-    await h.owner.query(`SELECT * FROM conversations WHERE org_id = $1 AND channel = 'telegram'`, [
-      t.orgId,
-    ])
+    await h.owner.query(
+      `SELECT c.* FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE c.org_id = $1 AND ch.kind = 'telegram'`,
+      [t.orgId],
+    )
   ).rows;
 const msgs = async (t: Tenant) =>
   (await h.owner.query(`SELECT * FROM messages WHERE org_id = $1 ORDER BY id`, [t.orgId])).rows;
@@ -184,11 +186,9 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
 
     const [c] = await convs(t);
     expect(c).toMatchObject({
-      raw_jid: `tg:${b.rowId}:555`,
+      peer_key: '555',
       title: 'asha',
-      provider: 'telegram',
-      origin: 'telegram',
-      inbox_status: 'open',
+      status: 'open',
       unread_count: 1,
       preview: 'Hello there',
     });
@@ -197,9 +197,15 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
       direction: 'in',
       body: 'Hello there',
       status: 'received',
-      provider: 'telegram',
-      from_number: '555',
+      kind: 'text',
+      sender_kind: 'customer',
+      provider_message_id: '11',
     });
+    // The thread lives on the bot's own channel, keyed by the bot's row id.
+    const channel = (
+      await h.owner.query(`SELECT kind, external_id FROM channels WHERE id = $1`, [c.channel_id])
+    ).rows[0];
+    expect(channel).toMatchObject({ kind: 'telegram', external_id: String(b.rowId) });
     expect(m.meta.telegram).toMatchObject({
       chat_id: '555',
       message_id: '11',
@@ -232,13 +238,13 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
     const t = await api.signup('ti4');
     const b = await bot(t);
     await push(b, message({ text: 'one' }));
-    await h.owner.query(`UPDATE conversations SET inbox_status = 'resolved' WHERE org_id = $1`, [
+    await h.owner.query(`UPDATE conversations SET status = 'resolved' WHERE org_id = $1`, [
       t.orgId,
     ]);
     await push(b, message({ text: 'two' }));
     expect(await convs(t)).toHaveLength(1);
     expect((await convs(t))[0]).toMatchObject({
-      inbox_status: 'open',
+      status: 'open',
       unread_count: 2,
       preview: 'two',
     });
@@ -303,7 +309,7 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
       message({ photo: [{ file_id: 'small' }, { file_id: 'LARGE' }], caption: 'Look' }),
     );
     const [m] = await msgs(t);
-    expect(m).toMatchObject({ body: 'Look', media_path: null, media_type: null });
+    expect(m).toMatchObject({ body: 'Look', media_key: null, kind: 'text' });
     expect(m.meta.telegram.file_id).toBe('LARGE');
   });
 
