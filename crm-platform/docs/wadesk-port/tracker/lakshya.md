@@ -113,43 +113,43 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-RBAC-001 | todo |  |  |
-| WD-RBAC-002 | todo |  |  |
-| WD-RBAC-003 | todo |  |  |
-| WD-RBAC-004 | todo |  |  |
-| WD-RBAC-005 | todo |  |  |
-| WD-RBAC-006 | todo |  |  |
-| WD-RBAC-007 | todo |  |  |
-| WD-RBAC-008 | todo |  |  |
-| WD-RBAC-009 | todo |  |  |
-| WD-RBAC-010 | todo |  |  |
-| WD-RBAC-011 | todo |  |  |
-| WD-RBAC-012 | todo |  |  |
-| WD-RBAC-013 | todo |  |  |
-| WD-RBAC-014 | todo |  |  |
-| WD-RBAC-015 | todo |  |  |
-| WD-RBAC-016 | todo |  |  |
-| WD-RBAC-017 | todo |  |  |
-| WD-RBAC-018 | todo |  |  |
-| WD-RBAC-019 | todo |  |  |
-| WD-RBAC-020 | todo |  |  |
-| WD-RBAC-021 | todo |  |  |
-| WD-RBAC-022 | todo |  |  |
-| WD-RBAC-023 | todo |  |  |
-| WD-RBAC-024 | todo |  |  |
-| WD-RBAC-025 | todo |  |  |
-| WD-RBAC-026 | todo |  |  |
-| WD-RBAC-027 | todo |  |  |
-| WD-RBAC-028 | todo |  |  |
-| WD-RBAC-029 | todo |  |  |
-| WD-RBAC-030 | todo |  |  |
-| WD-RBAC-031 | todo |  |  |
-| WD-RBAC-032 | todo |  |  |
-| WD-RBAC-033 | todo |  |  |
-| WD-RBAC-034 | todo |  |  |
-| WD-RBAC-035 | todo |  |  |
-| WD-RBAC-036 | todo |  |  |
-| WD-RBAC-037 | todo |  |  |
+| WD-RBAC-001 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-002 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-003 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-004 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-005 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-006 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-007 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-008 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-009 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-010 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-011 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-012 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-013 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-014 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-015 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-016 | wontfix |  | operator identity pool replaces role-name staff recognition (D-RBAC-04) |
+| WD-RBAC-017 | wontfix |  | legacy users.role not ported (D-RBAC-04); plan/billing bypass is a PLAN/BILL flag |
+| WD-RBAC-018 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-019 | blocked |  | guard + keys ready; waiting on platform inbox routes (ASHELL/SUPP) |
+| WD-RBAC-020 | blocked |  | waiting on WD-WSP impersonation tokens |
+| WD-RBAC-021 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-022 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running WaDesk |
+| WD-RBAC-023 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| WD-RBAC-024 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-025 | blocked |  | each domain adopts its own permission keys; see wiring map |
+| WD-RBAC-026 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change; invite/remove/reset flows blocked on WD-WSP |
+| WD-RBAC-028 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-029 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-030 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-031 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-032 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| WD-RBAC-033 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-034 | blocked |  | keys org.owner_settings.manage / org.delete registered; SET, TCHAT, CHK adopt them |
+| WD-RBAC-035 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| WD-RBAC-036 | blocked |  | one guard for all actor kinds already; API-key scopes belong to the public API domain |
+| WD-RBAC-037 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
 
 ## admin-console-shell (ashell)
 

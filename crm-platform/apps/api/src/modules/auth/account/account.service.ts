@@ -99,7 +99,7 @@ export class AccountService {
                o.settings AS org_settings,
                EXISTS (
                  SELECT 1 FROM user_roles ur JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
-                 WHERE ur.org_id = u.org_id AND ur.user_id = u.id AND r.system_key = 'admin'
+                 WHERE ur.org_id = u.org_id AND ur.user_id = u.id AND r.system_key IN ('admin', 'workspace_admin')
                ) AS is_admin,
                COALESCE((o.settings ->> 'ownerUserId') = u.uuid::text, false) AS is_owner
         FROM users u

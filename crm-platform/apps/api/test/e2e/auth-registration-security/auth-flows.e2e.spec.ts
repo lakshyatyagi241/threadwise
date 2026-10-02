@@ -182,7 +182,7 @@ describe('registration', () => {
     const session = await api().get('/v2/auth/session').set(bearer(a.access));
     expect(session.body.landing).toBe('onboarding');
     expect(session.body.org.onboardingStep).toBe('workspace');
-    expect(session.body.roles.map((r: { name: string }) => r.name)).toEqual(['Admin']);
+    expect(session.body.roles.map((r: { name: string }) => r.name)).toEqual(['Owner']);
     expect(Object.keys(session.body.permissions)).toContain('admin.user.manage');
     expect(session.body.flags).toMatchObject({
       emailUnverified: true,
