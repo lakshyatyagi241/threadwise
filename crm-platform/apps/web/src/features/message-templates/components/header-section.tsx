@@ -48,7 +48,11 @@ export function HeaderSection({
     if (p) {
       setProblem(
         p === 'tooBig'
-          ? t('tooBig', { size: megabytes(file.size), max: megabytes(MEDIA_MAX_BYTES[kind]), kind: t(`kind.${kind}`) })
+          ? t('tooBig', {
+              size: megabytes(file.size),
+              max: megabytes(MEDIA_MAX_BYTES[kind]),
+              kind: t(`kind.${kind}`),
+            })
           : t(p === 'wrongType' ? 'wrongType' : 'emptyFile'),
       );
       return;
@@ -57,12 +61,23 @@ export function HeaderSection({
     upload.mutate(file);
   }
 
-  const Icon = kind === 'video' ? VideoIcon : kind === 'document' ? DocumentIcon : kind === 'location' ? PinIcon : ImageIcon;
+  const Icon =
+    kind === 'video'
+      ? VideoIcon
+      : kind === 'document'
+        ? DocumentIcon
+        : kind === 'location'
+          ? PinIcon
+          : ImageIcon;
 
   return (
     <div className="space-y-3">
       <Field label={t('type')} htmlFor={`${base}-kind`}>
-        <Select id={`${base}-kind`} value={kind} onChange={(e) => onKind(e.target.value as HeaderKind)}>
+        <Select
+          id={`${base}-kind`}
+          value={kind}
+          onChange={(e) => onKind(e.target.value as HeaderKind)}
+        >
           {HEADER_KINDS.map((k) => (
             <option key={k} value={k}>
               {t(`kind.${k}`)}
@@ -121,13 +136,22 @@ export function HeaderSection({
                 e.target.value = '';
               }}
             />
-            <Button variant="secondary" size="sm" disabled={upload.isPending} onClick={() => input.current?.click()}>
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={upload.isPending}
+              onClick={() => input.current?.click()}
+            >
               {state.headerFileName || state.headerSampleUrl ? t('replace') : t('choose')}
             </Button>
           </div>
           {problem && <Alert tone="danger">{problem}</Alert>}
           {upload.isError && <ErrorAlert error={errorText(upload.error)} />}
-          {headerError && <p role="alert" className="text-xs text-danger">{headerError}</p>}
+          {headerError && (
+            <p role="alert" className="text-xs text-danger">
+              {headerError}
+            </p>
+          )}
         </div>
       )}
 

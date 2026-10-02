@@ -30,7 +30,11 @@ export function parseMarkup(text: string, depth = 0): Segment[] {
 }
 
 /** The `n/max` counter and whether it is over. */
-export const counter = (text: string, max: number) => ({ used: text.length, max, over: text.length > max });
+export const counter = (text: string, max: number) => ({
+  used: text.length,
+  max,
+  over: text.length > max,
+});
 
 /** Wraps the selection in a marker (`*`, `_`, `~`, three backticks); an empty selection inserts the word "text". */
 export function wrapSelection(

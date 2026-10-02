@@ -42,7 +42,10 @@ export function TemplateDetailScreen({ id }: { id: string }) {
               {t('retry')}
             </Button>
           )}
-          <Link href="/templates" className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium">
+          <Link
+            href="/templates"
+            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium"
+          >
             {t('back')}
           </Link>
         </div>
@@ -131,7 +134,10 @@ function Detail({ tpl }: { tpl: TemplateDetail }) {
             </Button>
           )}
           {mayEdit && canEdit(tpl.status) && (
-            <Link href={`/templates/${tpl.id}/edit`} className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+            <Link
+              href={`/templates/${tpl.id}/edit`}
+              className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            >
               {t('edit')}
             </Link>
           )}
@@ -175,7 +181,11 @@ function Detail({ tpl }: { tpl: TemplateDetail }) {
                 <span className="font-mono text-xs">{tpl.metaTemplateId ?? t('none')}</span>
               </Fact>
               <Fact label={t('facts.number')}>
-                {number ? connectionLabel(number) : tpl.connectionId ? t('facts.numberUnknown') : t('none')}
+                {number
+                  ? connectionLabel(number)
+                  : tpl.connectionId
+                    ? t('facts.numberUnknown')
+                    : t('none')}
               </Fact>
               <Fact label={t('facts.submitted')}>{when(tpl.submittedAt)}</Fact>
               <Fact label={t('facts.approved')}>{when(tpl.approvedAt)}</Fact>
@@ -190,39 +200,54 @@ function Detail({ tpl }: { tpl: TemplateDetail }) {
             <dl className="space-y-2 text-sm">
               {tpl.header && (
                 <div>
-                  <dt className="text-xs uppercase text-muted-foreground">{t('components.header')}</dt>
+                  <dt className="text-xs uppercase text-muted-foreground">
+                    {t('components.header')}
+                  </dt>
                   <dd className="break-words">{tpl.header}</dd>
                 </div>
               )}
               {tpl.attachmentType !== 'none' && (
                 <div>
-                  <dt className="text-xs uppercase text-muted-foreground">{t('components.media')}</dt>
+                  <dt className="text-xs uppercase text-muted-foreground">
+                    {t('components.media')}
+                  </dt>
                   <dd>{t(`attachment.${tpl.attachmentType}`)}</dd>
                 </div>
               )}
               {tpl.body && (
                 <div>
-                  <dt className="text-xs uppercase text-muted-foreground">{t('components.body')}</dt>
+                  <dt className="text-xs uppercase text-muted-foreground">
+                    {t('components.body')}
+                  </dt>
                   <dd className="whitespace-pre-wrap break-words">{tpl.body}</dd>
                 </div>
               )}
               {tpl.footer && (
                 <div>
-                  <dt className="text-xs uppercase text-muted-foreground">{t('components.footer')}</dt>
+                  <dt className="text-xs uppercase text-muted-foreground">
+                    {t('components.footer')}
+                  </dt>
                   <dd className="break-words">{tpl.footer}</dd>
                 </div>
               )}
               {tpl.buttons.length > 0 && (
                 <div>
-                  <dt className="text-xs uppercase text-muted-foreground">{t('components.buttons')}</dt>
+                  <dt className="text-xs uppercase text-muted-foreground">
+                    {t('components.buttons')}
+                  </dt>
                   <dd>
                     <ul className="space-y-1">
                       {tpl.buttons.map((b, i) => (
                         <li key={i} className="flex flex-wrap items-center gap-2">
-                          <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{b.type}</span>
+                          <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+                            {b.type}
+                          </span>
                           <span>{b.text}</span>
                           {(b.url ?? b.phone_number) && (
-                            <span className="break-all font-mono text-xs text-muted-foreground" dir="ltr">
+                            <span
+                              className="break-all font-mono text-xs text-muted-foreground"
+                              dir="ltr"
+                            >
                               {b.url ?? b.phone_number}
                             </span>
                           )}
@@ -234,7 +259,9 @@ function Detail({ tpl }: { tpl: TemplateDetail }) {
               )}
               {tpl.codeExpirationMinutes !== null && (
                 <div>
-                  <dt className="text-xs uppercase text-muted-foreground">{t('components.expiry')}</dt>
+                  <dt className="text-xs uppercase text-muted-foreground">
+                    {t('components.expiry')}
+                  </dt>
                   <dd>{t('components.expiryValue', { count: tpl.codeExpirationMinutes })}</dd>
                 </div>
               )}
@@ -247,7 +274,9 @@ function Detail({ tpl }: { tpl: TemplateDetail }) {
               <p className="text-sm text-success">{t('lint.clean')}</p>
             ) : (
               <>
-                {(['name', 'language', 'header', 'body', 'footer', 'buttons', 'template'] as const).map((f) => (
+                {(
+                  ['name', 'language', 'header', 'body', 'footer', 'buttons', 'template'] as const
+                ).map((f) => (
                   <div key={f}>
                     <IssueList issues={tpl.lint} field={f} />
                   </div>
@@ -286,7 +315,13 @@ function Detail({ tpl }: { tpl: TemplateDetail }) {
 }
 
 /** The one banner that tells the operator where the template stands with Meta. */
-function StatusBanner({ tpl, when }: { tpl: TemplateDetail; when: (iso: string | null) => string }) {
+function StatusBanner({
+  tpl,
+  when,
+}: {
+  tpl: TemplateDetail;
+  when: (iso: string | null) => string;
+}) {
   const t = useTranslations('message-templates.detail.banner');
   switch (tpl.status) {
     case 'draft':
@@ -296,7 +331,10 @@ function StatusBanner({ tpl, when }: { tpl: TemplateDetail; when: (iso: string |
         <Alert tone="info" data-testid="banner-pending">
           <p className="font-medium">{t('pending')}</p>
           <p className="mt-1 text-xs">
-            {t('pendingMeta', { submitted: when(tpl.submittedAt), checked: when(tpl.lastSyncedAt) })}
+            {t('pendingMeta', {
+              submitted: when(tpl.submittedAt),
+              checked: when(tpl.lastSyncedAt),
+            })}
           </p>
           {isAwaitingReview(tpl.status) && <p className="mt-1 text-xs">{t('polling')}</p>}
         </Alert>
@@ -305,7 +343,9 @@ function StatusBanner({ tpl, when }: { tpl: TemplateDetail; when: (iso: string |
       return (
         <Alert tone="danger" data-testid="banner-rejected">
           <p className="font-medium">{t('rejected')}</p>
-          {tpl.rejectionReason && <p className="mt-1 whitespace-pre-line break-words">{tpl.rejectionReason}</p>}
+          {tpl.rejectionReason && (
+            <p className="mt-1 whitespace-pre-line break-words">{tpl.rejectionReason}</p>
+          )}
           <p className="mt-1 text-xs">{t('rejectedHelp')}</p>
         </Alert>
       );
@@ -323,4 +363,3 @@ function StatusBanner({ tpl, when }: { tpl: TemplateDetail; when: (iso: string |
       return null;
   }
 }
-

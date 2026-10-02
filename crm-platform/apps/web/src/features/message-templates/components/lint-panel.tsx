@@ -43,7 +43,11 @@ export function LintPanel({
   const errors = issues.filter((i) => i.severity === 'error');
   const warnings = issues.length - errors.length;
   return (
-    <section aria-label={t('title')} className="space-y-2 rounded-md border border-border p-3" data-testid="lint-panel">
+    <section
+      aria-label={t('title')}
+      className="space-y-2 rounded-md border border-border p-3"
+      data-testid="lint-panel"
+    >
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-sm font-semibold">{t('title')}</h3>
         {checking && (
@@ -69,7 +73,9 @@ export function LintPanel({
                 <span
                   className={cn(
                     'mt-0.5 shrink-0 rounded px-1.5 py-0.5 font-medium',
-                    i.severity === 'error' ? 'bg-danger/15 text-danger' : 'bg-warning/15 text-warning',
+                    i.severity === 'error'
+                      ? 'bg-danger/15 text-danger'
+                      : 'bg-warning/15 text-warning',
                   )}
                 >
                   {t(`severity.${i.severity}`)}

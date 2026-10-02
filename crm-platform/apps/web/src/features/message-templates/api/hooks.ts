@@ -89,7 +89,8 @@ function useAction<TVars, TOut>(fn: (vars: TVars) => Promise<TOut>) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fn,
-    onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.all, predicate: (q) => q.queryKey[1] !== 'lint' }),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: KEYS.all, predicate: (q) => q.queryKey[1] !== 'lint' }),
   });
 }
 

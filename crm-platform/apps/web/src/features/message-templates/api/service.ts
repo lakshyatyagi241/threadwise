@@ -18,7 +18,12 @@ export const templatesApi = {
   get: (id: string, signal?: AbortSignal) =>
     apiFetch(`${base}/${id}`, { schema: templateDetailSchema, signal }),
   create: (input: CreateTemplateInput, idempotencyKey?: string) =>
-    apiFetch(base, { method: 'POST', body: input, schema: templateSubmitResultSchema, idempotencyKey }),
+    apiFetch(base, {
+      method: 'POST',
+      body: input,
+      schema: templateSubmitResultSchema,
+      idempotencyKey,
+    }),
   update: (id: string, input: UpdateTemplateInput, idempotencyKey?: string) =>
     apiFetch(`${base}/${id}`, {
       method: 'PUT',

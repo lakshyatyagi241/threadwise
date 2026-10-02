@@ -40,16 +40,31 @@ export function VariablesPanel({
       const id = `${base}-${scope}-${tok}`;
       const put = (p: Partial<typeof slot>) => set({ ...slots, [tok]: { ...slot, ...p } });
       return (
-        <li key={`${scope}-${tok}`} className="grid items-end gap-3 sm:grid-cols-[auto_1fr_1fr]" data-testid="variable-row">
+        <li
+          key={`${scope}-${tok}`}
+          className="grid items-end gap-3 sm:grid-cols-[auto_1fr_1fr]"
+          data-testid="variable-row"
+        >
           <span className="rounded bg-success/15 px-2 py-1 font-mono text-xs font-medium text-success sm:mb-2">
             {`{{${tok}}}`}
             <span className="ms-1 font-sans text-[10px] text-muted-foreground">{t(scope)}</span>
           </span>
           <Field label={t('attribute')} htmlFor={`${id}-key`}>
-            <Input id={`${id}-key`} dir="ltr" value={slot.key} maxLength={100} onChange={(e) => put({ key: e.target.value })} />
+            <Input
+              id={`${id}-key`}
+              dir="ltr"
+              value={slot.key}
+              maxLength={100}
+              onChange={(e) => put({ key: e.target.value })}
+            />
           </Field>
           <Field label={t('sample')} htmlFor={`${id}-ex`}>
-            <Input id={`${id}-ex`} value={slot.example} maxLength={200} onChange={(e) => put({ example: e.target.value })} />
+            <Input
+              id={`${id}-ex`}
+              value={slot.example}
+              maxLength={200}
+              onChange={(e) => put({ example: e.target.value })}
+            />
           </Field>
         </li>
       );

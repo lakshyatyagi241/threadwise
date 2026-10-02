@@ -85,7 +85,11 @@ export function toVariableMap(
     tokensOf(text).map((t, i) => {
       const slot = slots[t];
       const example = slot?.example.trim();
-      return { num: i + 1, key: (slot?.key.trim() || t).slice(0, 100), ...(example ? { example: example.slice(0, 200) } : {}) };
+      return {
+        num: i + 1,
+        key: (slot?.key.trim() || t).slice(0, 100),
+        ...(example ? { example: example.slice(0, 200) } : {}),
+      };
     });
   const map: TplVariableMap = {};
   if (header && tokensOf(header.text).length) map.header = build(header.text, header.slots);
@@ -94,10 +98,7 @@ export function toVariableMap(
 }
 
 /** Slot entries from a stored template: the key is the attribute, the example the sample, by position. */
-export function slotsFromMap(
-  text: string,
-  slots: TplVariableMap['body'] | undefined,
-): SlotInputs {
+export function slotsFromMap(text: string, slots: TplVariableMap['body'] | undefined): SlotInputs {
   const out: SlotInputs = {};
   tokensOf(text).forEach((t, i) => {
     const s = slots?.find((x) => x.num === i + 1);

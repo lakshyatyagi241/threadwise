@@ -65,7 +65,11 @@ export function ButtonsEditor({
             const err = (code: string) => mine.find((x) => x.code === code);
             const id = `${base}-${r.key}`;
             return (
-              <li key={r.key} className="rounded-md border border-border p-3" data-testid="button-row">
+              <li
+                key={r.key}
+                className="rounded-md border border-border p-3"
+                data-testid="button-row"
+              >
                 <div className="mb-2 flex items-center gap-2">
                   <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     {t(`kind.${r.kind}`)}
@@ -157,7 +161,9 @@ export function ButtonsEditor({
                       <Field
                         label={t('urlExample')}
                         htmlFor={`${id}-ex`}
-                        error={err('urlExampleRequired') ? t('issue.urlExampleRequired') : undefined}
+                        error={
+                          err('urlExampleRequired') ? t('issue.urlExampleRequired') : undefined
+                        }
                       >
                         <Input
                           id={`${id}-ex`}
