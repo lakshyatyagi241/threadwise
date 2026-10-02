@@ -4,6 +4,7 @@ import {
   ERROR_CODES,
   type ConnectWoocommerceInput,
   type WoocommerceOverview,
+  type SyncResult,
   type WoocommerceStore,
   type WoocommerceTestResult,
 } from '@crm/contracts';
@@ -23,6 +24,7 @@ import {
   webhookIdsOf,
   webhookUrl,
 } from './ecom-rules';
+import { ImportService } from './import.service';
 import { EcomSettingsService } from './platform-settings.service';
 import { StoresRepository, type WooRow } from './stores.repository';
 
@@ -49,6 +51,7 @@ export class WoocommerceService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly settings: EcomSettingsService,
+    private readonly imports: ImportService,
     private readonly config: ConfigService<Env, true>,
     @Inject(WOOCOMMERCE) private readonly woo: WooFactory,
     @Inject(ECOM_PLAN_GATE) private readonly plan: EcomPlanGate,
@@ -182,6 +185,10 @@ export class WoocommerceService {
       await this.repo.setWooHooks(tx, ctx.orgId, saved.row.id, ids);
       return (await this.repo.wooByStoreUrl(tx, ctx.orgId, url)) ?? saved.row;
     });
+    // The first import runs in the background: the merchant lands on the store screen at once and it fills in.
+    await this.imports
+      .enqueue({ orgId: ctx.orgId, kind: 'woocommerce', id: saved.row.id })
+      .catch((err: unknown) => this.logger.warn({ err }, 'woocommerce: import not queued'));
     if (Object.keys(ids).length < WOO_WEBHOOK_TOPICS.length) {
       this.logger.warn(
         { orgId: ctx.orgId, registered: Object.keys(ids).length },
@@ -217,5 +224,29 @@ export class WoocommerceService {
         payload: { uuid: row.uuid, storeUrl: row.storeUrl },
       });
     });
+  }
+
+  /** Sync now (WD-ECOM-013): the same as Shopify's. The store is verified with its keys, its facts refreshed and the import queued. */
+  async sync(uuid: string): Promise<SyncResult> {
+    const { orgId } = RequestContextStore.require();
+    await this.plan.assertIntegration(orgId, 'woocommerce');
+    const row = await this.db.tx((tx) => this.repo.wooByUuid(tx, orgId, uuid));
+    if (!row) throw AppError.notFound('WooCommerce store', uuid);
+    if (row.consumerKey === '') {
+      return { ok: false, message: 'This store is no longer connected. Connect it again.' };
+    }
+    const api = this.woo.store(
+      row.storeUrl,
+      this.crypto.decrypt(row.consumerKey),
+      this.crypto.decrypt(row.consumerSecret),
+    );
+    const probe = await api.test();
+    if (!probe.ok) {
+      await this.db.tx((tx) => this.repo.setStatus(tx, orgId, 'woocommerce', row.id, 'error'));
+      return { ok: false, message: probe.error || 'Verify failed.' };
+    }
+    await this.db.tx((tx) => this.repo.refreshWoo(tx, orgId, row.id, probe.data));
+    await this.imports.enqueue({ orgId, kind: 'woocommerce', id: row.id });
+    return { ok: true, counts: await api.counts(), importQueued: true };
   }
 }

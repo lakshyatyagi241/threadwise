@@ -67,4 +67,18 @@ export class WoocommerceController {
   async disconnect(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.woo.disconnect(id);
   }
+
+  @Post('stores/:id/sync')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('ecom.connect')
+  @ApiOperation({
+    summary:
+      'Sync now: read the store again, refresh its facts, queue the import and return its totals',
+    description:
+      '200 with `ok = false` and the reason when the store does not answer (it is then flagged `error`); 404 for another workspace’s store.',
+  })
+  sync(@Param('id', ParseUUIDPipe) id: string) {
+    return this.woo.sync(id);
+  }
 }

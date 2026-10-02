@@ -8,8 +8,9 @@ WaDesk 1.7.0 vs branch `punya/punyafix`. Inventory: [inventory/shopify-woocommer
 Automated only; no screen yet, so the Playwright twin run against the running WaDesk has not been done, and nothing was compared against a live Shopify
 or WooCommerce store (that needs a Shopify partner app and a store, which this workspace does not have).
 
-- `apps/api/test/unit/shopify-woocommerce/ecom-rules.spec.ts`: 12 tests, passing (the store domain rules, PHP-compatible encoding, the OAuth signature in every accept and refuse case, the approval address, the sealed state's age and shape, the WooCommerce address, the webhook topics, address and secret, the saved webhook ids).
+- `apps/api/test/unit/shopify-woocommerce/ecom-rules.spec.ts`, `mirror-rules.spec.ts` and `woo-phone.spec.ts`: 38 tests, passing (connect rules as below; every product, order, customer and stock mapping for both stores, the strike-through price, status maps, the Link-header paging, dial codes and every phone case) — the connect rules: (the store domain rules, PHP-compatible encoding, the OAuth signature in every accept and refuse case, the approval address, the sealed state's age and shape, the WooCommerce address, the webhook topics, address and secret, the saved webhook ids).
 - `apps/api/test/e2e/shopify-woocommerce/ecom-connect.e2e.spec.ts` (17 scenarios: platform settings without the secret and the blank-secret rule, operator only, the start refusals and permission, the callback with an encrypted token and 12 webhooks and no secret in any answer, a bad signature or state or another store saving nothing, Shopify's own refusal, a store with no details, reconnecting with the old webhooks torn down and a new secret, isolation between workspaces, disconnect and its 404; WooCommerce test, connect with encrypted keys and 7 webhooks, refusals, reconnect, disconnect and permission). Typechecked and linted; NOT RUN (no Docker or Postgres in this environment).
+- `apps/api/test/e2e/shopify-woocommerce/ecom-import.e2e.spec.ts` (10 scenarios: a Shopify import into the catalog, orders and contacts with the store stamped; importing again updating in place; a contact that already has the number only joining the group; slug collisions; the customer group kept when renamed and remade when gone; a cut-short read, a store with no credentials and isolation; a WooCommerce import with an international number from the billing country; sync now for both stores with its failure, 404 and permission cases). Typechecked and linted; NOT RUN.
 - Typecheck, lint on the new files and `pnpm arch:check` (0 errors) are clean.
 
 ## Status of each feature
@@ -39,8 +40,15 @@ or WooCommerce store (that needs a Shopify partner app and a store, which this w
 6. **Disconnect is `DELETE` and answers 204**; WaDesk redirected with a flash.
 7. **The Shopify secret is never shown and a save is audited** with the names of the fields that changed, not their values.
 
+8. **Every page is read** (up to ten pages: 2,500 products, orders or customers on Shopify, 1,000 on WooCommerce); WaDesk read only the first 250 or 100 and dropped the rest without saying so. A cut-short read is recorded (`incomplete` in the sync stats).
+9. **The import runs in a worker**, and "Sync now" answers at once with the store's totals and `importQueued`; WaDesk imported inside the request and returned the counts. The connect lands on the store screen without waiting.
+10. **A Shopify product with no SKU gets `SHOPIFY-<id>`**; WaDesk saved an empty SKU, which anything that finds a product by SKU (reorder, the flow commerce node) cannot use. Availability is set from stock too (WaDesk left every product "in stock").
+11. **An empty phone no longer hides a filled one.** WooCommerce sends `""` for a blank field; WaDesk fell through only on null, so an empty billing phone hid the shipping phone. The first filled value is used, for phone and country.
+12. **Two products with one slug both import** (the second gets its id on the end); a customer is found by number as digits or with a `+`; the customer group id is kept on the store so a renamed group is still the one used.
+
 ## Shims
 
+- `StoreMirror` (`_shims/sql-store-mirror.ts`): writes `wa_products`, `wa_orders`, `contacts` and the customer group directly until the catalog, checkout and contacts domains export their writers (a contact is created without a quota check or a `contact_identities` row, as the Facebook and Telegram channels do).
 - `EcomPlanGate` (`_shims/open-gates.ts`): `integration_shopify` and `integration_woocommerce` are not in the plan catalogue; every check passes.
 
 ## Not verified

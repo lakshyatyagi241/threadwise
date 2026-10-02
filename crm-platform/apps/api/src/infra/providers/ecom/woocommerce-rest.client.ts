@@ -1,7 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ecomConfig } from '../../../config/domains/ecom.env';
 import { guardedRequest } from '../../net/guarded-http';
-import type { EcomResult, WooFactory, WooStoreApi, WooStoreInfo } from './ecom.port';
+import {
+  MAX_PAGES,
+  type EcomResult,
+  type StoreCounts,
+  type StoreRead,
+  type StoreRecord,
+  type WooFactory,
+  type WooStoreApi,
+  type WooStoreInfo,
+} from './ecom.port';
 
 const API_PATH = '/wp-json/wc/v3';
 const TIMEOUT_MS = 15_000;
@@ -30,7 +39,10 @@ class WooStore implements WooStoreApi {
     method: 'GET' | 'POST' | 'DELETE',
     path: string,
     json?: Json,
-  ): Promise<{ status: number; json: unknown; raw: string } | { error: string }> {
+  ): Promise<
+    | { status: number; json: unknown; raw: string; total: number | null; pages: number | null }
+    | { error: string }
+  > {
     let url: URL;
     try {
       url = new URL(`${this.storeUrl.replace(/\/+$/, '')}${API_PATH}${path}`);
@@ -54,7 +66,17 @@ class WooStore implements WooStoreApi {
       } catch {
         parsed = null;
       }
-      return { status: res.status, json: parsed, raw: res.body.slice(0, 200) };
+      const header = (name: string) => {
+        const v = Number(res.headers[name]);
+        return Number.isFinite(v) ? v : null;
+      };
+      return {
+        status: res.status,
+        json: parsed,
+        raw: res.body.slice(0, 200),
+        total: header('x-wp-total'),
+        pages: header('x-wp-totalpages'),
+      };
     } catch (err) {
       return { error: (err as Error).message };
     }
@@ -85,6 +107,46 @@ class WooStore implements WooStoreApi {
         version: text(env.version),
       },
     };
+  }
+
+  /** WooCommerce has no count endpoint: the total comes back in the `X-WP-Total` header of a one-row page. */
+  async counts(): Promise<StoreCounts> {
+    const out: StoreCounts = { products: 0, orders: 0, customers: 0 };
+    for (const k of Object.keys(out) as Array<keyof StoreCounts>) {
+      const r = await this.send('GET', `/${k}?per_page=1`);
+      if (!('error' in r) && r.status >= 200 && r.status < 300) out[k] = r.total ?? 0;
+    }
+    return out;
+  }
+
+  /** Reads one list page by page (100 a page) until a short page, the last page the store reports, or the page cap. */
+  private async readAll(path: string, orderby: string): Promise<StoreRead> {
+    const items: StoreRecord[] = [];
+    for (let page = 1; ; page += 1) {
+      if (page > MAX_PAGES) return { items, complete: false };
+      const r = await this.send(
+        'GET',
+        `${path}?per_page=100&orderby=${orderby}&order=desc&page=${page}`,
+      );
+      if ('error' in r || r.status < 200 || r.status >= 300 || !Array.isArray(r.json)) {
+        return { items, complete: false };
+      }
+      for (const x of r.json) items.push(obj(x));
+      if (r.json.length < 100 || (r.pages !== null && page >= r.pages))
+        return { items, complete: true };
+    }
+  }
+
+  products(): Promise<StoreRead> {
+    return this.readAll('/products', 'date');
+  }
+
+  orders(): Promise<StoreRead> {
+    return this.readAll('/orders', 'date');
+  }
+
+  customers(): Promise<StoreRead> {
+    return this.readAll('/customers', 'registered_date');
   }
 
   async registerWebhooks(a: {

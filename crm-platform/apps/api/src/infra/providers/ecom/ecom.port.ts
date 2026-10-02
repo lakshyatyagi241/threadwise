@@ -37,9 +37,35 @@ export interface ShopifyAppApi {
   ): Promise<EcomResult<{ accessToken: string; scope: string }>>;
 }
 
+/** One resource record as the store sends it; the importer picks out what it needs and trusts nothing. */
+export type StoreRecord = Record<string, unknown>;
+
+/**
+ * A resource read to the end of its pages, at most `MAX_PAGES` of them. `complete` is false when the store stopped answering or the
+ * page cap was reached, so the import can say it was partial instead of pretending it brought everything.
+ */
+export interface StoreRead {
+  items: StoreRecord[];
+  complete: boolean;
+}
+
+/** What the store reports as its size. A count that cannot be read is 0. */
+export interface StoreCounts {
+  products: number;
+  orders: number;
+  customers: number;
+}
+
+/** Most pages read for one resource in one import: 250 a page on Shopify, 100 on WooCommerce. */
+export const MAX_PAGES = 10;
+
 /** Calls made as one store. */
 export interface ShopifyStoreApi {
   shop(): Promise<EcomResult<ShopInfo>>;
+  counts(): Promise<StoreCounts>;
+  products(): Promise<StoreRead>;
+  orders(): Promise<StoreRead>;
+  customers(): Promise<StoreRead>;
   /** Subscribes each topic to the address; returns topic to the store's webhook id for those that were created. */
   registerWebhooks(address: string, topics: readonly string[]): Promise<Record<string, string>>;
   /** Removes the subscriptions; a failure is ignored (the store may already be gone). */
@@ -63,6 +89,10 @@ export interface WooStoreInfo {
 export interface WooStoreApi {
   /** Reads `system_status`: proves the key and secret work and says what the store is. */
   test(): Promise<EcomResult<WooStoreInfo>>;
+  counts(): Promise<StoreCounts>;
+  products(): Promise<StoreRead>;
+  orders(): Promise<StoreRead>;
+  customers(): Promise<StoreRead>;
   registerWebhooks(a: {
     deliveryUrl: string;
     secret: string;

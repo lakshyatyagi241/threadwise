@@ -7,6 +7,7 @@ import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
 import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
+import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
@@ -48,6 +49,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChannelTelegramWorkerModule,
     ChannelFacebookWorkerModule,
     ChannelInstagramWorkerModule,
+    ShopifyWoocommerceWorkerModule,
   ],
   providers: [
     OutboxDrainService,

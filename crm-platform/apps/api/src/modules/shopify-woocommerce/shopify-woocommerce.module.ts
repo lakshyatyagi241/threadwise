@@ -4,8 +4,10 @@ import { SHOPIFY, WOOCOMMERCE } from '../../infra/providers/ecom/ecom.port';
 import { HttpShopifyFactory } from '../../infra/providers/ecom/shopify-admin.client';
 import { HttpWooFactory } from '../../infra/providers/ecom/woocommerce-rest.client';
 import { OpenEcomPlanGate } from './_shims/open-gates';
-import { ECOM_PLAN_GATE } from './_shims/tokens';
+import { SqlStoreMirror } from './_shims/sql-store-mirror';
+import { ECOM_PLAN_GATE, STORE_MIRROR } from './_shims/tokens';
 import { EcomPublicController } from './ecom-public.controller';
+import { ImportService } from './import.service';
 import { EcomPlatformSettingsController } from './platform-settings.controller';
 import { EcomSettingsService } from './platform-settings.service';
 import { ShopifyController } from './shopify.controller';
@@ -31,12 +33,20 @@ import { WoocommerceService } from './woocommerce.service';
     StoresRepository,
     ShopifyService,
     WoocommerceService,
+    ImportService,
     HttpShopifyFactory,
     HttpWooFactory,
     { provide: SHOPIFY, useExisting: HttpShopifyFactory },
     { provide: WOOCOMMERCE, useExisting: HttpWooFactory },
     { provide: ECOM_PLAN_GATE, useClass: OpenEcomPlanGate },
+    { provide: STORE_MIRROR, useClass: SqlStoreMirror },
   ],
-  exports: [EcomSettingsService, StoresRepository, ShopifyService, WoocommerceService],
+  exports: [
+    EcomSettingsService,
+    StoresRepository,
+    ShopifyService,
+    WoocommerceService,
+    ImportService,
+  ],
 })
 export class ShopifyWoocommerceModule {}

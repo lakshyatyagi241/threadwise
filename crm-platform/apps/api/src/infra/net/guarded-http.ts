@@ -1,5 +1,5 @@
 import { lookup as dnsLookup, type LookupAddress } from 'node:dns';
-import { request as httpRequest } from 'node:http';
+import { request as httpRequest, type IncomingHttpHeaders } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { isIP } from 'node:net';
 
@@ -45,7 +45,9 @@ export interface GuardedRequest {
  * A request to an operator-supplied address. The address check runs inside the socket's own DNS lookup, so the address that was
  * checked is the address that is connected to (no resolve-then-connect gap for DNS rebinding), and redirects are never followed.
  */
-export function guardedRequest(req: GuardedRequest): Promise<{ status: number; body: string }> {
+export function guardedRequest(
+  req: GuardedRequest,
+): Promise<{ status: number; body: string; headers: IncomingHttpHeaders }> {
   const { url, allowPrivate } = req;
   const doRequest = url.protocol === 'https:' ? httpsRequest : httpRequest;
   const host = url.hostname.replace(/^\[|\]$/g, '');
@@ -97,7 +99,11 @@ export function guardedRequest(req: GuardedRequest): Promise<{ status: number; b
           if (size <= req.maxBytes) chunks.push(c);
         });
         res.on('end', () =>
-          resolve({ status: res.statusCode ?? 0, body: Buffer.concat(chunks).toString('utf8') }),
+          resolve({
+            status: res.statusCode ?? 0,
+            body: Buffer.concat(chunks).toString('utf8'),
+            headers: res.headers,
+          }),
         );
         res.on('error', reject);
       },

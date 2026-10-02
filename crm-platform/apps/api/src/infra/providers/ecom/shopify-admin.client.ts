@@ -1,8 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
+  MAX_PAGES,
   SHOP_DOMAIN,
   type EcomResult,
   type ShopInfo,
+  type StoreCounts,
+  type StoreRead,
+  type StoreRecord,
   type ShopifyAppApi,
   type ShopifyFactory,
   type ShopifySettings,
@@ -18,12 +22,22 @@ const obj = (x: unknown): Json => (typeof x === 'object' && x !== null ? (x as J
 const text = (x: unknown): string | null =>
   typeof x === 'string' ? x : typeof x === 'number' ? String(x) : null;
 
+/** The address of the next page from a `Link` header (`<...>; rel="next"`), or null on the last page. */
+export function nextLink(header: string | null): string | null {
+  if (!header) return null;
+  for (const part of header.split(',')) {
+    const m = /<([^>]+)>\s*;\s*rel="?next"?/i.exec(part);
+    if (m) return m[1]!;
+  }
+  return null;
+}
+
 /** One request. Never throws: a network failure is `null`. The token goes in a header, never in the address or a log. */
 async function call(
   method: 'GET' | 'POST' | 'DELETE',
   url: string,
   o: { token?: string; json?: Json } = {},
-): Promise<{ status: number; json: Json } | null> {
+): Promise<{ status: number; json: Json; next: string | null } | null> {
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (o.token) headers['X-Shopify-Access-Token'] = o.token;
   if (o.json) headers['Content-Type'] = 'application/json';
@@ -36,7 +50,11 @@ async function call(
       redirect: 'manual',
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
-    return { status: res.status, json: obj(await res.json().catch(() => ({}))) };
+    return {
+      status: res.status,
+      json: obj(await res.json().catch(() => ({}))),
+      next: nextLink(res.headers.get('link')),
+    };
   } catch {
     return null;
   }
@@ -94,6 +112,66 @@ class ShopifyStore implements ShopifyStoreApi {
         country: text(s.country_name),
       },
     };
+  }
+
+  async counts(): Promise<StoreCounts> {
+    const out: StoreCounts = { products: 0, orders: 0, customers: 0 };
+    if (!SHOP_DOMAIN.test(this.shopDomain)) return out;
+    const paths = {
+      products: 'products/count.json',
+      // `orders/count.json` needs an explicit status; the others do not.
+      orders: 'orders/count.json?status=any',
+      customers: 'customers/count.json',
+    } as const;
+    for (const [k, path] of Object.entries(paths) as Array<[keyof StoreCounts, string]>) {
+      const r = await call('GET', `${adminBase(this.shopDomain)}/${path}`, { token: this.token });
+      const n = r && r.status >= 200 && r.status < 300 ? Number(r.json.count) : 0;
+      out[k] = Number.isFinite(n) ? n : 0;
+    }
+    return out;
+  }
+
+  /**
+   * Reads one list to the end of its pages. Shopify pages by cursor: each answer's `Link` header names the next page, which must be
+   * on the same store (a header pointing anywhere else is not followed).
+   */
+  private async readAll(resource: string, key: string, query: string): Promise<StoreRead> {
+    const items: StoreRecord[] = [];
+    if (!SHOP_DOMAIN.test(this.shopDomain)) return { items, complete: false };
+    let url: string | null = `${adminBase(this.shopDomain)}/${resource}.json?${query}`;
+    for (let page = 0; url !== null; page += 1) {
+      if (page >= MAX_PAGES) return { items, complete: false };
+      const r = await call('GET', url, { token: this.token });
+      if (!r || r.status < 200 || r.status >= 300) return { items, complete: false };
+      const list = r.json[key];
+      if (Array.isArray(list)) for (const x of list) items.push(obj(x));
+      url = r.next !== null && new URL(r.next).host === this.shopDomain ? r.next : null;
+    }
+    return { items, complete: true };
+  }
+
+  products(): Promise<StoreRead> {
+    return this.readAll(
+      'products',
+      'products',
+      'limit=250&fields=id,title,handle,body_html,tags,vendor,product_type,status,images,image,variants,created_at',
+    );
+  }
+
+  orders(): Promise<StoreRead> {
+    return this.readAll(
+      'orders',
+      'orders',
+      'limit=250&status=any&fields=id,name,order_number,email,phone,created_at,cancelled_at,total_price,currency,financial_status,fulfillment_status,line_items,customer,shipping_address,billing_address,payment_gateway_names,gateway,tags',
+    );
+  }
+
+  customers(): Promise<StoreRead> {
+    return this.readAll(
+      'customers',
+      'customers',
+      'limit=250&fields=id,first_name,last_name,email,phone,orders_count,total_spent,created_at',
+    );
   }
 
   async registerWebhooks(
