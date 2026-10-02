@@ -4,41 +4,52 @@
       "groupHeading": "Platform settings",
       "hub": "Settings hub",
       "general": "General",
-      "branding": "Branding",
+      "appearance": "Appearance and colours",
       "siteInfo": "Site info",
+      "footer": "Footer",
       "mail": "Mail",
       "seo": "SEO",
-      "privacy": "Privacy and cookies",
+      "privacy": "Privacy, GDPR and ADA",
       "analytics": "Analytics",
-      "customCode": "Custom code",
-      "pwa": "Installable app",
+      "custom": "Custom code",
+      "pwa": "PWA",
       "storage": "Cloud storage",
       "realtime": "Real-time"
     },
     "hub": {
-      "kicker": "Platform",
-      "title": "Settings",
-      "description": "Everything that applies to the whole installation rather than one workspace.",
-      "export": "Export settings",
+      "kicker": "Admin - Project settings",
+      "title": "Project settings",
+      "description": "Configure app identity, messaging providers, mail, e-commerce integrations, storefront metadata, footer content, PWA, SEO, and custom code.",
+      "export": "Export config",
       "exporting": "Exporting",
       "exportHint": "Downloads every saved setting. Secrets and account identifiers are replaced.",
       "tiles": {
-        "saved": "Saved groups",
-        "savedHint": "of {total}",
-        "secrets": "Secret fields",
-        "secretsHint": "stored encrypted",
-        "needsTest": "Needs a test",
+        "saved": "Saved settings",
+        "savedHint": "groups of {total} saved",
+        "healthy": "Healthy",
+        "healthyHint": "with a non-empty value",
+        "needsTest": "Needs test",
         "needsTestNone": "all verified",
+        "secrets": "Secret fields",
+        "secretsHint": "encrypted / masked",
         "lastUpdated": "Last updated",
-        "lastUpdatedNone": "no edits yet"
+        "lastUpdatedNone": "no edits yet",
+        "lastUpdatedHint": "most recent save"
       },
       "card": {
         "saved": "Saved",
         "defaults": "Defaults",
         "needsTest": "Needs test",
-        "updated": "Updated {when}"
+        "updated": "Updated {when}",
+        "open": "Open"
       },
-      "others": "Registration, social login and the sign-in pages are edited under Guest pages."
+      "others": "Currencies, catalogue, Shopify, WooCommerce, HubSpot, Google, Slack, mobile push and Trello settings appear here when their modules are installed.",
+      "actions": {
+        "addons": "Add-ons",
+        "updater": "Updater",
+        "legal": "Legal pages",
+        "general": "Open general"
+      }
     },
     "common": {
       "save": "Save changes",
@@ -60,10 +71,18 @@
       "updated": "Last saved {when}",
       "neverSaved": "Never saved: showing defaults.",
       "back": "All settings",
-      "invalidGroup": "That settings page does not exist."
+      "invalidGroup": "That settings page does not exist.",
+      "eyebrow": "Admin - Project settings",
+      "guide": "Quick guide",
+      "resetDraft": "Reset draft",
+      "cancel": "Cancel",
+      "applyAfterSave": "Changes apply only after you save.",
+      "saveAndTest": "Save & test connection",
+      "custom": "custom",
+      "manageLanguages": "Manage languages"
     },
     "test": {
-      "title": "Check the connection",
+      "title": "Send a test email",
       "saveFirst": "Save your changes first: the check uses the saved settings.",
       "mailTo": "Send the test email to",
       "mailRun": "Send test email",
@@ -131,8 +150,8 @@
             "hint": "Dial code with a plus sign, for example +91."
           },
           "defaultCountryIso": {
-            "label": "Default country ISO",
-            "hint": "Two letters, for example in."
+            "label": "Default country (phone pickers)",
+            "hint": "Applies to every phone-input picker on the platform."
           },
           "fontFamily": {
             "label": "Font family"
@@ -140,6 +159,11 @@
           "maintenanceMode": {
             "label": "Maintenance mode",
             "hint": "Takes the customer app offline with a 503. Operators, sign-in and machine callbacks keep working."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "Theme default"
           }
         }
       },
@@ -177,74 +201,86 @@
           },
           "colors": {
             "wa-deep": {
-              "label": "Wa deep",
+              "label": "Primary",
               "hint": "Setting the primary also recolours the teal, green, mint and bubble shades unless you set them too."
             },
             "wa-teal": {
-              "label": "Wa teal"
+              "label": "Primary (hover)"
             },
             "wa-green": {
-              "label": "Wa green"
+              "label": "Accent / success"
             },
             "wa-mint": {
-              "label": "Wa mint"
+              "label": "Soft accent fill"
             },
             "wa-bubble": {
-              "label": "Wa bubble"
+              "label": "Chat bubble"
             },
             "paper-0": {
-              "label": "Paper 0"
+              "label": "Page background"
             },
             "paper-50": {
-              "label": "Paper 50"
+              "label": "Card / muted bg"
             },
             "paper-100": {
-              "label": "Paper 100"
+              "label": "Hover background"
             },
             "paper-200": {
-              "label": "Paper 200"
+              "label": "Borders"
             },
             "ink-500": {
-              "label": "Ink 500"
+              "label": "Muted text"
             },
             "ink-700": {
-              "label": "Ink 700"
+              "label": "Body text"
             },
             "ink-900": {
-              "label": "Ink 900"
+              "label": "Headings"
             },
             "accent-coral": {
-              "label": "Accent coral"
+              "label": "Accent - coral"
             },
             "accent-amber": {
-              "label": "Accent amber"
+              "label": "Accent - amber"
             },
             "accent-plum": {
-              "label": "Accent plum"
+              "label": "Accent - plum"
             },
             "accent-sky": {
-              "label": "Accent sky"
+              "label": "Accent - sky"
             }
           },
           "fontScale": {
-            "label": "Font scale",
+            "label": "Font size",
             "hint": "Whole-interface text size in percent, 80 to 130."
           },
           "uiOpacity": {
-            "label": "UI opacity",
+            "label": "Opacity",
             "hint": "Whole-interface opacity in percent, 55 to 100."
           },
           "dashboardLayout": {
-            "label": "Dashboard layout"
+            "label": "Navigation layout"
           },
           "sidebarColor": {
-            "label": "Sidebar color"
+            "label": "Background"
           },
           "sidebarTextColor": {
-            "label": "Sidebar text color"
+            "label": "Text colour"
           },
           "sidebarAccentColor": {
-            "label": "Sidebar accent color"
+            "label": "Accent colour"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "Top bar",
+            "sidebar": "Sidebar"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "Current: menu across the top plus a More page for overflow.",
+            "sidebar": "Admin-style left rail with all features grouped. No top menu."
           }
         }
       },
@@ -371,6 +407,14 @@
             "label": "Password",
             "hint": "Stored encrypted and never shown again."
           }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (port 587)",
+            "ssl": "ssl (port 465)",
+            "starttls": "starttls",
+            "none": "none"
+          }
         }
       },
       "seo": {
@@ -389,10 +433,12 @@
         },
         "fields": {
           "metaTitle": {
-            "label": "Meta title"
+            "label": "Meta title",
+            "hint": "Lead with the brand."
           },
           "metaDescription": {
-            "label": "Meta description"
+            "label": "Meta description",
+            "hint": "Shows under the title in Google."
           },
           "metaKeywords": {
             "label": "Meta keywords"
@@ -419,7 +465,8 @@
             "label": "Open Graph URL"
           },
           "ogImage": {
-            "label": "Open Graph image"
+            "label": "Open Graph image",
+            "hint": "Recommended 1200x630. Used by Slack, X, WhatsApp, Discord."
           },
           "twitterCard": {
             "label": "Twitter card"
@@ -435,6 +482,14 @@
           },
           "bingVerification": {
             "label": "Bing verification"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "index, follow",
+            "index, nofollow": "index, nofollow",
+            "noindex, follow": "noindex, follow",
+            "noindex, nofollow": "noindex, nofollow"
           }
         }
       },
@@ -497,6 +552,13 @@
           "adaReducedMotion": {
             "label": "ADA reduced motion",
             "hint": "Stored for your records. It does not change behaviour yet."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "Bottom sticky bar (recommended)",
+            "top-bar": "Top sticky bar",
+            "modal": "Centered modal"
           }
         }
       },
@@ -715,6 +777,646 @@
           }
         }
       }
+    },
+    "cards": {
+      "appearance": {
+        "title": "Appearance & colours",
+        "description": "Recolour every page of the user and admin dashboards: brand, surfaces, text and accents. Applies live.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "General settings",
+        "description": "App name, contact details, logos, URL, address, and global service toggles.",
+        "tags": "APP_NAME / APP_URL / logos"
+      },
+      "paymentGateways": {
+        "title": "Payment gateways",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave and more: keys, currencies, and live toggles.",
+        "tags": "Live / sandbox - per-gateway keys"
+      },
+      "aiKeys": {
+        "title": "AI / API keys",
+        "description": "Provider credentials for OpenAI, Anthropic, Google and others. Drives every AI feature in the platform.",
+        "tags": "BYOK / default models"
+      },
+      "mail": {
+        "title": "Mail settings",
+        "description": "SMTP driver, host, port, sender name, encryption, and test send.",
+        "tags": "SMTP / verify / welcome"
+      },
+      "auditLog": {
+        "title": "Audit log",
+        "description": "Searchable history of every admin action: workspace edits, user changes, billing events, security incidents, settings updates.",
+        "tags": "Filter / detail / CSV export"
+      },
+      "privacy": {
+        "title": "Privacy, GDPR & ADA",
+        "description": "Cookie consent banner, GDPR / CCPA compliance, ADA / WCAG accessibility toggles, and policy URLs.",
+        "tags": "Consent / policies / ally"
+      },
+      "menuOrder": {
+        "title": "Menu order",
+        "description": "Set the sequence of the top-navigation items shown in every user workspace.",
+        "tags": "Reorder"
+      },
+      "authPages": {
+        "title": "Auth pages",
+        "description": "Edit the login, register and forgot-password pages: headline, sub-text, accent colour, and the side image or video. Live preview.",
+        "tags": "Login / register / forgot"
+      },
+      "analytics": {
+        "title": "Analytics integrations",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: paste the ID, we render the script.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "SEO settings",
+        "description": "Meta title, description, OpenGraph, Twitter cards, robots, canonical, and Google + Bing site verification.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "Languages",
+        "description": "Available locales, default language, RTL flag, and the per-language enable toggle. Drives the language picker.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "PWA settings",
+        "description": "App name, install icons, theme colour, background colour, display mode, and the PWA enable switch.",
+        "tags": "Icons / colors / install"
+      },
+      "footer": {
+        "title": "Footer settings",
+        "description": "Footer title, social links, copyright text, and the public footer description.",
+        "tags": "Logo / socials / copyright"
+      },
+      "siteInfo": {
+        "title": "Site info",
+        "description": "Contact emails, phone, WhatsApp, address, and social links shared across the public footer, contact and about pages.",
+        "tags": "emails / phone / socials"
+      },
+      "socialLogin": {
+        "title": "Social login & captcha",
+        "description": "Toggle Google and Facebook sign-in on the login and register pages, paste OAuth keys, and enable reCAPTCHA.",
+        "tags": "not configured"
+      },
+      "registration": {
+        "title": "Registration",
+        "description": "Public sign-up, email verification, default plan and trial length for new workspaces.",
+        "tags": "Sign-up / trial / plan"
+      },
+      "custom": {
+        "title": "Custom code",
+        "description": "Production CSS and JavaScript injected into the public pages when the switch is on.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "Cloud storage",
+        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "realtime": {
+        "title": "Real-time",
+        "description": "Pusher keys that power the live Team Inbox feed for every workspace.",
+        "tags": "Pusher / broadcasting"
+      }
+    },
+    "signup": {
+      "body": "Public registration, auto-verify email, the default plan for new signups and the free trial length are edited on the Registration page.",
+      "link": "Open registration settings"
+    },
+    "brandAssets": {
+      "intro": "Favicon is shared across every theme. Logo is per theme: upload an inverted or light variant for dark mode, a doodle-friendly variant for the doodle theme.",
+      "favicon": {
+        "title": "Favicon",
+        "note": "Shown in browser tabs and bookmarks. Recommended 35x35 px. PNG, ICO, JPG, SVG or WebP, up to 512 KB. Uploading replaces it."
+      },
+      "logos": {
+        "title": "Logo per theme",
+        "note": "Each theme uses its own logo. Falls back to Paper if no theme-specific logo is uploaded."
+      },
+      "themes": {
+        "paper": {
+          "label": "Paper (default)",
+          "note": "Light, off-white. The default look."
+        },
+        "bright": {
+          "label": "Bright white",
+          "note": "Higher-contrast white background."
+        },
+        "dark": {
+          "label": "Dark (beta)",
+          "note": "Use a light or inverted version of your logo."
+        },
+        "doodle": {
+          "label": "Doodle (fancy)",
+          "note": "Pastel mint background."
+        }
+      },
+      "noFile": "No file",
+      "upload": "Upload",
+      "uploading": "Uploading",
+      "remove": "Remove",
+      "loading": "Loading",
+      "loadFailed": "Could not load the brand files.",
+      "failed": "The upload failed.",
+      "tooLarge": "This file is over {kb} KB.",
+      "wrongType": "This file type is not allowed here."
+    },
+    "teamInbox": {
+      "intro": "A separate installable app scoped to the Team Inbox. Agents open the link, add it to their home screen and get push notifications on new messages even when the app is closed.",
+      "enabled": {
+        "label": "Enable the Team Inbox app",
+        "hint": "Turns on the separate manifest, install prompt and notifications on /team-inbox."
+      },
+      "name": {
+        "label": "App name"
+      },
+      "shortName": {
+        "label": "Short name",
+        "hint": "Up to 12 characters."
+      },
+      "icon192": {
+        "label": "App icon (192x192 PNG)",
+        "note": "Uses the app icon if empty. Home-screen icon for the inbox app."
+      },
+      "icon512": {
+        "label": "Large icon / splash (512x512 PNG)",
+        "note": "Uses the app icon if empty. Install splash and high-DPI screens."
+      },
+      "push": {
+        "ready": {
+          "title": "Push notifications: ready",
+          "body": "Keys are generated. Agents can turn on notifications from the inbox."
+        },
+        "todo": {
+          "title": "Push notifications: one step left",
+          "body": "Click Generate keys to set up push. No server access needed."
+        },
+        "generate": "Generate keys",
+        "generating": "Generating",
+        "generated": "Push keys generated."
+      },
+      "manifestLink": "Team Inbox manifest",
+      "save": "Save Team Inbox app",
+      "saving": "Saving",
+      "saved": "Team Inbox app saved.",
+      "conflict": "Someone else saved this after you opened it. Reload the page and try again.",
+      "failed": "Something went wrong and nothing was saved.",
+      "loading": "Loading",
+      "loadFailed": "Could not load the Team Inbox app settings."
+    },
+    "seoPreview": {
+      "google": "Google result",
+      "noDescription": "No meta description yet.",
+      "noImage": "No OG image",
+      "sitemapKicker": "Sitemap & robots",
+      "sitemapTitle": "Crawler files",
+      "sitemapFile": "Auto-generated from public pages and published blog posts. Submit /sitemap.xml to Google Search Console.",
+      "download": "Download sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "General settings",
+        "description": "Core application identity, contact information, default locale and currency, and platform-level service switches.",
+        "sections": {
+          "identity": {
+            "title": "Application identity"
+          },
+          "brandAssets": {
+            "title": "Brand assets"
+          },
+          "platform": {
+            "title": "Platform toggles"
+          },
+          "signup": {
+            "title": "Signups & free trial"
+          }
+        },
+        "guide": {
+          "title": "Where things go",
+          "items": {
+            "appName": {
+              "title": "App name",
+              "body": "Used in page titles, emails and the in-app brand. Keep short: ideally one or two words."
+            },
+            "appUrl": {
+              "title": "App URL",
+              "body": "The canonical address. All callbacks, emails and OAuth redirects derive from this."
+            },
+            "language": {
+              "title": "Default language",
+              "body": "Applied to new accounts. Existing users keep whatever they picked."
+            },
+            "currency": {
+              "title": "Default currency",
+              "body": "Used for invoices and wallets without an explicit override."
+            },
+            "maintenance": {
+              "title": "Maintenance mode",
+              "body": "When ON every non-admin route shows a placeholder. Admin can still reach the console."
+            }
+          }
+        },
+        "tip": {
+          "title": "Production rule",
+          "body": "Save only after testing the affected user flow. Identity changes propagate to invoices and outbound emails."
+        }
+      },
+      "appearance": {
+        "title": "Dashboard colours",
+        "description": "Recolour the entire app, every page of the user dashboard and the admin panel, by changing these theme colours. Saving applies instantly to everyone; leave a colour at its default to keep the shipped look.",
+        "sections": {
+          "layout": {
+            "title": "Navigation layout",
+            "description": "Choose how the user dashboard is laid out. Sidebar moves every menu into a left rail (no top header, no More page)."
+          },
+          "sidebar": {
+            "title": "Sidebar colour",
+            "description": "The dark left rail background (sidebar layout only). Leave the default for the shipped near-black."
+          },
+          "interface": {
+            "title": "Interface"
+          },
+          "brand": {
+            "title": "Brand"
+          },
+          "surfaces": {
+            "title": "Surfaces"
+          },
+          "text": {
+            "title": "Text"
+          },
+          "accents": {
+            "title": "Accents"
+          }
+        },
+        "guide": {
+          "title": "How colours work",
+          "items": {
+            "how": {
+              "title": "Applies instantly",
+              "body": "Saving rewrites the live theme tokens for everyone."
+            },
+            "tokens": {
+              "title": "One token, one job",
+              "body": "Each swatch maps to a single CSS variable used across the user dashboard and the admin panel."
+            },
+            "primary": {
+              "title": "Change Primary, the rest follows",
+              "body": "Primary (hover), accent, soft fill and chat bubble are derived from Primary unless you set them yourself."
+            },
+            "defaults": {
+              "title": "Leave defaults alone",
+              "body": "Any colour left at its shipped value keeps the original look; only changed tokens are overridden."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tip",
+          "body": "Check contrast after big changes. Text and background colours both come from these tokens."
+        },
+        "eyebrow": "Admin - Appearance"
+      },
+      "siteInfo": {
+        "title": "Site info",
+        "description": "Contact details and social links shared across the footer, contact and about pages. Edit once, they update everywhere.",
+        "sections": {
+          "company": {
+            "title": "Company"
+          },
+          "contact": {
+            "title": "Contact emails"
+          },
+          "phone": {
+            "title": "Phone & WhatsApp"
+          },
+          "social": {
+            "title": "Social links"
+          }
+        },
+        "guide": {
+          "title": "What goes where",
+          "items": {
+            "shared": {
+              "title": "Shared everywhere",
+              "body": "These values feed the public footer, the contact page and the legal pages."
+            },
+            "frontend": {
+              "title": "Page text and colours",
+              "body": "Edited in the Frontend editor, not here."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "Footer settings",
+        "description": "Footer title, social links, copyright text and the public footer description.",
+        "sections": {
+          "footer": {
+            "title": "Public footer"
+          }
+        },
+        "guide": {
+          "title": "What goes where",
+          "items": {
+            "what": {
+              "title": "Footer title and copyright",
+              "body": "Empty title uses the platform name. Empty copyright text is generated from the year and the brand."
+            },
+            "social": {
+              "title": "Social URLs",
+              "body": "Empty fields hide the icon. These share the Site info social links: editing here updates them everywhere."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "Mail settings",
+        "description": "SMTP host, port, encryption and credentials. Saved values are applied on every send, so welcome, verification, receipt and support mail use them without a restart.",
+        "sections": {
+          "smtp": {
+            "title": "SMTP credentials"
+          }
+        },
+        "guide": {
+          "title": "Common provider hosts",
+          "items": {
+            "hosts": {
+              "title": "Typical settings",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.<region>.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls with an app password."
+            },
+            "used": {
+              "title": "Mailables in the system",
+              "body": "Welcome and verification emails, password reset, invoices and receipts, support replies, security alerts and workspace invites."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tip",
+          "body": "Always send a test after editing. A single typo in the host or port silently breaks every transactional email in the platform."
+        }
+      },
+      "seo": {
+        "title": "SEO settings",
+        "description": "Site-wide default meta tags: title, description, OpenGraph, Twitter cards, robots, canonical and search-engine verification.",
+        "sections": {
+          "search": {
+            "title": "Meta tags"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Twitter cards"
+          },
+          "verification": {
+            "title": "Site verification"
+          },
+          "preview": {
+            "title": "Live preview"
+          }
+        },
+        "guide": {
+          "title": "SEO basics",
+          "items": {
+            "basics": {
+              "title": "Titles and descriptions",
+              "body": "Meta title: lead with the brand and one strong descriptor, 50-60 characters. Meta description: a 1-2 sentence pitch, 140-160 characters."
+            },
+            "where": {
+              "title": "Where this shows",
+              "body": "Admin pages, signed-in pages, public pages and link previews (WhatsApp, Slack, Discord, X). Robots: use noindex for staging or private deployments."
+            },
+            "sitemap": {
+              "title": "Validate",
+              "body": "opengraph.xyz, Google Rich Results test and the Twitter Card validator."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privacy, GDPR & ADA",
+        "eyebrow": "Admin - Compliance",
+        "description": "Cookie consent banner, policy URLs, GDPR / CCPA compliance and WCAG accessibility toggles. The same setting feeds the consent UI and gates every analytics integration.",
+        "sections": {
+          "banner": {
+            "title": "Banner & policy"
+          },
+          "compliance": {
+            "title": "GDPR & CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG"
+          }
+        },
+        "guide": {
+          "title": "How consent works",
+          "items": {
+            "order": {
+              "title": "Order of operations",
+              "body": "1. The visitor lands and the cookie banner opens (skipped when Do-Not-Track is respected). 2. The choice is saved in the crm_cookie_consent cookie for one year. 3. Only the allowed trackers are loaded. 4. The visitor can reopen the picker from any element with data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "Linked settings",
+              "body": "Analytics integrations (GA4, GTM, Pixel, Clarity and more) and PWA settings."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analytics integrations",
+        "eyebrow": "Admin - Tracking",
+        "description": "Paste each provider ID once. The official vendor snippet is rendered on every public page, but only after the visitor consents to the matching cookie category.",
+        "sections": {
+          "site": {
+            "title": "Site analytics"
+          },
+          "marketing": {
+            "title": "Ad pixels"
+          }
+        },
+        "guide": {
+          "title": "Tracker -> category",
+          "items": {
+            "categories": {
+              "title": "When each fires",
+              "body": "Analytics: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. Marketing: Meta Pixel, TikTok, LinkedIn, X Pixel. GTM container scripts may include further trackers; pause them with category triggers inside GTM."
+            },
+            "where": {
+              "title": "Where loaded",
+              "body": "Public and sign-in pages. Admin pages are intentionally off."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "Custom code",
+        "description": "Production custom styles and scripts for advanced branding and behaviour. Injected into public pages when enabled.",
+        "sections": {
+          "code": {
+            "title": "Custom code"
+          }
+        },
+        "guide": {
+          "title": "Rules of thumb",
+          "items": {
+            "scope": {
+              "title": "Scope your CSS",
+              "body": "Wrap rules with a brand class. Avoid touching body, *, or framework utility classes."
+            },
+            "block": {
+              "title": "Do not block",
+              "body": "Wrap JS in DOMContentLoaded. No synchronous network calls."
+            },
+            "dark": {
+              "title": "Test dark mode",
+              "body": "Toggle the theme and check html[data-theme=\"dark\"] selectors before saving."
+            },
+            "sensitive": {
+              "title": "Production-sensitive",
+              "body": "A bad save reaches every public page instantly. Have a teammate review big diffs."
+            }
+          }
+        },
+        "tip": {
+          "title": "Careful",
+          "body": "Custom code runs on every public page and cannot be sandboxed. Only a super admin can change it."
+        }
+      },
+      "pwa": {
+        "title": "PWA settings",
+        "description": "Installable app manifest: name, icons, colours and display mode. Drives the manifest and the install prompt.",
+        "sections": {
+          "app": {
+            "title": "PWA manifest"
+          },
+          "teamInbox": {
+            "title": "Team Inbox PWA"
+          }
+        },
+        "guide": {
+          "title": "Installable app",
+          "items": {
+            "manifest": {
+              "title": "Live manifest",
+              "body": "The manifest is served at /api/v2/public/manifest.webmanifest and exists only while the switch is on."
+            },
+            "install": {
+              "title": "Icons",
+              "body": "Upload square PNG icons on the Appearance page or paste hosted URLs. 192 px for the home screen, 512 px for the splash."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "Cloud storage",
+        "eyebrow": "Admin - Media storage",
+        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or any S3-compatible store. When off, media stays on the local disk, so nothing breaks until you turn it on.",
+        "sections": {
+          "provider": {
+            "title": "Cloud media routing"
+          },
+          "credentials": {
+            "title": "Bucket connection"
+          }
+        },
+        "guide": {
+          "title": "Set it up",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Access key + secret + region + bucket. The Wasabi endpoint is derived from the region."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Use the Bunny fields: storage zone and password. Region is the zone region (de, ny, la...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "Fill the S3 fields and paste the Endpoint URL. Tick path-style for MinIO."
+            },
+            "test": {
+              "title": "Always test first",
+              "body": "\"Save & test connection\" writes and deletes a probe file before you flip Enabled on."
+            }
+          }
+        },
+        "tip": {
+          "title": "Safe by default",
+          "body": "Existing files stay where they are. Only new uploads go to the bucket; nothing is migrated or deleted."
+        }
+      },
+      "realtime": {
+        "title": "Real-time notifications",
+        "eyebrow": "Admin - Live broadcasting",
+        "description": "One Pusher app powers the live Team Inbox for every workspace: new messages, status changes and snooze wake-ups appear instantly. Platform-wide; users never enter keys.",
+        "sections": {
+          "live": {
+            "title": "Live delivery"
+          },
+          "pusher": {
+            "title": "Pusher credentials"
+          }
+        },
+        "guide": {
+          "title": "How it works",
+          "items": {
+            "how": {
+              "title": "One app, all workspaces",
+              "body": "The server broadcasts with the secret; pages load only the public key."
+            },
+            "live": {
+              "title": "What goes live",
+              "body": "Inbound messages and operator replies push a light signal and the inbox refreshes instantly."
+            },
+            "poll": {
+              "title": "Polling stays as fallback",
+              "body": "If Pusher is off or unreachable the inbox keeps its slower poll so nothing is missed."
+            },
+            "test": {
+              "title": "Test it",
+              "body": "Use \"Save & test connection\" to fire a live event at Pusher and confirm the credentials."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "We use cookies",
+      "learnMore": "Learn more",
+      "decline": "Decline",
+      "customize": "Customize",
+      "acceptAll": "Accept All",
+      "rejectAll": "Reject All",
+      "save": "Save Preferences",
+      "preferences": "Cookie preferences",
+      "categories": {
+        "necessary": {
+          "title": "Strictly necessary",
+          "body": "Needed for the site to work: sign-in, security and your choices. Always on."
+        },
+        "analytics": {
+          "title": "Analytics cookies",
+          "body": "Help us understand how the site is used so we can improve it."
+        },
+        "marketing": {
+          "title": "Marketing cookies",
+          "body": "Used to measure ads and show you relevant campaigns elsewhere."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "Live preview",
+      "previewTitle": "Before you save",
+      "previewNote": "Colours, size and opacity update as you drag. Nothing is applied to anyone until you save.",
+      "resetTitle": "Reset to defaults",
+      "resetBody": "Clears all overrides and restores the original palette.",
+      "reset": "Reset all colours",
+      "tokens": "{count} tokens",
+      "controls": "{count} controls",
+      "primary": "Primary",
+      "cancel": "Cancel",
+      "active": "Active"
     }
   }
 }

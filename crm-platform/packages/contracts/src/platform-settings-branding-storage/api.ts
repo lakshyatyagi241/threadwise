@@ -13,6 +13,8 @@ export const setGroupResponseSchema = z.object({
   updatedAt: z.string().datetime().nullable(),
   /** The last connection test of a testable group (mail, storage, realtime), if any. */
   test: z.object({ ok: z.boolean(), at: z.string().datetime() }).nullable(),
+  /** Read-only facts that are not editable fields (the Team Inbox app's push state). Absent for most groups. */
+  extra: z.record(z.unknown()).optional(),
 });
 export type SetGroupResponse = z.infer<typeof setGroupResponseSchema>;
 
@@ -41,6 +43,8 @@ export type SetPatchRequest = {
 export const setHubResponseSchema = z.object({
   kpis: z.object({
     savedGroups: z.number().int(),
+    /** Saved groups that hold at least one non-empty value. */
+    healthyGroups: z.number().int(),
     totalGroups: z.number().int(),
     /** Testable groups that are configured but have no successful test since they were last saved. */
     needsTest: z.array(setGroupSchema),
@@ -111,7 +115,18 @@ export const publicSiteConfigSchema = z.object({
   /** Tracker ids to load once the visitor consents; empty ids are omitted. */
   analytics: z.record(z.string()),
   customCode: z.object({ css: z.string(), js: z.string() }),
-  pwa: z.object({ enabled: z.boolean(), themeColor: z.string() }),
+  /** Head tags of the installable app (TW-SET-036): shown only when `enabled`. */
+  pwa: z.object({
+    enabled: z.boolean(),
+    themeColor: z.string(),
+    shortName: z.string(),
+    /** The 192 icon, else the favicon. */
+    appleTouchIcon: z.string(),
+  }),
+  /** The separate Team Inbox app (TW-SET-038): its manifest is `/v2/public/team-inbox-manifest.webmanifest`. */
+  teamInboxPwa: z.object({ enabled: z.boolean() }),
+  /** Where the legal pages live: the saved URL, else the built-in `/legal/<page>` (TW-SET-030 rule 5). */
+  legal: z.object({ terms: z.string(), privacy: z.string(), cookies: z.string() }),
   realtime: z.object({ enabled: z.boolean() }),
 });
 export type PublicSiteConfig = z.infer<typeof publicSiteConfigSchema>;

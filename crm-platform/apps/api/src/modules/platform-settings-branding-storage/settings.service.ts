@@ -16,12 +16,16 @@ import {
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
+import type { Tx } from '@crm/db';
 import { AuthAuditService, PlatformSettingsService } from '../auth';
 
 /** Where a group's document and its secrets live in the platform store (see port-map). */
 export const docKey = (g: SetGroup) => `set.${g}`;
 export const secretKey = (g: SetGroup, field: string) => `set.${g}.${field}`;
 const testKey = (g: SetGroup) => `set.${g}._test`;
+/** The Team Inbox app's Web Push key pair (TW-SET-038): generated, never typed in. */
+export const VAPID_PUBLIC_KEY = 'set.tiPwa.vapidPublic';
+export const VAPID_PRIVATE_KEY = 'set.tiPwa.vapidPrivate';
 
 /** Fields an export never prints even though they are not secrets (they identify the account). */
 const EXPORT_MASKED: Partial<Record<SetGroup, readonly string[]>> = {
@@ -30,6 +34,14 @@ const EXPORT_MASKED: Partial<Record<SetGroup, readonly string[]>> = {
   analytics: ['posthogKey', 'mixpanelToken'],
   realtime: ['appKey'],
 };
+
+/** A stored value that says something: not blank, not an empty list, not an object of blanks. */
+function hasValue(v: unknown): boolean {
+  if (v === '' || v === null || v === undefined || v === false) return false;
+  if (Array.isArray(v)) return v.length > 0;
+  if (typeof v === 'object') return Object.values(v as object).some(hasValue);
+  return true;
+}
 
 interface Doc {
   _rv?: number;
@@ -58,7 +70,11 @@ export class SettingsService {
   /** What a never-saved group shows: the schema defaults, with `.env` filling the few that exist there. */
   defaults<G extends SetGroup>(group: G): SetGroupValues<G> {
     const base: Record<string, unknown> = {};
-    if (group === 'general') base.appName = this.config.get('APP_NAME', { infer: true });
+    if (group === 'general') {
+      base.appName = this.config.get('APP_NAME', { infer: true });
+      // Reference seeded the footer with the brand name at install time; a never-saved group shows the same.
+      base.platformFooter = `Sent via ${base.appName}`.slice(0, 60);
+    }
     if (group === 'mail') {
       base.host = this.config.get('SMTP_HOST', { infer: true });
       base.port = this.config.get('SMTP_PORT', { infer: true });
@@ -105,6 +121,15 @@ export class SettingsService {
       secrets[f] = { isSet: await this.store.hasSecret(secretKey(group, f)) };
     }
     const test = await this.store.get<{ ok: boolean; at: string }>(testKey(group));
+    const extra =
+      group === 'tiPwa'
+        ? {
+            vapidPublic: (await this.store.get<string>(VAPID_PUBLIC_KEY)) ?? '',
+            pushReady:
+              (await this.store.get<string>(VAPID_PUBLIC_KEY)) !== undefined &&
+              (await this.store.hasSecret(VAPID_PRIVATE_KEY)),
+          }
+        : undefined;
     return {
       group,
       values: (await this.values(group)) as Record<string, unknown>,
@@ -112,6 +137,7 @@ export class SettingsService {
       rowVersion: doc?._rv ?? 0,
       updatedAt: doc?._at ?? null,
       test: test ? { ok: test.ok, at: test.at } : null,
+      ...(extra ? { extra } : {}),
     };
   }
 
@@ -211,6 +237,60 @@ export class SettingsService {
     return this.read(group);
   }
 
+  /**
+   * A server-side change to one group that does not come from a form (an uploaded brand asset): lock the document, apply
+   * `change` to its current values, re-validate, bump `_rv` and audit, in one transaction with whatever `inTx` writes.
+   */
+  async mutate(
+    group: SetGroup,
+    operatorId: number,
+    change: (values: Record<string, unknown>) => Record<string, unknown>,
+    inTx?: (tx: Tx) => Promise<void>,
+  ): Promise<void> {
+    const schema = SET_GROUP_SCHEMAS[group];
+    const key = docKey(group);
+    await this.store.inTx(async (tx) => {
+      const found = await tx.execute(
+        sql`SELECT value FROM platform_settings WHERE key = ${key} FOR UPDATE`,
+      );
+      const current = (found.rows[0] as { value: Doc } | undefined)?.value;
+      const before = (current ? { ...current } : this.defaults(group)) as Record<string, unknown>;
+      delete before._rv;
+      delete before._at;
+      const parsedBefore = schema.safeParse(before);
+      const base = (parsedBefore.success ? parsedBefore.data : this.defaults(group)) as Record<
+        string,
+        unknown
+      >;
+      const merged = schema.safeParse(change({ ...base }));
+      if (!merged.success) {
+        throw AppError.validation(
+          'Settings are not valid',
+          merged.error.issues.map((i) => ({ path: i.path.join('.'), message: i.message })),
+        );
+      }
+      const after = merged.data as Record<string, unknown>;
+      const changed = Object.keys(after).filter(
+        (k) => JSON.stringify(after[k]) !== JSON.stringify(base[k]),
+      );
+      const version = (current?._rv ?? 0) + 1;
+      const json = JSON.stringify({ ...after, _rv: version, _at: new Date().toISOString() });
+      await tx.execute(sql`
+        INSERT INTO platform_settings (key, value, is_secret, updated_by, updated_at)
+        VALUES (${key}, ${json}::jsonb, false, ${operatorId}, now())
+        ON CONFLICT (key) DO UPDATE
+          SET value = EXCLUDED.value, updated_by = EXCLUDED.updated_by, updated_at = now()`);
+      if (inTx) await inTx(tx);
+      await this.audit.record(tx, {
+        event: `platform.settings.${group}_updated`,
+        status: 'info',
+        actorType: 'platform_operator',
+        actorId: operatorId,
+        payload: { fields: changed, rowVersion: version },
+      });
+    });
+  }
+
   /** Stores the outcome of a connection test and audits it (the hub's "needs test" reads it). */
   async recordTest(
     group: SetTestableGroup,
@@ -242,7 +322,7 @@ export class SettingsService {
     return this.store.inTx(async (tx) => {
       const res = await tx.execute(sql`
         SELECT key, value, is_secret, updated_at
-          FROM platform_settings WHERE key LIKE 'set.%' ORDER BY key`);
+          FROM platform_settings WHERE key LIKE 'set.%' AND key NOT LIKE 'set.asset.%' ORDER BY key`);
       return res.rows as unknown as Array<{
         key: string;
         value: unknown;
@@ -273,9 +353,13 @@ export class SettingsService {
         const doc = byKey.get(docKey(group))?.value as Doc | undefined;
         const tested =
           (byKey.get(testKey(group))?.value as { ok?: boolean } | undefined)?.ok === true;
+        const { _rv, _at, ...fields } = doc ?? {};
+        void _rv;
+        void _at;
         return {
           group,
           saved: doc !== undefined,
+          filled: Object.values(fields).some(hasValue),
           updatedAt: doc?._at ?? null,
           needsTest: this.needsTest(
             group,
@@ -285,9 +369,12 @@ export class SettingsService {
         };
       }),
     );
+    // "Healthy" = saved and holding at least one non-empty value (Reference: rows with a non-empty value).
+    const healthy = groups.filter((g) => g.saved && g.filled).length;
     return {
       kpis: {
         savedGroups: groups.filter((g) => g.saved).length,
+        healthyGroups: healthy,
         totalGroups: SET_GROUPS.length,
         needsTest: groups.filter((g) => g.needsTest).map((g) => g.group),
         secretFields: rows.filter((r) => r.is_secret).length,
@@ -304,6 +391,10 @@ export class SettingsService {
       .filter((r) => !r.key.includes('._test'))
       .map((r) => {
         if (r.is_secret) return { key: r.key, value: '[REDACTED]' as unknown, secret: true };
+        // A lone value (the public push key) is exported as it is; a group document loses its bookkeeping.
+        if (typeof r.value !== 'object' || r.value === null || Array.isArray(r.value)) {
+          return { key: r.key, value: r.value, secret: false };
+        }
         const group = r.key.split('.')[1] as SetGroup;
         const doc = { ...(r.value as Doc) };
         delete doc._rv;
