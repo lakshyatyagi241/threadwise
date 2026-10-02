@@ -10,14 +10,14 @@ migration registers two capability keys. Every figure is a live SQL aggregate ov
 
 ## Target modules, tables, contracts
 
-| Piece      | Where                                                                                                                                                                      |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| API module | `apps/api/src/modules/dashboards-analytics-charts/` (`dash-window.ts` and `dash-metrics.ts` are pure; repository, service, controllers, plan guard)                        |
-| Contracts  | `packages/contracts/src/dashboards-analytics-charts/index.ts`                                                                                                              |
-| Migration  | `packages/db/migrations/20261005100000_dash_permissions.sql` (permission keys and Admin grants)                                                                            |
-| Reads      | `messages`, `inbox_messages` (both streams, summed, TW-DASH-002), `organizations.settings.timezone`                                                                        |
+| Piece      | Where                                                                                                                                                                                           |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| API module | `apps/api/src/modules/dashboards-analytics-charts/` (`dash-window.ts` and `dash-metrics.ts` are pure; repository, service, controllers, plan guard)                                             |
+| Contracts  | `packages/contracts/src/dashboards-analytics-charts/index.ts`                                                                                                                                   |
+| Migration  | `packages/db/migrations/20261005100000_dash_permissions.sql` (permission keys and Admin grants)                                                                                                 |
+| Reads      | `messages`, `inbox_messages` (both streams, summed, TW-DASH-002), `organizations.settings.timezone`                                                                                             |
 | Web        | `apps/web/src/features/dashboards-analytics-charts/` (api, lib, components), routes `(app)/(dashboards-analytics-charts)/{dashboard,analytics}`, `messages/en/dashboards-analytics-charts.json` |
-| Tests      | `apps/api/test/unit/dashboards-analytics-charts/`, `apps/api/test/e2e/dashboards-analytics-charts/`, web unit tests beside the code                                         |
+| Tests      | `apps/api/test/unit/dashboards-analytics-charts/`, `apps/api/test/e2e/dashboards-analytics-charts/`, web unit tests beside the code                                                             |
 
 ## Endpoints and permission keys
 
@@ -39,12 +39,12 @@ SVG/CSS from the page's colour tokens (no chart dependency may be added), each w
 
 ## Prerequisites from other domains
 
-| Needed                                       | State                                                                                          |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| message streams (CHAT, TIB1)                 | tables exist (schema port); nothing writes them yet, so numbers are zero until those ship      |
-| engine scope (WADEV/WABA enabled-engine set) | not available: no engine filter is applied (see deviations in the run report)                  |
-| plan flag `analytics` (PLAN)                 | built; resolved with `resolveFeature`                                                          |
-| platform-wide reads for the admin surfaces   | missing: no sanctioned cross-tenant door for orders, revenue or health probes                  |
+| Needed                                       | State                                                                                     |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| message streams (CHAT, TIB1)                 | tables exist (schema port); nothing writes them yet, so numbers are zero until those ship |
+| engine scope (WADEV/WABA enabled-engine set) | not available: no engine filter is applied (see deviations in the run report)             |
+| plan flag `analytics` (PLAN)                 | built; resolved with `resolveFeature`                                                     |
+| platform-wide reads for the admin surfaces   | missing: no sanctioned cross-tenant door for orders, revenue or health probes             |
 
 ## Build order and status
 
