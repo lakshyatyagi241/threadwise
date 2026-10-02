@@ -51,6 +51,7 @@ const noPageApi = (): FacebookPageApi => ({
   },
   sendText: () => Promise.resolve({ ok: true, data: { messageId: 'm' } }),
   sendAttachment: () => Promise.resolve({ ok: true, data: { messageId: 'm' } }),
+  sendButtonTemplate: () => Promise.resolve({ ok: true, data: { messageId: 'm' } }),
   replyComment: () => Promise.resolve({ ok: true, data: { id: 'c' } }),
   getSenderProfile: () => Promise.resolve(null),
   getComment: () => Promise.resolve(null),

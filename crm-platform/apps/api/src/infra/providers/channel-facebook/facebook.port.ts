@@ -69,6 +69,12 @@ export interface GraphComment {
 
 export type AttachmentType = 'image' | 'video' | 'audio' | 'file';
 
+/** A button as Messenger's Send API takes it (a template message carries at most three). */
+export type MessengerButton =
+  | { type: 'web_url'; title: string; url: string }
+  | { type: 'phone_number'; title: string; payload: string }
+  | { type: 'postback'; title: string; payload: string };
+
 /** What the Meta app resolves to on this install (the Facebook override, else the WhatsApp app's values). */
 export interface MetaAppSettings {
   appId: string | null;
@@ -106,6 +112,12 @@ export interface FacebookPageApi {
     psid: string,
     type: AttachmentType,
     url: string,
+  ): Promise<GraphResult<{ messageId: string }>>;
+  /** Text with up to three buttons as a button template, inside the 24 hour window. The text is cut to 640. */
+  sendButtonTemplate(
+    psid: string,
+    text: string,
+    buttons: readonly MessengerButton[],
   ): Promise<GraphResult<{ messageId: string }>>;
   /** A public reply under a comment (or a post) as the Page. */
   replyComment(objectId: string, text: string): Promise<GraphResult<{ id: string }>>;

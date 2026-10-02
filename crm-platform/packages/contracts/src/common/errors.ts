@@ -170,6 +170,16 @@ export const ERROR_CODES = {
   FB_TOKEN_NOT_A_PAGE: 'FB_TOKEN_NOT_A_PAGE',
   /** Refresh: Meta did not answer for the Page (its token may need re-auth). */
   FB_REFRESH_FAILED: 'FB_REFRESH_FAILED',
+  /** A broadcast needs a message. */
+  FB_BROADCAST_EMPTY: 'FB_BROADCAST_EMPTY',
+  /** None of the picked people are inside the 24 hour window of that Page. */
+  FB_NO_RECIPIENTS: 'FB_NO_RECIPIENTS',
+  /** The Page is not connected, or Meta revoked its token. */
+  FB_PAGE_UNAVAILABLE: 'FB_PAGE_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  FB_NOTHING_TO_SEND: 'FB_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  FB_NOTHING_TO_RETRY: 'FB_NOTHING_TO_RETRY',
 
   // campaigns (WD-CAMP)
   /** Nobody on the audience can be messaged. */

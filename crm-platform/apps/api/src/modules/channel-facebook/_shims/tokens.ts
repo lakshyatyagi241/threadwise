@@ -63,8 +63,33 @@ export interface InboxIngest {
     contactId: number | null,
     p: { name: string; avatarUrl: string | null },
   ): Promise<void>;
+  /** A message we sent into a thread (a broadcast): shown as outbound, moves the thread's last-sent time, leaves unread alone. */
+  recordOutbound(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    m: { body: string; providerMessageId: string | null; broadcastUuid: string },
+  ): Promise<void>;
+  /** When the person last wrote in this thread (the 24 hour window runs from here), or null. */
+  lastInboundAt(tx: Tx, orgId: number, conversationId: number): Promise<Date | null>;
 }
 export const INBOX_INGEST = Symbol('FACEBOOK_INBOX_INGEST');
+
+/** A Facebook template: a row of `wa_templates` whose channel is facebook (message-templates). */
+export interface FacebookTemplate {
+  id: number;
+  uuid: string;
+  name: string;
+  body: string;
+  buttons: unknown;
+}
+
+/** Reads Facebook templates until the templates domain exports a channel-aware lookup. */
+export interface FacebookTemplates {
+  list(tx: Tx, orgId: number): Promise<FacebookTemplate[]>;
+  find(tx: Tx, orgId: number, uuid: string): Promise<FacebookTemplate | undefined>;
+}
+export const FACEBOOK_TEMPLATES = Symbol('FACEBOOK_TEMPLATES');
 
 export interface InboundContext {
   orgId: number;

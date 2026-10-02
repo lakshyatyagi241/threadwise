@@ -94,6 +94,35 @@ export class SqlInboxIngest implements InboxIngest {
     return { stored: true, conversationId, contactId, newThread };
   }
 
+  async recordOutbound(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    m: { body: string; providerMessageId: string | null; broadcastUuid: string },
+  ): Promise<void> {
+    const meta = {
+      source: 'facebook_broadcast',
+      broadcast_id: m.broadcastUuid,
+      ...(m.providerMessageId ? { wa_message_id: m.providerMessageId } : {}),
+    };
+    await tx.execute(sql`
+      INSERT INTO messages (org_id, conversation_id, direction, body, status, provider, meta, sent_at)
+      VALUES (${orgId}, ${conversationId}, 'out', ${m.body}, 'sent', 'facebook', ${JSON.stringify(meta)}::jsonb, now())`);
+    // Outbound is not unread: only the customer's messages are.
+    await tx.execute(sql`
+      UPDATE conversations SET last_message_at = now(), last_outbound_at = now()
+      WHERE org_id = ${orgId} AND id = ${conversationId}`);
+  }
+
+  async lastInboundAt(tx: Tx, orgId: number, conversationId: number): Promise<Date | null> {
+    const res = await tx.execute(
+      sql`SELECT last_inbound_at FROM conversations WHERE org_id = ${orgId} AND id = ${conversationId}`,
+    );
+    const v = (res.rows[0] as { last_inbound_at: Date | string | null } | undefined)
+      ?.last_inbound_at;
+    return v ? new Date(v) : null;
+  }
+
   async applyProfile(
     tx: Tx,
     orgId: number,
