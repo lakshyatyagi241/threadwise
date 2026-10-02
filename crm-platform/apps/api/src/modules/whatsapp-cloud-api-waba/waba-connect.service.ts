@@ -12,6 +12,7 @@ import {
   type VerifyTokenResult,
   type WabaBusinessProfile,
   type WabaConnection as WabaConnectionDto,
+  type WabaHealth,
   type WabaReadiness,
 } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
@@ -46,8 +47,6 @@ import {
   maskToken,
   verifyTokenFor,
   webhookUrl,
-  type HealthIssue,
-  type HealthSeverity,
 } from './waba-rules';
 
 /** What is stored encrypted in `credentials_json`. */
@@ -581,13 +580,7 @@ export class WabaConnectService {
   // --- health and profile ------------------------------------------------------------------------------------------
 
   /** Live read of the number from Meta plus the issues that follow from it (TW-WABA-021, 022). */
-  async health(uuid: string): Promise<{
-    connection: WabaConnectionDto;
-    overall: HealthSeverity;
-    issues: HealthIssue[];
-    tokenHint: string | null;
-    checkedAt: string;
-  }> {
+  async health(uuid: string): Promise<WabaHealth> {
     let row = await this.require(uuid);
     const meta = row.meta_json ?? {};
     const creds = this.creds(row);
