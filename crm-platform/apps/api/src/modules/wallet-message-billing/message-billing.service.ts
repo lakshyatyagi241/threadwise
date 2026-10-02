@@ -250,9 +250,10 @@ export class MessageBillingService {
   async settleFailed(
     orgId: number,
     providerMessageId: string,
-  ): Promise<{ refunded: boolean; refundedMinor: number }> {
+  ): Promise<{ refunded: boolean; refundedMinor: number; balanceAfterMinor: number }> {
     const wamid = providerMessageId.trim();
-    if (!wamid || orgId <= NO_ORG) return { refunded: false, refundedMinor: 0 };
+    if (!wamid || orgId <= NO_ORG)
+      return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
     const s = await this.settings.effective();
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
       const found = await tx.execute(sql`
@@ -268,7 +269,7 @@ export class MessageBillingService {
         | undefined;
       // Never charged (the failure came first), free, or already refunded: nothing to reverse.
       if (!key || key.status !== 'charged' || key.charge_id === null || !key.charge_created_at) {
-        return { refunded: false, refundedMinor: 0 };
+        return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
       }
       const chargeId = Number(key.charge_id);
       const chargeAt = key.charge_created_at;
@@ -276,7 +277,7 @@ export class MessageBillingService {
         SELECT credits, wamid FROM usage_charges
         WHERE org_id = ${orgId} AND id = ${chargeId} AND created_at = ${chargeAt}::timestamptz FOR UPDATE`);
       const charge = ch.rows[0] as { credits: number; wamid: string } | undefined;
-      if (!charge) return { refunded: false, refundedMinor: 0 };
+      if (!charge) return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
 
       let refundTx: number | null = null;
       if (charge.credits > 0) {
@@ -308,7 +309,12 @@ export class MessageBillingService {
         subjectId: chargeId,
         payload: { wamid, refundedMinor: charge.credits },
       });
-      return { refunded: true, refundedMinor: charge.credits };
+      const wallet = await this.repo.peekWallet(tx, orgId);
+      return {
+        refunded: true,
+        refundedMinor: charge.credits,
+        balanceAfterMinor: wallet?.balanceMinor ?? 0,
+      };
     });
   }
 

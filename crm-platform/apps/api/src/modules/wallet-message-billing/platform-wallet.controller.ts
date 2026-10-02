@@ -17,6 +17,7 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   adjustWalletSchema,
+  creditPackageInputSchema,
   importRatesSchema,
   platformWalletListQuerySchema,
   pricePreviewQuerySchema,
@@ -28,6 +29,7 @@ import {
   updateWalletSettingsSchema,
   walletLogQuerySchema,
   type AdjustWalletInput,
+  type CreditPackageInput,
   type ImportRatesInput,
   type PlatformWalletListQuery,
   type PricePreviewQuery,
@@ -44,6 +46,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles, PlatformSettingsService } from '../auth';
+import { CreditPackagesService } from './credit-packages.service';
 import { PlatformMarginsService } from './platform-margins.service';
 import { PlatformRatesService } from './platform-rates.service';
 import { PlatformWalletService, type Operator } from './platform-wallet.service';
@@ -69,6 +72,7 @@ export class PlatformWalletController {
     private readonly wallets: PlatformWalletService,
     private readonly rates: PlatformRatesService,
     private readonly margins: PlatformMarginsService,
+    private readonly packages: CreditPackagesService,
     private readonly settings: WalletSettingsService,
     private readonly platform: PlatformSettingsService,
   ) {}
@@ -235,6 +239,48 @@ export class PlatformWalletController {
       q,
       q.workspaceId ? await this.margins.orgIdOf(q.workspaceId) : null,
     );
+  }
+
+  // --- credit packages (TW-WALLET-019) ---------------------------------------------------------------------------------------
+
+  @Get('packages')
+  @ApiOperation({
+    summary: 'Credit packages, in display order, and the currencies one can be priced in',
+  })
+  async listPackages() {
+    return this.packages.list();
+  }
+
+  @Post('packages')
+  @OperatorRoles('super_admin')
+  @ApiOperation({ summary: 'Create a credit package (a blank slug is made from the name)' })
+  async createPackage(@Body(zodPipe(creditPackageInputSchema)) body: CreditPackageInput) {
+    return this.packages.create(body, await this.me());
+  }
+
+  @Put('packages/:id')
+  @OperatorRoles('super_admin')
+  @ApiOperation({ summary: 'Edit a credit package; a stale rowVersion is refused' })
+  async updatePackage(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(creditPackageInputSchema)) body: CreditPackageInput,
+  ) {
+    return this.packages.update(id, body, await this.me());
+  }
+
+  @Post('packages/:id/toggle')
+  @HttpCode(HttpStatus.OK)
+  @OperatorRoles('super_admin')
+  @ApiOperation({ summary: 'Activate or deactivate a credit package' })
+  async togglePackage(@Param('id', ParseUUIDPipe) id: string) {
+    return this.packages.toggle(id, await this.me());
+  }
+
+  @Delete('packages/:id')
+  @OperatorRoles('super_admin')
+  @ApiOperation({ summary: 'Delete a credit package (past ledger entries keep their rows)' })
+  async deletePackage(@Param('id', ParseUUIDPipe) id: string) {
+    return { deleted: await this.packages.remove(id, await this.me()) };
   }
 
   // --- workspaces' wallets ---------------------------------------------------------------------------------------------------

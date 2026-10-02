@@ -7,6 +7,7 @@ import type {
   StatementRow,
   WalletLedgerQuery,
   WalletLedgerResponse,
+  WalletSnapshot,
   WalletSummary,
   WalletTransaction,
   WalletTxType,
@@ -176,6 +177,37 @@ export class WalletQueryService {
         hasMore,
         limit: query.limit,
       },
+    };
+  }
+
+  /** The mobile app's and the extension's one-call view (TW-WALLET-025, -029). */
+  async snapshot(): Promise<WalletSnapshot> {
+    const orgId = RequestContextStore.require().orgId;
+    const s = await this.summary();
+    const spent = await this.db.tx((tx) =>
+      tx.execute(sql`
+        SELECT COALESCE(sum(revenue_minor), 0)::text AS spent FROM usage_charges
+        WHERE org_id = ${orgId} AND status = 'charged' AND created_at >= ${monthStart(new Date())}::date`),
+    );
+    const buffer = s.flatPriceMinor > 0 ? Math.floor(s.balanceMinor / s.flatPriceMinor) : 0;
+    const limit = s.plan.monthlyMessagesLimit;
+    const unlimited = limit <= 0;
+    return {
+      billingMode: s.billingMode,
+      currency: s.currency,
+      balanceMinor: s.balanceMinor,
+      flatPriceMinor: s.flatPriceMinor,
+      messagesRemaining:
+        s.billingMode === 'wallet'
+          ? buffer
+          : unlimited
+            ? -1
+            : Math.max(0, limit - s.plan.usedThisMonth),
+      walletBufferMessages: s.billingMode === 'plan' ? buffer : null,
+      spentThisMonthMinor: Number((spent.rows[0] as { spent: string }).spent),
+      planActive: s.plan.active,
+      monthlyMessagesLimit: limit,
+      usedThisMonth: s.plan.usedThisMonth,
     };
   }
 
