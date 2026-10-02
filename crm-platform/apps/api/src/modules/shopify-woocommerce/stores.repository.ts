@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import type { StoreKind } from './mirror-rules';
 
 /** The two store tables, always inside the caller's tenant transaction (RLS scopes every statement). */
 
@@ -300,6 +301,16 @@ export class StoresRepository {
   }
 
   // ── Both stores ─────────────────────────────────────────────────────────
+
+  /** Either kind's store by id. */
+  async storeById(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    id: number,
+  ): Promise<ShopifyRow | WooRow | undefined> {
+    return kind === 'shopify' ? this.shopifyById(tx, orgId, id) : this.wooById(tx, orgId, id);
+  }
 
   async shopifyById(tx: Tx, orgId: number, id: number): Promise<ShopifyRow | undefined> {
     const res = await tx.execute(

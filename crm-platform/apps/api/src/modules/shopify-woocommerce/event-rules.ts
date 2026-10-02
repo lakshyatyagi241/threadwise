@@ -1,0 +1,249 @@
+import { createHmac, timingSafeEqual } from 'node:crypto';
+import { wooInvoiceUrl } from './mirror-rules';
+import { wooPhoneOf } from './woo-phone';
+
+/**
+ * Pure rules of reading a store's webhook into a WhatsApp message (TW-ECOM-008, 010, 027, 029): the signatures, who the message is
+ * for, and the variables that fill the template. No database and no network, so each can be tested alone.
+ */
+
+type Json = Record<string, unknown>;
+const obj = (x: unknown): Json => (typeof x === 'object' && x !== null ? (x as Json) : {});
+const arr = (x: unknown): unknown[] => (Array.isArray(x) ? x : []);
+const str = (x: unknown): string | null =>
+  typeof x === 'string' ? x : typeof x === 'number' ? String(x) : null;
+const filled = (...v: Array<string | null>): string | null =>
+  v.find((x) => x !== null && x.trim() !== '') ?? null;
+
+// ── Signatures ──────────────────────────────────────────────────────────
+
+/** A base64 HMAC-SHA256 of the raw body, as both stores send it. Compared in constant time; an empty header never matches. */
+function signatureHolds(payload: Buffer, header: string, secret: string): boolean {
+  if (header === '' || secret === '') return false;
+  const expected = Buffer.from(createHmac('sha256', secret).update(payload).digest('base64'));
+  const given = Buffer.from(header);
+  return expected.length === given.length && timingSafeEqual(expected, given);
+}
+
+/** Shopify signs every store's deliveries with the platform app's client secret (`X-Shopify-Hmac-SHA256`). */
+export const verifyShopifyWebhook = (
+  payload: Buffer,
+  header: string,
+  clientSecret: string,
+): boolean => signatureHolds(payload, header, clientSecret);
+
+/** WooCommerce signs a store's deliveries with the secret set on that store's webhooks (`X-WC-Webhook-Signature`). */
+export const verifyWooWebhook = (payload: Buffer, header: string, webhookSecret: string): boolean =>
+  signatureHolds(payload, header, webhookSecret);
+
+// ── The automations a store can map ─────────────────────────────────────
+
+/** Shopify's own topics, then the automations Reference adds (COD, back in stock, delivered, the cart steps). */
+export const SHOPIFY_AUTOMATIONS: readonly string[] = [
+  'orders/create',
+  'orders/updated',
+  'orders/paid',
+  'orders/fulfilled',
+  'orders/cancelled',
+  'fulfillments/update',
+  'refunds/create',
+  'products/update',
+  'customers/create',
+  'customers/update',
+  'checkouts/create',
+  'app/uninstalled',
+  'cod/confirm',
+  'cod/prepaid',
+  'stock/back',
+  'order/delivered',
+  'cart/step2',
+  'cart/step3',
+];
+
+/** WooCommerce's topics, then one automation per order status, then COD, stock, the cart steps, dunning and the review reward. */
+export const WOO_AUTOMATIONS: readonly string[] = [
+  'order.created',
+  'order.updated',
+  'order.deleted',
+  'customer.created',
+  'customer.updated',
+  'product.created',
+  'product.updated',
+  'order.processing',
+  'order.completed',
+  'order.on-hold',
+  'order.cancelled',
+  'order.refunded',
+  'order.failed',
+  'cod/confirm',
+  'cod/prepaid',
+  'stock/back',
+  'checkout.created',
+  'cart/step2',
+  'cart/step3',
+  'subscription.payment_failed',
+  'review/reward',
+];
+
+// ── The recipient ───────────────────────────────────────────────────────
+
+/** Shopify: the customer's phone, else the order's, else the shipping then billing address's (the first one filled in). */
+export const shopifyRecipient = (data: Json): string | null =>
+  filled(
+    str(obj(data.customer).phone),
+    str(data.phone),
+    str(obj(data.shipping_address).phone),
+    str(obj(data.billing_address).phone),
+  );
+
+/** WooCommerce: billing, shipping or customer phone, made international from the billing country. */
+export const wooRecipient = (data: Json): string | null => wooPhoneOf(data);
+
+// ── The variables ───────────────────────────────────────────────────────
+
+/** What fills a template: named values, and the ordered list that fills `{{1}}`, `{{2}}`, ... */
+export interface EventContext {
+  vars: Record<string, string>;
+  positional: string[];
+}
+
+export interface StoreFacts {
+  storeName: string | null;
+  storeUrl: string;
+  currency: string | null;
+}
+
+const label = (s: StoreFacts): string => s.storeName || s.storeUrl;
+
+/** Shopify's order or customer payload as variables. The positional default is `[name, order name, total]`. */
+export function shopifyContext(store: StoreFacts, data: Json): EventContext {
+  const cust = obj(data.customer);
+  const first = (str(cust.first_name) ?? str(data.first_name) ?? '').trim();
+  const last = (str(cust.last_name) ?? str(data.last_name) ?? '').trim();
+  const name = `${first} ${last}`.trim() || str(data.name) || 'there';
+  const orderName = str(data.name) ?? `#${str(data.order_number) ?? str(data.id) ?? ''}`;
+  const currency = str(data.currency) ?? store.currency ?? '';
+  const total = str(data.total_price) ?? '';
+  const totalFmt = total !== '' ? `${total} ${currency}`.trim() : '';
+  const ful = obj(arr(data.fulfillments)[0]);
+  const orderUrl = str(data.order_status_url) ?? '';
+  return {
+    vars: {
+      name,
+      first_name: first || name,
+      last_name: last,
+      order_number: str(data.order_number) ?? str(data.id) ?? '',
+      order_name: orderName,
+      total: totalFmt,
+      total_price: total,
+      currency,
+      email: str(cust.email) ?? str(data.email) ?? '',
+      store_name: label(store),
+      financial_status: str(data.financial_status) ?? '',
+      fulfillment_status: str(data.fulfillment_status) ?? '',
+      // Usable as {{tracking_url}}, {{tracking_number}}, {{tracking_company}} and {{order_url}} in Shipped, Delivered and Prepaid templates.
+      tracking_url: str(ful.tracking_url) ?? str(arr(ful.tracking_urls)[0]) ?? orderUrl,
+      tracking_number: str(ful.tracking_number) ?? '',
+      tracking_company: str(ful.tracking_company) ?? '',
+      order_url: orderUrl,
+      checkout_url: str(data.abandoned_checkout_url) ?? orderUrl,
+    },
+    positional: [name, orderName, totalFmt],
+  };
+}
+
+/**
+ * Shipment-tracking details from a WooCommerce order's meta: the Shipment Tracking plugins keep `_wc_shipment_tracking_items` or
+ * `_tracking_number`. Empty strings when there is none.
+ */
+export function wooTracking(data: Json): { number: string; url: string; company: string } {
+  const out = { number: '', url: '', company: '' };
+  for (const m of arr(data.meta_data)) {
+    const meta = obj(m);
+    const key = str(meta.key) ?? '';
+    const val = meta.value;
+    if (key === '_wc_shipment_tracking_items' && Array.isArray(val) && val[0]) {
+      const first = obj(val[0]);
+      out.number = str(first.tracking_number) ?? '';
+      out.company = str(first.tracking_provider) ?? str(first.custom_tracking_provider) ?? '';
+      out.url = str(first.custom_tracking_link) ?? '';
+    } else if (key === '_tracking_number' && typeof val === 'string') {
+      out.number = val;
+    }
+  }
+  return out;
+}
+
+/** WooCommerce's order payload as variables. The positional default is `[name, order #, total]`. */
+export function wooContext(store: StoreFacts, data: Json): EventContext {
+  const billing = obj(data.billing);
+  const first = (str(billing.first_name) ?? '').trim();
+  const last = (str(billing.last_name) ?? '').trim();
+  const name = `${first} ${last}`.trim() || 'there';
+  const number = str(data.number) ?? str(data.id) ?? '';
+  const orderName = `#${number}`;
+  const currency = str(data.currency) ?? store.currency ?? '';
+  const total = str(data.total) ?? '';
+  const totalFmt = total !== '' ? `${total} ${currency}`.trim() : '';
+  const base = store.storeUrl ? store.storeUrl.replace(/\/+$/, '') : '';
+  const id = str(data.id) ?? '';
+  // The customer-facing order page (the standard My Account endpoint) and the pay-now link (the order-pay endpoint needs the key).
+  const orderUrl = base ? `${base}/my-account/view-order/${id}/` : '';
+  const key = str(data.order_key);
+  const payUrl =
+    base && key ? `${base}/checkout/order-pay/${id}/?pay_for_order=true&key=${key}` : orderUrl;
+  const tracking = wooTracking(data);
+  // A real PDF from the store's invoice plugin when there is one, else the order page where the invoice download lives, so
+  // {{invoice_url}} works in any store.
+  const invoice = wooInvoiceUrl(data);
+  return {
+    vars: {
+      name,
+      first_name: first || name,
+      last_name: last,
+      order_number: number,
+      order_name: orderName,
+      total: totalFmt,
+      total_price: total,
+      currency,
+      email: str(billing.email) ?? '',
+      store_name: label(store),
+      status: str(data.status) ?? '',
+      payment_method: str(data.payment_method) ?? '',
+      payment_method_title: str(data.payment_method_title) ?? '',
+      order_url: orderUrl,
+      order_pay_url: payUrl,
+      invoice_url: invoice || orderUrl,
+      invoice_is_pdf: invoice !== '' ? '1' : '0',
+      tracking_number: tracking.number,
+      tracking_url: tracking.url || orderUrl,
+      tracking_company: tracking.company,
+    },
+    positional: [name, orderName, totalFmt],
+  };
+}
+
+/** A chosen list of order fields fills `{{1}}`, `{{2}}`, ...; a field that is not there is empty. */
+export const applyVarMap = (ctx: EventContext, varMap: readonly string[] | null): EventContext =>
+  varMap && varMap.length > 0
+    ? { vars: ctx.vars, positional: varMap.map((f) => ctx.vars[f] ?? '') }
+    : ctx;
+
+const TOKEN = /\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g;
+
+/** A template body with its tokens filled: `{{name}}` from the named values (any case), `{{1}}` from the list; unknown ones removed. */
+export function renderBody(body: string, ctx: EventContext): string {
+  const lower = new Map(Object.entries(ctx.vars).map(([k, v]) => [k.toLowerCase(), v]));
+  return body.replace(TOKEN, (_m, key: string) =>
+    /^\d+$/.test(key)
+      ? (ctx.positional[Number(key) - 1] ?? '')
+      : (lower.get(key.toLowerCase()) ?? ''),
+  );
+}
+
+/** The values for a template's numbered parameters, in order: up to the highest `{{n}}` the body declares. */
+export function bodyParams(body: string, positional: readonly string[]): string[] {
+  let max = 0;
+  for (const m of body.matchAll(TOKEN)) if (/^\d+$/.test(m[1]!)) max = Math.max(max, Number(m[1]));
+  return Array.from({ length: max }, (_, i) => positional[i] ?? '');
+}

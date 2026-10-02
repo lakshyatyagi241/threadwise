@@ -49,3 +49,28 @@ export interface StoreMirror {
   ): Promise<boolean>;
 }
 export const STORE_MIRROR = Symbol('ECOM_STORE_MIRROR');
+
+/** A WhatsApp template an automation can send. */
+export interface EcomTemplate {
+  id: number;
+  uuid: string;
+  name: string;
+  language: string;
+  body: string;
+}
+
+/** Reads the message templates an automation points at (message-templates domain). */
+export interface EcomTemplates {
+  /** The template when it exists and can be sent now: not submitted to Meta, or approved by it. */
+  sendable(tx: Tx, orgId: number, id: number): Promise<EcomTemplate | undefined>;
+}
+export const ECOM_TEMPLATES = Symbol('ECOM_TEMPLATES');
+
+/** Sends one approved template to one customer (TW-ECOM-010). Throws with a reason a person can act on. */
+export interface CommerceSender {
+  send(
+    orgId: number,
+    m: { to: string; template: EcomTemplate; params: string[]; reference: string },
+  ): Promise<{ providerMessageId: string | null }>;
+}
+export const COMMERCE_SENDER = Symbol('ECOM_COMMERCE_SENDER');
