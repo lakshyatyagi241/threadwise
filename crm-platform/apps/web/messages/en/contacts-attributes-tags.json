@@ -35,7 +35,8 @@
       "lostReason": "Choose why this contact was lost before moving it to a lost stage.",
       "stageFlag": "Won and lost can only be set on a contact stage, and a stage cannot be both.",
       "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
-      "stageScope": "A status can only be limited to one of your lifecycle stages."
+      "stageScope": "A status can only be limited to one of your lifecycle stages.",
+      "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space."
     },
     "list": {
       "title": "Contact Hub",
@@ -77,7 +78,7 @@
       "emptyTitle": "No contacts yet",
       "emptyFilteredTitle": "No data found",
       "empty": "Add your first contact, or import a CSV file to get started.",
-      "emptyFiltered": "No contacts match the current filters. Try clearing filters or add your first contact.",
+      "emptyFiltered": "No contacts match the current filters. Clear the search, choose another group, or add a new contact.",
       "resetFilters": "Reset filters",
       "loading": "Loading contacts",
       "deleteTitle": "Delete this contact?",
@@ -86,6 +87,7 @@
       "keep": "Keep contact",
       "cancel": "Cancel",
       "deleted": "Contact deleted.",
+      "alreadyDeleted": "This contact was already deleted. The list has been refreshed.",
       "edit": "Edit",
       "editNamed": "Edit {name}",
       "deleteNamed": "Delete {name}",
@@ -401,6 +403,8 @@
       "updated": "Updated",
       "invalid": "Invalid",
       "imported": "{count, plural, one {Imported # contact.} other {Imported # contacts.}}",
+      "importedUpdated": "{count, plural, one {# existing contact updated.} other {# existing contacts updated.}}",
+      "importedInvalid": "{count, plural, one {# invalid row skipped.} other {# invalid rows skipped.}}",
       "downloadRejects": "Download rejected rows",
       "fileTooLarge": "That file is larger than {mb} MB.",
       "checking": "Checking the file...",

@@ -25,6 +25,7 @@ export type ErrorKind =
   | 'validation'
   | 'unavailable'
   | 'rateLimited'
+  | 'planLimit'
   | 'unexpected';
 
 export function errorKind(error: unknown): ErrorKind {
@@ -73,10 +74,21 @@ export function errorKind(error: unknown): ErrorKind {
       return 'validation';
     case ERROR_CODES.RATE_LIMITED:
       return 'rateLimited';
+    case ERROR_CODES.PLAN_LIMIT_REACHED:
+      return 'planLimit';
   }
   // A route that is not there yet answers 404/501 without one of our codes for it.
   if (error.status === 404 || error.status === 501) return 'unavailable';
   return 'unexpected';
+}
+
+/**
+ * What a failed single-record delete means. A 404 on `DELETE /contacts/:id` is a record that is already gone (deleted in
+ * another tab or by someone else), which is not "this action is not available yet": the list is stale, nothing else.
+ */
+export function deleteFailure(error: unknown): 'gone' | 'forbidden' | 'failed' {
+  if (error instanceof ApiError && error.status === 404) return 'gone';
+  return errorKind(error) === 'forbidden' ? 'forbidden' : 'failed';
 }
 
 /** `{ path: message }` from the server's per-field errors, first message per path. */
@@ -85,6 +97,14 @@ export function fieldErrors(error: unknown): Record<string, string> {
   if (!(error instanceof ApiError)) return out;
   for (const f of error.fieldErrors) if (!(f.path in out)) out[f.path] = f.message;
   return out;
+}
+
+/** The plan's cap from a PLAN_LIMIT_REACHED answer (`limitValue`), for the message; undefined when it is not there. */
+export function planLimitOf(error: unknown): number | undefined {
+  if (!(error instanceof ApiError)) return undefined;
+  const raw = error.fieldErrors.find((f) => f.path === 'limitValue')?.message;
+  const n = raw === undefined ? NaN : Number(raw);
+  return Number.isFinite(n) ? n : undefined;
 }
 
 export const requestIdOf = (error: unknown): string | undefined =>

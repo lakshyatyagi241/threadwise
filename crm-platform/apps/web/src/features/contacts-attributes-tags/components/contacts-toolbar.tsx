@@ -122,6 +122,8 @@ function useShortcutLabel() {
 export function ContactsToolbar(p: ContactsToolbarProps) {
   const t = useTranslations('contacts-attributes-tags.list');
   const tb = useTranslations('contacts-attributes-tags.bulk');
+  // A viewer can do none of these: an empty dropdown would only be a button that opens nothing.
+  const hasMoreActions = Object.values(p.can).some(Boolean);
 
   const segmentLabel =
     p.segment === ''
@@ -321,78 +323,80 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           {t('sendCampaign')}
         </Button>
 
-        <div className="relative">
-          <Menu
-            label={t('moreActions')}
-            triggerClassName={trigger}
-            trigger={
-              <>
-                {t('moreActions')}
-                <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-              </>
-            }
-          >
-            {p.can.export && (
-              <MenuItem onSelect={p.onExportAll} disabled={p.exporting}>
-                <DownloadIcon /> {t('exportAll')}
-              </MenuItem>
-            )}
-            {p.can.import && (
-              <MenuItem onSelect={p.onImport}>
-                <UploadIcon /> {t('bulkUpload')}
-              </MenuItem>
-            )}
-            {p.can.merge && (
-              <MenuItem onSelect={p.onDedupe}>
-                <MergeIcon /> {t('dedupe')}
-              </MenuItem>
-            )}
-            {p.can.createGroups && (
-              <MenuItem onSelect={p.onNewGroup}>
-                <UsersPlusIcon /> {t('newGroup')}
-              </MenuItem>
-            )}
-            {(p.can.export || p.can.update || p.can.delete) && (
-              <>
-                <MenuSeparator />
-                <MenuLabel>{none ? t('selectedActionsNone') : t('selectedActions')}</MenuLabel>
-              </>
-            )}
-            {p.can.export && (
-              <MenuItem onSelect={p.onExportSelected} disabled={none || p.busy}>
-                {tb('export')}
-              </MenuItem>
-            )}
-            {p.can.update && (
-              <>
-                <MenuItem onSelect={() => p.onPicker('groupAdd')} disabled={none || p.busy}>
-                  {tb('addToGroup')}
+        {hasMoreActions && (
+          <div className="relative">
+            <Menu
+              label={t('moreActions')}
+              triggerClassName={trigger}
+              trigger={
+                <>
+                  {t('moreActions')}
+                  <ChevronDownIcon className="size-3.5 text-muted-foreground" />
+                </>
+              }
+            >
+              {p.can.export && (
+                <MenuItem onSelect={p.onExportAll} disabled={p.exporting}>
+                  <DownloadIcon /> {t('exportAll')}
                 </MenuItem>
-                <MenuItem onSelect={() => p.onPicker('groupRemove')} disabled={none || p.busy}>
-                  {tb('removeFromGroup')}
+              )}
+              {p.can.import && (
+                <MenuItem onSelect={p.onImport}>
+                  <UploadIcon /> {t('bulkUpload')}
                 </MenuItem>
-                <MenuItem onSelect={() => p.onPicker('tagAdd')} disabled={none || p.busy}>
-                  {tb('tag')}
+              )}
+              {p.can.merge && (
+                <MenuItem onSelect={p.onDedupe}>
+                  <MergeIcon /> {t('dedupe')}
                 </MenuItem>
-                <MenuItem onSelect={() => p.onPicker('tagRemove')} disabled={none || p.busy}>
-                  {tb('untag')}
+              )}
+              {p.can.createGroups && (
+                <MenuItem onSelect={p.onNewGroup}>
+                  <UsersPlusIcon /> {t('newGroup')}
                 </MenuItem>
-              </>
-            )}
-            {p.can.delete && (
-              <MenuItem danger onSelect={p.onDeleteSelected} disabled={none || p.busy}>
-                {tb('delete')}
-              </MenuItem>
-            )}
-          </Menu>
-          <BulkPickers
-            picker={p.picker}
-            canCreateTags={p.can.createTags}
-            onClose={() => p.onPicker(null)}
-            onGroup={p.onGroup}
-            onTag={p.onTagApply}
-          />
-        </div>
+              )}
+              {(p.can.export || p.can.update || p.can.delete) && (
+                <>
+                  <MenuSeparator />
+                  <MenuLabel>{none ? t('selectedActionsNone') : t('selectedActions')}</MenuLabel>
+                </>
+              )}
+              {p.can.export && (
+                <MenuItem onSelect={p.onExportSelected} disabled={none || p.busy}>
+                  {tb('export')}
+                </MenuItem>
+              )}
+              {p.can.update && (
+                <>
+                  <MenuItem onSelect={() => p.onPicker('groupAdd')} disabled={none || p.busy}>
+                    {tb('addToGroup')}
+                  </MenuItem>
+                  <MenuItem onSelect={() => p.onPicker('groupRemove')} disabled={none || p.busy}>
+                    {tb('removeFromGroup')}
+                  </MenuItem>
+                  <MenuItem onSelect={() => p.onPicker('tagAdd')} disabled={none || p.busy}>
+                    {tb('tag')}
+                  </MenuItem>
+                  <MenuItem onSelect={() => p.onPicker('tagRemove')} disabled={none || p.busy}>
+                    {tb('untag')}
+                  </MenuItem>
+                </>
+              )}
+              {p.can.delete && (
+                <MenuItem danger onSelect={p.onDeleteSelected} disabled={none || p.busy}>
+                  {tb('delete')}
+                </MenuItem>
+              )}
+            </Menu>
+            <BulkPickers
+              picker={p.picker}
+              canCreateTags={p.can.createTags}
+              onClose={() => p.onPicker(null)}
+              onGroup={p.onGroup}
+              onTag={p.onTagApply}
+            />
+          </div>
+        )}
 
         <div className="ms-auto flex items-center gap-2">
           <Menu

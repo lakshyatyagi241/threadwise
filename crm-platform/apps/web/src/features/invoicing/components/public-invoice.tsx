@@ -329,5 +329,5 @@ function Amount({ value }: { value: string }) {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-dvh bg-muted/40 px-3 py-6 sm:px-6 sm:py-10">{children}</div>;
+  return <main className="min-h-dvh bg-muted/40 px-3 py-6 sm:px-6 sm:py-10">{children}</main>;
 }

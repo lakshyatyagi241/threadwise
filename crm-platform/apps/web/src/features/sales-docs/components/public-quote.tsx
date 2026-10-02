@@ -188,6 +188,10 @@ function Quote({ token, doc }: { token: string; doc: PublicDoc }) {
 
   return (
     <div className="space-y-4">
+      {/* The page's one level-one heading for screen readers; the paper below shows the same words as a design. */}
+      <h1 className="sr-only" dir="auto">
+        {doc.title ? `${doc.number} · ${doc.title}` : doc.number}
+      </h1>
       {status === 'accepted' && (
         <Card
           tone="success"

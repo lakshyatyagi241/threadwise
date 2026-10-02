@@ -38,6 +38,7 @@ import type { ContactImportJob, ContactImportPreview } from '../api/schemas';
 import { downloadBlob, downloadCsv } from '../lib/download';
 import { errorKind } from '../lib/errors';
 import { statusChoices } from '../lib/option-sets';
+import { importSummaryParts } from '../lib/import-summary';
 import { ErrorLine } from './error-line';
 import { DownloadIcon, FileIcon, UploadIcon } from './icons';
 
@@ -138,6 +139,8 @@ function ImportBody({ onClose }: { onClose: () => void }) {
   const finishedId = finished?.id;
   const finishedStatus = finished?.status;
   const finishedCreated = finished?.created ?? 0;
+  const finishedUpdated = finished?.updated ?? 0;
+  const finishedInvalid = finished?.invalid ?? 0;
   useEffect(() => {
     if (!finishedId) return;
     void Promise.all([
@@ -145,7 +148,15 @@ function ImportBody({ onClose }: { onClose: () => void }) {
       qc.invalidateQueries({ queryKey: KEYS.groups }),
       qc.invalidateQueries({ queryKey: KEYS.tags }),
     ]);
-    if (finishedStatus === 'completed') toast(t('imported', { count: finishedCreated }), 'success');
+    if (finishedStatus === 'completed') {
+      // "Imported 0 contacts." alone is wrong when the file only refreshed existing ones, so say what else happened.
+      const parts = importSummaryParts({
+        created: finishedCreated,
+        updated: finishedUpdated,
+        invalid: finishedInvalid,
+      });
+      toast(parts.map((x) => t(x.key, { count: x.count })).join(' '), 'success');
+    }
     // Once per finished job.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finishedId]);

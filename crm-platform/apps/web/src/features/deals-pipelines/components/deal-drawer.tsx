@@ -307,7 +307,13 @@ function DrawerBody({
           </div>
         </section>
 
-        <LinkedTasks kind="deal" id={deal.id} compact className="border-t border-border pt-5" />
+        <LinkedTasks
+          kind="deal"
+          id={deal.id}
+          compact
+          className="border-t border-border pt-5"
+          onChanged={() => void qc.invalidateQueries({ queryKey: KEYS.activities(deal.id) })}
+        />
         <LinkedInvoices kind="deal" id={deal.id} compact className="border-t border-border pt-5" />
 
         <LinkedSalesDocs kind="deal" id={deal.id} compact className="border-t border-border pt-5" />
