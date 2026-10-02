@@ -41,6 +41,11 @@ export class MigrationStateService {
     return this.files;
   }
 
+  /** Whether this build ships its migration files (the Requirements screen lists it as a readable directory). */
+  shipped(): boolean {
+    return this.loadFiles() !== null;
+  }
+
   async report(tx: Tx): Promise<MigrationReport> {
     return buildMigrationReport(this.loadFiles(), await this.repo.ledger(tx));
   }

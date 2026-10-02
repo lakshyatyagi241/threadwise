@@ -1,8 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
-import type { SystemCheck, SystemStatusResponse } from '@crm/contracts';
+import {
+  ERROR_CODES,
+  type SystemCheck,
+  type SystemStatusResponse,
+  type VerifyLicenceResponse,
+} from '@crm/contracts';
+import { AppError } from '../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { PlatformStore } from '../auth';
+import { AuthAuditService, PlatformStore } from '../auth';
+import { LicenceService } from './licence.service';
 import { MigrationStateService } from './migration-state.service';
 import { ReleaseInfoService } from './release-info.service';
 import { SetupService } from './setup.service';
@@ -20,14 +27,17 @@ export class SystemService {
     private readonly release: ReleaseInfoService,
     private readonly setup: SetupService,
     private readonly migrations: MigrationStateService,
+    private readonly licence: LicenceService,
+    private readonly audit: AuthAuditService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
   async status(): Promise<SystemStatusResponse> {
-    const [db, redis, setup] = await Promise.all([
+    const [db, redis, setup, licence] = await Promise.all([
       this.checkDatabase(),
       this.checkRedis(),
       this.setup.snapshot(),
+      this.licence.status(),
     ]);
     const migrations = db.report ?? { status: 'unknown' as const, appliedCount: 0, rows: [] };
     const migrationsCheck: SystemCheck =
@@ -52,7 +62,30 @@ export class SystemService {
       },
       migrations,
       checks: [db.check, redis, migrationsCheck],
+      licence,
     };
+  }
+
+  /** Updater step 1 (TW-INST-020): verify, store sealed, audit. The code is never written to the audit payload. */
+  async verifyLicence(code: string, operatorId: number | null): Promise<VerifyLicenceResponse> {
+    if (!this.licence.required) {
+      throw new AppError(
+        ERROR_CODES.LICENCE_NOT_ENABLED,
+        'This deployment does not enforce a purchase code.',
+        HttpStatus.CONFLICT,
+      );
+    }
+    const verdict = await this.licence.check(code);
+    await this.audit.recordStandalone({
+      event: 'admin.updater.verify',
+      status: verdict.ok ? 'success' : 'failure',
+      actorType: 'platform_operator',
+      actorId: operatorId,
+      payload: { result: verdict.ok ? 'success' : verdict.reason },
+    });
+    this.licence.assertVerdict(verdict);
+    await this.licence.remember(code, operatorId);
+    return { message: 'Purchase verified.', licence: await this.licence.status() };
   }
 
   private async checkDatabase() {
