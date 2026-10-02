@@ -3,7 +3,7 @@ domain: catalog-products
 code: CAT
 title: WhatsApp commerce catalog and products
 wadesk_version: '1.7.0'
-sources_read: 62
+sources_read: 64
 ---
 
 # WhatsApp commerce catalog and products
@@ -87,6 +87,8 @@ Shopify / WooCommerce / Google-Sheets / ordering features (they read and write `
 | WD-CAT-032 | Product aliases and order-text matching                              | partial     | P2       | M      | 025           |
 | WD-CAT-033 | Meta product payload and availability derivation                     | implemented | P0       | M      | 026           |
 | WD-CAT-034 | Catalog provider abstraction (Meta Cloud, 360dialog)                 | implemented | P0       | M      |               |
+| WD-CAT-035 | Plan paywall sheet over the catalog pages                            | implemented | P1       | S      | 001           |
+| WD-CAT-036 | Store rail on the product and review pages (storefront domain)       | implemented | P2       | S      | 019, 027      |
 
 ## Features
 
@@ -114,7 +116,9 @@ Shopify / WooCommerce / Google-Sheets / ordering features (they read and write `
 - **Endpoints:** see WD-CAT-008, 014, 016, 018 for the four GET routes; every catalog route shares the middleware
   `auth`, `workspace.role:admin`, `plan:access_wa_storefront`.
 - **Data:** reads `wa_catalogs` (one row per workspace and provider; the badge uses the first row found) for the pill.
-- **Rules & edge cases:**
+- **Rules & edge cases:** 0. Confirmed in the running reference: the pill reads "Not connected" (grey dot, mono text) at the right of the strip, the four tabs
+  are plain links with an underline on the active one, and the status flash is a green mono bar ("Collection created.").
+  The paywall overlay is the global sheet described in WD-CAT-035.
   1. The pill label is the provider code upper-cased with underscores turned into spaces ("META CLOUD", "DIALOG 360").
   2. The workspace may hold up to two `wa_catalogs` rows (one per provider) but every page and action uses `first()`; the second row is
      ignored by the UI (see Open questions).
@@ -419,8 +423,10 @@ Shopify / WooCommerce / Google-Sheets / ordering features (they read and write `
   table).
 - **Actors & access:** WD-CAT-001 gates.
 - **UX & screens:** `_setup.blade.php` plus `_connect-form.blade.php`. QUIRK: in the reference, `GET /catalog` throws "Undefined variable
-  $engine" because the controller puts an undefined `$engine` into the view data, so the whole Setup tab is a 500 (confirmed in the
-  running reference). The intended screen, from the view source, is:
+  $engine" because the controller puts an undefined `$engine`into the view data, so the whole Setup tab is a 500 (confirmed in the
+running reference; it fails the same way with no device, with a connected device bound to the workspace, and with products and shops
+present, because the variable is undefined in the controller at`CatalogController.php:117` whatever the data). The intended screen,
+  from the view source, is:
   - Data prepared: the workspace's catalog row, shops (storefronts, newest first), the latest 50 products by updated_at desc, a status
     bucket count over all products (`meta_sync_status` null counted as "unsynced"), the health block (WD-CAT-007), collections, total
     product count, the 5 most recent catalog sends, and a merged list of connected senders: every connected Baileys device (active
@@ -735,14 +741,17 @@ Shopify / WooCommerce / Google-Sheets / ordering features (they read and write `
   line", also comma or semicolon, country code required with or without a plus).
   Step 02 Format and sender: three radio tiles Single product (one card), Product list or carousel (up to 30), Catalog link (plain text,
   works anytime); "Send from" is the unified sender picker (composite keys `engine:id`); "From shop" select appears only when the
-  workspace has storefronts (label "branding context").
+  workspace has storefronts (label "branding context"). Confirmed in the running reference with no sender: the tab is only the
+  "Connect a device first" card (`You need a connected WhatsApp device to send catalog messages.`).
+  QUIRK (observed): the reference still showed that card after a connected device row was bound to the workspace, because the sender list
+  comes from the platform's allowed engines (`WorkspaceEngine::senders`), not from the devices table alone.
   Step 03 Products: a search box (client-side filter on name and sku), a note "Showing products from {shop}", and the products grouped by
   category in collapsible groups (category or "Other"), each a compact card (image or a box glyph, name, price display) with a
   checkbox. Hidden in link mode. Changing the shop repaints from a prebuilt JS map without a request.
   Step 04 Message and send: optional textarea (max 1024), feedback line, "View recent sends →", the Send button whose label follows the
   mode ("Send product →", "Send carousel →", "Send catalog link →").
   Side rail: Summary (recipients, products, format), Catalog card (name and provider and product count, or "Unofficial API
-  (carousel)" with a "Link Meta →" link), up to 5 recent sends (masked number, time ago), and a note about the 24-hour window.
+  (carousel)" with a "Link Meta →" link), up to 5 recent sends (number, time ago; `mask_phone` returns the number unchanged in this build, so it is shown in full), and a note about the 24-hour window.
 - **Endpoints:**
 
 | METHOD uri       | route name        | Controller@action          | middleware                                                 | request | response   |
@@ -884,7 +893,7 @@ The submit target is `POST catalog/send-to-number` (WD-CAT-015).
 - **Summary:** a table of the 50 most recent catalog messages sent by the workspace, with a link to each thread.
 - **Actors & access:** WD-CAT-001 gates.
 - **UX & screens:** `_activity.blade.php`. Title "Catalog send activity", subtitle "Every catalog message your workspace has sent (SPM · MPM ·
-  link)", a "Send another →" button. Columns When ("M d, H:i"), To (masked phone), Mode (a pill SPM mint, MPM amber, other grey; value
+  link)", a "Send another →" button. Columns When ("M d, H:i"), To (the number in full: `mask_phone` is switched off product-wide in `app/Support/security_helpers.php`), Mode (a pill SPM mint, MPM amber, other grey; value
   "UNKNOWN" if the mode is missing), Body (truncated), and "View thread →" linking to `/team-inbox?conversation={id}`. Empty: "No sends yet.
   Send your first catalog from the Send tab." (confirmed in the running reference).
 - **Endpoints:**
@@ -899,7 +908,8 @@ The submit target is `POST catalog/send-to-number` (WD-CAT-015).
   1. Only rows written by `catalogContent` carry `meta.kind = catalog`; the single-product share (WD-CAT-023) uses `meta.source =
 product_share` and never appears here, and campaign or flow catalog sends do not either.
   2. The log has no status column (rows are only created after a successful provider call), so failed sends never appear.
-  3. The number is masked by the app's `mask_phone` helper.
+  3. QUIRK: the To column goes through `mask_phone`, but that helper returns its input unchanged (masking was disabled product-wide because
+     it made threads unrecognisable), so numbers show in full. The port shows them in full too.
   4. No pagination or filters.
 - **Async & events:** none.
 - **External systems:** none.
@@ -1001,6 +1011,13 @@ CRUD routes are listed in WD-CAT-017; the send action posts to `POST catalog/sen
      the controller comment; the Send tab's picker is the escape hatch).
   4. The picker cap of 30 is enforced client-side and server-side (validation max 30).
   5. Sends from a collection keep the stored order; stale members are skipped at render time.
+  6. Confirmed in the running reference: creating a collection reloads the page (the New collection panel is closed again) with the flash
+     "Collection created."; the picker lists only active products, alphabetically, and shows 0/30 then n/30; a card shows up to four box
+     thumbnails (a box glyph when a product has no image), "3 products · {description}" and the buttons Send, Edit, Delete (confirm
+     "Delete this collection? Products are not affected."). With no sender the Send panel replaces the sender select with a coral note
+     "No connected senders. Connect one →", an empty number answers "Enter a recipient number first." without a request, and a send
+     answers HTTP 422 whose message "No connected device. Pair one at /devices first." is shown in red (so the "HTTP 200" quirk applies
+     only when a recipient failed after the request was accepted).
 - **Async & events:** none.
 - **External systems:** via WD-CAT-015.
 - **Settings:** none.
@@ -1038,7 +1055,11 @@ CRUD routes are listed in WD-CAT-017; the send action posts to `POST catalog/sen
 | GET store/products | user.store.products.index | WaProductController@index | web, auth, workspace.role:admin | q?, page? | Blade page |
 
 - **Data:** `wa_products` (soft-delete aware), ordered by `sort_order` asc then id desc, 25 per page.
-- **Rules & edge cases:**
+- **Rules & edge cases:** 0. Confirmed in the running reference once a shop exists: the footer is Laravel's paginator, "Showing 1 to 25 of 28 results" on the left
+  and the page links on the right (only when there is more than one page); the list shows draft and out-of-stock products too, newest
+  first when sort orders tie; the Stock pill reads "In stock" or "Out"; the store rail (WD-CAT-036) carries a Products count badge.
+  A shop cannot be created from the UI without a device: `/connect?platform=wa-store` stops at step 1 "Connect WhatsApp first"
+  ("Go to devices"), so on a workspace with no device the products pages stay unreachable (500).
   1. QUIRK (cross-tenant leak): when `q` is non-empty the controller adds `name LIKE %q% OR sku LIKE %q%` WITHOUT grouping it against the
      workspace condition, so the SQL is `workspace = X AND name LIKE ... OR sku LIKE ...`; rows of any workspace whose SKU matches are
      returned (the soft-delete scope is also applied outside the OR). A name match stays inside the workspace, a SKU match does not. The
@@ -1116,6 +1137,11 @@ CRUD routes are listed in WD-CAT-017; the send action posts to `POST catalog/sen
      appending `-2`, `-3`, ... Renaming a product never changes its slug (the public URL stays stable). QUIRK: the uniqueness probe
      ignores soft-deleted rows while the database unique index (workspace, slug) includes them, so recreating a product named like a deleted
      one fails with a database error (HTTP 500). The port uses hard delete (the Postgres model has no `deleted_at`), which removes this case.
+     1b. Confirmed in the running reference: a server-side validation failure re-renders the form with a red list on top using Laravel's
+     wording ("The name field is required.", "The price major field must not be greater than 1000000.", "The image url field must be a
+     valid URL."); the text inputs carry `maxlength` (the SKU box stops at 96 characters) and `required` on name and price, so the browser
+     stops an empty submit first. Recreating the name of a soft-deleted product answered HTTP 500 `UniqueConstraintViolationException`
+     (SQLSTATE 23000), proving the slug quirk of rule 1.
   2. Image upload: stored under `store-products` on the configured media disk, then `image_url` is set to its public URL (this second write
      re-triggers the auto-sync push, WD-CAT-012). When both an upload and a URL are given, the upload wins. Editing without a new upload
      keeps the old image; an emptied URL field on edit sets `image_url` to null.
@@ -1166,7 +1192,8 @@ CRUD routes are listed in WD-CAT-017; the send action posts to `POST catalog/sen
 - **Data:** sets `deleted_at` (soft delete). Collections keep the stale id (filtered at use time); order items keep a product reference
   that resolves to an empty placeholder; reviews and reservations stay (reviews of a deleted product still list in moderation, showing the
   product as `#id`).
-- **Rules & edge cases:**
+- **Rules & edge cases:** 0. Confirmed in the running reference: the browser confirm reads "Delete this product?", the redirect flash "Product removed." and the
+  row only gets `deleted_at` (soft delete).
   1. No cascade to Meta: the product stays in the Meta catalog and can still be sent by retailer id until removed in Commerce Manager.
   2. No cascade to collections; `product_count` still counts the stale id.
   3. The slug stays reserved by the soft-deleted row (see WD-CAT-020 rule 1). The Store wizard's "reset everything" force-deletes all
@@ -1210,6 +1237,9 @@ CRUD routes are listed in WD-CAT-017; the send action posts to `POST catalog/sen
      URL on its own line when present, a blank line and "Qty: 1".
   3. The storefront chosen is simply the first row (not necessarily the newest), unlike the catalog sync which uses the newest.
   4. The product page URL works only if the storefront is enabled and the product is in stock (public side).
+  5. Confirmed in the running reference: with a shop and no phone number the modal shows the storefront link
+     `http://127.0.0.1:8000/s/{shop slug}/p/{product slug}` and the deep-link box "(connect a phone number first)"; the Send row is a phone
+     input ("WhatsApp number, e.g. +1 555…") with a Send button and Close, and the modal has no corner close icon.
 - **Async & events:** none.
 - **External systems:** none.
 - **Settings:** storefront domain settings (custom domain, subdomain host) decide the public URL.
@@ -1289,7 +1319,8 @@ product_share` and the product id, plus a found-or-created conversation (open, o
   by sort_order then id desc; limit 120. `retailer_id` = meta_retailer_id, else sku, else `wsn-{id}`; `synced` = `meta_sync_status ===
 'synced'`.
 - **Rules & edge cases:**
-  1. No shop filter (unlike the Send tab).
+  1. No shop filter (unlike the Send tab). Confirmed in the running reference through the inbox modal: drafts, deleted and out-of-stock
+     products are absent, order is sort order then newest first.
   2. Hard cap 120, no pagination: stores with more products must search.
   3. The picker shows a "synced" or "not synced" badge from `synced`; "not synced" products can still be sent on a Meta catalog but will
      fail on Meta if the item is not in the catalog.
@@ -1435,6 +1466,9 @@ product_share` and the product id, plus a found-or-created conversation (open, o
      "thanks, it will appear once approved".
   6. No notification is sent to the merchant when a review arrives; no email or push.
   7. A deleted product's reviews remain and display `#id`.
+  8. Confirmed in the running reference (reviews posted through the public `POST /s/{slug}/review`, answer "Thanks! Your review will appear
+     once approved."): newest first, stars drawn amber and grey, customer name shown as typed ("Anonymous" only when empty), tab labels with a
+     small mono count, flash "Review approved." after Approve, the browser confirm "Delete this review?" before Delete.
 - **Async & events:** none.
 - **External systems:** none.
 - **Settings:** none.
@@ -1622,7 +1656,11 @@ team-inbox/api/conversations/{id}/catalog` (`user.team-inbox.api.catalog`, middl
 - **UX & screens:** `#catalog-modal` in the team inbox (script `user-team-inbox-index.js`): mode switch Single / List / Link, search box (250
   ms debounce) hitting WD-CAT-024, a product grid with a "synced" or "not synced" badge, an optional message textarea, summary "N selected /
   30 max", Send. Single mode keeps one pick; List caps at 30 ("Multi-product messages support up to 30 items."); Link needs no products.
-  Escape and backdrop close. Success toast "Catalog sent"; errors in a warning strip (the server `message` or "Failed (HTTP n)").
+  Escape and backdrop close. Confirmed in the running reference (modal opened from the composer toolbar button titled "Send catalog
+  products"): kicker "Send catalog", title "Pick products to send", a collapsed "How catalog send works" help row, the three mode tabs, a
+  "Search products…" box, product cards (box glyph without an image, name, price, an amber "not synced" badge), an "Optional message (body
+  text)" box, Cancel and "Send →", and a corner close icon. The staff web app does not consume `GET /v2/catalog/products/picker` yet (the
+  inbox domain owns the modal). Success toast "Catalog sent"; errors in a warning strip (the server `message` or "Failed (HTTP n)").
 - **Endpoints:**
 
 | METHOD uri                                     | route name                  | Controller@action                  | middleware | request                                                                                                                                       | response                                                                                                      |
@@ -1798,6 +1836,70 @@ footer_text, section_title}` to the Node bridge `/api/send-product-catalog/{send
   tests with recorded Meta responses; retry and timeout policy in the adapter. Decide whether to support 360dialog catalog operations at
   all (it needs a Graph token, which the form calls an "access token / API key").
 
+### WD-CAT-035 — Plan paywall sheet over the catalog pages
+
+- **Status:** implemented
+- **Priority:** P1
+- **Effort:** S
+- **Depends on:** WD-CAT-001
+- **Summary:** on a plan without `access_wa_storefront` the catalog tabs still render and a global bottom sheet slides over them telling the
+  merchant the feature is not on the plan and offering the plans that include it.
+- **Actors & access:** any workspace user who reaches a gated GET page; platform admins and plans with the flag never see it.
+- **UX & screens:** `resources/views/components/plan-paywall.blade.php` (shared by every plan-gated route): a dimmed full-screen backdrop and a
+  rounded white sheet that rises from the bottom (max width 920 px): a lock tile, the kicker "Premium feature", the title "{label} is not on
+  your plan" (label for this flag: "WhatsApp storefront"), the line "Pick a plan below that includes it. Upgrade and unlock this feature
+  instantly.", one card per active package that has the flag (name, price per month or Free or Custom, a 70-character subtitle, "Choose
+  {plan}" to checkout, "Continue free" or "Talk to sales"; the highlighted plan carries a "Popular" tag), and the links "Go back"
+  (`/dashboard`) and "Compare all plans →" (`/account/plans`).
+- **Endpoints:** none (a Blade component driven by `View::share('planPaywall')` from the plan middleware, or the URL map in
+  `config/plan_gates.php`).
+- **Data:** reads `packages` rows with the flag column set and status 1, ordered by sort order then amount.
+- **Rules & edge cases:**
+  1. The sheet is shown only when the effective plan lacks the flag; mutations are refused by the middleware regardless (WD-CAT-001).
+  2. The page behind the sheet is the real tab, so the merchant sees the data the plan cannot use.
+  3. No close button; the way out is "Go back" or choosing a plan.
+- **Async & events:** none.
+- **External systems:** none.
+- **Settings:** package flags; `config/plan_gates.php`.
+- **Acceptance criteria:**
+  - Given a plan without the flag, When an admin opens `/catalog/collections`, Then the tab renders and the sheet titled "WhatsApp storefront
+    is not on your plan" rises over it.
+  - Given a plan with the flag, When the page opens, Then no sheet is rendered.
+  - Given the sheet, When "Compare all plans" is clicked, Then the plans page opens.
+- **Source refs:** resources/views/components/plan-paywall.blade.php, app/Http/Middleware/EnforcePlanFeature.php, config/plan_gates.php.
+- **Port notes:** the web draws the sheet over the empty tab frame because the catalog API refuses every call on such a plan (WaDesk rendered the
+  data). The plan cards need a plans list that says which plans carry `wa_storefront`; `GET /v2/plans` returns three feature chips only, so the
+  cards are blocked on a contract change in the plans domain. The staff menu still lists Catalog on such a plan (the shell resolves the menu with
+  plan features unknown).
+
+### WD-CAT-036 — Store rail on the product and review pages (storefront domain)
+
+- **Status:** implemented
+- **Priority:** P2
+- **Effort:** S
+- **Depends on:** WD-CAT-019, WD-CAT-027
+- **Summary:** the left column of `/store/products`, its form pages and `/store/reviews`: the shop card, the public link and the Store menu with
+  live counts. It belongs to the storefront domain; this entry records what the pages here depend on.
+- **Actors & access:** admin or above.
+- **UX & screens:** `resources/views/user/store/_sidebar.blade.php`: a card with a bag glyph, a "Setup" pill, the shop name and "Not connected"; a
+  "Public URL" card with the mono link and "Open ↗" and "Copy"; the STORE menu (Overview, Orders, Products with a count badge, Groups,
+  Storefront, Coupons, Reviews with the pending count badge, Payments, Checkout gateways, Customers, Invoices) and SETTINGS (Connection).
+- **Endpoints:** none of its own.
+- **Data:** the workspace's first storefront row, `wa_products` and `wa_product_reviews` counts.
+- **Rules & edge cases:**
+  1. The rail dereferences the storefront row: with no shop the whole page is HTTP 500 (WD-CAT-019 rule 2).
+  2. A shop needs a connected device to be created from the UI (`/connect?platform=wa-store`, step 1).
+- **Async & events:** none.
+- **External systems:** none.
+- **Settings:** none.
+- **Acceptance criteria:**
+  - Given a shop, When `/store/products` opens, Then the rail shows the shop name, the public link and the Products badge with the product count.
+  - Given no shop, When the page opens, Then the reference fails (the port must not).
+  - Given three pending reviews, When `/store/reviews` opens, Then the Reviews entry carries a 3 badge.
+- **Source refs:** resources/views/user/store/_sidebar.blade.php.
+- **Port notes:** not built here: the staff web app has no Store area yet, so the product and review screens render without the rail and the
+  customer menu lists Products and Reviews instead (STORE domain).
+
 ## Data model
 
 Postgres tables already exist in `packages/db/migrations/20261001105000_cat_wadesk_schema.sql` (Drizzle: `packages/db/src/schema/catalog-products/tables.ts`).
@@ -1934,8 +2036,10 @@ Exposes:
 - **Documentation vs code:** docs say Catalog is plan-gated for adding and editing products (product routes have no plan gate), say draft
   products are hidden (storefront shows any in-stock product), say the sweep exists (it is not scheduled), and describe the Graph version
   switch and menu hiding (inert).
-- **Slug uniqueness with soft deletes:** recreating a name of a deleted product hits the database unique index (500). Not applicable in
-  Postgres hard delete.
+- **Slug uniqueness with soft deletes:** recreating a name of a deleted product hits the database unique index (500, reproduced in the running
+  reference). Not applicable in Postgres hard delete.
+- **mask_phone is a no-op:** every number the catalog screens print goes through it and shows in full.
+- **A shop cannot be created without a device**, and every Store page needs a shop, so a fresh install cannot reach `/store/products` at all.
 - **No aliases UI**, no `is_active` UI for collections, no UI for `concierge_footer` or `order_ack_template_id`.
 - **Dead code:** the `catalog_message` sender, `listCatalogs`, `WaCatalog::providerBaseUrl()` (pinned v22.0), `WaProduct::scopeAvailable` is
   used but ignores status, `last_synced_at` and `meta_set_id` are never written, `wa_product_reviews.order_id` never set.
