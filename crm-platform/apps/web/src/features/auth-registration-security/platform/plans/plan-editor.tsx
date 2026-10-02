@@ -295,6 +295,23 @@ export function PlanEditor({
                 />
               </Field>
             </div>
+            <Field
+              label={t('fields.dataRetentionDays.label')}
+              htmlFor={fieldId('dataRetentionDays')}
+              hint={t('fields.dataRetentionDays.hint')}
+              error={err('dataRetentionDays')}
+            >
+              <Input
+                id={fieldId('dataRetentionDays')}
+                type="number"
+                inputMode="numeric"
+                min={0}
+                value={draft.dataRetentionDays}
+                onChange={(e) => set('dataRetentionDays', e.target.value)}
+                invalid={Boolean(problems.dataRetentionDays)}
+                className="font-mono"
+              />
+            </Field>
             <div className="grid gap-3 sm:grid-cols-2">
               <ToggleRow
                 id="plan-isActive"

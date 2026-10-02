@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { WalletAppShell } from '@/features/wallet-message-billing';
 import { NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
@@ -51,7 +52,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
           theme={theme}
           navFooter={<WorkspaceSwitcher />}
-          banners={<AccountBanners key="banners" />}
+          banners={
+            <>
+              <TrialBar />
+              <AccountBanners key="banners" />
+            </>
+          }
           bell={<NotificationBell key="bell" />}
         >
           <AccountGate>{children}</AccountGate>

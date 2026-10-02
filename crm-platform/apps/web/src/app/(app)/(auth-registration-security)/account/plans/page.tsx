@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { PlansPlaceholder } from '@/features/auth-registration-security/account/plans/plans-placeholder';
+import { PlansPicker } from '@/features/plans-subscriptions-trials/components/plans-picker';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('auth-registration-security.account.plans');
+  const t = await getTranslations('plans-subscriptions-trials.plans');
   return { title: t('title') };
 }
 
-/** The destination of every "upgrade" link until the billing domain builds the real plan picker and checkout. */
+/** The destination of every "upgrade" in the app (TW-PLAN-011): the real plan picker for this workspace. */
 export default function PlansPage() {
-  return <PlansPlaceholder />;
+  return <PlansPicker />;
 }

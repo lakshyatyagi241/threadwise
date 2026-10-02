@@ -7,7 +7,7 @@ import { buildSend, type TemplateShape } from '../../infra/providers/whatsapp/me
 import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
-import { EngineSenderRegistry } from './engine-senders';
+import { EngineSenderRegistry, renderPlainBody, type OutgoingText } from './engine-senders';
 import {
   applyOverrides,
   sanitizeOverrides,
@@ -36,6 +36,7 @@ import {
   WARMER_GATE,
   type SenderDirectory,
   type TemplateDirectory,
+  type TemplateRecord,
   type WarmerGate,
 } from './_shims/tokens';
 
@@ -151,7 +152,7 @@ export class BroadcastDispatchService {
         headerLocation: template.headerLocation,
       };
       const overrides = sanitizeOverrides(b.template_overrides);
-      const mergeBase = sender.engine === 'waba' ? await this.merge.baseContext(tx, orgId) : null;
+      const mergeBase = await this.merge.baseContext(tx, orgId);
       const pacing = await this.pacingSettings.get(tx, orgId);
       const warm = await this.warmer.gap(tx, sender);
       const pending = await tx.execute(sql`
@@ -178,7 +179,7 @@ export class BroadcastDispatchService {
     if (prep.failed) return 'failed';
     const { template, sender, adapter, shape, overrides, mergeBase, pacing, warm, pendingTotal } =
       prep;
-    if (mergeBase)
+    if (mergeBase && sender.engine === 'waba')
       this.logger.log(
         { orgId, broadcastId, engine: sender.engine },
         '[BCAST] meta_payloads are built per recipient',
@@ -265,25 +266,43 @@ export class BroadcastDispatchService {
           }
 
           try {
-            const built = mergeBase
-              ? await this.payloadFor(
+            const clientReference = `bcast-${broadcastId}-${contactId}`;
+            let sent: { providerMessageId: string | null };
+            if (sender.engine !== 'waba' && opened.sendText) {
+              // Plain-text engines (unofficial, Twilio): the rendered template, not a Meta template.
+              sent = await opened.sendText(
+                await this.textFor(
                   orgId,
-                  broadcastId,
                   contactId,
-                  template.id,
                   to,
+                  template,
                   shape,
-                  overrides,
                   mergeBase,
-                )
-              : null;
-            const sent = await opened.send({
-              to,
-              templateName: built ? built.name : template.templateName,
-              language: template.language,
-              clientReference: `bcast-${broadcastId}-${contactId}`,
-              ...(built ? { components: built.components } : {}),
-            });
+                  clientReference,
+                ),
+              );
+            } else {
+              const built =
+                sender.engine === 'waba'
+                  ? await this.payloadFor(
+                      orgId,
+                      broadcastId,
+                      contactId,
+                      template.id,
+                      to,
+                      shape,
+                      overrides,
+                      mergeBase,
+                    )
+                  : null;
+              sent = await opened.send({
+                to,
+                templateName: built ? built.name : template.templateName,
+                language: template.language,
+                clientReference,
+                ...(built ? { components: built.components } : {}),
+              });
+            }
             await this.db.tx(async (tx) => {
               const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
                 status: 'sent',
@@ -371,6 +390,40 @@ export class BroadcastDispatchService {
       await this.runtime.sleep(Math.min(left, HEARTBEAT_MS));
       await this.lease.renew(leaseKey, token);
     }
+  }
+
+  /**
+   * The text a plain-text engine (the unofficial engine, Twilio) sends one recipient: the template's body with this contact's
+   * values, its header and footer, and its media as a link. Send-time overrides are Cloud API components, not applied here.
+   */
+  private async textFor(
+    orgId: number,
+    contactId: number,
+    to: string,
+    template: TemplateRecord,
+    shape: TemplateShape & { headerLocation: unknown },
+    base: Omit<MergeContext, 'contact'>,
+    clientReference: string,
+  ): Promise<OutgoingText> {
+    const contact = await this.db.tx((tx) => this.merge.contactFor(tx, orgId, contactId));
+    const ctx: MergeContext = { ...base, contact };
+    const vars = buildRecipientVars(shape, {
+      pull: (key) => resolveToken(key, ctx).value,
+      mediaUrl: (path) => this.templates.mediaUrl(path),
+    });
+    const kind = (template.attachmentType ?? '').toLowerCase();
+    const media =
+      vars.headerMediaUrl && (kind === 'image' || kind === 'video' || kind === 'document')
+        ? { kind: kind as 'image' | 'video' | 'document', url: vars.headerMediaUrl }
+        : null;
+    return {
+      to,
+      text: renderPlainBody(template.templateBody, vars.body),
+      header: vars.header ?? (template.header && !media ? template.header : null),
+      footer: template.footer,
+      media,
+      clientReference,
+    };
   }
 
   /**

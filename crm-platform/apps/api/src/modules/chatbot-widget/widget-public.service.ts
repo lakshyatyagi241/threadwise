@@ -1,6 +1,7 @@
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
+  toPublicLauncher,
   widgetMessageRequestSchema,
   type WidgetHistoryResponse,
   type WidgetMessageResponse,
@@ -120,7 +121,10 @@ export class WidgetPublicService {
     const found = await this.locate(token);
     if (!found || found.widget.status !== 'active') return null;
     const w = found.widget;
-    return buildEmbedScript(w, `${base}/widget/${w.embedToken}/chat`);
+    return buildEmbedScript(
+      { ...w, whatsappUrl: whatsappUrl(w) },
+      `${base}/widget/${w.embedToken}/chat`,
+    );
   }
 
   async chatPage(token: string): Promise<string | null> {
@@ -133,25 +137,17 @@ export class WidgetPublicService {
   // --- guards ---------------------------------------------------------------------------------------------------------
 
   /**
-   * The allow-list check of the three `api/*` routes (TW-WGT-020). No `Origin` header means a same-origin or non-browser
-   * caller and the check is skipped. The widget's own host is always allowed: the chat page is served from it, so its own
-   * requests carry that origin, and Reference's list would have blocked them.
+   * The allow-list check of the three `api/*` routes (TW-WGT-020). No `Origin` header means a same-origin GET or a non-browser
+   * caller and the check is skipped.
+   *
+   * QUIRK: reproduced deliberately (TW-WGT-020 rule 7). The chat page is served from the widget's own host, so its own POSTs
+   * carry that host as their Origin and a non-empty list that names only customer sites blocks them with `cors_origin_denied`.
+   * Nothing allows the widget's own host implicitly.
    */
-  async checkOrigin(
-    token: string,
-    origin: string | undefined,
-    ownHost: string,
-  ): Promise<OriginCheck> {
+  async checkOrigin(token: string, origin: string | undefined): Promise<OriginCheck> {
     if (!origin) return { kind: 'skip' };
     const found = await this.locate(token);
     if (!found) return { kind: 'not_found' };
-    let host = '';
-    try {
-      host = new URL(origin).host.toLowerCase();
-    } catch {
-      host = '';
-    }
-    if (host !== '' && host === ownHost.toLowerCase()) return { kind: 'allowed', origin };
     if (originAllowed(origin, found.widget.allowedDomains)) return { kind: 'allowed', origin };
     return {
       kind: 'denied',
@@ -159,8 +155,8 @@ export class WidgetPublicService {
     };
   }
 
-  async enforceThrottle(route: ThrottledRoute, ip: string, token: string): Promise<void> {
-    if (await this.throttle.allow(route, ip, token)) return;
+  async enforceThrottle(route: ThrottledRoute, ip: string): Promise<void> {
+    if (await this.throttle.allow(route, ip)) return;
     throw new WidgetPublicError(429, { message: 'Too Many Attempts.' }, { 'Retry-After': '60' });
   }
 
@@ -206,7 +202,7 @@ export class WidgetPublicService {
       const lines: InboxLine[] =
         visitor.conversationId === null
           ? []
-          : await this.inbox.recent(tx, orgId, visitor.conversationId, TRANSCRIPT_LIMIT);
+          : await this.inbox.oldest(tx, orgId, visitor.conversationId, TRANSCRIPT_LIMIT);
       return {
         newVisitorUuid: isNew ? visitor.visitorUuid : null,
         widgetUuid: widget.uuid,
@@ -231,6 +227,7 @@ export class WidgetPublicService {
             collect_email: widget.collectEmail,
             collect_phone: widget.collectPhone,
             whatsapp_url: whatsappUrl(widget),
+            launcher: toPublicLauncher(widget.launcher),
           },
           visitor: {
             uuid: visitor.visitorUuid,
@@ -289,7 +286,6 @@ export class WidgetPublicService {
         conversationId: visitor.conversationId,
       };
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
-      const history = await this.inbox.recent(tx, orgId, conversation.id, HISTORY_TURNS);
       const inbound = await this.inbox.insertInbound(
         tx,
         orgId,
@@ -298,6 +294,9 @@ export class WidgetPublicService {
         visitor.visitorUuid,
         data.body,
       );
+      // The history is read AFTER the visitor's line is stored, so the message appears both in the history and as
+      // "Visitor just said" (TW-WGT-016 rule 4: reproduced deliberately).
+      const history = await this.inbox.recent(tx, orgId, conversation.id, HISTORY_TURNS);
       const humanTookOver = await this.inbox.humanHasTakenOver(tx, orgId, conversation.id);
       let assistant: AssistantProfile | undefined;
       let knowledge: KnowledgeSource[] = [];
@@ -348,16 +347,18 @@ export class WidgetPublicService {
   // --- history --------------------------------------------------------------------------------------------------------
 
   /**
-   * Business lines newer than `since`, so a person's reply from the team inbox reaches the open widget. A paused widget
-   * stops here too (Reference's history route ignored the status). An unknown visitor gets an empty list and no new row.
+   * Business lines newer than `since`, so a person's reply from the team inbox reaches the open widget.
    */
   async history(token: string, req: PublicRequest, since: number): Promise<WidgetHistoryResponse> {
-    const { orgId, widget } = await this.locateActive(token);
+    // QUIRK: reproduced deliberately (TW-WGT-018 rule 1, TW-WGT-011 rule 4). The history route does not look at the status, so
+    // a paused widget still serves it; and an unknown or missing visitor uuid creates a visitor row on every poll.
+    const found = await this.locate(token);
+    if (!found) throw notFound();
+    const { orgId, widget } = found;
     return this.db.txAs({ orgId }, async (tx) => {
-      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
-      if (!resolved || resolved.visitor.conversationId === null)
-        return { ok: true as const, messages: [] };
-      await this.visitors.touch(tx, orgId, resolved.visitor.id, 60);
+      const resolved = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
+      await this.visitors.touch(tx, orgId, resolved.visitor.id);
+      if (resolved.visitor.conversationId === null) return { ok: true as const, messages: [] };
       const lines = await this.inbox.outboundSince(
         tx,
         orgId,
