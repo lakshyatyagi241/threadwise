@@ -53,6 +53,8 @@ or WooCommerce store (that needs a Shopify partner app and a store, which this w
 14. **A delivery id is remembered for a day**, so a store's retry of a delivery already taken is dropped (WaDesk processed every retry again). A delivery that cannot be queued answers 503 and forgets the id, so the store retries.
 15. **A WooCommerce `order.<status>` automation fires once per order and status**; WaDesk messaged on every update that carried the status. A delayed automation is queued with its delay instead of sleeping in the request.
 16. **A failed message says why on the log row** (no Cloud API number connected, template not approved, no phone), and a failing step never stops the mirror upkeep that follows it.
+17. **Saving automations validates the template and the sender** (WaDesk saved whatever id arrived): a template of another workspace, an automation turned on without a template, or a "send from" number that is not connected is a 422. The template travels as its uuid, never its internal id.
+18. **Sending from a chosen number works for Cloud API numbers only** (the one engine with a sender adapter); a Baileys or Twilio choice fails on the log with that reason instead of silently using another number.
 
 ## Shims
 

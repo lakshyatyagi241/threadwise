@@ -2,3 +2,4 @@
 export * from './settings';
 export * from './store';
 export * from './sync';
+export * from './automations';
