@@ -41,7 +41,9 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const router = useRouter();
   const params = useSearchParams();
 
-  const [currency, setCurrency] = useState<string | undefined>(params.get('currency')?.toUpperCase() ?? undefined);
+  const [currency, setCurrency] = useState<string | undefined>(
+    params.get('currency')?.toUpperCase() ?? undefined,
+  );
   const [period, setPeriod] = useState<PaygwPeriod | undefined>(
     params.get('period') === 'yearly' ? 'yearly' : undefined,
   );
@@ -54,7 +56,12 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const attempt = useRef<{ sig: string; key: string } | null>(null);
 
   const quote = useQuery<PaygwQuote>({
-    queryKey: checkoutKey(target.kind, target.kind === 'plan' ? target.planSlug : amount, currency, period),
+    queryKey: checkoutKey(
+      target.kind,
+      target.kind === 'plan' ? target.planSlug : amount,
+      currency,
+      period,
+    ),
     queryFn: ({ signal }) =>
       target.kind === 'plan'
         ? fetchPlanQuote(target.planSlug, { currency, period }, signal)
@@ -94,12 +101,31 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
       const payload = Object.fromEntries(
         Object.entries(billing).filter(([, v]) => v.trim() !== ''),
       ) as PaygwBilling;
-      const sig = JSON.stringify([target, selected.id, q.currency, q.billingPeriod, amount, payload]);
+      const sig = JSON.stringify([
+        target,
+        selected.id,
+        q.currency,
+        q.billingPeriod,
+        amount,
+        payload,
+      ]);
       if (attempt.current?.sig !== sig) attempt.current = { sig, key: crypto.randomUUID() };
       const key = attempt.current.key;
       return target.kind === 'plan'
-        ? placePlanOrder(target.planSlug, { gatewayId: selected.id, currency: q.currency, period: q.billingPeriod, billing: payload }, key)
-        : placeWalletOrder({ gatewayId: selected.id, amount, currency: q.currency, billing: payload }, key);
+        ? placePlanOrder(
+            target.planSlug,
+            {
+              gatewayId: selected.id,
+              currency: q.currency,
+              period: q.billingPeriod,
+              billing: payload,
+            },
+            key,
+          )
+        : placeWalletOrder(
+            { gatewayId: selected.id, amount, currency: q.currency, billing: payload },
+            key,
+          );
     },
     onSuccess: async (res) => {
       setProblem(null);
@@ -158,10 +184,21 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
           <h2 className="font-medium">{t('account')}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={t('name')} htmlFor="co-name">
-              <Input id="co-name" autoComplete="name" value={billing.customerName} onChange={set('customerName')} />
+              <Input
+                id="co-name"
+                autoComplete="name"
+                value={billing.customerName}
+                onChange={set('customerName')}
+              />
             </Field>
             <Field label={t('email')} htmlFor="co-email">
-              <Input id="co-email" type="email" autoComplete="email" value={billing.customerEmail} onChange={set('customerEmail')} />
+              <Input
+                id="co-email"
+                type="email"
+                autoComplete="email"
+                value={billing.customerEmail}
+                onChange={set('customerEmail')}
+              />
             </Field>
           </div>
         </Card>
@@ -170,22 +207,47 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
           <h2 className="font-medium">{t('billingAddress')}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={t('company')} htmlFor="co-company">
-              <Input id="co-company" autoComplete="organization" value={billing.company} onChange={set('company')} />
+              <Input
+                id="co-company"
+                autoComplete="organization"
+                value={billing.company}
+                onChange={set('company')}
+              />
             </Field>
             <Field label={t('taxId')} htmlFor="co-tax" hint={t('taxIdHint')}>
               <Input id="co-tax" value={billing.taxId} onChange={set('taxId')} />
             </Field>
             <Field label={t('address')} htmlFor="co-address" className="sm:col-span-2">
-              <Input id="co-address" autoComplete="street-address" value={billing.address} onChange={set('address')} />
+              <Input
+                id="co-address"
+                autoComplete="street-address"
+                value={billing.address}
+                onChange={set('address')}
+              />
             </Field>
             <Field label={t('city')} htmlFor="co-city">
-              <Input id="co-city" autoComplete="address-level2" value={billing.city} onChange={set('city')} />
+              <Input
+                id="co-city"
+                autoComplete="address-level2"
+                value={billing.city}
+                onChange={set('city')}
+              />
             </Field>
             <Field label={t('postal')} htmlFor="co-postal">
-              <Input id="co-postal" autoComplete="postal-code" value={billing.postal} onChange={set('postal')} />
+              <Input
+                id="co-postal"
+                autoComplete="postal-code"
+                value={billing.postal}
+                onChange={set('postal')}
+              />
             </Field>
             <Field label={t('country')} htmlFor="co-country">
-              <Input id="co-country" autoComplete="country-name" value={billing.country} onChange={set('country')} />
+              <Input
+                id="co-country"
+                autoComplete="country-name"
+                value={billing.country}
+                onChange={set('country')}
+              />
             </Field>
           </div>
         </Card>
@@ -193,7 +255,11 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         {q.availableCurrencies.length > 1 && (
           <Card className="space-y-2 p-4">
             <Field label={t('currency')} htmlFor="co-currency">
-              <Select id="co-currency" value={q.currency} onChange={(e) => setCurrency(e.target.value)}>
+              <Select
+                id="co-currency"
+                value={q.currency}
+                onChange={(e) => setCurrency(e.target.value)}
+              >
                 {q.availableCurrencies.map((c) => (
                   <option key={c} value={c}>
                     {c}
@@ -207,7 +273,11 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         {q.periods.length > 1 && (
           <Card className="space-y-2 p-4">
             <Field label={t('period')} htmlFor="co-period">
-              <Select id="co-period" value={q.billingPeriod} onChange={(e) => setPeriod(e.target.value as PaygwPeriod)}>
+              <Select
+                id="co-period"
+                value={q.billingPeriod}
+                onChange={(e) => setPeriod(e.target.value as PaygwPeriod)}
+              >
                 {q.periods.map((p) => (
                   <option key={p} value={p}>
                     {t(`periods.${p}`)}
@@ -251,11 +321,18 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         </Card>
 
         <Button type="submit" className="w-full" disabled={!selected || pay.isPending || launching}>
-          {!selected ? t('noGatewayButton') : pay.isPending || launching ? t('processing') : t('pay', { amount: money(q.total) })}
+          {!selected
+            ? t('noGatewayButton')
+            : pay.isPending || launching
+              ? t('processing')
+              : t('pay', { amount: money(q.total) })}
         </Button>
       </form>
 
-      <aside className="h-fit space-y-3 rounded-md border border-border p-4 lg:sticky lg:top-4" aria-label={t('summary')}>
+      <aside
+        className="h-fit space-y-3 rounded-md border border-border p-4 lg:sticky lg:top-4"
+        aria-label={t('summary')}
+      >
         <h2 className="font-medium">{t('summary')}</h2>
         <div>
           <p className="font-medium">{q.itemName}</p>

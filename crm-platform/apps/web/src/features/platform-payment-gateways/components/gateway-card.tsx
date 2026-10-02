@@ -207,7 +207,9 @@ export function GatewayCard({ gateway: g, currencyChoices, canEdit, onChanged }:
                 id={`${g.slug}-mode`}
                 value={draft.mode}
                 disabled={!canEdit}
-                onChange={(e) => setDraft((d) => ({ ...d, mode: e.target.value as 'sandbox' | 'live' }))}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, mode: e.target.value as 'sandbox' | 'live' }))
+                }
               >
                 <option value="sandbox">{t('mode.sandbox')}</option>
                 <option value="live">{t('mode.live')}</option>
@@ -254,7 +256,12 @@ export function GatewayCard({ gateway: g, currencyChoices, canEdit, onChanged }:
           </fieldset>
 
           <Field label={t('webhookUrl')} htmlFor={`${g.slug}-hook`} hint={t('webhookHint')}>
-            <Input id={`${g.slug}-hook`} readOnly value={g.webhookUrl} onFocus={(e) => e.currentTarget.select()} />
+            <Input
+              id={`${g.slug}-hook`}
+              readOnly
+              value={g.webhookUrl}
+              onFocus={(e) => e.currentTarget.select()}
+            />
           </Field>
 
           {canEdit ? (

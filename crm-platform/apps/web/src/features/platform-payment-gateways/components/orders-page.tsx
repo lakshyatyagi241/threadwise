@@ -32,7 +32,8 @@ export function OrdersPage() {
     queryKey: ORDERS_KEY,
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) => fetchOrders(pageParam, signal),
-    getNextPageParam: (last) => (last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined),
+    getNextPageParam: (last) =>
+      last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
     refetchOnWindowFocus: false,
   });
 
@@ -114,7 +115,9 @@ export function OrdersPage() {
                     <td className="px-3 py-2">
                       <Badge tone={TONE[o.status]}>{t(`status.${o.status}`)}</Badge>
                       {o.failureReason && o.status === 'failed' && (
-                        <span className="mt-0.5 block text-xs text-muted-foreground">{o.failureReason}</span>
+                        <span className="mt-0.5 block text-xs text-muted-foreground">
+                          {o.failureReason}
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -124,7 +127,11 @@ export function OrdersPage() {
           </div>
           {q.hasNextPage && (
             <div className="flex justify-center">
-              <Button variant="secondary" disabled={q.isFetchingNextPage} onClick={() => void q.fetchNextPage()}>
+              <Button
+                variant="secondary"
+                disabled={q.isFetchingNextPage}
+                onClick={() => void q.fetchNextPage()}
+              >
                 {t('loadMore')}
               </Button>
             </div>

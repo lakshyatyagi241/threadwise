@@ -100,9 +100,14 @@ describe('what the browser does next (TW-PAYGW-011)', () => {
   const base = { orderNumber: 'WSN-1', orderId: '00000000-0000-4000-8000-000000000009' };
   it('redirect navigates, paid is done, a Razorpay action becomes widget options', () => {
     expect(
-      nextStep({ ...base, next: { type: 'redirect', url: 'https://pay.test/x' } } as PlaceOrderResponse),
+      nextStep({
+        ...base,
+        next: { type: 'redirect', url: 'https://pay.test/x' },
+      } as PlaceOrderResponse),
     ).toEqual({ kind: 'navigate', url: 'https://pay.test/x' });
-    expect(nextStep({ ...base, next: { type: 'paid' } } as PlaceOrderResponse)).toEqual({ kind: 'done' });
+    expect(nextStep({ ...base, next: { type: 'paid' } } as PlaceOrderResponse)).toEqual({
+      kind: 'done',
+    });
     const step = nextStep({
       ...base,
       next: {

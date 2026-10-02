@@ -41,7 +41,10 @@ function postForm(url: string, fields: Record<string, string>): void {
 export const cancelledUrl = (returnUrl: string): string =>
   `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}cancelled=1`;
 
-export async function openRazorpay(options: Record<string, unknown>, returnUrl: string): Promise<void> {
+export async function openRazorpay(
+  options: Record<string, unknown>,
+  returnUrl: string,
+): Promise<void> {
   const Razorpay = await loadScript();
   new Razorpay({
     ...options,
