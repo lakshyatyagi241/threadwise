@@ -50,3 +50,4 @@ export * from './sales-docs';
 export * from './invoicing';
 export * from './appointments';
 export * from './notifications-activity-audit';
+export * from './chatbot-widget';

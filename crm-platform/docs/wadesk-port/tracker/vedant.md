@@ -575,36 +575,36 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-WGT-001 | todo |  |  |
-| WD-WGT-002 | todo |  |  |
-| WD-WGT-003 | todo |  |  |
-| WD-WGT-004 | todo |  |  |
-| WD-WGT-005 | todo |  |  |
-| WD-WGT-006 | todo |  |  |
-| WD-WGT-007 | todo |  |  |
-| WD-WGT-008 | todo |  |  |
-| WD-WGT-009 | todo |  |  |
-| WD-WGT-010 | todo |  |  |
-| WD-WGT-011 | todo |  |  |
-| WD-WGT-012 | todo |  |  |
-| WD-WGT-013 | todo |  |  |
-| WD-WGT-014 | todo |  |  |
-| WD-WGT-015 | todo |  |  |
-| WD-WGT-016 | todo |  |  |
-| WD-WGT-017 | todo |  |  |
-| WD-WGT-018 | todo |  |  |
-| WD-WGT-019 | todo |  |  |
-| WD-WGT-020 | todo |  |  |
-| WD-WGT-021 | todo |  |  |
-| WD-WGT-022 | todo |  |  |
-| WD-WGT-023 | todo |  |  |
-| WD-WGT-024 | todo |  |  |
-| WD-WGT-025 | todo |  |  |
-| WD-WGT-026 | todo |  |  |
-| WD-WGT-027 | todo |  |  |
-| WD-WGT-028 | todo |  |  |
-| WD-WGT-029 | todo |  |  |
-| WD-WGT-030 | todo |  |  |
+| WD-WGT-001 | done |  |  |
+| WD-WGT-002 | done |  |  |
+| WD-WGT-003 | done |  |  |
+| WD-WGT-004 | done |  |  |
+| WD-WGT-005 | done |  |  |
+| WD-WGT-006 | done |  |  |
+| WD-WGT-007 | done |  |  |
+| WD-WGT-008 | done |  |  |
+| WD-WGT-009 | done |  |  |
+| WD-WGT-010 | done |  |  |
+| WD-WGT-011 | done |  |  |
+| WD-WGT-012 | done |  |  |
+| WD-WGT-013 | done |  |  |
+| WD-WGT-014 | done |  |  |
+| WD-WGT-015 | done |  |  |
+| WD-WGT-016 | done |  |  |
+| WD-WGT-017 | done |  |  |
+| WD-WGT-018 | done |  |  |
+| WD-WGT-019 | blocked |  | Widget side done (thread, hand-off, polling contract tested); inbox screens, reply path and mobile list belong to TIB1/MOB |
+| WD-WGT-020 | done |  |  |
+| WD-WGT-021 | backend-done |  | allowedDomains API and CORS enforcement done; the builder has no control for it, as in WaDesk |
+| WD-WGT-022 | done |  |  |
+| WD-WGT-023 | done |  |  |
+| WD-WGT-024 | done |  |  |
+| WD-WGT-025 | done |  |  |
+| WD-WGT-026 | done |  |  |
+| WD-WGT-027 | blocked |  | RBAC keys done; access_chatbot_widgets is not in the PLAN catalogue (open gate shim); widget limit unenforced as in WaDesk |
+| WD-WGT-028 | frontend-done |  | sidebar item done; More tile, quick access and command palette belong to the shell |
+| WD-WGT-029 | done |  |  |
+| WD-WGT-030 | wontfix |  | greenfield port: no legacy widget messages to backfill |
 
 ## team-chat (tchat)
 
