@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { TchatMessageResponse } from '@crm/contracts';
 import { parseBody, plainBody } from './body';
 import { errorKind } from './errors';
 import { canEditNow, formatStamp, initials, nearBottom } from './format';
@@ -12,7 +13,8 @@ import {
 import { EMPTY_THREAD, groupByDay, mergeById, threadReducer, type Pending } from './thread';
 
 const ID = '3f2b8c1e-8c1a-4a55-9d3e-1b2c3d4e5f60';
-const msg = (id: string, at = '2026-01-01T10:00:00Z') => ({ id, createdAt: at }) as never;
+const msg = (id: string, at = '2026-01-01T10:00:00Z') =>
+  ({ id, createdAt: at }) as unknown as TchatMessageResponse;
 const pending = (key: string): Pending => ({
   key,
   body: 'hi',
@@ -80,9 +82,9 @@ describe('format', () => {
 describe('thread', () => {
   it('merges by id keeping order, replacing known copies', () => {
     const a = msg('1');
-    const out = mergeById([a, msg('2')], [{ ...a, body: 'x' } as never, msg('3')]);
+    const out = mergeById([a, msg('2')], [{ ...a, body: 'x' }, msg('3')]);
     expect(out.map((m) => m.id)).toEqual(['1', '2', '3']);
-    expect((out[0] as never as { body: string }).body).toBe('x');
+    expect(out[0]!.body).toBe('x');
   });
   it('a send becomes confirmed once; a failure keeps the draft for retry', () => {
     let s = threadReducer(
