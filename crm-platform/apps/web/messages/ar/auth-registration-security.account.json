@@ -458,7 +458,8 @@
             "woocommerce": "WooCommerce",
             "shopify": "Shopify",
             "calling": "مكالمات واتساب",
-            "remove_branding": "العلامة البيضاء"
+            "remove_branding": "العلامة البيضاء",
+            "sales_pipeline": "مسار المبيعات"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

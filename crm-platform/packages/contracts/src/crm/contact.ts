@@ -37,6 +37,9 @@ export const contactResponseSchema = z.object({
   /** Meaningful only when status is a "closed lost" value. Options via status_options. */
   lostReason: z.string().nullable(),
   otherLostReason: z.string().nullable(),
+  /** Stamped when the contact enters a won / lost lifecycle stage (Contact stages screen), cleared when it leaves. */
+  wonAt: z.string().datetime().nullable(),
+  lostAt: z.string().datetime().nullable(),
   leadScore: z.number().int().nullable(),
   /** Values are org-configurable via status_options, not a fixed enum here. */
   whatsappSubscriptionStatus: z.string().nullable(),
@@ -180,6 +183,9 @@ export const bulkUpdateContactsSchema = z.object({
   values: z.object({
     ownerId: uuidSchema.nullish(),
     lifecycleStage: z.string().min(1).nullish(),
+    /** Needed when `lifecycleStage` is a lost stage (the same reason is recorded on every contact moved). */
+    lostReason: z.string().max(255).nullish(),
+    otherLostReason: z.string().max(500).nullish(),
     status: z.string().max(64).nullish(),
     customFields: z.record(z.unknown()).optional(),
   }),

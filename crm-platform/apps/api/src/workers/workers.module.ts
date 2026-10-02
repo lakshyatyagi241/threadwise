@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
-import { ContactImportWorkerModule, TasksWorkerModule } from '../modules/crm';
+import {
+  ContactImportWorkerModule,
+  InvoicingWorkerModule,
+  SalesDocsWorkerModule,
+  TasksWorkerModule,
+} from '../modules/crm';
+import { NotificationsWorkerModule } from '../modules/notifications';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -18,7 +24,15 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
  */
 @Module({
   // AuthModule: the OTP template poll reuses the sender registry and the Meta template client.
-  imports: [ScheduleModule.forRoot(), AuthModule, ContactImportWorkerModule, TasksWorkerModule],
+  imports: [
+    ScheduleModule.forRoot(),
+    AuthModule,
+    ContactImportWorkerModule,
+    TasksWorkerModule,
+    SalesDocsWorkerModule,
+    InvoicingWorkerModule,
+    NotificationsWorkerModule,
+  ],
   providers: [
     OutboxDrainService,
     PartitionMaintenanceService,

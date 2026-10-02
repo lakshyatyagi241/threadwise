@@ -1315,6 +1315,7 @@
             "users": "Team seats",
             "contacts": "Contacts",
             "tags": "Tags",
+            "pipelines": "Sales pipelines",
             "templates": "Message templates",
             "flows": "Flows",
             "autoreplies": "Keyword auto-replies"
@@ -1332,7 +1333,8 @@
             "woocommerce": "WooCommerce",
             "shopify": "Shopify",
             "analytics": "Analytics",
-            "remove_branding": "White-label (removes platform branding)"
+            "remove_branding": "White-label (removes platform branding)",
+            "sales_pipeline": "Sales pipeline (deals and tasks)"
           },
           "problems": {
             "required": "This field is required.",

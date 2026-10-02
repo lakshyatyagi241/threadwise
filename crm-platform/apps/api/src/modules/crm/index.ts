@@ -97,5 +97,25 @@ export type { DealRow } from './deals';
 export { TasksService, TasksRepository, toTaskResponse } from './tasks';
 export type { TaskRow } from './tasks';
 export { TasksWorkerModule } from './tasks/tasks-worker.module';
+export { SalesDocsService, SalesDocsRepository, SALES_DOC_INVOICE_PORT } from './sales-docs';
+export type {
+  InvoiceDraftLine,
+  InvoiceDraftResult,
+  InvoiceDraftSource,
+  SalesDocInvoicePort,
+  SalesDocRow,
+} from './sales-docs';
+export { SalesDocsWorkerModule } from './sales-docs/sales-docs-worker.module';
+export {
+  InvoicesService,
+  InvoicesRepository,
+  PaymentsService,
+  TaxRatesService,
+  InvoiceSettingsService,
+  InvoiceConversionService,
+  toInvoiceSummary,
+} from './invoicing';
+export type { InvoiceRow } from './invoicing';
+export { InvoicingWorkerModule } from './invoicing/invoicing-worker.module';
 export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
 export type { PipelineRow, StageRow } from './pipelines';

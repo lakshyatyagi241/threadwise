@@ -16,6 +16,11 @@ export type ErrorKind =
   | 'importFile'
   | 'tooLarge'
   | 'mergeScope'
+  | 'requiredProperty'
+  | 'lostReason'
+  | 'stageFlag'
+  | 'statusStage'
+  | 'stageScope'
   | 'systemField'
   | 'validation'
   | 'unavailable'
@@ -54,6 +59,16 @@ export function errorKind(error: unknown): ErrorKind {
       return 'tooLarge';
     case ERROR_CODES.CON_MERGE_SCOPE_REQUIRED:
       return 'mergeScope';
+    case ERROR_CODES.CON_REQUIRED_PROPERTY_MISSING:
+      return 'requiredProperty';
+    case ERROR_CODES.CON_LOST_REASON_REQUIRED:
+      return 'lostReason';
+    case ERROR_CODES.STATUS_OPTION_FLAG_INVALID:
+      return 'stageFlag';
+    case ERROR_CODES.CON_STATUS_STAGE_MISMATCH:
+      return 'statusStage';
+    case ERROR_CODES.STATUS_OPTION_STAGE_INVALID:
+      return 'stageScope';
     case ERROR_CODES.VALIDATION_FAILED:
       return 'validation';
     case ERROR_CODES.RATE_LIMITED:

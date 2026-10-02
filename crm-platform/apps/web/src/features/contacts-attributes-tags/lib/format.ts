@@ -35,7 +35,11 @@ export function formatDateTime(
       const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
       return `${get('day')} ${get('month')} ${get('year')}, ${get('hour')}:${get('minute')} ${get('dayPeriod')}`;
     }
-    return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(d);
+    return new Intl.DateTimeFormat(locale, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone,
+    }).format(d);
   } catch {
     return '';
   }

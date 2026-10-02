@@ -101,9 +101,7 @@ function PropertyForm({
   const editing = field !== undefined;
 
   const [draft, setDraft] = useState<PropertyDraft>(() =>
-    field
-      ? draftFromField(field, dependencies)
-      : emptyDraft(sectionId ?? sections[0]?.id ?? ''),
+    field ? draftFromField(field, dependencies) : emptyDraft(sectionId ?? sections[0]?.id ?? ''),
   );
   const [keyTouched, setKeyTouched] = useState(false);
   const [newOption, setNewOption] = useState('');
@@ -289,7 +287,11 @@ function PropertyForm({
         </Field>
       </div>
 
-      <Field label={t('modal.description')} htmlFor={id('description')} hint={t('modal.descriptionHint')}>
+      <Field
+        label={t('modal.description')}
+        htmlFor={id('description')}
+        hint={t('modal.descriptionHint')}
+      >
         <Textarea
           id={id('description')}
           rows={2}
@@ -319,7 +321,11 @@ function PropertyForm({
                       }))
                     }
                   />
-                  <code dir="ltr" className="hidden w-28 shrink-0 truncate font-mono text-xs text-muted-foreground sm:block" title={o.value}>
+                  <code
+                    dir="ltr"
+                    className="hidden w-28 shrink-0 truncate font-mono text-xs text-muted-foreground sm:block"
+                    title={o.value}
+                  >
                     {o.value}
                   </code>
                   <SmallButton
@@ -339,7 +345,12 @@ function PropertyForm({
                   <SmallButton
                     label={t('modal.optionRemove', { n: i + 1 })}
                     danger
-                    onClick={() => set('options', draft.options.filter((_, at) => at !== i))}
+                    onClick={() =>
+                      set(
+                        'options',
+                        draft.options.filter((_, at) => at !== i),
+                      )
+                    }
                   >
                     <TrashIcon className="size-3.5" />
                   </SmallButton>
@@ -413,16 +424,22 @@ function PropertyForm({
         {draft.conditions.map((c, i) => {
           const parent = others.find((f) => f.id === c.fieldId);
           const choices = parent && isOptionType(parent.fieldType) ? (parent.options ?? []) : null;
-          const yesNo = parent && (parent.fieldType === 'checkbox' || parent.fieldType === 'boolean');
+          const yesNo =
+            parent && (parent.fieldType === 'checkbox' || parent.fieldType === 'boolean');
           return (
-            <div key={c.id ?? `new-${i}`} className="flex flex-wrap items-center gap-2 rounded-md border border-border p-2">
+            <div
+              key={c.id ?? `new-${i}`}
+              className="flex flex-wrap items-center gap-2 rounded-md border border-border p-2"
+            >
               <span className="text-xs text-muted-foreground">{t('modal.when')}</span>
               <Select
                 aria-label={t('modal.conditionField')}
                 className="w-auto min-w-40 flex-1"
                 value={c.fieldId}
                 disabled={Boolean(c.id)}
-                onChange={(e) => setCondition(i, { fieldId: e.target.value, optionId: null, value: '' })}
+                onChange={(e) =>
+                  setCondition(i, { fieldId: e.target.value, optionId: null, value: '' })
+                }
               >
                 <option value="">{t('modal.conditionPick')}</option>
                 {others.map((f) => (
@@ -472,7 +489,12 @@ function PropertyForm({
               <SmallButton
                 label={t('modal.conditionRemove')}
                 danger
-                onClick={() => set('conditions', draft.conditions.filter((_, at) => at !== i))}
+                onClick={() =>
+                  set(
+                    'conditions',
+                    draft.conditions.filter((_, at) => at !== i),
+                  )
+                }
               >
                 <TrashIcon className="size-3.5" />
               </SmallButton>

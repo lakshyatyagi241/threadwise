@@ -48,10 +48,16 @@ export function ContactsPagination({
         {loading && <Spinner label={t('loading')} />}
       </div>
 
-      <nav aria-label={t('pagination')} className="flex flex-wrap items-center justify-center gap-1">
+      <nav
+        aria-label={t('pagination')}
+        className="flex flex-wrap items-center justify-center gap-1"
+      >
         <button
           type="button"
-          className={cn(textBtn, first ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted')}
+          className={cn(
+            textBtn,
+            first ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted',
+          )}
           disabled={first}
           onClick={() => onPage(page - 1)}
           aria-label={t('prevPage')}
@@ -83,7 +89,10 @@ export function ContactsPagination({
         )}
         <button
           type="button"
-          className={cn(textBtn, last ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted')}
+          className={cn(
+            textBtn,
+            last ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted',
+          )}
           disabled={last}
           onClick={() => onPage(page + 1)}
           aria-label={t('nextPage')}

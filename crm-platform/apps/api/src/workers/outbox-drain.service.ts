@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../infra/db/database.service';
+import { OutboxSubscriberRegistry } from '../kernel/outbox/outbox-subscribers';
 
 interface OutboxRow {
   id: string;
@@ -35,7 +36,10 @@ export class OutboxDrainService {
   private readonly logger = new Logger(OutboxDrainService.name);
   private running = false;
 
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly subscribers: OutboxSubscriberRegistry,
+  ) {}
 
   @Interval(2_000)
   async drain(): Promise<void> {
@@ -117,15 +121,22 @@ export class OutboxDrainService {
   /**
    * Fan-out target.
    *
-   * Today this only logs. It becomes the automation trigger (workflows),
-   * the counter updater, the realtime emitter and the ClickHouse feed — each
-   * added as an explicit subscriber, so a failure in one does not silently
-   * swallow the event for the others.
+   * Subscribers register themselves with the OutboxSubscriberRegistry (task notifications today; the automation
+   * trigger, counter updater, realtime emitter and ClickHouse feed follow the same way), and the registry runs
+   * each matching one on its own so a failure in one does not swallow the event for the others.
    */
   private async dispatch(row: OutboxRow): Promise<void> {
     this.logger.debug(
       { eventType: row.event_type, orgId: row.org_id, aggregateId: row.aggregate_id },
       'outbox event dispatched',
     );
+    await this.subscribers.dispatch({
+      id: String(row.id),
+      orgId: Number(row.org_id),
+      aggregateModule: row.aggregate_module,
+      aggregateId: String(row.aggregate_id),
+      eventType: row.event_type,
+      payload: row.payload,
+    });
   }
 }

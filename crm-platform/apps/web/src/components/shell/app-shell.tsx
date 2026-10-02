@@ -27,6 +27,8 @@ interface Props {
   wallet?: WalletChipData;
   /** Unread notifications for the bell; 0 or absent shows no count. */
   notificationCount?: number;
+  /** The live notification bell (see features/notifications-activity-audit); when given it replaces the static one. */
+  bell?: ReactNode;
   children: ReactNode;
 }
 
@@ -48,6 +50,7 @@ export function AppShell({
   announcement,
   wallet,
   notificationCount,
+  bell: liveBell,
   children,
 }: Props) {
   const pathname = usePathname();
@@ -91,10 +94,12 @@ export function AppShell({
           wallet={wallet}
           notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
           notificationCount={notificationCount}
+          bell={liveBell}
           settingsHref={gear && !gear.comingSoon ? gear.href : undefined}
         />
         {banners}
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page. */}
+        <main className="relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

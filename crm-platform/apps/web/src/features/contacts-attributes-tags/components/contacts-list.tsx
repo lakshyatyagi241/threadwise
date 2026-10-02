@@ -19,14 +19,7 @@ import {
   STICKY_SELECT,
   STICKY_SELECT_HEAD,
 } from '../lib/sticky';
-import {
-  AttributeChip,
-  ContactAvatar,
-  GroupChip,
-  MoreChip,
-  OutlineTag,
-  TagChip,
-} from './chips';
+import { AttributeChip, ContactAvatar, GroupChip, MoreChip, OutlineTag, TagChip } from './chips';
 import {
   CalendarIcon,
   EyeIcon,
@@ -58,6 +51,8 @@ export interface ListHandlers {
   onStageChange?: (id: string, stage: string) => void;
   /** Id of the contact whose stage is being saved. */
   stageBusyId?: string | null;
+  /** What moving a contact holding `status` to `stage` does to its status ("Status becomes X"); null = nothing. */
+  stageStatusHint?: (status: string, stage: string) => string | null;
   statusLabel: (value: string) => string;
   onToggle: (id: string) => void;
   onView: (id: string) => void;
@@ -169,7 +164,13 @@ function QuickLink({
 }) {
   if (!href) {
     return (
-      <button type="button" disabled title={missing} aria-label={missing} className={cn(quickBtn, quickOff)}>
+      <button
+        type="button"
+        disabled
+        title={missing}
+        aria-label={missing}
+        className={cn(quickBtn, quickOff)}
+      >
         {children}
       </button>
     );
@@ -277,6 +278,11 @@ function StatusCell({ row, h }: { row: RowView; h: ListHandlers }) {
           name={row.name || t('unnamed')}
           busy={h.stageBusyId === row.id}
           onChange={h.onStageChange ? (v) => h.onStageChange?.(row.id, v) : undefined}
+          statusHint={
+            h.stageStatusHint
+              ? (stage) => h.stageStatusHint?.(row.status, stage) ?? null
+              : undefined
+          }
         />
       )}
       {row.status && (
@@ -480,7 +486,9 @@ export function ContactsTable({
               >
                 <span className="flex min-w-0 items-center gap-1.5">
                   <HeaderIcon id={c.id} />
-                  <span className="truncate">{'key' in c.label ? t(c.label.key) : c.label.text}</span>
+                  <span className="truncate">
+                    {'key' in c.label ? t(c.label.key) : c.label.text}
+                  </span>
                 </span>
               </th>
             ))}
@@ -581,7 +589,9 @@ export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers)
             )}
             <div className="text-xs text-muted-foreground">
               {t('colCreatedOn')}:{' '}
-              <span className="tabular-nums">{formatDateTime(row.createdAt, locale, timeZone) || '-'}</span>
+              <span className="tabular-nums">
+                {formatDateTime(row.createdAt, locale, timeZone) || '-'}
+              </span>
             </div>
             {row.memo && <p className="line-clamp-2 text-xs text-muted-foreground">{row.memo}</p>}
           </li>

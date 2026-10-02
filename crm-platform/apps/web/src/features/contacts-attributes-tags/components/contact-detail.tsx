@@ -8,9 +8,17 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { LinkedSalesDocs } from '@/features/sales-docs';
+import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
 import { useCursorList } from '@/lib/api/use-cursor-list';
-import { deleteContact, invalidateContacts, KEYS, updateContact, useContact } from '../api/contacts';
+import {
+  deleteContact,
+  invalidateContacts,
+  KEYS,
+  updateContact,
+  useContact,
+} from '../api/contacts';
 import { useStatusOptions } from '../api/attributes';
 import { useContactFields, useFieldSections } from '../api/properties';
 import { useContactTags } from '../api/tags';
@@ -24,11 +32,14 @@ import {
 } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import { detailGroups } from '../lib/property-model';
-import { stageChoices } from '../lib/option-sets';
+import { stageChoices, statusChoices } from '../lib/option-sets';
 import { ContactAvatar, GroupChip, TagPill } from './chips';
 import { StageMenu } from './stage-menu';
 import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
+import { LostReasonDialog, type LostPrompt } from './lost-reason';
+import { isLostStage } from '../lib/stage-flow';
+import { statusAfterMove, statusNotice } from '../lib/status-scope';
 import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
 
 /**
@@ -50,22 +61,52 @@ export function ContactDetail({ id }: { id: string }) {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const ts = useTranslations('contacts-attributes-tags.stageMenu');
+  const tForm = useTranslations('contacts-attributes-tags.form');
+  /** A status value as the workspace names it (its configured label, else the platform's). */
+  const statusLabelOf = (v: string) =>
+    statusChoices(statusOptions.data, (x) => tForm(`statuses.${x}`)).find((c) => c.value === v)
+      ?.label ?? titleCaseKey(v);
+
+  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
 
   const changeStage = useMutation({
-    mutationFn: (v: { stage: string; rowVersion: number }) =>
-      updateContact(id, { lifecycleStage: v.stage, rowVersion: v.rowVersion }),
-    onSuccess: async (saved) => {
-      await Promise.all([invalidateContacts(qc), qc.invalidateQueries({ queryKey: KEYS.contact(id) })]);
+    mutationFn: (v: {
+      stage: string;
+      rowVersion: number;
+      /** The status the contact holds now, to tell what the stage move did to it. */
+      statusBefore: string | null;
+      reason?: { lostReason?: string | null; otherLostReason?: string | null };
+    }) => updateContact(id, { lifecycleStage: v.stage, ...v.reason, rowVersion: v.rowVersion }),
+    onSuccess: async (saved, v) => {
+      setLostPrompt(null);
+      await Promise.all([
+        invalidateContacts(qc),
+        qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+      ]);
+      const stageName =
+        stageChoices(statusOptions.data).find((s) => s.value === saved.lifecycleStage)?.label ??
+        saved.lifecycleStage ??
+        '';
+      // The API keeps the status valid for the stage: say what happened to it, from its answer.
+      const notice = statusNotice(v.statusBefore, saved.status);
       toast(
-        ts('changed', {
-          stage: stageChoices(statusOptions.data).find((s) => s.value === saved.lifecycleStage)?.label ?? saved.lifecycleStage ?? '',
-        }),
+        notice.kind === 'none'
+          ? ts('changed', { stage: stageName })
+          : notice.kind === 'cleared'
+            ? ts('changedStatusCleared', { stage: stageName })
+            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
+                stage: stageName,
+                status: statusLabelOf(notice.status),
+              }),
         'success',
       );
     },
     onError: async (e) => {
       const kind = errorKind(e);
-      toast(ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'), 'danger');
+      toast(
+        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
+        'danger',
+      );
       if (kind === 'conflict') await qc.invalidateQueries({ queryKey: KEYS.contact(id) });
     },
   });
@@ -82,7 +123,6 @@ export function ContactDetail({ id }: { id: string }) {
       toast(t('deleteFailed'), 'danger');
     },
   });
-
 
   const back = (
     <Link
@@ -156,14 +196,40 @@ export function ContactDetail({ id }: { id: string }) {
                   choices={stageChoices(statusOptions.data, c.lifecycleStage)}
                   name={name}
                   busy={changeStage.isPending}
+                  statusHint={(stage) => {
+                    const move = statusAfterMove(statusOptions.data, c.status, stage);
+                    if (!move.changed) return null;
+                    return move.status === null
+                      ? ts('willClear')
+                      : ts('willReset', { status: statusLabelOf(move.status) });
+                  }}
                   onChange={
                     canUpdate
-                      ? (stage) => changeStage.mutate({ stage, rowVersion: c.rowVersion })
+                      ? (stage) => {
+                          const choices = stageChoices(
+                            statusOptions.data,
+                            c.lifecycleStage ?? undefined,
+                          );
+                          // A lost stage asks why first; nothing is saved until the dialog gives a reason.
+                          if (isLostStage(choices, stage)) {
+                            setLostPrompt({
+                              contactId: c.id,
+                              contactName: name,
+                              stageValue: stage,
+                              stageLabel: choices.find((x) => x.value === stage)?.label ?? stage,
+                            });
+                          } else
+                            changeStage.mutate({
+                              stage,
+                              rowVersion: c.rowVersion,
+                              statusBefore: c.status,
+                            });
+                        }
                       : undefined
                   }
                 />
               )}
-              {c.status && <Badge tone="success">{titleCaseKey(c.status)}</Badge>}
+              {c.status && <Badge tone="success">{statusLabelOf(c.status)}</Badge>}
               {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
               {(tags.data ?? []).map((tag) => (
                 <TagPill key={tag.id} name={tag.name} color={tag.color} />
@@ -202,6 +268,8 @@ export function ContactDetail({ id }: { id: string }) {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-6">
           <LinkedTasks kind="contact" id={id} />
+          <LinkedInvoices kind="contact" id={id} />
+          <LinkedSalesDocs kind="contact" id={id} />
           <Timeline id={id} />
         </div>
         <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">
@@ -227,7 +295,10 @@ export function ContactDetail({ id }: { id: string }) {
           {customGroups.map((g) => (
             <div key={g.title ?? 'other'} className="space-y-3 border-t border-border pt-3">
               {g.title && (
-                <h3 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground" dir="auto">
+                <h3
+                  className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
+                  dir="auto"
+                >
                   {g.title}
                 </h3>
               )}
@@ -244,6 +315,19 @@ export function ContactDetail({ id }: { id: string }) {
       </div>
 
       <ContactFormModal open={editing} contact={c} onClose={() => setEditing(false)} />
+      <LostReasonDialog
+        prompt={lostPrompt}
+        busy={changeStage.isPending}
+        onConfirm={(p, reason) =>
+          changeStage.mutate({
+            stage: p.stageValue,
+            rowVersion: c.rowVersion,
+            reason,
+            statusBefore: c.status,
+          })
+        }
+        onClose={() => setLostPrompt(null)}
+      />
       <ConfirmDialog
         open={deleting}
         tone="danger"

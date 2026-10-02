@@ -21,6 +21,7 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'users', group: 'workspace' },
   { key: 'contacts', group: 'workspace' },
   { key: 'tags', group: 'workspace' },
+  { key: 'pipelines', group: 'workspace' },
   { key: 'templates', group: 'content' },
   { key: 'flows', group: 'content' },
   { key: 'autoreplies', group: 'content' },
@@ -45,6 +46,8 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'shopify', group: 'integrations', default: true },
   { key: 'analytics', group: 'advanced', default: false },
   { key: 'remove_branding', group: 'advanced', default: false },
+  // The deals + tasks + pipelines area (WD-DEAL-001). Default true: every plan row that predates the key keeps the area it had.
+  { key: 'sales_pipeline', group: 'advanced', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -63,6 +66,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'shopify',
   'calling',
   'remove_branding',
+  'sales_pipeline',
 ];
 export const PLAN_CHIP_MAX = 3;
 
