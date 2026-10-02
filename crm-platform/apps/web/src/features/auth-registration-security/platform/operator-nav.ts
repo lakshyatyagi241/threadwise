@@ -50,6 +50,13 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  // Platform support desk (SUPP): its own message file, so the keys live outside this domain's namespace.
+  {
+    id: 'support-inbox',
+    href: '/admin/support',
+    labelKey: 'platform-support-desk.nav.inbox',
+    groupKey: 'platform-support-desk.nav.group',
+  },
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */
