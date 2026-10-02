@@ -91,7 +91,7 @@ export class AiUsageController {
   }
 }
 
-/** The model picker the AI editors read (TW-AIADM-015). Any signed-in user of the workspace. */
+/** The model picker the AI editors read (TW-AIADM-015). `aiadm.models.read`, held by every preset. */
 @ApiTags('ai')
 @ActorKinds('user')
 @Controller({ path: 'ai/models', version: '2' })
@@ -99,6 +99,7 @@ export class AiModelsController {
   constructor(private readonly models: AiModelsService) {}
 
   @Get()
+  @RequirePermission('aiadm.models.read')
   @ApiOperation({ summary: 'Text models available to this workspace (platform keys plus its own)' })
   async list() {
     return this.models.list();

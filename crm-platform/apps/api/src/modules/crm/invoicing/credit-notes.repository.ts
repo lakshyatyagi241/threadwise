@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { CreditNoteReason, CreditNoteSettlement, CreditNoteStatus, ListCreditNotesQuery, RecordScope } from '@crm/contracts';
+import type {
+  CreditNoteReason,
+  CreditNoteSettlement,
+  CreditNoteStatus,
+  ListCreditNotesQuery,
+  RecordScope,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../../common/pagination/cursor';
 
@@ -26,7 +32,14 @@ export interface CreditNoteRow {
   taxAddedMinor: bigint;
   totalMinor: bigint;
   refundedMinor: bigint;
-  taxSummary: Array<{ name: string; type: string | null; ratePercent: string; inclusive: boolean; baseMinor: string; taxMinor: string }> | null;
+  taxSummary: Array<{
+    name: string;
+    type: string | null;
+    ratePercent: string;
+    inclusive: boolean;
+    baseMinor: string;
+    taxMinor: string;
+  }> | null;
   issueDate: string | null;
   issuedAt: Date | null;
   voidedAt: Date | null;
@@ -125,7 +138,11 @@ const toRow = (r: Raw): CreditNoteRow => ({
 const escapeLike = (v: string) => v.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /** A credit note's people are its invoice's: owned or created by the caller (or a teammate). */
-export function creditNoteScopeCondition(orgId: number, scope: RecordScope, actorUserId: number | null): SQL | undefined {
+export function creditNoteScopeCondition(
+  orgId: number,
+  scope: RecordScope,
+  actorUserId: number | null,
+): SQL | undefined {
   if (scope === 'all') return undefined;
   if (!actorUserId) return sql`false`;
   const own = sql`(i.owner_id = ${actorUserId} OR i.user_id = ${actorUserId})`;
@@ -138,22 +155,40 @@ export function creditNoteScopeCondition(orgId: number, scope: RecordScope, acto
 
 @Injectable()
 export class CreditNotesRepository {
-  async list(tx: Tx, orgId: number, query: ListCreditNotesQuery, scope: SQL | undefined): Promise<CreditNoteRow[]> {
+  async list(
+    tx: Tx,
+    orgId: number,
+    query: ListCreditNotesQuery,
+    scope: SQL | undefined,
+  ): Promise<CreditNoteRow[]> {
     const conds: SQL[] = [sql`c.org_id = ${orgId}`];
     if (scope) conds.push(scope);
     if (query.status?.length)
-      conds.push(sql`c.status IN (${sql.join(query.status.map((x) => sql`${x}`), sql`, `)})`);
+      conds.push(
+        sql`c.status IN (${sql.join(
+          query.status.map((x) => sql`${x}`),
+          sql`, `,
+        )})`,
+      );
     if (query.invoiceId)
-      conds.push(sql`c.invoice_id = (SELECT x.id FROM invoices x WHERE x.org_id = ${orgId} AND x.uuid = ${query.invoiceId}::uuid)`);
+      conds.push(
+        sql`c.invoice_id = (SELECT x.id FROM invoices x WHERE x.org_id = ${orgId} AND x.uuid = ${query.invoiceId}::uuid)`,
+      );
     if (query.contactId)
-      conds.push(sql`i.contact_id = (SELECT x.id FROM contacts x WHERE x.org_id = ${orgId} AND x.uuid = ${query.contactId}::uuid)`);
+      conds.push(
+        sql`i.contact_id = (SELECT x.id FROM contacts x WHERE x.org_id = ${orgId} AND x.uuid = ${query.contactId}::uuid)`,
+      );
     if (query.q) {
       const like = `%${escapeLike(query.q)}%`;
-      conds.push(sql`(c.credit_number ILIKE ${like} OR i.invoice_number ILIKE ${like} OR i.buyer_name ILIKE ${like})`);
+      conds.push(
+        sql`(c.credit_number ILIKE ${like} OR i.invoice_number ILIKE ${like} OR i.buyer_name ILIKE ${like})`,
+      );
     }
     if (query.cursor) {
       const cur = decodeCursor(query.cursor);
-      conds.push(sql`(c.created_at, c.id) < (${cur.createdAtIso ?? cur.createdAt.toISOString()}::timestamptz, ${cur.id})`);
+      conds.push(
+        sql`(c.created_at, c.id) < (${cur.createdAtIso ?? cur.createdAt.toISOString()}::timestamptz, ${cur.id})`,
+      );
     }
     const res = await tx.execute(sql`
       ${SELECT} WHERE ${sql.join(conds, sql` AND `)} ORDER BY c.created_at DESC, c.id DESC LIMIT ${query.limit + 1}
@@ -161,10 +196,19 @@ export class CreditNotesRepository {
     return (res.rows as Raw[]).map(toRow);
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string, forUpdate = false): Promise<CreditNoteRow | undefined> {
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    forUpdate = false,
+  ): Promise<CreditNoteRow | undefined> {
     if (forUpdate)
-      await tx.execute(sql`SELECT 1 FROM credit_notes WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
-    const res = await tx.execute(sql`${SELECT} WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid`);
+      await tx.execute(
+        sql`SELECT 1 FROM credit_notes WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`,
+      );
+    const res = await tx.execute(
+      sql`${SELECT} WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid`,
+    );
     const r = (res.rows as Raw[])[0];
     return r ? toRow(r) : undefined;
   }
@@ -215,12 +259,19 @@ export class CreditNotesRepository {
         ${exceptCreditNoteId !== undefined ? sql`AND c.id <> ${exceptCreditNoteId}` : sql``}
       GROUP BY ci.invoice_item_id
     `);
-    return new Map((res.rows as Raw[]).map((r) => [Number(r.invoice_item_id), { qty: r.qty as string, amountMinor: big(r.amount) }]));
+    return new Map(
+      (res.rows as Raw[]).map((r) => [
+        Number(r.invoice_item_id),
+        { qty: r.qty as string, amountMinor: big(r.amount) },
+      ]),
+    );
   }
 
   /** True when an issued credit note already exists against the invoice (shipping is credited with the first one only). */
   async hasIssued(tx: Tx, orgId: number, invoiceId: number): Promise<boolean> {
-    const res = await tx.execute(sql`SELECT 1 FROM credit_notes WHERE org_id = ${orgId} AND invoice_id = ${invoiceId} AND status = 'issued' LIMIT 1`);
+    const res = await tx.execute(
+      sql`SELECT 1 FROM credit_notes WHERE org_id = ${orgId} AND invoice_id = ${invoiceId} AND status = 'issued' LIMIT 1`,
+    );
     return res.rows.length > 0;
   }
 
@@ -276,11 +327,15 @@ export class CreditNotesRepository {
     if (v.note !== undefined) sets.push(sql`note = ${v.note}`);
     if (v.settlement !== undefined) sets.push(sql`settlement = ${v.settlement}`);
     if (v.issueDate !== undefined) sets.push(sql`issue_date = ${v.issueDate}::date`);
-    if (v.subtotalMinor !== undefined) sets.push(sql`subtotal_minor = ${v.subtotalMinor.toString()}::bigint`);
+    if (v.subtotalMinor !== undefined)
+      sets.push(sql`subtotal_minor = ${v.subtotalMinor.toString()}::bigint`);
     if (v.taxMinor !== undefined) sets.push(sql`tax_minor = ${v.taxMinor.toString()}::bigint`);
-    if (v.taxAddedMinor !== undefined) sets.push(sql`tax_added_minor = ${v.taxAddedMinor.toString()}::bigint`);
-    if (v.totalMinor !== undefined) sets.push(sql`total_minor = ${v.totalMinor.toString()}::bigint`);
-    if (v.taxSummary !== undefined) sets.push(sql`tax_summary = ${JSON.stringify(v.taxSummary)}::jsonb`);
+    if (v.taxAddedMinor !== undefined)
+      sets.push(sql`tax_added_minor = ${v.taxAddedMinor.toString()}::bigint`);
+    if (v.totalMinor !== undefined)
+      sets.push(sql`total_minor = ${v.totalMinor.toString()}::bigint`);
+    if (v.taxSummary !== undefined)
+      sets.push(sql`tax_summary = ${JSON.stringify(v.taxSummary)}::jsonb`);
     if (sets.length === 0) sets.push(sql`updated_at = now()`);
     const res = await tx.execute(sql`
       UPDATE credit_notes SET ${sql.join(sets, sql`, `)}
@@ -289,8 +344,15 @@ export class CreditNotesRepository {
     return res.rows.length > 0;
   }
 
-  async replaceItems(tx: Tx, orgId: number, creditNoteId: number, items: CreditNoteItemInsert[]): Promise<void> {
-    await tx.execute(sql`DELETE FROM credit_note_items WHERE org_id = ${orgId} AND credit_note_id = ${creditNoteId}`);
+  async replaceItems(
+    tx: Tx,
+    orgId: number,
+    creditNoteId: number,
+    items: CreditNoteItemInsert[],
+  ): Promise<void> {
+    await tx.execute(
+      sql`DELETE FROM credit_note_items WHERE org_id = ${orgId} AND credit_note_id = ${creditNoteId}`,
+    );
     for (const it of items) {
       await tx.execute(sql`
         INSERT INTO credit_note_items (org_id, credit_note_id, sort, invoice_item_id, description, hsn_sac, qty, unit_price_minor,
@@ -324,16 +386,28 @@ export class CreditNotesRepository {
   }
 
   async delete(tx: Tx, orgId: number, id: number): Promise<void> {
-    await tx.execute(sql`DELETE FROM credit_notes WHERE org_id = ${orgId} AND id = ${id} AND status = 'draft'`);
+    await tx.execute(
+      sql`DELETE FROM credit_notes WHERE org_id = ${orgId} AND id = ${id} AND status = 'draft'`,
+    );
   }
 
   /** Payments of an invoice with something left to refund, newest first: where a cash settlement takes its money from. */
-  async refundablePayments(tx: Tx, orgId: number, invoiceId: number): Promise<Array<{ id: number; uuid: string; refundableMinor: bigint }>> {
+  async refundablePayments(
+    tx: Tx,
+    orgId: number,
+    invoiceId: number,
+  ): Promise<Array<{ id: number; uuid: string; refundableMinor: bigint }>> {
     const res = await tx.execute(sql`
       SELECT p.id, p.uuid, (p.amount_minor - coalesce((SELECT sum(-r.amount_minor) FROM payments r WHERE r.org_id = p.org_id AND r.refund_of_id = p.id), 0))::text AS refundable
       FROM payments p WHERE p.org_id = ${orgId} AND p.invoice_id = ${invoiceId} AND p.kind = 'payment'
       ORDER BY p.paid_at DESC, p.id DESC
     `);
-    return (res.rows as Raw[]).map((r) => ({ id: Number(r.id), uuid: r.uuid as string, refundableMinor: big(r.refundable) })).filter((p) => p.refundableMinor > 0n);
+    return (res.rows as Raw[])
+      .map((r) => ({
+        id: Number(r.id),
+        uuid: r.uuid as string,
+        refundableMinor: big(r.refundable),
+      }))
+      .filter((p) => p.refundableMinor > 0n);
   }
 }

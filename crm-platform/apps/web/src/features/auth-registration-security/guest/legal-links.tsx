@@ -18,7 +18,7 @@ function legalTags(links: Links) {
           href={safe}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-medium text-foreground underline underline-offset-2 hover:text-primary"
+          className="font-semibold text-(--auth-link) hover:underline"
         >
           {chunks}
         </a>
@@ -36,7 +36,7 @@ export function LegalLine({ links }: { links: Links }) {
   const t = useTranslations('auth-registration-security.guest.legal');
   const tags = legalTags(links);
   return (
-    <p className="text-xs leading-relaxed text-muted-foreground">
+    <p className="mt-8 text-center text-[10.5px] leading-relaxed text-(--auth-ink-500)">
       {t.rich('login', tags)}
       {links.cookies && <> {t.rich('cookies', tags)}</>}
     </p>

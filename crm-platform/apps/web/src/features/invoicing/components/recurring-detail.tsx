@@ -8,9 +8,23 @@ import { useRecurring } from '../api/hooks';
 import { formatDateTime } from '../lib/dates';
 import { rowActions } from '../lib/recurring';
 import { BackIcon, ClockIcon, PencilIcon, RefreshIcon, TrashIcon } from './icons';
-import { ContactPill, ErrorLine, Money, UserText, useInvoicingCan, useWorkspaceZone } from './parts';
+import {
+  ContactPill,
+  ErrorLine,
+  Money,
+  UserText,
+  useInvoicingCan,
+  useWorkspaceZone,
+} from './parts';
 import { RecurringInvoiceBuilder } from './recurring-builder';
-import { amountMinorOf, DayText, RecurringStatusChip, useEveryText, useModeText, useRecurringActions } from './recurring-parts';
+import {
+  amountMinorOf,
+  DayText,
+  RecurringStatusChip,
+  useEveryText,
+  useModeText,
+  useRecurringActions,
+} from './recurring-parts';
 import { RecurringRuns } from './recurring-runs';
 
 /**
@@ -30,7 +44,8 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
   const q = useRecurring(id);
   const actions = useRecurringActions({ onDeleted: () => router.replace('/recurring-invoices') });
 
-  if (search.get('edit') === '1' && can.updateRecurring) return <RecurringInvoiceBuilder recurringId={id} />;
+  if (search.get('edit') === '1' && can.updateRecurring)
+    return <RecurringInvoiceBuilder recurringId={id} />;
 
   if (q.isPending) {
     return (
@@ -43,7 +58,10 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
     return (
       <div className="space-y-3">
         <ErrorLine error={q.error} onRetry={() => void q.refetch()} />
-        <Link href="/recurring-invoices" className="inline-block text-sm font-medium text-primary underline-offset-2 hover:underline">
+        <Link
+          href="/recurring-invoices"
+          className="inline-block text-sm font-medium text-primary underline-offset-2 hover:underline"
+        >
           {t('backToList')}
         </Link>
       </div>
@@ -80,17 +98,30 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {a.edit && (
-            <Link href={`/recurring-invoices/${r.id}?edit=1`} className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+            <Link
+              href={`/recurring-invoices/${r.id}?edit=1`}
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            >
               <PencilIcon /> {tr('edit')}
             </Link>
           )}
           {a.pause && (
-            <Button variant="secondary" className="h-10" disabled={actions.pending === r.id} onClick={() => void actions.pause(r)}>
+            <Button
+              variant="secondary"
+              className="h-10"
+              disabled={actions.pending === r.id}
+              onClick={() => void actions.pause(r)}
+            >
               <ClockIcon /> {tr('pause')}
             </Button>
           )}
           {a.resume && (
-            <Button variant="secondary" className="h-10" disabled={actions.pending === r.id} onClick={() => void actions.resume(r)}>
+            <Button
+              variant="secondary"
+              className="h-10"
+              disabled={actions.pending === r.id}
+              onClick={() => void actions.resume(r)}
+            >
               <RefreshIcon /> {tr('resume')}
             </Button>
           )}
@@ -124,18 +155,24 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
           <div className="mt-1 text-lg font-semibold">
             <DayText day={r.status === 'ended' ? null : r.nextRunDate} />
           </div>
-          {r.status === 'paused' && <div className="text-xs text-muted-foreground">{tr('onHold')}</div>}
+          {r.status === 'paused' && (
+            <div className="text-xs text-muted-foreground">{tr('onHold')}</div>
+          )}
         </div>
         <div className={stat}>
           <div className={label}>{t('lastRun')}</div>
-          <div className="mt-1 text-lg font-semibold tabular-nums">{r.lastRunAt ? formatDateTime(r.lastRunAt, locale, zone) : '-'}</div>
+          <div className="mt-1 text-lg font-semibold tabular-nums">
+            {r.lastRunAt ? formatDateTime(r.lastRunAt, locale, zone) : '-'}
+          </div>
         </div>
         <div className={stat}>
           <div className={label}>{t('runs')}</div>
           <div className="mt-1 text-lg font-semibold tabular-nums">
             {r.maxRuns === null ? r.runCount : tr('runsOf', { done: r.runCount, max: r.maxRuns })}
           </div>
-          <div className="text-xs text-muted-foreground">{t('failedCount', { count: r.failureCount })}</div>
+          <div className="text-xs text-muted-foreground">
+            {t('failedCount', { count: r.failureCount })}
+          </div>
         </div>
         <div className={stat}>
           <div className={label}>{t('amount')}</div>
@@ -147,8 +184,14 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
       </div>
 
       <div className="grid items-start gap-3 lg:grid-cols-2">
-        <section aria-labelledby="rec-upcoming" className="rounded-xl border border-border bg-background">
-          <h2 id="rec-upcoming" className="border-b border-border px-4 py-3 text-base font-semibold">
+        <section
+          aria-labelledby="rec-upcoming"
+          className="rounded-xl border border-border bg-background"
+        >
+          <h2
+            id="rec-upcoming"
+            className="border-b border-border px-4 py-3 text-base font-semibold"
+          >
             {t('upcoming')}
           </h2>
           {r.upcoming.length === 0 ? (
@@ -157,7 +200,9 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
             <ol className="divide-y divide-border">
               {r.upcoming.map((d, i) => (
                 <li key={d} className="flex items-center gap-3 px-4 py-2.5 text-sm">
-                  <span className="w-6 text-xs font-semibold tabular-nums text-muted-foreground">{i + 1}</span>
+                  <span className="w-6 text-xs font-semibold tabular-nums text-muted-foreground">
+                    {i + 1}
+                  </span>
                   <DayText day={d} className="font-medium" />
                 </li>
               ))}
@@ -165,13 +210,25 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
           )}
         </section>
 
-        <section aria-labelledby="rec-template" className="rounded-xl border border-border bg-background">
-          <h2 id="rec-template" className="border-b border-border px-4 py-3 text-base font-semibold">
+        <section
+          aria-labelledby="rec-template"
+          className="rounded-xl border border-border bg-background"
+        >
+          <h2
+            id="rec-template"
+            className="border-b border-border px-4 py-3 text-base font-semibold"
+          >
             {t('template')}
           </h2>
           <dl className="divide-y divide-border text-sm">
             <Row term={t('buyer')}>
-              {r.contact ? <ContactPill contact={{ id: r.contact.id, name: r.contact.name ?? r.buyerName }} /> : r.buyerName ? <UserText>{r.buyerName}</UserText> : '-'}
+              {r.contact ? (
+                <ContactPill contact={{ id: r.contact.id, name: r.contact.name ?? r.buyerName }} />
+              ) : r.buyerName ? (
+                <UserText>{r.buyerName}</UserText>
+              ) : (
+                '-'
+              )}
             </Row>
             <Row term={t('lines')}>{tr('lineCount', { count: r.lineCount })}</Row>
             <Row term={t('currency')}>
@@ -182,9 +239,13 @@ export function RecurringInvoiceDetail({ id }: { id: string }) {
               <DayText day={r.startDate} />
             </Row>
             <Row term={t('ends')}>{r.endDate ? <DayText day={r.endDate} /> : t('never')}</Row>
-            <Row term={t('limit')}>{r.maxRuns === null ? t('noLimit') : t('invoicesCount', { count: r.maxRuns })}</Row>
+            <Row term={t('limit')}>
+              {r.maxRuns === null ? t('noLimit') : t('invoicesCount', { count: r.maxRuns })}
+            </Row>
           </dl>
-          <p className="border-t border-border px-4 py-3 text-xs text-muted-foreground">{t('templateNote')}</p>
+          <p className="border-t border-border px-4 py-3 text-xs text-muted-foreground">
+            {t('templateNote')}
+          </p>
         </section>
       </div>
 

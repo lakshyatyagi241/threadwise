@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { occurrenceDate, upcomingRuns } from '@crm/contracts';
-import { dateOfPeriod, firstPeriodFrom, templateFromInvoice } from '../../../src/modules/crm/invoicing/recurring-invoices.service';
+import {
+  dateOfPeriod,
+  firstPeriodFrom,
+  templateFromInvoice,
+} from '../../../src/modules/crm/invoicing/recurring-invoices.service';
 import {
   fulfilmentStatusOf,
   invoicingStatusOf,
@@ -27,13 +31,33 @@ describe('recurring schedule dates', () => {
   });
 
   it('upcomingRuns stops at the end date and at the run cap', () => {
-    const byEnd = upcomingRuns({ start: '2026-01-01', frequency: 'month', interval: 1, fromIndex: 0, end: '2026-03-15', count: 10 });
+    const byEnd = upcomingRuns({
+      start: '2026-01-01',
+      frequency: 'month',
+      interval: 1,
+      fromIndex: 0,
+      end: '2026-03-15',
+      count: 10,
+    });
     expect(byEnd.map((r) => r.date)).toEqual(['2026-01-01', '2026-02-01', '2026-03-01']);
-    const byCap = upcomingRuns({ start: '2026-01-01', frequency: 'month', interval: 1, fromIndex: 0, maxRuns: 2, count: 10 });
+    const byCap = upcomingRuns({
+      start: '2026-01-01',
+      frequency: 'month',
+      interval: 1,
+      fromIndex: 0,
+      maxRuns: 2,
+      count: 10,
+    });
     expect(byCap).toHaveLength(2);
   });
 
-  const shape = { startDate: '2026-01-10', frequency: 'month' as const, interval: 1, endDate: null, maxRuns: null };
+  const shape = {
+    startDate: '2026-01-10',
+    frequency: 'month' as const,
+    interval: 1,
+    endDate: null,
+    maxRuns: null,
+  };
 
   it('dateOfPeriod is null past the cap or the end date (the schedule has ended)', () => {
     expect(dateOfPeriod({ ...shape, maxRuns: 3 }, 3)).toBeNull();
@@ -52,7 +76,14 @@ describe('recurring schedule dates', () => {
   it('a template copied from an invoice carries the buyer, links, tax mode and lines but no dates', () => {
     const t = templateFromInvoice({
       docType: 'tax_invoice',
-      buyer: { name: 'Acme', email: 'a@acme.test', phone: null, address: null, taxId: null, country: 'IN' },
+      buyer: {
+        name: 'Acme',
+        email: 'a@acme.test',
+        phone: null,
+        address: null,
+        taxId: null,
+        country: 'IN',
+      },
       contact: { id: '00000000-0000-4000-8000-000000000001', name: 'Acme' },
       company: null,
       deal: null,
@@ -69,10 +100,23 @@ describe('recurring schedule dates', () => {
       terms: null,
       legalNotes: null,
       lines: [
-        { description: 'Hosting', sku: null, hsnSac: '998315', qty: '1', unitPrice: '1000.00', discount: null, taxRateId: null },
+        {
+          description: 'Hosting',
+          sku: null,
+          hsnSac: '998315',
+          qty: '1',
+          unitPrice: '1000.00',
+          discount: null,
+          taxRateId: null,
+        },
       ],
     } as never);
-    expect(t).toMatchObject({ buyerName: 'Acme', currency: 'INR', taxMode: 'rates', contactId: '00000000-0000-4000-8000-000000000001' });
+    expect(t).toMatchObject({
+      buyerName: 'Acme',
+      currency: 'INR',
+      taxMode: 'rates',
+      contactId: '00000000-0000-4000-8000-000000000001',
+    });
     expect(t.lines).toHaveLength(1);
     expect('issueDate' in t).toBe(false);
     expect(t.shipping).toBeNull();
@@ -82,7 +126,9 @@ describe('recurring schedule dates', () => {
 describe('sales order progress and quote conversion', () => {
   it('the two statuses are derived from the summed quantities', () => {
     expect(invoicingStatusOf({ qtyTotal: '10.0000', qtyInvoiced: '0.0000' })).toBe('not_invoiced');
-    expect(invoicingStatusOf({ qtyTotal: '10.0000', qtyInvoiced: '4.0000' })).toBe('partially_invoiced');
+    expect(invoicingStatusOf({ qtyTotal: '10.0000', qtyInvoiced: '4.0000' })).toBe(
+      'partially_invoiced',
+    );
     expect(invoicingStatusOf({ qtyTotal: '10.0000', qtyInvoiced: '10.0000' })).toBe('invoiced');
     expect(fulfilmentStatusOf({ qtyTotal: '10.0000', qtyFulfilled: '0.0000' })).toBe('unfulfilled');
     expect(fulfilmentStatusOf({ qtyTotal: '10.0000', qtyFulfilled: '10.0000' })).toBe('fulfilled');
@@ -151,11 +197,35 @@ describe('sales order progress and quote conversion', () => {
       notes: null,
       terms: null,
       items: [
-        { description: 'A', qty: '1.0000', unitPriceMinor: 10000n, discountKind: 'none', discountValue: 0n, taxRateBp: null, grossMinor: 10000n, netMinor: 10000n },
-        { description: 'B', qty: '2.0000', unitPriceMinor: 5000n, discountKind: 'none', discountValue: 0n, taxRateBp: 0, grossMinor: 10000n, netMinor: 10000n },
+        {
+          description: 'A',
+          qty: '1.0000',
+          unitPriceMinor: 10000n,
+          discountKind: 'none',
+          discountValue: 0n,
+          taxRateBp: null,
+          grossMinor: 10000n,
+          netMinor: 10000n,
+        },
+        {
+          description: 'B',
+          qty: '2.0000',
+          unitPriceMinor: 5000n,
+          discountKind: 'none',
+          discountValue: 0n,
+          taxRateBp: 0,
+          grossMinor: 10000n,
+          netMinor: 10000n,
+        },
       ],
     });
-    const priced = priceInvoice({ currency: 'USD', specs, discount: null, shipping: null, reverseCharge: false });
+    const priced = priceInvoice({
+      currency: 'USD',
+      specs,
+      discount: null,
+      shipping: null,
+      reverseCharge: false,
+    });
     // 200.00 gross, 10.00 discount spread 5.00 + 5.00, tax 10% only on the first line: (100 - 5) * 10% = 9.50
     expect(priced.totals.discountMinor).toBe(0n); // folded into the lines: an order has no document discount
     expect(priced.totals.subtotalMinor).toBe(19000n);

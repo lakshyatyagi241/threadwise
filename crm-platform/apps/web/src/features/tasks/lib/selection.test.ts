@@ -8,7 +8,11 @@ describe('selectionReducer', () => {
     expect(selectionReducer(on, { type: 'toggle', id: 'a' }).ids.size).toBe(0);
   });
   it('sets and unsets many at once', () => {
-    const all = selectionReducer(EMPTY_SELECTION, { type: 'setMany', ids: ['a', 'b', 'c'], checked: true });
+    const all = selectionReducer(EMPTY_SELECTION, {
+      type: 'setMany',
+      ids: ['a', 'b', 'c'],
+      checked: true,
+    });
     expect(all.ids.size).toBe(3);
     const some = selectionReducer(all, { type: 'setMany', ids: ['a', 'b'], checked: false });
     expect([...some.ids]).toEqual(['c']);
@@ -19,7 +23,11 @@ describe('selectionReducer', () => {
     expect(selectionReducer(s, { type: 'clear' }).ids.size).toBe(0);
   });
   it('forgets rows that left the list and keeps the state when nothing changed', () => {
-    const s = selectionReducer(EMPTY_SELECTION, { type: 'setMany', ids: ['a', 'b'], checked: true });
+    const s = selectionReducer(EMPTY_SELECTION, {
+      type: 'setMany',
+      ids: ['a', 'b'],
+      checked: true,
+    });
     expect([...selectionReducer(s, { type: 'retain', ids: ['b', 'c'] }).ids]).toEqual(['b']);
     expect(selectionReducer(s, { type: 'retain', ids: ['a', 'b', 'c'] })).toBe(s);
   });

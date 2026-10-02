@@ -73,6 +73,11 @@ export const envSchema = z.object({
   CREDENTIALS_ENCRYPTION_KEY: z
     .string()
     .min(44, 'CREDENTIALS_ENCRYPTION_KEY must be a base64-encoded 32-byte key'),
+  /**
+   * Retired encryption keys, comma-separated base64, kept only so old blobs still decrypt while
+   * `pnpm --filter @crm/api secrets:reencrypt` re-seals them under the current key (then remove).
+   */
+  CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS: z.string().optional(),
 
   // --- object storage ------------------------------------------------------
   S3_ENDPOINT: z.string().url().optional(),

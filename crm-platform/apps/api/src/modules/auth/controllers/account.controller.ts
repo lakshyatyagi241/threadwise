@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -22,6 +23,7 @@ import {
   mfaDisableRequestSchema,
   mfaEnableRequestSchema,
   regenerateRecoveryCodesRequestSchema,
+  sessionListQuerySchema,
   updateBrandingRequestSchema,
   updateProfileRequestSchema,
   type ChangeEmailRequest,
@@ -29,6 +31,7 @@ import {
   type DeleteAccountRequest,
   type MfaDisableRequest,
   type MfaEnableRequest,
+  type SessionListQuery,
   type UpdateBrandingRequest,
   type UpdateProfileRequest,
 } from '@crm/contracts';
@@ -37,7 +40,8 @@ import { ActorKinds, Public, RequirePermission } from '../../../common/decorator
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
-import { AccountService } from '../account/account.service';
+import { AccountService, AVATAR_MAX_BYTES } from '../account/account.service';
+import { UploadTooLargeInterceptor } from '../account/upload-too-large.interceptor';
 import { RecoveryService } from '../flows/recovery.service';
 import { AllowWhileGated } from '../guards/auth-gates';
 import { MfaService } from '../security/mfa.service';
@@ -98,7 +102,13 @@ export class AccountController {
 
   @Post('avatar')
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 1.2 * 1024 * 1024, files: 1 } }))
+  // The transport cap sits a little above the photo limit so a file just over it still
+  // reaches the upload policy and gets its precise message; anything bigger is cut off
+  // here and answered by the interceptor with the same stable code and the limit.
+  @UseInterceptors(
+    UploadTooLargeInterceptor,
+    FileInterceptor('file', { limits: { fileSize: Math.ceil(AVATAR_MAX_BYTES * 1.2), files: 1 } }),
+  )
   @ApiOperation({ summary: 'Upload my photo (JPG, PNG, WebP or GIF, up to 1 MB)' })
   async setAvatar(@UploadedFile() file: { originalname: string; buffer: Buffer } | undefined) {
     if (!file)
@@ -216,9 +226,9 @@ export class AccountController {
 
   @Get('sessions')
   @AllowWhileGated()
-  @ApiOperation({ summary: 'Devices I am signed in on' })
-  async sessions() {
-    return { data: await this.account.listSessions() };
+  @ApiOperation({ summary: 'Devices I am signed in on (paged, current device first)' })
+  async sessions(@Query(zodPipe(sessionListQuerySchema)) query: SessionListQuery) {
+    return this.account.listSessions(query);
   }
 
   @Post('sessions/revoke-others')

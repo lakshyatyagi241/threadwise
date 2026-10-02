@@ -23,7 +23,10 @@ import {
   type NumberingSettings,
 } from '../../../src/modules/crm/invoicing/invoice-rules';
 
-const n = (over: Partial<NumberingSettings> = {}): NumberingSettings => ({ ...DEFAULT_NUMBERING, ...over });
+const n = (over: Partial<NumberingSettings> = {}): NumberingSettings => ({
+  ...DEFAULT_NUMBERING,
+  ...over,
+});
 
 describe('numbering (TW-INV-008, D-08, D-13)', () => {
   it('TW-INV-008 #1: the default format is INV-<year>-<6 digits>', () => {
@@ -79,8 +82,17 @@ describe('dates and due dates (TW-INV-030, D-02)', () => {
   });
 
   it('an explicit due date wins over terms, terms win over the default, and nothing at all means due on issue', () => {
-    expect(resolveDueDate({ issueDate: '2026-10-01', dueDate: '2026-10-09', termsDays: 30, defaultDueDays: 14 })).toBe('2026-10-09');
-    expect(resolveDueDate({ issueDate: '2026-10-01', termsDays: 30, defaultDueDays: 14 })).toBe('2026-10-31');
+    expect(
+      resolveDueDate({
+        issueDate: '2026-10-01',
+        dueDate: '2026-10-09',
+        termsDays: 30,
+        defaultDueDays: 14,
+      }),
+    ).toBe('2026-10-09');
+    expect(resolveDueDate({ issueDate: '2026-10-01', termsDays: 30, defaultDueDays: 14 })).toBe(
+      '2026-10-31',
+    );
     expect(resolveDueDate({ issueDate: '2026-10-01' })).toBe('2026-10-01');
   });
 
@@ -98,8 +110,11 @@ describe('dates and due dates (TW-INV-030, D-02)', () => {
 
 describe('status model (TW-INV-025, D-01)', () => {
   const today = '2026-10-10';
-  const st = (status: 'draft' | 'issued' | 'void', paymentStatus: 'unpaid' | 'partially_paid' | 'paid', dueDate: string | null) =>
-    deriveInvoiceStatus({ status, paymentStatus, dueDate, today });
+  const st = (
+    status: 'draft' | 'issued' | 'void',
+    paymentStatus: 'unpaid' | 'partially_paid' | 'paid',
+    dueDate: string | null,
+  ) => deriveInvoiceStatus({ status, paymentStatus, dueDate, today });
 
   it('derives the six statuses', () => {
     expect(st('draft', 'unpaid', null)).toBe('draft');
@@ -146,7 +161,15 @@ describe('aging (TW-PAY-004, D-22)', () => {
 
   it('the bucket edges', () => {
     const edges: Array<[number, string]> = [
-      [-5, 'current'], [0, 'current'], [1, 'd1_30'], [30, 'd1_30'], [31, 'd31_60'], [60, 'd31_60'], [61, 'd61_90'], [90, 'd61_90'], [91, 'd90_plus'],
+      [-5, 'current'],
+      [0, 'current'],
+      [1, 'd1_30'],
+      [30, 'd1_30'],
+      [31, 'd31_60'],
+      [60, 'd31_60'],
+      [61, 'd61_90'],
+      [90, 'd61_90'],
+      [91, 'd90_plus'],
     ];
     for (const [d, b] of edges) expect(agingBucketOf(d), `${d} days`).toBe(b);
     expect(AGING_BUCKETS).toHaveLength(5);
@@ -157,7 +180,11 @@ describe('payment decisions (TW-PAY-002, D-11)', () => {
   it('an amount up to the balance is fine; more is refused unless allowed, then the excess is the credit', () => {
     expect(decidePayment(10_000n, 4_000n, false)).toEqual({ ok: true, creditMinor: 0n });
     expect(decidePayment(10_000n, 10_000n, false)).toEqual({ ok: true, creditMinor: 0n });
-    expect(decidePayment(10_000n, 10_001n, false)).toEqual({ ok: false, reason: 'overpayment', balanceMinor: 10_000n });
+    expect(decidePayment(10_000n, 10_001n, false)).toEqual({
+      ok: false,
+      reason: 'overpayment',
+      balanceMinor: 10_000n,
+    });
     expect(decidePayment(10_000n, 12_500n, true)).toEqual({ ok: true, creditMinor: 2_500n });
   });
 
@@ -174,7 +201,14 @@ describe('public token (TW-INV-016, D-15)', () => {
     expect(a).not.toBe(b);
     expect(a).toMatch(/^[A-Za-z0-9_-]{43}$/);
     expect(isPlausibleToken(a)).toBe(true);
-    for (const junk of ['', 'short', `${a}x`, `${a.slice(0, 42)}!`, "a' OR '1'='1", '../../etc/passwd'])
+    for (const junk of [
+      '',
+      'short',
+      `${a}x`,
+      `${a.slice(0, 42)}!`,
+      "a' OR '1'='1",
+      '../../etc/passwd',
+    ])
       expect(isPlausibleToken(junk)).toBe(false);
   });
 

@@ -1,4 +1,11 @@
-import type { BoardColumnData, BoardKpis, Deal, Stage, StageKind, StageSummary } from '../api/schemas';
+import type {
+  BoardColumnData,
+  BoardKpis,
+  Deal,
+  Stage,
+  StageKind,
+  StageSummary,
+} from '../api/schemas';
 import { weighted } from './money';
 
 /**
@@ -31,7 +38,12 @@ export interface BoardState {
   kpis: BoardKpis | null;
 }
 
-export const EMPTY_COLUMN: ColumnState = { ids: [], nextCursor: null, hasMore: false, status: 'loading' };
+export const EMPTY_COLUMN: ColumnState = {
+  ids: [],
+  nextCursor: null,
+  hasMore: false,
+  status: 'loading',
+};
 
 const zeroSummary = (stageId: string): StageSummary => ({
   stageId,
@@ -72,7 +84,9 @@ export type BoardAction =
   | { type: 'removed'; dealId: string }
   | { type: 'restore'; snapshot: BoardState };
 
-export function initialBoard(stages: readonly Pick<Stage, 'id' | 'probability' | 'kind'>[]): BoardState {
+export function initialBoard(
+  stages: readonly Pick<Stage, 'id' | 'probability' | 'kind'>[],
+): BoardState {
   return boardReducer(
     { stages: {}, columns: {}, deals: {}, summary: {}, kpis: null },
     { type: 'reset', stages },
@@ -133,7 +147,8 @@ export function settleDeal(
     status: kind,
     wonAt: kind === 'won' ? (deal.wonAt ?? now) : null,
     lostAt: kind === 'lost' ? (deal.lostAt ?? now) : null,
-    lostReason: kind === 'lost' ? (lostReason ?? deal.lostReason) : kind === 'open' ? null : deal.lostReason,
+    lostReason:
+      kind === 'lost' ? (lostReason ?? deal.lostReason) : kind === 'open' ? null : deal.lostReason,
   };
 }
 
@@ -250,7 +265,10 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
       return {
         ...state,
         deals: { ...state.deals, [deal.id]: deal },
-        columns: { ...state.columns, [deal.stageId]: { ...col, ids: insertAt(col.ids, deal.id, 0) } },
+        columns: {
+          ...state.columns,
+          [deal.stageId]: { ...col, ids: insertAt(col.ids, deal.id, 0) },
+        },
         summary: bump(state.summary, state.stages, deal.stageId, 1, deal.boardValueMinor),
       };
     }
@@ -269,7 +287,13 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
         summary = bump(summary, state.stages, old.stageId, -1, -old.boardValueMinor);
         summary = bump(summary, state.stages, deal.stageId, 1, deal.boardValueMinor);
       } else if (old.boardValueMinor !== deal.boardValueMinor) {
-        summary = bump(summary, state.stages, deal.stageId, 0, deal.boardValueMinor - old.boardValueMinor);
+        summary = bump(
+          summary,
+          state.stages,
+          deal.stageId,
+          0,
+          deal.boardValueMinor - old.boardValueMinor,
+        );
       }
       return { ...state, columns, summary, deals: { ...state.deals, [deal.id]: deal } };
     }
@@ -283,7 +307,10 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
       return {
         ...state,
         deals,
-        columns: { ...state.columns, [deal.stageId]: { ...col, ids: col.ids.filter((x) => x !== deal.id) } },
+        columns: {
+          ...state.columns,
+          [deal.stageId]: { ...col, ids: col.ids.filter((x) => x !== deal.id) },
+        },
         summary: bump(state.summary, state.stages, deal.stageId, -1, -deal.boardValueMinor),
       };
     }

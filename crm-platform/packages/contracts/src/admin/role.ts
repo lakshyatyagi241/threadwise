@@ -30,6 +30,14 @@ export const roleResponseSchema = z.object({
   systemKey: z.string().nullable(),
   isLocked: z.boolean(),
   grants: z.array(roleGrantSchema),
+  /** Members holding the role. */
+  userCount: z.number().int(),
+  /** One of the five Reference presets (Owner, Admin, Manager, Agent, Viewer): never deleted, never renamed. */
+  isPreset: z.boolean(),
+  /** The caller may hand this role to a member (the member-role picker offers only these). */
+  grantable: z.boolean(),
+  /** The caller may change this role's permissions (not locked; the Owner and Admin presets only by an Owner). */
+  editable: z.boolean(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

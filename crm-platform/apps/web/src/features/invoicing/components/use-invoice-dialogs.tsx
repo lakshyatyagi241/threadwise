@@ -59,7 +59,9 @@ export function useInvoiceDialogs(opts: { onDeleted?: (inv: Target) => void } = 
           title={t('title')}
           message={
             <span className="block space-y-3">
-              <span className="block">{t('message', { name: inv.number ?? inv.buyerName ?? inv.contact?.name ?? '' })}</span>
+              <span className="block">
+                {t('message', { name: inv.number ?? inv.buyerName ?? inv.contact?.name ?? '' })}
+              </span>
               {error !== null && <Alert tone="danger">{errorText(error)}</Alert>}
             </span>
           }

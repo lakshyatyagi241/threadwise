@@ -1,33 +1,44 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createTranslator } from 'next-intl';
-import { RECURRING_FREQUENCIES, RECURRING_MODES, RECURRING_STATUSES, RECURRING_RUN_STATUSES } from '@crm/contracts';
+import {
+  RECURRING_FREQUENCIES,
+  RECURRING_MODES,
+  RECURRING_STATUSES,
+  RECURRING_RUN_STATUSES,
+} from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
-import { RECURRING_ERROR_CODES, RECURRING_TABS, SEND_CHANNELS, type RecurringProblem } from './lib/recurring';
+import {
+  RECURRING_ERROR_CODES,
+  RECURRING_TABS,
+  SEND_CHANNELS,
+  type RecurringProblem,
+} from './lib/recurring';
 import type { Problem } from './lib/builder';
 import { missingKeys } from './test-messages';
 
 /** Every problem the template editor can show (the dates are not part of a template). */
-const TEMPLATE_PROBLEMS: Exclude<Problem, 'issueDateInvalid' | 'dueBeforeIssue' | 'dueInvalid'>[] = [
-  'descriptionRequired',
-  'qtyInvalid',
-  'priceInvalid',
-  'lineDiscountInvalid',
-  'hsnRequired',
-  'hsnInvalid',
-  'taxRateRemoved',
-  'currencyInvalid',
-  'noLines',
-  'discountInvalid',
-  'shippingInvalid',
-  'emailInvalid',
-  'amountZero',
-  'amountInvalid',
-  'contactRequired',
-  'countryInvalid',
-  'regionInvalid',
-  'autoNeedsSellerCountry',
-];
+const TEMPLATE_PROBLEMS: Exclude<Problem, 'issueDateInvalid' | 'dueBeforeIssue' | 'dueInvalid'>[] =
+  [
+    'descriptionRequired',
+    'qtyInvalid',
+    'priceInvalid',
+    'lineDiscountInvalid',
+    'hsnRequired',
+    'hsnInvalid',
+    'taxRateRemoved',
+    'currencyInvalid',
+    'noLines',
+    'discountInvalid',
+    'shippingInvalid',
+    'emailInvalid',
+    'amountZero',
+    'amountInvalid',
+    'contactRequired',
+    'countryInvalid',
+    'regionInvalid',
+    'autoNeedsSellerCountry',
+  ];
 const SCHEDULE_PROBLEMS: RecurringProblem[] = [
   'nameRequired',
   'nameTooLong',
@@ -45,7 +56,10 @@ describe('recurring messages built at run time (English and Arabic)', () => {
   it('has every frequency, mode, status, tab, channel and outcome', () => {
     expect(
       missingKeys([
-        ...RECURRING_FREQUENCIES.flatMap((f) => [`recurring.every.${f}`, `recurring.frequency.${f}`]),
+        ...RECURRING_FREQUENCIES.flatMap((f) => [
+          `recurring.every.${f}`,
+          `recurring.frequency.${f}`,
+        ]),
         ...RECURRING_MODES.flatMap((m) => [
           `recurring.modeShort.${m}`,
           `recurring.modeCards.${m}.title`,
@@ -54,7 +68,11 @@ describe('recurring messages built at run time (English and Arabic)', () => {
         ]),
         ...RECURRING_STATUSES.map((s) => `recurring.status.${s}`),
         ...RECURRING_RUN_STATUSES.map((s) => `recurring.runStatus.${s}`),
-        ...RECURRING_TABS.flatMap((tab) => [`recurring.tabs.${tab}`, `recurring.empty.${tab}.title`, `recurring.empty.${tab}.message`]),
+        ...RECURRING_TABS.flatMap((tab) => [
+          `recurring.tabs.${tab}`,
+          `recurring.empty.${tab}.title`,
+          `recurring.empty.${tab}.message`,
+        ]),
         ...SEND_CHANNELS.flatMap((c) => [`recurring.channel.${c}`, `recurring.modeSent.${c}`]),
         'recurring.preview.outcome.draft',
         'recurring.preview.outcome.issue',
@@ -66,23 +84,32 @@ describe('recurring messages built at run time (English and Arabic)', () => {
   });
 
   it('has a sentence for every problem the form can show', () => {
-    expect(missingKeys([...TEMPLATE_PROBLEMS, ...SCHEDULE_PROBLEMS, 'generic' as const].map((p) => `recurring.problems.${p}`))).toEqual([]);
+    expect(
+      missingKeys(
+        [...TEMPLATE_PROBLEMS, ...SCHEDULE_PROBLEMS, 'generic' as const].map(
+          (p) => `recurring.problems.${p}`,
+        ),
+      ),
+    ).toEqual([]);
   });
 
   it('has the API error codes the screens can hit', () => {
-    expect(
-      missingKeys(RECURRING_ERROR_CODES.map((c) => `errors.codes.${c}`)),
-    ).toEqual([]);
+    expect(missingKeys(RECURRING_ERROR_CODES.map((c) => `errors.codes.${c}`))).toEqual([]);
   });
 });
 
 const load = (locale: 'en' | 'ar') =>
-  JSON.parse(readFileSync(join(process.cwd(), 'messages', locale, 'invoicing.x-recurring.json'), 'utf8')) as {
+  JSON.parse(
+    readFileSync(join(process.cwd(), 'messages', locale, 'invoicing.x-recurring.json'), 'utf8'),
+  ) as {
     invoicing: { recurring: Record<string, unknown> };
   };
 type Say = (key: string, values?: Record<string, string | number>) => string;
 const translator = (locale: 'en' | 'ar'): Say =>
-  createTranslator({ locale, messages: load(locale).invoicing.recurring as never }) as unknown as Say;
+  createTranslator({
+    locale,
+    messages: load(locale).invoicing.recurring as never,
+  }) as unknown as Say;
 
 describe('the schedule sentence renders in both languages', () => {
   const en = translator('en');
@@ -91,13 +118,24 @@ describe('the schedule sentence renders in both languages', () => {
   it('says "Every month" with its limit and outcome', () => {
     const limit = en('preview.sentenceLimit', { kind: 'runs', count: 12, end: '' });
     expect(limit).toBe(', 12 invoices');
-    expect(en('preview.sentence', { every: en('every.month', { interval: 1 }), start: '31 Jan 2026', limit, outcome: en('preview.outcome.issue_email') })).toBe(
+    expect(
+      en('preview.sentence', {
+        every: en('every.month', { interval: 1 }),
+        start: '31 Jan 2026',
+        limit,
+        outcome: en('preview.outcome.issue_email'),
+      }),
+    ).toBe(
       'Every month from 31 Jan 2026, 12 invoices. Each invoice is issued and emailed to the buyer.',
     );
     expect(en('every.week', { interval: 3 })).toBe('Every 3 weeks');
     expect(en('preview.sentenceLimit', { kind: 'none', count: 0, end: '' })).toBe('');
-    expect(en('preview.sentenceLimit', { kind: 'both', count: 1, end: '1 Jun 2027' })).toBe(', 1 invoice, until 1 Jun 2027');
-    expect(en('preview.sentenceLimit', { kind: 'end', count: 0, end: '1 Jun 2027' })).toBe(', until 1 Jun 2027');
+    expect(en('preview.sentenceLimit', { kind: 'both', count: 1, end: '1 Jun 2027' })).toBe(
+      ', 1 invoice, until 1 Jun 2027',
+    );
+    expect(en('preview.sentenceLimit', { kind: 'end', count: 0, end: '1 Jun 2027' })).toBe(
+      ', until 1 Jun 2027',
+    );
   });
 
   it('uses Arabic plural forms for the interval', () => {

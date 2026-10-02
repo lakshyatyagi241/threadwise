@@ -36,7 +36,10 @@ export function PublicInvoice({ token }: { token: string }) {
   if (q.isPending) {
     return (
       <Shell>
-        <div role="status" className="flex items-center justify-center gap-2 py-24 text-muted-foreground">
+        <div
+          role="status"
+          className="flex items-center justify-center gap-2 py-24 text-muted-foreground"
+        >
           <Spinner /> {t('loading')}
         </div>
       </Shell>
@@ -47,14 +50,25 @@ export function PublicInvoice({ token }: { token: string }) {
     return (
       <Shell>
         <div className="mx-auto max-w-md rounded-xl border border-border bg-background px-6 py-12 text-center">
-          <div aria-hidden="true" className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+          <div
+            aria-hidden="true"
+            className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground"
+          >
             <InvoiceIcon className="size-6" />
           </div>
           <h1 className="text-lg font-semibold">
-            {gone === 404 ? t('notFoundTitle') : gone === 410 ? t('unavailableTitle') : t('errorTitle')}
+            {gone === 404
+              ? t('notFoundTitle')
+              : gone === 410
+                ? t('unavailableTitle')
+                : t('errorTitle')}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            {gone === 404 ? t('notFoundMessage') : gone === 410 ? t('unavailableMessage') : t('errorMessage')}
+            {gone === 404
+              ? t('notFoundMessage')
+              : gone === 410
+                ? t('unavailableMessage')
+                : t('errorMessage')}
           </p>
           {gone === null && (
             <Button variant="secondary" className="mt-5 min-h-10" onClick={() => void q.refetch()}>
@@ -73,7 +87,15 @@ export function PublicInvoice({ token }: { token: string }) {
 }
 
 /** The loaded page: header, banners, the paper and the pay panel (exported for the render tests). */
-export function PublicInvoiceView({ token, data: p, onPaid }: { token: string; data: PublicInvoiceData; onPaid: () => void }) {
+export function PublicInvoiceView({
+  token,
+  data: p,
+  onPaid,
+}: {
+  token: string;
+  data: PublicInvoiceData;
+  onPaid: () => void;
+}) {
   const t = useTranslations('invoicing.public');
   const locale = useLocale();
   const paper = useMemo(() => paperFromPublic(p), [p]);
@@ -91,7 +113,9 @@ export function PublicInvoiceView({ token, data: p, onPaid }: { token: string; d
           <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
             <span dir="ltr">{p.number}</span>
             <StatusChip status={p.status} />
-            {p.dueDate && p.status !== 'paid' && p.status !== 'void' && <span>{t('dueOn', { date: formatDay(p.dueDate, locale) })}</span>}
+            {p.dueDate && p.status !== 'paid' && p.status !== 'void' && (
+              <span>{t('dueOn', { date: formatDay(p.dueDate, locale) })}</span>
+            )}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -131,14 +155,22 @@ export function PublicInvoiceView({ token, data: p, onPaid }: { token: string; d
 
       <footer className="space-y-1 pb-6 text-center text-xs text-muted-foreground print:hidden">
         <p>
-          <a className="text-primary underline underline-offset-2" href={`${base}/print`} target="_blank" rel="noreferrer noopener">
+          <a
+            className="text-primary underline underline-offset-2"
+            href={`${base}/print`}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             {t('printable')}
           </a>
         </p>
         {p.seller.email && (
           <p>
             {t('questions')}{' '}
-            <a className="text-primary underline underline-offset-2" href={`mailto:${p.seller.email}`}>
+            <a
+              className="text-primary underline underline-offset-2"
+              href={`mailto:${p.seller.email}`}
+            >
               {p.seller.email}
             </a>
           </p>
@@ -150,7 +182,17 @@ export function PublicInvoiceView({ token, data: p, onPaid }: { token: string; d
 }
 
 /** How to pay: the bank details (with copy buttons) and, when the seller connected a provider, "Pay now" (any amount up to the balance). */
-function PayPanel({ token, data: p, balanceMinor, onPaid }: { token: string; data: PublicInvoiceData; balanceMinor: number; onPaid: () => void }) {
+function PayPanel({
+  token,
+  data: p,
+  balanceMinor,
+  onPaid,
+}: {
+  token: string;
+  data: PublicInvoiceData;
+  balanceMinor: number;
+  onPaid: () => void;
+}) {
   const t = useTranslations('invoicing.public');
   const locale = useLocale();
   const money = (n: number) => formatMoney(n, p.currency, locale);
@@ -164,14 +206,26 @@ function PayPanel({ token, data: p, balanceMinor, onPaid }: { token: string; dat
 
   const typed = decimalOf(amount, p.currencyExponent);
   const typedMinor = typed === null ? null : majorToMinor(typed, p.currencyExponent);
-  const amountError = typedMinor === null ? 'invalid' : typedMinor <= 0 ? 'invalid' : typedMinor > balanceMinor ? 'tooMuch' : null;
+  const amountError =
+    typedMinor === null
+      ? 'invalid'
+      : typedMinor <= 0
+        ? 'invalid'
+        : typedMinor > balanceMinor
+          ? 'tooMuch'
+          : null;
 
   const pay = useMutation({
-    mutationFn: () => invoicingApi.publicPay(token, typedMinor !== null && typedMinor < balanceMinor ? (typed ?? undefined) : undefined),
+    mutationFn: () =>
+      invoicingApi.publicPay(
+        token,
+        typedMinor !== null && typedMinor < balanceMinor ? (typed ?? undefined) : undefined,
+      ),
     onSuccess: (r) => {
       setResult(r);
       // Redirect only to an https page (a provider checkout); anything else is not followed.
-      if (r.kind === 'redirect' && r.url && /^https:\/\//i.test(r.url)) window.location.assign(r.url);
+      if (r.kind === 'redirect' && r.url && /^https:\/\//i.test(r.url))
+        window.location.assign(r.url);
       else onPaid();
     },
   });
@@ -180,14 +234,19 @@ function PayPanel({ token, data: p, balanceMinor, onPaid }: { token: string; dat
     return (
       <section className="rounded-xl border border-border bg-background p-4 text-sm sm:p-5 print:hidden">
         <h2 className="text-base font-semibold">{t('payNow')}</h2>
-        <p className="mt-1 text-muted-foreground">{t('amountDue')} <Amount value={money(balanceMinor)} /></p>
+        <p className="mt-1 text-muted-foreground">
+          {t('amountDue')} <Amount value={money(balanceMinor)} />
+        </p>
         <p className="mt-2 text-muted-foreground">{t('noPayOptions')}</p>
       </section>
     );
   }
 
   return (
-    <section aria-labelledby="pay-now" className="space-y-4 rounded-xl border border-border bg-background p-4 sm:p-5 print:hidden">
+    <section
+      aria-labelledby="pay-now"
+      className="space-y-4 rounded-xl border border-border bg-background p-4 sm:p-5 print:hidden"
+    >
       <div>
         <h2 id="pay-now" className="text-base font-semibold">
           {t('payNow')}
@@ -199,7 +258,12 @@ function PayPanel({ token, data: p, balanceMinor, onPaid }: { token: string; dat
 
       {online && (
         <div className="space-y-3">
-          <Field label={t('payAmount', { currency: p.currency })} htmlFor="pay-amount" hint={t('payAmountHint')} error={amountError ? t(`amountErrors.${amountError}`) : undefined}>
+          <Field
+            label={t('payAmount', { currency: p.currency })}
+            htmlFor="pay-amount"
+            hint={t('payAmountHint')}
+            error={amountError ? t(`amountErrors.${amountError}`) : undefined}
+          >
             <Input
               id="pay-amount"
               inputMode="decimal"
@@ -217,12 +281,17 @@ function PayPanel({ token, data: p, balanceMinor, onPaid }: { token: string; dat
             onClick={() => pay.mutate()}
           >
             {pay.isPending ? <Spinner /> : null}
-            {t('payButton', { amount: typedMinor !== null && !amountError ? money(typedMinor) : money(balanceMinor) })} <ExternalIcon />
+            {t('payButton', {
+              amount: typedMinor !== null && !amountError ? money(typedMinor) : money(balanceMinor),
+            })}{' '}
+            <ExternalIcon />
           </Button>
           <p className="text-xs text-muted-foreground">{t('gatewayNote')}</p>
           {pay.isError && (
             <Alert tone="danger">
-              {errorCode(pay.error) === 'INV_LINK_UNAVAILABLE' ? t('linkUnavailable') : t('payFailed')}
+              {errorCode(pay.error) === 'INV_LINK_UNAVAILABLE'
+                ? t('linkUnavailable')
+                : t('payFailed')}
             </Alert>
           )}
           {result && <PayResult result={result} />}
@@ -235,13 +304,18 @@ function PayPanel({ token, data: p, balanceMinor, onPaid }: { token: string; dat
           <p className="text-sm">{t('bankIntro', { number: p.number })}</p>
           {bank.instructions && (
             <div className="space-y-2">
-              <pre dir="auto" className="thin-scrollbar overflow-x-auto whitespace-pre-wrap rounded-md border border-border bg-muted px-3 py-2.5 font-sans text-sm">
+              <pre
+                dir="auto"
+                className="thin-scrollbar overflow-x-auto whitespace-pre-wrap rounded-md border border-border bg-muted px-3 py-2.5 font-sans text-sm"
+              >
                 {bank.instructions}
               </pre>
               <CopyButton text={bank.instructions} label={t('copyInstructions')} />
             </div>
           )}
-          {bank.details && Object.keys(bank.details).length > 0 && <BankDetails details={bank.details} />}
+          {bank.details && Object.keys(bank.details).length > 0 && (
+            <BankDetails details={bank.details} />
+          )}
         </div>
       )}
     </section>
@@ -250,7 +324,8 @@ function PayPanel({ token, data: p, balanceMinor, onPaid }: { token: string; dat
 
 function PayResult({ result }: { result: PublicPayResponse }) {
   const t = useTranslations('invoicing.public');
-  if (result.kind === 'unavailable') return <Alert tone="warning">{result.note || t('payUnavailable')}</Alert>;
+  if (result.kind === 'unavailable')
+    return <Alert tone="warning">{result.note || t('payUnavailable')}</Alert>;
   if (result.kind === 'redirect') {
     const ok = !!result.url && /^https:\/\//i.test(result.url);
     return (
@@ -268,7 +343,9 @@ function PayResult({ result }: { result: PublicPayResponse }) {
           {result.instructions}
         </p>
       )}
-      {result.details && Object.keys(result.details).length > 0 && <BankDetails details={result.details} />}
+      {result.details && Object.keys(result.details).length > 0 && (
+        <BankDetails details={result.details} />
+      )}
       {result.note && <p className="text-sm text-muted-foreground">{result.note}</p>}
     </Alert>
   );
@@ -280,7 +357,10 @@ function BankDetails({ details }: { details: Record<string, string> }) {
   return (
     <dl className="divide-y divide-border rounded-md border border-border text-sm">
       {Object.entries(details).map(([label, value]) => (
-        <div key={label} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2">
+        <div
+          key={label}
+          className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2"
+        >
           <div className="min-w-0">
             <dt className="text-xs text-muted-foreground" dir="auto">
               {label}
@@ -313,7 +393,14 @@ function CopyButton({ text, label, compact }: { text: string; label: string; com
     }
   }
   return (
-    <Button variant="secondary" size={compact ? 'sm' : undefined} className="min-h-10 shrink-0" aria-label={label} title={label} onClick={() => void copy()}>
+    <Button
+      variant="secondary"
+      size={compact ? 'sm' : undefined}
+      className="min-h-10 shrink-0"
+      aria-label={label}
+      title={label}
+      onClick={() => void copy()}
+    >
       {copied ? <CheckIcon /> : <CopyIcon />}
       {compact ? (copied ? t('copied') : null) : copied ? t('copied') : label}
     </Button>

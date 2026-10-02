@@ -2,8 +2,11 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
   parseOtpSenderRef,
+  OTP_TEMPLATE_OPTIONS_MAX,
   type OtpTemplateActionResponse,
   type OtpTemplateCreateRequest,
+  type OtpTemplateOption,
+  type OtpTemplateOptionsResponse,
   type OtpTemplateOutcome,
   type OtpTemplateState,
 } from '@crm/contracts';
@@ -11,6 +14,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { MetaTemplateClient } from '../../../infra/providers/auth-registration-security/meta-template.client';
 import {
   LOCAL_OTP_TEMPLATE_NAME,
+  OTP_COPY_BUTTON_TEXT,
   OTP_TEMPLATE_LANGUAGE,
   WABA_OTP_TEMPLATE_NAME,
   localTemplateBody,
@@ -161,6 +165,7 @@ export class OtpTemplateService {
         submittedAt: now,
         checkedAt: now,
         rejectedReason: submitted.rejectedReason,
+        buttonLabel: OTP_COPY_BUTTON_TEXT,
       };
       outcome = 'submitted';
     }
@@ -174,6 +179,67 @@ export class OtpTemplateService {
       expiresAfterMinutes: ttl,
     });
     return this.response(outcome);
+  }
+
+  /**
+   * The data behind the "WABA auth template" dropdown (TW-AUTH-007 rule 5): the approved
+   * authentication templates of the saved WhatsApp Business sender (up to 300, the way Reference lists
+   * them), with the saved template always present and carrying its status even when it is not
+   * approved or not on Meta's list (a plain save must never lose it). Local (Twilio, bridge) senders
+   * have no Meta list: the saved local text is the only row.
+   *
+   * Meta being unreachable does not fail the call: the saved template is still returned and
+   * `unavailableReason` says why the rest is missing.
+   */
+  async options(): Promise<OtpTemplateOptionsResponse> {
+    const { otp } = await this.policy.registration();
+    const sender = otp.sender;
+    const saved = otp.template && sender && otp.template.sender === sender ? otp.template : null;
+
+    let listed: OtpTemplateOption[] = [];
+    let unavailableReason: string | null = null;
+    if (sender && parseOtpSenderRef(sender)?.kind === 'waba') {
+      try {
+        const access = await this.wabaAccess(sender);
+        const rows = await this.meta.listApprovedAuthentication(access);
+        listed = rows.map((t) => ({
+          id: t.id,
+          name: t.name,
+          language: t.language,
+          kind: 'waba' as const,
+          status: 'approved' as const,
+          selected: false,
+          buttonLabel: t.buttonLabel,
+        }));
+      } catch (err) {
+        unavailableReason =
+          err instanceof OtpSendError || err instanceof AppError
+            ? err.message.slice(0, 240)
+            : 'The template list could not be read.';
+        if (!(err instanceof OtpSendError || err instanceof AppError)) {
+          this.logger.warn({ err }, 'OTP template list failed');
+        }
+      }
+    }
+
+    const savedOption: OtpTemplateOption | null = saved
+      ? {
+          id: saved.metaTemplateId ?? saved.name,
+          name: saved.name,
+          language: saved.language,
+          kind: saved.kind,
+          status: saved.status,
+          selected: true,
+          buttonLabel: saved.kind === 'waba' ? (saved.buttonLabel ?? OTP_COPY_BUTTON_TEXT) : null,
+        }
+      : null;
+    const rest = savedOption ? listed.filter((t) => t.id !== savedOption.id) : listed;
+    const templates = savedOption ? [savedOption, ...rest] : rest;
+    return {
+      sender,
+      templates: templates.slice(0, OTP_TEMPLATE_OPTIONS_MAX + 1),
+      unavailableReason,
+    };
   }
 
   /** Reads the template's review status back from Meta. */

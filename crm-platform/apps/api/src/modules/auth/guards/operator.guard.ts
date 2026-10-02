@@ -13,8 +13,9 @@ import { ALLOW_WHILE_GATED_KEY, OPERATOR_ROLES_KEY } from './auth-gates';
  * Runs after the global JwtAuthGuard has proved the token is an operator's.
  * It then loads the operator (so suspension and role changes apply on the next
  * request, not at token expiry), applies the IP allowlist (TW-AUTH-038),
- * requires MFA enrolment for super admins (except on the enrolment routes,
- * marked @AllowWhileGated), and checks the route's role list. A role refusal
+ * requires MFA enrolment where it applies (super admins always, every operator
+ * when the security policy asks for it; except on the enrolment routes, marked
+ * @AllowWhileGated), and checks the route's role list. A role refusal
  * on a danger action is itself an audited event, as in Reference.
  */
 @Injectable()
@@ -42,10 +43,10 @@ export class OperatorGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (operator.role === 'super_admin' && !operator.mfa_enabled && !gated) {
+    if (!gated && (await this.operators.mfaEnrolmentRequired(operator))) {
       throw new AppError(
         ERROR_CODES.AUTH_MFA_ENROLMENT_REQUIRED,
-        'Super admins must enrol two-factor authentication to continue.',
+        'Two-factor authentication is required for your account. Enrol to continue.',
         HttpStatus.FORBIDDEN,
       );
     }

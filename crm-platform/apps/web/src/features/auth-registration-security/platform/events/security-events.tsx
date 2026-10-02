@@ -6,16 +6,21 @@ import { useId, useMemo, useState, type FormEvent } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { securityEventListResponseSchema } from '@crm/contracts';
 import { Badge, Button, Card, Field, Input, Select, Spinner } from '@crm/ui';
+import { eventActor, eventOrg, shortId } from '../lib/event-view';
+import { csvFilename, eventsToCsv } from '../lib/events-csv';
 import {
   EVENT_STATUSES,
   KNOWN_EVENTS,
   eventsHref,
+  filtersFromParams,
+  hasFilters,
   parseStatus,
   prettyPayload,
   statusTone,
-  type EventStatus,
+  type EventFilters,
 } from '../lib/events';
 import { operatorFetch } from '../operator-fetch';
+import { CopyId } from '../ui/copy-id';
 import { PageHeader } from '../ui/page-header';
 import { ErrorBlock, LoadingBlock } from '../ui/state';
 
@@ -28,20 +33,23 @@ export function SecurityEvents() {
   const locale = useLocale();
   const router = useRouter();
   const params = useSearchParams();
-  const event = params.get('event')?.trim() || undefined;
-  const status = parseStatus(params.get('status'));
+  const filters = filtersFromParams(params);
+  const { event, q: search, status } = filters;
   const listId = useId();
   // `typed` is what the person has typed since the last apply; null means the box simply shows the URL filter.
-  const [typed, setTyped] = useState<string | null>(null);
-  const draftEvent = typed ?? event ?? '';
+  const [typedEvent, setTypedEvent] = useState<string | null>(null);
+  const [typedSearch, setTypedSearch] = useState<string | null>(null);
+  const draftEvent = typedEvent ?? event ?? '';
+  const draftSearch = typedSearch ?? search ?? '';
   const [open, setOpen] = useState<ReadonlySet<string>>(new Set());
+  const [exported, setExported] = useState<number | null>(null);
 
   const q = useInfiniteQuery({
-    queryKey: ['operator', 'security-events', { event, status }],
+    queryKey: ['operator', 'security-events', { event, q: search, status }],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) =>
       operatorFetch('/security/events', {
-        query: { limit: PAGE_SIZE, event, status, cursor: pageParam },
+        query: { limit: PAGE_SIZE, event, q: search, status, cursor: pageParam },
         schema: securityEventListResponseSchema,
         signal,
       }),
@@ -55,14 +63,29 @@ export function SecurityEvents() {
     [locale],
   );
 
-  const apply = (next: { event?: string; status?: EventStatus }) => {
+  const apply = (next: EventFilters) => {
     setOpen(new Set());
-    setTyped(null);
+    setTypedEvent(null);
+    setTypedSearch(null);
+    setExported(null);
     router.replace(eventsHref(next));
   };
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    apply({ event: draftEvent, status });
+    apply({ event: draftEvent, q: draftSearch, status });
+  };
+  const exportCsv = () => {
+    // Built in the browser from the rows already loaded: nothing more is asked of the server.
+    const blob = new Blob([eventsToCsv(rows)], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = csvFilename(new Date());
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    setExported(rows.length);
   };
   const toggle = (key: string) =>
     setOpen((cur) => {
@@ -71,7 +94,7 @@ export function SecurityEvents() {
       else next.add(key);
       return next;
     });
-  const filtered = Boolean(event || status);
+  const filtered = hasFilters(filters);
 
   return (
     <div className="space-y-5">
@@ -80,17 +103,28 @@ export function SecurityEvents() {
         title={t('title')}
         description={t('description')}
         actions={
-          <Button variant="secondary" onClick={() => void q.refetch()} disabled={q.isFetching}>
-            {q.isFetching && !q.isFetchingNextPage && <Spinner label={t('refreshing')} />}
-            {t('refresh')}
-          </Button>
+          <>
+            <Button variant="secondary" onClick={exportCsv} disabled={rows.length === 0}>
+              {t('export')}
+            </Button>
+            <Button variant="secondary" onClick={() => void q.refetch()} disabled={q.isFetching}>
+              {q.isFetching && !q.isFetchingNextPage && <Spinner label={t('refreshing')} />}
+              {t('refresh')}
+            </Button>
+          </>
         }
       />
+
+      {exported !== null && (
+        <p role="status" className="text-xs text-muted-foreground">
+          {t('exported', { count: exported })}
+        </p>
+      )}
 
       <Card>
         <form
           onSubmit={onSubmit}
-          className="grid items-end gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_auto]"
+          className="grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_12rem_auto]"
           role="search"
           aria-label={t('filters.label')}
         >
@@ -98,7 +132,7 @@ export function SecurityEvents() {
             <Input
               id="events-event"
               value={draftEvent}
-              onChange={(e) => setTyped(e.target.value)}
+              onChange={(e) => setTypedEvent(e.target.value)}
               list={listId}
               autoComplete="off"
               spellCheck={false}
@@ -112,11 +146,26 @@ export function SecurityEvents() {
               ))}
             </datalist>
           </Field>
+          <Field label={t('filters.q')} htmlFor="events-q" hint={t('filters.qHint')}>
+            <Input
+              id="events-q"
+              type="search"
+              value={draftSearch}
+              onChange={(e) => setTypedSearch(e.target.value)}
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="platform.security"
+              dir="ltr"
+              className="font-mono"
+            />
+          </Field>
           <Field label={t('filters.status')} htmlFor="events-status">
             <Select
               id="events-status"
               value={status ?? ''}
-              onChange={(e) => apply({ event: draftEvent, status: parseStatus(e.target.value) })}
+              onChange={(e) =>
+                apply({ event: draftEvent, q: draftSearch, status: parseStatus(e.target.value) })
+              }
             >
               <option value="">{t('filters.anyStatus')}</option>
               {EVENT_STATUSES.map((s) => (
@@ -153,6 +202,11 @@ export function SecurityEvents() {
               const payload = prettyPayload(row.payload);
               const expanded = open.has(key);
               const panelId = `event-payload-${index}`;
+              const actor = eventActor(row);
+              const org = eventOrg(row);
+              const typeLabel = t.has(`actorTypes.${actor.type}`)
+                ? t(`actorTypes.${actor.type}`)
+                : actor.type;
               return (
                 <li key={key} className="px-4 py-3">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
@@ -164,16 +218,68 @@ export function SecurityEvents() {
                       {when.format(new Date(row.at))}
                     </time>
                   </div>
-                  <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                    <span>{t('actor', { actor: row.actorType })}</span>
-                    {row.ip && (
-                      <span>
-                        {t('ip')}{' '}
-                        <span className="font-mono" dir="ltr">
-                          {row.ip}
-                        </span>
-                      </span>
-                    )}
+                  <div className="mt-1.5 flex flex-wrap items-start gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                    <dl className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-1">
+                      <div className="flex flex-wrap items-center gap-x-1.5">
+                        <dt>{t('actorLabel')}</dt>
+                        <dd className="flex flex-wrap items-center gap-x-1.5">
+                          {actor.label ? (
+                            <>
+                              <span className="text-foreground">{actor.label}</span>
+                              {actor.email && (
+                                <span dir="ltr" className="font-mono">
+                                  {actor.email}
+                                </span>
+                              )}
+                              <span>({typeLabel})</span>
+                            </>
+                          ) : (
+                            <span className="text-foreground">{typeLabel}</span>
+                          )}
+                          {actor.id && (
+                            <CopyId
+                              value={actor.id}
+                              shown={shortId(actor.id)}
+                              what={t('copyNames.actorId')}
+                            />
+                          )}
+                        </dd>
+                      </div>
+                      {org && (
+                        <div className="flex flex-wrap items-center gap-x-1.5">
+                          <dt>{t('workspaceLabel')}</dt>
+                          <dd className="flex flex-wrap items-center gap-x-1.5">
+                            <span className="text-foreground">{org.label}</span>
+                            {org.slug && (
+                              <span dir="ltr" className="font-mono">
+                                {org.slug}
+                              </span>
+                            )}
+                            <CopyId value={org.id} shown={null} what={t('copyNames.orgId')} />
+                          </dd>
+                        </div>
+                      )}
+                      {row.ip && (
+                        <div className="flex items-center gap-x-1.5">
+                          <dt>{t('ip')}</dt>
+                          <dd className="font-mono" dir="ltr">
+                            {row.ip}
+                          </dd>
+                        </div>
+                      )}
+                      {row.requestId && (
+                        <div className="flex flex-wrap items-center gap-x-1.5">
+                          <dt>{t('requestIdLabel')}</dt>
+                          <dd>
+                            <CopyId
+                              value={row.requestId}
+                              shown={shortId(row.requestId)}
+                              what={t('copyNames.requestId')}
+                            />
+                          </dd>
+                        </div>
+                      )}
+                    </dl>
                     <button
                       type="button"
                       aria-expanded={expanded}
@@ -184,6 +290,18 @@ export function SecurityEvents() {
                       {expanded ? t('hidePayload') : t('showPayload')}
                     </button>
                   </div>
+                  {row.userAgent && (
+                    <p
+                      className="mt-1 truncate text-xs text-muted-foreground"
+                      title={row.userAgent}
+                      dir="ltr"
+                    >
+                      <span className="me-1.5" dir="auto">
+                        {t('userAgentLabel')}
+                      </span>
+                      {row.userAgent}
+                    </p>
+                  )}
                   {expanded && (
                     <div id={panelId} className="mt-2">
                       {payload ? (

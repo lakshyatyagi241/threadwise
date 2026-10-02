@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { bucketHref, bucketRange, bucketRows, minorBig, shareLabel, shareTenths, BUCKETS } from './aging';
+import {
+  bucketHref,
+  bucketRange,
+  bucketRows,
+  minorBig,
+  shareLabel,
+  shareTenths,
+  BUCKETS,
+} from './aging';
 
 describe('minorBig', () => {
   it('is exact for the currency exponent', () => {
@@ -48,11 +56,16 @@ describe('bucketRows', () => {
 
 describe('bucket ranges (due dates, as of the report day)', () => {
   const asOf = '2026-10-15';
-  it('current is due today or later', () => expect(bucketRange('current', asOf)).toEqual({ dueFrom: '2026-10-15' }));
-  it('1-30 days late', () => expect(bucketRange('d1_30', asOf)).toEqual({ dueFrom: '2026-09-15', dueTo: '2026-10-14' }));
-  it('31-60 days late', () => expect(bucketRange('d31_60', asOf)).toEqual({ dueFrom: '2026-08-16', dueTo: '2026-09-14' }));
-  it('61-90 days late', () => expect(bucketRange('d61_90', asOf)).toEqual({ dueFrom: '2026-07-17', dueTo: '2026-08-15' }));
-  it('over 90 days has only an upper end', () => expect(bucketRange('d90_plus', asOf)).toEqual({ dueTo: '2026-07-16' }));
+  it('current is due today or later', () =>
+    expect(bucketRange('current', asOf)).toEqual({ dueFrom: '2026-10-15' }));
+  it('1-30 days late', () =>
+    expect(bucketRange('d1_30', asOf)).toEqual({ dueFrom: '2026-09-15', dueTo: '2026-10-14' }));
+  it('31-60 days late', () =>
+    expect(bucketRange('d31_60', asOf)).toEqual({ dueFrom: '2026-08-16', dueTo: '2026-09-14' }));
+  it('61-90 days late', () =>
+    expect(bucketRange('d61_90', asOf)).toEqual({ dueFrom: '2026-07-17', dueTo: '2026-08-15' }));
+  it('over 90 days has only an upper end', () =>
+    expect(bucketRange('d90_plus', asOf)).toEqual({ dueTo: '2026-07-16' }));
   it('builds the invoice list link', () => {
     expect(bucketHref('d1_30', asOf, { currency: 'USD' })).toBe(
       '/invoices?status=issued,partially_paid,overdue&dueFrom=2026-09-15&dueTo=2026-10-14&currency=USD',

@@ -42,6 +42,7 @@ import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { TeamChatModule } from './modules/team-chat';
+import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -143,6 +144,7 @@ import { HealthModule } from './health/health.module';
     PublicApiModule,
     PlatformSupportDeskModule,
     TeamChatModule,
+    WorkspacesTeamsTenancyModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

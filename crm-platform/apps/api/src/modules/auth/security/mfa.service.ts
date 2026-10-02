@@ -14,6 +14,7 @@ import type { Env } from '../../../config/env.schema';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { toIsoString, type DateLike } from '../support/dates';
+import { MfaAttemptLimiter } from '../support/mfa-attempts';
 import { createRecoveryCodes, consumeRecoveryCode } from '../support/recovery-codes';
 import { AuthKeys, Ttl } from '../support/redis-keys';
 import { generateTotpSecret, otpauthUrl, verifyTotp } from '../support/totp';
@@ -45,6 +46,7 @@ export class MfaService {
     private readonly passwords: PasswordService,
     private readonly audit: AuthAuditService,
     private readonly gates: AccountGateService,
+    private readonly limiter: MfaAttemptLimiter,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     config: ConfigService<Env, true>,
   ) {
@@ -93,6 +95,9 @@ export class MfaService {
   }
 
   async enable(orgId: number, userId: number, code: string): Promise<MfaEnableResponse> {
+    // Five wrong codes in fifteen minutes, counted with sign-in and with the confirmation
+    // passwords below: enrolling is a second-factor guess target too (TW-AUTH-030).
+    await this.limiter.assertAvailable('user', orgId, userId);
     const key = AuthKeys.mfaSetup(orgId, String(userId));
     const stored = await this.redis.get(key);
     if (!stored) {
@@ -105,6 +110,7 @@ export class MfaService {
     const secret = this.crypto.decrypt(stored);
     const step = verifyTotp(secret, code);
     if (step === null) {
+      await this.limiter.recordFailure('user', orgId, userId);
       await this.audit.recordStandalone({
         event: 'auth.mfa_failed',
         status: 'failure',
@@ -121,6 +127,15 @@ export class MfaService {
       );
     }
 
+    // The pending secret is consumed first: of two simultaneous confirmations only
+    // one gets to enrol (and to see the recovery codes); the other finds the setup gone.
+    if ((await this.redis.del(key)) === 0) {
+      throw new AppError(
+        ERROR_CODES.AUTH_MFA_SETUP_EXPIRED,
+        'Setup expired. Start again to get a new code.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     const { plain, hashes } = await createRecoveryCodes();
     await this.db.txAs({ orgId, userId }, async (tx) => {
       await tx.execute(sql`
@@ -139,7 +154,7 @@ export class MfaService {
         recordId: userId,
       });
     });
-    await this.redis.del(key);
+    await this.limiter.clear('user', orgId, userId);
     await this.gates.invalidate(orgId, userId);
     return { recoveryCodes: plain };
   }
@@ -238,13 +253,17 @@ export class MfaService {
     if (!state.secretEnc) return false;
     const step = verifyTotp(this.crypto.decrypt(state.secretEnc), code, Date.now(), state.lastStep);
     if (step === null) return false;
-    await this.db.txAs({ orgId, userId }, async (tx) => {
-      await tx.execute(sql`
+    // Advance the spent time-step only if nobody did meanwhile: two simultaneous
+    // submissions of the same code cannot both pass.
+    const res = await this.db.txAs({ orgId, userId }, async (tx) =>
+      tx.execute(sql`
         UPDATE user_security SET mfa_last_step = ${step}
         WHERE org_id = ${orgId} AND user_id = ${userId}
-      `);
-    });
-    return true;
+          AND (mfa_last_step IS NULL OR mfa_last_step < ${step})
+        RETURNING 1
+      `),
+    );
+    return res.rows.length > 0;
   }
 
   /** Consumes a recovery code. Returns whether one matched. */
@@ -274,13 +293,25 @@ export class MfaService {
     return true;
   }
 
+  /** The password gate of disable / regenerate: wrong guesses draw on the same budget as wrong codes. */
   private async assertPassword(orgId: number, userId: number, password: string): Promise<void> {
+    await this.limiter.assertAvailable('user', orgId, userId);
     const res = await this.db.txAs({ orgId, userId }, async (tx) =>
       tx.execute(sql`SELECT password_hash FROM users WHERE org_id = ${orgId} AND id = ${userId}`),
     );
     const hash = (res.rows[0] as unknown as { password_hash: string | null } | undefined)
       ?.password_hash;
     if (!(await this.passwords.verifyOrDummy(hash, password))) {
+      await this.limiter.recordFailure('user', orgId, userId);
+      await this.audit.recordStandalone({
+        event: 'auth.mfa_failed',
+        status: 'failure',
+        orgId,
+        actorType: 'user',
+        actorId: userId,
+        recordId: userId,
+        payload: { phase: 'confirm' },
+      });
       throw new AppError(
         ERROR_CODES.AUTH_CURRENT_PASSWORD_WRONG,
         'The password you entered is not correct.',

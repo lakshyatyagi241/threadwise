@@ -4,12 +4,7 @@ import { createContext, useContext, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Select, cn } from '@crm/ui';
 import type { RuleAction } from '../lib/builder';
-import {
-  fieldsByGroup,
-  findField,
-  type FieldDef,
-  type InvalidReason,
-} from '../lib/fields';
+import { fieldsByGroup, findField, type FieldDef, type InvalidReason } from '../lib/fields';
 import type { ValueProblem } from '../lib/model';
 import {
   canAddCondition,
@@ -69,7 +64,11 @@ function CombinatorToggle({ group }: { group: Group }) {
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm">
       <span className="font-medium">{label}</span>
-      <div role="radiogroup" aria-label={label} className="inline-flex overflow-hidden rounded-md border border-border">
+      <div
+        role="radiogroup"
+        aria-label={label}
+        className="inline-flex overflow-hidden rounded-md border border-border"
+      >
         {(['and', 'or'] as const satisfies readonly Combinator[]).map((c) => (
           <button
             key={c}
@@ -87,7 +86,9 @@ function CombinatorToggle({ group }: { group: Group }) {
           </button>
         ))}
       </div>
-      <span className="text-muted-foreground">{t(group.combinator === 'and' ? 'matchAllHint' : 'matchAnyHint')}</span>
+      <span className="text-muted-foreground">
+        {t(group.combinator === 'and' ? 'matchAllHint' : 'matchAnyHint')}
+      </span>
     </div>
   );
 }
@@ -149,14 +150,28 @@ function GroupEditor({
         {group.children.map((child, i) => (
           <li key={child.id} className="space-y-2">
             {i > 0 && (
-              <div aria-hidden="true" className="ps-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <div
+                aria-hidden="true"
+                className="ps-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+              >
                 {t(group.combinator)}
               </div>
             )}
             {child.kind === 'condition' ? (
-              <ConditionRow condition={child} number={`${prefix}${i + 1}`} index={i} count={group.children.length} />
+              <ConditionRow
+                condition={child}
+                number={`${prefix}${i + 1}`}
+                index={i}
+                count={group.children.length}
+              />
             ) : (
-              <GroupEditor group={child} level={level + 1} index={i} siblings={group.children.length} prefix={`${prefix}${i + 1}.`} />
+              <GroupEditor
+                group={child}
+                level={level + 1}
+                index={i}
+                siblings={group.children.length}
+                prefix={`${prefix}${i + 1}.`}
+              />
             )}
           </li>
         ))}
@@ -290,18 +305,25 @@ function Warning({ condition, warning }: { condition: Condition; warning: Condit
         ? t('values', { count: warning.missing.length })
         : t(`reason.${warning.reason}`);
   return (
-    <div role="alert" className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-md border border-warning/40 bg-warning/10 px-3 py-2 text-xs text-warning">
+    <div
+      role="alert"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-md border border-warning/40 bg-warning/10 px-3 py-2 text-xs text-warning"
+    >
       <span className="inline-flex items-center gap-1.5 font-medium">
         <WarningIcon className="size-3.5" />
         {message}
       </span>
-      <span className="text-foreground/80">{t(warning.type === 'field' ? 'fixField' : 'fixValues')}</span>
+      <span className="text-foreground/80">
+        {t(warning.type === 'field' ? 'fixField' : 'fixValues')}
+      </span>
       <span className="ms-auto flex gap-2">
         {warning.type === 'values' && (
           <button
             type="button"
             disabled={disabled}
-            onClick={() => dispatch({ type: 'dropMissing', id: condition.id, missing: warning.missing })}
+            onClick={() =>
+              dispatch({ type: 'dropMissing', id: condition.id, missing: warning.missing })
+            }
             className="font-semibold text-foreground underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             {t('removeValues')}
@@ -333,7 +355,8 @@ function ConditionRow({
 }) {
   const t = useTranslations('segments.builder');
   const tp = useTranslations('segments.problem');
-  const { catalog, dispatch, disabled, warnings, problems, showProblems, serverProblems } = useRules();
+  const { catalog, dispatch, disabled, warnings, problems, showProblems, serverProblems } =
+    useRules();
   const field = findField(catalog, condition.field);
   const warning = warnings.get(condition.id);
   const problem = showProblems ? problems[condition.id] : undefined;
@@ -346,7 +369,11 @@ function ConditionRow({
       aria-label={t('conditionN', { n: number })}
       className={cn(
         'space-y-2 rounded-md border bg-background p-2.5',
-        warning ? 'border-warning/50' : problem || serverMessage ? 'border-danger/50' : 'border-border',
+        warning
+          ? 'border-warning/50'
+          : problem || serverMessage
+            ? 'border-danger/50'
+            : 'border-border',
       )}
     >
       <div className="flex flex-wrap items-start gap-2">
@@ -354,7 +381,11 @@ function ConditionRow({
           <FieldSelect condition={condition} label={t('fieldOf', { n: number })} />
         </div>
         <div className="w-full sm:w-48">
-          <OperatorSelect condition={condition} field={field} label={t('operatorOf', { n: number })} />
+          <OperatorSelect
+            condition={condition}
+            field={field}
+            label={t('operatorOf', { n: number })}
+          />
         </div>
         {field && hasValue && (
           <div className="min-w-0 flex-1 basis-full sm:basis-64">

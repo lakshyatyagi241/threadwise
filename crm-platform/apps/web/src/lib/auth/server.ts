@@ -7,7 +7,9 @@ import {
   type SessionResponse,
 } from '@crm/contracts';
 import { cookies, headers } from 'next/headers';
+import { clientIpFrom } from './client-ip';
 import { cookieNames, type SessionKind, type TokenPair } from './cookies';
+import { REQUEST_PATH_HEADER, loginPath, refreshPath } from './next-path';
 
 export const apiBase = () => process.env.API_URL ?? 'http://localhost:3000';
 
@@ -16,6 +18,13 @@ export interface SessionState<T> {
   session: T | null;
   /** No usable access token, but a refresh token exists: refresh instead of sending to login. */
   expired: boolean;
+  /**
+   * Set when the API refused the caller's address (operator IP allowlist, TW-AUTH-038): the address it
+   * reports, or '' when it could not read one. The console shows the blocked screen instead of a login loop.
+   */
+  blockedIp?: string;
+  /** Set when the API ended the session for inactivity (TW-AUTH-033): the configured limit, in minutes. */
+  idleMinutes?: number;
 }
 
 /**
@@ -23,7 +32,7 @@ export interface SessionState<T> {
  * so without the header an operator IP allowlist would be checked against the web server.
  */
 async function clientAddressHeaders(): Promise<Record<string, string>> {
-  const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim();
+  const ip = clientIpFrom(await headers());
   return ip ? { 'X-Forwarded-For': ip } : {};
 }
 
@@ -41,10 +50,50 @@ async function probe<T>(
     headers: { Authorization: `Bearer ${at}`, ...(await clientAddressHeaders()) },
     cache: 'no-store',
   });
-  if (res.status === 401) return { session: null, expired: hasRefresh };
+  if (res.status === 401) {
+    const body = (await res.json().catch(() => null)) as {
+      errors?: { path?: string; message?: string }[];
+    } | null;
+    const idle = body?.errors?.find((e) => e.path === 'reason')?.message === 'idle';
+    if (idle) {
+      // The refresh token is ended too, so there is nothing to rotate: go to sign-in with the reason.
+      const minutes = Number(body?.errors?.find((e) => e.path === 'idleMinutes')?.message);
+      return {
+        session: null,
+        expired: false,
+        idleMinutes: Number.isFinite(minutes) && minutes > 0 ? minutes : undefined,
+      };
+    }
+    return { session: null, expired: hasRefresh };
+  }
+  if (res.status === 403) {
+    const body = (await res.json().catch(() => null)) as {
+      code?: string;
+      errors?: { path?: string; message?: string }[];
+    } | null;
+    if (body?.code === 'AUTH_IP_BLOCKED') {
+      const ip = body.errors?.find((e) => e.path === 'ip')?.message?.trim() ?? '';
+      return { session: null, expired: false, blockedIp: ip };
+    }
+    return { session: null, expired: false };
+  }
   if (!res.ok) return { session: null, expired: false };
   const parsed = parse(await res.json());
   return { session: parsed, expired: false };
+}
+
+/** The page the browser asked for (path and query), as recorded by the proxy; null outside a proxied request. */
+export async function requestPath(): Promise<string | null> {
+  return (await headers()).get(REQUEST_PATH_HEADER);
+}
+
+/**
+ * Where a visitor without a usable session goes: the refresh route when a refresh token is still alive,
+ * otherwise sign-in. Either way the page they asked for rides along as `?next=` (TW-AUTH-001/011).
+ */
+export async function signedOutTarget(expired: boolean, idleMinutes?: number): Promise<string> {
+  const asked = await requestPath();
+  return expired ? refreshPath(asked) : loginPath(asked, { idleMinutes });
 }
 
 /** Server-side staff session check: everything the shell needs (user, org, permissions, flags) in one call. */

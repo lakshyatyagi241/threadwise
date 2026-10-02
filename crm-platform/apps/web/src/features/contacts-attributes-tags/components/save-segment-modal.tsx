@@ -28,7 +28,13 @@ export function SaveSegmentModal({
 }) {
   const t = useTranslations('contacts-attributes-tags.segmentSave');
   return (
-    <Modal open={open} onClose={onClose} eyebrow={t('eyebrow')} title={t('title')} closeLabel={t('close')}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      eyebrow={t('eyebrow')}
+      title={t('title')}
+      closeLabel={t('close')}
+    >
       {open && <SaveForm filter={filter} onClose={onClose} />}
     </Modal>
   );
@@ -45,7 +51,10 @@ function SaveForm({ filter, onClose }: { filter: object; onClose: () => void }) 
   const [missing, setMissing] = useState(false);
 
   const save = useMutation({
-    mutationFn: () => segmentFromFilters({ name: name.trim(), visibility, filter } as Parameters<typeof segmentFromFilters>[0]),
+    mutationFn: () =>
+      segmentFromFilters({ name: name.trim(), visibility, filter } as Parameters<
+        typeof segmentFromFilters
+      >[0]),
     onSuccess: async (segment) => {
       await invalidateSegments(qc);
       toast(t('created', { name: segment.name }), 'success');
@@ -112,7 +121,9 @@ function SaveForm({ filter, onClose }: { filter: object; onClose: () => void }) 
               />
               <span>
                 <span className="block font-medium">{t(v)}</span>
-                <span className="block text-xs text-muted-foreground">{t(v === 'private' ? 'privateHint' : 'sharedHint')}</span>
+                <span className="block text-xs text-muted-foreground">
+                  {t(v === 'private' ? 'privateHint' : 'sharedHint')}
+                </span>
               </span>
             </label>
           ))}

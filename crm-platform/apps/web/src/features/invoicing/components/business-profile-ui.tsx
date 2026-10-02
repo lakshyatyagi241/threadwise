@@ -31,7 +31,11 @@ export function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 rounded-xl border border-border bg-background">
+    <section
+      id={id}
+      aria-labelledby={`${id}-title`}
+      className="scroll-mt-20 rounded-xl border border-border bg-background"
+    >
       <header className="border-b border-border px-4 py-3 sm:px-5">
         <h2 id={`${id}-title`} className="text-base font-semibold">
           {title}
@@ -83,7 +87,8 @@ export function RowsEditor({
   const uid = useId();
   const used = new Set(rows.map((r) => r.label.trim().toLowerCase()));
   const free = (suggestions ?? []).filter((s) => !used.has(s.toLowerCase()));
-  const update = (i: number, patch: Partial<Row>) => onChange(rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
+  const update = (i: number, patch: Partial<Row>) =>
+    onChange(rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
 
   function addSuggestion(label: string) {
     const blank = rows.findIndex((r) => !r.label.trim() && !r.value.trim());
@@ -100,7 +105,10 @@ export function RowsEditor({
           const le = err(`${errPrefix}.${i}.label`);
           const ve = err(`${errPrefix}.${i}.value`);
           return (
-            <li key={i} className="flex flex-col gap-2 rounded-lg border border-border p-3 sm:flex-row sm:items-start sm:border-0 sm:p-0">
+            <li
+              key={i}
+              className="flex flex-col gap-2 rounded-lg border border-border p-3 sm:flex-row sm:items-start sm:border-0 sm:p-0"
+            >
               <div className="sm:w-56 sm:shrink-0">
                 <Input
                   id={`${uid}-l${i}`}
@@ -160,10 +168,20 @@ export function RowsEditor({
       )}
       {!disabled && (
         <div className="flex flex-wrap items-center gap-2">
-          <Button type="button" variant="secondary" disabled={rows.length >= max} onClick={() => onChange([...rows, { label: '', value: '' }])}>
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={rows.length >= max}
+            onClick={() => onChange([...rows, { label: '', value: '' }])}
+          >
             <PlusIcon /> {t('add')}
           </Button>
-          <span className={cn('text-xs tabular-nums', rows.length >= max ? 'text-warning' : 'text-muted-foreground')}>
+          <span
+            className={cn(
+              'text-xs tabular-nums',
+              rows.length >= max ? 'text-warning' : 'text-muted-foreground',
+            )}
+          >
             {t('count', { count: rows.length, max })}
           </span>
         </div>
