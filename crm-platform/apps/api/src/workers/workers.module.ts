@@ -14,6 +14,7 @@ import {
   TasksWorkerModule,
 } from '../modules/crm';
 import { NotificationsWorkerModule } from '../modules/notifications';
+import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -44,6 +45,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     BroadcastsWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ScheduledQueueWarmerWorkerModule,
   ],
   providers: [
     OutboxDrainService,

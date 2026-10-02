@@ -47,6 +47,30 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
 - **100 MB size cap** (Reference had none). WhatsApp's own document ceiling.
 - Evidence: `apps/api/test/unit/node-bridge-runtime/safe-fetch.spec.ts` (49): every blocked range, redirect re-validation, DNS names, size cap, MIME.
 
+## TW-NODE-030 to 036 scheduled messages (deliberate deviations)
+
+- **The row is the schedule.** No in-memory cron, no boot sync: nothing is lost on a restart (Reference lost single and broadcast schedules and left their rows
+  `scheduled` for ever). A job is only the next occurrence; a reconciliation pass queues a run again if its job finished or vanished.
+- **`repeat_every` is honoured and the end date is inclusive** (the bridge ignored the first and stopped before the second); weekly walks to the next chosen
+  weekday, monthly adds months without overflow, all in the schedule's own zone.
+- **Late policy.** A one-off more than `SCHED_MAX_LATE_MINUTES` (60) late is failed with "Missed its time" instead of being left `scheduled`; a recurring one
+  does not catch up and moves to its next future occurrence (as Reference did).
+- **Per-recipient claim** (`processing`, new migration) so a retry after a crash never messages the same person twice (Reference sent again after a restart).
+- **Every occurrence of a recurring schedule reaches the whole audience**; recipients are pending again after each run and totals are cumulative. Reference ignored
+  later runs as "duplicate callbacks".
+- **`paused` is a real status** with an automatic resume (daily cap: next midnight UTC; emergency halt: retried in 5 minutes). Laravel rejected `paused` and left
+  the row `running`.
+- **No callbacks.** The bridge's status posts and Laravel's duplicate guard are direct writes in the run's own transactions; a single scheduled message's outcome is
+  now recorded (Reference never reported it). The unknown-interval 500 at registration becomes "the recurrence ends after its first run".
+- **One run per number** across broadcasts and schedules (shared lease).
+
+## Not verified (scheduler)
+
+- Real transports: the engine is tested with a fake transport. The Cloud API text transport exists; Baileys and Twilio register their own when built.
+- Not built here: wallet and plan metering of each message (WALLET, PLAN), the warmer's daily budget and hold (SCHED), re-resolving tags and groups at fire time
+  (the SCHED screens write the audience), a run-history table (none in the schema), delivered and read states (TW-NODE-020 receipts), media from storage and
+  templates (they fail the schedule up front with the reason).
+
 ## Not verified
 
 - **Automated twin run.** `threadwise-playwright-parity` could not be used for this slice: its scripts list changed files without `git diff --relative`,

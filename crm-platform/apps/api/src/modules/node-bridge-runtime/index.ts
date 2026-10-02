@@ -9,3 +9,14 @@ export {
   SafeFetch,
   UnsafeMediaUrlError,
 } from '../../infra/providers/node-bridge-runtime/safe-fetch';
+export { OutboundRegistry } from './outbound/outbound-registry.service';
+export { SenderResolver } from './outbound/sender-resolver.service';
+export {
+  UnsupportedSendError,
+  type EngineTransport,
+  type OpenTransport,
+  type SendCommand,
+  type SendContext,
+  type SendOutcome,
+  type SenderRef,
+} from './outbound/outbound';
