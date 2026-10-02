@@ -113,12 +113,10 @@ describe('chat page (TW-WGT-009, 022)', () => {
 describe('config and the visitor (TW-WGT-010, 011, 012, 013)', () => {
   it('TW-WGT-010 #1: a first call creates one visitor row, returns its uuid and sets the visitor cookie', async () => {
     const w = await api.widget(t.admin, { name: 'Config 1' });
-    const res = await api
-      .pub(w.embedToken)
-      .config(undefined, {
-        referer: 'https://customer.example/pricing',
-        'user-agent': 'UnitBrowser/1',
-      });
+    const res = await api.pub(w.embedToken).config(undefined, {
+      referer: 'https://customer.example/pricing',
+      'user-agent': 'UnitBrowser/1',
+    });
     expect(res.status).toBe(200);
     expect(res.body.ok).toBe(true);
     expect(res.body.visitor.uuid).toMatch(uuidRe);
@@ -399,15 +397,13 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
   it('TW-WGT-014 rule 2 / TW-WGT-005 #2: name, email and phone are stored on the visitor, last non-empty write wins', async () => {
     const w = await api.widget(t.admin, { name: 'Msg 4' });
     const uuid = await api.visitor(w.embedToken);
-    await api
-      .pub(w.embedToken)
-      .message({
-        body: 'one',
-        name: 'Asha',
-        email: 'asha@example.com',
-        phone: '+91 98765 43210',
-        visitor_uuid: uuid,
-      });
+    await api.pub(w.embedToken).message({
+      body: 'one',
+      name: 'Asha',
+      email: 'asha@example.com',
+      phone: '+91 98765 43210',
+      visitor_uuid: uuid,
+    });
     await api.pub(w.embedToken).message({ body: 'two', name: '', email: null, visitor_uuid: uuid });
     let row = await h.owner.query(
       `SELECT name, email, phone FROM chatbot_widget_visitors WHERE org_id = $1 AND visitor_uuid = $2`,
@@ -543,15 +539,13 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
     ]);
     const w = await api.widget(t.admin, { name: 'Contact 2' });
     const uuid = await api.visitor(w.embedToken);
-    await api
-      .pub(w.embedToken)
-      .message({
-        body: 'hi',
-        name: 'Someone Else',
-        email: 'new@contact.test',
-        phone: '919876543211',
-        visitor_uuid: uuid,
-      });
+    await api.pub(w.embedToken).message({
+      body: 'hi',
+      name: 'Someone Else',
+      email: 'new@contact.test',
+      phone: '919876543211',
+      visitor_uuid: uuid,
+    });
     const conv = await api.conversationOf(t.orgId, uuid);
     const linked = await h.owner.query(
       `SELECT uuid, name, email, channel FROM contacts WHERE org_id = $1 AND id = $2`,
