@@ -116,7 +116,9 @@ export class EngineConnectionService {
     const secret = (await this.settings.getSecret(secretKey(engine))) ?? '';
     const result = await this.handshake.handshake({ engine, url, secret, brand });
 
-    const message = result.ok ? `${brand} connected.` : `${brand} not connected - ${result.reason}.`;
+    const message = result.ok
+      ? `${brand} connected.`
+      : `${brand} not connected - ${result.reason}.`;
     await this.settings.mergeMember(
       DOC,
       engine,

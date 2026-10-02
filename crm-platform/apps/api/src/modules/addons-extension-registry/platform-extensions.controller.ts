@@ -97,7 +97,8 @@ export class PlatformExtensionsController {
     }),
   )
   @ApiOperation({
-    summary: 'Step 2 of the installer: upload a package (field "extension", optional "purchaseCode")',
+    summary:
+      'Step 2 of the installer: upload a package (field "extension", optional "purchaseCode")',
   })
   upload(@UploadedFile() file: UploadedZip | undefined, @Body() body: { purchaseCode?: unknown }) {
     const code = typeof body?.purchaseCode === 'string' ? body.purchaseCode.slice(0, 191) : '';

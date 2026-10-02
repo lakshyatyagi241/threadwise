@@ -50,7 +50,8 @@ export function mergeLimit(
 ): number {
   if (plan.platformOwned) return 0;
   const override = plan.overrides.limits?.[key];
-  if (typeof override === 'number' && Number.isInteger(override)) return override > 0 ? override : 0;
+  if (typeof override === 'number' && Number.isInteger(override))
+    return override > 0 ? override : 0;
   if (!plan.planKnown) return 0;
 
   const stored = plan.planLimits[key];

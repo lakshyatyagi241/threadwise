@@ -35,7 +35,9 @@ export class ExtensionStore {
   }
 
   async list(tx: Tx): Promise<ExtensionRow[]> {
-    const res = await tx.execute(sql`SELECT ${COLUMNS} FROM extensions ORDER BY name ASC, slug ASC`);
+    const res = await tx.execute(
+      sql`SELECT ${COLUMNS} FROM extensions ORDER BY name ASC, slug ASC`,
+    );
     return res.rows as unknown as ExtensionRow[];
   }
 

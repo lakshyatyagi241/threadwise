@@ -38,7 +38,8 @@ export function readZip(buf: Buffer, limits: { maxEntries: number }): ZipEntry[]
   const total = buf.readUInt16LE(eocd + 10);
   const cdSize = buf.readUInt32LE(eocd + 12);
   const cdOffset = buf.readUInt32LE(eocd + 16);
-  if (disk !== 0 || buf.readUInt16LE(eocd + 6) !== 0) throw new ZipError('multi-disk archives are not supported');
+  if (disk !== 0 || buf.readUInt16LE(eocd + 6) !== 0)
+    throw new ZipError('multi-disk archives are not supported');
   if (total === 0xffff || cdSize === 0xffffffff || cdOffset === 0xffffffff) {
     throw new ZipError('ZIP64 archives are not supported');
   }
@@ -48,7 +49,8 @@ export function readZip(buf: Buffer, limits: { maxEntries: number }): ZipEntry[]
   const entries: ZipEntry[] = [];
   let p = cdOffset;
   for (let n = 0; n < total; n++) {
-    if (p + 46 > buf.length || buf.readUInt32LE(p) !== CEN_SIG) throw new ZipError('bad central directory entry');
+    if (p + 46 > buf.length || buf.readUInt32LE(p) !== CEN_SIG)
+      throw new ZipError('bad central directory entry');
     const flags = buf.readUInt16LE(p + 8);
     if (flags & 0x1) throw new ZipError('encrypted archives are not supported');
     const nameLen = buf.readUInt16LE(p + 28);
@@ -73,7 +75,8 @@ export function readZip(buf: Buffer, limits: { maxEntries: number }): ZipEntry[]
 /** The bytes of one entry, verified against its declared size and CRC. */
 export function readEntry(buf: Buffer, entry: ZipEntry): Buffer {
   const o = entry.offset;
-  if (o + 30 > buf.length || buf.readUInt32LE(o) !== LOC_SIG) throw new ZipError(`bad local header for ${entry.name}`);
+  if (o + 30 > buf.length || buf.readUInt32LE(o) !== LOC_SIG)
+    throw new ZipError(`bad local header for ${entry.name}`);
   const start = o + 30 + buf.readUInt16LE(o + 26) + buf.readUInt16LE(o + 28);
   const end = start + entry.compressedSize;
   if (end > buf.length) throw new ZipError(`${entry.name} runs past the end of the archive`);
@@ -90,7 +93,8 @@ export function readEntry(buf: Buffer, entry: ZipEntry): Buffer {
     }
   } else throw new ZipError(`${entry.name} uses an unsupported compression method`);
 
-  if (data.length !== entry.size) throw new ZipError(`${entry.name} does not match its declared size`);
+  if (data.length !== entry.size)
+    throw new ZipError(`${entry.name} does not match its declared size`);
   if (crc32(data) !== entry.crc) throw new ZipError(`${entry.name} is corrupt (checksum mismatch)`);
   return data;
 }

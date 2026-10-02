@@ -129,7 +129,12 @@ export class AddonPackService {
     const titled = (k: string) => k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
     return {
       features: [
-        ...PLAN_FEATURE_DEFS.map((d) => ({ key: d.key, label: titled(d.key), group: d.group, source: 'core' })),
+        ...PLAN_FEATURE_DEFS.map((d) => ({
+          key: d.key,
+          label: titled(d.key),
+          group: d.group,
+          source: 'core',
+        })),
         ...mf.map((f) => ({ key: f.key, label: f.label, group: f.group, source: f.module })),
       ],
       limits: [
@@ -187,7 +192,9 @@ export class AddonPackService {
 
     return this.tx(async (tx) => {
       const taken = await tx.execute(sql`SELECT slug FROM plans`);
-      const base = /[a-z0-9]/i.test(body.name.normalize('NFKD')) ? slugifyPlanName(body.name) : 'addon';
+      const base = /[a-z0-9]/i.test(body.name.normalize('NFKD'))
+        ? slugifyPlanName(body.name)
+        : 'addon';
       const slug = uniquePlanSlug(
         base,
         new Set((taken.rows as unknown as Array<{ slug: string }>).map((r) => r.slug)),

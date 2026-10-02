@@ -63,17 +63,26 @@ describe('zip reader', () => {
   });
 
   it('refuses garbage and archives with too many entries', () => {
-    expect(() => readZip(Buffer.from('definitely not a zip file at all'), { maxEntries: 5 })).toThrow();
+    expect(() =>
+      readZip(Buffer.from('definitely not a zip file at all'), { maxEntries: 5 }),
+    ).toThrow();
     const many = makeZip(Array.from({ length: 6 }, (_, i) => ({ name: `f${i}`, data: 'x' })));
     expect(() => readZip(many, { maxEntries: 5 })).toThrow(/entries/);
   });
 });
 
 describe('package inspection (WD-ADD-004)', () => {
-  const m = (extra: Record<string, unknown> = {}) => manifestJson({ slug: 'foo', name: 'Foo', version: '1.2.0', ...extra });
+  const m = (extra: Record<string, unknown> = {}) =>
+    manifestJson({ slug: 'foo', name: 'Foo', version: '1.2.0', ...extra });
 
   it('accepts extension.json at the root', () => {
-    const r = inspectPackage(makeZip([{ name: 'extension.json', data: m() }, { name: 'a.txt', data: 'x' }]), OPTS);
+    const r = inspectPackage(
+      makeZip([
+        { name: 'extension.json', data: m() },
+        { name: 'a.txt', data: 'x' },
+      ]),
+      OPTS,
+    );
     expect(r.manifest).toMatchObject({ slug: 'foo', name: 'Foo', version: '1.2.0' });
     expect(r.rootPrefix).toBe('');
   });
@@ -84,23 +93,31 @@ describe('package inspection (WD-ADD-004)', () => {
   });
 
   it('refuses an unreadable archive, a missing manifest, a malformed manifest', () => {
-    expect(refusal(() => inspectPackage(Buffer.from('plain text, not a zip'), OPTS))).toMatchObject({
-      code: 'ADD_PACKAGE_INVALID',
-      message: expect.stringContaining('not a readable ZIP'),
-    });
-    expect(refusal(() => inspectPackage(makeZip([{ name: 'readme.txt', data: 'x' }]), OPTS)).message).toMatch(
-      /extension\.json was not found/,
+    expect(refusal(() => inspectPackage(Buffer.from('plain text, not a zip'), OPTS))).toMatchObject(
+      {
+        code: 'ADD_PACKAGE_INVALID',
+        message: expect.stringContaining('not a readable ZIP'),
+      },
     );
-    const bad = refusal(() => inspectPackage(makeZip([{ name: 'extension.json', data: '{"name":"no slug"}' }]), OPTS));
+    expect(
+      refusal(() => inspectPackage(makeZip([{ name: 'readme.txt', data: 'x' }]), OPTS)).message,
+    ).toMatch(/extension\.json was not found/);
+    const bad = refusal(() =>
+      inspectPackage(makeZip([{ name: 'extension.json', data: '{"name":"no slug"}' }]), OPTS),
+    );
     expect(bad.message).toMatch(/malformed/);
     expect(bad.getStatus()).toBe(422);
     expect(
-      refusal(() => inspectPackage(makeZip([{ name: 'extension.json', data: m({ slug: '../../etc' }) }]), OPTS)).message,
+      refusal(() =>
+        inspectPackage(makeZip([{ name: 'extension.json', data: m({ slug: '../../etc' }) }]), OPTS),
+      ).message,
     ).toMatch(/malformed/);
   });
 
   it('refuses a package that needs a newer core, naming both versions (nothing is written)', () => {
-    const e = refusal(() => inspectPackage(makeZip([{ name: 'extension.json', data: m({ min_core: '2.0.0' }) }]), OPTS));
+    const e = refusal(() =>
+      inspectPackage(makeZip([{ name: 'extension.json', data: m({ min_core: '2.0.0' }) }]), OPTS),
+    );
     expect(e.code).toBe('ADD_CORE_TOO_OLD');
     expect(e.message).toContain('2.0.0');
     expect(e.message).toContain('1.0.0');
@@ -111,8 +128,13 @@ describe('package inspection (WD-ADD-004)', () => {
   });
 
   it('refuses a package that declares it would unpack past the limit', () => {
-    const zip = makeZip([{ name: 'extension.json', data: m() }, { name: 'big.bin', data: Buffer.alloc(5000) }]);
-    expect(refusal(() => inspectPackage(zip, { ...OPTS, maxUnpackedBytes: 1000 })).code).toBe('ADD_PACKAGE_TOO_LARGE');
+    const zip = makeZip([
+      { name: 'extension.json', data: m() },
+      { name: 'big.bin', data: Buffer.alloc(5000) },
+    ]);
+    expect(refusal(() => inspectPackage(zip, { ...OPTS, maxUnpackedBytes: 1000 })).code).toBe(
+      'ADD_PACKAGE_TOO_LARGE',
+    );
   });
 });
 
@@ -162,7 +184,10 @@ describe('install (WD-ADD-005)', () => {
     const zip = makeZip([{ name: 'extension.json', data: manifest }]);
     const inspection = inspectPackage(zip, OPTS);
     // the manifest alone is installable; an inspection whose every entry is protected is not
-    const hollow = { ...inspection, entries: inspection.entries.map((e) => ({ ...e, name: '.env' })) };
+    const hollow = {
+      ...inspection,
+      entries: inspection.entries.map((e) => ({ ...e, name: '.env' })),
+    };
     await expect(installPackage(zip, hollow, dir)).rejects.toMatchObject({
       message: 'The ZIP contained no installable files.',
     });
@@ -170,8 +195,14 @@ describe('install (WD-ADD-005)', () => {
   });
 
   it('a second install of the same slug overwrites in place', async () => {
-    const v1 = makeZip([{ name: 'extension.json', data: manifest }, { name: 'a.txt', data: 'one' }]);
-    const v2 = makeZip([{ name: 'extension.json', data: manifestJson({ slug: 'foo', version: '2.0.0' }) }, { name: 'a.txt', data: 'two' }]);
+    const v1 = makeZip([
+      { name: 'extension.json', data: manifest },
+      { name: 'a.txt', data: 'one' },
+    ]);
+    const v2 = makeZip([
+      { name: 'extension.json', data: manifestJson({ slug: 'foo', version: '2.0.0' }) },
+      { name: 'a.txt', data: 'two' },
+    ]);
     await installPackage(v1, inspectPackage(v1, OPTS), dir);
     const res = await installPackage(v2, inspectPackage(v2, OPTS), dir);
     expect(res.written).toBe(2);
@@ -180,7 +211,8 @@ describe('install (WD-ADD-005)', () => {
 
   it('path predicates', () => {
     expect(isSafeRelative('a/b.txt')).toBe(true);
-    for (const bad of ['', '../a', 'a/../b', '/a', 'C:/a', 'a\\b', 'a\0b']) expect(isSafeRelative(bad), bad).toBe(false);
+    for (const bad of ['', '../a', 'a/../b', '/a', 'C:/a', 'a\\b', 'a\0b'])
+      expect(isSafeRelative(bad), bad).toBe(false);
     expect(isProtectedPath('vendor')).toBe(true);
     expect(isProtectedPath('vendor/x')).toBe(true);
     expect(isProtectedPath('vendors/x')).toBe(false);

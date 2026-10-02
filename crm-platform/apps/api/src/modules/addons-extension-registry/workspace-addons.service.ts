@@ -79,7 +79,8 @@ export class WorkspaceAddonsService {
         package_id: number;
       }>;
       const ownedCount = new Map<number, number>();
-      for (const r of ownedRows) ownedCount.set(r.package_id, (ownedCount.get(r.package_id) ?? 0) + 1);
+      for (const r of ownedRows)
+        ownedCount.set(r.package_id, (ownedCount.get(r.package_id) ?? 0) + 1);
 
       const catRes = await tx.execute(sql`
         SELECT id::int AS id, uuid, slug, name, subtitle, amount::text AS amount, offer_amount::text AS offer_amount,

@@ -44,7 +44,12 @@ export function mergeModules(
   for (const row of rows) {
     const manifest = disk.get(row.slug)?.manifest ?? readStoredManifest(row.manifest);
     if (!manifest) continue;
-    out.set(row.slug, { slug: row.slug, manifest, source: 'upload', enabled: row.status === 'active' });
+    out.set(row.slug, {
+      slug: row.slug,
+      manifest,
+      source: 'upload',
+      enabled: row.status === 'active',
+    });
   }
   for (const [slug, mod] of disk) {
     if (out.has(slug)) continue;
@@ -94,7 +99,12 @@ export class ModuleRegistryService {
         this.store.tx((tx) => this.store.list(tx)),
         scanModules(addonsConfig().modulesDir),
       ]);
-      const snap: RegistrySnapshot = { at: Date.now(), rows, disk, modules: mergeModules(rows, disk) };
+      const snap: RegistrySnapshot = {
+        at: Date.now(),
+        rows,
+        disk,
+        modules: mergeModules(rows, disk),
+      };
       this.cached = snap;
       return snap;
     } catch (err) {

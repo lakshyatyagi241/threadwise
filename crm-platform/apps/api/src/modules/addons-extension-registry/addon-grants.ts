@@ -62,11 +62,10 @@ export const isStackable = (g: AddonGrants): boolean => Object.keys(g.limits).le
 export function grantBullets(g: AddonGrants): AddonBullet[] {
   const bullets: AddonBullet[] = [
     ...g.features.map((key): AddonBullet => ({ kind: 'feature', key, amount: null })),
-    ...Object.entries(g.limits).map(
-      ([key, v]): AddonBullet =>
-        v === -1
-          ? { kind: 'limit_unlimited', key, amount: null }
-          : { kind: 'limit_add', key, amount: v },
+    ...Object.entries(g.limits).map(([key, v]): AddonBullet =>
+      v === -1
+        ? { kind: 'limit_unlimited', key, amount: null }
+        : { kind: 'limit_add', key, amount: v },
     ),
   ];
   return bullets.slice(0, MAX_BULLETS);

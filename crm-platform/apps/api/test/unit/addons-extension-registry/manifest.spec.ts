@@ -77,7 +77,10 @@ describe('extension manifest (WD-ADD-004)', () => {
   });
 
   it('drops route paths that are absolute or climb out of the package', () => {
-    const m = parse({ slug: 'foo', routes: ['routes/a.php', '../core.php', '/etc/passwd', 'a/../../b', 7] })!;
+    const m = parse({
+      slug: 'foo',
+      routes: ['routes/a.php', '../core.php', '/etc/passwd', 'a/../../b', 7],
+    })!;
     expect(m.routes).toEqual(['routes/a.php']);
   });
 

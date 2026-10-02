@@ -107,7 +107,8 @@ export async function removeFiles(modulesDir: string, tracked: string[]): Promis
   for (const path of tracked) {
     if (!isSafeRelative(path)) continue;
     const [, ...rest] = path.split('/');
-    if (rest.length > 0 && rest.join('/') !== 'extension.json' && isProtectedPath(rest.join('/'))) continue;
+    if (rest.length > 0 && rest.join('/') !== 'extension.json' && isProtectedPath(rest.join('/')))
+      continue;
     const target = resolve(base, path);
     if (!target.startsWith(base + sep)) continue;
     try {
