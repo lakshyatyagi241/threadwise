@@ -248,6 +248,7 @@
     "system": {
       "nav": { "group": "System", "item": "Updater" },
       "title": "Application updater",
+      "titleRich": "Application <i>updater</i>.",
       "titleAccent": "updater",
       "kicker": "Admin · Maintenance",
       "description": "Verify your purchase and see exactly what this deployment is running. Updates ship as a new image and migrations run before it starts — your database, storage and uploads are never touched from this page.",

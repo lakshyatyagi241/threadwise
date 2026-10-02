@@ -215,7 +215,7 @@ export function SystemView() {
             {t('kicker')}
           </div>
           <h1 className="font-serif text-[28px] font-normal leading-none tracking-[-0.01em] sm:text-[40px]">
-            {t.rich('title', { i: (c) => <span className="italic text-brand">{c}</span> })}
+            {t.rich('titleRich', { i: (c) => <span className="italic text-brand">{c}</span> })}
           </h1>
           <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('description')}</p>
         </div>
