@@ -9,13 +9,13 @@ import {
   type CustomerTicketListQuery,
   type SupportReplyRequest,
 } from '@crm/contracts';
-import { ActorKinds } from '../../common/decorators';
+import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { CustomerTicketsService } from './customer-tickets.service';
 
 /**
- * The customer's own support tickets (TW-SUPP-001..005). Any signed-in workspace user: no permission key, no plan
- * gate (the same as Reference). Ownership is the query, not a check, so another user's ticket is a 404.
+ * The customer's own support tickets (TW-SUPP-001..005). Reference let any signed-in user in; here filing and reading are
+ * `support.ticket.create` / `support.ticket.read`, held by every preset, so a workspace can switch them off per role. No plan gate. Ownership is the query, not a check, so another user's ticket is a 404.
  */
 @ApiTags('support')
 @ActorKinds('user')
@@ -24,24 +24,28 @@ export class CustomerTicketsController {
   constructor(private readonly tickets: CustomerTicketsService) {}
 
   @Post()
+  @RequirePermission('support.ticket.create')
   @ApiOperation({ summary: 'File a support ticket' })
   async create(@Body(zodPipe(createSupportTicketRequestSchema)) body: CreateSupportTicketRequest) {
     return this.tickets.create(body);
   }
 
   @Get()
+  @RequirePermission('support.ticket.read')
   @ApiOperation({ summary: 'My newest tickets plus open/resolved counts' })
   async list(@Query(zodPipe(customerTicketListQuerySchema)) query: CustomerTicketListQuery) {
     return this.tickets.list(query.limit);
   }
 
   @Get(':id')
+  @RequirePermission('support.ticket.read')
   @ApiOperation({ summary: 'One of my tickets with its thread (internal notes never included)' })
   async detail(@Param('id', zodPipe(uuidSchema)) id: string) {
     return this.tickets.detail(id);
   }
 
   @Post(':id/reply')
+  @RequirePermission('support.ticket.read')
   @ApiOperation({ summary: 'Reply on my ticket (reopens a resolved one)' })
   async reply(
     @Param('id', zodPipe(uuidSchema)) id: string,
