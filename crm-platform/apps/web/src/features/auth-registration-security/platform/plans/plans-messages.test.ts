@@ -75,6 +75,7 @@ describe('plan catalogue messages (operator console)', () => {
       // other domains merge their own entries; their keys live in their own message files
       if (!item.labelKey.startsWith('auth-registration-security.platform.')) continue;
     // Entries other domains add to the menu carry their own namespace; that domain's message test covers them.
+    // Other domains label their own entries in their own message files.
     for (const item of OPERATOR_NAV.filter((i) =>
       i.labelKey.startsWith('auth-registration-security.platform.'),
     )) {

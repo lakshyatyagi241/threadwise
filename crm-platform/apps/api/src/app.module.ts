@@ -21,6 +21,7 @@ import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
+import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { BroadcastsModule } from './modules/broadcasts';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { CrmModule } from './modules/crm';
@@ -115,6 +116,7 @@ import { HealthModule } from './health/health.module';
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
+    BspBillingEngineModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,

@@ -14,6 +14,7 @@ export interface OperatorNavItem {
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
+const BSP = 'bsp-billing-engine.nav';
 
 export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   {
@@ -143,6 +144,18 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/payment-gateways',
     labelKey: 'platform-payment-gateways.nav.gateways',
     groupKey: 'platform-payment-gateways.nav.group',
+  // BSP domain (seam edit): the two reseller pages, in Reference's Billing group.
+  {
+    id: 'bsp-income',
+    href: '/admin/bsp',
+    labelKey: `${BSP}.income`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'bsp-credit',
+    href: '/admin/bsp/credit',
+    labelKey: `${BSP}.reseller`,
+    groupKey: `${BSP}.groups.billing`,
   },
 ];
 
