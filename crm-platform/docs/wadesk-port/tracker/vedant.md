@@ -141,7 +141,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-019 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | WD-NODE-020 | todo |  |  |
 | WD-NODE-021 | todo |  |  |
-| WD-NODE-022 | todo |  |  |
+| WD-NODE-022 | in-progress |  | outbound port + registry + sender resolver + Cloud API text transport done; Baileys and Twilio transports land with the socket runtime |
 | WD-NODE-023 | todo |  |  |
 | WD-NODE-024 | todo |  |  |
 | WD-NODE-025 | todo |  |  |
@@ -149,13 +149,13 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-027 | todo |  |  |
 | WD-NODE-028 | backend-done |  | SafeFetch: all-address DNS check, pinned IP, every redirect hop checked, size cap, MIME; consumer is 023; local paths intentionally refused |
 | WD-NODE-029 | in-progress |  | admin form + real reader wired into BCAST pacing (PlatformPacingSettings); jitter, daily cap, lease already in BCAST; per-socket serialization lands with the Baileys adapter |
-| WD-NODE-030 | todo |  |  |
-| WD-NODE-031 | todo |  |  |
-| WD-NODE-032 | todo |  |  |
-| WD-NODE-033 | todo |  |  |
-| WD-NODE-034 | todo |  |  |
-| WD-NODE-035 | todo |  |  |
-| WD-NODE-036 | todo |  |  |
+| WD-NODE-030 | backend-done |  | DB row is the schedule; due poller queues one BullMQ job per occurrence (jobId = uuid + time); late policy configurable; no cron, no boot sync |
+| WD-NODE-031 | backend-done |  | run engine: per-recipient claim, pacing, daily cap, lease shared with BCAST, halt; send-now via SchedulerService; text on every engine, media and location when a transport supports them |
+| WD-NODE-032 | backend-done |  | next run from repeat_every, weekdays, months without overflow, end date inclusive; every occurrence reaches the whole audience |
+| WD-NODE-033 | backend-done |  | same engine with one recipient row; outcome is now recorded (WaDesk never reported it) |
+| WD-NODE-034 | backend-done |  | SchedulerService: pause, resume, cancel, send-now; a run in progress stops before its next batch; the SCHED screens call it |
+| WD-NODE-035 | backend-done |  | callbacks became direct writes in the run; recipient states only move up; delivered/read arrive with receipts (020); wallet metering blocked on WALLET |
+| WD-NODE-036 | backend-done |  | replaced: the row is the schedule, so nothing is lost on restart; a reconciliation pass queues a stuck run again |
 | WD-NODE-037 | blocked |  | already built in BCAST (dispatch, pacing, pause/resume); only the Baileys engine adapter is missing (needs 011) |
 | WD-NODE-038 | blocked |  | already built in BCAST (progress and receipts services); the Baileys receipt source needs 011/020 |
 | WD-NODE-039 | wontfix |  | dead code in WaDesk (campaign engine in Node is never reached and throws a ReferenceError) |

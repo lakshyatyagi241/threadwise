@@ -56,3 +56,14 @@ are started.
 | Scheduler                            | 030-036                                                                      | SCHED domain on BullMQ                                                                                                                            |
 | Collapses into the owning domain     | 019, 041-051                                                                 | flows (FLR), calling (CALL), Google (INTG), commerce and booking (CHK, APPT), channels; built there, not as bridge endpoints                      |
 | Not ported                           | 039, 053, 054                                                                | dead code in WaDesk, developer-only endpoint, smoke scripts                                                                                       |
+
+## Scheduled messages (WD-NODE-030 to 036)
+
+| Piece                      | Where                                                             | Notes                                                                                                                 |
+| -------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Schedule rows              | `scheduled_messages`, `scheduled_message_contacts`                | created by the SCHED screens (not built yet); the engine reads and updates them                                       |
+| Due poller, reconciliation | `scheduled-due.service.ts` (worker)                               | every 3 s; queues due rows, resumes system pauses, queues a stuck run again                                           |
+| Run                        | `scheduled-run.processor.ts`, `scheduled-run.service.ts` (worker) | queue `sched-run`; shares BCAST's pacing, daily cap and one-run-per-number lease                                      |
+| Lifecycle                  | `scheduler.service.ts` (API and worker)                           | pause, resume, cancel, send-now; callers: SCHED screens, appointment reminders                                        |
+| Outbound port              | `node-bridge-runtime/outbound/`                                   | `SendCommand`, `OutboundRegistry`, `SenderResolver`, Cloud API text transport; Baileys and Twilio register when built |
+| Settings                   | `config/domains/scheduled-queue-warmer.env.ts`                    | `SCHED_MAX_LATE_MINUTES` (60), `SCHED_STALE_RUN_MINUTES` (10)                                                         |
