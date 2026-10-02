@@ -70,7 +70,8 @@ beforeAll(async () => {
     customers: () => Promise.resolve(wooData.customers),
     registerWebhooks: () => Promise.resolve({}),
     deleteWebhooks: () => Promise.resolve(),
-    updateOrderStatus: () => Promise.resolve(true),
+    updateOrder: () => Promise.resolve(true),
+    createPendingOrder: () => Promise.resolve(null),
   });
 }, 240_000);
 

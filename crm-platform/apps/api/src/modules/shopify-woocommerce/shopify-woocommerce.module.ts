@@ -18,7 +18,9 @@ import { CartRepository } from './cart.repository';
 import { CartService } from './cart.service';
 import { CodRepository } from './cod.repository';
 import { CodService } from './cod.service';
+import { ConciergeService } from './concierge.service';
 import { ComplianceService } from './compliance.service';
+import { EcomInboundService } from './ecom-inbound.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { ImportService } from './import.service';
@@ -64,6 +66,8 @@ import { WoocommerceService } from './woocommerce.service';
     ComplianceService,
     CodRepository,
     CodService,
+    ConciergeService,
+    EcomInboundService,
     CartRepository,
     CartService,
     SegmentsRepository,
@@ -89,6 +93,7 @@ import { WoocommerceService } from './woocommerce.service';
     ShopifyService,
     WoocommerceService,
     ImportService,
+    EcomInboundService,
   ],
 })
 export class ShopifyWoocommerceModule {}

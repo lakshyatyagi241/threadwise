@@ -1,7 +1,10 @@
 import { createHmac } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import {
+  accountSummary,
   applyVarMap,
+  conciergeIntent,
+  isPositiveRating,
   bodyParams,
   codRisk,
   isShopifyCod,
@@ -250,5 +253,30 @@ describe('offer and win-back variables (TW-ECOM-014, 015)', () => {
       'https://acme.test/',
       '',
     ]);
+  });
+});
+
+describe('the concierge (TW-ECOM-031)', () => {
+  it("reads the intent in Reference's order: edit address, then reorder, then points", () => {
+    expect(conciergeIntent('Please change my address')).toBe('edit-address');
+    expect(conciergeIntent('wrong address!')).toBe('edit-address');
+    expect(conciergeIntent('I want to ORDER AGAIN')).toBe('reorder');
+    expect(conciergeIntent('how many points do I have')).toBe('points');
+    expect(conciergeIntent('reorder and change address')).toBe('edit-address');
+    expect(conciergeIntent('hello')).toBeNull();
+    expect(conciergeIntent('   ')).toBeNull();
+  });
+  it('reads a positive rating', () => {
+    for (const t of ['5', 'Great service', 'love it!', '⭐⭐⭐⭐⭐', '👍', 'PERFECT'])
+      expect(isPositiveRating(t)).toBe(true);
+    for (const t of ['2', 'bad', 'where is it', '']) expect(isPositiveRating(t)).toBe(false);
+  });
+  it('writes the account summary with two decimals, thousands separators and optional points', () => {
+    expect(accountSummary({ orders: 3, spentMinor: 123456, currency: 'USD', points: null })).toBe(
+      "Here's your account summary:\n• Orders: 3\n• Total spent: USD 1,234.56",
+    );
+    expect(accountSummary({ orders: 1, spentMinor: 500, currency: '', points: '120' })).toBe(
+      "Here's your account summary:\n• Orders: 1\n• Total spent: 5.00\n• Points balance: 120",
+    );
   });
 });

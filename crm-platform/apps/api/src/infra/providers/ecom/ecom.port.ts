@@ -100,8 +100,16 @@ export interface WooStoreApi {
     nameOf: (topic: string) => string;
   }): Promise<Record<string, string>>;
   deleteWebhooks(ids: readonly string[]): Promise<void>;
-  /** Sets a real order's status (`processing`, `cancelled`, ...). False when the store refused or did not answer. */
-  updateOrderStatus(orderId: string, status: string): Promise<boolean>;
+  /** Changes a real order (its `status`, its `shipping` address, ...). False when the store refused or did not answer. */
+  updateOrder(orderId: string, patch: Record<string, unknown>): Promise<boolean>;
+  /**
+   * Creates a pending order for these items (by sku, or by id when the reference is only digits) and returns the link the customer
+   * pays at. Null when the store refused or gave no link.
+   */
+  createPendingOrder(
+    items: ReadonlyArray<{ reference: string; qty: number }>,
+    flowSessionId: string | null,
+  ): Promise<{ url: string; orderId: string } | null>;
 }
 
 export interface WooFactory {

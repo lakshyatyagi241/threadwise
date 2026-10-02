@@ -202,7 +202,7 @@ export class CodService {
           this.crypto.decrypt(row.consumerKey),
           this.crypto.decrypt(row.consumerSecret),
         )
-        .updateOrderStatus(storeOrderId, yes ? 'processing' : 'cancelled');
+        .updateOrder(storeOrderId, { status: yes ? 'processing' : 'cancelled' });
     } catch (err) {
       this.logger.debug({ err }, 'COD remote status flip failed');
     }

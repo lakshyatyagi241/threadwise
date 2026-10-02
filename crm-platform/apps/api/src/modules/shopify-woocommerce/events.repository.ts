@@ -105,6 +105,24 @@ export class EventsRepository {
     return (res.rows as Array<Record<string, unknown>>).map(toConfig);
   }
 
+  /** Is there a log row of this event for this recipient within the last `days` days? */
+  async recentFor(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    storeId: number,
+    eventType: string,
+    recipient: string,
+    days: number,
+  ): Promise<boolean> {
+    const t = tables(kind);
+    const res = await tx.execute(sql`
+      SELECT 1 FROM ${t.logs}
+      WHERE org_id = ${orgId} AND integration_id = ${storeId} AND event_type = ${eventType} AND recipient = ${recipient}
+        AND created_at >= now() - make_interval(days => ${days}) LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
   /** Deliveries logged per event type. */
   async fired(
     tx: Tx,

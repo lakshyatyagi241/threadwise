@@ -47,10 +47,11 @@ beforeAll(async () => {
     customers: () => Promise.reject(new Error('unused')),
     registerWebhooks: () => Promise.resolve({}),
     deleteWebhooks: () => Promise.resolve(),
-    updateOrderStatus: (order, status) => {
-      remote.push({ order, status });
+    updateOrder: (order, patch) => {
+      remote.push({ order, status: String(patch.status) });
       return Promise.resolve(true);
     },
+    createPendingOrder: () => Promise.resolve(null),
   });
 }, 240_000);
 
