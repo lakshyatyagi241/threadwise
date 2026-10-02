@@ -61,7 +61,6 @@ afterAll(async () => {
 beforeEach(() => {
   calls.length = 0;
   answer = () => ({ ok: true, data: { messageId: 'mid.sent' } });
-  sender.now = () => new Date();
 });
 
 /** A connected Page row for the tenant, its token sealed the way the app seals it. */

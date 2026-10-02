@@ -69,6 +69,30 @@ export interface GraphComment {
 
 export type AttachmentType = 'image' | 'video' | 'audio' | 'file';
 
+/** What to publish on a Page feed: text, a link, or photos (one is a photo post, several a multi-photo post). */
+export interface PublishSpec {
+  message: string;
+  link: string;
+  photos: readonly string[];
+  /** Epoch seconds: Meta holds the post and publishes it then. Null publishes now. */
+  scheduledTs: number | null;
+}
+
+/** One post of the Page's own feed, as Meta lists it. */
+export interface GraphPublishedPost {
+  id: string;
+  message?: string;
+  created_time?: string;
+  permalink_url?: string;
+  full_picture?: string;
+}
+
+/** An insights metric: its name and one value per period (the last is the latest). */
+export interface GraphInsightMetric {
+  name?: string;
+  values?: Array<{ value?: unknown }>;
+}
+
 /** A button as Messenger's Send API takes it (a template message carries at most three). */
 export type MessengerButton =
   | { type: 'web_url'; title: string; url: string }
@@ -133,6 +157,31 @@ export interface FacebookPageApi {
   ): Promise<GraphResult>;
   /** Removes profile properties across all locales. `graphVersion` as above. */
   deleteMessengerProfile(fields: readonly string[], graphVersion?: string): Promise<GraphResult>;
+  /**
+   * Publishes (or schedules) a post. One photo posts to `/photos` with a caption; several are uploaded unpublished and attached to
+   * `/feed`; text and links post to `/feed`. A scheduled post is held by Meta, not by us.
+   */
+  publish(spec: PublishSpec): Promise<GraphResult<{ id: string }>>;
+  /** A feed video from a public HTTPS file address (Meta fetches it). */
+  postVideo(
+    fileUrl: string,
+    description: string,
+    scheduledTs: number | null,
+  ): Promise<GraphResult<{ id: string }>>;
+  /** A reel from a public HTTPS file address: start, hosted upload, wait until processed, finish. */
+  postReel(
+    fileUrl: string,
+    description: string,
+    scheduledTs: number | null,
+  ): Promise<GraphResult<{ id: string }>>;
+  /** Deletes a post (or any object) of the Page. */
+  deletePost(objectId: string): Promise<GraphResult>;
+  /** The newest published posts of the Page; empty when Meta does not answer. */
+  recentPosts(limit: number): Promise<GraphPublishedPost[]>;
+  /** Page level insights (28 day period); a metric Meta no longer has is simply absent. */
+  pageInsights(metrics: readonly string[]): Promise<GraphInsightMetric[]>;
+  /** Insights of one post. */
+  postInsights(postId: string, metrics: readonly string[]): Promise<GraphInsightMetric[]>;
   /** A public reply under a comment (or a post) as the Page. */
   replyComment(objectId: string, text: string): Promise<GraphResult<{ id: string }>>;
   getSenderProfile(psid: string): Promise<GraphSenderProfile | null>;
