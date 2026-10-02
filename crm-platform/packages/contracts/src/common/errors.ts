@@ -196,6 +196,12 @@ export const ERROR_CODES = {
   IG_ACCOUNT_NOT_FOUND: 'IG_ACCOUNT_NOT_FOUND',
   /** The engine did not give a sign-in address for a new account. */
   IG_CONNECT_FAILED: 'IG_CONNECT_FAILED',
+  /** Run a flow: the thread is not an Instagram thread. */
+  IG_NOT_AN_INSTAGRAM_THREAD: 'IG_NOT_AN_INSTAGRAM_THREAD',
+  /** Run a flow: the thread has no engine conversation id (its key is not `ig:...`). */
+  IG_THREAD_NO_ENGINE_ID: 'IG_THREAD_NO_ENGINE_ID',
+  /** The engine refused to start the flow. */
+  IG_FLOW_RUN_FAILED: 'IG_FLOW_RUN_FAILED',
 
   // campaigns (WD-CAMP)
   /** Nobody on the audience can be messaged. */

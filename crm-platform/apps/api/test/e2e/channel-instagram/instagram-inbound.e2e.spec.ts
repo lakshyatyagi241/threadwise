@@ -55,6 +55,9 @@ beforeAll(async () => {
       fetched.push(id);
       return Promise.resolve(thread[id] ?? []);
     },
+    reply: () => Promise.resolve({ ok: true, data: { messageId: null } }),
+    flows: () => Promise.resolve([]),
+    runFlow: () => Promise.resolve({ ok: true, data: null }),
     connectStart: () => Promise.resolve({ ok: true, data: { url: 'https://engine.test/x' } }),
   });
 }, 240_000);

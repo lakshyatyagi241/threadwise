@@ -147,4 +147,16 @@ export class SqlInstagramIngest implements InstagramInboxIngest {
       ]),
     );
   }
+
+  async findThread(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+  ): Promise<{ id: number; channel: string | null; rawJid: string | null } | undefined> {
+    const res = await tx.execute(sql`
+      SELECT id, channel, raw_jid FROM conversations WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`);
+    const r = res.rows[0] as
+      { id: number | string; channel: string | null; raw_jid: string | null } | undefined;
+    return r ? { id: Number(r.id), channel: r.channel, rawJid: r.raw_jid } : undefined;
+  }
 }

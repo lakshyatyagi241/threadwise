@@ -32,6 +32,12 @@ export interface InstagramInboxIngest {
   record(tx: Tx, orgId: number, n: Normalized): Promise<IngestOutcome>;
   /** The time of the last message of every Instagram thread we hold, by thread key: the pull skips a thread with nothing newer. */
   threadClock(tx: Tx, orgId: number): Promise<Map<string, Date | null>>;
+  /** A thread by its public id, whatever its channel (the caller checks that it is an Instagram one). */
+  findThread(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+  ): Promise<{ id: number; channel: string | null; rawJid: string | null } | undefined>;
 }
 export const INSTAGRAM_INBOX_INGEST = Symbol('INSTAGRAM_INBOX_INGEST');
 
@@ -58,3 +64,10 @@ export interface InstagramAutomation {
   automate(ctx: AutomationContext): Promise<void>;
 }
 export const INSTAGRAM_AUTOMATION = Symbol('INSTAGRAM_AUTOMATION');
+
+/** A public address for a stored file, for an outbound attachment (platform-settings-branding-storage). */
+export interface MediaUrls {
+  /** The address the engine can fetch, or null when the path has none. An address that is already public is returned as it is. */
+  publicUrl(path: string): string | null;
+}
+export const INSTAGRAM_MEDIA_URLS = Symbol('INSTAGRAM_MEDIA_URLS');

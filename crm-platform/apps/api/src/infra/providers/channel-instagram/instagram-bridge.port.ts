@@ -43,6 +43,24 @@ export interface BridgeMessage {
   at: string | null;
 }
 
+/** One reply to a thread. `type` is `text`, `image`, `video`, `audio`, `file`, `quick_replies` or `buttons`. */
+export interface BridgeReply {
+  type: string;
+  text: string | null;
+  mediaUrl: string | null;
+  quickReplies: Array<{ title: string; payload: string }>;
+  buttons: Array<
+    | { type: 'web_url'; title: string; url: string }
+    | { type: 'postback'; title: string; payload: string }
+  >;
+}
+
+/** An Instagram flow the engine can run. */
+export interface BridgeFlow {
+  id: number;
+  name: string;
+}
+
 export type BridgeResult<T> =
   | { ok: true; data: T }
   /** `error` is the engine's own words when it gave any; `status` is the HTTP status when it answered. */
@@ -59,6 +77,15 @@ export interface InstagramBridgeApi {
   conversations(account: string): Promise<BridgeConversation[]>;
   /** The messages of one thread. A failure answers an empty list. */
   messages(conversationId: string): Promise<BridgeMessage[]>;
+  /** Sends a reply; the engine does the Graph call and returns the provider's message id when it has one. */
+  reply(
+    conversationId: string,
+    r: BridgeReply,
+  ): Promise<BridgeResult<{ messageId: string | null }>>;
+  /** The active flows the engine can run for one account. A failure answers an empty list. */
+  flows(account: string): Promise<BridgeFlow[]>;
+  /** Starts a flow on a thread. */
+  runFlow(conversationId: string, flowId: number): Promise<BridgeResult<null>>;
   /** A signed one-time ticket for the sign-in popup; `data.url` is the engine's login entry point. */
   connectStart(workspace: number, returnUrl: string): Promise<BridgeResult<{ url: string }>>;
 }

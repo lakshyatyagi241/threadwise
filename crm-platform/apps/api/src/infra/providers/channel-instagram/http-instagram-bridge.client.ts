@@ -6,7 +6,9 @@ import type {
   BridgeAccount,
   BridgeConnection,
   BridgeConversation,
+  BridgeFlow,
   BridgeMessage,
+  BridgeReply,
   BridgeResult,
   InstagramBridgeApi,
   InstagramBridgeFactory,
@@ -78,6 +80,20 @@ export function toMessages(body: unknown): BridgeMessage[] {
   });
 }
 
+/** The engine's flow list (`{flows: [{id|flow_id, name|flow_name}]}`) into ours: a flow without a positive whole id is dropped. */
+export function toFlows(body: unknown): BridgeFlow[] {
+  const list = obj(body).flows;
+  if (!Array.isArray(list)) return [];
+  const out: BridgeFlow[] = [];
+  for (const raw of list) {
+    const f = obj(raw);
+    const id = Number(text(f.id) || text(f.flow_id));
+    if (!Number.isInteger(id) || id <= 0) continue;
+    out.push({ id, name: text(f.name) || text(f.flow_name) });
+  }
+  return out;
+}
+
 class HttpBridge implements InstagramBridgeApi {
   private readonly logger = new Logger('InstagramBridge');
 
@@ -87,7 +103,7 @@ class HttpBridge implements InstagramBridgeApi {
     method: 'GET' | 'POST',
     path: string,
     o: { query?: Record<string, string>; json?: Json } = {},
-  ): Promise<{ status: number; json: unknown } | null> {
+  ): Promise<{ status: number; json: unknown; raw: string } | null> {
     let url: URL;
     try {
       url = new URL(`${this.conn.url.replace(/\/+$/, '')}${PREFIX}${path}`);
@@ -111,7 +127,7 @@ class HttpBridge implements InstagramBridgeApi {
       } catch {
         json = null;
       }
-      return { status: res.status, json };
+      return { status: res.status, json, raw: res.body.slice(0, 300) };
     } catch (err) {
       // The address and the error message are enough to diagnose; the secret is in a header and never reaches a log.
       this.logger.warn({ path, err: (err as Error).message }, 'instagram engine call failed');
@@ -140,6 +156,54 @@ class HttpBridge implements InstagramBridgeApi {
       `/conversations/${encodeURIComponent(conversationId)}/messages`,
     );
     return res && res.status >= 200 && res.status < 300 ? toMessages(res.json) : [];
+  }
+
+  async reply(
+    conversationId: string,
+    r: BridgeReply,
+  ): Promise<BridgeResult<{ messageId: string | null }>> {
+    const body: Json = { type: r.type };
+    if (r.text !== null) body.text = r.text;
+    if (r.mediaUrl !== null) body.media_url = r.mediaUrl;
+    if (r.quickReplies.length > 0) body.quick_replies = r.quickReplies;
+    if (r.buttons.length > 0) body.buttons = r.buttons;
+    const res = await this.send(
+      'POST',
+      `/conversations/${encodeURIComponent(conversationId)}/reply`,
+      {
+        json: body,
+      },
+    );
+    if (!res) return { ok: false, error: null, status: null };
+    const j = obj(res.json);
+    if (res.status >= 200 && res.status < 300 && j.ok !== false) {
+      return { ok: true, data: { messageId: text(j.message_id) || null } };
+    }
+    // The engine's own reason (a Meta error, a missing thread, a refused secret) is what makes a failed send diagnosable.
+    return {
+      ok: false,
+      error: text(j.error) || text(j.message) || res.raw || null,
+      status: res.status,
+    };
+  }
+
+  async flows(account: string): Promise<BridgeFlow[]> {
+    const res = await this.send('GET', '/flows', { query: { account } });
+    return res && res.status >= 200 && res.status < 300 ? toFlows(res.json) : [];
+  }
+
+  async runFlow(conversationId: string, flowId: number): Promise<BridgeResult<null>> {
+    const res = await this.send(
+      'POST',
+      `/conversations/${encodeURIComponent(conversationId)}/run-flow`,
+      {
+        json: { flow_id: flowId },
+      },
+    );
+    if (!res) return { ok: false, error: null, status: null };
+    const j = obj(res.json);
+    if (res.status >= 200 && res.status < 300 && j.ok !== false) return { ok: true, data: null };
+    return { ok: false, error: text(j.error) || null, status: res.status };
   }
 
   async connectStart(workspace: number, returnUrl: string): Promise<BridgeResult<{ url: string }>> {

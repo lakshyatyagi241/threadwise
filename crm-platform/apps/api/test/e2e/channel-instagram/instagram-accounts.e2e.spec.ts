@@ -48,6 +48,9 @@ beforeAll(async () => {
     },
     conversations: () => Promise.resolve([]),
     messages: () => Promise.resolve([]),
+    reply: () => Promise.resolve({ ok: true, data: { messageId: null } }),
+    flows: () => Promise.resolve([]),
+    runFlow: () => Promise.resolve({ ok: true, data: null }),
     connectStart: (workspace, returnUrl) => {
       asked.push({ method: 'connectStart', args: [workspace, returnUrl] });
       return Promise.resolve(start);
