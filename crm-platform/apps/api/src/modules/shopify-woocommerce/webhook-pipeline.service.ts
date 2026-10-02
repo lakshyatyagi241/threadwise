@@ -6,7 +6,9 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { STORE_MIRROR, type StoreMirror } from './_shims/tokens';
+import { CodService } from './cod.service';
 import { EventMessageService } from './event-message.service';
+import { isShopifyCod, isWooCod, shopifyRecipient, wooRecipient } from './event-rules';
 import { EventsRepository, type LogRef } from './events.repository';
 import {
   shopifyCustomer,
@@ -50,6 +52,7 @@ export class WebhookPipelineService {
     private readonly mirrorRepo: MirrorRepository,
     private readonly events: EventsRepository,
     private readonly message: EventMessageService,
+    private readonly codService: CodService,
     @Inject(STORE_MIRROR) private readonly mirror: StoreMirror,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<WebhookJob>,
@@ -63,19 +66,10 @@ export class WebhookPipelineService {
     }
     await this.guarded(job, 'message', () => this.automation(job, job.eventType, log, true));
     const status = job.kind === 'woocommerce' ? wooStatusEvent(job) : null;
-    if (status && (await this.firstTimeInStatus(job, status))) {
-      await this.guarded(job, status, async () => {
-        const own = await this.db.txAs({ orgId: job.orgId }, (tx) =>
-          this.events.log(tx, job.orgId, job.kind, job.storeId, {
-            eventType: status,
-            status: 'received',
-            payload: job.data,
-          }),
-        );
-        await this.automation(job, status, own, true);
-      });
-    }
+    if (status && (await this.firstTimeInStatus(job, status)))
+      await this.guarded(job, status, () => this.pseudo(job, status, job.data));
     await this.guarded(job, 'mirror', () => this.upkeep(job));
+    await this.guarded(job, 'cod', () => this.cod(job));
     if (job.kind === 'shopify') {
       if (job.eventType === 'fulfillments/update')
         await this.guarded(job, 'delivered', () => this.delivered(job));
@@ -111,15 +105,58 @@ export class WebhookPipelineService {
       customer: { first_name: order?.name || 'there', phone },
       fulfillments: [d],
     };
+    await this.pseudo(job, 'order/delivered', data);
+  }
+
+  /**
+   * An automation fired by the pipeline rather than a topic of its own (order status, COD prepaid, delivered): it needs a customer
+   * phone and an active template, goes to the customer only, and writes its own log row. Nothing to send writes nothing.
+   */
+  private async pseudo(
+    job: WebhookJob,
+    type: string,
+    data: Record<string, unknown>,
+    extra?: Record<string, string>,
+  ): Promise<void> {
+    const cfg = await this.message.config(job.orgId, job.kind, job.storeId, type);
+    if (!cfg) return;
+    const phone = (job.kind === 'shopify' ? shopifyRecipient(data) : wooRecipient(data))?.replace(
+      /\D/g,
+      '',
+    );
+    if (!phone) return;
     const log = await this.db.txAs({ orgId: job.orgId }, (tx) =>
-      this.events.log(tx, job.orgId, 'shopify', job.storeId, {
-        eventType: 'order/delivered',
+      this.events.log(tx, job.orgId, job.kind, job.storeId, {
+        eventType: type,
         status: 'received',
         recipient: phone,
         payload: data,
       }),
     );
-    await this.automation({ ...job, data }, 'order/delivered', log, true);
+    await this.automation({ ...job, data }, type, log, false, { pseudo: true, extra });
+  }
+
+  /** A new cash-on-delivery order: risk score (WooCommerce), the confirmation, the prepaid nudge, then the risk log. */
+  private async cod(job: WebhookJob): Promise<void> {
+    const cod =
+      job.kind === 'shopify'
+        ? job.eventType === 'orders/create' && isShopifyCod(job.data)
+        : job.eventType === 'order.created' && isWooCod(job.data);
+    if (!cod) return;
+    const risk =
+      job.kind === 'woocommerce' ? await this.codService.risk(job.orgId, job.data) : null;
+    await this.codService.confirm(job.orgId, job.kind, job.storeId, job.data);
+    await this.pseudo(job, 'cod/prepaid', job.data, risk ? { risk_level: risk.level } : undefined);
+    if (risk) {
+      await this.db.txAs({ orgId: job.orgId }, (tx) =>
+        this.events.log(tx, job.orgId, job.kind, job.storeId, {
+          eventType: 'cod/risk',
+          status: 'processed',
+          recipient: wooRecipient(job.data),
+          payload: { order: `#${String(job.data.number ?? '')}`, risk },
+        }),
+      );
+    }
   }
 
   private async guarded(job: WebhookJob, step: string, fn: () => Promise<void>): Promise<void> {
@@ -139,6 +176,7 @@ export class WebhookPipelineService {
     eventType: string,
     log: LogRef,
     mayDelay: boolean,
+    opts: { pseudo?: boolean; extra?: Record<string, string> } = {},
   ): Promise<void> {
     const cfg = await this.message.config(job.orgId, job.kind, job.storeId, eventType);
     if (!cfg) {
@@ -167,6 +205,7 @@ export class WebhookPipelineService {
       cfg,
       job.data,
       `ecom-${job.kind}-${job.storeId}-${log.id}`,
+      { extra: opts.extra, customerOnly: opts.pseudo },
     );
     await this.setLog(job, log, {
       status: out.status === 'sent' ? 'sent' : out.status === 'failed' ? 'failed' : 'skipped',

@@ -122,6 +122,7 @@ beforeAll(async () => {
       calls.push({ what: 'wooDelete', args: [url, [...ids]] });
       return Promise.resolve();
     },
+    updateOrderStatus: () => Promise.resolve(true),
   });
 }, 240_000);
 

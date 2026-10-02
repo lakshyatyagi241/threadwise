@@ -53,6 +53,7 @@ import {
     BroadcastProgressService,
     BroadcastDispatchService,
     EngineSenderRegistry,
+    WabaEngineSender,
     BroadcastsRepository,
     BroadcastsComposeService,
     LinkTracker,

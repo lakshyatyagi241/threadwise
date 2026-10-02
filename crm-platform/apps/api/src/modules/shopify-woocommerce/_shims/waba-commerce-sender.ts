@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../../infra/db/database.service';
-import { EngineSenderRegistry } from '../../broadcasts';
+import { EngineSenderRegistry, WabaEngineSender } from '../../broadcasts';
 import type { CommerceSender, EcomTemplate } from './tokens';
 
 /**
@@ -14,21 +14,17 @@ export class WabaCommerceSender implements CommerceSender {
   constructor(
     private readonly db: DatabaseService,
     private readonly engines: EngineSenderRegistry,
+    private readonly waba: WabaEngineSender,
   ) {}
 
-  async send(
+  /** The connected Cloud API number to send from: the chosen one (`engine:uuid`) or the primary. */
+  private async number(
     orgId: number,
-    m: {
-      to: string;
-      template: EcomTemplate;
-      params: string[];
-      reference: string;
-      senderKey?: string | null;
-    },
-  ): Promise<{ providerMessageId: string | null }> {
-    // A chosen number (`engine:uuid`) must be a Cloud API one; the other engines have no adapter here yet.
-    const [engine, uuid] = (m.senderKey ?? '').split(':');
-    if (m.senderKey && engine !== 'waba')
+    senderKey: string | null | undefined,
+  ): Promise<{ id: number; phone: string }> {
+    // A chosen number must be a Cloud API one; the other engines have no adapter here yet.
+    const [engine, uuid] = (senderKey ?? '').split(':');
+    if (senderKey && engine !== 'waba')
       throw new Error(
         `Sending from a ${engine ?? 'this'} number is not supported yet. Choose a Cloud API number.`,
       );
@@ -42,17 +38,31 @@ export class WabaCommerceSender implements CommerceSender {
     });
     if (!row)
       throw new Error(
-        m.senderKey
+        senderKey
           ? 'The chosen WhatsApp number is not connected.'
           : 'No WhatsApp Cloud API number is connected to send from.',
       );
+    return { id: Number(row.id), phone: row.phone_number ?? '' };
+  }
+
+  async send(
+    orgId: number,
+    m: {
+      to: string;
+      template: EcomTemplate;
+      params: string[];
+      reference: string;
+      senderKey?: string | null;
+    },
+  ): Promise<{ providerMessageId: string | null }> {
+    const num = await this.number(orgId, m.senderKey);
     const adapter = this.engines.get('waba');
     if (!adapter) throw new Error('The WhatsApp Cloud API sender is not available.');
     const opened = await adapter.open(orgId, {
       engine: 'waba',
-      id: Number(row.id),
-      phoneDigits: (row.phone_number ?? '').replace(/\D/g, ''),
-      label: row.phone_number ?? '',
+      id: num.id,
+      phoneDigits: num.phone.replace(/\D/g, ''),
+      label: num.phone,
     });
     return opened.send({
       to: m.to,
@@ -62,6 +72,18 @@ export class WabaCommerceSender implements CommerceSender {
       components: m.params.length
         ? [{ type: 'body', parameters: m.params.map((text) => ({ type: 'text', text })) }]
         : [],
+    });
+  }
+
+  async sendText(
+    orgId: number,
+    m: { to: string; body: string; reference: string },
+  ): Promise<{ providerMessageId: string | null }> {
+    const num = await this.number(orgId, null);
+    return this.waba.sendSessionText(orgId, num.id, {
+      to: m.to,
+      body: m.body,
+      clientReference: m.reference,
     });
   }
 }

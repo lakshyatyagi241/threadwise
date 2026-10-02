@@ -67,6 +67,12 @@ export class EventMessageService {
     cfg: EventConfig,
     data: Json,
     reference: string,
+    opts: {
+      /** Values added to the event's variables (the COD risk level). */
+      extra?: Record<string, string>;
+      /** Fired by the pipeline rather than a webhook topic of its own: goes to the customer only, whatever `sendTo` says. */
+      customerOnly?: boolean;
+    } = {},
   ): Promise<MessageOutcome> {
     const loaded = await this.db.txAs({ orgId }, async (tx) => {
       const store = await this.stores.storeById(tx, orgId, kind, storeId);
@@ -84,14 +90,16 @@ export class EventMessageService {
       storeUrl: store.storeUrl,
       currency: 'shopCurrency' in store ? store.shopCurrency : store.storeCurrency,
     };
+    const base = kind === 'shopify' ? shopifyContext(facts, data) : wooContext(facts, data);
     const ctx: EventContext = applyVarMap(
-      kind === 'shopify' ? shopifyContext(facts, data) : wooContext(facts, data),
+      opts.extra ? { ...base, vars: { ...base.vars, ...opts.extra } } : base,
       cfg.varMap,
     );
+    const sendTo = opts.customerOnly ? 'customer' : cfg.sendTo;
     const customer = digits(kind === 'shopify' ? shopifyRecipient(data) : wooRecipient(data));
     const to = [
-      ...(cfg.sendTo !== 'admin' && customer ? [customer] : []),
-      ...(cfg.sendTo !== 'customer' && digits(cfg.adminNumber) ? [digits(cfg.adminNumber)] : []),
+      ...(sendTo !== 'admin' && customer ? [customer] : []),
+      ...(sendTo !== 'customer' && digits(cfg.adminNumber) ? [digits(cfg.adminNumber)] : []),
     ];
     if (to.length === 0)
       return {

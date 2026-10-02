@@ -81,5 +81,10 @@ export interface CommerceSender {
       senderKey?: string | null;
     },
   ): Promise<{ providerMessageId: string | null }>;
+  /** A plain text answer to a message the customer just sent (inside their open session): the COD confirmation reply. */
+  sendText(
+    orgId: number,
+    m: { to: string; body: string; reference: string },
+  ): Promise<{ providerMessageId: string | null }>;
 }
 export const COMMERCE_SENDER = Symbol('ECOM_COMMERCE_SENDER');

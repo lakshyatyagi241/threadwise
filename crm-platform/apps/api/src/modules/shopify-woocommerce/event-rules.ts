@@ -245,3 +245,106 @@ export function bodyParams(body: string, positional: readonly string[]): string[
   for (const m of body.matchAll(TOKEN)) if (/^\d+$/.test(m[1]!)) max = Math.max(max, Number(m[1]));
   return Array.from({ length: max }, (_, i) => positional[i] ?? '');
 }
+
+// ── Cash on delivery (TW-ECOM-016, 017, 030) ───────────────────────────
+
+const lower = (x: unknown): string => (str(x) ?? '').toLowerCase();
+
+/** Shopify: a gateway named cash on delivery or cod, or an unpaid order tagged cod. */
+export function isShopifyCod(data: Json): boolean {
+  for (const g of arr(data.payment_gateway_names)) {
+    const n = lower(g);
+    if (n.includes('cash on delivery') || n.includes('cod') || n.includes('cash_on_delivery'))
+      return true;
+  }
+  const gw = lower(data.gateway);
+  if (gw.includes('cash on delivery') || gw.includes('cod')) return true;
+  return lower(data.tags).includes('cod') && lower(data.financial_status) === 'pending';
+}
+
+/** WooCommerce: a payment method of cod, or a title naming cash on delivery. */
+export function isWooCod(data: Json): boolean {
+  const method = lower(data.payment_method);
+  if (method === 'cod' || method.includes('cash_on_delivery') || method.includes('cashondelivery'))
+    return true;
+  const title = lower(data.payment_method_title);
+  return title.includes('cash on delivery') || title.includes('cod');
+}
+
+const YES = [
+  'yes',
+  'y',
+  'confirm',
+  'confirmed',
+  'ok',
+  'okay',
+  'yep',
+  'sure',
+  'haan',
+  'ha',
+  'haa',
+  '1',
+  '✅',
+  '👍',
+];
+const NO = ['no', 'n', 'cancel', 'cancelled', 'cancel order', 'nope', 'nahi', 'nai', '2', '❌'];
+
+/**
+ * How a customer's reply reads: yes, no, or neither. Yes wins when a text reads as both, as in Reference (it tests yes first), though
+ * no text can start with "yes" or "confirm" and with "no" or "cancel" at once.
+ */
+export function readCodReply(text: string): 'yes' | 'no' | null {
+  const t = text.trim().toLowerCase();
+  if (YES.includes(t) || t.startsWith('yes') || t.startsWith('confirm')) return 'yes';
+  if (NO.includes(t) || t.startsWith('no') || t.startsWith('cancel')) return 'no';
+  return null;
+}
+
+export interface RiskFacts {
+  priorCount: number;
+  priorCancelled: number;
+  priorFulfilled: number;
+  total: number;
+  /** The store's average order value in major units; 0 when there are no orders. */
+  average: number;
+  hasEmail: boolean;
+  hasPhone: boolean;
+}
+
+/** A 0 to 100 score, the reasons behind it, and its level (60 and up high, 30 and up medium). */
+export function codRisk(f: RiskFacts): {
+  score: number;
+  level: 'high' | 'medium' | 'low';
+  reasons: string[];
+} {
+  const reasons: string[] = [];
+  let score = 0;
+  if (f.priorCount === 0) {
+    score += 30;
+    reasons.push('First-time buyer (no order history)');
+  } else if (f.priorFulfilled === 0) {
+    score += 18;
+    reasons.push('No previously fulfilled order');
+  }
+  if (f.priorCancelled > 0) {
+    score += Math.min(30, f.priorCancelled * 15);
+    reasons.push(`${f.priorCancelled} prior cancelled order${f.priorCancelled === 1 ? '' : 's'}`);
+  }
+  if (f.average > 0 && f.total > f.average * 2) {
+    score += 25;
+    reasons.push(`Order value ${Math.round((f.total / f.average) * 10) / 10}× the store average`);
+  } else if (f.average > 0 && f.total > f.average * 1.5) {
+    score += 12;
+    reasons.push('Order value above average');
+  }
+  if (!f.hasEmail) {
+    score += 8;
+    reasons.push('No email on the order');
+  }
+  if (!f.hasPhone) {
+    score += 15;
+    reasons.push('No phone number on the order');
+  }
+  score = Math.max(0, Math.min(100, score));
+  return { score, level: score >= 60 ? 'high' : score >= 30 ? 'medium' : 'low', reasons };
+}
