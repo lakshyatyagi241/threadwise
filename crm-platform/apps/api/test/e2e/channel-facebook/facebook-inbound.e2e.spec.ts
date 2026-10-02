@@ -39,6 +39,7 @@ const defaults = (): FacebookPageApi => ({
     sent.push({ method: 'sendAttachment', args: [psid, type, url] });
     return Promise.resolve({ ok: true, data: { messageId: 'mid.att' } });
   },
+  sendButtonTemplate: () => Promise.resolve({ ok: true, data: { messageId: 'mid.btn' } }),
   replyComment: (id, text) => {
     sent.push({ method: 'replyComment', args: [id, text] });
     return Promise.resolve({ ok: true, data: { id: 'c.reply' } });

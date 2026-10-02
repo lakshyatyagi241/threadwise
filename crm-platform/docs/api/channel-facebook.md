@@ -27,6 +27,25 @@ table needs a user session and the permission shown; the three public routes pro
 | `POST /facebook/webhook` | `X-Hub-Signature-256`           | Messages, taps and feed comments. 403 on a bad signature when a secret is configured; otherwise always 200 (Meta retries anything else). |
 | `GET /facebook/callback` | the sealed `state` from `start` | Where the login dialog returns. 303 to `{WEB_APP_URL}/facebook?fb=connected\|error&message=...`.                                         |
 
+## Broadcasts (TW-FB-012 to 014)
+
+| Method and path                       | Permission             | What                                                                                                                                                     |
+| ------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /facebook/broadcasts/compose`    | `fb.broadcasts.read`   | `{pages: [{id, pageId, name, audience: [{psid, title, lastInboundAt}]}], templates}`: each connected Page with who it can message right now.             |
+| `GET /facebook/broadcasts`            | `fb.broadcasts.read`   | `{data: FbBroadcast[], stats}`: the 50 newest, with totals over all of them.                                                                             |
+| `POST /facebook/broadcasts`           | `fb.broadcasts.manage` | Body `{name, pageId, templateId?, body?, psids[]}`. 201 a draft with a frozen list. 422 `FB_PAGE_UNAVAILABLE`, `FB_BROADCAST_EMPTY`, `FB_NO_RECIPIENTS`. |
+| `POST /facebook/broadcasts/:id/start` | `fb.broadcasts.manage` | Draft to sending; a worker job sends it. 422 `FB_PAGE_UNAVAILABLE`, `FB_NOTHING_TO_SEND`. Already sending is returned as it is.                          |
+| `POST /facebook/broadcasts/:id/pause` | `fb.broadcasts.manage` | Back to draft; unsent people stay pending and the running job stops at its next batch.                                                                   |
+| `POST /facebook/broadcasts/:id/retry` | `fb.broadcasts.manage` | `{retried}`: failed people back to pending (blocked stay). 422 `FB_NOTHING_TO_RETRY`; 409 while sending.                                                 |
+| `DELETE /facebook/broadcasts/:id`     | `fb.broadcasts.manage` | 204. Any status; recipients go with it.                                                                                                                  |
+
+`FbBroadcast`: `id`, `name`, `pageId`, `pageName`, `templateId`, `status` (`draft`, `sending`, `done`, `failed`), `total`, `sent`, `failed`,
+`blocked`, `progress` (whole percent, blocked counts as done), `lastError`, `startedAt`, `finishedAt`, `createdAt`. A person is `blocked`
+when Meta says they cannot be reached (outside the 24 hour window, unavailable, invalid id, policy) and the window is checked again at the
+moment of each send.
+
+Events: `facebook.broadcast.created`, `.started`, `.paused`, `.retry_requested`, `.deleted`.
+
 ## Module surface for other domains
 
 `FacebookSenderService.reply(orgId, {rawJid, text, media})` returns `{ok, providerMessageId, error}` and never throws. The team inbox calls
@@ -38,4 +57,4 @@ it to answer a `channel = facebook` thread: `fb:<page>:<psid>` is a DM, `fb:<pag
 
 ## Queues
 
-`fb-backfill` (one job per connected Page), `fb-broadcast` (one job per broadcast run; F2).
+`fb-backfill` (one job per connected Page), `fb-broadcast` (one job per broadcast run).

@@ -13,6 +13,7 @@ import {
   type GraphPage,
   type GraphResult,
   type GraphSenderProfile,
+  type MessengerButton,
   type MetaAppSettings,
   type TokenDebug,
 } from './facebook.port';
@@ -22,6 +23,8 @@ const TIMEOUT_MS = 20_000;
 /** Meta caps a Messenger text at 2000 characters. */
 export const TEXT_LIMIT = 2000;
 const COMMENT_LIMIT = 8000;
+/** Meta cuts a button template's text at 640 characters. */
+const BUTTON_TEXT_LIMIT = 640;
 /** `/me/accounts` is followed at most this many pages of 100 (Reference's guard). */
 const MAX_PAGES = 10;
 
@@ -207,6 +210,23 @@ class PageApi implements FacebookPageApi {
       recipient: { id: psid },
       messaging_type: 'RESPONSE',
       message: { attachment: { type, payload: { url, is_reusable: false } } },
+    });
+  }
+
+  sendButtonTemplate(psid: string, text: string, buttons: readonly MessengerButton[]) {
+    return this.send({
+      recipient: { id: psid },
+      messaging_type: 'RESPONSE',
+      message: {
+        attachment: {
+          type: 'template',
+          payload: {
+            template_type: 'button',
+            text: clip(text, BUTTON_TEXT_LIMIT),
+            buttons: buttons.slice(0, 3),
+          },
+        },
+      },
     });
   }
 
