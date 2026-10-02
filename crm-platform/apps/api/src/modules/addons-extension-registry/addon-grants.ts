@@ -58,14 +58,26 @@ export const featuresColumn = (g: AddonGrants): Record<string, boolean> =>
 /** A pack with any limit boost can be bought again to stack (WD-ADD-033 rule 2); a feature-only pack cannot. */
 export const isStackable = (g: AddonGrants): boolean => Object.keys(g.limits).length > 0;
 
+/** "access_campaigns" -> "Access campaigns": the label of a core flag or cap, which carries no title of its own. */
+export const titledKey = (k: string): string =>
+  k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+
 /** "Unlimited <limit>" for -1, "+N <limit>" for a positive delta, the feature itself otherwise; capped at five. */
-export function grantBullets(g: AddonGrants): AddonBullet[] {
+export function grantBullets(
+  g: AddonGrants,
+  labelOf: (key: string) => string = titledKey,
+): AddonBullet[] {
   const bullets: AddonBullet[] = [
-    ...g.features.map((key): AddonBullet => ({ kind: 'feature', key, amount: null })),
+    ...g.features.map((key): AddonBullet => ({
+      kind: 'feature',
+      key,
+      label: labelOf(key),
+      amount: null,
+    })),
     ...Object.entries(g.limits).map(([key, v]): AddonBullet =>
       v === -1
-        ? { kind: 'limit_unlimited', key, amount: null }
-        : { kind: 'limit_add', key, amount: v },
+        ? { kind: 'limit_unlimited', key, label: labelOf(key), amount: null }
+        : { kind: 'limit_add', key, label: labelOf(key), amount: v },
     ),
   ];
   return bullets.slice(0, MAX_BULLETS);
