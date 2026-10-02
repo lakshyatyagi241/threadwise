@@ -26,6 +26,7 @@ import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
+import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
@@ -133,6 +134,7 @@ import { HealthModule } from './health/health.module';
     AppointmentsBookingModule,
     NotificationsModule,
     BroadcastsModule,
+    ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,
     PlatformSupportDeskModule,

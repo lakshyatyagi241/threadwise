@@ -163,6 +163,12 @@ export const ERROR_CODES = {
   DEAL_ORDER_INVALID: 'DEAL_ORDER_INVALID',
   DEAL_LOST_REASON_NAME_TAKEN: 'DEAL_LOST_REASON_NAME_TAKEN',
 
+  // website chatbot widget (WD-WGT)
+  /** Mode `ai` or `both` saved without a smart agent. */
+  WGT_ASSISTANT_REQUIRED: 'WGT_ASSISTANT_REQUIRED',
+  /** The smart agent is not one of this workspace's. */
+  WGT_ASSISTANT_NOT_IN_WORKSPACE: 'WGT_ASSISTANT_NOT_IN_WORKSPACE',
+
   // tasks (WD-TASK)
   /** The assignee is not an active member of this workspace (WaDesk silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
