@@ -102,7 +102,7 @@ Every push is one envelope, and the socket.io event name is `type`:
 | Type                        | Room                   | Payload (`@crm/contracts` `realtimeEventSchemas`)                            | Emitted by (when built)           |
 | --------------------------- | ---------------------- | ---------------------------------------------------------------------------- | --------------------------------- |
 | `inbox.conversation.upsert` | `user` of the audience | `{ conversationId, rowVersion, changed[] }`: a signal, refetch the row       | ingest, assignment, status (Ph 1) |
-| `inbox.message.new`         | `conv:<uuid>`          | `{ conversationId, message: { id, seq, ... } }` (Phase 1 tightens `message`) | ingest worker, send (Ph 1)        |
+| `inbox.message.new`         | `conv:<uuid>`          | `{ conversationId, message }`: the full `MessageResponse`, with `media.url === ''` (a link is minted per reader: fetch the page after `seq - 1`) | ingest worker, send (Ph 1)        |
 | `inbox.message.status`      | `conv:<uuid>`          | `{ conversationId, messageId, clientMessageId, status, at }`                 | dispatch worker, receipts (Ph 1)  |
 | `inbox.unread`              | `user`                 | `{ conversationId, unread }`                                                 | ingest, mark read (Ph 1)          |
 | `inbox.assignment`          | `user` / `conv`        | `{ conversationId, assigneeUserId, assigneeTeamId }`                         | assignment (Ph 1, 3)              |

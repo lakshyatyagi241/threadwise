@@ -104,11 +104,12 @@ the time the event happened. Retention about 180 days (a sweep is not built yet)
 
 ## Writers other than the pipeline
 
-Until the conversation facade exists, three shims write the folded tables directly and take the next `msg_seq` the same way
-(`UPDATE conversations SET msg_seq = msg_seq + 1 ... RETURNING`, then insert the message): the chatbot widget gateway
-(`modules/chatbot-widget/_shims/sql-inbox-gateway.ts`, which also creates one `webchat` channel per widget), the broadcast inbox mirror
-(`modules/broadcasts/broadcast-inbox-mirror.service.ts`) and, read-only plus the translation columns, the translation store
-(`modules/localization-translation/conversation-message-store.ts`). The dashboards repository reads `messages`.
+The message pipelines (see "Message pipelines" below) are the writers of the stream for the inbox. Three shims still write the folded
+tables directly and take the next `msg_seq` the same way (`UPDATE conversations SET msg_seq = msg_seq + 1 ... RETURNING`, then insert the
+message): the chatbot widget gateway (`modules/chatbot-widget/_shims/sql-inbox-gateway.ts`, which also creates one `webchat` channel per
+widget), the broadcast inbox mirror (`modules/broadcasts/broadcast-inbox-mirror.service.ts`; it can move to
+`ConversationsFacade.recordOutbound`, which does the same under the ledger) and, read-only plus the translation columns, the translation
+store (`modules/localization-translation/conversation-message-store.ts`). The dashboards repository reads `messages`.
 
 ---
 
@@ -201,8 +202,10 @@ A failed send throws `ChannelError { code, retryable }`: retryable goes back to 
   `SendPolicyService` and `EmergencyHaltService`, so the halt stops what is already queued), then the adapter, once per `clientReference`: a send that
   succeeded is remembered 24 hours in Redis, so a retry returns the stored answer and a concurrent duplicate gets a retryable `DISPATCH_IN_FLIGHT`.
   A failure stores nothing. Residual risk (the process dies after the provider accepted, before the answer is stored) is documented in the plan, 3.4.
+  `send` plans the simulator's receipts but does not queue them: the caller runs `scheduleReceipts(channel, result)` once the provider id is stored
+  (the plan is part of the remembered answer, so a retry after a crash can still schedule it).
 - `ChannelIngestPublisher` puts normalised inbound messages and receipts on `webhook-ingest` (job name `channel.ingest`; the job shape is
-  `channelIngestJobSchema`). The ingest processor is Phase 1; until it exists jobs wait in the queue.
+  `channelIngestJobSchema`). The ingest processor (below) consumes them.
 
 ## The dev simulator
 
@@ -215,7 +218,8 @@ A failed send throws `ChannelError { code, retryable }`: retryable goes back to 
   message three times under one provider id.
 - Outbound faults by a prefix on the body (or media caption): `/fail` permanent refusal (`SIM_REJECTED`), `/flaky` retryable error on attempts 1 and 2,
   `/slow` answers after 10 s, `/ooo` receipts arrive read, delivered, sent.
-- Receipts after an accepted send: `sent` (0 ms), `delivered` (1 s), `read` (3 s), configurable in `settings.simulator.latencyMs`; queued as delayed jobs.
+- Receipts after an accepted send: `sent` (0 ms), `delivered` (1 s), `read` (3 s), configurable in `settings.simulator.latencyMs`; queued as delayed jobs
+  by the dispatch worker AFTER it stored the provider id (a receipt finds its message through that id).
 - Window toggle: `settings.simulator.window` is `auto` (24 hours from the last inbound), `open` or `closed`.
 
 ## The public webhook door
@@ -229,5 +233,163 @@ with no detail; a uuid that is not a channel is `404`. A disconnected channel st
 ## For other domains
 
 `ChannelsFacade` (barrel `modules/chat-conversations`): `list`, `findByUuid`, `findById`, all taking the caller's transaction, read-only and
-secret-free. `ConversationsFacade` (`recordOutbound`, `openConversationFor`, `findThread`) is declared as a contract and is implemented with the message
-pipeline in Phase 1; nothing binds `CONVERSATIONS_FACADE` yet.
+secret-free. `ConversationsFacade` (token `CONVERSATIONS_FACADE`) is the door to threads and messages: see "The facade" below.
+
+---
+
+# Chat conversations (CHAT): message pipelines
+
+Inbound ingest, delivery receipts, outbound enqueue and dispatch (plan-inbox-chat.md Phase 1, section 3.4). Code:
+`apps/api/src/modules/chat-conversations/`. Workers: `ChatConversationsWorkerModule`, imported by `WorkersModule` only (the HTTP app stores
+and enqueues, it never picks up a job).
+
+```
+simulator route / signed webhook                      agent presses send (team-inbox route -> ConversationsFacade.enqueueOutbound)
+   | parseInbound (adapter)                              |  guards, queued row, ledger client_id          (one transaction)
+   v                                                     v
+queue webhook-ingest --channel.ingest--> ChannelIngestProcessor      queue message-dispatch --message.send--> MessageDispatchProcessor
+   | inbound: InboundIngestService (one transaction per message)        | MessageDispatchService -> ChannelDispatcher.send -> adapter
+   | receipt: ReceiptsService (ledger lookup, rank rule, event log)     | queued -> sent (+ ledger provider_id) -> receipts -> read
+   v                                                                    v
+after commit: realtime (conv room, user rooms)                      after commit: schedule simulator receipts, realtime
+```
+
+## Queues and jobs
+
+| Queue              | Job              | Payload                                                            | Producer                                                       | Consumer                                | Retry                                                                                                                                                      |
+| ------------------ | ---------------- | ------------------------------------------------------------------ | -------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `webhook-ingest`   | `channel.ingest` | `channelIngestJobSchema`: one inbound message or receipt (normalised) | `ChannelIngestPublisher` (webhook door, simulator, dispatcher) | `ChannelIngestProcessor` (concurrency 8) | Queue default (5 attempts, exponential 2 s). A receipt that finds no message is retried through that backoff (it may have beaten the send's commit), then dropped. |
+| `message-dispatch` | `message.send`   | `{ orgId, messageUuid, generation }` (ids only)                    | `OutboundService` after the commit; the recovery sweep | `MessageDispatchProcessor` (concurrency 8) | 8 attempts, exponential 2 s (`MESSAGE_SEND_JOB_OPTIONS`): the wait before the last attempt (about 4 minutes) outlasts a killed worker's 60 s send lock. Job id `msg-<uuid>-<generation>`. |
+
+No queue was added: the health probe and the dashboards queue list are unchanged. One interval job in the worker: `QueuedMessageRecoveryService` (below).
+
+## Inbound ingest (`InboundIngestService`)
+
+One provider message becomes one stored message on the right thread, once, in whatever order and however often it is delivered. One transaction per message:
+
+1. The thread is found or created under an advisory lock on (workspace, channel, peer) (`peer_key` is normalised by `normalizePeerKey`: digits for phone
+   channels through the contacts canonicaliser, the channel's thread id otherwise), then its row is locked for the rest of the transaction. A new thread
+   resolves its contact first (below).
+2. A message id (`nextval('messages_id_seq')`) and row time (`statement_timestamp()` as text, microseconds included) are allocated BEFORE the ledger row,
+   because the ledger carries both.
+3. `message_ledger INSERT ... ON CONFLICT DO NOTHING`: no row back = a duplicate delivery; the transaction ends with nothing stored (outcome `duplicate`).
+   The queue's job id is a shortcut, and a probe before the file download skips the common redelivery; the unique key is the authority.
+4. `msg_seq` is taken from the locked row (`msg_seq + 1`, so 50 messages at once give 50 distinct gap-free numbers), the message is inserted (`status
+   received`, `provider_ts` = the customer's time clamped to the arrival), and the thread is updated: `last_message_*`, `preview`, `unread_count + 1`,
+   `last_inbound_at` (only forward: a late older message never shortens the window), `window_expires_at` = that time + the channel's `windowHours` (null:
+   no window rule), `waiting_since` (set when nobody is already waiting: the SLA anchor, the oldest unanswered message).
+5. A resolved, closed or snoozed thread is reopened by the message (`pending` returns to `open`; `spam` stays `spam`): `resolved_at` / `snoozed_until`
+   cleared, a `reopened` event and the outbox event `conversation.reopened`. A new thread writes a `created` event, an audit row (`conversations` insert)
+   and `conversation.created`.
+
+Contact resolution is `ContactsService.resolveOrCreateByIdentity(tx, orgId, { kind, value, name, source })` (crm barrel; the one edit outside this domain's
+folders): the phone goes through the one canonicaliser and is looked up by identity (`contact_identities`), then by the stored number (a contact that predates
+identities is healed with one), else created with the workspace's default stage and status, an identity, an audit row and `contact.created`, under the
+contact quota (`ContactQuotaService`). It never throws for the cap: the outcome is `quota_reached` and the thread is created without a contact,
+`needs_contact = true`; the next message tries again. The step runs in a savepoint, so a failure inside it costs only the contact, not the message.
+**An inbound message is never dropped for a business reason.**
+
+Media: the file is fetched (`adapter.fetchMedia`) and stored through `ChatMediaStore.storeInbound` before the transaction (no connection is held across a
+network call; an orphan is removed if the transaction loses). A file the upload policy refuses leaves the message without it (`meta.mediaError =
+rejected`); a download that keeps failing does the same on the queue's last attempt, so the text is never lost. Reactions decorate the message they answer
+(`messages.reaction`) instead of adding a bubble; their redelivery is still a no-op through the ledger.
+
+## Delivery receipts (`ReceiptsService`)
+
+The provider id in a receipt finds the message (and its partition) through the ledger (per workspace and channel: another workspace cannot reach a message by
+guessing an id). The status moves in one conditional UPDATE: `queued < sent < delivered < read` only forward, `failed` only from queued or sent and never over a
+delivery, nothing leaves `failed`. A receipt the rule refuses still fills its time column (`delivered` after `read` tells when) and is still appended to
+`message_events` (`detail.applied` says which), so the log is complete when the arrival order was not. An id nobody has is `unknown` and changes nothing. After
+the commit: `inbox.message.status` to the thread's room.
+
+## Outbound (`OutboundService`, `MessageDispatchService`)
+
+`enqueueOutbound` (the agent's send): one transaction holds the thread's row lock, the client-id ledger row (a repeated `clientMessageId` returns the first
+message with `replayed: true`: no second row, no second send; another thread's id is `409 IDEMPOTENCY_KEY_REUSED`), the guards (below), the next `seq`, the
+`queued` message and its event. After the commit the job is enqueued and the thread told (`inbox.message.new`, `inbox.conversation.upsert`). If the enqueue is
+lost the message stays `queued` and the recovery sweep queues it.
+
+Guards at enqueue (`ChannelDispatcher.assertCanQueue`; nothing is stored when one fails): `CHANNEL_DISCONNECTED`, `CHANNEL_CAPABILITY_UNSUPPORTED`,
+`SERVICE_WINDOW_CLOSED` (free-form text or media more than `windowHours` after the customer's last message; a template is allowed), `PLAN_LIMIT_REACHED`
+(`monthly_messages`: outbound messages of metered channels this month that did not fail, counted only for a workspace whose plan has a cap; the simulator is
+never metered). At send time (the worker, `ChannelDispatcher.send`): the channel and window again, then the emergency halt and content screen
+(`OUTBOUND_SEND_GUARD`), so a halt stops what is already queued.
+
+The worker's `dispatch`: re-read the message (a job carries ids only); skip it unless `queued`; write an `attempt` event BEFORE the provider is called; send
+through the dispatcher (one provider call per client reference, answered from Redis for 24 h after a success); on success one transaction moves
+`queued -> sent`, writes the provider id to the ledger and the `sent` event, sets `last_outbound_at`, ends the customer's wait (`waiting_since = NULL`) and, for
+a staff reply, stamps `first_response_at` once (a `first_response` event). **First response is stamped only when the provider accepted the message** (WaDesk
+stamped it when the agent pressed send, even if the send then failed). Then the simulator's receipts are queued and the thread told (`inbox.message.status`).
+
+Failures: a retryable `ChannelError` goes back to the queue (backoff; a message another worker is sending is delayed without using an attempt); on the last
+attempt, or for a permanent refusal (`ChannelError` not retryable) or a guard (`AppError`: `AUTH_SEND_HALTED`, `AUTH_SEND_BLOCKED`, window, channel off), the
+message ends `failed` with `failure_code` / `failure_reason`, no first response, the customer still waiting. `retryOutbound` puts the same message back to
+`queued` (new dispatch generation, same `seq`, same row) after the same guards; only a failed outbound message qualifies.
+
+Kill-safety: the message row exists before the job, and the worker never creates one, so a worker killed anywhere cannot duplicate a message. The retry finds
+it `queued` and asks the dispatcher again, which answers from the stored result if the provider had already accepted. **Residual risk, as in the plan (3.4):**
+if the process dies after the provider accepted and before its answer is stored, the retry can call the provider a second time (the Cloud API has no
+idempotency key). The log shows the attempt that has no outcome. A killed worker's send lock lasts 60 s.
+
+`QueuedMessageRecoveryService` (worker, every 30 s, privileged): `queued` outbound messages older than a minute and younger than 24 h are put back on the queue
+(a finished or failed job still holding the id is removed first). Safe on every worker and to repeat.
+
+## Realtime (after commit, best effort, never inside a transaction)
+
+| Event                       | When                                                            | Goes to                                                                                                                                                  |
+| --------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `inbox.message.new`         | a message was stored (inbound, queued reply, recorded outbound) | the thread's room `conv:<uuid>`: the message without a media link (`media.url` is `''`; the client fetches the page after `seq - 1` for a link made for it) |
+| `inbox.message.status`      | sent, delivered, read, failed, queued again                     | the thread's room                                                                                                                                        |
+| `inbox.conversation.upsert` | any stored message; first response; reopened; read              | the people who may see the thread (`AudienceResolver`, per scope); a signal: `changed` lists `lastMessage`, `unread`, `created`, `status`, `lastOutbound`, `waiting`, `firstResponse` |
+| `inbox.unread`              | inbound; mark read                                              | the same audience: `{ conversationId, unread }`                                                                                                          |
+| `rt.resync`                 | an inbound reaction                                             | the thread's room                                                                                                                                        |
+
+A person whose scope does not include the thread is told nothing (tested). Outbox events (same transaction, `aggregateModule: conversations`):
+`conversation.created`, `conversation.reopened`; `contact.created` when the pipeline created the contact. Messages and receipts are not outbox events.
+
+## The facade (`ConversationsFacade`)
+
+Token `CONVERSATIONS_FACADE`, barrel `modules/chat-conversations`. Runs under the ambient request context, own transactions, uuids on the wire. **It does not know
+read scopes: the caller checks `conversationVisible` before calling** (team-inbox-conversations does).
+
+| Method                                                                                      | Does                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enqueueOutbound({ conversationId, clientMessageId, content, replyToMessageId?, sender? })` | The agent's send (above). `content`: `text`; `media` (a file already stored by `ChatMediaStore.store`: key, mime, size, name, sha256); `template` (name, language, variables and the text the thread shows: the TPL domain resolves it). Returns `{ message, replayed }`: the `queued` message (answer `202`). |
+| `retryOutbound(messageId)`                                                                  | Retry of a failed message. `MESSAGE_NOT_FOUND`, `MESSAGE_NOT_RETRYABLE`.                                                                                                                                                                                                                |
+| `listMessages(conversationId, { limit, before?, afterSeq? })`                               | A thread page ascending by `seq` with `hasMoreBefore` / `hasMoreAfter`; each file is a link minted for the caller.                                                                                                                                                                     |
+| `markRead(conversationId, upToSeq)`                                                         | `unread_count` becomes the number of customer messages after `upToSeq` (never increases); tells the audience.                                                                                                                                                                           |
+| `openConversationFor(contactId, channelId)`                                                 | The perpetual thread of a contact on a phone channel (created when missing).                                                                                                                                                                                                            |
+| `findThread(channelId, peerKey)`                                                            | The thread of (channel, peer), the peer normalised.                                                                                                                                                                                                                                     |
+| `recordOutbound({ channelId, peerKey, source, body, providerMessageId? })`                  | A message another domain sent (a broadcast, a flow) written into the thread as `sent`; the same provider id twice is a no-op.                                                                                                                                                           |
+
+## Media access
+
+`MessageMediaAccessPolicy` is bound to the media route (`MEDIA_ACCESS_POLICY`, in `app.module`): a link works only while its holder may still see the conversation
+the file belongs to (`conversationVisible`, current grants), looked up through `idx_messages_media_key` (migration `20261015100000_chat_messages_media_key_idx`). A
+key on no message yet (an upload waiting in the composer) passes: the link was minted by code that had authorised the person. The worker registers the same
+`ChatMediaModule` as the HTTP app, because inbound files are stored by the ingest job.
+
+## Errors
+
+`SERVICE_WINDOW_CLOSED`, `CHANNEL_DISCONNECTED`, `CHANNEL_CAPABILITY_UNSUPPORTED`, `PLAN_LIMIT_REACHED` (all `422`, at enqueue); `CONVERSATION_NOT_FOUND`,
+`MESSAGE_NOT_FOUND` (`404`, also for another workspace's ids); `MESSAGE_NOT_RETRYABLE`, `IDEMPOTENCY_KEY_REUSED` (`409`). At send time the message ends `failed` with
+`AUTH_SEND_HALTED` / `AUTH_SEND_BLOCKED` (the guard), `SIM_REJECTED` (the simulator), `CHANNEL_NOT_LIVE` (an adapter that cannot send yet), a provider's own code, or
+`DISPATCH_ERROR` (retries exhausted on an unclassified error).
+
+## Not built here
+
+Message-event retention (180 days) and the ledger sweep (60 days) are not scheduled yet; routing, auto-reply and opt-out stages of the ingest (plan 3.4 step 6, Phase 2+);
+inbound reactions are stored on the target message only (no reaction send); an inbound `contact` card carries no card; the web chat widget's own inbound still goes
+through its shim.
+
+## Tests
+
+Unit (`apps/api/test/unit/chat-conversations/`): peer-key normalisation, receipt rank and arrival orders, window computation, previews and kinds, the wire mapper, the
+processors' retry and delay decisions, the dispatcher, the simulator faults. Integration (`test/integration/chat-conversations/message-pipeline-sql.spec.ts`, real Postgres as the
+restricted role): 50 parallel inbound on a thread that does not exist yet give one thread and 50 gap-free numbers, 20 duplicate deliveries store one message, the ledger names a
+message to the microsecond, every receipt order ends at `read`, `failed` rules, unread, and isolation of every repository call between two workspaces. E2E
+(`apps/api/test/e2e/chat-conversations/`; `pipeline-support.ts` runs the worker processors inside the test app): `message-ingest.e2e.spec.ts` (inbound, contact, reopen,
+duplicates 20x and 3x, 50 in parallel through the queue, the contact cap, realtime audience, the signed webhook, unknown receipts), `message-send.e2e.spec.ts` (send to
+`read`, idempotency, `/fail` and Retry, `/flaky`, `/ooo`, forced receipts, window, channel, monthly cap, emergency halt, a crash before the commit, a worker really killed
+mid-call and finished by another, the recovery sweep, cross-tenant) and `conversations-facade.e2e.spec.ts` (thread paging, mark read, thread lookups, `recordOutbound`, the media
+access rule, joining a room).

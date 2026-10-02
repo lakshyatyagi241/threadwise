@@ -634,6 +634,27 @@ describe('delivery', () => {
     expect(await arrives(c, REALTIME_EVENT.unread)).toBe(false);
   });
 
+  it('puts a socket back in the room when it re-joins after an eviction and still has access', async () => {
+    const tt = await api.signup('rtr');
+    const a = await api.member(tt, 'a', READ('own'));
+    const th = await conversation(tt, { userId: a.userId });
+    const c = await connectAs(a.token);
+    await join(c, conv(th.uuid));
+
+    const emitter = h.app.get(RealtimeEmitter);
+    await emitter.evict(tt.orgId, a.userId, { kind: 'conv', id: th.uuid });
+    await sleep(300);
+
+    // The gateway must not answer "already in" from a stale entry: it re-checks access and joins again.
+    expect((await join(c, conv(th.uuid))).ok).toBe(true);
+    c.events.length = 0;
+    await emitter.emit(tt.orgId, [{ kind: 'conv', id: th.uuid }], REALTIME_EVENT.unread, {
+      conversationId: th.uuid,
+      unread: 3,
+    });
+    expect(await arrives(c, REALTIME_EVENT.unread)).toBe(true);
+  });
+
   it("keeps each workspace's rooms apart even when two rooms have the same uuid", async () => {
     const shared = randomUUID();
     const a = await connectAs(allReader.token);

@@ -4,6 +4,10 @@ export { ChannelsFacade, type ChannelSummary } from './channels.facade';
 export {
   CONVERSATIONS_FACADE,
   type ConversationsFacade,
+  type EnqueueOutboundInput,
+  type EnqueueOutboundResult,
+  type OutboundContent,
+  type OutboundMediaRef,
   type RecordOutboundInput,
   type ThreadRef,
 } from './conversations.facade';
@@ -15,3 +19,6 @@ export {
 } from './channel-dispatcher.service';
 export { ChannelRegistryService } from './channel-registry.service';
 export { ChannelIngestPublisher } from './channel-ingest.publisher';
+export { ChatConversationsWorkerModule } from './chat-conversations-worker.module';
+export { MessageMediaAccessPolicy } from './media-access.policy';
+export { normalizePeerKey, identityOfPeer } from './peer-key';

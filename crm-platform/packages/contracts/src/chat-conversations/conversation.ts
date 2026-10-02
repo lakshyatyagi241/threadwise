@@ -37,21 +37,13 @@ export const conversationAssignmentSchema = z.object({
 export type ConversationAssignment = z.infer<typeof conversationAssignmentSchema>;
 
 /**
- * Placeholder for `POST /inbox/conversations/:id/assign` until the assignment service defines its strategies: `userId` assigns,
- * `null` unassigns, and a person claiming a thread for themselves sends their own id (the server checks the claim-only right).
- * `AssignmentService` is the only writer of the assignee columns.
+ * `POST /inbox/conversations/:id/status`: resolve, close, reopen, or park a thread as pending (waiting on the customer). The legal moves are
+ * `canMoveConversationStatus` below. Snooze and spam have their own routes (they carry a time or a reason).
  */
-export const assignConversationSchema = z.object({
-  rowVersion: z.number().int().positive(),
-  userId: uuidSchema.nullable(),
-  teamId: uuidSchema.nullable().optional(),
-});
-export type AssignConversationInput = z.infer<typeof assignConversationSchema>;
-
-/** `POST /inbox/conversations/:id/status`: resolve or reopen (the guarded transitions; snooze and spam have their own routes). */
+export const SETTABLE_CONVERSATION_STATUSES = ['open', 'pending', 'resolved', 'closed'] as const;
 export const setConversationStatusSchema = z.object({
   rowVersion: z.number().int().positive(),
-  status: z.enum(['open', 'resolved']),
+  status: z.enum(SETTABLE_CONVERSATION_STATUSES),
 });
 export type SetConversationStatusInput = z.infer<typeof setConversationStatusSchema>;
 
@@ -103,7 +95,11 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
   channelId: uuidSchema.optional(),
   /** Contact name, peer name or number, or a word of the preview. */
   q: z.string().trim().min(1).max(200).optional(),
-  archived: z.coerce.boolean().default(false),
+  /** The archive view: every archived thread, whatever the tab or status. A query string, so `false` must mean false (`z.coerce.boolean` reads any non-empty string as true). */
+  archived: z
+    .enum(['true', 'false', '1', '0'])
+    .transform((v) => v === 'true' || v === '1')
+    .default('false'),
 });
 export type ListConversationsQuery = z.infer<typeof listConversationsQuerySchema>;
 

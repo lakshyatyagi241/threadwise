@@ -126,7 +126,9 @@ export class RealtimeGateway
     const name = roomName(data.identity.orgId, ref);
     const room = realtimeRoomKey(spec.data);
 
-    // Already in: answer with where the room stands, without asking the database again.
+    // Already in: answer with where the room stands, without asking the database again. "Already in" means the socket really is in
+    // the room: an eviction (RealtimeEmitter.evict) takes it out without touching `joined`, so a stale entry must not count.
+    if (data.joined.has(name) && !client.rooms.has(name)) data.joined.delete(name);
     if (!data.joined.has(name)) {
       if (data.joined.size >= REALTIME_MAX_JOINED_ROOMS) return { ok: false, code: 'LIMIT' };
       try {

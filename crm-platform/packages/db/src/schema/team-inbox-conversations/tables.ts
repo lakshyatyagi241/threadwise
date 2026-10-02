@@ -11,12 +11,14 @@ import {
   jsonb,
   pgTable,
   primaryKey,
+  check,
   text,
   timestamp,
   unique,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { tags } from '../contact-views';
 import { organizations, users } from '../foundation';
@@ -134,3 +136,57 @@ export const savedReplies = pgTable(
 
 export type SavedRepliesRow = typeof savedReplies.$inferSelect;
 export type NewSavedRepliesRow = typeof savedReplies.$inferInsert;
+
+/**
+ * A file an agent attached in the composer before sending: the reference a send names (`mediaId`). The bytes live in the media store,
+ * never in Postgres. Migration 20261015090100.
+ */
+export const conversationMediaUploads = pgTable(
+  'conversation_media_uploads',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id'),
+    mediaKey: text('media_key').notNull(),
+    kind: text('kind').$type<'image' | 'video' | 'audio' | 'document'>().notNull(),
+    mime: text('mime').notNull(),
+    sizeBytes: idColumn('size_bytes').notNull(),
+    name: text('name').notNull(),
+    sha256: text('sha256').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    usedAt: timestamp('used_at', { withTimezone: true }),
+    /** The send that claimed the file (its `clientMessageId`), so a retry of that send is recognised. */
+    usedByClientMessageId: uuid('used_by_client_message_id'),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_conversation_media_uploads_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'conversation_media_uploads_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'conversation_media_uploads_org_id_user_id_fkey',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    check(
+      'chk_conversation_media_uploads_kind',
+      sql`kind IN ('image', 'video', 'audio', 'document')`,
+    ),
+    check('chk_conversation_media_uploads_size', sql`size_bytes >= 0`),
+    check(
+      'chk_conversation_media_uploads_claim',
+      sql`(used_at IS NULL) = (used_by_client_message_id IS NULL)`,
+    ),
+    index('idx_conversation_media_uploads_expiry')
+      .on(t.expiresAt)
+      .where(sql`used_at IS NULL`),
+  ],
+);
+
+export type ConversationMediaUploadsRow = typeof conversationMediaUploads.$inferSelect;
+export type NewConversationMediaUploadsRow = typeof conversationMediaUploads.$inferInsert;

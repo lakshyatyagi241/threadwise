@@ -331,7 +331,11 @@ import { TagsService } from './tags/tags.service';
     PipelinesService,
     TasksService,
     SalesDocsService,
+    // The expiry sweep (SalesDocsWorkerModule) reads it directly.
+    SalesDocsRepository,
     InvoicesService,
+    // The recurring-invoice sweep (InvoicingWorkerModule) drives it.
+    RecurringInvoicesService,
     PaymentsService,
     TaxRatesService,
   ],

@@ -54,6 +54,8 @@ import {
     BroadcastDispatchService,
     EngineSenderRegistry,
     BroadcastsRepository,
+    // The resume sweep (BroadcastsWorkerModule) re-arms the pacing state.
+    PacingRuntime,
   ],
   providers: [
     CryptoService,

@@ -9,8 +9,6 @@ import { describe, expect, it } from 'vitest';
  * will enforce it. Enforcing one means deleting its line, so this list only ever shrinks.
  */
 const AWAITING: Readonly<Record<string, string>> = {
-  'inbox.conversation.note': 'WD-TIB1 conversation notes',
-  'inbox.conversation.assign_self': 'WD-TIB2 assignment',
   'inbox.conversation.snooze': 'WD-TIB1 snooze',
   'inbox.conversation.bulk': 'WD-TIB1 bulk actions',
   'inbox.conversation.tag': 'WD-TIB1 labels',

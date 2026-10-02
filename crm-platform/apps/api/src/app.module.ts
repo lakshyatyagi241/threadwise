@@ -44,7 +44,9 @@ import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { TeamChatModule } from './modules/team-chat';
-import { ChatConversationsModule } from './modules/chat-conversations';
+import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
+import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
+import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
@@ -135,6 +137,8 @@ import { HealthModule } from './health/health.module';
       imports: [PlatformSettingsModule],
       objectGateway: { useExisting: MediaStorageService },
       uploadValidator: { useExisting: UploadPolicyService },
+      // A link stops working when the person may no longer see the conversation the file belongs to.
+      accessPolicy: { useClass: MessageMediaAccessPolicy },
     }),
     HealthModule,
 
@@ -152,6 +156,8 @@ import { HealthModule } from './health/health.module';
     PlatformSupportDeskModule,
     TeamChatModule,
     ChatConversationsModule,
+    TeamInboxConversationsModule,
+    TeamInboxRoutingSlaModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],
