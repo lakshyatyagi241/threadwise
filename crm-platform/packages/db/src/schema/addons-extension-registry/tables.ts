@@ -54,7 +54,7 @@ export const extensionApiTokens = pgTable(
     tokenHash: text('token_hash').notNull(),
     label: text('label'),
     lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
-    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -72,7 +72,7 @@ export const extensionApiTokens = pgTable(
       name: 'fk_extension_api_tokens_user_id',
       columns: [t.orgId, t.userId],
       foreignColumns: [users.orgId, users.id],
-    }).onDelete('set null'),
+    }).onDelete('cascade'),
     index('idx_extension_api_tokens_user_id').on(t.orgId, t.userId),
   ],
 );

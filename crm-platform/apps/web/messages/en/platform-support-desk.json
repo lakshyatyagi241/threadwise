@@ -1,0 +1,155 @@
+{
+  "platform-support-desk": {
+    "nav": {
+      "support": "Support",
+      "inbox": "Support inbox",
+      "group": "Support"
+    },
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "pending": "Pending",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "reason": {
+      "bug": {
+        "label": "Something is broken",
+        "hint": "An error, a crash or a screen that does not work"
+      },
+      "delivery": {
+        "label": "Message delivery",
+        "hint": "Messages that are late, failed or never arrived"
+      },
+      "template": {
+        "label": "Template approval",
+        "hint": "A template that is pending or was rejected"
+      },
+      "billing": { "label": "Billing and plans", "hint": "Charges, invoices, upgrades and limits" },
+      "integration": {
+        "label": "Integration help",
+        "hint": "Connecting a channel, webhook or another tool"
+      },
+      "account": { "label": "Account access", "hint": "Sign-in, two-factor codes and team access" },
+      "other": { "label": "Something else", "hint": "Anything that does not fit above" }
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "validation": "Some of the values are not valid. Check the fields and try again.",
+      "conflict": "Someone else changed this ticket. It was reloaded; apply your change again.",
+      "closed": "This ticket is closed. Open a new ticket to continue.",
+      "notFound": "That ticket could not be found.",
+      "unexpected": "Something went wrong. Try again.",
+      "retry": "Try again",
+      "requestId": "Request id"
+    },
+    "customer": {
+      "title": "How can we help?",
+      "subtitle": "Send a message to the support team. We reply by email and in the ticket thread.",
+      "pickReason": "Pick a reason",
+      "form": {
+        "name": "Your name",
+        "email": "Reply email",
+        "emailHint": "Replies go to this address.",
+        "subject": "Subject",
+        "message": "Tell us what happened",
+        "submit": "Send to support",
+        "sending": "Sending..."
+      },
+      "created": "Ticket {number} created. We will follow up shortly.",
+      "history": {
+        "title": "Recent tickets",
+        "all": "{open} open of {total}",
+        "empty": "You have not opened any tickets yet.",
+        "justSubmitted": "just submitted"
+      },
+      "thread": {
+        "back": "Back to all tickets",
+        "opened": "Opened {date}",
+        "resolved": "Resolved {date}",
+        "you": "You",
+        "support": "Support team",
+        "initial": "initial",
+        "replyTitle": "Reply",
+        "replyPlaceholder": "Add more details or a link to a screenshot",
+        "send": "Send reply",
+        "sending": "Sending...",
+        "reopenHint": "Replying to a resolved ticket reopens it.",
+        "closed": "This ticket is closed.",
+        "openNew": "Open a new ticket"
+      }
+    },
+    "operator": {
+      "title": "Support inbox",
+      "subtitle": "Every customer ticket across all workspaces, newest first.",
+      "kpi": {
+        "open": "Open",
+        "unassigned": "Unassigned",
+        "resolved24h": "Resolved in 24 hours",
+        "total": "All time"
+      },
+      "filters": {
+        "status": "Status",
+        "priority": "Priority",
+        "agent": "Agent",
+        "all": "All",
+        "me": "Assigned to me",
+        "unassigned": "Unassigned",
+        "search": "Search ticket or customer",
+        "clear": "Clear"
+      },
+      "table": {
+        "when": "When",
+        "ticket": "Subject and customer",
+        "priority": "Priority",
+        "status": "Status",
+        "assignee": "Assignee",
+        "open": "Open",
+        "unassigned": "unassigned",
+        "empty": "No tickets match the current filters.",
+        "loadMore": "Load more",
+        "noSubject": "(no subject)"
+      },
+      "panel": {
+        "title": "Ticket #{number}",
+        "close": "Close",
+        "loading": "Loading...",
+        "status": "Status",
+        "priority": "Priority",
+        "customer": "Customer",
+        "workspace": "Workspace",
+        "assignedTo": "Assigned to",
+        "firstReply": "First reply",
+        "opened": "Opened",
+        "none": "none",
+        "assign": "Assign to",
+        "unassign": "- unassigned -",
+        "customerInitial": "{name} - initial",
+        "internal": "internal",
+        "emailFailed": "email not sent",
+        "replyPlaceholder": "Reply to the customer or add an internal note",
+        "internalNote": "Internal note (not sent to customer)",
+        "send": "Send reply",
+        "addNote": "Add note",
+        "sending": "Sending...",
+        "readOnly": "Your role can read tickets but not change them."
+      },
+      "toast": {
+        "replied": "Reply sent to {email}.",
+        "noted": "Internal note added.",
+        "emailFailed": "Reply saved, but the email could not be sent.",
+        "status": "Status updated.",
+        "priority": "Priority set.",
+        "assigned": "Assigned.",
+        "unassigned": "Unassigned."
+      }
+    }
+  }
+}

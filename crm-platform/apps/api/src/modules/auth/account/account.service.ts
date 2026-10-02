@@ -35,6 +35,7 @@ import {
   bustFooterCache,
   pickFooter,
   platformFooterFrom,
+  readSavedPlatformFooter,
 } from '../security/branding-footer.service';
 import { PasswordService } from '../security/password.service';
 import { UploadPolicyService } from '../security/upload-policy.service';
@@ -548,10 +549,7 @@ export class AccountService {
     const p = await this.loadProfile(orgId, userId);
     const own = (p.org_settings as { messageFooter?: string | null }).messageFooter ?? null;
     const canEdit = await this.planGate.has(orgId, 'remove_branding');
-    const platform = platformFooterFrom(
-      await this.settings.get<string>(PLATFORM_FOOTER_SETTING),
-      this.appName,
-    );
+    const platform = platformFooterFrom(await readSavedPlatformFooter(this.settings), this.appName);
     return {
       messageFooter: own,
       platformDefault: platform ?? '',

@@ -4,7 +4,10 @@ import { z } from 'zod';
  * Machine-readable application error codes. The frontend switches on `code`,
  * never on the human-readable message — messages get reworded, codes do not.
  */
+import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
+
 export const ERROR_CODES = {
+  ...PAYGW_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -162,6 +165,70 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+  // platform settings, branding and storage (TW-SET)
+  SET_MAINTENANCE: 'SET_MAINTENANCE',
+  // localization and translation (TW-I18N)
+  I18N_LANGUAGE_NOT_AVAILABLE: 'I18N_LANGUAGE_NOT_AVAILABLE',
+  I18N_LANGUAGE_IS_DEFAULT: 'I18N_LANGUAGE_IS_DEFAULT',
+  I18N_LANGUAGE_INACTIVE: 'I18N_LANGUAGE_INACTIVE',
+  I18N_ADD_LANGUAGE_DISABLED: 'I18N_ADD_LANGUAGE_DISABLED',
+  I18N_PROVIDER_CREDENTIALS_MISSING: 'I18N_PROVIDER_CREDENTIALS_MISSING',
+  I18N_PROVIDER_INACTIVE: 'I18N_PROVIDER_INACTIVE',
+  I18N_LOCKDOWN_NO_OFFICIAL_PROVIDER: 'I18N_LOCKDOWN_NO_OFFICIAL_PROVIDER',
+  // first-run setup and the demo guard (TW-INST-001, 015, 029)
+  SETUP_ALREADY_COMPLETED: 'SETUP_ALREADY_COMPLETED',
+  SETUP_DISABLED: 'SETUP_DISABLED',
+  SETUP_TOKEN_INVALID: 'SETUP_TOKEN_INVALID',
+  SETUP_PREREQUISITES_FAILED: 'SETUP_PREREQUISITES_FAILED',
+  SETUP_STEP_OUT_OF_ORDER: 'SETUP_STEP_OUT_OF_ORDER',
+  SETUP_STEP_FAILED: 'SETUP_STEP_FAILED',
+  SETUP_LICENCE_INVALID: 'SETUP_LICENCE_INVALID',
+  SETUP_DATABASE_TEST_FAILED: 'SETUP_DATABASE_TEST_FAILED',
+  LICENCE_NOT_ENABLED: 'LICENCE_NOT_ENABLED',
+  DEMO_MODE_BLOCKED: 'DEMO_MODE_BLOCKED',
+  // add-ons, extensions and the module registry (TW-ADD)
+  ADD_PACKAGE_INVALID: 'ADD_PACKAGE_INVALID',
+  ADD_PACKAGE_TOO_LARGE: 'ADD_PACKAGE_TOO_LARGE',
+  ADD_CORE_TOO_OLD: 'ADD_CORE_TOO_OLD',
+  ADD_ENGINE_CONFLICT: 'ADD_ENGINE_CONFLICT',
+  ADD_PACK_IN_USE: 'ADD_PACK_IN_USE',
+  ADD_MODULE_DISABLED: 'ADD_MODULE_DISABLED',
+  // AI provider keys and token metering (TW-AIADM)
+  /** Activating a provider that has no readable key. */
+  AIADM_KEY_REQUIRED: 'AIADM_KEY_REQUIRED',
+  /** No key (own or platform) is available for the provider a call asked for. */
+  AIADM_NO_KEY_AVAILABLE: 'AIADM_NO_KEY_AVAILABLE',
+  // marketing site, blog, legal pages and guidebook (TW-CMS)
+  CMS_SLUG_TAKEN: 'CMS_SLUG_TAKEN',
+
+  // reseller billing (TW-BSP)
+  /** The platform's Meta connection (business id and token) is not set up. */
+  BSP_NOT_CONFIGURED: 'BSP_NOT_CONFIGURED',
+  /** Meta accepts only AUD, EUR, GBP, IDR, INR and USD for a credit line, and the choice is locked once attached. */
+  BSP_CURRENCY_UNSUPPORTED: 'BSP_CURRENCY_UNSUPPORTED',
+  /** The WABA is not a connected WhatsApp Business number of that workspace (Reference attached any string). */
+  BSP_WABA_NOT_FOUND: 'BSP_WABA_NOT_FOUND',
+  /** Meta refused or did not answer; the message is Meta's, shown to the operator. */
+  BSP_META_REJECTED: 'BSP_META_REJECTED',
+  BSP_ALLOCATION_NOT_ATTACHED: 'BSP_ALLOCATION_NOT_ATTACHED',
+  /** "Bill me through us" is chosen before the platform's credit line exists. */
+  BSP_RESELLER_UNAVAILABLE: 'BSP_RESELLER_UNAVAILABLE',
+
+  // team chat (TW-TCHAT)
+  TCHAT_CHANNEL_NAME_TAKEN: 'TCHAT_CHANNEL_NAME_TAKEN',
+  /** #general cannot be deleted. */
+  TCHAT_CHANNEL_PROTECTED: 'TCHAT_CHANNEL_PROTECTED',
+  TCHAT_NOT_CHANNEL_MEMBER: 'TCHAT_NOT_CHANNEL_MEMBER',
+  TCHAT_EMPTY_MESSAGE: 'TCHAT_EMPTY_MESSAGE',
+  /** The message being replied to is not in this channel (Reference: `parent_other_channel`). */
+  TCHAT_REPLY_OTHER_CHANNEL: 'TCHAT_REPLY_OTHER_CHANNEL',
+  TCHAT_EDIT_WINDOW_EXPIRED: 'TCHAT_EDIT_WINDOW_EXPIRED',
+  TCHAT_NOT_MESSAGE_AUTHOR: 'TCHAT_NOT_MESSAGE_AUTHOR',
+  TCHAT_ALREADY_MEMBER: 'TCHAT_ALREADY_MEMBER',
+  TCHAT_INVITATION_DECIDED: 'TCHAT_INVITATION_DECIDED',
+  TCHAT_ATTACHMENT_REJECTED: 'TCHAT_ATTACHMENT_REJECTED',
+  /** The operation does not apply to this kind of channel (members of a public channel, a direct message with yourself). */
+  TCHAT_CHANNEL_KIND_INVALID: 'TCHAT_CHANNEL_KIND_INVALID',
 
   // proposals and estimates (TW-PROP / TW-EST)
   /** The move is not allowed from the document's status (details: `from`, `to`). */

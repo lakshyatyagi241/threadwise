@@ -75,6 +75,8 @@ export function Checkbox({ className, ...rest }: CheckboxProps) {
 const BUTTON_VARIANTS = {
   primary:
     'bg-primary text-primary-foreground hover:bg-(--auth-teal) hover:opacity-100 dark:hover:bg-(--auth-teal)',
+  brand:
+    'bg-primary text-primary-foreground hover:bg-(--auth-teal) hover:opacity-100 dark:hover:bg-(--auth-teal)',
   secondary:
     'border border-border bg-background text-(--auth-ink-700) hover:bg-muted hover:text-foreground',
   ghost: 'text-(--auth-ink-700) hover:bg-muted',
