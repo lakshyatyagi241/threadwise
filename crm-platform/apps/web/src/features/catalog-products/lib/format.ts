@@ -43,12 +43,12 @@ const UNITS: Array<[Intl.RelativeTimeFormatUnit, number]> = [
   ['minute', 60],
 ];
 
-/** "5 minutes ago" / "just now": the `diffForHumans` of WaDesk. */
+/** "5 minutes ago", "1 day ago", "6 seconds ago": Carbon's `diffForHumans`, which never says "yesterday" or "now". */
 export function timeAgo(iso: string, now: Date, locale: string): string {
   const seconds = Math.round((new Date(iso).getTime() - now.getTime()) / 1000);
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'always' });
   for (const [unit, size] of UNITS) {
     if (Math.abs(seconds) >= size) return rtf.format(Math.trunc(seconds / size), unit);
   }
-  return rtf.format(0, 'second');
+  return rtf.format(Math.min(seconds, 0) || -0, 'second');
 }
