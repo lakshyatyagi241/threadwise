@@ -285,7 +285,7 @@ describe('margin grid rendering', () => {
     expect(html).toContain('$0.5000');
     expect(html).toContain('Meta&#x27;s cost is not known here, so the typed fixed price applies.');
     expect(html).toContain('value="50"');
-    expect(html).toContain('Any category');
+    expect(html).toContain('Marketing');
   });
 
   it('shows each skipped reason on its own row', () => {
@@ -322,7 +322,7 @@ describe('margin grid rendering', () => {
     expect(html).toContain('Any country');
     expect(html).toContain('India (IN)');
     expect(filterCountries(COUNTRIES, 'emir').map((c) => c.code)).toEqual(['AE']);
-    expect(filterCountries(COUNTRIES, 'us').map((c) => c.code)).toEqual(['US', 'AE']);
+    expect(filterCountries(COUNTRIES, 'us').map((c) => c.code)).toEqual(['US']);
     expect(filterCountries(COUNTRIES, '')).toHaveLength(3);
   });
 
@@ -503,7 +503,7 @@ describe('pricing mode', () => {
     expect(html).toContain('Current: Fixed prices');
     expect(html).toContain('id="pricing-mode"');
     expect(html).toContain('Change how customers are priced?');
-    expect(html).toContain('Where Meta&#x27;s cost is unknown, the fixed price is still charged.');
+    expect(html).toContain('Margins stay saved but stop applying.');
     expect(html).toContain('Save pricing mode');
     expect(html).toMatch(/value="fixed"[^>]*checked|checked[^>]*value="fixed"/);
   });
@@ -513,6 +513,7 @@ describe('pricing mode', () => {
       <PricingModeCard settings={settings({ pricingMode: 'margin' })} canEdit={false} />,
     );
     expect(html).toContain('Current: Meta cost + margin');
+    expect(html).toContain('Where Meta&#x27;s cost is unknown, the fixed price is still charged.');
     expect(html).not.toContain('Save pricing mode');
     expect(html).toContain('<fieldset');
     expect(html).toMatch(/<fieldset[^>]*disabled/);
