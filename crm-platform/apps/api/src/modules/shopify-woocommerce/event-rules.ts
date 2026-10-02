@@ -405,3 +405,67 @@ export const winbackContext = (store: StoreFacts, coupon: string | undefined): E
   vars: { name: 'there', coupon_code: coupon ?? '', store_name: label(store) },
   positional: ['there', label(store), coupon ?? ''],
 });
+
+// ── Concierge on WhatsApp (WD-ECOM-031) ────────────────────────────────
+
+const EDIT_ADDRESS = [
+  'change address',
+  'update address',
+  'edit address',
+  'wrong address',
+  'change my address',
+  'update my address',
+  'change shipping',
+  'edit my order',
+  'change delivery address',
+];
+const REORDER = ['reorder', 're-order', 'order again', 'repeat order', 'repeat my order'];
+const POINTS = ['points', 'loyalty', 'my balance', 'reward balance', 'my points'];
+const POSITIVE = [
+  '5',
+  '4',
+  'great',
+  'good',
+  'love it',
+  'loved it',
+  'excellent',
+  'awesome',
+  'amazing',
+  'perfect',
+  '⭐',
+  '👍',
+];
+
+const mentions = (t: string, words: readonly string[]): boolean => words.some((w) => t.includes(w));
+
+/** What a customer's message asks of the concierge, in WaDesk's order: edit the address, reorder, or the points balance. */
+export function conciergeIntent(text: string): 'edit-address' | 'reorder' | 'points' | null {
+  const t = text.trim().toLowerCase();
+  if (mentions(t, EDIT_ADDRESS)) return 'edit-address';
+  if (mentions(t, REORDER)) return 'reorder';
+  if (mentions(t, POINTS)) return 'points';
+  return null;
+}
+
+/** A positive rating: the loosest trigger, so it is the last one tried and is gated three more ways by the caller. */
+export const isPositiveRating = (text: string): boolean =>
+  mentions(text.trim().toLowerCase(), POSITIVE);
+
+/** The account summary answer. Amounts are shown to two decimals with thousands separators. */
+export function accountSummary(a: {
+  orders: number;
+  spentMinor: number;
+  currency: string;
+  points: string | null;
+}): string {
+  const spent = (a.spentMinor / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return [
+    "Here's your account summary:",
+    `• Orders: ${a.orders}`,
+    `• Total spent: ${`${a.currency} ${spent}`.trim()}`,
+    ...(a.points !== null ? [`• Points balance: ${a.points}`] : []),
+  ].join('\n');
+}

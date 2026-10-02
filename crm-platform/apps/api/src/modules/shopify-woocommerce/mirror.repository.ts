@@ -12,6 +12,14 @@ export interface MirroredProduct {
   productUrl: string | null;
 }
 
+export interface WooOrderFacts {
+  id: number;
+  wooOrderId: string;
+  name: string | null;
+  status: string;
+  items: Array<{ sku: string | null; qty: number }>;
+}
+
 export interface MirroredOrder {
   id: number;
   phone: string | null;
@@ -130,6 +138,81 @@ export class MirrorRepository {
       WHERE org_id = ${orgId} AND in_stock = false AND ${col} IS NOT NULL
       ORDER BY id LIMIT ${limit}`);
     return (res.rows as Array<Record<string, unknown>>).map(toProduct);
+  }
+
+  /** The customer's newest mirrored WooCommerce order, optionally only those in these mirror statuses. */
+  async latestWooOrder(
+    tx: Tx,
+    orgId: number,
+    phone: string,
+    statuses?: readonly string[],
+  ): Promise<WooOrderFacts | undefined> {
+    const res = await tx.execute(sql`
+      SELECT id, woo_order_id, status, items_json, meta_json->>'name' AS order_name FROM wa_orders
+      WHERE org_id = ${orgId} AND source = 'woocommerce' AND customer_phone = ${phone}
+        ${
+          statuses
+            ? sql`AND status IN (${sql.join(
+                statuses.map((x) => sql`${x}`),
+                sql`, `,
+              )})`
+            : sql``
+        }
+      ORDER BY id DESC LIMIT 1`);
+    const r = res.rows[0] as
+      | {
+          id: number | string;
+          woo_order_id: string | null;
+          status: string;
+          items_json: unknown;
+          order_name: string | null;
+        }
+      | undefined;
+    if (!r) return undefined;
+    const items = (Array.isArray(r.items_json) ? r.items_json : []).map(
+      (i: Record<string, unknown>) => ({
+        sku: typeof i.sku === 'string' && i.sku !== '' ? i.sku : null,
+        qty: Number(i.qty) || 1,
+      }),
+    );
+    return {
+      id: Number(r.id),
+      wooOrderId: r.woo_order_id ?? '',
+      name: r.order_name,
+      status: r.status,
+      items,
+    };
+  }
+
+  /** How many mirrored WooCommerce orders the customer has, and what they spent (minor units). */
+  async wooTotals(
+    tx: Tx,
+    orgId: number,
+    phone: string,
+  ): Promise<{ orders: number; spentMinor: number }> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n, coalesce(sum(total_minor), 0)::bigint AS spent FROM wa_orders
+      WHERE org_id = ${orgId} AND source = 'woocommerce' AND customer_phone = ${phone}`);
+    const r = res.rows[0] as { n: number; spent: number | string };
+    return { orders: Number(r.n), spentMinor: Number(r.spent) };
+  }
+
+  /** Did the customer receive a WooCommerce order within the last `days` days (mirror status shipped)? */
+  async hasRecentShipped(tx: Tx, orgId: number, phone: string, days: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wa_orders
+      WHERE org_id = ${orgId} AND source = 'woocommerce' AND customer_phone = ${phone} AND status = 'shipped'
+        AND created_at >= now() - make_interval(days => ${days}) LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
+  /** The points balance a points plugin stored on the contact (`data.points_balance`), as text. */
+  async pointsBalance(tx: Tx, orgId: number, phone: string): Promise<string | null> {
+    const res = await tx.execute(sql`
+      SELECT data->>'points_balance' AS points FROM contacts
+      WHERE org_id = ${orgId} AND normalized_phone IN (${phone}, ${`+${phone}`}) ORDER BY id LIMIT 1`);
+    const r = res.rows[0] as { points: string | null } | undefined;
+    return r?.points ?? null;
   }
 }
 

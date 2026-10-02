@@ -171,9 +171,36 @@ class WooStore implements WooStoreApi {
     return done;
   }
 
-  async updateOrderStatus(orderId: string, status: string): Promise<boolean> {
-    const r = await this.send('PUT', `/orders/${encodeURIComponent(orderId)}`, { status });
+  async updateOrder(orderId: string, patch: Json): Promise<boolean> {
+    const r = await this.send('PUT', `/orders/${encodeURIComponent(orderId)}`, patch);
     return !('error' in r) && r.status >= 200 && r.status < 300;
+  }
+
+  async createPendingOrder(
+    items: ReadonlyArray<{ reference: string; qty: number }>,
+    flowSessionId: string | null,
+  ): Promise<{ url: string; orderId: string } | null> {
+    // WooCommerce accepts a product id or a sku per line; a reference that is only digits is the id.
+    const line_items = items.map((i) => ({
+      quantity: Math.max(1, i.qty),
+      ...(/^\d+$/.test(i.reference) ? { product_id: Number(i.reference) } : { sku: i.reference }),
+    }));
+    const meta_data = [
+      ...(flowSessionId ? [{ key: '_wa_flow_session', value: flowSessionId }] : []),
+      { key: '_wa_origin', value: 'wadesk-flow' },
+    ];
+    const r = await this.send('POST', '/orders', { status: 'pending', line_items, meta_data });
+    if ('error' in r || r.status < 200 || r.status >= 300) return null;
+    const order = obj(r.json);
+    const id = text(order.id);
+    let url = text(order.payment_url) ?? '';
+    if (url === '') {
+      // Older WooCommerce versions send no payment_url: build it from the order key.
+      const key = text(order.order_key);
+      if (id && key)
+        url = `${this.storeUrl.replace(/\/+$/, '')}/checkout/order-pay/${id}/?pay_for_order=true&key=${key}`;
+    }
+    return url !== '' && id ? { url, orderId: id } : null;
   }
 
   async deleteWebhooks(ids: readonly string[]): Promise<void> {
