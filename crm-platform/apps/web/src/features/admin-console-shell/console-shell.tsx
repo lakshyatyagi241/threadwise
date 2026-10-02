@@ -9,10 +9,7 @@ import { Alert, Badge, Spinner, cn } from '@crm/ui';
 import { setLocale, setTheme } from '@/components/shell/actions';
 import { LOCALES } from '@/i18n/locales';
 import { OperatorProvider } from '@/features/auth-registration-security/platform/operator-context';
-import {
-  OPERATOR_ACCOUNT_PATH,
-  OPERATOR_NAV,
-} from '@/features/auth-registration-security/platform/operator-nav';
+import { OPERATOR_ACCOUNT_PATH } from '@/features/auth-registration-security/platform/operator-nav';
 import {
   CloseIcon,
   MenuIcon,
@@ -26,6 +23,7 @@ import {
   CONSOLE_HOME,
   activeLeafId,
   buildConsoleNav,
+  CONSOLE_NAV_ITEMS,
   formatCount,
   initiallyOpenGroups,
   isGroup,
@@ -109,7 +107,7 @@ export function ConsoleShell({
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
   const blocked = gated && !onAccountPage;
 
-  const entries = useMemo(() => buildConsoleNav(OPERATOR_NAV), []);
+  const entries = useMemo(() => buildConsoleNav(CONSOLE_NAV_ITEMS), []);
   const activeId = activeLeafId(pathname, entries);
   const defaultOpen = useMemo(() => initiallyOpenGroups(entries, activeId), [entries, activeId]);
   const flippedIds = flipped.path === pathname ? flipped.ids : [];

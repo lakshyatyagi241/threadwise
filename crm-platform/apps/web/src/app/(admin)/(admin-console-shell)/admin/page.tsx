@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { OPERATOR_NAV } from '@/features/auth-registration-security/platform/operator-nav';
 import {
   buildConsoleNav,
+  CONSOLE_NAV_ITEMS,
   isGroup,
   type ConsoleLeaf,
 } from '@/features/admin-console-shell/console-nav';
@@ -14,7 +14,7 @@ import {
 export default async function AdminHome() {
   const t = await getTranslations('admin-console-shell.overview');
   const tAll = await getTranslations();
-  const areas = buildConsoleNav(OPERATOR_NAV).filter(isGroup);
+  const areas = buildConsoleNav(CONSOLE_NAV_ITEMS).filter(isGroup);
 
   return (
     <section className="space-y-6">

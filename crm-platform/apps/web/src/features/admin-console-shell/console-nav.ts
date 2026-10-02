@@ -1,4 +1,7 @@
-import type { OperatorNavItem } from '@/features/auth-registration-security/platform/operator-nav';
+import {
+  OPERATOR_NAV,
+  type OperatorNavItem,
+} from '@/features/auth-registration-security/platform/operator-nav';
 
 /** One link in the console rail. `badgeKey` names a count the layout may supply; no count means no badge. */
 export interface ConsoleLeaf {
@@ -24,6 +27,19 @@ export const isGroup = (e: ConsoleEntry): e is ConsoleGroup => 'children' in e;
 const NS = 'admin-console-shell.nav';
 
 export const CONSOLE_HOME = '/admin';
+
+/** This domain's own pages, merged after the other domains' entries (their nav data stays untouched). */
+const ASHELL_ITEMS: readonly OperatorNavItem[] = [
+  {
+    id: 'menu-order',
+    href: '/admin/settings/menu-order',
+    labelKey: `${NS}.menuOrder`,
+    groupKey: `${NS}.groups.shell`,
+  },
+];
+
+/** Everything the rail lists. */
+export const CONSOLE_NAV_ITEMS: readonly OperatorNavItem[] = [...OPERATOR_NAV, ...ASHELL_ITEMS];
 
 /** Which operator-nav items carry a live count, and under which count name. */
 const BADGE_KEYS: Readonly<Record<string, string>> = { plans: 'plans' };
@@ -96,7 +112,8 @@ const fixed = (value: number, maxDecimals: number) =>
 export function formatCount(n: number | null | undefined): string | null {
   if (n == null || !Number.isFinite(n) || n <= 0) return null;
   const whole = Math.trunc(n);
-  if (whole >= 1_000_000) return `${fixed(whole / 1_000_000, whole >= 10_000_000 ? 0 : 1)}M`;
+  // 999,500 and up already rounds to "1000k"; promote it to "1M" so no comma ever shows.
+  if (whole >= 999_500) return `${fixed(whole / 1_000_000, whole >= 10_000_000 ? 0 : 1)}M`;
   if (whole >= 1000) return `${fixed(whole / 1000, whole >= 10_000 ? 0 : 1)}k`;
   return String(whole);
 }
