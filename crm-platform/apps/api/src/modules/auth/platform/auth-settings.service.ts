@@ -25,6 +25,7 @@ import {
   bustFooterCache,
   capFooter,
   platformFooterFrom,
+  readSavedPlatformFooter,
 } from '../security/branding-footer.service';
 import { PlatformSettingsService } from './platform-settings.service';
 import { RegistrationOtpService } from './registration-otp.service';
@@ -327,7 +328,7 @@ export class AuthSettingsService {
 
   /** The footer workspaces on plans that cannot remove branding send with every text message. */
   async getPlatformBrandingFooter(): Promise<PlatformBrandingFooterResponse> {
-    const saved = await this.settings.get<string>(PLATFORM_FOOTER_SETTING);
+    const saved = await readSavedPlatformFooter(this.settings);
     return {
       footer: platformFooterFrom(saved, this.appName) ?? '',
       isDefault: saved === undefined || saved === null,
@@ -339,7 +340,7 @@ export class AuthSettingsService {
     footer: string,
     operatorId: number,
   ): Promise<{ before: string | null; after: string | null }> {
-    const saved = await this.settings.get<string>(PLATFORM_FOOTER_SETTING);
+    const saved = await readSavedPlatformFooter(this.settings);
     const before = platformFooterFrom(saved, this.appName);
     const text = capFooter(footer);
     await this.settings.set(PLATFORM_FOOTER_SETTING, text, operatorId);

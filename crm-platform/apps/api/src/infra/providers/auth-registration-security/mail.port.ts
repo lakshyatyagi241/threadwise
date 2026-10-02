@@ -9,6 +9,8 @@ export interface MailMessage {
   subject: string;
   text: string;
   html?: string;
+  /** Where a reply should go when it is not the sender (a contact-form notification replies to the visitor). */
+  replyTo?: string;
 }
 
 /** Why a send failed, in terms an operator can act on. Never includes secrets. */

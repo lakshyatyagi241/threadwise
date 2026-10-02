@@ -33,7 +33,7 @@ describe('tabsFromNav', () => {
 
   it('ignores entries that are not a single /account/<name> segment', () => {
     const items: NavItem[] = [
-      { id: 'a', group: 'crm', labelKey: 'x', href: '/contacts' },
+      { id: 'a', group: 'audience', labelKey: 'x', href: '/contacts' },
       { id: 'b', group: 'settings', labelKey: 'x', href: '/account' },
       { id: 'c', group: 'settings', labelKey: 'x', href: '/account/a/b' },
       { id: 'd', group: 'settings', labelKey: 'x', href: '/accounting/x' },

@@ -1,11 +1,11 @@
-import { getTranslations } from 'next-intl/server';
+import { Suspense } from 'react';
+import { DashboardScreen } from '@/features/dashboards-analytics-charts/components/dashboard-screen';
 
-export default async function DashboardPage() {
-  const t = await getTranslations('dashboards-analytics-charts.home');
+export default function DashboardPage() {
+  // The screen reads the address (useSearchParams), which needs a Suspense boundary.
   return (
-    <section className="space-y-2">
-      <h1 className="text-2xl font-semibold">{t('title')}</h1>
-      <p className="text-muted-foreground">{t('welcome')}</p>
-    </section>
+    <Suspense>
+      <DashboardScreen />
+    </Suspense>
   );
 }

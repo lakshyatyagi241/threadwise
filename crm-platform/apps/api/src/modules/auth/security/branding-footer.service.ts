@@ -45,6 +45,16 @@ export function capFooter(text: string): string {
 }
 
 /** The platform default from its saved value: never saved = "Sent via <app>", saved blank = none. */
+/**
+ * The platform default footer as saved. The General settings page (WD-SET-012) stores it in `set.general`; the
+ * operator endpoint of this domain stores it under its own key. The settings page wins when it has a value.
+ */
+export async function readSavedPlatformFooter(settings: PlatformSettingsService): Promise<unknown> {
+  const general = await settings.get<{ platformFooter?: unknown }>('set.general');
+  if (typeof general?.platformFooter === 'string') return general.platformFooter;
+  return settings.get<string>(PLATFORM_FOOTER_SETTING);
+}
+
 export function platformFooterFrom(saved: unknown, appName: string): string | null {
   const text = saved === undefined || saved === null ? `Sent via ${appName}` : String(saved);
   return capFooter(text) || null;
@@ -105,10 +115,7 @@ export class BrandingFooterService {
 
   /** The platform default as saved; never set means "Sent via <app name>", saved blank means none. */
   async platformDefault(): Promise<string | null> {
-    return platformFooterFrom(
-      await this.settings.get<string>(PLATFORM_FOOTER_SETTING),
-      this.appName,
-    );
+    return platformFooterFrom(await readSavedPlatformFooter(this.settings), this.appName);
   }
 
   /** The footer for this organization, or null for none. Never throws. */

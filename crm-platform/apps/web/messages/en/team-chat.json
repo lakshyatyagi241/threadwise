@@ -1,0 +1,191 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Team Chat"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "screen": {
+      "title": "Team Chat",
+      "back": "Back to channels",
+      "search": "Search this channel",
+      "pinned": "Pinned messages",
+      "members": "Channel members",
+      "deleteChannel": "Delete this channel",
+      "type": {
+        "public": "Channel",
+        "private": "Private",
+        "dm": "Direct message"
+      },
+      "olderMessage": "That message is further back. Load older messages to see it.",
+      "loading": "Loading Team Chat",
+      "loadFailed": "Team Chat could not be loaded.",
+      "retry": "Try again",
+      "deleteTitle": "Delete this channel?",
+      "deleteMessage": "#{name} and all of its messages will be deleted for everyone. This cannot be undone.",
+      "deleteConfirm": "Delete channel",
+      "cancel": "Cancel"
+    },
+    "sidebar": {
+      "label": "Channels and people",
+      "channels": "Channels",
+      "createChannel": "Create a channel",
+      "loading": "Loading channels",
+      "loadFailed": "Channels could not be loaded.",
+      "noChannels": "No channels yet",
+      "direct": "Direct messages",
+      "people": "People",
+      "invite": "Invite a teammate",
+      "pending": "Pending requests",
+      "pendingCount": "{count, plural, one {# pending request} other {# pending requests}}",
+      "unread": "{count, plural, one {# unread message} other {# unread messages}}"
+    },
+    "members": {
+      "label": "Members",
+      "title": "Team chat",
+      "count": "{count, plural, one {# member} other {# members}}",
+      "countUnknown": "Members",
+      "search": "Search members",
+      "loading": "Loading members",
+      "none": "No members match",
+      "online": "Online",
+      "offline": "Offline",
+      "you": "(you)",
+      "message": "Message {name}"
+    },
+    "panel": {
+      "searchTitle": "Search messages",
+      "pinnedTitle": "Pinned messages",
+      "searchPlaceholder": "Search this channel",
+      "searchHint": "Type at least two characters.",
+      "close": "Close",
+      "failed": "That could not be loaded.",
+      "noResults": "No messages match.",
+      "noPinned": "Nothing is pinned in this channel."
+    },
+    "stream": {
+      "loading": "Loading messages",
+      "loadFailed": "Messages could not be loaded.",
+      "loadOlder": "Load older messages",
+      "emptyTitle": "No messages in #{name} yet",
+      "emptyMessage": "Say hello and start the conversation."
+    },
+    "message": {
+      "edited": "(edited)",
+      "pinned": "Pinned",
+      "editLabel": "Edit your message",
+      "cancel": "Cancel",
+      "save": "Save",
+      "editConflict": "This message changed while you were editing it. Reload and try again.",
+      "reactions": "Reactions",
+      "reactionChip": "{emoji}, {count, plural, one {# person} other {# people}}",
+      "reactionTray": "Choose a reaction",
+      "reply": "Reply",
+      "react": "React",
+      "edit": "Edit",
+      "pin": "Pin",
+      "unpin": "Unpin",
+      "delete": "Delete",
+      "deleteTitle": "Delete this message?",
+      "deleteMessage": "It will be removed for everyone in the channel.",
+      "uploading": "Uploading",
+      "retry": "Retry",
+      "discard": "Discard"
+    },
+    "composer": {
+      "placeholder": "Message #{name}",
+      "attach": "Attach a file",
+      "send": "Send",
+      "hint": "Enter to send, Shift+Enter for a new line, @ to mention a teammate.",
+      "replyingTo": "Replying to {name}",
+      "cancelReply": "Cancel reply",
+      "removeFile": "Remove the attachment",
+      "fileTooLarge": "That file is larger than 20 MB.",
+      "mentionList": "Teammates to mention",
+      "typingOne": "{name} is typing",
+      "typingMany": "{count} people are typing"
+    },
+    "createChannel": {
+      "title": "Create a channel",
+      "close": "Close",
+      "name": "Name",
+      "nameHint": "Lowercase letters, digits, dashes and underscores, no spaces.",
+      "description": "Description (optional)",
+      "privacy": "Privacy",
+      "public": {
+        "label": "Public",
+        "hint": "Everyone in the workspace can read and write."
+      },
+      "private": {
+        "label": "Private",
+        "hint": "Invite only. Only its members see it."
+      },
+      "cancel": "Cancel",
+      "create": "Create channel"
+    },
+    "invite": {
+      "title": "Invite a teammate",
+      "close": "Close",
+      "email": "Email",
+      "name": "Name (optional)",
+      "note": "Note for the admin (optional)",
+      "noteHint": "Why this person should join.",
+      "addToChannel": "Also add them to #{name}",
+      "approved": "Done. The request was approved.",
+      "pending": "Invitation submitted, waiting for admin approval.",
+      "cancel": "Cancel",
+      "submit": "Submit invite"
+    },
+    "invitations": {
+      "title": "Pending invitations",
+      "close": "Close",
+      "loading": "Loading",
+      "loadFailed": "Invitations could not be loaded.",
+      "empty": "No invitations yet",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "declined": "Declined",
+        "expired": "Expired"
+      },
+      "requestedBy": "Requested by {name} · {time}",
+      "decidedBy": "{status} by {name} · {time}",
+      "needsAccount": "This person has no account in the workspace yet, so nobody was added.",
+      "approve": "Approve",
+      "decline": "Decline"
+    },
+    "channelMembers": {
+      "title": "Members of #{name}",
+      "close": "Close",
+      "admin": "Admin",
+      "leave": "Leave",
+      "remove": "Remove",
+      "addLabel": "Add a teammate",
+      "choose": "Choose a teammate",
+      "add": "Add"
+    },
+    "errors": {
+      "network": "Network error. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "You have been signed out. Sign in again.",
+      "notFound": "That no longer exists.",
+      "validation": "Check what you entered and try again.",
+      "conflict": "This changed in the meantime. Reload and try again.",
+      "tooLarge": "That file is larger than 20 MB.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "emptyMessage": "Write a message or attach a file.",
+      "replyOtherChannel": "You can only reply to a message in the same channel.",
+      "attachmentRejected": "This file could not be attached. Only images, PDFs, Word, Excel, text and CSV files up to 20 MB are allowed.",
+      "editExpired": "Messages can only be edited for 15 minutes.",
+      "nameTaken": "A channel with this name already exists.",
+      "channelProtected": "#general cannot be deleted.",
+      "alreadyMember": "Already a workspace member.",
+      "alreadyDecided": "Already decided.",
+      "notMember": "You are not a member of this channel.",
+      "notAuthor": "You can only change your own messages.",
+      "kindInvalid": "That does not apply to this kind of channel.",
+      "unexpected": "Something went wrong. Try again."
+    }
+  }
+}
