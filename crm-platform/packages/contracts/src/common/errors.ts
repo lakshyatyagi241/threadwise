@@ -8,12 +8,14 @@ import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
 import { CHANNEL_ERROR_CODES } from '../chat-conversations/channel-errors';
 import { CONVERSATION_ERROR_CODES } from '../chat-conversations/conversation-errors';
+import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
   ...CHANNEL_ERROR_CODES,
   ...CONVERSATION_ERROR_CODES,
+  ...INBOX_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',

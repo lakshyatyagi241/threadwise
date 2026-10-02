@@ -49,6 +49,11 @@ export interface Harness {
 export interface HarnessOptions {
   /** Runs on the Nest application before `init()`: where a spec that needs sockets installs its WebSocket adapter. */
   configureApp?: (app: INestApplication) => void | Promise<void>;
+  /**
+   * Modules added next to AppModule: how a spec runs the worker-side processors (a worker module is not part of the HTTP app) inside the
+   * same process, against the same database and Redis. A loader, so the modules are imported after the environment is set, like AppModule.
+   */
+  loadModules?: () => Promise<unknown[]>;
 }
 
 /**
@@ -120,7 +125,10 @@ export async function startHarness(options: HarnessOptions = {}): Promise<Harnes
 
   // Imported after the environment is set: AppModule reads configuration at import.
   const { AppModule } = await import('../../../src/app.module');
-  const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
+  const extraModules = (await options.loadModules?.()) ?? [];
+  const moduleRef = await Test.createTestingModule({
+    imports: [AppModule, ...(extraModules as never[])],
+  })
     .overrideProvider(MAIL_PORT)
     .useValue(fakeMail)
     .overrideProvider(CAPTCHA_PORT)

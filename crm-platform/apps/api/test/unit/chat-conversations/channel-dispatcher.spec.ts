@@ -322,9 +322,21 @@ describe('ChannelDispatcher.send: the worker side', () => {
     expect(err).toMatchObject({ code: 'PROVIDER_UNREACHABLE', retryable: true });
   });
 
-  it('queues the simulated receipts after the provider accepts, each with its delay', async () => {
+  it('send plans the simulated receipts but queues none: the caller schedules them once the provider id is stored', async () => {
     const { dispatcher, publisher } = build();
     const r = await dispatcher.send(req());
+    expect(publisher.enqueueReceipt).not.toHaveBeenCalled();
+    expect(r.plannedReceipts.map((p) => [p.status, p.delayMs])).toEqual([
+      ['sent', 0],
+      ['delivered', 1000],
+      ['read', 3000],
+    ]);
+  });
+
+  it('scheduleReceipts queues each planned step with its delay, for this tenant and provider id', async () => {
+    const { dispatcher, publisher } = build();
+    const r = await dispatcher.send(req());
+    await dispatcher.scheduleReceipts(channel(), r);
     const calls = publisher.enqueueReceipt.mock.calls as unknown as Array<
       [number, string, { providerMessageId: string; status: string }, { delayMs: number }]
     >;
@@ -338,18 +350,19 @@ describe('ChannelDispatcher.send: the worker side', () => {
     );
   });
 
-  it('a replayed send queues no second set of receipts', async () => {
-    const { dispatcher, publisher } = build();
-    await dispatcher.send(req());
-    publisher.enqueueReceipt.mockClear();
-    await dispatcher.send(req());
-    expect(publisher.enqueueReceipt).not.toHaveBeenCalled();
+  it('a replayed send still carries the plan, so a retry after a crash can schedule the receipts the first run never did', async () => {
+    const { dispatcher } = build();
+    const first = await dispatcher.send(req());
+    const again = await dispatcher.send(req());
+    expect(again.replayed).toBe(true);
+    expect(again.plannedReceipts).toEqual(first.plannedReceipts);
   });
 
-  it('losing a simulated receipt does not fail the send', async () => {
+  it('losing a simulated receipt does not fail the caller', async () => {
     const { dispatcher, publisher } = build();
+    const r = await dispatcher.send(req());
     publisher.enqueueReceipt.mockRejectedValue(new Error('queue down'));
-    await expect(dispatcher.send(req())).resolves.toMatchObject({ replayed: false });
+    await expect(dispatcher.scheduleReceipts(channel(), r)).resolves.toBeUndefined();
   });
 
   it('Redis down: retryable ChannelError, because idempotency cannot be promised', async () => {

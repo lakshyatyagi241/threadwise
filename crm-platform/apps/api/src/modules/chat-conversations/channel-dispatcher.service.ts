@@ -46,12 +46,18 @@ export interface QueueCheckOptions {
 export interface DispatchResult {
   providerMessageId: string;
   acceptedAt: Date;
+  /** What a simulated provider will report later (empty for a real one, which uses its webhook). See `scheduleReceipts`. */
+  plannedReceipts: PlannedReceipt[];
   /** True when this key had already been sent: the stored answer is returned and the provider is not called again. */
   replayed: boolean;
 }
 
 const RESULT_TTL_SECONDS = 24 * 3600;
-const LOCK_TTL_SECONDS = 120;
+/**
+ * How long one worker owns a message's send. Long enough for a slow provider call, short enough that a worker killed mid-send does
+ * not keep its message away from the retry for minutes (the queue's backoff comes back to it).
+ */
+const LOCK_TTL_SECONDS = 60;
 const RELEASE_IF_OWNER =
   "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
@@ -137,7 +143,11 @@ export class ChannelDispatcher {
       if (again) return { ...again, replayed: true };
 
       const sent = await this.callAdapter(adapter, req.channel, envelope);
-      const result = { providerMessageId: sent.providerMessageId, acceptedAt: sent.acceptedAt };
+      const result = {
+        providerMessageId: sent.providerMessageId,
+        acceptedAt: sent.acceptedAt,
+        plannedReceipts: sent.plannedReceipts ?? [],
+      };
       await this.redisCall(() =>
         this.redis.set(
           key,
@@ -146,16 +156,24 @@ export class ChannelDispatcher {
           RESULT_TTL_SECONDS,
         ),
       );
-      await this.planReceipts(
-        req.channel,
-        sent.providerMessageId,
-        sent.plannedReceipts,
-        sent.acceptedAt,
-      );
       return { ...result, replayed: false };
     } finally {
       await this.redis.eval(RELEASE_IF_OWNER, 1, `${key}:lock`, owner).catch(() => undefined);
     }
+  }
+
+  /**
+   * Queues the delivery steps a simulated provider reports after accepting a send. Separate from `send` on purpose: the caller runs
+   * it AFTER it has stored the provider's id (the receipt finds its message through that id), so a `sent` receipt due in 0 ms can
+   * never arrive before the message knows it was sent. Safe to call twice (the job ids are fixed, and a receipt is idempotent).
+   */
+  async scheduleReceipts(channel: ChannelRuntime, result: DispatchResult): Promise<void> {
+    await this.planReceipts(
+      channel,
+      result.providerMessageId,
+      result.plannedReceipts,
+      result.acceptedAt,
+    );
   }
 
   // --- internals ---------------------------------------------------------------------------------------------------------------
@@ -264,8 +282,16 @@ export class ChannelDispatcher {
     const raw = await this.redisCall(() => this.redis.get(key));
     if (!raw) return null;
     try {
-      const v = JSON.parse(raw) as { providerMessageId: string; acceptedAt: string };
-      return { providerMessageId: v.providerMessageId, acceptedAt: new Date(v.acceptedAt) };
+      const v = JSON.parse(raw) as {
+        providerMessageId: string;
+        acceptedAt: string;
+        plannedReceipts?: PlannedReceipt[];
+      };
+      return {
+        providerMessageId: v.providerMessageId,
+        acceptedAt: new Date(v.acceptedAt),
+        plannedReceipts: v.plannedReceipts ?? [],
+      };
     } catch {
       return null;
     }

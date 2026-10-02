@@ -54,3 +54,5 @@ export * from './chatbot-widget';
 export * from './roles-permissions';
 export * from './realtime';
 export * from './chat-conversations';
+export * from './team-inbox-conversations';
+export * from './team-inbox-routing-sla';

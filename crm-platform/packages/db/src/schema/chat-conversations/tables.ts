@@ -136,6 +136,10 @@ export const conversations = pgTable(
       columns: [t.orgId, t.slaPolicyId],
       foreignColumns: [slaPolicies.orgId, slaPolicies.id],
     }).onDelete('set null'),
+    index('idx_conversations_title_trgm').using('gin', sql`${t.title} gin_trgm_ops`),
+    index('idx_conversations_peer_name_trgm').using('gin', sql`${t.peerName} gin_trgm_ops`),
+    index('idx_conversations_peer_key_trgm').using('gin', sql`${t.peerKey} gin_trgm_ops`),
+    index('idx_conversations_preview_trgm').using('gin', sql`${t.preview} gin_trgm_ops`),
     index('idx_conversations_assignee_agent_id').on(t.orgId, t.assigneeAgentId),
     index('idx_conversations_contact_id').on(t.orgId, t.contactId),
     index('idx_conversations_queue').on(
@@ -175,6 +179,8 @@ export const conversationEvents = pgTable(
     id: bigint('id', { mode: 'number' })
       .notNull()
       .default(sql`nextval('conversation_events_id_seq')`),
+    /** The id on the wire (tib1 migration 20261015090000). */
+    uuid: uuid('uuid').notNull().defaultRandom(),
     orgId: orgIdColumn(),
     conversationId: idColumn('conversation_id').notNull(),
     actorUserId: idColumn('actor_user_id'),
@@ -188,6 +194,12 @@ export const conversationEvents = pgTable(
     index('idx_conversation_events_conversation_id').on(t.orgId, t.conversationId),
     index('idx_conversation_events_created_at').on(t.orgId, t.createdAt),
     index('idx_conversation_events_type').on(t.orgId, t.type),
+    index('idx_conversation_events_timeline').on(
+      t.orgId,
+      t.conversationId,
+      t.createdAt.desc(),
+      t.id.desc(),
+    ),
   ],
 );
 
@@ -203,7 +215,8 @@ export const conversationNotes = pgTable(
     conversationId: idColumn('conversation_id').notNull(),
     userId: idColumn('user_id'),
     body: text('body').notNull(),
-    mentions: jsonb('mentions'),
+    /** Users mentioned, as uuid strings (tib1 migration 20261015090100: NOT NULL, always an array). */
+    mentions: jsonb('mentions').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
     isPinned: boolean('is_pinned').notNull().default(false),
     editedAt: timestamp('edited_at', { withTimezone: true }),
     createdAt: createdAt(),
@@ -377,6 +390,9 @@ export const messages = pgTable(
       .on(t.orgId, t.templateId)
       .where(sql`template_id IS NOT NULL`),
     index('idx_messages_body_trgm').using('gin', sql`${t.body} gin_trgm_ops`),
+    index('idx_messages_media_key')
+      .on(t.orgId, t.mediaKey)
+      .where(sql`media_key IS NOT NULL`),
   ],
 );
 
