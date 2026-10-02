@@ -22,7 +22,6 @@ import {
   SEND_LABEL,
   buildSendRequest,
   firstId,
-  firstKey,
   recipientCount,
   sendFailed,
   setMode,
@@ -95,7 +94,7 @@ export function SendTab() {
   }
   if (!data.connected || data.senders.length === 0) return <NoSender />;
 
-  const sender = form.sender || firstKey(data.senders);
+  const sender = form.sender;
   const shop = data.shops.length > 0 ? form.shopId || firstId(data.shops) : '';
   const count = recipientCount(form, groupCounts);
   const catalog = overview.data?.catalog ?? null;

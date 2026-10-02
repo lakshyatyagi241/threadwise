@@ -12,7 +12,7 @@ import { KEYS } from '../api/catalog';
 import { deleteReview, moderateReview, useReviewsPage } from '../api/reviews';
 import { timeAgo } from '../lib/format';
 import { REVIEW_TABS, parseReviewTab, reviewsStateToSearch } from '../lib/pages';
-import { CARD, LoadError, LoadingBlock, Pager } from './parts';
+import { CARD, LoadError, LoadingBlock, PagerBar } from './parts';
 import { useErrorText } from './use-error-text';
 
 /** Five stars, filled up to the rating (Reference drew them as characters). */
@@ -86,7 +86,7 @@ export function ReviewsScreen() {
   const total = list.counts?.[tab];
 
   return (
-    <main className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
+    <div className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
       <section className="min-w-0 space-y-5">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
@@ -199,7 +199,13 @@ export function ReviewsScreen() {
             ))
           )}
         </div>
-        <Pager page={list.page} total={total} size={REVIEWS_PAGE_SIZE} onPage={(p) => go(tab, p)} />
+        <PagerBar
+          page={list.page}
+          total={total}
+          size={REVIEWS_PAGE_SIZE}
+          shown={list.items.length}
+          onPage={(p) => go(tab, p)}
+        />
       </section>
 
       <ConfirmDialog
@@ -213,6 +219,6 @@ export function ReviewsScreen() {
         onConfirm={() => void confirmDelete()}
         onClose={() => setPendingDelete(null)}
       />
-    </main>
+    </div>
   );
 }

@@ -99,6 +99,7 @@ describe('message keys used in code', () => {
   const files = [
     ...sourceFiles(join(WEB, 'src', 'features', 'catalog-products')),
     ...sourceFiles(join(WEB, 'src', 'app', '(app)', '(catalog-products)')),
+    ...sourceFiles(join(WEB, 'src', 'app', '(admin)', '(catalog-products)')),
   ];
 
   it('exist in the English messages', () => {

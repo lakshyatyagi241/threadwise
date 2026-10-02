@@ -31,16 +31,18 @@
       "noRecipients": "Pick at least one contact, group or paste a number.",
       "tooManyRecipients": "Maximum 500 recipients per send. Split them into smaller batches.",
       "noProducts": "Pick at least one product first.",
-      "noSender": "No connected sender. Connect a device or a WhatsApp number first.",
+      "noSender": "No connected device. Pair one under Channels first.",
       "sendFailed": "The message could not be sent: {detail}",
       "collectionProducts": "None of the selected products belong to this workspace.",
       "providerFailed": "WhatsApp or Meta could not complete the request: {detail}",
       "unexpected": "Something went wrong. Try again in a moment."
     },
     "paywall": {
-      "title": "WhatsApp Catalog is not on your plan",
-      "message": "Upgrade your plan to push products into WhatsApp chats, send product cards and lists, and sync with Meta.",
-      "upgrade": "See plans"
+      "kicker": "Premium feature",
+      "title": "WhatsApp storefront is not on your plan",
+      "message": "Pick a plan that includes it. Upgrade and unlock this feature instantly.",
+      "back": "Go back",
+      "compare": "Compare all plans"
     },
     "status": {
       "unsynced": "unsynced",
@@ -49,6 +51,7 @@
       "failed": "failed"
     },
     "pager": {
+      "showing": "Showing {from} to {to} of {total} results",
       "label": "Pages",
       "prev": "Previous page",
       "next": "Next page",
@@ -250,9 +253,18 @@
         "count": "{count, plural, one {# recipient} other {# recipients}}",
         "source": "Where recipients come from",
         "modes": {
-          "groups": { "title": "Contact groups", "hint": "Use saved segments." },
-          "contacts": { "title": "Individual contacts", "hint": "Pick specific people." },
-          "manual": { "title": "Manual numbers", "hint": "Paste, one per line." }
+          "groups": {
+            "title": "Contact groups",
+            "hint": "Use saved segments."
+          },
+          "contacts": {
+            "title": "Individual contacts",
+            "hint": "Pick specific people."
+          },
+          "manual": {
+            "title": "Manual numbers",
+            "hint": "Paste, one per line."
+          }
         },
         "noGroups": "No contact groups yet. Create one from the <link>Contacts</link> page first.",
         "groupContacts": "{count, plural, one {# contact} other {# contacts}}",
@@ -266,9 +278,18 @@
       },
       "format": {
         "title": "Format & sender",
-        "spm": { "title": "Single product", "hint": "One product card" },
-        "mpm": { "title": "Product list (carousel)", "hint": "Up to 30 products" },
-        "link": { "title": "Catalog link", "hint": "Plain text · works anytime" },
+        "spm": {
+          "title": "Single product",
+          "hint": "One product card"
+        },
+        "mpm": {
+          "title": "Product list (carousel)",
+          "hint": "Up to 30 products"
+        },
+        "link": {
+          "title": "Catalog link",
+          "hint": "Plain text · works anytime"
+        },
         "sendFrom": "Send from",
         "fromShop": "From shop",
         "brandingContext": "(branding context)",
@@ -425,7 +446,6 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "deleted": "Product deleted.",
-      "showing": "Showing {shown} of {total}",
       "deleteTitle": "Delete this product?",
       "deleteBody": "\"{name}\" will be deleted. It stays on Meta until you remove it there."
     },
@@ -564,6 +584,147 @@
       "deleted": "Review deleted.",
       "deleteTitle": "Delete this review?",
       "deleteBody": "The review is removed for good."
+    },
+    "senderPicker": {
+      "none": "No connected senders.",
+      "connectOne": "Connect one →",
+      "select": "— Select a sender —",
+      "connectNew": "Connect new device",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "Unofficial API"
+      }
+    },
+    "admin": {
+      "nav": "Catalog",
+      "pageTitle": "Catalog settings",
+      "loading": "Loading the catalog settings",
+      "retry": "Try again",
+      "eyebrow": "Admin · Project settings",
+      "titleLead": "WhatsApp",
+      "titleAccent": "Catalog",
+      "intro": "Platform-level controls for the WABA Catalog feature. Each merchant connects their own Meta Commerce Account catalog from the workspace-side <link>/catalog</link> page. This screen sets the defaults every workspace inherits.",
+      "allSettings": "All settings",
+      "openCatalog": "Open user catalog",
+      "reset": "Reset draft",
+      "save": "Save changes",
+      "saved": "Catalog settings saved.",
+      "superOnly": "Only a super admin can change these settings. You can see the saved values.",
+      "fix": "Please fix the highlighted fields:",
+      "problems": {
+        "graphVersion": "Use a Graph API version such as v23.0.",
+        "currency": "Use a 3-letter currency code."
+      },
+      "errors": {
+        "conflict": "Someone else saved these settings first. The latest values are shown; make your change again.",
+        "forbidden": "You do not have permission to change these settings.",
+        "validation": "Some fields are not valid. Check the highlighted fields and try again.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "unexpected": "Something went wrong. Try again in a moment."
+      },
+      "usage": {
+        "connected": "Workspaces connected",
+        "connectedHint": "with a Meta Catalog ID saved",
+        "products": "Products synced",
+        "productsHint": "across all workspace catalogs",
+        "sends": "Catalog messages sent",
+        "sendsHint": "SPM + MPM + catalog CTA"
+      },
+      "gate": {
+        "kicker": "Feature gate",
+        "title": "Catalog availability",
+        "enabled": "Enabled",
+        "body": "When enabled, workspace owners can connect their Meta Commerce catalog at <link>/catalog</link> and send Single Product, Multi-Product, and Catalog-CTA messages from the chat and flow builder. Switch off to hide the menu entry across all workspaces (existing connections stay intact but become read-only).",
+        "commerce": "Allow Commerce checkout",
+        "commerceHint": "Lets merchants accept in-WhatsApp payment via a connected Commerce Account. Requires Meta-approved Commerce Account + supported region."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Graph API version",
+        "intro": "Every catalog operation (send, sync, push) goes through this Graph API version. Meta ships a new version every ~3 months and supports the previous one for ~2 years.",
+        "version": "Graph API version",
+        "versionHint": "Format: v{major}.{minor}, for example v23.0. Leave it blank to use the default.",
+        "currency": "Default currency",
+        "currencyHint": "ISO-4217 code (3 letters). Used as the default for new catalogs; each Meta Commerce catalog still locks to a single currency."
+      },
+      "app": {
+        "kicker": "Optional · Meta App",
+        "title": "Platform-wide Meta app",
+        "intro": "Only needed if you plan to ship an \"Install with Meta\" OAuth experience. The default flow has each merchant paste their own system-user token on the catalog page, so no app credentials are required.",
+        "id": "Meta App ID",
+        "idHint": "From developers.facebook.com → your app → Settings → Basic.",
+        "secret": "Meta App Secret",
+        "secretPlaceholder": "App secret",
+        "secretSaved": "•••••••••••• (saved, leave blank to keep)",
+        "secretHint": "Encrypted at rest. Used to verify Webhook payload signatures (X-Hub-Signature-256)."
+      },
+      "walk": {
+        "kicker": "Merchant walkthrough",
+        "title": "How a workspace connects its catalog",
+        "intro": "Shown to merchants on the catalog page. Reproduced here so you can sanity-check the flow.",
+        "waba": {
+          "title": "Have an active WABA + Phone Number ID",
+          "body": "The merchant needs a verified WhatsApp Business Account in Meta Business Suite with at least one approved phone number. Without this, no catalog message can send."
+        },
+        "catalog": {
+          "title": "Create a catalog in Meta Commerce Manager",
+          "body": "At business.facebook.com/commerce → Create catalog → pick e-commerce. Add products manually, via CSV, or pull from Shopify/Woo. Catalog must be Public and locked to one currency."
+        },
+        "link": {
+          "title": "Connect the catalog to the WABA",
+          "body": "In Business Suite → WhatsApp Manager → Catalog tab → \"Choose a catalog\" → pick the one created in Step 2. This is what enables Cloud API product messages."
+        },
+        "token": {
+          "title": "Generate a System User token",
+          "body": "Business Settings → System Users → Add → Admin. Generate a token with whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management. Pick \"Never\" for expiry to avoid quarterly re-auth."
+        },
+        "paste": {
+          "title": "Paste credentials on the catalog page",
+          "body": "WABA ID, Catalog ID, Phone Number ID, and the System User token go on the workspace-side catalog page. It then runs a test GET /{CATALOG_ID}?fields=name,product_count to verify the token has catalog_management on that catalog."
+        }
+      },
+      "side": {
+        "archKicker": "Architecture",
+        "archTitle": "Per-merchant vs platform",
+        "here": "Here (admin, one-time)",
+        "hereBody": "Feature toggle, Graph API version, default currency, optional Meta App credentials.",
+        "merchant": "On the catalog page (per merchant)",
+        "merchantBody": "WABA ID, Catalog ID, Phone Number ID, System User token. Meta requires the catalog be owned by the merchant's Commerce Account, so there is no shared catalog.",
+        "payloadsKicker": "Cloud API payloads",
+        "payloadsTitle": "Three message types we send",
+        "payload": {
+          "spm": {
+            "title": "SPM · Single Product",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · Multi-Product",
+            "code": "interactive.type = \"product_list\" · max 10 sections, 30 items"
+          },
+          "cta": {
+            "title": "Catalog CTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "Official docs",
+        "docsTitle": "Reference",
+        "docs": {
+          "sell": "Sell products and services →",
+          "messages": "Cloud API messages reference →",
+          "batch": "Catalog Batch API (push products) →",
+          "changelog": "Graph API changelog →",
+          "policies": "Commerce policies →"
+        },
+        "constraintsTitle": "Constraints",
+        "constraints": {
+          "public": "Catalog must be Public",
+          "currency": "One currency per catalog",
+          "images": "Images ≥ 500×500 px (JPG / PNG)",
+          "goods": "No alcohol / adult / regulated goods",
+          "verification": "Business Verification required for production"
+        }
+      }
     }
   }
 }

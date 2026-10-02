@@ -31,21 +31,52 @@ export function LoadingBlock({ label }: { label: string }) {
   );
 }
 
-/** The paywall of a plan without the storefront flag (Reference shows an overlay on the GET pages; mutations are refused). */
+/**
+ * The paywall of a plan without the storefront flag. Reference lets the page render and slides a sheet up over it ("not on your
+ * plan", with the plans that include the feature as cards). The catalog API refuses every call on such a plan, so the sheet
+ * is drawn over the empty frame; the plan cards wait on a plans list that says which plans carry the flag.
+ */
 export function Paywall() {
   const t = useTranslations('catalogProducts.paywall');
   return (
     <div
-      className={cn(CARD, 'mx-auto flex max-w-2xl flex-col items-center gap-3 p-10 text-center')}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cat-paywall-title"
+      data-testid="catalog-paywall"
+      className="fixed inset-0 z-[80] flex items-end justify-center bg-black/55 px-3 sm:px-4"
     >
-      <span className="grid size-12 place-items-center rounded-xl bg-muted text-muted-foreground">
-        <LockIcon className="size-6" />
-      </span>
-      <h2 className="font-serif text-2xl leading-tight">{t('title')}</h2>
-      <p className="max-w-md text-sm text-muted-foreground">{t('message')}</p>
-      <Link href="/account/plans" className={PILL_LINK}>
-        {t('upgrade')}
-      </Link>
+      <div className="max-h-[94vh] w-full max-w-[920px] overflow-y-auto rounded-t-3xl border border-b-0 border-border bg-background px-6 pb-8 pt-7 text-center shadow-lg sm:px-8">
+        <span className="mx-auto mb-3 grid size-12 place-items-center rounded-2xl bg-muted text-brand dark:text-primary">
+          <LockIcon className="size-5" />
+        </span>
+        <div className={KICKER}>{t('kicker')}</div>
+        <h2
+          id="cat-paywall-title"
+          className="mt-1 font-serif text-[26px] leading-tight sm:text-[30px]"
+        >
+          {t('title')}
+        </h2>
+        <p className="mx-auto mt-2 max-w-[52ch] text-[13.5px] text-muted-foreground">
+          {t('message')}
+        </p>
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <Link
+            href="/dashboard"
+            className="text-[12.5px] font-medium text-muted-foreground hover:text-foreground"
+          >
+            {t('back')}
+          </Link>
+          <span className="text-border">·</span>
+          <Link
+            href="/account/plans"
+            className={cn(TEXT_LINK, 'inline-flex items-center gap-1 text-[12.5px]')}
+          >
+            {t('compare')}
+            <ChevronRightIcon className="size-3 rtl:rotate-180" />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
@@ -183,17 +214,22 @@ export function Pager({
   total,
   size,
   onPage,
+  className,
 }: {
   page: number;
   total: number | undefined;
   size: number;
   onPage: (page: number) => void;
+  className?: string;
 }) {
   const t = useTranslations('catalogProducts.pager');
   const pages = totalPages(total ?? 0, size);
   if (pages <= 1) return null;
   return (
-    <nav aria-label={t('label')} className="mt-4 flex items-center justify-center gap-1">
+    <nav
+      aria-label={t('label')}
+      className={cn('flex items-center justify-center gap-1', className ?? 'mt-4')}
+    >
       <button
         type="button"
         className={PAGER_BTN}
@@ -234,6 +270,36 @@ export function Pager({
         <ChevronRightIcon className="size-4 rtl:rotate-180" />
       </button>
     </nav>
+  );
+}
+
+/** Laravel's paginator footer, as Reference draws it: "Showing 1 to 25 of 28 results" on one side, the page links on the other. */
+export function PagerBar({
+  page,
+  total,
+  size,
+  shown,
+  onPage,
+  className,
+}: {
+  page: number;
+  total: number | undefined;
+  size: number;
+  /** Rows on this page. */
+  shown: number;
+  onPage: (page: number) => void;
+  className?: string;
+}) {
+  const t = useTranslations('catalogProducts.pager');
+  if (total === undefined || total <= size) return null;
+  const from = (page - 1) * size + 1;
+  return (
+    <div className={cn('flex flex-wrap items-center justify-between gap-3', className)}>
+      <div className="text-[12.5px] text-muted-foreground" aria-live="polite">
+        {t('showing', { from, to: from + Math.max(shown, 1) - 1, total })}
+      </div>
+      <Pager page={page} total={total} size={size} onPage={onPage} className="mt-0" />
+    </div>
   );
 }
 
