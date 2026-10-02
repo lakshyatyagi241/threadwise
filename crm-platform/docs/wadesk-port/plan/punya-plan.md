@@ -84,6 +84,6 @@ Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-instagram.md` 
 | I1   | Permissions, bridge port and client, accounts: available, link, unlink (DONE) | 016, 003, 004, 005, 006   |
 | I2   | Inbound push, ingest (shim), pull job (DONE)                                  | 007, 008, 009             |
 | I3   | Reply sender, flows list and run (DONE)                                       | 010, 011 (no caller), 012 |
-| I4   | Composer recipients and reply-only broadcast (B10)                            | 013, 014                  |
+| I4   | Composer recipients and reply-only broadcast (DONE)                           | 013, 014                  |
 | I5   | Web: hub, add dialog                                                          | 001, 002, 015             |
 | I6   | Auto-reply hook, flow import and push, templates (BLOCKED: others)            | 017, 018, 019, 020        |

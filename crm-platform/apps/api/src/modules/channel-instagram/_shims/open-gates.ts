@@ -7,6 +7,10 @@ export class OpenInstagramPlanGate implements InstagramPlanGate {
   assertChannel(): Promise<void> {
     return Promise.resolve();
   }
+
+  assertBroadcast(): Promise<void> {
+    return Promise.resolve();
+  }
 }
 
 /** No auto-reply domain yet: nothing replies to an Instagram message. */

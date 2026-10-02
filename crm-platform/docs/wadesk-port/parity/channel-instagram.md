@@ -8,7 +8,7 @@ WaDesk 1.7.0 vs branch `punya/punyafix`. Inventory: [inventory/channel-instagram
 Automated only; no screen yet, so the Playwright twin run against the running WaDesk has not been done. WaDesk's Instagram needs a
 running Instaflow deployment with a shared secret, which this workspace does not have, so nothing was compared against a live engine.
 
-- `apps/api/test/unit/channel-instagram/account-rules.spec.ts`, `ingest-rules.spec.ts` and `reply-rules.spec.ts`: 39 tests, passing (handle, live state, Manage address, picker, profile, engine list reading; thread title and placeholder, thread key, flags, preview, buttons, what may trigger a contact or an automation, pull skip and history rules, engine thread and message lists).
+- `apps/api/test/unit/channel-instagram/account-rules.spec.ts`, `ingest-rules.spec.ts` and `reply-rules.spec.ts` and `broadcast-rules.spec.ts`: 47 tests, passing (handle, live state, Manage address, picker, profile, engine list reading; thread title and placeholder, thread key, flags, preview, buttons, what may trigger a contact or an automation, pull skip and history rules, engine thread and message lists).
 - `apps/api/test/e2e/channel-instagram/instagram-inbound.e2e.spec.ts` (18 scenarios: the secret and the connection flag, unreadable body and unknown workspace, thread and contact and unread and window, redelivery, title refresh, our own send, test and history, media preview, story mention, buttons graft, isolation; the pull both directions with new-row counts, skipping, push then pull, no id, history never answered). Typechecked and linted; NOT RUN.
 - `apps/api/test/e2e/channel-instagram/instagram-accounts.e2e.spec.ts` (10 scenarios: hub and engine state, isolation, picker by email, link and relink on one row, an account only the person owns, refusing an unlisted account even with a username, engine off, permissions, connect ticket and its refusals, unlink keeping threads until the last account, other organizations untouched). Typechecked and linted; NOT RUN (no Docker or Postgres in this environment).
 - Typecheck, lint on the new files and `pnpm arch:check` (0 errors) are clean. The addons unit tests (39) still pass after the handshake adapter moved onto the shared guarded request.
@@ -46,10 +46,17 @@ running Instaflow deployment with a shared secret, which this workspace does not
 
 12. **Running a flow has its own permission** (`ig.flows.run`); WaDesk allowed anyone who could reply. A bridge answer of `ok:false` on a 200 counts as a failure (WaDesk counted any 2xx as sent).
 
+13. **An account's threads are told apart exactly.** WaDesk matched `ig:<account>` plus one wildcard character, so account `1` also listed account `12`'s threads; the port matches the two real separators (`_` and `:`).
+14. **A send is capped at 200 threads** and runs five at a time; WaDesk's broadcasts page had no cap and sent one by one inside the request, which could outlive it. The pickers still list up to 2000 per account.
+15. **A broadcast's mirrored message keeps the engine's id** (WaDesk's broadcasts page dropped it, so the pull showed every sent message a second time).
+16. **No broadcast record is kept**, as in WaDesk: the answer carries `{sent, failed, errors}` (up to five reasons of 120 characters; WaDesk's page showed only the counts) and each message that went shows in its thread. A thread that is not this organization's or not Instagram counts as failed.
+
 ## Shims
 
 - `InstagramPlanGate` (`_shims/open-gates.ts`): `access_instagram` is not in the plan catalogue; every check passes.
 - `InstagramInboxIngest` (`_shims/sql-instagram-ingest.ts`): writes `conversations`, `messages` and `contacts` directly until the inbox domain exports its inbound service; the live "message received" push is the inbox domain's and is not emitted here.
+- `InstagramTemplates` (`_shims/sql-instagram-templates.ts`): reads `wa_templates` where the channel is instagram until the templates domain exports a lookup.
+- `InstagramPlanGate.assertBroadcast`: the plan's `broadcast` feature; every check passes until the catalogue carries it.
 - `MediaUrls` (`_shims/open-gates.ts`): only an address that is already public can be sent as an attachment until the storage domain exports signed addresses (same as Facebook).
 - `InstagramAutomation` (`_shims/open-gates.ts`): the keyword auto-reply rules (WD-IG-017); nothing replies until that domain exports them.
 

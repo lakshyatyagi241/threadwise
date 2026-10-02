@@ -43,3 +43,15 @@ No route. A worker asks the engine every 20 seconds for each organization with a
 ## Replying (WD-IG-010)
 
 Not a route: the team inbox calls `InstagramSenderService.reply({rawJid, text, media?, buttons?})` for a message whose provider is `instagram` and stores the returned `providerMessageId` on the row (so a later pull never shows our own send twice). It never throws; `{ok: false, error}` carries the reason in words ("IgDesk HTTP 400: ...").
+
+## Reply-only sends (WD-IG-013, 014)
+
+Instagram only lets an account message someone who already wrote to it, so recipients are existing threads. All three need `ig.broadcasts.manage`.
+
+| Method and path                 | What                                                                                                                                                                                                                                                                         |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /instagram/compose`        | `{accounts: [{id, instaflowAccountId, handle}], threads: {<engine account id>: [{id, title, windowOpen}]}, templates: [{id, name, body, buttons}]}`. Connected accounts only (empty while the engine is off); up to 2000 threads per account, newest customer message first. |
+| `POST /instagram/broadcasts`    | Body `{name, message (1 to 1000), threadIds (1 to 200)}`. `{name}` in the message becomes the person's name ("there" when unknown). 200 `{sent, failed, errors}`. 422 `IG_NOT_CONNECTED` when the engine is off.                                                             |
+| `POST /instagram/composer/send` | Body `{body (1 to 4096), threadIds (1 to 200), templateId?}`. A template's body and buttons replace the typed text; an unknown template is ignored. 200 `{sent, failed, errors}`. 422 `IG_NOT_CONNECTED`.                                                                    |
+
+`errors` holds up to five reasons, each cut to 120 characters ("IgDesk HTTP 400: Outside the 24 hour window"). A thread that is not the organization's or not an Instagram thread counts as failed. Every message that went is shown in its thread at once, with the engine's id so the pull does not show it again. Nothing is kept as a broadcast record.

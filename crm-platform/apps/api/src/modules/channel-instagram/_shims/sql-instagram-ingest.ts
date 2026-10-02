@@ -7,9 +7,11 @@ import {
   contactNameOf,
   isGenuineInbound,
   isPlaceholderTitle,
+  previewOf,
   type Normalized,
 } from '../ingest-rules';
-import type { InstagramInboxIngest, IngestOutcome } from './tokens';
+import { accountThreadPatterns } from '../broadcast-rules';
+import type { InstagramInboxIngest, IngestOutcome, ThreadRef } from './tokens';
 
 const compact = (o: Record<string, unknown>): Record<string, unknown> =>
   Object.fromEntries(
@@ -158,5 +160,71 @@ export class SqlInstagramIngest implements InstagramInboxIngest {
     const r = res.rows[0] as
       { id: number | string; channel: string | null; raw_jid: string | null } | undefined;
     return r ? { id: Number(r.id), channel: r.channel, rawJid: r.raw_jid } : undefined;
+  }
+
+  async findThreads(tx: Tx, orgId: number, uuids: string[]): Promise<ThreadRef[]> {
+    if (uuids.length === 0) return [];
+    const res = await tx.execute(sql`
+      SELECT id, uuid, title, channel, raw_jid FROM conversations
+      WHERE org_id = ${orgId} AND uuid IN (${sql.join(
+        uuids.map((u) => sql`${u}::uuid`),
+        sql`, `,
+      )})`);
+    return (
+      res.rows as Array<{
+        id: number | string;
+        uuid: string;
+        title: string | null;
+        channel: string | null;
+        raw_jid: string | null;
+      }>
+    ).map((r) => ({
+      id: Number(r.id),
+      uuid: r.uuid,
+      title: r.title ?? '',
+      channel: r.channel,
+      rawJid: r.raw_jid,
+    }));
+  }
+
+  async threadsOfAccount(
+    tx: Tx,
+    orgId: number,
+    accountId: string,
+    limit: number,
+  ): Promise<Array<{ uuid: string; title: string; lastInboundAt: Date | null }>> {
+    const [underscore, colon] = accountThreadPatterns(accountId);
+    const res = await tx.execute(sql`
+      SELECT uuid, title, last_inbound_at FROM conversations
+      WHERE org_id = ${orgId} AND channel = 'instagram'
+        AND (raw_jid LIKE ${underscore} ESCAPE '\' OR raw_jid LIKE ${colon} ESCAPE '\')
+      ORDER BY last_inbound_at DESC NULLS LAST, id DESC LIMIT ${limit}`);
+    return (
+      res.rows as Array<{
+        uuid: string;
+        title: string | null;
+        last_inbound_at: Date | string | null;
+      }>
+    ).map((r) => ({
+      uuid: r.uuid,
+      title: r.title ?? '',
+      lastInboundAt: r.last_inbound_at ? new Date(r.last_inbound_at) : null,
+    }));
+  }
+
+  async recordOutbound(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    m: { body: string; providerMessageId: string | null; userId: number | null },
+  ): Promise<void> {
+    const meta = m.providerMessageId ? { wa_message_id: m.providerMessageId } : {};
+    await tx.execute(sql`
+      INSERT INTO messages (org_id, conversation_id, user_id, direction, body, status, provider, meta, sent_at, delivered_at)
+      VALUES (${orgId}, ${conversationId}, ${m.userId}, 'out', ${m.body}, 'sent', 'instagram', ${JSON.stringify(meta)}::jsonb, now(), now())`);
+    // Outbound is not unread: only the customer's messages are.
+    await tx.execute(sql`
+      UPDATE conversations SET last_message_at = now(), last_outbound_at = now(), preview = ${previewOf(m.body, 'text')}
+      WHERE org_id = ${orgId} AND id = ${conversationId}`);
   }
 }
