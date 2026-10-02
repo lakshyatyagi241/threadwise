@@ -121,6 +121,8 @@ export const envSchema = z.object({
   /** A Login-for-Business configuration id; when set it drives the login dialog. */
   FB_CONFIG_ID: z.string().optional(),
   FB_GRAPH_VERSION: z.string().optional(),
+  /** The Graph version the welcome greeting is retried on when the configured one has dropped it; empty disables the retry. */
+  FB_GREETING_GRAPH_VERSION: z.string().default('v19.0'),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),

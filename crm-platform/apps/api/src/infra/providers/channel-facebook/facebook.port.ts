@@ -81,6 +81,8 @@ export interface MetaAppSettings {
   appSecret: string | null;
   configId: string | null;
   graphVersion: string;
+  /** The older Graph version the welcome greeting is retried on once the configured one has dropped it (empty disables the retry). */
+  greetingFallbackVersion: string;
   verifyToken: string | null;
   /** Every secret a webhook may be signed with: the Facebook one and the WhatsApp one, without duplicates. */
   signingSecrets: string[];
@@ -119,6 +121,18 @@ export interface FacebookPageApi {
     text: string,
     buttons: readonly MessengerButton[],
   ): Promise<GraphResult<{ messageId: string }>>;
+  /**
+   * The Messenger profile as one object (`get_started`, `greeting`, `persistent_menu`, `ice_breakers`, ...); a property that is not
+   * set is absent. Empty when Meta could not be reached.
+   */
+  getMessengerProfile(): Promise<Record<string, unknown>>;
+  /** Sets one or more profile properties. `graphVersion` overrides the configured version (the greeting's retry). */
+  setMessengerProfile(
+    payload: Record<string, unknown>,
+    graphVersion?: string,
+  ): Promise<GraphResult>;
+  /** Removes profile properties across all locales. `graphVersion` as above. */
+  deleteMessengerProfile(fields: readonly string[], graphVersion?: string): Promise<GraphResult>;
   /** A public reply under a comment (or a post) as the Page. */
   replyComment(objectId: string, text: string): Promise<GraphResult<{ id: string }>>;
   getSenderProfile(psid: string): Promise<GraphSenderProfile | null>;

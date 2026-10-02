@@ -40,6 +40,9 @@ const defaults = (): FacebookPageApi => ({
     return Promise.resolve({ ok: true, data: { messageId: 'mid.att' } });
   },
   sendButtonTemplate: () => Promise.resolve({ ok: true, data: { messageId: 'mid.btn' } }),
+  getMessengerProfile: () => Promise.resolve({}),
+  setMessengerProfile: () => Promise.resolve({ ok: true }),
+  deleteMessengerProfile: () => Promise.resolve({ ok: true }),
   replyComment: (id, text) => {
     sent.push({ method: 'replyComment', args: [id, text] });
     return Promise.resolve({ ok: true, data: { id: 'c.reply' } });
