@@ -21,6 +21,7 @@ import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
+import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
@@ -127,6 +128,7 @@ import { HealthModule } from './health/health.module';
 
     // Apps
     AdminModule,
+    RolesPermissionsModule,
     CrmModule,
     DashboardsAnalyticsChartsModule,
     AppointmentsBookingModule,
