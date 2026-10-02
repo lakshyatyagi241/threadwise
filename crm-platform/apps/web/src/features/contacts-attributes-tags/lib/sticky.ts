@@ -22,6 +22,10 @@ export const STICKY_SELECT_HEAD = 'sm:start-0 sm:z-30 bg-muted';
 export const STICKY_NAME = `sticky start-0 sm:start-12 z-10 ${SURFACE}`;
 export const STICKY_NAME_HEAD = 'start-0 sm:start-12 z-30 bg-muted';
 
+/** The same frozen Name cell when the table has no checkbox column (a read-only listing): it sits at the very start. */
+export const STICKY_NAME_ALONE = `sticky start-0 z-10 ${SURFACE}`;
+export const STICKY_NAME_ALONE_HEAD = 'start-0 z-30 bg-muted';
+
 /** Shadow along the frozen edge, mirrored in RTL, only while the table is scrolled sideways. */
 export const FROZEN_SHADOW =
   'shadow-[6px_0_8px_-4px_rgba(15,23,42,0.18)] rtl:shadow-[-6px_0_8px_-4px_rgba(15,23,42,0.18)] ' +

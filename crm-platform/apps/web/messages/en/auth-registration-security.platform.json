@@ -1316,6 +1316,7 @@
             "contacts": "Contacts",
             "tags": "Tags",
             "pipelines": "Sales pipelines",
+            "appointments": "Appointments per month",
             "templates": "Message templates",
             "flows": "Flows",
             "autoreplies": "Keyword auto-replies"
@@ -1334,7 +1335,8 @@
             "shopify": "Shopify",
             "analytics": "Analytics",
             "remove_branding": "White-label (removes platform branding)",
-            "sales_pipeline": "Sales pipeline (deals and tasks)"
+            "sales_pipeline": "Sales pipeline (deals and tasks)",
+            "appointment_booking": "Appointments and booking pages"
           },
           "problems": {
             "required": "This field is required.",

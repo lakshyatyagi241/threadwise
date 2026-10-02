@@ -8,6 +8,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { LinkedAppointments } from '@/features/appointments';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
@@ -270,6 +271,7 @@ export function ContactDetail({ id }: { id: string }) {
           <LinkedTasks kind="contact" id={id} />
           <LinkedInvoices kind="contact" id={id} />
           <LinkedSalesDocs kind="contact" id={id} />
+          <LinkedAppointments contactId={id} />
           <Timeline id={id} />
         </div>
         <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">

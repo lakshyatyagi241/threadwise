@@ -1,11 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useReducer, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
+import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { invalidateSegments, useSegments } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
 import {
@@ -16,6 +18,7 @@ import {
   type BulkOutcome,
 } from '../api/bulk';
 import {
+  contactFilterBody,
   deleteContact,
   invalidateContacts,
   KEYS,
@@ -56,7 +59,9 @@ import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import { ContactFormModal } from './contact-form-modal';
 import { ContactsGrid, ContactsTable } from './contacts-list';
 import { ContactsPagination } from './contacts-pagination';
-import { ContactsToolbar, segmentOf } from './contacts-toolbar';
+import { ContactsToolbar, filtersOfSegment, segmentOf } from './contacts-toolbar';
+import { SaveSegmentModal } from './save-segment-modal';
+import type { SegmentOption, SegmentsState } from './segment-picker';
 import { DedupeDialog } from './dedupe-dialog';
 import { ErrorLine } from './error-line';
 import { LostReasonDialog, type LostPrompt } from './lost-reason';
@@ -95,6 +100,8 @@ export function ContactsScreen() {
   const canMerge = useCan('record.contacts.merge');
   const canCreateGroups = useCan('record.contact-groups.create');
   const canCreateTags = useCan('record.tags.create');
+  const canReadSegments = useCan('record.segments.read');
+  const canCreateSegments = useCan('record.segments.create');
 
   // The rows-per-page choice is remembered per browser; a `per=` in the URL (a shared link) still wins.
   const [storedSize, setStoredSize] = useStoredValue(PAGE_SIZE_KEY);
@@ -129,6 +136,27 @@ export function ContactsScreen() {
   const stats = useContactStats();
   const groups = useGroups();
   const tags = useTags();
+  const segmentList = useSegments(canReadSegments);
+  const segmentOptions = useMemo<SegmentOption[]>(
+    () =>
+      (segmentList.data ?? [])
+        .map((s) => ({
+          id: s.id,
+          name: s.name,
+          color: s.color ?? null,
+          memberCount: s.memberCount,
+          countApproximate: s.countApproximate,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    [segmentList.data],
+  );
+  const segmentsState: SegmentsState = !canReadSegments
+    ? 'off'
+    : segmentList.isError
+      ? 'error'
+      : segmentList.isPending
+        ? 'loading'
+        : 'ready';
   const attributes = useAttributes();
   const statusOptions = useStatusOptions();
 
@@ -195,6 +223,7 @@ export function ContactsScreen() {
     tag: filters.tag,
     consent: filters.consent,
     imported: filters.imported,
+    segment: filters.segment,
   };
   const target = (): BulkTarget =>
     pickerRow ? { kind: 'ids', ids: [pickerRow] } : bulkTarget(sel, snapshot);
@@ -206,6 +235,7 @@ export function ContactsScreen() {
   const [dedupeOpen, setDedupeOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [groupOpen, setGroupOpen] = useState(false);
+  const [saveSegmentOpen, setSaveSegmentOpen] = useState(false);
   const [picker, setPicker] = useState<BulkPicker>(null);
   /** The contact a group/tag picker opened from a row's menu acts on; null when it acts on the selection. */
   const [pickerRow, setPickerRow] = useState<string | null>(null);
@@ -224,6 +254,7 @@ export function ContactsScreen() {
       invalidateContacts(qc),
       qc.invalidateQueries({ queryKey: KEYS.groups }),
       qc.invalidateQueries({ queryKey: KEYS.tags }),
+      invalidateSegments(qc),
     ]);
 
   async function guarded<T>(fn: () => Promise<T>): Promise<T | undefined> {
@@ -441,11 +472,17 @@ export function ContactsScreen() {
         q={q}
         onQ={setQ}
         segment={segmentOf(filters)}
-        onSegment={(v) =>
-          setFilters({ imported: v === 'imported', group: v === 'imported' ? '' : v })
-        }
+        onSegment={(v) => setFilters(filtersOfSegment(v))}
         stats={s}
         groups={groups.data ?? []}
+        segments={segmentOptions}
+        segmentsState={segmentsState}
+        onRetrySegments={() => void segmentList.refetch()}
+        canCreateSegment={canCreateSegments}
+        // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
+        onSaveAsSegment={
+          canCreateSegments && filtered && !filters.segment ? () => setSaveSegmentOpen(true) : undefined
+        }
         tag={filters.tag}
         onTag={(id) => setFilters({ tag: id })}
         tags={tags.data ?? []}
@@ -532,6 +569,18 @@ export function ContactsScreen() {
           </div>
         )}
       </div>
+
+      {list.segmentInvalid > 0 && (
+        <Alert tone="warning" className="flex flex-wrap items-center justify-between gap-2">
+          <span>{t('segmentInvalid', { count: list.segmentInvalid })}</span>
+          <Link
+            href={`/segments/${filters.segment}/edit`}
+            className="font-semibold underline underline-offset-2"
+          >
+            {t('segmentFix')}
+          </Link>
+        </Alert>
+      )}
 
       {header === 'all' && total !== undefined && total > rows.length && (
         <div
@@ -626,6 +675,7 @@ export function ContactsScreen() {
             onPage={(p) => setFilters({ page: p })}
             onLimit={(n) => setFilters({ limit: n })}
             onRecount={() => void invalidateContacts(qc)}
+            approximate={list.totalApproximate}
           />
         )}
       </section>
@@ -657,6 +707,11 @@ export function ContactsScreen() {
       />
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
       <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />
+      <SaveSegmentModal
+        open={saveSegmentOpen}
+        filter={{ ...contactFilterBody({ ...filters, segment: '' }), segmentId: undefined }}
+        onClose={() => setSaveSegmentOpen(false)}
+      />
       <DedupeDialog open={dedupeOpen} onClose={() => setDedupeOpen(false)} />
       <ConfirmDialog
         open={deleteId !== null}

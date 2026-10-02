@@ -310,7 +310,15 @@ export const statusOptionUsageQuerySchema = z.object({
 export type StatusOptionUsageQuery = z.infer<typeof statusOptionUsageQuerySchema>;
 
 export const statusOptionUsageResponseSchema = z.object({
-  data: z.array(z.object({ id: uuidSchema, value: z.string(), count: z.number().int() })),
+  data: z.array(
+    z.object({
+      id: uuidSchema,
+      value: z.string(),
+      count: z.number().int(),
+      /** Segments whose rules use this stage or status: they match nothing once it is deleted. */
+      segments: z.number().int().optional(),
+    }),
+  ),
 });
 export type StatusOptionUsageResponse = z.infer<typeof statusOptionUsageResponseSchema>;
 
@@ -328,6 +336,14 @@ export const fieldUsageQuerySchema = z.object({ moduleKey: moduleKeySchema });
 export type FieldUsageQuery = z.infer<typeof fieldUsageQuerySchema>;
 
 export const fieldUsageResponseSchema = z.object({
-  data: z.array(z.object({ id: uuidSchema, key: z.string(), count: z.number().int() })),
+  data: z.array(
+    z.object({
+      id: uuidSchema,
+      key: z.string(),
+      count: z.number().int(),
+      /** Segments whose rules use this property: they match nothing once it is deleted. */
+      segments: z.number().int().optional(),
+    }),
+  ),
 });
 export type FieldUsageResponse = z.infer<typeof fieldUsageResponseSchema>;

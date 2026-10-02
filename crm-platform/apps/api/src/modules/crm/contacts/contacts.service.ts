@@ -26,6 +26,8 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { DisplayIdService } from '../../../kernel/identifiers/display-id.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { countWithTimeout } from '../segments/segment-count';
+import { contactConditions, contactScopeCondition, whereOf } from './contact-conditions';
 import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
@@ -77,6 +79,7 @@ export class ContactsService {
           ...(query.includeTotal ? { meta: { total: 0 } } : {}),
         };
       }
+      const segment = resolution.segment;
 
       const rows = await this.repo.list(tx, ctx.orgId, {
         limit: query.limit,
@@ -103,10 +106,33 @@ export class ContactsService {
         }),
       );
 
-      const total = query.includeTotal
-        ? await this.repo.count(tx, ctx.orgId, resolution.filter, scope, ctx.userId)
-        : undefined;
-      return { data, page, ...(total !== undefined ? { meta: { total } } : {}) };
+      // A segment can be any rule over millions of rows: its total is counted under the 3 second ceiling.
+      let approximate = false;
+      let total: number | undefined;
+      if (query.includeTotal && resolution.filter.segment) {
+        const counted = await countWithTimeout(
+          tx,
+          whereOf(
+            contactConditions(
+              ctx.orgId,
+              resolution.filter,
+              contactScopeCondition(ctx.orgId, scope, ctx.userId),
+            ),
+          ),
+        );
+        total = counted.count;
+        approximate = counted.approximate;
+      } else if (query.includeTotal) {
+        total = await this.repo.count(tx, ctx.orgId, resolution.filter, scope, ctx.userId);
+      }
+      return {
+        data,
+        page,
+        ...(total !== undefined
+          ? { meta: { total, ...(approximate ? { approximate } : {}) } }
+          : {}),
+        ...(segment ? { segment } : {}),
+      };
     });
   }
 

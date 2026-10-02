@@ -248,6 +248,8 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M2 6.5h12M4.5 10h2.5" />
     </>
   ),
+  // a funnel: rules that narrow contacts down to the ones that match (Segments)
+  segment: <path d="M2.5 3h11L9.5 8.2V13l-3 1.5V8.2L2.5 3z" />,
   percent: (
     <>
       <path d="M12.5 3.5l-9 9" />

@@ -80,6 +80,14 @@ export {
 } from './contact-groups';
 export type { ContactGroupRow } from './contact-groups';
 export { ContactBulkService } from './contact-bulk';
+export {
+  SegmentsService,
+  SegmentsRepository,
+  SegmentActionsService,
+  toSegmentResponse,
+} from './segments';
+export type { SegmentRow } from './segments';
+export { SegmentsWorkerModule } from './segments/segments-worker.module';
 export { ContactImportEngine, ContactImportProcessor } from './contact-import';
 export { ContactImportWorkerModule } from './contact-import/contact-import-worker.module';
 export type { ContactImportJobData } from './contact-import';

@@ -15,6 +15,8 @@ import {
   isScrolledSideways,
   SELECT_W,
   STICKY_NAME,
+  STICKY_NAME_ALONE,
+  STICKY_NAME_ALONE_HEAD,
   STICKY_NAME_HEAD,
   STICKY_SELECT,
   STICKY_SELECT_HEAD,
@@ -84,8 +86,8 @@ const WIDTH: Record<string, number> = {
 };
 const widthOf = (id: ColumnId) => WIDTH[isAttrId(id) ? 'attr' : id] ?? 160;
 
-export function tableMinWidth(columns: readonly ColumnDef[]): number {
-  return SELECT_W + columns.reduce((sum, c) => sum + widthOf(c.id), 0);
+export function tableMinWidth(columns: readonly ColumnDef[], selectable = true): number {
+  return (selectable ? SELECT_W : 0) + columns.reduce((sum, c) => sum + widthOf(c.id), 0);
 }
 
 /** Leading icon of a column header, by the kind of data the column holds. */
@@ -437,12 +439,15 @@ export function ContactsTable({
   columns,
   headerState,
   onToggleAll,
+  selectable = true,
   ...h
 }: {
   rows: RowView[];
   columns: readonly ColumnDef[];
   headerState: CheckState;
   onToggleAll: (checked: boolean) => void;
+  /** False for a read-only listing (the members of a segment): no checkbox column, the name column is frozen alone. */
+  selectable?: boolean;
 } & ListHandlers) {
   const t = useTranslations('contacts-attributes-tags.list');
   const locale = useLocale();
@@ -461,10 +466,10 @@ export function ContactsTable({
     >
       <table
         className="w-full table-fixed border-separate border-spacing-0 text-sm"
-        style={{ minWidth: tableMinWidth(columns) }}
+        style={{ minWidth: tableMinWidth(columns, selectable) }}
       >
         <colgroup>
-          <col style={{ width: SELECT_W }} />
+          {selectable && <col style={{ width: SELECT_W }} />}
           {columns.map((c) => (
             <col
               key={c.id}
@@ -475,14 +480,20 @@ export function ContactsTable({
         </colgroup>
         <thead>
           <tr>
-            <th className={cn(th, 'py-3 ps-4 pe-2', STICKY_SELECT_HEAD)}>
-              <HeaderCheckbox state={headerState} onChange={onToggleAll} label={t('selectAll')} />
-            </th>
+            {selectable && (
+              <th className={cn(th, 'py-3 ps-4 pe-2', STICKY_SELECT_HEAD)}>
+                <HeaderCheckbox state={headerState} onChange={onToggleAll} label={t('selectAll')} />
+              </th>
+            )}
             {columns.map((c) => (
               <th
                 key={c.id}
                 scope="col"
-                className={cn(th, c.id === 'name' && `${STICKY_NAME_HEAD} ${frozenEdge(scrolled)}`)}
+                className={cn(
+                  th,
+                  c.id === 'name' &&
+                    `${selectable ? STICKY_NAME_HEAD : STICKY_NAME_ALONE_HEAD} ${frozenEdge(scrolled)}`,
+                )}
               >
                 <span className="flex min-w-0 items-center gap-1.5">
                   <HeaderIcon id={c.id} />
@@ -506,21 +517,24 @@ export function ContactsTable({
                   isSel && 'bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]',
                 )}
               >
-                <td className={cn('border-b border-border ps-4 pe-2', STICKY_SELECT)}>
-                  <input
-                    type="checkbox"
-                    checked={isSel}
-                    onChange={() => h.onToggle(row.id)}
-                    aria-label={t('selectRow', { name: row.name || t('unnamed') })}
-                    className="size-4 cursor-pointer accent-[var(--brand)]"
-                  />
-                </td>
+                {selectable && (
+                  <td className={cn('border-b border-border ps-4 pe-2', STICKY_SELECT)}>
+                    <input
+                      type="checkbox"
+                      checked={isSel}
+                      onChange={() => h.onToggle(row.id)}
+                      aria-label={t('selectRow', { name: row.name || t('unnamed') })}
+                      className="size-4 cursor-pointer accent-[var(--brand)]"
+                    />
+                  </td>
+                )}
                 {columns.map((c) => (
                   <td
                     key={c.id}
                     className={cn(
                       'max-w-0 border-b border-border px-3 py-2',
-                      c.id === 'name' && `${STICKY_NAME} ${frozenEdge(scrolled)}`,
+                      c.id === 'name' &&
+                        `${selectable ? STICKY_NAME : STICKY_NAME_ALONE} ${frozenEdge(scrolled)}`,
                     )}
                   >
                     <Cell column={c} row={row} h={h} locale={locale} timeZone={timeZone} />
