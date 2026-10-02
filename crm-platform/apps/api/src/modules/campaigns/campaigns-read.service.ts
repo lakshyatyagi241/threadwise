@@ -24,7 +24,13 @@ import {
   type SenderDirectory,
   type TemplateDirectory,
 } from '../broadcasts';
-import { buttonRows, engagement, pct, reconciledStatus, utcToLocalDateTime } from './campaign-rules';
+import {
+  buttonRows,
+  engagement,
+  pct,
+  reconciledStatus,
+  utcToLocalDateTime,
+} from './campaign-rules';
 import { toCampaign, toConfig } from './campaigns.mapper';
 import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
 

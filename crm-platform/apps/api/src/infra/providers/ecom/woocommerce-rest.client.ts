@@ -185,7 +185,10 @@ class WooStore implements WooStoreApi {
   async salesReport(days: number): Promise<StoreRecord> {
     const day = (d: Date) => d.toISOString().slice(0, 10);
     const min = new Date(Date.now() - days * 86_400_000);
-    const r = await this.send('GET', `/reports/sales?date_min=${day(min)}&date_max=${day(new Date())}`);
+    const r = await this.send(
+      'GET',
+      `/reports/sales?date_min=${day(min)}&date_max=${day(new Date())}`,
+    );
     if ('error' in r || r.status < 200 || r.status >= 300 || !Array.isArray(r.json)) return {};
     return obj(r.json[0]);
   }
