@@ -17,6 +17,7 @@ import {
 import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -50,6 +51,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChatConversationsWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ScheduledQueueWarmerWorkerModule,
   ],
   providers: [
     OutboxDrainService,
