@@ -181,12 +181,12 @@ describe('the planned tiles', () => {
       expect(SETTINGS_SECTIONS as readonly string[]).toContain(t.section);
   });
 
+  // Telegram is built: its tile is declared in features/channel-telegram/settings.ts and left this list.
   it('cover the channels that left the menu, as Soon tiles', () => {
     const channels = PLANNED_SETTINGS.filter((t) => t.section === 'channels').map((t) => t.id);
     for (const id of [
       'channels',
       'whatsapp',
-      'telegram',
       'sms',
       'email',
       'line',

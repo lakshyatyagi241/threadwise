@@ -25,7 +25,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   tile('channels', 'whatsapp', '/channels/whatsapp', 'whatsapp', 10),
   tile('channels', 'facebook', '/channels/facebook', 'facebook', 20),
   tile('channels', 'instagram', '/channels/instagram', 'instagram', 30),
-  tile('channels', 'telegram', '/telegram', 'send', 40),
   tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50),
   tile('channels', 'sms', '/sms', 'sms', 60),
   tile('channels', 'email', '/email', 'mail', 70),

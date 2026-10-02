@@ -108,38 +108,9 @@ export const PLANNED_NAV: readonly NavItem[] = [
   },
 
   // Campaigns
-  {
-    id: 'campaigns',
-    group: 'campaigns',
-    labelKey: L('campaigns'),
-    href: '/campaigns',
-    order: 0,
-    icon: 'campaign',
-  },
-  {
-    id: 'scheduled',
-    group: 'campaigns',
-    labelKey: L('scheduled'),
-    href: '/scheduled',
-    order: 20,
-    icon: 'clock',
-  },
-  {
-    id: 'templates',
-    group: 'campaigns',
-    labelKey: L('templates'),
-    href: '/templates',
-    order: 30,
-    icon: 'template',
-  },
-  {
-    id: 'history',
-    group: 'campaigns',
-    labelKey: L('history'),
-    href: '/message-history',
-    order: 40,
-    icon: 'history',
-  },
+  { id: 'scheduled', group: 'campaigns', labelKey: L('scheduled'), href: '/scheduled', order: 20, icon: 'clock' },
+  { id: 'templates', group: 'campaigns', labelKey: L('templates'), href: '/templates', order: 30, icon: 'template' },
+  { id: 'history', group: 'campaigns', labelKey: L('history'), href: '/message-history', order: 40, icon: 'history' },
 
   // Automation (Appointments is a real screen in features/appointments)
   {
