@@ -19,6 +19,7 @@
     "clean": "rm -rf dist *.tsbuildinfo"
   },
   "dependencies": {
+    "@crm/tax": "workspace:*",
     "zod": "^3.24.1"
   },
   "devDependencies": {
