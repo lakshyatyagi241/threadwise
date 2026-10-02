@@ -40,3 +40,4 @@ export * from './platform-support-desk';
 export * from './ai-keys-usage-admin';
 export * from './marketing-site-cms';
 export * from './admin-console-shell';
+export * from './dashboards-analytics-charts';

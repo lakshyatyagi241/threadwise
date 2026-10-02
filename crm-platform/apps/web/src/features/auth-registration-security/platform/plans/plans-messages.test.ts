@@ -71,6 +71,9 @@ describe('plan catalogue messages (operator console)', () => {
       i.labelKey.startsWith('auth-registration-security.platform.'),
     );
     for (const item of own) {
+    for (const item of OPERATOR_NAV) {
+      // other domains merge their own entries; their keys live in their own message files
+      if (!item.labelKey.startsWith('auth-registration-security.platform.')) continue;
       const key = item.labelKey.replace('auth-registration-security.platform.', '');
       expect(en[key], key).toBeTypeOf('string');
     }

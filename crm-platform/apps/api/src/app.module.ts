@@ -26,6 +26,7 @@ import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
+import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
@@ -119,6 +120,7 @@ import { HealthModule } from './health/health.module';
     // Apps
     AdminModule,
     CrmModule,
+    DashboardsAnalyticsChartsModule,
     BroadcastsModule,
     PartnerModule,
     PublicApiModule,
