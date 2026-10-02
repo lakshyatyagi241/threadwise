@@ -66,7 +66,14 @@ describe('operator overrides form', () => {
     ).toEqual({
       limits: { devices: 0, users: -1, tags: 5 },
       features: { calling: true, shopify: false },
+      dataRetentionDays: null,
     });
+  });
+  it('reads the retention override: empty = plan default, 0 = never wipe this workspace', () => {
+    expect(buildOverrides({}, {}, '').dataRetentionDays).toBeNull();
+    expect(buildOverrides({}, {}, '0').dataRetentionDays).toBe(0);
+    expect(buildOverrides({}, {}, ' 45 ').dataRetentionDays).toBe(45);
+    expect(buildOverrides({}, {}, '9999').dataRetentionDays).toBeNull();
   });
 });
 

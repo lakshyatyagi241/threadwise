@@ -464,7 +464,11 @@ describe('the super admin attaches plans and limits per workspace', () => {
     expect(after).toMatchObject({ planSlug: 'pro', billingCycle: 'monthly' });
     expect(after.validity.state).toBe('paid_active');
     expect(after.validity.planEndsAt).not.toBeNull();
-    expect(after.overrides).toEqual({ limits: { contacts: 2 }, features: { calling: true } });
+    expect(after.overrides).toEqual({
+      limits: { contacts: 2 },
+      features: { calling: true },
+      dataRetentionDays: null,
+    });
     const st = await stateOf(a.orgId);
     expect(st.trial_ends_at).toBeNull();
 
@@ -508,7 +512,7 @@ describe('the super admin attaches plans and limits per workspace', () => {
     });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.validity.planEndsAt).toBe(fixed);
-    expect(res.body.overrides).toEqual({ limits: {}, features: {} });
+    expect(res.body.overrides).toEqual({ limits: {}, features: {}, dataRetentionDays: null });
     const never = await ops('put', `/workspace-plans/${a.uuid}`).send({
       planSlug: 'pro',
       planEndsAt: null,
@@ -1020,5 +1024,174 @@ describe('the one-line count guard for future domains (WD-PLAN-006/017)', () => 
     await guard(a.orgId, 'tags');
     await expect(guard(a.orgId, 'total_campaigns')).rejects.toThrow(/does not apply/);
     await expect(guard(a.orgId, 'monthly_messages')).rejects.toThrow(/does not apply/);
+  });
+});
+
+describe('everything is configurable from the super admin panel (per plan, overridable per workspace)', () => {
+  it('edits the platform yearly switch and discount; checkout, the picker and the public page follow', async () => {
+    await paidPlan('pro', '100');
+    const a = await signup();
+    expect((await ops('get', '/plan-settings')).body).toEqual({
+      yearlyToggleEnabled: true,
+      yearlyDiscountPct: 20,
+    });
+
+    const saved = await ops('put', '/plan-settings').send({
+      yearlyToggleEnabled: true,
+      yearlyDiscountPct: 10,
+    });
+    expect(saved.status, JSON.stringify(saved.body)).toBe(200);
+    const view = billingPlansResponseSchema.parse((await as(a, 'get', '/v2/billing/plans')).body);
+    expect(view.yearlyToggle).toEqual({ enabled: true, discountPct: 10 });
+    expect(view.data.find((p) => p.slug === 'pro')?.yearly).toEqual({
+      perMonth: '90.00',
+      perYear: '1080.00',
+    });
+    const pub = await api().get('/v2/public/cms/pricing');
+    expect(pub.body.yearlyDiscountPct).toBe(10);
+    expect(pub.body.plans[0].limits).toBeDefined();
+
+    await ops('put', '/plan-settings').send({ yearlyToggleEnabled: false, yearlyDiscountPct: 10 });
+    const off = billingPlansResponseSchema.parse((await as(a, 'get', '/v2/billing/plans')).body);
+    expect(off.yearlyToggle.enabled).toBe(false);
+
+    expect(
+      (
+        await ops('put', '/plan-settings', supportToken).send({
+          yearlyToggleEnabled: true,
+          yearlyDiscountPct: 20,
+        })
+      ).status,
+    ).toBe(403);
+    expect(
+      (
+        await ops('put', '/plan-settings').send({
+          yearlyToggleEnabled: true,
+          yearlyDiscountPct: 91,
+        })
+      ).status,
+    ).toBe(422);
+    expect((await ops('get', '/plan-settings', supportToken)).status).toBe(200);
+    const ev = await h.owner.query(
+      `SELECT 1 FROM security_events WHERE event = 'platform.plan.settings_updated'`,
+    );
+    expect(ev.rows.length).toBeGreaterThanOrEqual(2);
+    await ops('put', '/plan-settings').send({ yearlyToggleEnabled: true, yearlyDiscountPct: 20 });
+  });
+
+  it('sets a workspace’s trial end from the console: extends it, or ends it now; a changed plan keeps an explicit date', async () => {
+    await freePlan('free_trialops');
+    await paidPlan('pro', '49');
+    const a = await signup();
+    await setOrgState(a.orgId, 'free_trialops', new Date(Date.now() + 2 * DAY), null);
+    const w = workspacePlanSchema.parse((await ops('get', `/workspace-plans/${a.uuid}`)).body);
+    const later = new Date(Date.now() + 30 * DAY).toISOString();
+    const extended = await ops('put', `/workspace-plans/${a.uuid}`).send({
+      planSlug: 'free_trialops',
+      trialEndsAt: later,
+      rowVersion: w.rowVersion,
+    });
+    expect(extended.status, JSON.stringify(extended.body)).toBe(200);
+    expect(extended.body.validity).toMatchObject({ state: 'free_trial', trialEndsAt: later });
+
+    const ended = await ops('put', `/workspace-plans/${a.uuid}`).send({
+      planSlug: 'free_trialops',
+      trialEndsAt: null,
+      rowVersion: extended.body.rowVersion,
+    });
+    expect(ended.body.validity.state).toBe('free');
+    expect((await as(a, 'get', '/v2/contacts')).status).toBe(200);
+
+    // A workspace whose first request comes after the operator expires its trial is gated at once (an open verdict is cached for a few seconds).
+    const b = await signup();
+    await setOrgState(b.orgId, 'free_trialops', null, null);
+    const wb = workspacePlanSchema.parse((await ops('get', `/workspace-plans/${b.uuid}`)).body);
+    const past = new Date(Date.now() - DAY).toISOString();
+    const expired = await ops('put', `/workspace-plans/${b.uuid}`).send({
+      planSlug: 'free_trialops',
+      trialEndsAt: past,
+      rowVersion: wb.rowVersion,
+    });
+    expect(expired.body.validity.state).toBe('free_trial_expired');
+    expect((await as(b, 'get', '/v2/contacts')).status).toBe(402);
+  });
+
+  it('overrides data retention for one workspace: longer, shorter, or never wipe it; the plan value applies otherwise', async () => {
+    const mk = async (planSlug: string, lapsedDays: number) => {
+      const a = await signup();
+      await setOrgState(a.orgId, planSlug, null, new Date(Date.now() + 5 * DAY));
+      await addContact(a, ++counter);
+      await setOrgState(a.orgId, planSlug, null, new Date(Date.now() - lapsedDays * DAY));
+      return a;
+    };
+    const setRetention = async (a: Account, days: number | null) => {
+      const w = workspacePlanSchema.parse((await ops('get', `/workspace-plans/${a.uuid}`)).body);
+      const res = await ops('put', `/workspace-plans/${a.uuid}`).send({
+        planSlug: w.planSlug,
+        planEndsAt: w.validity.planEndsAt,
+        rowVersion: w.rowVersion,
+        overrides: { limits: {}, features: {}, dataRetentionDays: days },
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+      expect(res.body.overrides.dataRetentionDays).toBe(days);
+    };
+    const contacts = async (a: Account) =>
+      (await h.owner.query(`SELECT count(*)::int AS n FROM contacts WHERE org_id = $1`, [a.orgId]))
+        .rows[0].n as number;
+
+    await paidPlan('ret_plan', '30', { dataRetentionDays: 30 });
+    const exempt = await mk('ret_plan', 100); // plan says wipe after 30, workspace says never
+    const shorter = await mk('ret_plan', 10); // plan says 30 (not due), workspace says 7 (due)
+    const longer = await mk('ret_plan', 40); // plan says 30 (due), workspace says 90 (not due)
+    const byPlan = await mk('ret_plan', 40); // no override: plan's 30
+    await setRetention(exempt, 0);
+    await setRetention(shorter, 7);
+    await setRetention(longer, 90);
+
+    const res = await api()
+      .post('/v2/platform/workspace-plans/retention/run')
+      .set(bearer(superToken))
+      .send({ dryRun: false, confirm: 'WIPE' });
+    expect(res.status).toBe(200);
+    expect(await contacts(exempt)).toBe(1);
+    expect(await contacts(longer)).toBe(1);
+    expect(await contacts(shorter)).toBe(0);
+    expect(await contacts(byPlan)).toBe(0);
+    const bad = await ops('put', `/workspace-plans/${exempt.uuid}`).send({
+      planSlug: 'ret_plan',
+      rowVersion: 99,
+      overrides: { limits: {}, features: {}, dataRetentionDays: 4000 },
+    });
+    expect(bad.status).toBe(422);
+  });
+
+  it('applies a per-workspace limit and flag override on top of the plan for every enforcement, and clears them back to the plan', async () => {
+    await paidPlan('plain', '10', { limits: { tags: 1 }, features: { analytics: false } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'plain', null, null);
+    await h.owner.query(`INSERT INTO tags (org_id, name) VALUES ($1, 't1')`, [a.orgId]);
+    const guard = () => h.app.get(PlanUsageService).assertCanAdd(a.orgId, 'tags');
+    expect((await guard().catch((e) => e)).code).toBe('PLAN_LIMIT_REACHED');
+
+    let w = workspacePlanSchema.parse((await ops('get', `/workspace-plans/${a.uuid}`)).body);
+    let res = await ops('put', `/workspace-plans/${a.uuid}`).send({
+      planSlug: 'plain',
+      rowVersion: w.rowVersion,
+      overrides: { limits: { tags: 3 }, features: { analytics: true }, dataRetentionDays: null },
+    });
+    await guard();
+    const usage = billingUsageResponseSchema.parse((await as(a, 'get', '/v2/billing/usage')).body);
+    expect(usage.meters.find((m) => m.key === 'tags')?.limit).toBe(3);
+    expect(usage.features.find((f) => f.key === 'analytics')?.enabled).toBe(true);
+
+    res = await ops('put', `/workspace-plans/${a.uuid}`).send({
+      planSlug: 'plain',
+      rowVersion: res.body.rowVersion,
+      overrides: { limits: {}, features: {}, dataRetentionDays: null },
+    });
+    expect(res.status).toBe(200);
+    expect((await guard().catch((e) => e)).code).toBe('PLAN_LIMIT_REACHED');
+    w = workspacePlanSchema.parse(res.body);
+    expect(w.overrides).toEqual({ limits: {}, features: {}, dataRetentionDays: null });
   });
 });

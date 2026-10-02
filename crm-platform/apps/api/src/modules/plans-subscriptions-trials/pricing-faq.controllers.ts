@@ -7,12 +7,15 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createPricingFaqRequestSchema,
+  planSettingsSchema,
+  type PlanSettings,
   publicFaqQuerySchema,
   updatePricingFaqRequestSchema,
   uuidSchema,
@@ -23,6 +26,7 @@ import {
 import { ActorKinds, Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
+import { PlanSettingsService } from './plan-settings.service';
 import { PricingFaqService } from './pricing-faq.service';
 import { AllowWhenTrialExpired } from './trial-gate.guard';
 
@@ -92,5 +96,29 @@ export class PublicPricingFaqsController {
   @ApiOperation({ summary: 'Active FAQs for a public placement' })
   list(@Query(zodPipe(publicFaqQuerySchema)) q: PublicFaqQuery) {
     return this.faqs.readers(q.for);
+  }
+}
+
+/** The platform's pricing settings (yearly switch and discount): every operator role reads, only super admins write. */
+@ApiTags('platform')
+@ActorKinds('platform_operator')
+@UseGuards(OperatorGuard)
+@Controller({ path: 'platform/plan-settings', version: '2' })
+export class PlatformPlanSettingsController {
+  constructor(private readonly settings: PlanSettingsService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Yearly switch and discount' })
+  get() {
+    return this.settings.get();
+  }
+
+  @Put()
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary: 'Change the yearly switch and discount (read by checkout, the picker and /pricing)',
+  })
+  update(@Body(zodPipe(planSettingsSchema)) body: PlanSettings) {
+    return this.settings.update(body);
   }
 }

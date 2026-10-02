@@ -24,6 +24,7 @@ const toInput = (iso: string | null) => (iso ? iso.slice(0, 16) : '');
 export function buildOverrides(
   limits: Record<string, string>,
   flags: Record<string, FlagChoice>,
+  retention = '',
 ): PlanOverrides {
   const outLimits: Record<string, number> = {};
   for (const [k, v] of Object.entries(limits)) {
@@ -33,7 +34,12 @@ export function buildOverrides(
   }
   const outFlags: Record<string, boolean> = {};
   for (const [k, v] of Object.entries(flags)) if (v !== 'default') outFlags[k] = v === 'on';
-  return { limits: outLimits, features: outFlags };
+  const r = retention.trim();
+  return {
+    limits: outLimits,
+    features: outFlags,
+    dataRetentionDays: /^\d{1,4}$/.test(r) && Number(r) <= 3650 ? Number(r) : null,
+  };
 }
 
 /**
@@ -57,6 +63,9 @@ export function AttachDialog({
   const [planSlug, setPlanSlug] = useState('');
   const [endsAt, setEndsAt] = useState('');
   const [neverEnds, setNeverEnds] = useState(false);
+  const [trialEnd, setTrialEnd] = useState('');
+  const [endTrial, setEndTrial] = useState(false);
+  const [retention, setRetention] = useState('');
   const [limits, setLimits] = useState<Record<string, string>>({});
   const [flags, setFlags] = useState<Record<string, FlagChoice>>({});
   const [error, setError] = useState<string | null>(null);
@@ -68,6 +77,13 @@ export function AttachDialog({
     setPlanSlug(workspace.planSlug);
     setEndsAt(toInput(workspace.validity.planEndsAt));
     setNeverEnds(false);
+    setTrialEnd(toInput(workspace.validity.trialEndsAt));
+    setEndTrial(false);
+    setRetention(
+      workspace.overrides.dataRetentionDays === null
+        ? ''
+        : String(workspace.overrides.dataRetentionDays),
+    );
     setLimits(
       Object.fromEntries(
         Object.entries(workspace.overrides.limits).map(([k, v]) => [k, String(v)]),
@@ -89,7 +105,12 @@ export function AttachDialog({
       return attachWorkspacePlan(w.workspaceId, {
         planSlug,
         rowVersion: w.rowVersion,
-        overrides: buildOverrides(limits, flags),
+        overrides: buildOverrides(limits, flags, retention),
+        ...(endTrial
+          ? { trialEndsAt: null }
+          : trialEnd !== toInput(w.validity.trialEndsAt) && trialEnd
+            ? { trialEndsAt: new Date(trialEnd).toISOString() }
+            : {}),
         ...(neverEnds
           ? { planEndsAt: null }
           : endChanged && endsAt
@@ -168,6 +189,40 @@ export function AttachDialog({
             </label>
             <p className="text-muted-foreground">{t('endsHint')}</p>
           </div>
+
+          <div className="space-y-1">
+            <label className="block font-medium" htmlFor="attach-trial">
+              {t('trialEnd')}
+            </label>
+            <Input
+              id="attach-trial"
+              type="datetime-local"
+              value={trialEnd}
+              disabled={endTrial}
+              onChange={(e) => setTrialEnd(e.target.value)}
+            />
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={endTrial}
+                onChange={(e) => setEndTrial(e.target.checked)}
+              />
+              {t('endTrialNow')}
+            </label>
+            <p className="text-muted-foreground">{t('trialHint')}</p>
+          </div>
+
+          <label className="block space-y-1">
+            <span className="font-medium">{t('retention')}</span>
+            <Input
+              inputMode="numeric"
+              value={retention}
+              placeholder={t('retentionPlaceholder')}
+              onChange={(e) => setRetention(e.target.value)}
+              data-testid="override-retention"
+            />
+            <span className="text-muted-foreground">{t('retentionHint')}</span>
+          </label>
 
           <fieldset className="space-y-2">
             <legend className="font-medium">{t('limits')}</legend>
