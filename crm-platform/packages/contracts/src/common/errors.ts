@@ -157,6 +157,20 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // Facebook channel (TW-FB)
+  /** No Meta app is configured on this install, so a Page cannot be connected. */
+  FB_NOT_CONFIGURED: 'FB_NOT_CONFIGURED',
+  /** The OAuth state did not round-trip: a forged or stale callback (login-CSRF guard). */
+  FB_STATE_INVALID: 'FB_STATE_INVALID',
+  /** Meta refused the code. */
+  FB_CODE_REJECTED: 'FB_CODE_REJECTED',
+  /** The account manages no Page we could store. */
+  FB_NO_PAGES: 'FB_NO_PAGES',
+  /** A pasted token did not resolve to a Page. */
+  FB_TOKEN_NOT_A_PAGE: 'FB_TOKEN_NOT_A_PAGE',
+  /** Refresh: Meta did not answer for the Page (its token may need re-auth). */
+  FB_REFRESH_FAILED: 'FB_REFRESH_FAILED',
+
   // campaigns (TW-CAMP)
   /** Nobody on the audience can be messaged. */
   CAMP_NO_RECIPIENTS: 'CAMP_NO_RECIPIENTS',

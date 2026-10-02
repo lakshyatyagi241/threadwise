@@ -5,6 +5,7 @@ import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CampaignsWorkerModule } from '../modules/campaigns';
+import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
@@ -44,6 +45,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     BroadcastsWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ChannelFacebookWorkerModule,
   ],
   providers: [
     OutboxDrainService,

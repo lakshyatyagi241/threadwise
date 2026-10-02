@@ -30,6 +30,7 @@ export * from './plans-subscriptions-trials';
 export * from './contacts-attributes-tags';
 export * from './broadcasts';
 export * from './channel-telegram';
+export * from './channel-facebook';
 export * from './deals-pipelines';
 export * from './tasks';
 export * from './platform-settings-branding-storage';

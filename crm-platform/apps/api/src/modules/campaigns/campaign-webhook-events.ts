@@ -6,6 +6,7 @@
  * Reference fires exactly two webhook events from the model, `campaign_created` and `campaign_status_updated`; its bell has
  * `campaign_completed` and `campaign_failed`. `workspace_id` is added by the deliverer from the event's org.
  */
+import type { CampaignRow } from './campaigns.repository';
 
 export interface CampaignSnapshot {
   uuid: string;
@@ -21,6 +22,22 @@ export interface CampaignSnapshot {
   responded: number;
   createdBy: number | null;
 }
+
+/** The facts an event needs, read off a stored campaign. Lives here, not with the emitter, so the service and the emitter do not import each other. */
+export const toSnapshot = (c: CampaignRow): CampaignSnapshot => ({
+  uuid: c.uuid,
+  name: c.name,
+  type: c.type,
+  status: c.status,
+  scheduleType: c.scheduleType,
+  totalRecipients: c.totalRecipients,
+  sent: c.counts.sent,
+  delivered: c.counts.delivered,
+  read: c.counts.read,
+  failed: c.counts.failed,
+  responded: c.counts.responded,
+  createdBy: c.createdBy,
+});
 
 export interface WebhookEventOut {
   event: string;
