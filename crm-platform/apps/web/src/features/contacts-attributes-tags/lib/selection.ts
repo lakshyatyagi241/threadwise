@@ -66,6 +66,8 @@ export interface ContactFilterSnapshot {
   tag: string;
   consent: '' | 'subscribed' | 'unsubscribed';
   imported: boolean;
+  /** Segment id, or empty: "select all matching" inside a segment acts on its members only. */
+  segment: string;
 }
 
 /** What a bulk action acts on: explicit ids, or the filter that defines "all matching". */

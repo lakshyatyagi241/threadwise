@@ -11,7 +11,11 @@ export interface OperatorNavItem {
   groupKey: string;
 }
 
+import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
+import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
+
 const NS = 'auth-registration-security.platform.nav';
+const BSP = 'bsp-billing-engine.nav';
 
 export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   {
@@ -49,6 +53,115 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/plans',
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
+  },
+  // platform settings, branding and storage (SET domain)
+  ...SET_OPERATOR_NAV,
+  // roles and permissions domain (RBAC): Roles, Permissions, Staff roles
+  ...ROLES_OPERATOR_NAV,
+  {
+    id: 'i18n-languages',
+    href: '/admin/i18n/languages',
+    labelKey: 'localization-translation.nav.languages',
+    groupKey: 'localization-translation.nav.group',
+  },
+  {
+    id: 'i18n-providers',
+    href: '/admin/i18n/providers',
+    labelKey: 'localization-translation.nav.providers',
+    groupKey: 'localization-translation.nav.group',
+  },
+  {
+    id: 'i18n-usage',
+    href: '/admin/i18n/usage',
+    labelKey: 'localization-translation.nav.usage',
+    groupKey: 'localization-translation.nav.group',
+  },
+  {
+    id: 'system',
+    href: '/admin/system',
+    labelKey: 'install-update-licensing.system.nav.item',
+    groupKey: 'install-update-licensing.system.nav.group',
+  },
+  // add-ons domain: billing add-ons and installable modules (messages/en/addons-extension-registry.json)
+  {
+    id: 'addon-packs',
+    href: '/admin/addons',
+    labelKey: 'addons-extension-registry.nav.packs',
+    groupKey: 'addons-extension-registry.nav.group',
+  },
+  {
+    id: 'extensions',
+    href: '/admin/extensions',
+    labelKey: 'addons-extension-registry.nav.extensions',
+    groupKey: 'addons-extension-registry.nav.group',
+  },
+  // Platform support desk (SUPP): its own message file, so the keys live outside this domain's namespace.
+  {
+    id: 'support-inbox',
+    href: '/admin/support',
+    labelKey: 'platform-support-desk.nav.inbox',
+    groupKey: 'platform-support-desk.nav.group',
+  },
+  {
+    id: 'ai-keys',
+    href: '/admin/api-keys',
+    labelKey: 'ai-keys-usage-admin.admin.nav.keys',
+    groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  },
+  {
+    id: 'ai-dashboard',
+    href: '/admin/ai-dashboard',
+    labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
+    groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  },
+  {
+    id: 'cms-frontend',
+    href: '/admin/frontend',
+    labelKey: 'marketing-site-cms.nav.frontend',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-blog',
+    href: '/admin/blog',
+    labelKey: 'marketing-site-cms.nav.blog',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-legal',
+    href: '/admin/legal-pages',
+    labelKey: 'marketing-site-cms.nav.legal',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-contact',
+    href: '/admin/contact-messages',
+    labelKey: 'marketing-site-cms.nav.contact',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'system-health',
+    href: '/admin/health',
+    labelKey: 'dashboards-analytics-charts.health.nav',
+    groupKey: 'dashboards-analytics-charts.health.group',
+  },
+  {
+    id: 'payment-gateways',
+    href: '/admin/payment-gateways',
+    labelKey: 'platform-payment-gateways.nav.gateways',
+    groupKey: 'platform-payment-gateways.nav.group',
+  },
+  // BSP domain (seam edit): the two reseller pages, in WaDesk's Billing group.
+  {
+    id: 'bsp-income',
+    href: '/admin/bsp',
+    labelKey: `${BSP}.income`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'bsp-credit',
+    href: '/admin/bsp/credit',
+    labelKey: `${BSP}.reseller`,
+    groupKey: `${BSP}.groups.billing`,
   },
 ];
 

@@ -32,6 +32,8 @@ export function toContactResponse(
     status: row.status,
     lostReason: row.lostReason,
     otherLostReason: row.otherLostReason,
+    wonAt: row.wonAt?.toISOString() ?? null,
+    lostAt: row.lostAt?.toISOString() ?? null,
     leadScore: row.leadScore,
     whatsappSubscriptionStatus: row.whatsappSubscriptionStatus,
     smsSubscriptionStatus: row.smsSubscriptionStatus,

@@ -22,8 +22,9 @@ export interface ReasonOption {
   id?: string;
 }
 
-/** What the API takes: a catalogue id, or free text. */
-export type LostReasonPayload = { lostReasonId: string } | { lostReason: string };
+/** What the API takes: a catalogue id, free text, or nothing (a workspace that does not require a reason). */
+export type LostReasonPayload =
+  { lostReasonId: string } | { lostReason: string } | Record<string, never>;
 
 /** The payload for the person's choice, or null while the form is not complete. */
 export function resolveLostReason(
@@ -41,4 +42,19 @@ export function resolveLostReason(
   if (found.id) return { lostReasonId: found.id };
   const label = found.label.trim().slice(0, LOST_REASON_MAX);
   return label === '' ? null : { lostReason: label };
+}
+
+/**
+ * What "Mark as lost" sends: the person's reason when they gave a complete one, nothing when no choice was made and the
+ * workspace does not require one (WaDesk's one-click behaviour, D-08), otherwise null (the form is not ready).
+ */
+export function lostReasonToSend(
+  choice: string,
+  options: readonly ReasonOption[],
+  otherText: string,
+  required: boolean,
+): LostReasonPayload | null {
+  const payload = resolveLostReason(choice, options, otherText);
+  if (payload) return payload;
+  return !required && !choice ? {} : null;
 }

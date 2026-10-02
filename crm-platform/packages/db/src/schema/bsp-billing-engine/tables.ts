@@ -2,7 +2,10 @@
  * bsp-billing-engine: tables ported from WaDesk. Mirrors migrations/20261001100800_bsp_wadesk_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
+  bigint,
+  check,
   foreignKey,
   index,
   pgTable,
@@ -27,6 +30,8 @@ export const bspCreditAllocations = pgTable(
     currency: text('currency').notNull().default('USD'),
     status: text('status').notNull().default('attached'),
     lastError: text('last_error'),
+    /** The platform operator who attached it; null when the sweep did, or the operator was deleted. */
+    createdByOperatorId: bigint('created_by_operator_id', { mode: 'number' }),
     attachedAt: timestamp('attached_at', { withTimezone: true }),
     revokedAt: timestamp('revoked_at', { withTimezone: true }),
     createdAt: createdAt(),
@@ -41,7 +46,20 @@ export const bspCreditAllocations = pgTable(
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
-    index('idx_bsp_credit_allocations_waba_id').on(t.orgId, t.wabaId),
+    unique('uq_bsp_credit_allocations_org_waba').on(t.orgId, t.wabaId),
+    check(
+      'chk_bsp_credit_allocations_status',
+      sql`${t.status} in ('attached', 'revoked', 'failed')`,
+    ),
+    check(
+      'chk_bsp_credit_allocations_source',
+      sql`${t.creditSource} is null or ${t.creditSource} in ('meta', 'aggregator')`,
+    ),
+    check(
+      'chk_bsp_credit_allocations_currency',
+      sql`${t.currency} = upper(${t.currency}) and length(${t.currency}) between 1 and 8`,
+    ),
+    index('idx_bsp_credit_allocations_listing').on(t.createdAt.desc(), t.id.desc()),
   ],
 );
 

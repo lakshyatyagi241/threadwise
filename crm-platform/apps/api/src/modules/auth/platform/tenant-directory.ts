@@ -117,8 +117,8 @@ export class TenantDirectory {
   }
 
   /**
-   * Creates the organization, its locked Admin role (every capability key),
-   * an editable Agent role, the first user, that user's security/profile
+   * Creates the organization, its five workspace preset roles (the locked Owner
+   * holds every capability key), the first user, that user's security/profile
    * rows and the organization's plan (the registration default, plus a free
    * trial when the plan is free) in ONE transaction. `inTx` runs inside it so
    * the caller can write the audit row and outbox event atomically with the
@@ -156,42 +156,10 @@ export class TenantDirectory {
       const orgId = orgRow.id;
       await this.plans.recordInitialState(tx, orgId, plan);
 
-      // The Admin preset is created unlocked so its grants can be inserted
-      // (protect_locked_role refuses grants on a locked role), then locked.
-      const adminRole = await tx.execute(sql`
-        INSERT INTO roles (org_id, name, system_key, is_locked)
-        VALUES (${orgId}, 'Admin', 'admin', false) RETURNING id
-      `);
-      const adminRoleId = (adminRole.rows[0] as unknown as { id: number }).id;
-      await tx.execute(sql`
-        INSERT INTO role_grants (org_id, role_id, permission_key, effect, record_scope)
-        SELECT ${orgId}, ${adminRoleId}, key, 'allow', 'all' FROM permission_defs
-      `);
-      await tx.execute(
-        sql`UPDATE roles SET is_locked = true WHERE org_id = ${orgId} AND id = ${adminRoleId}`,
-      );
-
-      const agentRole = await tx.execute(sql`
-        INSERT INTO roles (org_id, name) VALUES (${orgId}, 'Agent') RETURNING id
-      `);
-      const agentRoleId = (agentRole.rows[0] as unknown as { id: number }).id;
-      await tx.execute(sql`
-        INSERT INTO role_grants (org_id, role_id, permission_key, effect, record_scope)
-        VALUES
-          (${orgId}, ${agentRoleId}, 'record.contacts.read', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.contacts.create', 'allow', 'all'),
-          (${orgId}, ${agentRoleId}, 'record.contacts.update', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'inbox.conversation.read', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'inbox.conversation.reply', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.deals.read', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.deals.create', 'allow', 'all'),
-          (${orgId}, ${agentRoleId}, 'record.deals.update', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.pipelines.read', 'allow', 'all'),
-          (${orgId}, ${agentRoleId}, 'record.tasks.read', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.tasks.create', 'allow', 'all'),
-          (${orgId}, ${agentRoleId}, 'record.tasks.update', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.tasks.delete', 'allow', 'own')
-      `);
+      // The five workspace presets (Owner, Admin, Manager, Agent, Viewer) and their grants come from one SQL function, the same one the
+      // RBAC migration ran for every existing organization. The first user is the Owner (the locked top preset).
+      const ownerRole = await tx.execute(sql`SELECT provision_workspace_presets(${orgId}) AS id`);
+      const adminRoleId = Number((ownerRole.rows[0] as unknown as { id: number | string }).id);
 
       const userRes = await tx.execute(sql`
         INSERT INTO users (org_id, email, full_name, password_hash)

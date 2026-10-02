@@ -91,6 +91,7 @@ describe('the real menu', () => {
       'contacts',
       'attributes',
       'contact-groups',
+      'segments',
       'lead-finder',
       'deals',
       'pipelines',

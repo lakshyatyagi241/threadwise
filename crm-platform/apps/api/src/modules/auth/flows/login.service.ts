@@ -348,21 +348,24 @@ export class LoginService {
 
   /**
    * One function decides where a person lands (WD-AUTH-011), shared by login
-   * and the session probe. Unfinished onboarding wins; then role: people who
-   * can work conversations but not administer go to the inbox.
+   * and the session probe. Unfinished onboarding wins (for the Owner); then what the
+   * person may open: someone who cannot open the dashboard but can work conversations goes to the inbox.
    */
   async landingFor(
     org: Pick<OrgRef, 'id' | 'settings'>,
     userId: number,
     isAdmin: boolean,
   ): Promise<Landing> {
-    const step = (org.settings as { onboardingStep?: string }).onboardingStep;
-    if (step && step !== 'done' && isAdmin) return 'onboarding';
-    if (isAdmin) return 'dashboard';
     const grants = await this.rbac.grantsForUser(org.id, userId);
-    const canInbox = this.rbac.can(grants, 'inbox.conversation.read').allowed;
-    const canRecords = this.rbac.can(grants, 'record.contacts.read').allowed;
-    return canInbox && !canRecords ? 'inbox' : 'dashboard';
+    // Finishing the workspace's onboarding (branding, profile) is the Owner's job: the owner-only settings key says who that is.
+    const step = (org.settings as { onboardingStep?: string }).onboardingStep;
+    if (step && step !== 'done' && this.rbac.can(grants, 'org.owner_settings.manage').allowed)
+      return 'onboarding';
+    if (isAdmin) return 'dashboard';
+    // WD-RBAC-035: the landing follows what the person may open, not a role name. WaDesk sent Agents and Viewers to the team inbox
+    // and Managers and above to the dashboard; the dashboard needs dash.dashboard.read, which the Manager preset and above hold.
+    if (this.rbac.can(grants, 'dash.dashboard.read').allowed) return 'dashboard';
+    return this.rbac.can(grants, 'inbox.conversation.read').allowed ? 'inbox' : 'dashboard';
   }
 
   // --- logout -------------------------------------------------------------------------------------------

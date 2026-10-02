@@ -85,7 +85,6 @@ export function SlashTextarea({
         rows={rows}
         value={value}
         aria-label={label}
-        aria-expanded={open}
         aria-controls={open ? listId : undefined}
         aria-autocomplete="list"
         aria-activedescendant={open && matches.length > 0 ? `${listId}-${current}` : undefined}

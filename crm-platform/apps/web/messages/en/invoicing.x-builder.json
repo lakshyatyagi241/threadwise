@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "An amount, quantity or rate on the invoice cannot be used. Check the highlighted fields.",
+        "INV_TAX_RATE_INVALID": "One of the tax rates cannot be used today: it is inactive or outside its dates. Pick another rate.",
+        "INV_NOT_DRAFT": "This invoice has been issued, so it can no longer be edited. Duplicate it to start a corrected one.",
+        "INV_ORDER_LINKED": "This invoice belongs to a sales order, so that order has to be changed instead.",
+        "SALESDOC_INVALID_TRANSITION": "The proposal or estimate has not been accepted yet, so it cannot become an invoice.",
+        "SALESDOC_ALREADY_CONVERTED": "This document was already turned into an invoice.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "Invoicing is not available on this server yet.",
+        "INV_LINK_UNAVAILABLE": "This invoice link is no longer available."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Creating a draft from the accepted document...",
+      "duplicating": "Copying the invoice into a new draft...",
+      "openExisting": "Open the invoice that was already created",
+      "backToInvoices": "Back to invoices",
+      "backToInvoice": "Back to the invoice",
+      "issued": "Invoice issued.",
+      "savedNotIssued": "The draft was saved, but it could not be issued: {reason}",
+      "buyerCountry": "Country",
+      "buyerCountryHint": "Two letters, like IN or GB. Decides the tax id format and, in automatic mode, the tax.",
+      "buyerTaxId": "Tax id",
+      "buyerTaxIdNamed": "Tax id ({label})",
+      "taxIdHint": "GSTIN, VAT number, EIN... Checked as you type.",
+      "taxIdExpected": "Expected: {label}, for example {example}.",
+      "taxIdUnchecked": "No format is known for this country, so the number is saved as typed.",
+      "taxIdValid": "{label} looks right ({level, select, checksum {format and check digits checked} other {only the format checked}}). That does not prove it is registered.",
+      "taxIdInvalid": "This {label} looks wrong ({level, select, checksum {format and check digits checked} other {only the format checked}}).",
+      "taxIdStillSave": "You can still save it.",
+      "docType": "Document",
+      "docTypes": {
+        "tax_invoice": "Tax invoice",
+        "proforma": "Proforma invoice"
+      },
+      "noDueDate": "Default payment terms",
+      "reference": "Reference",
+      "referenceHint": "The buyer's purchase order number or any reference to print.",
+      "tax": "Tax",
+      "taxMode": "How tax is worked out",
+      "taxModes": {
+        "rates": "Tax rates",
+        "auto": "Automatic"
+      },
+      "taxModeHint": {
+        "rates": "Pick a tax rate for each line. A line left on the default uses your workspace's default rate.",
+        "auto": "The tax engine decides each line's tax from your country, the buyer's country and tax id, the supply and the place of supply. The server's answer is what is saved."
+      },
+      "sellerCountry": "Your country (from the invoicing profile)",
+      "sellerCountryMissing": "Automatic tax needs your country in the invoicing profile (a country with a tax preset). Set it there first.",
+      "supplyType": "Supply",
+      "supplyTypes": {
+        "goods": "Goods",
+        "services": "Services",
+        "digital": "Digital services"
+      },
+      "placeOfSupply": "Place of supply",
+      "placeOfSupplyHint": "A state or province of {country}; leave on the first choice for the whole country.",
+      "placeSameCountry": "Whole country",
+      "placeRegionPlaceholder": "Region code, optional",
+      "reverseCharge": "Reverse charge",
+      "reverseChargeHint": "The buyer accounts for the tax, so none is charged on this invoice.",
+      "shipping": "Shipping ({currency})",
+      "shippingHint": "Never discounted or taxed.",
+      "legalNotes": "Legal notes",
+      "legalNotesHint": "Wording required on the document, such as a reverse-charge statement. Automatic mode fills it in when the law asks for it.",
+      "problems": {
+        "contactRequired": "Pick a contact or type the buyer's name.",
+        "currencyInvalid": "Enter a three-letter currency code.",
+        "issueDateInvalid": "Enter a valid issue date.",
+        "dueBeforeIssue": "The due date cannot be before the issue date.",
+        "dueInvalid": "Enter a valid due date.",
+        "noLines": "Add at least one line before issuing.",
+        "discountInvalid": "Enter a valid discount (a percentage from 0 to 100, or an amount).",
+        "shippingInvalid": "Enter a valid shipping amount.",
+        "emailInvalid": "Enter a valid email address.",
+        "amountZero": "The invoice total must be more than zero.",
+        "amountInvalid": "An amount is too large or has too many decimals for this currency.",
+        "countryInvalid": "Use a two-letter country code.",
+        "regionInvalid": "Use a short region code, up to three letters or digits.",
+        "autoNeedsSellerCountry": "Set your country in the invoicing profile to use automatic tax.",
+        "descriptionRequired": "Describe this line.",
+        "qtyInvalid": "Enter a quantity above zero, with at most 4 decimals.",
+        "priceInvalid": "Enter a valid price with the decimals this currency allows.",
+        "lineDiscountInvalid": "Enter a valid line discount.",
+        "hsnRequired": "Enter the HSN/SAC code. Your country asks for it on each line.",
+        "hsnInvalid": "An HSN/SAC code is 2 to 12 letters or digits.",
+        "taxRateRemoved": "The tax rate of this line was removed. Pick a current one."
+      }
+    },
+    "lines": {
+      "discount": "Discount",
+      "discountKind": "Discount type",
+      "taxAuto": "Automatic",
+      "taxDefault": "Default ({rate})",
+      "taxDefaultNone": "Default (no tax)",
+      "removedRateOption": "{rate}, removed",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Code"
+    },
+    "totals": {
+      "shipping": "Shipping",
+      "taxIncluded": "{name}, included",
+      "taxOn": "on {base}",
+      "reverseCharge": "Reverse charge: no tax is charged.",
+      "includesTotal": "Tax included in prices"
+    },
+    "taxWhy": {
+      "title": "Why this tax?",
+      "preview": "Preview",
+      "previewNote": "Worked out in your browser while you edit. What the server decides when you save is what counts.",
+      "taxFree": "No tax is charged on this supply",
+      "warnings": "Double-check",
+      "placeOfSupply": "Place of supply",
+      "reverseCharge": "Reverse charge",
+      "reverseChargeNote": "The buyer accounts for the tax, so none is charged.",
+      "documentNotes": "Printed on the document",
+      "disclaimer": "Rates and rules are defaults to verify with your accountant or tax authority. This is not legal or tax advice."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Tax invoice",
+        "proforma": "Proforma invoice",
+        "receipt": "Receipt"
+      },
+      "sellerTaxId": "Tax id",
+      "registrationNo": "Reg. no.",
+      "buyerTaxId": "Tax id",
+      "reference": "Reference",
+      "placeOfSupply": "Place of supply",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "{amount} discount",
+      "shipping": "Shipping",
+      "credited": "Credited",
+      "taxSummary": "Tax summary",
+      "taxName": "Tax",
+      "taxBase": "Taxable amount",
+      "taxAmount": "Tax",
+      "taxInclusive": "included",
+      "reverseCharge": "Reverse charge: the buyer accounts for the tax.",
+      "paymentsReceived": "Payments received",
+      "refund": "refund",
+      "bankDetails": "Bank details",
+      "voidReason": "Cancelled: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Link not found",
+      "notFoundMessage": "This invoice link does not exist. Check that you copied all of it, or ask the sender for the link again.",
+      "unavailableTitle": "This link is unavailable",
+      "unavailableMessage": "The invoice link was withdrawn or has expired. Ask the sender for a new link.",
+      "voidReason": "Reason: {reason}",
+      "printable": "Open the printable page",
+      "amountDueFooter": "Amount due: {amount}",
+      "noPayOptions": "The seller has not set up an online way to pay. Please contact them to arrange payment.",
+      "payAmount": "Amount to pay ({currency})",
+      "payAmountHint": "The full balance is filled in. Enter a smaller amount to pay part of it.",
+      "amountErrors": {
+        "invalid": "Enter an amount above zero.",
+        "tooMuch": "The amount cannot be more than what is due."
+      },
+      "linkUnavailable": "This invoice link is no longer available, so it cannot be paid from here.",
+      "payFailed": "We could not start the payment. Try again in a moment.",
+      "payUnavailable": "Online payment is not available for this invoice right now.",
+      "redirecting": "Taking you to the payment page...",
+      "payInstructions": "Pay as described below.",
+      "bankTransfer": "Bank transfer",
+      "copyInstructions": "Copy the instructions",
+      "copyValue": "Copy {label}"
+    }
+  }
+}

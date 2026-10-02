@@ -25,6 +25,26 @@ const nextConfig: NextConfig = {
     ];
     return [
       { source: '/:path*', headers: security },
+      // The buyer's page (/q/<token>) holds a customer's name and prices and its address is the credential: never cached,
+      // never indexed, never leaked through a Referer header (WD-PROP-018, D-16).
+      {
+        source: '/q/:path*',
+        headers: [
+          ...noStore,
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
+      // The visitor's booking pages (/book/<org>/<service>) and manage pages (/b/manage/<token>): a manage link is a secret and
+      // the pages hold a customer's name and time, so the same rules as /q.
+      ...['/book/:path*', '/b/:path*'].map((source) => ({
+        source,
+        headers: [
+          ...noStore,
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      })),
       ...[
         '/login',
         '/signup',

@@ -21,6 +21,9 @@ const FORWARD_RESPONSE = [
   'retry-after',
   'cache-control',
   'x-content-type-options',
+  // Uploaded brand files (SVG) are served with a sandboxing policy that must reach the browser.
+  'content-security-policy',
+  'cross-origin-resource-policy',
 ];
 
 /**

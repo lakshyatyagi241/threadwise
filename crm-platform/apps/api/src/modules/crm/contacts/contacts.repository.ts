@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { alias } from 'drizzle-orm/pg-core';
 import { and, asc, desc, eq, gt, inArray, lt, or, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { RecordScope } from '@crm/contracts';
 import { decodeCursor } from '../../../common/pagination/cursor';
+import { NO_STAGE_FLAGS, type StageFlags } from './contact-stage';
+import type { StatusScopeOption } from './contact-status-stage';
+import type { RequiredRule } from './required-properties';
 import {
   contactConditions,
   contactScopeCondition,
@@ -10,7 +14,16 @@ import {
   type ResolvedContactFilter,
 } from './contact-conditions';
 
-const { companies, contacts, statusOptions, teamMembers, users } = schema;
+const {
+  companies,
+  contacts,
+  fieldDependencies,
+  fieldOptions,
+  fields,
+  statusOptions,
+  teamMembers,
+  users,
+} = schema;
 
 export interface ContactRow {
   id: number;
@@ -35,6 +48,8 @@ export interface ContactRow {
   status: string | null;
   lostReason: string | null;
   otherLostReason: string | null;
+  wonAt: Date | null;
+  lostAt: Date | null;
   leadScore: number | null;
   whatsappSubscriptionStatus: string | null;
   smsSubscriptionStatus: string | null;
@@ -105,6 +120,8 @@ export class ContactsRepository {
       status: contacts.status,
       lostReason: contacts.lostReason,
       otherLostReason: contacts.otherLostReason,
+      wonAt: contacts.wonAt,
+      lostAt: contacts.lostAt,
       leadScore: contacts.leadScore,
       whatsappSubscriptionStatus: contacts.whatsappSubscriptionStatus,
       smsSubscriptionStatus: contacts.smsSubscriptionStatus,
@@ -320,6 +337,10 @@ export class ContactsRepository {
       ownerId?: number | null;
       lifecycleStage?: string;
       status?: string | null;
+      lostReason?: string | null;
+      otherLostReason?: string | null;
+      wonAt?: Date | null;
+      lostAt?: Date | null;
       leadScore?: number | null;
       whatsappSubscriptionStatus?: string | null;
       smsSubscriptionStatus?: string | null;
@@ -327,6 +348,8 @@ export class ContactsRepository {
       emailConfirmed?: boolean;
       faxNumber?: string | null;
       source?: string | null;
+      isUnsubscribed?: boolean;
+      unsubscribedAt?: Date | null;
       data: Record<string, unknown>;
       displayId: string;
       createdBy: number | null;
@@ -348,6 +371,10 @@ export class ContactsRepository {
         lifecycleStage: values.lifecycleStage ?? 'new',
         lifecycleStageDate: sql`now()`,
         status: values.status ?? null,
+        lostReason: values.lostReason ?? null,
+        otherLostReason: values.otherLostReason ?? null,
+        wonAt: values.wonAt ?? null,
+        lostAt: values.lostAt ?? null,
         leadScore: values.leadScore ?? null,
         whatsappSubscriptionStatus: values.whatsappSubscriptionStatus ?? null,
         smsSubscriptionStatus: values.smsSubscriptionStatus ?? null,
@@ -355,6 +382,8 @@ export class ContactsRepository {
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
         source: values.source ?? null,
+        isUnsubscribed: values.isUnsubscribed ?? false,
+        unsubscribedAt: values.unsubscribedAt ?? null,
         data: values.data,
         displayId: values.displayId,
         createdBy: values.createdBy,
@@ -439,7 +468,11 @@ export class ContactsRepository {
    * exactly one contact or none — no ambiguity, no "pick the first match".
    */
   /** The workspace's default option of a contact group (the stage a new contact starts in), if one is marked. */
-  async defaultOptionValue(tx: Tx, orgId: number, optionGroup: string): Promise<string | undefined> {
+  async defaultOptionValue(
+    tx: Tx,
+    orgId: number,
+    optionGroup: string,
+  ): Promise<string | undefined> {
     const rows = await tx
       .select({ value: statusOptions.value })
       .from(statusOptions)
@@ -454,6 +487,139 @@ export class ContactsRepository {
       )
       .limit(1);
     return rows[0]?.value;
+  }
+
+  /**
+   * What the admin flagged on a lifecycle stage. A value with no option row (a stage that was deleted, a free-text
+   * stage from an import) carries no flags.
+   */
+  async stageFlags(tx: Tx, orgId: number, value: string): Promise<StageFlags> {
+    const rows = await tx
+      .select({ isWon: statusOptions.isWon, isLost: statusOptions.isLost })
+      .from(statusOptions)
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          eq(statusOptions.optionGroup, 'lifecycle_stage'),
+          eq(statusOptions.value, value),
+        ),
+      )
+      .limit(1);
+    return rows[0] ?? NO_STAGE_FLAGS;
+  }
+
+  /**
+   * Every status option of the contact status groups with the stage it is scoped to, plus the label of every lifecycle
+   * stage (for error messages). One small read per write that touches the stage or the status.
+   */
+  async statusContext(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ scope: StatusScopeOption[]; stageLabels: Map<string, string> }> {
+    const stage = alias(statusOptions, 'scope_stage');
+    const rows = await tx
+      .select({
+        value: statusOptions.value,
+        label: statusOptions.label,
+        isDefault: statusOptions.isDefault,
+        isActive: statusOptions.isActive,
+        stageValue: stage.value,
+        stageLabel: stage.label,
+      })
+      .from(statusOptions)
+      .leftJoin(
+        stage,
+        and(eq(stage.orgId, statusOptions.orgId), eq(stage.id, statusOptions.stageOptionId)),
+      )
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          inArray(statusOptions.optionGroup, ['status', 'contact_status']),
+        ),
+      )
+      .orderBy(asc(statusOptions.position), asc(statusOptions.id));
+    const stages = await tx
+      .select({ value: statusOptions.value, label: statusOptions.label })
+      .from(statusOptions)
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          eq(statusOptions.optionGroup, 'lifecycle_stage'),
+        ),
+      );
+    return {
+      scope: rows,
+      stageLabels: new Map(stages.map((s) => [s.value, s.label])),
+    };
+  }
+
+  /**
+   * The contact properties the registry marks required that a write can be held to: active, visible, user-settable
+   * (not system fields, which have rules of their own, and not computed ones), with the conditions that make each
+   * apply. Checkboxes are left out: an unticked box is an answer, as on the contact form.
+   */
+  async requiredRules(tx: Tx, orgId: number): Promise<RequiredRule[]> {
+    const required = await tx
+      .select({ id: fields.id, key: fields.key, label: fields.label })
+      .from(fields)
+      .where(
+        and(
+          eq(fields.orgId, orgId),
+          eq(fields.moduleKey, 'contacts'),
+          eq(fields.isRequired, true),
+          eq(fields.isActive, true),
+          eq(fields.isSystem, false),
+          eq(fields.isHidden, false),
+          eq(fields.isReadOnly, false),
+          sql`${fields.fieldType} NOT IN ('formula', 'checkbox', 'boolean')`,
+        ),
+      )
+      .orderBy(asc(fields.position), asc(fields.id));
+    if (required.length === 0) return [];
+
+    const parent = alias(fields, 'dep_parent');
+    const deps = await tx
+      .select({
+        fieldId: fieldDependencies.fieldId,
+        parentKey: parent.key,
+        value: fieldDependencies.dependsOnValue,
+        optionValue: fieldOptions.value,
+      })
+      .from(fieldDependencies)
+      .innerJoin(
+        parent,
+        and(
+          eq(parent.orgId, fieldDependencies.orgId),
+          eq(parent.id, fieldDependencies.dependsOnFieldId),
+        ),
+      )
+      .leftJoin(
+        fieldOptions,
+        and(
+          eq(fieldOptions.orgId, fieldDependencies.orgId),
+          eq(fieldOptions.id, fieldDependencies.dependsOnOptionId),
+        ),
+      )
+      .where(
+        and(
+          eq(fieldDependencies.orgId, orgId),
+          inArray(
+            fieldDependencies.fieldId,
+            required.map((r) => r.id),
+          ),
+        ),
+      );
+
+    return required.map((r) => ({
+      key: r.key,
+      label: r.label,
+      conditions: deps
+        .filter((d) => d.fieldId === r.id)
+        .map((d) => ({ parentKey: d.parentKey, wanted: d.value ?? d.optionValue ?? null })),
+    }));
   }
 
   async findByIdentity(
@@ -481,6 +647,24 @@ export class ContactsRepository {
       INSERT INTO contact_identities (org_id, contact_id, kind, value, is_primary)
       VALUES (${orgId}, ${contactId}, ${kind}, ${value}, true)
       ON CONFLICT (org_id, kind, value) DO NOTHING
+    `);
+  }
+
+  /**
+   * Drops the identity key a contact no longer holds (its old phone or email after an edit or a clear). Without this
+   * the key keeps pointing at the contact, so a later create with that number or address is answered with this
+   * contact instead of making a new one, and an import would update the wrong person.
+   */
+  async removeIdentity(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    kind: 'email' | 'phone',
+    value: string,
+  ): Promise<void> {
+    await tx.execute(sql`
+      DELETE FROM contact_identities
+      WHERE org_id = ${orgId} AND contact_id = ${contactId} AND kind = ${kind} AND value = ${value}
     `);
   }
 

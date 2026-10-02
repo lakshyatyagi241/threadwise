@@ -1,0 +1,32 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "الإشعارات",
+      "labelUnread": "الإشعارات، {count, plural, zero {لا إشعارات غير مقروءة} one {إشعار واحد غير مقروء} two {إشعاران غير مقروءين} few {# إشعارات غير مقروءة} many {# إشعارًا غير مقروء} other {# إشعار غير مقروء}}",
+      "title": "الإشعارات",
+      "markAll": "تعليم الكل كمقروء",
+      "empty": "لا توجد إشعارات بعد.",
+      "loading": "جارٍ تحميل الإشعارات",
+      "failed": "تعذّر تحميل الإشعارات.",
+      "retry": "حاول مرة أخرى",
+      "unread": "غير مقروء"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "تم إسناد مهمة إليك",
+        "body": "أسند إليك {actor} المهمة: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "حان موعد مهمة",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "اكتملت مهمة",
+        "body": "أكمل {actor} المهمة: {task}",
+        "bodyNoActor": "{task}"
+      }
+    }
+  }
+}

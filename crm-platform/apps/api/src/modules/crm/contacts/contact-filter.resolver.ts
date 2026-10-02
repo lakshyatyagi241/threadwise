@@ -1,6 +1,8 @@
 import { and, eq, inArray } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { ContactFilter } from '@crm/contracts';
+import type { InvalidCondition } from '@crm/contracts';
+import { loadSegmentFilter } from '../segments/segment-filter';
 import type { ResolvedContactFilter } from './contact-conditions';
 
 const { contactGroups, tags, users } = schema;
@@ -18,7 +20,14 @@ export interface FilterInput extends Omit<ContactFilter, 'tagMode' | 'includeArc
   tagId?: string;
 }
 
-export type FilterResolution = { empty: true } | { empty: false; filter: ResolvedContactFilter };
+export type FilterResolution =
+  | { empty: true }
+  | {
+      empty: false;
+      filter: ResolvedContactFilter;
+      /** Set when the filter named a segment: its conditions that point at deleted things (they match nothing). */
+      segment?: { id: string; invalidConditions: InvalidCondition[] };
+    };
 
 export async function resolveContactFilter(
   tx: Tx,
@@ -36,6 +45,12 @@ export async function resolveContactFilter(
     unsubscribed: input.unsubscribed,
     source: input.source,
     status: input.status,
+    createdFrom: input.createdFrom,
+    createdTo: input.createdTo,
+    updatedFrom: input.updatedFrom,
+    updatedTo: input.updatedTo,
+    lastActivityFrom: input.lastActivityFrom,
+    lastActivityTo: input.lastActivityTo,
     uuids: extra.uuids,
     excludeUuids: extra.excludeUuids,
   };
@@ -72,5 +87,14 @@ export async function resolveContactFilter(
     resolved.tagIds = rows.map((r) => r.id);
   }
 
-  return { empty: false, filter: resolved };
+  let segment: { id: string; invalidConditions: InvalidCondition[] } | undefined;
+  if (input.segmentId) {
+    // A segment the caller cannot see, or that does not exist, is "no contacts", like any unknown id above.
+    const loaded = await loadSegmentFilter(tx, orgId, input.segmentId);
+    if (!loaded) return { empty: true };
+    resolved.segment = loaded.where;
+    segment = { id: loaded.uuid, invalidConditions: loaded.invalid };
+  }
+
+  return { empty: false, filter: resolved, ...(segment ? { segment } : {}) };
 }

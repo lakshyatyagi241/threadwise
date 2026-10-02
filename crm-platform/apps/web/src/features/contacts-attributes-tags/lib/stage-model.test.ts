@@ -25,6 +25,9 @@ const opt = (over: Partial<StatusOptionResponse>): StatusOptionResponse => ({
   position: 0,
   isDefault: false,
   isActive: true,
+  isWon: false,
+  isLost: false,
+  stageOptionId: null,
   rowVersion: 1,
   ...over,
 });
@@ -115,7 +118,7 @@ describe('seeds and delete rules', () => {
     expect(seeds.every((s) => isHexColor(s.color))).toBe(true);
   });
 
-  it('offers the four platform statuses with the caller\'s labels', () => {
+  it("offers the four platform statuses with the caller's labels", () => {
     const seeds = statusSeeds((v) => v.toUpperCase());
     expect(seeds.map((s) => s.label)).toEqual(['ACTIVE', 'PROSPECT', 'CUSTOMER', 'VIP']);
     expect(seeds.every((s) => !s.isDefault)).toBe(true);

@@ -26,6 +26,13 @@ export const TasksIcon = (p: IconProps) => (
     <path d="M8.5 9.5l2 2 3.5-4M8.5 16h7" />
   </Svg>
 );
+export const OptionsIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
+    <circle cx="15" cy="7" r="2" />
+    <circle cx="9" cy="17" r="2" />
+  </Svg>
+);
 export const PlusIcon = (p: IconProps) => (
   <Svg {...p}>
     <path d="M12 5v14M5 12h14" />
