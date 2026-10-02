@@ -52,7 +52,11 @@ describe('ordering and grouping', () => {
     ({ title, dueAt, status }) as TaskResponse;
 
   it('sorts soonest first with undated last', () => {
-    const list = [task('c', null), task('b', '2026-10-05T00:00:00Z'), task('a', '2026-10-03T00:00:00Z')];
+    const list = [
+      task('c', null),
+      task('b', '2026-10-05T00:00:00Z'),
+      task('a', '2026-10-03T00:00:00Z'),
+    ];
     expect(list.sort(compareByDue).map((t) => t.title)).toEqual(['a', 'b', 'c']);
   });
 

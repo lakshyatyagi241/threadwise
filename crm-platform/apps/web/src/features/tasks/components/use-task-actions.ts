@@ -21,10 +21,7 @@ export function useTaskActions() {
   const errorText = useErrorText();
 
   const failed = (e: unknown, key: 'failed' | 'saveFailed' | 'deleteFailed' | 'createFailed') => {
-    toast(
-      errorKind(e) === 'conflict' ? t('conflict') : `${t(key)} ${errorText(e)}`,
-      'danger',
-    );
+    toast(errorKind(e) === 'conflict' ? t('conflict') : `${t(key)} ${errorText(e)}`, 'danger');
     void invalidateTasks(qc);
   };
 
@@ -36,7 +33,9 @@ export function useTaskActions() {
     },
 
     /** Completes an open task or reopens a done one. Resolves to the task as the server has it, or null on failure. */
-    async toggle(task: Pick<TaskResponse, 'id' | 'status' | 'title'>): Promise<TaskResponse | null> {
+    async toggle(
+      task: Pick<TaskResponse, 'id' | 'status' | 'title'>,
+    ): Promise<TaskResponse | null> {
       const reopening = task.status === 'done';
       try {
         const next = reopening ? await tasksApi.reopen(task.id) : await tasksApi.complete(task.id);

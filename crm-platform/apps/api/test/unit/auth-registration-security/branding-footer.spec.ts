@@ -205,16 +205,30 @@ describe('the footer at the WhatsApp provider boundary', () => {
 
   it('never touches an approved template', async () => {
     const { provider, calls } = build();
-    await provider.sendTemplate(creds, {
-      to: '+1',
-      templateName: 'order_update',
-      language: 'en',
-      variables: { '1': 'A' },
-      clientReference: 'r',
-    });
+    // Templates leave through the provider's own request; capture what it posts.
+    const posted: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url: string, init: { body: string }) => {
+        posted.push(init.body);
+        return new Response(JSON.stringify({ messages: [{ id: 'wamid.1' }] }), { status: 200 });
+      }),
+    );
+    try {
+      await provider.sendTemplate(creds, {
+        to: '+1',
+        templateName: 'order_update',
+        language: 'en',
+        variables: { '1': 'A' },
+        clientReference: 'r',
+      });
+    } finally {
+      vi.unstubAllGlobals();
+    }
     expect(calls).toEqual(['screen:A']);
-    expect(provider.sent[0]).toMatchObject({ type: 'template' });
-    expect(JSON.stringify(provider.sent[0])).not.toContain('FOOT');
+    expect(posted).toHaveLength(1);
+    expect(JSON.parse(posted[0] as string)).toMatchObject({ type: 'template' });
+    expect(posted[0]).not.toContain('FOOT');
   });
 
   it('still refuses when the guard refuses: no footer work, nothing sent', async () => {

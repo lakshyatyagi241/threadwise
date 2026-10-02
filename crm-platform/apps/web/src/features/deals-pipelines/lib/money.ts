@@ -61,8 +61,17 @@ export function weighted(minor: number, probability: number): number {
 export const sumMinor = (values: readonly number[]): number => values.reduce((a, b) => a + b, 0);
 
 /** Codes offered in the currency pickers; a pipeline's own currency is added when it is not among them. */
-export const COMMON_CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'INR', 'EGP', 'CAD', 'AUD', 'JPY'] as const;
+export const COMMON_CURRENCIES = [
+  'USD',
+  'EUR',
+  'GBP',
+  'AED',
+  'SAR',
+  'INR',
+  'EGP',
+  'CAD',
+  'AUD',
+  'JPY',
+] as const;
 
-export const currencyChoices = (own: string): string[] => [
-  ...new Set([own, ...COMMON_CURRENCIES]),
-];
+export const currencyChoices = (own: string): string[] => [...new Set([own, ...COMMON_CURRENCIES])];

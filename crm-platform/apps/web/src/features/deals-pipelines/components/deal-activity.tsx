@@ -61,7 +61,13 @@ export function DealActivity({ deal, canWrite }: { deal: Deal; canWrite: boolean
   }
 
   const icon = (a: Activity) =>
-    a.type === 'stage_change' ? <MoveIcon /> : a.type === 'task' ? <CalendarIcon /> : <MessageIcon />;
+    a.type === 'stage_change' ? (
+      <MoveIcon />
+    ) : a.type === 'task' ? (
+      <CalendarIcon />
+    ) : (
+      <MessageIcon />
+    );
 
   return (
     <section aria-labelledby="deal-activity-h" className="space-y-4">
@@ -150,7 +156,10 @@ export function DealActivity({ deal, canWrite }: { deal: Deal; canWrite: boolean
                 >
                   {a.type === 'stage_change'
                     ? a.stageChange
-                      ? t('stageChangeLabel', { from: a.stageChange.from ?? '—', to: a.stageChange.to })
+                      ? t('stageChangeLabel', {
+                          from: a.stageChange.from ?? '—',
+                          to: a.stageChange.to,
+                        })
                       : t('stageChanged')
                     : a.body}
                 </p>

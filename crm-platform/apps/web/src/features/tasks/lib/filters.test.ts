@@ -22,7 +22,9 @@ describe('parseFilters', () => {
   it('reads every filter', () => {
     expect(
       parseFilters(
-        params(`tab=all&status=done&q=call&priority=high&assignee=${ID}&contact=${ID2}&view=board&task=${ID}`),
+        params(
+          `tab=all&status=done&q=call&priority=high&assignee=${ID}&contact=${ID2}&view=board&task=${ID}`,
+        ),
       ),
     ).toEqual({
       tab: 'all',
@@ -37,7 +39,9 @@ describe('parseFilters', () => {
     });
   });
   it('falls back instead of failing on unknown or malformed values', () => {
-    const p = parseFilters(params('tab=nope&status=x&priority=urgent&assignee=bob&contact=1&deal=2&task=zzz&view=grid'));
+    const p = parseFilters(
+      params('tab=nope&status=x&priority=urgent&assignee=bob&contact=1&deal=2&task=zzz&view=grid'),
+    );
     expect(p).toEqual(DEFAULT_FILTERS);
   });
   it('keeps "none" for the unassigned filter and caps the search at 100 characters', () => {
@@ -51,7 +55,16 @@ describe('filtersToSearch', () => {
     expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
   });
   it('round-trips a full state', () => {
-    const state = f({ tab: 'all', status: 'all', q: 'x', priority: 'low', assignee: 'none', deal: ID, view: 'board', task: ID2 });
+    const state = f({
+      tab: 'all',
+      status: 'all',
+      q: 'x',
+      priority: 'low',
+      assignee: 'none',
+      deal: ID,
+      view: 'board',
+      task: ID2,
+    });
     expect(parseFilters(params(filtersToSearch(state).slice(1)))).toEqual(state);
   });
   it('writes the status only on the All tab', () => {
@@ -91,7 +104,10 @@ describe('listQuery', () => {
       status: 'all',
       assigneeId: ID,
     });
-    expect(listQuery(f({ tab: 'all', assignee: 'none' }))).toMatchObject({ unassigned: true, assigneeId: undefined });
+    expect(listQuery(f({ tab: 'all', assignee: 'none' }))).toMatchObject({
+      unassigned: true,
+      assigneeId: undefined,
+    });
   });
   it('the bucket tabs are open tasks with the due filter', () => {
     for (const tab of ['overdue', 'today', 'upcoming'] as const) {
@@ -102,7 +118,9 @@ describe('listQuery', () => {
     expect(listQuery(f({ tab: 'completed' }))).toMatchObject({ status: 'done', sort: 'completed' });
   });
   it('passes the search, priority and linked records through', () => {
-    expect(listQuery(f({ tab: 'all', q: ' acme ', priority: 'high', contact: ID, deal: ID2 }))).toMatchObject({
+    expect(
+      listQuery(f({ tab: 'all', q: ' acme ', priority: 'high', contact: ID, deal: ID2 })),
+    ).toMatchObject({
       q: 'acme',
       priority: 'high',
       contactId: ID,
@@ -118,7 +136,14 @@ describe('countsQuery and tabCount', () => {
     expect(q).not.toHaveProperty('due');
     expect(q).not.toHaveProperty('status');
   });
-  const counts = { overdue: 2, today: 3, upcoming: 4, open: 12, done: 7, mine: { open: 5, overdue: 1 } };
+  const counts = {
+    overdue: 2,
+    today: 3,
+    upcoming: 4,
+    open: 12,
+    done: 7,
+    mine: { open: 5, overdue: 1 },
+  };
   it('picks the right number for each tab', () => {
     expect(tabCount('mine', counts)).toBe(5);
     expect(tabCount('all', counts)).toBe(12);

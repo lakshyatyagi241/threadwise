@@ -29,10 +29,17 @@ export function LedgerSummary({
   const t = useTranslations('invoicing.payments.kpi');
   const rows = summary ? summaryByCurrency(summary, currency || undefined) : [];
   return (
-    <section aria-label={t('label')} className="space-y-3 rounded-xl border border-border bg-background p-4">
+    <section
+      aria-label={t('label')}
+      className="space-y-3 rounded-xl border border-border bg-background p-4"
+    >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-sm font-semibold">{t('heading')}</h2>
-        <div role="group" aria-label={t('window')} className="inline-flex rounded-md border border-border p-0.5">
+        <div
+          role="group"
+          aria-label={t('window')}
+          className="inline-flex rounded-md border border-border p-0.5"
+        >
           {SUMMARY_DAYS.map((d) => (
             <button
               key={d}
@@ -41,7 +48,9 @@ export function LedgerSummary({
               onClick={() => onDays(d)}
               className={cn(
                 'h-8 min-w-14 rounded px-3 text-xs font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
-                days === d ? 'bg-brand text-brand-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                days === d
+                  ? 'bg-brand text-brand-foreground'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
               )}
             >
               {t('days', { count: d })}
@@ -53,14 +62,20 @@ export function LedgerSummary({
       {error ? (
         <p className="text-sm text-muted-foreground">{t('failed')}</p>
       ) : loading || !summary ? (
-        <div role="status" aria-label={t('loading')} className="h-24 animate-pulse rounded-lg bg-muted/50" />
+        <div
+          role="status"
+          aria-label={t('loading')}
+          className="h-24 animate-pulse rounded-lg bg-muted/50"
+        />
       ) : rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">{t('none')}</p>
       ) : (
         <div className="space-y-3">
           {rows.map((r) => (
             <div key={r.currency} className="space-y-1.5">
-              {rows.length > 1 && <div className="text-xs font-semibold text-muted-foreground">{r.currency}</div>}
+              {rows.length > 1 && (
+                <div className="text-xs font-semibold text-muted-foreground">{r.currency}</div>
+              )}
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                 <Kpi label={t('collected', { days })} tone="success">
                   <Money minor={r.collected} currency={r.currency} />
@@ -68,10 +83,17 @@ export function LedgerSummary({
                 <Kpi label={t('refunded', { days })} tone={r.refunded > 0 ? 'danger' : undefined}>
                   <Money minor={r.refunded} currency={r.currency} />
                 </Kpi>
-                <Kpi label={t('outstanding')} hint={t('invoices', { count: r.outstandingInvoices })}>
+                <Kpi
+                  label={t('outstanding')}
+                  hint={t('invoices', { count: r.outstandingInvoices })}
+                >
                   <Money minor={r.outstanding} currency={r.currency} />
                 </Kpi>
-                <Kpi label={t('overdue')} hint={t('invoices', { count: r.overdueInvoices })} tone={r.overdue > 0 ? 'danger' : undefined}>
+                <Kpi
+                  label={t('overdue')}
+                  hint={t('invoices', { count: r.overdueInvoices })}
+                  tone={r.overdue > 0 ? 'danger' : undefined}
+                >
                   <Money minor={r.overdue} currency={r.currency} />
                 </Kpi>
               </div>
@@ -97,7 +119,15 @@ function Kpi({
   return (
     <div className="min-w-0 rounded-lg border border-border p-3">
       <div className="truncate text-xs font-medium text-muted-foreground">{label}</div>
-      <div className={cn('mt-1 truncate text-xl font-semibold', tone === 'success' && 'text-success', tone === 'danger' && 'text-danger')}>{children}</div>
+      <div
+        className={cn(
+          'mt-1 truncate text-xl font-semibold',
+          tone === 'success' && 'text-success',
+          tone === 'danger' && 'text-danger',
+        )}
+      >
+        {children}
+      </div>
       {hint && <div className="mt-0.5 text-xs text-muted-foreground">{hint}</div>}
     </div>
   );

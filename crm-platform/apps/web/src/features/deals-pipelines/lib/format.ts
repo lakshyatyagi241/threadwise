@@ -22,7 +22,10 @@ export function avatarColor(name: string | null | undefined): string {
 export type DueState = 'overdue' | 'today' | 'upcoming';
 
 /** Where a due date sits against `now`, by calendar day (a task due today is not overdue until tomorrow). */
-export function dueState(dueAt: string | null | undefined, now: Date = new Date()): DueState | null {
+export function dueState(
+  dueAt: string | null | undefined,
+  now: Date = new Date(),
+): DueState | null {
   if (!dueAt) return null;
   // A date without a time ("2026-10-05") is a calendar day in the viewer's zone, not UTC midnight.
   const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dueAt);
@@ -69,7 +72,11 @@ export function formatDay(value: string | null | undefined, locale: string): str
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
   const d = m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : new Date(value);
   if (Number.isNaN(d.getTime())) return '';
-  return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }).format(d);
+  return new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(d);
 }
 
 export function formatDateTime(value: string | null | undefined, locale: string): string {
@@ -85,5 +92,8 @@ export function monthLabel(month: string, locale: string, ref: Date = new Date()
   if (!m) return month;
   const d = new Date(Number(m[1]), Number(m[2]) - 1, 1);
   const withYear = d.getFullYear() !== ref.getFullYear();
-  return new Intl.DateTimeFormat(locale, withYear ? { month: 'short', year: '2-digit' } : { month: 'short' }).format(d);
+  return new Intl.DateTimeFormat(
+    locale,
+    withYear ? { month: 'short', year: '2-digit' } : { month: 'short' },
+  ).format(d);
 }

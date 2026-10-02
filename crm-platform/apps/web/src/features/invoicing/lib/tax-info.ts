@@ -46,7 +46,14 @@ export interface TaxIdCheck {
   normalized: string | null;
 }
 
-const NONE: TaxIdCheck = { state: 'empty', label: null, level: null, reason: null, example: null, normalized: null };
+const NONE: TaxIdCheck = {
+  state: 'empty',
+  label: null,
+  level: null,
+  reason: null,
+  example: null,
+  normalized: null,
+};
 
 /**
  * Checks a buyer's tax id against the format of the buyer's country (the seller's when none is given). Saving is never blocked by
@@ -76,7 +83,14 @@ export function checkBuyerTaxId(
 // --- place of supply ----------------------------------------------------------------------------------------------------------
 
 /** ISO 3166-2 suffixes that differ from the first abbreviation the engine lists for an Indian state. */
-const INDIA_ISO: Record<string, string> = { '05': 'UT', '21': 'OD', '22': 'CG', '26': 'DH', '34': 'PY', '36': 'TS' };
+const INDIA_ISO: Record<string, string> = {
+  '05': 'UT',
+  '21': 'OD',
+  '22': 'CG',
+  '26': 'DH',
+  '34': 'PY',
+  '36': 'TS',
+};
 
 export interface RegionOption {
   /** The ISO 3166-2 suffix ("MH", "CA"). */
@@ -109,7 +123,10 @@ export function splitPlace(place: string | null | undefined): { country: string;
 }
 
 /** The `placeOfSupply` to send: "IN-MH" from a country and a region, or null when there is no region to name. */
-export function placeOfSupplyOf(country: string | null | undefined, region: string | null | undefined): string | null {
+export function placeOfSupplyOf(
+  country: string | null | undefined,
+  region: string | null | undefined,
+): string | null {
   const c = (country ?? '').trim().toUpperCase();
   const r = (region ?? '').trim().toUpperCase();
   return c && r ? `${c}-${r}` : null;
@@ -146,7 +163,9 @@ export interface AutoTaxPreview {
   documentTypeHint: string | null;
 }
 
-export type AutoTaxOutcome = { ok: true; preview: AutoTaxPreview } | { ok: false; reason: 'noCountry' | 'noProfile' | 'failed' };
+export type AutoTaxOutcome =
+  | { ok: true; preview: AutoTaxPreview }
+  | { ok: false; reason: 'noCountry' | 'noProfile' | 'failed' };
 
 /**
  * What the tax engine would decide for these lines, the way the API decides it in auto mode (same inputs, same filtering of
@@ -198,7 +217,8 @@ export function previewAutoTax(ctx: AutoTaxContext, lines: readonly AutoTaxLine[
       push(out.documentNotes, res.documentNotes);
       if (res.reverseCharge) out.reverseCharge = true;
       if (!res.taxFree) out.taxFree = false;
-      if (res.documentTypeHint && res.documentTypeHint !== 'tax_invoice') out.documentTypeHint = res.documentTypeHint;
+      if (res.documentTypeHint && res.documentTypeHint !== 'tax_invoice')
+        out.documentTypeHint = res.documentTypeHint;
       const taxes = res.taxes.filter((t) => t.category !== 'withholding' && Number(t.rate) >= 0);
       out.lines.push(
         taxes.length === 0
@@ -223,20 +243,32 @@ export function previewAutoTax(ctx: AutoTaxContext, lines: readonly AutoTaxLine[
 
 // --- a tax rate as a line's tax -----------------------------------------------------------------------------------------------
 
-const trimPct = (p: string): string => (p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p);
+const trimPct = (p: string): string =>
+  p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p;
 
 /** A saved tax rate as the tax a line carries: its parts when it has components (CGST + SGST), else one item named after it. */
-export function lineTaxOfRate(r: Pick<TaxRateResponse, 'name' | 'rate' | 'inclusive' | 'components'>): LineTax {
+export function lineTaxOfRate(
+  r: Pick<TaxRateResponse, 'name' | 'rate' | 'inclusive' | 'components'>,
+): LineTax {
   if (r.components && r.components.length > 0) {
     return {
       name: r.name,
       inclusive: r.inclusive,
-      items: r.components.map((c) => ({ code: c.type, name: `${c.type} ${trimPct(c.rate)}%`, rate: c.rate })),
+      items: r.components.map((c) => ({
+        code: c.type,
+        name: `${c.type} ${trimPct(c.rate)}%`,
+        rate: c.rate,
+      })),
     };
   }
-  return { name: r.name, inclusive: r.inclusive, items: [{ code: r.name, name: r.name, rate: r.rate }] };
+  return {
+    name: r.name,
+    inclusive: r.inclusive,
+    items: [{ code: r.name, name: r.name, rate: r.rate }],
+  };
 }
 
 /** The percent an explicit slab sends to the auto-tax engine: only a rate made of one tax counts (the server does the same). */
-export const slabPercentOf = (r: Pick<TaxRateResponse, 'rate' | 'components'> | null | undefined): string | null =>
-  r && !(r.components && r.components.length > 1) ? r.rate : null;
+export const slabPercentOf = (
+  r: Pick<TaxRateResponse, 'rate' | 'components'> | null | undefined,
+): string | null => (r && !(r.components && r.components.length > 1) ? r.rate : null);

@@ -34,55 +34,55 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 
 ## Feature index
 
-| Id | Feature | Status | Priority | Effort | Depends on |
-| --- | --- | --- | --- | --- | --- |
-| WD-DEAL-001 | Plan gate and (absent) role gate for the deals area | implemented | P0 | S | plan-limits domain |
-| WD-DEAL-002 | Default pipeline and stage ladder seeding (+ currency heal) | implemented | P0 | S | WD-DEAL-001 |
-| WD-DEAL-003 | Kanban board page: pipeline selection, columns, cards | implemented | P0 | L | WD-DEAL-002 |
-| WD-DEAL-004 | Board filters (search, owner, source) | implemented | P1 | S | WD-DEAL-003 |
-| WD-DEAL-005 | Board KPI strip | implemented | P1 | S | WD-DEAL-003, WD-DEAL-006 |
-| WD-DEAL-006 | Money: minor units, display-currency conversion, weighted value | implemented | P0 | M | WD-DEAL-003 |
-| WD-DEAL-007 | Drag-and-drop stage move (PATCH /deals/{deal}/stage) | implemented | P0 | M | WD-DEAL-003 |
-| WD-DEAL-008 | Stage-change engine (status/won_at/lost_at sync, timeline row, flow trigger, notifications) | implemented | P0 | M | WD-DEAL-007 |
-| WD-DEAL-009 | Create deal (modal, POST /deals) and deal sources | implemented | P0 | M | WD-DEAL-003 |
-| WD-DEAL-010 | Deal detail slide-over (GET /deals/{deal}) | implemented | P0 | M | WD-DEAL-003 |
-| WD-DEAL-011 | Edit deal fields inline (PATCH /deals/{deal}) | implemented | P0 | M | WD-DEAL-010 |
-| WD-DEAL-012 | Mark Won / Mark Lost with optional lost reason | implemented | P0 | S | WD-DEAL-008 |
-| WD-DEAL-013 | Delete deal | implemented | P1 | S | WD-DEAL-010 |
-| WD-DEAL-014 | Link a contact to a deal (picker + search endpoint) | implemented | P1 | S | WD-CON-* |
-| WD-DEAL-015 | Activity timeline: notes, calls, messages, tasks | implemented | P1 | M | WD-DEAL-010 |
-| WD-DEAL-016 | Task done / reopen toggle | implemented | P1 | S | WD-DEAL-015 |
-| WD-DEAL-017 | Overdue deal-task reminder sweep | implemented | P1 | M | WD-DEAL-015, notifications |
-| WD-DEAL-018 | Owner notifications (assigned, won, lost, task due) | implemented | P1 | M | WD-DEAL-008 |
-| WD-DEAL-019 | Reports page metrics and leaderboard | implemented | P1 | M | WD-DEAL-008 |
-| WD-DEAL-020 | Reports charts (value by stage, won vs lost 6 months) | implemented | P1 | S | WD-DEAL-019 |
-| WD-DEAL-021 | Workspace deal settings: auto-deal from orders | implemented | P2 | S | WD-DEAL-022 |
-| WD-DEAL-022 | Auto-create a deal from a new order | implemented | P1 | M | commerce/orders domain |
-| WD-DEAL-023 | Stage list JSON (flow builder + inbox picker) | implemented | P1 | S | WD-DEAL-002 |
-| WD-DEAL-024 | Deep link /deals?deal=ID opens the drawer | implemented | P2 | S | WD-DEAL-010 |
-| WD-DEAL-025 | Inbox: create deal from a conversation | implemented | P1 | M | inbox domain |
-| WD-DEAL-026 | Inbox: deals panel for a conversation/contact | implemented | P1 | S | inbox domain |
-| WD-DEAL-027 | Flow trigger: deal_stage_changed | implemented | P1 | M | flows domain |
-| WD-DEAL-028 | Flow node: create / move deal (POST /api/flow-node/deal-action) | implemented | P1 | M | flows domain |
-| WD-DEAL-029 | Messenger lead node creates a deal | implemented | P2 | S | channels (facebook) |
-| WD-DEAL-030 | REST API: list deals | implemented | P1 | S | WD-DEAL-035 |
-| WD-DEAL-031 | REST API: show deal | implemented | P1 | S | WD-DEAL-035 |
-| WD-DEAL-032 | REST API: create deal | implemented | P1 | S | WD-DEAL-035 |
-| WD-DEAL-033 | REST API: update / advance deal | implemented | P1 | S | WD-DEAL-035 |
-| WD-DEAL-034 | REST API: delete deal | implemented | P1 | S | WD-DEAL-035 |
-| WD-DEAL-035 | REST API cross-cutting: auth, throttle, envelope, errors, plan gate | implemented | P0 | M | api-keys domain |
-| WD-DEAL-036 | AI CRM copilot deal tools (list/create/move + sales report) | implemented | P2 | M | ai domain |
-| WD-DEAL-037 | Contact 360 consumption of deals and deal activities | implemented | P2 | S | WD-CON-* |
-| WD-DEAL-038 | Company link (deals.company_id) and company 360 rollups | partial | P2 | M | companies |
-| WD-DEAL-039 | Other CRM surfaces that read or reference deals (dashboard, calendar, briefs, tasks, projects, payments, proposals) | implemented | P2 | M | CRM overlap |
-| WD-DEAL-040 | Main-dashboard deal KPI card | implemented | P2 | S | dashboard domain |
-| WD-DEAL-041 | Pipeline and stage editor (rename, reorder, add, delete, flag won/lost) | docs-only | P1 | L | WD-DEAL-002 |
-| WD-DEAL-042 | Multiple pipelines (selector exists, creation does not) | partial | P2 | M | WD-DEAL-041 |
-| WD-DEAL-043 | Lost reasons | partial | P2 | S | WD-DEAL-012 |
-| WD-DEAL-044 | pipelines_limit plan quota | dead-code | P2 | S | WD-DEAL-042 |
-| WD-DEAL-045 | Demo seeding command (deals:demo) | implemented | P2 | S | WD-DEAL-002 |
-| WD-DEAL-046 | Workspace data wipe includes deals and activities | implemented | P2 | S | admin/retention |
-| WD-DEAL-047 | Empty, loading and error states + i18n inventory | implemented | P1 | S | WD-DEAL-003 |
+| Id          | Feature                                                                                                             | Status      | Priority | Effort | Depends on                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ------ | -------------------------- |
+| WD-DEAL-001 | Plan gate and (absent) role gate for the deals area                                                                 | implemented | P0       | S      | plan-limits domain         |
+| WD-DEAL-002 | Default pipeline and stage ladder seeding (+ currency heal)                                                         | implemented | P0       | S      | WD-DEAL-001                |
+| WD-DEAL-003 | Kanban board page: pipeline selection, columns, cards                                                               | implemented | P0       | L      | WD-DEAL-002                |
+| WD-DEAL-004 | Board filters (search, owner, source)                                                                               | implemented | P1       | S      | WD-DEAL-003                |
+| WD-DEAL-005 | Board KPI strip                                                                                                     | implemented | P1       | S      | WD-DEAL-003, WD-DEAL-006   |
+| WD-DEAL-006 | Money: minor units, display-currency conversion, weighted value                                                     | implemented | P0       | M      | WD-DEAL-003                |
+| WD-DEAL-007 | Drag-and-drop stage move (PATCH /deals/{deal}/stage)                                                                | implemented | P0       | M      | WD-DEAL-003                |
+| WD-DEAL-008 | Stage-change engine (status/won_at/lost_at sync, timeline row, flow trigger, notifications)                         | implemented | P0       | M      | WD-DEAL-007                |
+| WD-DEAL-009 | Create deal (modal, POST /deals) and deal sources                                                                   | implemented | P0       | M      | WD-DEAL-003                |
+| WD-DEAL-010 | Deal detail slide-over (GET /deals/{deal})                                                                          | implemented | P0       | M      | WD-DEAL-003                |
+| WD-DEAL-011 | Edit deal fields inline (PATCH /deals/{deal})                                                                       | implemented | P0       | M      | WD-DEAL-010                |
+| WD-DEAL-012 | Mark Won / Mark Lost with optional lost reason                                                                      | implemented | P0       | S      | WD-DEAL-008                |
+| WD-DEAL-013 | Delete deal                                                                                                         | implemented | P1       | S      | WD-DEAL-010                |
+| WD-DEAL-014 | Link a contact to a deal (picker + search endpoint)                                                                 | implemented | P1       | S      | WD-CON-*                   |
+| WD-DEAL-015 | Activity timeline: notes, calls, messages, tasks                                                                    | implemented | P1       | M      | WD-DEAL-010                |
+| WD-DEAL-016 | Task done / reopen toggle                                                                                           | implemented | P1       | S      | WD-DEAL-015                |
+| WD-DEAL-017 | Overdue deal-task reminder sweep                                                                                    | implemented | P1       | M      | WD-DEAL-015, notifications |
+| WD-DEAL-018 | Owner notifications (assigned, won, lost, task due)                                                                 | implemented | P1       | M      | WD-DEAL-008                |
+| WD-DEAL-019 | Reports page metrics and leaderboard                                                                                | implemented | P1       | M      | WD-DEAL-008                |
+| WD-DEAL-020 | Reports charts (value by stage, won vs lost 6 months)                                                               | implemented | P1       | S      | WD-DEAL-019                |
+| WD-DEAL-021 | Workspace deal settings: auto-deal from orders                                                                      | implemented | P2       | S      | WD-DEAL-022                |
+| WD-DEAL-022 | Auto-create a deal from a new order                                                                                 | implemented | P1       | M      | commerce/orders domain     |
+| WD-DEAL-023 | Stage list JSON (flow builder + inbox picker)                                                                       | implemented | P1       | S      | WD-DEAL-002                |
+| WD-DEAL-024 | Deep link /deals?deal=ID opens the drawer                                                                           | implemented | P2       | S      | WD-DEAL-010                |
+| WD-DEAL-025 | Inbox: create deal from a conversation                                                                              | implemented | P1       | M      | inbox domain               |
+| WD-DEAL-026 | Inbox: deals panel for a conversation/contact                                                                       | implemented | P1       | S      | inbox domain               |
+| WD-DEAL-027 | Flow trigger: deal_stage_changed                                                                                    | implemented | P1       | M      | flows domain               |
+| WD-DEAL-028 | Flow node: create / move deal (POST /api/flow-node/deal-action)                                                     | implemented | P1       | M      | flows domain               |
+| WD-DEAL-029 | Messenger lead node creates a deal                                                                                  | implemented | P2       | S      | channels (facebook)        |
+| WD-DEAL-030 | REST API: list deals                                                                                                | implemented | P1       | S      | WD-DEAL-035                |
+| WD-DEAL-031 | REST API: show deal                                                                                                 | implemented | P1       | S      | WD-DEAL-035                |
+| WD-DEAL-032 | REST API: create deal                                                                                               | implemented | P1       | S      | WD-DEAL-035                |
+| WD-DEAL-033 | REST API: update / advance deal                                                                                     | implemented | P1       | S      | WD-DEAL-035                |
+| WD-DEAL-034 | REST API: delete deal                                                                                               | implemented | P1       | S      | WD-DEAL-035                |
+| WD-DEAL-035 | REST API cross-cutting: auth, throttle, envelope, errors, plan gate                                                 | implemented | P0       | M      | api-keys domain            |
+| WD-DEAL-036 | AI CRM copilot deal tools (list/create/move + sales report)                                                         | implemented | P2       | M      | ai domain                  |
+| WD-DEAL-037 | Contact 360 consumption of deals and deal activities                                                                | implemented | P2       | S      | WD-CON-*                   |
+| WD-DEAL-038 | Company link (deals.company_id) and company 360 rollups                                                             | partial     | P2       | M      | companies                  |
+| WD-DEAL-039 | Other CRM surfaces that read or reference deals (dashboard, calendar, briefs, tasks, projects, payments, proposals) | implemented | P2       | M      | CRM overlap                |
+| WD-DEAL-040 | Main-dashboard deal KPI card                                                                                        | implemented | P2       | S      | dashboard domain           |
+| WD-DEAL-041 | Pipeline and stage editor (rename, reorder, add, delete, flag won/lost)                                             | docs-only   | P1       | L      | WD-DEAL-002                |
+| WD-DEAL-042 | Multiple pipelines (selector exists, creation does not)                                                             | partial     | P2       | M      | WD-DEAL-041                |
+| WD-DEAL-043 | Lost reasons                                                                                                        | partial     | P2       | S      | WD-DEAL-012                |
+| WD-DEAL-044 | pipelines_limit plan quota                                                                                          | dead-code   | P2       | S      | WD-DEAL-042                |
+| WD-DEAL-045 | Demo seeding command (deals:demo)                                                                                   | implemented | P2       | S      | WD-DEAL-002                |
+| WD-DEAL-046 | Workspace data wipe includes deals and activities                                                                   | implemented | P2       | S      | admin/retention            |
+| WD-DEAL-047 | Empty, loading and error states + i18n inventory                                                                    | implemented | P1       | S      | WD-DEAL-003                |
 
 ## Features
 
@@ -128,7 +128,7 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
   1. Seeded pipeline: name `Sales Pipeline`, `is_default=1`, `sort_order=0`, currency = the workspace's `currency` (or the platform `default_currency` system setting, fallback `USD`) unless a currency argument is passed (order flow passes the order currency).
   2. Seeded stage ladder (sort_order 0..5): New Lead p=10 `#64748B`; Qualified p=25 `#0EA5E9`; Proposal p=50 `#6366F1`; Negotiation p=75 `#F59E0B`; Won p=100 `#16A34A` is_won; Lost p=0 `#DC2626` is_lost. Each stage row also carries `workspace_id`.
   3. If a pipeline exists (ordered by `is_default` desc then id) it is returned; a pipeline with zero stages is self-healed by seeding the six stages.
-  4. Currency heal (runs every call when a pipeline exists): if the target currency is not `INR`, every deal and pipeline of the workspace whose stored `currency='INR'` is silently relabeled to the target currency (no amount conversion). Rationale in code comment: an old hardcoded INR default. QUIRK: the target currency is the *caller-supplied* currency (order currency in the auto-deal path) or the workspace currency; so a workspace on USD can never keep a deal explicitly priced in INR (it flips back on the next board/reports/stage-JSON/API-create call), and a USD order can relabel the workspace's INR pipeline/deals to USD.
+  4. Currency heal (runs every call when a pipeline exists): if the target currency is not `INR`, every deal and pipeline of the workspace whose stored `currency='INR'` is silently relabeled to the target currency (no amount conversion). Rationale in code comment: an old hardcoded INR default. QUIRK: the target currency is the _caller-supplied_ currency (order currency in the auto-deal path) or the workspace currency; so a workspace on USD can never keep a deal explicitly priced in INR (it flips back on the next board/reports/stage-JSON/API-create call), and a USD order can relabel the workspace's INR pipeline/deals to USD.
   5. Heal errors are swallowed.
   6. The board only seeds when the pipelines list is empty; other callers always run the function.
 - **Async & events:** none (synchronous).
@@ -152,9 +152,9 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **UX & screens:** `resources/views/user/deals/index.blade.php`, JS `resources/js/charts/user-deals-board.js` (page key `user-deals-board`, nav key `deals`). Header: eyebrow "Sales / Pipeline of opportunities", title "Deals pipeline"; pipeline `<select>` only when more than one pipeline exists (navigates to `?pipeline=ID`); "Reports" link; settings gear; "New deal" button. Each column header: color dot, stage name, count badge, column total (`symbol` + integer, no decimals), `+` button (opens the new-deal modal; it does NOT preselect the column's stage). Card: top-left pill (source pill, or "Closed won" green pill on the won stage, "Lost" red pill on the lost stage), age (short relative time since created_at, absolute syntax), title, linked contact name (name, else "first last", else phone), thin probability bar for open stages with 0<p<100 (colors: p>=75 green, p>=50 amber, else teal) with "N%" text, amount (display currency, 2 decimals), avatar with 1-2 initials of the owner name (fallback contact name, fallback "Deal"; color from a 6-color palette by crc32 of the name). Won column cards get a won style; columns get `dl-col-won`/`dl-col-lost` classes. Empty column text: "No deals yet".
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
-| GET deals | user.deals.index | DealsController@index | auth, plan:access_sales_pipeline | query `pipeline` int, `owner` int, `source` string, `q` string | HTML view |
+| METHOD uri | route name       | Controller@action     | middleware                       | request                                                        | response  |
+| ---------- | ---------------- | --------------------- | -------------------------------- | -------------------------------------------------------------- | --------- |
+| GET deals  | user.deals.index | DealsController@index | auth, plan:access_sales_pipeline | query `pipeline` int, `owner` int, `source` string, `q` string | HTML view |
 
 - **Data:** reads pipelines, pipeline_stages, deals (+ contact `id,name,first_name,last_name,country_code,mobile`, owner `id,name`), workspace members (`users.id,name`), currencies.
 - **Rules & edge cases:**
@@ -258,8 +258,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **UX & screens:** HTML5 drag events (`dragstart/dragend/dragover/dragleave/drop`), `dataTransfer.effectAllowed=move` and a `text/plain` payload (Firefox requirement); target column gets `dragover` class. Dropping on the same column is ignored. After a successful move a toast: "Deal marked Won" (success) when the stage is won, "Deal marked Lost" (info) when lost, else "Deal moved" (success). On failure the card returns to its source column and an error toast shows the server message (fallback "Could not move the deal."). Column counts are recomputed client-side; column VALUE totals, KPI strip and probability bars are NOT refreshed until reload (QUIRK: stale totals after a move). The card is appended at the end of the target column in the DOM (not at the drop position).
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri                                  | route name       | Controller@action           | middleware | request                                                                             | response                                                                                                                                                                                         |
+| ------------------------------------------- | ---------------- | --------------------------- | ---------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | PATCH deals/{deal} (`{deal}` numeric)/stage | user.deals.stage | DealsController@updateStage | auth, plan | JSON `stage_id` required integer; `sort_order` nullable integer (UI never sends it) | 200 `{ok:true, status, stage:{id,name,is_won,is_lost}}`; 404 `{ok:false,message:"Deal not found."}`; 422 `{ok:false,message:"Invalid target stage."}`; 422 Laravel validation `{message,errors}` |
 
 - **Data:** updates `deals.stage_id`, `deals.sort_order`, and via hook `status/won_at/lost_at/lost_reason` (WD-DEAL-008).
@@ -316,8 +316,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **UX & screens:** modal "New deal": Title (required, maxlength 191, placeholder "e.g. Acme Corp — annual plan"), Value (number min 0 step 0.01), Currency (active admin currencies, preselected pipeline currency), Stage (all stages of the pipeline incl. won/lost), Owner (default option "Me" + members), Expected close date (date). Buttons Cancel / "Create deal"; submit shows "…" and disables; on success toast "Deal created" and a full page reload; on failure the server message as an error toast and the button re-enabled. Backdrop click closes. No contact picker in this modal (link later in the drawer).
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri | route name       | Controller@action     | middleware | request                                                                                                                                                                                                                                                                   | response                                                                                                                                                                         |
+| ---------- | ---------------- | --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | POST deals | user.deals.store | DealsController@store | auth, plan | `title` required string max191; `pipeline_id` required integer; `stage_id` nullable integer; `value` nullable numeric 0..99999999; `currency` nullable string max10; `owner_user_id` nullable integer; `contact_id` nullable integer; `expected_close_date` nullable date | 200 `{ok:true,message:"Deal created.",deal_id}`; 404 `{ok:false,message:"Pipeline not found."}`; 422 `{ok:false,message:"This pipeline has no stages."}`; Laravel validation 422 |
 
 - **Data:** inserts `deals` (`source='manual'`, `sort_order=0`, `status` via hook).
@@ -349,9 +349,9 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** Clicking a card opens a right-hand panel populated from one JSON call: editable fields, customer card, Mark Won/Lost, activity timeline.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
-| GET deals/{deal} | user.deals.show | DealsController@show | auth, plan | path `deal` numeric | 200 `{ok:true, deal:{id,title,value(float major),value_display,currency,status,conversation_id,stage_id,stage_name,owner_user_id,owner_name,source,lost_reason,expected_close_date(Y-m-d),created_at(day-date-time string),contact:{id,name,phone,wa_phone}|null}, stages:[{id,name,is_won,is_lost}], members:[{id,name}], activities:[{id,type,body,label,user_name,due_at,done,created_at}]}`; 404 `{ok:false,message:"Deal not found."}` |
+| METHOD uri       | route name      | Controller@action    | middleware | request             | response                                                                                                                                                                                                                                                    |
+| ---------------- | --------------- | -------------------- | ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET deals/{deal} | user.deals.show | DealsController@show | auth, plan | path `deal` numeric | 200 `{ok:true, deal:{id,title,value(float major),value_display,currency,status,conversation_id,stage_id,stage_name,owner_user_id,owner_name,source,lost_reason,expected_close_date(Y-m-d),created_at(day-date-time string),contact:{id,name,phone,wa_phone} | null}, stages:[{id,name,is_won,is_lost}], members:[{id,name}], activities:[{id,type,body,label,user_name,due_at,done,created_at}]}`; 404 `{ok:false,message:"Deal not found."}` |
 
 - **UX & screens (rendered client-side in `renderPanel`):**
   - Header: editable title input ("Deal name"), delete (trash) and close buttons, amount (`value_display`, deal's own currency), status badge (OPEN/WON/LOST uppercased), stage name, eyebrow "Deal · via {source}".
@@ -385,8 +385,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** Each field in the drawer saves on `change` with its own PATCH call; the board card is live-patched.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri         | route name        | Controller@action      | middleware | request                                                                                                                                                                                                                                                               | response                                                                                                        |
+| ------------------ | ----------------- | ---------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | PATCH deals/{deal} | user.deals.update | DealsController@update | auth, plan | all optional (`sometimes`): `title` required string max191; `value` nullable numeric 0..99999999; `currency` nullable string max10; `owner_user_id` nullable integer; `stage_id` nullable integer; `contact_id` nullable integer; `expected_close_date` nullable date | 200 `{ok:true, deal:<serialized, see WD-DEAL-010>}`; 404 `{ok:false,message:"Deal not found."}`; 422 validation |
 
 - **Rules & edge cases:**
@@ -414,10 +414,10 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** One-click outcome buttons in the drawer move the deal to the pipeline's first won/lost stage.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
-| POST deals/{deal}/won | user.deals.won | DealsController@markWon | auth, plan | none | 200 `{ok:true,status,stage:{id,name}}`; 404 "Deal not found."; 422 `{ok:false,message:"This pipeline has no Won stage."}` |
-| POST deals/{deal}/lost | user.deals.lost | DealsController@markLost | auth, plan | optional `reason` string (trimmed, cut to 191 chars) | same; 422 "This pipeline has no Lost stage." |
+| METHOD uri             | route name      | Controller@action        | middleware | request                                              | response                                                                                                                  |
+| ---------------------- | --------------- | ------------------------ | ---------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| POST deals/{deal}/won  | user.deals.won  | DealsController@markWon  | auth, plan | none                                                 | 200 `{ok:true,status,stage:{id,name}}`; 404 "Deal not found."; 422 `{ok:false,message:"This pipeline has no Won stage."}` |
+| POST deals/{deal}/lost | user.deals.lost | DealsController@markLost | auth, plan | optional `reason` string (trimmed, cut to 191 chars) | same; 422 "This pipeline has no Lost stage."                                                                              |
 
 - **Rules & edge cases:**
   1. Stage chosen = the lowest `sort_order` stage with the matching flag in the deal's pipeline.
@@ -441,9 +441,9 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** Hard delete from the drawer (trash icon) after a browser `confirm("Delete this deal? This cannot be undone.")`.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE deals/{deal} | user.deals.destroy | DealsController@destroy | auth, plan | none | 200 `{ok:true}`; 404 "Deal not found." |
+| METHOD uri          | route name         | Controller@action       | middleware | request | response                               |
+| ------------------- | ------------------ | ----------------------- | ---------- | ------- | -------------------------------------- |
+| DELETE deals/{deal} | user.deals.destroy | DealsController@destroy | auth, plan | none    | 200 `{ok:true}`; 404 "Deal not found." |
 
 - **Rules & edge cases:** deletes the deal's `deal_activities` rows then the deal (no transaction, no soft delete, no audit log, no notification, no flow trigger). References that remain dangling (no FKs): `tasks.related_id` (type deal), `projects.deal_id`, `payments.deal_id`, `sales_docs.deal_id`, invoice meta `deal_id`, `crm_briefs.subject_id`, inbox notification links `/deals?deal=ID`. Toast "Deal deleted"; panel closes and the page reloads.
 - **Acceptance criteria:** Given a deal with 5 activities, When deleted, Then the deal and its 5 activities are gone and a second DELETE returns 404.
@@ -459,8 +459,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** A deal with no contact shows a search box; choosing a result PATCHes `contact_id`.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri                | route name                 | Controller@action              | middleware | request   | response                                      |
+| ------------------------- | -------------------------- | ------------------------------ | ---------- | --------- | --------------------------------------------- |
 | GET deals/contacts/search | user.deals.contacts.search | DealsController@contactsSearch | auth, plan | query `q` | 200 `{ok:true,data:[{id,name,phone}]}` max 15 |
 
 - **Rules & edge cases:**
@@ -485,8 +485,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** Free-text entries on a deal: note, call log, message log, task (with due date). System entries (`stage_change`) are written by the stage hook.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri                 | route name          | Controller@action           | middleware | request                                                                                              | response                                                                                                              |
+| -------------------------- | ------------------- | --------------------------- | ---------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | POST deals/{deal}/activity | user.deals.activity | DealsController@addActivity | auth, plan | `type` required in `note,call,message,task`; `body` required string max 5000; `due_at` nullable date | 200 `{ok:true,activity:{id,type,body,label,user_name,due_at,done,created_at}}`; 404 "Deal not found."; 422 validation |
 
 - **Data:** `deal_activities` (`deal_id, workspace_id, user_id, type, body (encrypted at rest), meta, due_at, done_at, reminded_at`). Types allowed in the model: `note, stage_change, call, message, task`.
@@ -513,8 +513,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Depends on:** WD-DEAL-015
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri                             | route name           | Controller@action            | middleware | request                 | response                                                             |
+| -------------------------------------- | -------------------- | ---------------------------- | ---------- | ----------------------- | -------------------------------------------------------------------- |
 | POST deals/{deal}/task/{activity}/done | user.deals.task.done | DealsController@completeTask | auth, plan | none (both ids numeric) | 200 `{ok:true,done:bool}`; 404 "Deal not found." / "Task not found." |
 
 - **Rules & edge cases:** toggles `done_at` between now and null (it is a toggle, not "complete"); only `type=task` activities of that deal are matched; `reminded_at` is NOT reset on reopen (so a reopened overdue task is never reminded again). The link text flips between "Mark done" and "Done" with color classes; no strike-through; no timestamp shown for completion. No "my tasks" view for deal tasks exists (the first-class `/tasks` feature is a separate table `tasks`).
@@ -569,8 +569,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** `/deals/reports` is a read-only analytics page.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri        | route name         | Controller@action       | middleware | request                          | response                                                     |
+| ----------------- | ------------------ | ----------------------- | ---------- | -------------------------------- | ------------------------------------------------------------ |
 | GET deals/reports | user.deals.reports | DealsController@reports | auth, plan | none (no filters, no date range) | HTML view with embedded JSON `{byStage[], months[], symbol}` |
 
 - **Metrics and formulas (workspace-wide, ALL pipelines, no currency conversion, display symbol = workspace currency):**
@@ -609,8 +609,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** The gear opens a modal "Pipeline settings": checkbox "Auto-create a deal from new orders" and "Only for orders above (blank = any value)".
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri          | route name          | Controller@action            | middleware | request                                                                       | response                                                                                                   |
+| ------------------- | ------------------- | ---------------------------- | ---------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | POST deals/settings | user.deals.settings | DealsController@saveSettings | auth, plan | `auto_from_orders` nullable boolean; `min_value` nullable numeric 0..99999999 | 200 `{ok:true,message:"Settings saved."}`; 422 `{ok:false,message:"No active workspace."}`; validation 422 |
 
 - **Rules & edge cases:** sets `workspaces.deals_auto_from_orders = bool(auto_from_orders, default false)` and `workspaces.deals_auto_min_minor = round(min_value*100)` or null when blank. Missing `auto_from_orders` always switches the feature OFF. The modal is prefilled from the workspace (min shown in major units). Toast "Settings saved". No role gate (any member can change it). Closing the modal needs no reload. These are the ONLY pipeline settings in the product: no stage editor, no currency picker, no lost-reason list, no default-owner or round-robin rule.
@@ -647,9 +647,9 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Depends on:** WD-DEAL-002
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
-| GET deals/stages | user.deals.stages | DealsController@stagesJson | auth, plan | none | 200 `{ok:true,data:[{id,name}]}` stages of the DEFAULT pipeline ordered by `sort_order` |
+| METHOD uri       | route name        | Controller@action          | middleware | request | response                                                                                |
+| ---------------- | ----------------- | -------------------------- | ---------- | ------- | --------------------------------------------------------------------------------------- |
+| GET deals/stages | user.deals.stages | DealsController@stagesJson | auth, plan | none    | 200 `{ok:true,data:[{id,name}]}` stages of the DEFAULT pipeline ordered by `sort_order` |
 
 - **Rules & edge cases:** seeds the default pipeline if missing; only the default pipeline (other pipelines unreachable from the flow builder and the inbox mini-form, QUIRK for multi-pipeline); no probability/won flags in the payload; used by the flow builder (trigger node "stage that triggers the flow", deal node "Pipeline stage") and the inbox create-deal modal.
 - **Acceptance criteria:** Given a default pipeline with six stages, Then `data` has six items in order; the first call on an empty workspace seeds them.
@@ -672,8 +672,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Depends on:** inbox domain, WD-DEAL-002
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri                                         | route name                              | Controller@action              | middleware           | request                                                                                           | response                                                                                                                                                                                        |
+| -------------------------------------------------- | --------------------------------------- | ------------------------------ | -------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | POST team-inbox/api/conversations/{id}/create-deal | team-inbox.create-deal (name per group) | TeamInboxController@createDeal | auth (+ inbox group) | `title` nullable string max191; `value` nullable numeric 0..99999999; `stage_id` nullable integer | 200 `{ok:true,deal_id,url:"/deals",message:"Deal created in {pipeline name}."}`; 422 `{ok:false,message:"Sales Pipeline is not enabled on your plan."}` or `"Your pipeline has no stages yet."` |
 
 - **Rules & edge cases:** plan check is in code (not the middleware). Pipeline = the default pipeline; stage = requested stage found in that pipeline (else first). Contact resolved by comparing the contact `mobile` digits to the conversation `raw_jid`/`alt_jid` (note: `mobile` without country code vs full jid digits). Title default = contact name or `Deal — {phone}`. Deal: `conversation_id`, `contact_id`, `currency = pipeline currency`, `owner_user_id = actor`, `source='inbox'`, `sort_order=0`. Writes a `conversation_events` note "Deal created: {title} (#id)". UI: header button "Create deal" opens a mini modal (Deal name prefilled with contact/thread name, Value, Stage select from `/deals/stages`).
@@ -687,9 +687,9 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Effort:** S
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
-| GET team-inbox/api/conversations/{id}/deals | team-inbox.deals | TeamInboxController@conversationDeals | auth (+ inbox group) | none | 200 `{ok:true,enabled:bool,deals:[{id,title,value_display,status,stage_name,owner_name,url}]}`; when the plan lacks the feature `{ok:true,enabled:false,deals:[]}` (panel hidden) |
+| METHOD uri                                  | route name       | Controller@action                     | middleware           | request | response                                                                                                                                                                          |
+| ------------------------------------------- | ---------------- | ------------------------------------- | -------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET team-inbox/api/conversations/{id}/deals | team-inbox.deals | TeamInboxController@conversationDeals | auth (+ inbox group) | none    | 200 `{ok:true,enabled:bool,deals:[{id,title,value_display,status,stage_name,owner_name,url}]}`; when the plan lacks the feature `{ok:true,enabled:false,deals:[]}` (panel hidden) |
 
 - **Rules & edge cases:** deals where `conversation_id = conv` OR `contact_id = matched contact`; open first, then id desc; limit 12; section shows the count and "No deals yet. Create one"; each row links to `/deals?deal=ID`.
 - **Acceptance criteria:** Given an order-sourced deal tied only to the contact, Then it appears in the panel of that contact's conversation; with the plan off the panel is hidden.
@@ -719,8 +719,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Summary:** A "Deal" flow node (Node bridge executor `executeDealNode`) calls Laravel to create a deal or re-stage the contact's open deal.
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri                     | route name                | Controller@action                    | middleware                                                                  | request                                                                                                                                                                                                                                                         | response                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------ | ------------------------- | ------------------------------------ | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | POST api/flow-node/deal-action | api.flow-node.deal-action | FlowNodeActionsController@dealAction | header `X-Node-Token` (shared token compared with hash_equals); CSRF-exempt | `workspace_id` required int; `action` required in `create,move`; `stage_id` required int; `deal_name` nullable string max191; `value` nullable numeric 0..99999999; `owner_user_id` nullable int; `contact_phone` nullable string max32; `deal_id` nullable int | 200 `{ok:true,deal_id,status,created:bool}`; 401 `{ok:false,error:"unauthorized"}`; 404 `{ok:false,error:"workspace_not_found"}`; 422 `{ok:false,error:"plan_not_allowed",message:"Sales Pipeline is not enabled on this workspace plan."}` or `{ok:false,error:"stage_not_found"}`; 500 `{ok:false,error:"deal_failed",message}` |
 
 - **Rules & edge cases:** stage must belong to the workspace; its pipeline is the target pipeline (so non-default pipelines work here). `move`: explicit `deal_id` wins, else the contact's most recent OPEN deal (any pipeline) in the workspace; if none found it CREATES a deal (flow never dead-ends; response `created:true`). `create`: title = `deal_name` or "New deal" (cut 191), `value_minor`, `currency = pipeline currency`, `owner_user_id` (unvalidated) else null, `contact_id` resolved by phone digits, `source='flow'`, `sort_order=0`. Moves run the full stage engine (WD-DEAL-008) so flows can chain. Node executor: default name `{{contact_name}} — deal`, value digits/dot only after variable substitution, saves the deal id into variable `saveAs` (default `deal_id`), routes via port 1 (created) on success and port 2 (error) on any failure; the node's `ownerId` is forwarded as `owner_user_id`. Builder UI fields: Action (create / move), Pipeline stage (required), Deal name, Deal value, Save-as variable; the test panel logs "[CRM] ..." and skips the call.
@@ -746,8 +746,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Depends on:** WD-DEAL-035
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri       | route name         | Controller@action           | middleware                             | request                                                                                                                                     | response                                                                                  |
+| ---------------- | ------------------ | --------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | GET api/v1/deals | api.v1.deals.index | Api\V1\DealController@index | api, auth.apikey, auth.apikey.throttle | query `page` (Laravel paginator), `per_page` int clamped 1..100 default 25, `pipeline_id`, `stage_id`, `status` (any string, not validated) | 200 `{data:[Deal...], meta:{page,per_page,total,last_page}}`; 403 `plan_feature_disabled` |
 
 - **Rules:** ordered by `id` desc; workspace-scoped from the key; no search, no owner/contact/date filter, no sort option, no expand. Deal item shape in WD-DEAL-031. `meta` is a page-number scheme (no cursor, no links).
@@ -763,8 +763,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Depends on:** WD-DEAL-035
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri            | route name        | Controller@action   | middleware                 | request    | response                                                                                                                                                                                                                                                                                                                      |
+| --------------------- | ----------------- | ------------------- | -------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | GET api/v1/deals/{id} | api.v1.deals.show | DealController@show | api, auth.apikey, throttle | id numeric | 200 `{data:{id,title,pipeline_id,stage_id,stage(name),status,value(float major),value_minor(int),currency,contact_id,owner_user_id,source,expected_close_date(Y-m-d),lost_reason,won_at,lost_at,created_at,updated_at}}` (timestamps ISO-8601 with app tz offset); 404 `{error:{code:"not_found",message:"Deal not found."}}` |
 
 - **Acceptance criteria:** Given a deal in another workspace, Then 404; given a won deal, Then `status:"won"` and `won_at` set.
@@ -778,8 +778,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Depends on:** WD-DEAL-035
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri        | route name         | Controller@action    | middleware                 | request                                                                                                                                                                                                                | response                                                                                                                      |
+| ----------------- | ------------------ | -------------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | POST api/v1/deals | api.v1.deals.store | DealController@store | api, auth.apikey, throttle | `title` required string max191; `pipeline_id`, `stage_id`, `contact_id`, `owner_user_id` nullable integer; `value` nullable numeric 0..99999999; `currency` nullable string max10; `expected_close_date` nullable date | 201 `{data:<deal>}` (no meta); 422 `{error:{code:"unprocessable",message:"Pipeline has no stages."}}`; Laravel validation 422 |
 
 - **Rules & edge cases:** pipeline = given (must be the workspace's) else the default (seeded on demand); QUIRK: an unknown/foreign `pipeline_id` silently falls back to the default pipeline; unknown `stage_id` silently falls to the first stage; unknown `contact_id` becomes null; `owner_user_id` is stored unvalidated and defaults to NULL (unlike the UI default of the actor; so no assignment notification unless a different owner is passed and the key's owner differs); `currency` default = pipeline currency; `source='api'`; `sort_order` default 0; cannot set `company_id`, `notes`, `meta`, `status`, `conversation_id`. The stage engine runs (status, notifications). Creating directly into a won stage yields a won deal.
@@ -794,8 +794,8 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Depends on:** WD-DEAL-035
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
+| METHOD uri            | route name          | Controller@action     | middleware                 | request                                                                                                                                                                                                                                                                   | response                                                                                                                                      |
+| --------------------- | ------------------- | --------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | PUT api/v1/deals/{id} | api.v1.deals.update | DealController@update | api, auth.apikey, throttle | partial body (`sometimes`): `title` required string max191; `value` nullable numeric 0..99999999; `currency` nullable string max10; `stage_id`, `contact_id`, `owner_user_id` nullable integer; `expected_close_date` nullable date; `lost_reason` nullable string max191 | 200 `{data:<deal>}`; 404 not_found; 422 `{error:{code:"unprocessable",message:"Stage not in this deal's pipeline."}}`; Laravel validation 422 |
 
 - **Rules & edge cases:** PUT behaves as PATCH. `value` null -> 0; empty `currency` ignored; `owner_user_id` falsy -> null; `lost_reason` can be set/cleared (QUIRK: when the same request moves the deal to an open stage, the stage hook nulls `lost_reason`); unknown `contact_id` -> null; foreign stage -> 422 (unlike the web PATCH); `stage_id` null/0 ignored. There is no `status` field: advance by `stage_id`; there are no won/lost/activity/task endpoints in the API. Notifications and flow triggers fire as for the UI.
@@ -809,9 +809,9 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 - **Effort:** S
 - **Endpoints:**
 
-| METHOD uri | route name | Controller@action | middleware | request | response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE api/v1/deals/{id} | api.v1.deals.destroy | DealController@destroy | api, auth.apikey, throttle | none | 200 `{data:{deleted:true}}`; 404 not_found |
+| METHOD uri               | route name           | Controller@action      | middleware                 | request | response                                   |
+| ------------------------ | -------------------- | ---------------------- | -------------------------- | ------- | ------------------------------------------ |
+| DELETE api/v1/deals/{id} | api.v1.deals.destroy | DealController@destroy | api, auth.apikey, throttle | none    | 200 `{data:{deleted:true}}`; 404 not_found |
 
 - **Rules:** same hard delete + activity cascade as WD-DEAL-013; no event.
 - **Source refs:** DealController.php:144-153.
@@ -976,61 +976,66 @@ inbox (create-deal button + deals panel), flows (trigger + node), orders/commerc
 All tables are InnoDB utf8mb4_unicode_ci with **no foreign keys** (referential integrity is by application). Timestamps are nullable `timestamp` created_at/updated_at (no soft deletes). Verified with `SHOW CREATE TABLE` on the local reference DB (all four tables are empty there).
 
 ### deals
+
 Purpose: one opportunity. Read/written by WD-DEAL-003..014, 022, 025..036. Volume: unbounded per workspace (board loads all).
 
-| Column | Type | Null | Default | Notes |
-| --- | --- | --- | --- | --- |
-| id | bigint unsigned AI PK | no | | |
-| workspace_id | bigint unsigned | no | | tenant key |
-| pipeline_id | bigint unsigned | no | | -> pipelines.id (no FK) |
-| stage_id | bigint unsigned | no | | -> pipeline_stages.id |
-| contact_id | bigint unsigned | yes | NULL | -> contacts.id; relation `withDefault` (null object) |
-| company_id | bigint unsigned | yes | NULL | -> companies.id; never set by app writers (WD-DEAL-038) |
-| conversation_id | bigint unsigned | yes | NULL | -> conversations.id; set by inbox create only |
-| title | varchar(191) | no | | |
-| value_minor | bigint | no | 0 | minor units, cast integer |
-| currency | varchar(10) | no | 'INR' | free text, not upper-cased on write |
-| owner_user_id | bigint unsigned | yes | NULL | -> users.id; not membership-validated |
-| owner_team_id | bigint unsigned | yes | NULL | unused (no writer/reader) |
-| expected_close_date | date | yes | NULL | cast date |
-| status | varchar(16) | no | 'open' | `open|won|lost`, derived from stage by hook |
-| lost_reason | varchar(191) | yes | NULL | free text |
-| source | varchar(24) | no | 'manual' | `manual,inbox,order,shopify,woo,form,api,flow,facebook` |
-| sort_order | int unsigned | no | 0 | always 0 in practice |
-| notes | text | yes | NULL | unused by UI/API (demo seeder only) |
-| meta | json | yes | NULL | cast array; `{order_id}`, `{demo:true}` |
-| won_at | timestamp | yes | NULL | cast datetime |
-| lost_at | timestamp | yes | NULL | cast datetime |
-| created_at, updated_at | timestamp | yes | NULL | |
+| Column                 | Type                  | Null | Default  | Notes                                                   |
+| ---------------------- | --------------------- | ---- | -------- | ------------------------------------------------------- |
+| id                     | bigint unsigned AI PK | no   |          |                                                         |
+| workspace_id           | bigint unsigned       | no   |          | tenant key                                              |
+| pipeline_id            | bigint unsigned       | no   |          | -> pipelines.id (no FK)                                 |
+| stage_id               | bigint unsigned       | no   |          | -> pipeline_stages.id                                   |
+| contact_id             | bigint unsigned       | yes  | NULL     | -> contacts.id; relation `withDefault` (null object)    |
+| company_id             | bigint unsigned       | yes  | NULL     | -> companies.id; never set by app writers (WD-DEAL-038) |
+| conversation_id        | bigint unsigned       | yes  | NULL     | -> conversations.id; set by inbox create only           |
+| title                  | varchar(191)          | no   |          |                                                         |
+| value_minor            | bigint                | no   | 0        | minor units, cast integer                               |
+| currency               | varchar(10)           | no   | 'INR'    | free text, not upper-cased on write                     |
+| owner_user_id          | bigint unsigned       | yes  | NULL     | -> users.id; not membership-validated                   |
+| owner_team_id          | bigint unsigned       | yes  | NULL     | unused (no writer/reader)                               |
+| expected_close_date    | date                  | yes  | NULL     | cast date                                               |
+| status                 | varchar(16)           | no   | 'open'   | `open                                                   | won | lost`, derived from stage by hook |
+| lost_reason            | varchar(191)          | yes  | NULL     | free text                                               |
+| source                 | varchar(24)           | no   | 'manual' | `manual,inbox,order,shopify,woo,form,api,flow,facebook` |
+| sort_order             | int unsigned          | no   | 0        | always 0 in practice                                    |
+| notes                  | text                  | yes  | NULL     | unused by UI/API (demo seeder only)                     |
+| meta                   | json                  | yes  | NULL     | cast array; `{order_id}`, `{demo:true}`                 |
+| won_at                 | timestamp             | yes  | NULL     | cast datetime                                           |
+| lost_at                | timestamp             | yes  | NULL     | cast datetime                                           |
+| created_at, updated_at | timestamp             | yes  | NULL     |                                                         |
 
 Indexes: `deals_workspace_id_status_index (workspace_id, status)`, `deals_pipeline_id_stage_id_index (pipeline_id, stage_id)`, `deals_contact_id_index`, `deals_owner_user_id_index`, `deals_company_id_index`. No index on `(workspace_id, source)`, `title`, `won_at`, `conversation_id`, or JSON `meta->order_id` (full scan for the order dedupe). Scopes: `forCurrentWorkspace` (workspace of the logged-in user or empty), `open()`. Relations: workspace, pipeline, stage, contact (withDefault), company (withDefault), owner (withDefault), activities (latest()). Accessors: `value_major` (minor/100 float), `value_display` (symbol + number_format 2). Enum constants: STATUSES, SOURCES.
 
 ### deal_activities
+
 Purpose: timeline (notes/calls/messages/tasks/stage changes). Read/written by WD-DEAL-008, 010, 015..017, 037.
 
-| Column | Type | Null | Default | Notes |
-| --- | --- | --- | --- | --- |
-| id | bigint unsigned AI PK | no | | |
-| deal_id | bigint unsigned | no | | -> deals.id |
-| workspace_id | bigint unsigned | no | | |
-| user_id | bigint unsigned | yes | NULL | author; null = System |
-| type | varchar(24) | no | 'note' | `note,stage_change,call,message,task` |
-| body | text | yes | NULL | **encrypted at rest** (Laravel `encrypted` cast) |
-| meta | json | yes | NULL | stage_change `{from_stage_id,to_stage_id}` |
-| due_at | timestamp | yes | NULL | tasks only |
-| done_at | timestamp | yes | NULL | tasks only (toggle) |
-| reminded_at | timestamp | yes | NULL | reminder idempotency |
-| created_at, updated_at | timestamp | yes | NULL | |
+| Column                 | Type                  | Null | Default | Notes                                            |
+| ---------------------- | --------------------- | ---- | ------- | ------------------------------------------------ |
+| id                     | bigint unsigned AI PK | no   |         |                                                  |
+| deal_id                | bigint unsigned       | no   |         | -> deals.id                                      |
+| workspace_id           | bigint unsigned       | no   |         |                                                  |
+| user_id                | bigint unsigned       | yes  | NULL    | author; null = System                            |
+| type                   | varchar(24)           | no   | 'note'  | `note,stage_change,call,message,task`            |
+| body                   | text                  | yes  | NULL    | **encrypted at rest** (Laravel `encrypted` cast) |
+| meta                   | json                  | yes  | NULL    | stage_change `{from_stage_id,to_stage_id}`       |
+| due_at                 | timestamp             | yes  | NULL    | tasks only                                       |
+| done_at                | timestamp             | yes  | NULL    | tasks only (toggle)                              |
+| reminded_at            | timestamp             | yes  | NULL    | reminder idempotency                             |
+| created_at, updated_at | timestamp             | yes  | NULL    |                                                  |
 
 Indexes: `(deal_id, created_at)`, `(workspace_id, type)`, `(due_at)`. The reminder sweep filters type/done/reminded/due without a matching composite index.
 
 ### pipelines
+
 Columns: `id`, `workspace_id` bigint unsigned NOT NULL, `name` varchar(120) NOT NULL, `is_default` tinyint(1) NOT NULL default 0, `currency` varchar(10) NOT NULL default 'INR', `sort_order` int unsigned NOT NULL default 0, timestamps. Index `(workspace_id, is_default)`. No unique on one-default-per-workspace. Seed: "Sales Pipeline". Rows are created only by `ensureDefaultForWorkspace` (and seeders).
 
 ### pipeline_stages
+
 Columns: `id`, `pipeline_id` bigint unsigned NOT NULL, `workspace_id` bigint unsigned NOT NULL, `name` varchar(120) NOT NULL, `sort_order` int unsigned NOT NULL default 0, `color` varchar(16) NOT NULL default '#25D366', `is_won` tinyint(1) NOT NULL default 0, `is_lost` tinyint(1) NOT NULL default 0, `probability` tinyint unsigned NOT NULL default 0 (0-255 possible, 0-100 by convention; no check), timestamps. Indexes `(pipeline_id, sort_order)`, `(workspace_id)`. No unique on name or on a single won/lost per pipeline. Casts: booleans, integers.
 
 ### Pivots / references (owned elsewhere, deal-aware)
+
 - `contacts.company_id` (bigint unsigned null) and `deals.contact_id`: the contact link is many deals -> one contact; no pivot table. There is NO deal-to-user pivot (single `owner_user_id`; `owner_team_id` unused), no deal-to-company pivot, no deal-products/line-items table, no deal tags/labels table, no deal files table.
 - `tasks.related_type varchar(16)` + `tasks.related_id bigint unsigned` (index `(related_type, related_id)`), values `contact|deal|company`.
 - `projects.deal_id`, `payments.deal_id`, `sales_docs.deal_id` (all bigint unsigned null); invoices carry `deal_id` inside `meta`; `crm_briefs (subject_type varchar(16), subject_id)` with `deal`.
@@ -1044,7 +1049,7 @@ Columns: `id`, `pipeline_id` bigint unsigned NOT NULL, `workspace_id` bigint uns
 ## Cross-domain contracts
 
 - **Consumes (plan-limits domain):** `PlanLimitGuard::hasFeature(workspace, 'access_sales_pipeline')` plus package column; platform-admin bypass; middleware `plan:` with GET-passthrough paywall behavior (WD-DEAL-001).
-- **Consumes (contacts, WD-CON-*):** `Contact::forCurrentWorkspace()->find(id)` for linking; contact name/phone fields (`name, first_name, last_name, country_code, mobile`) and `Contact::canonicalizePhone`; `Contact::rememberPhone` (AI); `contacts.company_id`. Exposes: `Contact::deals()` (open first, newest first) used by contact 360 and inbox panel; deals + deal activities in contact timelines.
+- **Consumes (contacts, WD-CON-\*):** `Contact::forCurrentWorkspace()->find(id)` for linking; contact name/phone fields (`name, first_name, last_name, country_code, mobile`) and `Contact::canonicalizePhone`; `Contact::rememberPhone` (AI); `contacts.company_id`. Exposes: `Contact::deals()` (open first, newest first) used by contact 360 and inbox panel; deals + deal activities in contact timelines.
 - **Consumes (workspace/users):** workspace members via `workspace_user` for owner pickers, `workspaces.currency`, `owner_user_id` of workspaces for demo seeds.
 - **Consumes (currencies/admin settings):** `currencies` table (symbol + `exchange_rate`), system setting `default_currency`, `FormatSettings::convert/formatIn`.
 - **Consumes (inbox/notifications):** `NotificationDispatcher::notifyDealAssigned|notifyDealOutcome|notifyDealTaskDue` (4 notification types, dedupe 30 s, optional web push when `ti_pwa_enabled`). Exposes to inbox: `POST .../create-deal`, `GET .../deals`, `GET /deals/stages`, deep links `/deals?deal=ID`, and `deals.conversation_id` for "Open in inbox" (`/team-inbox?c=ID`). The inbox queue poll hosts the reminder sweep.
@@ -1071,34 +1076,34 @@ Columns: `id`, `pipeline_id` bigint unsigned NOT NULL, `workspace_id` bigint uns
 
 ## Differences to decide
 
-| Id | WaDesk behavior | Recommendation for the port |
-| --- | --- | --- |
-| D-01 | Plan gate lets GET requests through (paywall overlay only); read JSON works without the plan | Enforce plan on reads too (403 `plan_feature_disabled`), keep a client-side upsell screen |
-| D-02 | No role/permission gate on deals; viewers can create/move/delete | Introduce permission keys `deals.view/write/delete/report/settings`; map agent=view+write, manager=+delete+report, admin=+settings |
-| D-03 | `ensureDefaultForWorkspace` silently relabels every `INR` deal/pipeline to the workspace (or order) currency on each call | Drop; migrate once; allow any currency per deal |
-| D-04 | Board "Weighted forecast" includes the Won column at 100% and respects filters; reports forecast is open-only | Use open-only everywhere, unfiltered, same helper |
-| D-05 | Board converts money into the workspace currency; reports, leaderboard, CRM dashboard and AI report sum raw mixed currencies under one symbol | Always convert via one FX service (SQL aggregate with rate table); show currency explicitly |
-| D-06 | Board loads every deal in a pipeline with no pagination or per-stage totals endpoint | Per-stage cursor pagination (page size 25) + server aggregates (count, sum, weighted) per stage |
-| D-07 | `sort_order` is always 0; drag within a column is a no-op; moved card appended at DOM end | Persist ordering (fractional index or gap-based rank) on drop with before/after ids |
-| D-08 | Mark Lost never collects a reason; reason is free text; no catalog | Add lost-reason catalog (workspace settings, optional required) and a picker in the drawer and drag-to-lost dialog; keep `lost_reason` text for API |
-| D-09 | Pipelines/stages cannot be created or edited (docs claim they can); `pipelines_limit` unenforced | Build the editor (WD-DEAL-041/042): CRUD, reorder, color, probability, won/lost flags (max one each), delete-with-reassign, enforce `pipelines_limit` |
-| D-10 | Stage move is accepted from any stage to any stage with no required fields; no stage-change on create; no stage-change timeline on create; no flow trigger on create | Emit `deal.created` and `deal.stage_changed` outbox events on every placement, log the placement row |
-| D-11 | Web PATCH silently ignores a foreign stage_id; API create silently falls back to default pipeline/first stage; API update returns 422 | Return 422 with a stable error code in all paths |
-| D-12 | `owner_user_id` accepted for any integer, no membership check; API default owner null, UI default actor | Validate workspace membership; define one default (actor for UI, null or key owner for API, documented) |
-| D-13 | Deleting a deal hard-deletes with no audit and leaves dangling references (tasks, projects, payments, docs, notifications) | Soft delete + audit + SET NULL FKs, outbox `deal.deleted`; keep activities for audit |
-| D-14 | `company_id` is never settable; company rollups are dead | Add `companyId` to DTOs and inherit from the contact's company; expose company in the drawer |
-| D-15 | Contact link can be set but not changed/removed in the UI | Allow change/unlink; show contact deep link |
-| D-16 | Flow trigger is once per (flow, contact) forever and only fires when a contact is linked and only on update | Keep per-deal enrollment idempotency (flow, deal) instead of (flow, contact); fire on create; support pipeline-specific stages in the pickers |
-| D-17 | `deal_stage_changed` picker and inbox/AI/Messenger use only the default pipeline | Let pickers choose a pipeline then a stage |
-| D-18 | Auto-deal from order: no plan check, min value compared in raw minor across currencies, owner null, order status changes do not update the deal, contact search loads all contacts | Add plan check, compare in base currency, default owner rule, optional status-sync rule (paid -> won), indexed phone lookup |
-| D-19 | Two task systems (deal timeline tasks vs `/tasks` table with `related_type=deal`) | Use one task model with `dealId`; show deal tasks in "My tasks"; keep the reminder job once |
-| D-20 | Reminders run on inbox polls/heartbeat; due dates are midnight of a date; reopened task never re-reminds | BullMQ repeatable job; datetime due with tenant timezone; reset `remindedAt` on reopen or due change |
-| D-21 | REST API: no scopes, validation 422 not in `{error}` envelope, page-number pagination, no webhooks for deals, no activity/won/lost endpoints | Use the repo's problem+json, cursor pagination, Idempotency-Key, `deals:read|write` scopes; add endpoints for activities and `won|lost`; emit `deal.*` webhook events |
-| D-22 | Source `api` is used for AI copilot deals; `shopify/woo/form` sources have no writer | Add `ai` source; keep `shopify/woo/form` reserved for the integrations that will write them |
-| D-23 | Hard-coded English strings in the JS drawer and server messages; no RTL in drawer | Translate through the web i18n catalog; return error codes |
-| D-24 | Reports: no date range, no pipeline filter, mislabeled "this month", month label without year, no conversion funnel/cycle time | Add `from/to/pipelineId` filters, correct labels, and funnel + avg-days-to-close metrics (extensions) |
-| D-25 | Plain deals fields missing: no tags, products/line items, attachments, multiple contacts, team owner (unused), custom fields | Out of parity scope; decide for product roadmap |
-| D-26 | Activity body encrypted; no edit/delete of entries | Keep encryption; allow edit/delete of own notes with audit |
+| Id   | WaDesk behavior                                                                                                                                                                    | Recommendation for the port                                                                                                                           |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-01 | Plan gate lets GET requests through (paywall overlay only); read JSON works without the plan                                                                                       | Enforce plan on reads too (403 `plan_feature_disabled`), keep a client-side upsell screen                                                             |
+| D-02 | No role/permission gate on deals; viewers can create/move/delete                                                                                                                   | Introduce permission keys `deals.view/write/delete/report/settings`; map agent=view+write, manager=+delete+report, admin=+settings                    |
+| D-03 | `ensureDefaultForWorkspace` silently relabels every `INR` deal/pipeline to the workspace (or order) currency on each call                                                          | Drop; migrate once; allow any currency per deal                                                                                                       |
+| D-04 | Board "Weighted forecast" includes the Won column at 100% and respects filters; reports forecast is open-only                                                                      | Use open-only everywhere, unfiltered, same helper                                                                                                     |
+| D-05 | Board converts money into the workspace currency; reports, leaderboard, CRM dashboard and AI report sum raw mixed currencies under one symbol                                      | Always convert via one FX service (SQL aggregate with rate table); show currency explicitly                                                           |
+| D-06 | Board loads every deal in a pipeline with no pagination or per-stage totals endpoint                                                                                               | Per-stage cursor pagination (page size 25) + server aggregates (count, sum, weighted) per stage                                                       |
+| D-07 | `sort_order` is always 0; drag within a column is a no-op; moved card appended at DOM end                                                                                          | Persist ordering (fractional index or gap-based rank) on drop with before/after ids                                                                   |
+| D-08 | Mark Lost never collects a reason; reason is free text; no catalog                                                                                                                 | Add lost-reason catalog (workspace settings, optional required) and a picker in the drawer and drag-to-lost dialog; keep `lost_reason` text for API   |
+| D-09 | Pipelines/stages cannot be created or edited (docs claim they can); `pipelines_limit` unenforced                                                                                   | Build the editor (WD-DEAL-041/042): CRUD, reorder, color, probability, won/lost flags (max one each), delete-with-reassign, enforce `pipelines_limit` |
+| D-10 | Stage move is accepted from any stage to any stage with no required fields; no stage-change on create; no stage-change timeline on create; no flow trigger on create               | Emit `deal.created` and `deal.stage_changed` outbox events on every placement, log the placement row                                                  |
+| D-11 | Web PATCH silently ignores a foreign stage_id; API create silently falls back to default pipeline/first stage; API update returns 422                                              | Return 422 with a stable error code in all paths                                                                                                      |
+| D-12 | `owner_user_id` accepted for any integer, no membership check; API default owner null, UI default actor                                                                            | Validate workspace membership; define one default (actor for UI, null or key owner for API, documented)                                               |
+| D-13 | Deleting a deal hard-deletes with no audit and leaves dangling references (tasks, projects, payments, docs, notifications)                                                         | Soft delete + audit + SET NULL FKs, outbox `deal.deleted`; keep activities for audit                                                                  |
+| D-14 | `company_id` is never settable; company rollups are dead                                                                                                                           | Add `companyId` to DTOs and inherit from the contact's company; expose company in the drawer                                                          |
+| D-15 | Contact link can be set but not changed/removed in the UI                                                                                                                          | Allow change/unlink; show contact deep link                                                                                                           |
+| D-16 | Flow trigger is once per (flow, contact) forever and only fires when a contact is linked and only on update                                                                        | Keep per-deal enrollment idempotency (flow, deal) instead of (flow, contact); fire on create; support pipeline-specific stages in the pickers         |
+| D-17 | `deal_stage_changed` picker and inbox/AI/Messenger use only the default pipeline                                                                                                   | Let pickers choose a pipeline then a stage                                                                                                            |
+| D-18 | Auto-deal from order: no plan check, min value compared in raw minor across currencies, owner null, order status changes do not update the deal, contact search loads all contacts | Add plan check, compare in base currency, default owner rule, optional status-sync rule (paid -> won), indexed phone lookup                           |
+| D-19 | Two task systems (deal timeline tasks vs `/tasks` table with `related_type=deal`)                                                                                                  | Use one task model with `dealId`; show deal tasks in "My tasks"; keep the reminder job once                                                           |
+| D-20 | Reminders run on inbox polls/heartbeat; due dates are midnight of a date; reopened task never re-reminds                                                                           | BullMQ repeatable job; datetime due with tenant timezone; reset `remindedAt` on reopen or due change                                                  |
+| D-21 | REST API: no scopes, validation 422 not in `{error}` envelope, page-number pagination, no webhooks for deals, no activity/won/lost endpoints                                       | Use the repo's problem+json, cursor pagination, Idempotency-Key, `deals:read                                                                          | write`scopes; add endpoints for activities and`won | lost`; emit `deal.*` webhook events |
+| D-22 | Source `api` is used for AI copilot deals; `shopify/woo/form` sources have no writer                                                                                               | Add `ai` source; keep `shopify/woo/form` reserved for the integrations that will write them                                                           |
+| D-23 | Hard-coded English strings in the JS drawer and server messages; no RTL in drawer                                                                                                  | Translate through the web i18n catalog; return error codes                                                                                            |
+| D-24 | Reports: no date range, no pipeline filter, mislabeled "this month", month label without year, no conversion funnel/cycle time                                                     | Add `from/to/pipelineId` filters, correct labels, and funnel + avg-days-to-close metrics (extensions)                                                 |
+| D-25 | Plain deals fields missing: no tags, products/line items, attachments, multiple contacts, team owner (unused), custom fields                                                       | Out of parity scope; decide for product roadmap                                                                                                       |
+| D-26 | Activity body encrypted; no edit/delete of entries                                                                                                                                 | Keep encryption; allow edit/delete of own notes with audit                                                                                            |
 
 ## Coverage
 
@@ -1191,7 +1196,14 @@ Columns: `id`, `pipeline_id` bigint unsigned NOT NULL, `workspace_id` bigint uns
     "WD-DEAL-032": ["POST api/v1/deals"],
     "WD-DEAL-033": ["PUT api/v1/deals/{id}"],
     "WD-DEAL-034": ["DELETE api/v1/deals/{id}"],
-    "WD-DEAL-039": ["GET crm", "GET crm/guide", "GET crm/revenue", "GET crm/revenue.csv", "GET crm/revenue.pdf", "POST crm/briefs"]
+    "WD-DEAL-039": [
+      "GET crm",
+      "GET crm/guide",
+      "GET crm/revenue",
+      "GET crm/revenue.csv",
+      "GET crm/revenue.pdf",
+      "POST crm/briefs"
+    ]
   }
 }
 ```
@@ -1206,54 +1218,54 @@ differs from WaDesk is listed here with the "Differences to decide" row it settl
 
 ### Decided as recommended (fixes)
 
-| Diff # | Decision | Where |
-| --- | --- | --- |
-| D-01 | The plan check covers reads too: a workspace whose plan lacks the sales pipeline gets `422 PLAN_FEATURE_LOCKED` (the repo's existing plan-lock code, with `feature: sales_pipeline` and the upgrade path) on every deals, pipelines, board, reports and lost-reason route. The flag is `features.sales_pipeline` on the plan (or an organization override); a plan that does not carry the key is NOT locked (every existing plan). It is not in the plan-form registry yet, see follow-ups. | WD-DEAL-001 |
-| D-02 | Permissions are keys, not "any member": `record.deals.read/create/update/delete/report` (with a record scope on the deal's owner: all, team, own) and `record.pipelines.read/create/update/delete` (pipelines, stages, lost reasons and deal settings, one configuration resource). The names follow the repo's `record.<resource>.<action>`, not the spec's `deals.view/write`. Admin has all; the editable front-line preset (Agent / Counsellor) gets deals read/update on its own deals, create, and pipelines read. A viewer role with read keys cannot write (403). A deal outside the caller's scope is 404, never 403. | WD-DEAL-001 |
-| D-03 | No currency "heal". The default pipeline is created with the workspace by a database trigger (and backfilled by the migration), so reading never writes. A deal's currency is its own and is never relabelled by any call. Changing it is an explicit PATCH that must carry the value in the new currency. A currency is a 3-letter code, upper-cased, and the number of decimals follows it (JPY 0, KWD 3, else 2). | WD-DEAL-002, 006 |
-| D-04 | The forecast is value x stage probability over OPEN deals only, everywhere (board KPI, reports, per column), and the board's KPI strip is never changed by the board filters. | WD-DEAL-005, 019 |
-| D-05 | Every total is exact per currency (`byCurrency: [{currency, amount}]`). `convertTo=XXX` adds one converted figure using `currencies.exchange_rate` (bigint arithmetic, half up, minor units of both currencies respected). A currency with no usable rate is listed in `unconverted` and `converted` is `null`: never treated as 1.0 (the board's WaDesk behaviour) and never summed raw under one symbol (its reports' behaviour). | WD-DEAL-005, 006, 019 |
-| D-06 | The board is per-column keyset paging (25 cards by default, up to 100) plus SQL aggregates for each column's count, per-currency total and weighted total, so a column of any size costs one page. `GET /deals/board/stages/:stageId/deals` is "load more". The flat `GET /deals` list pages `(created_at, id)` at microsecond precision (no lost or repeated rows on ties). | WD-DEAL-003 |
-| D-07 | The order inside a column persists: `deals.sort_order` is a gap-spaced bigint (new deals on top, newest first until a card is moved); `PATCH /deals/:id/stage` accepts `beforeDealId` / `afterDealId` and the drop takes the midpoint of its neighbours; a column whose gap has closed is renumbered in the same transaction (this bumps the other cards' `rowVersion`, rare). A reorder inside a column is not a stage change. | WD-DEAL-007 |
-| D-08 | Lost-reason catalogue (`/deal-lost-reasons`, list/add/rename/deactivate/reorder/delete), a picker value `lostReasonId` on lost and on a drag into a lost stage, free text `reason` kept for API-style callers, and a workspace setting `lostReasonRequired` (422 `DEAL_LOST_REASON_REQUIRED` on button and drag alike). The deal keeps the reason NAME as text, so deleting or renaming a reason never rewrites history. A reason over 191 characters is 422, not truncated. Creating a deal straight into a lost stage does not require a reason (the create has no reason field). | WD-DEAL-012, 043 |
-| D-09 | The editor WaDesk documented is built: create/rename/recolour/re-weight/reorder/delete pipelines and stages, exactly one default pipeline, at most one won and one lost stage per pipeline (won is 100%, lost 0%, by CHECK), unique names (any case), only an empty stage can change kind, deleting a stage with deals moves them to a stage of the same pipeline, deleting a pipeline with deals moves open/won/lost deals to the target's first open / won / lost stage (409 if the target lacks one), the default pipeline cannot be deleted, the last stage cannot be deleted. The foreign keys are NO ACTION, so the database refuses what the service forgets. `pipelines_limit` is enforced on create as the plan limit `pipelines` (422 `PLAN_LIMIT_REACHED`); see follow-ups for the registry. | WD-DEAL-041, 042, 044 |
-| D-10 | A create is a placement: one `stage_change` timeline row (`from: null`), `deal.created`, `deal.stage_changed` (`fromStageId: null`) and `deal.won` / `deal.lost` when it starts there. Every real move writes exactly one timeline row, one audit row and `deal.stage_changed`, plus `deal.won`, `deal.lost` or `deal.reopened` on a status change. All in the writer's transaction. The timeline row stores the stage NAMES, so a deleted stage still reads (WaDesk showed `?`). | WD-DEAL-008 |
-| D-11 | A stage of another pipeline is `422 DEAL_STAGE_MISMATCH` on create, move and reopen alike, and the database enforces it (composite FK `(org, pipeline, stage)`). There is no silent fallback to the default pipeline or the first stage; an unknown `pipelineId` on the board is 404; a contact, company or stage that is not in the workspace is 404 (WaDesk silently dropped the link). | WD-DEAL-007, 009, 011, 032, 033 |
-| D-12 | An owner must be an ACTIVE member of the workspace (422 `DEAL_OWNER_INVALID`), also for a task assignee. Omitted on a staff create means the caller; `null` means no owner. | WD-DEAL-009, 011 |
-| D-13 | Hard delete, as the repo's rule says (not soft delete), audited with what was deleted, `deal.deleted` event, the timeline cascades. The references from contacts, companies, conversations, owners, projects, sales docs and payments are `ON DELETE SET NULL` foreign keys, so nothing dangles. | WD-DEAL-013 |
-| D-14 | `companyId` is on create and update; a deal linked to a contact with a company and no company of its own inherits it (an explicit company or `null` wins). Company rollups are not built (companies domain). | WD-DEAL-038 |
-| D-15 | A contact can be linked, changed and unlinked after creation. | WD-DEAL-014 |
-| D-16, D-17 | The flow trigger itself belongs to the flows domain. This port emits `deal.stage_changed` on every placement and move (create included) with the pipeline and stage uuids, so a flow can key its idempotency on `(flow, deal)` rather than WaDesk's `(flow, contact)`. `GET /pipelines` returns every pipeline with its stages for the builder and inbox pickers (not only the default pipeline). | WD-DEAL-023, 027 |
-| D-19 | Timeline tasks keep their own rows but carry an assignee and a due timestamp, and `GET /deals/tasks` ("my tasks", overdue, done) lists them across deals. Merging with the separate `tasks` table is the tasks domain's decision. | WD-DEAL-015, 016 |
-| D-20 | Task due dates are full timestamps with an offset (a bare date is not a valid `dueAt`, so nothing is silently read as midnight); reopening a task clears `reminded_at` so it can be reminded again. The reminder sweep's index (`idx_deal_activities_task_sweep`) is in place; the job itself is a follow-up. | WD-DEAL-016, 017 |
-| D-22 | `ai` joins the source vocabulary (`manual, inbox, order, shopify, woo, form, api, flow, facebook, ai`), enforced by a CHECK. Staff-created deals are always `manual`; `DealsService.create(input, source)` takes the source for the other writers. | WD-DEAL-009 |
-| D-23 | Server answers carry stable error codes (`DEAL_*`), never messages to parse. | WD-DEAL-047 |
-| D-24 | Reports take `pipelineId`, `ownerId`, `from`, `to`, `convertTo`; "won this month" is this month in the workspace's time zone (`organizations.settings.timezone`, else UTC); the six-month trend is keyed `YYYY-MM` (year included); `avgDaysToClose` and lost-reason counts are added. A funnel (stage-to-stage conversion) is not built. | WD-DEAL-019, 020 |
-| D-26 | The timeline body is encrypted at rest (AES-GCM through `CryptoService`, as WaDesk's cast did). Editing or deleting an entry is not built. | WD-DEAL-015 |
+| Diff #     | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Where                           |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| D-01       | The plan check covers reads too: a workspace whose plan lacks the sales pipeline gets `422 PLAN_FEATURE_LOCKED` (the repo's existing plan-lock code, with `feature: sales_pipeline` and the upgrade path) on every deals, pipelines, board, reports and lost-reason route. The flag is `features.sales_pipeline` on the plan (or an organization override); a plan that does not carry the key is NOT locked (every existing plan). It is not in the plan-form registry yet, see follow-ups.                                                                                                                                                                                                                                                                                                            | WD-DEAL-001                     |
+| D-02       | Permissions are keys, not "any member": `record.deals.read/create/update/delete/report` (with a record scope on the deal's owner: all, team, own) and `record.pipelines.read/create/update/delete` (pipelines, stages, lost reasons and deal settings, one configuration resource). The names follow the repo's `record.<resource>.<action>`, not the spec's `deals.view/write`. Admin has all; the editable front-line preset (Agent / Counsellor) gets deals read/update on its own deals, create, and pipelines read. A viewer role with read keys cannot write (403). A deal outside the caller's scope is 404, never 403.                                                                                                                                                                          | WD-DEAL-001                     |
+| D-03       | No currency "heal". The default pipeline is created with the workspace by a database trigger (and backfilled by the migration), so reading never writes. A deal's currency is its own and is never relabelled by any call. Changing it is an explicit PATCH that must carry the value in the new currency. A currency is a 3-letter code, upper-cased, and the number of decimals follows it (JPY 0, KWD 3, else 2).                                                                                                                                                                                                                                                                                                                                                                                    | WD-DEAL-002, 006                |
+| D-04       | The forecast is value x stage probability over OPEN deals only, everywhere (board KPI, reports, per column), and the board's KPI strip is never changed by the board filters.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | WD-DEAL-005, 019                |
+| D-05       | Every total is exact per currency (`byCurrency: [{currency, amount}]`). `convertTo=XXX` adds one converted figure using `currencies.exchange_rate` (bigint arithmetic, half up, minor units of both currencies respected). A currency with no usable rate is listed in `unconverted` and `converted` is `null`: never treated as 1.0 (the board's WaDesk behaviour) and never summed raw under one symbol (its reports' behaviour).                                                                                                                                                                                                                                                                                                                                                                     | WD-DEAL-005, 006, 019           |
+| D-06       | The board is per-column keyset paging (25 cards by default, up to 100) plus SQL aggregates for each column's count, per-currency total and weighted total, so a column of any size costs one page. `GET /deals/board/stages/:stageId/deals` is "load more". The flat `GET /deals` list pages `(created_at, id)` at microsecond precision (no lost or repeated rows on ties).                                                                                                                                                                                                                                                                                                                                                                                                                            | WD-DEAL-003                     |
+| D-07       | The order inside a column persists: `deals.sort_order` is a gap-spaced bigint (new deals on top, newest first until a card is moved); `PATCH /deals/:id/stage` accepts `beforeDealId` / `afterDealId` and the drop takes the midpoint of its neighbours; a column whose gap has closed is renumbered in the same transaction (this bumps the other cards' `rowVersion`, rare). A reorder inside a column is not a stage change.                                                                                                                                                                                                                                                                                                                                                                         | WD-DEAL-007                     |
+| D-08       | Lost-reason catalogue (`/deal-lost-reasons`, list/add/rename/deactivate/reorder/delete), a picker value `lostReasonId` on lost and on a drag into a lost stage, free text `reason` kept for API-style callers, and a workspace setting `lostReasonRequired` (422 `DEAL_LOST_REASON_REQUIRED` on button and drag alike). The deal keeps the reason NAME as text, so deleting or renaming a reason never rewrites history. A reason over 191 characters is 422, not truncated. Creating a deal straight into a lost stage does not require a reason (the create has no reason field).                                                                                                                                                                                                                     | WD-DEAL-012, 043                |
+| D-09       | The editor WaDesk documented is built: create/rename/recolour/re-weight/reorder/delete pipelines and stages, exactly one default pipeline, at most one won and one lost stage per pipeline (won is 100%, lost 0%, by CHECK), unique names (any case), only an empty stage can change kind, deleting a stage with deals moves them to a stage of the same pipeline, deleting a pipeline with deals moves open/won/lost deals to the target's first open / won / lost stage (409 if the target lacks one), the default pipeline cannot be deleted, the last stage cannot be deleted. The foreign keys are NO ACTION, so the database refuses what the service forgets. `pipelines_limit` is enforced on create as the plan limit `pipelines` (422 `PLAN_LIMIT_REACHED`); see follow-ups for the registry. | WD-DEAL-041, 042, 044           |
+| D-10       | A create is a placement: one `stage_change` timeline row (`from: null`), `deal.created`, `deal.stage_changed` (`fromStageId: null`) and `deal.won` / `deal.lost` when it starts there. Every real move writes exactly one timeline row, one audit row and `deal.stage_changed`, plus `deal.won`, `deal.lost` or `deal.reopened` on a status change. All in the writer's transaction. The timeline row stores the stage NAMES, so a deleted stage still reads (WaDesk showed `?`).                                                                                                                                                                                                                                                                                                                       | WD-DEAL-008                     |
+| D-11       | A stage of another pipeline is `422 DEAL_STAGE_MISMATCH` on create, move and reopen alike, and the database enforces it (composite FK `(org, pipeline, stage)`). There is no silent fallback to the default pipeline or the first stage; an unknown `pipelineId` on the board is 404; a contact, company or stage that is not in the workspace is 404 (WaDesk silently dropped the link).                                                                                                                                                                                                                                                                                                                                                                                                               | WD-DEAL-007, 009, 011, 032, 033 |
+| D-12       | An owner must be an ACTIVE member of the workspace (422 `DEAL_OWNER_INVALID`), also for a task assignee. Omitted on a staff create means the caller; `null` means no owner.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | WD-DEAL-009, 011                |
+| D-13       | Hard delete, as the repo's rule says (not soft delete), audited with what was deleted, `deal.deleted` event, the timeline cascades. The references from contacts, companies, conversations, owners, projects, sales docs and payments are `ON DELETE SET NULL` foreign keys, so nothing dangles.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | WD-DEAL-013                     |
+| D-14       | `companyId` is on create and update; a deal linked to a contact with a company and no company of its own inherits it (an explicit company or `null` wins). Company rollups are not built (companies domain).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | WD-DEAL-038                     |
+| D-15       | A contact can be linked, changed and unlinked after creation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | WD-DEAL-014                     |
+| D-16, D-17 | The flow trigger itself belongs to the flows domain. This port emits `deal.stage_changed` on every placement and move (create included) with the pipeline and stage uuids, so a flow can key its idempotency on `(flow, deal)` rather than WaDesk's `(flow, contact)`. `GET /pipelines` returns every pipeline with its stages for the builder and inbox pickers (not only the default pipeline).                                                                                                                                                                                                                                                                                                                                                                                                       | WD-DEAL-023, 027                |
+| D-19       | Timeline tasks keep their own rows but carry an assignee and a due timestamp, and `GET /deals/tasks` ("my tasks", overdue, done) lists them across deals. Merging with the separate `tasks` table is the tasks domain's decision.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | WD-DEAL-015, 016                |
+| D-20       | Task due dates are full timestamps with an offset (a bare date is not a valid `dueAt`, so nothing is silently read as midnight); reopening a task clears `reminded_at` so it can be reminded again. The reminder sweep's index (`idx_deal_activities_task_sweep`) is in place; the job itself is a follow-up.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | WD-DEAL-016, 017                |
+| D-22       | `ai` joins the source vocabulary (`manual, inbox, order, shopify, woo, form, api, flow, facebook, ai`), enforced by a CHECK. Staff-created deals are always `manual`; `DealsService.create(input, source)` takes the source for the other writers.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | WD-DEAL-009                     |
+| D-23       | Server answers carry stable error codes (`DEAL_*`), never messages to parse.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | WD-DEAL-047                     |
+| D-24       | Reports take `pipelineId`, `ownerId`, `from`, `to`, `convertTo`; "won this month" is this month in the workspace's time zone (`organizations.settings.timezone`, else UTC); the six-month trend is keyed `YYYY-MM` (year included); `avgDaysToClose` and lost-reason counts are added. A funnel (stage-to-stage conversion) is not built.                                                                                                                                                                                                                                                                                                                                                                                                                                                               | WD-DEAL-019, 020                |
+| D-26       | The timeline body is encrypted at rest (AES-GCM through `CryptoService`, as WaDesk's cast did). Editing or deleting an entry is not built.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | WD-DEAL-015                     |
 
 ### Other decisions
 
-| Decision | Where |
-| --- | --- |
-| A new stage without a probability starts at 0; it is placed after the last open stage so Won and Lost stay at the end (or before `beforeStageId`). | WD-DEAL-041 |
+| Decision                                                                                                                                                                                                                                           | Where       |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| A new stage without a probability starts at 0; it is placed after the last open stage so Won and Lost stay at the end (or before `beforeStageId`).                                                                                                 | WD-DEAL-041 |
 | Timeline types are `note, call, message, email, meeting, task` (WaDesk: `note, call, message, task`; `email` was a 422 there); `stage_change` is system-only. `dueAt` / `assigneeId` on anything but a task is 422 (WaDesk dropped them silently). | WD-DEAL-015 |
-| A won deal that was lost drops the stale reason (WaDesk kept `lost_reason` when moving to won); `won_at` / `lost_at` are kept when the deal is moved to the stage it is already in. | WD-DEAL-008 |
-| Marking a won deal won again, or a lost deal lost again without a reason, is a no-op (no row, no event); with a new reason it only replaces the reason. `POST /deals/:id/reopen` is new (WaDesk reopened by dragging). | WD-DEAL-012 |
-| `status` and the won/lost stamps are a CHECK on the table, so a report counting `won_at` and one counting `status` cannot disagree. | WD-DEAL-008 |
-| Every update takes `rowVersion` (409 `ROW_VERSION_CONFLICT`); the stage routes take it optionally (drag and drop is last write wins unless the client sends it). | WD-DEAL-011 |
-| Board search matches the title, the contact's name and the company's name (WaDesk: title only); `unassigned` and `contactId` / `companyId` filters are added. | WD-DEAL-004 |
-| Reads and writes use the record scope on the deal's OWNER; an unowned deal is visible only to scope `all`. | WD-DEAL-001 |
+| A won deal that was lost drops the stale reason (WaDesk kept `lost_reason` when moving to won); `won_at` / `lost_at` are kept when the deal is moved to the stage it is already in.                                                                | WD-DEAL-008 |
+| Marking a won deal won again, or a lost deal lost again without a reason, is a no-op (no row, no event); with a new reason it only replaces the reason. `POST /deals/:id/reopen` is new (WaDesk reopened by dragging).                             | WD-DEAL-012 |
+| `status` and the won/lost stamps are a CHECK on the table, so a report counting `won_at` and one counting `status` cannot disagree.                                                                                                                | WD-DEAL-008 |
+| Every update takes `rowVersion` (409 `ROW_VERSION_CONFLICT`); the stage routes take it optionally (drag and drop is last write wins unless the client sends it).                                                                                   | WD-DEAL-011 |
+| Board search matches the title, the contact's name and the company's name (WaDesk: title only); `unassigned` and `contactId` / `companyId` filters are added.                                                                                      | WD-DEAL-004 |
+| Reads and writes use the record scope on the deal's OWNER; an unowned deal is visible only to scope `all`.                                                                                                                                         | WD-DEAL-001 |
 
 ### Not built here (follow-ups)
 
-| What | Why / where it goes |
-| --- | --- |
-| Public REST API `/public/v1/deals` (WD-DEAL-030..035) | The contacts port added no public-API pattern, and the existing `/public/v1` guard checks the key and signature but not scopes. It needs `deals:read` / `deals:write` key scopes first (D-21). The services take a `source`, so the controller is thin. |
-| Overdue-task reminder job and the four owner notifications (WD-DEAL-017, 018) | Consumers of the outbox events (`deal.created` carries the owner, `deal.owner_changed`, `deal.won`, `deal.lost`) and a BullMQ sweep over `idx_deal_activities_task_sweep`; they belong with the notifications domain. |
-| Auto-deal from orders and its settings (WD-DEAL-021, 022), inbox create/panel (025, 026), flow node (028), Messenger (029), AI tools (036) | Owned by the orders, inbox, flows, channels and AI domains; they call the deal service. |
-| Registering `sales_pipeline` and `pipelines` in the plan registry (`PLAN_FEATURE_DEFS` / `PLAN_LIMIT_DEFS` in `@crm/contracts`) | The plan editor in `apps/web` renders and message-tests every registry key, so adding them needs the web messages in the same change. Until then they are set on a plan's JSON or an organization override. |
-| Company 360 rollups, calendar and dashboard KPI cards (WD-DEAL-038..040), demo seeder (045) | Other domains consume `GET /deals?companyId=`, `GET /contacts/:id/deals` and `GET /deals/reports`. |
-| Edit and delete of timeline entries; a funnel report | Out of the listed scope (D-24, D-26). |
+| What                                                                                                                                       | Why / where it goes                                                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Public REST API `/public/v1/deals` (WD-DEAL-030..035)                                                                                      | The contacts port added no public-API pattern, and the existing `/public/v1` guard checks the key and signature but not scopes. It needs `deals:read` / `deals:write` key scopes first (D-21). The services take a `source`, so the controller is thin. |
+| Overdue-task reminder job and the four owner notifications (WD-DEAL-017, 018)                                                              | Consumers of the outbox events (`deal.created` carries the owner, `deal.owner_changed`, `deal.won`, `deal.lost`) and a BullMQ sweep over `idx_deal_activities_task_sweep`; they belong with the notifications domain.                                   |
+| Auto-deal from orders and its settings (WD-DEAL-021, 022), inbox create/panel (025, 026), flow node (028), Messenger (029), AI tools (036) | Owned by the orders, inbox, flows, channels and AI domains; they call the deal service.                                                                                                                                                                 |
+| Registering `sales_pipeline` and `pipelines` in the plan registry (`PLAN_FEATURE_DEFS` / `PLAN_LIMIT_DEFS` in `@crm/contracts`)            | The plan editor in `apps/web` renders and message-tests every registry key, so adding them needs the web messages in the same change. Until then they are set on a plan's JSON or an organization override.                                             |
+| Company 360 rollups, calendar and dashboard KPI cards (WD-DEAL-038..040), demo seeder (045)                                                | Other domains consume `GET /deals?companyId=`, `GET /contacts/:id/deals` and `GET /deals/reports`.                                                                                                                                                      |
+| Edit and delete of timeline entries; a funnel report                                                                                       | Out of the listed scope (D-24, D-26).                                                                                                                                                                                                                   |
 
 ### Follow-up closed: plan registry
 

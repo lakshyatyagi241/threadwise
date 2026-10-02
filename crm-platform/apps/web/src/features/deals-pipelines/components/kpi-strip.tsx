@@ -6,13 +6,7 @@ import type { BoardKpis } from '../api/schemas';
 import { formatMoney } from '../lib/money';
 
 /** Four tiles over the board. They describe the whole pipeline: the search and owner filters never change them. */
-export function KpiStrip({
-  kpis,
-  currency,
-}: {
-  kpis: BoardKpis | null;
-  currency: string;
-}) {
+export function KpiStrip({ kpis, currency }: { kpis: BoardKpis | null; currency: string }) {
   const t = useTranslations('deals-pipelines.kpi');
   const locale = useLocale();
   const money = (n: number) => formatMoney(n, currency, locale);

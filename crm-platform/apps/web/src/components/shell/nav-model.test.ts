@@ -10,7 +10,15 @@ const item = (
   group: ResolvedNavItem['group'],
   href: string,
   over: Partial<ResolvedNavItem> = {},
-): ResolvedNavItem => ({ id, group, href, labelKey: id, locked: false, comingSoon: false, ...over });
+): ResolvedNavItem => ({
+  id,
+  group,
+  href,
+  labelKey: id,
+  locked: false,
+  comingSoon: false,
+  ...over,
+});
 
 const items = [
   item('dashboard', 'overview', '/dashboard'),
@@ -35,11 +43,13 @@ describe('toSections', () => {
 
 describe('railSections', () => {
   it('keeps only real screens and drops groups left empty', () => {
-    expect(railSections(toSections(items)).map((s) => [s.group, s.items.map((i) => i.id)])).toEqual([
-      ['overview', ['dashboard']],
-      ['audience', ['contacts', 'groups']],
-      ['settings', ['account']],
-    ]);
+    expect(railSections(toSections(items)).map((s) => [s.group, s.items.map((i) => i.id)])).toEqual(
+      [
+        ['overview', ['dashboard']],
+        ['audience', ['contacts', 'groups']],
+        ['settings', ['account']],
+      ],
+    );
   });
 });
 

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { createRecurringInvoiceSchema, updateRecurringInvoiceSchema, type RecurringInvoiceResponse, type TaxRateResponse } from '@crm/contracts';
+import {
+  createRecurringInvoiceSchema,
+  updateRecurringInvoiceSchema,
+  type RecurringInvoiceResponse,
+  type TaxRateResponse,
+} from '@crm/contracts';
 import { emptyLine } from './builder';
 import {
   CATCH_UP_MAX,
@@ -37,7 +42,11 @@ function form(over: Partial<RecurringForm> = {}): RecurringForm {
     ...base,
     name: 'Retainer',
     startDate: '2026-11-01',
-    draft: { ...base.draft, buyerName: 'Acme', lines: [{ ...emptyLine(), description: 'Work', qty: '2', price: '50' }] },
+    draft: {
+      ...base.draft,
+      buyerName: 'Acme',
+      lines: [{ ...emptyLine(), description: 'Work', qty: '2', price: '50' }],
+    },
     ...over,
   };
 }
@@ -75,7 +84,14 @@ describe('previewSchedule', () => {
   it('lists the next six dates and clamps month ends from the start day', () => {
     const s = shapeOf(form({ startDate: '2026-01-31' }))!;
     const p = previewSchedule(s)!;
-    expect(p.runs.map((r) => r.date)).toEqual(['2026-01-31', '2026-02-28', '2026-03-31', '2026-04-30', '2026-05-31', '2026-06-30']);
+    expect(p.runs.map((r) => r.date)).toEqual([
+      '2026-01-31',
+      '2026-02-28',
+      '2026-03-31',
+      '2026-04-30',
+      '2026-05-31',
+      '2026-06-30',
+    ]);
     expect(p.runs.map((r) => r.clamped)).toEqual([false, true, false, true, false, true]);
     expect(p.clampsAtMonthEnd).toBe(true);
     expect(p.more).toBe(true);
@@ -99,7 +115,12 @@ describe('previewSchedule', () => {
 
   it('stops at the end date and counts the invoices', () => {
     const p = previewSchedule(shapeOf(form({ startDate: '2026-01-01', endDate: '2026-04-15' }))!)!;
-    expect(p.runs.map((r) => r.date)).toEqual(['2026-01-01', '2026-02-01', '2026-03-01', '2026-04-01']);
+    expect(p.runs.map((r) => r.date)).toEqual([
+      '2026-01-01',
+      '2026-02-01',
+      '2026-03-01',
+      '2026-04-01',
+    ]);
     expect(p.endedBy).toBe('endDate');
     expect(p.totalRuns).toBe(4);
   });
@@ -113,9 +134,25 @@ describe('previewSchedule', () => {
   });
 
   it('handles weekly and daily steps and yearly leap days', () => {
-    expect(previewSchedule(shapeOf(form({ frequency: 'week', interval: '2', startDate: '2026-01-01' }))!, 0, 3)!.runs.map((r) => r.date)).toEqual(['2026-01-01', '2026-01-15', '2026-01-29']);
-    expect(previewSchedule(shapeOf(form({ frequency: 'day', interval: '10', startDate: '2026-02-20' }))!, 0, 2)!.runs.map((r) => r.date)).toEqual(['2026-02-20', '2026-03-02']);
-    const y = previewSchedule(shapeOf(form({ frequency: 'year', startDate: '2028-02-29' }))!, 0, 3)!;
+    expect(
+      previewSchedule(
+        shapeOf(form({ frequency: 'week', interval: '2', startDate: '2026-01-01' }))!,
+        0,
+        3,
+      )!.runs.map((r) => r.date),
+    ).toEqual(['2026-01-01', '2026-01-15', '2026-01-29']);
+    expect(
+      previewSchedule(
+        shapeOf(form({ frequency: 'day', interval: '10', startDate: '2026-02-20' }))!,
+        0,
+        2,
+      )!.runs.map((r) => r.date),
+    ).toEqual(['2026-02-20', '2026-03-02']);
+    const y = previewSchedule(
+      shapeOf(form({ frequency: 'year', startDate: '2028-02-29' }))!,
+      0,
+      3,
+    )!;
     expect(y.runs.map((r) => r.date)).toEqual(['2028-02-29', '2029-02-28', '2030-02-28']);
     expect(y.runs.map((r) => r.clamped)).toEqual([false, true, true]);
   });
@@ -138,7 +175,9 @@ describe('schedule position', () => {
   });
 
   it('returns null when the schedule has no period left', () => {
-    expect(firstPeriodFrom(shapeOf(form({ startDate: '2026-01-01', maxRuns: '2' }))!, '2026-10-15')).toBeNull();
+    expect(
+      firstPeriodFrom(shapeOf(form({ startDate: '2026-01-01', maxRuns: '2' }))!, '2026-10-15'),
+    ).toBeNull();
   });
 
   it('starts an edit preview at the saved next run, or at today when the schedule changed', () => {
@@ -151,7 +190,13 @@ describe('schedule position', () => {
 });
 
 function formFromSaved(r: RecurringInvoiceResponse): RecurringForm {
-  return form({ frequency: r.frequency, interval: String(r.interval), startDate: r.startDate, endDate: r.endDate ?? '', maxRuns: r.maxRuns === null ? '' : String(r.maxRuns) });
+  return form({
+    frequency: r.frequency,
+    interval: String(r.interval),
+    startDate: r.startDate,
+    endDate: r.endDate ?? '',
+    maxRuns: r.maxRuns === null ? '' : String(r.maxRuns),
+  });
 }
 
 describe('scheduleFacts', () => {
@@ -159,9 +204,18 @@ describe('scheduleFacts', () => {
     const shape = shapeOf(form({ maxRuns: '12' }))!;
     expect(scheduleFacts({ mode: 'draft', sendChannel: 'email', shape }).outcome).toBe('draft');
     expect(scheduleFacts({ mode: 'issue', sendChannel: 'email', shape }).outcome).toBe('issue');
-    expect(scheduleFacts({ mode: 'issue_send', sendChannel: 'email', shape })).toMatchObject({ outcome: 'issue_email', maxRuns: 12, interval: 1, frequency: 'month' });
-    expect(scheduleFacts({ mode: 'issue_send', sendChannel: 'whatsapp', shape }).outcome).toBe('issue_whatsapp');
-    expect(scheduleFacts({ mode: 'issue_send', sendChannel: 'link', shape }).outcome).toBe('issue_link');
+    expect(scheduleFacts({ mode: 'issue_send', sendChannel: 'email', shape })).toMatchObject({
+      outcome: 'issue_email',
+      maxRuns: 12,
+      interval: 1,
+      frequency: 'month',
+    });
+    expect(scheduleFacts({ mode: 'issue_send', sendChannel: 'whatsapp', shape }).outcome).toBe(
+      'issue_whatsapp',
+    );
+    expect(scheduleFacts({ mode: 'issue_send', sendChannel: 'link', shape }).outcome).toBe(
+      'issue_link',
+    );
   });
 });
 
@@ -180,8 +234,12 @@ describe('validateRecurring', () => {
   });
 
   it('refuses an end date before the start date', () => {
-    expect(problems(form({ startDate: '2026-11-01', endDate: '2026-10-31' })).endDate).toBe('endBeforeStart');
-    expect(problems(form({ startDate: '2026-11-01', endDate: '2026-11-01' })).endDate).toBeUndefined();
+    expect(problems(form({ startDate: '2026-11-01', endDate: '2026-10-31' })).endDate).toBe(
+      'endBeforeStart',
+    );
+    expect(
+      problems(form({ startDate: '2026-11-01', endDate: '2026-11-01' })).endDate,
+    ).toBeUndefined();
   });
 
   it('refuses a start date more than the catch-up window in the past (REC_START_TOO_OLD)', () => {
@@ -193,21 +251,36 @@ describe('validateRecurring', () => {
   });
 
   it('needs a copied invoice or a built template, not neither', () => {
-    expect(problems(form({ source: 'invoice', fromInvoice: null })).template).toBe('invoiceRequired');
+    expect(problems(form({ source: 'invoice', fromInvoice: null })).template).toBe(
+      'invoiceRequired',
+    );
     const pick = { id: UUID, number: 'INV-1', buyerName: 'Acme', currency: 'USD', totalMinor: 100 };
-    expect(hasRecurringProblems(problems(form({ source: 'invoice', fromInvoice: pick })))).toBe(false);
+    expect(hasRecurringProblems(problems(form({ source: 'invoice', fromInvoice: pick })))).toBe(
+      false,
+    );
   });
 
   it('needs a line, and a buyer when it issues by itself', () => {
     const empty = form({ draft: { ...form().draft, lines: [emptyLine()] } });
     expect(problems(empty).lines).toBe('noLines');
-    const noBuyer = form({ mode: 'issue', draft: { ...form().draft, buyerName: '', contactId: null } });
+    const noBuyer = form({
+      mode: 'issue',
+      draft: { ...form().draft, buyerName: '', contactId: null },
+    });
     expect(problems(noBuyer).buyerName).toBe('contactRequired');
-    expect(problems(form({ mode: 'draft', draft: { ...form().draft, buyerName: '' } })).buyerName).toBeUndefined();
+    expect(
+      problems(form({ mode: 'draft', draft: { ...form().draft, buyerName: '' } })).buyerName,
+    ).toBeUndefined();
   });
 
   it('flags a bad line and a bad payment term', () => {
-    const f = form({ paymentTermsDays: '400', draft: { ...form().draft, lines: [{ ...emptyLine(), description: '', qty: '1', price: '5' }] } });
+    const f = form({
+      paymentTermsDays: '400',
+      draft: {
+        ...form().draft,
+        lines: [{ ...emptyLine(), description: '', qty: '1', price: '5' }],
+      },
+    });
     const p = problems(f);
     expect(p['lines.0.description']).toBe('descriptionRequired');
     expect(p.paymentTermsDays).toBe('termsInvalid');
@@ -220,7 +293,9 @@ describe('validateRecurring', () => {
   });
 
   it('warns about a missing buyer email only where the email is needed', () => {
-    expect(warningsOf(form({ mode: 'issue_send', sendChannel: 'email' }))).toEqual(['noBuyerEmail']);
+    expect(warningsOf(form({ mode: 'issue_send', sendChannel: 'email' }))).toEqual([
+      'noBuyerEmail',
+    ]);
     expect(warningsOf(form({ mode: 'issue_send', sendChannel: 'link' }))).toEqual([]);
     expect(warningsOf(form({ mode: 'issue' }))).toEqual([]);
   });
@@ -228,10 +303,26 @@ describe('validateRecurring', () => {
 
 describe('buildCreateInput', () => {
   it('sends the built template, in the shape the API accepts', () => {
-    const body = buildCreateInput(form({ maxRuns: '12', endDate: '2027-12-31', mode: 'issue_send', paymentTermsDays: '30' }), CTX);
-    expect(body).toMatchObject({ name: 'Retainer', frequency: 'month', interval: 1, startDate: '2026-11-01', endDate: '2027-12-31', maxRuns: 12, mode: 'issue_send', sendChannel: 'email' });
+    const body = buildCreateInput(
+      form({ maxRuns: '12', endDate: '2027-12-31', mode: 'issue_send', paymentTermsDays: '30' }),
+      CTX,
+    );
+    expect(body).toMatchObject({
+      name: 'Retainer',
+      frequency: 'month',
+      interval: 1,
+      startDate: '2026-11-01',
+      endDate: '2027-12-31',
+      maxRuns: 12,
+      mode: 'issue_send',
+      sendChannel: 'email',
+    });
     expect(body.fromInvoiceId).toBeUndefined();
-    expect(body.template).toMatchObject({ paymentTermsDays: 30, currency: 'USD', buyerName: 'Acme' });
+    expect(body.template).toMatchObject({
+      paymentTermsDays: 30,
+      currency: 'USD',
+      buyerName: 'Acme',
+    });
     expect(body.template).not.toHaveProperty('issueDate');
     expect(body.template).not.toHaveProperty('dueDate');
     expect(body.template!.lines).toEqual([{ description: 'Work', qty: '2', unitPrice: '50' }]);
@@ -260,14 +351,30 @@ describe('buildUpdateInput', () => {
 
   it('sends nothing when nothing changed', () => {
     const r = saved({ name: 'Retainer' });
-    expect(isEmptyPatch(buildUpdateInput(r, { ...same(r), name: 'Retainer' }, ctx, false))).toBe(true);
+    expect(isEmptyPatch(buildUpdateInput(r, { ...same(r), name: 'Retainer' }, ctx, false))).toBe(
+      true,
+    );
   });
 
   it('sends only the changed schedule fields and never the start date', () => {
     const r = saved();
-    const patch = buildUpdateInput(r, { ...same(r), name: 'New name', interval: '2', maxRuns: '24', mode: 'issue', startDate: '2030-01-01' }, ctx, false);
+    const patch = buildUpdateInput(
+      r,
+      {
+        ...same(r),
+        name: 'New name',
+        interval: '2',
+        maxRuns: '24',
+        mode: 'issue',
+        startDate: '2030-01-01',
+      },
+      ctx,
+      false,
+    );
     expect(patch).toEqual({ name: 'New name', interval: 2, maxRuns: 24, mode: 'issue' });
-    expect(updateRecurringInvoiceSchema.safeParse({ ...patch, rowVersion: r.rowVersion }).success).toBe(true);
+    expect(
+      updateRecurringInvoiceSchema.safeParse({ ...patch, rowVersion: r.rowVersion }).success,
+    ).toBe(true);
   });
 
   it('clears the end date and the cap with null', () => {
@@ -288,8 +395,16 @@ describe('buildUpdateInput', () => {
 
 describe('server errors', () => {
   it('maps template paths onto the draft lines that were sent', () => {
-    const f = form({ draft: { ...form().draft, lines: [emptyLine(), { ...emptyLine(), description: 'A', price: '1' }] } });
-    const out = serverErrorsOn({ 'template.lines.0.qty': 'bad', startDate: 'too far', 'template.buyerEmail': 'bad email' }, f.draft);
+    const f = form({
+      draft: {
+        ...form().draft,
+        lines: [emptyLine(), { ...emptyLine(), description: 'A', price: '1' }],
+      },
+    });
+    const out = serverErrorsOn(
+      { 'template.lines.0.qty': 'bad', startDate: 'too far', 'template.buyerEmail': 'bad email' },
+      f.draft,
+    );
     expect(out).toEqual({ 'lines.1.qty': 'bad', startDate: 'too far', buyerEmail: 'bad email' });
   });
 });
@@ -297,21 +412,43 @@ describe('server errors', () => {
 describe('rows', () => {
   const can = { update: true, remove: true };
   it('offers pause on an active schedule and resume on a paused one', () => {
-    expect(rowActions({ status: 'active', nextRunDate: '2026-11-01' }, can)).toEqual({ pause: true, resume: false, runNow: true, edit: true, remove: true });
-    expect(rowActions({ status: 'paused', nextRunDate: '2026-11-01' }, can)).toMatchObject({ pause: false, resume: true, runNow: true });
+    expect(rowActions({ status: 'active', nextRunDate: '2026-11-01' }, can)).toEqual({
+      pause: true,
+      resume: false,
+      runNow: true,
+      edit: true,
+      remove: true,
+    });
+    expect(rowActions({ status: 'paused', nextRunDate: '2026-11-01' }, can)).toMatchObject({
+      pause: false,
+      resume: true,
+      runNow: true,
+    });
   });
   it('offers an ended schedule only deletion', () => {
-    expect(rowActions({ status: 'ended', nextRunDate: null }, can)).toEqual({ pause: false, resume: false, runNow: false, edit: false, remove: true });
+    expect(rowActions({ status: 'ended', nextRunDate: null }, can)).toEqual({
+      pause: false,
+      resume: false,
+      runNow: false,
+      edit: false,
+      remove: true,
+    });
   });
   it('follows the permissions', () => {
-    expect(rowActions({ status: 'active', nextRunDate: '2026-11-01' }, { update: false, remove: false })).toEqual({ pause: false, resume: false, runNow: false, edit: false, remove: false });
+    expect(
+      rowActions({ status: 'active', nextRunDate: '2026-11-01' }, { update: false, remove: false }),
+    ).toEqual({ pause: false, resume: false, runNow: false, edit: false, remove: false });
   });
   it('maps tabs to the API status filter', () => {
     expect(statusFilterOf('all')).toBeUndefined();
     expect(statusFilterOf('paused')).toBe('paused');
   });
   it('filters the loaded rows by name, buyer or contact', () => {
-    const r = { name: 'Monthly retainer', buyerName: 'Acme Ltd', contact: { id: UUID, name: 'Dana' } };
+    const r = {
+      name: 'Monthly retainer',
+      buyerName: 'Acme Ltd',
+      contact: { id: UUID, name: 'Dana' },
+    };
     expect(matchesRecurring(r, '')).toBe(true);
     expect(matchesRecurring(r, 'RETAIN')).toBe(true);
     expect(matchesRecurring(r, 'acme')).toBe(true);

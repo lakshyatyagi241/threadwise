@@ -30,15 +30,48 @@ import { ErrorLine, useInvoicingCan } from './parts';
 const SECTIONS = ['business', 'branding', 'payment', 'numbering', 'defaults', 'online'] as const;
 /** The roots of the form's field paths: a server error under another path is shown in the bar, where the person will see it. */
 const KNOWN_ROOTS = new Set<string>([
-  'sellerName', 'sellerAddress', 'sellerCountry', 'sellerState', 'sellerTaxId', 'sellerRegistrationNo', 'sellerPhone', 'supportEmail',
-  'extraFields', 'logoUrl', 'brandColor', 'invoiceTitle', 'footerNote', 'bankDetails', 'paymentInstructions', 'numberingPrefix',
-  'proformaPrefix', 'receiptPrefix', 'creditNotePrefix', 'salesOrderPrefix', 'numberFormat', 'numberPadding', 'yearlyReset',
-  'fiscalYearStartMonth', 'dueDays', 'terms', 'overdueReminders', 'defaultTaxRegime',
+  'sellerName',
+  'sellerAddress',
+  'sellerCountry',
+  'sellerState',
+  'sellerTaxId',
+  'sellerRegistrationNo',
+  'sellerPhone',
+  'supportEmail',
+  'extraFields',
+  'logoUrl',
+  'brandColor',
+  'invoiceTitle',
+  'footerNote',
+  'bankDetails',
+  'paymentInstructions',
+  'numberingPrefix',
+  'proformaPrefix',
+  'receiptPrefix',
+  'creditNotePrefix',
+  'salesOrderPrefix',
+  'numberFormat',
+  'numberPadding',
+  'yearlyReset',
+  'fiscalYearStartMonth',
+  'dueDays',
+  'terms',
+  'overdueReminders',
+  'defaultTaxRegime',
 ]);
 
 function BuildingIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="size-5">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="size-5"
+    >
       <path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14 9h5a1 1 0 0 1 1 1v11M3 21h18M8 8h2M8 12h2M8 16h2M17 13h1M17 17h1" />
     </svg>
   );
@@ -54,7 +87,10 @@ export function BusinessProfileScreen() {
   return (
     <div className="mx-auto max-w-5xl space-y-4">
       <header className="flex items-center gap-4 rounded-xl border border-border bg-background px-4 py-3">
-        <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+        <span
+          aria-hidden="true"
+          className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
+        >
           <BuildingIcon />
         </span>
         <div className="min-w-0">
@@ -66,19 +102,34 @@ export function BusinessProfileScreen() {
       {!allowed ? (
         <Alert tone="warning">{t('forbidden')}</Alert>
       ) : query.isPending ? (
-        <div role="status" className="flex items-center gap-2 rounded-xl border border-border bg-background p-6 text-muted-foreground">
+        <div
+          role="status"
+          className="flex items-center gap-2 rounded-xl border border-border bg-background p-6 text-muted-foreground"
+        >
           <Spinner /> {t('loading')}
         </div>
       ) : query.isError ? (
         <ErrorLine error={query.error} onRetry={() => void query.refetch()} />
       ) : (
-        <ProfileEditor profile={query.data} canEdit={can.settings} reload={() => query.refetch().then((r) => r.data ?? null)} />
+        <ProfileEditor
+          profile={query.data}
+          canEdit={can.settings}
+          reload={() => query.refetch().then((r) => r.data ?? null)}
+        />
       )}
     </div>
   );
 }
 
-function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; canEdit: boolean; reload: () => Promise<InvoiceProfile | null> }) {
+function ProfileEditor({
+  profile,
+  canEdit,
+  reload,
+}: {
+  profile: InvoiceProfile;
+  canEdit: boolean;
+  reload: () => Promise<InvoiceProfile | null>;
+}) {
   const t = useTranslations('invoicing.settings');
   const locale = useLocale();
   const qc = useQueryClient();
@@ -129,7 +180,9 @@ function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; 
     [issues, serverErrors, showAll, t],
   );
   const issueCount = Object.keys(issues).length;
-  const unmapped = Object.entries(serverErrors).filter(([p]) => !KNOWN_ROOTS.has(p.split('.')[0] ?? ''));
+  const unmapped = Object.entries(serverErrors).filter(
+    ([p]) => !KNOWN_ROOTS.has(p.split('.')[0] ?? ''),
+  );
 
   const suggestion = countrySuggestion(form.sellerCountry);
   const country = form.sellerCountry.trim().toUpperCase();
@@ -137,12 +190,17 @@ function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; 
     !readOnly &&
     suggestion !== null &&
     dismissedFor !== country &&
-    (suggestion.regime !== form.defaultTaxRegime || suggestion.fiscalYearStartMonth !== Number(form.fiscalYearStartMonth)) &&
+    (suggestion.regime !== form.defaultTaxRegime ||
+      suggestion.fiscalYearStartMonth !== Number(form.fiscalYearStartMonth)) &&
     (country !== initial.sellerCountry.trim().toUpperCase() || form.defaultTaxRegime === 'none');
 
   const months = useMemo(() => {
     const m = suggestion?.fiscalYearStartMonth;
-    return m ? new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(2026, m - 1, 1))) : '';
+    return m
+      ? new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(
+          new Date(Date.UTC(2026, m - 1, 1)),
+        )
+      : '';
   }, [suggestion?.fiscalYearStartMonth, locale]);
 
   function focusFirstError() {
@@ -210,7 +268,10 @@ function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; 
       {readOnly && <Alert tone="info">{t('readOnly')}</Alert>}
       {base.rowVersion === null && <Alert tone="info">{t('notSavedYet')}</Alert>}
 
-      <nav aria-label={t('menu')} className="thin-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
+      <nav
+        aria-label={t('menu')}
+        className="thin-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1"
+      >
         {SECTIONS.map((s) => (
           <a
             key={s}
@@ -225,10 +286,19 @@ function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; 
       <BusinessSection {...ctx} />
 
       {showSuggestion && suggestion && (
-        <Alert tone="info" className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Alert
+          tone="info"
+          className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+        >
           <div className="min-w-0">
             <p className="font-medium">{t('suggest.title', { country: suggestion.countryName })}</p>
-            <p className="text-xs">{t('suggest.body', { taxLabel: suggestion.taxLabel, regime: suggestion.regime, month: months })}</p>
+            <p className="text-xs">
+              {t('suggest.body', {
+                taxLabel: suggestion.taxLabel,
+                regime: suggestion.regime,
+                month: months,
+              })}
+            </p>
           </div>
           <div className="flex shrink-0 gap-2">
             <Button
@@ -243,7 +313,12 @@ function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; 
             >
               {t('suggest.apply')}
             </Button>
-            <Button type="button" variant="secondary" className="h-10" onClick={() => setDismissedFor(country)}>
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-10"
+              onClick={() => setDismissedFor(country)}
+            >
               {t('suggest.dismiss')}
             </Button>
           </div>
@@ -260,13 +335,26 @@ function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; 
         <div className="sticky bottom-0 z-30 -mx-4 -mb-4 border-t border-border bg-background/95 px-4 py-3 backdrop-blur md:-mx-6 md:-mb-6 md:px-6">
           <div className="mx-auto max-w-5xl space-y-2">
             {conflict && (
-              <Alert tone="danger" className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <Alert
+                tone="danger"
+                className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+              >
                 <span>{t('conflict.message')}</span>
                 <span className="flex shrink-0 gap-2">
-                  <Button type="button" variant="primary" size="sm" onClick={() => void reloadLatest()}>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    size="sm"
+                    onClick={() => void reloadLatest()}
+                  >
                     {t('conflict.reload')}
                   </Button>
-                  <Button type="button" variant="secondary" size="sm" onClick={() => setConflict(false)}>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setConflict(false)}
+                  >
                     {t('conflict.keep')}
                   </Button>
                 </span>
@@ -311,7 +399,13 @@ function ProfileEditor({ profile, canEdit, reload }: { profile: InvoiceProfile; 
                 >
                   {t('discard')}
                 </Button>
-                <Button type="button" variant="primary" className="h-10 min-w-28" disabled={!dirty || saving} onClick={() => void save()}>
+                <Button
+                  type="button"
+                  variant="primary"
+                  className="h-10 min-w-28"
+                  disabled={!dirty || saving}
+                  onClick={() => void save()}
+                >
                   {saving && <Spinner />} {t('save')}
                 </Button>
               </div>

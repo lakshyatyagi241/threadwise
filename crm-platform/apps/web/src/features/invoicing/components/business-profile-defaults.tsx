@@ -24,7 +24,10 @@ export function DefaultsSection({ form, set, err, readOnly, profile }: EditorCtx
   const regimeProfile = regime === 'none' ? undefined : profileOf(regime);
   const presetCountry = regimeProfile?.code ?? (form.sellerCountry.trim() || null);
   const notesProfile = regimeProfile ?? profileOf(form.sellerCountry);
-  const asOf = notesProfile?.sources.map((s) => s.asOf).sort().at(-1);
+  const asOf = notesProfile?.sources
+    .map((s) => s.asOf)
+    .sort()
+    .at(-1);
 
   return (
     <Section id="defaults" title={t('title')} description={t('description')}>
@@ -32,7 +35,12 @@ export function DefaultsSection({ form, set, err, readOnly, profile }: EditorCtx
         <Field label={t('currency')} htmlFor={`${uid}-cur`} hint={t('currencyHint')}>
           <Input id={`${uid}-cur`} value={profile.currency} readOnly disabled dir="ltr" />
         </Field>
-        <Field label={t('dueDays')} htmlFor={`${uid}-due`} hint={form.dueDays.trim() === '' ? t('dueOnIssue') : t('dueDaysHint')} error={err('dueDays')}>
+        <Field
+          label={t('dueDays')}
+          htmlFor={`${uid}-due`}
+          hint={form.dueDays.trim() === '' ? t('dueOnIssue') : t('dueDaysHint')}
+          error={err('dueDays')}
+        >
           <Input
             id={`${uid}-due`}
             type="number"
@@ -50,7 +58,15 @@ export function DefaultsSection({ form, set, err, readOnly, profile }: EditorCtx
       </div>
 
       <Field label={t('terms')} htmlFor={`${uid}-terms`} hint={t('termsHint')} error={err('terms')}>
-        <Textarea id={`${uid}-terms`} rows={5} value={form.terms} disabled={readOnly} invalid={!!err('terms')} dir="auto" onChange={(e) => set('terms', e.target.value)} />
+        <Textarea
+          id={`${uid}-terms`}
+          rows={5}
+          value={form.terms}
+          disabled={readOnly}
+          invalid={!!err('terms')}
+          dir="auto"
+          onChange={(e) => set('terms', e.target.value)}
+        />
         <p className="text-end text-xs tabular-nums text-muted-foreground" dir="ltr">
           {form.terms.length}/{LIMITS.terms}
         </p>
@@ -61,14 +77,32 @@ export function DefaultsSection({ form, set, err, readOnly, profile }: EditorCtx
           <p className="text-sm font-medium">{t('reminders')}</p>
           <p className="text-xs text-muted-foreground">{t('remindersHint')}</p>
         </div>
-        <Switch checked={form.overdueReminders} disabled={readOnly} label={t('reminders')} onCheckedChange={(v) => set('overdueReminders', v)} />
+        <Switch
+          checked={form.overdueReminders}
+          disabled={readOnly}
+          label={t('reminders')}
+          onCheckedChange={(v) => set('overdueReminders', v)}
+        />
       </div>
 
       <div className="space-y-3 border-t border-border pt-5">
         <div className="grid items-end gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
-          <Field label={t('regime')} htmlFor={`${uid}-regime`} hint={t('regimeHint')} error={err('defaultTaxRegime')}>
-            <Select id={`${uid}-regime`} value={regime} disabled={readOnly} invalid={!!err('defaultTaxRegime')} onChange={(e) => set('defaultTaxRegime', e.target.value)}>
-              {!REGIME_OPTIONS.some((o) => o.id === regime) && <option value={regime}>{regime}</option>}
+          <Field
+            label={t('regime')}
+            htmlFor={`${uid}-regime`}
+            hint={t('regimeHint')}
+            error={err('defaultTaxRegime')}
+          >
+            <Select
+              id={`${uid}-regime`}
+              value={regime}
+              disabled={readOnly}
+              invalid={!!err('defaultTaxRegime')}
+              onChange={(e) => set('defaultTaxRegime', e.target.value)}
+            >
+              {!REGIME_OPTIONS.some((o) => o.id === regime) && (
+                <option value={regime}>{regime}</option>
+              )}
               {REGIME_OPTIONS.map((o) => (
                 <option key={o.id} value={o.id}>
                   {o.id === 'none' ? t('regimeNone') : `${o.name} (${o.id})`}
@@ -77,16 +111,26 @@ export function DefaultsSection({ form, set, err, readOnly, profile }: EditorCtx
             </Select>
           </Field>
           {can.createTaxRate && (
-            <Button type="button" variant="secondary" className="h-10 w-full sm:w-auto" disabled={!presetCountry} onClick={() => setDialog(true)}>
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-10 w-full sm:w-auto"
+              disabled={!presetCountry}
+              onClick={() => setDialog(true)}
+            >
               <PercentIcon /> {t('loadRates')}
             </Button>
           )}
         </div>
-        {can.createTaxRate && !presetCountry && <p className="text-xs text-muted-foreground">{t('loadRatesNeedsCountry')}</p>}
+        {can.createTaxRate && !presetCountry && (
+          <p className="text-xs text-muted-foreground">{t('loadRatesNeedsCountry')}</p>
+        )}
 
         {notesProfile && (
           <details className="rounded-lg border border-border bg-muted p-3 text-sm">
-            <summary className="cursor-pointer font-medium focus-visible:ring-2 focus-visible:ring-primary">{t('notesTitle', { country: notesProfile.name })}</summary>
+            <summary className="cursor-pointer font-medium focus-visible:ring-2 focus-visible:ring-primary">
+              {t('notesTitle', { country: notesProfile.name })}
+            </summary>
             <ul className="mt-2 list-disc space-y-1.5 ps-5 text-xs leading-relaxed" dir="auto">
               {notesProfile.notes.map((n) => (
                 <li key={n}>{n}</li>
@@ -97,7 +141,9 @@ export function DefaultsSection({ form, set, err, readOnly, profile }: EditorCtx
         )}
         <Alert tone="info" className="text-xs">
           {t('disclaimer')}
-          {asOf && <span className="mt-1 block text-muted-foreground">{t('checked', { date: asOf })}</span>}
+          {asOf && (
+            <span className="mt-1 block text-muted-foreground">{t('checked', { date: asOf })}</span>
+          )}
         </Alert>
       </div>
 

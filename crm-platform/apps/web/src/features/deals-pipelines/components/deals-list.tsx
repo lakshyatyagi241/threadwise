@@ -30,7 +30,11 @@ export function DealsList({
 
   if (list.isPending) {
     return (
-      <div className="space-y-2 rounded-xl border border-border p-4" aria-busy="true" aria-label={t('loading')}>
+      <div
+        className="space-y-2 rounded-xl border border-border p-4"
+        aria-busy="true"
+        aria-label={t('loading')}
+      >
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="h-10 animate-pulse rounded bg-muted" />
         ))}
@@ -53,11 +57,13 @@ export function DealsList({
         <table className="w-full min-w-[56rem] text-sm">
           <thead className="bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
-              {(['title', 'contact', 'stage', 'amount', 'owner', 'close', 'status'] as const).map((c) => (
-                <th key={c} scope="col" className="px-4 py-3 text-start font-medium">
-                  {t(`columns.${c}`)}
-                </th>
-              ))}
+              {(['title', 'contact', 'stage', 'amount', 'owner', 'close', 'status'] as const).map(
+                (c) => (
+                  <th key={c} scope="col" className="px-4 py-3 text-start font-medium">
+                    {t(`columns.${c}`)}
+                  </th>
+                ),
+              )}
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
@@ -80,7 +86,11 @@ export function DealsList({
                   <td className="px-4 py-3">
                     {stage ? (
                       <span className="inline-flex items-center gap-1.5">
-                        <span aria-hidden="true" className="size-2 rounded-full" style={{ backgroundColor: stage.color }} />
+                        <span
+                          aria-hidden="true"
+                          className="size-2 rounded-full"
+                          style={{ backgroundColor: stage.color }}
+                        />
                         {stage.name}
                       </span>
                     ) : (
@@ -113,7 +123,11 @@ export function DealsList({
       </div>
       {list.hasNextPage && (
         <div className="flex justify-center">
-          <Button variant="secondary" disabled={list.isFetchingNextPage} onClick={() => void list.fetchNextPage()}>
+          <Button
+            variant="secondary"
+            disabled={list.isFetchingNextPage}
+            onClick={() => void list.fetchNextPage()}
+          >
             {list.isFetchingNextPage && <Spinner />}
             {t('loadMore')}
           </Button>

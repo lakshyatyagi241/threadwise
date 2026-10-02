@@ -50,7 +50,12 @@ import {
   MemberCount,
   VisibilityChip,
 } from './parts';
-import { SegmentDialogs, useSegmentActions, useSegmentCan, type SegmentActions } from './segment-actions';
+import {
+  SegmentDialogs,
+  useSegmentActions,
+  useSegmentCan,
+  type SegmentActions,
+} from './segment-actions';
 import { useSummaryContext } from './use-summary';
 
 const HELP_KEY = 'segments:hub:help';
@@ -60,7 +65,15 @@ const th =
 const SURFACE = 'bg-background group-hover:bg-muted';
 const NAME_CELL = `sticky start-0 z-10 ${SURFACE}`;
 const NAME_HEAD = 'start-0 z-30 bg-muted';
-const WIDTHS = { name: 320, rules: 380, members: 150, visibility: 120, owner: 150, updated: 170, actions: 56 } as const;
+const WIDTHS = {
+  name: 320,
+  rules: 380,
+  members: 150,
+  visibility: 120,
+  owner: 150,
+  updated: 170,
+  actions: 56,
+} as const;
 const MIN_WIDTH = Object.values(WIDTHS).reduce((a, b) => a + b, 0);
 
 /**
@@ -83,7 +96,9 @@ export function SegmentsScreen() {
 
   const params = useMemo(() => parseHub(search), [search]);
   const setParams = (patch: Partial<HubParams>) =>
-    router.replace(`${pathname}${hubToSearch({ ...params, page: 1, ...patch })}`, { scroll: false });
+    router.replace(`${pathname}${hubToSearch({ ...params, page: 1, ...patch })}`, {
+      scroll: false,
+    });
 
   // Search is applied 300 ms after typing stops, without a page reload.
   const [q, setQ] = useState(params.q);
@@ -102,13 +117,18 @@ export function SegmentsScreen() {
 
   const all = useMemo(() => list.data ?? [], [list.data]);
   const rows = useMemo(() => filterSegments(all, params, me), [all, params, me]);
-  const view = useMemo(() => pageWindow(rows, params.page, params.per), [rows, params.page, params.per]);
+  const view = useMemo(
+    () => pageWindow(rows, params.page, params.per),
+    [rows, params.page, params.per],
+  );
   const filtered = params.q.trim() !== '' || params.show !== 'all';
 
   // A page past the end (rows were deleted) steps back, in the URL too.
   useEffect(() => {
     if (list.isSuccess && view.page !== params.page) {
-      router.replace(`${pathname}${hubToSearch({ ...params, page: view.page })}`, { scroll: false });
+      router.replace(`${pathname}${hubToSearch({ ...params, page: view.page })}`, {
+        scroll: false,
+      });
     }
     // Only a settled list decides.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,7 +140,10 @@ export function SegmentsScreen() {
     <div className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
-          <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+          <span
+            aria-hidden="true"
+            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
+          >
             <FunnelIcon className="size-5" />
           </span>
           <div className="min-w-0">
@@ -147,7 +170,11 @@ export function SegmentsScreen() {
             className="h-9 ps-9 [&::-webkit-search-cancel-button]:hidden"
           />
         </div>
-        <div role="group" aria-label={t('showLabel')} className="inline-flex overflow-hidden rounded-md border border-border">
+        <div
+          role="group"
+          aria-label={t('showLabel')}
+          className="inline-flex overflow-hidden rounded-md border border-border"
+        >
           {SHOW_VALUES.map((v) => (
             <button
               key={v}
@@ -303,7 +330,10 @@ function SegmentsTable({
       onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
       className="thin-scrollbar h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
-      <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: MIN_WIDTH }}>
+      <table
+        className="w-full table-fixed border-separate border-spacing-0 text-sm"
+        style={{ minWidth: MIN_WIDTH }}
+      >
         <colgroup>
           <col className="w-[220px] sm:w-[320px]" />
           <col style={{ width: WIDTHS.rules }} />
@@ -315,13 +345,27 @@ function SegmentsTable({
         </colgroup>
         <thead>
           <tr>
-            <th scope="col" className={cn(th, NAME_HEAD, frozenEdge(scrolled))}>{t('colName')}</th>
-            <th scope="col" className={th}>{t('colRules')}</th>
-            <th scope="col" className={th}>{t('colMembers')}</th>
-            <th scope="col" className={th}>{t('colVisibility')}</th>
-            <th scope="col" className={th}>{t('colOwner')}</th>
-            <th scope="col" className={th}>{t('colUpdated')}</th>
-            <th scope="col" className={cn(th, 'end-0 z-30 px-1')}><span className="sr-only">{t('colActions')}</span></th>
+            <th scope="col" className={cn(th, NAME_HEAD, frozenEdge(scrolled))}>
+              {t('colName')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colRules')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colMembers')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colVisibility')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colOwner')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colUpdated')}
+            </th>
+            <th scope="col" className={cn(th, 'end-0 z-30 px-1')}>
+              <span className="sr-only">{t('colActions')}</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -330,7 +374,13 @@ function SegmentsTable({
             const owner = s.ownerName ?? personName(s.ownerId);
             return (
               <tr key={s.id} className="group h-16 align-middle transition-colors hover:bg-muted">
-                <td className={cn('max-w-0 border-b border-border px-3 py-2', NAME_CELL, frozenEdge(scrolled))}>
+                <td
+                  className={cn(
+                    'max-w-0 border-b border-border px-3 py-2',
+                    NAME_CELL,
+                    frozenEdge(scrolled),
+                  )}
+                >
                   <div className="flex min-w-0 items-center gap-2.5">
                     <ColorDot color={s.color} />
                     <div className="min-w-0">
@@ -342,7 +392,12 @@ function SegmentsTable({
                         {s.name}
                       </Link>
                       {s.description && (
-                        <span title={s.description} className="block truncate text-xs text-muted-foreground">{s.description}</span>
+                        <span
+                          title={s.description}
+                          className="block truncate text-xs text-muted-foreground"
+                        >
+                          {s.description}
+                        </span>
                       )}
                       {needsAttention(s) && <AttentionChip count={s.invalidConditions.length} />}
                     </div>
@@ -352,7 +407,9 @@ function SegmentsTable({
                   {text === null ? (
                     <span className="block h-3 w-48 animate-pulse rounded bg-muted" />
                   ) : (
-                    <span title={text} className="line-clamp-2 text-muted-foreground">{text || '-'}</span>
+                    <span title={text} className="line-clamp-2 text-muted-foreground">
+                      {text || '-'}
+                    </span>
                   )}
                 </td>
                 <td className="border-b border-border px-3 py-2">
@@ -362,14 +419,23 @@ function SegmentsTable({
                     onRefresh={() => void actions.refresh(s)}
                   />
                 </td>
-                <td className="border-b border-border px-3 py-2"><VisibilityChip visibility={s.visibility} /></td>
+                <td className="border-b border-border px-3 py-2">
+                  <VisibilityChip visibility={s.visibility} />
+                </td>
                 <td className="max-w-0 border-b border-border px-3 py-2">
-                  <span title={owner} className="block truncate">{owner ?? '-'}</span>
+                  <span title={owner} className="block truncate">
+                    {owner ?? '-'}
+                  </span>
                 </td>
                 <td className="border-b border-border px-3 py-2 tabular-nums text-muted-foreground">
                   {format.dateTime(new Date(s.updatedAt), { dateStyle: 'medium' })}
                 </td>
-                <td className={cn('sticky end-0 z-10 border-b border-border px-1 py-2 text-center', SURFACE)}>
+                <td
+                  className={cn(
+                    'sticky end-0 z-10 border-b border-border px-1 py-2 text-center',
+                    SURFACE,
+                  )}
+                >
                   <RowActions segment={s} actions={actions} can={can} />
                 </td>
               </tr>
@@ -473,11 +539,23 @@ function Footer({
         {t('range', { from: w.from, to: w.to, total: w.total })}
       </div>
       <nav aria-label={t('pagination')} className="flex items-center gap-2">
-        <button type="button" className={btn} disabled={w.page <= 1} onClick={() => onPage(w.page - 1)}>
+        <button
+          type="button"
+          className={btn}
+          disabled={w.page <= 1}
+          onClick={() => onPage(w.page - 1)}
+        >
           {t('previous')}
         </button>
-        <span className="tabular-nums text-muted-foreground">{t('pageOf', { page: w.page, pages: w.pages })}</span>
-        <button type="button" className={btn} disabled={w.page >= w.pages} onClick={() => onPage(w.page + 1)}>
+        <span className="tabular-nums text-muted-foreground">
+          {t('pageOf', { page: w.page, pages: w.pages })}
+        </span>
+        <button
+          type="button"
+          className={btn}
+          disabled={w.page >= w.pages}
+          onClick={() => onPage(w.page + 1)}
+        >
           {t('next')}
         </button>
         <Select

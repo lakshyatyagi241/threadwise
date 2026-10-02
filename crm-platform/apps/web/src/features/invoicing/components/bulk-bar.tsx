@@ -9,15 +9,27 @@ import { actionFacts } from '../lib/invoice-facts';
 import { allowedActions, type ActionContext, type InvoiceAction } from '../lib/status';
 import { BanIcon, CheckIcon, SendIcon, TrashIcon } from './icons';
 
-const ACTION_OF: Record<BulkAction, InvoiceAction> = { issue: 'issue', send: 'send', void: 'void', delete: 'delete' };
+const ACTION_OF: Record<BulkAction, InvoiceAction> = {
+  issue: 'issue',
+  send: 'send',
+  void: 'void',
+  delete: 'delete',
+};
 
 /** The rows of a selection that accept `action`: the only ones a bulk call is made for (the rest would only answer 409). */
-export function eligibleRows(rows: readonly InvoiceSummary[], action: BulkAction, can: ActionContext['can']): InvoiceSummary[] {
+export function eligibleRows(
+  rows: readonly InvoiceSummary[],
+  action: BulkAction,
+  can: ActionContext['can'],
+): InvoiceSummary[] {
   return rows.filter((r) => allowedActions(actionFacts(r), { can }).has(ACTION_OF[action]));
 }
 
 /** How many selected invoices accept each action, so a button is offered only when at least one does. */
-export function bulkEligibility(rows: readonly InvoiceSummary[], can: ActionContext['can']): Record<BulkAction, number> {
+export function bulkEligibility(
+  rows: readonly InvoiceSummary[],
+  can: ActionContext['can'],
+): Record<BulkAction, number> {
   return {
     issue: eligibleRows(rows, 'issue', can).length,
     send: eligibleRows(rows, 'send', can).length,
@@ -50,12 +62,22 @@ export function BulkBar(p: BulkBarProps) {
       </span>
       {p.busy && <Spinner label={t('working')} />}
       {p.can.issue && (
-        <Button size="sm" variant="secondary" disabled={p.busy || e.issue === 0} onClick={() => p.onAction('issue')}>
+        <Button
+          size="sm"
+          variant="secondary"
+          disabled={p.busy || e.issue === 0}
+          onClick={() => p.onAction('issue')}
+        >
           <CheckIcon /> {t('issue')}
         </Button>
       )}
       {p.can.update && (
-        <Button size="sm" variant="secondary" disabled={p.busy || e.send === 0} onClick={() => p.onAction('send')}>
+        <Button
+          size="sm"
+          variant="secondary"
+          disabled={p.busy || e.send === 0}
+          onClick={() => p.onAction('send')}
+        >
           <SendIcon /> {t('sendLink')}
         </Button>
       )}

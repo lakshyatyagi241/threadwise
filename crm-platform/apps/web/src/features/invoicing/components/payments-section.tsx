@@ -28,7 +28,10 @@ export function PaymentsSection({ invoice }: { invoice: Pick<InvoiceSummary, 'id
 
   if (!can.readPayments) return null;
   return (
-    <section aria-labelledby="inv-payments" className="rounded-xl border border-border bg-background p-4">
+    <section
+      aria-labelledby="inv-payments"
+      className="rounded-xl border border-border bg-background p-4"
+    >
       <h2 id="inv-payments" className="mb-3 text-sm font-semibold">
         {t('title')}
       </h2>
@@ -48,7 +51,11 @@ export function PaymentsSection({ invoice }: { invoice: Pick<InvoiceSummary, 'id
               <li key={p.id} className="space-y-1.5 py-3 first:pt-0 last:pb-0">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Money minor={minorOf(p.amountMinor)} currency={p.currency} className={cn('font-semibold', isRefund && 'text-danger')} />
+                    <Money
+                      minor={minorOf(p.amountMinor)}
+                      currency={p.currency}
+                      className={cn('font-semibold', isRefund && 'text-danger')}
+                    />
                     {isRefund ? (
                       <span className="inline-flex items-center gap-1 rounded-full border border-danger/30 bg-danger/10 px-2 py-0.5 text-xs font-medium text-danger">
                         <UndoIcon className="size-3" /> {t('refundChip')}
@@ -57,7 +64,9 @@ export function PaymentsSection({ invoice }: { invoice: Pick<InvoiceSummary, 'id
                       <MethodChip method={p.method} />
                     )}
                   </div>
-                  <span className="text-xs tabular-nums text-muted-foreground">{formatDateTime(p.paidAt, locale, zone)}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">
+                    {formatDateTime(p.paidAt, locale, zone)}
+                  </span>
                 </div>
                 {p.receiptNumber && (
                   <p className="text-xs text-muted-foreground">
@@ -77,11 +86,22 @@ export function PaymentsSection({ invoice }: { invoice: Pick<InvoiceSummary, 'id
                 )}
                 {!isRefund && Number(p.refunded) > 0 && (
                   <p className="text-xs text-danger">
-                    {t('refundedSoFar', { amount: formatMoney(majorToMinor(p.refunded, exponentOf(p.currency)), p.currency, locale) })}
+                    {t('refundedSoFar', {
+                      amount: formatMoney(
+                        majorToMinor(p.refunded, exponentOf(p.currency)),
+                        p.currency,
+                        locale,
+                      ),
+                    })}
                   </p>
                 )}
                 {can.refund && hasRefundable(p) && (
-                  <Button variant="ghost" size="sm" className="-ms-2" onClick={() => setRefunding(p)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="-ms-2"
+                    onClick={() => setRefunding(p)}
+                  >
                     <UndoIcon /> {t('refund')}
                   </Button>
                 )}
@@ -121,7 +141,10 @@ export function ActivityTimeline({ invoiceId }: { invoiceId: string }) {
   const zone = useWorkspaceZone();
   const events = useInvoiceEvents(invoiceId);
   return (
-    <section aria-labelledby="inv-activity" className="rounded-xl border border-border bg-background p-4">
+    <section
+      aria-labelledby="inv-activity"
+      className="rounded-xl border border-border bg-background p-4"
+    >
       <h2 id="inv-activity" className="mb-3 text-sm font-semibold">
         {t('title')}
       </h2>
@@ -139,7 +162,13 @@ export function ActivityTimeline({ invoiceId }: { invoiceId: string }) {
             const who = e.actor.kind === 'user' ? e.actor.user?.name : t(`actors.${e.actor.kind}`);
             return (
               <li key={e.id} className="flex gap-3">
-                <span aria-hidden="true" className={cn('mt-1.5 size-2 shrink-0 rounded-full', isTimelineEvent(e.type) ? DOT[e.type] : 'bg-muted-foreground')} />
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    'mt-1.5 size-2 shrink-0 rounded-full',
+                    isTimelineEvent(e.type) ? DOT[e.type] : 'bg-muted-foreground',
+                  )}
+                />
                 <div className="min-w-0 text-sm">
                   <div>{isTimelineEvent(e.type) ? t(`events.${e.type}`) : e.type}</div>
                   {e.detail && (
