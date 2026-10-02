@@ -1,0 +1,17 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "Overview"
+    },
+    "shell": {
+      "collapse": "Collapse sidebar",
+      "expand": "Expand sidebar",
+      "toggleGroup": "Show or hide {group}"
+    },
+    "overview": {
+      "title": "Platform console",
+      "note": "Everything an operator manages lives in the menu. Each card opens one area.",
+      "open": "Open"
+    }
+  }
+}
