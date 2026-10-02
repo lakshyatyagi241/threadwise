@@ -112,7 +112,8 @@ const fixed = (value: number, maxDecimals: number) =>
 export function formatCount(n: number | null | undefined): string | null {
   if (n == null || !Number.isFinite(n) || n <= 0) return null;
   const whole = Math.trunc(n);
-  if (whole >= 1_000_000) return `${fixed(whole / 1_000_000, whole >= 10_000_000 ? 0 : 1)}M`;
+  // 999,500 and up already rounds to "1000k"; promote it to "1M" so no comma ever shows.
+  if (whole >= 999_500) return `${fixed(whole / 1_000_000, whole >= 10_000_000 ? 0 : 1)}M`;
   if (whole >= 1000) return `${fixed(whole / 1000, whole >= 10_000 ? 0 : 1)}k`;
   return String(whole);
 }
