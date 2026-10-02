@@ -8,6 +8,7 @@ import { catalogSettingsResponseSchema, type CatalogSettingsResponse } from '@cr
 import { Alert, Button, Card, Field, Input, PasswordInput, Spinner, Switch } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
+import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { ApiError } from '@/lib/api/errors';
 import {
   APP_ID_MAX,
@@ -82,11 +83,11 @@ function Section({
 
 function SettingsForm({ data, canEdit }: { data: CatalogSettingsResponse; canEdit: boolean }) {
   const t = useTranslations(NS);
+  const toast = useToast();
   const qc = useQueryClient();
   const id = useId();
   const [form, setForm] = useState<AdminSettingsForm>(() => formFromSettings(data));
   const [problems, setProblems] = useState<ReturnType<typeof adminSettingsProblems>>([]);
-  const [notice, setNotice] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
   const patch = (p: Partial<AdminSettingsForm>) => setForm((f) => ({ ...f, ...p }));
 
   const save = useMutation({
@@ -97,19 +98,18 @@ function SettingsForm({ data, canEdit }: { data: CatalogSettingsResponse; canEdi
         schema: catalogSettingsResponseSchema,
       }),
     onSuccess: async () => {
-      setNotice({ tone: 'success', text: t('saved') });
+      toast.success(t('saved'));
       await qc.invalidateQueries({ queryKey: QUERY_KEY });
     },
     onError: async (e) => {
       const key = failureKey(e);
-      setNotice({ tone: 'danger', text: t(`errors.${key}`) });
+      toast.error(t(`errors.${key}`));
       if (key === 'conflict') await qc.invalidateQueries({ queryKey: QUERY_KEY });
     },
   });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    setNotice(null);
     const found = adminSettingsProblems(form);
     setProblems(found);
     if (found.length === 0) save.mutate();
@@ -117,7 +117,6 @@ function SettingsForm({ data, canEdit }: { data: CatalogSettingsResponse; canEdi
   const reset = () => {
     setForm(formFromSettings(data));
     setProblems([]);
-    setNotice(null);
   };
   const lock = !canEdit;
 
@@ -182,11 +181,6 @@ function SettingsForm({ data, canEdit }: { data: CatalogSettingsResponse; canEdi
       </div>
 
       {lock && <Alert tone="info">{t('superOnly')}</Alert>}
-      {notice && (
-        <Alert tone={notice.tone} role={notice.tone === 'danger' ? 'alert' : 'status'}>
-          {notice.text}
-        </Alert>
-      )}
       {problems.length > 0 && (
         <Alert tone="danger" role="alert">
           <div className="mb-1 font-semibold">{t('fix')}</div>

@@ -445,7 +445,7 @@
       "edit": "Edit",
       "delete": "Delete",
       "cancel": "Cancel",
-      "deleted": "Product deleted.",
+      "deleted": "Product removed.",
       "deleteTitle": "Delete this product?",
       "deleteBody": "\"{name}\" will be deleted. It stays on Meta until you remove it there."
     },
@@ -644,7 +644,7 @@
         "title": "Graph API version",
         "intro": "Every catalog operation (send, sync, push) goes through this Graph API version. Meta ships a new version every ~3 months and supports the previous one for ~2 years.",
         "version": "Graph API version",
-        "versionHint": "Format: v{major}.{minor}, for example v23.0. Leave it blank to use the default.",
+        "versionHint": "Format: v'{'major'}'.'{'minor'}', for example v23.0. Leave it blank to use the default.",
         "currency": "Default currency",
         "currencyHint": "ISO-4217 code (3 letters). Used as the default for new catalogs; each Meta Commerce catalog still locks to a single currency."
       },
