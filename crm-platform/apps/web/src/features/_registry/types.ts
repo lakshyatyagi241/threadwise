@@ -1,16 +1,17 @@
 /**
- * Menu groups, in the order they appear. They follow WaDesk's user menu (`UserNav`): Overview, Inbox & Chat,
- * Audience, Campaigns, Automation, Channels, Sales & CRM, Store, Developer, Help; account and workspace settings
- * come last. A domain picks one of these for each of its screens.
+ * Menu groups, in the order they appear. They follow WaDesk's user menu (`UserNav`), regrouped for a CRM:
+ * Platform (`overview`), Inbox & Chat, CRM (`audience`), Sales, Campaigns, Automation, Channels, Store, Developer,
+ * Help; account and workspace settings come last. The ids `overview` and `audience` are kept so domains that already
+ * declare them keep working; only their headings read "Platform" and "CRM". A domain picks one for each screen.
  */
 export const NAV_GROUPS = [
   'overview',
   'inbox',
   'audience',
+  'sales',
   'campaigns',
   'automation',
   'channels',
-  'sales',
   'store',
   'developer',
   'help',

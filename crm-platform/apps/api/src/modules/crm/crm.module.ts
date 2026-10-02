@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AttributesController } from './attributes/attributes.controller';
 import { AttributesRepository } from './attributes/attributes.repository';
@@ -38,6 +39,16 @@ import { ContactViewsService } from './contact-views/contact-views.service';
 import { ContactsController } from './contacts/contacts.controller';
 import { ContactsRepository } from './contacts/contacts.repository';
 import { ContactsService } from './contacts/contacts.service';
+import { DealActivitiesRepository } from './deals/deal-activities.repository';
+import { DealActivitiesService } from './deals/deal-activities.service';
+import { DealBoardService } from './deals/deal-board.service';
+import { DealEngine } from './deals/deal-engine.service';
+import { DealReportsRepository } from './deals/deal-reports.repository';
+import { DealReportsService } from './deals/deal-reports.service';
+import { DealsPlan, SalesPipelineGuard } from './deals/deals-plan';
+import { ContactDealsController, DealsController } from './deals/deals.controller';
+import { DealsRepository } from './deals/deals.repository';
+import { DealsService } from './deals/deals.service';
 import { FieldSectionsController } from './field-sections/field-sections.controller';
 import { FieldSectionsRepository } from './field-sections/field-sections.repository';
 import { FieldSectionsService } from './field-sections/field-sections.service';
@@ -46,6 +57,22 @@ import { FieldOptionsRepository } from './fields/field-options.repository';
 import { FieldsController } from './fields/fields.controller';
 import { FieldsRepository } from './fields/fields.repository';
 import { FieldsService } from './fields/fields.service';
+import {
+  DealSettingsController,
+  LostReasonsController,
+  PipelineStagesController,
+  PipelinesController,
+} from './pipelines/pipelines.controller';
+import { LostReasonsService } from './pipelines/lost-reasons.service';
+import { PipelinesRepository } from './pipelines/pipelines.repository';
+import { PipelinesService } from './pipelines/pipelines.service';
+import {
+  ContactTasksController,
+  DealTasksController,
+  TasksController,
+} from './tasks/tasks.controller';
+import { TasksRepository } from './tasks/tasks.repository';
+import { TasksService } from './tasks/tasks.service';
 import { StatusOptionsController } from './status-options/status-options.controller';
 import { StatusOptionsRepository } from './status-options/status-options.repository';
 import { StatusOptionsService } from './status-options/status-options.service';
@@ -93,8 +120,21 @@ import { TagsService } from './tags/tags.service';
     ContactFilesController,
     ContactActivitiesController,
     ContactMeetingsController,
+    // Deals: `deals/board`, `deals/reports` and `deals/tasks` are literal paths declared before `deals/:id` inside the controller.
+    DealsController,
+    ContactDealsController,
+    PipelinesController,
+    PipelineStagesController,
+    LostReasonsController,
+    DealSettingsController,
+    // Tasks: `tasks/my`, `tasks/counts` and `tasks/bulk/...` are literal paths declared before `tasks/:id` inside the controller.
+    TasksController,
+    ContactTasksController,
+    DealTasksController,
   ],
   providers: [
+    // Encrypts deal timeline bodies at rest (the same service the public API provides for its own module).
+    CryptoService,
     ContactsService,
     ContactsRepository,
     ContactQuotaService,
@@ -129,6 +169,21 @@ import { TagsService } from './tags/tags.service';
     ContactActivitiesRepository,
     ContactMeetingsService,
     ContactMeetingsRepository,
+    DealsPlan,
+    SalesPipelineGuard,
+    DealsRepository,
+    DealActivitiesRepository,
+    DealReportsRepository,
+    DealEngine,
+    DealsService,
+    DealActivitiesService,
+    DealBoardService,
+    DealReportsService,
+    PipelinesRepository,
+    PipelinesService,
+    LostReasonsService,
+    TasksRepository,
+    TasksService,
   ],
   exports: [
     ContactsService,
@@ -147,6 +202,9 @@ import { TagsService } from './tags/tags.service';
     ContactFilesService,
     ContactActivitiesService,
     ContactMeetingsService,
+    DealsService,
+    PipelinesService,
+    TasksService,
   ],
 })
 export class CrmModule {}

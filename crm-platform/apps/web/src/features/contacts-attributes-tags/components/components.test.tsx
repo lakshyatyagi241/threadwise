@@ -8,7 +8,16 @@ import { EmptyState, StatTile } from '@crm/ui';
 import { allColumns, visibleColumns, type ColumnId } from '../lib/columns';
 import type { RowView } from '../lib/row-view';
 import { ContactAvatar, GroupChip, TagPill } from './chips';
+import { menuActions } from '../lib/row-actions';
+import {
+  frozenEdge,
+  isScrolledSideways,
+  STICKY_NAME,
+  STICKY_NAME_HEAD,
+  STICKY_SELECT,
+} from '../lib/sticky';
 import { ContactsGrid, ContactsTable, type ListHandlers } from './contacts-list';
+import { ContactsPagination } from './contacts-pagination';
 import { TagsEditor } from './tags-editor';
 
 const messages = JSON.parse(
@@ -47,6 +56,9 @@ const handlers = (over: Partial<ListHandlers> = {}): ListHandlers => ({
   stageLabel: (v) => v.toUpperCase(),
   statusLabel: (v) => v,
   onToggle: () => undefined,
+  onView: () => undefined,
+  onAddToGroup: () => undefined,
+  onTag: () => undefined,
   onEdit: () => undefined,
   onDelete: () => undefined,
   ...over,
@@ -82,7 +94,7 @@ describe('ContactsTable', () => {
       'English',
       'Order Id',
       'A12',
-      '05/03/2026',
+      '05 Mar 2026, 12:00 PM',
       'VIP',
       'Hot lead',
       'aarav@example.com',
@@ -119,10 +131,10 @@ describe('ContactsTable', () => {
     expect(table([row({ name: '' })])).toContain('No Name');
   });
 
-  it('draws only the chosen columns, with bold titles, plus the actions column', () => {
+  it('draws only the chosen columns, with bold titles', () => {
     const chosen: ColumnId[] = ['name', 'phone', 'email', 'tags', 'createdOn'];
     const out = table([row()], {}, 'none', visibleColumns(chosen, ATTRS));
-    for (const title of ['Contact Name', 'Phone Number', 'Email ID', 'Tags', 'Created On', 'Action']) {
+    for (const title of ['Contact Name', 'Phone Number', 'Email ID', 'Tags', 'Created On']) {
       expect(out, title).toContain(title);
     }
     for (const gone of ['Order Id', 'Groups', 'Language', 'Memo', 'Stage']) {
@@ -153,11 +165,58 @@ describe('ContactsTable', () => {
     expect(table([row({ optedOut: true })])).toContain('Opted out');
   });
 
-  it('hides edit and delete without the permissions', () => {
-    const out = table([row()], { canEdit: false, canDelete: false });
-    expect(out).not.toContain('aria-label="Edit Aarav Sharma"');
-    expect(out).not.toContain('aria-label="Delete Aarav Sharma"');
-    expect(table([row()])).toContain('aria-label="Delete Aarav Sharma"');
+  it('hides edit, add to group, tag and delete from the row menu without the permissions', () => {
+    // The menu is a portal that only exists while open, so what is checked here is the pure decision it renders from.
+    expect(menuActions({ edit: false, delete: false })).toEqual(['view']);
+    expect(menuActions({ edit: true, delete: false })).toEqual(['view', 'edit', 'group', 'tag']);
+    expect(menuActions({ edit: true, delete: true })).toEqual(['view', 'edit', 'group', 'tag', 'delete']);
+  });
+
+  it('puts call, WhatsApp, email and the menu beside the name', () => {
+    const out = table([row()]);
+    expect(out).toContain('href="tel:+919876543210"');
+    expect(out).toContain('href="https://wa.me/919876543210"');
+    expect(out).toContain('target="_blank"');
+    expect(out).toContain('href="mailto:aarav@example.com"');
+    expect(out).toContain('aria-label="WhatsApp Aarav Sharma"');
+    expect(out).toContain('aria-label="More actions for Aarav Sharma"');
+  });
+
+  it('disables call, WhatsApp and email instead of hiding them when the contact has no phone or email', () => {
+    const out = table([row({ phone: '', email: '' })]);
+    expect(out).not.toContain('href="tel:');
+    expect(out).not.toContain('wa.me');
+    expect(out).not.toContain('href="mailto:');
+    expect(out.match(/aria-label="No phone number"/g)).toHaveLength(1);
+    expect(out).toContain('aria-label="No phone number for WhatsApp"');
+    expect(out).toContain('aria-label="No email address"');
+    expect(out.match(/disabled=""/g)?.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('freezes the checkbox and the name cell and keeps the scroll area focusable', () => {
+    const out = table([row()]);
+    expect(out).toContain(STICKY_NAME);
+    expect(out).toContain(STICKY_SELECT);
+    expect(out).toContain(STICKY_NAME_HEAD);
+    expect(out).toContain('tabindex="0"');
+    expect(out).toContain('thin-scrollbar');
+    // no shadow until the table has scrolled sideways
+    expect(out).not.toContain('shadow-[6px_0_8px');
+  });
+
+  it('shows the frozen-edge shadow only while scrolled sideways', () => {
+    expect(frozenEdge(false)).toBe('');
+    expect(frozenEdge(true)).toContain('shadow-[6px_0_8px');
+    expect(frozenEdge(true)).toContain('rtl:shadow-[-6px_0_8px');
+    expect(isScrolledSideways(0)).toBe(false);
+    expect(isScrolledSideways(120)).toBe(true);
+    expect(isScrolledSideways(-120)).toBe(true);
+  });
+
+  it('shows the phone and the email as outlined pills', () => {
+    const out = table([row()]);
+    expect(out).toContain('rounded-full border border-border bg-background');
+    expect(out).toContain('title="+91 98765 43210"');
   });
 
   it('makes tag chips filter buttons only when the API can filter by tag', () => {
@@ -246,5 +305,45 @@ describe('chips and shared tiles', () => {
     );
     expect(empty).toContain('No data found');
     expect(empty).toContain('Reset');
+  });
+});
+
+describe('ContactsPagination', () => {
+  const footer = (over: Partial<Parameters<typeof ContactsPagination>[0]> = {}) =>
+    html(
+      <ContactsPagination
+        page={1}
+        total={5000}
+        limit={200}
+        loading={false}
+        onPage={() => undefined}
+        onLimit={() => undefined}
+        onRecount={() => undefined}
+        {...over}
+      />,
+    );
+
+  it('shows Previous, 1 2 3 4 5 ... 25, Next, the total count and the page-size select', () => {
+    const out = footer();
+    for (const text of ['>Previous<', '>Next<', '>Total count<', '>5,000<', '200 per page']) {
+      expect(out, text).toContain(text);
+    }
+    for (const n of [1, 2, 3, 4, 5, 25]) expect(out).toContain(`aria-label="Page ${n}"`);
+    expect(out).not.toContain('aria-label="Page 6"');
+    expect(out).toContain('aria-current="page"');
+    for (const n of [10, 25, 50, 100, 200]) expect(out).toContain(`${n} per page`);
+    expect(out).not.toContain('500 per page');
+  });
+
+  it('mutes Previous on the first page and Next on the last', () => {
+    expect(footer({ page: 1 })).toMatch(/<button[^>]*disabled=""[^>]*aria-label="Previous page"/);
+    expect(footer({ page: 25 })).toMatch(/<button[^>]*disabled=""[^>]*aria-label="Next page"/);
+    expect(footer({ page: 3 })).not.toContain('disabled=""');
+  });
+
+  it('has one page and a dash while the total is unknown', () => {
+    const out = footer({ total: undefined, page: 1 });
+    expect(out).toContain('>-<');
+    expect(out).toMatch(/aria-label="Next page"/);
   });
 });

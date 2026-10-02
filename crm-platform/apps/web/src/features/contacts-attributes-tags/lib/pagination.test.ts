@@ -30,18 +30,28 @@ describe('pageWindow', () => {
   it('lists every page when there are few', () => {
     expect(pageWindow(1, 1)).toEqual([1]);
     expect(pageWindow(2, 5)).toEqual([1, 2, 3, 4, 5]);
+    expect(pageWindow(4, 7)).toEqual([1, 2, 3, 4, 5, 6, 7]);
   });
-  it('shows the ends, the current page and its neighbours, with a gap between', () => {
-    expect(pageWindow(1, 20)).toEqual([1, 2, 'gap', 20]);
-    expect(pageWindow(10, 20)).toEqual([1, 'gap', 9, 10, 11, 'gap', 20]);
-    expect(pageWindow(20, 20)).toEqual([1, 'gap', 19, 20]);
+  it('starts as 1 2 3 4 5 ... last', () => {
+    expect(pageWindow(1, 20)).toEqual([1, 2, 3, 4, 5, 'gap', 20]);
+    expect(pageWindow(3, 20)).toEqual([1, 2, 3, 4, 5, 'gap', 20]);
+  });
+  it('slides a run of five around the current page with a gap on each side', () => {
+    expect(pageWindow(10, 20)).toEqual([1, 'gap', 8, 9, 10, 11, 12, 'gap', 20]);
+  });
+  it('ends as first ... last five', () => {
+    expect(pageWindow(20, 20)).toEqual([1, 'gap', 16, 17, 18, 19, 20]);
+    expect(pageWindow(18, 20)).toEqual([1, 'gap', 16, 17, 18, 19, 20]);
   });
   it('shows a single skipped page instead of a gap', () => {
-    expect(pageWindow(4, 20)).toEqual([1, 2, 3, 4, 5, 'gap', 20]);
-    expect(pageWindow(17, 20)).toEqual([1, 'gap', 16, 17, 18, 19, 20]);
+    expect(pageWindow(5, 20)).toEqual([1, 2, 3, 4, 5, 6, 7, 'gap', 20]);
+    expect(pageWindow(6, 20)).toEqual([1, 'gap', 4, 5, 6, 7, 8, 'gap', 20]);
+    expect(pageWindow(4, 20)).toEqual([1, 2, 3, 4, 5, 6, 'gap', 20]);
+    expect(pageWindow(17, 20)).toEqual([1, 'gap', 15, 16, 17, 18, 19, 20]);
   });
-  it('widens with more siblings', () => {
-    expect(pageWindow(10, 30, 2)).toEqual([1, 'gap', 8, 9, 10, 11, 12, 'gap', 30]);
+  it('clamps a current page outside the range and honours another run size', () => {
+    expect(pageWindow(99, 20)).toEqual([1, 'gap', 16, 17, 18, 19, 20]);
+    expect(pageWindow(10, 30, 7)).toEqual([1, 'gap', 7, 8, 9, 10, 11, 12, 13, 'gap', 30]);
   });
 });
 

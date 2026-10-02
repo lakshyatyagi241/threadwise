@@ -38,8 +38,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         }}
         nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
         theme={theme}
-        headerStart={<WorkspaceSwitcher />}
-        banners={<AccountBanners />}
+        navFooter={<WorkspaceSwitcher />}
+        banners={<AccountBanners key="banners" />}
       >
         <AccountGate>{children}</AccountGate>
       </AppShell>

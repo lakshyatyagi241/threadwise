@@ -274,3 +274,35 @@ export const reorderStatusOptionsSchema = z.object({
   orderedIds: z.array(uuidSchema).min(1),
 });
 export type ReorderStatusOptionsInput = z.infer<typeof reorderStatusOptionsSchema>;
+
+// --- Usage counts and delete-with-reassign (Contact stages / Contact properties screens) ---
+
+/** How many contacts hold each value of one option group (`lifecycle_stage`, `status`, `lost_reason`). */
+export const statusOptionUsageQuerySchema = z.object({
+  moduleKey: moduleKeySchema,
+  optionGroup: z.string().min(1).max(100),
+});
+export type StatusOptionUsageQuery = z.infer<typeof statusOptionUsageQuerySchema>;
+
+export const statusOptionUsageResponseSchema = z.object({
+  data: z.array(z.object({ id: uuidSchema, value: z.string(), count: z.number().int() })),
+});
+export type StatusOptionUsageResponse = z.infer<typeof statusOptionUsageResponseSchema>;
+
+/**
+ * Deleting an option that contacts still hold needs somewhere to move them: `moveTo` is the id of another option of
+ * the same group. Without it the call is 409 `STATUS_OPTION_IN_USE` (`errors:[{path:"contacts", message:"<count>"}]`).
+ */
+export const deleteStatusOptionQuerySchema = z.object({
+  moveTo: uuidSchema.optional(),
+});
+export type DeleteStatusOptionQuery = z.infer<typeof deleteStatusOptionQuerySchema>;
+
+/** How many contacts hold a non-empty value for each custom field key of a module. */
+export const fieldUsageQuerySchema = z.object({ moduleKey: moduleKeySchema });
+export type FieldUsageQuery = z.infer<typeof fieldUsageQuerySchema>;
+
+export const fieldUsageResponseSchema = z.object({
+  data: z.array(z.object({ id: uuidSchema, key: z.string(), count: z.number().int() })),
+});
+export type FieldUsageResponse = z.infer<typeof fieldUsageResponseSchema>;

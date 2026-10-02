@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { ModuleKey } from '@crm/contracts';
+import type { ContactOptionColumn } from './status-option-columns';
 
-const { statusOptions } = schema;
+const { statusOptions, contacts } = schema;
 
 export interface StatusOptionRow {
   id: number;
@@ -160,6 +161,52 @@ export class StatusOptionsRepository {
         .set({ position: index })
         .where(and(eq(statusOptions.orgId, orgId), eq(statusOptions.id, id)));
     }
+  }
+
+
+  /** How many contacts hold each value of one contact column (every row of the workspace, archived included). */
+  async countContactsByValue(
+    tx: Tx,
+    orgId: number,
+    column: ContactOptionColumn,
+  ): Promise<Map<string, number>> {
+    const col = contacts[column];
+    const rows = await tx
+      .select({ value: col, count: sql<number>`count(*)::int` })
+      .from(contacts)
+      .where(eq(contacts.orgId, orgId))
+      .groupBy(col);
+    return new Map(
+      rows.filter((r) => r.value !== null).map((r) => [r.value as string, Number(r.count)]),
+    );
+  }
+
+  /**
+   * Moves every contact holding `from` to `to`. A stage move also stamps the stage date and the previous stage,
+   * exactly as a single edit of the contact does.
+   */
+  async reassignContacts(
+    tx: Tx,
+    orgId: number,
+    column: ContactOptionColumn,
+    from: string,
+    to: string,
+  ): Promise<number> {
+    const set =
+      column === 'lifecycleStage'
+        ? {
+            lifecycleStage: to,
+            lifecycleStageDate: new Date(),
+            previousLifecycleStage: from,
+            previousLifecycleStageDate: sql`lifecycle_stage_date`,
+          }
+        : { [column]: to };
+    const res = await tx
+      .update(contacts)
+      .set(set)
+      .where(and(eq(contacts.orgId, orgId), eq(contacts[column], from)))
+      .returning({ id: contacts.id });
+    return res.length;
   }
 
   async deleteById(tx: Tx, orgId: number, id: number): Promise<boolean> {
