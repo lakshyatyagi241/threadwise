@@ -105,6 +105,29 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/ai-dashboard',
     labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
     groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  {
+    id: 'cms-frontend',
+    href: '/admin/frontend',
+    labelKey: 'marketing-site-cms.nav.frontend',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-blog',
+    href: '/admin/blog',
+    labelKey: 'marketing-site-cms.nav.blog',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-legal',
+    href: '/admin/legal-pages',
+    labelKey: 'marketing-site-cms.nav.legal',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-contact',
+    href: '/admin/contact-messages',
+    labelKey: 'marketing-site-cms.nav.contact',
+    groupKey: 'marketing-site-cms.nav.group',
   },
 ];
 

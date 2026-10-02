@@ -165,6 +165,9 @@ import { TokenService } from './token.service';
     OtpTemplateService,
     // the platform-wide table door, for other domains whose operator tables need it (AIADM)
     PlatformStore,
+    // the guest-form gate and throttle, for other domains' public forms (CMS contact)
+    CaptchaService,
+    RateLimitService,
   ],
 })
 export class AuthModule implements NestModule {
