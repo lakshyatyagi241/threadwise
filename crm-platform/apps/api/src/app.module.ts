@@ -24,6 +24,7 @@ import { AdminModule } from './modules/admin';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
+import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
@@ -115,6 +116,7 @@ import { HealthModule } from './health/health.module';
     BroadcastsModule,
     PartnerModule,
     PublicApiModule,
+    PlatformSupportDeskModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

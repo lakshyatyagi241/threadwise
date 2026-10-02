@@ -88,6 +88,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/extensions',
     labelKey: 'addons-extension-registry.nav.extensions',
     groupKey: 'addons-extension-registry.nav.group',
+  // Platform support desk (SUPP): its own message file, so the keys live outside this domain's namespace.
+  {
+    id: 'support-inbox',
+    href: '/admin/support',
+    labelKey: 'platform-support-desk.nav.inbox',
+    groupKey: 'platform-support-desk.nav.group',
   },
 ];
 
