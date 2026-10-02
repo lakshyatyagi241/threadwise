@@ -17,3 +17,5 @@ export { CatalogSyncService } from './catalog-sync.service';
 export { retailerIdOf, effectiveAvailability } from './catalog-rules';
 export { metaCatalogPrice, parseMetaPriceMinor } from './catalog-money';
 export { matchProduct, type MatchResult } from './product-matcher';
+// Sending a catalog message to given numbers (the inbox conversation's Catalog picker calls it for one number, WD-CAT-031).
+export { CatalogSendService } from './catalog-send.service';

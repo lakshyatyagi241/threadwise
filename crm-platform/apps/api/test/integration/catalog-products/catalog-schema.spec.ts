@@ -356,6 +356,16 @@ describe('catalog-products: schema, isolation, foreign keys and checks', () => {
     for (const [label, sql, re] of bad) await expect(owner.query(sql), label).rejects.toThrow(re);
   });
 
+  it('every sync status the module writes is accepted (pending, synced, failed, error)', async () => {
+    for (const status of ['pending', 'synced', 'failed', 'error']) {
+      await owner.query(
+        `INSERT INTO wa_products (org_id, name, slug, meta_sync_status) VALUES ($1,'s',$2,$3)`,
+        [orgA, `sync-${status}`, status],
+      );
+    }
+    await owner.query(`DELETE FROM wa_products WHERE org_id = $1 AND slug LIKE 'sync-%'`, [orgA]);
+  });
+
   it('the same slug and provider are fine in another tenant (uniqueness is per organization)', async () => {
     await owner.query(`INSERT INTO wa_products (org_id, name, slug) VALUES ($1,'x','shirt-a')`, [
       orgB,

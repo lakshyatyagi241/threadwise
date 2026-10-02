@@ -241,12 +241,3 @@ export const catalogActivityResponseSchema = z.object({
   data: z.array(catalogSendActivitySchema),
 });
 export type CatalogActivityResponse = z.infer<typeof catalogActivityResponseSchema>;
-
-/** Admin-wide (platform) setting WaDesk keeps at /admin/settings/catalog. */
-export const catalogAdminSettingsSchema = z.object({
-  graphApiVersion: z
-    .string()
-    .trim()
-    .regex(/^v\d{1,2}\.\d{1,2}$/, 'Use a Graph API version such as v23.0'),
-});
-export type CatalogAdminSettings = z.infer<typeof catalogAdminSettingsSchema>;

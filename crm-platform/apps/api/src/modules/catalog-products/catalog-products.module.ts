@@ -88,6 +88,7 @@ import { StorefrontProductsReader } from './storefront-reader';
     CatalogConciergeService,
     CatalogOrderAckService,
     CatalogSyncService,
+    CatalogSendService,
   ],
 })
 export class CatalogProductsModule {}
