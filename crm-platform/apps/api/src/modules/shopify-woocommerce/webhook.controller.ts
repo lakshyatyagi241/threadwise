@@ -2,6 +2,7 @@ import { Controller, Headers, HttpCode, HttpStatus, Param, Post, Req, Res } from
 import { ApiExcludeController } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { Public } from '../../common/decorators';
+import { ComplianceService } from './compliance.service';
 import { WebhookService } from './webhook.service';
 
 type Raw = Request & { rawBody?: Buffer };
@@ -11,7 +12,10 @@ type Raw = Request & { rawBody?: Buffer };
 @Public()
 @Controller({ version: '2' })
 export class EcomWebhookController {
-  constructor(private readonly webhooks: WebhookService) {}
+  constructor(
+    private readonly webhooks: WebhookService,
+    private readonly compliance: ComplianceService,
+  ) {}
 
   @Post('shopify/webhook/:secret')
   @HttpCode(HttpStatus.OK)
@@ -29,6 +33,28 @@ export class EcomWebhookController {
       deliveryId: deliveryId ?? '',
     });
     res.status(out.status).type('text/plain').send(out.body);
+  }
+
+  /** Shopify's mandatory privacy webhooks (no store secret; the app-level signature is the proof). */
+  @Post('shopify/compliance')
+  @HttpCode(HttpStatus.OK)
+  async shopifyCompliance(
+    @Headers('x-shopify-hmac-sha256') signature: string | undefined,
+    @Headers('x-shopify-topic') topic: string | undefined,
+    @Headers('x-shopify-shop-domain') shop: string | undefined,
+    @Req() req: Raw,
+    @Res() res: Response,
+  ): Promise<void> {
+    const status = await this.compliance.receive(
+      req.rawBody ?? Buffer.alloc(0),
+      signature ?? '',
+      topic ?? '',
+      shop ?? '',
+    );
+    res
+      .status(status)
+      .type('text/plain')
+      .send(status === 401 ? 'bad hmac' : 'ok');
   }
 
   @Post('woocommerce/webhook/:secret')

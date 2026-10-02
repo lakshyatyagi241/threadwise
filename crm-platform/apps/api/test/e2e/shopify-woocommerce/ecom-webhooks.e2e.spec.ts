@@ -46,19 +46,19 @@ beforeEach(() => {
 const sign = (raw: string, secret: string): string =>
   createHmac('sha256', secret).update(raw).digest('base64');
 
-async function store(t: Tenant, kind: 'shopify' | 'woocommerce', status = 'connected') {
+async function store(t: Tenant, kind: 'shopify' | 'woocommerce') {
   const secret = randomBytes(20).toString('hex');
   const r =
     kind === 'shopify'
       ? await h.owner.query(
-          `INSERT INTO shopify_integrations (org_id, user_id, store_url, store_name, shop_currency, access_token, webhook_secret, status)
-           VALUES ($1, $2, $3, 'S', 'USD', 'x', $4, $5) RETURNING id`,
-          [t.orgId, t.adminUserId, `${secret.slice(0, 6)}.myshopify.com`, secret, status],
+          `INSERT INTO shopify_integrations (org_id, user_id, store_url, store_name, shop_currency, access_token, webhook_secret)
+           VALUES ($1, $2, $3, 'S', 'USD', 'x', $4) RETURNING id`,
+          [t.orgId, t.adminUserId, `${secret.slice(0, 6)}.myshopify.com`, secret],
         )
       : await h.owner.query(
-          `INSERT INTO woocommerce_integrations (org_id, user_id, store_url, store_name, store_currency, consumer_key, consumer_secret, webhook_secret, status)
-           VALUES ($1, $2, $3, 'W', 'USD', 'k', 's', $4, $5) RETURNING id`,
-          [t.orgId, t.adminUserId, `https://${secret.slice(0, 6)}.test`, secret, status],
+          `INSERT INTO woocommerce_integrations (org_id, user_id, store_url, store_name, store_currency, consumer_key, consumer_secret, webhook_secret)
+           VALUES ($1, $2, $3, 'W', 'USD', 'k', 's', $4) RETURNING id`,
+          [t.orgId, t.adminUserId, `https://${secret.slice(0, 6)}.test`, secret],
         );
   return { id: Number(r.rows[0].id), secret };
 }
@@ -173,13 +173,6 @@ describe('the Shopify webhook door (WD-ECOM-008)', () => {
     const rows = await logs(t, 'shopify', s.id);
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ event_type: 'orders/create', status: 'received' });
-  });
-
-  it('logs a delivery for a store that is not connected as skipped and queues nothing', async () => {
-    const t = await api.signup('ewh3');
-    const s = await store(t, 'shopify', 'uninstalled');
-    expect((await shopifyPost(s.secret, 'orders/create', order)).status).toBe(200);
-    expect((await logs(t, 'shopify', s.id))[0]).toMatchObject({ status: 'skipped' });
   });
 
   it("never resolves another tenant's store through the secret of a different kind", async () => {
@@ -410,5 +403,115 @@ describe('the event message and mirror upkeep (WD-ECOM-010)', () => {
       );
     expect(sentMessages).toHaveLength(1);
     expect(sentMessages[0]!.to).toBe('2348012345678');
+  });
+});
+
+describe('delivered, uninstall and the privacy webhooks (WD-ECOM-018, 021, 022)', () => {
+  const runLogged = async (
+    t: Tenant,
+    kind: 'shopify' | 'woocommerce',
+    storeId: number,
+    topic: string,
+    data: Record<string, unknown>,
+  ) => {
+    const [row] = (
+      await h.owner.query(
+        `SELECT id, created_at FROM ${kind}_integration_logs WHERE org_id = $1 AND event_type = $2 ORDER BY id DESC LIMIT 1`,
+        [t.orgId, topic],
+      )
+    ).rows;
+    await pipeline.run(
+      job(t, kind, storeId, topic, data, Number(row.id), new Date(row.created_at).toISOString()),
+    );
+  };
+
+  it('fires the Delivered automation for the customer on the mirrored order', async () => {
+    const t = await api.signup('ewh12');
+    const s = await store(t, 'shopify');
+    await automation(
+      t,
+      'shopify',
+      s.id,
+      'order/delivered',
+      await template(t, 'Hi {{1}}, {{2}} arrived'),
+    );
+    await shopifyPost(s.secret, 'orders/create', order);
+    await runLogged(t, 'shopify', s.id, 'orders/create', order);
+    sentMessages.length = 0;
+    const fulfilment = { id: 9, order_id: 1001, shipment_status: 'delivered' };
+    await shopifyPost(s.secret, 'fulfillments/update', fulfilment);
+    await runLogged(t, 'shopify', s.id, 'fulfillments/update', fulfilment);
+    expect(sentMessages).toHaveLength(1);
+    expect(sentMessages[0]).toMatchObject({ to: '15550109999', params: ['Ada L', '#1001', ''] });
+  });
+
+  it('does not fire Delivered for a shipment still in transit', async () => {
+    const t = await api.signup('ewh13');
+    const s = await store(t, 'shopify');
+    await automation(t, 'shopify', s.id, 'order/delivered', await template(t));
+    const fulfilment = { id: 9, order_id: 1, shipment_status: 'in_transit' };
+    await shopifyPost(s.secret, 'fulfillments/update', fulfilment);
+    await runLogged(t, 'shopify', s.id, 'fulfillments/update', fulfilment);
+    expect(sentMessages).toHaveLength(0);
+  });
+
+  it('clears the token on app/uninstalled and keeps the row, mapping and logs', async () => {
+    const t = await api.signup('ewh14');
+    const s = await store(t, 'shopify');
+    await shopifyPost(s.secret, 'app/uninstalled', { id: 1 });
+    await runLogged(t, 'shopify', s.id, 'app/uninstalled', { id: 1 });
+    const row = (
+      await h.owner.query(
+        `SELECT access_token, connected_at FROM shopify_integrations WHERE id = $1`,
+        [s.id],
+      )
+    ).rows[0];
+    expect(row).toEqual({ access_token: '', connected_at: null });
+    expect(await logs(t, 'shopify', s.id)).toHaveLength(1);
+  });
+
+  const compliance = (topic: string, body: Record<string, unknown>, hmac?: string) => {
+    const raw = JSON.stringify(body);
+    return api
+      .http()
+      .post('/v2/shopify/compliance')
+      .set('content-type', 'application/json')
+      .set('x-shopify-topic', topic)
+      .set('x-shopify-hmac-sha256', hmac ?? sign(raw, CLIENT_SECRET))
+      .send(raw);
+  };
+
+  it('refuses a bad signature before reading anything, with no store installed', async () => {
+    const r = await compliance(
+      'shop/redact',
+      { shop_domain: 'x.myshopify.com' },
+      sign('{}', 'wrong'),
+    );
+    expect(r.status).toBe(401);
+    expect(r.text).toBe('bad hmac');
+  });
+
+  it("customers/redact erases that customer's logs only; shop/redact erases the store; both answer 200", async () => {
+    const t = await api.signup('ewh15');
+    const s = await store(t, 'shopify');
+    const domain = (
+      await h.owner.query(`SELECT store_url FROM shopify_integrations WHERE id = $1`, [s.id])
+    ).rows[0].store_url as string;
+    await h.owner.query(
+      `INSERT INTO shopify_integration_logs (org_id, integration_id, event_type, status, recipient)
+       VALUES ($1, $2, 'orders/create', 'sent', '111'), ($1, $2, 'orders/create', 'sent', '222')`,
+      [t.orgId, s.id],
+    );
+    expect(
+      (await compliance('customers/redact', { shop_domain: domain, customer: { phone: '111' } }))
+        .status,
+    ).toBe(200);
+    expect((await logs(t, 'shopify', s.id)).map((l) => l.recipient)).toEqual(['222']);
+    expect((await compliance('customers/data_request', { shop_domain: domain })).status).toBe(200);
+    expect((await compliance('shop/redact', { shop_domain: domain })).status).toBe(200);
+    expect(
+      (await h.owner.query(`SELECT 1 FROM shopify_integrations WHERE id = $1`, [s.id])).rows,
+    ).toHaveLength(0);
+    expect(await logs(t, 'shopify', s.id)).toHaveLength(0);
   });
 });
