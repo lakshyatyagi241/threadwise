@@ -36,6 +36,11 @@ export interface NewOption {
   label: string;
   color: string;
   isDefault: boolean;
+  /** Lifecycle stages only. */
+  isWon?: boolean;
+  isLost?: boolean;
+  /** Statuses only: the lifecycle stage option this status belongs to; absent = every stage. */
+  stageOptionId?: string | null;
 }
 
 export const createStatusOption = (group: string, o: NewOption): Promise<StatusOptionResponse> =>
@@ -48,6 +53,9 @@ export const createStatusOption = (group: string, o: NewOption): Promise<StatusO
       label: o.label.trim(),
       color: o.color,
       isDefault: o.isDefault,
+      ...(o.isWon ? { isWon: true } : {}),
+      ...(o.isLost ? { isLost: true } : {}),
+      ...(o.stageOptionId ? { stageOptionId: o.stageOptionId } : {}),
     },
     schema: statusOptionResponseSchema,
   });
@@ -55,7 +63,16 @@ export const createStatusOption = (group: string, o: NewOption): Promise<StatusO
 /** Sends the rowVersion that was read; a stale one is a 409 the screen turns into "reload". */
 export const updateStatusOption = (
   current: Pick<StatusOptionResponse, 'id' | 'rowVersion'>,
-  patch: { label?: string; color?: string; isDefault?: boolean; isActive?: boolean },
+  patch: {
+    label?: string;
+    color?: string;
+    isDefault?: boolean;
+    isActive?: boolean;
+    isWon?: boolean;
+    isLost?: boolean;
+    /** null = every stage. */
+    stageOptionId?: string | null;
+  },
 ): Promise<StatusOptionResponse> =>
   apiFetch(`/status-options/${current.id}`, {
     method: 'PATCH',

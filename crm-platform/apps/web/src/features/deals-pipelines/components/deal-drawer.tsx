@@ -4,6 +4,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, ConfirmDialog, Field, Input, Select, cn, useToast } from '@crm/ui';
+import { LinkedSalesDocs } from '@/features/sales-docs';
+import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useDealDetail, useMembers } from '../api/hooks';
 import { dealsApi } from '../api/service';
@@ -306,6 +308,9 @@ function DrawerBody({
         </section>
 
         <LinkedTasks kind="deal" id={deal.id} compact className="border-t border-border pt-5" />
+        <LinkedInvoices kind="deal" id={deal.id} compact className="border-t border-border pt-5" />
+
+        <LinkedSalesDocs kind="deal" id={deal.id} compact className="border-t border-border pt-5" />
 
         <div className={cn('border-t border-border pt-5')}>
           <DealActivity deal={deal} canWrite={canWrite} />

@@ -32,12 +32,8 @@ export const PLANNED_NAV: readonly NavItem[] = [
   { id: 'companies', group: 'audience', labelKey: L('companies'), href: '/companies', order: 70, icon: 'companies' },
   { id: 'email-templates', group: 'audience', labelKey: L('emailTemplates'), href: '/email-templates', order: 80, icon: 'mail' },
 
-  // Sales (Reference's SalesDocs engine: proposals and estimates; invoices and payments from its auto-invoice module)
+  // Sales (Reference's SalesDocs engine: proposals and estimates are real screens in features/sales-docs; invoices, payments and tax rates are real screens in features/invoicing)
   { id: 'crm-dashboard', group: 'sales', labelKey: L('crmDashboard'), href: '/crm', order: 0, icon: 'crm' },
-  { id: 'proposals', group: 'sales', labelKey: L('proposals'), href: '/proposals', order: 10, icon: 'proposal' },
-  { id: 'estimates', group: 'sales', labelKey: L('estimates'), href: '/estimates', order: 20, icon: 'estimate' },
-  { id: 'invoices', group: 'sales', labelKey: L('invoices'), href: '/invoices', order: 30, icon: 'invoice' },
-  { id: 'payments', group: 'sales', labelKey: L('payments'), href: '/payments', order: 40, icon: 'payment' },
 
   // Campaigns
   { id: 'campaigns', group: 'campaigns', labelKey: L('campaigns'), href: '/campaigns', order: 0, icon: 'campaign' },

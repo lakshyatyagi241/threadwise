@@ -18,7 +18,13 @@ export function AnnouncementPill({ children, href }: { children: ReactNode; href
   const cls =
     'inline-flex max-w-full items-center gap-2 truncate rounded-full border border-brand/25 bg-brand/10 px-4 py-1.5 text-sm font-medium text-brand';
   return href ? (
-    <Link href={href} className={cn(cls, 'outline-none hover:bg-brand/15 focus-visible:ring-2 focus-visible:ring-primary')}>
+    <Link
+      href={href}
+      className={cn(
+        cls,
+        'outline-none hover:bg-brand/15 focus-visible:ring-2 focus-visible:ring-primary',
+      )}
+    >
       {children}
     </Link>
   ) : (
@@ -87,6 +93,8 @@ export interface TopBarProps {
   wallet?: WalletChipData;
   notificationsHref?: string;
   notificationCount?: number;
+  /** A live bell (badge and panel) owned by the notifications domain; replaces the link or the disabled placeholder. */
+  bell?: ReactNode;
   settingsHref?: string;
 }
 
@@ -101,6 +109,7 @@ export function TopBar({
   wallet,
   notificationsHref,
   notificationCount,
+  bell,
   settingsHref,
 }: TopBarProps) {
   const t = useTranslations();
@@ -144,13 +153,17 @@ export function TopBar({
               <span className="tabular-nums">{wallet.label}</span>
             </span>
           ))}
-        <IconLink
-          href={notificationsHref}
-          label={t('shell.notifications')}
-          icon="bell"
-          badge={notificationCount}
-        />
-        {settingsHref && <IconLink href={settingsHref} label={t('shell.settings')} icon="settings" />}
+        {bell ?? (
+          <IconLink
+            href={notificationsHref}
+            label={t('shell.notifications')}
+            icon="bell"
+            badge={notificationCount}
+          />
+        )}
+        {settingsHref && (
+          <IconLink href={settingsHref} label={t('shell.settings')} icon="settings" />
+        )}
         <UserMenu user={user} theme={theme} />
       </div>
     </header>

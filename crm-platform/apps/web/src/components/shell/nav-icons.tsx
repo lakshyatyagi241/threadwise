@@ -248,6 +248,13 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M2 6.5h12M4.5 10h2.5" />
     </>
   ),
+  percent: (
+    <>
+      <path d="M12.5 3.5l-9 9" />
+      <circle cx="4.8" cy="4.8" r="1.7" />
+      <circle cx="11.2" cy="11.2" r="1.7" />
+    </>
+  ),
   settings: (
     <>
       <circle cx="8" cy="8" r="2" />

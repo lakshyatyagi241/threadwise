@@ -122,7 +122,9 @@ describe('ContactsTable', () => {
   });
 
   it('shows a plain dash for every empty value', () => {
-    const out = table([row({ groups: [], tags: [], email: '', phone: '', custom: {}, createdAt: '' })]);
+    const out = table([
+      row({ groups: [], tags: [], email: '', phone: '', custom: {}, createdAt: '' }),
+    ]);
     expect(out.match(/>-<\/span>/g)?.length).toBeGreaterThanOrEqual(6);
     expect(out).not.toContain('—');
   });
@@ -145,7 +147,11 @@ describe('ContactsTable', () => {
   });
 
   it('shows two tag chips and folds the rest into +N with the full list on hover', () => {
-    const tags = ['One', 'Two', 'Three', 'Four'].map((name, i) => ({ id: `t${i}`, name, color: null }));
+    const tags = ['One', 'Two', 'Three', 'Four'].map((name, i) => ({
+      id: `t${i}`,
+      name,
+      color: null,
+    }));
     const out = table([row({ tags })]);
     expect(out).toContain('>One<');
     expect(out).toContain('>Two<');
@@ -169,7 +175,13 @@ describe('ContactsTable', () => {
     // The menu is a portal that only exists while open, so what is checked here is the pure decision it renders from.
     expect(menuActions({ edit: false, delete: false })).toEqual(['view']);
     expect(menuActions({ edit: true, delete: false })).toEqual(['view', 'edit', 'group', 'tag']);
-    expect(menuActions({ edit: true, delete: true })).toEqual(['view', 'edit', 'group', 'tag', 'delete']);
+    expect(menuActions({ edit: true, delete: true })).toEqual([
+      'view',
+      'edit',
+      'group',
+      'tag',
+      'delete',
+    ]);
   });
 
   it('puts call, WhatsApp, email and the menu beside the name', () => {

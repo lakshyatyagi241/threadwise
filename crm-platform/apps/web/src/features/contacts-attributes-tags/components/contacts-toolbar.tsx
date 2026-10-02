@@ -178,7 +178,12 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           label={t('segmentFilter')}
           trigger={
             <>
-              <span className={cn('max-w-[11rem] truncate', p.segment === '' && 'text-muted-foreground')}>
+              <span
+                className={cn(
+                  'max-w-[11rem] truncate',
+                  p.segment === '' && 'text-muted-foreground',
+                )}
+              >
                 {segmentLabel}
               </span>
               <ChevronDownIcon className="size-3.5 text-muted-foreground" />
@@ -186,7 +191,11 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           }
           triggerClassName={trigger}
         >
-          <MenuRadioItem checked={p.segment === ''} onSelect={() => p.onSegment('')} hint={n(p.stats?.total)}>
+          <MenuRadioItem
+            checked={p.segment === ''}
+            onSelect={() => p.onSegment('')}
+            hint={n(p.stats?.total)}
+          >
             {t('allContacts')}
           </MenuRadioItem>
           <MenuRadioItem
@@ -226,7 +235,9 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           label={t('tagFilter')}
           trigger={
             <>
-              <span className={cn('max-w-[11rem] truncate', p.tag === '' && 'text-muted-foreground')}>
+              <span
+                className={cn('max-w-[11rem] truncate', p.tag === '' && 'text-muted-foreground')}
+              >
                 {tagLabel}
               </span>
               <ChevronDownIcon className="size-3.5 text-muted-foreground" />
@@ -264,7 +275,11 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
             {t('allStages')}
           </MenuRadioItem>
           {p.stages.map((x) => (
-            <MenuRadioItem key={x.value} checked={p.stage === x.value} onSelect={() => p.onStage(x.value)}>
+            <MenuRadioItem
+              key={x.value}
+              checked={p.stage === x.value}
+              onSelect={() => p.onStage(x.value)}
+            >
               {x.label}
             </MenuRadioItem>
           ))}
@@ -277,7 +292,11 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
               ['unsubscribed', t('unsubscribedOnly')],
             ] as const
           ).map(([v, label]) => (
-            <MenuRadioItem key={v || 'all'} checked={p.consent === v} onSelect={() => p.onConsent(v)}>
+            <MenuRadioItem
+              key={v || 'all'}
+              checked={p.consent === v}
+              onSelect={() => p.onConsent(v)}
+            >
               {label}
             </MenuRadioItem>
           ))}
@@ -438,7 +457,9 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
       {p.anySelected && (
         <div className="flex flex-wrap items-center gap-2 text-sm" role="status">
           <span className="font-medium" aria-live="polite">
-            {p.selectedCount === null ? tb('allMatching') : tb('selected', { count: p.selectedCount })}
+            {p.selectedCount === null
+              ? tb('allMatching')
+              : tb('selected', { count: p.selectedCount })}
           </span>
           <button
             type="button"

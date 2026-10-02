@@ -29,3 +29,6 @@ export * from './plans-subscriptions-trials';
 export * from './contacts-attributes-tags';
 export * from './deals-pipelines';
 export * from './tasks';
+export * from './sales-docs';
+export * from './invoicing';
+export * from './notifications-activity-audit';

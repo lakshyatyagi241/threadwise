@@ -59,6 +59,9 @@ import { ContactsPagination } from './contacts-pagination';
 import { ContactsToolbar, segmentOf } from './contacts-toolbar';
 import { DedupeDialog } from './dedupe-dialog';
 import { ErrorLine } from './error-line';
+import { LostReasonDialog, type LostPrompt } from './lost-reason';
+import { isLostStage } from '../lib/stage-flow';
+import { statusAfterMove, statusNotice } from '../lib/status-scope';
 import { GroupModal } from './group-modal';
 import { ImportModal } from './import-modal';
 import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
@@ -167,7 +170,8 @@ export function ContactsScreen() {
   const [statsRaw, setStatsRaw] = useStoredValue(STATS_KEY);
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
-    () => (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
+    () =>
+      (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
@@ -211,6 +215,7 @@ export function ContactsScreen() {
   };
   const [busy, setBusy] = useState(false);
   const [stageBusy, setStageBusy] = useState<string | null>(null);
+  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
   const [exporting, setExporting] = useState(false);
   const deleteTarget = rows.find((r) => r.id === deleteId);
 
@@ -291,14 +296,46 @@ export function ContactsScreen() {
   }
 
   /** The stage cell's menu: saves the new stage of one contact, with the row version the table last read. */
-  async function changeStage(id: string, stage: string) {
+  async function changeStage(
+    id: string,
+    stage: string,
+    reason?: { lostReason?: string | null; otherLostReason?: string | null },
+  ) {
     const row = rows.find((r) => r.id === id);
     if (!row) return;
+    // A lost stage asks why first; nothing is saved until the dialog gives a reason.
+    if (!reason && isLostStage(stages, stage)) {
+      setLostPrompt({
+        contactId: id,
+        contactName: row.name ?? '',
+        stageValue: stage,
+        stageLabel: stages.find((x) => x.value === stage)?.label ?? stage,
+      });
+      return;
+    }
     setStageBusy(id);
     try {
-      await updateContact(id, { lifecycleStage: stage, rowVersion: row.rowVersion });
+      const saved = await updateContact(id, {
+        lifecycleStage: stage,
+        ...reason,
+        rowVersion: row.rowVersion,
+      });
+      setLostPrompt(null);
       await refresh();
-      toast(ts('changed', { stage: stages.find((x) => x.value === stage)?.label ?? stage }), 'success');
+      // The API keeps the status valid for the stage: say what happened to it, from its answer.
+      const stageName = stages.find((x) => x.value === stage)?.label ?? stage;
+      const notice = statusNotice(row.status, saved.status);
+      toast(
+        notice.kind === 'none'
+          ? ts('changed', { stage: stageName })
+          : notice.kind === 'cleared'
+            ? ts('changedStatusCleared', { stage: stageName })
+            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
+                stage: stageName,
+                status: statuses.find((x) => x.value === notice.status)?.label ?? notice.status,
+              }),
+        'success',
+      );
     } catch (e) {
       const kind = errorKind(e);
       toast(
@@ -331,8 +368,20 @@ export function ContactsScreen() {
     canDelete,
     stageLabel: (v: string) => stages.find((x) => x.value === v)?.label ?? v,
     stageChoices: stages,
-    onStageChange: canUpdate ? (id: string, stage: string) => void changeStage(id, stage) : undefined,
+    onStageChange: canUpdate
+      ? (id: string, stage: string) => void changeStage(id, stage)
+      : undefined,
     stageBusyId: stageBusy,
+    // Under each stage of the menu: what moving there would do to the contact's status.
+    stageStatusHint: (status: string, stage: string) => {
+      const move = statusAfterMove(statusOptions.data, status || null, stage);
+      if (!move.changed) return null;
+      return move.status === null
+        ? ts('willClear')
+        : ts('willReset', {
+            status: statuses.find((x) => x.value === move.status)?.label ?? move.status,
+          });
+    },
     statusLabel: (v: string) => statuses.find((x) => x.value === v)?.label ?? v,
     onToggle: (id: string) => dispatch({ type: 'toggle', id }),
     onView: (id: string) => router.push(`/contacts/${id}`),
@@ -444,7 +493,11 @@ export function ContactsScreen() {
         </button>
         {showStats && (
           <div className="mt-2 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <StatTile label={t('stats.total')} value={num(s?.total)} hint={t('stats.inWorkspace')} />
+            <StatTile
+              label={t('stats.total')}
+              value={num(s?.total)}
+              hint={t('stats.inWorkspace')}
+            />
             <StatTile
               tone="accent"
               label={t('stats.groups')}
@@ -581,6 +634,12 @@ export function ContactsScreen() {
         open={formFor !== null}
         contact={formFor === 'new' || formFor === null ? undefined : formFor}
         onClose={() => setFormFor(null)}
+      />
+      <LostReasonDialog
+        prompt={lostPrompt}
+        busy={stageBusy !== null}
+        onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
+        onClose={() => setLostPrompt(null)}
       />
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
       <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />

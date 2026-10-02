@@ -90,6 +90,8 @@ const DYNAMIC_PREFIXES = [
   'attributes.system.',
   'properties.types.',
   'properties.typeHelp.',
+  // the stage meaning radios: `modal.meaning.${m}` and `${m}Hint`
+  'stages.modal.meaning.',
 ];
 
 describe('message keys used in code', () => {

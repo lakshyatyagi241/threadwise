@@ -111,7 +111,11 @@ async function main(): Promise<void> {
            ($1, $2, 'record.tasks.read',   'allow', 'own'),
            ($1, $2, 'record.tasks.create', 'allow', 'all'),
            ($1, $2, 'record.tasks.update', 'allow', 'own'),
-           ($1, $2, 'record.tasks.delete', 'allow', 'own')
+           ($1, $2, 'record.tasks.delete', 'allow', 'own'),
+           ($1, $2, 'record.sales-docs.read',   'allow', 'own'),
+           ($1, $2, 'record.sales-docs.create', 'allow', 'all'),
+           ($1, $2, 'record.sales-docs.update', 'allow', 'own'),
+           ($1, $2, 'record.sales-docs.send',   'allow', 'own')
          ON CONFLICT (org_id, role_id, permission_key) DO NOTHING`,
         [orgId, counsellorRoleId],
       );

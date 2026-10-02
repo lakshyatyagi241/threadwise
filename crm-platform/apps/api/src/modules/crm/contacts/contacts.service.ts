@@ -27,6 +27,9 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { resolveContactFilter } from './contact-filter.resolver';
+import { stageEntryValues } from './contact-stage';
+import { planStatus } from './contact-status-stage';
+import { missingRequired, requiredPropertiesError } from './required-properties';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { toContactResponse } from './contacts.mapper';
@@ -165,8 +168,38 @@ export class ContactsService {
         }
       }
 
+      // Properties the workspace marked required (Contact properties screen) are part of the contract of a create.
+      await this.assertRequiredProperties(tx, ctx.orgId, input.customFields);
+
       // Plan cap (TW-CON-026): every way of adding a contact counts, not only the UI's.
       await this.quota.assertCanAddOne(tx, ctx.orgId);
+
+      // No stage chosen: the workspace's default stage (Contact stages screen), else the column default.
+      const stage =
+        input.lifecycleStage ??
+        (await this.repo.defaultOptionValue(tx, ctx.orgId, 'lifecycle_stage'));
+      // A contact created straight into a won or lost stage is stamped, and a lost one needs its reason.
+      const stageValues = stage
+        ? stageEntryValues({
+            flags: await this.repo.stageFlags(tx, ctx.orgId, stage),
+            current: { wonAt: null, lostAt: null, lostReason: null, otherLostReason: null },
+            lostReason: input.lostReason,
+            otherLostReason: input.otherLostReason,
+            now: new Date(),
+          })
+        : {};
+
+      // The status must belong to the stage the contact starts in; none given = the stage's default status, if it has one.
+      const startStage = stage ?? 'new';
+      const statusCtx = await this.repo.statusContext(tx, ctx.orgId);
+      const statusPlan = planStatus({
+        scope: statusCtx.scope,
+        stage: startStage,
+        stageLabel: statusCtx.stageLabels.get(startStage) ?? null,
+        stageChanged: true,
+        current: null,
+        requested: input.status,
+      });
 
       const displayId = await this.displayIds.next(tx, ctx.orgId, MODULE_KEY, DISPLAY_PREFIX);
 
@@ -183,11 +216,12 @@ export class ContactsService {
         phone,
         companyId,
         ownerId,
-        // No stage chosen: the workspace's default stage (Contact stages screen), else the column default.
-        lifecycleStage:
-          input.lifecycleStage ??
-          (await this.repo.defaultOptionValue(tx, ctx.orgId, 'lifecycle_stage')),
-        status: input.status,
+        lifecycleStage: stage,
+        lostReason: input.lostReason,
+        otherLostReason: input.otherLostReason,
+        wonAt: (stageValues.wonAt as Date | null | undefined) ?? null,
+        lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
+        status: statusPlan.status ?? undefined,
         leadScore: input.leadScore,
         whatsappSubscriptionStatus: input.whatsappSubscriptionStatus,
         smsSubscriptionStatus: input.smsSubscriptionStatus,
@@ -252,7 +286,6 @@ export class ContactsService {
         ? (canonicalizePhone({ number: input.phone })?.e164 ?? input.phone)
         : input.phone;
       if (phone !== undefined) values.phone = phone;
-      if (input.status !== undefined) values.status = input.status;
       if (input.lostReason !== undefined) values.lostReason = input.lostReason;
       if (input.otherLostReason !== undefined) values.otherLostReason = input.otherLostReason;
       if (input.leadScore !== undefined) values.leadScore = input.leadScore;
@@ -268,18 +301,48 @@ export class ContactsService {
       if (input.emailConfirmed !== undefined) values.emailConfirmed = input.emailConfirmed;
       if (input.faxNumber !== undefined) values.faxNumber = input.faxNumber;
       if (input.source !== undefined) values.source = input.source;
-      if (input.lifecycleStage !== undefined && input.lifecycleStage !== existing.lifecycleStage) {
+      // lifecycle_stage is NOT NULL: a null stage is "leave it", not a clear.
+      if (input.lifecycleStage != null && input.lifecycleStage !== existing.lifecycleStage) {
         // Track the transition, not just the current value — the sub-agent
         // portal and the pipeline UI both read "what was it before".
         values.lifecycleStage = input.lifecycleStage;
         values.lifecycleStageDate = new Date();
         values.previousLifecycleStage = existing.lifecycleStage;
         values.previousLifecycleStageDate = existing.lifecycleStageDate;
+        // Entering a won or lost stage stamps it (a lost one needs a reason); leaving one clears the stamp.
+        Object.assign(
+          values,
+          stageEntryValues({
+            flags: await this.repo.stageFlags(tx, ctx.orgId, input.lifecycleStage),
+            current: existing,
+            lostReason: input.lostReason,
+            otherLostReason: input.otherLostReason,
+            now: new Date(),
+          }),
+        );
+      }
+      // The status stays valid for the stage: a stage move that leaves it invalid resets it (to the new stage's default, or
+      // none), and a status set by the caller must belong to the contact's (new) stage (422 CON_STATUS_STAGE_MISMATCH).
+      const nextStage = (values.lifecycleStage as string | undefined) ?? existing.lifecycleStage;
+      if (input.status !== undefined || values.lifecycleStage !== undefined) {
+        const statusCtx = await this.repo.statusContext(tx, ctx.orgId);
+        const plan = planStatus({
+          scope: statusCtx.scope,
+          stage: nextStage,
+          stageLabel: statusCtx.stageLabels.get(nextStage) ?? null,
+          stageChanged: values.lifecycleStage !== undefined,
+          current: existing.status,
+          requested: input.status,
+        });
+        if (plan.status !== undefined) values.status = plan.status;
       }
       if (input.customFields !== undefined) {
         // Merge, don't replace: a client that sends three fields must not wipe
         // the other forty the org has defined.
         values.data = { ...(existing.data ?? {}), ...input.customFields };
+        // A save that edits properties answers for all of them; a stage or owner change alone does not (a contact that
+        // predates a newly required property stays editable).
+        await this.assertRequiredProperties(tx, ctx.orgId, values.data as Record<string, unknown>);
       }
       if (input.ownerId !== undefined) {
         values.ownerId = input.ownerId
@@ -370,6 +433,17 @@ export class ContactsService {
 
       await this.repo.deleteById(tx, ctx.orgId, existing.id);
     });
+  }
+
+  /** 422 CON_REQUIRED_PROPERTY_MISSING when properties the registry marks required have no value (honouring dependencies). */
+  private async assertRequiredProperties(
+    tx: Tx,
+    orgId: number,
+    data: Record<string, unknown>,
+    only?: ReadonlySet<string>,
+  ): Promise<void> {
+    const missing = missingRequired(await this.repo.requiredRules(tx, orgId), data, only);
+    if (missing.length > 0) throw requiredPropertiesError(missing);
   }
 
   private async requireUser(
@@ -498,6 +572,11 @@ export class ContactsService {
       const ownerId = input.values.ownerId
         ? await this.requireUser(tx, ctx.orgId, input.values.ownerId)
         : input.values.ownerId; // null (unset) or undefined (leave alone) pass through
+      // Read once for the whole batch; each row is planned against it.
+      const statusCtx =
+        input.values.status !== undefined || input.values.lifecycleStage != null
+          ? await this.repo.statusContext(tx, ctx.orgId)
+          : undefined;
 
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
@@ -513,11 +592,49 @@ export class ContactsService {
 
         const values: Record<string, unknown> = { updatedBy: ctx.userId };
         if (input.values.ownerId !== undefined) values.ownerId = ownerId;
-        if (input.values.lifecycleStage !== undefined)
+        if (
+          input.values.lifecycleStage !== undefined &&
+          input.values.lifecycleStage !== null &&
+          input.values.lifecycleStage !== existing.lifecycleStage
+        ) {
           values.lifecycleStage = input.values.lifecycleStage;
-        if (input.values.status !== undefined) values.status = input.values.status;
+          values.lifecycleStageDate = new Date();
+          values.previousLifecycleStage = existing.lifecycleStage;
+          values.previousLifecycleStageDate = existing.lifecycleStageDate;
+          Object.assign(
+            values,
+            stageEntryValues({
+              flags: await this.repo.stageFlags(rowTx, ctx.orgId, input.values.lifecycleStage),
+              current: existing,
+              lostReason: input.values.lostReason,
+              otherLostReason: input.values.otherLostReason,
+              now: new Date(),
+            }),
+          );
+        }
+        if (statusCtx) {
+          const nextStage =
+            (values.lifecycleStage as string | undefined) ?? existing.lifecycleStage;
+          const plan = planStatus({
+            scope: statusCtx.scope,
+            stage: nextStage,
+            stageLabel: statusCtx.stageLabels.get(nextStage) ?? null,
+            stageChanged: values.lifecycleStage !== undefined,
+            current: existing.status,
+            requested: input.values.status,
+          });
+          if (plan.status !== undefined) values.status = plan.status;
+        }
         if (input.values.customFields !== undefined) {
           values.data = { ...(existing.data ?? {}), ...input.values.customFields };
+          // Only the keys this edit sets are held to the rule: it may not blank a required property, but contacts
+          // that never had one are not all refused.
+          await this.assertRequiredProperties(
+            rowTx,
+            ctx.orgId,
+            values.data as Record<string, unknown>,
+            new Set(Object.keys(input.values.customFields)),
+          );
         }
 
         await this.repo.updateFieldsById(rowTx, ctx.orgId, id, values);

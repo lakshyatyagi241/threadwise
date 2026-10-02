@@ -34,9 +34,7 @@ export function parseFilters(
   defaultLimit: PageSize = DEFAULT_FILTERS.limit,
 ): ContactFilters {
   const per = Number(params.get('per'));
-  const limit = (PAGE_SIZES as readonly number[]).includes(per)
-    ? (per as PageSize)
-    : defaultLimit;
+  const limit = (PAGE_SIZES as readonly number[]).includes(per) ? (per as PageSize) : defaultLimit;
   const consent = params.get('consent');
   return {
     q: (params.get('q') ?? '').slice(0, 200),
@@ -54,7 +52,10 @@ export function parseFilters(
 }
 
 /** Only non-default values are written, so the clean URL is `/contacts`. */
-export function filtersToSearch(f: ContactFilters, defaultLimit: PageSize = DEFAULT_FILTERS.limit): string {
+export function filtersToSearch(
+  f: ContactFilters,
+  defaultLimit: PageSize = DEFAULT_FILTERS.limit,
+): string {
   const p = new URLSearchParams();
   if (f.q.trim()) p.set('q', f.q.trim());
   if (f.group) p.set('group', f.group);

@@ -9,7 +9,8 @@
 /** Width in px of the checkbox column; the Name cell sticks right after it (`sm:start-12` is the same 48px). */
 export const SELECT_W = 48;
 
-const SURFACE = 'bg-background group-hover:bg-muted group-data-[selected=true]:bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]';
+const SURFACE =
+  'bg-background group-hover:bg-muted group-data-[selected=true]:bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]';
 
 /** Checkbox cell: frozen from `sm` up (on a phone the Name cell takes the whole frozen width). */
 export const STICKY_SELECT = `sm:sticky sm:start-0 sm:z-10 ${SURFACE}`;

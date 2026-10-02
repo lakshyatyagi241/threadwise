@@ -71,6 +71,60 @@ import {
   DealTasksController,
   TasksController,
 } from './tasks/tasks.controller';
+import {
+  ContactSalesDocsController,
+  DealSalesDocsController,
+  SalesDocSettingsController,
+  SalesDocsController,
+} from './sales-docs/sales-docs.controller';
+import { PublicSalesDocsController } from './sales-docs/sales-docs-public.controller';
+import { PublicLinkThrottle } from './sales-docs/public-link-throttle';
+import { SalesDocSettingsService } from './sales-docs/sales-doc-settings.service';
+import { SalesDocsPublicService } from './sales-docs/sales-docs-public.service';
+import { SalesDocsRepository } from './sales-docs/sales-docs.repository';
+import { SalesDocsService } from './sales-docs/sales-docs.service';
+import { SalesDocsSupport } from './sales-docs/sales-docs.support';
+import { SALES_DOC_INVOICE_PORT } from './sales-docs';
+import {
+  INVOICE_PAYMENT_GATEWAYS,
+  type InvoicePaymentGateway,
+  type InvoicePaymentGateways,
+} from '../../infra/providers/invoice-payments/invoice-payment-gateway.port';
+import {
+  HmacGenericGateway,
+  ManualTransferGateway,
+} from '../../infra/providers/invoice-payments/invoice-payment-gateways';
+import { CreditNotesController } from './invoicing/credit-notes.controller';
+import { CreditNotesRepository } from './invoicing/credit-notes.repository';
+import { CreditNotesService } from './invoicing/credit-notes.service';
+import { RecurringInvoicesController } from './invoicing/recurring-invoices.controller';
+import { RecurringInvoicesRepository } from './invoicing/recurring-invoices.repository';
+import { RecurringInvoicesService } from './invoicing/recurring-invoices.service';
+import { SalesOrdersController } from './invoicing/sales-orders.controller';
+import { SalesOrdersRepository } from './invoicing/sales-orders.repository';
+import { SalesOrdersService } from './invoicing/sales-orders.service';
+import { InvoiceConversionService } from './invoicing/invoice-conversion.service';
+import { InvoiceGatewayWebhookController } from './invoicing/invoice-gateway-webhook.controller';
+import { InvoiceGatewayWebhookService } from './invoicing/invoice-gateway-webhook.service';
+import { InvoicePdfService } from './invoicing/invoice-pdf.service';
+import { InvoicePublicController } from './invoicing/invoice-public.controller';
+import { InvoicePublicService, PublicRateLimiter } from './invoicing/invoice-public.service';
+import { InvoiceSettingsController } from './invoicing/invoice-settings.controller';
+import { InvoiceSettingsRepository } from './invoicing/invoice-settings.repository';
+import { InvoiceSettingsService } from './invoicing/invoice-settings.service';
+import {
+  ContactInvoicesController,
+  DealInvoicesController,
+  InvoicesController,
+} from './invoicing/invoices.controller';
+import { InvoicesRepository } from './invoicing/invoices.repository';
+import { InvoicesService } from './invoicing/invoices.service';
+import { PaymentsController } from './invoicing/payments.controller';
+import { PaymentsRepository } from './invoicing/payments.repository';
+import { PaymentsService } from './invoicing/payments.service';
+import { TaxRatesController } from './invoicing/tax-rates.controller';
+import { TaxRatesRepository } from './invoicing/tax-rates.repository';
+import { TaxRatesService } from './invoicing/tax-rates.service';
 import { TasksRepository } from './tasks/tasks.repository';
 import { TasksService } from './tasks/tasks.service';
 import { StatusOptionsController } from './status-options/status-options.controller';
@@ -131,6 +185,27 @@ import { TagsService } from './tags/tags.service';
     TasksController,
     ContactTasksController,
     DealTasksController,
+    // Proposals and estimates: `sales-docs/settings`, `sales-docs/templates` (settings controller, registered first) and
+    // `sales-docs/counts` are literal paths declared before `sales-docs/:id`. The public controller is unauthenticated (token).
+    SalesDocSettingsController,
+    SalesDocsController,
+    ContactSalesDocsController,
+    DealSalesDocsController,
+    PublicSalesDocsController,
+    // Invoices and payments: `invoices/counts` is a literal path declared before `invoices/:id`, and `payments/summary`, `aging`
+    // and `outstanding` before `payments/:id`, inside their controllers. The settings controller has no `:id`. The public and
+    // webhook controllers are unauthenticated (token / signature).
+    InvoiceSettingsController,
+    CreditNotesController,
+    SalesOrdersController,
+    RecurringInvoicesController,
+    InvoicesController,
+    ContactInvoicesController,
+    DealInvoicesController,
+    PaymentsController,
+    TaxRatesController,
+    InvoicePublicController,
+    InvoiceGatewayWebhookController,
   ],
   providers: [
     // Encrypts deal timeline bodies at rest (the same service the public API provides for its own module).
@@ -184,6 +259,42 @@ import { TagsService } from './tags/tags.service';
     LostReasonsService,
     TasksRepository,
     TasksService,
+    SalesDocsRepository,
+    SalesDocsSupport,
+    SalesDocsService,
+    SalesDocsPublicService,
+    SalesDocSettingsService,
+    PublicLinkThrottle,
+    InvoicesRepository,
+    InvoicesService,
+    CreditNotesRepository,
+    CreditNotesService,
+    SalesOrdersRepository,
+    SalesOrdersService,
+    RecurringInvoicesRepository,
+    RecurringInvoicesService,
+    PaymentsRepository,
+    PaymentsService,
+    TaxRatesRepository,
+    TaxRatesService,
+    InvoiceSettingsRepository,
+    InvoiceSettingsService,
+    InvoicePublicService,
+    InvoicePdfService,
+    InvoiceGatewayWebhookService,
+    PublicRateLimiter,
+    // The pay-now hook's gateway port: the built-in adapters. A real gateway adapter registers here under its provider key.
+    {
+      provide: INVOICE_PAYMENT_GATEWAYS,
+      useFactory: (): InvoicePaymentGateways =>
+        new Map<string, InvoicePaymentGateway>([
+          ['manual', new ManualTransferGateway()],
+          ['hmac_generic', new HmacGenericGateway()],
+        ]),
+    },
+    // Sales-docs' "create an invoice draft from an accepted document" port, implemented here.
+    InvoiceConversionService,
+    { provide: SALES_DOC_INVOICE_PORT, useExisting: InvoiceConversionService },
   ],
   exports: [
     ContactsService,
@@ -205,6 +316,10 @@ import { TagsService } from './tags/tags.service';
     DealsService,
     PipelinesService,
     TasksService,
+    SalesDocsService,
+    InvoicesService,
+    PaymentsService,
+    TaxRatesService,
   ],
 })
 export class CrmModule {}

@@ -27,6 +27,9 @@ describe('errorKind', () => {
     expect(errorKind(api(413, ERROR_CODES.CON_IMPORT_TOO_LARGE))).toBe('tooLarge');
     expect(errorKind(api(422, ERROR_CODES.CON_EXPORT_TOO_LARGE))).toBe('tooLarge');
     expect(errorKind(api(403, ERROR_CODES.CON_MERGE_SCOPE_REQUIRED))).toBe('mergeScope');
+    expect(errorKind(api(422, ERROR_CODES.CON_REQUIRED_PROPERTY_MISSING))).toBe('requiredProperty');
+    expect(errorKind(api(422, ERROR_CODES.CON_LOST_REASON_REQUIRED))).toBe('lostReason');
+    expect(errorKind(api(422, ERROR_CODES.STATUS_OPTION_FLAG_INVALID))).toBe('stageFlag');
   });
 
   it('treats a missing route as "not available yet" and a network failure as a network problem', () => {
@@ -57,6 +60,9 @@ describe('option sets', () => {
     position: 0,
     isDefault: false,
     isActive: true,
+    isWon: false,
+    isLost: false,
+    stageOptionId: null,
     rowVersion: 1,
     ...over,
   });

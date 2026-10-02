@@ -384,3 +384,11 @@ Reference is listed here with the "Differences to decide" row it settles. Code: 
 | Calendar and CRM dashboard consumers (TW-TASK-012)                           | Other domains read `GET /tasks` (`dueFrom` / `dueTo`) and `GET /tasks/counts`.                    |
 | Recurring tasks, snooze, subtasks, comments                                  | Not in Reference.                                                                                    |
 | `sales_pipeline` is still not in the plan registry (`PLAN_FEATURE_DEFS`)     | Same follow-up as deals: the web plan editor needs its messages in the same change.               |
+
+### Follow-ups closed (notifications, plan registry)
+
+| What | Decision |
+| --- | --- |
+| The `task.assigned`, `task.due` and `task.completed` notification consumers | Built as `TaskNotificationConsumer` in `apps/api/src/modules/notifications` (worker process). It writes the in-app feed (`inbox_notifications`, TW-NOTIF-012/015) that the header bell reads; web push, email and Slack are not part of it. Recipients: the new assignee on assign (not when they did it themselves), the assignee else the creator on due, the creator on completion by someone else. Idempotent through a unique `dedupe_key` (event type + outbox event id); the task is read again at delivery so a stale notification is dropped. "Due soon" is the sweep's moment (the due time is reached). |
+| The generic fan-out | `OutboxDrainService.dispatch` now hands each event to the subscribers registered in the kernel's `OutboxSubscriberRegistry`; one failing subscriber does not stop the others, and the event is retried with the drain's backoff. |
+| `sales_pipeline` in the plan registry | Registered (feature, default on) with the `pipelines` limit (default 0 = unlimited); see the deals inventory. |
