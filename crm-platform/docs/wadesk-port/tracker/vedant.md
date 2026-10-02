@@ -124,17 +124,17 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-002 | in-progress |  | guard + first route done; applies to every later bridge-facing route |
 | WD-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
 | WD-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
-| WD-NODE-005 | in-progress |  | in-memory registry becomes Redis device leases (with 011) and BullMQ jobs (030); no boot sync |
-| WD-NODE-006 | in-progress |  | enableShutdownHooks exists in api and worker; lease release lands with 011 |
-| WD-NODE-007 | todo |  |  |
-| WD-NODE-008 | todo |  |  |
-| WD-NODE-009 | todo |  |  |
-| WD-NODE-010 | todo |  |  |
-| WD-NODE-011 | todo |  |  |
-| WD-NODE-012 | todo |  |  |
-| WD-NODE-013 | todo |  |  |
-| WD-NODE-014 | todo |  |  |
-| WD-NODE-015 | todo |  |  |
+| WD-NODE-005 | backend-done |  | registry is a per-worker map plus a Redis lease per device; no in-memory schedules or boot sync; shutdown releases leases |
+| WD-NODE-006 | backend-done |  | shutdown closes connections and releases leases, keeps sessions, never unlinks; enableShutdownHooks already on |
+| WD-NODE-007 | backend-done |  | restore at boot and every pass: devices with a saved session (3+ rows) and no owner are opened, staggered; thin sessions reported Disconnected; also the failover when a worker dies |
+| WD-NODE-008 | backend-done |  | DeviceControlService.requestQr: command to the owning worker, QR within 35 s, 429-style busy lock, already-linked answer; the Devices screens (WADEV) call it |
+| WD-NODE-009 | backend-done |  | pairing code command: same code for 2 minutes, short numbers refused with Pairing failed status; the library generates the code |
+| WD-NODE-010 | in-progress |  | status read and terminate done; check-connection not ported (destructive GET, intended); contact export blocked on MOB (Baileys 6.7 has no store) |
+| WD-NODE-011 | backend-done |  | state machine with the full close-code table, backoff, QR stall, mismatch, watchdog (tested with a fake socket); Baileys adapter compiles against the library; NOT verified against live WhatsApp |
+| WD-NODE-012 | backend-done |  | status goes to devices.status (same buckets as WaDesk), an outbox event device.status_changed and Redis for the QR and progress |
+| WD-NODE-013 | backend-done |  | per-device proxy (http, socks5) read at every connect, probed through the proxy, fail-closed, result kept on the device; NOT verified against a real proxy |
+| WD-NODE-014 | backend-done |  | liveness: owner touches last_seen_at, a device untouched for 90 s flips to disconnected; the other sweeps belong to their own domains as BullMQ jobs |
+| WD-NODE-015 | blocked |  | campaign drain loop belongs to CAMP (Punya's campaigns run on BullMQ) |
 | WD-NODE-016 | todo |  |  |
 | WD-NODE-017 | todo |  |  |
 | WD-NODE-018 | todo |  |  |
