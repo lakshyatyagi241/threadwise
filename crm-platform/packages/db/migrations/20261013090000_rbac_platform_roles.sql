@@ -82,7 +82,9 @@ BEGIN
     RETURN COALESCE(NEW, OLD);
   END IF;
   -- platform_role_permissions: removing a grant from a locked role is refused; adding one is allowed (a new key reaches Super Admin).
-  IF EXISTS (SELECT 1 FROM platform_roles r WHERE r.id = OLD.role_id AND r.is_locked) THEN
+  -- A permission being deleted takes its grants with it (the parent row is already gone in the cascade); that is the one removal allowed.
+  IF EXISTS (SELECT 1 FROM platform_roles r WHERE r.id = OLD.role_id AND r.is_locked)
+     AND EXISTS (SELECT 1 FROM platform_permissions p WHERE p.id = OLD.permission_id) THEN
     RAISE EXCEPTION 'platform role is locked: its permissions cannot be removed' USING ERRCODE = 'insufficient_privilege';
   END IF;
   RETURN COALESCE(NEW, OLD);

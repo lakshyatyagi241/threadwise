@@ -556,6 +556,38 @@ describe('permission catalogue (TW-RBAC-011..013)', () => {
     expect((await sup('delete', `/permissions/${perm.id}`)).status).toBe(404);
   });
 
+  it('deletes a permission that the locked Super Admin role also holds', async () => {
+    const name = `tmp.${uniq('super')}`;
+    const perm = (await sup('post', '/permissions').send({ name })).body;
+    const superRole = platformRoleDetailSchema.parse(
+      (await sup('get', `/roles/${(await roleByName('Super Admin')).id}`)).body,
+    );
+    const added = await sup('put', `/roles/${superRole.id}`).send({
+      name: 'Super Admin',
+      permissions: [...superRole.permissions, name],
+      rowVersion: superRole.rowVersion,
+    });
+    expect(added.status, JSON.stringify(added.body)).toBe(200);
+    expect((await sup('delete', `/permissions/${perm.id}`)).status).toBe(200);
+    expect(
+      platformRoleDetailSchema.parse((await sup('get', `/roles/${superRole.id}`)).body)
+        .permissionCount,
+    ).toBe(101);
+  });
+
+  it('lets an operator who only manages roles read the catalogue for the role editor', async () => {
+    const role = await createRole(uniq('Roles only '), ['platform.role.manage']);
+    const staff = platformStaffListResponseSchema.parse((await sup('get', '/staff')).body);
+    const aud = staff.data.find((s) => s.email === 'auditor@platform.test')!;
+    const base = aud.roles.map((r) => r.id);
+    await sup('put', `/staff/${aud.id}/roles`).send({ roleIds: [role.id] });
+    expect((await call(auditorToken, 'get', '/permissions')).status).toBe(200);
+    expect((await call(auditorToken, 'post', '/permissions').send({ name: 'x.y' })).status).toBe(
+      403,
+    );
+    await sup('put', `/staff/${aud.id}/roles`).send({ roleIds: base });
+  });
+
   it('refuses to delete a key the code checks (Reference let it fail closed for everybody)', async () => {
     const list = platformPermissionListResponseSchema.parse(
       (await sup('get', '/permissions')).body,

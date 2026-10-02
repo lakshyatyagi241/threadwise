@@ -12,6 +12,7 @@ export interface OperatorNavItem {
 }
 
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
+import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -55,6 +56,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   },
   // platform settings, branding and storage (SET domain)
   ...SET_OPERATOR_NAV,
+  // roles and permissions domain (RBAC): Roles, Permissions, Staff roles
+  ...ROLES_OPERATOR_NAV,
   {
     id: 'i18n-languages',
     href: '/admin/i18n/languages',

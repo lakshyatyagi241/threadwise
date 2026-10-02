@@ -120,8 +120,9 @@ export class PlatformRbacController {
     return this.roles.remove(id);
   }
 
+  // The role editor builds its matrix from this list, so the role managers read it as well.
   @Get('permissions')
-  @PlatformPermission('platform.permission.manage')
+  @PlatformPermission('platform.permission.manage', 'platform.role.manage')
   @ApiOperation({
     summary: 'Every permission with its module, role count and orphan state, plus the KPI strip',
   })
