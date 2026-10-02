@@ -50,6 +50,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  {
+    id: 'system',
+    href: '/admin/system',
+    labelKey: 'install-update-licensing.system.nav.item',
+    groupKey: 'install-update-licensing.system.nav.group',
+  },
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */
