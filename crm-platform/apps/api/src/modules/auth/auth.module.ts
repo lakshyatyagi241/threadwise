@@ -163,6 +163,8 @@ import { TokenService } from './token.service';
     PlatformStore,
     WebhookSecretRegistry,
     OtpTemplateService,
+    // the platform-wide table door, for other domains whose operator tables need it (AIADM)
+    PlatformStore,
   ],
 })
 export class AuthModule implements NestModule {
