@@ -35,7 +35,9 @@ Nav entries come from your `features/<domain>/nav.ts` through the generated regi
 1. Read **UX & screens** of the entry: each screen/modal/tab, fields, validation, conditional visibility (role, plan, channel
    state), empty/loading/error/limit states, bulk actions, filters/sort/search, realtime, toasts. Each item becomes a component or
    a test id. Open the reference screen in Reference for layout intent only.
-2. Build with `@crm/ui` components and tokens. No Reference markup, CSS, JS, icons or images; no copied copy: write messages in English
+2. Build with `@crm/ui` components and tokens, matching the reference screen's layout, flow and behavior
+   ([PORTING_RULES.md](../../../docs/threadwise-port/PORTING_RULES.md) section 3: same UI, rewritten in our stack). No Reference markup, CSS, JS, icons or images; short
+   functional labels match the reference, longer copy is written fresh, in English
    in your `messages/en/<domain>.json` (translations for the other 19 languages come through the localization domain).
 3. Data only through the typed API client from the foundation (see `frontend-api-call`): import types from `@crm/contracts`,
    parse responses at the boundary, uuids only, `Idempotency-Key` on mutations, `rowVersion` on updates (409 → "reload", never auto-retry),
