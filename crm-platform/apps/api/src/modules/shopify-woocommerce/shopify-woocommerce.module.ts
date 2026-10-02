@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BroadcastsModule } from '../broadcasts';
+import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { SHOPIFY, WOOCOMMERCE } from '../../infra/providers/ecom/ecom.port';
 import { HttpShopifyFactory } from '../../infra/providers/ecom/shopify-admin.client';
@@ -8,7 +9,7 @@ import { OpenEcomPlanGate } from './_shims/open-gates';
 import { SqlStoreMirror } from './_shims/sql-store-mirror';
 import { SqlEcomTemplates } from './_shims/sql-ecom-templates';
 import { COMMERCE_SENDER, ECOM_PLAN_GATE, ECOM_TEMPLATES, STORE_MIRROR } from './_shims/tokens';
-import { WabaCommerceSender } from './_shims/waba-commerce-sender';
+import { EngineCommerceSender } from './_shims/engine-commerce-sender';
 import { EcomPublicController } from './ecom-public.controller';
 import { AutomationsController } from './automations.controller';
 import { AutomationsService } from './automations.service';
@@ -47,7 +48,7 @@ import { WoocommerceService } from './woocommerce.service';
  * binding the real one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [BroadcastsModule],
+  imports: [BroadcastsModule, NodeBridgeRuntimeModule],
   controllers: [
     EcomPlatformSettingsController,
     ShopifyController,
@@ -91,7 +92,7 @@ import { WoocommerceService } from './woocommerce.service';
     { provide: ECOM_PLAN_GATE, useClass: OpenEcomPlanGate },
     { provide: STORE_MIRROR, useClass: SqlStoreMirror },
     { provide: ECOM_TEMPLATES, useClass: SqlEcomTemplates },
-    { provide: COMMERCE_SENDER, useClass: WabaCommerceSender },
+    { provide: COMMERCE_SENDER, useClass: EngineCommerceSender },
   ],
   exports: [
     EcomSettingsService,

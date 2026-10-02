@@ -7,6 +7,7 @@ import {
   COMMERCE_SENDER,
   type CommerceSender,
 } from '../../../src/modules/shopify-woocommerce/_shims/tokens';
+import { bodyParams } from '../../../src/modules/shopify-woocommerce/event-rules';
 import {
   BroadcastService,
   type BroadcastJob,
@@ -35,7 +36,7 @@ beforeAll(async () => {
   const sender = h.app.get<CommerceSender>(COMMERCE_SENDER);
   sender.send = (_o, m) => {
     if (failFor && m.to === failFor) return Promise.reject(new Error('no route'));
-    sent.push({ to: m.to, params: m.params });
+    sent.push({ to: m.to, params: bodyParams(m.template.body, m.ctx.positional) });
     return Promise.resolve({ providerMessageId: 'w1' });
   };
 }, 240_000);

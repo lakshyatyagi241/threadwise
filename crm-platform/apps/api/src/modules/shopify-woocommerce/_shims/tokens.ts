@@ -4,6 +4,7 @@
  */
 
 import type { Tx } from '@crm/db';
+import type { EventContext } from '../event-rules';
 import type { MirrorCustomer, MirrorOrder, MirrorProduct, StoreKind } from '../mirror-rules';
 
 export type { StoreKind };
@@ -57,6 +58,8 @@ export interface EcomTemplate {
   name: string;
   language: string;
   body: string;
+  header: string | null;
+  footer: string | null;
 }
 
 /** Reads the message templates an automation points at (message-templates domain). */
@@ -68,22 +71,27 @@ export interface EcomTemplates {
 }
 export const ECOM_TEMPLATES = Symbol('ECOM_TEMPLATES');
 
-/** Sends one approved template to one customer (TW-ECOM-010). Throws with a reason a person can act on. */
+/**
+ * Sends one template to one customer through the number the workspace sends from (TW-ECOM-010): the chosen "send from" number, else
+ * its default engine's. A Cloud API number gets the approved template with the numbered values; the unofficial engine and Twilio get the
+ * template rendered as text (header, body, footer). Throws with a reason a person can act on.
+ */
 export interface CommerceSender {
   send(
     orgId: number,
     m: {
       to: string;
       template: EcomTemplate;
-      params: string[];
+      /** The values that fill the template, named and numbered. */
+      ctx: EventContext;
       reference: string;
-      /** `engine:uuid` of the number to send from (TW-ECOM-033); absent means the workspace's primary number. */
+      /** `engine:uuid` of the number to send from (TW-ECOM-033); absent means the workspace's default engine. */
       senderKey?: string | null;
     },
   ): Promise<{ providerMessageId: string | null }>;
   /** Whether a number is connected to send from now (nothing is scheduled for a workspace that has none). */
   canSend(orgId: number): Promise<boolean>;
-  /** A plain text answer to a message the customer just sent (inside their open session): the COD confirmation reply. */
+  /** A plain text answer to a message the customer just sent (inside their open session): the COD, stock and concierge replies. */
   sendText(
     orgId: number,
     m: { to: string; body: string; reference: string },

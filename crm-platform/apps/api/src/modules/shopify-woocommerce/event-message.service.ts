@@ -8,7 +8,6 @@ import {
 } from './_shims/tokens';
 import {
   applyVarMap,
-  bodyParams,
   shopifyContext,
   shopifyRecipient,
   wooContext,
@@ -111,7 +110,6 @@ export class EventMessageService {
 
     const chosen = (store.metadata as { senderKey?: unknown } | null)?.senderKey;
     const senderKey = kind === 'woocommerce' && typeof chosen === 'string' ? chosen : null;
-    const params = bodyParams(template.body, ctx.positional);
     const sent: string[] = [];
     const errors: string[] = [];
     const response: unknown[] = [];
@@ -120,7 +118,7 @@ export class EventMessageService {
         const out = await this.sender.send(orgId, {
           to: dest,
           template,
-          params,
+          ctx,
           reference,
           senderKey,
         });

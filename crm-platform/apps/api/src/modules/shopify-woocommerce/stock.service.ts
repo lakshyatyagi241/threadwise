@@ -6,7 +6,7 @@ import {
   type CommerceSender,
   type EcomTemplates,
 } from './_shims/tokens';
-import { bodyParams, matchOutOfStock, wantsStockAlert } from './event-rules';
+import { matchOutOfStock, wantsStockAlert, type EventContext } from './event-rules';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { MirrorRepository } from './mirror.repository';
@@ -106,8 +106,15 @@ export class StockService {
       kind === 'shopify'
         ? `https://${store.storeUrl}/products/${text(data.handle) ?? ''}`
         : (text(data.permalink) ?? existing.productUrl ?? '');
-    const positional = ['there', name, url];
-    const params = bodyParams(template.body, positional);
+    const ctx: EventContext = {
+      vars: {
+        name: 'there',
+        product_name: name,
+        product_url: url,
+        store_name: store.storeName || store.storeUrl,
+      },
+      positional: ['there', name, url],
+    };
 
     let sent = 0;
     for (const w of waiters) {
@@ -117,7 +124,7 @@ export class StockService {
         await this.sender.send(orgId, {
           to,
           template,
-          params,
+          ctx,
           reference: `ecom-stock-${kind}-${storeId}-${w.id}`,
         });
         sent += 1;
