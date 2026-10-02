@@ -154,6 +154,8 @@ import { TokenService } from './token.service';
     HtmlSanitizerService,
     SecurityPolicyService,
     PlatformSettingsService,
+    // the sanctioned door to platform-wide tables, for other domains' platform catalogues (I18N)
+    PlatformStore,
     WebhookSecretRegistry,
     OtpTemplateService,
   ],
