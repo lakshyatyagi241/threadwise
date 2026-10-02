@@ -29,6 +29,7 @@ describe('columns', () => {
       'tags',
       'groups',
       'stage',
+      'status',
       'language',
       'memo',
       'createdOn',
@@ -43,9 +44,19 @@ describe('columns', () => {
       'attr:total_spent',
       'email',
       'tags',
+      'stage',
+      'status',
       'createdOn',
     ]);
-    expect(defaultColumns([])).toEqual(['name', 'phone', 'email', 'tags', 'createdOn']);
+    expect(defaultColumns([])).toEqual([
+      'name',
+      'phone',
+      'email',
+      'tags',
+      'stage',
+      'status',
+      'createdOn',
+    ]);
   });
 
   it('honours a stored choice, in canonical order, and always keeps the name', () => {

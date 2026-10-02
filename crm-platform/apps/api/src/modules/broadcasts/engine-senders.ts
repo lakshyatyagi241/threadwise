@@ -19,9 +19,27 @@ export interface OutgoingMessage {
   components?: unknown[];
 }
 
+/** A free-text message (a campaign's custom text, media and buttons), for the engines that can send one. */
+export interface OutgoingText {
+  /** Destination as digits. */
+  to: string;
+  text: string;
+  clientReference: string;
+  header?: string | null;
+  footer?: string | null;
+  buttons?: unknown[];
+  quickReplies?: unknown[];
+  media?: { kind: 'image' | 'video' | 'document'; url: string } | null;
+}
+
 /** A sender with its credentials loaded once for the whole run. */
 export interface OpenedSender {
   send(message: OutgoingMessage): Promise<{ providerMessageId: string | null }>;
+  /**
+   * A custom (non-template) message. Absent where the engine cannot send one: the Cloud API only allows free text inside an open
+   * 24-hour customer session, so a campaign on it must use an approved template (WaDesk refuses it the same way).
+   */
+  sendText?(message: OutgoingText): Promise<{ providerMessageId: string | null }>;
 }
 
 /** One adapter per engine. `open` throws when the number cannot send (no credentials). */

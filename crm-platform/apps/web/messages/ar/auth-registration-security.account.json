@@ -518,7 +518,11 @@
             "calling": "مكالمات واتساب",
             "remove_branding": "العلامة البيضاء",
             "sales_pipeline": "مسار المبيعات",
-            "appointment_booking": "المواعيد"
+            "appointment_booking": "المواعيد",
+            "inbox_sla": "اتفاقية مستوى الخدمة",
+            "inbox_routing": "توجيه المحادثات",
+            "inbox_kanban": "لوحة كانبان",
+            "team_performance": "أداء الفريق"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

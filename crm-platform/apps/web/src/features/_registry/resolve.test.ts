@@ -147,7 +147,7 @@ describe('resolveNav with planned screens', () => {
     const gated: NavItem[] = [
       {
         id: 'tg',
-        group: 'channels',
+        group: 'store',
         labelKey: 't',
         href: '/telegram',
         gates: { channel: 'telegram' },
