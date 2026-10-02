@@ -1738,3 +1738,18 @@ One row per (ticket, breach type) crossing. `id`; `ticket_id` FK support_tickets
   }
 }
 ```
+
+## Port decisions (built features)
+
+Deliberate differences from WaDesk in the rebuilt ticket core (WD-SUPP-001..005, 007..013), each covered by a test:
+
+- Customer "open" means neither resolved nor closed (WaDesk counted closed as open) and the pill uses the real status vocabulary.
+- A closed ticket refuses a customer reply with 409 (WaDesk hid the box but the endpoint reopened it).
+- An internal note changes nothing on the ticket (WaDesk moved `open` to `in_progress` and bumped `last_reply_at`).
+- Moving to `open`, `in_progress` or `pending` always clears `resolved_at` (WaDesk kept a stale value on closed to open).
+- Assignment accepts only active `super_admin` or `support` operators (WaDesk accepted any user id); staff are platform operators, so
+  `assigned_agent_id` references `platform_operators`.
+- Unknown ticket on a priority change is a 404 (WaDesk silently succeeded); every operator write takes `rowVersion` (409 when stale).
+- Operator writes need the `super_admin` or `support` role; auditors read only (WaDesk enforced nothing).
+- The customer email outcome is stored on the message (`email_status`) and shown in the panel; WaDesk's banner said "sent" even when delivery threw.
+- Kept as in WaDesk: a customer reply on `pending` leaves it `pending`; no per-user rate limit, no dedupe; `reason` is stored and filterable.
