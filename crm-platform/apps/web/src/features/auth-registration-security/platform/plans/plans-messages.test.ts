@@ -80,6 +80,11 @@ describe('plan catalogue messages (operator console)', () => {
     for (const item of OPERATOR_NAV.filter((i) =>
       i.labelKey.startsWith('auth-registration-security.platform.'),
     )) {
+    // Other domains register their own menu items under their own namespace and test their own labels.
+    const own = OPERATOR_NAV.filter((i) =>
+      i.labelKey.startsWith('auth-registration-security.platform.'),
+    );
+    for (const item of own) {
       const key = item.labelKey.replace('auth-registration-security.platform.', '');
       expect(en[key], key).toBeTypeOf('string');
     }

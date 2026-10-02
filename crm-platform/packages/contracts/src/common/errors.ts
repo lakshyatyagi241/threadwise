@@ -166,6 +166,11 @@ export const ERROR_CODES = {
   ADD_ENGINE_CONFLICT: 'ADD_ENGINE_CONFLICT',
   ADD_PACK_IN_USE: 'ADD_PACK_IN_USE',
   ADD_MODULE_DISABLED: 'ADD_MODULE_DISABLED',
+  // AI provider keys and token metering (TW-AIADM)
+  /** Activating a provider that has no readable key. */
+  AIADM_KEY_REQUIRED: 'AIADM_KEY_REQUIRED',
+  /** No key (own or platform) is available for the provider a call asked for. */
+  AIADM_NO_KEY_AVAILABLE: 'AIADM_NO_KEY_AVAILABLE',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

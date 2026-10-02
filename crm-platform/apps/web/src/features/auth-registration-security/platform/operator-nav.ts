@@ -94,6 +94,17 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/support',
     labelKey: 'platform-support-desk.nav.inbox',
     groupKey: 'platform-support-desk.nav.group',
+  {
+    id: 'ai-keys',
+    href: '/admin/api-keys',
+    labelKey: 'ai-keys-usage-admin.admin.nav.keys',
+    groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  },
+  {
+    id: 'ai-dashboard',
+    href: '/admin/ai-dashboard',
+    labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
+    groupKey: 'ai-keys-usage-admin.admin.nav.group',
   },
 ];
 

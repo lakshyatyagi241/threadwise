@@ -22,6 +22,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { BroadcastsModule } from './modules/broadcasts';
+import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
@@ -106,6 +107,7 @@ import { HealthModule } from './health/health.module';
     LocalizationTranslationModule,
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
+    AiKeysUsageAdminModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,
