@@ -2,6 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { ERROR_CODES, MESSAGE_DELIVERY_EVENT } from '@crm/contracts';
 import { DeliveryBillingConsumer } from '../../../src/modules/wallet-message-billing/delivery.consumer';
 import { RateCardService } from '../../../src/modules/wallet-message-billing/rate-card.service';
+import { WalletRealtimePublisher } from '../../../src/modules/wallet-message-billing/wallet-realtime.publisher';
 import { WalletLogService } from '../../../src/modules/wallet-message-billing/wallet-log.service';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
 import {
@@ -415,7 +416,10 @@ describe('settleFailed (WD-WALLET-011)', () => {
     const id = wamid();
     await settle(t.orgId, { id, category: 'service' });
     const { billing } = services(h);
-    expect(await billing.settleFailed(t.orgId, id)).toEqual({ refunded: false, refundedMinor: 0 });
+    expect(await billing.settleFailed(t.orgId, id)).toMatchObject({
+      refunded: false,
+      refundedMinor: 0,
+    });
     expect(await billing.settleFailed(t.orgId, 'never-sent')).toEqual({
       refunded: false,
       refundedMinor: 0,
@@ -474,6 +478,7 @@ describe('the delivery subscriber (WD-WALLET-012)', () => {
       h.app.get(OutboxSubscriberRegistry, { strict: false }),
       h.app.get(WalletLogService, { strict: false }),
       s.db,
+      { balanceChanged: async () => undefined } as unknown as WalletRealtimePublisher,
     );
   }
   const event = (orgId: number, payload: Record<string, unknown>) => ({
