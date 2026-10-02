@@ -84,6 +84,8 @@ export const wabaPlatformCallbackSchema = z.object({
   verifyToken: z.string(),
   /** The webhook fields to subscribe. */
   fields: z.array(z.string()),
+  /** WABA numbers connected across every workspace (Reference: "Connected WABAs"). */
+  connectedWabas: z.number().int().nonnegative(),
 });
 export type WabaPlatformCallback = z.infer<typeof wabaPlatformCallbackSchema>;
 

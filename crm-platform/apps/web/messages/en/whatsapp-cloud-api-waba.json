@@ -40,6 +40,13 @@
         "title": "Embedded Signup is not configured",
         "message": "Ask the platform admin to set: {missing}. You can still connect with a pasted token.",
         "messageGeneric": "Ask the platform admin to finish the Meta app setup. You can still connect with a pasted token."
+      },
+      "missingNames": {
+        "META_APP_ID": "Meta App ID",
+        "META_APP_SECRET": "App Secret",
+        "META_EMBEDDED_CONFIG_ID": "Embedded Signup Config ID",
+        "INTERAKT_PARTNER_AUTH_KEY": "Interakt partner key",
+        "INTERAKT_SOLUTION_ID": "Interakt solution ID"
       }
     },
     "card": {

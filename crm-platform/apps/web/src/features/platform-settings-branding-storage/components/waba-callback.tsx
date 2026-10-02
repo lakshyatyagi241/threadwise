@@ -55,6 +55,10 @@ export function WabaCallback() {
   if (q.isError) return <Alert>{t('unavailable')}</Alert>;
   return (
     <div className="space-y-3">
+      <div className="rounded-md border border-border p-3 text-sm">
+        <span className="text-muted-foreground">{t('connected')}</span>{' '}
+        <strong data-testid="waba-connected-count">{q.data.connectedWabas}</strong>
+      </div>
       <CopyRow
         label={t('webhookUrl')}
         value={q.data.webhookUrl ?? t('noUrl')}
