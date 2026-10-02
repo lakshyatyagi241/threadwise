@@ -298,4 +298,106 @@ export class StoresRepository {
       woocommerce: { integrations: r.wi!, events: r.we!, logs: r.wl! },
     };
   }
+
+  // ── Both stores ─────────────────────────────────────────────────────────
+
+  async shopifyById(tx: Tx, orgId: number, id: number): Promise<ShopifyRow | undefined> {
+    const res = await tx.execute(
+      sql`SELECT * FROM shopify_integrations WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    const r = res.rows[0] as Raw | undefined;
+    return r ? toShopify(r) : undefined;
+  }
+
+  async wooById(tx: Tx, orgId: number, id: number): Promise<WooRow | undefined> {
+    const res = await tx.execute(
+      sql`SELECT * FROM woocommerce_integrations WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    const r = res.rows[0] as Raw | undefined;
+    return r ? toWoo(r) : undefined;
+  }
+
+  /** What an import brought in, per resource, and when. */
+  async setSynced(
+    tx: Tx,
+    orgId: number,
+    kind: 'shopify' | 'woocommerce',
+    id: number,
+    stats: Record<string, number>,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE ${sql.raw(TABLE[kind])}
+      SET products_synced_at = now(), orders_synced_at = now(), customers_synced_at = now(),
+          sync_stats = ${JSON.stringify(stats)}::jsonb
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  async mergeMetadata(
+    tx: Tx,
+    orgId: number,
+    kind: 'shopify' | 'woocommerce',
+    id: number,
+    patch: Record<string, unknown>,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE ${sql.raw(TABLE[kind])}
+      SET metadata = coalesce(metadata, '{}'::jsonb) || ${JSON.stringify(patch)}::jsonb
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  async setStatus(
+    tx: Tx,
+    orgId: number,
+    kind: 'shopify' | 'woocommerce',
+    id: number,
+    status: string,
+  ): Promise<void> {
+    await tx.execute(
+      sql`UPDATE ${sql.raw(TABLE[kind])} SET status = ${status} WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+  }
+
+  /** A fresh read of the store's facts: a field the store did not give keeps what is saved. The store is active and verified now. */
+  async refreshShopify(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    f: {
+      name: string | null;
+      email: string | null;
+      owner: string | null;
+      plan: string | null;
+      currency: string | null;
+      country: string | null;
+    },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE shopify_integrations
+      SET store_name = coalesce(${f.name}, store_name), shop_email = coalesce(${f.email}, shop_email),
+          shop_owner = coalesce(${f.owner}, shop_owner), shop_plan = coalesce(${f.plan}, shop_plan),
+          shop_currency = coalesce(${f.currency}, shop_currency), shop_country = coalesce(${f.country}, shop_country),
+          status = 'active', last_verified_at = now()
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  async refreshWoo(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    f: {
+      name: string | null;
+      currency: string | null;
+      country: string | null;
+      version: string | null;
+    },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE woocommerce_integrations
+      SET store_name = coalesce(${f.name}, store_name), store_currency = coalesce(${f.currency}, store_currency),
+          store_country = coalesce(${f.country}, store_country), store_version = coalesce(${f.version}, store_version),
+          status = 'active', last_verified_at = now()
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
 }
+
+const TABLE = { shopify: 'shopify_integrations', woocommerce: 'woocommerce_integrations' } as const;

@@ -79,6 +79,10 @@ beforeAll(async () => {
     },
   });
   shopify.store = (shop, token2) => ({
+    counts: () => Promise.resolve({ products: 0, orders: 0, customers: 0 }),
+    products: () => Promise.resolve({ items: [], complete: true }),
+    orders: () => Promise.resolve({ items: [], complete: true }),
+    customers: () => Promise.resolve({ items: [], complete: true }),
     shop: () => {
       calls.push({ what: 'shop', args: [shop, token2] });
       return Promise.resolve(shopInfo);
@@ -97,6 +101,10 @@ beforeAll(async () => {
 
   const woo = h.app.get<WooFactory>(WOOCOMMERCE);
   woo.store = (url, key, secret) => ({
+    counts: () => Promise.resolve({ products: 0, orders: 0, customers: 0 }),
+    products: () => Promise.resolve({ items: [], complete: true }),
+    orders: () => Promise.resolve({ items: [], complete: true }),
+    customers: () => Promise.resolve({ items: [], complete: true }),
     test: () => {
       calls.push({ what: 'wooTest', args: [url, key, secret] });
       return Promise.resolve(wooProbe);

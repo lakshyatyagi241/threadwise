@@ -36,6 +36,8 @@ export const QUEUES = {
   FB_BROADCAST: 'fb-broadcast',
   /** One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (TW-IG-009). */
   IG_PULL: 'ig-pull',
+  /** One job per connected store: imports its products, orders and customers into the mirror (TW-ECOM-011). */
+  ECOM_IMPORT: 'ecom-import',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
 } as const;

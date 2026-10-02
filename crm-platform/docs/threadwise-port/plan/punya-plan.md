@@ -95,7 +95,7 @@ Inventory written 2026-10-03: `docs/threadwise-port/inventory/shopify-woocommerc
 | Step | What                                                                                                              | Features                                    |
 | ---- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | E1   | Permissions, platform settings, Shopify OAuth, WooCommerce connect and test, webhook register and teardown (DONE) | 001, 002, 003, 005, 006, 007, 025, 026, 013 |
-| E2   | Import into the mirror (both), keep it in step, sync now                                                          | 011, 012, 013                               |
+| E2   | Import into the mirror (both), keep it in step, sync now (DONE)                                                   | 011, 012, 013                               |
 | E3   | Webhook receivers (both), automations config, event message, logs                                                 | 008, 009, 010, 027, 028, 029, 033           |
 | E4   | Offers, win-back, COD and prepaid, delivered, stock, cart recovery, GDPR, uninstall, concierge, inbound service   | 014 to 022, 030, 031, 034                   |
 | E5   | Web: Shopify and WooCommerce store screens                                                                        | 004, 023, 024                               |

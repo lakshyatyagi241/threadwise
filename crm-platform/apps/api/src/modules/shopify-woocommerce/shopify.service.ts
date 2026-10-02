@@ -7,6 +7,7 @@ import {
   type ShopifyConnectStart,
   type ShopifyOverview,
   type ShopifyStore,
+  type SyncResult,
 } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -27,6 +28,7 @@ import {
   webhookIdsOf,
   webhookUrl,
 } from './ecom-rules';
+import { ImportService } from './import.service';
 import { EcomSettingsService } from './platform-settings.service';
 import { StoresRepository, type ShopifyRow } from './stores.repository';
 
@@ -63,6 +65,7 @@ export class ShopifyService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly settings: EcomSettingsService,
+    private readonly imports: ImportService,
     private readonly config: ConfigService<Env, true>,
     @Inject(SHOPIFY) private readonly shopify: ShopifyFactory,
     @Inject(ECOM_PLAN_GATE) private readonly plan: EcomPlanGate,
@@ -241,6 +244,10 @@ export class ShopifyService {
             SHOPIFY_WEBHOOK_TOPICS,
           );
           await this.db.tx((tx) => this.repo.setShopifyHooks(tx, state.orgId, saved.row.id, ids));
+          // The first import runs in the background: the merchant lands on the store screen at once and it fills in.
+          await this.imports
+            .enqueue({ orgId: state.orgId, kind: 'shopify', id: saved.row.id })
+            .catch((err: unknown) => this.logger.warn({ err }, 'shopify: import not queued'));
           if (Object.keys(ids).length < SHOPIFY_WEBHOOK_TOPICS.length) {
             this.logger.warn(
               { orgId: state.orgId, registered: Object.keys(ids).length },
@@ -283,5 +290,28 @@ export class ShopifyService {
         payload: { uuid: row.uuid, storeUrl: row.storeUrl },
       });
     });
+  }
+
+  /**
+   * Sync now (TW-ECOM-013): the store is read again (a store that does not answer is flagged `error` and answers `ok = false` with
+   * the reason), its facts refreshed, the import queued, and the store's own totals returned.
+   */
+  async sync(uuid: string): Promise<SyncResult> {
+    const { orgId } = RequestContextStore.require();
+    await this.plan.assertIntegration(orgId, 'shopify');
+    const row = await this.db.tx((tx) => this.repo.shopifyByUuid(tx, orgId, uuid));
+    if (!row) throw AppError.notFound('Shopify store', uuid);
+    if (row.accessToken === '') {
+      return { ok: false, message: 'This store is no longer connected. Connect it again.' };
+    }
+    const api = this.shopify.store(row.storeUrl, this.crypto.decrypt(row.accessToken));
+    const shop = await api.shop();
+    if (!shop.ok) {
+      await this.db.tx((tx) => this.repo.setStatus(tx, orgId, 'shopify', row.id, 'error'));
+      return { ok: false, message: shop.error || 'Verify failed' };
+    }
+    await this.db.tx((tx) => this.repo.refreshShopify(tx, orgId, row.id, shop.data));
+    await this.imports.enqueue({ orgId, kind: 'shopify', id: row.id });
+    return { ok: true, counts: await api.counts(), importQueued: true };
   }
 }
