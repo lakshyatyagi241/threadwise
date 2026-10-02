@@ -1,0 +1,19 @@
+/** Public surface of the catalog-products domain. Other domains import only from here. */
+export { CatalogProductsModule } from './catalog-products.module';
+export { CatalogProductsWorkerModule } from './catalog-products-worker.module';
+export {
+  StorefrontProductsReader,
+  type StorefrontProduct,
+  type StorefrontReview,
+} from './storefront-reader';
+// Stock ledger for flows and checkout (WD-CAT-025): hold, commit, release, by ref, and the expired-hold sweep.
+export { InventoryService, type StockReservation } from './inventory.service';
+// Inbound automations; the hook that calls them belongs to the inbox/webhook domain (WD-CAT-028, 029).
+export { CatalogConciergeService } from './catalog-concierge.service';
+export { CatalogOrderAckService, type CatalogOrderForAck } from './catalog-order-ack.service';
+// A product written by another domain (importers, sheets) can ask for its push to Meta here (WD-CAT-012).
+export { CatalogSyncService } from './catalog-sync.service';
+// Pure rules other domains reuse: the retailer id, the effective availability, the order-text matcher, the Meta price.
+export { retailerIdOf, effectiveAvailability } from './catalog-rules';
+export { metaCatalogPrice, parseMetaPriceMinor } from './catalog-money';
+export { matchProduct, type MatchResult } from './product-matcher';
