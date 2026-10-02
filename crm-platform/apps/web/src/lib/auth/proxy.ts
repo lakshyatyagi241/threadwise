@@ -13,6 +13,9 @@ const FORWARD_REQUEST = [
   'if-match',
   'accept-language',
   'user-agent',
+  'x-forwarded-for',
+  // Audio and video in a thread seek with byte ranges (the media route answers them).
+  'range',
 ];
 const FORWARD_RESPONSE = [
   'content-type',
@@ -24,6 +27,10 @@ const FORWARD_RESPONSE = [
   // Uploaded brand files (SVG) are served with a sandboxing policy that must reach the browser.
   'content-security-policy',
   'cross-origin-resource-policy',
+  // A downloaded customer file keeps its name, and a ranged read reports which bytes it got.
+  'content-disposition',
+  'content-range',
+  'accept-ranges',
 ];
 
 /**
