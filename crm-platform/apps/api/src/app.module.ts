@@ -21,11 +21,23 @@ import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
+import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
+import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { CrmModule } from './modules/crm';
+import { LocalizationTranslationModule } from './modules/localization-translation';
+import { PlatformSupportDeskModule } from './modules/platform-support-desk';
+import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
+import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
+import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
+import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
+import { CmsModule } from './modules/marketing-site-cms';
+import { AdminConsoleShellModule } from './modules/admin-console-shell';
+import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
+import { TeamChatModule } from './modules/team-chat';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -99,6 +111,15 @@ import { HealthModule } from './health/health.module';
     KernelModule,
     AuthModule,
     PlansModule,
+    PlatformSettingsModule,
+    LocalizationTranslationModule,
+    InstallUpdateLicensingModule,
+    AddonsExtensionRegistryModule,
+    AiKeysUsageAdminModule,
+    CmsModule,
+    AdminConsoleShellModule,
+    PlatformPaymentGatewaysModule,
+    BspBillingEngineModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,
@@ -106,11 +127,14 @@ import { HealthModule } from './health/health.module';
     // Apps
     AdminModule,
     CrmModule,
+    DashboardsAnalyticsChartsModule,
     AppointmentsBookingModule,
     NotificationsModule,
     BroadcastsModule,
     PartnerModule,
     PublicApiModule,
+    PlatformSupportDeskModule,
+    TeamChatModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],
