@@ -9,7 +9,7 @@ import type {
   DashboardTemplate,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
-import { discountPct, paramCount } from './dashboard-rules';
+import { discountPct, paramCount, templateEngine } from './dashboard-rules';
 import type { StoreKind } from './mirror-rules';
 
 type Row = Record<string, unknown>;
@@ -227,20 +227,35 @@ export class DashboardRepository {
     };
   }
 
-  /** Templates that can be sent now: not submitted to Meta, or approved by it. */
+  /** WhatsApp templates that can be sent now: not submitted to Meta, or approved by it. */
   async templates(tx: Tx, orgId: number): Promise<DashboardTemplate[]> {
     const res = await tx.execute(sql`
-      SELECT uuid, template_name, category, language, channel, template_body FROM wa_templates
-      WHERE org_id = ${orgId} AND (meta_template_id IS NULL OR upper(coalesce(meta_status, '')) = 'APPROVED')
-      ORDER BY template_name`);
-    return (res.rows as Row[]).map((r) => ({
-      uuid: String(r.uuid),
-      name: String(r.template_name),
-      category: s(r.category),
-      language: String(r.language ?? 'en_US'),
-      channel: s(r.channel),
-      paramCount: paramCount(String(r.template_body ?? '')),
-    }));
+      SELECT t.uuid, t.template_name, t.category, t.language, t.channel, t.template_body, t.twilio_content_sid,
+             t.meta_template_id, t.provider_config_id, c.uuid AS account_uuid
+      FROM wa_templates t
+      LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
+      WHERE t.org_id = ${orgId} AND (t.meta_template_id IS NULL OR upper(coalesce(t.meta_status, '')) = 'APPROVED')
+      ORDER BY t.template_name`);
+    const out: DashboardTemplate[] = [];
+    for (const r of res.rows as Row[]) {
+      const engine = templateEngine({
+        channel: s(r.channel),
+        twilioContentSid: s(r.twilio_content_sid),
+        metaTemplateId: s(r.meta_template_id),
+        providerConfigId: r.provider_config_id,
+      });
+      if (engine === null) continue;
+      out.push({
+        uuid: String(r.uuid),
+        name: String(r.template_name),
+        category: s(r.category),
+        language: String(r.language ?? 'en_US'),
+        engine,
+        senderAccount: s(r.account_uuid),
+        paramCount: paramCount(String(r.template_body ?? '')),
+      });
+    }
+    return out;
   }
 
   async contactGroups(

@@ -216,7 +216,9 @@ describe('the WooCommerce dashboard', () => {
     expect(d.woo.senders).toEqual([
       { key: expect.stringMatching(/^waba:/), label: '+15550001111', engine: 'waba' },
     ]);
-    expect(d.templates).toEqual([expect.objectContaining({ name: 'welcome', paramCount: 2 })]);
+    expect(d.templates).toEqual([
+      expect.objectContaining({ name: 'welcome', paramCount: 2, engine: 'baileys' }),
+    ]);
     expect(d.contactGroups.map((g: { name: string }) => g.name)).toEqual(['Buyers']);
     expect(d.coupons).toEqual([{ code: 'SAVE10', type: 'percent', amount: 10 }]);
   });

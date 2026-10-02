@@ -61,7 +61,10 @@ export const dashboardTemplateSchema = z.object({
   name: z.string(),
   category: z.string().nullable(),
   language: z.string(),
-  channel: z.string().nullable(),
+  /** `waba`, `twilio` or `baileys`: the engine the template belongs to. */
+  engine: z.string(),
+  /** The Cloud API account (provider config uuid) a WABA template is bound to; null otherwise. */
+  senderAccount: z.string().uuid().nullable(),
   /** How many numbered variables ({{1}}, {{2}}, ...) the body declares; 0 means named tokens only. */
   paramCount: z.number().int().min(0),
 });
