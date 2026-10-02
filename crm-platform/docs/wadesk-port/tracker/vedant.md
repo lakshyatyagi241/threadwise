@@ -121,7 +121,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | Feature | Status | PR | Notes |
 |---|---|---|---|
 | WD-NODE-001 | blocked |  | no bridge process in this repo until decision E |
-| WD-NODE-002 | in-progress |  | guard + first route done; applies to every later bridge-facing route |
+| WD-NODE-002 | backend-done |  | NodeTokenGuard on the one bridge-facing route; the bridge's other routes became in-process commands (Redis), so no other route needs it |
 | WD-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
 | WD-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
 | WD-NODE-005 | backend-done |  | registry is a per-worker map plus a Redis lease per device; no in-memory schedules or boot sync; shutdown releases leases |
@@ -142,13 +142,13 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-020 | backend-done |  | receipts from the socket go to the broadcast recipient or the scheduled recipient that owns the message id, upward only; the chat message status waits for CHAT |
 | WD-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
 | WD-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
-| WD-NODE-023 | in-progress |  | media on the unofficial engine (type precedence, voice notes, documents with a file name, download through SafeFetch) and on Twilio; Cloud API media, media with buttons and inline base64 not built |
+| WD-NODE-023 | backend-done |  | media on the unofficial engine, Twilio and the Cloud API (public https link, caption with footer, document file name, no caption on audio); inline attachment_base64 not ported: media comes from a URL or storage, never from a request body |
 | WD-NODE-024 | in-progress |  | location, contact card and group message with mentions done; product catalog sends blocked on the catalog domain (CAT) and the template pipeline |
 | WD-NODE-025 | backend-done |  | react, pin, star, edit, delete through the owning socket; pin keeps WaDesk's fixed 24 hours (its duration choice never had an effect) |
 | WD-NODE-026 | wontfix |  | intended: engine and credentials come from the device row, no settings hop or cache (inventory port note) |
 | WD-NODE-027 | backend-done |  | Cloud API text transport (shared Meta provider) and a Twilio transport (text, media with caption, location); templates by ContentSid belong to the template pipeline; Twilio status callback belongs to the WhatsApp provider domain |
 | WD-NODE-028 | backend-done |  | SafeFetch: all-address DNS check, pinned IP, every redirect hop checked, size cap, MIME; consumer is 023; local paths intentionally refused |
-| WD-NODE-029 | in-progress |  | admin form + real reader wired into BCAST pacing (PlatformPacingSettings); jitter, daily cap, lease already in BCAST; per-socket serialization lands with the Baileys adapter |
+| WD-NODE-029 | backend-done |  | admin form + real reader wired into BCAST pacing; per-socket send serialization is in the Baileys adapter; jitter, daily cap and lease in BCAST |
 | WD-NODE-030 | backend-done |  | DB row is the schedule; due poller queues one BullMQ job per occurrence (jobId = uuid + time); late policy configurable; no cron, no boot sync |
 | WD-NODE-031 | backend-done |  | run engine: per-recipient claim, pacing, daily cap, lease shared with BCAST, halt; send-now via SchedulerService; text on every engine, media and location when a transport supports them |
 | WD-NODE-032 | backend-done |  | next run from repeat_every, weekdays, months without overflow, end date inclusive; every occurrence reaches the whole audience |
@@ -156,10 +156,10 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-034 | backend-done |  | SchedulerService: pause, resume, cancel, send-now; a run in progress stops before its next batch; the SCHED screens call it |
 | WD-NODE-035 | backend-done |  | callbacks became direct writes in the run; recipient states only move up; delivered/read arrive with receipts (020); wallet metering blocked on WALLET |
 | WD-NODE-036 | backend-done |  | replaced: the row is the schedule, so nothing is lost on restart; a reconciliation pass queues a stuck run again |
-| WD-NODE-037 | blocked |  | already built in BCAST (dispatch, pacing, pause/resume); only the Baileys engine adapter is missing (needs 011) |
-| WD-NODE-038 | blocked |  | already built in BCAST (progress and receipts services); the Baileys receipt source needs 011/020 |
+| WD-NODE-037 | backend-done |  | broadcasts reach the unofficial engine and Twilio through TransportEngineSender (rendered text, media as link, header/footer); pacing, cap, lease already in BCAST |
+| WD-NODE-038 | backend-done |  | same adapter as 037; per-number daily cap and gaps in BCAST |
 | WD-NODE-039 | wontfix |  | dead code in WaDesk (campaign engine in Node is never reached and throws a ReferenceError) |
-| WD-NODE-040 | todo |  |  |
+| WD-NODE-040 | blocked |  | campaign callbacks and receipts belong to CAMP (campaign drain); ReceiptRouter is the seam it registers into |
 | WD-NODE-041 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | WD-NODE-042 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | WD-NODE-043 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |

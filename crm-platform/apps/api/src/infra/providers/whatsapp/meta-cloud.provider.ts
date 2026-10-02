@@ -8,6 +8,7 @@ import type {
   NormalisedInboundMessage,
   SendResult,
   SendTemplateParams,
+  SendMediaParams,
   SendTextParams,
   WhatsAppProvider,
 } from './whatsapp.port';
@@ -88,20 +89,51 @@ export class MetaCloudProvider implements WhatsAppProvider {
     });
   }
 
-  /**
-   * The one place a message leaves for Meta. Stubbed until channel credential
-   * storage and the send pipelines land; everything before it (halt, guardrails,
-   * the footer) is real and runs first, so a pipeline cannot reach here unguarded.
-   */
+  async sendMedia(credentials: ChannelCredentials, params: SendMediaParams): Promise<SendResult> {
+    await this.guard.beforeSend({
+      body: params.caption ?? '',
+      bulk: params.screen?.bulk,
+      source: params.screen?.source,
+    });
+    const caption =
+      params.caption && params.kind !== 'audio'
+        ? await this.guard.withFooter({ body: params.caption })
+        : undefined;
+    return this.post(credentials, {
+      messaging_product: 'whatsapp',
+      to: params.to,
+      type: params.kind,
+      [params.kind]: {
+        link: params.link,
+        ...(caption ? { caption } : {}),
+        ...(params.kind === 'document' && params.fileName ? { filename: params.fileName } : {}),
+      },
+    });
+  }
+
+  /** The one place a free-form message leaves for Meta. Everything before it (halt, guardrails, footer) runs first. */
   protected async post(
     credentials: ChannelCredentials,
     payload: Record<string, unknown>,
   ): Promise<SendResult> {
-    this.logger.warn(
-      { to: payload.to, type: payload.type, url: this.baseUrl(credentials) },
-      'send not implemented yet — the message pipelines land with the Inbox and Broadcast modules',
-    );
-    throw new Error(`MetaCloudProvider.send (${String(payload.type)}) is not implemented`);
+    const res = await fetch(this.baseUrl(credentials), {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${credentials.accessToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
+    });
+    const json = (await res.json().catch(() => ({}))) as {
+      messages?: Array<{ id?: string }>;
+      error?: { message?: string };
+    };
+    if (!res.ok) throw new Error(json.error?.message ?? `Meta Cloud API answered ${res.status}`);
+    const providerMessageId = json.messages?.[0]?.id;
+    if (!providerMessageId)
+      throw new Error('Meta Cloud API accepted the send but returned no message id');
+    return { providerMessageId, acceptedAt: new Date() };
   }
 
   /**
