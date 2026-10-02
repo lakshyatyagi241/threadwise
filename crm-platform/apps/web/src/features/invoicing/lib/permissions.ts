@@ -37,6 +37,7 @@ export type InvoicingCan = Record<keyof typeof KEYS, boolean>;
 
 export function invoicingCan(permissions: Readonly<Record<string, unknown>>): InvoicingCan {
   const out = {} as InvoicingCan;
-  for (const [name, key] of Object.entries(KEYS)) out[name as keyof InvoicingCan] = key in permissions;
+  for (const [name, key] of Object.entries(KEYS))
+    out[name as keyof InvoicingCan] = key in permissions;
   return out;
 }

@@ -68,7 +68,11 @@ describe('diffToPatch', () => {
   it('sends only the changed fields, trimmed', () => {
     const a = form();
     const b = { ...a, sellerName: '  Acme Ltd  ', numberPadding: '4', overdueReminders: false };
-    expect(diffToPatch(a, b, null)).toEqual({ sellerName: 'Acme Ltd', numberPadding: 4, overdueReminders: false });
+    expect(diffToPatch(a, b, null)).toEqual({
+      sellerName: 'Acme Ltd',
+      numberPadding: 4,
+      overdueReminders: false,
+    });
   });
 
   it('carries rowVersion only once the profile has been saved', () => {
@@ -81,13 +85,29 @@ describe('diffToPatch', () => {
   it('clears an optional field with null', () => {
     const a = form({ supportEmail: 'a@b.co', dueDays: 30, logoUrl: 'https://x.test/l.png' });
     const b = { ...a, supportEmail: '  ', dueDays: '', logoUrl: '' };
-    expect(diffToPatch(a, b, 2)).toEqual({ supportEmail: null, dueDays: null, logoUrl: null, rowVersion: 2 });
+    expect(diffToPatch(a, b, 2)).toEqual({
+      supportEmail: null,
+      dueDays: null,
+      logoUrl: null,
+      rowVersion: 2,
+    });
   });
 
   it('upper-cases country, state and prefixes, and sends the due days as a number', () => {
     const a = form();
-    const b = { ...a, sellerCountry: 'gb', sellerState: 'eng', numberingPrefix: 'inv2', dueDays: '30' };
-    expect(diffToPatch(a, b, null)).toEqual({ sellerCountry: 'GB', sellerState: 'ENG', numberingPrefix: 'INV2', dueDays: 30 });
+    const b = {
+      ...a,
+      sellerCountry: 'gb',
+      sellerState: 'eng',
+      numberingPrefix: 'inv2',
+      dueDays: '30',
+    };
+    expect(diffToPatch(a, b, null)).toEqual({
+      sellerCountry: 'GB',
+      sellerState: 'ENG',
+      numberingPrefix: 'INV2',
+      dueDays: 30,
+    });
   });
 
   it('keeps India states as GST codes and does not treat MH vs 27 as a change', () => {
@@ -99,15 +119,40 @@ describe('diffToPatch', () => {
 
   it('sends extra fields as a whole list without blank or half-filled rows, and an empty list clears them', () => {
     const a = form({ extraFields: [{ label: 'CIN', value: 'U1' }] });
-    const b = { ...a, extraFields: [...a.extraFields, { label: 'LUT No', value: ' AD123 ' }, { label: '', value: '' }, { label: 'half', value: '' }] };
-    expect(diffToPatch(a, b, null)).toEqual({ extraFields: [{ label: 'CIN', value: 'U1' }, { label: 'LUT No', value: 'AD123' }] });
+    const b = {
+      ...a,
+      extraFields: [
+        ...a.extraFields,
+        { label: 'LUT No', value: ' AD123 ' },
+        { label: '', value: '' },
+        { label: 'half', value: '' },
+      ],
+    };
+    expect(diffToPatch(a, b, null)).toEqual({
+      extraFields: [
+        { label: 'CIN', value: 'U1' },
+        { label: 'LUT No', value: 'AD123' },
+      ],
+    });
     expect(diffToPatch(a, { ...a, extraFields: [] }, null)).toEqual({ extraFields: [] });
   });
 
   it('sends bank details as a record, null when none are left, and ignores a reorder', () => {
     const a = form({ bankDetails: { IBAN: 'DE00', BIC: 'ABC' } });
     expect(diffToPatch(a, { ...a, bankRows: [...a.bankRows].reverse() }, null)).toEqual({});
-    expect(diffToPatch(a, { ...a, bankRows: [{ label: 'IBAN', value: 'DE11' }, { label: 'BIC', value: 'ABC' }] }, null)).toEqual({
+    expect(
+      diffToPatch(
+        a,
+        {
+          ...a,
+          bankRows: [
+            { label: 'IBAN', value: 'DE11' },
+            { label: 'BIC', value: 'ABC' },
+          ],
+        },
+        null,
+      ),
+    ).toEqual({
       bankDetails: { IBAN: 'DE11', BIC: 'ABC' },
     });
     expect(diffToPatch(a, { ...a, bankRows: [] }, 1)).toEqual({ bankDetails: null, rowVersion: 1 });
@@ -152,7 +197,14 @@ describe('number format', () => {
     const n = numberingInputOf(form());
     expect(formatNumberExample('invoice', n, '2026-10-02', 7)).toBe('INV-2026-000007');
     expect(formatNumberExample('creditNote', n, '2026-10-02', 1)).toBe('CRN-2026-000001');
-    expect(formatNumberExample('invoice', { ...n, numberFormat: '{PREFIX}/{YY}/{SEQ}', padding: 3 }, '2027-01-05', 1234)).toBe('INV/27/1234');
+    expect(
+      formatNumberExample(
+        'invoice',
+        { ...n, numberFormat: '{PREFIX}/{YY}/{SEQ}', padding: 3 },
+        '2027-01-05',
+        1234,
+      ),
+    ).toBe('INV/27/1234');
   });
 
   it('uses the year the fiscal year started in', () => {
@@ -175,9 +227,14 @@ describe('number format', () => {
 
   it("warns about India's 16 characters and character set", () => {
     const long = numberExamples({ ...form(), numberingPrefix: 'INVOICE' }, '2026-10-02');
-    expect(numberingWarnings('IN', long)).toEqual([{ kind: 'invoice', code: 'tooLong', max: 16, length: 'INVOICE-2026-000001'.length }]);
+    expect(numberingWarnings('IN', long)).toEqual([
+      { kind: 'invoice', code: 'tooLong', max: 16, length: 'INVOICE-2026-000001'.length },
+    ]);
     expect(numberingWarnings('IN', numberExamples(form(), '2026-10-02'))).toEqual([]);
-    const odd = numberExamples({ ...form(), numberFormat: '{PREFIX}.{YEAR}.{SEQ}', numberPadding: '2' }, '2026-10-02');
+    const odd = numberExamples(
+      { ...form(), numberFormat: '{PREFIX}.{YEAR}.{SEQ}', numberPadding: '2' },
+      '2026-10-02',
+    );
     expect(numberingWarnings('IN', odd).map((w) => w.code)).toContain('chars');
     expect(numberingWarnings('', long)).toEqual([]);
     expect(numberingWarnings('US', long)).toEqual([]);
@@ -272,7 +329,12 @@ describe('bank rows', () => {
         { label: 'BIC', value: '' },
       ]),
     ).toEqual([{ label: 'IBAN', value: 'DE00' }]);
-    expect(bankRowsToRecord([{ label: 'A', value: '1' }, { label: 'A', value: '2' }])).toEqual({ A: '2' });
+    expect(
+      bankRowsToRecord([
+        { label: 'A', value: '1' },
+        { label: 'A', value: '2' },
+      ]),
+    ).toEqual({ A: '2' });
     expect(bankRowsToRecord([{ label: '', value: '' }])).toBeNull();
     expect(recordToRows({ IBAN: 'x' })).toEqual([{ label: 'IBAN', value: 'x' }]);
     expect(recordToRows(null)).toEqual([]);
@@ -309,20 +371,59 @@ describe('validateForm', () => {
     };
     const v = validateForm(f);
     expect(Object.keys(v).sort()).toEqual(
-      ['brandColor', 'dueDays', 'fiscalYearStartMonth', 'logoUrl', 'numberPadding', 'numberingPrefix', 'sellerCountry', 'sellerState', 'supportEmail', 'yearlyReset'].sort(),
+      [
+        'brandColor',
+        'dueDays',
+        'fiscalYearStartMonth',
+        'logoUrl',
+        'numberPadding',
+        'numberingPrefix',
+        'sellerCountry',
+        'sellerState',
+        'supportEmail',
+        'yearlyReset',
+      ].sort(),
     );
     expect(v['yearlyReset']?.code).toBe('format.year');
   });
 
   it('checks rows: incomplete, too many, too long, repeated bank labels', () => {
-    const rows = (n: number) => Array.from({ length: n }, (_, i) => ({ label: `L${i}`, value: 'v' }));
-    expect(validateForm({ ...form(), extraFields: rows(9) })['extraFields']?.code).toBe('tooManyRows');
-    expect(validateForm({ ...form(), bankRows: rows(13) })['bankDetails']?.code).toBe('tooManyRows');
-    expect(validateForm({ ...form(), bankRows: [{ label: 'IBAN', value: '' }] })['bankDetails.0.value']?.code).toBe('rowIncomplete');
-    expect(validateForm({ ...form(), bankRows: [{ label: 'x'.repeat(41), value: 'v' }] })['bankDetails.0.label']?.code).toBe('tooLong');
-    expect(validateForm({ ...form(), bankRows: [{ label: 'x', value: 'y'.repeat(121) }] })['bankDetails.0.value']?.code).toBe('tooLong');
-    expect(validateForm({ ...form(), bankRows: [{ label: 'IBAN', value: '1' }, { label: 'iban', value: '2' }] })['bankDetails.1.label']?.code).toBe('duplicate');
-    expect(validateForm({ ...form(), extraFields: [{ label: 'CIN', value: 'z'.repeat(81) }] })['extraFields.0.value']?.code).toBe('tooLong');
+    const rows = (n: number) =>
+      Array.from({ length: n }, (_, i) => ({ label: `L${i}`, value: 'v' }));
+    expect(validateForm({ ...form(), extraFields: rows(9) })['extraFields']?.code).toBe(
+      'tooManyRows',
+    );
+    expect(validateForm({ ...form(), bankRows: rows(13) })['bankDetails']?.code).toBe(
+      'tooManyRows',
+    );
+    expect(
+      validateForm({ ...form(), bankRows: [{ label: 'IBAN', value: '' }] })['bankDetails.0.value']
+        ?.code,
+    ).toBe('rowIncomplete');
+    expect(
+      validateForm({ ...form(), bankRows: [{ label: 'x'.repeat(41), value: 'v' }] })[
+        'bankDetails.0.label'
+      ]?.code,
+    ).toBe('tooLong');
+    expect(
+      validateForm({ ...form(), bankRows: [{ label: 'x', value: 'y'.repeat(121) }] })[
+        'bankDetails.0.value'
+      ]?.code,
+    ).toBe('tooLong');
+    expect(
+      validateForm({
+        ...form(),
+        bankRows: [
+          { label: 'IBAN', value: '1' },
+          { label: 'iban', value: '2' },
+        ],
+      })['bankDetails.1.label']?.code,
+    ).toBe('duplicate');
+    expect(
+      validateForm({ ...form(), extraFields: [{ label: 'CIN', value: 'z'.repeat(81) }] })[
+        'extraFields.0.value'
+      ]?.code,
+    ).toBe('tooLong');
   });
 });
 

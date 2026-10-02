@@ -140,7 +140,8 @@ export class SettingsController {
   @OperatorRoles('super_admin')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Generate the Team Inbox app Web Push key pair once (idempotent; the private key is never returned)',
+    summary:
+      'Generate the Team Inbox app Web Push key pair once (idempotent; the private key is never returned)',
   })
   generateKeys() {
     return this.vapid.generate(this.operatorId());

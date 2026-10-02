@@ -11,7 +11,14 @@ import {
   validateForm,
   type SegmentForm,
 } from './form';
-import { addCondition, conditionsOf, emptyRoot, newCondition, setValue, type Condition } from './model';
+import {
+  addCondition,
+  conditionsOf,
+  emptyRoot,
+  newCondition,
+  setValue,
+  type Condition,
+} from './model';
 
 const lookups: Lookups = {
   stages: [{ value: 'new', label: 'New' }],
@@ -26,7 +33,12 @@ const stage = catalog.find((f) => f.id === 'lifecycleStage')!;
 
 const formWith = (value: Condition['value'], over: Partial<SegmentForm> = {}): SegmentForm => {
   const r = emptyRoot();
-  return { ...blankForm(), name: 'Hot leads', rules: addCondition(r, r.id, { ...newCondition(stage), value }), ...over };
+  return {
+    ...blankForm(),
+    name: 'Hot leads',
+    rules: addCondition(r, r.id, { ...newCondition(stage), value }),
+    ...over,
+  };
 };
 
 describe('validateForm', () => {
@@ -41,7 +53,9 @@ describe('validateForm', () => {
   });
 
   it('limits the description to 1000 characters', () => {
-    expect(validateForm(formWith('new', { description: 'x'.repeat(1001) }), catalog).description).toBe('tooLong');
+    expect(
+      validateForm(formWith('new', { description: 'x'.repeat(1001) }), catalog).description,
+    ).toBe('tooLong');
   });
 
   it('needs at least one condition', () => {
@@ -65,12 +79,21 @@ describe('validateForm', () => {
 
 describe('formToInput', () => {
   it('builds the create body the contract accepts', () => {
-    const input = formToInput(formWith('new', { description: '  warm ', visibility: 'shared' }), catalog);
+    const input = formToInput(
+      formWith('new', { description: '  warm ', visibility: 'shared' }),
+      catalog,
+    );
     expect(input).toMatchObject({
       name: 'Hot leads',
       description: 'warm',
       visibility: 'shared',
-      rules: { type: 'group', combinator: 'and', children: [{ type: 'condition', field: 'lifecycleStage', operator: 'equals', value: 'new' }] },
+      rules: {
+        type: 'group',
+        combinator: 'and',
+        children: [
+          { type: 'condition', field: 'lifecycleStage', operator: 'equals', value: 'new' },
+        ],
+      },
     });
   });
 
@@ -97,7 +120,9 @@ describe('unsaved changes', () => {
   });
 
   it('ignores spaces around the name', () => {
-    expect(formSignature(formWith('new', { name: ' Hot leads ' }))).toBe(formSignature(formWith('new')));
+    expect(formSignature(formWith('new', { name: ' Hot leads ' }))).toBe(
+      formSignature(formWith('new')),
+    );
   });
 
   it('a segment loaded from the server starts out unchanged', () => {

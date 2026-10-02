@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { buildWhatsappLink, phpUrlencode } from '@crm/contracts';
 
 /**
  * The pure rules of the chatbot widget: tokens, slugs, the WhatsApp link, the origin allow-list, the transcript shape.
@@ -58,12 +59,6 @@ export function uniqueSlug(base: string, taken: ReadonlySet<string>): string {
 export const copySlug = (slug: string, random: () => string = () => freshToken(4)) =>
   `${slug}-copy-${random()}`;
 
-/** The name a duplicate gets, cut so the suffix never pushes it past the 120-character column. */
-export function copyName(name: string, max = 120): string {
-  const suffix = ' (copy)';
-  return `${name.slice(0, Math.max(0, max - suffix.length))}${suffix}`;
-}
-
 export interface WidgetModeFields {
   mode: string;
   assistantId: unknown | null;
@@ -80,20 +75,12 @@ export const usesAi = (w: Pick<WidgetModeFields, 'mode' | 'assistantId'>): boole
 export const usesWhatsApp = (w: Pick<WidgetModeFields, 'mode' | 'targetWhatsappNumber'>): boolean =>
   (w.mode === 'whatsapp' || w.mode === 'both') && !!w.targetWhatsappNumber;
 
-/** PHP's `urlencode`: spaces become `+` and everything outside `[A-Za-z0-9_.-]` is percent-encoded. */
-export function phpUrlencode(value: string): string {
-  return encodeURIComponent(value)
-    .replace(/[!'()*~]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)
-    .replace(/%20/g, '+');
-}
+export { phpUrlencode };
 
 /** The `wa.me` deep link of WD-WGT-013, or null when the mode or the number says there is none. */
 export function whatsappUrl(w: WidgetModeFields): string | null {
   if (!usesWhatsApp(w)) return null;
-  const digits = `${w.targetWhatsappCc ?? ''}${w.targetWhatsappNumber ?? ''}`.replace(/\D+/g, '');
-  if (digits === '') return null;
-  const text = phpUrlencode(w.prefilledMessage ?? '');
-  return `https://wa.me/${digits}${text !== '' ? `?text=${text}` : ''}`;
+  return buildWhatsappLink(w.targetWhatsappCc, w.targetWhatsappNumber, w.prefilledMessage);
 }
 
 /** The host[:port] of an `Origin` header, lower case; null when it does not parse. */
@@ -197,5 +184,3 @@ export const historyFrom = (agentId: number | null): 'agent' | 'assistant' =>
 
 /** `source` marker on every message the widget's own assistant writes; anything else outbound is a person. */
 export const AI_SOURCE = 'ai_chat_assistant';
-export const BOT_SENDER_PREFIX = 'widget-';
-export const botSender = (widgetUuid: string): string => `${BOT_SENDER_PREFIX}${widgetUuid}`;

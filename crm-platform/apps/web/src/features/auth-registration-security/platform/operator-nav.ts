@@ -12,6 +12,7 @@ export interface OperatorNavItem {
 }
 
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
+import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
@@ -58,6 +59,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...SET_OPERATOR_NAV,
   // roles and permissions domain (RBAC): Roles, Permissions, Staff roles
   ...ROLES_OPERATOR_NAV,
+  // Node bridge domain (NODE): address, token and sender pacing
+  ...NODE_OPERATOR_NAV,
   {
     id: 'i18n-languages',
     href: '/admin/i18n/languages',

@@ -21,7 +21,12 @@ const lookups: Lookups = {
   users: [{ value: 'u1', label: 'Asha' }],
   properties: [
     { key: 'plan', label: 'Plan', fieldType: 'select', options: [{ value: 'pro', label: 'Pro' }] },
-    { key: 'interests', label: 'Interests', fieldType: 'multiselect', options: [{ value: 'golf', label: 'Golf' }] },
+    {
+      key: 'interests',
+      label: 'Interests',
+      fieldType: 'multiselect',
+      options: [{ value: 'golf', label: 'Golf' }],
+    },
     { key: 'visits', label: 'Visits', fieldType: 'integer', options: [] },
     { key: 'joined', label: 'Joined', fieldType: 'date', options: [] },
     { key: 'vip', label: 'VIP', fieldType: 'checkbox', options: [] },
@@ -47,7 +52,10 @@ describe('the field catalog', () => {
   });
 
   it('hands each system field its choices', () => {
-    expect(findField(catalog, 'lifecycleStage')?.options?.map((o) => o.label)).toEqual(['New', 'Won']);
+    expect(findField(catalog, 'lifecycleStage')?.options?.map((o) => o.label)).toEqual([
+      'New',
+      'Won',
+    ]);
     expect(findField(catalog, 'tags')?.options?.[0]?.value).toBe('t1');
     expect(findField(catalog, 'owner')?.options?.[0]?.label).toBe('Asha');
     expect(findField(catalog, 'source')?.options).toBeUndefined();
@@ -60,7 +68,10 @@ describe('the field catalog', () => {
   });
 
   it('turns custom properties into fields by type and leaves out computed ones', () => {
-    expect(findField(catalog, propertyFieldId('plan'))).toMatchObject({ kind: 'option', group: 'properties' });
+    expect(findField(catalog, propertyFieldId('plan'))).toMatchObject({
+      kind: 'option',
+      group: 'properties',
+    });
     expect(findField(catalog, propertyFieldId('interests'))?.kind).toBe('multi');
     expect(findField(catalog, propertyFieldId('visits'))?.kind).toBe('number');
     expect(findField(catalog, propertyFieldId('joined'))?.kind).toBe('date');
@@ -76,7 +87,11 @@ describe('references to things that were deleted', () => {
     const r = emptyRoot();
     return addCondition(r, r.id, c);
   };
-  const cond = (field: string, operator: Condition['operator'], value: Condition['value']): Condition => ({
+  const cond = (
+    field: string,
+    operator: Condition['operator'],
+    value: Condition['value'],
+  ): Condition => ({
     ...newCondition({ id: field, kind: 'tags', operators: [operator] }),
     field,
     operator,

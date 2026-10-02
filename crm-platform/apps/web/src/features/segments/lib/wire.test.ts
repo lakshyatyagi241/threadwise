@@ -25,7 +25,11 @@ const catalog = buildCatalog(lookups);
 const field = (id: string) => catalog.find((f) => f.id === id)!;
 const TAG = lookups.tags[0]!.value;
 
-function condition(id: string, operator: Condition['operator'], value: Condition['value']): Condition {
+function condition(
+  id: string,
+  operator: Condition['operator'],
+  value: Condition['value'],
+): Condition {
   return { ...newCondition(field(id)), operator, value };
 }
 
@@ -48,13 +52,23 @@ describe('editor tree to wire', () => {
       combinator: 'and',
       children: [
         { type: 'condition', field: 'lifecycleStage', operator: 'in', value: ['new', 'qualified'] },
-        { type: 'condition', field: 'custom.visits', operator: 'between', value: { from: 2, to: 10 } },
+        {
+          type: 'condition',
+          field: 'custom.visits',
+          operator: 'between',
+          value: { from: 2, to: 10 },
+        },
         {
           type: 'group',
           combinator: 'or',
           children: [
             { type: 'condition', field: 'tags', operator: 'has_any', value: [TAG] },
-            { type: 'condition', field: 'lastActivityAt', operator: 'more_than_days_ago', value: 30 },
+            {
+              type: 'condition',
+              field: 'lastActivityAt',
+              operator: 'more_than_days_ago',
+              value: 30,
+            },
             { type: 'condition', field: 'unsubscribed', operator: 'is_false' },
           ],
         },
@@ -72,7 +86,9 @@ describe('editor tree to wire', () => {
     r = addCondition(r, r.id, condition('source', 'contains', '  web  '));
     r = addCondition(r, r.id, condition('custom.visits', 'gt', ''));
     const wire = toWire(r, catalog);
-    expect(wire.children).toEqual([{ type: 'condition', field: 'source', operator: 'contains', value: 'web' }]);
+    expect(wire.children).toEqual([
+      { type: 'condition', field: 'source', operator: 'contains', value: 'web' },
+    ]);
   });
 
   it('an empty tree, or one with nothing complete, is not valid rules (the contract needs at least one condition)', () => {

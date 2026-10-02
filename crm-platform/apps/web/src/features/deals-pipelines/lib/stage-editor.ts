@@ -14,12 +14,7 @@ export const STAGE_COLORS = [
 ] as const;
 
 export type StageProblem =
-  | 'nameRequired'
-  | 'nameTooLong'
-  | 'probability'
-  | 'color'
-  | 'twoWon'
-  | 'twoLost';
+  'nameRequired' | 'nameTooLong' | 'probability' | 'color' | 'twoWon' | 'twoLost';
 
 /** A stage's probability follows its kind: won is 100, lost is 0. */
 export function probabilityFor(kind: StageKind, wanted: number): number {

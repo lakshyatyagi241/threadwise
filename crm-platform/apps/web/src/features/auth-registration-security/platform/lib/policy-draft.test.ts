@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { securityPolicySchema } from '@crm/contracts';
+import { KEYWORD_LIST_MAX_CHARS, securityPolicySchema } from '@crm/contracts';
 import {
   BOOLEAN_KEYS,
   FIELD_TAB,
+  NUMERIC_FIELDS,
   NUMERIC_KEYS,
   buildPolicyPatch,
   numberProblem,
@@ -74,17 +75,43 @@ describe('buildPolicyPatch', () => {
       code: 'range',
       min: 5,
       max: 1440,
-      allowZero: true,
+      allowZero: false,
     });
     expect(problems.lockoutWindowMinutes).toMatchObject({ code: 'range' });
     expect(problems.passwordMinLength).toMatchObject({ code: 'range', min: 6, max: 128 });
   });
 
-  it('accepts 0 where the API means off or unlimited', () => {
-    const d = { ...policyToDraft(base), sessionTimeoutMinutes: '0', maxConcurrentSessions: '0' };
-    expect(buildPolicyPatch(base, d).patch).toEqual({
-      sessionTimeoutMinutes: 0,
-      maxConcurrentSessions: 0,
+  it('refuses 0 for the timeout, session cap and lockout, which the form cannot save', () => {
+    const d = {
+      ...policyToDraft(base),
+      sessionTimeoutMinutes: '0',
+      maxConcurrentSessions: '0',
+      lockoutAfterFailures: '0',
+    };
+    const { patch, problems } = buildPolicyPatch(base, d);
+    expect(patch).toEqual({});
+    expect(problems.sessionTimeoutMinutes).toMatchObject({ code: 'range', allowZero: false });
+    expect(problems.maxConcurrentSessions).toMatchObject({ code: 'range', allowZero: false });
+    expect(problems.lockoutAfterFailures).toMatchObject({ code: 'range', allowZero: false });
+  });
+
+  it('accepts 0 where the range itself starts at 0', () => {
+    const stored = {
+      ...base,
+      passwordMaxAgeDays: 90,
+      waMaxSendsPerMinute: 10,
+      auditLogRetentionDays: 30,
+    };
+    const d = {
+      ...policyToDraft(stored),
+      passwordMaxAgeDays: '0',
+      waMaxSendsPerMinute: '0',
+      auditLogRetentionDays: '0',
+    };
+    expect(buildPolicyPatch(stored, d).patch).toEqual({
+      passwordMaxAgeDays: 0,
+      waMaxSendsPerMinute: 0,
+      auditLogRetentionDays: 0,
     });
   });
 
@@ -108,19 +135,46 @@ describe('buildPolicyPatch', () => {
     expect(patch.ipAllowlistCidrs).toBeUndefined();
   });
 
-  it('flags over-long and over-many list entries', () => {
-    const long = { ...policyToDraft(base), abuseBlockKeywordList: 'x'.repeat(101) };
-    expect(buildPolicyPatch(base, long).problems.abuseBlockKeywordList).toEqual({
+  it('flags an allowlist with too many or too long entries', () => {
+    const long = { ...policyToDraft(base), ipAllowlistCidrs: '1'.repeat(65) };
+    expect(buildPolicyPatch(base, long).problems.ipAllowlistCidrs).toEqual({
       code: 'tooLong',
-      max: 100,
+      max: 64,
     });
     const many = {
       ...policyToDraft(base),
-      abuseBlockKeywordList: Array.from({ length: 201 }, (_, i) => `k${i}`).join('\n'),
+      ipAllowlistCidrs: Array.from(
+        { length: 201 },
+        (_, i) => `10.0.${Math.floor(i / 200)}.${i}`,
+      ).join('\n'),
     };
-    expect(buildPolicyPatch(base, many).problems.abuseBlockKeywordList).toEqual({
+    expect(buildPolicyPatch(base, many).problems.ipAllowlistCidrs).toEqual({
       code: 'tooMany',
       max: 200,
+    });
+  });
+
+  it('caps the keyword list on its total length, not per keyword or by count', () => {
+    const longWord = { ...policyToDraft(base), abuseBlockKeywordList: 'x'.repeat(300) };
+    expect(buildPolicyPatch(base, longWord).problems.abuseBlockKeywordList).toBeUndefined();
+    const manyWords = {
+      ...policyToDraft(base),
+      abuseBlockKeywordList: Array.from({ length: 500 }, (_, i) => `k${i}`).join('\n'),
+    };
+    expect(buildPolicyPatch(base, manyWords).problems.abuseBlockKeywordList).toBeUndefined();
+    const tooMuch = { ...policyToDraft(base), abuseBlockKeywordList: 'x'.repeat(5001) };
+    expect(buildPolicyPatch(base, tooMuch).problems.abuseBlockKeywordList).toEqual({
+      code: 'totalTooLong',
+      max: KEYWORD_LIST_MAX_CHARS,
+    });
+  });
+
+  it('counts the keyword list in characters, so an emoji costs one', () => {
+    const justFits = { ...policyToDraft(base), abuseBlockKeywordList: '😀'.repeat(5000) };
+    expect(buildPolicyPatch(base, justFits).problems.abuseBlockKeywordList).toBeUndefined();
+    const over = { ...policyToDraft(base), abuseBlockKeywordList: '😀'.repeat(5001) };
+    expect(buildPolicyPatch(base, over).problems.abuseBlockKeywordList).toMatchObject({
+      code: 'totalTooLong',
     });
   });
 
@@ -151,5 +205,59 @@ describe('numberProblem', () => {
     expect(numberProblem('6', { min: 1, max: 5 })).toMatchObject({ code: 'range' });
     expect(numberProblem('0', { min: 1, max: 5 })).toMatchObject({ code: 'range' });
     expect(numberProblem('0', { min: 5, max: 9, allowZero: true })).toBe(0);
+  });
+});
+
+describe('numeric ranges follow the contract', () => {
+  const fieldSchema = (key: (typeof NUMERIC_KEYS)[number]) => securityPolicySchema.shape[key];
+
+  it.each(NUMERIC_KEYS)('%s: the form range is exactly what the API accepts', (key) => {
+    const { min, max, allowZero } = NUMERIC_FIELDS[key];
+    const schema = fieldSchema(key);
+    expect(schema.safeParse(min).success).toBe(true);
+    expect(schema.safeParse(max).success).toBe(true);
+    expect(schema.safeParse(max + 1).success).toBe(false);
+    if (min > 0) {
+      expect(schema.safeParse(0).success).toBe(allowZero === true);
+      if (min > 1) expect(schema.safeParse(min - 1).success).toBe(false);
+    } else {
+      expect(schema.safeParse(-1).success).toBe(false);
+    }
+  });
+});
+
+describe('numeric ranges match the reference form', () => {
+  // The limits WaDesk's Security page states on its number inputs (facts about the form, not its text).
+  const REFERENCE = {
+    lockoutAfterFailures: [1, 50],
+    lockoutWindowMinutes: [1, 1440],
+    passwordMaxAgeDays: [0, 3650],
+    sessionTimeoutMinutes: [5, 1440],
+    passwordMinLength: [6, 128],
+    waMaxSendsPerMinute: [0, 10_000],
+    waMaxSendsPerDay: [0, 1_000_000],
+    waHoldOnLinksCount: [0, 50],
+    apiRateLimitPerMinute: [1, 100_000],
+    webhookReplayWindowSec: [10, 3600],
+    deviceLogoutOnInactiveDays: [0, 3650],
+    maxConcurrentSessions: [1, 50],
+  } as const;
+
+  it.each(Object.entries(REFERENCE))('%s', (key, [min, max]) => {
+    const spec = NUMERIC_FIELDS[key as keyof typeof NUMERIC_FIELDS];
+    expect([spec.min, spec.max]).toEqual([min, max]);
+  });
+
+  it('adds only the retention control, which the reference form leaves out', () => {
+    expect(NUMERIC_KEYS.filter((k) => !(k in REFERENCE))).toEqual(['auditLogRetentionDays']);
+  });
+
+  it('refuses 0 for the three controls whose reference inputs start above it', () => {
+    for (const key of [
+      'sessionTimeoutMinutes',
+      'maxConcurrentSessions',
+      'lockoutAfterFailures',
+    ] as const)
+      expect(NUMERIC_FIELDS[key].allowZero).toBe(false);
   });
 });

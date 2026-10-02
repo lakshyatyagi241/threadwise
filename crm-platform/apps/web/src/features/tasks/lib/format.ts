@@ -20,7 +20,11 @@ export function avatarColor(name: string | null | undefined): string {
 }
 
 /** Medium date and short time in `timeZone`; empty for a missing or unparseable value. */
-export function formatDateTime(iso: string | null | undefined, locale: string, timeZone?: string): string {
+export function formatDateTime(
+  iso: string | null | undefined,
+  locale: string,
+  timeZone?: string,
+): string {
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
@@ -55,7 +59,10 @@ export function formatTime(iso: string, locale: string, timeZone?: string): stri
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
   try {
-    return new Intl.DateTimeFormat(locale, { timeStyle: 'short', timeZone: timeZone || undefined }).format(d);
+    return new Intl.DateTimeFormat(locale, {
+      timeStyle: 'short',
+      timeZone: timeZone || undefined,
+    }).format(d);
   } catch {
     return '';
   }

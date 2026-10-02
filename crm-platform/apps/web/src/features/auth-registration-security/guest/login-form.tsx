@@ -1,7 +1,6 @@
 'use client';
 
 import { loginRequestSchema, type RegistrationConfigResponse } from '@crm/contracts';
-import { Alert, Button, Checkbox, Input, PasswordInput, Spinner } from '@crm/ui';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
@@ -13,18 +12,18 @@ import { FormError } from './form-error';
 import { FormField } from './form-field';
 import { LegalLine } from './legal-links';
 import { MfaStep } from './mfa-step';
-import { rememberReferral } from './referral';
 import { bffLoginResponseSchema } from './schemas';
 import { completeSignIn } from './sign-in-complete';
 import { SocialButtons } from './social-buttons';
 import { TransientToast } from './toast';
+import { Alert, ArrowIcon, Button, Checkbox, Input, LINK, PasswordInput, Spinner, cn } from './ui';
 import { stripSearchParams } from './url-params';
 import { failedFields } from './zod-fields';
 
-type Flash = 'reset' | 'expired' | 'deleted' | null;
+type Flash = 'reset' | 'expired' | 'idle' | 'deleted' | null;
 
 /** One-time notices carried in the address (`?reset=1`, `?expired=1`, `?account_deleted=1`): shown once, then dropped from the URL. */
-const FLASH_PARAMS = ['reset', 'expired', 'account_deleted'] as const;
+const FLASH_PARAMS = ['reset', 'expired', 'minutes', 'account_deleted'] as const;
 
 const FIELD_ORDER = ['email', 'password', 'orgSlug'] as const;
 
@@ -37,8 +36,8 @@ export function LoginForm({
   defaultOrg,
   next,
   flash,
+  idleMinutes = null,
   loggedOut,
-  referral,
 }: {
   config: RegistrationConfigResponse;
   /** `?org=` or the `crm_org` cookie. */
@@ -46,9 +45,9 @@ export function LoginForm({
   /** A safe relative return path (already sanitised on the server) or null. */
   next: string | null;
   flash: Flash;
+  /** The inactivity limit, shown when the flash is 'idle' (WD-AUTH-033). */
+  idleMinutes?: number | null;
   loggedOut: boolean;
-  /** `?ref=` seen on the sign-in page is kept for a later sign-up. */
-  referral: string;
 }) {
   const t = useTranslations('auth-registration-security.guest.login');
   const tv = useTranslations('auth-registration-security.guest.validation');
@@ -66,10 +65,6 @@ export function LoginForm({
   /** The form unmounts during the MFA step; the email is kept so going back does not lose it (never the password). */
   const [lastEmail, setLastEmail] = useState('');
   const captcha = useCaptcha(config.captcha, 'login');
-
-  useEffect(() => {
-    if (referral) rememberReferral(referral);
-  }, [referral]);
 
   useEffect(() => {
     stripSearchParams(FLASH_PARAMS);
@@ -170,17 +165,25 @@ export function LoginForm({
     : '/forgot-password';
 
   return (
-    <div className="space-y-5">
+    <div>
       {loggedOut && <TransientToast message={t('loggedOut')} clearParam="logout" />}
-      {flash === 'reset' && <Alert tone="success">{t('flashReset')}</Alert>}
-      {flash === 'expired' && <Alert tone="warning">{t('flashExpired')}</Alert>}
-      {flash === 'deleted' && <Alert tone="success">{t('flashDeleted')}</Alert>}
-      {mfaExpired && <Alert tone="warning">{t('mfaExpired')}</Alert>}
+      <div className="mb-3 space-y-3 empty:hidden">
+        {flash === 'reset' && <Alert tone="success">{t('flashReset')}</Alert>}
+        {flash === 'expired' && <Alert tone="warning">{t('flashExpired')}</Alert>}
+        {flash === 'idle' && (
+          <Alert tone="warning">
+            {idleMinutes ? t('flashIdle', { minutes: idleMinutes }) : t('flashExpired')}
+          </Alert>
+        )}
+        {flash === 'deleted' && <Alert tone="success">{t('flashDeleted')}</Alert>}
+        {mfaExpired && <Alert tone="warning">{t('mfaExpired')}</Alert>}
+      </div>
 
       <SocialButtons
         social={config.social}
         mode="login"
         getOrgSlug={() => orgSlug}
+        next={next}
         onError={setError}
         onNeedInput={() => {
           setAskWorkspace(true);
@@ -228,19 +231,18 @@ export function LoginForm({
           label={t('password')}
           error={fieldErrors.password}
           labelEnd={
-            <Link
-              href={forgotHref}
-              className="text-xs font-medium text-primary underline-offset-2 hover:underline"
-            >
+            <Link href={forgotHref} className={cn(LINK, 'text-[11px]')}>
               {t('forgot')}
             </Link>
           }
         >
+          {/* The running reference puts a show/hide eye on every password field, this one included. */}
           {(p) => (
             <PasswordInput
               {...p}
               name="password"
               autoComplete="current-password"
+              placeholder="********"
               showLabel={t('showPassword')}
               hideLabel={t('hidePassword')}
             />
@@ -278,35 +280,29 @@ export function LoginForm({
 
         {captcha.widget}
 
-        <Button type="submit" className="h-11 w-full" disabled={pending}>
-          {pending && <Spinner label={t('submitting')} />}
+        <Button type="submit" className="mt-2 w-full" disabled={pending}>
+          {pending ? <Spinner label={t('submitting')} /> : null}
           {pending ? t('submitting') : t('submit')}
+          {!pending && <ArrowIcon />}
         </Button>
-      </form>
 
-      <div className="space-y-3 text-center text-sm">
         {config.registrationOpen && (
-          <p className="text-muted-foreground">
+          <p className="mt-4 text-center text-[12.5px] text-(--auth-ink-600)">
             {t('newHere')}{' '}
-            <Link
-              href="/signup"
-              className="font-medium text-primary underline-offset-2 hover:underline"
-            >
+            <Link href="/signup" className={LINK}>
               {t('createAccount')}
             </Link>
           </p>
         )}
-        <p className="text-muted-foreground">
+        <p className="text-center text-[12.5px] text-(--auth-ink-600)">
           {t('lostWorkspace')}{' '}
-          <Link
-            href="/find-workspace"
-            className="font-medium text-primary underline-offset-2 hover:underline"
-          >
+          <Link href="/find-workspace" className={LINK}>
             {t('findWorkspace')}
           </Link>
         </p>
-        <LegalLine links={config.links} />
-      </div>
+      </form>
+
+      <LegalLine links={config.links} />
     </div>
   );
 }

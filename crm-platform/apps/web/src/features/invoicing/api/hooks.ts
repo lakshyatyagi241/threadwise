@@ -1,6 +1,11 @@
 'use client';
 
-import { keepPreviousData, useInfiniteQuery, useQuery, type QueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+  type QueryClient,
+} from '@tanstack/react-query';
 import { invoicingApi, type Page, type Query } from './service';
 
 export const KEYS = {
@@ -234,4 +239,5 @@ export function useContactName(id: string) {
 }
 
 /** After any write: every list, badge, summary and open document of the domain is stale. */
-export const invalidateInvoicing = (qc: QueryClient) => qc.invalidateQueries({ queryKey: KEYS.all });
+export const invalidateInvoicing = (qc: QueryClient) =>
+  qc.invalidateQueries({ queryKey: KEYS.all });

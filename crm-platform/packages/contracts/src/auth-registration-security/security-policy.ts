@@ -7,26 +7,32 @@ import { z } from 'zod';
  * of ours are enforced, so the admin screen does not over-promise.
  */
 
-const zeroOr = (min: number, max: number) =>
-  z.union([z.literal(0), z.number().int().min(min).max(max)]);
+/**
+ * The keyword box is one text area in WaDesk, capped at 5000 characters with
+ * no per-keyword limit. We keep a list, and cap the same total: the items joined
+ * one per line, counted in characters (code points).
+ */
+export const KEYWORD_LIST_MAX_CHARS = 5000;
+export const keywordListLength = (list: readonly string[]): number =>
+  Array.from(list.join('\n')).length;
 
 export const securityPolicySchema = z.object({
   // --- login and MFA
   requireMfaForAll: z.boolean().default(false),
   requireMfaForAdmins: z.boolean().default(false),
   requireMfaForOwners: z.boolean().default(false),
-  /** Only 'totp' exists; the others are accepted and stored for parity. */
+  /** Only 'totp' exists; the others are accepted and stored for parity. WaDesk's default is authenticator app + email. */
   allowedMfaMethods: z
     .array(z.enum(['totp', 'email', 'telegram']))
     .min(1)
-    .default(['totp']),
-  /** Idle minutes before a non-remembered session expires. 0 = off. */
-  sessionTimeoutMinutes: zeroOr(5, 1440).default(60),
-  /** 0 = unlimited. */
-  maxConcurrentSessions: zeroOr(1, 50).default(5),
+    .default(['totp', 'email']),
+  /** Idle minutes before a non-remembered session expires. 0 cannot be saved, as in WaDesk. */
+  sessionTimeoutMinutes: z.number().int().min(5).max(1440).default(60),
+  /** Devices signed in at once. 0 cannot be saved, as in WaDesk. */
+  maxConcurrentSessions: z.number().int().min(1).max(50).default(5),
   rememberMeEnabled: z.boolean().default(true),
-  /** 0 = lockout off. */
-  lockoutAfterFailures: zeroOr(1, 50).default(5),
+  /** Failed sign-ins before a lockout. 0 cannot be saved, as in WaDesk. */
+  lockoutAfterFailures: z.number().int().min(1).max(50).default(5),
   lockoutWindowMinutes: z.number().int().min(1).max(1440).default(15),
   // --- password rules (sign-up, reset, change, admin-set)
   passwordMinLength: z.number().int().min(6).max(128).default(8),
@@ -45,7 +51,12 @@ export const securityPolicySchema = z.object({
   // --- abuse filters
   abuseBlockFinanceTerms: z.boolean().default(false),
   abuseBlockShortLinks: z.boolean().default(false),
-  abuseBlockKeywordList: z.array(z.string().trim().min(1).max(100)).max(200).default([]),
+  abuseBlockKeywordList: z
+    .array(z.string().trim().min(1))
+    .refine((list) => keywordListLength(list) <= KEYWORD_LIST_MAX_CHARS, {
+      message: `Keep the keyword list under ${KEYWORD_LIST_MAX_CHARS} characters.`,
+    })
+    .default([]),
   // --- API and webhooks
   apiRateLimitPerMinute: z.number().int().min(1).max(100_000).default(600),
   webhookSignatureRequired: z.boolean().default(true),
@@ -84,18 +95,32 @@ export const riskItemSchema = z.object({
   severity: riskSeveritySchema,
   /** The event name, e.g. auth.lockout. */
   signal: z.string(),
+  /** A label from the event, or '' when it has none worth showing (never the event name again). */
   detail: z.string(),
+  /** The workspace's name; null when the event belongs to no workspace (see `scope`). */
   workspace: z.string().nullable(),
+  /**
+   * What `workspace: null` means: the event is a platform-level one (the screen
+   * shows "<app name> Platform"), or it belongs to nothing at all (a dash).
+   */
+  scope: z.enum(['workspace', 'platform', 'none']),
+  /** Who did it: the person's name, never the actor type. 'System' when there is no actor. */
   actor: z.string(),
+  actorKind: z.enum(['user', 'platform_operator', 'system']),
   at: z.string().datetime(),
 });
 
 export const coverageBucketSchema = z.object({
   key: z.enum(['admin_access', 'send_abuse', 'api_hardening', 'incident_readiness']),
   percent: z.number().int().min(0).max(100),
+  /** Controls switched on in this bucket, and how many it has ("2/4"). */
+  enabled: z.number().int().nonnegative(),
+  total: z.number().int().positive(),
 });
 
 export const securityOverviewResponseSchema = z.object({
+  /** The platform's display name, for "<app name> Platform" in the risk queue. */
+  appName: z.string(),
   policy: securityPolicySchema,
   emergencyHalt: z.boolean(),
   kpis: z.object({
@@ -138,15 +163,26 @@ export const securityEventSchema = z.object({
   event: z.string(),
   status: z.enum(['success', 'failure', 'warning', 'info']),
   actorType: z.string(),
+  /** The actor's public id (user or operator uuid); null for system events or a deleted account. */
+  actorId: z.string().uuid().nullable(),
+  /** Resolved at read time, so it is current: null when the actor no longer exists. */
+  actorName: z.string().nullable(),
+  actorEmail: z.string().nullable(),
   /** Organization uuid when the event belongs to one. */
   orgId: z.string().uuid().nullable(),
+  orgSlug: z.string().nullable(),
+  orgName: z.string().nullable(),
   ip: z.string().nullable(),
+  userAgent: z.string().nullable(),
+  requestId: z.string().nullable(),
   payload: z.record(z.unknown()),
 });
 export const securityEventListQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(200).default(50),
   cursor: z.string().max(256).optional(),
   event: z.string().max(80).optional(),
+  /** Case-insensitive text search in the event name (what the risk queue's Inspect link uses). */
+  q: z.string().trim().min(1).max(80).optional(),
   status: z.enum(['success', 'failure', 'warning', 'info']).optional(),
 });
 export type SecurityEventListQuery = z.infer<typeof securityEventListQuerySchema>;

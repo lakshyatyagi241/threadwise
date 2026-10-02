@@ -1,5 +1,6 @@
 /**
- * team-inbox-conversations: tables ported from WaDesk. Mirrors migrations/20261001102600_tib1_wadesk_schema.sql.
+ * team-inbox-conversations: tables ported from WaDesk. Mirrors migrations/20261001102600_tib1_wadesk_schema.sql
+ * and 20261014100300_tib1_saved_replies_shortcut_unique.sql (the folded `inbox_messages` is now `messages` in chat-conversations).
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {
@@ -8,13 +9,13 @@ import {
   foreignKey,
   index,
   jsonb,
-  numeric,
   pgTable,
   primaryKey,
-  smallint,
+  check,
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
@@ -60,66 +61,6 @@ export const conversationTag = pgTable(
 
 export type ConversationTagRow = typeof conversationTag.$inferSelect;
 export type NewConversationTagRow = typeof conversationTag.$inferInsert;
-
-export const inboxMessages = pgTable(
-  'inbox_messages',
-  {
-    id: bigint('id', { mode: 'number' })
-      .notNull()
-      .default(sql`nextval('inbox_messages_id_seq')`),
-    orgId: orgIdColumn(),
-    conversationId: idColumn('conversation_id').notNull(),
-    userId: idColumn('user_id'),
-    agentId: idColumn('agent_id'),
-    contactId: idColumn('contact_id'),
-    templateId: idColumn('template_id'),
-    direction: text('direction').notNull().default('out'),
-    toNumber: text('to_number'),
-    fromNumber: text('from_number'),
-    body: text('body'),
-    detectedLanguage: text('detected_language'),
-    translatedBody: text('translated_body'),
-    isTranslated: boolean('is_translated').notNull().default(false),
-    mediaPath: text('media_path'),
-    mediaType: text('media_type'),
-    voiceTranscript: text('voice_transcript'),
-    voiceTranscriptLang: text('voice_transcript_lang'),
-    aiProcessedAt: timestamp('ai_processed_at', { withTimezone: true }),
-    aiReplyId: idColumn('ai_reply_id'),
-    latitude: numeric('latitude', { precision: 10, scale: 7 }),
-    longitude: numeric('longitude', { precision: 10, scale: 7 }),
-    status: text('status').notNull().default('pending'),
-    failureReason: text('failure_reason'),
-    pinned: boolean('pinned').notNull().default(false),
-    starred: boolean('starred').notNull().default(false),
-    reaction: text('reaction'),
-    editedAt: timestamp('edited_at', { withTimezone: true }),
-    qualityScore: smallint('quality_score'),
-    qualityNote: text('quality_note'),
-    meta: jsonb('meta'),
-    sentAt: timestamp('sent_at', { withTimezone: true }),
-    deliveredAt: timestamp('delivered_at', { withTimezone: true }),
-    readAt: timestamp('read_at', { withTimezone: true }),
-    provider: text('provider'),
-    createdAt: createdAt(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.id, t.createdAt] }),
-    index('idx_inbox_messages_agent_id').on(t.orgId, t.agentId),
-    index('idx_inbox_messages_ai_processed_at').on(t.orgId, t.aiProcessedAt),
-    index('idx_inbox_messages_contact_id').on(t.orgId, t.contactId),
-    index('idx_inbox_messages_direction').on(t.orgId, t.direction),
-    index('idx_inbox_messages_pinned').on(t.orgId, t.pinned),
-    index('idx_inbox_messages_provider').on(t.orgId, t.provider),
-    index('idx_inbox_messages_starred').on(t.orgId, t.starred),
-    index('idx_inbox_messages_status').on(t.orgId, t.status),
-    index('idx_inbox_messages_template_id').on(t.orgId, t.templateId),
-    index('idx_inbox_messages_user_id').on(t.orgId, t.userId),
-  ],
-);
-
-export type InboxMessagesRow = typeof inboxMessages.$inferSelect;
-export type NewInboxMessagesRow = typeof inboxMessages.$inferInsert;
 
 export const outboundWebhooks = pgTable(
   'outbound_webhooks',
@@ -188,8 +129,64 @@ export const savedReplies = pgTable(
     }).onDelete('set null'),
     index('idx_saved_replies_shortcut').on(t.orgId, t.shortcut),
     index('idx_saved_replies_user_id').on(t.orgId, t.userId),
+    // NULLS NOT DISTINCT: one shared (ownerless) reply per shortcut. Drizzle cannot express it; the SQL migration is the truth.
+    uniqueIndex('uq_saved_replies_owner_shortcut').on(t.orgId, t.userId, t.shortcut),
   ],
 );
 
 export type SavedRepliesRow = typeof savedReplies.$inferSelect;
 export type NewSavedRepliesRow = typeof savedReplies.$inferInsert;
+
+/**
+ * A file an agent attached in the composer before sending: the reference a send names (`mediaId`). The bytes live in the media store,
+ * never in Postgres. Migration 20261015090100.
+ */
+export const conversationMediaUploads = pgTable(
+  'conversation_media_uploads',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id'),
+    mediaKey: text('media_key').notNull(),
+    kind: text('kind').$type<'image' | 'video' | 'audio' | 'document'>().notNull(),
+    mime: text('mime').notNull(),
+    sizeBytes: idColumn('size_bytes').notNull(),
+    name: text('name').notNull(),
+    sha256: text('sha256').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    usedAt: timestamp('used_at', { withTimezone: true }),
+    /** The send that claimed the file (its `clientMessageId`), so a retry of that send is recognised. */
+    usedByClientMessageId: uuid('used_by_client_message_id'),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_conversation_media_uploads_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'conversation_media_uploads_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'conversation_media_uploads_org_id_user_id_fkey',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    check(
+      'chk_conversation_media_uploads_kind',
+      sql`kind IN ('image', 'video', 'audio', 'document')`,
+    ),
+    check('chk_conversation_media_uploads_size', sql`size_bytes >= 0`),
+    check(
+      'chk_conversation_media_uploads_claim',
+      sql`(used_at IS NULL) = (used_by_client_message_id IS NULL)`,
+    ),
+    index('idx_conversation_media_uploads_expiry')
+      .on(t.expiresAt)
+      .where(sql`used_at IS NULL`),
+  ],
+);
+
+export type ConversationMediaUploadsRow = typeof conversationMediaUploads.$inferSelect;
+export type NewConversationMediaUploadsRow = typeof conversationMediaUploads.$inferInsert;

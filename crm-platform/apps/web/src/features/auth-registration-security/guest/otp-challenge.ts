@@ -49,10 +49,18 @@ export function defaultStore(): KeyValueStore {
   return memoryStore;
 }
 
-export function toStoredChallenge(r: OtpRequired, now: number): StoredChallenge {
+/**
+ * The challenge as kept in the tab. `maskedPhone` overrides the server's text when the page built its own mask
+ * from the number just typed (right for every calling-code length).
+ */
+export function toStoredChallenge(
+  r: OtpRequired,
+  now: number,
+  maskedPhone?: string,
+): StoredChallenge {
   return {
     challengeId: r.challengeId,
-    maskedPhone: r.maskedPhone,
+    maskedPhone: maskedPhone || r.maskedPhone,
     codeLength: r.codeLength,
     expiresAt: now + r.expiresInSeconds * 1000,
     resendAt: now + r.resendCooldownSeconds * 1000,

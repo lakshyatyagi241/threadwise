@@ -23,7 +23,13 @@ const PRINT_CSS = `
  * The printable receipt of one ledger entry (`GET /payments/:id/receipt`): seller, buyer, the entry and where it left the
  * invoice. A refund prints as a refund receipt with the amount negative.
  */
-export function ReceiptDialog({ payment, onClose }: { payment: PaymentResponse; onClose: () => void }) {
+export function ReceiptDialog({
+  payment,
+  onClose,
+}: {
+  payment: PaymentResponse;
+  onClose: () => void;
+}) {
   const t = useTranslations('invoicing.payments.receipt');
   const receipt = useQuery({
     queryKey: ['invoicing', 'payments', 'receipt', payment.id],
@@ -76,7 +82,9 @@ function ReceiptBody({ receipt }: { receipt: PaymentReceipt }) {
     <div id="payment-receipt" className="space-y-5 text-sm">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
-          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t('from')}</div>
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {t('from')}
+          </div>
           <div className="mt-1 font-semibold" dir="auto">
             <UserText>{receipt.seller.name || t('noSeller')}</UserText>
           </div>
@@ -92,7 +100,9 @@ function ReceiptBody({ receipt }: { receipt: PaymentReceipt }) {
           )}
         </div>
         <div className="min-w-0 sm:text-end">
-          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t('to')}</div>
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {t('to')}
+          </div>
           <div className="mt-1 font-semibold" dir="auto">
             <UserText>{receipt.buyerName || t('noBuyer')}</UserText>
           </div>
@@ -100,8 +110,14 @@ function ReceiptBody({ receipt }: { receipt: PaymentReceipt }) {
       </div>
 
       <div className="rounded-lg border border-border p-4">
-        <div className="text-xs font-medium text-muted-foreground">{refund ? t('refunded') : t('received')}</div>
-        <Money minor={minor(receipt.amount)} currency={cur} className={refund ? 'text-3xl font-semibold text-danger' : 'text-3xl font-semibold'} />
+        <div className="text-xs font-medium text-muted-foreground">
+          {refund ? t('refunded') : t('received')}
+        </div>
+        <Money
+          minor={minor(receipt.amount)}
+          currency={cur}
+          className={refund ? 'text-3xl font-semibold text-danger' : 'text-3xl font-semibold'}
+        />
         <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5">
           <dt className="text-muted-foreground">{t('receiptNumber')}</dt>
           <dd dir="ltr" className="text-end font-medium sm:text-start">

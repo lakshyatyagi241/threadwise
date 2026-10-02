@@ -1,0 +1,190 @@
+/*
+ * Look of the guest pages (sign-in, sign-up, recovery, onboarding, lock screens).
+ *
+ * Everything lives under `.auth-scope`, so nothing here reaches the signed-in app and the global tokens in
+ * @crm/ui stay untouched. The scope redefines the semantic tokens the shared primitives read (`--background`,
+ * `--border`, `--primary`, ...) with the warm paper-and-green palette of the guest design, and adds `--auth-*`
+ * tokens for the pieces that have no semantic name (the showcase panel, the display type, the stat tiles).
+ * Colours, radii and sizes were measured on the reference guest pages; the families are open-licence fonts
+ * loaded by `auth-fonts.ts`, and the marks are drawn in this repo.
+ */
+
+.auth-scope {
+  /* paper (surfaces) */
+  --auth-paper-0: #fbfaf6;
+  --auth-paper-50: #f5f3ec;
+  --auth-paper-100: #efebe0;
+  --auth-paper-200: #e5dfd0;
+  --auth-paper-300: #d4ccb6;
+  /* ink (text) */
+  --auth-ink-300: #c3ccc9;
+  --auth-ink-400: #9aa8a4;
+  --auth-ink-500: #6b807c;
+  --auth-ink-600: #3a5a55;
+  --auth-ink-700: #1f4540;
+  --auth-ink-800: #13312d;
+  --auth-ink-900: #0b1f1c;
+  --auth-ink-950: #070d0c;
+  /* brand greens, coral for errors, amber for glow */
+  --auth-deep: #075e54;
+  --auth-teal: #128c7e;
+  --auth-green: #25d366;
+  --auth-mint: #dcf8c6;
+  --auth-coral: #e87a5d;
+  --auth-coral-ink: #a1431f;
+  --auth-amber: #e5a04e;
+  /* text on the always-dark showcase panels: stays light in both themes */
+  --auth-light: #fbfaf6;
+  /* link colour: the deep green on paper, the bright green on dark */
+  --auth-link: var(--auth-deep);
+  --auth-shadow-card: 0 1px 0 rgba(11, 31, 28, 0.04), 0 1px 2px rgba(11, 31, 28, 0.04);
+  --auth-shadow-pop: 0 18px 60px -30px rgba(11, 31, 28, 0.5);
+  --auth-overlay: rgba(11, 31, 28, 0.45);
+
+  /* semantic tokens the shared primitives read */
+  --background: var(--auth-paper-0);
+  --foreground: var(--auth-ink-900);
+  --muted: var(--auth-paper-50);
+  --muted-foreground: var(--auth-ink-500);
+  --border: var(--auth-paper-200);
+  --primary: var(--auth-deep);
+  --primary-foreground: var(--auth-paper-0);
+  --danger: var(--auth-coral-ink);
+  --danger-foreground: #ffffff;
+  --success: var(--auth-deep);
+  --warning: #8a5a14;
+  --radius: 0.5rem;
+
+  --font-sans: var(--font-auth-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-auth-serif), ui-serif, Georgia, 'Times New Roman', serif;
+  --font-mono: var(--font-auth-mono), ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-theme='dark'] .auth-scope {
+  --auth-paper-0: #102824;
+  --auth-paper-50: #0b1f1c;
+  --auth-paper-100: #13312d;
+  --auth-paper-200: #1f4540;
+  --auth-paper-300: #2a5a53;
+  --auth-ink-300: #3a5a55;
+  --auth-ink-400: #6b807c;
+  --auth-ink-500: #9aa8a4;
+  --auth-ink-600: #b7c5c1;
+  --auth-ink-700: #d0dbd8;
+  --auth-ink-800: #e0e8e6;
+  --auth-ink-900: #eef3f1;
+  --auth-ink-950: #f6f9f8;
+  --auth-deep: #0f7a6d;
+  --auth-coral-ink: #f4a58f;
+  --auth-mint: #123a30;
+  --auth-link: #4ade80;
+  --auth-shadow-card: 0 1px 0 rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --auth-shadow-pop: 0 18px 60px -30px rgba(0, 0, 0, 0.8);
+  --auth-overlay: rgba(0, 0, 0, 0.6);
+
+  --background: var(--auth-paper-0);
+  --foreground: var(--auth-ink-900);
+  --muted: var(--auth-paper-50);
+  --muted-foreground: var(--auth-ink-500);
+  --border: var(--auth-paper-200);
+  --primary: var(--auth-deep);
+  --primary-foreground: #fbfaf6;
+  --danger: var(--auth-coral-ink);
+  --danger-foreground: #2b0a0a;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  color-scheme: dark;
+}
+
+/* The page behind the scope (overscroll, short pages) takes the paper colour too. */
+html:has(.auth-scope) {
+  background: #f5f3ec;
+}
+html[data-theme='dark']:has(.auth-scope) {
+  background: #0b1f1c;
+}
+
+/* Showcase panel backdrop (split design): a deep-green gradient with two soft lights. */
+.auth-scope .auth-art {
+  background:
+    radial-gradient(
+      80% 60% at 30% 20%,
+      color-mix(in srgb, var(--auth-green) 18%, transparent) 0,
+      transparent 50%
+    ),
+    radial-gradient(
+      60% 50% at 80% 80%,
+      color-mix(in srgb, var(--auth-deep) 30%, transparent) 0,
+      transparent 60%
+    ),
+    linear-gradient(135deg, var(--auth-deep) 0%, #13312d 100%);
+}
+
+.auth-scope .auth-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.auth-scope .auth-stat-pill {
+  background: rgba(11, 31, 28, 0.32);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Aurora design: a slowly drifting gradient mesh. */
+.auth-scope .auth-aurora {
+  background-color: #f4f4f5;
+  background-image:
+    radial-gradient(
+      40% 50% at 20% 20%,
+      color-mix(in srgb, var(--auth-green) 30%, transparent) 0,
+      transparent 60%
+    ),
+    radial-gradient(
+      45% 55% at 80% 25%,
+      color-mix(in srgb, var(--auth-deep) 26%, transparent) 0,
+      transparent 60%
+    ),
+    radial-gradient(50% 50% at 65% 88%, rgba(229, 160, 78, 0.24) 0, transparent 60%),
+    radial-gradient(42% 50% at 12% 82%, rgba(37, 99, 235, 0.18) 0, transparent 60%);
+  background-size: 200% 200%;
+  animation: auth-aurora-pan 20s ease-in-out infinite;
+}
+[data-theme='dark'] .auth-scope .auth-aurora {
+  background-color: #0b1f1c;
+}
+@keyframes auth-aurora-pan {
+  0%,
+  100% {
+    background-position:
+      0% 0%,
+      100% 0%,
+      50% 100%,
+      0% 100%;
+  }
+  50% {
+    background-position:
+      30% 25%,
+      70% 35%,
+      40% 70%,
+      25% 80%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-scope .auth-aurora {
+    animation: none;
+  }
+}
+
+/* Country flags in the phone picker (flag-icons ships the SVG files). */
+.auth-scope .fi {
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(11, 31, 28, 0.12);
+}

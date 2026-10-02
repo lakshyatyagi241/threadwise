@@ -230,14 +230,19 @@ export function priceInvoice(input: PricingInput): PricingResult {
     };
   } catch (err) {
     if (err instanceof TaxMathError) {
-      return { ok: false, totals: emptyTotals(currency), issues: [{ path: err.path, message: err.message }] };
+      return {
+        ok: false,
+        totals: emptyTotals(currency),
+        issues: [{ path: err.path, message: err.message }],
+      };
     }
     throw err;
   }
 }
 
 function toEngineDiscount(d: { kind: 'none' | 'percent' | 'amount'; value: bigint }) {
-  if (d.kind === 'percent') return { kind: 'percent' as const, percent: formatRate(d.value * 100n) };
+  if (d.kind === 'percent')
+    return { kind: 'percent' as const, percent: formatRate(d.value * 100n) };
   if (d.kind === 'amount') return { kind: 'amount' as const, minor: d.value };
   return { kind: 'none' as const };
 }

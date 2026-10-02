@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   cancelOrderSchema,
@@ -15,7 +28,12 @@ import {
   type RecordScope,
   type UpdateSalesOrderInput,
 } from '@crm/contracts';
-import { ActorKinds, GrantedScope, Idempotent, RequirePermission } from '../../../common/decorators';
+import {
+  ActorKinds,
+  GrantedScope,
+  Idempotent,
+  RequirePermission,
+} from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { SalesOrdersService } from './sales-orders.service';
@@ -32,15 +50,22 @@ export class SalesOrdersController {
   @RequirePermission('record.sales-orders.read')
   @ApiOperation({
     summary: 'List sales orders (cursor paginated)',
-    description: 'Filters: status, invoicingStatus (not_invoiced, partially_invoiced, invoiced), fulfilmentStatus, contactId, dealId, q.',
+    description:
+      'Filters: status, invoicingStatus (not_invoiced, partially_invoiced, invoiced), fulfilmentStatus, contactId, dealId, q.',
   })
-  list(@Query(zodPipe(listSalesOrdersQuerySchema)) query: ListSalesOrdersQuery, @GrantedScope('record.sales-orders.read') scope: RecordScope) {
+  list(
+    @Query(zodPipe(listSalesOrdersQuerySchema)) query: ListSalesOrdersQuery,
+    @GrantedScope('record.sales-orders.read') scope: RecordScope,
+  ) {
     return this.orders.list(query, scope);
   }
 
   @Get('counts')
   @RequirePermission('record.sales-orders.read')
-  @ApiOperation({ summary: 'Counts per status, orders waiting to be invoiced or delivered, and the open value per currency' })
+  @ApiOperation({
+    summary:
+      'Counts per status, orders waiting to be invoiced or delivered, and the open value per currency',
+  })
   counts(@GrantedScope('record.sales-orders.read') scope: RecordScope) {
     return this.orders.counts(scope);
   }
@@ -50,16 +75,23 @@ export class SalesOrdersController {
   @RequirePermission('record.sales-orders.create')
   @ApiOperation({
     summary: 'Create a sales order from an accepted offer (quoteId) or from lines',
-    description: 'A draft until confirmed. An offer that is not accepted is 409 SO_QUOTE_NOT_ACCEPTED; one that already has a live order is 409 SO_QUOTE_TAKEN.',
+    description:
+      'A draft until confirmed. An offer that is not accepted is 409 SO_QUOTE_NOT_ACCEPTED; one that already has a live order is 409 SO_QUOTE_TAKEN.',
   })
-  create(@Body(zodPipe(createSalesOrderSchema)) body: CreateSalesOrderInput, @GrantedScope('record.sales-orders.create') scope: RecordScope) {
+  create(
+    @Body(zodPipe(createSalesOrderSchema)) body: CreateSalesOrderInput,
+    @GrantedScope('record.sales-orders.create') scope: RecordScope,
+  ) {
     return this.orders.create(body, scope);
   }
 
   @Get(':id')
   @RequirePermission('record.sales-orders.read')
   @ApiOperation({ summary: 'Get one sales order, with its lines, progress and invoices' })
-  get(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.sales-orders.read') scope: RecordScope) {
+  get(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.sales-orders.read') scope: RecordScope,
+  ) {
     return this.orders.get(id, scope);
   }
 
@@ -77,8 +109,13 @@ export class SalesOrdersController {
   @Post(':id/confirm')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.sales-orders.update')
-  @ApiOperation({ summary: 'Confirm a draft: its prices are frozen, it can be invoiced and delivered' })
-  confirm(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.sales-orders.update') scope: RecordScope) {
+  @ApiOperation({
+    summary: 'Confirm a draft: its prices are frozen, it can be invoiced and delivered',
+  })
+  confirm(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.sales-orders.update') scope: RecordScope,
+  ) {
     return this.orders.confirm(id, scope);
   }
 
@@ -115,7 +152,9 @@ export class SalesOrdersController {
   @Post(':id/cancel')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.sales-orders.update')
-  @ApiOperation({ summary: 'Cancel an order that has no live invoice (409 SO_HAS_INVOICES otherwise)' })
+  @ApiOperation({
+    summary: 'Cancel an order that has no live invoice (409 SO_HAS_INVOICES otherwise)',
+  })
   cancel(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(cancelOrderSchema)) body: CancelOrderInput,
@@ -128,7 +167,10 @@ export class SalesOrdersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.sales-orders.delete')
   @ApiOperation({ summary: 'Delete a draft order' })
-  async remove(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.sales-orders.delete') scope: RecordScope) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.sales-orders.delete') scope: RecordScope,
+  ) {
     await this.orders.remove(id, scope);
   }
 }

@@ -32,9 +32,18 @@ const contact = (over: Partial<ContactResponse>): ContactResponse =>
     ...over,
   }) as ContactResponse;
 
-const group = (...children: SegmentGroup['children']): SegmentGroup => ({ type: 'group', combinator: 'and', children });
+const group = (...children: SegmentGroup['children']): SegmentGroup => ({
+  type: 'group',
+  combinator: 'and',
+  children,
+});
 const c = (field: string, operator: string, value?: unknown) =>
-  ({ type: 'condition', field, operator, ...(value === undefined ? {} : { value }) }) as SegmentGroup['children'][number];
+  ({
+    type: 'condition',
+    field,
+    operator,
+    ...(value === undefined ? {} : { value }),
+  }) as SegmentGroup['children'][number];
 const test = (cond: SegmentGroup['children'][number], over: Partial<ContactResponse> = {}) =>
   matches(contact(over), group(cond), NOW);
 
@@ -93,7 +102,9 @@ describe('how conditions are evaluated (the semantics the screens rely on)', () 
     expect(test(c('lastActivityAt', 'in_last_days', 5))).toBe(false);
     expect(test(c('lastActivityAt', 'more_than_days_ago', 5))).toBe(true);
     expect(test(c('lastActivityAt', 'more_than_days_ago', 30))).toBe(false);
-    expect(test(c('lastActivityAt', 'more_than_days_ago', 30), { lastActivityAt: null })).toBe(false);
+    expect(test(c('lastActivityAt', 'more_than_days_ago', 30), { lastActivityAt: null })).toBe(
+      false,
+    );
   });
 
   it('search matches every word against name, email and the digits of the phone', () => {
@@ -108,13 +119,21 @@ describe('groups', () => {
     const yes = c('source', 'equals', 'web');
     const no = c('source', 'equals', 'ads');
     expect(matches(contact({}), group(yes, no), NOW)).toBe(false);
-    expect(matches(contact({}), { type: 'group', combinator: 'or', children: [yes, no] }, NOW)).toBe(true);
-    const nested = group(yes, { type: 'group', combinator: 'or', children: [no, c('tags', 'has_any', ['t1'])] });
+    expect(
+      matches(contact({}), { type: 'group', combinator: 'or', children: [yes, no] }, NOW),
+    ).toBe(true);
+    const nested = group(yes, {
+      type: 'group',
+      combinator: 'or',
+      children: [no, c('tags', 'has_any', ['t1'])],
+    });
     expect(matches(contact({}), nested, NOW)).toBe(true);
   });
 
   it('evaluate keeps only the matching contacts', () => {
     const rows = [contact({ id: 'a' }), contact({ id: 'b', source: 'ads' })];
-    expect(evaluate(rows, group(c('source', 'equals', 'web')), NOW).map((r) => r.id)).toEqual(['a']);
+    expect(evaluate(rows, group(c('source', 'equals', 'web')), NOW).map((r) => r.id)).toEqual([
+      'a',
+    ]);
   });
 });

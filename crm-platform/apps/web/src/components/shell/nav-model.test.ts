@@ -3,14 +3,34 @@ import type { ResolvedNavItem } from '@/features/_registry/types';
 import { NAV } from '@/features/_registry/nav.generated';
 import { PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
-import { activeItemId, matchesHref, railSections, toSections } from './nav-model';
+import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
+import { SETTINGS } from '@/features/_registry/settings.generated';
+import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
+import { resolveSettings } from '@/features/_registry/settings-resolve';
+import {
+  activeItemId,
+  activeNavId,
+  helpItems,
+  matchesHref,
+  menuItems,
+  railSections,
+  toSections,
+} from './nav-model';
 
 const item = (
   id: string,
   group: ResolvedNavItem['group'],
   href: string,
   over: Partial<ResolvedNavItem> = {},
-): ResolvedNavItem => ({ id, group, href, labelKey: id, locked: false, comingSoon: false, ...over });
+): ResolvedNavItem => ({
+  id,
+  group,
+  href,
+  labelKey: id,
+  locked: false,
+  comingSoon: false,
+  ...over,
+});
 
 const items = [
   item('dashboard', 'overview', '/dashboard'),
@@ -35,11 +55,13 @@ describe('toSections', () => {
 
 describe('railSections', () => {
   it('keeps only real screens and drops groups left empty', () => {
-    expect(railSections(toSections(items)).map((s) => [s.group, s.items.map((i) => i.id)])).toEqual([
-      ['overview', ['dashboard']],
-      ['audience', ['contacts', 'groups']],
-      ['settings', ['account']],
-    ]);
+    expect(railSections(toSections(items)).map((s) => [s.group, s.items.map((i) => i.id)])).toEqual(
+      [
+        ['overview', ['dashboard']],
+        ['audience', ['contacts', 'groups']],
+        ['settings', ['account']],
+      ],
+    );
   });
 });
 
@@ -76,9 +98,7 @@ describe('the real menu', () => {
       'sales',
       'campaigns',
       'automation',
-      'channels',
       'store',
-      'developer',
       'help',
       'settings',
     ]);
@@ -86,10 +106,9 @@ describe('the real menu', () => {
 
   it('orders Platform, Inbox & Chat and CRM as specified', () => {
     expect(ids('overview')).toEqual(['dashboard', 'analytics', 'notifications']);
-    expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat', 'team-members']);
+    expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat']);
     expect(ids('audience')).toEqual([
       'contacts',
-      'attributes',
       'contact-groups',
       'segments',
       'lead-finder',
@@ -107,5 +126,101 @@ describe('the real menu', () => {
       { ...CAPABILITIES_UNKNOWN, permissions: new Set() },
     );
     expect(toSections(gated)).toEqual([]);
+  });
+});
+
+describe('the menu after the Settings move', () => {
+  const resolved = resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: PLANNED_NAV });
+  const menuIds = new Set(resolved.map((i) => i.id));
+  const tiles = resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN, { planned: PLANNED_SETTINGS });
+
+  it('has only the Settings entry in the settings group', () => {
+    expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual(['settings']);
+  });
+
+  it('no longer lists the configuration screens', () => {
+    for (const id of [
+      'contact-stages',
+      'contact-properties',
+      'attributes',
+      'tax-rates',
+      'business-profile',
+      'addons-workspace',
+      'i18n-translation',
+      'ai-keys',
+      'bsp-billing-mode',
+      'billing-orders',
+      'account',
+      'chat-widget',
+      'team-members',
+      'auto-reply',
+      'channels',
+      'telegram',
+      'sms',
+      'integrations',
+      'rest-api',
+      'webhooks',
+      'activity-log',
+    ]) {
+      expect(menuIds.has(id), id).toBe(false);
+    }
+  });
+
+  it('keeps the daily-work screens', () => {
+    for (const id of [
+      'dashboard',
+      'analytics',
+      'team-chat',
+      'contacts',
+      'contact-groups',
+      'segments',
+      'deals',
+      'tasks',
+      'appointments',
+      'proposals',
+      'estimates',
+      'invoices',
+      'recurring-invoices',
+      'credit-notes',
+      'sales-orders',
+      'payments',
+      'broadcasts',
+    ]) {
+      expect(menuIds.has(id), id).toBe(true);
+    }
+  });
+
+  it('keeps Help links out of the rail and in the user menu', () => {
+    expect(menuItems(resolved).some((i) => i.group === 'help')).toBe(false);
+    expect(helpItems(resolved).map((i) => i.id)).toEqual(['support', 'guidebook']);
+  });
+
+  it('highlights Settings on a Settings page and on a screen a tile points at', () => {
+    expect(activeNavId(resolved, tiles, '/settings')).toBe('settings');
+    expect(activeNavId(resolved, tiles, '/settings/business')).toBe('settings');
+    expect(activeNavId(resolved, tiles, '/tax-rates')).toBe('settings');
+    expect(activeNavId(resolved, tiles, '/contact-stages')).toBe('settings');
+    expect(activeNavId(resolved, tiles, '/account/security')).toBe('settings');
+  });
+
+  it('keeps a daily screen active, and a nested settings tile wins over its parent menu entry', () => {
+    expect(activeNavId(resolved, tiles, '/contacts')).toBe('contacts');
+    expect(activeNavId(resolved, tiles, '/appointments')).toBe('appointments');
+    expect(activeNavId(resolved, tiles, '/appointments/types')).toBe('settings');
+    expect(activeNavId(resolved, tiles, '/deals')).toBe('deals');
+    expect(activeNavId(resolved, tiles, '/deals/settings')).toBe('settings');
+  });
+
+  it('prefers the menu entry on a tie', () => {
+    const tile = {
+      id: 't',
+      section: 'data',
+      labelKey: 't',
+      href: '/tasks',
+      icon: 'x',
+      locked: false,
+      comingSoon: false,
+    } as ResolvedSettingsTile;
+    expect(activeNavId(resolved, [tile], '/tasks')).toBe('tasks');
   });
 });

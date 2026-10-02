@@ -1,0 +1,275 @@
+{
+  "settings": {
+    "title": "Settings",
+    "breadcrumb": "Breadcrumb",
+    "backToSettings": "Back to Settings",
+    "sectionsLabel": "Settings sections",
+    "searchLabel": "Search settings",
+    "searchPlaceholder": "Search settings",
+    "searchHint": "Type to filter every setting by name or keyword. Press Escape to clear, the Down arrow to move to the results.",
+    "clearSearch": "Clear search",
+    "results": {
+      "title": "{count, plural, one {# setting matches “{query}”} other {# settings match “{query}”}}",
+      "status": "{count, plural, =0 {No results} one {# result} other {# results}}"
+    },
+    "noResults": {
+      "title": "No settings match “{query}”",
+      "message": "Check the spelling or try a broader word, like “tax”, “team” or “WhatsApp”."
+    },
+    "emptySection": {
+      "title": "Nothing to set up here",
+      "message": "None of the settings in this section are available to your role."
+    },
+    "inSection": "In {section}",
+    "soon": "Soon",
+    "upgrade": "Upgrade",
+    "comingSoon": "Coming soon",
+    "sections": {
+      "channels": {
+        "title": "Channels",
+        "description": "Connect the places your customers message you."
+      },
+      "data": {
+        "title": "Data and customization",
+        "description": "Shape how contacts, deals and conversations are described."
+      },
+      "business": {
+        "title": "Business and billing",
+        "description": "Your company details, taxes, plan and payments."
+      },
+      "people": {
+        "title": "Team and permissions",
+        "description": "Who can do what in your workspace."
+      },
+      "automation": {
+        "title": "Automation and AI",
+        "description": "Replies, bookings, the website widget and AI."
+      },
+      "integrations": {
+        "title": "Integrations and developer",
+        "description": "Connect other tools and extend the product."
+      },
+      "security": {
+        "title": "Data and security",
+        "description": "Sign-in, privacy, export and the audit trail."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "All channels",
+        "description": "See every channel you have connected and add a new one.",
+        "keywords": "connections, inboxes, numbers, accounts"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "Connect your WhatsApp Business number to chat with customers.",
+        "keywords": "wa, whatsapp business, cloud api, number, qr"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Answer messages sent to your Facebook page.",
+        "keywords": "meta, messenger, page, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Answer direct messages sent to your Instagram account.",
+        "keywords": "meta, dm, insta, direct messages"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Connect a Telegram bot to chat with customers.",
+        "keywords": "bot, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "Answer messages sent to your TikTok business account.",
+        "keywords": "tik tok, dm, video"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "Send and receive text messages with your own sender.",
+        "keywords": "text message, sender id, dlt, twilio, mobile"
+      },
+      "email": {
+        "label": "Email",
+        "description": "Connect a mailbox to send and receive email in the inbox.",
+        "keywords": "mailbox, smtp, imap, gmail, outlook, sender"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "Connect your LINE official account.",
+        "keywords": "line official account, messaging"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Connect your Viber business account.",
+        "keywords": "viber bot, messaging"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "Connect your WeChat official account.",
+        "keywords": "weixin, official account"
+      },
+      "wa-links": {
+        "label": "WhatsApp links",
+        "description": "Create click-to-chat links and QR codes that open a WhatsApp chat.",
+        "keywords": "click to chat, qr code, short link, wa.me"
+      },
+      "contact-stages": {
+        "label": "Contact stages",
+        "description": "Set the stages and statuses a contact moves through.",
+        "keywords": "lifecycle, status, lead, customer, won, lost, funnel"
+      },
+      "contact-properties": {
+        "label": "Contact properties",
+        "description": "Add the fields you want to keep on every contact.",
+        "keywords": "custom fields, fields, required, dropdown, columns"
+      },
+      "attributes": {
+        "label": "Attributes",
+        "description": "Tags and the other labels you put on contacts.",
+        "keywords": "tags, labels, sources, custom attributes"
+      },
+      "deal-pipelines": {
+        "label": "Pipelines and stages",
+        "description": "Edit your deal pipelines, stages and lost reasons.",
+        "keywords": "deals, sales stages, board, lost reason, funnel"
+      },
+      "tags": {
+        "label": "Tags",
+        "description": "Create and organise the tags used across contacts and chats.",
+        "keywords": "labels, colour, color"
+      },
+      "saved-replies": {
+        "label": "Saved replies",
+        "description": "Write reusable answers your team can send in one click.",
+        "keywords": "canned responses, shortcuts, snippets, templates"
+      },
+      "business-profile": {
+        "label": "Business profile",
+        "description": "Your company name, address, tax number and logo for documents.",
+        "keywords": "company, address, gst, vat, tax id, logo, invoice header"
+      },
+      "tax-rates": {
+        "label": "Tax rates",
+        "description": "Set the taxes added to your invoices and estimates.",
+        "keywords": "vat, gst, sales tax, percent, rates, country"
+      },
+      "plans": {
+        "label": "Plan and usage",
+        "description": "See your plan, what it includes and upgrade.",
+        "keywords": "subscription, upgrade, limits, pricing, trial"
+      },
+      "wallet": {
+        "label": "Wallet",
+        "description": "Top up the balance that pays for messages.",
+        "keywords": "credit, balance, top up, recharge, funds"
+      },
+      "billing-orders": {
+        "label": "Order history",
+        "description": "Your plan and wallet purchases, with receipts.",
+        "keywords": "payments, receipts, invoices, purchases, orders"
+      },
+      "bsp-billing-mode": {
+        "label": "Message billing",
+        "description": "Choose who is billed for your WhatsApp messages.",
+        "keywords": "whatsapp, conversation charges, meta billing, bsp, wallet"
+      },
+      "account": {
+        "label": "Account",
+        "description": "Your name, email, password and language.",
+        "keywords": "profile, me, avatar, email, password, preferences"
+      },
+      "branding": {
+        "label": "Branding",
+        "description": "Your logo and colours across the workspace.",
+        "keywords": "logo, colors, colours, theme, appearance, white label"
+      },
+      "team-members": {
+        "label": "Team members",
+        "description": "Invite people and manage who is in your workspace.",
+        "keywords": "users, staff, invite, agents, employees, seats"
+      },
+      "roles": {
+        "label": "Roles and permissions",
+        "description": "Decide what each role can see and do.",
+        "keywords": "access, admin, manager, agent, rbac, permissions"
+      },
+      "teams": {
+        "label": "Teams",
+        "description": "Group people into teams for routing and reporting.",
+        "keywords": "groups, departments, assignment, routing"
+      },
+      "ai-keys": {
+        "label": "AI provider keys",
+        "description": "Add your own AI provider key to power AI features.",
+        "keywords": "openai, gemini, claude, api key, model, token"
+      },
+      "booking-types": {
+        "label": "Booking types",
+        "description": "The services customers can book, with hours and rules.",
+        "keywords": "appointments, services, availability, slots, schedule, calendar"
+      },
+      "appointment-settings": {
+        "label": "Appointment settings",
+        "description": "Booking rules, reminders and the public booking page.",
+        "keywords": "booking page, reminders, buffer, notice, cancellation"
+      },
+      "chat-widget": {
+        "label": "Chat widget",
+        "description": "Add a chat bubble to your website, also called web chat.",
+        "keywords": "web chat, website chat, live chat, widget, embed, bubble"
+      },
+      "auto-reply": {
+        "label": "Auto-reply",
+        "description": "Greet customers and answer when you are away.",
+        "keywords": "away message, welcome, greeting, out of office, keywords"
+      },
+      "integrations": {
+        "label": "Integrations",
+        "description": "Connect Shopify, Google, payments and other tools.",
+        "keywords": "apps, connect, zapier, shopify, woocommerce, google"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "Keys and documentation for building on top of the product.",
+        "keywords": "api keys, developers, tokens, docs, openapi"
+      },
+      "webhooks": {
+        "label": "Webhooks",
+        "description": "Send events to your own systems as they happen.",
+        "keywords": "callbacks, events, http, endpoint, notify"
+      },
+      "addons": {
+        "label": "Add-ons",
+        "description": "Switch optional features on or off for your workspace.",
+        "keywords": "extensions, modules, plugins, marketplace"
+      },
+      "i18n-translation": {
+        "label": "Translation",
+        "description": "Languages and automatic translation of messages.",
+        "keywords": "language, languages, locale, translate, auto translate"
+      },
+      "account-security": {
+        "label": "Password and two-step sign-in",
+        "description": "Change your password and protect sign-in with a second step.",
+        "keywords": "mfa, 2fa, authenticator, sessions, devices, sign in, login"
+      },
+      "import-export": {
+        "label": "Import and export",
+        "description": "Bring data in from a file or take a copy out.",
+        "keywords": "csv, excel, download, backup, upload, migrate"
+      },
+      "activity-log": {
+        "label": "Audit log",
+        "description": "A record of who changed what, and when.",
+        "keywords": "activity, history, changes, audit trail, security log"
+      },
+      "privacy": {
+        "label": "Privacy and data",
+        "description": "Consent, retention and requests to delete data.",
+        "keywords": "gdpr, consent, retention, delete data, dpa, personal data"
+      }
+    }
+  }
+}
