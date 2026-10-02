@@ -63,3 +63,9 @@ Side-by-side pixel comparison (only `/admin/extensions` and the add-on create pa
 on a device, the install of a real third-party package, behaviour with several API replicas (the registry cache is per process, 30 s), a browser run of the workspace page and of the
 module entries in the rail, the Docker-free parts of the database run (`crm_app_user` in the shared local Postgres rejects the password in `.env`, so the dev server for the screenshots ran as the owner role;
 tests use their own containers and the restricted role).
+
+## Round 2 re-verification
+
+Re-run on the merged tip (b26678c): unit 39, API e2e and integration 44, web 12, `pnpm arch:check` (0 errors) and `pnpm db:verify-schema` (0 errors) all pass; eslint clean on the domain.
+The blocked and partial rows above are unchanged: each needs an edit in another domain's zone (checkout, plan editor, settings hub, IG, INST), which this domain may not make.
+`checkout.service.ts` still answers "Add-ons are not purchasable yet." for add-on plans, so TW-ADD-032 and TW-ADD-033 stay blocked on PAYGW.
