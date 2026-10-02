@@ -35,6 +35,7 @@ describe('shell messages', () => {
       'balance',
       'notifications',
       'settings',
+      'help',
       'language',
       'theme',
       'themeLight',

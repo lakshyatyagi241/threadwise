@@ -1266,3 +1266,11 @@ Connections: **TIB1** (conversation columns, queue poll host, kanban, bulk toolb
   }
 }
 ```
+
+
+## Port note: data model (2026-10-02)
+
+`agent_statuses` gains `last_assigned_at`, the clock a real round robin needs (WaDesk's pick used the oldest `conversations.updated_at`,
+which any edit bumps). `conversations` now carries `waiting_since` (the start of the current wait for a human answer) and `msg_seq`; the
+partial due-date indexes for the sweeps are in `20261014100000_chat_conversation_reshape.sql`. See
+[docs/api/chat-conversations.md](../../api/chat-conversations.md).
