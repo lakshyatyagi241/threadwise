@@ -48,18 +48,20 @@ the operator identity pool, plan/billing bypass belongs to the PLAN and BILL dom
 
 ## Workspace layer
 
-See the section "Phase 2" of [parity/roles-permissions.md](../parity/roles-permissions.md) for the decisions. Rows are filled in as each lands.
+Decisions D-RBAC-05 to 08 are in [parity/roles-permissions.md](../parity/roles-permissions.md).
 
-| Id               | Feature                                           | Our code                                                    | Status                      |
-| ---------------- | ------------------------------------------------- | ----------------------------------------------------------- | --------------------------- |
-| WD-RBAC-004      | 23 workspace permissions and the five-role matrix | migration `rbac_workspace_presets`                          | planned                     |
-| WD-RBAC-024      | Workspace role model, hierarchy                   | preset `system_key` rank                                    | planned                     |
-| WD-RBAC-025      | Route-level minimum role                          | per-feature permission keys in the owning domains           | planned                     |
-| WD-RBAC-026      | Role-grant rules and role change                  | `WorkspaceRoleRules`                                        | planned                     |
-| WD-RBAC-027      | Member-management gates                           | `org.member.*` keys                                         | planned                     |
-| WD-RBAC-028..032 | Conversation and inbox-setting gates              | permission keys registered; enforcement in the inbox domain | planned (blocked:TIB1/TIB2) |
-| WD-RBAC-033      | Permission map to the client                      | session payload                                             | planned                     |
-| WD-RBAC-034      | Owner-only checks                                 | `org.settings.manage`, `org.delete`                         | planned                     |
-| WD-RBAC-035      | Role-tier navigation and landing                  | nav gates by permission                                     | planned                     |
-| WD-RBAC-036      | API/mobile surfaces                               | API-key scopes                                              | planned                     |
-| WD-RBAC-037      | Unenforced keys                                   | coverage test                                               | planned                     |
+| Id               | Feature                                        | Our code                                                                                                                          | Status                                                                                         |
+| ---------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| WD-RBAC-004      | Workspace permissions and the five-role matrix | migration `20261013100000_rbac_workspace_presets` (keys, `provision_workspace_presets`, `rbac_is_owner_only`, auto-grant trigger) | built                                                                                          |
+| WD-RBAC-024      | Role model, hierarchy                          | preset `system_key` (`admin` = Owner, `workspace_admin`, `manager`, `agent`, `viewer`), rank in `workspace-role-rules.service.ts` | built                                                                                          |
+| WD-RBAC-025      | Route-level minimum role                       | each domain gates its routes with its own keys; Manager/Agent/Viewer grants decide who passes                                     | blocked: per-domain adoption (the gaps WaDesk left ungated are closed by construction)         |
+| WD-RBAC-026      | Role-grant rules, role change                  | `WorkspaceRoleRulesService` used by `PATCH /v2/users/:id` and `POST /v2/users`; role edits by `PATCH /v2/roles/:id`               | built (D-RBAC-06)                                                                              |
+| WD-RBAC-027      | Member gates                                   | `org.member.invite`, `org.member.role_assign`                                                                                     | built for create and role change; invite/remove/reset flows blocked: WD-WSP                    |
+| WD-RBAC-028..032 | Conversation and inbox-setting gates           | keys `inbox.conversation.*`, `inbox.*.manage`, `inbox.settings.read` registered with the matrix                                   | blocked: inbox endpoints (TIB1/TIB2) adopt them; `key-coverage.spec.ts` lists each as awaiting |
+| WD-RBAC-033      | Permission map to the client                   | `GET /v2/auth/session` `permissions`                                                                                              | built (existing)                                                                               |
+| WD-RBAC-034      | Owner-only checks                              | `org.owner_settings.manage`, `org.delete`, `admin.settings.manage`                                                                | keys built; blocked: SET, TCHAT, CHK adopt them                                                |
+| WD-RBAC-035      | Role-tier nav and landing                      | nav items declare `gates.permission` (existing registry); `LoginService.landingFor` follows permissions                           | built (D-RBAC-08)                                                                              |
+| WD-RBAC-036      | API/mobile surfaces                            | one guard for all actor kinds                                                                                                     | blocked: API-key scopes (public API domain)                                                    |
+| WD-RBAC-037      | Unenforced keys                                | `test/unit/roles-permissions/key-coverage.spec.ts`                                                                                | built                                                                                          |
+
+Console sidebar counts: `roles` and `permissions` badges come from `GET /v2/platform/roles` kpis (`console-counts.ts`).
