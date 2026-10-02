@@ -154,6 +154,9 @@ import { TokenService } from './token.service';
     HtmlSanitizerService,
     SecurityPolicyService,
     PlatformSettingsService,
+    // the two sanctioned doors to platform-wide data, for the first-run setup (INST)
+    PlatformStore,
+    TenantDirectory,
     WebhookSecretRegistry,
     OtpTemplateService,
   ],

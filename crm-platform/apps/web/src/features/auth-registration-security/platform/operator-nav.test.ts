@@ -17,7 +17,8 @@ describe('activeNavId', () => {
 describe('groupNav', () => {
   it('groups in first-seen order', () => {
     const groups = groupNav(OPERATOR_NAV);
-    expect(groups).toHaveLength(3);
+    expect(groups).toHaveLength(4);
+    expect(groups[3]!.items.map((i) => i.id)).toEqual(['system']);
     expect(groups[0]!.items.map((i) => i.id)).toEqual(['security', 'security-events']);
     expect(groups[1]!.items.map((i) => i.id)).toEqual([
       'registration',
