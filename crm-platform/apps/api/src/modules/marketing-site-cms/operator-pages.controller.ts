@@ -170,6 +170,14 @@ export class OperatorContactController {
     return this.contact.list(q);
   }
 
+  @Post('read-all')
+  @HttpCode(200)
+  @OperatorRoles('super_admin', 'support')
+  @ApiOperation({ summary: 'Mark every unread message read' })
+  markAllRead() {
+    return this.contact.markAllRead();
+  }
+
   @Patch(':id/read')
   @OperatorRoles('super_admin', 'support')
   @ApiOperation({ summary: 'Mark a message read or unread' })

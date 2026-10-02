@@ -1214,6 +1214,55 @@ describe('contact form and inbox (TW-CMS-005, 006, 042, 043)', () => {
     expect((await ops('delete', `/contact-messages/${id}`)).status).toBe(404);
     expect((await events('platform.cms.contact_deleted')).length).toBeGreaterThan(0);
   });
+
+  it('filters by topic and ignores an unknown topic; the topic combines with search and read state (TW-CMS-042)', async () => {
+    const sent = ['sales', 'sales', 'support', 'partnership', 'other'];
+    for (const [i, topic] of sent.entries()) {
+      await pub('post', '/contact').send({
+        ...valid,
+        topic,
+        message: i === 0 ? 'about acme' : 'hello',
+      });
+    }
+    const topics = async (qs: string) =>
+      ((await ops('get', `/contact-messages?${qs}`)).body.data as Array<{ topic: string }>).map(
+        (m) => m.topic,
+      );
+    expect(await topics('topic=sales')).toEqual(['sales', 'sales']);
+    expect(await topics('topic=support')).toEqual(['support']);
+    expect(await topics('topic=jobs')).toHaveLength(5);
+    expect(await topics('topic=sales&q=acme')).toEqual(['sales']);
+    expect(await topics('topic=sales&status=read')).toEqual([]);
+    // The header counts do not follow the filter.
+    expect((await ops('get', '/contact-messages?topic=sales')).body.summary).toEqual({
+      total: 5,
+      unread: 5,
+    });
+  });
+
+  it('mark all read clears the unread count, is idempotent and open to support (TW-CMS-043)', async () => {
+    for (let i = 0; i < 5; i++) await pub('post', '/contact').send(valid);
+    const first = (await ops('get', '/contact-messages')).body.data[0].id as string;
+    await ops('patch', `/contact-messages/${first}/read`).send({ isRead: true });
+    expect((await ops('get', '/contact-messages')).body.summary.unread).toBe(4);
+
+    const all = await support('post', '/contact-messages/read-all');
+    expect(all.status, JSON.stringify(all.body)).toBe(200);
+    expect(all.body).toEqual({ updated: 4 });
+    expect((await ops('get', '/contact-messages')).body.summary).toEqual({ total: 5, unread: 0 });
+    expect((await ops('post', '/contact-messages/read-all')).body).toEqual({ updated: 0 });
+  });
+
+  it('the delete audit row records the sender address (TW-CMS-043 rule 3)', async () => {
+    await pub('post', '/contact').send({ ...valid, email: 'sender.to.audit@example.com' });
+    const id = (await ops('get', '/contact-messages')).body.data[0].id as string;
+    expect((await ops('delete', `/contact-messages/${id}`)).status).toBe(200);
+    const logged = await events('platform.cms.contact_deleted');
+    expect(logged.at(-1)?.payload).toMatchObject({
+      uuid: id,
+      email: 'sender.to.audit@example.com',
+    });
+  });
 });
 
 // ---------------------------------------------------------------------------------------------------------------------
