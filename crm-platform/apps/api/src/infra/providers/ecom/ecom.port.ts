@@ -100,6 +100,10 @@ export interface WooStoreApi {
     nameOf: (topic: string) => string;
   }): Promise<Record<string, string>>;
   deleteWebhooks(ids: readonly string[]): Promise<void>;
+  /** The newest records of a resource, for the dashboard (one request, up to `limit`); empty when the store does not answer. */
+  recent(resource: 'orders' | 'products' | 'customers', limit: number): Promise<StoreRecord[]>;
+  /** The sales report of the last `days` days (WooCommerce `reports/sales`); empty when the store does not answer. */
+  salesReport(days: number): Promise<StoreRecord>;
   /** Changes a real order (its `status`, its `shipping` address, ...). False when the store refused or did not answer. */
   updateOrder(orderId: string, patch: Record<string, unknown>): Promise<boolean>;
   /**

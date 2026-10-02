@@ -171,6 +171,25 @@ class WooStore implements WooStoreApi {
     return done;
   }
 
+  async recent(
+    resource: 'orders' | 'products' | 'customers',
+    limit: number,
+  ): Promise<StoreRecord[]> {
+    const orderby = resource === 'customers' ? 'registered_date' : 'date';
+    const per = Math.max(1, Math.min(100, limit));
+    const r = await this.send('GET', `/${resource}?per_page=${per}&orderby=${orderby}&order=desc`);
+    if ('error' in r || r.status < 200 || r.status >= 300 || !Array.isArray(r.json)) return [];
+    return r.json.filter((x): x is StoreRecord => typeof x === 'object' && x !== null);
+  }
+
+  async salesReport(days: number): Promise<StoreRecord> {
+    const day = (d: Date) => d.toISOString().slice(0, 10);
+    const min = new Date(Date.now() - days * 86_400_000);
+    const r = await this.send('GET', `/reports/sales?date_min=${day(min)}&date_max=${day(new Date())}`);
+    if ('error' in r || r.status < 200 || r.status >= 300 || !Array.isArray(r.json)) return {};
+    return obj(r.json[0]);
+  }
+
   async updateOrder(orderId: string, patch: Json): Promise<boolean> {
     const r = await this.send('PUT', `/orders/${encodeURIComponent(orderId)}`, patch);
     return !('error' in r) && r.status >= 200 && r.status < 300;

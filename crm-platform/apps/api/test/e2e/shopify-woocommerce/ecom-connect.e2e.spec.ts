@@ -123,6 +123,8 @@ beforeAll(async () => {
       return Promise.resolve();
     },
     updateOrder: () => Promise.resolve(true),
+    recent: () => Promise.resolve([]),
+    salesReport: () => Promise.resolve({}),
     createPendingOrder: () => Promise.resolve(null),
   });
 }, 240_000);
