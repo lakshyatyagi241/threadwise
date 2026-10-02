@@ -1224,7 +1224,7 @@
           "items": {
             "hosts": {
               "title": "Typical settings",
-              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.<region>.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls with an app password."
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls with an app password."
             },
             "used": {
               "title": "Mailables in the system",
