@@ -37,7 +37,18 @@ An unknown or missing `range` is `7d`. `7d` and `30d` run from the start of that
     "readRate": 26.7,
     "replyRate": 33.3
   },
-  "previous": { "sent": 0, "delivered": 0, "failed": 0, "read": 0, "queued": 0, "replies": 0, "repliers": 0, "deliverability": 0, "readRate": 0, "replyRate": 0 },
+  "previous": {
+    "sent": 0,
+    "delivered": 0,
+    "failed": 0,
+    "read": 0,
+    "queued": 0,
+    "replies": 0,
+    "repliers": 0,
+    "deliverability": 0,
+    "readRate": 0,
+    "replyRate": 0
+  },
   "sentDeltaPct": 100,
   "readRateDeltaPp": 26.7,
   "sparkline": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3],
