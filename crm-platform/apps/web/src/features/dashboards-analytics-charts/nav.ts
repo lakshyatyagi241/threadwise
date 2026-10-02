@@ -8,5 +8,15 @@ export const nav: NavItem[] = [
     href: '/dashboard',
     order: 0,
     icon: 'home',
+    gates: { permission: 'dash.dashboard.read' },
+  },
+  {
+    id: 'analytics',
+    group: 'overview',
+    labelKey: 'dashboards-analytics-charts.nav.analytics',
+    href: '/analytics',
+    order: 10,
+    icon: 'analytics',
+    gates: { permission: 'dash.analytics.read', planFeature: 'analytics' },
   },
 ];

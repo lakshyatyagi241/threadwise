@@ -11,10 +11,13 @@ export const dashRangeSchema = z.enum(DASH_RANGES);
 export type DashRange = z.infer<typeof dashRangeSchema>;
 
 export const dashSummaryQuerySchema = z.object({
-  range: z.string().optional().transform((v): DashRange => {
-    const p = dashRangeSchema.safeParse(v);
-    return p.success ? p.data : '7d';
-  }),
+  range: z
+    .string()
+    .optional()
+    .transform((v): DashRange => {
+      const p = dashRangeSchema.safeParse(v);
+      return p.success ? p.data : '7d';
+    }),
 });
 export type DashSummaryQuery = z.infer<typeof dashSummaryQuerySchema>;
 
@@ -97,7 +100,14 @@ export type DashThroughputResponse = z.infer<typeof dashThroughputResponseSchema
 export const ANALYTICS_RANGES = ['7d', '30d', '90d', 'custom'] as const;
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const analyticsQuerySchema = z.object({
-  range: z.string().optional().transform((v) => ((ANALYTICS_RANGES as readonly string[]).includes(v ?? '') ? (v as (typeof ANALYTICS_RANGES)[number]) : '30d')),
+  range: z
+    .string()
+    .optional()
+    .transform((v) =>
+      (ANALYTICS_RANGES as readonly string[]).includes(v ?? '')
+        ? (v as (typeof ANALYTICS_RANGES)[number])
+        : '30d',
+    ),
   from: isoDate.optional().catch(undefined),
   to: isoDate.optional().catch(undefined),
 });
@@ -107,7 +117,11 @@ export const ANALYTICS_MAX_DAYS = 366;
 
 export const analyticsResponseSchema = z.object({
   range: z.enum(ANALYTICS_RANGES),
-  window: dashWindowSchema.extend({ days: z.number().int(), fromDate: z.string(), toDate: z.string() }),
+  window: dashWindowSchema.extend({
+    days: z.number().int(),
+    fromDate: z.string(),
+    toDate: z.string(),
+  }),
   current: dashTotalsSchema,
   previous: dashTotalsSchema,
   /** Percent change per metric (inverted polarity for failed and queued is a display matter). */
@@ -131,7 +145,10 @@ export const analyticsResponseSchema = z.object({
   funnel: dashFunnelSchema,
   /** Outbound by type; zero buckets omitted. */
   types: z.array(
-    z.object({ key: z.enum(['text', 'template', 'media', 'interactive', 'location']), count: z.number().int() }),
+    z.object({
+      key: z.enum(['text', 'template', 'media', 'interactive', 'location']),
+      count: z.number().int(),
+    }),
   ),
   /** 7 rows (Sunday = 0) of 24 hourly message counts, both directions, in the workspace zone. */
   heatmap: z.array(z.array(z.number().int()).length(24)).length(7),

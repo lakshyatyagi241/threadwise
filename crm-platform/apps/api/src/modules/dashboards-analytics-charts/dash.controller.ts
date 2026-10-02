@@ -27,7 +27,9 @@ export class DashboardController {
 
   @Get('throughput')
   @RequirePermission('dash.dashboard.read')
-  @ApiOperation({ summary: 'Sent, delivered and failed per bucket, with peak and average per hour' })
+  @ApiOperation({
+    summary: 'Sent, delivered and failed per bucket, with peak and average per hour',
+  })
   throughput(@Query(zodPipe(dashSummaryQuerySchema)) q: DashSummaryQuery) {
     return this.dash.throughput(q.range);
   }
@@ -43,7 +45,9 @@ export class AnalyticsController {
 
   @Get('overview')
   @RequirePermission('dash.analytics.read')
-  @ApiOperation({ summary: 'Totals with trends, daily series, funnel, type mix and hour heatmap for a window' })
+  @ApiOperation({
+    summary: 'Totals with trends, daily series, funnel, type mix and hour heatmap for a window',
+  })
   overview(@Query(zodPipe(analyticsQuerySchema)) q: AnalyticsQuery) {
     return this.dash.analytics(q);
   }

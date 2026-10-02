@@ -44,7 +44,13 @@ export class DashService {
       const hours = await this.repo.hourlyOut(tx, orgId, now, 20);
       return {
         range,
-        window: { from: iso(w.from), to: iso(w.to), prevFrom: iso(w.prevFrom), prevTo: iso(w.prevTo), timezone: tz },
+        window: {
+          from: iso(w.from),
+          to: iso(w.to),
+          prevFrom: iso(w.prevFrom),
+          prevTo: iso(w.prevTo),
+          timezone: tz,
+        },
         current,
         previous,
         sentDeltaPct: percentChange(current.sent, previous.sent),
@@ -66,7 +72,13 @@ export class DashService {
         // 24 whole hours ending with the current one (Reference's 24h chart).
         const first = new Date(zonedHourStart(now, tz).getTime() - 23 * HOUR_MS);
         starts = Array.from({ length: 24 }, (_, i) => new Date(first.getTime() + i * HOUR_MS));
-        found = await this.repo.buckets(tx, orgId, first, new Date(first.getTime() + 24 * HOUR_MS), { bucket: 'hour' });
+        found = await this.repo.buckets(
+          tx,
+          orgId,
+          first,
+          new Date(first.getTime() + 24 * HOUR_MS),
+          { bucket: 'hour' },
+        );
       } else {
         const fromDate = w.fromDate!;
         starts = Array.from({ length: w.days! }, (_, i) => zonedMidnight(addDays(fromDate, i), tz));
@@ -84,7 +96,10 @@ export class DashService {
         sent: starts.map((_, i) => at(i).sent),
         delivered: starts.map((_, i) => at(i).delivered),
         failed: starts.map((_, i) => at(i).failed),
-        peak: slot >= 0 ? { start: iso(new Date(now.getTime() - (slot + 1) * HOUR_MS)), count: top } : null,
+        peak:
+          slot >= 0
+            ? { start: iso(new Date(now.getTime() - (slot + 1) * HOUR_MS)), count: top }
+            : null,
         avgPerHour: Math.round(hourly.reduce((a, b) => a + b, 0) / 24),
       };
     });
@@ -95,10 +110,17 @@ export class DashService {
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
-      if (!w) throw AppError.validation('The range is too long', [{ path: 'from', message: 'at most 366 days' }]);
+      if (!w)
+        throw AppError.validation('The range is too long', [
+          { path: 'from', message: 'at most 366 days' },
+        ]);
       const current = totalsOf(await this.repo.counts(tx, orgId, w.from, w.to));
       const previous = totalsOf(await this.repo.counts(tx, orgId, w.prevFrom, w.prevTo));
-      const days = await this.repo.buckets(tx, orgId, w.from, w.to, { bucket: 'day', fromDate: w.fromDate, tz });
+      const days = await this.repo.buckets(tx, orgId, w.from, w.to, {
+        bucket: 'day',
+        fromDate: w.fromDate,
+        tz,
+      });
       const idx = Array.from({ length: w.days }, (_, i) => i);
       const at = (i: number) => days.get(i) ?? { sent: 0, delivered: 0, failed: 0 };
       const f = funnelOf(current);

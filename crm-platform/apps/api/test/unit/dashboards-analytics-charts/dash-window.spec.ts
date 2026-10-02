@@ -45,8 +45,12 @@ describe('dashboard windows (TW-DASH-003)', () => {
 
   it('cuts days in the workspace zone, so a message at 02:00 UTC belongs to the next day in Jakarta', () => {
     expect(todayIn('Asia/Jakarta', new Date('2026-10-14T20:00:00Z'))).toBe('2026-10-15');
-    expect(zonedMidnight('2026-10-15', 'Asia/Jakarta').toISOString()).toBe('2026-10-14T17:00:00.000Z');
-    expect(zonedMidnight('2026-10-15', 'Asia/Kolkata').toISOString()).toBe('2026-10-14T18:30:00.000Z');
+    expect(zonedMidnight('2026-10-15', 'Asia/Jakarta').toISOString()).toBe(
+      '2026-10-14T17:00:00.000Z',
+    );
+    expect(zonedMidnight('2026-10-15', 'Asia/Kolkata').toISOString()).toBe(
+      '2026-10-14T18:30:00.000Z',
+    );
   });
 
   it('a window over a daylight-saving change keeps equal day counts', () => {
@@ -61,7 +65,9 @@ describe('dashboard windows (TW-DASH-003)', () => {
     expect(zonedHourStart(new Date('2026-10-14T10:45:00Z'), 'Asia/Kolkata').toISOString()).toBe(
       '2026-10-14T10:30:00.000Z',
     );
-    expect(zonedHourStart(new Date('2026-10-14T10:45:00Z'), 'UTC').toISOString()).toBe('2026-10-14T10:00:00.000Z');
+    expect(zonedHourStart(new Date('2026-10-14T10:45:00Z'), 'UTC').toISOString()).toBe(
+      '2026-10-14T10:00:00.000Z',
+    );
   });
 });
 
@@ -77,7 +83,11 @@ describe('analytics windows (TW-DASH-022)', () => {
   });
 
   it('swaps an inverted custom range', () => {
-    const w = resolveAnalyticsWindow(q({ range: 'custom', from: '2026-05-10', to: '2026-05-01' }), 'UTC', NOW)!;
+    const w = resolveAnalyticsWindow(
+      q({ range: 'custom', from: '2026-05-10', to: '2026-05-01' }),
+      'UTC',
+      NOW,
+    )!;
     expect([w.fromDate, w.toDate]).toEqual(['2026-05-01', '2026-05-10']);
     expect(w.days).toBe(10);
     expect(w.prevTo).toEqual(w.from);
@@ -89,6 +99,12 @@ describe('analytics windows (TW-DASH-022)', () => {
   });
 
   it('refuses spans over 366 days', () => {
-    expect(resolveAnalyticsWindow(q({ range: 'custom', from: '2024-01-01', to: '2026-01-01' }), 'UTC', NOW)).toBeNull();
+    expect(
+      resolveAnalyticsWindow(
+        q({ range: 'custom', from: '2024-01-01', to: '2026-01-01' }),
+        'UTC',
+        NOW,
+      ),
+    ).toBeNull();
   });
 });

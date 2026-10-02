@@ -32,7 +32,9 @@ const n = (v: unknown): number => Number(v ?? 0);
 @Injectable()
 export class DashRepository {
   async orgTimezone(tx: Tx, orgId: number): Promise<string | null> {
-    const res = await tx.execute(sql`SELECT settings ->> 'timezone' AS tz FROM organizations WHERE id = ${orgId}`);
+    const res = await tx.execute(
+      sql`SELECT settings ->> 'timezone' AS tz FROM organizations WHERE id = ${orgId}`,
+    );
     return ((res.rows[0] as Raw | undefined)?.tz as string | null | undefined) ?? null;
   }
 
@@ -96,12 +98,20 @@ export class DashRepository {
         count(*) FILTER (WHERE status = 'failed')::int AS failed
       FROM ${stream(orgId, from, to)} WHERE direction = 'out' GROUP BY 1`);
     return new Map(
-      (res.rows as Raw[]).map((r) => [n(r.i), { sent: n(r.sent), delivered: n(r.delivered), failed: n(r.failed) }]),
+      (res.rows as Raw[]).map((r) => [
+        n(r.i),
+        { sent: n(r.sent), delivered: n(r.delivered), failed: n(r.failed) },
+      ]),
     );
   }
 
   /** Outbound by display type; template wins over media (TW-DASH-027 rule 7). */
-  async types(tx: Tx, orgId: number, from: Date, to: Date): Promise<Array<{ key: string; count: number }>> {
+  async types(
+    tx: Tx,
+    orgId: number,
+    from: Date,
+    to: Date,
+  ): Promise<Array<{ key: string; count: number }>> {
     const res = await tx.execute(sql`
       SELECT CASE
           WHEN template_id IS NOT NULL THEN 'template'

@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { csvCell } from '../../../src/modules/dashboards-analytics-charts/dash.service';
-import { deltaPp, funnelOf, percentChange, totalsOf } from '../../../src/modules/dashboards-analytics-charts/dash-metrics';
+import {
+  deltaPp,
+  funnelOf,
+  percentChange,
+  totalsOf,
+} from '../../../src/modules/dashboards-analytics-charts/dash-metrics';
 
 const zero = { sent: 0, delivered: 0, failed: 0, read: 0, replies: 0, repliers: 0 };
 
@@ -18,14 +23,28 @@ describe('metric rules (TW-DASH-002)', () => {
   });
 
   it('rates are one decimal and 0 for no sends; queued never goes below 0', () => {
-    const t = totalsOf({ sent: 200, delivered: 180, failed: 5, read: 50, replies: 30, repliers: 20 });
+    const t = totalsOf({
+      sent: 200,
+      delivered: 180,
+      failed: 5,
+      read: 50,
+      replies: 30,
+      repliers: 20,
+    });
     expect(t).toMatchObject({ readRate: 25, deliverability: 90, replyRate: 15, queued: 15 });
-    expect(totalsOf(zero)).toMatchObject({ readRate: 0, deliverability: 0, replyRate: 0, queued: 0 });
+    expect(totalsOf(zero)).toMatchObject({
+      readRate: 0,
+      deliverability: 0,
+      replyRate: 0,
+      queued: 0,
+    });
     expect(totalsOf({ ...zero, sent: 1, delivered: 2 }).queued).toBe(0);
   });
 
   it('funnel: 100 sent, 90 delivered, 30 replies, 20 repliers', () => {
-    const f = funnelOf(totalsOf({ sent: 100, delivered: 90, failed: 0, read: 0, replies: 30, repliers: 20 }));
+    const f = funnelOf(
+      totalsOf({ sent: 100, delivered: 90, failed: 0, read: 0, replies: 30, repliers: 20 }),
+    );
     expect(f.stages.map((s) => [s.count, s.pct, s.drop])).toEqual([
       [100, 100, 0],
       [90, 90, 10],
