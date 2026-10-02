@@ -112,9 +112,17 @@ Screenshot-versus-ours: the Interakt screenshots were described to this session 
 ## NOT verified
 
 - **Real AI provider calls.** No provider key is available; the vendor adapter is tested against a local stub (prompt, token cap, fallback, error paths). BYOK/platform key resolution and metering belong to AIADM (keys come from `WGT_AI_*` env).
-- **Team Inbox display and agent reply path.** There is no inbox in this app yet; agent replies are simulated by inserting an outbound `inbox_messages` row. The "Web widget" badge and push/translation observers are untested.
+- **Team Inbox display and agent reply path.** There is no inbox in this app yet; agent replies are simulated by inserting an outbound `messages` row. The "Web widget" badge and push/translation observers are untested.
 - **Paused widget, role gate and plan gate against the reference.** The reference cannot be edited, nothing there can pause a widget, and its role and plan gates need accounts the reference does not have; these are covered on ours (API e2e: 404s of a paused widget, 403 per key, 422 plan lock and the paywall) and by reading the reference source only.
 - **Exact 60-then-429 on both products in one run**: shown on the reference alone (60 accepted, then 429) and on ours in the API e2e test; the twin run compares the shape because the loopback address is shared with other dev traffic.
 - **The Interakt page against the Interakt screenshots** (see above), and its dark mode and RTL: the page uses the app tokens and a phone-width check showed no horizontal overflow; RTL was not exercised.
 - **File uploads** (none: images are addresses; MinIO unavailable) and **cross-origin preflight per widget** (answered by the global CORS middleware).
 - The reference still holds soft-deleted widgets and a few visitor/conversation rows from the probes (the widgets and assistants were deleted through the app; soft delete keeps the rows).
+
+## Difference forced by the folded message tables (merge with origin/main)
+
+- **Opening line (WD-WGT-015 rule 4).** WaDesk stored it in a legacy table that the inbox thread view never read, so agents never
+  saw it and a reload never repainted it. The platform folded `messages` and `inbox_messages` into one thread table, so the line
+  is now an ordinary bot message of the thread (`meta.source = 'welcome'`): agents see it and a reload repaints it. Intended,
+  forced by the architecture. The human-takeover QUIRK is kept: any outbound line other than the opening line counts, so the
+  assistant still answers the first message of a conversation only.

@@ -1,10 +1,12 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { nav } from '../nav';
-import { resolveNav } from '../../_registry/resolve';
+import { settings } from '../settings';
+import { CAPABILITIES_UNKNOWN } from '../../_registry/resolve';
+import { resolveSettings } from '../../_registry/settings-resolve';
+import { PLANNED_SETTINGS } from '../../_registry/settings-planned';
+import { SETTINGS } from '../../_registry/settings.generated';
 import { NAV } from '../../_registry/nav.generated';
-import { PLANNED_NAV } from '../../_registry/planned';
 
 const WEB = resolve(__dirname, '../../../..');
 const ROOT = 'roles-permissions-workspace';
@@ -79,7 +81,6 @@ describe('roles-permissions-workspace messages', () => {
 
   it('exist for the keys built at run time', () => {
     const dynamic = [
-      ...nav.map((n) => n.labelKey),
       ...['owner', 'admin', 'manager', 'agent', 'viewer'].flatMap((s) => [
         `${ROOT}.blurb.${s}`,
         `${ROOT}.team.filter.preset.${s}`,
@@ -109,28 +110,40 @@ describe('roles-permissions-workspace messages', () => {
   });
 });
 
-describe('workspace nav', () => {
-  it('is picked up by the registry generator', () => {
-    for (const item of nav) expect(NAV.some((n) => n.id === item.id)).toBe(true);
+describe('workspace settings tiles', () => {
+  it('are picked up by the registry generator, and are not menu entries', () => {
+    for (const item of settings) {
+      expect(SETTINGS.some((n) => n.id === item.id)).toBe(true);
+      expect(NAV.some((n) => n.href === item.href)).toBe(false);
+    }
   });
 
-  it('gates Team members and Roles on their permissions and leaves the planned inbox entry alone', () => {
-    const none = resolveNav(NAV, { permissions: new Set(), planFeatures: null, channels: null });
+  it('gate Team and Roles on their permissions and leave no planned tile beside them', () => {
+    const none = resolveSettings(SETTINGS, {
+      permissions: new Set(),
+      planFeatures: null,
+      channels: null,
+    });
     expect(none.some((i) => i.href === '/settings/team' || i.href === '/settings/roles')).toBe(
       false,
     );
-    const all = resolveNav(
-      NAV,
+    const all = resolveSettings(
+      SETTINGS,
       {
         permissions: new Set(['admin.user.manage', 'admin.role.manage']),
         planFeatures: null,
         channels: null,
       },
-      { planned: PLANNED_NAV },
+      { planned: PLANNED_SETTINGS },
     );
     const team = all.filter((i) => i.id === 'workspace-team');
     expect(team).toHaveLength(1);
-    expect(team[0]).toMatchObject({ href: '/settings/team', group: 'settings', comingSoon: false });
-    expect(all.find((i) => i.href === '/settings/roles')?.group).toBe('settings');
+    expect(team[0]).toMatchObject({ href: '/settings/team', section: 'people', comingSoon: false });
+    expect(all.filter((i) => i.id === 'roles')).toHaveLength(1);
+    expect(all.find((i) => i.id === 'roles')).toMatchObject({
+      href: '/settings/roles',
+      comingSoon: false,
+    });
+    expect(resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN).length).toBeGreaterThan(0);
   });
 });

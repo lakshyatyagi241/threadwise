@@ -57,7 +57,9 @@ export const chatbotWidgets = pgTable(
     status: text('status').notNull().default('active'),
     allowedDomains: jsonb('allowed_domains'),
     // migrations/20261010100300_wgt_launcher_config.sql: the WhatsApp widget's look and placement, one object (WD-WGT-028).
-    launcher: jsonb('launcher').notNull().default(sql`'{}'::jsonb`),
+    launcher: jsonb('launcher')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

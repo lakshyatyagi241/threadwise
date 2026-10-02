@@ -24,6 +24,9 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'pipelines', group: 'workspace' },
   // Appointments booked per calendar month of the booking's start (WD-APPT-035). 0 = unlimited.
   { key: 'appointments', group: 'workspace' },
+  // Quick replies and routing rules of the team inbox (WD-TIB1 saved replies, WD-TIB2 routing). 0 = unlimited.
+  { key: 'saved_replies', group: 'workspace' },
+  { key: 'routing_rules', group: 'workspace' },
   { key: 'templates', group: 'content' },
   { key: 'flows', group: 'content' },
   { key: 'autoreplies', group: 'content' },
@@ -54,6 +57,11 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'appointment_booking', group: 'advanced', default: true },
   // The website chatbot widget builder (WD-WGT-027). Default false: WaDesk's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
   { key: 'chatbot_widgets', group: 'messaging', default: false },
+  // Team inbox gates (plan-inbox-chat.md decision 11), with WaDesk's column defaults: SLA policies off, the other three on.
+  { key: 'inbox_sla', group: 'messaging', default: false },
+  { key: 'inbox_routing', group: 'messaging', default: true },
+  { key: 'inbox_kanban', group: 'messaging', default: true },
+  { key: 'team_performance', group: 'advanced', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -75,6 +83,10 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'sales_pipeline',
   'appointment_booking',
   'chatbot_widgets',
+  'inbox_sla',
+  'inbox_routing',
+  'inbox_kanban',
+  'team_performance',
 ];
 export const PLAN_CHIP_MAX = 3;
 

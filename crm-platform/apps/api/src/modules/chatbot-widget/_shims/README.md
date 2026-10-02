@@ -13,12 +13,13 @@ implementation. When the owning domain exports the real service, bind it to the 
 
 What the `SqlInboxGateway` stands in for, so the swap is complete:
 
-- creating the conversation (`channel = 'chatbot_widget'`, `origin = 'web'`) and its contact;
-- writing the visitor's line and the assistant's reply into `inbox_messages`;
-- the engine stamped on the thread (the workspace's primary WhatsApp engine; fixed to `baileys`, WaDesk's fallback, until
-  WADEV exports it);
-- the human-takeover read (ANY outbound line counts, as WaDesk: QUIRK, so the assistant answers the first message only);
-- the opening line, written to the legacy `messages` table (QUIRK), and the oldest-200 transcript read.
+- the widget's channel (kind `webchat`, one per widget, keyed by the widget uuid) and the visitor's thread on it (the visitor uuid is
+  the peer key), and the visitor's contact;
+- writing the visitor's line (`sender_kind = 'customer'`, status `received`), the opening line and the assistant's reply
+  (`sender_kind = 'bot'`) into `messages`, taking the next `conversations.msg_seq` for each;
+- the engine stamped on the thread is not a shim concern any more (the thread belongs to the widget's own `webchat` channel);
+- the human-takeover read (ANY outbound line after the opening line counts, as WaDesk: QUIRK, so the assistant answers the first
+  message only), and the oldest-200 transcript read.
 
 The plan gate is not a shim any more: `widget-plan.ts` binds the `chatbot_widgets` flag of the plan catalogue through the entitlement service.
 

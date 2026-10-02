@@ -5,8 +5,8 @@ Spec: `docs/wadesk-port/inventory/dashboards-analytics-charts.md`. Zone: `owners
 ## Shape of the domain
 
 WaDesk's DASH is a read-only numbers layer. It owns no table, so this port adds **no table, no RLS and no outbox event**; the one
-migration registers two capability keys. Every figure is a live SQL aggregate over streams other domains own (`messages`,
-`inbox_messages`), computed on the caller's tenant connection (forced RLS plus an explicit `org_id`).
+migration registers two capability keys. Every figure is a live SQL aggregate over the message stream other domains own (`messages`; WaDesk's
+`messages` and `inbox_messages` are folded into it), computed on the caller's tenant connection (forced RLS plus an explicit `org_id`).
 
 ## Target modules, tables, contracts
 
@@ -15,7 +15,7 @@ migration registers two capability keys. Every figure is a live SQL aggregate ov
 | API module | `apps/api/src/modules/dashboards-analytics-charts/` (`dash-window.ts` and `dash-metrics.ts` are pure; repository, service, controllers, plan guard)                                             |
 | Contracts  | `packages/contracts/src/dashboards-analytics-charts/index.ts`                                                                                                                                   |
 | Migration  | `packages/db/migrations/20261005100000_dash_permissions.sql` (permission keys and Admin grants)                                                                                                 |
-| Reads      | `messages`, `inbox_messages` (both streams, summed, WD-DASH-002), `organizations.settings.timezone`                                                                                             |
+| Reads      | `messages` (the folded stream, WD-DASH-002), `organizations.settings.timezone`                                                                                             |
 | Web        | `apps/web/src/features/dashboards-analytics-charts/` (api, lib, components), routes `(app)/(dashboards-analytics-charts)/{dashboard,analytics}`, `messages/en/dashboards-analytics-charts.json` |
 | Tests      | `apps/api/test/unit/dashboards-analytics-charts/`, `apps/api/test/e2e/dashboards-analytics-charts/`, web unit tests beside the code                                                             |
 
@@ -61,6 +61,6 @@ SVG/CSS from the page's colour tokens (no chart dependency may be added), each w
 
 ## Risks
 
-- Counts scan `messages` and `inbox_messages` per request. The `(org_id, created_at)` shape and the `org_id` prefixed indexes bound
+- Counts scan `messages` per request. The `(org_id, created_at)` shape and the `org_id` prefixed indexes bound
   this to the window; a rollup table is the upgrade if a workspace's windows get large.
 - Until the chat domains write messages, the screens render their empty states only.

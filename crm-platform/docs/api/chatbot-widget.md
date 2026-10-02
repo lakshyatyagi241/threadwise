@@ -10,16 +10,16 @@ Every mutation takes `Idempotency-Key`. Ids are uuids. Keys: `wgt.widgets.read|c
 (plan catalogue) gates every admin call: when the plan lacks it, writes are 422 `PLAN_FEATURE_LOCKED` and the list and the assistant picker answer with `planLocked: true`.
 The public routes ignore the plan and the widget limit is never enforced, as in WaDesk.
 
-| Method and path                  | Key    | Notes                                                                                                                                                                        |
-| -------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /v2/widgets?limit&cursor`   | read   | `{ data, page, stats: {total, active, visitors}, planLocked }`; newest first, 20 per page. There is no status filter (WaDesk's status views do nothing).                      |
-| `GET /v2/widgets/assistants`     | read   | `{ data: [{id, name}], planLocked }`: active smart agents by name (the builder picker).                                                                                      |
-| `GET /v2/widgets/:id`            | read   | The widget as the builder edits it (all fields, `launcher`, `embedToken`, `embedUrl`, `previewUrl`, `rowVersion`).                                                           |
-| `POST /v2/widgets`               | create | Whole form. 201 with the widget. 422 `WGT_ASSISTANT_REQUIRED` (mode ai/both without `assistantId`), 422 `WGT_ASSISTANT_NOT_IN_WORKSPACE`.                                    |
-| `PATCH /v2/widgets/:id`          | update | Whole form + `rowVersion`. 409 `ROW_VERSION_CONFLICT`. QUIRK: an id that is not in the workspace creates a NEW widget instead of answering 404. Slug and token never change. |
-| `POST /v2/widgets/:id/duplicate` | create | 201; name `<name> (copy)` (not truncated), new token, the ORIGINAL author is kept, paused stays paused.                                                                      |
-| `POST /v2/widgets/:id/rotate-token` | update | `{ embedToken, embedUrl, previewUrl, rowVersion }`; the old token is dead at once.                                                                                         |
-| `DELETE /v2/widgets/:id`         | delete | 204. Hard delete: visitors cascade, conversations and contacts stay.                                                                                                         |
+| Method and path                     | Key    | Notes                                                                                                                                                                        |
+| ----------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /v2/widgets?limit&cursor`      | read   | `{ data, page, stats: {total, active, visitors}, planLocked }`; newest first, 20 per page. There is no status filter (WaDesk's status views do nothing).                     |
+| `GET /v2/widgets/assistants`        | read   | `{ data: [{id, name}], planLocked }`: active smart agents by name (the builder picker).                                                                                      |
+| `GET /v2/widgets/:id`               | read   | The widget as the builder edits it (all fields, `launcher`, `embedToken`, `embedUrl`, `previewUrl`, `rowVersion`).                                                           |
+| `POST /v2/widgets`                  | create | Whole form. 201 with the widget. 422 `WGT_ASSISTANT_REQUIRED` (mode ai/both without `assistantId`), 422 `WGT_ASSISTANT_NOT_IN_WORKSPACE`.                                    |
+| `PATCH /v2/widgets/:id`             | update | Whole form + `rowVersion`. 409 `ROW_VERSION_CONFLICT`. QUIRK: an id that is not in the workspace creates a NEW widget instead of answering 404. Slug and token never change. |
+| `POST /v2/widgets/:id/duplicate`    | create | 201; name `<name> (copy)` (not truncated), new token, the ORIGINAL author is kept, paused stays paused.                                                                      |
+| `POST /v2/widgets/:id/rotate-token` | update | `{ embedToken, embedUrl, previewUrl, rowVersion }`; the old token is dead at once.                                                                                           |
+| `DELETE /v2/widgets/:id`            | delete | 204. Hard delete: visitors cascade, conversations and contacts stay.                                                                                                         |
 
 There is no status endpoint: nothing in WaDesk can pause a widget (the column exists, no screen or route sets it).
 
@@ -65,14 +65,14 @@ Every write has an audit row (`chatbot_widgets`) and an outbox event (`widget.cr
 One object, stored in `chatbot_widgets.launcher` (jsonb), the look and placement of the WhatsApp widget. Absent on create: the defaults; absent on update: the stored object is kept.
 Every key is optional (a missing key takes its default; unknown keys are dropped), so a later option is a new key with a default and needs no migration.
 
-| Key                                  | Values                                                                                                | Default                                              |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `buttonType`                         | `pill` (Chat With Us) or `icon` (round)                                                               | `pill`                                               |
-| `colour`                             | preset key (`original`, `teal-deal`, `green-lime`, `blue-lagoon`, `red-cherry`, `orange-sunset`, `yellow-sand`, `pink-margarita`, `navy-suit`, `purple-velvet`, `silver-spoon`, `dark-night`) or `#rgb` / `#rrggbb` | `original`                  |
-| `avatar`                             | `preset:support`, `preset:store`, `preset:chat`, `preset:person`, or an http(s) image address (up to 1024) | `preset:support`                                |
-| `greeting`                           | 1 to 60 characters                                                                                    | `HI THERE!`                                          |
-| `introMessage`                       | 1 to 500 characters                                                                                   | `We are here to help you! Chat with us on WhatsApp for any queries.` |
-| `desktop`, `mobile`                  | `{ side: left\|right, sideSpacing: 0..500, bottomSpacing: 0..500 }` (whole pixels)                    | desktop right 10/10, mobile right 10/60              |
+| Key                 | Values                                                                                                                                                                                                              | Default                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `buttonType`        | `pill` (Chat With Us) or `icon` (round)                                                                                                                                                                             | `pill`                                                               |
+| `colour`            | preset key (`original`, `teal-deal`, `green-lime`, `blue-lagoon`, `red-cherry`, `orange-sunset`, `yellow-sand`, `pink-margarita`, `navy-suit`, `purple-velvet`, `silver-spoon`, `dark-night`) or `#rgb` / `#rrggbb` | `original`                                                           |
+| `avatar`            | `preset:support`, `preset:store`, `preset:chat`, `preset:person`, or an http(s) image address (up to 1024)                                                                                                          | `preset:support`                                                     |
+| `greeting`          | 1 to 60 characters                                                                                                                                                                                                  | `HI THERE!`                                                          |
+| `introMessage`      | 1 to 500 characters                                                                                                                                                                                                 | `We are here to help you! Chat with us on WhatsApp for any queries.` |
+| `desktop`, `mobile` | `{ side: left\|right, sideSpacing: 0..500, bottomSpacing: 0..500 }` (whole pixels)                                                                                                                                  | desktop right 10/10, mobile right 10/60                              |
 
 Errors are 422 `VALIDATION_FAILED` with the field path (for example `launcher.desktop.sideSpacing`).
 
@@ -81,13 +81,13 @@ Errors are 422 `VALIDATION_FAILED` with the field path (for example `launcher.de
 The token (48 characters, `[A-Za-z0-9]{16,80}` accepted by the route) is the only credential. The organization is found through the
 SECURITY DEFINER function `wgt_widget_lookup(token)`; everything after runs in that organization's tenant transaction.
 
-| Route                                    | Notes                                                                                                                                                                                                  |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Route                                    | Notes                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /widget/:token/embed` (`/embed.js`) | `application/javascript`, `Cache-Control: no-cache, must-revalidate`. 404 (still JavaScript, a comment) for unknown, paused, deleted or rotated tokens. `ai` and `both`: the frame loader. `whatsapp`: draws the launcher and the messenger panel itself (Start Conversation opens the `wa.me` link in a new tab; mobile placement at 768 px and below). |
-| `GET /widget/:token/chat`                | The iframe document. No frame-blocking headers. 404 plain text "Widget not found".                                                                                                                     |
-| `GET /widget/:token/api/config`          | Appearance, intake flags, `whatsapp_url`, `launcher` (resolved colour ends, image, texts, both placements), visitor, the OLDEST 200 messages. Creates the visitor, sets cookie `wgt_vid_<widget uuid>`. Not throttled. |
-| `POST /widget/:token/api/message`        | `{ body (1..8000), name?, email?, phone?, visitor_uuid? }` -> `{ ok, inbound: {id}, reply: {id, body, at} \| null }`. 422 in Laravel's `{message, errors}` shape. 60 a minute.                           |
-| `GET /widget/:token/api/history?since`   | Outbound lines newer than `since` (polled every 4 s). 120 a minute. Ignores the widget status and creates visitors (as WaDesk).                                                                        |
+| `GET /widget/:token/chat`                | The iframe document. No frame-blocking headers. 404 plain text "Widget not found".                                                                                                                                                                                                                                                                       |
+| `GET /widget/:token/api/config`          | Appearance, intake flags, `whatsapp_url`, `launcher` (resolved colour ends, image, texts, both placements), visitor, the OLDEST 200 messages. Creates the visitor, sets cookie `wgt_vid_<widget uuid>`. Not throttled.                                                                                                                                   |
+| `POST /widget/:token/api/message`        | `{ body (1..8000), name?, email?, phone?, visitor_uuid? }` -> `{ ok, inbound: {id}, reply: {id, body, at} \| null }`. 422 in Laravel's `{message, errors}` shape. 60 a minute.                                                                                                                                                                           |
+| `GET /widget/:token/api/history?since`   | Outbound lines newer than `since` (polled every 4 s). 120 a minute. Ignores the widget status and creates visitors (as WaDesk).                                                                                                                                                                                                                          |
 
 The two throttled routes share ONE counter per client address, across every widget (as WaDesk's guest throttle); the limit applied is the called route's. Over the limit: 429 `Too Many Attempts.`
 
@@ -104,5 +104,8 @@ Without a key the assistant's fallback message is the reply (WaDesk: empty provi
 
 ## Inbox hand-off seam
 
-The widget writes `conversations` (`channel='chatbot_widget'`, `origin='web'`, `platform='WIDGET'`), `inbox_messages`, the opening line into the legacy `messages` table, and a `contacts` row through
-`_shims/sql-inbox-gateway.ts` until the team inbox and contacts domains export services. An outbound `inbox_messages` row in the visitor's conversation reaches the visitor on the next poll.
+The widget writes a `channels` row (kind `webchat`, one per widget, `external_id` = the widget uuid), `conversations` (the visitor is the peer: `peer_key` = the visitor
+uuid), `messages` and a `contacts` row through `_shims/sql-inbox-gateway.ts` until the conversations and contacts domains export services. The visitor's line is an inbound
+message (`sender_kind = 'customer'`, status `received`); the opening line and the assistant's replies are `sender_kind = 'bot'`. An outbound `messages` row in the visitor's
+conversation reaches the visitor on the next poll. As in WaDesk (QUIRK), ANY outbound line after the opening line silences the AI for that thread, so the assistant answers a
+conversation's first message only. Data model: [chat-conversations.md](chat-conversations.md).

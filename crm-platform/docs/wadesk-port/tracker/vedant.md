@@ -120,10 +120,10 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-NODE-001 | todo |  |  |
-| WD-NODE-002 | todo |  |  |
+| WD-NODE-001 | blocked |  | no bridge process in this repo until decision E |
+| WD-NODE-002 | in-progress |  | guard + first route done; applies to every later bridge-facing route |
 | WD-NODE-003 | todo |  |  |
-| WD-NODE-004 | todo |  |  |
+| WD-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
 | WD-NODE-005 | todo |  |  |
 | WD-NODE-006 | todo |  |  |
 | WD-NODE-007 | todo |  |  |
@@ -148,7 +148,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-026 | todo |  |  |
 | WD-NODE-027 | todo |  |  |
 | WD-NODE-028 | todo |  |  |
-| WD-NODE-029 | todo |  |  |
+| WD-NODE-029 | in-progress |  | admin pacing + bridge pull route done; jitter, batching, daily cap wait for the send pipeline |
 | WD-NODE-030 | todo |  |  |
 | WD-NODE-031 | todo |  |  |
 | WD-NODE-032 | todo |  |  |
@@ -171,7 +171,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-049 | todo |  |  |
 | WD-NODE-050 | todo |  |  |
 | WD-NODE-051 | todo |  |  |
-| WD-NODE-052 | todo |  |  |
+| WD-NODE-052 | frontend-done |  | address, token, test connection; parity run pending |
 | WD-NODE-053 | todo |  |  |
 | WD-NODE-054 | todo |  |  |
 
