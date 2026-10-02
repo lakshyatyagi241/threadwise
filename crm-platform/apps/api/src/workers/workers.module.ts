@@ -16,8 +16,10 @@ import {
 } from '../modules/crm';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
 import { MessageTemplatesWorkerModule } from '../modules/message-templates';
+import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -52,6 +54,8 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChatConversationsWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ScheduledQueueWarmerWorkerModule,
+    NodeBridgeRuntimeWorkerModule,
   ],
   providers: [
     OutboxDrainService,
