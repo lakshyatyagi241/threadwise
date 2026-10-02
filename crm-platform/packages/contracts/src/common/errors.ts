@@ -4,7 +4,10 @@ import { z } from 'zod';
  * Machine-readable application error codes. The frontend switches on `code`,
  * never on the human-readable message — messages get reworded, codes do not.
  */
+import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
+
 export const ERROR_CODES = {
+  ...PAYGW_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
