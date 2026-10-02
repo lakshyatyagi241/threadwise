@@ -27,6 +27,7 @@ import { LocalizationTranslationModule } from './modules/localization-translatio
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
+import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -103,6 +104,7 @@ import { HealthModule } from './health/health.module';
     PlatformSettingsModule,
     LocalizationTranslationModule,
     InstallUpdateLicensingModule,
+    AddonsExtensionRegistryModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,

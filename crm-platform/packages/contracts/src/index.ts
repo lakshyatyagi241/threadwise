@@ -33,3 +33,4 @@ export * from './tasks';
 export * from './platform-settings-branding-storage';
 export * from './localization-translation';
 export * from './install-update-licensing';
+export * from './addons-extension-registry';

@@ -76,6 +76,18 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/system',
     labelKey: 'install-update-licensing.system.nav.item',
     groupKey: 'install-update-licensing.system.nav.group',
+  // add-ons domain: billing add-ons and installable modules (messages/en/addons-extension-registry.json)
+  {
+    id: 'addon-packs',
+    href: '/admin/addons',
+    labelKey: 'addons-extension-registry.nav.packs',
+    groupKey: 'addons-extension-registry.nav.group',
+  },
+  {
+    id: 'extensions',
+    href: '/admin/extensions',
+    labelKey: 'addons-extension-registry.nav.extensions',
+    groupKey: 'addons-extension-registry.nav.group',
   },
 ];
 
