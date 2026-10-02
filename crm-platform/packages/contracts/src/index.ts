@@ -52,3 +52,5 @@ export * from './appointments';
 export * from './notifications-activity-audit';
 export * from './chatbot-widget';
 export * from './roles-permissions';
+export * from './realtime';
+export * from './chat-conversations';
