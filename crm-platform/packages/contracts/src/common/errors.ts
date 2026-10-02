@@ -120,6 +120,16 @@ export const ERROR_CODES = {
   // Telegram channel (WD-TG)
   /** Telegram refused the token (getMe failed). */
   TG_TOKEN_REJECTED: 'TG_TOKEN_REJECTED',
+  /** A broadcast needs a message, a file, or both. */
+  TG_BROADCAST_EMPTY: 'TG_BROADCAST_EMPTY',
+  /** None of the picked chats belong to the bot. */
+  TG_NO_RECIPIENTS: 'TG_NO_RECIPIENTS',
+  /** The bot is not connected or is paused. */
+  TG_BOT_UNAVAILABLE: 'TG_BOT_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  TG_NOTHING_TO_SEND: 'TG_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
   // deals and pipelines (WD-DEAL)
   /** The stage belongs to a different pipeline than the deal (WaDesk ignored it, defaulted it, or 422'd by path). */
