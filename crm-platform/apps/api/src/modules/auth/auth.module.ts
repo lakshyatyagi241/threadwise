@@ -147,6 +147,10 @@ import { TokenService } from './token.service';
     EpochService,
     AccountGateService,
     PasswordService,
+    // the invite-by-link member flows (WSP): mail, one-time tokens and the one place a session is opened
+    MailService,
+    UserTokensService,
+    LoginService,
     AuthAuditService,
     SendPolicyService,
     EmergencyHaltService,
