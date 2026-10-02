@@ -19,6 +19,11 @@ export interface SendTemplateParams {
   clientReference: string;
   /** What the pre-send guard needs to know; see `OutboundSendGuard`. */
   screen?: { bulk?: boolean; source?: string };
+  /**
+   * The Cloud API components, already built for this recipient (header media, buttons, carousel, ...). When set they are
+   * sent as they are and `variables` is ignored. See `buildSend` in meta-send-payload.ts.
+   */
+  components?: unknown[];
 }
 
 export interface SendTextParams {

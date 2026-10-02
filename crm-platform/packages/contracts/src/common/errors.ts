@@ -115,6 +115,18 @@ export const ERROR_CODES = {
   /** A status that belongs to another lifecycle stage was set on a contact (details: path `status`, names the stage). */
   CON_STATUS_STAGE_MISMATCH: 'CON_STATUS_STAGE_MISMATCH',
 
+  // broadcasts (TW-BCAST)
+  BCAST_NO_RECIPIENTS: 'BCAST_NO_RECIPIENTS',
+  BCAST_TEMPLATE_NOT_FOUND: 'BCAST_TEMPLATE_NOT_FOUND',
+  BCAST_TEMPLATE_NOT_ALLOWED: 'BCAST_TEMPLATE_NOT_ALLOWED',
+  BCAST_SEND_BLOCKED: 'BCAST_SEND_BLOCKED',
+  BCAST_WARMER_HOLD: 'BCAST_WARMER_HOLD',
+  BCAST_NOT_DELETABLE: 'BCAST_NOT_DELETABLE',
+  BCAST_NOT_RETRYABLE: 'BCAST_NOT_RETRYABLE',
+  BCAST_NO_FAILED_RECIPIENTS: 'BCAST_NO_FAILED_RECIPIENTS',
+  BCAST_LINK_EXPIRED: 'BCAST_LINK_EXPIRED',
+  BCAST_NOT_RESUMABLE: 'BCAST_NOT_RESUMABLE',
+
   // deals and pipelines (TW-DEAL)
   /** The stage belongs to a different pipeline than the deal (Reference ignored it, defaulted it, or 422'd by path). */
   DEAL_STAGE_MISMATCH: 'DEAL_STAGE_MISMATCH',

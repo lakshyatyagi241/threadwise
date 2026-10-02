@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
+import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
@@ -32,6 +33,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     SalesDocsWorkerModule,
     InvoicingWorkerModule,
     NotificationsWorkerModule,
+    BroadcastsWorkerModule,
   ],
   providers: [
     OutboxDrainService,
