@@ -122,10 +122,10 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 |---|---|---|---|
 | WD-NODE-001 | blocked |  | no bridge process in this repo until decision E |
 | WD-NODE-002 | in-progress |  | guard + first route done; applies to every later bridge-facing route |
-| WD-NODE-003 | todo |  |  |
+| WD-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
 | WD-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
-| WD-NODE-005 | todo |  |  |
-| WD-NODE-006 | todo |  |  |
+| WD-NODE-005 | in-progress |  | in-memory registry becomes Redis device leases (with 011) and BullMQ jobs (030); no boot sync |
+| WD-NODE-006 | in-progress |  | enableShutdownHooks exists in api and worker; lease release lands with 011 |
 | WD-NODE-007 | todo |  |  |
 | WD-NODE-008 | todo |  |  |
 | WD-NODE-009 | todo |  |  |
@@ -138,17 +138,17 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-016 | todo |  |  |
 | WD-NODE-017 | todo |  |  |
 | WD-NODE-018 | todo |  |  |
-| WD-NODE-019 | todo |  |  |
+| WD-NODE-019 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | WD-NODE-020 | todo |  |  |
 | WD-NODE-021 | todo |  |  |
 | WD-NODE-022 | todo |  |  |
 | WD-NODE-023 | todo |  |  |
 | WD-NODE-024 | todo |  |  |
 | WD-NODE-025 | todo |  |  |
-| WD-NODE-026 | todo |  |  |
+| WD-NODE-026 | wontfix |  | intended: engine and credentials come from the device row, no settings hop or cache (inventory port note) |
 | WD-NODE-027 | todo |  |  |
-| WD-NODE-028 | todo |  |  |
-| WD-NODE-029 | in-progress |  | admin pacing + bridge pull route done; jitter, batching, daily cap wait for the send pipeline |
+| WD-NODE-028 | backend-done |  | SafeFetch: all-address DNS check, pinned IP, every redirect hop checked, size cap, MIME; consumer is 023; local paths intentionally refused |
+| WD-NODE-029 | in-progress |  | admin form + real reader wired into BCAST pacing (PlatformPacingSettings); jitter, daily cap, lease already in BCAST; per-socket serialization lands with the Baileys adapter |
 | WD-NODE-030 | todo |  |  |
 | WD-NODE-031 | todo |  |  |
 | WD-NODE-032 | todo |  |  |
@@ -156,24 +156,24 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-034 | todo |  |  |
 | WD-NODE-035 | todo |  |  |
 | WD-NODE-036 | todo |  |  |
-| WD-NODE-037 | todo |  |  |
-| WD-NODE-038 | todo |  |  |
-| WD-NODE-039 | todo |  |  |
+| WD-NODE-037 | blocked |  | already built in BCAST (dispatch, pacing, pause/resume); only the Baileys engine adapter is missing (needs 011) |
+| WD-NODE-038 | blocked |  | already built in BCAST (progress and receipts services); the Baileys receipt source needs 011/020 |
+| WD-NODE-039 | wontfix |  | dead code in WaDesk (campaign engine in Node is never reached and throws a ReferenceError) |
 | WD-NODE-040 | todo |  |  |
-| WD-NODE-041 | todo |  |  |
-| WD-NODE-042 | todo |  |  |
-| WD-NODE-043 | todo |  |  |
-| WD-NODE-044 | todo |  |  |
-| WD-NODE-045 | todo |  |  |
-| WD-NODE-046 | todo |  |  |
-| WD-NODE-047 | todo |  |  |
-| WD-NODE-048 | todo |  |  |
-| WD-NODE-049 | todo |  |  |
-| WD-NODE-050 | todo |  |  |
-| WD-NODE-051 | todo |  |  |
+| WD-NODE-041 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-042 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-043 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-044 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-045 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-046 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-047 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-048 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-050 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-051 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | WD-NODE-052 | frontend-done |  | address, token, test connection; parity run pending |
-| WD-NODE-053 | todo |  |  |
-| WD-NODE-054 | todo |  |  |
+| WD-NODE-053 | wontfix |  | developer-only file-sync endpoint (wd-sync); not a product feature |
+| WD-NODE-054 | wontfix |  | WaDesk smoke scripts; replaced by this repo's own tests |
 
 ## chat-conversations (chat)
 

@@ -38,6 +38,15 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
 - **Bridge address keeps the installer's port.** The installer stores `{serverUrl, port}`; saving a new address leaves `port` alone, or takes it from
   the URL (default 8888) when there was none.
 
+## WD-NODE-028 media fetch (deliberate deviations)
+
+- **Every redirect hop is checked** (WaDesk checked only the first, so an allowed host could redirect to an internal one). Security hardening.
+- **The connection is pinned** to the address that was checked (WaDesk resolved the name twice).
+- **Local file paths are refused** instead of read from an allow-list. A user-supplied value must never name a file on the server; media comes from a URL
+  or from storage. WaDesk's internal callers that passed a path will pass a storage key or URL instead.
+- **100 MB size cap** (WaDesk had none). WhatsApp's own document ceiling.
+- Evidence: `apps/api/test/unit/node-bridge-runtime/safe-fetch.spec.ts` (49): every blocked range, redirect re-validation, DNS names, size cap, MIME.
+
 ## Not verified
 
 - **Automated twin run.** `wadesk-playwright-parity` could not be used for this slice: its scripts list changed files without `git diff --relative`,

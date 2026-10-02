@@ -91,9 +91,14 @@ export class NodeBridgeSettingsService {
     return { serverUrl: bridge?.serverUrl?.trim() ?? '', token: await this.token() };
   }
 
+  /** The saved pacing, or WaDesk's defaults. The send pipelines read it before every bulk run, so an admin value is authoritative. */
+  async pacing(): Promise<NodePacing> {
+    return this.pacingValues(await this.store.get<PacingDoc>(NODE_PACING_KEY));
+  }
+
   /** What the bridge pulls on a timer (WaDesk `GET api/whatsapp-message-settings`). */
   async messageSettings(): Promise<NodeMessageSettings> {
-    const p = this.pacingValues(await this.store.get<PacingDoc>(NODE_PACING_KEY));
+    const p = await this.pacing();
     return {
       success: true,
       msg_gap: p.msgGap,
