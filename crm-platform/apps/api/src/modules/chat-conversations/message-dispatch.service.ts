@@ -5,6 +5,7 @@ import { ChannelError, type ChannelRuntime } from '../../infra/providers/chat-co
 import { ChannelDispatcher, type DispatchResult } from './channel-dispatcher.service';
 import { ChannelRegistryService } from './channel-registry.service';
 import { ChannelsRepository } from './channels.repository';
+import { DeliveryReporter } from './delivery-reporter';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
@@ -63,6 +64,7 @@ export class MessageDispatchService {
     private readonly dispatcher: ChannelDispatcher,
     private readonly lifecycle: ConversationLifecycleService,
     private readonly realtime: ChatRealtimePublisher,
+    private readonly deliveries: DeliveryReporter,
   ) {}
 
   async dispatch(
@@ -87,7 +89,7 @@ export class MessageDispatchService {
       return this.failed(orgId, row, ref, err, options);
     }
 
-    await this.markSent(orgId, row, conv, ref, sent);
+    await this.markSent(orgId, row, conv, ref, sent, runtime.kind);
     // After the commit: a receipt finds its message through the ledger row this transaction wrote.
     await this.dispatcher.scheduleReceipts(runtime, sent);
     return 'sent';
@@ -136,6 +138,7 @@ export class MessageDispatchService {
     conv: ConversationRow,
     ref: { id: number; createdAt: string },
     sent: DispatchResult,
+    channelKind: string,
   ): Promise<void> {
     const done = await this.db.txAs({ orgId }, async (tx) => {
       // The thread's lock first (the order every writer takes), then the message.
@@ -159,6 +162,14 @@ export class MessageDispatchService {
           conversationId: conv.id,
         },
       );
+      await this.deliveries.report(tx, orgId, {
+        channelKind,
+        conversationId: conv.id,
+        peerKey: conv.peerKey,
+        status: 'sent',
+        providerMessageId: sent.providerMessageId,
+        message: row,
+      });
       await this.messages.insertEvent(tx, orgId, ref, 'sent', {
         providerMessageId: sent.providerMessageId,
         acceptedAt: sent.acceptedAt.toISOString(),

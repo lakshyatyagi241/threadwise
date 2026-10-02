@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
 import type { Tx } from '@crm/db';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { NodeBridgeSettingsService } from '../node-bridge-runtime';
 import { DEFAULT_PACING, utcDayKey, type PacingSettings, type Random } from './pacing';
 
 /** The clock and the dice of a run, so a test can make time instant and chance fixed. */
@@ -19,11 +20,24 @@ export interface PacingSettingsSource {
 }
 export const PACING_SETTINGS = Symbol('BROADCAST_PACING_SETTINGS');
 
-/** WaDesk's defaults until the settings domain exposes the real values. */
+/**
+ * The platform's sender pacing, as the operator saved it in the Node bridge panel (WD-NODE-029). WaDesk's bridge re-pulled it
+ * before every bulk run; reading it here at the start of each run does the same. The daily cap was never configurable in WaDesk
+ * (Laravel never sent `baileys_daily_cap`), so its default stays.
+ */
 @Injectable()
-export class DefaultPacingSettings implements PacingSettingsSource {
-  get(): Promise<PacingSettings> {
-    return Promise.resolve(DEFAULT_PACING);
+export class PlatformPacingSettings implements PacingSettingsSource {
+  constructor(private readonly node: NodeBridgeSettingsService) {}
+
+  async get(): Promise<PacingSettings> {
+    const p = await this.node.pacing();
+    return {
+      msgGapSeconds: p.msgGap,
+      enableBatches: p.enableBatches,
+      batchSize: p.batchesGap,
+      batchGapMinutes: p.bwMsgGap,
+      baileysDailyCap: DEFAULT_PACING.baileysDailyCap,
+    };
   }
 }
 

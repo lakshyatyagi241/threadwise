@@ -34,3 +34,64 @@ are started.
 | Provider  | `apps/api/src/infra/providers/node-bridge-runtime/node-bridge.probe.ts`                                                                 |
 | Web       | `apps/web/src/features/node-bridge-runtime/`, route `/admin/node-bridge`, menu entry via `operator-nav.ts`                              |
 | Tests     | `apps/api/test/e2e/node-bridge-runtime/node-bridge.e2e.spec.ts` (18), `apps/web/src/features/node-bridge-runtime/lib/draft.test.ts` (3) |
+
+## Media fetch safety (WD-NODE-028)
+
+| Rule                                                   | Where                                                                                 | Notes                                                                                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Blocked address ranges, every resolved address checked | `infra/providers/node-bridge-runtime/safe-fetch.ts` (`isBlockedAddress`, `SafeFetch`) | adds multicast/reserved and IPv4-mapped forms                                                              |
+| Redirects: max 3, each hop re-checked                  | same                                                                                  | WaDesk checked the first hop only (a bypass); fixed, see parity notes                                      |
+| Local file paths                                       | not accepted                                                                          | WaDesk allowed a read allow-list (`MEDIA_READ_BASES`); media comes from a URL or storage, see parity notes |
+| MIME and extension                                     | same (`resolveMime`, `extensionFor`)                                                  | server type, then extension, then `application/octet-stream`; default `.jpg`                               |
+| `assertHttpsMedia` (broadcast pipeline)                | BCAST `template-guards.ts`                                                            | already ported there                                                                                       |
+| Inline `attachment_base64`                             | with WD-NODE-023                                                                      | consumer of `SafeFetch`; not built yet                                                                     |
+
+## How the other NODE features map to our architecture
+
+| Group                                | Features                                                                     | Where it lives or what happens                                                                                                                    |
+| ------------------------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Collapses, nothing to build          | 003, 005, 026                                                                | CORS and body limits exist in `main.ts`; in-memory registry becomes Redis leases and BullMQ jobs; engine and credentials come from the device row |
+| Already built in BCAST               | 029 (jitter, daily cap, lease), 037, 038, 014 (tick), 027 (Cloud API sender) | `apps/api/src/modules/broadcasts`; the Baileys and Twilio engine adapters are the missing piece                                                   |
+| Needs the socket runtime (`baileys`) | 007-013, 016-025, 021, 020                                                   | waits for the dependency PR and WD-NODE-011                                                                                                       |
+| Scheduler                            | 030-036                                                                      | SCHED domain on BullMQ                                                                                                                            |
+| Collapses into the owning domain     | 019, 041-051                                                                 | flows (FLR), calling (CALL), Google (INTG), commerce and booking (CHK, APPT), channels; built there, not as bridge endpoints                      |
+| Not ported                           | 039, 053, 054                                                                | dead code in WaDesk, developer-only endpoint, smoke scripts                                                                                       |
+
+## Scheduled messages (WD-NODE-030 to 036)
+
+| Piece                      | Where                                                             | Notes                                                                                                                 |
+| -------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Schedule rows              | `scheduled_messages`, `scheduled_message_contacts`                | created by the SCHED screens (not built yet); the engine reads and updates them                                       |
+| Due poller, reconciliation | `scheduled-due.service.ts` (worker)                               | every 3 s; queues due rows, resumes system pauses, queues a stuck run again                                           |
+| Run                        | `scheduled-run.processor.ts`, `scheduled-run.service.ts` (worker) | queue `sched-run`; shares BCAST's pacing, daily cap and one-run-per-number lease                                      |
+| Lifecycle                  | `scheduler.service.ts` (API and worker)                           | pause, resume, cancel, send-now; callers: SCHED screens, appointment reminders                                        |
+| Outbound port              | `node-bridge-runtime/outbound/`                                   | `SendCommand`, `OutboundRegistry`, `SenderResolver`, Cloud API text transport; Baileys and Twilio register when built |
+| Settings                   | `config/domains/scheduled-queue-warmer.env.ts`                    | `SCHED_MAX_LATE_MINUTES` (60), `SCHED_STALE_RUN_MINUTES` (10)                                                         |
+
+## Device runtime (WD-NODE-005 to 014)
+
+| Piece                                     | Where                                                             | Notes                                                                                  |
+| ----------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Close-code table, backoff, status buckets | `runtime/close-policy.ts`, `runtime/device-status.ts`             | pure, unit-tested row by row                                                           |
+| One device's connection                   | `runtime/device-session.ts`                                       | state machine; events applied in order; fake clock in tests                            |
+| Worker runtime                            | `runtime/device-runtime.service.ts`                               | Redis lease per device, restore and failover, liveness, status, commands               |
+| API control                               | `runtime/device-control.service.ts`                               | `requestQr`, `requestPairingCode`, `terminate`, `status`; the WADEV screens call these |
+| Saved session                             | `device_auth_state` (migration `20261014090100`)                  | one encrypted row per entry, forced RLS                                                |
+| Baileys adapter                           | `infra/providers/node-bridge-runtime/baileys.socket-factory.ts`   | WaDesk's socket settings value for value; the only file that knows the library         |
+| Proxy                                     | `infra/providers/node-bridge-runtime/proxy.ts`, `devices.proxy_*` | http and socks5; probed through the proxy; fail-closed                                 |
+| Redis keys                                | `runtime/wa-redis.ts`                                             | `wa:device:`, `wa:qr:`, `wa:code:`, `wa:status:`, `wa:init:`, channel `wa:cmd`         |
+| Events                                    | outbox `device.status_changed`                                    | aggregate `devices`; WaDesk's `DeviceStatusChanged`                                    |
+
+## Sending, receiving and receipts (WD-NODE-016 to 025, 027)
+
+| Piece                     | Where                                                                                           | Notes                                                                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Send commands and engines | `infra/providers/node-bridge-runtime/outbound.port.ts`, `modules/node-bridge-runtime/outbound/` | `SendCommand` (text, media, location, contact, group text); transports `waba`, `twilio`, `baileys` register in `OutboundRegistry` |
+| Cross-process send        | `runtime/device-control.service.ts` (`sendMessage`, `messageAction`, `groupAction`)             | the worker that owns the device's lease answers over Redis; a device nobody owns refuses at once                                  |
+| Message actions, groups   | same, `WaSocket.act` / `WaSocket.groups`                                                        | react, pin, star, edit, delete; group directory and management                                                                    |
+| Reading messages          | `infra/providers/node-bridge-runtime/inbound-normalizer.ts`                                     | pure; every filter and priority rule of WD-NODE-016 and 018                                                                       |
+| Where inbound goes        | `runtime/routers.ts` (`InboundRouter`, `ReceiptRouter`)                                         | consumers register themselves; messages are deduplicated per device; the inbox registers an `InboundSink` when it is built        |
+| Receipts                  | `scheduled-queue-warmer/scheduled-receipts.service.ts`, BCAST `BroadcastReceiptsService`        | registered into `ReceiptRouter` by `ScheduledQueueWarmerWorkerModule`                                                             |
+| Twilio                    | `outbound/twilio.transport.ts`                                                                  | Messages API with the number's own SID and token                                                                                  |
+
+Not outbox events: the outbox rules exclude individual messages and receipts (they would drown the drain), so inbound traffic uses in-process sinks.

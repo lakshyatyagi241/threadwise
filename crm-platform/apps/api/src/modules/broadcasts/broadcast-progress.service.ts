@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import type { WalletDeliveryStatus } from '@crm/contracts';
+import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import type { PauseNote } from './pacing';
+import { assemblePhone } from './recipient-phone';
 import { aggregates, outcome, shouldAdvance, type RecipientCounts } from './recipient-status';
 import {
   createdNotification,
@@ -16,6 +19,7 @@ import {
 } from './webhook-events';
 
 const MODULE_KEY = 'broadcasts';
+const DELIVERY_STATUSES = new Set(['sent', 'delivered', 'read', 'failed']);
 
 export interface RecipientUpdate {
   status: string;
@@ -43,10 +47,10 @@ export class BroadcastProgressService {
     update: RecipientUpdate,
   ): Promise<string | null> {
     const cur = await tx.execute(sql`
-      SELECT status FROM broadcast_contacts
+      SELECT status, whatsapp_message_id FROM broadcast_contacts
       WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND contact_id = ${contactId}
       FOR UPDATE`);
-    const row = cur.rows[0] as { status: string } | undefined;
+    const row = cur.rows[0] as { status: string; whatsapp_message_id: string | null } | undefined;
     if (!row || !shouldAdvance(row.status, update.status)) return null;
 
     const at = (update.at ?? new Date()).toISOString();
@@ -59,7 +63,62 @@ export class BroadcastProgressService {
         delivered_at = CASE WHEN ${update.status} IN ('delivered','read') THEN coalesce(delivered_at, ${at}::timestamptz) ELSE delivered_at END,
         read_at = CASE WHEN ${update.status} = 'read' THEN coalesce(read_at, ${at}::timestamptz) ELSE read_at END
       WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND contact_id = ${contactId}`);
+
+    // The wallet learns of a real transition only (a repeat of the same status is not news), in this transaction.
+    const providerMessageId = update.providerMessageId ?? row.whatsapp_message_id;
+    if (providerMessageId && row.status !== update.status && DELIVERY_STATUSES.has(update.status)) {
+      await this.reportDelivery(
+        tx,
+        orgId,
+        broadcastId,
+        contactId,
+        providerMessageId,
+        update.status as WalletDeliveryStatus,
+      );
+    }
     return row.status;
+  }
+
+  /** `message.delivery_reported` for the wallet (WD-WALLET-012): the broadcast's engine, the template's category, the recipient's number. */
+  private async reportDelivery(
+    tx: Tx,
+    orgId: number,
+    broadcastId: number,
+    contactId: number,
+    providerMessageId: string,
+    status: WalletDeliveryStatus,
+  ): Promise<void> {
+    const res = await tx.execute(sql`
+      SELECT b.provider, coalesce(t.meta_category, t.category) AS category, c.phone, c.country_code
+      FROM broadcasts b
+      JOIN contacts c ON c.org_id = b.org_id AND c.id = ${contactId}
+      LEFT JOIN wa_templates t ON t.org_id = b.org_id AND t.id = b.template_id
+      WHERE b.org_id = ${orgId} AND b.id = ${broadcastId}`);
+    const r = res.rows[0] as
+      | {
+          provider: string | null;
+          category: string | null;
+          phone: string | null;
+          country_code: string | null;
+        }
+      | undefined;
+    if (!r) return;
+    // A broadcast without an engine sends through the unofficial one (the dispatcher's own default).
+    const provider = deliveryProviderOf(r.provider ?? 'baileys');
+    if (!provider) return;
+    await emitDeliveryReported(this.outbox, tx, {
+      orgId,
+      aggregateModule: MODULE_KEY,
+      aggregateId: broadcastId,
+      report: {
+        provider,
+        providerMessageId,
+        status,
+        recipient: assemblePhone(r.phone, r.country_code) || null,
+        category: r.category,
+        source: 'broadcast',
+      },
+    });
   }
 
   async counts(tx: Tx, orgId: number, broadcastId: number): Promise<RecipientCounts> {
