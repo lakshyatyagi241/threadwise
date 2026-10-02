@@ -22,6 +22,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { CrmModule } from './modules/crm';
+import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
@@ -96,6 +97,7 @@ import { HealthModule } from './health/health.module';
     KernelModule,
     AuthModule,
     PlansModule,
+    LocalizationTranslationModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,
