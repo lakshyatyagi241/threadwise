@@ -1,13 +1,20 @@
+import { z } from 'zod';
 import {
   adjustWalletResultSchema,
+  creditPackageListSchema,
+  creditPackageSchema,
   deleteRateResultSchema,
   importRatesResultSchema,
+  marginsResponseSchema,
   messagePricingSchema,
+  pricePreviewSchema,
+  removePlanMarginResultSchema,
   platformWalletDetailSchema,
   platformWalletListSchema,
   platformWalletOverviewSchema,
   ratesResponseSchema,
   reconciliationSchema,
+  saveMarginsResultSchema,
   saveRatesResultSchema,
   seedRatesResultSchema,
   statementResponseSchema,
@@ -17,6 +24,10 @@ import {
   walletSettingsSchema,
   walletSummarySchema,
   type AdjustWalletInput,
+  type CreditPackageInput,
+  type PricePreviewQuery,
+  type SavePlanMarginsInput,
+  type SaveWorkspaceMarginsInput,
   type UpdateSwitchesInput,
   type UpdateWalletSettingsInput,
   type UpsertRateInput,
@@ -40,6 +51,13 @@ export const KEYS = {
   workspaces: ['wallet', 'platform', 'workspaces'] as const,
   workspace: (id: string) => ['wallet', 'platform', 'workspace', id] as const,
   logs: ['wallet', 'platform', 'logs'] as const,
+  /** `''` = the platform default for every plan. */
+  margins: (plan: string) => ['wallet', 'platform', 'margins', plan] as const,
+  marginsAll: ['wallet', 'platform', 'margins'] as const,
+  workspaceMargins: (id: string) => ['wallet', 'platform', 'workspace-margins', id] as const,
+  preview: (q: PricePreviewQuery) => ['wallet', 'platform', 'preview', q] as const,
+  workspacePlan: (id: string) => ['wallet', 'platform', 'workspace-plan', id] as const,
+  packages: ['wallet', 'platform', 'packages'] as const,
 };
 
 /** The workspace's own wallet (`/api/v2/wallet/*`). Each call is permission-gated by the API. */
@@ -99,6 +117,8 @@ export async function downloadStatementCsv(
     ),
   };
 }
+
+const deletedSchema = z.object({ deleted: z.boolean() });
 
 /** The operator console's calls (`/api/platform/*` becomes `/v2/platform/*`; the browser never sees a token). */
 export const operatorApi = {
@@ -169,4 +189,54 @@ export const operatorApi = {
     }),
   reconcile: () =>
     operatorFetch('/wallet/reconciliation', { method: 'POST', schema: reconciliationSchema }),
+  margins: (plan: string, signal?: AbortSignal) =>
+    operatorFetch('/wallet/margins', {
+      query: { plan: plan || undefined },
+      schema: marginsResponseSchema,
+      signal,
+    }),
+  saveMargins: (body: SavePlanMarginsInput) =>
+    operatorFetch('/wallet/margins', { method: 'PUT', body, schema: saveMarginsResultSchema }),
+  deleteMargin: (id: string) =>
+    operatorFetch(`/wallet/margins/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      schema: removePlanMarginResultSchema,
+    }),
+  workspaceMargins: (id: string, signal?: AbortSignal) =>
+    operatorFetch(`/wallet/workspaces/${encodeURIComponent(id)}/margins`, {
+      schema: marginsResponseSchema,
+      signal,
+    }),
+  saveWorkspaceMargins: (id: string, body: SaveWorkspaceMarginsInput) =>
+    operatorFetch(`/wallet/workspaces/${encodeURIComponent(id)}/margins`, {
+      method: 'PUT',
+      body,
+      schema: saveMarginsResultSchema,
+    }),
+  preview: (q: PricePreviewQuery, signal?: AbortSignal) =>
+    operatorFetch('/wallet/pricing/preview', {
+      query: { workspaceId: q.workspaceId, country: q.country, category: q.category },
+      schema: pricePreviewSchema,
+      signal,
+    }),
+  packages: (signal?: AbortSignal) =>
+    operatorFetch('/wallet/packages', { schema: creditPackageListSchema, signal }),
+  createPackage: (body: CreditPackageInput) =>
+    operatorFetch('/wallet/packages', { method: 'POST', body, schema: creditPackageSchema }),
+  updatePackage: (id: string, body: CreditPackageInput) =>
+    operatorFetch(`/wallet/packages/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      body,
+      schema: creditPackageSchema,
+    }),
+  togglePackage: (id: string) =>
+    operatorFetch(`/wallet/packages/${encodeURIComponent(id)}/toggle`, {
+      method: 'POST',
+      schema: creditPackageSchema,
+    }),
+  deletePackage: (id: string) =>
+    operatorFetch(`/wallet/packages/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      schema: deletedSchema,
+    }),
 };
