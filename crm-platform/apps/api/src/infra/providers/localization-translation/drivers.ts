@@ -281,10 +281,10 @@ export const DRIVERS: Record<TranslationProviderSlug, DriverDefinition> = {
     credentialFields: [
       {
         key: 'admin_email',
-        label: 'Contact email (optional)',
+        label: 'Admin email (optional)',
         type: 'text',
         required: false,
-        hint: 'Adding an email raises the free daily quota.',
+        hint: 'Optional. Raises the daily quota from 5k to 50k requests per IP.',
         placeholder: 'you@example.com',
       },
     ],
@@ -300,10 +300,10 @@ export const DRIVERS: Record<TranslationProviderSlug, DriverDefinition> = {
     credentialFields: [
       {
         key: 'endpoint',
-        label: 'Server URL',
+        label: 'Endpoint URL',
         type: 'text',
         required: true,
-        hint: 'Where your LibreTranslate server listens. The Docker default is http://localhost:5000.',
+        hint: 'URL of your LibreTranslate server. For self-hosted Docker, usually http://localhost:5000.',
         placeholder: 'http://localhost:5000',
       },
       {
@@ -311,7 +311,7 @@ export const DRIVERS: Record<TranslationProviderSlug, DriverDefinition> = {
         label: 'API key (optional)',
         type: 'password',
         required: false,
-        hint: 'Only the hosted service needs one.',
+        hint: 'Required only for the hosted libretranslate.com tier. Leave blank for self-hosted.',
         placeholder: null,
       },
     ],
@@ -322,10 +322,10 @@ export const DRIVERS: Record<TranslationProviderSlug, DriverDefinition> = {
     credentialFields: [
       {
         key: 'api_key',
-        label: 'API key',
+        label: 'DeepL API key',
         type: 'password',
         required: true,
-        hint: 'Keys ending in :fx use the free plan automatically.',
+        hint: 'Free tier: 500k chars/month. Keys ending in :fx are free-tier, others Pro. Get one at deepl.com/pro-api.',
         placeholder: null,
       },
     ],
@@ -336,10 +336,10 @@ export const DRIVERS: Record<TranslationProviderSlug, DriverDefinition> = {
     credentialFields: [
       {
         key: 'api_key',
-        label: 'API key',
+        label: 'Google Cloud API key',
         type: 'password',
         required: true,
-        hint: 'Enable the Cloud Translation API in your Google Cloud project, then create a key.',
+        hint: 'Enable "Cloud Translation API" in Google Cloud Console, then create an API key. ~$20 per 1M chars.',
         placeholder: null,
       },
     ],
