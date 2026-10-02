@@ -37,6 +37,7 @@ import { CatalogSyncService } from './catalog-sync.service';
 import {
   changedSyncFields,
   digitsOf,
+  retailerIdOf,
   nextFreeSlug,
   normalizeGallery,
   normalizeTags,
@@ -426,11 +427,21 @@ export class ProductsService {
       orgId: ctx.orgId,
       recipientDigits: digits,
       userId: ctx.userId,
+      source: 'product_share',
       mode: 'spm',
       body: caption,
       provider: 'baileys',
       messageId,
-      products: [],
+      products: [
+        {
+          id: plan.product.id,
+          name: plan.product.name,
+          imageUrl: plan.product.imageUrl,
+          priceMinor: plan.product.priceMinor,
+          currency: plan.product.currencyCode,
+          retailerId: retailerIdOf(plan.product),
+        },
+      ],
     });
     await this.db.tx((tx) =>
       this.audit.record(tx, {

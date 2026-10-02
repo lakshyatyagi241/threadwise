@@ -168,3 +168,17 @@ export interface BaileysCatalogBridge {
 }
 
 export const BAILEYS_CATALOG_BRIDGE = Symbol('BAILEYS_CATALOG_BRIDGE');
+
+/**
+ * What the live adapters read from the platform's settings at call time (TW-CAT-030, 034): the Graph API version and where the
+ * Node bridge is. The catalog module implements it over the platform settings store (with the environment as the fallback), so
+ * an adapter never reads settings itself.
+ */
+export interface CatalogRuntimeSettings {
+  /** `vNN.N`: the operator's saved version, else the environment's, else `v23.0`. */
+  graphVersion(): Promise<string>;
+  /** The bridge's address and shared token: the operator's saved values, else the environment's. */
+  bridgeTarget(): Promise<{ baseUrl: string; token: string | null }>;
+}
+
+export const CATALOG_RUNTIME_SETTINGS = Symbol('CATALOG_RUNTIME_SETTINGS');

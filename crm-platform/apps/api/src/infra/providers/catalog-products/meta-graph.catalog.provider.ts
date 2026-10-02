@@ -22,8 +22,11 @@ const LIST_PAGE = 200;
 const LIST_MAX_PAGES = 50;
 
 export interface MetaGraphOptions {
-  /** `v23.0` by default (Reference's `catalog_graph_api_version`, here the env `CAT_GRAPH_API_VERSION`). */
-  graphVersion: string;
+  /**
+   * `v23.0` by default (Reference's `catalog_graph_api_version`). A function is asked on every call, so an operator's change of the
+   * saved setting applies to the next request without a restart.
+   */
+  graphVersion: string | (() => string | Promise<string>);
   fetchImpl?: typeof fetch;
   timeoutMs?: number;
   retryDelayMs?: number;
@@ -79,8 +82,12 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
 
   // --- plumbing -----------------------------------------------------------------------------------------------------------
 
-  private graph(path: string): string {
-    const version = this.opts.graphVersion.replace(/^\/+/, '');
+  private async graph(path: string): Promise<string> {
+    const raw =
+      typeof this.opts.graphVersion === 'function'
+        ? await this.opts.graphVersion()
+        : this.opts.graphVersion;
+    const version = raw.replace(/^\/+/, '');
     return `${GRAPH_HOST}/${version}/${path.replace(/^\/+/, '')}`;
   }
 
@@ -92,7 +99,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
   }
 
   /** Where `/messages` and `/whatsapp_commerce_settings` live. Meta needs the phone number id in the path, 360dialog does not. */
-  private messagesBase(b: CatalogBinding): string {
+  private async messagesBase(b: CatalogBinding): Promise<string> {
     if (b.provider === 'dialog_360') return this.dialogHost;
     if (!b.phoneNumberId) {
       throw new CatalogProviderError(
@@ -188,7 +195,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
   async verifyCatalog(b: CatalogBinding): Promise<CatalogInfo> {
     const json = await this.call(
       this.base(b, 'verifyCatalog', {
-        url: this.graph(b.catalogId),
+        url: await this.graph(b.catalogId),
         query: { fields: 'id,name,product_count,vertical,is_catalog_segment' },
         retry: true,
       }),
@@ -206,7 +213,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
     for (let page = 0; page < LIST_MAX_PAGES; page++) {
       const json = await this.call(
         this.base(b, 'listProducts', {
-          url: this.graph(`${b.catalogId}/products`),
+          url: await this.graph(`${b.catalogId}/products`),
           query: {
             fields: 'id,retailer_id,name,description,price,currency,availability,image_url,url',
             limit: LIST_PAGE,
@@ -250,7 +257,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
     const json = await this.call(
       this.base(b, 'upsertProductsBatch', {
         method: 'POST',
-        url: this.graph(`${b.catalogId}/items_batch`),
+        url: await this.graph(`${b.catalogId}/items_batch`),
         body: {
           item_type: 'PRODUCT_ITEM',
           requests: items.map((i) => ({
@@ -273,7 +280,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
     if (handles.length === 0) return [];
     const json = await this.call(
       this.base(b, 'checkBatchStatus', {
-        url: this.graph(`${b.catalogId}/check_batch_request_status`),
+        url: await this.graph(`${b.catalogId}/check_batch_request_status`),
         query: { handles: JSON.stringify([...handles]) },
         retry: true,
       }),
@@ -300,7 +307,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
     await this.call(
       this.base(b, 'setCommerceSettings', {
         method: 'POST',
-        url: `${this.messagesBase(b)}/whatsapp_commerce_settings`,
+        url: `${await this.messagesBase(b)}/whatsapp_commerce_settings`,
         body: {
           is_cart_enabled: settings.cartEnabled,
           is_catalog_visible: settings.catalogVisible,
@@ -313,7 +320,11 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
 
   private async send(b: CatalogBinding, op: string, payload: unknown): Promise<SentMessage> {
     const json = await this.call(
-      this.base(b, op, { method: 'POST', url: `${this.messagesBase(b)}/messages`, body: payload }),
+      this.base(b, op, {
+        method: 'POST',
+        url: `${await this.messagesBase(b)}/messages`,
+        body: payload,
+      }),
     );
     const first = asRecord(Array.isArray(json.messages) ? json.messages[0] : undefined);
     return { messageId: typeof first.id === 'string' ? first.id : null, raw: json };
@@ -447,7 +458,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
 
   async listWabaCatalogs(a: GraphAuth, wabaId: string): Promise<string[]> {
     const json = await this.call(
-      this.authCall(a, 'listWabaCatalogs', { url: this.graph(`${wabaId}/product_catalogs`) }),
+      this.authCall(a, 'listWabaCatalogs', { url: await this.graph(`${wabaId}/product_catalogs`) }),
     );
     return (Array.isArray(json.data) ? json.data : [])
       .map((d) => asRecord(d).id)
@@ -458,7 +469,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
     const json = await this.call(
       this.authCall(a, 'createCatalog', {
         method: 'POST',
-        url: this.graph(`${businessId}/owned_product_catalogs`),
+        url: await this.graph(`${businessId}/owned_product_catalogs`),
         body: { name, vertical: 'commerce' },
       }),
     );
@@ -469,7 +480,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
     await this.call(
       this.authCall(a, 'linkCatalogToWaba', {
         method: 'POST',
-        url: this.graph(`${wabaId}/product_catalogs`),
+        url: await this.graph(`${wabaId}/product_catalogs`),
         body: { catalog_id: catalogId },
       }),
     );
@@ -478,7 +489,7 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
   async catalogName(a: GraphAuth, catalogId: string): Promise<string | null> {
     const json = await this.call(
       this.authCall(a, 'catalogName', {
-        url: this.graph(catalogId),
+        url: await this.graph(catalogId),
         query: { fields: 'name' },
         timeoutMs: NAME_TIMEOUT_MS,
       }),
