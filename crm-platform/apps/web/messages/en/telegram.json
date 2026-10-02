@@ -1,0 +1,204 @@
+{
+  "telegram": {
+    "nav": { "title": "Telegram" },
+    "common": { "dismiss": "Dismiss" },
+    "connect": {
+      "title": "Connect Telegram Bot",
+      "close": "Close",
+      "cancel": "Cancel",
+      "submit": "Connect Bot",
+      "intro": "Enter your HTTP API bot token to configure the webhook and start handling Telegram chats.",
+      "tokenLabel": "Bot token *",
+      "tokenPlaceholder": "e.g. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "That does not look like a BotFather token.",
+      "connected": "Telegram bot connected.",
+      "savedNeedsAttention": "The bot is saved, but Telegram did not accept the webhook.",
+      "failed": "Could not connect the bot. Try again.",
+      "howTitle": "How to get a bot token?",
+      "how1a": "Open Telegram and search for the verified",
+      "how1b": "account.",
+      "how2a": "Send",
+      "how2b": "and choose a display name and username.",
+      "how3": "Copy the generated HTTP API token and paste it above."
+    },
+    "bot": {
+      "failed": "That did not work. Try again.",
+      "webhookFixed": "Inbound is live again.",
+      "live": "Live",
+      "paused": "Paused",
+      "needsAttention": "Needs attention",
+      "lastMessage": "Last message {when}",
+      "payments": "Payments",
+      "on": "on",
+      "paymentsSaved": "Payment settings saved.",
+      "paymentsHint": "Paste a payment provider token from @BotFather (/mybots → Payments) to enable the Payment flow node — native in-chat invoices.",
+      "paymentsSavedPlaceholder": "•••••••• (saved — leave blank to keep)",
+      "paymentsToken": "Payment provider token",
+      "removeToken": "Remove token",
+      "save": "Save",
+      "webhook": "Webhook",
+      "fixInbound": "Fix inbound (re-register webhook)",
+      "pause": "Pause",
+      "resume": "Resume",
+      "pausedDone": "Bot paused.",
+      "resumedDone": "Bot resumed.",
+      "disconnect": "Disconnect",
+      "disconnectConfirm": "Disconnect this Telegram bot? Its inbox threads stay, but it stops sending/receiving.",
+      "cancel": "Cancel",
+      "disconnected": "Bot disconnected."
+    },
+    "hub": {
+      "kicker": "Channel · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Connect",
+      "intro": "Deploy a Telegram bot to automate messaging workflows, handle client support, and broadcast updates to your subscribers worldwide.",
+      "teamInbox": "Team inbox",
+      "flows": "Flows",
+      "broadcasts": "Broadcasts",
+      "telegramBroadcasts": "Telegram broadcasts",
+      "loadError": "Could not load your Telegram bots.",
+      "connectedCount": "{count} connected",
+      "notConnected": "Not Connected",
+      "botCardTitle": "Telegram Bot Connection",
+      "botCardBody": "Paste a bot token from @BotFather to automate messaging, handle support, and broadcast to your subscribers.",
+      "connectAnother": "Connect another bot",
+      "connectBot": "Connect Bot",
+      "accountCardTitle": "Telegram Account Connection",
+      "accountCardBody": "Link your Telegram account to create bots right here — scan a QR or use your phone number, just like WhatsApp.",
+      "connectAccount": "Connect Account",
+      "accountUnavailable": "Not available yet: it needs the Telegram account service, which is not set up in this workspace.",
+      "connectedBots": "Connected bots",
+      "guideTitle": "Telegram Bot Setup Guide",
+      "guideBody": "Complete these steps to link your Telegram channel and enable automated workflows.",
+      "prerequisites": "Prerequisites",
+      "pre": {
+        "account": "An active Telegram account",
+        "name": "A unique name for your bot",
+        "app": "Access to Telegram Web/App"
+      },
+      "stepsTitle": "Connection Steps",
+      "step": "Step {n}",
+      "steps": {
+        "locate": {
+          "title": "Locate BotFather",
+          "body": "Open Telegram and search for the official @BotFather account (look for the verified badge)."
+        },
+        "create": {
+          "title": "Create a new bot",
+          "body": "Send /newbot to @BotFather and follow the prompts to name your bot and pick a username."
+        },
+        "token": {
+          "title": "Retrieve API token",
+          "body": "BotFather generates an HTTP API token (e.g. 123456789:ABC…). Copy it safely."
+        },
+        "connect": {
+          "title": "Connect the bot here",
+          "body": "Click “Connect Bot”, paste your token in the box, and submit to finish the link."
+        }
+      },
+      "unlockedTitle": "What’s unlocked?",
+      "unlocked": {
+        "support": {
+          "title": "Automate support",
+          "body": "Let AI bots handle FAQs and route conversations 24/7."
+        },
+        "broadcast": {
+          "title": "Broadcast campaigns",
+          "body": "Send promotions, alerts and newsletters to all subscribers at once."
+        },
+        "media": {
+          "title": "Rich interactive media",
+          "body": "Engage users with buttons, menus, invoices and images."
+        }
+      },
+      "tipTitle": "Configuration tip",
+      "tipBody": "Never share your bot API token publicly. If it is compromised, message @BotFather and run /revoke to generate a new one immediately. On localhost, a tunnel’s address changes each restart — press “Fix inbound” to re-register."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Broadcasts",
+      "title": "Telegram",
+      "titleAccent": "broadcasts",
+      "intro": "Message everyone who has chatted with your bot, then track sent, failed and blocked per broadcast.",
+      "bots": "Bots",
+      "newBroadcast": "New broadcast",
+      "connectFirst": "Connect a Telegram bot first.",
+      "connectBot": "Connect a bot",
+      "tile": {
+        "sent": "Sent",
+        "audience": "Audience",
+        "failed": "Failed",
+        "blocked": "Blocked",
+        "sending": "Sending",
+        "broadcasts": "{count} broadcasts",
+        "audienceHint": "total recipients",
+        "failedHint": "delivery errors",
+        "blockedHint": "bot blocked by user",
+        "sendingHint": "in flight"
+      },
+      "listKicker": "Broadcast list",
+      "listTitle": "Recent broadcasts",
+      "col": {
+        "broadcast": "Broadcast",
+        "bot": "Bot",
+        "recipients": "Recipients",
+        "progress": "Progress",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "counts": "{sent} sent · {failed} failed · {blocked} blocked",
+      "status": {
+        "draft": "Draft",
+        "sending": "Sending",
+        "done": "Done",
+        "failed": "Failed"
+      },
+      "start": "Start",
+      "pause": "Pause",
+      "retry": "Retry",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this broadcast?",
+      "cancel": "Cancel",
+      "empty": "No broadcasts yet.",
+      "createFirst": "Create your first one",
+      "failed": "That did not work. Try again.",
+      "started": "Sending started.",
+      "paused": "Paused. Unsent chats stay pending.",
+      "retried": "{count} failed chats are ready to send again. Press Start.",
+      "deleted": "Broadcast deleted."
+    },
+    "compose": {
+      "kicker": "Telegram · New broadcast",
+      "title": "Compose a",
+      "titleAccent": "broadcast",
+      "back": "Back",
+      "loadError": "Could not load the bots and templates.",
+      "noPermission": "You can look at this page, but you are not allowed to create broadcasts.",
+      "setup": "Broadcast setup",
+      "name": "Broadcast name",
+      "namePlaceholder": "e.g. Weekend sale",
+      "bot": "Bot",
+      "template": "Template (optional)",
+      "templateHint": "Prefills the message and sends the template’s buttons.",
+      "templateNone": "— none (write your own) —",
+      "buttonCount": "{count} button(s)",
+      "message": "Message",
+      "messageHint": "Use '{name}' to personalise.",
+      "messagePlaceholder": "Hi '{name}'! …",
+      "attachment": "Attachment (optional)",
+      "attachmentHint": "A public address to an image, video, audio file or document. Uploading a file needs the storage service.",
+      "attachmentInvalid": "Enter a full address starting with http:// or https://.",
+      "recipients": "Recipients",
+      "selectAll": "Select all",
+      "clearAll": "Clear all",
+      "noChats": "Nobody has chatted with this bot yet.",
+      "type": { "private": "private", "group": "group", "channel": "channel" },
+      "selected": "{count} selected",
+      "submit": "Create broadcast",
+      "preview": "Live preview",
+      "previewEmpty": "Your message preview…",
+      "previewNote": "This is how your broadcast will look in each recipient’s chat.",
+      "created": "Broadcast created with {count} recipients. Press Start sending when ready.",
+      "failed": "Could not create the broadcast. Try again."
+    }
+  }
+}

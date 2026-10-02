@@ -30,9 +30,12 @@ export const isUnreachable = (description: string): boolean => {
   return UNREACHABLE.some((n) => d.includes(n));
 };
 
-/** `{{name}}` and `{{ name }}` become the chat's title; nothing else is merged (a chat has no other attributes). */
+/**
+ * `{{name}}` and `{{ name }}` become the chat's title (Reference's sender); so does `{name}`, which Reference's compose screen promises and
+ * its sender left as typed. Nothing else is merged (a chat has no other attributes).
+ */
 export const personalise = (body: string, title: string | null): string =>
-  body.replace(/\{\{\s*name\s*\}\}/g, title ?? '').trim();
+  body.replace(/\{\{\s*name\s*\}\}|\{name\}/g, title ?? '').trim();
 
 /** Whole percent done; blocked counts as done. */
 export const progressPct = (sent: number, failed: number, blocked: number, total: number): number =>
