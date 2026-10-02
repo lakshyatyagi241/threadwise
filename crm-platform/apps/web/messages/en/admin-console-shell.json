@@ -1,7 +1,11 @@
 {
   "admin-console-shell": {
     "nav": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "menuOrder": "Menu order",
+      "groups": {
+        "shell": "Interface"
+      }
     },
     "shell": {
       "collapse": "Collapse sidebar",
@@ -12,6 +16,51 @@
       "title": "Platform console",
       "note": "Everything an operator manages lives in the menu. Each card opens one area.",
       "open": "Open"
+    },
+    "menuOrder": {
+      "title": "Menu order",
+      "note": "Choose which entries appear in the top bar every customer sees, and their order. Everything else lives under More. Users see the change on their next page load.",
+      "barZone": "Top bar",
+      "moreZone": "More",
+      "locked": "Always last",
+      "save": "Save layout",
+      "reset": "Reset to default",
+      "saved": "Menu layout saved. Users see it on their next page load.",
+      "saveFailed": "The layout could not be saved.",
+      "loadFailed": "The layout could not be loaded.",
+      "moveUp": "Move {item} up",
+      "moveDown": "Move {item} down",
+      "remove": "Move {item} to More",
+      "add": "Add {item} to the top bar",
+      "removeShort": "Remove",
+      "addShort": "Add",
+      "items": {
+        "dashboard": "Dashboard",
+        "team-inbox": "Team Inbox",
+        "wa-campaigns": "Campaigns",
+        "flows": "Flows",
+        "templates": "Templates",
+        "devices": "Devices",
+        "metaads": "Meta Ads",
+        "broadcasts": "Broadcasts",
+        "contacts": "Contacts",
+        "deals": "Deals",
+        "chat": "Live Chat",
+        "analytics": "Analytics",
+        "auto-reply": "Auto-reply",
+        "scheduled": "Scheduled",
+        "message-history": "History",
+        "ai-assistants": "AI Assistants",
+        "ai-training": "AI Training",
+        "wa-links": "WA Links",
+        "chatbot-widgets": "Chat Widget",
+        "webhooks": "Webhooks",
+        "integrations": "Integrations",
+        "warmer": "Warmer",
+        "call-logs": "Call Logs",
+        "support": "Support",
+        "more": "More"
+      }
     }
   }
 }
