@@ -477,6 +477,26 @@ describe('creating and pricing a draft (WD-INV-005/006)', () => {
     expect((await api.as(t.admin).post('/v2/invoices').send({ buyerName: 'x', lines: [{ ...LINE, qty: '0' }] })).status).toBe(422);
   });
 
+  it('parity run: a date that is not a day, a NUL character and a code that is not ISO 4217 are 422, never a database failure (500)', async () => {
+    const bad: Array<Record<string, unknown>> = [
+      { issueDate: '2026-02-31' },
+      { dueDate: '2026-13-01' },
+      { buyerName: 'a\u0000b' },
+      { notes: 'a\u0000b' },
+      { reference: 'a\u0000b' },
+      { currency: 'ZZZ' },
+    ];
+    for (const extra of bad) {
+      const res = await api.as(t.admin).post('/v2/invoices').send({ buyerName: 'x', lines: [LINE], ...extra });
+      expect(res.status, JSON.stringify(extra)).toBe(422);
+    }
+    for (const q of ['issuedFrom=2026-02-31', 'dueTo=2026-04-31', 'q=a%00b']) {
+      const res = await api.as(t.admin).get(`/v2/invoices?${q}`);
+      expect(res.status, q).toBe(422);
+    }
+    expect((await api.as(t.admin).get('/v2/payments?from=2026-02-31')).status).toBe(422);
+  });
+
   it('a contact brings its name, email, phone and company; a deal brings its contact and company (WaDesk kept the ids in a JSON blob nothing read)', async () => {
     const [cid] = await api.seedContacts(t, [{ name: 'Linked Contact', email: 'linked@buyer.test', phone: '+14155550123' }]);
     const inv = await make(t.admin, { buyerName: undefined, contactId: cid });

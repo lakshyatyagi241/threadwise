@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { calendarDaySchema, isoCurrencySchema } from '../sales-docs/input-guards';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
@@ -90,13 +91,8 @@ export const invoiceLineInputSchema = z.object({
 });
 export type InvoiceLineInput = z.infer<typeof invoiceLineInputSchema>;
 
-const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'a date as YYYY-MM-DD');
-const currency = z
-  .string()
-  .trim()
-  .length(3)
-  .transform((v) => v.toUpperCase())
-  .refine((v) => /^[A-Z]{3}$/.test(v), 'currency must be a 3-letter ISO code');
+const date = calendarDaySchema;
+const currency = isoCurrencySchema;
 const country = z
   .string()
   .trim()

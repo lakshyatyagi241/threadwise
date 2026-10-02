@@ -464,6 +464,13 @@ describe('create, pricing and links (WD-PROP-005, 006, 025, D-01, D-03, D-12, D-
       { kind: 'proposal', lines: ONE_LINE, buyerEmail: 'not-an-email' },
       { kind: 'proposal', lines: ONE_LINE, buyerPhone: '12345' },
       { kind: 'proposal', lines: ONE_LINE, validUntil: 'tomorrow' },
+      // parity run: shaped like a date but not a day (it used to reach the database and answer 500), a NUL character, a code that is
+      // three letters but not ISO 4217
+      { kind: 'proposal', lines: ONE_LINE, validUntil: '2026-02-31' },
+      { kind: 'proposal', lines: ONE_LINE, validUntil: '2026-13-01' },
+      { kind: 'proposal', lines: ONE_LINE, title: 'a\u0000b' },
+      { kind: 'proposal', lines: [{ description: 'a\u0000b', qty: '1', unitPrice: '1' }] },
+      { kind: 'proposal', lines: ONE_LINE, currency: 'ZZZ' },
       { kind: 'proposal', lines: ONE_LINE, notes: 'n'.repeat(5001) },
     ];
     for (const body of bad) {
@@ -1377,10 +1384,15 @@ describe("the buyer's public page (WD-PROP-014..016, 018, D-04, D-05, D-11, D-16
     }
     expect(['sent', 'viewed']).toContain((await get(t.admin, id)).status);
     expect((await get(t.admin, id)).overdue).toBe(true);
-    // staff cannot accept a lapsed price on the buyer's behalf either
+    // staff cannot accept a lapsed price on the buyer's behalf either, and the document does not offer the action
     const staff = await api.as(t.admin).post(`/v2/sales-docs/${id}/accept`).send({});
     expect(staff.status).toBe(409);
     expect(code(staff)).toBe('SALESDOC_EXPIRED');
+    expect((await get(t.admin, id)).actions).toMatchObject({
+      decide: false,
+      extend: true,
+      revise: true,
+    });
   });
 
   it('D-16: a revoked link is 410 SALESDOC_LINK_UNAVAILABLE until a new one is made; the old token stays dead; sending again revives a link', async () => {

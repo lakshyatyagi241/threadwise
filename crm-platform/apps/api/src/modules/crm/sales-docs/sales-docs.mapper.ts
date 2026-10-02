@@ -5,6 +5,7 @@ import {
   parseQty,
   salesDocAmounts,
   type PublicSalesDoc,
+  type SalesDocActions,
   type SalesDocDiscount,
   type SalesDocEvent,
   type SalesDocLine,
@@ -104,6 +105,19 @@ export function linkActive(row: SalesDocRow, now: Date): boolean {
   );
 }
 
+/**
+ * What the status allows next. A lapsed document (open, valid-until date passed, sweep not yet run) is still `sent` or `viewed` in the
+ * table, but staff cannot record a decision on it (409 SALESDOC_EXPIRED: extend or revise it first), so `decide` is false.
+ */
+export function actionsFor(
+  row: Pick<SalesDocRow, 'status' | 'validUntil' | 'dealId'>,
+  tz: string | null,
+  now: Date = new Date(),
+): SalesDocActions {
+  const actions = actionsOf(row.status, row.dealId !== null);
+  return isOverdue(row.status, row.validUntil, tz, now) ? { ...actions, decide: false } : actions;
+}
+
 export function toSalesDocResponse(
   row: SalesDocRow,
   items: SalesDocItemRow[],
@@ -131,7 +145,7 @@ export function toSalesDocResponse(
       viewCount: row.viewCount,
       lastViewedAt: row.lastViewedAt?.toISOString() ?? null,
     },
-    actions: actionsOf(row.status, row.dealId !== null),
+    actions: actionsFor(row, tz, now),
   };
 }
 

@@ -14,6 +14,7 @@ import {
   type SalesDocAction,
 } from '../../../src/modules/crm/sales-docs/sales-doc-rules';
 import { AppError } from '../../../src/common/errors/app-error';
+import { actionsFor } from '../../../src/modules/crm/sales-docs/sales-docs.mapper';
 import { composeQuoteMail } from '../../../src/modules/crm/sales-docs/sales-doc-mail';
 import {
   esc,
@@ -251,5 +252,35 @@ describe('print page and mail (WD-PROP-030)', () => {
   it('masks a recipient in the timeline', () => {
     expect(maskRecipient('priya@example.com')).toBe('pr***@example.com');
     expect(maskRecipient('+919876543210')).toBe('+91********10');
+  });
+});
+
+describe('actionsFor (what the API says staff may do next)', () => {
+  const now = new Date('2026-10-02T12:00:00Z');
+  const row = (status: SalesDocStatus, validUntil: string | null) => ({
+    status,
+    validUntil,
+    dealId: null,
+  });
+
+  it('does not offer a decision on an open document whose valid-until date has passed', () => {
+    const lapsed = actionsFor(row('viewed', '2026-10-01'), null, now);
+    expect(lapsed.decide).toBe(false);
+    // it can still be brought back
+    expect(lapsed.extend).toBe(true);
+    expect(lapsed.revise).toBe(true);
+  });
+
+  it('keeps it for a document valid today or later, or with no date', () => {
+    expect(actionsFor(row('sent', '2026-10-02'), null, now).decide).toBe(true);
+    expect(actionsFor(row('sent', '2026-12-31'), null, now).decide).toBe(true);
+    expect(actionsFor(row('sent', null), null, now).decide).toBe(true);
+  });
+
+  it('is the plain status table for a draft or a decided document', () => {
+    expect(actionsFor(row('draft', '2020-01-01'), null, now).decide).toBe(true);
+    expect(actionsFor(row('accepted', '2020-01-01'), null, now)).toEqual(
+      actionsOf('accepted', false),
+    );
   });
 });

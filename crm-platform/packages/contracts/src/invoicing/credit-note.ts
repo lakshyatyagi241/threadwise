@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { calendarDaySchema } from '../sales-docs/input-guards';
 import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryList } from '../contacts-attributes-tags/query-helpers';
@@ -73,10 +74,7 @@ export const createCreditNoteSchema = z.object({
   lines: z.array(creditNoteLineInputSchema).max(100).optional(),
   /** What happens to money when it is issued. Default `balance`. */
   settlement: creditNoteSettlementSchema.default('balance'),
-  issueDate: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .nullish(),
+  issueDate: calendarDaySchema.nullish(),
 });
 export type CreateCreditNoteInput = z.infer<typeof createCreditNoteSchema>;
 
@@ -86,10 +84,7 @@ export const updateCreditNoteSchema = z.object({
   settlement: creditNoteSettlementSchema.optional(),
   lines: z.array(creditNoteLineInputSchema).min(1).max(100).optional(),
   full: z.boolean().optional(),
-  issueDate: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .nullish(),
+  issueDate: calendarDaySchema.nullish(),
   rowVersion: z.number().int().positive(),
 });
 export type UpdateCreditNoteInput = z.infer<typeof updateCreditNoteSchema>;

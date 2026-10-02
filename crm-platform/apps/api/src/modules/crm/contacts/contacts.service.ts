@@ -29,6 +29,7 @@ import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
+import { assertFormFieldLimits } from './form-field-limits';
 import { missingRequired, requiredPropertiesError } from './required-properties';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
@@ -168,6 +169,7 @@ export class ContactsService {
         }
       }
 
+      assertFormFieldLimits(input.customFields);
       // Properties the workspace marked required (Contact properties screen) are part of the contract of a create.
       await this.assertRequiredProperties(tx, ctx.orgId, input.customFields);
 
@@ -229,6 +231,8 @@ export class ContactsService {
         emailConfirmed: input.emailConfirmed,
         faxNumber: input.faxNumber,
         source: input.source,
+        isUnsubscribed: input.isUnsubscribed === true,
+        unsubscribedAt: input.isUnsubscribed === true ? new Date() : null,
         data: input.customFields,
         displayId,
         createdBy: ctx.userId,
@@ -301,6 +305,12 @@ export class ContactsService {
       if (input.emailConfirmed !== undefined) values.emailConfirmed = input.emailConfirmed;
       if (input.faxNumber !== undefined) values.faxNumber = input.faxNumber;
       if (input.source !== undefined) values.source = input.source;
+      // Marketing opt-out (WD-CON-017): the timestamp is written with the flag, on every change, so the evidence is never
+      // missing (WaDesk left it empty on a manual change). No change, nothing touched.
+      if (input.isUnsubscribed !== undefined && input.isUnsubscribed !== existing.isUnsubscribed) {
+        values.isUnsubscribed = input.isUnsubscribed;
+        values.unsubscribedAt = input.isUnsubscribed ? new Date() : null;
+      }
       // lifecycle_stage is NOT NULL: a null stage is "leave it", not a clear.
       if (input.lifecycleStage != null && input.lifecycleStage !== existing.lifecycleStage) {
         // Track the transition, not just the current value — the sub-agent
@@ -337,6 +347,7 @@ export class ContactsService {
         if (plan.status !== undefined) values.status = plan.status;
       }
       if (input.customFields !== undefined) {
+        assertFormFieldLimits(input.customFields);
         // Merge, don't replace: a client that sends three fields must not wipe
         // the other forty the org has defined.
         values.data = { ...(existing.data ?? {}), ...input.customFields };
@@ -364,8 +375,15 @@ export class ContactsService {
       );
       if (!updated) throw AppError.rowVersionConflict('Contact');
 
+      // The identity keys follow the contact: the old address or number is released (an edit or a clear), the new one claimed.
+      if (input.email !== undefined && existing.email && input.email !== existing.email) {
+        await this.repo.removeIdentity(tx, ctx.orgId, existing.id, 'email', existing.email);
+      }
       if (input.email && input.email !== existing.email) {
         await this.repo.addIdentity(tx, ctx.orgId, existing.id, 'email', input.email);
+      }
+      if (phone !== undefined && existing.phone && phone !== existing.phone) {
+        await this.repo.removeIdentity(tx, ctx.orgId, existing.id, 'phone', existing.phone);
       }
       if (phone && phone !== existing.phone) {
         await this.repo.addIdentity(tx, ctx.orgId, existing.id, 'phone', phone);
@@ -626,6 +644,7 @@ export class ContactsService {
           if (plan.status !== undefined) values.status = plan.status;
         }
         if (input.values.customFields !== undefined) {
+          assertFormFieldLimits(input.values.customFields);
           values.data = { ...(existing.data ?? {}), ...input.values.customFields };
           // Only the keys this edit sets are held to the rule: it may not blank a required property, but contacts
           // that never had one are not all refused.

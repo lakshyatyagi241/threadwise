@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { calendarDaySchema, isoCurrencySchema } from './input-guards';
 import { uuidSchema, emailSchema, phoneSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
@@ -77,13 +78,8 @@ export const salesDocLineInputSchema = z.object({
 });
 export type SalesDocLineInput = z.infer<typeof salesDocLineInputSchema>;
 
-const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'a date as YYYY-MM-DD');
-const currency = z
-  .string()
-  .trim()
-  .length(3)
-  .transform((v) => v.toUpperCase())
-  .refine((v) => /^[A-Z]{3}$/.test(v), 'currency must be a 3-letter ISO code');
+const date = calendarDaySchema;
+const currency = isoCurrencySchema;
 
 const buyerShape = {
   /** Default: the linked contact's. */
