@@ -48,6 +48,7 @@ export class SmtpMailAdapter implements MailPort {
         subject: message.subject,
         text: message.text,
         html: message.html,
+        replyTo: message.replyTo,
       });
     } catch (err) {
       const code = (err as { code?: string }).code ?? '';

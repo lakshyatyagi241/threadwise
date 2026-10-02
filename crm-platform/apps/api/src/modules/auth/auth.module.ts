@@ -156,6 +156,9 @@ import { TokenService } from './token.service';
     PlatformSettingsService,
     WebhookSecretRegistry,
     OtpTemplateService,
+    // the guest-form gate and throttle, for other domains' public forms (CMS contact)
+    CaptchaService,
+    RateLimitService,
   ],
 })
 export class AuthModule implements NestModule {

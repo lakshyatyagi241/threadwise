@@ -24,7 +24,7 @@ export class CaptchaService {
 
   async assert(
     token: string | undefined,
-    action: 'login' | 'register' | 'forgot' | 'operator',
+    action: 'login' | 'register' | 'forgot' | 'operator' | 'contact',
   ): Promise<void> {
     const config = await this.settings.captchaConfig();
     if (!config) return;

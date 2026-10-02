@@ -102,6 +102,9 @@ export const ERROR_CODES = {
   CON_ATTRIBUTE_KEY_RESERVED: 'CON_ATTRIBUTE_KEY_RESERVED',
   CON_ATTRIBUTE_IN_USE: 'CON_ATTRIBUTE_IN_USE',
   CON_MERGE_SCOPE_REQUIRED: 'CON_MERGE_SCOPE_REQUIRED',
+
+  // marketing site, blog, legal pages and guidebook (WD-CMS)
+  CMS_SLUG_TAKEN: 'CMS_SLUG_TAKEN',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

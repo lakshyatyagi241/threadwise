@@ -6,6 +6,8 @@ export { AuthModule } from './auth.module';
 export { AllowWhileGated, OperatorRoles } from './guards/auth-gates';
 export { OperatorGuard } from './guards/operator.guard';
 export { AuthAuditService, type SecurityEventInput } from './security/auth-audit.service';
+export { CaptchaService } from './security/captcha.service';
+export { RateLimitService } from './security/rate-limit.service';
 export { EmergencyHaltService } from './security/emergency-halt.service';
 export {
   WebhookSecretRegistry,
