@@ -131,6 +131,19 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+
+  // reseller billing (TW-BSP)
+  /** The platform's Meta connection (business id and token) is not set up. */
+  BSP_NOT_CONFIGURED: 'BSP_NOT_CONFIGURED',
+  /** Meta accepts only AUD, EUR, GBP, IDR, INR and USD for a credit line, and the choice is locked once attached. */
+  BSP_CURRENCY_UNSUPPORTED: 'BSP_CURRENCY_UNSUPPORTED',
+  /** The WABA is not a connected WhatsApp Business number of that workspace (Reference attached any string). */
+  BSP_WABA_NOT_FOUND: 'BSP_WABA_NOT_FOUND',
+  /** Meta refused or did not answer; the message is Meta's, shown to the operator. */
+  BSP_META_REJECTED: 'BSP_META_REJECTED',
+  BSP_ALLOCATION_NOT_ATTACHED: 'BSP_ALLOCATION_NOT_ATTACHED',
+  /** "Bill me through us" is chosen before the platform's credit line exists. */
+  BSP_RESELLER_UNAVAILABLE: 'BSP_RESELLER_UNAVAILABLE',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
