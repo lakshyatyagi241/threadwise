@@ -28,21 +28,13 @@ export function previewDocument(i: PreviewDocInput): string {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-  html,body{margin:0;height:100%;background:#fafafa;font-family:system-ui,sans-serif;overflow:hidden}
-  .bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#f1f1f3;border-bottom:1px solid #e4e4e7}
-  .dot{width:9px;height:9px;border-radius:50%;background:#d4d4d8}
-  .url{flex:1;height:14px;margin-left:10px;border-radius:7px;background:#e4e4e7}
-  .page{padding:22px 22px}
-  .hero{height:${i.device === 'mobile' ? 90 : 120}px;border-radius:10px;background:#e8e8ec;margin-bottom:16px}
-  .line{height:10px;border-radius:5px;background:#e4e4e7;margin-bottom:10px}
-  .w60{width:60%}.w80{width:80%}.w45{width:45%}
+  html,body{margin:0;height:100%;background:linear-gradient(180deg,#f7f7f8,#ececef);font-family:system-ui,sans-serif;overflow:hidden}
+  .bar{display:flex;align-items:center;gap:6px;padding:9px 14px;background:rgba(255,255,255,.7);border-bottom:1px solid #e2e2e6}
+  .dot{width:8px;height:8px;border-radius:50%;background:#d4d4d8}
+  .url{flex:1;height:12px;margin-left:10px;border-radius:6px;background:#e4e4e8}
 </style></head>
 <body>
   <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url"></span></div>
-  <div class="page">
-    <div class="hero"></div>
-    <div class="line w80"></div><div class="line"></div><div class="line w60"></div><div class="line w45"></div>
-  </div>
   <script>${script}</script>
 </body></html>`;
 }

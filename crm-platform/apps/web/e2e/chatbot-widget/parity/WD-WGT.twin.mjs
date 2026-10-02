@@ -156,8 +156,13 @@ export default (h) => {
 
   async function openBuilder(c) {
     await c.goto('/chatbot-widgets/create', {
-      ready: { wadesk: '#cbw-builder', ours: '#wgt-next' },
+      ready: { wadesk: '#cbw-builder', ours: '[data-mode-tile]' },
     });
+    // ours opens a new widget on the WhatsApp Install & Customize page (WD-WGT-028); the wizard is one tile away
+    if (c.side === 'ours') {
+      await c.page.locator('[data-mode-tile=ai]').click();
+      await c.page.locator('#wgt-next').waitFor();
+    }
     // the cookie banner of either app floats over the footer buttons
     await c.page
       .getByRole('button', { name: /decline|reject/i })
