@@ -8,7 +8,13 @@ import {
 } from '../../infra/providers/localization-translation/redis-stores';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import {
+  CONVERSATION_MESSAGE_STORE,
+  PgConversationMessageStore,
+} from './conversation-message-store';
 import { ConversationTranslationService } from './conversation-translation.service';
+import { KEYWORD_RULE_STORE, PgKeywordRuleStore } from './keyword-rule-store';
+import { KeywordTranslationService } from './keyword-translation.service';
 import {
   MyLocaleController,
   PlatformLanguagesController,
@@ -54,8 +60,16 @@ import { TranslationService } from './translation.service';
     TranslationUsageService,
     TranslationService,
     TranslationSettingsService,
+    { provide: CONVERSATION_MESSAGE_STORE, useClass: PgConversationMessageStore },
+    { provide: KEYWORD_RULE_STORE, useClass: PgKeywordRuleStore },
     ConversationTranslationService,
+    KeywordTranslationService,
   ],
-  exports: [TranslationService, ConversationTranslationService, LanguagesService],
+  exports: [
+    TranslationService,
+    ConversationTranslationService,
+    KeywordTranslationService,
+    LanguagesService,
+  ],
 })
 export class LocalizationTranslationModule {}
