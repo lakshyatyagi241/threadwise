@@ -10,8 +10,12 @@ import { SessionProvider } from '@/features/auth-registration-security/shared/se
 import { NAV } from '@/features/_registry/nav.generated';
 import { PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
+import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
+import { resolveSettings } from '@/features/_registry/settings-resolve';
+import { SETTINGS } from '@/features/_registry/settings.generated';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
-import { getSession } from '@/lib/auth/server';
+import { getSession, signedOutTarget } from '@/lib/auth/server';
+import { RealtimeProvider } from '@/lib/realtime';
 
 /**
  * Customer workspace shell. Guards the session, hands the whole session
@@ -20,8 +24,8 @@ import { getSession } from '@/lib/auth/server';
  * real permissions.
  */
 export default async function AppLayout({ children }: { children: ReactNode }) {
-  const { session, expired } = await getSession();
-  if (!session) redirect(expired ? '/api/auth/refresh?next=/' : '/login');
+  const { session, expired, idleMinutes } = await getSession();
+  if (!session) redirect(await signedOutTarget(expired, idleMinutes));
 
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   const capabilities = {
@@ -31,20 +35,28 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <SessionProvider session={session}>
-      <AppShell
-        user={{
-          fullName: session.user.displayName ?? session.user.fullName,
-          email: session.user.email,
-          avatarUrl: session.user.avatarUrl,
-        }}
-        nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
-        theme={theme}
-        navFooter={<WorkspaceSwitcher />}
-        banners={<AccountBanners key="banners" />}
-        bell={<NotificationBell key="bell" />}
+      {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
+          The address is read here, on the server, so it can be set per deployment without rebuilding. */}
+      <RealtimeProvider
+        key={`${session.org.id}:${session.user.id}`}
+        url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
       >
-        <AccountGate>{children}</AccountGate>
-      </AppShell>
+        <AppShell
+          user={{
+            fullName: session.user.displayName ?? session.user.fullName,
+            email: session.user.email,
+            avatarUrl: session.user.avatarUrl,
+          }}
+          nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
+          settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
+          theme={theme}
+          navFooter={<WorkspaceSwitcher />}
+          banners={<AccountBanners key="banners" />}
+          bell={<NotificationBell key="bell" />}
+        >
+          <AccountGate>{children}</AccountGate>
+        </AppShell>
+      </RealtimeProvider>
     </SessionProvider>
   );
 }

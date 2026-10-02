@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { SecurityOverviewResponse } from '@crm/contracts';
 import { Alert, Badge, cn } from '@crm/ui';
 import type { DangerKind } from '../lib/danger';
+import { securityTrailHref } from '../lib/events';
 import { useOperator } from '../operator-context';
 import { SettingsCard } from './controls';
 import { SECURITY_NS } from './policy-form';
@@ -40,12 +42,15 @@ function ActionRow({
   onClick,
   disabled,
   tone = 'danger',
+  strong = false,
 }: {
   title: string;
   detail: string;
   onClick: () => void;
   disabled: boolean;
   tone?: 'danger' | 'success';
+  /** The kill switch: bolder than the rest so it is never mistaken for a routine action. */
+  strong?: boolean;
 }) {
   return (
     <button
@@ -56,7 +61,9 @@ function ActionRow({
         'flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-md border px-3 py-3 text-start text-sm font-semibold transition',
         'disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary',
         tone === 'danger'
-          ? 'border-danger/40 bg-background hover:bg-danger/10'
+          ? strong
+            ? 'border-danger/60 bg-danger/10 font-bold text-danger hover:bg-danger/20'
+            : 'border-danger/40 bg-background hover:bg-danger/10'
           : 'border-success/40 bg-success/10 text-success hover:bg-success/15',
       )}
     >
@@ -131,6 +138,7 @@ export function DangerPanel({
               title={t('halt.title')}
               detail={t('halt.detail')}
               disabled={!canRunDanger}
+              strong
               onClick={() => onAction('halt_sends')}
             />
           )}
@@ -148,6 +156,12 @@ export function DangerPanel({
             </li>
           ))}
         </ul>
+        <Link
+          href={securityTrailHref()}
+          className="inline-block text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {t('logged.trail')}
+        </Link>
       </SettingsCard>
     </div>
   );

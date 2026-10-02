@@ -1,4 +1,10 @@
-import { TAX_RATE_NAME_MAX, type CreateTaxRateInput, type TaxRateResponse, type TaxType, type UpdateTaxRateInput } from '@crm/contracts';
+import {
+  TAX_RATE_NAME_MAX,
+  type CreateTaxRateInput,
+  type TaxRateResponse,
+  type TaxType,
+  type UpdateTaxRateInput,
+} from '@crm/contracts';
 
 /**
  * The tax-rate form, as pure functions: the same rules the API's `createTaxRateSchema` enforces (a percent with at most 4
@@ -57,7 +63,8 @@ const HSN = /^[0-9A-Za-z]{2,12}$/;
 const PPM_FACTOR = 10_000;
 
 /** A real calendar day (`2026-02-30` is not one). */
-const isRealDay = (v: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(v) && new Date(`${v}T00:00:00Z`).toISOString().slice(0, 10) === v;
+const isRealDay = (v: string): boolean =>
+  /^\d{4}-\d{2}-\d{2}$/.test(v) && new Date(`${v}T00:00:00Z`).toISOString().slice(0, 10) === v;
 
 /** "18", "7.25", "9.975": at most 3 digits and 4 decimals, and not above 100. */
 export function isPercent(text: string): boolean {
@@ -74,7 +81,9 @@ export function percentUnits(text: string): number {
 /** 99750 -> "9.975", 180000 -> "18", 0 -> "0". */
 export function unitsToPercent(units: number): string {
   const whole = Math.floor(units / PPM_FACTOR);
-  const frac = String(units % PPM_FACTOR).padStart(4, '0').replace(/0+$/, '');
+  const frac = String(units % PPM_FACTOR)
+    .padStart(4, '0')
+    .replace(/0+$/, '');
   return frac ? `${whole}.${frac}` : String(whole);
 }
 
@@ -103,10 +112,21 @@ export type TaxRateProblem =
   | 'componentsSum'
   | 'descriptionTooLong';
 
-export type TaxRateField = 'name' | 'rate' | 'country' | 'region' | 'effectiveFrom' | 'effectiveTo' | 'defaultHsnSac' | 'components' | 'description';
+export type TaxRateField =
+  | 'name'
+  | 'rate'
+  | 'country'
+  | 'region'
+  | 'effectiveFrom'
+  | 'effectiveTo'
+  | 'defaultHsnSac'
+  | 'components'
+  | 'description';
 
 /** Problems keyed by field; empty when the form can be sent. */
-export function validateTaxRateForm(f: TaxRateFormState): Partial<Record<TaxRateField, TaxRateProblem>> {
+export function validateTaxRateForm(
+  f: TaxRateFormState,
+): Partial<Record<TaxRateField, TaxRateProblem>> {
   const out: Partial<Record<TaxRateField, TaxRateProblem>> = {};
   const name = f.name.trim();
   if (!name) out.name = 'nameRequired';
@@ -118,13 +138,23 @@ export function validateTaxRateForm(f: TaxRateFormState): Partial<Record<TaxRate
   if (region && region.length > 8) out.region = 'regionInvalid';
   if (f.effectiveFrom && !isRealDay(f.effectiveFrom)) out.effectiveFrom = 'dateInvalid';
   if (f.effectiveTo && !isRealDay(f.effectiveTo)) out.effectiveTo = 'dateInvalid';
-  if (!out.effectiveFrom && !out.effectiveTo && f.effectiveFrom && f.effectiveTo && f.effectiveTo < f.effectiveFrom) out.effectiveTo = 'dateOrder';
+  if (
+    !out.effectiveFrom &&
+    !out.effectiveTo &&
+    f.effectiveFrom &&
+    f.effectiveTo &&
+    f.effectiveTo < f.effectiveFrom
+  )
+    out.effectiveTo = 'dateOrder';
   if (f.defaultHsnSac.trim() && !HSN.test(f.defaultHsnSac.trim())) out.defaultHsnSac = 'hsnInvalid';
   if (f.compound) {
     if (f.components.length === 0) out.components = 'componentsMissing';
-    else if (f.components.some((c) => !c.type.trim() || c.type.trim().length > 12)) out.components = 'componentTypeRequired';
-    else if (f.components.some((c) => !PERCENT.test(c.rate.trim()))) out.components = 'componentRateInvalid';
-    else if (!out.rate && componentsTotal(f.components) !== unitsToPercent(percentUnits(f.rate))) out.components = 'componentsSum';
+    else if (f.components.some((c) => !c.type.trim() || c.type.trim().length > 12))
+      out.components = 'componentTypeRequired';
+    else if (f.components.some((c) => !PERCENT.test(c.rate.trim())))
+      out.components = 'componentRateInvalid';
+    else if (!out.rate && componentsTotal(f.components) !== unitsToPercent(percentUnits(f.rate)))
+      out.components = 'componentsSum';
   }
   return out;
 }
@@ -171,12 +201,18 @@ export function splitEvenly(rate: string, types: readonly string[]): ComponentDr
   if (!isPercent(rate) || types.length === 0) return types.map((type) => ({ type, rate: '' }));
   const total = percentUnits(rate);
   const each = Math.floor(total / types.length);
-  return types.map((type, i) => ({ type, rate: unitsToPercent(i === types.length - 1 ? total - each * (types.length - 1) : each) }));
+  return types.map((type, i) => ({
+    type,
+    rate: unitsToPercent(i === types.length - 1 ? total - each * (types.length - 1) : each),
+  }));
 }
 
 const orNull = (s: string): string | null => s.trim() || null;
 
-type SharedFields = Omit<CreateTaxRateInput, 'isDefault' | 'isActive' | 'name' | 'rate'> & { name: string; rate: string };
+type SharedFields = Omit<CreateTaxRateInput, 'isDefault' | 'isActive' | 'name' | 'rate'> & {
+  name: string;
+  rate: string;
+};
 
 function shared(f: TaxRateFormState): SharedFields {
   return {
@@ -187,14 +223,26 @@ function shared(f: TaxRateFormState): SharedFields {
     description: orNull(f.description),
     country: f.country.trim() ? f.country.trim().toUpperCase() : null,
     region: orNull(f.region),
-    components: f.compound ? f.components.map((c) => ({ type: c.type.trim().toUpperCase(), rate: unitsToPercent(percentUnits(c.rate)) })) : null,
+    components: f.compound
+      ? f.components.map((c) => ({
+          type: c.type.trim().toUpperCase(),
+          rate: unitsToPercent(percentUnits(c.rate)),
+        }))
+      : null,
     effectiveFrom: f.effectiveFrom || null,
     effectiveTo: f.effectiveTo || null,
     defaultHsnSac: orNull(f.defaultHsnSac),
   };
 }
 
-export const toCreateInput = (f: TaxRateFormState): CreateTaxRateInput => ({ ...shared(f), isDefault: f.isDefault, isActive: f.isDefault ? true : f.isActive });
+export const toCreateInput = (f: TaxRateFormState): CreateTaxRateInput => ({
+  ...shared(f),
+  isDefault: f.isDefault,
+  isActive: f.isDefault ? true : f.isActive,
+});
 
 /** The patch of an edit (the default flag moves through its own endpoint). */
-export const toUpdatePatch = (f: TaxRateFormState): Omit<UpdateTaxRateInput, 'rowVersion'> => ({ ...shared(f), isActive: f.isDefault ? true : f.isActive });
+export const toUpdatePatch = (f: TaxRateFormState): Omit<UpdateTaxRateInput, 'rowVersion'> => ({
+  ...shared(f),
+  isActive: f.isDefault ? true : f.isActive,
+});

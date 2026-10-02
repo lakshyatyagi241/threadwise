@@ -4,7 +4,17 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Alert, Button, ConfirmDialog, Field, Input, Modal, Select, Spinner, useToast } from '@crm/ui';
+import {
+  Alert,
+  Button,
+  ConfirmDialog,
+  Field,
+  Input,
+  Modal,
+  Select,
+  Spinner,
+  useToast,
+} from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useGroups, useTags } from '@/features/contacts-attributes-tags';
 import {
@@ -81,7 +91,18 @@ export function useSegmentActions({
   };
   const failed = (e: unknown) => {
     const kind = errorKind(e);
-    toast(t(kind === 'forbidden' ? 'forbidden' : kind === 'rateLimited' ? 'rateLimited' : kind === 'unavailable' ? 'unavailable' : 'failed'), 'danger');
+    toast(
+      t(
+        kind === 'forbidden'
+          ? 'forbidden'
+          : kind === 'rateLimited'
+            ? 'rateLimited'
+            : kind === 'unavailable'
+              ? 'unavailable'
+              : 'failed',
+      ),
+      'danger',
+    );
   };
 
   return {
@@ -111,7 +132,16 @@ export function useSegmentActions({
         toast(t('exportStarted'), 'success');
       } catch (e) {
         const kind = errorKind(e);
-        toast(t(kind === 'conflict' || kind === 'validation' ? 'exportTooLarge' : kind === 'forbidden' ? 'forbidden' : 'failed'), 'danger');
+        toast(
+          t(
+            kind === 'conflict' || kind === 'validation'
+              ? 'exportTooLarge'
+              : kind === 'forbidden'
+                ? 'forbidden'
+                : 'failed',
+          ),
+          'danger',
+        );
       } finally {
         setExporting((s) => mark(s, segment.id, false));
       }
@@ -196,7 +226,9 @@ function SnapshotNote({ segment }: { segment: Segment }) {
     <Alert tone="info" className="text-xs">
       {segment.memberCount === null
         ? t('snapshotNoteUnknown')
-        : t(segment.countApproximate ? 'snapshotNoteApprox' : 'snapshotNote', { count: segment.memberCount })}
+        : t(segment.countApproximate ? 'snapshotNoteApprox' : 'snapshotNote', {
+            count: segment.memberCount,
+          })}
     </Alert>
   );
 }
@@ -219,7 +251,10 @@ function TagModal({ segment, onClose }: { segment: Segment; onClose: () => void 
     setBusy(true);
     setError(null);
     try {
-      const r = await tagMembers(segment.id, name.trim() ? { name: name.trim() } : { tagId: chosen });
+      const r = await tagMembers(
+        segment.id,
+        name.trim() ? { name: name.trim() } : { tagId: chosen },
+      );
       await Promise.all([invalidateSegments(qc), qc.invalidateQueries({ queryKey: ['cat'] })]);
       const label = name.trim() || list.find((x) => x.id === chosen)?.name || '';
       reportBulk(toast, t, r, 'tagged', label);
@@ -232,29 +267,51 @@ function TagModal({ segment, onClose }: { segment: Segment; onClose: () => void 
   }
 
   return (
-    <Modal open onClose={() => !busy && onClose()} title={t('tagTitle')} eyebrow={segment.name} closeLabel={t('close')} footer={
-      <>
-        <Button variant="secondary" onClick={onClose} disabled={busy}>{t('cancel')}</Button>
-        <Button onClick={() => void apply()} disabled={busy || !ready}>
-          {busy && <Spinner />}
-          {t('tagApply')}
-        </Button>
-      </>
-    }>
+    <Modal
+      open
+      onClose={() => !busy && onClose()}
+      title={t('tagTitle')}
+      eyebrow={segment.name}
+      closeLabel={t('close')}
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose} disabled={busy}>
+            {t('cancel')}
+          </Button>
+          <Button onClick={() => void apply()} disabled={busy || !ready}>
+            {busy && <Spinner />}
+            {t('tagApply')}
+          </Button>
+        </>
+      }
+    >
       <div className="space-y-3">
         <SnapshotNote segment={segment} />
         {error ? <ErrorLine error={error} /> : null}
         <Field label={t('tagExisting')} htmlFor="seg-tag-existing">
-          <Select id="seg-tag-existing" value={chosen ?? ''} disabled={Boolean(name.trim()) || list.length === 0} onChange={(e) => setTagId(e.target.value)}>
+          <Select
+            id="seg-tag-existing"
+            value={chosen ?? ''}
+            disabled={Boolean(name.trim()) || list.length === 0}
+            onChange={(e) => setTagId(e.target.value)}
+          >
             {list.length === 0 && <option value="">{t('noTags')}</option>}
             {list.map((x) => (
-              <option key={x.id} value={x.id}>{x.name}</option>
+              <option key={x.id} value={x.id}>
+                {x.name}
+              </option>
             ))}
           </Select>
         </Field>
         {can.createTags && (
           <Field label={t('tagNew')} htmlFor="seg-tag-new" hint={t('tagNewHint')}>
-            <Input id="seg-tag-new" value={name} maxLength={64} placeholder={t('tagNewPlaceholder')} onChange={(e) => setName(e.target.value)} />
+            <Input
+              id="seg-tag-new"
+              value={name}
+              maxLength={64}
+              placeholder={t('tagNewPlaceholder')}
+              onChange={(e) => setName(e.target.value)}
+            />
           </Field>
         )}
       </div>
@@ -289,23 +346,39 @@ function GroupModal({ segment, onClose }: { segment: Segment; onClose: () => voi
   }
 
   return (
-    <Modal open onClose={() => !busy && onClose()} title={t('groupTitle')} eyebrow={segment.name} closeLabel={t('close')} footer={
-      <>
-        <Button variant="secondary" onClick={onClose} disabled={busy}>{t('cancel')}</Button>
-        <Button onClick={() => void apply()} disabled={busy || !chosen}>
-          {busy && <Spinner />}
-          {t('groupApply')}
-        </Button>
-      </>
-    }>
+    <Modal
+      open
+      onClose={() => !busy && onClose()}
+      title={t('groupTitle')}
+      eyebrow={segment.name}
+      closeLabel={t('close')}
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose} disabled={busy}>
+            {t('cancel')}
+          </Button>
+          <Button onClick={() => void apply()} disabled={busy || !chosen}>
+            {busy && <Spinner />}
+            {t('groupApply')}
+          </Button>
+        </>
+      }
+    >
       <div className="space-y-3">
         <SnapshotNote segment={segment} />
         {error ? <ErrorLine error={error} /> : null}
         <Field label={t('groupChoose')} htmlFor="seg-group">
-          <Select id="seg-group" value={chosen} disabled={list.length === 0} onChange={(e) => setGroupId(e.target.value)}>
+          <Select
+            id="seg-group"
+            value={chosen}
+            disabled={list.length === 0}
+            onChange={(e) => setGroupId(e.target.value)}
+          >
             {list.length === 0 && <option value="">{t('noGroups')}</option>}
             {list.map((g) => (
-              <option key={g.id} value={g.id}>{g.name}</option>
+              <option key={g.id} value={g.id}>
+                {g.name}
+              </option>
             ))}
           </Select>
         </Field>

@@ -5,10 +5,12 @@ import { useTranslations } from 'next-intl';
 import { Alert, Button, Field, Textarea } from '@crm/ui';
 import { normalizeIp, wouldLockOut } from '../lib/cidr';
 import { appendEntry, parseList } from '../lib/list-text';
+import { WORKSPACES_HREF } from '../lib/links';
 import {
   AlertChannelControl,
   EnforcementBadge,
-  GuardrailModeControl,
+  GuardrailModeExplanation,
+  GuardrailModeSelect,
   KeywordListControl,
   MfaMethodsControl,
   NumberControl,
@@ -46,11 +48,11 @@ export function LoginPanel() {
             <h3 className="text-sm font-semibold">{t('password.title')}</h3>
             <p className="text-xs text-muted-foreground">{t('password.note')}</p>
           </div>
-          <NumberControl name="passwordMinLength" />
-          <div className="space-y-3">
-            <ToggleControl name="passwordRequireUpper" />
-            <ToggleControl name="passwordRequireNumber" />
-            <ToggleControl name="passwordRequireSymbol" />
+          <div className="grid grid-cols-2 items-end gap-3 2xl:grid-cols-4">
+            <NumberControl name="passwordMinLength" />
+            <ToggleControl name="passwordRequireUpper" compact />
+            <ToggleControl name="passwordRequireNumber" compact />
+            <ToggleControl name="passwordRequireSymbol" compact />
           </div>
           <ToggleControl name="rememberMeEnabled" />
         </div>
@@ -85,8 +87,9 @@ export function WhatsappPanel() {
         title={t('master.title')}
         description={t('master.description')}
         className="lg:col-span-3"
+        aside={<GuardrailModeSelect />}
       >
-        <GuardrailModeControl />
+        <GuardrailModeExplanation />
       </SettingsCard>
       <SettingsCard kicker={t('caps.kicker')} title={t('caps.title')}>
         <div className="space-y-3">
@@ -105,6 +108,12 @@ export function WhatsappPanel() {
         <p className="rounded-md border border-border p-3 text-sm text-muted-foreground">
           {t('health.body')}
         </p>
+        <Link
+          href={WORKSPACES_HREF}
+          className="block rounded-full border border-border px-3 py-2 text-center text-sm font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {t('health.link')}
+        </Link>
       </SettingsCard>
     </Panel>
   );

@@ -105,20 +105,31 @@ export function InvoiceDetail({ id }: { id: string }) {
             {invoice.number ?? t('draftTitle')}
           </h1>
           <StatusChip status={invoice.status} />
-          {late > 0 && <span className="text-xs font-medium text-danger">{t('daysLate', { count: late })}</span>}
-          {(invoice.buyerName ?? invoice.contact?.name) && (
-            invoice.contact ? (
-              <ContactPill contact={{ id: invoice.contact.id, name: invoice.buyerName ?? invoice.contact.name }} />
+          {late > 0 && (
+            <span className="text-xs font-medium text-danger">
+              {t('daysLate', { count: late })}
+            </span>
+          )}
+          {(invoice.buyerName ?? invoice.contact?.name) &&
+            (invoice.contact ? (
+              <ContactPill
+                contact={{
+                  id: invoice.contact.id,
+                  name: invoice.buyerName ?? invoice.contact.name,
+                }}
+              />
             ) : (
               <span className="truncate text-sm text-muted-foreground" dir="auto">
                 {invoice.buyerName}
               </span>
-            )
-          )}
+            ))}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {allowed.has('edit') && (
-            <Link href={`/invoices/${invoice.id}/edit`} className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+            <Link
+              href={`/invoices/${invoice.id}/edit`}
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            >
               <PencilIcon /> {t('edit')}
             </Link>
           )}
@@ -133,12 +144,18 @@ export function InvoiceDetail({ id }: { id: string }) {
             </Button>
           )}
           {allowed.has('send') && (
-            <Button variant={invoice.sentAt ? 'secondary' : 'brand'} onClick={() => dialogs.open('send', invoice)}>
+            <Button
+              variant={invoice.sentAt ? 'secondary' : 'brand'}
+              onClick={() => dialogs.open('send', invoice)}
+            >
               <SendIcon /> {invoice.sentAt ? t('shareAgain') : t('send')}
             </Button>
           )}
           {allowed.has('recordPayment') && (
-            <Button variant={invoice.sentAt ? 'brand' : 'secondary'} onClick={() => dialogs.open('pay', invoice)}>
+            <Button
+              variant={invoice.sentAt ? 'brand' : 'secondary'}
+              onClick={() => dialogs.open('pay', invoice)}
+            >
               <PaymentIcon /> {t('recordPayment')}
             </Button>
           )}
@@ -148,7 +165,10 @@ export function InvoiceDetail({ id }: { id: string }) {
             </Button>
           )}
           {allowed.has('copyLink') && (
-            <Button variant="secondary" onClick={() => void actions.copyLink(invoice, link ?? null)}>
+            <Button
+              variant="secondary"
+              onClick={() => void actions.copyLink(invoice, link ?? null)}
+            >
               <CopyIcon /> {t('copyLink')}
             </Button>
           )}
@@ -161,7 +181,10 @@ export function InvoiceDetail({ id }: { id: string }) {
             </Button>
           )}
           {allowed.has('creditNote') && (
-            <Link href={creditNoteHref(invoice.id)} className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+            <Link
+              href={creditNoteHref(invoice.id)}
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            >
               <NoteIcon /> {t('createCreditNote')}
             </Link>
           )}
@@ -176,18 +199,30 @@ export function InvoiceDetail({ id }: { id: string }) {
           {allowed.has('duplicate') && (
             <Button
               variant="secondary"
-              onClick={() => void actions.duplicate(invoice).then((r) => r.ok && router.push(`/invoices/${r.value.id}/edit`))}
+              onClick={() =>
+                void actions
+                  .duplicate(invoice)
+                  .then((r) => r.ok && router.push(`/invoices/${r.value.id}/edit`))
+              }
             >
               <CopyDocIcon /> {t('duplicate')}
             </Button>
           )}
           {allowed.has('void') && (
-            <Button variant="secondary" className={danger} onClick={() => dialogs.open('void', invoice)}>
+            <Button
+              variant="secondary"
+              className={danger}
+              onClick={() => dialogs.open('void', invoice)}
+            >
               <BanIcon /> {t('void')}
             </Button>
           )}
           {allowed.has('delete') && (
-            <Button variant="secondary" className={danger} onClick={() => dialogs.open('delete', invoice)}>
+            <Button
+              variant="secondary"
+              className={danger}
+              onClick={() => dialogs.open('delete', invoice)}
+            >
               <TrashIcon /> {t('delete')}
             </Button>
           )}
@@ -219,7 +254,9 @@ export function InvoiceDetail({ id }: { id: string }) {
           <DetailsCard invoice={invoice} />
           {link && <PublicLinkCard invoice={invoice} canChange={can.update && open} />}
           {issued && <PaymentsSection invoice={invoice} />}
-          {issued && <CreditNotesCard invoiceId={invoice.id} canCreate={allowed.has('creditNote')} />}
+          {issued && (
+            <CreditNotesCard invoiceId={invoice.id} canCreate={allowed.has('creditNote')} />
+          )}
           <ActivityTimeline invoiceId={invoice.id} />
         </aside>
       </div>

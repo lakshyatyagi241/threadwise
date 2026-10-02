@@ -1,10 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import {
-  SEGMENT_BUILTIN_FIELDS,
-  SEGMENT_INVALID_REASONS,
-  SEGMENT_OPERATORS,
-} from '@crm/contracts';
+import { SEGMENT_BUILTIN_FIELDS, SEGMENT_INVALID_REASONS, SEGMENT_OPERATORS } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { SHOW_VALUES } from './lib/url';
 
@@ -155,7 +151,10 @@ describe('message keys used in code', () => {
         (k) => `problem.rules.${k}`,
       ),
       ...SHOW_VALUES.map((v) => `hub.show.${v}`),
-      ...(['private', 'shared'] as const).flatMap((v) => [`visibility.${v}`, `visibility.${v}Hint`]),
+      ...(['private', 'shared'] as const).flatMap((v) => [
+        `visibility.${v}`,
+        `visibility.${v}Hint`,
+      ]),
     ];
     const missing = [...new Set(dynamic)].filter((k) => !(`${ROOT_KEY}.${k}` in en));
     expect(missing).toEqual([]);

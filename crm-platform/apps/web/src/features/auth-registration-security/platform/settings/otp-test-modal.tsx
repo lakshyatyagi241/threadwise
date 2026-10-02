@@ -7,7 +7,7 @@ import { otpTestResponseSchema } from '@crm/contracts';
 import type { OtpSenderView, OtpTestResponse } from '@crm/contracts';
 import { Alert, Button, Field, Input, Modal, Select, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { normalizePhoneInput, senderRef } from '../lib/otp-senders';
+import { normalizePhoneInput, pickerSenders, senderRef } from '../lib/otp-senders';
 import { operatorFetch } from '../operator-fetch';
 
 const NS = 'auth-registration-security.platform.registration.otp.test';
@@ -143,7 +143,8 @@ export function OtpTestModal({
         <Field label={t('sender')} htmlFor="otp-test-sender" hint={t('senderHint')}>
           <Select id="otp-test-sender" value={sender} onChange={(e) => setSender(e.target.value)}>
             <option value="">{t('savedSender')}</option>
-            {senders.map((s) => (
+            {/* Only senders that can deliver a code (a test through an unfinished one can only fail). */}
+            {pickerSenders(senders, initialSender).map((s) => (
               <option key={s.id} value={senderRef(s)}>
                 {s.label}
               </option>

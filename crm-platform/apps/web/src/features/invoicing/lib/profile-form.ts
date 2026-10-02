@@ -80,7 +80,9 @@ export interface CountryOption {
 }
 
 /** The countries that have a tax profile (the custom profile is not a country). */
-export const COUNTRY_OPTIONS: readonly CountryOption[] = TAX_PROFILES.filter((p) => p.code !== 'CUSTOM')
+export const COUNTRY_OPTIONS: readonly CountryOption[] = TAX_PROFILES.filter(
+  (p) => p.code !== 'CUSTOM',
+)
   .map((p) => ({ code: p.code, name: p.name }))
   .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -175,10 +177,15 @@ export function bankRowsToRecord(rows: readonly Row[]): Record<string, string> |
   return Object.keys(out).length === 0 ? null : out;
 }
 
-const sameRecord = (a: Record<string, string> | null, b: Record<string, string> | null): boolean => {
+const sameRecord = (
+  a: Record<string, string> | null,
+  b: Record<string, string> | null,
+): boolean => {
   const ka = Object.keys(a ?? {});
   const kb = Object.keys(b ?? {});
-  return ka.length === kb.length && ka.every((k) => (a as Record<string, string>)[k] === (b ?? {})[k]);
+  return (
+    ka.length === kb.length && ka.every((k) => (a as Record<string, string>)[k] === (b ?? {})[k])
+  );
 };
 
 const sameRows = (a: readonly Row[], b: readonly Row[]): boolean =>
@@ -228,19 +235,31 @@ export const NUMBER_TOKENS = ['{PREFIX}', '{YEAR}', '{YY}', '{SEQ}'] as const;
 export type NumberFormatProblem = 'empty' | 'tooLong' | 'charset' | 'token' | 'seq' | 'year';
 
 /** The same rules as the server (`updateInvoiceProfileSchema` and the yearly-reset check), so the person learns before saving. */
-export function numberFormatProblem(format: string, yearlyReset: boolean): NumberFormatProblem | null {
+export function numberFormatProblem(
+  format: string,
+  yearlyReset: boolean,
+): NumberFormatProblem | null {
   const f = format.trim();
   if (!f) return 'empty';
   if (f.length > LIMITS.numberFormat) return 'tooLong';
   if (!/^[A-Za-z0-9{}_./ -]+$/.test(f)) return 'charset';
-  if (!(f.match(/\{[A-Z]+\}/g) ?? []).every((t) => (NUMBER_TOKENS as readonly string[]).includes(t))) return 'token';
+  if (
+    !(f.match(/\{[A-Z]+\}/g) ?? []).every((t) => (NUMBER_TOKENS as readonly string[]).includes(t))
+  )
+    return 'token';
   if (!f.includes('{SEQ}')) return 'seq';
   if (yearlyReset && !f.includes('{YEAR}') && !f.includes('{YY}')) return 'year';
   return null;
 }
 
 export type DocKind = 'invoice' | 'proforma' | 'receipt' | 'creditNote' | 'salesOrder';
-export const DOC_KINDS: readonly DocKind[] = ['invoice', 'proforma', 'receipt', 'creditNote', 'salesOrder'];
+export const DOC_KINDS: readonly DocKind[] = [
+  'invoice',
+  'proforma',
+  'receipt',
+  'creditNote',
+  'salesOrder',
+];
 
 export interface NumberingInput {
   prefixes: Record<DocKind, string>;
@@ -257,7 +276,12 @@ export function numberingYear(date: string, fiscalYearStartMonth: number): numbe
 }
 
 /** `{PREFIX}-{YEAR}-{SEQ}` + INV, 2026-10-02, seq 7, padding 6 gives `INV-2026-000007`: the rule the server applies. */
-export function formatNumberExample(kind: DocKind, n: NumberingInput, date: string, seq: number): string {
+export function formatNumberExample(
+  kind: DocKind,
+  n: NumberingInput,
+  date: string,
+  seq: number,
+): string {
   const year = numberingYear(date, n.fiscalYearStartMonth);
   return n.numberFormat
     .replaceAll('{PREFIX}', n.prefixes[kind])
@@ -305,7 +329,10 @@ export interface NumberingWarning {
 }
 
 /** What the country's law says about a number (India: at most 16 characters, letters, digits, "-" and "/"), checked on the examples. */
-export function numberingWarnings(country: string, examples: readonly NumberExample[]): NumberingWarning[] {
+export function numberingWarnings(
+  country: string,
+  examples: readonly NumberExample[],
+): NumberingWarning[] {
   const rules = profileOf(country)?.numbering;
   if (!rules) return [];
   const out: NumberingWarning[] = [];
@@ -374,7 +401,9 @@ export function normalizedTaxId(country: string, raw: string): string {
 }
 
 /** For a GSTIN: the state its first digits name, and the PAN inside. */
-export function gstinFacts(check: TaxIdCheck): { stateCode: string; stateName: string; pan: string } | null {
+export function gstinFacts(
+  check: TaxIdCheck,
+): { stateCode: string; stateName: string; pan: string } | null {
   const d = check.result?.details;
   if (!check.result?.valid || !d?.['stateCode']) return null;
   const st = INDIA_STATES.find((s) => s.code === d['stateCode']);
@@ -401,7 +430,8 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export function validateForm(f: ProfileForm): Record<string, FieldIssue> {
   const out: Record<string, FieldIssue> = {};
   const max = (key: keyof typeof LIMITS, value: string, path: string = key) => {
-    if (value.trim().length > LIMITS[key]) out[path] = { code: 'tooLong', params: { max: LIMITS[key] } };
+    if (value.trim().length > LIMITS[key])
+      out[path] = { code: 'tooLong', params: { max: LIMITS[key] } };
   };
   max('sellerName', f.sellerName);
   max('sellerAddress', f.sellerAddress);
@@ -413,9 +443,12 @@ export function validateForm(f: ProfileForm): Record<string, FieldIssue> {
   max('paymentInstructions', f.paymentInstructions);
   max('terms', f.terms);
 
-  if (f.sellerCountry.trim() && !/^[A-Za-z]{2}$/.test(f.sellerCountry.trim())) out['sellerCountry'] = { code: 'country' };
-  if (f.sellerState.trim() && !/^[A-Za-z0-9]{1,3}$/.test(f.sellerState.trim())) out['sellerState'] = { code: 'state' };
-  if (f.supportEmail.trim() && !EMAIL.test(f.supportEmail.trim())) out['supportEmail'] = { code: 'email' };
+  if (f.sellerCountry.trim() && !/^[A-Za-z]{2}$/.test(f.sellerCountry.trim()))
+    out['sellerCountry'] = { code: 'country' };
+  if (f.sellerState.trim() && !/^[A-Za-z0-9]{1,3}$/.test(f.sellerState.trim()))
+    out['sellerState'] = { code: 'state' };
+  if (f.supportEmail.trim() && !EMAIL.test(f.supportEmail.trim()))
+    out['supportEmail'] = { code: 'email' };
 
   const logo = f.logoUrl.trim();
   if (logo) {
@@ -429,39 +462,61 @@ export function validateForm(f: ProfileForm): Record<string, FieldIssue> {
     }
     if (!ok) out['logoUrl'] = { code: 'httpsUrl' };
   }
-  if (f.brandColor.trim() && !/^#[0-9A-Fa-f]{6}$/.test(f.brandColor.trim())) out['brandColor'] = { code: 'hex' };
+  if (f.brandColor.trim() && !/^#[0-9A-Fa-f]{6}$/.test(f.brandColor.trim()))
+    out['brandColor'] = { code: 'hex' };
 
-  for (const key of ['numberingPrefix', 'proformaPrefix', 'receiptPrefix', 'creditNotePrefix', 'salesOrderPrefix'] as const) {
+  for (const key of [
+    'numberingPrefix',
+    'proformaPrefix',
+    'receiptPrefix',
+    'creditNotePrefix',
+    'salesOrderPrefix',
+  ] as const) {
     if (!/^[A-Za-z0-9]{1,10}$/.test(f[key].trim())) out[key] = { code: 'prefix' };
   }
   const problem = numberFormatProblem(f.numberFormat, f.yearlyReset);
-  if (problem) out[problem === 'year' ? 'yearlyReset' : 'numberFormat'] = { code: `format.${problem}`, params: { max: LIMITS.numberFormat } };
+  if (problem)
+    out[problem === 'year' ? 'yearlyReset' : 'numberFormat'] = {
+      code: `format.${problem}`,
+      params: { max: LIMITS.numberFormat },
+    };
   const pad = Number(f.numberPadding);
-  if (!f.numberPadding.trim() || !Number.isInteger(pad) || pad < 1 || pad > 10) out['numberPadding'] = { code: 'padding' };
+  if (!f.numberPadding.trim() || !Number.isInteger(pad) || pad < 1 || pad > 10)
+    out['numberPadding'] = { code: 'padding' };
   const month = Number(f.fiscalYearStartMonth);
-  if (!Number.isInteger(month) || month < 1 || month > 12) out['fiscalYearStartMonth'] = { code: 'month' };
+  if (!Number.isInteger(month) || month < 1 || month > 12)
+    out['fiscalYearStartMonth'] = { code: 'month' };
   if (f.dueDays.trim()) {
     const d = Number(f.dueDays);
     if (!/^\d+$/.test(f.dueDays.trim()) || d > 365) out['dueDays'] = { code: 'dueDays' };
   }
   if (!/^[a-z0-9_]{1,32}$/.test(f.defaultTaxRegime)) out['defaultTaxRegime'] = { code: 'regime' };
 
-  if (f.extraFields.filter((r) => !blank(r)).length > MAX_EXTRA_ROWS) out['extraFields'] = { code: 'tooManyRows', params: { max: MAX_EXTRA_ROWS } };
+  if (f.extraFields.filter((r) => !blank(r)).length > MAX_EXTRA_ROWS)
+    out['extraFields'] = { code: 'tooManyRows', params: { max: MAX_EXTRA_ROWS } };
   f.extraFields.forEach((r, i) => {
     if (blank(r)) return;
-    if (!complete(r)) out[`extraFields.${i}.${r.label.trim() ? 'value' : 'label'}`] = { code: 'rowIncomplete' };
-    else if (r.label.trim().length > LIMITS.rowLabel) out[`extraFields.${i}.label`] = { code: 'tooLong', params: { max: LIMITS.rowLabel } };
-    else if (r.value.trim().length > LIMITS.extraValue) out[`extraFields.${i}.value`] = { code: 'tooLong', params: { max: LIMITS.extraValue } };
+    if (!complete(r))
+      out[`extraFields.${i}.${r.label.trim() ? 'value' : 'label'}`] = { code: 'rowIncomplete' };
+    else if (r.label.trim().length > LIMITS.rowLabel)
+      out[`extraFields.${i}.label`] = { code: 'tooLong', params: { max: LIMITS.rowLabel } };
+    else if (r.value.trim().length > LIMITS.extraValue)
+      out[`extraFields.${i}.value`] = { code: 'tooLong', params: { max: LIMITS.extraValue } };
   });
 
-  if (f.bankRows.filter((r) => !blank(r)).length > MAX_BANK_ROWS) out['bankDetails'] = { code: 'tooManyRows', params: { max: MAX_BANK_ROWS } };
+  if (f.bankRows.filter((r) => !blank(r)).length > MAX_BANK_ROWS)
+    out['bankDetails'] = { code: 'tooManyRows', params: { max: MAX_BANK_ROWS } };
   const seen = new Set<string>();
   f.bankRows.forEach((r, i) => {
     if (blank(r)) return;
-    if (!complete(r)) out[`bankDetails.${i}.${r.label.trim() ? 'value' : 'label'}`] = { code: 'rowIncomplete' };
-    else if (r.label.trim().length > LIMITS.rowLabel) out[`bankDetails.${i}.label`] = { code: 'tooLong', params: { max: LIMITS.rowLabel } };
-    else if (r.value.trim().length > LIMITS.bankValue) out[`bankDetails.${i}.value`] = { code: 'tooLong', params: { max: LIMITS.bankValue } };
-    else if (seen.has(r.label.trim().toLowerCase())) out[`bankDetails.${i}.label`] = { code: 'duplicate' };
+    if (!complete(r))
+      out[`bankDetails.${i}.${r.label.trim() ? 'value' : 'label'}`] = { code: 'rowIncomplete' };
+    else if (r.label.trim().length > LIMITS.rowLabel)
+      out[`bankDetails.${i}.label`] = { code: 'tooLong', params: { max: LIMITS.rowLabel } };
+    else if (r.value.trim().length > LIMITS.bankValue)
+      out[`bankDetails.${i}.value`] = { code: 'tooLong', params: { max: LIMITS.bankValue } };
+    else if (seen.has(r.label.trim().toLowerCase()))
+      out[`bankDetails.${i}.label`] = { code: 'duplicate' };
     seen.add(r.label.trim().toLowerCase());
   });
   return out;
@@ -483,13 +538,23 @@ const NULLABLE_TEXT = [
   'footerNote',
   'invoiceTitle',
 ] as const;
-const PREFIXES = ['numberingPrefix', 'proformaPrefix', 'receiptPrefix', 'creditNotePrefix', 'salesOrderPrefix'] as const;
+const PREFIXES = [
+  'numberingPrefix',
+  'proformaPrefix',
+  'receiptPrefix',
+  'creditNotePrefix',
+  'salesOrderPrefix',
+] as const;
 
 /**
  * Only what changed since `initial`: a cleared optional field is `null`, a half-filled row is not sent. `rowVersion` rides along
  * only when something changed and the profile has been saved before (it is null until the first save).
  */
-export function diffToPatch(initial: ProfileForm, current: ProfileForm, rowVersion: number | null): UpdateInvoiceProfileInput {
+export function diffToPatch(
+  initial: ProfileForm,
+  current: ProfileForm,
+  rowVersion: number | null,
+): UpdateInvoiceProfileInput {
   const patch: UpdateInvoiceProfileInput = {};
   const out = patch as Record<string, unknown>;
 
@@ -500,23 +565,35 @@ export function diffToPatch(initial: ProfileForm, current: ProfileForm, rowVersi
     out['sellerCountry'] = current.sellerCountry.trim().toUpperCase() || null;
   }
   const state = normalizeState(current.sellerCountry, current.sellerState);
-  if (normalizeState(initial.sellerCountry, initial.sellerState) !== state) out['sellerState'] = state || null;
+  if (normalizeState(initial.sellerCountry, initial.sellerState) !== state)
+    out['sellerState'] = state || null;
 
   for (const k of PREFIXES) {
-    if (initial[k].trim().toUpperCase() !== current[k].trim().toUpperCase() && current[k].trim()) out[k] = current[k].trim().toUpperCase();
+    if (initial[k].trim().toUpperCase() !== current[k].trim().toUpperCase() && current[k].trim())
+      out[k] = current[k].trim().toUpperCase();
   }
-  if (initial.numberFormat.trim() !== current.numberFormat.trim() && current.numberFormat.trim()) out['numberFormat'] = current.numberFormat.trim();
-  if (initial.numberPadding.trim() !== current.numberPadding.trim() && current.numberPadding.trim()) out['numberPadding'] = Number(current.numberPadding);
+  if (initial.numberFormat.trim() !== current.numberFormat.trim() && current.numberFormat.trim())
+    out['numberFormat'] = current.numberFormat.trim();
+  if (initial.numberPadding.trim() !== current.numberPadding.trim() && current.numberPadding.trim())
+    out['numberPadding'] = Number(current.numberPadding);
   if (initial.yearlyReset !== current.yearlyReset) out['yearlyReset'] = current.yearlyReset;
-  if (initial.fiscalYearStartMonth.trim() !== current.fiscalYearStartMonth.trim() && current.fiscalYearStartMonth.trim()) {
+  if (
+    initial.fiscalYearStartMonth.trim() !== current.fiscalYearStartMonth.trim() &&
+    current.fiscalYearStartMonth.trim()
+  ) {
     out['fiscalYearStartMonth'] = Number(current.fiscalYearStartMonth);
   }
-  if (initial.dueDays.trim() !== current.dueDays.trim()) out['dueDays'] = current.dueDays.trim() ? Number(current.dueDays) : null;
-  if (initial.overdueReminders !== current.overdueReminders) out['overdueReminders'] = current.overdueReminders;
-  if (initial.defaultTaxRegime !== current.defaultTaxRegime) out['defaultTaxRegime'] = current.defaultTaxRegime;
+  if (initial.dueDays.trim() !== current.dueDays.trim())
+    out['dueDays'] = current.dueDays.trim() ? Number(current.dueDays) : null;
+  if (initial.overdueReminders !== current.overdueReminders)
+    out['overdueReminders'] = current.overdueReminders;
+  if (initial.defaultTaxRegime !== current.defaultTaxRegime)
+    out['defaultTaxRegime'] = current.defaultTaxRegime;
 
-  if (!sameRows(normalizeRows(initial.extraFields), normalizeRows(current.extraFields))) out['extraFields'] = normalizeRows(current.extraFields);
-  if (!sameRecord(bankRowsToRecord(initial.bankRows), bankRowsToRecord(current.bankRows))) out['bankDetails'] = bankRowsToRecord(current.bankRows);
+  if (!sameRows(normalizeRows(initial.extraFields), normalizeRows(current.extraFields)))
+    out['extraFields'] = normalizeRows(current.extraFields);
+  if (!sameRecord(bankRowsToRecord(initial.bankRows), bankRowsToRecord(current.bankRows)))
+    out['bankDetails'] = bankRowsToRecord(current.bankRows);
 
   if (Object.keys(patch).length > 0 && rowVersion !== null) patch.rowVersion = rowVersion;
   return patch;

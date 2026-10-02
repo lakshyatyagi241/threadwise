@@ -11,6 +11,7 @@ import { QueueModule } from './infra/queue/queue.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
 import { SendGuardModule } from './modules/auth';
+import { RealtimeEmitterModule } from './realtime';
 import { WorkersModule } from './workers/workers.module';
 
 /**
@@ -45,6 +46,8 @@ import { WorkersModule } from './workers/workers.module';
     ProvidersModule,
     SendGuardModule,
     KernelModule,
+    // Publish-only realtime: jobs announce what they did; the API pods that hold the sockets deliver it.
+    RealtimeEmitterModule,
     WorkersModule,
   ],
 })

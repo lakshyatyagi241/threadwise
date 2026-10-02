@@ -17,6 +17,28 @@ export const QUALITY_STEPS = [0.9, 0.82, 0.74, 0.66, 0.58, 0.5] as const;
 export const SHRINK_FACTOR = 0.8;
 const MIN_EDGE = 96;
 
+/**
+ * How many bytes to aim for: a tenth under the server's own cap when the API
+ * reported one (`avatarMaxBytes` on the profile), else the built-in 900 KiB.
+ */
+export function avatarTargetBytes(serverMax: number | null | undefined): number {
+  return serverMax && serverMax > 0 ? Math.floor(serverMax * 0.9) : AVATAR_MAX_BYTES;
+}
+
+/** A byte count as megabytes for a sentence ("1 MB"), in the reader's number format. */
+export function formatLimit(bytes: number, locale: string): string {
+  const mb = bytes / (1024 * 1024);
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'unit',
+      unit: 'megabyte',
+      maximumFractionDigits: 1,
+    }).format(mb);
+  } catch {
+    return `${Math.round(mb * 10) / 10} MB`;
+  }
+}
+
 export function isAvatarType(type: string): boolean {
   return (AVATAR_TYPES as readonly string[]).includes(type);
 }
@@ -64,8 +86,14 @@ export function encodePlan(
   return plan;
 }
 
+/**
+ * `source-too-large`: the file picked is over the 20 MB we are willing to decode.
+ * `too-large`: it decoded but could not be brought under the API's 1 MiB cap.
+ */
+export type ImageErrorReason = 'type' | 'source-too-large' | 'too-large' | 'decode' | 'encode';
+
 export class ImageError extends Error {
-  constructor(readonly reason: 'type' | 'too-large' | 'decode' | 'encode') {
+  constructor(readonly reason: ImageErrorReason) {
     super(reason);
     this.name = 'ImageError';
   }
@@ -106,15 +134,38 @@ function toBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promi
 }
 
 /**
- * Returns a File ready to upload: re-encoded (WebP where the browser can, else
- * JPEG), at most 512 px on the long edge and under AVATAR_MAX_BYTES.
+ * True when the picture can go up exactly as picked. Only an animated-capable
+ * GIF qualifies (re-encoding through a canvas would flatten it to one frame),
+ * and only when it is already small enough for the API and for the circle it is
+ * shown in. Anything else is re-encoded, which also strips metadata and fixes
+ * orientation.
  */
-export async function prepareAvatar(file: File): Promise<File> {
+export function canUploadAsPicked(
+  file: Pick<File, 'type' | 'size'>,
+  width: number,
+  height: number,
+  maxBytes: number = AVATAR_MAX_BYTES,
+): boolean {
+  if (file.type !== 'image/gif' || file.size > maxBytes) return false;
+  const fitted = fitWithin(width, height);
+  return fitted.width === Math.round(width) && fitted.height === Math.round(height);
+}
+
+/**
+ * Returns a File ready to upload: re-encoded (WebP where the browser can, else
+ * JPEG), at most 512 px on the long edge and under `maxBytes`. A small GIF
+ * is kept as picked so its animation survives.
+ */
+export async function prepareAvatar(
+  file: File,
+  maxBytes: number = AVATAR_MAX_BYTES,
+): Promise<File> {
   if (!isAvatarType(file.type)) throw new ImageError('type');
-  if (file.size > AVATAR_MAX_SOURCE_BYTES) throw new ImageError('too-large');
+  if (file.size > AVATAR_MAX_SOURCE_BYTES) throw new ImageError('source-too-large');
 
   const decoded = await decode(file);
   try {
+    if (canUploadAsPicked(file, decoded.width, decoded.height, maxBytes)) return file;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new ImageError('encode');
@@ -135,7 +186,7 @@ export async function prepareAvatar(file: File): Promise<File> {
       ctx.imageSmoothingQuality = 'high';
       ctx.drawImage(decoded.source, 0, 0, attempt.width, attempt.height);
       const blob = await toBlob(canvas, mime, attempt.quality);
-      if (blob && blob.size <= AVATAR_MAX_BYTES) {
+      if (blob && blob.size <= maxBytes) {
         const ext = mime === 'image/webp' ? 'webp' : 'jpg';
         return new File([blob], `avatar.${ext}`, { type: mime });
       }

@@ -1,0 +1,57 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Channels",
+      "item": "Node bridge"
+    },
+    "page": {
+      "title": "Node bridge URL & token",
+      "eyebrow": "global · node bridge",
+      "description": "The shared Node bridge every engine talks to — the Unofficial API sends through it and sender pacing is applied here. Set once; it applies platform-wide.",
+      "superOnly": "Only a super admin can change the Node bridge. You can see the saved values."
+    },
+    "bridge": {
+      "tokenSet": "Token set",
+      "noToken": "No token",
+      "serverUrl": "Server URL",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Enter a valid Server URL (http:// or https://) first.",
+      "serverUrlHint": "Where your Node bridge is reachable. Inbound + status webhooks are handled automatically — the bridge picks our URL up from its APP_DOMAIN_NAME env var.",
+      "token": "Node webhook token (X-Node-Token)",
+      "tokenPlaceholder": "shared X-Node-Token secret",
+      "tokenSavedPlaceholder": "••• stored, leave blank to keep",
+      "tokenHint": "Shared secret the Node bridge sends as X-Node-Token. Must match the token in your Node bridge config. Hidden after save; re-paste only to rotate.",
+      "save": "Save",
+      "saving": "Saving…",
+      "test": "Test connection",
+      "testing": "Testing…",
+      "saved": "Node bridge saved."
+    },
+    "pacing": {
+      "eyebrow": "pacing",
+      "title": "Sender pacing & batching",
+      "msgGap": "Message gap (sec)",
+      "msgGapHint": "Seconds between consecutive sends.",
+      "batchesGap": "Batch size",
+      "batchesGapHint": "Recipients per batch.",
+      "bwMsgGap": "Between batch (min)",
+      "bwMsgGapHint": "Minutes between batches.",
+      "enableBatches": "Enable batches",
+      "update": "Update timing",
+      "updating": "Saving…",
+      "saved": "Sending timing updated.",
+      "tipTitle": "Pacing tip",
+      "tip": "Lower the message gap only after a 24h soak — Meta throttles aggressive senders. 3 sec is the safe default."
+    },
+    "errors": {
+      "forbidden": "You do not have permission to do that.",
+      "conflict": "Someone else changed these settings. The page was refreshed; try again.",
+      "validation": "Check the values and try again.",
+      "request": "That request could not be completed.",
+      "unexpected": "Something went wrong on our side. Try again in a moment.",
+      "network": "Could not reach the server. Check your connection."
+    },
+    "loading": "Loading",
+    "retry": "Try again"
+  }
+}

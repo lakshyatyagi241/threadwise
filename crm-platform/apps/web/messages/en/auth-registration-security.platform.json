@@ -55,7 +55,8 @@
         "readOnly": {
           "superAdmin": "Only super admins can change these settings. Your role ({role}) can look at them.",
           "superAdminSupport": "Only super admins and support can change these settings. Your role ({role}) can look at them."
-        }
+        },
+        "copyWhat": "Copy {what}"
       },
       "login": {
         "title": "Operator sign-in",
@@ -78,7 +79,8 @@
           "recoveryFormat": "A recovery code has 8 to 32 letters, digits or dashes."
         },
         "notices": {
-          "expired": "Your session ended. Sign in again to continue."
+          "expired": "Your session ended. Sign in again to continue.",
+          "idle": "You were signed out after {minutes, plural, one {# minute} other {# minutes}} without activity. Sign in again to continue."
         },
         "problems": {
           "invalid": "Those credentials do not match.",
@@ -91,7 +93,8 @@
           "captcha": "The captcha check failed. Complete it and try again.",
           "challengeExpired": "That sign-in expired. Enter your password again.",
           "rateLimited": "Too many requests. Wait a moment and try again.",
-          "unexpected": "We could not sign you in. Try again in a moment."
+          "unexpected": "We could not sign you in. Try again in a moment.",
+          "lockedWait": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
         },
         "captcha": {
           "loadFailed": "The captcha could not load. Check your connection or a content blocker, then retry.",
@@ -159,7 +162,9 @@
           "unexpected": "We could not complete that step. Try again in a moment.",
           "codeFormat": "Enter the 6 digits shown in your app.",
           "codeInvalid": "That code is not valid. Check the clock on your phone and try the next code.",
-          "setupExpired": "The setup expired. Begin again."
+          "setupExpired": "The setup expired. Begin again.",
+          "locked": "Too many failed attempts. Wait a while before trying again.",
+          "lockedWait": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
         }
       },
       "security": {
@@ -197,7 +202,8 @@
           "rangeWithZero": "Enter 0, or a whole number from {min} to {max}.",
           "tooMany": "No more than {max} entries.",
           "tooLong": "Each entry can be at most {max} characters.",
-          "invalidEntry": "{entry} is not a valid address or range."
+          "invalidEntry": "{entry} is not a valid address or range.",
+          "totalTooLong": "Keep the list under {max} characters in total."
         },
         "kpis": {
           "score": {
@@ -244,7 +250,16 @@
             "watch": "Watch"
           },
           "platform": "Platform",
-          "inspect": "Inspect"
+          "inspect": "Inspect",
+          "platformOf": "{app} Platform",
+          "owner": {
+            "system": "System",
+            "types": {
+              "user": "User",
+              "platform_operator": "Platform operator"
+            }
+          },
+          "noWorkspace": "No workspace"
         },
         "coverage": {
           "kicker": "Coverage",
@@ -311,7 +326,7 @@
           },
           "maxConcurrentSessions": {
             "label": "Max concurrent sessions per user",
-            "hint": "When exceeded, the oldest session is signed out. 0 means unlimited."
+            "hint": "When exceeded, the oldest session is signed out."
           },
           "rememberMeEnabled": {
             "label": "Allow keep me signed in",
@@ -329,13 +344,16 @@
             "label": "Minimum length"
           },
           "passwordRequireUpper": {
-            "label": "Require an uppercase letter"
+            "label": "Require an uppercase letter",
+            "short": "Uppercase"
           },
           "passwordRequireNumber": {
-            "label": "Require a number"
+            "label": "Require a number",
+            "short": "Number"
           },
           "passwordRequireSymbol": {
-            "label": "Require a symbol"
+            "label": "Require a symbol",
+            "short": "Symbol"
           },
           "passwordMaxAgeDays": {
             "label": "Password age limit (days)",
@@ -384,12 +402,12 @@
           },
           "abuseBlockKeywordList": {
             "label": "Custom keyword blocklist",
-            "hint": "One per line, or separated by commas. Matching is not case sensitive. Matching messages are flagged or blocked according to the guardrail mode.",
+            "hint": "One per line, or separated by commas. Up to 5,000 characters in all. Matching is not case sensitive. Matching messages are flagged or blocked according to the guardrail mode.",
             "placeholder": "forex\nquick money\nguaranteed return"
           },
           "apiRateLimitPerMinute": {
             "label": "API requests per minute",
-            "hint": "Default for each workspace key. A plan can override it."
+            "hint": "The most requests per minute any one workspace API key can make. A key can have a lower limit of its own, never a higher one."
           },
           "webhookSignatureRequired": {
             "label": "Require HMAC signatures",
@@ -469,7 +487,8 @@
             "health": {
               "kicker": "Trust quality",
               "title": "Workspace health",
-              "body": "Block and flag counts per workspace appear here once the sending pipelines report them. Until then, use the security event log to see what the guardrails caught."
+              "body": "Block and flag counts per workspace appear here once the sending pipelines report them. Until then, use the security event log to see what the guardrails caught.",
+              "link": "View workspaces"
             }
           },
           "abuse": {
@@ -565,7 +584,8 @@
               "rotate": "When secrets are rotated, with the count.",
               "halt": "When the stop is engaged, and again when sends resume.",
               "policy": "On any setting change above, with the old and new values."
-            }
+            },
+            "trail": "View security audit trail"
           },
           "halted": {
             "title": "Emergency stop is on",
@@ -628,7 +648,12 @@
             }
           }
         },
-        "tabsLabel": "Security Center sections"
+        "tabsLabel": "Security Center sections",
+        "search": {
+          "label": "Search security rules, IPs and actors",
+          "placeholder": "Search security rules, IPs, actors…",
+          "shortcut": "Cmd K"
+        }
       },
       "events": {
         "kicker": "Security Center",
@@ -643,7 +668,9 @@
           "status": "Status",
           "anyStatus": "Any status",
           "apply": "Apply",
-          "clear": "Clear filters"
+          "clear": "Clear filters",
+          "q": "Search text",
+          "qHint": "Finds events whose name contains this text, in any letter case."
         },
         "status": {
           "success": "Success",
@@ -654,7 +681,6 @@
         "empty": "No security events have been recorded yet.",
         "emptyFiltered": "No events match these filters.",
         "listLabel": "Security events",
-        "actor": "Actor: {actor}",
         "ip": "IP",
         "showPayload": "Show details",
         "hidePayload": "Hide details",
@@ -662,7 +688,23 @@
         "payloadLabel": "Details of {event}",
         "loadMore": "Load more",
         "loading": "Loading",
-        "end": "{count, plural, one {Showing the only event.} other {Showing all # events.}}"
+        "end": "{count, plural, one {Showing the only event.} other {Showing all # events.}}",
+        "export": "Export CSV",
+        "exported": "{count, plural, one {Saved # loaded event to a CSV file.} other {Saved # loaded events to a CSV file.}}",
+        "actorLabel": "Actor",
+        "actorTypes": {
+          "user": "User",
+          "platform_operator": "Platform operator",
+          "system": "System"
+        },
+        "workspaceLabel": "Workspace",
+        "requestIdLabel": "Request id",
+        "userAgentLabel": "Browser",
+        "copyNames": {
+          "actorId": "actor id",
+          "orgId": "workspace id",
+          "requestId": "request id"
+        }
       },
       "registration": {
         "kicker": "Guest pages",
@@ -801,7 +843,9 @@
               "twilio": "Twilio",
               "device": "Unofficial session",
               "dev": "Log only"
-            }
+            },
+            "noneConnected": "None of your senders is connected yet. Finish one in Manage senders; only connected senders can be chosen.",
+            "unfinished": "{label} ({kind}, not finished)"
           },
           "template": {
             "title": "Message template",
@@ -826,7 +870,7 @@
             "never": "Not yet",
             "reason": "Reason",
             "stale": "This template was made for a code valid for {count, plural, one {# minute} other {# minutes}}. Create and submit again to match the validity above.",
-            "create": "Create & submit template",
+            "create": "Create & submit OTP template",
             "creating": "Working",
             "refresh": "Refresh status",
             "refreshing": "Checking",
@@ -836,7 +880,9 @@
               "local_ready": "The message is saved and in use now. This channel needs no review.",
               "already_pending": "The template is already with Meta for review. Use Refresh status to check on it.",
               "already_approved": "The template is already approved. Nothing needed to be sent.",
-              "refreshed": "Status checked."
+              "refreshed": "Status checked.",
+              "approvedNow": "Meta approved the template straight away. The code step is ready.",
+              "rejectedNow": "Meta rejected the template. The reason is shown below; fix it and submit again."
             },
             "refreshed": {
               "pending": "Meta is still reviewing the template.",
@@ -849,6 +895,17 @@
               "check": "The status could not be read from Meta.",
               "rejected": "The template could not be created.",
               "unexpected": "Something went wrong. Try again in a moment."
+            },
+            "createHint": "Builds the sign-up message for the chosen sender. WhatsApp Business goes to Meta for review; the other channels are ready at once.",
+            "picker": {
+              "label": "WhatsApp Business template",
+              "hint": "Sign-up sends the template created with the button below. Other approved authentication templates of this sender are listed so you can see them; they cannot be chosen here yet.",
+              "none": "None yet (create one below)",
+              "loading": "Loading templates",
+              "option": "{name} ({language}), {status}",
+              "otherSender": "Save the sender to see its templates.",
+              "failed": "The template list could not be loaded.",
+              "unavailable": "Meta's template list could not be read: {reason}"
             }
           },
           "test": {
@@ -944,7 +1001,7 @@
             }
           },
           "defaults": {
-            "graphBaseUrl": "https://graph.facebook.com/v21.0",
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
             "apiBaseUrl": "https://api.twilio.com"
           },
           "secretLabel": {
@@ -983,6 +1040,27 @@
           "errors": {
             "unexpected": "The sender could not be saved. Try again in a moment."
           }
+        },
+        "footer": {
+          "kicker": "Outgoing messages",
+          "title": "Platform message footer",
+          "description": "Added to the end of plain-text and interactive messages sent from workspaces whose plan cannot remove branding. Templates carry their own text and skip it. A workspace on a plan that can remove branding sets its own footer, or none, in its account.",
+          "builtIn": "Built-in text",
+          "label": "Footer text",
+          "hint": "Up to {max} characters. Leave it empty to send no footer at all.",
+          "count": "{used}/{max}",
+          "preview": "Preview",
+          "noFooter": "(no footer)",
+          "save": "Save footer",
+          "saving": "Saving",
+          "clear": "Clear",
+          "saved": "Platform footer saved. It applies from the next message.",
+          "savedNone": "Platform footer removed. Messages go out without one.",
+          "errors": {
+            "invalid": "That footer was not accepted.",
+            "unexpected": "The footer could not be saved. Try again in a moment."
+          },
+          "requestId": "Request id"
         }
       },
       "social": {
@@ -1117,6 +1195,17 @@
             "google": "Google",
             "facebook": "Facebook",
             "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "Reference",
+          "title": "Official documentation",
+          "opensNewTab": "(opens in a new tab)",
+          "links": {
+            "google": "Google OAuth setup",
+            "facebook": "Facebook Login setup",
+            "recaptchaAdmin": "reCAPTCHA admin console",
+            "recaptchaDocs": "reCAPTCHA documentation"
           }
         }
       },
@@ -1317,6 +1406,8 @@
             "tags": "Tags",
             "pipelines": "Sales pipelines",
             "appointments": "Appointments per month",
+            "saved_replies": "Saved replies",
+            "routing_rules": "Routing rules",
             "templates": "Message templates",
             "flows": "Flows",
             "autoreplies": "Keyword auto-replies"
@@ -1336,7 +1427,12 @@
             "analytics": "Analytics",
             "remove_branding": "White-label (removes platform branding)",
             "sales_pipeline": "Sales pipeline (deals and tasks)",
-            "appointment_booking": "Appointments and booking pages"
+            "appointment_booking": "Appointments and booking pages",
+            "chatbot_widgets": "Website chatbot widgets",
+            "inbox_sla": "Inbox SLA policies",
+            "inbox_routing": "Inbox routing rules and business hours",
+            "inbox_kanban": "Inbox Kanban board",
+            "team_performance": "Team performance reports"
           },
           "problems": {
             "required": "This field is required.",
@@ -1358,7 +1454,7 @@
       "authPages": {
         "kicker": "Guest pages",
         "title": "Auth pages",
-        "description": "Choose a design for the sign-in, sign-up and forgot-password pages, then edit the words and colour of each. The preview shows your unsaved changes exactly as visitors will see them.",
+        "description": "Choose a design for the sign-in, sign-up and forgot-password pages, then edit the words and colour of each. The preview shows your unsaved changes as visitors will see them. The Terms and Privacy links on these pages are set in <link>Registration policy</link>.",
         "save": "Save changes",
         "saving": "Saving",
         "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
@@ -1404,7 +1500,7 @@
         },
         "fields": {
           "accent": "Accent colour",
-          "accentHint": "Used for the highlighted word, buttons and the brand panel. Reset returns to the shipped colour.",
+          "accentHint": "A six-digit hex colour such as #0f766e. Short (#fff), eight-digit and named colours are not accepted. Used for the highlighted word, buttons and the brand panel. Reset returns to the shipped colour.",
           "accentPicker": "Pick the accent colour",
           "accentHex": "Accent colour as hex",
           "accentReset": "Reset to default",
@@ -1487,12 +1583,38 @@
               "login": "Sign in",
               "register": "Create workspace",
               "forgot": "Send reset link"
-            }
+            },
+            "workspace": "Workspace address",
+            "forgotLink": "Forgot password?",
+            "newHere": "New here?",
+            "createAccount": "Create a workspace",
+            "haveAccount": "Already registered?",
+            "signInLink": "Sign in",
+            "backToSignIn": "Back to sign in",
+            "captchaV3": "This page is protected by reCAPTCHA.",
+            "captchaV2": "I am not a robot",
+            "captchaBrand": "reCAPTCHA"
           },
           "enlarge": "Enlarge preview",
-          "shrink": "Side by side"
+          "shrink": "Side by side",
+          "openReal": "Open the real page",
+          "openRealNote": "Opens the saved version in a new tab. Changes you have not saved show only in this preview.",
+          "opensNewTab": "(opens in a new tab)"
         },
         "pagesLabel": "Page to edit"
+      },
+      "ipBlocked": {
+        "kicker": "Access blocked",
+        "title": "This address is not allowed",
+        "body": "The operator console only accepts requests from addresses on its allowlist. The address these requests come from is not on it, so the console refused them.",
+        "addressLabel": "Blocked address",
+        "addressUnknown": "The server could not read your address.",
+        "fixTitle": "How to get access",
+        "fixBody": "A super admin who can still reach the console adds this address to the IP allowlist. Nothing else about your account changes.",
+        "fixPath": "Security Center › API and webhooks › IP allowlist",
+        "dashboard": "Go to dashboard",
+        "signOut": "Sign out",
+        "signingOut": "Signing out"
       }
     }
   }

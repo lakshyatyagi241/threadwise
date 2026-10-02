@@ -45,15 +45,41 @@ export const KNOWN_EVENTS = [
   'platform.settings.auth_pages_updated',
 ] as const;
 
+/** What the viewer narrows by. `event` is an exact name; `q` finds a piece of one, in any case. */
+export interface EventFilters {
+  event?: string;
+  q?: string;
+  status?: EventStatus;
+}
+
+/** The filters in a URL query: trimmed, blanks dropped, an unknown status ignored. */
+export function filtersFromParams(params: { get(name: string): string | null }): EventFilters {
+  return {
+    event: params.get('event')?.trim() || undefined,
+    q: params.get('q')?.trim() || undefined,
+    status: parseStatus(params.get('status')),
+  };
+}
+
+export const hasFilters = (f: EventFilters): boolean => Boolean(f.event || f.q || f.status);
+
 /** `/admin/security/events` with only the filters that are set. */
-export function eventsHref(filters: { event?: string; status?: EventStatus }): string {
+export function eventsHref(filters: EventFilters): string {
   const p = new URLSearchParams();
   const event = filters.event?.trim();
   if (event) p.set('event', event);
+  const q = filters.q?.trim();
+  if (q) p.set('q', q);
   if (filters.status) p.set('status', filters.status);
   const qs = p.toString();
   return qs ? `/admin/security/events?${qs}` : '/admin/security/events';
 }
+
+/** The text that selects the security audit trail: every event whose name contains it. */
+export const SECURITY_TRAIL_QUERY = 'platform.security';
+
+/** The security audit trail link: the viewer narrowed to the `platform.security.*` events. */
+export const securityTrailHref = (): string => eventsHref({ q: SECURITY_TRAIL_QUERY });
 
 /** The payload as indented JSON, or null when there is nothing to show. */
 export function prettyPayload(payload: Record<string, unknown>): string | null {

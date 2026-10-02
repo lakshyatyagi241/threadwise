@@ -119,7 +119,14 @@ export function serverActions(status: DocStatus, hasDeal: boolean): SalesDocActi
 
 export interface ActionContext {
   /** What the signed-in person may do (from their permissions). */
-  can: { update: boolean; create: boolean; delete: boolean; send: boolean; convert: boolean; order?: boolean };
+  can: {
+    update: boolean;
+    create: boolean;
+    delete: boolean;
+    send: boolean;
+    convert: boolean;
+    order?: boolean;
+  };
   /** The document already has a deal linked, so "create deal" would duplicate it. */
   hasDeal: boolean;
   /** Draft with nothing to send yet (no line). */

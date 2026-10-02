@@ -11,10 +11,28 @@ import { rowActions } from '../lib/recurring';
 import { frozenEdge, isScrolledSideways, STICKY_ONLY, STICKY_ONLY_HEAD } from '../lib/sticky';
 import { ClockIcon, EyeIcon, PencilIcon, RefreshIcon, TrashIcon } from './icons';
 import { ContactPill, Money, UserText, useInvoicingCan, useWorkspaceZone } from './parts';
-import { amountMinorOf, DayText, RecurringStatusChip, useEveryText, useModeText } from './recurring-parts';
+import {
+  amountMinorOf,
+  DayText,
+  RecurringStatusChip,
+  useEveryText,
+  useModeText,
+} from './recurring-parts';
 import { RowMenu } from './row-menu';
 
-const COLUMNS = ['name', 'buyer', 'every', 'next', 'last', 'runs', 'failures', 'amount', 'mode', 'status', 'actions'] as const;
+const COLUMNS = [
+  'name',
+  'buyer',
+  'every',
+  'next',
+  'last',
+  'runs',
+  'failures',
+  'amount',
+  'mode',
+  'status',
+  'actions',
+] as const;
 const COL_W: Record<(typeof COLUMNS)[number], number> = {
   name: 230,
   buyer: 190,
@@ -39,7 +57,13 @@ export interface RecurringRowHandlers {
 }
 
 /** The schedules, one row each: the name column stays put while the rest scrolls sideways inside the card. */
-export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInvoiceResponse[]; handlers: RecurringRowHandlers }) {
+export function RecurringTable({
+  rows,
+  handlers,
+}: {
+  rows: readonly RecurringInvoiceResponse[];
+  handlers: RecurringRowHandlers;
+}) {
   const t = useTranslations('invoicing.recurring');
   const tc = useTranslations('invoicing.recurring.columns');
   const locale = useLocale();
@@ -61,7 +85,10 @@ export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInv
       onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
       className="thin-scrollbar min-h-0 flex-1 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
-      <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: TABLE_W }}>
+      <table
+        className="w-full table-fixed border-separate border-spacing-0 text-sm"
+        style={{ minWidth: TABLE_W }}
+      >
         <colgroup>
           {COLUMNS.map((c) => (
             <col key={c} style={{ width: COL_W[c] }} />
@@ -79,7 +106,11 @@ export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInv
                   c === 'name' && `${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`,
                 )}
               >
-                {c === 'actions' ? <span className="sr-only">{tc('actions')}</span> : <span className="block truncate">{tc(c)}</span>}
+                {c === 'actions' ? (
+                  <span className="sr-only">{tc('actions')}</span>
+                ) : (
+                  <span className="block truncate">{tc(c)}</span>
+                )}
               </th>
             ))}
           </tr>
@@ -90,7 +121,15 @@ export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInv
             const muted = r.status === 'ended';
             const busy = handlers.pendingId === r.id;
             return (
-              <tr key={r.id} aria-busy={busy} className={cn('group h-14 align-middle transition-colors hover:bg-muted', muted && 'text-muted-foreground', busy && 'opacity-60')}>
+              <tr
+                key={r.id}
+                aria-busy={busy}
+                className={cn(
+                  'group h-14 align-middle transition-colors hover:bg-muted',
+                  muted && 'text-muted-foreground',
+                  busy && 'opacity-60',
+                )}
+              >
                 <td className={cn('max-w-0', td, STICKY_ONLY, frozenEdge(scrolled))}>
                   <Link
                     href={`/recurring-invoices/${r.id}`}
@@ -100,11 +139,15 @@ export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInv
                   >
                     {r.name}
                   </Link>
-                  <div className="truncate text-xs text-muted-foreground">{t('lineCount', { count: r.lineCount })}</div>
+                  <div className="truncate text-xs text-muted-foreground">
+                    {t('lineCount', { count: r.lineCount })}
+                  </div>
                 </td>
                 <td className={cn('max-w-0', td)}>
                   {r.contact ? (
-                    <ContactPill contact={{ id: r.contact.id, name: r.contact.name ?? r.buyerName }} />
+                    <ContactPill
+                      contact={{ id: r.contact.id, name: r.contact.name ?? r.buyerName }}
+                    />
                   ) : r.buyerName ? (
                     <UserText className="block truncate">{r.buyerName}</UserText>
                   ) : (
@@ -115,14 +158,28 @@ export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInv
                   <span className="block truncate">{every(r.frequency, r.interval)}</span>
                 </td>
                 <td className={cn('max-w-0', td)}>
-                  <DayText day={r.status === 'ended' ? null : r.nextRunDate} className={cn('block truncate', r.status === 'paused' && 'text-muted-foreground')} />
-                  {r.status === 'paused' && r.nextRunDate && <span className="block truncate text-xs text-muted-foreground">{t('onHold')}</span>}
+                  <DayText
+                    day={r.status === 'ended' ? null : r.nextRunDate}
+                    className={cn(
+                      'block truncate',
+                      r.status === 'paused' && 'text-muted-foreground',
+                    )}
+                  />
+                  {r.status === 'paused' && r.nextRunDate && (
+                    <span className="block truncate text-xs text-muted-foreground">
+                      {t('onHold')}
+                    </span>
+                  )}
                 </td>
                 <td className={cn('max-w-0', td, 'tabular-nums')}>
-                  <span className="block truncate">{r.lastRunAt ? formatDateTime(r.lastRunAt, locale, zone) : '-'}</span>
+                  <span className="block truncate">
+                    {r.lastRunAt ? formatDateTime(r.lastRunAt, locale, zone) : '-'}
+                  </span>
                 </td>
                 <td className={cn(td, 'text-end tabular-nums')}>
-                  {r.maxRuns === null ? r.runCount : t('runsOf', { done: r.runCount, max: r.maxRuns })}
+                  {r.maxRuns === null
+                    ? r.runCount
+                    : t('runsOf', { done: r.runCount, max: r.maxRuns })}
                 </td>
                 <td className={cn(td, 'text-end tabular-nums')}>
                   {r.failureCount > 0 ? (
@@ -142,7 +199,13 @@ export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInv
                 </td>
                 <td className={cn('max-w-0', td)}>
                   <span className="block truncate">{mode.short(r.mode)}</span>
-                  {r.mode === 'issue_send' && <span className="block truncate text-xs text-muted-foreground">{t(`channel.${r.sendChannel === 'whatsapp' ? 'whatsapp' : r.sendChannel === 'link' ? 'link' : 'email'}`)}</span>}
+                  {r.mode === 'issue_send' && (
+                    <span className="block truncate text-xs text-muted-foreground">
+                      {t(
+                        `channel.${r.sendChannel === 'whatsapp' ? 'whatsapp' : r.sendChannel === 'link' ? 'link' : 'email'}`,
+                      )}
+                    </span>
+                  )}
                 </td>
                 <td className={td}>
                   <RecurringStatusChip status={r.status} />
@@ -151,34 +214,65 @@ export function RecurringTable({ rows, handlers }: { rows: readonly RecurringInv
                   <RowMenu label={t('moreFor', { name: r.name })}>
                     {(close) => (
                       <>
-                        <MenuItem onSelect={() => { close(); router.push(`/recurring-invoices/${r.id}`); }}>
+                        <MenuItem
+                          onSelect={() => {
+                            close();
+                            router.push(`/recurring-invoices/${r.id}`);
+                          }}
+                        >
                           <EyeIcon /> {t('open')}
                         </MenuItem>
                         {a.edit && (
-                          <MenuItem onSelect={() => { close(); router.push(`/recurring-invoices/${r.id}?edit=1`); }}>
+                          <MenuItem
+                            onSelect={() => {
+                              close();
+                              router.push(`/recurring-invoices/${r.id}?edit=1`);
+                            }}
+                          >
                             <PencilIcon /> {t('edit')}
                           </MenuItem>
                         )}
                         {(a.pause || a.resume || a.runNow) && <MenuSeparator />}
                         {a.pause && (
-                          <MenuItem onSelect={() => { close(); handlers.onPause(r); }}>
+                          <MenuItem
+                            onSelect={() => {
+                              close();
+                              handlers.onPause(r);
+                            }}
+                          >
                             <ClockIcon /> {t('pause')}
                           </MenuItem>
                         )}
                         {a.resume && (
-                          <MenuItem onSelect={() => { close(); handlers.onResume(r); }}>
+                          <MenuItem
+                            onSelect={() => {
+                              close();
+                              handlers.onResume(r);
+                            }}
+                          >
                             <RefreshIcon /> {t('resume')}
                           </MenuItem>
                         )}
                         {a.runNow && (
-                          <MenuItem onSelect={() => { close(); handlers.onRunNow(r); }}>
+                          <MenuItem
+                            onSelect={() => {
+                              close();
+                              handlers.onRunNow(r);
+                            }}
+                          >
                             <RefreshIcon /> {t('runNow.action')}
                           </MenuItem>
                         )}
                         {a.remove && (
                           <>
                             <MenuSeparator />
-                            <MenuItem danger onSelect={() => { close(); handlers.onDelete(r); }}>
+                            <MenuItem
+                              danger
+                              onSelect={() => {
+                                close();
+                                handlers.onDelete(r);
+                              }}
+                            >
                               <TrashIcon /> {t('delete.action')}
                             </MenuItem>
                           </>

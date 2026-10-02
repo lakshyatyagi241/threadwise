@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { buildCatalog, type FieldDef, type Lookups } from './fields';
-import { addCondition, addGroup, emptyRoot, newCondition, setCombinator, type Condition } from './model';
+import {
+  addCondition,
+  addGroup,
+  emptyRoot,
+  newCondition,
+  setCombinator,
+  type Condition,
+} from './model';
 import { operatorKey, summarize, summarizeConditions, type Translate } from './summary';
 
 const lookups: Lookups = {
@@ -43,10 +50,22 @@ const TEMPLATES: Record<string, string> = {
 const t: Translate = (key, values = {}) =>
   (TEMPLATES[key] ?? key).replace(/\{(\w+)\}/g, (_, k: string) => String(values[k] ?? ''));
 const labelOf = (f: FieldDef) =>
-  'text' in f.label ? f.label.text : ({ lifecycleStage: 'Stage', tags: 'Tags', lastActivityAt: 'Last activity', source: 'Source', createdAt: 'Created' }[f.id] ?? f.id);
+  'text' in f.label
+    ? f.label.text
+    : ({
+        lifecycleStage: 'Stage',
+        tags: 'Tags',
+        lastActivityAt: 'Last activity',
+        source: 'Source',
+        createdAt: 'Created',
+      }[f.id] ?? f.id);
 const ctx = { catalog, t, fieldLabel: labelOf };
 
-const cond = (id: string, operator: Condition['operator'], value: Condition['value']): Condition => ({
+const cond = (
+  id: string,
+  operator: Condition['operator'],
+  value: Condition['value'],
+): Condition => ({
   ...newCondition(field(id)),
   operator,
   value,
@@ -68,7 +87,9 @@ describe('summary sentence', () => {
     r = addCondition(r, r.id, cond('lifecycleStage', 'equals', 'won'));
     r = addCondition(r, r.id, cond('tags', 'has_any', ['t1', 't2']));
     expect(summarize(r, ctx)).toBe('Stage is Won and Tags include any of VIP, Hot');
-    expect(summarize(setCombinator(r, r.id, 'or'), ctx)).toBe('Stage is Won or Tags include any of VIP, Hot');
+    expect(summarize(setCombinator(r, r.id, 'or'), ctx)).toBe(
+      'Stage is Won or Tags include any of VIP, Hot',
+    );
   });
 
   it('wraps a nested group in brackets', () => {
@@ -77,7 +98,9 @@ describe('summary sentence', () => {
     r = addGroup(r, r.id, cond('tags', 'has_all', ['t1']));
     const inner = r.children[1]!.id;
     r = addCondition(r, inner, cond('source', 'contains', 'web'));
-    expect(summarize(r, ctx)).toBe('Stage is Won and (Tags include all of VIP or Source contains web)');
+    expect(summarize(r, ctx)).toBe(
+      'Stage is Won and (Tags include all of VIP or Source contains web)',
+    );
   });
 
   it('writes relative dates in days, ranges with both ends, and an empty check without a value', () => {
@@ -97,7 +120,9 @@ describe('summary sentence', () => {
     expect(operatorKey('option', 'equals')).toBe('op.equals');
     let r = emptyRoot();
     r = addCondition(r, r.id, cond('createdAt', 'equals', '2026-03-01'));
-    expect(summarize(r, { ...ctx, formatDate: (s) => `<${s}>` })).toBe('Created is on <2026-03-01>');
+    expect(summarize(r, { ...ctx, formatDate: (s) => `<${s}>` })).toBe(
+      'Created is on <2026-03-01>',
+    );
   });
 
   it('marks a deleted value, an unknown field, and long lists', () => {

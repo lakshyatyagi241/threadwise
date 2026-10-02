@@ -12,7 +12,13 @@ import { formatMoney } from '../lib/money';
  * Open pipeline value by stage: one bar per stage in the stage's own colour (the colour is the stage's identity, set
  * in the pipeline settings), the value written at the end of the bar, and the weighted value on hover or focus.
  */
-export function StageValueChart({ stages, currency }: { stages: Report['byStage']; currency: string }) {
+export function StageValueChart({
+  stages,
+  currency,
+}: {
+  stages: Report['byStage'];
+  currency: string;
+}) {
   const t = useTranslations('deals-pipelines.reports');
   const locale = useLocale();
   const rows = stages.filter((s) => s.kind === 'open');
@@ -21,17 +27,24 @@ export function StageValueChart({ stages, currency }: { stages: Report['byStage'
   return (
     <ul className="space-y-3" aria-label={t('stageChartLabel')}>
       {rows.map((r) => (
-        <li key={r.stageId} className="group relative grid grid-cols-[minmax(5rem,9rem)_1fr] items-center gap-3">
+        <li
+          key={r.stageId}
+          className="group relative grid grid-cols-[minmax(5rem,9rem)_1fr] items-center gap-3"
+        >
           <span className="min-w-0 truncate text-sm">
             {r.name}
             <span className="ms-1.5 text-xs text-muted-foreground tabular-nums">{r.count}</span>
           </span>
-          <div className="flex items-center gap-2" tabIndex={0} aria-label={t('stageRow', {
-            name: r.name,
-            value: formatMoney(r.valueMinor, currency, locale),
-            weighted: formatMoney(r.weightedMinor, currency, locale),
-            count: r.count,
-          })}>
+          <div
+            className="flex items-center gap-2"
+            tabIndex={0}
+            aria-label={t('stageRow', {
+              name: r.name,
+              value: formatMoney(r.valueMinor, currency, locale),
+              weighted: formatMoney(r.weightedMinor, currency, locale),
+              count: r.count,
+            })}
+          >
             <div className="h-6 min-w-0 flex-1 rounded-md bg-muted">
               <div
                 className="h-full rounded-md"
@@ -96,13 +109,20 @@ export function WonLostChart({ months }: { months: Report['months'] }) {
             </span>
           </div>
         ))}
-        <div className="absolute inset-0 flex items-stretch gap-1 ps-8" onMouseLeave={() => setActive(null)}>
+        <div
+          className="absolute inset-0 flex items-stretch gap-1 ps-8"
+          onMouseLeave={() => setActive(null)}
+        >
           {months.map((m, i) => (
             <div
               key={m.month}
               tabIndex={0}
               role="img"
-              aria-label={t('monthRow', { month: monthLabel(m.month, locale), won: m.won, lost: m.lost })}
+              aria-label={t('monthRow', {
+                month: monthLabel(m.month, locale),
+                won: m.won,
+                lost: m.lost,
+              })}
               onMouseEnter={() => setActive(i)}
               onFocus={() => setActive(i)}
               onBlur={() => setActive(null)}

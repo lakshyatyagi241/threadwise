@@ -32,8 +32,9 @@ import { RolesService } from './roles.service';
 export class RolesController {
   constructor(private readonly roles: RolesService) {}
 
+  // The members screen reads the list to offer the roles a person can be given, so the people managers read it too.
   @Get()
-  @RequirePermission('admin.role.manage')
+  @RequirePermission('admin.role.manage', 'admin.user.manage')
   @ApiOperation({ summary: 'List roles, each with its resolved grant set' })
   async list(@Query(zodPipe(paginationQuerySchema)) query: PaginationQuery) {
     return this.roles.list(query);

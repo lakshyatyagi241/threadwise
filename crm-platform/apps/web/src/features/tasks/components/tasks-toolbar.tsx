@@ -2,11 +2,25 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, Input, Menu, MenuCheckboxItem, MenuItem, MenuSeparator, Select, cn } from '@crm/ui';
+import {
+  Button,
+  Input,
+  Menu,
+  MenuCheckboxItem,
+  MenuItem,
+  MenuSeparator,
+  Select,
+  cn,
+} from '@crm/ui';
 import { useRecordRef } from '../api/hooks';
 import { PRIORITIES, type Member } from '../api/schemas';
 import { COLUMN_IDS, LOCKED_COLUMNS, type ColumnId } from '../lib/columns';
-import { hasActiveFilter, type StatusFilter, type TaskFilters, type TasksView } from '../lib/filters';
+import {
+  hasActiveFilter,
+  type StatusFilter,
+  type TaskFilters,
+  type TasksView,
+} from '../lib/filters';
 import { BoardIcon, ColumnsIcon, KeyboardIcon, ListIcon, RefreshIcon, SearchIcon } from './icons';
 import { RecordPicker } from './record-picker';
 
@@ -137,7 +151,14 @@ export function TasksToolbar(p: TasksToolbarProps) {
           onClick={() => {
             setPending('');
             p.onQ('');
-            p.onChange({ q: '', status: 'open', priority: '', assignee: '', contact: '', deal: '' });
+            p.onChange({
+              q: '',
+              status: 'open',
+              priority: '',
+              assignee: '',
+              contact: '',
+              deal: '',
+            });
           }}
         >
           {t('clear')}
@@ -185,7 +206,11 @@ export function TasksToolbar(p: TasksToolbarProps) {
         >
           <KeyboardIcon className="size-4" />
         </button>
-        <div role="group" aria-label={t('view')} className="inline-flex overflow-hidden rounded-md border border-border">
+        <div
+          role="group"
+          aria-label={t('view')}
+          className="inline-flex overflow-hidden rounded-md border border-border"
+        >
           {views.map(({ id, icon: Icon }) => (
             <button
               key={id}

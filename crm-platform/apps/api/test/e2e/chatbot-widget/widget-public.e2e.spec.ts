@@ -50,8 +50,12 @@ const aiWidget = async (over: Record<string, unknown> = {}, assistant = {}) => {
 describe('loader script (TW-WGT-008)', () => {
   let w: WidgetJson;
   beforeAll(async () => {
+    // The frame loader belongs to the AI and Both widgets; a WhatsApp widget draws its own panel (TW-WGT-028).
+    const a = await api.assistant(t);
     w = await api.widget(t.admin, {
       name: 'Loader',
+      mode: 'both',
+      assistantId: a.uuid,
       autoOpen: true,
       position: 'bottom_left',
       buttonColor: '#112233',
@@ -241,6 +245,8 @@ describe('config and the visitor (TW-WGT-010, 011, 012, 013)', () => {
       collect_email: true,
       collect_phone: false,
       whatsapp_url: 'https://wa.me/919876543210?text=Hi+there',
+      // the one addition to Reference's config (TW-WGT-028, user-requested); its content is asserted in widget-launcher.e2e.spec.ts
+      launcher: expect.objectContaining({ button_type: 'pill', greeting: 'HI THERE!' }),
     });
     const text = JSON.stringify(res.body);
     expect(text).not.toContain('allowed');
@@ -268,23 +274,20 @@ describe('config and the visitor (TW-WGT-010, 011, 012, 013)', () => {
     );
   });
 
-  it('TW-WGT-012 #1/#2: a returning visitor gets the whole thread, oldest first, from their own point of view', async () => {
+  it('TW-WGT-012 #1/#2: a returning visitor gets the whole thread, oldest first, from their own point of view (no opening line: it is not in the inbox table)', async () => {
     const w = await api.widget(t.admin, { name: 'Repaint' });
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'one', visitor_uuid: uuid });
     await api.pub(w.embedToken).message({ body: 'two', visitor_uuid: uuid });
     await api.agentReply(t.orgId, uuid, 'a person answers');
     const res = await api.pub(w.embedToken).config(uuid);
-    const bodies = res.body.transcript.map((m: { body: string }) => m.body);
-    expect(bodies).toEqual(['Hi! How can we help today?', 'one', 'two', 'a person answers']);
-    expect(res.body.transcript.map((m: { dir: string }) => m.dir)).toEqual([
-      'in',
-      'out',
-      'out',
-      'in',
+    expect(res.body.transcript.map((m: { body: string }) => m.body)).toEqual([
+      'one',
+      'two',
+      'a person answers',
     ]);
+    expect(res.body.transcript.map((m: { dir: string }) => m.dir)).toEqual(['out', 'out', 'in']);
     expect(res.body.transcript.map((m: { from: string }) => m.from)).toEqual([
-      'assistant',
       'visitor',
       'visitor',
       'assistant',
@@ -293,20 +296,20 @@ describe('config and the visitor (TW-WGT-010, 011, 012, 013)', () => {
     expect([...ids].sort((a, b) => a - b)).toEqual(ids);
   });
 
-  it('TW-WGT-012 #3: a long thread repaints its NEWEST 200 messages, still oldest first (Reference showed the oldest 200)', async () => {
+  it('TW-WGT-012 #3 QUIRK: a long thread repaints its OLDEST 200 messages (the newest never appear on reload), as Reference does', async () => {
     const w = await api.widget(t.admin, { name: 'Long thread', welcomeMessage: '' });
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'seed', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
     await h.owner.query(
-      `INSERT INTO inbox_messages (org_id, conversation_id, direction, from_number, to_number, body, status, sent_at)
-       SELECT $1, $2, 'in', $3, 'x', 'bulk ' || g, 'delivered', now() FROM generate_series(1, 205) g`,
-      [t.orgId, conv!.id, uuid],
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, body, status, sent_at)
+       SELECT $1, $2, 100 + g, 'in', 'customer', 'bulk ' || g, 'received', now() FROM generate_series(1, 205) g`,
+      [t.orgId, conv!.id],
     );
     const res = await api.pub(w.embedToken).config(uuid);
     expect(res.body.transcript).toHaveLength(200);
-    expect(res.body.transcript[199].body).toBe('bulk 205');
-    expect(res.body.transcript[0].body).toBe('bulk 6');
+    expect(res.body.transcript[0].body).toBe('seed');
+    expect(res.body.transcript[199].body).toBe('bulk 199');
   });
 
   it('TW-WGT-012 #2: a brand-new visitor has an empty transcript (the iframe shows the opening line itself)', async () => {
@@ -332,7 +335,11 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
     expect(res.body.reply).toBeNull();
     const thread = await api.thread(t.orgId, uuid);
     const inbound = thread.find((m) => m.direction === 'in')!;
-    expect(inbound).toMatchObject({ body: 'hello there', status: 'delivered', from_number: uuid });
+    expect(inbound).toMatchObject({
+      body: 'hello there',
+      status: 'received',
+      sender_kind: 'customer',
+    });
     expect(inbound.meta).toMatchObject({
       channel: 'chatbot_widget',
       visitor_uuid: uuid,
@@ -435,12 +442,12 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'first', visitor_uuid: uuid });
     await h.owner.query(
-      `UPDATE conversations SET inbox_status = 'resolved', resolved_at = now() WHERE org_id = $1 AND id = $2`,
+      `UPDATE conversations SET status = 'resolved', resolved_at = now() WHERE org_id = $1 AND id = $2`,
       [t.orgId, (await api.conversationOf(t.orgId, uuid))!.id],
     );
     await api.pub(w.embedToken).message({ body: 'after resolve', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
-    expect(conv!.inbox_status).toBe('resolved');
+    expect(conv!.status).toBe('resolved');
     expect((await api.thread(t.orgId, uuid)).map((m) => m.body)).toContain('after resolve');
   });
 
@@ -450,16 +457,20 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
     await api.pub(w.embedToken).message({ body: 'hi', name: 'Asha', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
     expect(conv).toMatchObject({
-      channel: 'chatbot_widget',
-      platform: 'WIDGET',
-      origin: 'web',
       status: 'open',
-      inbox_status: 'open',
       title: 'Asha',
       priority: 'normal',
+      peer_key: uuid,
     });
-    expect(conv!.raw_jid).toBe(`widget-${w.id}-${uuid}`);
-    expect(conv!.device_id).toBeNull();
+    // The thread sits on the widget's own webchat channel, one channel per widget.
+    expect(
+      (
+        await h.owner.query(
+          `SELECT kind, external_id, status FROM channels WHERE org_id = $1 AND id = $2`,
+          [t.orgId, conv!.channel_id],
+        )
+      ).rows[0],
+    ).toEqual({ kind: 'webchat', external_id: w.id, status: 'connected' });
     expect(conv!.assignee_user_id).toBeNull();
     expect(conv!.sla_policy_id).toBeNull();
     expect(conv!.routing_meta).toMatchObject({
@@ -502,13 +513,23 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
     expect((await api.conversationOf(t.orgId, uuid))!.id).not.toBe(old);
   });
 
-  it('TW-WGT-015 / TW-WGT-009: the opening line is a message of the thread, so agents see it first and a reload repaints it', async () => {
+  it('TW-WGT-015 rule 4 (intended, forced by the folded message tables): the opening line is a bot message of the thread, which agents see and the visitor-facing reads skip', async () => {
     const w = await api.widget(t.admin, { name: 'Conv 5', welcomeMessage: 'Welcome aboard' });
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'hi', visitor_uuid: uuid });
     const thread = await api.thread(t.orgId, uuid);
     expect(thread.map((m) => `${m.direction}:${m.body}`)).toEqual(['out:Welcome aboard', 'in:hi']);
-    expect(thread[0]!.meta).toMatchObject({ source: 'welcome' });
+    const conv = await api.conversationOf(t.orgId, uuid);
+    const rows = await h.owner.query(
+      `SELECT direction, body, sender_kind, meta FROM messages WHERE org_id = $1 AND conversation_id = $2 ORDER BY id`,
+      [t.orgId, conv!.id],
+    );
+    expect(rows.rows[0]).toMatchObject({
+      direction: 'out',
+      body: 'Welcome aboard',
+      sender_kind: 'bot',
+    });
+    expect(rows.rows[0].meta).toMatchObject({ source: 'welcome' });
   });
 
   it('TW-WGT-015 #4: with no phone a contact keyed by the widget channel and the visitor uuid is created once per visitor', async () => {
@@ -566,14 +587,18 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
   it('TW-WGT-015 / TW-WGT-019 #3: the widget thread stays separate from the WhatsApp thread of the same phone', async () => {
     const w = await api.widget(t.admin, { name: 'Contact 3' });
     const uuid = await api.visitor(w.embedToken);
-    const wa = await h.owner.query(
-      `INSERT INTO conversations (org_id, raw_jid, title, channel, contact_digits) VALUES ($1, '919876540000@s.whatsapp.net', 'WA thread', 'whatsapp', '919876540000') RETURNING id`,
+    const waChannel = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name, external_id) VALUES ($1, 'whatsapp_cloud', 'WA', '919876540000') RETURNING id`,
       [t.orgId],
+    );
+    const wa = await h.owner.query(
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, '919876540000', 'WA thread') RETURNING id`,
+      [t.orgId, waChannel.rows[0].id],
     );
     await api.pub(w.embedToken).message({ body: 'hi', phone: '919876540000', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
     expect(Number(conv!.id)).not.toBe(Number(wa.rows[0].id));
-    expect(conv!.channel).toBe('chatbot_widget');
+    expect(Number(conv!.channel_id)).not.toBe(Number(waChannel.rows[0].id));
   });
 
   it('TW-WGT-019 #1/#4/#5/#6: the thread is an ordinary inbox thread: visible without a connected engine, unassigned, no SLA, no routing', async () => {
@@ -581,14 +606,14 @@ describe('send a visitor message (TW-WGT-014, 015)', () => {
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'hi', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
-    expect(conv).toMatchObject({ archived: false, is_spam: false, sla_breached: false });
+    expect(conv).toMatchObject({ archived: false, sla_breached: false });
     expect(conv!.assignee_user_id).toBeNull();
     expect(conv!.assignee_team_id).toBeNull();
     expect(conv!.sla_first_response_due).toBeNull();
     expect(conv!.first_response_at).toBeNull();
-    // Inbound lines carry the provider of the thread, as the inbox stamps them.
+    // The visitor's line is an inbound message of the thread, numbered 1 (this widget has no welcome line).
     const inbound = (await api.thread(t.orgId, uuid)).find((m) => m.direction === 'in')!;
-    expect(inbound.provider).toBe(conv!.provider);
+    expect(inbound.sender_kind).toBe('customer');
   });
 
   it('TW-WGT-016 #4 (whatsapp mode): the widget stores the line and answers nothing', async () => {
@@ -654,8 +679,8 @@ describe('AI assistant reply (TW-WGT-016, 017)', () => {
     expect(out).toMatchObject({
       direction: 'out',
       status: 'sent',
+      sender_kind: 'bot',
       body: 'We ship free over 50 dollars.',
-      to_number: uuid,
     });
     expect(out.meta).toMatchObject({ assistant_id: a.uuid, channel: 'chatbot_widget' });
     const conv = await api.conversationOf(t.orgId, uuid);
@@ -663,29 +688,35 @@ describe('AI assistant reply (TW-WGT-016, 017)', () => {
     expect(conv!.preview).toBe('We ship free over 50 dollars.');
   });
 
-  it("TW-WGT-016 rule 4 / TW-WGT-017 #2: the visitor's new line is not repeated as history, and the bot answers every message while no person has", async () => {
+  it("TW-WGT-016 rule 4 QUIRK: the history includes the visitor's new line (it is quoted twice)", async () => {
     const { w } = await aiWidget({ name: 'AI 2' });
+    const uuid = await api.visitor(w.embedToken);
+    ai.calls.length = 0;
+    ai.next = 'reply one';
+    await api.pub(w.embedToken).message({ body: 'first question', visitor_uuid: uuid });
+    const first = ai.calls[0]!.user;
+    expect(first).toContain('Conversation so far:\nVisitor: first question');
+    expect(first).toContain('Visitor just said:\nfirst question');
+    // The opening line is not in the inbox table, so it is not part of the history.
+    expect(first).not.toContain('Hi! How can we help today?');
+  });
+
+  it('TW-WGT-017 #2 QUIRK: the assistant answers only the FIRST message of a conversation: its own reply counts as "a person took over" (as Reference)', async () => {
+    const { w } = await aiWidget({ name: 'AI 2b' });
     const uuid = await api.visitor(w.embedToken);
     ai.calls.length = 0;
     ai.next = 'reply one';
     const r1 = await api.pub(w.embedToken).message({ body: 'first question', visitor_uuid: uuid });
     ai.next = 'reply two';
     const r2 = await api.pub(w.embedToken).message({ body: 'second question', visitor_uuid: uuid });
-    ai.next = 'reply three';
     const r3 = await api.pub(w.embedToken).message({ body: 'third question', visitor_uuid: uuid });
-    expect([r1.body.reply.body, r2.body.reply.body, r3.body.reply.body]).toEqual([
-      'reply one',
-      'reply two',
-      'reply three',
-    ]);
-    const second = ai.calls[1]!.user;
-    expect(second).toContain('Conversation so far:');
-    expect(second).toContain('Visitor: first question');
-    expect(second).toContain('Assistant: reply one');
-    expect(second.indexOf('second question')).toBe(second.lastIndexOf('second question'));
-    expect(second).toContain('Visitor just said:\nsecond question');
-    // The opening line is part of the history as the assistant's first words.
-    expect(ai.calls[0]!.user).toContain('Assistant: Hi! How can we help today?');
+    expect(r1.body.reply.body).toBe('reply one');
+    expect(r2.body.reply).toBeNull();
+    expect(r3.body.reply).toBeNull();
+    expect(ai.calls).toHaveLength(1);
+    expect((await api.thread(t.orgId, uuid)).map((m) => m.body)).toEqual(
+      expect.arrayContaining(['second question', 'third question']),
+    );
   });
 
   it('TW-WGT-017 #1/#3: once a person replied in the inbox the bot stays silent for the rest of the thread', async () => {
@@ -709,18 +740,6 @@ describe('AI assistant reply (TW-WGT-016, 017)', () => {
     expect((await api.thread(t.orgId, uuid)).map((m) => m.body)).toEqual(
       expect.arrayContaining(['are you a bot?', 'hello?']),
     );
-  });
-
-  it('TW-WGT-017: a reply with no sender number (the inbox leaves it null) counts as a person too', async () => {
-    const { w } = await aiWidget({ name: 'AI 4' });
-    const uuid = await api.visitor(w.embedToken);
-    await api.pub(w.embedToken).message({ body: 'hello', visitor_uuid: uuid });
-    await api.agentReply(t.orgId, uuid, 'null sender', null);
-    ai.calls.length = 0;
-    expect(
-      (await api.pub(w.embedToken).message({ body: 'again', visitor_uuid: uuid })).body.reply,
-    ).toBeNull();
-    expect(ai.calls).toHaveLength(0);
   });
 
   it("TW-WGT-016 #2 (empty): a blank model answer becomes the assistant's fallback message, stored like any reply", async () => {
@@ -824,14 +843,10 @@ describe('agent replies reach the visitor by polling (TW-WGT-018)', () => {
     const w = await api.widget(t.admin, { name: 'Poll 1' });
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'hi', visitor_uuid: uuid });
-    const first = await api.pub(w.embedToken).history(uuid, 0);
-    // Only the opening line so far; the visitor's own line is inbound and never comes back.
-    expect(first.body.messages.map((m: { body: string }) => m.body)).toEqual([
-      'Hi! How can we help today?',
-    ]);
-    const since = first.body.messages.at(-1).id as number;
+    // The visitor's own line is inbound and the opening line is not in the inbox table: nothing to deliver yet.
+    expect((await api.pub(w.embedToken).history(uuid, 0)).body.messages).toEqual([]);
     const id = await api.agentReply(t.orgId, uuid, 'Hello, how can I help?');
-    const poll = await api.pub(w.embedToken).history(uuid, since);
+    const poll = await api.pub(w.embedToken).history(uuid, 0);
     expect(poll.status).toBe(200);
     expect(poll.body.ok).toBe(true);
     expect(poll.body.messages).toHaveLength(1);
@@ -856,14 +871,15 @@ describe('agent replies reach the visitor by polling (TW-WGT-018)', () => {
     expect(ids[0]).toBeLessThan(ids[1]);
   });
 
-  it('TW-WGT-018 #2: a visitor with no conversation gets an empty list, and the poll does not create a visitor', async () => {
+  it('TW-WGT-018 #2 / TW-WGT-011 rule 4 QUIRK: a visitor with no conversation gets an empty list; an unknown or missing uuid creates a visitor row on every poll (as Reference)', async () => {
     const w = await api.widget(t.admin, { name: 'Poll 3' });
     const uuid = await api.visitor(w.embedToken);
     expect((await api.pub(w.embedToken).history(uuid, 0)).body).toEqual({ ok: true, messages: [] });
-    const before = await api.count(
-      `SELECT count(*)::int AS n FROM chatbot_widget_visitors WHERE org_id = $1`,
-      [t.orgId],
-    );
+    const count = () =>
+      api.count(`SELECT count(*)::int AS n FROM chatbot_widget_visitors WHERE org_id = $1`, [
+        t.orgId,
+      ]);
+    const before = await count();
     expect((await api.pub(w.embedToken).history(undefined, 0)).body).toEqual({
       ok: true,
       messages: [],
@@ -872,11 +888,7 @@ describe('agent replies reach the visitor by polling (TW-WGT-018)', () => {
       ok: true,
       messages: [],
     });
-    expect(
-      await api.count(`SELECT count(*)::int AS n FROM chatbot_widget_visitors WHERE org_id = $1`, [
-        t.orgId,
-      ]),
-    ).toBe(before);
+    expect(await count()).toBe(before + 2);
   });
 
   it("TW-WGT-018: one visitor's poll never returns another visitor's replies", async () => {
@@ -912,7 +924,7 @@ describe('agent replies reach the visitor by polling (TW-WGT-018)', () => {
     const r1 = await api.pub(w.embedToken).message({ body: 'I need help', visitor_uuid: uuid });
     expect(r1.body.reply.body).toBe('bot greeting');
     const conv = await api.conversationOf(t.orgId, uuid);
-    expect(conv).toMatchObject({ channel: 'chatbot_widget', unread_count: 1 });
+    expect(conv).toMatchObject({ unread_count: 1 });
     await api.agentReply(t.orgId, uuid, 'A human here');
     const poll = await api.pub(w.embedToken).history(uuid, r1.body.reply.id);
     expect(poll.body.messages.map((m: { body: string }) => m.body)).toEqual(['A human here']);
@@ -975,17 +987,28 @@ describe('allowed domains (TW-WGT-020, 021)', () => {
     expect(res.headers['access-control-allow-origin']).toBeUndefined();
   });
 
-  it("TW-WGT-020 rule 7: the widget's own host is always allowed, so the chat page can post from its own origin", async () => {
+  it("TW-WGT-020 rule 7 QUIRK: with a non-empty list the widget's own host is NOT allowed, so the chat page's own message POST is refused (as Reference)", async () => {
     const w = await api.widget(t.admin, { name: 'Cors 5', allowedDomains: ['acme.com'] });
     const uuid = await api.visitor(w.embedToken);
-    // The chat page is served from the widget's host, so its own posts carry that host as their Origin.
     const res = await api
       .pub(w.embedToken)
       .message(
         { body: 'from my own page', visitor_uuid: uuid },
         { origin: 'https://widgets.crm.test', host: 'widgets.crm.test' },
       );
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(403);
+    expect(res.body.error).toBe('cors_origin_denied');
+    expect(await api.thread(t.orgId, uuid)).toEqual([]);
+    // The same page with an empty list works.
+    const open = await api.widget(t.admin, { name: 'Cors 5b' });
+    const u2 = await api.visitor(open.embedToken);
+    expect(
+      (
+        await api
+          .pub(open.embedToken)
+          .message({ body: 'ok', visitor_uuid: u2 }, { origin: 'https://widgets.crm.test' })
+      ).status,
+    ).toBe(200);
   });
 
   it('TW-WGT-020 #5: an unknown token with an Origin header is 404 widget_not_found, never 403', async () => {
@@ -1009,27 +1032,32 @@ describe('allowed domains (TW-WGT-020, 021)', () => {
 });
 
 describe('public hardening (TW-WGT-022)', () => {
-  it('TW-WGT-022 #2: the 61st message in a minute from one address to one widget is 429; another widget is unaffected', async () => {
+  it('TW-WGT-022 #2 QUIRK: ONE counter per client address is shared by every widget and by message and history: the 61st message in a minute is 429 wherever it goes', async () => {
     const w = await api.widget(t.admin, { name: 'Throttle 1' });
     const other = await api.widget(t.admin, { name: 'Throttle 2' });
+    const ip = '10.99.1.1';
     const uuid = await api.visitor(w.embedToken);
     const ok: number[] = [];
     for (let i = 0; i < 60; i++)
-      ok.push((await api.pub(w.embedToken).message({ body: `m${i}`, visitor_uuid: uuid })).status);
+      ok.push(
+        (await api.pub(w.embedToken, ip).message({ body: `m${i}`, visitor_uuid: uuid })).status,
+      );
     expect(new Set(ok)).toEqual(new Set([200]));
     const limited = await api
-      .pub(w.embedToken)
+      .pub(w.embedToken, ip)
       .message({ body: 'one too many', visitor_uuid: uuid });
     expect(limited.status).toBe(429);
     expect(limited.headers['retry-after']).toBe('60');
     expect(limited.body.message).toBe('Too Many Attempts.');
+    // Another widget from the same address is limited too; the same widget from another address is not.
+    expect((await api.pub(other.embedToken, ip).message({ body: 'x' })).status).toBe(429);
     expect(
-      (
-        await api
-          .pub(other.embedToken)
-          .message({ body: 'fine', visitor_uuid: await api.visitor(other.embedToken) })
-      ).status,
+      (await api.pub(w.embedToken, '10.99.1.2').message({ body: 'fine', visitor_uuid: uuid }))
+        .status,
     ).toBe(200);
+    // Config has no throttle at all.
+    for (let i = 0; i < 130; i++)
+      expect((await api.pub(w.embedToken, ip).config(uuid)).status).toBe(200);
   });
 
   it('TW-WGT-022 #3: the message route does not need a CSRF token or a session', async () => {
@@ -1042,15 +1070,16 @@ describe('public hardening (TW-WGT-022)', () => {
     expect(res.status).toBe(200);
   });
 
-  it('TW-WGT-022: the history poll is limited to 120 a minute and shares the message counter', async () => {
+  it('TW-WGT-022: the history poll is limited to 120 a minute against the same shared counter', async () => {
     const w = await api.widget(t.admin, { name: 'Throttle 3' });
     const uuid = await api.visitor(w.embedToken);
-    for (let i = 0; i < 120; i++) await api.pub(w.embedToken).history(uuid, 0);
-    expect((await api.pub(w.embedToken).history(uuid, 0)).status).toBe(429);
-    // The shared counter is already past the message limit too.
-    expect((await api.pub(w.embedToken).message({ body: 'x', visitor_uuid: uuid })).status).toBe(
-      429,
-    );
+    const ip = '10.99.2.1';
+    for (let i = 0; i < 120; i++)
+      expect((await api.pub(w.embedToken, ip).history(uuid, 0)).status).toBe(200);
+    expect((await api.pub(w.embedToken, ip).history(uuid, 0)).status).toBe(429);
+    expect(
+      (await api.pub(w.embedToken, ip).message({ body: 'x', visitor_uuid: uuid })).status,
+    ).toBe(429);
   });
 });
 

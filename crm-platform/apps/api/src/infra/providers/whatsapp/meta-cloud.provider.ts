@@ -70,13 +70,15 @@ export class MetaCloudProvider implements WhatsAppProvider {
       bulk: params.screen?.bulk,
       source: params.screen?.source,
     });
+    // After the screen, so a platform footer is never read as the sender's own words.
+    const body = await this.guard.withFooter({ body: params.body });
     return this.post(credentials, {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
       to: params.to.replace(/\D+/g, ''),
       type: 'text',
       ...(params.replyToProviderMessageId ? { context: { message_id: params.replyToProviderMessageId } } : {}),
-      text: { preview_url: false, body: params.body },
+      text: { preview_url: false, body },
     });
   }
 

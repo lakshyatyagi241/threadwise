@@ -140,8 +140,7 @@ export const isPlausibleToken = (token: string): boolean => /^[A-Za-z0-9_-]{43}$
 // --- over-payment ----------------------------------------------------------------------------------------------------------
 
 export type PaymentDecision =
-  | { ok: true; creditMinor: bigint }
-  | { ok: false; reason: 'overpayment'; balanceMinor: bigint };
+  { ok: true; creditMinor: bigint } | { ok: false; reason: 'overpayment'; balanceMinor: bigint };
 
 /**
  * Decides whether `amountMinor` may be recorded against an invoice with `balanceMinor` open. More than the balance is refused

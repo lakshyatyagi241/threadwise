@@ -13,10 +13,28 @@ import { minorOf } from '../lib/wire';
 import { BanIcon, CheckIcon, EyeIcon, InvoiceIcon, PencilIcon, TrashIcon } from './icons';
 import { ContactPill, Money, useInvoicingCan } from './parts';
 import type { SalesOrderDialogKind } from './sales-order-dialogs';
-import { FulfilmentChip, InvoicingChip, OrderStatusChip, QuoteLink, salesOrderEditHref, salesOrderHref } from './sales-order-parts';
+import {
+  FulfilmentChip,
+  InvoicingChip,
+  OrderStatusChip,
+  QuoteLink,
+  salesOrderEditHref,
+  salesOrderHref,
+} from './sales-order-parts';
 import { RowMenu } from './row-menu';
 
-export const SO_COLUMNS = ['number', 'buyer', 'quote', 'deal', 'expected', 'status', 'invoicing', 'fulfilment', 'total', 'invoices'] as const;
+export const SO_COLUMNS = [
+  'number',
+  'buyer',
+  'quote',
+  'deal',
+  'expected',
+  'status',
+  'invoicing',
+  'fulfilment',
+  'total',
+  'invoices',
+] as const;
 type Column = (typeof SO_COLUMNS)[number];
 
 /** Column widths in px (fixed layout: the table scrolls sideways inside its card when they do not fit). */
@@ -112,7 +130,9 @@ function Cell({ id, order, locale }: { id: Column; order: SalesOrderSummary; loc
       );
     case 'buyer':
       return order.contact ? (
-        <ContactPill contact={{ id: order.contact.id, name: order.contact.name ?? order.buyerName }} />
+        <ContactPill
+          contact={{ id: order.contact.id, name: order.contact.name ?? order.buyerName }}
+        />
       ) : order.buyerName ? (
         <span className="block truncate" dir="auto" title={order.buyerName}>
           {order.buyerName}
@@ -135,7 +155,11 @@ function Cell({ id, order, locale }: { id: Column; order: SalesOrderSummary; loc
         <span className="text-muted-foreground">-</span>
       );
     case 'expected':
-      return <span className="tabular-nums text-muted-foreground">{formatDay(order.expectedDate, locale) || '-'}</span>;
+      return (
+        <span className="tabular-nums text-muted-foreground">
+          {formatDay(order.expectedDate, locale) || '-'}
+        </span>
+      );
     case 'status':
       return <OrderStatusChip status={order.status} />;
     case 'invoicing':
@@ -151,7 +175,13 @@ function Cell({ id, order, locale }: { id: Column; order: SalesOrderSummary; loc
         <FulfilmentChip status={order.fulfilmentStatus} />
       );
     case 'total':
-      return <Money minor={minorOf(order.totalMinor)} currency={order.currency} className="font-medium" />;
+      return (
+        <Money
+          minor={minorOf(order.totalMinor)}
+          currency={order.currency}
+          className="font-medium"
+        />
+      );
     case 'invoices':
       return <span className="tabular-nums">{order.invoiceCount}</span>;
   }
@@ -181,7 +211,10 @@ export function SalesOrdersTable({
       onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
       className="thin-scrollbar h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
-      <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: MIN_WIDTH }}>
+      <table
+        className="w-full table-fixed border-separate border-spacing-0 text-sm"
+        style={{ minWidth: MIN_WIDTH }}
+      >
         <colgroup>
           {SO_COLUMNS.map((c) => (
             <col key={c} style={{ width: WIDTHS[c] }} />
@@ -193,7 +226,11 @@ export function SalesOrdersTable({
               <th
                 key={c}
                 scope="col"
-                className={cn(th, NUMERIC.has(c) && 'text-end', c === 'number' && `ps-4 ${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`)}
+                className={cn(
+                  th,
+                  NUMERIC.has(c) && 'text-end',
+                  c === 'number' && `ps-4 ${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`,
+                )}
               >
                 <span className="block truncate">{t(`columns.${c}`)}</span>
               </th>
@@ -202,7 +239,11 @@ export function SalesOrdersTable({
         </thead>
         <tbody>
           {orders.map((o) => (
-            <tr key={o.id} data-row-id={o.id} className="group h-14 align-middle transition-colors hover:bg-muted">
+            <tr
+              key={o.id}
+              data-row-id={o.id}
+              className="group h-14 align-middle transition-colors hover:bg-muted"
+            >
               {SO_COLUMNS.map((c) => (
                 <td
                   key={c}

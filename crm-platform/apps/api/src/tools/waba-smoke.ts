@@ -56,7 +56,10 @@ async function main(): Promise<void> {
   const http = new WabaHttp(env);
   const admin = new WabaAdminClient(env, http);
   const templates = new WabaTemplateClient(http, env);
-  const provider = new MetaCloudProvider(http, { beforeSend: async () => undefined });
+  const provider = new MetaCloudProvider(http, {
+    beforeSend: async () => undefined,
+    withFooter: async (i) => i.body,
+  });
 
   const conn: WabaConnection =
     route === 'interakt'

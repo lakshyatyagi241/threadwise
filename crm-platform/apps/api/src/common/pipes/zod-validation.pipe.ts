@@ -1,5 +1,5 @@
 import { Injectable, type PipeTransform } from '@nestjs/common';
-import type { ZodSchema } from 'zod';
+import type { ZodType, ZodTypeDef } from 'zod';
 import { AppError } from '../errors/app-error';
 
 /**
@@ -14,7 +14,8 @@ import { AppError } from '../errors/app-error';
  */
 @Injectable()
 export class ZodValidationPipe<T> implements PipeTransform<unknown, T> {
-  constructor(private readonly schema: ZodSchema<T>) {}
+  // The input type is open: a schema may transform a query string (`"true"` to `true`), so what goes in is not what comes out.
+  constructor(private readonly schema: ZodType<T, ZodTypeDef, unknown>) {}
 
   transform(value: unknown): T {
     // PostgreSQL text cannot hold a NUL (0x00): the write fails and the caller used to get a 500 for input that is theirs to fix.
@@ -50,5 +51,5 @@ export function findNul(value: unknown, path = '', depth = 0): string | null {
 }
 
 /** Convenience factory so call sites read as `ZodBody(schema)`. */
-export const zodPipe = <T>(schema: ZodSchema<T>): ZodValidationPipe<T> =>
+export const zodPipe = <T>(schema: ZodType<T, ZodTypeDef, unknown>): ZodValidationPipe<T> =>
   new ZodValidationPipe(schema);

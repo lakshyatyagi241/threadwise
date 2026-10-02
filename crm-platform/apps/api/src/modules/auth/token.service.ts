@@ -110,6 +110,22 @@ export class TokenService {
     }
   }
 
+  /**
+   * Signature check only, for ending a session with an access token that has
+   * just run out (sign-out). It proves whose session it was; it must never be
+   * used to let a request through.
+   */
+  async verifyAccessIgnoringExpiry(token: string): Promise<TokenClaims> {
+    try {
+      return await this.jwt.verifyAsync<TokenClaims>(token, {
+        secret: this.config.get('JWT_ACCESS_SECRET', { infer: true }),
+        ignoreExpiration: true,
+      });
+    } catch {
+      throw AppError.unauthenticated('Invalid or expired token');
+    }
+  }
+
   async verifyRefresh(token: string): Promise<TokenClaims> {
     try {
       return await this.jwt.verifyAsync<TokenClaims>(token, {

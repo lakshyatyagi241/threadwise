@@ -45,7 +45,6 @@ export const ASSISTANT_DIRECTORY = Symbol('WGT_ASSISTANT_DIRECTORY');
 
 export interface ConversationStub {
   id: number;
-  provider: string | null;
   created: boolean;
 }
 
@@ -104,18 +103,14 @@ export interface InboxGateway {
     conversation: ConversationStub,
     widget: WidgetForInbox,
     assistantUuid: string | null,
-    visitorUuid: string,
     body: string,
   ): Promise<{ id: number; sentAt: Date }>;
-  /** True once someone other than the widget's own bot has answered in the thread. */
-  humanHasTakenOver(
-    tx: Tx,
-    orgId: number,
-    conversationId: number,
-    botSender: string,
-  ): Promise<boolean>;
+  /** Reference rule (TW-WGT-017): any outbound line after the opening line counts as a person having taken over; see the gateway. */
+  humanHasTakenOver(tx: Tx, orgId: number, conversationId: number): Promise<boolean>;
   /** Newest `limit` lines, oldest first. */
   recent(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]>;
+  /** The oldest `limit` lines, oldest first (the transcript the widget repaints). */
+  oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]>;
   /** Outbound lines with an id above `since`, oldest first. */
   outboundSince(tx: Tx, orgId: number, conversationId: number, since: number): Promise<InboxLine[]>;
 }

@@ -73,6 +73,11 @@ export const envSchema = z.object({
   CREDENTIALS_ENCRYPTION_KEY: z
     .string()
     .min(44, 'CREDENTIALS_ENCRYPTION_KEY must be a base64-encoded 32-byte key'),
+  /**
+   * Retired encryption keys, comma-separated base64, kept only so old blobs still decrypt while
+   * `pnpm --filter @crm/api secrets:reencrypt` re-seals them under the current key (then remove).
+   */
+  CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS: z.string().optional(),
 
   // --- object storage ------------------------------------------------------
   S3_ENDPOINT: z.string().url().optional(),
@@ -108,6 +113,11 @@ export const envSchema = z.object({
   LINK_TRACKING_TTL_DAYS: z.coerce.number().int().min(7).default(90),
   WHATSAPP_VERIFY_TOKEN: z.string().optional(),
   WHATSAPP_APP_SECRET: z.string().optional(),
+  /**
+   * Dev-only simulated messaging channel (chat conversations). Declared here so a value in .env reaches process.env (only validated
+   * keys are assigned there); the rule lives in config/domains/chat-conversations.env.ts. A production process that sets it does not boot.
+   */
+  CHANNEL_SIMULATOR_ENABLED: booleanish.default(false),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),
@@ -150,6 +160,11 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     }
     if (parsed.data.JWT_REFRESH_SECRET.startsWith('dev-only')) {
       throw new Error('JWT_REFRESH_SECRET is still the development placeholder.');
+    }
+    if (parsed.data.CHANNEL_SIMULATOR_ENABLED) {
+      throw new Error(
+        'CHANNEL_SIMULATOR_ENABLED must not be set in production: the channel simulator writes customer messages on request.',
+      );
     }
     if (parsed.data.CREDENTIALS_ENCRYPTION_KEY === DEV_ENCRYPTION_KEY) {
       throw new Error('CREDENTIALS_ENCRYPTION_KEY is still the development placeholder.');

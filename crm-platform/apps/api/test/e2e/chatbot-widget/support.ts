@@ -59,6 +59,8 @@ export interface WidgetJson {
 }
 
 let counter = 0;
+let ipSeq = 1;
+const nextClientIp = () => `10.88.${Math.floor(ipSeq / 250)}.${ipSeq++ % 250}`;
 
 /** Widget helpers on top of the contacts harness (same app, same database, organizations of their own). */
 export class WidgetApi extends Api {
@@ -132,22 +134,35 @@ export class WidgetApi extends Api {
 
   // --- the public side ---------------------------------------------------------------------------------------------------
 
-  pub(token: string) {
+  /**
+   * The public calls as a visitor's browser makes them. Throttle counters are per client address (as in Reference), so each
+   * `pub()` comes from a fresh address unless a test pins one to exercise the limit.
+   */
+  pub(token: string, ip: string = nextClientIp()) {
     const http = () => request(this.h.app.getHttpServer());
+    const from = (headers: Record<string, string>) => ({ 'x-forwarded-for': ip, ...headers });
     return {
       embed: (route: 'embed' | 'embed.js' = 'embed') => http().get(`/widget/${token}/${route}`),
       chat: () => http().get(`/widget/${token}/chat`),
       config: (uuid?: string, headers: Record<string, string> = {}) =>
         http()
           .get(`/widget/${token}/api/config${uuid ? `?visitor_uuid=${uuid}` : ''}`)
-          .set(headers),
+          .set(from(headers)),
       message: (body: Record<string, unknown>, headers: Record<string, string> = {}) =>
-        http().post(`/widget/${token}/api/message`).set(headers).send(body),
+        http().post(`/widget/${token}/api/message`).set(from(headers)).send(body),
       history: (uuid: string | undefined, since = 0, headers: Record<string, string> = {}) =>
         http()
           .get(`/widget/${token}/api/history?since=${since}${uuid ? `&visitor_uuid=${uuid}` : ''}`)
-          .set(headers),
+          .set(from(headers)),
     };
+  }
+
+  /** The paused state has no screen or endpoint in Reference (TW-WGT-026); it is set in the database. */
+  async setStatus(orgId: number, widgetUuid: string, status: 'active' | 'paused') {
+    await this.h.owner.query(
+      `UPDATE chatbot_widgets SET status = $3 WHERE org_id = $1 AND uuid = $2`,
+      [orgId, widgetUuid, status],
+    );
   }
 
   /** A visitor through the public config call. */
@@ -165,8 +180,8 @@ export class WidgetApi extends Api {
   /** The thread of a visitor, straight from the table, oldest first. */
   async thread(orgId: number, visitorUuid: string) {
     const res = await this.h.owner.query(
-      `SELECT m.id, m.direction, m.from_number, m.to_number, m.body, m.status, m.meta, m.provider, m.user_id
-       FROM inbox_messages m
+      `SELECT m.id, m.direction, m.sender_kind, m.body, m.status, m.meta, m.sender_user_id
+       FROM messages m
        JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
        WHERE m.org_id = $1 AND v.visitor_uuid = $2 ORDER BY m.id`,
       [orgId, visitorUuid],
@@ -174,13 +189,11 @@ export class WidgetApi extends Api {
     return res.rows as Array<{
       id: number;
       direction: string;
-      from_number: string | null;
-      to_number: string | null;
+      sender_kind: string;
       body: string;
       status: string;
       meta: Record<string, unknown>;
-      provider: string | null;
-      user_id: number | null;
+      sender_user_id: number | null;
     }>;
   }
 
@@ -193,18 +206,14 @@ export class WidgetApi extends Api {
     return res.rows[0] as Record<string, unknown> | undefined;
   }
 
-  /** A reply typed by an operator in the team inbox: outbound, not written by the widget's bot. */
-  async agentReply(
-    orgId: number,
-    visitorUuid: string,
-    body: string,
-    from: string | null = '+10000000000',
-  ) {
+  /** A reply typed by an operator in the team inbox: outbound, sent by a staff member and not by the widget's bot. */
+  async agentReply(orgId: number, visitorUuid: string, body: string) {
     const conv = await this.conversationOf(orgId, visitorUuid);
     const res = await this.h.owner.query(
-      `INSERT INTO inbox_messages (org_id, conversation_id, direction, from_number, to_number, body, status, sent_at, provider)
-       VALUES ($1,$2,'out',$3,$4,$5,'sent',now(),'baileys') RETURNING id`,
-      [orgId, conv!.id, from, visitorUuid, body],
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, body, status, sent_at)
+       VALUES ($1, $2, (SELECT COALESCE(max(seq), 0) + 1 FROM messages WHERE org_id = $1 AND conversation_id = $2),
+               'out', 'agent', $3, 'sent', now()) RETURNING id`,
+      [orgId, conv!.id, body],
     );
     return Number(res.rows[0].id);
   }

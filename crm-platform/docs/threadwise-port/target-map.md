@@ -76,10 +76,11 @@ anywhere** — all nine are declared-only:
 backoff `min(2^attempts,900)`s, dead after 8. `dispatch()` only writes a debug log, so every event is marked `done` with **zero
 subscribers**. Runbook: `docs/runbooks/outbox-backlog.md`.
 
-**Realtime** (`apps/api/src/realtime/realtime.gateway.ts`): namespace `/realtime`, token in `handshake.auth.token`, joins
-`org:{org}` and (staff only) `user:{org}:{id}`. No `@SubscribeMessage`, so the documented explicit `conv:{org}:{id}` join does not exist;
-`emitToUser`/`emitToConversation` have **no callers**. The gateway lives in the API process only; the worker cannot emit to
-sockets (no `@socket.io/redis-emitter` dependency, `worker.ts` does not import `RealtimeModule`).
+**Realtime** (`apps/api/src/realtime/`, rebuilt 2026-10 for the inbox, see `docs/api/realtime.md`): namespace `/realtime`; the browser connects with a
+one-time ticket (`POST /v2/realtime/ticket`, minted through the web proxy) and the gateway also still takes `auth.token`. Every socket joins `org` and
+`user`; `conv:` and `inbox:` rooms only through `room:join`, authorised by the same visibility rule as the REST read. Publishing is
+`RealtimeEmitter` (`@socket.io/redis-emitter`, per-room sequence numbers), imported by the HTTP app AND `worker.ts` through `RealtimeEmitterModule`; who hears
+an event is decided by `AudienceResolver`. Nothing publishes yet except the tests: the inbox phases are the first callers.
 
 **Storage / email / providers.** `S3_*` and `SMTP_*` env keys, MinIO buckets `crm-media|crm-documents|crm-exports` and Mailpit exist in
 `docker-compose.yml`; there is no S3 client, no uploader, no mailer. Providers (`apps/api/src/infra/providers/`): WhatsApp

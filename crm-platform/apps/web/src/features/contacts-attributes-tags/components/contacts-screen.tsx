@@ -481,7 +481,9 @@ export function ContactsScreen() {
         canCreateSegment={canCreateSegments}
         // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
         onSaveAsSegment={
-          canCreateSegments && filtered && !filters.segment ? () => setSaveSegmentOpen(true) : undefined
+          canCreateSegments && filtered && !filters.segment
+            ? () => setSaveSegmentOpen(true)
+            : undefined
         }
         tag={filters.tag}
         onTag={(id) => setFilters({ tag: id })}

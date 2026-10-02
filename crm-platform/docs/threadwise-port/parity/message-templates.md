@@ -4,7 +4,7 @@ Scope of this file: the NestJS side of TW-TPL-007, 017, 019, 020, 022, 023, 024 
 
 Evidence: unit tests in `apps/api/test/unit/message-templates/` (rules, Meta state, parsing, errors, mapper; and the agreement of the webhook and the sync on the local status) and `apps/api/test/e2e/message-templates/message-templates.e2e.spec.ts` (create+submit, Meta refusal, outage, lint failure, name clash, edit and row version, delete blocked by a broadcast, refresh, sync with a partial fetch, media, tenancy, permissions).
 
-**Not run:** the e2e file needs Docker (testcontainers); it was written and type-checked in a container without Docker and has NOT been executed. The migration `20261015090000_tpl_permissions.sql` has not been applied to a live database by this work either. No reference comparison (Playwright) was run: this slice has no screen.
+**Not run:** the e2e file needs Docker (testcontainers); it was written and type-checked in a container without Docker and has NOT been executed. The migration `20261015110000_tpl_permissions.sql` has not been applied to a live database by this work either. No reference comparison (Playwright) was run: this slice has no screen.
 
 ## Status
 
