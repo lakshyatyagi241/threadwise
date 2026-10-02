@@ -7,7 +7,12 @@ export type SendCommand =
   | {
       type: 'media';
       to: string;
+      /** Where to fetch it from; empty when the bytes are given (`data` in this process, `bufferKey` between processes). */
       mediaUrl: string;
+      /** The file itself, when the caller already holds it (the inbox's stored media). */
+      data?: Buffer;
+      /** Where the bytes wait in Redis while the command travels to the worker that owns the device. */
+      bufferKey?: string;
       caption?: string;
       fileName?: string;
       mimeType?: string;
