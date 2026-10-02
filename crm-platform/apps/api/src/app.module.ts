@@ -27,6 +27,7 @@ import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
 import { ChannelFacebookModule } from './modules/channel-facebook';
+import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
@@ -141,6 +142,7 @@ import { HealthModule } from './health/health.module';
     CampaignsModule,
     ChannelTelegramModule,
     ChannelFacebookModule,
+    ChannelInstagramModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,

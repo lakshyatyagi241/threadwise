@@ -165,7 +165,7 @@ flow-runtime-engine (flows of type `instagram`), auto-reply-keywords (Instagram 
 
 - **Status:** partial. **Priority:** P0. **Effort:** S.
 - **Summary:** Instagram shows only while BOTH hold: the bridge is connected (a cached flag, no network call) and the workspace has a connected mirror row (`hasConnected`). Cutting the bridge or unlinking the last account makes it disappear everywhere. Labels use the saved display name (`instaflow_brand`, default `IgDesk`), never the literal "Instaflow". The plan flag `access_instagram` gates the channel.
-- **Port notes:** permission keys `ig.accounts.read`, `ig.accounts.manage`, `ig.broadcasts.manage`, `ig.inbox.reply` replace the workspace-role guard. The plan flag is a shim (`InstagramPlanGate`) until the plan catalogue carries it, same as `FacebookPlanGate`.
+- **Port notes:** permission keys `ig.accounts.read`, `ig.accounts.manage` and `ig.broadcasts.manage` replace the workspace-role guard (replying in the inbox stays under the inbox keys). The plan flag is a shim (`InstagramPlanGate`) until the plan catalogue carries it, same as `FacebookPlanGate`.
 - **Source refs:** `WorkspaceIgAccount::hasConnected`, `ig_brand_name()` (`fc_helpers.php`), `UserNav.php`.
 
 ### WD-IG-016 — Bridge client: settings, secret header, timeouts, never throw
