@@ -17,13 +17,14 @@ describe('activeNavId', () => {
 describe('groupNav', () => {
   it('groups in first-seen order', () => {
     const groups = groupNav(OPERATOR_NAV);
-    expect(groups).toHaveLength(3);
-    expect(groups[0]!.items.map((i) => i.id)).toEqual(['security', 'security-events']);
-    expect(groups[1]!.items.map((i) => i.id)).toEqual([
-      'registration',
-      'social-login',
-      'auth-pages',
+    // The auth domain's own groups come first, in this order; other domains append theirs after them.
+    expect(groups.slice(0, 3).map((g) => g.items.map((i) => i.id))).toEqual([
+      ['security', 'security-events'],
+      ['registration', 'social-login', 'auth-pages'],
+      ['plans'],
     ]);
-    expect(groups[2]!.items.map((i) => i.id)).toEqual(['plans']);
+    expect(groups.length).toBeGreaterThan(3);
+    const ids = OPERATOR_NAV.map((i) => i.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 });

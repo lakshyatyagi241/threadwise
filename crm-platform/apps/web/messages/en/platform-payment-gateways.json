@@ -1,0 +1,155 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Payment gateways",
+      "group": "Billing",
+      "orders": "Order history"
+    },
+    "admin": {
+      "title": "Payment gateways",
+      "description": "{count} gateways. Credentials are encrypted at rest and are never shown again after saving.",
+      "kpi": {
+        "total": "Gateways",
+        "active": "Active",
+        "india": "India",
+        "crypto": "Crypto"
+      },
+      "tabsLabel": "Filter by region",
+      "all": "All",
+      "search": "Filter by name or slug",
+      "emptyTitle": "No gateways here",
+      "emptyMessage": "Nothing matches this region and search. Try another tab or clear the search.",
+      "regions": {
+        "popular": "Popular",
+        "india": "India",
+        "asia": "Asia",
+        "mena": "MENA",
+        "europe": "Europe",
+        "us": "US and Canada",
+        "africa": "Africa",
+        "latam": "Latin America",
+        "crypto": "Crypto",
+        "offline": "Offline"
+      },
+      "card": {
+        "active": "Active",
+        "disabled": "Disabled",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Live"
+        },
+        "keysSaved": "Keys saved",
+        "noDriverBadge": "Driver not available yet",
+        "activate": "Activate",
+        "disable": "Disable",
+        "savedPlaceholder": "Saved. Leave blank to keep it.",
+        "clear": "Remove saved value",
+        "undoClear": "Keep saved value",
+        "modeLabel": "Mode",
+        "sortOrder": "Sort order",
+        "currencies": "Supported currencies",
+        "currenciesAll": "None selected: every currency is accepted",
+        "currenciesSelected": "{count, plural, one {# selected} other {# selected}}",
+        "currenciesHint": "Buyers only see this gateway in the currencies you tick. Leave all unticked to accept any currency.",
+        "webhookUrl": "Webhook URL",
+        "webhookHint": "Paste this into the provider dashboard so it can notify us of payments.",
+        "saving": "Saving",
+        "save": "Save",
+        "readOnly": "Only a super admin can change gateways.",
+        "saved": "{name} settings saved.",
+        "activated": "{name} activated.",
+        "deactivated": "{name} deactivated."
+      },
+      "errors": {
+        "conflict": "Someone else changed this gateway. It has been reloaded; review it and save again.",
+        "notConfigured": "Configure required fields first: {fields}",
+        "noDriver": "This gateway has no driver in this release yet, so it can be configured but not activated.",
+        "forbidden": "Only a super admin can change gateways.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
+    "checkout": {
+      "title": "Complete your order",
+      "walletTitle": "Add money to your wallet",
+      "subtitle": "Review the price, tell us who is paying and choose how.",
+      "loading": "Loading checkout",
+      "account": "Account",
+      "name": "Full name",
+      "email": "Email",
+      "billingAddress": "Billing address",
+      "company": "Company",
+      "taxId": "Tax ID",
+      "taxIdHint": "GSTIN, VAT or EIN, if you have one.",
+      "address": "Address",
+      "city": "City",
+      "postal": "Postal code",
+      "country": "Country",
+      "currency": "Currency",
+      "period": "Billing period",
+      "periods": {
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "paymentMethod": "Payment method",
+      "noGateway": "No payment gateway is configured for {currency} yet. Ask your administrator to activate one.",
+      "noGatewayButton": "No gateway configured",
+      "sandbox": "sandbox",
+      "pay": "Pay {amount}",
+      "processing": "Starting payment",
+      "summary": "Order summary",
+      "billed": {
+        "monthly": "Billed for one period",
+        "yearly": "Billed for 12 months"
+      },
+      "subtotal": "Subtotal",
+      "tax": "{label} ({rate}%)",
+      "total": "Total today",
+      "updating": "Updating price",
+      "errors": {
+        "gatewayUnavailable": "That gateway is not currently available.",
+        "currencyUnsupported": "That gateway does not accept this currency. Pick another gateway or currency.",
+        "providerError": "Payment provider error. Try again or pick a different gateway.",
+        "notPurchasable": "This plan cannot be bought online.",
+        "downgrade": "Downgrades are not available online. Contact support to move to a lower plan.",
+        "amountTooLow": "Enter a larger amount to add to your wallet.",
+        "couponUnavailable": "Coupons are not available yet.",
+        "forbidden": "You do not have permission to buy.",
+        "notFound": "We could not find that plan.",
+        "widgetBlocked": "The payment window could not open. Check that your browser allows it and try again.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
+    "orders": {
+      "title": "Order history",
+      "lifetime": "Lifetime spend: {total}",
+      "loading": "Loading orders",
+      "loadFailed": "Could not load your orders. Reload the page to try again.",
+      "emptyTitle": "No orders yet",
+      "emptyMessage": "Your purchases will appear here.",
+      "browsePlans": "Browse plans",
+      "loadMore": "Load more",
+      "outcome": {
+        "success": "Payment received. Thank you.",
+        "failed": "Payment did not complete. Try again or pick another gateway.",
+        "cancelled": "You cancelled the payment.",
+        "pending": "We are waiting for the payment provider to confirm your payment. This page updates once it does.",
+        "notfound": "We could not find that order."
+      },
+      "col": {
+        "order": "Order",
+        "item": "Item",
+        "date": "Date",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "status": {
+        "pending": "Pending",
+        "awaiting_approval": "Awaiting approval",
+        "paid": "Paid",
+        "failed": "Failed",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded"
+      }
+    }
+  }
+}

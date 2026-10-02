@@ -497,8 +497,11 @@ export class AccountService {
     const settings = p.org_settings as { messageFooter?: string | null };
     return {
       messageFooter: settings.messageFooter ?? null,
+      // The footer is edited on the platform General settings page (TW-SET-012), which stores it in `set.general`.
       platformDefault:
-        (await this.settings.get<string>('platform.branding_footer')) ?? `Sent via ${this.appName}`,
+        (await this.settings.get<{ platformFooter?: string }>('set.general'))?.platformFooter ??
+        (await this.settings.get<string>('platform.branding_footer')) ??
+        `Sent via ${this.appName}`,
       canEdit: await this.planGate.has(orgId, 'remove_branding'),
     };
   }

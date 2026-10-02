@@ -4,8 +4,10 @@
  */
 import {
   check,
+  customType,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgTable,
   primaryKey,
@@ -113,6 +115,7 @@ export const teamChatInvitations = pgTable(
     index('idx_team_chat_invitations_invitee_user_id').on(t.orgId, t.inviteeUserId),
     index('idx_team_chat_invitations_requester_user_id').on(t.orgId, t.requesterUserId),
     index('idx_team_chat_invitations_status').on(t.orgId, t.status),
+    index('idx_team_chat_invitations_created_at').on(t.orgId, t.createdAt.desc(), t.id.desc()),
   ],
 );
 
@@ -171,6 +174,19 @@ export const teamChatMessages = pgTable(
     index('idx_team_chat_messages_reply_to_id').on(t.orgId, t.replyToId),
     index('idx_team_chat_messages_user_id').on(t.orgId, t.userId),
     index('idx_team_chat_messages_created_at').on(t.orgId, t.createdAt),
+    index('idx_team_chat_messages_channel_id').on(t.orgId, t.channelId, t.id),
+    index('idx_team_chat_messages_pinned')
+      .on(t.orgId, t.channelId, t.pinnedAt)
+      .where(sql`${t.pinnedAt} is not null`),
+    check(
+      'chk_team_chat_messages_has_content',
+      sql`${t.body} is not null or ${t.attachmentPath} is not null`,
+    ),
+    check(
+      'chk_team_chat_messages_attachment_name',
+      sql`${t.attachmentPath} is null or ${t.attachmentName} is not null`,
+    ),
+    check('chk_team_chat_messages_channel_required', sql`${t.channelId} is not null`),
   ],
 );
 
@@ -248,11 +264,6 @@ export const teamChatReads = pgTable(
       columns: [t.orgId, t.userId],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_team_chat_reads_last_read_message_id',
-      columns: [t.orgId, t.lastReadMessageId],
-      foreignColumns: [teamChatMessages.orgId, teamChatMessages.id],
-    }).onDelete('cascade'),
   ],
 );
 
@@ -295,14 +306,44 @@ export const teamChatChannelMembers = pgTable(
       columns: [t.orgId, t.userId],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_team_chat_channel_members_last_read_message_id',
-      columns: [t.orgId, t.lastReadMessageId],
-      foreignColumns: [teamChatMessages.orgId, teamChatMessages.id],
-    }).onDelete('cascade'),
     index('idx_team_chat_channel_members_user_id').on(t.orgId, t.userId),
   ],
 );
 
 export type TeamChatChannelMembersRow = typeof teamChatChannelMembers.$inferSelect;
 export type NewTeamChatChannelMembersRow = typeof teamChatChannelMembers.$inferInsert;
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
+
+export const teamChatAttachmentBlobs = pgTable(
+  'team_chat_attachment_blobs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    messageId: idColumn('message_id').notNull(),
+    bytes: bytea('bytes').notNull(),
+    byteSize: integer('byte_size').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_team_chat_attachment_blobs_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_team_chat_attachment_blobs_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_team_chat_attachment_blobs_message_id').on(t.orgId, t.messageId),
+    check('chk_team_chat_attachment_blobs_size', sql`${t.byteSize} between 1 and 20971520`),
+    foreignKey({
+      name: 'fk_team_chat_attachment_blobs_message_id',
+      columns: [t.orgId, t.messageId],
+      foreignColumns: [teamChatMessages.orgId, teamChatMessages.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type TeamChatAttachmentBlobsRow = typeof teamChatAttachmentBlobs.$inferSelect;
