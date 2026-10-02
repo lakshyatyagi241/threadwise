@@ -1,5 +1,6 @@
 import request from 'supertest';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import * as rules from '../../../src/modules/platform-support-desk/ticket-rules';
 import {
   customerTicketDetailSchema,
   customerTicketListResponseSchema,
@@ -16,6 +17,12 @@ import {
   startHarness,
   type Harness,
 } from '../auth-registration-security/harness';
+
+// Passthrough spy: only the collision test overrides the generated candidate.
+vi.mock('../../../src/modules/platform-support-desk/ticket-rules', async (orig) => {
+  const m = await orig<typeof import('../../../src/modules/platform-support-desk/ticket-rules')>();
+  return { ...m, ticketNumber: vi.fn(m.ticketNumber) };
+});
 
 /**
  * The platform support desk end to end through HTTP (WD-SUPP-001..005, 007..013): the customer ticket form and
@@ -193,6 +200,20 @@ describe('customer files a ticket (WD-SUPP-001, 002)', () => {
     expect(res.status).toBe(401);
   });
 
+  it('a number that is already taken is skipped and the next candidate is used (WD-SUPP-002)', async () => {
+    const a = await signup();
+    const first = await fileTicket(a);
+    vi.mocked(rules.ticketNumber).mockReturnValueOnce(first.ticketNumber);
+    const second = await fileTicket(a);
+    expect(second.ticketNumber).not.toBe(first.ticketNumber);
+    expect(second.ticketNumber).toMatch(SUPP_TICKET_NUMBER_PATTERN);
+    const n = await h.owner.query(
+      `SELECT count(*)::int AS n FROM support_tickets WHERE org_id = $1`,
+      [a.orgId],
+    );
+    expect(n.rows[0].n).toBe(2);
+  });
+
   it('two quick tickets from one user get distinct numbers (no dedupe)', async () => {
     const a = await signup();
     const [x, y] = await Promise.all([fileTicket(a), fileTicket(a)]);
@@ -239,6 +260,11 @@ describe('customer history and thread (WD-SUPP-003, 004)', () => {
     const t = await fileTicket(a);
     expect((await cust(b).get(`/${t.id}`)).status).toBe(404);
     expect((await cust(b).post(`/${t.id}/reply`).send({ body: 'hi' })).status).toBe(404);
+    const stored = await h.owner.query(
+      `SELECT count(*)::int AS n FROM support_messages WHERE org_id = $1`,
+      [a.orgId],
+    );
+    expect(stored.rows[0].n).toBe(0);
 
     await ops('post', `/${t.id}/reply`).send({ body: 'Internal only', isInternalNote: true });
     await ops('post', `/${t.id}/reply`).send({ body: 'We are on it' });
