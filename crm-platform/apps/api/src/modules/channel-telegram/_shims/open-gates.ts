@@ -28,6 +28,15 @@ export class NoMediaStore implements MediaStore {
   save(): Promise<string | null> {
     return Promise.resolve(null);
   }
+
+  read(): Promise<null> {
+    return Promise.resolve(null);
+  }
+
+  /** An address that is already public is used as it is; a stored path needs the storage domain. */
+  publicUrl(path: string): string | null {
+    return /^https?:\/\//i.test(path) ? path : null;
+  }
 }
 
 /** No flow runtime, routing or auto-reply yet: nothing consumes a message and nothing replies. */

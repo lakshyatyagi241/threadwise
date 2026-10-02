@@ -71,3 +71,19 @@ What an update does, in this order:
 
 Not yet: downloading media into our storage (the message keeps its caption and file id, no file) and the flow, routing and
 auto-reply hooks, which are stand-ins until their owners export them (see the parity file).
+
+## Replying in a thread (WD-TG-008, 009)
+
+Not an HTTP route: the team inbox calls `TelegramSenderService.reply(orgId, { rawJid, text, media?, buttons? })` (exported from
+`modules/channel-telegram`). It sends through the bot named in the thread key `tg:<bot row id>:<chat id>` (an older `tg:<chat id>`
+key is answered by the workspace's first active bot) and returns `{ ok, providerMessageId, fileId, error }`. It never throws: a
+disconnected bot (`Telegram bot not connected`), a key that is not a Telegram thread, an unreachable file or a Telegram refusal
+come back as `ok = false` with the reason.
+
+- Text is cut to 4096 characters, a caption to 1024; the rest of a longer caption follows as its own text message.
+- `parse_mode` is off; when a mode is asked for and Telegram cannot parse it, the text is sent again plain.
+- Media goes by Telegram file id, by address, or as an upload of the bytes (preferred for our own stored files: no public
+  address needed). Text is the caption (none for stickers and video notes).
+- A Telegram template's `buttons` become the keyboard: any link makes an inline keyboard (links as link buttons, quick replies as
+  `tqr:<label>` callbacks, labels cut to 64 and callback data to 60); only quick replies make a one-time reply keyboard; a phone
+  button is appended to the text as `📞 label: number`.

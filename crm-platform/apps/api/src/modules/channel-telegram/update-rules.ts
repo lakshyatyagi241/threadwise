@@ -126,6 +126,20 @@ export function chatTitle(m: Dict): string {
 /** The thread key: the bot is part of it, so a reply leaves from the bot that carried the thread. */
 export const threadKey = (botRowId: number, chatId: string): string => `tg:${botRowId}:${chatId}`;
 
+/**
+ * The bot and the chat behind a thread key: `tg:<bot row id>:<chat id>`. An older key `tg:<chat id>` (before a workspace could
+ * have several bots) has no bot: the caller falls back to the workspace's first active one. The chat id never contains a colon.
+ */
+export function parseThreadKey(rawJid: string): { botRowId: number | null; chatId: string } | null {
+  const parts = rawJid.split(':');
+  if (parts[0] !== 'tg' || parts.length < 2) return null;
+  const chatId = parts.at(-1) ?? '';
+  if (chatId === '') return null;
+  if (parts.length >= 3 && /^\d+$/.test(parts[1] ?? ''))
+    return { botRowId: Number(parts[1]), chatId };
+  return { botRowId: null, chatId };
+}
+
 /** The 120 characters the thread list shows. */
 export const preview = (text: string): string => text.slice(0, 120);
 
