@@ -46,6 +46,7 @@ export const pipelines = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     index('idx_pipelines_is_default').on(t.orgId, t.isDefault),
+    // uq_pipelines_org_lower_name (lower(btrim(name))) and uq_pipelines_one_default (partial) live in the migration.
   ],
 );
 
@@ -83,6 +84,7 @@ export const pipelineStages = pgTable(
       foreignColumns: [pipelines.orgId, pipelines.id],
     }).onDelete('cascade'),
     index('idx_pipeline_stages_pipeline_id_sort_order').on(t.orgId, t.pipelineId, t.sortOrder),
+    unique('uq_pipeline_stages_org_pipeline_id').on(t.orgId, t.pipelineId, t.id),
   ],
 );
 
@@ -109,7 +111,8 @@ export const deals = pgTable(
     status: text('status').notNull().default('open'),
     lostReason: text('lost_reason'),
     source: text('source').notNull().default('manual'),
-    sortOrder: integer('sort_order').notNull().default(0),
+    sortOrder: bigint('sort_order', { mode: 'number' }).notNull().default(0),
+    lostReasonId: idColumn('lost_reason_id'),
     notes: text('notes'),
     meta: jsonb('meta'),
     wonAt: timestamp('won_at', { withTimezone: true }),
@@ -130,12 +133,18 @@ export const deals = pgTable(
       name: 'fk_deals_pipeline_id',
       columns: [t.orgId, t.pipelineId],
       foreignColumns: [pipelines.orgId, pipelines.id],
-    }).onDelete('cascade'),
+    }).onDelete('no action'),
+    // The stage must belong to the deal's own pipeline.
     foreignKey({
       name: 'fk_deals_stage_id',
-      columns: [t.orgId, t.stageId],
-      foreignColumns: [pipelineStages.orgId, pipelineStages.id],
-    }).onDelete('cascade'),
+      columns: [t.orgId, t.pipelineId, t.stageId],
+      foreignColumns: [pipelineStages.orgId, pipelineStages.pipelineId, pipelineStages.id],
+    }).onDelete('no action'),
+    foreignKey({
+      name: 'fk_deals_lost_reason_id',
+      columns: [t.orgId, t.lostReasonId],
+      foreignColumns: [dealLostReasons.orgId, dealLostReasons.id],
+    }).onDelete('set null'),
     foreignKey({
       name: 'fk_deals_contact_id',
       columns: [t.orgId, t.contactId],
@@ -161,6 +170,9 @@ export const deals = pgTable(
     index('idx_deals_owner_user_id').on(t.orgId, t.ownerUserId),
     index('idx_deals_pipeline_id_stage_id').on(t.orgId, t.pipelineId, t.stageId),
     index('idx_deals_status').on(t.orgId, t.status),
+    index('idx_deals_board').on(t.orgId, t.stageId, t.sortOrder, t.id),
+    index('idx_deals_org_created').on(t.orgId, t.createdAt, t.id),
+    // idx_deals_won_at / idx_deals_lost_at / idx_deals_open_currency (partial) and idx_deals_title_trgm (gin) live in the migrations.
   ],
 );
 
@@ -175,12 +187,16 @@ export const dealActivities = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     dealId: idColumn('deal_id').notNull(),
     userId: idColumn('user_id'),
+    assigneeUserId: idColumn('assignee_user_id'),
     type: text('type').notNull().default('note'),
     body: text('body'),
     meta: jsonb('meta'),
     dueAt: timestamp('due_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
+    // The mirrored row in `tasks` (migration 20261004100000). The composite FK to tasks lives in the migration: declaring it
+    // here would make the two schema files import each other.
+    taskId: idColumn('task_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -206,8 +222,69 @@ export const dealActivities = pgTable(
     index('idx_deal_activities_deal_id_created_at').on(t.orgId, t.dealId, t.createdAt),
     index('idx_deal_activities_due_at').on(t.orgId, t.dueAt),
     index('idx_deal_activities_type').on(t.orgId, t.type),
+    foreignKey({
+      name: 'fk_deal_activities_assignee_user_id',
+      columns: [t.orgId, t.assigneeUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_deal_activities_timeline').on(t.orgId, t.dealId, t.createdAt, t.id),
+    // idx_deal_activities_task_sweep and idx_deal_activities_assignee are partial (tasks only) and live in the migration.
   ],
 );
 
 export type DealActivitiesRow = typeof dealActivities.$inferSelect;
 export type NewDealActivitiesRow = typeof dealActivities.$inferInsert;
+
+export const dealLostReasons = pgTable(
+  'deal_lost_reasons',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    name: text('name').notNull(),
+    sortOrder: integer('sort_order').notNull().default(0),
+    isActive: boolean('is_active').notNull().default(true),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_deal_lost_reasons_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_deal_lost_reasons_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    index('idx_deal_lost_reasons_order').on(t.orgId, t.sortOrder, t.id),
+  ],
+);
+
+export type DealLostReasonsRow = typeof dealLostReasons.$inferSelect;
+export type NewDealLostReasonsRow = typeof dealLostReasons.$inferInsert;
+
+export const dealSettings = pgTable(
+  'deal_settings',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    lostReasonRequired: boolean('lost_reason_required').notNull().default(false),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_deal_settings_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_deal_settings_org_id').on(t.orgId),
+    foreignKey({
+      name: 'fk_deal_settings_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type DealSettingsRow = typeof dealSettings.$inferSelect;
+export type NewDealSettingsRow = typeof dealSettings.$inferInsert;

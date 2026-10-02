@@ -10,7 +10,7 @@ import {
   type ResolvedContactFilter,
 } from './contact-conditions';
 
-const { companies, contacts, teamMembers, users } = schema;
+const { companies, contacts, statusOptions, teamMembers, users } = schema;
 
 export interface ContactRow {
   id: number;
@@ -438,6 +438,24 @@ export class ContactsRepository {
    * contact_identities is unique on (org_id, kind, value), so this either hits
    * exactly one contact or none — no ambiguity, no "pick the first match".
    */
+  /** The workspace's default option of a contact group (the stage a new contact starts in), if one is marked. */
+  async defaultOptionValue(tx: Tx, orgId: number, optionGroup: string): Promise<string | undefined> {
+    const rows = await tx
+      .select({ value: statusOptions.value })
+      .from(statusOptions)
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          eq(statusOptions.optionGroup, optionGroup),
+          eq(statusOptions.isDefault, true),
+          eq(statusOptions.isActive, true),
+        ),
+      )
+      .limit(1);
+    return rows[0]?.value;
+  }
+
   async findByIdentity(
     tx: Tx,
     orgId: number,

@@ -27,6 +27,15 @@ describe('planned screens', () => {
     }
   });
 
+  it('add the CRM and Sales entries in menu order', () => {
+    const ids = (g: string) =>
+      PLANNED_NAV.filter((i) => i.group === g)
+        .sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
+        .map((i) => i.id);
+    expect(ids('audience')).toEqual(['lead-finder', 'pipelines', 'companies', 'email-templates']);
+    expect(ids('sales')).toEqual(['crm-dashboard', 'proposals', 'estimates', 'invoices', 'payments']);
+  });
+
   it('cover the WaDesk groups the real screens do not', () => {
     const groups = new Set<string>(PLANNED_NAV.map((i) => i.group));
     for (const g of ['inbox', 'campaigns', 'automation', 'channels', 'sales', 'store', 'developer', 'help']) {

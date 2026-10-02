@@ -14,12 +14,16 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createStatusOptionSchema,
+  deleteStatusOptionQuerySchema,
   listStatusOptionsQuerySchema,
   reorderStatusOptionsSchema,
+  statusOptionUsageQuerySchema,
   updateStatusOptionSchema,
   type CreateStatusOptionInput,
+  type DeleteStatusOptionQuery,
   type ListStatusOptionsQuery,
   type ReorderStatusOptionsInput,
+  type StatusOptionUsageQuery,
   type UpdateStatusOptionInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decorators';
@@ -43,6 +47,13 @@ export class StatusOptionsController {
   @ApiOperation({ summary: 'List status options for a module, optionally one group' })
   async list(@Query(zodPipe(listStatusOptionsQuerySchema)) query: ListStatusOptionsQuery) {
     return this.statusOptions.list(query);
+  }
+
+  @Get('usage')
+  @RequirePermission(...anyPropertyPermission('read'))
+  @ApiOperation({ summary: 'How many contacts hold each option of a group' })
+  async usage(@Query(zodPipe(statusOptionUsageQuerySchema)) query: StatusOptionUsageQuery) {
+    return this.statusOptions.usage(query);
   }
 
   @Post()
@@ -77,8 +88,15 @@ export class StatusOptionsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission(...anyPropertyPermission('delete'))
-  @ApiOperation({ summary: 'Delete a status option' })
-  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
-    await this.statusOptions.remove(id);
+  @ApiOperation({
+    summary: 'Delete a status option',
+    description:
+      'Contacts that still hold the value make it 409 STATUS_OPTION_IN_USE (errors[0].message = how many) until repeated with moveTo=<another option id of the group>; they are moved in the same transaction.',
+  })
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(deleteStatusOptionQuerySchema)) query: DeleteStatusOptionQuery,
+  ): Promise<void> {
+    await this.statusOptions.remove(id, query);
   }
 }

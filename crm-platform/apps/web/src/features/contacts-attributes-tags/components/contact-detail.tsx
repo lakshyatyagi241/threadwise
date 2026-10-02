@@ -2,15 +2,17 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFormatter, useTranslations } from 'next-intl';
 import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { LinkedTasks } from '@/features/tasks';
 import { useCursorList } from '@/lib/api/use-cursor-list';
-import { deleteContact, invalidateContacts, useContact } from '../api/contacts';
-import { useAttributes, useStatusOptions } from '../api/attributes';
+import { deleteContact, invalidateContacts, KEYS, updateContact, useContact } from '../api/contacts';
+import { useStatusOptions } from '../api/attributes';
+import { useContactFields, useFieldSections } from '../api/properties';
 import { useContactTags } from '../api/tags';
 import {
   displayName,
@@ -21,8 +23,10 @@ import {
   titleCaseKey,
 } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
-import { stageLabel } from '../lib/option-sets';
+import { detailGroups } from '../lib/property-model';
+import { stageChoices } from '../lib/option-sets';
 import { ContactAvatar, GroupChip, TagPill } from './chips';
+import { StageMenu } from './stage-menu';
 import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
 import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
@@ -40,10 +44,31 @@ export function ContactDetail({ id }: { id: string }) {
   const canDelete = useCan('record.contacts.delete');
   const contact = useContact(id);
   const tags = useContactTags(id);
-  const attributes = useAttributes();
+  const registry = useContactFields();
+  const sections = useFieldSections();
   const statusOptions = useStatusOptions();
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const ts = useTranslations('contacts-attributes-tags.stageMenu');
+
+  const changeStage = useMutation({
+    mutationFn: (v: { stage: string; rowVersion: number }) =>
+      updateContact(id, { lifecycleStage: v.stage, rowVersion: v.rowVersion }),
+    onSuccess: async (saved) => {
+      await Promise.all([invalidateContacts(qc), qc.invalidateQueries({ queryKey: KEYS.contact(id) })]);
+      toast(
+        ts('changed', {
+          stage: stageChoices(statusOptions.data).find((s) => s.value === saved.lifecycleStage)?.label ?? saved.lifecycleStage ?? '',
+        }),
+        'success',
+      );
+    },
+    onError: async (e) => {
+      const kind = errorKind(e);
+      toast(ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'), 'danger');
+      if (kind === 'conflict') await qc.invalidateQueries({ queryKey: KEYS.contact(id) });
+    },
+  });
 
   const remove = useMutation({
     mutationFn: () => deleteContact(id),
@@ -58,10 +83,6 @@ export function ContactDetail({ id }: { id: string }) {
     },
   });
 
-  const labels = useMemo(
-    () => new Map((attributes.data ?? []).map((a) => [a.key, a.name])),
-    [attributes.data],
-  );
 
   const back = (
     <Link
@@ -100,14 +121,14 @@ export function ContactDetail({ id }: { id: string }) {
   const phone = formatPhone(c.phone);
   const cf = c.customFields;
   const text = (key: string): string => (typeof cf[key] === 'string' ? cf[key] : '');
-  const attrs = Object.entries(cf)
-    .filter(
-      ([k, v]) =>
-        !RESERVED_CUSTOM_KEYS.has(k.toLowerCase()) &&
-        (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') &&
-        String(v) !== '',
-    )
-    .map(([k, v]) => ({ key: k, label: labels.get(k) ?? titleCaseKey(k), value: String(v) }));
+  const customGroups = detailGroups(
+    registry.data ?? [],
+    sections.data ?? [],
+    cf,
+    RESERVED_CUSTOM_KEYS,
+    { yes: t('yes'), no: t('no') },
+    titleCaseKey,
+  );
   const memberGroups = c.groups ?? [];
 
   return (
@@ -130,7 +151,17 @@ export function ContactDetail({ id }: { id: string }) {
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
               {c.lifecycleStage && (
-                <Badge>{stageLabel(statusOptions.data, c.lifecycleStage)}</Badge>
+                <StageMenu
+                  value={c.lifecycleStage}
+                  choices={stageChoices(statusOptions.data, c.lifecycleStage)}
+                  name={name}
+                  busy={changeStage.isPending}
+                  onChange={
+                    canUpdate
+                      ? (stage) => changeStage.mutate({ stage, rowVersion: c.rowVersion })
+                      : undefined
+                  }
+                />
               )}
               {c.status && <Badge tone="success">{titleCaseKey(c.status)}</Badge>}
               {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
@@ -169,7 +200,10 @@ export function ContactDetail({ id }: { id: string }) {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <Timeline id={id} />
+        <div className="min-w-0 space-y-6">
+          <LinkedTasks kind="contact" id={id} />
+          <Timeline id={id} />
+        </div>
         <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">
           <h2 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
             {t('details')}
@@ -189,12 +223,23 @@ export function ContactDetail({ id }: { id: string }) {
               )}
             </Detail>
             <Detail label={t('consent')}>{isOptedOut(c) ? t('optedOutFull') : t('optedIn')}</Detail>
-            {attrs.map((a) => (
-              <Detail key={a.key} label={a.label}>
-                {a.value}
-              </Detail>
-            ))}
           </dl>
+          {customGroups.map((g) => (
+            <div key={g.title ?? 'other'} className="space-y-3 border-t border-border pt-3">
+              {g.title && (
+                <h3 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground" dir="auto">
+                  {g.title}
+                </h3>
+              )}
+              <dl className="space-y-3 text-sm">
+                {g.rows.map((r) => (
+                  <Detail key={r.key} label={r.label}>
+                    {r.value}
+                  </Detail>
+                ))}
+              </dl>
+            </div>
+          ))}
         </aside>
       </div>
 

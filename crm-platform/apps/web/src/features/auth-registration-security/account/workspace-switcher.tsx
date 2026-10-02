@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Spinner, cn } from '@crm/ui';
+import { useNavCollapsed } from '@/components/shell/nav-context';
+import { ChevronsUpDownIcon } from '@/components/shell/nav-icons';
 import { ApiError } from '@/lib/api/errors';
 import { retryAfterSeconds } from '../shared/error-utils';
 import { showFlash } from '../shared/flash';
-import { ChevronDownIcon, CheckIcon } from '../shared/icons';
+import { CheckIcon } from '../shared/icons';
 import { useSession } from '../shared/session-context';
 import { authApi, bffPost, bffSwitchResultSchema, keys } from './api';
 import { MfaChallengeModal } from './mfa-challenge-modal';
@@ -19,14 +21,29 @@ interface Target {
   name: string;
 }
 
+/** "AI" for "Acme Inc", "A" for "Acme": the square avatar's letters. */
+export function initialsOf(name: string): string {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  const letters =
+    words.length > 1 ? words[0]!.slice(0, 1) + words[1]!.slice(0, 1) : (words[0] ?? '?').slice(0, 2);
+  return letters.toUpperCase();
+}
+
+/** "growth-plus" -> "Growth plus": the plan slug the session carries, made readable. */
+export function planLabel(slug: string): string {
+  const text = slug.replace(/[-_]+/g, ' ').trim();
+  return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
+}
+
 /**
- * Workspace switcher in the header (WD-AUTH-010). Hidden (just the current
- * name) when the person only belongs to one workspace. Switching asks the
- * server for a session in the other workspace; if that account has two-factor
- * on, a code prompt appears first.
+ * Workspace card pinned at the bottom of the menu (WD-AUTH-010): square initials avatar, the workspace name and
+ * its plan, and a chevron that opens the person's workspaces. In the slim icon rail it is just the avatar. With a
+ * single workspace there is nothing to switch, so it is a plain card. Switching asks the server for a session in
+ * the other workspace; if that account has two-factor on, a code prompt appears first.
  */
 export function WorkspaceSwitcher() {
   const t = useTranslations('auth-registration-security.account.switcher');
+  const collapsed = useNavCollapsed();
   const { org } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -61,8 +78,33 @@ export function WorkspaceSwitcher() {
     return () => document.removeEventListener('pointerdown', onDown);
   }, [open]);
 
+  const plan = planLabel(org.plan);
+  const avatar = (
+    <span
+      aria-hidden="true"
+      className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-nav-active text-xs font-bold text-nav-active-foreground"
+    >
+      {initialsOf(org.name)}
+    </span>
+  );
+  const identity = (
+    <span className="min-w-0 flex-1 text-start">
+      <span className="block truncate text-sm font-bold text-nav-active-foreground">{org.name}</span>
+      {plan && <span className="block truncate text-xs text-nav-muted">{plan}</span>}
+    </span>
+  );
+
   if (workspaces.length < 2) {
-    return <span className="truncate text-sm font-medium">{org.name}</span>;
+    return collapsed ? (
+      <div className="flex justify-center" title={org.name}>
+        {avatar}
+      </div>
+    ) : (
+      <div className="flex items-center gap-3 rounded-xl bg-nav-hover p-2">
+        {avatar}
+        {identity}
+      </div>
+    );
   }
 
   function finish(target: Target) {
@@ -140,22 +182,19 @@ export function WorkspaceSwitcher() {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t('label', { name: org.name })}
+        title={collapsed ? org.name : undefined}
         disabled={switching}
         onClick={() => setOpen((v) => !v)}
-        className="flex max-w-[14rem] items-center gap-2 rounded-md border border-border px-2.5 py-1.5 text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-60 sm:max-w-xs"
-      >
-        <span
-          aria-hidden="true"
-          className="flex size-6 shrink-0 items-center justify-center rounded bg-primary/15 text-xs font-semibold text-primary"
-        >
-          {org.name.slice(0, 1).toUpperCase()}
-        </span>
-        <span className="truncate font-medium">{org.name}</span>
-        {switching ? (
-          <Spinner label={t('switching')} />
-        ) : (
-          <ChevronDownIcon className="size-4 text-muted-foreground" />
+        className={cn(
+          'flex items-center gap-3 rounded-xl text-nav-foreground outline-none transition hover:bg-nav-hover',
+          'focus-visible:ring-2 focus-visible:ring-nav-ring disabled:opacity-60',
+          collapsed ? 'mx-auto p-1' : 'w-full bg-nav-hover/60 p-2',
         )}
+      >
+        {avatar}
+        {!collapsed && identity}
+        {!collapsed &&
+          (switching ? <Spinner label={t('switching')} /> : <ChevronsUpDownIcon className="text-nav-muted" />)}
       </button>
 
       {open && (
@@ -164,7 +203,10 @@ export function WorkspaceSwitcher() {
           role="menu"
           aria-label={t('heading')}
           onKeyDown={onMenuKey}
-          className="absolute start-0 top-full z-30 mt-1 w-64 max-w-[calc(100vw-2rem)] rounded-md border border-border bg-background p-1 shadow-lg"
+          className={cn(
+            'absolute z-50 w-64 max-w-[calc(100vw-2rem)] rounded-md border border-border bg-background p-1 text-foreground shadow-lg',
+            collapsed ? 'bottom-0 start-full ms-3' : 'bottom-full start-0 mb-2',
+          )}
         >
           <div className="px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t('heading')}

@@ -1,5 +1,7 @@
 import { cn } from '@crm/ui';
 import { avatarTone, initials } from '../lib/contact-model';
+import { optionColor } from '../lib/stage-model';
+import { CircleDotIcon } from './icons';
 
 const FALLBACK_COLOR = 'var(--primary)';
 
@@ -123,6 +125,46 @@ export function MoreChip({ count, title }: { count: number; title: string }) {
       className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground"
     >
       +{count}
+    </span>
+  );
+}
+
+/** Stage as a soft filled badge with a dot icon, in the stage's colour. */
+export function StageBadge({
+  stage,
+  label,
+  color,
+}: {
+  stage: string;
+  label: string;
+  /** The workspace's colour for this stage; the stable fallback for the value when absent. */
+  color?: string | null;
+}) {
+  const c = optionColor({ value: stage, color });
+  return (
+    <span
+      title={label}
+      className="inline-flex max-w-full items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium"
+      style={{
+        background: `color-mix(in srgb, ${c} 12%, transparent)`,
+        color: `color-mix(in srgb, ${c} 80%, var(--foreground))`,
+        borderColor: `color-mix(in srgb, ${c} 28%, transparent)`,
+      }}
+    >
+      <CircleDotIcon className="size-3" />
+      <span className="truncate">{label}</span>
+    </span>
+  );
+}
+
+/** Plain outlined tag for a short categorical value (language). */
+export function OutlineTag({ value }: { value: string }) {
+  return (
+    <span
+      title={value}
+      className="inline-flex max-w-full items-center rounded-md border border-border px-2 py-0.5 text-xs text-foreground"
+    >
+      <span className="truncate">{value}</span>
     </span>
   );
 }

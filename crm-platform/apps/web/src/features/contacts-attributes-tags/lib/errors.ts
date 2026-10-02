@@ -10,6 +10,8 @@ export type ErrorKind =
   | 'keyTaken'
   | 'reservedKey'
   | 'attributeInUse'
+  | 'statusInUse'
+  | 'dependencyCycle'
   | 'nameTaken'
   | 'importFile'
   | 'tooLarge'
@@ -37,6 +39,10 @@ export function errorKind(error: unknown): ErrorKind {
       return 'reservedKey';
     case ERROR_CODES.CON_ATTRIBUTE_IN_USE:
       return 'attributeInUse';
+    case ERROR_CODES.DEPENDENCY_CYCLE_DETECTED:
+      return 'dependencyCycle';
+    case ERROR_CODES.STATUS_OPTION_IN_USE:
+      return 'statusInUse';
     case ERROR_CODES.CON_GROUP_NAME_TAKEN:
     case ERROR_CODES.CON_TAG_NAME_TAKEN:
       return 'nameTaken';

@@ -183,7 +183,10 @@ export class ContactsService {
         phone,
         companyId,
         ownerId,
-        lifecycleStage: input.lifecycleStage,
+        // No stage chosen: the workspace's default stage (Contact stages screen), else the column default.
+        lifecycleStage:
+          input.lifecycleStage ??
+          (await this.repo.defaultOptionValue(tx, ctx.orgId, 'lifecycle_stage')),
         status: input.status,
         leadScore: input.leadScore,
         whatsappSubscriptionStatus: input.whatsappSubscriptionStatus,

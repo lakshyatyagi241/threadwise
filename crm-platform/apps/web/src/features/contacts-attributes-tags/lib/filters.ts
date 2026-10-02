@@ -28,11 +28,15 @@ function cleanPage(v: string | null): number {
   return Number.isInteger(n) && n >= 1 ? Math.min(n, 100_000) : 1;
 }
 
-export function parseFilters(params: Params): ContactFilters {
+/** `defaultLimit` is the remembered rows-per-page; a valid `per=` in the URL still wins. */
+export function parseFilters(
+  params: Params,
+  defaultLimit: PageSize = DEFAULT_FILTERS.limit,
+): ContactFilters {
   const per = Number(params.get('per'));
   const limit = (PAGE_SIZES as readonly number[]).includes(per)
     ? (per as PageSize)
-    : DEFAULT_FILTERS.limit;
+    : defaultLimit;
   const consent = params.get('consent');
   return {
     q: (params.get('q') ?? '').slice(0, 200),
@@ -50,7 +54,7 @@ export function parseFilters(params: Params): ContactFilters {
 }
 
 /** Only non-default values are written, so the clean URL is `/contacts`. */
-export function filtersToSearch(f: ContactFilters): string {
+export function filtersToSearch(f: ContactFilters, defaultLimit: PageSize = DEFAULT_FILTERS.limit): string {
   const p = new URLSearchParams();
   if (f.q.trim()) p.set('q', f.q.trim());
   if (f.group) p.set('group', f.group);
@@ -59,7 +63,7 @@ export function filtersToSearch(f: ContactFilters): string {
   if (f.consent) p.set('consent', f.consent);
   if (f.imported) p.set('imported', '1');
   if (f.order !== DEFAULT_FILTERS.order) p.set('order', f.order);
-  if (f.limit !== DEFAULT_FILTERS.limit) p.set('per', String(f.limit));
+  if (f.limit !== defaultLimit) p.set('per', String(f.limit));
   if (f.page > 1) p.set('page', String(f.page));
   const s = p.toString();
   return s ? `?${s}` : '';
