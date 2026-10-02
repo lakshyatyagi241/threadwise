@@ -76,9 +76,7 @@ export class TranslationUsageService {
     const toInclusive = query.to ? new Date(`${query.to}T23:59:59.999Z`) : now;
     const toExclusive = new Date(toInclusive.getTime() + 1);
     // The chart shows the last 30 days of the range, not of today.
-    const chartFrom = new Date(
-      Math.max(from.getTime(), toInclusive.getTime() - 30 * DAY_MS),
-    );
+    const chartFrom = new Date(Math.max(from.getTime(), toInclusive.getTime() - 30 * DAY_MS));
 
     const [totals, providers, timeline, top] = await this.store.tx(async (tx) =>
       Promise.all([

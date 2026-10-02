@@ -35,7 +35,10 @@ function driver(
   return { d, calls };
 }
 
-function build(drivers: TranslationDriver[], policy: RoutePolicy = { lockdown: false, residency: 'any' }) {
+function build(
+  drivers: TranslationDriver[],
+  policy: RoutePolicy = { lockdown: false, residency: 'any' },
+) {
   const recorded: Array<{ orgId: number | null; e: UsageEntry }> = [];
   const router = {
     policy: async () => policy,
@@ -77,11 +80,21 @@ describe('TranslationService.translate', () => {
     expect(a.calls.translate).toBe(0);
   });
 
+  it('treats a regional code and its base language as the same language', async () => {
+    const a = driver('deepl', () => 'x');
+    const { svc } = build([a.d]);
+    expect(await svc.translate('Olá', 'pt-BR', 'pt', ctx)).toBe('Olá');
+    expect(await svc.translate('你好吗', 'zh-CN', 'zh_cn', ctx)).toBe('你好吗');
+    expect(a.calls.translate).toBe(0);
+  });
+
   it('falls to the next provider and records the one that served, flagged as a fallback', async () => {
     const first = driver('mymemory', () => null);
     const second = driver('google_gtx', () => 'Hola, ¿dónde está mi pedido?');
     const { svc, recorded } = build([first.d, second.d]);
-    expect(await svc.translate('Where is my order', 'en', 'es', ctx)).toBe('Hola, ¿dónde está mi pedido?');
+    expect(await svc.translate('Where is my order', 'en', 'es', ctx)).toBe(
+      'Hola, ¿dónde está mi pedido?',
+    );
     expect(recorded).toHaveLength(1);
     expect(recorded[0]!.e).toMatchObject({
       providerSlug: 'google_gtx',
@@ -127,8 +140,15 @@ describe('TranslationService.translate', () => {
     const a = build([loose.d], { lockdown: false, residency: 'any' });
     expect(await a.svc.translate('A longer sentence here', 'en', 'es', ctx)).toBe('suelto');
     // Same cache, new policy: the earlier answer must not be served.
-    const router = { policy: async () => ({ lockdown: true, residency: 'any' }), drivers: async () => [strict.d] };
-    const svc2 = new TranslationService(router as never, { record: async () => undefined } as never, a.cache);
+    const router = {
+      policy: async () => ({ lockdown: true, residency: 'any' }),
+      drivers: async () => [strict.d],
+    };
+    const svc2 = new TranslationService(
+      router as never,
+      { record: async () => undefined } as never,
+      a.cache,
+    );
     expect(await svc2.translate('A longer sentence here', 'en', 'es', ctx)).toBe('estricto');
   });
 });
@@ -136,19 +156,35 @@ describe('TranslationService.translate', () => {
 /** WD-I18N-022 */
 describe('TranslationService.detectAndTranslate', () => {
   it('returns language and text and records one usage row', async () => {
-    const a = driver('deepl', () => null, () => ({ language: 'es', text: 'Where is my order?' }));
+    const a = driver(
+      'deepl',
+      () => null,
+      () => ({ language: 'es', text: 'Where is my order?' }),
+    );
     const { svc, recorded } = build([a.d]);
     expect(await svc.detectAndTranslate('Dónde está mi pedido', 'en', ctx)).toEqual({
       language: 'es',
       text: 'Where is my order?',
     });
     expect(recorded).toHaveLength(1);
-    expect(recorded[0]!.e).toMatchObject({ sourceLang: 'es', targetLang: 'en', providerSlug: 'deepl' });
+    expect(recorded[0]!.e).toMatchObject({
+      sourceLang: 'es',
+      targetLang: 'en',
+      providerSlug: 'deepl',
+    });
   });
 
   it('merges halves: one driver finds the language, the next supplies the text', async () => {
-    const a = driver('mymemory', () => null, () => ({ language: 'es', text: null }));
-    const b = driver('google_gtx', () => null, () => ({ language: null, text: 'Where is my order?' }));
+    const a = driver(
+      'mymemory',
+      () => null,
+      () => ({ language: 'es', text: null }),
+    );
+    const b = driver(
+      'google_gtx',
+      () => null,
+      () => ({ language: null, text: 'Where is my order?' }),
+    );
     const { svc, recorded } = build([a.d, b.d]);
     expect(await svc.detectAndTranslate('Dónde está mi pedido', 'en', ctx)).toEqual({
       language: 'es',
@@ -168,7 +204,11 @@ describe('TranslationService.detectAndTranslate', () => {
   });
 
   it('serves a repeat from the cache', async () => {
-    const a = driver('deepl', () => null, () => ({ language: 'fr', text: 'Where is it?' }));
+    const a = driver(
+      'deepl',
+      () => null,
+      () => ({ language: 'fr', text: 'Where is it?' }),
+    );
     const { svc } = build([a.d]);
     await svc.detectAndTranslate('Où est-ce', 'en', ctx);
     await svc.detectAndTranslate('Où est-ce', 'en', ctx);
@@ -176,7 +216,11 @@ describe('TranslationService.detectAndTranslate', () => {
   });
 
   it('returns nulls for empty text without asking anyone', async () => {
-    const a = driver('deepl', () => null, () => ({ language: 'fr', text: 'x' }));
+    const a = driver(
+      'deepl',
+      () => null,
+      () => ({ language: 'fr', text: 'x' }),
+    );
     const { svc } = build([a.d]);
     expect(await svc.detectAndTranslate('  ', 'en', ctx)).toEqual({ language: null, text: null });
     expect(a.calls.detect).toBe(0);
@@ -185,7 +229,11 @@ describe('TranslationService.detectAndTranslate', () => {
 
 describe('TranslationService.detect', () => {
   it('answers a non-Latin script offline, for free', async () => {
-    const a = driver('deepl', () => null, () => ({ language: 'xx', text: 'x' }));
+    const a = driver(
+      'deepl',
+      () => null,
+      () => ({ language: 'xx', text: 'x' }),
+    );
     const { svc, recorded } = build([a.d]);
     expect(await svc.detect('안녕하세요', ctx)).toBe('ko');
     expect(a.calls.detect).toBe(0);
@@ -193,7 +241,11 @@ describe('TranslationService.detect', () => {
   });
 
   it('asks a provider only for Latin-script text', async () => {
-    const a = driver('deepl', () => null, () => ({ language: 'es', text: 'Hello' }));
+    const a = driver(
+      'deepl',
+      () => null,
+      () => ({ language: 'es', text: 'Hello' }),
+    );
     const { svc } = build([a.d]);
     expect(await svc.detect('Hola amigo', ctx)).toBe('es');
     expect(a.calls.detect).toBe(1);
@@ -216,7 +268,13 @@ describe('TranslationService.fanOut', () => {
       detectAndTranslate: async () => ({ language: null, text: null }),
     };
     const { svc } = build([a]);
-    const out = await svc.fanOut('Where is my parcel', 'en', ['es', 'fr', 'ja', 'de', 'it', 'en', 'es'], ctx, 2);
+    const out = await svc.fanOut(
+      'Where is my parcel',
+      'en',
+      ['es', 'fr', 'ja', 'de', 'it', 'en', 'es'],
+      ctx,
+      2,
+    );
     expect(out).toEqual({
       es: 'Where is my parcel:es',
       fr: 'Where is my parcel:fr',

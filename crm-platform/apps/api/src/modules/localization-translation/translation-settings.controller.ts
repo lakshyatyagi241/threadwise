@@ -26,7 +26,9 @@ export class TranslationSettingsController {
   @Idempotent()
   @RequirePermission('i18n.translation_settings.update')
   @ApiOperation({ summary: 'Change the team language or the auto-translate switch (plan-gated)' })
-  update(@Body(zodPipe(updateTranslationSettingsRequestSchema)) body: UpdateTranslationSettingsRequest) {
+  update(
+    @Body(zodPipe(updateTranslationSettingsRequestSchema)) body: UpdateTranslationSettingsRequest,
+  ) {
     return this.settings.update(body);
   }
 }

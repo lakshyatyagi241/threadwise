@@ -110,7 +110,10 @@ export class ProvidersAdminService {
   }
 
   /** WD-I18N-015. */
-  async update(uuid: string, body: UpdateTranslationProviderRequest): Promise<TranslationProviderItem> {
+  async update(
+    uuid: string,
+    body: UpdateTranslationProviderRequest,
+  ): Promise<TranslationProviderItem> {
     const operatorId = this.operatorId();
     const lockdown = await this.lockdownOn();
     const item = await this.store.tx(async (tx) => {
@@ -138,7 +141,9 @@ export class ProvidersAdminService {
       }
 
       const touched = Object.entries(body.credentials ?? {})
-        .filter(([k, v]) => v.trim() !== '' && DRIVERS[slug].credentialFields.some((f) => f.key === k))
+        .filter(
+          ([k, v]) => v.trim() !== '' && DRIVERS[slug].credentialFields.some((f) => f.key === k),
+        )
         .map(([k]) => k);
       const updated = rowsOf(
         await tx.execute(sql`
@@ -258,7 +263,9 @@ export class ProvidersAdminService {
           HttpStatus.CONFLICT,
         );
       }
-      await tx.execute(sql`UPDATE translation_providers SET is_default = false WHERE is_default AND uuid <> ${uuid}`);
+      await tx.execute(
+        sql`UPDATE translation_providers SET is_default = false WHERE is_default AND uuid <> ${uuid}`,
+      );
       const updated = rowsOf(
         await tx.execute(
           sql`UPDATE translation_providers SET is_default = true WHERE uuid = ${uuid} RETURNING ${COLUMNS}`,

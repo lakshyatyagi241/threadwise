@@ -85,7 +85,8 @@ export class ConversationTranslationService {
         ),
       ),
     ]);
-    const s = row.rows[0] as { default_language: string | null; inbox_translate: boolean } | undefined;
+    const s = row.rows[0] as
+      { default_language: string | null; inbox_translate: boolean } | undefined;
     return {
       enabled: translationAllowed(entitlements) && (s?.inbox_translate ?? true),
       teamLanguage: (s?.default_language ?? 'en').trim().toLowerCase() || 'en',
