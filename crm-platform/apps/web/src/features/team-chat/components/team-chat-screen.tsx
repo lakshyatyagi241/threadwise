@@ -2,7 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Badge, Button, ConfirmDialog, cn, useToast } from '@crm/ui';
 import type { TchatChannelResponse, TchatMember, TchatMessageResponse } from '@crm/contracts';
 import {
