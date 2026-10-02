@@ -160,14 +160,50 @@ await check('the wizard stays the wizard for Smart agent and Smart + WhatsApp', 
   await page.fill('#wgt-f-phone', '9876543210');
 });
 
-await check('the preview repaints as the header colour changes (step 2)', async () => {
-  await page.click('#wgt-next');
-  await page.fill('#wgt-f-headerBg', '#112233');
-  const bg = await page
-    .locator('[data-testid=preview-header]')
-    .evaluate((el) => getComputedStyle(el).backgroundColor);
-  assert.equal(bg, 'rgb(17, 34, 51)');
-});
+await check(
+  'the wizard preview is the same open messenger panel, drawn from the wizard fields',
+  async () => {
+    const panel = preview().locator('[role=dialog]');
+    await panel.waitFor();
+    assert.equal(await preview().locator('[data-testid=wgt-close]').isVisible(), true);
+    await preview().getByText('Typically replies within 5 mins').waitFor();
+    const box = await panel.boundingBox();
+    assert.ok(box.height >= 500 && box.height <= 580, `panel is ${box.height}px tall`);
+    // the intake gate and the disabled Send, as the real chat page opens
+    await preview().locator('[data-testid=preview-intake]').waitFor();
+    // the WhatsApp action of the Both engine, with a number set
+    await preview().getByText('Open WhatsApp').waitFor();
+    await page.click('#wgt-next');
+    await page.fill('#wgt-f-headerBg', '#112233');
+    await page.fill('#wgt-f-headerTitle', 'Acme Support');
+    await until(
+      async () =>
+        (await preview()
+          .locator('[data-testid=preview-header]')
+          .evaluate((el) => getComputedStyle(el).backgroundColor)) === 'rgb(17, 34, 51)',
+    );
+    await until(async () => (await panel.getAttribute('aria-label')) === 'Acme Support');
+    await page.click('#wgt-next');
+    await page.fill('#wgt-f-welcomeMessage', 'Welcome to the preview');
+    await preview()
+      .locator('[data-testid=preview-welcome]')
+      .getByText('Welcome to the preview')
+      .waitFor();
+    // collapse, re-open, and the Desktop / Mobile switch of the preview card
+    await preview().locator('[data-testid=wgt-close]').click();
+    await preview().locator('[data-testid=wgt-launcher]').waitFor();
+    assert.equal(await panel.isVisible(), false);
+    await preview().locator('[data-testid=wgt-launcher]').click();
+    await panel.waitFor();
+    await page.locator('[data-preview-device=mobile]').click();
+    await until(
+      async () => (await page.locator('[data-testid=launcher-preview]').boundingBox()).width < 420,
+    );
+    await preview().locator('[role=dialog]').waitFor();
+    await page.locator('[data-preview-device=desktop]').click();
+    await page.click('[data-step-node="2"]');
+  },
+);
 
 await check('launcher fill must be hex (step 2 gate)', async () => {
   await page.fill('#wgt-f-buttonColor', 'red');
@@ -213,7 +249,7 @@ await check(
     await launcher.waitFor();
     await launcher.click();
     const frame = site.frameLocator('iframe');
-    await frame.locator('#hdr').getByText('Chat with us').waitFor();
+    await frame.locator('#hdr').getByText('Acme Support').waitFor();
     assert.ok(await frame.locator('#send').isDisabled());
     await frame.locator('#i-name').fill('Asha');
     await frame.locator('#i-go').click();
