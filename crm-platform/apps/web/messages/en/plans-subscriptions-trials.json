@@ -25,7 +25,8 @@
       "total_campaigns": "Campaigns created",
       "api_rate_limit_per_minute": "API requests per minute (0 = platform default)",
       "saved_replies": "Saved replies",
-      "routing_rules": "Routing rules"
+      "routing_rules": "Routing rules",
+      "scheduled_messages": "Scheduled messages"
     },
     "features": {
       "automation": "Automation",
@@ -43,7 +44,9 @@
       "inbox_routing": "Routing rules",
       "waba_calling": "WhatsApp calling",
       "inbox_kanban": "Kanban view",
-      "team_performance": "Team performance"
+      "team_performance": "Team performance",
+      "scheduled_messages": "Scheduled messages",
+      "whatsapp_warmer": "WhatsApp warmer"
     },
     "common": {
       "unlimited": "Unlimited",
