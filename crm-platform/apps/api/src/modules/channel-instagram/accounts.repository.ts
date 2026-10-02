@@ -123,6 +123,14 @@ export class AccountsRepository {
     return res.rows.length;
   }
 
+  /** Every organization with a linked account: the pull sweep's work list. */
+  async orgsWithAccounts(tx: Tx): Promise<number[]> {
+    const res = await tx.execute(
+      sql`SELECT DISTINCT org_id FROM workspace_ig_accounts ORDER BY org_id`,
+    );
+    return (res.rows as Array<{ org_id: number | string }>).map((r) => Number(r.org_id));
+  }
+
   /** The signed-in person's email: the engine matches the accounts the person owns by it. */
   async userEmail(tx: Tx, orgId: number, userId: number): Promise<string | null> {
     const res = await tx.execute(

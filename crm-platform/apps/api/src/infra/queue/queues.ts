@@ -34,6 +34,8 @@ export const QUEUES = {
   FB_BACKFILL: 'fb-backfill',
   /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (WD-FB-013). */
   FB_BROADCAST: 'fb-broadcast',
+  /** One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (WD-IG-009). */
+  IG_PULL: 'ig-pull',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
 } as const;

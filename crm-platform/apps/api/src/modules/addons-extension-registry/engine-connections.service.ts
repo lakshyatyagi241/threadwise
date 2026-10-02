@@ -152,6 +152,19 @@ export class EngineConnectionService implements OnApplicationBootstrap {
     };
   }
 
+  /**
+   * A message arrived signed with the shared secret, which proves the link is live: the connection reads as connected (WD-IG-007).
+   * Written only when it was not, so a busy engine does not rewrite a setting on every message.
+   */
+  async markConnected(engine: EngineKey): Promise<void> {
+    await this.settings.mergeMember(
+      DOC,
+      engine,
+      { connected: true, lastCheckAt: new Date().toISOString(), lastError: null },
+      null,
+    );
+  }
+
   async connect(engine: EngineKey, input: ConnectEngineRequest): Promise<ConnectEngineResponse> {
     const operatorId = this.operatorId();
     if (engine === 'instagram' && (await this.nativeInstagramActive())) {

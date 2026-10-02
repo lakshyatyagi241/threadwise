@@ -6,6 +6,7 @@ import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
+import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
@@ -46,6 +47,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
     ChannelFacebookWorkerModule,
+    ChannelInstagramWorkerModule,
   ],
   providers: [
     OutboxDrainService,

@@ -1,9 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { truthy } from '../../../common/truthy';
 import { addonsConfig } from '../../../config/domains/addons-extension-registry.env';
 import { guardedRequest } from '../../net/guarded-http';
 import type {
   BridgeAccount,
   BridgeConnection,
+  BridgeConversation,
+  BridgeMessage,
   BridgeResult,
   InstagramBridgeApi,
   InstagramBridgeFactory,
@@ -36,6 +39,43 @@ export function toAccounts(body: unknown): BridgeAccount[] {
     });
   }
   return out;
+}
+
+/** The engine's thread list into ours: a row without an id is dropped. */
+export function toConversations(body: unknown): BridgeConversation[] {
+  if (!Array.isArray(body)) return [];
+  const out: BridgeConversation[] = [];
+  for (const raw of body) {
+    const c = obj(raw);
+    const id = text(c.id).trim();
+    if (id === '') continue;
+    out.push({
+      id,
+      account: text(c.account),
+      name: text(c.name),
+      handle: text(c.handle),
+      avatar: text(c.avatar),
+      lastAt: text(c.last_at) || null,
+    });
+  }
+  return out;
+}
+
+/** The engine's message list into ours. `from_me` follows PHP's idea of set, as the engine is written in it. */
+export function toMessages(body: unknown): BridgeMessage[] {
+  if (!Array.isArray(body)) return [];
+  return body.map((raw) => {
+    const m = obj(raw);
+    return {
+      id: text(m.id).trim(),
+      fromMe: truthy(m.from_me),
+      type: text(m.type) || 'text',
+      text: text(m.text),
+      mediaUrl: text(m.media_url),
+      buttons: Array.isArray(m.buttons) ? m.buttons : null,
+      at: text(m.at) || null,
+    };
+  });
 }
 
 class HttpBridge implements InstagramBridgeApi {
@@ -87,6 +127,19 @@ class HttpBridge implements InstagramBridgeApi {
     if (Object.keys(query).length === 0) return [];
     const res = await this.send('GET', '/accounts', { query });
     return res && res.status >= 200 && res.status < 300 ? toAccounts(res.json) : [];
+  }
+
+  async conversations(account: string): Promise<BridgeConversation[]> {
+    const res = await this.send('GET', '/conversations', { query: { account } });
+    return res && res.status >= 200 && res.status < 300 ? toConversations(res.json) : [];
+  }
+
+  async messages(conversationId: string): Promise<BridgeMessage[]> {
+    const res = await this.send(
+      'GET',
+      `/conversations/${encodeURIComponent(conversationId)}/messages`,
+    );
+    return res && res.status >= 200 && res.status < 300 ? toMessages(res.json) : [];
   }
 
   async connectStart(workspace: number, returnUrl: string): Promise<BridgeResult<{ url: string }>> {

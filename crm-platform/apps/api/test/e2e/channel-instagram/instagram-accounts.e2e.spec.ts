@@ -46,6 +46,8 @@ beforeAll(async () => {
       asked.push({ method: 'accounts', args: [q] });
       return Promise.resolve(q.ownerEmail !== undefined ? byOwner : byWorkspace);
     },
+    conversations: () => Promise.resolve([]),
+    messages: () => Promise.resolve([]),
     connectStart: (workspace, returnUrl) => {
       asked.push({ method: 'connectStart', args: [workspace, returnUrl] });
       return Promise.resolve(start);
