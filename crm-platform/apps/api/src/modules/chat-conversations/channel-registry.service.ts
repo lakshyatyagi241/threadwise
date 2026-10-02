@@ -171,50 +171,74 @@ export class ChannelRegistryService {
   }
 
   /**
-   * Keeps the inbox channel of an unofficial-engine device in step with the device (TW-NODE-017): one `whatsapp_qr` channel per
-   * device, its handle the device uuid, `connected` while the device is. Called by the NODE runtime, which owns the device; the
-   * caller supplies the system context (audit and outbox read it). Creates the channel the first time, then only touches what
-   * changed. No credentials: the session lives in the runtime, not here.
+   * Keeps the inbox channel of a number that another domain owns in step with that number: one channel per number, its handle the
+   * owner's own id (a device uuid, a WhatsApp number's uuid), `connected` while the number is. Called by the owning runtime, which
+   * supplies the system context (audit and outbox read it). Creates the channel the first time, then only touches what changed.
+   * No credentials are stored: the owner keeps them, and its adapter reads them when it sends.
    */
-  async syncDeviceChannel(
+  async syncProviderChannel(
     orgId: number,
-    device: { uuid: string; name: string; displayAddress: string | null; connected: boolean },
+    channel: {
+      kind: 'whatsapp_qr' | 'whatsapp_waba';
+      externalId: string;
+      name: string;
+      displayAddress: string | null;
+      connected: boolean;
+      /** Whether sends draw on the plan allowance and the wallet. */
+      metered: boolean;
+    },
   ): Promise<{ id: number; uuid: string; created: boolean }> {
-    const status = device.connected ? 'connected' : 'disconnected';
+    const status = channel.connected ? 'connected' : 'disconnected';
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
-      const found = await this.repo.byExternal(tx, orgId, 'whatsapp_qr', device.uuid);
+      const found = await this.repo.byExternal(tx, orgId, channel.kind, channel.externalId);
       if (found) {
         if (
           found.status !== status ||
-          found.name !== device.name ||
-          found.displayAddress !== device.displayAddress
+          found.name !== channel.name ||
+          found.displayAddress !== channel.displayAddress
         ) {
           await this.repo.update(tx, orgId, found.id, found.rowVersion, {
             status,
-            name: device.name,
-            displayAddress: device.displayAddress,
+            name: channel.name,
+            displayAddress: channel.displayAddress,
           });
         }
         return { id: found.id, uuid: found.uuid, created: false };
       }
       const row = await this.repo.insert(tx, orgId, {
-        kind: 'whatsapp_qr',
-        name: device.name,
+        kind: channel.kind,
+        name: channel.name,
         status,
-        externalId: device.uuid,
-        displayAddress: device.displayAddress,
+        externalId: channel.externalId,
+        displayAddress: channel.displayAddress,
         credentialsEnc: null,
         credentialHints: {},
         webhookTokenHash: null,
-        // The unofficial engine has no per-message bill from Meta: it does not draw on the wallet.
-        settings: normalizeSettings('whatsapp_qr', { metered: false }),
+        settings: normalizeSettings(channel.kind, { metered: channel.metered }),
         createdBy: null,
       });
       // Another worker created it between the read and the insert: take theirs.
-      const won = row ?? (await this.repo.byExternal(tx, orgId, 'whatsapp_qr', device.uuid));
-      if (!won) throw new Error('device channel could not be created');
+      const won =
+        row ?? (await this.repo.byExternal(tx, orgId, channel.kind, channel.externalId));
+      if (!won) throw new Error('channel could not be created');
       if (row) await this.recordCreated(tx, row);
       return { id: won.id, uuid: won.uuid, created: row !== null };
+    });
+  }
+
+  /** The unofficial engine's device as a channel (see `syncProviderChannel`). */
+  syncDeviceChannel(
+    orgId: number,
+    device: { uuid: string; name: string; displayAddress: string | null; connected: boolean },
+  ): Promise<{ id: number; uuid: string; created: boolean }> {
+    // The unofficial engine has no per-message bill from Meta: it does not draw on the wallet.
+    return this.syncProviderChannel(orgId, {
+      kind: 'whatsapp_qr',
+      externalId: device.uuid,
+      name: device.name,
+      displayAddress: device.displayAddress,
+      connected: device.connected,
+      metered: false,
     });
   }
 

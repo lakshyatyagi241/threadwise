@@ -91,10 +91,10 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WABA-031 | todo |  |  |
 | TW-WABA-032 | todo |  |  |
 | TW-WABA-033 | todo |  |  |
-| TW-WABA-034 | todo |  |  |
-| TW-WABA-035 | todo |  |  |
+| TW-WABA-034 | backend-done |  | inbound WhatsApp messages become a thread, contact and stored message through the inbox ingest queue (WabaInboxSink bound to WABA_INBOUND_SINK); each connected number is an inbox channel whatsapp_waba; e2e with the real webhook door; not run against real Meta |
+| TW-WABA-035 | backend-done |  | customer files fetched from Meta by media id (GET /{id}, then the URL with the number's credentials, 100 MB cap) by the ingest job, retried by the queue, stored without the file on the last attempt; not run against real Meta |
 | TW-WABA-036 | todo |  |  |
-| TW-WABA-037 | todo |  |  |
+| TW-WABA-037 | backend-done |  | delivery reports the broadcasts did not claim advance the inbox message (sent, delivered, read, failed with Meta code), forward only; wallet settlement once belongs with WALLET |
 | TW-WABA-038 | todo |  |  |
 | TW-WABA-039 | todo |  |  |
 | TW-WABA-040 | todo |  |  |
@@ -106,9 +106,9 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WABA-046 | todo |  |  |
 | TW-WABA-047 | todo |  |  |
 | TW-WABA-048 | todo |  |  |
-| TW-WABA-049 | todo |  |  |
+| TW-WABA-049 | backend-done |  | Cloud API outbound send adapter for the inbox (text, media by upload, template, location, reaction; Meta or Interakt route; Meta error codes become retry or fail); not run against real Meta |
 | TW-WABA-050 | todo |  |  |
-| TW-WABA-051 | todo |  |  |
+| TW-WABA-051 | in-progress |  | send errors are classified for the inbox (retry vs fail with Meta's code); the full user-facing message table is still to port |
 | TW-WABA-052 | todo |  |  |
 | TW-WABA-053 | todo |  |  |
 | TW-WABA-054 | todo |  |  |

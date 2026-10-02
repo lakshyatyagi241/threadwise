@@ -41,3 +41,17 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/threadwise-port/waba-int
 | Enabled-engines card (Twilio, Unofficial/Baileys, Business API) | on the same page | not built | Baileys is out of scope; Twilio is another channel |
 | Connected-WABAs count | per platform | same, counted across all workspaces with the platform store | |
 | Role gating of buttons | admin only | server enforces `waba.numbers.*`; the screens do not hide buttons yet (no per-screen permission payload) | app-init payload does not exist yet |
+
+## Inbox wiring (TW-WABA-034, 035, 037, 049)
+
+- Each connected number is an inbox channel of kind `whatsapp_waba` (handle = the number's uuid, metered), created on its first message and by a one-minute pass in the
+  worker that also marks the channel of a removed or disconnected number. The WABA domain keeps the credentials; the adapter reads them through
+  `WabaConnectService.resolveConnection` when it sends or fetches a file.
+- Inbound: `WabaInboxSink` (bound to `WABA_INBOUND_SINK`) maps the raw Meta message (text, file, location, reaction, button, contacts; anything else as `unsupported`)
+  and hands it to the inbox ingest queue. A reply goes out through `MetaCloudProvider` (the guard and footer run once). Delivery reports the broadcasts do not claim become
+  inbox receipts. Evidence: `waba-inbox.e2e.spec.ts` (6) through the real webhook door with Meta faked at the HTTP edge, and `waba-inbox.spec.ts` (unit).
+- Deviations: a new channel kind `whatsapp_waba` beside Lakshya's skeleton `whatsapp_cloud` (which keeps credentials in the channel registry and stays non-live), because the
+  numbers and their credentials already live in `wa_provider_configs`; outbound files are uploaded to Meta and sent by media id (the inbox store is not reachable from Meta).
+- Not built: automation fan-out after the store (036), groups (039, 040), catalog orders (042), hand-offs to forms, Pay and calling (043), coexistence echoes, contact sync and
+  history (044 to 046), wallet settlement once per delivery (WALLET), a hook that updates the channel the moment a number connects (the pass does it within a minute).
+- Not verified: real Meta or Interakt; Playwright twin run.

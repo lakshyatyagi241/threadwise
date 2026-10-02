@@ -11,7 +11,7 @@ import { uuidSchema } from '../common/ids';
 // --- vocabulary ---------------------------------------------------------------------------------------------------------
 
 /** Adapter families. A new channel type is a new member here and a new adapter; the database stores the plain string. */
-export const CHANNEL_KINDS = ['simulator', 'whatsapp_cloud', 'whatsapp_qr', 'webchat'] as const;
+export const CHANNEL_KINDS = ['simulator', 'whatsapp_cloud', 'whatsapp_qr', 'whatsapp_waba', 'webchat'] as const;
 export const channelKindSchema = z.enum(CHANNEL_KINDS);
 export type ChannelKind = z.infer<typeof channelKindSchema>;
 

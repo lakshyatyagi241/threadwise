@@ -37,13 +37,13 @@ export function Avatar({
 
 /** A short coloured tag for the channel kind (Reference's channel badge). */
 export function ChannelTag({ kind, name, className }: { kind: string; name: string; className?: string }) {
-  const label = kind === 'whatsapp_cloud' ? 'WA' : kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
+  const label = kind === 'whatsapp_cloud' || kind === 'whatsapp_waba' ? 'WA' : kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
   return (
     <span
       title={name}
       className={cn(
         'inline-flex h-4 items-center rounded px-1 text-[9px] font-semibold uppercase tracking-wide',
-        kind === 'whatsapp_cloud' || kind === 'whatsapp_qr'
+        kind === 'whatsapp_cloud' || kind === 'whatsapp_waba' || kind === 'whatsapp_qr'
           ? 'bg-success/15 text-success'
           : kind === 'simulator'
             ? 'bg-warning/15 text-warning'

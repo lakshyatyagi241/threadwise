@@ -96,6 +96,33 @@ export class WabaHttp {
     return this.send<T>(url, req, req.headers ?? {});
   }
 
+  /**
+   * The bytes at a media URL Meta handed out (`GET /{media-id}` answers with a short-lived one). The URL only answers to the
+   * number's own credentials, so they go in the headers. Refuses a body larger than `maxBytes` rather than buffering it.
+   */
+  async download(
+    auth: WabaAuth,
+    url: string,
+    maxBytes: number,
+  ): Promise<{ bytes: Buffer; mime: string | null }> {
+    let res: Response;
+    try {
+      res = await this.fetchImpl(url, {
+        method: 'GET',
+        headers: this.headers(auth),
+        signal: AbortSignal.timeout(this.env.WABA_HTTP_TIMEOUT_MS),
+      });
+    } catch (cause) {
+      throw WabaApiError.network(cause);
+    }
+    if (!res.ok) throw WabaApiError.fromResponse(res.status, {});
+    const declared = Number(res.headers.get('content-length') ?? 0);
+    if (declared > maxBytes) throw new Error(`The file is larger than ${maxBytes} bytes`);
+    const bytes = Buffer.from(await res.arrayBuffer());
+    if (bytes.length > maxBytes) throw new Error(`The file is larger than ${maxBytes} bytes`);
+    return { bytes, mime: res.headers.get('content-type') };
+  }
+
   private url(base: string, path: string, query?: WabaQuery): string {
     const u = new URL(`${base}${path.startsWith('/') ? path : `/${path}`}`);
     for (const [k, v] of Object.entries(query ?? {})) {
