@@ -113,13 +113,24 @@ describe('invoice payload', () => {
   });
 
   it('leaves shipping out once it was billed, whatever the box says', () => {
-    const p = buildInvoicePayload({ ...emptyInvoiceForm(true), includeShipping: true }, [L1], { shippingPending: false });
+    const p = buildInvoicePayload({ ...emptyInvoiceForm(true), includeShipping: true }, [L1], {
+      shippingPending: false,
+    });
     expect(p.includeShipping).toBe(false);
   });
 
   it('defaults each line to what is left and drops zero lines', () => {
-    const p = buildInvoicePayload({ ...emptyInvoiceForm(false), mode: 'lines', qty: { [L2.id]: '0' } }, [L1, L2], { shippingPending: false });
-    expect(p).toEqual({ all: false, issue: false, includeShipping: false, lines: [{ lineId: L1.id, qty: '6' }] });
+    const p = buildInvoicePayload(
+      { ...emptyInvoiceForm(false), mode: 'lines', qty: { [L2.id]: '0' } },
+      [L1, L2],
+      { shippingPending: false },
+    );
+    expect(p).toEqual({
+      all: false,
+      issue: false,
+      includeShipping: false,
+      lines: [{ lineId: L1.id, qty: '6' }],
+    });
   });
 
   it('sends a partial quantity', () => {
@@ -132,25 +143,47 @@ describe('invoice payload', () => {
   });
 
   it('carries dates, terms and issue-now', () => {
-    const p = buildInvoicePayload({ ...emptyInvoiceForm(false), issue: true, issueDate: '2026-10-05', termsDays: '30' }, [L1], { shippingPending: false });
+    const p = buildInvoicePayload(
+      { ...emptyInvoiceForm(false), issue: true, issueDate: '2026-10-05', termsDays: '30' },
+      [L1],
+      { shippingPending: false },
+    );
     expect(p).toMatchObject({ issue: true, issueDate: '2026-10-05', paymentTermsDays: 30 });
-    const q = buildInvoicePayload({ ...emptyInvoiceForm(false), dueDate: '2026-11-01', termsDays: '30' }, [L1], { shippingPending: false });
+    const q = buildInvoicePayload(
+      { ...emptyInvoiceForm(false), dueDate: '2026-11-01', termsDays: '30' },
+      [L1],
+      { shippingPending: false },
+    );
     expect(q).toMatchObject({ dueDate: '2026-11-01' });
     expect(q).not.toHaveProperty('paymentTermsDays');
   });
 
   it('refuses more than is left, bad quantities, nothing chosen and bad dates', () => {
-    const over = invoiceFormProblems({ ...emptyInvoiceForm(false), mode: 'lines', qty: { [L1.id]: '7' } }, [L1, L2]);
+    const over = invoiceFormProblems(
+      { ...emptyInvoiceForm(false), mode: 'lines', qty: { [L1.id]: '7' } },
+      [L1, L2],
+    );
     expect(over.lines[L1.id]).toBe('qtyExceeds');
-    const bad = invoiceFormProblems({ ...emptyInvoiceForm(false), mode: 'lines', qty: { [L1.id]: 'x' } }, [L1]);
+    const bad = invoiceFormProblems(
+      { ...emptyInvoiceForm(false), mode: 'lines', qty: { [L1.id]: 'x' } },
+      [L1],
+    );
     expect(bad.lines[L1.id]).toBe('qtyInvalid');
-    const none = invoiceFormProblems({ ...emptyInvoiceForm(false), mode: 'lines', qty: { [L1.id]: '0', [L2.id]: '0' } }, [L1, L2]);
+    const none = invoiceFormProblems(
+      { ...emptyInvoiceForm(false), mode: 'lines', qty: { [L1.id]: '0', [L2.id]: '0' } },
+      [L1, L2],
+    );
     expect(none.form).toContain('nothing');
     const done = invoiceFormProblems(emptyInvoiceForm(false), [line({ qtyInvoiced: '10' })]);
     expect(done.form).toContain('nothing');
-    const dates = invoiceFormProblems({ ...emptyInvoiceForm(false), issueDate: '2026-10-10', dueDate: '2026-10-01' }, [L1]);
+    const dates = invoiceFormProblems(
+      { ...emptyInvoiceForm(false), issueDate: '2026-10-10', dueDate: '2026-10-01' },
+      [L1],
+    );
     expect(dates.form).toContain('dueBeforeIssue');
-    expect(invoiceFormProblems({ ...emptyInvoiceForm(false), issueDate: 'soon' }, [L1]).form).toContain('issueDateInvalid');
+    expect(
+      invoiceFormProblems({ ...emptyInvoiceForm(false), issueDate: 'soon' }, [L1]).form,
+    ).toContain('issueDateInvalid');
   });
 
   it('proposes the quantity that is left', () => {
@@ -162,22 +195,33 @@ describe('invoice payload', () => {
 
 describe('fulfil payload', () => {
   it('records all, or the lines named, with a trimmed note', () => {
-    expect(buildFulfilPayload({ ...emptyFulfilForm(), note: '  DN-7 ' }, [L2])).toEqual({ all: true, note: 'DN-7' });
-    expect(buildFulfilPayload({ mode: 'lines', qty: { [L2.id]: '0.5' }, note: '' }, [L1, L2])).toEqual({
+    expect(buildFulfilPayload({ ...emptyFulfilForm(), note: '  DN-7 ' }, [L2])).toEqual({
+      all: true,
+      note: 'DN-7',
+    });
+    expect(
+      buildFulfilPayload({ mode: 'lines', qty: { [L2.id]: '0.5' }, note: '' }, [L1, L2]),
+    ).toEqual({
       all: false,
       lines: [{ lineId: L2.id, qty: '0.5' }],
     });
   });
   it('refuses a delivery above what is left or nothing at all', () => {
-    expect(fulfilFormProblems({ mode: 'lines', qty: { [L2.id]: '2' }, note: '' }, [L2]).lines[L2.id]).toBe('qtyExceeds');
+    expect(
+      fulfilFormProblems({ mode: 'lines', qty: { [L2.id]: '2' }, note: '' }, [L2]).lines[L2.id],
+    ).toBe('qtyExceeds');
     expect(fulfilFormProblems(emptyFulfilForm(), [L1]).form).toContain('nothing');
-    expect(fulfilFormProblems({ ...emptyFulfilForm(), note: 'x'.repeat(501) }, [L2]).form).toContain('noteTooLong');
+    expect(
+      fulfilFormProblems({ ...emptyFulfilForm(), note: 'x'.repeat(501) }, [L2]).form,
+    ).toContain('noteTooLong');
   });
 });
 
 describe('list state', () => {
   it('reads and writes the address', () => {
-    const f = parseSalesOrderFilters(new URLSearchParams('tab=confirmed&quick=toInvoice&q=chair&contact=nope'));
+    const f = parseSalesOrderFilters(
+      new URLSearchParams('tab=confirmed&quick=toInvoice&q=chair&contact=nope'),
+    );
     expect(f).toEqual({ tab: 'confirmed', quick: 'toInvoice', q: 'chair', contactId: '' });
     expect(salesOrderFiltersToSearch(f)).toBe('?tab=confirmed&quick=toInvoice&q=chair');
     expect(salesOrderFiltersToSearch({ tab: 'all', quick: '', q: '', contactId: '' })).toBe('');
@@ -185,19 +229,36 @@ describe('list state', () => {
   });
 
   it('builds the query: a quick filter pins confirmed', () => {
-    expect(salesOrderListQuery({ tab: 'draft', quick: '', q: ' a ', contactId: '' })).toEqual({ q: 'a', contactId: undefined, status: 'draft' });
-    expect(salesOrderListQuery({ tab: 'all', quick: 'toInvoice', q: '', contactId: '' })).toMatchObject({
+    expect(salesOrderListQuery({ tab: 'draft', quick: '', q: ' a ', contactId: '' })).toEqual({
+      q: 'a',
+      contactId: undefined,
+      status: 'draft',
+    });
+    expect(
+      salesOrderListQuery({ tab: 'all', quick: 'toInvoice', q: '', contactId: '' }),
+    ).toMatchObject({
       status: 'confirmed',
       invoicingStatus: 'not_invoiced,partially_invoiced',
     });
-    expect(salesOrderListQuery({ tab: 'draft', quick: 'toFulfil', q: '', contactId: '' })).toMatchObject({
+    expect(
+      salesOrderListQuery({ tab: 'draft', quick: 'toFulfil', q: '', contactId: '' }),
+    ).toMatchObject({
       status: 'confirmed',
       fulfilmentStatus: 'unfulfilled,partially_fulfilled',
     });
   });
 
   it('reads counts', () => {
-    const counts = { all: 5, draft: 1, confirmed: 3, cancelled: 0, closed: 1, toInvoice: 2, toFulfil: 1, openValue: [] };
+    const counts = {
+      all: 5,
+      draft: 1,
+      confirmed: 3,
+      cancelled: 0,
+      closed: 1,
+      toInvoice: 2,
+      toFulfil: 1,
+      openValue: [],
+    };
     expect(salesOrderTabCount(counts, 'confirmed')).toBe(3);
     expect(salesOrderTabCount(counts, 'toInvoice')).toBe(2);
     expect(salesOrderTabCount(undefined, 'all')).toBeUndefined();
@@ -208,11 +269,24 @@ describe('what an order offers', () => {
   const all = { updateSalesOrder: true, invoiceSalesOrder: true, deleteSalesOrder: true };
   const base = { invoicingStatus: 'not_invoiced', fulfilmentStatus: 'unfulfilled' } as const;
   it('draft: edit, confirm, delete', () => {
-    expect([...salesOrderActions({ ...base, status: 'draft' }, all)].sort()).toEqual(['confirm', 'delete', 'edit', 'open']);
+    expect([...salesOrderActions({ ...base, status: 'draft' }, all)].sort()).toEqual([
+      'confirm',
+      'delete',
+      'edit',
+      'open',
+    ]);
   });
   it('confirmed: invoice, fulfil, cancel while something is left', () => {
-    expect([...salesOrderActions({ ...base, status: 'confirmed' }, all)].sort()).toEqual(['cancel', 'fulfil', 'invoice', 'open']);
-    const done = salesOrderActions({ status: 'confirmed', invoicingStatus: 'invoiced', fulfilmentStatus: 'fulfilled' }, all);
+    expect([...salesOrderActions({ ...base, status: 'confirmed' }, all)].sort()).toEqual([
+      'cancel',
+      'fulfil',
+      'invoice',
+      'open',
+    ]);
+    const done = salesOrderActions(
+      { status: 'confirmed', invoicingStatus: 'invoiced', fulfilmentStatus: 'fulfilled' },
+      all,
+    );
     expect(done.has('invoice')).toBe(false);
     expect(done.has('fulfil')).toBe(false);
   });
@@ -223,10 +297,23 @@ describe('what an order offers', () => {
   it('follows the permissions', () => {
     const none = { updateSalesOrder: false, invoiceSalesOrder: false, deleteSalesOrder: false };
     expect([...salesOrderActions({ ...base, status: 'draft' }, none)]).toEqual(['open']);
-    expect([...salesOrderActions({ ...base, status: 'confirmed' }, { ...none, invoiceSalesOrder: true })].sort()).toEqual(['invoice', 'open']);
+    expect(
+      [
+        ...salesOrderActions(
+          { ...base, status: 'confirmed' },
+          { ...none, invoiceSalesOrder: true },
+        ),
+      ].sort(),
+    ).toEqual(['invoice', 'open']);
   });
   it('works on a list row', () => {
-    const s = { id: 'a', number: 'SO-1', status: 'confirmed', invoicingStatus: 'invoiced', fulfilmentStatus: 'fulfilled' } as SalesOrderSummary;
+    const s = {
+      id: 'a',
+      number: 'SO-1',
+      status: 'confirmed',
+      invoicingStatus: 'invoiced',
+      fulfilmentStatus: 'fulfilled',
+    } as SalesOrderSummary;
     expect(salesOrderActions(s, all).has('invoice')).toBe(false);
   });
 });
@@ -305,7 +392,13 @@ const order = (): SalesOrderResponse =>
     rowVersion: 3,
     createdAt: '2026-10-02T04:56:45.201Z',
     buyer: { name: 'Order Co', email: null, phone: null },
-    amounts: { subtotal: '700.00', discount: '0.00', shipping: '10.00', tax: '0.00', total: '710.00' },
+    amounts: {
+      subtotal: '700.00',
+      discount: '0.00',
+      shipping: '10.00',
+      tax: '0.00',
+      total: '710.00',
+    },
     shippingInvoiced: false,
     notes: null,
     terms: null,
@@ -322,10 +415,17 @@ describe('the builder form', () => {
     const p = validateOrderDraft(d, { creating: true });
     expect(p.fields.buyer).toBe('buyerRequired');
     expect(p.list).toBe('noLines');
-    const ok = { ...d, buyerName: 'Acme', lines: [{ ...emptyLine(), description: 'Chair', price: '30' }] };
+    const ok = {
+      ...d,
+      buyerName: 'Acme',
+      lines: [{ ...emptyLine(), description: 'Chair', price: '30' }],
+    };
     expect(validateOrderDraft(ok, { creating: true })).toEqual({ fields: {}, lines: {} });
     expect(
-      validateOrderDraft({ ...ok, buyerEmail: 'nope', currency: 'US', expectedDate: '5/6', shipping: '1.2.3' }, { creating: true }).fields,
+      validateOrderDraft(
+        { ...ok, buyerEmail: 'nope', currency: 'US', expectedDate: '5/6', shipping: '1.2.3' },
+        { creating: true },
+      ).fields,
     ).toEqual({
       email: 'emailInvalid',
       currency: 'currencyInvalid',
@@ -340,9 +440,15 @@ describe('the builder form', () => {
   });
 
   it('checks lines of an edit only when they were touched', () => {
-    const d = { ...emptyOrderDraft('USD'), buyerName: 'A', lines: [{ ...emptyLine('snapshot'), description: 'Old', price: '5' }] };
+    const d = {
+      ...emptyOrderDraft('USD'),
+      buyerName: 'A',
+      lines: [{ ...emptyLine('snapshot'), description: 'Old', price: '5' }],
+    };
     expect(validateOrderDraft(d, { creating: false, linesTouched: false }).lines).toEqual({});
-    expect(validateOrderDraft(d, { creating: false, linesTouched: true }).lines).toEqual({ 'lines.0.taxRateId': 'taxRateRemoved' });
+    expect(validateOrderDraft(d, { creating: false, linesTouched: true }).lines).toEqual({
+      'lines.0.taxRateId': 'taxRateRemoved',
+    });
   });
 
   it('builds the create body from scratch: lines as decimal strings, currency upper case', () => {
@@ -361,8 +467,17 @@ describe('the builder form', () => {
   });
 
   it('builds the create body from an offer: no lines, no currency', () => {
-    const d = { ...emptyOrderDraft('USD'), quoteId: '33333333-3333-4333-8333-333333333333', reference: 'PO-9', expectedDate: '2026-11-01' };
-    expect(buildCreateInput(d, [])).toEqual({ quoteId: d.quoteId, reference: 'PO-9', expectedDate: '2026-11-01' });
+    const d = {
+      ...emptyOrderDraft('USD'),
+      quoteId: '33333333-3333-4333-8333-333333333333',
+      reference: 'PO-9',
+      expectedDate: '2026-11-01',
+    };
+    expect(buildCreateInput(d, [])).toEqual({
+      quoteId: d.quoteId,
+      reference: 'PO-9',
+      expectedDate: '2026-11-01',
+    });
   });
 
   it('an edit sends the header always and lines/shipping only when changed', () => {
@@ -370,10 +485,19 @@ describe('the builder form', () => {
     expect(initial.shipping).toBe('10.00');
     expect(initial.lines).toHaveLength(2);
     const untouched = buildUpdateInput({ ...initial, notes: 'hi' }, initial, []);
-    expect(untouched).toMatchObject({ notes: 'hi', buyerName: 'Order Co', contactId: null, reference: null });
+    expect(untouched).toMatchObject({
+      notes: 'hi',
+      buyerName: 'Order Co',
+      contactId: null,
+      reference: null,
+    });
     expect(untouched).not.toHaveProperty('lines');
     expect(untouched).not.toHaveProperty('shipping');
-    const changed = { ...initial, shipping: '', lines: initial.lines.map((l, i) => (i === 0 ? { ...l, qty: '12' } : l)) };
+    const changed = {
+      ...initial,
+      shipping: '',
+      lines: initial.lines.map((l, i) => (i === 0 ? { ...l, qty: '12' } : l)),
+    };
     expect(linesChanged(changed, initial)).toBe(true);
     const out = buildUpdateInput(changed, initial, []);
     expect(out.shipping).toBeNull();
@@ -384,18 +508,32 @@ describe('the builder form', () => {
 
 describe('a saved line as an editable one', () => {
   it('matches a current tax rate by name, percent and inclusivity', () => {
-    const l = line({ taxName: 'GST', taxRate: '18', amounts: { net: '300.00', tax: '54.00', total: '354.00' } });
-    expect(draftLineOf(l, 'USD', [rate({ id: 'other', name: 'VAT' }), rate()]).taxRateId).toBe('r1');
+    const l = line({
+      taxName: 'GST',
+      taxRate: '18',
+      amounts: { net: '300.00', tax: '54.00', total: '354.00' },
+    });
+    expect(draftLineOf(l, 'USD', [rate({ id: 'other', name: 'VAT' }), rate()]).taxRateId).toBe(
+      'r1',
+    );
   });
   it('keeps a removed rate as a snapshot, and no tax as none', () => {
-    const l = line({ taxName: 'Old', taxRate: '7.5', amounts: { net: '300.00', tax: '22.50', total: '322.50' } });
+    const l = line({
+      taxName: 'Old',
+      taxRate: '7.5',
+      amounts: { net: '300.00', tax: '22.50', total: '322.50' },
+    });
     const d = draftLineOf(l, 'USD', [rate()]);
     expect(d.taxRateId).toBe('snapshot');
     expect(d.taxSnapshot).toMatchObject({ name: 'Old', rate: '7.5' });
     expect(draftLineOf(line(), 'USD', [rate()]).taxRateId).toBe('none');
   });
   it('recovers a line discount from the amount between gross and net', () => {
-    const l = line({ qty: '2', unitPrice: '50.00', amounts: { net: '90.00', tax: '0.00', total: '90.00' } });
+    const l = line({
+      qty: '2',
+      unitPrice: '50.00',
+      amounts: { net: '90.00', tax: '0.00', total: '90.00' },
+    });
     const d = draftLineOf(l, 'USD', []);
     expect(d.discountKind).toBe('amount');
     expect(d.discount).toBe('10.00');

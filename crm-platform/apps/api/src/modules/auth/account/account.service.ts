@@ -31,7 +31,6 @@ import { SessionService } from '../sessions/session.service';
 import { AccountGateService } from '../security/account-gate.service';
 import { AuthAuditService } from '../security/auth-audit.service';
 import {
-  PLATFORM_FOOTER_SETTING,
   bustFooterCache,
   pickFooter,
   platformFooterFrom,

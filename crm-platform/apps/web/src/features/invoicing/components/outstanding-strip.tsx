@@ -19,7 +19,9 @@ export function OutstandingStrip({ counts }: { counts: InvoiceCountsResponse | u
   const t = useTranslations('invoicing.strip');
   const locale = useLocale();
   if (!counts) return null;
-  const currencies = [...new Set([...counts.outstanding, ...counts.overdueAmount].map((x) => x.currency))];
+  const currencies = [
+    ...new Set([...counts.outstanding, ...counts.overdueAmount].map((x) => x.currency)),
+  ];
   const open = currencies.filter((c) => {
     const o = counts.outstanding.find((x) => x.currency === c);
     const d = counts.overdueAmount.find((x) => x.currency === c);
@@ -33,9 +35,14 @@ export function OutstandingStrip({ counts }: { counts: InvoiceCountsResponse | u
         const d = counts.overdueAmount.find((x) => x.currency === c);
         const overdue = d ? minorOf(d) : 0;
         return (
-          <div key={c} className="flex min-w-0 flex-wrap items-baseline gap-x-5 gap-y-1 rounded-xl border border-border bg-background px-4 py-2.5">
+          <div
+            key={c}
+            className="flex min-w-0 flex-wrap items-baseline gap-x-5 gap-y-1 rounded-xl border border-border bg-background px-4 py-2.5"
+          >
             <div>
-              <div className="text-xs font-medium text-muted-foreground">{t('outstanding', { currency: c })}</div>
+              <div className="text-xs font-medium text-muted-foreground">
+                {t('outstanding', { currency: c })}
+              </div>
               <div dir="ltr" className="text-lg font-semibold tabular-nums">
                 {formatMoney(o ? minorOf(o) : 0, c, locale)}
               </div>

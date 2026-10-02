@@ -56,9 +56,7 @@ export function Board(p: BoardProps) {
               cur?.stageId === stageId && cur.index === index ? cur : { stageId, index },
             );
           }}
-          onDragLeaveColumn={(stageId) =>
-            setOver((cur) => (cur?.stageId === stageId ? null : cur))
-          }
+          onDragLeaveColumn={(stageId) => setOver((cur) => (cur?.stageId === stageId ? null : cur))}
           onDropOnColumn={(stageId, index) => {
             const deal = draggingId ? p.state.deals[draggingId] : undefined;
             endDrag();

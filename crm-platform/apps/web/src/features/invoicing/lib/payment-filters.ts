@@ -1,4 +1,9 @@
-import { PAYMENT_METHODS, PAYMENT_KINDS, type PaymentKind, type PaymentMethod } from '@crm/contracts';
+import {
+  PAYMENT_METHODS,
+  PAYMENT_KINDS,
+  type PaymentKind,
+  type PaymentMethod,
+} from '@crm/contracts';
 import { isDay } from './dates';
 
 /**
@@ -9,7 +14,18 @@ export const PAYMENTS_VIEWS = ['ledger', 'aging', 'outstanding'] as const;
 export type PaymentsView = (typeof PAYMENTS_VIEWS)[number];
 
 /** The methods in the order the filter offers them: the ones a person records by hand first, then those written by integrations. */
-export const METHOD_ORDER: readonly PaymentMethod[] = ['bank', 'cash', 'card', 'upi', 'cheque', 'other', 'manual', 'gateway', 'wa_pay', 'storefront'];
+export const METHOD_ORDER: readonly PaymentMethod[] = [
+  'bank',
+  'cash',
+  'card',
+  'upi',
+  'cheque',
+  'other',
+  'manual',
+  'gateway',
+  'wa_pay',
+  'storefront',
+];
 
 /** The KPI windows. */
 export const SUMMARY_DAYS = [7, 30, 90] as const;
@@ -65,7 +81,9 @@ export function parsePaymentFilters(search: SearchLike): PaymentFilters {
     .map((m) => m.trim())
     .filter((m): m is PaymentMethod => (PAYMENT_METHODS as readonly string[]).includes(m));
   return {
-    view: (PAYMENTS_VIEWS as readonly (string | null)[]).includes(view) ? (view as PaymentsView) : 'ledger',
+    view: (PAYMENTS_VIEWS as readonly (string | null)[]).includes(view)
+      ? (view as PaymentsView)
+      : 'ledger',
     q: (search.get('q') ?? '').slice(0, 100),
     kind: (PAYMENT_KINDS as readonly (string | null)[]).includes(kind) ? (kind as PaymentKind) : '',
     methods: [...new Set(methods)],

@@ -97,25 +97,60 @@ describe('tabs and counts', () => {
 
 describe('the server status the screens trust', () => {
   it('is what the contract derives (the screens never re-derive it)', () => {
-    expect(deriveInvoiceStatus({ status: 'issued', paymentStatus: 'partially_paid', dueDate: '2026-10-01', today: '2026-10-15' })).toBe('overdue');
-    expect(deriveInvoiceStatus({ status: 'issued', paymentStatus: 'unpaid', dueDate: '2026-10-15', today: '2026-10-15' })).toBe('issued');
+    expect(
+      deriveInvoiceStatus({
+        status: 'issued',
+        paymentStatus: 'partially_paid',
+        dueDate: '2026-10-01',
+        today: '2026-10-15',
+      }),
+    ).toBe('overdue');
+    expect(
+      deriveInvoiceStatus({
+        status: 'issued',
+        paymentStatus: 'unpaid',
+        dueDate: '2026-10-15',
+        today: '2026-10-15',
+      }),
+    ).toBe('issued');
   });
 });
 
 describe('allowedActions', () => {
   it('a draft can be edited, issued and deleted, not paid, voided or credited', () => {
     const a = actions(facts({ status: 'draft', hasPublicLink: false, balanceMinor: 0 }));
-    expect([...a].sort()).toEqual(['delete', 'download', 'duplicate', 'edit', 'issue', 'print', 'view']);
+    expect([...a].sort()).toEqual([
+      'delete',
+      'download',
+      'duplicate',
+      'edit',
+      'issue',
+      'print',
+      'view',
+    ]);
   });
   it('an unpaid issued invoice offers payment, mark paid, send, link, void and a credit note, but not edit or delete', () => {
     const a = actions(facts());
-    for (const k of ['recordPayment', 'markPaid', 'send', 'copyLink', 'void', 'creditNote', 'duplicate', 'download'] as const) {
+    for (const k of [
+      'recordPayment',
+      'markPaid',
+      'send',
+      'copyLink',
+      'void',
+      'creditNote',
+      'duplicate',
+      'download',
+    ] as const) {
       expect(a.has(k), k).toBe(true);
     }
     for (const k of ['edit', 'issue', 'delete'] as const) expect(a.has(k), k).toBe(false);
   });
   it('voiding needs the money given back and no credit notes first (INV_HAS_PAYMENTS, INV_HAS_CREDITS)', () => {
-    expect(actions(facts({ status: 'partially_paid', paidMinor: 4_000, balanceMinor: 6_000 })).has('void')).toBe(false);
+    expect(
+      actions(facts({ status: 'partially_paid', paidMinor: 4_000, balanceMinor: 6_000 })).has(
+        'void',
+      ),
+    ).toBe(false);
     expect(actions(facts({ creditedMinor: 500, balanceMinor: 9_500 })).has('void')).toBe(false);
     expect(actions(facts({ status: 'overdue' })).has('void')).toBe(true);
   });
@@ -127,7 +162,12 @@ describe('allowedActions', () => {
     expect(a.has('copyLink')).toBe(true);
   });
   it('a void invoice only offers to look at it, print it and copy it', () => {
-    expect([...actions(facts({ status: 'void', balanceMinor: 0 }))].sort()).toEqual(['download', 'duplicate', 'print', 'view']);
+    expect([...actions(facts({ status: 'void', balanceMinor: 0 }))].sort()).toEqual([
+      'download',
+      'duplicate',
+      'print',
+      'view',
+    ]);
   });
   it('copying the link needs a link', () => {
     expect(actions(facts({ hasPublicLink: false })).has('copyLink')).toBe(false);
@@ -135,7 +175,11 @@ describe('allowedActions', () => {
   it('follows the permissions of the person', () => {
     const a = actions(facts(), none);
     expect([...a].sort()).toEqual(['copyLink', 'download', 'print', 'view']);
-    expect(actions(facts({ status: 'draft', hasPublicLink: false }), { ...none, issue: true }).has('issue')).toBe(true);
+    expect(
+      actions(facts({ status: 'draft', hasPublicLink: false }), { ...none, issue: true }).has(
+        'issue',
+      ),
+    ).toBe(true);
     expect(actions(facts(), { ...none, recordPayment: true }).has('markPaid')).toBe(true);
   });
 });

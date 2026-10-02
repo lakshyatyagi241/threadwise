@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { ListRecurringInvoicesQuery, RecordScope, RecurringFrequency, RecurringMode, RecurringStatus } from '@crm/contracts';
+import type {
+  ListRecurringInvoicesQuery,
+  RecordScope,
+  RecurringFrequency,
+  RecurringMode,
+  RecurringStatus,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../../common/pagination/cursor';
 
@@ -89,7 +95,11 @@ const toRow = (r: Raw): RecurringRow => ({
 });
 
 /** A schedule's people are its owner and creator: same record-scope rule as an invoice. */
-export function recurringScopeCondition(orgId: number, scope: RecordScope, actorUserId: number | null): SQL | undefined {
+export function recurringScopeCondition(
+  orgId: number,
+  scope: RecordScope,
+  actorUserId: number | null,
+): SQL | undefined {
   if (scope === 'all') return undefined;
   if (!actorUserId) return sql`false`;
   const own = sql`(r.owner_id = ${actorUserId} OR r.created_by = ${actorUserId})`;
@@ -102,15 +112,30 @@ export function recurringScopeCondition(orgId: number, scope: RecordScope, actor
 
 @Injectable()
 export class RecurringInvoicesRepository {
-  async list(tx: Tx, orgId: number, query: ListRecurringInvoicesQuery, scope: SQL | undefined): Promise<RecurringRow[]> {
+  async list(
+    tx: Tx,
+    orgId: number,
+    query: ListRecurringInvoicesQuery,
+    scope: SQL | undefined,
+  ): Promise<RecurringRow[]> {
     const conds: SQL[] = [sql`r.org_id = ${orgId}`];
     if (scope) conds.push(scope);
-    if (query.status?.length) conds.push(sql`r.status IN (${sql.join(query.status.map((x) => sql`${x}`), sql`, `)})`);
+    if (query.status?.length)
+      conds.push(
+        sql`r.status IN (${sql.join(
+          query.status.map((x) => sql`${x}`),
+          sql`, `,
+        )})`,
+      );
     if (query.contactId)
-      conds.push(sql`r.contact_id = (SELECT x.id FROM contacts x WHERE x.org_id = ${orgId} AND x.uuid = ${query.contactId}::uuid)`);
+      conds.push(
+        sql`r.contact_id = (SELECT x.id FROM contacts x WHERE x.org_id = ${orgId} AND x.uuid = ${query.contactId}::uuid)`,
+      );
     if (query.cursor) {
       const cur = decodeCursor(query.cursor);
-      conds.push(sql`(r.created_at, r.id) < (${cur.createdAtIso ?? cur.createdAt.toISOString()}::timestamptz, ${cur.id})`);
+      conds.push(
+        sql`(r.created_at, r.id) < (${cur.createdAtIso ?? cur.createdAt.toISOString()}::timestamptz, ${cur.id})`,
+      );
     }
     const res = await tx.execute(
       sql`${SELECT} WHERE ${sql.join(conds, sql` AND `)} ORDER BY r.created_at DESC, r.id DESC LIMIT ${query.limit + 1}`,
@@ -118,10 +143,19 @@ export class RecurringInvoicesRepository {
     return (res.rows as Raw[]).map(toRow);
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string, forUpdate = false): Promise<RecurringRow | undefined> {
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    forUpdate = false,
+  ): Promise<RecurringRow | undefined> {
     if (forUpdate)
-      await tx.execute(sql`SELECT 1 FROM recurring_invoices WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
-    const res = await tx.execute(sql`${SELECT} WHERE r.org_id = ${orgId} AND r.uuid = ${uuid}::uuid`);
+      await tx.execute(
+        sql`SELECT 1 FROM recurring_invoices WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`,
+      );
+    const res = await tx.execute(
+      sql`${SELECT} WHERE r.org_id = ${orgId} AND r.uuid = ${uuid}::uuid`,
+    );
     const r = (res.rows as Raw[])[0];
     return r ? toRow(r) : undefined;
   }
@@ -246,7 +280,13 @@ export class RecurringInvoicesRepository {
   }
 
   /** The idempotency claim: true when this call is the one that owns the period. */
-  async claimRun(tx: Tx, orgId: number, recurringId: number, periodIndex: number, periodDate: string): Promise<number | null> {
+  async claimRun(
+    tx: Tx,
+    orgId: number,
+    recurringId: number,
+    periodIndex: number,
+    periodDate: string,
+  ): Promise<number | null> {
     const res = await tx.execute(sql`
       INSERT INTO recurring_invoice_runs (org_id, recurring_id, period_index, period_date, status)
       VALUES (${orgId}, ${recurringId}, ${periodIndex}, ${periodDate}::date, 'failed')
@@ -257,14 +297,25 @@ export class RecurringInvoicesRepository {
     return r ? Number(r.id) : null;
   }
 
-  async finishRun(tx: Tx, orgId: number, runId: number, v: { invoiceId: number | null; error: string | null }): Promise<void> {
+  async finishRun(
+    tx: Tx,
+    orgId: number,
+    runId: number,
+    v: { invoiceId: number | null; error: string | null },
+  ): Promise<void> {
     await tx.execute(sql`
       UPDATE recurring_invoice_runs SET status = ${v.error === null ? 'created' : 'failed'}, invoice_id = ${v.invoiceId}, error = ${v.error}
       WHERE org_id = ${orgId} AND id = ${runId}
     `);
   }
 
-  async runs(tx: Tx, orgId: number, recurringId: number, limit: number, beforeIndex?: number): Promise<RecurringRunRow[]> {
+  async runs(
+    tx: Tx,
+    orgId: number,
+    recurringId: number,
+    limit: number,
+    beforeIndex?: number,
+  ): Promise<RecurringRunRow[]> {
     const res = await tx.execute(sql`
       SELECT u.id, u.period_index, to_char(u.period_date, 'YYYY-MM-DD') AS period_date, u.status, i.uuid AS invoice_uuid,
              i.invoice_number, u.error, u.created_at
@@ -293,7 +344,9 @@ export class RecurringInvoicesRepository {
   }
 
   async tagInvoice(tx: Tx, orgId: number, invoiceId: number, recurringId: number): Promise<void> {
-    await tx.execute(sql`UPDATE invoices SET recurring_id = ${recurringId} WHERE org_id = ${orgId} AND id = ${invoiceId}`);
+    await tx.execute(
+      sql`UPDATE invoices SET recurring_id = ${recurringId} WHERE org_id = ${orgId} AND id = ${invoiceId}`,
+    );
   }
 
   /** Cross-tenant claim for the worker (privileged transaction): schedules whose next date has come in their workspace's calendar. */

@@ -6,7 +6,13 @@ import type { InvoiceSummary, TaxRateResponse } from '@crm/contracts';
 import { Alert, Button, Field, Input, Select, Spinner, Textarea, cn } from '@crm/ui';
 import { invoicingApi } from '../api/service';
 import { draftOf, usedIndexes, withContact, type InvoiceDraft } from '../lib/builder';
-import { TEMPLATE_PAYMENT_TERMS, suggestName, type PickedInvoice, type RecurringForm, type TemplateSource } from '../lib/recurring';
+import {
+  TEMPLATE_PAYMENT_TERMS,
+  suggestName,
+  type PickedInvoice,
+  type RecurringForm,
+  type TemplateSource,
+} from '../lib/recurring';
 import { invoiceMinor } from '../lib/wire';
 import { ContactPicker } from './contact-picker';
 import { CopyDocIcon } from './icons';
@@ -14,7 +20,20 @@ import { InvoiceLinesEditor } from './line-items-editor';
 import { ErrorLine, Money, UserText } from './parts';
 import { PickInvoiceDialog } from './pick-invoice-dialog';
 
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'INR', 'JPY', 'KWD', 'CAD', 'AUD', 'SGD', 'CHF'];
+const CURRENCIES = [
+  'USD',
+  'EUR',
+  'GBP',
+  'AED',
+  'SAR',
+  'INR',
+  'JPY',
+  'KWD',
+  'CAD',
+  'AUD',
+  'SGD',
+  'CHF',
+];
 
 export const pickedOf = (inv: InvoiceSummary): PickedInvoice => ({
   id: inv.id,
@@ -107,15 +126,26 @@ export function RecurringTemplateSection(props: SectionProps) {
                   {form.fromInvoice.buyerName ? ` - ${form.fromInvoice.buyerName}` : ''}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {t('copyOf')} <Money minor={form.fromInvoice.totalMinor} currency={form.fromInvoice.currency} />
+                  {t('copyOf')}{' '}
+                  <Money minor={form.fromInvoice.totalMinor} currency={form.fromInvoice.currency} />
                 </div>
               </div>
-              <Button variant="secondary" className="h-10" disabled={disabled} onClick={() => setPicking(true)}>
+              <Button
+                variant="secondary"
+                className="h-10"
+                disabled={disabled}
+                onClick={() => setPicking(true)}
+              >
                 {t('change')}
               </Button>
             </div>
           ) : (
-            <Button variant="secondary" className="min-h-10" disabled={disabled} onClick={() => setPicking(true)}>
+            <Button
+              variant="secondary"
+              className="min-h-10"
+              disabled={disabled}
+              onClick={() => setPicking(true)}
+            >
               <CopyDocIcon /> {t('choose')}
             </Button>
           )}
@@ -130,7 +160,12 @@ export function RecurringTemplateSection(props: SectionProps) {
         <>
           {editing && (
             <div className="flex flex-wrap items-center gap-2">
-              <Button variant="secondary" className="min-h-10" disabled={disabled || loading} onClick={() => setPicking(true)}>
+              <Button
+                variant="secondary"
+                className="min-h-10"
+                disabled={disabled || loading}
+                onClick={() => setPicking(true)}
+              >
                 {loading ? <Spinner /> : <CopyDocIcon />} {t('startFromInvoice')}
               </Button>
               <span className="text-xs text-muted-foreground">{t('startFromInvoiceHint')}</span>
@@ -163,12 +198,25 @@ export function RecurringTemplateSection(props: SectionProps) {
 }
 
 /** The buyer, currency, lines, discount, shipping, notes and terms of a template built by hand. */
-function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, disabled }: SectionProps) {
+function TemplateEditor({
+  form,
+  onForm,
+  errors,
+  rates,
+  showHsn,
+  lineAmounts,
+  disabled,
+}: SectionProps) {
   const t = useTranslations('invoicing.recurring.template');
   const d = form.draft;
   const set = (patch: Partial<InvoiceDraft>) => onForm({ draft: { ...d, ...patch } });
-  const currencies = useMemo(() => (CURRENCIES.includes(d.currency) ? CURRENCIES : [d.currency, ...CURRENCIES]), [d.currency]);
-  const lineErrors = Object.fromEntries(Object.entries(errors).filter(([k]) => k.startsWith('lines')));
+  const currencies = useMemo(
+    () => (CURRENCIES.includes(d.currency) ? CURRENCIES : [d.currency, ...CURRENCIES]),
+    [d.currency],
+  );
+  const lineErrors = Object.fromEntries(
+    Object.entries(errors).filter(([k]) => k.startsWith('lines')),
+  );
   const amounts = useMemo(() => {
     // `lineAmounts` is by priced line; the editor wants it by draft line.
     const used = usedIndexes(d.lines);
@@ -193,15 +241,43 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
         </Field>
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label={t('buyerName')} htmlFor="rt-bname" error={errors.buyerName}>
-            <Input id="rt-bname" dir="auto" disabled={disabled} value={d.buyerName} invalid={!!errors.buyerName} onChange={(e) => set({ buyerName: e.target.value })} />
+            <Input
+              id="rt-bname"
+              dir="auto"
+              disabled={disabled}
+              value={d.buyerName}
+              invalid={!!errors.buyerName}
+              onChange={(e) => set({ buyerName: e.target.value })}
+            />
           </Field>
           <Field label={t('buyerEmail')} htmlFor="rt-bemail" error={errors.buyerEmail}>
-            <Input id="rt-bemail" type="email" dir="ltr" disabled={disabled} value={d.buyerEmail} invalid={!!errors.buyerEmail} onChange={(e) => set({ buyerEmail: e.target.value })} />
+            <Input
+              id="rt-bemail"
+              type="email"
+              dir="ltr"
+              disabled={disabled}
+              value={d.buyerEmail}
+              invalid={!!errors.buyerEmail}
+              onChange={(e) => set({ buyerEmail: e.target.value })}
+            />
           </Field>
           <Field label={t('buyerPhone')} htmlFor="rt-bphone" error={errors.buyerPhone}>
-            <Input id="rt-bphone" type="tel" dir="ltr" disabled={disabled} value={d.buyerPhone} invalid={!!errors.buyerPhone} onChange={(e) => set({ buyerPhone: e.target.value })} />
+            <Input
+              id="rt-bphone"
+              type="tel"
+              dir="ltr"
+              disabled={disabled}
+              value={d.buyerPhone}
+              invalid={!!errors.buyerPhone}
+              onChange={(e) => set({ buyerPhone: e.target.value })}
+            />
           </Field>
-          <Field label={t('buyerCountry')} htmlFor="rt-bcountry" error={errors.buyerCountry} hint={t('buyerCountryHint')}>
+          <Field
+            label={t('buyerCountry')}
+            htmlFor="rt-bcountry"
+            error={errors.buyerCountry}
+            hint={t('buyerCountryHint')}
+          >
             <Input
               id="rt-bcountry"
               dir="ltr"
@@ -213,10 +289,24 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
             />
           </Field>
           <Field label={t('buyerTaxId')} htmlFor="rt-btax" error={errors.buyerTaxId}>
-            <Input id="rt-btax" dir="ltr" disabled={disabled} value={d.buyerTaxId} invalid={!!errors.buyerTaxId} onChange={(e) => set({ buyerTaxId: e.target.value })} />
+            <Input
+              id="rt-btax"
+              dir="ltr"
+              disabled={disabled}
+              value={d.buyerTaxId}
+              invalid={!!errors.buyerTaxId}
+              onChange={(e) => set({ buyerTaxId: e.target.value })}
+            />
           </Field>
           <Field label={t('buyerAddress')} htmlFor="rt-baddr" error={errors.buyerAddress}>
-            <Textarea id="rt-baddr" dir="auto" rows={2} disabled={disabled} value={d.buyerAddress} onChange={(e) => set({ buyerAddress: e.target.value })} />
+            <Textarea
+              id="rt-baddr"
+              dir="auto"
+              rows={2}
+              disabled={disabled}
+              value={d.buyerAddress}
+              onChange={(e) => set({ buyerAddress: e.target.value })}
+            />
           </Field>
         </div>
       </div>
@@ -225,7 +315,13 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
         <h3 className="text-sm font-semibold">{t('details')}</h3>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Field label={t('currency')} htmlFor="rt-currency" error={errors.currency}>
-            <Select id="rt-currency" disabled={disabled} value={d.currency} invalid={!!errors.currency} onChange={(e) => set({ currency: e.target.value })}>
+            <Select
+              id="rt-currency"
+              disabled={disabled}
+              value={d.currency}
+              invalid={!!errors.currency}
+              onChange={(e) => set({ currency: e.target.value })}
+            >
               {currencies.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -234,12 +330,22 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
             </Select>
           </Field>
           <Field label={t('docType')} htmlFor="rt-doctype">
-            <Select id="rt-doctype" disabled={disabled} value={d.docType} onChange={(e) => set({ docType: e.target.value as InvoiceDraft['docType'] })}>
+            <Select
+              id="rt-doctype"
+              disabled={disabled}
+              value={d.docType}
+              onChange={(e) => set({ docType: e.target.value as InvoiceDraft['docType'] })}
+            >
               <option value="tax_invoice">{t('docTypes.tax_invoice')}</option>
               <option value="proforma">{t('docTypes.proforma')}</option>
             </Select>
           </Field>
-          <Field label={t('taxMode')} htmlFor="rt-taxmode" error={errors.taxMode} hint={d.taxMode === 'auto' ? t('taxModeAutoHint') : undefined}>
+          <Field
+            label={t('taxMode')}
+            htmlFor="rt-taxmode"
+            error={errors.taxMode}
+            hint={d.taxMode === 'auto' ? t('taxModeAutoHint') : undefined}
+          >
             <Select
               id="rt-taxmode"
               disabled={disabled}
@@ -253,14 +359,24 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
           </Field>
           {d.taxMode === 'auto' && (
             <Field label={t('supplyType')} htmlFor="rt-supply">
-              <Select id="rt-supply" disabled={disabled} value={d.supplyType} onChange={(e) => set({ supplyType: e.target.value as InvoiceDraft['supplyType'] })}>
+              <Select
+                id="rt-supply"
+                disabled={disabled}
+                value={d.supplyType}
+                onChange={(e) => set({ supplyType: e.target.value as InvoiceDraft['supplyType'] })}
+              >
                 <option value="goods">{t('supply.goods')}</option>
                 <option value="services">{t('supply.services')}</option>
                 <option value="digital">{t('supply.digital')}</option>
               </Select>
             </Field>
           )}
-          <Field label={t('paymentTerms')} htmlFor="rt-terms-days" error={errors.paymentTermsDays} hint={t('paymentTermsHint')}>
+          <Field
+            label={t('paymentTerms')}
+            htmlFor="rt-terms-days"
+            error={errors.paymentTermsDays}
+            hint={t('paymentTermsHint')}
+          >
             <Select
               id="rt-terms-days"
               disabled={disabled}
@@ -270,7 +386,11 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
             >
               {TEMPLATE_PAYMENT_TERMS.map((v) => (
                 <option key={v} value={v}>
-                  {v === '' ? t('termsDefault') : v === '0' ? t('termsOnReceipt') : t('termsNet', { days: Number(v) })}
+                  {v === ''
+                    ? t('termsDefault')
+                    : v === '0'
+                      ? t('termsOnReceipt')
+                      : t('termsNet', { days: Number(v) })}
                 </option>
               ))}
             </Select>
@@ -297,7 +417,14 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
         <h3 className="text-sm font-semibold">{t('adjustments')}</h3>
         <div className="grid gap-3 sm:grid-cols-3">
           <Field label={t('discountKind')} htmlFor="rt-dkind">
-            <Select id="rt-dkind" disabled={disabled} value={d.discountKind} onChange={(e) => set({ discountKind: e.target.value as InvoiceDraft['discountKind'] })}>
+            <Select
+              id="rt-dkind"
+              disabled={disabled}
+              value={d.discountKind}
+              onChange={(e) =>
+                set({ discountKind: e.target.value as InvoiceDraft['discountKind'] })
+              }
+            >
               <option value="none">{t('discountNone')}</option>
               <option value="percent">{t('discountPercent')}</option>
               <option value="amount">{t('discountAmount', { currency: d.currency })}</option>
@@ -305,21 +432,56 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
           </Field>
           {d.discountKind !== 'none' && (
             <Field label={t('discountValue')} htmlFor="rt-dvalue" error={errors.discount}>
-              <Input id="rt-dvalue" inputMode="decimal" dir="ltr" disabled={disabled} value={d.discountText} invalid={!!errors.discount} onChange={(e) => set({ discountText: e.target.value })} />
+              <Input
+                id="rt-dvalue"
+                inputMode="decimal"
+                dir="ltr"
+                disabled={disabled}
+                value={d.discountText}
+                invalid={!!errors.discount}
+                onChange={(e) => set({ discountText: e.target.value })}
+              />
             </Field>
           )}
-          <Field label={t('shipping', { currency: d.currency })} htmlFor="rt-ship" error={errors.shipping}>
-            <Input id="rt-ship" inputMode="decimal" dir="ltr" disabled={disabled} value={d.shipping} placeholder="0" invalid={!!errors.shipping} onChange={(e) => set({ shipping: e.target.value })} />
+          <Field
+            label={t('shipping', { currency: d.currency })}
+            htmlFor="rt-ship"
+            error={errors.shipping}
+          >
+            <Input
+              id="rt-ship"
+              inputMode="decimal"
+              dir="ltr"
+              disabled={disabled}
+              value={d.shipping}
+              placeholder="0"
+              invalid={!!errors.shipping}
+              onChange={(e) => set({ shipping: e.target.value })}
+            />
           </Field>
         </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label={t('notes')} htmlFor="rt-notes" hint={t('notesHint')}>
-          <Textarea id="rt-notes" dir="auto" rows={3} disabled={disabled} value={d.notes} onChange={(e) => set({ notes: e.target.value })} />
+          <Textarea
+            id="rt-notes"
+            dir="auto"
+            rows={3}
+            disabled={disabled}
+            value={d.notes}
+            onChange={(e) => set({ notes: e.target.value })}
+          />
         </Field>
         <Field label={t('termsText')} htmlFor="rt-termstext" hint={t('termsTextHint')}>
-          <Textarea id="rt-termstext" dir="auto" rows={3} disabled={disabled} value={d.terms} onChange={(e) => set({ terms: e.target.value })} />
+          <Textarea
+            id="rt-termstext"
+            dir="auto"
+            rows={3}
+            disabled={disabled}
+            value={d.terms}
+            onChange={(e) => set({ terms: e.target.value })}
+          />
         </Field>
       </div>
     </div>
@@ -327,7 +489,15 @@ function TemplateEditor({ form, onForm, errors, rates, showHsn, lineAmounts, dis
 }
 
 /** A read-only line about the template of a saved schedule (the API does not send the template back). */
-export function TemplateKept({ buyer, lineCount, amount }: { buyer: string | null; lineCount: number; amount: { minor: number; currency: string } }) {
+export function TemplateKept({
+  buyer,
+  lineCount,
+  amount,
+}: {
+  buyer: string | null;
+  lineCount: number;
+  amount: { minor: number; currency: string };
+}) {
   const t = useTranslations('invoicing.recurring.template');
   return (
     <Alert tone="info" className="text-sm">

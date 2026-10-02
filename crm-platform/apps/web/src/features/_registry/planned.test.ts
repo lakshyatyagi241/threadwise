@@ -38,7 +38,16 @@ describe('planned screens', () => {
 
   it('cover the Reference groups the real screens do not', () => {
     const groups = new Set<string>(PLANNED_NAV.map((i) => i.group));
-    for (const g of ['inbox', 'campaigns', 'automation', 'channels', 'sales', 'store', 'developer', 'help']) {
+    for (const g of [
+      'inbox',
+      'campaigns',
+      'automation',
+      'channels',
+      'sales',
+      'store',
+      'developer',
+      'help',
+    ]) {
       expect(groups.has(g), g).toBe(true);
     }
   });
@@ -48,7 +57,9 @@ describe('planned screens', () => {
       const nav = shell(locale).nav as Tree;
       for (const i of PLANNED_NAV) {
         expect(i.labelKey.startsWith('shell.nav.'), i.id).toBe(true);
-        expect(typeof nav[i.labelKey.slice('shell.nav.'.length)], `${locale} ${i.id}`).toBe('string');
+        expect(typeof nav[i.labelKey.slice('shell.nav.'.length)], `${locale} ${i.id}`).toBe(
+          'string',
+        );
       }
       const groups = shell(locale).groups as Tree;
       for (const g of NAV_GROUPS) expect(typeof groups[g], `${locale} group ${g}`).toBe('string');

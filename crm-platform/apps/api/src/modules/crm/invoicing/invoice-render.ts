@@ -39,10 +39,14 @@ export function groupDigits(amount: string): string {
 }
 
 /** The currency code goes first and no symbol is used: a symbol is not in every font and means different things in different countries. */
-export const money = (amount: string, currency: string): string => `${currency} ${groupDigits(amount)}`;
+export const money = (amount: string, currency: string): string =>
+  `${currency} ${groupDigits(amount)}`;
 
 const esc = (v: string | null | undefined): string =>
-  (v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  (v ?? '').replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
+  );
 
 const nl = (v: string | null | undefined): string => esc(v).replace(/\r?\n/g, '<br>');
 
@@ -62,17 +66,21 @@ function sellerLines(inv: PublicInvoice): string[] {
 
 export function renderInvoiceHtml(inv: PublicInvoice): string {
   const cur = inv.currency;
-  const brand = inv.brandColor && /^#[0-9A-Fa-f]{6}$/.test(inv.brandColor) ? inv.brandColor : '#0B3D2E';
+  const brand =
+    inv.brandColor && /^#[0-9A-Fa-f]{6}$/.test(inv.brandColor) ? inv.brandColor : '#0B3D2E';
   const taxed = inv.lines.some((l) => l.taxRate !== '0');
   const rows = inv.lines
     .map(
-      (l) => `<tr><td>${esc(l.description)}${l.sku ? `<div class="muted">${esc(l.sku)}</div>` : ''}${
-        l.hsnSac ? `<div class="muted">HSN/SAC ${esc(l.hsnSac)}</div>` : ''
-      }</td><td class="num">${esc(l.qty)}</td><td class="num">${esc(groupDigits(l.unitPrice))}</td>${
-        l.discount ? `<td class="num">${esc(l.discount.kind === 'percent' ? `${l.discount.value}%` : groupDigits(l.discount.value))}</td>` : '<td></td>'
-      }${taxed ? `<td class="num">${l.taxRate !== '0' ? esc(`${l.taxName ?? 'Tax'} ${l.taxRate}%`) : ''}</td>` : ''}<td class="num">${esc(
-        groupDigits(l.amounts.total),
-      )}</td></tr>`,
+      (l) =>
+        `<tr><td>${esc(l.description)}${l.sku ? `<div class="muted">${esc(l.sku)}</div>` : ''}${
+          l.hsnSac ? `<div class="muted">HSN/SAC ${esc(l.hsnSac)}</div>` : ''
+        }</td><td class="num">${esc(l.qty)}</td><td class="num">${esc(groupDigits(l.unitPrice))}</td>${
+          l.discount
+            ? `<td class="num">${esc(l.discount.kind === 'percent' ? `${l.discount.value}%` : groupDigits(l.discount.value))}</td>`
+            : '<td></td>'
+        }${taxed ? `<td class="num">${l.taxRate !== '0' ? esc(`${l.taxName ?? 'Tax'} ${l.taxRate}%`) : ''}</td>` : ''}<td class="num">${esc(
+          groupDigits(l.amounts.total),
+        )}</td></tr>`,
     )
     .join('');
   const taxRows = inv.taxSummary
@@ -80,7 +88,10 @@ export function renderInvoiceHtml(inv: PublicInvoice): string {
       (t) =>
         `<tr><td>${esc(t.name)} ${esc(t.rate)}%${t.inclusive ? ' (included)' : ''}</td><td class="num">${esc(groupDigits(t.base))}</td><td class="num">${esc(groupDigits(t.tax))}</td></tr>` +
         (t.components ?? [])
-          .map((c) => `<tr class="sub"><td>&nbsp;&nbsp;${esc(c.type)} ${esc(c.rate)}%</td><td></td><td class="num">${esc(groupDigits(c.amount))}</td></tr>`)
+          .map(
+            (c) =>
+              `<tr class="sub"><td>&nbsp;&nbsp;${esc(c.type)} ${esc(c.rate)}%</td><td></td><td class="num">${esc(groupDigits(c.amount))}</td></tr>`,
+          )
           .join(''),
     )
     .join('');
@@ -129,9 +140,17 @@ ${!/^0(\.0+)?$/.test(inv.amounts.paid) ? `<tr><td>Paid</td><td class="num">-${es
 ${taxRows ? `<table><thead><tr><th>Tax summary</th><th class="num">Taxable</th><th class="num">Tax</th></tr></thead><tbody>${taxRows}</tbody></table>` : ''}
 ${inv.reverseCharge ? '<p class="muted">Reverse charge: the recipient accounts for the tax.</p>' : ''}
 ${payments ? `<table><thead><tr><th>Date</th><th>Payments received</th><th class="num">Amount</th></tr></thead><tbody>${payments}</tbody></table>` : ''}
-${inv.payable && bank ? `<div class="box"><strong>How to pay</strong>${bank.instructions ? `<div>${nl(bank.instructions)}</div>` : ''}${
-    bank.details ? `<div class="muted">${Object.entries(bank.details).map(([k, v]) => `${esc(k)}: ${esc(v)}`).join('<br>')}</div>` : ''
-  }</div>` : ''}
+${
+  inv.payable && bank
+    ? `<div class="box"><strong>How to pay</strong>${bank.instructions ? `<div>${nl(bank.instructions)}</div>` : ''}${
+        bank.details
+          ? `<div class="muted">${Object.entries(bank.details)
+              .map(([k, v]) => `${esc(k)}: ${esc(v)}`)
+              .join('<br>')}</div>`
+          : ''
+      }</div>`
+    : ''
+}
 ${inv.notes ? `<div class="box"><strong>Notes</strong><div>${nl(inv.notes)}</div></div>` : ''}
 ${inv.terms ? `<div class="box"><strong>Terms</strong><div class="muted">${nl(inv.terms)}</div></div>` : ''}
 ${inv.legalNotes ? `<p class="muted">${nl(inv.legalNotes)}</p>` : ''}
@@ -143,15 +162,24 @@ ${inv.footerNote ? `<p class="muted">${nl(inv.footerNote)}</p>` : ''}
 
 /** Helvetica advance widths (per 1000 em) for ASCII 32..126. */
 const W = [
-  278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556, 556, 556, 556, 556, 556, 556, 556,
-  278, 278, 584, 584, 584, 556, 1015, 667, 667, 722, 722, 667, 611, 778, 722, 278, 500, 667, 556, 833, 722, 778, 667, 778, 722, 667,
-  611, 722, 667, 944, 667, 667, 611, 278, 278, 278, 469, 556, 333, 556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500, 222, 833,
-  556, 556, 556, 556, 333, 500, 278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584,
+  278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556,
+  556, 556, 556, 556, 556, 556, 556, 278, 278, 584, 584, 584, 556, 1015, 667, 667, 722, 722, 667,
+  611, 778, 722, 278, 500, 667, 556, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667,
+  667, 611, 278, 278, 278, 469, 556, 333, 556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500,
+  222, 833, 556, 556, 556, 556, 333, 500, 278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584,
 ];
 
 /** Windows-1252 bytes for the few characters outside Latin-1 that commonly appear; anything else becomes "?". */
 const CP1252: Record<number, number> = {
-  0x20ac: 0x80, 0x2018: 0x91, 0x2019: 0x92, 0x201c: 0x93, 0x201d: 0x94, 0x2022: 0x95, 0x2013: 0x96, 0x2014: 0x97, 0x2026: 0x85,
+  0x20ac: 0x80,
+  0x2018: 0x91,
+  0x2019: 0x92,
+  0x201c: 0x93,
+  0x201d: 0x94,
+  0x2022: 0x95,
+  0x2013: 0x96,
+  0x2014: 0x97,
+  0x2026: 0x85,
 };
 
 function toWinAnsi(text: string): number[] {
@@ -211,19 +239,34 @@ class PdfWriter {
 
   private encode(text: string): string {
     return toWinAnsi(text)
-      .map((b) => (b === 0x28 || b === 0x29 || b === 0x5c ? `\\${String.fromCharCode(b)}` : b < 127 && b >= 32 ? String.fromCharCode(b) : `\\${b.toString(8).padStart(3, '0')}`))
+      .map((b) =>
+        b === 0x28 || b === 0x29 || b === 0x5c
+          ? `\\${String.fromCharCode(b)}`
+          : b < 127 && b >= 32
+            ? String.fromCharCode(b)
+            : `\\${b.toString(8).padStart(3, '0')}`,
+      )
       .join('');
   }
 
-  text(text: string, x: number, size = 10, opts: { bold?: boolean; align?: 'left' | 'right'; color?: [number, number, number] } = {}): void {
+  text(
+    text: string,
+    x: number,
+    size = 10,
+    opts: { bold?: boolean; align?: 'left' | 'right'; color?: [number, number, number] } = {},
+  ): void {
     const bold = opts.bold ?? false;
     const px = opts.align === 'right' ? x - widthOf(text, size, bold) : x;
     const [r, g, b] = opts.color ?? [0.1, 0.1, 0.1];
-    this.page.ops.push(`BT /${bold ? 'F2' : 'F1'} ${size} Tf ${r} ${g} ${b} rg ${px.toFixed(2)} ${this.y.toFixed(2)} Td (${this.encode(text)}) Tj ET`);
+    this.page.ops.push(
+      `BT /${bold ? 'F2' : 'F1'} ${size} Tf ${r} ${g} ${b} rg ${px.toFixed(2)} ${this.y.toFixed(2)} Td (${this.encode(text)}) Tj ET`,
+    );
   }
 
   rule(width = 0.5, gray = 0.8): void {
-    this.page.ops.push(`${gray} G ${width} w ${this.left} ${this.y.toFixed(2)} m ${this.right} ${this.y.toFixed(2)} l S`);
+    this.page.ops.push(
+      `${gray} G ${width} w ${this.left} ${this.y.toFixed(2)} m ${this.right} ${this.y.toFixed(2)} l S`,
+    );
   }
 
   build(): Buffer {
@@ -249,7 +292,11 @@ class PdfWriter {
     let pos = parts[0]!.length;
     objs.forEach((o, i) => {
       offsets.push(pos);
-      const b = Buffer.concat([Buffer.from(`${i + 1} 0 obj\n`, 'latin1'), o, Buffer.from('\nendobj\n', 'latin1')]);
+      const b = Buffer.concat([
+        Buffer.from(`${i + 1} 0 obj\n`, 'latin1'),
+        o,
+        Buffer.from('\nendobj\n', 'latin1'),
+      ]);
       parts.push(b);
       pos += b.length;
     });
@@ -267,7 +314,9 @@ export function renderInvoicePdf(inv: PublicInvoice): Buffer {
   const cur = inv.currency;
   const brand = ((): [number, number, number] => {
     const m = /^#([0-9A-Fa-f]{2})([0-9A-Fa-f]{2})([0-9A-Fa-f]{2})$/.exec(inv.brandColor ?? '');
-    return m ? [parseInt(m[1]!, 16) / 255, parseInt(m[2]!, 16) / 255, parseInt(m[3]!, 16) / 255] : [0.04, 0.24, 0.18];
+    return m
+      ? [parseInt(m[1]!, 16) / 255, parseInt(m[2]!, 16) / 255, parseInt(m[3]!, 16) / 255]
+      : [0.04, 0.24, 0.18];
   })();
 
   // header: seller on the left, title and number on the right
@@ -281,7 +330,10 @@ export function renderInvoicePdf(inv: PublicInvoice): Buffer {
       w.y -= 12;
     }
   }
-  w.text(`Issued ${inv.issueDate}${inv.dueDate ? `   Due ${inv.dueDate}` : ''}`, w.right, 9, { align: 'right', color: [0.35, 0.35, 0.35] });
+  w.text(`Issued ${inv.issueDate}${inv.dueDate ? `   Due ${inv.dueDate}` : ''}`, w.right, 9, {
+    align: 'right',
+    color: [0.35, 0.35, 0.35],
+  });
   w.y -= 12;
   if (inv.reference) {
     w.text(`Ref: ${inv.reference}`, w.right, 9, { align: 'right', color: [0.35, 0.35, 0.35] });
@@ -295,7 +347,10 @@ export function renderInvoicePdf(inv: PublicInvoice): Buffer {
   w.y -= 13;
   w.text(inv.buyer.name ?? 'Customer', w.left, 11, { bold: true });
   w.y -= 14;
-  for (const l of [...(inv.buyer.address ? inv.buyer.address.split(/\r?\n/) : []), ...(inv.buyer.taxId ? [`Tax ID: ${inv.buyer.taxId}`] : [])]) {
+  for (const l of [
+    ...(inv.buyer.address ? inv.buyer.address.split(/\r?\n/) : []),
+    ...(inv.buyer.taxId ? [`Tax ID: ${inv.buyer.taxId}`] : []),
+  ]) {
     w.text(l, w.left, 9);
     w.y -= 12;
   }
@@ -319,8 +374,12 @@ export function renderInvoicePdf(inv: PublicInvoice): Buffer {
     const desc = wrap(l.description, 290, 9.5);
     const extra: string[] = [];
     if (l.hsnSac) extra.push(`HSN/SAC ${l.hsnSac}`);
-    if (l.discount) extra.push(`Discount ${l.discount.kind === 'percent' ? `${l.discount.value}%` : groupDigits(l.discount.value)}`);
-    if (l.taxRate !== '0') extra.push(`${l.taxName ?? 'Tax'} ${l.taxRate}%${l.taxInclusive ? ' incl.' : ''}`);
+    if (l.discount)
+      extra.push(
+        `Discount ${l.discount.kind === 'percent' ? `${l.discount.value}%` : groupDigits(l.discount.value)}`,
+      );
+    if (l.taxRate !== '0')
+      extra.push(`${l.taxName ?? 'Tax'} ${l.taxRate}%${l.taxInclusive ? ' incl.' : ''}`);
     const height = (desc.length + (extra.length ? 1 : 0)) * 12 + 6;
     w.ensure(height);
     w.text(l.qty, colQty, 9.5, { align: 'right' });
@@ -383,7 +442,11 @@ export function renderInvoicePdf(inv: PublicInvoice): Buffer {
   const blocks: Array<[string, string]> = [];
   const bank = inv.paymentOptions.bankTransfer;
   if (inv.payable && bank) {
-    const detail = bank.details ? Object.entries(bank.details).map(([k, v]) => `${k}: ${v}`).join('\n') : '';
+    const detail = bank.details
+      ? Object.entries(bank.details)
+          .map(([k, v]) => `${k}: ${v}`)
+          .join('\n')
+      : '';
     blocks.push(['HOW TO PAY', [bank.instructions, detail].filter(Boolean).join('\n')]);
   }
   if (inv.notes) blocks.push(['NOTES', inv.notes]);

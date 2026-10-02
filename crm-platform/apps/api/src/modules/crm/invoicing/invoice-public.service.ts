@@ -55,7 +55,11 @@ export class PublicRateLimiter {
       return;
     }
     if (count > max) {
-      throw new AppError(ERROR_CODES.RATE_LIMITED, 'Too many requests', HttpStatus.TOO_MANY_REQUESTS);
+      throw new AppError(
+        ERROR_CODES.RATE_LIMITED,
+        'Too many requests',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
     }
   }
 }
@@ -95,7 +99,11 @@ export class InvoicePublicService {
   }
 
   /** Runs `fn` as the tenant of the link, with a context the audit and outbox helpers can read. */
-  private inTenant<T>(link: ResolvedLink, ip: string | undefined, fn: () => Promise<T>): Promise<T> {
+  private inTenant<T>(
+    link: ResolvedLink,
+    ip: string | undefined,
+    fn: () => Promise<T>,
+  ): Promise<T> {
     const base = RequestContextStore.peek();
     return RequestContextStore.run(
       {
@@ -112,7 +120,10 @@ export class InvoicePublicService {
   }
 
   private liveOrThrow(row: InvoiceRow): void {
-    if (row.tokenRevokedAt !== null || (row.tokenExpiresAt !== null && row.tokenExpiresAt <= new Date())) {
+    if (
+      row.tokenRevokedAt !== null ||
+      (row.tokenExpiresAt !== null && row.tokenExpiresAt <= new Date())
+    ) {
       throw new AppError(
         ERROR_CODES.INV_LINK_UNAVAILABLE,
         'This invoice link is no longer available',
@@ -121,10 +132,7 @@ export class InvoicePublicService {
     }
   }
 
-  private async load(
-    tx: Tx,
-    link: ResolvedLink,
-  ): Promise<{ row: InvoiceRow; doc: PublicInvoice }> {
+  private async load(tx: Tx, link: ResolvedLink): Promise<{ row: InvoiceRow; doc: PublicInvoice }> {
     const tz = await this.invoices.zone(tx, link.orgId);
     const row = await this.repo.findById(tx, link.orgId, link.invoiceId, tz);
     if (!row || row.storedStatus === 'draft') throw AppError.notFound('Invoice');
@@ -135,7 +143,10 @@ export class InvoicePublicService {
       this.paymentsRepo.forInvoice(tx, link.orgId, row.id),
       this.settingsRepo.connection(tx, link.orgId, 'hmac_generic'),
     ]);
-    return { row, doc: buildPublicInvoice({ row, lines, taxSummary, payments, online: conn?.enabled === true }) };
+    return {
+      row,
+      doc: buildPublicInvoice({ row, lines, taxSummary, payments, online: conn?.enabled === true }),
+    };
   }
 
   /** The JSON the web page renders. Counts the view (the first one raises `invoice.viewed`). */
@@ -179,7 +190,11 @@ export class InvoicePublicService {
    * signed webhook); without one the buyer gets the bank-transfer instructions. Either way the page is display-only: only a
    * verified webhook (or a person recording the transfer) ever marks money received.
    */
-  async pay(token: string, input: PublicPayInput, ip: string | undefined): Promise<PublicPayResponse> {
+  async pay(
+    token: string,
+    input: PublicPayInput,
+    ip: string | undefined,
+  ): Promise<PublicPayResponse> {
     const link = await this.resolve(token);
     return this.inTenant(link, ip, () =>
       this.db.tx(async (tx) => {
@@ -187,9 +202,16 @@ export class InvoicePublicService {
         const row = await this.repo.findById(tx, link.orgId, link.invoiceId, tz, true);
         if (!row || row.storedStatus === 'draft') throw AppError.notFound('Invoice');
         this.liveOrThrow(row);
-        const balance = row.totalMinor > row.paidMinor + row.creditedMinor ? row.totalMinor - row.paidMinor - row.creditedMinor : 0n;
+        const balance =
+          row.totalMinor > row.paidMinor + row.creditedMinor
+            ? row.totalMinor - row.paidMinor - row.creditedMinor
+            : 0n;
         if (row.storedStatus !== 'issued' || balance <= 0n)
-          throw new AppError(ERROR_CODES.PAY_NOTHING_TO_PAY, 'There is nothing left to pay on this invoice', HttpStatus.CONFLICT);
+          throw new AppError(
+            ERROR_CODES.PAY_NOTHING_TO_PAY,
+            'There is nothing left to pay on this invoice',
+            HttpStatus.CONFLICT,
+          );
 
         let amount = balance;
         if (input.amount !== undefined) {
@@ -202,7 +224,10 @@ export class InvoicePublicService {
         }
 
         const snap = row.sellerSnapshot ?? {};
-        const instructions = typeof snap.paymentInstructions === 'string' ? (snap.paymentInstructions as string) : null;
+        const instructions =
+          typeof snap.paymentInstructions === 'string'
+            ? (snap.paymentInstructions as string)
+            : null;
         const details = (snap.bankDetails as Record<string, string> | null) ?? null;
         const conn = await this.settingsRepo.connection(tx, link.orgId, 'hmac_generic');
         const base = {
@@ -234,7 +259,12 @@ export class InvoicePublicService {
             actorKind: 'buyer',
             meta: { attempt: attemptId, provider: 'hmac_generic' },
           });
-          return { kind: out.kind === 'redirect' ? 'redirect' : 'instructions', attemptId, url: out.url ?? null, ...base };
+          return {
+            kind: out.kind === 'redirect' ? 'redirect' : 'instructions',
+            attemptId,
+            url: out.url ?? null,
+            ...base,
+          };
         }
         if (instructions || details) {
           return { kind: 'instructions', attemptId: null, url: null, ...base };
@@ -258,7 +288,13 @@ export class InvoicePublicService {
         this.paymentsRepo.forInvoice(tx, ctx.orgId, row.id),
         this.settingsRepo.connection(tx, ctx.orgId, 'hmac_generic'),
       ]);
-      return buildPublicInvoice({ row, lines, taxSummary, payments, online: conn?.enabled === true });
+      return buildPublicInvoice({
+        row,
+        lines,
+        taxSummary,
+        payments,
+        online: conn?.enabled === true,
+      });
     });
   }
 }

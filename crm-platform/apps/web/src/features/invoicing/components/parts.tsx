@@ -41,7 +41,15 @@ export function useInvoicingCan() {
 }
 
 /** An amount in its own currency, for the viewer's locale. */
-export function Money({ minor, currency, className }: { minor: number; currency: string; className?: string }) {
+export function Money({
+  minor,
+  currency,
+  className,
+}: {
+  minor: number;
+  currency: string;
+  className?: string;
+}) {
   const locale = useLocale();
   return (
     <span dir="ltr" className={cn('tabular-nums', className)}>
@@ -184,7 +192,13 @@ export function useErrorText() {
 }
 
 /** Reading-order wrapper for text a person typed (names, notes): follows its own script, not the page's. */
-export function UserText({ children, className }: { children: React.ReactNode; className?: string }) {
+export function UserText({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <span dir="auto" className={className}>
       {children}

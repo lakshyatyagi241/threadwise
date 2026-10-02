@@ -56,7 +56,9 @@ export function parseFilters(search: SearchLike): TaskFilters {
     tab: isTab(tab) ? tab : 'mine',
     q: (search.get('q') ?? '').slice(0, 100),
     status: status === 'done' || status === 'all' ? status : 'open',
-    priority: (PRIORITIES as readonly string[]).includes(priority) ? (priority as TaskPriority) : '',
+    priority: (PRIORITIES as readonly string[]).includes(priority)
+      ? (priority as TaskPriority)
+      : '',
     assignee: assignee === 'none' || UUID.test(assignee) ? assignee : '',
     contact: id(search.get('contact')),
     deal: id(search.get('deal')),
@@ -120,7 +122,13 @@ export function listQuery(f: TaskFilters): QueryValues {
   const shared = sharedQuery(f);
   switch (f.tab) {
     case 'mine':
-      return { ...shared, assigneeId: undefined, unassigned: undefined, mine: true, status: 'open' };
+      return {
+        ...shared,
+        assigneeId: undefined,
+        unassigned: undefined,
+        mine: true,
+        status: 'open',
+      };
     case 'all':
       return { ...shared, status: f.status };
     case 'overdue':
