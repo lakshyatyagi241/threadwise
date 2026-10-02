@@ -6,10 +6,12 @@ import { z } from 'zod';
  */
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
+import { WABA_ERROR_CODES } from '../whatsapp-cloud-api-waba/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
+  ...WABA_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',

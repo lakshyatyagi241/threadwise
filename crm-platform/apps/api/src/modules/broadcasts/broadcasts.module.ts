@@ -50,6 +50,7 @@ import {
     LinkRedirectController,
   ],
   exports: [
+    BroadcastReceiptsService,
     BroadcastProgressService,
     BroadcastDispatchService,
     EngineSenderRegistry,
