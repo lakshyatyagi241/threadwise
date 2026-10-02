@@ -5,9 +5,11 @@ import { z } from 'zod';
  * never on the human-readable message — messages get reworded, codes do not.
  */
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
+import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
+  ...RBAC_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
