@@ -8,7 +8,9 @@ import { TONE_CLASS, directionTone, formatMinor, formatMovement } from '../../li
 import { TypePill } from './type-pill';
 
 export const formatWhen = (iso: string, locale: string): string =>
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
+  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(
+    new Date(iso),
+  );
 
 /** Wallet activity rows: description (with the operator's reason for an adjustment), type, date, signed amount, balance. */
 export function ActivityTable({

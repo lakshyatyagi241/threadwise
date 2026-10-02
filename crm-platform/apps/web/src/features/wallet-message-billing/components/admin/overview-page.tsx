@@ -3,7 +3,11 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { walletMinorToMajor, type PlatformWalletOverview, type Reconciliation } from '@crm/contracts';
+import {
+  walletMinorToMajor,
+  type PlatformWalletOverview,
+  type Reconciliation,
+} from '@crm/contracts';
 import { Alert, Button, Card, Spinner, StatTile } from '@crm/ui';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { KEYS, operatorApi } from '../../api';
@@ -28,13 +32,19 @@ export function OverviewPage() {
         actions={
           <>
             <Link href="/admin/wallet/workspaces">
-              <Button variant="secondary" size="sm">{t('linkWorkspaces')}</Button>
+              <Button variant="secondary" size="sm">
+                {t('linkWorkspaces')}
+              </Button>
             </Link>
             <Link href="/admin/wallet/pricing">
-              <Button variant="secondary" size="sm">{t('linkPricing')}</Button>
+              <Button variant="secondary" size="sm">
+                {t('linkPricing')}
+              </Button>
             </Link>
             <Link href="/admin/wallet/logs">
-              <Button variant="secondary" size="sm">{t('linkLogs')}</Button>
+              <Button variant="secondary" size="sm">
+                {t('linkLogs')}
+              </Button>
             </Link>
           </>
         }
@@ -60,7 +70,12 @@ export function OverviewCards({ o }: { o: PlatformWalletOverview }) {
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatTile label={t('float')} value={money(o.floatMinor)} hint={t('floatHint')} tone="accent" />
+        <StatTile
+          label={t('float')}
+          value={money(o.floatMinor)}
+          hint={t('floatHint')}
+          tone="accent"
+        />
         <StatTile label={t('holding')} value={num.format(o.workspacesWithBalance)} />
         <StatTile
           label={t('low')}
@@ -119,28 +134,47 @@ export function ReconcileResult({ r }: { r: Reconciliation }) {
   }
   return (
     <div className="space-y-2">
-      <Alert tone="danger">{t('mismatches', { count: r.mismatches.length, checked: r.workspacesChecked })}</Alert>
+      <Alert tone="danger">
+        {t('mismatches', { count: r.mismatches.length, checked: r.workspacesChecked })}
+      </Alert>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[34rem] text-sm" aria-label={t('title')}>
           <thead>
             <tr className="border-b border-border text-xs text-muted-foreground">
-              <th scope="col" className="px-2 py-2 text-start font-medium">{t('workspace')}</th>
-              <th scope="col" className="px-2 py-2 text-end font-medium">{t('balance')}</th>
-              <th scope="col" className="px-2 py-2 text-end font-medium">{t('ledger')}</th>
-              <th scope="col" className="px-2 py-2 text-end font-medium">{t('difference')}</th>
+              <th scope="col" className="px-2 py-2 text-start font-medium">
+                {t('workspace')}
+              </th>
+              <th scope="col" className="px-2 py-2 text-end font-medium">
+                {t('balance')}
+              </th>
+              <th scope="col" className="px-2 py-2 text-end font-medium">
+                {t('ledger')}
+              </th>
+              <th scope="col" className="px-2 py-2 text-end font-medium">
+                {t('difference')}
+              </th>
             </tr>
           </thead>
           <tbody>
             {r.mismatches.map((m) => (
               <tr key={m.workspaceId} className="border-b border-border last:border-0">
                 <td className="px-2 py-2">
-                  <Link href={`/admin/wallet/workspaces/${m.workspaceId}`} className="font-medium text-primary hover:underline">
+                  <Link
+                    href={`/admin/wallet/workspaces/${m.workspaceId}`}
+                    className="font-medium text-primary hover:underline"
+                  >
                     {m.workspaceName}
                   </Link>
                 </td>
-                <td className="px-2 py-2 text-end tabular-nums">{walletMinorToMajor(m.balanceMinor)}</td>
-                <td className="px-2 py-2 text-end tabular-nums">{walletMinorToMajor(m.ledgerMinor)}</td>
-                <td className="px-2 py-2 text-end font-medium tabular-nums text-danger">{walletMinorToMajor(m.differenceMinor)}</td>
+                <td className="px-2 py-2 text-end tabular-nums">
+                  {walletMinorToMajor(m.balanceMinor)}
+                </td>
+                <td className="px-2 py-2 text-end tabular-nums">
+                  {walletMinorToMajor(m.ledgerMinor)}
+                </td>
+                <td className="px-2 py-2 text-end font-medium tabular-nums text-danger">
+                  {walletMinorToMajor(m.differenceMinor)}
+                </td>
               </tr>
             ))}
           </tbody>

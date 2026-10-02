@@ -95,7 +95,12 @@ function StatementBody() {
         <PermissionDenied permission="wallet.statement.read" />
       ) : (
         <>
-          <FilterBar key={appliedKey} applied={applied} onApply={go} onReset={() => go(EMPTY_FILTERS)} />
+          <FilterBar
+            key={appliedKey}
+            applied={applied}
+            onApply={go}
+            onReset={() => go(EMPTY_FILTERS)}
+          />
           <StatementList key={appliedKey} filters={applied} />
         </>
       )}
@@ -148,7 +153,11 @@ function FilterBar({
 
   return (
     <Card>
-      <form onSubmit={submit} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(4,minmax(0,1fr))_auto]" role="search">
+      <form
+        onSubmit={submit}
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(4,minmax(0,1fr))_auto]"
+        role="search"
+      >
         <Field label={t('type')} htmlFor="st-type">
           <Select
             id="st-type"
@@ -166,10 +175,23 @@ function FilterBar({
           </Select>
         </Field>
         <Field label={t('from')} htmlFor="st-from">
-          <Input id="st-from" type="date" value={draft.from} max={draft.to || undefined} onChange={(e) => set('from', e.target.value)} />
+          <Input
+            id="st-from"
+            type="date"
+            value={draft.from}
+            max={draft.to || undefined}
+            onChange={(e) => set('from', e.target.value)}
+          />
         </Field>
         <Field label={t('to')} htmlFor="st-to" error={inverted ? t('rangeInverted') : undefined}>
-          <Input id="st-to" type="date" value={draft.to} min={draft.from || undefined} invalid={inverted} onChange={(e) => set('to', e.target.value)} />
+          <Input
+            id="st-to"
+            type="date"
+            value={draft.to}
+            min={draft.from || undefined}
+            invalid={inverted}
+            onChange={(e) => set('to', e.target.value)}
+          />
         </Field>
         <Field label={t('search')} htmlFor="st-q">
           <Input
@@ -238,7 +260,11 @@ export function SummaryCards({ data }: { data: Pick<StatementResponse, 'summary'
   const { summary, currency } = data;
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <StatTile label={t('balance')} value={formatMinor(summary.currentBalanceMinor, currency, locale)} tone="accent" />
+      <StatTile
+        label={t('balance')}
+        value={formatMinor(summary.currentBalanceMinor, currency, locale)}
+        tone="accent"
+      />
       <StatTile label={t('in')} value={formatMinor(summary.moneyInMinor, currency, locale)} />
       <StatTile label={t('out')} value={formatMinor(summary.moneyOutMinor, currency, locale)} />
       <StatTile
@@ -265,30 +291,62 @@ export function StatementTable({
       <table className="w-full min-w-[48rem] text-sm" aria-label={t('label')}>
         <thead>
           <tr className="border-b border-border text-xs text-muted-foreground">
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('date')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('description')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('type')}</th>
-            <th scope="col" className="px-2 py-2 text-end font-medium">{t('in')}</th>
-            <th scope="col" className="px-2 py-2 text-end font-medium">{t('out')}</th>
-            <th scope="col" className="px-2 py-2 text-end font-medium">{t('balance')}</th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('date')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('description')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('type')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-end font-medium">
+              {t('in')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-end font-medium">
+              {t('out')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-end font-medium">
+              {t('balance')}
+            </th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
             <tr key={r.id} className="border-b border-border align-top last:border-0">
-              <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">{formatWhen(r.createdAt, locale)}</td>
+              <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
+                {formatWhen(r.createdAt, locale)}
+              </td>
               <td className="px-2 py-2">
                 <div>{r.description || humanizeSource(r.source)}</div>
                 <ContextBlock row={r} />
               </td>
-              <td className="px-2 py-2"><TypePill type={r.type} /></td>
-              <td className={cn('whitespace-nowrap px-2 py-2 text-end tabular-nums', r.moneyInMinor > 0 && 'font-medium text-success')}>
+              <td className="px-2 py-2">
+                <TypePill type={r.type} />
+              </td>
+              <td
+                className={cn(
+                  'whitespace-nowrap px-2 py-2 text-end tabular-nums',
+                  r.moneyInMinor > 0 && 'font-medium text-success',
+                )}
+              >
                 {r.moneyInMinor > 0 ? money(r.moneyInMinor) : <span aria-label={t('none')}>-</span>}
               </td>
-              <td className={cn('whitespace-nowrap px-2 py-2 text-end tabular-nums', r.moneyOutMinor > 0 && 'font-medium text-danger')}>
-                {r.moneyOutMinor > 0 ? money(r.moneyOutMinor) : <span aria-label={t('none')}>-</span>}
+              <td
+                className={cn(
+                  'whitespace-nowrap px-2 py-2 text-end tabular-nums',
+                  r.moneyOutMinor > 0 && 'font-medium text-danger',
+                )}
+              >
+                {r.moneyOutMinor > 0 ? (
+                  money(r.moneyOutMinor)
+                ) : (
+                  <span aria-label={t('none')}>-</span>
+                )}
               </td>
-              <td className="whitespace-nowrap px-2 py-2 text-end tabular-nums">{money(r.balanceAfterMinor)}</td>
+              <td className="whitespace-nowrap px-2 py-2 text-end tabular-nums">
+                {money(r.balanceAfterMinor)}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -314,13 +372,25 @@ function ContextBlock({ row }: { row: StatementRow }) {
         <>
           <div className="mt-1 space-y-0.5 text-xs text-muted-foreground">
             {c.campaignName && <div>{c.campaignName}</div>}
-            {c.recipient && <div>{t('to')}: {c.recipient}</div>}
-            {c.template && <div>{t('template')}: {c.template}</div>}
+            {c.recipient && (
+              <div>
+                {t('to')}: {c.recipient}
+              </div>
+            )}
+            {c.template && (
+              <div>
+                {t('template')}: {c.template}
+              </div>
+            )}
           </div>
           <div className="mt-1.5 flex flex-wrap gap-1">
-            {c.channel && <Badge>{CHANNELS.includes(c.channel) ? tch(c.channel) : c.channel}</Badge>}
+            {c.channel && (
+              <Badge>{CHANNELS.includes(c.channel) ? tch(c.channel) : c.channel}</Badge>
+            )}
             {c.country && <Badge>{c.country}</Badge>}
-            {c.category && <Badge>{CATEGORIES.includes(c.category) ? tcat(c.category) : c.category}</Badge>}
+            {c.category && (
+              <Badge>{CATEGORIES.includes(c.category) ? tcat(c.category) : c.category}</Badge>
+            )}
             {c.engine && <Badge>{ENGINES.includes(c.engine) ? te(c.engine) : c.engine}</Badge>}
           </div>
         </>
@@ -328,4 +398,3 @@ function ContextBlock({ row }: { row: StatementRow }) {
     </>
   );
 }
-

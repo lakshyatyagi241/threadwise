@@ -52,7 +52,10 @@ export function addRow(d: Draft): Draft {
   return {
     ...d,
     seq,
-    added: [...d.added, { key: `new-${seq}`, countryCode: '', category: '', price: '', metaCost: '' }],
+    added: [
+      ...d.added,
+      { key: `new-${seq}`, countryCode: '', category: '', price: '', metaCost: '' },
+    ],
   };
 }
 
@@ -69,7 +72,11 @@ export function editField(
 ): Draft {
   const { [key]: _cleared, ...skipped } = d.skipped;
   if (d.added.some((r) => r.key === key)) {
-    return { ...d, skipped, added: d.added.map((r) => (r.key === key ? { ...r, [field]: value } : r)) };
+    return {
+      ...d,
+      skipped,
+      added: d.added.map((r) => (r.key === key ? { ...r, [field]: value } : r)),
+    };
   }
   if (field !== 'price' && field !== 'metaCost') return d;
   return { ...d, skipped, edits: { ...d.edits, [key]: { ...d.edits[key], [field]: value } } };
@@ -103,14 +110,16 @@ export function gridRows(server: readonly RateRow[], d: Draft): GridRow[] {
       dirty: !samePrice(nextPrice, price) || !sameCost(nextCost, metaCost),
     };
   });
-  const added = d.added.map(
-    (r): GridRow => ({
-      ...r,
-      existing: false,
-      currency: null,
-      dirty: r.price.trim() !== '' || r.metaCost.trim() !== '' || r.countryCode !== '' || r.category !== '',
-    }),
-  );
+  const added = d.added.map((r): GridRow => ({
+    ...r,
+    existing: false,
+    currency: null,
+    dirty:
+      r.price.trim() !== '' ||
+      r.metaCost.trim() !== '' ||
+      r.countryCode !== '' ||
+      r.category !== '',
+  }));
   return [...stored, ...added];
 }
 
@@ -123,7 +132,9 @@ export type RowProblem = 'price' | 'metaCost' | 'country' | 'empty' | 'duplicate
 export function rowProblem(row: GridRow, all: readonly GridRow[]): RowProblem | null {
   if (!row.dirty) return null;
   if (!row.existing) {
-    const same = all.filter((r) => keyOf(r.countryCode, r.category) === keyOf(row.countryCode, row.category));
+    const same = all.filter(
+      (r) => keyOf(r.countryCode, r.category) === keyOf(row.countryCode, row.category),
+    );
     // A new row repeating a stored row or an earlier new row would only ever lose to it ("first wins").
     if (same.length > 1 && same[0]!.key !== row.key) return 'duplicate';
   }
@@ -222,9 +233,4 @@ export function marginOf(price: string, metaCost: string): Margin | null {
     percent,
     tone: micros > 0 ? 'success' : micros < 0 ? 'danger' : 'neutral',
   };
-}
-
-function trimMicros(abs: number): string {
-  const text = microsToMajor(abs);
-  return text;
 }
