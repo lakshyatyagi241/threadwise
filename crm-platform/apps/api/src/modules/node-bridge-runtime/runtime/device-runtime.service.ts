@@ -161,8 +161,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       report: (r) => this.applyStatus(orgId, deviceId, r),
       proxyFor: async () => this.proxyOf((await this.loadDevice(orgId, deviceId)) ?? dev),
       ended: () => void this.drop(orgId, deviceId),
-      inbound: async (n) => void (await this.inbound.message(orgId, deviceId, n)),
-      receipt: async (r) => void (await this.receipts.route(r)),
+      inbound: async (n, media) => void (await this.inbound.message(orgId, deviceId, n, media)),
+      receipt: async (r) => void (await this.receipts.route({ orgId, deviceId }, r)),
       groups: (g) => this.inbound.groups(orgId, deviceId, g),
     };
     const session = new DeviceSession(
@@ -333,6 +333,20 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       'EX',
       300,
     );
+    await this.inbound.deviceStatus(orgId, deviceId, {
+      status: label,
+      connected: status === 'connected',
+    });
+  }
+
+  /** A media command that left its file in Redis (`bufferKey`) gets the bytes back before the socket sends it. */
+  private async withBytes(command: SendCommand): Promise<SendCommand> {
+    if (command.type !== 'media' || !command.bufferKey) return command;
+    const data = await this.redis.getdelBuffer(command.bufferKey);
+    if (!data)
+      throw new UnsupportedSendError('The file to send expired before the device took it.');
+    const { bufferKey: _gone, ...rest } = command;
+    return { ...rest, data };
   }
 
   /** The proxy Reference's `loadProxy` read at every connect (TW-NODE-013). Null means a direct connection. */
@@ -455,7 +469,12 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       if (!this.owned.has(key(orgId, deviceId))) return null;
       try {
         if (cmd.type === 'send') {
-          const r = await this.send(orgId, deviceId, cmd.command, cmd.context);
+          const r = await this.send(
+            orgId,
+            deviceId,
+            await this.withBytes(cmd.command),
+            cmd.context,
+          );
           return { ok: true, status: 'sent', providerMessageId: r.providerMessageId };
         }
         if (cmd.type === 'act') {
