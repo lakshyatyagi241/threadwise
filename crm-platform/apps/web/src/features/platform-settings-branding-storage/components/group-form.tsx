@@ -287,7 +287,9 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             readOnly={!canEdit}
             disabled={draft.clear[f.key] === true}
             autoComplete="new-password"
-            placeholder={isSet ? '••••••••' : ''}
+            placeholder={
+              isSet ? '••••••••' : tg.has(`fields.${f.key}.placeholder`) ? tg(`fields.${f.key}.placeholder`) : ''
+            }
             showLabel={t('common.secretShow')}
             hideLabel={t('common.secretHide')}
           />
@@ -449,7 +451,18 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
         ? (PALETTE_DEFAULTS[f.key.slice(7)] ?? '')
         : f.key === 'sidebarColor'
           ? '#06100E'
-          : '';
+          : f.key === 'sidebarTextColor'
+            ? '#FFFFFF'
+            : f.key === 'sidebarAccentColor'
+              ? '#A7E8C0'
+              : '';
+      // WaDesk labels the two derived sidebar colours instead of showing a hex.
+      const hint =
+        f.key === 'sidebarTextColor'
+          ? 'Auto (contrast)'
+          : f.key === 'sidebarAccentColor'
+            ? 'Default green'
+            : shipped || '#RRGGBB';
       input = (
         <div className="flex items-center gap-2">
           <input
@@ -466,7 +479,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             onChange={(e) => setField(f.key, e.target.value)}
             readOnly={!canEdit}
             invalid={Boolean(err)}
-            placeholder={shipped || '#RRGGBB'}
+            placeholder={hint}
             spellCheck={false}
             className="font-mono"
           />

@@ -118,19 +118,23 @@
             "label": "App URL"
           },
           "supportEmail": {
-            "label": "Support email"
+            "label": "Support email",
+            "placeholder": "support@…"
           },
           "fromEmail": {
-            "label": "From email"
+            "label": "From email",
+            "placeholder": "hello@…"
           },
           "contactNumber": {
-            "label": "Contact number"
+            "label": "Contact number",
+            "placeholder": "+91 …"
           },
           "address": {
             "label": "Address"
           },
           "mapIframeUrl": {
-            "label": "Map iframe URL"
+            "label": "Map iframe URL",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
           },
           "platformFooter": {
             "label": "Platform footer",
@@ -381,10 +385,14 @@
         },
         "fields": {
           "fromName": {
-            "label": "From name"
+            "label": "From name",
+            "placeholder": "Acme Inc.",
+            "hint": "Shown to recipients as the \"From\" name."
           },
           "fromAddress": {
-            "label": "From address"
+            "label": "From address",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "Domain must have valid SPF + DKIM or mail lands in spam."
           },
           "mailer": {
             "label": "Mailer",
@@ -392,20 +400,24 @@
           },
           "host": {
             "label": "Host",
+            "placeholder": "smtp.mailgun.org",
             "hint": "Leave empty to keep the server default."
           },
           "port": {
-            "label": "Port"
+            "label": "Port",
+            "hint": "587 for TLS, 465 for SSL, 25 (avoid)."
           },
           "encryption": {
             "label": "Encryption",
             "hint": "ssl means implicit TLS (usually port 465); tls and starttls upgrade on port 587."
           },
           "username": {
-            "label": "Username"
+            "label": "Username",
+            "placeholder": "postmaster@mg.example.com"
           },
           "password": {
             "label": "Password",
+            "placeholder": "Enter SMTP password",
             "hint": "Stored encrypted and never shown again."
           }
         },
