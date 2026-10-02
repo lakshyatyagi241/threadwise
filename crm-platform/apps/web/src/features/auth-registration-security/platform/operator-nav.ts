@@ -71,11 +71,13 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/i18n/usage',
     labelKey: 'localization-translation.nav.usage',
     groupKey: 'localization-translation.nav.group',
+  },
   {
     id: 'system',
     href: '/admin/system',
     labelKey: 'install-update-licensing.system.nav.item',
     groupKey: 'install-update-licensing.system.nav.group',
+  },
   // add-ons domain: billing add-ons and installable modules (messages/en/addons-extension-registry.json)
   {
     id: 'addon-packs',
@@ -88,12 +90,14 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/extensions',
     labelKey: 'addons-extension-registry.nav.extensions',
     groupKey: 'addons-extension-registry.nav.group',
+  },
   // Platform support desk (SUPP): its own message file, so the keys live outside this domain's namespace.
   {
     id: 'support-inbox',
     href: '/admin/support',
     labelKey: 'platform-support-desk.nav.inbox',
     groupKey: 'platform-support-desk.nav.group',
+  },
   {
     id: 'ai-keys',
     href: '/admin/api-keys',
@@ -105,6 +109,7 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/ai-dashboard',
     labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
     groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  },
   {
     id: 'cms-frontend',
     href: '/admin/frontend',
