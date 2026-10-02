@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { buildWhatsappLink, phpUrlencode } from '@crm/contracts';
 
 /**
  * The pure rules of the chatbot widget: tokens, slugs, the WhatsApp link, the origin allow-list, the transcript shape.
@@ -74,20 +75,12 @@ export const usesAi = (w: Pick<WidgetModeFields, 'mode' | 'assistantId'>): boole
 export const usesWhatsApp = (w: Pick<WidgetModeFields, 'mode' | 'targetWhatsappNumber'>): boolean =>
   (w.mode === 'whatsapp' || w.mode === 'both') && !!w.targetWhatsappNumber;
 
-/** PHP's `urlencode`: spaces become `+` and everything outside `[A-Za-z0-9_.-]` is percent-encoded. */
-export function phpUrlencode(value: string): string {
-  return encodeURIComponent(value)
-    .replace(/[!'()*~]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)
-    .replace(/%20/g, '+');
-}
+export { phpUrlencode };
 
 /** The `wa.me` deep link of WD-WGT-013, or null when the mode or the number says there is none. */
 export function whatsappUrl(w: WidgetModeFields): string | null {
   if (!usesWhatsApp(w)) return null;
-  const digits = `${w.targetWhatsappCc ?? ''}${w.targetWhatsappNumber ?? ''}`.replace(/\D+/g, '');
-  if (digits === '') return null;
-  const text = phpUrlencode(w.prefilledMessage ?? '');
-  return `https://wa.me/${digits}${text !== '' ? `?text=${text}` : ''}`;
+  return buildWhatsappLink(w.targetWhatsappCc, w.targetWhatsappNumber, w.prefilledMessage);
 }
 
 /** The host[:port] of an `Origin` header, lower case; null when it does not parse. */

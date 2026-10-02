@@ -135,6 +135,7 @@ export default (h) => {
     save: { wadesk: '#cbw-save', ours: '#wgt-save' },
     tile: (mode) => ({ wadesk: `[data-mode-tile=${mode}]`, ours: `[data-mode-tile=${mode}]` }),
     phone: { wadesk: '[data-cbw-phone]', ours: '#wgt-f-phone' },
+    assistant: { wadesk: '[data-field=assistant_id]', ours: '#wgt-f-assistantId' },
     headerBg: { wadesk: 'input[data-field=header_bg][type=text]', ours: '#wgt-f-headerBg' },
     buttonColor: {
       wadesk: 'input[data-field=button_color][type=text]',
@@ -418,9 +419,13 @@ export default (h) => {
     title: 'The loader script: headers and what it configures',
     api: true,
     run: async (c) => {
+      // A WhatsApp widget's loader is the user-requested Interakt panel (WD-WGT-028), so the frame loader that both products
+      // share is compared on a Both widget.
       const w = await save(
         c,
         widgetBody(c, {
+          mode: 'both',
+          assistantId: await assistant(c),
           position: 'bottom_left',
           buttonColor: '#112233',
           buttonImageUrl: 'https://example.com/logo.png',
@@ -813,6 +818,8 @@ export default (h) => {
     title: 'Builder: each step refuses to advance until its rules hold',
     run: async (c) => {
       const o = c.obs;
+      // the agent list is read when the page opens, so the assistant exists first
+      const aid = await assistant(c);
       await openBuilder(c);
       await clickNext(c);
       o.flag('name.blocked', (await stepNow(c)) === 1);
@@ -821,15 +828,10 @@ export default (h) => {
       await clickNext(c);
       o.flag('agent.blocked', (await stepNow(c)) === 1);
       o.flag('agent.message', await seen(c, 'Link a smart agent'));
-      await at(c, B.tile('whatsapp')).click();
-      o.flag(
-        'agent.selectHidden',
-        (await c.page.locator('[data-field=assistant_id], #wgt-f-assistantId').count()) === 0 ||
-          !(await c.page
-            .locator('[data-field=assistant_id], #wgt-f-assistantId')
-            .first()
-            .isVisible()),
-      );
+      // The WhatsApp engine has its own page on ours (WD-WGT-028), so the number rules are walked on the Both engine.
+      await at(c, B.tile('both')).click();
+      o.flag('agent.selectShown', await at(c, B.assistant).isVisible());
+      await at(c, B.assistant).selectOption(String(aid));
       await at(c, B.phone).fill('12345');
       await clickNext(c);
       o.flag('whatsapp.blocked', (await stepNow(c)) === 1);
@@ -874,10 +876,13 @@ export default (h) => {
     title: 'Builder: launch saves, reveals the snippet, and the list shows the widget',
     run: async (c) => {
       const o = c.obs;
+      // the agent list is read when the page opens, so the assistant exists first
+      const aid = await assistant(c);
       await openBuilder(c);
       const name = c.tag('launch');
       await at(c, B.name).fill(name);
-      await at(c, B.tile('whatsapp')).click();
+      await at(c, B.tile('both')).click();
+      await at(c, B.assistant).selectOption(String(aid));
       await at(c, B.phone).fill('9876543210');
       await clickNext(c);
       await clickNext(c);
@@ -918,10 +923,13 @@ export default (h) => {
     title: 'Launch clicked twice quickly',
     tags: ['double-submit'],
     run: async (c) => {
+      // the agent list is read when the page opens, so the assistant exists first
+      const aid = await assistant(c);
       await openBuilder(c);
       const name = c.tag('dbl');
       await at(c, B.name).fill(name);
-      await at(c, B.tile('whatsapp')).click();
+      await at(c, B.tile('both')).click();
+      await at(c, B.assistant).selectOption(String(aid));
       await at(c, B.phone).fill('9876543210');
       await clickNext(c);
       await clickNext(c);
@@ -1122,7 +1130,13 @@ export default (h) => {
       const o = c.obs;
       const w = await save(
         c,
-        widgetBody(c, { name: c.tag('site'), headerTitle: 'Talk <b>to</b> us', collectName: true }),
+        widgetBody(c, {
+          name: c.tag('site'),
+          mode: 'both',
+          assistantId: await assistant(c),
+          headerTitle: 'Talk <b>to</b> us',
+          collectName: true,
+        }),
       );
       const base = c.side === 'wadesk' ? c.sideObj.baseUrl : c.sideObj.apiBase;
       const server = http.createServer((req, res) => {
@@ -1215,7 +1229,10 @@ export default (h) => {
     title: 'The panel on a phone-width page',
     run: async (c) => {
       const o = c.obs;
-      const w = await save(c, widgetBody(c, { name: c.tag('mob') }));
+      const w = await save(
+        c,
+        widgetBody(c, { name: c.tag('mob'), mode: 'both', assistantId: await assistant(c) }),
+      );
       const base = c.side === 'wadesk' ? c.sideObj.baseUrl : c.sideObj.apiBase;
       const server = http.createServer((req, res) => {
         res.setHeader('content-type', 'text/html');
@@ -1310,6 +1327,13 @@ export default (h) => {
     scenarios,
     pages: [],
     // Each entry is a decision recorded in docs/wadesk-port/parity/chatbot-widget.md.
-    intended: [],
+    intended: [
+      {
+        scenario: /^chat\.page-and-config$/,
+        key: 'set.config.widgetKeys',
+        reason:
+          'WD-WGT-028, user-requested Interakt reference: the public config also carries the launcher block (look and placement of the WhatsApp widget)',
+      },
+    ],
   };
 };

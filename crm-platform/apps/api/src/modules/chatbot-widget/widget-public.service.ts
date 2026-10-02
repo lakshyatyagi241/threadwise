@@ -1,6 +1,7 @@
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
+  toPublicLauncher,
   widgetMessageRequestSchema,
   type WidgetHistoryResponse,
   type WidgetMessageResponse,
@@ -121,7 +122,10 @@ export class WidgetPublicService {
     const found = await this.locate(token);
     if (!found || found.widget.status !== 'active') return null;
     const w = found.widget;
-    return buildEmbedScript(w, `${base}/widget/${w.embedToken}/chat`);
+    return buildEmbedScript(
+      { ...w, whatsappUrl: whatsappUrl(w) },
+      `${base}/widget/${w.embedToken}/chat`,
+    );
   }
 
   async chatPage(token: string): Promise<string | null> {
@@ -224,6 +228,7 @@ export class WidgetPublicService {
             collect_email: widget.collectEmail,
             collect_phone: widget.collectPhone,
             whatsapp_url: whatsappUrl(widget),
+            launcher: toPublicLauncher(widget.launcher),
           },
           visitor: {
             uuid: visitor.visitorUuid,

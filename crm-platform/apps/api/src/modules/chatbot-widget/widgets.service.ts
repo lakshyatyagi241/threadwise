@@ -184,6 +184,7 @@ export class WidgetsService {
       collectEmail: input.collectEmail,
       collectPhone: input.collectPhone,
       allowedDomains: input.allowedDomains,
+      launcher: input.launcher,
     };
   }
 
@@ -292,6 +293,7 @@ export class WidgetsService {
           collectEmail: src.collectEmail,
           collectPhone: src.collectPhone,
           allowedDomains: src.allowedDomains,
+          launcher: src.launcher,
         },
         // A paused widget is copied as paused (WaDesk copied every column).
         src.status,
@@ -377,6 +379,9 @@ function diff(
 ): Record<string, { old: unknown; new: unknown }> | undefined {
   const out: Record<string, { old: unknown; new: unknown }> = {};
   for (const k of AUDITED) if (a[k] !== b[k]) out[k] = { old: a[k], new: b[k] };
+  if (JSON.stringify(a.launcher) !== JSON.stringify(b.launcher)) {
+    out.launcher = { old: a.launcher, new: b.launcher };
+  }
   if (JSON.stringify(a.allowedDomains) !== JSON.stringify(b.allowedDomains)) {
     out.allowedDomains = { old: a.allowedDomains, new: b.allowedDomains };
   }

@@ -1,12 +1,77 @@
 import {
+  buildWhatsappLink,
+  DEFAULT_LAUNCHER,
+  isLauncherAvatar,
+  LAUNCHER_LIMITS,
+  resolveLauncherColour,
   WIDGET_BUILDER_DEFAULTS,
   WIDGET_HEX_COLOUR,
   type CreateWidgetInput,
+  type LauncherButtonType,
+  type LauncherSide,
   type Widget,
   type WidgetBodyBgKind,
+  type WidgetLauncher,
   type WidgetMode,
   type WidgetPosition,
 } from '@crm/contracts';
+
+/** One placement of the launcher as the form holds it: spacing stays text until it is validated. */
+export interface PlacementDraft {
+  side: LauncherSide;
+  sideSpacing: string;
+  bottomSpacing: string;
+}
+
+/** The WhatsApp widget's look and placement as the form holds it (WD-WGT-028, Interakt reference). */
+export interface LauncherDraft {
+  buttonType: LauncherButtonType;
+  /** A colour preset key or a hex colour. */
+  colour: string;
+  /** `preset:<key>` or an image address. */
+  avatar: string;
+  greeting: string;
+  introMessage: string;
+  desktop: PlacementDraft;
+  mobile: PlacementDraft;
+}
+
+const placementDraft = (p: WidgetLauncher['desktop']): PlacementDraft => ({
+  side: p.side,
+  sideSpacing: String(p.sideSpacing),
+  bottomSpacing: String(p.bottomSpacing),
+});
+
+export const launcherDraft = (l: WidgetLauncher): LauncherDraft => ({
+  buttonType: l.buttonType,
+  colour: l.colour,
+  avatar: l.avatar,
+  greeting: l.greeting,
+  introMessage: l.introMessage,
+  desktop: placementDraft(l.desktop),
+  mobile: placementDraft(l.mobile),
+});
+
+const spacingOf = (v: string): number => (/^\d{1,4}$/.test(v.trim()) ? Number(v.trim()) : Number.NaN);
+
+/** The draft as the API takes it. A spacing that is not a whole number is NaN here; `validateWhatsapp` refuses it first. */
+export const launcherPayload = (d: LauncherDraft): WidgetLauncher => ({
+  buttonType: d.buttonType,
+  colour: d.colour,
+  avatar: d.avatar,
+  greeting: d.greeting.trim(),
+  introMessage: d.introMessage.trim(),
+  desktop: {
+    side: d.desktop.side,
+    sideSpacing: spacingOf(d.desktop.sideSpacing),
+    bottomSpacing: spacingOf(d.desktop.bottomSpacing),
+  },
+  mobile: {
+    side: d.mobile.side,
+    sideSpacing: spacingOf(d.mobile.sideSpacing),
+    bottomSpacing: spacingOf(d.mobile.bottomSpacing),
+  },
+});
 
 /**
  * What the four-step builder edits (WD-WGT-002 to 005): one flat object, text fields as plain strings ('' = none), the way
@@ -41,6 +106,8 @@ export interface BuilderState {
   collectName: boolean;
   collectEmail: boolean;
   collectPhone: boolean;
+  /** The WhatsApp widget's look and placement; the AI and Both builders carry it along untouched. */
+  launcher: LauncherDraft;
 }
 
 export const TOTAL_STEPS = 4;
@@ -78,6 +145,7 @@ export function newState(): BuilderState {
     collectName: D.collectName,
     collectEmail: D.collectEmail,
     collectPhone: D.collectPhone,
+    launcher: launcherDraft(DEFAULT_LAUNCHER),
   };
 }
 
@@ -111,12 +179,14 @@ export function fromWidget(w: Widget): BuilderState {
     collectName: w.collectName,
     collectEmail: w.collectEmail,
     collectPhone: w.collectPhone,
+    launcher: launcherDraft(w.launcher),
   };
 }
 
 /** The save body. `allowedDomains` is left out on purpose: the builder has no control for it and a save must not clear it. */
 export function toPayload(s: BuilderState): CreateWidgetInput {
   const orNull = (v: string) => (v.trim() === '' ? null : v);
+  const wa = s.mode === 'whatsapp';
   return {
     name: s.name,
     mode: s.mode,
@@ -124,8 +194,9 @@ export function toPayload(s: BuilderState): CreateWidgetInput {
     targetWhatsappCc: orNull(s.targetWhatsappCc),
     targetWhatsappNumber: orNull(s.targetWhatsappNumber),
     prefilledMessage: orNull(s.prefilledMessage),
-    position: s.position,
-    buttonColor: s.buttonColor,
+    // A WhatsApp widget is placed by its launcher config; the legacy side and fill follow it so the list shows the same.
+    position: wa ? (s.launcher.desktop.side === 'left' ? 'bottom_left' : 'bottom_right') : s.position,
+    buttonColor: wa ? resolveLauncherColour(s.launcher.colour).from : s.buttonColor,
     buttonImageUrl: orNull(s.buttonImageUrl),
     headerTitle: s.headerTitle,
     headerBg: s.headerBg,
@@ -143,6 +214,7 @@ export function toPayload(s: BuilderState): CreateWidgetInput {
     collectName: s.collectName,
     collectEmail: s.collectEmail,
     collectPhone: s.collectPhone,
+    launcher: launcherPayload(s.launcher),
   };
 }
 
@@ -247,4 +319,77 @@ export function previewImageUrl(v: string): string | null {
   } catch {
     return null;
   }
+}
+
+// --- the WhatsApp widget page (WD-WGT-028) ---------------------------------------------------------------------------------
+
+export type WhatsappCard = 1 | 2 | 3 | 4 | 5;
+
+export type WhatsappProblem =
+  | { ok: true }
+  | {
+      ok: false;
+      /** Message key under `chatbotWidget.whatsappBuilder.problem`. */
+      key: 'name' | 'avatar' | 'greeting' | 'intro' | 'spacing' | 'whatsapp';
+      /** The accordion card to open (0 = the name above the cards). */
+      card: 0 | WhatsappCard;
+      /** The control to flash and focus: its `wgt-f-<field>` id. */
+      field: string;
+    };
+
+const SPACING_FIELDS = [
+  ['desktop', 'sideSpacing', 'desktopSideSpacing'],
+  ['desktop', 'bottomSpacing', 'desktopBottomSpacing'],
+  ['mobile', 'sideSpacing', 'mobileSideSpacing'],
+  ['mobile', 'bottomSpacing', 'mobileBottomSpacing'],
+] as const;
+
+/** A spacing the API will take: a whole number of pixels from 0 to the limit. */
+export const validSpacing = (v: string): boolean => {
+  const n = spacingOf(v);
+  return Number.isInteger(n) && n >= 0 && n <= LAUNCHER_LIMITS.spacing;
+};
+
+/** The first failing rule of the WhatsApp page, in the order the page reads. */
+export function validateWhatsapp(s: BuilderState): WhatsappProblem {
+  if (s.name.trim() === '') return { ok: false, key: 'name', card: 0, field: 'name' };
+  const l = s.launcher;
+  if (!isLauncherAvatar(l.avatar)) return { ok: false, key: 'avatar', card: 2, field: 'avatar' };
+  if (l.greeting.trim() === '') return { ok: false, key: 'greeting', card: 3, field: 'greeting' };
+  if (l.introMessage.trim() === '') {
+    return { ok: false, key: 'intro', card: 3, field: 'introMessage' };
+  }
+  for (const [device, key, field] of SPACING_FIELDS) {
+    if (!validSpacing(l[device][key])) return { ok: false, key: 'spacing', card: 4, field };
+  }
+  if (digitsOf(`${s.targetWhatsappCc}${s.targetWhatsappNumber}`).length < 8) {
+    return { ok: false, key: 'whatsapp', card: 5, field: 'phone' };
+  }
+  return { ok: true };
+}
+
+/** The link Start Conversation opens, from what the form holds right now; null while there is no number. */
+export const previewWhatsappLink = (s: BuilderState): string | null =>
+  buildWhatsappLink(s.targetWhatsappCc, s.targetWhatsappNumber, s.prefilledMessage);
+
+/** A launcher config that is always drawable: unfinished spacing text falls back to the defaults so the preview never breaks. */
+export function previewLauncher(d: LauncherDraft): WidgetLauncher {
+  const p = launcherPayload(d);
+  const fix = (n: number, fallback: number) => (Number.isFinite(n) ? Math.min(n, 500) : fallback);
+  return {
+    ...p,
+    greeting: p.greeting || DEFAULT_LAUNCHER.greeting,
+    introMessage: p.introMessage || DEFAULT_LAUNCHER.introMessage,
+    avatar: isLauncherAvatar(p.avatar) ? p.avatar : DEFAULT_LAUNCHER.avatar,
+    desktop: {
+      ...p.desktop,
+      sideSpacing: fix(p.desktop.sideSpacing, DEFAULT_LAUNCHER.desktop.sideSpacing),
+      bottomSpacing: fix(p.desktop.bottomSpacing, DEFAULT_LAUNCHER.desktop.bottomSpacing),
+    },
+    mobile: {
+      ...p.mobile,
+      sideSpacing: fix(p.mobile.sideSpacing, DEFAULT_LAUNCHER.mobile.sideSpacing),
+      bottomSpacing: fix(p.mobile.bottomSpacing, DEFAULT_LAUNCHER.mobile.bottomSpacing),
+    },
+  };
 }

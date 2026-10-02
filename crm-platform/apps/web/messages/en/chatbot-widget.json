@@ -254,6 +254,96 @@
         "off": "Off",
         "none": "None"
       }
+    },
+    "whatsappBuilder": {
+      "crumb": "WhatsApp Widget",
+      "title": "WhatsApp Widget",
+      "titleAccent": "Install & Customize",
+      "type": "Widget type",
+      "nameHint": "Only you see this name. It is also the business name shown in the messenger.",
+      "save": "Save Changes",
+      "saved": "Changes saved. Your widget is live.",
+      "card": {
+        "1": {
+          "title": "Style your WhatsApp chat button",
+          "subtitle": "Pick a beautiful chat button designs what suits your website best",
+          "buttonType": "Button Type",
+          "type": {
+            "pill": "Chat With Us button",
+            "icon": "Icon-only round button"
+          },
+          "iconOnly": "Icon only",
+          "buttonColor": "Button Color",
+          "pickCustom": "Pick a custom color",
+          "custom": "Custom {hex}"
+        },
+        "2": {
+          "title": "Design your messenger",
+          "subtitle": "Pick a beautiful image for your messenger",
+          "image": "Messenger image",
+          "names": {
+            "support": "Support",
+            "store": "Store",
+            "chat": "Chat",
+            "person": "Person"
+          },
+          "url": "Or use your own image address",
+          "urlHint": "Paste the address of a square image (https://...). Uploading a file is not available yet."
+        },
+        "3": {
+          "title": "Set your welcome message",
+          "subtitle": "Welcome your customers",
+          "greeting": "Greetings",
+          "greetingHint": "Say Hi to your customers when they open messenger",
+          "intro": "Intro Message",
+          "introHint": "Introduce your business and tell customers how you can help"
+        },
+        "4": {
+          "title": "Set your Chat Button position",
+          "subtitle": "Adjust your button position on computers and mobile",
+          "preview": "Chat Button Preview",
+          "desktopPreview": "Desktop Preview",
+          "mobilePreview": "Mobile Preview",
+          "desktopPosition": "Desktop Launcher Position",
+          "mobilePosition": "Mobile Launcher Position",
+          "left": "Left",
+          "right": "Right",
+          "desktopSideSpacing": "Desktop Side Spacing",
+          "desktopBottomSpacing": "Desktop Bottom Spacing",
+          "mobileSideSpacing": "Mobile Side Spacing",
+          "mobileBottomSpacing": "Mobile Bottom Spacing",
+          "px": "px"
+        },
+        "5": {
+          "title": "Configure your WhatsApp number",
+          "subtitle": "Connect the WhatsApp number to the messenger",
+          "number": "WhatsApp Number",
+          "numberHint": "Messenger will send your customers to this WhatsApp number",
+          "prefilled": "Pre-filled Message",
+          "prefilledHint": "This will be first default message text"
+        }
+      },
+      "install": {
+        "title": "Install on your website",
+        "body": "Paste this tag just before the closing body tag of every page that should show the widget.",
+        "copy": "Copy code"
+      },
+      "problem": {
+        "name": "Name your widget.",
+        "avatar": "Use a built-in image or an http(s) image address.",
+        "greeting": "Add a greeting.",
+        "intro": "Add an intro message.",
+        "spacing": "Spacing must be a whole number of pixels from 0 to 500.",
+        "whatsapp": "Add a full WhatsApp number: country code and digits."
+      },
+      "preview": {
+        "title": "Live preview",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "frameTitle": "Live preview of your WhatsApp widget",
+        "hint": "Click the button to open the messenger, then Start Conversation to try it.",
+        "businessName": "Your business"
+      }
     }
   }
 }
