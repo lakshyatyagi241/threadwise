@@ -69,3 +69,7 @@ tests use their own containers and the restricted role).
 Re-run on the merged tip (b26678c): unit 39, API e2e and integration 44, web 12, `pnpm arch:check` (0 errors) and `pnpm db:verify-schema` (0 errors) all pass; eslint clean on the domain.
 The blocked and partial rows above are unchanged: each needs an edit in another domain's zone (checkout, plan editor, settings hub, IG, INST), which this domain may not make.
 `checkout.service.ts` still answers "Add-ons are not purchasable yet." for add-on plans, so TW-ADD-032 and TW-ADD-033 stay blocked on PAYGW.
+
+## Round 2 pass 2
+
+`git fetch origin` fails from this worktree (`https://github.com/lakshyatyagi241/threadwise.git` answers "Repository not found" for the signed-in account), so the requested pull from main could not run; the tip stays at origin/main as last fetched (4122a8b). Re-ran on it: contracts and db build, `db:migrate` (144 applied), unit 39, `pnpm db:verify-schema` and `pnpm arch:check` (0 errors). No screen difference found beyond the table above; every partial and blocked row still needs an edit in PAYGW, PLAN, IG, SET or INST zones.
