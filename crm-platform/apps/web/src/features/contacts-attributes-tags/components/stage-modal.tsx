@@ -4,7 +4,7 @@ import { useId, useState, type FormEvent } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import type { StatusOptionResponse } from '@crm/contracts';
-import { Alert, Button, Field, Input, Modal, Spinner, Switch, cn, useToast } from '@crm/ui';
+import { Alert, Button, Field, Input, Modal, Select, Spinner, Switch, cn, useToast } from '@crm/ui';
 import { createStatusOption, invalidateStatusOptions, updateStatusOption } from '../api/stages';
 import { errorKind } from '../lib/errors';
 import {
@@ -18,6 +18,7 @@ import {
   valueFromLabel,
   type OptionGroup,
 } from '../lib/stage-model';
+import { flagsOf, meaningOf, type StageMeaning } from '../lib/stage-flow';
 import { StageBadge } from './chips';
 import { ErrorLine } from './error-line';
 import { CheckIcon } from './icons';
@@ -28,6 +29,7 @@ export function StageModal({
   group,
   option,
   siblings,
+  stages,
   onClose,
 }: {
   open: boolean;
@@ -36,6 +38,8 @@ export function StageModal({
   option?: StatusOptionResponse;
   /** Every option of the group (the name must differ from all the others). */
   siblings: readonly StatusOptionResponse[];
+  /** The workspace's lifecycle stages: what a status can be limited to. */
+  stages: readonly StatusOptionResponse[];
   onClose: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.stages');
@@ -54,6 +58,7 @@ export function StageModal({
           group={group}
           option={option}
           siblings={siblings}
+          stages={stages}
           onClose={onClose}
         />
       )}
@@ -65,11 +70,13 @@ function StageForm({
   group,
   option,
   siblings,
+  stages,
   onClose,
 }: {
   group: OptionGroup;
   option?: StatusOptionResponse;
   siblings: readonly StatusOptionResponse[];
+  stages: readonly StatusOptionResponse[];
   onClose: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.stages');
@@ -83,7 +90,11 @@ function StageForm({
   const [color, setColor] = useState<string>(option ? optionColor(option) : COLOR_PALETTE[0]);
   const [isDefault, setDefault] = useState(option?.isDefault ?? false);
   const [active, setActive] = useState(option?.isActive ?? true);
+  const [meaning, setMeaning] = useState<StageMeaning>(option ? meaningOf(option) : 'none');
   const [problem, setProblem] = useState<string | null>(null);
+  /** Statuses only: the stage this status is limited to ('' = every stage). */
+  const [scopeId, setScopeId] = useState(option?.stageOptionId ?? '');
+  const scoped = !isStage && scopeId !== '';
 
   const others = siblings.filter((s) => s.id !== option?.id);
   const value =
@@ -100,11 +111,26 @@ function StageForm({
         return updateStatusOption(option, {
           ...(label.trim() !== option.label ? { label: label.trim() } : {}),
           ...(color !== optionColor(option) ? { color } : {}),
-          ...(isStage && isDefault !== option.isDefault ? { isDefault } : {}),
+          // A stage default, or the default status of a stage; a status on all stages has none (a default makes no sense there).
+          ...((isStage || scoped) && isDefault !== option.isDefault ? { isDefault } : {}),
+          ...(!isStage && !scoped && option.isDefault && option.stageOptionId
+            ? { isDefault: false }
+            : {}),
+          ...(!isStage && scopeId !== (option.stageOptionId ?? '')
+            ? { stageOptionId: scopeId || null }
+            : {}),
           ...(active !== option.isActive ? { isActive: active } : {}),
+          ...(isStage && meaning !== meaningOf(option) ? flagsOf(meaning) : {}),
         });
       }
-      return createStatusOption(group, { value, label, color, isDefault: isStage && isDefault });
+      return createStatusOption(group, {
+        value,
+        label,
+        color,
+        isDefault: (isStage || scoped) && isDefault,
+        ...(isStage ? flagsOf(meaning) : {}),
+        ...(scoped ? { stageOptionId: scopeId } : {}),
+      });
     },
     onSuccess: async () => {
       await invalidateStatusOptions(qc);
@@ -207,21 +233,85 @@ function StageForm({
         </div>
       </fieldset>
 
-      {isStage && (
+      {!isStage && (
+        <Field
+          label={t('modal.scope.label')}
+          htmlFor={`${uid}-scope`}
+          hint={
+            stages.length === 0
+              ? t('modal.scope.noStages')
+              : editing && option?.stageOptionId !== (scopeId || null)
+                ? t('modal.scope.moveNote')
+                : t('modal.scope.hint')
+          }
+        >
+          <Select
+            id={`${uid}-scope`}
+            value={scopeId}
+            disabled={stages.length === 0 && scopeId === ''}
+            onChange={(e) => setScopeId(e.target.value)}
+          >
+            <option value="">{t('modal.scope.all')}</option>
+            {stages.map((st) => (
+              <option key={st.id} value={st.id}>
+                {st.label}
+                {st.isActive ? '' : ` (${t('row.hidden')})`}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
+
+      {(isStage || scoped) && (
         <div className="flex items-start justify-between gap-4 rounded-md border border-border p-3">
           <div className="min-w-0 text-sm">
             <label htmlFor={`${uid}-default`} className="block font-medium">
-              {t('modal.default')}
+              {isStage ? t('modal.default') : t('modal.scope.default')}
             </label>
-            <p className="text-xs text-muted-foreground">{t('modal.defaultHint')}</p>
+            <p className="text-xs text-muted-foreground">
+              {isStage ? t('modal.defaultHint') : t('modal.scope.defaultHint')}
+            </p>
           </div>
           <Switch
             id={`${uid}-default`}
             checked={isDefault}
             onCheckedChange={setDefault}
-            label={t('modal.default')}
+            label={isStage ? t('modal.default') : t('modal.scope.default')}
           />
         </div>
+      )}
+
+      {isStage && (
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium">{t('modal.meaning.title')}</legend>
+          <p className="text-xs text-muted-foreground">{t('modal.meaning.hint')}</p>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {(['none', 'won', 'lost'] as const).map((m) => (
+              <label
+                key={m}
+                className={cn(
+                  'flex cursor-pointer flex-col gap-0.5 rounded-md border p-2.5 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary',
+                  meaning === m ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted/50',
+                )}
+              >
+                <span className="flex items-center gap-2 font-medium">
+                  <input
+                    type="radio"
+                    name={`${uid}-meaning`}
+                    value={m}
+                    checked={meaning === m}
+                    onChange={() => setMeaning(m)}
+                    className="accent-[var(--primary)]"
+                  />
+                  {t(`modal.meaning.${m}`)}
+                </span>
+                <span className="ps-6 text-xs text-muted-foreground">
+                  {t(`modal.meaning.${m}Hint`)}
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
       )}
 
       {editing && (
@@ -241,7 +331,7 @@ function StageForm({
         </div>
       )}
 
-      {editing && !active && option?.isDefault && (
+      {editing && isStage && !active && option?.isDefault && (
         <Alert tone="warning">{t('modal.defaultInactive')}</Alert>
       )}
 

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { dateOrInstantSchema } from '../common/dates';
 import { uuidSchema } from '../common/ids';
 import { queryBoolean, queryList } from './query-helpers';
 
@@ -34,6 +35,21 @@ export const contactFilterShape = {
   unsubscribed: queryBoolean().optional(),
   source: z.string().max(128).optional(),
   status: z.string().max(64).optional(),
+  /**
+   * Date windows, both ends inclusive; a bare day (`2026-10-03`) covers that whole day in UTC. They
+   * are the same conditions a segment rule's date operators build (one SQL builder for both).
+   */
+  createdFrom: dateOrInstantSchema.optional(),
+  createdTo: dateOrInstantSchema.optional(),
+  updatedFrom: dateOrInstantSchema.optional(),
+  updatedTo: dateOrInstantSchema.optional(),
+  lastActivityFrom: dateOrInstantSchema.optional(),
+  lastActivityTo: dateOrInstantSchema.optional(),
+  /**
+   * Members of one segment (a saved rule that fills itself). Combines with every other filter by AND.
+   * A segment the caller cannot see answers like one that does not exist: no contacts.
+   */
+  segmentId: uuidSchema.optional(),
 } as const;
 
 export const contactFilterSchema = z

@@ -92,12 +92,30 @@ describe('checkValue', () => {
 describe('displayValue', () => {
   const words = { yes: 'Yes', no: 'No' };
   const options = [
-    { id: '1', fieldId: 'f', value: 'in', label: 'India', position: 0, isHidden: false, rowVersion: 1 },
-    { id: '2', fieldId: 'f', value: 'ae', label: 'UAE', position: 1, isHidden: false, rowVersion: 1 },
+    {
+      id: '1',
+      fieldId: 'f',
+      value: 'in',
+      label: 'India',
+      position: 0,
+      isHidden: false,
+      rowVersion: 1,
+    },
+    {
+      id: '2',
+      fieldId: 'f',
+      value: 'ae',
+      label: 'UAE',
+      position: 1,
+      isHidden: false,
+      rowVersion: 1,
+    },
   ];
   it('prints option labels, Yes/No and plain text; hides masked values; skips empties', () => {
     expect(displayValue(f('select', { options }), 'in', words)).toBe('India');
-    expect(displayValue(f('multiselect', { options }), ['in', 'ae', 'zz'], words)).toBe('India, UAE, zz');
+    expect(displayValue(f('multiselect', { options }), ['in', 'ae', 'zz'], words)).toBe(
+      'India, UAE, zz',
+    );
     expect(displayValue(f('checkbox'), true, words)).toBe('Yes');
     expect(displayValue(f('checkbox'), false, words)).toBe('No');
     expect(displayValue(f('integer'), 7, words)).toBe('7');
@@ -112,11 +130,22 @@ describe('isFieldApplicable', () => {
     id: 'country',
     key: 'country',
     options: [
-      { id: 'o-in', fieldId: 'country', value: 'in', label: 'India', position: 0, isHidden: false, rowVersion: 1 },
+      {
+        id: 'o-in',
+        fieldId: 'country',
+        value: 'in',
+        label: 'India',
+        position: 0,
+        isHidden: false,
+        rowVersion: 1,
+      },
     ],
   });
   const state = f('text', { id: 'state', key: 'state' });
-  const byId = new Map([[country.id, country], [state.id, state]]);
+  const byId = new Map([
+    [country.id, country],
+    [state.id, state],
+  ]);
   const dep = (over: Partial<FieldDependencyResponse>): FieldDependencyResponse => ({
     id: 'd',
     fieldId: 'state',
@@ -140,12 +169,25 @@ describe('isFieldApplicable', () => {
   it('works with a multi-select parent and a plain value', () => {
     expect(isFieldApplicable(state, [dep({})], byId, { country: ['ae', 'in'] })).toBe(true);
     expect(
-      isFieldApplicable(state, [dep({ dependsOnOptionId: null, dependsOnValue: 'true' })], byId, { country: 'true' }),
+      isFieldApplicable(state, [dep({ dependsOnOptionId: null, dependsOnValue: 'true' })], byId, {
+        country: 'true',
+      }),
     ).toBe(true);
   });
 
   it('needs every dependency, and ignores a dependency on a property that is gone', () => {
-    expect(isFieldApplicable(state, [dep({}), dep({ id: 'e', dependsOnFieldId: 'gone' })], byId, { country: 'in' })).toBe(true);
-    expect(isFieldApplicable(state, [dep({}), dep({ id: 'e', dependsOnOptionId: null, dependsOnValue: 'x' })], byId, { country: 'in' })).toBe(false);
+    expect(
+      isFieldApplicable(state, [dep({}), dep({ id: 'e', dependsOnFieldId: 'gone' })], byId, {
+        country: 'in',
+      }),
+    ).toBe(true);
+    expect(
+      isFieldApplicable(
+        state,
+        [dep({}), dep({ id: 'e', dependsOnOptionId: null, dependsOnValue: 'x' })],
+        byId,
+        { country: 'in' },
+      ),
+    ).toBe(false);
   });
 });

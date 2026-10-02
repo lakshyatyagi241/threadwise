@@ -21,7 +21,13 @@ export type ColumnId = FixedColumnId | `attr:${string}`;
 export const LOCKED_COLUMNS: readonly ColumnId[] = ['name'];
 
 /** Visible on first visit (plus the first two custom attributes, see `defaultColumns`). */
-export const DEFAULT_FIXED: readonly FixedColumnId[] = ['name', 'phone', 'email', 'tags', 'createdOn'];
+export const DEFAULT_FIXED: readonly FixedColumnId[] = [
+  'name',
+  'phone',
+  'email',
+  'tags',
+  'createdOn',
+];
 
 /** How many custom attribute columns a first-time visitor sees. */
 export const DEFAULT_ATTRIBUTE_COLUMNS = 2;
@@ -64,9 +70,11 @@ export function allColumns(attributes: readonly AttributeColumn[]): ColumnDef[] 
   return [
     fixed('name'),
     fixed('phone'),
-    ...attributes.map(
-      (a): ColumnDef => ({ id: attrId(a.key), label: { text: a.name }, attributeKey: a.key }),
-    ),
+    ...attributes.map((a): ColumnDef => ({
+      id: attrId(a.key),
+      label: { text: a.name },
+      attributeKey: a.key,
+    })),
     fixed('email'),
     fixed('tags'),
     fixed('groups'),
@@ -113,11 +121,7 @@ export function visibleColumns(
 }
 
 /** Flips one column. The result is what to store; locked columns are left alone. */
-export function toggleColumn(
-  current: readonly ColumnId[],
-  id: ColumnId,
-  on: boolean,
-): ColumnId[] {
+export function toggleColumn(current: readonly ColumnId[], id: ColumnId, on: boolean): ColumnId[] {
   if (LOCKED_COLUMNS.includes(id)) return [...current];
   const rest = current.filter((c) => c !== id);
   return on ? [...rest, id] : rest;

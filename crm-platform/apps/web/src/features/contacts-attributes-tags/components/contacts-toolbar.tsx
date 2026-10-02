@@ -13,6 +13,8 @@ import {
   MenuSeparator,
   cn,
 } from '@crm/ui';
+import { filtersOfPicker, pickerValue } from '../lib/segment-entries';
+import { SegmentPicker, type SegmentOption, type SegmentsState } from './segment-picker';
 import type { ContactFilters } from '../api/contacts';
 import type { ContactGroup, ContactStats } from '../api/schemas';
 import type { ColumnDef, ColumnId } from '../lib/columns';
@@ -33,11 +35,17 @@ import {
   UsersPlusIcon,
 } from './icons';
 
-/** The segment dropdown's value: '' = everyone, 'imported', 'no_group', or a group id. */
+/** The segment dropdown's value: '' = everyone, 'imported', 'no_group', a group id, or `segment:<id>`. */
 export type SegmentValue = string;
 
-export const segmentOf = (f: Pick<ContactFilters, 'group' | 'imported'>): SegmentValue =>
-  f.imported ? 'imported' : f.group;
+export const segmentOf = (
+  f: Pick<ContactFilters, 'group' | 'imported' | 'segment'>,
+): SegmentValue => pickerValue(f);
+
+/** The filters a dropdown value stands for: picking a group, a segment or a quick list replaces the previous pick. */
+export const filtersOfSegment = (
+  value: SegmentValue,
+): Pick<ContactFilters, 'group' | 'imported' | 'segment'> => filtersOfPicker(value);
 
 export interface ContactsToolbarProps {
   q: string;
@@ -47,6 +55,13 @@ export interface ContactsToolbarProps {
   onSegment: (value: SegmentValue) => void;
   stats: ContactStats | undefined;
   groups: readonly ContactGroup[];
+  /** The workspace's segments for the dropdown's Segments section (empty while `segmentsState` is not `ready`). */
+  segments: readonly SegmentOption[];
+  segmentsState: SegmentsState;
+  onRetrySegments: () => void;
+  /** Present when the person may save the active filters as a segment: the button then shows. */
+  onSaveAsSegment?: () => void;
+  canCreateSegment: boolean;
 
   tag: string;
   onTag: (id: string) => void;
@@ -101,7 +116,6 @@ export interface ContactsToolbarProps {
   refreshing: boolean;
 }
 
-const n = (v: number | undefined) => (v === undefined ? undefined : v.toLocaleString());
 const trigger = 'h-9 gap-2 whitespace-nowrap';
 const iconBtn =
   'inline-flex size-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary';
@@ -122,15 +136,9 @@ function useShortcutLabel() {
 export function ContactsToolbar(p: ContactsToolbarProps) {
   const t = useTranslations('contacts-attributes-tags.list');
   const tb = useTranslations('contacts-attributes-tags.bulk');
+  // A viewer can do none of these: an empty dropdown would only be a button that opens nothing.
+  const hasMoreActions = Object.values(p.can).some(Boolean);
 
-  const segmentLabel =
-    p.segment === ''
-      ? t('selectSegment')
-      : p.segment === 'imported'
-        ? t('imported')
-        : p.segment === 'no_group'
-          ? t('noGroup')
-          : (p.groups.find((g) => g.id === p.segment)?.name ?? t('selectSegment'));
   const tagLabel = p.tags.find((x) => x.id === p.tag)?.name ?? t('selectTag');
   const filtersOn = Number(p.stage !== '') + Number(p.consent !== '');
   const none = !p.anySelected;
@@ -174,59 +182,24 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           )}
         </div>
 
-        <Menu
-          label={t('segmentFilter')}
-          trigger={
-            <>
-              <span className={cn('max-w-[11rem] truncate', p.segment === '' && 'text-muted-foreground')}>
-                {segmentLabel}
-              </span>
-              <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-            </>
-          }
-          triggerClassName={trigger}
-        >
-          <MenuRadioItem checked={p.segment === ''} onSelect={() => p.onSegment('')} hint={n(p.stats?.total)}>
-            {t('allContacts')}
-          </MenuRadioItem>
-          <MenuRadioItem
-            checked={p.segment === 'imported'}
-            onSelect={() => p.onSegment('imported')}
-            hint={n(p.stats?.imported)}
-          >
-            {t('imported')}
-          </MenuRadioItem>
-          <MenuRadioItem
-            checked={p.segment === 'no_group'}
-            onSelect={() => p.onSegment('no_group')}
-            hint={n(p.stats?.noGroup)}
-          >
-            {t('noGroup')}
-          </MenuRadioItem>
-          {p.groups.length > 0 && <MenuSeparator />}
-          {p.groups.length > 0 && <MenuLabel>{t('groupsHeading')}</MenuLabel>}
-          {p.groups.map((g) => (
-            <MenuRadioItem
-              key={g.id}
-              checked={p.segment === g.id}
-              onSelect={() => p.onSegment(g.id)}
-              hint={g.memberCount.toLocaleString()}
-            >
-              <span
-                aria-hidden="true"
-                className="me-2 inline-block size-2 rounded-full align-middle"
-                style={{ background: g.color || 'var(--primary)' }}
-              />
-              {g.name}
-            </MenuRadioItem>
-          ))}
-        </Menu>
+        <SegmentPicker
+          value={p.segment}
+          onChange={p.onSegment}
+          counts={{ total: p.stats?.total, imported: p.stats?.imported, noGroup: p.stats?.noGroup }}
+          groups={p.groups}
+          segments={p.segments}
+          segmentsState={p.segmentsState}
+          canCreateSegment={p.canCreateSegment}
+          onRetrySegments={p.onRetrySegments}
+        />
 
         <Menu
           label={t('tagFilter')}
           trigger={
             <>
-              <span className={cn('max-w-[11rem] truncate', p.tag === '' && 'text-muted-foreground')}>
+              <span
+                className={cn('max-w-[11rem] truncate', p.tag === '' && 'text-muted-foreground')}
+              >
                 {tagLabel}
               </span>
               <ChevronDownIcon className="size-3.5 text-muted-foreground" />
@@ -264,7 +237,11 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
             {t('allStages')}
           </MenuRadioItem>
           {p.stages.map((x) => (
-            <MenuRadioItem key={x.value} checked={p.stage === x.value} onSelect={() => p.onStage(x.value)}>
+            <MenuRadioItem
+              key={x.value}
+              checked={p.stage === x.value}
+              onSelect={() => p.onStage(x.value)}
+            >
               {x.label}
             </MenuRadioItem>
           ))}
@@ -277,7 +254,11 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
               ['unsubscribed', t('unsubscribedOnly')],
             ] as const
           ).map(([v, label]) => (
-            <MenuRadioItem key={v || 'all'} checked={p.consent === v} onSelect={() => p.onConsent(v)}>
+            <MenuRadioItem
+              key={v || 'all'}
+              checked={p.consent === v}
+              onSelect={() => p.onConsent(v)}
+            >
               {label}
             </MenuRadioItem>
           ))}
@@ -291,6 +272,18 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           </MenuRadioItem>
         </Menu>
 
+        {p.onSaveAsSegment && (
+          <Button
+            variant="secondary"
+            className={trigger}
+            onClick={p.onSaveAsSegment}
+            title={t('saveAsSegmentHint')}
+          >
+            <FilterIcon className="size-4 text-muted-foreground" />
+            {t('saveAsSegment')}
+          </Button>
+        )}
+
         <Button
           variant="secondary"
           className={trigger}
@@ -302,78 +295,80 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           {t('sendCampaign')}
         </Button>
 
-        <div className="relative">
-          <Menu
-            label={t('moreActions')}
-            triggerClassName={trigger}
-            trigger={
-              <>
-                {t('moreActions')}
-                <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-              </>
-            }
-          >
-            {p.can.export && (
-              <MenuItem onSelect={p.onExportAll} disabled={p.exporting}>
-                <DownloadIcon /> {t('exportAll')}
-              </MenuItem>
-            )}
-            {p.can.import && (
-              <MenuItem onSelect={p.onImport}>
-                <UploadIcon /> {t('bulkUpload')}
-              </MenuItem>
-            )}
-            {p.can.merge && (
-              <MenuItem onSelect={p.onDedupe}>
-                <MergeIcon /> {t('dedupe')}
-              </MenuItem>
-            )}
-            {p.can.createGroups && (
-              <MenuItem onSelect={p.onNewGroup}>
-                <UsersPlusIcon /> {t('newGroup')}
-              </MenuItem>
-            )}
-            {(p.can.export || p.can.update || p.can.delete) && (
-              <>
-                <MenuSeparator />
-                <MenuLabel>{none ? t('selectedActionsNone') : t('selectedActions')}</MenuLabel>
-              </>
-            )}
-            {p.can.export && (
-              <MenuItem onSelect={p.onExportSelected} disabled={none || p.busy}>
-                {tb('export')}
-              </MenuItem>
-            )}
-            {p.can.update && (
-              <>
-                <MenuItem onSelect={() => p.onPicker('groupAdd')} disabled={none || p.busy}>
-                  {tb('addToGroup')}
+        {hasMoreActions && (
+          <div className="relative">
+            <Menu
+              label={t('moreActions')}
+              triggerClassName={trigger}
+              trigger={
+                <>
+                  {t('moreActions')}
+                  <ChevronDownIcon className="size-3.5 text-muted-foreground" />
+                </>
+              }
+            >
+              {p.can.export && (
+                <MenuItem onSelect={p.onExportAll} disabled={p.exporting}>
+                  <DownloadIcon /> {t('exportAll')}
                 </MenuItem>
-                <MenuItem onSelect={() => p.onPicker('groupRemove')} disabled={none || p.busy}>
-                  {tb('removeFromGroup')}
+              )}
+              {p.can.import && (
+                <MenuItem onSelect={p.onImport}>
+                  <UploadIcon /> {t('bulkUpload')}
                 </MenuItem>
-                <MenuItem onSelect={() => p.onPicker('tagAdd')} disabled={none || p.busy}>
-                  {tb('tag')}
+              )}
+              {p.can.merge && (
+                <MenuItem onSelect={p.onDedupe}>
+                  <MergeIcon /> {t('dedupe')}
                 </MenuItem>
-                <MenuItem onSelect={() => p.onPicker('tagRemove')} disabled={none || p.busy}>
-                  {tb('untag')}
+              )}
+              {p.can.createGroups && (
+                <MenuItem onSelect={p.onNewGroup}>
+                  <UsersPlusIcon /> {t('newGroup')}
                 </MenuItem>
-              </>
-            )}
-            {p.can.delete && (
-              <MenuItem danger onSelect={p.onDeleteSelected} disabled={none || p.busy}>
-                {tb('delete')}
-              </MenuItem>
-            )}
-          </Menu>
-          <BulkPickers
-            picker={p.picker}
-            canCreateTags={p.can.createTags}
-            onClose={() => p.onPicker(null)}
-            onGroup={p.onGroup}
-            onTag={p.onTagApply}
-          />
-        </div>
+              )}
+              {(p.can.export || p.can.update || p.can.delete) && (
+                <>
+                  <MenuSeparator />
+                  <MenuLabel>{none ? t('selectedActionsNone') : t('selectedActions')}</MenuLabel>
+                </>
+              )}
+              {p.can.export && (
+                <MenuItem onSelect={p.onExportSelected} disabled={none || p.busy}>
+                  {tb('export')}
+                </MenuItem>
+              )}
+              {p.can.update && (
+                <>
+                  <MenuItem onSelect={() => p.onPicker('groupAdd')} disabled={none || p.busy}>
+                    {tb('addToGroup')}
+                  </MenuItem>
+                  <MenuItem onSelect={() => p.onPicker('groupRemove')} disabled={none || p.busy}>
+                    {tb('removeFromGroup')}
+                  </MenuItem>
+                  <MenuItem onSelect={() => p.onPicker('tagAdd')} disabled={none || p.busy}>
+                    {tb('tag')}
+                  </MenuItem>
+                  <MenuItem onSelect={() => p.onPicker('tagRemove')} disabled={none || p.busy}>
+                    {tb('untag')}
+                  </MenuItem>
+                </>
+              )}
+              {p.can.delete && (
+                <MenuItem danger onSelect={p.onDeleteSelected} disabled={none || p.busy}>
+                  {tb('delete')}
+                </MenuItem>
+              )}
+            </Menu>
+            <BulkPickers
+              picker={p.picker}
+              canCreateTags={p.can.createTags}
+              onClose={() => p.onPicker(null)}
+              onGroup={p.onGroup}
+              onTag={p.onTagApply}
+            />
+          </div>
+        )}
 
         <div className="ms-auto flex items-center gap-2">
           <Menu
@@ -438,7 +433,9 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
       {p.anySelected && (
         <div className="flex flex-wrap items-center gap-2 text-sm" role="status">
           <span className="font-medium" aria-live="polite">
-            {p.selectedCount === null ? tb('allMatching') : tb('selected', { count: p.selectedCount })}
+            {p.selectedCount === null
+              ? tb('allMatching')
+              : tb('selected', { count: p.selectedCount })}
           </span>
           <button
             type="button"

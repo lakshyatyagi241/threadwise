@@ -47,7 +47,9 @@ export function RowMenu({
   useEffect(() => {
     if (!open) return;
     const items = () => [
-      ...(panel.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])') ?? []),
+      ...(panel.current?.querySelectorAll<HTMLElement>(
+        '[role="menuitem"]:not([aria-disabled="true"])',
+      ) ?? []),
     ];
     items()[0]?.focus();
     const onPress = (e: PointerEvent) => {

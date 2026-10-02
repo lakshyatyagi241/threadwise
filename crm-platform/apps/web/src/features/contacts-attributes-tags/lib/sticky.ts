@@ -9,7 +9,8 @@
 /** Width in px of the checkbox column; the Name cell sticks right after it (`sm:start-12` is the same 48px). */
 export const SELECT_W = 48;
 
-const SURFACE = 'bg-background group-hover:bg-muted group-data-[selected=true]:bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]';
+const SURFACE =
+  'bg-background group-hover:bg-muted group-data-[selected=true]:bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]';
 
 /** Checkbox cell: frozen from `sm` up (on a phone the Name cell takes the whole frozen width). */
 export const STICKY_SELECT = `sm:sticky sm:start-0 sm:z-10 ${SURFACE}`;
@@ -20,6 +21,10 @@ export const STICKY_SELECT_HEAD = 'sm:start-0 sm:z-30 bg-muted';
 /** Name cell: always frozen; after the checkbox column from `sm` up, at the very start on a phone. */
 export const STICKY_NAME = `sticky start-0 sm:start-12 z-10 ${SURFACE}`;
 export const STICKY_NAME_HEAD = 'start-0 sm:start-12 z-30 bg-muted';
+
+/** The same frozen Name cell when the table has no checkbox column (a read-only listing): it sits at the very start. */
+export const STICKY_NAME_ALONE = `sticky start-0 z-10 ${SURFACE}`;
+export const STICKY_NAME_ALONE_HEAD = 'start-0 z-30 bg-muted';
 
 /** Shadow along the frozen edge, mirrored in RTL, only while the table is scrolled sideways. */
 export const FROZEN_SHADOW =

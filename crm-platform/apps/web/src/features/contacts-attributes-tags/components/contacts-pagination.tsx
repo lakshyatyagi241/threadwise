@@ -25,6 +25,7 @@ export function ContactsPagination({
   onPage,
   onLimit,
   onRecount,
+  approximate = false,
 }: {
   page: number;
   /** Undefined until the first response (the count is not known yet). */
@@ -36,6 +37,8 @@ export function ContactsPagination({
   onLimit: (limit: PageSize) => void;
   /** "Total count": ask the API for the count again. */
   onRecount: () => void;
+  /** The total is an estimate: shown as "about N". */
+  approximate?: boolean;
 }) {
   const t = useTranslations('contacts-attributes-tags.list');
   const pages = totalPages(total ?? 0, limit);
@@ -48,10 +51,16 @@ export function ContactsPagination({
         {loading && <Spinner label={t('loading')} />}
       </div>
 
-      <nav aria-label={t('pagination')} className="flex flex-wrap items-center justify-center gap-1">
+      <nav
+        aria-label={t('pagination')}
+        className="flex flex-wrap items-center justify-center gap-1"
+      >
         <button
           type="button"
-          className={cn(textBtn, first ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted')}
+          className={cn(
+            textBtn,
+            first ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted',
+          )}
           disabled={first}
           onClick={() => onPage(page - 1)}
           aria-label={t('prevPage')}
@@ -83,7 +92,10 @@ export function ContactsPagination({
         )}
         <button
           type="button"
-          className={cn(textBtn, last ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted')}
+          className={cn(
+            textBtn,
+            last ? 'cursor-not-allowed text-muted-foreground/60' : 'hover:bg-muted',
+          )}
           disabled={last}
           onClick={() => onPage(page + 1)}
           aria-label={t('nextPage')}
@@ -101,7 +113,11 @@ export function ContactsPagination({
         >
           <span className="text-muted-foreground">{t('totalCount')}</span>
           <span className="font-semibold tabular-nums">
-            {total === undefined ? '-' : total.toLocaleString()}
+            {total === undefined
+              ? '-'
+              : approximate
+                ? t('approxTotal', { total })
+                : total.toLocaleString()}
           </span>
         </button>
         <Select

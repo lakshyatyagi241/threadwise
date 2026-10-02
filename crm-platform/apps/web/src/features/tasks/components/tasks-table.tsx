@@ -199,7 +199,11 @@ function Cell({
         <Dash />
       );
     case 'deal':
-      return task.deal ? <RecordPill kind="deal" id={task.deal.id} label={task.deal.title} /> : <Dash />;
+      return task.deal ? (
+        <RecordPill kind="deal" id={task.deal.id} label={task.deal.title} />
+      ) : (
+        <Dash />
+      );
     case 'created':
       return (
         <span className="block truncate tabular-nums text-muted-foreground">
@@ -250,7 +254,9 @@ export function TasksTable({
       aria-label={t('scrollArea')}
       tabIndex={0}
       onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
-      className="thin-scrollbar h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+      // `relative`: the scroller must be the containing block of the rows' visually hidden (absolutely positioned) labels, or they
+      // keep their place in the wide table and push the page itself sideways on a phone.
+      className="thin-scrollbar relative h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
       <table
         className="w-full table-fixed border-separate border-spacing-0 text-sm"

@@ -2,8 +2,16 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
+import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
-import { ContactImportWorkerModule, TasksWorkerModule } from '../modules/crm';
+import {
+  ContactImportWorkerModule,
+  InvoicingWorkerModule,
+  SalesDocsWorkerModule,
+  SegmentsWorkerModule,
+  TasksWorkerModule,
+} from '../modules/crm';
+import { NotificationsWorkerModule } from '../modules/notifications';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -26,6 +34,11 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ContactImportWorkerModule,
     TasksWorkerModule,
     BspBillingEngineWorkerModule,
+    SegmentsWorkerModule,
+    SalesDocsWorkerModule,
+    InvoicingWorkerModule,
+    NotificationsWorkerModule,
+    AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
   ],
   providers: [

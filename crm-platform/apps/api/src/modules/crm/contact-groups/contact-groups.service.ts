@@ -21,6 +21,7 @@ import { assertContactScope } from '../contacts/contact-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { toContactGroupResponse } from './contact-groups.mapper';
 import { ContactGroupsRepository } from './contact-groups.repository';
+import { segmentNamesUsing } from '../segments/segment-usage';
 
 const MODULE_KEY = 'contact_groups';
 
@@ -159,6 +160,9 @@ export class ContactGroupsService {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact group', uuid);
 
+      // Segments that use this group are not blocked: the condition now matches nothing and is flagged
+      // (invalidConditions). GET /segments/usage?kind=group&ref=<id> lists them before the delete.
+      const segmentNames = await segmentNamesUsing(tx, ctx.orgId, 'group', uuid);
       await this.audit.record(tx, {
         module: MODULE_KEY,
         recordId: existing.id,
@@ -166,13 +170,19 @@ export class ContactGroupsService {
         delta: {
           name: { old: existing.name, new: null },
           members: { old: existing.memberCount, new: 0 },
+          ...(segmentNames.length > 0 ? { segments: { old: segmentNames, new: null } } : {}),
         },
       });
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,
         aggregateId: existing.id,
         eventType: 'contact_group.deleted',
-        payload: { uuid, name: existing.name, detachedContacts: existing.memberCount },
+        payload: {
+          uuid,
+          name: existing.name,
+          detachedContacts: existing.memberCount,
+          segments: segmentNames,
+        },
       });
       await this.repo.deleteById(tx, ctx.orgId, existing.id);
     });

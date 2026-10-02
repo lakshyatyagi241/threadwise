@@ -85,7 +85,19 @@ export const dealResponseSchema = z.object({
 });
 export type DealResponse = z.infer<typeof dealResponseSchema>;
 
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD');
+/** A real calendar day as `YYYY-MM-DD`: `2026-02-31` matches the shape but is not a day (the database would refuse it with a 500). */
+export function isRealCalendarDate(value: string): boolean {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!m) return false;
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const probe = new Date(Date.UTC(y, mo - 1, d));
+  return probe.getUTCFullYear() === y && probe.getUTCMonth() === mo - 1 && probe.getUTCDate() === d;
+}
+
+export const dealDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD')
+  .refine(isRealCalendarDate, 'date is not a real calendar day');
 
 export const createDealSchema = z.object({
   title: z.string().trim().min(1).max(DEAL_TITLE_MAX),
@@ -101,7 +113,7 @@ export const createDealSchema = z.object({
   contactId: uuidSchema.nullish(),
   /** Omit to inherit the contact's company. */
   companyId: uuidSchema.nullish(),
-  expectedCloseDate: isoDate.nullish(),
+  expectedCloseDate: dealDateSchema.nullish(),
   notes: z.string().trim().max(DEAL_NOTES_MAX).nullish(),
 });
 export type CreateDealInput = z.infer<typeof createDealSchema>;
@@ -114,7 +126,7 @@ export const updateDealSchema = z.object({
   ownerId: uuidSchema.nullish(),
   contactId: uuidSchema.nullish(),
   companyId: uuidSchema.nullish(),
-  expectedCloseDate: isoDate.nullish(),
+  expectedCloseDate: dealDateSchema.nullish(),
   notes: z.string().trim().max(DEAL_NOTES_MAX).nullish(),
   rowVersion: z.number().int().positive(),
 });
