@@ -88,3 +88,15 @@ announcements, contact messages, guidebook (P1).
 - Legal template text is original and generic: it must be reviewed by counsel before launch.
 - `?fc_edit=1` is not a trust boundary here: the editor previews the draft inside `/admin/frontend` with the operator
   session, and the public pages never read drafts.
+
+## Status (this run)
+
+Built and tested: content store with draft, publish, discard, reset and layout (WD-CMS-008, 009, 018 to 026, 028), contact form and
+inbox (006, 042, 043), legal pages (013, 033 to 036), blog admin and public (011, 012, 029 to 032), pricing read (003),
+sitemap data (014), operator screens `/admin/frontend`, `/admin/blog`, `/admin/legal-pages`, `/admin/contact-messages`, public
+`/blog`, `/blog/[slug]`, `/legal/[slug]`, `/contact`.
+
+Not built: the composable public pages (`/`, `/features`, `/pricing`, `/about` renderers) and the live preview inside the editor, FAQs
+(037, 038, 010), announcements (039 to 041, 017), guidebook (044 to 046), `sitemap.xml` and `robots.txt` route files (014, 015), SEO
+defaults from SET (016), image upload (027). The contact page has no captcha widget: with captcha enabled in platform settings the
+API refuses the form.
