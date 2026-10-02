@@ -154,6 +154,8 @@ import { TokenService } from './token.service';
     HtmlSanitizerService,
     SecurityPolicyService,
     PlatformSettingsService,
+    // the single door to cross-tenant reads, for the reseller console (BSP): a read-only reader that adds no privileged call of its own
+    PlatformStore,
     WebhookSecretRegistry,
     OtpTemplateService,
   ],
