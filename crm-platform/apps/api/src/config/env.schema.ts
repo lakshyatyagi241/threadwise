@@ -113,6 +113,14 @@ export const envSchema = z.object({
   LINK_TRACKING_TTL_DAYS: z.coerce.number().int().min(7).default(90),
   WHATSAPP_VERIFY_TOKEN: z.string().optional(),
   WHATSAPP_APP_SECRET: z.string().optional(),
+  /** The Meta app Facebook logs in through (WD-FB-002). Each falls back to the WhatsApp app's value, as in WaDesk. */
+  META_APP_ID: z.string().optional(),
+  FB_APP_ID: z.string().optional(),
+  FB_APP_SECRET: z.string().optional(),
+  FB_WEBHOOK_VERIFY_TOKEN: z.string().optional(),
+  /** A Login-for-Business configuration id; when set it drives the login dialog. */
+  FB_CONFIG_ID: z.string().optional(),
+  FB_GRAPH_VERSION: z.string().optional(),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),
