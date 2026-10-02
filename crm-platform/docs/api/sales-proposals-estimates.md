@@ -298,8 +298,10 @@ notes or the link.
 | `salesdoc.converted`              | convert to a deal or an invoice                       | `to`, `dealId` / `invoiceId` |
 | `salesdoc.deleted`                | delete                                                |                              |
 
-The "quote decided" notification to the owner and the creator (WD-PROP-017), the web push and the webhooks are consumers of these
-events and belong to the notifications and integrations domains.
+The "quote decided" notification to the owner and the creator (WD-PROP-017) is `SalesDocNotificationConsumer` in `modules/notifications`
+(worker process): a decision made by the **buyer** writes one in-app notification (`sales_doc_decided`, link `/estimates/<id>` or
+`/proposals/<id>`, once per person however often the event is delivered); a decision recorded by staff, or a document deleted before
+delivery, notifies nobody. The web push and the webhooks are consumers of these events and belong to the integrations domain.
 
 ## Errors this domain adds
 

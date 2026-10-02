@@ -1385,8 +1385,8 @@ contracts in `packages/contracts/src/sales-docs/`, migrations `20261006100000_sa
 * **Server-side PDF** (a worker job writing to media storage). Today: the print-optimised HTML page.
 * **WhatsApp delivery**: a subscriber of `salesdoc.delivery_requested` in the messaging domain (template message outside the 24 h window,
   delivery result back onto the timeline).
-* **Notifications** (WD-PROP-017): a consumer of `salesdoc.accepted / declined / viewed / expired` for the owner, the creator and the org
-  admins, deep-linking to the document.
+* **Notifications** (WD-PROP-017): built for the buyer's decision (`SalesDocNotificationConsumer`: owner and creator, deep link to the
+  document). Still to do: `salesdoc.viewed / expired` and the org admins by preference.
 * **AI copilot tools** (WD-PROP-019..021): call `SalesDocsService.create(input, 'ai')`; add `convert_quote` (WD-EST-009).
 * **Calendar** (WD-PROP-022): read `GET /sales-docs?validFrom&validTo` and deep-link to the document.
 * The seller block (logo, address, tax id) on the public page and the print; localization of the email and the public page.

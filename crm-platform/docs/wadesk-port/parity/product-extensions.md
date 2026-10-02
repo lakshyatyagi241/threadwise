@@ -3,8 +3,9 @@
 [PORTING_RULES.md](../PORTING_RULES.md) says features and UI do not change, and that a deviation is allowed only when documented
 and approved. Everything below deviates on purpose. Each item was requested by the project owner (Lakshya) in chat on
 2026-10-02; the rule text says only the human can waive a rule, in words, per case, so each entry states the words. Status:
-**owner-requested, pending sign-off by the domain owner and reviewer**. Nothing here was verified side by side against the
-running reference (no `wadesk-playwright-parity` stamp exists for these areas yet).
+**owner-requested, pending sign-off by the domain owner and reviewer**. Items 7, 8 and 9 (proposals and estimates, invoicing, the
+tax engine) were compared side by side with the running reference on 2026-10-02: see [sales-proposals-estimates.md](sales-proposals-estimates.md)
+and [sales-invoices-payments.md](sales-invoices-payments.md). The other items were not.
 
 Standing product direction given by the owner: the product targets small businesses that want one bundled tool, so build what a
 small business needs even when WaDesk does not have it, and make money and tax features country-aware.
@@ -24,7 +25,7 @@ small business needs even when WaDesk does not have it, and make money and tax f
 
 ## What is not verified
 
-- No item above was compared with the running WaDesk reference; the reference had no workspace user for most of this work.
+- Items 1 to 6 and 10 were not compared with the running WaDesk reference (items 7 to 9 were, see above); the reference had no workspace user while they were built.
 - Plan gating for deals, tasks and sales documents shares the `sales_pipeline` flag; the reference gates these differently.
 - Preset tax rates are defaults the user must verify (see `docs/tax-engine.md`).
 - Delivery (email, WhatsApp), real payment providers, server-side PDF files and e-invoicing formats are not built.
