@@ -22,6 +22,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { CrmModule } from './modules/crm';
+import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
@@ -105,6 +106,7 @@ import { HealthModule } from './health/health.module';
     CrmModule,
     PartnerModule,
     PublicApiModule,
+    PlatformSupportDeskModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

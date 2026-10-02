@@ -1738,3 +1738,18 @@ One row per (ticket, breach type) crossing. `id`; `ticket_id` FK support_tickets
   }
 }
 ```
+
+## Port decisions (built features)
+
+Deliberate differences from Reference in the rebuilt ticket core (TW-SUPP-001..005, 007..013), each covered by a test:
+
+- Customer "open" means neither resolved nor closed (Reference counted closed as open) and the pill uses the real status vocabulary.
+- A closed ticket refuses a customer reply with 409 (Reference hid the box but the endpoint reopened it).
+- An internal note changes nothing on the ticket (Reference moved `open` to `in_progress` and bumped `last_reply_at`).
+- Moving to `open`, `in_progress` or `pending` always clears `resolved_at` (Reference kept a stale value on closed to open).
+- Assignment accepts only active `super_admin` or `support` operators (Reference accepted any user id); staff are platform operators, so
+  `assigned_agent_id` references `platform_operators`.
+- Unknown ticket on a priority change is a 404 (Reference silently succeeded); every operator write takes `rowVersion` (409 when stale).
+- Operator writes need the `super_admin` or `support` role; auditors read only (Reference enforced nothing).
+- The customer email outcome is stored on the message (`email_status`) and shown in the panel; Reference's banner said "sent" even when delivery threw.
+- Kept as in Reference: a customer reply on `pending` leaves it `pending`; no per-user rate limit, no dedupe; `reason` is stored and filterable.
