@@ -2,24 +2,28 @@
 
 import Link from 'next/link';
 import { useFormatter, useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { setExportResponseSchema, setHubResponseSchema } from '@crm/contracts';
 import { Badge, Button, Card, Spinner, StatTile } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
-import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
-import { GROUP_SPECS } from '../fields';
+import { EXTERNAL_CARDS, GROUP_SPECS, HUB_ORDER } from '../fields';
 import { exportFileName } from '../lib/export-name';
 import { hubKey } from '../lib/query-keys';
+import { SetHeader } from './page-parts';
 
 const NS = 'platform-settings-branding-storage';
 
+const linkButton =
+  'inline-flex h-9 items-center rounded-md border border-border px-3 text-sm font-medium hover:bg-muted';
+
+/** The settings landing page (WD-SET-003): header actions, five numbers, then one numbered card per settings page. */
 export function SettingsHubPage() {
   const t = useTranslations(NS);
   const tn = useTranslations(`${NS}.hub`);
+  const tc = useTranslations(`${NS}.cards`);
   const format = useFormatter();
   const toast = useToast();
   const { operator } = useOperator();
@@ -52,37 +56,50 @@ export function SettingsHubPage() {
   if (q.isError) return <ErrorBlock error={q.error} onRetry={() => void q.refetch()} />;
   const { kpis, groups } = q.data;
   const state = new Map(groups.map((g) => [g.group, g]));
+  const specs = new Map(GROUP_SPECS.map((s) => [s.id, s]));
+  const external = new Map<string, string>(EXTERNAL_CARDS.map((c) => [c.id, c.href]));
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <SetHeader
         eyebrow={tn('kicker')}
         title={tn('title')}
         description={tn('description')}
         actions={
-          operator.role === 'super_admin' ? (
-            <Button
-              variant="secondary"
-              onClick={() => exporting.mutate()}
-              disabled={exporting.isPending}
-            >
-              {exporting.isPending && <Spinner label={tn('exporting')} />}
-              {exporting.isPending ? tn('exporting') : tn('export')}
-            </Button>
-          ) : undefined
+          <>
+            <Link href="/admin/addons" className={linkButton}>
+              {tn('actions.addons')}
+            </Link>
+            <Link href="/admin/system" className={linkButton}>
+              {tn('actions.updater')}
+            </Link>
+            <Link href="/admin/legal-pages" className={linkButton}>
+              {tn('actions.legal')}
+            </Link>
+            <Link href="/admin/settings/general" className={linkButton}>
+              {tn('actions.general')}
+            </Link>
+            {operator.role === 'super_admin' && (
+              <Button onClick={() => exporting.mutate()} disabled={exporting.isPending}>
+                {exporting.isPending && <Spinner label={tn('exporting')} />}
+                {exporting.isPending ? tn('exporting') : tn('export')}
+              </Button>
+            )}
+          </>
         }
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <StatTile
           label={tn('tiles.saved')}
           value={kpis.savedGroups}
           hint={tn('tiles.savedHint', { total: kpis.totalGroups })}
         />
         <StatTile
-          label={tn('tiles.secrets')}
-          value={kpis.secretFields}
-          hint={tn('tiles.secretsHint')}
+          label={tn('tiles.healthy')}
+          value={kpis.healthyGroups}
+          tone={kpis.healthyGroups > 0 ? 'accent' : 'default'}
+          hint={tn('tiles.healthyHint')}
         />
         <StatTile
           label={tn('tiles.needsTest')}
@@ -95,6 +112,11 @@ export function SettingsHubPage() {
           }
         />
         <StatTile
+          label={tn('tiles.secrets')}
+          value={kpis.secretFields}
+          hint={tn('tiles.secretsHint')}
+        />
+        <StatTile
           label={tn('tiles.lastUpdated')}
           value={
             <span className="text-lg">
@@ -103,39 +125,46 @@ export function SettingsHubPage() {
                 : tn('tiles.lastUpdatedNone')}
             </span>
           }
+          hint={tn('tiles.lastUpdatedHint')}
         />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {GROUP_SPECS.map((spec) => {
-          const s = state.get(spec.group);
+        {HUB_ORDER.map((id, i) => {
+          const spec = specs.get(id);
+          const href = spec ? `/admin/settings/${spec.slug}` : external.get(id);
+          if (!href) return null;
+          const s = spec ? state.get(spec.group) : undefined;
           return (
             <Link
-              key={spec.group}
-              href={`/admin/settings/${spec.slug}`}
+              key={id}
+              href={href}
+              data-testid={`hub-card-${id}`}
               className="rounded-md focus-visible:outline-2 focus-visible:outline-primary"
             >
-              <Card className="h-full space-y-2 transition-colors hover:border-primary/50">
+              <Card className="flex h-full flex-col gap-2 transition-colors hover:border-primary/50">
                 <div className="flex items-start justify-between gap-2">
-                  <h2 className="text-base font-semibold leading-tight">
-                    {t(`groups.${spec.group}.title`)}
-                  </h2>
-                  {s?.needsTest ? (
-                    <Badge tone="warning">{tn('card.needsTest')}</Badge>
-                  ) : (
-                    <Badge tone={s?.saved ? 'success' : 'neutral'}>
-                      {s?.saved ? tn('card.saved') : tn('card.defaults')}
-                    </Badge>
-                  )}
+                  <h2 className="text-base font-semibold leading-tight">{tc(`${id}.title`)}</h2>
+                  <span className="font-mono text-[11px] text-muted-foreground">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  {t(`groups.${spec.group}.description`)}
-                </p>
-                {s?.updatedAt && (
-                  <p className="text-xs text-muted-foreground">
-                    {tn('card.updated', { when: format.relativeTime(new Date(s.updatedAt)) })}
-                  </p>
-                )}
+                <p className="text-sm text-muted-foreground">{tc(`${id}.description`)}</p>
+                <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+                  <span className="font-mono text-[11px] text-muted-foreground">
+                    {tc(`${id}.tags`)}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    {s?.needsTest ? (
+                      <Badge tone="warning">{tn('card.needsTest')}</Badge>
+                    ) : s ? (
+                      <Badge tone={s.saved ? 'success' : 'neutral'}>
+                        {s.saved ? tn('card.saved') : tn('card.defaults')}
+                      </Badge>
+                    ) : null}
+                    <span className="font-mono text-[11px] text-primary">{tn('card.open')}</span>
+                  </span>
+                </div>
               </Card>
             </Link>
           );
