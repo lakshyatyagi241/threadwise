@@ -8,3 +8,14 @@ Added since: `GET /v2/waba/numbers/:id/health` returns `WabaHealth` including `d
 template tally, per-read `errors`); `GET /v2/waba/readiness` includes `coexistence`; `GET /v2/platform/waba/callback` (super admin)
 returns the webhook URL, verify token, subscribe fields and the number of connected WABAs across workspaces.
 Permissions: `waba.numbers.read|connect|manage`.
+
+Added with the number extras (`waba.numbers.read` for reads, `waba.numbers.manage` for changes):
+`GET|POST|DELETE /v2/waba/numbers/:id/username` (claim returns `{username, status, suggestions}`; handle rules are checked before Meta is called),
+`GET|POST /v2/waba/numbers/:id/qr-codes` and `DELETE /v2/waba/numbers/:id/qr-codes/:code` (prefilled message up to 140 characters),
+`POST /v2/waba/numbers/:id/sync-history` (re-subscribes; reports `importedMessages`), `GET /v2/waba/numbers/:id/inbound-check`
+(`verdict`: `not_subscribed | wrong_url | delivering_here | subscribed_default`), `GET /v2/waba/webhook-config` (callback URL and verify
+token for a customer's own Meta app). Health `details.conversations` carries this month's free-allowance tally when Meta's analytics answer.
+Platform (super admin): `GET /v2/platform/waba/webhook-status` and `POST /v2/platform/waba/webhook-subscribe` for the Meta app's
+coexistence fields (`messages`, `smb_message_echoes`, `smb_app_state_sync`, `history`).
+Webhook fields now handled: `business_username_update` and `smb_message_echoes` (a message typed on the Business app becomes one outbound bubble).
+Inbox: each connected number is a `whatsapp_waba` channel (see the inbox wiring section of the parity doc).

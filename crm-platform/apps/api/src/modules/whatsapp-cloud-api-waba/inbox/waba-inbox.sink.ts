@@ -4,8 +4,15 @@ import type {
   NormalisedDeliveryEvent,
   NormalisedInboundMessage,
 } from '../../../infra/providers/whatsapp/whatsapp.port';
-import { ChannelIngestPublisher } from '../../chat-conversations';
-import type { InboundContext, WabaInboundSink } from '../waba-inbound-sink';
+import { randomUUID } from 'node:crypto';
+import { Inject } from '@nestjs/common';
+import { RequestContextStore } from '../../../common/context/request-context';
+import {
+  CONVERSATIONS_FACADE,
+  ChannelIngestPublisher,
+  type ConversationsFacade,
+} from '../../chat-conversations';
+import type { BusinessAppEcho, InboundContext, WabaInboundSink } from '../waba-inbound-sink';
 import { WabaChannelSync } from './waba-channel-sync.service';
 
 interface MetaMessage {
@@ -45,8 +52,7 @@ export function toInbound(
   if (type === 'text') return { ...base, kind: 'text', body: m.text?.body ?? '' };
   if (MEDIA.has(type)) {
     const file = m[type] as
-      | { id?: string; mime_type?: string; filename?: string; caption?: string }
-      | undefined;
+      { id?: string; mime_type?: string; filename?: string; caption?: string } | undefined;
     if (file?.id) {
       return {
         ...base,
@@ -99,17 +105,37 @@ export class WabaInboxSink implements WabaInboundSink {
   constructor(
     private readonly channels: WabaChannelSync,
     private readonly publisher: ChannelIngestPublisher,
+    @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
+
+  /** A message typed on the Business app: an outbound bubble on the thread (the ledger makes a repeat a no-op), no unread, no routing. */
+  async onEcho(ctx: InboundContext, echo: BusinessAppEcho): Promise<void> {
+    const channel = await this.channels.ensure(ctx.orgId, ctx.configUuid);
+    if (!channel) return;
+    await RequestContextStore.run(
+      {
+        requestId: `waba-echo-${randomUUID()}`,
+        orgId: ctx.orgId,
+        actorType: 'system',
+        actorId: null,
+        userId: null,
+      },
+      () =>
+        this.conversations.recordOutbound({
+          channelId: channel,
+          peerKey: echo.to,
+          source: 'business_app',
+          body: echo.text,
+          providerMessageId: echo.providerMessageId,
+        }),
+    );
+  }
 
   async onMessage(ctx: InboundContext, message: NormalisedInboundMessage): Promise<void> {
     const channel = await this.channels.ensure(ctx.orgId, ctx.configUuid);
     // A number that is not ours to show (removed between the webhook and now) has nowhere to put the message.
     if (!channel) return;
-    await this.publisher.enqueueInbound(
-      ctx.orgId,
-      channel,
-      toInbound(message, ctx.contactName),
-    );
+    await this.publisher.enqueueInbound(ctx.orgId, channel, toInbound(message, ctx.contactName));
   }
 
   async onStatus(ctx: InboundContext, event: NormalisedDeliveryEvent): Promise<void> {
@@ -117,7 +143,12 @@ export class WabaInboxSink implements WabaInboundSink {
     if (!channel || event.event === 'clicked') return;
     const first = (
       event.raw as {
-        errors?: Array<{ code?: number; title?: string; message?: string; error_data?: { details?: string } }>;
+        errors?: Array<{
+          code?: number;
+          title?: string;
+          message?: string;
+          error_data?: { details?: string };
+        }>;
       }
     ).errors?.[0];
     await this.publisher.enqueueReceipt(ctx.orgId, channel, {

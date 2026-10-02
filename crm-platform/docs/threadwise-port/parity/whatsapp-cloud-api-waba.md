@@ -55,3 +55,17 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/threadwise-port/waba-int
 - Not built: automation fan-out after the store (036), groups (039, 040), catalog orders (042), hand-offs to forms, Pay and calling (043), coexistence echoes, contact sync and
   history (044 to 046), wallet settlement once per delivery (WALLET), a hook that updates the channel the moment a number connects (the pass does it within a minute).
 - Not verified: real Meta or Interakt; Playwright twin run.
+
+## Health-page extras and diagnostics (TW-WABA-002, 003, 015, 023 to 028, 044)
+
+- Built: free-conversation tile (023, optional, from Meta analytics), verified-badge checklist (024, without the calling toggle: CALL owns it), business username with
+  rules, suggestions and the status webhook (025, 026), QR codes (027), history re-sync button (028), the platform app's webhook-field check and one-click subscribe (002, 003, on
+  the console WhatsApp settings page), the per-number live inbound check with a typed verdict and the own-app paste-in values (015), and business-app echoes (044).
+- Evidence: `waba-extras.e2e.spec.ts` (10), `waba-inbox.e2e.spec.ts` (8, with echoes), unit `waba-extras-rules.spec.ts` and `waba-diagnostics.spec.ts`. Meta is faked at the HTTP edge;
+  nothing ran against real Meta or Interakt.
+- Deviations: the QR screen is new (Reference had the routes and no screen); echo files and places are described on the thread, not downloaded; the free-allowance constant is
+  kept as Reference has it though Meta's pricing changed; the own-app panel reads `GET /v2/waba/webhook-config`.
+- Not built, with the reason: 036 automation fan-out (needs the flow and auto-reply engines), 039 and 040 groups and 042 catalog orders and 043 hand-offs to forms, Pay and
+  calling (other domains' tables and engines), 045 contact sync and 046 history import (need an import mode in the contacts module and in the inbox ingest: no flows or
+  notifications on an imported address book, backdated messages with no unread), 047 Twilio inbound (needs the Twilio connection from WADEV), 053 button-click analytics sync
+  (campaign and template columns belong to CAMP and TPL), 054 ads reuse (no ads client), 055 and 056 saved customers (commerce tables).

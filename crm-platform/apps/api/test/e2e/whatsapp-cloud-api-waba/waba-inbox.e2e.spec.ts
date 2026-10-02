@@ -246,6 +246,82 @@ describe('inbound (TW-WABA-034, 035)', () => {
   });
 });
 
+describe('coexistence echoes (TW-WABA-044)', () => {
+  const echo = (ids: { phone: string; waba: string }, message: Record<string, unknown>) =>
+    api
+      .http()
+      .post(`/v2/public/webhooks/whatsapp?k=${KEY()}`)
+      .send({
+        object: 'whatsapp_business_account',
+        entry: [
+          {
+            id: ids.waba,
+            changes: [
+              {
+                field: 'smb_message_echoes',
+                value: {
+                  messaging_product: 'whatsapp',
+                  metadata: { phone_number_id: ids.phone },
+                  message_echoes: [
+                    {
+                      from: '919112210000',
+                      timestamp: String(Math.floor(Date.now() / 1000)),
+                      ...message,
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+  it('a message typed on the Business app becomes one outbound bubble, with no unread, even if delivered twice', async () => {
+    const x = await arrange('wi7');
+    const body = {
+      to: '919800000030',
+      id: 'wamid.echo.1',
+      type: 'text',
+      text: { body: 'typed on the phone' },
+    };
+    expect((await echo(x.ids, body)).status).toBe(200);
+    expect((await echo(x.ids, body)).status).toBe(200);
+    const conv = await conversation(x, '919800000030');
+    const rows = await until('the echo', async () => {
+      const m = await messages(Number(conv.id));
+      return m.length ? m : undefined;
+    });
+    await new Promise((r) => setTimeout(r, 400));
+    expect(await messages(Number(conv.id))).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ direction: 'out', body: 'typed on the phone' });
+    expect(Number(conv.unread_count ?? 0)).toBe(0);
+  });
+
+  it('describes a file typed from the app, and skips an echo with no customer number', async () => {
+    const x = await arrange('wi8');
+    await echo(x.ids, {
+      to: '919800000031',
+      id: 'wamid.echo.2',
+      type: 'image',
+      image: { id: 'M', caption: 'menu' },
+    });
+    await echo(x.ids, { id: 'wamid.echo.3', type: 'text', text: { body: 'no customer' } });
+    const conv = await conversation(x, '919800000031');
+    const rows = await until('the echo', async () => {
+      const m = await messages(Number(conv.id));
+      return m.length ? m : undefined;
+    });
+    expect(rows[0]).toMatchObject({ direction: 'out', body: '[Photo] menu' });
+    expect(
+      (
+        await h.owner.query(`SELECT count(*)::int AS n FROM conversations WHERE org_id = $1`, [
+          x.t.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(1);
+  });
+});
+
 describe('replying (TW-WABA-037, 049)', () => {
   async function thread(x: Awaited<ReturnType<typeof arrange>>, peer: string) {
     await webhook(

@@ -3,6 +3,10 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import { WabaDiagnosticsController, WabaPlatformDiagnosticsController } from './waba-diagnostics.controller';
+import { WabaDiagnosticsService } from './waba-diagnostics.service';
+import { WabaExtrasController } from './waba-extras.controller';
+import { WabaExtrasService } from './waba-extras.service';
 import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConfigService } from './waba-config.service';
 import { WabaPlatformController } from './waba-platform.controller';
@@ -27,13 +31,22 @@ import { WabaWebhookService } from './waba-webhook.service';
  */
 @Module({
   imports: [BroadcastsModule, PlatformSettingsModule, ChatConversationsModule],
-  controllers: [WabaConnectionsController, WabaWebhookController, WabaPlatformController],
+  controllers: [
+    WabaConnectionsController,
+    WabaExtrasController,
+    WabaDiagnosticsController,
+    WabaPlatformDiagnosticsController,
+    WabaWebhookController,
+    WabaPlatformController,
+  ],
   providers: [
     CryptoService,
     WabaConfigService,
     WabaHealthDetailsService,
     WabaConnectionsRepository,
     WabaConnectService,
+    WabaExtrasService,
+    WabaDiagnosticsService,
     WabaWebhookService,
     WabaIngestService,
     WabaTemplateEvents,
