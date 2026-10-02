@@ -139,7 +139,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-RBAC-024 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
 | TW-RBAC-025 | blocked |  | each domain adopts its own permission keys; see wiring map |
 | TW-RBAC-026 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
-| TW-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change; invite/remove/reset flows blocked on TW-WSP |
+| TW-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change and on the WSP members screen (invite, resend, remove, reset, role change) |
 | TW-RBAC-028 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
 | TW-RBAC-029 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
 | TW-RBAC-030 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |

@@ -156,9 +156,10 @@ test.describe('Team members', () => {
     const dialog = page.getByRole('dialog', { name: 'Invite a teammate' });
     await dialog.getByLabel('Full name').fill(INVITEE.name);
     await dialog.getByLabel('Email').fill(INVITEE.email);
-    // The role list holds only what an admin may grant.
+    // The role list holds what the signed-in Owner may grant (RBAC's ladder): all five presets, Owner included.
     const options = await dialog.getByLabel('Workspace role').locator('option').allInnerTexts();
-    expect(options.some((o) => o.startsWith('Owner'))).toBe(false);
+    expect(options.some((o) => o.startsWith('Owner'))).toBe(true);
+    expect(options.some((o) => o.startsWith('Admin'))).toBe(true);
     await dialog.getByRole('button', { name: 'Send invite' }).click();
     await expect(dialog.getByTestId('invite-result')).toContainText(`${INVITEE.name} added.`);
     await dialog.getByRole('button', { name: 'Done' }).click();

@@ -3,7 +3,6 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
   WSP_INVITE_TTL_DAYS,
-  WSP_TIER_RANK,
   inviteWspMemberSchema,
   type ChangeWspMemberRoleInput,
   type InviteWspMemberInput,
@@ -30,16 +29,10 @@ import {
   UserTokensService,
 } from '../auth';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
-import {
-  assertCanActOn,
-  assertCanGrantRole,
-  canGrantRole,
-  memberTier,
-  tierOfRole,
-  type Actor,
-} from './member-rules';
+import { WorkspaceRoleRulesService } from '../roles-permissions';
+import { assertCanActOn, type Actor } from './member-rules';
 import { toMemberResponse, toMemberStatus, toRoleRef } from './members.mapper';
-import { MembersRepository, type MemberRow } from './members.repository';
+import { MembersRepository, TIER_SCORE, type MemberRow } from './members.repository';
 
 const INVITE_TTL_SECONDS = WSP_INVITE_TTL_DAYS * 24 * 60 * 60;
 /** A reset link is the auth domain's own: same token kind, same 60 minute life, same page. */
@@ -60,9 +53,11 @@ interface Delivery {
 /**
  * Workspace members (TW-WSP-015..019, 046): the list, the invite by single-use link, role changes, removal and password reset.
  *
- * Differences from Reference that are fixes, not features (docs/threadwise-port/parity/workspaces-teams-tenancy.md):
- * an invitation is a link the invitee uses to choose their own password (no temporary password is ever shown), removal is
- * soft and ends sessions, and nobody can act on a member who outranks them or change the organization owner's role.
+ * One role model: the roles are the RBAC domain's presets (Owner, Admin, Manager, Agent, Viewer) and custom roles, and who may
+ * hand out which role, change a role, or demote the last Owner is `WorkspaceRoleRulesService`'s. What stays here is the member
+ * lifecycle: an invitation is a link the invitee uses to choose their own password (no temporary password is ever shown),
+ * removal is soft and ends sessions, nobody removes themselves or an Owner, nobody acts on a member who outranks them, and only
+ * an Owner resets an Owner's password (docs/threadwise-port/parity/workspaces-teams-tenancy.md).
  */
 @Injectable()
 export class MembersService {
@@ -73,6 +68,7 @@ export class MembersService {
     private readonly repo: MembersRepository,
     private readonly outbox: OutboxService,
     private readonly rbac: RbacService,
+    private readonly roleRules: WorkspaceRoleRulesService,
     private readonly tokens: UserTokensService,
     private readonly mail: MailService,
     private readonly passwords: PasswordService,
@@ -86,8 +82,7 @@ export class MembersService {
   async list(query: ListWspMembersQuery): Promise<PageResponse<WspMember>> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const owner = await this.repo.ownerUuid(tx, ctx.orgId);
-      const page = await this.repo.list(tx, ctx.orgId, owner, {
+      const page = await this.repo.list(tx, ctx.orgId, {
         limit: query.limit,
         cursor: query.cursor,
         q: query.q,
@@ -116,18 +111,14 @@ export class MembersService {
     const grants = await this.rbac.grantsForUser(ctx.orgId, ctx.userId!);
     const planLimit = await this.entitlements.limit(ctx.orgId, 'users');
     return this.db.tx(async (tx) => {
-      const owner = await this.repo.ownerUuid(tx, ctx.orgId);
-      const me = await this.actor(tx, ctx.orgId, ctx.userId!, owner);
-      const { byTier, pending } = await this.repo.tierCounts(tx, ctx.orgId, owner);
+      const me = await this.actor(tx, ctx.orgId, ctx.userId!);
+      const { byTier, pending } = await this.repo.tierCounts(tx, ctx.orgId);
       const count = (t: WspRoleTier) => byTier.get(t) ?? 0;
+      // Which roles this caller may hand out is the RBAC rule (TW-RBAC-026), asked once for the whole picker.
+      const grantable = new Set(await this.roleRules.grantableRoleIds(tx, ctx.orgId, ctx.userId!));
       const roles = (await this.repo.listRoles(tx, ctx.orgId))
-        .map((r) => {
-          const ref = toRoleRef(r);
-          return { ...ref, grantable: canGrantRole(me, ref.tier) };
-        })
-        .sort(
-          (a, b) => WSP_TIER_RANK[b.tier] - WSP_TIER_RANK[a.tier] || a.name.localeCompare(b.name),
-        );
+        .map((r) => ({ ...toRoleRef(r), grantable: grantable.has(r.id) }))
+        .sort((a, b) => TIER_SCORE[b.tier] - TIER_SCORE[a.tier] || a.name.localeCompare(b.name));
       return {
         counts: {
           all: [...byTier.values()].reduce((a, b) => a + b, 0),
@@ -147,9 +138,9 @@ export class MembersService {
         me: {
           id: me.uuid,
           tier: me.tier,
-          canInvite: this.rbac.can(grants, 'member.invite').allowed,
-          canAssignRoles: this.rbac.can(grants, 'member.role.assign').allowed,
-          canManageTeams: this.rbac.can(grants, 'team.manage').allowed,
+          canInvite: this.rbac.can(grants, 'org.member.invite').allowed,
+          canAssignRoles: this.rbac.can(grants, 'org.member.role_assign').allowed,
+          canManageTeams: this.rbac.can(grants, 'inbox.team.manage').allowed,
         },
       };
     });
@@ -172,8 +163,7 @@ export class MembersService {
       const input = new ZodValidationPipe<InviteWspMemberInput>(inviteWspMemberSchema).transform(
         raw,
       );
-      const owner = await this.repo.ownerUuid(tx, ctx.orgId);
-      const actor = await this.actor(tx, ctx.orgId, ctx.userId!, owner);
+      const actor = await this.actor(tx, ctx.orgId, ctx.userId!);
 
       const role = await this.repo.roleByUuid(tx, ctx.orgId, input.roleId);
       if (!role) {
@@ -181,7 +171,14 @@ export class MembersService {
           { path: 'roleId', message: 'unknown role' },
         ]);
       }
-      assertCanGrantRole(actor, tierOfRole(role), role.name);
+      // Handing out a role is the RBAC rule (TW-RBAC-026). The invitee has no account yet, hence target 0 and no current roles.
+      await this.roleRules.assertCanChangeRoles(tx, {
+        orgId: ctx.orgId,
+        actorUserId: ctx.userId!,
+        targetUserId: 0,
+        currentRoleIds: [],
+        newRoleIds: [role.id],
+      });
 
       const existing = await this.repo.userByEmail(tx, ctx.orgId, input.email);
       if (existing && existing.status !== 'inactive') {
@@ -211,7 +208,7 @@ export class MembersService {
         invitedBy: actor.id,
       });
 
-      const member = await this.load(tx, ctx.orgId, owner, userId);
+      const member = await this.load(tx, ctx.orgId, userId);
       await this.repo.audit(tx, {
         orgId: ctx.orgId,
         actorId: ctx.actorId,
@@ -252,9 +249,8 @@ export class MembersService {
   async resendInvite(uuid: string): Promise<WspMemberActionResponse> {
     const ctx = RequestContextStore.require();
     const done = await this.db.tx(async (tx) => {
-      const owner = await this.repo.ownerUuid(tx, ctx.orgId);
-      const actor = await this.actor(tx, ctx.orgId, ctx.userId!, owner);
-      const target = await this.requireMember(tx, ctx.orgId, owner, uuid);
+      const actor = await this.actor(tx, ctx.orgId, ctx.userId!);
+      const target = await this.requireMember(tx, ctx.orgId, uuid);
       if (toMemberStatus(target) !== 'pending') {
         throw new AppError(
           ERROR_CODES.WSP_INVITE_NOT_PENDING,
@@ -263,7 +259,7 @@ export class MembersService {
         );
       }
       assertCanActOn(actor, { tier: target.tier });
-      return this.reissueInvite(tx, ctx, actor, owner, target, 'member.invite_resent');
+      return this.reissueInvite(tx, ctx, actor, target, 'member.invite_resent');
     });
     return this.deliverInvite(done);
   }
@@ -273,37 +269,23 @@ export class MembersService {
   async changeRole(uuid: string, input: ChangeWspMemberRoleInput): Promise<WspMember> {
     const ctx = RequestContextStore.require();
     const result = await this.db.tx(async (tx) => {
-      const owner = await this.repo.ownerUuid(tx, ctx.orgId);
-      const actor = await this.actor(tx, ctx.orgId, ctx.userId!, owner);
-      const target = await this.requireMember(tx, ctx.orgId, owner, uuid);
-
-      if (target.id === ctx.userId) {
-        throw new AppError(
-          ERROR_CODES.WSP_CANNOT_CHANGE_OWN_ROLE,
-          'You cannot change your own role.',
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      }
+      const target = await this.requireMember(tx, ctx.orgId, uuid);
       const role = await this.repo.roleByUuid(tx, ctx.orgId, input.roleId);
       if (!role) {
         throw AppError.validation('Request payload failed validation', [
           { path: 'roleId', message: 'unknown role' },
         ]);
       }
-      const roleTier = tierOfRole(role);
-      const targetTier = await this.tierOf(tx, ctx.orgId, target);
-      // The owner keeps administration: ownership is not transferred by demoting (Reference let an Admin demote the Owner).
-      if (targetTier === 'owner' && roleTier !== 'admin') {
-        throw new AppError(
-          ERROR_CODES.WSP_LAST_OWNER,
-          "The workspace owner's role cannot be reduced.",
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      }
-      assertCanActOn(actor, { tier: targetTier });
-      assertCanGrantRole(actor, roleTier, role.name);
-
       const before = await this.repo.rolesForUsers(tx, ctx.orgId, [target.id]);
+      // Self change, acting on someone above you, owner-only grants, custom roles you do not fully hold and the last Owner are
+      // all the RBAC rule (TW-RBAC-026): one model for this screen and for Settings > Users.
+      await this.roleRules.assertCanChangeRoles(tx, {
+        orgId: ctx.orgId,
+        actorUserId: ctx.userId!,
+        targetUserId: target.id,
+        currentRoleIds: before.map((r) => r.roleId),
+        newRoleIds: [role.id],
+      });
       if (!(await this.repo.touchWithVersion(tx, ctx.orgId, target.id, input.rowVersion))) {
         throw AppError.rowVersionConflict('Member');
       }
@@ -328,7 +310,7 @@ export class MembersService {
           previousRoleIds: before.map((r) => r.roleUuid),
         },
       });
-      return this.load(tx, ctx.orgId, owner, target.id);
+      return this.load(tx, ctx.orgId, target.id);
     });
     // Cached grant sets are keyed by the organization's roles version: bump it only once the change is visible.
     await this.rbac.bumpRolesVersion(ctx.orgId);
@@ -340,9 +322,8 @@ export class MembersService {
   async remove(uuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
     const gone = await this.db.tx(async (tx) => {
-      const owner = await this.repo.ownerUuid(tx, ctx.orgId);
-      const actor = await this.actor(tx, ctx.orgId, ctx.userId!, owner);
-      const target = await this.requireMember(tx, ctx.orgId, owner, uuid);
+      const actor = await this.actor(tx, ctx.orgId, ctx.userId!);
+      const target = await this.requireMember(tx, ctx.orgId, uuid);
       if (target.id === ctx.userId) {
         throw new AppError(
           ERROR_CODES.WSP_CANNOT_REMOVE_SELF,
@@ -357,7 +338,7 @@ export class MembersService {
           HttpStatus.UNPROCESSABLE_ENTITY,
         );
       }
-      assertCanActOn(actor, { tier: await this.tierOf(tx, ctx.orgId, target) });
+      assertCanActOn(actor, target);
 
       await this.repo.deactivate(tx, ctx.orgId, target.id);
       await this.repo.cancelLiveTokens(tx, ctx.orgId, target.id);
@@ -397,9 +378,8 @@ export class MembersService {
   async resetPassword(uuid: string): Promise<WspMemberActionResponse> {
     const ctx = RequestContextStore.require();
     const done = await this.db.tx(async (tx) => {
-      const owner = await this.repo.ownerUuid(tx, ctx.orgId);
-      const actor = await this.actor(tx, ctx.orgId, ctx.userId!, owner);
-      const target = await this.requireMember(tx, ctx.orgId, owner, uuid);
+      const actor = await this.actor(tx, ctx.orgId, ctx.userId!);
+      const target = await this.requireMember(tx, ctx.orgId, uuid);
       if (target.tier === 'owner' && actor.tier !== 'owner') {
         throw new AppError(
           ERROR_CODES.WSP_CANNOT_ACT_ON_HIGHER_RANK,
@@ -407,10 +387,10 @@ export class MembersService {
           HttpStatus.FORBIDDEN,
         );
       }
-      assertCanActOn(actor, { tier: await this.tierOf(tx, ctx.orgId, target) });
+      assertCanActOn(actor, target);
 
       if (toMemberStatus(target) === 'pending') {
-        return this.reissueInvite(tx, ctx, actor, owner, target, 'member.password_reset');
+        return this.reissueInvite(tx, ctx, actor, target, 'member.password_reset');
       }
       const token = await this.tokens.issue(
         tx,
@@ -437,7 +417,7 @@ export class MembersService {
       });
       const org = await this.repo.orgInfo(tx, ctx.orgId);
       return {
-        member: await this.load(tx, ctx.orgId, owner, target.id),
+        member: await this.load(tx, ctx.orgId, target.id),
         kind: 'reset' as const,
         delivery: {
           email: target.email,
@@ -455,7 +435,6 @@ export class MembersService {
     tx: Tx,
     ctx: RequestContext,
     actor: Acting,
-    owner: string | null,
     target: MemberRow,
     action: 'member.invite_resent' | 'member.password_reset',
   ) {
@@ -481,7 +460,7 @@ export class MembersService {
     const org = await this.repo.orgInfo(tx, ctx.orgId);
     const roles = await this.repo.rolesForUsers(tx, ctx.orgId, [target.id]);
     return {
-      member: await this.load(tx, ctx.orgId, owner, target.id),
+      member: await this.load(tx, ctx.orgId, target.id),
       kind: 'invite' as const,
       delivery: {
         email: target.email,
@@ -517,38 +496,14 @@ export class MembersService {
     return { member: done.member, emailSent: sent, inviteLink: sent ? null : delivery.url };
   }
 
-  private async actor(
-    tx: Tx,
-    orgId: number,
-    userId: number,
-    owner: string | null,
-  ): Promise<Acting> {
-    const row = await this.repo.byId(tx, orgId, owner, userId);
+  private async actor(tx: Tx, orgId: number, userId: number): Promise<Acting> {
+    const row = await this.repo.byId(tx, orgId, userId);
     if (!row) throw AppError.unauthenticated();
-    return {
-      id: row.id,
-      uuid: row.uuid,
-      fullName: row.fullName,
-      tier: await this.tierOf(tx, orgId, row),
-    };
+    return { id: row.id, uuid: row.uuid, fullName: row.fullName, tier: row.tier };
   }
 
-  /** The tier the rules use: the same model the list sorts by, computed from the member's roles. */
-  private async tierOf(tx: Tx, orgId: number, row: MemberRow): Promise<WspRoleTier> {
-    const roles = await this.repo.rolesForUsers(tx, orgId, [row.id]);
-    return memberTier(
-      row.tier === 'owner',
-      roles.map((r) => ({ systemKey: r.systemKey, name: r.roleName })),
-    );
-  }
-
-  private async load(
-    tx: Tx,
-    orgId: number,
-    owner: string | null,
-    userId: number,
-  ): Promise<WspMember> {
-    const row = await this.repo.byId(tx, orgId, owner, userId);
+  private async load(tx: Tx, orgId: number, userId: number): Promise<WspMember> {
+    const row = await this.repo.byId(tx, orgId, userId);
     const [roles, teams] = await Promise.all([
       this.repo.rolesForUsers(tx, orgId, [userId]),
       this.repo.teamUuidsForUsers(tx, orgId, [userId]),
@@ -557,13 +512,8 @@ export class MembersService {
   }
 
   /** A member of this organization who has not been removed, else 404 (a removed or foreign member looks the same). */
-  private async requireMember(
-    tx: Tx,
-    orgId: number,
-    owner: string | null,
-    uuid: string,
-  ): Promise<MemberRow> {
-    const row = await this.repo.byUuid(tx, orgId, owner, uuid);
+  private async requireMember(tx: Tx, orgId: number, uuid: string): Promise<MemberRow> {
+    const row = await this.repo.byUuid(tx, orgId, uuid);
     if (!row || row.status === 'inactive') throw AppError.notFound('Member', uuid);
     return row;
   }

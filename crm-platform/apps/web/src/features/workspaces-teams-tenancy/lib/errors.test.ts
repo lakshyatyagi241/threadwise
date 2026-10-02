@@ -13,9 +13,11 @@ describe('errorKind', () => {
     );
     expect(errorKind(api(ERROR_CODES.PLAN_LIMIT_REACHED))).toBe('planLimit');
     expect(errorKind(api(ERROR_CODES.ROW_VERSION_CONFLICT, 409))).toBe('conflict');
-    expect(errorKind(api(ERROR_CODES.WSP_CANNOT_GRANT_ROLE, 403))).toBe('cannotGrant');
+    expect(errorKind(api(ERROR_CODES.RBAC_ROLE_GRANT_FORBIDDEN, 403))).toBe('cannotGrant');
+    expect(errorKind(api(ERROR_CODES.RBAC_SELF_ROLE_CHANGE, 422))).toBe('ownRole');
+    expect(errorKind(api(ERROR_CODES.WSP_CANNOT_ACT_ON_HIGHER_RANK, 403))).toBe('higherRank');
     expect(errorKind(api(ERROR_CODES.WSP_TEAM_NAME_TAKEN, 409))).toBe('teamNameTaken');
-    expect(errorKind(api(ERROR_CODES.WSP_LAST_OWNER))).toBe('lastOwner');
+    expect(errorKind(api(ERROR_CODES.RBAC_LAST_OWNER))).toBe('lastOwner');
   });
 
   it('treats a dropped connection as a network problem and anything else as unexpected', () => {

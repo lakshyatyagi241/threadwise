@@ -1,12 +1,13 @@
-/** Error codes of the workspaces-teams-tenancy domain (WSP). The frontend switches on these, never on the message. */
+/**
+ * Error codes of the workspaces-teams-tenancy domain (WSP). The frontend switches on these, never on the message.
+ * Role grants, a member changing their own role and the last Owner are RBAC's rules and answer with RBAC's codes
+ * (`RBAC_ROLE_GRANT_FORBIDDEN`, `RBAC_SELF_ROLE_CHANGE`, `RBAC_LAST_OWNER`); only the member-lifecycle rules are WSP's.
+ */
 export const WSP_ERROR_CODES = {
   WSP_ALREADY_MEMBER: 'WSP_ALREADY_MEMBER',
-  WSP_CANNOT_GRANT_ROLE: 'WSP_CANNOT_GRANT_ROLE',
   WSP_CANNOT_ACT_ON_HIGHER_RANK: 'WSP_CANNOT_ACT_ON_HIGHER_RANK',
-  WSP_CANNOT_CHANGE_OWN_ROLE: 'WSP_CANNOT_CHANGE_OWN_ROLE',
   WSP_CANNOT_REMOVE_SELF: 'WSP_CANNOT_REMOVE_SELF',
   WSP_CANNOT_REMOVE_OWNER: 'WSP_CANNOT_REMOVE_OWNER',
-  WSP_LAST_OWNER: 'WSP_LAST_OWNER',
   WSP_INVITE_INVALID: 'WSP_INVITE_INVALID',
   WSP_INVITE_NOT_PENDING: 'WSP_INVITE_NOT_PENDING',
   WSP_TEAM_NAME_TAKEN: 'WSP_TEAM_NAME_TAKEN',

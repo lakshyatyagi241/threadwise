@@ -4,22 +4,26 @@ import { paginationQuerySchema } from '../common/pagination';
 
 /**
  * Workspace members (TW-WSP-015..021, 046): who is in this workspace, with which role, and the invite / role / remove /
- * reset actions on them. Reference's five tiers are kept as a display tier computed from the member's roles:
- * `owner` = the organization's owner, then the system presets `admin`, `manager`, `agent`, `viewer`; any role an
- * organization defined itself reads as `custom` and ranks like an agent.
+ * reset actions on them. Reference's five tiers are the RBAC domain's five workspace presets, read from the member's roles by
+ * the preset's `system_key`: `owner` = the Owner preset (`admin`), `admin` = `workspace_admin`, then `manager`, `agent`
+ * and `viewer`; a role an organization defined itself (no `system_key`) reads as `custom`. A member's tier is the highest
+ * of their roles, and `isOwner` is true when they hold the Owner preset.
  */
 export const WSP_ROLE_TIERS = ['owner', 'admin', 'manager', 'agent', 'viewer', 'custom'] as const;
 export const wspRoleTierSchema = z.enum(WSP_ROLE_TIERS);
 export type WspRoleTier = z.infer<typeof wspRoleTierSchema>;
 
-/** Rank of a tier, used for "may this person act on that person" checks (TW-WSP-020 rule 4, 046). */
+/**
+ * Rank of a tier, used for "may this person act on that person" checks (TW-WSP-020 rule 4, 046). The numbers are the RBAC
+ * domain's `PRESET_RANK` (a unit test keeps them equal); a custom role has no rank there, so it ranks below every preset.
+ */
 export const WSP_TIER_RANK: Record<WspRoleTier, number> = {
   owner: 100,
   admin: 80,
   manager: 60,
   agent: 40,
-  custom: 40,
   viewer: 20,
+  custom: 0,
 };
 
 export const WSP_MEMBER_NAME_MAX = 191;

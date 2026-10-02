@@ -24,7 +24,7 @@ import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorato
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { TeamsService } from './teams.service';
 
-/** Teams (TW-WSP-022). Listing is open to every signed-in member (Reference applied no check); the writes need `team.manage`. */
+/** Teams (TW-WSP-022). Listing is open to every signed-in member (Reference applied no check); the writes need `inbox.team.manage`. */
 @ApiTags('workspace-teams')
 @ActorKinds('user')
 @Controller({ path: 'workspace/teams', version: '2' })
@@ -41,14 +41,14 @@ export class TeamsController {
 
   @Post()
   @Idempotent()
-  @RequirePermission('team.manage')
+  @RequirePermission('inbox.team.manage')
   @ApiOperation({ summary: 'Create a team' })
   async create(@Body(zodPipe(createWspTeamSchema)) body: CreateWspTeamInput) {
     return this.teams.create(body);
   }
 
   @Patch(':id')
-  @RequirePermission('team.manage')
+  @RequirePermission('inbox.team.manage')
   @ApiOperation({
     summary: 'Edit a team',
     description:
@@ -63,7 +63,7 @@ export class TeamsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @RequirePermission('team.manage')
+  @RequirePermission('inbox.team.manage')
   @ApiOperation({ summary: 'Delete a team; conversations assigned to it become unassigned' })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.teams.remove(id);

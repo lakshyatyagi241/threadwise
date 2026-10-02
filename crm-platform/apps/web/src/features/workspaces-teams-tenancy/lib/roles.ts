@@ -57,21 +57,24 @@ function outranks(member: Pick<WspMember, 'tier'>, me: Me): boolean {
   return WSP_TIER_RANK[member.tier] > WSP_TIER_RANK[me.tier];
 }
 
-/** Who the caller may act on: never themselves, never someone of a higher tier. The server enforces the same. */
+/** Who the caller may act on: never themselves, never someone of a higher tier (the RBAC ladder). The server enforces the same. */
 function isActionable(member: Pick<WspMember, 'id' | 'tier'>, me: Me): boolean {
   return member.id !== me.id && !outranks(member, me);
 }
 
-/** Role select (otherwise a read-only badge): needs the assign permission, and the owner's role is never changed here. */
+/**
+ * Role select (otherwise a read-only badge): needs the assign permission. An Owner's role is changed by another Owner only
+ * (the server keeps at least one Owner); nobody below the Owner tier outranks-checks into it anyway.
+ */
 export function canChangeRole(member: WspMember, me: Me): boolean {
-  return me.canAssignRoles && !member.isOwner && isActionable(member, me);
+  return me.canAssignRoles && (!member.isOwner || me.tier === 'owner') && isActionable(member, me);
 }
 
 export function canRemove(member: WspMember, me: Me): boolean {
   return me.canInvite && !member.isOwner && isActionable(member, me);
 }
 
-/** Reset password for someone who has an account; a pending invite is re-sent instead. */
+/** Reset password for someone who has an account (an Owner's only by an Owner: the ladder); a pending invite is re-sent instead. */
 export function canReset(member: WspMember, me: Me): boolean {
   return me.canInvite && member.status !== 'pending' && isActionable(member, me);
 }
