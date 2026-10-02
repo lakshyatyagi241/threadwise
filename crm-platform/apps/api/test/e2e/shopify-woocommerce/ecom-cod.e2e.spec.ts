@@ -127,7 +127,6 @@ async function fire(
     eventType,
     data,
     log: { id: Number(log.id), createdAt: new Date(log.created_at).toISOString() },
-    phase: 'full',
   };
   await pipeline.run(job);
 }

@@ -6,6 +6,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { STORE_MIRROR, type StoreMirror } from './_shims/tokens';
+import { CartService } from './cart.service';
 import { CodService } from './cod.service';
 import { StockService } from './stock.service';
 import { EventMessageService } from './event-message.service';
@@ -33,8 +34,6 @@ export interface WebhookJob {
   data: Json;
   /** The delivery's log row, so the outcome lands on it. */
   log: { id: number; createdAt: string };
-  /** 'send' is the delayed second half of an automation: only the message, the rest already ran. */
-  phase: 'full' | 'send';
 }
 
 const STATUS_MEMORY_SECONDS = 30 * 86_400;
@@ -55,6 +54,7 @@ export class WebhookPipelineService {
     private readonly message: EventMessageService,
     private readonly codService: CodService,
     private readonly stockService: StockService,
+    private readonly cartService: CartService,
     @Inject(STORE_MIRROR) private readonly mirror: StoreMirror,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<WebhookJob>,
@@ -62,11 +62,7 @@ export class WebhookPipelineService {
 
   async run(job: WebhookJob): Promise<void> {
     const log: LogRef = { id: job.log.id, createdAt: new Date(job.log.createdAt) };
-    if (job.phase === 'send') {
-      await this.automation(job, job.eventType, log, false);
-      return;
-    }
-    await this.guarded(job, 'message', () => this.automation(job, job.eventType, log, true));
+    await this.guarded(job, 'message', () => this.automation(job, job.eventType, log));
     const status = job.kind === 'woocommerce' ? wooStatusEvent(job) : null;
     if (status && (await this.firstTimeInStatus(job, status)))
       await this.guarded(job, status, () => this.pseudo(job, status, job.data));
@@ -77,6 +73,7 @@ export class WebhookPipelineService {
       );
     await this.guarded(job, 'mirror', () => this.upkeep(job));
     await this.guarded(job, 'cod', () => this.cod(job));
+    await this.guarded(job, 'cart', () => this.cart(job));
     if (job.kind === 'shopify') {
       if (job.eventType === 'fulfillments/update')
         await this.guarded(job, 'delivered', () => this.delivered(job));
@@ -140,7 +137,20 @@ export class WebhookPipelineService {
         payload: data,
       }),
     );
-    await this.automation({ ...job, data }, type, log, false, { pseudo: true, extra });
+    await this.automation({ ...job, data }, type, log, { pseudo: true, extra });
+  }
+
+  /** A new checkout schedules the follow-up steps; an order for the shopper's number removes them. */
+  private async cart(job: WebhookJob): Promise<void> {
+    const shopify = job.kind === 'shopify';
+    if (job.eventType === (shopify ? 'checkouts/create' : 'checkout.created'))
+      await this.cartService.schedule(job.orgId, job.kind, job.storeId, job.data);
+    else if (
+      shopify
+        ? job.eventType === 'orders/create' || job.eventType === 'orders/paid'
+        : job.eventType === 'order.created' || job.eventType === 'order.updated'
+    )
+      await this.cartService.cancelOnOrder(job.orgId, job.kind, job.data);
   }
 
   /** A new cash-on-delivery order: risk score (WooCommerce), the confirmation, the prepaid nudge, then the risk log. */
@@ -177,32 +187,16 @@ export class WebhookPipelineService {
     }
   }
 
-  /** One automation: sent now, or queued for later when it has a delay. Writes its outcome on the log row. */
+  /** One automation, sent now. Writes its outcome on the log row. (A delay applies only to the cart steps, which have their own job.) */
   private async automation(
     job: WebhookJob,
     eventType: string,
     log: LogRef,
-    mayDelay: boolean,
     opts: { pseudo?: boolean; extra?: Record<string, string> } = {},
   ): Promise<void> {
     const cfg = await this.message.config(job.orgId, job.kind, job.storeId, eventType);
     if (!cfg) {
       await this.setLog(job, log, { status: 'skipped' });
-      return;
-    }
-    // Only the cart steps wait (as in WaDesk); every other automation sends at once whatever delay was saved.
-    if (mayDelay && cfg.delaySeconds > 0 && cfg.eventType.startsWith('cart/')) {
-      await this.queue.add(
-        'send',
-        {
-          ...job,
-          eventType,
-          log: { id: log.id, createdAt: log.createdAt.toISOString() },
-          phase: 'send',
-        },
-        { delay: cfg.delaySeconds * 1000, attempts: 1, removeOnComplete: true, removeOnFail: true },
-      );
-      await this.setLog(job, log, { status: 'processed' });
       return;
     }
     const out = await this.message.send(

@@ -147,7 +147,6 @@ const job = (
   eventType,
   data,
   log: { id: logId, createdAt },
-  phase: 'full',
 });
 
 describe('the Shopify webhook door (WD-ECOM-008)', () => {
