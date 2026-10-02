@@ -4,8 +4,10 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState, type FormEvent } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
+  CMS_CONTACT_TOPICS,
   cmsContactListResponseSchema,
   cmsContactMessageSchema,
+  markAllCmsContactReadResponseSchema,
   type CmsContactMessage,
 } from '@crm/contracts';
 import { Badge, Button, Card, ConfirmDialog, EmptyState, Input, Select } from '@crm/ui';
@@ -22,14 +24,15 @@ export function ContactInbox() {
   const [term, setTerm] = useState('');
   const [q, setQ] = useState('');
   const [status, setStatus] = useState<'' | 'unread' | 'read'>('');
+  const [topic, setTopic] = useState<'' | (typeof CMS_CONTACT_TOPICS)[number]>('');
   const [doomed, setDoomed] = useState<CmsContactMessage | null>(null);
 
   const list = useInfiniteQuery({
-    queryKey: [...KEY, { q, status }],
+    queryKey: [...KEY, { q, status, topic }],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) =>
       operatorFetch('/cms/contact-messages', {
-        query: { q, status, cursor: pageParam },
+        query: { q, status, topic, cursor: pageParam },
         schema: cmsContactListResponseSchema,
         signal,
       }),
@@ -52,6 +55,14 @@ export function ContactInbox() {
       }),
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
   });
+  const readAll = useMutation({
+    mutationFn: () =>
+      operatorFetch('/cms/contact-messages/read-all', {
+        method: 'POST',
+        schema: markAllCmsContactReadResponseSchema,
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+  });
   const remove = useMutation({
     mutationFn: (m: CmsContactMessage) =>
       operatorFetch(`/cms/contact-messages/${m.id}`, { method: 'DELETE' }),
@@ -69,14 +80,26 @@ export function ContactInbox() {
     <div className="space-y-5">
       <PageHeader title={t('title')} description={t('description')} />
       {summary && (
-        <p className="text-sm text-muted-foreground">
-          {t('summary', { total: summary.total, unread: summary.unread })}
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="text-sm text-muted-foreground">
+            {t('summary', { total: summary.total, unread: summary.unread })}
+          </p>
+          {summary.unread > 0 && (
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={readAll.isPending}
+              onClick={() => readAll.mutate()}
+            >
+              {t('markAllRead')}
+            </Button>
+          )}
+        </div>
       )}
       <Card>
         <form
           onSubmit={submit}
-          className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_auto]"
+          className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]"
           role="search"
         >
           <Input
@@ -94,12 +117,24 @@ export function ContactInbox() {
             <option value="unread">{t('unread')}</option>
             <option value="read">{t('read')}</option>
           </Select>
+          <Select
+            value={topic}
+            aria-label={t('allTopics')}
+            onChange={(e) => setTopic(e.target.value as typeof topic)}
+          >
+            <option value="">{t('allTopics')}</option>
+            {CMS_CONTACT_TOPICS.map((v) => (
+              <option key={v} value={v}>
+                {t(`topic${v[0]!.toUpperCase()}${v.slice(1)}` as 'topicSales')}
+              </option>
+            ))}
+          </Select>
           <Button type="submit" variant="secondary">
             {t('search')}
           </Button>
         </form>
       </Card>
-      <ActionError error={setRead.error ?? remove.error} />
+      <ActionError error={setRead.error ?? readAll.error ?? remove.error} />
       {list.isPending ? (
         <LoadingBlock />
       ) : list.isError ? (

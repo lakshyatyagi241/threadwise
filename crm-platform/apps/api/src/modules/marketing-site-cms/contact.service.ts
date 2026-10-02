@@ -163,6 +163,7 @@ export class ContactService {
       );
     }
     if (q.status) conds.push(sql`is_read = ${q.status === 'read'}`);
+    if (q.topic) conds.push(sql`topic = ${q.topic}`);
     if (q.cursor) {
       const c = decodeCursor(q.cursor);
       conds.push(
@@ -204,17 +205,30 @@ export class ContactService {
     });
   }
 
+  /** Every unread message becomes read (WD-CMS-043). Idempotent: a second call updates nothing. */
+  async markAllRead(): Promise<{ updated: number }> {
+    operatorId();
+    return this.store.tx(async (tx) => {
+      const res = await tx.execute(
+        sql`UPDATE contact_messages SET is_read = TRUE WHERE NOT is_read RETURNING 1`,
+      );
+      return { updated: res.rows.length };
+    });
+  }
+
   async remove(uuid: string): Promise<void> {
     operatorId();
     await this.store.tx(async (tx) => {
       const res = await tx.execute(
-        sql`DELETE FROM contact_messages WHERE uuid = ${uuid} RETURNING 1`,
+        sql`DELETE FROM contact_messages WHERE uuid = ${uuid} RETURNING email`,
       );
-      if (!res.rows.length) throw AppError.notFound('Message', uuid);
+      const row = res.rows[0] as { email: string } | undefined;
+      if (!row) throw AppError.notFound('Message', uuid);
+      // WaDesk labelled this audit row with the sender's address (WD-CMS-043 rule 3).
       await this.audit.record(tx, {
         event: CMS_EVENTS.contactDeleted,
         status: 'success',
-        payload: { uuid },
+        payload: { uuid, email: row.email },
       });
     });
   }

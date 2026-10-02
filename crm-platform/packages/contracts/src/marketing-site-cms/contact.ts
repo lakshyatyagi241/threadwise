@@ -40,6 +40,8 @@ export type CmsContactMessage = z.infer<typeof cmsContactMessageSchema>;
 export const cmsContactListQuerySchema = z.object({
   q: z.string().trim().max(200).optional(),
   status: z.enum(['unread', 'read']).optional().catch(undefined),
+  /** An unknown topic is ignored, like WaDesk's unknown filter. */
+  topic: cmsContactTopicSchema.optional().catch(undefined),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   cursor: z.string().min(1).max(512).optional(),
 });
@@ -54,3 +56,6 @@ export type CmsContactListResponse = z.infer<typeof cmsContactListResponseSchema
 
 export const setCmsContactReadRequestSchema = z.object({ isRead: z.boolean() });
 export type SetCmsContactReadRequest = z.infer<typeof setCmsContactReadRequestSchema>;
+
+export const markAllCmsContactReadResponseSchema = z.object({ updated: z.number().int() });
+export type MarkAllCmsContactReadResponse = z.infer<typeof markAllCmsContactReadResponseSchema>;
