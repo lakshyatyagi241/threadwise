@@ -432,36 +432,36 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-SCHED-001 | todo |  |  |
-| WD-SCHED-002 | todo |  |  |
-| WD-SCHED-003 | todo |  |  |
-| WD-SCHED-004 | todo |  |  |
-| WD-SCHED-005 | todo |  |  |
-| WD-SCHED-006 | todo |  |  |
-| WD-SCHED-007 | todo |  |  |
-| WD-SCHED-008 | todo |  |  |
-| WD-SCHED-009 | todo |  |  |
-| WD-SCHED-010 | todo |  |  |
-| WD-SCHED-011 | todo |  |  |
-| WD-SCHED-012 | todo |  |  |
-| WD-SCHED-013 | todo |  |  |
-| WD-SCHED-014 | todo |  |  |
-| WD-SCHED-015 | todo |  |  |
-| WD-SCHED-016 | todo |  |  |
-| WD-SCHED-017 | todo |  |  |
-| WD-SCHED-018 | todo |  |  |
-| WD-SCHED-019 | todo |  |  |
-| WD-SCHED-020 | todo |  |  |
-| WD-SCHED-021 | todo |  |  |
-| WD-SCHED-022 | todo |  |  |
-| WD-SCHED-023 | todo |  |  |
-| WD-SCHED-024 | todo |  |  |
-| WD-SCHED-025 | todo |  |  |
-| WD-SCHED-026 | todo |  |  |
-| WD-SCHED-027 | todo |  |  |
-| WD-SCHED-028 | todo |  |  |
-| WD-SCHED-029 | todo |  |  |
-| WD-SCHED-030 | todo |  |  |
+| WD-SCHED-001 | frontend-done |  | list with stats, up-next, tabs, search and row actions (web + API); the stats strip is computed from the page shown; not opened in a browser or run against WaDesk side by side |
+| WD-SCHED-002 | frontend-done |  | 5-step composer: basics and senders, audience with live preview, message, schedule, review; not in a browser; media is a link, no file drop; no template categories |
+| WD-SCHED-003 | backend-done |  | plan flag and limit, 2-minute lead time, audience, halt and content guard, wallet, multi-sender split, warmer reservation, one transaction; 16 e2e |
+| WD-SCHED-004 | backend-done |  | group, tag, earlier broadcasts, typed numbers; opted-out and archived contacts never messaged, one copy per person (WaDesk's gap fixed); recipients fixed when saved |
+| WD-SCHED-005 | backend-done |  | round-robin split, one schedule per sender named after it, tag audiences split too (WaDesk left them empty) |
+| WD-SCHED-006 | in-progress |  | text, media by link, location, template as text on the unofficial engine and Twilio; no upload until the send port takes file bytes; no Cloud API template |
+| WD-SCHED-007 | backend-done |  | a test message to a number typed in the composer after the schedule is saved; a failure never undoes the schedule |
+| WD-SCHED-008 | backend-done |  | reserved per send date for one-off schedules from a warming number, held with WaDesk's wording, and released on cancel, delete or fail |
+| WD-SCHED-009 | backend-done |  | emergency halt and content guardrails before saving, wallet precheck once for the whole audience |
+| WD-SCHED-010 | backend-done |  | covered by WD-NODE-030: the row is the schedule, no bridge registration |
+| WD-SCHED-011 | backend-done |  | covered by WD-NODE-030, 032: cadence, weekdays, end date inclusive, next run in the schedule's zone |
+| WD-SCHED-012 | frontend-done |  | detail with progress, funnel, recipients and actions; no engagement curve or donut chart; not in a browser |
+| WD-SCHED-013 | frontend-done |  | pause and resume from list and detail; 409 when the status does not allow it |
+| WD-SCHED-014 | frontend-done |  | cancel from list and detail; releases the warmer budget the unsent part reserved |
+| WD-SCHED-015 | frontend-done |  | run now: due at once from waiting, running, paused or failed; recipients already sent are skipped |
+| WD-SCHED-016 | backend-done |  | PATCH name, time, message with a version check, 2-minute lead time and zone check; the web has no edit screen (the reference detail has none) |
+| WD-SCHED-017 | frontend-done |  | retry with a new time; only failed recipients are tried again (WaDesk re-sent to everyone) |
+| WD-SCHED-018 | frontend-done |  | delete from list and detail; hard delete; releases the warmer budget |
+| WD-SCHED-019 | backend-done |  | plan feature and limit scheduled_messages, permissions sched.schedules.read and manage (Owner, Admin, Manager) |
+| WD-SCHED-020 | backend-done |  | covered by WD-NODE-030: BullMQ and the due poller replace the bridge's in-memory cron |
+| WD-SCHED-021 | backend-done |  | covered by WD-NODE-031: ScheduledRunService; now also applies the number's warmer hours, gap and spintax |
+| WD-SCHED-022 | backend-done |  | covered by WD-NODE-032 |
+| WD-SCHED-023 | backend-done |  | covered by WD-NODE-033: counters on the row |
+| WD-SCHED-024 | backend-done |  | covered by WD-NODE-035: per-recipient receipts; wallet settlement per delivery is not verified for scheduled sends |
+| WD-SCHED-025 | backend-done |  | covered by WD-NODE-030: nothing to restore, state is in the database |
+| WD-SCHED-026 | backend-done |  | covered by WD-NODE-036: durable retry of failed one-offs |
+| WD-SCHED-027 | backend-done |  | covered: the broadcast retry policy is shared |
+| WD-SCHED-028 | blocked |  | needs the customer API domain; public-api here is a lead-intake skeleton; ScheduleCreateService is the use case to call |
+| WD-SCHED-029 | blocked |  | needs the mobile domain |
+| WD-SCHED-030 | backend-done |  | ScheduleProducerService: ordinary schedules with source and external_key; a key replaces its old schedule; cancel by key; e2e |
 
 ## auto-reply-keywords (ar)
 
