@@ -52,7 +52,8 @@ export const launcherDraft = (l: WidgetLauncher): LauncherDraft => ({
   mobile: placementDraft(l.mobile),
 });
 
-const spacingOf = (v: string): number => (/^\d{1,4}$/.test(v.trim()) ? Number(v.trim()) : Number.NaN);
+const spacingOf = (v: string): number =>
+  /^\d{1,4}$/.test(v.trim()) ? Number(v.trim()) : Number.NaN;
 
 /** The draft as the API takes it. A spacing that is not a whole number is NaN here; `validateWhatsapp` refuses it first. */
 export const launcherPayload = (d: LauncherDraft): WidgetLauncher => ({
@@ -121,7 +122,8 @@ export function newState(): BuilderState {
     id: null,
     rowVersion: null,
     name: D.name,
-    mode: D.mode,
+    // The Install & Customize page is the primary builder, so a new widget opens on it.
+    mode: 'whatsapp',
     assistantId: '',
     targetWhatsappCc: D.targetWhatsappCc,
     targetWhatsappNumber: D.targetWhatsappNumber,
@@ -195,7 +197,11 @@ export function toPayload(s: BuilderState): CreateWidgetInput {
     targetWhatsappNumber: orNull(s.targetWhatsappNumber),
     prefilledMessage: orNull(s.prefilledMessage),
     // A WhatsApp widget is placed by its launcher config; the legacy side and fill follow it so the list shows the same.
-    position: wa ? (s.launcher.desktop.side === 'left' ? 'bottom_left' : 'bottom_right') : s.position,
+    position: wa
+      ? s.launcher.desktop.side === 'left'
+        ? 'bottom_left'
+        : 'bottom_right'
+      : s.position,
     buttonColor: wa ? resolveLauncherColour(s.launcher.colour).from : s.buttonColor,
     buttonImageUrl: orNull(s.buttonImageUrl),
     headerTitle: s.headerTitle,
