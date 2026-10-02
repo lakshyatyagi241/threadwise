@@ -12,7 +12,7 @@ ALTER TABLE wa_products
   ADD CONSTRAINT chk_wa_products_status CHECK (status IN ('active', 'draft', 'archived')) NOT VALID,
   ADD CONSTRAINT chk_wa_products_price CHECK (price_minor >= 0 AND (compare_price_minor IS NULL OR compare_price_minor >= 0)) NOT VALID,
   ADD CONSTRAINT chk_wa_products_stock CHECK ((stock_qty IS NULL OR stock_qty >= 0) AND reserved_qty >= 0) NOT VALID,
-  ADD CONSTRAINT chk_wa_products_meta_sync_status CHECK (meta_sync_status IS NULL OR meta_sync_status IN ('pending', 'synced', 'failed')) NOT VALID;
+  ADD CONSTRAINT chk_wa_products_meta_sync_status CHECK (meta_sync_status IS NULL OR meta_sync_status IN ('pending', 'synced', 'failed', 'error')) NOT VALID;
 
 ALTER TABLE wa_product_reviews
   ADD CONSTRAINT chk_wa_product_reviews_rating CHECK (rating BETWEEN 1 AND 5) NOT VALID,
