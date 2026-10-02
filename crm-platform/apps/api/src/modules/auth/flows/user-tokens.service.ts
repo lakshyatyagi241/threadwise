@@ -6,7 +6,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { randomToken, sha256Hex } from '../support/crypto-utils';
 
-export type TokenKind = 'email_verify' | 'password_reset' | 'email_change';
+export type TokenKind = 'email_verify' | 'password_reset' | 'email_change' | 'invite';
 
 export interface ConsumedToken {
   userId: number;
