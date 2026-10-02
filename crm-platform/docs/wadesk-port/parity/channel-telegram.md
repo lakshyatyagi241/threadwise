@@ -18,7 +18,7 @@ Evidence so far is automated, no screen yet:
 | ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | WD-TG-001        | partial      | The list endpoint exists (`GET /telegram/bots`); the hub screen is T5.                                                                                   |
 | WD-TG-002        | backend-done | Connect by token, encrypted, re-paste updates, webhook registered, refusal keeps it.                                                                     |
-| WD-TG-007        | backend-done | Fix inbound, pause and resume, payment settings, disconnect. Screen is T5.                                                                               |
+| WD-TG-007        | screen-done  | Fix inbound, pause and resume, payment settings, disconnect, on each bot card.                                                                           |
 | WD-TG-019        | partial      | Permission keys added (`tg.*`). The plan flags are a shim (see below).                                                                                   |
 | WD-TG-003        | backend-done | Public webhook, routing token, secret header, always 200, flood limit, tenant by a narrow lookup function.                                               |
 | WD-TG-004        | partial      | Thread, contact, message and unread are done. Media is not downloaded (no storage upload yet) and automation is a stand-in.                              |
@@ -65,3 +65,21 @@ Evidence so far is automated, no screen yet:
 - The flood limit (120 a minute per token) is not covered by a test.
 - No real Telegram call was made (no bot token here): the Bot API client is covered by the e2e through a fake only.
 - No screen exists yet, so the Playwright twin run against the running WaDesk has not been done for this feature.
+
+## Screens (T5)
+
+`apps/web/src/features/channel-telegram`: hub `/telegram`, list `/telegram/broadcasts`, compose `/telegram/broadcasts/create`; nav entry
+in the Channels group (the planned placeholder is removed); messages `messages/en/telegram.json`. `compose-model.test.ts` covers the
+preview, template fill, button labels and the create rule.
+
+Intended differences on the screens:
+
+| #   | Area         | WaDesk                                                        | Here                                                                                                               |
+| --- | ------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 12  | `{name}`     | Screen promises `{name}`; the sender only replaced `{{name}}` | The sender replaces `{name}` too, so what the screen promises is what is sent. Nothing WaDesk accepted is refused. |
+| 13  | Sending row  | "Resume" re-runs the browser loop                             | "Pause": a worker sends, so the only thing left to do to a sending broadcast is stop it.                           |
+| 14  | Attachment   | File picker (50 MB)                                           | A public address; uploading a file waits on the storage service (blocked, recorded).                               |
+| 15  | Hub header   | Team inbox, Flows, Broadcasts                                 | Adds a "Telegram broadcasts" link, the only way into that list from the hub.                                       |
+| 16  | Account card | Connect Account opens a QR and phone login                    | Shown disabled with the reason (T6, needs the Node bridge).                                                        |
+
+Not verified: the side-by-side run against WaDesk (the dev sign-in is the user's), the 3-second polling while a broadcast is sending.

@@ -40,6 +40,7 @@ describe('the message text', () => {
   it('{{name}} becomes the chat title, with or without spaces; nothing else is merged', () => {
     expect(personalise('Hi {{name}}, and {{ name }}!', 'Asha')).toBe('Hi Asha, and Asha!');
     expect(personalise('Hi {{first_name}}', 'Asha')).toBe('Hi {{first_name}}');
+    expect(personalise('Hi {name}!', 'Asha')).toBe('Hi Asha!');
     expect(personalise('  Hi {{name}}  ', null)).toBe('Hi');
   });
 });

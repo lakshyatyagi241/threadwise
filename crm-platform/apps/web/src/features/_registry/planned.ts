@@ -49,7 +49,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
 
   // Channels
   { id: 'channels', group: 'channels', labelKey: L('channels'), href: '/channels', order: 0, icon: 'channels' },
-  { id: 'telegram', group: 'channels', labelKey: L('telegram'), href: '/telegram', order: 10, icon: 'send' },
   { id: 'sms', group: 'channels', labelKey: L('sms'), href: '/sms', order: 20, icon: 'sms' },
   { id: 'line', group: 'channels', labelKey: L('line'), href: '/line', order: 30, icon: 'chat' },
   { id: 'viber', group: 'channels', labelKey: L('viber'), href: '/viber', order: 40, icon: 'phone' },
