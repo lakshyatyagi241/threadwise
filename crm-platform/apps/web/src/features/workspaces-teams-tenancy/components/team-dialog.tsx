@@ -146,6 +146,7 @@ function TeamForm({
       setNameError(
         problem === 'required' ? t('nameRequired') : t('nameTooLong', { max: WSP_TEAM_NAME_MAX }),
       );
+      document.getElementById(`${ids}-name`)?.focus();
       return;
     }
     setBusy(true);
@@ -180,6 +181,7 @@ function TeamForm({
           maxLength={WSP_TEAM_NAME_MAX}
           autoComplete="off"
           autoFocus
+          required
           invalid={Boolean(nameError)}
         />
       </Field>

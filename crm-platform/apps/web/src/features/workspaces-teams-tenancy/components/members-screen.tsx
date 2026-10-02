@@ -2,7 +2,7 @@
 
 import { Alert, Button, ConfirmDialog, useToast } from '@crm/ui';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { WSP_INVITE_TTL_DAYS, type WspMember } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useMembers, useMembersSummary, useRefreshWorkspace } from '../api/hooks';
@@ -47,6 +47,17 @@ function Members() {
   const membersQ = useMembers(q, tierQuery(tier));
   const summary = summaryQ.data;
   const me = summary?.me;
+
+  // Search and the role filter are answered by the server, and a new query has no data yet. The rows already on screen
+  // stay (dimmed) until the answer arrives instead of flashing placeholder rows on every keystroke.
+  const items = useMemo(() => membersQ.data?.pages.flatMap((p) => p.data) ?? [], [membersQ.data]);
+  const [previous, setPrevious] = useState<{ data: unknown; items: WspMember[] }>({
+    data: undefined,
+    items: [],
+  });
+  if (membersQ.data && previous.data !== membersQ.data) setPrevious({ data: membersQ.data, items });
+  const refreshing = membersQ.isPending && previous.items.length > 0;
+  const shown = refreshing ? previous.items : items;
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [confirm, setConfirm] = useState<{ kind: 'remove' | 'reset'; member: WspMember } | null>(
@@ -125,10 +136,10 @@ function Members() {
   }
 
   const failed = summaryQ.isError ? summaryQ.error : membersQ.isError ? membersQ.error : null;
-  const loading = summaryQ.isPending || membersQ.isPending;
+  const loading = summaryQ.isPending || (membersQ.isPending && !refreshing);
   const seats = seatsLine(summary?.seats);
-  const count = q ? membersQ.items.length : (summary?.counts[tier] ?? membersQ.items.length);
-  const countMore = q !== '' && membersQ.hasNextPage;
+  const count = q ? shown.length : (summary?.counts[tier] ?? shown.length);
+  const countMore = q !== '' && !refreshing && membersQ.hasNextPage;
   const canInvite = me?.canInvite ?? false;
 
   return (
@@ -221,7 +232,8 @@ function Members() {
               </div>
             ) : (
               <MembersTable
-                members={membersQ.items}
+                members={shown}
+                refreshing={refreshing}
                 summary={summary}
                 loading={loading}
                 filtered={q !== '' || tier !== 'all'}

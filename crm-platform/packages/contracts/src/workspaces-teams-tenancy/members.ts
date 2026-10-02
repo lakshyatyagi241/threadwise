@@ -23,6 +23,18 @@ export const WSP_TIER_RANK: Record<WspRoleTier, number> = {
 };
 
 export const WSP_MEMBER_NAME_MAX = 191;
+
+/**
+ * A display name (member, team) with whitespace AND invisible formatting characters (zero-width space, joiners, word
+ * joiner, byte-order mark) removed from both ends, so a name cannot hide behind characters nobody can see.
+ */
+export const wspDisplayName = (max: number) =>
+  z
+    .string()
+    .transform((v) =>
+      v.replace(/^[\s\u200B-\u200D\u2060\uFEFF]+|[\s\u200B-\u200D\u2060\uFEFF]+$/g, ''),
+    )
+    .pipe(z.string().min(1).max(max));
 export const WSP_INVITE_TTL_DAYS = 7;
 
 export const wspMemberStatusSchema = z.enum(['active', 'pending', 'inactive']);
@@ -58,7 +70,13 @@ export const wspMemberSchema = z.object({
 export type WspMember = z.infer<typeof wspMemberSchema>;
 
 export const listWspMembersQuerySchema = paginationQuerySchema.extend({
-  q: z.string().trim().min(1).max(200).optional().describe('Name or email contains, case-insensitive'),
+  q: z
+    .string()
+    .trim()
+    .min(1)
+    .max(200)
+    .optional()
+    .describe('Name or email contains, case-insensitive'),
   tier: wspRoleTierSchema.optional(),
 });
 export type ListWspMembersQuery = z.infer<typeof listWspMembersQuerySchema>;
@@ -90,7 +108,7 @@ export const wspMembersSummarySchema = z.object({
 export type WspMembersSummary = z.infer<typeof wspMembersSummarySchema>;
 
 export const inviteWspMemberSchema = z.object({
-  fullName: z.string().trim().min(1).max(WSP_MEMBER_NAME_MAX),
+  fullName: wspDisplayName(WSP_MEMBER_NAME_MAX),
   email: emailSchema,
   roleId: uuidSchema,
 });
