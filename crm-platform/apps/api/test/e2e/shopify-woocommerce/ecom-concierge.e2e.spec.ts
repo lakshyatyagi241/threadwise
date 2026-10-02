@@ -51,6 +51,8 @@ beforeAll(async () => {
       patches.push({ order, patch });
       return Promise.resolve(orderOk);
     },
+    recent: () => Promise.resolve([]),
+    salesReport: () => Promise.resolve({}),
     createPendingOrder: (items) => {
       created.push([...items]);
       return Promise.resolve(link);

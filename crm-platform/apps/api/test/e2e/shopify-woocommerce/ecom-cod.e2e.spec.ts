@@ -51,6 +51,8 @@ beforeAll(async () => {
       remote.push({ order, status: String(patch.status) });
       return Promise.resolve(true);
     },
+    recent: () => Promise.resolve([]),
+    salesReport: () => Promise.resolve({}),
     createPendingOrder: () => Promise.resolve(null),
   });
 }, 240_000);

@@ -20,6 +20,9 @@ import { CodRepository } from './cod.repository';
 import { CodService } from './cod.service';
 import { ConciergeService } from './concierge.service';
 import { ComplianceService } from './compliance.service';
+import { DashboardController } from './dashboard.controller';
+import { DashboardRepository } from './dashboard.repository';
+import { DashboardService } from './dashboard.service';
 import { EcomInboundService } from './ecom-inbound.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
@@ -53,6 +56,7 @@ import { WoocommerceService } from './woocommerce.service';
     EcomWebhookController,
     AutomationsController,
     BroadcastController,
+    DashboardController,
   ],
   providers: [
     CryptoService,
@@ -71,6 +75,8 @@ import { WoocommerceService } from './woocommerce.service';
     CartRepository,
     CartService,
     SegmentsRepository,
+    DashboardRepository,
+    DashboardService,
     BroadcastService,
     StockRepository,
     StockService,

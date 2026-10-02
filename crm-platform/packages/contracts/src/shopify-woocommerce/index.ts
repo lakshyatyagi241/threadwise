@@ -4,3 +4,4 @@ export * from './store';
 export * from './sync';
 export * from './automations';
 export * from './broadcast';
+export * from './dashboard';
