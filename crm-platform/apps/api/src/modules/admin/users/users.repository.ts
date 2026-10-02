@@ -155,6 +155,28 @@ export class UsersRepository {
     return rows;
   }
 
+  /** A user's current roles with internal ids, for the grant rules and the audit delta. */
+  async currentRoles(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+  ): Promise<Array<{ id: number; name: string }>> {
+    return tx
+      .select({ id: roles.id, name: roles.name })
+      .from(userRoles)
+      .innerJoin(roles, and(eq(roles.orgId, userRoles.orgId), eq(roles.id, userRoles.roleId)))
+      .where(and(eq(userRoles.orgId, orgId), eq(userRoles.userId, userId)));
+  }
+
+  async roleNames(tx: Tx, orgId: number, roleIds: number[]): Promise<string[]> {
+    if (roleIds.length === 0) return [];
+    const rows = await tx
+      .select({ name: roles.name })
+      .from(roles)
+      .where(and(eq(roles.orgId, orgId), inArray(roles.id, roleIds)));
+    return rows.map((r) => r.name).sort();
+  }
+
   /** Resolves role uuids to internal ids. Silently drops ones that don't exist in this org. */
   async resolveRoleIds(tx: Tx, orgId: number, uuids: string[]): Promise<number[]> {
     if (uuids.length === 0) return [];
