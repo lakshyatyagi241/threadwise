@@ -75,6 +75,10 @@ describe('formatting', () => {
     expect(formatRange('2026-10-01T00:00:00.000Z', '2026-10-02T09:00:00.000Z', 'en')).toBe(
       '01 Oct - 02 Oct',
     );
+    // the API's `to` is exclusive: a full month ends on its last day, not on the 1st of the next
+    expect(formatRange('2026-10-01T00:00:00.000Z', '2026-11-01T00:00:00.000Z', 'en')).toBe(
+      '01 Oct - 31 Oct',
+    );
   });
 });
 
