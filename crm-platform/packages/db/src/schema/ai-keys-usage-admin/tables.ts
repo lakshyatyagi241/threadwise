@@ -28,6 +28,8 @@ export const adminAiKeys = pgTable(
     name: text('name').notNull(),
     /** AES-GCM ciphertext (credential pattern); never plain text. */
     apiKey: text('api_key'),
+    /** Last four characters of the key, so a screen can say which one is saved. Not a secret. */
+    keyLast4: text('key_last4'),
     defaultModel: text('default_model'),
     extraConfig: text('extra_config'),
     isActive: boolean('is_active').notNull().default(false),
@@ -51,6 +53,7 @@ export const aiProviderKeys = pgTable(
     provider: text('provider').notNull(),
     /** AES-GCM ciphertext (credential pattern); never plain text. */
     apiKey: text('api_key').notNull(),
+    keyLast4: text('key_last4'),
     isActive: boolean('is_active').notNull().default(true),
     createdAt: createdAt(),
     updatedAt: updatedAt(),

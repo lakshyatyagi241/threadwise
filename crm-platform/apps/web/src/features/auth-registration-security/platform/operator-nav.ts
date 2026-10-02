@@ -50,6 +50,18 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  {
+    id: 'ai-keys',
+    href: '/admin/api-keys',
+    labelKey: 'ai-keys-usage-admin.admin.nav.keys',
+    groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  },
+  {
+    id: 'ai-dashboard',
+    href: '/admin/ai-dashboard',
+    labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
+    groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  },
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */
