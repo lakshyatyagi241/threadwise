@@ -48,13 +48,13 @@ describe('row permissions', () => {
   const admin = summary('admin').me;
   const manager = summary('manager').me;
 
-  it('lets an owner change an admin but never the owner row or themselves', () => {
+  it('lets an owner change an admin or another owner but never themselves', () => {
     expect(canChangeRole(member(2, 'admin'), owner)).toBe(true);
-    expect(canChangeRole(member(3, 'owner'), owner)).toBe(false);
+    expect(canChangeRole(member(3, 'owner'), owner)).toBe(true);
     expect(canChangeRole(member(1, 'owner'), owner)).toBe(false);
   });
 
-  it('makes a row read-only for someone of a higher tier than the caller', () => {
+  it('makes a row read-only for someone of a higher tier than the caller, an Owner row for anyone but an Owner', () => {
     expect(canChangeRole(member(4, 'owner'), admin)).toBe(false);
     expect(canChangeRole(member(5, 'agent'), admin)).toBe(true);
   });

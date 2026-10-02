@@ -14,6 +14,8 @@ import {
  * Workspace members and teams end to end through HTTP (WD-WSP-015..022, 046, 047): the members list, the invite by single-use
  * link and its acceptance, role changes, removal, password reset, the role model and teams, with the audit row, the outbox
  * event and the tenant isolation each write must have. One app, one database; each block works in an organization of its own.
+ * The role model is RBAC's: five preset roles (Owner = system_key admin, Admin = workspace_admin, Manager, Agent, Viewer) and the
+ * keys org.member.invite, org.member.role_assign and inbox.team.manage; who may grant what is WorkspaceRoleRulesService.
  * Where the port deliberately differs from WaDesk the test says so (docs/wadesk-port/parity/workspaces-teams-tenancy.md).
  */
 let h: Harness;
@@ -59,7 +61,7 @@ interface Team {
   rowVersion: number;
 }
 
-/** A signed-in member holding one of the organization's roles by name (Admin, Manager, Agent, Viewer, or a custom one). */
+/** A signed-in member holding one of the organization's roles by name (Owner, Admin, Manager, Agent, Viewer, or a custom one). */
 async function addMember(
   t: Tenant,
   name: string,
@@ -357,7 +359,7 @@ describe('WD-WSP-016: invite a member', () => {
     ).toBe(1);
   });
 
-  it('016 #3: an admin who is not the owner cannot invite as admin (403 WSP_CANNOT_GRANT_ROLE); the owner can', async () => {
+  it('016 #3: an admin who is not the owner cannot invite as admin (403 RBAC_ROLE_GRANT_FORBIDDEN); the owner can', async () => {
     const adminRole = await roleId(t, 'Admin');
     const denied = await invite(adminNotOwner.token, {
       fullName: 'Nope',
@@ -365,7 +367,7 @@ describe('WD-WSP-016: invite a member', () => {
       roleId: adminRole,
     });
     expect(denied.status).toBe(403);
-    expect(code(denied)).toBe('WSP_CANNOT_GRANT_ROLE');
+    expect(code(denied)).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
     expect(
       await count(`SELECT count(*) n FROM users WHERE email = 'nope16@example.test'`, []),
     ).toBe(0);
@@ -482,7 +484,7 @@ describe('WD-WSP-016: invite a member', () => {
     expect(res.status).toBe(401);
   });
 
-  it('016: an agent (no member.invite) cannot invite; a bad payload and an unknown role are 422 with the fields named', async () => {
+  it('016: an agent (no org.member.invite) cannot invite; a bad payload and an unknown role are 422 with the fields named', async () => {
     const agent = await addMember(t, 'Plain Agent', 'Agent');
     const denied = await invite(agent.token, {
       fullName: 'X',
@@ -781,7 +783,7 @@ describe("WD-WSP-017: change a member's role", () => {
     expect((await permissionsOf(agent.token))['record.contacts.read']).toBe('all');
   });
 
-  it('017 #2: changing your own role is 422 WSP_CANNOT_CHANGE_OWN_ROLE', async () => {
+  it('017 #2: changing your own role is 422 RBAC_SELF_ROLE_CHANGE', async () => {
     const me = (await members(adminNotOwner.token)).data.find((m) => m.id === adminNotOwner.uuid)!;
     const res = await change(
       adminNotOwner.token,
@@ -790,10 +792,10 @@ describe("WD-WSP-017: change a member's role", () => {
       me.rowVersion,
     );
     expect(res.status).toBe(422);
-    expect(code(res)).toBe('WSP_CANNOT_CHANGE_OWN_ROLE');
+    expect(code(res)).toBe('RBAC_SELF_ROLE_CHANGE');
   });
 
-  it('017 #3: an admin who is not the owner cannot set a member to admin (403 WSP_CANNOT_GRANT_ROLE)', async () => {
+  it('017 #3: an admin who is not the owner cannot set a member to admin (403 RBAC_ROLE_GRANT_FORBIDDEN)', async () => {
     const v = await rowOf(t.admin, viewer.uuid);
     const res = await change(
       adminNotOwner.token,
@@ -802,7 +804,7 @@ describe("WD-WSP-017: change a member's role", () => {
       v.rowVersion,
     );
     expect(res.status).toBe(403);
-    expect(code(res)).toBe('WSP_CANNOT_GRANT_ROLE');
+    expect(code(res)).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
     expect((await rowOf(t.admin, viewer.uuid)).tier).toBe('viewer');
     // The owner can.
     expect(
@@ -810,7 +812,7 @@ describe("WD-WSP-017: change a member's role", () => {
     ).toBe('admin');
   });
 
-  it('017 #4 (intended difference): an admin demoting the owner is refused (WaDesk allowed it): 422 WSP_LAST_OWNER, the owner keeps their role', async () => {
+  it('017 #4 (intended difference): an admin demoting the owner is refused (WaDesk allowed it): 403 RBAC_ROLE_GRANT_FORBIDDEN, the owner keeps their role', async () => {
     const owner = await rowOf(t.admin, await ownerUuid(t));
     const res = await change(
       adminNotOwner.token,
@@ -818,8 +820,8 @@ describe("WD-WSP-017: change a member's role", () => {
       await roleId(t, 'Viewer'),
       owner.rowVersion,
     );
-    expect(res.status).toBe(422);
-    expect(code(res)).toBe('WSP_LAST_OWNER');
+    expect(res.status).toBe(403);
+    expect(code(res)).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
     expect((await rowOf(t.admin, owner.id)).tier).toBe('owner');
     expect(
       await count(
@@ -829,12 +831,52 @@ describe("WD-WSP-017: change a member's role", () => {
     ).toBe(1);
   });
 
-  it('017 (fixed): nobody acts on a member who outranks them (403 WSP_CANNOT_ACT_ON_HIGHER_RANK); equal rank is fine', async () => {
-    const lowAdmin = await api.member(t, 'rolemgr', [['member.role.assign'], ['member.invite']]);
+  it('017 (intended difference): Owner is a role an Owner can hand to someone, and take away again; the organization never has none', async () => {
+    const second = await addMember(t, 'Second Owner', 'Agent');
+    const row = await rowOf(t.admin, second.uuid);
+    const promoted = await change(t.admin, second.uuid, await roleId(t, 'Owner'), row.rowVersion);
+    expect(promoted.status, JSON.stringify(promoted.body)).toBe(200);
+    expect(promoted.body).toMatchObject({ tier: 'owner', isOwner: true });
+    expect((await members(t.admin)).data.filter((m) => m.isOwner)).toHaveLength(2);
+    // An Admin cannot hand it out (owner-only grant), and the new Owner cannot demote themselves.
+    expect(
+      code(
+        await change(
+          adminNotOwner.token,
+          agent.uuid,
+          await roleId(t, 'Owner'),
+          (await rowOf(t.admin, agent.uuid)).rowVersion,
+        ),
+      ),
+    ).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
+    expect(
+      code(
+        await change(second.token, second.uuid, await roleId(t, 'Agent'), promoted.body.rowVersion),
+      ),
+    ).toBe('RBAC_SELF_ROLE_CHANGE');
+    // The original Owner demotes them again; one Owner is left and stays.
+    const demoted = await change(
+      t.admin,
+      second.uuid,
+      await roleId(t, 'Agent'),
+      promoted.body.rowVersion,
+    );
+    expect(demoted.status, JSON.stringify(demoted.body)).toBe(200);
+    expect(demoted.body).toMatchObject({ tier: 'agent', isOwner: false });
+    expect((await members(t.admin)).data.filter((m) => m.isOwner)).toHaveLength(1);
+  });
+
+  it('017 (fixed): nobody acts on a member who outranks them (403 WSP_CANNOT_ACT_ON_HIGHER_RANK on remove and reset, RBAC_ROLE_GRANT_FORBIDDEN on a role change); equal rank is fine', async () => {
+    // A custom role holding both keys ranks below every preset (RBAC's ladder), so it may act on custom-role members only.
+    const lowAdmin = await api.member(t, 'rolemgr', [
+      ['org.member.role_assign'],
+      ['org.member.invite'],
+      ['record.contacts.read'],
+    ]);
     const m = await rowOf(t.admin, manager.uuid);
     const res = await change(lowAdmin.token, manager.uuid, await roleId(t, 'Agent'), m.rowVersion);
     expect(res.status).toBe(403);
-    expect(code(res)).toBe('WSP_CANNOT_ACT_ON_HIGHER_RANK');
+    expect(code(res)).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
     const removal = await api.as(lowAdmin.token).delete(`/v2/workspace/members/${manager.uuid}`);
     expect(removal.status).toBe(403);
     expect(code(removal)).toBe('WSP_CANNOT_ACT_ON_HIGHER_RANK');
@@ -843,17 +885,41 @@ describe("WD-WSP-017: change a member's role", () => {
       .post(`/v2/workspace/members/${manager.uuid}/reset-password`)
       .send();
     expect(reset.status).toBe(403);
-    // A custom role ranks as an agent: it may act on other agents.
-    const peer = await addMember(t, 'Peer Agent', 'Agent');
-    const p = await rowOf(t.admin, peer.uuid);
+    expect(code(reset)).toBe('WSP_CANNOT_ACT_ON_HIGHER_RANK');
+    // Even an Agent outranks it.
+    const peerAgent = await addMember(t, 'Peer Agent', 'Agent');
+    const pa = await rowOf(t.admin, peerAgent.uuid);
     expect(
-      (await change(lowAdmin.token, peer.uuid, await roleId(t, 'Viewer'), p.rowVersion)).status,
-    ).toBe(200);
+      code(await change(lowAdmin.token, peerAgent.uuid, await roleId(t, 'Viewer'), pa.rowVersion)),
+    ).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
+    // A member holding a custom role is its equal: it may change them to a custom role it fully holds, and remove them.
+    const peer = await api.member(t, 'peercustom', [['record.contacts.read']]);
+    const peerUuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [peer.userId]))
+      .rows[0].uuid as string;
+    const held = (
+      await h.owner.query(
+        `INSERT INTO roles (org_id, name) VALUES ($1,'Observer') RETURNING uuid, id`,
+        [t.orgId],
+      )
+    ).rows[0];
+    await h.owner.query(
+      `INSERT INTO role_grants (org_id, role_id, permission_key, effect, record_scope) VALUES ($1,$2,'record.contacts.read','allow','all')`,
+      [t.orgId, held.id],
+    );
+    const p = await rowOf(t.admin, peerUuid);
+    expect((await change(lowAdmin.token, peerUuid, held.uuid, p.rowVersion)).status).toBe(200);
     // It may not hand out a role above its own.
-    const v = await rowOf(t.admin, peer.uuid);
-    const up = await change(lowAdmin.token, peer.uuid, await roleId(t, 'Manager'), v.rowVersion);
+    const up = await change(
+      lowAdmin.token,
+      peerUuid,
+      await roleId(t, 'Viewer'),
+      (await rowOf(t.admin, peerUuid)).rowVersion,
+    );
     expect(up.status).toBe(403);
-    expect(code(up)).toBe('WSP_CANNOT_GRANT_ROLE');
+    expect(code(up)).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
+    expect((await api.as(lowAdmin.token).delete(`/v2/workspace/members/${peerUuid}`)).status).toBe(
+      204,
+    );
   });
 
   it('017: a stale rowVersion is 409 ROW_VERSION_CONFLICT and changes nothing', async () => {
@@ -864,7 +930,7 @@ describe("WD-WSP-017: change a member's role", () => {
     expect((await rowOf(t.admin, manager.uuid)).tier).toBe('manager');
   });
 
-  it('017: without member.role.assign it is 403; an unknown member, a member of another workspace and an unknown role are 404 / 404 / 422', async () => {
+  it('017: without org.member.role_assign it is 403; an unknown member, a member of another workspace and an unknown role are 404 / 404 / 422', async () => {
     const m = await rowOf(t.admin, manager.uuid);
     const denied = await change(
       manager.token,
@@ -964,7 +1030,7 @@ describe('WD-WSP-018 and WD-WSP-047: remove a member (soft), and invite the addr
     expect((await members(t.admin)).data.some((m) => m.isOwner)).toBe(true);
   });
 
-  it('018 #3: a manager (no member.invite) cannot remove: 403', async () => {
+  it('018 #3: a manager (no org.member.invite) cannot remove: 403', async () => {
     const manager = await addMember(t, 'Mgr18', 'Manager');
     const target = await addMember(t, 'Target18', 'Agent');
     const res = await api.as(manager.token).delete(`/v2/workspace/members/${target.uuid}`);
@@ -1110,7 +1176,7 @@ describe("WD-WSP-019: reset a member's password", () => {
     expect(own.status).toBe(200);
   });
 
-  it('019 #3: a user who is not in this workspace is 404 (and a manager without member.invite is 403)', async () => {
+  it('019 #3: a user who is not in this workspace is 404 (and a manager without org.member.invite is 403)', async () => {
     const other = await api.signup('wsp19o');
     const foreign = await addMember(other, 'Foreign19', 'Agent');
     expect(
@@ -1164,64 +1230,56 @@ describe('WD-WSP-020: the role model, the permission matrix and the role gates',
     t = await api.signup('wsp20');
   });
 
-  it('020: a new organization gets the Admin preset (locked, every key) and the Manager and Viewer presets (unlocked)', async () => {
+  it('020: a new organization gets the five RBAC presets: Owner (locked, system_key admin), Admin, Manager, Agent and Viewer', async () => {
     const roles = (
       await h.owner.query(
-        `SELECT name, system_key, is_locked FROM roles WHERE org_id = $1 AND system_key IS NOT NULL ORDER BY system_key`,
+        `SELECT name, system_key, is_locked FROM roles WHERE org_id = $1 AND system_key IS NOT NULL ORDER BY name`,
         [t.orgId],
       )
     ).rows;
     expect(roles).toEqual([
-      { name: 'Admin', system_key: 'admin', is_locked: true },
+      { name: 'Admin', system_key: 'workspace_admin', is_locked: false },
+      { name: 'Agent', system_key: 'agent', is_locked: false },
       { name: 'Manager', system_key: 'manager', is_locked: false },
-      { name: 'Viewer', system_key: 'readonly', is_locked: false },
+      { name: 'Owner', system_key: 'admin', is_locked: true },
+      { name: 'Viewer', system_key: 'viewer', is_locked: false },
     ]);
-    const adminKeys = await count(
-      `SELECT count(*) n FROM role_grants g JOIN roles r ON r.org_id = g.org_id AND r.id = g.role_id WHERE g.org_id = $1 AND r.system_key = 'admin' AND g.permission_key IN ('member.invite','member.role.assign','team.manage','workspace.settings','workspace.export')`,
-      [t.orgId],
-    );
-    expect(adminKeys).toBe(5);
+    const holders = async (key: string) =>
+      (
+        await h.owner.query(
+          `SELECT r.name FROM role_grants g JOIN roles r ON r.org_id = g.org_id AND r.id = g.role_id WHERE g.org_id = $1 AND g.permission_key = $2 ORDER BY r.name`,
+          [t.orgId, key],
+        )
+      ).rows.map((x) => x.name);
+    for (const key of ['org.member.invite', 'org.member.role_assign', 'inbox.team.manage']) {
+      expect(await holders(key), key).toEqual(['Admin', 'Owner']);
+    }
   });
 
-  it('020 #1: an agent can reply to conversations but not assign them, and holds none of the member, team or workspace keys', async () => {
+  it('020 #1: an agent can reply to conversations but not assign them, and holds none of the member or team keys', async () => {
     const agent = await addMember(t, 'Agent20', 'Agent');
     const perms = await permissionsOf(agent.token);
-    expect(perms['inbox.conversation.reply']).toBe('own');
+    expect(perms['inbox.conversation.reply']).toBe('all');
     for (const k of [
-      'member.invite',
-      'member.role.assign',
-      'team.manage',
-      'workspace.settings',
-      'workspace.export',
+      'org.member.invite',
+      'org.member.role_assign',
+      'inbox.team.manage',
       'inbox.conversation.assign',
     ]) {
       expect(perms[k], k).toBeUndefined();
     }
   });
 
-  it('020 #2: an admin holds the member, team and workspace keys; a manager holds none of them but sees every record', async () => {
+  it('020 #2: an admin holds the member and team keys; a manager holds none of them but sees every record', async () => {
     const admin = await addMember(t, 'Admin20', 'Admin');
     const manager = await addMember(t, 'Manager20', 'Manager');
     const adminPerms = await permissionsOf(admin.token);
-    for (const k of [
-      'member.invite',
-      'member.role.assign',
-      'team.manage',
-      'workspace.settings',
-      'workspace.export',
-    ]) {
-      expect(adminPerms[k], k).toBe('all');
-    }
+    const keys = ['org.member.invite', 'org.member.role_assign', 'inbox.team.manage'];
+    for (const k of keys) expect(adminPerms[k], k).toBe('all');
+    // The owner-only keys stay with the Owner.
+    expect(adminPerms['org.delete']).toBeUndefined();
     const mgrPerms = await permissionsOf(manager.token);
-    for (const k of [
-      'member.invite',
-      'member.role.assign',
-      'team.manage',
-      'workspace.settings',
-      'workspace.export',
-    ]) {
-      expect(mgrPerms[k], k).toBeUndefined();
-    }
+    for (const k of keys) expect(mgrPerms[k], k).toBeUndefined();
     expect(mgrPerms['record.contacts.read']).toBe('all');
     expect(mgrPerms['record.contacts.delete']).toBe('all');
     expect(mgrPerms['inbox.conversation.assign']).toBe('all');
@@ -1230,7 +1288,7 @@ describe('WD-WSP-020: the role model, the permission matrix and the role gates',
   it('020 #3: a viewer can only read: every key they hold is a read key', async () => {
     const viewer = await addMember(t, 'Viewer20', 'Viewer');
     const perms = await permissionsOf(viewer.token);
-    expect(Object.keys(perms).length).toBeGreaterThan(5);
+    expect(Object.keys(perms).length).toBeGreaterThan(0);
     for (const k of Object.keys(perms)) expect(k.endsWith('.read'), k).toBe(true);
     expect((await createTeam(viewer.token, { name: 'Nope20' })).status).toBe(403);
     expect(
@@ -1244,14 +1302,14 @@ describe('WD-WSP-020: the role model, the permission matrix and the role gates',
     ).toBe(403);
   });
 
-  it('020 #5: the roles a caller may grant: an owner all but owner, an admin manager, agent, custom and viewer (not admin), an agent only up to their own rank', async () => {
+  it('020 #5: the roles a caller may grant (RBAC ladder): an Owner every role, an Admin all but Owner and Admin, nobody without org.member.role_assign', async () => {
     const grantable = (summary: { roles: Array<{ name: string; grantable: boolean }> }) =>
       summary.roles
         .filter((r) => r.grantable)
         .map((r) => r.name)
         .sort();
     const ownerSummary = (await api.as(t.admin).get('/v2/workspace/members/summary')).body;
-    expect(grantable(ownerSummary)).toEqual(['Admin', 'Agent', 'Manager', 'Viewer']);
+    expect(grantable(ownerSummary)).toEqual(['Admin', 'Agent', 'Manager', 'Owner', 'Viewer']);
     expect(ownerSummary.me).toMatchObject({
       tier: 'owner',
       canInvite: true,
@@ -1260,15 +1318,32 @@ describe('WD-WSP-020: the role model, the permission matrix and the role gates',
     });
     const admin = await addMember(t, 'Admin20b', 'Admin');
     const adminSummary = (await api.as(admin.token).get('/v2/workspace/members/summary')).body;
-    expect(grantable(adminSummary)).not.toContain('Admin');
-    expect(grantable(adminSummary)).toEqual(expect.arrayContaining(['Manager', 'Viewer']));
-    expect(adminSummary.me.tier).toBe('admin');
+    expect(grantable(adminSummary)).toEqual(['Agent', 'Manager', 'Viewer']);
+    expect(adminSummary.me).toMatchObject({
+      tier: 'admin',
+      canInvite: true,
+      canAssignRoles: true,
+      canManageTeams: true,
+    });
     const agent = await addMember(t, 'Agent20b', 'Agent');
     const agentSummary = (await api.as(agent.token).get('/v2/workspace/members/summary')).body;
-    expect(grantable(agentSummary)).not.toContain('Manager');
-    expect(grantable(agentSummary)).toContain('Viewer');
+    expect(grantable(agentSummary)).toEqual([]);
+    expect(agentSummary.me).toMatchObject({
+      tier: 'agent',
+      canInvite: false,
+      canAssignRoles: false,
+      canManageTeams: false,
+    });
     expect(adminSummary.seats.used).toBeGreaterThan(1);
-    expect(ownerSummary.roles[0].tier).toBe('admin');
+    // The roles come highest first, the Owner preset on top.
+    expect(ownerSummary.roles[0]).toMatchObject({ name: 'Owner', tier: 'owner' });
+    expect(ownerSummary.roles.map((r: { tier: string }) => r.tier).slice(0, 5)).toEqual([
+      'owner',
+      'admin',
+      'manager',
+      'agent',
+      'viewer',
+    ]);
   });
 });
 
@@ -1326,7 +1401,7 @@ describe('WD-WSP-022: teams', () => {
     expect(plain.body.color).toBe('#075E54');
   });
 
-  it('022 #2: a manager (no team.manage) cannot create, edit or delete a team: 403; any signed-in member can list', async () => {
+  it('022 #2: a manager (no inbox.team.manage) cannot create, edit or delete a team: 403; any signed-in member can list', async () => {
     const manager = await addMember(t, 'Mgr22', 'Manager');
     expect((await createTeam(manager.token, { name: 'Denied' })).status).toBe(403);
     const list = await api.as(t.admin).get('/v2/workspace/teams');
@@ -1580,42 +1655,40 @@ describe('WD-WSP-022: teams', () => {
   });
 });
 
-describe('WD-WSP-046: nobody acts on a higher rank, and only the owner hands out Admin', () => {
+describe('WD-WSP-046: nobody acts on a higher rank, and only an Owner hands out Admin', () => {
   it('046: the rank rules hold on every member action at once (invite, role, remove, reset) for a caller who holds the keys but ranks lower', async () => {
     const t = await api.signup('wsp46');
-    const caller = await api.member(t, 'keys-only', [['member.invite'], ['member.role.assign']]);
+    const caller = await api.member(t, 'keys-only', [
+      ['org.member.invite'],
+      ['org.member.role_assign'],
+    ]);
     const admin = await addMember(t, 'Admin46', 'Admin');
     const adminRow = (await members(t.admin)).data.find((m) => m.id === admin.uuid)!;
-    const attempts = [
-      await api.as(caller.token).delete(`/v2/workspace/members/${admin.uuid}`),
-      await api.as(caller.token).post(`/v2/workspace/members/${admin.uuid}/reset-password`).send(),
-      await api
-        .as(caller.token)
-        .patch(`/v2/workspace/members/${admin.uuid}/role`)
-        .send({ roleId: await roleId(t, 'Viewer'), rowVersion: adminRow.rowVersion }),
-    ];
-    for (const a of attempts) {
+    const removal = await api.as(caller.token).delete(`/v2/workspace/members/${admin.uuid}`);
+    const reset = await api
+      .as(caller.token)
+      .post(`/v2/workspace/members/${admin.uuid}/reset-password`)
+      .send();
+    for (const a of [removal, reset]) {
       expect(a.status).toBe(403);
       expect(code(a)).toBe('WSP_CANNOT_ACT_ON_HIGHER_RANK');
     }
-    expect(
-      code(
-        await invite(caller.token, {
-          fullName: 'X',
-          email: 'x46@example.test',
-          roleId: await roleId(t, 'Admin'),
-        }),
-      ),
-    ).toBe('WSP_CANNOT_GRANT_ROLE');
-    expect(
-      code(
-        await invite(caller.token, {
-          fullName: 'X',
-          email: 'x46@example.test',
-          roleId: await roleId(t, 'Manager'),
-        }),
-      ),
-    ).toBe('WSP_CANNOT_GRANT_ROLE');
+    // Handing out a role, or changing one, is RBAC's rule and answers with its code.
+    const roleChange = await api
+      .as(caller.token)
+      .patch(`/v2/workspace/members/${admin.uuid}/role`)
+      .send({ roleId: await roleId(t, 'Viewer'), rowVersion: adminRow.rowVersion });
+    expect(roleChange.status).toBe(403);
+    expect(code(roleChange)).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
+    for (const role of ['Admin', 'Manager']) {
+      const res = await invite(caller.token, {
+        fullName: 'X',
+        email: 'x46@example.test',
+        roleId: await roleId(t, role),
+      });
+      expect(res.status, role).toBe(403);
+      expect(code(res), role).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
+    }
     expect((await members(t.admin)).data.find((m) => m.id === admin.uuid)!.tier).toBe('admin');
   });
 });

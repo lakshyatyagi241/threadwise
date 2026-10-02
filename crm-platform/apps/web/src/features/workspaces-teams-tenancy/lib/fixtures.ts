@@ -36,11 +36,12 @@ export function summary(
   meTier: WspRoleTier,
   over: Partial<WspMembersSummary> = {},
 ): WspMembersSummary {
+  // RBAC's ladder (WorkspaceRoleRulesService): an Owner hands out every role, an Admin everything below Admin, nobody else anything.
   const rank = ['viewer', 'agent', 'manager', 'admin', 'owner'];
   const canGrant = (tier: WspRoleTier) =>
     meTier === 'owner'
       ? true
-      : tier !== 'owner' && tier !== 'admin' && rank.indexOf(tier) <= rank.indexOf(meTier);
+      : meTier === 'admin' && tier !== 'owner' && tier !== 'admin' && rank.indexOf(tier) >= 0;
   const privileged = meTier === 'owner' || meTier === 'admin';
   return {
     counts: { all: 5, owner: 1, admin: 1, manager: 1, agent: 1, viewer: 1, custom: 0, pending: 0 },

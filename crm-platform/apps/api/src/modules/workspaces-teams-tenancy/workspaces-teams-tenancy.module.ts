@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { RolesPermissionsModule } from '../roles-permissions';
 import { InvitationsController } from './invitations.controller';
 import { InvitationsService } from './invitations.service';
 import { MembersController } from './members.controller';
@@ -10,11 +11,12 @@ import { TeamsRepository } from './teams.repository';
 import { TeamsService } from './teams.service';
 
 /**
- * Workspace members and teams (WSP, WD-WSP-015..022, 046). Kernel services (audit, outbox, RBAC), the database, Redis and the
+ * Workspace members and teams (WSP, WD-WSP-015..022, 046). Who may hand out which role is the RBAC domain's
+ * `WorkspaceRoleRulesService`. Kernel services (audit, outbox, RBAC), the database, Redis and the
  * auth services (mail, one-time tokens, sessions, sign-in) are global.
  */
 @Module({
-  imports: [PlansCoreModule],
+  imports: [PlansCoreModule, RolesPermissionsModule],
   controllers: [MembersController, TeamsController, InvitationsController],
   providers: [MembersRepository, MembersService, TeamsRepository, TeamsService, InvitationsService],
   exports: [MembersService, TeamsService],

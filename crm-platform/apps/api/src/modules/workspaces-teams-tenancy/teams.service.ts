@@ -44,7 +44,7 @@ const isNameClash = (err: unknown): boolean =>
 
 /**
  * Teams inside a workspace (WD-WSP-022): the groups the inbox routes conversations to. Any signed-in member may read; creating,
- * editing and deleting need `team.manage` (the controller's decorator).
+ * editing and deleting need `inbox.team.manage` (the controller's decorator).
  *
  * Intended fixes over WaDesk: `memberIds` must be active members of THIS workspace (WaDesk attached any user id, even another
  * tenant's), and a team name is unique per workspace.

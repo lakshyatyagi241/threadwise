@@ -1370,7 +1370,7 @@ export default (h) => {
         scenario: /^members\.list\.shape$/,
         key: /^flag\.ownRow(RoleEditable|Removable|Resettable)$/,
         reason:
-          'The signed-in owner cannot change or remove their own row (the server refuses each: own role, owner, last owner), so our row does not offer those controls; WaDesk offers them and fails with an error message.',
+          'The signed-in Owner cannot change or remove their own row (the server refuses each: own role, removing an Owner, the RBAC last-Owner rule), so our row does not offer those controls; WaDesk offers them and fails with an error message.',
       },
       {
         scenario: /^members\.list\.shape$/,
@@ -1382,7 +1382,7 @@ export default (h) => {
         scenario: /^members\.role\.change-ui$/,
         key: 'ui.roleOptions',
         reason:
-          'The role list holds only roles the caller may grant: Owner is never grantable (ownership is the organization owner) and custom roles stand in for Agent. WaDesk lists all five fixed roles and refuses on the server.',
+          "The role list holds the roles the caller may grant by RBAC's ladder (an Owner: the five presets, Owner included, plus the organization's custom roles, which stand in beside Agent). WaDesk lists its five fixed roles and refuses on the server.",
       },
       {
         scenario: /^members\.reset\.ui$/,

@@ -24,8 +24,9 @@ import { MembersService } from './members.service';
 
 /**
  * Workspace members (WD-WSP-015..019). Reading needs no permission key (any signed-in member, as in WaDesk); inviting,
- * removing and resetting need `member.invite`, changing a role needs `member.role.assign`. The rank rules on top of those keys
- * (nobody acts on a higher role, only the owner grants Admin) are the service's. Literal paths are declared before `:id`.
+ * removing and resetting need `org.member.invite`, changing a role needs `org.member.role_assign` (RBAC's keys). The rank rules on
+ * top of those keys are RBAC's `WorkspaceRoleRulesService` for handing out a role and the service's for removing and resetting.
+ * Literal paths are declared before `:id`.
  */
 @ApiTags('workspace-members')
 @ActorKinds('user')
@@ -53,7 +54,7 @@ export class MembersController {
 
   @Post('invite')
   @Idempotent()
-  @RequirePermission('member.invite')
+  @RequirePermission('org.member.invite')
   @ApiOperation({
     summary: 'Invite a person by email: they get a single-use link to choose their password',
     description:
@@ -65,7 +66,7 @@ export class MembersController {
 
   @Post(':id/resend-invite')
   @HttpCode(HttpStatus.OK)
-  @RequirePermission('member.invite')
+  @RequirePermission('org.member.invite')
   @ApiOperation({
     summary: 'Send a pending member a fresh invitation link (the old one stops working)',
   })
@@ -74,7 +75,7 @@ export class MembersController {
   }
 
   @Patch(':id/role')
-  @RequirePermission('member.role.assign')
+  @RequirePermission('org.member.role_assign')
   @ApiOperation({
     summary: "Change a member's role",
     description:
@@ -89,7 +90,7 @@ export class MembersController {
 
   @Post(':id/reset-password')
   @HttpCode(HttpStatus.OK)
-  @RequirePermission('member.invite')
+  @RequirePermission('org.member.invite')
   @ApiOperation({
     summary: 'Email the member a link to set a new password (no password is shown to anyone)',
   })
@@ -99,7 +100,7 @@ export class MembersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @RequirePermission('member.invite')
+  @RequirePermission('org.member.invite')
   @ApiOperation({
     summary: 'Remove a member: access, roles and team places end now; the account is kept',
   })

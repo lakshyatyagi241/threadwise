@@ -1,29 +1,20 @@
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { Client } from 'pg';
-import { mkdtempSync, readdirSync, symlinkSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createDbClient, runMigrations, withTenant, type DbClient } from '@crm/db';
-import { memberTier } from '../../../src/modules/workspaces-teams-tenancy/member-rules';
+import { tierOfRole } from '../../../src/modules/workspaces-teams-tenancy/member-rules';
 import { MembersRepository } from '../../../src/modules/workspaces-teams-tenancy/members.repository';
 import { TeamsRepository } from '../../../src/modules/workspaces-teams-tenancy/teams.repository';
 
 /**
- * Migration 20261013090000_wsp_members_teams against real Postgres, in two passes: everything BEFORE it is applied and
- * organizations are arranged the way an installation that predates it looks (a locked Admin preset, no owner recorded, an
- * organization with its own role called Manager), then the migration runs over them. After that the members and teams
- * repositories are exercised as the restricted application role, because a superuser would bypass every policy.
+ * Migration 20261013110000_wsp_members_teams against real Postgres, on top of the RBAC workspace presets it depends on: the
+ * whole chain is applied, organizations are provisioned the way sign-up does (`provision_workspace_presets`), and the members and
+ * teams repositories are exercised as the restricted application role, because a superuser would bypass every policy.
  */
-const MIGRATION = '20261013090000_wsp_members_teams.sql';
 const MIGRATIONS = resolve(__dirname, '../../../../../packages/db/migrations');
-const NEW_KEYS = [
-  'member.invite',
-  'member.role.assign',
-  'team.manage',
-  'workspace.settings',
-  'workspace.export',
-];
+/** The keys the member and team screens use are RBAC's; WSP registers none of its own. */
+const RBAC_KEYS = ['org.member.invite', 'org.member.role_assign', 'inbox.team.manage'];
 
 describe('wsp members and teams: migration, role presets, isolation and the repositories', () => {
   let container: StartedPostgreSqlContainer;
@@ -33,13 +24,6 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
   const members = new MembersRepository();
   const teams = new TeamsRepository();
 
-  // organizations that exist before the migration
-  let legacy: number; // locked Admin, two admins, no owner recorded, no Manager/Viewer
-  let custom: number; // its own roles called Manager and Viewer
-  let owned: number; // owner already recorded
-  let adminUserOfLegacy: number;
-  let customManagerRole: number;
-  // a second tenant created after the migration, for the repository tests
   let orgA: number;
   let orgB: number;
   const ids: Record<string, number> = {};
@@ -90,70 +74,14 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
     await owner.query(
       `CREATE ROLE crm_app_user LOGIN PASSWORD 'test' NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS`,
     );
-
-    // Pass 1: every migration but this one, so the data below looks like an installation that predates it.
-    const before = mkdtempSync(join(tmpdir(), 'wsp-mig-'));
-    for (const f of readdirSync(MIGRATIONS)) {
-      if (f === MIGRATION) continue;
-      symlinkSync(join(MIGRATIONS, f), join(before, f));
-    }
-    await runMigrations(container.getConnectionUri(), { dir: before, log: () => undefined });
-
-    legacy = await org('legacy');
-    custom = await org('custom');
-    owned = await org('owned');
-    for (const o of [legacy, custom, owned]) {
-      // The Admin preset is created unlocked so a grant can be added, then locked, as provisioning does.
-      const admin = await role(o, 'Admin', 'admin');
-      await owner.query(
-        `INSERT INTO role_grants (org_id, role_id, permission_key) VALUES ($1,$2,'record.contacts.read')`,
-        [o, admin],
-      );
-      await owner.query(`UPDATE roles SET is_locked = true WHERE id = $1 AND org_id = $2`, [
-        admin,
-        o,
-      ]);
-      ids[`admin-${o}`] = admin;
-    }
-    adminUserOfLegacy = await user(legacy, 'first@legacy.test', 'First');
-    await give(legacy, adminUserOfLegacy, ids[`admin-${legacy}`]!);
-    const second = await user(legacy, 'second@legacy.test', 'Second');
-    await give(legacy, second, ids[`admin-${legacy}`]!);
-    await owner.query(`UPDATE users SET created_at = now() + interval '1 day' WHERE id = $1`, [
-      second,
-    ]);
-    const ownedUser = await user(owned, 'o@owned.test', 'Owned');
-    await give(owned, ownedUser, ids[`admin-${owned}`]!);
-    uuids.ownedUser = (
-      await owner.query(`SELECT uuid FROM users WHERE id = $1`, [ownedUser])
-    ).rows[0].uuid;
-    await owner.query(`UPDATE organizations SET settings = $2::jsonb WHERE id = $1`, [
-      owned,
-      JSON.stringify({ ownerUserId: '11111111-1111-4111-8111-111111111111' }),
-    ]);
-    customManagerRole = await role(custom, 'Manager');
-    await owner.query(
-      `INSERT INTO role_grants (org_id, role_id, permission_key) VALUES ($1,$2,'record.tags.read')`,
-      [custom, customManagerRole],
-    );
-    await role(custom, 'Viewer');
-    const versionBefore = Number(
-      (await owner.query(`SELECT roles_version FROM organizations WHERE id = $1`, [legacy])).rows[0]
-        .roles_version,
-    );
-    uuids.versionBefore = String(versionBefore);
-
-    // Pass 2: the real directory; only the new migration is pending.
     await runMigrations(container.getConnectionUri(), { dir: MIGRATIONS, log: () => undefined });
 
     // Tenants for the repository tests, created through the function a new organization goes through.
     orgA = await org('tenant-a');
     orgB = await org('tenant-b');
     for (const o of [orgA, orgB]) {
-      await owner.query(`SELECT wsp_seed_role_presets($1)`, [o]);
-      await role(o, 'Agent');
+      await owner.query(`SELECT provision_workspace_presets($1)`, [o]);
       await role(o, 'Counsellor');
-      ids[`admin-${o}`] = await role(o, 'Admin', 'admin');
     }
     const roleOf = async (o: number, name: string) =>
       Number(
@@ -175,7 +103,7 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
       ).rows[0].uuid;
       if (roleName) await give(o, ids[key]!, await roleOf(o, roleName));
     };
-    await add('owner', orgA, 'owner@a.test', 'Zed Owner', 'Admin');
+    await add('owner', orgA, 'owner@a.test', 'Zed Owner', 'Owner');
     await add('adminB', orgA, 'bea@a.test', 'Bea Admin', 'Admin');
     await add('adminA', orgA, 'ann@a.test', 'ann Admin', 'Admin');
     await add('manager', orgA, 'mo@a.test', 'Mo Manager', 'Manager');
@@ -185,11 +113,7 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
     await add('pending', orgA, 'pen@a.test', 'Pen Ding', 'Agent', `invited_at=now()`);
     await add('removed', orgA, 'gone@a.test', 'Gone Person', null, `status='inactive'`);
     await add('norole', orgA, 'none@a.test', 'No Role', null);
-    await add('b', orgB, 'bob@b.test', 'Bob B', 'Admin');
-    await owner.query(`UPDATE organizations SET settings = $2::jsonb WHERE id = $1`, [
-      orgA,
-      JSON.stringify({ ownerUserId: uuids.owner }),
-    ]);
+    await add('b', orgB, 'bob@b.test', 'Bob B', 'Owner');
 
     const appUrl = `postgres://crm_app_user:test@${container.getHost()}:${container.getPort()}/crm`;
     app = new Client({ connectionString: appUrl });
@@ -206,211 +130,95 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
 
   const inA = <T>(fn: Parameters<typeof withTenant>[2]) =>
     withTenant(client.db, { orgId: orgA }, fn) as Promise<T>;
-  const grants = async (roleId: number) =>
-    (
-      await owner.query(
-        `SELECT permission_key, effect::text, record_scope::text FROM role_grants WHERE role_id = $1 ORDER BY permission_key`,
-        [roleId],
-      )
-    ).rows as Array<{ permission_key: string; effect: string; record_scope: string }>;
 
-  describe('the migration over an installation that predates it', () => {
-    it('registers the five workspace capability keys, none of them scope-aware', async () => {
-      const res = await owner.query(
-        `SELECT key, category, supports_scope FROM permission_defs WHERE key = ANY($1) ORDER BY key`,
-        [NEW_KEYS],
-      );
-      expect(res.rows.map((r) => r.key).sort()).toEqual([...NEW_KEYS].sort());
-      for (const r of res.rows) {
-        expect(r.category).toBe('workspace');
-        expect(r.supports_scope).toBe(false);
-      }
-    });
-
-    it('grants the five keys to every existing locked Admin preset and leaves it locked', async () => {
-      for (const o of [legacy, custom, owned]) {
-        const res = await owner.query(
-          `SELECT is_locked, (SELECT count(*)::int FROM role_grants g WHERE g.org_id = r.org_id AND g.role_id = r.id AND g.permission_key = ANY($2)) AS n
-           FROM roles r WHERE r.org_id = $1 AND r.system_key = 'admin'`,
-          [o, NEW_KEYS],
-        );
-        expect(res.rows[0]).toEqual({ is_locked: true, n: 5 });
-      }
-    });
-
-    it('creates the Manager (manager) and Viewer (readonly) presets for every organization, unlocked', async () => {
-      for (const o of [legacy, owned]) {
-        const res = await owner.query(
-          `SELECT name, system_key, is_locked FROM roles WHERE org_id = $1 AND system_key IN ('manager','readonly') ORDER BY system_key`,
-          [o],
-        );
-        expect(res.rows).toEqual([
-          { name: 'Manager', system_key: 'manager', is_locked: false },
-          { name: 'Viewer', system_key: 'readonly', is_locked: false },
-        ]);
-      }
-    });
-
-    it("adopts an organization's own role called Manager or Viewer (only the key is set) instead of clashing on the name", async () => {
-      const res = await owner.query(
-        `SELECT name, system_key FROM roles WHERE org_id = $1 AND name IN ('Manager','Viewer') ORDER BY name`,
-        [custom],
-      );
-      expect(res.rows).toEqual([
-        { name: 'Manager', system_key: 'manager' },
-        { name: 'Viewer', system_key: 'readonly' },
-      ]);
-      // Its own grants are untouched: one grant, not the preset's.
-      expect((await grants(customManagerRole)).map((g) => g.permission_key)).toEqual([
-        'record.tags.read',
-      ]);
-      // The Viewer it already had was an empty role and stays one: rewriting an admin's role would be worse than a label.
-      const viewer = await one(`SELECT id FROM roles WHERE org_id = $1 AND name = 'Viewer'`, [
-        custom,
-      ]);
-      expect(await grants(viewer)).toHaveLength(0);
-    });
-
-    it('gives the Manager preset record scope all on the Agent set plus delete, the inbox and the dashboards, and no member, team or workspace key', async () => {
-      const manager = await one(
-        `SELECT id FROM roles WHERE org_id = $1 AND system_key = 'manager'`,
-        [legacy],
-      );
-      const g = await grants(manager);
-      const keys = g.map((x) => x.permission_key);
-      expect(g.every((x) => x.effect === 'allow' && x.record_scope === 'all')).toBe(true);
-      for (const k of [
-        'record.contacts.read',
-        'record.contacts.update',
-        'record.contacts.delete',
-        'record.deals.read',
-        'record.deals.delete',
-        'record.tasks.delete',
-        'record.appointments.update',
-        'record.invoices.read',
-        'record.payments.read',
-        'record.sales-docs.send',
-        'inbox.conversation.read',
-        'inbox.conversation.reply',
-        'inbox.conversation.assign',
-        'inbox.conversation.resolve',
-        'dash.dashboard.read',
-        'dash.analytics.read',
-      ]) {
-        expect(keys, k).toContain(k);
-      }
-      for (const k of keys) {
-        expect(
-          k.startsWith('member.') ||
-            k === 'team.manage' ||
-            k.startsWith('workspace.') ||
-            k.startsWith('admin.'),
-          k,
-        ).toBe(false);
-      }
-      // Everything the stock Agent preset can do, a Manager can do.
-      const agentKeys = [
-        'record.contacts.read',
-        'record.contacts.create',
-        'record.contacts.update',
-        'inbox.conversation.read',
-        'inbox.conversation.reply',
-        'record.deals.read',
-        'record.deals.create',
-        'record.deals.update',
-        'record.pipelines.read',
-        'record.tasks.read',
-        'record.tasks.create',
-        'record.tasks.update',
-        'record.segments.read',
-        'record.segments.create',
-        'record.sales-docs.read',
-        'record.invoices.read',
-        'record.payments.read',
-        'record.tax-rates.read',
-        'record.booking-types.read',
-        'record.appointments.read',
-        'record.appointments.create',
-      ];
-      for (const k of agentKeys) expect(keys, k).toContain(k);
-    });
-
-    it('gives the Viewer preset every record read key and the inbox read key, scope all, and nothing that writes', async () => {
-      const viewer = await one(
-        `SELECT id FROM roles WHERE org_id = $1 AND system_key = 'readonly'`,
-        [legacy],
-      );
-      const keys = (await grants(viewer)).map((x) => x.permission_key);
-      const expected = (
-        await owner.query(
-          `SELECT key FROM permission_defs WHERE key LIKE 'record.%.read' OR key = 'inbox.conversation.read' ORDER BY key`,
-        )
-      ).rows.map((r) => r.key);
-      expect(keys).toEqual(expected);
-      expect(keys.length).toBeGreaterThan(10);
-      expect(
-        (await grants(viewer)).every((x) => x.effect === 'allow' && x.record_scope === 'all'),
-      ).toBe(true);
-    });
-
-    it('is idempotent: running the preset function again changes nothing', async () => {
-      const count = async () =>
-        Number(
-          (
-            await owner.query(
-              `SELECT (SELECT count(*) FROM roles) + (SELECT count(*) FROM role_grants) AS n`,
-            )
-          ).rows[0].n,
-        );
-      const before = await count();
-      for (const o of [legacy, custom, owned])
-        await owner.query(`SELECT wsp_seed_role_presets($1)`, [o]);
-      expect(await count()).toBe(before);
-    });
-
-    it('records the earliest Admin as owner where none was recorded, and leaves a recorded owner alone', async () => {
-      const read = async (o: number) =>
-        (
-          await owner.query(
-            `SELECT settings ->> 'ownerUserId' AS owner FROM organizations WHERE id = $1`,
-            [o],
-          )
-        ).rows[0].owner;
-      const firstUuid = (
-        await owner.query(`SELECT uuid FROM users WHERE id = $1`, [adminUserOfLegacy])
-      ).rows[0].uuid;
-      expect(await read(legacy)).toBe(firstUuid);
-      expect(await read(owned)).toBe('11111111-1111-4111-8111-111111111111');
-      expect(await read(custom)).toBeNull();
-    });
-
+  describe('the migration on top of the RBAC presets', () => {
     it('widens the one-time token kinds to include invite and still refuses unknown kinds', async () => {
-      const u = adminUserOfLegacy;
+      const u = ids.owner!;
       await owner.query(
         `INSERT INTO user_tokens (org_id, user_id, kind, token_hash, expires_at) VALUES ($1,$2,'invite','h1', now() + interval '1 day')`,
-        [legacy, u],
+        [orgA, u],
       );
       await expect(
         owner.query(
           `INSERT INTO user_tokens (org_id, user_id, kind, token_hash, expires_at) VALUES ($1,$2,'bogus','h2', now() + interval '1 day')`,
-          [legacy, u],
+          [orgA, u],
         ),
       ).rejects.toThrow(/chk_user_tokens_kind/);
     });
 
-    it('bumps the roles version so cached grant sets are rebuilt', async () => {
-      const now = Number(
-        (await owner.query(`SELECT roles_version FROM organizations WHERE id = $1`, [legacy]))
-          .rows[0].roles_version,
+    it('uses the RBAC keys and registers none of its own', async () => {
+      const res = await owner.query(`SELECT key FROM permission_defs WHERE key = ANY($1)`, [
+        RBAC_KEYS,
+      ]);
+      expect(res.rows.map((r) => r.key).sort()).toEqual([...RBAC_KEYS].sort());
+      const stale = await owner.query(`SELECT key FROM permission_defs WHERE key = ANY($1)`, [
+        [
+          'member.invite',
+          'member.role.assign',
+          'team.manage',
+          'workspace.settings',
+          'workspace.export',
+        ],
+      ]);
+      expect(stale.rowCount).toBe(0);
+      const fn = await owner.query(`SELECT 1 FROM pg_proc WHERE proname = 'wsp_seed_role_presets'`);
+      expect(fn.rowCount).toBe(0);
+    });
+
+    it('finds the five presets on a provisioned organization: Owner is system_key admin, the rest by their own key', async () => {
+      const res = await owner.query(
+        `SELECT name, system_key, is_locked FROM roles WHERE org_id = $1 AND system_key IS NOT NULL ORDER BY name`,
+        [orgA],
       );
-      expect(now).toBeGreaterThan(Number(uuids.versionBefore));
+      expect(res.rows).toEqual([
+        { name: 'Admin', system_key: 'workspace_admin', is_locked: false },
+        { name: 'Agent', system_key: 'agent', is_locked: false },
+        { name: 'Manager', system_key: 'manager', is_locked: false },
+        { name: 'Owner', system_key: 'admin', is_locked: true },
+        { name: 'Viewer', system_key: 'viewer', is_locked: false },
+      ]);
+      // Each preset reads as the tier its name says; the custom role does not.
+      for (const r of res.rows) {
+        expect(tierOfRole({ systemKey: r.system_key }), r.name).toBe(r.name.toLowerCase());
+      }
+    });
+
+    it('grants the member and team keys to the Owner and Admin presets only', async () => {
+      const holders = async (key: string) =>
+        (
+          await owner.query(
+            `SELECT r.name FROM role_grants g JOIN roles r ON r.org_id = g.org_id AND r.id = g.role_id
+             WHERE g.org_id = $1 AND g.permission_key = $2 AND g.effect = 'allow' ORDER BY r.name`,
+            [orgA, key],
+          )
+        ).rows.map((x) => x.name);
+      for (const key of RBAC_KEYS) expect(await holders(key), key).toEqual(['Admin', 'Owner']);
+    });
+
+    it('keeps an Owner: the last one cannot be removed from the role, a second one makes it possible', async () => {
+      const ownerRole = await one(
+        `SELECT id FROM roles WHERE org_id = $1 AND system_key = 'admin'`,
+        [orgB],
+      );
+      await expect(
+        owner.query(`DELETE FROM user_roles WHERE org_id = $1 AND role_id = $2`, [orgB, ownerRole]),
+      ).rejects.toThrow(/at least one Owner/);
+      const second = await user(orgB, 'second@b.test', 'Second Owner');
+      await give(orgB, second, ownerRole);
+      await owner.query(`DELETE FROM user_roles WHERE org_id = $1 AND user_id = $2`, [orgB, ids.b]);
+      await give(orgB, ids.b!, ownerRole);
+      await owner.query(`DELETE FROM user_roles WHERE org_id = $1 AND user_id = $2`, [
+        orgB,
+        second,
+      ]);
+      await owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [second]);
     });
   });
 
   describe('the members repository (restricted role, tenant transaction)', () => {
     it('lists everyone but the removed, owner first, then admin, manager, agent, custom, viewer, each by name', async () => {
       const page = await inA<Awaited<ReturnType<MembersRepository['list']>>>(async (tx) =>
-        members.list(tx, orgA, uuids.owner!, { limit: 50 }),
+        members.list(tx, orgA, { limit: 50 }),
       );
       expect(page.rows.map((r) => [r.fullName, r.tier])).toEqual([
         ['Zed Owner', 'owner'],
@@ -431,7 +239,7 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
       let cursor: string | undefined;
       for (let i = 0; i < 10; i++) {
         const page = await inA<Awaited<ReturnType<MembersRepository['list']>>>(async (tx) =>
-          members.list(tx, orgA, uuids.owner!, { limit: 2, cursor }),
+          members.list(tx, orgA, { limit: 2, cursor }),
         );
         seen.push(...page.rows.map((r) => r.fullName));
         if (!page.hasMore) break;
@@ -451,9 +259,9 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
     });
 
     it('filters by tier and by a name or email fragment, case-insensitively, treating % and _ literally', async () => {
-      const list = (f: Parameters<MembersRepository['list']>[3]) =>
+      const list = (f: Parameters<MembersRepository['list']>[2]) =>
         inA<Awaited<ReturnType<MembersRepository['list']>>>(async (tx) =>
-          members.list(tx, orgA, uuids.owner!, f),
+          members.list(tx, orgA, f),
         );
       expect((await list({ limit: 50, tier: 'agent' })).rows.map((r) => r.fullName)).toEqual([
         'Pen Ding',
@@ -471,7 +279,7 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
 
     it("computes the same tier in SQL (list order) as the rules do from the member's roles", async () => {
       await inA(async (tx) => {
-        const page = await members.list(tx, orgA, uuids.owner!, { limit: 50 });
+        const page = await members.list(tx, orgA, { limit: 50 });
         const roles = await members.rolesForUsers(
           tx,
           orgA,
@@ -480,15 +288,18 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
         for (const row of page.rows) {
           const mine = roles
             .filter((r) => r.userId === row.id)
-            .map((r) => ({ systemKey: r.systemKey, name: r.roleName }));
-          expect(memberTier(row.tier === 'owner', mine), row.fullName).toBe(row.tier);
+            .map((r) => tierOfRole({ systemKey: r.systemKey }));
+          // The highest tier among the roles, by the rank order the list sorts by.
+          const order = ['viewer', 'custom', 'agent', 'manager', 'admin', 'owner'];
+          const best = mine.sort((x, y) => order.indexOf(y) - order.indexOf(x))[0] ?? 'custom';
+          expect(best, row.fullName).toBe(row.tier);
         }
       });
     });
 
     it('counts members per tier, pending separately, and seats as everyone not removed', async () => {
       await inA(async (tx) => {
-        const { byTier, pending } = await members.tierCounts(tx, orgA, uuids.owner!);
+        const { byTier, pending } = await members.tierCounts(tx, orgA);
         expect(Object.fromEntries(byTier)).toEqual({
           owner: 1,
           admin: 2,
@@ -504,11 +315,11 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
 
     it("never shows another organization's members, by list or by uuid", async () => {
       await inA(async (tx) => {
-        const all = await members.list(tx, orgA, uuids.owner!, { limit: 200 });
+        const all = await members.list(tx, orgA, { limit: 200 });
         expect(all.rows.some((r) => r.email.endsWith('@b.test'))).toBe(false);
-        expect(await members.byUuid(tx, orgA, uuids.owner!, uuids.b!)).toBeUndefined();
+        expect(await members.byUuid(tx, orgA, uuids.b!)).toBeUndefined();
         expect(await members.userByEmail(tx, orgA, 'bob@b.test')).toBeUndefined();
-        expect(await members.byId(tx, orgA, uuids.owner!, ids.b!)).toBeUndefined();
+        expect(await members.byId(tx, orgA, ids.b!)).toBeUndefined();
       });
     });
 
@@ -551,10 +362,10 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
 
     it('touches a row only while the version still matches', async () => {
       await inA(async (tx) => {
-        const v = (await members.byId(tx, orgA, uuids.owner!, ids.manager!))!.rowVersion;
+        const v = (await members.byId(tx, orgA, ids.manager!))!.rowVersion;
         expect(await members.touchWithVersion(tx, orgA, ids.manager!, v + 5)).toBe(false);
         expect(await members.touchWithVersion(tx, orgA, ids.manager!, v)).toBe(true);
-        expect((await members.byId(tx, orgA, uuids.owner!, ids.manager!))!.rowVersion).toBe(v + 1);
+        expect((await members.byId(tx, orgA, ids.manager!))!.rowVersion).toBe(v + 1);
       });
     });
   });

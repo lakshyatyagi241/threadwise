@@ -139,7 +139,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-RBAC-024 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
 | WD-RBAC-025 | blocked |  | each domain adopts its own permission keys; see wiring map |
 | WD-RBAC-026 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
-| WD-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change; invite/remove/reset flows blocked on WD-WSP |
+| WD-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change and on the WSP members screen (invite, resend, remove, reset, role change) |
 | WD-RBAC-028 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
 | WD-RBAC-029 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
 | WD-RBAC-030 | blocked |  | keys registered with the WaDesk matrix; waiting on inbox domain (TIB1/TIB2) endpoints |

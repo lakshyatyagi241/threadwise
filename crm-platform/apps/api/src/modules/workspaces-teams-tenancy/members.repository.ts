@@ -91,17 +91,21 @@ export const toDate = (v: unknown): Date | null =>
  */
 @Injectable()
 export class MembersRepository {
-  /** The tier of each user as a number, computed in SQL so the list can be sorted and paged by it. */
-  private tierScore(ownerUuid: string | null): SQL {
-    return sql`CASE WHEN u.uuid::text = ${ownerUuid}::text THEN 6 ELSE COALESCE((
-      SELECT max(CASE
-          WHEN r.system_key = 'admin' THEN 5
-          WHEN r.system_key = 'manager' THEN 4
-          WHEN r.system_key = 'agent' OR (r.system_key IS NULL AND lower(btrim(r.name)) = 'agent') THEN 3
-          WHEN r.system_key = 'readonly' THEN 1
+  /**
+   * The tier of each user as a number, computed in SQL so the list can be sorted and paged by it: the highest of the user's
+   * roles by the RBAC preset's `system_key` (Owner = `admin`), and 2 (`custom`) for a role without a preset or no role at all.
+   */
+  private tierScore(): SQL {
+    return sql`COALESCE((
+      SELECT max(CASE r.system_key
+          WHEN 'admin' THEN 6
+          WHEN 'workspace_admin' THEN 5
+          WHEN 'manager' THEN 4
+          WHEN 'agent' THEN 3
+          WHEN 'viewer' THEN 1
           ELSE 2 END)
       FROM user_roles ur JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
-      WHERE ur.org_id = u.org_id AND ur.user_id = u.id), 2) END`;
+      WHERE ur.org_id = u.org_id AND ur.user_id = u.id), 2)`;
   }
 
   private toRow(r: Raw): MemberRow {
@@ -120,27 +124,18 @@ export class MembersRepository {
     };
   }
 
-  private select(orgId: number, ownerUuid: string | null, where: SQL): SQL {
+  private select(orgId: number, where: SQL): SQL {
     return sql`
       SELECT u.id, u.uuid, u.email::text AS email, u.full_name, u.status, u.invited_at, u.joined_at, u.row_version,
-             ${this.tierScore(ownerUuid)} AS tier_score, a.status AS presence_status, a.last_seen_at
+             ${this.tierScore()} AS tier_score, a.status AS presence_status, a.last_seen_at
       FROM users u
       LEFT JOIN agent_statuses a ON a.org_id = u.org_id AND a.user_id = u.id
       WHERE u.org_id = ${orgId} AND ${where}`;
   }
 
-  /** The organization owner's user uuid (`settings.ownerUserId`), or null for an organization that never recorded one. */
-  async ownerUuid(tx: Tx, orgId: number): Promise<string | null> {
-    const res = await tx.execute(
-      sql`SELECT settings ->> 'ownerUserId' AS owner FROM organizations WHERE id = ${orgId}`,
-    );
-    return ((res.rows[0] as Raw | undefined)?.owner as string | null | undefined) ?? null;
-  }
-
   async list(
     tx: Tx,
     orgId: number,
-    ownerUuid: string | null,
     filter: ListMembersFilter,
   ): Promise<{ rows: MemberRow[]; nextCursor: string | null; hasMore: boolean }> {
     const conds: SQL[] = [sql`u.status <> 'inactive'`];
@@ -148,7 +143,7 @@ export class MembersRepository {
       const p = likePattern(filter.q);
       conds.push(sql`(u.full_name ILIKE ${p} OR u.email::text ILIKE ${p})`);
     }
-    const base = this.select(orgId, ownerUuid, sql.join(conds, sql` AND `));
+    const base = this.select(orgId, sql.join(conds, sql` AND `));
 
     const outer: SQL[] = [];
     if (filter.tier) outer.push(sql`m.tier_score = ${TIER_SCORE[filter.tier]}`);
@@ -180,24 +175,14 @@ export class MembersRepository {
     };
   }
 
-  async byUuid(
-    tx: Tx,
-    orgId: number,
-    ownerUuid: string | null,
-    uuid: string,
-  ): Promise<MemberRow | undefined> {
-    const res = await tx.execute(this.select(orgId, ownerUuid, sql`u.uuid = ${uuid}::uuid`));
+  async byUuid(tx: Tx, orgId: number, uuid: string): Promise<MemberRow | undefined> {
+    const res = await tx.execute(this.select(orgId, sql`u.uuid = ${uuid}::uuid`));
     const row = res.rows[0] as Raw | undefined;
     return row ? this.toRow(row) : undefined;
   }
 
-  async byId(
-    tx: Tx,
-    orgId: number,
-    ownerUuid: string | null,
-    id: number,
-  ): Promise<MemberRow | undefined> {
-    const res = await tx.execute(this.select(orgId, ownerUuid, sql`u.id = ${id}`));
+  async byId(tx: Tx, orgId: number, id: number): Promise<MemberRow | undefined> {
+    const res = await tx.execute(this.select(orgId, sql`u.id = ${id}`));
     const row = res.rows[0] as Raw | undefined;
     return row ? this.toRow(row) : undefined;
   }
@@ -206,11 +191,10 @@ export class MembersRepository {
   async tierCounts(
     tx: Tx,
     orgId: number,
-    ownerUuid: string | null,
   ): Promise<{ byTier: Map<WspRoleTier, number>; pending: number }> {
     const res = await tx.execute(sql`
       SELECT m.tier_score, count(*)::int AS n, count(*) FILTER (WHERE m.joined_at IS NULL AND m.invited_at IS NOT NULL)::int AS pending
-      FROM (${this.select(orgId, ownerUuid, sql`u.status <> 'inactive'`)}) m
+      FROM (${this.select(orgId, sql`u.status <> 'inactive'`)}) m
       GROUP BY m.tier_score`);
     const byTier = new Map<WspRoleTier, number>();
     let pending = 0;

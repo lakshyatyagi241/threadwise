@@ -143,7 +143,7 @@ export class InvitationsService {
   }
 
   private async requirePending(tx: Tx, orgId: number, userId: number) {
-    const row = await this.repo.byId(tx, orgId, null, userId);
+    const row = await this.repo.byId(tx, orgId, userId);
     if (!row || toMemberStatus(row) !== 'pending') throw this.invalid();
     return row;
   }
