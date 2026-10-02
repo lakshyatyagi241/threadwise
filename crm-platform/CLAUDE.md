@@ -9,6 +9,20 @@ wrote them.
 [CONTRIBUTING.md](CONTRIBUTING.md) — the non-negotiable rules and why each
 one exists. [docs/README.md](docs/README.md) — the map of everything else.
 
+## Reference port: HARD RULES (every session, every chat, no exceptions)
+
+Any work that ports a Reference feature follows [docs/threadwise-port/PORTING_RULES.md](docs/threadwise-port/PORTING_RULES.md). That file
+wins over any skill that says otherwise about features or UI. In short:
+
+1. **No feature is lost, changed, merged, renamed or "improved".** Same behavior, same screens, same flows as the running reference.
+2. **Same UI**, rewritten on our stack (Next.js, Tailwind, `@crm/ui`); the licensed source is the reference, no PHP/Blade pasted.
+3. **Dig before you build.** Read the feature's inventory entry **and** its wiring map in `docs/threadwise-port/wiring/` (route,
+   permission, tables, settings, upstream feeders, every place it is used), then open it in the reference. Port every consumer, not only the screen.
+4. **Real wiring only.** Migration (RLS) -> service -> controller -> contract -> web page -> worker job. No mocks, no dead buttons.
+5. **Anything you cannot port yet is recorded as `blocked` with its id, never silently dropped.** If you find a feature or
+   consumer that no inventory/wiring file lists, add it to the wiring file in the same change.
+6. Unsure whether something is a feature or an accident? Keep it and ask; do not delete it.
+
 ## Use the project skills
 
 `.claude/skills/` has a growing library of narrow, single-purpose skills for
