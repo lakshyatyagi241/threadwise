@@ -15,6 +15,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations } from '../foundation';
+import { devices } from '../whatsapp-devices-baileys/tables';
 
 export const googleFormSessions = pgTable(
   'google_form_sessions',
@@ -53,3 +54,36 @@ export const googleFormSessions = pgTable(
 
 export type GoogleFormSessionsRow = typeof googleFormSessions.$inferSelect;
 export type NewGoogleFormSessionsRow = typeof googleFormSessions.$inferInsert;
+
+export const deviceAuthState = pgTable(
+  'device_auth_state',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    deviceId: idColumn('device_id').notNull(),
+    name: text('name').notNull(),
+    value: text('value').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_device_auth_state_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_device_auth_state_device_name').on(t.orgId, t.deviceId, t.name),
+    foreignKey({
+      name: 'fk_device_auth_state_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'device_auth_state_org_id_device_id_fkey',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type DeviceAuthStateRow = typeof deviceAuthState.$inferSelect;
+export type NewDeviceAuthStateRow = typeof deviceAuthState.$inferInsert;
