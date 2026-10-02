@@ -9,7 +9,7 @@
     "start": "next start -p 3001",
     "typecheck": "node scripts/gen-registry.mjs && next typegen && tsc --noEmit",
     "lint": "node scripts/gen-registry.mjs && eslint src",
-    "test": "vitest run",
+    "test": "node scripts/gen-registry.mjs && vitest run",
     "test:e2e": "playwright test"
   },
   "dependencies": {

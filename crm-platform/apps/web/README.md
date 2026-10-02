@@ -29,8 +29,9 @@ NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime      # the socket addres
 | `src/app/(admin)/`                            | platform-admin shell (placeholder until the super-admin actor exists)                                               |
 | `src/app/api/auth/*`                          | login, logout, refresh route handlers; tokens go into httpOnly cookies                                              |
 | `src/app/api/v2/[...path]`                    | same-origin proxy to the API: adds the bearer token, refreshes once on 401, blocks `auth/*` and cross-origin writes |
-| `src/features/<domain>/`                      | a domain's screens' code and its `nav.ts` menu entries                                                              |
-| `src/features/_registry/`                     | nav types and gating rules; `nav.generated.ts` is built from every `nav.ts` (gitignored)                            |
+| `src/features/<domain>/`                      | a domain's screens' code, its `nav.ts` menu entries and its `settings.ts` Settings tiles                            |
+| `src/features/_registry/`                     | nav and Settings types and gating rules; `nav.generated.ts` and `settings.generated.ts` are built (gitignored)      |
+| `src/features/settings-hub/`                  | the Settings pages (section list, tile grid, search) and the "Back to Settings" breadcrumb                           |
 | `src/components/shell/`                       | the app shell (sidebar, header, theme and language switchers)                                                       |
 | `src/lib/api`, `src/lib/auth`                 | API client, error mapping, cursor-list hook; cookie and session helpers                                             |
 | `src/i18n`, `messages/<locale>/<domain>.json` | locale list (21, three RTL), message loader with English fallback; one messages file per domain                     |
@@ -38,7 +39,10 @@ NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime      # the socket addres
 ## Add a screen for your domain (no shared file is edited)
 
 1. `src/app/(app)/(<domain>)/<routeBase>/page.tsx`
-2. `src/features/<domain>/nav.ts` exporting `nav: NavItem[]` (group, label key, href, optional gates)
+2. `src/features/<domain>/nav.ts` exporting `nav: NavItem[]` (group, label key, href, optional gates) for daily-work screens, or
+   `src/features/<domain>/settings.ts` exporting `settings: SettingsTile[]` (`settingsTile({ id, section, href, icon, gates })`, copy in
+   `messages/<locale>/settings.json` under `settings.tiles.<id>`) for a screen that configures something: configuration lives under Settings,
+   not in the menu
 3. `messages/en/<domain>.json` with the top-level key `<domain>`; reference keys as `<domain>.<screen>.<key>`
 4. Fetch through `apiFetch` / `useCursorList` with a schema from `@crm/contracts`
 5. `pnpm --filter @crm/web typecheck lint test` (the registry regenerates by itself)
