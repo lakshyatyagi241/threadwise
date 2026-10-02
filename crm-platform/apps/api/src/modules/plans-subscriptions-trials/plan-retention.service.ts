@@ -98,13 +98,13 @@ export class PlanRetentionService {
   async candidates(now = new Date(), limit = 100): Promise<WipeCandidate[]> {
     return this.store.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT o.id, o.slug, o.plan, s.plan_ends_at, p.data_retention_days
+        SELECT o.id, o.slug, o.plan, s.plan_ends_at, coalesce((s.overrides->>'dataRetentionDays')::int, p.data_retention_days) AS data_retention_days
         FROM org_plan_state s
         JOIN organizations o ON o.id = s.org_id
         JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
-        WHERE s.data_wiped_at IS NULL AND s.plan_ends_at IS NOT NULL AND p.data_retention_days > 0
+        WHERE s.data_wiped_at IS NULL AND s.plan_ends_at IS NOT NULL AND coalesce((s.overrides->>'dataRetentionDays')::int, p.data_retention_days) > 0
           AND NOT s.platform_owned
-          AND s.plan_ends_at < ${now.toISOString()}::timestamptz - (p.data_retention_days * interval '1 day')
+          AND s.plan_ends_at < ${now.toISOString()}::timestamptz - (coalesce((s.overrides->>'dataRetentionDays')::int, p.data_retention_days) * interval '1 day')
         ORDER BY s.plan_ends_at, o.id LIMIT ${limit}`);
       return (
         res.rows as unknown as Array<{
@@ -144,7 +144,7 @@ export class PlanRetentionService {
       .tx(async (tx) => {
         // Re-check under a lock: another worker may have wiped it, or the workspace may have renewed since the candidate list was read.
         const lock = await tx.execute(sql`
-        SELECT s.plan_ends_at, s.data_wiped_at, p.data_retention_days
+        SELECT s.plan_ends_at, s.data_wiped_at, coalesce((s.overrides->>'dataRetentionDays')::int, p.data_retention_days) AS data_retention_days
         FROM org_plan_state s JOIN organizations o ON o.id = s.org_id
         JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
         WHERE s.org_id = ${c.orgId} FOR UPDATE OF s`);

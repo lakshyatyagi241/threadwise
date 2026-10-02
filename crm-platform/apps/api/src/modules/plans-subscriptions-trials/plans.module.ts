@@ -6,9 +6,11 @@ import { BillingController } from './billing.controller';
 import { BillingService } from './billing.service';
 import {
   BillingFaqsController,
+  PlatformPlanSettingsController,
   PlatformPricingFaqsController,
   PublicPricingFaqsController,
 } from './pricing-faq.controllers';
+import { PlanSettingsService } from './plan-settings.service';
 import { PricingFaqService } from './pricing-faq.service';
 import { PlanAdminService } from './plan-admin.service';
 import { PlatformWorkspacePlansController } from './platform-workspace-plans.controller';
@@ -35,6 +37,7 @@ import { PlansController } from './plans.controller';
     PlatformPricingFaqsController,
     BillingFaqsController,
     PublicPricingFaqsController,
+    PlatformPlanSettingsController,
   ],
   providers: [
     PlanAdminService,
@@ -43,6 +46,7 @@ import { PlansController } from './plans.controller';
     WorkspacePlanAdminService,
     TrialGateGuard,
     PricingFaqService,
+    PlanSettingsService,
     SubscriptionService,
     PlanRetentionService,
   ],

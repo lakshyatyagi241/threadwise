@@ -110,7 +110,8 @@ export class WorkspacePlanAdminService {
       const now = new Date();
       const changing = org.plan !== target.slug;
       const facts = toFacts(target);
-      const trialEndsAt = changing ? null : org.trial_ends_at;
+      let trialEndsAt: string | null = changing ? null : org.trial_ends_at;
+      if (body.trialEndsAt !== undefined) trialEndsAt = body.trialEndsAt;
       let planEndsAt: string | null = org.plan_ends_at;
       if (body.planEndsAt !== undefined) planEndsAt = body.planEndsAt;
       else if (changing) planEndsAt = defaultPeriodEnd(now, facts)?.toISOString() ?? null;
@@ -137,6 +138,7 @@ export class WorkspacePlanAdminService {
         workspace: org.slug,
         plan: { from: org.plan, to: target.slug },
         planEndsAt,
+        trialEndsAt,
         overrides,
       };
       await this.audit.record(tx, {
@@ -188,7 +190,7 @@ export class WorkspacePlanAdminService {
 
 function parseOverrides(raw: unknown): PlanOverrides {
   const parsed = planOverridesSchema.safeParse(raw ?? {});
-  return parsed.success ? parsed.data : { limits: {}, features: {} };
+  return parsed.success ? parsed.data : { limits: {}, features: {}, dataRetentionDays: null };
 }
 
 export function toWorkspacePlan(r: OrgPlanRow, now = new Date()): WorkspacePlan {

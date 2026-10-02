@@ -178,6 +178,8 @@ export const planOverridesSchema = z.object({
       (r) => Object.keys(r).every((k) => (PLAN_FEATURE_KEYS as string[]).includes(k)),
       'Unknown feature key.',
     ),
+  /** Data retention for this workspace alone (TW-PLAN-023): days after its paid plan lapses. null = the plan's value; 0 = never wipe this workspace. */
+  dataRetentionDays: z.number().int().min(0).max(3650).nullable().default(null),
 });
 export type PlanOverrides = z.infer<typeof planOverridesSchema>;
 export type PlanOverrideLimitKey = PlanLimitKey;
@@ -227,6 +229,8 @@ export const attachPlanRequestSchema = z.object({
   planSlug: planSlugSchema,
   planEndsAt: z.string().datetime().nullable().optional(),
   overrides: planOverridesSchema.optional(),
+  /** The free-trial end for this workspace: a date extends or shortens it, null ends the trial now. Omitted: unchanged (a changed plan always clears it). */
+  trialEndsAt: z.string().datetime().nullable().optional(),
   rowVersion: z.number().int().min(1),
 });
 export type AttachPlanRequest = z.infer<typeof attachPlanRequestSchema>;
@@ -259,3 +263,12 @@ export const retentionRunResponseSchema = z.object({
   ),
 });
 export type RetentionRunResponse = z.infer<typeof retentionRunResponseSchema>;
+
+// --- platform plan settings (super admin) -------------------------------------------------------------------------------
+
+/** The two pricing settings checkout, the plan picker and the public page all read (`pricing.yearly_toggle_enabled`, `pricing.yearly_discount_pct`). */
+export const planSettingsSchema = z.object({
+  yearlyToggleEnabled: z.boolean(),
+  yearlyDiscountPct: z.number().int().min(0).max(90),
+});
+export type PlanSettings = z.infer<typeof planSettingsSchema>;

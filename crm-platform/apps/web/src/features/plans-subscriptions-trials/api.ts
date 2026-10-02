@@ -8,6 +8,8 @@ import {
   type CreatePricingFaqRequest,
   type UpdatePricingFaqRequest,
   attachPlanRequestSchema,
+  planSettingsSchema,
+  type PlanSettings,
   billingPlansResponseSchema,
   billingStatusSchema,
   billingUsageResponseSchema,
@@ -96,3 +98,9 @@ export const runRetention = (body: { dryRun: boolean; confirm?: string }) =>
     body,
     schema: retentionRunResponseSchema,
   });
+
+export const PLAN_SETTINGS_KEY = ['operator', 'plan-settings'] as const;
+export const fetchPlanSettings = (signal?: AbortSignal) =>
+  operatorFetch('/plan-settings', { schema: planSettingsSchema, signal });
+export const savePlanSettings = (body: PlanSettings) =>
+  operatorFetch('/plan-settings', { method: 'PUT', body, schema: planSettingsSchema });

@@ -4,7 +4,8 @@
       "usage": "Plan and usage",
       "workspacePlans": "Workspace plans",
       "group": "Subscriptions",
-      "pricingFaqs": "Pricing FAQs"
+      "pricingFaqs": "Pricing FAQs",
+      "planSettings": "Pricing settings"
     },
     "limits": {
       "monthly_messages": "Messages per month",
@@ -224,7 +225,13 @@
         "saved": "Plan saved for {name}.",
         "changesTrial": "Changing the plan ends the workspace's free trial.",
         "conflict": "Someone changed this workspace's plan. Reload and try again.",
-        "failed": "Could not save the plan."
+        "failed": "Could not save the plan.",
+        "trialEnd": "Free trial ends",
+        "endTrialNow": "End the trial now",
+        "trialHint": "Set a date to extend or shorten this workspace's trial. A changed plan clears the trial unless you set a date here.",
+        "retention": "Data retention override (days)",
+        "retentionPlaceholder": "Plan default",
+        "retentionHint": "Days after a paid plan lapses before this workspace's data is deleted. Empty uses the plan's value; 0 never deletes this workspace."
       },
       "faqs": {
         "title": "Pricing FAQs",
@@ -266,6 +273,18 @@
         "rows": "{count, number} rows",
         "forbidden": "Only super admins can run this.",
         "failed": "The run failed. Nothing was changed."
+      },
+      "settings": {
+        "title": "Pricing settings",
+        "description": "Platform-wide pricing choices. Changes apply to checkout, the plans page and the public pricing page at once.",
+        "yearlyToggle": "Offer yearly billing",
+        "yearlyToggleHint": "Shows the Monthly/Yearly switch on the plans pages when some plan can be billed yearly.",
+        "discount": "Yearly discount (%)",
+        "discountHint": "0 to 90. A year costs twelve months less this discount.",
+        "save": "Save",
+        "saved": "Pricing settings saved.",
+        "forbidden": "Only super admins can change these settings.",
+        "failed": "We couldn't save the settings."
       }
     },
     "public": {

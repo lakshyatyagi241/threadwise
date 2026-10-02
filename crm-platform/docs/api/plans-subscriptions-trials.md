@@ -127,3 +127,23 @@ orders, subscriptions, wallet, invoices, tags, companies, tasks, field definitio
 ### Public pricing page
 
 `/pricing` (site route) reads `GET /public/cms/pricing` (cards now carry `limits` and `features`) and the FAQ endpoint above. Yearly switch, volume and feature lists, plan call to action.
+
+## Configuration map (super admin)
+
+Everything below is set from the console; nothing is code-only.
+
+| What                                                                                                                                       | Per plan (`/admin/plans`)                        | Per workspace (`/admin/workspace-plans`)               | Platform (`/admin/plan-settings`) |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------ | --------------------------------- |
+| Every cap (messages, broadcasts, total campaigns, devices, seats, contacts, tags, pipelines, appointments, templates, flows, auto-replies) | yes, 0 = unlimited                               | yes, beats the plan; empty = plan; 0 or -1 = unlimited |                                   |
+| Every feature flag                                                                                                                         | yes                                              | yes: always on / always off / plan default             |                                   |
+| Price, offer, period, free, lifetime, custom quote, active, default, highlighted, sort, button text                                        | yes                                              |                                                        |                                   |
+| Data retention days                                                                                                                        | yes (0 = never)                                  | yes: empty = plan, 0 = never wipe this workspace       |                                   |
+| Plan and plan end date                                                                                                                     |                                                  | yes                                                    |                                   |
+| Free-trial end                                                                                                                             | trial length at sign-up in registration settings | yes: set a date, or end the trial now                  |                                   |
+| Yearly switch and discount                                                                                                                 |                                                  |                                                        | yes (`/platform/plan-settings`)   |
+| Pricing FAQs                                                                                                                               |                                                  |                                                        | `/admin/pricing-faqs`             |
+| Wipe preview / run                                                                                                                         |                                                  |                                                        | `/admin/workspace-plans`          |
+
+`PUT /platform/plan-settings` body `{ yearlyToggleEnabled, yearlyDiscountPct (0..90) }` (super admin; every role reads; audited as
+`platform.plan.settings_updated`). `PUT /platform/workspace-plans/:id` also takes `trialEndsAt` (datetime, null = end now; omitted = unchanged, a
+changed plan clears it unless given) and `overrides.dataRetentionDays` (0..3650 or null).

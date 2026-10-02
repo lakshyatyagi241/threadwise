@@ -14,4 +14,10 @@ export const PLAN_OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'plans-subscriptions-trials.nav.pricingFaqs',
     groupKey: 'plans-subscriptions-trials.nav.group',
   },
+  {
+    id: 'plan-settings',
+    href: '/admin/plan-settings',
+    labelKey: 'plans-subscriptions-trials.nav.planSettings',
+    groupKey: 'plans-subscriptions-trials.nav.group',
+  },
 ];
