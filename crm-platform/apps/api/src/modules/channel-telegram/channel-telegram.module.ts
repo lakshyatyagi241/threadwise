@@ -9,6 +9,7 @@ import { BotsController } from './bots.controller';
 import { BotsRepository } from './bots.repository';
 import { BotsService } from './bots.service';
 import { InboundService } from './inbound.service';
+import { TelegramSenderService } from './telegram-sender.service';
 import { WebhookController } from './webhook.controller';
 
 /**
@@ -22,6 +23,7 @@ import { WebhookController } from './webhook.controller';
     BotsService,
     BotsRepository,
     InboundService,
+    TelegramSenderService,
     TelegramBotApiFactory,
     { provide: TELEGRAM_API, useExisting: TelegramBotApiFactory },
     { provide: TELEGRAM_PLAN_GATE, useClass: OpenTelegramPlanGate },
@@ -29,6 +31,6 @@ import { WebhookController } from './webhook.controller';
     { provide: MEDIA_STORE, useClass: NoMediaStore },
     { provide: INBOUND_HOOKS, useClass: NoInboundHooks },
   ],
-  exports: [BotsService],
+  exports: [BotsService, TelegramSenderService],
 })
 export class ChannelTelegramModule {}

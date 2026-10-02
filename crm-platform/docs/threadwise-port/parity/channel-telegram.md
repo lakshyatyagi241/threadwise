@@ -8,24 +8,26 @@ Evidence so far is automated, no screen yet:
 - `apps/api/test/e2e/channel-telegram/telegram-bots.e2e.spec.ts`: 11 scenarios (connect, re-paste, rejected token, webhook refused,
   fix inbound, pause, payment settings, disconnect, tenant isolation, permissions) against a real Postgres and a fake Telegram.
 - `apps/api/test/e2e/channel-telegram/telegram-inbound.e2e.spec.ts`: 11 scenarios for the webhook (secret and unknown token, quiet kinds, first message, same thread and contact, reopen, two at once, group and channel post, photo, automation order, taps, payments, isolation).
-- `apps/api/test/unit/channel-telegram/bot-rules.spec.ts` and `update-rules.spec.ts`: 18 tests (routing token, https address, error clipping, token shape, update kinds, media and text extraction, titles, payments).
+- `apps/api/test/e2e/channel-telegram/telegram-sender.e2e.spec.ts`: 8 scenarios (the bot in the thread key, disconnected and foreign bots, older key, refusal, keyboard, media by address, upload and unreachable).
+- `apps/api/test/unit/channel-telegram/bot-rules.spec.ts`, `update-rules.spec.ts` and `sending.spec.ts`: 29 tests (routing token, https address, error clipping, token shape, update kinds, media and text extraction, titles, payments).
 
 ## Status of each feature
 
-| Feature          | Status       | Notes                                                                                                                       |
-| ---------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| TW-TG-001        | partial      | The list endpoint exists (`GET /telegram/bots`); the hub screen is T5.                                                      |
-| TW-TG-002        | backend-done | Connect by token, encrypted, re-paste updates, webhook registered, refusal keeps it.                                        |
-| TW-TG-007        | backend-done | Fix inbound, pause and resume, payment settings, disconnect. Screen is T5.                                                  |
-| TW-TG-019        | partial      | Permission keys added (`tg.*`). The plan flags are a shim (see below).                                                      |
-| TW-TG-003        | backend-done | Public webhook, routing token, secret header, always 200, flood limit, tenant by a narrow lookup function.                  |
-| TW-TG-004        | partial      | Thread, contact, message and unread are done. Media is not downloaded (no storage upload yet) and automation is a stand-in. |
-| TW-TG-005        | backend-done | Taps answered; `tqr:` taps replayed as typed messages.                                                                      |
-| TW-TG-006        | backend-done | Pre-checkout approved first; payment recorded as its own row; resume hook called.                                           |
-| TW-TG-008, 009   | not started  | T3.                                                                                                                         |
-| TW-TG-010 to 014 | not started  | T4.                                                                                                                         |
-| TW-TG-015 to 017 | blocked      | Needs the Node bridge (T6).                                                                                                 |
-| TW-TG-018        | blocked      | Needs the flow runtime (T7).                                                                                                |
+| Feature          | Status       | Notes                                                                                                                                                 |
+| ---------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TW-TG-001        | partial      | The list endpoint exists (`GET /telegram/bots`); the hub screen is T5.                                                                                |
+| TW-TG-002        | backend-done | Connect by token, encrypted, re-paste updates, webhook registered, refusal keeps it.                                                                  |
+| TW-TG-007        | backend-done | Fix inbound, pause and resume, payment settings, disconnect. Screen is T5.                                                                            |
+| TW-TG-019        | partial      | Permission keys added (`tg.*`). The plan flags are a shim (see below).                                                                                |
+| TW-TG-003        | backend-done | Public webhook, routing token, secret header, always 200, flood limit, tenant by a narrow lookup function.                                            |
+| TW-TG-004        | partial      | Thread, contact, message and unread are done. Media is not downloaded (no storage upload yet) and automation is a stand-in.                           |
+| TW-TG-005        | backend-done | Taps answered; `tqr:` taps replayed as typed messages.                                                                                                |
+| TW-TG-006        | backend-done | Pre-checkout approved first; payment recorded as its own row; resume hook called.                                                                     |
+| TW-TG-008        | backend-done | `TelegramSenderService.reply`: the thread's bot sends text, media (file id, address or upload), long captions follow up. The inbox composer is TIB's. |
+| TW-TG-009        | backend-done | Template buttons become the keyboard; phone buttons are appended to the text.                                                                         |
+| TW-TG-010 to 014 | not started  | T4.                                                                                                                                                   |
+| TW-TG-015 to 017 | blocked      | Needs the Node bridge (T6).                                                                                                                           |
+| TW-TG-018        | blocked      | Needs the flow runtime (T7).                                                                                                                          |
 
 ## Intended differences from Reference
 

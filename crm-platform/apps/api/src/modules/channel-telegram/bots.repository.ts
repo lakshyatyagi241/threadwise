@@ -99,6 +99,15 @@ export class BotsRepository {
     return r ? toRow(r) : undefined;
   }
 
+  /** Some active bot, the oldest: where a thread from before a workspace could have several bots is answered. */
+  async findFirstActive(tx: Tx, orgId: number): Promise<BotRow | undefined> {
+    const res = await tx.execute(
+      sql`SELECT ${COLUMNS} FROM telegram_bots WHERE org_id = ${orgId} AND active ORDER BY id LIMIT 1`,
+    );
+    const r = (res.rows as unknown as Raw[])[0];
+    return r ? toRow(r) : undefined;
+  }
+
   /** A push arrived: the bot is alive. Clears a stale error only when a message (not a payment step) came in. */
   async touchInbound(tx: Tx, orgId: number, id: number, clearError: boolean): Promise<void> {
     await tx.execute(sql`

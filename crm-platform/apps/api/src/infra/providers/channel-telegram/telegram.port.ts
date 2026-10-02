@@ -16,12 +16,47 @@ export interface TelegramBotIdentity {
   first_name?: string;
 }
 
+export type MediaKind =
+  'image' | 'video' | 'audio' | 'voice' | 'document' | 'sticker' | 'animation' | 'video_note';
+
+/** Where a media message gets its file: a public address, Telegram's own file id, or the bytes themselves. */
+export type MediaSource =
+  { url: string } | { fileId: string } | { bytes: Uint8Array; filename: string };
+
+export interface SendOptions {
+  /** `Markdown`, `HTML` or empty. Off by default; when Telegram rejects a mode the text is sent again unparsed. */
+  parseMode?: string;
+  /** A keyboard, already built (see `templateButtonsMarkup`). */
+  replyMarkup?: object | null;
+}
+
+export interface SentMessage {
+  message_id: number;
+  /** Photos come back as sizes, smallest first: the last is the one to reuse. */
+  photo?: Array<{ file_id: string }>;
+  [media: string]: unknown;
+}
+
 export interface TelegramBotApi {
   /** Identifies the bot behind a token: validates the token on connect. */
   getMe(): Promise<TelegramResult<TelegramBotIdentity>>;
   /** Points the bot at this install. Drops the pending backlog so a reconnect does not replay old updates. */
   setWebhook(url: string, secretToken: string): Promise<TelegramResult>;
   deleteWebhook(): Promise<TelegramResult>;
+  /** Text, cut to 4096 characters. */
+  sendMessage(
+    chatId: string,
+    text: string,
+    opts?: SendOptions,
+  ): Promise<TelegramResult<SentMessage>>;
+  /** A file with an optional caption (cut to 1024; stickers and video notes take none). */
+  sendMedia(
+    chatId: string,
+    kind: MediaKind,
+    source: MediaSource,
+    caption?: string | null,
+    opts?: SendOptions,
+  ): Promise<TelegramResult<SentMessage>>;
   /** Stops the spinner on an inline-button tap; Telegram requires it. */
   answerCallbackQuery(queryId: string): Promise<TelegramResult>;
   /** Approves (or declines with a reason) a payment before Telegram's 10 second limit. */

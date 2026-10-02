@@ -68,6 +68,10 @@ export interface MediaStore {
   readonly enabled: boolean;
   /** The stored path or public URL, or null when it could not be saved. */
   save(orgId: number, bytes: Uint8Array, extension: string): Promise<string | null>;
+  /** The bytes of a file we stored (so a send can upload it instead of asking Telegram to fetch a URL), or null when not ours. */
+  read(path: string): Promise<{ bytes: Uint8Array; filename: string } | null>;
+  /** A public address for a stored file, or null when it has none. */
+  publicUrl(path: string): string | null;
 }
 export const MEDIA_STORE = Symbol('TELEGRAM_MEDIA_STORE');
 
