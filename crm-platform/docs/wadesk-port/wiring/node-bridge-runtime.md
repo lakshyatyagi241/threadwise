@@ -81,3 +81,17 @@ are started.
 | Proxy                                     | `infra/providers/node-bridge-runtime/proxy.ts`, `devices.proxy_*` | http and socks5; probed through the proxy; fail-closed                                 |
 | Redis keys                                | `runtime/wa-redis.ts`                                             | `wa:device:`, `wa:qr:`, `wa:code:`, `wa:status:`, `wa:init:`, channel `wa:cmd`         |
 | Events                                    | outbox `device.status_changed`                                    | aggregate `devices`; WaDesk's `DeviceStatusChanged`                                    |
+
+## Sending, receiving and receipts (WD-NODE-016 to 025, 027)
+
+| Piece                     | Where                                                                                           | Notes                                                                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Send commands and engines | `infra/providers/node-bridge-runtime/outbound.port.ts`, `modules/node-bridge-runtime/outbound/` | `SendCommand` (text, media, location, contact, group text); transports `waba`, `twilio`, `baileys` register in `OutboundRegistry` |
+| Cross-process send        | `runtime/device-control.service.ts` (`sendMessage`, `messageAction`, `groupAction`)             | the worker that owns the device's lease answers over Redis; a device nobody owns refuses at once                                  |
+| Message actions, groups   | same, `WaSocket.act` / `WaSocket.groups`                                                        | react, pin, star, edit, delete; group directory and management                                                                    |
+| Reading messages          | `infra/providers/node-bridge-runtime/inbound-normalizer.ts`                                     | pure; every filter and priority rule of WD-NODE-016 and 018                                                                       |
+| Where inbound goes        | `runtime/routers.ts` (`InboundRouter`, `ReceiptRouter`)                                         | consumers register themselves; messages are deduplicated per device; the inbox registers an `InboundSink` when it is built        |
+| Receipts                  | `scheduled-queue-warmer/scheduled-receipts.service.ts`, BCAST `BroadcastReceiptsService`        | registered into `ReceiptRouter` by `ScheduledQueueWarmerWorkerModule`                                                             |
+| Twilio                    | `outbound/twilio.transport.ts`                                                                  | Messages API with the number's own SID and token                                                                                  |
+
+Not outbox events: the outbox rules exclude individual messages and receipts (they would drown the drain), so inbound traffic uses in-process sinks.

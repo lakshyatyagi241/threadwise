@@ -23,3 +23,14 @@ export {
 export { NodeBridgeRuntimeWorkerModule } from './node-bridge-runtime-worker.module';
 export { DeviceControlService, type DeviceStatusView } from './runtime/device-control.service';
 export type { DeviceCommandResult } from './runtime/device-command';
+export {
+  InboundRouter,
+  ReceiptRouter,
+  type DeliveryReport,
+  type InboundSink,
+  type ReceiptSink,
+} from './runtime/routers';
+export type { Normalized } from '../../infra/providers/node-bridge-runtime/inbound-normalizer';
+export type { GroupSnapshot } from '../../infra/providers/node-bridge-runtime/inbound.port';
+export type { GroupAction } from '../../infra/providers/node-bridge-runtime/socket.port';
+export type { MessageAction } from '../../infra/providers/node-bridge-runtime/outbound.port';

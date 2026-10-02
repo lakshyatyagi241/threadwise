@@ -68,6 +68,15 @@ class FakeSocket implements WaSocket {
   end() {
     this.ended = true;
   }
+  async send() {
+    return { providerMessageId: 'wamid.unit' };
+  }
+  async act() {
+    return undefined;
+  }
+  async groups() {
+    return { ok: true } as const;
+  }
   emit(e: SocketEvent) {
     this.listener?.(e);
   }

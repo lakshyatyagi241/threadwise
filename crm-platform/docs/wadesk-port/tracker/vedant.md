@@ -135,18 +135,18 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-013 | backend-done |  | per-device proxy (http, socks5) read at every connect, probed through the proxy, fail-closed, result kept on the device; NOT verified against a real proxy |
 | WD-NODE-014 | backend-done |  | liveness: owner touches last_seen_at, a device untouched for 90 s flips to disconnected; the other sweeps belong to their own domains as BullMQ jobs |
 | WD-NODE-015 | blocked |  | campaign drain loop belongs to CAMP (Punya's campaigns run on BullMQ) |
-| WD-NODE-016 | todo |  |  |
-| WD-NODE-017 | todo |  |  |
-| WD-NODE-018 | todo |  |  |
+| WD-NODE-016 | backend-done |  | capture and normalization of every message (filters, 10-minute replay guard, sender and LID resolution, text priority, media, location, contact, reaction, forwarded) with per-device dedup, delivered to registered consumers; media bytes wait for storage (F5) |
+| WD-NODE-017 | blocked |  | the inbox that stores messages (CHAT, TIB1) is not built; InboundRouter is the seam it registers into (replaces the inbound-message HTTP endpoint) |
+| WD-NODE-018 | backend-done |  | echo of the business's own messages and group messages normalized and delivered (a LID-only group speaker keeps the LID instead of being lost); mirroring the bridge's own auto-replies belongs with auto-reply (019) |
 | WD-NODE-019 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-020 | todo |  |  |
-| WD-NODE-021 | todo |  |  |
-| WD-NODE-022 | in-progress |  | outbound port + registry + sender resolver + Cloud API text transport done; Baileys and Twilio transports land with the socket runtime |
-| WD-NODE-023 | todo |  |  |
-| WD-NODE-024 | todo |  |  |
-| WD-NODE-025 | todo |  |  |
+| WD-NODE-020 | backend-done |  | receipts from the socket go to the broadcast recipient or the scheduled recipient that owns the message id, upward only; the chat message status waits for CHAT |
+| WD-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
+| WD-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
+| WD-NODE-023 | in-progress |  | media on the unofficial engine (type precedence, voice notes, documents with a file name, download through SafeFetch) and on Twilio; Cloud API media, media with buttons and inline base64 not built |
+| WD-NODE-024 | in-progress |  | location, contact card and group message with mentions done; product catalog sends blocked on the catalog domain (CAT) and the template pipeline |
+| WD-NODE-025 | backend-done |  | react, pin, star, edit, delete through the owning socket; pin keeps WaDesk's fixed 24 hours (its duration choice never had an effect) |
 | WD-NODE-026 | wontfix |  | intended: engine and credentials come from the device row, no settings hop or cache (inventory port note) |
-| WD-NODE-027 | todo |  |  |
+| WD-NODE-027 | backend-done |  | Cloud API text transport (shared Meta provider) and a Twilio transport (text, media with caption, location); templates by ContentSid belong to the template pipeline; Twilio status callback belongs to the WhatsApp provider domain |
 | WD-NODE-028 | backend-done |  | SafeFetch: all-address DNS check, pinned IP, every redirect hop checked, size cap, MIME; consumer is 023; local paths intentionally refused |
 | WD-NODE-029 | in-progress |  | admin form + real reader wired into BCAST pacing (PlatformPacingSettings); jitter, daily cap, lease already in BCAST; per-socket serialization lands with the Baileys adapter |
 | WD-NODE-030 | backend-done |  | DB row is the schedule; due poller queues one BullMQ job per occurrence (jobId = uuid + time); late policy configurable; no cron, no boot sync |
