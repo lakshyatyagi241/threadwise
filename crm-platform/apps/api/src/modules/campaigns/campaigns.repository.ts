@@ -1159,6 +1159,57 @@ export class CampaignsRepository {
     };
   }
 
+  /** Top performers: the campaign's recipients grouped by contact group, ranked by read rate (TW-CAMP-019 "segments"). */
+  async segments(tx: Tx, orgId: number, campaignId: number, limit: number) {
+    const res = await tx.execute(sql`
+      SELECT g.name AS name, count(DISTINCT r.id)::int AS recipients,
+             count(DISTINCT r.id) FILTER (WHERE r.responded_at IS NOT NULL)::int AS replies,
+             count(DISTINCT r.id) FILTER (WHERE r.read_at IS NOT NULL)::int AS reads,
+             count(DISTINCT r.id) FILTER (WHERE r.is_unsubscribed OR r.status = 'unsubscribed')::int AS opt_outs
+      FROM wp_campaign_contacts r
+      JOIN contact_group_members gm ON gm.org_id = r.org_id AND gm.contact_id = r.contact_id
+      JOIN contact_groups g ON g.org_id = gm.org_id AND g.id = gm.group_id
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId}
+      GROUP BY g.id, g.name`);
+    return (res.rows as Raw[])
+      .map((r) => {
+        const recipients = Number(r.recipients);
+        return {
+          name: String(r.name ?? ''),
+          recipients,
+          replies: Number(r.replies),
+          optOuts: Number(r.opt_outs),
+          readPct: recipients > 0 ? Math.round((Number(r.reads) / recipients) * 1000) / 10 : 0,
+        };
+      })
+      .filter((s) => s.name !== '')
+      .sort((a, b) => b.readPct - a.readPct)
+      .slice(0, limit);
+  }
+
+  /** Real clicks per destination: the sum of the tracked links of this campaign, by the URL they point at. */
+  async clicksByUrl(tx: Tx, orgId: number, campaignId: number): Promise<Map<string, number>> {
+    const res = await tx.execute(sql`
+      SELECT original_url, coalesce(sum(clicks), 0)::int AS total FROM wa_link_clicks
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} GROUP BY original_url`);
+    return new Map((res.rows as Raw[]).map((r) => [String(r.original_url), Number(r.total)]));
+  }
+
+  /** WHO opted out: the campaign's recipients whose contact is now unsubscribed, newest first. */
+  async optOuts(tx: Tx, orgId: number, campaignId: number, limit: number) {
+    const res = await tx.execute(sql`
+      SELECT coalesce(r.recipient_name, c.name, '') AS name, coalesce(r.phone_number, c.phone, '') AS phone,
+             r.unsubscribed_at, r.sent_at
+      FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND (r.is_unsubscribed OR r.status = 'unsubscribed')
+      ORDER BY coalesce(r.unsubscribed_at, r.sent_at) DESC NULLS LAST, r.id DESC LIMIT ${limit}`);
+    return (res.rows as Raw[]).map((r) => ({
+      name: String(r.name),
+      phone: String(r.phone),
+      at: r.unsubscribed_at ?? r.sent_at ? new Date((r.unsubscribed_at ?? r.sent_at) as string) : null,
+    }));
+  }
+
   async optInCount(tx: Tx, orgId: number, campaignId: number): Promise<number> {
     const res = await tx.execute(sql`
       SELECT count(*)::int AS n FROM wp_campaign_contacts r

@@ -39,6 +39,7 @@ import {
   StopIcon,
   TrashIcon,
 } from './icons';
+import { EngagementTab } from './engagement-tab';
 import { RecipientsTab } from './recipients-tab';
 
 const TONE: Record<string, string> = {
@@ -553,6 +554,7 @@ export function DetailScreen({ id }: { id: string }) {
         items={[
           { id: 'overview', label: t('tabs.overview'), content: overview },
           { id: 'messages', label: t('tabs.messages'), content: <RecipientsTab id={id} /> },
+          { id: 'engagement', label: t('tabs.engagement'), content: <EngagementTab d={d} /> },
           { id: 'replies', label: t('tabs.replies', { count: n.replies }), content: replies },
           {
             id: 'failures',

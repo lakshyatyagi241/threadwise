@@ -563,6 +563,74 @@ describe('TW-CAMP-001, 019: list and detail', () => {
     expect(all.body.data).toHaveLength(4);
   });
 
+  it('the detail carries engagement, top buttons from real clicks, segments by group and who opted out', async () => {
+    const t = await api.signup('cc15b');
+    const ids = await contacts(t, 3);
+    const dev = await device(t, 'Buttons phone');
+    const made = await post(
+      t,
+      '',
+      base({
+        contactIds: ids,
+        senderKey: `baileys:${dev}`,
+        type: 'button',
+        customButtons: [
+          { type: 'url', text: 'Shop', url: 'https://shop.test/a', value: 'https://shop.test/a' },
+          { type: 'quick_reply', text: 'Yes', value: 'Yes' },
+        ],
+      }),
+    );
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    const id = made.body.campaign.id as string;
+    const cid = Number((await row(id)).id);
+    const rs = (
+      await h.owner.query(
+        `SELECT id FROM wp_campaign_contacts WHERE campaign_id = $1 ORDER BY id`,
+        [cid],
+      )
+    ).rows;
+    const g = (
+      await h.owner.query(
+        `INSERT INTO contact_groups (org_id, name) VALUES ($1,'VIP') RETURNING id`,
+        [t.orgId],
+      )
+    ).rows[0];
+    await h.owner.query(
+      `INSERT INTO contact_group_members (org_id, group_id, contact_id)
+       SELECT $1, $2, contact_id FROM wp_campaign_contacts WHERE campaign_id = $3`,
+      [t.orgId, g.id, cid],
+    );
+    await h.owner.query(
+      `UPDATE wp_campaign_contacts SET status='read', sent_at=now(), delivered_at=now(), read_at=now() WHERE id=$1`,
+      [rs[0].id],
+    );
+    await h.owner.query(
+      `UPDATE wp_campaign_contacts SET status='delivered', sent_at=now(), delivered_at=now(), clicked=true WHERE id=$1`,
+      [rs[1].id],
+    );
+    await h.owner.query(
+      `UPDATE wp_campaign_contacts SET status='unsubscribed', is_unsubscribed=true, unsubscribed_at=now() WHERE id=$1`,
+      [rs[2].id],
+    );
+    await h.owner.query(
+      `INSERT INTO wa_link_clicks (org_id, token, original_url, campaign_id, clicks) VALUES ($1,'tok1','https://shop.test/a',$2,3)`,
+      [t.orgId, cid],
+    );
+
+    const d = await get(t, `/${id}`);
+    expect(d.status, JSON.stringify(d.body)).toBe(200);
+    expect(d.body.segments).toEqual([
+      { name: 'VIP', recipients: 3, replies: 0, optOuts: 1, readPct: 33.3 },
+    ]);
+    expect(d.body.buttonRows).toEqual([
+      { label: 'Shop', count: 3, trackable: true, pct: 100 },
+      { label: 'Yes', count: null, trackable: false, pct: 0 },
+    ]);
+    expect(d.body.engagement).toMatchObject({ openedCount: 1, optOutCount: 1, optOutPct: 33.3 });
+    expect(d.body.optOuts).toHaveLength(1);
+    expect(d.body.optOuts[0].at).toEqual(expect.any(String));
+  });
+
   it('the builder lists senders, templates, groups with counts, tags with counts and flows', async () => {
     const t = await api.signup('cc16');
     await device(t, 'Sales phone');

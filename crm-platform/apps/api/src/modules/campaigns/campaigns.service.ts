@@ -34,6 +34,8 @@ import {
 } from './campaign-rules';
 import { toCampaign } from './campaigns.mapper';
 import { CampaignsRepository, type NewCampaign } from './campaigns.repository';
+import { toSnapshot } from './campaign-events';
+import { createdWebhook } from './campaign-webhook-events';
 
 export const MODULE_KEY = 'campaigns';
 
@@ -130,6 +132,7 @@ export class CampaignsService {
           status: row.status,
           scheduleType: row.scheduleType,
           totalRecipients: contactIds.length,
+          webhook: createdWebhook(toSnapshot(row), new Date()),
         },
       });
       return row;
