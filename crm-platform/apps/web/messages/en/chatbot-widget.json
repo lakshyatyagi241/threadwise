@@ -341,7 +341,7 @@
         "desktop": "Desktop",
         "mobile": "Mobile",
         "frameTitle": "Live preview of your WhatsApp widget",
-        "hint": "Click the button to open the messenger, then Start Conversation to try it.",
+        "hint": "Collapse the panel with the round button, open it again from the launcher, and try Start Conversation.",
         "businessName": "Your business"
       }
     }

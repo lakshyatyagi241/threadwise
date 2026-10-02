@@ -315,10 +315,10 @@ describe('the loader script', () => {
     });
     const css = r.doc.head.children[0]!.textContent;
     expect(css).toContain(
-      `.wgt-${SHORT}[data-dev="d"]{left:24px;right:auto;align-items:flex-start;bottom:32px}`,
+      `.wgt-${SHORT}[data-dev="d"]{left:24px;right:auto;align-items:flex-start;bottom:32px;--wb:32px}`,
     );
     expect(css).toContain(
-      `.wgt-${SHORT}[data-dev="m"]{right:6px;left:auto;align-items:flex-end;bottom:90px}`,
+      `.wgt-${SHORT}[data-dev="m"]{right:6px;left:auto;align-items:flex-end;bottom:90px;--wb:90px}`,
     );
   });
 
@@ -346,7 +346,7 @@ describe('the loader script', () => {
     const close = r.byId(`wgt-close-${SHORT}`);
     expect(panel.style.cssText).toContain('display:none');
     r.click(launch);
-    expect(panel.style.display).toBe('block');
+    expect(panel.style.display).toBe('flex');
     expect(launch.style.display).toBe('none');
     expect(close.style.display).toBe('flex');
     expect(launch.attrs['aria-expanded']).toBe('true');
@@ -406,7 +406,7 @@ describe('the loader script', () => {
     const r = run({ autoOpen: true });
     expect(r.timers.map((t) => t.ms)).toEqual([1200]);
     r.timers[0]!.fn();
-    expect(r.byId(`wgt-panel-${SHORT}`).style.display).toBe('block');
+    expect(r.byId(`wgt-panel-${SHORT}`).style.display).toBe('flex');
   });
 
   it('loading it twice mounts one launcher, except in the preview', () => {
@@ -437,7 +437,7 @@ describe('the loader script', () => {
       { wgt: 'toggle', open: false },
     ]);
     const open = run({ preview: true, startOpen: true });
-    expect(open.byId(`wgt-panel-${SHORT}`).style.display).toBe('block');
+    expect(open.byId(`wgt-panel-${SHORT}`).style.display).toBe('flex');
   });
 
   it('text that is markup or script stays text: it is only ever assigned as textContent and the program has no raw tag', () => {
@@ -481,5 +481,52 @@ describe('the embed route picks the program by mode', () => {
       expect(js).toContain("createElement('iframe')");
       expect(js).not.toContain('Start Conversation');
     }
+  });
+});
+
+describe('the panel looks like the real messenger', () => {
+  it('is 500px tall, shrinking only for a short page and the bottom spacing, on a warm chat area', () => {
+    const r = run();
+    const panel = r.byId(`wgt-panel-${SHORT}`);
+    expect(panel.style.cssText).toContain('height:min(500px,calc(100vh - 100px - var(--wb,10px)))');
+    expect(panel.style.cssText).toContain('width:360px');
+    expect(panel.style.cssText).toContain('background:#EDE8E0');
+  });
+
+  it('puts the greeting and the intro in ONE white bubble with a tail and a 24-hour time at its bottom right', () => {
+    const r = run({
+      launcher: { ...DEFAULT_LAUNCHER, greeting: 'Namaste!', introMessage: 'We reply fast.' },
+    });
+    const bubble = r.created.find((e) => e.attrs['data-testid'] === 'wgt-intro')!;
+    expect(bubble.style.cssText).toContain('background:#fff');
+    expect(bubble.style.cssText).toContain('border-radius:0 12px 12px 12px');
+    const inside = bubble.children.map((c) => c.textContent).filter(Boolean);
+    expect(inside.slice(0, 2)).toEqual(['Namaste!', 'We reply fast.']);
+    expect(bubble.children[0]!.style.cssText).toContain('border-top:9px solid #fff');
+    const time = bubble.children.find((c) => c.style.cssText.includes('bottom:5px'))!;
+    expect(time.textContent).toMatch(/^\d{2}:\d{2}$/);
+  });
+
+  it('has a divider above a full-width pill Start Conversation with the send icon before the bold text', () => {
+    const r = run();
+    const start = r.byId(`wgt-start-${SHORT}`);
+    expect(start.style.cssText).toContain('width:100%');
+    expect(start.style.cssText).toContain('border-radius:26px');
+    expect(start.style.cssText).toContain('font-weight:700');
+    expect(start.children[0]!.innerHTML).toContain('<svg');
+    expect(start.children[1]!.textContent).toBe('Start Conversation');
+    const foot = r.created.find((e) => e.children.includes(start))!;
+    expect(foot.style.cssText).toContain('border-top:1px solid');
+  });
+
+  it('shows the business name in bold above the bold reply-time line, next to the round image', () => {
+    const r = run();
+    const head = r.created.find((e) => e.style.cssText.includes('gap:14px'))!;
+    expect(head.children[0]!.tag).toBe('img');
+    expect(head.children[0]!.style.cssText).toContain('border-radius:50%');
+    const who = head.children[1]!;
+    expect(who.children[0]!.textContent).toBe('Acme Shop');
+    expect(who.children[0]!.style.cssText).toContain('font-weight:700');
+    expect(who.children[1]!.style.cssText).toContain('font-weight:700');
   });
 });

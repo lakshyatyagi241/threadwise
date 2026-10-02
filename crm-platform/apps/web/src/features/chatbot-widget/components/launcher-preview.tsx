@@ -18,7 +18,8 @@ const REPAINT_MS = 120;
 export function LauncherPreview({ s, device }: { s: BuilderState; device: PreviewDevice }) {
   const t = useTranslations('chatbotWidget.whatsappBuilder.preview');
   const frame = useRef<HTMLIFrameElement>(null);
-  const open = useRef(false);
+  // The preview opens with the panel expanded; the visitor's own collapse and re-open are remembered across repaints.
+  const open = useRef(true);
 
   const fallbackName = t('businessName');
   const input = {
@@ -33,7 +34,7 @@ export function LauncherPreview({ s, device }: { s: BuilderState; device: Previe
   useEffect(() => {
     latest.current = input;
   });
-  const [doc, setDoc] = useState(() => previewDocument({ ...input, startOpen: false }));
+  const [doc, setDoc] = useState(() => previewDocument({ ...input, startOpen: true }));
 
   useEffect(() => {
     const timer = window.setTimeout(
@@ -71,10 +72,10 @@ export function LauncherPreview({ s, device }: { s: BuilderState; device: Previe
           className={cn(
             'mx-auto overflow-hidden bg-white shadow-inner',
             device === 'mobile'
-              ? 'w-[300px] rounded-[28px] border-[6px] border-foreground/80'
+              ? 'w-[372px] max-w-full rounded-[32px] border-[6px] border-foreground/80'
               : 'w-full rounded-xl border border-border',
           )}
-          style={{ height: device === 'mobile' ? 560 : 460 }}
+          style={{ height: device === 'mobile' ? 700 : 620 }}
         >
           <iframe
             ref={frame}

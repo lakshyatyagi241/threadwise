@@ -342,7 +342,7 @@ const RUNTIME = `
 
   var style = d.createElement('style');
   function place(dev, p) {
-    return '.' + K + '[data-dev="' + dev + '"]{' + (p.side === 'left' ? 'left:' + p.s + 'px;right:auto;align-items:flex-start;' : 'right:' + p.s + 'px;left:auto;align-items:flex-end;') + 'bottom:' + p.b + 'px}';
+    return '.' + K + '[data-dev="' + dev + '"]{' + (p.side === 'left' ? 'left:' + p.s + 'px;right:auto;align-items:flex-start;' : 'right:' + p.s + 'px;left:auto;align-items:flex-end;') + 'bottom:' + p.b + 'px;--wb:' + p.b + 'px}';
   }
   style.textContent = '.' + K + '{position:fixed;z-index:2147483600;display:flex;flex-direction:column;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.35}'
     + '.' + K + ' *{box-sizing:border-box}'
@@ -371,45 +371,48 @@ const RUNTIME = `
   wrap.setAttribute('data-testid', 'wgt-embed');
 
   // --- panel
-  var panel = el('div', 'display:none;width:340px;max-width:calc(100vw - 20px);margin-bottom:12px;border-radius:18px;overflow:hidden;background:#efeae2;box-shadow:0 14px 48px rgba(0,0,0,.28)');
+  // Tall like the real thing: 500px, shrinking only when the page is shorter (the launcher, the collapse button and the bottom spacing stay in view).
+  var panel = el('div', 'display:none;flex-direction:column;width:360px;max-width:calc(100vw - 20px);height:min(500px,calc(100vh - 100px - var(--wb,10px)));min-height:240px;margin-bottom:12px;border-radius:20px;overflow:hidden;background:#EDE8E0;box-shadow:0 14px 48px rgba(0,0,0,.28)');
   panel.id = 'wgt-panel-' + C.id;
   panel.setAttribute('role', 'dialog');
   panel.setAttribute('aria-label', C.name);
 
-  var head = el('div', 'display:flex;align-items:center;gap:12px;padding:14px 16px;color:#fff;background:' + grad);
-  var avatar = el('img', 'width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.85);background:#fff;flex:none');
+  var head = el('div', 'display:flex;align-items:center;gap:14px;padding:16px 18px;color:#fff;flex:none;background:' + grad);
+  var avatar = el('img', 'width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.9);background:#fff;flex:none');
   avatar.alt = '';
   avatar.src = C.avatar;
   var who = el('div', 'min-width:0');
-  var title = el('div', 'font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis', C.name);
+  var title = el('div', 'font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis', C.name);
   title.setAttribute('data-testid', 'wgt-name');
-  var reply = el('div', 'font-size:12px;opacity:.92;margin-top:2px', C.text.reply);
+  var reply = el('div', 'font-size:12.5px;font-weight:700;margin-top:3px;opacity:.95', C.text.reply);
   who.appendChild(title);
   who.appendChild(reply);
   head.appendChild(avatar);
   head.appendChild(who);
 
-  var body = el('div', 'padding:16px 16px 6px');
-  var greet = el('div', 'font-size:13px;font-weight:700;letter-spacing:.02em;text-align:center;color:#3b4a54;margin-bottom:10px;overflow-wrap:anywhere', C.greeting);
-  greet.setAttribute('data-testid', 'wgt-greeting');
-  var bubble = el('div', 'position:relative;background:#fff;color:#111b21;border-radius:2px 14px 14px 14px;padding:10px 54px 10px 12px;font-size:14px;box-shadow:0 1px 1px rgba(0,0,0,.12);overflow-wrap:anywhere;white-space:pre-wrap');
+  var body = el('div', 'flex:1;overflow:auto;padding:20px 16px;background:#EDE8E0');
+  var bubble = el('div', 'position:relative;display:inline-block;max-width:88%;background:#fff;color:#111b21;border-radius:0 12px 12px 12px;padding:9px 12px 22px;font-size:14.5px;box-shadow:0 1px 1px rgba(0,0,0,.13);overflow-wrap:anywhere;white-space:pre-wrap');
   bubble.setAttribute('data-testid', 'wgt-intro');
-  var introText = el('span', '', C.intro);
+  var tail = el('span', 'position:absolute;left:-7px;top:0;width:0;height:0;border-top:9px solid #fff;border-left:8px solid transparent');
+  var greet = el('div', 'font-weight:700;margin-bottom:3px', C.greeting);
+  greet.setAttribute('data-testid', 'wgt-greeting');
+  var introText = el('div', '', C.intro);
   var time = el('span', 'position:absolute;right:10px;bottom:5px;font-size:11px;color:#667781');
-  try { time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch (e) { time.textContent = ''; }
+  try { time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }); } catch (e) { time.textContent = ''; }
+  bubble.appendChild(tail);
+  bubble.appendChild(greet);
   bubble.appendChild(introText);
   bubble.appendChild(time);
-  body.appendChild(greet);
   body.appendChild(bubble);
 
-  var foot = el('div', 'padding:14px 16px 18px');
-  var start = el('button', 'width:100%;height:50px;border:0;border-radius:26px;color:#fff;font-size:15.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;background:' + grad);
+  var foot = el('div', 'flex:none;padding:14px 16px 16px;border-top:1px solid #d6cfc3;background:#EDE8E0');
+  var start = el('button', 'width:100%;height:52px;border:0;border-radius:26px;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;background:' + grad);
   start.type = 'button';
   start.id = 'wgt-start-' + C.id;
   start.setAttribute('data-testid', 'wgt-start');
   start.setAttribute('data-wa', C.wa || '');
+  start.appendChild(svg(SEND, 19));
   start.appendChild(el('span', '', C.text.start));
-  start.appendChild(svg(SEND, 18));
   if (C.wa) {
     start.addEventListener('click', function () { win.open(C.wa, '_blank', 'noopener'); });
   } else {
@@ -450,7 +453,7 @@ const RUNTIME = `
   var open = false;
   function show(next) {
     open = next;
-    panel.style.display = open ? 'block' : 'none';
+    panel.style.display = open ? 'flex' : 'none';
     launch.style.display = open ? 'none' : 'flex';
     close.style.display = open ? 'flex' : 'none';
     launch.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -471,7 +474,7 @@ const RUNTIME = `
   apply();
   if (mq && C.device === 'auto') { if (mq.addEventListener) mq.addEventListener('change', apply); else if (mq.addListener) mq.addListener(apply); }
 
-  if (C.startOpen) { panel.style.display = 'block'; launch.style.display = 'none'; close.style.display = 'flex'; open = true; launch.setAttribute('aria-expanded', 'true'); }
+  if (C.startOpen) { panel.style.display = 'flex'; launch.style.display = 'none'; close.style.display = 'flex'; open = true; launch.setAttribute('aria-expanded', 'true'); }
   else if (C.autoOpen) setTimeout(function () { if (!open) show(true); }, 1200);
 })
 `;

@@ -208,3 +208,18 @@ describe('the preview', () => {
     expect(doc.match(/<\/script>/g)).toHaveLength(1);
   });
 });
+
+describe('the preview backdrop', () => {
+  it('is a clean neutral page with the panel dominating: no skeleton blocks', () => {
+    const doc = previewDocument({
+      name: 'Acme',
+      launcher: previewLauncher(newState().launcher),
+      whatsappUrl: null,
+      device: 'desktop',
+      startOpen: true,
+    });
+    expect(doc).not.toContain('class="hero"');
+    expect(doc).not.toContain('class="line');
+    expect(doc).toContain('"startOpen":true');
+  });
+});
