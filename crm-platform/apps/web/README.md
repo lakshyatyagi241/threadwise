@@ -17,7 +17,7 @@ Sign in with the seeded staff user printed by `setup` (organization slug, email,
 
 ```
 API_URL=http://localhost:3000                       # server-side only; the browser never calls the API host
-NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime
+NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime      # the socket address; REALTIME_URL overrides it at runtime
 ```
 
 ## How it is put together
@@ -62,4 +62,4 @@ See the `wadesk-frontend-port` skill for the rules that apply to every screen.
 - Only English messages exist; the loader falls back to English for the other 20 locales.
 - All domains' messages are sent to the client (fine now, split per route later).
 - When only the access token has expired, the refresh redirect returns to `/dashboard`, not the page you were on.
-- Realtime is not wired: there is no short-lived socket token endpoint yet.
+- Realtime is connected (one socket per session, `src/lib/realtime`) but no screen listens yet: the polling features still poll.

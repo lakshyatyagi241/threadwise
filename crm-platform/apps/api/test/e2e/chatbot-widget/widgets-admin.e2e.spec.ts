@@ -691,7 +691,8 @@ describe('rotate the embed token (WD-WGT-023)', () => {
     expect(after.body.transcript.map((m: { body: string }) => m.body)).toContain('before');
     expect(
       await api.count(
-        `SELECT count(*)::int AS n FROM conversations WHERE org_id = $1 AND channel = 'chatbot_widget'`,
+        `SELECT count(*)::int AS n FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+         WHERE c.org_id = $1 AND ch.kind = 'webchat'`,
         [t.orgId],
       ),
     ).toBeGreaterThanOrEqual(1);
@@ -792,7 +793,7 @@ describe('delete (WD-WGT-025, 029)', () => {
     );
     expect(convs.rows).toHaveLength(1);
     const msgs = await h.owner.query(
-      `SELECT count(*)::int AS n FROM inbox_messages WHERE org_id = $1 AND conversation_id = $2`,
+      `SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND conversation_id = $2`,
       [t.orgId, convs.rows[0].id],
     );
     expect(msgs.rows[0].n).toBe(threadBefore.length);

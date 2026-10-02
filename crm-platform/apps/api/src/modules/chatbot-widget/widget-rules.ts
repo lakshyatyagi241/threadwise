@@ -197,5 +197,3 @@ export const historyFrom = (agentId: number | null): 'agent' | 'assistant' =>
 
 /** `source` marker on every message the widget's own assistant writes; anything else outbound is a person. */
 export const AI_SOURCE = 'ai_chat_assistant';
-export const BOT_SENDER_PREFIX = 'widget-';
-export const botSender = (widgetUuid: string): string => `${BOT_SENDER_PREFIX}${widgetUuid}`;

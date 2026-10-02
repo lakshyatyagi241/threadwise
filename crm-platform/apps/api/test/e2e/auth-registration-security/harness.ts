@@ -46,6 +46,11 @@ export interface Harness {
   stop(): Promise<void>;
 }
 
+export interface HarnessOptions {
+  /** Runs on the Nest application before `init()`: where a spec that needs sockets installs its WebSocket adapter. */
+  configureApp?: (app: INestApplication) => void | Promise<void>;
+}
+
 /**
  * A hermetic copy of the API: real Postgres (restricted role, real migrations),
  * real Redis, the real AppModule. Only the outbound edges are faked: mail,
@@ -53,7 +58,7 @@ export interface Harness {
  * sign-up code goes through the REAL composite sender to local HTTP stubs of
  * Meta, Twilio and the bridge, so tests follow the codes a person would receive.
  */
-export async function startHarness(): Promise<Harness> {
+export async function startHarness(options: HarnessOptions = {}): Promise<Harness> {
   const pg: StartedPostgreSqlContainer = await new PostgreSqlContainer('pgvector/pgvector:pg16')
     .withDatabase('crm')
     .withUsername('crm')
@@ -130,6 +135,7 @@ export async function startHarness(): Promise<Harness> {
     'loopback',
   );
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '2' });
+  await options.configureApp?.(app);
   await app.init();
 
   const redisClient = new Redis(process.env.REDIS_URL!);

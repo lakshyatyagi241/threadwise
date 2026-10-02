@@ -14,11 +14,11 @@ implementation. When the owning domain exports the real service, bind it to the 
 
 What the `SqlInboxGateway` stands in for, so the swap is complete:
 
-- creating the conversation (`channel = 'chatbot_widget'`, `origin = 'web'`) and its contact;
-- writing the visitor's line and the assistant's reply into `inbox_messages`;
-- the engine stamped on the thread (the workspace's primary WhatsApp engine; fixed to `baileys`, WaDesk's fallback, until
-  WADEV exports it);
-- the human-takeover read (an outbound line not written by the widget's own bot).
+- the widget's channel (kind `webchat`, one per widget, keyed by the widget uuid) and the visitor's thread on it (the visitor uuid is
+  the peer key), and the visitor's contact;
+- writing the visitor's line (`sender_kind = 'customer'`, status `received`) and the assistant's reply (`sender_kind = 'bot'`) into
+  `messages`, taking the next `conversations.msg_seq` for each;
+- the human-takeover read (an outbound line with `sender_kind = 'agent'`).
 
 The team inbox screens, the inbox reply path and the mobile list belong to TIB1; the widget side of that hand-off
 (WD-WGT-018, 019) is the polling contract tested in `test/e2e/chatbot-widget`.

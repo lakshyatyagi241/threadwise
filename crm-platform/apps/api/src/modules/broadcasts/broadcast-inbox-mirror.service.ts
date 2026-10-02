@@ -22,7 +22,8 @@ import {
  * (broadcast, contact): found by the provider's message id or by `src_key`, serialised so two reports at once cannot both insert.
  * Outbound messages are not unread: `unread_count` is never touched.
  *
- * Stand-in for the team-inbox domain's own mirror; it writes `messages` and `conversations` directly until that domain exports one.
+ * Stand-in for the conversations domain's own outbound recorder; it writes `messages` and `conversations` directly until that domain
+ * exports one.
  */
 @Injectable()
 export class BroadcastInboxMirrorService {
@@ -47,13 +48,11 @@ export class BroadcastInboxMirrorService {
       return await this.db.txAs({ orgId }, async (tx) => {
         const b = (
           await tx.execute(sql`
-            SELECT uuid, provider, device_id, template_id, temp_caption FROM broadcasts
+            SELECT uuid, template_id, temp_caption FROM broadcasts
             WHERE org_id = ${orgId} AND id = ${broadcastId}`)
         ).rows[0] as
           | {
               uuid: string;
-              provider: string | null;
-              device_id: number | string | null;
               template_id: number | string | null;
               temp_caption: string | null;
             }
@@ -66,16 +65,14 @@ export class BroadcastInboxMirrorService {
         const digits = digitsOf(c?.phone);
         if (!b || digits === '') return false;
 
-        // In a multi-number workspace the send lands in the sending number's thread, never another's.
-        const bound = b.provider === 'baileys' && b.device_id !== null ? Number(b.device_id) : null;
+        // The thread of this recipient: the one linked to the contact, else the one whose peer is the contact's number. A broadcast does
+        // not name a channel yet (it still carries a device id), so a workspace with several channels gets the oldest matching thread.
         const conv = (
           await tx.execute(sql`
-            SELECT id, provider FROM conversations
-            WHERE org_id = ${orgId}
-              AND (contact_id = ${contactId} OR contact_digits = ${digits} OR split_part(raw_jid, '@', 1) = ${digits})
-              AND (${bound}::bigint IS NULL OR device_id IS NULL OR device_id = ${bound}::bigint)
+            SELECT id FROM conversations
+            WHERE org_id = ${orgId} AND (contact_id = ${contactId} OR peer_key = ${digits})
             ORDER BY id LIMIT 1`)
-        ).rows[0] as { id: number | string; provider: string | null } | undefined;
+        ).rows[0] as { id: number | string } | undefined;
         if (!conv) return false;
 
         const tpl =
@@ -114,16 +111,26 @@ export class BroadcastInboxMirrorService {
           ...(providerMessageId ? { wa_message_id: providerMessageId } : {}),
           src_key: key,
         };
+        // The next `seq` of the thread; the update also takes the thread's row lock, so a mirror and an inbound message never interleave.
+        const id = Number(
+          (
+            (await tx.execute(sql`SELECT nextval('messages_id_seq') AS id`)).rows[0] as {
+              id: number | string;
+            }
+          ).id,
+        );
+        const bumped = await tx.execute(sql`
+          UPDATE conversations SET msg_seq = msg_seq + 1, last_message_id = ${id}, last_message_at = now(),
+                                   last_outbound_at = now(), preview = left(${body}, ${PREVIEW_LENGTH})
+          WHERE org_id = ${orgId} AND id = ${Number(conv.id)} RETURNING msg_seq`);
         await tx.execute(sql`
-          INSERT INTO messages (org_id, conversation_id, contact_id, template_id, direction, to_number, body, status,
-                                provider, meta, sent_at, delivered_at, read_at)
-          VALUES (${orgId}, ${Number(conv.id)}, ${contactId}, ${b.template_id === null ? null : Number(b.template_id)},
-                  'out', ${digits}, ${body}, ${status}, ${b.provider ?? conv.provider}, ${JSON.stringify(meta)}::jsonb, now(),
+          INSERT INTO messages (id, org_id, conversation_id, seq, direction, kind, sender_kind, template_id, body, status, meta,
+                                provider_ts, sent_at, delivered_at, read_at)
+          VALUES (${id}, ${orgId}, ${Number(conv.id)}, ${Number((bumped.rows[0] as { msg_seq: number | string }).msg_seq)},
+                  'out', ${tpl ? 'template' : 'text'}, 'broadcast',
+                  ${b.template_id === null ? null : Number(b.template_id)}, ${body}, ${status},
+                  ${JSON.stringify(meta)}::jsonb, now(), now(),
                   ${status === 'sent' ? null : sql`now()`}, ${status === 'read' ? sql`now()` : null})`);
-        await tx.execute(sql`
-          UPDATE conversations SET last_message_at = now(), last_outbound_at = now(),
-                                   preview = left(${body}, ${PREVIEW_LENGTH})
-          WHERE org_id = ${orgId} AND id = ${Number(conv.id)}`);
         return true;
       });
     } catch (err) {

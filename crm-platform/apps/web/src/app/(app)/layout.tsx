@@ -12,6 +12,7 @@ import { PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
 import { getSession } from '@/lib/auth/server';
+import { RealtimeProvider } from '@/lib/realtime';
 
 /**
  * Customer workspace shell. Guards the session, hands the whole session
@@ -31,20 +32,27 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <SessionProvider session={session}>
-      <AppShell
-        user={{
-          fullName: session.user.displayName ?? session.user.fullName,
-          email: session.user.email,
-          avatarUrl: session.user.avatarUrl,
-        }}
-        nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
-        theme={theme}
-        navFooter={<WorkspaceSwitcher />}
-        banners={<AccountBanners key="banners" />}
-        bell={<NotificationBell key="bell" />}
+      {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
+          The address is read here, on the server, so it can be set per deployment without rebuilding. */}
+      <RealtimeProvider
+        key={`${session.org.id}:${session.user.id}`}
+        url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
       >
-        <AccountGate>{children}</AccountGate>
-      </AppShell>
+        <AppShell
+          user={{
+            fullName: session.user.displayName ?? session.user.fullName,
+            email: session.user.email,
+            avatarUrl: session.user.avatarUrl,
+          }}
+          nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
+          theme={theme}
+          navFooter={<WorkspaceSwitcher />}
+          banners={<AccountBanners key="banners" />}
+          bell={<NotificationBell key="bell" />}
+        >
+          <AccountGate>{children}</AccountGate>
+        </AppShell>
+      </RealtimeProvider>
     </SessionProvider>
   );
 }
