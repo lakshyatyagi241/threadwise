@@ -89,7 +89,9 @@ export function sanitizeName(raw: string): string {
 
 /** On blur: repeated underscores collapse and the edges are trimmed. */
 export const tidyName = (raw: string): string =>
-  sanitizeName(raw).replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+  sanitizeName(raw)
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '');
 
 export const isAuth = (s: Pick<FormState, 'metaCategory'>): boolean =>
   s.metaCategory === 'AUTHENTICATION';
@@ -152,7 +154,11 @@ export function toFields(s: FormState): Fields {
   }
   const textHeader = s.headerKind === 'text' && s.headerText.trim() !== '';
   const media = isMediaKind(s.headerKind);
-  const attachmentType = media || s.headerKind === 'location' ? s.headerKind : 'none';
+  const attachmentType = isMediaKind(s.headerKind)
+    ? s.headerKind
+    : s.headerKind === 'location'
+      ? 'location'
+      : 'none';
   const variableMap = toVariableMap(
     textHeader ? { text: s.headerText, slots: s.headerSlots } : null,
     { text: s.body, slots: s.bodySlots },

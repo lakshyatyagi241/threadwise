@@ -28,7 +28,10 @@ export function summarizeSync(results: Array<SyncTemplatesResult | null>): SyncT
 }
 
 /** Which numbers a sync runs against: the filtered one, else every connected number. */
-export function syncTargets(connections: WabaConnection[], connectionId: string | undefined): string[] {
+export function syncTargets(
+  connections: WabaConnection[],
+  connectionId: string | undefined,
+): string[] {
   if (connectionId) return connections.some((c) => c.id === connectionId) ? [connectionId] : [];
   return usableConnections(connections).map((c) => c.id);
 }
@@ -38,6 +41,8 @@ export const usableConnections = (connections: WabaConnection[]): WabaConnection
   connections.filter((c) => c.status === 'connected' && c.hasToken);
 
 /** A readable name for a number: its label, else the phone number, else the verified name. */
-export function connectionLabel(c: Pick<WabaConnection, 'displayLabel' | 'phoneNumber' | 'verifiedName'>): string {
+export function connectionLabel(
+  c: Pick<WabaConnection, 'displayLabel' | 'phoneNumber' | 'verifiedName'>,
+): string {
   return c.displayLabel || c.phoneNumber || c.verifiedName || '';
 }

@@ -172,7 +172,11 @@ export function TemplatesScreen() {
         </Field>
       </form>
 
-      <section aria-live="polite" aria-busy={list.isFetching} className={cn(list.isFetching && !list.isPending && 'opacity-70 transition-opacity')}>
+      <section
+        aria-live="polite"
+        aria-busy={list.isFetching}
+        className={cn(list.isFetching && !list.isPending && 'opacity-70 transition-opacity')}
+      >
         {list.isPending ? (
           <div className="flex justify-center p-12">
             <Spinner label={t('loading')} />
@@ -220,7 +224,9 @@ export function TemplatesScreen() {
                 <li key={tpl.id} className="flex">
                   <TemplateCard
                     template={tpl}
-                    connectionLabel={tpl.connectionId ? (labels.get(tpl.connectionId) ?? null) : null}
+                    connectionLabel={
+                      tpl.connectionId ? (labels.get(tpl.connectionId) ?? null) : null
+                    }
                     mayEdit={mayCreate}
                     mayDelete={mayDelete}
                     onDelete={setToDelete}

@@ -32,6 +32,8 @@ export const QUEUES = {
   WABA_INGEST: 'waba-ingest',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
+  /** Re-reads WhatsApp templates stuck PENDING on Meta (WD-TPL-027). Own queue: a Meta outage must not hold anything else. */
+  TPL_SWEEP: 'tpl-sweep',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

@@ -4,8 +4,25 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import type { TemplateDetail, TemplateSubmitResult, TplLintIssue, TplMetaCategory, WabaConnection } from '@crm/contracts';
-import { Alert, Button, Card, EmptyState, Field, Input, Select, Spinner, Textarea, useToast } from '@crm/ui';
+import type {
+  TemplateDetail,
+  TemplateSubmitResult,
+  TplLintIssue,
+  TplMetaCategory,
+  WabaConnection,
+} from '@crm/contracts';
+import {
+  Alert,
+  Button,
+  Card,
+  EmptyState,
+  Field,
+  Input,
+  Select,
+  Spinner,
+  Textarea,
+  useToast,
+} from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
   useConnections,
@@ -102,7 +119,10 @@ export function TemplateFormScreen({ id }: { id?: string }) {
           <Button variant="secondary" onClick={() => void detail.refetch()}>
             {t('retry')}
           </Button>
-          <Link href="/templates" className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium">
+          <Link
+            href="/templates"
+            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium"
+          >
             {t('backToLibrary')}
           </Link>
         </div>
@@ -115,7 +135,10 @@ export function TemplateFormScreen({ id }: { id?: string }) {
           title={t('notEditableTitle')}
           message={t('notEditableBody')}
           actions={
-            <Link href={`/templates/${detail.data.id}`} className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium">
+            <Link
+              href={`/templates/${detail.data.id}`}
+              className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium"
+            >
               {t('viewTemplate')}
             </Link>
           }
@@ -123,7 +146,13 @@ export function TemplateFormScreen({ id }: { id?: string }) {
       </main>
     );
   }
-  return <TemplateForm key={`${detail.data.id}:${detail.data.rowVersion}`} detail={detail.data} initial={stateFromDetail(detail.data)} />;
+  return (
+    <TemplateForm
+      key={`${detail.data.id}:${detail.data.rowVersion}`}
+      detail={detail.data}
+      initial={stateFromDetail(detail.data)}
+    />
+  );
 }
 
 interface Saved {
@@ -141,8 +170,12 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   const [state, setState] = useState<FormState>(initial);
-  const [saved, setSaved] = useState<Saved | null>(detail ? { id: detail.id, rowVersion: detail.rowVersion } : null);
-  const [result, setResult] = useState<{ value: TemplateSubmitResult; submitted: boolean } | null>(null);
+  const [saved, setSaved] = useState<Saved | null>(
+    detail ? { id: detail.id, rowVersion: detail.rowVersion } : null,
+  );
+  const [result, setResult] = useState<{ value: TemplateSubmitResult; submitted: boolean } | null>(
+    null,
+  );
   const [failure, setFailure] = useState<ErrorText | null>(null);
 
   const connections = useConnections();
@@ -161,7 +194,9 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
   const hasContractIssues = Object.keys(contract).length > 0;
   const payloadKey = JSON.stringify(toLintInput(current));
   const settledKey = useDebounced(payloadKey, 500);
-  const lint = useLint(hasContractIssues ? null : (JSON.parse(settledKey) as ReturnType<typeof toLintInput>));
+  const lint = useLint(
+    hasContractIssues ? null : (JSON.parse(settledKey) as ReturnType<typeof toLintInput>),
+  );
   const issues: TplLintIssue[] = hasContractIssues ? [] : (lint.data?.issues ?? []);
   const lintErrors = issues.filter((i) => i.severity === 'error').length;
   const checking = !hasContractIssues && (settledKey !== payloadKey || lint.isFetching);
@@ -187,7 +222,10 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
     };
     const fail = (e: unknown) => setFailure(errorText(e));
     if (saved) {
-      update.mutate(toUpdateInput(current, saved.rowVersion, submit), { onSuccess: done, onError: fail });
+      update.mutate(toUpdateInput(current, saved.rowVersion, submit), {
+        onSuccess: done,
+        onError: fail,
+      });
     } else {
       create.mutate(toCreateInput(current, submit), { onSuccess: done, onError: fail });
     }
@@ -196,7 +234,13 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
   function wrap(marker: string) {
     const el = bodyRef.current;
     if (!el) return;
-    const r = wrapSelection(current.body, el.selectionStart, el.selectionEnd, marker, t('body.wrapSample'));
+    const r = wrapSelection(
+      current.body,
+      el.selectionStart,
+      el.selectionEnd,
+      marker,
+      t('body.wrapSample'),
+    );
     setState((s) => withBody(s, r.value));
     requestAnimationFrame(() => {
       el.focus();
@@ -242,7 +286,10 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
           {t('submit')}
         </Button>
         {!canSubmit && !busy && (
-          <span id={`${base}-why`} className="basis-full text-xs text-muted-foreground sm:basis-auto">
+          <span
+            id={`${base}-why`}
+            className="basis-full text-xs text-muted-foreground sm:basis-auto"
+          >
             {!current.connectionId
               ? t('why.connection')
               : !nameOk
@@ -290,14 +337,19 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
               >
                 {detail ? (
                   <p id={`${base}-conn`} className="flex h-10 items-center text-sm">
-                    {labelOf(connections.data ?? [], detail.connectionId) ?? t('identity.connectionUnknown')}
+                    {labelOf(connections.data ?? [], detail.connectionId) ??
+                      t('identity.connectionUnknown')}
                   </p>
                 ) : connections.isPending ? (
                   <Spinner label={t('loading')} />
                 ) : connections.isError ? (
                   <div className="space-y-1">
                     <ErrorAlert error={errorText(connections.error)} />
-                    <Button size="sm" variant="secondary" onClick={() => void connections.refetch()}>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => void connections.refetch()}
+                    >
                       {t('retry')}
                     </Button>
                   </div>
@@ -322,7 +374,11 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                   </Select>
                 )}
               </Field>
-              <Field label={t('identity.category')} htmlFor={`${base}-cat`} hint={t('identity.categoryHint')}>
+              <Field
+                label={t('identity.category')}
+                htmlFor={`${base}-cat`}
+                hint={t('identity.categoryHint')}
+              >
                 <Select
                   id={`${base}-cat`}
                   value={current.metaCategory}
@@ -355,7 +411,11 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                 <IssueList issues={issues} field="name" />
               </Field>
               <Field label={t('identity.language')} htmlFor={`${base}-lang`}>
-                <Select id={`${base}-lang`} value={current.language} onChange={(e) => set({ language: e.target.value })}>
+                <Select
+                  id={`${base}-lang`}
+                  value={current.language}
+                  onChange={(e) => set({ language: e.target.value })}
+                >
                   {languageOptions(locale, current.language).map((o) => (
                     <option key={o.code} value={o.code}>
                       {o.label}
@@ -373,7 +433,11 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                 label={t('auth.expiry')}
                 htmlFor={`${base}-expiry`}
                 hint={t('auth.expiryHint', { min: EXPIRY_MIN, max: EXPIRY_MAX })}
-                error={contract.codeExpirationMinutes ? t('auth.expiryInvalid', { min: EXPIRY_MIN, max: EXPIRY_MAX }) : undefined}
+                error={
+                  contract.codeExpirationMinutes
+                    ? t('auth.expiryInvalid', { min: EXPIRY_MIN, max: EXPIRY_MAX })
+                    : undefined
+                }
               >
                 <Input
                   id={`${base}-expiry`}
@@ -426,7 +490,12 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                     invalid={Boolean(contract.body)}
                     onChange={(e) => setState((s) => withBody(s, e.target.value))}
                   />
-                  <p className={bodyCount.over ? 'text-xs text-danger' : 'text-xs text-muted-foreground'} aria-live="polite">
+                  <p
+                    className={
+                      bodyCount.over ? 'text-xs text-danger' : 'text-xs text-muted-foreground'
+                    }
+                    aria-live="polite"
+                  >
                     {t('body.counter', { used: bodyCount.used, max: bodyCount.max })}
                   </p>
                   <IssueList issues={issues} field="body" />
@@ -473,7 +542,11 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
 
         <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start" aria-label={t('aside')}>
           <PhonePreview model={previewOf(current)} />
-          <LintPanel issues={issues} checking={checking} failed={lint.isError && !hasContractIssues} />
+          <LintPanel
+            issues={issues}
+            checking={checking}
+            failed={lint.isError && !hasContractIssues}
+          />
         </aside>
       </div>
     </main>
@@ -504,7 +577,10 @@ function ResultPanel({ result, submitted }: { result: TemplateSubmitResult; subm
           </ul>
         </Alert>
       )}
-      <Link href={`/templates/${result.template.id}`} className="inline-flex text-sm font-medium underline">
+      <Link
+        href={`/templates/${result.template.id}`}
+        className="inline-flex text-sm font-medium underline"
+      >
         {t('open')}
       </Link>
     </div>

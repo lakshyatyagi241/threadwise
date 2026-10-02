@@ -131,12 +131,16 @@ export function buttonIssues(rows: ButtonRow[]): ButtonIssue[] {
         out.push({ rowKey: r.key, code: 'urlExampleRequired' });
     }
     if (r.kind === 'phone' && !r.phone.trim()) out.push({ rowKey: r.key, code: 'phoneRequired' });
-    if (r.kind === 'copy_code' && !r.example.trim()) out.push({ rowKey: r.key, code: 'codeRequired' });
+    if (r.kind === 'copy_code' && !r.example.trim())
+      out.push({ rowKey: r.key, code: 'codeRequired' });
   }
   const qr = rows.map((r) => r.kind === 'quick_reply');
   const first = qr.indexOf(true);
   const last = qr.lastIndexOf(true);
-  if (first >= 0 && (qr.slice(first, last + 1).includes(false) || (first > 0 && last < qr.length - 1)))
+  if (
+    first >= 0 &&
+    (qr.slice(first, last + 1).includes(false) || (first > 0 && last < qr.length - 1))
+  )
     out.push({ rowKey: null, code: 'quickReplyPosition' });
   return out;
 }

@@ -5,7 +5,16 @@ import type { ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import { parseMarkup, type Segment } from '../lib/format';
 import type { PreviewModel } from '../lib/form-model';
-import { CopyIcon, DocumentIcon, ImageIcon, LinkIcon, PhoneIcon, PinIcon, ReplyIcon, VideoIcon } from './icons';
+import {
+  CopyIcon,
+  DocumentIcon,
+  ImageIcon,
+  LinkIcon,
+  PhoneIcon,
+  PinIcon,
+  ReplyIcon,
+  VideoIcon,
+} from './icons';
 
 /** The fixed code shown in the authentication layout (display only). */
 const AUTH_SAMPLE_CODE = '482913';
@@ -61,7 +70,6 @@ function MediaBlock({ model }: { model: PreviewModel }) {
   const k = model.headerKind;
   if (k === 'image' && model.headerImageUrl) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element -- Meta's sample URL, not a build-time asset
       <img
         src={model.headerImageUrl}
         alt={t('headerImageAlt')}
@@ -70,7 +78,14 @@ function MediaBlock({ model }: { model: PreviewModel }) {
     );
   }
   if (k !== 'image' && k !== 'video' && k !== 'document' && k !== 'location') return null;
-  const Icon = k === 'video' ? VideoIcon : k === 'document' ? DocumentIcon : k === 'location' ? PinIcon : ImageIcon;
+  const Icon =
+    k === 'video'
+      ? VideoIcon
+      : k === 'document'
+        ? DocumentIcon
+        : k === 'location'
+          ? PinIcon
+          : ImageIcon;
   return (
     <div
       className="mb-1.5 grid h-24 place-items-center rounded-md border border-border bg-muted text-muted-foreground"
@@ -104,7 +119,10 @@ export function MessageBubble({
 
   return (
     <div
-      className={cn('w-full max-w-[95%] rounded-lg rounded-ss-sm bg-background px-2.5 py-2 text-sm shadow-sm', className)}
+      className={cn(
+        'w-full max-w-[95%] rounded-lg rounded-ss-sm bg-background px-2.5 py-2 text-sm shadow-sm',
+        className,
+      )}
       data-testid="message-bubble"
     >
       {model.auth ? (
@@ -113,7 +131,9 @@ export function MessageBubble({
             <strong>{AUTH_SAMPLE_CODE}</strong> {t('authBody')}
           </p>
           {model.expiry !== null && (
-            <p className="mt-1 text-xs text-muted-foreground">{t('authExpiry', { count: model.expiry })}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {t('authExpiry', { count: model.expiry })}
+            </p>
           )}
         </>
       ) : (
@@ -131,7 +151,9 @@ export function MessageBubble({
           ) : (
             <p className="text-muted-foreground">{t('bodyEmpty')}</p>
           )}
-          {model.footer && <p className="mt-1 text-xs text-muted-foreground break-words">{model.footer}</p>}
+          {model.footer && (
+            <p className="mt-1 text-xs text-muted-foreground break-words">{model.footer}</p>
+          )}
         </>
       )}
       <p className="mt-1 text-end text-[10px] text-muted-foreground">{t('time')} ✓✓</p>
@@ -144,13 +166,20 @@ export function MessageBubble({
             </li>
           ) : (
             shown.map((b, i) => (
-              <li key={i} className="flex items-center justify-center gap-1.5 text-xs font-medium text-brand">
+              <li
+                key={i}
+                className="flex items-center justify-center gap-1.5 text-xs font-medium text-brand"
+              >
                 <ButtonIcon kind={b.kind} />
                 <span className="truncate">{b.text || t('buttonUnnamed')}</span>
               </li>
             ))
           )}
-          {hidden > 0 && <li className="text-center text-[11px] text-muted-foreground">{t('moreButtons', { count: hidden })}</li>}
+          {hidden > 0 && (
+            <li className="text-center text-[11px] text-muted-foreground">
+              {t('moreButtons', { count: hidden })}
+            </li>
+          )}
         </ul>
       )}
     </div>
@@ -161,7 +190,11 @@ export function MessageBubble({
 export function PhonePreview({ model }: { model: PreviewModel }) {
   const t = useTranslations('message-templates.preview');
   return (
-    <section aria-label={t('title')} className="rounded-2xl border border-border bg-muted p-3" data-testid="phone-preview">
+    <section
+      aria-label={t('title')}
+      className="rounded-2xl border border-border bg-muted p-3"
+      data-testid="phone-preview"
+    >
       <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
         <span className="font-medium">{t('title')}</span>
         <span className="rounded-full bg-background px-2 py-0.5 font-mono">{model.language}</span>
@@ -172,4 +205,3 @@ export function PhonePreview({ model }: { model: PreviewModel }) {
     </section>
   );
 }
-
