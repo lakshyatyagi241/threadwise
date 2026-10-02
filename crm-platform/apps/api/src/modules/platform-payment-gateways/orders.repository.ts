@@ -224,7 +224,7 @@ export class OrdersRepository {
     userId: number,
     limit: number,
     cursor?: string,
-  ): Promise<Array<OrderRow & { gatewayName: string | null; planName: string | null }>> {
+  ): Promise<Array<OrderRow & { planName: string | null }>> {
     const conds: SQL[] = [sql`o.org_id = ${orgId}`, sql`o.user_id = ${userId}`];
     if (cursor) {
       const c = decodeCursor(cursor);
@@ -232,16 +232,14 @@ export class OrdersRepository {
       conds.push(sql`(o.created_at, o.id) < (${at}::timestamptz, ${c.id})`);
     }
     const res = await tx.execute(sql`
-      SELECT ${COLS}, g.name AS gateway_name, p.name AS plan_name
+      SELECT ${COLS}, p.name AS plan_name
       FROM orders o
-      LEFT JOIN payment_gateways g ON g.id = o.gateway_id
       LEFT JOIN plans p ON p.slug = o.plan_slug
       WHERE ${sql.join(conds, sql` AND `)}
       ORDER BY o.created_at DESC, o.id DESC
       LIMIT ${limit + 1}`);
     return (res.rows as Raw[]).map((r) => ({
       ...toRow(r),
-      gatewayName: (r.gateway_name as string | null) ?? null,
       planName: (r.plan_name as string | null) ?? null,
     }));
   }

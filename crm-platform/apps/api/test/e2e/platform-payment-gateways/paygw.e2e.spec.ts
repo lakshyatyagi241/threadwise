@@ -643,7 +643,7 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
     );
     expect((await w.post('')).status).toBe(403);
     const ok = await w.post();
-    expect(ok.status).toBe(201);
+    expect(ok.status).toBe(200); // Reference answers 200 {ok:true}; Nest's POST default of 201 is not what providers were promised
     expect(ok.body).toEqual({ ok: true }); // valid, matches no order: still acknowledged
   });
 
@@ -818,6 +818,8 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
     expect(inr).toMatchObject({ total: '4827.97', orders: 1 });
     const wallet = parsed.data.find((o) => o.kind === 'wallet_topup')!;
     expect(wallet).toMatchObject({ itemName: 'Wallet top-up', status: 'paid', amount: '11.80' });
+    // The name comes from the catalogue: payment_gateways is operator-only under RLS, so a join from a tenant read is empty.
+    expect(parsed.data.every((o) => !!o.gatewayName)).toBe(true);
 
     const p1 = await api().get('/v2/billing/orders?limit=2').set(bearer(buyer.token));
     expect(p1.body.page).toMatchObject({ hasMore: true, limit: 2 });
