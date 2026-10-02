@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
+import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
@@ -42,6 +43,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ContactImportWorkerModule,
     TasksWorkerModule,
     BspBillingEngineWorkerModule,
+    WalletMessageBillingWorkerModule,
     SegmentsWorkerModule,
     SalesDocsWorkerModule,
     InvoicingWorkerModule,
