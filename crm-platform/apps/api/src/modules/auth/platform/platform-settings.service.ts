@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import type { Tx } from '@crm/db';
 import { CryptoService } from '../../../common/crypto/crypto.service';
 import { PlatformStore } from './platform-store';
 
@@ -56,6 +57,24 @@ export class PlatformSettingsService {
         this.inflight = null;
       });
     return this.inflight;
+  }
+
+  /**
+   * One transaction on the platform store, for a writer that must read, compare and write several keys
+   * (and record its audit event) atomically: the platform-settings domain (TW-SET) edits a whole group at
+   * once under a version check. The snapshot is dropped afterwards so this process reads the new values.
+   */
+  async inTx<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
+    try {
+      return await this.store.tx(fn);
+    } finally {
+      this.invalidate();
+    }
+  }
+
+  /** Encrypts for storage as a secret row written inside `inTx`. */
+  seal(plaintext: string): string {
+    return this.crypto.encrypt(plaintext);
   }
 
   invalidate(): void {

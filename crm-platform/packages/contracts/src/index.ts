@@ -30,3 +30,4 @@ export * from './contacts-attributes-tags';
 export * from './broadcasts';
 export * from './deals-pipelines';
 export * from './tasks';
+export * from './platform-settings-branding-storage';
