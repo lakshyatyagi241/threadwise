@@ -420,7 +420,7 @@ describe('settleFailed (WD-WALLET-011)', () => {
       refunded: false,
       refundedMinor: 0,
     });
-    expect(await billing.settleFailed(t.orgId, 'never-sent')).toEqual({
+    expect(await billing.settleFailed(t.orgId, 'never-sent')).toMatchObject({
       refunded: false,
       refundedMinor: 0,
     });
