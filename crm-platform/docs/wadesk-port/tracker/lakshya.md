@@ -369,39 +369,39 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-WALLET-001 | todo |  |  |
-| WD-WALLET-002 | todo |  |  |
-| WD-WALLET-003 | todo |  |  |
-| WD-WALLET-004 | todo |  |  |
-| WD-WALLET-005 | todo |  |  |
-| WD-WALLET-006 | todo |  |  |
-| WD-WALLET-007 | todo |  |  |
-| WD-WALLET-008 | todo |  |  |
-| WD-WALLET-009 | todo |  |  |
-| WD-WALLET-010 | todo |  |  |
-| WD-WALLET-011 | todo |  |  |
-| WD-WALLET-012 | todo |  |  |
-| WD-WALLET-013 | todo |  |  |
-| WD-WALLET-014 | todo |  |  |
-| WD-WALLET-015 | todo |  |  |
-| WD-WALLET-016 | todo |  |  |
-| WD-WALLET-017 | todo |  |  |
-| WD-WALLET-018 | todo |  |  |
-| WD-WALLET-019 | todo |  |  |
-| WD-WALLET-020 | todo |  |  |
-| WD-WALLET-021 | todo |  |  |
-| WD-WALLET-022 | todo |  |  |
-| WD-WALLET-023 | todo |  |  |
-| WD-WALLET-024 | todo |  |  |
-| WD-WALLET-025 | todo |  |  |
-| WD-WALLET-026 | todo |  |  |
-| WD-WALLET-027 | todo |  |  |
-| WD-WALLET-028 | todo |  |  |
-| WD-WALLET-029 | todo |  |  |
-| WD-WALLET-030 | todo |  |  |
-| WD-WALLET-031 | todo |  |  |
-| WD-WALLET-032 | todo |  |  |
-| WD-WALLET-033 | todo |  |  |
+| WD-WALLET-001 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-002 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-003 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-004 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-005 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-006 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-007 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-008 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-009 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-010 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-011 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-012 | blocked |  | consumer built; channel emitters blocked on WABA/NODE/CHAT/BCAST/CAMP/SCHED/FLR |
+| WD-WALLET-013 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-014 | wontfix |  | intended: see parity file |
+| WD-WALLET-015 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-016 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-017 | wontfix |  | intended: see parity file |
+| WD-WALLET-018 | wontfix |  | intended: see parity file |
+| WD-WALLET-019 | blocked |  | credit_packages owned by CPN; UI retired in WaDesk |
+| WD-WALLET-020 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-021 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-022 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-023 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-024 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-025 | blocked |  | MOB/EXT surface |
+| WD-WALLET-026 | blocked |  | MOB/EXT surface |
+| WD-WALLET-027 | blocked |  | MOB/EXT surface |
+| WD-WALLET-028 | blocked |  | MOB/EXT surface |
+| WD-WALLET-029 | blocked |  | MOB/EXT surface |
+| WD-WALLET-030 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-031 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-032 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| WD-WALLET-033 | wontfix |  | intended: see parity file |
 
 ## notifications-activity-audit (notif)
 
