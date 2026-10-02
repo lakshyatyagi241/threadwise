@@ -14,10 +14,17 @@ import { AppError } from '../errors/app-error';
 export interface Cursor {
   createdAt: Date;
   id: number;
+  /**
+   * The same instant with the database's full microsecond precision. A JS Date only keeps
+   * milliseconds, so rows that share a millisecond but differ in microseconds (or tie exactly) land
+   * on the wrong side of a Date-based bound and whole pages vanish or repeat. Optional: a list that
+   * selects it compares with this value, one that does not keeps using `createdAt`.
+   */
+  createdAtIso?: string;
 }
 
 export function encodeCursor(cursor: Cursor): string {
-  return Buffer.from(`${cursor.createdAt.toISOString()}|${cursor.id}`, 'utf8').toString(
+  return Buffer.from(`${cursor.createdAtIso ?? cursor.createdAt.toISOString()}|${cursor.id}`, 'utf8').toString(
     'base64url',
   );
 }
@@ -29,7 +36,10 @@ export function decodeCursor(raw: string): Cursor {
     const createdAt = new Date(iso);
     const parsedId = Number.parseInt(id, 10);
     if (Number.isNaN(createdAt.getTime()) || Number.isNaN(parsedId)) throw new Error('malformed');
-    return { createdAt, id: parsedId };
+    // Only carried when it holds more than the Date does (microseconds); keeps the plain shape otherwise.
+    return iso === createdAt.toISOString()
+      ? { createdAt, id: parsedId }
+      : { createdAt, id: parsedId, createdAtIso: iso };
   } catch {
     throw new AppError(ERROR_CODES.VALIDATION_FAILED, 'Invalid pagination cursor', 400);
   }
@@ -42,7 +52,7 @@ export function decodeCursor(raw: string): Cursor {
  * COUNT over a partitioned table is exactly the query that turns a 20ms list
  * endpoint into a 2s one.
  */
-export function buildPage<T extends { createdAt: Date; id: number }>(
+export function buildPage<T extends { createdAt: Date; id: number; createdAtIso?: string }>(
   rows: T[],
   limit: number,
 ): { items: T[]; page: PageInfo } {
@@ -53,7 +63,10 @@ export function buildPage<T extends { createdAt: Date; id: number }>(
   return {
     items,
     page: {
-      nextCursor: hasMore && last ? encodeCursor({ createdAt: last.createdAt, id: last.id }) : null,
+      nextCursor:
+        hasMore && last
+          ? encodeCursor({ createdAt: last.createdAt, id: last.id, createdAtIso: last.createdAtIso })
+          : null,
       hasMore,
       limit,
     },

@@ -1,0 +1,208 @@
+'use client';
+
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Input, cn } from '@crm/ui';
+import type { ContactGroupResponse, ContactResponse, TagResponse } from '@crm/contracts';
+import { contactName, matchesSearch, toggle } from '../lib/compose-model';
+import { SearchIcon } from './icons';
+
+const KICKER =
+  'mr-1 self-center font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground';
+const CHIP =
+  'inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[11.5px] hover:bg-muted';
+
+/**
+ * "Who do you want to send it to?" (WD-BCAST-007): tag and group chips plus a searchable table of the newest contacts, all
+ * merged by the server (first occurrence wins, opted-out and archived contacts dropped).
+ */
+export function AudiencePicker({
+  tags,
+  groups,
+  contacts,
+  contactsDenied,
+  selectedTags,
+  selectedGroups,
+  selectedContacts,
+  onTags,
+  onGroups,
+  onContacts,
+}: {
+  tags: TagResponse[];
+  groups: ContactGroupResponse[];
+  contacts: ContactResponse[];
+  /** The caller may not read contacts: the table is replaced by a note. */
+  contactsDenied: boolean;
+  selectedTags: string[];
+  selectedGroups: string[];
+  selectedContacts: string[];
+  onTags: (ids: string[]) => void;
+  onGroups: (ids: string[]) => void;
+  onContacts: (ids: string[]) => void;
+}) {
+  const t = useTranslations('broadcasts.compose');
+  const [q, setQ] = useState('');
+  const rows = useMemo(
+    () =>
+      contacts
+        .map((c) => ({ id: c.id, name: contactName(c), phone: c.phone ?? '' }))
+        .filter((r) => matchesSearch(r, q)),
+    [contacts, q],
+  );
+  const allShown = rows.length > 0 && rows.every((r) => selectedContacts.includes(r.id));
+  const count = selectedContacts.length;
+
+  const chip = (
+    key: string,
+    on: boolean,
+    change: () => void,
+    label: string,
+    extra?: React.ReactNode,
+  ) => (
+    <label key={key} className={cn(CHIP, on && 'border-brand bg-muted')}>
+      <input
+        type="checkbox"
+        className="size-3 accent-[var(--brand)]"
+        checked={on}
+        onChange={change}
+      />
+      {extra}
+      <span>{label}</span>
+    </label>
+  );
+
+  return (
+    <div className="border-t border-border pt-5">
+      <div className="mb-3 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl leading-tight">{t('audience')}</h2>
+          <p className="mt-1 text-xs text-muted-foreground">{t('audienceHint')}</p>
+        </div>
+        <span className="font-mono text-[10.5px] text-muted-foreground" aria-live="polite">
+          {t('selected', { count })}
+        </span>
+      </div>
+
+      {tags.length > 0 && (
+        <div className="mb-3 flex flex-wrap gap-2">
+          <span className={KICKER}>{t('tags')}</span>
+          {tags.map((tg) =>
+            chip(
+              tg.id,
+              selectedTags.includes(tg.id),
+              () => onTags(toggle(selectedTags, tg.id)),
+              tg.name,
+              <>
+                <span
+                  className="size-[7px] shrink-0 rounded-full"
+                  style={{ background: tg.color ?? 'var(--brand)' }}
+                  aria-hidden="true"
+                />
+              </>,
+            ),
+          )}
+        </div>
+      )}
+      {groups.length > 0 && (
+        <div className="mb-3 flex flex-wrap gap-2">
+          <span className={KICKER}>{t('groups')}</span>
+          {groups.map((g) =>
+            chip(
+              g.id,
+              selectedGroups.includes(g.id),
+              () => onGroups(toggle(selectedGroups, g.id)),
+              g.name,
+            ),
+          )}
+        </div>
+      )}
+
+      <div className="relative mb-3">
+        <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={t('search')}
+          aria-label={t('search')}
+          className="ps-9 text-[12.5px]"
+        />
+      </div>
+
+      <div className="overflow-hidden rounded-xl border border-border bg-background">
+        <div className="max-h-[320px] overflow-y-auto">
+          <table className="w-full table-fixed text-[12.5px]">
+            <thead className="sticky top-0 border-b border-border bg-muted text-muted-foreground">
+              <tr>
+                <th className="w-[48px] px-4 py-2.5 text-start">
+                  <input
+                    type="checkbox"
+                    aria-label={t('selectAll')}
+                    className="size-4 accent-[var(--brand)]"
+                    checked={allShown}
+                    disabled={rows.length === 0}
+                    onChange={(e) => {
+                      const shown = rows.map((r) => r.id);
+                      onContacts(
+                        e.target.checked
+                          ? [...new Set([...selectedContacts, ...shown])]
+                          : selectedContacts.filter((id) => !shown.includes(id)),
+                      );
+                    }}
+                  />
+                </th>
+                <th className="px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]">
+                  {t('colName')}
+                </th>
+                <th className="w-[200px] px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]">
+                  {t('colPhone')}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {contactsDenied ? (
+                <tr>
+                  <td colSpan={3} className="px-4 py-6 text-center text-xs text-muted-foreground">
+                    {t('contactsDenied')}
+                  </td>
+                </tr>
+              ) : contacts.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="px-4 py-6 text-center text-xs text-muted-foreground">
+                    {t('noContacts')}{' '}
+                    <Link href="/contacts" className="font-semibold text-brand hover:underline">
+                      {t('addSome')}
+                    </Link>
+                  </td>
+                </tr>
+              ) : rows.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="px-4 py-6 text-center text-xs text-muted-foreground">
+                    {t('noMatch')}
+                  </td>
+                </tr>
+              ) : (
+                rows.map((r) => (
+                  <tr key={r.id}>
+                    <td className="px-4 py-2.5">
+                      <input
+                        type="checkbox"
+                        aria-label={r.name}
+                        className="size-4 accent-[var(--brand)]"
+                        checked={selectedContacts.includes(r.id)}
+                        onChange={() => onContacts(toggle(selectedContacts, r.id))}
+                      />
+                    </td>
+                    <td className="truncate px-3 py-2.5 font-semibold">{r.name}</td>
+                    <td className="px-3 py-2.5 font-mono text-[11px]">{r.phone || '—'}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

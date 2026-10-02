@@ -82,6 +82,8 @@ export const contacts = pgTable(
     /** Only meaningful when status='closed_lost'. Options via status_options. */
     lostReason: text('lost_reason'),
     otherLostReason: text('other_lost_reason'),
+    wonAt: timestamp('won_at', { withTimezone: true }),
+    lostAt: timestamp('lost_at', { withTimezone: true }),
     leadScore: integer('lead_score'),
     /** Enum values are org-configurable via status_options, not a fixed set here. */
     whatsappSubscriptionStatus: text('whatsapp_subscription_status'),
@@ -116,6 +118,10 @@ export const contacts = pgTable(
     message: text('message'),
     isUnsubscribed: boolean('is_unsubscribed').notNull().default(false),
     unsubscribedAt: timestamp('unsubscribed_at', { withTimezone: true }),
+    /** Where the contact came from (the import's source knob, "import", ...). */
+    source: text('source'),
+    /** The CSV import that created the contact; null for everything else. */
+    importJobId: idColumn('import_job_id'),
 
     createdBy: idColumn('created_by'),
     updatedBy: idColumn('updated_by'),
@@ -132,6 +138,12 @@ export const contacts = pgTable(
     index('idx_contacts_org_unsubscribed')
       .on(t.orgId)
       .where(sql`${t.isUnsubscribed}`),
+    index('idx_contacts_org_import_job')
+      .on(t.orgId, t.importJobId)
+      .where(sql`${t.importJobId} IS NOT NULL`),
+    index('idx_contacts_org_source')
+      .on(t.orgId, t.source)
+      .where(sql`${t.source} IS NOT NULL`),
     index('idx_contacts_org_created').on(t.orgId, t.createdAt, t.id),
     index('idx_contacts_org_owner').on(t.orgId, t.ownerId, t.createdAt),
     index('idx_contacts_org_stage').on(t.orgId, t.lifecycleStage, t.createdAt),

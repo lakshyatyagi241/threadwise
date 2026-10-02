@@ -234,6 +234,17 @@ export const statusOptionResponseSchema = z.object({
   position: z.number().int(),
   isDefault: z.boolean(),
   isActive: z.boolean(),
+  /**
+   * Lifecycle stages only: a contact entering a won stage gets `wonAt`, one entering a lost stage gets `lostAt` and must
+   * carry a lost reason. Never both; false on every other group.
+   */
+  isWon: z.boolean(),
+  isLost: z.boolean(),
+  /**
+   * Contact statuses only: the lifecycle stage option this status belongs to, or null when it is valid in every stage.
+   * `isDefault` on a scoped status means "the status a contact gets when it enters that stage without a valid one".
+   */
+  stageOptionId: uuidSchema.nullable(),
   rowVersion: z.number().int(),
 });
 export type StatusOptionResponse = z.infer<typeof statusOptionResponseSchema>;
@@ -250,6 +261,15 @@ export const createStatusOptionSchema = z.object({
   color: z.string().max(32).optional(),
   position: z.number().int().optional(),
   isDefault: z.boolean().default(false),
+  /** Only on the `lifecycle_stage` group of `contacts` (422 STATUS_OPTION_FLAG_INVALID elsewhere, or when both are set). */
+  isWon: z.boolean().default(false),
+  isLost: z.boolean().default(false),
+  /**
+   * Only on the `status` / `contact_status` groups of `contacts`: scope the status to one lifecycle stage option of the
+   * workspace (null or absent = every stage). 422 STATUS_OPTION_STAGE_INVALID when it is not a lifecycle stage or the group
+   * cannot be scoped.
+   */
+  stageOptionId: uuidSchema.nullish(),
 });
 export type CreateStatusOptionInput = z.infer<typeof createStatusOptionSchema>;
 
@@ -258,6 +278,11 @@ export const updateStatusOptionSchema = z.object({
   color: z.string().max(32).nullish(),
   isDefault: z.boolean().optional(),
   isActive: z.boolean().optional(),
+  /** Setting one to true clears the other unless the request also names it; both true is 422 STATUS_OPTION_FLAG_INVALID. */
+  isWon: z.boolean().optional(),
+  isLost: z.boolean().optional(),
+  /** Absent keeps the scope, null makes the status valid in every stage. Scope changes are not applied to contacts already holding it. */
+  stageOptionId: uuidSchema.nullish(),
   rowVersion: z.number().int().positive(),
 });
 export type UpdateStatusOptionInput = z.infer<typeof updateStatusOptionSchema>;
@@ -274,3 +299,51 @@ export const reorderStatusOptionsSchema = z.object({
   orderedIds: z.array(uuidSchema).min(1),
 });
 export type ReorderStatusOptionsInput = z.infer<typeof reorderStatusOptionsSchema>;
+
+// --- Usage counts and delete-with-reassign (Contact stages / Contact properties screens) ---
+
+/** How many contacts hold each value of one option group (`lifecycle_stage`, `status`, `lost_reason`). */
+export const statusOptionUsageQuerySchema = z.object({
+  moduleKey: moduleKeySchema,
+  optionGroup: z.string().min(1).max(100),
+});
+export type StatusOptionUsageQuery = z.infer<typeof statusOptionUsageQuerySchema>;
+
+export const statusOptionUsageResponseSchema = z.object({
+  data: z.array(
+    z.object({
+      id: uuidSchema,
+      value: z.string(),
+      count: z.number().int(),
+      /** Segments whose rules use this stage or status: they match nothing once it is deleted. */
+      segments: z.number().int().optional(),
+    }),
+  ),
+});
+export type StatusOptionUsageResponse = z.infer<typeof statusOptionUsageResponseSchema>;
+
+/**
+ * Deleting an option that contacts still hold needs somewhere to move them: `moveTo` is the id of another option of
+ * the same group. Without it the call is 409 `STATUS_OPTION_IN_USE` (`errors:[{path:"contacts", message:"<count>"}]`).
+ */
+export const deleteStatusOptionQuerySchema = z.object({
+  moveTo: uuidSchema.optional(),
+});
+export type DeleteStatusOptionQuery = z.infer<typeof deleteStatusOptionQuerySchema>;
+
+/** How many contacts hold a non-empty value for each custom field key of a module. */
+export const fieldUsageQuerySchema = z.object({ moduleKey: moduleKeySchema });
+export type FieldUsageQuery = z.infer<typeof fieldUsageQuerySchema>;
+
+export const fieldUsageResponseSchema = z.object({
+  data: z.array(
+    z.object({
+      id: uuidSchema,
+      key: z.string(),
+      count: z.number().int(),
+      /** Segments whose rules use this property: they match nothing once it is deleted. */
+      segments: z.number().int().optional(),
+    }),
+  ),
+});
+export type FieldUsageResponse = z.infer<typeof fieldUsageResponseSchema>;

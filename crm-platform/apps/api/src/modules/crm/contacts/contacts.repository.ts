@@ -1,13 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { and, asc, desc, eq, gt, ilike, inArray, lt, or, sql, type SQL } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { and, asc, desc, eq, gt, inArray, lt, or, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { RecordScope } from '@crm/contracts';
 import { decodeCursor } from '../../../common/pagination/cursor';
+import { NO_STAGE_FLAGS, type StageFlags } from './contact-stage';
+import type { StatusScopeOption } from './contact-status-stage';
+import type { RequiredRule } from './required-properties';
+import {
+  contactConditions,
+  contactScopeCondition,
+  whereOf,
+  type ResolvedContactFilter,
+} from './contact-conditions';
 
-const { companies, contacts, teamMembers, users } = schema;
+const {
+  companies,
+  contacts,
+  fieldDependencies,
+  fieldOptions,
+  fields,
+  statusOptions,
+  teamMembers,
+  users,
+} = schema;
 
 export interface ContactRow {
   id: number;
+  /** created_at at microsecond precision (keyset cursor). */
+  createdAtIso?: string;
   uuid: string;
   displayId: string | null;
   name: string | null;
@@ -27,6 +48,8 @@ export interface ContactRow {
   status: string | null;
   lostReason: string | null;
   otherLostReason: string | null;
+  wonAt: Date | null;
+  lostAt: Date | null;
   leadScore: number | null;
   whatsappSubscriptionStatus: string | null;
   smsSubscriptionStatus: string | null;
@@ -35,6 +58,8 @@ export interface ContactRow {
   faxNumber: string | null;
   lastActivityAt: Date | null;
   data: Record<string, unknown>;
+  source: string | null;
+  isUnsubscribed: boolean;
   isArchived: boolean;
   rowVersion: number;
   createdAt: Date;
@@ -45,14 +70,19 @@ export interface ListContactsFilter {
   limit: number;
   cursor?: string;
   order: 'asc' | 'desc';
-  q?: string;
-  ownerId?: number;
-  lifecycleStage?: string;
-  includeArchived: boolean;
+  filter: ResolvedContactFilter;
   /** Row visibility from the caller's RBAC grant. */
   scope: RecordScope;
   /** The caller — needed to resolve 'own' and 'team' scopes. */
   actorUserId: number | null;
+}
+
+/** A group or tag chip on a contact row. */
+export interface ContactChip {
+  contactId: number;
+  uuid: string;
+  name: string;
+  color: string | null;
 }
 
 /**
@@ -70,6 +100,8 @@ export class ContactsRepository {
     return {
       id: contacts.id,
       uuid: contacts.uuid,
+      // Full-precision created_at for the keyset cursor (a JS Date drops the microseconds).
+      createdAtIso: sql<string>`to_char(${contacts.createdAt} at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`,
       displayId: contacts.displayId,
       name: contacts.name,
       firstName: contacts.firstName,
@@ -88,6 +120,8 @@ export class ContactsRepository {
       status: contacts.status,
       lostReason: contacts.lostReason,
       otherLostReason: contacts.otherLostReason,
+      wonAt: contacts.wonAt,
+      lostAt: contacts.lostAt,
       leadScore: contacts.leadScore,
       whatsappSubscriptionStatus: contacts.whatsappSubscriptionStatus,
       smsSubscriptionStatus: contacts.smsSubscriptionStatus,
@@ -96,6 +130,8 @@ export class ContactsRepository {
       faxNumber: contacts.faxNumber,
       lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
+      source: contacts.source,
+      isUnsubscribed: contacts.isUnsubscribed,
       isArchived: contacts.isArchived,
       rowVersion: contacts.rowVersion,
       createdAt: contacts.createdAt,
@@ -103,31 +139,13 @@ export class ContactsRepository {
     };
   }
 
-  /**
-   * Record scope, as a WHERE condition against `contacts.owner_id`. 'all'
-   * returns undefined (adds nothing); 'own' and 'team' narrow the query.
-   * A caller with no user id (should not happen on a real route) collapses
-   * to a predicate that matches nothing rather than to "everything".
-   */
+  /** See contactScopeCondition; kept here so existing callers read the same. */
   private scopeCondition(
     orgId: number,
     scope: RecordScope,
     actorUserId: number | null,
   ): SQL | undefined {
-    if (scope === 'all') return undefined;
-    if (scope === 'own') {
-      return actorUserId ? eq(contacts.ownerId, actorUserId) : sql`false`;
-    }
-    if (!actorUserId) return sql`false`;
-    return sql`
-      ${contacts.ownerId} IN (
-        SELECT tm2.user_id
-        FROM ${teamMembers} tm1
-        JOIN ${teamMembers} tm2
-          ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-        WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}
-      )
-    `;
+    return contactScopeCondition(orgId, scope, actorUserId);
   }
 
   /** Select + joins, without a WHERE — each caller adds its own. */
@@ -144,44 +162,27 @@ export class ContactsRepository {
 
   /** Returns `limit + 1` rows; the caller turns the extra one into `hasMore`. */
   async list(tx: Tx, orgId: number, filter: ListContactsFilter): Promise<ContactRow[]> {
-    const conditions: SQL[] = [eq(contacts.orgId, orgId)];
-
-    if (!filter.includeArchived) {
-      conditions.push(eq(contacts.isArchived, false));
-    }
-    if (filter.ownerId !== undefined) {
-      conditions.push(eq(contacts.ownerId, filter.ownerId));
-    }
-    if (filter.lifecycleStage) {
-      conditions.push(eq(contacts.lifecycleStage, filter.lifecycleStage));
-    }
-
-    if (filter.q) {
-      const pattern = `%${filter.q}%`;
-      const match = or(
-        ilike(contacts.name, pattern),
-        ilike(sql`${contacts.email}::text`, pattern),
-        ilike(contacts.phone, pattern),
-      );
-      if (match) conditions.push(match);
-    }
-
-    const scopeCondition = this.scopeCondition(orgId, filter.scope, filter.actorUserId);
-    if (scopeCondition) conditions.push(scopeCondition);
+    const conditions = contactConditions(
+      orgId,
+      filter.filter,
+      this.scopeCondition(orgId, filter.scope, filter.actorUserId),
+    );
 
     // Keyset boundary over the (created_at, id) tuple. Row-value comparison so
     // the planner can use the composite index directly.
     if (filter.cursor) {
       const cursor = decodeCursor(filter.cursor);
+      // Compare against the microsecond-precision instant, not the millisecond Date.
+      const bound = sql`${cursor.createdAtIso ?? cursor.createdAt.toISOString()}::timestamptz`;
       conditions.push(
         filter.order === 'desc'
           ? or(
-              lt(contacts.createdAt, cursor.createdAt),
-              and(eq(contacts.createdAt, cursor.createdAt), lt(contacts.id, cursor.id)),
+              sql`${contacts.createdAt} < ${bound}`,
+              and(sql`${contacts.createdAt} = ${bound}`, lt(contacts.id, cursor.id)),
             )!
           : or(
-              gt(contacts.createdAt, cursor.createdAt),
-              and(eq(contacts.createdAt, cursor.createdAt), gt(contacts.id, cursor.id)),
+              sql`${contacts.createdAt} > ${bound}`,
+              and(sql`${contacts.createdAt} = ${bound}`, gt(contacts.id, cursor.id)),
             )!,
       );
     }
@@ -197,6 +198,116 @@ export class ContactsRepository {
       .limit(filter.limit + 1);
 
     return rows as ContactRow[];
+  }
+
+  /** How many contacts match a filter ("Showing 1-50 of N"). */
+  async count(
+    tx: Tx,
+    orgId: number,
+    filter: ResolvedContactFilter,
+    scope: RecordScope,
+    actorUserId: number | null,
+  ): Promise<number> {
+    const where = whereOf(
+      contactConditions(orgId, filter, this.scopeCondition(orgId, scope, actorUserId)),
+    );
+    const rows = await tx.execute(sql`SELECT count(*)::int AS n FROM ${contacts} WHERE ${where}`);
+    return Number((rows.rows[0] as { n: number }).n);
+  }
+
+  /**
+   * The tiles and sidebar badges, in one pass: workspace-wide (a filter would defeat the
+   * point), but still inside the caller's record scope and, like the list, without archived rows.
+   */
+  async stats(
+    tx: Tx,
+    orgId: number,
+    scope: RecordScope,
+    actorUserId: number | null,
+  ): Promise<{
+    total: number;
+    subscribed: number;
+    unsubscribed: number;
+    noGroup: number;
+    imported: number;
+    groups: number;
+  }> {
+    const where = whereOf(
+      contactConditions(
+        orgId,
+        { includeArchived: false, tagMode: 'any' },
+        this.scopeCondition(orgId, scope, actorUserId),
+      ),
+    );
+    const rows = await tx.execute(sql`
+      SELECT count(*)::int AS total,
+             count(*) FILTER (WHERE NOT ${contacts.isUnsubscribed})::int AS subscribed,
+             count(*) FILTER (WHERE ${contacts.isUnsubscribed})::int AS unsubscribed,
+             count(*) FILTER (WHERE ${contacts.importJobId} IS NOT NULL)::int AS imported,
+             count(*) FILTER (WHERE NOT EXISTS (
+               SELECT 1 FROM contact_group_members m
+               WHERE m.org_id = ${orgId} AND m.contact_id = ${contacts.id}
+             ))::int AS no_group
+      FROM ${contacts} WHERE ${where}
+    `);
+    const r = rows.rows[0] as {
+      total: number;
+      subscribed: number;
+      unsubscribed: number;
+      imported: number;
+      no_group: number;
+    };
+    const g = await tx.execute(
+      sql`SELECT count(*)::int AS n FROM contact_groups WHERE org_id = ${orgId}`,
+    );
+    return {
+      total: Number(r.total),
+      subscribed: Number(r.subscribed),
+      unsubscribed: Number(r.unsubscribed),
+      noGroup: Number(r.no_group),
+      imported: Number(r.imported),
+      groups: Number((g.rows[0] as { n: number }).n),
+    };
+  }
+
+  /** Group chips for a page of contacts, one query. */
+  async groupChips(tx: Tx, orgId: number, contactIds: number[]): Promise<ContactChip[]> {
+    if (contactIds.length === 0) return [];
+    const rows = await tx.execute(sql`
+      SELECT m.contact_id AS "contactId", g.uuid, g.name, g.color
+      FROM contact_group_members m
+      JOIN contact_groups g ON g.org_id = m.org_id AND g.id = m.group_id
+      WHERE m.org_id = ${orgId}
+        AND m.contact_id IN (${sql.join(
+          contactIds.map((id) => sql`${id}`),
+          sql`, `,
+        )})
+      ORDER BY lower(g.name)
+    `);
+    return rows.rows.map((r) => ({
+      ...(r as unknown as ContactChip),
+      contactId: Number((r as { contactId: number }).contactId),
+    }));
+  }
+
+  /** Tag chips for a page of contacts, one query. */
+  async tagChips(tx: Tx, orgId: number, contactIds: number[]): Promise<ContactChip[]> {
+    if (contactIds.length === 0) return [];
+    const rows = await tx.execute(sql`
+      SELECT ct.contact_id AS "contactId", t.uuid, t.name::text AS name, t.color
+      FROM contact_tags ct
+      JOIN tags t ON t.org_id = ct.org_id AND t.id = ct.tag_id
+      WHERE ct.org_id = ${orgId}
+        AND ct.contact_id IN (${sql.join(
+          contactIds.map((id) => sql`${id}`),
+          sql`, `,
+        )})
+      ORDER BY lower(t.name::text)
+    `);
+    return rows.rows.map((r) => ({
+      ...(r as unknown as ContactChip),
+      contactId: Number((r as { contactId: number }).contactId),
+    }));
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<ContactRow | undefined> {
@@ -226,12 +337,19 @@ export class ContactsRepository {
       ownerId?: number | null;
       lifecycleStage?: string;
       status?: string | null;
+      lostReason?: string | null;
+      otherLostReason?: string | null;
+      wonAt?: Date | null;
+      lostAt?: Date | null;
       leadScore?: number | null;
       whatsappSubscriptionStatus?: string | null;
       smsSubscriptionStatus?: string | null;
       emailSubscriptionStatus?: string | null;
       emailConfirmed?: boolean;
       faxNumber?: string | null;
+      source?: string | null;
+      isUnsubscribed?: boolean;
+      unsubscribedAt?: Date | null;
       data: Record<string, unknown>;
       displayId: string;
       createdBy: number | null;
@@ -253,12 +371,19 @@ export class ContactsRepository {
         lifecycleStage: values.lifecycleStage ?? 'new',
         lifecycleStageDate: sql`now()`,
         status: values.status ?? null,
+        lostReason: values.lostReason ?? null,
+        otherLostReason: values.otherLostReason ?? null,
+        wonAt: values.wonAt ?? null,
+        lostAt: values.lostAt ?? null,
         leadScore: values.leadScore ?? null,
         whatsappSubscriptionStatus: values.whatsappSubscriptionStatus ?? null,
         smsSubscriptionStatus: values.smsSubscriptionStatus ?? null,
         emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
+        source: values.source ?? null,
+        isUnsubscribed: values.isUnsubscribed ?? false,
+        unsubscribedAt: values.unsubscribedAt ?? null,
         data: values.data,
         displayId: values.displayId,
         createdBy: values.createdBy,
@@ -342,6 +467,161 @@ export class ContactsRepository {
    * contact_identities is unique on (org_id, kind, value), so this either hits
    * exactly one contact or none — no ambiguity, no "pick the first match".
    */
+  /** The workspace's default option of a contact group (the stage a new contact starts in), if one is marked. */
+  async defaultOptionValue(
+    tx: Tx,
+    orgId: number,
+    optionGroup: string,
+  ): Promise<string | undefined> {
+    const rows = await tx
+      .select({ value: statusOptions.value })
+      .from(statusOptions)
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          eq(statusOptions.optionGroup, optionGroup),
+          eq(statusOptions.isDefault, true),
+          eq(statusOptions.isActive, true),
+        ),
+      )
+      .limit(1);
+    return rows[0]?.value;
+  }
+
+  /**
+   * What the admin flagged on a lifecycle stage. A value with no option row (a stage that was deleted, a free-text
+   * stage from an import) carries no flags.
+   */
+  async stageFlags(tx: Tx, orgId: number, value: string): Promise<StageFlags> {
+    const rows = await tx
+      .select({ isWon: statusOptions.isWon, isLost: statusOptions.isLost })
+      .from(statusOptions)
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          eq(statusOptions.optionGroup, 'lifecycle_stage'),
+          eq(statusOptions.value, value),
+        ),
+      )
+      .limit(1);
+    return rows[0] ?? NO_STAGE_FLAGS;
+  }
+
+  /**
+   * Every status option of the contact status groups with the stage it is scoped to, plus the label of every lifecycle
+   * stage (for error messages). One small read per write that touches the stage or the status.
+   */
+  async statusContext(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ scope: StatusScopeOption[]; stageLabels: Map<string, string> }> {
+    const stage = alias(statusOptions, 'scope_stage');
+    const rows = await tx
+      .select({
+        value: statusOptions.value,
+        label: statusOptions.label,
+        isDefault: statusOptions.isDefault,
+        isActive: statusOptions.isActive,
+        stageValue: stage.value,
+        stageLabel: stage.label,
+      })
+      .from(statusOptions)
+      .leftJoin(
+        stage,
+        and(eq(stage.orgId, statusOptions.orgId), eq(stage.id, statusOptions.stageOptionId)),
+      )
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          inArray(statusOptions.optionGroup, ['status', 'contact_status']),
+        ),
+      )
+      .orderBy(asc(statusOptions.position), asc(statusOptions.id));
+    const stages = await tx
+      .select({ value: statusOptions.value, label: statusOptions.label })
+      .from(statusOptions)
+      .where(
+        and(
+          eq(statusOptions.orgId, orgId),
+          eq(statusOptions.moduleKey, 'contacts'),
+          eq(statusOptions.optionGroup, 'lifecycle_stage'),
+        ),
+      );
+    return {
+      scope: rows,
+      stageLabels: new Map(stages.map((s) => [s.value, s.label])),
+    };
+  }
+
+  /**
+   * The contact properties the registry marks required that a write can be held to: active, visible, user-settable
+   * (not system fields, which have rules of their own, and not computed ones), with the conditions that make each
+   * apply. Checkboxes are left out: an unticked box is an answer, as on the contact form.
+   */
+  async requiredRules(tx: Tx, orgId: number): Promise<RequiredRule[]> {
+    const required = await tx
+      .select({ id: fields.id, key: fields.key, label: fields.label })
+      .from(fields)
+      .where(
+        and(
+          eq(fields.orgId, orgId),
+          eq(fields.moduleKey, 'contacts'),
+          eq(fields.isRequired, true),
+          eq(fields.isActive, true),
+          eq(fields.isSystem, false),
+          eq(fields.isHidden, false),
+          eq(fields.isReadOnly, false),
+          sql`${fields.fieldType} NOT IN ('formula', 'checkbox', 'boolean')`,
+        ),
+      )
+      .orderBy(asc(fields.position), asc(fields.id));
+    if (required.length === 0) return [];
+
+    const parent = alias(fields, 'dep_parent');
+    const deps = await tx
+      .select({
+        fieldId: fieldDependencies.fieldId,
+        parentKey: parent.key,
+        value: fieldDependencies.dependsOnValue,
+        optionValue: fieldOptions.value,
+      })
+      .from(fieldDependencies)
+      .innerJoin(
+        parent,
+        and(
+          eq(parent.orgId, fieldDependencies.orgId),
+          eq(parent.id, fieldDependencies.dependsOnFieldId),
+        ),
+      )
+      .leftJoin(
+        fieldOptions,
+        and(
+          eq(fieldOptions.orgId, fieldDependencies.orgId),
+          eq(fieldOptions.id, fieldDependencies.dependsOnOptionId),
+        ),
+      )
+      .where(
+        and(
+          eq(fieldDependencies.orgId, orgId),
+          inArray(
+            fieldDependencies.fieldId,
+            required.map((r) => r.id),
+          ),
+        ),
+      );
+
+    return required.map((r) => ({
+      key: r.key,
+      label: r.label,
+      conditions: deps
+        .filter((d) => d.fieldId === r.id)
+        .map((d) => ({ parentKey: d.parentKey, wanted: d.value ?? d.optionValue ?? null })),
+    }));
+  }
+
   async findByIdentity(
     tx: Tx,
     orgId: number,
@@ -370,6 +650,24 @@ export class ContactsRepository {
     `);
   }
 
+  /**
+   * Drops the identity key a contact no longer holds (its old phone or email after an edit or a clear). Without this
+   * the key keeps pointing at the contact, so a later create with that number or address is answered with this
+   * contact instead of making a new one, and an import would update the wrong person.
+   */
+  async removeIdentity(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    kind: 'email' | 'phone',
+    value: string,
+  ): Promise<void> {
+    await tx.execute(sql`
+      DELETE FROM contact_identities
+      WHERE org_id = ${orgId} AND contact_id = ${contactId} AND kind = ${kind} AND value = ${value}
+    `);
+  }
+
   /** Lightweight rows for pickers/typeaheads — never the full record. */
   async selectData(
     tx: Tx,
@@ -378,18 +676,12 @@ export class ContactsRepository {
   ): Promise<
     Array<{ id: string; name: string | null; email: string | null; phone: string | null }>
   > {
-    const conditions: SQL[] = [eq(contacts.orgId, orgId), eq(contacts.isArchived, false)];
-    if (filter.q) {
-      const pattern = `%${filter.q}%`;
-      const match = or(
-        ilike(contacts.name, pattern),
-        ilike(sql`${contacts.email}::text`, pattern),
-        ilike(contacts.phone, pattern),
-      );
-      if (match) conditions.push(match);
-    }
-    const scopeCondition = this.scopeCondition(orgId, filter.scope, filter.actorUserId);
-    if (scopeCondition) conditions.push(scopeCondition);
+    // The same word-by-word search as the list, so a picker finds what the list finds.
+    const conditions = contactConditions(
+      orgId,
+      { q: filter.q, includeArchived: false, tagMode: 'any' },
+      this.scopeCondition(orgId, filter.scope, filter.actorUserId),
+    );
 
     const rows = await tx
       .select({

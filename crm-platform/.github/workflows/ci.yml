@@ -25,6 +25,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/tax build
       - run: pnpm --filter @crm/contracts build
       - run: pnpm --filter @crm/db build
 
@@ -82,6 +83,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/tax build
       - run: pnpm --filter @crm/contracts build
       - run: pnpm --filter @crm/db build
 

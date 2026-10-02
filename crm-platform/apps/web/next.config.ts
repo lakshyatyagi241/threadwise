@@ -32,6 +32,9 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', '*.localhost'],
   // Next generates AGENTS.md/CLAUDE.md files on every dev start; this repo keeps its own agent guidance.
   agentRules: false,
+  // Dev only: keep Next's round badge off the bottom-left, where the menu's workspace card lives.
+  devIndicators: { position: 'bottom-right' },
+  // Auth pages must never be cached (WD-AUTH-020, WD-AUTH-045); framing is refused everywhere except the widget.
   async headers() {
     const security = [
       { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -48,6 +51,26 @@ const nextConfig: NextConfig = {
       // Framing is refused everywhere except the embeddable chat widget, which customers put on their own sites.
       { source: '/((?!widget(?:/|$)).*)', headers: security },
       ...NO_STORE_PAGES.map((source) => ({ source, headers: noStore })),
+      // The buyer's page (/q/<token>) holds a customer's name and prices and its address is the credential: never cached,
+      // never indexed, never leaked through a Referer header (WD-PROP-018, D-16).
+      {
+        source: '/q/:path*',
+        headers: [
+          ...noStore,
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
+      // The visitor's booking pages (/book/<org>/<service>) and manage pages (/b/manage/<token>): a manage link is a secret and
+      // the pages hold a customer's name and time, so the same rules as /q.
+      ...['/book/:path*', '/b/:path*'].map((source) => ({
+        source,
+        headers: [
+          ...noStore,
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      })),
     ];
   },
   // Addresses WaDesk bookmarks and old emails may still carry. Query strings travel along with each redirect.

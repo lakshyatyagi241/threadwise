@@ -25,7 +25,7 @@ type Flash = 'reset' | 'expired' | 'idle' | 'deleted' | null;
 /** One-time notices carried in the address (`?reset=1`, `?expired=1`, `?account_deleted=1`): shown once, then dropped from the URL. */
 const FLASH_PARAMS = ['reset', 'expired', 'minutes', 'account_deleted'] as const;
 
-const FIELD_ORDER = ['orgSlug', 'email', 'password'] as const;
+const FIELD_ORDER = ['email', 'password', 'orgSlug'] as const;
 
 /**
  * Sign-in (WD-AUTH-001/002/003/004/012): workspace + email + password, "keep me signed in", reCAPTCHA,
@@ -56,6 +56,8 @@ export function LoginForm({
   const [error, setError] = useState<MappedError | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [orgSlug, setOrgSlug] = useState(defaultOrg);
+  // Email + password is enough; the workspace box only appears when the email is in several workspaces.
+  const [askWorkspace, setAskWorkspace] = useState(false);
   // "Keep me signed in" is on by default, and absent when an administrator turned it off.
   const [remember, setRemember] = useState(config.rememberMeEnabled);
   const [mfa, setMfa] = useState<{ token: string; expiresAt: number } | null>(null);
@@ -82,6 +84,7 @@ export function LoginForm({
       if (message) server[name] = message;
     }
     setFieldErrors(server);
+    if (mapped.field === 'orgSlug') setAskWorkspace(true);
     if (mapped.key === 'invalidCredentials') {
       // Never keep a rejected password around: clear it and let the visitor retype it.
       const password = form.current?.elements.namedItem('password');
@@ -99,7 +102,7 @@ export function LoginForm({
     setMfaExpired(false);
     const data = new FormData(e.currentTarget);
     const raw = {
-      orgSlug: String(data.get('orgSlug') ?? '').trim(),
+      ...(askWorkspace ? { orgSlug: String(data.get('orgSlug') ?? '').trim() } : {}),
       email: String(data.get('email') ?? '').trim(),
       password: String(data.get('password') ?? ''),
       remember: config.rememberMeEnabled && remember,
@@ -183,6 +186,7 @@ export function LoginForm({
         next={next}
         onError={setError}
         onNeedInput={() => {
+          setAskWorkspace(true);
           setFieldErrors({ orgSlug: tv('orgSlugForSocial') });
           focusFirstInvalid(form.current, FIELD_ORDER, ['orgSlug']);
         }}
@@ -206,23 +210,6 @@ export function LoginForm({
           skipFieldMessage={Boolean(error?.field && fieldErrors[error.field])}
         />
 
-        <FormField label={t('workspace')} hint={t('workspaceHint')} error={fieldErrors.orgSlug}>
-          {(p) => (
-            <Input
-              {...p}
-              name="orgSlug"
-              value={orgSlug}
-              onChange={(e) => setOrgSlug(e.target.value)}
-              autoComplete="organization"
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-              placeholder={t('workspacePlaceholder')}
-              autoFocus={!defaultOrg}
-            />
-          )}
-        </FormField>
-
         <FormField label={t('email')} error={fieldErrors.email}>
           {(p) => (
             <Input
@@ -235,7 +222,7 @@ export function LoginForm({
               autoCapitalize="none"
               spellCheck={false}
               placeholder={t('emailPlaceholder')}
-              autoFocus={Boolean(defaultOrg)}
+              autoFocus
             />
           )}
         </FormField>
@@ -261,6 +248,25 @@ export function LoginForm({
             />
           )}
         </FormField>
+
+        {askWorkspace && (
+          <FormField label={t('workspace')} hint={t('workspaceHint')} error={fieldErrors.orgSlug}>
+            {(p) => (
+              <Input
+                {...p}
+                name="orgSlug"
+                value={orgSlug}
+                onChange={(e) => setOrgSlug(e.target.value)}
+                autoComplete="organization"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                placeholder={t('workspacePlaceholder')}
+                autoFocus
+              />
+            )}
+          </FormField>
+        )}
 
         {config.rememberMeEnabled && (
           <Checkbox

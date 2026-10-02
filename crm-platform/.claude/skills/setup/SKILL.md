@@ -42,7 +42,7 @@ run it and relay the output.
    fast with a specific fix if any is missing.
 2. **`.env`** — copies from `.env.example` if absent. Never overwrites an
    existing one.
-3. **Docker infra** — if `crm-postgres` and `crm-redis` are already healthy,
+3. **Docker infra** — if `crm-platform-postgres` and `crm-platform-redis` are already healthy,
    reuses them untouched. Otherwise checks whether the default ports
    (5432/6379/9000/9001/1025/8025/3000) are free; any that are busy get
    remapped to a free port (50000 offset from default, or the next free port

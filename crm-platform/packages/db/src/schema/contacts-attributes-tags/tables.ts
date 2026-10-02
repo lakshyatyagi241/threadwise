@@ -2,10 +2,12 @@
  * contacts-attributes-tags: tables ported from WaDesk. Mirrors migrations/20261001103500_con_wadesk_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
-  boolean,
   foreignKey,
   index,
+  integer,
+  jsonb,
   pgTable,
   primaryKey,
   smallint,
@@ -24,10 +26,10 @@ export const contactGroups = pgTable(
     orgId: orgIdColumn(),
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().defaultRandom(),
-    userId: idColumn('user_id'),
-    userGroup: text('user_group'),
+    createdBy: idColumn('created_by'),
+    name: text('name').notNull(),
     note: text('note'),
-    status: boolean('status').notNull().default(true),
+    /** `#RRGGBB` or null. */
     color: text('color'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -43,10 +45,12 @@ export const contactGroups = pgTable(
     }).onDelete('cascade'),
     foreignKey({
       name: 'fk_contact_groups_user_id',
-      columns: [t.orgId, t.userId],
+      columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
-    index('idx_contact_groups_user_id').on(t.orgId, t.userId),
+    index('idx_contact_groups_user_id').on(t.orgId, t.createdBy),
+    index('idx_contact_groups_org_created').on(t.orgId, t.createdAt, t.id),
+    // uq_contact_groups_org_lower_name (org_id, lower(name)) lives in the SQL migration: verify-schema cannot compare expression indexes.
   ],
 );
 
@@ -127,3 +131,57 @@ export const contactGroupMembers = pgTable(
 
 export type ContactGroupMembersRow = typeof contactGroupMembers.$inferSelect;
 export type NewContactGroupMembersRow = typeof contactGroupMembers.$inferInsert;
+
+/** One CSV import run (WD-CON-027): the uploaded text while it runs, progress, counted outcomes, rejected rows. */
+export const contactImportJobs = pgTable(
+  'contact_import_jobs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    createdBy: idColumn('created_by'),
+    status: text('status').notNull().default('queued'),
+    fileName: text('file_name').notNull(),
+    byteSize: integer('byte_size').notNull().default(0),
+    totalRows: integer('total_rows').notNull().default(0),
+    processedRows: integer('processed_rows').notNull().default(0),
+    createdCount: integer('created_count').notNull().default(0),
+    updatedCount: integer('updated_count').notNull().default(0),
+    invalidCount: integer('invalid_count').notNull().default(0),
+    duplicatesInFile: integer('duplicates_in_file').notNull().default(0),
+    limitExceeded: integer('limit_exceeded').notNull().default(0),
+    options: jsonb('options').$type<Record<string, unknown>>().notNull().default({}),
+    rejects: jsonb('rejects')
+      .$type<Array<{ row: number; reason: string; values?: Record<string, string> }>>()
+      .notNull()
+      .default([]),
+    sourceCsv: text('source_csv'),
+    error: text('error'),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('contact_import_jobs_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'contact_import_jobs_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_contact_import_jobs_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_contact_import_jobs_org_created').on(t.orgId, t.createdAt, t.id),
+    index('idx_contact_import_jobs_active')
+      .on(t.status)
+      .where(sql`${t.status} IN ('queued', 'running')`),
+  ],
+);
+
+export type ContactImportJobsRow = typeof contactImportJobs.$inferSelect;
+export type NewContactImportJobsRow = typeof contactImportJobs.$inferInsert;

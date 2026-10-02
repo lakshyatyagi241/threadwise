@@ -56,8 +56,29 @@ describe('registry', () => {
       'shopify',
       'calling',
       'remove_branding',
+      'sales_pipeline',
+      'appointment_booking',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
+  });
+
+  it('registers the deals gate and the pipelines cap, which the deals area reads from the plan JSON', () => {
+    expect(PLAN_FEATURE_KEYS).toContain('sales_pipeline');
+    expect(PLAN_LIMIT_KEYS).toContain('pipelines');
+    // A plan row that predates the keys keeps the area it had: not locked, not capped.
+    expect(PLAN_FEATURE_DEFS.find((d) => d.key === 'sales_pipeline')?.default).toBe(true);
+    expect(resolveFeature(ent({ planFeatures: {} }), 'sales_pipeline')).toBe(true);
+    expect(resolveLimit(ent({ planLimits: {} }), 'pipelines')).toBe(0);
+    expect(resolveFeature(ent({ planFeatures: { sales_pipeline: false } }), 'sales_pipeline')).toBe(
+      false,
+    );
+    expect(resolveLimit(ent({ planLimits: { pipelines: 3 } }), 'pipelines')).toBe(3);
+    expect(
+      resolveLimit(
+        ent({ planLimits: { pipelines: 3 }, overrides: { limits: { pipelines: -1 } } }),
+        'pipelines',
+      ),
+    ).toBe(0);
   });
 
   it('the branding feature is off unless a plan grants it', () => {
