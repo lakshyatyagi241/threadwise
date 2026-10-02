@@ -87,3 +87,30 @@ come back as `ok = false` with the reason.
 - A Telegram template's `buttons` become the keyboard: any link makes an inline keyboard (links as link buttons, quick replies as
   `tqr:<label>` callbacks, labels cut to 64 and callback data to 60); only quick replies make a one-time reply keyboard; a phone
   button is appended to the text as `📞 label: number`.
+
+## Broadcasts (WD-TG-010 to 014)
+
+Permissions: `tg.broadcasts.read` for the GETs, `tg.broadcasts.manage` for the rest. A bot can only message chats that wrote to it first,
+so the audience is the chats it carries.
+
+| Method and path                       | What it does                                                                                             |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `GET /telegram/bots/:id/chats`        | The bot's chats, newest 500: `{ chatId, title, type (private, group, channel), lastMessageAt, unread }`. |
+| `GET /telegram/broadcasts/compose`    | `{ bots, templates }` for the compose page (Telegram templates only).                                    |
+| `GET /telegram/broadcasts`            | The 50 newest broadcasts and `stats` (total, sent, failed, blocked, audience, sending) over all of them. |
+| `POST /telegram/broadcasts`           | Draft: `{ name, botId, templateId?, body?, chatIds[], mediaUrl? }`. 201. Recipients are frozen here.     |
+| `POST /telegram/broadcasts/:id/start` | Draft to sending and queues the `tg-broadcast` job. Already sending is returned as it is.                |
+| `POST /telegram/broadcasts/:id/pause` | Back to draft; unsent chats stay pending; the job stops at its next batch.                               |
+| `POST /telegram/broadcasts/:id/retry` | Failed chats back to pending (blocked stay blocked); broadcast back to draft. `{ retried }`.             |
+| `DELETE /telegram/broadcasts/:id`     | Removes the broadcast and its recipients in any status. 204.                                             |
+
+Rules: forged chat ids are dropped (422 `TG_NO_RECIPIENTS` when none remain); a broadcast needs a message, a file or both (422
+`TG_BROADCAST_EMPTY`); an empty body takes the template's body and buttons; `{{name}}` becomes the chat's title. Start refuses a
+missing or paused bot (422 `TG_BOT_UNAVAILABLE`) and nobody pending (422 `TG_NOTHING_TO_SEND`); retry refuses none failed (422
+`TG_NOTHING_TO_RETRY`) and a running broadcast (409). Another workspace's broadcast or bot is 404.
+
+Sending: the worker claims 25 pending chats at a time (`FOR UPDATE SKIP LOCKED`), sends one by one 50 ms apart, writes each outcome
+at once and recomputes the counters from the rows. Refusals that mean the person cannot be reached ("bot was blocked", "chat not
+found", ...) mark the chat `blocked`, any other `failed`. A file is sent by address or upload once; Telegram's file id is then reused
+for everyone after. A sent message is copied into the chat's thread as an outbound message (`source: telegram_broadcast`). Events:
+`telegram.broadcast.created|started|paused|retry_requested|deleted`.
