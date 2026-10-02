@@ -410,6 +410,8 @@ describe('analytics (WD-DASH-022..025, 027, 031, 032)', () => {
     await withAnalytics(o);
     const res = await api.as(o.admin).get('/v2/analytics/overview?range=30d');
     expect(res.body.current.sent).toBe(0);
+    // WD-DASH-027: nothing sent is an empty mix (the screen draws its single zero slice)
+    expect(res.body.types).toEqual([]);
     expect(res.body.heatmap.flat().reduce((a: number, b: number) => a + b, 0)).toBe(0);
   });
 });
