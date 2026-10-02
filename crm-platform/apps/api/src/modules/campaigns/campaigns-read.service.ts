@@ -24,7 +24,7 @@ import {
   type SenderDirectory,
   type TemplateDirectory,
 } from '../broadcasts';
-import { pct, reconciledStatus, utcToLocalDateTime } from './campaign-rules';
+import { buttonRows, engagement, pct, reconciledStatus, utcToLocalDateTime } from './campaign-rules';
 import { toCampaign, toConfig } from './campaigns.mapper';
 import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
 
@@ -253,6 +253,13 @@ export class CampaignsReadService {
         deliveryIssueReason: failures[0]?.error.trim() || null,
         optOutCount: makeup.optedOut,
         optInCount: await this.repo.optInCount(tx, orgId, c.id),
+        engagement: engagement(n, makeup.optedOut),
+        buttonRows: buttonRows(buttons, await this.repo.clicksByUrl(tx, orgId, c.id), n.clicks),
+        segments: await this.repo.segments(tx, orgId, c.id, 5),
+        optOuts: (await this.repo.optOuts(tx, orgId, c.id, 200)).map((o) => ({
+          ...o,
+          at: o.at?.toISOString() ?? null,
+        })),
         failures: failures.map((f) => ({ ...f, at: f.at.toISOString() })),
         failureSummary: await this.repo.failureSummary(tx, orgId, c.id, 5),
         replies: (await this.repo.replies(tx, orgId, c.id, 10)).map((r) => ({

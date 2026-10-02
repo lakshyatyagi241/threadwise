@@ -1,7 +1,11 @@
 {
   "campaigns": {
-    "nav": { "title": "Campaigns" },
-    "common": { "dismiss": "Dismiss" },
+    "nav": {
+      "title": "Campaigns"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
     "list": {
       "workspace": "Workspace",
       "title": "WhatsApp",
@@ -20,7 +24,12 @@
         "inFlight": "in flight",
         "awaiting": "awaiting"
       },
-      "range": { "all": "All time", "7d": "7 days", "30d": "30 days", "90d": "90 days" },
+      "range": {
+        "all": "All time",
+        "7d": "7 days",
+        "30d": "30 days",
+        "90d": "90 days"
+      },
       "search": "Search campaigns",
       "selectPage": "Select this page",
       "deleteSelected": "Delete {count} selected",
@@ -61,7 +70,12 @@
           "completed": "Completed",
           "failed": "Failed"
         },
-        "typeNames": { "all": "All types", "text": "Text", "template": "Template", "flow": "Flow" },
+        "typeNames": {
+          "all": "All types",
+          "text": "Text",
+          "template": "Template",
+          "flow": "Flow"
+        },
         "health": "Delivery health",
         "healthWarning": "{count} campaigns have more than 5 failures. Open their analytics to see why.",
         "healthy": "Healthy. Average delivery rate {rate}%.",
@@ -172,10 +186,22 @@
         "title": "Message",
         "type": "Message type",
         "tiles": {
-          "text": { "title": "Text", "hint": "A plain message" },
-          "custom": { "title": "Rich message", "hint": "Header, footer, media, buttons" },
-          "template": { "title": "Template", "hint": "An approved template" },
-          "flow": { "title": "Flow", "hint": "Start a flow for each person" }
+          "text": {
+            "title": "Text",
+            "hint": "A plain message"
+          },
+          "custom": {
+            "title": "Rich message",
+            "hint": "Header, footer, media, buttons"
+          },
+          "template": {
+            "title": "Template",
+            "hint": "An approved template"
+          },
+          "flow": {
+            "title": "Flow",
+            "hint": "Start a flow for each person"
+          }
         },
         "message": "Message",
         "messageHint": "Use '{{name}}' or '{{first_name}}' to personalise. Type / for any attribute.",
@@ -187,7 +213,11 @@
         "buttons": "Buttons",
         "addButton": "Add button",
         "buttonType": "Button type",
-        "buttonTypes": { "url": "Link", "quick_reply": "Quick reply", "phone_number": "Call" },
+        "buttonTypes": {
+          "url": "Link",
+          "quick_reply": "Quick reply",
+          "phone_number": "Call"
+        },
         "buttonText": "Label",
         "buttonValue": "Value",
         "buttonReply": "Reply text",
@@ -212,15 +242,28 @@
       "delivery": {
         "when": "When to send",
         "schedule": {
-          "now": { "title": "Send now", "hint": "Starts as soon as you launch" },
-          "scheduled": { "title": "Schedule", "hint": "Once, at a date and time" },
-          "recurring": { "title": "Recurring", "hint": "Again and again" }
+          "now": {
+            "title": "Send now",
+            "hint": "Starts as soon as you launch"
+          },
+          "scheduled": {
+            "title": "Schedule",
+            "hint": "Once, at a date and time"
+          },
+          "recurring": {
+            "title": "Recurring",
+            "hint": "Again and again"
+          }
         },
         "date": "Send date",
         "time": "Send time",
         "timezone": "Time zone",
         "repeat": "Repeat",
-        "repeats": { "daily": "Every day", "weekly": "Every week", "monthly": "Every month" },
+        "repeats": {
+          "daily": "Every day",
+          "weekly": "Every week",
+          "monthly": "Every month"
+        },
         "repeatUntil": "Repeat until",
         "repeatUntilHint": "Leave empty to repeat until you stop it.",
         "expires": "Auto-end date (optional)",
@@ -290,6 +333,7 @@
       "tabs": {
         "overview": "Overview",
         "messages": "Messages",
+        "engagement": "Engagement",
         "replies": "Replies ({count})",
         "failures": "Failures ({count})",
         "optouts": "Opt-outs ({count})"
@@ -351,7 +395,9 @@
         "resend": "Resend to {count} failed",
         "summary": "Most common reasons"
       },
-      "replies": { "empty": "Nobody has replied yet." },
+      "replies": {
+        "empty": "Nobody has replied yet."
+      },
       "recipients": {
         "optOutsHint": "Recipients who opted out. They are never messaged again.",
         "status": "Status",
@@ -384,6 +430,23 @@
         "showing": "Showing {shown} of {total}",
         "prev": "Previous page",
         "next": "Next page"
+      },
+      "engagement": {
+        "opened": "Opened",
+        "clicked": "Clicked",
+        "replied": "Replied",
+        "optedOut": "Opted out",
+        "topButtons": "Top buttons",
+        "noButtons": "This campaign has no buttons.",
+        "clicks": "{count, plural, one {# click} other {# clicks}}",
+        "notTrackable": "Quick replies have no link, so they cannot be tracked.",
+        "topSegments": "Top performing groups",
+        "noSegments": "No contact groups in this audience.",
+        "group": "Group",
+        "recipients": "Recipients",
+        "replies": "Replies",
+        "optOuts": "Opt-outs",
+        "readRate": "Read rate"
       }
     }
   }

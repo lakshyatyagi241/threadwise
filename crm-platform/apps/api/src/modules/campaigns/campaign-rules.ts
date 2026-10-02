@@ -438,6 +438,56 @@ export const pct = (part: number, base: number): number =>
 /** The tile shows the greater of our click count and Meta's, never the sum. */
 export const effectiveClicks = (ours: number, meta: number): number => Math.max(ours, meta);
 
+/** The Engagement tab's four cards: opened, clicked and replied are percents of sent (never zero-divided), opt-outs of recipients. */
+export function engagement(
+  n: { recipients: number; sent: number; read: number; clicks: number; replies: number },
+  optOuts: number,
+) {
+  const base = Math.max(n.sent, 1);
+  return {
+    openedPct: pct(n.read, base),
+    openedCount: n.read,
+    clickedPct: pct(n.clicks, base),
+    clickedCount: n.clicks,
+    repliedPct: pct(n.replies, base),
+    repliedCount: n.replies,
+    optOutPct: pct(optOuts, n.recipients),
+    optOutCount: optOuts,
+  };
+}
+
+const isUrl = (v: string) => {
+  try {
+    const u = new URL(v);
+    return u.protocol === 'http:' || u.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * "Top buttons" from real clicks. Only a URL button can be tracked (the link tracker wraps it at send time); a quick reply has no
+ * link, so its count is null rather than a zero that reads like "nobody tapped it". The share is of all clicks, whole percent.
+ */
+export function buttonRows(
+  buttons: Array<Record<string, unknown>>,
+  clicksByUrl: ReadonlyMap<string, number>,
+  totalClicks: number,
+): Array<{ label: string; count: number | null; trackable: boolean; pct: number }> {
+  return buttons.map((b, i) => {
+    const url = String(b.value ?? b.url ?? '');
+    const kind = String(b.type ?? b.sub_type ?? '').toLowerCase();
+    const trackable = kind === 'url' || isUrl(url);
+    const count = trackable ? (clicksByUrl.get(url) ?? 0) : null;
+    return {
+      label: String(b.text ?? `Button ${i + 1}`),
+      count,
+      trackable,
+      pct: count && totalClicks > 0 ? Math.round((count / totalClicks) * 100) : 0,
+    };
+  });
+}
+
 // ---------------------------------------------------------------- export (020)
 
 /** A leading `=`, `+`, `-` or `@` would run as a formula in a spreadsheet. */

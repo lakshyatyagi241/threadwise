@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   advanceRecurring,
   assignVariants,
+  buttonRows,
   cleanNumbers,
+  engagement,
   csvSafe,
   dueAtUtc,
   expiresBeforeSend,
@@ -280,5 +282,43 @@ describe('small helpers', () => {
     expect(csvSafe('=SUM(A1)')).toBe("'=SUM(A1)");
     expect(csvSafe('+91')).toBe("'+91");
     expect(csvSafe('Asha')).toBe('Asha');
+  });
+});
+
+describe('detail: engagement and top buttons', () => {
+  it('engagement is a percent of sent, never a zero division, opt-outs of recipients', () => {
+    const n = { recipients: 10, sent: 4, read: 2, clicks: 1, replies: 1 };
+    expect(engagement(n, 2)).toEqual({
+      openedPct: 50,
+      openedCount: 2,
+      clickedPct: 25,
+      clickedCount: 1,
+      repliedPct: 25,
+      repliedCount: 1,
+      optOutPct: 20,
+      optOutCount: 2,
+    });
+    expect(engagement({ ...n, sent: 0, read: 0 }, 0).openedPct).toBe(0);
+  });
+
+  it('only a URL button is trackable; a quick reply is null, not zero', () => {
+    const clicks = new Map([['https://a.test/x', 3]]);
+    expect(
+      buttonRows(
+        [
+          { type: 'url', text: 'Shop', url: 'https://a.test/x' },
+          { type: 'quick_reply', text: 'Yes' },
+          { text: 'Plain link', value: 'https://b.test/' },
+          {},
+        ],
+        clicks,
+        4,
+      ),
+    ).toEqual([
+      { label: 'Shop', count: 3, trackable: true, pct: 75 },
+      { label: 'Yes', count: null, trackable: false, pct: 0 },
+      { label: 'Plain link', count: 0, trackable: true, pct: 0 },
+      { label: 'Button 4', count: null, trackable: false, pct: 0 },
+    ]);
   });
 });

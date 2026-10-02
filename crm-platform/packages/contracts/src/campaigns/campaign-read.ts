@@ -165,6 +165,40 @@ export const campaignDetailSchema = z.object({
   deliveryIssueReason: z.string().nullable(),
   optOutCount: z.number().int(),
   optInCount: z.number().int(),
+  /** Engagement tab: the four cards (percent of sent, opt-outs of recipients) with their counts. */
+  engagement: z.object({
+    openedPct: pct,
+    openedCount: z.number().int(),
+    clickedPct: pct,
+    clickedCount: z.number().int(),
+    repliedPct: pct,
+    repliedCount: z.number().int(),
+    optOutPct: pct,
+    optOutCount: z.number().int(),
+  }),
+  /** Top buttons from real tracked clicks. `count` is null for a button that cannot be tracked (a quick reply). */
+  buttonRows: z.array(
+    z.object({
+      label: z.string(),
+      count: z.number().int().nullable(),
+      trackable: z.boolean(),
+      pct: z.number(),
+    }),
+  ),
+  /** Top five contact groups by read rate. */
+  segments: z.array(
+    z.object({
+      name: z.string(),
+      recipients: z.number().int(),
+      replies: z.number().int(),
+      optOuts: z.number().int(),
+      readPct: pct,
+    }),
+  ),
+  /** Who opted out, newest first. */
+  optOuts: z.array(
+    z.object({ name: z.string(), phone: z.string(), at: z.string().datetime().nullable() }),
+  ),
   failures: z.array(z.object({ id: uuidSchema, error: z.string(), at: z.string().datetime() })),
   failureSummary: z.array(z.object({ error: z.string(), count: z.number().int() })),
   replies: z.array(
