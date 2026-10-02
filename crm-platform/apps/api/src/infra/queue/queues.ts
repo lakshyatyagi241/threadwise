@@ -28,6 +28,8 @@ export const QUEUES = {
   CON_IMPORT: 'con-import',
   /** One job per broadcast: sends its pending recipients (TW-BCAST-016). Own queue so a slow provider cannot hold campaigns. */
   BCAST_DISPATCH: 'bcast-dispatch',
+  /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
+  SEGMENT_ACTIONS: 'segment-actions',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

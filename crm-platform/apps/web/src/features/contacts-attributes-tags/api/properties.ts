@@ -48,7 +48,12 @@ export function useFieldSections() {
   return useQuery({
     queryKey: SECTIONS,
     queryFn: ({ signal }) =>
-      fetchAllPages('/field-sections', fieldSectionResponseSchema, { moduleKey: 'contacts' }, { signal }),
+      fetchAllPages(
+        '/field-sections',
+        fieldSectionResponseSchema,
+        { moduleKey: 'contacts' },
+        { signal },
+      ),
     staleTime: 60_000,
   });
 }

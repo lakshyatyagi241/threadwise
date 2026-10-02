@@ -127,6 +127,8 @@ export interface SeedOption {
   label: string;
   color: string;
   isDefault: boolean;
+  isWon?: boolean;
+  isLost?: boolean;
 }
 
 /** The platform's ten lifecycle stages, offered as the starting list of a workspace that has none. */
@@ -136,6 +138,9 @@ export function stageSeeds(): SeedOption[] {
     label: titleCaseKey(value),
     color: stageColor(value),
     isDefault: value === 'new',
+    // The platform's end states carry the meaning Reference-style pipelines expect: enrolled is a win, lost is a loss.
+    ...(value === 'enrolled' ? { isWon: true } : {}),
+    ...(value === 'lost' ? { isLost: true } : {}),
   }));
 }
 
@@ -156,3 +161,15 @@ export const moveTargets = <T extends { id: string }>(options: readonly T[], id:
 /** What deleting an option needs first: nothing, or a place to move the contacts that hold it. */
 export const deleteNeeds = (holders: number): 'nothing' | 'move' =>
   holders > 0 ? 'move' : 'nothing';
+
+/** The lifecycle stages a status can be limited to: the workspace's stage options, in their saved order. */
+export const scopeStages = (
+  options: readonly StatusOptionResponse[] | undefined,
+): StatusOptionResponse[] => groupOptions(options, STAGE_GROUP);
+
+/** The statuses limited to a stage (what deleting that stage releases to every stage). */
+export const statusesScopedTo = (
+  options: readonly StatusOptionResponse[] | undefined,
+  stageId: string,
+): StatusOptionResponse[] =>
+  groupOptions(options, STATUS_GROUP).filter((o) => o.stageOptionId === stageId);

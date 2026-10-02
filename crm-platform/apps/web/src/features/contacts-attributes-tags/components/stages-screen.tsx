@@ -21,8 +21,10 @@ import {
   moveItem,
   optionColor,
   sameOrder,
+  scopeStages,
   STAGE_GROUP,
   STATUS_GROUP,
+  statusesScopedTo,
   stageSeeds,
   statusSeeds,
   type OptionGroup,
@@ -99,6 +101,9 @@ function GroupManager({ group }: { group: OptionGroup }) {
   const all = useStatusOptions();
   const saved = useMemo(() => groupOptions(all.data, group), [all.data, group]);
   const usage = useStatusUsage(group, saved.length > 0);
+  /** The stages a status can be limited to (and what a scope chip names). */
+  const stageOptions = useMemo(() => scopeStages(all.data), [all.data]);
+  const stageById = new Map(stageOptions.map((s) => [s.id, s]));
 
   /** Ids in the order just chosen, until the server's list catches up. */
   const [order, setOrder] = useState<string[] | null>(null);
@@ -120,7 +125,16 @@ function GroupManager({ group }: { group: OptionGroup }) {
 
   async function fail(e: unknown) {
     const k = errorKind(e);
-    toast(t(k === 'conflict' ? 'toast.conflict' : k === 'forbidden' ? 'toast.forbidden' : 'toast.failed'), 'danger');
+    toast(
+      t(
+        k === 'conflict'
+          ? 'toast.conflict'
+          : k === 'forbidden'
+            ? 'toast.forbidden'
+            : 'toast.failed',
+      ),
+      'danger',
+    );
     await invalidateStatusOptions(qc);
   }
 
@@ -276,6 +290,29 @@ function GroupManager({ group }: { group: OptionGroup }) {
                         {o.value}
                       </code>
                       {o.isDefault && isStage && <Badge tone="success">{t('row.default')}</Badge>}
+                      {!isStage &&
+                        (o.stageOptionId && stageById.get(o.stageOptionId) ? (
+                          <span
+                            title={t('row.inStage', {
+                              stage: stageById.get(o.stageOptionId)!.label,
+                            })}
+                            className="inline-flex min-w-0 max-w-full items-center gap-1 text-xs text-muted-foreground"
+                          >
+                            <ArrowRightIcon className="size-3 shrink-0 rtl:rotate-180" />
+                            <StageBadge
+                              stage={stageById.get(o.stageOptionId)!.value}
+                              label={stageById.get(o.stageOptionId)!.label}
+                              color={stageById.get(o.stageOptionId)!.color}
+                            />
+                          </span>
+                        ) : (
+                          <Badge>{t('row.allStages')}</Badge>
+                        ))}
+                      {!isStage && o.isDefault && o.stageOptionId && (
+                        <Badge tone="success">{t('row.defaultInStage')}</Badge>
+                      )}
+                      {isStage && o.isWon && <Badge tone="success">{t('row.won')}</Badge>}
+                      {isStage && o.isLost && <Badge tone="danger">{t('row.lost')}</Badge>}
                       {!o.isActive && <Badge>{t('row.hidden')}</Badge>}
                     </div>
                     <span className="w-28 shrink-0 text-xs text-muted-foreground">
@@ -298,14 +335,34 @@ function GroupManager({ group }: { group: OptionGroup }) {
                           >
                             <ArrowDownIcon className="size-3.5" />
                           </IconButton>
-                          {isStage && (
+                          {(isStage || o.stageOptionId) && (
                             <IconButton
-                              label={t('row.makeDefault', { name: o.label })}
-                              disabled={o.isDefault || !o.isActive || busy}
-                              onClick={() => void patch(o, { isDefault: true }, t('toast.defaultSet', { name: o.label }))}
+                              label={
+                                isStage
+                                  ? t('row.makeDefault', { name: o.label })
+                                  : o.isDefault
+                                    ? t('row.unsetDefault', { name: o.label })
+                                    : t('row.makeStageDefault', { name: o.label })
+                              }
+                              // A stage default can only be replaced; the default status of a stage can also be dropped.
+                              disabled={
+                                (isStage && o.isDefault) || (!o.isDefault && !o.isActive) || busy
+                              }
+                              onClick={() =>
+                                void patch(
+                                  o,
+                                  { isDefault: !o.isDefault },
+                                  o.isDefault
+                                    ? t('toast.defaultCleared', { name: o.label })
+                                    : t('toast.defaultSet', { name: o.label }),
+                                )
+                              }
                             >
                               <StarIcon
-                                className={cn('size-3.5', o.isDefault && 'fill-current text-warning')}
+                                className={cn(
+                                  'size-3.5',
+                                  o.isDefault && 'fill-current text-warning',
+                                )}
                               />
                             </IconButton>
                           )}
@@ -343,10 +400,10 @@ function GroupManager({ group }: { group: OptionGroup }) {
           </div>
         )}
 
-        {usage.isError && configured && (
-          <Alert tone="warning">{t('usageFailed')}</Alert>
+        {usage.isError && configured && <Alert tone="warning">{t('usageFailed')}</Alert>}
+        {!canUpdate && configured && (
+          <p className="text-xs text-muted-foreground">{t('readOnly')}</p>
         )}
-        {!canUpdate && configured && <p className="text-xs text-muted-foreground">{t('readOnly')}</p>}
       </section>
 
       <aside className="space-y-4 lg:sticky lg:top-6">
@@ -394,12 +451,14 @@ function GroupManager({ group }: { group: OptionGroup }) {
         group={group}
         option={editing === 'new' || editing === null ? undefined : editing}
         siblings={saved}
+        stages={stageOptions}
         onClose={() => setEditing(null)}
       />
       <StageDeleteDialog
         group={group}
         option={deleting}
         options={saved}
+        scopedStatuses={isStage && deleting ? statusesScopedTo(all.data, deleting.id).length : 0}
         onClose={() => setDeleting(null)}
       />
     </div>

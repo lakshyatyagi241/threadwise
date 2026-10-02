@@ -30,7 +30,13 @@
       "tooLarge": "That is more than can be done in one go. Narrow it down and try again.",
       "mergeScope": "Merging duplicates needs access to every contact. Ask an admin.",
       "statusInUse": "Some contacts still hold this value. Choose where to move them.",
-      "dependencyCycle": "That condition would make two properties wait for each other."
+      "dependencyCycle": "That condition would make two properties wait for each other.",
+      "requiredProperty": "Some required properties have no value. Fill them in and save again.",
+      "lostReason": "Choose why this contact was lost before moving it to a lost stage.",
+      "stageFlag": "Won and lost can only be set on a contact stage, and a stage cannot be both.",
+      "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
+      "stageScope": "A status can only be limited to one of your lifecycle stages.",
+      "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space."
     },
     "list": {
       "title": "Contact Hub",
@@ -72,7 +78,7 @@
       "emptyTitle": "No contacts yet",
       "emptyFilteredTitle": "No data found",
       "empty": "Add your first contact, or import a CSV file to get started.",
-      "emptyFiltered": "No contacts match the current filters. Try clearing filters or add your first contact.",
+      "emptyFiltered": "No contacts match the current filters. Clear the search, choose another group, or add a new contact.",
       "resetFilters": "Reset filters",
       "loading": "Loading contacts",
       "deleteTitle": "Delete this contact?",
@@ -81,6 +87,7 @@
       "keep": "Keep contact",
       "cancel": "Cancel",
       "deleted": "Contact deleted.",
+      "alreadyDeleted": "This contact was already deleted. The list has been refreshed.",
       "edit": "Edit",
       "editNamed": "Edit {name}",
       "deleteNamed": "Delete {name}",
@@ -142,7 +149,23 @@
       "next": "Next",
       "totalCount": "Total count",
       "recount": "Count again",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "segmentApprox": "about {count, number}",
+      "quickHeading": "Contacts",
+      "segmentFallback": "Segment",
+      "segmentSearch": "Search groups and segments",
+      "segmentsHeading": "Segments",
+      "segmentsLoading": "Loading segments",
+      "segmentsFailed": "Segments could not be loaded.",
+      "segmentsRetry": "Try again",
+      "segmentsNone": "No segments yet.",
+      "segmentsCreate": "Create one",
+      "segmentNoMatch": "No group or segment matches your search.",
+      "saveAsSegment": "Save as segment",
+      "saveAsSegmentHint": "Turn the filters you have on into a segment that keeps itself up to date",
+      "segmentInvalid": "{count, plural, one {# condition of this segment points at something that was deleted, so it matches fewer contacts than it should.} other {# conditions of this segment point at something that was deleted, so it matches fewer contacts than it should.}}",
+      "segmentFix": "Fix the rules",
+      "approxTotal": "about {total, number}"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -268,7 +291,12 @@
         "url": "Enter a full link starting with http:// or https://."
       },
       "readOnlyField": "Read only",
-      "yes": "Yes"
+      "yes": "Yes",
+      "statusHelp": "A stage is where the contact is in your sales journey. A status is a step inside it, so only the statuses that fit the stage are listed.",
+      "statusNoticeReset": "Status reset to {status}.",
+      "statusNoticeSet": "Status set to {status}, the default for this stage.",
+      "statusNoticeCleared": "Status cleared: it does not apply to this stage.",
+      "statusNoneForStage": "No status is set up for this stage."
     },
     "tags": {
       "title": "Tags",
@@ -391,6 +419,8 @@
       "updated": "Updated",
       "invalid": "Invalid",
       "imported": "{count, plural, one {Imported # contact.} other {Imported # contacts.}}",
+      "importedUpdated": "{count, plural, one {# existing contact updated.} other {# existing contacts updated.}}",
+      "importedInvalid": "{count, plural, one {# invalid row skipped.} other {# invalid rows skipped.}}",
       "downloadRejects": "Download rejected rows",
       "fileTooLarge": "That file is larger than {mb} MB.",
       "checking": "Checking the file...",
@@ -648,7 +678,12 @@
       "changed": "Stage changed to {stage}.",
       "conflict": "Someone else changed this contact. The list was refreshed; try again.",
       "forbidden": "You do not have permission to change contacts.",
-      "failed": "The stage could not be changed. Try again."
+      "failed": "The stage could not be changed. Try again.",
+      "changedStatusReset": "Stage changed to {stage}. Status reset to {status}.",
+      "changedStatusSet": "Stage changed to {stage}. Status set to {status}.",
+      "changedStatusCleared": "Stage changed to {stage}. Status cleared: it does not apply to this stage.",
+      "willReset": "Status becomes {status}",
+      "willClear": "Status will be cleared"
     },
     "stages": {
       "eyebrow": "Settings and workspace",
@@ -667,7 +702,7 @@
         "addTitle": "Add a stage",
         "namePlaceholder": "Interview scheduled",
         "listLabel": "Lifecycle stages",
-        "help": "Every contact is in exactly one stage. Drag the rows or use the arrows to set the order they are offered in.",
+        "help": "Every contact is in exactly one stage: where the person is in your sales journey. Drag the rows or use the arrows to set the order they are offered in.",
         "add": "Add stage",
         "unconfiguredTitle": "Using the platform stages",
         "unconfigured": "This workspace has not set up its own stages, so contacts use the ten standard ones. Customise them to rename, recolour, reorder, add or remove stages.",
@@ -675,7 +710,7 @@
         "startFresh": "Start with my own",
         "how": {
           "title": "How stages work",
-          "body": "A contact starts in the default stage. Change it from the contacts table, the contact page or the edit form. Deleting a stage that contacts are in asks where to move them."
+          "body": "A contact starts in the default stage. Change it from the contacts table, the contact page or the edit form. Statuses can belong to a stage, so changing the stage may change the status too. Deleting a stage that contacts are in asks where to move them."
         }
       },
       "status": {
@@ -683,7 +718,7 @@
         "addTitle": "Add a status",
         "namePlaceholder": "Key account",
         "listLabel": "Contact statuses",
-        "help": "A status is an optional label on a contact, such as VIP or Customer. A contact can have one, or none.",
+        "help": "A stage is where a contact is in your sales journey; a status is a step inside it, such as Quote sent while Qualified, or Not interested while Lost. Leave a status on All stages for labels like Do not contact.",
         "add": "Add status",
         "unconfiguredTitle": "Using the platform statuses",
         "unconfigured": "This workspace has not set up its own statuses, so contacts use Active, Prospect, Customer and VIP. Customise them to make them yours.",
@@ -691,7 +726,7 @@
         "startFresh": "Start with my own",
         "how": {
           "title": "How statuses work",
-          "body": "Statuses are free labels you can filter and report on. Unlike stages, a contact does not need one. Deleting a status that contacts hold asks where to move them."
+          "body": "A status can apply to all stages or to one. A contact only offers the statuses that fit its stage, and moving it to another stage resets the status to that stage's default, or clears it when there is none. Deleting a status that contacts hold asks where to move them."
         }
       },
       "row": {
@@ -703,13 +738,21 @@
         "moveDown": "Move {name} down",
         "makeDefault": "Make {name} the default",
         "edit": "Edit {name}",
-        "delete": "Delete {name}"
+        "delete": "Delete {name}",
+        "won": "Won",
+        "lost": "Lost",
+        "allStages": "All stages",
+        "inStage": "In {stage}",
+        "defaultInStage": "Default in stage",
+        "unsetDefault": "Stop {name} being the default of its stage",
+        "makeStageDefault": "Make {name} the default of its stage"
       },
       "toast": {
         "conflict": "Someone else changed this list. It was refreshed; try again.",
         "forbidden": "You do not have permission to change this.",
         "failed": "That could not be saved. Try again.",
-        "defaultSet": "{name} is now the default."
+        "defaultSet": "{name} is now the default.",
+        "defaultCleared": "{name} is no longer the default."
       },
       "seed": {
         "done": "The standard options were added. You can edit them now."
@@ -746,6 +789,26 @@
           "required": "Enter a name.",
           "tooLong": "Use at most 255 characters.",
           "taken": "Another option already has this name."
+        },
+        "meaning": {
+          "title": "What this stage means",
+          "hint": "Won and lost stages stamp the date when a contact enters them. A lost stage also asks for a reason.",
+          "none": "Normal",
+          "noneHint": "An ordinary step.",
+          "won": "Won",
+          "wonHint": "The contact converted.",
+          "lost": "Lost",
+          "lostHint": "The contact is gone. A reason is required."
+        },
+        "scope": {
+          "title": "Where it applies",
+          "hint": "Choose a stage to offer this status only to contacts in that stage, or keep it on all stages.",
+          "label": "Applies to",
+          "all": "All stages",
+          "noStages": "Set up your lifecycle stages first to limit a status to one.",
+          "default": "Default status of this stage",
+          "defaultHint": "A contact that enters this stage without a status that fits gets this one. A stage has at most one.",
+          "moveNote": "Contacts that already have this status keep it until their stage changes."
         }
       },
       "delete": {
@@ -760,7 +823,9 @@
         "close": "Close",
         "keep": "Keep it",
         "moveAndDelete": "Move {count, plural, one {# contact} other {# contacts}} to {target} and delete",
-        "confirm": "Delete"
+        "confirm": "Delete",
+        "scopedStatuses": "{count, plural, one {# status is} other {# statuses are}} limited to this stage. They stay, and become available in all stages.",
+        "moveScopedNote": "{target} belongs to one stage, so contacts in other stages will be left with no status."
       }
     },
     "properties": {
@@ -992,6 +1057,43 @@
         "manageGroups": "Manage groups",
         "locked": "Fixed"
       }
+    },
+    "lost": {
+      "title": "Why was {name} lost?",
+      "subtitle": "Moving to {stage} needs a reason. It is saved on the contact.",
+      "reason": "Reason",
+      "pick": "Choose a reason",
+      "other": "Other (write it)",
+      "otherLabel": "Details",
+      "otherPlaceholder": "What happened?",
+      "problem": {
+        "pick": "Choose a reason.",
+        "text": "Write the reason."
+      },
+      "confirm": "Move to {stage}",
+      "cancel": "Cancel",
+      "close": "Close",
+      "contactFallback": "this contact"
+    },
+    "segmentSave": {
+      "eyebrow": "New segment",
+      "title": "Save these filters as a segment",
+      "close": "Close",
+      "intro": "A segment keeps itself up to date: contacts join and leave as they start or stop matching these filters. You can refine the rules next.",
+      "name": "Segment name",
+      "namePlaceholder": "For example: Qualified VIPs",
+      "nameRequired": "Give the segment a name.",
+      "nameTaken": "Another segment already has this name.",
+      "visibility": "Who can see it",
+      "private": "Private",
+      "shared": "Shared",
+      "privateHint": "Only you, and people who can edit every segment.",
+      "sharedHint": "Everyone who can view segments.",
+      "cancel": "Cancel",
+      "save": "Save and open rules",
+      "created": "Created the segment \"{name}\". Refine its rules below.",
+      "forbidden": "You do not have permission to create segments.",
+      "failed": "The segment could not be created. Try again."
     }
   }
 }

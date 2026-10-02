@@ -26,6 +26,15 @@ describe('money', () => {
     expect(toMinor('19.99', 'USD')).toBe(1999);
   });
 
+  it('never rounds: more decimals than the currency has is refused, trailing zeros are fine', () => {
+    expect(toMinor('1.005', 'USD')).toBeNaN();
+    expect(toMinor('5000.5', 'JPY')).toBeNaN();
+    expect(toMinor('12.3456', 'KWD')).toBeNaN();
+    expect(toMinor('5000.00', 'JPY')).toBe(5000);
+    expect(toMinor('1.230', 'USD')).toBe(123);
+    expect(toMinor('12.345', 'KWD')).toBe(12345);
+  });
+
   it('rejects text, negatives and a lone dot', () => {
     expect(toMinor('abc', 'USD')).toBeNaN();
     expect(toMinor('-5', 'USD')).toBeNaN();

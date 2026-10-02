@@ -370,7 +370,7 @@ Reference is listed here with the "Differences to decide" row it settles. Code: 
 | Decision                                                                                                                                                                                            | Where       |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | Ids on the wire, in audit rows and in events are uuids; the audit trail names people and linked records by uuid.                                                                                    | all         |
-| `title` is trimmed and 1 to 255 characters (a blank title is 422; Reference accepted whitespace); `notes` at most 5000; an unknown `priority` is 422.                                                  | TW-TASK-003 |
+| `title` is trimmed and 1 to 255 characters (a blank title is 422; Reference refuses a whitespace-only title too, its input-trimming middleware turns it into a missing title: verified live in the parity run); `notes` at most 5000; an unknown `priority` is 422.                                                  | TW-TASK-003 |
 | A due-window filter (`due`, `dueFrom`, `dueTo`) is about open tasks: a done task is never "overdue".                                                                                                | TW-TASK-009 |
 | A deleted user is `ON DELETE SET NULL` on assignee and creator; a suspended or removed member can no longer be assigned, but stays filterable.                                                      | TW-TASK-004 |
 | A role migration cannot clear the permission cache: on a running environment the new keys appear when the 10-minute grant cache expires (or after flushing the `rbac:*` Redis keys), as with deals. | rbac        |
@@ -384,3 +384,11 @@ Reference is listed here with the "Differences to decide" row it settles. Code: 
 | Calendar and CRM dashboard consumers (TW-TASK-012)                           | Other domains read `GET /tasks` (`dueFrom` / `dueTo`) and `GET /tasks/counts`.                    |
 | Recurring tasks, snooze, subtasks, comments                                  | Not in Reference.                                                                                    |
 | `sales_pipeline` is still not in the plan registry (`PLAN_FEATURE_DEFS`)     | Same follow-up as deals: the web plan editor needs its messages in the same change.               |
+
+### Follow-ups closed (notifications, plan registry)
+
+| What | Decision |
+| --- | --- |
+| The `task.assigned`, `task.due` and `task.completed` notification consumers | Built as `TaskNotificationConsumer` in `apps/api/src/modules/notifications` (worker process). It writes the in-app feed (`inbox_notifications`, TW-NOTIF-012/015) that the header bell reads; web push, email and Slack are not part of it. Recipients: the new assignee on assign (not when they did it themselves), the assignee else the creator on due, the creator on completion by someone else. Idempotent through a unique `dedupe_key` (event type + outbox event id); the task is read again at delivery so a stale notification is dropped. "Due soon" is the sweep's moment (the due time is reached). |
+| The generic fan-out | `OutboxDrainService.dispatch` now hands each event to the subscribers registered in the kernel's `OutboxSubscriberRegistry`; one failing subscriber does not stop the others, and the event is retried with the drain's backoff. |
+| `sales_pipeline` in the plan registry | Registered (feature, default on) with the `pipelines` limit (default 0 = unlimited); see the deals inventory. |

@@ -16,17 +16,19 @@ All routes need a staff bearer token. The capability each one needs is in bracke
 
 Query (all optional, all filters combine with AND):
 
-| Param                                                              | Meaning                                                                                                              |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| `limit` 1-1000 (50), `cursor`, `order` (`desc`)                    | cursor pagination over `(created_at, id)`, newest first                                                              |
-| `q`                                                                | every word must match the name, first/last name, email or phone; a numeric word also matches the digits of the phone |
-| `ownerId`, `lifecycleStage`, `status`, `source`, `includeArchived` | as before; `status`/`source` are exact                                                                               |
-| `groupId` / `noGroup=true`                                         | members of one group / contacts in no group (not together)                                                           |
-| `tagIds=a,b` (or `tagId=a`) + `tagMode=any\|all`                   | contacts carrying any / all of these tags                                                                            |
-| `imported=true\|false`                                             | created by a CSV import, or not                                                                                      |
-| `unsubscribed=true\|false`                                         | opted out / subscribed                                                                                               |
-| `expand=groups,tags`                                               | adds the chips of each row                                                                                           |
-| `includeTotal=true`                                                | adds `meta.total`, the count of every contact matching the filter                                                    |
+| Param                                                                                     | Meaning                                                                                                                                                                                                                           |
+| ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `limit` 1-1000 (50), `cursor`, `order` (`desc`)                                           | cursor pagination over `(created_at, id)`, newest first                                                                                                                                                                           |
+| `q`                                                                                       | every word must match the name, first/last name, email or phone; a numeric word also matches the digits of the phone                                                                                                              |
+| `ownerId`, `lifecycleStage`, `status`, `source`, `includeArchived`                        | as before; `status`/`source` are exact                                                                                                                                                                                            |
+| `groupId` / `noGroup=true`                                                                | members of one group / contacts in no group (not together)                                                                                                                                                                        |
+| `tagIds=a,b` (or `tagId=a`) + `tagMode=any\|all`                                          | contacts carrying any / all of these tags                                                                                                                                                                                         |
+| `imported=true\|false`                                                                    | created by a CSV import, or not                                                                                                                                                                                                   |
+| `unsubscribed=true\|false`                                                                | opted out / subscribed                                                                                                                                                                                                            |
+| `createdFrom`/`createdTo`, `updatedFrom`/`updatedTo`, `lastActivityFrom`/`lastActivityTo` | date windows, both ends inclusive; a bare `YYYY-MM-DD` covers the whole day in UTC (the same SQL as a segment's date operators)                                                                                                   |
+| `segmentId`                                                                               | members of one segment (a saved rule that fills itself), combined with every other filter by AND; unknown or not visible = no contacts; adds `segment: { id, invalidConditions }` to the response. See [segments.md](segments.md) |
+| `expand=groups,tags`                                                                      | adds the chips of each row                                                                                                                                                                                                        |
+| `includeTotal=true`                                                                       | adds `meta.total`, the count of every contact matching the filter                                                                                                                                                                 |
 
 ```json
 // GET /v2/contacts?q=aarav&groupId=2f6c…&expand=groups&includeTotal=true&limit=12
@@ -63,6 +65,22 @@ Workspace-wide, ignores any filter: `{ "total": 10, "groups": 3, "subscribed": 8
 New in this domain: `source` (<= 128), the phone is canonicalised (E.164) and written as the same identity key an import uses (an existing
 match is returned, 201), the display name is the typed `name` else `firstName lastName` (never a title), and a create at the plan's contact
 cap is 422 `PLAN_LIMIT_REACHED` (`errors`: `limit`, `used`, `limitValue`, `upgradeUrl`).
+
+**Required properties are enforced.** A contact property (`/fields`, `moduleKey=contacts`) marked `isRequired` must have a value in `customFields`:
+a create (and a `PATCH` that carries `customFields`) with a missing one is 422 `CON_REQUIRED_PROPERTY_MISSING`, with one `errors` entry per property,
+`{ "path": "customFields.<key>", "message": "required" }` (the detail names the labels). A value counts as missing when it is `null`, blank text or an
+empty list; `0` and `false` are answers. Not enforced: system fields (they have rules of their own), inactive, hidden and read-only properties,
+formulas, and checkboxes (an unticked box is an answer). A property with a "show only when" rule (`/fields/dependencies`) is required only while every
+one of its conditions holds (the same test the contact form uses to show it). A `PATCH` that carries `customFields` is held to the whole set on the merged
+result; a patch without `customFields` (a stage, owner or source change) is not, so a contact that predates a newly required property stays editable.
+`POST /contacts/bulk/update` may not blank a required property it sets; the refusal is listed per contact in `failed` with the same code.
+
+**Won and lost stages.** When the contact's `lifecycleStage` changes to a stage flagged `isWon` or `isLost` (see Contact stages), `wonAt` / `lostAt`
+are stamped (and the other cleared). Entering a lost stage needs a reason: `lostReason` (a `lost_reason` option's value) or `otherLostReason` (free
+text), sent with the change or already on the contact, else 422 `CON_LOST_REASON_REQUIRED` (`errors: [{ path: "lostReason", message: "required" }]`).
+The same rules apply to a create into such a stage and to `bulk/update` (which takes `lostReason` / `otherLostReason` in `values`; one reason is
+recorded on every contact moved). Moving out of a lost stage clears `lostAt` and the reasons that described it; moving out of a won stage clears
+`wonAt`. A stage that is not flagged behaves as before.
 
 ### `GET /contacts/:id/groups`, `PUT /contacts/:id/groups` [`record.contacts.read` / `record.contacts.update`, scope]
 
@@ -275,17 +293,55 @@ The lists behind a contact's lifecycle stage and status are rows of `status_opti
 `lost_reason` group is understood too). They need the Contact Properties permissions (`record.contact-properties.read|create|update|delete`). A workspace with no rows
 falls back to the platform's ten stages and four statuses in the web app.
 
-| Route                                                           | Notes                                                                                                                                                                                  |
-| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /status-options?moduleKey&optionGroup`                     | in saved order                                                                                                                                                                         |
-| `GET /status-options/usage?moduleKey&optionGroup`               | `{ data: [ { id, value, count } ] }`: contacts holding each option (archived included); 0 for groups no contact column stores                                                          |
-| `POST /status-options`                                          | `{ moduleKey, optionGroup, value (snake_case), label, color?, position?, isDefault? }`; a default clears the group's previous default                                                   |
-| `PATCH /status-options/:id`                                     | `{ label?, color?, isDefault?, isActive?, rowVersion }`; the value never changes                                                                                                       |
-| `POST /status-options/reorder`                                  | `{ moduleKey, optionGroup, orderedIds }`                                                                                                                                               |
-| `DELETE /status-options/:id?moveTo=<option id>`                 | 204. Contacts still holding the value: 409 `STATUS_OPTION_IN_USE` (`errors:[{path:"contacts",message:"<count>"}]`) until `moveTo` names another option of the same group; they are moved in the same transaction (a stage move stamps the stage date and previous stage) |
+| Route                                             | Notes                                                                                                                                                                                                                                                                    |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET /status-options?moduleKey&optionGroup`       | in saved order                                                                                                                                                                                                                                                           |
+| `GET /status-options/usage?moduleKey&optionGroup` | `{ data: [ { id, value, count, segments } ] }`: contacts holding each option (archived included; 0 for groups no contact column stores) and the segments whose rules use it                                                                                              |
+| `POST /status-options`                            | `{ moduleKey, optionGroup, value (snake_case), label, color?, position?, isDefault?, isWon?, isLost?, stageOptionId? }`; a default clears the previous default of its scope (the database allows one per scope, see below)                                               |
+| `PATCH /status-options/:id`                       | `{ label?, color?, isDefault?, isActive?, isWon?, isLost?, stageOptionId?, rowVersion }`; the value never changes. Setting one flag clears the other unless both are named                                                                                               |
+| `POST /status-options/reorder`                    | `{ moduleKey, optionGroup, orderedIds }`                                                                                                                                                                                                                                 |
+| `DELETE /status-options/:id?moveTo=<option id>`   | 204. Contacts still holding the value: 409 `STATUS_OPTION_IN_USE` (`errors:[{path:"contacts",message:"<count>"}]`) until `moveTo` names another option of the same group; they are moved in the same transaction (a stage move stamps the stage date and previous stage) |
 
-`POST /contacts` without a `lifecycleStage` starts the contact in the group's default option (else the column default `new`). There are no required/won/lost flags on a
-stage: those belong to deal pipelines, not to contacts.
+`POST /contacts` without a `lifecycleStage` starts the contact in the group's default option (else the column default `new`).
+
+**Won / lost flags** (`isWon`, `isLost`, default false, in every response) exist on the `lifecycle_stage` group of `contacts` only, and a stage is never both:
+anything else is 422 `STATUS_OPTION_FLAG_INVALID`. Several stages may be won and several lost. Nothing is flagged by the migration, so existing workspaces
+behave as before until an admin flags a stage; a workspace seeded from the platform stages in the web app gets `enrolled` as won and `lost` as lost.
+Deleting a stage with `moveTo` a flagged stage stamps the moved contacts like any other move into it.
+
+### Stage and status are linked (lightly)
+
+A contact's **lifecycle stage** is where the person is in the sales journey (new, contacted, qualified, ..., won, lost); its **status** is a sub-state inside that
+stage (in Qualified: Waiting for quote, Quote sent, Negotiating; in Lost: Not interested, Went elsewhere) or a state that is not part of the journey (Do not contact).
+A status option may therefore be **scoped to one stage**:
+
+- `stageOptionId` (uuid, in every response, `null` = valid in every stage) is accepted on `POST` / `PATCH /status-options` for the `status` / `contact_status`
+  groups of `contacts` only. It must be a `lifecycle_stage` option of the same workspace: another workspace's id is 404, anything else (a status, a lost reason, a
+  stage being scoped itself, a deal option) is 422 `STATUS_OPTION_STAGE_INVALID`. On `PATCH`, absent keeps the scope and `null` makes the status valid everywhere.
+  Changing a scope is not applied to contacts that already hold the status: they keep it until their stage changes.
+- **One default per scope.** `isDefault` on a scoped status means "the status a contact gets when it enters that stage without a valid one". Each stage has at most
+  one (a second one clears the first), next to the group's own unscoped default; a default that is moved into a scope that already has one gives way unless
+  `isDefault: true` is sent in the same request. The database enforces it (`uq_status_options_one_default` is per `(org, module, group, stage scope)`).
+  A hidden (`isActive=false`) default is never applied.
+- Unscoped statuses are exactly what every status was before: valid in every stage. A workspace that never scopes a status sees no change anywhere.
+
+The rules on a contact (`POST /contacts`, `PATCH /contacts/:id`, `POST /contacts/bulk/update`, one SAVEPOINT per contact in the bulk):
+
+| Situation                                                                                                                       | Result                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The stage changes and the status held is still valid in the new stage (unscoped, scoped to it, or a value no option exists for) | The status is kept                                                                                                                                                                                    |
+| The stage changes and the status held is scoped to another stage                                                                | Reset to the new stage's default status, or cleared (`null`) when it has none. Moving into a won or lost stage is the same rule: those stages simply get a default like any other.                    |
+| The stage changes and the contact has no status, and the new stage has a default status                                         | The default is applied (the same as creating a contact in that stage). No default: stays empty.                                                                                                       |
+| A status is set (different from the one held) and it is scoped to a stage other than the contact's stage after the write        | 422 `CON_STATUS_STAGE_MISMATCH`, `errors:[{path:"status", message:"Status \"X\" belongs to the \"A\" stage and cannot be set on a contact in the \"B\" stage."}]` (bulk: that contact is in `failed`) |
+| A request sends the status the contact already holds along with a stage change                                                  | Treated as "status not sent": the reset above applies (a form that posts every field must not fail on a stale status)                                                                                 |
+| `status: null` (clear)                                                                                                          | Always allowed, and wins over a default                                                                                                                                                               |
+| `POST /contacts` with no `status`                                                                                               | The default status of the stage the contact starts in, if that stage has one                                                                                                                          |
+
+The check is made against the stage after the write, so `{ lifecycleStage, status }` in one request is judged together. Editing other fields of a contact whose
+status is out of scope is not blocked. Import (`/contacts/import`) writes the status knob as before and does not validate it against a stage.
+
+Deleting a **stage** keeps the statuses scoped to it: they become valid in every stage (`stageOptionId: null`) and stop being a default. Deleting a **status** with
+`moveTo` a status that is scoped to a stage moves the contacts of that stage and leaves the contacts of other stages with no status.
 
 ## Contact properties (`/fields`, `/field-sections`)
 
@@ -293,14 +349,14 @@ The custom properties of a contact are rows of the field registry (`moduleKey=co
 variables (`config.defaultValue`, `config.description`), so a property created here is also an attribute and the reverse. Contact values live in `customFields[key]`
 as their type (number, boolean, list for a multi-select, text otherwise). Same permissions as above.
 
-| Route                                                    | Notes                                                                                                                                                            |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /fields?moduleKey&includeInactive=true`             | options inline for select, multiselect and radio. Send `includeInactive` only when true (the flag is coerced from text, so `false` would also mean true)               |
-| `GET /fields/usage?moduleKey`                            | `{ data: [ { id, key, count } ] }`: contacts with a non-empty value per key                                                                                      |
-| `GET /fields/dependencies?moduleKey`                     | every "show only when" rule of the module: `[ { id, fieldId, dependsOnFieldId, dependsOnOptionId | dependsOnValue } ]`                                           |
-| `POST /fields`                                           | as before; a contact key that is a built-in token or a form-owned key is 422 `CON_ATTRIBUTE_KEY_RESERVED` (same rule as `POST /attributes`)                         |
-| `PATCH /fields/:id`, `DELETE /fields/:id`                | `DELETE` deactivates (`isActive=false`, values kept); a system field is 409 `FIELD_IS_SYSTEM`                                                                    |
-| `/fields/:id/options`, `/fields/dependencies`, `/field-sections` | create, rename, reorder, delete as documented on the routes; a dependency that closes a cycle is 409 `DEPENDENCY_CYCLE_DETECTED`                           |
+| Route                                                            | Notes                                                                                                                                                    |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /fields?moduleKey&includeInactive=true`                     | options inline for select, multiselect and radio. Send `includeInactive` only when true (the flag is coerced from text, so `false` would also mean true) |
+| `GET /fields/usage?moduleKey`                                    | `{ data: [ { id, key, count, segments } ] }`: contacts with a non-empty value per key, and the segments whose rules use it                               |
+| `GET /fields/dependencies?moduleKey`                             | every "show only when" rule of the module: `[ { id, fieldId, dependsOnFieldId, dependsOnOptionId                                                         | dependsOnValue } ]` |
+| `POST /fields`                                                   | as before; a contact key that is a built-in token or a form-owned key is 422 `CON_ATTRIBUTE_KEY_RESERVED` (same rule as `POST /attributes`)              |
+| `PATCH /fields/:id`, `DELETE /fields/:id`                        | `DELETE` deactivates (`isActive=false`, values kept); a system field is 409 `FIELD_IS_SYSTEM`                                                            |
+| `/fields/:id/options`, `/fields/dependencies`, `/field-sections` | create, rename, reorder, delete as documented on the routes; a dependency that closes a cycle is 409 `DEPENDENCY_CYCLE_DETECTED`                         |
 
 ## Permissions added
 
@@ -311,4 +367,4 @@ workspace has them). Everything else reuses `record.contacts.*`, `record.tags.*`
 
 `contact_group.created|updated|deleted|members_changed`, `contact.group_added|group_removed|tag_added|tag_removed`, `tag.contacts_changed`,
 `contact.merged`, `contact.deleted` (also from merges, with `mergedInto`), `contact.exported`, `contact.import_started|import_completed`, and (only with
-`triggerAutomations`) `contact.created` per imported contact.
+`triggerAutomations`) `contact.created` per imported contact. `contact.stage_changed` (payload `previousStage`, `stage`) is emitted when a stage moves.

@@ -17,6 +17,8 @@ export interface DealsToolbarProps {
   pipelineId: string;
   members: readonly Member[];
   canSettings: boolean;
+  /** `record.deals.report`: the reports screen answers 403 without it, so the link is not offered. */
+  canReports: boolean;
 }
 
 /** One row: pipeline, search, owner and source filters, Clear, then the board/list switch and the two side screens. */
@@ -136,12 +138,14 @@ export function DealsToolbar(p: DealsToolbarProps) {
             </button>
           ))}
         </div>
-        <Link
-          href="/deals/reports"
-          className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
-        >
-          <ChartIcon /> {t('reports')}
-        </Link>
+        {p.canReports && (
+          <Link
+            href="/deals/reports"
+            className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
+          >
+            <ChartIcon /> {t('reports')}
+          </Link>
+        )}
         {p.canSettings && (
           <Link
             href="/deals/settings"
