@@ -37,7 +37,9 @@ export function summaryByCurrency(s: PaymentSummaryResponse, only?: string): Cur
 /** The currencies a screen can offer in its filter: those with any figure, plus the one already chosen. */
 export function currenciesOf(s: PaymentSummaryResponse | undefined, chosen: string): string[] {
   const set = new Set<string>();
-  if (s) for (const list of [s.collected, s.refunded, s.outstanding, s.overdue]) for (const r of list) set.add(r.currency);
+  if (s)
+    for (const list of [s.collected, s.refunded, s.outstanding, s.overdue])
+      for (const r of list) set.add(r.currency);
   if (chosen) set.add(chosen);
   return [...set].sort();
 }

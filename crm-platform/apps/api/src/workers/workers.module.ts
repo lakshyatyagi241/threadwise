@@ -4,6 +4,9 @@ import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '.
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
+import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
+import { CampaignsWorkerModule } from '../modules/campaigns';
+import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
@@ -40,6 +43,9 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
+    ChatConversationsWorkerModule,
+    CampaignsWorkerModule,
+    ChannelTelegramWorkerModule,
   ],
   providers: [
     OutboxDrainService,

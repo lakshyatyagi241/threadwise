@@ -30,7 +30,6 @@ interface PendingLost {
   index: number;
 }
 
-
 /** `/deals`: the Kanban board (or the table) of one pipeline, with filters, quick add and the deal drawer. */
 export function DealsScreen() {
   const t = useTranslations('deals-pipelines.board');
@@ -249,9 +248,13 @@ export function DealsScreen() {
             <>
               <KpiStrip kpis={board.kpis} currency={pipeline.currency} />
               {board.unconverted.length > 0 && (
-                <Alert tone="warning">{tReports('unconverted', { currencies: board.unconverted.join(', ') })}</Alert>
+                <Alert tone="warning">
+                  {tReports('unconverted', { currencies: board.unconverted.join(', ') })}
+                </Alert>
               )}
-              {board.loadError != null && <ErrorLine error={board.loadError} onRetry={board.reload} />}
+              {board.loadError != null && (
+                <ErrorLine error={board.loadError} onRetry={board.reload} />
+              )}
               <Board
                 pipeline={pipeline}
                 state={board.state}
@@ -269,7 +272,11 @@ export function DealsScreen() {
             </>
           )}
           {filters.view === 'list' && (
-            <DealsList pipeline={pipeline} filters={filters} onOpen={(id) => setFilters({ deal: id })} />
+            <DealsList
+              pipeline={pipeline}
+              filters={filters}
+              onOpen={(id) => setFilters({ deal: id })}
+            />
           )}
         </>
       )}

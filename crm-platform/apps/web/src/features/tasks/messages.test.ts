@@ -122,10 +122,12 @@ describe('message keys used in code', () => {
       ...(['overdue', 'today', 'upcoming', 'no_date'] as const).map((s) => `board.buckets.${s}`),
       ...(['today', 'tomorrow', 'yesterday', 'date', 'none'] as const).map((s) => `due.${s}`),
       ...(['today', 'tomorrow', 'nextWeek'] as const).map((s) => `form.presets.${s}`),
-      ...(['titleRequired', 'titleTooLong', 'notesTooLong', 'dueInvalid', 'assigneeInvalid'] as const).map(
-        (s) => `form.problems.${s}`,
+      ...(
+        ['titleRequired', 'titleTooLong', 'notesTooLong', 'dueInvalid', 'assigneeInvalid'] as const
+      ).map((s) => `form.problems.${s}`),
+      ...(['created', 'createdBy', 'reminded', 'completed'] as const).map(
+        (s) => `drawer.events.${s}`,
       ),
-      ...(['created', 'createdBy', 'reminded', 'completed'] as const).map((s) => `drawer.events.${s}`),
       ...(
         [
           'next',

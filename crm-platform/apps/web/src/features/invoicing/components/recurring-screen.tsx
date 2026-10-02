@@ -6,7 +6,13 @@ import { useId, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, EmptyState, Input, Spinner, cn } from '@crm/ui';
 import { useRecurringList } from '../api/hooks';
-import { isRecurringTab, matchesRecurring, RECURRING_TABS, statusFilterOf, type RecurringTab } from '../lib/recurring';
+import {
+  isRecurringTab,
+  matchesRecurring,
+  RECURRING_TABS,
+  statusFilterOf,
+  type RecurringTab,
+} from '../lib/recurring';
 import { PlusIcon, RefreshIcon, SearchIcon } from './icons';
 import { ErrorLine, useInvoicingCan } from './parts';
 import { useRecurringActions } from './recurring-parts';
@@ -30,7 +36,10 @@ export function RecurringInvoicesScreen() {
 
   const list = useRecurringList({ status: statusFilterOf(tab) });
   const actions = useRecurringActions();
-  const rows = useMemo(() => list.items.filter((r) => matchesRecurring(r, text)), [list.items, text]);
+  const rows = useMemo(
+    () => list.items.filter((r) => matchesRecurring(r, text)),
+    [list.items, text],
+  );
   const searching = text.trim() !== '';
 
   const changeTab = (next: RecurringTab) => {
@@ -69,7 +78,10 @@ export function RecurringInvoicesScreen() {
     <div className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
-          <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+          <span
+            aria-hidden="true"
+            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
+          >
             <RefreshIcon className="size-5" />
           </span>
           <div className="min-w-0">
@@ -78,14 +90,21 @@ export function RecurringInvoicesScreen() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link href="/invoices" className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+          <Link
+            href="/invoices"
+            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+          >
             {t('invoices')}
           </Link>
           {newLink}
         </div>
       </header>
 
-      <div role="tablist" aria-label={t('tabsLabel')} className="thin-scrollbar flex gap-1 overflow-x-auto overflow-y-hidden border-b border-border">
+      <div
+        role="tablist"
+        aria-label={t('tabsLabel')}
+        className="thin-scrollbar flex gap-1 overflow-x-auto overflow-y-hidden border-b border-border"
+      >
         {RECURRING_TABS.map((id, i) => {
           const selected = id === tab;
           return (
@@ -101,7 +120,9 @@ export function RecurringInvoicesScreen() {
               onKeyDown={(e) => onKey(e, i)}
               className={cn(
                 'inline-flex min-h-10 shrink-0 items-center border-b-2 px-3 py-2.5 text-sm font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-                selected ? 'border-brand text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
+                selected
+                  ? 'border-brand text-foreground'
+                  : 'border-transparent text-muted-foreground hover:text-foreground',
               )}
             >
               {tt(id)}
@@ -141,7 +162,12 @@ export function RecurringInvoicesScreen() {
         aria-busy={list.isFetching}
         className="flex max-h-[max(26rem,calc(100dvh-17rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
-        <div className={cn('flex min-h-0 flex-1 flex-col transition-opacity', list.isPlaceholderData && 'opacity-60')}>
+        <div
+          className={cn(
+            'flex min-h-0 flex-1 flex-col transition-opacity',
+            list.isPlaceholderData && 'opacity-60',
+          )}
+        >
           {list.isPending ? (
             <ListSkeleton />
           ) : list.isError ? (
@@ -181,10 +207,17 @@ export function RecurringInvoicesScreen() {
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-border bg-background px-4 py-2.5 text-sm">
             <span className="flex items-center gap-2 text-muted-foreground" aria-live="polite">
               {list.isFetching && <Spinner label={t('loading')} />}
-              {searching ? t('showingMatches', { count: rows.length, loaded: list.items.length }) : t('showing', { count: list.items.length })}
+              {searching
+                ? t('showingMatches', { count: rows.length, loaded: list.items.length })
+                : t('showing', { count: list.items.length })}
             </span>
             {list.hasNextPage ? (
-              <Button variant="secondary" size="sm" disabled={list.isFetchingNextPage} onClick={() => void list.fetchNextPage()}>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={list.isFetchingNextPage}
+                onClick={() => void list.fetchNextPage()}
+              >
                 {list.isFetchingNextPage && <Spinner />}
                 {t('loadMore')}
               </Button>
@@ -195,7 +228,9 @@ export function RecurringInvoicesScreen() {
         )}
       </section>
 
-      {searching && list.hasNextPage && <p className="text-xs text-muted-foreground">{t('searchLoadedOnly')}</p>}
+      {searching && list.hasNextPage && (
+        <p className="text-xs text-muted-foreground">{t('searchLoadedOnly')}</p>
+      )}
       {actions.node}
     </div>
   );

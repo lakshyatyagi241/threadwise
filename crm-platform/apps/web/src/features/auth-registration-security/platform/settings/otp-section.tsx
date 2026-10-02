@@ -7,8 +7,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   otpSendersResponseSchema,
   otpTemplateActionResponseSchema,
+  otpTemplateOptionsResponseSchema,
   type OtpTemplateCreateRequest,
-  type OtpTemplateOutcome,
   type RegistrationSettingsResponse,
 } from '@crm/contracts';
 import { Alert, Badge, Button, Field, Input, Select, Spinner } from '@crm/ui';
@@ -21,16 +21,20 @@ import {
 import {
   REASON_TONE,
   canRefreshTemplate,
+  outcomeKey,
+  outcomeTone,
+  pickerSenders,
   senderRef,
   templateFor,
   templateIsStale,
+  templatePicker,
   templateState,
 } from '../lib/otp-senders';
 import { operatorFetch } from '../operator-fetch';
 import { useToast } from '../ui/toast';
 import { OtpTestModal } from './otp-test-modal';
 import { SendersModal } from './otp-senders-modal';
-import { OTP_SENDERS_KEY, REGISTRATION_KEY } from './query-keys';
+import { OTP_SENDERS_KEY, REGISTRATION_KEY, otpTemplatesKey } from './query-keys';
 import { Section, ToggleRow } from './section-parts';
 import { useProblemText } from './use-problem-text';
 
@@ -56,8 +60,9 @@ interface Flash {
 
 /**
  * The sign-up code card: the on/off switch with the live verdict (is the code step really running,
- * and if not, why), the sender picker with "Manage senders", the code knobs, the message template
- * ("Create & submit template", "Refresh status") and "Send a test code" (WD-AUTH-006/007).
+ * and if not, why), the sender picker (connected senders only) with "Manage senders", the code knobs,
+ * the message template (its picker, "Create & submit OTP template", "Refresh status") and "Send a test
+ * code" (WD-AUTH-006/007).
  */
 export function OtpSection({
   settings,
@@ -102,6 +107,9 @@ export function OtpSection({
     refetchOnWindowFocus: false,
   });
   const senders = sendersQ.data?.senders ?? [];
+  // Only senders that can deliver a code are offered (WaDesk lists connected channels only).
+  const offered = pickerSenders(senders, draft.otpSender);
+  const noneConnected = sendersQ.isSuccess && senders.length > 0 && offered.length === 0;
 
   const fmt = useMemo(
     () => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }),
@@ -116,10 +124,31 @@ export function OtpSection({
     draft.otpEnabled !== settings.otp.enabled || draft.otpSender.trim() !== savedSender;
   const template = templateFor(settings, draft.otpSender.trim());
   const state = templateState(template);
-  const ttl = /^\d+$/.test(draft.ttlMinutes.trim()) ? Number(draft.ttlMinutes.trim()) : null;
+  // A blank validity means the default, so the template is compared against that.
+  const ttl =
+    draft.ttlMinutes.trim() === ''
+      ? OTP_KNOBS.ttlMinutes.default
+      : /^\d+$/.test(draft.ttlMinutes.trim())
+        ? Number(draft.ttlMinutes.trim())
+        : null;
   const stale = templateIsStale(template, ttl);
   const known = senders.some((s) => senderRef(s) === draft.otpSender);
   const noSender = draft.otpSender.trim() === '';
+
+  // The picker lists the SAVED sender's approved authentication templates. The key carries what the
+  // list depends on, so saving a sender or creating/refreshing a template reads it again by itself.
+  const templatesQ = useQuery({
+    queryKey: otpTemplatesKey(settings.otp),
+    queryFn: ({ signal }) =>
+      operatorFetch('/settings/registration/otp-templates', {
+        schema: otpTemplateOptionsResponseSchema,
+        signal,
+      }),
+    enabled: savedSender !== '',
+    refetchOnWindowFocus: false,
+  });
+  const picker = templatePicker(templatesQ.data, draft.otpSender.trim());
+  const pickerWaiting = savedSender !== '' && templatesQ.isPending;
 
   // --- template actions ---------------------------------------------------------------------------------
   function describe(err: unknown, what: 'submit' | 'check'): Flash {
@@ -136,8 +165,6 @@ export function OtpSection({
     };
   }
 
-  const outcomeText = (o: OtpTemplateOutcome) => t(`otp.template.outcome.${o}`);
-
   const create = useMutation({
     mutationFn: (body: OtpTemplateCreateRequest) =>
       operatorFetch('/settings/registration/otp-template', {
@@ -147,8 +174,21 @@ export function OtpSection({
       }),
     onSuccess: (res) => {
       onApplied(res.registration);
-      setFlash({ tone: 'success', text: outcomeText(res.outcome) });
-      toast.success(outcomeText(res.outcome));
+      // Meta can settle a submission at once, so the template's status picks the sentence, not the outcome alone:
+      // approved now, waiting for Meta's review, or refused.
+      const key = outcomeKey(res.outcome, res.registration.otp.template?.status);
+      const text = t(`otp.template.outcome.${key}`);
+      const tone = outcomeTone(key);
+      setFlash({
+        tone,
+        text,
+        detail:
+          key === 'rejectedNow'
+            ? (res.registration.otp.template?.rejectedReason ?? undefined)
+            : undefined,
+      });
+      if (tone === 'danger') toast.error(text);
+      else toast.success(text);
     },
     onError: (err) => {
       if (err instanceof ApiError && err.code === 'UNAUTHENTICATED') return;
@@ -252,7 +292,9 @@ export function OtpSection({
         hint={
           sendersQ.isSuccess && senders.length === 0
             ? t('otp.sender.empty')
-            : t('fields.otpSender.hint')
+            : noneConnected
+              ? t('otp.sender.noneConnected')
+              : t('fields.otpSender.hint')
         }
         error={errors.otpSender}
       >
@@ -266,9 +308,12 @@ export function OtpSection({
             className="min-w-0 flex-1"
           >
             <option value="">{t('otp.sender.none')}</option>
-            {senders.map((s) => (
+            {offered.map((s) => (
               <option key={s.id} value={senderRef(s)}>
-                {t('otp.sender.option', { label: s.label, kind: t(`otp.sender.kinds.${s.kind}`) })}
+                {t(s.connected === false ? 'otp.sender.unfinished' : 'otp.sender.option', {
+                  label: s.label,
+                  kind: t(`otp.sender.kinds.${s.kind}`),
+                })}
               </option>
             ))}
             {!noSender && !known && sendersQ.isSuccess && (
@@ -298,6 +343,44 @@ export function OtpSection({
         <p className="text-xs text-muted-foreground">
           {t(`otp.template.explain.${template ? template.kind : 'none'}`)}
         </p>
+        <Field
+          label={t('otp.template.picker.label')}
+          htmlFor="reg-otpTemplate"
+          hint={
+            templatesQ.isError
+              ? t('otp.template.picker.failed')
+              : !noSender && draft.otpSender.trim() !== savedSender
+                ? t('otp.template.picker.otherSender')
+                : t('otp.template.picker.hint')
+          }
+        >
+          <Select
+            id="reg-otpTemplate"
+            value={picker.selectedId}
+            // The saved template is the only one sign-up sends: the others are shown, not choosable.
+            onChange={() => undefined}
+            disabled={pickerWaiting}
+            className="min-w-0"
+          >
+            <option value="">
+              {pickerWaiting ? t('otp.template.picker.loading') : t('otp.template.picker.none')}
+            </option>
+            {picker.rows.map((row) => (
+              <option key={row.id} value={row.id} disabled={!row.selected}>
+                {t('otp.template.picker.option', {
+                  name: row.name,
+                  language: row.language,
+                  status: t(`otp.template.states.${row.status}`),
+                })}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        {templatesQ.data?.unavailableReason && picker.rows.length > 0 && (
+          <p className="break-words text-xs text-warning" dir="auto">
+            {t('otp.template.picker.unavailable', { reason: templatesQ.data.unavailableReason })}
+          </p>
+        )}
         {template && (
           <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 text-xs">
             <dt className="text-muted-foreground">{t('otp.template.name')}</dt>
@@ -373,6 +456,7 @@ export function OtpSection({
             </Button>
           )}
         </div>
+        <p className="text-xs text-muted-foreground">{t('otp.template.createHint')}</p>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-dashed border-border p-3">

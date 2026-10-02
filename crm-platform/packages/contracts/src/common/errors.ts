@@ -6,10 +6,18 @@ import { z } from 'zod';
  */
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
+import { CHANNEL_ERROR_CODES } from '../chat-conversations/channel-errors';
+import { CONVERSATION_ERROR_CODES } from '../chat-conversations/conversation-errors';
+import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
+import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
+  ...CHANNEL_ERROR_CODES,
+  ...CONVERSATION_ERROR_CODES,
+  ...INBOX_ERROR_CODES,
+  ...WSP_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -84,6 +92,7 @@ export const ERROR_CODES = {
   AUTH_SOCIAL_STATE_INVALID: 'AUTH_SOCIAL_STATE_INVALID',
   AUTH_SOCIAL_FAILED: 'AUTH_SOCIAL_FAILED',
   AUTH_SOCIAL_NO_EMAIL: 'AUTH_SOCIAL_NO_EMAIL',
+  AUTH_SOCIAL_NO_ACCOUNT: 'AUTH_SOCIAL_NO_ACCOUNT',
   AUTH_SESSION_NOT_FOUND: 'AUTH_SESSION_NOT_FOUND',
   AUTH_CANNOT_REVOKE_CURRENT: 'AUTH_CANNOT_REVOKE_CURRENT',
   AUTH_WORKSPACE_NOT_AVAILABLE: 'AUTH_WORKSPACE_NOT_AVAILABLE',
@@ -139,6 +148,36 @@ export const ERROR_CODES = {
   BCAST_NO_FAILED_RECIPIENTS: 'BCAST_NO_FAILED_RECIPIENTS',
   BCAST_LINK_EXPIRED: 'BCAST_LINK_EXPIRED',
   BCAST_NOT_RESUMABLE: 'BCAST_NOT_RESUMABLE',
+
+  // Telegram channel (WD-TG)
+  /** Telegram refused the token (getMe failed). */
+  TG_TOKEN_REJECTED: 'TG_TOKEN_REJECTED',
+  /** A broadcast needs a message, a file, or both. */
+  TG_BROADCAST_EMPTY: 'TG_BROADCAST_EMPTY',
+  /** None of the picked chats belong to the bot. */
+  TG_NO_RECIPIENTS: 'TG_NO_RECIPIENTS',
+  /** The bot is not connected or is paused. */
+  TG_BOT_UNAVAILABLE: 'TG_BOT_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  TG_NOTHING_TO_SEND: 'TG_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
+
+  // campaigns (WD-CAMP)
+  /** Nobody on the audience can be messaged. */
+  CAMP_NO_RECIPIENTS: 'CAMP_NO_RECIPIENTS',
+  /** Edit: only draft, scheduled or paused campaigns can change. */
+  CAMP_NOT_EDITABLE: 'CAMP_NOT_EDITABLE',
+  /** Resend: only a finished campaign can be sent again. */
+  CAMP_NOT_RESENDABLE: 'CAMP_NOT_RESENDABLE',
+  /** Resend: nobody matches the scope. */
+  CAMP_NOTHING_TO_RESEND: 'CAMP_NOTHING_TO_RESEND',
+  /** The template cannot be used for a campaign (not approved, OTP, quality, media). */
+  CAMP_TEMPLATE_NOT_ALLOWED: 'CAMP_TEMPLATE_NOT_ALLOWED',
+  /** The auto-end date is not after the send date. */
+  CAMP_EXPIRY_BEFORE_SEND: 'CAMP_EXPIRY_BEFORE_SEND',
+  /** The campaign cannot be started or resumed in its current status. */
+  CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
 
   // deals and pipelines (WD-DEAL)
   /** The stage belongs to a different pipeline than the deal (WaDesk ignored it, defaulted it, or 422'd by path). */

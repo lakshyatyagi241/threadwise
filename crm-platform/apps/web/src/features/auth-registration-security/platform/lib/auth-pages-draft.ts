@@ -1,5 +1,6 @@
 import {
   AUTH_PAGE_EXTRA_KEYS,
+  authPageContentPatchSchema,
   type AuthPageContent,
   type AuthPageName,
   type AuthPagesPatch,
@@ -10,9 +11,20 @@ import {
 export type PageDefaults = AuthPagesResponse['defaults'];
 
 export const PAGES = ['login', 'register', 'forgot'] as const satisfies readonly AuthPageName[];
-/** Only these two pages carry the showcase copy of the split design. */
-export const SHOWCASE_PAGES = ['login', 'register'] as const;
+/**
+ * Every page can carry showcase copy. Login shows all of it on the split design; register stores the
+ * same keys (a superset of what WaDesk edits there); forgot has a hero card and a footer line.
+ */
+export const SHOWCASE_PAGES = ['login', 'register', 'forgot'] as const;
 export type ShowcasePage = (typeof SHOWCASE_PAGES)[number];
+
+export type ShowcaseGroup = 'hero' | 'stats' | 'features' | 'chips' | 'footer';
+/** Which blocks of showcase fields the editor offers per page. */
+export const SHOWCASE_GROUPS_BY_PAGE: Record<ShowcasePage, readonly ShowcaseGroup[]> = {
+  login: ['hero', 'stats', 'features', 'chips', 'footer'],
+  register: ['hero', 'stats', 'features', 'chips', 'footer'],
+  forgot: ['hero', 'footer'],
+};
 export const VARIANT_IDS = [1, 2, 3, 4, 5] as const;
 
 export const TEXT_FIELDS = ['eyebrow', 'heading', 'headingAccent', 'subheading'] as const;
@@ -62,6 +74,13 @@ export interface AuthPagesDraft {
   extra: Record<ShowcasePage, Record<string, string>>;
 }
 
+/** The pages' public links: opened in a new tab beside the preview. */
+export const REAL_PAGE_PATHS: Record<AuthPageName, string> = {
+  login: '/login',
+  register: '/signup',
+  forgot: '/forgot-password',
+};
+
 function pageToDraft(c: AuthPageContent): PageDraft {
   return {
     eyebrow: c.eyebrow ?? '',
@@ -82,7 +101,12 @@ export function authPagesToDraft(r: AuthPagesResponse): AuthPagesDraft {
       register: pageToDraft(r.register),
       forgot: pageToDraft(r.forgot),
     },
-    extra: { login: { ...r.extra.login }, register: { ...r.extra.register } },
+    extra: {
+      login: { ...r.extra.login },
+      register: { ...r.extra.register },
+      // Older servers do not send the forgot page's copy.
+      forgot: { ...(r.extra.forgot ?? {}) },
+    },
   };
 }
 
@@ -104,7 +128,12 @@ export function isHttpsUrl(value: string): boolean {
   }
 }
 
+/** A colour the `<input type=color>` can show: exactly #rrggbb. */
 export const isHexColour = (v: string): boolean => /^#[0-9a-fA-F]{6}$/.test(v);
+
+/** Whether the API takes this accent: asked of the contract, so the editor accepts exactly what it accepts. */
+export const isAcceptedAccent = (v: string): boolean =>
+  authPageContentPatchSchema.shape.accent.safeParse(v).success;
 
 export type AuthPagesProblem = 'accent' | 'mediaUrl';
 /** Keyed `<page>.<field>`. */
@@ -129,7 +158,7 @@ export function buildAuthPagesPatch(
     }
 
     const accent = d.accent.trim();
-    if (accent && !isHexColour(accent)) problems[`${page}.accent`] = 'accent';
+    if (accent && !isAcceptedAccent(accent)) problems[`${page}.accent`] = 'accent';
     else if (accent && accent.toLowerCase() !== (b.accent ?? '').toLowerCase())
       content.accent = accent.toLowerCase();
     // An empty accent clears the override, so visitors see the shipped colour again.
@@ -153,7 +182,7 @@ export function buildAuthPagesPatch(
     const changed: Record<string, string> = {};
     for (const key of AUTH_PAGE_EXTRA_KEYS) {
       const v = (draft.extra[page][key] ?? '').trim();
-      if (v !== (base.extra[page][key] ?? '')) changed[key] = v;
+      if (v !== (base.extra[page]?.[key] ?? '')) changed[key] = v;
     }
     if (Object.keys(changed).length > 0) patch.extra = { ...patch.extra, [page]: changed };
   }
@@ -205,7 +234,7 @@ export function authPagesFieldForPath(
 ): { page: AuthPageName | null; control: string } | null {
   const content = /^(login|register|forgot)\.(\w+)$/.exec(path);
   if (content) return { page: content[1] as AuthPageName, control: `${content[1]}-${content[2]}` };
-  const extra = /^extra\.(login|register)\.(\w+)$/.exec(path);
+  const extra = /^extra\.(login|register|forgot)\.(\w+)$/.exec(path);
   if (extra) return { page: extra[1] as AuthPageName, control: `extra-${extra[1]}-${extra[2]}` };
   if (path === 'variant') return { page: null, control: 'variant' };
   if (path.startsWith('clearMedia')) return { page: null, control: 'variant' };

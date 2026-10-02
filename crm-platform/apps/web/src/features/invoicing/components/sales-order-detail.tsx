@@ -91,7 +91,10 @@ export function SalesOrderDetail({ id }: { id: string }) {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {allowed.has('edit') && (
-            <Link href={salesOrderEditHref(o.id)} className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+            <Link
+              href={salesOrderEditHref(o.id)}
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            >
               <PencilIcon /> {t('edit')}
             </Link>
           )}
@@ -145,7 +148,9 @@ export function SalesOrderDetail({ id }: { id: string }) {
 
       {o.status === 'cancelled' && (
         <Alert tone="danger">
-          <p className="font-medium">{t('cancelledOn', { date: formatDateTime(o.cancelledAt, locale) })}</p>
+          <p className="font-medium">
+            {t('cancelledOn', { date: formatDateTime(o.cancelledAt, locale) })}
+          </p>
           {o.cancelReason && <UserText className="mt-1 block">{o.cancelReason}</UserText>}
         </Alert>
       )}
@@ -159,13 +164,17 @@ export function SalesOrderDetail({ id }: { id: string }) {
             <section className="space-y-3 rounded-xl border border-border bg-background p-4 text-sm">
               {o.notes && (
                 <div>
-                  <h2 className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('notes')}</h2>
+                  <h2 className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {t('notes')}
+                  </h2>
                   <UserText className="block whitespace-pre-wrap">{o.notes}</UserText>
                 </div>
               )}
               {o.terms && (
                 <div>
-                  <h2 className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('terms')}</h2>
+                  <h2 className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {t('terms')}
+                  </h2>
                   <UserText className="block whitespace-pre-wrap">{o.terms}</UserText>
                 </div>
               )}
@@ -174,10 +183,25 @@ export function SalesOrderDetail({ id }: { id: string }) {
         </div>
         <div className="min-w-0 space-y-4">
           {(o.status === 'confirmed' || o.status === 'closed') && (
-            <section aria-label={t('progress')} className="space-y-3 rounded-xl border border-border bg-background p-4 text-sm">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('progress')}</h2>
-              <ProgressRow label={t('invoiced')} pct={facts.invoicedPct} done={facts.invoiced} total={facts.ordered} />
-              <ProgressRow label={t('fulfilled')} pct={facts.fulfilledPct} done={facts.fulfilled} total={facts.ordered} />
+            <section
+              aria-label={t('progress')}
+              className="space-y-3 rounded-xl border border-border bg-background p-4 text-sm"
+            >
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t('progress')}
+              </h2>
+              <ProgressRow
+                label={t('invoiced')}
+                pct={facts.invoicedPct}
+                done={facts.invoiced}
+                total={facts.ordered}
+              />
+              <ProgressRow
+                label={t('fulfilled')}
+                pct={facts.fulfilledPct}
+                done={facts.fulfilled}
+                total={facts.ordered}
+              />
             </section>
           )}
           <TotalsCard order={o} />
@@ -203,7 +227,17 @@ function BackLink() {
   );
 }
 
-function ProgressRow({ label, pct, done, total }: { label: string; pct: number; done: bigint; total: bigint }) {
+function ProgressRow({
+  label,
+  pct,
+  done,
+  total,
+}: {
+  label: string;
+  pct: number;
+  done: bigint;
+  total: bigint;
+}) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-baseline justify-between gap-3">
@@ -221,23 +255,44 @@ function ProgressRow({ label, pct, done, total }: { label: string; pct: number; 
 function LinesCard({ order }: { order: SalesOrderResponse }) {
   const t = useTranslations('invoicing.salesOrders.lines');
   const tracked = order.status === 'confirmed' || order.status === 'closed';
-  const th = 'border-b border-border bg-muted px-3 py-2.5 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
+  const th =
+    'border-b border-border bg-muted px-3 py-2.5 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
   return (
-    <section aria-label={t('title')} className="overflow-hidden rounded-xl border border-border bg-background">
+    <section
+      aria-label={t('title')}
+      className="overflow-hidden rounded-xl border border-border bg-background"
+    >
       <h2 className="border-b border-border px-4 py-3 text-sm font-semibold">{t('title')}</h2>
-      <div role="region" aria-label={t('scrollArea')} tabIndex={0} className="thin-scrollbar overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary">
+      <div
+        role="region"
+        aria-label={t('scrollArea')}
+        tabIndex={0}
+        className="thin-scrollbar overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+      >
         <table className="w-full min-w-[46rem] border-separate border-spacing-0 text-sm">
           <thead>
             <tr>
               <th scope="col" className={cn(th, 'sticky start-0 z-10 w-[26%]')}>
                 {t('item')}
               </th>
-              <th scope="col" className={cn(th, 'text-end')}>{t('ordered')}</th>
-              <th scope="col" className={cn(th, 'w-[16%]')}>{t('invoiced')}</th>
-              <th scope="col" className={cn(th, 'w-[16%]')}>{t('fulfilled')}</th>
-              <th scope="col" className={cn(th, 'text-end')}>{t('toInvoice')}</th>
-              <th scope="col" className={cn(th, 'text-end')}>{t('unitPrice')}</th>
-              <th scope="col" className={cn(th, 'text-end')}>{t('amount')}</th>
+              <th scope="col" className={cn(th, 'text-end')}>
+                {t('ordered')}
+              </th>
+              <th scope="col" className={cn(th, 'w-[16%]')}>
+                {t('invoiced')}
+              </th>
+              <th scope="col" className={cn(th, 'w-[16%]')}>
+                {t('fulfilled')}
+              </th>
+              <th scope="col" className={cn(th, 'text-end')}>
+                {t('toInvoice')}
+              </th>
+              <th scope="col" className={cn(th, 'text-end')}>
+                {t('unitPrice')}
+              </th>
+              <th scope="col" className={cn(th, 'text-end')}>
+                {t('amount')}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -250,7 +305,11 @@ function LinesCard({ order }: { order: SalesOrderResponse }) {
                     <UserText className="block font-medium">{l.description}</UserText>
                     <span className="mt-0.5 block text-xs text-muted-foreground">
                       {l.sku && <span dir="ltr">{l.sku} </span>}
-                      {l.taxName ? t('taxLine', { name: l.taxName, rate: l.taxRate }) : l.taxRate !== '0' ? t('taxRate', { rate: l.taxRate }) : null}
+                      {l.taxName
+                        ? t('taxLine', { name: l.taxName, rate: l.taxRate })
+                        : l.taxRate !== '0'
+                          ? t('taxRate', { rate: l.taxRate })
+                          : null}
                     </span>
                   </td>
                   <td className={cn(cell, 'text-end tabular-nums')} dir="ltr">
@@ -262,7 +321,10 @@ function LinesCard({ order }: { order: SalesOrderResponse }) {
                         <span dir="ltr" className="tabular-nums">
                           {qtyText(f.invoiced)}
                         </span>
-                        <ProgressBar pct={f.invoicedPct} label={t('invoicedBar', { name: l.description })} />
+                        <ProgressBar
+                          pct={f.invoicedPct}
+                          label={t('invoicedBar', { name: l.description })}
+                        />
                       </div>
                     ) : (
                       <span className="text-muted-foreground">-</span>
@@ -274,20 +336,34 @@ function LinesCard({ order }: { order: SalesOrderResponse }) {
                         <span dir="ltr" className="tabular-nums">
                           {qtyText(f.fulfilled)}
                         </span>
-                        <ProgressBar pct={f.fulfilledPct} label={t('fulfilledBar', { name: l.description })} />
+                        <ProgressBar
+                          pct={f.fulfilledPct}
+                          label={t('fulfilledBar', { name: l.description })}
+                        />
                       </div>
                     ) : (
                       <span className="text-muted-foreground">-</span>
                     )}
                   </td>
-                  <td className={cn(cell, 'text-end tabular-nums', f.toInvoice > 0n && tracked ? 'font-medium' : 'text-muted-foreground')} dir="ltr">
+                  <td
+                    className={cn(
+                      cell,
+                      'text-end tabular-nums',
+                      f.toInvoice > 0n && tracked ? 'font-medium' : 'text-muted-foreground',
+                    )}
+                    dir="ltr"
+                  >
                     {tracked ? qtyText(f.toInvoice) : '-'}
                   </td>
                   <td className={cn(cell, 'text-end')}>
                     <Money minor={major(l.unitPrice, order.currency)} currency={order.currency} />
                   </td>
                   <td className={cn(cell, 'text-end')}>
-                    <Money minor={major(l.amounts.total, order.currency)} currency={order.currency} className="font-medium" />
+                    <Money
+                      minor={major(l.amounts.total, order.currency)}
+                      currency={order.currency}
+                      className="font-medium"
+                    />
                   </td>
                 </tr>
               );
@@ -316,12 +392,22 @@ function TotalsCard({ order }: { order: SalesOrderResponse }) {
     </div>
   );
   return (
-    <section aria-label={t('title')} className="rounded-xl border border-border bg-background p-4 text-sm">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('title')}</h2>
+    <section
+      aria-label={t('title')}
+      className="rounded-xl border border-border bg-background p-4 text-sm"
+    >
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {t('title')}
+      </h2>
       <dl className="space-y-1.5">
         {row(t('subtotal'), major(a.subtotal, c))}
         {major(a.discount, c) > 0 && row(t('discount'), major(a.discount, c), undefined, true)}
-        {major(a.shipping, c) > 0 && row(t('shipping'), major(a.shipping, c), order.shippingInvoiced ? t('shippingBilled') : t('shippingPending'))}
+        {major(a.shipping, c) > 0 &&
+          row(
+            t('shipping'),
+            major(a.shipping, c),
+            order.shippingInvoiced ? t('shippingBilled') : t('shippingPending'),
+          )}
         {row(t('tax'), major(a.tax, c))}
         <div className="flex items-baseline justify-between gap-3 border-t border-border pt-2 text-lg font-bold">
           <dt>{t('total')}</dt>
@@ -345,17 +431,42 @@ function DetailsCard({ order }: { order: SalesOrderResponse }) {
   );
   const dash = <span className="text-muted-foreground">-</span>;
   return (
-    <section aria-label={t('title')} className="rounded-xl border border-border bg-background p-4 text-sm">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('title')}</h2>
+    <section
+      aria-label={t('title')}
+      className="rounded-xl border border-border bg-background p-4 text-sm"
+    >
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {t('title')}
+      </h2>
       <dl className="space-y-2">
-        {row(t('buyer'), order.contact ? <ContactPill contact={{ id: order.contact.id, name: order.contact.name ?? order.buyer.name }} /> : order.buyer.name ? <UserText>{order.buyer.name}</UserText> : dash)}
-        {order.buyer.email && row(t('email'), <span dir="ltr" className="break-all">{order.buyer.email}</span>)}
+        {row(
+          t('buyer'),
+          order.contact ? (
+            <ContactPill
+              contact={{ id: order.contact.id, name: order.contact.name ?? order.buyer.name }}
+            />
+          ) : order.buyer.name ? (
+            <UserText>{order.buyer.name}</UserText>
+          ) : (
+            dash
+          ),
+        )}
+        {order.buyer.email &&
+          row(
+            t('email'),
+            <span dir="ltr" className="break-all">
+              {order.buyer.email}
+            </span>,
+          )}
         {order.buyer.phone && row(t('phone'), <span dir="ltr">{order.buyer.phone}</span>)}
         {row(t('quote'), <QuoteLink quote={order.quote} className="inline-block max-w-full" />)}
         {row(
           t('deal'),
           order.deal ? (
-            <Link href={`/deals?deal=${order.deal.id}`} className="text-primary underline-offset-2 hover:underline">
+            <Link
+              href={`/deals?deal=${order.deal.id}`}
+              className="text-primary underline-offset-2 hover:underline"
+            >
               <UserText>{order.deal.title}</UserText>
             </Link>
           ) : (
@@ -376,10 +487,15 @@ function DetailsCard({ order }: { order: SalesOrderResponse }) {
 function InvoicesCard({ order }: { order: SalesOrderResponse }) {
   const t = useTranslations('invoicing.salesOrders.invoices');
   return (
-    <section aria-label={t('title')} className="overflow-hidden rounded-xl border border-border bg-background">
+    <section
+      aria-label={t('title')}
+      className="overflow-hidden rounded-xl border border-border bg-background"
+    >
       <h2 className="border-b border-border px-4 py-3 text-sm font-semibold">{t('title')}</h2>
       {order.invoices.length === 0 ? (
-        <p className="px-4 py-6 text-sm text-muted-foreground">{order.status === 'draft' ? t('noneDraft') : t('none')}</p>
+        <p className="px-4 py-6 text-sm text-muted-foreground">
+          {order.status === 'draft' ? t('noneDraft') : t('none')}
+        </p>
       ) : (
         <ul className="divide-y divide-border">
           {order.invoices.map((inv) => (
@@ -388,17 +504,31 @@ function InvoicesCard({ order }: { order: SalesOrderResponse }) {
                 href={`/invoices/${inv.id}`}
                 className="flex min-h-12 flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5 outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
               >
-                <span className={cn('min-w-0 flex-1 basis-32 truncate font-medium', !inv.number && 'italic text-muted-foreground')} dir="ltr">
+                <span
+                  className={cn(
+                    'min-w-0 flex-1 basis-32 truncate font-medium',
+                    !inv.number && 'italic text-muted-foreground',
+                  )}
+                  dir="ltr"
+                >
                   {inv.number ?? t('draft')}
                 </span>
                 <StatusChip status={linkedInvoiceStatus(inv.status)} />
-                <Money minor={major(inv.total, order.currency)} currency={order.currency} className="font-medium" />
+                <Money
+                  minor={major(inv.total, order.currency)}
+                  currency={order.currency}
+                  className="font-medium"
+                />
               </Link>
             </li>
           ))}
         </ul>
       )}
-      {order.invoices.some((i) => i.status === 'void') && <p className="border-t border-border px-4 py-2 text-xs text-muted-foreground">{t('voidNote')}</p>}
+      {order.invoices.some((i) => i.status === 'void') && (
+        <p className="border-t border-border px-4 py-2 text-xs text-muted-foreground">
+          {t('voidNote')}
+        </p>
+      )}
     </section>
   );
 }

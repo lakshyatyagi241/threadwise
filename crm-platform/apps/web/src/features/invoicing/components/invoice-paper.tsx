@@ -25,7 +25,8 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
   const title = m.title || t(`docTitle.${m.docType}`);
   const cols = 4 + (m.showHsn ? 1 : 0);
   const exclusive = m.taxRows.filter((r) => !r.inclusive);
-  const showBalance = (m.paidMinor > 0 || m.creditedMinor > 0 || m.status === 'paid') && m.status !== 'void';
+  const showBalance =
+    (m.paidMinor > 0 || m.creditedMinor > 0 || m.status === 'paid') && m.status !== 'void';
   const s = m.seller;
 
   return (
@@ -44,7 +45,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
             aria-hidden="true"
             className={cn(
               'pointer-events-none absolute end-6 top-24 rotate-[-12deg] rounded-md border-4 px-4 py-1 text-3xl font-extrabold uppercase tracking-widest opacity-25 sm:text-4xl rtl:rotate-[12deg]',
-              stamp === 'paid' ? 'border-green-700 text-green-700' : 'border-slate-500 text-slate-500',
+              stamp === 'paid'
+                ? 'border-green-700 text-green-700'
+                : 'border-slate-500 text-slate-500',
             )}
           >
             {ts(stamp)}
@@ -53,7 +56,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
 
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
-            {s?.logoUrl && s.logoUrl.startsWith('https://') && <img src={s.logoUrl} alt="" className="mb-2 max-h-12 w-auto" />}
+            {s?.logoUrl && s.logoUrl.startsWith('https://') && (
+              <img src={s.logoUrl} alt="" className="mb-2 max-h-12 w-auto" />
+            )}
             <div className="text-base font-semibold" dir="auto">
               {s?.name || t('sellerFallback')}
             </div>
@@ -95,7 +100,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
 
         <section className="mt-6 grid gap-4 sm:grid-cols-2">
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('billedTo')}</div>
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              {t('billedTo')}
+            </div>
             <div className="mt-1 font-medium" dir="auto">
               {m.buyer.name || t('buyerFallback')}
             </div>
@@ -185,7 +192,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
                   <td className="py-2 pe-2" dir="auto">
                     {l.description || <span className="text-slate-400">{t('noDescription')}</span>}
                     {l.sku && <div className="text-xs text-slate-500">{l.sku}</div>}
-                    {l.taxLabel && <div className="text-xs text-slate-500 sm:hidden">{l.taxLabel}</div>}
+                    {l.taxLabel && (
+                      <div className="text-xs text-slate-500 sm:hidden">{l.taxLabel}</div>
+                    )}
                     {l.discount && (
                       <div className="text-xs text-slate-500">
                         {l.discount.kind === 'percent'
@@ -203,7 +212,10 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
                   <td className="px-2 py-2 text-end tabular-nums" dir="ltr">
                     {money(l.unitPriceMinor)}
                   </td>
-                  <td className="hidden px-2 py-2 text-end text-xs text-slate-500 sm:table-cell" dir="auto">
+                  <td
+                    className="hidden px-2 py-2 text-end text-xs text-slate-500 sm:table-cell"
+                    dir="auto"
+                  >
                     {l.taxLabel ?? '-'}
                   </td>
                   <td className="py-2 ps-2 text-end font-medium tabular-nums" dir="ltr">
@@ -220,7 +232,11 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
             <Row label={t('subtotal')} value={money(m.subtotalMinor)} />
             {m.discountMinor > 0 && (
               <Row
-                label={m.discountPercent !== null ? t('discountPercent', { percent: m.discountPercent }) : t('discount')}
+                label={
+                  m.discountPercent !== null
+                    ? t('discountPercent', { percent: m.discountPercent })
+                    : t('discount')
+                }
                 value={`-${money(m.discountMinor)}`}
               />
             )}
@@ -234,8 +250,12 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
                 {money(m.totalMinor)}
               </dd>
             </div>
-            {m.includedTaxMinor > 0 && <Row muted label={t('includesTax')} value={money(m.includedTaxMinor)} />}
-            {m.creditedMinor > 0 && <Row label={t('credited')} value={`-${money(m.creditedMinor)}`} />}
+            {m.includedTaxMinor > 0 && (
+              <Row muted label={t('includesTax')} value={money(m.includedTaxMinor)} />
+            )}
+            {m.creditedMinor > 0 && (
+              <Row label={t('credited')} value={`-${money(m.creditedMinor)}`} />
+            )}
             {m.paidMinor > 0 && <Row label={t('paid')} value={`-${money(m.paidMinor)}`} />}
             {showBalance && (
               <div className="flex items-baseline justify-between gap-4 rounded bg-slate-100 px-2 py-1.5 font-bold">
@@ -250,7 +270,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
 
         {m.taxRows.length > 0 && (
           <section aria-label={t('taxSummary')} className="mt-5">
-            <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('taxSummary')}</div>
+            <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              {t('taxSummary')}
+            </div>
             <div className="thin-scrollbar overflow-x-auto">
               <table className="w-full border-collapse text-xs">
                 <thead>
@@ -268,10 +290,15 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
                 </thead>
                 <tbody>
                   {m.taxRows.map((r) => (
-                    <tr key={`${r.label}-${r.inclusive}-${r.baseMinor}`} className="border-b border-slate-100">
+                    <tr
+                      key={`${r.label}-${r.inclusive}-${r.baseMinor}`}
+                      className="border-b border-slate-100"
+                    >
                       <td className="py-1 pe-2" dir="auto">
                         {r.label}
-                        {r.inclusive && <span className="text-slate-500"> ({t('taxInclusive')})</span>}
+                        {r.inclusive && (
+                          <span className="text-slate-500"> ({t('taxInclusive')})</span>
+                        )}
                       </td>
                       <td className="px-2 py-1 text-end tabular-nums" dir="ltr">
                         {money(r.baseMinor)}
@@ -300,12 +327,15 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
 
         {m.payments.length > 0 && (
           <section aria-label={t('paymentsReceived')} className="mt-5">
-            <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('paymentsReceived')}</div>
+            <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              {t('paymentsReceived')}
+            </div>
             <ul className="divide-y divide-slate-100 text-xs">
               {m.payments.map((p, i) => (
                 <li key={i} className="flex flex-wrap items-baseline justify-between gap-x-4 py-1">
                   <span>
-                    {formatDateTime(p.paidAt, locale)} - {tm.has(p.method) ? tm(p.method) : p.method}
+                    {formatDateTime(p.paidAt, locale)} -{' '}
+                    {tm.has(p.method) ? tm(p.method) : p.method}
                     {p.kind === 'refund' && ` (${t('refund')})`}
                     {p.receiptNumber && <span dir="ltr"> - {p.receiptNumber}</span>}
                   </span>
@@ -323,7 +353,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
           <section className="mt-6 grid gap-4 border-t border-slate-200 pt-4 text-xs text-slate-600 sm:grid-cols-2">
             {m.notes && (
               <div>
-                <div className="mb-1 font-semibold uppercase tracking-wider text-slate-500">{t('notes')}</div>
+                <div className="mb-1 font-semibold uppercase tracking-wider text-slate-500">
+                  {t('notes')}
+                </div>
                 <p className="whitespace-pre-line" dir="auto">
                   {m.notes}
                 </p>
@@ -331,7 +363,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
             )}
             {m.terms && (
               <div>
-                <div className="mb-1 font-semibold uppercase tracking-wider text-slate-500">{t('terms')}</div>
+                <div className="mb-1 font-semibold uppercase tracking-wider text-slate-500">
+                  {t('terms')}
+                </div>
                 <p className="whitespace-pre-line" dir="auto">
                   {m.terms}
                 </p>
@@ -342,7 +376,9 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
 
         {s?.bankDetails && (
           <section aria-label={t('bankDetails')} className="mt-4 text-xs text-slate-600">
-            <div className="mb-1 font-semibold uppercase tracking-wider text-slate-500">{t('bankDetails')}</div>
+            <div className="mb-1 font-semibold uppercase tracking-wider text-slate-500">
+              {t('bankDetails')}
+            </div>
             <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5">
               {Object.entries(s.bankDetails).map(([k, v]) => (
                 <div key={k} className="contents">
@@ -362,7 +398,10 @@ export function InvoicePaper({ model: m, className }: { model: PaperModel; class
           </p>
         )}
         {m.footerNote && (
-          <p className="mt-6 whitespace-pre-line border-t border-slate-200 pt-3 text-center text-xs text-slate-500" dir="auto">
+          <p
+            className="mt-6 whitespace-pre-line border-t border-slate-200 pt-3 text-center text-xs text-slate-500"
+            dir="auto"
+          >
             {m.footerNote}
           </p>
         )}
@@ -381,7 +420,9 @@ const PRINT_CSS = `@media print {
 
 function Row({ label, value, muted }: { label: string; value: string; muted?: boolean }) {
   return (
-    <div className={cn('flex items-baseline justify-between gap-4', muted && 'text-xs text-slate-500')}>
+    <div
+      className={cn('flex items-baseline justify-between gap-4', muted && 'text-xs text-slate-500')}
+    >
       <dt className={muted ? undefined : 'text-slate-600'} dir="auto">
         {label}
       </dt>

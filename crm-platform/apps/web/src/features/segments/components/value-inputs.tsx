@@ -5,7 +5,13 @@ import { useTranslations } from 'next-intl';
 import { Input, Popover, Select, cn } from '@crm/ui';
 import type { Choice, FieldDef } from '../lib/fields';
 import type { EditorValue } from '../lib/model';
-import { MAX_LIST_VALUES, MAX_RELATIVE_DAYS, MAX_TEXT_VALUE, inputKindOf, type Operator } from '../lib/operators';
+import {
+  MAX_LIST_VALUES,
+  MAX_RELATIVE_DAYS,
+  MAX_TEXT_VALUE,
+  inputKindOf,
+  type Operator,
+} from '../lib/operators';
 import { PlusIcon, SearchIcon, XIcon } from './icons';
 
 /** The input a condition's value needs, chosen from the field's kind and the operator (see `inputKindOf`). */
@@ -33,7 +39,11 @@ function Chip({
   return (
     <span className={cn(chip, stale && 'border-warning/50 bg-warning/10 text-warning')}>
       {color && !stale && (
-        <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full" style={{ background: color }} />
+        <span
+          aria-hidden="true"
+          className="size-1.5 shrink-0 rounded-full"
+          style={{ background: color }}
+        />
       )}
       <span className="truncate">{label}</span>
       {onRemove && (
@@ -76,7 +86,9 @@ function OptionPicker({
     [options, needle],
   );
   const toggle = (v: string) =>
-    onChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v].slice(0, MAX_LIST_VALUES));
+    onChange(
+      value.includes(v) ? value.filter((x) => x !== v) : [...value, v].slice(0, MAX_LIST_VALUES),
+    );
   return (
     <div
       className={cn(
@@ -109,7 +121,12 @@ function OptionPicker({
         <PlusIcon className="size-3" />
         {value.length === 0 ? t('choose') : t('add')}
       </button>
-      <Popover open={open} onClose={() => setOpen(false)} label={label} className="start-0 end-auto w-72 max-w-[calc(100vw-3rem)]">
+      <Popover
+        open={open}
+        onClose={() => setOpen(false)}
+        label={label}
+        className="start-0 end-auto w-72 max-w-[calc(100vw-3rem)]"
+      >
         <div className="relative">
           <SearchIcon className="pointer-events-none absolute start-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -122,10 +139,21 @@ function OptionPicker({
             className="h-8 ps-8 [&::-webkit-search-cancel-button]:hidden"
           />
         </div>
-        <ul role="listbox" aria-multiselectable="true" aria-label={label} className="thin-scrollbar max-h-56 overflow-y-auto">
-          {options.length === 0 && <li className="px-2 py-3 text-center text-xs text-muted-foreground">{t('noOptions')}</li>}
+        <ul
+          role="listbox"
+          aria-multiselectable="true"
+          aria-label={label}
+          className="thin-scrollbar max-h-56 overflow-y-auto"
+        >
+          {options.length === 0 && (
+            <li className="px-2 py-3 text-center text-xs text-muted-foreground">
+              {t('noOptions')}
+            </li>
+          )}
           {options.length > 0 && matching.length === 0 && (
-            <li className="px-2 py-3 text-center text-xs text-muted-foreground">{t('noMatches')}</li>
+            <li className="px-2 py-3 text-center text-xs text-muted-foreground">
+              {t('noMatches')}
+            </li>
           )}
           {matching.slice(0, SHOWN).map((o) => {
             const on = value.includes(o.value);
@@ -145,14 +173,22 @@ function OptionPicker({
                   >
                     {on ? '✓' : ''}
                   </span>
-                  {o.color && <span aria-hidden="true" className="size-2 shrink-0 rounded-full" style={{ background: o.color }} />}
+                  {o.color && (
+                    <span
+                      aria-hidden="true"
+                      className="size-2 shrink-0 rounded-full"
+                      style={{ background: o.color }}
+                    />
+                  )}
                   <span className="min-w-0 flex-1 truncate">{o.label}</span>
                 </button>
               </li>
             );
           })}
           {matching.length > SHOWN && (
-            <li className="px-2 py-2 text-center text-xs text-muted-foreground">{t('refine', { count: matching.length - SHOWN })}</li>
+            <li className="px-2 py-2 text-center text-xs text-muted-foreground">
+              {t('refine', { count: matching.length - SHOWN })}
+            </li>
           )}
         </ul>
       </Popover>
@@ -191,7 +227,8 @@ function TokenInput({
     }
     setBad(false);
     const next = [...value];
-    for (const p of parts) if (!next.includes(p) && next.length < MAX_LIST_VALUES) next.push(p.slice(0, MAX_TEXT_VALUE));
+    for (const p of parts)
+      if (!next.includes(p) && next.length < MAX_LIST_VALUES) next.push(p.slice(0, MAX_TEXT_VALUE));
     onChange(next);
     return true;
   };
@@ -211,7 +248,12 @@ function TokenInput({
       )}
     >
       {value.map((v) => (
-        <Chip key={v} label={v} removeLabel={t('remove', { name: v })} onRemove={disabled ? undefined : () => onChange(value.filter((x) => x !== v))} />
+        <Chip
+          key={v}
+          label={v}
+          removeLabel={t('remove', { name: v })}
+          onRemove={disabled ? undefined : () => onChange(value.filter((x) => x !== v))}
+        />
       ))}
       <input
         value={draft}
@@ -219,7 +261,9 @@ function TokenInput({
         aria-label={label}
         aria-invalid={invalid || bad || undefined}
         inputMode={numeric ? 'decimal' : undefined}
-        placeholder={value.length === 0 ? t(numeric ? 'numbersPlaceholder' : 'tokensPlaceholder') : ''}
+        placeholder={
+          value.length === 0 ? t(numeric ? 'numbersPlaceholder' : 'tokensPlaceholder') : ''
+        }
         onChange={(e) => {
           setDraft(e.target.value);
           if (bad) setBad(false);
@@ -257,7 +301,10 @@ export function ValueInput({
   const kind = inputKindOf(field.kind, operator);
   const str = typeof value === 'string' ? value : '';
   const list = Array.isArray(value) ? value : [];
-  const range = value !== null && typeof value === 'object' && !Array.isArray(value) ? value : { from: '', to: '' };
+  const range =
+    value !== null && typeof value === 'object' && !Array.isArray(value)
+      ? value
+      : { from: '', to: '' };
 
   switch (kind) {
     case 'none':

@@ -58,7 +58,7 @@ Run artifacts (screenshots, probe logs) live outside the repo.
 ## NOT verified
 
 - **Real AI provider calls.** No provider key is available; the vendor adapter is tested against a local stub (prompt, token cap, fallback, error paths). Real OpenAI/Anthropic/Gemini responses were not seen. BYOK/platform key resolution and metering belong to AIADM (keys come from `WGT_AI_*` env).
-- **Team Inbox display and agent reply path.** There is no inbox in this app yet; agent replies are simulated by inserting an outbound `inbox_messages` row. Real inbox reply delivery, the "Web widget" badge and push/translation observers are untested.
+- **Team Inbox display and agent reply path.** There is no inbox in this app yet; agent replies are simulated by inserting an outbound `messages` row with `sender_kind = 'agent'`. Real inbox reply delivery, the "Web widget" badge and push/translation observers are untested.
 - **Throttle on the reference**: 64 consecutive message posts were not limited there, so the 60/min figure is the spec, not an observed behaviour.
 - **Paused widget on the reference**: it cannot be set without editing the reference database, so the paused behaviour is checked against the spec only.
 - **Plan gate and role gate behaviours** (paywall overlay, 403/redirect by role) against the reference: not run; plan flag is a shim.

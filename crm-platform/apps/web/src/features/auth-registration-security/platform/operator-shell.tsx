@@ -16,7 +16,9 @@ import {
   activeNavId,
   groupNav,
 } from './operator-nav';
+import { ipBlockStore } from './lib/ip-blocked';
 import { CloseIcon, MenuIcon, MoonIcon, SunIcon } from './ui/icons';
+import { IpBlockedView, useIpBlock } from './ui/ip-blocked-view';
 import { languageName } from './ui/language';
 import { ToastProvider } from './ui/toast';
 import { useDocumentTheme } from './ui/use-browser';
@@ -57,6 +59,8 @@ export function OperatorShell({
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
+  // Set by operatorFetch when the API refuses the console's address (operator IP allowlist).
+  const ipBlock = useIpBlock();
   const { operator } = session;
   const gated = session.mfaEnrolmentRequired;
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
@@ -68,6 +72,11 @@ export function OperatorShell({
   useEffect(() => {
     if (blocked) router.replace(OPERATOR_ACCOUNT_PATH);
   }, [blocked, router]);
+
+  // Another screen is another chance: its own calls decide whether the address is still refused.
+  useEffect(() => {
+    ipBlockStore.clear();
+  }, [pathname]);
 
   // Escape closes the drawer and hands focus back to its button.
   useEffect(() => {
@@ -311,6 +320,8 @@ export function OperatorShell({
                   <Spinner label={t('redirecting')} />
                   {t('redirecting')}
                 </div>
+              ) : ipBlock ? (
+                <IpBlockedView ip={ipBlock.ip} />
               ) : (
                 children
               )}

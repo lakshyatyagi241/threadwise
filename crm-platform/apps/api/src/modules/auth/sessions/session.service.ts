@@ -25,6 +25,14 @@ export interface CreateSessionInput {
   userAgent?: string | null;
 }
 
+/** One page of a person's devices, in the shape of the standard list envelope plus a total. */
+export interface SessionPage {
+  data: SessionItem[];
+  page: { nextCursor: string | null; hasMore: boolean; limit: number };
+  /** Every live session of the person, not just this page. */
+  total: number;
+}
+
 export interface SessionTokens {
   tokens: TokenPair;
   sessionId: string;
@@ -44,6 +52,23 @@ interface SessionRow {
   ip: string | null;
   user_agent: string | null;
   created_at: DateLike;
+}
+
+/**
+ * The 401 an idle session gets. It carries the limit so the sign-in page can
+ * say "timed out after N minutes of inactivity" instead of a bare "expired"
+ * (WD-AUTH-033): `errors` holds `reason: idle` and `idleMinutes: N`.
+ */
+export function idleTimeoutError(limitMinutes: number): AppError {
+  return new AppError(
+    ERROR_CODES.UNAUTHENTICATED,
+    `Your session timed out after ${limitMinutes} minutes of inactivity.`,
+    HttpStatus.UNAUTHORIZED,
+    [
+      { path: 'reason', message: 'idle' },
+      { path: 'idleMinutes', message: String(limitMinutes) },
+    ],
+  );
 }
 
 type RotateDecision =
@@ -87,8 +112,14 @@ export class SessionService {
       { orgId: input.orgId, userId: input.userId },
       async (tx) => {
         let evictedIds: string[] = [];
-        // Concurrent-session cap (WD-AUTH-034): enforced here, at issuance,
-        // instead of on every request like WaDesk's middleware. 0 = unlimited.
+        // Two sign-ins at the same moment must not both count the same live
+        // sessions and both stay under the cap: one person's issuance is serial.
+        await tx.execute(
+          sql`SELECT pg_advisory_xact_lock(hashtextextended(${`auth-sessions:${input.orgId}:${input.userId}`}, 0))`,
+        );
+        // Concurrent-session cap (WD-AUTH-034): enforced here at issuance, and
+        // again from the request guard when the cap is lowered later
+        // (`enforceCapIfChanged`). 0 = unlimited.
         if (policy.maxConcurrentSessions > 0) {
           const live = await tx.execute(sql`
             SELECT uuid FROM auth_sessions
@@ -138,6 +169,7 @@ export class SessionService {
 
     await Promise.all(evicted.map((id) => this.tombstone(id)));
     await this.touchActivity(sid);
+    await this.markCapChecked(sid, policy.maxConcurrentSessions);
 
     const tokens = await this.tokens.issue(
       {
@@ -176,25 +208,23 @@ export class SessionService {
       async (tx) => {
         const res = await tx.execute(sql`
           SELECT s.id, s.uuid, s.user_id, s.remember, s.mfa_verified, s.refresh_version, s.rotated_at,
-                 s.last_used_at, s.expires_at, s.revoked_at, s.ip, s.user_agent, s.created_at,
-                 u.status AS user_status, u.uuid AS user_uuid
+                 s.last_used_at, s.expires_at, s.revoked_at, s.revoked_reason, s.ip, s.user_agent, s.created_at,
+                 u.uuid AS user_uuid
           FROM auth_sessions s
           JOIN users u ON u.org_id = s.org_id AND u.id = s.user_id
           WHERE s.org_id = ${claims.org} AND s.uuid = ${sid}::uuid
           FOR UPDATE OF s
         `);
         const row = res.rows[0] as unknown as
-          (SessionRow & { user_status: string; user_uuid: string }) | undefined;
+          (SessionRow & { user_uuid: string; revoked_reason: string | null }) | undefined;
         if (!row || row.revoked_at || toMs(row.expires_at) <= Date.now()) {
+          // Ended by the idle rule already (the request guard does that): say so.
+          if (row?.revoked_reason === 'idle') return { kind: 'reject', reason: 'idle' } as const;
           return { kind: 'reject', reason: 'session_ended' } as const;
         }
-        if (row.user_status !== 'active') {
-          await tx.execute(sql`
-            UPDATE auth_sessions SET revoked_at = now(), revoked_reason = 'user_inactive'
-            WHERE org_id = ${claims.org} AND id = ${row.id}
-          `);
-          return { kind: 'reject', reason: 'user_inactive' } as const;
-        }
+        // A suspended person keeps a session, held at the suspended screen by
+        // the account gate (WD-AUTH-016); ending it here would turn "your
+        // account is suspended" into "please sign in" after fifteen minutes.
 
         // Idle timeout (WD-AUTH-033): remembered sessions are exempt, as in WaDesk.
         const idleMs = policy.sessionTimeoutMinutes * 60_000;
@@ -272,6 +302,7 @@ export class SessionService {
           payload: { sessionId: sid },
         });
       }
+      if (decision.reason === 'idle') throw idleTimeoutError(policy.sessionTimeoutMinutes);
       throw AppError.unauthenticated('Invalid or expired refresh token');
     }
 
@@ -333,6 +364,7 @@ export class SessionService {
 
   // --- list ------------------------------------------------------------------
 
+  /** Every live session of the person, current first. Not capped: nothing is silently left out. */
   async list(
     orgId: number,
     userId: number,
@@ -344,20 +376,94 @@ export class SessionService {
         FROM auth_sessions
         WHERE org_id = ${orgId} AND user_id = ${userId}
           AND revoked_at IS NULL AND expires_at > now()
-        ORDER BY last_used_at DESC
-        LIMIT 100
+        ORDER BY last_used_at DESC, uuid DESC
       `),
     );
-    const rows = res.rows as unknown as Array<{
-      uuid: string;
-      remember: boolean;
-      ip: string | null;
-      user_agent: string | null;
-      created_at: DateLike;
-      last_used_at: DateLike;
-    }>;
-    const activity = await Promise.all(rows.map((r) => this.readActivity(r.uuid)));
+    return this.toItems(res.rows as unknown as SessionRowLite[], currentSid);
+  }
 
+  /**
+   * One page of the devices list (WD-AUTH-031): the current device leads the
+   * first page, the rest follow by recency, keyset-paged so no page is skipped
+   * or repeated while sessions come and go. `total` counts every live session.
+   *
+   * Paging is by the stored last-used time; the time shown also folds in the
+   * live activity stamp, so across a page boundary two devices used within the
+   * same refresh interval can appear in either order.
+   */
+  async listPage(
+    orgId: number,
+    userId: number,
+    currentSid: string | undefined,
+    opts: { limit: number; cursor?: string },
+  ): Promise<SessionPage> {
+    const limit = Math.min(Math.max(opts.limit, 1), 100);
+    const after = opts.cursor ? decodeSessionCursor(opts.cursor) : null;
+    if (opts.cursor && !after) {
+      throw AppError.validation('That page marker is not valid.', [
+        { path: 'cursor', message: 'Invalid cursor.' },
+      ]);
+    }
+
+    const { rows, total } = await this.db.txAs({ orgId, userId }, async (tx) => {
+      const live = sql`org_id = ${orgId} AND user_id = ${userId} AND revoked_at IS NULL AND expires_at > now()`;
+      const countRes = await tx.execute(
+        sql`SELECT count(*)::int AS n FROM auth_sessions WHERE ${live}`,
+      );
+      const total = (countRes.rows[0] as unknown as { n: number }).n;
+
+      const lead: SessionRowLite[] = [];
+      if (!after && currentSid) {
+        const cur = await tx.execute(sql`
+          SELECT uuid, remember, host(ip) AS ip, user_agent, created_at, last_used_at,
+                 ${PRECISE_TS} AS cursor_ts
+          FROM auth_sessions WHERE ${live} AND uuid = ${currentSid}::uuid
+        `);
+        lead.push(...(cur.rows as unknown as SessionRowLite[]));
+      }
+      // The current device takes one place on the first page, so a page is `limit` rows.
+      const room = limit - lead.length;
+      const afterClause = after
+        ? sql`AND (last_used_at, uuid) < (${after.t}::timestamptz, ${after.u}::uuid)`
+        : sql``;
+      const notCurrent = currentSid ? sql`AND uuid <> ${currentSid}::uuid` : sql``;
+      const rest = await tx.execute(sql`
+        SELECT uuid, remember, host(ip) AS ip, user_agent, created_at, last_used_at,
+               ${PRECISE_TS} AS cursor_ts
+        FROM auth_sessions
+        WHERE ${live} ${notCurrent} ${afterClause}
+        ORDER BY last_used_at DESC, uuid DESC
+        LIMIT ${room + 1}
+      `);
+      return { rows: { lead, rest: rest.rows as unknown as SessionRowLite[], room }, total };
+    });
+
+    const hasMore = rows.rest.length > rows.room;
+    const pageRest = rows.rest.slice(0, rows.room);
+    const last = pageRest[pageRest.length - 1];
+    const items = await this.toItems([...rows.lead, ...pageRest], currentSid);
+    return {
+      data: items,
+      page: {
+        // When the current device alone fills the page there is no last row to resume after:
+        // the sentinel means "from the start of the other devices".
+        nextCursor: !hasMore
+          ? null
+          : last
+            ? encodeSessionCursor(last.cursor_ts!, last.uuid)
+            : encodeSessionCursor('infinity', 'ffffffff-ffff-ffff-ffff-ffffffffffff'),
+        hasMore,
+        limit,
+      },
+      total,
+    };
+  }
+
+  private async toItems(
+    rows: SessionRowLite[],
+    currentSid: string | undefined,
+  ): Promise<SessionItem[]> {
+    const activity = await Promise.all(rows.map((r) => this.readActivity(r.uuid)));
     return rows
       .map((r, i) => {
         const agent = describeAgent(r.user_agent);
@@ -387,6 +493,122 @@ export class SessionService {
       `),
     );
     return res.rows.length > 0;
+  }
+
+  /**
+   * Ends a session the idle rule caught on a request (WD-AUTH-033): the row is
+   * revoked and `auth.session_timeout` is written, once. The tombstone's NX
+   * write is the "once": whoever sets it first does the database work.
+   */
+  async expireIdle(
+    orgId: number,
+    userId: number,
+    sid: string,
+    limitMinutes: number,
+    lastActivityMs: number,
+  ): Promise<void> {
+    try {
+      const first = await this.redis.set(
+        AuthKeys.revoked(sid),
+        '1',
+        'EX',
+        Ttl.accessRevocationSeconds,
+        'NX',
+      );
+      if (first !== 'OK') return;
+      await this.db.txAs({ orgId, userId }, async (tx) => {
+        const res = await tx.execute(sql`
+          UPDATE auth_sessions SET revoked_at = now(), revoked_reason = 'idle'
+          WHERE org_id = ${orgId} AND uuid = ${sid}::uuid AND revoked_at IS NULL
+          RETURNING 1
+        `);
+        if (res.rows.length === 0) return;
+        await this.audit.record(tx, {
+          event: 'auth.session_timeout',
+          status: 'warning',
+          orgId,
+          actorType: 'user',
+          actorId: userId,
+          recordId: userId,
+          payload: {
+            idleSeconds: Math.round((Date.now() - lastActivityMs) / 1000),
+            limitMinutes,
+          },
+        });
+      });
+    } catch (err) {
+      this.logger.warn({ err, sid }, 'could not record idle session end');
+    }
+  }
+
+  // --- cap changes (WD-AUTH-034) ----------------------------------------------
+
+  /**
+   * Lowering "max concurrent sessions" must reach the sessions that already
+   * exist. Each session remembers the cap it was last checked against (Redis,
+   * the same idea as WaDesk's per-session marker); when the policy's cap is
+   * different, the next authenticated request from ANY of the person's
+   * sessions trims the live set to the newest `cap`, keeping the one making
+   * the request. Costs one extra key in the guard's existing MGET, and a
+   * database round trip only on the first request after the cap changed.
+   *
+   * Never throws: a failing sweep must not fail the request that triggered it.
+   */
+  async enforceCapIfChanged(
+    orgId: number,
+    userId: number,
+    sid: string,
+    cap: number,
+    marker: string | null,
+  ): Promise<void> {
+    if (marker === String(cap)) return;
+    try {
+      if (cap > 0) {
+        const victims = await this.db.txAs({ orgId, userId }, async (tx) => {
+          await tx.execute(
+            sql`SELECT pg_advisory_xact_lock(hashtextextended(${`auth-sessions:${orgId}:${userId}`}, 0))`,
+          );
+          const live = await tx.execute(sql`
+            SELECT uuid FROM auth_sessions
+            WHERE org_id = ${orgId} AND user_id = ${userId}
+              AND revoked_at IS NULL AND expires_at > now()
+            ORDER BY (uuid = ${sid}::uuid) DESC, last_used_at DESC, uuid DESC
+          `);
+          const doomed = (live.rows as unknown as Array<{ uuid: string }>)
+            .slice(cap)
+            .map((r) => r.uuid);
+          if (doomed.length === 0) return doomed;
+          await tx.execute(sql`
+            UPDATE auth_sessions SET revoked_at = now(), revoked_reason = 'session_cap'
+            WHERE org_id = ${orgId}
+              AND uuid IN (${sql.join(
+                doomed.map((v) => sql`${v}::uuid`),
+                sql`, `,
+              )})
+          `);
+          await this.audit.record(tx, {
+            event: 'auth.concurrent_sessions_evicted',
+            status: 'warning',
+            orgId,
+            actorType: 'user',
+            actorId: userId,
+            recordId: userId,
+            payload: { cap, evicted: doomed.length, trigger: 'cap_lowered' },
+          });
+          return doomed;
+        });
+        await Promise.all(victims.map((id) => this.tombstone(id)));
+      }
+      await this.markCapChecked(sid, cap);
+    } catch (err) {
+      this.logger.warn({ err, orgId, userId }, 'session cap sweep failed');
+    }
+  }
+
+  async markCapChecked(sid: string, cap: number): Promise<void> {
+    await this.redis
+      .set(AuthKeys.capChecked(sid), String(cap), 'EX', 31 * 24 * 3600)
+      .catch(() => undefined);
   }
 
   // --- redis helpers ---------------------------------------------------------
@@ -419,4 +641,42 @@ export class SessionService {
       );
     }
   }
+}
+
+interface SessionRowLite {
+  uuid: string;
+  remember: boolean;
+  ip: string | null;
+  user_agent: string | null;
+  created_at: DateLike;
+  last_used_at: DateLike;
+  /** `last_used_at` at full microsecond precision, for the page cursor. */
+  cursor_ts?: string;
+}
+
+/** Microsecond-exact UTC timestamp text: a JS Date would round the cursor and skip or repeat rows. */
+const PRECISE_TS = sql`to_char(last_used_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`;
+
+function encodeSessionCursor(t: string, u: string): string {
+  return Buffer.from(JSON.stringify({ t, u }), 'utf8').toString('base64url');
+}
+
+function decodeSessionCursor(raw: string): { t: string; u: string } | null {
+  try {
+    const v = JSON.parse(Buffer.from(raw, 'base64url').toString('utf8')) as {
+      t?: unknown;
+      u?: unknown;
+    };
+    if (
+      typeof v.t === 'string' &&
+      typeof v.u === 'string' &&
+      (v.t === 'infinity' || /^\d{4}-\d{2}-\d{2}T[\d:.]+Z$/.test(v.t)) &&
+      /^[0-9a-f-]{36}$/i.test(v.u)
+    ) {
+      return { t: v.t, u: v.u };
+    }
+  } catch {
+    // fall through
+  }
+  return null;
 }

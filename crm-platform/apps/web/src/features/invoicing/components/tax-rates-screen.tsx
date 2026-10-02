@@ -3,7 +3,17 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { Badge, Button, ConfirmDialog, EmptyState, MenuItem, MenuSeparator, Spinner, cn, useToast } from '@crm/ui';
+import {
+  Badge,
+  Button,
+  ConfirmDialog,
+  EmptyState,
+  MenuItem,
+  MenuSeparator,
+  Spinner,
+  cn,
+  useToast,
+} from '@crm/ui';
 import type { TaxRateResponse } from '@crm/contracts';
 import { invalidateInvoicing, useTaxRates } from '../api/hooks';
 import { invoicingApi } from '../api/service';
@@ -17,7 +27,18 @@ import { TaxPresetsDialog } from './tax-presets-dialog';
 import { TaxRateDialog } from './tax-rate-dialog';
 
 const COL_W = [220, 100, 130, 100, 110, 140, 90, 70, 100, 56];
-const COLS = ['name', 'type', 'rate', 'applies', 'where', 'effective', 'status', 'used', 'hsn', 'actions'] as const;
+const COLS = [
+  'name',
+  'type',
+  'rate',
+  'applies',
+  'where',
+  'effective',
+  'status',
+  'used',
+  'hsn',
+  'actions',
+] as const;
 const TABLE_W = COL_W.reduce((a, b) => a + b, 0);
 
 /**
@@ -63,7 +84,10 @@ export function TaxRatesScreen() {
     <div className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
-          <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+          <span
+            aria-hidden="true"
+            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
+          >
             <PercentIcon className="size-5" />
           </span>
           <div className="min-w-0">
@@ -83,7 +107,10 @@ export function TaxRatesScreen() {
         )}
       </header>
 
-      <section aria-label={t('tableLabel')} className="flex max-h-[max(24rem,calc(100dvh-13rem))] flex-col overflow-hidden rounded-xl border border-border bg-background">
+      <section
+        aria-label={t('tableLabel')}
+        className="flex max-h-[max(24rem,calc(100dvh-13rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+      >
         {rates.isPending ? (
           <div role="status" className="flex items-center gap-2 p-6 text-muted-foreground">
             <Spinner /> {t('loading')}
@@ -117,7 +144,12 @@ export function TaxRatesScreen() {
             can={{ update: can.updateTaxRate, remove: can.deleteTaxRate }}
             onEdit={setForm}
             onDelete={setDeleting}
-            onDefault={(r) => void act(() => invoicingApi.setDefaultTaxRate(r.id), t('madeDefault', { name: r.name }))}
+            onDefault={(r) =>
+              void act(
+                () => invoicingApi.setDefaultTaxRate(r.id),
+                t('madeDefault', { name: r.name }),
+              )
+            }
             onActive={(r) =>
               void act(
                 () => invoicingApi.updateTaxRate(r.id, r.rowVersion, { isActive: !r.isActive }),
@@ -127,7 +159,9 @@ export function TaxRatesScreen() {
           />
         )}
         {!rates.isPending && !rates.isError && list.length > 0 && (
-          <div className="shrink-0 border-t border-border bg-background px-4 py-2.5 text-sm text-muted-foreground">{t('count', { count: list.length })}</div>
+          <div className="shrink-0 border-t border-border bg-background px-4 py-2.5 text-sm text-muted-foreground">
+            {t('count', { count: list.length })}
+          </div>
         )}
       </section>
 
@@ -148,16 +182,24 @@ export function TaxRatesScreen() {
         tone="danger"
         busy={busy}
         title={t('deleteTitle')}
-        message={deleting ? (deleting.usedBy > 0 ? t('deleteUsed', { name: deleting.name, count: deleting.usedBy }) : t('deleteUnused', { name: deleting.name })) : ''}
+        message={
+          deleting
+            ? deleting.usedBy > 0
+              ? t('deleteUsed', { name: deleting.name, count: deleting.usedBy })
+              : t('deleteUnused', { name: deleting.name })
+            : ''
+        }
         confirmLabel={t('delete')}
         cancelLabel={t('keep')}
         onClose={() => setDeleting(null)}
         onConfirm={() => {
           const r = deleting;
           if (!r) return;
-          void act(() => invoicingApi.removeTaxRate(r.id), t('deleted', { name: r.name })).then((ok) => {
-            if (ok) setDeleting(null);
-          });
+          void act(() => invoicingApi.removeTaxRate(r.id), t('deleted', { name: r.name })).then(
+            (ok) => {
+              if (ok) setDeleting(null);
+            },
+          );
         }}
       />
     </div>
@@ -183,7 +225,8 @@ function RatesTable({
   const tt = useTranslations('invoicing.taxRates.types');
   const locale = useLocale();
   const [scrolled, setScrolled] = useState(false);
-  const th = 'sticky top-0 z-20 border-b border-border bg-muted px-3 py-3 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
+  const th =
+    'sticky top-0 z-20 border-b border-border bg-muted px-3 py-3 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
   const td = 'border-b border-border px-3 py-2';
   return (
     <div
@@ -193,7 +236,10 @@ function RatesTable({
       onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
       className="thin-scrollbar min-h-0 flex-1 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
-      <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: TABLE_W }}>
+      <table
+        className="w-full table-fixed border-separate border-spacing-0 text-sm"
+        style={{ minWidth: TABLE_W }}
+      >
         <colgroup>
           {COL_W.map((w, i) => (
             <col key={i} style={{ width: w }} />
@@ -202,8 +248,20 @@ function RatesTable({
         <thead>
           <tr>
             {COLS.map((c) => (
-              <th key={c} scope="col" className={cn(th, c === 'used' && 'text-end', c === 'name' && `${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`)}>
-                {c === 'actions' ? <span className="sr-only">{t('columns.actions')}</span> : <span className="block truncate">{t(`columns.${c}`)}</span>}
+              <th
+                key={c}
+                scope="col"
+                className={cn(
+                  th,
+                  c === 'used' && 'text-end',
+                  c === 'name' && `${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`,
+                )}
+              >
+                {c === 'actions' ? (
+                  <span className="sr-only">{t('columns.actions')}</span>
+                ) : (
+                  <span className="block truncate">{t(`columns.${c}`)}</span>
+                )}
               </th>
             ))}
           </tr>
@@ -215,7 +273,13 @@ function RatesTable({
             const to = formatDay(r.effectiveTo, locale);
             const menu = can.update || can.remove;
             return (
-              <tr key={r.id} className={cn('group h-14 align-middle transition-colors hover:bg-muted', !r.isActive && 'text-muted-foreground')}>
+              <tr
+                key={r.id}
+                className={cn(
+                  'group h-14 align-middle transition-colors hover:bg-muted',
+                  !r.isActive && 'text-muted-foreground',
+                )}
+              >
                 <td className={cn('max-w-0', td, STICKY_ONLY, frozenEdge(scrolled))}>
                   <div className="flex min-w-0 items-center gap-2">
                     <span className="truncate font-medium" dir="auto" title={r.name}>
@@ -237,13 +301,21 @@ function RatesTable({
                     {percentLabel(r.rate)}%
                   </span>
                   {r.components && r.components.length > 0 && (
-                    <span dir="ltr" className="block truncate text-xs text-muted-foreground" title={r.components.map((c) => `${c.type} ${percentLabel(c.rate)}%`).join(' + ')}>
+                    <span
+                      dir="ltr"
+                      className="block truncate text-xs text-muted-foreground"
+                      title={r.components
+                        .map((c) => `${c.type} ${percentLabel(c.rate)}%`)
+                        .join(' + ')}
+                    >
                       {r.components.map((c) => `${c.type} ${percentLabel(c.rate)}%`).join(' + ')}
                     </span>
                   )}
                 </td>
                 <td className={td}>
-                  <Badge tone={r.inclusive ? 'warning' : 'neutral'}>{r.inclusive ? t('inclusive') : t('exclusive')}</Badge>
+                  <Badge tone={r.inclusive ? 'warning' : 'neutral'}>
+                    {r.inclusive ? t('inclusive') : t('exclusive')}
+                  </Badge>
                 </td>
                 <td className={cn('max-w-0', td)}>
                   <span dir="ltr" className="block truncate">
@@ -251,10 +323,14 @@ function RatesTable({
                   </span>
                 </td>
                 <td className={cn('max-w-0', td, 'tabular-nums')}>
-                  <span className="block truncate">{from || to ? `${from || t('always')} - ${to || t('noEnd')}` : t('always')}</span>
+                  <span className="block truncate">
+                    {from || to ? `${from || t('always')} - ${to || t('noEnd')}` : t('always')}
+                  </span>
                 </td>
                 <td className={td}>
-                  <Badge tone={r.isActive ? 'success' : 'neutral'}>{r.isActive ? t('active') : t('inactive')}</Badge>
+                  <Badge tone={r.isActive ? 'success' : 'neutral'}>
+                    {r.isActive ? t('active') : t('inactive')}
+                  </Badge>
                 </td>
                 <td className={cn(td, 'text-end tabular-nums')}>{r.usedBy}</td>
                 <td className={cn('max-w-0', td)}>
@@ -268,24 +344,45 @@ function RatesTable({
                       {(close) => (
                         <>
                           {can.update && (
-                            <MenuItem onSelect={() => { close(); onEdit(r); }}>
+                            <MenuItem
+                              onSelect={() => {
+                                close();
+                                onEdit(r);
+                              }}
+                            >
                               <PencilIcon /> {t('edit')}
                             </MenuItem>
                           )}
                           {can.update && !r.isDefault && r.isActive && (
-                            <MenuItem onSelect={() => { close(); onDefault(r); }}>
+                            <MenuItem
+                              onSelect={() => {
+                                close();
+                                onDefault(r);
+                              }}
+                            >
                               <CheckIcon /> {t('makeDefault')}
                             </MenuItem>
                           )}
                           {can.update && !r.isDefault && (
-                            <MenuItem onSelect={() => { close(); onActive(r); }}>
+                            <MenuItem
+                              onSelect={() => {
+                                close();
+                                onActive(r);
+                              }}
+                            >
                               <BanIcon /> {r.isActive ? t('deactivate') : t('activate')}
                             </MenuItem>
                           )}
                           {can.remove && (
                             <>
                               {can.update && <MenuSeparator />}
-                              <MenuItem danger onSelect={() => { close(); onDelete(r); }}>
+                              <MenuItem
+                                danger
+                                onSelect={() => {
+                                  close();
+                                  onDelete(r);
+                                }}
+                              >
                                 <TrashIcon /> {t('delete')}
                               </MenuItem>
                             </>

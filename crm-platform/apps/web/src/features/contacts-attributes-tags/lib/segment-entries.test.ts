@@ -10,7 +10,12 @@ const input = (q = '') => ({
     { id: 's2', name: 'Big list', color: '#22C55E', memberCount: 12000, countApproximate: true },
     { id: 's3', name: 'Never counted', color: null, memberCount: null, countApproximate: false },
   ],
-  labels: { all: 'All contacts', imported: 'Imported', noGroup: 'No group', approx: (n: number) => `about ${n}` },
+  labels: {
+    all: 'All contacts',
+    imported: 'Imported',
+    noGroup: 'No group',
+    approx: (n: number) => `about ${n}`,
+  },
 });
 
 describe('Select Segment dropdown rows', () => {
@@ -59,7 +64,11 @@ describe('dropdown value <-> filters', () => {
     expect(filtersOfPicker('segment:s1')).toEqual({ segment: 's1', group: '', imported: false });
     expect(filtersOfPicker('g1')).toEqual({ segment: '', group: 'g1', imported: false });
     expect(filtersOfPicker('imported')).toEqual({ segment: '', group: '', imported: true });
-    expect(filtersOfPicker('no_group')).toEqual({ segment: '', group: 'no_group', imported: false });
+    expect(filtersOfPicker('no_group')).toEqual({
+      segment: '',
+      group: 'no_group',
+      imported: false,
+    });
     expect(filtersOfPicker('')).toEqual({ segment: '', group: '', imported: false });
   });
 });

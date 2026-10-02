@@ -299,9 +299,9 @@ describe('config and the visitor (WD-WGT-010, 011, 012, 013)', () => {
     await api.pub(w.embedToken).message({ body: 'seed', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
     await h.owner.query(
-      `INSERT INTO inbox_messages (org_id, conversation_id, direction, from_number, to_number, body, status, sent_at)
-       SELECT $1, $2, 'in', $3, 'x', 'bulk ' || g, 'delivered', now() FROM generate_series(1, 205) g`,
-      [t.orgId, conv!.id, uuid],
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, body, status, sent_at)
+       SELECT $1, $2, 100 + g, 'in', 'customer', 'bulk ' || g, 'received', now() FROM generate_series(1, 205) g`,
+      [t.orgId, conv!.id],
     );
     const res = await api.pub(w.embedToken).config(uuid);
     expect(res.body.transcript).toHaveLength(200);
@@ -332,7 +332,11 @@ describe('send a visitor message (WD-WGT-014, 015)', () => {
     expect(res.body.reply).toBeNull();
     const thread = await api.thread(t.orgId, uuid);
     const inbound = thread.find((m) => m.direction === 'in')!;
-    expect(inbound).toMatchObject({ body: 'hello there', status: 'delivered', from_number: uuid });
+    expect(inbound).toMatchObject({
+      body: 'hello there',
+      status: 'received',
+      sender_kind: 'customer',
+    });
     expect(inbound.meta).toMatchObject({
       channel: 'chatbot_widget',
       visitor_uuid: uuid,
@@ -435,12 +439,12 @@ describe('send a visitor message (WD-WGT-014, 015)', () => {
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'first', visitor_uuid: uuid });
     await h.owner.query(
-      `UPDATE conversations SET inbox_status = 'resolved', resolved_at = now() WHERE org_id = $1 AND id = $2`,
+      `UPDATE conversations SET status = 'resolved', resolved_at = now() WHERE org_id = $1 AND id = $2`,
       [t.orgId, (await api.conversationOf(t.orgId, uuid))!.id],
     );
     await api.pub(w.embedToken).message({ body: 'after resolve', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
-    expect(conv!.inbox_status).toBe('resolved');
+    expect(conv!.status).toBe('resolved');
     expect((await api.thread(t.orgId, uuid)).map((m) => m.body)).toContain('after resolve');
   });
 
@@ -450,16 +454,20 @@ describe('send a visitor message (WD-WGT-014, 015)', () => {
     await api.pub(w.embedToken).message({ body: 'hi', name: 'Asha', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
     expect(conv).toMatchObject({
-      channel: 'chatbot_widget',
-      platform: 'WIDGET',
-      origin: 'web',
       status: 'open',
-      inbox_status: 'open',
       title: 'Asha',
       priority: 'normal',
+      peer_key: uuid,
     });
-    expect(conv!.raw_jid).toBe(`widget-${w.id}-${uuid}`);
-    expect(conv!.device_id).toBeNull();
+    // The thread sits on the widget's own webchat channel, one channel per widget.
+    expect(
+      (
+        await h.owner.query(
+          `SELECT kind, external_id, status FROM channels WHERE org_id = $1 AND id = $2`,
+          [t.orgId, conv!.channel_id],
+        )
+      ).rows[0],
+    ).toEqual({ kind: 'webchat', external_id: w.id, status: 'connected' });
     expect(conv!.assignee_user_id).toBeNull();
     expect(conv!.sla_policy_id).toBeNull();
     expect(conv!.routing_meta).toMatchObject({
@@ -566,14 +574,18 @@ describe('send a visitor message (WD-WGT-014, 015)', () => {
   it('WD-WGT-015 / WD-WGT-019 #3: the widget thread stays separate from the WhatsApp thread of the same phone', async () => {
     const w = await api.widget(t.admin, { name: 'Contact 3' });
     const uuid = await api.visitor(w.embedToken);
-    const wa = await h.owner.query(
-      `INSERT INTO conversations (org_id, raw_jid, title, channel, contact_digits) VALUES ($1, '919876540000@s.whatsapp.net', 'WA thread', 'whatsapp', '919876540000') RETURNING id`,
+    const waChannel = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name, external_id) VALUES ($1, 'whatsapp_cloud', 'WA', '919876540000') RETURNING id`,
       [t.orgId],
+    );
+    const wa = await h.owner.query(
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, '919876540000', 'WA thread') RETURNING id`,
+      [t.orgId, waChannel.rows[0].id],
     );
     await api.pub(w.embedToken).message({ body: 'hi', phone: '919876540000', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
     expect(Number(conv!.id)).not.toBe(Number(wa.rows[0].id));
-    expect(conv!.channel).toBe('chatbot_widget');
+    expect(Number(conv!.channel_id)).not.toBe(Number(waChannel.rows[0].id));
   });
 
   it('WD-WGT-019 #1/#4/#5/#6: the thread is an ordinary inbox thread: visible without a connected engine, unassigned, no SLA, no routing', async () => {
@@ -581,14 +593,14 @@ describe('send a visitor message (WD-WGT-014, 015)', () => {
     const uuid = await api.visitor(w.embedToken);
     await api.pub(w.embedToken).message({ body: 'hi', visitor_uuid: uuid });
     const conv = await api.conversationOf(t.orgId, uuid);
-    expect(conv).toMatchObject({ archived: false, is_spam: false, sla_breached: false });
+    expect(conv).toMatchObject({ archived: false, sla_breached: false });
     expect(conv!.assignee_user_id).toBeNull();
     expect(conv!.assignee_team_id).toBeNull();
     expect(conv!.sla_first_response_due).toBeNull();
     expect(conv!.first_response_at).toBeNull();
-    // Inbound lines carry the provider of the thread, as the inbox stamps them.
+    // The visitor's line is an inbound message of the thread, numbered 1 (this widget has no welcome line).
     const inbound = (await api.thread(t.orgId, uuid)).find((m) => m.direction === 'in')!;
-    expect(inbound.provider).toBe(conv!.provider);
+    expect(inbound.sender_kind).toBe('customer');
   });
 
   it('WD-WGT-016 #4 (whatsapp mode): the widget stores the line and answers nothing', async () => {
@@ -654,8 +666,8 @@ describe('AI assistant reply (WD-WGT-016, 017)', () => {
     expect(out).toMatchObject({
       direction: 'out',
       status: 'sent',
+      sender_kind: 'bot',
       body: 'We ship free over 50 dollars.',
-      to_number: uuid,
     });
     expect(out.meta).toMatchObject({ assistant_id: a.uuid, channel: 'chatbot_widget' });
     const conv = await api.conversationOf(t.orgId, uuid);
@@ -709,18 +721,6 @@ describe('AI assistant reply (WD-WGT-016, 017)', () => {
     expect((await api.thread(t.orgId, uuid)).map((m) => m.body)).toEqual(
       expect.arrayContaining(['are you a bot?', 'hello?']),
     );
-  });
-
-  it('WD-WGT-017: a reply with no sender number (the inbox leaves it null) counts as a person too', async () => {
-    const { w } = await aiWidget({ name: 'AI 4' });
-    const uuid = await api.visitor(w.embedToken);
-    await api.pub(w.embedToken).message({ body: 'hello', visitor_uuid: uuid });
-    await api.agentReply(t.orgId, uuid, 'null sender', null);
-    ai.calls.length = 0;
-    expect(
-      (await api.pub(w.embedToken).message({ body: 'again', visitor_uuid: uuid })).body.reply,
-    ).toBeNull();
-    expect(ai.calls).toHaveLength(0);
   });
 
   it("WD-WGT-016 #2 (empty): a blank model answer becomes the assistant's fallback message, stored like any reply", async () => {
@@ -912,7 +912,7 @@ describe('agent replies reach the visitor by polling (WD-WGT-018)', () => {
     const r1 = await api.pub(w.embedToken).message({ body: 'I need help', visitor_uuid: uuid });
     expect(r1.body.reply.body).toBe('bot greeting');
     const conv = await api.conversationOf(t.orgId, uuid);
-    expect(conv).toMatchObject({ channel: 'chatbot_widget', unread_count: 1 });
+    expect(conv).toMatchObject({ unread_count: 1 });
     await api.agentReply(t.orgId, uuid, 'A human here');
     const poll = await api.pub(w.embedToken).history(uuid, r1.body.reply.id);
     expect(poll.body.messages.map((m: { body: string }) => m.body)).toEqual(['A human here']);

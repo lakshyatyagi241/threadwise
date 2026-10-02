@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { CONVERSATION_STATUSES } from '../chat-conversations/enums';
 
 /**
  * Mirrors of the Postgres enums. Kept here so the frontend gets the legal
@@ -11,10 +12,10 @@ export type RecordLifecycle = z.infer<typeof recordLifecycleSchema>;
 export const channelTypeSchema = z.enum(['whatsapp', 'webbot', 'sms', 'email', 'voice']);
 export type ChannelType = z.infer<typeof channelTypeSchema>;
 
-export const conversationStatusSchema = z.enum(['open', 'pending', 'resolved', 'closed']);
+export const conversationStatusSchema = z.enum(CONVERSATION_STATUSES);
 export const conversationModeSchema = z.enum(['bot', 'agent']);
 
-export const msgDirectionSchema = z.enum(['inbound', 'outbound']);
+export const msgDirectionSchema = z.enum(['in', 'out']);
 export const deliveryStatusSchema = z.enum([
   'received',
   'queued',

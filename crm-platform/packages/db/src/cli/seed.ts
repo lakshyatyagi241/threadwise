@@ -89,6 +89,8 @@ async function main(): Promise<void> {
            ($1, $2, 'record.contacts.update', 'allow', 'own'),
            ($1, $2, 'inbox.conversation.read','allow', 'own'),
            ($1, $2, 'inbox.conversation.reply','allow','own'),
+           ($1, $2, 'inbox.conversation.note','allow','own'),
+           ($1, $2, 'inbox.conversation.assign_self','allow','own'),
            ($1, $2, 'record.deals.read',   'allow', 'own'),
            ($1, $2, 'record.deals.create', 'allow', 'all'),
            ($1, $2, 'record.deals.update', 'allow', 'own'),

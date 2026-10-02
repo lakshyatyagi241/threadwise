@@ -149,6 +149,65 @@ export class WorkspaceRoleRulesService {
     }
   }
 
+  /** Whether the caller may change this role's permissions: not locked, and the Owner and Admin presets only by an Owner. */
+  async canEditRole(
+    tx: Tx,
+    orgId: number,
+    actorUserId: number,
+    role: RoleInfo & { isLocked: boolean },
+  ): Promise<boolean> {
+    if (role.isLocked) return false;
+    if (role.systemKey && OWNER_GRANTED.has(role.systemKey)) {
+      return (await this.rankOfUser(tx, orgId, actorUserId)) >= PRESET_RANK.admin!;
+    }
+    return true;
+  }
+
+  /**
+   * Deactivating a member: not yourself, not someone above you (an Admin cannot switch off an Owner or another Admin), and never the
+   * last active Owner.
+   */
+  async assertCanDeactivate(
+    tx: Tx,
+    orgId: number,
+    actorUserId: number,
+    targetUserId: number,
+    targetRoleIds: number[],
+  ): Promise<void> {
+    if (actorUserId === targetUserId) {
+      throw new AppError(
+        ERROR_CODES.RBAC_SELF_DEACTIVATE,
+        'You cannot deactivate your own account here.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'status', message: 'You cannot deactivate your own account here.' }],
+      );
+    }
+    const roles = await this.rolesById(tx, orgId, targetRoleIds);
+    const actorRank = await this.rankOfUser(tx, orgId, actorUserId);
+    const targetRank = Math.max(0, ...targetRoleIds.map((id) => this.rankOf(roles.get(id))));
+    if (
+      targetRank > actorRank ||
+      (targetRank >= PRESET_RANK.workspace_admin! && actorRank < PRESET_RANK.admin!)
+    ) {
+      throw this.forbidden(this.topRole(roles, targetRoleIds));
+    }
+    const ownerRoleId = [...roles.values()].find((r) => r.systemKey === 'admin')?.id;
+    if (ownerRoleId !== undefined) {
+      const res = await tx.execute(sql`
+        SELECT count(*) AS n FROM user_roles ur JOIN users u ON u.org_id = ur.org_id AND u.id = ur.user_id
+        WHERE ur.org_id = ${orgId} AND ur.role_id = ${ownerRoleId} AND ur.user_id <> ${targetUserId} AND u.status = 'active'
+      `);
+      if (Number((res.rows[0] as { n: string }).n) === 0) {
+        throw new AppError(
+          ERROR_CODES.RBAC_LAST_OWNER,
+          'The workspace must keep at least one active Owner.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'status', message: 'The workspace must keep at least one active Owner.' }],
+        );
+      }
+    }
+  }
+
   /** Roles an actor may offer in a picker: the presets at or below their rank, and every custom role they fully cover. */
   async grantableRoleIds(tx: Tx, orgId: number, actorUserId: number): Promise<number[]> {
     const actorGrants = await this.rbac.grantsForUser(orgId, actorUserId);

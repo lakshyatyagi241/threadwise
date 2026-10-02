@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useId, useState, type FormEvent } from 'react';
-import { Alert, Button, Card, Field, Input, Spinner } from '@crm/ui';
+import { Alert, Button, Card, Field, Spinner, Textarea } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { ErrorNote } from '../../shared/error-note';
 import { redirectOnGateError } from '../../shared/gate-errors';
@@ -14,20 +14,13 @@ import { useSession } from '../../shared/session-context';
 import { useGateRedirect } from '../../shared/use-gate-redirect';
 import { authApi, keys } from '../api';
 import { PLANS_PATH } from '../plans/plan-format';
+import { FOOTER_MAX, clampCodePoints, codePointLength, footerPreview } from './footer-text';
 
-export const FOOTER_MAX = 60;
 const BRANDING_PERMISSION = 'auth.branding.update';
-
-/** The line outgoing messages end with: the saved footer, else the platform default. */
-export function effectiveFooter(
-  data: Pick<BrandingResponse, 'messageFooter' | 'platformDefault'>,
-): string {
-  return data.messageFooter ?? data.platformDefault;
-}
 
 export function BrandingView() {
   const c = useTranslations('auth-registration-security.account.common');
-  const { permissions } = useSession();
+  const { permissions, user } = useSession();
   const query = useQuery({ queryKey: keys.branding, queryFn: authApi.branding, staleTime: 0 });
   useGateRedirect(query.error);
 
@@ -49,56 +42,69 @@ export function BrandingView() {
     );
   }
   const hasPermission = BRANDING_PERMISSION in permissions;
-  return <BrandingPane data={query.data} hasPermission={hasPermission} />;
+  return (
+    <BrandingPane
+      data={query.data}
+      hasPermission={hasPermission}
+      name={user.displayName ?? user.fullName}
+    />
+  );
 }
 
-/** Preview of an outgoing message with its footer. Pure presentation. */
+/** Preview of an outgoing message with its footer in WhatsApp italics (`_text_`). Pure presentation. */
 function FooterPreview({ footer }: { footer: string }) {
   const t = useTranslations('auth-registration-security.account.branding');
   return (
-    <div>
-      <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+    <div className="rounded-md border border-border bg-muted px-3 py-2 text-sm">
+      <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
         {t('preview')}
       </p>
-      <div className="rounded-lg border border-border bg-muted px-3 py-2 text-sm">
-        <p>{t('sampleMessage')}</p>
-        <p
-          className="mt-1 whitespace-pre-wrap break-words italic text-muted-foreground"
-          data-testid="footer-preview"
-        >
-          {footer.trim() ? footer : t('noFooter')}
-        </p>
-      </div>
+      <p>{t('sampleMessage')}</p>
+      <p
+        className="mt-1 whitespace-pre-wrap break-words italic text-muted-foreground"
+        data-testid="footer-preview"
+      >
+        {footerPreview(footer, t('noFooter'))}
+      </p>
     </div>
   );
 }
 
-function BrandingPane({ data, hasPermission }: { data: BrandingResponse; hasPermission: boolean }) {
+function BrandingPane({
+  data,
+  hasPermission,
+  name,
+}: {
+  data: BrandingResponse;
+  hasPermission: boolean;
+  /** The person's name, for the "Sent via ..." placeholder. */
+  name: string;
+}) {
   const t = useTranslations('auth-registration-security.account.branding');
   const router = useRouter();
   const queryClient = useQueryClient();
   const uid = useId();
-  const [value, setValue] = useState(effectiveFooter(data));
+  // What the workspace saved; nothing saved reads as blank (on a plan that removes branding both send no footer).
+  const [value, setValue] = useState(data.messageFooter ?? '');
   const [fieldError, setFieldError] = useState<string | null>(null);
   const [error, setError] = useState<unknown>(null);
-  const [pending, setPending] = useState<'save' | 'reset' | null>(null);
-  const [saved, setSaved] = useState<'saved' | 'reset' | null>(null);
+  const [pending, setPending] = useState(false);
+  const [saved, setSaved] = useState<'saved' | 'removed' | null>(null);
 
   const editable = data.canEdit && hasPermission;
-  const usingDefault = data.messageFooter === null;
-  const dirty = value.trim() !== effectiveFooter(data);
+  const length = codePointLength(value);
 
   const explain = !data.canEdit ? t('planLocked') : !hasPermission ? t('permissionLocked') : null;
 
-  async function send(messageFooter: string | null, kind: 'save' | 'reset') {
-    setPending(kind);
+  async function send(messageFooter: string, outcome: 'saved' | 'removed' = 'saved') {
+    setPending(true);
     setError(null);
     setSaved(null);
     try {
       const updated = await authApi.updateBranding({ messageFooter });
       queryClient.setQueryData(keys.branding, updated);
-      setValue(effectiveFooter(updated));
-      setSaved(kind === 'save' ? 'saved' : 'reset');
+      setValue(updated.messageFooter ?? '');
+      setSaved(outcome);
       // The org's footer is part of the session the shell reads.
       router.refresh();
     } catch (err) {
@@ -112,127 +118,128 @@ function BrandingPane({ data, hasPermission }: { data: BrandingResponse; hasPerm
         setError(null);
         setFieldError(t('forbidden'));
         void queryClient.invalidateQueries({ queryKey: keys.branding });
+      } else if (err instanceof ApiError && err.code === ERROR_CODES.VALIDATION_FAILED) {
+        setFieldError(t('tooLong', { max: FOOTER_MAX }));
       } else {
         setError(err);
       }
     } finally {
-      setPending(null);
+      setPending(false);
     }
   }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (pending || !dirty) return;
+    if (pending) return;
+    // Like WaDesk's Save, always live; blank is a deliberate "no footer".
     const parsed = updateBrandingRequestSchema.safeParse({ messageFooter: value });
-    if (!parsed.success) {
+    if (!parsed.success || parsed.data.messageFooter === null) {
       setFieldError(t('tooLong', { max: FOOTER_MAX }));
       document.getElementById(`${uid}-footer`)?.focus();
       return;
     }
     setFieldError(null);
-    // Blank is a deliberate "no footer" ('', not null).
-    void send(parsed.data.messageFooter, 'save');
+    void send(parsed.data.messageFooter);
   }
 
   if (!editable) {
     return (
-      <Card className="space-y-4 p-5">
+      <Card className="max-w-2xl space-y-4 p-5">
         <h2 className="text-lg font-semibold">{t('title')}</h2>
         <p className="text-sm text-muted-foreground">{t('description')}</p>
-        {explain && (
-          <Alert tone="info" className="flex flex-wrap items-center justify-between gap-2">
-            <span className="min-w-0 flex-1">{explain}</span>
-            {!data.canEdit && (
-              <Link
-                href={PLANS_PATH}
-                className="shrink-0 font-medium text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {t('upgrade')}
-              </Link>
-            )}
-          </Alert>
-        )}
         <div>
-          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {usingDefault ? t('currentDefault') : t('current')}
+          <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            {!data.canEdit ? t('currentDefault') : t('current')}
           </p>
           <p
             className="rounded-md border border-border bg-muted px-3 py-2 text-sm italic"
             data-testid="current-footer"
           >
-            {effectiveFooter(data).trim() ? effectiveFooter(data) : t('noFooter')}
+            {footerPreview(data.effective, t('noFooter'))}
           </p>
         </div>
-        <FooterPreview footer={effectiveFooter(data)} />
+        {explain && (
+          <Alert
+            tone="warning"
+            className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
+          >
+            <span className="min-w-0 flex-1">
+              {!data.canEdit && <strong className="font-semibold">{t('upgradeTitle')} </strong>}
+              {explain}
+            </span>
+            {!data.canEdit && (
+              <Link
+                href={PLANS_PATH}
+                className="shrink-0 font-semibold underline underline-offset-2 focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                {t('upgrade')}
+                <span aria-hidden="true" className="inline-block rtl:-scale-x-100">
+                  {' →'}
+                </span>
+              </Link>
+            )}
+          </Alert>
+        )}
       </Card>
     );
   }
 
   return (
-    <Card className="space-y-5 p-5">
+    <Card className="max-w-2xl space-y-5 p-5">
       <div>
         <h2 className="text-lg font-semibold">{t('title')}</h2>
         <p className="text-sm text-muted-foreground">{t('description')}</p>
       </div>
-      {usingDefault && (
-        <Alert tone="info">{t('usingDefault', { footer: data.platformDefault })}</Alert>
-      )}
-
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
-        <Field
-          label={t('label', { max: FOOTER_MAX })}
-          htmlFor={`${uid}-footer`}
-          hint={t('hint')}
-          error={fieldError}
-        >
-          <Input
+        <Field label={t('label', { max: FOOTER_MAX })} htmlFor={`${uid}-footer`} error={fieldError}>
+          <Textarea
             id={`${uid}-footer`}
+            rows={2}
             value={value}
-            maxLength={FOOTER_MAX}
             onChange={(e) => {
-              setValue(e.target.value);
+              setValue(clampCodePoints(e.target.value));
               setFieldError(null);
               setSaved(null);
             }}
             invalid={Boolean(fieldError)}
-            placeholder={data.platformDefault}
+            placeholder={t('placeholder', { name })}
+            aria-describedby={`${uid}-meta`}
+            className="resize-none"
           />
-          <p className="text-end text-xs text-muted-foreground" aria-live="off">
-            {value.length}/{FOOTER_MAX}
+          <p
+            id={`${uid}-meta`}
+            className="flex items-center justify-between gap-3 font-mono text-[11px] text-muted-foreground"
+          >
+            <span>{t('hint')}</span>
+            <span dir="ltr" className="shrink-0" aria-live="off">
+              {length}/{FOOTER_MAX}
+            </span>
           </p>
         </Field>
 
         <FooterPreview footer={value} />
 
         <ErrorNote error={error} />
-        {saved && <Alert tone="success">{saved === 'saved' ? t('saved') : t('resetDone')}</Alert>}
+        {saved && <Alert tone="success">{t(saved === 'removed' ? 'removed' : 'saved')}</Alert>}
 
         <div className="flex flex-wrap items-center gap-2">
-          <Button type="submit" disabled={pending !== null || !dirty}>
-            {pending === 'save' && <Spinner label={t('saving')} />}
-            {pending === 'save' ? t('saving') : t('save')}
+          <Button type="submit" disabled={pending}>
+            {pending && <Spinner label={t('saving')} />}
+            {pending ? t('saving') : t('save')}
           </Button>
+          {/* On a plan that removes branding, no footer is a real choice (the platform's line never applies): say it
+              plainly and do it now, instead of leaving an empty box that still needs saving. */}
           <Button
             type="button"
             variant="secondary"
-            disabled={pending !== null || value === ''}
+            disabled={pending || !data.messageFooter}
             onClick={() => {
               setValue('');
               setFieldError(null);
-              setSaved(null);
-              document.getElementById(`${uid}-footer`)?.focus();
+              void send('', 'removed');
             }}
           >
-            {t('clear')}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            disabled={pending !== null || usingDefault}
-            onClick={() => void send(null, 'reset')}
-          >
-            {pending === 'reset' && <Spinner label={t('saving')} />}
-            {t('reset')}
+            {t('remove')}
           </Button>
         </div>
       </form>

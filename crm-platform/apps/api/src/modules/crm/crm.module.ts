@@ -333,9 +333,10 @@ import { TagsService } from './tags/tags.service';
     SalesDocsService,
     SalesDocsRepository,
     InvoicesService,
+    // The recurring-invoice sweep (InvoicingWorkerModule) drives it.
+    RecurringInvoicesService,
     PaymentsService,
     TaxRatesService,
-    RecurringInvoicesService,
   ],
 })
 export class CrmModule {}

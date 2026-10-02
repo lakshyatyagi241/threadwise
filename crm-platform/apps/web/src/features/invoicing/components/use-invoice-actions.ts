@@ -1,6 +1,11 @@
 'use client';
 
-import type { InvoiceLinkState, InvoiceSummary, MANUAL_PAYMENT_METHODS, SendInvoiceInput } from '@crm/contracts';
+import type {
+  InvoiceLinkState,
+  InvoiceSummary,
+  MANUAL_PAYMENT_METHODS,
+  SendInvoiceInput,
+} from '@crm/contracts';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useToast } from '@crm/ui';
@@ -13,10 +18,13 @@ import { useErrorText, useToday } from './parts';
 /** The public page of an invoice, as a full address (to copy or open). */
 export const publicPath = (token: string): string => `/i/${token}`;
 export const publicUrl = (token: string): string =>
-  typeof window === 'undefined' ? publicPath(token) : `${window.location.origin}${publicPath(token)}`;
+  typeof window === 'undefined'
+    ? publicPath(token)
+    : `${window.location.origin}${publicPath(token)}`;
 
 /** True when the buyer's link can be opened right now (not revoked, not expired). */
-export const linkIsLive = (link: InvoiceLinkState | null | undefined): link is InvoiceLinkState => !!link && link.active;
+export const linkIsLive = (link: InvoiceLinkState | null | undefined): link is InvoiceLinkState =>
+  !!link && link.active;
 
 /** Copies text; resolves false when the browser refuses (insecure context, no permission). */
 export async function copyText(text: string): Promise<boolean> {
@@ -48,7 +56,11 @@ export function useInvoiceActions() {
   const errorText = useErrorText();
   const today = useToday();
 
-  async function run<T>(fn: () => Promise<T>, done: (r: T) => string | null, opts: RunOptions = {}): Promise<Outcome<T>> {
+  async function run<T>(
+    fn: () => Promise<T>,
+    done: (r: T) => string | null,
+    opts: RunOptions = {},
+  ): Promise<Outcome<T>> {
     try {
       const value = await fn();
       await invalidateInvoicing(qc);
@@ -63,20 +75,44 @@ export function useInvoiceActions() {
 
   return {
     issue: (inv: Pick<InvoiceSummary, 'id' | 'rowVersion'>, opts?: RunOptions) =>
-      run(() => invoicingApi.issue(inv.id, { rowVersion: inv.rowVersion }), (r) => t('issued', { number: r.number ?? '' }), opts),
+      run(
+        () => invoicingApi.issue(inv.id, { rowVersion: inv.rowVersion }),
+        (r) => t('issued', { number: r.number ?? '' }),
+        opts,
+      ),
     send: (inv: Pick<InvoiceSummary, 'id'>, body: Partial<SendInvoiceInput>, opts?: RunOptions) =>
       run(
         () => invoicingApi.send(inv.id, body),
         () => t(`sentVia.${body.channel ?? 'link'}`),
         opts,
       ),
-    voidInvoice: (inv: Pick<InvoiceSummary, 'id' | 'rowVersion'>, reason: string, opts?: RunOptions) =>
-      run(() => invoicingApi.void(inv.id, reason, inv.rowVersion), (r) => t('voided', { number: r.number ?? '' }), opts),
-    duplicate: (inv: Pick<InvoiceSummary, 'id'>) => run(() => invoicingApi.duplicate(inv.id), () => t('duplicated')),
+    voidInvoice: (
+      inv: Pick<InvoiceSummary, 'id' | 'rowVersion'>,
+      reason: string,
+      opts?: RunOptions,
+    ) =>
+      run(
+        () => invoicingApi.void(inv.id, reason, inv.rowVersion),
+        (r) => t('voided', { number: r.number ?? '' }),
+        opts,
+      ),
+    duplicate: (inv: Pick<InvoiceSummary, 'id'>) =>
+      run(
+        () => invoicingApi.duplicate(inv.id),
+        () => t('duplicated'),
+      ),
     remove: (inv: Pick<InvoiceSummary, 'id'>, opts?: RunOptions) =>
-      run(() => invoicingApi.remove(inv.id), () => t('deleted'), opts),
+      run(
+        () => invoicingApi.remove(inv.id),
+        () => t('deleted'),
+        opts,
+      ),
     /** Records the whole balance as received today: "Mark as paid". */
-    markPaid: (inv: Pick<InvoiceSummary, 'id' | 'currency' | 'amountsMinor'>, method: ManualMethod, opts?: RunOptions) =>
+    markPaid: (
+      inv: Pick<InvoiceSummary, 'id' | 'currency' | 'amountsMinor'>,
+      method: ManualMethod,
+      opts?: RunOptions,
+    ) =>
       run(
         () =>
           invoicingApi.recordPayment(inv.id, {
@@ -87,25 +123,41 @@ export function useInvoiceActions() {
         () => t('markedPaid'),
         opts,
       ),
-    regenerateLink: (inv: Pick<InvoiceSummary, 'id'>, expiresInDays: number | null, opts?: RunOptions) =>
+    regenerateLink: (
+      inv: Pick<InvoiceSummary, 'id'>,
+      expiresInDays: number | null,
+      opts?: RunOptions,
+    ) =>
       run(
         () => invoicingApi.regenerateLink(inv.id, expiresInDays ? { expiresInDays } : {}),
         () => t('linkRegenerated'),
         opts,
       ),
     revokeLink: (inv: Pick<InvoiceSummary, 'id'>, opts?: RunOptions) =>
-      run(() => invoicingApi.revokeLink(inv.id), () => t('linkRevoked'), opts),
+      run(
+        () => invoicingApi.revokeLink(inv.id),
+        () => t('linkRevoked'),
+        opts,
+      ),
     /**
      * A list row has no link (only the detail does): read the invoice now and copy the live link, or say it is off. The detail
      * passes the link it already has.
      */
-    copyLink: async (inv: Pick<InvoiceSummary, 'id'>, known?: InvoiceLinkState | null): Promise<boolean> => {
+    copyLink: async (
+      inv: Pick<InvoiceSummary, 'id'>,
+      known?: InvoiceLinkState | null,
+    ): Promise<boolean> => {
       try {
         const link =
           known !== undefined
             ? known
-            : (await qc.fetchQuery({ queryKey: KEYS.invoice(inv.id), queryFn: ({ signal }) => invoicingApi.get(inv.id, signal), staleTime: 0 }))
-                .publicLink;
+            : (
+                await qc.fetchQuery({
+                  queryKey: KEYS.invoice(inv.id),
+                  queryFn: ({ signal }) => invoicingApi.get(inv.id, signal),
+                  staleTime: 0,
+                })
+              ).publicLink;
         if (!linkIsLive(link)) {
           toast(t('linkUnavailable'), 'danger');
           return false;

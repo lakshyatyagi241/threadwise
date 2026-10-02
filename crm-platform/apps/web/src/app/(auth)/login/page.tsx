@@ -3,7 +3,6 @@ import { getTranslations } from 'next-intl/server';
 import { GuestFrame } from '@/features/auth-registration-security/guest/guest-frame';
 import { LoginForm } from '@/features/auth-registration-security/guest/login-form';
 import { safeNextPath } from '@/features/auth-registration-security/guest/next-path';
-import { sanitizeReferral } from '@/features/auth-registration-security/guest/referral';
 import {
   cleanSlug,
   firstParam,
@@ -32,7 +31,10 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
         ? 'reset'
         : firstParam(sp.expired) === '1'
           ? 'expired'
-          : null;
+          : firstParam(sp.expired) === 'idle'
+            ? 'idle'
+            : null;
+  const minutes = Number.parseInt(firstParam(sp.minutes) ?? '', 10);
 
   return (
     <GuestFrame page="login" config={config}>
@@ -41,8 +43,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
         defaultOrg={defaultOrg}
         next={safeNextPath(firstParam(sp.next))}
         flash={flash}
+        idleMinutes={flash === 'idle' && minutes > 0 && minutes <= 10080 ? minutes : null}
         loggedOut={firstParam(sp.logout) === '1'}
-        referral={sanitizeReferral(firstParam(sp.ref))}
       />
     </GuestFrame>
   );

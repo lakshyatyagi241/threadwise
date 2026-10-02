@@ -11,7 +11,9 @@ import { BusinessSection } from './business-profile-business';
 import { PaymentSection } from './business-profile-payment';
 import type { EditorCtx } from './business-profile-ui';
 
-const messages = JSON.parse(readFileSync(join(process.cwd(), 'messages', 'en', 'invoicing.x-settings.json'), 'utf8')) as Record<string, unknown>;
+const messages = JSON.parse(
+  readFileSync(join(process.cwd(), 'messages', 'en', 'invoicing.x-settings.json'), 'utf8'),
+) as Record<string, unknown>;
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
     <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
@@ -20,16 +22,46 @@ const html = (el: ReactElement) =>
   );
 
 const PROFILE: InvoiceProfile = {
-  sellerName: 'Acme Traders', sellerAddress: '1 Main Road', sellerCountry: 'IN', sellerState: '29', sellerTaxId: '27AAPFU0939F1ZV',
-  sellerRegistrationNo: null, sellerPhone: null, supportEmail: null, extraFields: [{ label: 'CIN', value: 'U123' }], logoUrl: 'https://x.test/logo.png',
-  brandColor: '#0B3D2E', bankDetails: { IFSC: 'HDFC0001234', 'Account number': '1234567890' }, paymentInstructions: 'Quote the invoice number.',
-  numberingPrefix: 'INV', proformaPrefix: 'PRO', receiptPrefix: 'RCT', creditNotePrefix: 'CRN', salesOrderPrefix: 'SO',
-  numberFormat: '{PREFIX}/{YEAR}/{SEQ}', numberPadding: 4, yearlyReset: true, fiscalYearStartMonth: 4, dueDays: 30, terms: null, footerNote: 'Thank you',
-  invoiceTitle: 'Tax Invoice', defaultTaxRegime: 'in', overdueReminders: true, currency: 'INR', rowVersion: 2, updatedAt: null,
+  sellerName: 'Acme Traders',
+  sellerAddress: '1 Main Road',
+  sellerCountry: 'IN',
+  sellerState: '29',
+  sellerTaxId: '27AAPFU0939F1ZV',
+  sellerRegistrationNo: null,
+  sellerPhone: null,
+  supportEmail: null,
+  extraFields: [{ label: 'CIN', value: 'U123' }],
+  logoUrl: 'https://x.test/logo.png',
+  brandColor: '#0B3D2E',
+  bankDetails: { IFSC: 'HDFC0001234', 'Account number': '1234567890' },
+  paymentInstructions: 'Quote the invoice number.',
+  numberingPrefix: 'INV',
+  proformaPrefix: 'PRO',
+  receiptPrefix: 'RCT',
+  creditNotePrefix: 'CRN',
+  salesOrderPrefix: 'SO',
+  numberFormat: '{PREFIX}/{YEAR}/{SEQ}',
+  numberPadding: 4,
+  yearlyReset: true,
+  fiscalYearStartMonth: 4,
+  dueDays: 30,
+  terms: null,
+  footerNote: 'Thank you',
+  invoiceTitle: 'Tax Invoice',
+  defaultTaxRegime: 'in',
+  overdueReminders: true,
+  currency: 'INR',
+  rowVersion: 2,
+  updatedAt: null,
 };
 
 const ctx = (form: ProfileForm, over: Partial<EditorCtx> = {}): EditorCtx => ({
-  form, set: () => undefined, err: () => undefined, readOnly: false, profile: PROFILE, ...over,
+  form,
+  set: () => undefined,
+  err: () => undefined,
+  readOnly: false,
+  profile: PROFILE,
+  ...over,
 });
 
 describe('business profile sections render', () => {
@@ -46,7 +78,9 @@ describe('business profile sections render', () => {
   });
 
   it('warns, without blocking, on a failed GSTIN and shows the reason', () => {
-    const out = html(<BusinessSection {...ctx({ ...profileToForm(PROFILE), sellerTaxId: '27AAPFU0939F1ZX' })} />);
+    const out = html(
+      <BusinessSection {...ctx({ ...profileToForm(PROFILE), sellerTaxId: '27AAPFU0939F1ZX' })} />,
+    );
     expect(out).toContain('check digits do not match');
     expect(out).toContain('You can still save it');
   });

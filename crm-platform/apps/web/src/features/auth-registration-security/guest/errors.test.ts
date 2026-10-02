@@ -130,13 +130,24 @@ describe('mapAuthError', () => {
     });
   });
 
-  it('treats 419 and bare 401/403 as a stale page or lapsed session', () => {
+  it('treats 419 and a bare 401 as a page that outlived its session', () => {
     expect(mapAuthError(err(419, 'UNKNOWN'))).toMatchObject({ key: 'sessionExpired', stale: true });
     expect(mapAuthError(err(401, ERROR_CODES.UNAUTHENTICATED))).toMatchObject({
       key: 'sessionExpired',
       stale: true,
     });
-    expect(mapAuthError(err(403, ERROR_CODES.FORBIDDEN)).key).toBe('sessionExpired');
+  });
+
+  it('keeps a refused request (403) apart from an expired one', () => {
+    expect(mapAuthError(err(403, ERROR_CODES.FORBIDDEN))).toMatchObject({
+      key: 'forbidden',
+      stale: false,
+    });
+    expect(mapAuthError(err(403, 'SOMETHING_ELSE')).key).toBe('forbidden');
+  });
+
+  it('maps a social sign-in that matches no account', () => {
+    expect(mapAuthError(err(401, ERROR_CODES.AUTH_SOCIAL_NO_ACCOUNT)).key).toBe('socialNoAccount');
   });
 
   it('reports a dropped connection and unknown failures', () => {
