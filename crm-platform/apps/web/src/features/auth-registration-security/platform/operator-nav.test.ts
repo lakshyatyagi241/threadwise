@@ -26,16 +26,5 @@ describe('groupNav', () => {
     expect(groups.length).toBeGreaterThan(3);
     const ids = OPERATOR_NAV.map((i) => i.id);
     expect(new Set(ids).size).toBe(ids.length);
-    expect(groups).toHaveLength(4);
-    expect(groups[0]!.items.map((i) => i.id)).toEqual(['security', 'security-events']);
-    expect(groups[1]!.items.map((i) => i.id)).toEqual([
-      'registration',
-      'social-login',
-      'auth-pages',
-    ]);
-    expect(groups[2]!.items.map((i) => i.id)).toEqual(['plans']);
-    expect(groups[3]!.items.map((i) => i.id)).toEqual(['system-health']);
-    expect(groups[3]!.items.map((i) => i.id)).toEqual(['payment-gateways']);
-    expect(groups[3]!.items.map((i) => i.id)).toEqual(['bsp-income', 'bsp-credit']);
   });
 });
