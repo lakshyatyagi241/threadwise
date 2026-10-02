@@ -1,21 +1,20 @@
 'use client';
 
-import {
-  DELETE_CONFIRMATION_PHRASE,
-  ERROR_CODES,
-  deleteAccountRequestSchema,
-} from '@crm/contracts';
+import { DELETE_CONFIRMATION_PHRASE, ERROR_CODES } from '@crm/contracts';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useId, useRef, useState, type FormEvent } from 'react';
-import { Alert, Button, Card, Field, Input, PasswordInput, Spinner } from '@crm/ui';
+import { Alert, Button, Card, Field, Input, Spinner, Textarea } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { ErrorNote } from '../../shared/error-note';
 import { focusFirstInvalid } from '../../shared/focus';
 import { redirectOnGateError } from '../../shared/gate-errors';
 import { WarningIcon } from '../../shared/icons';
+import { TitledPasswordInput } from '../../shared/titled-password-input';
 import { authApi } from '../api';
-import { blockerOf, phraseMatches, type DeleteBlocker } from './delete-rules';
+import { PLANS_PATH, SUPPORT_PATH } from '../plans/plan-format';
+import { blockerOf, buildDeleteRequest, phraseMatches, type DeleteBlocker } from './delete-rules';
 
 /**
  * Delete account (WD-AUTH-028). The API hard-deletes the user: the
@@ -32,6 +31,8 @@ export function DeleteAccountView() {
   const formRef = useRef<HTMLFormElement>(null);
   const [phrase, setPhrase] = useState('');
   const [password, setPassword] = useState('');
+  // Kept only in this form so the person can say why; it is never sent anywhere.
+  const [reason, setReason] = useState('');
   const [errors, setErrors] = useState<Partial<Record<'phrase' | 'password', string>>>({});
   const [blocker, setBlocker] = useState<DeleteBlocker | null>(null);
   const [error, setError] = useState<unknown>(null);
@@ -52,13 +53,13 @@ export function DeleteAccountView() {
     if (!password) found.password = t('errors.passwordRequired');
     if (Object.keys(found).length) return fail(found);
 
-    const parsed = deleteAccountRequestSchema.safeParse({ confirmation: phrase.trim(), password });
-    if (!parsed.success) return fail({ phrase: t('errors.phrase') });
+    const body = buildDeleteRequest(phrase, password);
+    if (!body) return fail({ phrase: t('errors.phrase') });
 
     setPending(true);
     setErrors({});
     try {
-      await authApi.deleteAccount(parsed.data);
+      await authApi.deleteAccount(body);
       // The session is gone server-side; a full navigation clears every client cache too.
       try {
         await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
@@ -84,7 +85,7 @@ export function DeleteAccountView() {
   const ready = phraseMatches(phrase) && password.length > 0;
 
   return (
-    <Card className="space-y-5 border-danger/40 p-5">
+    <Card className="space-y-5 border-2 border-danger/40 p-5">
       <div className="flex items-start gap-3">
         <WarningIcon className="mt-1 size-5 text-danger" />
         <div className="space-y-2">
@@ -100,6 +101,30 @@ export function DeleteAccountView() {
           <li>{t('consequence1')}</li>
           <li>{t('consequence2')}</li>
           <li>{t('consequence3')}</li>
+        </ul>
+      </div>
+
+      <div className="rounded-md border border-border bg-muted p-3 text-sm">
+        <p className="mb-1 font-medium">{t('considerTitle')}</p>
+        <ul className="list-disc space-y-1 ps-5 text-muted-foreground">
+          <li>
+            <Link
+              href={PLANS_PATH}
+              className="font-medium text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t('considerPlanLink')}
+            </Link>{' '}
+            {t('considerPlanRest')}
+          </li>
+          <li>
+            <Link
+              href={SUPPORT_PATH}
+              className="font-medium text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t('considerSupportLink')}
+            </Link>{' '}
+            {t('considerSupportRest')}
+          </li>
         </ul>
       </div>
 
@@ -132,8 +157,18 @@ export function DeleteAccountView() {
             invalid={Boolean(errors.phrase)}
           />
         </Field>
+        <Field label={t('reasonLabel')} htmlFor={`${uid}-reason`} hint={t('reasonHint')}>
+          <Textarea
+            id={`${uid}-reason`}
+            rows={2}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder={t('reasonPlaceholder')}
+            className="resize-none"
+          />
+        </Field>
         <Field label={t('password')} htmlFor={`${uid}-password`} error={errors.password}>
-          <PasswordInput
+          <TitledPasswordInput
             id={`${uid}-password`}
             autoComplete="current-password"
             value={password}

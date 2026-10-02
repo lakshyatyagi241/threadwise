@@ -24,8 +24,28 @@ export const orgSlugSchema = z
  * Plain bounds only. The admin password policy (WD-AUTH-035) is evaluated by
  * the server and reported as AUTH_PASSWORD_POLICY with per-rule details,
  * because the rules are runtime configuration, not part of the contract.
+ *
+ * The floor is 6, the lowest minimum length an administrator can configure
+ * (policy range 6-128): the contract must never be stricter than the policy it
+ * defers to, or a workspace that set its minimum to 6 could not use it. The
+ * stored policy (default 8) decides the real minimum.
  */
-export const passwordSchema = z.string().min(8).max(256);
+export const PASSWORD_CONTRACT_MIN = 6;
+export const passwordSchema = z.string().min(PASSWORD_CONTRACT_MIN).max(256);
+
+/**
+ * `GET /v2/auth/password-policy` (public): the rules that are in force right
+ * now, so the sign-up, reset and change forms can show an accurate hint before
+ * the person types, instead of a number copied into the page.
+ */
+export const passwordPolicyHintSchema = z.object({
+  minLength: z.number().int().min(6).max(128),
+  /** Both an upper-case and a lower-case letter. */
+  requireMixedCase: z.boolean(),
+  requireNumber: z.boolean(),
+  requireSymbol: z.boolean(),
+});
+export type PasswordPolicyHint = z.infer<typeof passwordPolicyHintSchema>;
 
 /**
  * What the client must do after a successful authentication. The web app
@@ -66,6 +86,13 @@ export const authenticatedSchema = z.object({
   tokens: tokenPairSchema,
   landing: landingSchema,
   flags: accountFlagsSchema,
+  /**
+   * Whether the session is a long ("keep me signed in") one. Password sign-in
+   * echoes the request, social sign-in is always remembered unless the platform
+   * turned remembering off, so the web tier can set its cookie lifetime from
+   * this instead of guessing.
+   */
+  remember: z.boolean().optional(),
 });
 export type Authenticated = z.infer<typeof authenticatedSchema>;
 
@@ -86,10 +113,15 @@ export type LoginResponse = z.infer<typeof loginResponseSchema>;
 export const mfaLoginRequestSchema = z
   .object({
     challengeToken: z.string().min(1),
-    /** Six-digit authenticator code. */
+    /**
+     * Six-digit authenticator code. Spaces are dropped first, because
+     * authenticator apps show the code as "123 456" and people paste it that way.
+     */
     code: z
       .string()
-      .regex(/^\d{6}$/)
+      .max(16)
+      .transform((c) => c.replace(/\s+/g, ''))
+      .pipe(z.string().regex(/^\d{6}$/))
       .optional(),
     /** One of the single-use recovery codes. */
     recoveryCode: z.string().min(8).max(32).optional(),
@@ -102,8 +134,14 @@ export type MfaLoginRequest = z.infer<typeof mfaLoginRequestSchema>;
 export const refreshRequestSchema = z.object({ refreshToken: z.string().min(1) });
 export type RefreshRequest = z.infer<typeof refreshRequestSchema>;
 
+/**
+ * `POST /v2/auth/logout` is public: it ends the session behind whichever
+ * credential is presented, the bearer access token (even one that has just
+ * expired) and/or this refresh token. It answers `{ ok: true }` whether or not
+ * anything was ended, so a browser that lost its access token can still sign
+ * out the refresh token it holds.
+ */
 export const logoutRequestSchema = z.object({
-  /** Optional: when omitted the session in the access token is ended. */
   refreshToken: z.string().min(1).optional(),
 });
 export type LogoutRequest = z.infer<typeof logoutRequestSchema>;

@@ -69,6 +69,7 @@ export function FlashBanner() {
 
 function VerificationBanner() {
   const t = useTranslations('auth-registration-security.account.banners');
+  const tm = useTranslations('auth-registration-security.account.mailFailure');
   const router = useRouter();
   const { flags, user, sessionId } = useSession();
   const [dismissed, setDismissed] = useSessionFlag(`ars.verify-banner.${sessionId}`);
@@ -77,7 +78,7 @@ function VerificationBanner() {
   // The lock screen replaces the banner under the "block" policy.
   if (!flags.emailUnverified || flags.emailBlocked || dismissed) return null;
 
-  const { notice, seconds, throttled, pending, error } = verification;
+  const { notice, reason, seconds, throttled, pending, error } = verification;
   return (
     <div className="border-b border-warning/40 bg-warning/10 px-4 py-2 text-sm text-foreground">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -85,7 +86,12 @@ function VerificationBanner() {
         <p className="min-w-0 flex-1">
           {t('verifyMessage', { email: user.email })}{' '}
           {notice === 'sent' && <span className="font-medium text-success">{t('sent')}</span>}
-          {notice === 'notSent' && <span className="font-medium text-danger">{t('notSent')}</span>}
+          {notice === 'notSent' && (
+            <span className="font-medium text-danger">
+              {t('notSent')}
+              {reason ? ` ${tm(reason)}` : ''}
+            </span>
+          )}
           {notice === 'alreadyVerified' && (
             <span className="font-medium text-success">{t('alreadyVerified')}</span>
           )}

@@ -31,16 +31,25 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function OperatorLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ expired?: string; next?: string }>;
+  searchParams: Promise<{ expired?: string; minutes?: string; next?: string }>;
 }) {
   const params = await searchParams;
   const next = safeConsolePath(params.next, OPERATOR_HOME);
   const { session, expired } = await getOperatorSession();
   if (session) redirect(session.mfaEnrolmentRequired ? OPERATOR_ACCOUNT_PATH : next);
-  // A refresh cookie without a usable access token: rotate it instead of asking for a password.
-  if (expired && params.expired !== '1')
+  // A refresh cookie without a usable access token: rotate it instead of asking for a password. Not when the
+  // address already says why the session ended (expired, or idle): the refresh would only fail again.
+  if (expired && !params.expired)
     redirect(`/api/platform-auth/refresh?next=${encodeURIComponent(next)}`);
+  // Signed out for inactivity (WD-AUTH-033): the notice names the limit; without a usable number it is the plain one.
+  const minutes = Number.parseInt(params.minutes ?? '', 10);
+  const idleMinutes = params.expired === 'idle' && minutes > 0 && minutes <= 10080 ? minutes : null;
   return (
-    <OperatorLogin expired={params.expired === '1'} next={next} captcha={await captchaConfig()} />
+    <OperatorLogin
+      expired={params.expired === '1' || (params.expired === 'idle' && idleMinutes === null)}
+      idleMinutes={idleMinutes}
+      next={next}
+      captcha={await captchaConfig()}
+    />
   );
 }

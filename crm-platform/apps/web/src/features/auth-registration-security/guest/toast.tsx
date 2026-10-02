@@ -7,7 +7,7 @@ import { stripSearchParams } from './url-params';
 export function TransientToast({
   message,
   clearParam,
-  durationMs = 6000,
+  durationMs = 2200,
 }: {
   message: string;
   /** Query parameter to drop from the address bar once shown, so a reload does not repeat it. */
@@ -27,7 +27,7 @@ export function TransientToast({
     <div
       role="status"
       aria-live="polite"
-      className="fixed inset-x-4 bottom-6 z-50 mx-auto w-fit max-w-sm rounded-full border border-border bg-foreground px-5 py-2.5 text-center text-sm text-background shadow-lg"
+      className="fixed inset-x-4 top-5 z-50 mx-auto w-fit max-w-sm rounded-full bg-(--auth-ink-900) px-5 py-2.5 text-center text-[13px] text-(--auth-paper-0) shadow-lg"
     >
       {message}
     </div>

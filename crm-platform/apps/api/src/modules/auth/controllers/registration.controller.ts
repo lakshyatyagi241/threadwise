@@ -68,7 +68,7 @@ export class RegistrationController {
   @Post('signup/resend-otp')
   @ApiOperation({ summary: 'Send a new code (cooldown applies)' })
   async resendOtp(@Body(zodPipe(signupResendOtpRequestSchema)) body: SignupResendOtpRequest) {
-    return this.signup.resendOtp(body);
+    return this.signup.resendOtp(body, clientMeta());
   }
 
   @Public()
@@ -123,7 +123,11 @@ export class RegistrationController {
 
   @Public()
   @Post('social/:provider/callback')
-  @ApiOperation({ summary: 'Finish provider sign-in with the code and state from the redirect' })
+  @ApiOperation({
+    summary: 'Finish provider sign-in with the code and state from the redirect',
+    description:
+      'Failures carry `errors: [{ path: "provider", message: "google" | "facebook" }]`: AUTH_SOCIAL_FAILED (the exchange failed), AUTH_SOCIAL_NO_ACCOUNT (nothing in that workspace matches this sign-in), AUTH_SOCIAL_NO_EMAIL (a first-time identity that shares no email), AUTH_SOCIAL_STATE_INVALID, AUTH_SIGNUP_CLOSED (sign-up mode while registration is closed).',
+  })
   async socialCallback(
     @Param('provider') rawProvider: string,
     @Body(zodPipe(socialCallbackRequestSchema)) body: SocialCallbackRequest,

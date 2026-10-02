@@ -1,12 +1,15 @@
 'use client';
 
-import { Alert } from '@crm/ui';
 import { useTranslations } from 'next-intl';
 import type { MappedError } from './errors';
 import { showsRequestId } from './errors';
 import { PolicyList } from './policy-errors';
+import { Alert } from './ui';
 
-/** The form-level message for a failed submit: friendly text, the broken password rules, and the request id when useful. */
+/**
+ * The form-level message for a failed submit: friendly text, the broken password rules, and the request id when
+ * useful. Nothing here clears the form: a lapsed session or a refused request leaves everything typed in place.
+ */
 export function FormError({
   error,
   skipFieldMessage = false,
@@ -27,15 +30,6 @@ export function FormError({
         <p className="text-xs opacity-80">
           {t('errors.requestId')}: <span className="font-mono">{error.requestId}</span>
         </p>
-      )}
-      {error.stale && (
-        <button
-          type="button"
-          onClick={() => window.location.reload()}
-          className="text-xs font-medium underline underline-offset-2"
-        >
-          {t('errors.reload')}
-        </button>
       )}
     </Alert>
   );

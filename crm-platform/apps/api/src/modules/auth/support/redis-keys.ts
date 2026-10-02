@@ -22,6 +22,20 @@ export const AuthKeys = {
   mfaChallenge: (token: string) => `auth:mfa:${sha256Hex(token)}`,
   /** Attempts left on an MFA challenge. */
   mfaAttempts: (token: string) => `auth:mfa-try:${sha256Hex(token)}`,
+  /**
+   * Failed second-factor / password-confirmation attempts for ONE person, across
+   * every challenge and every enrol, disable or regenerate call (WD-AUTH-030).
+   * A fresh challenge per password login must not reset the guessing budget.
+   */
+  mfaFailures: (pool: 'user' | 'operator', orgId: number, subjectId: number) =>
+    `auth:mfa-fail:${pool}:${orgId}:${subjectId}`,
+  /** The session-cap value a session was last checked against (WD-AUTH-034). */
+  capChecked: (sid: string) => `auth:cap:${sid}`,
+  /** Failed partner-portal sign-ins, scoped away from staff sign-ins for the same address. */
+  partnerLockout: (orgId: number, email: string, ip: string) =>
+    `auth:lock-partner:${orgId}:${sha256Hex(`${email.toLowerCase()}|${ip}`).slice(0, 32)}`,
+  /** Failed sign-ins per IP across emails. Counted on failure only. */
+  ipFailures: (scope: string, ip: string) => `auth:ipfail:${scope}:${ip}`,
   /** Pending TOTP enrolment secret (encrypted) for a user. */
   mfaSetup: (orgId: number, subject: string) => `auth:mfa-setup:${orgId}:${subject}`,
   /** Staged sign-up awaiting its WhatsApp code. */
@@ -58,6 +72,13 @@ export const Ttl = {
   verifyEmailSeconds: 60 * 60,
   resetPasswordSeconds: 60 * 60,
   emailChangeSeconds: 60 * 60,
-  /** Absolute session lifetime when "keep me signed in" is off. */
-  sessionNoRememberSeconds: 24 * 60 * 60,
+  /**
+   * Absolute session lifetime when "keep me signed in" is off: seven days, the
+   * lifetime WaDesk's session cookie has (SESSION_LIFETIME), so closing the
+   * browser tab does not end the session by itself either.
+   */
+  sessionNoRememberSeconds: 7 * 24 * 60 * 60,
+  /** One person's budget of wrong second-factor / confirmation attempts (WD-AUTH-030). */
+  mfaFailureWindowSeconds: 15 * 60,
+  mfaFailureMax: 5,
 } as const;

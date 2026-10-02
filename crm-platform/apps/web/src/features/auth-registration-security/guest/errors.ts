@@ -45,7 +45,7 @@ export interface MappedError {
   requestId?: string;
   /** The password policy list: one entry per broken rule. */
   policy: PolicyIssue[];
-  /** The failure means the page is stale or the session lapsed: offer a refresh rather than a retry. */
+  /** The page sat open until its session lapsed: say so kindly and let the visitor press the button again. */
   stale: boolean;
 }
 
@@ -82,6 +82,7 @@ const BY_CODE: Record<string, { key: string; field?: string }> = {
   [ERROR_CODES.AUTH_SOCIAL_STATE_INVALID]: { key: 'socialExpired' },
   [ERROR_CODES.AUTH_SOCIAL_FAILED]: { key: 'socialFailed' },
   [ERROR_CODES.AUTH_SOCIAL_NO_EMAIL]: { key: 'socialNoEmail' },
+  [ERROR_CODES.AUTH_SOCIAL_NO_ACCOUNT]: { key: 'socialNoAccount' },
   [ERROR_CODES.AUTH_IP_BLOCKED]: { key: 'ipBlocked' },
   [ERROR_CODES.AUTH_WORKSPACE_NOT_AVAILABLE]: { key: 'workspaceUnavailable' },
 };
@@ -169,9 +170,15 @@ export function mapAuthError(error: unknown): MappedError {
     return { ...base, key: 'validation', field: first };
   }
 
-  // A stale page, a lapsed session or a blocked cross-site post: the form must be reloaded, not retried.
-  if (err.status === 419 || err.status === 401 || err.status === 403) {
+  // The page outlived its session (or the token behind it): a friendly note, and the form stays as typed so
+  // the visitor presses the button again. WaDesk's expired-page answer was the same.
+  if (err.status === 419 || err.status === 401) {
     return { ...base, key: 'sessionExpired', stale: true };
+  }
+
+  // A refused request is not an expired one: the cross-site guard and permission checks answer 403.
+  if (err.status === 403 || err.code === ERROR_CODES.FORBIDDEN) {
+    return { ...base, key: 'forbidden' };
   }
 
   return { ...base, key: 'unexpected' };
