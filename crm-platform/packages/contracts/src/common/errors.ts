@@ -189,6 +189,14 @@ export const ERROR_CODES = {
   /** The schedule is outside Meta's window (10 minutes to 75 days ahead). */
   FB_SCHEDULE_INVALID: 'FB_SCHEDULE_INVALID',
 
+  // Instagram channel (TW-IG)
+  /** The Instagram engine is not connected on this install. */
+  IG_NOT_CONNECTED: 'IG_NOT_CONNECTED',
+  /** The engine does not list that account to this workspace or person. */
+  IG_ACCOUNT_NOT_FOUND: 'IG_ACCOUNT_NOT_FOUND',
+  /** The engine did not give a sign-in address for a new account. */
+  IG_CONNECT_FAILED: 'IG_CONNECT_FAILED',
+
   // campaigns (TW-CAMP)
   /** Nobody on the audience can be messaged. */
   CAMP_NO_RECIPIENTS: 'CAMP_NO_RECIPIENTS',

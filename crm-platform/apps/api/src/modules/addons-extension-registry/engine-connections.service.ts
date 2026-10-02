@@ -136,6 +136,22 @@ export class EngineConnectionService implements OnApplicationBootstrap {
     return { active: !local, brand };
   }
 
+  /**
+   * What a channel needs to call the engine (TW-IG-016): address, shared secret and display name. The secret is read here for
+   * server-side adapters only and never returned by an API.
+   */
+  async connection(
+    engine: EngineKey,
+  ): Promise<{ connected: boolean; url: string; secret: string; brand: string }> {
+    const s = await this.read(engine);
+    return {
+      connected: Boolean(s.connected) && Boolean(s.url),
+      url: s.url ?? '',
+      secret: (await this.settings.getSecret(secretKey(engine))) ?? '',
+      brand: s.brand || DEFAULT_BRAND[engine],
+    };
+  }
+
   async connect(engine: EngineKey, input: ConnectEngineRequest): Promise<ConnectEngineResponse> {
     const operatorId = this.operatorId();
     if (engine === 'instagram' && (await this.nativeInstagramActive())) {
