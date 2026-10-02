@@ -369,39 +369,39 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-WALLET-001 | todo |  |  |
-| TW-WALLET-002 | todo |  |  |
-| TW-WALLET-003 | todo |  |  |
-| TW-WALLET-004 | todo |  |  |
-| TW-WALLET-005 | todo |  |  |
-| TW-WALLET-006 | todo |  |  |
-| TW-WALLET-007 | todo |  |  |
-| TW-WALLET-008 | todo |  |  |
-| TW-WALLET-009 | todo |  |  |
-| TW-WALLET-010 | todo |  |  |
-| TW-WALLET-011 | todo |  |  |
-| TW-WALLET-012 | todo |  |  |
-| TW-WALLET-013 | todo |  |  |
-| TW-WALLET-014 | todo |  |  |
-| TW-WALLET-015 | todo |  |  |
-| TW-WALLET-016 | todo |  |  |
-| TW-WALLET-017 | todo |  |  |
-| TW-WALLET-018 | todo |  |  |
-| TW-WALLET-019 | todo |  |  |
-| TW-WALLET-020 | todo |  |  |
-| TW-WALLET-021 | todo |  |  |
-| TW-WALLET-022 | todo |  |  |
-| TW-WALLET-023 | todo |  |  |
-| TW-WALLET-024 | todo |  |  |
-| TW-WALLET-025 | todo |  |  |
-| TW-WALLET-026 | todo |  |  |
-| TW-WALLET-027 | todo |  |  |
-| TW-WALLET-028 | todo |  |  |
-| TW-WALLET-029 | todo |  |  |
-| TW-WALLET-030 | todo |  |  |
-| TW-WALLET-031 | todo |  |  |
-| TW-WALLET-032 | todo |  |  |
-| TW-WALLET-033 | todo |  |  |
+| TW-WALLET-001 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-002 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-003 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-004 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-005 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-006 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-007 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-008 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-009 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-010 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-011 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-012 | blocked |  | consumer built; channel emitters blocked on WABA/NODE/CHAT/BCAST/CAMP/SCHED/FLR |
+| TW-WALLET-013 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-014 | wontfix |  | intended: see parity file |
+| TW-WALLET-015 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-016 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-017 | wontfix |  | intended: see parity file |
+| TW-WALLET-018 | wontfix |  | intended: see parity file |
+| TW-WALLET-019 | blocked |  | credit_packages owned by CPN; UI retired in Reference |
+| TW-WALLET-020 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-021 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-022 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-023 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-024 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-025 | blocked |  | MOB/EXT surface |
+| TW-WALLET-026 | blocked |  | MOB/EXT surface |
+| TW-WALLET-027 | blocked |  | MOB/EXT surface |
+| TW-WALLET-028 | blocked |  | MOB/EXT surface |
+| TW-WALLET-029 | blocked |  | MOB/EXT surface |
+| TW-WALLET-030 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-031 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-032 | backend-done |  | API+tests done; web in web pass; see parity/wallet-message-billing.md |
+| TW-WALLET-033 | wontfix |  | intended: see parity file |
 
 ## notifications-activity-audit (notif)
 
