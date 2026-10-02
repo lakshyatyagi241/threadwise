@@ -1,0 +1,108 @@
+{
+  "localization-translation": {
+    "nav": {
+      "translation": "Translation",
+      "languages": "Languages",
+      "providers": "Translation providers",
+      "usage": "Translation usage",
+      "group": "Localization"
+    },
+    "errors": {
+      "unexpected": "Something went wrong. Try again.",
+      "conflict": "Someone else changed this. The list was reloaded, so check it and try again.",
+      "languageIsDefault": "The default language cannot be switched off or deleted. Make another language the default first.",
+      "languageInactive": "Only an active language can be the default.",
+      "credentialsMissing": "Fill in the required credentials first.",
+      "providerInactive": "Only an active provider can be the default.",
+      "lockdownNoOfficial": "The lockdown needs at least one active official provider with its credentials.",
+      "planGate": "Your plan does not include translation."
+    },
+    "languages": {
+      "kicker": "Localization",
+      "title": "Languages",
+      "description": "The languages people can pick for the interface. The default is used for visitors who have not chosen one.",
+      "loading": "Loading languages",
+      "stats": { "total": "Languages", "active": "Active", "default": "Default" },
+      "columns": {
+        "language": "Language",
+        "code": "Code",
+        "direction": "Direction",
+        "active": "Active",
+        "actions": "Actions"
+      },
+      "defaultBadge": "Default",
+      "toggleLabel": "Switch {name} on or off",
+      "makeDefault": "Make default",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "confirmDelete": {
+        "title": "Delete language",
+        "message": "Delete {name}? People who picked it fall back to the default language."
+      },
+      "addLocked": "Adding new languages is turned off in this release."
+    },
+    "providers": {
+      "kicker": "Localization",
+      "title": "Translation providers",
+      "description": "The engines that translate conversations. They are tried from the default, then in the order below, until one answers.",
+      "loading": "Loading providers",
+      "lockdown": {
+        "title": "Official providers only",
+        "description": "Skip free and unofficial engines so customer text only goes to providers you have a contract with."
+      },
+      "defaultBadge": "Default",
+      "unofficial": "Unofficial",
+      "skipped": "Skipped by lockdown",
+      "activeLabel": "Switch {name} on or off",
+      "makeDefault": "Make default",
+      "secretStored": "A value is stored. Leave blank to keep it.",
+      "sortOrder": "Fallback order",
+      "save": "Save"
+    },
+    "usage": {
+      "kicker": "Localization",
+      "title": "Translation usage",
+      "description": "Volume and estimated cost by engine and by workspace.",
+      "from": "From",
+      "to": "To",
+      "badRange": "The start date must not be after the end date.",
+      "loading": "Loading usage",
+      "failed": "Could not load usage.",
+      "estimate": "Estimate, not a bill",
+      "totals": {
+        "calls": "Calls",
+        "charsIn": "Characters in",
+        "cost": "Estimated cost",
+        "fallbackHits": "Fallbacks used"
+      },
+      "byProvider": "By provider",
+      "topWorkspaces": "Top workspaces",
+      "cols": {
+        "provider": "Provider",
+        "workspace": "Workspace",
+        "calls": "Calls",
+        "chars": "Characters",
+        "cost": "Cost"
+      },
+      "empty": "No translations in this range."
+    },
+    "settings": {
+      "title": "Translation",
+      "description": "Translate customer messages into your team language and your replies into theirs.",
+      "loading": "Loading translation settings",
+      "failed": "Could not load translation settings.",
+      "upgrade": "Your plan does not include real-time translation. Upgrade to turn it on.",
+      "enabled": {
+        "title": "Auto-translate conversations",
+        "hint": "Translate inbound messages for your team and outbound replies for the customer."
+      },
+      "teamLanguage": {
+        "label": "Team language",
+        "hint": "The language your agents read and write."
+      },
+      "engine": "Translations are tried with {name} first.",
+      "engineNone": "No translation engine is available right now.",
+      "usage": { "characters": "Characters this month", "calls": "Translations this month" }
+    }
+  }
+}

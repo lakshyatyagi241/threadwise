@@ -50,6 +50,24 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  {
+    id: 'i18n-languages',
+    href: '/admin/i18n/languages',
+    labelKey: 'localization-translation.nav.languages',
+    groupKey: 'localization-translation.nav.group',
+  },
+  {
+    id: 'i18n-providers',
+    href: '/admin/i18n/providers',
+    labelKey: 'localization-translation.nav.providers',
+    groupKey: 'localization-translation.nav.group',
+  },
+  {
+    id: 'i18n-usage',
+    href: '/admin/i18n/usage',
+    labelKey: 'localization-translation.nav.usage',
+    groupKey: 'localization-translation.nav.group',
+  },
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */

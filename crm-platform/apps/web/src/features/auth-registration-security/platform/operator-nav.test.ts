@@ -17,7 +17,7 @@ describe('activeNavId', () => {
 describe('groupNav', () => {
   it('groups in first-seen order', () => {
     const groups = groupNav(OPERATOR_NAV);
-    expect(groups).toHaveLength(3);
+    expect(groups.length).toBeGreaterThanOrEqual(3);
     expect(groups[0]!.items.map((i) => i.id)).toEqual(['security', 'security-events']);
     expect(groups[1]!.items.map((i) => i.id)).toEqual([
       'registration',
@@ -25,5 +25,11 @@ describe('groupNav', () => {
       'auth-pages',
     ]);
     expect(groups[2]!.items.map((i) => i.id)).toEqual(['plans']);
+    // other domains append their own groups after these three
+    expect(groups[3]!.items.map((i) => i.id)).toEqual([
+      'i18n-languages',
+      'i18n-providers',
+      'i18n-usage',
+    ]);
   });
 });
