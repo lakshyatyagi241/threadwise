@@ -1,4 +1,18 @@
-import { Body, Controller, Get, Header, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Header,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   mailTestRequestSchema,
@@ -12,9 +26,11 @@ import { ActorKinds } from '../../common/decorators';
 import { RequestContextStore } from '../../common/context/request-context';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
+import { BrandAssetsService } from './brand-assets.service';
 import { ConnectionTestsService } from './connection-tests.service';
 import { MailRuntimeService } from './mail-runtime.service';
 import { SettingsService } from './settings.service';
+import { VapidService } from './vapid.service';
 
 /**
  * The operator console's settings surface (TW-SET-001..004, 024, 025, 039, 041). Reference gated all of it by
@@ -30,6 +46,8 @@ export class SettingsController {
     private readonly settings: SettingsService,
     private readonly mail: MailRuntimeService,
     private readonly tests: ConnectionTestsService,
+    private readonly assets: BrandAssetsService,
+    private readonly vapid: VapidService,
   ) {}
 
   private operatorId(): number {
@@ -97,5 +115,34 @@ export class SettingsController {
     const result = await this.tests.realtimeTest();
     await this.settings.recordTest('realtime', result.ok, result.message, this.operatorId());
     return result;
+  }
+
+  @Post('assets/:slot')
+  @OperatorRoles('super_admin')
+  // 2 MB is the largest slot (the 512 px app icon); each slot enforces its own, smaller limit too.
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 2.1 * 1024 * 1024, files: 1 } }))
+  @ApiOperation({
+    summary: 'Upload the favicon, a theme logo or an app icon (type checked from the bytes)',
+  })
+  upload(@Param('slot') slot: string, @UploadedFile() file: { buffer: Buffer } | undefined) {
+    return this.assets.upload(slot, file?.buffer, this.operatorId());
+  }
+
+  @Delete('assets/:slot')
+  @OperatorRoles('super_admin')
+  @HttpCode(204)
+  @ApiOperation({ summary: 'Remove an uploaded brand file (the field goes back to empty)' })
+  async removeAsset(@Param('slot') slot: string) {
+    await this.assets.remove(slot, this.operatorId());
+  }
+
+  @Post('tiPwa/generate-keys')
+  @OperatorRoles('super_admin')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Generate the Team Inbox app Web Push key pair once (idempotent; the private key is never returned)',
+  })
+  generateKeys() {
+    return this.vapid.generate(this.operatorId());
   }
 }
