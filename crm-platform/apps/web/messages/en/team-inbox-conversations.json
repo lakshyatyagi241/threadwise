@@ -1,0 +1,403 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Inbox"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "screen": {
+      "listRegion": "Conversations",
+      "panelRegion": "Contact and notes",
+      "close": "Close",
+      "cancel": "Cancel",
+      "conflict": "Someone else changed this conversation first. It has been reloaded; try again.",
+      "assigned": "Conversation assigned.",
+      "assignedToYou": "Assigned to you.",
+      "unassigned": "Conversation unassigned.",
+      "resolved": "Conversation resolved.",
+      "reopened": "Conversation reopened.",
+      "deleteNoteTitle": "Delete this note?",
+      "deleteNoteMessage": "The note is removed for everyone on your team. This cannot be undone.",
+      "deleteNoteConfirm": "Delete note",
+      "pickTitle": "Pick a conversation",
+      "pickMessage": "Choose a conversation from the list to read it and reply. New messages appear here by themselves.",
+      "shortcuts": "Shortcuts: j and k move through the list, e resolves, / searches.",
+      "teamChanged": "Team updated."
+    },
+    "list": {
+      "title": "Inbox",
+      "refresh": "Refresh the list",
+      "openSimulator": "Open the customer simulator",
+      "search": "Search conversations",
+      "searchPlaceholder": "Search name or number",
+      "tabsLabel": "Conversation views",
+      "tabs": {
+        "all": "All",
+        "mine": "Mine",
+        "unassigned": "Unassigned",
+        "unread": "Unread"
+      },
+      "statusFilter": "Status",
+      "statusOpen": "Open and pending",
+      "statusAll": "Every status",
+      "status": {
+        "open": "Open",
+        "pending": "Pending",
+        "snoozed": "Snoozed",
+        "resolved": "Resolved",
+        "closed": "Closed",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Low",
+        "normal": "Normal",
+        "high": "High",
+        "urgent": "Urgent"
+      },
+      "channelFilter": "Channel",
+      "allChannels": "All channels",
+      "archived": "Archived",
+      "backToInbox": "Back to the inbox",
+      "loading": "Loading conversations",
+      "retry": "Try again",
+      "listLabel": "Conversations",
+      "loadMore": "Load more",
+      "moreFailed": "More conversations could not be loaded.",
+      "unreadCount": "{count, plural, one {# unread message} other {# unread messages}}",
+      "you": "You:",
+      "noMessages": "No messages yet",
+      "windowClosed": "Window closed",
+      "windowLeftHours": "{hours}h {minutes}m left",
+      "windowLeftMinutes": "{minutes}m left",
+      "unassigned": "Unassigned",
+      "needsContact": "No contact record",
+      "gettingStarted": {
+        "title": "Connect a channel to start",
+        "message": "Your inbox fills up when customers write to a connected channel. Connect one and every conversation lands here.",
+        "connect": "Connect a channel"
+      },
+      "emptyFiltered": {
+        "title": "No conversations match",
+        "message": "Nothing fits these filters. Clear them to see every conversation again.",
+        "clear": "Clear filters"
+      },
+      "empty": {
+        "all": {
+          "title": "No conversations yet",
+          "message": "When a customer writes to one of your channels, the conversation shows up here."
+        },
+        "mine": {
+          "title": "Nothing assigned to you",
+          "message": "Conversations assigned to you appear here. Open one from All and assign it to yourself."
+        },
+        "unassigned": {
+          "title": "Every conversation has an owner",
+          "message": "New conversations nobody has picked up yet are listed here."
+        },
+        "unread": {
+          "title": "You are all caught up",
+          "message": "Conversations with new messages from customers are listed here."
+        }
+      }
+    },
+    "status": {
+      "received": "Received",
+      "queued": "Sending",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "failed": "Not sent"
+    },
+    "errors": {
+      "conflict": "Someone else changed this first. It has been reloaded; try again.",
+      "windowClosed": "The 24-hour reply window has closed, so a free-form message cannot be sent.",
+      "planLimit": "Your plan's monthly message limit has been reached.",
+      "channelDisconnected": "This channel is disconnected. Reconnect it to send messages.",
+      "sendHalted": "Sending is paused for the whole platform right now. Try again later.",
+      "notFound": "This conversation no longer exists or you cannot see it.",
+      "notRetryable": "Only a message that failed can be sent again.",
+      "mediaNotFound": "The attachment expired or was removed. Attach it again.",
+      "statusInvalid": "That change is not allowed from the conversation's current status.",
+      "assigneeInvalid": "That person cannot be assigned this conversation.",
+      "forbidden": "You do not have permission to do that.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "simulatorDisabled": "The channel simulator is turned off on this server.",
+      "channelInUse": "This channel still has conversations. Disconnect it instead of removing it.",
+      "validation": "Some of what you entered is not valid.",
+      "tooLarge": "That file is too large.",
+      "unsupported": "This channel cannot send that kind of message or file.",
+      "network": "The server could not be reached. Check your connection and try again.",
+      "generic": "Something went wrong. Try again.",
+      "genericWithId": "Something went wrong. Try again. Reference: {id}"
+    },
+    "bubble": {
+      "kind": {
+        "image": "Photo",
+        "text": "Message",
+        "attachment": "Attachment"
+      },
+      "template": "Template message: {name}",
+      "unavailable": "Message unavailable",
+      "sentIn": "Sent in {lang}. Show the text you wrote",
+      "translatedFrom": "Translated from {lang}. Show the original",
+      "bot": "Bot",
+      "broadcast": "Broadcast",
+      "reacted": "Reaction {emoji}",
+      "edited": "Edited",
+      "failed": "This message was not delivered.",
+      "retry": "Retry",
+      "sending": "Sending",
+      "dismiss": "Dismiss",
+      "noteLabel": "Internal note",
+      "unknownAuthor": "A teammate",
+      "deleteNote": "Delete this note"
+    },
+    "media": {
+      "openImage": "Open image {name}",
+      "video": "Video",
+      "voice": "Voice message",
+      "audio": "Audio",
+      "document": "Document",
+      "download": "Download {name}",
+      "location": "Shared location",
+      "openMap": "Open in OpenStreetMap"
+    },
+    "thread": {
+      "title": "Conversation",
+      "back": "Back to the conversation list",
+      "loading": "Loading the conversation",
+      "retry": "Try again",
+      "notFound": {
+        "title": "Conversation not found",
+        "message": "It was removed, or it is not one you can see. Pick another from the list."
+      },
+      "status": {
+        "resolved": "Resolved",
+        "closed": "Closed",
+        "spam": "Spam",
+        "snoozed": "Snoozed"
+      },
+      "assignToMe": "Assign to me",
+      "resolve": "Resolve",
+      "reopen": "Reopen",
+      "resolveShortcut": "Resolve or reopen (e)",
+      "showPanel": "Show contact and notes",
+      "hidePanel": "Hide contact and notes",
+      "window": {
+        "closed": "Window closed",
+        "closesInHours": "Closes in {hours}h {minutes}m",
+        "closesInMinutes": "Closes in {minutes}m"
+      },
+      "windowBanner": {
+        "title": "The 24-hour reply window has closed.",
+        "message": "This channel only allows an approved template message more than 24 hours after the customer's last message. You can still add internal notes. A new message from the customer reopens the window."
+      },
+      "channelBanner": {
+        "title": "This channel is disconnected.",
+        "message": "{name} is not connected, so replies cannot be sent. Reconnect the channel to send messages. Internal notes still work."
+      },
+      "readOnly": "You can read this conversation but you do not have permission to reply.",
+      "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
+      "messagesLabel": "Messages",
+      "loadOlder": "Load earlier messages",
+      "empty": "No messages in this conversation yet.",
+      "newMessageAnnounce": "New message: {text}",
+      "attachment": "an attachment",
+      "jumpLatest": "Jump to latest",
+      "jumpLatestNew": "{count, plural, one {# new message} other {# new messages}}"
+    },
+    "composer": {
+      "modeLabel": "Message type",
+      "mode": {
+        "reply": "Reply",
+        "note": "Internal note"
+      },
+      "attach": "Attach a file",
+      "removeAttachment": "Remove the attachment",
+      "replyLabel": "Reply to the customer",
+      "noteLabel": "Internal note",
+      "replyPlaceholder": "Type a message",
+      "notePlaceholder": "Write a note only your team can see",
+      "replyDisabledPlaceholder": "Replies are turned off for this conversation",
+      "send": "Send",
+      "addNote": "Add note",
+      "hint": "Enter sends. Shift+Enter adds a new line."
+    },
+    "panel": {
+      "tabsLabel": "Notes and timeline",
+      "contact": "Contact",
+      "openContact": "Open contact",
+      "needsContact": "This number has no contact record because your contact limit was reached.",
+      "noContact": "This conversation is not linked to a contact.",
+      "email": "Email",
+      "stage": "Stage",
+      "status": "Status",
+      "source": "Source",
+      "since": "Contact since",
+      "optedOut": "Opted out of marketing",
+      "resolve": "Resolve",
+      "reopen": "Reopen",
+      "assignee": {
+        "title": "Assigned to",
+        "unknown": "Unknown teammate",
+        "none": "Nobody has this conversation",
+        "team": "Team: {name}",
+        "pick": "Choose who has this conversation",
+        "unassigned": "Unassigned",
+        "you": "you",
+        "loadFailed": "The list of teammates could not be loaded.",
+        "assignToMe": "Assign to me",
+        "unassign": "Unassign",
+        "open": "{count} open",
+        "pickTeam": "Choose a team for this conversation",
+        "noTeam": "No team"
+      },
+      "presence": {
+        "online": "Online",
+        "away": "Away",
+        "busy": "Busy",
+        "offline": "Offline"
+      },
+      "notes": {
+        "tab": "Notes",
+        "label": "New internal note",
+        "placeholder": "Write a note only your team can see",
+        "hint": "Ctrl+Enter adds the note.",
+        "add": "Add note",
+        "addFailed": "The note could not be saved.",
+        "loading": "Loading notes",
+        "empty": "No notes yet.",
+        "unknownAuthor": "A teammate",
+        "delete": "Delete this note"
+      },
+      "timeline": {
+        "tab": "Timeline",
+        "loading": "Loading the timeline",
+        "failed": "The timeline could not be loaded.",
+        "retry": "Try again",
+        "empty": "Nothing has happened in this conversation yet.",
+        "events": {
+          "created": "Conversation started",
+          "assigned": "Assigned by {actor}",
+          "reassigned": "Reassigned by {actor}",
+          "unassigned": "Unassigned by {actor}",
+          "ai_handoff": "Handed to a person by {actor}",
+          "resolved": "Resolved by {actor}",
+          "closed": "Closed by {actor}",
+          "reopened": "Reopened by {actor}",
+          "status_changed": "Status changed by {actor}",
+          "note_added": "Note added by {actor}",
+          "snoozed": "Snoozed by {actor}",
+          "auto_unsnoozed": "Snooze ended",
+          "priority_changed": "Priority changed by {actor}",
+          "tag_added": "Label added by {actor}",
+          "tag_removed": "Label removed by {actor}",
+          "first_response": "First reply sent",
+          "sla_breach": "Response deadline missed",
+          "unknown": "{what} by {actor}"
+        },
+        "actors": {
+          "user": "A teammate",
+          "system": "The system",
+          "bot": "A bot",
+          "flow": "An automation",
+          "ai": "The AI assistant"
+        }
+      },
+      "owner": "Owner",
+      "past": {
+        "title": "Past conversations",
+        "noMessages": "No messages",
+        "status": {
+          "open": "Open",
+          "pending": "Pending",
+          "snoozed": "Snoozed",
+          "resolved": "Resolved",
+          "closed": "Closed",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Customer simulator",
+      "close": "Close the simulator",
+      "devOnly": "Development only. This pretends to be a customer on a simulated channel; nothing reaches a real phone.",
+      "noChannel": "There is no simulator channel yet.",
+      "createChannel": "Create the simulator channel",
+      "disabled": "The simulator is turned off on this server.",
+      "channel": "Simulator channel",
+      "customer": "The customer",
+      "name": "Name",
+      "number": "Number",
+      "numberHint": "Digits only, 5 to 15.",
+      "kind": "Message type",
+      "kinds": {
+        "text": "Text",
+        "image": "Image",
+        "document": "Document",
+        "audio": "Audio",
+        "video": "Video",
+        "location": "Location"
+      },
+      "file": "File",
+      "fileHint": "Optional. Its name and type are used; a sample file is sent otherwise.",
+      "message": "Message",
+      "caption": "Caption",
+      "placeName": "Place name",
+      "send": "Send as customer",
+      "sent": "{count, plural, one {Sent once.} other {Delivered # times, stored once.}}",
+      "duplicate": "Duplicate delivery",
+      "duplicateHint": "Delivers the same message three times, to prove it is stored once.",
+      "nextSend": "Your next reply",
+      "nextSendHint": "Applies to the next message you send from the composer, then switches back to normal.",
+      "faults": {
+        "none": "Normal",
+        "fail": "Fails",
+        "flaky": "Fails twice, then works",
+        "slow": "Slow (10 s)",
+        "ooo": "Receipts out of order"
+      },
+      "window": "24-hour window",
+      "windows": {
+        "auto": "Automatic",
+        "open": "Force open",
+        "closed": "Force closed"
+      },
+      "windowHint": "Closed shows how the composer behaves when only a template may be sent."
+    },
+    "channels": {
+      "title": "Channels",
+      "intro": "The accounts customers reach you on. Each one feeds the inbox.",
+      "backToInbox": "Back to the inbox",
+      "simulatorNote": "Development: add a simulated channel to try the inbox without a real account.",
+      "addSimulator": "Add simulator channel",
+      "simulatorAdded": "Simulator channel added.",
+      "simulatorDisabled": "The simulator is turned off on this server.",
+      "loading": "Loading channels",
+      "loadFailed": "Channels could not be loaded.",
+      "retry": "Try again",
+      "empty": {
+        "title": "No channels connected",
+        "message": "Connect a channel and customer messages will start arriving in the inbox."
+      },
+      "listLabel": "Connected channels",
+      "status": {
+        "connected": "Connected",
+        "disconnected": "Disconnected",
+        "error": "Error"
+      },
+      "capWindow": "{hours}-hour reply window",
+      "capTemplates": "Templates",
+      "capMedia": "Media",
+      "capReceipts": "Delivery receipts",
+      "lastEvent": "Last activity {when}",
+      "noEvents": "No activity yet",
+      "remove": "Remove",
+      "removeTitle": "Remove this channel?",
+      "removeMessage": "{name} will be removed. A channel that still has conversations cannot be removed; disconnect it instead.",
+      "removeConfirm": "Remove channel",
+      "cancel": "Cancel"
+    }
+  }
+}

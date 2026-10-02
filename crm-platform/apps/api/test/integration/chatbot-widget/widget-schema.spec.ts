@@ -197,11 +197,19 @@ describe('chatbot widget: schema, isolation and token lookup', () => {
       (await owner.query(`SELECT assistant_id FROM chatbot_widgets WHERE id = $1`, [widgetA]))
         .rows[0].assistant_id,
     ).toBeNull();
+    const channel = Number(
+      (
+        await owner.query(
+          `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'webchat', 'w') RETURNING id`,
+          [orgA],
+        )
+      ).rows[0].id,
+    );
     const conv = Number(
       (
         await owner.query(
-          `INSERT INTO conversations (org_id, title, channel) VALUES ($1,'t','chatbot_widget') RETURNING id`,
-          [orgA],
+          `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, 'visitor-1', 't') RETURNING id`,
+          [orgA, channel],
         )
       ).rows[0].id,
     );

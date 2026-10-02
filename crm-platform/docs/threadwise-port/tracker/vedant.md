@@ -120,10 +120,10 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-NODE-001 | todo |  |  |
-| TW-NODE-002 | todo |  |  |
+| TW-NODE-001 | blocked |  | no bridge process in this repo until decision E |
+| TW-NODE-002 | in-progress |  | guard + first route done; applies to every later bridge-facing route |
 | TW-NODE-003 | todo |  |  |
-| TW-NODE-004 | todo |  |  |
+| TW-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
 | TW-NODE-005 | todo |  |  |
 | TW-NODE-006 | todo |  |  |
 | TW-NODE-007 | todo |  |  |
@@ -148,7 +148,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-026 | todo |  |  |
 | TW-NODE-027 | todo |  |  |
 | TW-NODE-028 | todo |  |  |
-| TW-NODE-029 | todo |  |  |
+| TW-NODE-029 | in-progress |  | admin pacing + bridge pull route done; jitter, batching, daily cap wait for the send pipeline |
 | TW-NODE-030 | todo |  |  |
 | TW-NODE-031 | todo |  |  |
 | TW-NODE-032 | todo |  |  |
@@ -171,7 +171,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-049 | todo |  |  |
 | TW-NODE-050 | todo |  |  |
 | TW-NODE-051 | todo |  |  |
-| TW-NODE-052 | todo |  |  |
+| TW-NODE-052 | frontend-done |  | address, token, test connection; parity run pending |
 | TW-NODE-053 | todo |  |  |
 | TW-NODE-054 | todo |  |  |
 

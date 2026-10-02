@@ -702,7 +702,8 @@ describe('rotate the embed token (TW-WGT-023)', () => {
     expect(after.body.transcript.map((m: { body: string }) => m.body)).toContain('before');
     expect(
       await api.count(
-        `SELECT count(*)::int AS n FROM conversations WHERE org_id = $1 AND channel = 'chatbot_widget'`,
+        `SELECT count(*)::int AS n FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+         WHERE c.org_id = $1 AND ch.kind = 'webchat'`,
         [t.orgId],
       ),
     ).toBeGreaterThanOrEqual(1);
@@ -796,7 +797,7 @@ describe('delete (TW-WGT-025, 029)', () => {
     );
     expect(convs.rows).toHaveLength(1);
     const msgs = await h.owner.query(
-      `SELECT count(*)::int AS n FROM inbox_messages WHERE org_id = $1 AND conversation_id = $2`,
+      `SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND conversation_id = $2`,
       [t.orgId, convs.rows[0].id],
     );
     expect(msgs.rows[0].n).toBe(threadBefore.length);
@@ -862,10 +863,19 @@ describe('plan gate (TW-WGT-027)', () => {
       expect(list.status).toBe(200);
       expect(list.body.planLocked).toBe(true);
       expect((await api.as(t.admin).get(`/v2/widgets/${w.id}`)).status).toBe(200);
-      const before = await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`, [t.orgId]);
+      const before = await api.count(
+        `SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`,
+        [t.orgId],
+      );
       for (const res of [
-        await api.as(t.admin).post('/v2/widgets').send(widgetBody({ name: 'Blocked' })),
-        await api.as(t.admin).patch(`/v2/widgets/${w.id}`).send({ ...widgetBody(), rowVersion: w.rowVersion }),
+        await api
+          .as(t.admin)
+          .post('/v2/widgets')
+          .send(widgetBody({ name: 'Blocked' })),
+        await api
+          .as(t.admin)
+          .patch(`/v2/widgets/${w.id}`)
+          .send({ ...widgetBody(), rowVersion: w.rowVersion }),
         await api.as(t.admin).post(`/v2/widgets/${w.id}/duplicate`),
         await api.as(t.admin).post(`/v2/widgets/${w.id}/rotate-token`),
         await api.as(t.admin).delete(`/v2/widgets/${w.id}`),
@@ -873,7 +883,11 @@ describe('plan gate (TW-WGT-027)', () => {
         expect(res.status).toBe(422);
         expect(res.body.code).toBe('PLAN_FEATURE_LOCKED');
       }
-      expect(await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`, [t.orgId])).toBe(before);
+      expect(
+        await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`, [
+          t.orgId,
+        ]),
+      ).toBe(before);
       // TW-WGT-027 rule 4: the public routes ignore the plan, so a downgraded workspace keeps serving its embedded widgets.
       expect((await api.pub(w.embedToken).embed()).status).toBe(200);
       expect((await api.pub(w.embedToken).config()).status).toBe(200);

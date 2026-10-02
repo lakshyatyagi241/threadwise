@@ -5,8 +5,7 @@
       "payments": "Payments",
       "taxRates": "Tax rates",
       "recurring": "Recurring invoices",
-      "salesOrders": "Sales orders",
-      "businessProfile": "Business profile"
+      "salesOrders": "Sales orders"
     },
     "common": {
       "unnamedContact": "Unnamed contact",

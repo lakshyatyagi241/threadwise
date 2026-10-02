@@ -17,7 +17,7 @@ Sign in with the seeded staff user printed by `setup` (organization slug, email,
 
 ```
 API_URL=http://localhost:3000                       # server-side only; the browser never calls the API host
-NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime
+NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime      # the socket address; REALTIME_URL overrides it at runtime
 ```
 
 ## How it is put together
@@ -29,8 +29,9 @@ NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime
 | `src/app/(admin)/`                            | platform-admin shell (placeholder until the super-admin actor exists)                                               |
 | `src/app/api/auth/*`                          | login, logout, refresh route handlers; tokens go into httpOnly cookies                                              |
 | `src/app/api/v2/[...path]`                    | same-origin proxy to the API: adds the bearer token, refreshes once on 401, blocks `auth/*` and cross-origin writes |
-| `src/features/<domain>/`                      | a domain's screens' code and its `nav.ts` menu entries                                                              |
-| `src/features/_registry/`                     | nav types and gating rules; `nav.generated.ts` is built from every `nav.ts` (gitignored)                            |
+| `src/features/<domain>/`                      | a domain's screens' code, its `nav.ts` menu entries and its `settings.ts` Settings tiles                            |
+| `src/features/_registry/`                     | nav and Settings types and gating rules; `nav.generated.ts` and `settings.generated.ts` are built (gitignored)      |
+| `src/features/settings-hub/`                  | the Settings pages (section list, tile grid, search) and the "Back to Settings" breadcrumb                           |
 | `src/components/shell/`                       | the app shell (sidebar, header, theme and language switchers)                                                       |
 | `src/lib/api`, `src/lib/auth`                 | API client, error mapping, cursor-list hook; cookie and session helpers                                             |
 | `src/i18n`, `messages/<locale>/<domain>.json` | locale list (21, three RTL), message loader with English fallback; one messages file per domain                     |
@@ -38,7 +39,10 @@ NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime
 ## Add a screen for your domain (no shared file is edited)
 
 1. `src/app/(app)/(<domain>)/<routeBase>/page.tsx`
-2. `src/features/<domain>/nav.ts` exporting `nav: NavItem[]` (group, label key, href, optional gates)
+2. `src/features/<domain>/nav.ts` exporting `nav: NavItem[]` (group, label key, href, optional gates) for daily-work screens, or
+   `src/features/<domain>/settings.ts` exporting `settings: SettingsTile[]` (`settingsTile({ id, section, href, icon, gates })`, copy in
+   `messages/<locale>/settings.json` under `settings.tiles.<id>`) for a screen that configures something: configuration lives under Settings,
+   not in the menu
 3. `messages/en/<domain>.json` with the top-level key `<domain>`; reference keys as `<domain>.<screen>.<key>`
 4. Fetch through `apiFetch` / `useCursorList` with a schema from `@crm/contracts`
 5. `pnpm --filter @crm/web typecheck lint test` (the registry regenerates by itself)
@@ -62,4 +66,4 @@ See the `threadwise-frontend-port` skill for the rules that apply to every scree
 - Only English messages exist; the loader falls back to English for the other 20 locales.
 - All domains' messages are sent to the client (fine now, split per route later).
 - When only the access token has expired, the refresh redirect returns to the page that was asked for (`?next=`, kept only for same-site paths); a session that ended for inactivity goes to sign-in with the reason instead.
-- Realtime is not wired: there is no short-lived socket token endpoint yet.
+- Realtime is connected (one socket per session, `src/lib/realtime`) but no screen listens yet: the polling features still poll.

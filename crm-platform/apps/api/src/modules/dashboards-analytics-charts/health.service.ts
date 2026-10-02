@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getQueueToken } from '@nestjs/bullmq';
 import { ModuleRef } from '@nestjs/core';
@@ -19,6 +19,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { AuthAuditService } from '../auth';
+import { NodeBridgeSettingsService } from '../node-bridge-runtime';
 import { overallState, queueState, shortError } from './health-rules';
 
 /** A poll storm (several consoles at 20 s) shares one run of the probes. */
@@ -41,6 +42,7 @@ export class HealthService {
     private readonly config: ConfigService,
     private readonly moduleRef: ModuleRef,
     private readonly audit: AuthAuditService,
+    @Optional() private readonly bridge?: NodeBridgeSettingsService,
   ) {}
 
   /** Every queue by its fixed name. */
@@ -153,13 +155,15 @@ export class HealthService {
 
   /** Reachability, not correctness: any HTTP answer counts as up (TW-DASH-048 rule 3). */
   private async probeBridge(): Promise<HealthCheck> {
-    const url = this.config.get<string>('NODE_BRIDGE_URL')?.trim();
+    // The address an operator saved in the Node bridge panel (TW-NODE-052) wins; the environment is the fallback.
+    const saved = await this.bridge?.target();
+    const url = saved?.serverUrl || this.config.get<string>('NODE_BRIDGE_URL')?.trim();
     if (!url) {
       return {
         key: 'bridge',
         state: 'warn',
         value: 'Not configured',
-        detail: 'Set NODE_BRIDGE_URL',
+        detail: 'Set the Node bridge URL',
         ping: null,
       };
     }
@@ -167,7 +171,7 @@ export class HealthService {
     let host = url;
     try {
       host = new URL(url).host;
-      const token = this.config.get<string>('NODE_BRIDGE_TOKEN');
+      const token = saved?.token ?? this.config.get<string>('NODE_BRIDGE_TOKEN');
       const res = await fetch(url, {
         headers: token ? { 'X-Node-Token': token } : {},
         signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),

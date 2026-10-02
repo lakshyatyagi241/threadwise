@@ -190,7 +190,9 @@ export class WidgetsRepository {
    * check-then-insert let both through only because its server handled one request at a time.
    */
   async lockSlugs(tx: Tx, orgId: number): Promise<void> {
-    await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${`wgt-slug:${orgId}`}, 0))`);
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`wgt-slug:${orgId}`}, 0))`,
+    );
   }
 
   /** Slugs of the workspace that could collide with `base` (`base`, `base-2`, ...), leaving out the widget being saved. */

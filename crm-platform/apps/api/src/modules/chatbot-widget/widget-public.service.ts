@@ -23,7 +23,6 @@ import { HISTORY_TURNS } from './ai-prompt';
 import { buildEmbedScript, NOT_FOUND_SCRIPT } from './embed-script';
 import { renderChatPage } from './chat-page';
 import {
-  botSender,
   historyFrom,
   isTokenShape,
   originAllowed,
@@ -298,12 +297,7 @@ export class WidgetPublicService {
       // The history is read AFTER the visitor's line is stored, so the message appears both in the history and as
       // "Visitor just said" (TW-WGT-016 rule 4: reproduced deliberately).
       const history = await this.inbox.recent(tx, orgId, conversation.id, HISTORY_TURNS);
-      const humanTookOver = await this.inbox.humanHasTakenOver(
-        tx,
-        orgId,
-        conversation.id,
-        botSender(widget.uuid),
-      );
+      const humanTookOver = await this.inbox.humanHasTakenOver(tx, orgId, conversation.id);
       let assistant: AssistantProfile | undefined;
       let knowledge: KnowledgeSource[] = [];
       if (!humanTookOver && usesAi(widget) && widget.assistantId !== null) {
@@ -342,7 +336,6 @@ export class WidgetPublicService {
               stored.conversation,
               forInbox,
               widget.assistantUuid,
-              stored.visitor.visitorUuid,
               replyText!,
             );
             return { id: out.id, body: replyText!, at: out.sentAt.toISOString() };

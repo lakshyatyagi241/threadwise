@@ -180,8 +180,8 @@ export class WidgetApi extends Api {
   /** The thread of a visitor, straight from the table, oldest first. */
   async thread(orgId: number, visitorUuid: string) {
     const res = await this.h.owner.query(
-      `SELECT m.id, m.direction, m.from_number, m.to_number, m.body, m.status, m.meta, m.provider, m.user_id
-       FROM inbox_messages m
+      `SELECT m.id, m.direction, m.sender_kind, m.body, m.status, m.meta, m.sender_user_id
+       FROM messages m
        JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
        WHERE m.org_id = $1 AND v.visitor_uuid = $2 ORDER BY m.id`,
       [orgId, visitorUuid],
@@ -189,13 +189,11 @@ export class WidgetApi extends Api {
     return res.rows as Array<{
       id: number;
       direction: string;
-      from_number: string | null;
-      to_number: string | null;
+      sender_kind: string;
       body: string;
       status: string;
       meta: Record<string, unknown>;
-      provider: string | null;
-      user_id: number | null;
+      sender_user_id: number | null;
     }>;
   }
 
@@ -208,18 +206,14 @@ export class WidgetApi extends Api {
     return res.rows[0] as Record<string, unknown> | undefined;
   }
 
-  /** A reply typed by an operator in the team inbox: outbound, not written by the widget's bot. */
-  async agentReply(
-    orgId: number,
-    visitorUuid: string,
-    body: string,
-    from: string | null = '+10000000000',
-  ) {
+  /** A reply typed by an operator in the team inbox: outbound, sent by a staff member and not by the widget's bot. */
+  async agentReply(orgId: number, visitorUuid: string, body: string) {
     const conv = await this.conversationOf(orgId, visitorUuid);
     const res = await this.h.owner.query(
-      `INSERT INTO inbox_messages (org_id, conversation_id, direction, from_number, to_number, body, status, sent_at, provider)
-       VALUES ($1,$2,'out',$3,$4,$5,'sent',now(),'baileys') RETURNING id`,
-      [orgId, conv!.id, from, visitorUuid, body],
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, body, status, sent_at)
+       VALUES ($1, $2, (SELECT COALESCE(max(seq), 0) + 1 FROM messages WHERE org_id = $1 AND conversation_id = $2),
+               'out', 'agent', $3, 'sent', now()) RETURNING id`,
+      [orgId, conv!.id, body],
     );
     return Number(res.rows[0].id);
   }
