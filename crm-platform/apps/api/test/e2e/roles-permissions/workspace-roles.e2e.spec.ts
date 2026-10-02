@@ -195,10 +195,15 @@ describe('presets (TW-RBAC-004, 024)', () => {
     expect(a.get('record.contacts.read')).toBe('own');
   });
 
-  it('Viewer reads the conversations of its own teams and nothing else', async () => {
+  it('Viewer reads the conversations of its own teams, plus the keys every member holds', async () => {
     const org = await signupOrg();
     const v = await grantsOf(org.orgId, 'Viewer');
-    expect([...v.entries()]).toEqual([['inbox.conversation.read', 'team']]);
+    expect([...v.entries()].sort()).toEqual([
+      ['aiadm.models.read', 'all'],
+      ['inbox.conversation.read', 'team'],
+      ['support.ticket.create', 'all'],
+      ['support.ticket.read', 'all'],
+    ]);
   });
 
   it('keeps the presets: no delete, no rename, in the API and in the database', async () => {
@@ -431,6 +436,160 @@ describe('landing and the permission map (TW-RBAC-033, 035)', () => {
     expect(Object.keys(perms)).not.toContain('org.member.role_assign');
     const viewer = await addMember(org, 'Viewer');
     const vs = await api().get('/v2/auth/session').set(bearer(viewer.token));
-    expect(Object.keys(vs.body.permissions)).toEqual(['inbox.conversation.read']);
+    expect(Object.keys(vs.body.permissions).sort()).toEqual([
+      'aiadm.models.read',
+      'inbox.conversation.read',
+      'support.ticket.create',
+      'support.ticket.read',
+    ]);
+  });
+});
+
+describe('a workspace admin manages roles and members (screens: /settings/roles, /settings/team)', () => {
+  const rolesOf = async (token: string) =>
+    (await api().get('/v2/roles').set(bearer(token))).body.data as Array<{
+      id: string;
+      name: string;
+      userCount: number;
+      isPreset: boolean;
+      grantable: boolean;
+      editable: boolean;
+      isLocked: boolean;
+    }>;
+
+  it('tells each caller which roles they can hand out and which they can edit, and counts the members', async () => {
+    const org = await signupOrg();
+    const admin = await addMember(org, 'Admin');
+    await addMember(org, 'Agent');
+    const asOwner = Object.fromEntries((await rolesOf(org.owner)).map((r) => [r.name, r]));
+    expect(asOwner.Owner).toMatchObject({
+      userCount: 1,
+      isPreset: true,
+      isLocked: true,
+      grantable: true,
+      editable: false,
+    });
+    expect(asOwner.Agent).toMatchObject({
+      userCount: 1,
+      isPreset: true,
+      grantable: true,
+      editable: true,
+    });
+    const asAdmin = Object.fromEntries((await rolesOf(admin.token)).map((r) => [r.name, r]));
+    expect(asAdmin.Owner!.grantable).toBe(false);
+    expect(asAdmin.Admin).toMatchObject({ grantable: false, editable: false });
+    expect(asAdmin.Manager).toMatchObject({ grantable: true, editable: true });
+  });
+
+  it('creates, edits and deletes a custom role; one with members cannot be deleted until they are moved', async () => {
+    const org = await signupOrg();
+    const created = await api()
+      .post('/v2/roles')
+      .set(bearer(org.owner))
+      .set('Idempotency-Key', crypto.randomUUID())
+      .send({
+        name: 'Sales lead',
+        grants: [
+          { permissionKey: 'record.contacts.read', effect: 'allow', recordScope: 'team' },
+          { permissionKey: 'record.contacts.delete', effect: 'deny', recordScope: 'all' },
+        ],
+      });
+    expect(created.status, JSON.stringify(created.body)).toBe(201);
+    expect(created.body).toMatchObject({
+      isPreset: false,
+      userCount: 0,
+      editable: true,
+      grantable: true,
+    });
+    const edited = await api()
+      .patch(`/v2/roles/${created.body.id}`)
+      .set(bearer(org.owner))
+      .send({
+        grants: [{ permissionKey: 'record.contacts.read', effect: 'allow', recordScope: 'all' }],
+        rowVersion: created.body.rowVersion,
+      });
+    expect(edited.status, JSON.stringify(edited.body)).toBe(200);
+    expect(edited.body.grants).toHaveLength(1);
+
+    const member = await addMember(org, 'Agent');
+    expect((await setRoles(org.owner, member.uuid, [created.body.id])).status).toBe(200);
+    const blocked = await api().delete(`/v2/roles/${created.body.id}`).set(bearer(org.owner));
+    expect(blocked.status).toBe(422);
+    expect(blocked.body.code).toBe('RBAC_ROLE_IN_USE');
+    expect((await setRoles(org.owner, member.uuid, [org.roles.Agent!])).status).toBe(200);
+    expect((await api().delete(`/v2/roles/${created.body.id}`).set(bearer(org.owner))).status).toBe(
+      204,
+    );
+  });
+
+  it('takes effect on the member at once: removing a permission from their role closes the door', async () => {
+    const org = await signupOrg();
+    const role = await api()
+      .post('/v2/roles')
+      .set(bearer(org.owner))
+      .set('Idempotency-Key', crypto.randomUUID())
+      .send({
+        name: 'Reader',
+        grants: [{ permissionKey: 'record.contacts.read', effect: 'allow', recordScope: 'all' }],
+      });
+    const member = await addMember(org, 'Viewer');
+    await setRoles(org.owner, member.uuid, [role.body.id]);
+    expect((await api().get('/v2/contacts').set(bearer(member.token))).status).toBe(200);
+    await api()
+      .patch(`/v2/roles/${role.body.id}`)
+      .set(bearer(org.owner))
+      .send({ grants: [], rowVersion: role.body.rowVersion });
+    expect((await api().get('/v2/contacts').set(bearer(member.token))).status).toBe(403);
+  });
+
+  it('deactivates and reactivates members, but not yourself, not a superior, not the last Owner', async () => {
+    const org = await signupOrg();
+    const admin = await addMember(org, 'Admin');
+    const agent = await addMember(org, 'Agent');
+    const ownerUuid = (await api().get('/v2/users/me').set(bearer(org.owner))).body.id as string;
+    const patch = (token: string, uuid: string, status: string) =>
+      api().patch(`/v2/users/${uuid}`).set(bearer(token)).send({ status, rowVersion: 1 });
+
+    expect((await patch(admin.token, agent.uuid, 'inactive')).status).toBe(200);
+    const row = (await api().get(`/v2/users/${agent.uuid}`).set(bearer(org.owner))).body;
+    expect(row.status).toBe('inactive');
+    const back = await api()
+      .patch(`/v2/users/${agent.uuid}`)
+      .set(bearer(org.owner))
+      .send({ status: 'active', rowVersion: row.rowVersion });
+    expect(back.status, JSON.stringify(back.body)).toBe(200);
+
+    const self = await patch(admin.token, admin.uuid, 'inactive');
+    expect(self.body.code).toBe('RBAC_SELF_DEACTIVATE');
+    const superior = await patch(admin.token, ownerUuid, 'inactive');
+    expect(superior.status).toBe(403);
+    expect(superior.body.code).toBe('RBAC_ROLE_GRANT_FORBIDDEN');
+    const soleOwner = await patch(org.owner, ownerUuid, 'inactive');
+    expect(soleOwner.body.code).toBe('RBAC_SELF_DEACTIVATE');
+  });
+
+  it('switches filing support tickets and the AI model picker off per role', async () => {
+    const org = await signupOrg();
+    const viewer = await addMember(org, 'Viewer');
+    const t1 = await api().get('/v2/support/tickets').set(bearer(viewer.token));
+    expect(t1.status, JSON.stringify(t1.body)).toBe(200);
+    const m1 = await api().get('/v2/ai/models').set(bearer(viewer.token));
+    expect(m1.status, JSON.stringify(m1.body)).toBe(200);
+    const roles = await rolesOf(org.owner);
+    const v = roles.find((r) => r.name === 'Viewer')!;
+    const full = await api().get(`/v2/roles/${v.id}`).set(bearer(org.owner));
+    const stripped = await api()
+      .patch(`/v2/roles/${v.id}`)
+      .set(bearer(org.owner))
+      .send({
+        grants: full.body.grants.filter(
+          (g: { permissionKey: string }) =>
+            !/^(support\.ticket|aiadm\.models)/.test(g.permissionKey),
+        ),
+        rowVersion: full.body.rowVersion,
+      });
+    expect(stripped.status, JSON.stringify(stripped.body)).toBe(200);
+    expect((await api().get('/v2/support/tickets').set(bearer(viewer.token))).status).toBe(403);
+    expect((await api().get('/v2/ai/models').set(bearer(viewer.token))).status).toBe(403);
   });
 });
