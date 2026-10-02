@@ -9,7 +9,12 @@ export { mapBaileysAck, mapTwilioStatus } from './receipt-rules';
  * the sender lease and daily cap, link tracking, the compose lookups and the pure rules they all share.
  */
 export { BroadcastsComposeService } from './broadcasts-compose.service';
-export { EngineSenderRegistry, type OpenedSender, type OutgoingMessage } from './engine-senders';
+export {
+  EngineSenderRegistry,
+  type OpenedSender,
+  type OutgoingMessage,
+  type OutgoingText,
+} from './engine-senders';
 export { LinkTracker } from './tracking/link-tracker';
 export {
   CapTally,

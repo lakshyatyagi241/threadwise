@@ -248,6 +248,15 @@ export interface NewCampaign {
 
 const json = (v: unknown) => (v === null || v === undefined ? null : JSON.stringify(v));
 
+export interface ClaimedRecipient {
+  id: number;
+  contactId: number;
+  variant: string | null;
+  attempts: number;
+  phone: string | null;
+  countryCode: string | null;
+}
+
 export interface RecipientRow {
   id: number;
   uuid: string;
@@ -447,6 +456,184 @@ export class CampaignsRepository {
         out.set(r.uuid, Number(r.id));
     }
     return out;
+  }
+
+  // -------------------------------------------------------------- the run
+
+  async liveStatus(tx: Tx, orgId: number, id: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT status FROM wpcampaigns WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    const r = res.rows[0] as { status: string } | undefined;
+    return r ? r.status : null;
+  }
+
+  /** The run is alive: the sweeper leaves a campaign alone while this is recent. */
+  async touch(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(
+      sql`UPDATE wpcampaigns SET last_run_at = now() WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+  }
+
+  /**
+   * Recipients that opted out are stamped `unsubscribed` (flag set) so the run can finish and the opt-outs tab shows them; one
+   * contact per normalized phone keeps the first, the later rows are `skipped` (not sent, not a failure).
+   */
+  async screenRecipients(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<{ optedOut: number; duplicates: number }> {
+    const settled = sql`('sent','delivered','read','responded','unsubscribed','skipped')`;
+    const out = await tx.execute(sql`
+      UPDATE wp_campaign_contacts r SET status = 'unsubscribed', is_unsubscribed = true, unsubscribed = true
+      FROM contacts c
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
+        AND c.is_unsubscribed AND r.status NOT IN ${settled}
+      RETURNING r.id`);
+    const dup = await tx.execute(sql`
+      UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = 'duplicate number — already sent this run'
+      FROM (
+        SELECT x.id, row_number() OVER (PARTITION BY x.digits ORDER BY x.id) AS rn
+        FROM (
+          SELECT r2.id, regexp_replace(coalesce(c.phone, ''), '[^0-9]', '', 'g') AS digits
+          FROM wp_campaign_contacts r2 JOIN contacts c ON c.org_id = r2.org_id AND c.id = r2.contact_id
+          WHERE r2.org_id = ${orgId} AND r2.campaign_id = ${id} AND r2.status NOT IN ${settled}
+        ) x WHERE x.digits <> ''
+      ) d
+      WHERE r.org_id = ${orgId} AND r.id = d.id AND d.rn > 1
+      RETURNING r.id`);
+    return { optedOut: out.rows.length, duplicates: dup.rows.length };
+  }
+
+  /**
+   * The next recipients to send: queued ones, and failed ones with attempts left whose next attempt is due. They are marked
+   * `pending` (claimed) in the same statement, so two workers never take the same row. Oldest first.
+   */
+  async claim(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    maxAttempts: number,
+    limit: number,
+  ): Promise<ClaimedRecipient[]> {
+    const res = await tx.execute(sql`
+      WITH picked AS MATERIALIZED (
+        SELECT r.id FROM wp_campaign_contacts r
+        WHERE r.org_id = ${orgId} AND r.campaign_id = ${id}
+          AND (r.status = 'queued'
+               OR (r.status = 'failed' AND r.send_attempts < ${maxAttempts}
+                   AND (r.next_attempt_at IS NULL OR r.next_attempt_at <= now())))
+        ORDER BY r.id LIMIT ${limit} FOR UPDATE SKIP LOCKED
+      )
+      UPDATE wp_campaign_contacts r SET status = 'pending'
+      FROM picked, contacts c
+      WHERE r.org_id = ${orgId} AND r.id = picked.id AND c.org_id = r.org_id AND c.id = r.contact_id
+      RETURNING r.id, r.contact_id, r.variant, r.send_attempts, c.phone, c.country_code`);
+    return (res.rows as Raw[])
+      .map((r) => ({
+        id: Number(r.id),
+        contactId: Number(r.contact_id),
+        variant: str(r.variant),
+        attempts: Number(r.send_attempts ?? 0),
+        phone: str(r.phone),
+        countryCode: str(r.country_code),
+      }))
+      .sort((a, b) => a.id - b.id);
+  }
+
+  async markSent(
+    tx: Tx,
+    orgId: number,
+    rowId: number,
+    providerMessageId: string | null,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = 'sent', sent_at = now(), whatsapp_message_id = ${providerMessageId},
+             error_message = NULL, next_attempt_at = NULL
+      WHERE org_id = ${orgId} AND id = ${rowId}`);
+  }
+
+  async markFailed(
+    tx: Tx,
+    orgId: number,
+    rowId: number,
+    v: { attempts: number; nextAttemptAt: Date | null; error: string },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = 'failed', send_attempts = ${v.attempts},
+             next_attempt_at = ${v.nextAttemptAt ? v.nextAttemptAt.toISOString() : null}::timestamptz,
+             error_message = ${v.error.slice(0, 191)}
+      WHERE org_id = ${orgId} AND id = ${rowId}`);
+  }
+
+  /** A row put back for a later run (nothing was sent): the operator halted, or the window closed. */
+  async release(tx: Tx, orgId: number, rowId: number, status: string): Promise<void> {
+    await tx.execute(
+      sql`UPDATE wp_campaign_contacts SET status = ${status} WHERE org_id = ${orgId} AND id = ${rowId}`,
+    );
+  }
+
+  /** Rows every recipient not yet sent becomes failed at the cap (the campaign ended before they were reached). */
+  async expireUnsent(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    maxAttempts: number,
+    hours: number,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = 'failed', send_attempts = ${maxAttempts}, next_attempt_at = NULL,
+             error_message = ${`Not sent — campaign ended after its ${hours}h send window (auto-expired)`}
+      WHERE org_id = ${orgId} AND campaign_id = ${id}
+        AND status NOT IN ('sent','delivered','read','responded','unsubscribed')`);
+  }
+
+  async firstSentAt(tx: Tx, orgId: number, id: number): Promise<Date | null> {
+    const res = await tx.execute(sql`
+      SELECT min(sent_at) AS at FROM wp_campaign_contacts WHERE org_id = ${orgId} AND campaign_id = ${id} AND sent_at IS NOT NULL`);
+    const r = res.rows[0] as { at: string | Date | null };
+    return r.at ? new Date(r.at) : null;
+  }
+
+  /** What is left after a run: rows not sent (a skipped duplicate is final), and of those the ones with attempts left (and when the earliest is due). */
+  async remaining(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    maxAttempts: number,
+  ): Promise<{ remaining: number; retryable: number; nextRetryAt: Date | null }> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS remaining,
+             count(*) FILTER (WHERE send_attempts < ${maxAttempts})::int AS retryable,
+             min(next_attempt_at) FILTER (WHERE send_attempts < ${maxAttempts}) AS next_at
+      FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status NOT IN ('sent','delivered','read','responded','unsubscribed','skipped')`);
+    const r = res.rows[0] as {
+      remaining: number;
+      retryable: number;
+      next_at: string | Date | null;
+    };
+    return {
+      remaining: Number(r.remaining),
+      retryable: Number(r.retryable),
+      nextRetryAt: r.next_at ? new Date(r.next_at) : null,
+    };
+  }
+
+  /** A fresh cadence: every recipient is queued again with its retries and backoff cleared. */
+  async requeueAll(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = 'queued', send_attempts = 0, next_attempt_at = NULL
+      WHERE org_id = ${orgId} AND campaign_id = ${id}`);
+  }
+
+  async firstContactUuid(tx: Tx, orgId: number, contactId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+    );
+    const r = res.rows[0] as { uuid: string } | undefined;
+    return r?.uuid ?? null;
   }
 
   // -------------------------------------------------------------- list and tiles

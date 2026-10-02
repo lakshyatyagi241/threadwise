@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
+import { CrmModule } from '../crm';
 import {
   DefaultCampaignSettings,
   NoFlowStarter,
@@ -15,6 +16,7 @@ import {
 } from './_shims/tokens';
 import { CampaignAudienceService } from './audience.service';
 import { CampaignEvents } from './campaign-events';
+import { CampaignMirrorService } from './campaign-mirror.service';
 import { CampaignJobs } from './campaign-jobs';
 import { CampaignsActionsController } from './campaigns-actions.controller';
 import { CampaignsActionsService } from './campaigns-actions.service';
@@ -30,7 +32,7 @@ import { CampaignsService } from './campaigns.service';
  * same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [BroadcastsModule],
+  imports: [BroadcastsModule, CrmModule],
   controllers: [CampaignsController, CampaignsReadController, CampaignsActionsController],
   providers: [
     CryptoService,
@@ -41,11 +43,25 @@ import { CampaignsService } from './campaigns.service';
     CampaignsActionsService,
     CampaignEvents,
     CampaignJobs,
+    CampaignMirrorService,
     { provide: CAMPAIGN_PLAN_GATE, useClass: OpenCampaignPlanGate },
     { provide: CAMPAIGN_BILLING, useClass: OpenCampaignBilling },
     { provide: CAMPAIGN_FLOW_STARTER, useClass: NoFlowStarter },
     { provide: CAMPAIGN_SETTINGS, useClass: DefaultCampaignSettings },
   ],
-  exports: [CampaignsRepository, CampaignEvents, CampaignJobs],
+  // The worker module reuses this module's providers and the kits it was built from.
+  exports: [
+    BroadcastsModule,
+    CrmModule,
+    CryptoService,
+    CampaignsRepository,
+    CampaignEvents,
+    CampaignJobs,
+    CampaignMirrorService,
+    CAMPAIGN_PLAN_GATE,
+    CAMPAIGN_BILLING,
+    CAMPAIGN_FLOW_STARTER,
+    CAMPAIGN_SETTINGS,
+  ],
 })
 export class CampaignsModule {}
