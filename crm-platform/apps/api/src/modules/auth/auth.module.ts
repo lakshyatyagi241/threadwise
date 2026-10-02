@@ -154,6 +154,8 @@ import { TokenService } from './token.service';
     HtmlSanitizerService,
     SecurityPolicyService,
     PlatformSettingsService,
+    // the one door to platform-wide tables, for the add-ons domain's operator catalogue and registry
+    PlatformStore,
     WebhookSecretRegistry,
     OtpTemplateService,
   ],
