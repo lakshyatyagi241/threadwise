@@ -79,11 +79,11 @@ Inventory written 2026-10-02: `docs/threadwise-port/inventory/channel-facebook.m
 
 Inventory written 2026-10-02: `docs/threadwise-port/inventory/channel-instagram.md` (TW-IG-001 to 020). The channel is the Instaflow bridge; the native add-on is not in the reference (020, blocked). Build order, one commit and push per step:
 
-| Step | What                                                                          | Features                |
-| ---- | ----------------------------------------------------------------------------- | ----------------------- |
-| I1   | Permissions, bridge port and client, accounts: available, link, unlink (DONE) | 016, 003, 004, 005, 006 |
-| I2   | Inbound push, ingest (shim), pull job (DONE)                                  | 007, 008, 009           |
-| I3   | Reply sender, composer recipients, flows list and run                         | 010, 011, 012, 013      |
-| I4   | Reply-only broadcast (B10)                                                    | 014                     |
-| I5   | Web: hub, add dialog                                                          | 001, 002, 015           |
-| I6   | Auto-reply hook, flow import and push, templates (BLOCKED: others)            | 017, 018, 019, 020      |
+| Step | What                                                                          | Features                  |
+| ---- | ----------------------------------------------------------------------------- | ------------------------- |
+| I1   | Permissions, bridge port and client, accounts: available, link, unlink (DONE) | 016, 003, 004, 005, 006   |
+| I2   | Inbound push, ingest (shim), pull job (DONE)                                  | 007, 008, 009             |
+| I3   | Reply sender, flows list and run (DONE)                                       | 010, 011 (no caller), 012 |
+| I4   | Composer recipients and reply-only broadcast (B10)                            | 013, 014                  |
+| I5   | Web: hub, add dialog                                                          | 001, 002, 015             |
+| I6   | Auto-reply hook, flow import and push, templates (BLOCKED: others)            | 017, 018, 019, 020        |

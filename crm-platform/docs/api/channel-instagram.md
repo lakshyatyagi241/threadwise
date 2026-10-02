@@ -32,3 +32,14 @@ A message is stored once by its id (a push and a pull of the same message give o
 ## Pull (TW-IG-009)
 
 No route. A worker asks the engine every 20 seconds for each organization with a linked account (queue `ig-pull`, job id `ig-pull-<org>`): the threads of every linked account, then the messages of each thread with news, both directions. A pulled message older than 10 minutes is history (stored, never answered).
+
+## Flows (TW-IG-012)
+
+| Method and path                              | Permission     | What                                                                                                                                                                                                        |
+| -------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /instagram/flows`                       | `ig.flows.run` | `{flows: [{id, name}], authorUrl}`: the engine's flows for the linked accounts, each once; empty with no linked account or no engine.                                                                       |
+| `POST /instagram/conversations/:id/run-flow` | `ig.flows.run` | Body `{flowId}` (a positive whole number). 200 `{ok: true}`. 404 unknown or foreign conversation; 422 `IG_NOT_AN_INSTAGRAM_THREAD`, `IG_THREAD_NO_ENGINE_ID`, `IG_NOT_CONNECTED`; 502 `IG_FLOW_RUN_FAILED`. |
+
+## Replying (TW-IG-010)
+
+Not a route: the team inbox calls `InstagramSenderService.reply({rawJid, text, media?, buttons?})` for a message whose provider is `instagram` and stores the returned `providerMessageId` on the row (so a later pull never shows our own send twice). It never throws; `{ok: false, error}` carries the reason in words ("IgDesk HTTP 400: ...").

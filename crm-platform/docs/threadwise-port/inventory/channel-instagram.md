@@ -31,28 +31,28 @@ flow-runtime-engine (flows of type `instagram`), auto-reply-keywords (Instagram 
 
 ## Feature index
 
-| Id        | Feature                                                                      | Status  | Priority | Effort | Depends on                  |
-| --------- | ---------------------------------------------------------------------------- | ------- | -------- | ------ | --------------------------- |
-| TW-IG-001 | Instagram hub: linked accounts, status, refresh, unlink, manage link         | pending | P0       | M      | TW-IG-004                   |
-| TW-IG-002 | Add-account dialog: smart connect, picker, connect new popup                 | pending | P0       | M      | TW-IG-003, TW-IG-005        |
-| TW-IG-003 | Available accounts to link (owner scoped)                                    | pending | P0       | S      | TW-IG-016                   |
-| TW-IG-004 | Link and refresh a mirror row                                                | pending | P0       | S      | TW-IG-016                   |
-| TW-IG-005 | Connect-new ticket and the return fallback                                   | pending | P1       | S      | TW-IG-016                   |
-| TW-IG-006 | Unlink: remove the mirror, purge the inbox with the last account             | pending | P0       | S      | TW-IG-004                   |
-| TW-IG-007 | Inbound push endpoint (secret, validation, connection flag)                  | pending | P0       | S      | TW-IG-008                   |
-| TW-IG-008 | Ingest one message: thread, dedup, preview, window, unread, contact, buttons | pending | P0       | L      | TW-IG-004                   |
-| TW-IG-009 | Pull new conversations and messages (both directions)                        | pending | P0       | M      | TW-IG-008                   |
-| TW-IG-010 | Reply through the bridge: text, media, quick replies, buttons                | pending | P0       | M      | TW-IG-008                   |
-| TW-IG-011 | Reaction and sender actions (typing, seen)                                   | pending | P2       | S      | TW-IG-010                   |
-| TW-IG-012 | Run a flow on a thread: list flows, run                                      | pending | P1       | S      | TW-IG-016                   |
-| TW-IG-013 | Composer "Send from" Instagram account and reply-only recipients             | pending | P1       | S      | TW-IG-004                   |
-| TW-IG-014 | Reply-only broadcast (TW-BCAST-019)                                          | pending | P1       | M      | TW-IG-010                   |
-| TW-IG-015 | Plan gate, visibility rule (`hasConnected`), brand name, permission keys     | partial | P0       | S      | plans-subscriptions-trials  |
-| TW-IG-016 | Bridge client: settings, secret header, timeouts, never throw                | pending | P0       | M      | TW-ADD-017                  |
-| TW-IG-017 | Keyword auto-reply from an Instagram DM and its trigger kinds                | blocked | P1       | S      | auto-reply-keywords         |
-| TW-IG-018 | Import an Instaflow flow, push a flow, flow hand-off on a keyword            | blocked | P1       | L      | flow-runtime-engine         |
-| TW-IG-019 | Instagram templates: pull from the bridge, push to it                        | blocked | P2       | M      | message-templates           |
-| TW-IG-020 | Native Instagram add-on (direct Graph, embedded Meta login, `/instagram/*`)  | blocked | P2       | XL     | add-on not in the reference |
+| Id        | Feature                                                                      | Status    | Priority | Effort | Depends on                  |
+| --------- | ---------------------------------------------------------------------------- | --------- | -------- | ------ | --------------------------- |
+| TW-IG-001 | Instagram hub: linked accounts, status, refresh, unlink, manage link         | pending   | P0       | M      | TW-IG-004                   |
+| TW-IG-002 | Add-account dialog: smart connect, picker, connect new popup                 | pending   | P0       | M      | TW-IG-003, TW-IG-005        |
+| TW-IG-003 | Available accounts to link (owner scoped)                                    | pending   | P0       | S      | TW-IG-016                   |
+| TW-IG-004 | Link and refresh a mirror row                                                | pending   | P0       | S      | TW-IG-016                   |
+| TW-IG-005 | Connect-new ticket and the return fallback                                   | pending   | P1       | S      | TW-IG-016                   |
+| TW-IG-006 | Unlink: remove the mirror, purge the inbox with the last account             | pending   | P0       | S      | TW-IG-004                   |
+| TW-IG-007 | Inbound push endpoint (secret, validation, connection flag)                  | pending   | P0       | S      | TW-IG-008                   |
+| TW-IG-008 | Ingest one message: thread, dedup, preview, window, unread, contact, buttons | pending   | P0       | L      | TW-IG-004                   |
+| TW-IG-009 | Pull new conversations and messages (both directions)                        | pending   | P0       | M      | TW-IG-008                   |
+| TW-IG-010 | Reply through the bridge: text, media, quick replies, buttons                | pending   | P0       | M      | TW-IG-008                   |
+| TW-IG-011 | Reaction and sender actions (typing, seen)                                   | no-caller | P2       | S      | TW-IG-010                   |
+| TW-IG-012 | Run a flow on a thread: list flows, run                                      | pending   | P1       | S      | TW-IG-016                   |
+| TW-IG-013 | Composer "Send from" Instagram account and reply-only recipients             | pending   | P1       | S      | TW-IG-004                   |
+| TW-IG-014 | Reply-only broadcast (TW-BCAST-019)                                          | pending   | P1       | M      | TW-IG-010                   |
+| TW-IG-015 | Plan gate, visibility rule (`hasConnected`), brand name, permission keys     | partial   | P0       | S      | plans-subscriptions-trials  |
+| TW-IG-016 | Bridge client: settings, secret header, timeouts, never throw                | pending   | P0       | M      | TW-ADD-017                  |
+| TW-IG-017 | Keyword auto-reply from an Instagram DM and its trigger kinds                | blocked   | P1       | S      | auto-reply-keywords         |
+| TW-IG-018 | Import an Instaflow flow, push a flow, flow hand-off on a keyword            | blocked   | P1       | L      | flow-runtime-engine         |
+| TW-IG-019 | Instagram templates: pull from the bridge, push to it                        | blocked   | P2       | M      | message-templates           |
+| TW-IG-020 | Native Instagram add-on (direct Graph, embedded Meta login, `/instagram/*`)  | blocked   | P2       | XL     | add-on not in the reference |
 
 ## Features
 
@@ -137,10 +137,10 @@ flow-runtime-engine (flows of type `instagram`), auto-reply-keywords (Instagram 
 
 ### TW-IG-011 — Reaction and sender actions (typing, seen)
 
-- **Status:** pending. **Priority:** P2. **Effort:** S.
+- **Status:** no-caller. **Priority:** P2. **Effort:** S.
 - **Summary:** Bridge calls `POST /conversations/{id}/react` (`message_id`, `reaction`, default heart) and `POST /conversations/{id}/action` (`typing_on`, `typing_off`, `mark_seen`). No screen calls them in the reference; they are client methods.
 - **Source refs:** `InstaflowClient::react`, `action`, `typingOn`, `typingOff`, `markSeen`.
-- **Port notes:** kept on the port as methods with tests; no endpoint is added until a screen uses them (recorded, not dropped).
+- **Port notes:** no screen, job or service in Reference calls them, so there is nothing to wire; they are recorded here, not dropped, and are added to the bridge port (two methods and a client call each) the day something needs them.
 
 ### TW-IG-012 — Run a flow on a thread: list flows, run
 
@@ -165,7 +165,7 @@ flow-runtime-engine (flows of type `instagram`), auto-reply-keywords (Instagram 
 
 - **Status:** partial. **Priority:** P0. **Effort:** S.
 - **Summary:** Instagram shows only while BOTH hold: the bridge is connected (a cached flag, no network call) and the workspace has a connected mirror row (`hasConnected`). Cutting the bridge or unlinking the last account makes it disappear everywhere. Labels use the saved display name (`instaflow_brand`, default `IgDesk`), never the literal "Instaflow". The plan flag `access_instagram` gates the channel.
-- **Port notes:** permission keys `ig.accounts.read`, `ig.accounts.manage` and `ig.broadcasts.manage` replace the workspace-role guard (replying in the inbox stays under the inbox keys). The plan flag is a shim (`InstagramPlanGate`) until the plan catalogue carries it, same as `FacebookPlanGate`.
+- **Port notes:** permission keys `ig.accounts.read`, `ig.accounts.manage`, `ig.broadcasts.manage` and `ig.flows.run` replace the workspace-role guard (replying in the inbox stays under the inbox keys). The plan flag is a shim (`InstagramPlanGate`) until the plan catalogue carries it, same as `FacebookPlanGate`.
 - **Source refs:** `WorkspaceIgAccount::hasConnected`, `ig_brand_name()` (`fc_helpers.php`), `UserNav.php`.
 
 ### TW-IG-016 — Bridge client: settings, secret header, timeouts, never throw
