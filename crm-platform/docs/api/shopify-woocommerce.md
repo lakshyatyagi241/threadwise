@@ -25,6 +25,8 @@ session and the permission shown; the platform routes need an operator; the call
 | `POST /shopify/webhook/:secret` | `X-Shopify-Hmac-SHA256` (base64 HMAC of the raw body, platform client secret) | 200 `ok`; 401 `bad hmac`; 404 `not found`; 503 `try again` (not queued, retry). Topic in `X-Shopify-Topic`, delivery in `X-Shopify-Webhook-Id`. |
 | `POST /woocommerce/webhook/:secret` | `X-WC-Webhook-Signature` (the store's webhook secret) | As Shopify's with `bad signature`. Topic `X-WC-Webhook-Topic`, delivery `X-WC-Webhook-Delivery-ID`. A non-JSON ping is acknowledged and not logged. |
 
+| `POST /shopify/compliance` | `X-Shopify-Hmac-SHA256` (platform client secret) | The three mandatory privacy webhooks by `X-Shopify-Topic`: `customers/data_request` (acknowledged), `customers/redact` (erases that customer's logs, all of the shop's when no phone), `shop/redact` (erases the store). 401 `bad hmac` before anything is read; 200 `ok` otherwise, whatever fails. |
+
 Give Shopify `{APP_URL}/v2/shopify/oauth/callback` as the app's redirect address (the platform setting defaults to it).
 
 ## WooCommerce (TW-ECOM-025, 026, 013)

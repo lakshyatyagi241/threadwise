@@ -17,6 +17,7 @@ import {
   wooProduct,
   type StoreKind,
 } from './mirror-rules';
+import { MirrorRepository } from './mirror.repository';
 import { StoresRepository } from './stores.repository';
 
 type Json = Record<string, unknown>;
@@ -46,6 +47,7 @@ export class WebhookPipelineService {
   constructor(
     private readonly db: DatabaseService,
     private readonly stores: StoresRepository,
+    private readonly mirrorRepo: MirrorRepository,
     private readonly events: EventsRepository,
     private readonly message: EventMessageService,
     @Inject(STORE_MIRROR) private readonly mirror: StoreMirror,
@@ -74,6 +76,50 @@ export class WebhookPipelineService {
       });
     }
     await this.guarded(job, 'mirror', () => this.upkeep(job));
+    if (job.kind === 'shopify') {
+      if (job.eventType === 'fulfillments/update')
+        await this.guarded(job, 'delivered', () => this.delivered(job));
+      if (job.eventType === 'app/uninstalled')
+        await this.guarded(job, 'uninstall', () =>
+          this.db.txAs({ orgId: job.orgId }, (tx) =>
+            this.stores.markShopifyUninstalled(tx, job.orgId, job.storeId),
+          ),
+        );
+    }
+  }
+
+  /**
+   * A courier marking a shipment delivered fires the Delivered automation (TW-ECOM-018). The customer comes from the mirrored order
+   * (phone, name, order name), the shipment's destination phone being the fallback.
+   */
+  private async delivered(job: WebhookJob): Promise<void> {
+    const d = job.data;
+    if (String(d.shipment_status ?? '').toLowerCase() !== 'delivered') return;
+    const cfg = await this.message.config(job.orgId, 'shopify', job.storeId, 'order/delivered');
+    if (!cfg) return;
+    const orderId = String(d.order_id ?? '');
+    const order = await this.db.txAs({ orgId: job.orgId }, (tx) =>
+      this.mirrorRepo.orderByStoreId(tx, job.orgId, 'shopify', orderId),
+    );
+    const destination = (d.destination ?? {}) as { phone?: unknown };
+    const phone =
+      order?.phone || (typeof destination.phone === 'string' ? destination.phone : null);
+    const data = {
+      id: d.order_id ?? null,
+      name: order?.orderName ?? `#${orderId}`,
+      phone,
+      customer: { first_name: order?.name || 'there', phone },
+      fulfillments: [d],
+    };
+    const log = await this.db.txAs({ orgId: job.orgId }, (tx) =>
+      this.events.log(tx, job.orgId, 'shopify', job.storeId, {
+        eventType: 'order/delivered',
+        status: 'received',
+        recipient: phone,
+        payload: data,
+      }),
+    );
+    await this.automation({ ...job, data }, 'order/delivered', log, true);
   }
 
   private async guarded(job: WebhookJob, step: string, fn: () => Promise<void>): Promise<void> {
@@ -96,7 +142,7 @@ export class WebhookPipelineService {
   ): Promise<void> {
     const cfg = await this.message.config(job.orgId, job.kind, job.storeId, eventType);
     if (!cfg) {
-      await this.setLog(job, log, { status: 'processed' });
+      await this.setLog(job, log, { status: 'skipped' });
       return;
     }
     // Only the cart steps wait (as in Reference); every other automation sends at once whatever delay was saved.

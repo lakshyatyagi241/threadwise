@@ -50,7 +50,7 @@ describe("reading a store's automations", () => {
     const id = await store(t, 'shopify');
     const res = await api.http().get(url('shopify', id)).set(bearer(t.admin));
     expect(res.status).toBe(200);
-    expect(res.body.automations).toHaveLength(18);
+    expect(res.body.automations).toHaveLength(16);
     expect(res.body.automations.every((a: { isActive: boolean }) => !a.isActive)).toBe(true);
     const woo = await api
       .http()

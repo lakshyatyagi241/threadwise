@@ -38,20 +38,18 @@ export const verifyWooWebhook = (payload: Buffer, header: string, webhookSecret:
 
 // ── The automations a store can map ─────────────────────────────────────
 
-/** Shopify's own topics, then the automations Reference adds (COD, back in stock, delivered, the cart steps). */
+/** The Shopify automations Reference shows: its order and customer topics, then the ones it adds (delivered, COD, back in stock, the cart steps). `fulfillments/update` and `app/uninstalled` are webhooks we handle but not automations a merchant maps. */
 export const SHOPIFY_AUTOMATIONS: readonly string[] = [
   'orders/create',
   'orders/updated',
   'orders/paid',
   'orders/fulfilled',
   'orders/cancelled',
-  'fulfillments/update',
   'refunds/create',
   'products/update',
   'customers/create',
   'customers/update',
   'checkouts/create',
-  'app/uninstalled',
   'cod/confirm',
   'cod/prepaid',
   'stock/back',

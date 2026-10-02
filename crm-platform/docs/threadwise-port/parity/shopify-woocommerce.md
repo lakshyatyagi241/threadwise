@@ -55,6 +55,10 @@ or WooCommerce store (that needs a Shopify partner app and a store, which this w
 16. **A failed message says why on the log row** (no Cloud API number connected, template not approved, no phone), and a failing step never stops the mirror upkeep that follows it.
 17. **Saving automations validates the template and the sender** (Reference saved whatever id arrived): a template of another workspace, an automation turned on without a template, or a "send from" number that is not connected is a 422. The template travels as its uuid, never its internal id.
 18. **Sending from a chosen number works for Cloud API numbers only** (the one engine with a sender adapter); a Baileys or Twilio choice fails on the log with that reason instead of silently using another number.
+19. **Delivered** (`fulfillments/update` with `shipment_status = delivered`) reads the customer from the mirrored order and falls back to the shipment's destination phone, as Reference; its context also carries the shipment's tracking fields, which Reference left blank.
+20. **App uninstalled** clears the token to an empty string (the column is NOT NULL here, null in Reference) and the connected time; the row, mapping and logs stay.
+21. **The privacy webhooks** (`POST /v2/shopify/compliance`) behave as Reference (401 `bad hmac` before reading, then always 200); the shop is found case-insensitively through a SECURITY DEFINER lookup, and `customers/redact` with no phone erases all of the shop's logs, as Reference does.
+22. **The automation list** is Reference's 16 Shopify and 21 WooCommerce types; `fulfillments/update` and `app/uninstalled` are webhooks handled, not automations to map. A delivery logs `skipped` when no automation is active, `sent` or `failed` after the send, as Reference.
 
 ## Shims
 

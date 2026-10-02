@@ -82,12 +82,10 @@ export class WebhookService {
       const log = await this.db.txAs({ orgId }, (tx) =>
         this.events.log(tx, orgId, kind, storeId, {
           eventType,
-          status: store.status === 'connected' ? 'received' : 'skipped',
+          status: 'received',
           payload: data,
-          error: store.status === 'connected' ? null : 'The store is not connected.',
         }),
       );
-      if (store.status !== 'connected') return { status: 200, body: 'ok' };
       await this.queue.add(
         'delivery',
         {

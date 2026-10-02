@@ -12,9 +12,11 @@ import { WabaCommerceSender } from './_shims/waba-commerce-sender';
 import { EcomPublicController } from './ecom-public.controller';
 import { AutomationsController } from './automations.controller';
 import { AutomationsService } from './automations.service';
+import { ComplianceService } from './compliance.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { ImportService } from './import.service';
+import { MirrorRepository } from './mirror.repository';
 import { EcomPlatformSettingsController } from './platform-settings.controller';
 import { EcomSettingsService } from './platform-settings.service';
 import { ShopifyController } from './shopify.controller';
@@ -49,6 +51,8 @@ import { WoocommerceService } from './woocommerce.service';
     ImportService,
     EventsRepository,
     AutomationsService,
+    ComplianceService,
+    MirrorRepository,
     EventMessageService,
     WebhookService,
     WebhookPipelineService,

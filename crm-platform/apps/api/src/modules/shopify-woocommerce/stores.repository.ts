@@ -221,6 +221,13 @@ export class StoresRepository {
       WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
+  /** The merchant removed the app: the revoked token and the connected time are cleared; the row, mapping and logs stay visible. */
+  async markShopifyUninstalled(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(
+      sql`UPDATE shopify_integrations SET access_token = '', connected_at = NULL WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+  }
+
   async removeShopify(tx: Tx, orgId: number, id: number): Promise<void> {
     await tx.execute(sql`DELETE FROM shopify_integrations WHERE org_id = ${orgId} AND id = ${id}`);
   }
