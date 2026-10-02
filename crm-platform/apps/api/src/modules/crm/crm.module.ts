@@ -332,7 +332,6 @@ import { TagsService } from './tags/tags.service';
     TasksService,
     SalesDocsService,
     SalesDocsRepository,
-    RecurringInvoicesService,
     InvoicesService,
     // The recurring-invoice sweep (InvoicingWorkerModule) drives it.
     RecurringInvoicesService,

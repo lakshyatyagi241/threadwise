@@ -53,6 +53,7 @@ export * from './appointments';
 export * from './notifications-activity-audit';
 export * from './chatbot-widget';
 export * from './roles-permissions';
+export * from './node-bridge-runtime';
 export * from './realtime';
 export * from './chat-conversations';
 export * from './team-inbox-conversations';

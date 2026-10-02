@@ -6,3 +6,4 @@ export { InstallUpdateLicensingModule } from './install-update-licensing.module'
 export { DemoSafe } from './demo-mode.guard';
 export { ReleaseInfoService } from './release-info.service';
 export { InstallSettingsService, type NodeBridgeSettings } from './install-settings.service';
+export { NODE_BRIDGE_KEY, NODE_BRIDGE_TOKEN_KEY } from './setup.service';

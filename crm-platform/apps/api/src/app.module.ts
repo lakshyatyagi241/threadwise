@@ -29,6 +29,7 @@ import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
+import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
@@ -129,6 +130,7 @@ import { HealthModule } from './health/health.module';
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
+    NodeBridgeRuntimeModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
