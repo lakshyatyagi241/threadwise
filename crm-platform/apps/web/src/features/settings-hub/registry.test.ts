@@ -80,7 +80,18 @@ describe('the Settings registry', () => {
 
   it('keeps a planned tile planned only while its page does not exist', () => {
     const pages = routes();
-    for (const t of PLANNED_SETTINGS) expect(isRoute(t.href, pages), `${t.id} now exists: declare it`).toBe(false);
+    for (const t of PLANNED_SETTINGS)
+      expect(isRoute(t.href, pages), `${t.id} now exists: declare it`).toBe(false);
+  });
+
+  it('gives no section the address of a screen under /settings (the screen would shadow the section page)', () => {
+    const shadowed = routes().filter(
+      (r) =>
+        r[0] === 'settings' &&
+        r.length > 1 &&
+        (SETTINGS_SECTIONS as readonly string[]).includes(r[1]!),
+    );
+    expect(shadowed).toEqual([]);
   });
 
   it('has a section for every id and tiles in most of them', () => {
@@ -97,8 +108,12 @@ describe('the Settings registry', () => {
         }
       }
       for (const s of SETTINGS_SECTIONS) {
-        expect(typeof lookup(tree, `settings.sections.${s}.title`), `${locale} ${s}`).toBe('string');
-        expect(typeof lookup(tree, `settings.sections.${s}.description`), `${locale} ${s}`).toBe('string');
+        expect(typeof lookup(tree, `settings.sections.${s}.title`), `${locale} ${s}`).toBe(
+          'string',
+        );
+        expect(typeof lookup(tree, `settings.sections.${s}.description`), `${locale} ${s}`).toBe(
+          'string',
+        );
       }
     }
   });

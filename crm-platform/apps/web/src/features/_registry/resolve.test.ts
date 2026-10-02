@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { CAPABILITIES_UNKNOWN, compareNav, mergePlanned, resolveNav } from './resolve';
+import {
+  CAPABILITIES_UNKNOWN,
+  compareNav,
+  isHubPane,
+  mergePlanned,
+  resolveNav,
+  resolveNavAll,
+} from './resolve';
 import type { NavItem } from './types';
 
 const items: NavItem[] = [
@@ -57,6 +64,48 @@ describe('resolveNav', () => {
   });
 });
 
+describe('account hub panes', () => {
+  const panes: NavItem[] = [
+    { id: 'account', group: 'settings', labelKey: 'a', href: '/account', order: 90 },
+    { id: 'plan', group: 'settings', labelKey: 'b', href: '/account/plans', order: 10 },
+    { id: 'wallet', group: 'settings', labelKey: 'c', href: '/account/wallet', order: 20 },
+    { id: 'settings', group: 'settings', labelKey: 'd', href: '/settings/general' },
+    { id: 'deep', group: 'settings', labelKey: 'e', href: '/account/wallet/history' },
+  ];
+
+  it('recognises a pane by its address: /account/<one segment>', () => {
+    expect(panes.map((p) => isHubPane(p))).toEqual([false, true, true, false, false]);
+    expect(isHubPane({ href: '/account/Wallet' })).toBe(false);
+    expect(isHubPane({ href: '/accounts/plans' })).toBe(false);
+  });
+
+  it('keeps hub panes out of the sidebar but leaves the Account entry and everything else', () => {
+    const ids = resolveNav(panes, CAPABILITIES_UNKNOWN).map((i) => i.id);
+    expect(ids).toContain('account');
+    expect(ids).toContain('settings');
+    expect(ids).toContain('deep');
+    expect(ids).not.toContain('plan');
+    expect(ids).not.toContain('wallet');
+  });
+
+  it('hands the hub every entry, panes included, with the same gating', () => {
+    const gated: NavItem[] = [
+      ...panes,
+      {
+        id: 'orders',
+        group: 'settings',
+        labelKey: 'f',
+        href: '/account/orders',
+        gates: { permission: 'orders.read' },
+      },
+    ];
+    expect(resolveNavAll(gated, caps([], [], [])).map((i) => i.id)).not.toContain('orders');
+    expect(resolveNavAll(gated, caps(['orders.read'], [], [])).map((i) => i.id)).toEqual(
+      expect.arrayContaining(['plan', 'wallet', 'orders']),
+    );
+  });
+});
+
 describe('resolveNav with planned screens', () => {
   const planned: NavItem[] = [
     { id: 'flows', group: 'automation', labelKey: 'soon-flows', href: '/flows', order: 0 },
@@ -82,7 +131,10 @@ describe('resolveNav with planned screens', () => {
   });
 
   it('also drops a planned entry whose address a real item already serves', () => {
-    const merged = mergePlanned([{ id: 'chat', group: 'inbox', labelKey: 'x', href: '/chat' }], planned);
+    const merged = mergePlanned(
+      [{ id: 'chat', group: 'inbox', labelKey: 'x', href: '/chat' }],
+      planned,
+    );
     expect(merged.map((m) => m.item.id)).toEqual(['chat', 'flows', 'deals']);
   });
 
@@ -93,7 +145,13 @@ describe('resolveNav with planned screens', () => {
 
   it('applies gates to planned entries too', () => {
     const gated: NavItem[] = [
-      { id: 'tg', group: 'store', labelKey: 't', href: '/telegram', gates: { channel: 'telegram' } },
+      {
+        id: 'tg',
+        group: 'store',
+        labelKey: 't',
+        href: '/telegram',
+        gates: { channel: 'telegram' },
+      },
     ];
     expect(resolveNav([], caps([], [], []), { planned: gated })).toEqual([]);
     expect(resolveNav([], caps([], [], ['telegram']), { planned: gated })).toHaveLength(1);
@@ -105,6 +163,10 @@ describe('resolveNav with planned screens', () => {
       { id: 'b', group: 'help', labelKey: 'b', href: '/b' },
       { id: 'c', group: 'overview', labelKey: 'c', href: '/c' },
     ];
-    expect([...list].sort(compareNav).map((i) => i.group)).toEqual(['overview', 'help', 'settings']);
+    expect([...list].sort(compareNav).map((i) => i.group)).toEqual([
+      'overview',
+      'help',
+      'settings',
+    ]);
   });
 });

@@ -216,7 +216,10 @@ export class InvoiceSettingsService {
       const problem = numberFormatProblem(format, yearly);
       if (problem) {
         throw AppError.validation(problem, [
-          { path: patch.numberFormat !== undefined ? 'numberFormat' : 'yearlyReset', message: problem },
+          {
+            path: patch.numberFormat !== undefined ? 'numberFormat' : 'yearlyReset',
+            message: problem,
+          },
         ]);
       }
 
@@ -273,9 +276,15 @@ export class InvoiceSettingsService {
         action: existing ? 'update' : 'insert',
         // Never the secret, in any form.
         delta: {
-          ...(input.enabled !== undefined ? { enabled: { old: existing?.enabled ?? false, new: input.enabled } } : {}),
-          ...(input.mode !== undefined ? { mode: { old: existing?.mode ?? 'test', new: input.mode } } : {}),
-          ...(input.webhookSecret !== undefined ? { webhookSecret: { old: !!existing?.secretCipher, new: true } } : {}),
+          ...(input.enabled !== undefined
+            ? { enabled: { old: existing?.enabled ?? false, new: input.enabled } }
+            : {}),
+          ...(input.mode !== undefined
+            ? { mode: { old: existing?.mode ?? 'test', new: input.mode } }
+            : {}),
+          ...(input.webhookSecret !== undefined
+            ? { webhookSecret: { old: !!existing?.secretCipher, new: true } }
+            : {}),
         },
       });
       await this.outbox.emit(tx, {

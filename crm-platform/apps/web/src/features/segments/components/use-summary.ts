@@ -17,7 +17,9 @@ export function useSummaryContext(catalog: readonly FieldDef[]): SummaryContext 
       fieldLabel: (f: FieldDef) => ('key' in f.label ? tf(f.label.key) : f.label.text),
       formatDate: (iso: string) => {
         const d = new Date(`${iso.slice(0, 10)}T00:00:00Z`);
-        return Number.isNaN(d.getTime()) ? iso : format.dateTime(d, { dateStyle: 'medium', timeZone: 'UTC' });
+        return Number.isNaN(d.getTime())
+          ? iso
+          : format.dateTime(d, { dateStyle: 'medium', timeZone: 'UTC' });
       },
     }),
     [catalog, ts, tf, format],

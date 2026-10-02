@@ -86,9 +86,9 @@ const EXTENSIONS: Record<
   mov: {
     kind: 'media',
     mime: 'video/quicktime',
-    sniff: (b) =>
-      b.subarray(4, 8).toString('ascii') === 'ftyp' ||
-      b.subarray(4, 8).toString('ascii') === 'moov',
+    // A QuickTime file starts with whichever top-level atom the encoder wrote
+    // first: `ftyp` or `moov`, but just as often `wide`, `mdat`, `free`, `skip` or `pnot`.
+    sniff: (b) => MOV_FIRST_ATOMS.has(b.subarray(4, 8).toString('ascii')),
   },
   '3gp': {
     kind: 'media',
@@ -184,6 +184,8 @@ const EXTENSIONS: Record<
   csv: { kind: 'document', mime: 'text/csv', sniff: (b) => looksLikeText(b) },
 };
 
+const MOV_FIRST_ATOMS = new Set(['ftyp', 'moov', 'wide', 'mdat', 'free', 'skip', 'pnot']);
+
 /** Text that is really markup or script is refused even under a .txt name. */
 function looksLikeText(b: Buffer): boolean {
   const head = b.subarray(0, 1024).toString('utf8').toLowerCase();
@@ -206,32 +208,60 @@ export interface ValidatedUpload {
   storedName: string;
 }
 
+/** Why a file was refused: stable, for a client that words its own message. */
+export type UploadRejection = 'type_not_allowed' | 'empty' | 'too_large' | 'content_not_allowed';
+
 /**
  * The shared upload guard (WD-AUTH-043). Extension allow-list plus a content
  * signature check, and a random stored name. Every endpoint that accepts a
  * file calls this; avatars are the first caller.
+ *
+ * A refusal is `AUTH_UPLOAD_REJECTED` (422) whose `errors` carry the reason
+ * (and, for `too_large`, `limitBytes`) next to the English message.
  */
 @Injectable()
 export class UploadPolicyService {
   validate(input: UploadCheck): ValidatedUpload {
-    const ext = (input.filename.split('.').pop() ?? '').toLowerCase();
-    const reject = (message: string): never => {
+    const reject = (
+      message: string,
+      reason: UploadRejection,
+      extra: AppErrorDetail[] = [],
+    ): never => {
       throw new AppError(
         ERROR_CODES.AUTH_UPLOAD_REJECTED,
         message,
         HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'file', message: reason }, ...extra],
       );
     };
 
-    if (!ext || input.filename.indexOf('.') === -1) return reject('The uploaded file is invalid.');
-    if (BLOCKED_EXTENSIONS.has(ext)) return reject('This file type is not allowed.');
+    // The extension is what follows the LAST dot, trimmed: "photo.png " and "a.png." are not png,
+    // and a name with no extension at all is just as unacceptable as a forbidden one.
+    const dot = input.filename.lastIndexOf('.');
+    const ext =
+      dot === -1
+        ? ''
+        : input.filename
+            .slice(dot + 1)
+            .trim()
+            .toLowerCase();
+    if (!ext || BLOCKED_EXTENSIONS.has(ext))
+      return reject('This file type is not allowed.', 'type_not_allowed');
     const rule = EXTENSIONS[ext];
-    if (!rule || !input.allow.includes(rule.kind)) return reject('This file type is not allowed.');
-    if (input.buffer.length === 0) return reject('The uploaded file is empty.');
-    if (input.buffer.length > input.maxBytes) {
-      return reject(`The file is too large (limit ${Math.round(input.maxBytes / 1024)} KB).`);
+    if (!rule || !input.allow.includes(rule.kind)) {
+      return reject('This file type is not allowed.', 'type_not_allowed');
     }
-    if (!rule.sniff(input.buffer)) return reject('This file content is not allowed.');
+    if (input.buffer.length === 0) return reject('The uploaded file is empty.', 'empty');
+    if (input.buffer.length > input.maxBytes) {
+      return reject(
+        `The file is too large (limit ${Math.round(input.maxBytes / 1024)} KB).`,
+        'too_large',
+        [{ path: 'limitBytes', message: String(input.maxBytes) }],
+      );
+    }
+    if (!rule.sniff(input.buffer)) {
+      return reject('This file content is not allowed.', 'content_not_allowed');
+    }
 
     return {
       ext,
@@ -240,3 +270,5 @@ export class UploadPolicyService {
     };
   }
 }
+
+type AppErrorDetail = { path: string; message: string };

@@ -40,7 +40,13 @@ export class RecurringInvoiceSweepService {
     for (const due of await this.recurring.due(limit)) {
       try {
         generated += await RequestContextStore.run(
-          { requestId: randomUUID(), orgId: due.orgId, actorType: 'system', actorId: null, userId: null },
+          {
+            requestId: randomUUID(),
+            orgId: due.orgId,
+            actorType: 'system',
+            actorId: null,
+            userId: null,
+          },
           () => this.recurring.runDue(due.orgId, due.id),
         );
       } catch (err) {

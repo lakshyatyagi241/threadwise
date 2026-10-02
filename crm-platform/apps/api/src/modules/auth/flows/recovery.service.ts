@@ -5,6 +5,7 @@ import {
   type ChangeEmailRequest,
   type FindWorkspacesRequest,
   type ForgotPasswordRequest,
+  type ResendVerificationResponse,
   type ResetPasswordRequest,
   type VerifyEmailRequest,
 } from '@crm/contracts';
@@ -72,15 +73,16 @@ export class RecoveryService {
     if (!org || org.status !== 'active') return;
 
     // One mail per address per minute (WaDesk's broker throttle).
-    const first = await this.rate.hit(
-      AuthKeys.mailThrottle('forgot', org.id, req.email),
-      MAIL_COOLDOWN_SECONDS,
-    );
+    const throttleKey = AuthKeys.mailThrottle('forgot', org.id, req.email);
+    const first = await this.rate.hit(throttleKey, MAIL_COOLDOWN_SECONDS);
     if (first.count > 1) return;
 
+    // Suspended and inactive people may reset their password too: they can sign
+    // in (and are held at the suspended screen), and WaDesk mails every account
+    // that still exists.
     const user = await this.db.txAs({ orgId: org.id }, async (tx) => {
       const res = await tx.execute(sql`
-        SELECT id, full_name FROM users WHERE org_id = ${org.id} AND email = ${req.email} AND status = 'active'
+        SELECT id, full_name FROM users WHERE org_id = ${org.id} AND email = ${req.email}
       `);
       return res.rows[0] as unknown as { id: number; full_name: string } | undefined;
     });
@@ -104,11 +106,13 @@ export class RecoveryService {
       });
       return t;
     });
-    await this.mail.sendPasswordReset(
+    const sent = await this.mail.sendPasswordReset(
       req.email,
       user.full_name,
       this.mail.link('/reset-password', { org: org.slug, token }),
     );
+    // A mail that never left must not cost the person a minute of waiting.
+    if (!sent) await this.rate.reset(throttleKey);
   }
 
   async resetPassword(req: ResetPasswordRequest): Promise<void> {
@@ -121,12 +125,11 @@ export class RecoveryService {
 
     const user = await this.db.txAs({ orgId: org.id }, async (tx) => {
       const res = await tx.execute(sql`
-        SELECT id, email, full_name, status FROM users WHERE org_id = ${org.id} AND id = ${peeked.userId}
+        SELECT id, email, full_name FROM users WHERE org_id = ${org.id} AND id = ${peeked.userId}
       `);
-      return res.rows[0] as unknown as
-        { id: number; email: string; full_name: string; status: string } | undefined;
+      return res.rows[0] as unknown as { id: number; email: string; full_name: string } | undefined;
     });
-    if (!user || user.status !== 'active') throw this.tokens.invalid();
+    if (!user) throw this.tokens.invalid();
 
     await this.passwords.assertAcceptable(req.password, {
       email: user.email,
@@ -199,8 +202,16 @@ export class RecoveryService {
     await this.gates.invalidate(org.id, userId);
   }
 
-  /** Authenticated resend, throttled (WaDesk's was not). */
-  async resendVerification(): Promise<{ sent: boolean; alreadyVerified: boolean }> {
+  /**
+   * Authenticated resend, throttled to one mail a minute (WaDesk's was not).
+   *
+   * The throttle is taken before the send so two quick clicks cannot both send,
+   * and given back when the mail never left: a mistyped SMTP password should
+   * not also make the person wait a minute before seeing the same failure.
+   * `reason` is a closed vocabulary (not_configured, auth_failed,
+   * connection_refused, timeout, transport_error) that never carries secrets.
+   */
+  async resendVerification(): Promise<ResendVerificationResponse> {
     const ctx = RequestContextStore.require();
     const orgId = ctx.orgId;
     const userId = ctx.userId!;
@@ -220,10 +231,8 @@ export class RecoveryService {
     if (!row) throw AppError.unauthenticated();
     if (row.email_verified_at) return { sent: false, alreadyVerified: true };
 
-    const hit = await this.rate.hit(
-      AuthKeys.mailThrottle('verify', orgId, row.email),
-      MAIL_COOLDOWN_SECONDS,
-    );
+    const throttleKey = AuthKeys.mailThrottle('verify', orgId, row.email);
+    const hit = await this.rate.hit(throttleKey, MAIL_COOLDOWN_SECONDS);
     if (hit.count > 1) {
       throw new AppError(
         ERROR_CODES.RATE_LIMITED,
@@ -235,12 +244,16 @@ export class RecoveryService {
     const token = await this.db.txAs({ orgId, userId }, (tx) =>
       this.tokens.issue(tx, orgId, userId, 'email_verify', Ttl.verifyEmailSeconds),
     );
-    const sent = await this.mail.sendVerifyEmail(
+    const result = await this.mail.sendVerifyEmailDetailed(
       row.email,
       row.full_name,
       this.mail.link('/verify-email', { org: row.slug, token }),
     );
-    return { sent, alreadyVerified: false };
+    if (!result.sent) {
+      await this.rate.reset(throttleKey);
+      return { sent: false, alreadyVerified: false, reason: result.reason };
+    }
+    return { sent: true, alreadyVerified: false };
   }
 
   // --- find my workspace ----------------------------------------------------------------------------------------

@@ -116,7 +116,10 @@ export function SendDialog({
   onClose,
   onChanged,
 }: {
-  invoice: Pick<InvoiceSummary, 'id' | 'number' | 'status' | 'rowVersion' | 'sentAt' | 'buyerEmail'>;
+  invoice: Pick<
+    InvoiceSummary,
+    'id' | 'number' | 'status' | 'rowVersion' | 'sentAt' | 'buyerEmail'
+  >;
   onClose: () => void;
   onChanged?: (inv: InvoiceResponse) => void;
 }) {
@@ -137,7 +140,9 @@ export function SendDialog({
   const link = linkIsLive(current?.publicLink) ? publicUrl(current.publicLink.token) : '';
   const number = current?.number ?? invoice.number;
   const recipientMissing =
-    current !== null && ((channel === 'email' && !current.buyer.email) || (channel === 'whatsapp' && !current.buyer.phone));
+    current !== null &&
+    ((channel === 'email' && !current.buyer.email) ||
+      (channel === 'whatsapp' && !current.buyer.phone));
 
   async function issue() {
     setError(null);
@@ -225,7 +230,11 @@ export function SendDialog({
       ) : (
         <div className="space-y-4">
           <Field label={t('channel')} htmlFor="send-channel">
-            <Select id="send-channel" value={channel} onChange={(e) => setChannel(e.target.value as typeof channel)}>
+            <Select
+              id="send-channel"
+              value={channel}
+              onChange={(e) => setChannel(e.target.value as typeof channel)}
+            >
               {INVOICE_SEND_CHANNELS.map((c) => (
                 <option key={c} value={c}>
                   {t(`channels.${c}`)}
@@ -238,7 +247,13 @@ export function SendDialog({
               <Field label={t('link')} htmlFor="send-link" hint={link ? t('linkHint') : undefined}>
                 {link ? (
                   <div className="flex gap-2">
-                    <Input id="send-link" readOnly dir="ltr" value={link} onFocus={(e) => e.currentTarget.select()} />
+                    <Input
+                      id="send-link"
+                      readOnly
+                      dir="ltr"
+                      value={link}
+                      onFocus={(e) => e.currentTarget.select()}
+                    />
                     <Button variant="secondary" onClick={() => void copy()} className="shrink-0">
                       {copied ? <CheckIcon /> : <CopyIcon />}
                       {copied ? t('copied') : t('copy')}
@@ -267,7 +282,11 @@ export function SendDialog({
                   ? (current?.buyer.email ?? invoice.buyerEmail ?? t('noEmail'))
                   : (current?.buyer.phone ?? t('noPhone'))}
               </p>
-              {recipientMissing && <Alert tone="warning">{t(channel === 'email' ? 'noEmailHelp' : 'noPhoneHelp')}</Alert>}
+              {recipientMissing && (
+                <Alert tone="warning">
+                  {t(channel === 'email' ? 'noEmailHelp' : 'noPhoneHelp')}
+                </Alert>
+              )}
               <Field label={t('message')} htmlFor="send-message" hint={t('messageHint')}>
                 <Textarea
                   id="send-message"
@@ -282,7 +301,9 @@ export function SendDialog({
           )}
           {error !== null && (
             <Alert tone="danger">
-              {errorCode(error) === 'INV_NO_RECIPIENT' ? t(channel === 'whatsapp' ? 'noPhoneHelp' : 'noEmailHelp') : errorText(error)}
+              {errorCode(error) === 'INV_NO_RECIPIENT'
+                ? t(channel === 'whatsapp' ? 'noPhoneHelp' : 'noEmailHelp')
+                : errorText(error)}
             </Alert>
           )}
           {current?.sentAt && <p className="text-xs text-muted-foreground">{t('alreadySent')}</p>}
@@ -350,7 +371,9 @@ export function EditDetailsDialog({
       } else {
         const server = fieldErrors(e);
         const form =
-          Object.keys(server).length === 0 || errorCode(e) === 'INV_OWNER_INVALID' ? errorText(e) : undefined;
+          Object.keys(server).length === 0 || errorCode(e) === 'INV_OWNER_INVALID'
+            ? errorText(e)
+            : undefined;
         setErrors({
           buyerEmail: server.buyerEmail,
           buyerPhone: server.buyerPhone,
@@ -417,13 +440,36 @@ export function EditDetailsDialog({
             </Alert>
           )}
           <Field label={t('email')} htmlFor="edit-email" error={errors.buyerEmail}>
-            <Input id="edit-email" type="email" dir="ltr" value={email} invalid={!!errors.buyerEmail} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              id="edit-email"
+              type="email"
+              dir="ltr"
+              value={email}
+              invalid={!!errors.buyerEmail}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </Field>
-          <Field label={t('phone')} htmlFor="edit-phone" hint={t('phoneHint')} error={errors.buyerPhone}>
-            <Input id="edit-phone" type="tel" dir="ltr" value={phone} invalid={!!errors.buyerPhone} onChange={(e) => setPhone(e.target.value)} />
+          <Field
+            label={t('phone')}
+            htmlFor="edit-phone"
+            hint={t('phoneHint')}
+            error={errors.buyerPhone}
+          >
+            <Input
+              id="edit-phone"
+              type="tel"
+              dir="ltr"
+              value={phone}
+              invalid={!!errors.buyerPhone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
           </Field>
           <Field label={t('contact')} htmlFor="edit-contact">
-            <ContactPicker id="edit-contact" value={contact} onChange={(c) => setContact(c ? { id: c.id, label: c.label } : null)} />
+            <ContactPicker
+              id="edit-contact"
+              value={contact}
+              onChange={(c) => setContact(c ? { id: c.id, label: c.label } : null)}
+            />
           </Field>
           <Field label={t('owner')} htmlFor="edit-owner">
             <Select id="edit-owner" value={owner} onChange={(e) => setOwner(e.target.value)}>
@@ -439,16 +485,53 @@ export function EditDetailsDialog({
             </Select>
           </Field>
           <Field label={t('dueDate')} htmlFor="edit-due" hint={t('dueHint')} error={errors.dueDate}>
-            <Input id="edit-due" type="date" value={dueDate} min={invoice.issueDate ?? undefined} invalid={!!errors.dueDate} onChange={(e) => setDueDate(e.target.value)} />
+            <Input
+              id="edit-due"
+              type="date"
+              value={dueDate}
+              min={invoice.issueDate ?? undefined}
+              invalid={!!errors.dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
           </Field>
           <Field label={t('reference')} htmlFor="edit-ref" error={errors.reference}>
-            <Input id="edit-ref" maxLength={191} value={reference} invalid={!!errors.reference} onChange={(e) => setReference(e.target.value)} />
+            <Input
+              id="edit-ref"
+              maxLength={191}
+              value={reference}
+              invalid={!!errors.reference}
+              onChange={(e) => setReference(e.target.value)}
+            />
           </Field>
-          <Field label={t('notes')} htmlFor="edit-notes" className="sm:col-span-2" error={errors.notes}>
-            <Textarea id="edit-notes" rows={3} maxLength={5000} value={notes} invalid={!!errors.notes} onChange={(e) => setNotes(e.target.value)} />
+          <Field
+            label={t('notes')}
+            htmlFor="edit-notes"
+            className="sm:col-span-2"
+            error={errors.notes}
+          >
+            <Textarea
+              id="edit-notes"
+              rows={3}
+              maxLength={5000}
+              value={notes}
+              invalid={!!errors.notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
           </Field>
-          <Field label={t('terms')} htmlFor="edit-terms" className="sm:col-span-2" error={errors.terms}>
-            <Textarea id="edit-terms" rows={3} maxLength={10000} value={terms} invalid={!!errors.terms} onChange={(e) => setTerms(e.target.value)} />
+          <Field
+            label={t('terms')}
+            htmlFor="edit-terms"
+            className="sm:col-span-2"
+            error={errors.terms}
+          >
+            <Textarea
+              id="edit-terms"
+              rows={3}
+              maxLength={10000}
+              value={terms}
+              invalid={!!errors.terms}
+              onChange={(e) => setTerms(e.target.value)}
+            />
           </Field>
         </form>
       )}

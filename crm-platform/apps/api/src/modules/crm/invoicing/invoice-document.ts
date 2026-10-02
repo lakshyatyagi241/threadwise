@@ -17,7 +17,8 @@ export function buildPublicInvoice(input: {
 }): PublicInvoice {
   const { row } = input;
   const snap = row.sellerSnapshot ?? {};
-  const str = (k: string): string | null => (typeof snap[k] === 'string' && snap[k] !== '' ? (snap[k] as string) : null);
+  const str = (k: string): string | null =>
+    typeof snap[k] === 'string' && snap[k] !== '' ? (snap[k] as string) : null;
   const seller = toSeller(row.sellerSnapshot) ?? {
     name: null,
     address: null,
@@ -30,7 +31,8 @@ export function buildPublicInvoice(input: {
     extra: [],
     bankDetails: null,
   };
-  const bankDetails = seller.bankDetails && Object.keys(seller.bankDetails).length > 0 ? seller.bankDetails : null;
+  const bankDetails =
+    seller.bankDetails && Object.keys(seller.bankDetails).length > 0 ? seller.bankDetails : null;
   const instructions = str('paymentInstructions');
   const bankTransfer = instructions || bankDetails ? { instructions, details: bankDetails } : null;
   const settled = row.paidMinor + row.creditedMinor;

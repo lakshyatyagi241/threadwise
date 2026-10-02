@@ -10,7 +10,9 @@ import { inputKindOf, operatorsForKind } from './operators';
 describe('operator availability by field kind', () => {
   it('offers exactly the operators the contract allows for every kind, only reordered', () => {
     for (const kind of SEGMENT_FIELD_KINDS) {
-      expect([...operatorsForKind(kind)].sort(), kind).toEqual([...SEGMENT_OPERATORS_BY_KIND[kind]].sort());
+      expect([...operatorsForKind(kind)].sort(), kind).toEqual(
+        [...SEGMENT_OPERATORS_BY_KIND[kind]].sort(),
+      );
     }
   });
 
@@ -39,7 +41,8 @@ describe('operator availability by field kind', () => {
 describe('the input an operator needs', () => {
   it('every operator of every kind has an input', () => {
     for (const kind of SEGMENT_FIELD_KINDS) {
-      for (const op of operatorsForKind(kind)) expect(inputKindOf(kind, op), `${kind}.${op}`).toBeTruthy();
+      for (const op of operatorsForKind(kind))
+        expect(inputKindOf(kind, op), `${kind}.${op}`).toBeTruthy();
     }
   });
 

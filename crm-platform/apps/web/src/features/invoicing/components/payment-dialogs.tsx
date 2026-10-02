@@ -1,6 +1,11 @@
 'use client';
 
-import { MANUAL_PAYMENT_METHODS, type InvoiceSummary, type PaymentOutcome, type PaymentResponse } from '@crm/contracts';
+import {
+  MANUAL_PAYMENT_METHODS,
+  type InvoiceSummary,
+  type PaymentOutcome,
+  type PaymentResponse,
+} from '@crm/contracts';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -52,7 +57,11 @@ export function RecordPaymentDialog({
   const partial = check.amountMinor !== null && check.amountMinor < balance;
 
   async function submit() {
-    if (Object.keys(check.problems).length > 0 || check.amount === null || check.amountMinor === null) {
+    if (
+      Object.keys(check.problems).length > 0 ||
+      check.amount === null ||
+      check.amountMinor === null
+    ) {
       setErrors({
         amount: check.problems.amount && t(`problems.${check.problems.amount}`),
         paidAt: check.problems.paidAt && t(`problems.${check.problems.paidAt}`),
@@ -86,8 +95,17 @@ export function RecordPaymentDialog({
       setConfirmOver(false);
       setErrors({
         amount:
-          code === 'PAY_OVERPAYMENT' || code === 'PAY_NOTHING_TO_PAY' ? errorText(e) : server.amount ? t('problems.amountInvalid') : undefined,
-        paidAt: code === 'PAY_FUTURE_DATE' ? errorText(e) : server.paidAt ? t('problems.dateInvalid') : undefined,
+          code === 'PAY_OVERPAYMENT' || code === 'PAY_NOTHING_TO_PAY'
+            ? errorText(e)
+            : server.amount
+              ? t('problems.amountInvalid')
+              : undefined,
+        paidAt:
+          code === 'PAY_FUTURE_DATE'
+            ? errorText(e)
+            : server.paidAt
+              ? t('problems.dateInvalid')
+              : undefined,
         form:
           code === 'PAY_OVERPAYMENT' || code === 'PAY_NOTHING_TO_PAY' || code === 'PAY_FUTURE_DATE'
             ? undefined
@@ -141,7 +159,11 @@ export function RecordPaymentDialog({
             {formatMoney(balance, invoice.currency, locale)}
           </span>
         </div>
-        <Field label={t('amount', { currency: invoice.currency })} htmlFor="pay-amount" error={errors.amount}>
+        <Field
+          label={t('amount', { currency: invoice.currency })}
+          htmlFor="pay-amount"
+          error={errors.amount}
+        >
           <Input
             id="pay-amount"
             inputMode="decimal"
@@ -156,7 +178,11 @@ export function RecordPaymentDialog({
           />
         </Field>
         <Field label={t('method')} htmlFor="pay-method">
-          <Select id="pay-method" value={method} onChange={(e) => setMethod(e.target.value as ManualMethod)}>
+          <Select
+            id="pay-method"
+            value={method}
+            onChange={(e) => setMethod(e.target.value as ManualMethod)}
+          >
             {MANUAL_PAYMENT_METHODS.map((m) => (
               <option key={m} value={m}>
                 {tm(m)}
@@ -174,7 +200,12 @@ export function RecordPaymentDialog({
             onChange={(e) => setPaidAt(e.target.value)}
           />
         </Field>
-        <Field label={t('reference')} htmlFor="pay-ref" hint={t('referenceHint')} error={errors.reference}>
+        <Field
+          label={t('reference')}
+          htmlFor="pay-ref"
+          hint={t('referenceHint')}
+          error={errors.reference}
+        >
           <Input
             id="pay-ref"
             maxLength={REFERENCE_MAX + 20}
@@ -184,11 +215,19 @@ export function RecordPaymentDialog({
           />
         </Field>
         <Field label={t('note')} htmlFor="pay-note" className="sm:col-span-2" error={errors.note}>
-          <Textarea id="pay-note" rows={2} maxLength={NOTE_MAX + 50} value={note} onChange={(e) => setNote(e.target.value)} />
+          <Textarea
+            id="pay-note"
+            rows={2}
+            maxLength={NOTE_MAX + 50}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          />
         </Field>
         {partial && !errors.amount && (
           <Alert tone="info" className="sm:col-span-2">
-            {t('partialNote', { left: formatMoney(balance - (check.amountMinor ?? 0), invoice.currency, locale) })}
+            {t('partialNote', {
+              left: formatMoney(balance - (check.amountMinor ?? 0), invoice.currency, locale),
+            })}
           </Alert>
         )}
         {check.overpays && (
@@ -263,7 +302,11 @@ export function MarkPaidDialog({
           {t('message', { amount: formatMoney(balance, invoice.currency, locale) })}
         </p>
         <Field label={t('method')} htmlFor="markpaid-method">
-          <Select id="markpaid-method" value={method} onChange={(e) => setMethod(e.target.value as ManualMethod)}>
+          <Select
+            id="markpaid-method"
+            value={method}
+            onChange={(e) => setMethod(e.target.value as ManualMethod)}
+          >
             {MANUAL_PAYMENT_METHODS.map((m) => (
               <option key={m} value={m}>
                 {tm(m)}
@@ -372,7 +415,11 @@ export function RefundDialog({
         <p className="text-sm text-muted-foreground">
           {t('available', { amount: formatMoney(refundable, payment.currency, locale) })}
         </p>
-        <Field label={t('amount', { currency: payment.currency })} htmlFor="refund-amount" error={errors.amount}>
+        <Field
+          label={t('amount', { currency: payment.currency })}
+          htmlFor="refund-amount"
+          error={errors.amount}
+        >
           <Input
             id="refund-amount"
             inputMode="decimal"
@@ -384,10 +431,23 @@ export function RefundDialog({
           />
         </Field>
         <Field label={t('date')} htmlFor="refund-date" error={errors.date}>
-          <Input id="refund-date" type="date" max={today} value={date} invalid={!!errors.date} onChange={(e) => setDate(e.target.value)} />
+          <Input
+            id="refund-date"
+            type="date"
+            max={today}
+            value={date}
+            invalid={!!errors.date}
+            onChange={(e) => setDate(e.target.value)}
+          />
         </Field>
         <Field label={t('reason')} htmlFor="refund-reason">
-          <Textarea id="refund-reason" rows={2} maxLength={REASON_MAX} value={reason} onChange={(e) => setReason(e.target.value)} />
+          <Textarea
+            id="refund-reason"
+            rows={2}
+            maxLength={REASON_MAX}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          />
         </Field>
         <p className="text-xs text-muted-foreground">{t('effect')}</p>
       </form>

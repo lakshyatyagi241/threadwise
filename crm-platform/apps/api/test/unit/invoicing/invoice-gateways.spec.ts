@@ -9,7 +9,9 @@ import {
 const SECRET = 'whsec_0123456789abcdef0123';
 const NOW = new Date('2026-10-05T10:00:00Z');
 const t = Math.floor(NOW.getTime() / 1000);
-const body = Buffer.from(JSON.stringify({ id: 'evt_1', type: 'payment.succeeded', data: { amount: '10.00' } }));
+const body = Buffer.from(
+  JSON.stringify({ id: 'evt_1', type: 'payment.succeeded', data: { amount: '10.00' } }),
+);
 const sign = (secret: string, ts: number, raw: Buffer) =>
   createHmac('sha256', secret).update(`${ts}.`).update(raw).digest('hex');
 
@@ -24,7 +26,12 @@ describe('the generic HMAC webhook adapter (WD-PAY-009, D-18)', () => {
 
   it('rejects a wrong secret, a tampered body and a changed timestamp', () => {
     expect(verify(`t=${t},v1=${sign('another-secret-0123456789', t, body)}`)).toBe(false);
-    expect(verify(`t=${t},v1=${sign(SECRET, t, body)}`, Buffer.from(body.toString().replace('10.00', '1000.00')))).toBe(false);
+    expect(
+      verify(
+        `t=${t},v1=${sign(SECRET, t, body)}`,
+        Buffer.from(body.toString().replace('10.00', '1000.00')),
+      ),
+    ).toBe(false);
     expect(verify(`t=${t + 1},v1=${sign(SECRET, t, body)}`)).toBe(false);
   });
 
@@ -56,11 +63,19 @@ describe('the generic HMAC webhook adapter (WD-PAY-009, D-18)', () => {
 
   it('reads the header case-insensitively as Node lower-cases it, and takes the first of a repeated header', () => {
     const header = `t=${t},v1=${sign(SECRET, t, body)}`;
-    expect(gw.verifyWebhookSignature(body, { 'x-invoice-signature': [header, 'x'] }, SECRET, NOW)).toBe(true);
+    expect(
+      gw.verifyWebhookSignature(body, { 'x-invoice-signature': [header, 'x'] }, SECRET, NOW),
+    ).toBe(true);
   });
 
   it('has no hosted checkout: the buyer is shown instructions', async () => {
-    const r = await gw.createCheckout({ attemptId: 'a', amountMinor: 100n, currency: 'USD', invoiceNumber: 'INV-1', description: 'd' });
+    const r = await gw.createCheckout({
+      attemptId: 'a',
+      amountMinor: 100n,
+      currency: 'USD',
+      invoiceNumber: 'INV-1',
+      description: 'd',
+    });
     expect(r.kind).toBe('instructions');
   });
 });
@@ -73,7 +88,13 @@ describe('the manual (bank transfer) adapter', () => {
   });
 
   it('shows instructions and hosts nothing', async () => {
-    const r = await gw.createCheckout({ attemptId: 'a', amountMinor: 100n, currency: 'USD', invoiceNumber: 'INV-1', description: 'd' });
+    const r = await gw.createCheckout({
+      attemptId: 'a',
+      amountMinor: 100n,
+      currency: 'USD',
+      invoiceNumber: 'INV-1',
+      description: 'd',
+    });
     expect(r).toEqual({ kind: 'instructions' });
   });
 });

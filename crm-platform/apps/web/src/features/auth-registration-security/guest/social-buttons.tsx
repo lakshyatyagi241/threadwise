@@ -5,17 +5,18 @@ import {
   type RegistrationConfigResponse,
   type SocialProvider,
 } from '@crm/contracts';
-import { Spinner, cn } from '@crm/ui';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { callApi } from './bff';
 import { mapAuthError, type MappedError } from './errors';
+import { rememberNext } from './next-memory';
+import { Spinner, cn } from './ui';
 
 const PROVIDERS: SocialProvider[] = ['google', 'facebook'];
 
-function GoogleMark() {
+function GoogleMark({ small }: { small: boolean }) {
   return (
-    <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className={small ? 'size-3.5' : 'size-4'} aria-hidden="true">
       <path
         fill="#4285F4"
         d="M22.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h5.9a5 5 0 0 1-2.2 3.3v2.7h3.5c2-1.9 3.3-4.7 3.3-8z"
@@ -36,9 +37,9 @@ function GoogleMark() {
   );
 }
 
-function FacebookMark() {
+function FacebookMark({ small }: { small: boolean }) {
   return (
-    <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className={small ? 'size-3.5' : 'size-4'} aria-hidden="true">
       <circle cx="12" cy="12" r="11" fill="#1877F2" />
       <path
         fill="#fff"
@@ -59,6 +60,7 @@ export function SocialButtons({
   getOrgSlug,
   getOrgName,
   compact = false,
+  next,
   onError,
   onNeedInput,
   disabled,
@@ -69,6 +71,8 @@ export function SocialButtons({
   getOrgSlug?: () => string;
   getOrgName?: () => string;
   compact?: boolean;
+  /** Where to land after a sign-in that returns from the provider (kept for the round trip). */
+  next?: string | null;
   onError: (error: MappedError | null) => void;
   /** Called with the missing field when the visitor clicks before filling it in. */
   onNeedInput: (field: 'orgSlug' | 'orgName') => void;
@@ -86,6 +90,7 @@ export function SocialButtons({
     if (mode === 'login' && !orgSlug) return onNeedInput('orgSlug');
     if (mode === 'signup' && orgName.length < 2) return onNeedInput('orgName');
     setPending(provider);
+    if (mode === 'login') rememberNext(next);
     try {
       const { url } = await callApi(`/auth/social/${provider}/start`, {
         query: {
@@ -98,40 +103,45 @@ export function SocialButtons({
       });
       window.location.assign(url);
     } catch (e) {
-      onError(mapAuthError(e));
+      // The failure text names the provider ("Could not complete Google sign-in").
+      const mapped = mapAuthError(e);
+      onError({ ...mapped, params: { ...mapped.params, provider: t(provider) } });
       setPending(null);
     }
   }
 
   return (
-    <div className="space-y-3">
-      <div className={cn('grid gap-2', live.length > 1 && 'sm:grid-cols-2')}>
+    <div>
+      <div className={cn('grid gap-2', live.length > 1 ? 'grid-cols-2' : 'grid-cols-1')}>
         {live.map((provider) => (
           <button
             key={provider}
             type="button"
             disabled={disabled || pending !== null}
+            aria-label={t(`${mode}.${provider}`)}
             onClick={() => void start(provider)}
             className={cn(
-              'inline-flex items-center justify-center gap-2 rounded-md border border-border bg-background px-3 text-sm font-medium text-foreground transition',
-              'hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-60',
-              compact ? 'h-9' : 'h-10',
+              'inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-3 font-medium text-foreground transition',
+              'hover:bg-muted focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-60',
+              compact ? 'py-2 text-[12.5px]' : 'py-2.5 text-[13px]',
             )}
           >
             {pending === provider ? (
               <Spinner label={t('redirecting')} />
             ) : provider === 'google' ? (
-              <GoogleMark />
+              <GoogleMark small={compact} />
             ) : (
-              <FacebookMark />
+              <FacebookMark small={compact} />
             )}
-            <span>{t(`${mode}.${provider}`)}</span>
+            <span>{t(provider)}</span>
           </button>
         ))}
       </div>
-      <div className="flex items-center gap-3 text-xs text-muted-foreground" aria-hidden="true">
+      <div className={cn('flex items-center gap-3', compact ? 'my-3' : 'my-5')} aria-hidden="true">
         <span className="h-px flex-1 bg-border" />
-        <span>{t('divider')}</span>
+        <span className="font-mono rtl:font-sans text-[10.5px] uppercase tracking-wider rtl:tracking-normal text-(--auth-ink-500)">
+          {t('divider')}
+        </span>
         <span className="h-px flex-1 bg-border" />
       </div>
     </div>

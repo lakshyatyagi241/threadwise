@@ -21,7 +21,15 @@ interface WhyData {
   reverseCharge: boolean;
 }
 
-function WhyPanel({ data, preview, className }: { data: WhyData; preview?: boolean; className?: string }) {
+function WhyPanel({
+  data,
+  preview,
+  className,
+}: {
+  data: WhyData;
+  preview?: boolean;
+  className?: string;
+}) {
   const t = useTranslations('invoicing.taxWhy');
   return (
     <section
@@ -29,7 +37,9 @@ function WhyPanel({ data, preview, className }: { data: WhyData; preview?: boole
       className={cn('rounded-lg border border-border bg-background p-4 text-sm', className)}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('title')}</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {t('title')}
+        </h2>
         {preview && (
           <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground">
             {t('preview')}
@@ -38,7 +48,9 @@ function WhyPanel({ data, preview, className }: { data: WhyData; preview?: boole
       </div>
       {preview && <p className="mt-1 text-xs text-muted-foreground">{t('previewNote')}</p>}
       {data.taxFree && (
-        <p className="mt-2 inline-block rounded bg-muted px-2 py-0.5 text-xs font-medium">{t('taxFree')}</p>
+        <p className="mt-2 inline-block rounded bg-muted px-2 py-0.5 text-xs font-medium">
+          {t('taxFree')}
+        </p>
       )}
       {data.reasons.length > 0 && (
         <ul className="mt-2 list-disc space-y-1 ps-5">

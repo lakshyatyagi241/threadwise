@@ -56,3 +56,4 @@ export * from './realtime';
 export * from './chat-conversations';
 export * from './team-inbox-conversations';
 export * from './team-inbox-routing-sla';
+export * from './workspaces-teams-tenancy';

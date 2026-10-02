@@ -978,10 +978,12 @@ describe('the model picker (WD-AIADM-015)', () => {
     ]);
   });
 
-  it('is open to any signed-in workspace user, and to nobody else', async () => {
+  it('needs aiadm.models.read (every preset holds it), and is closed to everybody else', async () => {
     const t = await noByokTenant('pick-auth');
     const nobody = await api.member(t, 'nobody', []);
-    expect((await api.as(nobody.token).get('/v2/ai/models')).status).toBe(200);
+    expect((await api.as(nobody.token).get('/v2/ai/models')).status).toBe(403);
+    const reader = await api.member(t, 'reader', [['aiadm.models.read']]);
+    expect((await api.as(reader.token).get('/v2/ai/models')).status).toBe(200);
     expect((await api.http().get('/v2/ai/models')).status).toBe(401);
     expect((await api.as(superToken).get('/v2/ai/models')).status).toBe(401);
   });

@@ -86,9 +86,15 @@ export function TasksBoard({
                     {(task.contact || task.deal) && (
                       <div className="flex flex-wrap gap-1">
                         {task.contact && (
-                          <RecordPill kind="contact" id={task.contact.id} label={task.contact.name} />
+                          <RecordPill
+                            kind="contact"
+                            id={task.contact.id}
+                            label={task.contact.name}
+                          />
                         )}
-                        {task.deal && <RecordPill kind="deal" id={task.deal.id} label={task.deal.title} />}
+                        {task.deal && (
+                          <RecordPill kind="deal" id={task.deal.id} label={task.deal.title} />
+                        )}
                       </div>
                     )}
                   </div>

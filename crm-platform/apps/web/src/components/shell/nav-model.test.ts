@@ -22,7 +22,15 @@ const item = (
   group: ResolvedNavItem['group'],
   href: string,
   over: Partial<ResolvedNavItem> = {},
-): ResolvedNavItem => ({ id, group, href, labelKey: id, locked: false, comingSoon: false, ...over });
+): ResolvedNavItem => ({
+  id,
+  group,
+  href,
+  labelKey: id,
+  locked: false,
+  comingSoon: false,
+  ...over,
+});
 
 const items = [
   item('dashboard', 'overview', '/dashboard'),
@@ -47,11 +55,13 @@ describe('toSections', () => {
 
 describe('railSections', () => {
   it('keeps only real screens and drops groups left empty', () => {
-    expect(railSections(toSections(items)).map((s) => [s.group, s.items.map((i) => i.id)])).toEqual([
-      ['overview', ['dashboard']],
-      ['audience', ['contacts', 'groups']],
-      ['settings', ['account']],
-    ]);
+    expect(railSections(toSections(items)).map((s) => [s.group, s.items.map((i) => i.id)])).toEqual(
+      [
+        ['overview', ['dashboard']],
+        ['audience', ['contacts', 'groups']],
+        ['settings', ['account']],
+      ],
+    );
   });
 });
 
@@ -130,9 +140,27 @@ describe('the menu after the Settings move', () => {
 
   it('no longer lists the configuration screens', () => {
     for (const id of [
-      'contact-stages', 'contact-properties', 'attributes', 'tax-rates', 'business-profile', 'addons-workspace',
-      'i18n-translation', 'ai-keys', 'bsp-billing-mode', 'billing-orders', 'account', 'chat-widget', 'team-members',
-      'auto-reply', 'channels', 'telegram', 'sms', 'integrations', 'rest-api', 'webhooks', 'activity-log',
+      'contact-stages',
+      'contact-properties',
+      'attributes',
+      'tax-rates',
+      'business-profile',
+      'addons-workspace',
+      'i18n-translation',
+      'ai-keys',
+      'bsp-billing-mode',
+      'billing-orders',
+      'account',
+      'chat-widget',
+      'team-members',
+      'auto-reply',
+      'channels',
+      'telegram',
+      'sms',
+      'integrations',
+      'rest-api',
+      'webhooks',
+      'activity-log',
     ]) {
       expect(menuIds.has(id), id).toBe(false);
     }
@@ -140,8 +168,23 @@ describe('the menu after the Settings move', () => {
 
   it('keeps the daily-work screens', () => {
     for (const id of [
-      'dashboard', 'analytics', 'team-chat', 'contacts', 'contact-groups', 'segments', 'deals', 'tasks', 'appointments',
-      'proposals', 'estimates', 'invoices', 'recurring-invoices', 'credit-notes', 'sales-orders', 'payments', 'broadcasts',
+      'dashboard',
+      'analytics',
+      'team-chat',
+      'contacts',
+      'contact-groups',
+      'segments',
+      'deals',
+      'tasks',
+      'appointments',
+      'proposals',
+      'estimates',
+      'invoices',
+      'recurring-invoices',
+      'credit-notes',
+      'sales-orders',
+      'payments',
+      'broadcasts',
     ]) {
       expect(menuIds.has(id), id).toBe(true);
     }
@@ -169,7 +212,15 @@ describe('the menu after the Settings move', () => {
   });
 
   it('prefers the menu entry on a tie', () => {
-    const tile = { id: 't', section: 'data', labelKey: 't', href: '/tasks', icon: 'x', locked: false, comingSoon: false } as ResolvedSettingsTile;
+    const tile = {
+      id: 't',
+      section: 'data',
+      labelKey: 't',
+      href: '/tasks',
+      icon: 'x',
+      locked: false,
+      comingSoon: false,
+    } as ResolvedSettingsTile;
     expect(activeNavId(resolved, [tile], '/tasks')).toBe('tasks');
   });
 });

@@ -2,13 +2,15 @@ import type { NavGates } from './types';
 
 /**
  * The sections of the Settings area, in the order they are listed. A tile picks one. The title and the one-line
- * description of each live in `messages/<locale>/settings.json` under `settings.sections.<id>`.
+ * description of each live in `messages/<locale>/settings.json` under `settings.sections.<id>`. A section's page is
+ * `/settings/<id>`, so an id must never equal the first segment of a real screen under `/settings/` (the Team members screen
+ * owns `/settings/team`, which is why the section is `people`); `settings-hub/registry.test.ts` checks it.
  */
 export const SETTINGS_SECTIONS = [
   'channels',
   'data',
   'business',
-  'team',
+  'people',
   'automation',
   'integrations',
   'security',

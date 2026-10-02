@@ -42,7 +42,11 @@ export function useTasksList(
     queryKey: [...KEYS.list, source, query],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) =>
-      tasksApi.list(source, { limit: opts.limit ?? PAGE_SIZE, ...query, cursor: pageParam }, signal),
+      tasksApi.list(
+        source,
+        { limit: opts.limit ?? PAGE_SIZE, ...query, cursor: pageParam },
+        signal,
+      ),
     getNextPageParam: (last) => (last.hasMore ? (last.nextCursor ?? undefined) : undefined),
     enabled: opts.enabled ?? true,
     placeholderData: keepPreviousData,

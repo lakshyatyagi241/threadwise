@@ -14,7 +14,7 @@ import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
 import { resolveSettings } from '@/features/_registry/settings-resolve';
 import { SETTINGS } from '@/features/_registry/settings.generated';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
-import { getSession } from '@/lib/auth/server';
+import { getSession, signedOutTarget } from '@/lib/auth/server';
 import { RealtimeProvider } from '@/lib/realtime';
 
 /**
@@ -24,8 +24,8 @@ import { RealtimeProvider } from '@/lib/realtime';
  * real permissions.
  */
 export default async function AppLayout({ children }: { children: ReactNode }) {
-  const { session, expired } = await getSession();
-  if (!session) redirect(expired ? '/api/auth/refresh?next=/' : '/login');
+  const { session, expired, idleMinutes } = await getSession();
+  if (!session) redirect(await signedOutTarget(expired, idleMinutes));
 
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   const capabilities = {

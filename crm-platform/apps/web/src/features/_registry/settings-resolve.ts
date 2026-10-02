@@ -56,7 +56,9 @@ export function toSettingsSections(tiles: readonly ResolvedSettingsTile[]): Sett
  * The section `/settings` opens on: the first one with a built screen (a section of only "Soon" tiles is a poor landing page),
  * else the first one there is.
  */
-export function defaultSection(sections: readonly SettingsSectionTiles[]): SettingsSection | undefined {
+export function defaultSection(
+  sections: readonly SettingsSectionTiles[],
+): SettingsSection | undefined {
   return (sections.find((s) => s.tiles.some((t) => !t.comingSoon)) ?? sections[0])?.section;
 }
 

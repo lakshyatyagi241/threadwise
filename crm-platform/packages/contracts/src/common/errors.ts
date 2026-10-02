@@ -9,6 +9,7 @@ import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
 import { CHANNEL_ERROR_CODES } from '../chat-conversations/channel-errors';
 import { CONVERSATION_ERROR_CODES } from '../chat-conversations/conversation-errors';
 import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
+import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
@@ -16,6 +17,7 @@ export const ERROR_CODES = {
   ...CHANNEL_ERROR_CODES,
   ...CONVERSATION_ERROR_CODES,
   ...INBOX_ERROR_CODES,
+  ...WSP_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -90,6 +92,7 @@ export const ERROR_CODES = {
   AUTH_SOCIAL_STATE_INVALID: 'AUTH_SOCIAL_STATE_INVALID',
   AUTH_SOCIAL_FAILED: 'AUTH_SOCIAL_FAILED',
   AUTH_SOCIAL_NO_EMAIL: 'AUTH_SOCIAL_NO_EMAIL',
+  AUTH_SOCIAL_NO_ACCOUNT: 'AUTH_SOCIAL_NO_ACCOUNT',
   AUTH_SESSION_NOT_FOUND: 'AUTH_SESSION_NOT_FOUND',
   AUTH_CANNOT_REVOKE_CURRENT: 'AUTH_CANNOT_REVOKE_CURRENT',
   AUTH_WORKSPACE_NOT_AVAILABLE: 'AUTH_WORKSPACE_NOT_AVAILABLE',

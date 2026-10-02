@@ -168,7 +168,9 @@ class Side {
   async release(handle) {
     this.opened.delete(handle);
     await handle.context?.close().catch(() => {});
-    if (handle.context) await handle.request?.dispose?.().catch(() => {});
+    // Ours hands every handle the SAME cached Bearer client (OursSide.api); it is disposed once, in disposeApis().
+    // Disposing it here broke every later scenario of the run ("Target page, context or browser has been closed").
+    if (handle.context && this.name !== 'ours') await handle.request?.dispose?.().catch(() => {});
   }
 
   async close() {

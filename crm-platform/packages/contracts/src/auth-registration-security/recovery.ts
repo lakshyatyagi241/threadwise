@@ -27,6 +27,28 @@ export const verifyEmailRequestSchema = z.object({
 });
 export type VerifyEmailRequest = z.infer<typeof verifyEmailRequestSchema>;
 
+/**
+ * `POST /v2/auth/verify-email/resend`. When the mail could not be sent, `reason`
+ * says why in a closed vocabulary that never carries secrets (WD-AUTH-015); a
+ * failed send does not start the 60-second wait.
+ */
+export const mailFailureReasonSchema = z.enum([
+  'not_configured',
+  'auth_failed',
+  'connection_refused',
+  'timeout',
+  'transport_error',
+  'unknown',
+]);
+export type MailFailureReasonCode = z.infer<typeof mailFailureReasonSchema>;
+
+export const resendVerificationResponseSchema = z.object({
+  sent: z.boolean(),
+  alreadyVerified: z.boolean(),
+  reason: mailFailureReasonSchema.optional(),
+});
+export type ResendVerificationResponse = z.infer<typeof resendVerificationResponseSchema>;
+
 /** Email-only entry: mails the workspace slugs to verified addresses. */
 export const findWorkspacesRequestSchema = z.object({
   email: emailSchema,

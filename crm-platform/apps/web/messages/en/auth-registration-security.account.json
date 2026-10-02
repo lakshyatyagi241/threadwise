@@ -22,7 +22,9 @@
         "signedOut": "Your session has ended. Please sign in again.",
         "rateLimited": "Too many attempts. Please wait a moment and try again.",
         "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
-        "requestId": "Request id"
+        "requestId": "Request id",
+        "locked": "Too many failed attempts. Wait a while before trying again.",
+        "lockedWait": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
       },
       "hub": {
         "railLabel": "Account",
@@ -35,7 +37,8 @@
           "profile": "Profile",
           "branding": "Branding",
           "security": "Password & security",
-          "delete": "Delete account"
+          "delete": "Delete account",
+          "plan": "Plan & usage"
         },
         "pages": {
           "profile": {
@@ -54,7 +57,17 @@
             "title": "Delete account",
             "description": "Permanently remove your account from this workspace."
           }
-        }
+        },
+        "breadcrumbLabel": "Breadcrumb",
+        "breadcrumbRoot": "Account",
+        "planBadge": "{plan} plan",
+        "planFree": "Free",
+        "upgrade": {
+          "title": "Need more room?",
+          "body": "Unlock more campaigns, devices and AI help with a higher plan.",
+          "cta": "See plans"
+        },
+        "lockedHint": "Finish the security step on this account first."
       },
       "avatar": {
         "alt": "Photo of {name}",
@@ -66,11 +79,15 @@
         "removed": "Photo removed.",
         "errors": {
           "type": "Choose a JPG, PNG, WebP or GIF image.",
-          "too-large": "That image is too large. Choose one under 20 MB.",
+          "too-large": "That image is still over the {size} limit after shrinking it. Try a smaller picture.",
           "decode": "We could not read that image. Try another file.",
           "encode": "We could not prepare that image. Try another file.",
-          "rejected": "That file was not accepted. Use a JPG, PNG, WebP or GIF image."
-        }
+          "rejected": "That file was not accepted. Use a JPG, PNG, WebP or GIF image.",
+          "source-too-large": "That image is too large to open. Choose one under 20 MB.",
+          "forbidden": "You are not allowed to change the photo on this account.",
+          "expired": "Your session has ended. Reload the page, sign in again and retry."
+        },
+        "hint": "JPG, PNG, WebP or GIF. We shrink it to fit {size}."
       },
       "timezone": {
         "label": "Timezone",
@@ -88,7 +105,7 @@
         "personalInfo": "Personal info",
         "fullName": "Full name",
         "displayName": "Display name",
-        "displayNameHint": "How your name appears to teammates. Leave blank to use your full name.",
+        "displayNameHint": "How your name appears to teammates. We start with your first name.",
         "email": "Email",
         "changeEmail": "Change email",
         "verified": "Verified",
@@ -105,8 +122,8 @@
           "bright": "Bright",
           "dark": "Dark"
         },
-        "workspaceTimezone": "Workspace timezone",
-        "workspaceTimezoneHint": "Applies to the whole workspace. Only owners and administrators can change it.",
+        "workspaceTimezone": "Timezone",
+        "workspaceTimezoneHint": "Applies to {workspace}. Only owners and administrators can change it.",
         "saved": "Profile saved.",
         "errors": {
           "fullNameRequired": "Enter your full name.",
@@ -114,7 +131,8 @@
           "invalid": "This value is not valid.",
           "timezoneInvalid": "Choose a timezone from the list.",
           "timezoneForbidden": "Only owners and administrators can change the workspace timezone."
-        }
+        },
+        "workspaceTag": "(workspace)"
       },
       "emailChange": {
         "title": "Change your email",
@@ -139,31 +157,31 @@
         "title": "Message footer",
         "description": "The line added at the bottom of plain text and interactive messages sent from automations, scheduled sends and team inbox replies. Approved templates carry their own text and skip it.",
         "label": "Custom footer ({max} characters at most)",
-        "hint": "Leave blank to send messages with no footer.",
+        "hint": "Leave blank to send messages with no footer at all.",
         "preview": "Preview",
         "sampleMessage": "Hello! Here is the information you asked for.",
         "noFooter": "(no footer)",
-        "usingDefault": "Your workspace uses the platform default footer: \"{footer}\". Save a footer of your own to replace it.",
         "save": "Save footer",
         "saving": "Saving",
-        "clear": "Clear",
-        "reset": "Reset to platform default",
         "saved": "Footer updated. It applies from the next message you send.",
-        "resetDone": "Footer reset to the platform default. It applies from the next message you send.",
         "tooLong": "The footer can be at most {max} characters.",
         "forbidden": "You are not allowed to change the footer.",
         "current": "Current footer",
         "currentDefault": "Current footer (platform default)",
-        "planLocked": "Your plan does not include a custom footer, so messages carry the platform default. Changing it needs a plan that removes platform branding.",
+        "planLocked": "Your plan uses the platform's default footer on outgoing messages. Higher plans unlock a custom footer, or no footer at all.",
         "permissionLocked": "Only workspace administrators can change the footer. You can see it here, but not edit it.",
-        "upgrade": "See plans"
+        "upgrade": "See plans",
+        "upgradeTitle": "Upgrade to remove the platform footer.",
+        "placeholder": "Sent via {name}",
+        "remove": "Remove my footer",
+        "removed": "Footer removed. Your messages go out with no footer from the next send."
       },
       "password": {
         "title": "Change password",
         "subtitle": "Choose a strong password you do not use anywhere else.",
         "current": "Current password",
         "new": "New password",
-        "newHint": "At least 8 characters. Your administrator may require more, such as mixed case, a number or a symbol.",
+        "newHint": "At least {count} characters.",
         "confirm": "Confirm new password",
         "submit": "Update password",
         "updating": "Updating",
@@ -173,7 +191,7 @@
         "errors": {
           "currentRequired": "Enter your current password.",
           "currentWrong": "That password is not correct.",
-          "tooShort": "Use at least 8 characters.",
+          "tooShort": "Use at least {count} characters.",
           "tooLong": "Use at most 256 characters.",
           "sameAsCurrent": "Choose a password different from your current one.",
           "mismatch": "The two passwords do not match.",
@@ -185,6 +203,29 @@
           "number": "Include at least one number.",
           "symbol": "Include at least one symbol.",
           "common": "That password is too easy to guess."
+        },
+        "currentPlaceholder": "Enter your current password",
+        "newPlaceholder": "At least {count} characters",
+        "confirmPlaceholder": "Type it again",
+        "tips": {
+          "title": "Password tips",
+          "mix": "Mix upper and lower case letters, numbers and symbols.",
+          "reuse": "Do not reuse passwords from other sites.",
+          "manager": "Consider a password manager."
+        },
+        "newHintRequires": "It must include {rules}.",
+        "requirement": {
+          "mixedCase": "upper and lower case letters",
+          "number": "a number",
+          "symbol": "a symbol"
+        },
+        "resetLink": {
+          "title": "No current password to type?",
+          "body": "If you signed in with Google or Facebook, or you do not remember your password, we can email a link to {email} so you can choose a new one without it.",
+          "send": "Email me a reset link",
+          "sending": "Sending",
+          "sent": "If {email} can receive mail, a reset link is on its way. Open it to choose a new password. You will be signed out everywhere and can sign in again with the new one.",
+          "captchaFailed": "Complete the captcha check and try again."
         }
       },
       "passwordConfirm": {
@@ -202,8 +243,7 @@
         "forcedBanner": "Your organization requires two-factor authentication. Set it up to keep using the app.",
         "forcedDone": "Two-factor authentication is on. Welcome back.",
         "offDescription": "Two-factor authentication is off. Turn it on to protect your account even if your password leaks.",
-        "setUp": "Set up authenticator app",
-        "starting": "Starting",
+        "starting": "Preparing your setup",
         "step1": "Open an authenticator app on your phone (Google Authenticator, Microsoft Authenticator, 1Password and similar).",
         "step2": "Scan the QR code, or type the setup key by hand.",
         "step3": "Enter the six-digit code the app shows to finish.",
@@ -218,7 +258,6 @@
         "codeWrong": "That code is not right or has expired. Wait for a new one and try again.",
         "enable": "Turn on",
         "enabling": "Turning on",
-        "cancel": "Cancel",
         "expired": "This setup expired. Start again to get a new code.",
         "restart": "Start again",
         "on": "On",
@@ -236,7 +275,8 @@
         "disableConfirm": "Turn off",
         "disabledDone": "Two-factor authentication is off.",
         "codesTitleEnabled": "Two-factor authentication is on. Save your recovery codes.",
-        "codesTitleRegenerated": "Your new recovery codes"
+        "codesTitleRegenerated": "Your new recovery codes",
+        "scanTitle": "Scan this QR code"
       },
       "recovery": {
         "intro": "If you lose your phone, each of these codes lets you sign in once.",
@@ -252,13 +292,11 @@
       },
       "sessions": {
         "title": "Where you are signed in",
-        "subtitle": "Devices that are signed in to your account. Sign out any you do not recognize.",
+        "subtitle": "Devices signed in to your account. Revoke any you do not recognize.",
         "thisDevice": "This device",
         "remembered": "Stays signed in",
         "ipUnknown": "Address unknown",
-        "lastActive": "Last active {when}",
-        "signOut": "Sign out",
-        "signOutOthers": "Sign out of all other devices",
+        "signOutOthers": "Sign out of all others",
         "signingOut": "Signing out",
         "empty": "No active sessions.",
         "confirmOneTitle": "Sign out this device?",
@@ -266,7 +304,19 @@
         "confirmOthersTitle": "Sign out of all other devices?",
         "confirmOthersBody": "{count, plural, one {1 other device} other {# other devices}} will be signed out. This device stays signed in.",
         "revoked": "{device} was signed out.",
-        "revokedOthers": "{count, plural, =0 {No other devices were signed in.} one {1 device was signed out.} other {# devices were signed out.}}"
+        "revokedOthers": "{count, plural, =0 {No other devices were signed in.} one {1 device was signed out.} other {# devices were signed out.}}",
+        "columns": {
+          "device": "Device",
+          "ip": "IP address",
+          "lastActive": "Last active",
+          "actions": "Actions"
+        },
+        "revoke": "Revoke",
+        "showing": "Showing {from}–{to} of {total}",
+        "prev": "Prev",
+        "next": "Next",
+        "lifetimes": "A sign-in ends by itself after {session}, or after {remembered} when keep me signed in was chosen.",
+        "idle": "Without that choice it also ends after {idle} of no activity."
       },
       "delete": {
         "title": "Delete your account",
@@ -298,7 +348,15 @@
           "phrase": "Type the phrase exactly as shown.",
           "passwordRequired": "Enter your current password.",
           "passwordWrong": "That password is not correct."
-        }
+        },
+        "considerTitle": "Before you delete, consider",
+        "considerPlanLink": "Downgrading to the free plan",
+        "considerPlanRest": "instead of deleting.",
+        "considerSupportLink": "Contacting support",
+        "considerSupportRest": "if a problem is making you leave. We may be able to fix it.",
+        "reasonLabel": "Why are you leaving? (optional)",
+        "reasonHint": "This stays in this form. It is not sent anywhere.",
+        "reasonPlaceholder": "Tell us what we could do better"
       },
       "switcher": {
         "heading": "Workspaces",
@@ -354,7 +412,7 @@
         "resendIn": "Resend in {seconds}s",
         "sending": "Sending",
         "sent": "We sent a new link to {email}.",
-        "notSent": "We could not send the email just now. Please try again in a minute.",
+        "notSent": "We could not send the email just now.",
         "throttled": "A link was sent a moment ago. Please wait before asking again.",
         "alreadyVerified": "Your email is already verified. Taking you in.",
         "signOut": "Sign out",
@@ -475,6 +533,14 @@
             "working": "Working"
           }
         }
+      },
+      "mailFailure": {
+        "not_configured": "Email sending is not set up on this platform yet. Ask your administrator.",
+        "auth_failed": "The mail server refused our sign-in. Ask your administrator to check the mail settings.",
+        "connection_refused": "The mail server did not accept the connection. Try again later, or ask your administrator.",
+        "timeout": "The mail server took too long to answer. You can try again right away.",
+        "transport_error": "The email could not be handed to the mail server. You can try again right away.",
+        "unknown": "The email could not be sent for a reason we could not tell. You can try again right away."
       }
     }
   }

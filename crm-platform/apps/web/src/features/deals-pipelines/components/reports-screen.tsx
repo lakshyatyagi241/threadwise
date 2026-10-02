@@ -109,7 +109,11 @@ export function ReportsScreen() {
       </div>
 
       {report.isPending && (
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3" aria-busy="true" aria-label={t('loading')}>
+        <div
+          className="grid grid-cols-2 gap-3 lg:grid-cols-3"
+          aria-busy="true"
+          aria-label={t('loading')}
+        >
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="h-24 animate-pulse rounded-md bg-muted" />
           ))}
@@ -120,14 +124,42 @@ export function ReportsScreen() {
       {r && (
         <>
           {r.unconverted.length > 0 && (
-            <Alert tone="warning">{t('unconverted', { currencies: r.unconverted.join(', ') })}</Alert>
+            <Alert tone="warning">
+              {t('unconverted', { currencies: r.unconverted.join(', ') })}
+            </Alert>
           )}
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-            <StatTile label={t('kpi.openValue')} value={money(r.openValueMinor)} hint={t('kpi.openValueHint', { count: r.openCount })} className="[&_div:nth-child(2)]:text-2xl" />
-            <StatTile label={t('kpi.forecast')} value={money(r.forecastMinor)} hint={t('kpi.forecastHint')} className="[&_div:nth-child(2)]:text-2xl" />
-            <StatTile label={t('kpi.wonValue')} value={money(r.wonValueMinor)} hint={t('kpi.wonValueHint', { count: r.wonCount })} tone="accent" className="[&_div:nth-child(2)]:text-2xl" />
-            <StatTile label={t('kpi.winRate')} value={`${r.winRate}%`} hint={t('kpi.winRateHint', { won: r.wonCount, lost: r.lostCount })} className="[&_div:nth-child(2)]:text-2xl" />
-            <StatTile label={t('kpi.wonThisMonth')} value={money(r.wonThisMonthValueMinor)} hint={t('kpi.wonThisMonthHint', { count: r.wonThisMonthCount })} className="[&_div:nth-child(2)]:text-2xl" />
+            <StatTile
+              label={t('kpi.openValue')}
+              value={money(r.openValueMinor)}
+              hint={t('kpi.openValueHint', { count: r.openCount })}
+              className="[&_div:nth-child(2)]:text-2xl"
+            />
+            <StatTile
+              label={t('kpi.forecast')}
+              value={money(r.forecastMinor)}
+              hint={t('kpi.forecastHint')}
+              className="[&_div:nth-child(2)]:text-2xl"
+            />
+            <StatTile
+              label={t('kpi.wonValue')}
+              value={money(r.wonValueMinor)}
+              hint={t('kpi.wonValueHint', { count: r.wonCount })}
+              tone="accent"
+              className="[&_div:nth-child(2)]:text-2xl"
+            />
+            <StatTile
+              label={t('kpi.winRate')}
+              value={`${r.winRate}%`}
+              hint={t('kpi.winRateHint', { won: r.wonCount, lost: r.lostCount })}
+              className="[&_div:nth-child(2)]:text-2xl"
+            />
+            <StatTile
+              label={t('kpi.wonThisMonth')}
+              value={money(r.wonThisMonthValueMinor)}
+              hint={t('kpi.wonThisMonthHint', { count: r.wonThisMonthCount })}
+              className="[&_div:nth-child(2)]:text-2xl"
+            />
             <StatTile
               label={t('kpi.avgDays')}
               value={r.avgDaysToClose === null ? '—' : t('kpi.days', { count: r.avgDaysToClose })}
@@ -140,14 +172,21 @@ export function ReportsScreen() {
             <EmptyState title={t('emptyTitle')} message={t('emptyMessage')} />
           ) : (
             <div className="grid gap-4 lg:grid-cols-5">
-              <section className="rounded-xl border border-border bg-background p-5 lg:col-span-3" aria-labelledby="rep-stage">
-                <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{t('distribution')}</div>
+              <section
+                className="rounded-xl border border-border bg-background p-5 lg:col-span-3"
+                aria-labelledby="rep-stage"
+              >
+                <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  {t('distribution')}
+                </div>
                 <h2 id="rep-stage" className="mb-4 text-lg font-semibold">
                   {t('stageTitle')}
                 </h2>
                 <StageValueChart stages={r.byStage} currency={currency} />
                 <details className="mt-4 text-sm">
-                  <summary className="cursor-pointer text-muted-foreground">{t('viewTable')}</summary>
+                  <summary className="cursor-pointer text-muted-foreground">
+                    {t('viewTable')}
+                  </summary>
                   <table className="mt-2 w-full text-sm">
                     <thead className="text-xs text-muted-foreground">
                       <tr>
@@ -158,27 +197,36 @@ export function ReportsScreen() {
                       </tr>
                     </thead>
                     <tbody>
-                      {r.byStage.filter((s) => s.kind === 'open').map((s) => (
-                        <tr key={s.stageId} className="border-t border-border">
-                          <td className="py-1">{s.name}</td>
-                          <td className="py-1 text-end tabular-nums">{s.count}</td>
-                          <td className="py-1 text-end tabular-nums">{money(s.valueMinor)}</td>
-                          <td className="py-1 text-end tabular-nums">{money(s.weightedMinor)}</td>
-                        </tr>
-                      ))}
+                      {r.byStage
+                        .filter((s) => s.kind === 'open')
+                        .map((s) => (
+                          <tr key={s.stageId} className="border-t border-border">
+                            <td className="py-1">{s.name}</td>
+                            <td className="py-1 text-end tabular-nums">{s.count}</td>
+                            <td className="py-1 text-end tabular-nums">{money(s.valueMinor)}</td>
+                            <td className="py-1 text-end tabular-nums">{money(s.weightedMinor)}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </details>
               </section>
 
-              <section className="rounded-xl border border-border bg-background p-5 lg:col-span-2" aria-labelledby="rep-trend">
-                <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{t('momentum')}</div>
+              <section
+                className="rounded-xl border border-border bg-background p-5 lg:col-span-2"
+                aria-labelledby="rep-trend"
+              >
+                <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  {t('momentum')}
+                </div>
                 <h2 id="rep-trend" className="mb-4 text-lg font-semibold">
                   {t('trendTitle')}
                 </h2>
                 <WonLostChart months={r.months} />
                 <details className="mt-4 text-sm">
-                  <summary className="cursor-pointer text-muted-foreground">{t('viewTable')}</summary>
+                  <summary className="cursor-pointer text-muted-foreground">
+                    {t('viewTable')}
+                  </summary>
                   <table className="mt-2 w-full text-sm">
                     <thead className="text-xs text-muted-foreground">
                       <tr>
@@ -203,10 +251,15 @@ export function ReportsScreen() {
           )}
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <section className="rounded-xl border border-border bg-background p-5" aria-labelledby="rep-leaders">
+            <section
+              className="rounded-xl border border-border bg-background p-5"
+              aria-labelledby="rep-leaders"
+            >
               <div className="mb-3 flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{t('mostWon')}</div>
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                    {t('mostWon')}
+                  </div>
                   <h2 id="rep-leaders" className="text-lg font-semibold">
                     {t('leadersTitle')}
                   </h2>
@@ -221,14 +274,20 @@ export function ReportsScreen() {
                 <ol className="divide-y divide-border">
                   {r.leaders.map((l, i) => (
                     <li key={l.userId} className="flex items-center gap-3 py-2.5">
-                      <span className="w-5 text-center text-sm font-medium tabular-nums text-muted-foreground">{i + 1}</span>
+                      <span className="w-5 text-center text-sm font-medium tabular-nums text-muted-foreground">
+                        {i + 1}
+                      </span>
                       <Avatar name={l.name} className="size-8 text-xs" />
                       <div className="min-w-0 flex-1">
                         <div className="truncate text-sm font-medium">{l.name}</div>
-                        <div className="text-xs text-muted-foreground">{t('wonCount', { count: l.won })}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {t('wonCount', { count: l.won })}
+                        </div>
                       </div>
                       <div className="text-end">
-                        <div className="text-sm font-semibold tabular-nums">{money(l.valueMinor)}</div>
+                        <div className="text-sm font-semibold tabular-nums">
+                          {money(l.valueMinor)}
+                        </div>
                         <div className="text-xs text-muted-foreground">{t('wonValue')}</div>
                       </div>
                     </li>
@@ -237,8 +296,13 @@ export function ReportsScreen() {
               )}
             </section>
 
-            <section className="rounded-xl border border-border bg-background p-5" aria-labelledby="rep-lost">
-              <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{t('lostKicker')}</div>
+            <section
+              className="rounded-xl border border-border bg-background p-5"
+              aria-labelledby="rep-lost"
+            >
+              <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                {t('lostKicker')}
+              </div>
               <h2 id="rep-lost" className="mb-3 text-lg font-semibold">
                 {t('lostTitle')}
               </h2>
@@ -247,12 +311,20 @@ export function ReportsScreen() {
               ) : (
                 <ul className="space-y-3">
                   {r.lostReasons.map((x) => (
-                    <li key={x.reason ?? '—'} className="grid grid-cols-[minmax(6rem,10rem)_1fr_auto] items-center gap-3 text-sm">
+                    <li
+                      key={x.reason ?? '—'}
+                      className="grid grid-cols-[minmax(6rem,10rem)_1fr_auto] items-center gap-3 text-sm"
+                    >
                       <span className="truncate">{x.reason ?? t('noReason')}</span>
                       <div className="h-3 rounded bg-muted">
-                        <div className="h-full rounded bg-danger" style={{ width: `${(x.count / topReason) * 100}%` }} />
+                        <div
+                          className="h-full rounded bg-danger"
+                          style={{ width: `${(x.count / topReason) * 100}%` }}
+                        />
                       </div>
-                      <span className="w-6 text-end tabular-nums text-muted-foreground">{x.count}</span>
+                      <span className="w-6 text-end tabular-nums text-muted-foreground">
+                        {x.count}
+                      </span>
                     </li>
                   ))}
                 </ul>

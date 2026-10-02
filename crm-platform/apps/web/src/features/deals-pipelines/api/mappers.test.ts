@@ -15,7 +15,9 @@ describe('wire money to minor units', () => {
       { currency: 'INR', amount: '33876.00' },
       { currency: 'USD', amount: '120.50' },
     ];
-    expect(pickTotal({ byCurrency, converted: { currency: 'INR', amount: '40000.00' } }, 'INR')).toBe(4_000_000);
+    expect(
+      pickTotal({ byCurrency, converted: { currency: 'INR', amount: '40000.00' } }, 'INR'),
+    ).toBe(4_000_000);
     // a missing exchange rate leaves converted null: only the pipeline's own currency counts
     expect(pickTotal({ byCurrency, converted: null, unconverted: ['USD'] }, 'INR')).toBe(3_387_600);
     expect(pickTotal({ byCurrency }, 'EUR')).toBe(0);
