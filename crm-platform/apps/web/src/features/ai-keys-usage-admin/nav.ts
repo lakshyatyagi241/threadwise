@@ -10,13 +10,4 @@ export const nav: NavItem[] = [
     icon: 'analytics',
     gates: { permission: 'aiadm.usage.read' },
   },
-  {
-    id: 'ai-keys',
-    group: 'settings',
-    labelKey: 'ai-keys-usage-admin.nav.keys',
-    href: '/ai-keys',
-    order: 40,
-    icon: 'settings',
-    gates: { permission: 'aiadm.keys.read' },
-  },
 ];

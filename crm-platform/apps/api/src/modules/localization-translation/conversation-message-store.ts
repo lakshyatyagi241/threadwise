@@ -19,7 +19,7 @@ export interface StoredMessage {
 }
 
 /**
- * Where conversation translation reads a message and writes its outcome. The inbox domain owns `inbox_messages` and
+ * Where conversation translation reads a message and writes its outcome. The inbox domain owns `messages` and
  * `conversations`; until it exposes its own repository this port is satisfied by `PgConversationMessageStore`.
  */
 export interface ConversationMessageStore {
@@ -57,11 +57,12 @@ export class PgConversationMessageStore implements ConversationMessageStore {
       tx.execute(sql`
         SELECT m.id, m.direction, m.body, m.is_translated, m.conversation_id, c.customer_language,
                COALESCE(m.template_id IS NOT NULL
+                  OR m.kind = 'template'
                   OR m.meta ->> 'template_id' IS NOT NULL
                   OR m.meta ->> 'template_name' IS NOT NULL
                   OR m.meta ->> 'type' = 'template', false) AS is_template,
                COALESCE(m.meta ->> 'forwarded', 'false') NOT IN ('false', '0', '') AS is_forwarded
-        FROM inbox_messages m
+        FROM messages m
         LEFT JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
         WHERE m.org_id = ${orgId} AND m.id = ${messageId}
         ORDER BY m.created_at DESC LIMIT 1
@@ -84,7 +85,7 @@ export class PgConversationMessageStore implements ConversationMessageStore {
   async saveInbound(orgId: number, m: StoredMessage, o: InboundOutcome): Promise<void> {
     await this.db.txAs({ orgId, userId: null }, async (tx) => {
       await tx.execute(sql`
-        UPDATE inbox_messages
+        UPDATE messages
         SET detected_language = ${o.detectedLanguage}, translated_body = ${o.translatedBody},
             is_translated = ${o.isTranslated}
         WHERE org_id = ${orgId} AND id = ${m.id}
@@ -103,7 +104,7 @@ export class PgConversationMessageStore implements ConversationMessageStore {
   async saveOutbound(orgId: number, m: StoredMessage, o: OutboundOutcome): Promise<void> {
     await this.db.txAs({ orgId, userId: null }, (tx) =>
       tx.execute(sql`
-        UPDATE inbox_messages
+        UPDATE messages
         SET translated_body = ${o.original}, detected_language = ${o.language}, is_translated = true
         WHERE org_id = ${orgId} AND id = ${m.id}
       `),
