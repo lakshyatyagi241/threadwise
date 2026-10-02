@@ -1,3 +1,4 @@
+import { QUEUES } from '../../../src/infra/queue/queues';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -101,7 +102,7 @@ describe('health probes (WD-DASH-048)', () => {
     const r = await service({ failed: 3, env: { NODE_BRIDGE_URL: bridgeUrl } }).snapshot(true);
     const q = state(r, 'queue');
     expect(q.state).toBe('warn');
-    expect(q.detail).toMatch(/ 33 failed$/); // 11 queues x 3
+    expect(q.detail).toMatch(new RegExp(` ${Object.keys(QUEUES).length * 3} failed$`)); // every queue x 3
     expect(r.overall).toBe('warn');
   });
 
@@ -130,8 +131,9 @@ describe('health probes (WD-DASH-048)', () => {
   it('clearing reports what it removed per the BullMQ counts and refuses an unknown queue', async () => {
     const svc = service({ failed: 2 });
     const r = await svc.clearQueues();
-    expect(r).toMatchObject({ ok: true, clearedFailed: 22, clearedPending: 0 });
-    expect(r.message).toBe('Cleared 0 pending and 22 failed job(s).');
+    const failed = Object.keys(QUEUES).length * 2;
+    expect(r).toMatchObject({ ok: true, clearedFailed: failed, clearedPending: 0 });
+    expect(r.message).toBe(`Cleared 0 pending and ${failed} failed job(s).`);
     await expect(svc.clearQueues('nope')).rejects.toMatchObject({ status: 422 });
   });
 });

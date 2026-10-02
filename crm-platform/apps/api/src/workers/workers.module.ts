@@ -12,6 +12,7 @@ import {
   TasksWorkerModule,
 } from '../modules/crm';
 import { NotificationsWorkerModule } from '../modules/notifications';
+import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -40,6 +41,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
+    WabaWorkerModule,
   ],
   providers: [
     OutboxDrainService,
