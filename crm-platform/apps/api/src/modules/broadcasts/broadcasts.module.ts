@@ -54,6 +54,7 @@ import {
     BroadcastDispatchService,
     EngineSenderRegistry,
     BroadcastsRepository,
+    PacingRuntime,
   ],
   providers: [
     CryptoService,

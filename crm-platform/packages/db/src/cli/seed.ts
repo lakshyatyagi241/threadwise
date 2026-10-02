@@ -114,15 +114,16 @@ async function main(): Promise<void> {
       );
 
       // --- users -----------------------------------------------------------
-      // No password_hash: staff sign in via Clerk now (see AuthService.loginViaClerk).
-      // auth_subject starts null and gets linked on that user's first Clerk login —
+      // password_hash set so the seeded staff admin can also sign in with
+      // DEMO_PASSWORD via the password flow, not just Clerk. auth_subject
+      // starts null and still gets linked on that user's first Clerk login —
       // matched by (org_id, email), same row, same role, no re-provisioning.
       const { rows: userRows } = await client.query<{ id: number }>(
-        `INSERT INTO users (org_id, email, full_name)
-         VALUES ($1, $2, 'Demo Admin')
-         ON CONFLICT (org_id, email) DO UPDATE SET full_name = EXCLUDED.full_name
+        `INSERT INTO users (org_id, email, full_name, password_hash)
+         VALUES ($1, $2, 'Demo Admin', $3)
+         ON CONFLICT (org_id, email) DO UPDATE SET full_name = EXCLUDED.full_name, password_hash = EXCLUDED.password_hash
          RETURNING id`,
-        [orgId, org.adminEmail],
+        [orgId, org.adminEmail, passwordHash],
       );
       const adminUserId = userRows[0]!.id;
 
@@ -190,8 +191,8 @@ async function main(): Promise<void> {
 
     await client.query('COMMIT');
     console.log(
-      `\ndone. Staff login (Clerk): sign in as ${ORGS[0]!.adminEmail} (org: ${ORGS[0]!.slug}) — ` +
-        'first login links this seeded row automatically, no password set.',
+      `\ndone. Staff login: ${ORGS[0]!.adminEmail} / ${DEMO_PASSWORD} (org: ${ORGS[0]!.slug}). ` +
+        'Clerk also works and links this same row on first sign-in.',
     );
     console.log(
       `     Agent login (password, unchanged): agent@${ORGS[0]!.slug}.test / ${DEMO_PASSWORD}`,
