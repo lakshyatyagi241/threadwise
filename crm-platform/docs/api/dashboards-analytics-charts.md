@@ -1,7 +1,7 @@
 # API: dashboards-analytics-charts
 
 Domain `dash` (TW-DASH). Base path `/v2`, staff bearer token. The domain owns no table: every number is a live aggregate over the
-workspace's messages (`messages` and `inbox_messages` summed). Errors are `application/problem+json`. Shapes live in
+workspace's messages (the one `messages` stream: Reference's `messages` and `inbox_messages` are folded). Errors are `application/problem+json`. Shapes live in
 `packages/contracts/src/dashboards-analytics-charts/`.
 
 Definitions (TW-DASH-002): **sent** = every outbound row; **delivered** = outbound with status `delivered`, `read` or `sent`;

@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { nav } from './nav';
+import { settings } from './settings';
 import { flatten, readMessages } from './lib/test-support';
 
 const DOMAIN = join(__dirname);
@@ -21,10 +21,11 @@ describe('workspaces-teams-tenancy messages', () => {
     expect(flatten(readMessages('ar')).sort()).toEqual(en);
   });
 
-  it('labels both menu entries in English and Arabic', () => {
+  it('labels both Settings tiles in English and Arabic', () => {
     for (const locale of ['en', 'ar']) {
       const keys = new Set(flatten(readMessages(locale)));
-      for (const item of nav) expect(keys.has(item.labelKey), `${locale} ${item.id}`).toBe(true);
+      for (const item of settings)
+        expect(keys.has(item.labelKey), `${locale} ${item.id}`).toBe(true);
     }
   });
 

@@ -1,6 +1,8 @@
 /**
- * chat-conversations: tables ported from Reference. Mirrors migrations/20261001103600_chat_threadwise_schema.sql.
- * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
+ * chat-conversations: tables ported from Reference and reshaped for the inbox. Mirrors migrations/20261001103600_chat_threadwise_schema.sql
+ * plus the reshape migrations 20261014100000 (conversations), 20261014100100 (messages fold), 20261014100200 (ledger, events) and
+ * 20261014100500 (channel foreign keys). The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the
+ * database disagree.
  */
 import {
   bigint,
@@ -12,7 +14,6 @@ import {
   numeric,
   pgTable,
   primaryKey,
-  smallint,
   text,
   timestamp,
   unique,
@@ -21,10 +22,20 @@ import {
 import { sql } from 'drizzle-orm';
 import { aiAgents } from '../ai-agents-training/tables';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
-import { contactGroups } from '../contacts-attributes-tags/tables';
 import { contacts } from '../crm';
 import { organizations, teams, users } from '../foundation';
 import { slaPolicies } from '../team-inbox-routing-sla/tables';
+import { chatChannels } from './channels';
+
+/** `conversations.status`: one lifecycle. `closed` is Reference's separate "closed" state, kept so no reachable state is lost. */
+export const CONVERSATION_STATUSES = [
+  'open',
+  'pending',
+  'snoozed',
+  'resolved',
+  'closed',
+  'spam',
+] as const;
 
 export const conversations = pgTable(
   'conversations',
@@ -32,32 +43,28 @@ export const conversations = pgTable(
     orgId: orgIdColumn(),
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().defaultRandom(),
-    userId: idColumn('user_id'),
-    deviceId: idColumn('device_id'),
-    contactGroupId: idColumn('contact_group_id'),
-    rawJid: text('raw_jid'),
-    altJid: text('alt_jid'),
-    contactDigits: text('contact_digits'),
+    channelId: idColumn('channel_id').notNull(),
+    /** The peer on that channel (normalised digits, or the channel's own thread id). One thread per (channel, peer). */
+    peerKey: text('peer_key').notNull(),
+    peerName: text('peer_name'),
     contactId: idColumn('contact_id'),
     title: text('title').notNull(),
     preview: text('preview'),
-    status: text('status').notNull().default('pending'),
-    platform: text('platform').notNull().default('W'),
-    provider: text('provider').notNull().default('baileys'),
+    status: text('status').$type<(typeof CONVERSATION_STATUSES)[number]>().notNull().default('open'),
     customerLanguage: text('customer_language'),
-    origin: text('origin').notNull().default('chat'),
     archived: boolean('archived').notNull().default(false),
     pinnedAt: timestamp('pinned_at', { withTimezone: true }),
     mutedAt: timestamp('muted_at', { withTimezone: true }),
-    recipientsCount: integer('recipients_count').notNull().default(0),
     lastMessageAt: timestamp('last_message_at', { withTimezone: true }),
-    scheduledAt: timestamp('scheduled_at', { withTimezone: true }),
-    scheduledTimezone: text('scheduled_timezone'),
-    inboxStatus: text('inbox_status').notNull().default('open'),
+    /** Highest `messages.seq` handed out; allocated under the conversation row lock. */
+    msgSeq: idColumn('msg_seq').notNull().default(0),
+    lastMessageId: idColumn('last_message_id'),
+    /** Free-form replies are allowed until this instant; NULL when the channel has no window rule. */
+    windowExpiresAt: timestamp('window_expires_at', { withTimezone: true }),
+    /** Start of the current wait for a human answer (SLA anchor). */
+    waitingSince: timestamp('waiting_since', { withTimezone: true }),
+    needsContact: boolean('needs_contact').notNull().default(false),
     priority: text('priority').notNull().default('normal'),
-    interestedSku: text('interested_sku'),
-    interestedProductId: idColumn('interested_product_id'),
-    interestedSeenAt: timestamp('interested_seen_at', { withTimezone: true }),
     assigneeUserId: idColumn('assignee_user_id'),
     assigneeTeamId: idColumn('assignee_team_id'),
     assigneeAgentId: idColumn('assignee_agent_id'),
@@ -70,8 +77,6 @@ export const conversations = pgTable(
     slaFirstResponseDue: timestamp('sla_first_response_due', { withTimezone: true }),
     slaResolutionDue: timestamp('sla_resolution_due', { withTimezone: true }),
     slaBreached: boolean('sla_breached').notNull().default(false),
-    channel: text('channel').notNull().default('whatsapp'),
-    isSpam: boolean('is_spam').notNull().default(false),
     routingMeta: jsonb('routing_meta'),
     escalationDueAt: timestamp('escalation_due_at', { withTimezone: true }),
     escalationAction: jsonb('escalation_action'),
@@ -85,21 +90,17 @@ export const conversations = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_conversations_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_conversations_channel_peer').on(t.orgId, t.channelId, t.peerKey),
     foreignKey({
       name: 'fk_conversations_org',
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     foreignKey({
-      name: 'fk_conversations_user_id',
-      columns: [t.orgId, t.userId],
-      foreignColumns: [users.orgId, users.id],
-    }).onDelete('set null'),
-    foreignKey({
-      name: 'fk_conversations_contact_group_id',
-      columns: [t.orgId, t.contactGroupId],
-      foreignColumns: [contactGroups.orgId, contactGroups.id],
-    }).onDelete('set null'),
+      name: 'fk_conversations_channel_id',
+      columns: [t.orgId, t.channelId],
+      foreignColumns: [chatChannels.orgId, chatChannels.id],
+    }).onDelete('restrict'),
     foreignKey({
       name: 'fk_conversations_contact_id',
       columns: [t.orgId, t.contactId],
@@ -135,46 +136,37 @@ export const conversations = pgTable(
       columns: [t.orgId, t.slaPolicyId],
       foreignColumns: [slaPolicies.orgId, slaPolicies.id],
     }).onDelete('set null'),
-    index('idx_conversations_alt_jid').on(t.orgId, t.altJid),
+    index('idx_conversations_title_trgm').using('gin', sql`${t.title} gin_trgm_ops`),
+    index('idx_conversations_peer_name_trgm').using('gin', sql`${t.peerName} gin_trgm_ops`),
+    index('idx_conversations_peer_key_trgm').using('gin', sql`${t.peerKey} gin_trgm_ops`),
+    index('idx_conversations_preview_trgm').using('gin', sql`${t.preview} gin_trgm_ops`),
     index('idx_conversations_assignee_agent_id').on(t.orgId, t.assigneeAgentId),
-    index('idx_conversations_channel').on(t.orgId, t.channel),
-    index('idx_conversations_contact_group_id').on(t.orgId, t.contactGroupId),
     index('idx_conversations_contact_id').on(t.orgId, t.contactId),
-    index('idx_conversations_device_id').on(t.orgId, t.deviceId),
-    index('idx_conversations_escalation_due_at').on(t.orgId, t.escalationDueAt),
-    index('idx_conversations_is_spam').on(t.orgId, t.isSpam),
-    index('idx_conversations_last_inbound_at').on(t.orgId, t.lastInboundAt),
-    index('idx_conversations_last_message_at').on(t.orgId, t.lastMessageAt),
-    index('idx_conversations_last_outbound_at').on(t.orgId, t.lastOutboundAt),
-    index('idx_conversations_origin').on(t.orgId, t.origin),
-    index('idx_conversations_pinned_at').on(t.orgId, t.pinnedAt),
-    index('idx_conversations_priority').on(t.orgId, t.priority),
-    index('idx_conversations_sla_breached').on(t.orgId, t.slaBreached),
-    index('idx_conversations_sla_first_response_due').on(t.orgId, t.slaFirstResponseDue),
-    index('idx_conversations_sla_resolution_due').on(t.orgId, t.slaResolutionDue),
-    index('idx_conversations_snoozed_until').on(t.orgId, t.snoozedUntil),
-    index('idx_conversations_user_id_archived_status').on(t.orgId, t.userId, t.archived, t.status),
-    index('idx_conversations_assignee_team_id_inbox_status').on(
+    index('idx_conversations_queue').on(
       t.orgId,
-      t.assigneeTeamId,
-      t.inboxStatus,
-    ),
-    index('idx_conversations_assignee_user_id_inbox_status').on(
-      t.orgId,
-      t.assigneeUserId,
-      t.inboxStatus,
-    ),
-    index('idx_conversations_inbox_status_priority').on(t.orgId, t.inboxStatus, t.priority),
-    index('idx_conversations_interested_sku').on(t.orgId, t.interestedSku),
-    index('idx_conversations_provider').on(t.orgId, t.provider),
-    index('idx_conversations_archived_inbox_status_last_message_at').on(
-      t.orgId,
+      t.status,
       t.archived,
-      t.inboxStatus,
-      t.lastMessageAt,
+      t.pinnedAt.desc().nullsLast(),
+      t.lastMessageAt.desc(),
+      t.id.desc(),
     ),
-    index('idx_conversations_contact_digits').on(t.orgId, t.contactDigits),
-    index('idx_conversations_unread_count').on(t.orgId, t.unreadCount),
+    index('idx_conversations_assignee_user').on(t.orgId, t.assigneeUserId, t.status),
+    index('idx_conversations_assignee_team').on(t.orgId, t.assigneeTeamId, t.status),
+    index('idx_conversations_unread')
+      .on(t.orgId, t.lastMessageAt.desc())
+      .where(sql`unread_count > 0`),
+    index('idx_conversations_snooze_due')
+      .on(t.snoozedUntil)
+      .where(sql`status = 'snoozed' AND snoozed_until IS NOT NULL`),
+    index('idx_conversations_escalation_due')
+      .on(t.escalationDueAt)
+      .where(sql`escalation_due_at IS NOT NULL`),
+    index('idx_conversations_sla_first_due')
+      .on(t.slaFirstResponseDue)
+      .where(sql`sla_first_response_due IS NOT NULL AND NOT sla_breached`),
+    index('idx_conversations_sla_resolution_due')
+      .on(t.slaResolutionDue)
+      .where(sql`sla_resolution_due IS NOT NULL AND NOT sla_breached`),
   ],
 );
 
@@ -187,6 +179,8 @@ export const conversationEvents = pgTable(
     id: bigint('id', { mode: 'number' })
       .notNull()
       .default(sql`nextval('conversation_events_id_seq')`),
+    /** The id on the wire (tib1 migration 20261015090000). */
+    uuid: uuid('uuid').notNull().defaultRandom(),
     orgId: orgIdColumn(),
     conversationId: idColumn('conversation_id').notNull(),
     actorUserId: idColumn('actor_user_id'),
@@ -200,6 +194,12 @@ export const conversationEvents = pgTable(
     index('idx_conversation_events_conversation_id').on(t.orgId, t.conversationId),
     index('idx_conversation_events_created_at').on(t.orgId, t.createdAt),
     index('idx_conversation_events_type').on(t.orgId, t.type),
+    index('idx_conversation_events_timeline').on(
+      t.orgId,
+      t.conversationId,
+      t.createdAt.desc(),
+      t.id.desc(),
+    ),
   ],
 );
 
@@ -215,7 +215,8 @@ export const conversationNotes = pgTable(
     conversationId: idColumn('conversation_id').notNull(),
     userId: idColumn('user_id'),
     body: text('body').notNull(),
-    mentions: jsonb('mentions'),
+    /** Users mentioned, as uuid strings (tib1 migration 20261015090100: NOT NULL, always an array). */
+    mentions: jsonb('mentions').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
     isPinned: boolean('is_pinned').notNull().default(false),
     editedAt: timestamp('edited_at', { withTimezone: true }),
     createdAt: createdAt(),
@@ -297,6 +298,37 @@ export const conversationParticipants = pgTable(
 export type ConversationParticipantsRow = typeof conversationParticipants.$inferSelect;
 export type NewConversationParticipantsRow = typeof conversationParticipants.$inferInsert;
 
+export const MESSAGE_DIRECTIONS = ['in', 'out'] as const;
+export const MESSAGE_KINDS = [
+  'text',
+  'image',
+  'video',
+  'audio',
+  'voice',
+  'document',
+  'sticker',
+  'location',
+  'contact',
+  'template',
+  'reaction',
+  'interactive',
+  'system',
+] as const;
+export const MESSAGE_SENDER_KINDS = ['customer', 'agent', 'bot', 'system', 'broadcast'] as const;
+export const MESSAGE_STATUSES = [
+  'received',
+  'queued',
+  'sent',
+  'delivered',
+  'read',
+  'failed',
+] as const;
+
+/**
+ * The one message stream (Reference's `messages` and `inbox_messages` folded). Monthly partitions on `created_at`; the id on the wire is
+ * `uuid`, ordering inside a thread is `seq`. Uniqueness of a channel message is enforced by `message_ledger`, not here. A stream has no
+ * foreign keys; a trigger on `conversations` deletes a thread's messages with it.
+ */
 export const messages = pgTable(
   'messages',
   {
@@ -304,46 +336,144 @@ export const messages = pgTable(
       .notNull()
       .default(sql`nextval('messages_id_seq')`),
     orgId: orgIdColumn(),
-    conversationId: idColumn('conversation_id'),
-    userId: idColumn('user_id'),
-    agentId: idColumn('agent_id'),
-    contactId: idColumn('contact_id'),
-    templateId: idColumn('template_id'),
-    direction: text('direction').notNull().default('out'),
-    toNumber: text('to_number'),
-    fromNumber: text('from_number'),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    conversationId: idColumn('conversation_id').notNull(),
+    seq: idColumn('seq').notNull(),
+    direction: text('direction').$type<(typeof MESSAGE_DIRECTIONS)[number]>().notNull(),
+    kind: text('kind').$type<(typeof MESSAGE_KINDS)[number]>().notNull().default('text'),
+    senderKind: text('sender_kind').$type<(typeof MESSAGE_SENDER_KINDS)[number]>().notNull(),
+    senderUserId: idColumn('sender_user_id'),
+    senderAgentId: idColumn('sender_agent_id'),
     body: text('body'),
-    mediaPath: text('media_path'),
-    mediaType: text('media_type'),
+    mediaKey: text('media_key'),
+    mediaMime: text('media_mime'),
+    mediaSize: idColumn('media_size'),
+    mediaName: text('media_name'),
+    mediaSha256: text('media_sha256'),
     latitude: numeric('latitude', { precision: 10, scale: 7 }),
     longitude: numeric('longitude', { precision: 10, scale: 7 }),
-    status: text('status').notNull().default('pending'),
-    pinned: boolean('pinned').notNull().default(false),
-    starred: boolean('starred').notNull().default(false),
-    reaction: text('reaction'),
-    qualityScore: smallint('quality_score'),
-    qualityNote: text('quality_note'),
-    meta: jsonb('meta'),
+    status: text('status').$type<(typeof MESSAGE_STATUSES)[number]>().notNull(),
+    failureCode: text('failure_code'),
     failureReason: text('failure_reason'),
-    scheduledAt: timestamp('scheduled_at', { withTimezone: true }),
+    clientMessageId: uuid('client_message_id'),
+    providerMessageId: text('provider_message_id'),
+    replyToMessageUuid: uuid('reply_to_message_uuid'),
+    reaction: text('reaction'),
+    starred: boolean('starred').notNull().default(false),
+    pinned: boolean('pinned').notNull().default(false),
+    editedAt: timestamp('edited_at', { withTimezone: true }),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+    isTranslated: boolean('is_translated').notNull().default(false),
+    translatedBody: text('translated_body'),
+    detectedLanguage: text('detected_language'),
+    templateId: idColumn('template_id'),
+    meta: jsonb('meta').$type<Record<string, unknown>>().notNull().default({}),
+    providerTs: timestamp('provider_ts', { withTimezone: true }),
     sentAt: timestamp('sent_at', { withTimezone: true }),
     deliveredAt: timestamp('delivered_at', { withTimezone: true }),
     readAt: timestamp('read_at', { withTimezone: true }),
-    provider: text('provider'),
     createdAt: createdAt(),
   },
   (t) => [
     primaryKey({ columns: [t.id, t.createdAt] }),
-    index('idx_messages_agent_id').on(t.orgId, t.agentId),
-    index('idx_messages_contact_id').on(t.orgId, t.contactId),
-    index('idx_messages_conversation_id').on(t.orgId, t.conversationId),
-    index('idx_messages_provider').on(t.orgId, t.provider),
-    index('idx_messages_scheduled_at').on(t.orgId, t.scheduledAt),
-    index('idx_messages_status').on(t.orgId, t.status),
-    index('idx_messages_template_id').on(t.orgId, t.templateId),
-    index('idx_messages_user_id').on(t.orgId, t.userId),
+    index('idx_messages_thread').on(t.orgId, t.conversationId, t.seq),
+    index('idx_messages_uuid').on(t.orgId, t.uuid),
+    index('idx_messages_wgt_conversation').on(t.orgId, t.conversationId, t.id),
+    index('idx_messages_org_created').on(t.orgId, t.createdAt),
+    index('idx_messages_queued')
+      .on(t.createdAt)
+      .where(sql`status = 'queued'`),
+    index('idx_messages_sender_user_id')
+      .on(t.orgId, t.senderUserId)
+      .where(sql`sender_user_id IS NOT NULL`),
+    index('idx_messages_template_id')
+      .on(t.orgId, t.templateId)
+      .where(sql`template_id IS NOT NULL`),
+    index('idx_messages_body_trgm').using('gin', sql`${t.body} gin_trgm_ops`),
+    index('idx_messages_media_key')
+      .on(t.orgId, t.mediaKey)
+      .where(sql`media_key IS NOT NULL`),
   ],
 );
 
 export type MessagesRow = typeof messages.$inferSelect;
 export type NewMessagesRow = typeof messages.$inferInsert;
+
+export const MESSAGE_LEDGER_KINDS = ['provider_id', 'client_id'] as const;
+
+/**
+ * Idempotency authority and receipt router for `messages` (a partitioned table cannot hold a unique key without its partition column).
+ * The message id and timestamp are allocated before the message is inserted, in the same transaction.
+ */
+export const messageLedger = pgTable(
+  'message_ledger',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    channelId: idColumn('channel_id').notNull(),
+    kind: text('kind').$type<(typeof MESSAGE_LEDGER_KINDS)[number]>().notNull(),
+    key: text('key').notNull(),
+    messageId: idColumn('message_id').notNull(),
+    messageCreatedAt: timestamp('message_created_at', { withTimezone: true }).notNull(),
+    conversationId: idColumn('conversation_id').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_message_ledger_key').on(t.orgId, t.channelId, t.kind, t.key),
+    foreignKey({
+      name: 'message_ledger_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_message_ledger_conversation_id',
+      columns: [t.orgId, t.conversationId],
+      foreignColumns: [conversations.orgId, conversations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_message_ledger_channel_id',
+      columns: [t.orgId, t.channelId],
+      foreignColumns: [chatChannels.orgId, chatChannels.id],
+    }).onDelete('cascade'),
+    index('idx_message_ledger_message').on(t.orgId, t.messageId),
+    index('idx_message_ledger_conversation').on(t.orgId, t.conversationId),
+    index('idx_message_ledger_created').on(t.createdAt),
+  ],
+);
+
+export type MessageLedgerRow = typeof messageLedger.$inferSelect;
+export type NewMessageLedgerRow = typeof messageLedger.$inferInsert;
+
+export const MESSAGE_EVENT_TYPES = [
+  'queued',
+  'attempt',
+  'retry',
+  'sent',
+  'delivered',
+  'read',
+  'failed',
+] as const;
+
+/** Every state change and receipt of a message, including receipts the summary columns ignore. Monthly partitions, no foreign keys. */
+export const messageEvents = pgTable(
+  'message_events',
+  {
+    id: bigint('id', { mode: 'number' })
+      .notNull()
+      .default(sql`nextval('message_events_id_seq')`),
+    orgId: orgIdColumn(),
+    messageId: idColumn('message_id').notNull(),
+    messageCreatedAt: timestamp('message_created_at', { withTimezone: true }).notNull(),
+    event: text('event').$type<(typeof MESSAGE_EVENT_TYPES)[number]>().notNull(),
+    detail: jsonb('detail'),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.id, t.createdAt] }),
+    index('idx_message_events_message').on(t.orgId, t.messageId, t.messageCreatedAt),
+  ],
+);
+
+export type MessageEventsRow = typeof messageEvents.$inferSelect;
+export type NewMessageEventsRow = typeof messageEvents.$inferInsert;

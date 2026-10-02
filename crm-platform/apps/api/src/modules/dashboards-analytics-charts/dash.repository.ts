@@ -6,24 +6,20 @@ import type { RawCounts } from './dash-metrics';
 type Raw = Record<string, unknown>;
 
 /**
- * The live aggregates behind the dashboard and analytics (TW-DASH-002). Reference's two message stores both exist here
- * (`messages` for broadcasts, schedules and quick sends; `inbox_messages` for conversations), so every count is the sum of
- * both. Row-level security already scopes both to the caller's workspace; the explicit `org_id` is the index prefix.
- * Nothing is cached and nothing is pre-aggregated.
+ * The live aggregates behind the dashboard and analytics (TW-DASH-002). Reference kept two message stores; here they are one stream
+ * (`messages`: conversations, broadcast mirrors, sends), so every count reads that one table. Row-level security already scopes it
+ * to the caller's workspace; the explicit `org_id` is the index prefix. Nothing is cached and nothing is pre-aggregated.
  */
 const DELIVERED = sql.raw(`status IN ('delivered','read','sent')`);
 const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
 
-/** The two streams as one relation over [from, to). `src` tells them apart ('m' legacy, 'i' inbox). */
+/** The message stream over [from, to). */
 function stream(orgId: number, from: Date, to: Date): SQL {
   const f = from.toISOString();
   const t = to.toISOString();
   return sql`(
-    SELECT 'm'::text AS src, created_at, direction, status, read_at, template_id, media_type, conversation_id
+    SELECT created_at, direction, status, read_at, template_id, kind, conversation_id
       FROM messages WHERE org_id = ${orgId} AND created_at >= ${f}::timestamptz AND created_at < ${t}::timestamptz
-    UNION ALL
-    SELECT 'i'::text, created_at, direction, status, read_at, template_id, media_type, conversation_id
-      FROM inbox_messages WHERE org_id = ${orgId} AND created_at >= ${f}::timestamptz AND created_at < ${t}::timestamptz
   ) m`;
 }
 
@@ -47,7 +43,7 @@ export class DashRepository {
         count(*) FILTER (WHERE direction = 'out' AND status = 'failed')::int AS failed,
         count(*) FILTER (WHERE direction = 'out' AND ${READ})::int AS read,
         count(*) FILTER (WHERE direction = 'in')::int AS replies,
-        count(DISTINCT conversation_id) FILTER (WHERE direction = 'in' AND src = 'i')::int AS repliers
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers
       FROM ${stream(orgId, from, to)}`);
     const r = (res.rows[0] ?? {}) as Raw;
     return {
@@ -114,10 +110,10 @@ export class DashRepository {
   ): Promise<Array<{ key: string; count: number }>> {
     const res = await tx.execute(sql`
       SELECT CASE
-          WHEN template_id IS NOT NULL THEN 'template'
-          WHEN media_type IN ('image','video','audio','document') THEN 'media'
-          WHEN media_type = 'location' THEN 'location'
-          WHEN media_type = 'contact' THEN 'interactive'
+          WHEN template_id IS NOT NULL OR kind = 'template' THEN 'template'
+          WHEN kind IN ('image','video','audio','voice','document','sticker') THEN 'media'
+          WHEN kind = 'location' THEN 'location'
+          WHEN kind IN ('contact','interactive') THEN 'interactive'
           ELSE 'text' END AS k, count(*)::int AS c
       FROM ${stream(orgId, from, to)} WHERE direction = 'out' GROUP BY 1`);
     return (res.rows as Raw[]).map((r) => ({ key: r.k as string, count: n(r.c) }));

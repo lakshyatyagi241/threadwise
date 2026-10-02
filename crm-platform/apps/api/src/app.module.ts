@@ -17,6 +17,7 @@ import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
+import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
@@ -35,16 +36,23 @@ import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
-import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
+import {
+  MediaStorageService,
+  PlatformSettingsModule,
+} from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
 import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
 import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { TeamChatModule } from './modules/team-chat';
+import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
+import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
+import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
+import { ChatMediaModule } from './infra/providers/chat-conversations/media';
 import { RealtimeModule } from './realtime/realtime.module';
 import { HealthModule } from './health/health.module';
 
@@ -127,6 +135,14 @@ import { HealthModule } from './health/health.module';
     BspBillingEngineModule,
     SendGuardModule,
     RealtimeModule,
+    // The one door chat media goes through (store, link, the authenticated media route), over the platform's storage and upload policy.
+    ChatMediaModule.register({
+      imports: [PlatformSettingsModule],
+      objectGateway: { useExisting: MediaStorageService },
+      uploadValidator: { useExisting: UploadPolicyService },
+      // A link stops working when the person may no longer see the conversation the file belongs to.
+      accessPolicy: { useClass: MessageMediaAccessPolicy },
+    }),
     HealthModule,
 
     // Apps
@@ -144,6 +160,9 @@ import { HealthModule } from './health/health.module';
     PublicApiModule,
     PlatformSupportDeskModule,
     TeamChatModule,
+    ChatConversationsModule,
+    TeamInboxConversationsModule,
+    TeamInboxRoutingSlaModule,
     WorkspacesTeamsTenancyModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.

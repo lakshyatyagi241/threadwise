@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import { Popover, cn } from '@crm/ui';
+import type { ResolvedNavItem } from '@/features/_registry/types';
 import { LOCALES } from '@/i18n/locales';
 import { setLocale, setTheme } from './actions';
 
@@ -31,8 +32,21 @@ export function Avatar({ user, className }: { user: ShellUser; className?: strin
 }
 
 /** Round avatar that opens the account panel: profile link, language, theme and sign-out. */
-export function UserMenu({ user, theme }: { user: ShellUser; theme: 'light' | 'dark' }) {
+export function UserMenu({
+  user,
+  theme,
+  settingsHref,
+  helpItems = [],
+}: {
+  user: ShellUser;
+  theme: 'light' | 'dark';
+  /** Opens the Settings area. */
+  settingsHref?: string;
+  /** Support and Guidebook: a screen that is not built yet shows disabled with a "Soon" mark. */
+  helpItems?: readonly ResolvedNavItem[];
+}) {
   const t = useTranslations('shell');
+  const tAll = useTranslations();
   const locale = useLocale();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -81,6 +95,11 @@ export function UserMenu({ user, theme }: { user: ShellUser; theme: 'light' | 'd
           </div>
         </div>
         <div className="my-1 h-px bg-border" />
+        {settingsHref && (
+          <Link href={settingsHref} onClick={() => setOpen(false)} className={row}>
+            {t('settings')}
+          </Link>
+        )}
         <Link href="/account" onClick={() => setOpen(false)} className={row}>
           {t('account')}
         </Link>
@@ -110,6 +129,37 @@ export function UserMenu({ user, theme }: { user: ShellUser; theme: 'light' | 'd
             {current === 'dark' ? t('themeLight') : t('themeDark')}
           </span>
         </button>
+        {helpItems.length > 0 && (
+          <>
+            <div className="my-1 h-px bg-border" />
+            <div role="group" aria-label={t('help')}>
+              {helpItems.map((item) =>
+                item.comingSoon ? (
+                  <span
+                    key={item.id}
+                    aria-disabled="true"
+                    title={t('comingSoon')}
+                    className={cn(row, 'cursor-not-allowed text-muted-foreground')}
+                  >
+                    <span>{tAll(item.labelKey)}</span>
+                    <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wide">
+                      {t('soon')}
+                    </span>
+                  </span>
+                ) : (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={row}
+                  >
+                    {tAll(item.labelKey)}
+                  </Link>
+                ),
+              )}
+            </div>
+          </>
+        )}
         <div className="my-1 h-px bg-border" />
         <button type="button" onClick={() => void logout()} className={cn(row, 'text-danger')}>
           {t('logout')}

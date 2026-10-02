@@ -11,6 +11,14 @@ import { NavCollapsedContext } from './nav-context';
 import { BrandMark, ChevronIcon, CloseIcon, NavIcon } from './nav-icons';
 import { railSections, type NavSection } from './nav-model';
 
+/** The Settings group is pinned under the scrolling list, always in reach; everything else scrolls. */
+function splitBottom(sections: readonly NavSection[]) {
+  return {
+    main: sections.filter((s) => s.group !== 'settings'),
+    bottom: sections.filter((s) => s.group === 'settings').flatMap((s) => s.items),
+  };
+}
+
 type Translate = ReturnType<typeof useTranslations>;
 
 function Pill({ tone, children }: { tone: 'new' | 'soon' | 'upgrade'; children: string }) {
@@ -193,6 +201,7 @@ export function NavRail({
   };
 
   const toggleLabel = t(pinned ? 'shell.collapseMenu' : 'shell.expandMenu');
+  const { main, bottom } = splitBottom(sections);
   return (
     <aside
       className={cn(
@@ -257,16 +266,39 @@ export function NavRail({
       )}
       <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         {pinned ? (
-          <NavPanel sections={sections} activeId={activeId} />
+          <NavPanel sections={main} activeId={activeId} />
         ) : (
           <RailIcons
-            sections={railSections(sections)}
+            sections={railSections(main)}
             activeId={activeId}
             show={show}
             hide={() => setTip(null)}
           />
         )}
       </div>
+      {bottom.length > 0 && (
+        <nav
+          aria-label={t('shell.settings')}
+          className={cn(
+            'shrink-0 border-t border-nav-border',
+            pinned ? 'space-y-0.5 px-3 py-2' : 'flex flex-col items-center gap-1 px-2 py-2',
+          )}
+        >
+          {bottom.map((item) =>
+            pinned ? (
+              <PanelItem key={item.id} item={item} active={item.id === activeId} t={t} />
+            ) : (
+              <RailLink
+                key={item.id}
+                item={item}
+                active={item.id === activeId}
+                show={show}
+                hide={() => setTip(null)}
+              />
+            ),
+          )}
+        </nav>
+      )}
       <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
         {footer && (
           <NavCollapsedContext.Provider value={!pinned}>{footer}</NavCollapsedContext.Provider>
@@ -287,6 +319,53 @@ export function NavRail({
           document.body,
         )}
     </aside>
+  );
+}
+
+/** One icon of the slim rail, with its tooltip. */
+function RailLink({
+  item,
+  active,
+  show,
+  hide,
+}: {
+  item: ResolvedNavItem;
+  active: boolean;
+  show: (el: HTMLElement, label: string) => void;
+  hide: () => void;
+}) {
+  const t = useTranslations();
+  const label = t(item.labelKey);
+  return (
+    <Link
+      href={item.href}
+      aria-label={label}
+      aria-current={active ? 'page' : undefined}
+      onMouseEnter={(e) => show(e.currentTarget, label)}
+      onMouseLeave={hide}
+      onFocus={(e) => show(e.currentTarget, label)}
+      onBlur={hide}
+      className={cn(
+        'relative flex size-11 items-center justify-center rounded-xl outline-none transition',
+        'focus-visible:ring-2 focus-visible:ring-nav-ring focus-visible:ring-offset-2 focus-visible:ring-offset-nav',
+        active
+          ? 'bg-nav-active text-nav-active-foreground'
+          : 'text-nav-foreground hover:bg-nav-hover hover:text-nav-active-foreground',
+      )}
+    >
+      <NavIcon name={item.icon} />
+      {item.badge === 'new' && (
+        <span className="absolute -end-1 -top-1 rounded-full bg-nav-badge px-1 py-0.5 text-[8px] font-bold uppercase leading-none text-nav-badge-foreground">
+          {t('shell.new')}
+        </span>
+      )}
+      {item.locked && (
+        <span
+          aria-hidden="true"
+          className="absolute bottom-1 end-1 size-2 rounded-full bg-nav-badge ring-2 ring-nav"
+        />
+      )}
+    </Link>
   );
 }
 
@@ -314,42 +393,15 @@ function RailIcons({
             i > 0 && 'mt-1 border-t border-nav-border pt-2',
           )}
         >
-          {section.items.map((item) => {
-            const label = t(item.labelKey);
-            const active = item.id === activeId;
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                aria-label={label}
-                aria-current={active ? 'page' : undefined}
-                onMouseEnter={(e) => show(e.currentTarget, label)}
-                onMouseLeave={hide}
-                onFocus={(e) => show(e.currentTarget, label)}
-                onBlur={hide}
-                className={cn(
-                  'relative flex size-11 items-center justify-center rounded-xl outline-none transition',
-                  'focus-visible:ring-2 focus-visible:ring-nav-ring focus-visible:ring-offset-2 focus-visible:ring-offset-nav',
-                  active
-                    ? 'bg-nav-active text-nav-active-foreground'
-                    : 'text-nav-foreground hover:bg-nav-hover hover:text-nav-active-foreground',
-                )}
-              >
-                <NavIcon name={item.icon} />
-                {item.badge === 'new' && (
-                  <span className="absolute -end-1 -top-1 rounded-full bg-nav-badge px-1 py-0.5 text-[8px] font-bold uppercase leading-none text-nav-badge-foreground">
-                    {t('shell.new')}
-                  </span>
-                )}
-                {item.locked && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute bottom-1 end-1 size-2 rounded-full bg-nav-badge ring-2 ring-nav"
-                  />
-                )}
-              </Link>
-            );
-          })}
+          {section.items.map((item) => (
+            <RailLink
+              key={item.id}
+              item={item}
+              active={item.id === activeId}
+              show={show}
+              hide={hide}
+            />
+          ))}
         </div>
       ))}
     </nav>
@@ -374,6 +426,7 @@ export function NavDrawer({
 }) {
   const t = useTranslations();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const { main, bottom } = splitBottom(sections);
 
   useEffect(() => {
     if (!open) return;
@@ -421,8 +474,24 @@ export function NavDrawer({
           </button>
         </div>
         <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto">
-          <NavPanel sections={sections} activeId={activeId} onNavigate={onClose} />
+          <NavPanel sections={main} activeId={activeId} onNavigate={onClose} />
         </div>
+        {bottom.length > 0 && (
+          <nav
+            aria-label={t('shell.settings')}
+            className="shrink-0 space-y-0.5 border-t border-nav-border px-3 py-2"
+          >
+            {bottom.map((item) => (
+              <PanelItem
+                key={item.id}
+                item={item}
+                active={item.id === activeId}
+                t={t}
+                onNavigate={onClose}
+              />
+            ))}
+          </nav>
+        )}
         {footer && (
           <div className="shrink-0 border-t border-nav-border p-3">
             <NavCollapsedContext.Provider value={false}>{footer}</NavCollapsedContext.Provider>
