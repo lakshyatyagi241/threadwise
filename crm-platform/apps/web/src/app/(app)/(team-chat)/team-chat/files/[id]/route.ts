@@ -24,7 +24,9 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
 }
 
 function cleanName(raw: string | null): string {
-  const base = (raw ?? '').split(/[/\]/).pop() ?? '';
-  const kept = [...base].filter((c) => c.charCodeAt(0) > 31 && c.charCodeAt(0) !== 127 && c !== '"');
+  const base = (raw ?? '').split(/[/\\]/).pop() ?? '';
+  const kept = [...base].filter(
+    (c) => c.charCodeAt(0) > 31 && c.charCodeAt(0) !== 127 && c !== '"',
+  );
   return (kept.join('').trim() || 'file').slice(0, 191);
 }
