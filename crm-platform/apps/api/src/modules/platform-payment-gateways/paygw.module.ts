@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CheckoutController } from './checkout.controller';
 import { CheckoutService } from './checkout.service';
 import { CheckoutSettingsService } from './checkout-settings.service';
@@ -17,6 +18,7 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
  * and the kernel are global providers, as in PlansModule.
  */
 @Module({
+  imports: [WalletMessageBillingModule],
   controllers: [PlatformGatewaysController, CheckoutController, PaymentsController],
   providers: [
     CryptoService,
