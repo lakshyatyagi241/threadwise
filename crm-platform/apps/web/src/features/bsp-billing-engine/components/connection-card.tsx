@@ -51,7 +51,11 @@ export function ConnectionCard({
     onError: (err) => {
       setServerFields(fieldErrors(err));
       const view = errorView(err);
-      toast.error(view.kind === 'metaRejected' ? te('metaRejected', { detail: view.detail ?? '' }) : te(view.kind));
+      toast.error(
+        view.kind === 'metaRejected'
+          ? te('metaRejected', { detail: view.detail ?? '' })
+          : te(view.kind),
+      );
     },
   });
 

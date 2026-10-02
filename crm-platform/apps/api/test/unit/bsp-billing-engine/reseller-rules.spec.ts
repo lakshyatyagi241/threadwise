@@ -43,11 +43,16 @@ describe('Meta cost resolution (WD-BSP-016)', () => {
   });
 
   it('#2 no row carries a cost: unknown is null, never 0', () => {
-    expect(resolveRate([row('', '', 1, null)], 'DE', 'utility')).toEqual({ credits: 1, costMinor: null });
+    expect(resolveRate([row('', '', 1, null)], 'DE', 'utility')).toEqual({
+      credits: 1,
+      costMinor: null,
+    });
   });
 
   it('a free destination (cost 0) is a known cost, distinct from unknown', () => {
-    expect(resolveRate([row('IN', 'utility', 0, '0'), row('', '', 1, '10')], 'IN', 'utility').costMinor).toBe('0');
+    expect(
+      resolveRate([row('IN', 'utility', 0, '0'), row('', '', 1, '10')], 'IN', 'utility').costMinor,
+    ).toBe('0');
   });
 
   it('no rows at all prices nothing', () => {
@@ -86,7 +91,8 @@ describe('credit line currency (WD-BSP-004, -006)', () => {
   });
 
   it('refuses everything Meta does not accept, naming the six', () => {
-    for (const ok of BSP_CREDIT_CURRENCIES) expect(currencyProblem(ok, BSP_CREDIT_CURRENCIES)).toBeNull();
+    for (const ok of BSP_CREDIT_CURRENCIES)
+      expect(currencyProblem(ok, BSP_CREDIT_CURRENCIES)).toBeNull();
     const msg = currencyProblem('THB', BSP_CREDIT_CURRENCIES);
     expect(msg).toContain('AUD, EUR, GBP, IDR, INR, USD');
     expect(msg).toContain('cannot be changed');
@@ -119,18 +125,31 @@ describe('settings validation (WD-BSP-004)', () => {
   });
 
   it('refuses a rates endpoint that is not a URL, and one that is not https', () => {
-    expect(updateBspSettingsSchema.safeParse({ ...base, ratesEndpoint: 'not a url' }).success).toBe(false);
-    expect(updateBspSettingsSchema.safeParse({ ...base, ratesEndpoint: 'http://x.test/r' }).success).toBe(false);
-    expect(updateBspSettingsSchema.safeParse({ ...base, ratesEndpoint: 'https://x.test/r' }).success).toBe(true);
+    expect(updateBspSettingsSchema.safeParse({ ...base, ratesEndpoint: 'not a url' }).success).toBe(
+      false,
+    );
+    expect(
+      updateBspSettingsSchema.safeParse({ ...base, ratesEndpoint: 'http://x.test/r' }).success,
+    ).toBe(false);
+    expect(
+      updateBspSettingsSchema.safeParse({ ...base, ratesEndpoint: 'https://x.test/r' }).success,
+    ).toBe(true);
   });
 
   it('an auto-attach currency Meta refuses is rejected up front; "usd1" is accepted', () => {
-    expect(updateBspSettingsSchema.safeParse({ ...base, autoAttachCurrency: 'THB' }).success).toBe(false);
-    expect(updateBspSettingsSchema.safeParse({ ...base, autoAttachCurrency: 'usd1' }).success).toBe(true);
+    expect(updateBspSettingsSchema.safeParse({ ...base, autoAttachCurrency: 'THB' }).success).toBe(
+      false,
+    );
+    expect(updateBspSettingsSchema.safeParse({ ...base, autoAttachCurrency: 'usd1' }).success).toBe(
+      true,
+    );
   });
 
   it('sending a token and clearing it in one request is contradictory', () => {
-    expect(updateBspSettingsSchema.safeParse({ ...base, systemUserToken: 'abc', clearToken: true }).success).toBe(false);
+    expect(
+      updateBspSettingsSchema.safeParse({ ...base, systemUserToken: 'abc', clearToken: true })
+        .success,
+    ).toBe(false);
   });
 });
 

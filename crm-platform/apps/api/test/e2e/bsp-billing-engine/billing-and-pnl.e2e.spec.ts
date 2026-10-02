@@ -24,7 +24,8 @@ const ops = (method: 'get' | 'post' | 'put', path: string) =>
   h.api.http()[method](`/v2/platform/bsp${path}`).set(bearer(h.superToken));
 const mode = (token: string) => h.api.as(token);
 
-const count = async (sql: string, params: unknown[]) => Number((await h.owner.query(sql, params)).rows[0].n);
+const count = async (sql: string, params: unknown[]) =>
+  Number((await h.owner.query(sql, params)).rows[0].n);
 
 async function connectMeta(over: Record<string, unknown> = {}) {
   const res = await ops('put', '/settings').send({
@@ -39,7 +40,9 @@ async function connectMeta(over: Record<string, unknown> = {}) {
 }
 
 async function disconnectMeta() {
-  await h.owner.query(`DELETE FROM platform_settings WHERE key IN ('bsp.reseller', 'bsp.system_user_token')`);
+  await h.owner.query(
+    `DELETE FROM platform_settings WHERE key IN ('bsp.reseller', 'bsp.system_user_token')`,
+  );
   h.app.get(PlatformSettingsService).invalidate();
 }
 
@@ -51,7 +54,10 @@ async function waba(orgId: number, wabaId: string, status = 'connected') {
 }
 
 async function flag(orgId: number): Promise<boolean | null> {
-  const r = await h.owner.query(`SELECT bill_to_platform_credit AS f FROM workspace_settings WHERE org_id = $1`, [orgId]);
+  const r = await h.owner.query(
+    `SELECT bill_to_platform_credit AS f FROM workspace_settings WHERE org_id = $1`,
+    [orgId],
+  );
   return r.rows.length ? r.rows[0].f : null;
 }
 
@@ -98,16 +104,17 @@ describe('the customer chooses who bills them (WD-BSP-011)', () => {
   });
 
   it('#5 a value that is not one of the two modes is rejected', async () => {
-    expect((await mode(a.admin).put('/v2/bsp/billing-mode').send({ mode: 'foo' })).status).toBe(422);
+    expect((await mode(a.admin).put('/v2/bsp/billing-mode').send({ mode: 'foo' })).status).toBe(
+      422,
+    );
     expect((await mode(a.admin).put('/v2/bsp/billing-mode').send({})).status).toBe(422);
   });
 
   it('#1 reseller flips the workspace, attaches each connected number in the workspace currency, and reports how each went', async () => {
     await connectMeta();
-    await h.owner.query(
-      `INSERT INTO workspace_settings (org_id, currency) VALUES ($1, 'INR')`,
-      [a.orgId],
-    );
+    await h.owner.query(`INSERT INTO workspace_settings (org_id, currency) VALUES ($1, 'INR')`, [
+      a.orgId,
+    ]);
     const w1 = nextWaba();
     const w2 = nextWaba();
     await waba(a.orgId, w1);
@@ -126,8 +133,15 @@ describe('the customer chooses who bills them (WD-BSP-011)', () => {
     expect(await flag(a.orgId)).toBe(true);
     const byWaba = Object.fromEntries(body.accounts.map((x) => [x.wabaId, x]));
     expect(byWaba[w1]).toMatchObject({ allocationStatus: 'attached', currency: 'INR' });
-    expect(byWaba[w2]).toMatchObject({ allocationStatus: 'failed', lastError: 'Already has a payment method' });
-    expect(h.graph.calls('POST', '/whatsapp_credit_sharing_and_attach').map((c) => c.query.get('waba_currency'))).toEqual(['INR', 'INR']);
+    expect(byWaba[w2]).toMatchObject({
+      allocationStatus: 'failed',
+      lastError: 'Already has a payment method',
+    });
+    expect(
+      h.graph
+        .calls('POST', '/whatsapp_credit_sharing_and_attach')
+        .map((c) => c.query.get('waba_currency')),
+    ).toEqual(['INR', 'INR']);
     // audit row and outbox event in the same transaction as the flag
     const audit = await h.owner.query(
       `SELECT actor_type, delta FROM audit_log WHERE org_id = $1 AND module = 'bsp' AND action = 'update' AND record_id = $1`,
@@ -135,7 +149,9 @@ describe('the customer chooses who bills them (WD-BSP-011)', () => {
     );
     expect(audit.rows[0].actor_type).toBe('user');
     expect(audit.rows[0].delta.billingMode).toEqual({ old: 'meta_direct', new: 'reseller' });
-    expect((await h.api.events(a.orgId, 'bsp.billing_mode.changed')).map((e) => e.mode)).toEqual(['reseller']);
+    expect((await h.api.events(a.orgId, 'bsp.billing_mode.changed')).map((e) => e.mode)).toEqual([
+      'reseller',
+    ]);
   });
 
   it('#3 choosing it again is safe: attached numbers are not re-sent to Meta, a failed one is retried, no second audit row', async () => {
@@ -159,7 +175,11 @@ describe('the customer chooses who bills them (WD-BSP-011)', () => {
     const again = await mode(a.admin).put('/v2/bsp/billing-mode').send({ mode: 'reseller' });
     expect(again.body.attach).toEqual({ attached: 1, failed: 0, skipped: 1, remaining: 0 });
     expect(h.graph.calls('POST', '/whatsapp_credit_sharing_and_attach')).toHaveLength(1);
-    expect(await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1`, [a.orgId])).toBe(2);
+    expect(
+      await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1`, [
+        a.orgId,
+      ]),
+    ).toBe(2);
     // the mode did not change, so neither the audit trail nor the outbox gets another entry
     expect(await modeAudits()).toBe(auditsBefore);
   });
@@ -182,12 +202,19 @@ describe('the customer chooses who bills them (WD-BSP-011)', () => {
   it('#4 only a member who may manage billing can choose; a viewer reads; an operator token is not a workspace user', async () => {
     const nobody = await h.api.member(a, 'bspnone', []);
     const viewer = await h.api.member(a, 'bspview', [['bsp.billing.read']]);
-    const manager = await h.api.member(a, 'bspmanage', [['bsp.billing.read'], ['bsp.billing.manage']]);
+    const manager = await h.api.member(a, 'bspmanage', [
+      ['bsp.billing.read'],
+      ['bsp.billing.manage'],
+    ]);
     expect((await mode(nobody.token).get('/v2/bsp/billing-mode')).status).toBe(403);
     expect((await mode(viewer.token).get('/v2/bsp/billing-mode')).status).toBe(200);
-    const denied = await mode(viewer.token).put('/v2/bsp/billing-mode').send({ mode: 'meta_direct' });
+    const denied = await mode(viewer.token)
+      .put('/v2/bsp/billing-mode')
+      .send({ mode: 'meta_direct' });
     expect(denied.status).toBe(403);
-    expect((await mode(manager.token).put('/v2/bsp/billing-mode').send({ mode: 'meta_direct' })).status).toBe(200);
+    expect(
+      (await mode(manager.token).put('/v2/bsp/billing-mode').send({ mode: 'meta_direct' })).status,
+    ).toBe(200);
     expect([401, 403]).toContain((await mode(h.superToken).get('/v2/bsp/billing-mode')).status);
   });
 
@@ -218,21 +245,31 @@ describe('the billing gate the settle engine reads (WD-BSP-012 rule 1)', () => {
   });
 
   it('a reseller workspace is wallet billed whatever the platform switch says', async () => {
-    await h.owner.query(`INSERT INTO workspace_settings (org_id, bill_to_platform_credit) VALUES ($1, true)`, [a.orgId]);
+    await h.owner.query(
+      `INSERT INTO workspace_settings (org_id, bill_to_platform_credit) VALUES ($1, true)`,
+      [a.orgId],
+    );
     expect(await payPerMessage(a.orgId)).toBe(true);
     await h.owner.query(`SELECT 1`);
-    expect(await db.txAs({ orgId: a.orgId, userId: null }, (tx) => modes.billingKind(tx, a.orgId))).toBe('wallet');
+    expect(
+      await db.txAs({ orgId: a.orgId, userId: null }, (tx) => modes.billingKind(tx, a.orgId)),
+    ).toBe('wallet');
   });
 
   it('a direct workspace is plan billed, and follows the platform pay-per-message switch', async () => {
     expect(await payPerMessage(a.orgId)).toBe(false);
-    expect(await db.txAs({ orgId: a.orgId, userId: null }, (tx) => modes.billingKind(tx, a.orgId))).toBe('plan');
+    expect(
+      await db.txAs({ orgId: a.orgId, userId: null }, (tx) => modes.billingKind(tx, a.orgId)),
+    ).toBe('plan');
     await h.app.get(PlatformSettingsService).set('billing.pay_per_message', true, null);
     expect(await payPerMessage(a.orgId)).toBe(true);
   });
 
   it('the isolation holds: a tenant context only ever reads its own flag', async () => {
-    await h.owner.query(`INSERT INTO workspace_settings (org_id, bill_to_platform_credit) VALUES ($1, true)`, [a.orgId]);
+    await h.owner.query(
+      `INSERT INTO workspace_settings (org_id, bill_to_platform_credit) VALUES ($1, true)`,
+      [a.orgId],
+    );
     await clean(b.orgId);
     expect(await payPerMessage(b.orgId)).toBe(false);
   });
@@ -246,7 +283,8 @@ describe('the Meta cost stamped on a charge (WD-BSP-016)', () => {
     await h.owner.query(
       `INSERT INTO message_rates (country_code, category, credits, meta_cost_minor, currency) VALUES ('QQ', 'marketing', 100, 72, 'USD')`,
     );
-    const lookup = () => db.txAs({ orgId: a.orgId, userId: null }, (tx) => cost.lookup(tx, 'qq', 'Marketing'));
+    const lookup = () =>
+      db.txAs({ orgId: a.orgId, userId: null }, (tx) => cost.lookup(tx, 'qq', 'Marketing'));
     expect(await lookup()).toEqual({ credits: 100, costMinor: '72' });
     await h.owner.query(`UPDATE message_rates SET meta_cost_minor = 80 WHERE country_code = 'QQ'`);
     expect((await lookup()).costMinor).toBe('80');
@@ -287,7 +325,12 @@ describe('the reseller P&L (WD-BSP-014, -015)', () => {
     const res = await dash('?month=2031-01');
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     const body = bspDashboardSchema.parse(res.body);
-    expect(body).toMatchObject({ month: '2031-01', currency: 'USD', from: '2031-01-01T00:00:00.000Z', to: '2031-02-01T00:00:00.000Z' });
+    expect(body).toMatchObject({
+      month: '2031-01',
+      currency: 'USD',
+      from: '2031-01-01T00:00:00.000Z',
+      to: '2031-02-01T00:00:00.000Z',
+    });
     expect(body.totals).toMatchObject({
       billedMessages: 2,
       freeMessages: 0,
@@ -303,14 +346,31 @@ describe('the reseller P&L (WD-BSP-014, -015)', () => {
     await charge(a.orgId, 'refunded', 5000, 3000, '2031-02-06T10:00:00Z');
     await charge(a.orgId, 'free', 0, 100, '2031-02-07T10:00:00Z');
     const body = bspDashboardSchema.parse((await dash('?month=2031-02')).body);
-    expect(body.totals).toMatchObject({ billedMessages: 1, freeMessages: 1, revenue: '100.00', metaCost: '72.00', margin: '28.00' });
+    expect(body.totals).toMatchObject({
+      billedMessages: 1,
+      freeMessages: 1,
+      revenue: '100.00',
+      metaCost: '72.00',
+      margin: '28.00',
+    });
   });
 
   it('#3 billed messages without a Meta cost are counted as unpriced and margin counts them as pure revenue', async () => {
-    for (let i = 0; i < 3; i += 1) await charge(b.orgId, 'charged', 100, null, `2031-03-0${i + 1}T10:00:00Z`);
+    for (let i = 0; i < 3; i += 1)
+      await charge(b.orgId, 'charged', 100, null, `2031-03-0${i + 1}T10:00:00Z`);
     const body = bspDashboardSchema.parse((await dash('?month=2031-03')).body);
-    expect(body.totals).toMatchObject({ billedMessages: 3, unpricedMessages: 3, revenue: '3.00', metaCost: '0.00', margin: '3.00' });
-    expect(body.workspaces[0]).toMatchObject({ billedMessages: 3, revenue: '3.00', margin: '3.00' });
+    expect(body.totals).toMatchObject({
+      billedMessages: 3,
+      unpricedMessages: 3,
+      revenue: '3.00',
+      metaCost: '0.00',
+      margin: '3.00',
+    });
+    expect(body.workspaces[0]).toMatchObject({
+      billedMessages: 3,
+      revenue: '3.00',
+      margin: '3.00',
+    });
   });
 
   it('#4 a month with no billed messages shows zeros and no workspaces', async () => {
@@ -333,7 +393,9 @@ describe('the reseller P&L (WD-BSP-014, -015)', () => {
     await charge(a.orgId, 'charged', 9999, 1, '2031-05-01T00:00:00Z');
     const body = bspDashboardSchema.parse((await dash()).body);
     const now = new Date();
-    expect(body.month).toBe(`${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`);
+    expect(body.month).toBe(
+      `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`,
+    );
     expect(body.totals).toMatchObject({ billedMessages: 1, revenue: '25.00' });
     expect((await dash('?month=2031-13')).status).toBe(422);
   });
@@ -341,8 +403,12 @@ describe('the reseller P&L (WD-BSP-014, -015)', () => {
   it('the window is half open: the first instant of the next month belongs to the next month', async () => {
     await charge(a.orgId, 'charged', 100, 10, '2031-06-30T23:59:59Z');
     await charge(a.orgId, 'charged', 700, 70, '2031-07-01T00:00:00Z');
-    expect(bspDashboardSchema.parse((await dash('?month=2031-06')).body).totals.revenue).toBe('1.00');
-    expect(bspDashboardSchema.parse((await dash('?month=2031-07')).body).totals.revenue).toBe('7.00');
+    expect(bspDashboardSchema.parse((await dash('?month=2031-06')).body).totals.revenue).toBe(
+      '1.00',
+    );
+    expect(bspDashboardSchema.parse((await dash('?month=2031-07')).body).totals.revenue).toBe(
+      '7.00',
+    );
   });
 
   it('#1 #2 per workspace: top spender first, with the workspace wallet balance; only workspaces with billed messages', async () => {
@@ -350,11 +416,22 @@ describe('the reseller P&L (WD-BSP-014, -015)', () => {
     await charge(b.orgId, 'charged', 900, 400, '2031-08-02T10:00:00Z');
     const third = await newTenant(h, 'bspmodec');
     await charge(third.orgId, 'refunded', 99999, 1, '2031-08-02T10:00:00Z');
-    await h.owner.query(`INSERT INTO wallets (org_id, unit, balance) VALUES ($1, 'USD', 12.5), ($2, 'USD', 7.5), ($1, 'credits', 99)`, [a.orgId, b.orgId]);
+    await h.owner.query(
+      `INSERT INTO wallets (org_id, unit, balance) VALUES ($1, 'USD', 12.5), ($2, 'USD', 7.5), ($1, 'credits', 99)`,
+      [a.orgId, b.orgId],
+    );
     const body = bspDashboardSchema.parse((await dash('?month=2031-08')).body);
     expect(body.workspaces.map((w) => w.revenue)).toEqual(['9.00', '5.00']);
-    expect(body.workspaces[0]).toMatchObject({ metaCost: '4.00', margin: '5.00', walletBalance: '7.50' });
-    expect(body.workspaces[1]).toMatchObject({ metaCost: '3.00', margin: '2.00', walletBalance: '12.50' });
+    expect(body.workspaces[0]).toMatchObject({
+      metaCost: '4.00',
+      margin: '5.00',
+      walletBalance: '7.50',
+    });
+    expect(body.workspaces[1]).toMatchObject({
+      metaCost: '3.00',
+      margin: '2.00',
+      walletBalance: '12.50',
+    });
     expect(body.workspaces.map((w) => w.workspaceName).join(' ')).not.toContain(third.slug);
     // the float is the money held in the base currency across every workspace; the credits wallet is another unit
     expect(body.totals.walletFloat).toBe('20.00');
@@ -373,7 +450,9 @@ describe('the reseller P&L (WD-BSP-014, -015)', () => {
 
   it('a base currency with no minor unit is shown without decimals (WaDesk always divided by 100)', async () => {
     await h.owner.query(`DELETE FROM currencies WHERE code = 'JPY'`);
-    await h.owner.query(`INSERT INTO currencies (name, code, symbol, precision) VALUES ('Yen', 'JPY', 'Y', 0)`);
+    await h.owner.query(
+      `INSERT INTO currencies (name, code, symbol, precision) VALUES ('Yen', 'JPY', 'Y', 0)`,
+    );
     try {
       await connectMeta({ baseCurrency: 'JPY' });
       await charge(a.orgId, 'charged', 10000, 7200, '2031-10-02T10:00:00Z');
@@ -387,7 +466,10 @@ describe('the reseller P&L (WD-BSP-014, -015)', () => {
 
   it('the figures are the same for every operator and no internal id leaves the system', async () => {
     await charge(a.orgId, 'charged', 100, 10, '2031-11-02T10:00:00Z');
-    const asSupport = await h.api.http().get('/v2/platform/bsp/dashboard?month=2031-11').set(bearer(h.supportToken));
+    const asSupport = await h.api
+      .http()
+      .get('/v2/platform/bsp/dashboard?month=2031-11')
+      .set(bearer(h.supportToken));
     const asSuper = await dash('?month=2031-11');
     expect(asSupport.status).toBe(200);
     expect(asSupport.body).toEqual(asSuper.body);

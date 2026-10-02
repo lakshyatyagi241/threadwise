@@ -10,13 +10,7 @@ import {
 } from '@crm/contracts';
 import { PlatformSettingsService } from '../../../src/modules/auth';
 import { ResellerCreditService } from '../../../src/modules/bsp-billing-engine/reseller-credit.service';
-import {
-  bearer,
-  newTenant,
-  startBspHarness,
-  type BspHarness,
-  type Tenant,
-} from './harness';
+import { bearer, newTenant, startBspHarness, type BspHarness, type Tenant } from './harness';
 
 /**
  * The operator's reseller console end to end through HTTP (WD-BSP-001, -003..-010): connection settings, the Meta credit-source
@@ -30,7 +24,12 @@ const ops = (method: 'get' | 'post' | 'put', path: string) =>
 const support = (method: 'get' | 'post' | 'put', path: string) =>
   h.api.http()[method](`/v2/platform/bsp${path}`).set(bearer(h.supportToken));
 
-const SETTINGS = { businessId: '5550001', extendedCreditId: '', ratesEndpoint: '', autoAttach: false };
+const SETTINGS = {
+  businessId: '5550001',
+  extendedCreditId: '',
+  ratesEndpoint: '',
+  autoAttach: false,
+};
 const TOKEN = 'EAAG-system-user-token-0001';
 
 async function saveSettings(over: Record<string, unknown> = {}) {
@@ -40,7 +39,9 @@ async function saveSettings(over: Record<string, unknown> = {}) {
 }
 
 async function resetPlatform() {
-  await h.owner.query(`DELETE FROM platform_settings WHERE key IN ('bsp.reseller', 'bsp.system_user_token')`);
+  await h.owner.query(
+    `DELETE FROM platform_settings WHERE key IN ('bsp.reseller', 'bsp.system_user_token')`,
+  );
   h.app.get(PlatformSettingsService).invalidate();
   h.graph.reset();
 }
@@ -54,7 +55,13 @@ async function waba(
   await h.owner.query(
     `INSERT INTO wa_provider_configs (org_id, provider, status, meta_json, phone_number, display_label)
      VALUES ($1, 'waba', $2, $3::jsonb, $4, $5)`,
-    [orgId, opts.status ?? 'connected', JSON.stringify({ waba_id: wabaId, phone_number_id: `pn-${wabaId}` }), opts.phone ?? '+15550100', opts.label ?? null],
+    [
+      orgId,
+      opts.status ?? 'connected',
+      JSON.stringify({ waba_id: wabaId, phone_number_id: `pn-${wabaId}` }),
+      opts.phone ?? '+15550100',
+      opts.label ?? null,
+    ],
   );
 }
 
@@ -131,7 +138,12 @@ describe('the health probe (WD-BSP-001)', () => {
     const res = await ops('get', '/status');
     expect(res.status).toBe(200);
     const body = bspStatusSchema.parse(res.body);
-    expect(body).toMatchObject({ ok: true, module: 'bsp', configured: false, graphVersion: 'v26.0' });
+    expect(body).toMatchObject({
+      ok: true,
+      module: 'bsp',
+      configured: false,
+      graphVersion: 'v26.0',
+    });
     expect(body.allocations).toBe(before);
   });
 });
@@ -161,7 +173,9 @@ describe('connection settings (WD-BSP-003, -004)', () => {
 
   it('#5 the stored token is ciphertext, not plaintext', async () => {
     await saveSettings();
-    const r = await h.owner.query(`SELECT value, is_secret FROM platform_settings WHERE key = 'bsp.system_user_token'`);
+    const r = await h.owner.query(
+      `SELECT value, is_secret FROM platform_settings WHERE key = 'bsp.system_user_token'`,
+    );
     expect(r.rows[0].is_secret).toBe(true);
     expect(JSON.stringify(r.rows[0].value)).not.toContain(TOKEN);
   });
@@ -173,8 +187,17 @@ describe('connection settings (WD-BSP-003, -004)', () => {
     expect(res.body).toMatchObject({ tokenSet: true, configured: true, businessId: '777' });
     // and the kept token still works against Meta
     await waba(a.orgId, nextWaba());
-    const w = (await h.owner.query(`SELECT meta_json->>'waba_id' AS w FROM wa_provider_configs WHERE org_id = $1`, [a.orgId])).rows[0].w;
-    const att = await ops('post', '/allocations').send({ workspaceId: await uuidOf(a.orgId), wabaId: w, currency: 'USD' });
+    const w = (
+      await h.owner.query(
+        `SELECT meta_json->>'waba_id' AS w FROM wa_provider_configs WHERE org_id = $1`,
+        [a.orgId],
+      )
+    ).rows[0].w;
+    const att = await ops('post', '/allocations').send({
+      workspaceId: await uuidOf(a.orgId),
+      wabaId: w,
+      currency: 'USD',
+    });
     expect(att.status, JSON.stringify(att.body)).toBe(201);
     expect(h.graph.seen.every((s) => s.auth === `Bearer ${TOKEN}`)).toBe(true);
     await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = $1`, [a.orgId]);
@@ -183,21 +206,39 @@ describe('connection settings (WD-BSP-003, -004)', () => {
 
   it('blank fields clear the stored values (WD-BSP-004 rule 1)', async () => {
     await saveSettings({ extendedCreditId: '999' });
-    const res = await ops('put', '/settings').send({ ...SETTINGS, businessId: '', extendedCreditId: '' });
-    expect(res.body).toMatchObject({ businessId: '', extendedCreditId: '', configured: false, tokenSet: true });
+    const res = await ops('put', '/settings').send({
+      ...SETTINGS,
+      businessId: '',
+      extendedCreditId: '',
+    });
+    expect(res.body).toMatchObject({
+      businessId: '',
+      extendedCreditId: '',
+      configured: false,
+      tokenSet: true,
+    });
   });
 
   it('there is a way to remove the token (WaDesk had none)', async () => {
     await saveSettings();
     const res = await ops('put', '/settings').send({ ...SETTINGS, clearToken: true });
     expect(res.body).toMatchObject({ tokenSet: false, configured: false });
-    expect(await count(`SELECT count(*)::int AS n FROM platform_settings WHERE key = 'bsp.system_user_token'`, [])).toBe(0);
+    expect(
+      await count(
+        `SELECT count(*)::int AS n FROM platform_settings WHERE key = 'bsp.system_user_token'`,
+        [],
+      ),
+    ).toBe(0);
   });
 
   it('#2 a rates endpoint that is not a URL is refused and nothing is written; http is refused too', async () => {
     await saveSettings();
     for (const bad of ['not a url', 'http://rates.test/r']) {
-      const res = await ops('put', '/settings').send({ ...SETTINGS, businessId: 'changed', ratesEndpoint: bad });
+      const res = await ops('put', '/settings').send({
+        ...SETTINGS,
+        businessId: 'changed',
+        ratesEndpoint: bad,
+      });
       expect(res.status).toBe(422);
       expect(res.body.errors.map((e: { path: string }) => e.path)).toContain('ratesEndpoint');
     }
@@ -227,13 +268,19 @@ describe('connection settings (WD-BSP-003, -004)', () => {
   });
 
   it('writes a security event naming the operator, without the token', async () => {
-    const before = await count(`SELECT count(*)::int AS n FROM security_events WHERE event = 'platform.bsp.settings_saved'`, []);
+    const before = await count(
+      `SELECT count(*)::int AS n FROM security_events WHERE event = 'platform.bsp.settings_saved'`,
+      [],
+    );
     await saveSettings();
     const r = await h.owner.query(
       `SELECT actor_type, actor_id, payload FROM security_events WHERE event = 'platform.bsp.settings_saved' ORDER BY id DESC LIMIT 1`,
     );
     expect(
-      await count(`SELECT count(*)::int AS n FROM security_events WHERE event = 'platform.bsp.settings_saved'`, []),
+      await count(
+        `SELECT count(*)::int AS n FROM security_events WHERE event = 'platform.bsp.settings_saved'`,
+        [],
+      ),
     ).toBe(before + 1);
     expect(r.rows[0].actor_type).toBe('platform_operator');
     expect(Number(r.rows[0].actor_id)).toBeGreaterThan(0);
@@ -243,7 +290,8 @@ describe('connection settings (WD-BSP-003, -004)', () => {
 });
 
 async function uuidOf(orgId: number): Promise<string> {
-  return (await h.owner.query(`SELECT uuid FROM organizations WHERE id = $1`, [orgId])).rows[0].uuid;
+  return (await h.owner.query(`SELECT uuid FROM organizations WHERE id = $1`, [orgId])).rows[0]
+    .uuid;
 }
 
 describe('the WABA picker (WD-BSP-003 #3 #4)', () => {
@@ -268,7 +316,9 @@ describe('the WABA picker (WD-BSP-003 #3 #4)', () => {
     expect(ra.workspaceName).toContain('Org bspa');
     // pending, disconnected and id-less rows never appear
     expect(list.filter((x) => x.workspaceId === ra.workspaceId)).toHaveLength(1);
-    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
+    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
   });
 });
 
@@ -278,8 +328,12 @@ describe('attach one (WD-BSP-005, -006)', () => {
     orgUuid = await uuidOf(a.orgId);
   });
   beforeEach(async () => {
-    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
-    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
+    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
+    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
   });
 
   const attach = (wabaId: string, currency = 'USD', workspaceId = orgUuid) =>
@@ -311,8 +365,18 @@ describe('attach one (WD-BSP-005, -006)', () => {
     const r = await row(a.orgId, w);
     expect(r!.created_by_operator_id).not.toBeNull();
     expect(r!.credit_source).toBe('meta');
-    expect(await count(`SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1 AND module = 'bsp' AND record_id = $2`, [a.orgId, r!.id])).toBe(1);
-    expect(await count(`SELECT count(*)::int AS n FROM security_events WHERE subject_org_id = $1 AND event = 'platform.bsp.credit_attached'`, [a.orgId])).toBeGreaterThanOrEqual(1);
+    expect(
+      await count(
+        `SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1 AND module = 'bsp' AND record_id = $2`,
+        [a.orgId, r!.id],
+      ),
+    ).toBe(1);
+    expect(
+      await count(
+        `SELECT count(*)::int AS n FROM security_events WHERE subject_org_id = $1 AND event = 'platform.bsp.credit_attached'`,
+        [a.orgId],
+      ),
+    ).toBeGreaterThanOrEqual(1);
     const ev = await h.api.events(a.orgId, 'bsp.credit_allocation.attached');
     expect(ev.map((e) => e.wabaId)).toContain(w);
   });
@@ -325,7 +389,9 @@ describe('attach one (WD-BSP-005, -006)', () => {
     await waba(a.orgId, w2);
     expect((await attach(w1)).status).toBe(201);
     expect(h.graph.calls('GET', '/extendedcredits')).toHaveLength(1);
-    expect(h.graph.calls('POST', '/whatsapp_credit_sharing_and_attach')[0]!.path).toContain('/credit-line-1/');
+    expect(h.graph.calls('POST', '/whatsapp_credit_sharing_and_attach')[0]!.path).toContain(
+      '/credit-line-1/',
+    );
     expect((await ops('get', '/settings')).body.extendedCreditId).toBe('credit-line-1');
     expect((await attach(w2)).status).toBe(201);
     expect(h.graph.calls('GET', '/extendedcredits')).toHaveLength(1);
@@ -355,7 +421,12 @@ describe('attach one (WD-BSP-005, -006)', () => {
     expect(second.status).toBe(201);
     expect(second.body.id).toBe(first.body.id);
     expect(h.graph.seen).toHaveLength(0);
-    expect(await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1 AND waba_id = $2`, [a.orgId, w])).toBe(1);
+    expect(
+      await count(
+        `SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1 AND waba_id = $2`,
+        [a.orgId, w],
+      ),
+    ).toBe(1);
   });
 
   it('#3 a currency Meta does not accept makes no Meta call and stores a failed row with the allowed list', async () => {
@@ -374,16 +445,28 @@ describe('attach one (WD-BSP-005, -006)', () => {
     await saveSettings({ extendedCreditId: '4242' });
     const w = nextWaba();
     await waba(a.orgId, w);
-    h.graph.respond = () => ({ status: 400, body: { error: { message: 'WABA belongs to another partner' } } });
+    h.graph.respond = () => ({
+      status: 400,
+      body: { error: { message: 'WABA belongs to another partner' } },
+    });
     const bad = await attach(w);
-    expect(bad.body).toMatchObject({ status: 'failed', lastError: 'WABA belongs to another partner', attachedAt: null });
+    expect(bad.body).toMatchObject({
+      status: 'failed',
+      lastError: 'WABA belongs to another partner',
+      attachedAt: null,
+    });
     const failedId = bad.body.id;
 
     h.graph.restore();
     const good = await attach(w);
     expect(good.body).toMatchObject({ status: 'attached', lastError: null });
     expect(good.body.id).toBe(failedId);
-    expect(await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1 AND waba_id = $2`, [a.orgId, w])).toBe(1);
+    expect(
+      await count(
+        `SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1 AND waba_id = $2`,
+        [a.orgId, w],
+      ),
+    ).toBe(1);
   });
 
   it('#6 with the connection not set up, a failed row records the not-configured message', async () => {
@@ -422,20 +505,32 @@ describe('attach one (WD-BSP-005, -006)', () => {
     expect((await attach(pending)).status).toBe(422);
     const ghost = await attach(w, 'USD', '00000000-0000-4000-8000-000000000000');
     expect(ghost.status).toBe(404);
-    expect(await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]])).toBe(0);
+    expect(
+      await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [
+        [a.orgId, b.orgId],
+      ]),
+    ).toBe(0);
     expect(h.graph.seen).toHaveLength(0);
   });
 
   it('validates the body', async () => {
-    const res = await ops('post', '/allocations').send({ workspaceId: 'x', wabaId: '', currency: '' });
+    const res = await ops('post', '/allocations').send({
+      workspaceId: 'x',
+      wabaId: '',
+      currency: '',
+    });
     expect(res.status).toBe(422);
   });
 });
 
 describe('attach all connected (WD-BSP-007)', () => {
   beforeEach(async () => {
-    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
-    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
+    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
+    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
     await reseller(a.orgId, true);
     await reseller(b.orgId, false);
   });
@@ -445,7 +540,11 @@ describe('attach all connected (WD-BSP-007)', () => {
     const res = await ops('post', '/allocations/attach-all');
     expect(res.status).toBe(422);
     expect(res.body.code).toBe('BSP_NOT_CONFIGURED');
-    expect(await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1`, [a.orgId])).toBe(0);
+    expect(
+      await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1`, [
+        a.orgId,
+      ]),
+    ).toBe(0);
   });
 
   it('#1 #4 attaches the numbers not yet attached, skips the attached one, never touches a disconnected one', async () => {
@@ -469,7 +568,12 @@ describe('attach all connected (WD-BSP-007)', () => {
 
     const res = await ops('post', '/allocations/attach-all');
     expect(res.status).toBe(200);
-    expect(attachAllResultSchema.parse(res.body)).toEqual({ attached: 1, failed: 1, skipped: 1, remaining: 0 });
+    expect(attachAllResultSchema.parse(res.body)).toEqual({
+      attached: 1,
+      failed: 1,
+      skipped: 1,
+      remaining: 0,
+    });
     expect(h.graph.calls('POST', '/whatsapp_credit_sharing_and_attach')).toHaveLength(2);
     expect((await row(a.orgId, todo1))!.status).toBe('attached');
     expect((await row(a.orgId, todo2))!.status).toBe('failed');
@@ -482,11 +586,22 @@ describe('attach all connected (WD-BSP-007)', () => {
     const w = nextWaba();
     await waba(a.orgId, w);
     h.graph.respond = () => ({ status: 400, body: { error: { message: 'busy' } } });
-    expect((await ops('post', '/allocations/attach-all')).body).toMatchObject({ attached: 0, failed: 1 });
+    expect((await ops('post', '/allocations/attach-all')).body).toMatchObject({
+      attached: 0,
+      failed: 1,
+    });
     h.graph.restore();
-    expect((await ops('post', '/allocations/attach-all')).body).toMatchObject({ attached: 1, failed: 0 });
+    expect((await ops('post', '/allocations/attach-all')).body).toMatchObject({
+      attached: 1,
+      failed: 0,
+    });
     expect((await row(a.orgId, w))!.status).toBe('attached');
-    expect(await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1 AND waba_id = $2`, [a.orgId, w])).toBe(1);
+    expect(
+      await count(
+        `SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1 AND waba_id = $2`,
+        [a.orgId, w],
+      ),
+    ).toBe(1);
   });
 
   it('a workspace on direct billing is not attached (WaDesk attached everyone: fixed)', async () => {
@@ -516,8 +631,12 @@ describe('auto-attach (WD-BSP-008)', () => {
     credit = h.app.get(ResellerCreditService);
   });
   beforeEach(async () => {
-    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
-    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
+    await h.owner.query(`DELETE FROM wa_provider_configs WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
+    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
     await reseller(a.orgId, true);
     await reseller(b.orgId, false);
   });
@@ -526,7 +645,11 @@ describe('auto-attach (WD-BSP-008)', () => {
     await saveSettings({ extendedCreditId: '4242', autoAttach: false });
     await waba(a.orgId, nextWaba());
     expect(await credit.autoAttachPending()).toBeNull();
-    expect(await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1`, [a.orgId])).toBe(0);
+    expect(
+      await count(`SELECT count(*)::int AS n FROM bsp_credit_allocations WHERE org_id = $1`, [
+        a.orgId,
+      ]),
+    ).toBe(0);
   });
 
   it('#1 with it on, a newly connected number of a reseller workspace gets an allocation, in the admin currency', async () => {
@@ -538,7 +661,10 @@ describe('auto-attach (WD-BSP-008)', () => {
     const r = await row(a.orgId, w);
     expect(r).toMatchObject({ status: 'attached', currency: 'EUR' });
     // the worker has no request: the actor is the system
-    const audit = await h.owner.query(`SELECT actor_type FROM audit_log WHERE org_id = $1 AND module = 'bsp' AND record_id = $2`, [a.orgId, r!.id]);
+    const audit = await h.owner.query(
+      `SELECT actor_type FROM audit_log WHERE org_id = $1 AND module = 'bsp' AND record_id = $2`,
+      [a.orgId, r!.id],
+    );
     expect(audit.rows[0].actor_type).toBe('system');
   });
 
@@ -609,8 +735,15 @@ describe('revoke (WD-BSP-009)', () => {
     expect(body.allocation.revokedAt).not.toBeNull();
     expect(body.workspaceStillReseller).toBe(true);
     expect(h.graph.calls('DELETE', `/alloc-${w}`)).toHaveLength(1);
-    expect(await count(`SELECT count(*)::int AS n FROM security_events WHERE subject_org_id = $1 AND event = 'platform.bsp.credit_revoked'`, [a.orgId])).toBeGreaterThanOrEqual(1);
-    expect((await h.api.events(a.orgId, 'bsp.credit_allocation.revoked')).map((e) => e.wabaId)).toContain(w);
+    expect(
+      await count(
+        `SELECT count(*)::int AS n FROM security_events WHERE subject_org_id = $1 AND event = 'platform.bsp.credit_revoked'`,
+        [a.orgId],
+      ),
+    ).toBeGreaterThanOrEqual(1);
+    expect(
+      (await h.api.events(a.orgId, 'bsp.credit_allocation.revoked')).map((e) => e.wabaId),
+    ).toContain(w);
   });
 
   it('#2 a Meta error leaves the row attached with the message in last_error and answers 502', async () => {
@@ -619,12 +752,19 @@ describe('revoke (WD-BSP-009)', () => {
     const res = await ops('post', `/allocations/${await uuidOfRow(a.orgId, w)}/revoke`).send({});
     expect(res.status).toBe(502);
     expect(res.body.code).toBe('BSP_META_REJECTED');
-    expect(res.body.detail ?? res.body.message ?? JSON.stringify(res.body)).toContain('Allocation locked');
-    expect(await row(a.orgId, w)).toMatchObject({ status: 'attached', last_error: 'Allocation locked' });
+    expect(res.body.detail ?? res.body.message ?? JSON.stringify(res.body)).toContain(
+      'Allocation locked',
+    );
+    expect(await row(a.orgId, w)).toMatchObject({
+      status: 'attached',
+      last_error: 'Allocation locked',
+    });
   });
 
   it('#3 an unknown id is 404', async () => {
-    const res = await ops('post', '/allocations/00000000-0000-4000-8000-000000000001/revoke').send({});
+    const res = await ops('post', '/allocations/00000000-0000-4000-8000-000000000001/revoke').send(
+      {},
+    );
     expect(res.status).toBe(404);
   });
 
@@ -641,7 +781,9 @@ describe('revoke (WD-BSP-009)', () => {
 
   it('an out-of-date rowVersion is 409 ROW_VERSION_CONFLICT and Meta is not called', async () => {
     const w = await attachedRow(a.orgId);
-    const res = await ops('post', `/allocations/${await uuidOfRow(a.orgId, w)}/revoke`).send({ rowVersion: 99 });
+    const res = await ops('post', `/allocations/${await uuidOfRow(a.orgId, w)}/revoke`).send({
+      rowVersion: 99,
+    });
     expect(res.status).toBe(409);
     expect(res.body.code).toBe('ROW_VERSION_CONFLICT');
     expect(h.graph.seen).toHaveLength(0);
@@ -649,7 +791,10 @@ describe('revoke (WD-BSP-009)', () => {
 
   it('an allocation with no Meta id cannot be revoked: the error says so (WD-BSP-021 #2)', async () => {
     const w = nextWaba();
-    await h.owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id, status, credit_source) VALUES ($1, $2, 'attached', 'meta')`, [a.orgId, w]);
+    await h.owner.query(
+      `INSERT INTO bsp_credit_allocations (org_id, waba_id, status, credit_source) VALUES ($1, $2, 'attached', 'meta')`,
+      [a.orgId, w],
+    );
     const res = await ops('post', `/allocations/${await uuidOfRow(a.orgId, w)}/revoke`).send({});
     expect(res.status).toBe(502);
     expect(JSON.stringify(res.body)).toContain('No allocation id to revoke.');
@@ -676,7 +821,9 @@ describe('the allocation register (WD-BSP-010)', () => {
     await h.owner.query(`DELETE FROM bsp_credit_allocations`);
   });
   afterAll(async () => {
-    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [[a.orgId, b.orgId]]);
+    await h.owner.query(`DELETE FROM bsp_credit_allocations WHERE org_id = ANY($1)`, [
+      [a.orgId, b.orgId],
+    ]);
   });
 
   it('#1 60 rows: 50 newest first with a cursor, then the other 10, nothing repeated or lost', async () => {
@@ -705,9 +852,15 @@ describe('the allocation register (WD-BSP-010)', () => {
       `INSERT INTO bsp_credit_allocations (org_id, waba_id, status, last_error) VALUES ($1, 'reg-failed', 'failed', 'Meta said no')`,
       [a.orgId],
     );
-    const res = bspAllocationListSchema.parse((await ops('get', '/allocations?status=failed&limit=5')).body);
+    const res = bspAllocationListSchema.parse(
+      (await ops('get', '/allocations?status=failed&limit=5')).body,
+    );
     expect(res.data).toHaveLength(1);
-    expect(res.data[0]).toMatchObject({ wabaId: 'reg-failed', status: 'failed', lastError: 'Meta said no' });
+    expect(res.data[0]).toMatchObject({
+      wabaId: 'reg-failed',
+      status: 'failed',
+      lastError: 'Meta said no',
+    });
     expect(res.data[0]!.workspaceName).toContain('Org bspa');
     expect(res.data[0]!.workspaceId).toMatch(/^[0-9a-f-]{36}$/);
     expect(JSON.stringify(res)).not.toMatch(/"org_?id"/i);
@@ -718,4 +871,3 @@ describe('the allocation register (WD-BSP-010)', () => {
     expect((await ops('get', '/allocations?cursor=garbage')).status).toBeGreaterThanOrEqual(400);
   });
 });
-

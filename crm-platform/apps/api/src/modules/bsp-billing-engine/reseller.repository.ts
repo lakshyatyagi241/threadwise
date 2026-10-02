@@ -166,9 +166,7 @@ export class ResellerRepository {
   }
 
   /** Active rows of the global rate table (one tenant reads it freely: policy `read_all`). */
-  async activeRates(
-    tx: Tx,
-  ): Promise<
+  async activeRates(tx: Tx): Promise<
     Array<{
       country_code: string;
       category: string;

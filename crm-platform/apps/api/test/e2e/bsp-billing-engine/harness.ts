@@ -235,19 +235,28 @@ export async function startBspHarness(): Promise<BspHarness> {
       try {
         // The platform settings the tests wrote, every organization they created (everything under it cascades), the usage rows
         // (no foreign key to an organization) and the operators.
-        await owner.query(`DELETE FROM platform_settings WHERE key IN ('bsp.reseller', 'bsp.system_user_token', 'billing.pay_per_message')`);
+        await owner.query(
+          `DELETE FROM platform_settings WHERE key IN ('bsp.reseller', 'bsp.system_user_token', 'billing.pay_per_message')`,
+        );
         if (track.orgs.length) {
           await owner.query(`DELETE FROM usage_charges WHERE org_id = ANY($1)`, [track.orgs]);
           await owner.query(`DELETE FROM organizations WHERE id = ANY($1)`, [track.orgs]);
         }
         await owner.query(`DELETE FROM message_rates WHERE country_code IN ('QQ', 'ZZ')`);
         if (track.operators.length) {
-          await owner.query(`DELETE FROM platform_sessions WHERE operator_id = ANY($1)`, [track.operators]);
+          await owner.query(`DELETE FROM platform_sessions WHERE operator_id = ANY($1)`, [
+            track.operators,
+          ]);
           await owner.query(`DELETE FROM platform_operators WHERE id = ANY($1)`, [track.operators]);
         }
       } finally {
         await app.close();
-        await Promise.all([stubs.graph.close(), stubs.twilio.close(), stubs.bridge.close(), graph.stop()]);
+        await Promise.all([
+          stubs.graph.close(),
+          stubs.twilio.close(),
+          stubs.bridge.close(),
+          graph.stop(),
+        ]);
         await redis.flushdb();
         redis.disconnect();
         await owner.end();

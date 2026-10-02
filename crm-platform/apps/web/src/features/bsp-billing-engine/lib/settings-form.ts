@@ -46,13 +46,15 @@ export function toPayload(d: SettingsDraft): UpdateBspSettingsInput {
   };
 }
 
-export type SettingsProblem = 'businessId' | 'graphVersion' | 'ratesEndpoint' | 'autoAttachCurrency' | 'baseCurrency';
+export type SettingsProblem =
+  'businessId' | 'graphVersion' | 'ratesEndpoint' | 'autoAttachCurrency' | 'baseCurrency';
 
 /** The same rules the server applies, so a mistake is shown before the request. The server stays the authority. */
 export function validateDraft(d: SettingsDraft): SettingsProblem[] {
   const out: SettingsProblem[] = [];
   if (d.businessId.trim().length > 64) out.push('businessId');
-  if (d.graphVersion.trim() && normalizeGraphVersion(d.graphVersion) === null) out.push('graphVersion');
+  if (d.graphVersion.trim() && normalizeGraphVersion(d.graphVersion) === null)
+    out.push('graphVersion');
   if (d.ratesEndpoint.trim() && !/^https:\/\/[^\s/?#]+[^\s]*$/i.test(d.ratesEndpoint.trim())) {
     out.push('ratesEndpoint');
   }
