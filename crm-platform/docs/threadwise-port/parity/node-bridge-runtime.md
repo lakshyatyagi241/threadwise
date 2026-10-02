@@ -10,6 +10,18 @@ TW-NODE-029 (admin pacing and the bridge's pull route), TW-NODE-002 (shared secr
   against a local stand-in bridge, pacing limits, the bridge's pull route and its wire format, fail-closed token guard, environment fallback, health card).
 - `apps/web/src/features/node-bridge-runtime/lib/draft.test.ts`: 3 tests for the pacing form's limits.
 
+## Checked by hand, side by side (2026-10-02)
+
+Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `/admin/node-bridge`, signed in locally on both.
+
+- Same: block order (address, token, buttons, then pacing), labels, placeholders, hints, the "No token" / "Token set" badge, field order and limits of the
+  pacing card, the "Pacing tip" text, the blank-token placeholder after saving, and the messages "Enter a valid Server URL (http:// or https://) first."
+  and "Could not reach the bridge — check the URL and that the Node service is running."
+- Ours, driven in the browser: save address and token, token field cleared with the "stored" placeholder, Test connection ("Bridge responded with HTTP 404."
+  against a server without the route), Update timing, and the bridge route then returning exactly the saved pacing and 403 for a wrong or missing token.
+- Differences: the address and pacing live on their own console page (Reference: top of the Channels hub and inside its providers form); the "Test connection"
+  button has no icon; the pacing result is a toast instead of the inline "Saved · Ns gap active on bridge" line.
+
 ## Deliberate deviations
 
 - **No push or refresh dance.** Reference mirrored the address and token into the Laravel `.env` (`EnvWriter`) and called the bridge's `refresh-settings`
@@ -28,8 +40,9 @@ TW-NODE-029 (admin pacing and the bridge's pull route), TW-NODE-002 (shared secr
 
 ## Not verified
 
-- **Side by side in a browser.** The reference screen is the top of Admin > Channel Settings (`/admin/settings/channel-setting`); ours is its own page
-  at `/admin/node-bridge`. A Playwright run of both is still to do.
+- **Automated twin run.** `threadwise-playwright-parity` could not be used for this slice: its scripts list changed files without `git diff --relative`,
+  so under this repo layout (git root one level above `crm-platform/`) they see zero feature files, and the operator console login needs MFA enrolment
+  that the harness does not drive. Checked by hand instead (below). The twin spec is still to write.
 - **Against the real Node bridge.** The reference runs without its bridge here, so "Test connection" was exercised against a stand-in that answers
   like `/api/refresh-settings` (200, 401, 403, 500, connection refused), not the bridge itself.
 - Not built: bridge-side endpoints of TW-NODE-004 (`/`, `/health`, `current-settings`), the daily cap and jitter of TW-NODE-029, and every other NODE

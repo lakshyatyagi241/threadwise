@@ -96,7 +96,7 @@ export function BridgeCard({ data, canEdit }: { data: NodeBridgeResponse; canEdi
           label={t('bridge.serverUrl')}
           htmlFor={`${id}-url`}
           hint={t('bridge.serverUrlHint')}
-          error={urlInvalid ? t('errors.validation') : undefined}
+          error={urlInvalid ? t('bridge.urlInvalid') : undefined}
         >
           <Input
             id={`${id}-url`}
