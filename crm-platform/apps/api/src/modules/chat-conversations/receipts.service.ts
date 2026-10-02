@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
+import { ConversationsRepository } from './conversations.repository';
+import { DeliveryReporter } from './delivery-reporter';
 import { ChannelsRepository } from './channels.repository';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { MessagesRepository } from './messages.repository';
@@ -43,6 +45,8 @@ export class ReceiptsService {
     private readonly channelsRepo: ChannelsRepository,
     private readonly messages: MessagesRepository,
     private readonly realtime: ChatRealtimePublisher,
+    private readonly conversations: ConversationsRepository,
+    private readonly deliveries: DeliveryReporter,
   ) {}
 
   async apply(job: ReceiptJob): Promise<ReceiptOutcome> {
@@ -79,6 +83,19 @@ export class ReceiptsService {
       });
       const message =
         outcome === 'advanced' ? await this.messages.byId(tx, orgId, ref.id, ref.createdAt) : null;
+      // Only a receipt that moved the message is news to the wallet; a late or repeated one reports nothing.
+      if (outcome === 'advanced' && message) {
+        const conv = await this.conversations.byId(tx, orgId, message.conversationId);
+        if (conv)
+          await this.deliveries.report(tx, orgId, {
+            channelKind: channel.kind,
+            conversationId: conv.id,
+            peerKey: conv.peerKey,
+            status: receipt.status,
+            providerMessageId: receipt.providerMessageId,
+            message,
+          });
+      }
       return { outcome, message };
     });
 

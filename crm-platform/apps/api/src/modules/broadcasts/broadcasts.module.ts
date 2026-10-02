@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { BroadcastDispatchService } from './broadcast-dispatch.service';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
@@ -26,9 +27,10 @@ import { BroadcastsComposeService } from './broadcasts-compose.service';
 import { BroadcastsReadService } from './broadcasts-read.service';
 import { BroadcastsRepository } from './broadcasts.repository';
 import { BroadcastsService } from './broadcasts.service';
-import { OpenBroadcastPlanGate, OpenWalletGate, OpenWarmerGate } from './_shims/open-gates';
+import { OpenBroadcastPlanGate, OpenWarmerGate } from './_shims/open-gates';
 import { SqlSenderDirectory } from './_shims/sql-sender-directory';
 import { SqlTemplateDirectory } from './_shims/sql-template-directory';
+import { BillingWalletGate } from './_shims/wallet-gate';
 import {
   BROADCAST_PLAN_GATE,
   SENDER_DIRECTORY,
@@ -42,7 +44,7 @@ import {
  * the real service to the same token (see _shims/README.md).
  */
 @Module({
-  imports: [PlansCoreModule, CrmModule],
+  imports: [PlansCoreModule, CrmModule, WalletMessageBillingModule],
   controllers: [
     BroadcastsController,
     BroadcastsReadController,
@@ -87,7 +89,7 @@ import {
     EngineSenderRegistry,
     { provide: SENDER_DIRECTORY, useClass: SqlSenderDirectory },
     { provide: TEMPLATE_DIRECTORY, useClass: SqlTemplateDirectory },
-    { provide: WALLET_GATE, useClass: OpenWalletGate },
+    { provide: WALLET_GATE, useClass: BillingWalletGate },
     { provide: WARMER_GATE, useClass: OpenWarmerGate },
     { provide: BROADCAST_PLAN_GATE, useClass: OpenBroadcastPlanGate },
   ],
