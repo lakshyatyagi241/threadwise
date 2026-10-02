@@ -67,6 +67,8 @@ afterAll(async () => {
   await h.owner.query(
     `INSERT INTO plan_message_margins (plan_slug, country_code, category, margin_bps) VALUES ('', '', '', 2000) ON CONFLICT DO NOTHING`,
   );
+  // The spec turns margin pricing on; the database outlives the run, so put the switch back for the next one.
+  await h.owner.query(`DELETE FROM platform_settings WHERE key = 'wallet.pricing_mode'`);
   await cleanWallet(h, startedAt);
   await h.stop();
 });
