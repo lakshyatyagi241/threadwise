@@ -22,10 +22,10 @@ export function wabaTail(wabaId: string, n = 6): string {
   return wabaId.length <= n ? wabaId : `…${wabaId.slice(-n)}`;
 }
 
-/** "02 Oct - 02 Oct": the P&L month window, in UTC like the API. */
+/** "01 Oct - 31 Oct": the P&L month window, in UTC like the API. `to` is exclusive, so the last day shown is the one before it. */
 export function formatRange(from: string, to: string, locale: string): string {
   const day = new Intl.DateTimeFormat(locale, { day: '2-digit', timeZone: 'UTC' });
   const month = new Intl.DateTimeFormat(locale, { month: 'short', timeZone: 'UTC' });
-  const one = (iso: string) => `${day.format(new Date(iso))} ${month.format(new Date(iso))}`;
-  return `${one(from)} - ${one(to)}`;
+  const one = (d: Date) => `${day.format(d)} ${month.format(d)}`;
+  return `${one(new Date(from))} - ${one(new Date(Date.parse(to) - 1))}`;
 }
