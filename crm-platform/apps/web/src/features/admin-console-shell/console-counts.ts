@@ -1,6 +1,6 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { planAdminListResponseSchema } from '@crm/contracts';
+import { planAdminListResponseSchema, platformRoleListResponseSchema } from '@crm/contracts';
 import { cookieNames } from '@/lib/auth/cookies';
 import { apiBase } from '@/lib/auth/server';
 
@@ -29,6 +29,24 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
     }
   } catch {
     // network failure: the plans badge stays blank
+  }
+
+  // Roles and permissions: one call carries both totals (Reference's sidebar badges are raw row counts). An operator without
+  // platform.role.manage gets a 403 here and simply sees no badge.
+  try {
+    const res = await fetch(`${apiBase()}/v2/platform/roles`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const parsed = platformRoleListResponseSchema.safeParse(await res.json());
+      if (parsed.success) {
+        counts.roles = parsed.data.kpis.totalRoles;
+        counts.permissions = parsed.data.kpis.totalPermissions;
+      }
+    }
+  } catch {
+    // network failure: the badges stay blank
   }
 
   return counts;

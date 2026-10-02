@@ -5,9 +5,11 @@ import { z } from 'zod';
  * never on the human-readable message — messages get reworded, codes do not.
  */
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
+import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
+  ...RBAC_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -161,6 +163,12 @@ export const ERROR_CODES = {
   DEAL_STAGE_LAST: 'DEAL_STAGE_LAST',
   DEAL_ORDER_INVALID: 'DEAL_ORDER_INVALID',
   DEAL_LOST_REASON_NAME_TAKEN: 'DEAL_LOST_REASON_NAME_TAKEN',
+
+  // website chatbot widget (TW-WGT)
+  /** Mode `ai` or `both` saved without a smart agent. */
+  WGT_ASSISTANT_REQUIRED: 'WGT_ASSISTANT_REQUIRED',
+  /** The smart agent is not one of this workspace's. */
+  WGT_ASSISTANT_NOT_IN_WORKSPACE: 'WGT_ASSISTANT_NOT_IN_WORKSPACE',
 
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
