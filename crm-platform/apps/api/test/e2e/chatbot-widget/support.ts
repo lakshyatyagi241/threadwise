@@ -59,6 +59,8 @@ export interface WidgetJson {
 }
 
 let counter = 0;
+let ipSeq = 1;
+const nextClientIp = () => `10.88.${Math.floor(ipSeq / 250)}.${ipSeq++ % 250}`;
 
 /** Widget helpers on top of the contacts harness (same app, same database, organizations of their own). */
 export class WidgetApi extends Api {
@@ -132,22 +134,35 @@ export class WidgetApi extends Api {
 
   // --- the public side ---------------------------------------------------------------------------------------------------
 
-  pub(token: string) {
+  /**
+   * The public calls as a visitor's browser makes them. Throttle counters are per client address (as in WaDesk), so each
+   * `pub()` comes from a fresh address unless a test pins one to exercise the limit.
+   */
+  pub(token: string, ip: string = nextClientIp()) {
     const http = () => request(this.h.app.getHttpServer());
+    const from = (headers: Record<string, string>) => ({ 'x-forwarded-for': ip, ...headers });
     return {
       embed: (route: 'embed' | 'embed.js' = 'embed') => http().get(`/widget/${token}/${route}`),
       chat: () => http().get(`/widget/${token}/chat`),
       config: (uuid?: string, headers: Record<string, string> = {}) =>
         http()
           .get(`/widget/${token}/api/config${uuid ? `?visitor_uuid=${uuid}` : ''}`)
-          .set(headers),
+          .set(from(headers)),
       message: (body: Record<string, unknown>, headers: Record<string, string> = {}) =>
-        http().post(`/widget/${token}/api/message`).set(headers).send(body),
+        http().post(`/widget/${token}/api/message`).set(from(headers)).send(body),
       history: (uuid: string | undefined, since = 0, headers: Record<string, string> = {}) =>
         http()
           .get(`/widget/${token}/api/history?since=${since}${uuid ? `&visitor_uuid=${uuid}` : ''}`)
-          .set(headers),
+          .set(from(headers)),
     };
+  }
+
+  /** The paused state has no screen or endpoint in WaDesk (WD-WGT-026); it is set in the database. */
+  async setStatus(orgId: number, widgetUuid: string, status: 'active' | 'paused') {
+    await this.h.owner.query(
+      `UPDATE chatbot_widgets SET status = $3 WHERE org_id = $1 AND uuid = $2`,
+      [orgId, widgetUuid, status],
+    );
   }
 
   /** A visitor through the public config call. */

@@ -24,10 +24,14 @@ import {
   toPayload,
   TOTAL_STEPS,
   validateStep,
+  validateWhatsapp,
   type BuilderState,
   type StepNumber,
+  type WhatsappCard,
 } from '../lib/builder-model';
 import { BuilderPreview } from './builder-preview';
+import type { PreviewDevice } from './launcher-preview';
+import { WhatsappBuilder } from './whatsapp-builder';
 import { LaunchStep, LookStep, SetupStep, VoiceStep } from './builder-steps';
 import { BackIcon, CheckIcon, LaunchCheckIcon, NextIcon, PrevIcon } from './icons';
 import { PlanPaywall } from './plan-paywall';
@@ -65,11 +69,27 @@ export function BuilderScreen({ widgetId }: { widgetId?: string }) {
       </main>
     );
   }
-  return <Builder initial={fromWidget(widget.data)} editing />;
+  return (
+    <Builder
+      initial={fromWidget(widget.data)}
+      editing
+      installed={{ embedUrl: widget.data.embedUrl, previewUrl: widget.data.previewUrl }}
+    />
+  );
 }
 
-function Builder({ initial, editing }: { initial: BuilderState; editing: boolean }) {
+function Builder({
+  initial,
+  editing,
+  installed = null,
+}: {
+  initial: BuilderState;
+  editing: boolean;
+  /** The addresses of a widget that already exists, so its install snippet is on the page from the start. */
+  installed?: { embedUrl: string; previewUrl: string } | null;
+}) {
   const t = useTranslations('chatbotWidget.builder');
+  const w = useTranslations('chatbotWidget.whatsappBuilder');
   const qc = useQueryClient();
   const { toast } = useToast();
   const canSave = useCan(editing ? 'wgt.widgets.update' : 'wgt.widgets.create');
@@ -82,8 +102,12 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
   const [furthest, setFurthest] = useState<number>(editing ? TOTAL_STEPS : 1);
   const [flash, setFlash] = useState<string | null>(null);
   const [saved, setSaved] = useState(editing);
-  const [saving, setSaving] = useState(false);
-  const [snippet, setSnippet] = useState<{ embedUrl: string; previewUrl: string } | null>(null);
+  const [snippet, setSnippet] = useState<{ embedUrl: string; previewUrl: string } | null>(
+    installed,
+  );
+  // The WhatsApp page (WD-WGT-028): which accordion card is open (0 = none) and which device the preview shows.
+  const [openCard, setOpenCard] = useState<0 | WhatsappCard>(1);
+  const [device, setDevice] = useState<PreviewDevice>('desktop');
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const set = useCallback(
@@ -127,8 +151,26 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
     if (canJump(target, current, furthest) === 'free' || gateForward(current)) showStep(target);
   };
 
+  /** Creates or updates; the page stays where it is and later saves update the same widget. */
+  const persist = async () => {
+    const body = toPayload(s);
+    const out =
+      s.id === null || s.rowVersion === null
+        ? await createWidget(body)
+        : await updateWidget(s.id, { ...body, rowVersion: s.rowVersion });
+    setS((prev) => ({ ...prev, id: out.id, rowVersion: out.rowVersion }));
+    setSaved(true);
+    void qc.invalidateQueries({ queryKey: KEYS.all });
+    return out;
+  };
+  const failed = (e: unknown) => {
+    const detail = e instanceof ApiError ? (e.fieldErrors[0]?.message ?? e.message) : null;
+    toast(detail ?? t('saveFailed'), 'danger');
+  };
+
+  // QUIRK: reproduced deliberately (WD-WGT-006). Nothing blocks a second click while the first save is in flight: both go out
+  // before the widget has an id, so a double click on Launch creates two widgets, as in WaDesk.
   const save = async (reveal: boolean) => {
-    if (saving) return;
     // Every step is checked, so an incomplete draft can never be saved; the first failing step opens.
     const bad = firstProblem(s);
     if (bad) {
@@ -137,17 +179,8 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
       flashField(bad.problem.field);
       return;
     }
-    setSaving(true);
     try {
-      const body = toPayload(s);
-      const out =
-        s.id === null || s.rowVersion === null
-          ? await createWidget(body)
-          : await updateWidget(s.id, { ...body, rowVersion: s.rowVersion });
-      // The page stays where it is; later saves update the same widget (the address is not rewritten).
-      setS((prev) => ({ ...prev, id: out.id, rowVersion: out.rowVersion }));
-      setSaved(true);
-      void qc.invalidateQueries({ queryKey: KEYS.all });
+      const out = await persist();
       if (reveal) {
         showStep(TOTAL_STEPS);
         setSnippet({ embedUrl: out.embedUrl, previewUrl: out.previewUrl });
@@ -156,10 +189,25 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
         toast(t('draftSaved'), 'success');
       }
     } catch (e) {
-      const detail = e instanceof ApiError ? (e.fieldErrors[0]?.message ?? e.message) : null;
-      toast(detail ?? t('saveFailed'), 'danger');
-    } finally {
-      setSaving(false);
+      failed(e);
+    }
+  };
+
+  /** Save Changes on the WhatsApp page: the page's own rules, the first failing card opens, then one save. */
+  const saveChanges = async () => {
+    const bad = validateWhatsapp(s);
+    if (!bad.ok) {
+      setOpenCard(bad.card);
+      toast(w(`problem.${bad.key}`), 'danger');
+      flashField(bad.field);
+      return;
+    }
+    try {
+      const out = await persist();
+      setSnippet({ embedUrl: out.embedUrl, previewUrl: out.previewUrl });
+      toast(w('saved'), 'success');
+    } catch (e) {
+      failed(e);
     }
   };
 
@@ -178,6 +226,30 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
     [t],
   );
   const stepProps = { s, set, flash };
+
+  if (s.mode === 'whatsapp') {
+    return (
+      <>
+        {assistants.data?.planLocked && <PlanPaywall />}
+        <WhatsappBuilder
+          s={s}
+          set={set}
+          flash={flash}
+          editing={editing}
+          saved={saved}
+          canSave={canSave}
+          openCard={openCard}
+          onOpenCard={setOpenCard}
+          device={device}
+          onDevice={setDevice}
+          defaultIso={defaultCountry.data}
+          snippet={snippet}
+          onCopy={() => void copySnippet()}
+          onSave={() => void saveChanges()}
+        />
+      </>
+    );
+  }
 
   return (
     <>
@@ -214,7 +286,6 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
               <button
                 type="button"
                 id="wgt-save"
-                disabled={saving}
                 onClick={() => void save(false)}
                 className="rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-50"
               >
@@ -226,7 +297,7 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
       </div>
 
       <section className="mx-auto max-w-none px-4 py-6 sm:px-6 lg:px-7">
-        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[1fr_342px]">
+        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_460px]">
           <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
             <nav aria-label={t('stepper')} className="border-b border-border bg-muted/40 px-5 py-4">
               <ol className="flex items-center">
@@ -325,11 +396,10 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
                   canSave && (
                     <Button
                       id="wgt-launch"
-                      disabled={saving}
                       onClick={() => void save(true)}
                       className="h-auto gap-1.5 rounded-full bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white hover:opacity-90"
                     >
-                      {saving ? <Spinner /> : <LaunchCheckIcon className="size-3" />}
+                      <LaunchCheckIcon className="size-3" />
                       {t('launchWidget')}
                     </Button>
                   )
@@ -338,7 +408,7 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
             </div>
           </div>
 
-          <BuilderPreview s={s} />
+          <BuilderPreview s={s} device={device} onDevice={setDevice} />
         </div>
       </section>
     </>

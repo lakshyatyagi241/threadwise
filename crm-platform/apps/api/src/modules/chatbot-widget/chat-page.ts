@@ -46,15 +46,16 @@ body { display: flex; flex-direction: column; background: #fff; }
 const SCRIPT = `
 (function () {
   var TOKEN = __TOKEN__;
-  var VKEY = 'wgt_vid_' + __WIDGET__;
+  var VKEY = 'wsnap_vid_' + TOKEN;
   var BASE = '/widget/' + TOKEN + '/api/';
   var API_CFG = BASE + 'config';
   var API_MSG = BASE + 'message';
   var API_HIS = BASE + 'history';
 
   // The visitor id lives in the iframe's own localStorage, not only in a cookie: the page runs in a cross-site frame where
-  // third-party cookies are often blocked, and without it every visit would start a new conversation. The key is built
-  // from the widget, not from the token, so rotating the token does not orphan returning visitors.
+  // third-party cookies are often blocked, and without it every visit would start a new conversation.
+  // QUIRK: reproduced deliberately (WD-WGT-023 rule 2). The key is built from the TOKEN, so rotating the token orphans a
+  // returning visitor whose cookie is blocked: they get a new visitor and a new conversation.
   function storedUuid() { try { return localStorage.getItem(VKEY) || ''; } catch (e) { return ''; } }
   function storeUuid(u) { try { if (u) localStorage.setItem(VKEY, u); } catch (e) {} }
   function withVid(url) {
@@ -65,7 +66,6 @@ const SCRIPT = `
   var cfg = null;
   var lastSeenMsgId = 0;
   var intakeDone = false;
-  var sending = false;
   function $(id) { return document.getElementById(id); }
 
   function addBubble(dir, text, extras) {
@@ -155,7 +155,6 @@ const SCRIPT = `
   function loadConfig() {
     return fetch(withVid(API_CFG), { credentials: 'include' })
       .then(function (res) {
-        if (!res.ok) throw new Error('config ' + res.status);
         return res.json();
       })
       .then(function (data) {
@@ -179,18 +178,15 @@ const SCRIPT = `
           intakeDone = true;
           $('send').disabled = false;
         }
-      })
-      .catch(function () {
-        // WaDesk left a blank page with a dead Send button; say what happened instead.
-        document.getElementById('hdr').textContent = 'Chat';
-        addBubble('in', 'This chat is not available right now.');
       });
+    // QUIRK: reproduced deliberately (WD-WGT-009 rule 4). A failed config (403, 404) is not handled: the page stays empty
+    // with a disabled Send button.
   }
 
   function send() {
     var txt = $('txt');
     var body = (txt.value || '').trim();
-    if (!body || $('send').disabled || sending) return;
+    if (!body) return;
     txt.value = '';
     addBubble('out', body);
     var payload = { body: body };
@@ -206,7 +202,6 @@ const SCRIPT = `
     typing.textContent = 'Typing\\u2026';
     $('msgs').appendChild(typing);
     $('msgs').scrollTop = $('msgs').scrollHeight;
-    sending = true;
     fetch(API_MSG, {
       method: 'POST',
       credentials: 'include',
@@ -218,15 +213,9 @@ const SCRIPT = `
       })
       .then(function (r) {
         typing.remove();
-        if (!r.ok) {
-          // WaDesk showed nothing for a refused message, so the visitor never knew it was lost.
-          addBubble('in', "Sorry, that didn't go through. Please try again.");
-          return;
-        }
+        // QUIRK: reproduced deliberately (WD-WGT-009 rule 2). A refused message (403, 422, 429) shows nothing: the visitor's
+        // bubble stays and the message was never stored.
         var json = r.json;
-        // The cursor moves past the visitor's own message (and the opening line stored before it), so the poll never
-        // draws either again.
-        if (json.inbound && json.inbound.id) lastSeenMsgId = Math.max(lastSeenMsgId, json.inbound.id);
         if (json.reply && json.reply.body) {
           addBubble('in', json.reply.body, { id: json.reply.id });
           lastSeenMsgId = Math.max(lastSeenMsgId, json.reply.id || 0);
@@ -236,7 +225,6 @@ const SCRIPT = `
         typing.remove();
         addBubble('in', "Sorry, that didn't go through. Please try again.");
       })
-      .then(function () { sending = false; });
   }
 
   $('send').addEventListener('click', send);
@@ -261,9 +249,7 @@ const SCRIPT = `
 `;
 
 export function renderChatPage(w: ChatPageWidget): string {
-  const script = SCRIPT.replace('__TOKEN__', () => jsString(w.token)).replace('__WIDGET__', () =>
-    jsString(w.uuid),
-  );
+  const script = SCRIPT.replace('__TOKEN__', () => jsString(w.token));
   return `<!doctype html>
 <html lang="en">
 <head>
