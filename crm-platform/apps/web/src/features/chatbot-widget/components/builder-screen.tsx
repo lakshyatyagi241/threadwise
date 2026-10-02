@@ -297,7 +297,7 @@ function Builder({
       </div>
 
       <section className="mx-auto max-w-none px-4 py-6 sm:px-6 lg:px-7">
-        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[1fr_342px]">
+        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_460px]">
           <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
             <nav aria-label={t('stepper')} className="border-b border-border bg-muted/40 px-5 py-4">
               <ol className="flex items-center">
@@ -408,7 +408,7 @@ function Builder({
             </div>
           </div>
 
-          <BuilderPreview s={s} />
+          <BuilderPreview s={s} device={device} onDevice={setDevice} />
         </div>
       </section>
     </>

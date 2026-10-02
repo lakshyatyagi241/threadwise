@@ -146,7 +146,14 @@ export default (h) => {
     bgImage: { threadwise: '[data-field=body_bg_image_url]', ours: '#wgt-f-bodyBgImageUrl' },
     snippet: { threadwise: '#cbw-snippet', ours: '[data-testid=snippet]' },
     pill: { threadwise: '#cbw-state-pill', ours: '[data-testid=state-pill]' },
-    previewHeader: { threadwise: '#cbw-prev-header', ours: '[data-testid=preview-header]' },
+    // ours draws the preview in a frame (the same open panel for every engine), so its header is found through the frame
+    previewHeader: {
+      threadwise: '#cbw-prev-header',
+      ours: (page) =>
+        page
+          .frameLocator('[data-testid=launcher-preview-frame]')
+          .locator('[data-testid=preview-header]'),
+    },
   };
   const at = (c, spec) => c.loc(typeof spec === 'function' ? spec : (spec[c.side] ?? spec));
   const stepNow = async (c) =>
@@ -855,6 +862,7 @@ export default (h) => {
       o.flag('title.message', await seen(c, 'Give the chat window a title.'));
       await at(c, B.headerTitle).fill('Hello');
       await at(c, B.headerBg).fill('#112233');
+      await c.page.waitForTimeout(700); // ours repaints its preview frame a moment after the keystroke
       const bg = await at(c, B.previewHeader).evaluate(
         (el) => getComputedStyle(el).backgroundColor,
       );

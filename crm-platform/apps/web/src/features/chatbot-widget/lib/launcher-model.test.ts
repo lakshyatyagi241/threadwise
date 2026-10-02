@@ -10,6 +10,7 @@ import {
   validSpacing,
   type BuilderState,
 } from './builder-model';
+import { chatPreviewDocument, chatPreviewInput, safePreviewColour } from './chat-preview-doc';
 import { previewDocument } from './launcher-preview-doc';
 
 /** TW-WGT-028: the WhatsApp widget page's model (user-requested Interakt reference). */
@@ -221,5 +222,113 @@ describe('the preview backdrop', () => {
     expect(doc).not.toContain('class="hero"');
     expect(doc).not.toContain('class="line');
     expect(doc).toContain('"startOpen":true');
+  });
+});
+
+describe('the wizard preview (Smart agent and Smart + WhatsApp)', () => {
+  const texts = { title: 'Chat with us', welcome: 'Hi!', send: 'Send' };
+  const wizard = (over: Partial<BuilderState> = {}): BuilderState => ({
+    ...newState(),
+    mode: 'both',
+    name: 'Acme',
+    assistantId: 'a-1',
+    targetWhatsappCc: '+91',
+    targetWhatsappNumber: '9876543210',
+    ...over,
+  });
+
+  it('takes every setting of the wizard: header, bubble, canvas, button, intake, side and launcher', () => {
+    const i = chatPreviewInput(
+      wizard({
+        headerTitle: 'Acme Support',
+        headerBg: '#112233',
+        headerTextColor: '#EEEEEE',
+        welcomeMessage: 'Welcome',
+        messageBubbleColor: '#F0F0F0',
+        messageTextColor: '#111111',
+        bodyBgKind: 'image',
+        bodyBgImageUrl: 'https://cdn.example/bg.png',
+        buttonLabel: 'Ask',
+        actionButtonBg: '#010203',
+        actionButtonTextColor: '#FAFAFA',
+        collectName: true,
+        collectEmail: true,
+        collectPhone: false,
+        position: 'bottom_left',
+        buttonColor: '#336699',
+        buttonImageUrl: 'https://cdn.example/logo.png',
+      }),
+      'mobile',
+      true,
+      texts,
+    );
+    expect(i).toMatchObject({
+      mode: 'both',
+      headerTitle: 'Acme Support',
+      headerBg: '#112233',
+      headerText: '#EEEEEE',
+      welcome: 'Welcome',
+      bubbleColor: '#F0F0F0',
+      bubbleText: '#111111',
+      bodyKind: 'image',
+      bodyImage: 'https://cdn.example/bg.png',
+      buttonLabel: 'Ask',
+      buttonBg: '#010203',
+      buttonText: '#FAFAFA',
+      collect: { name: true, email: true, phone: false },
+      whatsapp: true,
+      side: 'left',
+      launcherColour: '#336699',
+      launcherImage: 'https://cdn.example/logo.png',
+      device: 'mobile',
+      startOpen: true,
+    });
+  });
+
+  it('empty fields fall back to the builder defaults; a script address or odd colour is never handed to a style', () => {
+    const i = chatPreviewInput(
+      wizard({
+        headerTitle: '  ',
+        welcomeMessage: '',
+        buttonLabel: '',
+        headerBg: 'url(javascript:alert(1))',
+        bodyBgKind: 'image',
+        bodyBgImageUrl: 'javascript:alert(1)',
+      }),
+      'desktop',
+      true,
+      texts,
+    );
+    expect(i.headerTitle).toBe('Chat with us');
+    expect(i.welcome).toBe('Hi!');
+    expect(i.buttonLabel).toBe('Send');
+    expect(i.headerBg).toBe('#075E54');
+    expect(i.bodyImage).toBeNull();
+    expect(safePreviewColour('#abc', '#000')).toBe('#abc');
+    expect(safePreviewColour('red;background:url(x)', '#000')).toBe('#000');
+  });
+
+  it('the WhatsApp action shows for the Both engine with a number, never for the Smart agent engine', () => {
+    expect(chatPreviewInput(wizard(), 'desktop', true, texts).whatsapp).toBe(true);
+    expect(chatPreviewInput(wizard({ mode: 'ai' }), 'desktop', true, texts).whatsapp).toBe(false);
+    expect(
+      chatPreviewInput(wizard({ targetWhatsappNumber: '12' }), 'desktop', true, texts).whatsapp,
+    ).toBe(false);
+  });
+
+  it('the document is the open panel (startOpen), keeps saved text inert, and has one script element', () => {
+    const doc = chatPreviewDocument(
+      chatPreviewInput(
+        wizard({ headerTitle: '</script><img src=x onerror=alert(1)>' }),
+        'desktop',
+        true,
+        texts,
+      ),
+    );
+    expect(doc).toContain('"startOpen":true');
+    expect(doc).toContain('Typically replies within 5 mins');
+    expect(doc).toContain('data-testid');
+    expect(doc.match(/<\/script>/g)).toHaveLength(1);
+    expect(doc).not.toContain('<img src=x');
   });
 });
