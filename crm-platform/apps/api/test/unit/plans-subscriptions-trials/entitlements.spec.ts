@@ -59,6 +59,7 @@ describe('registry', () => {
       'sales_pipeline',
       'appointment_booking',
       'chatbot_widgets',
+      'wa_storefront',
       'inbox_sla',
       'inbox_routing',
       'inbox_kanban',
