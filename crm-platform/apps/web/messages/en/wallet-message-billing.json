@@ -196,7 +196,9 @@
         "overview": "Wallet",
         "pricing": "Message pricing",
         "workspaces": "Workspace wallets",
-        "logs": "Wallet logs"
+        "logs": "Wallet logs",
+        "margins": "Margins",
+        "packages": "Credit packages"
       },
       "overview": {
         "title": "Wallet overview",
@@ -388,6 +390,27 @@
             "title": "Which row wins",
             "body": "An exact country and category match is used first, then the country with any category, then any country, then the flat price."
           }
+        },
+        "mode": {
+          "title": "How customers are priced",
+          "current": "Current: {mode}",
+          "intro": "Choose what a message costs your customers. This applies to every workspace and is saved on its own.",
+          "fixed": {
+            "label": "Fixed prices",
+            "body": "You type a price for each country and category in the rate card below. Margins are saved but not used."
+          },
+          "margin": {
+            "label": "Meta cost + margin",
+            "body": "The customer pays Meta's cost plus your margin, set per country and category. Where Meta's cost is not known, the typed fixed price is charged."
+          },
+          "save": "Save pricing mode",
+          "manage": "Set margins",
+          "confirmTitle": "Change how customers are priced?",
+          "confirmFixed": "Every workspace will be charged the fixed prices from the rate card from the next message. Margins stay saved but stop applying.",
+          "confirmMargin": "Every workspace will be charged Meta's cost plus the margin that applies to it (workspace override, then its plan, then the platform default) from the next message. Where Meta's cost is unknown, the fixed price is still charged.",
+          "confirm": "Yes, change it",
+          "savedFixed": "Customers are now priced with fixed prices.",
+          "savedMargin": "Customers are now priced with Meta cost plus margin."
         }
       },
       "workspaces": {
@@ -441,6 +464,59 @@
           "appliedDeduct": "{applied} deducted. The balance is now {balance}.",
           "partial": "Only {applied} of {requested} was applied because the balance cannot go below 0. The balance is now {balance}.",
           "replayed": "(This request was already applied.)"
+        },
+        "pricing": {
+          "title": "Pricing for this workspace",
+          "subtitle": "Margin overrides beat the workspace's plan and the platform default, for this workspace only.",
+          "plan": "Plan",
+          "planLoading": "Loading plan",
+          "planUnknown": "Could not be read",
+          "noPlan": "No plan",
+          "overrides": "Margin overrides",
+          "overridesHint": "Only the rows listed here are overridden. Everything else follows the plan and the platform default.",
+          "empty": "No overrides. This workspace follows its plan and the platform default.",
+          "reason": {
+            "label": "Reason (kept in the audit log)",
+            "hint": "Required for any change or removal, 5 to 500 characters.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Say why in at least 5 characters.",
+              "long": "Keep the reason to 500 characters or fewer."
+            }
+          },
+          "save": "Save overrides",
+          "saving": "Saving",
+          "saveHint": "Fix the highlighted rows and give a reason to save.",
+          "saved": "{saved} saved, {removed} removed.",
+          "savedSome": "{saved} saved, {skipped} skipped. See the reason on each skipped row.",
+          "preview": {
+            "title": "Price preview",
+            "hint": "See how one message to this workspace would be priced and which layer set it.",
+            "country": "Country",
+            "category": "Category",
+            "run": "Preview price",
+            "running": "Working out the price",
+            "result": {
+              "label": "Price preview result",
+              "metaCost": "Meta cost",
+              "unknownCost": "Not known",
+              "margin": "Margin",
+              "noMargin": "None",
+              "layer": "Set by",
+              "noLayer": "No margin matched",
+              "layers": {
+                "workspace": "Workspace override",
+                "plan": "Plan margin",
+                "platform": "Platform default"
+              },
+              "price": "Customer price",
+              "basis": "Basis",
+              "bases": {
+                "margin": "Meta cost + margin",
+                "fixed": "Fixed price"
+              }
+            }
+          }
         }
       },
       "adjust": {
@@ -523,6 +599,157 @@
           "operator": "Operator",
           "customer": "Customer",
           "system": "System"
+        }
+      },
+      "margins": {
+        "title": "Margins",
+        "crumb": "Margins",
+        "subtitle": "What customers pay on top of Meta's cost, per country and message category.",
+        "retry": "Try again",
+        "ratesFailed": "Meta's costs could not be loaded, so prices for new rows cannot be shown.",
+        "mode": {
+          "current": "Customers are priced by",
+          "inactive": "Pricing mode is Fixed prices, so these margins are not in effect yet. They are saved and will apply when you switch to Meta cost + margin.",
+          "switchLink": "Go to the pricing mode switch"
+        },
+        "scope": {
+          "label": "Margins for",
+          "hint": "The platform default applies to every plan. A plan's own margin beats it.",
+          "platform": "Platform default (applies to every plan)"
+        },
+        "grid": {
+          "country": "Country",
+          "searchCountry": "Search countries",
+          "category": "Category",
+          "margin": "Margin %",
+          "metaCost": "Meta cost",
+          "price": "Customer price",
+          "note": "Reason",
+          "setBy": "Set by",
+          "actions": "Actions",
+          "anyCountry": "Any country",
+          "anyCategory": "Any category",
+          "unknownCost": "Meta's cost is not known here, so the typed fixed price applies.",
+          "priceInvalid": "Enter a margin from -100 to 1000 with at most 2 decimals.",
+          "removedPending": "Will be removed when you save.",
+          "addRow": "Add row",
+          "remove": "Remove",
+          "undo": "Undo",
+          "cancel": "Cancel",
+          "empty": "No margins yet. Add a row to set one.",
+          "removeTitle": "Remove this margin?",
+          "removeBody": "The margin for {country} is deleted. Prices fall back to the next matching margin.",
+          "removed": "Margin removed.",
+          "save": "Save margins",
+          "saving": "Saving",
+          "saved": "{count, plural, one {# margin saved.} other {# margins saved.}}",
+          "savedSome": "{saved} saved, {skipped} skipped. See the reason on each skipped row.",
+          "unsaved": "{count, plural, one {# unsaved row} other {# unsaved rows}}",
+          "tooMany": "Too many changed rows for one save. Save in smaller batches.",
+          "problems": {
+            "margin": "Enter a percentage from -100 to 1000 with at most 2 decimals. -100 means free.",
+            "duplicate": "This country and category already has a row."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Which margin wins",
+            "body": "A workspace override beats its plan's margin, which beats the platform default. A layer is read in full before the next one."
+          },
+          "specific": {
+            "title": "Most specific first",
+            "body": "Inside a layer, country and category is used first, then the country with any category, then the category in any country, then the default row."
+          },
+          "unknown": {
+            "title": "When Meta's cost is unknown",
+            "body": "The price is Meta's cost plus the margin, rounded to the nearest 0.01 and at least 0.01 unless the margin is -100% (free). Where Meta's cost is unknown, the typed fixed price applies instead."
+          }
+        }
+      },
+      "packages": {
+        "title": "Credit packages",
+        "crumb": "Credit packages",
+        "subtitle": "Optional offers: pay this much, get this much wallet credit. A credit above the price is a top-up bonus.",
+        "new": "New package",
+        "edit": "Edit",
+        "enable": "Enable",
+        "disable": "Disable",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "enabled": "{name} is enabled.",
+        "disabled": "{name} is disabled.",
+        "deleted": "Package deleted.",
+        "deleteTitle": "Delete package?",
+        "deleteBody": "Delete this package? Existing purchases keep their ledger rows.",
+        "bonus": "+{percent}% bonus",
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive",
+          "featured": "Featured"
+        },
+        "empty": {
+          "title": "No credit packages yet",
+          "body": "No packages have been created.",
+          "bodyWrite": "Create the first package to offer a wallet top-up with a bonus."
+        },
+        "columns": {
+          "label": "Credit packages",
+          "name": "Name",
+          "slug": "Slug",
+          "price": "Price",
+          "credit": "Wallet credit",
+          "badge": "Badge",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "form": {
+          "newTitle": "New credit package",
+          "editTitle": "Edit credit package",
+          "newCrumb": "New package",
+          "editCrumb": "Edit package",
+          "notFound": "This package no longer exists.",
+          "back": "Back to credit packages",
+          "sections": {
+            "identity": "Identity",
+            "pricing": "Pricing",
+            "display": "Display"
+          },
+          "name": "Name",
+          "slug": "Slug (optional)",
+          "slugHint": "Letters, numbers, dashes and underscores. Leave blank to make it from the name.",
+          "description": "Description",
+          "price": "Price",
+          "priceHint": "What the customer pays.",
+          "currency": "Currency",
+          "walletCredit": "Wallet credit",
+          "walletCreditHint": "What lands in the wallet.",
+          "bonusLine": "A bonus of {percent}%: the customer pays {price} and gets {credit}.",
+          "badge": "Badge",
+          "badgeHint": "A short label such as Best value.",
+          "sortOrder": "Sort order",
+          "sortOrderHint": "Lowest first.",
+          "active": "Active",
+          "featured": "Featured",
+          "create": "Create package",
+          "save": "Save changes",
+          "saving": "Saving",
+          "created": "{name} created.",
+          "saved": "{name} saved.",
+          "stale": {
+            "title": "This package was changed by someone else",
+            "body": "Your edits were not saved, so nothing was overwritten. Reload the latest version, then make your change again.",
+            "reload": "Reload the latest version"
+          },
+          "problems": {
+            "name": "Enter a name of up to 96 characters.",
+            "slug": "Use letters, numbers, dashes and underscores only.",
+            "description": "Keep the description to 500 characters or fewer.",
+            "price": "Enter an amount with at most 2 decimals.",
+            "currency": "Choose one of the listed currencies.",
+            "walletCredit": "Enter an amount greater than 0 with at most 2 decimals.",
+            "badge": "Keep the badge to 32 characters or fewer.",
+            "sortOrder": "Enter a whole number from 0 to 9999."
+          }
         }
       }
     }

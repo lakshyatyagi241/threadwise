@@ -175,6 +175,18 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: `${BSP}.groups.billing`,
   },
   {
+    id: 'wallet-margins',
+    href: '/admin/wallet/margins',
+    labelKey: `${WALLET}.margins`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'wallet-packages',
+    href: '/admin/wallet/packages',
+    labelKey: `${WALLET}.packages`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
     id: 'wallet-workspaces',
     href: '/admin/wallet/workspaces',
     labelKey: `${WALLET}.workspaces`,
