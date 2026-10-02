@@ -133,6 +133,11 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/contact-messages',
     labelKey: 'marketing-site-cms.nav.contact',
     groupKey: 'marketing-site-cms.nav.group',
+  {
+    id: 'system-health',
+    href: '/admin/health',
+    labelKey: 'dashboards-analytics-charts.health.nav',
+    groupKey: 'dashboards-analytics-charts.health.group',
   },
 ];
 
