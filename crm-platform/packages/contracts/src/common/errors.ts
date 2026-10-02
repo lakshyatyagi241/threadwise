@@ -102,6 +102,9 @@ export const ERROR_CODES = {
   CON_ATTRIBUTE_KEY_RESERVED: 'CON_ATTRIBUTE_KEY_RESERVED',
   CON_ATTRIBUTE_IN_USE: 'CON_ATTRIBUTE_IN_USE',
   CON_MERGE_SCOPE_REQUIRED: 'CON_MERGE_SCOPE_REQUIRED',
+
+  // platform settings, branding and storage (WD-SET)
+  SET_MAINTENANCE: 'SET_MAINTENANCE',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
