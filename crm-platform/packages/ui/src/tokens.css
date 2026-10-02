@@ -8,6 +8,8 @@
   --border: #e2e8f0;
   --primary: #0f766e;
   --primary-foreground: #ffffff;
+  --brand: #0b5a45;
+  --brand-foreground: #ffffff;
   --danger: #b91c1c;
   --danger-foreground: #ffffff;
   --success: #15803d;
@@ -16,6 +18,18 @@
   --sidebar-foreground: #cbd5e1;
   --sidebar-active: #134e4a;
   --radius: 0.5rem;
+  /* Navigation panel: light in the light theme, dark in the dark theme. Text pairs are AA on --nav-bg. */
+  --nav-bg: #ffffff;
+  --nav-foreground: #334155;
+  --nav-muted: #64748b;
+  --nav-disabled: #94a3b8;
+  --nav-border: #e2e8f0;
+  --nav-hover: #f1f5f9;
+  --nav-active: #e3f2ee;
+  --nav-active-foreground: #0b3d33;
+  --nav-ring: #0f766e;
+  --nav-badge: #f59e0b;
+  --nav-badge-foreground: #1c1303;
 }
 
 [data-theme='dark'] {
@@ -26,6 +40,8 @@
   --border: #1e293b;
   --primary: #2dd4bf;
   --primary-foreground: #04211f;
+  --brand: #0f766e;
+  --brand-foreground: #ffffff;
   --danger: #f87171;
   --danger-foreground: #2b0a0a;
   --success: #4ade80;
@@ -33,6 +49,17 @@
   --sidebar: #060b16;
   --sidebar-foreground: #94a3b8;
   --sidebar-active: #134e4a;
+  --nav-bg: #0a111f;
+  --nav-foreground: #cbd5e1;
+  --nav-muted: #94a3b8;
+  --nav-disabled: #64748b;
+  --nav-border: #1e293b;
+  --nav-hover: #131c30;
+  --nav-active: #1b2a47;
+  --nav-active-foreground: #ffffff;
+  --nav-ring: #5eead4;
+  --nav-badge: #fbbf24;
+  --nav-badge-foreground: #1c1303;
 }
 
 @theme inline {
@@ -43,6 +70,8 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
   --color-danger: var(--danger);
   --color-danger-foreground: var(--danger-foreground);
   --color-success: var(--success);
@@ -50,5 +79,56 @@
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-active: var(--sidebar-active);
+  --color-nav: var(--nav-bg);
+  --color-nav-foreground: var(--nav-foreground);
+  --color-nav-muted: var(--nav-muted);
+  --color-nav-disabled: var(--nav-disabled);
+  --color-nav-border: var(--nav-border);
+  --color-nav-hover: var(--nav-hover);
+  --color-nav-active: var(--nav-active);
+  --color-nav-active-foreground: var(--nav-active-foreground);
+  --color-nav-ring: var(--nav-ring);
+  --color-nav-badge: var(--nav-badge);
+  --color-nav-badge-foreground: var(--nav-badge-foreground);
   --radius-md: var(--radius);
+}
+
+/*
+ * Thin scrollbars for wide tables and panels: about 5px, rounded thumb, transparent track, brighter on hover.
+ * Chromium ignores ::-webkit-scrollbar once `scrollbar-width` is set, so the standard properties only apply
+ * where the webkit pseudo-elements do not exist (Firefox); the two never fight.
+ */
+.thin-scrollbar {
+  --thumb: color-mix(in srgb, var(--muted-foreground) 30%, transparent);
+  --thumb-hover: color-mix(in srgb, var(--muted-foreground) 65%, transparent);
+}
+/* The same scrollbar tinted for the navigation panel (either theme). */
+.nav-scrollbar {
+  --thumb: color-mix(in srgb, var(--nav-foreground) 28%, transparent);
+  --thumb-hover: color-mix(in srgb, var(--nav-foreground) 55%, transparent);
+}
+@supports not selector(::-webkit-scrollbar) {
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--thumb) transparent;
+  }
+  .thin-scrollbar:hover {
+    scrollbar-color: var(--thumb-hover) transparent;
+  }
+}
+.thin-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-track,
+.thin-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--thumb);
+  border-radius: 9999px;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--thumb-hover);
 }

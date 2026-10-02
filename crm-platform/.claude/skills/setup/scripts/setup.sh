@@ -71,7 +71,7 @@ container_healthy() {
   [ "$status" = "healthy" ] || [ "$status" = "running" ]
 }
 
-infra_up() { container_healthy crm-postgres && container_healthy crm-redis; }
+infra_up() { container_healthy crm-platform-postgres && container_healthy crm-platform-redis; }
 
 port_in_use() {
   local port="$1"
@@ -173,11 +173,11 @@ ok "Contracts and DB packages built"
 #    Level Security silently does nothing (see docs/architecture/multi-tenancy.md).
 # =============================================================================
 step "Checking database roles"
-ROLE_EXISTS="$(docker exec crm-postgres psql -U crm -d crm -tAc \
+ROLE_EXISTS="$(docker exec crm-platform-postgres psql -U crm -d crm -tAc \
   "SELECT 1 FROM pg_roles WHERE rolname='crm_app_user'" 2>/dev/null || true)"
 if [ "$ROLE_EXISTS" != "1" ]; then
   warn "crm_app_user role missing — creating it"
-  docker exec -i crm-postgres psql -U crm -d crm -v ON_ERROR_STOP=1 \
+  docker exec -i crm-platform-postgres psql -U crm -d crm -v ON_ERROR_STOP=1 \
     < docker/postgres/init/01-app-roles.sql
   ok "Created crm_app_user / crm_worker_user"
 else
@@ -196,8 +196,7 @@ ok "Migrations up to date"
 #    it would insert a second batch of demo contacts)
 # =============================================================================
 step "Seeding demo data"
-SEEDED="$(docker exec crm-postgres psql -U crm -d crm -tAc \
-  "SELECT 1 FROM organizations WHERE slug='Admin'" 2>/dev/null || true)"
+SEEDED="$(docker exec crm-platform-postgres psql -U crm -d crm -tAc   "SELECT 1 FROM organizations WHERE slug='Admin'" 2>/dev/null || true)"
 if [ "$SEEDED" = "1" ]; then
   ok "Demo data already seeded — skipping"
 else

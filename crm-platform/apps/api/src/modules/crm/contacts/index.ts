@@ -10,3 +10,10 @@ export { ContactsRepository } from './contacts.repository';
 export { toContactResponse } from './contacts.mapper';
 export { assertContactScope } from './contact-scope';
 export type { ContactRow } from './contacts.repository';
+export { ContactQuotaService } from './contact-quota.service';
+export type { ContactQuota } from './contact-quota.service';
+export {
+  contactConditions,
+  contactScopeCondition,
+  type ResolvedContactFilter,
+} from './contact-conditions';

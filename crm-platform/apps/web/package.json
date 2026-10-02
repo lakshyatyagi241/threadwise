@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@crm/contracts": "workspace:*",
+    "@crm/tax": "workspace:*",
     "@crm/ui": "workspace:*",
     "@tanstack/react-query": "^5.104.0",
     "flag-icons": "^7.5.0",

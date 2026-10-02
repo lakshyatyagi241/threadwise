@@ -6,7 +6,12 @@
  * outside fails the architecture check.
  */
 export { CrmModule } from './crm.module';
-export { ContactsService, ContactsRepository, toContactResponse } from './contacts';
+export {
+  ContactsService,
+  ContactsRepository,
+  ContactQuotaService,
+  toContactResponse,
+} from './contacts';
 export type { ContactRow } from './contacts';
 export {
   FieldSectionsService,
@@ -68,3 +73,57 @@ export {
   toContactMeetingResponse,
 } from './contact-meetings';
 export type { ContactMeetingRow } from './contact-meetings';
+export {
+  ContactGroupsService,
+  ContactGroupsRepository,
+  toContactGroupResponse,
+} from './contact-groups';
+export type { ContactGroupRow } from './contact-groups';
+export { ContactBulkService } from './contact-bulk';
+export {
+  SegmentsService,
+  SegmentsRepository,
+  SegmentActionsService,
+  toSegmentResponse,
+} from './segments';
+export type { SegmentRow } from './segments';
+export { SegmentsWorkerModule } from './segments/segments-worker.module';
+export { ContactImportEngine, ContactImportProcessor } from './contact-import';
+export { ContactImportWorkerModule } from './contact-import/contact-import-worker.module';
+export type { ContactImportJobData } from './contact-import';
+export { ContactDedupeService } from './contact-dedupe';
+export { AttributesService, MergeTagService, renderMergeTags, resolveToken } from './attributes';
+export type { MergeContact, MergeContext } from './attributes';
+export {
+  DealsService,
+  DealBoardService,
+  DealReportsService,
+  DealEngine,
+  toDealResponse,
+} from './deals';
+export type { DealRow } from './deals';
+export { TasksService, TasksRepository, toTaskResponse } from './tasks';
+export type { TaskRow } from './tasks';
+export { TasksWorkerModule } from './tasks/tasks-worker.module';
+export { SalesDocsService, SalesDocsRepository, SALES_DOC_INVOICE_PORT } from './sales-docs';
+export type {
+  InvoiceDraftLine,
+  InvoiceDraftResult,
+  InvoiceDraftSource,
+  SalesDocInvoicePort,
+  SalesDocRow,
+} from './sales-docs';
+export { SalesDocsWorkerModule } from './sales-docs/sales-docs-worker.module';
+export {
+  InvoicesService,
+  InvoicesRepository,
+  PaymentsService,
+  TaxRatesService,
+  InvoiceSettingsService,
+  InvoiceConversionService,
+  toInvoiceSummary,
+} from './invoicing';
+export type { InvoiceRow } from './invoicing';
+export { InvoicingWorkerModule } from './invoicing/invoicing-worker.module';
+export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
+export type { PipelineRow, StageRow } from './pipelines';

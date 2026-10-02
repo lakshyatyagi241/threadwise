@@ -92,6 +92,21 @@ export class TenantDirectory {
     });
   }
 
+  /** Slugs of active organizations holding an active user with this email (login without a workspace). Max 2 rows: only "none, one or many" matters. */
+  async activeOrgSlugsForEmail(email: string): Promise<string[]> {
+    return this.db.privileged(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT o.slug
+        FROM users u
+        JOIN organizations o ON o.id = u.org_id
+        WHERE u.email = ${email} AND u.status = 'active' AND o.status = 'active'
+        ORDER BY o.id
+        LIMIT 2
+      `);
+      return (res.rows as unknown as Array<{ slug: string }>).map((r) => r.slug);
+    });
+  }
+
   async slugExists(slug: string): Promise<boolean> {
     return this.db.privileged(async (tx) => {
       const res = await tx.execute(
@@ -167,7 +182,33 @@ export class TenantDirectory {
           (${orgId}, ${agentRoleId}, 'record.contacts.create', 'allow', 'all'),
           (${orgId}, ${agentRoleId}, 'record.contacts.update', 'allow', 'own'),
           (${orgId}, ${agentRoleId}, 'inbox.conversation.read', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'inbox.conversation.reply', 'allow', 'own')
+          (${orgId}, ${agentRoleId}, 'inbox.conversation.reply', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.deals.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.deals.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.deals.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.pipelines.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.tasks.delete', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.segments.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.segments.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.segments.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.segments.delete', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.send', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.invoices.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.invoices.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.invoices.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.payments.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.payments.create', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.tax-rates.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.booking-types.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.appointments.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.appointments.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.appointments.update', 'allow', 'own')
       `);
 
       const userRes = await tx.execute(sql`

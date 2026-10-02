@@ -48,3 +48,24 @@ describe('cursor pagination', () => {
     expect(decodeCursor(page.page.nextCursor!).id).toBe(3);
   });
 });
+
+describe('cursor microsecond precision', () => {
+  it('keeps the full-precision instant through encode and decode', () => {
+    const createdAt = new Date('2026-10-01T12:01:48.218Z');
+    const raw = encodeCursor({ createdAt, id: 7, createdAtIso: '2026-10-01T12:01:48.218561Z' });
+    const back = decodeCursor(raw);
+    expect(back.createdAtIso).toBe('2026-10-01T12:01:48.218561Z');
+    expect(back.createdAt.getTime()).toBe(createdAt.getTime());
+    expect(back.id).toBe(7);
+  });
+
+  it('buildPage puts the row microseconds into the next cursor', () => {
+    const rows = [1, 2, 3].map((id) => ({
+      id,
+      createdAt: new Date('2026-10-01T12:01:48.218Z'),
+      createdAtIso: '2026-10-01T12:01:48.218561Z',
+    }));
+    const { page } = buildPage(rows, 2);
+    expect(decodeCursor(page.nextCursor!).createdAtIso).toBe('2026-10-01T12:01:48.218561Z');
+  });
+});

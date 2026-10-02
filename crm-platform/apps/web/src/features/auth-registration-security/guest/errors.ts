@@ -85,6 +85,7 @@ const BY_CODE: Record<string, { key: string; field?: string }> = {
   [ERROR_CODES.AUTH_SOCIAL_NO_ACCOUNT]: { key: 'socialNoAccount' },
   [ERROR_CODES.AUTH_IP_BLOCKED]: { key: 'ipBlocked' },
   [ERROR_CODES.AUTH_WORKSPACE_NOT_AVAILABLE]: { key: 'workspaceUnavailable' },
+  [ERROR_CODES.AUTH_WORKSPACE_REQUIRED]: { key: 'workspaceRequired', field: 'orgSlug' },
 };
 
 function retryAfter(err: ApiError): number | undefined {

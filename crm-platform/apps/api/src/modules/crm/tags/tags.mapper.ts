@@ -6,6 +6,7 @@ export function toTagResponse(row: TagRow): TagResponse {
     id: row.uuid,
     name: row.name,
     color: row.color,
+    ...(row.contactCount !== undefined ? { contactCount: row.contactCount } : {}),
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

@@ -1,5 +1,5 @@
 import type { ContactResponse } from '@crm/contracts';
-import type { ContactRow } from './contacts.repository';
+import type { ContactChip, ContactRow } from './contacts.repository';
 
 /**
  * Row -> API shape.
@@ -9,7 +9,11 @@ import type { ContactRow } from './contacts.repository';
  * this function is allowed to put an internal id in a response — keeping the
  * translation in one place is what makes that rule checkable.
  */
-export function toContactResponse(row: ContactRow): ContactResponse {
+export function toContactResponse(
+  row: ContactRow,
+  chips?: { groups?: ContactChip[]; tags?: ContactChip[] },
+): ContactResponse {
+  const chip = (c: ContactChip) => ({ id: c.uuid, name: c.name, color: c.color });
   return {
     id: row.uuid,
     displayId: row.displayId,
@@ -28,6 +32,8 @@ export function toContactResponse(row: ContactRow): ContactResponse {
     status: row.status,
     lostReason: row.lostReason,
     otherLostReason: row.otherLostReason,
+    wonAt: row.wonAt?.toISOString() ?? null,
+    lostAt: row.lostAt?.toISOString() ?? null,
     leadScore: row.leadScore,
     whatsappSubscriptionStatus: row.whatsappSubscriptionStatus,
     smsSubscriptionStatus: row.smsSubscriptionStatus,
@@ -36,7 +42,11 @@ export function toContactResponse(row: ContactRow): ContactResponse {
     faxNumber: row.faxNumber,
     lastActivityAt: row.lastActivityAt?.toISOString() ?? null,
     customFields: row.data ?? {},
+    source: row.source,
+    isUnsubscribed: row.isUnsubscribed,
     isArchived: row.isArchived,
+    ...(chips?.groups ? { groups: chips.groups.map(chip) } : {}),
+    ...(chips?.tags ? { tags: chips.tags.map(chip) } : {}),
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

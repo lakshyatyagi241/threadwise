@@ -17,6 +17,7 @@ import {
   createFieldOptionDependencySchema,
   createFieldOptionSchema,
   createFieldSchema,
+  fieldUsageQuerySchema,
   listFieldsQuerySchema,
   reorderFieldOptionsSchema,
   reorderFieldsSchema,
@@ -26,6 +27,7 @@ import {
   type CreateFieldInput,
   type CreateFieldOptionDependencyInput,
   type CreateFieldOptionInput,
+  type FieldUsageQuery,
   type ListFieldsQuery,
   type ReorderFieldOptionsInput,
   type ReorderFieldsInput,
@@ -54,6 +56,20 @@ export class FieldsController {
   @ApiOperation({ summary: 'List fields for a module (optionally one section)' })
   async list(@Query(zodPipe(listFieldsQuerySchema)) query: ListFieldsQuery) {
     return this.fields.list(query);
+  }
+
+  @Get('usage')
+  @RequirePermission(...anyPropertyPermission('read'))
+  @ApiOperation({ summary: 'How many contacts hold a value for each field of a module' })
+  async usage(@Query(zodPipe(fieldUsageQuerySchema)) query: FieldUsageQuery) {
+    return this.fields.usage(query);
+  }
+
+  @Get('dependencies')
+  @RequirePermission(...anyPropertyPermission('read'))
+  @ApiOperation({ summary: 'Every dependency between the fields of a module' })
+  async listModuleDependencies(@Query(zodPipe(fieldUsageQuerySchema)) query: FieldUsageQuery) {
+    return this.fields.listModuleDependencies(query);
   }
 
   @Get(':id')

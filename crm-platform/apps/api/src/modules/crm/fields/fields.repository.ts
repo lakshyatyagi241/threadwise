@@ -195,6 +195,20 @@ export class FieldsRepository {
     return result.length > 0;
   }
 
+  /** Contacts holding a non-empty value under each key of their custom data. */
+  async countContactsByKey(tx: Tx, orgId: number): Promise<Map<string, number>> {
+    const res = await tx.execute(sql`
+      SELECT k.key AS key, count(*)::int AS n
+      FROM contacts c,
+           jsonb_object_keys(CASE WHEN jsonb_typeof(c.data) = 'object' THEN c.data ELSE '{}'::jsonb END) AS k(key)
+      WHERE c.org_id = ${orgId} AND coalesce(c.data ->> k.key, '') <> ''
+      GROUP BY k.key
+    `);
+    return new Map(
+      (res.rows as Array<{ key: string; n: number }>).map((row) => [row.key, Number(row.n)]),
+    );
+  }
+
   /** Resolves a section's external uuid to its internal id. */
   async resolveSectionId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
     const rows = await tx

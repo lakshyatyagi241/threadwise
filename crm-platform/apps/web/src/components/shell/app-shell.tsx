@@ -1,143 +1,105 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
-import { useState, useTransition, type ReactNode } from 'react';
-import { Badge, Button, cn } from '@crm/ui';
-import { LOCALES } from '@/i18n/locales';
-import { NAV_GROUPS, type ResolvedNavItem } from '@/features/_registry/types';
-import { setLocale, setTheme } from './actions';
+import { usePathname } from 'next/navigation';
+import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import type { ResolvedNavItem } from '@/features/_registry/types';
+import { useStoredValue } from '@/lib/use-stored-value';
+import { NavDrawer, NavRail } from './nav-rail';
+import { activeItemId, toSections } from './nav-model';
+import { TopBar, type WalletChipData } from './top-bar';
+import type { ShellUser } from './user-menu';
+
+export const NAV_PINNED_KEY = 'shell:nav:pinned';
 
 interface Props {
-  user: { fullName: string; email: string; avatarUrl?: string | null };
+  user: ShellUser;
   nav: ResolvedNavItem[];
   theme: 'light' | 'dark';
   /** Workspace switcher and similar header content owned by a domain. */
   headerStart?: ReactNode;
+  /** Card pinned under the menu (the workspace switcher). It reads `useNavCollapsed()` to shrink with the rail. */
+  navFooter?: ReactNode;
   /** Persistent notices above the page (email verification, trial). */
   banners?: ReactNode;
+  /** Optional pill in the middle of the top bar (see `AnnouncementPill`). */
+  announcement?: ReactNode;
+  /** Optional balance chip; omitted until a billing domain provides one. */
+  wallet?: WalletChipData;
+  /** Unread notifications for the bell; 0 or absent shows no count. */
+  notificationCount?: number;
+  /** The live notification bell (see features/notifications-activity-audit); when given it replaces the static one. */
+  bell?: ReactNode;
   children: ReactNode;
 }
 
-export function AppShell({ user, nav, theme, headerStart, banners, children }: Props) {
-  const t = useTranslations();
-  const locale = useLocale();
-  const pathname = usePathname();
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [, start] = useTransition();
-  const [current, setCurrent] = useState(theme);
+/** Screens the top bar's bell and gear point at, found in the menu by id (they stay disabled until the screen exists). */
+const BELL_ID = 'notifications';
+const GEAR_ID = 'account';
 
-  const toggleTheme = () => {
-    const next = current === 'dark' ? 'light' : 'dark';
-    setCurrent(next);
-    document.documentElement.dataset.theme = next;
-    start(() => void setTheme(next));
-  };
-  const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.replace('/login');
-  };
+/**
+ * The signed-in frame: a dark navigation column (a slim icon rail, a labelled panel when pinned open, a drawer on
+ * phones) beside a top bar and the page. The menu comes entirely from the resolved registry; nothing here names a domain's screens.
+ */
+export function AppShell({
+  user,
+  nav,
+  theme,
+  headerStart,
+  navFooter,
+  banners,
+  announcement,
+  wallet,
+  notificationCount,
+  bell: liveBell,
+  children,
+}: Props) {
+  const pathname = usePathname();
+  const [drawer, setDrawer] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const [pinnedRaw, setPinned] = useStoredValue(NAV_PINNED_KEY);
+  const pinned = pinnedRaw === '1';
+
+  const sections = useMemo(() => toSections(nav), [nav]);
+  const activeId = activeItemId(nav, pathname);
+  const closeDrawer = useCallback(() => setDrawer(false), []);
+
+  const bell = nav.find((i) => i.id === BELL_ID);
+  const gear = nav.find((i) => i.id === GEAR_ID);
 
   return (
-    <div className="flex min-h-screen">
-      <aside
-        className={cn(
-          'w-64 shrink-0 bg-sidebar p-3 text-sidebar-foreground max-md:fixed max-md:inset-y-0 max-md:z-20',
-          open ? 'max-md:block' : 'max-md:hidden',
-        )}
-      >
-        <div className="px-2 py-3 text-lg font-semibold text-white">{t('common.appName')}</div>
-        <nav className="mt-2 space-y-4">
-          {NAV_GROUPS.map((group) => {
-            const items = nav.filter((n) => n.group === group);
-            if (!items.length) return null;
-            return (
-              <div key={group}>
-                <div className="px-2 pb-1 text-xs uppercase tracking-wide opacity-60">
-                  {t(`shell.groups.${group}`)}
-                </div>
-                {items.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    aria-disabled={item.locked || undefined}
-                    className={cn(
-                      'flex items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-sidebar-active',
-                      pathname.startsWith(item.href) && 'bg-sidebar-active text-white',
-                      item.locked && 'opacity-60',
-                    )}
-                  >
-                    <span>{t(item.labelKey)}</span>
-                    {item.locked && <Badge tone="warning">{t('shell.locked')}</Badge>}
-                  </Link>
-                ))}
-              </div>
-            );
-          })}
-        </nav>
-      </aside>
+    <div className="flex min-h-dvh">
+      <NavRail
+        sections={sections}
+        activeId={activeId}
+        pinned={pinned}
+        onTogglePinned={() => setPinned(pinned ? '0' : '1')}
+        footer={navFooter}
+      />
+      <NavDrawer
+        open={drawer}
+        onClose={closeDrawer}
+        sections={sections}
+        activeId={activeId}
+        returnFocusTo={menuButton}
+        footer={navFooter}
+      />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between gap-2 border-b border-border px-4 py-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="md:hidden"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={t('shell.openMenu')}
-          >
-            ☰
-          </Button>
-          <div className="min-w-0">{headerStart}</div>
-          <div className="ms-auto flex items-center gap-2">
-            <select
-              aria-label={t('shell.language')}
-              value={locale}
-              onChange={(e) =>
-                start(async () => {
-                  await setLocale(e.target.value);
-                  router.refresh();
-                })
-              }
-              className="h-8 rounded-md border border-border bg-background px-2 text-sm"
-            >
-              {LOCALES.map((l) => (
-                <option key={l} value={l}>
-                  {l}
-                </option>
-              ))}
-            </select>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={toggleTheme}
-              aria-label={t('shell.theme')}
-            >
-              {current === 'dark' ? t('shell.themeLight') : t('shell.themeDark')}
-            </Button>
-            <Link
-              href="/account"
-              className="flex items-center gap-2 rounded-md px-1 text-sm hover:bg-muted"
-              title={user.email}
-            >
-              {user.avatarUrl ? (
-                <img src={user.avatarUrl} alt="" className="size-7 rounded-full object-cover" />
-              ) : (
-                <span className="flex size-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                  {user.fullName.slice(0, 1).toUpperCase()}
-                </span>
-              )}
-              <span className="hidden text-muted-foreground sm:inline">{user.fullName}</span>
-            </Link>
-            <Button variant="ghost" size="sm" onClick={() => void logout()}>
-              {t('shell.logout')}
-            </Button>
-          </div>
-        </header>
+        <TopBar
+          user={user}
+          theme={theme}
+          onOpenMenu={() => setDrawer(true)}
+          menuButtonRef={menuButton}
+          headerStart={headerStart}
+          announcement={announcement}
+          wallet={wallet}
+          notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
+          notificationCount={notificationCount}
+          bell={liveBell}
+          settingsHref={gear && !gear.comingSoon ? gear.href : undefined}
+        />
         {banners}
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page. */}
+        <main className="relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

@@ -6,6 +6,8 @@ Goal: rebuild every Reference (CodeCanyon Laravel + Node, v1.7.0) feature inside
 BullMQ, Next.js) with three people (Lakshya, Vedant, Punya) working in parallel with minimal merge conflicts.
 Reference is reference only: never copy its code, assets or text.
 
+**Rules for every port: [PORTING_RULES.md](PORTING_RULES.md)** (features unchanged, same UI rebuilt on our stack, real backend wiring, definition of done).
+
 ## Where things are
 
 | What                                                                     | Where                                                                                                                                                                   |
@@ -85,7 +87,7 @@ the device idle-logout consumer (037), a WebKit/Safari pass and a signed-in Refe
 | companies-projects-tasks                          | CTP    | writer interrupted, no file      |          |       |
 | sales-docs-proposals                              | SALES  | writer interrupted, no file      |          |       |
 | invoicing                                         | INV    | writer interrupted, no file      |          |       |
-| appointments-booking                              | APPT   | not started                      |          |       |
+| appointments-booking                              | APPT   | written, API port built          | 40       | 1021  |
 | catalog-products                                  | CAT    | not started                      |          |       |
 | storefront-builder                                | STORE  | not started                      |          |       |
 | checkout-orders-merchant-payments                 | CHK    | not started                      |          |       |

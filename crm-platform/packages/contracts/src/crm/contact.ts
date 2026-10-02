@@ -2,6 +2,10 @@ import { z } from 'zod';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
 import { lifecycleStageSchema, recordLifecycleSchema } from '../common/enums';
 import { paginationQuerySchema } from '../common/pagination';
+import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
+import { contactGroupRefSchema } from '../contacts-attributes-tags/contact-group';
+import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
+import type { InvalidCondition } from '../segments/rules';
 
 /**
  * Contact — the reference vertical slice.
@@ -34,6 +38,9 @@ export const contactResponseSchema = z.object({
   /** Meaningful only when status is a "closed lost" value. Options via status_options. */
   lostReason: z.string().nullable(),
   otherLostReason: z.string().nullable(),
+  /** Stamped when the contact enters a won / lost lifecycle stage (Contact stages screen), cleared when it leaves. */
+  wonAt: z.string().datetime().nullable(),
+  lostAt: z.string().datetime().nullable(),
   leadScore: z.number().int().nullable(),
   /** Values are org-configurable via status_options, not a fixed enum here. */
   whatsappSubscriptionStatus: z.string().nullable(),
@@ -44,7 +51,16 @@ export const contactResponseSchema = z.object({
   /** Bumped by note/activity/meeting writes — server-maintained. */
   lastActivityAt: z.string().datetime().nullable(),
   customFields: z.record(z.unknown()),
+  /** Where the contact came from: the import's source knob, "import", an API client... */
+  source: z.string().nullable(),
+  /** Marketing opt-out (TW-CON-017). */
+  isUnsubscribed: z.boolean(),
   isArchived: z.boolean(),
+  /** Only when the request asked for them with `expand`. */
+  groups: z.array(contactGroupRefSchema).optional(),
+  tags: z
+    .array(z.object({ id: uuidSchema, name: z.string(), color: z.string().nullable() }))
+    .optional(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -70,6 +86,10 @@ export const createContactSchema = z
     emailSubscriptionStatus: z.string().max(64).optional(),
     emailConfirmed: z.boolean().optional(),
     faxNumber: z.string().max(32).optional(),
+    /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
+    source: z.string().trim().max(128).optional(),
+    /** Marketing opt-out (TW-CON-017): broadcasts and campaigns skip an opted-out contact. */
+    isUnsubscribed: z.boolean().optional(),
     customFields: z.record(z.unknown()).default({}),
   })
   // A contact with neither a phone nor an email cannot be reached, cannot be
@@ -98,19 +118,47 @@ export const updateContactSchema = z.object({
   emailSubscriptionStatus: z.string().max(64).nullish(),
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
+  source: z.string().trim().max(128).nullish(),
+  /** Marketing opt-out. Turning it on stamps `unsubscribedAt`; turning it off clears it. */
+  isUnsubscribed: z.boolean().optional(),
   customFields: z.record(z.unknown()).optional(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409. */
   rowVersion: z.number().int().positive(),
 });
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
 
-export const listContactsQuerySchema = paginationQuerySchema.extend({
-  q: z.string().min(1).max(200).optional().describe('Free-text search over name/email/phone'),
-  ownerId: uuidSchema.optional(),
-  lifecycleStage: z.string().optional(),
-  includeArchived: z.coerce.boolean().default(false),
-});
+/** Page sizes: Reference offered 12/50/100/500/1000 and snapped anything else to 12; here any size up to 1000. */
+export const CONTACT_LIST_MAX_LIMIT = 1000;
+
+export const listContactsQuerySchema = paginationQuerySchema
+  .extend({
+    ...contactFilterShape,
+    limit: z.coerce.number().int().min(1).max(CONTACT_LIST_MAX_LIMIT).default(50),
+    /** `groups`, `tags` or `groups,tags`: adds the chips for each row. */
+    expand: queryList(z.enum(['groups', 'tags'])).optional(),
+    /** Adds `meta.total`, the count of every contact matching the filter ("Showing 1-50 of N"). */
+    includeTotal: queryBoolean().default(false),
+    /** A single tag, the way Reference's chip link sends it; merged into `tagIds`. */
+    tagId: z.string().uuid().optional(),
+  })
+  .refine((v) => !(v.groupId && v.noGroup), {
+    message: 'groupId and noGroup cannot be combined',
+    path: ['noGroup'],
+  })
+  .describe(
+    'Free-text search over name/email/phone digits, plus group, tag, source and consent filters',
+  );
 export type ListContactsQuery = z.infer<typeof listContactsQuerySchema>;
+
+/** The page envelope, plus `meta.total` when the request asked for `includeTotal`. */
+export type ContactListResponse = {
+  data: ContactResponse[];
+  page: { nextCursor: string | null; hasMore: boolean; limit: number };
+  /** `approximate`: the total of a segment's contacts could not be counted in 3 seconds and is the last known value or an estimate. */
+  meta?: { total: number; approximate?: boolean };
+  /** Only when the request filtered by `segmentId`: the segment's conditions that match nothing because something they point at was deleted. */
+  segment?: { id: string; invalidConditions: InvalidCondition[] };
+};
 
 /** Lightweight rows for pickers/typeaheads — never the full record. */
 export const contactSelectItemSchema = z.object({
@@ -143,6 +191,9 @@ export const bulkUpdateContactsSchema = z.object({
   values: z.object({
     ownerId: uuidSchema.nullish(),
     lifecycleStage: z.string().min(1).nullish(),
+    /** Needed when `lifecycleStage` is a lost stage (the same reason is recorded on every contact moved). */
+    lostReason: z.string().max(255).nullish(),
+    otherLostReason: z.string().max(500).nullish(),
     status: z.string().max(64).nullish(),
     customFields: z.record(z.unknown()).optional(),
   }),

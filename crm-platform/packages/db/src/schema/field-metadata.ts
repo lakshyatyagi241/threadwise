@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import {
   boolean,
   index,
@@ -156,6 +157,14 @@ export const statusOptions = pgTable(
     position: integer('position').notNull().default(0),
     isDefault: boolean('is_default').notNull().default(false),
     isActive: boolean('is_active').notNull().default(true),
+    /** Lifecycle stages only: entering one stamps the contact's won_at / lost_at (never both). */
+    isWon: boolean('is_won').notNull().default(false),
+    isLost: boolean('is_lost').notNull().default(false),
+    /**
+     * Contact statuses only: the lifecycle_stage option this status belongs to. NULL = valid in every stage. A composite
+     * FK (org_id, stage_option_id) -> status_options(org_id, id) in the migration; the service checks the target's group.
+     */
+    stageOptionId: idColumn('stage_option_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -170,6 +179,11 @@ export const statusOptions = pgTable(
       t.value,
     ),
     index('idx_status_options_org_group').on(t.orgId, t.moduleKey, t.optionGroup, t.position),
+    index('idx_status_options_stage')
+      .on(t.orgId, t.stageOptionId)
+      .where(sql`stage_option_id IS NOT NULL`),
+    // uq_status_options_one_default (migration 20261009090000): one default per scope, i.e. per (org, module, group,
+    // COALESCE(stage_option_id, 0)). An expression index, so it is not declared here (verify-schema cannot reflect it).
   ],
 );
 

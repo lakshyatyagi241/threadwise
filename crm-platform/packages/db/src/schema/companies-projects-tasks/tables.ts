@@ -97,8 +97,10 @@ export const tasks = pgTable(
     notes: text('notes'),
     priority: text('priority').notNull().default('medium'),
     status: text('status').notNull().default('open'),
-    relatedType: text('related_type'),
-    relatedId: idColumn('related_id'),
+    contactId: idColumn('contact_id'),
+    dealId: idColumn('deal_id'),
+    companyId: idColumn('company_id'),
+    source: text('source').notNull().default('manual'),
     dueAt: timestamp('due_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),
@@ -124,10 +126,24 @@ export const tasks = pgTable(
       columns: [t.orgId, t.assigneeId],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
-    index('idx_tasks_assignee_id').on(t.orgId, t.assigneeId),
-    index('idx_tasks_due_at').on(t.orgId, t.dueAt),
-    index('idx_tasks_related_type_related_id').on(t.orgId, t.relatedType, t.relatedId),
-    index('idx_tasks_status_due_at').on(t.orgId, t.status, t.dueAt),
+    foreignKey({
+      name: 'fk_tasks_contact_id',
+      columns: [t.orgId, t.contactId],
+      foreignColumns: [contacts.orgId, contacts.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_tasks_deal_id',
+      columns: [t.orgId, t.dealId],
+      foreignColumns: [deals.orgId, deals.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_tasks_company_id',
+      columns: [t.orgId, t.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+    }).onDelete('set null'),
+    index('idx_tasks_org_created').on(t.orgId, t.createdAt, t.id),
+    // The open-task, assignee, done, link, created_by and reminder indexes are partial or expression indexes and live in
+    // migrations/20261004100000_task_model_reshape.sql; the CHECKs (status, priority, done stamp) live there too.
   ],
 );
 

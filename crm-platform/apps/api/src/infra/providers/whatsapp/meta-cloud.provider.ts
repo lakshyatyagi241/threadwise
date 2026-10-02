@@ -12,14 +12,17 @@ import type {
   WhatsAppProvider,
 } from './whatsapp.port';
 import { OUTBOUND_SEND_GUARD, type OutboundSendGuard } from './send-guard.port';
+import { buildTemplateMessage } from './meta-template-payload';
+
+/** The Graph API normally answers in well under a second; a hung connection must not hold a broadcast worker. */
+const SEND_TIMEOUT_MS = 15_000;
 
 /**
  * Meta WhatsApp Cloud API adapter.
  *
- * Send methods are stubbed until channel credential storage lands; the
- * signature verification and webhook parsing are real, because those are what
- * the inbound path needs first and getting them wrong is a security issue
- * rather than a missing feature.
+ * `sendTemplate` is real (text templates with positional variables; the broadcast sender uses it). `sendText` is still a
+ * stub until the inbox reply pipeline lands. Signature verification and webhook parsing are real, because getting them
+ * wrong is a security issue rather than a missing feature.
  */
 @Injectable()
 export class MetaCloudProvider implements WhatsAppProvider {
@@ -46,12 +49,27 @@ export class MetaCloudProvider implements WhatsAppProvider {
       source: params.screen?.source,
     });
     // No footer: approved template content cannot be changed after submission.
-    return this.post(credentials, {
-      messaging_product: 'whatsapp',
-      to: params.to,
-      type: 'template',
-      template: { name: params.templateName, language: { code: params.language } },
+    const res = await fetch(this.baseUrl(credentials), {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${credentials.accessToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(buildTemplateMessage(params)),
+      signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
     });
+    const json = (await res.json().catch(() => ({}))) as {
+      messages?: Array<{ id?: string }>;
+      error?: { message?: string; code?: number };
+    };
+    if (!res.ok) {
+      throw new Error(json.error?.message ?? `Meta Cloud API answered ${res.status}`);
+    }
+    const providerMessageId = json.messages?.[0]?.id;
+    if (!providerMessageId)
+      throw new Error('Meta Cloud API accepted the send but returned no message id');
+    this.logger.debug({ template: params.templateName, providerMessageId }, 'template sent');
+    return { providerMessageId, acceptedAt: new Date() };
   }
 
   async sendText(credentials: ChannelCredentials, params: SendTextParams): Promise<SendResult> {

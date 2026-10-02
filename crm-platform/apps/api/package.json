@@ -27,6 +27,7 @@
     "@clerk/backend": "^3.18.1",
     "@crm/contracts": "workspace:*",
     "@crm/db": "workspace:*",
+    "@crm/tax": "workspace:*",
     "@nestjs/bullmq": "^11.0.1",
     "@nestjs/common": "^11.0.5",
     "@nestjs/config": "^4.0.0",
