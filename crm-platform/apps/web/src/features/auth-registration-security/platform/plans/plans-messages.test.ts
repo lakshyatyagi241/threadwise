@@ -76,6 +76,9 @@ describe('plan catalogue messages (operator console)', () => {
     // other domains add their own entries, labelled in their own message files
     for (const item of OPERATOR_NAV.filter((i) =>
       i.labelKey.startsWith('auth-registration-security.'),
+    // Entries other domains add carry their own namespace and are checked by that domain's tests.
+    for (const item of OPERATOR_NAV.filter((i) =>
+      i.labelKey.startsWith('auth-registration-security.platform.'),
     )) {
       const key = item.labelKey.replace('auth-registration-security.platform.', '');
       expect(en[key], key).toBeTypeOf('string');
