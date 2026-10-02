@@ -17,10 +17,12 @@ import { SendPolicyService } from '../auth';
 import {
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
+  WALLET_GATE,
   isKnownTimeZone,
   templateRefusals,
   type SenderDirectory,
   type TemplateDirectory,
+  type WalletGate,
 } from '../broadcasts';
 import { CAMPAIGN_PLAN_GATE, type CampaignPlanGate } from './_shims/tokens';
 import { CampaignAudienceService, hasAudience } from './audience.service';
@@ -79,6 +81,7 @@ export class CampaignsService {
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(CAMPAIGN_PLAN_GATE) private readonly plan: CampaignPlanGate,
+    @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
 
   async create(input: CreateCampaignInput): Promise<{ campaign: Campaign; message: string }> {
@@ -98,6 +101,11 @@ export class CampaignsService {
           'CAMP_NO_RECIPIENTS',
           'Pick at least one contact, group, tag or number to send to.',
         );
+      }
+      // A launch needs a funded wallet (TW-WALLET-013), checked before the campaign or any recipient row exists. A draft launches
+      // nothing, so it is not checked until it is started.
+      if (status !== 'draft') {
+        await this.wallet.precheck(orgId, contactIds.length, { source: 'campaign' });
       }
       const resolved = await this.resolve(tx, orgId, input);
       const id = await this.repo.insert(tx, orgId, {

@@ -369,39 +369,39 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-WALLET-001 | todo |  |  |
-| TW-WALLET-002 | todo |  |  |
-| TW-WALLET-003 | todo |  |  |
-| TW-WALLET-004 | todo |  |  |
-| TW-WALLET-005 | todo |  |  |
-| TW-WALLET-006 | todo |  |  |
-| TW-WALLET-007 | todo |  |  |
-| TW-WALLET-008 | todo |  |  |
-| TW-WALLET-009 | todo |  |  |
-| TW-WALLET-010 | todo |  |  |
-| TW-WALLET-011 | todo |  |  |
-| TW-WALLET-012 | todo |  |  |
-| TW-WALLET-013 | todo |  |  |
-| TW-WALLET-014 | todo |  |  |
-| TW-WALLET-015 | todo |  |  |
-| TW-WALLET-016 | todo |  |  |
-| TW-WALLET-017 | todo |  |  |
-| TW-WALLET-018 | todo |  |  |
-| TW-WALLET-019 | todo |  |  |
-| TW-WALLET-020 | todo |  |  |
-| TW-WALLET-021 | todo |  |  |
-| TW-WALLET-022 | todo |  |  |
-| TW-WALLET-023 | todo |  |  |
-| TW-WALLET-024 | todo |  |  |
-| TW-WALLET-025 | todo |  |  |
-| TW-WALLET-026 | todo |  |  |
-| TW-WALLET-027 | todo |  |  |
-| TW-WALLET-028 | todo |  |  |
-| TW-WALLET-029 | todo |  |  |
-| TW-WALLET-030 | todo |  |  |
-| TW-WALLET-031 | todo |  |  |
-| TW-WALLET-032 | todo |  |  |
-| TW-WALLET-033 | todo |  |  |
+| TW-WALLET-001 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-002 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-003 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-004 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-005 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-006 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-007 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-008 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-009 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-010 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-011 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-012 | done |  | emitters wired in broadcasts, campaigns, chat; scheduled/SMS/WABA/flow/api have no producer yet |
+| TW-WALLET-013 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-014 | wontfix |  | intended: see parity file |
+| TW-WALLET-015 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-016 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-017 | wontfix |  | intended: see parity file |
+| TW-WALLET-018 | wontfix |  | intended: see parity file |
+| TW-WALLET-019 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-020 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-021 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-022 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-023 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-024 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-025 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-026 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-027 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-028 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-029 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-030 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-031 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-032 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-033 | wontfix |  | intended: see parity file |
 
 ## notifications-activity-audit (notif)
 
