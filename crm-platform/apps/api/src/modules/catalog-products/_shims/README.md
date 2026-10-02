@@ -13,5 +13,9 @@ the same token in `catalog-products.module.ts` and delete the shim.
 Not behind a shim, listed because they are still open:
 
 - The plan-first message billing (`OverflowBilling::consumeOne`) of each catalog message is blocked on wallet-message-billing.
-- The inbound hooks that call `CatalogConciergeService` and `CatalogOrderAckService` belong to the inbox/webhook domain.
+- The inbound hooks that call `CatalogConciergeService` and `CatalogOrderAckService`: `WABA_INBOUND_SINK` is a single binding the inbox owns
+  (still `LoggingInboundSink`), the chat ingest emits no per-message outbox event, and no module captures a WhatsApp cart order yet.
+  Bind them in the inbox's sink (or a per-message event) when it lands.
+- The inbox mirror is real (`inbox-conversation-mirror.ts`, through the chat-conversations facade); `ConversationMirror` stays a token
+  here only because the send service and the tests inject it.
 - The image upload control of the product form needs the storage domain (F5); products take `imageUrl` and `galleryUrls`.
