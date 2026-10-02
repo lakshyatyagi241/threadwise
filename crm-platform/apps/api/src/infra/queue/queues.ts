@@ -26,6 +26,8 @@ export const QUEUES = {
   BULK_JOBS: 'bulk-jobs',
   /** Contact CSV imports above the synchronous size (WD-CON-027). Own queue: a huge file must not delay another bulk job. */
   CON_IMPORT: 'con-import',
+  /** One job per broadcast: sends its pending recipients (WD-BCAST-016). Own queue so a slow provider cannot hold campaigns. */
+  BCAST_DISPATCH: 'bcast-dispatch',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
