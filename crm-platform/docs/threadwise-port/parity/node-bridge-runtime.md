@@ -142,3 +142,11 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
 - Not verified: a live number. Tested with a fake socket against real Postgres, Redis and the inbox workers (`inbox-bridge.e2e.spec.ts`).
 - Touches the chat-conversations zone (Lakshya): channel kind and peer rule, `ChannelAdapterRegistry.register` and export, `ChannelRegistryService.syncDeviceChannel`,
   `ChannelsRepository.byExternal`, the `QR` badge in the inbox web.
+
+## Campaigns and health (TW-NODE-015, 040, 004)
+
+- `campaign-unofficial.e2e.spec.ts`: the real campaign dispatcher sends each recipient through the real engine adapter to a fake socket; delivery and read acks move the
+  recipient forward through the campaign's own receipt rules; a failed send does not stop the others. Not run against a live number.
+- Health: each worker writes `wa:worker:<id>` (90 s) every pass and removes it on shutdown; `NodeWorkerStatus` counts them and the devices they hold, and the console
+  health card's Node check shows that ("1 worker · 2 devices connected"). With no worker reporting it falls back to the saved-address probe, as before.
+- Not changed: template-kind campaigns on the unofficial engine and Twilio (a Meta template has no plain-text body here); interactive buttons are ignored on these engines.
