@@ -38,3 +38,36 @@ tunnel locally). Events: `telegram.bot.connected { uuid, username, reconnected }
 - Another workspace's bot answers 404 for every action.
 
 Not enforced yet: the plan flags `access_telegram`, `telegram_broadcasts` and the bot cap (see the parity file).
+
+## Inbound webhook (TW-TG-003 to 006)
+
+`POST /v2/telegram/inbound/:token` is where Telegram pushes (public, no sign-in, not in the API docs). `:token` is the bot's
+routing token (the last part of its `webhookUrl`); the secret set on `setWebhook` must come back in the
+`X-Telegram-Bot-Api-Secret-Token` header. It always answers 200 `{ ok: true, note }` so Telegram never retries: an unknown token
+(`unknown bot`), a wrong or missing secret (`bad secret`, compared in constant time) and a paused bot (`bot disabled`) are
+acknowledged and ignored. Only more than 120 requests a minute for one token answers 429.
+
+The tenant is found with `tg_bot_lookup(token)`, a SECURITY DEFINER function that returns two ids and nothing else; everything
+after runs under that organization.
+
+What an update does, in this order:
+
+1. **Payment check** (`pre_checkout_query`): approved at once, before anything is written (`pre_checkout_query`).
+2. **Button tap** (`callback_query`): answered so the button stops spinning; a tap whose data is `tqr:<label>` is replayed as a
+   typed message with that label.
+3. **`chat_join_request`, `poll_answer`**: acknowledged only (the bot's last-inbound time moves).
+4. **A message** (`message`, `channel_post`, `edited_message`, `edited_channel_post`): written into the inbox.
+   - Thread `channel = telegram`, key `tg:<bot row id>:<chat id>` (one per bot and chat, serialised so two updates at once make one).
+     Title: chat title, chat username, sender username, first and last name, else "Telegram". Unread goes up by one, a resolved
+     thread reopens, the preview is the first 120 characters.
+   - The sender is one contact per organization keyed by the Telegram user id (the chat id for a channel post), source "Telegram DM".
+   - Text and media: photo (largest size), video, voice, audio, animation (as video), document, sticker (its emoji as an image),
+     place (`📍 lat, lon`), contact card (`👤 name phone`), text, else a service line ("New member joined", "Member left",
+     "Group updated", `[message]`). The file id is kept in the message's `meta.telegram.file_id`.
+   - A `successful_payment` is its own row, `Payment received: <CUR> <amount>` (zero-decimal currencies whole, others over 100),
+     with `meta.payment`; it runs no flow or auto-reply.
+   - After the message is stored, automation runs: a flow first and, only when no flow consumed it, routing, the assigned AI agent
+     or a keyword reply. A failure there is logged and never blocks the stored message.
+
+Not yet: downloading media into our storage (the message keeps its caption and file id, no file) and the flow, routing and
+auto-reply hooks, which are stand-ins until their owners export them (see the parity file).

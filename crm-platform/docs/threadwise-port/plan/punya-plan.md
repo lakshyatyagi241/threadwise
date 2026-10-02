@@ -59,12 +59,12 @@ Order: telegram, facebook, instagram, then shopify-woocommerce.
 
 Inventory written 2026-10-02: `docs/threadwise-port/inventory/channel-telegram.md` (TW-TG-001 to 019). Build order, one commit and push per step:
 
-| Step | What                                                       | Features           |
-| ---- | ---------------------------------------------------------- | ------------------ |
-| T1   | Bots: connect by token, manage, plan gates, hub API (DONE) | 002, 007, 019, 001 |
-| T2   | Inbound webhook, inbox ingest (shim), taps, payments       | 003, 004, 005, 006 |
-| T3   | Sender: reply through the bot, template keyboard           | 008, 009           |
-| T4   | Audience and broadcasts API with a BullMQ sender           | 010, 011-014       |
-| T5   | Web: hub, broadcast list and compose                       | 001, 011, 012      |
-| T6   | MTProto account and @BotFather (needs the Node bridge)     | 015-017            |
-| T7   | Flow hand-off and the two Node callbacks (shim)            | 018                |
+| Step | What                                                        | Features           |
+| ---- | ----------------------------------------------------------- | ------------------ |
+| T1   | Bots: connect by token, manage, plan gates, hub API (DONE)  | 002, 007, 019, 001 |
+| T2   | Inbound webhook, inbox ingest (shim), taps, payments (DONE) | 003, 004, 005, 006 |
+| T3   | Sender: reply through the bot, template keyboard            | 008, 009           |
+| T4   | Audience and broadcasts API with a BullMQ sender            | 010, 011-014       |
+| T5   | Web: hub, broadcast list and compose                        | 001, 011, 012      |
+| T6   | MTProto account and @BotFather (needs the Node bridge)      | 015-017            |
+| T7   | Flow hand-off and the two Node callbacks (shim)             | 018                |

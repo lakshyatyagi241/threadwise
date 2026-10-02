@@ -38,6 +38,10 @@ const fakeFactory: TelegramApiFactory = {
         calls.push({ token, method: 'deleteWebhook', args: [] });
         return Promise.resolve({ ok: true });
       },
+      answerCallbackQuery: () => Promise.resolve({ ok: true }),
+      answerPreCheckoutQuery: () => Promise.resolve({ ok: true }),
+      downloadFile: () => Promise.resolve(null),
+      getUserProfilePhoto: () => Promise.resolve(null),
     };
   },
 };
