@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const AUTH_DIR = resolve(__dirname, '../../../src/modules/auth');
@@ -25,7 +25,7 @@ describe('privileged database access in the auth module', () => {
     ]);
     const offenders = files(AUTH_DIR)
       .filter((f) => /\.privileged\(/.test(readFileSync(f, 'utf8')))
-      .map((f) => relative(AUTH_DIR, f))
+      .map((f) => relative(AUTH_DIR, f).split(sep).join('/'))
       .filter((f) => !allowed.has(f));
     expect(offenders).toEqual([]);
   });

@@ -1,0 +1,202 @@
+{
+  "localization-translation": {
+    "nav": {
+      "translation": "Translation",
+      "languages": "Languages",
+      "providers": "Translation providers",
+      "usage": "Translation usage",
+      "group": "Localization"
+    },
+    "errors": {
+      "unexpected": "Something went wrong. Try again.",
+      "conflict": "Someone else changed this. The list was reloaded, so check it and try again.",
+      "languageIsDefault": "Can't switch off or delete the default language. Set another language as default first.",
+      "languageInactive": "Activate the language first before setting it as default.",
+      "credentialsMissing": "Fill in the required credentials first.",
+      "providerInactive": "Only an active provider can be the default.",
+      "lockdownNoOfficial": "Activate and configure at least one official paid provider (DeepL or Google Cloud) before enabling lockdown.",
+      "planGate": "Your plan does not include translation."
+    },
+    "switcher": {
+      "label": "Change language",
+      "menu": "Languages",
+      "failed": "The language could not be changed. Try again."
+    },
+    "languages": {
+      "kicker": "Admin · System · Languages",
+      "titleLead": "Platform",
+      "titleEm": "languages",
+      "description": "Manage which languages new users and workspaces can pick. The \"default\" language is the fallback for every newly created account.",
+      "loading": "Loading languages",
+      "stats": {
+        "total": "Total",
+        "totalHint": "configured",
+        "active": "Active",
+        "activeHint": "visible to users",
+        "default": "Default",
+        "defaultHint": "fallback for new accounts"
+      },
+      "catalog": "Catalog",
+      "allLanguages": "All languages",
+      "columns": {
+        "name": "Name",
+        "code": "Code",
+        "dir": "Dir",
+        "active": "Active",
+        "default": "Default",
+        "actions": "Actions"
+      },
+      "on": "On",
+      "off": "Off",
+      "defaultBadge": "Default",
+      "set": "Set",
+      "toggleLabel": "Switch {name} on or off",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "empty": "No languages yet.",
+      "flash": {
+        "activated": "{name} activated.",
+        "disabled": "{name} disabled.",
+        "nowDefault": "{name} is now the default language.",
+        "removed": "Language removed."
+      },
+      "confirmDelete": {
+        "title": "Delete language",
+        "message": "Remove {name}?"
+      },
+      "pack": {
+        "kicker": "Language pack",
+        "title": "Fixed at {count} languages",
+        "body": "Each active language is backed by a translation JSON file shipped with the platform. New language slots will appear here when the translation pack is extended.",
+        "note": "You can still toggle active state, edit native name + direction, and pick the platform default from the table on the left."
+      },
+      "usedFor": {
+        "title": "How this is used",
+        "body": "Active languages show up in the user-side profile language switcher and in template / auto-reply pickers. The default applies to brand-new accounts that haven't picked one."
+      }
+    },
+    "providers": {
+      "kicker": "Admin · System",
+      "title": "Translation providers",
+      "description": "Multi-language auto-reply uses one of these providers to translate inbound messages and craft replies in the customer's language. MyMemory is active out-of-box (free, no key). Plug in DeepL / Google Cloud / LibreTranslate for higher quality or self-hosted privacy.",
+      "loading": "Loading providers",
+      "on": "On",
+      "off": "Off",
+      "cancel": "Cancel",
+      "lockdown": {
+        "title": "Compliance lockdown",
+        "description": "When on, the fallback chain skips <mono>{slugs}</mono> and routes auto-reply translation only through official paid APIs (DeepL, Google Cloud). Required by some enterprise security policies that prohibit unofficial 3rd-party endpoints.",
+        "enable": "Enable lockdown",
+        "disable": "Disable lockdown",
+        "confirmOn": "Turn lockdown ON? Free drivers will be skipped — only paid APIs will translate.",
+        "confirmOff": "Turn lockdown OFF? Free drivers will rejoin the fallback chain."
+      },
+      "flash": {
+        "activated": "{name} activated.",
+        "disabled": "{name} disabled.",
+        "nowDefault": "{name} is now the default provider.",
+        "saved": "{name} saved.",
+        "lockdownOn": "Compliance lockdown is on.",
+        "lockdownOff": "Compliance lockdown is off."
+      },
+      "empty": {
+        "title": "No translation providers configured",
+        "body": "Run the translation provider seed to populate this list."
+      },
+      "active": "Active",
+      "disabled": "Disabled",
+      "defaultBadge": "Default",
+      "skipped": "Lockdown · skipped",
+      "skippedTitle": "Skipped because compliance lockdown is on.",
+      "slug": "slug: {slug}",
+      "makeDefault": "Make default",
+      "activate": "Activate",
+      "disable": "Disable",
+      "keepSecret": "••••••• (leave blank to keep)",
+      "noCredentials": "No credentials required — this provider works out of the box.",
+      "sortOrder": "Sort order",
+      "sortOrderHint": "Lower = higher priority in the fallback chain.",
+      "save": "Save {name}"
+    },
+    "usage": {
+      "kicker": "Admin · System",
+      "title": "Translation usage",
+      "description": "Volume + estimated cost of every auto-reply translation. Bundled dictionary hits and 24h cache hits aren't billable and don't appear here — these are the wire calls.",
+      "from": "From",
+      "to": "To",
+      "apply": "Apply",
+      "badRange": "The start date must not be after the end date.",
+      "loading": "Loading usage",
+      "failed": "Could not load usage.",
+      "totals": {
+        "calls": "Wire calls",
+        "chars": "Chars translated",
+        "charsOut": "out: {count}",
+        "cost": "Estimated cost",
+        "costHint": "based on published per-char rates",
+        "fallbackHits": "Fallback hits",
+        "fallbackHint": "primary driver failed, chain caught"
+      },
+      "byProvider": "By provider",
+      "emptyProvider": "No translation calls in this range.",
+      "free": "free",
+      "last30": "Last 30 days",
+      "timelineHint": "hover each bar for date / chars / cost",
+      "topWorkspaces": "Top spending workspaces",
+      "emptyWorkspaces": "No paid-tier translations in this range.",
+      "cols": {
+        "provider": "Provider",
+        "workspace": "Workspace",
+        "calls": "Calls",
+        "charsIn": "Chars in",
+        "chars": "Chars",
+        "cost": "Cost",
+        "rate": "Rate / 1M chars"
+      }
+    },
+    "settings": {
+      "title": "Real-time translation",
+      "description": "Chat with customers in any language. Each side reads in their own language — automatically.",
+      "loading": "Loading translation settings",
+      "failed": "Could not load translation settings.",
+      "saved": "Translation settings saved.",
+      "steps": {
+        "1": {
+          "title": "Customer writes (any language)",
+          "body": "Their message is auto-translated INTO your team language and shown to your agent, with the original one click away."
+        },
+        "2": {
+          "title": "Agent replies (your language)",
+          "body": "Your reply is translated INTO the customer's language right before it is sent on WhatsApp."
+        },
+        "3": {
+          "title": "AI + widget too",
+          "body": "The AI agent and the website chat widget reply natively in the customer's language."
+        }
+      },
+      "engine": {
+        "kicker": "Translation engine",
+        "free": "MyMemory (free)",
+        "body": "You do NOT enter any API keys here — translation is configured once, platform-wide, and works out of the box automatically. A free engine is enabled by default; the platform can be set up to use DeepL / Google Translate for higher quality."
+      },
+      "usage": {
+        "kicker": "This month",
+        "line": "characters translated · {count} messages"
+      },
+      "enabled": {
+        "title": "Auto-translate conversations",
+        "hint": "Turn the whole thing on or off for this workspace."
+      },
+      "teamLanguage": {
+        "label": "Your team language",
+        "hint": "The language YOUR agents read + write in. Customer messages are translated into this; your replies are translated out of it."
+      },
+      "save": "Save translation settings",
+      "upgrade": {
+        "title": "Upgrade to unlock real-time translation.",
+        "body": "Auto-translate WhatsApp conversations between your team's language and your customers' languages.",
+        "link": "See plans →"
+      }
+    }
+  }
+}

@@ -154,8 +154,21 @@ import { TokenService } from './token.service';
     HtmlSanitizerService,
     SecurityPolicyService,
     PlatformSettingsService,
+    // the sanctioned door to platform-wide tables, for other domains' platform catalogues (I18N)
+    PlatformStore,
+    // the two sanctioned doors to platform-wide data, for the first-run setup (INST)
+    PlatformStore,
+    TenantDirectory,
+    // the one door to platform-wide tables, for the add-ons domain's operator catalogue and registry
+    // the single door to cross-tenant reads, for the reseller console (BSP): a read-only reader that adds no privileged call of its own
+    PlatformStore,
     WebhookSecretRegistry,
     OtpTemplateService,
+    // the platform-wide table door, for other domains whose operator tables need it (AIADM)
+    PlatformStore,
+    // the guest-form gate and throttle, for other domains' public forms (CMS contact)
+    CaptchaService,
+    RateLimitService,
   ],
 })
 export class AuthModule implements NestModule {

@@ -16,6 +16,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
+import { platformOperators } from '../auth-registration-security/core';
 import { organizations, users } from '../foundation';
 import { slaPolicies } from '../team-inbox-routing-sla/tables';
 
@@ -160,15 +161,16 @@ export const supportTickets = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('cascade'),
     foreignKey({
-      name: 'fk_support_tickets_assigned_agent_id',
-      columns: [t.orgId, t.assignedAgentId],
-      foreignColumns: [users.orgId, users.id],
+      name: 'fk_support_tickets_assigned_operator',
+      columns: [t.assignedAgentId],
+      foreignColumns: [platformOperators.id],
     }).onDelete('set null'),
     foreignKey({
       name: 'fk_support_tickets_sla_policy_id',
       columns: [t.orgId, t.slaPolicyId],
       foreignColumns: [slaPolicies.orgId, slaPolicies.id],
     }).onDelete('set null'),
+    index('idx_support_tickets_created_at').on(t.createdAt.desc(), t.id.desc()),
     index('idx_support_tickets_assigned_agent_id').on(t.orgId, t.assignedAgentId),
     index('idx_support_tickets_sla_policy_id').on(t.orgId, t.slaPolicyId),
     index('idx_support_tickets_status_priority').on(t.orgId, t.status, t.priority),
@@ -232,6 +234,8 @@ export const supportMessages = pgTable(
     body: text('body').notNull(),
     attachments: jsonb('attachments'),
     isInternalNote: boolean('is_internal_note').notNull().default(false),
+    emailStatus: text('email_status'),
+    authorOperatorId: idColumn('author_operator_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -254,6 +258,12 @@ export const supportMessages = pgTable(
       columns: [t.orgId, t.authorUserId],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    foreignKey({
+      name: 'support_messages_author_operator_id_fkey',
+      columns: [t.authorOperatorId],
+      foreignColumns: [platformOperators.id],
+    }).onDelete('set null'),
+    index('idx_support_messages_author_operator_id').on(t.authorOperatorId),
     index('idx_support_messages_author_user_id').on(t.orgId, t.authorUserId),
     index('idx_support_messages_ticket_id_created_at').on(t.orgId, t.ticketId, t.createdAt),
   ],

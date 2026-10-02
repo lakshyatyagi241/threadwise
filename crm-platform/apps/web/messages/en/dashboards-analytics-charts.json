@@ -1,6 +1,212 @@
 {
   "dashboards-analytics-charts": {
-    "nav": { "title": "Dashboard" },
-    "home": { "title": "Dashboard", "welcome": "Welcome to your workspace." }
+    "nav": {
+      "title": "Dashboard",
+      "analytics": "Analytics"
+    },
+    "home": {
+      "title": "Dashboard",
+      "welcome": "Welcome to your workspace."
+    },
+    "chart": {
+      "empty": "No data in this window yet.",
+      "bucket": "Period",
+      "cell": "{day} {hour}:00 · {count, plural, one {# message} other {# messages}}"
+    },
+    "range": {
+      "label": "Date range",
+      "short": {
+        "24h": "24h",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d",
+        "qtd": "QTD",
+        "custom": "Custom"
+      },
+      "long": {
+        "24h": "Last 24 hours",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "qtd": "Quarter to date"
+      }
+    },
+    "funnel": {
+      "stage": {
+        "sent": "Outbound messages",
+        "delivered": "Delivered",
+        "replied": "Inbound replies",
+        "engaged": "Unique repliers"
+      },
+      "drop": "−{n}",
+      "endToEnd": "End-to-end conversion"
+    },
+    "error": {
+      "locked": "Your plan does not include analytics.",
+      "upgrade": "See plans",
+      "forbidden": "You do not have access to this page.",
+      "generic": "The numbers could not be loaded. Try again in a moment."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Good morning, {name}.",
+        "afternoon": "Good afternoon, {name}.",
+        "evening": "Good evening, {name}."
+      },
+      "subline": "{range}: {sent, plural, one {# message sent} other {# messages sent}}, {rate}% delivered.",
+      "kpis": "Key numbers",
+      "kpi": {
+        "sent": "Messages sent · {range}",
+        "sentLegend": "{delivered} delivered · {failed} failed",
+        "readRate": "Read rate",
+        "deliverability": "Deliverability",
+        "deliveredOf": "{delivered} of {sent} messages",
+        "replies": "Replies",
+        "replyRate": "{rate}% reply rate"
+      },
+      "throughput": {
+        "title": "Message throughput",
+        "subtitle": {
+          "24h": "Outbound, delivered and failed, hourly, last 24 hours",
+          "7d": "Outbound, delivered and failed, daily, last 7 days",
+          "30d": "Outbound, delivered and failed, daily, last 30 days",
+          "qtd": "Outbound, delivered and failed, daily, quarter to date"
+        },
+        "peak": "Peak hour {when} · {n} messages",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failed": "Failed",
+        "avgHour": "Average per hour",
+        "replies": "Replies",
+        "replyRate": "Reply rate"
+      },
+      "sparkline": {
+        "title": "Last 20 hours",
+        "subtitle": "Messages sent per hour, oldest first"
+      },
+      "funnel": {
+        "title": "Engagement funnel",
+        "viewAll": "View analytics"
+      }
+    },
+    "analytics": {
+      "title": "Analytics",
+      "headline": "{rate}% of messages reached their reader between {from} and {to}.",
+      "subline": "{sent, plural, one {# message} other {# messages}} sent, {replyRate}% reply rate.",
+      "noSends": "No outgoing messages in this window yet.",
+      "export": "Export CSV",
+      "from": "From",
+      "to": "To",
+      "apply": "Apply",
+      "kpis": "Key numbers",
+      "kpi": {
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "queued": "Queued",
+        "failed": "Failed",
+        "replyRate": "Reply rate"
+      },
+      "series": {
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failed": "Failed",
+        "queued": "Queued"
+      },
+      "empty": "Nothing to show in this window.",
+      "volume": {
+        "title": "Messages over time",
+        "subtitle": "Sent, delivered and failed per day"
+      },
+      "rates": {
+        "title": "Delivery rates",
+        "subtitle": "Delivered, queued and failed share"
+      },
+      "totals": {
+        "title": "Daily totals",
+        "subtitle": "Delivered, queued and failed per day, stacked"
+      },
+      "funnel": {
+        "title": "Engagement funnel"
+      },
+      "types": {
+        "title": "Message types",
+        "subtitle": "Outbound messages by kind",
+        "text": "Text",
+        "template": "Template",
+        "media": "Media",
+        "interactive": "Interactive",
+        "location": "Location"
+      },
+      "heatmap": {
+        "title": "Best hours",
+        "subtitle": "Message volume by weekday and hour, {zone}. Darker means busier.",
+        "empty": "No message volume in this window.",
+        "footer": "Computed from {total} messages, time zone {tz}"
+      }
+    },
+    "health": {
+      "nav": "System health",
+      "group": "System",
+      "title": "System health",
+      "kicker": "Platform",
+      "description": "Live checks of the services the platform runs on.",
+      "banner": {
+        "up": "All systems - Operational",
+        "warn": "All systems - Degraded",
+        "down": "All systems - Down",
+        "checked": "Last checked {time} · auto-refreshes every 20s",
+        "refresh": "Refresh now",
+        "refreshing": "Checking..."
+      },
+      "core": "Core services",
+      "state": {
+        "up": "Operational",
+        "warn": "Degraded",
+        "down": "Down",
+        "idle": "Idle"
+      },
+      "check": {
+        "database": "Database",
+        "cache": "Cache",
+        "queue": "Queue",
+        "bridge": "Node bridge",
+        "storage": "Media storage"
+      },
+      "latency": {
+        "title": "Response time",
+        "empty": "No timing data.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "Queues",
+        "name": "Queue",
+        "pending": "Pending",
+        "failed": "Failed"
+      },
+      "clear": {
+        "button": "Clear pending jobs",
+        "busy": "Clearing...",
+        "confirmTitle": "Clear pending and failed jobs?",
+        "confirmBody": "Waiting and delayed jobs are removed and failed jobs are deleted from every queue. Jobs that are running are left alone.",
+        "confirm": "Clear jobs",
+        "cancel": "Cancel",
+        "done": "Cleared {pending} pending and {failed} failed job(s).",
+        "failed": "Failed: {message}",
+        "superOnly": "Only a super admin can clear jobs."
+      },
+      "vitals": {
+        "title": "Host vitals",
+        "node": "Node",
+        "app": "App version",
+        "environment": "Environment",
+        "uptime": "Uptime",
+        "memory": "Memory (RSS)",
+        "heap": "Heap in use",
+        "diskFree": "Disk free",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Disk used {pct}%",
+        "noDisk": "Not available"
+      },
+      "error": "The health checks could not be loaded. Try again in a moment."
+    }
   }
 }
