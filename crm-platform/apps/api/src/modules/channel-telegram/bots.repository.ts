@@ -91,6 +91,21 @@ export class BotsRepository {
     return r ? toRow(r) : undefined;
   }
 
+  async findById(tx: Tx, orgId: number, id: number): Promise<BotRow | undefined> {
+    const res = await tx.execute(
+      sql`SELECT ${COLUMNS} FROM telegram_bots WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    const r = (res.rows as unknown as Raw[])[0];
+    return r ? toRow(r) : undefined;
+  }
+
+  /** A push arrived: the bot is alive. Clears a stale error only when a message (not a payment step) came in. */
+  async touchInbound(tx: Tx, orgId: number, id: number, clearError: boolean): Promise<void> {
+    await tx.execute(sql`
+      UPDATE telegram_bots SET last_inbound_at = now(), last_error = CASE WHEN ${clearError} THEN NULL ELSE last_error END
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
   /** The bot already connected for this Telegram bot id, so a re-pasted token updates the same row. */
   async findByTelegramId(tx: Tx, orgId: number, botId: string): Promise<BotRow | undefined> {
     const res = await tx.execute(
