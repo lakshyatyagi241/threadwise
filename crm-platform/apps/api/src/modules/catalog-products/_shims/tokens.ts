@@ -92,6 +92,11 @@ export interface ShopDirectory {
 export const SHOP_DIRECTORY = Symbol('CATALOG_SHOP_DIRECTORY');
 
 export interface CatalogSendMirrorInput {
+  /**
+   * `catalog`: a catalog message (single product, product list or link), shown as the catalog bubble. `product_share`: one
+   * product sent as an image with a caption (WD-CAT-023), shown as that text with `meta.source = 'product_share'`.
+   */
+  source?: 'catalog' | 'product_share';
   orgId: number;
   recipientDigits: string;
   userId: number | null;
@@ -110,9 +115,9 @@ export interface CatalogSendMirrorInput {
 }
 
 /**
- * Mirrors a catalog message into the recipient's inbox thread (find-or-create the conversation, write an outbound message
- * with `kind: catalog`). That is the team-inbox domain; until it exports it the default does nothing and the send log
- * (`cat_catalog_sends`) is the only record. Called after the provider accepted the message, never inside a transaction.
+ * Mirrors a catalog message into the recipient's inbox thread. Implemented by `InboxConversationMirror` over the chat-conversations
+ * facade (the token stays here because the send service and the tests inject it). Called after the provider accepted the message,
+ * never inside a transaction.
  */
 export interface ConversationMirror {
   mirrorCatalogSend(input: CatalogSendMirrorInput): Promise<void>;

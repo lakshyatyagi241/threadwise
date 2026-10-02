@@ -8,11 +8,17 @@ import {
 const CAROUSEL_TIMEOUT_MS = 60_000;
 const TEXT_TIMEOUT_MS = 30_000;
 
-export interface HttpBridgeOptions {
-  /** `BAILEYS_SERVER_URL`: WaDesk's `baileys_server_url` setting, else `SERVER_URL`, default `http://localhost:8888`. */
+export interface BridgeTarget {
   baseUrl: string;
-  /** `X-Node-Token`, when the bridge asks for one. */
-  token?: string;
+  token?: string | null;
+}
+
+export interface HttpBridgeOptions {
+  /**
+   * Where the bridge is, and the `X-Node-Token` it asks for (if any). A function is asked on every call, so an operator's edit of
+   * the Node bridge address applies to the next send without a restart.
+   */
+  target: BridgeTarget | (() => BridgeTarget | Promise<BridgeTarget>);
   fetchImpl?: typeof fetch;
   carouselTimeoutMs?: number;
   textTimeoutMs?: number;
@@ -38,12 +44,14 @@ export class HttpBaileysCatalogBridge implements BaileysCatalogBridge {
   ): Promise<SentMessage> {
     let res: Response;
     try {
-      res = await this.fetchImpl(`${this.opts.baseUrl.replace(/\/+$/, '')}${path}`, {
+      const target =
+        typeof this.opts.target === 'function' ? await this.opts.target() : this.opts.target;
+      res = await this.fetchImpl(`${target.baseUrl.replace(/\/+$/, '')}${path}`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          ...(this.opts.token ? { 'X-Node-Token': this.opts.token } : {}),
+          ...(target.token ? { 'X-Node-Token': target.token } : {}),
         },
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(timeoutMs),

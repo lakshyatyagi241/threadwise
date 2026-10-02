@@ -9,7 +9,6 @@ the same token in `catalog-products.module.ts` and delete the shim.
 | `SenderDirectory` (devices, WABA configs) | whatsapp-devices-baileys, whatsapp-cloud-api-waba | WD-CAT-003, 008, 014, 015, 022 | blocked on WADEV, WABA |
 | `AudienceDirectory` (contacts, groups)    | contacts-attributes-tags                          | WD-CAT-014, 015                | blocked on CON export  |
 | `ShopDirectory` (`wa_storefronts`)        | storefront-builder (STORE)                        | WD-CAT-008, 009, 014, 022, 023 | blocked on STORE       |
-| `ConversationMirror` (no-op by default)   | team-inbox-conversations (TIB)                    | WD-CAT-015, 023, 031           | blocked on TIB         |
 
 Not behind a shim, listed because they are still open:
 

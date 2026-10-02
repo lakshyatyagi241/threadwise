@@ -313,8 +313,7 @@ describe('Node bridge adapter (unverified against a live bridge)', () => {
   it('posts the carousel to /api/send-product-catalog/<sender> with the WaDesk payload', async () => {
     const m = mockFetch([{ body: { success: true, messageId: 'bw1' } }]);
     const bridge = new HttpBaileysCatalogBridge({
-      baseUrl: 'http://node:8888/',
-      token: 't',
+      target: { baseUrl: 'http://node:8888/', token: 't' },
       fetchImpl: m.impl,
     });
     const card = {
@@ -354,7 +353,10 @@ describe('Node bridge adapter (unverified against a live bridge)', () => {
       { body: { success: true } },
       { body: { success: true } },
     ]);
-    const bridge = new HttpBaileysCatalogBridge({ baseUrl: 'http://node', fetchImpl: m.impl });
+    const bridge = new HttpBaileysCatalogBridge({
+      target: { baseUrl: 'http://node' },
+      fetchImpl: m.impl,
+    });
     const c = {
       retailer_id: 'r',
       id: 'u',
@@ -400,7 +402,10 @@ describe('Node bridge adapter (unverified against a live bridge)', () => {
   });
   it('a bridge failure carries its error text', async () => {
     const m = mockFetch([{ status: 500, body: { error: 'session closed' } }]);
-    const bridge = new HttpBaileysCatalogBridge({ baseUrl: 'http://node', fetchImpl: m.impl });
+    const bridge = new HttpBaileysCatalogBridge({
+      target: { baseUrl: 'http://node' },
+      fetchImpl: m.impl,
+    });
     await expect(bridge.sendText({ senderPhone: '1', to: '2', text: 'x' })).rejects.toMatchObject({
       message: 'Baileys link send failed: session closed',
     });
@@ -429,5 +434,45 @@ describe('catalog configuration (WD-CAT-030)', () => {
       BAILEYS_SERVER_URL: 'http://n:1',
     });
     expect(() => readCatalogEnv({ CAT_GRAPH_API_VERSION: '23' })).toThrow(/Graph API version/);
+  });
+});
+
+describe('runtime settings are read on every call (WD-CAT-030, 034)', () => {
+  it('a Graph version function is asked per call, so a saved change applies to the next request', async () => {
+    const m = mockFetch([{ body: { id: '1' } }, { body: { id: '1' } }]);
+    let version = 'v23.0';
+    const p = new MetaGraphCatalogProvider({
+      graphVersion: async () => version,
+      fetchImpl: m.impl,
+      retryDelayMs: 0,
+    });
+    const binding = {
+      provider: 'meta_cloud' as const,
+      catalogId: '555',
+      wabaId: null,
+      phoneNumberId: '100',
+      accessToken: 'tok',
+    };
+    await p.verifyCatalog(binding);
+    version = 'v24.0';
+    await p.verifyCatalog(binding);
+    expect(m.calls[0]!.url).toContain('/v23.0/555');
+    expect(m.calls[1]!.url).toContain('/v24.0/555');
+  });
+
+  it('the bridge target function is asked per call: address and token follow the operator page', async () => {
+    const m = mockFetch([
+      { body: { success: true, messageId: 'a' } },
+      { body: { success: true, messageId: 'b' } },
+    ]);
+    let target = { baseUrl: 'http://one:8888', token: 't1' as string | null };
+    const bridge = new HttpBaileysCatalogBridge({ target: () => target, fetchImpl: m.impl });
+    await bridge.sendText({ senderPhone: '1', to: '2', text: 'x' });
+    target = { baseUrl: 'http://two:9999/', token: null };
+    await bridge.sendText({ senderPhone: '1', to: '2', text: 'x' });
+    expect(m.calls[0]!.url).toBe('http://one:8888/api/send-message/1');
+    expect(headers(m.calls[0]!)['X-Node-Token']).toBe('t1');
+    expect(m.calls[1]!.url).toBe('http://two:9999/api/send-message/1');
+    expect(headers(m.calls[1]!)['X-Node-Token']).toBeUndefined();
   });
 });

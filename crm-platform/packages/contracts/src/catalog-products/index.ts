@@ -6,3 +6,4 @@ export * from './product';
 export * from './catalog';
 export * from './collection';
 export * from './review';
+export * from './settings';
