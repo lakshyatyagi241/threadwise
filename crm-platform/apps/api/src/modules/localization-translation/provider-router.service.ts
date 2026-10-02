@@ -3,9 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { DataResidency } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { DRIVERS } from '../../infra/providers/localization-translation/drivers';
-import {
-  TRANSLATION_BREAKER,
-} from '../../infra/providers/localization-translation/redis-stores';
+import { TRANSLATION_BREAKER } from '../../infra/providers/localization-translation/redis-stores';
 import type {
   BreakerStore,
   TranslationDriver,

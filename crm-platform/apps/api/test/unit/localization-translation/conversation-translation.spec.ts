@@ -14,7 +14,12 @@ function build(s: Setup = {}) {
   const calls: Array<{ text: string; target: string; orgId: number | null }> = [];
   const db = {
     txAs: async () => ({
-      rows: [{ default_language: s.teamLanguage === undefined ? 'en' : s.teamLanguage, inbox_translate: s.enabled ?? true }],
+      rows: [
+        {
+          default_language: s.teamLanguage === undefined ? 'en' : s.teamLanguage,
+          inbox_translate: s.enabled ?? true,
+        },
+      ],
     }),
   };
   const plans = {
@@ -40,7 +45,9 @@ function build(s: Setup = {}) {
 describe('translateInbound', () => {
   it('stores the team-language reading, the detected language and pins the conversation', async () => {
     const { svc, calls } = build({ result: { language: 'es', text: 'Where is my order?' } });
-    expect(await svc.translateInbound({ orgId: 5, body: 'Dónde está mi pedido', pinnedLanguage: null })).toEqual({
+    expect(
+      await svc.translateInbound({ orgId: 5, body: 'Dónde está mi pedido', pinnedLanguage: null }),
+    ).toEqual({
       detectedLanguage: 'es',
       translatedBody: 'Where is my order?',
       isTranslated: true,
@@ -51,7 +58,9 @@ describe('translateInbound', () => {
 
   it('stores only the detected language when the customer already writes the team language', async () => {
     const { svc } = build({ result: { language: 'en', text: 'Where is my order?' } });
-    expect(await svc.translateInbound({ orgId: 5, body: 'Where is my order?', pinnedLanguage: null })).toEqual({
+    expect(
+      await svc.translateInbound({ orgId: 5, body: 'Where is my order?', pinnedLanguage: null }),
+    ).toEqual({
       detectedLanguage: 'en',
       translatedBody: null,
       isTranslated: false,
@@ -61,14 +70,20 @@ describe('translateInbound', () => {
 
   it('never moves a language that is already pinned', async () => {
     const { svc } = build({ result: { language: 'fr', text: 'Where is my order?' } });
-    const out = await svc.translateInbound({ orgId: 5, body: 'Où est ma commande', pinnedLanguage: 'es' });
+    const out = await svc.translateInbound({
+      orgId: 5,
+      body: 'Où est ma commande',
+      pinnedLanguage: 'es',
+    });
     expect(out).toMatchObject({ detectedLanguage: 'fr', isTranslated: true, pinLanguage: null });
   });
 
   it('does nothing when the plan lacks translation or the workspace switched it off', async () => {
     for (const s of [{ plan: false }, { enabled: false }]) {
       const { svc, calls } = build({ ...s, result: { language: 'es', text: 'x' } });
-      expect(await svc.translateInbound({ orgId: 5, body: 'Hola amigo', pinnedLanguage: null })).toBeNull();
+      expect(
+        await svc.translateInbound({ orgId: 5, body: 'Hola amigo', pinnedLanguage: null }),
+      ).toBeNull();
       expect(calls).toHaveLength(0);
     }
   });
@@ -76,20 +91,31 @@ describe('translateInbound', () => {
   it('skips empty bodies and already translated messages', async () => {
     const { svc, calls } = build({ result: { language: 'es', text: 'x' } });
     expect(await svc.translateInbound({ orgId: 5, body: '   ', pinnedLanguage: null })).toBeNull();
-    expect(await svc.translateInbound({ orgId: 5, body: 'Hola', pinnedLanguage: null, alreadyTranslated: true })).toBeNull();
+    expect(
+      await svc.translateInbound({
+        orgId: 5,
+        body: 'Hola',
+        pinnedLanguage: null,
+        alreadyTranslated: true,
+      }),
+    ).toBeNull();
     expect(calls).toHaveLength(0);
   });
 
   it('stores nothing and does not throw when every provider fails', async () => {
     const { svc } = build({ result: { language: null, text: null } });
-    expect(await svc.translateInbound({ orgId: 5, body: 'Hola amigo', pinnedLanguage: null })).toEqual({
+    expect(
+      await svc.translateInbound({ orgId: 5, body: 'Hola amigo', pinnedLanguage: null }),
+    ).toEqual({
       detectedLanguage: null,
       translatedBody: null,
       isTranslated: false,
       pinLanguage: null,
     });
     const boom = build({ result: 'throw' });
-    expect(await boom.svc.translateInbound({ orgId: 5, body: 'Hola amigo', pinnedLanguage: null })).toBeNull();
+    expect(
+      await boom.svc.translateInbound({ orgId: 5, body: 'Hola amigo', pinnedLanguage: null }),
+    ).toBeNull();
   });
 
   it('uses the workspace team language as the target', async () => {
@@ -115,7 +141,9 @@ describe('translateOutbound', () => {
 
   it('sends as typed when the text is already in the customer language', async () => {
     const { svc } = build({ result: { language: 'es', text: 'same' } });
-    expect(await svc.translateOutbound({ orgId: 5, body: 'Su pedido', customerLanguage: 'es' })).toEqual({
+    expect(
+      await svc.translateOutbound({ orgId: 5, body: 'Su pedido', customerLanguage: 'es' }),
+    ).toEqual({
       body: 'Su pedido',
       original: null,
       language: null,
@@ -125,27 +153,46 @@ describe('translateOutbound', () => {
 
   it('never translates templates, forwards, translated messages, or without a pinned language', async () => {
     const { svc, calls } = build({ result: { language: 'en', text: 'x' } });
-    for (const extra of [{ isTemplate: true }, { isForwarded: true }, { alreadyTranslated: true }]) {
-      const out = await svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'es', ...extra });
+    for (const extra of [
+      { isTemplate: true },
+      { isForwarded: true },
+      { alreadyTranslated: true },
+    ]) {
+      const out = await svc.translateOutbound({
+        orgId: 5,
+        body: typed,
+        customerLanguage: 'es',
+        ...extra,
+      });
       expect(out.isTranslated).toBe(false);
       expect(out.body).toBe(typed);
     }
-    expect((await svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: null })).body).toBe(typed);
+    expect(
+      (await svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: null })).body,
+    ).toBe(typed);
     expect(calls).toHaveLength(0);
   });
 
   it('sends as typed when translation is off, or the customer speaks the team language', async () => {
     const off = build({ enabled: false, result: { language: 'en', text: 'x' } });
-    expect((await off.svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'es' })).isTranslated).toBe(false);
+    expect(
+      (await off.svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'es' }))
+        .isTranslated,
+    ).toBe(false);
     const same = build({ result: { language: 'en', text: 'x' } });
-    expect((await same.svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'en' })).isTranslated).toBe(false);
+    expect(
+      (await same.svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'en' }))
+        .isTranslated,
+    ).toBe(false);
     expect(same.calls).toHaveLength(0);
   });
 
   it('sends the original when providers fail or throw', async () => {
     for (const result of [{ language: null, text: null }, 'throw'] as const) {
       const { svc } = build({ result });
-      expect(await svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'es' })).toEqual({
+      expect(
+        await svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'es' }),
+      ).toEqual({
         body: typed,
         original: null,
         language: null,
@@ -181,7 +228,11 @@ describe('translationAllowed (plan gate shim)', () => {
 
   it('lets an organization override beat the plan, and a platform-owned one through', () => {
     expect(translationAllowed(e({ overrides: { features: { translation: true } } }))).toBe(true);
-    expect(translationAllowed(e({ planFeatures: { translation: true }, overrides: { features: { translation: false } } }))).toBe(false);
+    expect(
+      translationAllowed(
+        e({ planFeatures: { translation: true }, overrides: { features: { translation: false } } }),
+      ),
+    ).toBe(false);
     expect(translationAllowed(e({ platformOwned: true }))).toBe(true);
   });
 

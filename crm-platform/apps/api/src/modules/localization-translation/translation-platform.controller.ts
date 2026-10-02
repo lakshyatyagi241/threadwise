@@ -32,7 +32,9 @@ export class TranslationPlatformController {
   ) {}
 
   @Get('translation-providers')
-  @ApiOperation({ summary: 'The provider catalogue with credential forms (secrets never returned)' })
+  @ApiOperation({
+    summary: 'The provider catalogue with credential forms (secrets never returned)',
+  })
   list() {
     return this.providers.list();
   }

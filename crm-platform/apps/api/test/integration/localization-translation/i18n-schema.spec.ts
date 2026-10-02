@@ -103,11 +103,18 @@ describe('i18n schema, RLS and the usage ledger', () => {
   describe('seed (TW-I18N-007, 014)', () => {
     it('ships 21 active languages, with ar, ur and he right-to-left, English first and Bengali last', async () => {
       const rows = (
-        await owner.query(`SELECT code, direction, is_active FROM languages ORDER BY sort_order, name`)
+        await owner.query(
+          `SELECT code, direction, is_active FROM languages ORDER BY sort_order, name`,
+        )
       ).rows as Array<{ code: string; direction: string; is_active: boolean }>;
       expect(rows).toHaveLength(21);
       expect(rows.every((r) => r.is_active)).toBe(true);
-      expect(rows.filter((r) => r.direction === 'rtl').map((r) => r.code).sort()).toEqual(['ar', 'he', 'ur']);
+      expect(
+        rows
+          .filter((r) => r.direction === 'rtl')
+          .map((r) => r.code)
+          .sort(),
+      ).toEqual(['ar', 'he', 'ur']);
       expect(rows[0]!.code).toBe('en');
       expect(rows[20]!.code).toBe('bn');
       expect(rows.find((r) => r.code === 'zh-CN')).toBeTruthy();
@@ -118,7 +125,12 @@ describe('i18n schema, RLS and the usage ledger', () => {
         await owner.query(
           `SELECT slug, is_active, is_default, sort_order, credentials FROM translation_providers ORDER BY sort_order`,
         )
-      ).rows as Array<{ slug: string; is_active: boolean; is_default: boolean; credentials: string | null }>;
+      ).rows as Array<{
+        slug: string;
+        is_active: boolean;
+        is_default: boolean;
+        credentials: string | null;
+      }>;
       expect(rows.map((r) => [r.slug, r.is_active, r.is_default])).toEqual([
         ['mymemory', true, true],
         ['google_gtx', true, false],
@@ -130,8 +142,13 @@ describe('i18n schema, RLS and the usage ledger', () => {
     });
 
     it('is idempotent and never overwrites an operator edit when the seed runs again', async () => {
-      await owner.query(`UPDATE languages SET name = 'Anglais', is_active = false WHERE code = 'en'`);
-      const seed = readFileSync(resolve(MIGRATIONS, '20261003090000_i18n_registry_seed.sql'), 'utf8');
+      await owner.query(
+        `UPDATE languages SET name = 'Anglais', is_active = false WHERE code = 'en'`,
+      );
+      const seed = readFileSync(
+        resolve(MIGRATIONS, '20261003090000_i18n_registry_seed.sql'),
+        'utf8',
+      );
       // Only the INSERT statements: the index and permission statements are not idempotent by design.
       const inserts = seed.match(
         /INSERT INTO (?:languages|translation_providers)[\s\S]*?ON CONFLICT \(\w+\) DO NOTHING;/g,
@@ -139,9 +156,12 @@ describe('i18n schema, RLS and the usage ledger', () => {
       expect(inserts).toHaveLength(2);
       for (const s of inserts) await owner.query(s);
       expect((await owner.query(`SELECT count(*)::int AS n FROM languages`)).rows[0].n).toBe(21);
-      const en = (await owner.query(`SELECT name, is_active FROM languages WHERE code = 'en'`)).rows[0];
+      const en = (await owner.query(`SELECT name, is_active FROM languages WHERE code = 'en'`))
+        .rows[0];
       expect(en).toEqual({ name: 'Anglais', is_active: false });
-      await owner.query(`UPDATE languages SET name = 'English', is_active = true WHERE code = 'en'`);
+      await owner.query(
+        `UPDATE languages SET name = 'English', is_active = true WHERE code = 'en'`,
+      );
     });
 
     it('registers the workspace permission keys', async () => {
@@ -169,11 +189,11 @@ describe('i18n schema, RLS and the usage ledger', () => {
     });
 
     it('bumps row_version on every update (the optimistic lock)', async () => {
-      const before = (await owner.query(`SELECT row_version FROM languages WHERE code = 'es'`)).rows[0]
-        .row_version as number;
+      const before = (await owner.query(`SELECT row_version FROM languages WHERE code = 'es'`))
+        .rows[0].row_version as number;
       await owner.query(`UPDATE languages SET sort_order = sort_order WHERE code = 'es'`);
-      const after = (await owner.query(`SELECT row_version FROM languages WHERE code = 'es'`)).rows[0]
-        .row_version as number;
+      const after = (await owner.query(`SELECT row_version FROM languages WHERE code = 'es'`))
+        .rows[0].row_version as number;
       expect(after).toBe(before + 1);
     });
   });
@@ -181,39 +201,57 @@ describe('i18n schema, RLS and the usage ledger', () => {
   describe('row-level security', () => {
     it('lets every tenant and even an unscoped session read the language registry', async () => {
       expect(
-        await asNobody(async () => (await app.query(`SELECT count(*)::int AS n FROM languages`)).rows[0].n),
+        await asNobody(
+          async () => (await app.query(`SELECT count(*)::int AS n FROM languages`)).rows[0].n,
+        ),
       ).toBe(21);
       expect(
-        await asOrg(orgA, async () => (await app.query(`SELECT count(*)::int AS n FROM languages`)).rows[0].n),
+        await asOrg(
+          orgA,
+          async () => (await app.query(`SELECT count(*)::int AS n FROM languages`)).rows[0].n,
+        ),
       ).toBe(21);
     });
 
     it('refuses a tenant a write to the registry, and allows the privileged flag', async () => {
       await asOrg(orgA, async () => {
-        const res = await app.query(`UPDATE languages SET name = 'Hacked' WHERE code = 'en' RETURNING id`);
+        const res = await app.query(
+          `UPDATE languages SET name = 'Hacked' WHERE code = 'en' RETURNING id`,
+        );
         expect(res.rowCount).toBe(0); // the row is invisible to the write policy: nothing changes
       });
       await asOrg(orgA, async () => {
-        await expect(app.query(`INSERT INTO languages (code, name) VALUES ('zz', 'Z')`)).rejects.toThrow(
-          /row-level security/,
-        );
+        await expect(
+          app.query(`INSERT INTO languages (code, name) VALUES ('zz', 'Z')`),
+        ).rejects.toThrow(/row-level security/);
       });
       await asPrivileged(async () => {
-        const res = await app.query(`UPDATE languages SET native_name = 'EN' WHERE code = 'en' RETURNING id`);
+        const res = await app.query(
+          `UPDATE languages SET native_name = 'EN' WHERE code = 'en' RETURNING id`,
+        );
         expect(res.rowCount).toBe(1);
       });
     });
 
     it('hides the provider catalogue (and its credentials) from every tenant', async () => {
-      await owner.query(`UPDATE translation_providers SET credentials = 'v1:x:y:z' WHERE slug = 'deepl'`);
+      await owner.query(
+        `UPDATE translation_providers SET credentials = 'v1:x:y:z' WHERE slug = 'deepl'`,
+      );
       expect(
-        await asOrg(orgA, async () => (await app.query(`SELECT * FROM translation_providers`)).rowCount),
+        await asOrg(
+          orgA,
+          async () => (await app.query(`SELECT * FROM translation_providers`)).rowCount,
+        ),
       ).toBe(0);
       expect(
-        await asNobody(async () => (await app.query(`SELECT * FROM translation_providers`)).rowCount),
+        await asNobody(
+          async () => (await app.query(`SELECT * FROM translation_providers`)).rowCount,
+        ),
       ).toBe(0);
       expect(
-        await asPrivileged(async () => (await app.query(`SELECT * FROM translation_providers`)).rowCount),
+        await asPrivileged(
+          async () => (await app.query(`SELECT * FROM translation_providers`)).rowCount,
+        ),
       ).toBe(5);
       await owner.query(`UPDATE translation_providers SET credentials = NULL WHERE slug = 'deepl'`);
     });
@@ -236,7 +274,10 @@ describe('i18n schema, RLS and the usage ledger', () => {
         [orgB],
       );
       expect(
-        await asOrg(orgA, async () => (await app.query(`SELECT * FROM translation_usage`)).rowCount),
+        await asOrg(
+          orgA,
+          async () => (await app.query(`SELECT * FROM translation_usage`)).rowCount,
+        ),
       ).toBe(0); // the first insert was rolled back with its transaction; org B's row is invisible to A
       await owner.query(`DELETE FROM translation_usage`);
     });
@@ -316,7 +357,9 @@ describe('i18n schema, RLS and the usage ledger', () => {
         charsOut: 5,
         wasFallback: false,
       });
-      expect((await owner.query(`SELECT count(*)::int AS n FROM translation_usage`)).rows[0].n).toBe(0);
+      expect(
+        (await owner.query(`SELECT count(*)::int AS n FROM translation_usage`)).rows[0].n,
+      ).toBe(0);
     });
 
     it("sums this month's characters and calls for one workspace only", async () => {
@@ -347,7 +390,15 @@ describe('i18n schema, RLS and the usage ledger', () => {
         costMicros: String(100 * 20 + 200 * 20),
         fallbackHits: 1,
       });
-      expect(r.byProvider.map((p) => [p.providerSlug, p.calls, p.charsIn, p.costMicros, p.ratePerMillionChars])).toEqual([
+      expect(
+        r.byProvider.map((p) => [
+          p.providerSlug,
+          p.calls,
+          p.charsIn,
+          p.costMicros,
+          p.ratePerMillionChars,
+        ]),
+      ).toEqual([
         ['deepl', 2, 300, '6000', '20000000'],
         ['google_gtx', 1, 400, '0', '0'],
         ['mymemory', 1, 50, '0', '0'],
@@ -368,7 +419,13 @@ describe('i18n schema, RLS and the usage ledger', () => {
       await owner.query(`DELETE FROM translation_usage`);
       const r = await usage.report({}, day('2026-05-15'));
       expect(r.range.from).toBe('2026-05-01T00:00:00.000Z');
-      expect(r.totals).toEqual({ calls: 0, charsIn: 0, charsOut: 0, costMicros: '0', fallbackHits: 0 });
+      expect(r.totals).toEqual({
+        calls: 0,
+        charsIn: 0,
+        charsOut: 0,
+        costMicros: '0',
+        fallbackHits: 0,
+      });
       expect(r.byProvider).toEqual([]);
       expect(r.timeline).toEqual([]);
       expect(r.topWorkspaces).toEqual([]);

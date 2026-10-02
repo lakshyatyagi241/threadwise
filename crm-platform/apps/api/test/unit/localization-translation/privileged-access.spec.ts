@@ -34,7 +34,9 @@ describe('privileged database access in the localization-translation domain', ()
 
   it('keeps controllers away from the database and the store', () => {
     for (const f of all.filter((p) => p.endsWith('.controller.ts'))) {
-      expect(readFileSync(f, 'utf8'), f).not.toMatch(/DatabaseService|PlatformStore|\.privileged\(/);
+      expect(readFileSync(f, 'utf8'), f).not.toMatch(
+        /DatabaseService|PlatformStore|\.privileged\(/,
+      );
     }
   });
 

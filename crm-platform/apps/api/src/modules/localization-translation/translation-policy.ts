@@ -92,4 +92,5 @@ export function cacheKey(
 }
 
 /** Base language in lower case; `zh-CN` becomes `zh`. */
-export const normalizeLang = (code: string): string => code.trim().toLowerCase();
+export const normalizeLang = (code: string): string =>
+  code.trim().toLowerCase().split(/[-_]/)[0] ?? '';

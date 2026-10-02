@@ -9,10 +9,7 @@ interface Call {
 }
 
 /** A fetch that records every call and answers with a canned body (or status). */
-function fakeFetch(
-  reply: unknown,
-  status = 200,
-): { fetch: typeof fetch; calls: Call[] } {
+function fakeFetch(reply: unknown, status = 200): { fetch: typeof fetch; calls: Call[] } {
   const calls: Call[] = [];
   const f = (async (url: string, init?: RequestInit) => {
     calls.push({ url: String(url), init });
@@ -31,7 +28,11 @@ const body = (c: Call) => JSON.parse(String(c.init?.body)) as Record<string, unk
 
 /** TW-I18N-024 */
 describe('MyMemory driver', () => {
-  const ok = { responseStatus: 200, responseData: { translatedText: 'hola' }, matches: [{ source: 'en-US' }] };
+  const ok = {
+    responseStatus: 200,
+    responseData: { translatedText: 'hola' },
+    matches: [{ source: 'en-US' }],
+  };
 
   it('translates with a langpair and sends the contact email as `de`', async () => {
     const { fetch, calls } = fakeFetch(ok);
@@ -46,19 +47,30 @@ describe('MyMemory driver', () => {
   it('detects through Autodetect and folds the source to its base language', async () => {
     const { fetch, calls } = fakeFetch(ok);
     const d = DRIVERS.mymemory.create({}, deps(fetch));
-    expect(await d.detectAndTranslate('hello there', 'es')).toEqual({ language: 'en', text: 'hola' });
+    expect(await d.detectAndTranslate('hello there', 'es')).toEqual({
+      language: 'en',
+      text: 'hola',
+    });
     expect(new URL(calls[0]!.url).searchParams.get('langpair')).toBe('Autodetect|es');
   });
 
   it('copes with `matches` arriving as a string', async () => {
-    const { fetch } = fakeFetch({ responseStatus: 200, responseData: { translatedText: 'hola' }, matches: '' });
+    const { fetch } = fakeFetch({
+      responseStatus: 200,
+      responseData: { translatedText: 'hola' },
+      matches: '',
+    });
     const d = DRIVERS.mymemory.create({}, deps(fetch));
     expect(await d.detectAndTranslate('hello', 'es')).toEqual({ language: null, text: 'hola' });
   });
 
   it('opens the breaker on a quota warning and then fails without any request', async () => {
     const breaker = new MemoryTranslationStores();
-    const warn = fakeFetch({ responseData: { translatedText: 'MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS' } });
+    const warn = fakeFetch({
+      responseData: {
+        translatedText: 'MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS',
+      },
+    });
     const d = DRIVERS.mymemory.create({}, deps(warn.fetch, breaker));
     expect(await d.translate('hello', 'en', 'es')).toBeNull();
     expect(await breaker.isOpen('translate:mymemory:breaker')).toBe(true);
@@ -70,7 +82,10 @@ describe('MyMemory driver', () => {
   });
 
   it('opens the breaker on HTTP 429 and on a 429 status in the body', async () => {
-    for (const reply of [fakeFetch({}, 429), fakeFetch({ responseStatus: 429, responseData: {} })]) {
+    for (const reply of [
+      fakeFetch({}, 429),
+      fakeFetch({ responseStatus: 429, responseData: {} }),
+    ]) {
       const breaker = new MemoryTranslationStores();
       const d = DRIVERS.mymemory.create({}, deps(reply.fetch, breaker));
       expect(await d.translate('hello', 'en', 'es')).toBeNull();
@@ -94,7 +109,14 @@ describe('MyMemory driver', () => {
 
 /** TW-I18N-025 */
 describe('Google GTX driver', () => {
-  const reply = [[['Hello ', 'Hola ', null], ['world', 'mundo', null]], null, 'es'];
+  const reply = [
+    [
+      ['Hello ', 'Hola ', null],
+      ['world', 'mundo', null],
+    ],
+    null,
+    'es',
+  ];
 
   it('concatenates the segments and sends the browser User-Agent', async () => {
     const { fetch, calls } = fakeFetch(reply);
@@ -114,7 +136,11 @@ describe('Google GTX driver', () => {
   });
 
   it('fails on an unexpected shape', async () => {
-    expect(await DRIVERS.google_gtx.create({}, deps(fakeFetch({ oops: 1 }).fetch)).translate('a', 'es', 'en')).toBeNull();
+    expect(
+      await DRIVERS.google_gtx
+        .create({}, deps(fakeFetch({ oops: 1 }).fetch))
+        .translate('a', 'es', 'en'),
+    ).toBeNull();
   });
 });
 
@@ -128,11 +154,20 @@ describe('LibreTranslate driver', () => {
     );
     expect(await d.translate('hello', 'en', 'es')).toBe('hola');
     expect(calls[0]!.url).toBe('http://localhost:5000/translate');
-    expect(body(calls[0]!)).toMatchObject({ q: 'hello', source: 'en', target: 'es', format: 'text', api_key: 'k1' });
+    expect(body(calls[0]!)).toMatchObject({
+      q: 'hello',
+      source: 'en',
+      target: 'es',
+      format: 'text',
+      api_key: 'k1',
+    });
   });
 
   it('auto-detects through source=auto and reads detectedLanguage', async () => {
-    const { fetch, calls } = fakeFetch({ translatedText: 'hello', detectedLanguage: { language: 'ES' } });
+    const { fetch, calls } = fakeFetch({
+      translatedText: 'hello',
+      detectedLanguage: { language: 'ES' },
+    });
     const d = DRIVERS.libretranslate.create({ endpoint: 'http://lt:5000' }, deps(fetch));
     expect(await d.detectAndTranslate('hola', 'en')).toEqual({ language: 'es', text: 'hello' });
     expect(body(calls[0]!).source).toBe('auto');
@@ -140,9 +175,14 @@ describe('LibreTranslate driver', () => {
 
   it('fails closed without an endpoint, and never calls a link-local address', async () => {
     const none = fakeFetch({ translatedText: 'x' });
-    expect(await DRIVERS.libretranslate.create({}, deps(none.fetch)).translate('a', 'en', 'es')).toBeNull();
+    expect(
+      await DRIVERS.libretranslate.create({}, deps(none.fetch)).translate('a', 'en', 'es'),
+    ).toBeNull();
     const meta = fakeFetch({ translatedText: 'x' });
-    const d = DRIVERS.libretranslate.create({ endpoint: 'http://169.254.169.254/latest' }, deps(meta.fetch));
+    const d = DRIVERS.libretranslate.create(
+      { endpoint: 'http://169.254.169.254/latest' },
+      deps(meta.fetch),
+    );
     expect(await d.translate('a', 'en', 'es')).toBeNull();
     expect(none.calls.length + meta.calls.length).toBe(0);
   });
@@ -154,20 +194,28 @@ describe('DeepL driver', () => {
 
   it('uses the free host for a :fx key and the paid host otherwise', async () => {
     const free = fakeFetch(reply);
-    await DRIVERS.deepl.create({ api_key: 'abc:fx' }, deps(free.fetch)).translate('Hello', 'en', 'es');
+    await DRIVERS.deepl
+      .create({ api_key: 'abc:fx' }, deps(free.fetch))
+      .translate('Hello', 'en', 'es');
     expect(free.calls[0]!.url).toBe('https://api-free.deepl.com/v2/translate');
 
     const paid = fakeFetch(reply);
     await DRIVERS.deepl.create({ api_key: 'abc' }, deps(paid.fetch)).translate('Hello', 'en', 'es');
     expect(paid.calls[0]!.url).toBe('https://api.deepl.com/v2/translate');
-    expect((paid.calls[0]!.init?.headers as Record<string, string>).authorization).toBe('DeepL-Auth-Key abc');
+    expect((paid.calls[0]!.init?.headers as Record<string, string>).authorization).toBe(
+      'DeepL-Auth-Key abc',
+    );
   });
 
   it('upper-cases the source and maps regional target variants', async () => {
     const { fetch, calls } = fakeFetch(reply);
     const d = DRIVERS.deepl.create({ api_key: 'k' }, deps(fetch));
     await d.translate('Hola', 'es', 'pt');
-    expect(body(calls[0]!)).toMatchObject({ source_lang: 'ES', target_lang: 'PT-BR', text: ['Hola'] });
+    expect(body(calls[0]!)).toMatchObject({
+      source_lang: 'ES',
+      target_lang: 'PT-BR',
+      text: ['Hola'],
+    });
     await d.translate('Hola', 'es', 'en');
     expect(body(calls[1]!).target_lang).toBe('EN-US');
   });
@@ -188,7 +236,9 @@ describe('DeepL driver', () => {
 
 /** TW-I18N-028 */
 describe('Google Cloud driver', () => {
-  const reply = { data: { translations: [{ translatedText: 'Hola', detectedSourceLanguage: 'EN' }] } };
+  const reply = {
+    data: { translations: [{ translatedText: 'Hola', detectedSourceLanguage: 'EN' }] },
+  };
 
   it('sends the key in a header, not in the URL', async () => {
     const { fetch, calls } = fakeFetch(reply);
@@ -196,7 +246,9 @@ describe('Google Cloud driver', () => {
     expect(await d.translate('Hello', 'en', 'es')).toBe('Hola');
     expect(calls[0]!.url).toBe('https://translation.googleapis.com/language/translate/v2');
     expect(calls[0]!.url).not.toContain('secret-key');
-    expect((calls[0]!.init?.headers as Record<string, string>)['x-goog-api-key']).toBe('secret-key');
+    expect((calls[0]!.init?.headers as Record<string, string>)['x-goog-api-key']).toBe(
+      'secret-key',
+    );
   });
 
   it('auto-detects by omitting source', async () => {
@@ -207,7 +259,11 @@ describe('Google Cloud driver', () => {
   });
 
   it('fails without a key', async () => {
-    expect(await DRIVERS.google_cloud.create({}, deps(fakeFetch(reply).fetch)).translate('a', 'en', 'es')).toBeNull();
+    expect(
+      await DRIVERS.google_cloud
+        .create({}, deps(fakeFetch(reply).fetch))
+        .translate('a', 'en', 'es'),
+    ).toBeNull();
   });
 });
 
@@ -223,10 +279,12 @@ describe('credential schemas', () => {
   });
 
   it('marks DeepL and Google Cloud official and the rest not', () => {
-    expect(Object.entries(DRIVERS).filter(([, d]) => d.official).map(([s]) => s).sort()).toEqual([
-      'deepl',
-      'google_cloud',
-    ]);
+    expect(
+      Object.entries(DRIVERS)
+        .filter(([, d]) => d.official)
+        .map(([s]) => s)
+        .sort(),
+    ).toEqual(['deepl', 'google_cloud']);
   });
 });
 

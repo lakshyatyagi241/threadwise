@@ -19,7 +19,8 @@ const row = (slug: string, over: Partial<ProviderRow> = {}): ProviderRow => ({
   ...over,
 });
 const open: RoutePolicy = { lockdown: false, residency: 'any' };
-const slugs = (rows: ProviderRow[], policy: RoutePolicy) => buildChain(rows, policy).map((e) => e.slug);
+const slugs = (rows: ProviderRow[], policy: RoutePolicy) =>
+  buildChain(rows, policy).map((e) => e.slug);
 
 /** TW-I18N-019 */
 describe('buildChain', () => {
@@ -78,7 +79,10 @@ describe('data residency', () => {
   ];
 
   it('eu_only allows DeepL and LibreTranslate', () => {
-    expect(slugs(rows, { lockdown: false, residency: 'eu_only' }).sort()).toEqual(['deepl', 'libretranslate']);
+    expect(slugs(rows, { lockdown: false, residency: 'eu_only' }).sort()).toEqual([
+      'deepl',
+      'libretranslate',
+    ]);
   });
 
   it('local allows LibreTranslate only', () => {
@@ -120,6 +124,8 @@ describe('cacheKey', () => {
     expect(a).not.toBe(cacheKey('pair', 'en:fr', 'hello', open));
     expect(a).not.toBe(cacheKey('auto', 'en:es', 'hello', open));
     expect(a).not.toBe(cacheKey('pair', 'en:es', 'hello', { lockdown: true, residency: 'any' }));
-    expect(a).not.toBe(cacheKey('pair', 'en:es', 'hello', { lockdown: false, residency: 'eu_only' }));
+    expect(a).not.toBe(
+      cacheKey('pair', 'en:es', 'hello', { lockdown: false, residency: 'eu_only' }),
+    );
   });
 });
