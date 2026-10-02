@@ -36,5 +36,6 @@ describe('groupNav', () => {
     expect(groups[2]!.items.map((i) => i.id)).toEqual(['plans']);
     expect(groups[3]!.items.map((i) => i.id)).toEqual(['system-health']);
     expect(groups[3]!.items.map((i) => i.id)).toEqual(['payment-gateways']);
+    expect(groups[3]!.items.map((i) => i.id)).toEqual(['bsp-income', 'bsp-credit']);
   });
 });
