@@ -1,0 +1,720 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "Platform settings",
+      "hub": "Settings hub",
+      "general": "General",
+      "branding": "Branding",
+      "siteInfo": "Site info",
+      "mail": "Mail",
+      "seo": "SEO",
+      "privacy": "Privacy and cookies",
+      "analytics": "Analytics",
+      "customCode": "Custom code",
+      "pwa": "Installable app",
+      "storage": "Cloud storage",
+      "realtime": "Real-time"
+    },
+    "hub": {
+      "kicker": "Platform",
+      "title": "Settings",
+      "description": "Everything that applies to the whole installation rather than one workspace.",
+      "export": "Export settings",
+      "exporting": "Exporting",
+      "exportHint": "Downloads every saved setting. Secrets and account identifiers are replaced.",
+      "tiles": {
+        "saved": "Saved groups",
+        "savedHint": "of {total}",
+        "secrets": "Secret fields",
+        "secretsHint": "stored encrypted",
+        "needsTest": "Needs a test",
+        "needsTestNone": "all verified",
+        "lastUpdated": "Last updated",
+        "lastUpdatedNone": "no edits yet"
+      },
+      "card": {
+        "saved": "Saved",
+        "defaults": "Defaults",
+        "needsTest": "Needs test",
+        "updated": "Updated {when}"
+      },
+      "others": "Registration, social login and the sign-in pages are edited under Guest pages."
+    },
+    "common": {
+      "save": "Save changes",
+      "saving": "Saving",
+      "saved": "{count, plural, one {Saved 1 change.} other {Saved # changes.}}",
+      "rejected": "{count, plural, one {1 field needs attention} other {# fields need attention}}",
+      "conflict": "Someone else saved these settings after you opened them. Reload to see their changes, then apply yours again.",
+      "reload": "Reload settings",
+      "unexpected": "Something went wrong and nothing was saved.",
+      "requestId": "Request id",
+      "readOnly": "You can read these settings but only a super admin can change them.",
+      "secretSet": "Saved. Leave blank to keep it.",
+      "secretUnset": "Not set.",
+      "secretClear": "Remove the saved value",
+      "secretShow": "Show",
+      "secretHide": "Hide",
+      "numberRequired": "Enter a whole number.",
+      "numberInteger": "Use a whole number.",
+      "updated": "Last saved {when}",
+      "neverSaved": "Never saved: showing defaults.",
+      "back": "All settings",
+      "invalidGroup": "That settings page does not exist."
+    },
+    "test": {
+      "title": "Check the connection",
+      "saveFirst": "Save your changes first: the check uses the saved settings.",
+      "mailTo": "Send the test email to",
+      "mailRun": "Send test email",
+      "run": "Test connection",
+      "running": "Testing",
+      "ok": "Passed",
+      "failed": "Failed",
+      "lastOk": "Last successful check {when}",
+      "neverTested": "Not checked yet."
+    },
+    "groups": {
+      "general": {
+        "title": "General settings",
+        "description": "Application identity, platform defaults and the maintenance switch.",
+        "sections": {
+          "identity": {
+            "title": "Application identity"
+          },
+          "defaults": {
+            "title": "Platform defaults"
+          },
+          "platform": {
+            "title": "Platform switches"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "App name",
+            "hint": "Shown in page titles, emails and the browser tab."
+          },
+          "appUrl": {
+            "label": "App URL"
+          },
+          "supportEmail": {
+            "label": "Support email"
+          },
+          "fromEmail": {
+            "label": "From email"
+          },
+          "contactNumber": {
+            "label": "Contact number"
+          },
+          "address": {
+            "label": "Address"
+          },
+          "mapIframeUrl": {
+            "label": "Map iframe URL"
+          },
+          "platformFooter": {
+            "label": "Platform footer",
+            "hint": "Added to outbound platform messages. Leave empty for none."
+          },
+          "defaultTimezone": {
+            "label": "Default timezone",
+            "hint": "Used when a workspace or person has not chosen one."
+          },
+          "defaultLanguage": {
+            "label": "Default language"
+          },
+          "defaultCurrency": {
+            "label": "Default currency"
+          },
+          "defaultCountryCode": {
+            "label": "Default country code",
+            "hint": "Dial code with a plus sign, for example +91."
+          },
+          "defaultCountryIso": {
+            "label": "Default country ISO",
+            "hint": "Two letters, for example in."
+          },
+          "fontFamily": {
+            "label": "Font family"
+          },
+          "maintenanceMode": {
+            "label": "Maintenance mode",
+            "hint": "Takes the customer app offline with a 503. Operators, sign-in and machine callbacks keep working."
+          }
+        }
+      },
+      "branding": {
+        "title": "Branding and appearance",
+        "description": "Favicon, logos per theme, colour tokens and interface size.",
+        "sections": {
+          "assets": {
+            "title": "Brand assets"
+          },
+          "colors": {
+            "title": "Colour tokens"
+          },
+          "interface": {
+            "title": "Interface"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "Favicon URL"
+          },
+          "logos": {
+            "paper": {
+              "label": "Paper"
+            },
+            "bright": {
+              "label": "Bright"
+            },
+            "dark": {
+              "label": "Dark"
+            },
+            "doodle": {
+              "label": "Doodle"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "Wa deep",
+              "hint": "Setting the primary also recolours the teal, green, mint and bubble shades unless you set them too."
+            },
+            "wa-teal": {
+              "label": "Wa teal"
+            },
+            "wa-green": {
+              "label": "Wa green"
+            },
+            "wa-mint": {
+              "label": "Wa mint"
+            },
+            "wa-bubble": {
+              "label": "Wa bubble"
+            },
+            "paper-0": {
+              "label": "Paper 0"
+            },
+            "paper-50": {
+              "label": "Paper 50"
+            },
+            "paper-100": {
+              "label": "Paper 100"
+            },
+            "paper-200": {
+              "label": "Paper 200"
+            },
+            "ink-500": {
+              "label": "Ink 500"
+            },
+            "ink-700": {
+              "label": "Ink 700"
+            },
+            "ink-900": {
+              "label": "Ink 900"
+            },
+            "accent-coral": {
+              "label": "Accent coral"
+            },
+            "accent-amber": {
+              "label": "Accent amber"
+            },
+            "accent-plum": {
+              "label": "Accent plum"
+            },
+            "accent-sky": {
+              "label": "Accent sky"
+            }
+          },
+          "fontScale": {
+            "label": "Font scale",
+            "hint": "Whole-interface text size in percent, 80 to 130."
+          },
+          "uiOpacity": {
+            "label": "UI opacity",
+            "hint": "Whole-interface opacity in percent, 55 to 100."
+          },
+          "dashboardLayout": {
+            "label": "Dashboard layout"
+          },
+          "sidebarColor": {
+            "label": "Sidebar color"
+          },
+          "sidebarTextColor": {
+            "label": "Sidebar text color"
+          },
+          "sidebarAccentColor": {
+            "label": "Sidebar accent color"
+          }
+        }
+      },
+      "site": {
+        "title": "Site information",
+        "description": "Company details, contact addresses, social profiles and the public footer.",
+        "sections": {
+          "company": {
+            "title": "Company"
+          },
+          "contact": {
+            "title": "Contact addresses"
+          },
+          "social": {
+            "title": "Social profiles"
+          },
+          "footer": {
+            "title": "Public footer"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "Company name"
+          },
+          "tagline": {
+            "label": "Tagline"
+          },
+          "foundedYear": {
+            "label": "Founded year"
+          },
+          "address": {
+            "label": "Address"
+          },
+          "cityCountry": {
+            "label": "City country"
+          },
+          "emailGeneral": {
+            "label": "Email general"
+          },
+          "emailSupport": {
+            "label": "Email support"
+          },
+          "emailSales": {
+            "label": "Email sales"
+          },
+          "emailSecurity": {
+            "label": "Email security"
+          },
+          "emailCareers": {
+            "label": "Email careers"
+          },
+          "phone": {
+            "label": "Phone"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "Social X"
+          },
+          "socialLinkedin": {
+            "label": "Social LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Social instagram"
+          },
+          "socialYoutube": {
+            "label": "Social YouTube"
+          },
+          "socialFacebook": {
+            "label": "Social facebook"
+          },
+          "socialGithub": {
+            "label": "Social GitHub"
+          },
+          "footerTitle": {
+            "label": "Footer title"
+          },
+          "footerDescription": {
+            "label": "Footer description"
+          },
+          "footerCopyright": {
+            "label": "Footer copyright"
+          }
+        }
+      },
+      "mail": {
+        "title": "Mail settings",
+        "description": "Outbound email. Saved values override the server defaults on every send.",
+        "sections": {
+          "sender": {
+            "title": "Sender"
+          },
+          "smtp": {
+            "title": "Mail server"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "From name"
+          },
+          "fromAddress": {
+            "label": "From address"
+          },
+          "mailer": {
+            "label": "Mailer",
+            "hint": "SMTP and the log mailer work today; API-based mailers are not wired yet."
+          },
+          "host": {
+            "label": "Host",
+            "hint": "Leave empty to keep the server default."
+          },
+          "port": {
+            "label": "Port"
+          },
+          "encryption": {
+            "label": "Encryption",
+            "hint": "ssl means implicit TLS (usually port 465); tls and starttls upgrade on port 587."
+          },
+          "username": {
+            "label": "Username"
+          },
+          "password": {
+            "label": "Password",
+            "hint": "Stored encrypted and never shown again."
+          }
+        }
+      },
+      "seo": {
+        "title": "SEO settings",
+        "description": "Search and social sharing tags for the public site.",
+        "sections": {
+          "search": {
+            "title": "Search results"
+          },
+          "social": {
+            "title": "Social sharing"
+          },
+          "verification": {
+            "title": "Site verification"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Meta title"
+          },
+          "metaDescription": {
+            "label": "Meta description"
+          },
+          "metaKeywords": {
+            "label": "Meta keywords"
+          },
+          "robots": {
+            "label": "Robots"
+          },
+          "canonical": {
+            "label": "Canonical"
+          },
+          "author": {
+            "label": "Author"
+          },
+          "ogTitle": {
+            "label": "Open Graph title"
+          },
+          "ogDescription": {
+            "label": "Open Graph description"
+          },
+          "ogType": {
+            "label": "Open Graph type"
+          },
+          "ogUrl": {
+            "label": "Open Graph URL"
+          },
+          "ogImage": {
+            "label": "Open Graph image"
+          },
+          "twitterCard": {
+            "label": "Twitter card"
+          },
+          "twitterSite": {
+            "label": "Twitter site"
+          },
+          "twitterCreator": {
+            "label": "Twitter creator"
+          },
+          "googleVerification": {
+            "label": "Google verification"
+          },
+          "bingVerification": {
+            "label": "Bing verification"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privacy and cookies",
+        "description": "The cookie consent banner, legal links and compliance flags.",
+        "sections": {
+          "banner": {
+            "title": "Cookie banner"
+          },
+          "links": {
+            "title": "Legal links"
+          },
+          "compliance": {
+            "title": "Compliance flags"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "Cookie banner enabled"
+          },
+          "cookieBannerStyle": {
+            "label": "Cookie banner style"
+          },
+          "cookieMessage": {
+            "label": "Cookie message"
+          },
+          "respectDoNotTrack": {
+            "label": "Respect do not track"
+          },
+          "policyUrl": {
+            "label": "Policy URL"
+          },
+          "termsUrl": {
+            "label": "Terms URL"
+          },
+          "cookiesPolicyUrl": {
+            "label": "Cookies policy URL"
+          },
+          "gdprCompliance": {
+            "label": "GDPR compliance",
+            "hint": "Stored for your records. It does not change behaviour yet."
+          },
+          "ccpaCompliance": {
+            "label": "CCPA compliance",
+            "hint": "Stored for your records. It does not change behaviour yet."
+          },
+          "adaSkipLink": {
+            "label": "ADA skip link",
+            "hint": "Stored for your records. It does not change behaviour yet."
+          },
+          "adaHighContrast": {
+            "label": "ADA high contrast",
+            "hint": "Stored for your records. It does not change behaviour yet."
+          },
+          "adaLargeText": {
+            "label": "ADA large text",
+            "hint": "Stored for your records. It does not change behaviour yet."
+          },
+          "adaReducedMotion": {
+            "label": "ADA reduced motion",
+            "hint": "Stored for your records. It does not change behaviour yet."
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Tracker ids. Trackers only load after a visitor consents.",
+        "sections": {
+          "trackers": {
+            "title": "Tracker ids"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Meta pixel"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft clarity"
+          },
+          "tiktokPixel": {
+            "label": "TikTok pixel"
+          },
+          "linkedinPartner": {
+            "label": "LinkedIn partner"
+          },
+          "twitterPixel": {
+            "label": "Twitter pixel"
+          },
+          "plausibleDomain": {
+            "label": "Plausible domain"
+          },
+          "posthogKey": {
+            "label": "PostHog key"
+          },
+          "mixpanelToken": {
+            "label": "Mixpanel token"
+          },
+          "hotjarSiteId": {
+            "label": "Hotjar site ID"
+          },
+          "posthogHost": {
+            "label": "PostHog host"
+          }
+        }
+      },
+      "customCode": {
+        "title": "Custom code",
+        "description": "CSS and JavaScript injected into the public site.",
+        "sections": {
+          "code": {
+            "title": "Custom code"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Enabled",
+            "hint": "Nothing below runs on the public site until this is on."
+          },
+          "css": {
+            "label": "CSS"
+          },
+          "js": {
+            "label": "JavaScript",
+            "hint": "Runs for every visitor. Only paste code you trust."
+          }
+        }
+      },
+      "pwa": {
+        "title": "Installable app",
+        "description": "Web app manifest and install behaviour.",
+        "sections": {
+          "app": {
+            "title": "Installable app"
+          },
+          "look": {
+            "title": "Look and behaviour"
+          },
+          "install": {
+            "title": "Install and offline"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Enabled"
+          },
+          "appName": {
+            "label": "App name"
+          },
+          "shortName": {
+            "label": "Short name"
+          },
+          "description": {
+            "label": "Description"
+          },
+          "startUrl": {
+            "label": "Start URL"
+          },
+          "scope": {
+            "label": "Scope"
+          },
+          "display": {
+            "label": "Display"
+          },
+          "orientation": {
+            "label": "Orientation"
+          },
+          "themeColor": {
+            "label": "Theme color"
+          },
+          "backgroundColor": {
+            "label": "Background color"
+          },
+          "icon192": {
+            "label": "Icon192"
+          },
+          "icon512": {
+            "label": "Icon512"
+          },
+          "installPrompt": {
+            "label": "Install prompt"
+          },
+          "offlineEnabled": {
+            "label": "Offline enabled"
+          }
+        }
+      },
+      "storage": {
+        "title": "Cloud storage",
+        "description": "S3-compatible bucket for media. Test the connection before turning it on.",
+        "sections": {
+          "provider": {
+            "title": "Provider"
+          },
+          "credentials": {
+            "title": "Bucket credentials"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Enabled"
+          },
+          "provider": {
+            "label": "Provider"
+          },
+          "visibility": {
+            "label": "Visibility",
+            "hint": "Private objects need signed links; use public or a CDN URL for media people open directly."
+          },
+          "basePath": {
+            "label": "Base path",
+            "hint": "Prefix for the probe object. Uploads will use it once the file module lands."
+          },
+          "accessKeyId": {
+            "label": "Access key ID"
+          },
+          "secret": {
+            "label": "Secret",
+            "hint": "Stored encrypted and never shown again."
+          },
+          "region": {
+            "label": "Region"
+          },
+          "bucket": {
+            "label": "Bucket"
+          },
+          "endpoint": {
+            "label": "Endpoint",
+            "hint": "Required for Spaces, R2 and MinIO. A trailing /bucket is removed."
+          },
+          "cdnUrl": {
+            "label": "CDN URL"
+          },
+          "pathStyle": {
+            "label": "Path style"
+          },
+          "storageZone": {
+            "label": "Storage zone",
+            "hint": "Bunny only."
+          },
+          "storagePassword": {
+            "label": "Storage password",
+            "hint": "Bunny only: the storage zone password. Stored encrypted."
+          }
+        }
+      },
+      "realtime": {
+        "title": "Real-time",
+        "description": "Pusher credentials for live updates, with a connection test.",
+        "sections": {
+          "live": {
+            "title": "Live delivery"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Enabled",
+            "hint": "Off keeps the inbox on polling."
+          },
+          "appId": {
+            "label": "App ID"
+          },
+          "cluster": {
+            "label": "Cluster"
+          },
+          "appKey": {
+            "label": "App key"
+          },
+          "appSecret": {
+            "label": "App secret",
+            "hint": "Stored encrypted and never shown again."
+          }
+        }
+      }
+    }
+  }
+}

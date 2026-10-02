@@ -11,6 +11,8 @@ export interface OperatorNavItem {
   groupKey: string;
 }
 
+import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
+
 const NS = 'auth-registration-security.platform.nav';
 
 export const OPERATOR_NAV: readonly OperatorNavItem[] = [
@@ -50,6 +52,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  // platform settings, branding and storage (SET domain)
+  ...SET_OPERATOR_NAV,
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */

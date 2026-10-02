@@ -114,6 +114,30 @@ can claim them, and the complete `system_settings` key catalogue (all 313 keys f
 | WD-SET-045 | Locale registry and text direction                                                          | implemented | P1       | S      | WD-SET-006             |
 | WD-SET-046 | Timezone resolution and safe timezone helpers                                               | implemented | P1       | S      | WD-SET-006             |
 
+## Port status (crm-platform)
+
+Store: the AUTH domain's platform-wide `platform_settings` table; a group is one versioned JSON document (`set.<group>`) and secrets
+are separate encrypted rows (`set.<group>.<field>`). See `port-map/platform-settings-branding-storage.md` and
+`docs/api/platform-settings-branding-storage.md`.
+
+| Status      | Features                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| done        | 001, 002, 003, 004, 005, 008, 022, 023, 024, 025, 029, 031 (stored only, as in WaDesk), 032, 035, 037 (stored only), 039, 041                                                                                                                                                                                                                                                                                                                                                                                      |
+| partial     | 006 (stored and validated, consumers in I18N/WSP not wired), 007 (registration policy, default plan and trial days live in AUTH; `billing_plan_scope` not ported), 010 (logo and favicon URLs, no upload yet), 011, 012 (stored and served, per-workspace resolution missing), 013-015 (stored, `themeCss` served, not injected into the web shell), 026 (form without the live preview), 027, 028 (robots only, no sitemap), 030, 033, 034, 036 (manifest endpoint, no head tags), 046 (timezone validation only) |
+| not started | 009 (dead code, dropped), 016, 017, 018-021 (AUTH built `auth.pages`; not re-verified here), 038, 040 (needs the file module), 042 (Socket.IO gateway replaces Pusher), 043, 044, 045                                                                                                                                                                                                                                                                                                                              |
+
+Decisions on WaDesk quirks (fixed deliberately unless noted):
+
+- 001: one encryption scheme (AES-GCM `CryptoService`) for every secret; typed values, no `int` default type; no key-only cache.
+- 002: `platform.system.settings` is replaced by operator roles (read: every role, write: super admin); audit lists changed field names only.
+- 004: redaction from the secret flag plus a per-group identifier list, not key-name suffixes.
+- 005: `contact_number`, `address`, `map_iframe_url` are kept (stored, no consumer yet); typed booleans.
+- 008: also exempts `/v2/auth`, `/v2/public`, `/v2/webhooks`, `/public/v1` and any operator token.
+- 013: a malformed colour is refused (WaDesk stored it as empty); font scale and opacity are clamped as in WaDesk.
+- 024: the encryption choice is real (ssl is implicit TLS, starttls requires the upgrade, empty disables it); sendmail and API mailers fail with `not_configured`.
+- 039: one credential set for the chosen provider (WaDesk kept a block per provider); blank non-secret fields CAN be cleared; save and test are separate calls; the test never persists anything; audit rows are written.
+- 041: the Pusher probe uses the REST API without an SDK; test result is 200 with `ok` (WaDesk: 422 on failure).
+
 ## Features
 
 ### WD-SET-001 — System settings key/value store (typed, cached, secrets encrypted)
