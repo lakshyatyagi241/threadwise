@@ -3,13 +3,18 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthProvidersModule } from '../../infra/providers/auth-registration-security/auth-providers.module';
 import { ObjectStorageProbe } from '../../infra/providers/platform-settings-branding-storage/object-storage.probe';
 import { PusherProbe } from '../../infra/providers/platform-settings-branding-storage/pusher.probe';
+import { BrandingService } from './branding.service';
+import { BrandAssetsService } from './brand-assets.service';
 import { ConnectionTestsService } from './connection-tests.service';
+import { CurrencyService } from './currency.service';
 import { MailRuntimeService } from './mail-runtime.service';
 import { MaintenanceGuard } from './maintenance.guard';
+import { MediaStorageService } from './media-storage.service';
 import { ProjectionService } from './projection.service';
 import { SitePublicController } from './public.controller';
 import { SettingsController } from './settings.controller';
 import { SettingsService } from './settings.service';
+import { VapidService } from './vapid.service';
 
 /**
  * Platform system settings, branding, storage, real-time, mail and SEO (WD-SET). Depends on the auth module
@@ -22,12 +27,17 @@ import { SettingsService } from './settings.service';
   providers: [
     SettingsService,
     ProjectionService,
+    BrandAssetsService,
+    BrandingService,
+    VapidService,
+    MediaStorageService,
+    CurrencyService,
     MailRuntimeService,
     ConnectionTestsService,
     ObjectStorageProbe,
     PusherProbe,
     { provide: APP_GUARD, useClass: MaintenanceGuard },
   ],
-  exports: [SettingsService, ProjectionService],
+  exports: [SettingsService, ProjectionService, BrandingService, MediaStorageService, CurrencyService],
 })
 export class PlatformSettingsModule {}

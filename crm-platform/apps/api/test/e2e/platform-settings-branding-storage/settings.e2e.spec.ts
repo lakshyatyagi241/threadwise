@@ -14,6 +14,8 @@ import {
 } from '../../../src/infra/providers/auth-registration-security/mail.port';
 import { PusherProbe } from '../../../src/infra/providers/platform-settings-branding-storage/pusher.probe';
 import { PlatformSettingsService } from '../../../src/modules/auth';
+import { BrandingService } from '../../../src/modules/platform-settings-branding-storage/branding.service';
+import { CurrencyService } from '../../../src/modules/platform-settings-branding-storage/currency.service';
 import { MailRuntimeService } from '../../../src/modules/platform-settings-branding-storage/mail-runtime.service';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import {
@@ -371,7 +373,7 @@ describe('WD-SET-004 export and WD-SET-003 hub', () => {
     const hub = setHubResponseSchema.parse((await ops('get', '/groups')).body);
     expect(hub.kpis).toMatchObject({
       savedGroups: 0,
-      totalGroups: 11,
+      totalGroups: 12,
       needsTest: [],
       secretFields: 0,
       lastUpdatedAt: null,
@@ -591,7 +593,7 @@ describe('public projection (WD-SET-011, 023, 027, 030, 033, 034, 036, 028)', ()
   });
 
   it('robots.txt follows the SEO robots directive', async () => {
-    expect((await api().get('/v2/public/robots.txt')).text).toBe('User-agent: *\nAllow: /\n');
+    expect((await api().get('/v2/public/robots.txt')).text).toBe('User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api\n');
     await save('seo', { robots: 'noindex, nofollow' });
     expect((await api().get('/v2/public/robots.txt')).text).toBe('User-agent: *\nDisallow: /\n');
   });
@@ -634,5 +636,273 @@ describe('WD-SET-008 maintenance mode', () => {
     expect((await tenantGet()).status).toBe(503);
     await save('general', { maintenanceMode: false });
     expect((await tenantGet()).status).toBe(200);
+  });
+});
+
+// A 1x1 PNG and a tiny SVG: real bytes, because the upload checks the content, not the file name.
+const PNG_BYTES = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+  'base64',
+);
+const SVG_BYTES = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"></svg>');
+
+describe('WD-SET-010 brand assets', () => {
+  const upload = (slot: string, buf: Buffer, name = 'f.png') =>
+    api()
+      .post(`/v2/platform/settings/assets/${slot}`)
+      .set(bearer(superToken))
+      .attach('file', buf, name);
+
+  it('stores an uploaded logo, points the branding group at it and serves it publicly', async () => {
+    const before = await group('branding');
+    const up = await upload('logo-dark', PNG_BYTES);
+    expect(up.status, JSON.stringify(up.body)).toBe(201);
+    expect(up.body.url).toMatch(/^\/api\/v2\/public\/brand\/logo-dark\?v=[0-9a-f]{8}$/);
+
+    const after = await group('branding');
+    expect((after.values.logos as Record<string, string>).dark).toBe(up.body.url);
+    expect(after.rowVersion).toBe(before.rowVersion + 1);
+
+    const file = await api().get('/v2/public/brand/logo-dark');
+    expect(file.status).toBe(200);
+    expect(file.headers['content-type']).toBe('image/png');
+    expect(file.headers['x-content-type-options']).toBe('nosniff');
+    expect(file.headers['cache-control']).toContain('immutable');
+    expect(Buffer.from(file.body).equals(PNG_BYTES)).toBe(true);
+
+    const cfg = (await api().get('/v2/public/site-config')).body;
+    expect(cfg.brand.logos.dark).toBe(up.body.url);
+    expect((await events('platform.settings.branding_updated')).length).toBeGreaterThan(0);
+  });
+
+  it('a theme with no logo of its own shows the paper logo', async () => {
+    const paper = await upload('logo-paper', PNG_BYTES);
+    const cfg = (await api().get('/v2/public/site-config')).body;
+    expect(cfg.brand.logos.doodle).toBe(paper.body.url);
+  });
+
+  it('refuses a wrong type, a file over the limit and an unknown slot, and serves nothing for them', async () => {
+    const html = await upload('favicon', Buffer.from('<html><script>1</script></html>'), 'a.png');
+    expect(html.status).toBe(422);
+    const big = await upload('favicon', Buffer.concat([PNG_BYTES, Buffer.alloc(600 * 1024)]));
+    expect(big.status).toBe(422);
+    expect((await upload('nope', PNG_BYTES)).status).toBe(422);
+    expect((await api().get('/v2/public/brand/favicon')).status).toBe(404);
+    expect((await api().get('/v2/public/brand/nope')).status).toBe(404);
+  });
+
+  it('accepts a 900 KB SVG logo (limit 1024 KB) and serves it sandboxed', async () => {
+    const pad = Buffer.from(`<!-- ${'x'.repeat(900 * 1024)} -->`);
+    const svg = Buffer.concat([
+      Buffer.from('<svg xmlns="http://www.w3.org/2000/svg">'),
+      pad,
+      Buffer.from('</svg>'),
+    ]);
+    const up = await upload('logo-bright', svg, 'logo.svg');
+    expect(up.status, JSON.stringify(up.body)).toBe(201);
+    const file = await api().get('/v2/public/brand/logo-bright');
+    expect(file.headers['content-type']).toBe('image/svg+xml');
+    expect(file.headers['content-security-policy']).toContain('sandbox');
+  });
+
+  it('replacing a file keeps one row (no orphan), and removing clears the field and the file', async () => {
+    await upload('favicon', PNG_BYTES);
+    await upload('favicon', SVG_BYTES, 'f.svg');
+    const rows = await h.owner.query(
+      `SELECT 1 FROM platform_settings WHERE key = 'set.asset.favicon'`,
+    );
+    expect(rows.rowCount).toBe(1);
+    expect((await api().get('/v2/public/brand/favicon')).headers['content-type']).toBe(
+      'image/svg+xml',
+    );
+
+    const del = await api().delete('/v2/platform/settings/assets/favicon').set(bearer(superToken));
+    expect(del.status).toBe(204);
+    expect((await group('branding')).values.faviconUrl).toBe('');
+    expect((await api().get('/v2/public/brand/favicon')).status).toBe(404);
+  });
+
+  it('only a super admin uploads, and an anonymous caller cannot', async () => {
+    const asSupport = await api()
+      .post('/v2/platform/settings/assets/favicon')
+      .set(bearer(supportToken))
+      .attach('file', PNG_BYTES, 'f.png');
+    expect(asSupport.status).toBe(403);
+    const anon = await api()
+      .post('/v2/platform/settings/assets/favicon')
+      .attach('file', PNG_BYTES, 'f.png');
+    expect(anon.status).toBe(401);
+  });
+
+  it('the settings export and the hub never carry the file bytes', async () => {
+    await upload('logo-paper', PNG_BYTES);
+    const exp = JSON.stringify((await ops('get', '/export')).body);
+    expect(exp).not.toContain(PNG_BYTES.toString('base64'));
+    expect((await ops('get', '/groups')).status).toBe(200);
+  });
+
+  it('an app icon goes into the manifest with the real image type', async () => {
+    await save('pwa', { enabled: true });
+    await upload('pwa-192', PNG_BYTES);
+    const m = (await api().get('/v2/public/manifest.webmanifest')).body;
+    expect(m.icons).toEqual([
+      expect.objectContaining({
+        sizes: '192x192',
+        type: 'image/png',
+        src: expect.stringContaining('/pwa-192?v='),
+      }),
+    ]);
+  });
+});
+
+describe('WD-SET-038 Team Inbox app', () => {
+  it('has no manifest while off; on, it falls back to the app icons, then the favicon, and scopes to /team-inbox', async () => {
+    expect((await api().get('/v2/public/team-inbox-manifest.webmanifest')).status).toBe(404);
+    await save('general', { appName: 'Acme' });
+    await save('tiPwa', { enabled: true });
+    let m = (await api().get('/v2/public/team-inbox-manifest.webmanifest')).body;
+    expect(m).toMatchObject({
+      name: 'Acme Inbox',
+      short_name: 'Inbox',
+      start_url: '/team-inbox',
+      scope: '/team-inbox',
+      display: 'standalone',
+      icons: [],
+    });
+    await save('branding', { faviconUrl: 'https://cdn.test/fav.ico' });
+    m = (await api().get('/v2/public/team-inbox-manifest.webmanifest')).body;
+    expect(m.icons).toEqual([
+      { src: 'https://cdn.test/fav.ico', sizes: 'any', type: 'image/x-icon' },
+    ]);
+    await save('pwa', { icon512: 'https://cdn.test/app512.png' });
+    m = (await api().get('/v2/public/team-inbox-manifest.webmanifest')).body;
+    expect(m.icons).toEqual([
+      { src: 'https://cdn.test/app512.png', sizes: '512x512', type: 'image/png' },
+    ]);
+    await save('tiPwa', {
+      name: 'Support Desk',
+      shortName: 'Support',
+      icon192: 'https://cdn.test/ti.png',
+    });
+    m = (await api().get('/v2/public/team-inbox-manifest.webmanifest')).body;
+    expect(m.name).toBe('Support Desk');
+    expect(m.short_name).toBe('Support');
+    expect(m.icons[0]).toMatchObject({ src: 'https://cdn.test/ti.png', sizes: '192x192' });
+  });
+
+  it('generates the push keys once: the private half is ciphertext and a second click returns the same key', async () => {
+    expect((await group('tiPwa')).extra).toMatchObject({ pushReady: false, vapidPublic: '' });
+    const first = await ops('post', '/tiPwa/generate-keys');
+    expect(first.status, JSON.stringify(first.body)).toBe(200);
+    expect(first.body).toMatchObject({ ok: true, ready: true });
+    expect(Buffer.from(first.body.publicKey, 'base64url')).toHaveLength(65);
+    expect(JSON.stringify(first.body)).not.toContain('private');
+
+    const row = await h.owner.query(
+      `SELECT value, is_secret FROM platform_settings WHERE key = 'set.tiPwa.vapidPrivate'`,
+    );
+    expect(row.rows[0].is_secret).toBe(true);
+    expect(JSON.stringify(row.rows[0].value)).not.toMatch(/^"[A-Za-z0-9_-]{43}"$/);
+
+    const second = await ops('post', '/tiPwa/generate-keys');
+    expect(second.body.publicKey).toBe(first.body.publicKey);
+    expect((await group('tiPwa')).extra).toMatchObject({
+      pushReady: true,
+      vapidPublic: first.body.publicKey,
+    });
+    expect((await events('platform.settings.tiPwa_keys_generated')).length).toBe(1);
+  });
+
+  it('two clicks at once still end with one pair', async () => {
+    const [a, b] = await Promise.all([
+      ops('post', '/tiPwa/generate-keys'),
+      ops('post', '/tiPwa/generate-keys'),
+    ]);
+    expect(a.body.publicKey).toBe(b.body.publicKey);
+  });
+
+  it('is for a super admin only', async () => {
+    expect((await support('post', '/tiPwa/generate-keys')).status).toBe(403);
+  });
+});
+
+describe('WD-SET-011 and 012 brand helpers and the platform footer', () => {
+  const branding = () => h.app.get(BrandingService);
+
+  it('a never-saved install shows the WaDesk-style default footer; saving a new one reaches the workspace Branding page', async () => {
+    expect((await group('general')).values.platformFooter).toMatch(/^Sent via /);
+    await save('general', { platformFooter: 'Sent via Acme' });
+    const res = await api().get('/v2/account/branding').set(bearer(tenantToken));
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.platformDefault).toBe('Sent via Acme');
+    // cleared = no platform footer at all (not the install default)
+    await save('general', { platformFooter: '' });
+    expect(
+      (await api().get('/v2/account/branding').set(bearer(tenantToken))).body.platformDefault,
+    ).toBe('');
+  });
+
+  it('BrandingService resolves the footer per plan feature and the brand names from the saved settings', async () => {
+    await save('general', { appName: 'Acme Corp', platformFooter: 'Sent via Acme' });
+    await save('site', { emailSupport: 'help@acme.test' });
+    const b = branding();
+    expect(await b.name()).toBe('Acme Corp');
+    expect(await b.token()).toBe('ACMECO');
+    expect((await b.webhookHeaders()).signature).toBe('X-AcmeCorp-Signature');
+    expect(await b.email('privacy')).toBe('help@acme.test');
+    expect(await b.footerFor({ hasRemoveBranding: false, footer: 'Mine' })).toBe('Sent via Acme');
+    expect(await b.footerFor({ hasRemoveBranding: true, footer: null })).toBeNull();
+    expect(await b.footerFor({ hasRemoveBranding: true, footer: 'Team X' })).toBe('Team X');
+    expect(await b.decorate('Hi', { hasRemoveBranding: false, footer: null })).toBe(
+      'Hi\n\n_Sent via Acme_',
+    );
+    await save('site', { emailSupport: '', emailSales: 'sales@acme.test' });
+    expect(await b.email('sales')).toBe('sales@acme.test');
+  });
+});
+
+describe('WD-SET-003 hub health and WD-SET-030 legal links', () => {
+  it('counts saved groups that hold a value as healthy', async () => {
+    let hub = setHubResponseSchema.parse((await ops('get', '/groups')).body);
+    expect(hub.kpis).toMatchObject({ savedGroups: 0, healthyGroups: 0, totalGroups: 12 });
+    await save('general', { appName: 'Acme' });
+    await save('seo', { robots: 'index, follow' });
+    hub = setHubResponseSchema.parse((await ops('get', '/groups')).body);
+    expect(hub.kpis.savedGroups).toBe(2);
+    expect(hub.kpis.healthyGroups).toBe(2);
+  });
+
+  it('the public projection resolves the legal pages to the saved URL, else the built-in page', async () => {
+    await save('privacy', { policyUrl: 'https://acme.test/privacy' });
+    const cfg = (await api().get('/v2/public/site-config')).body;
+    expect(cfg.legal).toEqual({
+      terms: '/legal/terms',
+      privacy: 'https://acme.test/privacy',
+      cookies: '/legal/cookies',
+    });
+    expect(cfg.pwa).toMatchObject({ enabled: false });
+  });
+});
+
+describe('WD-SET-044 currency helpers over the real currencies table', () => {
+  it('formats in a currency, converts through the USD rates and shows a workspace currency', async () => {
+    await h.owner.query(
+      `INSERT INTO currencies (name, code, symbol, "precision", exchange_rate, is_active) VALUES
+         ('US Dollar','USD','$',2,1,true),('Indian Rupee','INR','₹',2,83.5,true),('Old','XXX','x',2,5,false)
+       ON CONFLICT (code) DO UPDATE SET exchange_rate = EXCLUDED.exchange_rate, is_active = EXCLUDED.is_active, symbol = EXCLUDED.symbol`,
+    );
+    const svc = h.app.get(CurrencyService);
+    svc.flush();
+    expect(await svc.formatIn('1499.5', 'INR')).toBe('₹1,499.50');
+    expect(await svc.convert('10', 'USD', 'INR')).toBe('835.00');
+    expect(await svc.formatIn('3', 'XXX')).toBe('3.00'); // inactive: no row, plain number
+    expect(await svc.symbolFor('INR')).toBe('₹');
+    expect(await svc.symbolFor('ZZZ')).toBe('ZZZ');
+    expect(await svc.symbolFor(null)).toBe('');
+    await save('general', { defaultCurrency: 'inr' });
+    expect(await svc.effectiveCode(null)).toBe('INR');
+    expect(await svc.display('10', 'USD')).toBe('₹835.00');
+    expect(await svc.display('10', 'USD', 'USD')).toBe('$10.00');
+    await h.owner.query(`TRUNCATE currencies`);
   });
 });

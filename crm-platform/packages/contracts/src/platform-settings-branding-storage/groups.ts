@@ -19,6 +19,16 @@ const httpUrl = (max: number) =>
       'must be an http:// or https:// URL',
     );
 const url = (max: number) => z.union([z.literal(''), httpUrl(max)]).default('');
+/** An uploaded brand file (served by the API under /api/v2/public/brand/<slot>) or an external http(s) URL. */
+export const BRAND_ASSET_PATH = /^\/api\/v2\/public\/brand\/[a-z0-9-]+(\?v=[a-f0-9]{8})?$/;
+const assetUrl = (max: number) =>
+  z
+    .union([
+      z.literal(''),
+      z.string().max(max).regex(BRAND_ASSET_PATH, 'not a brand asset path'),
+      httpUrl(max),
+    ])
+    .default('');
 const email = (max: number) =>
   z.union([z.literal(''), z.string().trim().email().max(max)]).default('');
 const flag = (on: boolean) => z.boolean().default(on);
@@ -88,9 +98,9 @@ const colorMap = z.object(
   >,
 );
 const logoMap = z.object(
-  Object.fromEntries(BRAND_THEMES.map((t) => [t, url(500)])) as Record<
+  Object.fromEntries(BRAND_THEMES.map((t) => [t, assetUrl(500)])) as Record<
     (typeof BRAND_THEMES)[number],
-    ReturnType<typeof url>
+    ReturnType<typeof assetUrl>
   >,
 );
 
@@ -130,7 +140,7 @@ export const generalSettingsSchema = z.object({
 
 // --- WD-SET-010, 013, 014, 015 ----------------------------------------------------------------
 export const brandingSettingsSchema = z.object({
-  faviconUrl: url(500),
+  faviconUrl: assetUrl(500),
   logos: logoMap.default({}),
   colors: colorMap.default({}),
   fontScale: clamped(80, 130, 100),
@@ -277,8 +287,8 @@ export const pwaSettingsSchema = z.object({
     .string()
     .regex(/^#[0-9A-Fa-f]{3,8}$/)
     .default('#FBFAF6'),
-  icon192: url(500),
-  icon512: url(500),
+  icon192: assetUrl(500),
+  icon512: assetUrl(500),
 });
 
 // --- WD-SET-039 -------------------------------------------------------------------------------
@@ -306,6 +316,15 @@ export const realtimeSettingsSchema = z.object({
   cluster: z.string().trim().max(32).default('mt1'),
 });
 
+// --- WD-SET-038 (the VAPID key pair is generated, never typed: see the generate-keys endpoint) --
+export const tiPwaSettingsSchema = z.object({
+  enabled: flag(false),
+  name: text(60),
+  shortName: text(12),
+  icon192: assetUrl(500),
+  icon512: assetUrl(500),
+});
+
 export const SET_GROUP_SCHEMAS = {
   general: generalSettingsSchema,
   branding: brandingSettingsSchema,
@@ -318,6 +337,7 @@ export const SET_GROUP_SCHEMAS = {
   pwa: pwaSettingsSchema,
   storage: storageSettingsSchema,
   realtime: realtimeSettingsSchema,
+  tiPwa: tiPwaSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
 export const SET_GROUPS = Object.keys(SET_GROUP_SCHEMAS) as SetGroup[];
@@ -336,6 +356,7 @@ export const SET_SECRET_FIELDS = {
   pwa: [],
   storage: ['secret', 'storagePassword'],
   realtime: ['appSecret'],
+  tiPwa: [],
 } as const satisfies Record<SetGroup, readonly string[]>;
 
 /** Groups whose saved state can be checked against the outside world (a "test" button). */
