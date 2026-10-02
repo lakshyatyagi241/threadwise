@@ -25,6 +25,16 @@ describe('settings group schemas', () => {
     expect(general.safeParse({ appName: 'x'.repeat(81) }).success).toBe(false);
   });
 
+  it('links that reach public pages must be http(s): javascript: and data: are refused', () => {
+    expect(SET_GROUP_SCHEMAS.site.safeParse({ socialX: 'javascript:alert(1)' }).success).toBe(
+      false,
+    );
+    expect(SET_GROUP_SCHEMAS.general.safeParse({ mapIframeUrl: 'data:text/html,x' }).success).toBe(
+      false,
+    );
+    expect(SET_GROUP_SCHEMAS.site.safeParse({ socialX: 'https://x.com/acme' }).success).toBe(true);
+  });
+
   it('TW-SET-006: country iso must be two letters, timezone must exist, currency is upper-cased', () => {
     const general = SET_GROUP_SCHEMAS.general;
     expect(general.safeParse({ defaultCountryIso: 'ind' }).success).toBe(false);

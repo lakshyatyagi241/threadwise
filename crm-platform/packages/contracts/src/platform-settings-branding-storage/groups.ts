@@ -7,7 +7,18 @@ import { z } from 'zod';
  */
 
 const text = (max: number) => z.string().trim().max(max).default('');
-const url = (max: number) => z.union([z.literal(''), z.string().trim().url().max(max)]).default('');
+/** http(s) only: these end up in public `href`/`src`/iframe attributes, where `javascript:` would run. */
+const anyUrl = z.string().url();
+const httpUrl = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .refine(
+      (u) => /^https?:\/\//i.test(u) && anyUrl.safeParse(u).success,
+      'must be an http:// or https:// URL',
+    );
+const url = (max: number) => z.union([z.literal(''), httpUrl(max)]).default('');
 const email = (max: number) =>
   z.union([z.literal(''), z.string().trim().email().max(max)]).default('');
 const flag = (on: boolean) => z.boolean().default(on);
@@ -233,9 +244,7 @@ export const analyticsSettingsSchema = z.object({
   plausibleDomain: text(120),
   posthogKey: text(120),
   mixpanelToken: text(120),
-  posthogHost: z
-    .union([z.literal(''), z.string().url().max(200)])
-    .default('https://app.posthog.com'),
+  posthogHost: z.union([z.literal(''), httpUrl(200)]).default('https://app.posthog.com'),
   hotjarSiteId: text(30),
 });
 
