@@ -86,3 +86,16 @@ export type { ContactImportJobData } from './contact-import';
 export { ContactDedupeService } from './contact-dedupe';
 export { AttributesService, MergeTagService, renderMergeTags, resolveToken } from './attributes';
 export type { MergeContact, MergeContext } from './attributes';
+export {
+  DealsService,
+  DealBoardService,
+  DealReportsService,
+  DealEngine,
+  toDealResponse,
+} from './deals';
+export type { DealRow } from './deals';
+export { TasksService, TasksRepository, toTaskResponse } from './tasks';
+export type { TaskRow } from './tasks';
+export { TasksWorkerModule } from './tasks/tasks-worker.module';
+export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
+export type { PipelineRow, StageRow } from './pipelines';

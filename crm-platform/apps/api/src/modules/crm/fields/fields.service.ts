@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, RESERVED_ATTRIBUTE_KEYS } from '@crm/contracts';
 import type {
   CreateFieldDependencyInput,
   CreateFieldInput,
@@ -9,6 +9,8 @@ import type {
   FieldOptionDependencyResponse,
   FieldOptionResponse,
   FieldResponse,
+  FieldUsageQuery,
+  FieldUsageResponse,
   ListFieldsQuery,
   ModuleKey,
   PageResponse,
@@ -98,6 +100,28 @@ export class FieldsService {
     });
   }
 
+  /**
+   * How many contacts hold a value for each field of the module ("in use" on the properties screen). Only contacts
+   * keep their values in a custom-data column today, so any other module reports zero.
+   */
+  async usage(query: FieldUsageQuery): Promise<FieldUsageResponse> {
+    const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
+    return this.db.tx(async (tx) => {
+      const rows = await this.repo.listByModule(tx, ctx.orgId, {
+        moduleKey: query.moduleKey,
+        includeInactive: true,
+      });
+      const counts =
+        query.moduleKey === 'contacts'
+          ? await this.repo.countContactsByKey(tx, ctx.orgId)
+          : new Map<string, number>();
+      return {
+        data: rows.map((r) => ({ id: r.uuid, key: r.key, count: counts.get(r.key) ?? 0 })),
+      };
+    });
+  }
+
   async getByUuid(uuid: string): Promise<FieldResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
@@ -110,6 +134,16 @@ export class FieldsService {
   async create(input: CreateFieldInput): Promise<FieldResponse> {
     const ctx = RequestContextStore.require();
     this.requireModulePermission(input.moduleKey, 'create');
+    // A contact property is also a merge variable ({{key}}): the keys the platform already resolves, or that the
+    // contact form stores itself, cannot be redefined (same rule as POST /attributes).
+    if (input.moduleKey === 'contacts' && RESERVED_ATTRIBUTE_KEYS.has(input.key)) {
+      throw new AppError(
+        ERROR_CODES.CON_ATTRIBUTE_KEY_RESERVED,
+        `"${input.key}" is a built-in token. Pick another key.`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'key', message: 'reserved' }],
+      );
+    }
     return this.db.tx(async (tx) => {
       const sectionId = await this.repo.resolveSectionId(tx, ctx.orgId, input.sectionId);
       if (sectionId === undefined) throw AppError.notFound('FieldSection', input.sectionId);
@@ -355,6 +389,15 @@ export class FieldsService {
   }
 
   // --- field dependencies -----------------------------------------------
+
+  async listModuleDependencies(query: FieldUsageQuery): Promise<FieldDependencyResponse[]> {
+    const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
+    return this.db.tx(async (tx) => {
+      const rows = await this.dependenciesRepo.listByModule(tx, ctx.orgId, query.moduleKey);
+      return rows.map(toFieldDependencyResponse);
+    });
+  }
 
   async listDependencies(fieldUuid: string): Promise<FieldDependencyResponse[]> {
     const ctx = RequestContextStore.require();

@@ -2,6 +2,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { FALLBACK_STATUSES, TITLES } from './lib/contact-model';
+import { BUILT_IN_PROPERTIES, CREATABLE_TYPES } from './lib/property-model';
+import { fieldTypeSchema } from '@crm/contracts';
 import { IMPORT_FIELDS, IMPORT_REJECT_REASONS, SYSTEM_ATTRIBUTES } from '@crm/contracts';
 
 /**
@@ -82,7 +84,13 @@ function usedKeys(source: string): string[] {
   return out;
 }
 
-const DYNAMIC_PREFIXES = ['form.titles.', 'import.reasons.', 'attributes.system.'];
+const DYNAMIC_PREFIXES = [
+  'form.titles.',
+  'import.reasons.',
+  'attributes.system.',
+  'properties.types.',
+  'properties.typeHelp.',
+];
 
 describe('message keys used in code', () => {
   const files = [
@@ -155,6 +163,48 @@ describe('message keys used in code', () => {
           'mergeScope',
         ] as const
       ).map((s) => `errors.${s}`),
+      ...fieldTypeSchema.options.map((s) => `properties.types.${s}`),
+      ...CREATABLE_TYPES.map((s) => `properties.typeHelp.${s}`),
+      ...BUILT_IN_PROPERTIES.map((p) => `properties.builtin.${p.key}`),
+      ...(['required', 'tooLong'] as const).map((s) => `properties.modal.problem.label.${s}`),
+      ...(['required', 'format', 'tooLong', 'taken', 'reserved'] as const).map(
+        (s) => `properties.modal.problem.key.${s}`,
+      ),
+      ...(['required', 'emptyLabel', 'duplicate'] as const).map(
+        (s) => `properties.modal.problem.options.${s}`,
+      ),
+      ...(['name', 'key', 'type', 'required', 'visible', 'inUse', 'actions'] as const).map(
+        (s) => `properties.col.${s}`,
+      ),
+      ...(['required', 'tooLong', 'taken'] as const).flatMap((s) => [
+        `stages.modal.problem.${s}`,
+        `properties.section.problem.${s}`,
+      ]),
+      ...(['required', 'number', 'integer', 'email', 'url'] as const).map(
+        (s) => `form.fieldProblem.${s}`,
+      ),
+      ...(['stage', 'status'] as const).flatMap((k) =>
+        (
+          [
+            'eyebrow',
+            'addTitle',
+            'namePlaceholder',
+            'listLabel',
+            'help',
+            'add',
+            'unconfiguredTitle',
+            'unconfigured',
+            'seed',
+            'startFresh',
+            'how.title',
+            'how.body',
+          ] as const
+        ).map((s) => `stages.${k}.${s}`),
+      ),
+      'errors.statusInUse',
+      'errors.dependencyCycle',
+      'nav.stages',
+      'nav.properties',
       'list.listView',
       'list.gridView',
       'nav.contacts',
