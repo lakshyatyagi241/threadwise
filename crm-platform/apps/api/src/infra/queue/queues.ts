@@ -30,6 +30,8 @@ export const QUEUES = {
   BCAST_DISPATCH: 'bcast-dispatch',
   /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (WD-TG-013). */
   TG_BROADCAST: 'tg-broadcast',
+  /** One job per run of a scheduled message (WD-NODE-030, 031): sends its pending recipients with the pacing rules. Own queue so a long run cannot hold a broadcast. */
+  SCHED_RUN: 'sched-run',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
 } as const;
