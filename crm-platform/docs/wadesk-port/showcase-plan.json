@@ -1,0 +1,441 @@
+{
+  "today": [
+    {
+      "block": "1. Base setup",
+      "area": "Base",
+      "task": "Pull main, run the setup script, start the API, the worker and the web app",
+      "done_when": "pnpm dev, pnpm dev:worker and pnpm dev:web all up; you can sign in and see the dashboard and the 26 demo contacts",
+      "hours": 0.4,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "1. Base setup",
+      "area": "Base",
+      "task": "Create the working branch feat/auth-onboarding from main and confirm the ownership check passes for your paths",
+      "done_when": "ownership_check.py reports no FOREIGN files",
+      "hours": 0.1,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "1. Base setup",
+      "area": "Base",
+      "task": "Confirm Mailpit receives mail (SMTP localhost:51025 from .env, inbox UI on :58025)",
+      "done_when": "A test message sent over SMTP shows in the Mailpit inbox",
+      "hours": 0.1,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "1. Base setup",
+      "area": "Base",
+      "task": "Agree the web stack and cookie-session design with Shubham, Vedant and Punya, or amend it, before building more on it",
+      "done_when": "Design agreed, or edits are merged",
+      "hours": 0.3,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "1. Base setup",
+      "area": "Base",
+      "task": "Decide the privileged onboarding path: signup creates an organization, which needs one new sanctioned use of privileged()",
+      "done_when": "Decision agreed",
+      "hours": 0.5,
+      "priority": "Must",
+      "wd": "WD-WSP-002"
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "Mail port and SMTP adapter under infra/providers/mail with env vars, bound in the module (provider-adapter skill)",
+      "done_when": "A unit test with a fake adapter passes and a real send appears in Mailpit",
+      "hours": 0.5,
+      "priority": "Must",
+      "wd": "WD-AUTH-013"
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "Migration for user_tokens: email_verify and password_reset kinds, hashed token, expiry, consumed_at, attempts; forced RLS; Drizzle mirror (add-migration skill)",
+      "done_when": "db:migrate applies, check-rls.sh passes, db:status clean",
+      "hours": 0.4,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "POST /v2/auth/signup: create organization, locked Admin role with every permission key, and the first user in one privileged transaction; slug uniqueness; password policy; audit row and outbox event",
+      "done_when": "Signup returns a token pair; the new org exists; a user of another org cannot see it (integration test)",
+      "hours": 1.0,
+      "priority": "Must",
+      "wd": "WD-AUTH-005, WD-WSP-001, WD-WSP-002, WD-WSP-004"
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "POST /v2/auth/forgot-password and /v2/auth/reset-password: no account enumeration, single-use hashed token, one-hour expiry, rate limit",
+      "done_when": "Reset link arrives in Mailpit, works once, the old password stops working, a reused or expired token is refused",
+      "hours": 0.6,
+      "priority": "Must",
+      "wd": "WD-AUTH-013, WD-AUTH-014"
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "Email verification: send a code at signup, POST /v2/auth/verify-email, resend; decide whether login is blocked until verified",
+      "done_when": "Unverified accounts follow the decided rule; a wrong or expired code is refused",
+      "hours": 0.6,
+      "priority": "Should",
+      "wd": "WD-AUTH-005"
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "POST /v2/users/me/password (change password, current password required)",
+      "done_when": "Wrong current password refused; success revokes nothing else unexpectedly and writes an audit row",
+      "hours": 0.3,
+      "priority": "Must",
+      "wd": "WD-AUTH-027"
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "POST /v2/auth/logout that revokes the refresh token (today refresh is stateless)",
+      "done_when": "A revoked refresh token can no longer mint an access token",
+      "hours": 0.4,
+      "priority": "Should",
+      "wd": "WD-AUTH-012"
+    },
+    {
+      "block": "2. Auth backend",
+      "area": "Auth",
+      "task": "Contracts for every auth endpoint plus error codes, docs/api entries, unit and integration tests including tenant isolation",
+      "done_when": "contracts build, gate green, every acceptance criterion has a test",
+      "hours": 1.0,
+      "priority": "Must",
+      "wd": "WD-AUTH-005, WD-AUTH-013, WD-AUTH-014, WD-AUTH-027"
+    },
+    {
+      "block": "3. Auth frontend",
+      "area": "Auth",
+      "task": "/signup page (account step), /verify-email page, guest-only redirect for signed-in users",
+      "done_when": "A new user can sign up in the browser and lands signed in",
+      "hours": 0.7,
+      "priority": "Must",
+      "wd": "WD-AUTH-005, WD-AUTH-011"
+    },
+    {
+      "block": "3. Auth frontend",
+      "area": "Auth",
+      "task": "/forgot-password and /reset-password pages with the sent, invalid or expired token and success states",
+      "done_when": "Full reset flow works in the browser against Mailpit",
+      "hours": 0.6,
+      "priority": "Must",
+      "wd": "WD-AUTH-013, WD-AUTH-014"
+    },
+    {
+      "block": "3. Auth frontend",
+      "area": "Auth",
+      "task": "Account > Security page with change password",
+      "done_when": "Password change works; errors show the request id",
+      "hours": 0.4,
+      "priority": "Should",
+      "wd": "WD-AUTH-027"
+    },
+    {
+      "block": "3. Auth frontend",
+      "area": "Auth",
+      "task": "Login polish: links to signup and forgot password, remember the organization slug, rate-limit message, role-aware landing page",
+      "done_when": "Login, logout and landing behave as the inventory entries describe",
+      "hours": 0.5,
+      "priority": "Must",
+      "wd": "WD-AUTH-001, WD-AUTH-011, WD-AUTH-012"
+    },
+    {
+      "block": "3. Auth frontend",
+      "area": "Auth",
+      "task": "English messages for every auth screen; check one right-to-left locale (ar)",
+      "done_when": "No hard-coded strings; ar renders dir=rtl without layout breaks",
+      "hours": 0.3,
+      "priority": "Should",
+      "wd": ""
+    },
+    {
+      "block": "3. Auth frontend",
+      "area": "Auth",
+      "task": "End-to-end pass: signup, verify, login, forgot, reset, change password, logout, with Mailpit; unit and integration tests green",
+      "done_when": "The whole flow is demoable without a restart; pnpm test and the gate pass",
+      "hours": 0.5,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "4. Roles and permissions",
+      "area": "RBAC",
+      "task": "App-init capabilities: extend GET /v2/users/me (or add /v2/session) to return permissions, roles and the organization (name, plan, timezone)",
+      "done_when": "The web app receives the caller's permissions in one call",
+      "hours": 0.6,
+      "priority": "Should",
+      "wd": "WD-RBAC-004"
+    },
+    {
+      "block": "4. Roles and permissions",
+      "area": "RBAC",
+      "task": "Wire capabilities into the nav registry so menu items hide or lock for real",
+      "done_when": "A Counsellor sees fewer menu items than an Admin",
+      "hours": 0.3,
+      "priority": "Should",
+      "wd": "WD-RBAC-004"
+    },
+    {
+      "block": "4. Roles and permissions",
+      "area": "RBAC",
+      "task": "Settings > Users: list, search, create, edit, deactivate, assign roles (backend CRUD exists; there is no delete)",
+      "done_when": "An admin can add a user and change their role from the UI",
+      "hours": 1.2,
+      "priority": "Should",
+      "wd": "WD-WSP-015, WD-WSP-016, WD-WSP-017, WD-WSP-018, WD-WSP-038, WD-WSP-039"
+    },
+    {
+      "block": "4. Roles and permissions",
+      "area": "RBAC",
+      "task": "Settings > Roles: list, create and edit a role, permission matrix grouped by category with scope (all, team, own), locked system roles shown read-only",
+      "done_when": "A custom role can be created and its grants take effect on the next request",
+      "hours": 1.5,
+      "priority": "Should",
+      "wd": "WD-RBAC-001, WD-RBAC-004, WD-RBAC-024, WD-RBAC-026, WD-RBAC-027"
+    },
+    {
+      "block": "4. Roles and permissions",
+      "area": "RBAC",
+      "task": "Close backend gaps found while building the screens: permission-tree shape, delete policy, grant new keys to the locked Admin role (decision D4), permission keys for the new screens",
+      "done_when": "Admin holds every key including the new ones; gaps documented",
+      "hours": 0.6,
+      "priority": "Should",
+      "wd": ""
+    },
+    {
+      "block": "5. Workspace settings",
+      "area": "Workspace",
+      "task": "GET and PATCH /v2/workspace over organizations.settings: name, timezone, currency, default language, branding colours and logo; permission, audit row, optimistic locking",
+      "done_when": "PATCH with a stale rowVersion returns 409; a user without the permission gets 403",
+      "hours": 0.8,
+      "priority": "Should",
+      "wd": "WD-WSP-004"
+    },
+    {
+      "block": "5. Workspace settings",
+      "area": "Workspace",
+      "task": "Settings > Workspace screen (General and Branding tabs) with a live preview; timezone and currency applied to the app",
+      "done_when": "Changing the name and colours updates the shell without a reload",
+      "hours": 0.9,
+      "priority": "Should",
+      "wd": ""
+    },
+    {
+      "block": "6. Onboarding",
+      "area": "Onboarding",
+      "task": "Onboarding wizard after signup: step 2 workspace (name, slug, timezone, currency), step 3 invite teammates (skippable), finish to the dashboard",
+      "done_when": "A fresh signup is guided to a configured workspace",
+      "hours": 1.2,
+      "priority": "Stretch",
+      "wd": "WD-AUTH-008, WD-WSP-001"
+    },
+    {
+      "block": "6. Onboarding",
+      "area": "Onboarding",
+      "task": "Dashboard get-started checklist card (workspace set up, invite team, connect a channel placeholder)",
+      "done_when": "Card shows live completion state",
+      "hours": 0.4,
+      "priority": "Stretch",
+      "wd": ""
+    },
+    {
+      "block": "6. Onboarding",
+      "area": "Onboarding",
+      "task": "Invite member endpoint and accept flow with seat check",
+      "done_when": "An invited person receives a mail, sets a password and joins the org",
+      "hours": 1.0,
+      "priority": "Stretch",
+      "wd": "WD-WSP-016"
+    },
+    {
+      "block": "7. Showcase prep",
+      "area": "Showcase",
+      "task": "Seed a clean demo organization with users in different roles and write the ten-minute demo script",
+      "done_when": "Demo can be run from a clean database in under a minute",
+      "hours": 0.4,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "7. Showcase prep",
+      "area": "Showcase",
+      "task": "Run the gate and the ownership check, fix format and lint, push the branch and open the pull request",
+      "done_when": "Gate passes; branch pushed; PR open with screenshots",
+      "hours": 0.4,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "7. Showcase prep",
+      "area": "Showcase",
+      "task": "Update the Port status, Backend and Frontend columns on the Features tab for what shipped",
+      "done_when": "Sheet matches the branch",
+      "hours": 0.2,
+      "priority": "Must",
+      "wd": ""
+    },
+    {
+      "block": "7. Showcase prep",
+      "area": "Showcase",
+      "task": "Record the demo flow with screenshots in the PR description",
+      "done_when": "Reviewers can follow it without running the app",
+      "hours": 0.2,
+      "priority": "Should",
+      "wd": ""
+    }
+  ],
+  "decisions": [
+    {
+      "item": "Scope cut: what ships (P0 only, P0 plus a chosen slice of P1, or more)",
+      "why": "The 26 inventoried modules alone are about 3,300 dev-days; nothing else can be planned reliably until this is set",
+      "rec": "P0 plus the P1 items of the showcase modules first",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Approve or amend the web stack and cookie-session design",
+      "why": "Every screen builds on it",
+      "rec": "Approve; revisit when realtime needs a token endpoint",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Privileged onboarding path: signup creating an organization",
+      "why": "Needs one new sanctioned use of the privileged database path (amendment)",
+      "rec": "Approve with a narrow, audited onboarding function",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Require email verification before first login?",
+      "why": "Changes the signup flow and the login gate",
+      "rec": "Allow login but show a banner until verified, as WaDesk's auto-verify setting allows",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Signup open to anyone, or invite-only?",
+      "why": "Decides whether the signup screen exists in production",
+      "rec": "Open signup behind rate limits and email verification",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Password policy (minimum length, complexity, maximum age)",
+      "why": "Affects signup, reset and change-password validation",
+      "rec": "Minimum 8 characters; keep the WaDesk policy fields for later",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Roles seeded at signup",
+      "why": "Defines what a new organization starts with",
+      "rec": "Locked Admin plus an editable Agent role",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Production mail provider (SMTP relay or an API provider)",
+      "why": "Dev uses Mailpit; production needs a sender domain and deliverability setup",
+      "rec": "Decide before the first real signup",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "D4: how production Admin roles receive new permission keys",
+      "why": "The locked-role trigger blocks grants, so new keys do not reach existing Admin roles",
+      "rec": "Kernel decision plus a migration helper that unlocks, grants and relocks",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "D3: how worker jobs push to sockets",
+      "why": "Realtime from background work needs a bridge",
+      "rec": "@socket.io/redis-emitter in the kernel PR that adds the room registry",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "D5: platform super-admin actor kind",
+      "why": "Admin-console modules cannot start without it",
+      "rec": "Decide before the admin modules begin",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "D6: confirm Next.js 16 and next-intl",
+      "why": "Chosen by default in the web app design",
+      "rec": "Confirm",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "D7: GitHub settings (CODEOWNERS enforcement, up-to-date branches, merge queue)",
+      "why": "Prevents conflicting merges between three people",
+      "rec": "Turn on",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Channel strategy: keep the unofficial WhatsApp QR engine or use the Cloud API only",
+      "why": "WaDesk's own docs list ban risk; needs a decision either way",
+      "rec": "Decide before the channel core is built",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Confirm domain codes and route names in assignment-input.json",
+      "why": "Zones, migrations and permission keys use them",
+      "rec": "Review once, then freeze",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Get Vedant's and Punya's sign-off on the three-way split and add their GitHub handles",
+      "why": "Changes to ownership need all three approvals",
+      "rec": "Do this in one short call",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Invite Vedant and Punya to the repository",
+      "why": "They cannot see the private repo yet",
+      "rec": "Settings, Collaborators",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Confirm Geta allows its source on your personal GitHub account",
+      "why": "The safety check flagged crm-platform going to a personal account",
+      "rec": "Move to a geta-ai repository if the answer is no",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Give each teammate their own licensed WaDesk copy at wadesk-reference/WaDesk",
+      "why": "The source is licensed and is not in the repo",
+      "rec": "Each person uses their own copy",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Ticket for the Clerk login security issue",
+      "why": "Any valid Clerk identity can create a user in any organization; nothing covers it",
+      "rec": "Fix or remove the exchange before production",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Set a real CLERK_SECRET_KEY if staff login through Clerk is needed",
+      "why": "The API refuses to boot without a value",
+      "rec": "Keep the placeholder otherwise",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Where daily work happens: wadesk-port or geta-ai/crm-platform",
+      "why": "Code must not live in two places",
+      "rec": "Pick one before feature work starts",
+      "owner": "Lakshya Tyagi"
+    },
+    {
+      "item": "Run the remaining inventory (Punya's 22 modules first)",
+      "why": "Punya's tracker is empty until their modules are written",
+      "rec": "Run in chunks of about 8 modules with one review pass",
+      "owner": "Lakshya Tyagi"
+    }
+  ]
+}
