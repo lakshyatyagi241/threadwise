@@ -13,7 +13,7 @@ import { deleteProduct, useProductsPage } from '../api/products';
 import { parseProductsState, productsStateToSearch } from '../lib/pages';
 import { truncate } from '../lib/format';
 import { PlusIcon, SearchIcon } from './icons';
-import { CARD, LoadError, LoadingBlock, Pager, PILL_LINK, ProductThumb, TH } from './parts';
+import { CARD, LoadError, LoadingBlock, PagerBar, PILL_LINK, ProductThumb, TH } from './parts';
 import { ProductShareModal } from './product-share-modal';
 import { useErrorText } from './use-error-text';
 
@@ -71,7 +71,7 @@ export function ProductsScreen() {
   };
 
   return (
-    <main className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
+    <div className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
       <section className="min-w-0 space-y-5">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -233,21 +233,15 @@ export function ProductsScreen() {
               </div>
             )}
           </div>
-          {list.total !== undefined && list.total > 0 && (
-            <div
-              className="border-t border-border px-4 py-3 text-center font-mono text-[11px] text-muted-foreground"
-              aria-live="polite"
-            >
-              {t('showing', { shown: list.items.length, total: list.total })}
-            </div>
-          )}
+          <PagerBar
+            page={list.page}
+            total={list.total}
+            size={PRODUCTS_PAGE_SIZE}
+            shown={list.items.length}
+            onPage={(page) => go({ page })}
+            className="border-t border-border px-4 py-3"
+          />
         </div>
-        <Pager
-          page={list.page}
-          total={list.total}
-          size={PRODUCTS_PAGE_SIZE}
-          onPage={(page) => go({ page })}
-        />
       </section>
 
       <ProductShareModal product={sharing} onClose={() => setSharing(null)} />
@@ -263,6 +257,6 @@ export function ProductsScreen() {
         onConfirm={() => void confirmDelete()}
         onClose={() => setPendingDelete(null)}
       />
-    </main>
+    </div>
   );
 }

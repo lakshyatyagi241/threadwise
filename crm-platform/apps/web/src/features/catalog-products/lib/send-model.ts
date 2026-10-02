@@ -148,9 +148,8 @@ export function groupByCategory<T extends { category: string | null }>(
   return [...groups].map(([name, list]) => ({ name, items: list }));
 }
 
-/** The shop the picker starts on (WaDesk: the newest), and the sender the form starts on (the first listed). */
+/** The shop the picker starts on (WaDesk: the newest). */
 export const firstId = (items: Array<{ id: string }>): string => items[0]?.id ?? '';
-export const firstKey = (items: Array<{ key: string }>): string => items[0]?.key ?? '';
 
 /** The collection's "Send as MPM": a list message to one pasted number with the collection's live products. */
 export function buildCollectionSend(input: {

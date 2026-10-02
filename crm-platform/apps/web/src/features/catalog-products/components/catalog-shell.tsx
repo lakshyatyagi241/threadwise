@@ -82,9 +82,9 @@ export function CatalogShell({ children }: { children: ReactNode }) {
         </div>
       </nav>
 
-      <main className="mx-auto max-w-none space-y-5 px-4 py-7 sm:px-6 lg:px-7">
+      <div className="mx-auto max-w-none space-y-5 px-4 py-7 sm:px-6 lg:px-7">
         {locked ? <Paywall /> : children}
-      </main>
+      </div>
     </>
   );
 }

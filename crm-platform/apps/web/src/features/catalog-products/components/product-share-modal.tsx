@@ -123,7 +123,6 @@ export function ProductShareModal({
       onClose={onClose}
       eyebrow={t('eyebrow')}
       title={links.data?.product.name ?? product?.name ?? t('product')}
-      closeLabel={t('close')}
       footer={
         <Button variant="secondary" className="rounded-full" onClick={onClose}>
           {t('close')}

@@ -282,6 +282,7 @@ export function CollectionsTab() {
   const [pendingDelete, setPendingDelete] = useState<CollectionResponse | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [createKey, setCreateKey] = useState(0);
+  const [newOpen, setNewOpen] = useState(false);
 
   if (list.isPending) return <LoadingBlock label={t('loading')} />;
   if (list.isError) {
@@ -296,6 +297,8 @@ export function CollectionsTab() {
     await createCollection(buildCollectionInput(form));
     toast(t('created'), 'success');
     setCreateKey((k) => k + 1);
+    // WaDesk reloaded the page after a create, which closed the panel.
+    setNewOpen(false);
     await qc.invalidateQueries({ queryKey: KEYS.collections });
   };
 
@@ -327,7 +330,11 @@ export function CollectionsTab() {
       </section>
 
       {canManage && (
-        <details className={cn(CARD, 'group')}>
+        <details
+          className={cn(CARD, 'group')}
+          open={newOpen}
+          onToggle={(e) => setNewOpen(e.currentTarget.open)}
+        >
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 outline-none focus-visible:ring-2 focus-visible:ring-primary">
             <span className="inline-flex items-center gap-2 font-serif text-[16px]">
               <PlusIcon className="size-4 text-brand dark:text-primary" strokeWidth={1.8} />
