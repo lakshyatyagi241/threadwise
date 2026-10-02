@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { Tx } from '@crm/db';
+import { RequestContextStore } from '../../common/context/request-context';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { MODULE_KEY } from './campaigns.service';
 import { CampaignsRepository } from './campaigns.repository';
@@ -93,4 +94,15 @@ export class CampaignEvents {
       payload: { contactId, phone, optedIn: false, action: 'unsubscribed', source: 'stop_keyword' },
     });
   }
+}
+
+/**
+ * Runs `fn` as the system on behalf of one tenant. A report from the bridge or a provider arrives with no user and no tenant; the
+ * outbox takes its tenant from the context, so the work that follows a located campaign runs inside one.
+ */
+export function asSystem<T>(orgId: number, fn: () => Promise<T>): Promise<T> {
+  return RequestContextStore.run(
+    { requestId: `camp-report-${orgId}`, orgId, actorType: 'system', actorId: null, userId: null },
+    fn,
+  );
 }
