@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Only a draft order can be changed. A confirmed order is frozen: cancel it and start a new one to change its lines or prices.",
+        "SO_NOT_CONFIRMED": "Confirm the order first. Only a confirmed order can be invoiced or have its delivery recorded.",
+        "SO_CANCELLED": "This order is cancelled, so nothing more can be done with it.",
+        "SO_QUOTE_NOT_ACCEPTED": "Only an accepted proposal or estimate can become a sales order. Mark it as accepted first.",
+        "SO_QUOTE_TAKEN": "This proposal or estimate already has a sales order.",
+        "SO_QUANTITY_EXCEEDS": "A quantity is more than what is left on that line. Lower it and try again.",
+        "SO_NOTHING_TO_INVOICE": "There is nothing left to do here: everything is already invoiced or delivered.",
+        "SO_HAS_INVOICES": "An invoice made from this order is still live. Void or delete the invoice first, then cancel the order."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Sales orders",
+        "subtitle": "Accepted offers turned into orders, invoiced in one go or in parts, and delivered.",
+        "newOrder": "New sales order",
+        "search": "Search by number, buyer or reference",
+        "reset": "Reset",
+        "refresh": "Refresh",
+        "tableLabel": "Sales orders",
+        "noAccessTitle": "No access",
+        "noAccess": "You do not have permission to see sales orders.",
+        "emptyFilteredTitle": "No orders match",
+        "emptyFiltered": "Nothing matches these filters. Change or reset them.",
+        "resetFilters": "Reset filters",
+        "loading": "Loading sales orders",
+        "showing": "Showing {count}",
+        "loadMore": "Load more",
+        "allLoaded": "All loaded",
+        "contactLoading": "Loading...",
+        "empty": {
+          "all": {
+            "title": "No sales orders yet",
+            "message": "Turn an accepted proposal or estimate into an order, or start one from scratch."
+          },
+          "draft": {
+            "title": "No draft orders",
+            "message": "Orders you are still preparing show up here."
+          },
+          "confirmed": {
+            "title": "No confirmed orders",
+            "message": "Confirmed orders waiting to be invoiced or delivered show up here."
+          },
+          "cancelled": {
+            "title": "No cancelled orders",
+            "message": "Orders you cancel show up here with their reason."
+          },
+          "closed": {
+            "title": "No closed orders",
+            "message": "An order closes when everything on it is invoiced and delivered."
+          }
+        }
+      },
+      "strip": {
+        "label": "Value of open orders",
+        "openValue": "Open orders ({currency})"
+      },
+      "tabs": {
+        "label": "Order status",
+        "all": "All",
+        "draft": "Draft",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled",
+        "closed": "Closed",
+        "count": "{count} orders"
+      },
+      "quick": {
+        "label": "Quick filters",
+        "toInvoice": "To invoice",
+        "toFulfil": "To fulfil"
+      },
+      "table": {
+        "scrollArea": "Sales orders table",
+        "columns": {
+          "number": "Order",
+          "buyer": "Buyer",
+          "quote": "Quote",
+          "deal": "Deal",
+          "expected": "Expected",
+          "status": "Status",
+          "invoicing": "Invoicing",
+          "fulfilment": "Delivery",
+          "total": "Total",
+          "invoices": "Invoices"
+        }
+      },
+      "row": {
+        "moreFor": "Actions for {name}",
+        "open": "Open",
+        "edit": "Edit",
+        "confirm": "Confirm order",
+        "invoiceAll": "Invoice everything left",
+        "fulfilAll": "Mark all as delivered",
+        "cancel": "Cancel order",
+        "delete": "Delete draft"
+      },
+      "status": {
+        "draft": "Draft",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled",
+        "closed": "Closed"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Not invoiced",
+        "partially_invoiced": "Partly invoiced",
+        "invoiced": "Invoiced"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Not delivered",
+        "partially_fulfilled": "Partly delivered",
+        "fulfilled": "Delivered"
+      },
+      "actions": {
+        "failed": "That did not work.",
+        "confirmed": "Order {number} confirmed.",
+        "invoicedDraft": "Draft invoice created from the order.",
+        "invoicedIssued": "Invoice {number} issued.",
+        "fulfilled": "Delivery recorded.",
+        "cancelled": "Order {number} cancelled.",
+        "deleted": "Draft order deleted."
+      },
+      "dialog": {
+        "close": "Close",
+        "cancel": "Cancel",
+        "how": "Which quantities",
+        "mode": {
+          "all": "Everything that is left",
+          "lines": "Choose quantities"
+        },
+        "left": "{qty} left",
+        "qtyExceeds": "At most {max} is left on this line.",
+        "qtyInvalid": "Enter a quantity with at most 4 decimals, or 0 to skip this line.",
+        "nothingHint": "Everything on this order is already invoiced."
+      },
+      "confirmDialog": {
+        "title": "Confirm this order?",
+        "message": "Confirming freezes the lines and prices. After that you can invoice the order, in one go or in parts, and record deliveries. You can still cancel it while no invoice stands.",
+        "confirm": "Confirm order"
+      },
+      "cancelDialog": {
+        "title": "Cancel this order?",
+        "warning": "A cancelled order cannot be invoiced or delivered any more, and it cannot be reopened.",
+        "reason": "Reason",
+        "reasonHint": "Kept on the order for your team.",
+        "reasonRequired": "Say why the order is cancelled.",
+        "reasonTooLong": "Keep the reason under {max} characters.",
+        "cancelOrder": "Cancel order",
+        "hasInvoices": "This order still has an invoice. Void or delete the invoice first (a voided invoice gives its quantities back), then cancel the order.",
+        "seeInvoices": "See the invoices"
+      },
+      "deleteDialog": {
+        "title": "Delete this draft?",
+        "message": "The draft order is removed for good. A confirmed order cannot be deleted, only cancelled.",
+        "delete": "Delete draft"
+      },
+      "invoiceDialog": {
+        "title": "Invoice this order",
+        "intro": "Bill the order at its frozen prices. You can invoice it in parts: whatever is not billed now stays on the order.",
+        "invoiceAndIssue": "Create and issue invoice",
+        "createDraft": "Create draft invoice",
+        "issueDate": "Issue date",
+        "issueDateHint": "Leave empty for today ({today}).",
+        "dueDate": "Due date",
+        "terms": "Payment terms",
+        "termsDefault": "Workspace default",
+        "termsOnIssue": "Due on issue",
+        "termsDays": "{count} days",
+        "issueNow": "Issue the invoice now",
+        "issueNowHint": "The invoice gets its number and can be sent right away.",
+        "draftHint": "Leave it as a draft to check it before issuing.",
+        "includeShipping": "Bill shipping with this invoice",
+        "problems": {
+          "nothing": "Choose a quantity above zero on at least one line.",
+          "issueDateInvalid": "Enter a valid issue date.",
+          "dueDateInvalid": "Enter a valid due date.",
+          "dueBeforeIssue": "The due date cannot be before the issue date."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Record delivery",
+        "intro": "Record what was delivered to the buyer. Delivery is tracked apart from invoicing: either can come first.",
+        "record": "Record delivery",
+        "note": "Note",
+        "noteHint": "Optional, for example a delivery note number.",
+        "problems": {
+          "nothing": "Choose a quantity above zero on at least one line.",
+          "noteTooLong": "Keep the note under {max} characters."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "No access",
+        "noAccess": "You do not have permission to see sales orders.",
+        "loading": "Loading the order",
+        "back": "Back to sales orders",
+        "noBuyer": "No buyer",
+        "edit": "Edit",
+        "confirm": "Confirm order",
+        "recordDelivery": "Record delivery",
+        "invoice": "Invoice...",
+        "more": "More actions",
+        "cancel": "Cancel order",
+        "delete": "Delete draft",
+        "cancelledOn": "Cancelled on {date}",
+        "draftHint": "This order is a draft. Confirm it to freeze its prices and start invoicing and delivery.",
+        "notes": "Notes",
+        "terms": "Terms",
+        "progress": "Progress",
+        "invoiced": "Invoiced",
+        "fulfilled": "Delivered"
+      },
+      "lines": {
+        "title": "Lines",
+        "scrollArea": "Order lines",
+        "item": "Item",
+        "ordered": "Ordered",
+        "invoiced": "Invoiced",
+        "fulfilled": "Delivered",
+        "toInvoice": "To invoice",
+        "unitPrice": "Unit price",
+        "amount": "Amount",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Tax {rate}%",
+        "invoicedBar": "Invoiced share of {name}",
+        "fulfilledBar": "Delivered share of {name}"
+      },
+      "totals": {
+        "title": "Totals",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "shipping": "Shipping",
+        "shippingBilled": "Billed",
+        "shippingPending": "Billed with the first invoice",
+        "tax": "Tax",
+        "total": "Total"
+      },
+      "info": {
+        "title": "Details",
+        "buyer": "Buyer",
+        "email": "Email",
+        "phone": "Phone",
+        "quote": "Quote",
+        "deal": "Deal",
+        "owner": "Owner",
+        "reference": "Reference",
+        "expected": "Expected",
+        "created": "Created",
+        "confirmed": "Confirmed"
+      },
+      "invoices": {
+        "title": "Invoices from this order",
+        "none": "No invoice has been made from this order yet.",
+        "noneDraft": "Invoices can be made once the order is confirmed.",
+        "draft": "Draft",
+        "voidNote": "A voided invoice gives its quantities back to the order."
+      },
+      "builder": {
+        "noAccessTitle": "No access",
+        "noAccess": "You do not have permission to change sales orders.",
+        "loading": "Loading",
+        "frozen": "This order is confirmed, so its lines and prices are frozen. Cancel it and start a new one to change them.",
+        "openOrder": "Open the order",
+        "back": "Back",
+        "editTitle": "Edit {number}",
+        "newTitle": "New sales order",
+        "unsaved": "Unsaved changes",
+        "cancel": "Cancel",
+        "saveChanges": "Save changes",
+        "createDraft": "Create draft",
+        "conflict": "Someone else changed this draft while you were editing. Reload to see their version; your edits here will be lost.",
+        "reload": "Reload",
+        "saved": "Draft saved.",
+        "created": "Order {number} created as a draft.",
+        "fixProblems": "Fix the highlighted fields first.",
+        "serverRejected": "The server did not accept some of the values. Check the fields and try again.",
+        "startFrom": "Start from",
+        "source": {
+          "scratch": "A blank order",
+          "quote": "An accepted proposal or estimate"
+        },
+        "loadingQuote": "Loading the offer...",
+        "buyer": "Buyer",
+        "contact": "Contact",
+        "contactHint": "Pick a contact to link the order to them, or type the buyer below.",
+        "buyerName": "Buyer name",
+        "fromQuoteHint": "Left empty, the offer's buyer is used.",
+        "buyerEmail": "Email",
+        "buyerPhone": "Phone",
+        "details": "Order details",
+        "currency": "Currency",
+        "currencyHint": "Three letters, like USD or KWD.",
+        "currencyLocked": "Fixed once the order exists.",
+        "expectedDate": "Expected date",
+        "expectedHint": "When the buyer expects delivery.",
+        "reference": "Reference",
+        "referenceHint": "The buyer's purchase order number, for example.",
+        "linesFromQuote": "Lines",
+        "linesFromQuoteHint": "The order takes the lines, prices and taxes of the accepted offer, with its document discount folded into the lines. You can still edit the draft's lines after it is created.",
+        "lineItems": "Line items",
+        "shippingNotes": "Shipping, notes and terms",
+        "shipping": "Shipping ({currency})",
+        "shippingHint": "Billed with the first invoice.",
+        "notes": "Notes",
+        "notesHint": "Shown on the order.",
+        "terms": "Terms",
+        "termsHint": "Carried onto the invoices made from this order.",
+        "draftNote": "The order stays a draft until you confirm it. Confirming freezes its prices.",
+        "quoteTotals": "Offer totals",
+        "quoteTotalsNote": "As on the accepted offer. The order's own figures show once it is created.",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "tax": "Tax",
+        "total": "Total",
+        "openExisting": "Open order {number}",
+        "viewOrders": "View all orders",
+        "pickAnother": "Pick another offer",
+        "problems": {
+          "buyerRequired": "Pick a contact or type the buyer's name.",
+          "emailInvalid": "Enter a valid email address.",
+          "currencyInvalid": "Enter a three-letter currency code.",
+          "expectedDateInvalid": "Enter a valid date.",
+          "shippingInvalid": "Enter a valid amount.",
+          "noLines": "Add at least one line.",
+          "referenceTooLong": "Keep the reference under 191 characters."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Describe this line.",
+          "qtyInvalid": "Enter a quantity above zero.",
+          "priceInvalid": "Enter a valid price.",
+          "lineDiscountInvalid": "Enter a valid discount.",
+          "hsnRequired": "Enter the HSN/SAC code.",
+          "hsnInvalid": "Enter a valid HSN/SAC code.",
+          "taxRateRemoved": "The tax rate of this line no longer exists. Pick a current one."
+        }
+      },
+      "quotePicker": {
+        "search": "Search accepted offers",
+        "results": "Accepted proposals and estimates",
+        "loading": "Loading offers",
+        "noMatch": "No accepted offer matches.",
+        "none": "There is no accepted proposal or estimate yet.",
+        "kind": {
+          "proposal": "Proposal",
+          "estimate": "Estimate"
+        },
+        "untitled": "Untitled",
+        "accepted": "Accepted {date}"
+      }
+    }
+  }
+}

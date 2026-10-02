@@ -24,13 +24,15 @@ COPY apps/web/package.json          apps/web/
 COPY packages/config/package.json   packages/config/
 COPY packages/contracts/package.json packages/contracts/
 COPY packages/db/package.json       packages/db/
+COPY packages/tax/package.json      packages/tax/
 COPY packages/ui/package.json       packages/ui/
 RUN pnpm install --frozen-lockfile
 
 # --- build -----------------------------------------------------------------
 FROM deps AS build
 COPY . .
-RUN pnpm --filter @crm/contracts build \
+RUN pnpm --filter @crm/tax build \
+ && pnpm --filter @crm/contracts build \
  && pnpm --filter @crm/db build \
  && pnpm --filter @crm/api build
 

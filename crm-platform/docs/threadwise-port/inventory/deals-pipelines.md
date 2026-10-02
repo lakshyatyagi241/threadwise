@@ -1254,3 +1254,12 @@ differs from Reference is listed here with the "Differences to decide" row it se
 | Registering `sales_pipeline` and `pipelines` in the plan registry (`PLAN_FEATURE_DEFS` / `PLAN_LIMIT_DEFS` in `@crm/contracts`) | The plan editor in `apps/web` renders and message-tests every registry key, so adding them needs the web messages in the same change. Until then they are set on a plan's JSON or an organization override. |
 | Company 360 rollups, calendar and dashboard KPI cards (TW-DEAL-038..040), demo seeder (045) | Other domains consume `GET /deals?companyId=`, `GET /contacts/:id/deals` and `GET /deals/reports`. |
 | Edit and delete of timeline entries; a funnel report | Out of the listed scope (D-24, D-26). |
+
+### Follow-up closed: plan registry
+
+`sales_pipeline` (feature, group `advanced`, **default true**) and `pipelines` (limit, group `workspace`, 0 = unlimited) are now in `PLAN_FEATURE_DEFS` /
+`PLAN_LIMIT_DEFS`, so the platform plan editor renders them (messages in en and ar), the plan chips know the feature (last in the chip order), and
+`DealsPlan` reads them through the registry's own `resolveFeature` / `resolveLimit` instead of raw JSON. A plan row that predates the keys keeps what it had
+(not locked, not capped), which is why the feature defaults to on; the dev seed plans carry it (`pipelines`: Starter 2, Growth 10, Scale unlimited). The
+create-plan contract still treats a flag the request omits as off (TW-PLAN-003 rule 2), so an API client that creates a plan must send `sales_pipeline: true`
+to keep deals open on it; the web form ticks every feature by default.

@@ -2185,6 +2185,25 @@ contracts in `packages/contracts/src/contacts-attributes-tags/`, endpoints in `d
 | Background export for very large workspaces | Export streams in batches of 2,000 up to 200,000 rows per call; above that the caller narrows the filter. |
 | A stuck-job recovery sweep for `con-import` | BullMQ retries and stalled-job handling cover a dead worker; no separate sweeper. |
 
+### Port decision: Lifecycle stage and Status are linked (not in Reference)
+
+Reference keeps `status` (a free label on the contact) and the lifecycle stage as two independent values with no relationship, and so did this port until now:
+"Quote sent" could sit on a contact that was New or Lost. The owner asked whether they should be linked. Decision: **a light, optional link**, nothing more.
+
+- **Model.** Stage = where the person is in the sales journey. Status = a sub-state inside the stage, or a state outside the journey (Do not contact). A status option may be
+  scoped to one stage (`status_options.stage_option_id`, composite FK `(org_id, stage_option_id)` to a `lifecycle_stage` option of the same workspace, migration
+  `20261009090000_status_option_stage_scope`); no scope = valid in every stage, which is every existing status, so a workspace that never scopes one behaves exactly as before.
+- **Default per stage.** `is_default` on a scoped status is that stage's default status (at most one per stage, the database enforces it; the group's unscoped default is separate).
+- **Rules on a contact (create, update, bulk update).** A stage change keeps a status that is still valid for the new stage; otherwise (or when there is none) the new stage's
+  default status is applied, else the status is cleared. A status set explicitly that belongs to another stage is 422 `CON_STATUS_STAGE_MISMATCH` naming the stage. A status sent
+  unchanged is not re-validated. Won and lost stages need no special case: they are stages that can have a default (for example Lost -> Not interested). The rule is one pure function
+  shared by API and web (`@crm/contracts` `status-stage.ts`), so the contact form, the inline stage menu ("Status becomes X" under each stage) and the toast after the move
+  ("Stage changed to Lost. Status reset to Not interested.") say what the server will do.
+- **Deliberate limits.** Only statuses are scoped (not stages, not lost reasons, not deal statuses); a scope change is not retro-applied to contacts that hold the status (they are
+  fixed the next time their stage changes); import and the public/partner APIs do not validate a status against a stage; deleting a stage keeps its statuses as "all stages".
+- **Web.** Contact stages > Statuses: each status shows its scope ("All stages" or the stage), the edit dialog has an "Applies to" select and "Default status of this stage"; the
+  contact form lists only the statuses valid for the chosen stage and resets the status field when the stage changes; both tabs carry a short explanation of stage vs status.
+
 ## Coverage
 
 ```json threadwise-coverage
@@ -2306,3 +2325,12 @@ contracts in `packages/contracts/src/contacts-attributes-tags/`, endpoints in `d
   }
 }
 ```
+
+
+## Follow-ups closed: stage flags, required properties
+
+| What | Decision |
+| --- | --- |
+| Won / lost lifecycle stages | `status_options.is_won` / `is_lost` (mutually exclusive by a CHECK; the API accepts them on contacts' `lifecycle_stage` group only, else 422 `STATUS_OPTION_FLAG_INVALID`) and `contacts.won_at` / `lost_at`. Entering a won stage stamps `won_at`, a lost stage stamps `lost_at` and needs `lostReason` (a `lost_reason` option) or `otherLostReason` (422 `CON_LOST_REASON_REQUIRED`), leaving clears the stamps and the reasons. Nothing is flagged by the migration; a new workspace seeded from the platform stages gets `enrolled` as won and `lost` as lost. The web app asks for the reason in a dialog when a stage menu moves a contact to a lost stage and inline in the edit form. |
+| One default stage per group | A partial unique index (`uq_status_options_one_default`); the migration keeps the lowest-id default where a group had two. |
+| Required properties | Enforced on `POST /contacts` and on a `PATCH /contacts/:id` that carries `customFields` (422 `CON_REQUIRED_PROPERTY_MISSING`, one `customFields.<key>` entry per property), honouring "show only when" dependencies. Skipped: system, inactive, hidden and read-only properties, formulas and checkboxes. A stage or owner change alone is not held to the rules, so contacts that predate a newly required property stay editable; bulk edit may only not blank what it sets. CSV import is unchanged (it does not enforce them). |

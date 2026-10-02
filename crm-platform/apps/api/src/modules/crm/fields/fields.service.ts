@@ -36,6 +36,7 @@ import {
 } from './fields.mapper';
 import { FieldsRepository, type FieldRow } from './fields.repository';
 import type { Tx } from '@crm/db';
+import { segmentNamesUsing, segmentUsageCounts } from '../segments/segment-usage';
 
 const MODULE_KEY = 'fields';
 /** Types whose values come from a fixed choice list. */
@@ -116,8 +117,17 @@ export class FieldsService {
         query.moduleKey === 'contacts'
           ? await this.repo.countContactsByKey(tx, ctx.orgId)
           : new Map<string, number>();
+      const segments =
+        query.moduleKey === 'contacts'
+          ? await segmentUsageCounts(tx, ctx.orgId, 'field')
+          : new Map<string, number>();
       return {
-        data: rows.map((r) => ({ id: r.uuid, key: r.key, count: counts.get(r.key) ?? 0 })),
+        data: rows.map((r) => ({
+          id: r.uuid,
+          key: r.key,
+          count: counts.get(r.key) ?? 0,
+          segments: segments.get(r.key) ?? 0,
+        })),
       };
     });
   }
@@ -281,12 +291,25 @@ export class FieldsService {
         );
       }
 
-      await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
+      // Segments that filter on this property are not blocked: the condition now matches nothing and is flagged
+      // (invalidConditions). The audit row and the event say which ones.
+      const segmentNames =
+        existing.moduleKey === 'contacts'
+          ? await segmentNamesUsing(tx, ctx.orgId, 'field', existing.key)
+          : [];
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'delete',
+        ...(segmentNames.length > 0
+          ? { delta: { segments: { old: segmentNames, new: null } } }
+          : {}),
+      });
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,
         aggregateId: existing.id,
         eventType: 'field.deleted',
-        payload: { uuid, key: existing.key },
+        payload: { uuid, key: existing.key, segments: segmentNames },
       });
 
       // Soft delete: existing contacts.data still has this key, so the

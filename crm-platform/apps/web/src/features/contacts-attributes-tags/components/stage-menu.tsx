@@ -20,6 +20,7 @@ export function StageMenu({
   label: labelOverride,
   busy,
   onChange,
+  statusHint,
 }: {
   value: string;
   choices: readonly Choice[];
@@ -29,6 +30,8 @@ export function StageMenu({
   label?: string;
   busy?: boolean;
   onChange?: (value: string) => void;
+  /** What moving to a stage does to the contact's status ("Status becomes X"), shown under that stage; null = nothing. */
+  statusHint?: (stage: string) => string | null;
 }) {
   const t = useTranslations('contacts-attributes-tags.stageMenu');
   const current = choices.find((c) => c.value === value);
@@ -65,7 +68,14 @@ export function StageMenu({
                 className="size-2.5 shrink-0 rounded-full"
                 style={{ background: optionColor({ value: c.value, color: c.color }) }}
               />
-              <span className="min-w-0 flex-1 truncate">{c.label}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate">{c.label}</span>
+                {c.value !== value && statusHint?.(c.value) && (
+                  <span className="block truncate text-[11px] text-muted-foreground">
+                    {statusHint(c.value)}
+                  </span>
+                )}
+              </span>
               {c.value === value && <CheckIcon className="size-3.5 text-primary" />}
             </RowMenuItem>
           ))}

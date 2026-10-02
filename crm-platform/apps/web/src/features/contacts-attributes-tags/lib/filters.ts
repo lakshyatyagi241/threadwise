@@ -7,7 +7,7 @@ import {
 } from '../api/contacts';
 
 /**
- * The list filters live in the URL (`?q=&group=&tag=&stage=&consent=&imported=&per=&order=&page=`), as they did in Reference,
+ * The list filters live in the URL (`?q=&group=&tag=&stage=&consent=&imported=&segment=&per=&order=&page=`), as they did in Reference,
  * so a filtered view can be bookmarked or shared and the back button restores it. Unknown or malformed values fall
  * back to the defaults: a hand-edited URL never breaks the page.
  */
@@ -34,9 +34,7 @@ export function parseFilters(
   defaultLimit: PageSize = DEFAULT_FILTERS.limit,
 ): ContactFilters {
   const per = Number(params.get('per'));
-  const limit = (PAGE_SIZES as readonly number[]).includes(per)
-    ? (per as PageSize)
-    : defaultLimit;
+  const limit = (PAGE_SIZES as readonly number[]).includes(per) ? (per as PageSize) : defaultLimit;
   const consent = params.get('consent');
   return {
     q: (params.get('q') ?? '').slice(0, 200),
@@ -47,6 +45,7 @@ export function parseFilters(
       ? consent
       : '') as ConsentFilter,
     imported: params.get('imported') === '1',
+    segment: cleanId(params.get('segment'), false),
     order: params.get('order') === 'asc' ? 'asc' : 'desc',
     limit,
     page: cleanPage(params.get('page')),
@@ -54,7 +53,10 @@ export function parseFilters(
 }
 
 /** Only non-default values are written, so the clean URL is `/contacts`. */
-export function filtersToSearch(f: ContactFilters, defaultLimit: PageSize = DEFAULT_FILTERS.limit): string {
+export function filtersToSearch(
+  f: ContactFilters,
+  defaultLimit: PageSize = DEFAULT_FILTERS.limit,
+): string {
   const p = new URLSearchParams();
   if (f.q.trim()) p.set('q', f.q.trim());
   if (f.group) p.set('group', f.group);
@@ -62,6 +64,7 @@ export function filtersToSearch(f: ContactFilters, defaultLimit: PageSize = DEFA
   if (f.lifecycleStage) p.set('stage', f.lifecycleStage);
   if (f.consent) p.set('consent', f.consent);
   if (f.imported) p.set('imported', '1');
+  if (f.segment) p.set('segment', f.segment);
   if (f.order !== DEFAULT_FILTERS.order) p.set('order', f.order);
   if (f.limit !== defaultLimit) p.set('per', String(f.limit));
   if (f.page > 1) p.set('page', String(f.page));
@@ -71,5 +74,7 @@ export function filtersToSearch(f: ContactFilters, defaultLimit: PageSize = DEFA
 
 /** Any filter that narrows the list: the empty state offers "Reset filters" only when one is on. */
 export function hasActiveFilter(f: ContactFilters): boolean {
-  return Boolean(f.q.trim() || f.group || f.tag || f.lifecycleStage || f.consent || f.imported);
+  return Boolean(
+    f.q.trim() || f.group || f.tag || f.lifecycleStage || f.consent || f.imported || f.segment,
+  );
 }

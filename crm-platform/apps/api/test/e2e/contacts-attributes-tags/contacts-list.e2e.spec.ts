@@ -408,3 +408,82 @@ describe('source and status as real columns (TW-CON-015)', () => {
     expect(res.status).toBe(422);
   });
 });
+
+describe('identity keys follow an edit (TW-CON-013)', () => {
+  it('releases the old phone and email on an edit or a clear, so a new contact with them is a new contact', async () => {
+    const t = await api.signup('idk');
+    const made = await api
+      .as(t.admin)
+      .post('/v2/contacts')
+      .send({ name: 'Mover', phone: '+919990001001', email: 'mover@example.com' });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+
+    const moved = await api
+      .as(t.admin)
+      .patch(`/v2/contacts/${made.body.id}`)
+      .send({ phone: '+919990001002', email: null, rowVersion: made.body.rowVersion });
+    expect(moved.status, JSON.stringify(moved.body)).toBe(200);
+
+    // Before the fix both of these answered with "Mover" (the stale identity), swallowing the new contact.
+    const byOldPhone = await api
+      .as(t.admin)
+      .post('/v2/contacts')
+      .send({ name: 'Newcomer', phone: '+919990001001' });
+    expect(byOldPhone.status, JSON.stringify(byOldPhone.body)).toBe(201);
+    expect(byOldPhone.body.id).not.toBe(made.body.id);
+    expect(byOldPhone.body.name).toBe('Newcomer');
+
+    const byOldEmail = await api
+      .as(t.admin)
+      .post('/v2/contacts')
+      .send({ name: 'Mail owner', phone: '+919990001003', email: 'mover@example.com' });
+    expect(byOldEmail.body.id).not.toBe(made.body.id);
+    expect(byOldEmail.body.name).toBe('Mail owner');
+
+    // The number the contact holds now is still its identity: creating it again returns the same contact.
+    const again = await api
+      .as(t.admin)
+      .post('/v2/contacts')
+      .send({ name: 'Mover again', phone: '+919990001002' });
+    expect(again.body.id).toBe(made.body.id);
+  });
+});
+
+describe('marketing opt-out write path (TW-CON-017)', () => {
+  it('create and edit set and clear the opt-out, and the stats and the consent filter follow', async () => {
+    const t = await api.signup('optout');
+    const made = await api
+      .as(t.admin)
+      .post('/v2/contacts')
+      .send({ name: 'Opted out', phone: '+919990002001', isUnsubscribed: true });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    expect(made.body.isUnsubscribed).toBe(true);
+    await api.as(t.admin).post('/v2/contacts').send({ name: 'Subscribed', phone: '+919990002002' });
+
+    const stats = await api.as(t.admin).get('/v2/contacts/stats');
+    expect(stats.body).toMatchObject({ total: 2, unsubscribed: 1, subscribed: 1 });
+    const only = await api.as(t.admin).get('/v2/contacts?unsubscribed=true');
+    expect(names(only.body.data)).toEqual(['Opted out']);
+
+    const back = await api
+      .as(t.admin)
+      .patch(`/v2/contacts/${made.body.id}`)
+      .send({ isUnsubscribed: false, rowVersion: made.body.rowVersion });
+    expect(back.status, JSON.stringify(back.body)).toBe(200);
+    expect(back.body.isUnsubscribed).toBe(false);
+    expect((await api.as(t.admin).get('/v2/contacts?unsubscribed=true')).body.data).toEqual([]);
+
+    // Turning it on again stamps the time, and sending the same value is not a change.
+    const again = await api
+      .as(t.admin)
+      .patch(`/v2/contacts/${made.body.id}`)
+      .send({ isUnsubscribed: true, rowVersion: back.body.rowVersion });
+    expect(again.body.isUnsubscribed).toBe(true);
+    const same = await api
+      .as(t.admin)
+      .patch(`/v2/contacts/${made.body.id}`)
+      .send({ isUnsubscribed: true, rowVersion: again.body.rowVersion });
+    expect(same.status).toBe(200);
+    expect(same.body.isUnsubscribed).toBe(true);
+  });
+});

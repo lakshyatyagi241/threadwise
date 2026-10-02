@@ -3,11 +3,12 @@
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Field, Modal, Select, Spinner, Textarea } from '@crm/ui';
-import { useLostReasons } from '../api/hooks';
+import { useDealSettings, useLostReasons } from '../api/hooks';
 import {
   LOST_REASON_KEYS,
   LOST_REASON_MAX,
   OTHER,
+  lostReasonToSend,
   resolveLostReason,
   type LostReasonPayload,
   type ReasonOption,
@@ -21,13 +22,17 @@ export interface LostDialogProps {
 }
 
 /**
- * Closing a deal as lost always asks why (Reference never did, so reasons were empty in practice). The choices are the
- * workspace's lost-reason catalogue; until it has entries the dialog offers a few presets. "Other" asks for a few
- * words. Mount it only while it is needed: it starts empty each time.
+ * Closing a deal as lost offers a reason (Reference never asked, so reasons were empty in practice) and insists on one only
+ * when the workspace setting "require a reason" is on (D-08); with it off, "Mark as lost" works with no reason, as in
+ * Reference. The choices are the workspace's lost-reason catalogue; until it has entries the dialog offers a few presets.
+ * "Other" asks for a few words. Mount it only while it is needed: it starts empty each time.
  */
 export function LostDialog({ dealTitle, busy, onConfirm, onClose }: LostDialogProps) {
   const t = useTranslations('deals-pipelines.lost');
   const catalogue = useLostReasons(true);
+  const settings = useDealSettings();
+  // Unknown (the settings call failed) counts as required: the server is the authority and refuses a missing reason.
+  const required = settings.isError || (settings.data?.lostReasonRequired ?? false);
   const [choice, setChoice] = useState('');
   const [other, setOther] = useState('');
   const [touched, setTouched] = useState(false);
@@ -38,10 +43,12 @@ export function LostDialog({ dealTitle, busy, onConfirm, onClose }: LostDialogPr
     return LOST_REASON_KEYS.map((k) => ({ value: `p:${k}`, label: t(`reasons.${k}`) }));
   }, [catalogue.data, t]);
   const payload = resolveLostReason(choice, options, other);
+  // No choice and no requirement: close the deal without a reason. A started choice must still be complete.
+  const effective = lostReasonToSend(choice, options, other, required);
 
   const submit = () => {
     setTouched(true);
-    if (payload) onConfirm(payload);
+    if (effective) onConfirm(effective);
   };
 
   return (
@@ -58,7 +65,11 @@ export function LostDialog({ dealTitle, busy, onConfirm, onClose }: LostDialogPr
           <Button variant="secondary" onClick={onClose} disabled={busy}>
             {t('cancel')}
           </Button>
-          <Button variant="danger" disabled={busy || catalogue.isPending} onClick={submit}>
+          <Button
+            variant="danger"
+            disabled={busy || catalogue.isPending || settings.isPending}
+            onClick={submit}
+          >
             {busy && <Spinner />}
             {t('confirm')}
           </Button>
@@ -76,12 +87,12 @@ export function LostDialog({ dealTitle, busy, onConfirm, onClose }: LostDialogPr
         <Field
           label={t('reason')}
           htmlFor="lost-reason"
-          error={touched && !choice ? t('required') : undefined}
+          error={touched && !choice && required ? t('required') : undefined}
         >
           <Select
             id="lost-reason"
             value={choice}
-            invalid={touched && !choice}
+            invalid={touched && !choice && required}
             disabled={catalogue.isPending}
             onChange={(e) => setChoice(e.target.value)}
           >

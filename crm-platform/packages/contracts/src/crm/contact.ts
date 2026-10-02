@@ -5,6 +5,7 @@ import { paginationQuerySchema } from '../common/pagination';
 import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
 import { contactGroupRefSchema } from '../contacts-attributes-tags/contact-group';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
+import type { InvalidCondition } from '../segments/rules';
 
 /**
  * Contact — the reference vertical slice.
@@ -37,6 +38,9 @@ export const contactResponseSchema = z.object({
   /** Meaningful only when status is a "closed lost" value. Options via status_options. */
   lostReason: z.string().nullable(),
   otherLostReason: z.string().nullable(),
+  /** Stamped when the contact enters a won / lost lifecycle stage (Contact stages screen), cleared when it leaves. */
+  wonAt: z.string().datetime().nullable(),
+  lostAt: z.string().datetime().nullable(),
   leadScore: z.number().int().nullable(),
   /** Values are org-configurable via status_options, not a fixed enum here. */
   whatsappSubscriptionStatus: z.string().nullable(),
@@ -84,6 +88,8 @@ export const createContactSchema = z
     faxNumber: z.string().max(32).optional(),
     /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
     source: z.string().trim().max(128).optional(),
+    /** Marketing opt-out (TW-CON-017): broadcasts and campaigns skip an opted-out contact. */
+    isUnsubscribed: z.boolean().optional(),
     customFields: z.record(z.unknown()).default({}),
   })
   // A contact with neither a phone nor an email cannot be reached, cannot be
@@ -113,6 +119,8 @@ export const updateContactSchema = z.object({
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
   source: z.string().trim().max(128).nullish(),
+  /** Marketing opt-out. Turning it on stamps `unsubscribedAt`; turning it off clears it. */
+  isUnsubscribed: z.boolean().optional(),
   customFields: z.record(z.unknown()).optional(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409. */
   rowVersion: z.number().int().positive(),
@@ -146,7 +154,10 @@ export type ListContactsQuery = z.infer<typeof listContactsQuerySchema>;
 export type ContactListResponse = {
   data: ContactResponse[];
   page: { nextCursor: string | null; hasMore: boolean; limit: number };
-  meta?: { total: number };
+  /** `approximate`: the total of a segment's contacts could not be counted in 3 seconds and is the last known value or an estimate. */
+  meta?: { total: number; approximate?: boolean };
+  /** Only when the request filtered by `segmentId`: the segment's conditions that match nothing because something they point at was deleted. */
+  segment?: { id: string; invalidConditions: InvalidCondition[] };
 };
 
 /** Lightweight rows for pickers/typeaheads — never the full record. */
@@ -180,6 +191,9 @@ export const bulkUpdateContactsSchema = z.object({
   values: z.object({
     ownerId: uuidSchema.nullish(),
     lifecycleStage: z.string().min(1).nullish(),
+    /** Needed when `lifecycleStage` is a lost stage (the same reason is recorded on every contact moved). */
+    lostReason: z.string().max(255).nullish(),
+    otherLostReason: z.string().max(500).nullish(),
     status: z.string().max(64).nullish(),
     customFields: z.record(z.unknown()).optional(),
   }),

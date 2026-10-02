@@ -15,6 +15,8 @@ export const ERROR_CODES = {
   FORBIDDEN: 'FORBIDDEN',
   CONFLICT: 'CONFLICT',
   RATE_LIMITED: 'RATE_LIMITED',
+  /** The request body is larger than the server accepts (body-parser limit). */
+  PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
   INTERNAL: 'INTERNAL',
 
   // platform invariants
@@ -47,6 +49,10 @@ export const ERROR_CODES = {
   DEPENDENCY_CYCLE_DETECTED: 'DEPENDENCY_CYCLE_DETECTED',
   /** A status option still held by contacts: repeat the delete with `moveTo`. */
   STATUS_OPTION_IN_USE: 'STATUS_OPTION_IN_USE',
+  /** won/lost flags on a group other than contacts' lifecycle stages, or both flags at once. */
+  STATUS_OPTION_FLAG_INVALID: 'STATUS_OPTION_FLAG_INVALID',
+  /** A status scoped to something that is not a lifecycle stage of the workspace, or a group that cannot be scoped. */
+  STATUS_OPTION_STAGE_INVALID: 'STATUS_OPTION_STAGE_INVALID',
 
   // auth, registration and account security
   AUTH_INVALID_CREDENTIALS: 'AUTH_INVALID_CREDENTIALS',
@@ -107,6 +113,18 @@ export const ERROR_CODES = {
   CON_ATTRIBUTE_KEY_RESERVED: 'CON_ATTRIBUTE_KEY_RESERVED',
   CON_ATTRIBUTE_IN_USE: 'CON_ATTRIBUTE_IN_USE',
   CON_MERGE_SCOPE_REQUIRED: 'CON_MERGE_SCOPE_REQUIRED',
+  /** A property marked required in the registry has no value (details: one `customFields.<key>` per property). */
+  CON_REQUIRED_PROPERTY_MISSING: 'CON_REQUIRED_PROPERTY_MISSING',
+  /** The contact is moving to a lost lifecycle stage without a lost reason. */
+  CON_LOST_REASON_REQUIRED: 'CON_LOST_REASON_REQUIRED',
+  /** A status that belongs to another lifecycle stage was set on a contact (details: path `status`, names the stage). */
+  CON_STATUS_STAGE_MISMATCH: 'CON_STATUS_STAGE_MISMATCH',
+
+  // segments (product extension)
+  /** Another segment in the workspace has this name (any case). */
+  SEG_NAME_TAKEN: 'SEG_NAME_TAKEN',
+  /** The rules point at something that does not exist (a tag, group, stage, status, user or property) or use an operator the property's type does not have. */
+  SEG_RULES_INVALID: 'SEG_RULES_INVALID',
 
   // broadcasts (TW-BCAST)
   BCAST_NO_RECIPIENTS: 'BCAST_NO_RECIPIENTS',
@@ -210,6 +228,129 @@ export const ERROR_CODES = {
   TCHAT_ATTACHMENT_REJECTED: 'TCHAT_ATTACHMENT_REJECTED',
   /** The operation does not apply to this kind of channel (members of a public channel, a direct message with yourself). */
   TCHAT_CHANNEL_KIND_INVALID: 'TCHAT_CHANNEL_KIND_INVALID',
+
+  // proposals and estimates (TW-PROP / TW-EST)
+  /** The move is not allowed from the document's status (details: `from`, `to`). */
+  SALESDOC_INVALID_TRANSITION: 'SALESDOC_INVALID_TRANSITION',
+  /** Only a draft is edited in place; a sent document is revised first. */
+  SALESDOC_NOT_EDITABLE: 'SALESDOC_NOT_EDITABLE',
+  /** The valid-until date has passed: the buyer can no longer decide. */
+  SALESDOC_EXPIRED: 'SALESDOC_EXPIRED',
+  /** The document was decided the other way already (the same decision twice is a replay, not this). */
+  SALESDOC_ALREADY_DECIDED: 'SALESDOC_ALREADY_DECIDED',
+  SALESDOC_ALREADY_CONVERTED: 'SALESDOC_ALREADY_CONVERTED',
+  SALESDOC_ALREADY_LINKED_DEAL: 'SALESDOC_ALREADY_LINKED_DEAL',
+  /** Accepted and converted documents are evidence and cannot be deleted. */
+  SALESDOC_NOT_DELETABLE: 'SALESDOC_NOT_DELETABLE',
+  /** The public link was revoked or has expired (an unknown token is a plain 404). */
+  SALESDOC_LINK_UNAVAILABLE: 'SALESDOC_LINK_UNAVAILABLE',
+  /** The owner is not an active member of this workspace. */
+  SALESDOC_OWNER_INVALID: 'SALESDOC_OWNER_INVALID',
+  /** An amount, quantity or rate the math cannot represent (details: one path per field). */
+  SALESDOC_AMOUNT_INVALID: 'SALESDOC_AMOUNT_INVALID',
+  /** The channel has nowhere to deliver: no buyer email or phone. */
+  SALESDOC_NO_RECIPIENT: 'SALESDOC_NO_RECIPIENT',
+  SALESDOC_SEND_FAILED: 'SALESDOC_SEND_FAILED',
+  /** No invoicing module is bound to the sales-docs port in this deployment. */
+  SALESDOC_INVOICING_UNAVAILABLE: 'SALESDOC_INVOICING_UNAVAILABLE',
+  SALESDOC_TEMPLATE_NAME_TAKEN: 'SALESDOC_TEMPLATE_NAME_TAKEN',
+
+  // invoices, payments and tax rates (TW-INV / TW-PAY)
+  /** The invoice is no longer a draft: its lines, amounts, buyer name and numbering are frozen. */
+  INV_NOT_DRAFT: 'INV_NOT_DRAFT',
+  /** The action needs an issued invoice (a draft has no number to pay or send, a void one cannot be paid). */
+  INV_NOT_ISSUED: 'INV_NOT_ISSUED',
+  INV_ALREADY_VOID: 'INV_ALREADY_VOID',
+  /** An amount, quantity or rate the math cannot represent (details: one path per field). */
+  INV_AMOUNT_INVALID: 'INV_AMOUNT_INVALID',
+  /** A void invoice may not carry a net payment: refund it first. */
+  INV_HAS_PAYMENTS: 'INV_HAS_PAYMENTS',
+  /** Only a draft is deleted; an issued invoice is voided (its number stays on record). */
+  INV_NOT_DELETABLE: 'INV_NOT_DELETABLE',
+  INV_OWNER_INVALID: 'INV_OWNER_INVALID',
+  INV_TAX_RATE_INVALID: 'INV_TAX_RATE_INVALID',
+  /** The public link was revoked or has expired (an unknown token is a plain 404). */
+  INV_LINK_UNAVAILABLE: 'INV_LINK_UNAVAILABLE',
+  /** The invoice has no buyer email or phone for that delivery channel. */
+  INV_NO_RECIPIENT: 'INV_NO_RECIPIENT',
+  /** The source document was already turned into an invoice (the existing one is returned by the conversion port). */
+  INV_ALREADY_CONVERTED: 'INV_ALREADY_CONVERTED',
+  INV_RECURRING_INVALID: 'INV_RECURRING_INVALID',
+  TAX_RATE_NAME_TAKEN: 'TAX_RATE_NAME_TAKEN',
+  TAX_RATE_INVALID: 'TAX_RATE_INVALID',
+  /** The payment is more than the open balance and `allowOverpayment` was not set (details: balance, amount). */
+  PAY_OVERPAYMENT: 'PAY_OVERPAYMENT',
+  PAY_CURRENCY_MISMATCH: 'PAY_CURRENCY_MISMATCH',
+  PAY_FUTURE_DATE: 'PAY_FUTURE_DATE',
+  /** A refund is more than what is left of the payment (details: refundable, amount). */
+  PAY_REFUND_EXCEEDS: 'PAY_REFUND_EXCEEDS',
+  /** Only a payment can be refunded, and a refund cannot be refunded. */
+  PAY_NOT_REFUNDABLE: 'PAY_NOT_REFUNDABLE',
+  PAY_NOTHING_TO_PAY: 'PAY_NOTHING_TO_PAY',
+  PAY_GATEWAY_NOT_CONFIGURED: 'PAY_GATEWAY_NOT_CONFIGURED',
+  /** The webhook signature is missing or wrong (the endpoint does not say which, or whether the endpoint exists). */
+  PAY_SIGNATURE_INVALID: 'PAY_SIGNATURE_INVALID',
+  PAY_AMOUNT_MISMATCH: 'PAY_AMOUNT_MISMATCH',
+  /** The credit notes of an invoice would add up to more than the invoice (details: creditable). */
+  CN_EXCEEDS_INVOICE: 'CN_EXCEEDS_INVOICE',
+  /** A credit note is edited and deleted only while it is a draft. */
+  CN_NOT_DRAFT: 'CN_NOT_DRAFT',
+  CN_ALREADY_VOID: 'CN_ALREADY_VOID',
+  /** Cash was returned for this credit note: the refund stands in the payment ledger, so it cannot be voided. */
+  CN_HAS_REFUND: 'CN_HAS_REFUND',
+  /** Nothing is left to credit on the invoice (or on the chosen line). */
+  CN_NOTHING_TO_CREDIT: 'CN_NOTHING_TO_CREDIT',
+  CN_LINE_INVALID: 'CN_LINE_INVALID',
+  /** A sales order is edited only while it is a draft. */
+  SO_NOT_DRAFT: 'SO_NOT_DRAFT',
+  SO_NOT_CONFIRMED: 'SO_NOT_CONFIRMED',
+  SO_CANCELLED: 'SO_CANCELLED',
+  /** The proposal or estimate is not accepted yet. */
+  SO_QUOTE_NOT_ACCEPTED: 'SO_QUOTE_NOT_ACCEPTED',
+  /** The accepted offer already has a live sales order. */
+  SO_QUOTE_TAKEN: 'SO_QUOTE_TAKEN',
+  /** More than the unbilled or undelivered quantity (details: line, remaining). */
+  SO_QUANTITY_EXCEEDS: 'SO_QUANTITY_EXCEEDS',
+  SO_NOTHING_TO_INVOICE: 'SO_NOTHING_TO_INVOICE',
+  /** An invoice made from the order is still live: void or delete it first. */
+  SO_HAS_INVOICES: 'SO_HAS_INVOICES',
+  /** The schedule is ended (nothing left to run) or not in the state the action needs. */
+  /** An invoice with issued credit notes cannot be voided (void the credit notes first). */
+  INV_HAS_CREDITS: 'INV_HAS_CREDITS',
+  /** The lines of an invoice made from a sales order are fixed (they hold the order's billed quantities). */
+  INV_ORDER_LINKED: 'INV_ORDER_LINKED',
+  REC_NOT_ACTIVE: 'REC_NOT_ACTIVE',
+  REC_ENDED: 'REC_ENDED',
+  /** The start date is further back than the catch-up window allows. */
+  REC_START_TOO_OLD: 'REC_START_TOO_OLD',
+
+  // appointments and booking (TW-APPT)
+  /** The slot has no free seat any more (another booking won it). */
+  APPT_SLOT_TAKEN: 'APPT_SLOT_TAKEN',
+  /** The time is not one the booking type offers (outside the hours, inside the notice, past the horizon, on a closed date). */
+  APPT_SLOT_UNAVAILABLE: 'APPT_SLOT_UNAVAILABLE',
+  /** The move is not allowed from the appointment's status (details: `from`, `to`). */
+  APPT_INVALID_TRANSITION: 'APPT_INVALID_TRANSITION',
+  /** Complete, no-show and check-in need the appointment to have started. */
+  APPT_NOT_STARTED: 'APPT_NOT_STARTED',
+  /** The appointment has started: it can no longer be moved or cancelled by the customer. */
+  APPT_ALREADY_STARTED: 'APPT_ALREADY_STARTED',
+  /** Only an appointment in a final status is deleted. */
+  APPT_NOT_DELETABLE: 'APPT_NOT_DELETABLE',
+  /** The booking type was deleted or paused: the booking cannot move. */
+  APPT_TYPE_UNAVAILABLE: 'APPT_TYPE_UNAVAILABLE',
+  /** An answer is missing, of the wrong type, or not one of the choices (details: one path per question). */
+  APPT_ANSWERS_INVALID: 'APPT_ANSWERS_INVALID',
+  /** The host is not an active member of this workspace. */
+  APPT_HOST_INVALID: 'APPT_HOST_INVALID',
+  /** An amount the currency cannot represent, or a payment the booking does not need. */
+  APPT_AMOUNT_INVALID: 'APPT_AMOUNT_INVALID',
+  /** The manage link belongs to a booking that is over (cancelled, completed, ...). */
+  APPT_LINK_UNAVAILABLE: 'APPT_LINK_UNAVAILABLE',
+  /** Online booking is off for this workspace (plan flag, plan cap) or the service is not bookable. */
+  APPT_BOOKING_UNAVAILABLE: 'APPT_BOOKING_UNAVAILABLE',
+  /** A booking type with pending or confirmed bookings still to come is not deleted. */
+  BOOKING_TYPE_HAS_UPCOMING: 'BOOKING_TYPE_HAS_UPCOMING',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

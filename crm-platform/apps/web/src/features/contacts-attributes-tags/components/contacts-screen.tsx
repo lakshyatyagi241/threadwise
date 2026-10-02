@@ -1,11 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useReducer, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
+import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { invalidateSegments, useSegments } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
 import {
@@ -16,6 +18,7 @@ import {
   type BulkOutcome,
 } from '../api/bulk';
 import {
+  contactFilterBody,
   deleteContact,
   invalidateContacts,
   KEYS,
@@ -38,7 +41,7 @@ import {
 } from '../lib/columns';
 import { displayName } from '../lib/contact-model';
 import { downloadBlob } from '../lib/download';
-import { errorKind } from '../lib/errors';
+import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { clampPage, totalPages } from '../lib/pagination';
@@ -56,9 +59,14 @@ import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import { ContactFormModal } from './contact-form-modal';
 import { ContactsGrid, ContactsTable } from './contacts-list';
 import { ContactsPagination } from './contacts-pagination';
-import { ContactsToolbar, segmentOf } from './contacts-toolbar';
+import { ContactsToolbar, filtersOfSegment, segmentOf } from './contacts-toolbar';
+import { SaveSegmentModal } from './save-segment-modal';
+import type { SegmentOption, SegmentsState } from './segment-picker';
 import { DedupeDialog } from './dedupe-dialog';
 import { ErrorLine } from './error-line';
+import { LostReasonDialog, type LostPrompt } from './lost-reason';
+import { isLostStage } from '../lib/stage-flow';
+import { statusAfterMove, statusNotice } from '../lib/status-scope';
 import { GroupModal } from './group-modal';
 import { ImportModal } from './import-modal';
 import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
@@ -92,6 +100,8 @@ export function ContactsScreen() {
   const canMerge = useCan('record.contacts.merge');
   const canCreateGroups = useCan('record.contact-groups.create');
   const canCreateTags = useCan('record.tags.create');
+  const canReadSegments = useCan('record.segments.read');
+  const canCreateSegments = useCan('record.segments.create');
 
   // The rows-per-page choice is remembered per browser; a `per=` in the URL (a shared link) still wins.
   const [storedSize, setStoredSize] = useStoredValue(PAGE_SIZE_KEY);
@@ -126,6 +136,27 @@ export function ContactsScreen() {
   const stats = useContactStats();
   const groups = useGroups();
   const tags = useTags();
+  const segmentList = useSegments(canReadSegments);
+  const segmentOptions = useMemo<SegmentOption[]>(
+    () =>
+      (segmentList.data ?? [])
+        .map((s) => ({
+          id: s.id,
+          name: s.name,
+          color: s.color ?? null,
+          memberCount: s.memberCount,
+          countApproximate: s.countApproximate,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    [segmentList.data],
+  );
+  const segmentsState: SegmentsState = !canReadSegments
+    ? 'off'
+    : segmentList.isError
+      ? 'error'
+      : segmentList.isPending
+        ? 'loading'
+        : 'ready';
   const attributes = useAttributes();
   const statusOptions = useStatusOptions();
 
@@ -167,7 +198,8 @@ export function ContactsScreen() {
   const [statsRaw, setStatsRaw] = useStoredValue(STATS_KEY);
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
-    () => (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
+    () =>
+      (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
@@ -191,6 +223,7 @@ export function ContactsScreen() {
     tag: filters.tag,
     consent: filters.consent,
     imported: filters.imported,
+    segment: filters.segment,
   };
   const target = (): BulkTarget =>
     pickerRow ? { kind: 'ids', ids: [pickerRow] } : bulkTarget(sel, snapshot);
@@ -202,6 +235,7 @@ export function ContactsScreen() {
   const [dedupeOpen, setDedupeOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [groupOpen, setGroupOpen] = useState(false);
+  const [saveSegmentOpen, setSaveSegmentOpen] = useState(false);
   const [picker, setPicker] = useState<BulkPicker>(null);
   /** The contact a group/tag picker opened from a row's menu acts on; null when it acts on the selection. */
   const [pickerRow, setPickerRow] = useState<string | null>(null);
@@ -211,6 +245,7 @@ export function ContactsScreen() {
   };
   const [busy, setBusy] = useState(false);
   const [stageBusy, setStageBusy] = useState<string | null>(null);
+  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
   const [exporting, setExporting] = useState(false);
   const deleteTarget = rows.find((r) => r.id === deleteId);
 
@@ -219,6 +254,7 @@ export function ContactsScreen() {
       invalidateContacts(qc),
       qc.invalidateQueries({ queryKey: KEYS.groups }),
       qc.invalidateQueries({ queryKey: KEYS.tags }),
+      invalidateSegments(qc),
     ]);
 
   async function guarded<T>(fn: () => Promise<T>): Promise<T | undefined> {
@@ -291,14 +327,46 @@ export function ContactsScreen() {
   }
 
   /** The stage cell's menu: saves the new stage of one contact, with the row version the table last read. */
-  async function changeStage(id: string, stage: string) {
+  async function changeStage(
+    id: string,
+    stage: string,
+    reason?: { lostReason?: string | null; otherLostReason?: string | null },
+  ) {
     const row = rows.find((r) => r.id === id);
     if (!row) return;
+    // A lost stage asks why first; nothing is saved until the dialog gives a reason.
+    if (!reason && isLostStage(stages, stage)) {
+      setLostPrompt({
+        contactId: id,
+        contactName: row.name ?? '',
+        stageValue: stage,
+        stageLabel: stages.find((x) => x.value === stage)?.label ?? stage,
+      });
+      return;
+    }
     setStageBusy(id);
     try {
-      await updateContact(id, { lifecycleStage: stage, rowVersion: row.rowVersion });
+      const saved = await updateContact(id, {
+        lifecycleStage: stage,
+        ...reason,
+        rowVersion: row.rowVersion,
+      });
+      setLostPrompt(null);
       await refresh();
-      toast(ts('changed', { stage: stages.find((x) => x.value === stage)?.label ?? stage }), 'success');
+      // The API keeps the status valid for the stage: say what happened to it, from its answer.
+      const stageName = stages.find((x) => x.value === stage)?.label ?? stage;
+      const notice = statusNotice(row.status, saved.status);
+      toast(
+        notice.kind === 'none'
+          ? ts('changed', { stage: stageName })
+          : notice.kind === 'cleared'
+            ? ts('changedStatusCleared', { stage: stageName })
+            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
+                stage: stageName,
+                status: statuses.find((x) => x.value === notice.status)?.label ?? notice.status,
+              }),
+        'success',
+      );
     } catch (e) {
       const kind = errorKind(e);
       toast(
@@ -313,11 +381,25 @@ export function ContactsScreen() {
 
   async function onDeleteOne() {
     if (!deleteTarget) return;
-    const out = await guarded(() => deleteContact(deleteTarget.id).then(() => true as const));
-    setDeleteId(null);
-    if (!out) return;
-    await refresh();
-    toast(t('deleted'), 'success');
+    setBusy(true);
+    try {
+      await deleteContact(deleteTarget.id);
+      setDeleteId(null);
+      await refresh();
+      toast(t('deleted'), 'success');
+    } catch (e) {
+      setDeleteId(null);
+      const why = deleteFailure(e);
+      if (why === 'gone') {
+        // Deleted in another tab or by someone else: the list is stale, the contact is not "unavailable".
+        await refresh();
+        toast(t('alreadyDeleted'), 'info');
+      } else {
+        toast(tb(why), 'danger');
+      }
+    } finally {
+      setBusy(false);
+    }
   }
 
   const filtered = hasActiveFilter(filters);
@@ -331,8 +413,20 @@ export function ContactsScreen() {
     canDelete,
     stageLabel: (v: string) => stages.find((x) => x.value === v)?.label ?? v,
     stageChoices: stages,
-    onStageChange: canUpdate ? (id: string, stage: string) => void changeStage(id, stage) : undefined,
+    onStageChange: canUpdate
+      ? (id: string, stage: string) => void changeStage(id, stage)
+      : undefined,
     stageBusyId: stageBusy,
+    // Under each stage of the menu: what moving there would do to the contact's status.
+    stageStatusHint: (status: string, stage: string) => {
+      const move = statusAfterMove(statusOptions.data, status || null, stage);
+      if (!move.changed) return null;
+      return move.status === null
+        ? ts('willClear')
+        : ts('willReset', {
+            status: statuses.find((x) => x.value === move.status)?.label ?? move.status,
+          });
+    },
     statusLabel: (v: string) => statuses.find((x) => x.value === v)?.label ?? v,
     onToggle: (id: string) => dispatch({ type: 'toggle', id }),
     onView: (id: string) => router.push(`/contacts/${id}`),
@@ -378,11 +472,17 @@ export function ContactsScreen() {
         q={q}
         onQ={setQ}
         segment={segmentOf(filters)}
-        onSegment={(v) =>
-          setFilters({ imported: v === 'imported', group: v === 'imported' ? '' : v })
-        }
+        onSegment={(v) => setFilters(filtersOfSegment(v))}
         stats={s}
         groups={groups.data ?? []}
+        segments={segmentOptions}
+        segmentsState={segmentsState}
+        onRetrySegments={() => void segmentList.refetch()}
+        canCreateSegment={canCreateSegments}
+        // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
+        onSaveAsSegment={
+          canCreateSegments && filtered && !filters.segment ? () => setSaveSegmentOpen(true) : undefined
+        }
         tag={filters.tag}
         onTag={(id) => setFilters({ tag: id })}
         tags={tags.data ?? []}
@@ -444,7 +544,11 @@ export function ContactsScreen() {
         </button>
         {showStats && (
           <div className="mt-2 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <StatTile label={t('stats.total')} value={num(s?.total)} hint={t('stats.inWorkspace')} />
+            <StatTile
+              label={t('stats.total')}
+              value={num(s?.total)}
+              hint={t('stats.inWorkspace')}
+            />
             <StatTile
               tone="accent"
               label={t('stats.groups')}
@@ -465,6 +569,18 @@ export function ContactsScreen() {
           </div>
         )}
       </div>
+
+      {list.segmentInvalid > 0 && (
+        <Alert tone="warning" className="flex flex-wrap items-center justify-between gap-2">
+          <span>{t('segmentInvalid', { count: list.segmentInvalid })}</span>
+          <Link
+            href={`/segments/${filters.segment}/edit`}
+            className="font-semibold underline underline-offset-2"
+          >
+            {t('segmentFix')}
+          </Link>
+        </Alert>
+      )}
 
       {header === 'all' && total !== undefined && total > rows.length && (
         <div
@@ -559,6 +675,7 @@ export function ContactsScreen() {
             onPage={(p) => setFilters({ page: p })}
             onLimit={(n) => setFilters({ limit: n })}
             onRecount={() => void invalidateContacts(qc)}
+            approximate={list.totalApproximate}
           />
         )}
       </section>
@@ -582,8 +699,19 @@ export function ContactsScreen() {
         contact={formFor === 'new' || formFor === null ? undefined : formFor}
         onClose={() => setFormFor(null)}
       />
+      <LostReasonDialog
+        prompt={lostPrompt}
+        busy={stageBusy !== null}
+        onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
+        onClose={() => setLostPrompt(null)}
+      />
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
       <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />
+      <SaveSegmentModal
+        open={saveSegmentOpen}
+        filter={{ ...contactFilterBody({ ...filters, segment: '' }), segmentId: undefined }}
+        onClose={() => setSaveSegmentOpen(false)}
+      />
       <DedupeDialog open={dedupeOpen} onClose={() => setDedupeOpen(false)} />
       <ConfirmDialog
         open={deleteId !== null}

@@ -5,12 +5,18 @@ import { currencyExponent } from '@crm/contracts';
 /** Digits after the decimal point for a currency (JPY 0, USD 2, KWD 3): the contract's rule, shared with the API. */
 export const minorExponent = (currency: string): number => currencyExponent(currency);
 
-/** "250.5" -> 25050. Blank is 0; garbage or a negative number is NaN so the form can say so. */
+/**
+ * "250.5" -> 25050. Blank is 0; garbage, a negative number, or more decimals than the currency has (JPY 5000.5, USD 1.005)
+ * is NaN so the form can say so: the API refuses those too, and an amount is never rounded behind the person's back.
+ */
 export function toMinor(input: string | number, currency: string): number {
   const text = typeof input === 'number' ? String(input) : input.trim().replace(/,/g, '');
   if (text === '') return 0;
   if (!/^\d*\.?\d*$/.test(text) || text === '.') return Number.NaN;
-  return Math.round(Number(text) * 10 ** minorExponent(currency));
+  const exp = minorExponent(currency);
+  const fraction = text.split('.')[1] ?? '';
+  if (fraction.length > exp && /[1-9]/.test(fraction.slice(exp))) return Number.NaN;
+  return Math.round(Number(text) * 10 ** exp);
 }
 
 /** 25050 -> "250.50" for an input field (plain number, no grouping). */

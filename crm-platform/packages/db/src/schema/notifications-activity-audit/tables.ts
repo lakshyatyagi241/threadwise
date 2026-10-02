@@ -2,6 +2,7 @@
  * notifications-activity-audit: tables ported from Reference. Mirrors migrations/20261001100400_notif_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
   boolean,
   foreignKey,
@@ -12,6 +13,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
@@ -29,6 +31,8 @@ export const inboxNotifications = pgTable(
     body: text('body'),
     data: jsonb('data'),
     link: text('link'),
+    /** Idempotency key: event type + outbox event id. Unique per (org, user) when set. */
+    dedupeKey: text('dedupe_key'),
     readAt: timestamp('read_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -50,6 +54,13 @@ export const inboxNotifications = pgTable(
     index('idx_inbox_notifications_read_at').on(t.orgId, t.readAt),
     index('idx_inbox_notifications_type').on(t.orgId, t.type),
     index('idx_inbox_notifications_user_id_read_at').on(t.orgId, t.userId, t.readAt),
+    uniqueIndex('uq_inbox_notifications_dedupe')
+      .on(t.orgId, t.userId, t.dedupeKey)
+      .where(sql`dedupe_key IS NOT NULL`),
+    index('idx_inbox_notifications_user_feed').on(t.orgId, t.userId, t.id.desc()),
+    index('idx_inbox_notifications_user_unread')
+      .on(t.orgId, t.userId)
+      .where(sql`read_at IS NULL`),
   ],
 );
 

@@ -4,7 +4,7 @@ import { selectionBody } from '../api/bulk';
 import { sampleCsv } from '../api/import-export';
 import type { ContactRow } from '../api/schemas';
 import { ApiError } from '@/lib/api/errors';
-import { errorKind, fieldErrors } from './errors';
+import { deleteFailure, errorKind, fieldErrors, planLimitOf } from './errors';
 import { stageChoices, statusChoices } from './option-sets';
 import { rowView } from './row-view';
 
@@ -27,6 +27,9 @@ describe('errorKind', () => {
     expect(errorKind(api(413, ERROR_CODES.CON_IMPORT_TOO_LARGE))).toBe('tooLarge');
     expect(errorKind(api(422, ERROR_CODES.CON_EXPORT_TOO_LARGE))).toBe('tooLarge');
     expect(errorKind(api(403, ERROR_CODES.CON_MERGE_SCOPE_REQUIRED))).toBe('mergeScope');
+    expect(errorKind(api(422, ERROR_CODES.CON_REQUIRED_PROPERTY_MISSING))).toBe('requiredProperty');
+    expect(errorKind(api(422, ERROR_CODES.CON_LOST_REASON_REQUIRED))).toBe('lostReason');
+    expect(errorKind(api(422, ERROR_CODES.STATUS_OPTION_FLAG_INVALID))).toBe('stageFlag');
   });
 
   it('treats a missing route as "not available yet" and a network failure as a network problem', () => {
@@ -57,6 +60,9 @@ describe('option sets', () => {
     position: 0,
     isDefault: false,
     isActive: true,
+    isWon: false,
+    isLost: false,
+    stageOptionId: null,
     rowVersion: 1,
     ...over,
   });
@@ -152,6 +158,7 @@ describe('selectionBody (TW-CON-019)', () => {
     tag: '',
     consent: 'unsubscribed' as const,
     imported: false,
+    segment: '',
   };
 
   it('sends explicit ids as they are', () => {
@@ -179,5 +186,38 @@ describe('sampleCsv (TW-CON-032)', () => {
     expect(lines[0]).toBe('name,last_name,country_code,mobile,email,group,language');
     expect(lines).toHaveLength(3);
     expect(lines[1]).toContain('"VIP, New leads"');
+  });
+});
+
+describe('deleteFailure', () => {
+  const api = (status: number, code: string) => new ApiError(status, code, 'x');
+
+  it('a contact that is already gone is "gone", not "this action is not available yet"', () => {
+    expect(deleteFailure(api(404, ERROR_CODES.NOT_FOUND))).toBe('gone');
+    expect(deleteFailure(api(404, 'UNKNOWN'))).toBe('gone');
+  });
+
+  it('keeps forbidden and everything else as before', () => {
+    expect(deleteFailure(api(403, ERROR_CODES.FORBIDDEN))).toBe('forbidden');
+    expect(deleteFailure(api(500, 'INTERNAL'))).toBe('failed');
+    expect(deleteFailure(new TypeError('fetch failed'))).toBe('failed');
+  });
+});
+
+describe('plan limit (TW-CON-026)', () => {
+  const full = new ApiError(422, ERROR_CODES.PLAN_LIMIT_REACHED, 'x', undefined, [
+    { path: 'limit', message: 'contacts' },
+    { path: 'used', message: '500' },
+    { path: 'limitValue', message: '500' },
+  ]);
+
+  it('a create refused at the cap is a plan-limit message, not "something went wrong"', () => {
+    expect(errorKind(full)).toBe('planLimit');
+  });
+
+  it('reads the cap from the answer, and tolerates an answer without one', () => {
+    expect(planLimitOf(full)).toBe(500);
+    expect(planLimitOf(new ApiError(422, ERROR_CODES.PLAN_LIMIT_REACHED, 'x'))).toBeUndefined();
+    expect(planLimitOf(new TypeError('x'))).toBeUndefined();
   });
 });

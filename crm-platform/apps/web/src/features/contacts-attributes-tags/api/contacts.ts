@@ -45,6 +45,8 @@ export interface ContactFilters {
   consent: ConsentFilter;
   /** Created by a CSV import (Reference's "Imported" view, which never matched anything there). */
   imported: boolean;
+  /** Members of one segment (a saved rule that fills itself), by id; empty for none. Combines with every other filter. */
+  segment: string;
   order: 'asc' | 'desc';
   limit: PageSize;
   /** 1-based page number; it is not part of the saved filter of a bulk action. */
@@ -58,6 +60,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   tag: '',
   consent: '',
   imported: false,
+  segment: '',
   order: 'desc',
   limit: 10,
   page: 1,
@@ -65,7 +68,10 @@ export const DEFAULT_FILTERS: ContactFilters = {
 
 /** The filter half of a list request, also the saved filter of a bulk action ("select all N matching"). */
 export function contactFilterBody(
-  f: Pick<ContactFilters, 'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported'>,
+  f: Pick<
+    ContactFilters,
+    'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported' | 'segment'
+  >,
 ) {
   return {
     q: f.q.trim() || undefined,
@@ -75,6 +81,7 @@ export function contactFilterBody(
     tagIds: f.tag ? [f.tag] : undefined,
     unsubscribed: f.consent === '' ? undefined : f.consent === 'unsubscribed',
     imported: f.imported ? true : undefined,
+    segmentId: f.segment || undefined,
   };
 }
 
@@ -89,6 +96,7 @@ export function listQuery(f: ContactFilters) {
     tagIds: f.tag || undefined,
     unsubscribed: b.unsubscribed,
     imported: b.imported,
+    segmentId: b.segmentId,
     order: f.order,
     limit: f.limit,
     expand: 'groups,tags',
@@ -176,6 +184,10 @@ export function useContactsPage(filters: ContactFilters, page: number) {
     hasNextPage: hasMore,
     /** Every contact matching the filter, from `meta.total`. */
     total: result?.response.meta?.total,
+    /** The total is an estimate (a segment too large to count in time). */
+    totalApproximate: result?.response.meta?.approximate ?? false,
+    /** Only when the list is filtered by a segment: how many of its conditions point at something deleted. */
+    segmentInvalid: result?.response.segment?.invalidConditions.length ?? 0,
   };
 }
 

@@ -18,6 +18,7 @@ export function StageDeleteDialog({
   group,
   option,
   options,
+  scopedStatuses = 0,
   onClose,
 }: {
   group: OptionGroup;
@@ -25,6 +26,8 @@ export function StageDeleteDialog({
   option: StatusOptionResponse | null;
   /** Every option of the group. */
   options: readonly StatusOptionResponse[];
+  /** Deleting a stage: how many statuses are limited to it (they stay, and become available in every stage). */
+  scopedStatuses?: number;
   onClose: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.stages');
@@ -36,7 +39,14 @@ export function StageDeleteDialog({
       size="sm"
     >
       {option && (
-        <DeleteBody key={option.id} group={group} option={option} options={options} onClose={onClose} />
+        <DeleteBody
+          key={option.id}
+          group={group}
+          option={option}
+          options={options}
+          scopedStatuses={scopedStatuses}
+          onClose={onClose}
+        />
       )}
     </Modal>
   );
@@ -46,11 +56,13 @@ function DeleteBody({
   group,
   option,
   options,
+  scopedStatuses,
   onClose,
 }: {
   group: OptionGroup;
   option: StatusOptionResponse;
   options: readonly StatusOptionResponse[];
+  scopedStatuses: number;
   onClose: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.stages');
@@ -107,7 +119,17 @@ function DeleteBody({
               ))}
             </Select>
           </Field>
+          {group !== STAGE_GROUP && target?.stageOptionId && (
+            <p className="text-xs text-muted-foreground">
+              {t('delete.moveScopedNote', { target: target.label })}
+            </p>
+          )}
         </>
+      )}
+      {group === STAGE_GROUP && scopedStatuses > 0 && (
+        <p className="text-xs text-muted-foreground">
+          {t('delete.scopedStatuses', { count: scopedStatuses })}
+        </p>
       )}
       {group === STAGE_GROUP && option.isDefault && needs !== null && (
         <p className="text-xs text-muted-foreground">{t('delete.wasDefault')}</p>
