@@ -185,6 +185,8 @@ const planFieldsShape = {
   isCustomQuote: flag.default(false),
   sortOrder: z.number().int().min(0).max(100_000).default(0),
   ctaLabel: z.string().trim().min(1).max(64).default('Get started'),
+  /** Days after a paid plan lapses before its workspace data is wiped (TW-PLAN-023). 0 = never. */
+  dataRetentionDays: z.number().int().min(0).max(3650).default(0),
   limits: planLimitsSchema.default({}),
   features: planFeaturesSchema.default({}),
 };
@@ -243,6 +245,7 @@ export const planAdminItemSchema = z.object({
   isCustomQuote: z.boolean(),
   sortOrder: z.number().int(),
   ctaLabel: z.string(),
+  dataRetentionDays: z.number().int(),
   limits: planLimitsSchema,
   features: planFeaturesSchema,
   /** Organizations whose plan is this one (the delete guard, TW-PLAN-005). */
@@ -333,7 +336,7 @@ export type PlansResponse = z.infer<typeof plansResponseSchema>;
  *   used / limitValue the numbers, for a count cap
  */
 export interface PlanLockDetails {
-  reason: 'feature_disabled' | 'limit_reached';
+  reason: 'feature_disabled' | 'limit_reached' | 'quota_reached';
   key: string;
   upgradeUrl: string;
   used: number | null;
@@ -347,7 +350,11 @@ export function readPlanLock(
   const get = (path: string) => errors.find((e) => e.path === path)?.message;
   const reason = get('reason');
   const key = get('feature') ?? get('limit');
-  if ((reason !== 'feature_disabled' && reason !== 'limit_reached') || !key) return null;
+  if (
+    (reason !== 'feature_disabled' && reason !== 'limit_reached' && reason !== 'quota_reached') ||
+    !key
+  )
+    return null;
   const num = (v: string | undefined) => (v !== undefined && /^\d+$/.test(v) ? Number(v) : null);
   return {
     reason,

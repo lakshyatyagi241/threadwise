@@ -1364,6 +1364,10 @@
             },
             "billingUnit": {
               "label": "Unit"
+            },
+            "dataRetentionDays": {
+              "label": "Data retention (days after expiry)",
+              "hint": "Days after a paid plan lapses before the workspace's data is deleted. 0 = never. Deleting is permanent."
             }
           },
           "flags": {
@@ -1408,7 +1412,8 @@
             "appointments": "Appointments per month",
             "templates": "Message templates",
             "flows": "Flows",
-            "autoreplies": "Keyword auto-replies"
+            "autoreplies": "Keyword auto-replies",
+            "total_campaigns": "Campaigns created (never freed by deleting)"
           },
           "featureGroups": {
             "messaging": "Messaging",

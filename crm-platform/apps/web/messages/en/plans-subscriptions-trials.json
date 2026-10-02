@@ -3,7 +3,8 @@
     "nav": {
       "usage": "Plan and usage",
       "workspacePlans": "Workspace plans",
-      "group": "Subscriptions"
+      "group": "Subscriptions",
+      "pricingFaqs": "Pricing FAQs"
     },
     "limits": {
       "monthly_messages": "Messages per month",
@@ -16,7 +17,8 @@
       "appointments": "Appointments per month",
       "templates": "Templates",
       "flows": "Flows",
-      "autoreplies": "Auto-replies"
+      "autoreplies": "Auto-replies",
+      "total_campaigns": "Campaigns created"
     },
     "features": {
       "automation": "Automation",
@@ -104,7 +106,45 @@
         "showAll": "Show all {count} rows",
         "showLess": "Show fewer rows"
       },
-      "usageLink": "See usage and limits"
+      "usageLink": "See usage and limits",
+      "period": {
+        "label": "Billing period",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "save": "save {pct}%"
+      },
+      "faq": {
+        "title": "Frequently asked questions"
+      },
+      "addons": {
+        "title": "Add-ons",
+        "owned": "Add-ons you own",
+        "oneTime": "one-time",
+        "buy": "Buy add-on",
+        "buyAgain": "Buy again",
+        "active": "Active",
+        "unlimitedBullet": "Unlimited {label}",
+        "addBullet": "+{amount, number} {label}",
+        "per": {
+          "days": "{count, plural, one {/ day} other {/ {count} days}}",
+          "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
+          "months": "{count, plural, one {/ month} other {/ {count} months}}",
+          "years": "{count, plural, one {/ year} other {/ {count} years}}"
+        }
+      },
+      "renewal": {
+        "renewsOn": "Your plan renews automatically on {date}.",
+        "renews": "Your plan renews automatically.",
+        "cancel": "Cancel auto-renew",
+        "confirmTitle": "Cancel auto-renew?",
+        "confirmBody": "Your plan stays active until it expires, then it will not renew.",
+        "confirm": "Cancel auto-renew",
+        "keep": "Keep auto-renew",
+        "cancelled": "Auto-renew cancelled. Your plan stays active until it expires.",
+        "forbidden": "You don't have permission to change the plan.",
+        "none": "There is no active subscription to cancel.",
+        "failed": "We couldn't cancel auto-renew. Please try again."
+      }
     },
     "bar": {
       "trial": "{days, plural, one {You have # day} other {You have # days}} to explore this trial workspace. Connect a channel to unlock all features.",
@@ -112,7 +152,9 @@
       "renew": "{days, plural, one {Your plan expires in # day} other {Your plan expires in # days}} on {date}. Renew to keep your features.",
       "buy": "Buy a plan",
       "renewNow": "Renew now",
-      "connect": "Connect a channel"
+      "connect": "Connect a channel",
+      "autoRenew": "{days, plural, one {Your plan auto-renews in # day} other {Your plan auto-renews in # days}} on {date}.",
+      "managePlan": "Manage plan"
     },
     "usage": {
       "title": "Plan and usage",
@@ -183,7 +225,58 @@
         "changesTrial": "Changing the plan ends the workspace's free trial.",
         "conflict": "Someone changed this workspace's plan. Reload and try again.",
         "failed": "Could not save the plan."
+      },
+      "faqs": {
+        "title": "Pricing FAQs",
+        "description": "The questions shown on the plans page and the public pricing page. The lowest sort order shows first.",
+        "readOnly": "Only super admins can change FAQs.",
+        "empty": "No FAQs yet. Add one above.",
+        "newFaq": "New FAQ",
+        "question": "Question",
+        "answer": "Answer",
+        "answerHint": "Plain text. Markdown is not supported.",
+        "sortOrder": "Sort order",
+        "auto": "auto",
+        "placement": "Shows on",
+        "placements": {
+          "pricing": "Pricing page",
+          "home": "Homepage slider",
+          "both": "Both"
+        },
+        "active": "Active",
+        "add": "Add FAQ",
+        "save": "Save",
+        "delete": "Delete",
+        "deleteTitle": "Delete FAQ",
+        "deleteBody": "This FAQ is removed for good.",
+        "deleteConfirm": "Yes, delete",
+        "cancel": "Cancel",
+        "conflict": "Someone changed this FAQ. Reload and try again.",
+        "invalid": "Check the question, answer and sort order.",
+        "failed": "We couldn't save the FAQ."
+      },
+      "retention": {
+        "title": "Data retention",
+        "description": "Paid plans can set a retention period. A workspace whose paid plan ended longer ago than that has its data deleted once, by a nightly job. A preview deletes nothing.",
+        "preview": "Preview what would be wiped",
+        "typeToConfirm": "Type {word} to run it now",
+        "wipeNow": "Wipe now",
+        "previewDone": "{count, plural, =0 {No workspaces are due.} one {# workspace is due.} other {# workspaces are due.}}",
+        "wiped": "{count, plural, =0 {Nothing was wiped.} one {# workspace was wiped.} other {# workspaces were wiped.}}",
+        "rows": "{count, number} rows",
+        "forbidden": "Only super admins can run this.",
+        "failed": "The run failed. Nothing was changed."
       }
+    },
+    "public": {
+      "title": "Simple, honest, and flat.",
+      "lead": "Pick the plan that fits. Change it any time.",
+      "empty": "Pricing isn't available right now. Please check back soon.",
+      "billedYearly": "Billed {amount} a year",
+      "talkToSales": "Talk to sales",
+      "startFree": "Start free",
+      "volume": "Volume",
+      "features": "Features"
     }
   }
 }

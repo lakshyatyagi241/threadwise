@@ -12,14 +12,22 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { PlatformSettingsService } from '../auth';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlanCatalogService } from './plan-catalog.service';
 import { PlanEntitlementService, type Entitlements } from './plan-entitlement.service';
 import { changeDirection, validityForState } from './plan-lifecycle';
 import { PLAN_COLUMNS, fullFeatures, fullLimits, toFacts, type PlanRow } from './plan-row';
-import { buildPlanCard, byCatalogueOrder, planKind, type PlanFacts } from './plan-rules';
+import {
+  buildPlanCard,
+  byCatalogueOrder,
+  planKind,
+  yearlyOffer,
+  type PlanFacts,
+} from './plan-rules';
 import { PlanStore } from './plan-store';
 import { PlanUsageService } from './plan-usage.service';
+import { SubscriptionService } from './subscription.service';
 
 /**
  * What a workspace sees and does about its own plan (TW-PLAN-011..016). Every method acts on the CALLER's organization
@@ -38,6 +46,8 @@ export class BillingService {
     private readonly entitlements: PlanEntitlementService,
     private readonly usage: PlanUsageService,
     private readonly outbox: OutboxService,
+    private readonly settings: PlatformSettingsService,
+    private readonly subscriptions: SubscriptionService,
   ) {}
 
   // --- reads --------------------------------------------------------------------------------------------------------------------
@@ -63,6 +73,15 @@ export class BillingService {
         : stored;
     const effectiveSlug = effective?.slug ?? null;
 
+    const [toggle, pctSetting] = await Promise.all([
+      this.settings.get<unknown>('pricing.yearly_toggle_enabled'),
+      this.settings.get<unknown>('pricing.yearly_discount_pct'),
+    ]);
+    const pct =
+      Number.isInteger(pctSetting) && (pctSetting as number) >= 0 && (pctSetting as number) <= 100
+        ? (pctSetting as number)
+        : 20;
+
     const data: BillingPlan[] = active.map(({ row, facts: f }) => {
       const card = buildPlanCard(f, effectiveSlug, effective, true);
       return {
@@ -70,6 +89,7 @@ export class BillingService {
         limits: fullLimits(row.limits),
         features: fullFeatures(row.features),
         via: viaFor(card.action, f, effective),
+        yearly: yearlyOffer(f, pct),
       };
     });
 
@@ -84,6 +104,11 @@ export class BillingService {
         now: new Date(),
       }),
       canManage,
+      subscription: await this.subscriptions.current(orgId),
+      yearlyToggle: {
+        enabled: toggle !== false && data.some((p) => p.yearly !== null),
+        discountPct: pct,
+      },
     };
   }
 
@@ -98,6 +123,7 @@ export class BillingService {
       }),
       planSlug: e.planSlug,
       planName: e.planName,
+      subscription: await this.subscriptions.current(e.orgId),
     };
   }
 

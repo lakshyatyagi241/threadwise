@@ -1,4 +1,12 @@
 import {
+  workspaceAddonsResponseSchema,
+  cancelSubscriptionResponseSchema,
+  publicFaqListResponseSchema,
+  pricingFaqListResponseSchema,
+  pricingFaqSchema,
+  retentionRunResponseSchema,
+  type CreatePricingFaqRequest,
+  type UpdatePricingFaqRequest,
   attachPlanRequestSchema,
   billingPlansResponseSchema,
   billingStatusSchema,
@@ -36,6 +44,20 @@ export const changePlan = (planSlug: string) =>
     schema: changePlanResponseSchema,
   });
 
+export const fetchBillingFaqs = (signal?: AbortSignal) =>
+  apiFetch('/billing/faqs', { schema: publicFaqListResponseSchema, signal });
+
+/** The add-on catalogue and what the workspace owns (ADD domain, TW-ADD-033). */
+export const fetchAddons = (signal?: AbortSignal) =>
+  apiFetch('/addons', { schema: workspaceAddonsResponseSchema, signal });
+
+/** Stops the subscription renewing; the paid period keeps running (TW-PLAN-012). */
+export const cancelAutoRenew = () =>
+  apiFetch('/billing/subscription/cancel', {
+    method: 'POST',
+    schema: cancelSubscriptionResponseSchema,
+  });
+
 /** Operator console: the same-origin operator proxy (`/api/platform/*`). */
 export const WORKSPACE_PLANS_KEY = ['operator', 'workspace-plans'] as const;
 
@@ -51,4 +73,26 @@ export const attachWorkspacePlan = (workspaceId: string, body: AttachPlanRequest
     method: 'PUT',
     body: attachPlanRequestSchema.parse(body),
     schema: workspacePlanSchema,
+  });
+
+export const FAQS_KEY = ['operator', 'pricing-faqs'] as const;
+
+export const fetchPricingFaqs = (signal?: AbortSignal) =>
+  operatorFetch('/pricing-faqs', { schema: pricingFaqListResponseSchema, signal });
+
+export const createPricingFaq = (body: CreatePricingFaqRequest) =>
+  operatorFetch('/pricing-faqs', { method: 'POST', body, schema: pricingFaqSchema });
+
+export const updatePricingFaq = (id: string, body: UpdatePricingFaqRequest) =>
+  operatorFetch(`/pricing-faqs/${id}`, { method: 'PATCH', body, schema: pricingFaqSchema });
+
+export const deletePricingFaq = (id: string) =>
+  operatorFetch(`/pricing-faqs/${id}`, { method: 'DELETE' });
+
+/** Data-retention wipe: a dry run by default; a real run carries `confirm: "WIPE"` (TW-PLAN-023). */
+export const runRetention = (body: { dryRun: boolean; confirm?: string }) =>
+  operatorFetch('/workspace-plans/retention/run', {
+    method: 'POST',
+    body,
+    schema: retentionRunResponseSchema,
   });

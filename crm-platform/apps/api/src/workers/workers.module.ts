@@ -11,6 +11,7 @@ import {
   SegmentsWorkerModule,
   TasksWorkerModule,
 } from '../modules/crm';
+import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
@@ -40,6 +41,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
+    PlansWorkerModule,
   ],
   providers: [
     OutboxDrainService,

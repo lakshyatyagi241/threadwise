@@ -62,8 +62,29 @@ export const billingPlanSchema = planCardSchema.extend({
    * plan, a cheaper or equal plan), `sales` (custom quote), `none` (the current plan).
    */
   via: z.enum(['checkout', 'change', 'sales', 'none']),
+  /**
+   * The yearly price of a plan billed monthly: 12 months of the effective price less the yearly discount, and the per-month equivalent
+   * the card shows. null for free, lifetime, custom-quote and plans not billed once a month (a plan authored in years IS the yearly price).
+   */
+  yearly: z.object({ perMonth: z.string(), perYear: z.string() }).nullable(),
 });
 export type BillingPlan = z.infer<typeof billingPlanSchema>;
+
+/** The workspace's renewing subscription, if any (TW-PLAN-012): it is what makes "Cancel auto-renew" appear. */
+export const billingSubscriptionSchema = z.object({
+  status: z.enum(['active', 'past_due']),
+  renewsAt: z.string().datetime().nullable(),
+});
+export type BillingSubscription = z.infer<typeof billingSubscriptionSchema>;
+
+export const cancelSubscriptionResponseSchema = z.object({
+  status: z.literal('canceled'),
+  /** Whether the gateway was told: `ok`, `failed` (the local row is cancelled anyway, the operator reconciles) or `unsupported`. */
+  remote: z.enum(['ok', 'failed', 'unsupported']),
+  /** The paid period keeps running until this date. */
+  planEndsAt: z.string().datetime().nullable(),
+});
+export type CancelSubscriptionResponse = z.infer<typeof cancelSubscriptionResponseSchema>;
 
 export const billingPlansResponseSchema = z.object({
   data: z.array(billingPlanSchema),
@@ -75,8 +96,11 @@ export const billingPlansResponseSchema = z.object({
     })
     .nullable(),
   validity: planValiditySchema,
-  /** Whether the caller may change the plan (the `billing.manage` permission). */
+  /** Whether the caller may change the plan (`plan.subscription.manage`). */
   canManage: z.boolean(),
+  subscription: billingSubscriptionSchema.nullable(),
+  /** The Monthly/Yearly switch: on when the operator setting is on AND at least one card has a yearly price. */
+  yearlyToggle: z.object({ enabled: z.boolean(), discountPct: z.number().int().min(0).max(100) }),
 });
 export type BillingPlansResponse = z.infer<typeof billingPlansResponseSchema>;
 
@@ -85,6 +109,8 @@ export type BillingPlansResponse = z.infer<typeof billingPlansResponseSchema>;
 export const billingStatusSchema = planValiditySchema.extend({
   planSlug: z.string(),
   planName: z.string().nullable(),
+  /** A renewing subscription exists: the bars offer "Cancel auto-renew" and the renewal text says it renews. */
+  subscription: billingSubscriptionSchema.nullable(),
 });
 export type BillingStatus = z.infer<typeof billingStatusSchema>;
 
@@ -208,3 +234,28 @@ export type AttachPlanRequest = z.infer<typeof attachPlanRequestSchema>;
 /** The 402 the trial hard gate answers with (TW-PLAN-015): `errors` carries upgradeUrl and trial. */
 export const TRIAL_EXPIRED_MESSAGE =
   'Your free trial has ended. Choose a plan to keep using your workspace.';
+
+// --- retention (TW-PLAN-023), operator ---------------------------------------------------------------------------------
+
+export const RETENTION_CONFIRM = 'WIPE';
+
+/** `dryRun` (the default) counts what would go and rolls back; a real run must carry `confirm: "WIPE"`. */
+export const retentionRunRequestSchema = z
+  .object({ dryRun: z.boolean().default(true), confirm: z.string().optional() })
+  .refine((v) => v.dryRun || v.confirm === RETENTION_CONFIRM, {
+    message: 'Type WIPE to confirm a real run.',
+    path: ['confirm'],
+  });
+export type RetentionRunRequest = z.input<typeof retentionRunRequestSchema>;
+
+export const retentionRunResponseSchema = z.object({
+  dryRun: z.boolean(),
+  workspaces: z.array(
+    z.object({
+      slug: z.string(),
+      wiped: z.boolean(),
+      rows: z.record(z.string(), z.number().int()),
+    }),
+  ),
+});
+export type RetentionRunResponse = z.infer<typeof retentionRunResponseSchema>;

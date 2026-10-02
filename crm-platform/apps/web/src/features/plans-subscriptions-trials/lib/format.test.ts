@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { PlanValidity } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { buildOverrides } from '../operator/attach-dialog';
-import { bannerFor, barFor, compareRows, featureRows } from './format';
+import { bannerFor, barFor, checkoutPath, compareRows, featureRows, priceView } from './format';
 import { redirectOnTrialExpired } from './trial-redirect';
 
 const v = (over: Partial<PlanValidity>): PlanValidity => ({
@@ -83,5 +83,37 @@ describe('trial-expired redirect (TW-PLAN-015)', () => {
       redirectOnTrialExpired(new ApiError(500, 'INTERNAL', 'x'), '/contacts', (t) => go.push(t)),
     ).toBe(false);
     expect(go).toHaveLength(1);
+  });
+});
+
+describe('yearly mode (TW-PLAN-011 rule 3 and 4)', () => {
+  const paid = {
+    kind: 'paid',
+    lifetime: false,
+    price: {
+      amount: '49.00',
+      offerAmount: null,
+      currency: 'USD',
+      period: { unit: 'months', count: 1 },
+    },
+    yearly: { perMonth: '39.20', perYear: '470.40' },
+  } as never;
+  it('shows the per-month equivalent with the monthly price struck through, and monthly mode is unchanged', () => {
+    const y = priceView(paid, 'en-US', 'yearly');
+    expect(y).toMatchObject({
+      kind: 'paid',
+      main: '$39.20',
+      strike: '$49.00',
+      period: { unit: 'months', count: 1 },
+    });
+    expect(priceView(paid, 'en-US', 'monthly')).toMatchObject({ main: '$49.00', strike: null });
+  });
+  it('leaves a plan without a yearly price alone in yearly mode', () => {
+    const lifetime = { ...(paid as object), lifetime: true, yearly: null } as never;
+    expect(priceView(lifetime, 'en-US', 'yearly')).toMatchObject({ main: '$49.00' });
+  });
+  it('carries the yearly choice to checkout only when it is yearly', () => {
+    expect(checkoutPath('pro', 'yearly')).toBe('/billing/checkout/pro?period=yearly');
+    expect(checkoutPath('pro')).toBe('/billing/checkout/pro');
   });
 });

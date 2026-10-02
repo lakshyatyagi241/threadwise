@@ -74,6 +74,19 @@ const METERS: ReadonlyArray<{
       n(tx, sql`SELECT count(*)::int AS n FROM wa_templates WHERE org_id = ${orgId}`),
   },
   {
+    // Campaigns created in this plan period, deleted ones included (the quota ledger, TW-PLAN-018): the number the create check reads.
+    key: 'total_campaigns',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT coalesce(sum(count), 0)::int AS n FROM plan_usage
+            WHERE org_id = ${orgId} AND metric = 'campaign'
+              AND period = (SELECT o.plan || '|' || coalesce(to_char(s.plan_ends_at AT TIME ZONE 'UTC', 'YYYYMMDD'), '0')
+                            FROM organizations o LEFT JOIN org_plan_state s ON s.org_id = o.id WHERE o.id = ${orgId})`,
+      ),
+  },
+  {
     key: 'broadcasts',
     window: 'total',
     count: (tx, orgId) =>
@@ -140,6 +153,25 @@ export class PlanUsageService {
       for (const m of METERS) out.set(m.key, await m.count(tx, orgId, from, to));
       return out;
     });
+  }
+
+  /**
+   * The one-line guard for a domain that creates a capped thing (devices, flows, templates, auto-replies, ...): counts what the workspace
+   * holds with the SAME predicate the usage panel shows, then refuses row N+1 with 422 PLAN_LIMIT_REACHED. Call it before the insert, in the
+   * creating request. Two keys are not live counts and are refused here on purpose: `total_campaigns` is the delete-proof ledger
+   * (PlanQuotaService) and `monthly_messages` is an allowance whose overage bills the wallet instead of blocking.
+   */
+  async assertCanAdd(orgId: number, key: PlanLimitKey, now = new Date()): Promise<void> {
+    if (key === 'monthly_messages' || key === 'total_campaigns') {
+      throw new Error(`assertCanAdd does not apply to ${key}`);
+    }
+    const cap = await this.entitlements.limit(orgId, key);
+    if (cap === 0) return; // unlimited: skip the count
+    const meter = METERS.find((m) => m.key === key)!;
+    const used = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      meter.count(tx, orgId, monthStart(now), nextMonthStart(now)),
+    );
+    await this.entitlements.assertWithinLimit(orgId, key, used);
   }
 
   async meters(e: Entitlements, now = new Date()): Promise<UsageMeter[]> {

@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { AddonFulfilmentService } from '../addons-extension-registry';
 import { creditWallet } from './_shims/wallet-credit';
 import { nextPlanEnd, type BillingUnit } from './fulfilment-rules';
 import { recordOrderEvent } from './order-events';
@@ -30,6 +31,7 @@ export class FulfilmentService {
     private readonly store: PaygwStore,
     private readonly orders: OrdersRepository,
     private readonly outbox: OutboxService,
+    private readonly addons: AddonFulfilmentService,
   ) {}
 
   /** `applied` is false when the order was already paid (a replay), in which case nothing was changed. */
@@ -61,6 +63,15 @@ export class FulfilmentService {
         orderNumber: order.orderNumber,
       });
       return 'wallet_credited';
+    }
+    if (order.kind === 'addon' && order.planSlug) {
+      // The add-on sits on top of the plan: the plan, the trial and the plan's end date are untouched (TW-ADD-032).
+      const res = await this.addons.fulfil(tx, {
+        orgId: order.orgId,
+        pack: order.planSlug,
+        orderId: order.id,
+      });
+      return res.created ? 'addon_granted' : 'nothing';
     }
     if (order.kind !== 'plan' || !order.planSlug) return 'nothing';
 

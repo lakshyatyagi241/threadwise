@@ -5,7 +5,7 @@ import { useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { BillingPlan } from '@crm/contracts';
 import { Badge, Button, cn } from '@crm/ui';
-import { checkoutPath, featureRows, priceView, SALES_PATH } from '../lib/format';
+import { checkoutPath, featureRows, priceView, SALES_PATH, type Period } from '../lib/format';
 
 const NS = 'plans-subscriptions-trials';
 const VISIBLE = 7;
@@ -19,11 +19,13 @@ export function PlanCard({
   plan,
   canManage,
   busy,
+  period,
   onSwitch,
 }: {
   plan: BillingPlan;
   canManage: boolean;
   busy: boolean;
+  period: Period;
   onSwitch: (plan: BillingPlan) => void;
 }) {
   const t = useTranslations(`${NS}.plans`);
@@ -33,7 +35,7 @@ export function PlanCard({
   const locale = useLocale();
   const titleId = useId();
   const [expanded, setExpanded] = useState(false);
-  const price = priceView(plan, locale);
+  const price = priceView(plan, locale, period);
   const rows = featureRows(plan);
   const shown = expanded ? rows : rows.slice(0, VISIBLE);
 
@@ -111,7 +113,7 @@ export function PlanCard({
       ) : plan.via === 'checkout' ? (
         canManage ? (
           <Link
-            href={checkoutPath(plan.slug)}
+            href={checkoutPath(plan.slug, period)}
             className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary"
           >
             {label}
