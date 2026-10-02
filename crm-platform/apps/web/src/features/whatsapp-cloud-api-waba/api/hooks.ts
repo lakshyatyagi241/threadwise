@@ -8,6 +8,7 @@ export const KEYS = {
   readiness: ['waba', 'readiness'] as const,
   list: ['waba', 'numbers'] as const,
   health: (id: string) => ['waba', 'health', id] as const,
+  profile: (id: string) => ['waba', 'profile', id] as const,
 };
 
 export function useReadiness() {
@@ -63,3 +64,20 @@ export const useRenewToken = () => useAction((id: string) => wabaApi.renewToken(
 
 /** The pre-save check changes nothing, so it does not refresh the list. */
 export const useVerifyToken = () => useMutation({ mutationFn: wabaApi.verifyToken });
+
+export function useProfile(id: string) {
+  return useQuery({
+    queryKey: KEYS.profile(id),
+    queryFn: ({ signal }) => wabaApi.profile(id, signal),
+    retry: false,
+  });
+}
+
+export function useUpdateProfile(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (patch: Parameters<typeof wabaApi.updateProfile>[1]) =>
+      wabaApi.updateProfile(id, patch),
+    onSuccess: (data) => qc.setQueryData(KEYS.profile(id), data),
+  });
+}

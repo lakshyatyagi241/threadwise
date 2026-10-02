@@ -3,10 +3,12 @@ import {
   verifyTokenResultSchema,
   wabaConnectionListSchema,
   wabaConnectionSchema,
+  wabaBusinessProfileSchema,
   wabaHealthSchema,
   wabaReadinessSchema,
   type ConnectEmbeddedInput,
   type ConnectManualInput,
+  type UpdateBusinessProfileInput,
   type VerifyTokenInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -53,6 +55,14 @@ export const wabaApi = {
     }),
   disconnect: (id: string) =>
     apiFetch(`${base}/numbers/${id}/disconnect`, { method: 'POST', schema: wabaConnectionSchema }),
+  profile: (id: string, signal?: AbortSignal) =>
+    apiFetch(`${base}/numbers/${id}/profile`, { schema: wabaBusinessProfileSchema, signal }),
+  updateProfile: (id: string, patch: UpdateBusinessProfileInput) =>
+    apiFetch(`${base}/numbers/${id}/profile`, {
+      method: 'PUT',
+      body: patch,
+      schema: wabaBusinessProfileSchema,
+    }),
   remove: (id: string) => apiFetch(`${base}/numbers/${id}`, { method: 'DELETE' }),
   setToken: (id: string, accessToken: string) =>
     apiFetch(`${base}/numbers/${id}/token`, {

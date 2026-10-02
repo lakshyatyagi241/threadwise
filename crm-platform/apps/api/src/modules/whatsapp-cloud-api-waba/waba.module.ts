@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConfigService } from './waba-config.service';
 import { WabaPlatformController } from './waba-platform.controller';
 import { WabaConnectionsController } from './waba-connections.controller';
@@ -26,6 +27,7 @@ import { WabaWebhookService } from './waba-webhook.service';
   providers: [
     CryptoService,
     WabaConfigService,
+    WabaHealthDetailsService,
     WabaConnectionsRepository,
     WabaConnectService,
     WabaWebhookService,

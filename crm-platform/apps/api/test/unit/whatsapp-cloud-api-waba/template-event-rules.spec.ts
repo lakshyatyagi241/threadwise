@@ -60,7 +60,7 @@ describe('status updates (TW-TPL-029 rule 4)', () => {
     ).toBe('NONE');
   });
 
-  it('pauses for 24 hours on PAUSED and leaves the local status alone', () => {
+  it('pauses for 24 hours on PAUSED and marks the local status paused', () => {
     const p = applyTemplateEvent(
       'message_template_status_update',
       { event: 'PAUSED' },
@@ -68,7 +68,7 @@ describe('status updates (TW-TPL-029 rule 4)', () => {
       NOW,
     )!;
     expect(p.pausedUntil).toEqual(new Date('2026-10-03T10:00:00Z'));
-    expect(p.status).toBeUndefined();
+    expect(p.status).toBe('paused');
     expect(p.metaStatus).toBe('PAUSED');
   });
 
@@ -97,7 +97,10 @@ describe('status updates (TW-TPL-029 rule 4)', () => {
 
   it('maps Meta states to the local status', () => {
     expect(localStatusFor('IN_APPEAL')).toBe('pending');
-    expect(localStatusFor('DISABLED')).toBeNull();
+    expect(localStatusFor('DISABLED')).toBe('disabled');
+    expect(localStatusFor('PAUSED')).toBe('paused');
+    expect(localStatusFor('DELETED')).toBe('deleted');
+    expect(localStatusFor('SOMETHING_NEW')).toBeNull();
   });
 });
 
