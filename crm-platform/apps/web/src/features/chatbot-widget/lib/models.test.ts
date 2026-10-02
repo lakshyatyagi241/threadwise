@@ -15,13 +15,13 @@ import {
 import { accentFor, matchesSearch, relativeShort, statCards } from './list-model';
 import { countryOf, dialCodeOf, nationalDigits, splitInternational } from './phone';
 
-const valid = () => ({ ...newState(), name: 'Pricing', assistantId: 'a-1' });
+const valid = () => ({ ...newState(), mode: 'ai' as const, name: 'Pricing', assistantId: 'a-1' });
 
 describe('builder defaults and payload (TW-WGT-002 rule 1)', () => {
   it('a new widget opens on the builder defaults', () => {
     const s = newState();
     expect(s).toMatchObject({
-      mode: 'ai',
+      mode: 'whatsapp',
       position: 'bottom_right',
       buttonColor: '#075E54',
       headerTitle: 'Chat with us',
@@ -59,7 +59,7 @@ describe('step rules (TW-WGT-002 validators)', () => {
       ok: false,
       key: 'name',
     });
-    expect(validateStep(1, { ...newState(), name: 'x' })).toMatchObject({
+    expect(validateStep(1, { ...newState(), mode: 'ai', name: 'x' })).toMatchObject({
       ok: false,
       key: 'assistant',
       field: 'assistantId',

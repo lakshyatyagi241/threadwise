@@ -14,7 +14,9 @@ import {
   type DriverOrder,
   type DriverUrls,
   type PaymentDriver,
+  type CancelResult,
   type PaymentResult,
+  type SubscriptionRef,
   type WebhookPayment,
 } from './payment-driver';
 
@@ -151,5 +153,19 @@ export class StripeDriver implements PaymentDriver {
       currency: str(s.currency)?.toUpperCase(),
       payload: { session: s },
     };
+  }
+
+  /** Stripe: `cancel_at_period_end=true` stops renewal and keeps the paid period, which is what the customer was told. */
+  async cancelSubscription(ref: SubscriptionRef): Promise<CancelResult> {
+    if (!this.ctx.credentials.secret_key) return { ok: false, reason: 'stripe_secret_key_missing' };
+    try {
+      const res = await this.ctx.http(
+        `${API}/subscriptions/${encodeURIComponent(ref.gatewaySubscriptionId)}`,
+        { method: 'POST', headers: this.auth, body: form([['cancel_at_period_end', 'true']]) },
+      );
+      return isOk(res) ? { ok: true } : { ok: false, reason: `stripe_http_${res.status}` };
+    } catch (e) {
+      return { ok: false, reason: `stripe_exception: ${brief(e)}` };
+    }
   }
 }

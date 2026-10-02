@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
-  connectResultSchema,
+  fbConnectResultSchema,
   facebookConnectConfigSchema,
   facebookPageActionResultSchema,
   facebookPageListSchema,
@@ -67,7 +67,7 @@ export const connectManual = (pageAccessToken: string) =>
   apiFetch('/facebook/connect/manual', {
     method: 'POST',
     body: { pageAccessToken },
-    schema: connectResultSchema,
+    schema: fbConnectResultSchema,
   });
 
 export const refreshPage = (id: string) =>

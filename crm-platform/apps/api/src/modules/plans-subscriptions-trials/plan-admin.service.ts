@@ -35,6 +35,7 @@ interface PlanFields {
   isCustomQuote: boolean;
   sortOrder: number;
   ctaLabel: string;
+  dataRetentionDays: number;
   limits: Record<string, number>;
   features: Record<string, boolean>;
 }
@@ -56,6 +57,7 @@ const toFields = (row: PlanRow): PlanFields => ({
   isCustomQuote: row.is_custom_quote,
   sortOrder: row.sort_order,
   ctaLabel: row.cta_label,
+  dataRetentionDays: Number(row.data_retention_days),
   limits: fullLimits(row.limits),
   features: fullFeatures(row.features),
 });
@@ -145,11 +147,11 @@ export class PlanAdminService {
       const res = await tx.execute(sql`
         INSERT INTO plans (slug, name, subtitle, detail, amount, offer_amount, currency, billing_unit,
                            billing_duration, is_free, is_lifetime, is_active, is_default, is_highlighted,
-                           is_custom_quote, sort_order, cta_label, limits, features)
+                           is_custom_quote, sort_order, cta_label, data_retention_days, limits, features)
         VALUES (${slug}, ${body.name}, ${body.subtitle}, ${body.detail}, ${body.amount}::numeric,
                 ${body.offerAmount}::numeric, ${body.currency}, ${body.billingUnit}, ${body.billingDuration},
                 ${body.isFree}, ${body.isLifetime}, ${body.isActive}, ${body.isDefault}, ${body.isHighlighted},
-                ${body.isCustomQuote}, ${body.sortOrder}, ${body.ctaLabel},
+                ${body.isCustomQuote}, ${body.sortOrder}, ${body.ctaLabel}, ${body.dataRetentionDays},
                 ${JSON.stringify(body.limits)}::jsonb, ${JSON.stringify(body.features)}::jsonb)
         RETURNING ${PLAN_COLUMNS}
       `);
@@ -209,7 +211,7 @@ export class PlanAdminService {
           is_lifetime = ${after.isLifetime}, is_active = ${after.isActive},
           is_default = ${after.isDefault}, is_highlighted = ${after.isHighlighted},
           is_custom_quote = ${after.isCustomQuote}, sort_order = ${after.sortOrder},
-          cta_label = ${after.ctaLabel}, limits = ${JSON.stringify(after.limits)}::jsonb,
+          cta_label = ${after.ctaLabel}, data_retention_days = ${after.dataRetentionDays}, limits = ${JSON.stringify(after.limits)}::jsonb,
           features = ${JSON.stringify(after.features)}::jsonb
         WHERE id = ${stored.id}
         RETURNING ${PLAN_COLUMNS}

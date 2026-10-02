@@ -120,60 +120,60 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-NODE-001 | todo |  |  |
-| TW-NODE-002 | todo |  |  |
-| TW-NODE-003 | todo |  |  |
-| TW-NODE-004 | todo |  |  |
-| TW-NODE-005 | todo |  |  |
-| TW-NODE-006 | todo |  |  |
-| TW-NODE-007 | todo |  |  |
-| TW-NODE-008 | todo |  |  |
-| TW-NODE-009 | todo |  |  |
-| TW-NODE-010 | todo |  |  |
-| TW-NODE-011 | todo |  |  |
-| TW-NODE-012 | todo |  |  |
-| TW-NODE-013 | todo |  |  |
-| TW-NODE-014 | todo |  |  |
-| TW-NODE-015 | todo |  |  |
-| TW-NODE-016 | todo |  |  |
-| TW-NODE-017 | todo |  |  |
-| TW-NODE-018 | todo |  |  |
-| TW-NODE-019 | todo |  |  |
-| TW-NODE-020 | todo |  |  |
-| TW-NODE-021 | todo |  |  |
-| TW-NODE-022 | todo |  |  |
-| TW-NODE-023 | todo |  |  |
-| TW-NODE-024 | todo |  |  |
-| TW-NODE-025 | todo |  |  |
-| TW-NODE-026 | todo |  |  |
-| TW-NODE-027 | todo |  |  |
-| TW-NODE-028 | todo |  |  |
-| TW-NODE-029 | todo |  |  |
-| TW-NODE-030 | todo |  |  |
-| TW-NODE-031 | todo |  |  |
-| TW-NODE-032 | todo |  |  |
-| TW-NODE-033 | todo |  |  |
-| TW-NODE-034 | todo |  |  |
-| TW-NODE-035 | todo |  |  |
-| TW-NODE-036 | todo |  |  |
-| TW-NODE-037 | todo |  |  |
-| TW-NODE-038 | todo |  |  |
-| TW-NODE-039 | todo |  |  |
-| TW-NODE-040 | todo |  |  |
-| TW-NODE-041 | todo |  |  |
-| TW-NODE-042 | todo |  |  |
-| TW-NODE-043 | todo |  |  |
-| TW-NODE-044 | todo |  |  |
-| TW-NODE-045 | todo |  |  |
-| TW-NODE-046 | todo |  |  |
-| TW-NODE-047 | todo |  |  |
-| TW-NODE-048 | todo |  |  |
-| TW-NODE-049 | todo |  |  |
-| TW-NODE-050 | todo |  |  |
-| TW-NODE-051 | todo |  |  |
-| TW-NODE-052 | todo |  |  |
-| TW-NODE-053 | todo |  |  |
-| TW-NODE-054 | todo |  |  |
+| TW-NODE-001 | blocked |  | no bridge process in this repo until decision E |
+| TW-NODE-002 | backend-done |  | NodeTokenGuard on the one bridge-facing route; the bridge's other routes became in-process commands (Redis), so no other route needs it |
+| TW-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
+| TW-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
+| TW-NODE-005 | backend-done |  | registry is a per-worker map plus a Redis lease per device; no in-memory schedules or boot sync; shutdown releases leases |
+| TW-NODE-006 | backend-done |  | shutdown closes connections and releases leases, keeps sessions, never unlinks; enableShutdownHooks already on |
+| TW-NODE-007 | backend-done |  | restore at boot and every pass: devices with a saved session (3+ rows) and no owner are opened, staggered; thin sessions reported Disconnected; also the failover when a worker dies |
+| TW-NODE-008 | backend-done |  | DeviceControlService.requestQr: command to the owning worker, QR within 35 s, 429-style busy lock, already-linked answer; the Devices screens (WADEV) call it |
+| TW-NODE-009 | backend-done |  | pairing code command: same code for 2 minutes, short numbers refused with Pairing failed status; the library generates the code |
+| TW-NODE-010 | in-progress |  | status read and terminate done; check-connection not ported (destructive GET, intended); contact export blocked on MOB (Baileys 6.7 has no store) |
+| TW-NODE-011 | backend-done |  | state machine with the full close-code table, backoff, QR stall, mismatch, watchdog (tested with a fake socket); Baileys adapter compiles against the library; NOT verified against live WhatsApp |
+| TW-NODE-012 | backend-done |  | status goes to devices.status (same buckets as Reference), an outbox event device.status_changed and Redis for the QR and progress |
+| TW-NODE-013 | backend-done |  | per-device proxy (http, socks5) read at every connect, probed through the proxy, fail-closed, result kept on the device; NOT verified against a real proxy |
+| TW-NODE-014 | backend-done |  | liveness: owner touches last_seen_at, a device untouched for 90 s flips to disconnected; the other sweeps belong to their own domains as BullMQ jobs |
+| TW-NODE-015 | blocked |  | campaign drain loop belongs to CAMP (Punya's campaigns run on BullMQ) |
+| TW-NODE-016 | backend-done |  | capture and normalization of every message (filters, 10-minute replay guard, sender and LID resolution, text priority, media, location, contact, reaction, forwarded) with per-device dedup, delivered to registered consumers; media bytes wait for storage (F5) |
+| TW-NODE-017 | blocked |  | the inbox that stores messages (CHAT, TIB1) is not built; InboundRouter is the seam it registers into (replaces the inbound-message HTTP endpoint) |
+| TW-NODE-018 | backend-done |  | echo of the business's own messages and group messages normalized and delivered (a LID-only group speaker keeps the LID instead of being lost); mirroring the bridge's own auto-replies belongs with auto-reply (019) |
+| TW-NODE-019 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-020 | backend-done |  | receipts from the socket go to the broadcast recipient or the scheduled recipient that owns the message id, upward only; the chat message status waits for CHAT |
+| TW-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
+| TW-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
+| TW-NODE-023 | backend-done |  | media on the unofficial engine, Twilio and the Cloud API (public https link, caption with footer, document file name, no caption on audio); inline attachment_base64 not ported: media comes from a URL or storage, never from a request body |
+| TW-NODE-024 | in-progress |  | location, contact card and group message with mentions done; product catalog sends blocked on the catalog domain (CAT) and the template pipeline |
+| TW-NODE-025 | backend-done |  | react, pin, star, edit, delete through the owning socket; pin keeps Reference's fixed 24 hours (its duration choice never had an effect) |
+| TW-NODE-026 | wontfix |  | intended: engine and credentials come from the device row, no settings hop or cache (inventory port note) |
+| TW-NODE-027 | backend-done |  | Cloud API text transport (shared Meta provider) and a Twilio transport (text, media with caption, location); templates by ContentSid belong to the template pipeline; Twilio status callback belongs to the WhatsApp provider domain |
+| TW-NODE-028 | backend-done |  | SafeFetch: all-address DNS check, pinned IP, every redirect hop checked, size cap, MIME; consumer is 023; local paths intentionally refused |
+| TW-NODE-029 | backend-done |  | admin form + real reader wired into BCAST pacing; per-socket send serialization is in the Baileys adapter; jitter, daily cap and lease in BCAST |
+| TW-NODE-030 | backend-done |  | DB row is the schedule; due poller queues one BullMQ job per occurrence (jobId = uuid + time); late policy configurable; no cron, no boot sync |
+| TW-NODE-031 | backend-done |  | run engine: per-recipient claim, pacing, daily cap, lease shared with BCAST, halt; send-now via SchedulerService; text on every engine, media and location when a transport supports them |
+| TW-NODE-032 | backend-done |  | next run from repeat_every, weekdays, months without overflow, end date inclusive; every occurrence reaches the whole audience |
+| TW-NODE-033 | backend-done |  | same engine with one recipient row; outcome is now recorded (Reference never reported it) |
+| TW-NODE-034 | backend-done |  | SchedulerService: pause, resume, cancel, send-now; a run in progress stops before its next batch; the SCHED screens call it |
+| TW-NODE-035 | backend-done |  | callbacks became direct writes in the run; recipient states only move up; delivered/read arrive with receipts (020); wallet metering blocked on WALLET |
+| TW-NODE-036 | backend-done |  | replaced: the row is the schedule, so nothing is lost on restart; a reconciliation pass queues a stuck run again |
+| TW-NODE-037 | backend-done |  | broadcasts reach the unofficial engine and Twilio through TransportEngineSender (rendered text, media as link, header/footer); pacing, cap, lease already in BCAST |
+| TW-NODE-038 | backend-done |  | same adapter as 037; per-number daily cap and gaps in BCAST |
+| TW-NODE-039 | wontfix |  | dead code in Reference (campaign engine in Node is never reached and throws a ReferenceError) |
+| TW-NODE-040 | blocked |  | campaign callbacks and receipts belong to CAMP (campaign drain); ReceiptRouter is the seam it registers into |
+| TW-NODE-041 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-042 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-043 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-044 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-045 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-046 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-047 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-048 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-050 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-051 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-052 | frontend-done |  | address, token, test connection; parity run pending |
+| TW-NODE-053 | wontfix |  | developer-only file-sync endpoint (tw-sync); not a product feature |
+| TW-NODE-054 | wontfix |  | Reference smoke scripts; replaced by this repo's own tests |
 
 ## chat-conversations (chat)
 
@@ -593,16 +593,16 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WGT-016 | done |  |  |
 | TW-WGT-017 | done |  |  |
 | TW-WGT-018 | done |  |  |
-| TW-WGT-019 | blocked |  | Widget side done (thread, hand-off, polling contract tested); inbox screens, reply path and mobile list belong to TIB1/MOB |
+| TW-WGT-019 | partial |  | Widget side done through the InboxGateway shim (SQL writes to the inbox tables; thread, contact, opening line in the legacy messages table, polling contract tested); Team Inbox screens, the agent reply path and the mobile list belong to TIB1/MOB |
 | TW-WGT-020 | done |  |  |
-| TW-WGT-021 | backend-done |  | allowedDomains API and CORS enforcement done; the builder has no control for it, as in Reference |
+| TW-WGT-021 | done |  | as Reference has it: allowedDomains API and CORS enforcement, no builder control (its docs promise one, the screen has none); blank entry 422 and the widget's own posts blocked are reproduced quirks |
 | TW-WGT-022 | done |  |  |
 | TW-WGT-023 | done |  |  |
 | TW-WGT-024 | done |  |  |
 | TW-WGT-025 | done |  |  |
-| TW-WGT-026 | done |  |  |
-| TW-WGT-027 | blocked |  | RBAC keys done; access_chatbot_widgets is not in the PLAN catalogue (open gate shim); widget limit unenforced as in Reference |
-| TW-WGT-028 | frontend-done |  | sidebar item done; More tile, quick access and command palette belong to the shell |
+| TW-WGT-026 | done |  | as Reference: nothing can pause a widget (no endpoint or action); status views inert |
+| TW-WGT-027 | done |  | RBAC keys plus the `chatbot_widgets` plan flag (catalogue + entitlement gate, 422 PLAN_FEATURE_LOCKED, paywall); widget limit unenforced and public routes ignore the plan, as Reference |
+| TW-WGT-028 | partial |  | sidebar item done; More tile, quick access and command palette belong to the shell. Also the user-requested Interakt WhatsApp builder page and launcher (accordion of five cards, live preview, panel with Start Conversation to wa.me), `chatbot_widgets.launcher` jsonb |
 | TW-WGT-029 | done |  |  |
 | TW-WGT-030 | wontfix |  | greenfield port: no legacy widget messages to backfill |
 

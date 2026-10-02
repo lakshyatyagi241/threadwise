@@ -6,12 +6,24 @@ import { z } from 'zod';
  */
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
+import { WABA_ERROR_CODES } from '../whatsapp-cloud-api-waba/errors';
+import { TPL_ERROR_CODES } from '../message-templates/errors';
+import { CHANNEL_ERROR_CODES } from '../chat-conversations/channel-errors';
+import { CONVERSATION_ERROR_CODES } from '../chat-conversations/conversation-errors';
+import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
 import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
+import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
 
 export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
+  ...WABA_ERROR_CODES,
+  ...TPL_ERROR_CODES,
+  ...CHANNEL_ERROR_CODES,
+  ...CONVERSATION_ERROR_CODES,
+  ...INBOX_ERROR_CODES,
   ...WSP_ERROR_CODES,
+  ...WALLET_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -105,6 +117,10 @@ export const ERROR_CODES = {
   PLAN_LIMIT_REACHED: 'PLAN_LIMIT_REACHED',
   PLAN_IN_USE: 'PLAN_IN_USE',
   PLAN_DEFAULT_PROTECTED: 'PLAN_DEFAULT_PROTECTED',
+  PLAN_TRIAL_EXPIRED: 'PLAN_TRIAL_EXPIRED',
+  PLAN_CHECKOUT_REQUIRED: 'PLAN_CHECKOUT_REQUIRED',
+  PLAN_CHANGE_NOT_ALLOWED: 'PLAN_CHANGE_NOT_ALLOWED',
+  PLAN_NO_SUBSCRIPTION: 'PLAN_NO_SUBSCRIPTION',
 
   // contacts, contact groups, tags and attributes (TW-CON)
   CON_GROUP_NAME_TAKEN: 'CON_GROUP_NAME_TAKEN',

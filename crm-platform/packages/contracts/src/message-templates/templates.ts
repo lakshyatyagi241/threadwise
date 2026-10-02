@@ -1,0 +1,188 @@
+import { z } from 'zod';
+import { pageResponseSchema } from '../common/pagination';
+import { uuidSchema } from '../common/ids';
+
+/** Meta's category, which is what the review and the price follow. */
+export const tplMetaCategorySchema = z.enum(['MARKETING', 'UTILITY', 'AUTHENTICATION']);
+export type TplMetaCategory = z.infer<typeof tplMetaCategorySchema>;
+
+/** Where the template stands, local and Meta combined (TW-TPL-004). */
+export const tplStatusSchema = z.enum([
+  'draft',
+  'pending',
+  'approved',
+  'rejected',
+  'paused',
+  'disabled',
+  'deleted',
+]);
+export type TplStatus = z.infer<typeof tplStatusSchema>;
+
+export const TPL_NAME_MAX = 512;
+export const TPL_BODY_MAX = 1024;
+
+export const tplButtonSchema = z
+  .object({
+    type: z.string().min(1).max(32),
+    text: z.string().max(25).optional(),
+    url: z.string().max(2000).optional(),
+    phone_number: z.string().max(20).optional(),
+    example: z.union([z.string().max(2000), z.array(z.string().max(2000))]).optional(),
+  })
+  .passthrough();
+export type TplButton = z.infer<typeof tplButtonSchema>;
+
+export const tplVariableSlotSchema = z.object({
+  num: z.number().int().min(1),
+  key: z.string().max(100),
+  example: z.string().max(200).optional(),
+});
+export const tplVariableMapSchema = z.object({
+  header: z.array(tplVariableSlotSchema).optional(),
+  body: z.array(tplVariableSlotSchema).optional(),
+});
+export type TplVariableMap = z.infer<typeof tplVariableMapSchema>;
+
+export const tplAttachmentTypeSchema = z.enum(['none', 'image', 'video', 'document', 'location']);
+
+export const tplLintIssueSchema = z.object({
+  code: z.string(),
+  severity: z.enum(['error', 'warning']),
+  field: z.enum(['name', 'language', 'header', 'body', 'footer', 'buttons', 'template']),
+  message: z.string(),
+});
+export type TplLintIssue = z.infer<typeof tplLintIssueSchema>;
+
+export const templateSummarySchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  language: z.string(),
+  metaCategory: tplMetaCategorySchema.nullable(),
+  templateType: z.string(),
+  status: tplStatusSchema,
+  metaStatus: z.string().nullable(),
+  qualityScore: z.string().nullable(),
+  rejectionReason: z.string().nullable(),
+  metaTemplateId: z.string().nullable(),
+  /** The WhatsApp number it is submitted through (uuid of the connection). */
+  connectionId: uuidSchema.nullable(),
+  pausedUntil: z.string().datetime().nullable(),
+  approvedAt: z.string().datetime().nullable(),
+  submittedAt: z.string().datetime().nullable(),
+  lastSyncedAt: z.string().datetime().nullable(),
+  bodyPreview: z.string(),
+  rowVersion: z.number().int(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+export type TemplateSummary = z.infer<typeof templateSummarySchema>;
+
+export const templateDetailSchema = templateSummarySchema.extend({
+  header: z.string().nullable(),
+  attachmentType: tplAttachmentTypeSchema,
+  /** Public URL of the header example media, when one was uploaded. */
+  headerSampleUrl: z.string().nullable(),
+  body: z.string(),
+  footer: z.string().nullable(),
+  buttons: z.array(tplButtonSchema),
+  variableMap: tplVariableMapSchema,
+  codeExpirationMinutes: z.number().int().nullable(),
+  parameterFormat: z.enum(['POSITIONAL', 'NAMED']),
+  /** The Meta create payload as it would be (or was) sent: what the review sees. */
+  metaPayload: z.record(z.unknown()),
+  lint: z.array(tplLintIssueSchema),
+});
+export type TemplateDetail = z.infer<typeof templateDetailSchema>;
+
+export const listTemplatesQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(30),
+  cursor: z.string().min(1).max(512).optional(),
+  status: tplStatusSchema.optional(),
+  category: tplMetaCategorySchema.optional(),
+  connectionId: uuidSchema.optional(),
+  q: z.string().trim().max(100).optional(),
+});
+export type ListTemplatesQuery = z.infer<typeof listTemplatesQuerySchema>;
+export const listTemplatesResponseSchema = pageResponseSchema(templateSummarySchema);
+export type ListTemplatesResponse = z.infer<typeof listTemplatesResponseSchema>;
+
+const templateFields = {
+  name: z.string().trim().min(1).max(TPL_NAME_MAX),
+  language: z
+    .string()
+    .trim()
+    .regex(/^[a-z]{2,3}(_[A-Z]{2})?$/, 'a Meta language code such as en_US'),
+  metaCategory: tplMetaCategorySchema,
+  templateType: z.enum(['standard', 'media', 'auth']).default('standard'),
+  header: z.string().trim().max(60).nullish(),
+  attachmentType: tplAttachmentTypeSchema.default('none'),
+  /** Handle returned by `POST /v2/templates/media`; required for an image, video or document header. */
+  headerHandle: z.string().max(2000).nullish(),
+  headerSampleUrl: z.string().max(2000).nullish(),
+  body: z.string().max(TPL_BODY_MAX),
+  footer: z.string().trim().max(60).nullish(),
+  buttons: z.array(tplButtonSchema).max(10).default([]),
+  variableMap: tplVariableMapSchema.optional(),
+  codeExpirationMinutes: z.number().int().min(1).max(90).nullish(),
+  parameterFormat: z.enum(['POSITIONAL', 'NAMED']).default('POSITIONAL'),
+};
+
+export const createTemplateInputSchema = z.object({
+  ...templateFields,
+  connectionId: uuidSchema,
+  /** Send to Meta now (default) or keep as a draft. */
+  submit: z.boolean().default(true),
+});
+export type CreateTemplateInput = z.infer<typeof createTemplateInputSchema>;
+
+export const updateTemplateInputSchema = z.object({
+  ...templateFields,
+  rowVersion: z.number().int(),
+  submit: z.boolean().default(false),
+});
+export type UpdateTemplateInput = z.infer<typeof updateTemplateInputSchema>;
+
+/** `POST /v2/templates/lint`: instant feedback for the form without saving. */
+export const lintTemplateInputSchema = z.object({
+  ...templateFields,
+  hasHeaderFile: z.boolean().optional(),
+});
+export type LintTemplateInput = z.infer<typeof lintTemplateInputSchema>;
+export const lintTemplateResultSchema = z.object({
+  issues: z.array(tplLintIssueSchema),
+  /** The body as stored (placeholders renumbered) and the slots it reads from. */
+  normalized: z.object({
+    header: z.string().nullable(),
+    body: z.string(),
+    variableMap: tplVariableMapSchema,
+  }),
+  metaPayload: z.record(z.unknown()),
+});
+export type LintTemplateResult = z.infer<typeof lintTemplateResultSchema>;
+
+/** Result of submit/create/update: the saved template plus anything worth showing. */
+export const templateSubmitResultSchema = z.object({
+  template: templateDetailSchema,
+  warnings: z.array(tplLintIssueSchema),
+  /** Set when the row was saved but Meta refused: its words, so the form can show them. */
+  metaError: z.string().nullable(),
+});
+export type TemplateSubmitResult = z.infer<typeof templateSubmitResultSchema>;
+
+export const syncTemplatesInputSchema = z.object({ connectionId: uuidSchema });
+export type SyncTemplatesInput = z.infer<typeof syncTemplatesInputSchema>;
+export const syncTemplatesResultSchema = z.object({
+  created: z.number().int(),
+  updated: z.number().int(),
+  /** Local rows Meta no longer lists (kept, flagged `deleted`; never removed on a partial fetch). */
+  missing: z.number().int(),
+  total: z.number().int(),
+});
+export type SyncTemplatesResult = z.infer<typeof syncTemplatesResultSchema>;
+
+export const uploadTemplateMediaResultSchema = z.object({
+  handle: z.string(),
+  fileName: z.string(),
+  mimeType: z.string(),
+});
+export type UploadTemplateMediaResult = z.infer<typeof uploadTemplateMediaResultSchema>;

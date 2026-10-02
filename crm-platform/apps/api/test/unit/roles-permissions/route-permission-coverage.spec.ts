@@ -17,6 +17,10 @@ const SELF_SERVICE: Readonly<Record<string, string>> = {
   'modules/auth/controllers/registration.controller.ts':
     'verification mail for the caller’s own address',
   'modules/notifications/notifications.controller.ts': 'the caller’s own notification feed',
+  'infra/providers/chat-conversations/media/media.controller.ts':
+    'a short-lived signed token bound to one person and workspace, checked against the conversation’s visibility rule at read time',
+  'realtime/ticket/realtime-ticket.controller.ts':
+    'mints a one-time realtime ticket for the caller’s own session; every room is authorised again at join',
   'modules/team-chat/team-chat.controller.ts':
     'checked per action inside the service from the member’s capabilities (tchat.* keys, channel membership)',
 };
@@ -24,6 +28,8 @@ const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
   'modules/admin/users/users.controller.ts#me',
   // the plan catalogue behind the pricing cards every member sees when asked to upgrade
   'modules/plans-subscriptions-trials/plans.controller.ts#list',
+  // the plan picker: viewing the plans is open to every member (Reference: Authenticate only); changing the plan needs plan.subscription.manage
+  'modules/plans-subscriptions-trials/billing.controller.ts#plans',
 ];
 
 const root = join(__dirname, '../../../src');

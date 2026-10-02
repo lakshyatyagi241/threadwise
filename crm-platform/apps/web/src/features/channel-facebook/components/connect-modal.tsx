@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Button, Field, Modal, Textarea, useToast } from '@crm/ui';
-import { connectManualSchema } from '@crm/contracts';
+import { fbConnectManualSchema } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { KEYS, connectManual, startLogin } from '../api/facebook';
 import { ChevronDownIcon, FB_BLUE, FacebookGlyph } from './fb-icons';
@@ -42,7 +42,7 @@ export function ConnectModal({ open, onClose }: { open: boolean; onClose: () => 
   };
 
   const submitManual = async () => {
-    const parsed = connectManualSchema.safeParse({ pageAccessToken: token });
+    const parsed = fbConnectManualSchema.safeParse({ pageAccessToken: token });
     if (!parsed.success) {
       setError(t('tokenShape'));
       return;

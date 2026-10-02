@@ -54,25 +54,25 @@ export const startConnectResponseSchema = z.object({
 export type StartConnectResponse = z.infer<typeof startConnectResponseSchema>;
 
 /** The popup's server-side code (exchanged without a redirect address). */
-export const connectEmbeddedSchema = z.object({ code: z.string().trim().min(1).max(2000) });
-export type ConnectEmbeddedInput = z.infer<typeof connectEmbeddedSchema>;
+export const fbConnectEmbeddedSchema = z.object({ code: z.string().trim().min(1).max(2000) });
+export type FbConnectEmbeddedInput = z.infer<typeof fbConnectEmbeddedSchema>;
 
 /** A Page access token pasted by the operator. */
-export const connectManualSchema = z.object({
+export const fbConnectManualSchema = z.object({
   pageAccessToken: z
     .string()
     .trim()
     .min(20, 'That does not look like a Page access token.')
     .max(1000),
 });
-export type ConnectManualInput = z.infer<typeof connectManualSchema>;
+export type FbConnectManualInput = z.infer<typeof fbConnectManualSchema>;
 
-export const connectResultSchema = z.object({
+export const fbConnectResultSchema = z.object({
   pages: z.array(facebookPageSchema),
   /** "Facebook Page “X” connected." or "3 Facebook Pages connected: …". */
   message: z.string(),
 });
-export type ConnectResult = z.infer<typeof connectResultSchema>;
+export type FbConnectResult = z.infer<typeof fbConnectResultSchema>;
 
 /** Refresh and "Fix inbound" answer with the Page; a refused re-subscribe is a field, not an HTTP error. */
 export const facebookPageActionResultSchema = facebookPageSchema.extend({

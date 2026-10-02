@@ -51,11 +51,18 @@ async function setup(t: Tenant, o: { thread: boolean; name?: string; body?: stri
   );
   let convId: number | null = null;
   if (o.thread) {
+    // A thread belongs to a channel and is keyed by its peer (the contact's digits).
+    const channel = (
+      await h.owner.query(
+        `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'whatsapp_cloud', 'WA') RETURNING id`,
+        [t.orgId],
+      )
+    ).rows[0];
     convId = Number(
       (
         await h.owner.query(
-          `INSERT INTO conversations (org_id, title, contact_id, contact_digits, unread_count) VALUES ($1,'Asha',$2,$3,2) RETURNING id`,
-          [t.orgId, c.id, phone.replace(/\D/g, '')],
+          `INSERT INTO conversations (org_id, channel_id, peer_key, title, contact_id, unread_count) VALUES ($1,$2,$3,'Asha',$4,2) RETURNING id`,
+          [t.orgId, channel.id, phone.replace(/\D/g, ''), c.id],
         )
       ).rows[0].id,
     );

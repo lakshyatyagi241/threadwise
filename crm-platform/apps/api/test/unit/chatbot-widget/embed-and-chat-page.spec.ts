@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { DEFAULT_LAUNCHER } from '@crm/contracts';
 import { renderChatPage } from '../../../src/modules/chatbot-widget/chat-page';
 import {
   buildEmbedScript,
@@ -9,6 +10,11 @@ import {
 
 const widget = {
   uuid: 'e174adbe-698d-4afd-b89c-2d5cba3a3820',
+  // The frame loader serves the AI and Both widgets; a WhatsApp widget draws its own panel (see launcher.spec.ts).
+  mode: 'both',
+  name: 'Acme',
+  launcher: DEFAULT_LAUNCHER,
+  whatsappUrl: null as string | null,
   position: 'bottom_right',
   buttonColor: '#075E54',
   buttonImageUrl: null as string | null,
@@ -178,8 +184,7 @@ describe('chat page (TW-WGT-009)', () => {
     expect(page).toContain('placeholder="Type a message');
   });
 
-  it('TW-WGT-023 #2: the remembered visitor key is built from the widget, so rotating the token keeps visitors', () => {
-    expect(page).toContain(`"${widget.uuid}"`);
-    expect(page).toContain("'wgt_vid_' + ");
+  it('TW-WGT-023 rule 2 QUIRK: the remembered visitor key is built from the TOKEN, so rotating the token orphans a returning visitor (as Reference)', () => {
+    expect(page).toContain("'wsnap_vid_' + TOKEN");
   });
 });

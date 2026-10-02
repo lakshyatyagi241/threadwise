@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { assemblePhone } from '../broadcasts';
 
 /** `IN (...)` lists are chunked so a big audience never builds one giant statement. */
 export const CHUNK = 1_000;
@@ -761,6 +762,48 @@ export class CampaignsRepository {
       WHERE org_id = ${orgId} AND id = ${contactId} AND NOT is_unsubscribed
       RETURNING id`);
     return res.rows.length > 0;
+  }
+
+  /** The provider's id of a recipient's message, once it has one. */
+  async providerMessageOf(tx: Tx, orgId: number, rowId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT whatsapp_message_id FROM wp_campaign_contacts WHERE org_id = ${orgId} AND id = ${rowId}`,
+    );
+    return (
+      (res.rows[0] as { whatsapp_message_id: string | null } | undefined)?.whatsapp_message_id ??
+      null
+    );
+  }
+
+  /** What the wallet needs to price one recipient's message: the campaign's engine, the variant's template category, the number. */
+  async deliveryFacts(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    contactId: number,
+  ): Promise<{ provider: string | null; category: string | null; phone: string | null } | null> {
+    const res = await tx.execute(sql`
+      SELECT w.provider, coalesce(t.meta_category, t.category) AS category, c.phone, c.country_code
+      FROM wpcampaigns w
+      JOIN wp_campaign_contacts r ON r.org_id = w.org_id AND r.campaign_id = w.id AND r.contact_id = ${contactId}
+      JOIN contacts c ON c.org_id = w.org_id AND c.id = r.contact_id
+      LEFT JOIN wa_templates t ON t.org_id = w.org_id
+        AND t.id = CASE WHEN r.variant = 'B' THEN coalesce(w.template_id_b, w.template_id) ELSE coalesce(w.template_id_a, w.template_id) END
+      WHERE w.org_id = ${orgId} AND w.id = ${campaignId}`);
+    const r = res.rows[0] as
+      | {
+          provider: string | null;
+          category: string | null;
+          phone: string | null;
+          country_code: string | null;
+        }
+      | undefined;
+    if (!r) return null;
+    return {
+      provider: r.provider,
+      category: r.category,
+      phone: assemblePhone(r.phone, r.country_code) || null,
+    };
   }
 
   async contactPhone(tx: Tx, orgId: number, contactId: number): Promise<string | null> {

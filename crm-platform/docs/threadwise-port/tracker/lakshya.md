@@ -344,21 +344,21 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-PLAN-006 | in-progress |  | thin slice: 9 limit keys in a contracts registry (0 = unlimited, overrides, assertWithinLimit); no usage meters/ledger, nothing enforced yet |
 | TW-PLAN-007 | in-progress |  | thin slice: 7 feature flags in a registry; only remove_branding is enforced (branding); no route middleware/paywall |
 | TW-PLAN-008 | in-progress |  | 4-step default resolver + trial rule done and tested; registration default is a dropdown of active plans; billing_plan_scope not built |
-| TW-PLAN-009 | todo |  |  |
-| TW-PLAN-010 | todo |  |  |
-| TW-PLAN-011 | in-progress |  | partial: GET /v2/plans cards with the upgrade/downgrade/current classification (server side); /account/plans is a placeholder, no yearly toggle/FAQ/compare/checkout |
-| TW-PLAN-012 | todo |  |  |
-| TW-PLAN-013 | todo |  |  |
-| TW-PLAN-014 | todo |  |  |
-| TW-PLAN-015 | todo |  |  |
-| TW-PLAN-016 | todo |  |  |
-| TW-PLAN-017 | in-progress |  | partial: assertFeature/assertWithinLimit and the 422 PLAN_FEATURE_LOCKED / PLAN_LIMIT_REACHED problem; no quota ledger, no route guard |
-| TW-PLAN-018 | todo |  |  |
+| TW-PLAN-009 | done |  | operator CRUD /platform/pricing-faqs + /admin/pricing-faqs, readers: in-app, public; audited; partial update |
+| TW-PLAN-010 | done |  | /pricing site route over GET /public/cms/pricing (+limits/features) and the FAQ table; yearly switch |
+| TW-PLAN-011 | done |  | picker complete: validity banner, yearly switch, cards (server-decided action), add-ons, compare table, FAQ; admins may downgrade (intended) |
+| TW-PLAN-012 | done |  | POST /v2/billing/subscription/cancel + driver cancelSubscription (Stripe, Razorpay, PayPal); buttons on picker and top bar while a subscription exists. Rows are written by PAYGW recurring checkout (not built) |
+| TW-PLAN-013 | done |  | trial/renewal bar from GET /v2/billing/status, mounted in the app shell; renewal bar has no Cancel auto-renew (TW-PLAN-012 blocked); renew link goes to plans (Reference quirk fixed deliberately: no broken route guard) |
+| TW-PLAN-014 | done |  | GET /v2/billing/usage + /account/usage pane: 11 meters from the same counts enforcement uses, calendar-month reset, features unlocked; no wallet tiles (WALLET domain) |
+| TW-PLAN-015 | done |  | global TrialGateGuard after auth: 402 PLAN_TRIAL_EXPIRED + web redirect; API keys gated too (Reference leak closed); fails open on internal error; allow-list by path segment + @AllowWhenTrialExpired |
+| TW-PLAN-016 | done |  | planStateOf/validityOf + entitlement resolver uses state: lapsed paid plan falls back to the free plan's caps and flags; per-workspace org_plan_state; operator attach (PUT /v2/platform/workspace-plans/:id) and workspace change (POST /v2/billing/plan) are the writers beside PAYGW |
+| TW-PLAN-017 | done |  | assertFeature/assertWithinLimit, quota ledger, PlanUsageService.assertCanAdd for creators; broadcasts enforced; devices/flows/templates/auto-replies call sites wait for their domains |
+| TW-PLAN-018 | done |  | PlanQuotaService + total_campaigns limit + meter; call site belongs to the campaigns domain |
 | TW-PLAN-019 | todo |  |  |
 | TW-PLAN-020 | todo |  |  |
 | TW-PLAN-021 | todo |  |  |
 | TW-PLAN-022 | todo |  |  |
-| TW-PLAN-023 | todo |  |  |
+| TW-PLAN-023 | done |  | plans.data_retention_days, org_plan_state.data_wiped_at, nightly worker sweep, operator preview/run with WIPE confirm, audit + org.data_wiped |
 | TW-PLAN-024 | todo |  |  |
 | TW-PLAN-025 | todo |  |  |
 | TW-PLAN-026 | todo |  |  |
@@ -369,39 +369,39 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-WALLET-001 | todo |  |  |
-| TW-WALLET-002 | todo |  |  |
-| TW-WALLET-003 | todo |  |  |
-| TW-WALLET-004 | todo |  |  |
-| TW-WALLET-005 | todo |  |  |
-| TW-WALLET-006 | todo |  |  |
-| TW-WALLET-007 | todo |  |  |
-| TW-WALLET-008 | todo |  |  |
-| TW-WALLET-009 | todo |  |  |
-| TW-WALLET-010 | todo |  |  |
-| TW-WALLET-011 | todo |  |  |
-| TW-WALLET-012 | todo |  |  |
-| TW-WALLET-013 | todo |  |  |
-| TW-WALLET-014 | todo |  |  |
-| TW-WALLET-015 | todo |  |  |
-| TW-WALLET-016 | todo |  |  |
-| TW-WALLET-017 | todo |  |  |
-| TW-WALLET-018 | todo |  |  |
-| TW-WALLET-019 | todo |  |  |
-| TW-WALLET-020 | todo |  |  |
-| TW-WALLET-021 | todo |  |  |
-| TW-WALLET-022 | todo |  |  |
-| TW-WALLET-023 | todo |  |  |
-| TW-WALLET-024 | todo |  |  |
-| TW-WALLET-025 | todo |  |  |
-| TW-WALLET-026 | todo |  |  |
-| TW-WALLET-027 | todo |  |  |
-| TW-WALLET-028 | todo |  |  |
-| TW-WALLET-029 | todo |  |  |
-| TW-WALLET-030 | todo |  |  |
-| TW-WALLET-031 | todo |  |  |
-| TW-WALLET-032 | todo |  |  |
-| TW-WALLET-033 | todo |  |  |
+| TW-WALLET-001 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-002 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-003 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-004 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-005 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-006 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-007 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-008 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-009 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-010 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-011 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-012 | done |  | emitters wired in broadcasts, campaigns, chat; scheduled/SMS/WABA/flow/api have no producer yet |
+| TW-WALLET-013 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-014 | wontfix |  | intended: see parity file |
+| TW-WALLET-015 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-016 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-017 | wontfix |  | intended: see parity file |
+| TW-WALLET-018 | wontfix |  | intended: see parity file |
+| TW-WALLET-019 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-020 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-021 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-022 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-023 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-024 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-025 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-026 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-027 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-028 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-029 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-030 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-031 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-032 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-033 | wontfix |  | intended: see parity file |
 
 ## notifications-activity-audit (notif)
 

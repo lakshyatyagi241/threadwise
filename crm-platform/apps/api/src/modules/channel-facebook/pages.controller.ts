@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
-  connectEmbeddedSchema,
-  connectManualSchema,
-  type ConnectEmbeddedInput,
-  type ConnectManualInput,
+  fbConnectEmbeddedSchema,
+  fbConnectManualSchema,
+  type FbConnectEmbeddedInput,
+  type FbConnectManualInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -64,7 +64,7 @@ export class PagesController {
     description:
       '422 FB_CODE_REJECTED when Meta refuses the code; 422 FB_NO_PAGES when the account manages none.',
   })
-  embedded(@Body(zodPipe(connectEmbeddedSchema)) body: ConnectEmbeddedInput) {
+  embedded(@Body(zodPipe(fbConnectEmbeddedSchema)) body: FbConnectEmbeddedInput) {
     return this.pages.connectEmbedded(body.code);
   }
 
@@ -76,7 +76,7 @@ export class PagesController {
     summary: 'Connect one Page from a pasted Page access token',
     description: '422 FB_TOKEN_NOT_A_PAGE when the token does not resolve to a Page.',
   })
-  manual(@Body(zodPipe(connectManualSchema)) body: ConnectManualInput) {
+  manual(@Body(zodPipe(fbConnectManualSchema)) body: FbConnectManualInput) {
     return this.pages.connectManual(body.pageAccessToken);
   }
 
