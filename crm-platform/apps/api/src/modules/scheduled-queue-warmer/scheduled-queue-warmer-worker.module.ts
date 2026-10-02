@@ -1,5 +1,6 @@
 import { Module, type OnModuleInit } from '@nestjs/common';
 import { BroadcastReceiptsService, BroadcastsModule } from '../broadcasts';
+import { CampaignReceiptsService, CampaignsModule } from '../campaigns';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule, ReceiptRouter } from '../node-bridge-runtime';
 import { ScheduledDueService } from './scheduled-due.service';
@@ -13,7 +14,7 @@ import { ScheduledRunService } from './scheduled-run.service';
  * cap and one-run-per-number lease, so a number is never in a broadcast and a schedule at once.
  */
 @Module({
-  imports: [NodeBridgeRuntimeModule, BroadcastsModule, CrmModule],
+  imports: [NodeBridgeRuntimeModule, BroadcastsModule, CampaignsModule, CrmModule],
   providers: [
     ScheduledDueService,
     ScheduledRunService,
@@ -24,12 +25,14 @@ import { ScheduledRunService } from './scheduled-run.service';
 export class ScheduledQueueWarmerWorkerModule implements OnModuleInit {
   constructor(
     private readonly router: ReceiptRouter,
+    private readonly campaigns: CampaignReceiptsService,
     private readonly broadcasts: BroadcastReceiptsService,
     private readonly scheduled: ScheduledReceiptsService,
   ) {}
 
-  /** Delivery reports from the unofficial engine go to the broadcast recipient, else the scheduled one, that owns the message id. */
+  /** Delivery reports from the unofficial engine go to the campaign, broadcast or scheduled recipient that owns the message id. */
   onModuleInit(): void {
+    this.router.register((r) => this.campaigns.handle(r));
     this.router.register((r) => this.broadcasts.handle(r));
     this.router.register((r) => this.scheduled.handle(r));
   }

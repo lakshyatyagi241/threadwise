@@ -130,3 +130,15 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
 - Cloud API sends go through the shared `MetaCloudProvider` (WABA domain); the NODE transport sends text and media (by public https link) through it, and Interakt numbers use the same credential rules as broadcasts. Tested with a fake provider only.
 - Broadcasts on the unofficial engine and Twilio render the template body with the contact's values and send it as text or media (header, body, footer
   as lines). Send-time overrides, buttons and carousels are Cloud API components and are not applied on these engines.
+
+## Inbox wiring (TW-NODE-017, 018, 020)
+
+- The unofficial engine is the inbox channel kind `whatsapp_qr` (one per linked device, handle = device uuid, not metered). `QrChannelAdapter` sends through
+  `DeviceControlService`; `InboxBridge` (worker) turns what the runtime reads into the inbox's own `channel.ingest` jobs and keeps the channel's status in step.
+- Plan decision 1 (plan-inbox-chat.md) puts QR onboarding off by default with a ban warning at connect; neither the flag nor the warning is built here (WADEV owns
+  the connect screen).
+- Deviations: group messages are not threads (Reference's inbox listed individual chats); a customer file larger than 25 MB, or one that fails to download, arrives as
+  text saying it is not available; an echo's file or place is described on the thread, not copied; reactions sent from the inbox assume the target is the customer's message.
+- Not verified: a live number. Tested with a fake socket against real Postgres, Redis and the inbox workers (`inbox-bridge.e2e.spec.ts`).
+- Touches the chat-conversations zone (Lakshya): channel kind and peer rule, `ChannelAdapterRegistry.register` and export, `ChannelRegistryService.syncDeviceChannel`,
+  `ChannelsRepository.byExternal`, the `QR` badge in the inbox web.
