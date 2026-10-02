@@ -15,5 +15,10 @@ export {
   type FulfilInput,
   type FulfilResult,
 } from './addon-fulfilment.service';
+export {
+  ExtensionTokenService,
+  hashExtensionToken,
+  type IssuedExtensionToken,
+} from './extension-token.service';
 export { EngineConnectionService } from './engine-connections.service';
 export { mergeFeature, mergeLimit, type PlanFacts } from './entitlement-merge';

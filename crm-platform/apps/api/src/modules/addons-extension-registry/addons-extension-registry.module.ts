@@ -9,6 +9,7 @@ import { AddonPackService } from './addon-pack.service';
 import { AddonsController } from './addons.controller';
 import { EngineConnectionService } from './engine-connections.service';
 import { ExtensionStore } from './extension-store';
+import { ExtensionTokenService } from './extension-token.service';
 import { ExtensionsService } from './extensions.service';
 import { ModuleGateGuard } from './module-gate';
 import { ModuleRegistryService } from './module-registry.service';
@@ -38,6 +39,7 @@ import { WorkspaceAddonsService } from './workspace-addons.service';
     AddonEntitlementService,
     AddonFulfilmentService,
     WorkspaceAddonsService,
+    ExtensionTokenService,
   ],
   exports: [
     ModuleRegistryService,
@@ -45,6 +47,7 @@ import { WorkspaceAddonsService } from './workspace-addons.service';
     EngineConnectionService,
     AddonEntitlementService,
     AddonFulfilmentService,
+    ExtensionTokenService,
   ],
 })
 export class AddonsExtensionRegistryModule {}
