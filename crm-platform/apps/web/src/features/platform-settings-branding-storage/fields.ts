@@ -3,7 +3,6 @@ import {
   FONT_FAMILIES,
   MAILERS,
   STORAGE_PROVIDERS,
-  THEME_COLOR_TOKENS,
   type SetGroup,
   type SetTestableGroup,
 } from '@crm/contracts';
