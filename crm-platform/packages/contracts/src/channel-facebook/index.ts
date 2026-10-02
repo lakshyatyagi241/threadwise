@@ -2,3 +2,5 @@
 export * from './page';
 export * from './broadcast';
 export * from './setup';
+export * from './post';
+export * from './insights';

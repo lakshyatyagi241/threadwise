@@ -184,6 +184,10 @@ export const ERROR_CODES = {
   FB_SETUP_REJECTED: 'FB_SETUP_REJECTED',
   /** Meta's Graph version no longer accepts the field (the welcome greeting). */
   FB_SETUP_UNSUPPORTED: 'FB_SETUP_UNSUPPORTED',
+  /** A post cannot be made as written (nothing in it, photos and a link together, a video address that is not HTTPS). */
+  FB_POST_INVALID: 'FB_POST_INVALID',
+  /** The schedule is outside Meta's window (10 minutes to 75 days ahead). */
+  FB_SCHEDULE_INVALID: 'FB_SCHEDULE_INVALID',
 
   // campaigns (WD-CAMP)
   /** Nobody on the audience can be messaged. */

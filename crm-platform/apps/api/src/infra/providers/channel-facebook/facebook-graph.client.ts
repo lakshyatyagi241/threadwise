@@ -9,12 +9,15 @@ import {
   type FacebookPageApi,
   type GraphComment,
   type GraphConversation,
+  type GraphInsightMetric,
   type GraphMessage,
+  type GraphPublishedPost,
   type GraphPage,
   type GraphResult,
   type GraphSenderProfile,
   type MessengerButton,
   type MetaAppSettings,
+  type PublishSpec,
   type TokenDebug,
 } from './facebook.port';
 
@@ -25,6 +28,10 @@ export const TEXT_LIMIT = 2000;
 const COMMENT_LIMIT = 8000;
 /** Meta cuts a button template's text at 640 characters. */
 const BUTTON_TEXT_LIMIT = 640;
+/** A reel's processing is polled every two seconds, twenty times at most. */
+const REEL_POLLS = 20;
+const REEL_POLL_MS = 2000;
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 /** `/me/accounts` is followed at most this many pages of 100 (WaDesk's guard). */
 const MAX_PAGES = 10;
 
@@ -268,6 +275,155 @@ class PageApi implements FacebookPageApi {
         json: { fields: [...fields] },
       },
     );
+  }
+
+  /** A form POST that answers with the first id key Meta returned. */
+  private async postId(
+    path: string,
+    params: Record<string, string>,
+    idKeys: readonly string[],
+  ): Promise<GraphResult<{ id: string }>> {
+    const r = await call(this.version, 'POST', path, { token: this.token, form: params });
+    if (!r.ok) return { ok: false, error: r.error ?? 'request failed', code: r.code };
+    const key = idKeys.find((k) => r.data?.[k] !== undefined);
+    return { ok: true, data: { id: key ? (str(r.data?.[key]) ?? '') : '' } };
+  }
+
+  async publish(spec: PublishSpec): Promise<GraphResult<{ id: string }>> {
+    const photos = spec.photos.filter((u) => u !== '');
+    const message = spec.message.trim();
+    const link = spec.link.trim();
+    const schedule: Record<string, string> = spec.scheduledTs
+      ? { published: 'false', scheduled_publish_time: String(spec.scheduledTs) }
+      : {};
+
+    // A single photo (and not a link post) goes straight to /photos with a caption.
+    if (photos.length === 1 && link === '') {
+      return this.postId(
+        `${this.pageId}/photos`,
+        {
+          url: photos[0]!,
+          caption: message,
+          // Tells a scheduled photo apart from a plain draft on this endpoint.
+          ...(spec.scheduledTs ? { ...schedule, unpublished_content_type: 'SCHEDULED' } : {}),
+        },
+        ['post_id', 'id'],
+      );
+    }
+
+    // Several photos: each is uploaded unpublished, then attached to one feed post.
+    const attached: Record<string, string> = {};
+    for (const [i, url] of photos.entries()) {
+      const up = await this.postId(`${this.pageId}/photos`, { url, published: 'false' }, ['id']);
+      if (!up.ok || !up.data) return up;
+      attached[`attached_media[${i}]`] = JSON.stringify({ media_fbid: up.data.id });
+    }
+    return this.postId(
+      `${this.pageId}/feed`,
+      {
+        ...(message !== '' ? { message } : {}),
+        ...(link !== '' ? { link } : {}),
+        ...attached,
+        ...schedule,
+      },
+      ['id'],
+    );
+  }
+
+  postVideo(fileUrl: string, description: string, scheduledTs: number | null) {
+    return this.postId(
+      `${this.pageId}/videos`,
+      {
+        file_url: fileUrl,
+        description: clip(description, 5000),
+        ...(scheduledTs ? { published: 'false', scheduled_publish_time: String(scheduledTs) } : {}),
+      },
+      ['id'],
+    );
+  }
+
+  async postReel(
+    fileUrl: string,
+    description: string,
+    scheduledTs: number | null,
+  ): Promise<GraphResult<{ id: string }>> {
+    const reels = `${this.pageId}/video_reels`;
+    // 1. Start: Meta reserves a video id and an upload address.
+    const start = await call(this.version, 'POST', reels, {
+      token: this.token,
+      form: { upload_phase: 'start' },
+    });
+    const videoId = str(start.data?.video_id);
+    const uploadUrl = str(start.data?.upload_url);
+    if (!start.ok || !videoId) {
+      return { ok: false, error: start.error ?? 'reel start failed', code: start.code };
+    }
+    if (!uploadUrl) return { ok: false, error: 'reel start returned no upload_url' };
+
+    // 2. Upload: a hosted transfer, so Meta is told where to pull the file from.
+    try {
+      const up = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: { Authorization: `OAuth ${this.token}`, file_url: fileUrl },
+        signal: AbortSignal.timeout(180_000),
+      });
+      if (!up.ok) {
+        return { ok: false, error: `reel upload failed: ${(await up.text()).slice(0, 300)}` };
+      }
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : 'reel upload failed' };
+    }
+
+    // 2b. Wait: the upload answering 200 only means Meta accepted the request; it downloads the file after. Finishing before that
+    // completes fails intermittently, so the status is polled (about 40 seconds at most).
+    for (let i = 0; i < REEL_POLLS; i++) {
+      const st = await this.get(videoId, { fields: 'status' });
+      const phase = str(obj(obj(obj(st.data).status).uploading_phase).status);
+      if (phase === 'complete') break;
+      if (phase === 'error') return { ok: false, error: 'reel upload processing failed' };
+      await sleep(REEL_POLL_MS);
+    }
+
+    // 3. Finish: publish now or schedule. A reel caption holds about 2200 characters.
+    const done = await call(this.version, 'POST', reels, {
+      token: this.token,
+      form: {
+        upload_phase: 'finish',
+        video_id: videoId,
+        description: clip(description, 2200),
+        ...(scheduledTs
+          ? { video_state: 'SCHEDULED', scheduled_publish_time: String(scheduledTs) }
+          : { video_state: 'PUBLISHED' }),
+      },
+    });
+    return done.ok
+      ? { ok: true, data: { id: videoId } }
+      : { ok: false, error: done.error ?? 'reel finish failed', code: done.code };
+  }
+
+  deletePost(objectId: string): Promise<GraphResult> {
+    return call(this.version, 'DELETE', objectId, { token: this.token });
+  }
+
+  async recentPosts(limit: number): Promise<GraphPublishedPost[]> {
+    const r = await this.get(`${this.pageId}/published_posts`, {
+      fields: 'id,message,created_time,permalink_url,full_picture',
+      limit: String(limit),
+    });
+    return r.ok && Array.isArray(r.data?.data) ? (r.data.data as GraphPublishedPost[]) : [];
+  }
+
+  async pageInsights(metrics: readonly string[]): Promise<GraphInsightMetric[]> {
+    const r = await this.get(`${this.pageId}/insights`, {
+      metric: metrics.join(','),
+      period: 'days_28',
+    });
+    return r.ok && Array.isArray(r.data?.data) ? (r.data.data as GraphInsightMetric[]) : [];
+  }
+
+  async postInsights(postId: string, metrics: readonly string[]): Promise<GraphInsightMetric[]> {
+    const r = await this.get(`${postId}/insights`, { metric: metrics.join(',') });
+    return r.ok && Array.isArray(r.data?.data) ? (r.data.data as GraphInsightMetric[]) : [];
   }
 
   async replyComment(objectId: string, text: string): Promise<GraphResult<{ id: string }>> {

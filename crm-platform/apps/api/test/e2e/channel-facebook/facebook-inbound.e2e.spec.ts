@@ -43,6 +43,13 @@ const defaults = (): FacebookPageApi => ({
   getMessengerProfile: () => Promise.resolve({}),
   setMessengerProfile: () => Promise.resolve({ ok: true }),
   deleteMessengerProfile: () => Promise.resolve({ ok: true }),
+  publish: () => Promise.resolve({ ok: true, data: { id: 'p' } }),
+  postVideo: () => Promise.resolve({ ok: true, data: { id: 'v' } }),
+  postReel: () => Promise.resolve({ ok: true, data: { id: 'r' } }),
+  deletePost: () => Promise.resolve({ ok: true }),
+  recentPosts: () => Promise.resolve([]),
+  pageInsights: () => Promise.resolve([]),
+  postInsights: () => Promise.resolve([]),
   replyComment: (id, text) => {
     sent.push({ method: 'replyComment', args: [id, text] });
     return Promise.resolve({ ok: true, data: { id: 'c.reply' } });

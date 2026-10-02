@@ -18,9 +18,15 @@ import { FbBroadcastsController } from './fb-broadcasts.controller';
 import { FbBroadcastsRepository } from './fb-broadcasts.repository';
 import { FbBroadcastsService } from './fb-broadcasts.service';
 import { InboundService } from './inbound.service';
+import { InsightsController } from './insights.controller';
+import { InsightsRepository } from './insights.repository';
+import { InsightsService } from './insights.service';
 import { PagesController } from './pages.controller';
 import { PagesRepository } from './pages.repository';
 import { PagesService } from './pages.service';
+import { PostsController } from './posts.controller';
+import { PostsRepository } from './posts.repository';
+import { PostsService } from './posts.service';
 import { SenderService } from './sender.service';
 import { SetupController } from './setup.controller';
 import { SetupService } from './setup.service';
@@ -31,7 +37,14 @@ import { FacebookPublicController } from './webhook.controller';
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  controllers: [PagesController, FbBroadcastsController, SetupController, FacebookPublicController],
+  controllers: [
+    PagesController,
+    FbBroadcastsController,
+    SetupController,
+    PostsController,
+    InsightsController,
+    FacebookPublicController,
+  ],
   providers: [
     CryptoService,
     PagesService,
@@ -43,6 +56,10 @@ import { FacebookPublicController } from './webhook.controller';
     FbBroadcastsRepository,
     FbBroadcastSenderService,
     SetupService,
+    PostsService,
+    PostsRepository,
+    InsightsService,
+    InsightsRepository,
     FacebookGraphClients,
     { provide: FACEBOOK_GRAPH, useExisting: FacebookGraphClients },
     { provide: FACEBOOK_PLAN_GATE, useClass: OpenFacebookPlanGate },

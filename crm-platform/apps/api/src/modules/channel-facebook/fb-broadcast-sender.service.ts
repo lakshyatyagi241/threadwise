@@ -38,8 +38,6 @@ export class FbBroadcastSenderService {
 
   /** Replaceable in tests so a run does not wait. */
   sleep: (ms: number) => Promise<void> = (ms) => new Promise((r) => setTimeout(r, ms));
-  /** Replaceable in tests so the window can be tested without moving the clock. */
-  now: () => Date = () => new Date();
 
   constructor(
     private readonly db: DatabaseService,
@@ -92,7 +90,7 @@ export class FbBroadcastSenderService {
             : await this.db.txAs({ orgId }, (tx) =>
                 this.inbox.lastInboundAt(tx, orgId, r.conversationId as number),
               );
-        if (!insideWindow(lastIn, this.now())) {
+        if (!insideWindow(lastIn, new Date())) {
           await this.mark(orgId, r.id, { status: 'blocked', error: OUTSIDE });
           continue;
         }

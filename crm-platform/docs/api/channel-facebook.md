@@ -64,6 +64,27 @@ Needs `fb.setup.manage` for every route. Each save goes straight to Meta; nothin
 | `PUT /facebook/setup/:pageId/ice-breakers`    | Body `{items: [{question, payload}]}`; at most four; none removes them all.                                                                                                                              |
 | `DELETE /facebook/setup/:pageId/ice-breakers` | Remove all.                                                                                                                                                                                              |
 
+## Posts (WD-FB-016 to 018)
+
+| Method and path                      | Permission        | What                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /facebook/posts`                | `fb.posts.read`   | Query `status`, `type`, `range` (7d, 30d, 90d), `q`, `account` (a Page id), `page`. `{data, counts, typeCounts, meta, pages}`: 15 a page; scheduled first, then failed or draft, then the rest. `counts` and `typeCounts` ignore every filter but the Page; `failed` includes drafts.                                                                                        |
+| `POST /facebook/posts`               | `fb.posts.manage` | Body `{pageId, message?, link?, photoUrls?, videoUrl?, asReel?, scheduledAt?}`. 201 the post. 422 `FB_PAGE_UNAVAILABLE`, `FB_POST_INVALID` (nothing in it, photos with a link, a video address that is not HTTPS), `FB_SCHEDULE_INVALID` (10 minutes to 75 days ahead). Saved before Meta is called; a refusal by Meta is a 201 whose post has `status: failed` and `error`. |
+| `POST /facebook/posts/:id/publish`   | `fb.posts.manage` | Retry a draft or failed post now. 409 `FB_POST_INVALID` when it is already published or scheduled.                                                                                                                                                                                                                                                                           |
+| `DELETE /facebook/posts/:id`         | `fb.posts.manage` | 204. A post with a Meta id is deleted there first (a failure there is ignored), then here.                                                                                                                                                                                                                                                                                   |
+| `GET /facebook/my-posts?page=<uuid>` | `fb.posts.read`   | `{pages, page, items}`: the Page's 50 newest published posts, live. Nothing stored; Meta not answering is an empty list.                                                                                                                                                                                                                                                     |
+
+`FbPost`: `id`, `pageId`, `pageName`, `type` (`text`, `link`, `photo`, `multi_photo`, `video`, `reel`), `status` (`draft`, `scheduled`, `published`,
+`failed`), `message`, `link`, `photos`, `video`, `fbPostId`, `scheduledPublishTime`, `publishedAt`, `error`, `createdAt`. Events: `facebook.post.published`,
+`.scheduled`, `.failed`, `.deleted`.
+
+## Insights (WD-FB-019)
+
+`GET /facebook/insights?page=<uuid>&tz=<IANA zone>`, permission `fb.insights.read`. `{pages, page, identity, followers, kpis, local, trend, contentMix,
+convoMix, posts}`: the live identity and 28 day metrics from Meta (a metric Meta no longer has is absent from `kpis`), what this system knows
+(`local`: threads, open threads, messages in and out over 28 days, posts), a 14 day message trend (`days` are `YYYY-MM-DD` in `tz`, UTC when absent or
+unknown), the posts made here by type, threads by status, and up to six recent posts (live with their numbers, else this system's own).
+
 ## Module surface for other domains
 
 `FacebookSenderService.reply(orgId, {rawJid, text, media})` returns `{ok, providerMessageId, error}` and never throws. The team inbox calls
