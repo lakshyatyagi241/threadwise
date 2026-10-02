@@ -32,6 +32,9 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'templates', group: 'content' },
   { key: 'flows', group: 'content' },
   { key: 'autoreplies', group: 'content' },
+  // Customer REST API requests per minute per key (TW-PLAN-022). NOT like the other caps: 0 means "use the platform default", not unlimited;
+  // a workspace override of -1 means unlimited.
+  { key: 'api_rate_limit_per_minute', group: 'workspace' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -67,6 +70,24 @@ export const PLAN_FEATURE_DEFS = [
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
+
+/** The words a lock message and the paywall sheet use for a feature (TW-PLAN-019 rule 5). */
+export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
+  automation: 'Automation',
+  ai_assistants: 'AI assistants',
+  calling: 'WhatsApp calling',
+  woocommerce: 'WooCommerce',
+  shopify: 'Shopify',
+  analytics: 'Analytics',
+  remove_branding: 'White-label branding',
+  sales_pipeline: 'Sales pipeline',
+  appointment_booking: 'Appointment booking',
+  chatbot_widgets: 'Chatbot widgets',
+  inbox_sla: 'SLA policies',
+  inbox_routing: 'Routing rules',
+  inbox_kanban: 'Kanban view',
+  team_performance: 'Team performance',
+};
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
 /**

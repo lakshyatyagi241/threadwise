@@ -203,6 +203,9 @@ describe('presets (TW-RBAC-004, 024)', () => {
       ['inbox.conversation.read', 'team'],
       ['support.ticket.create', 'all'],
       ['support.ticket.read', 'all'],
+      ['wallet.balance.read', 'all'],
+      ['wallet.statement.export', 'all'],
+      ['wallet.statement.read', 'all'],
     ]);
   });
 
@@ -441,6 +444,9 @@ describe('landing and the permission map (TW-RBAC-033, 035)', () => {
       'inbox.conversation.read',
       'support.ticket.create',
       'support.ticket.read',
+      'wallet.balance.read',
+      'wallet.statement.export',
+      'wallet.statement.read',
     ]);
   });
 });
@@ -581,8 +587,14 @@ describe('a workspace admin manages roles and members (screens: /settings/roles,
     const admin = await addMember(org, 'Admin');
     const agent = await addMember(org, 'Agent');
     const ownerUuid = (await api().get('/v2/users/me').set(bearer(org.owner))).body.id as string;
-    const patch = (token: string, uuid: string, status: string) =>
-      api().patch(`/v2/users/${uuid}`).set(bearer(token)).send({ status, rowVersion: 1 });
+    // Signing in bumps the row version, so read the current one rather than assuming 1.
+    const patch = async (token: string, uuid: string, status: string) => {
+      const current = await api().get(`/v2/users/${uuid}`).set(bearer(org.owner));
+      return api()
+        .patch(`/v2/users/${uuid}`)
+        .set(bearer(token))
+        .send({ status, rowVersion: current.body.rowVersion });
+    };
 
     expect((await patch(admin.token, agent.uuid, 'inactive')).status).toBe(200);
     const row = (await api().get(`/v2/users/${agent.uuid}`).set(bearer(org.owner))).body;

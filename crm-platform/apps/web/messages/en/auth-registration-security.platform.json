@@ -1415,7 +1415,8 @@
             "templates": "Message templates",
             "flows": "Flows",
             "autoreplies": "Keyword auto-replies",
-            "total_campaigns": "Campaigns created (never freed by deleting)"
+            "total_campaigns": "Campaigns created (never freed by deleting)",
+            "api_rate_limit_per_minute": "API requests per minute (0 = platform default)"
           },
           "featureGroups": {
             "messaging": "Messaging",

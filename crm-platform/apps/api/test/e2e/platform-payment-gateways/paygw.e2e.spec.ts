@@ -761,10 +761,9 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
       hook.post(),
     ]);
     const wallet = (
-      await h.owner.query(
-        `SELECT balance::text AS balance FROM wallets WHERE org_id = $1`,
-        [buyer.orgId],
-      )
+      await h.owner.query(`SELECT balance::text AS balance FROM wallets WHERE org_id = $1`, [
+        buyer.orgId,
+      ])
     ).rows;
     expect(wallet).toHaveLength(1);
     // The wallet holds whole currency units: a 10.00 top-up is 10, and the ledger entry says the same.

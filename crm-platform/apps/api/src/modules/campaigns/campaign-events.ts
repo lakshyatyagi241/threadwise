@@ -4,7 +4,6 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { MODULE_KEY } from './campaigns.service';
 import { isNewer } from './campaign-rules';
 import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
 import {
@@ -12,6 +11,8 @@ import {
   statusWebhook,
   type CampaignSnapshot,
 } from './campaign-webhook-events';
+
+export const MODULE_KEY = 'campaigns';
 
 export const toSnapshot = (c: CampaignRow): CampaignSnapshot => ({
   uuid: c.uuid,

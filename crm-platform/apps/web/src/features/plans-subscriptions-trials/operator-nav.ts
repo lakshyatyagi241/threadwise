@@ -20,4 +20,22 @@ export const PLAN_OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'plans-subscriptions-trials.nav.planSettings',
     groupKey: 'plans-subscriptions-trials.nav.group',
   },
+  {
+    id: 'plan-analytics',
+    href: '/admin/plan-analytics',
+    labelKey: 'plans-subscriptions-trials.nav.analytics',
+    groupKey: 'plans-subscriptions-trials.nav.group',
+  },
+  {
+    id: 'financial',
+    href: '/admin/financial',
+    labelKey: 'plans-subscriptions-trials.nav.financial',
+    groupKey: 'plans-subscriptions-trials.nav.group',
+  },
+  {
+    id: 'premium',
+    href: '/admin/premium',
+    labelKey: 'plans-subscriptions-trials.nav.premium',
+    groupKey: 'plans-subscriptions-trials.nav.group',
+  },
 ];

@@ -132,7 +132,7 @@ describe('the lock under a race (TW-INST-015)', () => {
     expect(await count('platform_setup')).toBe(1);
     // the loser's org rolled back with it: no stray users, roles or audit rows
     expect(await count('users')).toBe(1);
-    expect(await count('roles')).toBe(2);
+    expect(await count('roles')).toBe(5); // the Owner, Admin, Manager, Agent and Viewer presets
     await resetPlatform();
   });
 });
