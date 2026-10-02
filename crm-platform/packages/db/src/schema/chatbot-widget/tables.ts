@@ -2,8 +2,10 @@
  * chatbot-widget: tables ported from Reference. Mirrors migrations/20261001103300_wgt_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
   boolean,
+  check,
   foreignKey,
   index,
   jsonb,
@@ -81,6 +83,11 @@ export const chatbotWidgets = pgTable(
     index('idx_chatbot_widgets_assistant_id').on(t.orgId, t.assistantId),
     index('idx_chatbot_widgets_user_id').on(t.orgId, t.userId),
     index('idx_chatbot_widgets_status').on(t.orgId, t.status),
+    // migrations/20261010100100_wgt_public_lookup.sql
+    check('chk_chatbot_widgets_mode', sql`${t.mode} IN ('ai', 'whatsapp', 'both')`),
+    check('chk_chatbot_widgets_position', sql`${t.position} IN ('bottom_right', 'bottom_left')`),
+    check('chk_chatbot_widgets_body_bg_kind', sql`${t.bodyBgKind} IN ('color', 'image')`),
+    check('chk_chatbot_widgets_status', sql`${t.status} IN ('active', 'paused')`),
   ],
 );
 
@@ -124,6 +131,8 @@ export const chatbotWidgetVisitors = pgTable(
     }).onDelete('cascade'),
     index('idx_chatbot_widget_visitors_conversation_id').on(t.orgId, t.conversationId),
     index('idx_chatbot_widget_visitors_widget_id').on(t.orgId, t.widgetId),
+    // migrations/20261010100100_wgt_public_lookup.sql
+    index('idx_chatbot_widget_visitors_uuid_widget').on(t.orgId, t.widgetId, t.visitorUuid),
   ],
 );
 
