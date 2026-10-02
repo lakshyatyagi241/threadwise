@@ -6,11 +6,13 @@ import {
   codRisk,
   isShopifyCod,
   isWooCod,
+  matchOutOfStock,
   readCodReply,
   renderBody,
   shopifyContext,
   shopifyRecipient,
   verifyShopifyWebhook,
+  wantsStockAlert,
   verifyWooWebhook,
   wooContext,
   wooRecipient,
@@ -192,5 +194,30 @@ describe('cash on delivery (WD-ECOM-016, 017, 030)', () => {
     expect(codRisk({ ...base, priorFulfilled: 0, priorCancelled: 1, hasEmail: false }).level).toBe(
       'medium',
     );
+  });
+});
+
+describe('back in stock (WD-ECOM-020)', () => {
+  it('reads a request to be told when something is available', () => {
+    for (const t of [
+      'Notify me',
+      'is the red shirt back in stock?',
+      'RESTOCK pls',
+      'available soon?',
+      'stock',
+    ])
+      expect(wantsStockAlert(t)).toBe(true);
+    for (const t of ['hello', 'where is my order', '']) expect(wantsStockAlert(t)).toBe(false);
+  });
+  it('finds the sold-out product named by name or sku, ignoring case and empty values', () => {
+    const products = [
+      { name: 'Blue Hoodie', sku: 'HOOD-B' },
+      { name: '', sku: '' },
+      { name: 'Red Shirt', sku: 'SH-R' },
+    ];
+    expect(matchOutOfStock('notify me for the red shirt', products)?.sku).toBe('SH-R');
+    expect(matchOutOfStock('notify me about sh-r', products)?.name).toBe('Red Shirt');
+    expect(matchOutOfStock('notify me for a green hat', products)).toBeUndefined();
+    expect(matchOutOfStock('anything', [{ name: '', sku: null }])).toBeUndefined();
   });
 });

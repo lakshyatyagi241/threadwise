@@ -63,6 +63,7 @@ or WooCommerce store (that needs a Shopify partner app and a store, which this w
 24. **The thank-you or cancelled answer goes as plain text in the customer's open session** through the primary Cloud API number; a number on another engine gets no answer (logged at debug), where WaDesk's dispatcher could send on any engine.
 25. **The WooCommerce risk score looks up the customer by the same normalised number the mirror stores, and leaves the order being scored out of its own history.** WaDesk matched the raw billing digits against normalised numbers (a local number never matched) and, because the mirror was already updated, an international number counted its own order, so "first-time buyer" almost never fired.
 26. **The prepaid nudge, Delivered and the WooCommerce status automations go to the customer only** (as WaDesk's pseudo events), whatever `send_to` says; a missing phone or template writes no log row.
+27. **Back in stock** reads the product's previous state before the mirror is updated and fires only on out to in, as WaDesk. Joining the list is once per customer and product while waiting (an advisory lock makes a double message safe); only a product that carries the store's own id can be waited for (WaDesk's Shopify side also matched products with none and stored an empty id); the "Done!" answer goes as session text on the Cloud API number. Customers are marked notified whether or not their send worked, as WaDesk, so a restock tells each at most once.
 
 ## Shims
 

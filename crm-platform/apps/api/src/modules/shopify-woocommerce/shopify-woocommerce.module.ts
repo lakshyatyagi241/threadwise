@@ -25,6 +25,8 @@ import { ShopifyController } from './shopify.controller';
 import { ShopifyService } from './shopify.service';
 import { StoresRepository } from './stores.repository';
 import { WoocommerceController } from './woocommerce.controller';
+import { StockRepository } from './stock.repository';
+import { StockService } from './stock.service';
 import { WebhookPipelineService } from './webhook-pipeline.service';
 import { EcomWebhookController } from './webhook.controller';
 import { WebhookService } from './webhook.service';
@@ -56,6 +58,8 @@ import { WoocommerceService } from './woocommerce.service';
     ComplianceService,
     CodRepository,
     CodService,
+    StockRepository,
+    StockService,
     MirrorRepository,
     EventMessageService,
     WebhookService,
