@@ -28,6 +28,7 @@ import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
 import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
+import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
@@ -143,6 +144,7 @@ import { HealthModule } from './health/health.module';
     ChannelTelegramModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
+    ShopifyWoocommerceModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,

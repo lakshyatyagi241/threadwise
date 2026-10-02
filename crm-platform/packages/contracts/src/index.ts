@@ -32,6 +32,7 @@ export * from './broadcasts';
 export * from './channel-telegram';
 export * from './channel-facebook';
 export * from './channel-instagram';
+export * from './shopify-woocommerce';
 export * from './deals-pipelines';
 export * from './tasks';
 export * from './platform-settings-branding-storage';

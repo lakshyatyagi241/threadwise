@@ -29,10 +29,10 @@ export function isPrivateAddress(address: string): boolean {
 }
 
 export interface GuardedRequest {
-  method: 'GET' | 'POST';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   url: URL;
   headers: Record<string, string>;
-  /** A JSON body for a POST. */
+  /** A JSON body for a POST or PUT. */
   body?: string;
   timeoutMs: number;
   /** Private, loopback and link-local destinations are refused unless this is on. */
