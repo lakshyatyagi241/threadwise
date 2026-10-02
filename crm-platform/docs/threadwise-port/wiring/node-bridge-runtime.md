@@ -67,3 +67,17 @@ are started.
 | Lifecycle                  | `scheduler.service.ts` (API and worker)                           | pause, resume, cancel, send-now; callers: SCHED screens, appointment reminders                                        |
 | Outbound port              | `node-bridge-runtime/outbound/`                                   | `SendCommand`, `OutboundRegistry`, `SenderResolver`, Cloud API text transport; Baileys and Twilio register when built |
 | Settings                   | `config/domains/scheduled-queue-warmer.env.ts`                    | `SCHED_MAX_LATE_MINUTES` (60), `SCHED_STALE_RUN_MINUTES` (10)                                                         |
+
+## Device runtime (TW-NODE-005 to 014)
+
+| Piece                                     | Where                                                             | Notes                                                                                  |
+| ----------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Close-code table, backoff, status buckets | `runtime/close-policy.ts`, `runtime/device-status.ts`             | pure, unit-tested row by row                                                           |
+| One device's connection                   | `runtime/device-session.ts`                                       | state machine; events applied in order; fake clock in tests                            |
+| Worker runtime                            | `runtime/device-runtime.service.ts`                               | Redis lease per device, restore and failover, liveness, status, commands               |
+| API control                               | `runtime/device-control.service.ts`                               | `requestQr`, `requestPairingCode`, `terminate`, `status`; the WADEV screens call these |
+| Saved session                             | `device_auth_state` (migration `20261014090100`)                  | one encrypted row per entry, forced RLS                                                |
+| Baileys adapter                           | `infra/providers/node-bridge-runtime/baileys.socket-factory.ts`   | Reference's socket settings value for value; the only file that knows the library         |
+| Proxy                                     | `infra/providers/node-bridge-runtime/proxy.ts`, `devices.proxy_*` | http and socks5; probed through the proxy; fail-closed                                 |
+| Redis keys                                | `runtime/wa-redis.ts`                                             | `wa:device:`, `wa:qr:`, `wa:code:`, `wa:status:`, `wa:init:`, channel `wa:cmd`         |
+| Events                                    | outbox `device.status_changed`                                    | aggregate `devices`; Reference's `DeviceStatusChanged`                                    |

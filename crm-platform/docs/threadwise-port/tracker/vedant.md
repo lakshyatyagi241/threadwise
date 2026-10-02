@@ -124,17 +124,17 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-002 | in-progress |  | guard + first route done; applies to every later bridge-facing route |
 | TW-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
 | TW-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
-| TW-NODE-005 | in-progress |  | in-memory registry becomes Redis device leases (with 011) and BullMQ jobs (030); no boot sync |
-| TW-NODE-006 | in-progress |  | enableShutdownHooks exists in api and worker; lease release lands with 011 |
-| TW-NODE-007 | todo |  |  |
-| TW-NODE-008 | todo |  |  |
-| TW-NODE-009 | todo |  |  |
-| TW-NODE-010 | todo |  |  |
-| TW-NODE-011 | todo |  |  |
-| TW-NODE-012 | todo |  |  |
-| TW-NODE-013 | todo |  |  |
-| TW-NODE-014 | todo |  |  |
-| TW-NODE-015 | todo |  |  |
+| TW-NODE-005 | backend-done |  | registry is a per-worker map plus a Redis lease per device; no in-memory schedules or boot sync; shutdown releases leases |
+| TW-NODE-006 | backend-done |  | shutdown closes connections and releases leases, keeps sessions, never unlinks; enableShutdownHooks already on |
+| TW-NODE-007 | backend-done |  | restore at boot and every pass: devices with a saved session (3+ rows) and no owner are opened, staggered; thin sessions reported Disconnected; also the failover when a worker dies |
+| TW-NODE-008 | backend-done |  | DeviceControlService.requestQr: command to the owning worker, QR within 35 s, 429-style busy lock, already-linked answer; the Devices screens (WADEV) call it |
+| TW-NODE-009 | backend-done |  | pairing code command: same code for 2 minutes, short numbers refused with Pairing failed status; the library generates the code |
+| TW-NODE-010 | in-progress |  | status read and terminate done; check-connection not ported (destructive GET, intended); contact export blocked on MOB (Baileys 6.7 has no store) |
+| TW-NODE-011 | backend-done |  | state machine with the full close-code table, backoff, QR stall, mismatch, watchdog (tested with a fake socket); Baileys adapter compiles against the library; NOT verified against live WhatsApp |
+| TW-NODE-012 | backend-done |  | status goes to devices.status (same buckets as Reference), an outbox event device.status_changed and Redis for the QR and progress |
+| TW-NODE-013 | backend-done |  | per-device proxy (http, socks5) read at every connect, probed through the proxy, fail-closed, result kept on the device; NOT verified against a real proxy |
+| TW-NODE-014 | backend-done |  | liveness: owner touches last_seen_at, a device untouched for 90 s flips to disconnected; the other sweeps belong to their own domains as BullMQ jobs |
+| TW-NODE-015 | blocked |  | campaign drain loop belongs to CAMP (Punya's campaigns run on BullMQ) |
 | TW-NODE-016 | todo |  |  |
 | TW-NODE-017 | todo |  |  |
 | TW-NODE-018 | todo |  |  |
