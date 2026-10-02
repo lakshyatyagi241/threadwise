@@ -21,6 +21,7 @@ import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
+import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { CrmModule } from './modules/crm';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PartnerModule } from './modules/partner/partner.module';
@@ -96,6 +97,7 @@ import { HealthModule } from './health/health.module';
     KernelModule,
     AuthModule,
     PlansModule,
+    AiKeysUsageAdminModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,

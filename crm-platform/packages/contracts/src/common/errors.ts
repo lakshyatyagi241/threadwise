@@ -102,6 +102,12 @@ export const ERROR_CODES = {
   CON_ATTRIBUTE_KEY_RESERVED: 'CON_ATTRIBUTE_KEY_RESERVED',
   CON_ATTRIBUTE_IN_USE: 'CON_ATTRIBUTE_IN_USE',
   CON_MERGE_SCOPE_REQUIRED: 'CON_MERGE_SCOPE_REQUIRED',
+
+  // AI provider keys and token metering (WD-AIADM)
+  /** Activating a provider that has no readable key. */
+  AIADM_KEY_REQUIRED: 'AIADM_KEY_REQUIRED',
+  /** No key (own or platform) is available for the provider a call asked for. */
+  AIADM_NO_KEY_AVAILABLE: 'AIADM_NO_KEY_AVAILABLE',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
