@@ -12,6 +12,8 @@ import { WabaCommerceSender } from './_shims/waba-commerce-sender';
 import { EcomPublicController } from './ecom-public.controller';
 import { AutomationsController } from './automations.controller';
 import { AutomationsService } from './automations.service';
+import { BroadcastController } from './broadcast.controller';
+import { BroadcastService } from './broadcast.service';
 import { CartRepository } from './cart.repository';
 import { CartService } from './cart.service';
 import { CodRepository } from './cod.repository';
@@ -27,6 +29,7 @@ import { ShopifyController } from './shopify.controller';
 import { ShopifyService } from './shopify.service';
 import { StoresRepository } from './stores.repository';
 import { WoocommerceController } from './woocommerce.controller';
+import { SegmentsRepository } from './segments.repository';
 import { StockRepository } from './stock.repository';
 import { StockService } from './stock.service';
 import { WebhookPipelineService } from './webhook-pipeline.service';
@@ -47,6 +50,7 @@ import { WoocommerceService } from './woocommerce.service';
     EcomPublicController,
     EcomWebhookController,
     AutomationsController,
+    BroadcastController,
   ],
   providers: [
     CryptoService,
@@ -62,6 +66,8 @@ import { WoocommerceService } from './woocommerce.service';
     CodService,
     CartRepository,
     CartService,
+    SegmentsRepository,
+    BroadcastService,
     StockRepository,
     StockService,
     MirrorRepository,
