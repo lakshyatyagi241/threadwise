@@ -7,6 +7,7 @@ import type { WabaHealth } from '@crm/contracts';
 import { Alert, Badge, Button, Card, Field, PasswordInput, Spinner, StatTile } from '@crm/ui';
 import { useHealth, useRenewToken, useResubscribe, useSetToken } from '../api/hooks';
 import { metaManagerUrl, qualityTone, tierLabel } from '../lib/display';
+import { BusinessProfileCard } from './business-profile-card';
 import { InboundBadge } from './inbound-badge';
 import { useErrorText } from './use-error-text';
 
@@ -59,6 +60,7 @@ export function HealthScreen({ id }: { id: string }) {
 
   const h: WabaHealth = q.data;
   const c = h.connection;
+  const d = h.details;
   const o = OVERALL[h.overall];
   const tier = tierLabel(c.messagingLimitTier);
   const quality = c.qualityRating?.toUpperCase() ?? null;
@@ -213,6 +215,90 @@ export function HealthScreen({ id }: { id: string }) {
           </form>
         </Card>
 
+        <Card className="p-4">
+          <h3 className="mb-2 font-semibold">{t('businessCard')}</h3>
+          {d.waba ? (
+            <dl className="divide-y divide-border">
+              <Row label={t('wabaName')}>{d.waba.name ?? none}</Row>
+              <Row label={t('accountReview')}>{d.waba.accountReviewStatus ?? none}</Row>
+              <Row label={t('businessVerification')}>
+                {d.waba.businessVerificationStatus?.replace(/_/g, ' ') ?? none}
+              </Row>
+              <Row label={t('ownerBusiness')}>{d.waba.ownerBusinessName ?? none}</Row>
+              <Row label={t('currency')}>{d.waba.currency ?? none}</Row>
+              <Row label={t('timezone')}>{d.waba.timezoneId ?? none}</Row>
+              <Row label={t('ownership')}>{d.waba.ownershipType ?? none}</Row>
+            </dl>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t('notRead')}</p>
+          )}
+        </Card>
+
+        <Card className="p-4">
+          <h3 className="mb-2 font-semibold">{t('tokenCard')}</h3>
+          <dl className="divide-y divide-border">
+            <Row label={t('tokenValid')}>
+              {d.token.valid === null ? t('tokenUnknown') : d.token.valid ? t('yes') : t('no')}
+            </Row>
+            <Row label={t('tokenApp')}>{d.token.appId ?? none}</Row>
+            <Row label={t('tokenScopes')}>
+              {d.token.scopes.length ? (
+                <span className="flex flex-wrap justify-end gap-1">
+                  {d.token.scopes
+                    .filter((x) => x.startsWith('whatsapp'))
+                    .map((x) => (
+                      <Badge key={x} tone="neutral">
+                        {x.replace('whatsapp_business_', '')}
+                      </Badge>
+                    ))}
+                </span>
+              ) : (
+                t('noScopes')
+              )}
+            </Row>
+          </dl>
+        </Card>
+
+        <Card className="p-4">
+          <h3 className="mb-2 font-semibold">{t('templatesCard')}</h3>
+          {d.templates ? (
+            <div className="flex flex-wrap gap-2 text-sm">
+              <Badge tone="neutral">{t('templatesSampled', { count: d.templates.sampled })}</Badge>
+              {Object.entries(d.templates.byStatus).map(([status, n]) => (
+                <Badge
+                  key={status}
+                  tone={
+                    status === 'APPROVED' ? 'success' : status === 'REJECTED' ? 'danger' : 'warning'
+                  }
+                >
+                  {status.toLowerCase()} {n}
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t('notRead')}</p>
+          )}
+        </Card>
+
+        <Card className="p-4">
+          <h3 className="mb-2 font-semibold">{t('phoneMore')}</h3>
+          <dl className="divide-y divide-border">
+            <Row label={t('accountMode')}>{d.phone.accountMode ?? none}</Row>
+            <Row label={t('officialBusiness')}>
+              {d.phone.isOfficialBusinessAccount === null
+                ? none
+                : d.phone.isOfficialBusinessAccount
+                  ? t('yes')
+                  : t('no')}
+            </Row>
+            <Row label={t('twoStepPin')}>
+              {d.phone.isPinEnabled === null ? none : d.phone.isPinEnabled ? t('yes') : t('no')}
+            </Row>
+          </dl>
+        </Card>
+
+        <BusinessProfileCard id={id} />
+
         <Card className="p-4 md:col-span-2">
           <h3 className="mb-2 font-semibold">{t('deliveryCard')}</h3>
           <dl className="grid gap-x-8 sm:grid-cols-2">
@@ -240,6 +326,13 @@ export function HealthScreen({ id }: { id: string }) {
                 </Button>
               </span>
             </Row>
+            <Row label={t('subscribedApps')}>
+              {d.webhook
+                ? d.webhook.subscribedApps.length
+                  ? d.webhook.subscribedApps.join(', ')
+                  : t('noApps')
+                : none}
+            </Row>
             <Row label={t('phoneId')}>
               <span className="font-mono text-xs" dir="ltr">
                 {c.phoneNumberId ?? none}
@@ -258,6 +351,18 @@ export function HealthScreen({ id }: { id: string }) {
           </dl>
         </Card>
       </div>
+      {d.errors.length > 0 && (
+        <section aria-labelledby="waba-read-errors">
+          <h2 id="waba-read-errors" className="mb-2 text-lg font-semibold">
+            {t('readErrors')}
+          </h2>
+          <ul className="list-disc space-y-1 ps-5 text-sm text-muted-foreground">
+            {d.errors.map((e) => (
+              <li key={e}>{e}</li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

@@ -188,7 +188,32 @@
       "renew": "Renew token",
       "tokenSaved": "Token saved.",
       "tokenRenewed": "Token renewed.",
-      "fixInbound": "Fix inbound"
+      "fixInbound": "Fix inbound",
+      "businessCard": "Business account",
+      "wabaName": "WABA name",
+      "accountReview": "Account review",
+      "businessVerification": "Business verification",
+      "ownerBusiness": "Owner business",
+      "currency": "Currency",
+      "timezone": "Timezone id",
+      "ownership": "Ownership",
+      "notRead": "Could not be read from Meta.",
+      "tokenCard": "Token diagnostics",
+      "tokenValid": "Token valid",
+      "tokenApp": "App",
+      "tokenScopes": "WhatsApp permissions",
+      "noScopes": "No permissions reported",
+      "yes": "Yes",
+      "no": "No",
+      "templatesCard": "Templates",
+      "templatesSampled": "{count} read",
+      "phoneMore": "Phone details",
+      "accountMode": "Account mode",
+      "officialBusiness": "Official business account",
+      "twoStepPin": "Two-step PIN",
+      "subscribedApps": "Subscribed apps",
+      "noApps": "None",
+      "readErrors": "Could not read some data from Meta"
     },
     "errors": {
       "generic": "Something went wrong. Try again.",
@@ -202,6 +227,24 @@
       "WABA_NO_CREDENTIALS": "No access token is stored for this number. Replace the token on its health page.",
       "WABA_PROVIDER_UNAVAILABLE": "Meta could not be reached. Try again in a moment.",
       "FORBIDDEN": "You do not have permission to do this."
+    },
+    "profile": {
+      "title": "Business profile",
+      "loading": "Loading the profile…",
+      "about": "About",
+      "aboutHint": "Shown under the name in the chat header (1–139 characters).",
+      "aboutRequired": "About is required",
+      "description": "Description",
+      "address": "Address",
+      "email": "Email",
+      "website1": "Website",
+      "website2": "Second website",
+      "websiteScheme": "Websites must start with http:// or https://",
+      "vertical": "Industry",
+      "verticalNone": "Not set",
+      "save": "Save profile",
+      "saving": "Saving…",
+      "saved": "Profile saved."
     }
   }
 }

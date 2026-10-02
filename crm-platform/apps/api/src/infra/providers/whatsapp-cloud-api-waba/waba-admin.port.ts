@@ -67,6 +67,17 @@ export interface BusinessProfile {
   vertical: string | null;
 }
 
+/** The WhatsApp Business Account node (WD-WABA-021). Every field is optional: Meta fails the whole read for one unreadable field. */
+export interface WabaDetails {
+  name: string | null;
+  currency: string | null;
+  timezoneId: string | null;
+  accountReviewStatus: string | null;
+  businessVerificationStatus: string | null;
+  ownerBusinessName: string | null;
+  ownershipType: string | null;
+}
+
 export interface PlatformReadiness {
   /** App id, secret and (for Embedded Signup) config id are set. */
   embeddedSignupReady: boolean;
@@ -120,6 +131,10 @@ export interface WabaAdminPort {
   verifyInboundWired(conn: WabaConnection, expectedUrl: string): Promise<boolean | null>;
 
   getBusinessProfile(conn: WabaConnection): Promise<BusinessProfile>;
+  /** The WABA node, rich field set first and a safe subset if Meta rejects it. */
+  getWabaDetails(conn: WabaConnection): Promise<WabaDetails>;
+  /** Names of the apps subscribed to this WABA's webhooks. */
+  getSubscribedApps(conn: WabaConnection): Promise<string[]>;
   updateBusinessProfile(
     conn: WabaConnection,
     patch: Partial<BusinessProfile> & { profilePictureHandle?: string },

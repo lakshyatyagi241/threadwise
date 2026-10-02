@@ -185,6 +185,41 @@ export const wabaHealthSchema = z.object({
   /** The token with its middle masked; never the token. Null when none is stored. */
   tokenHint: z.string().nullable(),
   checkedAt: z.string().datetime(),
+  /** What the other Meta reads found. Each part is independent: one failing read leaves the rest and adds to `errors`. */
+  details: z.object({
+    waba: z
+      .object({
+        name: z.string().nullable(),
+        currency: z.string().nullable(),
+        timezoneId: z.string().nullable(),
+        accountReviewStatus: z.string().nullable(),
+        businessVerificationStatus: z.string().nullable(),
+        ownerBusinessName: z.string().nullable(),
+        ownershipType: z.string().nullable(),
+      })
+      .nullable(),
+    token: z.object({
+      /** null = Meta could not be asked (no app credentials on the platform). */
+      valid: z.boolean().nullable(),
+      scopes: z.array(z.string()),
+      expiresAt: z.string().datetime().nullable(),
+      appId: z.string().nullable(),
+    }),
+    webhook: z.object({ subscribedApps: z.array(z.string()) }).nullable(),
+    templates: z
+      .object({
+        /** Counted over the first 100 only (WaDesk counts the first 200): a tally, not an inventory. */
+        sampled: z.number().int(),
+        byStatus: z.record(z.number().int()),
+      })
+      .nullable(),
+    phone: z.object({
+      accountMode: z.string().nullable(),
+      isOfficialBusinessAccount: z.boolean().nullable(),
+      isPinEnabled: z.boolean().nullable(),
+    }),
+    errors: z.array(z.string()),
+  }),
 });
 export type WabaHealth = z.infer<typeof wabaHealthSchema>;
 

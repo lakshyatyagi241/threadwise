@@ -10,6 +10,7 @@ import {
   type TokenInspection,
   type WabaAdminPort,
   type WabaConnection,
+  type WabaDetails,
 } from './waba-admin.port';
 import { WabaApiError } from './waba-errors';
 import { WabaHttp, type WabaAuth } from './waba-http';
@@ -455,6 +456,53 @@ export class WabaAdminClient implements WabaAdminPort {
       );
       return null;
     }
+  }
+
+  async getWabaDetails(conn: WabaConnection): Promise<WabaDetails> {
+    const auth = authOf(conn);
+    const rich =
+      'name,currency,timezone_id,account_review_status,business_verification_status,ownership_type,owner_business_info{id,name}';
+    const safe = 'name,currency,timezone_id,account_review_status';
+    const read = async (fields: string) =>
+      this.http.call<{
+        name?: string;
+        currency?: string;
+        timezone_id?: string;
+        account_review_status?: string;
+        business_verification_status?: string;
+        ownership_type?: string;
+        owner_business_info?: { name?: string };
+      }>(auth, { method: 'GET', path: `/${conn.wabaId}`, query: { fields }, timeoutMs: 12_000 });
+    let r;
+    try {
+      r = await read(rich);
+    } catch (e) {
+      // One unreadable field fails the whole request: retry with the subset that always reads.
+      if (asApiError(e).status === 0) throw e;
+      r = await read(safe);
+    }
+    return {
+      name: r.name ?? null,
+      currency: r.currency ?? null,
+      timezoneId: r.timezone_id ?? null,
+      accountReviewStatus: r.account_review_status ?? null,
+      businessVerificationStatus: r.business_verification_status ?? null,
+      ownerBusinessName: r.owner_business_info?.name ?? null,
+      ownershipType: r.ownership_type ?? null,
+    };
+  }
+
+  async getSubscribedApps(conn: WabaConnection): Promise<string[]> {
+    const res = await this.http.call<{
+      data?: Array<{ whatsapp_business_api_data?: { id?: string; name?: string; link?: string } }>;
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}/subscribed_apps`,
+      timeoutMs: 12_000,
+    });
+    return (res.data ?? []).map(
+      (d) => d.whatsapp_business_api_data?.name ?? d.whatsapp_business_api_data?.id ?? 'app',
+    );
   }
 
   // --- business profile --------------------------------------------------------------------------------------------

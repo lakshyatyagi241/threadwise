@@ -15,6 +15,7 @@ import {
   type WabaHealth,
   type WabaReadiness,
 } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -36,6 +37,7 @@ import {
 } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import type { WabaProviderKind } from '../../infra/providers/whatsapp-cloud-api-waba/waba-http';
 import { toDto } from './waba-connections.mapper';
+import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConnectionsRepository, type WabaRow } from './waba-connections.repository';
 import {
   cleanPin,
@@ -58,6 +60,15 @@ interface StoredCredentials {
   app_secret?: string;
   /** The two-step PIN that registered the number; never returned by the API. */
   register_pin?: string;
+}
+
+/** What `resolveConnection` returns. */
+export interface ResolvedWabaConnection {
+  id: number;
+  uuid: string;
+  status: string;
+  label: string | null;
+  conn: WabaConnection | null;
 }
 
 const UNIQUE_VIOLATION = '23505';
@@ -83,6 +94,7 @@ export class WabaConnectService {
     private readonly config: ConfigService<Env, true>,
     @Inject(WABA_ENV) private readonly env: WabaEnv,
     @Inject(WABA_ADMIN) private readonly admin: WabaAdminPort,
+    private readonly healthDetails: WabaHealthDetailsService,
   ) {}
 
   // --- reading -----------------------------------------------------------------------------------------------------
@@ -582,24 +594,36 @@ export class WabaConnectService {
   /** Live read of the number from Meta plus the issues that follow from it (WD-WABA-021, 022). */
   async health(uuid: string): Promise<WabaHealth> {
     let row = await this.require(uuid);
-    const meta = row.meta_json ?? {};
     const creds = this.creds(row);
     let liveReadFailed = false;
     let liveReadError: string | null = null;
     const tryConn = this.tryConn(row);
+    let phoneExtra = { accountMode: null, isOfficialBusinessAccount: null, isPinEnabled: null } as {
+      accountMode: string | null;
+      isOfficialBusinessAccount: boolean | null;
+      isPinEnabled: boolean | null;
+    };
+    let extra: Awaited<ReturnType<WabaHealthDetailsService['collect']>> | null = null;
     if (tryConn && row.status !== 'disconnected') {
       try {
         const phone = await this.admin.getPhone(authFor(tryConn), tryConn.phoneNumberId);
+        phoneExtra = {
+          accountMode: phone.accountMode,
+          isOfficialBusinessAccount: phone.isOfficialBusinessAccount,
+          isPinEnabled: phone.isPinEnabled,
+        };
         row = await this.touch(row, phoneMeta(phone), 'health', {
           lastHealthAt: new Date(),
           phoneNumber: phone.displayPhoneNumber ?? row.phone_number,
         });
+        // The other nodes only make sense when the token reached the phone; they run in parallel and never fail the page.
+        extra = await this.healthDetails.collect(tryConn, phoneExtra);
       } catch (e) {
         liveReadFailed = true;
         liveReadError = translateConnectError(asApiError(e));
       }
     }
-    const m = row.meta_json ?? meta;
+    const m = row.meta_json ?? {};
     const { overall, issues } = deriveHealth(
       {
         status: row.status,
@@ -613,6 +637,7 @@ export class WabaConnectService {
         inboundWired: typeof m.inbound_wired === 'boolean' ? m.inbound_wired : null,
         liveReadFailed,
         liveReadError,
+        ...(extra?.facts ?? {}),
       },
       new Date(),
     );
@@ -622,6 +647,14 @@ export class WabaConnectService {
       issues,
       tokenHint: maskToken(creds?.access_token),
       checkedAt: new Date().toISOString(),
+      details: extra?.details ?? {
+        waba: null,
+        token: { valid: null, scopes: [], expiresAt: null, appId: null },
+        webhook: null,
+        templates: null,
+        phone: phoneExtra,
+        errors: liveReadError ? [liveReadError] : [],
+      },
     };
   }
 
@@ -653,6 +686,31 @@ export class WabaConnectService {
       }),
     );
     return this.admin.getBusinessProfile(conn);
+  }
+
+  /**
+   * The decrypted provider connection of a stored number, for other domains that call Meta on its behalf (message templates).
+   * Reads inside the caller's transaction; the Meta call itself must happen outside it. `null` when the number does not exist
+   * in this organization; `conn` is null when it has no usable credentials.
+   */
+  async resolveConnection(
+    tx: Tx,
+    orgId: number,
+    ref: { uuid: string } | { id: number },
+  ): Promise<ResolvedWabaConnection | null> {
+    const row =
+      'uuid' in ref
+        ? await this.repo.findByUuid(tx, orgId, ref.uuid)
+        : await this.repo.findById(tx, orgId, ref.id);
+    if (!row) return null;
+    const conn = this.tryConn(row);
+    return {
+      id: row.id,
+      uuid: row.uuid,
+      status: row.status,
+      label: row.display_label ?? row.phone_number,
+      conn: conn && (conn.accessToken || conn.authKey) ? conn : null,
+    };
   }
 
   // --- internals ---------------------------------------------------------------------------------------------------
