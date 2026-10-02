@@ -50,6 +50,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  {
+    id: 'payment-gateways',
+    href: '/admin/payment-gateways',
+    labelKey: 'platform-payment-gateways.nav.gateways',
+    groupKey: 'platform-payment-gateways.nav.group',
+  },
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */

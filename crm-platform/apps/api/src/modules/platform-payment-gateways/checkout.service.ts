@@ -54,6 +54,7 @@ interface Priced {
   itemName: string;
   itemSubtitle: string | null;
   period: 'monthly' | 'yearly';
+  periods: Array<'monthly' | 'yearly'>;
   currency: string;
   available: string[];
   gateways: GatewayRow[];
@@ -221,6 +222,10 @@ export class CheckoutService {
       itemName: plan.name,
       itemSubtitle: plan.subtitle,
       period,
+      periods: [
+        ...(plan.billingUnit === 'years' ? [] : (['monthly'] as const)),
+        ...(billingPeriodFor(plan, 'yearly', s.yearlyToggleEnabled) === 'yearly' ? (['yearly'] as const) : []),
+      ],
       currency,
       available: list,
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
@@ -268,6 +273,7 @@ export class CheckoutService {
       itemName: 'Wallet top-up',
       itemSubtitle: null,
       period: 'monthly',
+      periods: ['monthly'],
       currency,
       available: list,
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
@@ -283,6 +289,7 @@ export class CheckoutService {
       itemName: p.itemName,
       itemSubtitle: p.itemSubtitle,
       billingPeriod: p.period,
+      periods: p.periods,
       currency: p.currency,
       availableCurrencies: p.available,
       subtotal: p.parts.subtotal,
