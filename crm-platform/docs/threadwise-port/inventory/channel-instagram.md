@@ -109,7 +109,7 @@ flow-runtime-engine (flows of type `instagram`), auto-reply-keywords (Instagram 
 - **Summary:** `POST /api/instaflow/inbound` (no session, outside the auth group). The header `X-Instaflow-Secret` is compared in constant time with the stored secret (empty stored secret or mismatch is 401 `unauthorized`). Body: `event` (`message`, `status`, `conversation`), `workspace_id`, optional `account`, `conversation`, `message`. A valid push sets `instaflow_connected = 1` and `instaflow_last_inbound = now` (the link is proven live). An unknown workspace is 422 `unknown workspace`. Only `message` events store anything; the other two are acknowledged (`received`). A store failure is 500 `store_failed`. Success returns `message_id` and `conversation_id`.
 - **Rules & edge cases:** the shared secret is the only authentication; the workspace id comes from the sender (a bridge that holds the secret can write to any workspace, as in Reference).
 - **Source refs:** `Api/InstaflowInboundController`, `routes/api.php`.
-- **Port notes:** rate limit and body size limit added at the edge; the secret is read from the encrypted setting saved by TW-ADD-017.
+- **Port notes:** public route `POST /v2/instaflow/inbound`; the secret is the encrypted platform secret saved by TW-ADD-017, compared as digests in constant time.
 
 ### TW-IG-008 — Ingest one message: thread, dedup, preview, window, unread, contact, buttons
 
@@ -184,7 +184,7 @@ flow-runtime-engine (flows of type `instagram`), auto-reply-keywords (Instagram 
 ### TW-IG-018 — Import an Instaflow flow, push a flow, flow hand-off on a keyword
 
 - **Status:** blocked (flow-runtime-engine, flow-builder-editor). **Priority:** P1. **Effort:** L.
-- **Summary:** `GET /flows/import-ig/{igId}` fetches the bridge flow with its graph and stores or updates a Reference flow keyed by `instaflow_flow_id`; saving a Reference Instagram flow pushes it (`POST /flows`, keyed by the Reference flow id, with trigger kind and keywords and the published flag); a published flow whose keywords match an inbound DM is handed to the runtime. Column `flows.instaflow_flow_id` exists in the port schema.
+- **Summary:** `GET /flows/import-ig/{igId}` fetches the bridge flow with its graph and stores or updates a Reference flow keyed by `instaflow_flow_id`; saving a Reference Instagram flow pushes it (`POST /flows`, keyed by the Reference flow id, with trigger kind and keywords and the published flag); Column `flows.instaflow_flow_id` exists in the port schema. Reference's hand-off of an inbound DM to a keyword flow runs only in the native add-on (`instagram_enabled`); with the engine, the engine runs flows itself, so that hand-off belongs to TW-IG-020.
 - **Source refs:** `FlowsController::importIgFlow` and the push on save, `InstaflowClient::flow`, `pushFlow`, `InstaflowIngestService::resolveIgKeywordFlow`.
 
 ### TW-IG-019 — Instagram templates: pull from the bridge, push to it

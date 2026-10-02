@@ -19,3 +19,16 @@ under Add-ons; while it is not connected the hub answers `bridge.connected = fal
 
 After the sign-in popup the engine tells the opener `threadwise:instagram-connected` with `account_id` (or sends a window with no opener
 to `{WEB_APP_URL}/instagram?ig_account=<id>`); the client then calls `POST /instagram/accounts` with that id.
+
+## Public route (TW-IG-007)
+
+| Method and path           | Proof                       | What                                                                                                                                                                                                                                                                                                                 |
+| ------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /instaflow/inbound` | header `X-Instaflow-Secret` | The engine's push. Body `{event: message\|status\|conversation, workspace_id, account?, conversation?, message?}`. 200 `{ok, message_id, conversation_id}` for a message, `{ok, received}` for the others; 401 `{ok:false, error:"unauthorized"}`; 422 `invalid payload` or `unknown workspace`; 500 `store_failed`. |
+
+Give the engine `{APP_URL}/v2/instaflow/inbound` as its push address. `message`: `{id, from_me, type, text, media_url, buttons[{title,url?}], at, ig_trigger, is_test, is_backfill, trace_id}`; `conversation`: `{id, name, handle, avatar}`; `account`: `{id, username, name, avatar}`.
+A message is stored once by its id (a push and a pull of the same message give one row). A test or history message is stored but makes no contact and runs no automation.
+
+## Pull (TW-IG-009)
+
+No route. A worker asks the engine every 20 seconds for each organization with a linked account (queue `ig-pull`, job id `ig-pull-<org>`): the threads of every linked account, then the messages of each thread with news, both directions. A pulled message older than 10 minutes is history (stored, never answered).
