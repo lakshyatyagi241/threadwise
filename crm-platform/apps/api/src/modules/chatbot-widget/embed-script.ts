@@ -1,3 +1,5 @@
+import { buildLauncherScript, type WidgetLauncher } from '@crm/contracts';
+
 /**
  * The loader a site pastes as `<script defer src=".../widget/<token>/embed">` (TW-WGT-008): it injects the floating
  * launcher and a hidden panel holding an iframe of the chat page.
@@ -8,6 +10,12 @@
 
 export interface EmbedWidget {
   uuid: string;
+  /** `whatsapp` widgets draw the messenger panel themselves (TW-WGT-028); `ai` and `both` open the chat page in a frame. */
+  mode: string;
+  name: string;
+  launcher: WidgetLauncher;
+  /** The `wa.me` link of the widget, or null when it has no number. */
+  whatsappUrl: string | null;
   position: string;
   buttonColor: string;
   buttonImageUrl: string | null;
@@ -43,6 +51,16 @@ const CHAT_GLYPH =
   "<svg viewBox='0 0 24 24' width='28' height='28' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'/></svg>";
 
 export function buildEmbedScript(w: EmbedWidget, chatUrl: string): string {
+  if (w.mode === 'whatsapp') {
+    // User-requested Interakt reference: the launcher opens a messenger panel whose button opens WhatsApp (TW-WGT-028).
+    return buildLauncherScript({
+      id: w.uuid,
+      name: w.name,
+      launcher: w.launcher,
+      whatsappUrl: w.whatsappUrl,
+      autoOpen: w.autoOpen,
+    });
+  }
   const side = w.position === 'bottom_left' ? 'left' : 'right';
   const colour = safeColour(w.buttonColor, DEFAULT_BUTTON_COLOUR);
   const image = safeHttpUrl(w.buttonImageUrl);

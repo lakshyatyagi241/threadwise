@@ -63,6 +63,7 @@ const stored: PlanAdminItem = {
     remove_branding: false,
     sales_pipeline: true,
     appointment_booking: true,
+    chatbot_widgets: false,
     inbox_sla: false,
     inbox_routing: true,
     inbox_kanban: true,

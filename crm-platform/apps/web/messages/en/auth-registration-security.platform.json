@@ -1428,6 +1428,7 @@
             "remove_branding": "White-label (removes platform branding)",
             "sales_pipeline": "Sales pipeline (deals and tasks)",
             "appointment_booking": "Appointments and booking pages",
+            "chatbot_widgets": "Website chatbot widgets",
             "inbox_sla": "Inbox SLA policies",
             "inbox_routing": "Inbox routing rules and business hours",
             "inbox_kanban": "Inbox Kanban board",

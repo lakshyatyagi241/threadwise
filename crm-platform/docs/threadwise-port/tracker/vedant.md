@@ -593,16 +593,16 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WGT-016 | done |  |  |
 | TW-WGT-017 | done |  |  |
 | TW-WGT-018 | done |  |  |
-| TW-WGT-019 | blocked |  | Widget side done (thread, hand-off, polling contract tested); inbox screens, reply path and mobile list belong to TIB1/MOB |
+| TW-WGT-019 | partial |  | Widget side done through the InboxGateway shim (SQL writes to the inbox tables; thread, contact, opening line in the legacy messages table, polling contract tested); Team Inbox screens, the agent reply path and the mobile list belong to TIB1/MOB |
 | TW-WGT-020 | done |  |  |
-| TW-WGT-021 | backend-done |  | allowedDomains API and CORS enforcement done; the builder has no control for it, as in Reference |
+| TW-WGT-021 | done |  | as Reference has it: allowedDomains API and CORS enforcement, no builder control (its docs promise one, the screen has none); blank entry 422 and the widget's own posts blocked are reproduced quirks |
 | TW-WGT-022 | done |  |  |
 | TW-WGT-023 | done |  |  |
 | TW-WGT-024 | done |  |  |
 | TW-WGT-025 | done |  |  |
-| TW-WGT-026 | done |  |  |
-| TW-WGT-027 | blocked |  | RBAC keys done; access_chatbot_widgets is not in the PLAN catalogue (open gate shim); widget limit unenforced as in Reference |
-| TW-WGT-028 | frontend-done |  | sidebar item done; More tile, quick access and command palette belong to the shell |
+| TW-WGT-026 | done |  | as Reference: nothing can pause a widget (no endpoint or action); status views inert |
+| TW-WGT-027 | done |  | RBAC keys plus the `chatbot_widgets` plan flag (catalogue + entitlement gate, 422 PLAN_FEATURE_LOCKED, paywall); widget limit unenforced and public routes ignore the plan, as Reference |
+| TW-WGT-028 | partial |  | sidebar item done; More tile, quick access and command palette belong to the shell. Also the user-requested Interakt WhatsApp builder page and launcher (accordion of five cards, live preview, panel with Start Conversation to wa.me), `chatbot_widgets.launcher` jsonb |
 | TW-WGT-029 | done |  |  |
 | TW-WGT-030 | wontfix |  | greenfield port: no legacy widget messages to backfill |
 

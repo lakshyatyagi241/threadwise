@@ -55,6 +55,8 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'sales_pipeline', group: 'advanced', default: true },
   // Booking types, appointments and the public booking pages (TW-APPT-001). Default true: Reference's column default.
   { key: 'appointment_booking', group: 'advanced', default: true },
+  // The website chatbot widget builder (TW-WGT-027). Default false: Reference's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
+  { key: 'chatbot_widgets', group: 'messaging', default: false },
   // Team inbox gates (plan-inbox-chat.md decision 11), with Reference's column defaults: SLA policies off, the other three on.
   { key: 'inbox_sla', group: 'messaging', default: false },
   { key: 'inbox_routing', group: 'messaging', default: true },
@@ -80,6 +82,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'remove_branding',
   'sales_pipeline',
   'appointment_booking',
+  'chatbot_widgets',
   'inbox_sla',
   'inbox_routing',
   'inbox_kanban',
