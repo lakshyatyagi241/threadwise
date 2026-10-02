@@ -1,0 +1,71 @@
+/** Two letters for an avatar: the first letters of the first and last word of the name. */
+export function initials(name: string): string {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return '?';
+  const first = [...words[0]!][0] ?? '?';
+  const last = words.length > 1 ? ([...words[words.length - 1]!][0] ?? '') : '';
+  return (first + last).toUpperCase();
+}
+
+/** Eight avatar colours; the same person always gets the same one. Whole class names, so the style scanner finds them. */
+export const AVATAR_COLORS = [
+  'bg-emerald-600',
+  'bg-sky-600',
+  'bg-violet-600',
+  'bg-amber-700',
+  'bg-rose-600',
+  'bg-teal-700',
+  'bg-indigo-600',
+  'bg-orange-700',
+] as const;
+
+export function avatarColor(id: string): (typeof AVATAR_COLORS)[number] {
+  let h = 0;
+  for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return AVATAR_COLORS[h % AVATAR_COLORS.length]!;
+}
+
+/** `B`, `KB`, `MB` with one decimal above a kilobyte. */
+export function humanSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+/** Local calendar day, the key of a day separator. */
+export function dayKey(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+
+export function formatDay(iso: string, locale: string): string {
+  return new Date(iso).toLocaleDateString(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+/** Today: `HH:MM`; another day: `Mon D, HH:MM` (WaDesk's rule). */
+export function formatStamp(iso: string, now: Date, locale: string): string {
+  const d = new Date(iso);
+  const time = d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+  if (dayKey(iso) === dayKey(now.toISOString())) return time;
+  return `${d.toLocaleDateString(locale, { month: 'short', day: 'numeric' })}, ${time}`;
+}
+
+/** The edit window of a message in minutes, shared with the API (15). */
+export const EDIT_WINDOW_MS = 15 * 60_000;
+export function canEditNow(createdAt: string, now: number): boolean {
+  return now - new Date(createdAt).getTime() <= EDIT_WINDOW_MS;
+}
+
+/** Keep following new messages only when the reader is already near the bottom (100 px). */
+export function nearBottom(scrollHeight: number, scrollTop: number, clientHeight: number): boolean {
+  return scrollHeight - scrollTop - clientHeight < 100;
+}
+
+/** Where the browser fetches an attachment: the web app's own route (inline for images, a download for the rest). */
+export function attachmentHref(messageId: string, name: string): string {
+  return `/team-chat/files/${messageId}?name=${encodeURIComponent(name)}`;
+}
