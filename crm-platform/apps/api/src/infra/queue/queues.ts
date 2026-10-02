@@ -28,6 +28,8 @@ export const QUEUES = {
   CON_IMPORT: 'con-import',
   /** One job per broadcast: sends its pending recipients (TW-BCAST-016). Own queue so a slow provider cannot hold campaigns. */
   BCAST_DISPATCH: 'bcast-dispatch',
+  /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (TW-TG-013). */
+  TG_BROADCAST: 'tg-broadcast',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
