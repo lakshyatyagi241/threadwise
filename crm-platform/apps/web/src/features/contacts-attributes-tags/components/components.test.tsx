@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -18,6 +19,8 @@ import {
 } from '../lib/sticky';
 import { ContactsGrid, ContactsTable, type ListHandlers } from './contacts-list';
 import { ContactsPagination } from './contacts-pagination';
+import { ContactsToolbar, type ContactsToolbarProps } from './contacts-toolbar';
+import { SlashTextarea } from './slash-picker';
 import { TagsEditor } from './tags-editor';
 
 const messages = JSON.parse(
@@ -357,5 +360,88 @@ describe('ContactsPagination', () => {
     const out = footer({ total: undefined, page: 1 });
     expect(out).toContain('>-<');
     expect(out).toMatch(/aria-label="Next page"/);
+  });
+});
+
+describe('ContactsToolbar', () => {
+  const noop = () => undefined;
+  const none = {
+    update: false,
+    delete: false,
+    export: false,
+    import: false,
+    merge: false,
+    createGroups: false,
+    createTags: false,
+  };
+  const toolbar = (can: Partial<ContactsToolbarProps['can']>) =>
+    html(
+      <QueryClientProvider client={new QueryClient()}>
+        <ContactsToolbar
+          q=""
+          onQ={noop}
+          segment=""
+          onSegment={noop}
+          stats={undefined}
+          groups={[]}
+          tag=""
+          onTag={noop}
+          tags={[]}
+          stage=""
+          onStage={noop}
+          stages={[]}
+          consent=""
+          onConsent={noop}
+          order="desc"
+          onOrder={noop}
+          selectedCount={0}
+          anySelected={false}
+          busy={false}
+          onClearSelection={noop}
+          onSendCampaign={noop}
+          can={{ ...none, ...can }}
+          exporting={false}
+          onExportAll={noop}
+          onExportSelected={noop}
+          onImport={noop}
+          onDedupe={noop}
+          onNewGroup={noop}
+          onDeleteSelected={noop}
+          picker={null}
+          onPicker={noop}
+          onGroup={async () => true}
+          onTagApply={async () => true}
+          allColumns={allColumns([])}
+          visibleIds={new Set<ColumnId>(['name'])}
+          onColumn={noop}
+          onResetColumns={noop}
+          view="list"
+          onView={noop}
+          onRefresh={noop}
+          refreshing={false}
+        />
+      </QueryClientProvider>,
+    );
+
+  it('a viewer, who can do none of the actions, gets no empty "More Actions" dropdown', () => {
+    expect(toolbar({})).not.toContain('More Actions');
+  });
+
+  it('shows "More Actions" as soon as one action is allowed', () => {
+    expect(toolbar({ export: true })).toContain('More Actions');
+    expect(toolbar({ delete: true })).toContain('More Actions');
+  });
+});
+
+describe('SlashTextarea', () => {
+  it('uses only ARIA attributes a textarea may carry (aria-expanded is not one: axe flags it as critical)', () => {
+    const markup = html(
+      <QueryClientProvider client={new QueryClient()}>
+        <SlashTextarea value="Hello /" onChange={() => undefined} label="Message" />
+      </QueryClientProvider>,
+    );
+    expect(markup).toContain('aria-label="Message"');
+    expect(markup).toContain('aria-autocomplete="list"');
+    expect(markup).not.toContain('aria-expanded');
   });
 });

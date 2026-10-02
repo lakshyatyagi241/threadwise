@@ -28,6 +28,14 @@ export const ERROR_KINDS = [
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
 
+/**
+ * Trying the same call again can only help when the failure was the network, the server or a limit that lifts: a plan that lacks
+ * the feature, a missing permission, a document that is not there or a sign-in that ended answer the same every time, so the
+ * panel does not offer the button for them.
+ */
+export const isRetryable = (kind: ErrorKind): boolean =>
+  kind === 'network' || kind === 'unavailable' || kind === 'rateLimited' || kind === 'unexpected';
+
 export function errorKind(error: unknown): ErrorKind {
   if (!(error instanceof ApiError)) return 'network';
   switch (error.code) {

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind, isRetryable, requestIdOf } from '../lib/errors';
 import { avatarColor, initials } from '../lib/format';
 import { todayKey, type DocStatus } from '../lib/status';
 import { ContactIcon } from './icons';
@@ -158,7 +158,7 @@ export function ErrorLine({
           {t('requestId')}: <span className="font-mono">{requestId}</span>
         </span>
       )}
-      {onRetry && (
+      {onRetry && isRetryable(kind) && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}
         </Button>

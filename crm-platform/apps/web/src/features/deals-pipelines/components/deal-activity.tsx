@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, Select, Spinner, Textarea, cn, useToast } from '@crm/ui';
+import { invalidateTasks } from '@/features/tasks';
 import { KEYS, useActivities } from '../api/hooks';
 import { dealsApi } from '../api/service';
 import type { Activity, Deal } from '../api/schemas';
@@ -40,6 +41,8 @@ export function DealActivity({ deal, canWrite }: { deal: Deal; canWrite: boolean
       setDue('');
       toast(t('added'), 'success');
       await qc.invalidateQueries({ queryKey: KEYS.activities(deal.id) });
+      // A timeline task is mirrored into the tasks list (D-14): the deal's task section and the Tasks screen follow.
+      if (type === 'task') await invalidateTasks(qc);
     } catch {
       toast(t('addFailed'), 'danger');
     } finally {
@@ -51,6 +54,7 @@ export function DealActivity({ deal, canWrite }: { deal: Deal; canWrite: boolean
     try {
       await dealsApi.setTaskDone(deal.id, a.id, !a.done);
       await qc.invalidateQueries({ queryKey: KEYS.activities(deal.id) });
+      await invalidateTasks(qc);
     } catch {
       toast(t('toggleFailed'), 'danger');
     }

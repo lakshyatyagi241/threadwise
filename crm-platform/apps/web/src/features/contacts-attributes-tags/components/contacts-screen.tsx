@@ -38,7 +38,7 @@ import {
 } from '../lib/columns';
 import { displayName } from '../lib/contact-model';
 import { downloadBlob } from '../lib/download';
-import { errorKind } from '../lib/errors';
+import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { clampPage, totalPages } from '../lib/pagination';
@@ -350,11 +350,25 @@ export function ContactsScreen() {
 
   async function onDeleteOne() {
     if (!deleteTarget) return;
-    const out = await guarded(() => deleteContact(deleteTarget.id).then(() => true as const));
-    setDeleteId(null);
-    if (!out) return;
-    await refresh();
-    toast(t('deleted'), 'success');
+    setBusy(true);
+    try {
+      await deleteContact(deleteTarget.id);
+      setDeleteId(null);
+      await refresh();
+      toast(t('deleted'), 'success');
+    } catch (e) {
+      setDeleteId(null);
+      const why = deleteFailure(e);
+      if (why === 'gone') {
+        // Deleted in another tab or by someone else: the list is stale, the contact is not "unavailable".
+        await refresh();
+        toast(t('alreadyDeleted'), 'info');
+      } else {
+        toast(tb(why), 'danger');
+      }
+    } finally {
+      setBusy(false);
+    }
   }
 
   const filtered = hasActiveFilter(filters);

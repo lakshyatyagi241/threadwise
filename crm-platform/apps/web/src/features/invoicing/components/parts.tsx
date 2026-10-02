@@ -7,7 +7,7 @@ import { Alert, Button, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import type { PaymentMethod } from '@crm/contracts';
 import { todayKey } from '../lib/dates';
-import { errorCode, errorKind, requestIdOf } from '../lib/errors';
+import { errorCode, errorKind, isRetryable, requestIdOf } from '../lib/errors';
 import { formatMoney } from '../lib/money';
 import { invoicingCan } from '../lib/permissions';
 import type { DisplayStatus } from '../lib/status';
@@ -163,7 +163,7 @@ export function ErrorLine({
           {t('requestId')}: <span className="font-mono">{requestId}</span>
         </span>
       )}
-      {onRetry && (
+      {onRetry && isRetryable(kind) && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}
         </Button>
