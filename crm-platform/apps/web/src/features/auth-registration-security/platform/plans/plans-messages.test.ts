@@ -70,6 +70,7 @@ describe('plan catalogue messages (operator console)', () => {
     const own = OPERATOR_NAV.filter((i) => i.labelKey.startsWith('auth-registration-security.'));
     for (const item of own) {
     // other domains label their own entries in their own message files
+    // entries merged in by other domains carry their own namespace and their own messages test
     for (const item of OPERATOR_NAV.filter((i) =>
       i.labelKey.startsWith('auth-registration-security.platform.'),
     )) {

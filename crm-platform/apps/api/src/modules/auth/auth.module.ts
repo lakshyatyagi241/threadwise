@@ -156,6 +156,9 @@ import { TokenService } from './token.service';
     PlatformSettingsService,
     // the sanctioned door to platform-wide tables, for other domains' platform catalogues (I18N)
     PlatformStore,
+    // the two sanctioned doors to platform-wide data, for the first-run setup (INST)
+    PlatformStore,
+    TenantDirectory,
     WebhookSecretRegistry,
     OtpTemplateService,
   ],
