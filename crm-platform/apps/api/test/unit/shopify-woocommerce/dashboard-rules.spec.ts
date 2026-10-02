@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   discountPct,
   paramCount,
+  templateEngine,
   trend14,
   wooDashboardCustomer,
   wooDashboardOrder,
@@ -9,6 +10,28 @@ import {
 } from '../../../src/modules/shopify-woocommerce/dashboard-rules';
 
 describe('the store dashboard rules (TW-ECOM-023)', () => {
+  it('names the engine of a template as Reference does, and refuses other channels', () => {
+    const t = (o: Partial<Parameters<typeof templateEngine>[0]>) =>
+      templateEngine({
+        channel: null,
+        twilioContentSid: null,
+        metaTemplateId: null,
+        providerConfigId: null,
+        ...o,
+      });
+    expect(t({ channel: 'waba' })).toBe('waba');
+    expect(t({ channel: 'twilio' })).toBe('twilio');
+    expect(t({ channel: 'baileys' })).toBe('baileys');
+    expect(t({ channel: 'instagram' })).toBeNull();
+    expect(t({ channel: 'telegram' })).toBeNull();
+    expect(t({ channel: 'whatsapp', metaTemplateId: 'm' })).toBe('waba');
+    expect(t({ channel: '' })).toBe('baileys');
+    expect(t({ twilioContentSid: 'HX1', metaTemplateId: 'm' })).toBe('twilio');
+    expect(t({ metaTemplateId: 'm' })).toBe('waba');
+    expect(t({ providerConfigId: 3 })).toBe('waba');
+    expect(t({})).toBe('baileys');
+  });
+
   it('rounds the discount off the compare-at price and gives 0 when there is none', () => {
     expect(discountPct(75, 100)).toBe(25);
     expect(discountPct(66.67, 100)).toBe(33);

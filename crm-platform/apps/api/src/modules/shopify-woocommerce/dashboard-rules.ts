@@ -21,6 +21,27 @@ const iso = (x: unknown): string | null => {
 export const discountPct = (price: number, compare: number | null): number =>
   compare !== null && compare > price && compare > 0 ? Math.round((1 - price / compare) * 100) : 0;
 
+const WHATSAPP_ENGINES = ['baileys', 'waba', 'twilio'];
+const OTHER_CHANNELS = ['instagram', 'facebook', 'telegram', 'line', 'wechat', 'viber'];
+
+/**
+ * The engine a template belongs to (Reference's `engineKey`): its channel when that names a WhatsApp engine, else (any other value or
+ * none) Twilio when it has a content sid, WABA when Meta or a provider account knows it, else the unofficial engine. Null for a template of another channel
+ * (Instagram, Facebook, Telegram, ...), which a WhatsApp automation cannot send.
+ */
+export function templateEngine(t: {
+  channel: string | null;
+  twilioContentSid: string | null;
+  metaTemplateId: string | null;
+  providerConfigId: unknown;
+}): string | null {
+  if (t.channel !== null && OTHER_CHANNELS.includes(t.channel)) return null;
+  if (t.channel !== null && WHATSAPP_ENGINES.includes(t.channel)) return t.channel;
+  if (t.twilioContentSid) return 'twilio';
+  if (t.metaTemplateId || t.providerConfigId) return 'waba';
+  return 'baileys';
+}
+
 /** How many numbered variables a template body declares (the highest `{{n}}`). */
 export function paramCount(body: string): number {
   let max = 0;
