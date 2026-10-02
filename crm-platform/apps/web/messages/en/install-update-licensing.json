@@ -1,93 +1,313 @@
 {
   "install-update-licensing": {
     "setup": {
-      "title": "Set up your platform",
-      "intro": "Create the platform owner and the first workspace. This page works once; afterwards it closes for good.",
+      "title": "Setup wizard",
+      "brand": "CRM",
+      "railEyebrow": "Setup wizard",
+      "railTitle": "Your <i>WhatsApp suite</i>, ready in minutes.",
+      "railFooter": "Platform installer · v{version}",
       "stepsLabel": "Setup steps",
+      "stepOf": "Step {n} of {total}",
+      "mobileStep": "Step {n}/{total} · {name}",
       "steps": {
-        "token": "Setup token",
-        "operator": "Platform owner",
-        "organization": "First workspace",
-        "review": "Review"
+        "welcome": "Welcome",
+        "requirements": "Requirements",
+        "database": "Database",
+        "application": "Application",
+        "admin": "Admin account",
+        "node": "Node bridge",
+        "install": "Install"
+      },
+      "screens": {
+        "licence": "Licence"
       },
       "disabled": "Setup is switched off because no setup token is configured on the server. Set SETUP_TOKEN, or create the first operator from the command line.",
-      "notReady": "The server is not ready for setup yet.",
-      "prerequisites": {
-        "database": "Database reachable",
-        "migrations": "Database migrations applied",
-        "permissions": "Permission definitions seeded"
+      "unavailable": "Could not read the setup status. Check that the API is running, then reload this page.",
+      "welcome": {
+        "eyebrow": "Welcome",
+        "title": "Let's get <i>{app}</i> running.",
+        "intro": "Seven simple steps, about three minutes total. We'll verify your server, check your database, confirm every default the admin console needs, link the Node bridge, and create your first super-admin login.",
+        "tiles": {
+          "database": "Database",
+          "security": "Security",
+          "translations": "Translations",
+          "admin": "Admin"
+        },
+        "beforeTitle": "Before you start",
+        "before": {
+          "database": "A PostgreSQL 16 database this deployment can reach, with its migrations applied.",
+          "runtime": "Node.js 22 or newer and Redis running next to the API.",
+          "token": "The setup token from your deployment configuration (SETUP_TOKEN)."
+        },
+        "tokenLabel": "Setup token",
+        "tokenHint": "Proves you control this deployment. It is checked again by every step.",
+        "begin": "Begin installation"
       },
-      "token": {
-        "label": "Setup token",
-        "hint": "The SETUP_TOKEN value from your deployment configuration."
+      "licence": {
+        "eyebrow": "Licence",
+        "title": "Verify your <i>purchase</i>.",
+        "intro": "Enter your CodeCanyon purchase code. We validate it with Envato before installing — installation can't continue without a valid code.",
+        "label": "Purchase code",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "Find it in your CodeCanyon account → <b>Downloads</b> → the <b>License certificate & purchase code</b>.",
+        "verified": "Purchase already verified — you can continue.",
+        "submit": "Verify & continue"
       },
-      "operator": {
+      "requirements": {
+        "eyebrow": "Step {n} of {total}",
+        "title": "Server <i>requirements</i>.",
+        "intro": "We're checking the host meets the minimum bar before installing.",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "— meets the {required}+ requirement",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "— {app} needs Node.js {required} or newer.",
+        "modules": "Runtime modules",
+        "services": "Services",
+        "directories": "Directories",
+        "database": "Database",
+        "noDatabase": "No database detected.",
+        "databaseRequired": "PostgreSQL is required.",
+        "extensionMissing": "Missing database extension: {name}.",
+        "tiles": {
+          "database": "database",
+          "redis": "redis",
+          "migrations": "migrations",
+          "permissions": "permissions",
+          "temp": "temp files",
+          "migrationsDir": "migrations"
+        },
+        "fixNotice": "Fix the items marked in coral before continuing. The Continue button stays disabled until everything passes.",
+        "recheck": "Check again",
+        "checking": "Checking…",
+        "loadFailed": "Could not run the requirements check."
+      },
+      "database": {
+        "eyebrow": "Step {n} of {total}",
+        "title": "Database <i>connection</i>.",
+        "intro": "Check the PostgreSQL database this platform runs on. We'll verify the connection before moving on.",
+        "driver": "Database driver",
+        "driverName": "PostgreSQL",
+        "host": "Host",
+        "port": "Port",
+        "name": "Database name",
+        "namePlaceholder": "crm",
+        "user": "Username",
+        "userPlaceholder": "postgres",
+        "password": "Password",
+        "passwordHint": "Leave blank to use this deployment's own password. The connection itself is set in the server's environment; this step only tests it.",
+        "test": "Test connection",
+        "testing": "Testing…",
+        "ok": "Connection successful.",
+        "unreachable": "Could not reach PostgreSQL over any route. Use the exact host your hosting panel shows, check the port, confirm the database and user exist and that the server accepts connections from this machine, then retry.",
+        "networkError": "Network error: {detail}"
+      },
+      "application": {
+        "eyebrow": "Step {n} of {total}",
+        "title": "Application <i>basics</i>.",
+        "intro": "Name your install, set the public URL, and pick a timezone + default language.",
+        "name": "Application name",
+        "url": "Application URL",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "Timezone",
+        "timezonePlaceholder": "Search timezones…",
+        "timezoneEmpty": "No timezones match.",
+        "locale": "Default language"
+      },
+      "admin": {
+        "eyebrow": "Step {n} of {total}",
+        "title": "Admin <i>account</i>.",
+        "intro": "Your first super-admin login + private workspace. Add teammates later from the console.",
         "fullName": "Full name",
+        "fullNamePlaceholder": "Vetrick R.",
         "email": "Email",
-        "emailHint": "This is the sign-in for the platform console.",
+        "emailPlaceholder": "you@yourdomain.com",
         "password": "Password",
         "confirm": "Confirm password",
-        "rulesLabel": "Password requirements",
-        "rules": {
-          "length": "At least 12 characters",
-          "upper": "An uppercase letter",
-          "lower": "A lowercase letter",
-          "number": "A number",
-          "symbol": "A symbol",
-          "personal": "Must not contain your name or email"
+        "workspace": "Workspace name",
+        "workspacePlaceholder": "My team",
+        "note": "Min. 12 chars with upper, lower, number and symbol · argon2id-hashed. This platform is multi-tenant — one private workspace ships pre-configured; rename it later in Workspaces. Your password is never stored in plain text, and it must be paired with two-factor sign-in at first login."
+      },
+      "node": {
+        "eyebrow": "Step {n} of {total}",
+        "title": "Node <i>bridge</i>.",
+        "intro": "WhatsApp is sent through a small Node service. Point the platform at it and set the shared token — the installer saves it for both sides.",
+        "url": "Node server URL",
+        "urlHint": "Where your Node bridge listens. The API calls this to send messages.",
+        "port": "Node port",
+        "portHint": "The port the Node bridge binds to.",
+        "token": "Node shared token",
+        "tokenHint": "Auto-filled. Must match in the API and the Node bridge — the installer saves it once, sealed.",
+        "generate": "Generate",
+        "info": "These are saved in the platform settings, not in .env files. The token is shared as NODE_WEBHOOK_TOKEN with the Node bridge.",
+        "submit": "Continue & install"
+      },
+      "install": {
+        "eyebrow": "Step {n} of {total}",
+        "title": "Installing <i>{app}</i>.",
+        "intro": "Sit tight — we're configuring everything. This usually takes a few seconds.",
+        "preparing": "Preparing…",
+        "complete": "Complete",
+        "failed": "Failed — see below",
+        "paused": "Installation paused",
+        "retry": "Retry from failed step",
+        "success": "Installation complete — redirecting…",
+        "rows": {
+          "configuration": {
+            "done": "Configuration saved",
+            "active": "Saving the application and Node bridge configuration…"
+          },
+          "migrations": {
+            "done": "Database migrations verified",
+            "active": "Checking database migrations…"
+          },
+          "defaults": {
+            "done": "Essential data verified",
+            "active": "Checking roles, permissions and defaults…"
+          },
+          "account": {
+            "done": "Admin + workspace ready",
+            "active": "Creating admin account and private workspace…"
+          },
+          "storage": {
+            "done": "Storage ready",
+            "active": "Checking storage and temporary directories…"
+          },
+          "finalize": {
+            "done": "Installation finalized",
+            "active": "Locking setup and recording the install…"
+          }
         }
-      },
-      "organization": {
-        "name": "Workspace name",
-        "slug": "Workspace address",
-        "slugHint": "Lowercase letters, numbers and hyphens. Used to sign in to the workspace.",
-        "timezone": "Time zone",
-        "locale": "Language"
-      },
-      "review": {
-        "intro": "Check these details, then create the platform.",
-        "mfaNote": "The platform owner must set up two-factor sign-in at first sign-in."
-      },
-      "done": {
-        "title": "Setup is complete",
-        "body": "{email} is the platform owner and {org} is ready.",
-        "mfaBadge": "Next",
-        "mfaNote": "Sign in to the console and enrol two-factor authentication.",
-        "console": "Open the platform console",
-        "workspace": "Open the workspace sign-in"
       },
       "completed": {
         "body": "Setup has already been completed on this deployment.",
         "login": "Go to sign-in"
       },
-      "show": "Show",
-      "hide": "Hide",
       "back": "Back",
       "continue": "Continue",
-      "verify": "Verify token",
-      "create": "Create platform",
+      "show": "Show",
+      "hide": "Hide",
       "working": "Working",
+      "problems": {
+        "token": "That setup token is not correct.",
+        "disabled": "Setup is disabled on this server.",
+        "outOfOrder": "A step ran out of order. Reload the page and start again.",
+        "step": "Installation step failed. Check your details and the server logs, then try again.",
+        "unknown": "Something went wrong. Try again.",
+        "requestId": "Request id {id}",
+        "prerequisites": "The server is not ready for setup: {items}.",
+        "licence": {
+          "empty": "Enter your CodeCanyon purchase code.",
+          "not_configured": "Licence check is not configured (missing Envato token).",
+          "unreachable": "Could not reach Envato to verify the code. Check the server's internet connection.",
+          "not_found": "Invalid purchase code — Envato has no sale for it.",
+          "http_error": "Envato verification failed.",
+          "other_product": "This purchase code is for a different product.",
+          "unknown": "The purchase code could not be verified."
+        },
+        "keys": {
+          "runtime": "Node.js version",
+          "database": "database",
+          "redis": "Redis",
+          "migrations": "database migrations",
+          "permissions": "permission definitions",
+          "temp": "temporary directory",
+          "storage": "storage",
+          "default": "{key}"
+        }
+      },
       "errors": {
-        "unexpected": "Something went wrong. Try again.",
-        "tokenWrong": "That setup token is not correct.",
-        "tokenLength": "The setup token is at least 32 characters.",
-        "slugTaken": "That workspace address is taken.",
-        "required": "This field is required.",
+        "tokenLength": "The setup token is at least {min} characters.",
+        "dbHost": "Enter the database host.",
+        "dbPort": "Enter a port between 1 and 65535.",
+        "dbName": "Enter the database name.",
+        "dbUser": "Enter the database username.",
+        "appNameRequired": "Enter the application name.",
+        "appNameLong": "The application name is at most {max} characters.",
+        "appUrl": "Enter a full URL starting with http:// or https://.",
+        "timezone": "Choose a timezone from the list.",
+        "locale": "Choose a language from the list.",
+        "fullNameRequired": "Enter your full name.",
+        "fullNameLong": "The full name is at most {max} characters.",
         "email": "Enter a valid email address.",
-        "passwordWeak": "The password does not meet the requirements.",
-        "passwordMismatch": "The passwords do not match.",
-        "orgName": "Enter a workspace name of at least 2 characters.",
-        "slug": "Use 3 to 40 lowercase letters, numbers or hyphens.",
-        "timezone": "Choose a valid time zone.",
-        "locale": "Choose a valid language."
+        "passwordMismatch": "The password confirmation does not match.",
+        "workspaceRequired": "Enter a workspace name of at least 2 characters.",
+        "workspaceLong": "The workspace name is at most {max} characters.",
+        "nodeUrl": "Enter the Node server URL, starting with http:// or https://.",
+        "nodePort": "Enter a port between 1 and 65535.",
+        "nodeToken": "The shared token is at least {min} characters.",
+        "password": {
+          "length": "The password needs at least 12 characters.",
+          "upper": "The password needs an uppercase letter.",
+          "lower": "The password needs a lowercase letter.",
+          "number": "The password needs a number.",
+          "symbol": "The password needs a symbol.",
+          "personal": "The password must not contain your name or email."
+        }
       }
     },
     "system": {
-      "nav": { "group": "System", "item": "System status" },
-      "title": "System status",
-      "description": "Version, database migrations and dependency health for this deployment. Read-only.",
-      "kicker": "System",
+      "nav": { "group": "System", "item": "Updater" },
+      "title": "Application updater",
+      "titleAccent": "updater",
+      "kicker": "Admin · Maintenance",
+      "description": "Verify your purchase and see exactly what this deployment is running. Updates ship as a new image and migrations run before it starts — your database, storage and uploads are never touched from this page.",
+      "crumbAdmin": "Admin",
+      "crumbSettings": "Settings",
+      "crumbUpdater": "Updater",
+      "version": "v{version} · build {build}",
+      "buildNone": "n/a",
+      "allSettings": "All settings",
+      "refresh": "Refresh",
+      "loading": "Loading",
+      "errorForbidden": "You cannot view this page.",
+      "errorUnexpected": "Could not load the updater.",
+      "requestId": "Request id",
+      "retry": "Try again",
+      "licence": {
+        "kicker": "step 1 · licence",
+        "title": "Verify your purchase",
+        "intro": "Enter your CodeCanyon purchase code. It is validated with Envato before any update can run.",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "Verify",
+        "verifying": "Verifying…",
+        "verified": "Purchase verified — you can proceed.",
+        "verifiedAt": "Verified {date}.",
+        "notVerified": "Not verified yet.",
+        "notEnabled": "This deployment does not enforce a purchase code, so there is nothing to verify here.",
+        "superAdminOnly": "Only a super admin can verify the purchase code.",
+        "reasons": {
+          "empty": "Enter your CodeCanyon purchase code.",
+          "not_configured": "Licence check is not configured (missing Envato token).",
+          "unreachable": "Could not reach Envato to verify the code. Check the server's internet connection.",
+          "not_found": "Invalid purchase code — Envato has no sale for it.",
+          "http_error": "Envato verification failed.",
+          "other_product": "This purchase code is for a different product.",
+          "unknown": "The purchase code could not be verified."
+        }
+      },
+      "process": {
+        "kicker": "update process",
+        "title": "Updates ship as an image",
+        "step2": {
+          "title": "Back up the database",
+          "body": "Take a database backup (pg_dump or point-in-time recovery) before deploying. Backups are an infrastructure job here, not a button."
+        },
+        "step3": {
+          "title": "Deploy the new image",
+          "body": "Roll out the new container image. The running version and build are shown below."
+        },
+        "step4": {
+          "title": "Run migrations",
+          "body": "pnpm db:migrate applies new tables and columns and never removes data. The ledger below lists every migration and its state."
+        },
+        "step5": {
+          "title": "Health check",
+          "body": "Dependencies are checked live below. Refresh this page after the deploy to confirm everything is up."
+        }
+      },
       "release": {
+        "kicker": "this deployment",
         "title": "Release",
         "version": "Version",
         "gitSha": "Build commit",
@@ -105,7 +325,8 @@
         "completedAt": "Completed {date} on version {version}"
       },
       "checks": {
-        "title": "Dependencies",
+        "kicker": "health",
+        "title": "Health check",
         "database": "Database",
         "redis": "Redis",
         "migrations": "Migrations",
@@ -115,6 +336,7 @@
         "latency": "{ms} ms"
       },
       "migrations": {
+        "kicker": "ledger",
         "title": "Migrations",
         "summary": "{count} applied",
         "status": {
@@ -132,13 +354,7 @@
         "id": "Migration",
         "stateLabel": "State",
         "appliedAt": "Applied at"
-      },
-      "refresh": "Refresh",
-      "loading": "Loading",
-      "errorForbidden": "You cannot view this page.",
-      "errorUnexpected": "Could not load the system status.",
-      "requestId": "Request id",
-      "retry": "Try again"
+      }
     }
   }
 }
