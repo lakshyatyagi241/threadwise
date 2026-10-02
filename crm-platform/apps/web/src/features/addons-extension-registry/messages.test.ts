@@ -46,14 +46,27 @@ describe('add-ons messages', () => {
         'limits',
         'form',
       ].map((f) => `addons-extension-registry.packs.editor.problems.${f}`),
-      ...['buy', 'active', 'buyAgain'].map((s) => `addons-extension-registry.workspace.state.${s}`),
+      ...['days', 'weeks', 'months', 'years'].map(
+        (u) => `addons-extension-registry.workspace.units.${u}`,
+      ),
+      ...['instagram', 'email'].flatMap((e) =>
+        [
+          'title',
+          'body',
+          'modalTitle',
+          'modalBody',
+          'url',
+          'disconnectTitle',
+          'disconnectBody',
+        ].map((k) => `addons-extension-registry.extensions.engines.${e}.${k}`),
+      ),
     ];
     for (const k of dynamic) expect(has(k), k).toBe(true);
   });
 
   it('uses only keys that exist in the components', () => {
     const dir = join(__dirname, 'components');
-    const src = ['packs-page', 'pack-editor', 'extensions-page', 'workspace-addons-page', 'ui']
+    const src = ['packs-page', 'pack-form-page', 'extensions-page', 'workspace-addons-page', 'ui']
       .map((f) => readFileSync(join(dir, `${f}.tsx`), 'utf8'))
       .join('\n');
     const namespaces = [...src.matchAll(/(?:const NS = |useTranslations\()['`]([\w.-]+)['`]/g)].map(
