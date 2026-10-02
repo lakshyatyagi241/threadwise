@@ -1,17 +1,17 @@
 {
   "shell": {
     "groups": {
-      "overview": "نظرة عامة",
+      "overview": "المنصة",
       "inbox": "الوارد والدردشة",
-      "audience": "الجمهور",
+      "audience": "العملاء والجمهور",
+      "sales": "المبيعات",
       "campaigns": "الحملات",
       "automation": "الأتمتة",
       "channels": "القنوات",
-      "sales": "المبيعات وCRM",
       "store": "المتجر",
       "developer": "المطوّرون",
-      "help": "المساعدة",
-      "settings": "الإعدادات"
+      "help": "الدعم والمساعدة",
+      "settings": "الإعدادات ومساحة العمل"
     },
     "locked": "ترقية",
     "soon": "قريبًا",
@@ -25,7 +25,6 @@
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة",
     "mainMenu": "القائمة الرئيسية",
-    "quickLinks": "روابط سريعة",
     "expandMenu": "إظهار التسميات",
     "collapseMenu": "إخفاء التسميات",
     "userMenu": "قائمة الحساب",
@@ -46,7 +45,6 @@
       "teamChat": "دردشة الفريق",
       "teamMembers": "أعضاء الفريق",
       "leadFinder": "الباحث عن العملاء",
-      "deals": "الصفقات",
       "campaigns": "الحملات",
       "broadcasts": "البث",
       "scheduled": "المجدولة",
@@ -73,7 +71,15 @@
       "webhooks": "الويب هوك",
       "support": "الدعم",
       "guidebook": "الدليل",
-      "activityLog": "سجل النشاط"
+      "activityLog": "سجل النشاط",
+      "pipelines": "مسارات المبيعات",
+      "tasks": "المهام",
+      "companies": "الشركات",
+      "emailTemplates": "قوالب البريد الإلكتروني",
+      "proposals": "العروض",
+      "estimates": "التقديرات",
+      "invoices": "الفواتير",
+      "payments": "المدفوعات"
     }
   }
 }

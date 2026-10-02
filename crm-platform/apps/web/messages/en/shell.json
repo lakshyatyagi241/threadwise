@@ -1,17 +1,17 @@
 {
   "shell": {
     "groups": {
-      "overview": "Overview",
+      "overview": "Platform",
       "inbox": "Inbox & Chat",
-      "audience": "Audience",
+      "audience": "CRM",
+      "sales": "Sales",
       "campaigns": "Campaigns",
       "automation": "Automation",
       "channels": "Channels",
-      "sales": "Sales & CRM",
       "store": "Store",
       "developer": "Developer",
-      "help": "Help",
-      "settings": "Settings"
+      "help": "Support & Help",
+      "settings": "Settings & Workspace"
     },
     "locked": "Upgrade",
     "language": "Language",
@@ -29,7 +29,6 @@
     "comingSoon": "Coming soon",
     "closeMenu": "Close menu",
     "mainMenu": "Main menu",
-    "quickLinks": "Quick links",
     "expandMenu": "Show labels",
     "collapseMenu": "Hide labels",
     "userMenu": "Account menu",
@@ -46,7 +45,6 @@
       "teamChat": "Team chat",
       "teamMembers": "Team members",
       "leadFinder": "Lead finder",
-      "deals": "Deals",
       "campaigns": "Campaigns",
       "broadcasts": "Broadcasts",
       "scheduled": "Scheduled",
@@ -73,7 +71,15 @@
       "webhooks": "Webhooks",
       "support": "Support",
       "guidebook": "Guidebook",
-      "activityLog": "Activity log"
+      "activityLog": "Activity log",
+      "pipelines": "Pipelines",
+      "tasks": "Tasks",
+      "companies": "Companies",
+      "emailTemplates": "Email templates",
+      "proposals": "Proposals",
+      "estimates": "Estimates",
+      "invoices": "Invoices",
+      "payments": "Payments"
     }
   }
 }

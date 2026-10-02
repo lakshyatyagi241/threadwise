@@ -117,7 +117,7 @@ export function TopBar({
       </button>
       <Link
         href="/"
-        className="flex shrink-0 items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="flex shrink-0 items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden"
       >
         <BrandMark className="size-8" />
         <span className="hidden text-base font-semibold tracking-tight sm:inline">

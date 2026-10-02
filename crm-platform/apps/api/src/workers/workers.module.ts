@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
-import { ContactImportWorkerModule } from '../modules/crm';
+import { ContactImportWorkerModule, TasksWorkerModule } from '../modules/crm';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -23,6 +23,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ScheduleModule.forRoot(),
     AuthModule,
     ContactImportWorkerModule,
+    TasksWorkerModule,
     BroadcastsWorkerModule,
   ],
   providers: [

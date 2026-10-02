@@ -29,8 +29,8 @@ export const KEYS = {
   stats: ['cat', 'stats'] as const,
 };
 
-/** Rows per screen (the API accepts any size up to 1000); ten is the default, as in the Contact Hub. */
-export const PAGE_SIZES = [10, 25, 50, 100, 500, 1000] as const;
+/** Rows per screen (the API accepts up to 1000; the footer offers these); ten is the default until one is remembered. */
+export const PAGE_SIZES = [10, 25, 50, 100, 200] as const;
 export type PageSize = (typeof PAGE_SIZES)[number];
 
 export type ConsentFilter = '' | 'subscribed' | 'unsubscribed';

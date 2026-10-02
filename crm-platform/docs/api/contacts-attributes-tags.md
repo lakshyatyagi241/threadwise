@@ -269,6 +269,39 @@ Resolution order for each `{{token}}` (key normalised, aliases applied): contact
 system token (`today`, `business_name`, `company_name`). Unresolved is the empty string. Other domains call `MergeTagService` (exported by the CRM barrel);
 `validatePositionalPlaceholders` (contracts) is the `{{1}}..{{n}}` gap check for the templates and campaign save paths.
 
+## Contact stages and statuses (`/status-options`)
+
+The lists behind a contact's lifecycle stage and status are rows of `status_options` (`moduleKey=contacts`, `optionGroup=lifecycle_stage` or `status`; a
+`lost_reason` group is understood too). They need the Contact Properties permissions (`record.contact-properties.read|create|update|delete`). A workspace with no rows
+falls back to the platform's ten stages and four statuses in the web app.
+
+| Route                                                           | Notes                                                                                                                                                                                  |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /status-options?moduleKey&optionGroup`                     | in saved order                                                                                                                                                                         |
+| `GET /status-options/usage?moduleKey&optionGroup`               | `{ data: [ { id, value, count } ] }`: contacts holding each option (archived included); 0 for groups no contact column stores                                                          |
+| `POST /status-options`                                          | `{ moduleKey, optionGroup, value (snake_case), label, color?, position?, isDefault? }`; a default clears the group's previous default                                                   |
+| `PATCH /status-options/:id`                                     | `{ label?, color?, isDefault?, isActive?, rowVersion }`; the value never changes                                                                                                       |
+| `POST /status-options/reorder`                                  | `{ moduleKey, optionGroup, orderedIds }`                                                                                                                                               |
+| `DELETE /status-options/:id?moveTo=<option id>`                 | 204. Contacts still holding the value: 409 `STATUS_OPTION_IN_USE` (`errors:[{path:"contacts",message:"<count>"}]`) until `moveTo` names another option of the same group; they are moved in the same transaction (a stage move stamps the stage date and previous stage) |
+
+`POST /contacts` without a `lifecycleStage` starts the contact in the group's default option (else the column default `new`). There are no required/won/lost flags on a
+stage: those belong to deal pipelines, not to contacts.
+
+## Contact properties (`/fields`, `/field-sections`)
+
+The custom properties of a contact are rows of the field registry (`moduleKey=contacts`), grouped by sections; **Attributes (above) are the same rows** seen as merge
+variables (`config.defaultValue`, `config.description`), so a property created here is also an attribute and the reverse. Contact values live in `customFields[key]`
+as their type (number, boolean, list for a multi-select, text otherwise). Same permissions as above.
+
+| Route                                                    | Notes                                                                                                                                                            |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /fields?moduleKey&includeInactive=true`             | options inline for select, multiselect and radio. Send `includeInactive` only when true (the flag is coerced from text, so `false` would also mean true)               |
+| `GET /fields/usage?moduleKey`                            | `{ data: [ { id, key, count } ] }`: contacts with a non-empty value per key                                                                                      |
+| `GET /fields/dependencies?moduleKey`                     | every "show only when" rule of the module: `[ { id, fieldId, dependsOnFieldId, dependsOnOptionId | dependsOnValue } ]`                                           |
+| `POST /fields`                                           | as before; a contact key that is a built-in token or a form-owned key is 422 `CON_ATTRIBUTE_KEY_RESERVED` (same rule as `POST /attributes`)                         |
+| `PATCH /fields/:id`, `DELETE /fields/:id`                | `DELETE` deactivates (`isActive=false`, values kept); a system field is 409 `FIELD_IS_SYSTEM`                                                                    |
+| `/fields/:id/options`, `/fields/dependencies`, `/field-sections` | create, rename, reorder, delete as documented on the routes; a dependency that closes a cycle is 409 `DEPENDENCY_CYCLE_DETECTED`                           |
+
 ## Permissions added
 
 `record.contact-groups.read|create|update|delete`, `record.contacts.import` (migration `20261002100200_con_permissions`; the Admin preset of every existing and new
