@@ -9,7 +9,7 @@ type Props = { params: Promise<{ group: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const spec = specBySlug((await params).group);
   if (!spec) return {};
-  const t = await getTranslations(`platform-settings-branding-storage.groups.${spec.group}`);
+  const t = await getTranslations(`platform-settings-branding-storage.pages.${spec.id}`);
   return { title: t('title') };
 }
 

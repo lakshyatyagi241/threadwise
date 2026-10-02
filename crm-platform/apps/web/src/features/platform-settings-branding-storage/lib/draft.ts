@@ -51,7 +51,7 @@ export function buildPatch(
   const read = (key: string, kind: string): unknown => {
     const raw = draft.fields[key];
     if (kind === 'toggle') return raw === true;
-    if (kind === 'number') {
+    if (kind === 'number' || kind === 'range') {
       const s = String(raw).trim();
       if (s === '') {
         problems[key] = 'required';

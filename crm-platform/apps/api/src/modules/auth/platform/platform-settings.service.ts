@@ -41,7 +41,7 @@ export class PlatformSettingsService {
 
     this.inflight = this.store
       .tx(async (tx) => {
-        const res = await tx.execute(sql`SELECT key, value, is_secret FROM platform_settings`);
+        const res = await tx.execute(sql`SELECT key, value, is_secret FROM platform_settings WHERE key NOT LIKE 'set.asset.%'`);
         const rows = new Map<string, Row>();
         for (const r of res.rows as unknown as Array<{
           key: string;

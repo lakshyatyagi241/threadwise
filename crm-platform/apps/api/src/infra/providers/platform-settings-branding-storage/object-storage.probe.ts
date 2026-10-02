@@ -127,6 +127,50 @@ export function signS3Request(
   };
 }
 
+/**
+ * A time-limited GET link for a private object (query-string SigV4). WaDesk labelled private mode "signed URLs" but never
+ * made one, so private media broke; this is the real thing (WD-SET-040 rule 5).
+ */
+export function presignS3Get(
+  t: StorageTarget,
+  key: string,
+  ttlSeconds: number,
+  now: Date = new Date(),
+): string {
+  const base = new URL(t.endpoint);
+  const host = t.pathStyle ? base.host : `${t.bucket}.${base.host}`;
+  const path =
+    (t.pathStyle ? `/${encodeSegment(t.bucket)}` : '') +
+    '/' +
+    key.split('/').map(encodeSegment).join('/');
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, '');
+  const day = amzDate.slice(0, 8);
+  const scope = `${day}/${t.region}/s3/aws4_request`;
+  const query: Array<[string, string]> = [
+    ['X-Amz-Algorithm', 'AWS4-HMAC-SHA256'],
+    ['X-Amz-Credential', `${t.accessKeyId}/${scope}`],
+    ['X-Amz-Date', amzDate],
+    ['X-Amz-Expires', String(Math.min(604800, Math.max(1, Math.floor(ttlSeconds))))],
+    ['X-Amz-SignedHeaders', 'host'],
+  ];
+  const canonicalQuery = query
+    .map(([k, v]) => `${encodeSegment(k)}=${encodeSegment(v)}`)
+    .sort()
+    .join('&');
+  const canonical = [
+    'GET',
+    path,
+    canonicalQuery,
+    `host:${host}\n`,
+    'host',
+    'UNSIGNED-PAYLOAD',
+  ].join('\n');
+  const toSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256(canonical)].join('\n');
+  const signingKey = hmac(hmac(hmac(hmac(`AWS4${t.secret}`, day), t.region), 's3'), 'aws4_request');
+  const signature = createHmac('sha256', signingKey).update(toSign).digest('hex');
+  return `${base.protocol}//${host}${path}?${canonicalQuery}&X-Amz-Signature=${signature}`;
+}
+
 @Injectable()
 export class ObjectStorageProbe {
   async probe(s: StorageSettingsInput): Promise<{ ok: boolean; message: string }> {

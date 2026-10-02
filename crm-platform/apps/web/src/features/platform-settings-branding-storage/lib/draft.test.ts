@@ -1,30 +1,42 @@
 import { describe, expect, it } from 'vitest';
 import { SET_GROUP_SCHEMAS, SET_SECRET_FIELDS, SET_GROUPS } from '@crm/contracts';
-import { GROUP_SPECS, allFields, specByGroup, specBySlug } from '../fields';
+import { GROUP_SPECS, allFields, specById, specBySlug } from '../fields';
 import { buildPatch, fieldForPath, patchSize, toDraft } from './draft';
 
 const defaults = (g: keyof typeof SET_GROUP_SCHEMAS) =>
   SET_GROUP_SCHEMAS[g].parse({}) as Record<string, unknown>;
 
+/** Groups edited by a component of their own instead of the generic form. */
+const CUSTOM_GROUPS = ['tiPwa'];
+/** Fields a custom component (the brand-file uploader) draws, so the generic form has no control for them. */
+const UPLOADED = (k: string) => k === 'faviconUrl' || k.startsWith('logos.');
+
 describe('settings screens cover the API groups', () => {
-  it('has one screen per group, with unique slugs', () => {
-    expect(GROUP_SPECS.map((s) => s.group).sort()).toEqual([...SET_GROUPS].sort());
+  it('has a screen for every group, with unique slugs and ids', () => {
+    expect([...new Set(GROUP_SPECS.map((s) => s.group))].sort()).toEqual(
+      SET_GROUPS.filter((g) => !CUSTOM_GROUPS.includes(g)).sort(),
+    );
     expect(new Set(GROUP_SPECS.map((s) => s.slug)).size).toBe(GROUP_SPECS.length);
+    expect(new Set(GROUP_SPECS.map((s) => s.id)).size).toBe(GROUP_SPECS.length);
     expect(specBySlug('site-info')?.group).toBe('site');
+    expect(specBySlug('footer')?.group).toBe('site');
     expect(specBySlug('nope')).toBeUndefined();
   });
 
   it('every non-secret API field has a control, every secret a secret box, and nothing extra', () => {
-    for (const spec of GROUP_SPECS) {
+    for (const group of SET_GROUPS.filter((g) => !CUSTOM_GROUPS.includes(g))) {
       const apiKeys = new Set<string>();
-      for (const [k, v] of Object.entries(defaults(spec.group))) {
-        if (v && typeof v === 'object')
+      for (const [k, v] of Object.entries(defaults(group))) {
+        if (v && typeof v === 'object' && !Array.isArray(v))
           for (const sub of Object.keys(v)) apiKeys.add(`${k}.${sub}`);
         else apiKeys.add(k);
       }
-      for (const s of SET_SECRET_FIELDS[spec.group]) apiKeys.add(s);
-      const specKeys = new Set(allFields(spec).map((f) => f.key));
-      expect([...specKeys].sort(), spec.group).toEqual([...apiKeys].sort());
+      for (const s of SET_SECRET_FIELDS[group]) apiKeys.add(s);
+      const specKeys = new Set(
+        GROUP_SPECS.filter((s) => s.group === group).flatMap((s) => allFields(s).map((f) => f.key)),
+      );
+      const expected = [...apiKeys].filter((k) => !(group === 'branding' && UPLOADED(k)));
+      expect([...specKeys].sort(), group).toEqual(expected.sort());
     }
   });
 
@@ -34,13 +46,13 @@ describe('settings screens cover the API groups', () => {
         .filter((f) => f.kind === 'secret')
         .map((f) => f.key)
         .sort();
-      expect(secretKeys, spec.group).toEqual([...SET_SECRET_FIELDS[spec.group]].sort());
+      expect(secretKeys, spec.id).toEqual([...SET_SECRET_FIELDS[spec.group]].sort());
     }
   });
 });
 
 describe('buildPatch', () => {
-  const general = specByGroup('general');
+  const general = specById('general');
 
   it('sends nothing when nothing changed', () => {
     const v = defaults('general');
@@ -61,7 +73,7 @@ describe('buildPatch', () => {
   });
 
   it('sends a whole nested object when one member changed, and none when none did', () => {
-    const branding = specByGroup('branding');
+    const branding = specById('appearance');
     const v = defaults('branding');
     const d = toDraft(v, branding);
     expect(buildPatch(v, d, branding).values).toEqual({});
@@ -75,7 +87,7 @@ describe('buildPatch', () => {
   });
 
   it('numbers: parsed, and a blank or fractional one is a problem, not a request', () => {
-    const mail = specByGroup('mail');
+    const mail = specById('mail');
     const v = defaults('mail');
     const d = toDraft(v, mail);
     d.fields.port = '2525';
@@ -87,7 +99,7 @@ describe('buildPatch', () => {
   });
 
   it('secrets: blank keeps, typed replaces, clear removes (clear wins over typed)', () => {
-    const mail = specByGroup('mail');
+    const mail = specById('mail');
     const v = defaults('mail');
     const d = toDraft(v, mail);
     expect(buildPatch(v, d, mail).secrets).toEqual({});
@@ -99,16 +111,16 @@ describe('buildPatch', () => {
   });
 
   it('secrets never appear in the draft fields (they are not part of the saved values)', () => {
-    const mail = specByGroup('mail');
+    const mail = specById('mail');
     expect(Object.keys(toDraft(defaults('mail'), mail).fields)).not.toContain('password');
   });
 });
 
 describe('fieldForPath', () => {
-  const branding = specByGroup('branding');
+  const branding = specById('appearance');
   it('maps API error paths to controls', () => {
-    expect(fieldForPath('values.appUrl', specByGroup('general'))).toBe('appUrl');
-    expect(fieldForPath('values.logos.paper', branding)).toBe('logos.paper');
+    expect(fieldForPath('values.appUrl', specById('general'))).toBe('appUrl');
+    expect(fieldForPath('values.colors.ink-900', branding)).toBe('colors.ink-900');
     expect(fieldForPath('values.colors', branding)).toBe('colors.wa-deep');
     expect(fieldForPath('values.nope', branding)).toBeNull();
   });
