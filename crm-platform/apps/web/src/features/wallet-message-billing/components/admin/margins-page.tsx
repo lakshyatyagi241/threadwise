@@ -63,11 +63,7 @@ export function MarginsPage() {
           <Card className="space-y-4">
             <div className="max-w-md">
               <Field label={t('scope.label')} htmlFor="margin-scope" hint={t('scope.hint')}>
-                <Select
-                  id="margin-scope"
-                  value={plan}
-                  onChange={(e) => setPlan(e.target.value)}
-                >
+                <Select id="margin-scope" value={plan} onChange={(e) => setPlan(e.target.value)}>
                   <option value="">{t('scope.platform')}</option>
                   {margins.data.plans.map((p) => (
                     <option key={p.slug} value={p.slug}>
@@ -113,7 +109,15 @@ type PlanEditorProps = {
   setDraft: (fn: (d: MarginDraft) => MarginDraft) => void;
 };
 
-function PlanEditor({ plan, data, rates, ratesPending, canEdit, draft, setDraft }: PlanEditorProps) {
+function PlanEditor({
+  plan,
+  data,
+  rates,
+  ratesPending,
+  canEdit,
+  draft,
+  setDraft,
+}: PlanEditorProps) {
   const t = useTranslations('wallet-message-billing.admin.margins');
   const tg = useTranslations('wallet-message-billing.admin.margins.grid');
   const te = useTranslations('wallet-message-billing.errors');
@@ -162,7 +166,9 @@ function PlanEditor({ plan, data, rates, ratesPending, canEdit, draft, setDraft 
 
   return (
     <div className="space-y-4">
-      {ratesPending && <LoadingBlock className="flex items-center gap-2 text-xs text-muted-foreground" />}
+      {ratesPending && (
+        <LoadingBlock className="flex items-center gap-2 text-xs text-muted-foreground" />
+      )}
       {rows.length === 0 ? (
         <Alert tone="info">{tg('empty')}</Alert>
       ) : (

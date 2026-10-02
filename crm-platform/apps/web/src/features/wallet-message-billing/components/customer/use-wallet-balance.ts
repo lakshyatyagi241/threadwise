@@ -22,14 +22,18 @@ export const BALANCE_REFRESH_MS = 300_000;
  * about-how-many-messages) is recomputed from the figures already cached, with the same rules the summary endpoint uses; the rest
  * of the summary (30-day totals) is refetched right after.
  */
-export function applyWalletUpdate(qc: QueryClient, payload: RealtimeEventPayload<'wallet.updated'>) {
+export function applyWalletUpdate(
+  qc: QueryClient,
+  payload: RealtimeEventPayload<'wallet.updated'>,
+) {
   qc.setQueryData<WalletSummary>(KEYS.summary, (old) =>
     old
       ? {
           ...old,
           balanceMinor: payload.balanceMinor,
           lowBalance:
-            old.lowBalanceThresholdMinor > 0 && payload.balanceMinor <= old.lowBalanceThresholdMinor,
+            old.lowBalanceThresholdMinor > 0 &&
+            payload.balanceMinor <= old.lowBalanceThresholdMinor,
           approxMessages:
             old.approxMessages !== null && old.flatPriceMinor > 0
               ? Math.floor(payload.balanceMinor / old.flatPriceMinor)

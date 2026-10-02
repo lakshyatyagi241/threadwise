@@ -97,9 +97,7 @@ export function bonusOf(priceMinor: number, walletCreditMinor: number): number |
 }
 
 export type PackageSubmitError =
-  | { kind: 'stale' }
-  | { kind: 'fields'; problems: PackageProblems }
-  | { kind: 'other' };
+  { kind: 'stale' } | { kind: 'fields'; problems: PackageProblems } | { kind: 'other' };
 
 /** What a failed save means for the form: a stale version (409), fields the server refused (422), or anything else. */
 export function packageSubmitError(err: unknown): PackageSubmitError {

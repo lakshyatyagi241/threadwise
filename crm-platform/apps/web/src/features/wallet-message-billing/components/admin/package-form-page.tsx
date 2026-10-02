@@ -133,7 +133,8 @@ export function PackageForm({
   const err = (f: PackageField) => (problems[f] ? t(`problems.${f}`) : undefined);
   const priceMinor = parseAmount(draft.price);
   const creditMinor = parseAmount(draft.walletCredit);
-  const bonus = priceMinor !== null && creditMinor !== null ? bonusOf(priceMinor, creditMinor) : null;
+  const bonus =
+    priceMinor !== null && creditMinor !== null ? bonusOf(priceMinor, creditMinor) : null;
 
   return (
     <form onSubmit={submit} noValidate className="space-y-5">
@@ -141,7 +142,13 @@ export function PackageForm({
         <Alert tone="warning" className="space-y-2" role="alert">
           <p className="font-medium">{t('stale.title')}</p>
           <p>{t('stale.body')}</p>
-          <Button type="button" variant="secondary" size="sm" onClick={onReload} disabled={reloading}>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={onReload}
+            disabled={reloading}
+          >
             {t('stale.reload')}
           </Button>
         </Alert>

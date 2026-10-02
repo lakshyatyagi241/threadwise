@@ -66,7 +66,10 @@ export function MarginGrid({
 }) {
   const t = useTranslations('wallet-message-billing.admin.margins.grid');
   const locale = useLocale();
-  const names = useMemo(() => new Map(countries.map((c) => [c.code, c.name] as const)), [countries]);
+  const names = useMemo(
+    () => new Map(countries.map((c) => [c.code, c.name] as const)),
+    [countries],
+  );
   const symbol = currencySymbol(currency, locale);
   return (
     <div className="overflow-x-auto">
@@ -226,13 +229,15 @@ function Line({
             {note}
           </p>
         )}
-        {row.removed && (
-          <p className="mt-1 text-xs text-muted-foreground">{t('removedPending')}</p>
-        )}
+        {row.removed && <p className="mt-1 text-xs text-muted-foreground">{t('removedPending')}</p>}
       </td>
       <td className="whitespace-nowrap px-2 py-3 tabular-nums">
         {row.metaCost === null ? (
-          <span className="text-muted-foreground" aria-label={t('unknownCost')} title={t('unknownCost')}>
+          <span
+            className="text-muted-foreground"
+            aria-label={t('unknownCost')}
+            title={t('unknownCost')}
+          >
             -
           </span>
         ) : (
@@ -264,7 +269,12 @@ function Line({
       {canEdit && (
         <td className="px-2 py-2 text-end">
           {row.removed ? (
-            <Button variant="ghost" size="sm" onClick={onUndo} aria-label={`${t('undo')}: ${label}`}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onUndo}
+              aria-label={`${t('undo')}: ${label}`}
+            >
               {t('undo')}
             </Button>
           ) : (

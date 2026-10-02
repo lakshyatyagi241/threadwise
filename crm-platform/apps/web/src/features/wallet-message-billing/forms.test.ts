@@ -362,6 +362,7 @@ describe('economics form', () => {
     launchCoveragePercent: 80,
     perCountryEnabled: false,
     payPerMessage: true,
+    pricingMode: 'fixed' as const,
     metaRatesLive: false,
     updatedAt: null,
   };
