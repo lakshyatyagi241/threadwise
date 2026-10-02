@@ -7,6 +7,7 @@ import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { STORE_MIRROR, type StoreMirror } from './_shims/tokens';
 import { CodService } from './cod.service';
+import { StockService } from './stock.service';
 import { EventMessageService } from './event-message.service';
 import { isShopifyCod, isWooCod, shopifyRecipient, wooRecipient } from './event-rules';
 import { EventsRepository, type LogRef } from './events.repository';
@@ -53,6 +54,7 @@ export class WebhookPipelineService {
     private readonly events: EventsRepository,
     private readonly message: EventMessageService,
     private readonly codService: CodService,
+    private readonly stockService: StockService,
     @Inject(STORE_MIRROR) private readonly mirror: StoreMirror,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<WebhookJob>,
@@ -68,6 +70,11 @@ export class WebhookPipelineService {
     const status = job.kind === 'woocommerce' ? wooStatusEvent(job) : null;
     if (status && (await this.firstTimeInStatus(job, status)))
       await this.guarded(job, status, () => this.pseudo(job, status, job.data));
+    // Back in stock reads the product's previous stock state, so it runs before the mirror overwrites it.
+    if (job.eventType === 'products/update' || job.eventType === 'product.updated')
+      await this.guarded(job, 'stock', () =>
+        this.stockService.onProductUpdate(job.orgId, job.kind, job.storeId, job.data),
+      );
     await this.guarded(job, 'mirror', () => this.upkeep(job));
     await this.guarded(job, 'cod', () => this.cod(job));
     if (job.kind === 'shopify') {

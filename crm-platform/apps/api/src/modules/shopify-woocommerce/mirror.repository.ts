@@ -3,6 +3,15 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { StoreKind } from './mirror-rules';
 
+export interface MirroredProduct {
+  id: number;
+  storeProductId: string;
+  name: string;
+  sku: string | null;
+  inStock: boolean;
+  productUrl: string | null;
+}
+
 export interface MirroredOrder {
   id: number;
   phone: string | null;
@@ -12,6 +21,7 @@ export interface MirroredOrder {
   status: string;
 }
 
+const PRODUCT_ID = { shopify: 'shopify_product_id', woocommerce: 'woo_product_id' } as const;
 const ORDER_ID = { shopify: 'shopify_order_id', woocommerce: 'woo_order_id' } as const;
 
 /** Reads of the CRM's copy of the store (TW-ECOM-011) that the automations need, inside the caller's tenant transaction. */
@@ -91,4 +101,43 @@ export class MirrorRepository {
       average: all === 0 ? 0 : Number(r.all_minor) / 100 / all,
     };
   }
+
+  /** A mirrored product by the store's own id. */
+  async productByStoreId(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    storeProductId: string,
+  ): Promise<MirroredProduct | undefined> {
+    const col = sql.raw(PRODUCT_ID[kind]);
+    const res = await tx.execute(sql`
+      SELECT id, ${col} AS store_product_id, name, sku, in_stock, product_url FROM wa_products
+      WHERE org_id = ${orgId} AND ${col} = ${storeProductId} ORDER BY id LIMIT 1`);
+    const r = res.rows[0] as Record<string, unknown> | undefined;
+    return r ? toProduct(r) : undefined;
+  }
+
+  /** The store's mirrored products that are out of stock, oldest first, up to `limit`. */
+  async outOfStock(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    limit = 2000,
+  ): Promise<MirroredProduct[]> {
+    const col = sql.raw(PRODUCT_ID[kind]);
+    const res = await tx.execute(sql`
+      SELECT id, ${col} AS store_product_id, name, sku, in_stock, product_url FROM wa_products
+      WHERE org_id = ${orgId} AND in_stock = false AND ${col} IS NOT NULL
+      ORDER BY id LIMIT ${limit}`);
+    return (res.rows as Array<Record<string, unknown>>).map(toProduct);
+  }
 }
+
+const toProduct = (r: Record<string, unknown>): MirroredProduct => ({
+  id: Number(r.id),
+  storeProductId: String(r.store_product_id ?? ''),
+  name: String(r.name ?? ''),
+  sku: typeof r.sku === 'string' ? r.sku : null,
+  inStock: r.in_stock === true,
+  productUrl: typeof r.product_url === 'string' ? r.product_url : null,
+});

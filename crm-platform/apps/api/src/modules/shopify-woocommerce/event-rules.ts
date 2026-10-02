@@ -348,3 +348,26 @@ export function codRisk(f: RiskFacts): {
   score = Math.max(0, Math.min(100, score));
   return { score, level: score >= 60 ? 'high' : score >= 30 ? 'medium' : 'low', reasons };
 }
+
+// ── Back in stock (TW-ECOM-020) ────────────────────────────────────────
+
+const STOCK_WORDS = ['notify', 'stock', 'back in stock', 'available', 'restock', 'in stock'];
+
+/** A message asking to be told when something is available again. */
+export const wantsStockAlert = (text: string): boolean => {
+  const t = text.trim().toLowerCase();
+  return STOCK_WORDS.some((w) => t.includes(w));
+};
+
+/** The first out-of-stock product whose name or sku appears in the message (case-insensitive); an empty name or sku never matches. */
+export function matchOutOfStock<P extends { name: string; sku: string | null }>(
+  text: string,
+  products: readonly P[],
+): P | undefined {
+  const t = text.trim().toLowerCase();
+  return products.find((p) => {
+    const name = p.name.toLowerCase();
+    const sku = (p.sku ?? '').toLowerCase();
+    return (name !== '' && t.includes(name)) || (sku !== '' && t.includes(sku));
+  });
+}
