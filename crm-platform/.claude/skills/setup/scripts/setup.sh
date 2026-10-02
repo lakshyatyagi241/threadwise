@@ -162,9 +162,10 @@ ok "Dependencies installed"
 # 5. Build shared packages (the app imports their compiled dist/, not source)
 # =============================================================================
 step "Building shared packages"
+pnpm --filter @crm/tax build
 pnpm --filter @crm/contracts build
 pnpm --filter @crm/db build
-ok "Contracts and DB packages built"
+ok "Tax, contracts and DB packages built"
 
 # =============================================================================
 # 6. Restricted app role — normally created by docker/postgres/init/ on first

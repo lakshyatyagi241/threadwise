@@ -9,7 +9,7 @@
     "start": "next start -p 3001",
     "typecheck": "node scripts/gen-registry.mjs && next typegen && tsc --noEmit",
     "lint": "node scripts/gen-registry.mjs && eslint src",
-    "test": "vitest run",
+    "test": "node scripts/gen-registry.mjs && vitest run",
     "test:e2e": "playwright test"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "server-only": "^0.0.1",
+    "socket.io-client": "^4.8.1",
     "zod": "^3.24.1"
   },
   "devDependencies": {

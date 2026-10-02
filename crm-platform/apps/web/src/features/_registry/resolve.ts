@@ -1,4 +1,10 @@
-import { NAV_GROUPS, type Capabilities, type NavItem, type ResolvedNavItem } from './types';
+import {
+  NAV_GROUPS,
+  type Capabilities,
+  type NavGates,
+  type NavItem,
+  type ResolvedNavItem,
+} from './types';
 
 export const CAPABILITIES_UNKNOWN: Capabilities = {
   permissions: null,
@@ -15,11 +21,11 @@ export interface ResolveOptions {
   planned?: readonly NavItem[];
 }
 
-/** Drops the planned entries a domain has taken over (same id, or same href). */
-export function mergePlanned(
-  items: readonly NavItem[],
-  planned: readonly NavItem[],
-): Array<{ item: NavItem; comingSoon: boolean }> {
+/** Drops the planned entries a domain has taken over (same id, or same href). Serves the menu and the Settings tiles alike. */
+export function mergePlanned<T extends { id: string; href: string }>(
+  items: readonly T[],
+  planned: readonly T[],
+): Array<{ item: T; comingSoon: boolean }> {
   const ids = new Set(items.map((i) => i.id));
   const hrefs = new Set(items.map((i) => i.href));
   return [
@@ -40,6 +46,25 @@ export function compareNav(a: NavItem, b: NavItem): number {
 }
 
 /**
+ * Reference's rule: a missing permission or unavailable channel removes the entry, a missing plan feature keeps it
+ * visible but locked (so it can upsell). Returns `null` when the entry is removed, else whether it is locked. A planned
+ * (not built) entry is never locked. Shared by the menu and the Settings tiles.
+ */
+export function evaluateGates(
+  gates: NavGates | undefined,
+  caps: Capabilities,
+  comingSoon = false,
+): { locked: boolean } | null {
+  const g = gates ?? {};
+  if (g.permission && caps.permissions && !caps.permissions.has(g.permission)) return null;
+  if (g.channel && caps.channels && !caps.channels.has(g.channel)) return null;
+  const locked =
+    !comingSoon &&
+    Boolean(g.planFeature && caps.planFeatures && !caps.planFeatures.has(g.planFeature));
+  return { locked };
+}
+
+/**
  * `/account/<name>`, one segment: a pane of the account hub (profile, plan, wallet, ...). A domain adds one by
  * declaring it in its own `nav.ts`; the hub lists it in its own menu, so the main sidebar leaves it out.
  */
@@ -47,6 +72,10 @@ export const HUB_PANE_HREF = /^\/account\/([a-z0-9][a-z0-9-]*)$/;
 
 export const isHubPane = (item: Pick<NavItem, 'href'>): boolean => HUB_PANE_HREF.test(item.href);
 
+/**
+ * Applies the gates to every entry, hub panes included. The server stays the authority; this only shapes the menu.
+ * Planned (not yet built) screens go through the same gates, then come out marked `comingSoon`.
+ */
 export function resolveNavAll(
   items: readonly NavItem[],
   caps: Capabilities,
@@ -54,13 +83,8 @@ export function resolveNavAll(
 ): ResolvedNavItem[] {
   const out: ResolvedNavItem[] = [];
   for (const { item, comingSoon } of mergePlanned(items, options.planned ?? [])) {
-    const g = item.gates ?? {};
-    if (g.permission && caps.permissions && !caps.permissions.has(g.permission)) continue;
-    if (g.channel && caps.channels && !caps.channels.has(g.channel)) continue;
-    const locked =
-      !comingSoon &&
-      Boolean(g.planFeature && caps.planFeatures && !caps.planFeatures.has(g.planFeature));
-    out.push({ ...item, locked, comingSoon });
+    const gate = evaluateGates(item.gates, caps, comingSoon);
+    if (gate) out.push({ ...item, locked: gate.locked, comingSoon });
   }
   return out.sort(compareNav);
 }

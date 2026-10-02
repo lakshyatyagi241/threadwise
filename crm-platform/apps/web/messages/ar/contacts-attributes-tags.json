@@ -125,6 +125,7 @@
       "colPhone": "رقم الهاتف",
       "colEmailId": "البريد الإلكتروني",
       "colStage": "المرحلة",
+      "colStatus": "الحالة",
       "colLanguage": "اللغة",
       "colCreatedOn": "تاريخ الإنشاء",
       "pagination": "ترقيم الصفحات",

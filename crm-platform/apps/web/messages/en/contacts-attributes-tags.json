@@ -125,6 +125,7 @@
       "colPhone": "Phone Number",
       "colEmailId": "Email ID",
       "colStage": "Stage",
+      "colStatus": "Status",
       "colLanguage": "Language",
       "colCreatedOn": "Created On",
       "pagination": "Pagination",
