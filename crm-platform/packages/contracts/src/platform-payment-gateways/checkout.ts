@@ -53,6 +53,8 @@ export const paygwQuoteSchema = z.object({
   itemName: z.string(),
   itemSubtitle: z.string().nullable(),
   billingPeriod: paygwPeriodSchema,
+  /** The billing periods this item can be bought in (a natively yearly plan offers only yearly; add-ons and wallet only monthly). */
+  periods: z.array(paygwPeriodSchema),
   currency: z.string(),
   availableCurrencies: z.array(z.string()),
   subtotal: z.string(),
