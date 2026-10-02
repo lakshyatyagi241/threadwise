@@ -1,10 +1,10 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { AppShell } from '@/components/shell/app-shell';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { WalletAppShell } from '@/features/wallet-message-billing';
 import { NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
@@ -41,7 +41,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         key={`${session.org.id}:${session.user.id}`}
         url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
       >
-        <AppShell
+        <WalletAppShell
           user={{
             fullName: session.user.displayName ?? session.user.fullName,
             email: session.user.email,
@@ -55,7 +55,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           bell={<NotificationBell key="bell" />}
         >
           <AccountGate>{children}</AccountGate>
-        </AppShell>
+        </WalletAppShell>
       </RealtimeProvider>
     </SessionProvider>
   );
