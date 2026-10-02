@@ -106,38 +106,9 @@ export const PLANNED_NAV: readonly NavItem[] = [
   },
 
   // Campaigns
-  {
-    id: 'campaigns',
-    group: 'campaigns',
-    labelKey: L('campaigns'),
-    href: '/campaigns',
-    order: 0,
-    icon: 'campaign',
-  },
-  {
-    id: 'scheduled',
-    group: 'campaigns',
-    labelKey: L('scheduled'),
-    href: '/scheduled',
-    order: 20,
-    icon: 'clock',
-  },
-  {
-    id: 'templates',
-    group: 'campaigns',
-    labelKey: L('templates'),
-    href: '/templates',
-    order: 30,
-    icon: 'template',
-  },
-  {
-    id: 'history',
-    group: 'campaigns',
-    labelKey: L('history'),
-    href: '/message-history',
-    order: 40,
-    icon: 'history',
-  },
+  { id: 'scheduled', group: 'campaigns', labelKey: L('scheduled'), href: '/scheduled', order: 20, icon: 'clock' },
+  { id: 'templates', group: 'campaigns', labelKey: L('templates'), href: '/templates', order: 30, icon: 'template' },
+  { id: 'history', group: 'campaigns', labelKey: L('history'), href: '/message-history', order: 40, icon: 'history' },
 
   // Automation (Appointments is a real screen in features/appointments)
   {
@@ -175,22 +146,7 @@ export const PLANNED_NAV: readonly NavItem[] = [
   },
 
   // Channels
-  {
-    id: 'channels',
-    group: 'channels',
-    labelKey: L('channels'),
-    href: '/channels',
-    order: 0,
-    icon: 'channels',
-  },
-  {
-    id: 'telegram',
-    group: 'channels',
-    labelKey: L('telegram'),
-    href: '/telegram',
-    order: 10,
-    icon: 'send',
-  },
+  { id: 'channels', group: 'channels', labelKey: L('channels'), href: '/channels', order: 0, icon: 'channels' },
   { id: 'sms', group: 'channels', labelKey: L('sms'), href: '/sms', order: 20, icon: 'sms' },
   { id: 'line', group: 'channels', labelKey: L('line'), href: '/line', order: 30, icon: 'chat' },
   {
