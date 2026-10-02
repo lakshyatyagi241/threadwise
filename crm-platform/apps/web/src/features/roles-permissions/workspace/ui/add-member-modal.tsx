@@ -94,7 +94,9 @@ export function AddMemberModal({
     if (!roleId) errs.roleId = tc('required');
     setFieldErrors(errs);
     setServerError(null);
-    const first = (['fullName', 'email', 'password', 'roleId'] as const).find((f) => errs[f]);
+    const first = (['fullName', 'email', 'password', 'roleId'] as const).find(
+      (f) => errs[f] !== undefined,
+    );
     if (first) {
       document.getElementById(`member-${first}`)?.focus();
       return;

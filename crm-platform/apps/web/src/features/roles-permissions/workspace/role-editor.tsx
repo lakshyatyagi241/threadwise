@@ -166,7 +166,7 @@ function RoleForm({
     onError: (err) => {
       const info = wsError(err);
       if (info.field === 'name') {
-        setErrors({ name: info.detail ?? te(info.key, info.values) });
+        setErrors({ name: te('nameTaken') });
         requestAnimationFrame(() => document.getElementById('ws-role-name')?.focus());
       } else {
         setErrors({ server: info });

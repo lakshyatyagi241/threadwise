@@ -153,6 +153,8 @@ export class RolesService {
 
       const values: Record<string, unknown> = {};
       if (input.name !== undefined) values.name = input.name;
+      // A grants-only edit still takes the optimistic lock (and bumps the version): rewrite the name unchanged.
+      if (input.grants !== undefined && values.name === undefined) values.name = existing.name;
 
       if (Object.keys(values).length > 0) {
         const updated = await this.repo.updateWithVersion(
