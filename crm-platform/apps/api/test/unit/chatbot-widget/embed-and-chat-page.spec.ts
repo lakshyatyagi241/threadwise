@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { DEFAULT_LAUNCHER } from '@crm/contracts';
 import { renderChatPage } from '../../../src/modules/chatbot-widget/chat-page';
 import {
   buildEmbedScript,
@@ -9,6 +10,11 @@ import {
 
 const widget = {
   uuid: 'e174adbe-698d-4afd-b89c-2d5cba3a3820',
+  // The frame loader serves the AI and Both widgets; a WhatsApp widget draws its own panel (see launcher.spec.ts).
+  mode: 'both',
+  name: 'Acme',
+  launcher: DEFAULT_LAUNCHER,
+  whatsappUrl: null as string | null,
   position: 'bottom_right',
   buttonColor: '#075E54',
   buttonImageUrl: null as string | null,

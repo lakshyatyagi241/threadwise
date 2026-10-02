@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
+import {
+  widgetLauncherSchema,
+  widgetLauncherViewSchema,
+  widgetPublicLauncherSchema,
+} from './launcher';
 
 /**
  * Website chatbot widget (WGT): the admin shapes behind `/v2/widgets` and the public wire protocol the embed script and
@@ -131,6 +136,11 @@ export const widgetFieldsSchema = z.object({
   collectName: z.boolean().optional(),
   collectEmail: z.boolean().optional(),
   collectPhone: z.boolean().optional(),
+  /**
+   * The WhatsApp widget's look and placement (TW-WGT-028, user-requested Interakt reference). Absent leaves the stored
+   * config alone on update and starts from the defaults on create; the AI and Both builders never send it.
+   */
+  launcher: widgetLauncherSchema.optional(),
   /** Absent leaves the stored list alone (the builder never sends it, TW-WGT-021). */
   // Reference trimmed every input and turned an empty string into null before validating, so a blank entry is "must be a string" (422).
   allowedDomains: z
@@ -182,6 +192,7 @@ export const widgetSchema = z.object({
   collectName: z.boolean(),
   collectEmail: z.boolean(),
   collectPhone: z.boolean(),
+  launcher: widgetLauncherViewSchema,
   allowedDomains: z.array(z.string()),
   embedToken: z.string(),
   /** `<public base>/widget/<token>/embed`: the address the pasted script tag loads. */
@@ -278,6 +289,8 @@ export const widgetPublicConfigSchema = z.object({
     collect_email: z.boolean(),
     collect_phone: z.boolean(),
     whatsapp_url: z.string().nullable(),
+    /** Look and placement of the WhatsApp launcher (TW-WGT-028); resolved colours and image, snake_case like the rest. */
+    launcher: widgetPublicLauncherSchema,
   }),
   visitor: z.object({
     uuid: z.string(),

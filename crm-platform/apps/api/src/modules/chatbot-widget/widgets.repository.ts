@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { parseLauncher, type WidgetLauncher } from '@crm/contracts';
 
 export interface WidgetRow {
   id: number;
@@ -37,6 +38,8 @@ export interface WidgetRow {
   collectPhone: boolean;
   status: string;
   allowedDomains: string[];
+  /** The WhatsApp widget's look and placement, with every missing key at its default (TW-WGT-028). */
+  launcher: WidgetLauncher;
   createdAt: Date;
   updatedAt: Date;
   rowVersion: number;
@@ -72,6 +75,8 @@ export interface WidgetWrite {
   collectEmail?: boolean;
   collectPhone?: boolean;
   allowedDomains?: string[];
+  /** Absent keeps the stored config on update and starts from the defaults on insert. */
+  launcher?: WidgetLauncher;
 }
 
 type Raw = Record<string, unknown>;
@@ -82,7 +87,7 @@ const COLUMNS = sql`
   w.button_color, w.button_image_url, w.header_title, w.header_bg, w.header_text_color, w.welcome_message,
   w.message_bubble_color, w.message_text_color, w.body_bg_kind, w.body_bg_color, w.body_bg_image_url, w.auto_open,
   w.button_label, w.action_button_bg, w.action_button_text_color, w.collect_name, w.collect_email, w.collect_phone,
-  w.status, w.allowed_domains, w.created_at, w.updated_at, w.row_version`;
+  w.status, w.allowed_domains, w.launcher, w.created_at, w.updated_at, w.row_version`;
 
 const FROM = sql`
   chatbot_widgets w
@@ -126,6 +131,7 @@ const toRow = (r: Raw): WidgetRow => ({
   collectPhone: r.collect_phone as boolean,
   status: r.status as string,
   allowedDomains: Array.isArray(r.allowed_domains) ? (r.allowed_domains as string[]) : [],
+  launcher: parseLauncher(r.launcher),
   createdAt: new Date(r.created_at as string),
   updatedAt: new Date(r.updated_at as string),
   rowVersion: num(r.row_version),
@@ -217,7 +223,7 @@ export class WidgetsRepository {
         prefilled_message, position, button_color, button_image_url, header_title, header_bg, header_text_color,
         welcome_message, message_bubble_color, message_text_color, body_bg_kind, body_bg_color, body_bg_image_url,
         auto_open, button_label, action_button_bg, action_button_text_color, collect_name, collect_email, collect_phone,
-        status, allowed_domains)
+        status, allowed_domains, launcher)
       VALUES (
         ${orgId}, ${userId}, ${w.assistantId}, ${w.name}, ${slug}, ${embedToken}, ${w.mode}, ${w.targetWhatsappCc},
         ${w.targetWhatsappNumber}, ${w.prefilledMessage}, ${w.position}, ${w.buttonColor}, ${w.buttonImageUrl},
@@ -225,7 +231,8 @@ export class WidgetsRepository {
         ${w.messageTextColor}, ${w.bodyBgKind}, ${w.bodyBgColor}, ${w.bodyBgImageUrl}, ${w.autoOpen ?? false},
         ${w.buttonLabel}, ${w.actionButtonBg}, ${w.actionButtonTextColor}, ${w.collectName ?? true},
         ${w.collectEmail ?? false}, ${w.collectPhone ?? false}, ${status},
-        ${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb)
+        ${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb,
+        ${JSON.stringify(w.launcher ?? {})}::jsonb)
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
   }
@@ -256,7 +263,8 @@ export class WidgetsRepository {
         collect_name = COALESCE(${w.collectName ?? null}::boolean, collect_name),
         collect_email = COALESCE(${w.collectEmail ?? null}::boolean, collect_email),
         collect_phone = COALESCE(${w.collectPhone ?? null}::boolean, collect_phone),
-        allowed_domains = COALESCE(${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb, allowed_domains)
+        allowed_domains = COALESCE(${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb, allowed_domains),
+        launcher = COALESCE(${w.launcher === undefined ? null : JSON.stringify(w.launcher)}::jsonb, launcher)
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
       RETURNING id`);
     return res.rows.length > 0;

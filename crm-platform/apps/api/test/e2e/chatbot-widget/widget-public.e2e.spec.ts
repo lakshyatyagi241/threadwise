@@ -50,8 +50,12 @@ const aiWidget = async (over: Record<string, unknown> = {}, assistant = {}) => {
 describe('loader script (TW-WGT-008)', () => {
   let w: WidgetJson;
   beforeAll(async () => {
+    // The frame loader belongs to the AI and Both widgets; a WhatsApp widget draws its own panel (TW-WGT-028).
+    const a = await api.assistant(t);
     w = await api.widget(t.admin, {
       name: 'Loader',
+      mode: 'both',
+      assistantId: a.uuid,
       autoOpen: true,
       position: 'bottom_left',
       buttonColor: '#112233',
@@ -241,6 +245,8 @@ describe('config and the visitor (TW-WGT-010, 011, 012, 013)', () => {
       collect_email: true,
       collect_phone: false,
       whatsapp_url: 'https://wa.me/919876543210?text=Hi+there',
+      // the one addition to Reference's config (TW-WGT-028, user-requested); its content is asserted in widget-launcher.e2e.spec.ts
+      launcher: expect.objectContaining({ button_type: 'pill', greeting: 'HI THERE!' }),
     });
     const text = JSON.stringify(res.body);
     expect(text).not.toContain('allowed');

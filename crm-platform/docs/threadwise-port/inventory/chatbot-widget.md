@@ -1021,6 +1021,12 @@ reproduced on purpose (tests carry the id; see `docs/threadwise-port/parity/chat
 - QUIRK (TW-WGT-023 rule 2): the remembered visitor key is built from the token. Reproduced.
 - QUIRK (TW-WGT-027): `chatbot_widgets_limit` is never enforced; public routes ignore the plan. Reproduced.
 
+- QUIRK (TW-WGT-006 rule 6): Reference soft-deletes and its unique `(workspace_id, slug)` index covers trashed rows, so saving a name whose slug a deleted widget holds is a 500. NOT reproducible: the platform schema rule is hard delete, so the collision cannot exist (listed as architecture-forced in the parity file).
+
+User-requested addition (TW-WGT-028, Interakt reference): the user showed another product's WhatsApp widget builder and asked for the same options in our WhatsApp-engine builder, with a live preview. Where it
+differs from Reference for the WhatsApp builder page and launcher, it wins; everything else stays Reference. It is one jsonb config (`chatbot_widgets.launcher`) with a Zod shape in the contract, so further options are added as keys
+with defaults. The Reference wizard stays for the Smart agent and Smart + WhatsApp engines. Details and every difference: `docs/threadwise-port/parity/chatbot-widget.md`.
+
 What cannot be reproduced because the architecture forbids it is listed as `intended` in the parity file (uuid ids, hard delete, cursor pagination, tenant isolation,
 problem+json on the admin API, the web app and API being two origins).
 
