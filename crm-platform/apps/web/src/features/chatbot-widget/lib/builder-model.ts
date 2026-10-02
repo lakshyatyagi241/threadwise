@@ -2,6 +2,8 @@ import {
   buildWhatsappLink,
   DEFAULT_LAUNCHER,
   isLauncherAvatar,
+  LAUNCHER_HEX,
+  launcherImageUrl,
   LAUNCHER_LIMITS,
   resolveLauncherColour,
   WIDGET_BUILDER_DEFAULTS,
@@ -398,4 +400,52 @@ export function previewLauncher(d: LauncherDraft): WidgetLauncher {
       bottomSpacing: fix(p.mobile.bottomSpacing, DEFAULT_LAUNCHER.mobile.bottomSpacing),
     },
   };
+}
+
+/** A hex colour the launcher accepts (3 or 6 digits); anything else is not a launcher colour. */
+const launcherHex = (v: string): string | null =>
+  LAUNCHER_HEX.test(v.trim()) ? v.trim().toUpperCase() : null;
+
+/**
+ * What the live preview draws for the Smart agent and Smart + WhatsApp engines: the SAME messenger panel as the WhatsApp
+ * widget, with its content taken from the wizard (the opening line is the bubble, the header colour is the panel colour, the
+ * launcher image is the avatar, the side is the placement). The wizard has no greeting line, so the bubble holds the opening
+ * line alone.
+ */
+export function wizardLauncher(s: BuilderState): WidgetLauncher {
+  const side: LauncherSide = s.position === 'bottom_left' ? 'left' : 'right';
+  const image = launcherImageUrl(s.buttonImageUrl);
+  return {
+    ...DEFAULT_LAUNCHER,
+    buttonType: 'icon',
+    colour: launcherHex(s.headerBg) ?? launcherHex(s.buttonColor) ?? DEFAULT_LAUNCHER.colour,
+    avatar: image ?? DEFAULT_LAUNCHER.avatar,
+    greeting: '',
+    introMessage: s.welcomeMessage.trim() || DEFAULT_LAUNCHER.introMessage,
+    desktop: { ...DEFAULT_LAUNCHER.desktop, side },
+    mobile: { ...DEFAULT_LAUNCHER.mobile, side },
+  };
+}
+
+export interface PreviewSource {
+  name: string;
+  launcher: WidgetLauncher;
+  whatsappUrl: string | null;
+  /** Start Conversation has no link to open (Smart agent has no WhatsApp number): keep its look, do nothing. */
+  inertStart: boolean;
+}
+
+/** The one thing every engine's preview is drawn from. */
+export function previewSource(s: BuilderState, fallbackName: string): PreviewSource {
+  const name = s.name.trim() || fallbackName;
+  if (s.mode === 'whatsapp') {
+    return {
+      name,
+      launcher: previewLauncher(s.launcher),
+      whatsappUrl: previewWhatsappLink(s),
+      inertStart: false,
+    };
+  }
+  const link = s.mode === 'both' ? previewWhatsappLink(s) : null;
+  return { name, launcher: wizardLauncher(s), whatsappUrl: link, inertStart: link === null };
 }
