@@ -2,8 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
   AVATAR_MAX_BYTES,
   QUALITY_STEPS,
+  avatarTargetBytes,
+  canUploadAsPicked,
   encodePlan,
   fitWithin,
+  formatLimit,
   isAvatarType,
 } from './image-downscale';
 
@@ -71,5 +74,51 @@ describe('limits', () => {
       expect(isAvatarType(t)).toBe(true);
     for (const t of ['image/svg+xml', 'image/bmp', 'application/pdf', ''])
       expect(isAvatarType(t)).toBe(false);
+  });
+});
+
+describe('canUploadAsPicked', () => {
+  const gif = (size: number) => ({ type: 'image/gif', size });
+
+  it('keeps a small GIF as picked so its animation survives', () => {
+    expect(canUploadAsPicked(gif(200_000), 320, 240)).toBe(true);
+    expect(canUploadAsPicked(gif(AVATAR_MAX_BYTES), 512, 512)).toBe(true);
+  });
+
+  it('re-encodes a GIF that is over the byte cap or larger than the circle needs', () => {
+    expect(canUploadAsPicked(gif(AVATAR_MAX_BYTES + 1), 320, 240)).toBe(false);
+    expect(canUploadAsPicked(gif(100_000), 513, 200)).toBe(false);
+  });
+
+  it('always re-encodes other formats, even tiny ones', () => {
+    for (const type of ['image/png', 'image/jpeg', 'image/webp'])
+      expect(canUploadAsPicked({ type, size: 1000 }, 64, 64)).toBe(false);
+  });
+});
+
+describe('avatarTargetBytes', () => {
+  it('aims a tenth under the cap the server reported', () => {
+    expect(avatarTargetBytes(1024 * 1024)).toBe(943718);
+    expect(avatarTargetBytes(512 * 1024)).toBe(471859);
+  });
+  it('falls back to the built-in target when the server said nothing', () => {
+    expect(avatarTargetBytes(undefined)).toBe(AVATAR_MAX_BYTES);
+    expect(avatarTargetBytes(null)).toBe(AVATAR_MAX_BYTES);
+    expect(avatarTargetBytes(0)).toBe(AVATAR_MAX_BYTES);
+  });
+});
+
+describe('formatLimit', () => {
+  it('writes the cap in megabytes', () => {
+    expect(formatLimit(1024 * 1024, 'en')).toMatch(/^1\s?MB$/);
+    expect(formatLimit(2.5 * 1024 * 1024, 'en')).toMatch(/^2\.5\s?MB$/);
+  });
+});
+
+describe('canUploadAsPicked with a server cap', () => {
+  it('uses the given cap instead of the built-in one', () => {
+    const gif = { type: 'image/gif', size: 600_000 };
+    expect(canUploadAsPicked(gif, 200, 200)).toBe(true);
+    expect(canUploadAsPicked(gif, 200, 200, 500_000)).toBe(false);
   });
 });

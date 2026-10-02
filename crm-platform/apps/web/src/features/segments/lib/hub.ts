@@ -14,7 +14,9 @@ export function filterSegments(
       if (params.show === 'mine' && s.ownerId !== meId) return false;
       if (params.show === 'shared' && s.visibility !== 'shared') return false;
       if (!needle) return true;
-      return `${s.name} ${s.description ?? ''} ${s.ownerName ?? ''}`.toLocaleLowerCase().includes(needle);
+      return `${s.name} ${s.description ?? ''} ${s.ownerName ?? ''}`
+        .toLocaleLowerCase()
+        .includes(needle);
     })
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt) || a.name.localeCompare(b.name));
 }
@@ -45,9 +47,7 @@ export function pageWindow<T>(rows: readonly T[], page: number, per: number): Pa
 }
 
 export type CountState =
-  | { kind: 'unknown' }
-  | { kind: 'exact'; count: number }
-  | { kind: 'approximate'; count: number };
+  { kind: 'unknown' } | { kind: 'exact'; count: number } | { kind: 'approximate'; count: number };
 
 /** How a member count reads: "-" until counted, "N", or "about N" when the server could only estimate. */
 export function countState(s: Pick<Segment, 'memberCount' | 'countApproximate'>): CountState {

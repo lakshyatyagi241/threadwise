@@ -61,8 +61,16 @@ export function useSegmentCatalog(): SegmentCatalog {
     () => ({
       stages: stageChoices(statusOptions.data).map(toChoice),
       statuses: statusChoices(statusOptions.data, (v) => tf(`statuses.${v}`)).map(toChoice),
-      tags: (tags.data ?? []).map((t) => ({ value: t.id, label: t.name, ...(t.color ? { color: t.color } : {}) })),
-      groups: (groups.data ?? []).map((g) => ({ value: g.id, label: g.name, ...(g.color ? { color: g.color } : {}) })),
+      tags: (tags.data ?? []).map((t) => ({
+        value: t.id,
+        label: t.name,
+        ...(t.color ? { color: t.color } : {}),
+      })),
+      groups: (groups.data ?? []).map((g) => ({
+        value: g.id,
+        label: g.name,
+        ...(g.color ? { color: g.color } : {}),
+      })),
       users: (people.data ?? []).map((u) => ({ value: u.id, label: u.fullName })),
       properties: (fields.data ?? []).filter(isUsableProperty).map((f) => ({
         key: f.key,
@@ -77,7 +85,10 @@ export function useSegmentCatalog(): SegmentCatalog {
     [statusOptions.data, tags.data, groups.data, fields.data, people.data, tf],
   );
   const catalog = useMemo(() => buildCatalog(lookups), [lookups]);
-  const names = useMemo(() => new Map((people.data ?? []).map((u) => [u.id, u.fullName])), [people.data]);
+  const names = useMemo(
+    () => new Map((people.data ?? []).map((u) => [u.id, u.fullName])),
+    [people.data],
+  );
   return {
     catalog,
     lookups,

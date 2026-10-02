@@ -20,9 +20,20 @@ describe('summaryByCurrency', () => {
   it('keeps every currency apart', () => {
     const rows = summaryByCurrency(s);
     expect(rows.map((r) => r.currency)).toEqual(['INR', 'USD', 'EUR']);
-    expect(rows[0]).toMatchObject({ collected: 630998, refunded: 20000, outstanding: 20000, outstandingInvoices: 2, overdue: 0 });
+    expect(rows[0]).toMatchObject({
+      collected: 630998,
+      refunded: 20000,
+      outstanding: 20000,
+      outstandingInvoices: 2,
+      overdue: 0,
+    });
     expect(rows[1]).toMatchObject({ collected: 60000, refunded: 0, outstanding: 0 });
-    expect(rows[2]).toMatchObject({ collected: 0, outstanding: 550, overdue: 550, overdueInvoices: 1 });
+    expect(rows[2]).toMatchObject({
+      collected: 0,
+      outstanding: 550,
+      overdue: 550,
+      overdueInvoices: 1,
+    });
   });
   it('can be narrowed to one currency', () => {
     expect(summaryByCurrency(s, 'USD').map((r) => r.currency)).toEqual(['USD']);

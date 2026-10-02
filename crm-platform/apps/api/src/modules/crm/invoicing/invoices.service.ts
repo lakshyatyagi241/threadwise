@@ -55,12 +55,12 @@ import {
   resolveDueDate,
   seriesKey,
 } from './invoice-rules';
-import { InvoiceSettingsService, numberingOf, type LoadedProfile } from './invoice-settings.service';
 import {
-  invoiceEventPayload,
-  toInvoiceResponse,
-  toInvoiceSummary,
-} from './invoices.mapper';
+  InvoiceSettingsService,
+  numberingOf,
+  type LoadedProfile,
+} from './invoice-settings.service';
+import { invoiceEventPayload, toInvoiceResponse, toInvoiceSummary } from './invoices.mapper';
 import {
   InvoicesRepository,
   invoiceScopeCondition,
@@ -125,8 +125,12 @@ export interface DraftSpec {
   metaJson?: Record<string, unknown> | null;
 }
 
-const bad = (code: string, message: string, status: HttpStatus, details?: Array<{ path: string; message: string }>) =>
-  new AppError(code as never, message, status, details);
+const bad = (
+  code: string,
+  message: string,
+  status: HttpStatus,
+  details?: Array<{ path: string; message: string }>,
+) => new AppError(code as never, message, status, details);
 
 /** A tax rate row as a line carries it: its taxes (a compound rate keeps its parts) and its inclusive flag, as a snapshot. */
 export function taxSpecOfRate(rate: TaxRateRow): TaxSpec {
@@ -136,7 +140,11 @@ export function taxSpecOfRate(rate: TaxRateRow): TaxSpec {
       name: rate.name,
       type: rate.taxType,
       inclusive: rate.inclusive,
-      items: rate.components.map((c) => ({ code: c.type, name: `${c.type} ${trimPercent(c.ratePercent)}%`, ratePercent: c.ratePercent })),
+      items: rate.components.map((c) => ({
+        code: c.type,
+        name: `${c.type} ${trimPercent(c.ratePercent)}%`,
+        ratePercent: c.ratePercent,
+      })),
     };
   }
   return simpleTax(rate.id, rate.name, rate.taxType, rate.ratePercent, rate.inclusive);
@@ -231,7 +239,14 @@ export class InvoicesService {
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const read = this.rbac.can(ctx.grants!, 'record.contacts.read');
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
-      await assertContactScope(tx, this.contacts, ctx.orgId, read.scope, ctx.userId!, contact.ownerId);
+      await assertContactScope(
+        tx,
+        this.contacts,
+        ctx.orgId,
+        read.scope,
+        ctx.userId!,
+        contact.ownerId,
+      );
       return this.linked(tx, { contactId: contact.id, contactUuid }, query, scope);
     });
   }
@@ -253,7 +268,11 @@ export class InvoicesService {
     });
   }
 
-  async events(uuid: string, query: InvoiceEventsQuery, scope: RecordScope): Promise<InvoiceEventsResponse> {
+  async events(
+    uuid: string,
+    query: InvoiceEventsQuery,
+    scope: RecordScope,
+  ): Promise<InvoiceEventsResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = await this.zone(tx, ctx.orgId);
@@ -279,7 +298,11 @@ export class InvoicesService {
         page: {
           nextCursor:
             hasMore && last
-              ? encodeCursor({ createdAt: last.createdAt, id: last.id, createdAtIso: last.createdAtIso })
+              ? encodeCursor({
+                  createdAt: last.createdAt,
+                  id: last.id,
+                  createdAtIso: last.createdAtIso,
+                })
               : null,
           hasMore,
           limit: query.limit,
@@ -303,7 +326,12 @@ export class InvoicesService {
    * Writes a draft inside the caller's transaction (the conversion port and the recurring runner call this too): the invoice, its
    * priced lines and tax summary, the audit row, the timeline entry and `invoice.created`.
    */
-  async createDraftIn(tx: Tx, orgId: number, actorUserId: number | null, spec: DraftSpec): Promise<InvoiceRow> {
+  async createDraftIn(
+    tx: Tx,
+    orgId: number,
+    actorUserId: number | null,
+    spec: DraftSpec,
+  ): Promise<InvoiceRow> {
     const profile = await this.settings.load(tx, orgId);
     const priced = priceInvoice({
       currency: spec.currency,
@@ -343,13 +371,21 @@ export class InvoicesService {
     return row;
   }
 
-  async update(uuid: string, input: UpdateInvoiceInput, scope: RecordScope): Promise<InvoiceResponse> {
+  async update(
+    uuid: string,
+    input: UpdateInvoiceInput,
+    scope: RecordScope,
+  ): Promise<InvoiceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lockForWrite(tx, uuid, scope);
       if (input.rowVersion !== row.rowVersion) throw AppError.rowVersionConflict('Invoice');
       if (row.storedStatus === 'void')
-        throw bad(ERROR_CODES.INV_ALREADY_VOID, 'A void invoice cannot be edited', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.INV_ALREADY_VOID,
+          'A void invoice cannot be edited',
+          HttpStatus.CONFLICT,
+        );
 
       if (row.storedStatus !== 'draft') {
         const touched = FROZEN_AFTER_ISSUE.filter((k) => input[k] !== undefined);
@@ -363,7 +399,10 @@ export class InvoicesService {
         }
       }
 
-      if (input.lines !== undefined && (await this.orders.orderOfInvoice(tx, ctx.orgId, row.id)) !== null)
+      if (
+        input.lines !== undefined &&
+        (await this.orders.orderOfInvoice(tx, ctx.orgId, row.id)) !== null
+      )
         throw bad(
           ERROR_CODES.INV_ORDER_LINKED,
           'The lines of an invoice made from a sales order are fixed: void or delete it and invoice the order again',
@@ -373,7 +412,13 @@ export class InvoicesService {
       const profile = await this.settings.load(tx, ctx.orgId);
       const patch: Parameters<InvoicesRepository['update']>[4] = {};
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      const set = <K extends keyof typeof patch>(k: K, v: (typeof patch)[K], label: string, old: unknown, next: unknown) => {
+      const set = <K extends keyof typeof patch>(
+        k: K,
+        v: (typeof patch)[K],
+        label: string,
+        old: unknown,
+        next: unknown,
+      ) => {
         patch[k] = v;
         delta[label] = { old, new: next };
       };
@@ -396,8 +441,16 @@ export class InvoicesService {
         const v = input[key];
         if (v !== undefined && (v ?? null) !== cur) {
           if (key === 'buyerName' && !(v ?? '').trim())
-            throw AppError.validation('An invoice needs a buyer name', [{ path: 'buyerName', message: 'required' }]);
-          set(col, v ?? null, key, key === 'notes' || key === 'terms' ? cur !== null : cur, key === 'notes' || key === 'terms' ? v !== null : (v ?? null));
+            throw AppError.validation('An invoice needs a buyer name', [
+              { path: 'buyerName', message: 'required' },
+            ]);
+          set(
+            col,
+            v ?? null,
+            key,
+            key === 'notes' || key === 'terms' ? cur !== null : cur,
+            key === 'notes' || key === 'terms' ? v !== null : (v ?? null),
+          );
         }
       }
       if (input.taxRegime !== undefined && input.taxRegime !== row.taxRegime)
@@ -406,9 +459,14 @@ export class InvoicesService {
       // owner and links
       if (input.ownerId !== undefined) {
         const owner = await this.resolveOwner(tx, ctx.orgId, input.ownerId, null);
-        if (owner !== row.ownerId) set('ownerId', owner, 'owner', row.ownerUuid, input.ownerId ?? null);
+        if (owner !== row.ownerId)
+          set('ownerId', owner, 'owner', row.ownerUuid, input.ownerId ?? null);
       }
-      if (input.contactId !== undefined || input.companyId !== undefined || input.dealId !== undefined) {
+      if (
+        input.contactId !== undefined ||
+        input.companyId !== undefined ||
+        input.dealId !== undefined
+      ) {
         const links = await this.resolveLinks(tx, ctx.orgId, input, false);
         for (const [k, key, cur] of [
           ['contactId', 'contact', row.contactId],
@@ -422,15 +480,27 @@ export class InvoicesService {
       }
 
       // dates
-      if (input.issueDate !== undefined) set('issueDate', input.issueDate ?? null, 'issueDate', row.issueDate, input.issueDate ?? null);
+      if (input.issueDate !== undefined)
+        set(
+          'issueDate',
+          input.issueDate ?? null,
+          'issueDate',
+          row.issueDate,
+          input.issueDate ?? null,
+        );
       let due: string | null | undefined = input.dueDate;
       if (due === undefined && input.paymentTermsDays != null) {
-        due = addDays(input.issueDate ?? row.issueDate ?? todayIn(resolveTimezone(profile.timezone)), input.paymentTermsDays);
+        due = addDays(
+          input.issueDate ?? row.issueDate ?? todayIn(resolveTimezone(profile.timezone)),
+          input.paymentTermsDays,
+        );
       }
       if (due !== undefined && (due ?? null) !== row.dueDate) {
         const issue = (patch.issueDate !== undefined ? patch.issueDate : row.issueDate) ?? null;
         if (due && issue && due < issue)
-          throw AppError.validation('The due date is before the issue date', [{ path: 'dueDate', message: 'before the issue date' }]);
+          throw AppError.validation('The due date is before the issue date', [
+            { path: 'dueDate', message: 'before the issue date' },
+          ]);
         set('dueDate', due ?? null, 'dueDate', row.dueDate, due ?? null);
       }
 
@@ -446,11 +516,17 @@ export class InvoicesService {
         input.taxMode !== undefined ||
         input.supplyType !== undefined ||
         (autoNow &&
-          (input.buyerCountry !== undefined || input.placeOfSupply !== undefined || input.buyerTaxId !== undefined));
+          (input.buyerCountry !== undefined ||
+            input.placeOfSupply !== undefined ||
+            input.buyerTaxId !== undefined));
       let priced: PricedInvoice | null = null;
       let explanation: AutoTaxExplanation | null = null;
       if (contentTouched) {
-        if (input.currency !== undefined && input.currency !== row.currency && input.lines === undefined)
+        if (
+          input.currency !== undefined &&
+          input.currency !== row.currency &&
+          input.lines === undefined
+        )
           throw AppError.validation('Changing the currency needs the lines to be sent again', [
             { path: 'lines', message: 'required with a new currency' },
           ]);
@@ -458,7 +534,10 @@ export class InvoicesService {
         let reverseCharge = input.reverseCharge ?? row.reverseCharge;
         let lines: LineSpec[];
         if (autoNow) {
-          const supplyType = (input.supplyType ?? (rowMeta.supplyType as 'goods' | 'services' | 'digital' | undefined) ?? 'goods');
+          const supplyType =
+            input.supplyType ??
+            (rowMeta.supplyType as 'goods' | 'services' | 'digital' | undefined) ??
+            'goods';
           const auto = await this.autoOrRates(
             tx,
             ctx.orgId,
@@ -466,7 +545,7 @@ export class InvoicesService {
             'auto',
             supplyType,
             input.lines ??
-              (await this.repo.lines(tx, ctx.orgId, row.id)).map((l) => ({
+              ((await this.repo.lines(tx, ctx.orgId, row.id)).map((l) => ({
                 description: l.description,
                 sku: l.sku,
                 hsnSac: l.hsnSac,
@@ -474,14 +553,22 @@ export class InvoicesService {
                 unitPrice: minorToMajor(l.unitPriceMinor, row.currency),
                 discount: undefined,
                 taxRateId: null,
-              })) as CreateInvoiceInput['lines'],
+              })) as CreateInvoiceInput['lines']),
             {
-              buyerCountry: input.buyerCountry !== undefined ? (input.buyerCountry ?? null) : row.buyerCountry,
-              placeOfSupply: input.placeOfSupply !== undefined ? (input.placeOfSupply ?? null) : row.placeOfSupply,
-              buyerTaxId: input.buyerTaxId !== undefined ? (input.buyerTaxId ?? null) : row.buyerTaxId,
-              date: (patch.issueDate !== undefined ? patch.issueDate : row.issueDate) ?? todayIn(resolveTimezone(profile.timezone)),
+              buyerCountry:
+                input.buyerCountry !== undefined ? (input.buyerCountry ?? null) : row.buyerCountry,
+              placeOfSupply:
+                input.placeOfSupply !== undefined
+                  ? (input.placeOfSupply ?? null)
+                  : row.placeOfSupply,
+              buyerTaxId:
+                input.buyerTaxId !== undefined ? (input.buyerTaxId ?? null) : row.buyerTaxId,
+              date:
+                (patch.issueDate !== undefined ? patch.issueDate : row.issueDate) ??
+                todayIn(resolveTimezone(profile.timezone)),
               reverseCharge,
-              legalNotes: input.legalNotes !== undefined ? (input.legalNotes ?? null) : row.legalNotes,
+              legalNotes:
+                input.legalNotes !== undefined ? (input.legalNotes ?? null) : row.legalNotes,
             },
           );
           lines = auto.lines;
@@ -494,12 +581,20 @@ export class InvoicesService {
           patch.metaJson = { ...rowMeta, taxMode: 'auto', supplyType, taxResolution: explanation };
           // an auto invoice keeps each line's own discount when only the buyer or the place changed: rebuild from the stored rows
           if (input.lines === undefined) {
-            const stored = specsFromRows(await this.repo.lines(tx, ctx.orgId, row.id), row.currency);
-            lines = lines.map((l, i) => ({ ...l, discount: stored[i]!.discount, sku: stored[i]!.sku }));
+            const stored = specsFromRows(
+              await this.repo.lines(tx, ctx.orgId, row.id),
+              row.currency,
+            );
+            lines = lines.map((l, i) => ({
+              ...l,
+              discount: stored[i]!.discount,
+              sku: stored[i]!.sku,
+            }));
           }
         } else if (input.lines !== undefined) {
           lines = await this.specsFromLines(tx, ctx.orgId, input.lines, profile);
-          if (input.taxMode === 'rates') patch.metaJson = { ...rowMeta, taxMode: 'rates', taxResolution: null };
+          if (input.taxMode === 'rates')
+            patch.metaJson = { ...rowMeta, taxMode: 'rates', taxResolution: null };
         } else {
           lines = specsFromRows(await this.repo.lines(tx, ctx.orgId, row.id), row.currency);
         }
@@ -512,11 +607,18 @@ export class InvoicesService {
                 ? { kind: 'amount', value: minorToMajor(row.discountValue, row.currency) }
                 : null;
         const shipping =
-          input.shipping !== undefined ? (input.shipping ?? null) : row.shippingMinor > 0n ? minorToMajor(row.shippingMinor, row.currency) : null;
+          input.shipping !== undefined
+            ? (input.shipping ?? null)
+            : row.shippingMinor > 0n
+              ? minorToMajor(row.shippingMinor, row.currency)
+              : null;
         priced = priceInvoice({ currency, specs: lines, discount, shipping, reverseCharge });
         Object.assign(patch, this.totalsPatch(priced, currency));
         patch.reverseCharge = reverseCharge;
-        delta.total = { old: minorToMajor(row.totalMinor, row.currency), new: minorToMajor(priced.totals.totalMinor, currency) };
+        delta.total = {
+          old: minorToMajor(row.totalMinor, row.currency),
+          new: minorToMajor(priced.totals.totalMinor, currency),
+        };
         if (currency !== row.currency) delta.currency = { old: row.currency, new: currency };
         if (input.lines !== undefined) delta.lines = { old: null, new: input.lines.length };
       }
@@ -526,8 +628,18 @@ export class InvoicesService {
       if (!ok) throw AppError.rowVersionConflict('Invoice');
       if (priced) await this.repo.replaceLines(tx, ctx.orgId, row.id, priced.lines, priced.summary);
 
-      const after = (await this.repo.findById(tx, ctx.orgId, row.id, resolveTimezone(profile.timezone)))!;
-      await this.audit.record(tx, { module: INVOICE_MODULE, recordId: row.id, action: 'update', delta });
+      const after = (await this.repo.findById(
+        tx,
+        ctx.orgId,
+        row.id,
+        resolveTimezone(profile.timezone),
+      ))!;
+      await this.audit.record(tx, {
+        module: INVOICE_MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta,
+      });
       await this.repo.log(tx, ctx.orgId, row.id, {
         event: 'edited',
         actorKind: 'user',
@@ -545,7 +657,11 @@ export class InvoicesService {
   }
 
   /** Draft -> issued: due date, number, public link, frozen seller block, all in one transaction. */
-  async issue(uuid: string, input: IssueInvoiceInput, scope: RecordScope): Promise<InvoiceResponse> {
+  async issue(
+    uuid: string,
+    input: IssueInvoiceInput,
+    scope: RecordScope,
+  ): Promise<InvoiceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lockForWrite(tx, uuid, scope);
@@ -564,12 +680,18 @@ export class InvoicesService {
     input: Pick<IssueInvoiceInput, 'issueDate' | 'dueDate' | 'paymentTermsDays'> = {},
   ): Promise<InvoiceRow> {
     if (row.storedStatus === 'void')
-      throw bad(ERROR_CODES.INV_ALREADY_VOID, 'A void invoice cannot be issued', HttpStatus.CONFLICT);
+      throw bad(
+        ERROR_CODES.INV_ALREADY_VOID,
+        'A void invoice cannot be issued',
+        HttpStatus.CONFLICT,
+      );
     if (row.storedStatus !== 'draft')
       throw bad(ERROR_CODES.INV_NOT_DRAFT, 'The invoice is already issued', HttpStatus.CONFLICT);
     const lines = await this.repo.lines(tx, orgId, row.id);
     if (lines.length === 0)
-      throw AppError.validation('An invoice needs at least one line', [{ path: 'lines', message: 'required' }]);
+      throw AppError.validation('An invoice needs at least one line', [
+        { path: 'lines', message: 'required' },
+      ]);
 
     const profile = await this.settings.load(tx, orgId, true);
     const tz = resolveTimezone(profile.timezone);
@@ -611,7 +733,12 @@ export class InvoicesService {
         dueDate: { old: row.dueDate, new: dueDate },
       },
     });
-    await this.repo.log(tx, orgId, row.id, { event: 'issued', detail: number, actorKind: actorUserId ? 'user' : 'system', actorUserId });
+    await this.repo.log(tx, orgId, row.id, {
+      event: 'issued',
+      detail: number,
+      actorKind: actorUserId ? 'user' : 'system',
+      actorUserId,
+    });
     await this.outbox.emit(tx, {
       aggregateModule: INVOICE_MODULE,
       aggregateId: row.id,
@@ -620,7 +747,11 @@ export class InvoicesService {
     });
     if (zero) {
       // Nothing to collect: it is paid the moment it exists.
-      await this.repo.log(tx, orgId, row.id, { event: 'paid', actorKind: 'system', detail: 'no balance' });
+      await this.repo.log(tx, orgId, row.id, {
+        event: 'paid',
+        actorKind: 'system',
+        detail: 'no balance',
+      });
       await this.outbox.emit(tx, {
         aggregateModule: INVOICE_MODULE,
         aggregateId: row.id,
@@ -637,17 +768,32 @@ export class InvoicesService {
     return this.db.tx(async (tx) => {
       const row = await this.lockForWrite(tx, uuid, scope);
       if (row.storedStatus !== 'issued')
-        throw bad(ERROR_CODES.INV_NOT_ISSUED, 'Only an issued invoice can be sent', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.INV_NOT_ISSUED,
+          'Only an issued invoice can be sent',
+          HttpStatus.CONFLICT,
+        );
       if (input.channel === 'email' && !row.buyerEmail)
-        throw bad(ERROR_CODES.INV_NO_RECIPIENT, 'The invoice has no buyer email', HttpStatus.UNPROCESSABLE_ENTITY, [
-          { path: 'buyerEmail', message: 'required to send by email' },
-        ]);
+        throw bad(
+          ERROR_CODES.INV_NO_RECIPIENT,
+          'The invoice has no buyer email',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'buyerEmail', message: 'required to send by email' }],
+        );
       if (input.channel === 'whatsapp' && !row.buyerPhone)
-        throw bad(ERROR_CODES.INV_NO_RECIPIENT, 'The invoice has no buyer phone', HttpStatus.UNPROCESSABLE_ENTITY, [
-          { path: 'buyerPhone', message: 'required to send on WhatsApp' },
-        ]);
+        throw bad(
+          ERROR_CODES.INV_NO_RECIPIENT,
+          'The invoice has no buyer phone',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'buyerPhone', message: 'required to send on WhatsApp' }],
+        );
       await this.repo.markSent(tx, ctx.orgId, row.id, input.channel);
-      const after = (await this.repo.findById(tx, ctx.orgId, row.id, await this.zone(tx, ctx.orgId)))!;
+      const after = (await this.repo.findById(
+        tx,
+        ctx.orgId,
+        row.id,
+        await this.zone(tx, ctx.orgId),
+      ))!;
       await this.audit.record(tx, {
         module: INVOICE_MODULE,
         recordId: row.id,
@@ -665,7 +811,11 @@ export class InvoicesService {
         aggregateModule: INVOICE_MODULE,
         aggregateId: row.id,
         eventType: 'invoice.sent',
-        payload: { ...invoiceEventPayload(after), channel: input.channel, message: input.message ?? null },
+        payload: {
+          ...invoiceEventPayload(after),
+          channel: input.channel,
+          message: input.message ?? null,
+        },
       });
       return this.toResponse(tx, after);
     });
@@ -680,7 +830,11 @@ export class InvoicesService {
       if (row.storedStatus === 'void')
         throw bad(ERROR_CODES.INV_ALREADY_VOID, 'The invoice is already void', HttpStatus.CONFLICT);
       if (row.storedStatus === 'draft')
-        throw bad(ERROR_CODES.INV_NOT_ISSUED, 'A draft is deleted, not voided', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.INV_NOT_ISSUED,
+          'A draft is deleted, not voided',
+          HttpStatus.CONFLICT,
+        );
       if (row.paidMinor > 0n)
         throw bad(
           ERROR_CODES.INV_HAS_PAYMENTS,
@@ -698,12 +852,20 @@ export class InvoicesService {
       await this.repo.markVoid(tx, ctx.orgId, row.id, ctx.userId, input.reason);
       await this.releaseOrder(tx, ctx.orgId, row.id);
       await this.repo.expireAttempts(tx, ctx.orgId, row.id);
-      const after = (await this.repo.findById(tx, ctx.orgId, row.id, await this.zone(tx, ctx.orgId)))!;
+      const after = (await this.repo.findById(
+        tx,
+        ctx.orgId,
+        row.id,
+        await this.zone(tx, ctx.orgId),
+      ))!;
       await this.audit.record(tx, {
         module: INVOICE_MODULE,
         recordId: row.id,
         action: 'update',
-        delta: { status: { old: row.storedStatus, new: 'void' }, voidReason: { old: null, new: input.reason } },
+        delta: {
+          status: { old: row.storedStatus, new: 'void' },
+          voidReason: { old: null, new: input.reason },
+        },
       });
       await this.repo.log(tx, ctx.orgId, row.id, {
         event: 'voided',
@@ -735,7 +897,10 @@ export class InvoicesService {
         module: INVOICE_MODULE,
         recordId: row.id,
         action: 'delete',
-        delta: { total: { old: minorToMajor(row.totalMinor, row.currency), new: null }, buyer: { old: row.buyerName, new: null } },
+        delta: {
+          total: { old: minorToMajor(row.totalMinor, row.currency), new: null },
+          buyer: { old: row.buyerName, new: null },
+        },
       });
       await this.outbox.emit(tx, {
         aggregateModule: INVOICE_MODULE,
@@ -803,17 +968,27 @@ export class InvoicesService {
   }
 
   /** A new public link; the old one stops working at once. */
-  async regenerateLink(uuid: string, input: PublicLinkInput, scope: RecordScope): Promise<InvoiceResponse> {
+  async regenerateLink(
+    uuid: string,
+    input: PublicLinkInput,
+    scope: RecordScope,
+  ): Promise<InvoiceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lockForWrite(tx, uuid, scope);
       if (row.storedStatus === 'draft')
-        throw bad(ERROR_CODES.INV_NOT_ISSUED, 'A draft has no public link until it is issued', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.INV_NOT_ISSUED,
+          'A draft has no public link until it is issued',
+          HttpStatus.CONFLICT,
+        );
       const token = newPublicToken();
       await this.repo.setLink(tx, ctx.orgId, row.id, {
         hash: hashPublicToken(token),
         cipher: this.crypto.encrypt(token),
-        expiresAt: input.expiresInDays ? new Date(Date.now() + input.expiresInDays * 86_400_000) : null,
+        expiresAt: input.expiresInDays
+          ? new Date(Date.now() + input.expiresInDays * 86_400_000)
+          : null,
       });
       await this.audit.record(tx, {
         module: INVOICE_MODULE,
@@ -821,8 +996,15 @@ export class InvoicesService {
         action: 'update',
         delta: { publicLink: { old: 'active', new: 'regenerated' } },
       });
-      await this.repo.log(tx, ctx.orgId, row.id, { event: 'link_regenerated', actorKind: 'user', actorUserId: ctx.userId });
-      return this.toResponse(tx, (await this.repo.findById(tx, ctx.orgId, row.id, await this.zone(tx, ctx.orgId)))!);
+      await this.repo.log(tx, ctx.orgId, row.id, {
+        event: 'link_regenerated',
+        actorKind: 'user',
+        actorUserId: ctx.userId,
+      });
+      return this.toResponse(
+        tx,
+        (await this.repo.findById(tx, ctx.orgId, row.id, await this.zone(tx, ctx.orgId)))!,
+      );
     });
   }
 
@@ -831,7 +1013,11 @@ export class InvoicesService {
     return this.db.tx(async (tx) => {
       const row = await this.lockForWrite(tx, uuid, scope);
       if (row.storedStatus === 'draft')
-        throw bad(ERROR_CODES.INV_NOT_ISSUED, 'A draft has no public link until it is issued', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.INV_NOT_ISSUED,
+          'A draft has no public link until it is issued',
+          HttpStatus.CONFLICT,
+        );
       await this.repo.setLink(tx, ctx.orgId, row.id, { revoke: true });
       await this.audit.record(tx, {
         module: INVOICE_MODULE,
@@ -839,8 +1025,15 @@ export class InvoicesService {
         action: 'update',
         delta: { publicLink: { old: 'active', new: 'revoked' } },
       });
-      await this.repo.log(tx, ctx.orgId, row.id, { event: 'link_revoked', actorKind: 'user', actorUserId: ctx.userId });
-      return this.toResponse(tx, (await this.repo.findById(tx, ctx.orgId, row.id, await this.zone(tx, ctx.orgId)))!);
+      await this.repo.log(tx, ctx.orgId, row.id, {
+        event: 'link_revoked',
+        actorKind: 'user',
+        actorUserId: ctx.userId,
+      });
+      return this.toResponse(
+        tx,
+        (await this.repo.findById(tx, ctx.orgId, row.id, await this.zone(tx, ctx.orgId)))!,
+      );
     });
   }
 
@@ -855,7 +1048,9 @@ export class InvoicesService {
   ): Promise<DraftSpec> {
     const profile = await this.settings.load(tx, orgId);
     const links = await this.resolveLinks(tx, orgId, input, true);
-    const contact = links.contactId ? await this.repo.resolveContactById(tx, orgId, links.contactId) : null;
+    const contact = links.contactId
+      ? await this.repo.resolveContactById(tx, orgId, links.contactId)
+      : null;
     const buyerName = (input.buyerName ?? contact?.name ?? '').trim();
     if (!buyerName)
       throw AppError.validation('An invoice needs a buyer: give a name or link a contact', [
@@ -867,7 +1062,9 @@ export class InvoicesService {
     if (!dueDate && input.paymentTermsDays != null)
       dueDate = addDays(issueDate ?? todayIn(tz), input.paymentTermsDays);
     if (dueDate && issueDate && dueDate < issueDate)
-      throw AppError.validation('The due date is before the issue date', [{ path: 'dueDate', message: 'before the issue date' }]);
+      throw AppError.validation('The due date is before the issue date', [
+        { path: 'dueDate', message: 'before the issue date' },
+      ]);
     return {
       source: extra.source ?? 'manual',
       docType: input.docType ?? 'tax_invoice',
@@ -894,14 +1091,22 @@ export class InvoicesService {
       terms: input.terms ?? profile.row.terms,
       discount: input.discount ?? null,
       shipping: input.shipping ?? null,
-      ...(await this.autoOrRates(tx, orgId, profile, input.taxMode ?? 'rates', input.supplyType ?? 'goods', input.lines, {
-        buyerCountry: input.buyerCountry ?? null,
-        placeOfSupply: input.placeOfSupply ?? null,
-        buyerTaxId: input.buyerTaxId ?? null,
-        date: issueDate ?? todayIn(tz),
-        reverseCharge: input.reverseCharge ?? false,
-        legalNotes: input.legalNotes ?? null,
-      })),
+      ...(await this.autoOrRates(
+        tx,
+        orgId,
+        profile,
+        input.taxMode ?? 'rates',
+        input.supplyType ?? 'goods',
+        input.lines,
+        {
+          buyerCountry: input.buyerCountry ?? null,
+          placeOfSupply: input.placeOfSupply ?? null,
+          buyerTaxId: input.buyerTaxId ?? null,
+          date: issueDate ?? todayIn(tz),
+          reverseCharge: input.reverseCharge ?? false,
+          legalNotes: input.legalNotes ?? null,
+        },
+      )),
       metaJson: extra.metaJson ?? null,
     };
   }
@@ -926,10 +1131,24 @@ export class InvoicesService {
       reverseCharge: boolean;
       legalNotes: string | null;
     },
-  ): Promise<{ lines: LineSpec[]; taxMode: 'rates' | 'auto'; explanation: AutoTaxExplanation | null; supplyType: typeof supplyType; reverseCharge: boolean; legalNotes: string | null }> {
+  ): Promise<{
+    lines: LineSpec[];
+    taxMode: 'rates' | 'auto';
+    explanation: AutoTaxExplanation | null;
+    supplyType: typeof supplyType;
+    reverseCharge: boolean;
+    legalNotes: string | null;
+  }> {
     const rateSpecs = await this.specsFromLines(tx, orgId, lines, profile);
     if (mode !== 'auto') {
-      return { lines: rateSpecs, taxMode: 'rates', explanation: null, supplyType, reverseCharge: ctx.reverseCharge, legalNotes: ctx.legalNotes };
+      return {
+        lines: rateSpecs,
+        taxMode: 'rates',
+        explanation: null,
+        supplyType,
+        reverseCharge: ctx.reverseCharge,
+        legalNotes: ctx.legalNotes,
+      };
     }
     const { specs, explanation } = resolveAutoTax(
       {
@@ -945,7 +1164,11 @@ export class InvoicesService {
       rateSpecs.map((l, i) => ({
         hsnSac: l.hsnSac,
         // an explicit slab on the line (its tax rate id) is honoured as the line's rate
-        ratePercent: lines[i]!.taxRateId ? (l.tax?.items.length === 1 ? l.tax.items[0]!.ratePercent : null) : null,
+        ratePercent: lines[i]!.taxRateId
+          ? l.tax?.items.length === 1
+            ? l.tax.items[0]!.ratePercent
+            : null
+          : null,
       })),
     );
     const notes = explanation.documentNotes.join('\n');
@@ -994,9 +1217,12 @@ export class InvoicesService {
           (!rate.effectiveFrom || rate.effectiveFrom <= today) &&
           (!rate.effectiveTo || rate.effectiveTo >= today);
         if (!inWindow)
-          throw bad(ERROR_CODES.INV_TAX_RATE_INVALID, `The tax rate "${rate.name}" cannot be used today`, HttpStatus.UNPROCESSABLE_ENTITY, [
-            { path: `lines.${i}.taxRateId`, message: 'inactive or outside its effective dates' },
-          ]);
+          throw bad(
+            ERROR_CODES.INV_TAX_RATE_INVALID,
+            `The tax rate "${rate.name}" cannot be used today`,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: `lines.${i}.taxRateId`, message: 'inactive or outside its effective dates' }],
+          );
       }
       const tax: TaxSpec | null = rate ? taxSpecOfRate(rate) : null;
       out.push({
@@ -1012,7 +1238,11 @@ export class InvoicesService {
     return out;
   }
 
-  private insertOf(spec: DraftSpec, priced: PricedInvoice, actorUserId: number | null): InvoiceInsert {
+  private insertOf(
+    spec: DraftSpec,
+    priced: PricedInvoice,
+    actorUserId: number | null,
+  ): InvoiceInsert {
     const t = priced.totals;
     const meta: Record<string, unknown> = { ...(spec.metaJson ?? {}) };
     if (spec.taxMode === 'auto') {
@@ -1089,9 +1319,12 @@ export class InvoicesService {
     if (ownerUuid === null) return null;
     const u = await this.repo.resolveActiveUser(tx, orgId, ownerUuid);
     if (!u)
-      throw bad(ERROR_CODES.INV_OWNER_INVALID, 'The owner is not an active member of this workspace', HttpStatus.UNPROCESSABLE_ENTITY, [
-        { path: 'ownerId', message: 'not an active member' },
-      ]);
+      throw bad(
+        ERROR_CODES.INV_OWNER_INVALID,
+        'The owner is not an active member of this workspace',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'ownerId', message: 'not an active member' }],
+      );
     return u.id;
   }
 
@@ -1105,7 +1338,8 @@ export class InvoicesService {
     input: { contactId?: string | null; companyId?: string | null; dealId?: string | null },
     fillFromParents: boolean,
   ): Promise<{ contactId?: number | null; companyId?: number | null; dealId?: number | null }> {
-    const out: { contactId?: number | null; companyId?: number | null; dealId?: number | null } = {};
+    const out: { contactId?: number | null; companyId?: number | null; dealId?: number | null } =
+      {};
     let dealContact: number | null = null;
     let dealCompany: number | null = null;
     if (input.dealId !== undefined) {
@@ -1183,7 +1417,14 @@ export class InvoicesService {
       tx,
       ctx.orgId,
       ctx.userId,
-      { limit: query.limit, cursor: query.cursor, order: 'desc', status: query.status, contactId: link.contactUuid, dealId: link.dealUuid },
+      {
+        limit: query.limit,
+        cursor: query.cursor,
+        order: 'desc',
+        status: query.status,
+        contactId: link.contactUuid,
+        dealId: link.dealUuid,
+      },
       invoiceScopeCondition(ctx.orgId, scope, ctx.userId),
       tz,
       // Drafts are not money yet: the rollup counts issued invoices; the list still shows drafts to the people who may see them.
@@ -1191,11 +1432,18 @@ export class InvoicesService {
     const page = buildPage(rows, query.limit);
     const roll = await this.repo.rollup(tx, ctx.orgId, link, tz);
     const pick = (f: 'invoiced' | 'paid' | 'outstanding' | 'overdue') =>
-      roll.filter((r) => r[f] > 0n).map((r) => ({ currency: r.currency, amount: minorToMajor(r[f], r.currency) }));
+      roll
+        .filter((r) => r[f] > 0n)
+        .map((r) => ({ currency: r.currency, amount: minorToMajor(r[f], r.currency) }));
     return {
       data: page.items.map(toInvoiceSummary),
       page: page.page,
-      totals: { invoiced: pick('invoiced'), paid: pick('paid'), outstanding: pick('outstanding'), overdue: pick('overdue') },
+      totals: {
+        invoiced: pick('invoiced'),
+        paid: pick('paid'),
+        outstanding: pick('outstanding'),
+        overdue: pick('overdue'),
+      },
     };
   }
 
@@ -1221,7 +1469,13 @@ export class InvoicesService {
 
   async lockForWrite(tx: Tx, uuid: string, scope: RecordScope): Promise<InvoiceRow> {
     const ctx = RequestContextStore.require();
-    const row = await this.repo.findByUuid(tx, ctx.orgId, uuid, await this.zone(tx, ctx.orgId), true);
+    const row = await this.repo.findByUuid(
+      tx,
+      ctx.orgId,
+      uuid,
+      await this.zone(tx, ctx.orgId),
+      true,
+    );
     if (!row) throw AppError.notFound('Invoice', uuid);
     await this.assertScope(tx, scope, row);
     return row;

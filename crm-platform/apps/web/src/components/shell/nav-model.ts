@@ -30,7 +30,10 @@ export function matchesHref(pathname: string, href: string): boolean {
 }
 
 /** The one active entry: the longest matching address among real screens (so `/account/security` is Account). */
-export function activeItemId(items: readonly ResolvedNavItem[], pathname: string): string | undefined {
+export function activeItemId(
+  items: readonly ResolvedNavItem[],
+  pathname: string,
+): string | undefined {
   let best: ResolvedNavItem | undefined;
   for (const item of items) {
     if (item.comingSoon || !matchesHref(pathname, item.href)) continue;

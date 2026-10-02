@@ -154,7 +154,12 @@ export function InvoicesScreen() {
 
       <OutstandingStrip counts={counts.data} />
 
-      <InvoicesTabs value={filters.tab} onChange={changeTab} counts={counts.data} panelId={panelId} />
+      <InvoicesTabs
+        value={filters.tab}
+        onChange={changeTab}
+        counts={counts.data}
+        panelId={panelId}
+      />
 
       <InvoicesToolbar
         filters={filters}
@@ -189,7 +194,12 @@ export function InvoicesScreen() {
         // The card is as tall as the window allows: the rows scroll inside it and the footer stays pinned.
         className="flex max-h-[max(26rem,calc(100dvh-19rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
-        <div className={cn('flex min-h-0 flex-1 flex-col transition-opacity', list.isPlaceholderData && 'opacity-60')}>
+        <div
+          className={cn(
+            'flex min-h-0 flex-1 flex-col transition-opacity',
+            list.isPlaceholderData && 'opacity-60',
+          )}
+        >
           {list.isPending ? (
             <ListSkeleton />
           ) : list.isError ? (
@@ -278,7 +288,9 @@ export function InvoicesScreen() {
         tone="danger"
         busy={busy}
         title={tb('confirm.delete.title')}
-        message={tb('confirm.delete.message', { count: eligibleRows(selectedRows, 'delete', can).length })}
+        message={tb('confirm.delete.message', {
+          count: eligibleRows(selectedRows, 'delete', can).length,
+        })}
         confirmLabel={tb('confirm.delete.confirm')}
         cancelLabel={tb('keep')}
         onClose={() => setBulkConfirm(null)}

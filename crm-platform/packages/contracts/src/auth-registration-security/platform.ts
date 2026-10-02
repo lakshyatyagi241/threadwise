@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { emailSchema, uuidSchema } from '../common/ids';
+import { brandingFooterTextSchema } from './account';
 import { mfaRequiredSchema, tokenPairSchema } from './login';
 import {
   otpSenderRefSchema,
@@ -55,7 +56,7 @@ export type OperatorSessionResponse = z.infer<typeof operatorSessionResponseSche
 export const registrationSettingsSchema = z.object({
   publicRegistration: z.boolean().default(true),
   /** off = auto-verify, banner = allowed but nagged, block = must verify first. */
-  emailVerification: z.enum(['off', 'banner', 'block']).default('banner'),
+  emailVerification: z.enum(['off', 'banner', 'block']).default('off'),
   /** Plan slug from the PLAN domain; null = the domain's own default. */
   defaultPlanId: z.string().max(64).nullable().default(null),
   trialDays: z.number().int().min(0).max(365).default(14),
@@ -87,10 +88,11 @@ const otpSettingsPatchSchema = z.object({
   enabled: z.boolean().optional(),
   /** Must be a sender in the OTP sender registry; null clears the choice. */
   sender: otpSenderRefSchema.nullable().optional(),
-  ttlMinutes: z.number().int().min(1).max(90).optional(),
-  length: z.number().int().min(4).max(8).optional(),
-  resendCooldownSec: z.number().int().min(15).max(600).optional(),
-  maxAttempts: z.number().int().min(1).max(20).optional(),
+  // A blank knob (null) means "use the default" (5 min / 6 digits / 60 s / 5 tries), never 0.
+  ttlMinutes: z.number().int().min(1).max(90).nullable().optional(),
+  length: z.number().int().min(4).max(8).nullable().optional(),
+  resendCooldownSec: z.number().int().min(15).max(600).nullable().optional(),
+  maxAttempts: z.number().int().min(1).max(20).nullable().optional(),
 });
 
 export const registrationSettingsPatchSchema = z.object({
@@ -233,6 +235,11 @@ export const authPagesResponseSchema = z.object({
   extra: z.object({
     login: authPageExtraSchema,
     register: authPageExtraSchema,
+    /**
+     * Reference stores every showcase key for the forgot page too and renders its
+     * `footer`. Always sent by the API; optional here so older fixtures still parse.
+     */
+    forgot: authPageExtraSchema.optional(),
   }),
 });
 export type AuthPagesResponse = z.infer<typeof authPagesResponseSchema>;
@@ -260,9 +267,32 @@ export const authPagesPatchSchema = z.object({
   register: authPageContentPatchSchema.optional(),
   forgot: authPageContentPatchSchema.optional(),
   extra: z
-    .object({ login: authPageExtraSchema.optional(), register: authPageExtraSchema.optional() })
+    .object({
+      login: authPageExtraSchema.optional(),
+      register: authPageExtraSchema.optional(),
+      forgot: authPageExtraSchema.optional(),
+    })
     .optional(),
   /** Clears the side media of these pages. */
   clearMedia: z.array(z.enum(['login', 'register', 'forgot'])).optional(),
 });
 export type AuthPagesPatch = z.infer<typeof authPagesPatchSchema>;
+
+// --- platform message footer (TW-AUTH-029) ------------------------------------------
+
+/**
+ * The footer appended to outgoing text messages of every workspace whose plan
+ * cannot remove branding. Reference keeps it in General settings
+ * (`platform_branding_footer`, seeded "Sent via <app>"). Blank = no footer.
+ */
+export const platformBrandingFooterResponseSchema = z.object({
+  footer: z.string(),
+  /** True until an operator saves one: the text shown is the built-in "Sent via <app name>". */
+  isDefault: z.boolean(),
+});
+export type PlatformBrandingFooterResponse = z.infer<typeof platformBrandingFooterResponseSchema>;
+
+export const platformBrandingFooterPatchSchema = z.object({
+  footer: brandingFooterTextSchema,
+});
+export type PlatformBrandingFooterPatch = z.infer<typeof platformBrandingFooterPatchSchema>;

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useId } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { PlanCard } from '@crm/contracts';
-import { Badge, Button, Card, Spinner, cn } from '@crm/ui';
+import { Badge, Button, Spinner, cn } from '@crm/ui';
 import { CheckIcon } from '../../shared/icons';
 import { ctaFor, messagesView, priceView } from './plan-format';
 
@@ -34,48 +34,83 @@ export function PlanCardView({
   const cta = ctaFor(card.action);
 
   return (
-    <Card
+    <div
       role="group"
       aria-labelledby={titleId}
       className={cn(
-        'relative space-y-3 p-4',
-        card.highlighted && 'border-primary ring-2 ring-primary/20',
-        card.current && 'bg-muted/50',
+        'relative space-y-3 rounded-xl border bg-background p-3.5 text-foreground',
+        card.highlighted ? 'border-primary bg-primary/5 ring-2 ring-primary/15' : 'border-border',
+        card.current && !card.highlighted && 'bg-muted/50',
       )}
     >
       {card.highlighted && (
-        <Badge className="absolute -top-2.5 start-4 bg-primary text-primary-foreground">
+        <span className="absolute -top-2 start-3 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 font-mono rtl:font-sans text-[10px] uppercase text-primary-foreground">
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-[#25d366]" />
           {t('popular')}
-        </Badge>
+        </span>
       )}
 
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 space-y-1">
-          <h3 id={titleId} className="text-lg font-semibold leading-tight">
+        <div className="min-w-0">
+          <h3 id={titleId} className="font-serif text-[18px] leading-tight">
             {card.name}
           </h3>
-          {card.subtitle && <p className="text-sm text-muted-foreground">{card.subtitle}</p>}
-          <p className="text-sm font-medium text-primary">
+          {card.subtitle && (
+            <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{card.subtitle}</p>
+          )}
+          <p className="mt-1.5 inline-flex items-center gap-1.5 text-[12px] font-medium text-primary">
+            <svg
+              viewBox="0 0 16 16"
+              className="size-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              aria-hidden="true"
+            >
+              <path d="M2 4h12v8H2zM5 4v8M11 4v8" />
+            </svg>
             {messages.kind === 'unlimited'
               ? t('messagesUnlimited')
               : t('messagesLimited', { count: messages.count })}
           </p>
+          {card.chips.length > 0 && (
+            <ul className="mt-2 flex flex-wrap gap-1" aria-label={t('chipsLabel')}>
+              {card.chips.map((key) => (
+                <li
+                  key={key}
+                  className="rounded bg-muted px-1.5 py-0.5 font-mono rtl:font-sans text-[10px] text-muted-foreground"
+                >
+                  {t(`chips.${key}`)}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div className="shrink-0 text-end">
-          {price.kind === 'free' && <p className="text-xl font-semibold">{t('free')}</p>}
-          {price.kind === 'custom' && <p className="text-xl font-semibold">{t('custom')}</p>}
+          {price.kind === 'free' && (
+            <p className="font-serif text-[22px] leading-none text-primary">{t('free')}</p>
+          )}
+          {price.kind === 'custom' && (
+            <p className="font-serif text-[22px] leading-none text-primary">{t('custom')}</p>
+          )}
           {price.kind === 'paid' && (
             <>
               {price.strike && (
-                <p className="text-xs text-muted-foreground line-through" data-testid="plan-strike">
+                <p
+                  className="text-[11px] leading-none text-muted-foreground line-through"
+                  data-testid="plan-strike"
+                >
                   {price.strike}
                 </p>
               )}
-              <p className="text-xl font-semibold" data-testid="plan-price">
+              <p
+                className="mt-0.5 font-serif text-[22px] leading-none text-primary"
+                data-testid="plan-price"
+              >
                 {price.main}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="mt-1 font-mono rtl:font-sans text-[10.5px] text-muted-foreground">
                 {price.lifetime
                   ? t('lifetime')
                   : price.period
@@ -86,20 +121,6 @@ export function PlanCardView({
           )}
         </div>
       </div>
-
-      {card.chips.length > 0 && (
-        <ul className="flex flex-wrap gap-1.5" aria-label={t('chipsLabel')}>
-          {card.chips.map((key) => (
-            <li
-              key={key}
-              className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground"
-            >
-              <CheckIcon className="size-3 text-primary" />
-              {t(`chips.${key}`)}
-            </li>
-          ))}
-        </ul>
-      )}
 
       <div>
         {cta.kind === 'current' && (
@@ -112,7 +133,8 @@ export function PlanCardView({
           <Button
             type="button"
             variant="secondary"
-            className="w-full sm:w-auto"
+            size="sm"
+            className="w-full rounded-full sm:w-auto"
             disabled={busy || !onContinueFree}
             onClick={onContinueFree}
           >
@@ -124,7 +146,7 @@ export function PlanCardView({
           <Link
             href={cta.href}
             className={cn(
-              'inline-flex h-10 w-full items-center justify-center rounded-md px-4 text-sm font-medium transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary sm:w-auto',
+              'inline-flex h-8 w-full items-center justify-center rounded-full px-4 text-[12.5px] font-medium transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary sm:w-auto',
               cta.label === 'talkToSales'
                 ? 'border border-border bg-background text-foreground hover:bg-muted'
                 : 'bg-primary text-primary-foreground',
@@ -140,9 +162,10 @@ export function PlanCardView({
             <Button
               type="button"
               variant="secondary"
+              size="sm"
               disabled
               aria-describedby={`${titleId}-down`}
-              className="w-full sm:w-auto"
+              className="w-full rounded-full sm:w-auto"
             >
               {t('cta.downgradeUnavailable')}
             </Button>
@@ -152,6 +175,6 @@ export function PlanCardView({
           </>
         )}
       </div>
-    </Card>
+    </div>
   );
 }

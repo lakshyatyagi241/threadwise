@@ -26,3 +26,7 @@ export { SessionService } from './sessions/session.service';
 export { TokenService, type TokenClaims } from './token.service';
 export { AuthMaintenanceService } from './maintenance/auth-maintenance.service';
 export { OtpTemplateRefreshService } from './maintenance/otp-template-refresh.service';
+export { AccountGateService } from './security/account-gate.service';
+export { LoginService } from './flows/login.service';
+export { UserTokensService, type TokenKind } from './flows/user-tokens.service';
+export { MailService } from './mail/mail.service';

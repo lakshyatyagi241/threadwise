@@ -7,6 +7,7 @@ import {
   guestHeader,
   guestMetadata,
   loadRegistrationConfig,
+  redirectIfSignedIn,
 } from '@/features/auth-registration-security/guest/server';
 
 export const generateMetadata = () => guestMetadata('socialCallback');
@@ -24,19 +25,17 @@ export default async function SocialCallbackPage({
   const parsed = socialProviderSchema.safeParse((await params).provider);
   if (!parsed.success) notFound();
   const sp = await searchParams;
+  // Someone already signed in has no business on a sign-in callback (the reference bounces guests-only pages too).
+  await redirectIfSignedIn();
   const config = await loadRegistrationConfig();
   return (
-    <GuestFrame
-      page="login"
-      variant={3}
-      config={config}
-      header={await guestHeader('socialCallback')}
-    >
+    <GuestFrame page="login" config={config} header={await guestHeader('socialCallback')}>
       <SocialCallback
         provider={parsed.data}
         code={firstParam(sp.code)}
         state={firstParam(sp.state)}
         providerError={firstParam(sp.error)}
+        rememberMeEnabled={config.rememberMeEnabled}
       />
     </GuestFrame>
   );

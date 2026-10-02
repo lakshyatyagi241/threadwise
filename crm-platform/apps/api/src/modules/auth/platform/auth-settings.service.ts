@@ -1,22 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Redis } from 'ioredis';
 import {
   AUTH_PAGE_EXTRA_KEYS,
   type AuthPageContent,
   type AuthPageName,
   type AuthPagesPatch,
   type AuthPagesResponse,
+  type PlatformBrandingFooterResponse,
   type RegistrationConfigResponse,
   type SocialCaptchaSettingsPatch,
   type SocialCaptchaSettingsResponse,
 } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import type { Env } from '../../../config/env.schema';
+import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import type { CaptchaConfig } from '../../../infra/providers/auth-registration-security/captcha.port';
 import type {
   SocialCredentials,
   SocialProviderName,
 } from '../../../infra/providers/auth-registration-security/social-oauth.port';
+import {
+  PLATFORM_FOOTER_SETTING,
+  bustFooterCache,
+  capFooter,
+  platformFooterFrom,
+  readSavedPlatformFooter,
+} from '../security/branding-footer.service';
 import { PlatformSettingsService } from './platform-settings.service';
 import { RegistrationOtpService } from './registration-otp.service';
 import { SecurityPolicyService } from './security-policy.service';
@@ -36,7 +46,24 @@ interface PagesDoc {
   login?: AuthPageContent;
   register?: AuthPageContent;
   forgot?: AuthPageContent;
-  extra?: { login?: Record<string, string>; register?: Record<string, string> };
+  extra?: {
+    login?: Record<string, string>;
+    register?: Record<string, string>;
+    forgot?: Record<string, string>;
+  };
+}
+
+/** What kind of media a URL points at, from its path: mp4/webm/... are video, .gif is a gif, the rest an image. */
+export function guessMediaType(url: string): 'image' | 'gif' | 'video' {
+  let path = url;
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    // not an absolute URL: judge the raw text
+  }
+  const ext = /\.([a-z0-9]+)$/i.exec(path)?.[1]?.toLowerCase();
+  if (ext && ['mp4', 'webm', 'mov', 'm4v', 'ogv'].includes(ext)) return 'video';
+  return ext === 'gif' ? 'gif' : 'image';
 }
 
 const SECRET_KEYS = {
@@ -55,21 +82,21 @@ const PAGE_DEFAULTS: Record<
     heading: 'Every customer chat,',
     headingAccent: 'one calm workspace',
     subheading: 'Broadcasts, automations and a shared inbox for teams that answer fast.',
-    accent: '#0f766e',
+    accent: '#25D366',
   },
   register: {
     eyebrow: 'Start in minutes',
     heading: 'Set up your',
     headingAccent: 'workspace',
     subheading: 'Create your workspace, then bring your team and your first channel in.',
-    accent: '#0f766e',
+    accent: '#25D366',
   },
   forgot: {
     eyebrow: 'Account recovery',
     heading: 'Back in',
     headingAccent: 'a minute',
     subheading: 'Enter your email and we will send you a secure link to choose a new password.',
-    accent: '#0f766e',
+    accent: '#25D366',
   },
 };
 
@@ -86,6 +113,7 @@ export class AuthSettingsService {
     private readonly settings: PlatformSettingsService,
     private readonly policy: SecurityPolicyService,
     private readonly otp: RegistrationOtpService,
+    @Inject(REDIS_CLIENT) private readonly redis: Redis,
     config: ConfigService<Env, true>,
   ) {
     this.appName = config.get('APP_NAME', { infer: true });
@@ -201,7 +229,10 @@ export class AuthSettingsService {
   // --- auth pages ---------------------------------------------------------------------
 
   async getAuthPages(): Promise<AuthPagesResponse> {
-    const doc = (await this.settings.get<PagesDoc>('auth.pages')) ?? {};
+    return this.projectPages((await this.settings.get<PagesDoc>('auth.pages')) ?? {});
+  }
+
+  private projectPages(doc: PagesDoc): AuthPagesResponse {
     const variant = doc.variant && doc.variant >= 1 && doc.variant <= 5 ? doc.variant : 1;
     return {
       defaults: {
@@ -213,58 +244,108 @@ export class AuthSettingsService {
       login: doc.login ?? {},
       register: doc.register ?? {},
       forgot: doc.forgot ?? {},
-      extra: { login: doc.extra?.login ?? {}, register: doc.extra?.register ?? {} },
+      extra: {
+        login: doc.extra?.login ?? {},
+        register: doc.extra?.register ?? {},
+        forgot: doc.extra?.forgot ?? {},
+      },
     };
   }
 
+  /**
+   * Edits are applied to the stored document under a row lock, so two operators
+   * saving different pages at once both land: a read-modify-write outside the
+   * lock would let the later save put back what the earlier one changed.
+   */
   async patchAuthPages(patch: AuthPagesPatch, operatorId: number): Promise<AuthPagesResponse> {
-    const current = await this.getAuthPages();
-    const next: AuthPagesResponse = {
-      ...current,
-      extra: { login: { ...current.extra.login }, register: { ...current.extra.register } },
-    };
-    if (patch.variant) next.variant = patch.variant;
+    return this.settings.updateDocument<AuthPagesResponse>(
+      'auth.pages',
+      (stored) => {
+        const current = this.projectPages(stored as PagesDoc);
+        const next: AuthPagesResponse = {
+          ...current,
+          extra: {
+            login: { ...current.extra.login },
+            register: { ...current.extra.register },
+            forgot: { ...current.extra.forgot },
+          },
+        };
+        if (patch.variant) next.variant = patch.variant;
 
-    for (const page of ['login', 'register', 'forgot'] as const) {
-      const p = patch[page];
-      if (!p) continue;
-      // Empty string clears a field (the public projection then shows the default).
-      const merged: AuthPageContent = { ...current[page] };
-      for (const [k, v] of Object.entries(p)) {
-        const key = k as keyof AuthPageContent;
-        if (v === undefined) continue;
-        if (v === '') delete merged[key];
-        else (merged as Record<string, unknown>)[key] = v;
-      }
-      next[page] = merged;
-    }
-
-    for (const page of patch.clearMedia ?? []) {
-      const merged = { ...next[page] };
-      delete merged.mediaUrl;
-      delete merged.mediaType;
-      next[page] = merged;
-    }
-
-    for (const page of ['login', 'register'] as const) {
-      const extra = patch.extra?.[page];
-      if (!extra) continue;
-      for (const [k, v] of Object.entries(extra)) {
-        if (!(AUTH_PAGE_EXTRA_KEYS as readonly string[]).includes(k)) {
-          throw AppError.validation('Unknown auth page field', [
-            { path: `extra.${page}.${k}`, message: 'Unknown field' },
-          ]);
+        for (const page of ['login', 'register', 'forgot'] as const) {
+          const p = patch[page];
+          if (!p) continue;
+          // Empty string clears a field (the public projection then shows the default).
+          const merged: AuthPageContent = { ...current[page] };
+          for (const [k, v] of Object.entries(p)) {
+            const key = k as keyof AuthPageContent;
+            if (v === undefined) continue;
+            if (v === '') delete merged[key];
+            else (merged as Record<string, unknown>)[key] = v;
+          }
+          if (p.mediaUrl === '') {
+            // No address, no kind: a leftover "video" must not follow the next address.
+            delete merged.mediaType;
+          } else if (p.mediaUrl !== undefined && p.mediaType === undefined) {
+            // A new address without a stated kind: the old kind describes the old file.
+            merged.mediaType = guessMediaType(p.mediaUrl);
+          }
+          next[page] = merged;
         }
-        if (v === '') delete next.extra[page][k];
-        else next.extra[page][k] = v;
-      }
-    }
 
-    // The shipped defaults are code, not stored state.
-    const { defaults: _defaults, ...stored } = next;
-    void _defaults;
-    await this.settings.set('auth.pages', stored, operatorId);
-    return next;
+        for (const page of patch.clearMedia ?? []) {
+          const merged = { ...next[page] };
+          delete merged.mediaUrl;
+          delete merged.mediaType;
+          next[page] = merged;
+        }
+
+        for (const page of ['login', 'register', 'forgot'] as const) {
+          const extra = patch.extra?.[page];
+          if (!extra) continue;
+          const target = next.extra[page] ?? (next.extra[page] = {});
+          for (const [k, v] of Object.entries(extra)) {
+            if (!(AUTH_PAGE_EXTRA_KEYS as readonly string[]).includes(k)) {
+              throw AppError.validation('Unknown auth page field', [
+                { path: `extra.${page}.${k}`, message: 'Unknown field' },
+              ]);
+            }
+            if (v === '') delete target[k];
+            else target[k] = v;
+          }
+        }
+
+        // The shipped defaults are code, not stored state.
+        const { defaults: _defaults, ...doc } = next;
+        void _defaults;
+        return { next: doc, result: next };
+      },
+      operatorId,
+    );
+  }
+
+  // --- platform message footer (TW-AUTH-029) --------------------------------------------------
+
+  /** The footer workspaces on plans that cannot remove branding send with every text message. */
+  async getPlatformBrandingFooter(): Promise<PlatformBrandingFooterResponse> {
+    const saved = await readSavedPlatformFooter(this.settings);
+    return {
+      footer: platformFooterFrom(saved, this.appName) ?? '',
+      isDefault: saved === undefined || saved === null,
+    };
+  }
+
+  /** Blank is allowed and means no platform footer. Takes effect on the next send, everywhere. */
+  async setPlatformBrandingFooter(
+    footer: string,
+    operatorId: number,
+  ): Promise<{ before: string | null; after: string | null }> {
+    const saved = await readSavedPlatformFooter(this.settings);
+    const before = platformFooterFrom(saved, this.appName);
+    const text = capFooter(footer);
+    await this.settings.set(PLATFORM_FOOTER_SETTING, text, operatorId);
+    await bustFooterCache(this.redis);
+    return { before, after: text || null };
   }
 
   // --- public projection (guest pages) -----------------------------------------------------
@@ -315,7 +396,7 @@ export class AuthSettingsService {
           register: defaulted('register'),
           forgot: defaulted('forgot'),
         },
-        extra: pages.extra,
+        extra: { ...pages.extra, forgot: pages.extra.forgot ?? {} },
       },
       links: {
         terms: registration.termsUrl,

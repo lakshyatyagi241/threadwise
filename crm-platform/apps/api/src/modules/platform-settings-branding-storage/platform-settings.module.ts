@@ -38,6 +38,12 @@ import { VapidService } from './vapid.service';
     PusherProbe,
     { provide: APP_GUARD, useClass: MaintenanceGuard },
   ],
-  exports: [SettingsService, ProjectionService, BrandingService, MediaStorageService, CurrencyService],
+  exports: [
+    SettingsService,
+    ProjectionService,
+    BrandingService,
+    MediaStorageService,
+    CurrencyService,
+  ],
 })
 export class PlatformSettingsModule {}

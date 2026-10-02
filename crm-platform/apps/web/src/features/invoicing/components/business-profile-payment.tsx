@@ -3,7 +3,14 @@
 import { useTranslations } from 'next-intl';
 import { useId } from 'react';
 import { Field, Textarea } from '@crm/ui';
-import { LIMITS, MAX_BANK_ROWS, bankLabelSuggestions, normalizeRows, profileOf, type ProfileForm } from '../lib/profile-form';
+import {
+  LIMITS,
+  MAX_BANK_ROWS,
+  bankLabelSuggestions,
+  normalizeRows,
+  profileOf,
+  type ProfileForm,
+} from '../lib/profile-form';
 import { RowsEditor, Section, SubHeading, type EditorCtx } from './business-profile-ui';
 
 /** Payment details: the bank rows and instructions printed under the totals, with a small preview of how they print. */
@@ -30,8 +37,21 @@ export function PaymentSection({ form, set, err, readOnly }: EditorCtx) {
               valuePlaceholder={t('rowValuePlaceholder')}
             />
           </div>
-          <Field label={t('instructions')} htmlFor={`${uid}-instr`} hint={t('instructionsHint')} error={err('paymentInstructions')}>
-            <Textarea id={`${uid}-instr`} rows={3} value={form.paymentInstructions} disabled={readOnly} invalid={!!err('paymentInstructions')} dir="auto" onChange={(e) => set('paymentInstructions', e.target.value)} />
+          <Field
+            label={t('instructions')}
+            htmlFor={`${uid}-instr`}
+            hint={t('instructionsHint')}
+            error={err('paymentInstructions')}
+          >
+            <Textarea
+              id={`${uid}-instr`}
+              rows={3}
+              value={form.paymentInstructions}
+              disabled={readOnly}
+              invalid={!!err('paymentInstructions')}
+              dir="auto"
+              onChange={(e) => set('paymentInstructions', e.target.value)}
+            />
           </Field>
         </div>
         <PrintPreview form={form} />
@@ -44,26 +64,42 @@ export function PaymentSection({ form, set, err, readOnly }: EditorCtx) {
 function PrintPreview({ form }: { form: ProfileForm }) {
   const t = useTranslations('invoicing.settings.payment');
   const rows = normalizeRows(form.bankRows);
-  const colour = /^#[0-9A-Fa-f]{6}$/.test(form.brandColor.trim()) ? form.brandColor.trim() : '#334155';
-  const title = form.invoiceTitle.trim() || profileOf(form.sellerCountry)?.documentTitles['tax_invoice'] || t('previewTitleDefault');
+  const colour = /^#[0-9A-Fa-f]{6}$/.test(form.brandColor.trim())
+    ? form.brandColor.trim()
+    : '#334155';
+  const title =
+    form.invoiceTitle.trim() ||
+    profileOf(form.sellerCountry)?.documentTitles['tax_invoice'] ||
+    t('previewTitleDefault');
   const instructions = form.paymentInstructions.trim();
   const footer = form.footerNote.trim();
   return (
     <figure className="min-w-0 space-y-2" aria-label={t('previewLabel')}>
-      <figcaption className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t('previewLabel')}</figcaption>
-      <div className="overflow-hidden rounded-lg border border-border bg-white text-slate-900 shadow-sm" style={{ borderTopColor: colour, borderTopWidth: 4 }}>
+      <figcaption className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        {t('previewLabel')}
+      </figcaption>
+      <div
+        className="overflow-hidden rounded-lg border border-border bg-white text-slate-900 shadow-sm"
+        style={{ borderTopColor: colour, borderTopWidth: 4 }}
+      >
         <div className="space-y-3 p-4 text-xs leading-relaxed">
           <div className="flex items-start justify-between gap-3">
             <p className="min-w-0 break-words text-sm font-semibold" dir="auto">
               {form.sellerName.trim() || t('previewSeller')}
             </p>
-            <p className="shrink-0 text-sm font-bold uppercase tracking-wide" style={{ color: colour }} dir="auto">
+            <p
+              className="shrink-0 text-sm font-bold uppercase tracking-wide"
+              style={{ color: colour }}
+              dir="auto"
+            >
               {title}
             </p>
           </div>
           <div className="h-px bg-slate-200" />
           <div>
-            <p className="mb-1 font-semibold uppercase tracking-wide text-slate-500">{t('previewBank')}</p>
+            <p className="mb-1 font-semibold uppercase tracking-wide text-slate-500">
+              {t('previewBank')}
+            </p>
             {rows.length === 0 ? (
               <p className="text-slate-500">{t('previewNoBank')}</p>
             ) : (
@@ -87,7 +123,10 @@ function PrintPreview({ form }: { form: ProfileForm }) {
             </p>
           )}
           {footer && (
-            <p className="whitespace-pre-wrap break-words border-t border-slate-200 pt-2 text-slate-500" dir="auto">
+            <p
+              className="whitespace-pre-wrap break-words border-t border-slate-200 pt-2 text-slate-500"
+              dir="auto"
+            >
               {footer}
             </p>
           )}

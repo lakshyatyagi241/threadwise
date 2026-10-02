@@ -29,4 +29,8 @@ export const RBAC_ERROR_CODES = {
   RBAC_LAST_OWNER: 'RBAC_LAST_OWNER',
   /** A preset role (Owner, Admin, Manager, Agent, Viewer) cannot be deleted or renamed. */
   RBAC_PRESET_ROLE: 'RBAC_PRESET_ROLE',
+  /** The role still has members: move them to another role before deleting it. */
+  RBAC_ROLE_IN_USE: 'RBAC_ROLE_IN_USE',
+  /** A member cannot deactivate their own account from the members screen. */
+  RBAC_SELF_DEACTIVATE: 'RBAC_SELF_DEACTIVATE',
 } as const;

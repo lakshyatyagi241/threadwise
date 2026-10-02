@@ -97,7 +97,8 @@ const amountInvalid = (issues: Array<{ path: string; message: string }>): AppErr
   );
 
 /** "9.0000" -> "9", "9.9750" -> "9.975", "10" -> "10" (only a fractional part loses trailing zeros). */
-export const trimPercent = (p: string): string => (p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p);
+export const trimPercent = (p: string): string =>
+  p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p;
 
 /** The sum of a line's tax percentages (additive taxes), exact: "9" + "9" = "18", "5" + "9.975" = "14.975". */
 export function totalPercent(items: readonly TaxItem[]): string {
@@ -124,9 +125,19 @@ export function specsFromRows(rows: InvoiceLineRow[], currency: string): LineSpe
     let tax: TaxSpec | null = null;
     if (percent !== '0' || l.taxName) {
       const items: TaxItem[] = l.taxComponents?.length
-        ? l.taxComponents.map((c) => ({ code: c.type, name: c.name ?? c.type, ratePercent: c.ratePercent }))
+        ? l.taxComponents.map((c) => ({
+            code: c.type,
+            name: c.name ?? c.type,
+            ratePercent: c.ratePercent,
+          }))
         : [{ code: l.taxName ?? 'Tax', name: l.taxName ?? 'Tax', ratePercent: percent }];
-      tax = { rateId: l.taxRateId, name: l.taxName, type: l.taxType, inclusive: l.taxInclusive, items };
+      tax = {
+        rateId: l.taxRateId,
+        name: l.taxName,
+        type: l.taxType,
+        inclusive: l.taxInclusive,
+        items,
+      };
     }
     return {
       description: l.description,
@@ -156,14 +167,22 @@ function toDiscount(
   if (d.kind === 'percent') {
     const bp = parsePercentBp(d.value);
     if (bp === null || bp > 10_000) {
-      issues.push({ path, message: 'a percent discount is between 0 and 100 with at most 2 decimals' });
+      issues.push({
+        path,
+        message: 'a percent discount is between 0 and 100 with at most 2 decimals',
+      });
       return none;
     }
-    return bp === 0 ? none : { engine: { kind: 'percent', percent: d.value }, kind: 'percent', value: BigInt(bp) };
+    return bp === 0
+      ? none
+      : { engine: { kind: 'percent', percent: d.value }, kind: 'percent', value: BigInt(bp) };
   }
   const minor = parseMajor(d.value, currency);
   if (minor === null) {
-    issues.push({ path, message: `an amount has at most ${currencyExponent(currency)} decimals in ${currency}` });
+    issues.push({
+      path,
+      message: `an amount has at most ${currencyExponent(currency)} decimals in ${currency}`,
+    });
     return none;
   }
   return minor === 0n ? none : { engine: { kind: 'amount', minor }, kind: 'amount', value: minor };
@@ -179,21 +198,34 @@ export function priceInvoice(opts: {
   const currency = opts.currency.toUpperCase();
   const exp = currencyExponent(currency);
   const issues: Array<{ path: string; message: string }> = [];
-  if (opts.specs.length === 0) issues.push({ path: 'lines', message: 'an invoice needs at least one line' });
+  if (opts.specs.length === 0)
+    issues.push({ path: 'lines', message: 'an invoice needs at least one line' });
   if (opts.specs.length > INVOICE_LINES_MAX)
     issues.push({ path: 'lines', message: `an invoice has at most ${INVOICE_LINES_MAX} lines` });
 
   const docDiscount = toDiscount(opts.discount, currency, 'discount', issues);
   const shipping = parseMajor(opts.shipping ?? '0', currency);
-  if (shipping === null) issues.push({ path: 'shipping', message: `an amount has at most ${exp} decimals in ${currency}` });
+  if (shipping === null)
+    issues.push({
+      path: 'shipping',
+      message: `an amount has at most ${exp} decimals in ${currency}`,
+    });
 
   const lineInputs: LineInput[] = [];
   const lineDiscounts: Array<ReturnType<typeof toDiscount>> = [];
   opts.specs.forEach((l, i) => {
     const qty = parseQty(l.qty);
-    if (qty === null || qty === 0n) issues.push({ path: `lines.${i}.qty`, message: 'a quantity is above 0 with at most 4 decimals' });
+    if (qty === null || qty === 0n)
+      issues.push({
+        path: `lines.${i}.qty`,
+        message: 'a quantity is above 0 with at most 4 decimals',
+      });
     const unit = parseMajor(l.unitPrice, currency);
-    if (unit === null) issues.push({ path: `lines.${i}.unitPrice`, message: `a price has at most ${exp} decimals in ${currency}` });
+    if (unit === null)
+      issues.push({
+        path: `lines.${i}.unitPrice`,
+        message: `a price has at most ${exp} decimals in ${currency}`,
+      });
     const disc = toDiscount(l.discount, currency, `lines.${i}.discount`, issues);
     lineDiscounts.push(disc);
     // Reverse charge: the buyer accounts for the tax, so none is charged on the document.
@@ -223,10 +255,12 @@ export function priceInvoice(opts: {
   try {
     r = calculateDocument({ currency, discount: docDiscount.engine, lines: engineLines });
   } catch (err) {
-    if (err instanceof TaxMathError) throw amountInvalid([{ path: err.path, message: err.message }]);
+    if (err instanceof TaxMathError)
+      throw amountInvalid([{ path: err.path, message: err.message }]);
     throw err;
   }
-  if (r.totalMinor >= MAX_MINOR || r.subtotalMinor >= MAX_MINOR) throw amountInvalid([{ path: 'lines', message: 'amount is too large' }]);
+  if (r.totalMinor >= MAX_MINOR || r.subtotalMinor >= MAX_MINOR)
+    throw amountInvalid([{ path: 'lines', message: 'amount is too large' }]);
 
   const typeOfCode = new Map<string, string | null>();
   opts.specs.forEach((s) => s.tax?.items.forEach((t) => typeOfCode.set(t.code, s.tax!.type)));
@@ -257,7 +291,12 @@ export function priceInvoice(opts: {
       // A compound rate (CGST + SGST) keeps its parts, each with the amount the engine charged for it.
       taxComponents:
         taxed && tax!.items.length > 1
-          ? x.taxes.map((t) => ({ type: t.code, name: t.name, ratePercent: t.ratePercent, amountMinor: t.amountMinor.toString() }))
+          ? x.taxes.map((t) => ({
+              type: t.code,
+              name: t.name,
+              ratePercent: t.ratePercent,
+              amountMinor: t.amountMinor.toString(),
+            }))
           : null,
       currency,
     };
@@ -267,7 +306,9 @@ export function priceInvoice(opts: {
     const lower = g.code.toLowerCase();
     return {
       name: g.name,
-      taxType: (TAX_TYPES as readonly string[]).includes(lower) ? lower : (typeOfCode.get(g.code) ?? null),
+      taxType: (TAX_TYPES as readonly string[]).includes(lower)
+        ? lower
+        : (typeOfCode.get(g.code) ?? null),
       ratePercent: g.ratePercent,
       inclusive: g.inclusive,
       baseMinor: g.baseMinor,

@@ -332,10 +332,10 @@ import { TagsService } from './tags/tags.service';
     TasksService,
     SalesDocsService,
     SalesDocsRepository,
+    RecurringInvoicesService,
     InvoicesService,
     PaymentsService,
     TaxRatesService,
-    RecurringInvoicesService,
   ],
 })
 export class CrmModule {}

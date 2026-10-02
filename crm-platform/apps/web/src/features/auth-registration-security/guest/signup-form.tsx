@@ -1,12 +1,14 @@
 'use client';
 
-import { signupRequestSchema, type RegistrationConfigResponse } from '@crm/contracts';
-import { Alert, Button, Checkbox, Input, PasswordInput, Spinner } from '@crm/ui';
+import {
+  signupRequestSchema,
+  type PasswordPolicyHint,
+  type RegistrationConfigResponse,
+} from '@crm/contracts';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -22,19 +24,23 @@ import { dropKey, focusFirstInvalid } from './focus';
 import { FormError } from './form-error';
 import { FormField } from './form-field';
 import { AgreeLabel } from './legal-links';
-import { PhoneInput, type PhoneValue } from './phone-input';
-import { evaluatePhone, pickDefaultCountry } from './phone';
-import { PolicyErrors } from './policy-errors';
 import { saveChallenge, toStoredChallenge } from './otp-challenge';
-import { currentReferral, forgetReferral, rememberReferral, sanitizeReferral } from './referral';
+import { PhoneInput, type PhoneValue } from './phone-input';
+import { evaluatePhone, maskPhone, pickDefaultCountry } from './phone';
+import { PolicyErrors } from './policy-errors';
+import { longEnough, policyHintParts } from './policy-hint';
+import { sanitizeReferral } from './referral';
 import { bffSignupResponseSchema } from './schemas';
 import { completeSignIn } from './sign-in-complete';
+import { clearDraft, parseDraft, readDraftRaw, saveDraft } from './signup-draft';
 import { suggestSlug } from './slug';
 import { SocialButtons } from './social-buttons';
 import { StepList } from './step-list';
+import { Alert, ArrowIcon, Button, Checkbox, Input, LINK, PasswordInput, Spinner, cn } from './ui';
 import { failedFields } from './zod-fields';
 
 const noopSubscribe = () => () => undefined;
+const noDraft = (): string | null => null;
 
 const FIELD_ORDER = [
   'fullName',
@@ -48,54 +54,77 @@ const FIELD_ORDER = [
   'acceptTerms',
 ] as const;
 
+/** Slightly tighter fields than the sign-in form: this one has the most of them. */
+const COMPACT = 'py-2';
+
 /**
  * Sign-up step 1 (TW-AUTH-005): creates the workspace and its first user together. With registration OTP on, the
  * response asks for the WhatsApp code and nothing exists until /verify-otp succeeds (TW-AUTH-006).
  */
 export function SignupForm({
   config,
-  referralParam,
+  referral: initialReferral,
+  passwordPolicy,
+  restore = false,
+  slugConflict = false,
 }: {
   config: RegistrationConfigResponse;
-  /** `?ref=` from the address. */
-  referralParam: string;
+  /** The code to prefill: `?ref=` from the address, else the 30-day cookie, resolved on the server. */
+  referral: string;
+  /** The live password rules, for the hint. Null when they could not be read. */
+  passwordPolicy: PasswordPolicyHint | null;
+  /** Coming back from the code check: refill the non-secret answers kept in this tab. */
+  restore?: boolean;
+  /** The workspace address was taken while the code was being checked: open the address field. */
+  slugConflict?: boolean;
 }) {
   const t = useTranslations('auth-registration-security.guest.signup');
   const tv = useTranslations('auth-registration-security.guest.validation');
   const tl = useTranslations('auth-registration-security.guest.login');
   const te = useTranslations('auth-registration-security.guest.errors');
+  const tp = useTranslations('auth-registration-security.guest.policy');
   const router = useRouter();
   const form = useRef<HTMLFormElement>(null);
   const captcha = useCaptcha(config.captcha, 'register');
+  const policy = policyHintParts(passwordPolicy);
+  const passwordHint = [
+    tp('minLength', { min: policy.min }),
+    ...policy.extras.map((e) => tp(e)),
+  ].join(' ');
+
+  // The tab's saved answers exist only in the browser: the server render (and hydration) sees none.
+  const rawDraft = useSyncExternalStore(
+    noopSubscribe,
+    () => (restore ? readDraftRaw() : null),
+    noDraft,
+  );
+  const draft = useMemo(() => parseDraft(rawDraft), [rawDraft]);
 
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<MappedError | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<Record<string, ReactNode>>({});
-  const [orgName, setOrgName] = useState('');
-  const [customSlug, setCustomSlug] = useState(false);
-  const [orgSlug, setOrgSlug] = useState('');
-  const [agree, setAgree] = useState(false);
-
-  // Referral: `?ref=` wins, then the 30-day cookie from an earlier visit; typing overrides both.
-  const cookieReferral = useSyncExternalStore(noopSubscribe, currentReferral, () => '');
-  const [referralEdit, setReferralEdit] = useState<string | null>(null);
-  const referral = referralEdit ?? (sanitizeReferral(referralParam) || cookieReferral);
-  useEffect(() => {
-    if (referralParam) rememberReferral(referralParam);
-  }, [referralParam]);
-
-  // Phone: the admin's default country, else the browser language's region (known only in the browser).
-  const defaultIso = useSyncExternalStore(
-    noopSubscribe,
-    () => pickDefaultCountry(config.defaultCountryIso, navigator.languages ?? [navigator.language]),
-    () => pickDefaultCountry(config.defaultCountryIso, []),
+  const [fieldErrors, setFieldErrors] = useState<Record<string, ReactNode>>(
+    slugConflict ? { orgSlug: te('slugTaken') } : {},
   );
+  const [orgNameEdit, setOrgNameEdit] = useState<string | null>(null);
+  const [customSlugEdit, setCustomSlugEdit] = useState<boolean | null>(null);
+  const [orgSlugEdit, setOrgSlugEdit] = useState<string | null>(null);
+  const [agree, setAgree] = useState(false);
+  const orgName = orgNameEdit ?? draft?.orgName ?? '';
+  const customSlug = customSlugEdit ?? (slugConflict || Boolean(draft?.customSlug));
+  const orgSlug = orgSlugEdit ?? draft?.orgSlug ?? '';
+
+  // Referral: the link or cookie code prefills the box; typing overrides it (then the box rules).
+  const [referralEdit, setReferralEdit] = useState<string | null>(null);
+  const referral = referralEdit ?? (initialReferral || draft?.referral || '');
+
+  // Phone: opens on the platform's default country; the same on the server and in the browser.
+  const defaultIso = pickDefaultCountry(config.defaultCountryIso);
   const [phoneEdit, setPhoneEdit] = useState<{ raw: string; iso: CountryCode } | null>(null);
   const phone = useMemo<PhoneValue>(() => {
-    const raw = phoneEdit?.raw ?? '';
-    const iso = phoneEdit?.iso ?? defaultIso;
+    const raw = phoneEdit?.raw ?? draft?.phoneRaw ?? '';
+    const iso = phoneEdit?.iso ?? pickDefaultCountry(draft?.phoneIso, defaultIso);
     return { raw, iso, state: evaluatePhone(raw, iso) };
-  }, [phoneEdit, defaultIso]);
+  }, [phoneEdit, draft, defaultIso]);
 
   const suggested = useMemo(() => suggestSlug(orgName), [orgName]);
 
@@ -126,7 +155,13 @@ export function SignupForm({
     const parsed = signupRequestSchema.safeParse(body);
     const messages: Record<string, ReactNode> = {};
     const failed: string[] = parsed.success ? [] : failedFields(parsed.error);
-    for (const f of failed) messages[f] = tv(f === 'password' ? 'newPassword' : f);
+    for (const f of failed)
+      messages[f] = tv(f === 'password' ? 'newPassword' : f, { min: policy.min });
+    // The contract only guards the floor; the live minimum is shown to the visitor before the server is asked.
+    if (!failed.includes('password') && !longEnough(password, policy)) {
+      messages.password = tv('newPassword', { min: policy.min });
+      failed.push('password');
+    }
     if (!phone.raw.trim()) {
       messages.phone = tv('phoneRequired');
       failed.push('phone');
@@ -154,11 +189,29 @@ export function SignupForm({
         bffSignupResponseSchema,
       );
       if (res.status === 'otp_required') {
-        saveChallenge(toStoredChallenge(res, Date.now()));
+        saveDraft({
+          fullName: text('fullName'),
+          email: text('email'),
+          orgName: text('orgName'),
+          orgSlug: customSlug ? text('orgSlug') : '',
+          customSlug,
+          phoneRaw: phone.raw,
+          phoneIso: phone.state.iso,
+          referral,
+        });
+        // The mask is built from the number just typed (right for any calling-code length), so the code page
+        // never depends on how the server guessed the prefix.
+        saveChallenge(
+          toStoredChallenge(
+            res,
+            Date.now(),
+            phone.state.e164 ? maskPhone(phone.state.e164) : undefined,
+          ),
+        );
         router.push('/verify-otp');
         return;
       }
-      forgetReferral();
+      clearDraft();
       completeSignIn(res);
     } catch (err) {
       captcha.reset();
@@ -176,7 +229,7 @@ export function SignupForm({
         messages[mapped.field] = te(mapped.key, mapped.params);
       }
       // A taken address the server derived itself still needs a place to type another one.
-      if (mapped.key === 'slugTaken') setCustomSlug(true);
+      if (mapped.key === 'slugTaken') setCustomSlugEdit(true);
       setFieldErrors(messages);
       focusFirstInvalid(form.current, FIELD_ORDER, Object.keys(messages));
       setPending(false);
@@ -187,11 +240,8 @@ export function SignupForm({
     return (
       <div className="space-y-4">
         <Alert tone="warning">{t('closedBody')}</Alert>
-        <p className="text-center text-sm text-muted-foreground">
-          <Link
-            href="/login"
-            className="font-medium text-primary underline-offset-2 hover:underline"
-          >
+        <p className="text-center text-[12.5px] text-(--auth-ink-600)">
+          <Link href="/login" className={LINK}>
             {t('closedBack')}
           </Link>
         </p>
@@ -200,8 +250,8 @@ export function SignupForm({
   }
 
   return (
-    <div className="space-y-5">
-      <StepList current={1} />
+    <div>
+      <StepList current={1} className="mb-3" />
 
       <SocialButtons
         social={config.social}
@@ -217,6 +267,7 @@ export function SignupForm({
       />
 
       <form
+        key={draft ? 'restored' : 'fresh'}
         method="post"
         ref={form}
         onSubmit={(e) => void onSubmit(e)}
@@ -226,7 +277,7 @@ export function SignupForm({
           setError((cur) => (cur && cur.field === name ? null : cur));
         }}
         noValidate
-        className="space-y-4"
+        className="space-y-2.5"
       >
         <FormError
           error={error}
@@ -240,9 +291,11 @@ export function SignupForm({
             <Input
               {...p}
               name="fullName"
+              defaultValue={draft?.fullName}
               autoComplete="name"
               placeholder={t('fullNamePlaceholder')}
               autoFocus
+              className={COMPACT}
             />
           )}
         </FormField>
@@ -253,11 +306,13 @@ export function SignupForm({
               {...p}
               name="email"
               type="email"
+              defaultValue={draft?.email}
               inputMode="email"
               autoComplete="email"
               autoCapitalize="none"
               spellCheck={false}
               placeholder={tl('emailPlaceholder')}
+              className={COMPACT}
             />
           )}
         </FormField>
@@ -272,9 +327,10 @@ export function SignupForm({
               {...p}
               name="orgName"
               value={orgName}
-              onChange={(e) => setOrgName(e.target.value)}
+              onChange={(e) => setOrgNameEdit(e.target.value)}
               autoComplete="organization"
               placeholder={t('orgNamePlaceholder')}
+              className={COMPACT}
             />
           )}
         </FormField>
@@ -286,19 +342,21 @@ export function SignupForm({
                 {...p}
                 name="orgSlug"
                 value={orgSlug}
-                onChange={(e) => setOrgSlug(e.target.value)}
+                onChange={(e) => setOrgSlugEdit(e.target.value)}
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
                 placeholder={suggested || t('orgSlugPlaceholder')}
+                className={COMPACT}
+                autoFocus={slugConflict}
               />
             )}
           </FormField>
         ) : (
           <button
             type="button"
-            onClick={() => setCustomSlug(true)}
-            className="text-xs font-medium text-primary underline-offset-2 hover:underline"
+            onClick={() => setCustomSlugEdit(true)}
+            className={cn(LINK, 'text-[11.5px]')}
           >
             {t('customiseSlug')}
           </button>
@@ -334,19 +392,24 @@ export function SignupForm({
               spellCheck={false}
               maxLength={16}
               placeholder={t('referralPlaceholder')}
-              className="font-mono uppercase placeholder:font-sans placeholder:normal-case"
+              className={cn(
+                COMPACT,
+                'font-mono uppercase tracking-wider placeholder:font-sans placeholder:normal-case placeholder:tracking-normal',
+              )}
             />
           )}
         </FormField>
 
-        <FormField label={t('password')} error={fieldErrors.password} hint={t('passwordHint')}>
+        <FormField label={t('password')} error={fieldErrors.password} hint={passwordHint}>
           {(p) => (
             <PasswordInput
               {...p}
               name="password"
               autoComplete="new-password"
+              placeholder={tp('placeholder', { min: policy.min })}
               showLabel={tl('showPassword')}
               hideLabel={tl('hidePassword')}
+              className={COMPACT}
             />
           )}
         </FormField>
@@ -359,21 +422,23 @@ export function SignupForm({
               autoComplete="new-password"
               showLabel={tl('showPassword')}
               hideLabel={tl('hidePassword')}
+              className={COMPACT}
             />
           )}
         </FormField>
 
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 pt-0.5">
           <Checkbox
             id="acceptTerms"
             name="acceptTerms"
             checked={agree}
             onChange={(e) => setAgree(e.target.checked)}
             aria-invalid={fieldErrors.acceptTerms ? true : undefined}
+            className="items-start text-[11px] leading-snug"
             label={<AgreeLabel links={config.links} />}
           />
           {fieldErrors.acceptTerms && (
-            <p role="alert" className="text-xs text-danger">
+            <p role="alert" className="text-[11.5px] text-(--auth-coral-ink)">
               {fieldErrors.acceptTerms}
             </p>
           )}
@@ -381,18 +446,19 @@ export function SignupForm({
 
         {captcha.widget}
 
-        <Button type="submit" className="h-11 w-full" disabled={pending}>
-          {pending && <Spinner label={t('submitting')} />}
+        <Button type="submit" className="mt-1 w-full py-2.5" disabled={pending}>
+          {pending ? <Spinner label={t('submitting')} /> : null}
           {pending ? t('submitting') : t('submit')}
+          {!pending && <ArrowIcon />}
         </Button>
-      </form>
 
-      <p className="text-center text-sm text-muted-foreground">
-        {t('haveAccount')}{' '}
-        <Link href="/login" className="font-medium text-primary underline-offset-2 hover:underline">
-          {t('signIn')}
-        </Link>
-      </p>
+        <p className="text-center text-[12px] text-(--auth-ink-600)">
+          {t('haveAccount')}{' '}
+          <Link href="/login" className={LINK}>
+            {t('signIn')}
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }

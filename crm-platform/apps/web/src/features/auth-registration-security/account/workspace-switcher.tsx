@@ -25,7 +25,9 @@ interface Target {
 export function initialsOf(name: string): string {
   const words = name.trim().split(/\s+/).filter(Boolean);
   const letters =
-    words.length > 1 ? words[0]!.slice(0, 1) + words[1]!.slice(0, 1) : (words[0] ?? '?').slice(0, 2);
+    words.length > 1
+      ? words[0]!.slice(0, 1) + words[1]!.slice(0, 1)
+      : (words[0] ?? '?').slice(0, 2);
   return letters.toUpperCase();
 }
 
@@ -89,7 +91,9 @@ export function WorkspaceSwitcher() {
   );
   const identity = (
     <span className="min-w-0 flex-1 text-start">
-      <span className="block truncate text-sm font-bold text-nav-active-foreground">{org.name}</span>
+      <span className="block truncate text-sm font-bold text-nav-active-foreground">
+        {org.name}
+      </span>
       {plan && <span className="block truncate text-xs text-nav-muted">{plan}</span>}
     </span>
   );
@@ -194,7 +198,11 @@ export function WorkspaceSwitcher() {
         {avatar}
         {!collapsed && identity}
         {!collapsed &&
-          (switching ? <Spinner label={t('switching')} /> : <ChevronsUpDownIcon className="text-nav-muted" />)}
+          (switching ? (
+            <Spinner label={t('switching')} />
+          ) : (
+            <ChevronsUpDownIcon className="text-nav-muted" />
+          ))}
       </button>
 
       {open && (

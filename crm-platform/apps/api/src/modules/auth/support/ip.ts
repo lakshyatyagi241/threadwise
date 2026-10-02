@@ -36,22 +36,37 @@ function toBytes(ip: string): Uint8Array | null {
 }
 
 /**
+ * Splits `address` or `address/prefix`. A missing, empty, signed, fractional or doubled prefix
+ * (`10.0.0.5/`, `10.0.0.5/-1`, `10.0.0.5/8/8`) is malformed: reading `Number('')` as 0 would turn
+ * a typo into a /0 that allows every address.
+ */
+function splitEntry(entry: string): { base: string; prefix: number | undefined } | null {
+  const parts = entry.trim().split('/');
+  if (parts.length > 2) return null;
+  const base = parts[0];
+  if (!base) return null;
+  if (parts.length === 1) return { base, prefix: undefined };
+  const raw = parts[1] as string;
+  return /^\d{1,3}$/.test(raw) ? { base, prefix: Number(raw) } : null;
+}
+
+/**
  * True when `ip` is the address or inside the CIDR. A v4 address never matches
  * a v6 range and an unparsable entry never matches (it cannot widen access).
  */
 export function ipMatches(ip: string, entry: string): boolean {
   const addr = normalizeIp(ip);
   if (!addr) return false;
-  const [base, prefixRaw] = entry.trim().split('/');
-  if (!base) return false;
-  const baseIp = normalizeIp(base);
+  const parsed = splitEntry(entry);
+  if (!parsed) return false;
+  const baseIp = normalizeIp(parsed.base);
   if (!baseIp) return false;
   if (isIP(addr) !== isIP(baseIp)) return false;
-  if (prefixRaw === undefined) return addr === baseIp;
+  if (parsed.prefix === undefined) return addr === baseIp;
 
-  const prefix = Number(prefixRaw);
+  const prefix = parsed.prefix;
   const max = isIP(addr) === 4 ? 32 : 128;
-  if (!Number.isInteger(prefix) || prefix < 0 || prefix > max) return false;
+  if (prefix > max) return false;
 
   const a = toBytes(addr);
   const b = toBytes(baseIp);
@@ -71,12 +86,11 @@ export const ipAllowed = (ip: string, entries: string[]): boolean =>
 
 /** Valid IP or CIDR, so a typo is rejected at save time instead of silently never matching. */
 export function isValidAllowlistEntry(entry: string): boolean {
-  const [base, prefix] = entry.trim().split('/');
-  if (!base || !normalizeIp(base)) return false;
-  if (prefix === undefined) return true;
-  const n = Number(prefix);
-  const max = isIP(base) === 4 ? 32 : 128;
-  return Number.isInteger(n) && n >= 0 && n <= max;
+  const parsed = splitEntry(entry);
+  if (!parsed || !normalizeIp(parsed.base)) return false;
+  if (parsed.prefix === undefined) return true;
+  const max = isIP(normalizeIp(parsed.base) ?? '') === 4 ? 32 : 128;
+  return parsed.prefix <= max;
 }
 
 /**
