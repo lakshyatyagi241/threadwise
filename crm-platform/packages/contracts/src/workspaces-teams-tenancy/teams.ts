@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
+import { wspDisplayName } from './members';
 
 /** Teams inside a workspace (WD-WSP-022): groups of members the inbox routes conversations to. */
 export const WSP_TEAM_NAME_MAX = 64;
@@ -8,7 +9,12 @@ export const WSP_TEAM_DESCRIPTION_MAX = 255;
 export const WSP_TEAM_DEFAULT_COLOR = '#075E54';
 export const WSP_TEAM_DEFAULT_CAPACITY = 20;
 
-export const WSP_ASSIGNMENT_STRATEGIES = ['manual', 'round_robin', 'least_loaded', 'sticky'] as const;
+export const WSP_ASSIGNMENT_STRATEGIES = [
+  'manual',
+  'round_robin',
+  'least_loaded',
+  'sticky',
+] as const;
 export const wspAssignmentStrategySchema = z.enum(WSP_ASSIGNMENT_STRATEGIES);
 export type WspAssignmentStrategy = z.infer<typeof wspAssignmentStrategySchema>;
 
@@ -48,7 +54,7 @@ export const listWspTeamsQuerySchema = paginationQuerySchema.extend({
 export type ListWspTeamsQuery = z.infer<typeof listWspTeamsQuerySchema>;
 
 export const createWspTeamSchema = z.object({
-  name: z.string().trim().min(1).max(WSP_TEAM_NAME_MAX),
+  name: wspDisplayName(WSP_TEAM_NAME_MAX),
   color: wspTeamColorSchema.default(WSP_TEAM_DEFAULT_COLOR),
   description: z.string().trim().max(WSP_TEAM_DESCRIPTION_MAX).nullish(),
   assignmentStrategy: wspAssignmentStrategySchema.default('manual'),
@@ -59,7 +65,7 @@ export type CreateWspTeamInput = z.infer<typeof createWspTeamSchema>;
 
 /** Every field optional; `memberIds`, when present, replaces the member list (an empty list removes everyone). */
 export const updateWspTeamSchema = z.object({
-  name: z.string().trim().min(1).max(WSP_TEAM_NAME_MAX).optional(),
+  name: wspDisplayName(WSP_TEAM_NAME_MAX).optional(),
   color: wspTeamColorSchema.optional(),
   description: z.string().trim().max(WSP_TEAM_DESCRIPTION_MAX).nullish(),
   assignmentStrategy: wspAssignmentStrategySchema.optional(),

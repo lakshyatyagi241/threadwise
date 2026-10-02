@@ -222,6 +222,7 @@ export function MembersTable({
   members,
   summary,
   loading,
+  refreshing = false,
   filtered,
   canInvite,
   actions,
@@ -233,6 +234,8 @@ export function MembersTable({
   members: WspMember[];
   summary: WspMembersSummary | undefined;
   loading: boolean;
+  /** A new search or filter is being answered: the previous rows stay on screen, dimmed. */
+  refreshing?: boolean;
   /** A search or a role filter is active: the empty state says "no match" instead of "none yet". */
   filtered: boolean;
   canInvite: boolean;
@@ -243,12 +246,16 @@ export function MembersTable({
   onLoadMore: () => void;
 }) {
   const t = useTranslations('workspaces-teams-tenancy');
-  const empty = !loading && members.length === 0;
+  const empty = !loading && !refreshing && members.length === 0;
 
   return (
     <div>
       <div className="overflow-x-auto">
-        <table className="w-full text-[12.5px]" aria-label={t('members.table')} aria-busy={loading}>
+        <table
+          className={cn('w-full text-[12.5px]', refreshing && 'opacity-60')}
+          aria-label={t('members.table')}
+          aria-busy={loading || refreshing}
+        >
           <thead className="border-b border-border bg-muted/60 text-muted-foreground">
             <tr>
               <th scope="col" className="px-3 py-2.5 text-start font-medium sm:px-5">

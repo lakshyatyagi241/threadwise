@@ -86,6 +86,8 @@ function InviteForm({
     const checked = validateInvite(form);
     if ('errors' in checked) {
       setFieldErrors(checked.errors);
+      // Keyboard and screen-reader users land on the first field that needs fixing.
+      document.getElementById(`${ids}-${checked.errors.fullName ? 'name' : 'email'}`)?.focus();
       return;
     }
     setBusy(true);
@@ -129,6 +131,7 @@ function InviteForm({
             maxLength={WSP_MEMBER_NAME_MAX}
             autoComplete="off"
             autoFocus
+            required
             invalid={Boolean(nameError)}
           />
         </Field>
@@ -142,6 +145,7 @@ function InviteForm({
             placeholder={t('emailPlaceholder')}
             maxLength={191}
             autoComplete="off"
+            required
             invalid={Boolean(emailError)}
           />
         </Field>
@@ -149,6 +153,7 @@ function InviteForm({
           <Select
             id={`${ids}-role`}
             name="roleId"
+            required
             value={form.roleId}
             onChange={(e) => set({ roleId: e.target.value })}
           >

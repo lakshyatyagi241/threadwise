@@ -34,6 +34,8 @@ function Teams() {
   const canManage = summaryQ.data?.me.canManageTeams ?? false;
   const [editing, setEditing] = useState<WspTeam | 'new' | null>(null);
   const loading = teamsQ.isPending;
+  // The access summary fails fast (no retries) while the list retries a few times: whichever fails first is shown.
+  const failed = summaryQ.isError ? summaryQ.error : teamsQ.isError ? teamsQ.error : null;
 
   return (
     <section className="space-y-5">
@@ -63,10 +65,17 @@ function Teams() {
         </ol>
       </details>
 
-      {teamsQ.isError ? (
+      {failed !== null ? (
         <Alert tone="danger" className="flex flex-wrap items-center justify-between gap-3">
-          <span>{errorText(teamsQ.error)}</span>
-          <Button size="sm" variant="secondary" onClick={() => void teamsQ.refetch()}>
+          <span>{errorText(failed)}</span>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => {
+              void summaryQ.refetch();
+              void teamsQ.refetch();
+            }}
+          >
             {tc('retry')}
           </Button>
         </Alert>
