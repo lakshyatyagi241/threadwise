@@ -8,15 +8,19 @@ import {
   PublicOnlyMediaUrls,
 } from './_shims/open-gates';
 import { SqlInstagramIngest } from './_shims/sql-instagram-ingest';
+import { SqlInstagramTemplates } from './_shims/sql-instagram-templates';
 import {
   INSTAGRAM_AUTOMATION,
   INSTAGRAM_INBOX_INGEST,
   INSTAGRAM_MEDIA_URLS,
   INSTAGRAM_PLAN_GATE,
+  INSTAGRAM_TEMPLATES,
 } from './_shims/tokens';
 import { AccountsController } from './accounts.controller';
 import { AccountsRepository } from './accounts.repository';
 import { AccountsService } from './accounts.service';
+import { BroadcastsController } from './broadcasts.controller';
+import { BroadcastsService } from './broadcasts.service';
 import { FlowsController } from './flows.controller';
 import { FlowsService } from './flows.service';
 import { InboundService } from './inbound.service';
@@ -31,7 +35,12 @@ import { SenderService } from './sender.service';
  */
 @Module({
   imports: [AddonsExtensionRegistryModule],
-  controllers: [AccountsController, FlowsController, InstaflowPublicController],
+  controllers: [
+    AccountsController,
+    BroadcastsController,
+    FlowsController,
+    InstaflowPublicController,
+  ],
   providers: [
     AccountsService,
     AccountsRepository,
@@ -39,6 +48,7 @@ import { SenderService } from './sender.service';
     IngestService,
     PullService,
     FlowsService,
+    BroadcastsService,
     SenderService,
     HttpInstagramBridgeFactory,
     { provide: INSTAGRAM_BRIDGE, useExisting: HttpInstagramBridgeFactory },
@@ -46,6 +56,7 @@ import { SenderService } from './sender.service';
     { provide: INSTAGRAM_INBOX_INGEST, useClass: SqlInstagramIngest },
     { provide: INSTAGRAM_AUTOMATION, useClass: NoInstagramAutomation },
     { provide: INSTAGRAM_MEDIA_URLS, useClass: PublicOnlyMediaUrls },
+    { provide: INSTAGRAM_TEMPLATES, useClass: SqlInstagramTemplates },
   ],
   exports: [AccountsService, AccountsRepository, IngestService, PullService, SenderService],
 })

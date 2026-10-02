@@ -10,8 +10,19 @@ import type { Normalized } from '../ingest-rules';
 export interface InstagramPlanGate {
   /** Throws a PLAN_FEATURE_LOCKED problem when the plan does not include the Instagram channel. */
   assertChannel(orgId: number): Promise<void>;
+  /** Throws when the plan does not include broadcasts (`broadcast`), which a reply-only send needs too. */
+  assertBroadcast(orgId: number): Promise<void>;
 }
 export const INSTAGRAM_PLAN_GATE = Symbol('INSTAGRAM_PLAN_GATE');
+
+/** A conversation of the team inbox, as the Instagram channel needs to see it. */
+export interface ThreadRef {
+  id: number;
+  uuid: string;
+  title: string;
+  channel: string | null;
+  rawJid: string | null;
+}
 
 export interface IngestOutcome {
   /** False when the message was already stored (the push and the pull both delivered it). */
@@ -32,6 +43,25 @@ export interface InstagramInboxIngest {
   record(tx: Tx, orgId: number, n: Normalized): Promise<IngestOutcome>;
   /** The time of the last message of every Instagram thread we hold, by thread key: the pull skips a thread with nothing newer. */
   threadClock(tx: Tx, orgId: number): Promise<Map<string, Date | null>>;
+  /** The threads with these public ids, whatever their channel (the caller checks that they are Instagram ones). */
+  findThreads(tx: Tx, orgId: number, uuids: string[]): Promise<ThreadRef[]>;
+  /** An account's threads, the newest customer message first. */
+  threadsOfAccount(
+    tx: Tx,
+    orgId: number,
+    accountId: string,
+    limit: number,
+  ): Promise<Array<{ uuid: string; title: string; lastInboundAt: Date | null }>>;
+  /**
+   * A message we sent into a thread, shown as outbound: the engine's id is kept at `wa_message_id` so the pull never shows it a
+   * second time, the thread's last-sent time and preview move, and its unread count is left alone.
+   */
+  recordOutbound(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    m: { body: string; providerMessageId: string | null; userId: number | null },
+  ): Promise<void>;
   /** A thread by its public id, whatever its channel (the caller checks that it is an Instagram one). */
   findThread(
     tx: Tx,
@@ -71,3 +101,19 @@ export interface MediaUrls {
   publicUrl(path: string): string | null;
 }
 export const INSTAGRAM_MEDIA_URLS = Symbol('INSTAGRAM_MEDIA_URLS');
+
+/** An Instagram template: a row of `wa_templates` whose channel is instagram (message-templates). */
+export interface InstagramTemplate {
+  id: number;
+  uuid: string;
+  name: string;
+  body: string;
+  buttons: unknown[];
+}
+
+/** Reads Instagram templates until the templates domain exports a channel-aware lookup. */
+export interface InstagramTemplates {
+  list(tx: Tx, orgId: number): Promise<InstagramTemplate[]>;
+  find(tx: Tx, orgId: number, uuid: string): Promise<InstagramTemplate | undefined>;
+}
+export const INSTAGRAM_TEMPLATES = Symbol('INSTAGRAM_TEMPLATES');
