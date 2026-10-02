@@ -30,7 +30,14 @@ export function SectionModal({
       title={section ? t('section.renameTitle') : t('section.newTitle')}
       closeLabel={t('modal.close')}
     >
-      {open && <SectionForm key={section?.id ?? 'new'} section={section} sections={sections} onClose={onClose} />}
+      {open && (
+        <SectionForm
+          key={section?.id ?? 'new'}
+          section={section}
+          sections={sections}
+          onClose={onClose}
+        />
+      )}
     </Modal>
   );
 }
@@ -64,7 +71,8 @@ function SectionForm({
     e.preventDefault();
     const trimmed = name.trim();
     const taken = sections.some(
-      (s) => s.id !== section?.id && s.name.trim().toLocaleLowerCase() === trimmed.toLocaleLowerCase(),
+      (s) =>
+        s.id !== section?.id && s.name.trim().toLocaleLowerCase() === trimmed.toLocaleLowerCase(),
     );
     const found = !trimmed ? 'required' : trimmed.length > 255 ? 'tooLong' : taken ? 'taken' : null;
     setProblem(found ? t(`section.problem.${found}`) : null);

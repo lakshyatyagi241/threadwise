@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Credit notes"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Credit notes cannot add up to more than the invoice. Lower the amounts, or credit what is still left.",
+        "CN_NOT_DRAFT": "Only a draft credit note can be edited or deleted. Reload to see its current state.",
+        "CN_ALREADY_VOID": "This credit note is already void.",
+        "CN_HAS_REFUND": "Cash was returned for this credit note, so it cannot be voided. The refund stays in the payment ledger.",
+        "CN_NOTHING_TO_CREDIT": "There is nothing left to credit here. Choose a line with something remaining, or add an amount.",
+        "CN_LINE_INVALID": "A credited line is not valid: the quantity is more than what is left, or an amount is wrong. Check the highlighted lines.",
+        "INV_NOT_ISSUED": "A credit note can only be made against an issued invoice."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Draft",
+        "issued": "Issued",
+        "void": "Void"
+      },
+      "reasons": {
+        "return": "Goods returned",
+        "price_adjustment": "Price adjustment",
+        "billing_error": "Billing error",
+        "cancellation": "Cancellation",
+        "goodwill": "Goodwill",
+        "other": "Other"
+      },
+      "settlements": {
+        "balance": "Applied to balance",
+        "refund": "Cash refund"
+      },
+      "tabs": {
+        "label": "Credit note status",
+        "all": "All",
+        "draft": "Draft",
+        "issued": "Issued",
+        "void": "Void"
+      },
+      "list": {
+        "title": "Credit notes",
+        "subtitle": "Documents that reduce what a buyer owes on an issued invoice.",
+        "invoices": "Invoices",
+        "newCreditNote": "New credit note",
+        "search": "Search by number or buyer",
+        "reset": "Clear filters",
+        "refresh": "Refresh",
+        "tableLabel": "Credit notes",
+        "noAccessTitle": "No access",
+        "noAccess": "You do not have permission to see credit notes.",
+        "emptyFilteredTitle": "No credit notes match",
+        "emptyFiltered": "Try a different search or clear the filters.",
+        "resetFilters": "Clear filters",
+        "empty": {
+          "all": {
+            "title": "No credit notes yet",
+            "message": "Credit an issued invoice when goods come back, a price was wrong or you want to give something back."
+          },
+          "draft": {
+            "title": "No drafts",
+            "message": "Credit notes you are still preparing show up here."
+          },
+          "issued": {
+            "title": "Nothing issued",
+            "message": "Issued credit notes have a number and have already changed their invoice."
+          },
+          "void": {
+            "title": "Nothing voided",
+            "message": "Credit notes that were voided are kept here."
+          }
+        },
+        "showing": "{count, plural, one {# credit note} other {# credit notes}} loaded",
+        "loadMore": "Load more",
+        "allLoaded": "All loaded",
+        "loading": "Loading credit notes",
+        "contactLoading": "...",
+        "invoiceChip": "Invoice {number}",
+        "clearInvoice": "Show credit notes of every invoice"
+      },
+      "table": {
+        "draft": "Draft",
+        "scrollArea": "Credit notes table, scrolls sideways",
+        "columns": {
+          "number": "Credit note",
+          "invoice": "Invoice",
+          "buyer": "Buyer",
+          "reason": "Reason",
+          "settlement": "Settlement",
+          "total": "Total",
+          "applied": "Applied to balance",
+          "refunded": "Refunded in cash",
+          "issued": "Issue date",
+          "status": "Status"
+        }
+      },
+      "row": {
+        "moreFor": "More actions for {name}",
+        "draft": "draft",
+        "open": "Open",
+        "edit": "Edit draft",
+        "issue": "Issue",
+        "pdf": "Download PDF",
+        "print": "Print",
+        "void": "Void",
+        "delete": "Delete draft"
+      },
+      "dialogs": {
+        "draftName": "this draft",
+        "close": "Close",
+        "keep": "Keep it",
+        "done": {
+          "issue": "Credit note {name} issued.",
+          "void": "Credit note {name} voided.",
+          "delete": "Draft deleted."
+        },
+        "issue": {
+          "title": "Issue this credit note?",
+          "message": "It takes its number and lowers what the buyer owes on the invoice. With a cash refund, money is returned through the payment ledger. After that it can no longer be edited.",
+          "confirm": "Issue credit note"
+        },
+        "void": {
+          "title": "Void this credit note?",
+          "warning": "The credit stops counting: the invoice goes back to what it was before this credit note.",
+          "reason": "Why is it void?",
+          "reasonHint": "Required. It is kept on the credit note.",
+          "confirm": "Void credit note"
+        },
+        "delete": {
+          "title": "Delete this draft?",
+          "message": "The draft is removed for good. Nothing has been issued, so the invoice does not change.",
+          "confirm": "Delete draft"
+        }
+      },
+      "picker": {
+        "total": "Invoice total",
+        "paid": "Paid",
+        "credited": "Credited so far",
+        "balance": "Balance owed",
+        "loading": "Loading the invoice",
+        "change": "Change invoice",
+        "search": "Search issued invoices by number or buyer",
+        "results": "Invoices that can be credited",
+        "searching": "Searching...",
+        "none": "No issued invoice found.",
+        "more": "Show more",
+        "totalShort": "Total",
+        "notCreditable": "A credit note can only be made against an issued invoice (issued, partly paid, overdue or paid). Pick another invoice."
+      },
+      "lines": {
+        "invoiceLines": "Lines of the invoice",
+        "creditLine": "Credit {name}",
+        "lineFacts": "Invoiced {qty} for {amount} before tax",
+        "tax": "Tax",
+        "taxIncluded": "{name} {rate}% included in the price",
+        "taxAdded": "{name} {rate}% added on top",
+        "alreadyCredited": "{qty} already credited, {left} left",
+        "fullyCredited": "Fully credited already",
+        "qtyToCredit": "Quantity to credit",
+        "freeTitle": "Free-form lines",
+        "freeHint": "A goodwill amount or an adjustment that is not tied to a line. The amount is before tax.",
+        "description": "Description",
+        "amount": "Amount before tax",
+        "taxRate": "Tax rate",
+        "noTax": "No tax",
+        "inclusive": "inclusive",
+        "removeFree": "Remove this line",
+        "addFree": "Add a free-form line"
+      },
+      "problems": {
+        "noInvoice": "Pick the invoice to credit.",
+        "nothing": "Choose something to credit: a line, or a free-form amount.",
+        "qtyInvalid": "Enter a quantity above 0, with at most 4 decimals.",
+        "qtyExceeds": "At most {max} can still be credited on this line.",
+        "descriptionRequired": "Describe what is credited.",
+        "amountInvalid": "Enter an amount above 0.",
+        "noteTooLong": "The note is longer than 2000 characters."
+      },
+      "estimate": {
+        "title": "Estimated credit",
+        "disclaimer": "An estimate worked out here with the invoice prices and tax. The figures the server saves are the final ones.",
+        "empty": "Nothing to credit yet. Choose the whole invoice, or tick lines.",
+        "lineQty": "Quantity {qty}",
+        "taxSummary": "Tax summary",
+        "included": "included",
+        "taxOn": "{tax} on {base}",
+        "subtotal": "Before tax",
+        "tax": "Tax",
+        "total": "Total credit",
+        "exceeds": "This is more than the invoice still allows to be credited ({max}). The server will refuse it.",
+        "money": "What happens to the money",
+        "balanceBefore": "Balance owed now",
+        "balanceAfter": "Balance owed after",
+        "applied": "Applied to the invoice",
+        "refunded": "Returned in cash",
+        "refundNote": "Cash refund: money the buyer has paid above what is still owed is returned through the payment ledger when you issue it.",
+        "balanceNote": "Applied to balance: no money is paid out. The credit only lowers what the buyer owes."
+      },
+      "builder": {
+        "noAccess": "You do not have permission to create credit notes.",
+        "backToList": "Back to credit notes",
+        "loading": "Loading the credit note",
+        "notDraft": "Only a draft credit note can be edited.",
+        "openIt": "Open the credit note",
+        "back": "Back",
+        "newTitle": "New credit note",
+        "editTitle": "Edit draft credit note",
+        "conflict": "Someone else changed this credit note while you were editing it. Reload to see the latest version; your changes here will be lost.",
+        "reload": "Reload",
+        "invoice": {
+          "title": "Invoice to credit",
+          "hint": "A credit note belongs to one issued invoice."
+        },
+        "details": {
+          "title": "Details",
+          "reason": "Reason",
+          "issueDate": "Issue date",
+          "issueDateHint": "Leave it empty to use the day you issue it (today is {today}).",
+          "note": "Note",
+          "noteHint": "Printed on the credit note. Optional."
+        },
+        "settlement": {
+          "title": "What happens to the money",
+          "hint": "Chosen now, applied when the credit note is issued.",
+          "balance": {
+            "title": "Apply to the invoice balance",
+            "body": "The invoice owes less. No money moves. Use it when the buyer has not paid yet, or will keep the credit."
+          },
+          "refund": {
+            "title": "Refund in cash",
+            "body": "Whatever the buyer has already paid above what is now owed is returned through the payment ledger as a refund."
+          }
+        },
+        "what": {
+          "title": "What to credit",
+          "pickFirst": "Pick the invoice first.",
+          "loadingCredits": "Checking earlier credit notes of this invoice",
+          "full": {
+            "title": "The whole remaining invoice",
+            "body": "Credits every line, and the shipping with the first credit note. Still creditable:"
+          },
+          "lines": {
+            "title": "Some lines or amounts",
+            "body": "Tick the lines and quantities to credit, or add a free-form amount."
+          }
+        },
+        "saveDraft": "Save draft",
+        "saveAndIssue": "Save and issue",
+        "cancel": "Cancel",
+        "estimateWaiting": "Pick an invoice to see the estimated credit.",
+        "savedToast": "Credit note saved as a draft.",
+        "issuedToast": "Credit note {number} issued.",
+        "savedNotIssued": "Saved as a draft, but it could not be issued: {reason}"
+      },
+      "detail": {
+        "noAccess": "You do not have permission to see credit notes.",
+        "loading": "Loading the credit note",
+        "back": "Back to credit notes",
+        "backToList": "Back to credit notes",
+        "draft": "Draft",
+        "againstInvoice": "Against invoice",
+        "edit": "Edit",
+        "issue": "Issue",
+        "pdf": "PDF",
+        "print": "Print",
+        "void": "Void",
+        "delete": "Delete",
+        "cannotVoidRefunded": "Cash was returned for this credit note, so it cannot be voided. The refund stays in the payment ledger.",
+        "voidedOn": "Voided on {date}",
+        "voided": "This credit note was voided.",
+        "voidReason": "Reason"
+      },
+      "money": {
+        "title": "What happened to the money",
+        "titleDraft": "What will happen to the money",
+        "total": "Credit total",
+        "applied": "Applied to the invoice",
+        "refunded": "Returned in cash",
+        "voidNote": "This credit note was voided, so it no longer reduces the invoice.",
+        "draftNote": "If you issue it as it is now:",
+        "estimate": "An estimate until it is issued.",
+        "balanceBody": "Settlement: applied to the balance. No money is paid out.",
+        "refundBody": "Settlement: cash refund. Money paid above what is still owed goes back to the buyer through the payment ledger."
+      },
+      "after": {
+        "title": "The invoice after this credit note",
+        "titleNow": "The invoice now",
+        "total": "Invoice total",
+        "paid": "Paid",
+        "credited": "Credited",
+        "balance": "Balance owed",
+        "credit": "Credit in the buyer favour"
+      },
+      "paper": {
+        "label": "Credit note {number}",
+        "labelDraft": "Draft credit note",
+        "void": "Void",
+        "sellerFallback": "Your business",
+        "title": "Credit note",
+        "draftNumber": "Draft",
+        "creditedTo": "Credited to",
+        "buyerFallback": "Buyer",
+        "issued": "Issued",
+        "invoice": "Invoice",
+        "item": "Item",
+        "qty": "Qty",
+        "unit": "Unit price",
+        "tax": "Tax",
+        "net": "Net",
+        "taxAmount": "Tax amount",
+        "total": "Total",
+        "taxFallback": "Tax",
+        "taxSummary": "Tax summary",
+        "taxRate": "Rate",
+        "taxBase": "Taxable amount",
+        "included": "included",
+        "subtotal": "Before tax",
+        "taxTotal": "Tax",
+        "totalCredit": "Total credit",
+        "reason": "Reason",
+        "note": "Note"
+      }
+    }
+  }
+}

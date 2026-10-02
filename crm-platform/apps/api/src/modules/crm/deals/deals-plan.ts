@@ -1,30 +1,32 @@
 import { CanActivate, HttpStatus, Injectable } from '@nestjs/common';
-import { ERROR_CODES, PLAN_UPGRADE_PATH, type PlanLimitKey } from '@crm/contracts';
+import {
+  ERROR_CODES,
+  PLAN_UPGRADE_PATH,
+  type PlanFeatureKey,
+  type PlanLimitKey,
+} from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
-import { PlanEntitlementService, type Entitlements } from '../../plans-subscriptions-trials';
+import {
+  PlanEntitlementService,
+  resolveFeature,
+  type Entitlements,
+} from '../../plans-subscriptions-trials';
 
 /**
  * The plan side of deals (TW-DEAL-001, 044). Reference gated the whole area on `access_sales_pipeline` and let every GET through
  * (the page showed a paywall over data it had already sent); `pipelines_limit` was declared and never read.
  *
- * Both keys live in the plan's stored `features` / `limits` JSON under the names below. They are not in the plan-form registry
- * yet (PLAN_FEATURE_DEFS / PLAN_LIMIT_DEFS in @crm/contracts, which the plan editor in apps/web renders and tests message
- * keys for), so for now they are set on a plan or an organization override directly. A plan that carries neither key is not
- * locked and not capped, which is what every existing plan means.
+ * Both keys are in the plan registry (PLAN_FEATURE_DEFS / PLAN_LIMIT_DEFS in @crm/contracts), so the plan editor renders them.
+ * `sales_pipeline` defaults to enabled and `pipelines` to unlimited, so a plan row that predates them is neither locked nor
+ * capped, which is what every existing plan means.
  */
-export const SALES_PIPELINE_FEATURE = 'sales_pipeline';
-export const PIPELINES_LIMIT_KEY = 'pipelines' as PlanLimitKey;
+export const SALES_PIPELINE_FEATURE = 'sales_pipeline' satisfies PlanFeatureKey;
+export const PIPELINES_LIMIT_KEY = 'pipelines' satisfies PlanLimitKey;
 
 /** Pure: the flag for one organization. Platform-owned and plan-less organizations are never locked out. */
 export function salesPipelineEnabled(e: Entitlements | null): boolean {
-  if (!e) return false;
-  if (e.platformOwned) return true;
-  const override = e.overrides.features?.[SALES_PIPELINE_FEATURE];
-  if (typeof override === 'boolean') return override;
-  if (!e.planKnown) return true;
-  const stored = (e.planFeatures as Record<string, unknown>)[SALES_PIPELINE_FEATURE];
-  return typeof stored === 'boolean' ? stored : true;
+  return e ? resolveFeature(e, SALES_PIPELINE_FEATURE) : false;
 }
 
 @Injectable()

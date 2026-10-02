@@ -44,8 +44,22 @@ import {
 import { fieldErrors, errorKind } from '../lib/errors';
 import { checkValue, isFieldApplicable } from '../lib/field-values';
 import { stageChoices, statusChoices } from '../lib/option-sets';
+import {
+  effectiveStage,
+  statusAfterMove,
+  statusNotice,
+  type StatusNotice,
+} from '../lib/status-scope';
 import { CustomFieldsSection, isFormField } from './custom-fields-section';
 import { ErrorLine } from './error-line';
+import { LostReasonFields, useLostReasonChoices } from './lost-reason';
+import {
+  OTHER_REASON,
+  isLostStage,
+  lostReasonPayload,
+  lostReasonProblem,
+  type LostReasonAnswer,
+} from '../lib/stage-flow';
 import { GroupChip } from './chips';
 import { TagsEditor, type TagLite } from './tags-editor';
 
@@ -92,6 +106,7 @@ function ContactForm({
 }) {
   const t = useTranslations('contacts-attributes-tags.form');
   const tt = useTranslations('contacts-attributes-tags.tags');
+  const tl = useTranslations('contacts-attributes-tags.lost');
   const qc = useQueryClient();
   const { toast } = useToast();
   const canCreateTags = useCan('record.tags.create');
@@ -115,6 +130,9 @@ function ContactForm({
   const [version, setVersion] = useState(contact?.rowVersion ?? 0);
   const [conflict, setConflict] = useState(false);
   const [pendingTags, setPendingTags] = useState<TagLite[]>([]);
+  const [lostProblem, setLostProblem] = useState<'pick' | 'text' | null>(null);
+  /** What changing the stage just did to the status field (shown under it until the person picks a status). */
+  const [statusMove, setStatusMove] = useState<StatusNotice>({ kind: 'none' });
 
   const registry = useContactFields();
   const sections = useFieldSections();
@@ -138,10 +156,35 @@ function ContactForm({
     () => stageChoices(statusOptions.data, values.lifecycleStage),
     [statusOptions.data, values.lifecycleStage],
   );
+  // Only the statuses that fit the chosen stage are offered (all of them in a workspace that never scoped a status).
   const statuses = useMemo(
-    () => statusChoices(statusOptions.data, (v) => t(`statuses.${v}`), values.status),
-    [statusOptions.data, values.status, t],
+    () =>
+      statusChoices(
+        statusOptions.data,
+        (v) => t(`statuses.${v}`),
+        values.status,
+        values.lifecycleStage,
+      ),
+    [statusOptions.data, values.status, values.lifecycleStage, t],
   );
+
+  const statusLabel = (v: string) =>
+    statusChoices(statusOptions.data, (x) => t(`statuses.${x}`)).find((c) => c.value === v)
+      ?.label ?? v;
+
+  // Moving to a lost stage needs a reason. A stored reason that is no longer one of the options reads as "not chosen".
+  const lostChoices = useLostReasonChoices();
+  const isLost = isLostStage(stages, values.lifecycleStage);
+  const lostAnswer: LostReasonAnswer = {
+    pick:
+      values.lostReason === OTHER_REASON || lostChoices.some((c) => c.value === values.lostReason)
+        ? values.lostReason
+        : '',
+    text: values.lostText,
+  };
+  const lostPayload = isLost
+    ? lostReasonPayload(lostAnswer, lostChoices.length > 0, editing)
+    : undefined;
 
   const set = <K extends keyof ContactFormValues>(key: K, value: ContactFormValues[K]) =>
     setValues((v) => ({ ...v, [key]: value }));
@@ -206,6 +249,7 @@ function ContactForm({
             contact.isUnsubscribed,
             contact.customFields,
             fieldsByKey,
+            lostPayload,
           ),
         );
         const before = initialGroups.current;
@@ -221,7 +265,9 @@ function ContactForm({
         }
       } else {
         const started = Date.now();
-        saved = await createContact(toCreatePayload(values, attributeKeys, fieldsByKey));
+        saved = await createContact(
+          toCreatePayload(values, attributeKeys, fieldsByKey, lostPayload),
+        );
         // Creating a contact whose phone or email already belongs to someone returns that person instead of a copy.
         duplicate = Date.parse(saved.createdAt) < started - 2000;
         if (!duplicate) {
@@ -265,7 +311,18 @@ function ContactForm({
     },
     onError: (e) => {
       if (errorKind(e) === 'conflict') setConflict(true);
-      setServerFields(fieldErrors(e));
+      const named = fieldErrors(e);
+      setServerFields(named);
+      // The API names each required property it found empty as `customFields.<key>`: mark those fields.
+      const props = Object.keys(named).filter((k) => k.startsWith('customFields.'));
+      if (props.length > 0) {
+        setFieldProblems(
+          Object.fromEntries(
+            props.map((k) => [k.slice('customFields.'.length), t('fieldProblem.required')]),
+          ),
+        );
+      }
+      if (named.lostReason) setLostProblem(lostAnswer.pick === '' ? 'pick' : 'text');
     },
   });
 
@@ -298,9 +355,15 @@ function ContactForm({
       if (found) fp[f.key] = t(`fieldProblem.${found}`);
     }
     setFieldProblems(fp);
+    const lostFound = isLost ? lostReasonProblem(lostAnswer, lostChoices.length > 0) : null;
+    setLostProblem(lostFound);
     if (Object.keys(next).length > 0) {
       const first = Object.keys(next)[0];
       document.getElementById(id(first === 'firstName' ? 'first' : first))?.focus();
+      return;
+    }
+    if (lostFound) {
+      document.getElementById(id(lostFound === 'pick' ? 'lost-reason' : 'lost-text'))?.focus();
       return;
     }
     const firstField = Object.keys(fp)[0];
@@ -443,34 +506,28 @@ function ContactForm({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <Field label={t('source')} htmlFor={id('source')}>
-          <Input
-            id={id('source')}
-            value={values.source}
-            maxLength={128}
-            placeholder={t('sourcePlaceholder')}
-            onChange={(e) => set('source', e.target.value)}
-          />
-        </Field>
-        <Field label={t('status')} htmlFor={id('status')}>
-          <Select
-            id={id('status')}
-            value={values.status}
-            onChange={(e) => set('status', e.target.value)}
-          >
-            <option value="">{t('statusNone')}</option>
-            {statuses.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </Select>
-        </Field>
         <Field label={t('stage')} htmlFor={id('stage')}>
           <Select
             id={id('stage')}
             value={values.lifecycleStage}
-            onChange={(e) => set('lifecycleStage', e.target.value)}
+            onChange={(e) => {
+              const next = e.target.value;
+              // The status follows the stage: one that does not fit is replaced by the stage's default, or cleared.
+              const move = statusAfterMove(
+                statusOptions.data,
+                values.status || null,
+                effectiveStage(statusOptions.data, next),
+              );
+              setValues((v) => ({
+                ...v,
+                lifecycleStage: next,
+                ...(move.changed ? { status: move.status ?? '' } : {}),
+              }));
+              setStatusMove(
+                move.changed ? statusNotice(values.status, move.status) : { kind: 'none' },
+              );
+              setLostProblem(null);
+            }}
           >
             {!editing && <option value="">{t('stageDefault')}</option>}
             {stages.map((s) => (
@@ -480,7 +537,66 @@ function ContactForm({
             ))}
           </Select>
         </Field>
+        <Field
+          label={t('status')}
+          htmlFor={id('status')}
+          hint={
+            statusMove.kind === 'reset'
+              ? t('statusNoticeReset', { status: statusLabel(statusMove.status) })
+              : statusMove.kind === 'set'
+                ? t('statusNoticeSet', { status: statusLabel(statusMove.status) })
+                : statusMove.kind === 'cleared'
+                  ? t('statusNoticeCleared')
+                  : statuses.length === 0
+                    ? t('statusNoneForStage')
+                    : t('statusHelp')
+          }
+        >
+          <Select
+            id={id('status')}
+            value={values.status}
+            onChange={(e) => {
+              set('status', e.target.value);
+              setStatusMove({ kind: 'none' });
+            }}
+          >
+            <option value="">{t('statusNone')}</option>
+            {statuses.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t('source')} htmlFor={id('source')}>
+          <Input
+            id={id('source')}
+            value={values.source}
+            maxLength={128}
+            placeholder={t('sourcePlaceholder')}
+            onChange={(e) => set('source', e.target.value)}
+          />
+        </Field>
       </div>
+
+      {isLost && (
+        <fieldset className="space-y-2 rounded-md border border-danger/30 bg-danger/5 p-3">
+          <legend className="px-1 text-sm font-medium">
+            {tl('title', { name: tl('contactFallback') })}
+          </legend>
+          <LostReasonFields
+            choices={lostChoices}
+            value={lostAnswer}
+            onChange={(a) => {
+              set('lostReason', a.pick);
+              set('lostText', a.text);
+              setLostProblem(null);
+            }}
+            problem={lostProblem}
+            idPrefix={id('lost')}
+          />
+        </fieldset>
+      )}
 
       <div className="flex items-start justify-between gap-4 rounded-md border border-border p-3">
         <div className="min-w-0 text-sm">

@@ -37,6 +37,8 @@ function row(over: Partial<ContactRow> = {}): ContactRow {
     status: null,
     lostReason: null,
     otherLostReason: null,
+    wonAt: null,
+    lostAt: null,
     leadScore: null,
     source: null,
     isUnsubscribed: false,
@@ -296,7 +298,10 @@ describe('validateForm', () => {
 });
 
 describe('typed contact properties', () => {
-  const types = new Map<string, { fieldType: 'integer' | 'multiselect' | 'checkbox' | 'date' | 'text' }>([
+  const types = new Map<
+    string,
+    { fieldType: 'integer' | 'multiselect' | 'checkbox' | 'date' | 'text' }
+  >([
     ['seats', { fieldType: 'integer' }],
     ['interests', { fieldType: 'multiselect' }],
     ['vip', { fieldType: 'checkbox' }],
@@ -338,7 +343,11 @@ describe('typed contact properties', () => {
   });
 
   it('leaves an empty value out on create and clears it with null on update', () => {
-    const empty = { ...EMPTY_FORM, firstName: 'A', attributes: { seats: '', interests: [], city: '' } };
+    const empty = {
+      ...EMPTY_FORM,
+      firstName: 'A',
+      attributes: { seats: '', interests: [], city: '' },
+    };
     const created = toCreatePayload(empty, keys, types).customFields;
     expect(created).not.toHaveProperty('seats');
     expect(created).not.toHaveProperty('interests');

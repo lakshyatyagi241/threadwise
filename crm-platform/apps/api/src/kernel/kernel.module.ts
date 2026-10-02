@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { AuditService } from './audit/audit.service';
 import { DisplayIdService } from './identifiers/display-id.service';
+import { OutboxSubscriberRegistry } from './outbox/outbox-subscribers';
 import { OutboxService } from './outbox/outbox.service';
 import { RbacService } from './rbac/rbac.service';
 
@@ -21,7 +22,7 @@ import { RbacService } from './rbac/rbac.service';
  */
 @Global()
 @Module({
-  providers: [OutboxService, AuditService, RbacService, DisplayIdService],
-  exports: [OutboxService, AuditService, RbacService, DisplayIdService],
+  providers: [OutboxService, OutboxSubscriberRegistry, AuditService, RbacService, DisplayIdService],
+  exports: [OutboxService, OutboxSubscriberRegistry, AuditService, RbacService, DisplayIdService],
 })
 export class KernelModule {}

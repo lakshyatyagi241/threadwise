@@ -63,11 +63,14 @@ const isIntegerType = (t: string) => t === 'integer' || t === 'big_integer';
 export function valueToInput(field: TypedField, raw: unknown): InputValue {
   const kind = inputKind(field);
   if (kind === 'multiselect') {
-    return Array.isArray(raw) ? raw.filter((v) => typeof v === 'string' || typeof v === 'number').map(String) : [];
+    return Array.isArray(raw)
+      ? raw.filter((v) => typeof v === 'string' || typeof v === 'number').map(String)
+      : [];
   }
   if (raw === null || raw === undefined) return kind === 'checkbox' ? 'false' : '';
   if (kind === 'checkbox') return raw === true || raw === 'true' ? 'true' : 'false';
-  if (typeof raw === 'string' || typeof raw === 'number' || typeof raw === 'boolean') return String(raw);
+  if (typeof raw === 'string' || typeof raw === 'number' || typeof raw === 'boolean')
+    return String(raw);
   return '';
 }
 
@@ -125,7 +128,8 @@ export function checkValue(
   applicable = true,
 ): ValueProblem | null {
   if (!applicable) return null;
-  if (isEmptyInput(field, input)) return field.isRequired && inputKind(field) !== 'checkbox' ? 'required' : null;
+  if (isEmptyInput(field, input))
+    return field.isRequired && inputKind(field) !== 'checkbox' ? 'required' : null;
   const text = Array.isArray(input) ? '' : (input ?? '').trim();
   switch (inputKind(field)) {
     case 'number': {
@@ -150,12 +154,14 @@ export function displayValue(
 ): string {
   if (raw === null || raw === undefined || raw === '') return '';
   if (field.isMasked) return '••••••';
-  const label = (v: unknown) => field.options?.find((o) => o.value === String(v))?.label ?? String(v);
+  const label = (v: unknown) =>
+    field.options?.find((o) => o.value === String(v))?.label ?? String(v);
   const kind = inputKind(field);
   if (kind === 'checkbox') return raw === true || raw === 'true' ? words.yes : words.no;
   if (Array.isArray(raw)) return raw.map(label).join(', ');
   if (kind === 'select' || kind === 'multiselect') return label(raw);
-  if (typeof raw === 'string' || typeof raw === 'number' || typeof raw === 'boolean') return String(raw);
+  if (typeof raw === 'string' || typeof raw === 'number' || typeof raw === 'boolean')
+    return String(raw);
   return '';
 }
 

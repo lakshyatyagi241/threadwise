@@ -21,8 +21,10 @@ import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
+import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CrmModule } from './modules/crm';
+import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
@@ -104,6 +106,8 @@ import { HealthModule } from './health/health.module';
     // Apps
     AdminModule,
     CrmModule,
+    AppointmentsBookingModule,
+    NotificationsModule,
     BroadcastsModule,
     PartnerModule,
     PublicApiModule,

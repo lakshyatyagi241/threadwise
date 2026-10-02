@@ -2,6 +2,7 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import type { FieldResponse } from '@crm/contracts';
 import type { ContactRow } from '../api/schemas';
 import { inputToValue, type InputValue } from './field-values';
+import { OTHER_REASON, type lostReasonPayload } from './stage-flow';
 
 /**
  * Contact display and form rules (TW-CON-008, 010, 012, 015, 016, 017), kept free of React so they can be tested.
@@ -158,6 +159,9 @@ export interface ContactFormValues {
   memo: string;
   status: string;
   lifecycleStage: string;
+  /** Why the contact was lost: a lost-reason option's value, OTHER_REASON (then `lostText` holds the words), or ''. */
+  lostReason: string;
+  lostText: string;
   source: string;
   /** Group ids (uuid). Empty array = no groups, which clears them on save. */
   groupIds: string[];
@@ -181,6 +185,8 @@ export const EMPTY_FORM: ContactFormValues = {
   memo: '',
   status: '',
   lifecycleStage: '',
+  lostReason: '',
+  lostText: '',
   source: '',
   groupIds: [],
   attributes: {},
@@ -215,6 +221,8 @@ export function contactToForm(
     memo: str(cf[EXTRA_KEYS.memo]),
     status: clean(c.status),
     lifecycleStage: clean(c.lifecycleStage),
+    lostReason: c.lostReason ? c.lostReason : c.otherLostReason ? OTHER_REASON : '',
+    lostText: c.otherLostReason ?? '',
     source: c.source ?? str(cf[EXTRA_KEYS.source]),
     groupIds: [...groupIds],
     attributes,
@@ -259,6 +267,8 @@ export function toCreatePayload(
   v: ContactFormValues,
   attributeKeys: readonly string[],
   fields?: ReadonlyMap<string, Pick<FieldResponse, 'fieldType'>>,
+  /** The lost reason, when the chosen stage is a lost one (see `lostReasonPayload`). */
+  lost?: ReturnType<typeof lostReasonPayload>,
 ) {
   const name = composeName(v);
   return {
@@ -268,6 +278,7 @@ export function toCreatePayload(
     ...(clean(v.email) ? { email: clean(v.email) } : {}),
     ...(v.phone ? { phone: v.phone } : {}),
     ...(clean(v.lifecycleStage) ? { lifecycleStage: clean(v.lifecycleStage) } : {}),
+    ...lost,
     ...(clean(v.status) ? { status: clean(v.status) } : {}),
     ...(clean(v.source) ? { source: clean(v.source) } : {}),
     ...(v.optedOut ? { isUnsubscribed: true } : {}),
@@ -283,6 +294,7 @@ export function toUpdatePayload(
   wasOptedOut: boolean,
   previous: Record<string, unknown> = {},
   fields?: ReadonlyMap<string, Pick<FieldResponse, 'fieldType'>>,
+  lost?: ReturnType<typeof lostReasonPayload>,
 ) {
   const name = composeName(v);
   return {
@@ -292,6 +304,7 @@ export function toUpdatePayload(
     email: orNull(v.email),
     phone: v.phone,
     ...(clean(v.lifecycleStage) ? { lifecycleStage: clean(v.lifecycleStage) } : {}),
+    ...lost,
     status: orNull(v.status),
     source: orNull(v.source),
     // Only a change to the switch touches the consent flag; saving an unrelated field must not flip it.

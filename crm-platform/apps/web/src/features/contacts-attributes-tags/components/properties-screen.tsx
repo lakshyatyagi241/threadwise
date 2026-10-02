@@ -68,7 +68,9 @@ export function PropertiesScreen() {
   const [query, setQuery] = useState('');
   const [showInactive, setShowInactive] = useState(false);
   const [builtInOpen, setBuiltInOpen] = useState(false);
-  const [editing, setEditing] = useState<{ field?: FieldResponse; sectionId?: string } | null>(null);
+  const [editing, setEditing] = useState<{ field?: FieldResponse; sectionId?: string } | null>(
+    null,
+  );
   const [sectionEditing, setSectionEditing] = useState<FieldSectionResponse | 'new' | null>(null);
   const [deactivating, setDeactivating] = useState<FieldResponse | null>(null);
   const [deletingSection, setDeletingSection] = useState<SectionGroup | null>(null);
@@ -92,7 +94,16 @@ export function PropertiesScreen() {
 
   const failToast = (e: unknown) => {
     const k = errorKind(e);
-    toast(t(k === 'conflict' ? 'toast.conflict' : k === 'forbidden' ? 'toast.forbidden' : 'toast.failed'), 'danger');
+    toast(
+      t(
+        k === 'conflict'
+          ? 'toast.conflict'
+          : k === 'forbidden'
+            ? 'toast.forbidden'
+            : 'toast.failed',
+      ),
+      'danger',
+    );
   };
 
   /** All of a section's property ids in saved order, shown or not. */
@@ -128,7 +139,8 @@ export function PropertiesScreen() {
   }
 
   const reactivate = useMutation({
-    mutationFn: (f: FieldResponse) => updateField(f.id, { isActive: true, rowVersion: f.rowVersion }),
+    mutationFn: (f: FieldResponse) =>
+      updateField(f.id, { isActive: true, rowVersion: f.rowVersion }),
     onSuccess: async () => {
       await invalidateProperties(qc);
       toast(t('toast.reactivated'), 'success');
@@ -307,9 +319,7 @@ export function PropertiesScreen() {
                       {section?.name ?? t('noSection')}
                     </h2>
                     <p className="text-xs text-muted-foreground">
-                      {section
-                        ? t('sectionCount', { count: g.fields.length })
-                        : t('noSectionHint')}
+                      {section ? t('sectionCount', { count: g.fields.length }) : t('noSectionHint')}
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
@@ -363,14 +373,16 @@ export function PropertiesScreen() {
                     <table className="w-full min-w-[46rem] text-sm">
                       <thead className="border-b border-border bg-muted text-muted-foreground">
                         <tr>
-                          {(['name', 'key', 'type', 'required', 'visible', 'inUse'] as const).map((c) => (
-                            <th
-                              key={c}
-                              className="px-3 py-2 text-start text-[11px] font-semibold uppercase tracking-wider first:ps-4"
-                            >
-                              {t(`col.${c}`)}
-                            </th>
-                          ))}
+                          {(['name', 'key', 'type', 'required', 'visible', 'inUse'] as const).map(
+                            (c) => (
+                              <th
+                                key={c}
+                                className="px-3 py-2 text-start text-[11px] font-semibold uppercase tracking-wider first:ps-4"
+                              >
+                                {t(`col.${c}`)}
+                              </th>
+                            ),
+                          )}
                           <th className="w-36 px-3 py-2 pe-4 text-end text-[11px] font-semibold uppercase tracking-wider">
                             {t('col.actions')}
                           </th>
@@ -395,7 +407,9 @@ export function PropertiesScreen() {
                               const target = ordered[at + delta];
                               if (target && section) void moveField(section.id, f.id, target.id);
                             }}
-                            onDropOn={(dragged) => section && void moveField(section.id, dragged, f.id)}
+                            onDropOn={(dragged) =>
+                              section && void moveField(section.id, dragged, f.id)
+                            }
                             onEdit={() => setEditing({ field: f })}
                             onDeactivate={() => setDeactivating(f)}
                             onReactivate={() => reactivate.mutate(f)}
@@ -481,12 +495,17 @@ function BuiltInCard({
   const t = useTranslations('contacts-attributes-tags.properties');
   const tb = useTranslations('contacts-attributes-tags.properties.builtin');
   const rows = BUILT_IN_PROPERTIES.filter((p) =>
-    query.trim() === '' ? true : `${tb(p.key)} ${p.key}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
+    query.trim() === ''
+      ? true
+      : `${tb(p.key)} ${p.key}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
   );
   if (query.trim() !== '' && rows.length === 0) return null;
   const expanded = open || query.trim() !== '';
   return (
-    <section className="rounded-md border border-border bg-background" aria-label={t('builtinCard.title')}>
+    <section
+      className="rounded-md border border-border bg-background"
+      aria-label={t('builtinCard.title')}
+    >
       <button
         type="button"
         onClick={onToggle}
@@ -532,7 +551,9 @@ function BuiltInCard({
                     <span className="block text-start">{p.key}</span>
                   </td>
                   <td className="px-3 py-2.5 text-muted-foreground">{t(`types.${p.type}`)}</td>
-                  <td className="px-3 py-2.5">{p.required ? <Tick label={t('yes')} /> : <Dash />}</td>
+                  <td className="px-3 py-2.5">
+                    {p.required ? <Tick label={t('yes')} /> : <Dash />}
+                  </td>
                   <td className="px-3 py-2.5">
                     <Tick label={t('yes')} />
                   </td>
@@ -542,7 +563,11 @@ function BuiltInCard({
                         href={p.manage}
                         className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                       >
-                        {t(p.manage === '/contact-stages' ? 'builtinCard.manageStages' : 'builtinCard.manageGroups')}
+                        {t(
+                          p.manage === '/contact-stages'
+                            ? 'builtinCard.manageStages'
+                            : 'builtinCard.manageGroups',
+                        )}
                         <ArrowRightIcon className="size-3 rtl:rotate-180" />
                       </Link>
                     ) : (
@@ -623,7 +648,11 @@ function PropertyRow({
       <td className="px-3 py-3 first:ps-4">
         <div className="flex items-start gap-2">
           {canReorder && (
-            <span aria-hidden="true" title={t('row.drag')} className="mt-0.5 cursor-grab text-muted-foreground">
+            <span
+              aria-hidden="true"
+              title={t('row.drag')}
+              className="mt-0.5 cursor-grab text-muted-foreground"
+            >
               <GripIcon className="size-3.5" />
             </span>
           )}
@@ -636,7 +665,11 @@ function PropertyRow({
               {f.isReadOnly && <Badge>{t('row.readOnly')}</Badge>}
             </div>
             {description && (
-              <p className="max-w-xs truncate text-xs text-muted-foreground" dir="auto" title={description}>
+              <p
+                className="max-w-xs truncate text-xs text-muted-foreground"
+                dir="auto"
+                title={description}
+              >
                 {description}
               </p>
             )}
@@ -660,17 +693,31 @@ function PropertyRow({
         )}
       </td>
       <td className="px-3 py-3">{f.isRequired ? <Tick label={t('yes')} /> : <Dash />}</td>
-      <td className="px-3 py-3">{f.isHidden ? <span className="text-xs">{t('row.hidden')}</span> : <Tick label={t('yes')} />}</td>
+      <td className="px-3 py-3">
+        {f.isHidden ? (
+          <span className="text-xs">{t('row.hidden')}</span>
+        ) : (
+          <Tick label={t('yes')} />
+        )}
+      </td>
       <td className="px-3 py-3 tabular-nums">
         {holders === undefined ? '—' : t('row.contacts', { count: holders })}
       </td>
       <td className="whitespace-nowrap px-3 py-3 pe-4 text-end">
         {canReorder && f.isActive && (
           <>
-            <MiniButton label={t('row.moveUp', { name: f.label })} disabled={first} onClick={() => onMove(-1)}>
+            <MiniButton
+              label={t('row.moveUp', { name: f.label })}
+              disabled={first}
+              onClick={() => onMove(-1)}
+            >
               <ArrowUpIcon className="size-3.5" />
             </MiniButton>
-            <MiniButton label={t('row.moveDown', { name: f.label })} disabled={last} onClick={() => onMove(1)}>
+            <MiniButton
+              label={t('row.moveDown', { name: f.label })}
+              disabled={last}
+              onClick={() => onMove(1)}
+            >
               <ArrowDownIcon className="size-3.5" />
             </MiniButton>
           </>
@@ -682,7 +729,11 @@ function PropertyRow({
         )}
         {f.isActive
           ? canDelete && (
-              <MiniButton label={t('row.deactivate', { name: f.label })} danger onClick={onDeactivate}>
+              <MiniButton
+                label={t('row.deactivate', { name: f.label })}
+                danger
+                onClick={onDeactivate}
+              >
                 <TrashIcon className="size-3.5" />
               </MiniButton>
             )

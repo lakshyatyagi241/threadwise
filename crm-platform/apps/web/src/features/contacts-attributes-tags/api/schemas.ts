@@ -76,7 +76,12 @@ export type ContactRow = ContactResponse;
 
 /** `GET /contacts`: the cursor envelope, plus `meta.total` when the request asked for `includeTotal`. */
 export const contactPageSchema = pageResponseSchema(contactResponseSchema).extend({
-  meta: z.object({ total: z.number().int().nonnegative() }).optional(),
+  /** `approximate`: the total of a segment's contacts could not be counted in time and is an estimate. */
+  meta: z
+    .object({ total: z.number().int().nonnegative(), approximate: z.boolean().optional() })
+    .optional(),
+  /** Only when the request filtered by a segment: its conditions that match nothing because something was deleted. */
+  segment: z.object({ id: z.string(), invalidConditions: z.array(z.unknown()) }).optional(),
 });
 
 export type ContactPage = z.infer<typeof contactPageSchema>;

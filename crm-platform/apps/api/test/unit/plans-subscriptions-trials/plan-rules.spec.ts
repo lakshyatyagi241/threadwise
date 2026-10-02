@@ -364,7 +364,8 @@ describe('pickChips', () => {
 
   it('a stored non-boolean falls back to the registry default', () => {
     const got = pickChips({ analytics: 'yes', automation: 1, ai_assistants: false });
-    expect(got).toEqual(['woocommerce', 'shopify']);
+    // sales_pipeline is last in the chip order and on by default, so it fills a free slot.
+    expect(got).toEqual(['woocommerce', 'shopify', 'sales_pipeline']);
   });
 
   it('honours an explicit max, including 0', () => {
