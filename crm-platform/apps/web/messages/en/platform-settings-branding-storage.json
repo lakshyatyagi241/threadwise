@@ -1555,7 +1555,8 @@
       "verifyToken": "Verify token",
       "verifyHint": "Paste into the same screen as the Verify token.",
       "copy": "Copy",
-      "copied": "Copied"
+      "copied": "Copied",
+      "connected": "Connected WABAs (all workspaces)"
     }
   }
 }

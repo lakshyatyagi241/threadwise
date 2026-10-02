@@ -1,10 +1,11 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { type WabaPlatformCallback } from '@crm/contracts';
 import { ConfigService } from '@nestjs/config';
 import { ActorKinds } from '../../common/decorators';
 import type { Env } from '../../config/env.schema';
-import { OperatorGuard, OperatorRoles } from '../auth';
+import { OperatorGuard, OperatorRoles, PlatformStore } from '../auth';
 import { WabaConfigService } from './waba-config.service';
 import { WABA_ENV, type WabaEnv } from '../../config/domains/whatsapp-cloud-api-waba.env';
 import { Inject } from '@nestjs/common';
@@ -22,6 +23,7 @@ import { inboundUrlKey, verifyTokenFor, webhookUrl } from './waba-rules';
 export class WabaPlatformController {
   constructor(
     private readonly cfg: WabaConfigService,
+    private readonly platform: PlatformStore,
     private readonly config: ConfigService<Env, true>,
     @Inject(WABA_ENV) private readonly env: WabaEnv,
   ) {}
@@ -32,7 +34,13 @@ export class WabaPlatformController {
     await this.cfg.refresh();
     const key = this.config.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true });
     const base = this.env.WABA_WEBHOOK_PUBLIC_URL ?? this.config.get('APP_URL', { infer: true });
+    const counted = await this.platform.tx((tx) =>
+      tx.execute(
+        sql`SELECT count(*)::int AS n FROM wa_provider_configs WHERE provider = 'waba' AND status = 'connected'`,
+      ),
+    );
     return {
+      connectedWabas: Number((counted.rows[0] as { n?: number } | undefined)?.n ?? 0),
       webhookUrl: webhookUrl(base, inboundUrlKey(key)),
       verifyToken: verifyTokenFor(
         this.env.WABA_VERIFY_TOKEN ?? this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
