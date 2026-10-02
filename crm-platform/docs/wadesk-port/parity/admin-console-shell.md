@@ -37,7 +37,7 @@ and the rest of the domain are not built yet, and are not covered here.
 - **Counts:** WaDesk shows badges for users, roles, permissions, devices, workspaces, coupons and more. Ours shows only the plan count, because that is the only source behind the operator API today. Cross-tenant counts need a sanctioned platform read (a decision for the kernel steward), so none was added.
 - **Header controls (WD-ASHELL-006):** health pill, notification bell, account menu with role and email. The theme and language switchers exist; the rest does not.
 - **Toasts (WD-ASHELL-007):** the existing toast supports success and error; the warning variant of WaDesk's inline banner is not added.
-- **IP allowlist on the console (WD-ASHELL-002):** waits for the platform security settings.
+- **IP allowlist on the console (WD-ASHELL-002):** already enforced by AUTH's `OperatorGuard` on every operator API call; no separate console check was added.
 - **Customer shell, quick access, tour, workspace switcher, settings hub (008 to 047):** not started.
 - **Twin run depth:** only `quick`, three custom scenarios. The harness's page probes (accessibility, keyboard, degraded states, performance) were not run on the console because its default login is the staff login, not the operator login. Our own Playwright spec covers keyboard and phone behaviour.
 - **Environment:** WaDesk ran from a Windows bind mount in Docker, with cold pages taking several seconds; the twin spec uses long timeouts for it.
