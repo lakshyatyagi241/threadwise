@@ -8,6 +8,9 @@ import type { NavItem } from './types';
  * gates are then yours), and delete the entry here. Until you delete it, the real item already wins (see
  * `mergePlanned`), so the two never both show.
  *
+ * Configuration screens are not menu entries: they are Settings tiles, and their "Soon" versions live in `settings-planned.ts`
+ * (Channels, Team members, Roles, Auto-reply, Integrations, REST API, Webhooks, Activity log...).
+ *
  * Labels live in `messages/<locale>/shell.json` under `shell.nav`, in the shell's own namespace, because no domain
  * owns these screens yet. `icon` names are defined in `components/shell/nav-icons.tsx`.
  */
@@ -19,14 +22,12 @@ export const PLANNED_NAV: readonly NavItem[] = [
   { id: 'notifications', group: 'overview', labelKey: L('notifications'), href: '/notifications', order: 20, icon: 'bell' },
 
   // Inbox & Chat
-  { id: 'inbox', group: 'inbox', labelKey: L('inbox'), href: '/inbox', order: 0, icon: 'inbox' },
   { id: 'quick-chat', group: 'inbox', labelKey: L('quickChat'), href: '/chat', order: 10, icon: 'chat' },
   { id: 'call-logs', group: 'inbox', labelKey: L('callLogs'), href: '/call-logs', order: 20, icon: 'phone' },
   { id: 'team-chat', group: 'inbox', labelKey: L('teamChat'), href: '/team-chat', order: 30, icon: 'team-chat' },
-  { id: 'team-members', group: 'inbox', labelKey: L('teamMembers'), href: '/team-members', order: 40, icon: 'team' },
 
-  // CRM (Contacts, Attributes, Contact groups, Segments and Deals are real screens). Orders keep the menu sequence:
-  // Contacts 0, Attributes 1, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
+  // CRM (Contacts, Contact groups, Segments and Deals are real screens; Attributes moved to Settings). Orders keep the menu sequence:
+  // Contacts 0, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
   { id: 'lead-finder', group: 'audience', labelKey: L('leadFinder'), href: '/lead-finder', order: 30, icon: 'pin', badge: 'new' },
   { id: 'pipelines', group: 'audience', labelKey: L('pipelines'), href: '/pipelines', order: 50, icon: 'pipelines' },
   { id: 'companies', group: 'audience', labelKey: L('companies'), href: '/companies', order: 70, icon: 'companies' },
@@ -44,30 +45,12 @@ export const PLANNED_NAV: readonly NavItem[] = [
   // Automation (Appointments is a real screen in features/appointments)
   { id: 'flows', group: 'automation', labelKey: L('flows'), href: '/flows', order: 0, icon: 'flow' },
   { id: 'ai-assistants', group: 'automation', labelKey: L('aiAssistants'), href: '/ai-assistants', order: 10, icon: 'bot', badge: 'new' },
-  { id: 'auto-reply', group: 'automation', labelKey: L('autoReply'), href: '/auto-reply', order: 20, icon: 'reply' },
-  { id: 'chat-widget', group: 'automation', labelKey: L('chatWidget'), href: '/chatbot-widgets', order: 40, icon: 'widget' },
-
-  // Channels
-  { id: 'channels', group: 'channels', labelKey: L('channels'), href: '/channels', order: 0, icon: 'channels' },
-  { id: 'telegram', group: 'channels', labelKey: L('telegram'), href: '/telegram', order: 10, icon: 'send' },
-  { id: 'sms', group: 'channels', labelKey: L('sms'), href: '/sms', order: 20, icon: 'sms' },
-  { id: 'line', group: 'channels', labelKey: L('line'), href: '/line', order: 30, icon: 'chat' },
-  { id: 'viber', group: 'channels', labelKey: L('viber'), href: '/viber', order: 40, icon: 'phone' },
-  { id: 'wechat', group: 'channels', labelKey: L('wechat'), href: '/wechat', order: 50, icon: 'team-chat' },
-  { id: 'email', group: 'channels', labelKey: L('email'), href: '/email', order: 60, icon: 'mail' },
-  { id: 'wa-links', group: 'channels', labelKey: L('waLinks'), href: '/wa-links', order: 70, icon: 'link' },
 
   // Store
   { id: 'store', group: 'store', labelKey: L('store'), href: '/store', order: 0, icon: 'store' },
   { id: 'catalog', group: 'store', labelKey: L('catalog'), href: '/catalog', order: 10, icon: 'catalog' },
 
-  // Developer
-  { id: 'integrations', group: 'developer', labelKey: L('integrations'), href: '/integrations', order: 0, icon: 'plug' },
-  { id: 'rest-api', group: 'developer', labelKey: L('restApi'), href: '/developers', order: 10, icon: 'code' },
-  { id: 'webhooks', group: 'developer', labelKey: L('webhooks'), href: '/webhooks', order: 20, icon: 'webhook' },
-
-  // Help
+  // Help (drawn in the user menu, not in the rail or panel)
   { id: 'support', group: 'help', labelKey: L('support'), href: '/support', order: 0, icon: 'help' },
   { id: 'guidebook', group: 'help', labelKey: L('guidebook'), href: '/guidebook', order: 10, icon: 'book' },
-  { id: 'activity-log', group: 'help', labelKey: L('activityLog'), href: '/activity-log', order: 20, icon: 'history' },
 ];

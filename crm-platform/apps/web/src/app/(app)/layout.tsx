@@ -10,6 +10,9 @@ import { SessionProvider } from '@/features/auth-registration-security/shared/se
 import { NAV } from '@/features/_registry/nav.generated';
 import { PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
+import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
+import { resolveSettings } from '@/features/_registry/settings-resolve';
+import { SETTINGS } from '@/features/_registry/settings.generated';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
 import { getSession } from '@/lib/auth/server';
 import { RealtimeProvider } from '@/lib/realtime';
@@ -45,6 +48,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             avatarUrl: session.user.avatarUrl,
           }}
           nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
+          settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
           theme={theme}
           navFooter={<WorkspaceSwitcher />}
           banners={<AccountBanners key="banners" />}

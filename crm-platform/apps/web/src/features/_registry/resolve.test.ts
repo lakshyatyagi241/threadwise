@@ -93,7 +93,7 @@ describe('resolveNav with planned screens', () => {
 
   it('applies gates to planned entries too', () => {
     const gated: NavItem[] = [
-      { id: 'tg', group: 'channels', labelKey: 't', href: '/telegram', gates: { channel: 'telegram' } },
+      { id: 'tg', group: 'store', labelKey: 't', href: '/telegram', gates: { channel: 'telegram' } },
     ];
     expect(resolveNav([], caps([], [], []), { planned: gated })).toEqual([]);
     expect(resolveNav([], caps([], [], ['telegram']), { planned: gated })).toHaveLength(1);
