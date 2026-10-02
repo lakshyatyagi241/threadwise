@@ -131,6 +131,22 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+
+  // team chat (TW-TCHAT)
+  TCHAT_CHANNEL_NAME_TAKEN: 'TCHAT_CHANNEL_NAME_TAKEN',
+  /** #general cannot be deleted. */
+  TCHAT_CHANNEL_PROTECTED: 'TCHAT_CHANNEL_PROTECTED',
+  TCHAT_NOT_CHANNEL_MEMBER: 'TCHAT_NOT_CHANNEL_MEMBER',
+  TCHAT_EMPTY_MESSAGE: 'TCHAT_EMPTY_MESSAGE',
+  /** The message being replied to is not in this channel (Reference: `parent_other_channel`). */
+  TCHAT_REPLY_OTHER_CHANNEL: 'TCHAT_REPLY_OTHER_CHANNEL',
+  TCHAT_EDIT_WINDOW_EXPIRED: 'TCHAT_EDIT_WINDOW_EXPIRED',
+  TCHAT_NOT_MESSAGE_AUTHOR: 'TCHAT_NOT_MESSAGE_AUTHOR',
+  TCHAT_ALREADY_MEMBER: 'TCHAT_ALREADY_MEMBER',
+  TCHAT_INVITATION_DECIDED: 'TCHAT_INVITATION_DECIDED',
+  TCHAT_ATTACHMENT_REJECTED: 'TCHAT_ATTACHMENT_REJECTED',
+  /** The operation does not apply to this kind of channel (members of a public channel, a direct message with yourself). */
+  TCHAT_CHANNEL_KIND_INVALID: 'TCHAT_CHANNEL_KIND_INVALID',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
