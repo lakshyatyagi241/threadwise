@@ -99,6 +99,13 @@ export const envSchema = z.object({
 
   // --- providers -----------------------------------------------------------
   META_GRAPH_VERSION: z.string().default('v21.0'),
+  /** Wrap the links in broadcasts so a tap is attributed to the recipient (TW-BCAST-018). */
+  LINK_TRACKING_ENABLED: z
+    .string()
+    .default('true')
+    .transform((v) => v.toLowerCase() !== 'false'),
+  /** How long a tracked link works, in days; never below 7. */
+  LINK_TRACKING_TTL_DAYS: z.coerce.number().int().min(7).default(90),
   WHATSAPP_VERIFY_TOKEN: z.string().optional(),
   WHATSAPP_APP_SECRET: z.string().optional(),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),

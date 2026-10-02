@@ -6,6 +6,8 @@ Goal: rebuild every Reference (CodeCanyon Laravel + Node, v1.7.0) feature inside
 BullMQ, Next.js) with three people (Lakshya, Vedant, Punya) working in parallel with minimal merge conflicts.
 Reference is reference only: never copy its code, assets or text.
 
+**Rules for every port: [PORTING_RULES.md](PORTING_RULES.md)** (features unchanged, same UI rebuilt on our stack, real backend wiring, definition of done).
+
 ## Where things are
 
 | What                                                                     | Where                                                                                                                                                                   |
