@@ -87,3 +87,16 @@ Inventory written 2026-10-02: `docs/threadwise-port/inventory/channel-instagram.
 | I4   | Composer recipients and reply-only broadcast (DONE)                           | 013, 014                  |
 | I5   | Web: hub, add dialog, reply-only compose (DONE)                               | 001, 002, 013, 014, 015   |
 | I6   | Auto-reply hook, flow import and push, templates (BLOCKED: others)            | 017, 018, 019, 020        |
+
+## ECOM (shopify-woocommerce)
+
+Inventory written 2026-10-03: `docs/threadwise-port/inventory/shopify-woocommerce.md` (TW-ECOM-001 to 038). The data model is in `20261001101800_ecom_threadwise_schema.sql`; `wa_products` and `wa_orders` already carry the store ids. Build order, one commit and push per step:
+
+| Step | What                                                                                                            | Features                                    |
+| ---- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| E1   | Permissions, platform settings, Shopify OAuth, WooCommerce connect and test, webhook register and teardown      | 001, 002, 003, 005, 006, 007, 025, 026, 013 |
+| E2   | Import into the mirror (both), keep it in step, sync now                                                        | 011, 012, 013                               |
+| E3   | Webhook receivers (both), automations config, event message, logs                                               | 008, 009, 010, 027, 028, 029, 033           |
+| E4   | Offers, win-back, COD and prepaid, delivered, stock, cart recovery, GDPR, uninstall, concierge, inbound service | 014 to 022, 030, 031, 034                   |
+| E5   | Web: Shopify and WooCommerce store screens                                                                      | 004, 023, 024                               |
+| E6   | Plugin download, invoices, flow links and resume, embedded session (BLOCKED: decisions and other domains)       | 032, 035, 036, 037, 038                     |
