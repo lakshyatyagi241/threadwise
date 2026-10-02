@@ -99,7 +99,12 @@ export const campaignBuilderSchema = z.object({
   templates: z.array(composeTemplateSchema),
   groups: z.array(z.object({ id: uuidSchema, name: z.string(), members: z.number().int() })),
   tags: z.array(
-    z.object({ id: uuidSchema, name: z.string(), color: z.string().nullable(), members: z.number().int() }),
+    z.object({
+      id: uuidSchema,
+      name: z.string(),
+      color: z.string().nullable(),
+      members: z.number().int(),
+    }),
   ),
   flows: z.array(z.object({ id: uuidSchema, name: z.string() })),
   /** True when the default engine is WABA: only Meta-approved templates may be sent. */
@@ -116,7 +121,9 @@ export const campaignDetailSchema = z.object({
   /** The funnel in WaDesk's order. */
   funnel: z.array(z.object({ key: z.string(), count: z.number().int() })),
   /** Sends per hour of day (campaign time zone), for the heatmap. */
-  hourly: z.array(z.object({ hour: z.number().int(), sent: z.number().int(), replies: z.number().int() })),
+  hourly: z.array(
+    z.object({ hour: z.number().int(), sent: z.number().int(), replies: z.number().int() }),
+  ),
   /** Messages per day: sent, delivered, read, replies. */
   daily: z.array(
     z.object({
@@ -128,7 +135,9 @@ export const campaignDetailSchema = z.object({
     }),
   ),
   /** Recipient rows by status, for the outcome chart. */
-  outcomes: z.array(z.object({ status: z.enum(CAMPAIGN_RECIPIENT_STATUSES), count: z.number().int() })),
+  outcomes: z.array(
+    z.object({ status: z.enum(CAMPAIGN_RECIPIENT_STATUSES), count: z.number().int() }),
+  ),
   /** Per variant when A/B is on: recipients, sent, delivered, read, replies, clicks. */
   variants: z.array(
     z.object({

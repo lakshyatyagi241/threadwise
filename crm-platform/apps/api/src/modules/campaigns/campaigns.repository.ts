@@ -1206,7 +1206,10 @@ export class CampaignsRepository {
     return (res.rows as Raw[]).map((r) => ({
       name: String(r.name),
       phone: String(r.phone),
-      at: r.unsubscribed_at ?? r.sent_at ? new Date((r.unsubscribed_at ?? r.sent_at) as string) : null,
+      at:
+        (r.unsubscribed_at ?? r.sent_at)
+          ? new Date((r.unsubscribed_at ?? r.sent_at) as string)
+          : null,
     }));
   }
 

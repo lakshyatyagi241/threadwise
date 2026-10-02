@@ -118,10 +118,14 @@ export const storeDashboardSchema = z.object({
   customers: z.array(dashboardCustomerSchema),
   /** Templates an automation or broadcast can send now. */
   templates: z.array(dashboardTemplateSchema),
-  contactGroups: z.array(z.object({ uuid: z.string().uuid(), name: z.string(), color: z.string().nullable() })),
+  contactGroups: z.array(
+    z.object({ uuid: z.string().uuid(), name: z.string(), color: z.string().nullable() }),
+  ),
   coupons: z.array(z.object({ code: z.string(), type: z.string(), amount: z.number() })),
   /** WooCommerce: the mirrored products an offer can be about. */
-  offerProducts: z.array(z.object({ uuid: z.string().uuid(), name: z.string(), priceMinor: z.number() })),
+  offerProducts: z.array(
+    z.object({ uuid: z.string().uuid(), name: z.string(), priceMinor: z.number() }),
+  ),
   analytics: dashboardAnalyticsSchema,
   /** Revenue shown on the overview: WooCommerce's 30 day sales report, Shopify's recent mirrored orders. */
   revenue30d: z.number(),
