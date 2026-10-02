@@ -45,7 +45,9 @@ describe('dates', () => {
   it('says how long ago', () => {
     const now = new Date('2026-10-02T12:00:00Z');
     expect(timeAgo('2026-10-02T11:55:00Z', now, 'en')).toBe('5 minutes ago');
-    expect(timeAgo('2026-10-01T12:00:00Z', now, 'en')).toBe('yesterday');
-    expect(timeAgo('2026-10-02T11:59:59Z', now, 'en')).toBe('now');
+    expect(timeAgo('2026-10-01T12:00:00Z', now, 'en')).toBe('1 day ago');
+    expect(timeAgo('2026-10-02T11:59:59Z', now, 'en')).toBe('1 second ago');
+    expect(timeAgo('2026-10-02T11:59:54Z', now, 'en')).toBe('6 seconds ago');
+    expect(timeAgo('2026-10-02T12:00:00Z', now, 'en')).toBe('0 seconds ago');
   });
 });

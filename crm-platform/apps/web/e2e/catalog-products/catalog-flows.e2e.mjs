@@ -144,7 +144,7 @@ await check(
     await page.getByTestId('catalog-pill').waitFor();
     assert.equal(await page.getByTestId('catalog-paywall').count(), 0);
     assert.ok((await page.locator('a[href="/catalog"]').count()) > 0, 'menu entry missing');
-    assert.match(await page.getByTestId('catalog-pill').innerText(), /Not connected/);
+    await page.getByTestId('catalog-pill').filter({ hasText: 'Not connected' }).waitFor();
     const tabs = await page.locator('nav[aria-label="Catalog sections"] a').allInnerTexts();
     assert.deepEqual(tabs, ['Setup', 'Send', 'Collections', 'Activity']);
   },
@@ -190,7 +190,7 @@ await check(
     await page.getByText(/Unsupported get request/).waitFor();
     assert.match(await body(), /code 100/);
     assert.match(await body(), /catalog_management/);
-    assert.match(await page.getByTestId('catalog-pill').innerText(), /Not connected/);
+    await page.getByTestId('catalog-pill').filter({ hasText: 'Not connected' }).waitFor();
   },
 );
 
@@ -201,7 +201,10 @@ await check(
     await page.getByRole('button', { name: 'Connect & verify' }).click();
     await page.getByText('Catalog connected.').first().waitFor();
     await page.getByText('ID 123456789').waitFor();
-    assert.match(await page.getByTestId('catalog-pill').innerText(), /META CLOUD · connected/);
+    await page
+      .getByTestId('catalog-pill')
+      .filter({ hasText: /META CLOUD · connected/ })
+      .waitFor();
     for (const label of ['Total', 'Synced', 'Pending', 'Failed'])
       await page.getByText(label, { exact: true }).first().waitFor();
     await page.getByRole('button', { name: 'Sync to Meta' }).waitFor();
@@ -443,7 +446,7 @@ await check('collections: edit renames, delete asks first', async () => {
   await dlg.getByText(/Products are not affected/).waitFor();
   await dlg.getByRole('button', { name: 'Delete' }).click();
   await page.getByText('Collection deleted.').first().waitFor();
-  assert.equal(await page.locator('article', { hasText: COLL }).count(), 0);
+  await page.locator('article', { hasText: COLL }).first().waitFor({ state: 'detached' });
   // keep one collection for the send panel
   await page.getByText('New collection').click();
   await page.getByLabel(/^Name/).first().fill(COLL);
@@ -556,7 +559,7 @@ await check(
     await dlg.getByText(/Products stay on Meta/).waitFor();
     await dlg.getByRole('button', { name: 'Disconnect' }).click();
     await page.getByText('Catalog disconnected.').first().waitFor();
-    assert.match(await page.getByTestId('catalog-pill').innerText(), /Not connected/);
+    await page.getByTestId('catalog-pill').filter({ hasText: 'Not connected' }).waitFor();
     await page.getByText('Ready to send').first().waitFor();
     assert.match(await body(), /Unofficial API carousel mode/);
   },
