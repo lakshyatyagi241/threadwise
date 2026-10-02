@@ -20,13 +20,18 @@ export const TABS = ['all', ...DISPLAY_STATUSES] as const;
 export type InvoiceTab = (typeof TABS)[number];
 
 /** The count a tab shows, from `GET /invoices/counts` (which names `partiallyPaid` in camel case). */
-export function tabCount(counts: InvoiceCountsResponse | undefined, tab: InvoiceTab): number | undefined {
+export function tabCount(
+  counts: InvoiceCountsResponse | undefined,
+  tab: InvoiceTab,
+): number | undefined {
   if (!counts) return undefined;
   return tab === 'partially_paid' ? counts.partiallyPaid : counts[tab];
 }
 
 /** Every status the contracts know is a tab (a status added to the API without a tab fails this in a test). */
-export const TABS_COVER_STATUSES = INVOICE_STATUSES.every((s) => (DISPLAY_STATUSES as readonly string[]).includes(s));
+export const TABS_COVER_STATUSES = INVOICE_STATUSES.every((s) =>
+  (DISPLAY_STATUSES as readonly string[]).includes(s),
+);
 
 export type InvoiceAction =
   | 'view'

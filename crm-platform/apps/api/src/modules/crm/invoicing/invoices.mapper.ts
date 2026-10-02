@@ -220,8 +220,12 @@ export function toInvoiceResponse(
     terms: row.terms,
     lines: lines.map((l) => toLineResponse(l, row.currency)),
     taxSummary: summary.map((t) => toTaxSummaryResponse(t, row.currency)),
-    quote: row.quoteUuid ? { id: row.quoteUuid, number: row.quoteNumber ?? '', kind: row.quoteKind ?? 'proposal' } : null,
-    salesOrder: row.salesOrderUuid ? { id: row.salesOrderUuid, number: row.salesOrderNumber ?? '' } : null,
+    quote: row.quoteUuid
+      ? { id: row.quoteUuid, number: row.quoteNumber ?? '', kind: row.quoteKind ?? 'proposal' }
+      : null,
+    salesOrder: row.salesOrderUuid
+      ? { id: row.salesOrderUuid, number: row.salesOrderNumber ?? '' }
+      : null,
     recurring: row.recurringUuid ? { id: row.recurringUuid, name: row.recurringName ?? '' } : null,
     createdBy: row.createdByUuid ? { id: row.createdByUuid, name: row.createdByName ?? '' } : null,
     publicLink: toLinkState(row, token),

@@ -183,19 +183,30 @@ export function BoardColumn(p: BoardColumnProps) {
         )}
 
         {status === 'error' && (
-          <div role="alert" className="rounded-lg border border-danger/40 bg-danger/10 p-3 text-xs text-danger">
+          <div
+            role="alert"
+            className="rounded-lg border border-danger/40 bg-danger/10 p-3 text-xs text-danger"
+          >
             <p>{t('columnFailed')}</p>
-            <Button variant="secondary" size="sm" className="mt-2" onClick={() => p.onRetry(p.stage.id)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="mt-2"
+              onClick={() => p.onRetry(p.stage.id)}
+            >
               {t('retry')}
             </Button>
           </div>
         )}
 
-        {status !== 'loading' && status !== 'error' && p.deals.length === 0 && p.dropAt === null && (
-          <div className="rounded-lg border border-dashed border-border px-3 py-6 text-center text-xs text-muted-foreground">
-            {p.filtered ? t('noMatches') : t('noDeals')}
-          </div>
-        )}
+        {status !== 'loading' &&
+          status !== 'error' &&
+          p.deals.length === 0 &&
+          p.dropAt === null && (
+            <div className="rounded-lg border border-dashed border-border px-3 py-6 text-center text-xs text-muted-foreground">
+              {p.filtered ? t('noMatches') : t('noDeals')}
+            </div>
+          )}
 
         {rows}
 

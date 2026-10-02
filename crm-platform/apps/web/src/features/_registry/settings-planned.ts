@@ -38,11 +38,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   tile('data', 'tags', '/tags', 'tag', 40),
   tile('data', 'saved-replies', '/saved-replies', 'reply', 50),
 
-  // Team and permissions (the roles screens exist for the platform operator only)
-  tile('team', 'team-members', '/team-members', 'team', 0),
-  tile('team', 'roles', '/roles', 'shield', 10),
-  tile('team', 'teams', '/teams', 'groups', 20),
-
   // Automation and AI
   tile('automation', 'auto-reply', '/auto-reply', 'reply', 20),
 

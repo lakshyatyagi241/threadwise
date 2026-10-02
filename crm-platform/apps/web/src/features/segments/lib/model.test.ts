@@ -29,10 +29,18 @@ import {
 } from './model';
 import { operatorsForKind } from './operators';
 
-const stage: FieldShape = { id: 'lifecycleStage', kind: 'option', operators: operatorsForKind('option') };
+const stage: FieldShape = {
+  id: 'lifecycleStage',
+  kind: 'option',
+  operators: operatorsForKind('option'),
+};
 const tags: FieldShape = { id: 'tags', kind: 'tags', operators: operatorsForKind('tags') };
 const created: FieldShape = { id: 'createdAt', kind: 'date', operators: operatorsForKind('date') };
-const score: FieldShape = { id: 'leadScore', kind: 'number', operators: operatorsForKind('number') };
+const score: FieldShape = {
+  id: 'leadScore',
+  kind: 'number',
+  operators: operatorsForKind('number'),
+};
 const source: FieldShape = { id: 'source', kind: 'text', operators: operatorsForKind('text') };
 const kinds: Record<string, FieldShape> = {
   lifecycleStage: stage,
@@ -86,7 +94,8 @@ describe('building the tree', () => {
 
     let full = emptyRoot();
     // 50 conditions in groups of 50 children at most
-    for (let i = 0; i < MAX_CONDITIONS; i++) full = addCondition(full, full.id, newCondition(stage));
+    for (let i = 0; i < MAX_CONDITIONS; i++)
+      full = addCondition(full, full.id, newCondition(stage));
     expect(countConditions(full)).toBe(MAX_CONDITIONS);
     expect(canAddCondition(full, full.id)).toBe(false);
     expect(addCondition(full, full.id, newCondition(stage))).toBe(full);
@@ -121,7 +130,11 @@ describe('editing a condition', () => {
   it('a new field resets the operator and the value (they belonged to the old field)', () => {
     const { r, id } = base();
     const next = changeField(r, id, score);
-    expect(conditionsOf(next)[0]).toMatchObject({ field: 'leadScore', operator: 'equals', value: '' });
+    expect(conditionsOf(next)[0]).toMatchObject({
+      field: 'leadScore',
+      operator: 'equals',
+      value: '',
+    });
   });
 
   it('choosing the same field again changes nothing', () => {
@@ -238,8 +251,12 @@ describe('valueProblem', () => {
   it('dates must be real days; a range must not run backwards', () => {
     expect(valueProblem(c(created, 'before', '2026-02-31'), 'date')).toBe('date');
     expect(valueProblem(c(created, 'before', '2026-02-27'), 'date')).toBeNull();
-    expect(valueProblem(c(created, 'between', { from: '2026-03-01', to: '2026-01-01' }), 'date')).toBe('range');
-    expect(valueProblem(c(created, 'between', { from: '2026-01-01', to: '2026-03-01' }), 'date')).toBeNull();
+    expect(
+      valueProblem(c(created, 'between', { from: '2026-03-01', to: '2026-01-01' }), 'date'),
+    ).toBe('range');
+    expect(
+      valueProblem(c(created, 'between', { from: '2026-01-01', to: '2026-03-01' }), 'date'),
+    ).toBeNull();
   });
 });
 

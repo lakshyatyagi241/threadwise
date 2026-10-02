@@ -395,16 +395,13 @@ describe('rule validation at the edge', () => {
       .as(t.admin)
       .post('/v2/field-sections')
       .send({ moduleKey: 'contacts', name: 'Seg' });
-    await api
-      .as(t.admin)
-      .post('/v2/fields')
-      .send({
-        moduleKey: 'contacts',
-        sectionId: section.body.id,
-        key: 'budget',
-        label: 'Budget',
-        fieldType: 'integer',
-      });
+    await api.as(t.admin).post('/v2/fields').send({
+      moduleKey: 'contacts',
+      sectionId: section.body.id,
+      key: 'budget',
+      label: 'Budget',
+      fieldType: 'integer',
+    });
     const bad = await post({
       name: 'Budget text',
       rules: rules(cond('custom.budget', 'contains', '5')),
@@ -1209,31 +1206,25 @@ describe('references to things that were deleted', () => {
     stage = await mkStage('doomed_stage');
     other = await mkStage('other_stage');
     statusId = (
-      await api
-        .as(t.admin)
-        .post('/v2/status-options')
-        .send({
-          moduleKey: 'contacts',
-          optionGroup: 'status',
-          value: 'doomed_status',
-          label: 'doomed',
-        })
+      await api.as(t.admin).post('/v2/status-options').send({
+        moduleKey: 'contacts',
+        optionGroup: 'status',
+        value: 'doomed_status',
+        label: 'doomed',
+      })
     ).body.id;
     const section = await api
       .as(t.admin)
       .post('/v2/field-sections')
       .send({ moduleKey: 'contacts', name: 'Del' });
     fieldId = (
-      await api
-        .as(t.admin)
-        .post('/v2/fields')
-        .send({
-          moduleKey: 'contacts',
-          sectionId: section.body.id,
-          key: 'doomed_field',
-          label: 'Doomed',
-          fieldType: 'text',
-        })
+      await api.as(t.admin).post('/v2/fields').send({
+        moduleKey: 'contacts',
+        sectionId: section.body.id,
+        key: 'doomed_field',
+        label: 'Doomed',
+        fieldType: 'text',
+      })
     ).body.id;
     tag = (await api.as(t.admin).post('/v2/tags').send({ name: 'doomed-tag' })).body.id;
     grp = (await api.as(t.admin).post('/v2/contact-groups').send({ name: 'doomed-group' })).body.id;

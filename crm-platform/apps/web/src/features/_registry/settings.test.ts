@@ -68,7 +68,7 @@ describe('resolveSettings with planned tiles', () => {
   const planned = [
     tile('tax', { section: 'business', href: '/tax-rates' }),
     tile('by-href', { section: 'business', href: '/tax-rates' }),
-    tile('roles', { section: 'team', href: '/roles' }),
+    tile('roles', { section: 'people', href: '/roles' }),
   ];
 
   it('marks planned tiles as coming soon and lets a real tile take over by id or by address', () => {
@@ -95,7 +95,12 @@ describe('resolveSettings with planned tiles', () => {
       tile('z', { section: 'channels', order: 50 }),
       tile('m', { section: 'business' }),
     ];
-    expect(resolveSettings(list, CAPABILITIES_UNKNOWN).map((t) => t.id)).toEqual(['z', 'm', 'a', 'b']);
+    expect(resolveSettings(list, CAPABILITIES_UNKNOWN).map((t) => t.id)).toEqual([
+      'z',
+      'm',
+      'a',
+      'b',
+    ]);
     expect(compareSettings(list[0]!, list[2]!)).toBeGreaterThan(0);
   });
 });
@@ -103,7 +108,11 @@ describe('resolveSettings with planned tiles', () => {
 describe('toSettingsSections', () => {
   it('lists only the sections that have a tile, in section order', () => {
     const r = resolveSettings(
-      [tile('a', { section: 'security' }), tile('b', { section: 'channels' }), tile('c', { section: 'security' })],
+      [
+        tile('a', { section: 'security' }),
+        tile('b', { section: 'channels' }),
+        tile('c', { section: 'security' }),
+      ],
       CAPABILITIES_UNKNOWN,
     );
     expect(toSettingsSections(r).map((s) => [s.section, s.tiles.map((t) => t.id)])).toEqual([
@@ -115,7 +124,10 @@ describe('toSettingsSections', () => {
   it('is empty for no tiles', () => expect(toSettingsSections([])).toEqual([]));
 
   it('hides a section whose tiles are all gated away', () => {
-    const r = resolveSettings([tile('a', { section: 'team', gates: { permission: 'no' } })], caps([], [], []));
+    const r = resolveSettings(
+      [tile('a', { section: 'people', gates: { permission: 'no' } })],
+      caps([], [], []),
+    );
     expect(toSettingsSections(r)).toEqual([]);
   });
 });
@@ -165,12 +177,23 @@ describe('the planned tiles', () => {
     const hrefs = PLANNED_SETTINGS.map((t) => t.href);
     expect(new Set(ids).size).toBe(ids.length);
     expect(new Set(hrefs).size).toBe(hrefs.length);
-    for (const t of PLANNED_SETTINGS) expect(SETTINGS_SECTIONS as readonly string[]).toContain(t.section);
+    for (const t of PLANNED_SETTINGS)
+      expect(SETTINGS_SECTIONS as readonly string[]).toContain(t.section);
   });
 
   it('cover the channels that left the menu, as Soon tiles', () => {
     const channels = PLANNED_SETTINGS.filter((t) => t.section === 'channels').map((t) => t.id);
-    for (const id of ['channels', 'whatsapp', 'telegram', 'sms', 'email', 'line', 'viber', 'wechat', 'wa-links']) {
+    for (const id of [
+      'channels',
+      'whatsapp',
+      'telegram',
+      'sms',
+      'email',
+      'line',
+      'viber',
+      'wechat',
+      'wa-links',
+    ]) {
       expect(channels, id).toContain(id);
     }
   });

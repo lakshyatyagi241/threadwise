@@ -3,6 +3,7 @@ import {
   ERROR_CODES,
   parseOtpSenderRef,
   registrationSettingsPatchSchema,
+  registrationSettingsSchema,
   type OtpStatus,
   type OtpTestRequest,
   type OtpTestResponse,
@@ -15,13 +16,40 @@ import { AuthAuditService } from '../security/auth-audit.service';
 import { RateLimitService } from '../security/rate-limit.service';
 import { randomNumericCode } from '../support/crypto-utils';
 import { AuthKeys } from '../support/redis-keys';
-import { maskPhone } from '../support/text';
+import { maskPhone } from '../flows/phone-mask';
 import { ConfiguredOtpSender } from './configured-otp-sender';
 import { evaluateOtpActivation } from './otp-activation';
 import { OtpSenderRegistryService } from './otp-sender-registry.service';
 import { SecurityPolicyService } from './security-policy.service';
 
 export const OTP_TESTS_PER_HOUR = 5;
+
+type OtpKnob = 'ttlMinutes' | 'length' | 'resendCooldownSec' | 'maxAttempts';
+const OTP_KNOBS: readonly OtpKnob[] = ['ttlMinutes', 'length', 'resendCooldownSec', 'maxAttempts'];
+/** The documented defaults (Reference: 5 minutes, 6 digits, 60 seconds, 5 attempts), straight from the schema. */
+const OTP_KNOB_DEFAULTS = registrationSettingsSchema.parse({}).otp;
+
+/**
+ * A blank field of the OTP form means "use the default", never 0 and never an error (Reference's
+ * validity box saves 5 when left empty). `null`, an empty or blank string and NaN are blank; a
+ * whole number typed as text is read as the number. A number out of range is still refused.
+ */
+export function withDefaultKnobs(body: unknown): unknown {
+  const otp = (body as { otp?: Record<string, unknown> } | null)?.otp;
+  if (!otp || typeof otp !== 'object') return body;
+  const next: Record<string, unknown> = { ...otp };
+  for (const knob of OTP_KNOBS) {
+    if (!(knob in next)) continue;
+    const v = next[knob];
+    if (v === null || (typeof v === 'number' && Number.isNaN(v))) {
+      next[knob] = OTP_KNOB_DEFAULTS[knob];
+    } else if (typeof v === 'string') {
+      const t = v.trim();
+      next[knob] = t === '' ? OTP_KNOB_DEFAULTS[knob] : /^\d+$/.test(t) ? Number(t) : v;
+    }
+  }
+  return { ...(body as object), otp: next };
+}
 
 /**
  * The sign-up code as a platform feature: is it on, change its settings, and
@@ -77,7 +105,7 @@ export class RegistrationOtpService {
     body: unknown,
     operatorId: number,
   ): Promise<{ before: RegistrationSettings; after: RegistrationSettings }> {
-    const patch = registrationSettingsPatchSchema.parse(body);
+    const patch = registrationSettingsPatchSchema.parse(withDefaultKnobs(body));
     const sender = patch.otp?.sender;
     if (typeof sender === 'string') await this.assertSelectable(sender, 'otp.sender');
     return this.policy.patchRegistration(patch, operatorId);

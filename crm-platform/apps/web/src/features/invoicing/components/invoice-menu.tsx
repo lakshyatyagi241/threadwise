@@ -44,7 +44,9 @@ export function InvoiceRowMenu({
   const can = useInvoicingCan();
   const actions = useInvoiceActions();
   const allowed = allowedActions(actionFacts(invoice), { can });
-  const label = t('moreFor', { name: invoice.number ?? invoice.buyerName ?? invoice.contact?.name ?? t('draft') });
+  const label = t('moreFor', {
+    name: invoice.number ?? invoice.buyerName ?? invoice.contact?.name ?? t('draft'),
+  });
 
   return (
     <RowMenu label={label}>

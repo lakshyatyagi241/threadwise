@@ -8,14 +8,19 @@ import { SessionsPanel } from './sessions-panel';
 /**
  * "Change password & security" (TW-AUTH-024/027/030/031): the password form,
  * two-factor and the device list on one page. `?required=password|mfa` is the
- * forced mode the account gate redirects to (TW-AUTH-032, TW-AUTH-035).
+ * forced mode the account gate redirects to (TW-AUTH-032, TW-AUTH-035); the card
+ * the person has to finish comes first.
  */
 export function SecurityView({ required }: { required?: 'password' | 'mfa' }) {
   const { flags } = useSession();
+  const passwordForced = flags.passwordChangeRequired || required === 'password';
+  const mfaForced = flags.mfaEnrolmentRequired || required === 'mfa';
+  const mfaFirst = mfaForced && !passwordForced;
+  const password = <ChangePasswordForm key="password" forced={passwordForced} />;
+  const mfa = <MfaPanel key="mfa" forcedByUrl={required === 'mfa'} />;
   return (
     <div className="space-y-5">
-      <ChangePasswordForm forced={flags.passwordChangeRequired || required === 'password'} />
-      <MfaPanel forcedByUrl={required === 'mfa'} />
+      {mfaFirst ? [mfa, password] : [password, mfa]}
       <SessionsPanel />
     </div>
   );

@@ -1,19 +1,20 @@
 'use client';
 
 import type { SocialProvider } from '@crm/contracts';
-import { Spinner } from '@crm/ui';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 import { postBff } from './bff';
 import { mapAuthError, type MappedError } from './errors';
 import { MfaStep } from './mfa-step';
+import { takeNext } from './next-memory';
 import { bffLoginResponseSchema, type BffLoginResponse } from './schemas';
 import { completeSignIn } from './sign-in-complete';
+import { Alert, LINK, PRIMARY_LINK, Spinner } from './ui';
 
 type State =
   | { phase: 'working' }
-  | { phase: 'mfa'; token: string; expiresAt: number }
+  | { phase: 'mfa'; token: string; expiresAt: number; next: string | null }
   | { phase: 'failed'; error: MappedError | null; cancelled: boolean; expired: boolean };
 
 /** The state value is single use on the server: one POST per `state`, even when React runs the effect twice. */
@@ -42,15 +43,19 @@ export function SocialCallback({
   code,
   state,
   providerError,
+  rememberMeEnabled,
 }: {
   provider: SocialProvider;
   code: string;
   state: string;
   /** `error` query parameter: the visitor cancelled or the provider refused. */
   providerError: string;
+  /** Whether the platform allows long sessions; a social sign-in is remembered unless it does not. */
+  rememberMeEnabled: boolean;
 }) {
   const t = useTranslations('auth-registration-security.guest.callback');
   const te = useTranslations('auth-registration-security.guest.errors');
+  const ts = useTranslations('auth-registration-security.guest.social');
   const [view, setView] = useState<State>(
     providerError || !code || !state
       ? { phase: 'failed', error: null, cancelled: Boolean(providerError), expired: !providerError }
@@ -63,15 +68,18 @@ export function SocialCallback({
     complete(provider, code, state).then(
       (res) => {
         if (cancelled) return;
+        // Read once, here: it is the return path remembered before the visitor left for the provider.
+        const next = takeNext();
         if (res.status === 'mfa_required') {
           setView({
             phase: 'mfa',
             token: res.challengeToken,
             expiresAt: Date.now() + res.expiresInSeconds * 1000,
+            next,
           });
           return;
         }
-        completeSignIn(res);
+        completeSignIn(res, next);
       },
       (err: unknown) => {
         if (!cancelled)
@@ -94,7 +102,7 @@ export function SocialCallback({
   if (view.phase === 'working') {
     return (
       <div
-        className="flex items-center justify-center gap-3 py-8 text-sm text-muted-foreground"
+        className="flex items-center justify-center gap-3 py-8 text-[13px] text-(--auth-ink-600)"
         role="status"
       >
         <Spinner label={t('working')} />
@@ -108,7 +116,8 @@ export function SocialCallback({
       <MfaStep
         challengeToken={view.token}
         expiresAt={view.expiresAt}
-        remember={false}
+        remember={rememberMeEnabled}
+        next={view.next}
         onBack={backToSignIn}
       />
     );
@@ -119,25 +128,19 @@ export function SocialCallback({
     : view.expired
       ? te('socialExpired')
       : view.error
-        ? te(view.error.key, view.error.params)
+        ? te(view.error.key, { ...view.error.params, provider: ts(provider) })
         : te('unexpected');
   return (
     <div className="space-y-4">
-      <div
-        role="alert"
-        className="rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger"
-      >
-        <p className="font-medium">{t('failedTitle')}</p>
+      <Alert tone="danger" className="space-y-0.5">
+        <p className="font-semibold">{t('failedTitle')}</p>
         <p>{message}</p>
-      </div>
-      <div className="flex flex-col items-center gap-2 text-sm">
-        <Link
-          href="/login"
-          className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground hover:opacity-90"
-        >
+      </Alert>
+      <div className="flex flex-col items-center gap-3 text-[12.5px]">
+        <Link href="/login" className={PRIMARY_LINK}>
           {t('backToSignIn')}
         </Link>
-        <Link href="/signup" className="text-muted-foreground underline-offset-2 hover:underline">
+        <Link href="/signup" className={LINK}>
           {t('createAccount')}
         </Link>
       </div>

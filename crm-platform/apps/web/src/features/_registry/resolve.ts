@@ -65,10 +65,18 @@ export function evaluateGates(
 }
 
 /**
- * Applies the gates to the menu entries. The server stays the authority; this only shapes the menu.
+ * `/account/<name>`, one segment: a pane of the account hub (profile, plan, wallet, ...). A domain adds one by
+ * declaring it in its own `nav.ts`; the hub lists it in its own menu, so the main sidebar leaves it out.
+ */
+export const HUB_PANE_HREF = /^\/account\/([a-z0-9][a-z0-9-]*)$/;
+
+export const isHubPane = (item: Pick<NavItem, 'href'>): boolean => HUB_PANE_HREF.test(item.href);
+
+/**
+ * Applies the gates to every entry, hub panes included. The server stays the authority; this only shapes the menu.
  * Planned (not yet built) screens go through the same gates, then come out marked `comingSoon`.
  */
-export function resolveNav(
+export function resolveNavAll(
   items: readonly NavItem[],
   caps: Capabilities,
   options: ResolveOptions = {},
@@ -79,4 +87,20 @@ export function resolveNav(
     if (gate) out.push({ ...item, locked: gate.locked, comingSoon });
   }
   return out.sort(compareNav);
+}
+
+/**
+ * The main sidebar's items. The account hub's panes are reached from the hub (the sidebar keeps the single
+ * "Account" entry), so they are left out here; use `resolveNavAll` where they are wanted.
+ */
+export function resolveNav(
+  items: readonly NavItem[],
+  caps: Capabilities,
+  options: ResolveOptions = {},
+): ResolvedNavItem[] {
+  return resolveNavAll(
+    items.filter((item) => !isHubPane(item)),
+    caps,
+    options,
+  );
 }

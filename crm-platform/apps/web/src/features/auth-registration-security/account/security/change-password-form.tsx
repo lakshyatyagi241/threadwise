@@ -2,17 +2,20 @@
 
 import { ERROR_CODES, passwordSchema } from '@crm/contracts';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useId, useRef, useState, type FormEvent } from 'react';
-import { Alert, Button, Card, Field, PasswordInput, Spinner } from '@crm/ui';
+import { Alert, Button, Card, Field, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { ErrorNote } from '../../shared/error-note';
 import { focusFirstInvalid } from '../../shared/focus';
 import { redirectOnGateError } from '../../shared/gate-errors';
 import { showFlash } from '../../shared/flash';
 import { useSession } from '../../shared/session-context';
+import { TitledPasswordInput } from '../../shared/titled-password-input';
 import { authApi } from '../api';
-import { policyViolations, type PolicyViolation } from './policy-rules';
+import { policyViolations, requirementsOf, type PolicyViolation } from './policy-rules';
+import { ResetLinkOffer } from './reset-link-offer';
+import { usePasswordPolicy } from './use-password-policy';
 
 type Errors = Partial<Record<'current' | 'next' | 'confirm', string>>;
 
@@ -27,7 +30,12 @@ export function ChangePasswordForm({ forced }: { forced: boolean }) {
   const t = useTranslations('auth-registration-security.account.password');
   const c = useTranslations('auth-registration-security.account.common');
   const router = useRouter();
+  const locale = useLocale();
   const { flags } = useSession();
+  // The hint, placeholder and `minlength` follow the policy in force right now.
+  const { policy, minLength } = usePasswordPolicy();
+  const requirements = policy ? requirementsOf(policy) : [];
+  const listFormat = new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' });
   const uid = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const [current, setCurrent] = useState('');
@@ -54,6 +62,17 @@ export function ChangePasswordForm({ forced }: { forced: boolean }) {
     focusFirstInvalid(formRef.current);
   }
 
+  /** Reference's Reset button: back to an empty form, nothing sent. */
+  function reset() {
+    setCurrent('');
+    setNext('');
+    setConfirm('');
+    setErrors({});
+    setRules([]);
+    setError(null);
+    setRevoked(null);
+  }
+
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (pending) return;
@@ -63,8 +82,9 @@ export function ChangePasswordForm({ forced }: { forced: boolean }) {
     const found: Errors = {};
     if (!current) found.current = t('errors.currentRequired');
     const parsed = passwordSchema.safeParse(next);
-    if (!parsed.success)
-      found.next = next.length > 256 ? t('errors.tooLong') : t('errors.tooShort');
+    if (!parsed.success || next.length < minLength)
+      found.next =
+        next.length > 256 ? t('errors.tooLong') : t('errors.tooShort', { count: minLength });
     if (!found.next && next === current) found.next = t('errors.sameAsCurrent');
     if (confirm !== next) found.confirm = t('errors.mismatch');
     if (Object.keys(found).length) return fail(found);
@@ -108,28 +128,46 @@ export function ChangePasswordForm({ forced }: { forced: boolean }) {
       </div>
 
       {forced && <Alert tone="warning">{t('forcedBanner')}</Alert>}
+      {/* An account with no password of its own (social sign-in) cannot type a current one: offer the e-mail link. */}
+      {forced && <ResetLinkOffer />}
 
       <form ref={formRef} onSubmit={(e) => void submit(e)} className="space-y-4" noValidate>
         <Field label={t('current')} htmlFor={id('current')} error={errors.current}>
-          <PasswordInput
+          <TitledPasswordInput
             id={id('current')}
             autoComplete="current-password"
             value={current}
             onChange={(e) => setCurrent(e.target.value)}
             invalid={Boolean(errors.current)}
+            placeholder={t('currentPlaceholder')}
+            required
             showLabel={c('showPassword')}
             hideLabel={c('hidePassword')}
           />
         </Field>
 
-        <Field label={t('new')} htmlFor={id('new')} hint={t('newHint')} error={errors.next}>
-          <PasswordInput
+        <Field
+          label={t('new')}
+          htmlFor={id('new')}
+          hint={
+            requirements.length
+              ? `${t('newHint', { count: minLength })} ${t('newHintRequires', {
+                  rules: listFormat.format(requirements.map((r) => t(`requirement.${r}`))),
+                })}`
+              : t('newHint', { count: minLength })
+          }
+          error={errors.next}
+        >
+          <TitledPasswordInput
             id={id('new')}
             autoComplete="new-password"
             value={next}
             onChange={(e) => setNext(e.target.value)}
             invalid={Boolean(errors.next)}
             aria-describedby={rules.length ? id('rules') : undefined}
+            placeholder={t('newPlaceholder', { count: minLength })}
+            required
+            minLength={minLength}
             showLabel={c('showPassword')}
             hideLabel={c('hidePassword')}
           />
@@ -147,21 +185,36 @@ export function ChangePasswordForm({ forced }: { forced: boolean }) {
         )}
 
         <Field label={t('confirm')} htmlFor={id('confirm')} error={errors.confirm}>
-          <PasswordInput
+          <TitledPasswordInput
             id={id('confirm')}
             autoComplete="new-password"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             invalid={Boolean(errors.confirm)}
+            placeholder={t('confirmPlaceholder')}
+            required
+            minLength={minLength}
             showLabel={c('showPassword')}
             hideLabel={c('hidePassword')}
           />
         </Field>
 
+        <div className="rounded-md border border-border bg-muted px-3 py-2 text-xs">
+          <p className="mb-1 font-semibold">{t('tips.title')}</p>
+          <ul className="list-disc space-y-0.5 ps-5 text-muted-foreground">
+            <li>{t('tips.mix')}</li>
+            <li>{t('tips.reuse')}</li>
+            <li>{t('tips.manager')}</li>
+          </ul>
+        </div>
+
         <ErrorNote error={error} />
         {revoked !== null && <Alert tone="success">{t('success', { count: revoked })}</Alert>}
 
-        <div className="flex justify-end">
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <Button type="button" variant="secondary" onClick={reset} disabled={pending}>
+            {c('reset')}
+          </Button>
           <Button type="submit" disabled={pending}>
             {pending && <Spinner label={t('updating')} />}
             {pending ? t('updating') : t('submit')}

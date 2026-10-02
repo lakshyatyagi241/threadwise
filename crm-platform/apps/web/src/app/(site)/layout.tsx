@@ -46,7 +46,9 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-6 text-sm text-muted-foreground sm:px-6">
           <span className="me-auto">
-            {site?.footer.title && <strong className="me-2 text-foreground">{site.footer.title}</strong>}
+            {site?.footer.title && (
+              <strong className="me-2 text-foreground">{site.footer.title}</strong>
+            )}
             {site?.footer.copyright || `${brand} ${t('rights')}`}
           </span>
           {site?.footer.social &&

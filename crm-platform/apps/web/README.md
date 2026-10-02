@@ -65,5 +65,5 @@ See the `threadwise-frontend-port` skill for the rules that apply to every scree
 - The menu shows every item until an app-init endpoint returns the caller's permissions, plan features and channels.
 - Only English messages exist; the loader falls back to English for the other 20 locales.
 - All domains' messages are sent to the client (fine now, split per route later).
-- When only the access token has expired, the refresh redirect returns to `/dashboard`, not the page you were on.
+- When only the access token has expired, the refresh redirect returns to the page that was asked for (`?next=`, kept only for same-site paths); a session that ended for inactivity goes to sign-in with the reason instead.
 - Realtime is connected (one socket per session, `src/lib/realtime`) but no screen listens yet: the polling features still poll.

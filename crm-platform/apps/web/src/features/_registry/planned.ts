@@ -18,39 +18,174 @@ const L = (id: string) => `shell.nav.${id}`;
 
 export const PLANNED_NAV: readonly NavItem[] = [
   // Platform (Dashboard is a real screen)
-  { id: 'analytics', group: 'overview', labelKey: L('analytics'), href: '/analytics', order: 10, icon: 'analytics' },
-  { id: 'notifications', group: 'overview', labelKey: L('notifications'), href: '/notifications', order: 20, icon: 'bell' },
+  {
+    id: 'analytics',
+    group: 'overview',
+    labelKey: L('analytics'),
+    href: '/analytics',
+    order: 10,
+    icon: 'analytics',
+  },
+  {
+    id: 'notifications',
+    group: 'overview',
+    labelKey: L('notifications'),
+    href: '/notifications',
+    order: 20,
+    icon: 'bell',
+  },
 
   // Inbox & Chat
-  { id: 'quick-chat', group: 'inbox', labelKey: L('quickChat'), href: '/chat', order: 10, icon: 'chat' },
-  { id: 'call-logs', group: 'inbox', labelKey: L('callLogs'), href: '/call-logs', order: 20, icon: 'phone' },
-  { id: 'team-chat', group: 'inbox', labelKey: L('teamChat'), href: '/team-chat', order: 30, icon: 'team-chat' },
+  {
+    id: 'quick-chat',
+    group: 'inbox',
+    labelKey: L('quickChat'),
+    href: '/chat',
+    order: 10,
+    icon: 'chat',
+  },
+  {
+    id: 'call-logs',
+    group: 'inbox',
+    labelKey: L('callLogs'),
+    href: '/call-logs',
+    order: 20,
+    icon: 'phone',
+  },
+  {
+    id: 'team-chat',
+    group: 'inbox',
+    labelKey: L('teamChat'),
+    href: '/team-chat',
+    order: 30,
+    icon: 'team-chat',
+  },
 
   // CRM (Contacts, Contact groups, Segments and Deals are real screens; Attributes moved to Settings). Orders keep the menu sequence:
   // Contacts 0, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
-  { id: 'lead-finder', group: 'audience', labelKey: L('leadFinder'), href: '/lead-finder', order: 30, icon: 'pin', badge: 'new' },
-  { id: 'pipelines', group: 'audience', labelKey: L('pipelines'), href: '/pipelines', order: 50, icon: 'pipelines' },
-  { id: 'companies', group: 'audience', labelKey: L('companies'), href: '/companies', order: 70, icon: 'companies' },
-  { id: 'email-templates', group: 'audience', labelKey: L('emailTemplates'), href: '/email-templates', order: 80, icon: 'mail' },
+  {
+    id: 'lead-finder',
+    group: 'audience',
+    labelKey: L('leadFinder'),
+    href: '/lead-finder',
+    order: 30,
+    icon: 'pin',
+    badge: 'new',
+  },
+  {
+    id: 'pipelines',
+    group: 'audience',
+    labelKey: L('pipelines'),
+    href: '/pipelines',
+    order: 50,
+    icon: 'pipelines',
+  },
+  {
+    id: 'companies',
+    group: 'audience',
+    labelKey: L('companies'),
+    href: '/companies',
+    order: 70,
+    icon: 'companies',
+  },
+  {
+    id: 'email-templates',
+    group: 'audience',
+    labelKey: L('emailTemplates'),
+    href: '/email-templates',
+    order: 80,
+    icon: 'mail',
+  },
 
   // Sales (Reference's SalesDocs engine: proposals and estimates are real screens in features/sales-docs; invoices, payments and tax rates are real screens in features/invoicing)
-  { id: 'crm-dashboard', group: 'sales', labelKey: L('crmDashboard'), href: '/crm', order: 0, icon: 'crm' },
+  {
+    id: 'crm-dashboard',
+    group: 'sales',
+    labelKey: L('crmDashboard'),
+    href: '/crm',
+    order: 0,
+    icon: 'crm',
+  },
 
   // Campaigns
-  { id: 'campaigns', group: 'campaigns', labelKey: L('campaigns'), href: '/campaigns', order: 0, icon: 'campaign' },
-  { id: 'scheduled', group: 'campaigns', labelKey: L('scheduled'), href: '/scheduled', order: 20, icon: 'clock' },
-  { id: 'templates', group: 'campaigns', labelKey: L('templates'), href: '/templates', order: 30, icon: 'template' },
-  { id: 'history', group: 'campaigns', labelKey: L('history'), href: '/message-history', order: 40, icon: 'history' },
+  {
+    id: 'campaigns',
+    group: 'campaigns',
+    labelKey: L('campaigns'),
+    href: '/campaigns',
+    order: 0,
+    icon: 'campaign',
+  },
+  {
+    id: 'scheduled',
+    group: 'campaigns',
+    labelKey: L('scheduled'),
+    href: '/scheduled',
+    order: 20,
+    icon: 'clock',
+  },
+  {
+    id: 'templates',
+    group: 'campaigns',
+    labelKey: L('templates'),
+    href: '/templates',
+    order: 30,
+    icon: 'template',
+  },
+  {
+    id: 'history',
+    group: 'campaigns',
+    labelKey: L('history'),
+    href: '/message-history',
+    order: 40,
+    icon: 'history',
+  },
 
   // Automation (Appointments is a real screen in features/appointments)
-  { id: 'flows', group: 'automation', labelKey: L('flows'), href: '/flows', order: 0, icon: 'flow' },
-  { id: 'ai-assistants', group: 'automation', labelKey: L('aiAssistants'), href: '/ai-assistants', order: 10, icon: 'bot', badge: 'new' },
+  {
+    id: 'flows',
+    group: 'automation',
+    labelKey: L('flows'),
+    href: '/flows',
+    order: 0,
+    icon: 'flow',
+  },
+  {
+    id: 'ai-assistants',
+    group: 'automation',
+    labelKey: L('aiAssistants'),
+    href: '/ai-assistants',
+    order: 10,
+    icon: 'bot',
+    badge: 'new',
+  },
 
   // Store
   { id: 'store', group: 'store', labelKey: L('store'), href: '/store', order: 0, icon: 'store' },
-  { id: 'catalog', group: 'store', labelKey: L('catalog'), href: '/catalog', order: 10, icon: 'catalog' },
+  {
+    id: 'catalog',
+    group: 'store',
+    labelKey: L('catalog'),
+    href: '/catalog',
+    order: 10,
+    icon: 'catalog',
+  },
 
   // Help (drawn in the user menu, not in the rail or panel)
-  { id: 'support', group: 'help', labelKey: L('support'), href: '/support', order: 0, icon: 'help' },
-  { id: 'guidebook', group: 'help', labelKey: L('guidebook'), href: '/guidebook', order: 10, icon: 'book' },
+  {
+    id: 'support',
+    group: 'help',
+    labelKey: L('support'),
+    href: '/support',
+    order: 0,
+    icon: 'help',
+  },
+  {
+    id: 'guidebook',
+    group: 'help',
+    labelKey: L('guidebook'),
+    href: '/guidebook',
+    order: 10,
+    icon: 'book',
+  },
 ];

@@ -14,7 +14,6 @@ const AWAITING: Readonly<Record<string, string>> = {
   'inbox.conversation.tag': 'TW-TIB1 labels',
   'inbox.conversation.priority': 'TW-TIB1 priority',
   'inbox.settings.read': 'TW-TIB2 inbox configuration screens',
-  'inbox.team.manage': 'TW-TIB2 teams',
   'inbox.tag.manage': 'TW-TIB1 workspace labels',
   'inbox.routing.manage': 'TW-TIB2 routing rules and business hours',
   'inbox.sla.manage': 'TW-TIB2 SLA policies',

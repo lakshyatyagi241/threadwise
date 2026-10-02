@@ -1,13 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { verify } from '@node-rs/argon2';
 import { sql } from 'drizzle-orm';
-import type { TokenPair } from '@crm/contracts';
+import type { LoginResponse, TokenPair } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AppError } from '../../common/errors/app-error';
 import { ClerkService } from './clerk.service';
 import { LoginService, type ClientMeta } from './flows/login.service';
+import { SecurityPolicyService } from './platform/security-policy.service';
 import { TenantDirectory } from './platform/tenant-directory';
 import { SessionService } from './sessions/session.service';
+import { normalizeIp } from './support/ip';
+import { AuthKeys } from './support/redis-keys';
 import { TokenService } from './token.service';
 
 interface LoginRow {
@@ -34,10 +37,25 @@ export class AuthService {
     private readonly tenants: TenantDirectory,
     private readonly sessions: SessionService,
     private readonly login: LoginService,
+    private readonly policy: SecurityPolicyService,
   ) {}
 
-  async loginPartnerAgent(orgSlug: string, email: string, password: string): Promise<TokenPair> {
+  /**
+   * Partner-portal sign-in. It shares the staff lockout rules (TW-AUTH-002): the
+   * same failure limit and window, counted per organization, address and IP, in
+   * a counter of its own so a partner's typos cannot lock a staff member out.
+   * Partner agents have no second factor to challenge.
+   */
+  async loginPartnerAgent(
+    orgSlug: string,
+    email: string,
+    password: string,
+    meta: ClientMeta = {},
+  ): Promise<TokenPair> {
     const orgId = await this.resolveOrgId(orgSlug);
+    const policy = await this.policy.policy();
+    const lockKey = AuthKeys.partnerLockout(orgId, email, normalizeIp(meta.ip) ?? 'unknown');
+    await this.login.assertNotLocked(lockKey, policy, { orgId, email });
 
     const row = await this.db.txAs({ orgId }, async (tx) => {
       const result = await tx.execute(sql`
@@ -48,7 +66,13 @@ export class AuthService {
       return result.rows[0] as unknown as LoginRow | undefined;
     });
 
-    await this.assertPassword(row, password, 'active');
+    try {
+      await this.assertPassword(row, password, 'active');
+    } catch (err) {
+      await this.login.recordFailedSignIn(lockKey, policy);
+      throw err;
+    }
+    await this.login.clearLockout(lockKey);
 
     await this.db.txAs({ orgId }, async (tx) => {
       await tx.execute(
@@ -70,10 +94,21 @@ export class AuthService {
    * anyone with a Clerk account join any tenant (known issue). A
    * person with no row is now told to ask for an invitation.
    */
-  async loginViaClerk(orgSlug: string, clerkToken: string, meta: ClientMeta) {
+  async loginViaClerk(
+    orgSlug: string,
+    clerkToken: string,
+    meta: ClientMeta,
+  ): Promise<LoginResponse> {
     const identity = await this.clerk.verifySession(clerkToken);
     const org = await this.tenants.findOrgBySlug(orgSlug);
     if (!org || org.status !== 'active') throw AppError.unauthenticated('Invalid credentials');
+
+    // The same lockout as a password sign-in, on the same counter (org + email + IP): a
+    // locked-out person is refused whichever door they use, and an identity that has no
+    // local account counts as a failed attempt (TW-AUTH-002).
+    const policy = await this.policy.policy();
+    const lockKey = AuthKeys.lockout(org.id, identity.email, normalizeIp(meta.ip) ?? 'unknown');
+    await this.login.assertNotLocked(lockKey, policy, { orgId: org.id, email: identity.email });
 
     const row = await this.db.txAs({ orgId: org.id }, async (tx) => {
       const bySubject = await tx.execute(sql`
@@ -90,9 +125,26 @@ export class AuthService {
     });
     const user = row as unknown as
       { id: number; uuid: string; email: string; full_name: string; status: string } | undefined;
-    if (!user || user.status !== 'active') throw AppError.unauthenticated('Invalid credentials');
+    // A suspended person gets in and is held at the suspended screen, as with a password (TW-AUTH-016).
+    if (!user) {
+      await this.login.recordFailedSignIn(lockKey, policy);
+      throw AppError.unauthenticated('Invalid credentials');
+    }
 
     this.logger.log({ orgId: org.id, userId: user.id }, 'clerk login');
+    await this.login.clearLockout(lockKey);
+
+    // Clerk vouched for the first factor only. A person who turned on two-factor here is
+    // challenged exactly as after a password (TW-AUTH-030/032); the exchange is not a back door.
+    const loaded = await this.login.loadOrgAndUser(org.id, user.id);
+    if (loaded?.user.mfa_enabled) {
+      return this.login.issueMfaChallenge({
+        orgId: org.id,
+        userId: user.id,
+        remember: false,
+        method: 'social',
+      });
+    }
     return this.login.completeLogin({
       org,
       user: { id: user.id, uuid: user.uuid, email: user.email, fullName: user.full_name },

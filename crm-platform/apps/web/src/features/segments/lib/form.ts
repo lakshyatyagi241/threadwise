@@ -22,7 +22,14 @@ import { fromWire, parseRules, toWire } from './wire';
 
 /** The builder's form: the segment's details plus its rule tree, with the checks that run before saving. */
 
-export const SEGMENT_COLORS = ['#7C3AED', '#22C55E', '#E87A5D', '#E5A04E', '#13478A', '#0F766E'] as const;
+export const SEGMENT_COLORS = [
+  '#7C3AED',
+  '#22C55E',
+  '#E87A5D',
+  '#E5A04E',
+  '#13478A',
+  '#0F766E',
+] as const;
 
 export interface SegmentForm {
   name: string;
@@ -42,7 +49,9 @@ export function blankForm(): SegmentForm {
   };
 }
 
-export function formFromSegment(s: Pick<Segment, 'name' | 'description' | 'color' | 'visibility' | 'rules'>): SegmentForm {
+export function formFromSegment(
+  s: Pick<Segment, 'name' | 'description' | 'color' | 'visibility' | 'rules'>,
+): SegmentForm {
   return {
     name: s.name,
     description: s.description ?? '',
@@ -53,7 +62,10 @@ export function formFromSegment(s: Pick<Segment, 'name' | 'description' | 'color
 }
 
 /** The body of a create or update (the caller adds `rowVersion` for an update); null when the rules are not valid yet. */
-export function formToInput(form: SegmentForm, catalog: readonly FieldDef[]): CreateSegmentInput | null {
+export function formToInput(
+  form: SegmentForm,
+  catalog: readonly FieldDef[],
+): CreateSegmentInput | null {
   const rules = parseRules(toWire(form.rules, catalog));
   if (!rules) return null;
   return {
@@ -171,4 +183,11 @@ export function mapServerProblems(
 }
 
 export const hasServerProblems = (p: ServerProblems): boolean =>
-  Boolean(p.name || p.description || p.color || p.visibility || p.rules || Object.keys(p.conditions).length);
+  Boolean(
+    p.name ||
+    p.description ||
+    p.color ||
+    p.visibility ||
+    p.rules ||
+    Object.keys(p.conditions).length,
+  );

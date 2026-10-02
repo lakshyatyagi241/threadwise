@@ -187,7 +187,7 @@ describe('OTP sender registry', () => {
 
   it('defaults the Graph and Twilio addresses', async () => {
     const waba = await call('post', '/senders', { ...graphSender(), graphBaseUrl: undefined });
-    expect(waba.body.graphBaseUrl).toBe('https://graph.facebook.com/v21.0');
+    expect(waba.body.graphBaseUrl).toBe('https://graph.facebook.com/v23.0');
     const twilio = await call('post', '/senders', { ...twilioSender(), apiBaseUrl: undefined });
     expect(twilio.body.apiBaseUrl).toBe('https://api.twilio.com');
   });
