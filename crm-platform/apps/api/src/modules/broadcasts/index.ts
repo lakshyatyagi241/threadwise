@@ -11,7 +11,6 @@ export { mapBaileysAck, mapTwilioStatus } from './receipt-rules';
 export { BroadcastsComposeService } from './broadcasts-compose.service';
 export {
   EngineSenderRegistry,
-  WabaEngineSender,
   type OpenedSender,
   type OutgoingMessage,
   type OutgoingText,

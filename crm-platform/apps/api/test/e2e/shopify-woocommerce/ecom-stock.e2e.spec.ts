@@ -4,6 +4,7 @@ import {
   COMMERCE_SENDER,
   type CommerceSender,
 } from '../../../src/modules/shopify-woocommerce/_shims/tokens';
+import { bodyParams } from '../../../src/modules/shopify-woocommerce/event-rules';
 import { StockService } from '../../../src/modules/shopify-woocommerce/stock.service';
 import {
   WebhookPipelineService,
@@ -26,7 +27,7 @@ beforeAll(async () => {
   pipeline = h.app.get(WebhookPipelineService);
   const sender = h.app.get<CommerceSender>(COMMERCE_SENDER);
   sender.send = (_o, m) => {
-    sent.push({ to: m.to, params: m.params });
+    sent.push({ to: m.to, params: bodyParams(m.template.body, m.ctx.positional) });
     return Promise.resolve({ providerMessageId: 'w1' });
   };
   sender.sendText = (_o, m) => {

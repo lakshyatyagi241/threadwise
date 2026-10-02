@@ -10,7 +10,6 @@ import {
 } from './_shims/tokens';
 import { CodRepository } from './cod.repository';
 import {
-  bodyParams,
   codRisk,
   readCodReply,
   shopifyContext,
@@ -105,7 +104,7 @@ export class CodService {
       const out = await this.sender.send(orgId, {
         to: phone,
         template,
-        params: bodyParams(template.body, ctx.positional),
+        ctx,
         reference: `ecom-cod-${kind}-${storeId}-${String(data.id ?? '')}`,
       });
       response = { to: phone, id: out.providerMessageId };

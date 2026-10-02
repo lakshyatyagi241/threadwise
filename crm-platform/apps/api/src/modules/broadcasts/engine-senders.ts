@@ -97,11 +97,10 @@ export class WabaEngineSender implements EngineSender {
     @Inject(WHATSAPP_PROVIDER) private readonly provider: WhatsAppProvider,
   ) {}
 
-  /** The number's credentials for the provider, decrypted. Throws a reason a person can act on. */
-  private async credentials(orgId: number, configId: number) {
+  async open(orgId: number, sender: DispatchSender): Promise<OpenedSender> {
     const row = await this.db.tx(async (tx) => {
       const res = await tx.execute(
-        sql`SELECT credentials_json, meta_json FROM wa_provider_configs WHERE org_id = ${orgId} AND id = ${configId}`,
+        sql`SELECT credentials_json, meta_json FROM wa_provider_configs WHERE org_id = ${orgId} AND id = ${sender.id}`,
       );
       return res.rows[0] as unknown as ConfigRow | undefined;
     });
@@ -137,28 +136,6 @@ export class WabaEngineSender implements EngineSender {
       ...(wabaId ? { businessAccountId: wabaId } : {}),
       marketingLite: meta.is_mm_lite_onboarded === true,
     } as const;
-    return credentials;
-  }
-
-  /**
-   * A plain text message inside the customer's open 24-hour session (an answer to a message they just sent). Not offered through
-   * `open()`: a campaign must still use an approved template.
-   */
-  async sendSessionText(
-    orgId: number,
-    configId: number,
-    m: { to: string; body: string; clientReference: string },
-  ): Promise<{ providerMessageId: string | null }> {
-    const credentials = await this.credentials(orgId, configId);
-    const res = await this.provider.sendText(credentials, {
-      ...m,
-      screen: { bulk: false, source: 'commerce-reply' },
-    });
-    return { providerMessageId: res.providerMessageId };
-  }
-
-  async open(orgId: number, sender: DispatchSender): Promise<OpenedSender> {
-    const credentials = await this.credentials(orgId, sender.id);
 
     return {
       send: async (m) => {

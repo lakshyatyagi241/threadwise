@@ -5,6 +5,7 @@ import {
   CommerceSender,
   COMMERCE_SENDER,
 } from '../../../src/modules/shopify-woocommerce/_shims/tokens';
+import { bodyParams } from '../../../src/modules/shopify-woocommerce/event-rules';
 import {
   WebhookPipelineService,
   type WebhookJob,
@@ -29,7 +30,11 @@ beforeAll(async () => {
   const sender = h.app.get<CommerceSender>(COMMERCE_SENDER);
   sender.send = (_org, m) => {
     if (failSend) return Promise.reject(new Error(failSend));
-    sentMessages.push({ to: m.to, params: m.params, template: m.template.name });
+    sentMessages.push({
+      to: m.to,
+      params: bodyParams(m.template.body, m.ctx.positional),
+      template: m.template.name,
+    });
     return Promise.resolve({ providerMessageId: 'wamid.1' });
   };
 }, 240_000);

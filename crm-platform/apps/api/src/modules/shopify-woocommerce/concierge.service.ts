@@ -10,13 +10,7 @@ import {
   type CommerceSender,
   type EcomTemplates,
 } from './_shims/tokens';
-import {
-  accountSummary,
-  applyVarMap,
-  bodyParams,
-  conciergeIntent,
-  isPositiveRating,
-} from './event-rules';
+import { accountSummary, applyVarMap, conciergeIntent, isPositiveRating } from './event-rules';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { MirrorRepository } from './mirror.repository';
@@ -273,7 +267,7 @@ export class ConciergeService {
       const out = await this.sender.send(orgId, {
         to: phone,
         template,
-        params: bodyParams(template.body, ctx.positional),
+        ctx,
         reference: `ecom-reward-${store.id}-${phone}`,
         senderKey:
           typeof (store.metadata as { senderKey?: unknown } | null)?.senderKey === 'string'

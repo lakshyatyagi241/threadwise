@@ -6,6 +6,7 @@ import {
   COMMERCE_SENDER,
   type CommerceSender,
 } from '../../../src/modules/shopify-woocommerce/_shims/tokens';
+import { bodyParams } from '../../../src/modules/shopify-woocommerce/event-rules';
 import { CodService } from '../../../src/modules/shopify-woocommerce/cod.service';
 import {
   WebhookPipelineService,
@@ -31,7 +32,11 @@ beforeAll(async () => {
   crypto = h.app.get(CryptoService, { strict: false });
   const sender = h.app.get<CommerceSender>(COMMERCE_SENDER);
   sender.send = (_o, m) => {
-    sent.push({ to: m.to, template: m.template.name, params: m.params });
+    sent.push({
+      to: m.to,
+      template: m.template.name,
+      params: bodyParams(m.template.body, m.ctx.positional),
+    });
     return Promise.resolve({ providerMessageId: 'wamid.1' });
   };
   sender.sendText = (_o, m) => {

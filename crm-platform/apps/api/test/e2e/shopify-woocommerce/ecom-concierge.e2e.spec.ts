@@ -6,6 +6,7 @@ import {
   COMMERCE_SENDER,
   type CommerceSender,
 } from '../../../src/modules/shopify-woocommerce/_shims/tokens';
+import { bodyParams } from '../../../src/modules/shopify-woocommerce/event-rules';
 import { EcomInboundService } from '../../../src/modules/shopify-woocommerce/ecom-inbound.service';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 
@@ -35,7 +36,7 @@ beforeAll(async () => {
     return Promise.resolve({ providerMessageId: 't' });
   };
   sender.send = (_o, m) => {
-    sent.push({ to: m.to, params: m.params });
+    sent.push({ to: m.to, params: bodyParams(m.template.body, m.ctx.positional) });
     return Promise.resolve({ providerMessageId: 's' });
   };
   const woo = h.app.get<WooFactory>(WOOCOMMERCE);

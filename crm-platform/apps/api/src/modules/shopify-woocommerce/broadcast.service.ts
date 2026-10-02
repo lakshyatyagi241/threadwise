@@ -14,7 +14,7 @@ import {
   type EcomPlanGate,
   type EcomTemplates,
 } from './_shims/tokens';
-import { bodyParams, offerContext, winbackContext, type StoreFacts } from './event-rules';
+import { offerContext, winbackContext, type StoreFacts } from './event-rules';
 import { EventsRepository } from './events.repository';
 import type { StoreKind } from './mirror-rules';
 import { SegmentsRepository } from './segments.repository';
@@ -258,7 +258,7 @@ export class BroadcastService {
         await this.sender.send(orgId, {
           to: phone,
           template,
-          params: bodyParams(template.body, ctx.positional),
+          ctx,
           reference: `ecom-${job.type}-${kind}-${storeId}-${ref.id}-${phone}`,
           senderKey,
         });
