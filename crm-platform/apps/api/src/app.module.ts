@@ -31,6 +31,7 @@ import { CampaignsModule } from './modules/campaigns';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
+import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
@@ -38,6 +39,7 @@ import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
+import { TrialGateGuard } from './modules/plans-subscriptions-trials/trial-gate.guard';
 import {
   MediaStorageService,
   PlatformSettingsModule,
@@ -48,6 +50,8 @@ import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { TeamChatModule } from './modules/team-chat';
+import { MessageTemplatesModule } from './modules/message-templates';
+import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
@@ -132,6 +136,7 @@ import { HealthModule } from './health/health.module';
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
     NodeBridgeRuntimeModule,
+    ScheduledQueueWarmerModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
@@ -164,6 +169,8 @@ import { HealthModule } from './health/health.module';
     PublicApiModule,
     PlatformSupportDeskModule,
     TeamChatModule,
+    WabaModule,
+    MessageTemplatesModule,
     ChatConversationsModule,
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
@@ -179,6 +186,9 @@ import { HealthModule } from './health/health.module';
     // unverified under 'block', MFA or password change required) is refused
     // here with a code the web app maps to the right lock screen.
     { provide: APP_GUARD, useClass: AccountGateGuard },
+    // The free-trial hard gate (WD-PLAN-015): a workspace whose trial ended gets 402 on every feature route until it picks a plan.
+    // After the account gate so a locked account is reported as locked first.
+    { provide: APP_GUARD, useExisting: TrialGateGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
   ],

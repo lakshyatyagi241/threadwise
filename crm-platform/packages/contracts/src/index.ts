@@ -54,6 +54,8 @@ export * from './appointments';
 export * from './notifications-activity-audit';
 export * from './chatbot-widget';
 export * from './roles-permissions';
+export * from './whatsapp-cloud-api-waba';
+export * from './message-templates';
 export * from './node-bridge-runtime';
 export * from './realtime';
 export * from './chat-conversations';

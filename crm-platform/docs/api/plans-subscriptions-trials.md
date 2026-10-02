@@ -1,0 +1,149 @@
+# Plans, subscriptions, trials and limits (PLAN)
+
+Every plan fact is **per workspace** (organization). A plan is a platform catalogue row; which plan a workspace is on, its trial, its
+period and its own overrides live in `org_plan_state` (tenant table, forced RLS; a workspace can read it, only the platform writes it).
+`organizations.plan` is the one plan reference (a slug).
+
+Base path `/v2`. Errors are problem+json with a stable `code`.
+
+## Who may do what
+
+| Actor                                                 | Can                                                                                                                                                                                       |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Super admin (platform operator)                       | create, edit, activate, delete plans and set their limits and flags (`/platform/plans`); attach a plan to any workspace and set that workspace's own limits (`/platform/workspace-plans`) |
+| Support / auditor operator                            | read the same screens, change nothing (403 on writes)                                                                                                                                     |
+| Workspace Owner or Admin (`plan.subscription.manage`) | see every active plan, switch to a free or cheaper/equal plan, downgrade, buy a dearer plan through checkout                                                                              |
+| Any other workspace member                            | see the plans, the status bar and their usage; the buttons are off                                                                                                                        |
+
+## Workspace (staff token)
+
+### GET `/billing/plans`
+
+Active plans for the caller's workspace. Each plan: card fields (`price`, `chips`, `highlighted`, `current`, `action`) plus `limits`,
+`features` and `via`: `checkout` (a payment), `change` (immediate switch), `sales` (custom quote), `none` (current plan). `action` is one of
+`current | upgrade | downgrade | choose | continue_free | contact_sales`. A lapsed paid plan reads as the free plan being current.
+`validity` = `{ state, trialEndsAt, planEndsAt, daysLeft, renewalWindow }`; `canManage` says whether the buttons work.
+States: `no_plan | free_trial | free_trial_expired | free | paid_active | paid_lapsed | custom_quote`.
+
+### GET `/billing/status`
+
+`validity` plus `planSlug`, `planName`: the trial and renewal bars.
+
+### GET `/billing/usage`
+
+`meters[]` `{ key, used, limit (0 = unlimited), percent (null when unlimited), window: 'month' | 'total' }`, `features[]` `{ key, enabled }`,
+`cycleResetsAt` (first of next calendar month). Limits come from the resolver, so overrides and a lapsed plan's fallback are respected.
+
+### POST `/billing/plan` (`plan.subscription.manage`)
+
+Body `{ "planSlug": "mini" }`. Switches at once to a free plan or a paid plan that is cheaper or equal. Keeps a running paid period; clears
+the trial when going to a paid plan; never restarts or extends a trial.
+Response `{ planSlug, planName, direction: 'upgrade'|'downgrade'|'switch', validity, overLimit: [{ key, used, limit }] }`. `overLimit` lists
+caps the new plan sets below what the workspace holds: nothing is deleted, adding more is blocked until under the cap.
+Refusals (422): `PLAN_CHECKOUT_REQUIRED` (dearer paid plan; `errors[]` has `checkoutUrl`), `PLAN_CHANGE_NOT_ALLOWED` (custom quote, same plan,
+inactive plan). 404 for an unknown plan, 403 without the permission. Audited (`audit_log`, module `plans`) and emits outbox `plan.changed`.
+
+## Trial gate
+
+A workspace on a free plan whose trial ended gets **402** `PLAN_TRIAL_EXPIRED` on feature routes (`errors[]`: `upgradeUrl=/account/plans`,
+`trial=expired`) for staff users and API keys. Open: `billing`, `plans`, `payments`, `auth`, `account`, `onboarding`, `support`, `me`, `i18n`,
+`shell`, `setup`, `health`, anything marked `@AllowWhenTrialExpired()`, platform operators, platform-owned workspaces. Paid plans (even
+lapsed) and free plans without a trial are never gated. An internal error lets the request through.
+
+## Entitlements
+
+Resolution for a cap or flag: platform-owned workspace (never limited) > the workspace's override > its plan (a lapsed paid plan uses the
+free plan's values) > registry default. A cap of 0 is unlimited; an override of -1 or 0 is unlimited.
+
+## Platform (operator token)
+
+### GET `/platform/workspace-plans?search=&plan=&cursor=&limit=`
+
+Workspaces newest first, cursor paginated. Item: `workspaceId, slug, name, status, planSlug, planName, validity, billingCycle, overrides,
+planLimits, planFeatures, rowVersion`.
+
+### GET `/platform/workspace-plans/:id`
+
+### PUT `/platform/workspace-plans/:id` (super admin)
+
+Body `{ planSlug, rowVersion, planEndsAt?, overrides? }`. `planEndsAt` omitted: the plan's own period when the plan changes, else unchanged;
+`null`: never expires; a datetime: that date. `overrides` `{ limits: { key: int }, features: { key: bool } }` replaces the stored overrides (omit to keep).
+A different plan clears the trial. 409 `ROW_VERSION_CONFLICT` on a stale `rowVersion`, 404 unknown plan or workspace, 422 unknown override key.
+Audited (`security_events` for the operator and `audit_log` for the workspace) and emits outbox `plan.attached`.
+
+### Plan catalogue `/platform/plans`
+
+Unchanged (WD-PLAN-001..005): list, create, update, activate, delete. The limit keys and feature flags are the registry in
+`@crm/contracts` (`PLAN_LIMIT_DEFS`, `PLAN_FEATURE_DEFS`).
+
+## Added: yearly price, add-ons, FAQs, cancel auto-renew, ledger, retention
+
+### GET `/billing/plans` additions
+
+Each plan has `yearly: { perMonth, perYear } | null` (12 months of the effective price less `pricing.yearly_discount_pct`, rounded half up to the cent,
+the same figure checkout charges; null for free, lifetime, custom-quote and plans not billed once a month). The response has
+`yearlyToggle: { enabled, discountPct }` (the setting is on AND some plan has a yearly price) and `subscription: { status, renewsAt } | null`.
+Checkout takes the choice as `?period=yearly`.
+
+### Add-ons
+
+`GET /addons` (ADD) lists them. They are bought through the same checkout as plans: `GET /billing/checkout/plans/:slug/quote` and
+`POST .../orders` accept an add-on slug. Needs an active paid plan (422 `PAYGW_PLAN_NOT_PURCHASABLE` otherwise). A paid order grants the add-on
+(`workspace_addons`) and leaves the plan, the trial and `plan_ends_at` untouched; replays grant it once.
+
+### Pricing FAQs
+
+- `GET /billing/faqs`: every active FAQ (the in-app picker).
+- `GET /public/pricing-faqs?for=pricing|home`: active FAQs whose placement is that value or `both`. Public, no sign-in.
+- `GET /platform/pricing-faqs` (every operator role); `POST`, `PATCH /:id` (partial, needs `rowVersion`), `DELETE /:id` (super admin).
+  `question` 1..255, `answer` 1..5000 plain text, `sortOrder` 0..9999 (none = max + 1), `placement` `pricing|home|both`, `isActive`.
+
+### POST `/billing/subscription/cancel` (`plan.subscription.manage`)
+
+Stops the renewing subscription (latest `active` or `past_due`; a `pending` row is not renewing). The paid period keeps running. The local row is
+always marked cancelled; the gateway is asked through the driver port (`cancelSubscription`: Stripe `cancel_at_period_end`, Razorpay
+`cancel_at_cycle_end`, PayPal cancel). Response `{ status: 'canceled', remote: 'ok' | 'failed' | 'unsupported', planEndsAt }`; the remote outcome is
+stored on the row (`meta.cancel`) and audited. 422 `PLAN_NO_SUBSCRIPTION` when there is nothing to cancel. Recurring subscriptions are created
+by the payment-gateway domain's recurring checkout (not built yet); until it writes rows this endpoint answers `PLAN_NO_SUBSCRIPTION`.
+
+### Quota ledger (`PlanQuotaService`, limit key `total_campaigns`)
+
+Increment-only counter in `plan_usage` keyed by metric and period (`<plan slug>|<plan end yyyymmdd or 0>`). `assertAvailable(tx, org, key, metric, liveCount)`
+refuses with 422 `PLAN_LIMIT_REACHED` and `reason: quota_reached`; `bump(tx, org, metric)` is atomic. First meeting adopts the live count. Deleting
+never frees allowance; a new plan or end date opens a fresh one. Its call site belongs to the campaigns domain.
+
+### Count guard for creators (`PlanUsageService.assertCanAdd(orgId, key)`)
+
+One line before the insert for any capped thing (devices, flows, templates, auto-replies...). Uses the usage panel's own count.
+
+### Retention
+
+Plans carry `dataRetentionDays` (0..3650, 0 = never). `POST /platform/workspace-plans/retention/run` (super admin): body `{ dryRun?: true }` previews
+(counts rows, rolls back); a real run needs `{ dryRun: false, confirm: "WIPE" }`. The worker also runs it nightly (03:17). A workspace is due when its PAID
+plan ended more than N days ago and it was not wiped before. Per workspace: one transaction, rows deleted by `org_id` from the table list in
+`plan-retention.service.ts`, `data_wiped_at` stamped, plan switched to the free plan, audit row and outbox `org.data_wiped`. Kept: the workspace, members,
+orders, subscriptions, wallet, invoices, tags, companies, tasks, field definitions.
+
+### Public pricing page
+
+`/pricing` (site route) reads `GET /public/cms/pricing` (cards now carry `limits` and `features`) and the FAQ endpoint above. Yearly switch, volume and feature lists, plan call to action.
+
+## Configuration map (super admin)
+
+Everything below is set from the console; nothing is code-only.
+
+| What                                                                                                                                       | Per plan (`/admin/plans`)                        | Per workspace (`/admin/workspace-plans`)               | Platform (`/admin/plan-settings`) |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------ | --------------------------------- |
+| Every cap (messages, broadcasts, total campaigns, devices, seats, contacts, tags, pipelines, appointments, templates, flows, auto-replies) | yes, 0 = unlimited                               | yes, beats the plan; empty = plan; 0 or -1 = unlimited |                                   |
+| Every feature flag                                                                                                                         | yes                                              | yes: always on / always off / plan default             |                                   |
+| Price, offer, period, free, lifetime, custom quote, active, default, highlighted, sort, button text                                        | yes                                              |                                                        |                                   |
+| Data retention days                                                                                                                        | yes (0 = never)                                  | yes: empty = plan, 0 = never wipe this workspace       |                                   |
+| Plan and plan end date                                                                                                                     |                                                  | yes                                                    |                                   |
+| Free-trial end                                                                                                                             | trial length at sign-up in registration settings | yes: set a date, or end the trial now                  |                                   |
+| Yearly switch and discount                                                                                                                 |                                                  |                                                        | yes (`/platform/plan-settings`)   |
+| Pricing FAQs                                                                                                                               |                                                  |                                                        | `/admin/pricing-faqs`             |
+| Wipe preview / run                                                                                                                         |                                                  |                                                        | `/admin/workspace-plans`          |
+
+`PUT /platform/plan-settings` body `{ yearlyToggleEnabled, yearlyDiscountPct (0..90) }` (super admin; every role reads; audited as
+`platform.plan.settings_updated`). `PUT /platform/workspace-plans/:id` also takes `trialEndsAt` (datetime, null = end now; omitted = unchanged, a
+changed plan clears it unless given) and `overrides.dataRetentionDays` (0..3650 or null).

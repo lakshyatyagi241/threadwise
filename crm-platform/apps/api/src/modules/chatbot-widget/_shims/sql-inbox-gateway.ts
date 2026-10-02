@@ -86,7 +86,9 @@ export class SqlInboxGateway implements InboxGateway {
 
     await this.linkContact(tx, orgId, widget, visitor, conversationId);
 
-    // The opening line is a message of the thread, so agents see it as the first bubble and a reload repaints it.
+    // WaDesk kept the opening line in a legacy table the inbox thread view never read (WD-WGT-015 rule 4). The message tables
+    // are folded into one thread table now, so the line is a normal bot message of the thread: agents see it and a reload
+    // repaints it (intended difference forced by the architecture, see the parity doc).
     if (widget.welcomeMessage) {
       await this.append(tx, orgId, conversationId, {
         direction: 'out',
@@ -247,22 +249,40 @@ export class SqlInboxGateway implements InboxGateway {
   }
 
   async humanHasTakenOver(tx: Tx, orgId: number, conversationId: number): Promise<boolean> {
-    // The widget's own lines are written by the bot; an operator's reply from the inbox carries `sender_kind = 'agent'`.
+    // QUIRK: reproduced deliberately (WD-WGT-017 rule 2). WaDesk compared its ENCRYPTED `from_number` column with the plain
+    // bot sender in SQL, which is true for every stored value, so ANY outbound line in the thread (the bot's own earlier
+    // reply included) counts as "a person took over" and the assistant answers only the first message of a conversation.
+    // Since the message tables were folded the opening line lives in this same table; it was never part of that check in
+    // WaDesk (it sat in a table the check did not read), so it is excluded here to keep the first answer.
     const res = await tx.execute(sql`
       SELECT 1 FROM messages
-      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out' AND sender_kind = 'agent'
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out'
+        AND COALESCE(meta->>'source', '') <> 'welcome'
       LIMIT 1`);
     return res.rows.length > 0;
   }
+
+  // The opening line is a bot message of the thread now (the message tables were folded), but WaDesk's visitor-facing reads never
+  // saw it: the widget paints its own opening bubble, so the transcript, the AI history and the poll skip `source = 'welcome'`.
 
   async recent(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
       SELECT id, direction, body, agent_id, sent_at FROM (
         SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at
         FROM messages
-        WHERE org_id = ${orgId} AND conversation_id = ${conversationId}
+        WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
         ORDER BY id DESC LIMIT ${limit}
       ) t ORDER BY id`);
+    return (res.rows as unknown as LineRow[]).map(toLine);
+  }
+
+  /** The OLDEST `limit` lines, oldest first (WD-WGT-012 rule 2: WaDesk's transcript takes the first 200, not the newest). */
+  async oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
+    const res = await tx.execute(sql`
+      SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at
+      FROM messages
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
+      ORDER BY id LIMIT ${limit}`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }
 
@@ -276,6 +296,7 @@ export class SqlInboxGateway implements InboxGateway {
       SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out' AND id > ${since}
+        AND COALESCE(meta->>'source', '') <> 'welcome'
       ORDER BY id`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }

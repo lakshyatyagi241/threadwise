@@ -9,10 +9,8 @@ import {
   widgetSchema,
   type CreateWidgetInput,
   type ListWidgetsResponse,
-  type SetWidgetStatusInput,
   type UpdateWidgetInput,
   type Widget,
-  type WidgetStatus,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 
@@ -26,13 +24,13 @@ export const KEYS = {
 const PAGE = 20;
 
 /** The list, newest first, a cursor page at a time; the stat numbers come with every page and are always workspace-wide. */
-export function useWidgets(status: WidgetStatus | null) {
+export function useWidgets() {
   return useInfiniteQuery({
-    queryKey: [...KEYS.list, status ?? 'all'],
+    queryKey: [...KEYS.list, 'all'],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }): Promise<ListWidgetsResponse> =>
       apiFetch('/widgets', {
-        query: { limit: PAGE, cursor: pageParam, status: status ?? undefined },
+        query: { limit: PAGE, cursor: pageParam },
         schema: listWidgetsResponseSchema,
         signal,
       }),
@@ -77,9 +75,6 @@ export const createWidget = (body: CreateWidgetInput): Promise<Widget> =>
 
 export const updateWidget = (id: string, body: UpdateWidgetInput): Promise<Widget> =>
   apiFetch(`/widgets/${id}`, { method: 'PATCH', body, schema: widgetSchema });
-
-export const setWidgetStatus = (id: string, body: SetWidgetStatusInput): Promise<Widget> =>
-  apiFetch(`/widgets/${id}/status`, { method: 'PATCH', body, schema: widgetSchema });
 
 export const duplicateWidget = (id: string): Promise<Widget> =>
   apiFetch(`/widgets/${id}/duplicate`, { method: 'POST', schema: widgetSchema });

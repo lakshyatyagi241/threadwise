@@ -49,6 +49,7 @@ import { ConnectionTest } from './connection-test';
 import { Counter, GuideCard, SetHeader, TipCard } from './page-parts';
 import { SeoPreview } from './seo-preview';
 import { TeamInboxApp } from './team-inbox-app';
+import { WabaCallback } from './waba-callback';
 
 const NS = 'platform-settings-branding-storage';
 
@@ -512,6 +513,26 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
     );
   };
 
+  const fieldsGrid = (s: SectionSpec) => {
+    const toggles = s.fields.filter((f) => f.kind === 'toggle');
+    return (
+      <div className="grid gap-4 sm:grid-cols-2">
+        {s.fields
+          .filter((f) => !f.hidden)
+          .map((f) => (
+            <div
+              key={f.key}
+              className={cn(
+                !(f.half || (f.kind === 'toggle' && toggles.length > 1)) && 'sm:col-span-2',
+              )}
+            >
+              {control(f)}
+            </div>
+          ))}
+      </div>
+    );
+  };
+
   const renderSection = (s: SectionSpec) => {
     const title = tp(`sections.${s.id}.title`);
     const description = tp.has(`sections.${s.id}.description`)
@@ -520,6 +541,13 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
     let body: ReactNode;
     if (s.custom === 'brandAssets') body = <BrandAssets canEdit={canEdit} />;
     else if (s.custom === 'teamInboxApp') body = <TeamInboxApp canEdit={canEdit} />;
+    else if (s.custom === 'wabaCallback')
+      body = (
+        <div className="space-y-4">
+          <WabaCallback />
+          {fieldsGrid(s)}
+        </div>
+      );
     else if (s.custom === 'signupLink') {
       body = (
         <div className="space-y-3 text-sm text-muted-foreground">
@@ -541,23 +569,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
         />
       );
     } else {
-      const toggles = s.fields.filter((f) => f.kind === 'toggle');
-      body = (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {s.fields
-            .filter((f) => !f.hidden)
-            .map((f) => (
-              <div
-                key={f.key}
-                className={cn(
-                  !(f.half || (f.kind === 'toggle' && toggles.length > 1)) && 'sm:col-span-2',
-                )}
-              >
-                {control(f)}
-              </div>
-            ))}
-        </div>
-      );
+      body = fieldsGrid(s);
     }
     return (
       <Section key={s.id} kicker={s.eyebrow ?? tp('title')} title={title} description={description}>

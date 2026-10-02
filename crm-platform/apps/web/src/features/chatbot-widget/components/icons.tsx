@@ -118,3 +118,31 @@ export const EngineGlyph = ({ kind, ...p }: IconProps & { kind: 'ai' | 'whatsapp
     )}
   </Svg>
 );
+
+export const ChevronDownIcon = (p: IconProps) => (
+  <Svg {...p} strokeWidth="2">
+    <path d="m4 6 4 4 4-4" />
+  </Svg>
+);
+
+export const ChevronUpIcon = (p: IconProps) => (
+  <Svg {...p} strokeWidth="2">
+    <path d="m4 10 4-4 4 4" />
+  </Svg>
+);
+
+/** The speech-bubble-and-handset mark of the WhatsApp launcher samples (drawn for the builder, not a brand asset). */
+export const WhatsappGlyph = (p: IconProps) => (
+  <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...p}>
+    <path
+      d="M16 4.5a11.3 11.3 0 0 0-9.7 17l-1.5 5.6 5.7-1.5A11.3 11.3 0 1 0 16 4.5z"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 10.5c-.7.7-1 1.6-.7 2.8.8 3.2 3.6 6 6.9 6.9 1.1.3 2-.1 2.6-.8l-1.8-2.1-1.6.8c-1.2-.5-2.4-1.7-2.9-2.9l.8-1.5z"
+      fill="currentColor"
+    />
+  </svg>
+);

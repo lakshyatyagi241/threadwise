@@ -577,6 +577,70 @@ describe('checkout, return, webhook and fulfilment (WD-PAYGW-009, 011, 026..028,
     expect(gain).toBeLessThan(32);
   });
 
+  it('add-ons: an add-on is bought through the same checkout on top of an active paid plan, the plan is untouched, a free workspace is refused', async () => {
+    await h.owner.query(
+      `INSERT INTO plans (slug, name, kind, amount, features, limits) VALUES ('boost', 'Boost pack', 'addon', 20, '{}'::jsonb, '{"contacts": 500}'::jsonb)`,
+    );
+    const stateBefore = (
+      await h.owner.query(
+        `SELECT o.plan, s.plan_ends_at FROM organizations o JOIN org_plan_state s ON s.org_id = o.id WHERE o.id = $1`,
+        [buyer.orgId],
+      )
+    ).rows[0];
+    const quote = await api()
+      .get('/v2/billing/checkout/plans/boost/quote')
+      .set(bearer(buyer.token));
+    expect(quote.status, JSON.stringify(quote.body)).toBe(200);
+    expect(quote.body).toMatchObject({
+      kind: 'addon',
+      itemName: 'Boost pack',
+      billingPeriod: 'monthly',
+    });
+
+    mockProviders();
+    stripeThatPays();
+    const placed = (await placePlan('boost', { gatewayId: stripeId })).body;
+    expect(placed.orderNumber).toBeTruthy();
+    const res = await api()
+      .get(`/v2/payments/return/stripe?o=${await tokenOf(placed.orderNumber)}&session_id=cs_1`)
+      .redirects(0);
+    expect(returnUrlOf(res.headers.location).searchParams.get('payment')).toBe('success');
+
+    const o = await orderBy(placed.orderNumber);
+    expect(o).toMatchObject({ status: 'paid', kind: 'addon', plan_slug: 'boost' });
+    const owned = await h.owner.query(`SELECT status FROM workspace_addons WHERE org_id = $1`, [
+      buyer.orgId,
+    ]);
+    expect(owned.rows).toEqual([{ status: 'active' }]);
+    const stateAfter = (
+      await h.owner.query(
+        `SELECT o.plan, s.plan_ends_at FROM organizations o JOIN org_plan_state s ON s.org_id = o.id WHERE o.id = $1`,
+        [buyer.orgId],
+      )
+    ).rows[0];
+    expect(stateAfter.plan).toBe(stateBefore.plan);
+    expect(stateAfter.plan_ends_at.getTime()).toBe(stateBefore.plan_ends_at.getTime());
+    // a replay of the return does not grant it twice
+    await api()
+      .get(`/v2/payments/return/stripe?o=${await tokenOf(placed.orderNumber)}&session_id=cs_1`)
+      .redirects(0);
+    expect(
+      (
+        await h.owner.query(`SELECT count(*)::int AS n FROM workspace_addons WHERE org_id = $1`, [
+          buyer.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(1);
+
+    const freeOrg = await signup('addonfree');
+    await onPlan(freeOrg.orgId, 'freebie');
+    const refused = await api()
+      .get('/v2/billing/checkout/plans/boost/quote')
+      .set(bearer(freeOrg.token));
+    expect(refused.status).toBe(422);
+    expect(refused.body.code).toBe('PAYGW_PLAN_NOT_PURCHASABLE');
+  });
+
   it('return: an unpaid session stays pending, the buyer cancelling is cancelled, a wrong amount fails, an unknown token lands on not-found', async () => {
     mockProviders();
     handlers.push((url, init) => {
@@ -815,7 +879,7 @@ describe('checkout, return, webhook and fulfilment (WD-PAYGW-009, 011, 026..028,
     expect(JSON.stringify(all.body)).not.toMatch(/return_token|returnToken|org_id|"orgId"/);
     const usd = parsed.lifetimeSpend.find((s) => s.currency === 'USD')!;
     const inr = parsed.lifetimeSpend.find((s) => s.currency === 'INR')!;
-    expect(usd.total).toBe('185.26'); // 3 plan orders x 57.82 + the 11.80 top-up
+    expect(usd.total).toBe('208.86'); // 3 plan orders x 57.82 + the 11.80 top-up + the 23.60 add-on
     expect(inr).toMatchObject({ total: '4827.97', orders: 1 });
     const wallet = parsed.data.find((o) => o.kind === 'wallet_topup')!;
     expect(wallet).toMatchObject({ itemName: 'Wallet top-up', status: 'paid', amount: '11.80' });
