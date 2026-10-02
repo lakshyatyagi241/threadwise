@@ -159,6 +159,39 @@ describe('WD-SET-002 access', () => {
     expect((await group('general')).values.appName).not.toBe('X');
   });
 
+  it('applies the operator IP allowlist to every settings route, and an enabled but empty list lets everyone in', async () => {
+    const policy = (body: Record<string, unknown>) =>
+      api().patch('/v2/platform/security/policy').set(bearer(superToken)).send(body);
+    const mine = (await api().get('/v2/platform/security').set(bearer(superToken))).body
+      .yourIp as string;
+    const from = (m: 'get' | 'patch', path: string) =>
+      api()
+        [m](`/v2/platform/settings${path}`)
+        .set(bearer(superToken))
+        .set('x-forwarded-for', '198.51.100.4');
+    expect(
+      (await policy({ ipAllowlistEnabled: true, ipAllowlistCidrs: [mine, '203.0.113.0/24'] }))
+        .status,
+    ).toBe(200);
+    try {
+      expect((await ops('get', '/groups')).status).toBe(200);
+      for (const res of [
+        await from('get', '/groups'),
+        await from('get', '/groups/general'),
+        await from('get', '/export'),
+        await from('patch', '/groups/general').send({ rowVersion: 0, values: { appName: 'Z' } }),
+      ]) {
+        expect(res.status).toBe(403);
+        expect(res.body.code).toBe('AUTH_IP_BLOCKED');
+      }
+      expect((await group('general')).values.appName).not.toBe('Z');
+    } finally {
+      expect((await policy({ ipAllowlistEnabled: false, ipAllowlistCidrs: [] })).status).toBe(200);
+    }
+    // Fail open: enabled with no CIDRs must not lock anyone out.
+    expect((await from('get', '/groups')).status).toBe(200);
+  });
+
   it('an unknown group is a validation error, not a 500', async () => {
     expect((await ops('get', '/groups/nope')).status).toBe(422);
   });
