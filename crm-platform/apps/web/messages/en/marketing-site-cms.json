@@ -166,7 +166,8 @@
       "sending": "Sending",
       "thanks": "Thank you. Your message has been sent.",
       "tooMany": "Too many messages in a short time. Try again in a minute.",
-      "failed": "We could not send your message. Check the form and try again."
+      "failed": "We could not send your message. Check the form and try again.",
+      "pricing": "Pricing"
     }
   }
 }

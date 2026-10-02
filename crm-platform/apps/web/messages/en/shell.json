@@ -7,11 +7,9 @@
       "sales": "Sales",
       "campaigns": "Campaigns",
       "automation": "Automation",
-      "channels": "Channels",
       "store": "Store",
-      "developer": "Developer",
       "help": "Support & Help",
-      "settings": "Settings & Workspace"
+      "settings": "Settings"
     },
     "locked": "Upgrade",
     "language": "Language",
@@ -51,26 +49,12 @@
       "history": "History",
       "flows": "Flows",
       "aiAssistants": "AI assistants",
-      "autoReply": "Auto-reply",
       "appointments": "Appointments",
-      "chatWidget": "Chat widget",
-      "channels": "Channels",
-      "telegram": "Telegram",
-      "sms": "SMS",
-      "line": "LINE",
-      "viber": "Viber",
-      "wechat": "WeChat",
-      "email": "Email",
-      "waLinks": "WhatsApp links",
       "crmDashboard": "CRM dashboard",
       "store": "Store",
       "catalog": "Catalog",
-      "integrations": "Integrations",
-      "restApi": "REST API",
-      "webhooks": "Webhooks",
       "support": "Support",
       "guidebook": "Guidebook",
-      "activityLog": "Activity log",
       "pipelines": "Pipelines",
       "tasks": "Tasks",
       "companies": "Companies",
@@ -79,6 +63,7 @@
       "estimates": "Estimates",
       "invoices": "Invoices",
       "payments": "Payments"
-    }
+    },
+    "help": "Help"
   }
 }

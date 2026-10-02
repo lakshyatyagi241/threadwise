@@ -95,8 +95,8 @@ describe('patch body', () => {
     expect(Object.keys(p.values)).toEqual(['appName']);
   });
 
-  it('only mail, storage and realtime have secrets', () => {
+  it('only mail, storage, realtime and whatsapp have secrets', () => {
     const withSecrets = SET_GROUPS.filter((g) => SET_SECRET_FIELDS[g].length > 0);
-    expect(withSecrets.sort()).toEqual(['mail', 'realtime', 'storage']);
+    expect(withSecrets.sort()).toEqual(['mail', 'realtime', 'storage', 'whatsapp']);
   });
 });

@@ -123,6 +123,11 @@ export const envSchema = z.object({
   FB_GRAPH_VERSION: z.string().optional(),
   /** The Graph version the welcome greeting is retried on when the configured one has dropped it; empty disables the retry. */
   FB_GREETING_GRAPH_VERSION: z.string().default('v19.0'),
+  /**
+   * Dev-only simulated messaging channel (chat conversations). Declared here so a value in .env reaches process.env (only validated
+   * keys are assigned there); the rule lives in config/domains/chat-conversations.env.ts. A production process that sets it does not boot.
+   */
+  CHANNEL_SIMULATOR_ENABLED: booleanish.default(false),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),
@@ -165,6 +170,11 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     }
     if (parsed.data.JWT_REFRESH_SECRET.startsWith('dev-only')) {
       throw new Error('JWT_REFRESH_SECRET is still the development placeholder.');
+    }
+    if (parsed.data.CHANNEL_SIMULATOR_ENABLED) {
+      throw new Error(
+        'CHANNEL_SIMULATOR_ENABLED must not be set in production: the channel simulator writes customer messages on request.',
+      );
     }
     if (parsed.data.CREDENTIALS_ENCRYPTION_KEY === DEV_ENCRYPTION_KEY) {
       throw new Error('CREDENTIALS_ENCRYPTION_KEY is still the development placeholder.');

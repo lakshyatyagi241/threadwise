@@ -5,7 +5,7 @@ import { randomBytes } from 'node:crypto';
 import type { Queue } from 'bullmq';
 import {
   ERROR_CODES,
-  type ConnectResult,
+  type FbConnectResult,
   type FacebookConnectConfig,
   type FacebookPage,
   type FacebookPageActionResult,
@@ -216,7 +216,7 @@ export class PagesService {
   }
 
   /** The popup's code: exchanged without a redirect address. */
-  async connectEmbedded(code: string): Promise<ConnectResult> {
+  async connectEmbedded(code: string): Promise<FbConnectResult> {
     const ctx = RequestContextStore.require();
     await this.plan.assertChannel(ctx.orgId);
     const s = this.graph.settings;
@@ -227,7 +227,7 @@ export class PagesService {
   }
 
   /** A pasted Page token: it must resolve through `/me` to a Page. */
-  async connectManual(pageAccessToken: string): Promise<ConnectResult> {
+  async connectManual(pageAccessToken: string): Promise<FbConnectResult> {
     const ctx = RequestContextStore.require();
     await this.plan.assertChannel(ctx.orgId);
     const token = pageAccessToken.trim();
@@ -263,7 +263,7 @@ export class PagesService {
   private async storePages(
     userToken: string,
     method: 'oauth' | 'embedded',
-  ): Promise<ConnectResult> {
+  ): Promise<FbConnectResult> {
     const app = this.graph.app();
     const pages = await app.listPages(userToken);
     if (pages.length === 0) throw refuse('FB_NO_PAGES', NO_PAGES);

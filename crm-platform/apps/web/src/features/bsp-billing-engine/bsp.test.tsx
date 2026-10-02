@@ -12,7 +12,7 @@ import { BillingModeCard } from './components/billing-mode-card';
 import { DashboardReport } from './components/dashboard-page';
 import { ERROR_KINDS } from './lib/errors';
 import { formatMoney, formatRange, wabaTail } from './lib/format';
-import { nav } from './nav';
+import { settings } from './settings';
 
 const WEB = resolve(__dirname, '../../..');
 const raw = JSON.parse(
@@ -82,10 +82,11 @@ describe('formatting', () => {
   });
 });
 
-describe('nav', () => {
-  it('offers one gated entry for the customer billing page', () => {
-    expect(nav).toHaveLength(1);
-    expect(nav[0]).toMatchObject({
+describe('settings tile', () => {
+  it('offers one gated tile for the customer billing page', () => {
+    expect(settings).toHaveLength(1);
+    expect(settings[0]).toMatchObject({
+      section: 'business',
       href: '/billing-mode',
       gates: { permission: 'bsp.billing.read' },
     });

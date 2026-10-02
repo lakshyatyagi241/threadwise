@@ -161,7 +161,7 @@ async function campaign(
     contacts?: Array<{ name: string; phone?: string; isUnsubscribed?: boolean }>;
   } = {},
 ) {
-  const people =
+  const people: Array<{ name: string; phone?: string; isUnsubscribed?: boolean }> =
     o.contacts ?? Array.from({ length: o.count ?? 3 }, (_, i) => ({ name: `Asha${i}` }));
   const contactIds = await api.seedContacts(
     t,

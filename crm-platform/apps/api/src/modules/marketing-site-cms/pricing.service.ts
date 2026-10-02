@@ -1,6 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { moneyCents, type PublicPlanCard, type PublicPricingResponse } from '@crm/contracts';
+import {
+  PLAN_FEATURE_KEYS,
+  PLAN_LIMIT_KEYS,
+  moneyCents,
+  storedFeature,
+  storedLimit,
+  type PlanFeatures,
+  type PlanLimits,
+  type PublicPlanCard,
+  type PublicPricingResponse,
+} from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { buildPlanCard, type PlanFacts } from '../plans-subscriptions-trials';
 import { PlatformSettingsService } from '../auth';
@@ -92,6 +102,12 @@ export class PricingService {
       const effective = card.price.offerAmount ?? card.price.amount;
       return {
         ...card,
+        limits: Object.fromEntries(
+          PLAN_LIMIT_KEYS.map((k) => [k, storedLimit(r.limits, k)]),
+        ) as PlanLimits,
+        features: Object.fromEntries(
+          PLAN_FEATURE_KEYS.map((k) => [k, storedFeature(r.features, k)]),
+        ) as PlanFeatures,
         yearlyAmount: monthly ? centsToMoney(yearlyCents(moneyCents(effective), pct)) : null,
         ctaUrl:
           card.kind === 'custom_quote'

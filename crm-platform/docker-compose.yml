@@ -72,8 +72,9 @@ services:
       retries: 10
 
   minio:
-    image: quay.io/minio/minio:latest
+    image: bitnamilegacy/minio:latest
     container_name: crm-platform-minio
+    user: "0"
     restart: unless-stopped
     command: ['server', '/data', '--console-address', ':9001']
     environment:
@@ -91,7 +92,7 @@ services:
       retries: 10
 
   minio_init:
-    image: quay.io/minio/mc:latest
+    image: bitnamilegacy/minio-client:latest
     depends_on:
       minio:
         condition: service_started
