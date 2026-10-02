@@ -65,6 +65,22 @@ Evidence so far is automated, no screen yet:
 
 ## Not verified
 
-- No screen exists yet, so the Playwright twin run against the running WaDesk has not been done.
+- The screens have not been run side by side with WaDesk (Playwright twin run): the dev sign-in is the user's, not typed by the assistant.
 - No real provider call was made (no Cloud API credentials here): sends go through a fake engine in the tests.
 - The 5-second sweeper cadence and the 20-second lock heartbeat were not run against a long campaign.
+
+## Screens (C4)
+
+`apps/web/src/features/campaigns`: list `/campaigns`, builder `/campaigns/create` and `/campaigns/:id/edit`, detail `/campaigns/:id`; nav
+entry in the Campaigns group (the planned placeholder is removed); messages `messages/en/campaigns.json`. `list-model.test.ts` and
+`builder-model.test.ts` cover the filters in the address, what each status allows, the request body, and what still stops a form from saving.
+The builder reuses broadcasts' audience picker, send-time overrides panel, attribute catalog and the area chart, donut and bars.
+
+| #   | Area            | WaDesk                                       | Here                                                                                             |
+| --- | --------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 15  | Address         | `/wa-campaigns`                              | `/campaigns` (the domain's route base).                                                          |
+| 16  | Media           | Upload an image, video or document           | A public address, until the storage service exists.                                              |
+| 17  | CSV             | Uploaded file read on the server             | The file is read in the browser (max 5 MB) and its text sent; the server parses it the same way. |
+| 18  | Card resend     | Re-queues and sends to everyone              | The same, with a confirm; the detail page also has "Resend to N failed".                         |
+| 19  | Channel chooser | `?channel=sms` and `?channel=email` builders | Not built: SMS and email campaigns are skipped on the owner's word.                              |
+| 20  | Build with AI   | A button in the composer                     | Not built (WD-CAMP-026, blocked).                                                                |
