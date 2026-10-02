@@ -29,6 +29,9 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
           <Link href="/blog" className="me-auto text-lg font-semibold">
             {brand}
           </Link>
+          <Link href="/pricing" className="text-sm hover:underline">
+            {t('pricing')}
+          </Link>
           <Link href="/blog" className="text-sm hover:underline">
             {t('blog')}
           </Link>

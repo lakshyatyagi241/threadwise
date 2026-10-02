@@ -16,6 +16,7 @@ import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/
 import { WORKSPACE_PLANS_KEY, fetchWorkspacePlans } from '../api';
 import { STATE_TONE } from '../lib/format';
 import { AttachDialog } from './attach-dialog';
+import { RetentionPanel } from './retention-panel';
 
 const NS = 'plans-subscriptions-trials.operator';
 
@@ -57,6 +58,8 @@ export function WorkspacePlansPage() {
     <div className="space-y-6">
       <PageHeader title={t('title')} description={t('description')} />
       {!canEdit && <ReadOnlyNotice section="plans" />}
+
+      <RetentionPanel canEdit={canEdit} />
 
       <div className="flex flex-wrap gap-3">
         <Input

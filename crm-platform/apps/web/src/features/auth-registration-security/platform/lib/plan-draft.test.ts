@@ -38,9 +38,11 @@ const stored: PlanAdminItem = {
   isCustomQuote: false,
   sortOrder: 10,
   ctaLabel: 'Upgrade',
+  dataRetentionDays: 0,
   limits: {
     monthly_messages: 10000,
     broadcasts: 0,
+    total_campaigns: 0,
     devices: 3,
     users: 0,
     contacts: 5000,

@@ -1,8 +1,16 @@
 import { Module } from '@nestjs/common';
+import { PlatformPaymentGatewaysModule } from '../platform-payment-gateways';
+import { PlanRetentionService } from './plan-retention.service';
+import { SubscriptionService } from './subscription.service';
 import { BillingController } from './billing.controller';
 import { BillingService } from './billing.service';
+import {
+  BillingFaqsController,
+  PlatformPricingFaqsController,
+  PublicPricingFaqsController,
+} from './pricing-faq.controllers';
+import { PricingFaqService } from './pricing-faq.service';
 import { PlanAdminService } from './plan-admin.service';
-import { PlanUsageService } from './plan-usage.service';
 import { PlatformWorkspacePlansController } from './platform-workspace-plans.controller';
 import { TrialGateGuard } from './trial-gate.guard';
 import { WorkspacePlanAdminService } from './workspace-plan-admin.service';
@@ -18,20 +26,25 @@ import { PlansController } from './plans.controller';
  * PlansCoreModule, so there is no cycle. Registered in app.module.ts.
  */
 @Module({
-  imports: [PlansCoreModule],
+  imports: [PlansCoreModule, PlatformPaymentGatewaysModule],
   controllers: [
     PlansController,
     PlatformPlansController,
     BillingController,
     PlatformWorkspacePlansController,
+    PlatformPricingFaqsController,
+    BillingFaqsController,
+    PublicPricingFaqsController,
   ],
   providers: [
     PlanAdminService,
     PlanStore,
-    PlanUsageService,
     BillingService,
     WorkspacePlanAdminService,
     TrialGateGuard,
+    PricingFaqService,
+    SubscriptionService,
+    PlanRetentionService,
   ],
   // The trial gate is registered as an app-wide guard in app.module.ts: it must run after JwtAuthGuard has set the request context,
   // and guards declared by imported modules run before the app's own. Exported so app.module can reference this one instance.

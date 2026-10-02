@@ -6,6 +6,7 @@ import {
   type BillingStatus,
   type BillingUsageResponse,
   type ChangePlanRequest,
+  type CancelSubscriptionResponse,
   type ChangePlanResponse,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
@@ -13,6 +14,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import { BillingService } from './billing.service';
+import { SubscriptionService } from './subscription.service';
 import { AllowWhenTrialExpired } from './trial-gate.guard';
 
 /**
@@ -28,6 +30,7 @@ export class BillingController {
   constructor(
     private readonly billing: BillingService,
     private readonly rbac: RbacService,
+    private readonly subscriptions: SubscriptionService,
   ) {}
 
   @Get('plans')
@@ -63,5 +66,16 @@ export class BillingController {
     @Body(zodPipe(changePlanRequestSchema)) body: ChangePlanRequest,
   ): Promise<ChangePlanResponse> {
     return this.billing.change(body.planSlug);
+  }
+
+  @Post('subscription/cancel')
+  @Idempotent()
+  @RequirePermission('plan.subscription.manage')
+  @ApiOperation({
+    summary:
+      'Stop the workspace subscription from renewing; the paid period keeps running (WD-PLAN-012)',
+  })
+  cancelAutoRenew(): Promise<CancelSubscriptionResponse> {
+    return this.subscriptions.cancel();
   }
 }

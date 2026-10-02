@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { BILLING_KEYS, fetchBillingStatus } from '../api';
+import { CancelRenewal } from './cancel-renewal';
 import { PLANS_PATH, barFor } from '../lib/format';
 
 const NS = 'plans-subscriptions-trials.bar';
@@ -21,6 +23,7 @@ export function TrialBar() {
     staleTime: 60_000,
     refetchOnWindowFocus: true,
   });
+  const { permissions } = useSession();
   if (!q.data) return null;
   const kind = barFor(q.data);
   if (!kind) return null;
@@ -42,7 +45,9 @@ export function TrialBar() {
           ? t('trial', { days: q.data.daysLeft ?? 1 })
           : kind === 'trialEnded'
             ? t('trialEnded')
-            : t('renew', { days: q.data.daysLeft ?? 1, date })}
+            : q.data.subscription
+              ? t('autoRenew', { days: q.data.daysLeft ?? 1, date })
+              : t('renew', { days: q.data.daysLeft ?? 1, date })}
       </span>
       <span className="flex gap-2">
         {kind === 'trial' && (
@@ -54,8 +59,15 @@ export function TrialBar() {
           </Link>
         )}
         <Link href={PLANS_PATH} className={`${btn} bg-background text-foreground hover:opacity-90`}>
-          {kind === 'renew' ? t('renewNow') : t('buy')}
+          {kind === 'renew' ? (q.data.subscription ? t('managePlan') : t('renewNow')) : t('buy')}
         </Link>
+        {kind === 'renew' && q.data.subscription && (
+          <CancelRenewal
+            compact
+            subscription={q.data.subscription}
+            canManage={'plan.subscription.manage' in permissions}
+          />
+        )}
       </span>
     </div>
   );

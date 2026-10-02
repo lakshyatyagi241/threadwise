@@ -1,4 +1,5 @@
 import {
+  centsToMoney,
   PLAN_CHIP_MAX,
   PLAN_CHIP_ORDER,
   moneyCents,
@@ -243,4 +244,39 @@ export function uniquePlanSlug(base: string, taken: ReadonlySet<string>): string
     const candidate = `${/[a-z]/.test(trimmed) ? trimmed : 'plan'}${suffix}`;
     if (!taken.has(candidate)) return candidate;
   }
+}
+
+// --- yearly pricing (WD-PLAN-011 rule 3) -----------------------------------------------------------------------------------
+
+/** Round-half-up integer division, the same rounding checkout uses, so the card and the order agree to the cent. */
+const divRound = (n: number, d: number): number => Math.floor((n * 2 + d) / (d * 2));
+
+/**
+ * The yearly price of a plan billed once a month: `effective x 12 x (1 - pct/100)`, where effective is the offer when there is one.
+ * Free, lifetime, custom-quote plans and plans on any other period get none (a plan authored in years already is the yearly price).
+ * `perMonth` is the figure the card shows in Yearly mode.
+ */
+export function yearlyOffer(
+  plan: Pick<
+    PlanFacts,
+    | 'isFree'
+    | 'isCustomQuote'
+    | 'isLifetime'
+    | 'amount'
+    | 'offerAmount'
+    | 'billingUnit'
+    | 'billingDuration'
+  >,
+  discountPct: number,
+): { perMonth: string; perYear: string } | null {
+  if (planKind(plan) !== 'paid' || plan.isLifetime) return null;
+  if (plan.billingUnit !== 'months' || plan.billingDuration !== 1) return null;
+  const offer =
+    plan.offerAmount !== null && moneyCents(plan.offerAmount) > 0
+      ? moneyCents(plan.offerAmount)
+      : null;
+  const effective =
+    offer !== null && offer < moneyCents(plan.amount) ? offer : moneyCents(plan.amount);
+  const year = divRound(effective * 12 * (100 - discountPct), 100);
+  return { perMonth: centsToMoney(divRound(year, 12)), perYear: centsToMoney(year) };
 }

@@ -10,6 +10,11 @@ import {
   workspacePlanSchema,
   type BillingPlan,
 } from '@crm/contracts';
+import { DatabaseService } from '../../../src/infra/db/database.service';
+import {
+  PlanQuotaService,
+  PlanUsageService,
+} from '../../../src/modules/plans-subscriptions-trials';
 import { RbacService } from '../../../src/kernel/rbac/rbac.service';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import {
@@ -559,5 +564,461 @@ describe('the super admin attaches plans and limits per workspace', () => {
     expect((await ops('get', '/workspace-plans')).status).toBe(200);
     const asOperator = await api().get('/v2/billing/plans').set(bearer(superToken));
     expect(asOperator.status).toBeGreaterThanOrEqual(401);
+  });
+});
+
+describe('pricing FAQs (WD-PLAN-009)', () => {
+  beforeEach(async () => {
+    await h.owner.query('DELETE FROM pricing_faqs');
+  });
+  const faq = (body: Record<string, unknown>, token = superToken) =>
+    api().post('/v2/platform/pricing-faqs').set(bearer(token)).send(body);
+
+  it('adds a FAQ: no sort order takes the next after the maximum, active by default, audited', async () => {
+    await h.owner.query(
+      `INSERT INTO pricing_faqs (question, answer, sort_order) VALUES ('old', 'a', 6)`,
+    );
+    const res = await faq({ question: 'Can I switch?', answer: 'Any time.' });
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body).toMatchObject({
+      sortOrder: 7,
+      isActive: true,
+      placement: 'pricing',
+      rowVersion: 1,
+    });
+    const ev = await h.owner.query(
+      `SELECT 1 FROM security_events WHERE event = 'platform.plan.faq_created'`,
+    );
+    expect(ev.rows).toHaveLength(1);
+  });
+
+  it('validates: an answer over 5000 characters, a blank question and a bad placement fail', async () => {
+    expect((await faq({ question: 'q', answer: 'x'.repeat(5001) })).status).toBe(422);
+    expect((await faq({ question: '  ', answer: 'a' })).status).toBe(422);
+    expect((await faq({ question: 'q', answer: 'a', placement: 'nowhere' })).status).toBe(422);
+    expect((await faq({ question: 'q', answer: 'x'.repeat(5000) })).status).toBe(201);
+  });
+
+  it('shows each reader its own set: in-app all active, public pricing pricing+both, home home+both; inactive hidden', async () => {
+    await faq({ question: 'p', answer: 'a', placement: 'pricing' });
+    await faq({ question: 'h', answer: 'a', placement: 'home' });
+    await faq({ question: 'b', answer: 'a', placement: 'both' });
+    const off = (await faq({ question: 'off', answer: 'a', placement: 'both' })).body;
+    const patched = await api()
+      .patch(`/v2/platform/pricing-faqs/${off.id}`)
+      .set(bearer(superToken))
+      .send({ isActive: false, rowVersion: off.rowVersion });
+    expect(patched.status, JSON.stringify(patched.body)).toBe(200);
+    expect(patched.body.isActive).toBe(false);
+
+    const a = await signup();
+    const inApp = await as(a, 'get', '/v2/billing/faqs');
+    expect(inApp.body.data.map((f: { question: string }) => f.question)).toEqual(['p', 'h', 'b']);
+    const pricing = await api().get('/v2/public/pricing-faqs?for=pricing');
+    expect(pricing.body.data.map((f: { question: string }) => f.question)).toEqual(['p', 'b']);
+    const home = await api().get('/v2/public/pricing-faqs?for=home');
+    expect(home.body.data.map((f: { question: string }) => f.question)).toEqual(['h', 'b']);
+    expect(JSON.stringify(pricing.body)).not.toMatch(/rowVersion|sortOrder|isActive/);
+  });
+
+  it('edits only what is sent, refuses a stale row version, deletes, and keeps writes for super admins', async () => {
+    const made = (await faq({ question: 'q', answer: 'a', sortOrder: 3 })).body;
+    const edit = await api()
+      .patch(`/v2/platform/pricing-faqs/${made.id}`)
+      .set(bearer(superToken))
+      .send({ answer: 'better', rowVersion: made.rowVersion });
+    expect(edit.body).toMatchObject({
+      question: 'q',
+      answer: 'better',
+      sortOrder: 3,
+      isActive: true,
+      rowVersion: 2,
+    });
+    const stale = await api()
+      .patch(`/v2/platform/pricing-faqs/${made.id}`)
+      .set(bearer(superToken))
+      .send({ answer: 'x', rowVersion: 1 });
+    expect(stale.status).toBe(409);
+    expect((await faq({ question: 'q', answer: 'a' }, supportToken)).status).toBe(403);
+    expect((await api().get('/v2/platform/pricing-faqs').set(bearer(supportToken))).status).toBe(
+      200,
+    );
+    expect(
+      (await api().delete(`/v2/platform/pricing-faqs/${made.id}`).set(bearer(superToken))).status,
+    ).toBe(204);
+    expect(
+      (await api().delete(`/v2/platform/pricing-faqs/${made.id}`).set(bearer(superToken))).status,
+    ).toBe(404);
+  });
+});
+
+describe('the yearly switch (WD-PLAN-011)', () => {
+  it('prices a monthly plan as 12 months less the discount, matching checkout, and skips free, lifetime and yearly-authored plans', async () => {
+    await freePlan('free_y');
+    await paidPlan('pro', '49');
+    await paidPlan('forever', '300', { isLifetime: true });
+    await paidPlan('annual', '400', { billingUnit: 'years', billingDuration: 1 });
+    const a = await signup();
+    const view = billingPlansResponseSchema.parse((await as(a, 'get', '/v2/billing/plans')).body);
+    const by = Object.fromEntries(view.data.map((p) => [p.slug, p]));
+    expect(by.pro?.yearly).toEqual({ perMonth: '39.20', perYear: '470.40' });
+    expect(by.free_y?.yearly).toBeNull();
+    expect(by.forever?.yearly).toBeNull();
+    expect(by.annual?.yearly).toBeNull();
+    expect(view.yearlyToggle).toEqual({ enabled: true, discountPct: 20 });
+  });
+
+  it('hides the switch when no plan has a yearly price', async () => {
+    await freePlan('free_only');
+    const a = await signup();
+    const view = billingPlansResponseSchema.parse((await as(a, 'get', '/v2/billing/plans')).body);
+    expect(view.yearlyToggle.enabled).toBe(false);
+  });
+});
+
+describe('cancel auto-renew (WD-PLAN-012)', () => {
+  const sub = (orgId: number, over: Record<string, unknown> = {}) =>
+    h.owner.query(
+      `INSERT INTO subscriptions (org_id, gateway, gateway_subscription_id, status, current_period_end)
+       VALUES ($1, $2, 'sub_1', $3, now() + interval '10 days')`,
+      [orgId, over.gateway ?? 'stripe', over.status ?? 'active'],
+    );
+  const cancel = (a: Account) =>
+    as(a, 'post', '/v2/billing/subscription/cancel').set('idempotency-key', randomUUID());
+
+  it('shows the renewing subscription, cancels it, keeps the paid period and records that the gateway could not be told', async () => {
+    await paidPlan('pro', '49');
+    await ops('get', '/payment-gateways'); // makes sure the gateway rows exist (no credentials saved)
+    const a = await signup();
+    const end = new Date(Date.now() + 10 * DAY);
+    await setOrgState(a.orgId, 'pro', null, end);
+    await sub(a.orgId);
+
+    const before = billingPlansResponseSchema.parse((await as(a, 'get', '/v2/billing/plans')).body);
+    expect(before.subscription).toMatchObject({ status: 'active' });
+    expect(
+      billingStatusSchema.parse((await as(a, 'get', '/v2/billing/status')).body).subscription,
+    ).not.toBeNull();
+
+    const res = await cancel(a);
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body).toMatchObject({ status: 'canceled', remote: 'failed' });
+    expect(new Date(res.body.planEndsAt).getTime()).toBe(end.getTime());
+    const row = (
+      await h.owner.query(`SELECT status, canceled_at, meta FROM subscriptions WHERE org_id = $1`, [
+        a.orgId,
+      ])
+    ).rows[0];
+    expect(row.status).toBe('canceled');
+    expect(row.canceled_at).not.toBeNull();
+    expect(row.meta.cancel.result).toBe('failed');
+    expect((await stateOf(a.orgId)).plan_ends_at?.getTime()).toBe(end.getTime());
+    const audit = await h.owner.query(
+      `SELECT 1 FROM audit_log WHERE org_id = $1 AND module = 'subscriptions'`,
+      [a.orgId],
+    );
+    expect(audit.rows).toHaveLength(1);
+    const ev = await h.owner.query(
+      `SELECT 1 FROM event_outbox WHERE org_id = $1 AND event_type = 'plan.subscription_canceled'`,
+      [a.orgId],
+    );
+    expect(ev.rows).toHaveLength(1);
+
+    const after = billingPlansResponseSchema.parse((await as(a, 'get', '/v2/billing/plans')).body);
+    expect(after.subscription).toBeNull();
+    const again = await cancel(a);
+    expect(again.status).toBe(422);
+    expect(again.body.code).toBe('PLAN_NO_SUBSCRIPTION');
+  });
+
+  it('still cancels locally when the gateway is unknown, ignores a pending row, and is for plan managers only', async () => {
+    const a = await signup();
+    await sub(a.orgId, { gateway: 'nowhere' });
+    await sub(a.orgId, { status: 'pending' });
+    const res = await cancel(a);
+    expect(res.body.remote).toBe('unsupported');
+    const rows = (
+      await h.owner.query(`SELECT status FROM subscriptions WHERE org_id = $1 ORDER BY id`, [
+        a.orgId,
+      ])
+    ).rows;
+    expect(rows.map((r) => r.status)).toEqual(['canceled', 'pending']);
+    expect((await cancel(a)).body.code).toBe('PLAN_NO_SUBSCRIPTION');
+
+    const b = await signup();
+    await sub(b.orgId);
+    await h.owner.query(
+      `UPDATE user_roles ur SET role_id = (SELECT id FROM roles WHERE org_id = $1 AND system_key = 'viewer') WHERE ur.org_id = $1`,
+      [b.orgId],
+    );
+    await h.app.get(RbacService).bumpRolesVersion(b.orgId);
+    expect((await cancel(b)).status).toBe(403);
+    expect(
+      (await h.owner.query(`SELECT status FROM subscriptions WHERE org_id = $1`, [b.orgId])).rows[0]
+        .status,
+    ).toBe('active');
+  });
+
+  it('never touches another workspace’s subscription', async () => {
+    const a = await signup();
+    const b = await signup();
+    await sub(b.orgId);
+    expect((await cancel(a)).body.code).toBe('PLAN_NO_SUBSCRIPTION');
+    expect(
+      (await h.owner.query(`SELECT status FROM subscriptions WHERE org_id = $1`, [b.orgId])).rows[0]
+        .status,
+    ).toBe('active');
+  });
+});
+
+describe('the delete-proof quota ledger (WD-PLAN-018)', () => {
+  const quota = () => h.app.get(PlanQuotaService);
+  const inTx = <T>(
+    orgId: number,
+    fn: (tx: Parameters<Parameters<DatabaseService['txAs']>[1]>[0]) => Promise<T>,
+  ) => h.app.get(DatabaseService).txAs({ orgId, userId: null }, fn);
+  const create = (orgId: number, live = async () => 0) =>
+    inTx(orgId, async (tx) => {
+      await quota().assertAvailable(tx, orgId, 'total_campaigns', 'campaign', live);
+      await quota().bump(tx, orgId, 'campaign');
+    });
+
+  it('blocks the third create after create 2, delete 2, create 1: deleting never frees allowance', async () => {
+    await paidPlan('capped', '10', { limits: { total_campaigns: 2 } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'capped', null, null);
+    await create(a.orgId);
+    await create(a.orgId);
+    // The two campaigns are "deleted": the live count is 0 again, the ledger still says 2.
+    const err = await create(a.orgId).catch((e) => e);
+    expect(err.code).toBe('PLAN_LIMIT_REACHED');
+    expect(err.details).toContainEqual({ path: 'reason', message: 'quota_reached' });
+    expect(err.message).toBe(
+      "You've reached your plan's limit of 2 total campaigns. Upgrade your plan to create more.",
+    );
+    const usage = billingUsageResponseSchema.parse((await as(a, 'get', '/v2/billing/usage')).body);
+    expect(usage.meters.find((m) => m.key === 'total_campaigns')).toMatchObject({
+      used: 2,
+      limit: 2,
+    });
+  });
+
+  it('opens a fresh allowance when the plan changes, and treats a limit of 0 as unlimited', async () => {
+    await paidPlan('capped', '10', { limits: { total_campaigns: 1 } });
+    await paidPlan('roomy', '20', { limits: { total_campaigns: 0 } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'capped', null, null);
+    await create(a.orgId);
+    expect((await create(a.orgId).catch((e) => e)).code).toBe('PLAN_LIMIT_REACHED');
+    await setOrgState(a.orgId, 'roomy', null, null);
+    await create(a.orgId);
+    await create(a.orgId);
+    await setOrgState(a.orgId, 'capped', null, null);
+    // Back on the same plan with the same end date: the OLD counter returns (kept WaDesk quirk).
+    expect((await create(a.orgId).catch((e) => e)).code).toBe('PLAN_LIMIT_REACHED');
+  });
+
+  it('adopts the live count the first time a workspace meets the metric, and only then', async () => {
+    await paidPlan('capped', '10', { limits: { total_campaigns: 5 } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'capped', null, null);
+    // Three campaigns existed before the ledger did: the first create adopts 3, then counts its own.
+    await create(a.orgId, async () => 3);
+    const seeded = await h.owner.query(
+      `SELECT count FROM plan_usage WHERE org_id = $1 AND metric = 'campaign'`,
+      [a.orgId],
+    );
+    expect(seeded.rows[0].count).toBe(4);
+    await create(a.orgId, async () => 99);
+    expect((await create(a.orgId, async () => 99).catch((e) => e)).code).toBe('PLAN_LIMIT_REACHED');
+    // A later period starts at 0 even though a live count is offered: old rows exist, nothing is adopted again.
+    await setOrgState(a.orgId, 'capped', null, new Date(Date.now() + 30 * DAY));
+    await create(a.orgId, async () => 99);
+    const rows = await h.owner.query(
+      `SELECT count FROM plan_usage WHERE org_id = $1 AND metric = 'campaign' ORDER BY id`,
+      [a.orgId],
+    );
+    expect(rows.rows.map((r) => r.count)).toEqual([5, 1]);
+  });
+
+  it('counts concurrent creates exactly (atomic bump) and keeps workspaces apart', async () => {
+    await paidPlan('capped', '10', { limits: { total_campaigns: 100 } });
+    const a = await signup();
+    const b = await signup();
+    await setOrgState(a.orgId, 'capped', null, null);
+    await setOrgState(b.orgId, 'capped', null, null);
+    await Promise.all(Array.from({ length: 10 }, () => create(a.orgId)));
+    await create(b.orgId);
+    const count = async (orgId: number) =>
+      (
+        await h.owner.query(
+          `SELECT sum(count)::int AS n FROM plan_usage WHERE org_id = $1 AND metric = 'campaign'`,
+          [orgId],
+        )
+      ).rows[0].n;
+    expect(await count(a.orgId)).toBe(10);
+    expect(await count(b.orgId)).toBe(1);
+  });
+});
+
+describe('data-retention wipe of lapsed workspaces (WD-PLAN-023)', () => {
+  const run = (body: Record<string, unknown>, token = superToken) =>
+    api().post('/v2/platform/workspace-plans/retention/run').set(bearer(token)).send(body);
+  const contactsOf = async (orgId: number) =>
+    (await h.owner.query(`SELECT count(*)::int AS n FROM contacts WHERE org_id = $1`, [orgId]))
+      .rows[0].n as number;
+
+  async function lapsedOrg(retention: number, lapsedDaysAgo: number) {
+    const slug = `ret_${++counter}`;
+    await paidPlan(slug, '30', { dataRetentionDays: retention });
+    const a = await signup();
+    await setOrgState(a.orgId, slug, null, new Date(Date.now() + 5 * DAY));
+    expect((await addContact(a, counter)).status).toBe(201);
+    expect((await addContact(a, counter + 1000)).status).toBe(201);
+    await setOrgState(a.orgId, slug, null, new Date(Date.now() - lapsedDaysAgo * DAY));
+    return { a, slug };
+  }
+
+  it('stores the retention days on the plan and validates the range', async () => {
+    const ok = await ops('post', '/plans').send({
+      name: 'Keep',
+      slug: 'keepit',
+      amount: '9',
+      dataRetentionDays: 30,
+    });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(201);
+    expect(ok.body.dataRetentionDays).toBe(30);
+    expect(
+      (await ops('post', '/plans').send({ name: 'Bad', amount: '9', dataRetentionDays: 3651 }))
+        .status,
+    ).toBe(422);
+    expect(
+      (await ops('post', '/plans').send({ name: 'Neg', amount: '9', dataRetentionDays: -1 }))
+        .status,
+    ).toBe(422);
+  });
+
+  it('a dry run counts what would go and deletes nothing; a real run needs the confirmation word', async () => {
+    const { a } = await lapsedOrg(30, 31);
+    const dry = await run({});
+    expect(dry.status, JSON.stringify(dry.body)).toBe(200);
+    const mine = dry.body.workspaces.find((w: { slug: string }) => w.slug === a.slug);
+    expect(dry.body.dryRun).toBe(true);
+    expect(mine).toMatchObject({ wiped: false });
+    expect(mine.rows.contacts).toBe(2);
+    expect(await contactsOf(a.orgId)).toBe(2);
+    expect((await stateOf(a.orgId)).plan).not.toBe('free_w');
+
+    const unconfirmed = await run({ dryRun: false });
+    expect(unconfirmed.status).toBe(422);
+    expect(await contactsOf(a.orgId)).toBe(2);
+    expect((await run({ dryRun: false, confirm: 'WIPE' }, supportToken)).status).toBe(403);
+  });
+
+  it('wipes once: data gone, stamped, switched to the free plan, audited with an event, kept data kept, never repeated', async () => {
+    await freePlan('free_w');
+    const { a } = await lapsedOrg(30, 31);
+    await h.owner.query(`INSERT INTO tags (org_id, name) VALUES ($1, 'keepme')`, [a.orgId]);
+    const res = await run({ dryRun: false, confirm: 'WIPE' });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const mine = res.body.workspaces.find((w: { slug: string }) => w.slug === a.slug);
+    expect(mine).toMatchObject({ wiped: true });
+    expect(await contactsOf(a.orgId)).toBe(0);
+    expect(
+      (await h.owner.query(`SELECT count(*)::int AS n FROM tags WHERE org_id = $1`, [a.orgId]))
+        .rows[0].n,
+    ).toBe(1);
+    expect(
+      (await h.owner.query(`SELECT count(*)::int AS n FROM users WHERE org_id = $1`, [a.orgId]))
+        .rows[0].n,
+    ).toBe(1);
+    const st = (
+      await h.owner.query(
+        `SELECT o.plan, s.data_wiped_at FROM organizations o JOIN org_plan_state s ON s.org_id = o.id WHERE o.id = $1`,
+        [a.orgId],
+      )
+    ).rows[0];
+    expect(st.plan).toBe('free_w');
+    expect(st.data_wiped_at).not.toBeNull();
+    const audit = await h.owner.query(
+      `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'plans' AND action = 'delete'`,
+      [a.orgId],
+    );
+    expect(audit.rows).toHaveLength(1);
+    const ev = await h.owner.query(
+      `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'org.data_wiped'`,
+      [a.orgId],
+    );
+    expect(ev.rows[0].payload.rowsDeleted).toBeGreaterThanOrEqual(2);
+
+    await addContact(a, 5000); // new data after the wipe
+    const again = await run({ dryRun: false, confirm: 'WIPE' });
+    expect(again.body.workspaces.some((w: { slug: string }) => w.slug === a.slug)).toBe(false);
+    expect(await contactsOf(a.orgId)).toBe(1);
+  });
+
+  it('wipes nothing for retention 0, inside the window, a free-trial-expired workspace, or a platform-owned one', async () => {
+    const zero = await lapsedOrg(0, 400);
+    const inside = await lapsedOrg(30, 29);
+    await freePlan('free_t2');
+    const trial = await signup();
+    await addContact(trial, 7000);
+    await setOrgState(trial.orgId, 'free_t2', new Date(Date.now() - 100 * DAY), null);
+    const owned = await lapsedOrg(30, 90);
+    await h.owner.query(`UPDATE org_plan_state SET platform_owned = true WHERE org_id = $1`, [
+      owned.a.orgId,
+    ]);
+
+    const res = await run({ dryRun: false, confirm: 'WIPE' });
+    const slugs = res.body.workspaces.map((w: { slug: string }) => w.slug);
+    for (const x of [zero.a, inside.a, trial, owned.a]) expect(slugs).not.toContain(x.slug);
+    expect(await contactsOf(zero.a.orgId)).toBe(2);
+    expect(await contactsOf(inside.a.orgId)).toBe(2);
+    expect(await contactsOf(trial.orgId)).toBe(1);
+    expect(await contactsOf(owned.a.orgId)).toBe(2);
+  });
+
+  it('wipes only the lapsed workspace, never its neighbour', async () => {
+    const lapsed = await lapsedOrg(30, 40);
+    const neighbour = await lapsedOrg(0, 40);
+    await run({ dryRun: false, confirm: 'WIPE' });
+    expect(await contactsOf(lapsed.a.orgId)).toBe(0);
+    expect(await contactsOf(neighbour.a.orgId)).toBe(2);
+  });
+});
+
+describe('the one-line count guard for future domains (WD-PLAN-006/017)', () => {
+  const guard = (orgId: number, key: Parameters<PlanUsageService['assertCanAdd']>[1]) =>
+    h.app.get(PlanUsageService).assertCanAdd(orgId, key);
+
+  it('counts what the workspace holds with the usage panel’s predicate and blocks row N+1', async () => {
+    await paidPlan('tiny', '10', { limits: { tags: 2, pipelines: 0 } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'tiny', null, null);
+    await guard(a.orgId, 'tags');
+    await h.owner.query(`INSERT INTO tags (org_id, name) VALUES ($1, 't1'), ($1, 't2')`, [a.orgId]);
+    const err = await guard(a.orgId, 'tags').catch((e) => e);
+    expect(err.code).toBe('PLAN_LIMIT_REACHED');
+    expect(err.details).toContainEqual({ path: 'reason', message: 'limit_reached' });
+    const usage = billingUsageResponseSchema.parse((await as(a, 'get', '/v2/billing/usage')).body);
+    expect(usage.meters.find((m) => m.key === 'tags')).toMatchObject({ used: 2, limit: 2 });
+    await guard(a.orgId, 'pipelines'); // unlimited
+  });
+
+  it('applies the workspace’s own override, and refuses the two keys that are not live counts', async () => {
+    await paidPlan('tiny', '10', { limits: { tags: 1 } });
+    const a = await signup();
+    await setOrgState(a.orgId, 'tiny', null, null);
+    await h.owner.query(`INSERT INTO tags (org_id, name) VALUES ($1, 't1')`, [a.orgId]);
+    expect((await guard(a.orgId, 'tags').catch((e) => e)).code).toBe('PLAN_LIMIT_REACHED');
+    const before = workspacePlanSchema.parse((await ops('get', `/workspace-plans/${a.uuid}`)).body);
+    await ops('put', `/workspace-plans/${a.uuid}`).send({
+      planSlug: 'tiny',
+      rowVersion: before.rowVersion,
+      overrides: { limits: { tags: 5 }, features: {} },
+    });
+    await guard(a.orgId, 'tags');
+    await expect(guard(a.orgId, 'total_campaigns')).rejects.toThrow(/does not apply/);
+    await expect(guard(a.orgId, 'monthly_messages')).rejects.toThrow(/does not apply/);
   });
 });

@@ -1,7 +1,20 @@
-import { Body, Controller, Get, Param, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   attachPlanRequestSchema,
+  retentionRunRequestSchema,
+  type RetentionRunRequest,
+  type RetentionRunResponse,
   uuidSchema,
   workspacePlanListQuerySchema,
   type AttachPlanRequest,
@@ -10,6 +23,7 @@ import {
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
+import { PlanRetentionService } from './plan-retention.service';
 import { WorkspacePlanAdminService } from './workspace-plan-admin.service';
 
 /**
@@ -21,7 +35,10 @@ import { WorkspacePlanAdminService } from './workspace-plan-admin.service';
 @UseGuards(OperatorGuard)
 @Controller({ path: 'platform/workspace-plans', version: '2' })
 export class PlatformWorkspacePlansController {
-  constructor(private readonly workspaces: WorkspacePlanAdminService) {}
+  constructor(
+    private readonly workspaces: WorkspacePlanAdminService,
+    private readonly retention: PlanRetentionService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -47,5 +64,23 @@ export class PlatformWorkspacePlansController {
     @Body(zodPipe(attachPlanRequestSchema)) body: AttachPlanRequest,
   ) {
     return this.workspaces.attach(id, body);
+  }
+
+  @Post('retention/run')
+  @HttpCode(200)
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary:
+      'Data-retention wipe of lapsed workspaces (WD-PLAN-023): a dry run by default (counts, rolls back); a real run needs confirm "WIPE"',
+  })
+  async runRetention(
+    @Body(zodPipe(retentionRunRequestSchema)) body: RetentionRunRequest,
+  ): Promise<RetentionRunResponse> {
+    const dryRun = body.dryRun ?? true;
+    const done = await this.retention.sweep({ dryRun });
+    return {
+      dryRun,
+      workspaces: done.map((d) => ({ slug: d.slug, wiped: d.wiped, rows: d.rows })),
+    };
   }
 }

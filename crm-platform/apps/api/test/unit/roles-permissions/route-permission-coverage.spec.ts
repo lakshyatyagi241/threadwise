@@ -24,6 +24,8 @@ const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
   'modules/admin/users/users.controller.ts#me',
   // the plan catalogue behind the pricing cards every member sees when asked to upgrade
   'modules/plans-subscriptions-trials/plans.controller.ts#list',
+  // the plan picker: viewing the plans is open to every member (WaDesk: Authenticate only); changing the plan needs plan.subscription.manage
+  'modules/plans-subscriptions-trials/billing.controller.ts#plans',
 ];
 
 const root = join(__dirname, '../../../src');

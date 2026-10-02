@@ -22,15 +22,29 @@ export type PriceView =
       lifetime: boolean;
     };
 
-export function priceView(plan: BillingPlan, locale: string): PriceView {
+export function priceView(
+  plan: BillingPlan,
+  locale: string,
+  period: Period = 'monthly',
+): PriceView {
   if (plan.kind === 'free') return { kind: 'free' };
   if (plan.kind === 'custom_quote') return { kind: 'custom' };
-  const { amount, offerAmount, currency, period } = plan.price;
+  const { amount, offerAmount, currency, period: billing } = plan.price;
+  // Yearly mode shows the per-month equivalent of the yearly price for a plan billed monthly; any other plan keeps its own price.
+  if (period === 'yearly' && plan.yearly) {
+    return {
+      kind: 'paid',
+      main: formatMoney(plan.yearly.perMonth, currency, locale),
+      strike: formatMoney(offerAmount ?? amount, currency, locale),
+      period: { unit: 'months', count: 1 },
+      lifetime: false,
+    };
+  }
   return {
     kind: 'paid',
     main: formatMoney(offerAmount ?? amount, currency, locale),
     strike: offerAmount ? formatMoney(amount, currency, locale) : null,
-    period,
+    period: billing,
     lifetime: plan.lifetime,
   };
 }
@@ -116,5 +130,8 @@ export function barFor(v: Pick<PlanValidity, 'state' | 'renewalWindow'>): BarKin
 
 export const PLANS_PATH = '/account/plans';
 export const USAGE_PATH = '/account/usage';
-export const checkoutPath = (slug: string) => `/billing/checkout/${encodeURIComponent(slug)}`;
+export type Period = 'monthly' | 'yearly';
+/** Checkout for a plan; the yearly choice rides along as `?period=yearly` (WD-PLAN-011 rule 4). */
+export const checkoutPath = (slug: string, period: Period = 'monthly') =>
+  `/billing/checkout/${encodeURIComponent(slug)}${period === 'yearly' ? '?period=yearly' : ''}`;
 export const SALES_PATH = '/support';

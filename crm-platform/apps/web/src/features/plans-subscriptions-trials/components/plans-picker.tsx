@@ -7,9 +7,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ERROR_CODES, type BillingPlan, type ChangePlanResponse } from '@crm/contracts';
 import { Alert, Button, EmptyState, Modal, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { BILLING_KEYS, changePlan, fetchBillingPlans } from '../api';
-import { USAGE_PATH, checkoutPath } from '../lib/format';
+import { BILLING_KEYS, changePlan, fetchBillingFaqs, fetchBillingPlans } from '../api';
+import { USAGE_PATH, checkoutPath, type Period } from '../lib/format';
+import { AddonsSection } from './addons-section';
+import { CancelRenewal } from './cancel-renewal';
 import { CompareTable } from './compare-table';
+import { FaqList } from './faq-list';
+import { PeriodSwitch } from './period-switch';
 import { PlanCard } from './plan-card';
 import { ValidityBanner } from './validity-banner';
 
@@ -28,6 +32,13 @@ export function PlansPicker() {
     queryFn: ({ signal }) => fetchBillingPlans(signal),
     staleTime: 0,
   });
+  const faqs = useQuery({
+    queryKey: ['billing', 'faqs'],
+    queryFn: ({ signal }) => fetchBillingFaqs(signal),
+    staleTime: 60_000,
+  });
+  // WaDesk opens in Yearly mode when the switch exists (WD-PLAN-011 rule 4).
+  const [chosen, setChosen] = useState<Period | null>(null);
   const [pending, setPending] = useState<BillingPlan | null>(null);
   const [done, setDone] = useState<ChangePlanResponse | null>(null);
 
@@ -56,8 +67,19 @@ export function PlansPicker() {
       ) : (
         <>
           <ValidityBanner validity={q.data.validity} planName={q.data.current?.name ?? null} />
+          {q.data.subscription && (
+            <CancelRenewal subscription={q.data.subscription} canManage={q.data.canManage} />
+          )}
           {!q.data.canManage && <Alert tone="info">{t('readOnly')}</Alert>}
           {done && <ChangeResult result={done} />}
+
+          {q.data.yearlyToggle.enabled && (
+            <PeriodSwitch
+              value={chosen ?? 'yearly'}
+              onChange={setChosen}
+              discountPct={q.data.yearlyToggle.discountPct}
+            />
+          )}
 
           {q.data.data.length === 0 ? (
             <EmptyState title={t('title')} message={t('empty')} />
@@ -69,13 +91,18 @@ export function PlansPicker() {
                   plan={plan}
                   canManage={q.data.canManage}
                   busy={false}
+                  period={q.data.yearlyToggle.enabled ? (chosen ?? 'yearly') : 'monthly'}
                   onSwitch={setPending}
                 />
               ))}
             </div>
           )}
 
+          <AddonsSection canManage={q.data.canManage} />
+
           <CompareTable plans={q.data.data} />
+
+          <FaqList faqs={faqs.data?.data ?? []} />
 
           <Link
             href={USAGE_PATH}

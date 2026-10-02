@@ -17,6 +17,8 @@ export type PlanLimitGroup = (typeof PLAN_LIMIT_GROUPS)[number];
 export const PLAN_LIMIT_DEFS = [
   { key: 'monthly_messages', group: 'messaging' },
   { key: 'broadcasts', group: 'messaging' },
+  // Campaigns CREATED over the life of a plan period, deleted ones included (the delete-proof quota ledger, WD-PLAN-018). 0 = unlimited.
+  { key: 'total_campaigns', group: 'messaging' },
   { key: 'devices', group: 'workspace' },
   { key: 'users', group: 'workspace' },
   { key: 'contacts', group: 'workspace' },
