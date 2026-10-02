@@ -21,7 +21,9 @@ export function statusOf(row: Pick<TemplateRow, 'status'>): TplStatus {
   return parsed.success ? parsed.data : 'pending';
 }
 
-export function categoryOf(row: Pick<TemplateRow, 'metaCategory' | 'category'>): TplMetaCategory | null {
+export function categoryOf(
+  row: Pick<TemplateRow, 'metaCategory' | 'category'>,
+): TplMetaCategory | null {
   const parsed = tplMetaCategorySchema.safeParse((row.metaCategory ?? '').toUpperCase());
   if (parsed.success) return parsed.data;
   const local = tplMetaCategorySchema.safeParse(row.category.toUpperCase());
@@ -108,7 +110,8 @@ export function toSummary(row: TemplateRow): TemplateSummary {
     approvedAt: iso(row.approvedAt),
     submittedAt: iso(row.submittedAt),
     lastSyncedAt: iso(row.lastSyncedAt),
-    bodyPreview: row.templateBody.length > 140 ? `${row.templateBody.slice(0, 137)}...` : row.templateBody,
+    bodyPreview:
+      row.templateBody.length > 140 ? `${row.templateBody.slice(0, 137)}...` : row.templateBody,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

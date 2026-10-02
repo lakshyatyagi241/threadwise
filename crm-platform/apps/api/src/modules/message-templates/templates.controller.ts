@@ -72,7 +72,9 @@ export class TemplatesController {
   @UseInterceptors(
     FileInterceptor('file', { limits: { fileSize: MEDIA_UPLOAD_MAX_BYTES, files: 1 } }),
   )
-  @ApiOperation({ summary: 'Upload a header example (image, video or PDF) to Meta; returns its handle' })
+  @ApiOperation({
+    summary: 'Upload a header example (image, video or PDF) to Meta; returns its handle',
+  })
   async uploadMedia(
     @Body(zodPipe(syncTemplatesInputSchema)) body: SyncTemplatesInput,
     @UploadedFile() file: { originalname: string; buffer: Buffer } | undefined,
@@ -126,7 +128,9 @@ export class TemplatesController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('tpl.templates.delete')
-  @ApiOperation({ summary: 'Delete a template here and on Meta (refused while a broadcast uses it)' })
+  @ApiOperation({
+    summary: 'Delete a template here and on Meta (refused while a broadcast uses it)',
+  })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.templates.remove(id);
   }

@@ -41,12 +41,7 @@ import {
 } from './template-input';
 import type { LintIssue } from './template-linter';
 import { buildMetaTemplate } from './template-payload';
-import {
-  columnsOfState,
-  sameLanguage,
-  statePatchFrom,
-  type CurrentState,
-} from './template-remote';
+import { columnsOfState, sameLanguage, statePatchFrom, type CurrentState } from './template-remote';
 import { draftOf, lintOf, statusOf, toDetail, toSummary } from './templates.mapper';
 import { TemplatesRepository, type TemplatePatch, type TemplateRow } from './templates.repository';
 
@@ -221,8 +216,7 @@ export class TemplatesService {
       const effective: PreparedTemplate = {
         ...prepared,
         headerHandle: prepared.attachmentType ? handle : null,
-        headerSampleUrl:
-          prepared.headerSampleUrl ?? (sameMedia ? current.headerSampleUrl : null),
+        headerSampleUrl: prepared.headerSampleUrl ?? (sameMedia ? current.headerSampleUrl : null),
       };
       const found = lintPrepared(effective, Boolean(effective.headerHandle), input.name);
       if (input.submit) this.throwIfErrors(found);
@@ -368,9 +362,10 @@ export class TemplatesService {
     const ext = (file.originalname.split('.').pop() ?? '').toLowerCase();
     const rule = MEDIA_TYPES[ext];
     if (!rule)
-      throw AppError.validation('Meta takes a JPG or PNG image, an MP4 or 3GP video, or a PDF as the header example', [
-        { path: 'file', message: 'File type not supported.' },
-      ]);
+      throw AppError.validation(
+        'Meta takes a JPG or PNG image, an MP4 or 3GP video, or a PDF as the header example',
+        [{ path: 'file', message: 'File type not supported.' }],
+      );
     const checked = this.uploads.validate({
       filename: file.originalname,
       buffer: file.buffer,
@@ -426,7 +421,10 @@ export class TemplatesService {
         removedOld = true;
       } catch (e) {
         // Already gone on Meta, or Meta is not answering: the create below says which.
-        this.logger.warn({ err: e, templateId: row.id }, '[TPL] could not delete the old Meta copy');
+        this.logger.warn(
+          { err: e, templateId: row.id },
+          '[TPL] could not delete the old Meta copy',
+        );
       }
     }
 
@@ -452,7 +450,8 @@ export class TemplatesService {
         const cleared: TemplatePatch = removedOld
           ? { metaTemplateId: null, metaStatus: null, approvedAt: null }
           : {};
-        const updated = (await this.repo.update(tx, orgId, row.id, { ...patch, ...cleared })) ?? row;
+        const updated =
+          (await this.repo.update(tx, orgId, row.id, { ...patch, ...cleared })) ?? row;
         await this.audit.record(tx, {
           module: MODULE,
           recordId: row.id,
@@ -541,7 +540,11 @@ export class TemplatesService {
     }
   }
 
-  private result(row: TemplateRow, warnings: TplLintIssue[], metaError: string | null): TemplateSubmitResult {
+  private result(
+    row: TemplateRow,
+    warnings: TplLintIssue[],
+    metaError: string | null,
+  ): TemplateSubmitResult {
     return { template: toDetail(row), warnings, metaError };
   }
 
@@ -558,7 +561,9 @@ export class TemplatesService {
   }
 
   /** The number a template is sent through; another organization's number is simply not found. */
-  private async connection(ref: { uuid: string } | { id: number }): Promise<ResolvedWabaConnection> {
+  private async connection(
+    ref: { uuid: string } | { id: number },
+  ): Promise<ResolvedWabaConnection> {
     const { orgId } = RequestContextStore.require();
     const found = await this.db.tx((tx: Tx) => this.waba.resolveConnection(tx, orgId, ref));
     if (!found) throw AppError.notFound('WhatsApp number', 'uuid' in ref ? ref.uuid : undefined);

@@ -159,9 +159,10 @@ export function statePatchFrom(
   mapStatus: StatusMapper,
 ): StatePatch {
   const metaStatus = remote.status.toUpperCase();
-  const category = (remote.category ?? remote.correctCategory ?? current.metaCategory ?? null)
-    ?.toString()
-    .toUpperCase() ?? null;
+  const category =
+    (remote.category ?? remote.correctCategory ?? current.metaCategory ?? null)
+      ?.toString()
+      .toUpperCase() ?? null;
   const reported = remote.qualityScore?.toUpperCase() ?? null;
   // UNKNOWN never overwrites a known score (TW-TPL-029 rule 5).
   const qualityScore =
@@ -172,7 +173,7 @@ export function statePatchFrom(
     metaCategory: category,
     qualityScore,
     rejectionReasonCode:
-      metaStatus === 'REJECTED' ? (remote.rejectedReason?.toUpperCase() || 'NONE') : null,
+      metaStatus === 'REJECTED' ? remote.rejectedReason?.toUpperCase() || 'NONE' : null,
     clearRejectionText: metaStatus === 'APPROVED',
     lastSyncedAt: now,
   };

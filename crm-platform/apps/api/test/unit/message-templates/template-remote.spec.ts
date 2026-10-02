@@ -39,14 +39,28 @@ const remote = (over: Partial<Parameters<typeof statePatchFrom>[0]> = {}) => ({
 describe('Meta state onto a row (TW-TPL-026, 027, 030)', () => {
   it('approves, stamps approved_at once and takes Meta category in upper case', () => {
     const p = statePatchFrom(remote({ category: 'marketing' }), blank, NOW, localStatusFor);
-    expect(p).toMatchObject({ metaStatus: 'APPROVED', status: 'approved', metaCategory: 'MARKETING' });
+    expect(p).toMatchObject({
+      metaStatus: 'APPROVED',
+      status: 'approved',
+      metaCategory: 'MARKETING',
+    });
     expect(p.approvedAt).toEqual(NOW);
-    const again = statePatchFrom(remote(), { ...blank, approvedAt: new Date('2026-09-01') }, NOW, localStatusFor);
+    const again = statePatchFrom(
+      remote(),
+      { ...blank, approvedAt: new Date('2026-09-01') },
+      NOW,
+      localStatusFor,
+    );
     expect(again.approvedAt).toBeUndefined();
   });
 
   it('keeps a known quality score when Meta says UNKNOWN', () => {
-    const p = statePatchFrom(remote({ qualityScore: 'UNKNOWN' }), { ...blank, qualityScore: 'GREEN' }, NOW, localStatusFor);
+    const p = statePatchFrom(
+      remote({ qualityScore: 'UNKNOWN' }),
+      { ...blank, qualityScore: 'GREEN' },
+      NOW,
+      localStatusFor,
+    );
     expect(p.qualityScore).toBe('GREEN');
   });
 
@@ -54,8 +68,12 @@ describe('Meta state onto a row (TW-TPL-026, 027, 030)', () => {
     const red = statePatchFrom(remote({ qualityScore: 'RED' }), blank, NOW, localStatusFor);
     expect(red.pausedUntil).toEqual(new Date('2026-10-03T10:00:00Z'));
     expect(
-      statePatchFrom(remote({ qualityScore: 'RED', category: 'AUTHENTICATION' }), blank, NOW, localStatusFor)
-        .pausedUntil,
+      statePatchFrom(
+        remote({ qualityScore: 'RED', category: 'AUTHENTICATION' }),
+        blank,
+        NOW,
+        localStatusFor,
+      ).pausedUntil,
     ).toBeUndefined();
     const paused = statePatchFrom(remote({ status: 'PAUSED' }), blank, NOW, localStatusFor);
     expect(paused).toMatchObject({ status: 'paused' });
@@ -70,9 +88,18 @@ describe('Meta state onto a row (TW-TPL-026, 027, 030)', () => {
   });
 
   it('keeps the rejection code, or NONE, and clears the refusal text on approval', () => {
-    expect(statePatchFrom(remote({ status: 'REJECTED', rejectedReason: 'invalid_format' }), blank, NOW, localStatusFor))
-      .toMatchObject({ status: 'rejected', rejectionReasonCode: 'INVALID_FORMAT' });
-    expect(statePatchFrom(remote({ status: 'REJECTED' }), blank, NOW, localStatusFor).rejectionReasonCode).toBe('NONE');
+    expect(
+      statePatchFrom(
+        remote({ status: 'REJECTED', rejectedReason: 'invalid_format' }),
+        blank,
+        NOW,
+        localStatusFor,
+      ),
+    ).toMatchObject({ status: 'rejected', rejectionReasonCode: 'INVALID_FORMAT' });
+    expect(
+      statePatchFrom(remote({ status: 'REJECTED' }), blank, NOW, localStatusFor)
+        .rejectionReasonCode,
+    ).toBe('NONE');
     const ok = statePatchFrom(remote(), blank, NOW, localStatusFor);
     expect(columnsOfState(ok)).toMatchObject({ rejectionReason: null, rejectionReasonCode: null });
   });
@@ -86,8 +113,17 @@ describe('Meta state onto a row (TW-TPL-026, 027, 030)', () => {
 
 describe('the webhook and the sync agree on the local status', () => {
   const metaStates = [
-    'APPROVED', 'REJECTED', 'PENDING', 'IN_APPEAL', 'PENDING_DELETION', 'PAUSED', 'DISABLED',
-    'LIMIT_EXCEEDED', 'FLAGGED', 'DELETED', 'REINSTATED',
+    'APPROVED',
+    'REJECTED',
+    'PENDING',
+    'IN_APPEAL',
+    'PENDING_DELETION',
+    'PAUSED',
+    'DISABLED',
+    'LIMIT_EXCEEDED',
+    'FLAGGED',
+    'DELETED',
+    'REINSTATED',
   ];
 
   it.each(metaStates)('%s', (state) => {
@@ -126,13 +162,24 @@ describe('parsing Meta components (TW-TPL-028 rule 6)', () => {
         { type: 'URL', text: 'Track', url: 'https://x.test/{{1}}', example: ['https://x.test/1'] },
         { type: 'QUICK_REPLY', text: 'Stop' },
       ],
-      variableMap: { body: [{ num: 1, key: 'name', example: 'Ana' }, { num: 2, key: 'order', example: '42' }] },
+      variableMap: {
+        body: [
+          { num: 1, key: 'name', example: 'Ana' },
+          { num: 2, key: 'order', example: '42' },
+        ],
+      },
       parameterFormat: 'POSITIONAL',
     });
     const meta = buildMetaTemplate({
-      name: prepared.name, language: prepared.language, metaCategory: prepared.metaCategory,
-      templateType: prepared.templateType, header: prepared.header, body: prepared.body,
-      footer: prepared.footer, buttons: prepared.buttons, variableMap: prepared.variableMap,
+      name: prepared.name,
+      language: prepared.language,
+      metaCategory: prepared.metaCategory,
+      templateType: prepared.templateType,
+      header: prepared.header,
+      body: prepared.body,
+      footer: prepared.footer,
+      buttons: prepared.buttons,
+      variableMap: prepared.variableMap,
     });
     const parsed = parseRemoteComponents(meta.components, 'UTILITY');
     expect(parsed).toMatchObject({
@@ -157,7 +204,12 @@ describe('parsing Meta components (TW-TPL-028 rule 6)', () => {
       ],
       'MARKETING',
     );
-    expect(media).toMatchObject({ attachmentType: 'image', headerSampleUrl: 'https://cdn.test/a.png', templateType: 'media', header: null });
+    expect(media).toMatchObject({
+      attachmentType: 'image',
+      headerSampleUrl: 'https://cdn.test/a.png',
+      templateType: 'media',
+      header: null,
+    });
     const auth = parseRemoteComponents(
       [
         { type: 'BODY', add_security_recommendation: true },
@@ -170,13 +222,31 @@ describe('parsing Meta components (TW-TPL-028 rule 6)', () => {
   });
 
   it('keeps a shape it only displays under its own name', () => {
-    expect(parseRemoteComponents([{ type: 'BODY', text: 'x' }, { type: 'CAROUSEL', cards: [] }], 'MARKETING').templateType).toBe('carousel');
+    expect(
+      parseRemoteComponents(
+        [
+          { type: 'BODY', text: 'x' },
+          { type: 'CAROUSEL', cards: [] },
+        ],
+        'MARKETING',
+      ).templateType,
+    ).toBe('carousel');
   });
 
   it('a sync keeps the attribute an operator mapped, and takes the examples Meta holds', () => {
     const merged = mergeVariableMap(
-      { body: [{ num: 1, key: '1', example: 'Ana' }, { num: 2, key: '2' }] },
-      { body: [{ num: 1, key: 'first_name' }, { num: 2, key: '2' }] },
+      {
+        body: [
+          { num: 1, key: '1', example: 'Ana' },
+          { num: 2, key: '2' },
+        ],
+      },
+      {
+        body: [
+          { num: 1, key: 'first_name' },
+          { num: 2, key: '2' },
+        ],
+      },
     );
     expect(merged.body).toEqual([
       { num: 1, key: 'first_name', example: 'Ana' },
@@ -206,13 +276,16 @@ describe('preparing the authored form (TW-TPL-007 rules 5, 8, 10)', () => {
   it('stores positional text and keeps the attribute behind each slot', () => {
     const p = prepareTemplate(base);
     expect(p.body).toBe('Hi {{1}}, order {{2}} ready');
-    expect(p.variableMap.body).toEqual([{ num: 1, key: 'first_name' }, { num: 2, key: 'order_id' }]);
+    expect(p.variableMap.body).toEqual([
+      { num: 1, key: 'first_name' },
+      { num: 2, key: 'order_id' },
+    ]);
     expect(p.name).toBe('spring_promo');
     expect(p.category).toBe('marketing');
     expect(p.attachmentType).toBeNull();
   });
 
-  it('carries the author\'s examples by slot number', () => {
+  it("carries the author's examples by slot number", () => {
     const p = prepareTemplate({
       ...base,
       variableMap: { body: [{ num: 1, key: '1', example: 'Ana' }] },
@@ -234,11 +307,19 @@ describe('preparing the authored form (TW-TPL-007 rules 5, 8, 10)', () => {
       buttons: [{ type: 'URL', text: 'a', url: 'https://a.test' }],
       codeExpirationMinutes: 10,
     });
-    expect(p).toMatchObject({ templateType: 'auth', header: null, footer: null, buttons: [], codeExpirationMinutes: 10 });
+    expect(p).toMatchObject({
+      templateType: 'auth',
+      header: null,
+      footer: null,
+      buttons: [],
+      codeExpirationMinutes: 10,
+    });
   });
 
   it('only a media header keeps its handle', () => {
-    expect(prepareTemplate({ ...base, attachmentType: 'image', headerHandle: 'h1' }).headerHandle).toBe('h1');
+    expect(
+      prepareTemplate({ ...base, attachmentType: 'image', headerHandle: 'h1' }).headerHandle,
+    ).toBe('h1');
     expect(prepareTemplate({ ...base, headerHandle: 'h1' }).headerHandle).toBeNull();
   });
 });
@@ -247,7 +328,7 @@ describe('what Meta said, in words an operator can use (TW-TPL-025 rule 9)', () 
   const err = (code: number, message: string, status = 400, subcode: number | null = null) =>
     WabaApiError.fromResponse(status, { error: { message, code, error_subcode: subcode } });
 
-  it('explains an expired token and keeps Meta\'s words and code', () => {
+  it("explains an expired token and keeps Meta's words and code", () => {
     const f = describeTemplateFailure(err(190, 'Error validating access token'));
     expect(f.message).toContain('Reconnect this WhatsApp number');
     expect(f.message).toContain('Error validating access token');
@@ -256,29 +337,61 @@ describe('what Meta said, in words an operator can use (TW-TPL-025 rule 9)', () 
   });
 
   it('knows the name clash and a throttle', () => {
-    expect(describeTemplateFailure(err(132007, 'dup')).message).toContain('already exists for a different language');
+    expect(describeTemplateFailure(err(132007, 'dup')).message).toContain(
+      'already exists for a different language',
+    );
     expect(describeTemplateFailure(err(4, 'too many calls', 400)).retryable).toBe(true);
     expect(describeTemplateFailure(err(1, 'boom', 503)).retryable).toBe(true);
   });
 
   it('survives a plain Error', () => {
-    expect(describeTemplateFailure(new Error('boom'))).toEqual({ message: 'boom', retryable: false });
+    expect(describeTemplateFailure(new Error('boom'))).toEqual({
+      message: 'boom',
+      retryable: false,
+    });
   });
 });
 
 describe('row to API shape', () => {
   const row = (over: Partial<TemplateRow> = {}): TemplateRow => ({
-    id: 7, uuid: '5f1f0a3e-1111-4222-8333-444455556666', userId: 1, templateName: 'promo', language: 'en_US',
-    header: null, templateBody: 'Hello {{1}}', footer: null, codeExpirationMinutes: null, buttons: null,
-    variableMap: { body: [{ num: 1, key: 'name', example: 'Ana' }] }, category: 'utility', metaCategory: 'UTILITY',
-    templateType: 'standard', attachmentType: null, attachmentFile: null, headerSampleUrl: null,
-    parameterFormat: 'POSITIONAL', status: 'pending', metaStatus: null, metaTemplateId: null, qualityScore: null,
-    rejectionReason: null, rejectionReasonCode: null, approvedAt: null, submittedAt: null, lastSyncedAt: null,
-    pausedUntil: null, providerConfigId: 3, connectionUuid: null, rowVersion: 2, createdAt: NOW,
-    createdAtIso: NOW.toISOString(), updatedAt: NOW, ...over,
+    id: 7,
+    uuid: '5f1f0a3e-1111-4222-8333-444455556666',
+    userId: 1,
+    templateName: 'promo',
+    language: 'en_US',
+    header: null,
+    templateBody: 'Hello {{1}}',
+    footer: null,
+    codeExpirationMinutes: null,
+    buttons: null,
+    variableMap: { body: [{ num: 1, key: 'name', example: 'Ana' }] },
+    category: 'utility',
+    metaCategory: 'UTILITY',
+    templateType: 'standard',
+    attachmentType: null,
+    attachmentFile: null,
+    headerSampleUrl: null,
+    parameterFormat: 'POSITIONAL',
+    status: 'pending',
+    metaStatus: null,
+    metaTemplateId: null,
+    qualityScore: null,
+    rejectionReason: null,
+    rejectionReasonCode: null,
+    approvedAt: null,
+    submittedAt: null,
+    lastSyncedAt: null,
+    pausedUntil: null,
+    providerConfigId: 3,
+    connectionUuid: null,
+    rowVersion: 2,
+    createdAt: NOW,
+    createdAtIso: NOW.toISOString(),
+    updatedAt: NOW,
+    ...over,
   });
 
-  it('reads Threadwise\'s public as approved and an unknown status as pending', () => {
+  it("reads Reference's public as approved and an unknown status as pending", () => {
     expect(statusOf({ status: 'public' })).toBe('approved');
     expect(statusOf({ status: 'weird' })).toBe('pending');
   });
@@ -292,9 +405,14 @@ describe('row to API shape', () => {
     expect(d.attachmentType).toBe('none');
   });
 
-  it('shows Meta\'s rejection code unless it says nothing', () => {
-    expect(toDetail(row({ status: 'rejected', rejectionReasonCode: 'INVALID_FORMAT' })).rejectionReason).toBe('INVALID_FORMAT');
+  it("shows Meta's rejection code unless it says nothing", () => {
+    expect(
+      toDetail(row({ status: 'rejected', rejectionReasonCode: 'INVALID_FORMAT' })).rejectionReason,
+    ).toBe('INVALID_FORMAT');
     expect(toDetail(row({ rejectionReasonCode: 'NONE' })).rejectionReason).toBeNull();
-    expect(toDetail(row({ rejectionReason: 'Meta says no', rejectionReasonCode: 'NONE' })).rejectionReason).toBe('Meta says no');
+    expect(
+      toDetail(row({ rejectionReason: 'Meta says no', rejectionReasonCode: 'NONE' }))
+        .rejectionReason,
+    ).toBe('Meta says no');
   });
 });

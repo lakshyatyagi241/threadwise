@@ -300,7 +300,13 @@ export class TemplateSyncService {
 
       const state = statePatchFrom(
         remote,
-        { status: 'pending', metaCategory: null, qualityScore: null, approvedAt: null, pausedUntil: null },
+        {
+          status: 'pending',
+          metaCategory: null,
+          qualityScore: null,
+          approvedAt: null,
+          pausedUntil: null,
+        },
         now,
         localStatusFor,
       );
@@ -334,13 +340,18 @@ export class TemplateSyncService {
       });
       // Its Meta id belongs to a row we cannot see (the same WABA connected in another workspace): not ours to take.
       if (row) created++;
-      else this.logger.warn({ orgId, metaTemplateId: remote.id }, '[TPL] sync skipped a template owned elsewhere');
+      else
+        this.logger.warn(
+          { orgId, metaTemplateId: remote.id },
+          '[TPL] sync skipped a template owned elsewhere',
+        );
     }
 
     let missing = 0;
     if (complete) {
       for (const row of local) {
-        if (!row.metaTemplateId || seen.has(row.metaTemplateId) || row.status === 'deleted') continue;
+        if (!row.metaTemplateId || seen.has(row.metaTemplateId) || row.status === 'deleted')
+          continue;
         await this.repo.update(tx, orgId, row.id, {
           metaStatus: 'DELETED',
           status: 'deleted',
