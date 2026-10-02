@@ -92,11 +92,11 @@ Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-instagram.md` 
 
 Inventory written 2026-10-03: `docs/wadesk-port/inventory/shopify-woocommerce.md` (WD-ECOM-001 to 038). The data model is in `20261001101800_ecom_wadesk_schema.sql`; `wa_products` and `wa_orders` already carry the store ids. Build order, one commit and push per step:
 
-| Step | What                                                                                                              | Features                                    |
-| ---- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| E1   | Permissions, platform settings, Shopify OAuth, WooCommerce connect and test, webhook register and teardown (DONE) | 001, 002, 003, 005, 006, 007, 025, 026, 013 |
-| E2   | Import into the mirror (both), keep it in step, sync now (DONE)                                                   | 011, 012, 013                               |
-| E3   | Webhook receivers (both), automations config, event message, logs                                                 | 008, 009, 010, 027, 028, 029, 033           |
-| E4   | Offers, win-back, COD and prepaid, delivered, stock, cart recovery, GDPR, uninstall, concierge, inbound service   | 014 to 022, 030, 031, 034                   |
-| E5   | Web: Shopify and WooCommerce store screens                                                                        | 004, 023, 024                               |
-| E6   | Plugin download, invoices, flow links and resume, embedded session (BLOCKED: decisions and other domains)         | 032, 035, 036, 037, 038                     |
+| Step | What                                                                                                                                               | Features                                    |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| E1   | Permissions, platform settings, Shopify OAuth, WooCommerce connect and test, webhook register and teardown (DONE)                                  | 001, 002, 003, 005, 006, 007, 025, 026, 013 |
+| E2   | Import into the mirror (both), keep it in step, sync now (DONE)                                                                                    | 011, 012, 013                               |
+| E3   | Webhook receivers (both), automations config, event message, logs (E3a receivers, event message, logs, mirror upkeep DONE; E3b config API pending) | 008, 009, 010, 027, 028, 029, 033           |
+| E4   | Offers, win-back, COD and prepaid, delivered, stock, cart recovery, GDPR, uninstall, concierge, inbound service                                    | 014 to 022, 030, 031, 034                   |
+| E5   | Web: Shopify and WooCommerce store screens                                                                                                         | 004, 023, 024                               |
+| E6   | Plugin download, invoices, flow links and resume, embedded session (BLOCKED: decisions and other domains)                                          | 032, 035, 036, 037, 038                     |

@@ -22,6 +22,9 @@ session and the permission shown; the platform routes need an operator; the call
 | ----------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /shopify/oauth/callback` | the `hmac` over the query, the sealed `state` | Where Shopify sends the browser back. 303 to `{WEB_APP_URL}/shopify?shopify=connected\|error&message=...`. Refused with a message: a bad signature, an expired or unknown state, another store, a refused code. |
 
+| `POST /shopify/webhook/:secret` | `X-Shopify-Hmac-SHA256` (base64 HMAC of the raw body, platform client secret) | 200 `ok`; 401 `bad hmac`; 404 `not found`; 503 `try again` (not queued, retry). Topic in `X-Shopify-Topic`, delivery in `X-Shopify-Webhook-Id`. |
+| `POST /woocommerce/webhook/:secret` | `X-WC-Webhook-Signature` (the store's webhook secret) | As Shopify's with `bad signature`. Topic `X-WC-Webhook-Topic`, delivery `X-WC-Webhook-Delivery-ID`. A non-JSON ping is acknowledged and not logged. |
+
 Give Shopify `{APP_URL}/v2/shopify/oauth/callback` as the app's redirect address (the platform setting defaults to it).
 
 ## WooCommerce (WD-ECOM-025, 026, 013)

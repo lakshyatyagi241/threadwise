@@ -49,16 +49,16 @@ or WooCommerce store (that needs a Shopify partner app and a store, which this w
 11. **An empty phone no longer hides a filled one.** WooCommerce sends `""` for a blank field; WaDesk fell through only on null, so an empty billing phone hid the shipping phone. The first filled value is used, for phone and country.
 12. **Two products with one slug both import** (the second gets its id on the end); a customer is found by number as digits or with a `+`; the customer group id is kept on the store so a renamed group is still the one used.
 
-13. **Every page is read** (up to ten pages: 2,500 products, orders or customers on Shopify, 1,000 on WooCommerce); WaDesk read only the first 250 or 100 and dropped the rest without saying so. A cut-short read is recorded (`incomplete` in the sync stats).
-14. **The import runs in a worker**, and "Sync now" answers at once with the store's totals and `importQueued`; WaDesk imported inside the request and returned the counts. The connect lands on the store screen without waiting.
-15. **A Shopify product with no SKU gets `SHOPIFY-<id>`**; WaDesk saved an empty SKU, which anything that finds a product by SKU (reorder, the flow commerce node) cannot use. Availability is set from stock too (WaDesk left every product "in stock").
-16. **An empty phone no longer hides a filled one.** WooCommerce sends `""` for a blank field; WaDesk fell through only on null, so an empty billing phone hid the shipping phone. The first filled value is used, for phone and country.
-17. **Two products with one slug both import** (the second gets its id on the end); a customer is found by number as digits or with a `+`; the customer group id is kept on the store so a renamed group is still the one used.
+13. **A webhook is answered at once and worked in the worker.** The address is `POST /v2/shopify/webhook/{secret}` or `/v2/woocommerce/webhook/{secret}`; the secret only finds the store (through a SECURITY DEFINER lookup, no tenant exists yet) and the signature proves the sender: `bad hmac` / `bad signature` (401) and `not found` (404) as WaDesk. WaDesk did the work inside the request.
+14. **A delivery id is remembered for a day**, so a store's retry of a delivery already taken is dropped (WaDesk processed every retry again). A delivery that cannot be queued answers 503 and forgets the id, so the store retries.
+15. **A WooCommerce `order.<status>` automation fires once per order and status**; WaDesk messaged on every update that carried the status. A delayed automation is queued with its delay instead of sleeping in the request.
+16. **A failed message says why on the log row** (no Cloud API number connected, template not approved, no phone), and a failing step never stops the mirror upkeep that follows it.
 
 ## Shims
 
 - `StoreMirror` (`_shims/sql-store-mirror.ts`): writes `wa_products`, `wa_orders`, `contacts` and the customer group directly until the catalog, checkout and contacts domains export their writers (a contact is created without a quota check or a `contact_identities` row, as the Facebook and Telegram channels do).
-- `StoreMirror` (`_shims/sql-store-mirror.ts`): writes `wa_products`, `wa_orders`, `contacts` and the customer group directly until the catalog, checkout and contacts domains export their writers (a contact is created without a quota check or a `contact_identities` row, as the Facebook and Telegram channels do).
+- `EcomTemplates` (`_shims/sql-ecom-templates.ts`): reads `wa_templates` (sendable: not submitted to Meta, or approved) until the templates domain exports its lookup.
+- `CommerceSender` (`_shims/waba-commerce-sender.ts`): sends through the primary connected Cloud API number via the broadcasts engine adapter; Baileys and Twilio numbers have no adapter, so such an organization gets a failed log with that reason.
 - `EcomPlanGate` (`_shims/open-gates.ts`): `integration_shopify` and `integration_woocommerce` are not in the plan catalogue; every check passes.
 
 ## Not verified

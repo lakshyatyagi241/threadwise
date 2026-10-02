@@ -38,6 +38,8 @@ export const QUEUES = {
   IG_PULL: 'ig-pull',
   /** One job per connected store: imports its products, orders and customers into the mirror (WD-ECOM-011). */
   ECOM_IMPORT: 'ecom-import',
+  /** One job per verified store webhook: the event message, the order-status automation and the mirror upkeep (WD-ECOM-008, 010, 027). */
+  ECOM_WEBHOOK: 'ecom-webhook',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
 } as const;
