@@ -1,4 +1,7 @@
 import {
+  priceFromMargin,
+  type MarginSource,
+  type PricingMode,
   WALLET_CATEGORIES,
   normalizeWalletCategory,
   normalizeWalletCountry,
@@ -27,6 +30,9 @@ export interface Priced {
   metaCostMicros: number | null;
   /** Which row set the price (`IN|marketing`, `|`), or `flat` when the flat setting applied. */
   matched: string;
+  /** What set the price: Meta cost x margin, or a typed/flat price. */
+  basis: 'margin' | 'fixed';
+  margin: { marginBps: number; source: MarginSource; matched: string } | null;
 }
 
 /**
@@ -64,23 +70,136 @@ export function priceMessage(
   }
   const cost = chain.find((r) => r.metaCostMicros !== null)?.metaCostMicros ?? null;
   if (!opts.perCountryEnabled || chain.length === 0) {
-    return { priceMinor: Math.max(0, opts.flatPriceMinor), metaCostMicros: cost, matched: 'flat' };
+    return {
+      priceMinor: Math.max(0, opts.flatPriceMinor),
+      metaCostMicros: cost,
+      matched: 'flat',
+      basis: 'fixed',
+      margin: null,
+    };
   }
   const first = chain[0]!;
   return {
     priceMinor: Math.max(0, first.priceMinor),
     metaCostMicros: cost,
     matched: `${first.countryCode}|${first.category}`,
+    basis: 'fixed',
+    margin: null,
+  };
+}
+
+// --- margin pricing: Meta cost + our margin ---------------------------------------------------------------------------------
+
+export interface MarginRule {
+  countryCode: string;
+  category: string;
+  marginBps: number;
+}
+
+export interface MarginLayers {
+  /** An operator's override for this one workspace. */
+  workspace: readonly MarginRule[];
+  /** The margin set for the workspace's plan. */
+  plan: readonly MarginRule[];
+  /** The platform default (plan ''), inherited by every plan. */
+  platform: readonly MarginRule[];
+}
+
+/** The four keys to try, most specific first: country+category, country, category, default. */
+export function lookupKeys(
+  country: string | null | undefined,
+  category: string | null | undefined,
+): Array<[string, string]> {
+  const c = normalizeWalletCountry(country);
+  const k = normalizeWalletCategory(category);
+  const seen = new Set<string>();
+  const out: Array<[string, string]> = [];
+  for (const [cc, kk] of [
+    [c, k],
+    [c, ''],
+    ['', k],
+    ['', ''],
+  ] as Array<[string, string]>) {
+    const key = `${cc}|${kk}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push([cc, kk]);
+    }
+  }
+  return out;
+}
+
+/**
+ * The margin that applies: the workspace's override layer first, then its plan's, then the platform default; inside a layer the most
+ * specific row. A layer is consulted whole before the next one, so a blanket margin on a workspace means "everything on this
+ * workspace" (an explicit override), not "only where nothing more specific exists further down".
+ */
+export function resolveMargin(
+  layers: MarginLayers,
+  country: string | null | undefined,
+  category: string | null | undefined,
+): { marginBps: number; source: MarginSource; matched: string } | null {
+  const order: Array<[MarginSource, readonly MarginRule[]]> = [
+    ['workspace', layers.workspace],
+    ['plan', layers.plan],
+    ['platform', layers.platform],
+  ];
+  for (const [source, rules] of order) {
+    for (const [cc, kk] of lookupKeys(country, category)) {
+      const hit = rules.find((r) => r.countryCode === cc && r.category === kk);
+      if (hit) return { marginBps: hit.marginBps, source, matched: `${cc}|${kk}` };
+    }
+  }
+  return null;
+}
+
+/**
+ * The price of a message. In `margin` mode, when Meta's cost is known and a margin applies, it is cost x (1 + margin); otherwise
+ * (mode `fixed`, no cost known for this country and category, or no margin anywhere) the typed price or the flat price answers, so
+ * a country Meta has not been synced for keeps charging what it charged.
+ */
+export function priceMessageWithMargin(
+  rows: readonly RateCardRow[],
+  layers: MarginLayers,
+  opts: {
+    country: string | null | undefined;
+    category: string | null | undefined;
+    perCountryEnabled: boolean;
+    flatPriceMinor: number;
+    pricingMode: PricingMode;
+  },
+): Priced {
+  const fixed = priceMessage(rows, opts);
+  if (opts.pricingMode !== 'margin' || fixed.metaCostMicros === null) return fixed;
+  const margin = resolveMargin(layers, opts.country, opts.category);
+  if (!margin) return fixed;
+  return {
+    priceMinor: priceFromMargin(fixed.metaCostMicros, margin.marginBps),
+    metaCostMicros: fixed.metaCostMicros,
+    matched: fixed.matched,
+    basis: 'margin',
+    margin,
   };
 }
 
 /** The panel of base prices (WD-WALLET-024): the any-country price of each category, or the selected country's. */
 export function pricingTable(
   rows: readonly RateCardRow[],
-  opts: { country: string | null; perCountryEnabled: boolean; flatPriceMinor: number },
+  opts: {
+    country: string | null;
+    perCountryEnabled: boolean;
+    flatPriceMinor: number;
+    pricingMode?: PricingMode;
+    layers?: MarginLayers;
+  },
 ): Array<{ category: WalletCategory; priceMinor: number; free: boolean }> {
+  const layers = opts.layers ?? { workspace: [], plan: [], platform: [] };
   return WALLET_CATEGORIES.map((category) => {
-    const { priceMinor } = priceMessage(rows, { ...opts, category });
+    const { priceMinor } = priceMessageWithMargin(rows, layers, {
+      ...opts,
+      category,
+      pricingMode: opts.pricingMode ?? 'fixed',
+    });
     return { category, priceMinor, free: priceMinor <= 0 };
   });
 }

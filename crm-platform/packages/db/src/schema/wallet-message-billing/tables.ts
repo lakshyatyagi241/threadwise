@@ -346,3 +346,65 @@ export const walletPlatformLog = pgTable(
 );
 
 export type WalletPlatformLogRow = typeof walletPlatformLog.$inferSelect;
+
+export const planMessageMargins = pgTable(
+  'plan_message_margins',
+  {
+    id: bigint('id', { mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().unique().defaultRandom(),
+    planSlug: text('plan_slug').notNull().default(''),
+    countryCode: text('country_code').notNull().default(''),
+    category: text('category').notNull().default(''),
+    marginBps: integer('margin_bps').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    unique('uq_plan_message_margins_key').on(t.planSlug, t.countryCode, t.category),
+    check('chk_plan_message_margins_country', sql`${t.countryCode} ~ '^([A-Z]{2})?$'`),
+    check(
+      'chk_plan_message_margins_category',
+      sql`${t.category} in ('', 'marketing', 'utility', 'authentication', 'service')`,
+    ),
+    check('chk_plan_message_margins_bps', sql`${t.marginBps} between -10000 and 100000`),
+  ],
+);
+
+export type PlanMessageMarginsRow = typeof planMessageMargins.$inferSelect;
+
+export const workspaceMessageMargins = pgTable(
+  'workspace_message_margins',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    countryCode: text('country_code').notNull().default(''),
+    category: text('category').notNull().default(''),
+    marginBps: integer('margin_bps').notNull(),
+    note: text('note').notNull(),
+    setBy: text('set_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_workspace_message_margins_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_workspace_message_margins_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_workspace_message_margins_key').on(t.orgId, t.countryCode, t.category),
+    check('chk_workspace_message_margins_country', sql`${t.countryCode} ~ '^([A-Z]{2})?$'`),
+    check(
+      'chk_workspace_message_margins_category',
+      sql`${t.category} in ('', 'marketing', 'utility', 'authentication', 'service')`,
+    ),
+    check('chk_workspace_message_margins_bps', sql`${t.marginBps} between -10000 and 100000`),
+    check('chk_workspace_message_margins_note', sql`length(btrim(${t.note})) >= 5`),
+  ],
+);
+
+export type WorkspaceMessageMarginsRow = typeof workspaceMessageMargins.$inferSelect;

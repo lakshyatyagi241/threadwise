@@ -375,6 +375,8 @@ export class WalletQueryService {
           country: country ?? null,
           perCountryEnabled: s.perCountryEnabled,
           flatPriceMinor: s.flatPriceMinor,
+          pricingMode: s.pricingMode,
+          layers: s.pricingMode === 'margin' ? await this.rates.layersFor(tx, orgId) : undefined,
         }),
         country: country ?? null,
       };

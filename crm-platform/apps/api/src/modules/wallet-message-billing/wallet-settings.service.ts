@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type {
+  PricingMode,
   UpdateSwitchesInput,
   UpdateWalletSettingsInput,
   WalletSettings,
@@ -16,6 +17,7 @@ export const SETTING_KEYS = {
   economics: 'wallet.economics',
   perCountry: 'wallet.per_country_enabled',
   payPerMessage: 'billing.pay_per_message',
+  pricingMode: 'wallet.pricing_mode',
 } as const;
 
 interface Economics {
@@ -41,6 +43,7 @@ export interface EffectiveSettings {
   launchCoveragePercent: number;
   perCountryEnabled: boolean;
   payPerMessage: boolean;
+  pricingMode: PricingMode;
 }
 
 /**
@@ -62,10 +65,11 @@ export class WalletSettingsService {
   }
 
   async effective(): Promise<EffectiveSettings> {
-    const [econ, perCountry, pay, currency] = await Promise.all([
+    const [econ, perCountry, pay, mode, currency] = await Promise.all([
       this.platform.get<Economics>(SETTING_KEYS.economics),
       this.platform.get<boolean>(SETTING_KEYS.perCountry),
       this.platform.get<boolean>(SETTING_KEYS.payPerMessage),
+      this.platform.get<string>(SETTING_KEYS.pricingMode),
       this.currency(),
     ]);
     return {
@@ -85,6 +89,8 @@ export class WalletSettingsService {
       ),
       perCountryEnabled: perCountry === true,
       payPerMessage: pay === true,
+      // Upgrades change nothing until an operator turns margin pricing on.
+      pricingMode: mode === 'margin' ? 'margin' : 'fixed',
     };
   }
 
@@ -92,7 +98,7 @@ export class WalletSettingsService {
     const s = await this.effective();
     const updated = await this.platform.inTx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT max(updated_at) AS at FROM platform_settings WHERE key IN (${SETTING_KEYS.economics}, ${SETTING_KEYS.perCountry}, ${SETTING_KEYS.payPerMessage})`);
+        SELECT max(updated_at) AS at FROM platform_settings WHERE key IN (${SETTING_KEYS.economics}, ${SETTING_KEYS.perCountry}, ${SETTING_KEYS.payPerMessage}, ${SETTING_KEYS.pricingMode})`);
       return (res.rows[0] as { at: Date | null } | undefined)?.at ?? null;
     });
     return { ...s, metaRatesLive, updatedAt: updated ? new Date(updated).toISOString() : null };
@@ -138,7 +144,7 @@ export class WalletSettingsService {
   ): Promise<void> {
     const before = await this.effective();
     await this.platform.inTx(async (tx) => {
-      const changed: Record<string, { old: boolean; new: boolean }> = {};
+      const changed: Record<string, { old: boolean | string; new: boolean | string }> = {};
       if (input.perCountryEnabled !== undefined) {
         await this.put(tx, SETTING_KEYS.perCountry, input.perCountryEnabled, operator.id);
         changed.perCountryEnabled = { old: before.perCountryEnabled, new: input.perCountryEnabled };
@@ -146,6 +152,10 @@ export class WalletSettingsService {
       if (input.payPerMessage !== undefined) {
         await this.put(tx, SETTING_KEYS.payPerMessage, input.payPerMessage, operator.id);
         changed.payPerMessage = { old: before.payPerMessage, new: input.payPerMessage };
+      }
+      if (input.pricingMode !== undefined) {
+        await this.put(tx, SETTING_KEYS.pricingMode, input.pricingMode, operator.id);
+        changed.pricingMode = { old: before.pricingMode, new: input.pricingMode };
       }
       await this.log.platform(tx, {
         event: 'platform.switches.changed',
