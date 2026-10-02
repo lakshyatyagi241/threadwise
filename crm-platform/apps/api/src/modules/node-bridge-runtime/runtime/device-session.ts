@@ -1,6 +1,19 @@
 import { decideClose, isMismatch, QR_MIN_GAP_MS, QR_STALL_MS, shortStatus } from './close-policy';
 import type { RuntimeStatus } from './device-status';
 import type {
+  GroupSnapshot,
+  ReceiptUpdate,
+} from '../../../infra/providers/node-bridge-runtime/inbound.port';
+import type { Normalized } from '../../../infra/providers/node-bridge-runtime/inbound-normalizer';
+import type {
+  MessageAction,
+  SendCommand,
+  SendContext,
+  SendOutcome,
+} from '../../../infra/providers/node-bridge-runtime/outbound.port';
+import type {
+  GroupAction,
+  GroupResult,
   ProxySettings,
   SocketEvent,
   WaSocket,
@@ -40,6 +53,17 @@ export interface SessionHost {
   proxyFor(): Promise<ProxySettings | null>;
   /** This session has ended for good (logout, failed pairing, mismatch): the runtime drops it and releases the device. */
   ended(): void;
+  /** What the socket delivered (WD-NODE-016, 018, 020, 021). The runtime hands each to whoever consumes it. */
+  inbound?(message: Normalized): Promise<void>;
+  receipt?(receipt: ReceiptUpdate): Promise<void>;
+  groups?(groups: GroupSnapshot[]): Promise<void>;
+}
+
+/** A send was asked of a device that is not connected (WaDesk: HTTP 503 `Sender device is not connected.`). */
+export class DeviceNotReadyError extends Error {
+  constructor() {
+    super('Sender device is not connected.');
+  }
 }
 
 export interface SessionIds {
@@ -76,6 +100,8 @@ export class DeviceSession {
   private nextStatus: { status: RuntimeStatus; progress: number } | null = null;
   /** Events are applied one after another, so a slow report can never land after a later one. */
   private events: Promise<void> = Promise.resolve();
+  /** How long a send waits for the socket to come back (the post-pairing restart race), as WaDesk's 8 s. */
+  readyWaitMs = 8_000;
 
   constructor(
     private readonly ids: SessionIds,
@@ -150,6 +176,30 @@ export class DeviceSession {
     return code;
   }
 
+  /** Sends one message through this device's socket. Waits up to `readyWaitMs` for it to be connected, then refuses. */
+  async send(command: SendCommand, context: SendContext): Promise<SendOutcome> {
+    return (await this.readySocket()).send(command, context);
+  }
+
+  async act(action: MessageAction): Promise<void> {
+    await (await this.readySocket()).act(action);
+  }
+
+  async groups(action: GroupAction): Promise<GroupResult> {
+    return (await this.readySocket()).groups(action);
+  }
+
+  private async readySocket(): Promise<WaSocket> {
+    const until = this.clock.now() + this.readyWaitMs;
+    for (;;) {
+      if (this.connected && this.sock) return this.sock;
+      if (this.clock.now() >= until || !this.shouldStayConnected || this.shuttingDown) {
+        throw new DeviceNotReadyError();
+      }
+      await new Promise<void>((r) => setTimeout(r, 250));
+    }
+  }
+
   /** The user unlinked the device: stop for good, unlink on the phone, forget the session. */
   async logout(): Promise<void> {
     this.shouldStayConnected = false;
@@ -208,6 +258,12 @@ export class DeviceSession {
         return this.onOpen(e.linkedId);
       case 'close':
         return this.onClose(e.code, e.message);
+      case 'message':
+        return this.host.inbound?.(e.normalized);
+      case 'receipt':
+        return this.host.receipt?.(e.receipt);
+      case 'groups':
+        return this.host.groups?.(e.groups);
     }
   }
 

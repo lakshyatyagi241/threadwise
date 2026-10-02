@@ -81,6 +81,26 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
   ran from the heartbeat belong to their own domains as BullMQ jobs.
 - **Reconnect never gives up** and events are applied in order, so a slow status write cannot land after a later one.
 
+## WD-NODE-016 to 025, 027 sending, receiving, receipts (deliberate deviations)
+
+- **No HTTP between the bridge and the inbox.** WaDesk posted every message to `api/inbound-message` and every receipt to a status endpoint; here the worker hands them to
+  registered consumers in-process (`InboundRouter`, `ReceiptRouter`). A message with no consumer registered is reported as unclaimed, not silently dropped.
+- **Dedup by message id per device** (7 days, in Redis) replaces the database's unique key, so a replay after a reconnect and the phone's echo of a mirrored message collapse to one.
+- **A LID-only group speaker keeps the LID** instead of the message being rejected for a missing phone (WaDesk lost those messages).
+- **Receipts are matched by the provider message id in each consumer's own rows**, not by what Node's memory held, so a restart cannot send an in-flight broadcast's receipts to the wrong place.
+- **Receipt timestamps** are when the runtime heard of it (as WaDesk); WhatsApp's own times are not used.
+- **Twilio media and locations work** (WaDesk's media endpoints had no Twilio branch and answered 404 for a Twilio workspace).
+- **The pairing of engine and sender is the row's**, not the request's `provider` field, so a send can no longer fall through to the wrong engine when credentials are missing (WaDesk fell through to the unofficial engine silently).
+- **Pin keeps 24 hours.** WaDesk accepted a 24 h / 7 d / 30 d choice that never had an effect; the library call has no duration, so the choice is not offered here either.
+- **A slow send is not reported failed early:** the send path waits for the socket's own 120 s query timeout (WaDesk's callers gave up after 20 to 90 s and invited duplicates).
+- **Media downloads go through SafeFetch** (see the media section), including its refusal of local paths.
+
+## Not built (sending)
+
+- Branding footer (SET and plan gate), interactive buttons and carousels (the official library has none; they need the fork or the template pipeline), Cloud API media and media with buttons,
+  inline `attachment_base64`, product catalog sends (CAT), templates by `ContentSid`.
+- Inbound media bytes: no object storage client exists yet (F5), so the message carries its type, name and size only.
+
 ## Not verified (device runtime)
 
 - **Live WhatsApp.** The Baileys adapter is checked by the compiler against the library's types and by nothing else: no real QR, pairing code, reconnect or close code was

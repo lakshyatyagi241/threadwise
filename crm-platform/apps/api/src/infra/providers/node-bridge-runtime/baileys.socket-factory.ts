@@ -7,17 +7,59 @@ import makeWASocket, {
   initAuthCreds,
   makeCacheableSignalKeyStore,
   proto,
+  type AnyMessageContent,
   type AuthenticationCreds,
+  type GroupMetadata,
   type SignalDataTypeMap,
   type SignalKeyStore,
   type WAVersion,
 } from 'baileys';
 import pino from 'pino';
-import type { SocketEvent, SocketTarget, WaSocket, WaSocketFactory } from './socket.port';
+import { normalizeMessage, type RawMessage } from './inbound-normalizer';
+import type { GroupSnapshot } from './inbound.port';
+import {
+  UnsupportedSendError,
+  type MessageAction,
+  type SendCommand,
+  type SendContext,
+  type SendOutcome,
+} from './outbound.port';
+import { SafeFetch } from './safe-fetch';
+import type {
+  GroupAction,
+  GroupResult,
+  SocketEvent,
+  SocketTarget,
+  WaSocket,
+  WaSocketFactory,
+} from './socket.port';
 import { DeviceAuthStore } from './device-auth-store';
 import { buildProxyAgent, probeProxy } from './proxy';
 
 const VERSION_TTL_MS = 60 * 60 * 1000;
+
+/** A chat id for a number, or the id as given when it already is one. Digits only: WaDesk's last-12-digits cut misrouted some countries. */
+const jidOf = (to: string): string =>
+  to.includes('@') ? to : `${to.replace(/\D+/g, '')}@s.whatsapp.net`;
+const groupJid = (g: string): string =>
+  g.endsWith('@g.us') ? g : `${g.replace(/[^\d-]/g, '')}@g.us`;
+
+const snapshot = (g: GroupMetadata): GroupSnapshot => ({
+  jid: g.id,
+  subject: g.subject ?? null,
+  description: g.desc ?? null,
+  size: g.size ?? g.participants?.length ?? null,
+});
+
+/** Runs `fn` once after calls stop coming for `ms`. */
+function debounce(ms: number, fn: () => void): () => void {
+  let t: NodeJS.Timeout | null = null;
+  return () => {
+    if (t) clearTimeout(t);
+    t = setTimeout(fn, ms);
+    t.unref?.();
+  };
+}
 
 /** What the runtime learns about a device's proxy each time it connects (WD-NODE-013 rule 2). */
 export interface ProxyResultSink {
@@ -45,7 +87,10 @@ export class BaileysSocketFactory implements WaSocketFactory {
   /** Set by the runtime so a proxy result reaches the device row. */
   proxyResults: ProxyResultSink | null = null;
 
-  constructor(private readonly store: DeviceAuthStore) {}
+  constructor(
+    private readonly store: DeviceAuthStore,
+    private readonly fetcher: SafeFetch,
+  ) {}
 
   async create(target: SocketTarget): Promise<WaSocket> {
     const agent = target.proxy ? buildProxyAgent(target.proxy) : undefined;
@@ -112,6 +157,36 @@ export class BaileysSocketFactory implements WaSocketFactory {
         emit({ type: 'close', code: err?.output?.statusCode, message: err?.message });
       }
     });
+    sock.ev.on('messages.upsert', ({ messages, type }) => {
+      for (const m of messages) {
+        try {
+          const normalized = normalizeMessage(m as unknown as RawMessage, type, new Date());
+          if (normalized) emit({ type: 'message', normalized });
+        } catch (err) {
+          // One bad message must not drop the rest of the batch (WD-NODE-016 rule 10).
+          this.logger.warn({ err: String(err) }, '[NODE] a message could not be read');
+        }
+      }
+    });
+    sock.ev.on('messages.update', (updates) => {
+      for (const u of updates) {
+        const ack = u.update?.status;
+        if (typeof ack === 'number' && u.key.id && u.key.fromMe) {
+          emit({
+            type: 'receipt',
+            receipt: { providerMessageId: u.key.id, chatJid: u.key.remoteJid ?? '', ack },
+          });
+        }
+      }
+    });
+    const syncGroups = debounce(5_000, () => {
+      void sock
+        .groupFetchAllParticipating()
+        .then((all) => emit({ type: 'groups', groups: Object.values(all).map(snapshot) }))
+        .catch(() => undefined);
+    });
+    sock.ev.on('groups.upsert', syncGroups);
+    sock.ev.on('group-participants.update', syncGroups);
     sock.ev.on('creds.update', () => {
       // Never debounced: a lost credentials write is a lost device.
       void saveCreds()
@@ -121,7 +196,87 @@ export class BaileysSocketFactory implements WaSocketFactory {
         );
     });
 
+    // One send at a time per socket: two concurrent sends to a new recipient race WhatsApp's key exchange (WD-NODE-029 rule 3).
+    let chain: Promise<unknown> = Promise.resolve();
+    const serialize = <T>(fn: () => Promise<T>): Promise<T> => {
+      const run = chain.then(fn, fn);
+      chain = run.catch(() => undefined);
+      return run;
+    };
+    const send = (command: SendCommand, _ctx: SendContext): Promise<SendOutcome> =>
+      serialize(async () => {
+        const jid = command.type === 'group_text' ? groupJid(command.groupJid) : jidOf(command.to);
+        const sent = await sock.sendMessage(jid, await this.content(command));
+        return { providerMessageId: sent?.key?.id ?? null };
+      });
+    const act = (a: MessageAction): Promise<void> =>
+      serialize(async () => {
+        const jid = jidOf(a.to);
+        const key = { remoteJid: jid, id: a.messageId, fromMe: 'fromMe' in a ? a.fromMe : true };
+        switch (a.type) {
+          case 'react':
+            await sock.sendMessage(jid, { react: { text: a.emoji, key } });
+            return;
+          case 'pin':
+            await sock.sendMessage(jid, { pin: key, type: a.pin ? 1 : 2, time: 86_400 });
+            return;
+          case 'star':
+            await sock.chatModify(
+              { star: { messages: [{ id: a.messageId, fromMe: a.fromMe }], star: a.star } },
+              jid,
+            );
+            return;
+          case 'edit':
+            await sock.sendMessage(jid, { text: a.text, edit: key });
+            return;
+          case 'delete':
+            await sock.sendMessage(jid, { delete: key });
+            return;
+        }
+      });
+    const groups = async (a: GroupAction): Promise<GroupResult> => {
+      switch (a.type) {
+        case 'list':
+          return { groups: Object.values(await sock.groupFetchAllParticipating()).map(snapshot) };
+        case 'metadata':
+          return { group: snapshot(await sock.groupMetadata(groupJid(a.groupJid))) };
+        case 'create':
+          return {
+            group: snapshot(
+              await sock.groupCreate(
+                a.subject,
+                a.participants.map((p) => jidOf(p)),
+              ),
+            ),
+          };
+        case 'participants':
+          await sock.groupParticipantsUpdate(
+            groupJid(a.groupJid),
+            a.participants.map((p) => jidOf(p)),
+            a.change,
+          );
+          return { ok: true };
+        case 'subject':
+          await sock.groupUpdateSubject(groupJid(a.groupJid), a.subject);
+          return { ok: true };
+        case 'description':
+          await sock.groupUpdateDescription(groupJid(a.groupJid), a.description);
+          return { ok: true };
+        case 'settings':
+          await sock.groupSettingUpdate(groupJid(a.groupJid), a.setting);
+          return { ok: true };
+        case 'leave':
+          await sock.groupLeave(groupJid(a.groupJid));
+          return { ok: true };
+        case 'invite':
+          return { code: (await sock.groupInviteCode(groupJid(a.groupJid))) ?? '' };
+      }
+    };
+
     return {
+      send,
+      act,
+      groups,
       subscribe: (l) => {
         listener = l;
         for (const e of backlog.splice(0)) l(e);
@@ -144,6 +299,59 @@ export class BaileysSocketFactory implements WaSocketFactory {
         sock.end(undefined);
       },
     };
+  }
+
+  /** What to hand Baileys for one command (WD-NODE-022 to 024). Media is fetched through SafeFetch. */
+  private async content(command: SendCommand): Promise<AnyMessageContent> {
+    switch (command.type) {
+      case 'text':
+        return { text: command.footer ? `${command.body}\n\n${command.footer}` : command.body };
+      case 'group_text':
+        return {
+          text: command.body,
+          ...(command.mentions?.length ? { mentions: command.mentions.map((n) => jidOf(n)) } : {}),
+        };
+      case 'location': {
+        const name = (command.name ?? '').trim().slice(0, 200);
+        const address = (command.address ?? '').trim().slice(0, 200);
+        return {
+          location: {
+            degreesLatitude: command.latitude,
+            degreesLongitude: command.longitude,
+            ...(name ? { name } : {}),
+            ...(address ? { address } : {}),
+          },
+        };
+      }
+      case 'contact': {
+        const digits = command.phone.replace(/\D+/g, '');
+        const vcard =
+          command.vcard ??
+          `BEGIN:VCARD\nVERSION:3.0\nFN:${command.name}\nTEL;type=CELL;type=VOICE;waid=${digits}:+${digits}\nEND:VCARD`;
+        return { contacts: { displayName: command.name, contacts: [{ vcard }] } };
+      }
+      case 'media': {
+        const file = await this.fetcher.fetchMedia(command.mediaUrl, { timeoutMs: 180_000 });
+        // The caller's type wins unless it is blank or the generic one; then what the host said; then the extension (WD-NODE-023 rule 3).
+        const mimetype =
+          command.mimeType && command.mimeType !== 'application/octet-stream'
+            ? command.mimeType
+            : file.mimetype;
+        const caption = command.caption || undefined;
+        if (mimetype.startsWith('image/')) return { image: file.buffer, mimetype, caption };
+        if (mimetype.startsWith('video/')) return { video: file.buffer, mimetype, caption };
+        if (mimetype.startsWith('audio/')) {
+          return { audio: file.buffer, mimetype, ptt: command.voiceNote === true };
+        }
+        const fileName =
+          command.fileName ?? (new URL(command.mediaUrl).pathname.split('/').pop() || 'file');
+        return { document: file.buffer, mimetype, fileName, caption };
+      }
+      default:
+        throw new UnsupportedSendError(
+          'This kind of message cannot be sent on the unofficial engine.',
+        );
+    }
   }
 
   async deleteSession(orgId: number, deviceId: number): Promise<void> {

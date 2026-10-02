@@ -6,30 +6,18 @@
  * property of the sender row, and each transport registers itself under its engine name.
  */
 
-/** What to send. The transport turns it into its own protocol; one that cannot send a kind says so (UnsupportedSendError). */
-export type SendCommand =
-  | { type: 'text'; to: string; body: string }
-  | { type: 'media'; to: string; mediaUrl: string; caption?: string; fileName?: string }
-  | {
-      type: 'location';
-      to: string;
-      latitude: number;
-      longitude: number;
-      name?: string;
-      address?: string;
-    };
-
-export interface SendContext {
-  /** Correlates the provider's later receipts back to our row. */
-  clientReference: string;
-  /** What the pre-send guard needs to know (bulk sends are screened harder than a single reply). */
-  screen?: { bulk?: boolean; source?: string };
-}
-
-export interface SendOutcome {
-  /** The provider's message id; null when the transport cannot tell (the unofficial engine sometimes cannot). */
-  providerMessageId: string | null;
-}
+export {
+  UnsupportedSendError,
+  type MessageAction,
+  type SendCommand,
+  type SendContext,
+  type SendOutcome,
+} from '../../../infra/providers/node-bridge-runtime/outbound.port';
+import type {
+  SendCommand,
+  SendContext,
+  SendOutcome,
+} from '../../../infra/providers/node-bridge-runtime/outbound.port';
 
 /** A number resolved to send through, one row of `devices` or `wa_provider_configs`. */
 export interface SenderRef {
@@ -49,6 +37,3 @@ export interface OpenTransport {
 export interface EngineTransport {
   open(orgId: number, sender: SenderRef): Promise<OpenTransport>;
 }
-
-/** The transport cannot send this kind of message. The text is shown to the user, so it says what to do instead. */
-export class UnsupportedSendError extends Error {}

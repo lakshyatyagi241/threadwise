@@ -3,8 +3,16 @@ import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { UnsupportedSendError } from '../../../infra/providers/node-bridge-runtime/outbound.port';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { COMMAND_TIMEOUT_MS, type DeviceCommand, type DeviceCommandResult } from './device-command';
+import type {
+  MessageAction,
+  SendCommand,
+  SendContext,
+  SendOutcome,
+} from '../../../infra/providers/node-bridge-runtime/outbound.port';
+import type { GroupAction } from '../../../infra/providers/node-bridge-runtime/socket.port';
 import { waKeys } from './wa-redis';
 
 const POLL_MS = 200;
@@ -27,10 +35,75 @@ export interface DeviceStatusView {
  */
 @Injectable()
 export class DeviceControlService {
+  /**
+   * Set by the worker's runtime: a send for a device this very process owns skips Redis. In the HTTP process it stays null and
+   * every send goes to the owning worker.
+   */
+  local: {
+    owns(orgId: number, deviceId: number): boolean;
+    send(
+      orgId: number,
+      deviceId: number,
+      command: SendCommand,
+      context: SendContext,
+    ): Promise<SendOutcome>;
+    act(orgId: number, deviceId: number, action: MessageAction): Promise<void>;
+    groups(orgId: number, deviceId: number, action: GroupAction): Promise<DeviceCommandResult>;
+  } | null = null;
+
   constructor(
     private readonly db: DatabaseService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
+
+  /** Sends a message through a connected number. The error says what to do when the number is not connected. */
+  async sendMessage(
+    orgId: number,
+    deviceId: number,
+    command: SendCommand,
+    context: SendContext,
+  ): Promise<SendOutcome> {
+    if (this.local?.owns(orgId, deviceId))
+      return this.local.send(orgId, deviceId, command, context);
+    const r = await this.sendIfOwned({ type: 'send', orgId, deviceId, command, context });
+    if (r.ok && r.status === 'sent') return { providerMessageId: r.providerMessageId };
+    throw failure(r);
+  }
+
+  async messageAction(orgId: number, deviceId: number, action: MessageAction): Promise<void> {
+    if (this.local?.owns(orgId, deviceId)) return this.local.act(orgId, deviceId, action);
+    const r = await this.sendIfOwned({ type: 'act', orgId, deviceId, action });
+    if (!(r.ok && r.status === 'acted')) throw failure(r);
+  }
+
+  /** Group directory and management on a device's number (WD-NODE-021). */
+  async groupAction(
+    orgId: number,
+    deviceId: number,
+    action: GroupAction,
+  ): Promise<DeviceCommandResult> {
+    if (this.local?.owns(orgId, deviceId)) return this.local.groups(orgId, deviceId, action);
+    return this.sendIfOwned({ type: 'group', orgId, deviceId, action });
+  }
+
+  /** A device nobody owns cannot send: say so at once instead of waiting out the command's long timeout. */
+  private async sendIfOwned(
+    command:
+      | {
+          type: 'send';
+          orgId: number;
+          deviceId: number;
+          command: SendCommand;
+          context: SendContext;
+        }
+      | { type: 'act'; orgId: number; deviceId: number; action: MessageAction }
+      | { type: 'group'; orgId: number; deviceId: number; action: GroupAction },
+  ): Promise<DeviceCommandResult> {
+    if (!(await this.redis.exists(waKeys.lease(command.orgId, command.deviceId)))) {
+      return { ok: false, status: 'not_ready', message: 'Sender device is not connected.' };
+    }
+    return this.send(command);
+  }
 
   /** Starts a pairing and returns the QR (or `connected` when the device is already linked). Within 35 s. */
   requestQr(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
@@ -93,4 +166,12 @@ export class DeviceControlService {
     }
     return { ok: false, status: 'timeout', message: 'The WhatsApp worker did not answer in time.' };
   }
+}
+
+/** The error a failed command becomes for a caller that sends. */
+function failure(r: DeviceCommandResult): Error {
+  const message = 'message' in r ? r.message : 'The message could not be sent.';
+  return r.ok === false && r.status === 'unsupported'
+    ? new UnsupportedSendError(message)
+    : new Error(message);
 }

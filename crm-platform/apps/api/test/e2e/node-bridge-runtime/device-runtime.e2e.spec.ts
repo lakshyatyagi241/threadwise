@@ -1,20 +1,12 @@
 import type { Redis } from 'ioredis';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
-import { DatabaseService } from '../../../src/infra/db/database.service';
 import { DeviceAuthStore } from '../../../src/infra/providers/node-bridge-runtime/device-auth-store';
-import { REDIS_CLIENT } from '../../../src/infra/redis/redis.module';
-import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
 import { DeviceControlService } from '../../../src/modules/node-bridge-runtime';
 import { DeviceRuntimeService } from '../../../src/modules/node-bridge-runtime/runtime/device-runtime.service';
-import type {
-  SocketEvent,
-  SocketTarget,
-  WaSocket,
-  WaSocketFactory,
-} from '../../../src/infra/providers/node-bridge-runtime/socket.port';
-import { DeviceLease, waKeys } from '../../../src/modules/node-bridge-runtime/runtime/wa-redis';
+import { waKeys } from '../../../src/modules/node-bridge-runtime/runtime/wa-redis';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import { FakeFactory, rig, worker as buildWorker, type Rig } from './support';
 
 /**
  * The unofficial engine's runtime (WD-NODE-005 to 014): the real app's database and Redis, a fake socket standing in for
@@ -23,85 +15,23 @@ import { Api, startHarness, type Harness, type Tenant } from '../contacts-attrib
  */
 let h: Harness;
 let api: Api;
-let db: DatabaseService;
 let redis: Redis;
 let store: DeviceAuthStore;
 let control: DeviceControlService;
+
 const runtimes: DeviceRuntimeService[] = [];
-
-class FakeSocket implements WaSocket {
-  listener: ((e: SocketEvent) => void) | null = null;
-  ended = false;
-  loggedOut = false;
-  pairingFor: string | null = null;
-  subscribe(l: (e: SocketEvent) => void) {
-    this.listener = l;
-  }
-  async requestPairingCode(digits: string) {
-    this.pairingFor = digits;
-    return 'ZX81KQ7M';
-  }
-  async logout() {
-    this.loggedOut = true;
-  }
-  end() {
-    this.ended = true;
-  }
-  emit(e: SocketEvent) {
-    this.listener?.(e);
-  }
-}
-
-class FakeFactory implements WaSocketFactory {
-  sockets: FakeSocket[] = [];
-  targets: SocketTarget[] = [];
-  /** What each new socket does on its own, like WhatsApp would: by default it connects and opens as the right phone. */
-  script: (s: FakeSocket, t: SocketTarget) => void = (s, t) => {
-    setImmediate(() => {
-      s.emit({ type: 'connecting' });
-      s.emit({ type: 'open', linkedId: `${t.phoneDigits}:1@s.whatsapp.net` });
-    });
-  };
-  constructor(private readonly auth: DeviceAuthStore) {}
-  async create(target: SocketTarget) {
-    this.targets.push(target);
-    const s = new FakeSocket();
-    this.sockets.push(s);
-    this.script(s, target);
-    return s;
-  }
-  async deleteSession(orgId: number, deviceId: number) {
-    await this.auth.deleteAll(orgId, deviceId);
-  }
-  get last() {
-    return this.sockets[this.sockets.length - 1]!;
-  }
-}
-
+let r: Rig;
 async function worker() {
-  const factory = new FakeFactory(store);
-  const rt = new DeviceRuntimeService(
-    db,
-    h.app.get(CryptoService, { strict: false }),
-    new DeviceLease(redis),
-    h.app.get(OutboxService, { strict: false }),
-    store,
-    redis,
-    factory,
-  );
-  rt.staggerMs = 0;
-  await rt.onApplicationBootstrap();
-  runtimes.push(rt);
-  return { rt, factory };
+  const w = await buildWorker(h, r);
+  runtimes.push(w.rt);
+  return w;
 }
 
 beforeAll(async () => {
   h = await startHarness();
   api = new Api(h);
-  db = h.app.get(DatabaseService);
-  redis = h.app.get<Redis>(REDIS_CLIENT);
-  store = new DeviceAuthStore(db, h.app.get(CryptoService, { strict: false }));
-  control = h.app.get(DeviceControlService);
+  r = rig(h);
+  ({ redis, store, control } = r);
 }, 240_000);
 
 afterEach(async () => {

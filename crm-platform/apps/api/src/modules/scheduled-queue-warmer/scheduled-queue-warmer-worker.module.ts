@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { BroadcastsModule } from '../broadcasts';
+import { Module, type OnModuleInit } from '@nestjs/common';
+import { BroadcastReceiptsService, BroadcastsModule } from '../broadcasts';
 import { CrmModule } from '../crm';
-import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
+import { NodeBridgeRuntimeModule, ReceiptRouter } from '../node-bridge-runtime';
 import { ScheduledDueService } from './scheduled-due.service';
 import { ScheduledRunProcessor } from './scheduled-run.processor';
+import { ScheduledReceiptsService } from './scheduled-receipts.service';
 import { ScheduledRunService } from './scheduled-run.service';
 
 /**
@@ -13,6 +14,23 @@ import { ScheduledRunService } from './scheduled-run.service';
  */
 @Module({
   imports: [NodeBridgeRuntimeModule, BroadcastsModule, CrmModule],
-  providers: [ScheduledDueService, ScheduledRunService, ScheduledRunProcessor],
+  providers: [
+    ScheduledDueService,
+    ScheduledRunService,
+    ScheduledRunProcessor,
+    ScheduledReceiptsService,
+  ],
 })
-export class ScheduledQueueWarmerWorkerModule {}
+export class ScheduledQueueWarmerWorkerModule implements OnModuleInit {
+  constructor(
+    private readonly router: ReceiptRouter,
+    private readonly broadcasts: BroadcastReceiptsService,
+    private readonly scheduled: ScheduledReceiptsService,
+  ) {}
+
+  /** Delivery reports from the unofficial engine go to the broadcast recipient, else the scheduled one, that owns the message id. */
+  onModuleInit(): void {
+    this.router.register((r) => this.broadcasts.handle(r));
+    this.router.register((r) => this.scheduled.handle(r));
+  }
+}
