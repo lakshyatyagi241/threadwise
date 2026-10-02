@@ -31,3 +31,4 @@ export * from './broadcasts';
 export * from './deals-pipelines';
 export * from './tasks';
 export * from './platform-settings-branding-storage';
+export * from './localization-translation';
