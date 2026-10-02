@@ -272,3 +272,15 @@ export const planSettingsSchema = z.object({
   yearlyDiscountPct: z.number().int().min(0).max(90),
 });
 export type PlanSettings = z.infer<typeof planSettingsSchema>;
+
+// --- entitlements for the app shell (TW-PLAN-020, 021) ------------------------------------------------------------
+
+/** The plan features the workspace has, as keys: the shell locks menu entries and draws the paywall sheet from it. */
+export const entitlementsResponseSchema = z.object({ features: z.array(z.string()) });
+export type EntitlementsResponse = z.infer<typeof entitlementsResponseSchema>;
+
+/** `unlocks`: only the plans that include this feature (the paywall sheet lists exactly those). */
+export const billingPlansQuerySchema = z.object({
+  unlocks: z.enum(PLAN_FEATURE_KEYS as [PlanFeatureKey, ...PlanFeatureKey[]]).optional(),
+});
+export type BillingPlansQuery = z.infer<typeof billingPlansQuerySchema>;

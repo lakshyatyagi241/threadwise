@@ -1289,7 +1289,9 @@ describe('TW-WSP-020: the role model, the permission matrix and the role gates',
     const viewer = await addMember(t, 'Viewer20', 'Viewer');
     const perms = await permissionsOf(viewer.token);
     expect(Object.keys(perms).length).toBeGreaterThan(0);
-    for (const k of Object.keys(perms)) expect(k.endsWith('.read'), k).toBe(true);
+    // support.ticket.* is a baseline every preset holds by design (own tickets), not a viewer write.
+    for (const k of Object.keys(perms).filter((k) => !k.startsWith('support.ticket.')))
+      expect(k.endsWith('.read'), k).toBe(true);
     expect((await createTeam(viewer.token, { name: 'Nope20' })).status).toBe(403);
     expect(
       (
@@ -1613,9 +1615,13 @@ describe('TW-WSP-022: teams', () => {
         ])
       ).rows[0].id,
     );
+    const channel = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name) VALUES ($1,'simulator','sim') RETURNING id`,
+      [t.orgId],
+    );
     const conv = await h.owner.query(
-      `INSERT INTO conversations (org_id, title, assignee_team_id) VALUES ($1,'Routed chat',$2) RETURNING id`,
-      [t.orgId, teamId],
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title, assignee_team_id) VALUES ($1,$2,'peer-022','Routed chat',$3) RETURNING id`,
+      [t.orgId, channel.rows[0].id, teamId],
     );
     const res = await api.as(t.admin).delete(`/v2/workspace/teams/${team.id}`);
     expect(res.status).toBe(204);

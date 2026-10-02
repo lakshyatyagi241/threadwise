@@ -1,4 +1,7 @@
 import {
+  financialSchema,
+  planAnalyticsSchema,
+  premiumSchema,
   workspaceAddonsResponseSchema,
   cancelSubscriptionResponseSchema,
   publicFaqListResponseSchema,
@@ -29,8 +32,9 @@ export const BILLING_KEYS = {
   usage: ['billing', 'usage'] as const,
 };
 
-export const fetchBillingPlans = (signal?: AbortSignal) =>
-  apiFetch('/billing/plans', { schema: billingPlansResponseSchema, signal });
+/** `unlocks`: only the plans that include this feature (the paywall sheet, TW-PLAN-020). */
+export const fetchBillingPlans = (signal?: AbortSignal, unlocks?: string) =>
+  apiFetch('/billing/plans', { query: { unlocks }, schema: billingPlansResponseSchema, signal });
 
 export const fetchBillingStatus = (signal?: AbortSignal) =>
   apiFetch('/billing/status', { schema: billingStatusSchema, signal });
@@ -104,3 +108,21 @@ export const fetchPlanSettings = (signal?: AbortSignal) =>
   operatorFetch('/plan-settings', { schema: planSettingsSchema, signal });
 export const savePlanSettings = (body: PlanSettings) =>
   operatorFetch('/plan-settings', { method: 'PUT', body, schema: planSettingsSchema });
+
+/** The revenue reports (super admin). `days` is 30, 90 or 365; `window` is 7d, 30d, 90d or 1y. */
+export const analyticsKey = (days: number, pkg: string) =>
+  ['operator', 'plan-analytics', days, pkg] as const;
+export const fetchPlanAnalytics = (days: number, pkg: string, signal?: AbortSignal) =>
+  operatorFetch('/plan-analytics', {
+    query: { days, package: pkg || undefined },
+    schema: planAnalyticsSchema,
+    signal,
+  });
+export const analyticsExportUrl = (days: number, pkg: string) =>
+  `/api/platform/plan-analytics/export?days=${days}${pkg ? `&package=${encodeURIComponent(pkg)}` : ''}`;
+export const financialKey = (w: string) => ['operator', 'financial', w] as const;
+export const fetchFinancial = (window: string, signal?: AbortSignal) =>
+  operatorFetch('/financial', { query: { window }, schema: financialSchema, signal });
+export const premiumKey = (w: string) => ['operator', 'premium', w] as const;
+export const fetchPremium = (window: string, signal?: AbortSignal) =>
+  operatorFetch('/premium', { query: { window }, schema: premiumSchema, signal });

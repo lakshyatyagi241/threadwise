@@ -38,6 +38,7 @@ import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { TrialGateGuard } from './modules/plans-subscriptions-trials/trial-gate.guard';
+import { PlanFeatureGuard } from './modules/plans-subscriptions-trials/plan-feature.guard';
 import {
   MediaStorageService,
   PlatformSettingsModule,
@@ -186,6 +187,8 @@ import { HealthModule } from './health/health.module';
     // After the account gate so a locked account is reported as locked first.
     { provide: APP_GUARD, useExisting: TrialGateGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
+    // Route-level plan gate (TW-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
+    { provide: APP_GUARD, useExisting: PlanFeatureGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
   ],
   exports: [CryptoService],

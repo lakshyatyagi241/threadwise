@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  billingPlansQuerySchema,
   changePlanRequestSchema,
+  type BillingPlansQuery,
+  type EntitlementsResponse,
   type BillingPlansResponse,
   type BillingStatus,
   type BillingUsageResponse,
@@ -37,10 +40,18 @@ export class BillingController {
   @ApiOperation({
     summary: 'Active plans with the workspace’s plan marked and what choosing each one does',
   })
-  async plans(): Promise<BillingPlansResponse> {
+  async plans(
+    @Query(zodPipe(billingPlansQuerySchema)) q: BillingPlansQuery,
+  ): Promise<BillingPlansResponse> {
     const ctx = RequestContextStore.require();
     const grants = await this.rbac.grantsForUser(ctx.orgId, ctx.userId!);
-    return this.billing.plans(this.rbac.can(grants, 'plan.subscription.manage').allowed);
+    return this.billing.plans(this.rbac.can(grants, 'plan.subscription.manage').allowed, q.unlocks);
+  }
+
+  @Get('entitlements')
+  @ApiOperation({ summary: 'The plan feature keys this workspace has on (locks, crowns, paywall)' })
+  entitlements(): Promise<EntitlementsResponse> {
+    return this.billing.entitlementKeys();
   }
 
   @Get('status')
