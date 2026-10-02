@@ -172,9 +172,11 @@ export function NumbersScreen() {
         <Alert>
           <strong>{t('notReady.title')}.</strong>{' '}
           {readiness.data.missing.length
-            ? t('notReady.message', { missing: readiness.data.missing
-                .map((m) => (t.has(`missingNames.${m}`) ? t(`missingNames.${m}`) : m))
-                .join(', ') })
+            ? t('notReady.message', {
+                missing: readiness.data.missing
+                  .map((m) => (t.has(`missingNames.${m}`) ? t(`missingNames.${m}`) : m))
+                  .join(', '),
+              })
             : t('notReady.messageGeneric')}
         </Alert>
       )}
