@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CrmModule } from '../crm';
+import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastDispatchService } from './broadcast-dispatch.service';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
@@ -12,8 +13,8 @@ import { LinkRedirectService } from './tracking/link-redirect.service';
 import { LinkTracker } from './tracking/link-tracker';
 import {
   CapTally,
-  DefaultPacingSettings,
   PACING_SETTINGS,
+  PlatformPacingSettings,
   PacingRuntime,
   SenderLease,
 } from './send-safety';
@@ -42,7 +43,7 @@ import {
  * the real service to the same token (see _shims/README.md).
  */
 @Module({
-  imports: [PlansCoreModule, CrmModule],
+  imports: [PlansCoreModule, CrmModule, NodeBridgeRuntimeModule],
   controllers: [
     BroadcastsController,
     BroadcastsReadController,
@@ -78,7 +79,7 @@ import {
     PacingRuntime,
     CapTally,
     SenderLease,
-    { provide: PACING_SETTINGS, useClass: DefaultPacingSettings },
+    { provide: PACING_SETTINGS, useClass: PlatformPacingSettings },
     LinkRedirectService,
     BroadcastsReadRepository,
     BroadcastProgressService,

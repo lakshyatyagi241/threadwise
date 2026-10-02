@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { NodeBridgeProbe } from '../../infra/providers/node-bridge-runtime/node-bridge.probe';
+import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { NodeBridgeController } from './node-bridge.controller';
 import { NodeBridgeSettingsService } from './node-bridge-settings.service';
 import { NodeInternalController } from './node-internal.controller';
@@ -12,7 +13,7 @@ import { NodeTokenGuard } from './node-token.guard';
  */
 @Module({
   controllers: [NodeBridgeController, NodeInternalController],
-  providers: [NodeBridgeSettingsService, NodeBridgeProbe, NodeTokenGuard],
-  exports: [NodeBridgeSettingsService],
+  providers: [NodeBridgeSettingsService, NodeBridgeProbe, NodeTokenGuard, SafeFetch],
+  exports: [NodeBridgeSettingsService, SafeFetch],
 })
 export class NodeBridgeRuntimeModule {}
