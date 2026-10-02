@@ -59,6 +59,10 @@ or WooCommerce store (that needs a Shopify partner app and a store, which this w
 20. **App uninstalled** clears the token to an empty string (the column is NOT NULL here, null in WaDesk) and the connected time; the row, mapping and logs stay.
 21. **The privacy webhooks** (`POST /v2/shopify/compliance`) behave as WaDesk (401 `bad hmac` before reading, then always 200); the shop is found case-insensitively through a SECURITY DEFINER lookup, and `customers/redact` with no phone erases all of the shop's logs, as WaDesk does.
 22. **The automation list** is WaDesk's 16 Shopify and 21 WooCommerce types; `fulfillments/update` and `app/uninstalled` are webhooks handled, not automations to map. A delivery logs `skipped` when no automation is active, `sent` or `failed` after the send, as WaDesk.
+23. **A COD reply settles the confirmation once.** The pending row is closed with a guarded update, so two replies arriving together answer the customer once (WaDesk read, then wrote). Everything else is as WaDesk: yes or no words, the newest pending row for the number, the mirrored order becomes `confirmed` or `cancelled`, WooCommerce's real order goes to `processing` or `cancelled`, a `cod/reply` log, and the same two answers.
+24. **The thank-you or cancelled answer goes as plain text in the customer's open session** through the primary Cloud API number; a number on another engine gets no answer (logged at debug), where WaDesk's dispatcher could send on any engine.
+25. **The WooCommerce risk score looks up the customer by the same normalised number the mirror stores, and leaves the order being scored out of its own history.** WaDesk matched the raw billing digits against normalised numbers (a local number never matched) and, because the mirror was already updated, an international number counted its own order, so "first-time buyer" almost never fired.
+26. **The prepaid nudge, Delivered and the WooCommerce status automations go to the customer only** (as WaDesk's pseudo events), whatever `send_to` says; a missing phone or template writes no log row.
 
 ## Shims
 

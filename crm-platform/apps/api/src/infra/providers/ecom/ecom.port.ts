@@ -100,6 +100,8 @@ export interface WooStoreApi {
     nameOf: (topic: string) => string;
   }): Promise<Record<string, string>>;
   deleteWebhooks(ids: readonly string[]): Promise<void>;
+  /** Sets a real order's status (`processing`, `cancelled`, ...). False when the store refused or did not answer. */
+  updateOrderStatus(orderId: string, status: string): Promise<boolean>;
 }
 
 export interface WooFactory {

@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 import {
   applyVarMap,
   bodyParams,
+  codRisk,
+  isShopifyCod,
+  isWooCod,
+  readCodReply,
   renderBody,
   shopifyContext,
   shopifyRecipient,
@@ -122,5 +126,71 @@ describe('filling a template', () => {
   it('declares as many parameters as the highest number in the body', () => {
     expect(bodyParams('{{1}} and {{3}}', ['a', 'b'])).toEqual(['a', 'b', '']);
     expect(bodyParams('{{name}} only', ['a'])).toEqual([]);
+  });
+});
+
+describe('cash on delivery (WD-ECOM-016, 017, 030)', () => {
+  it('Shopify: a cod gateway, or an unpaid order tagged cod', () => {
+    expect(isShopifyCod({ payment_gateway_names: ['Cash on Delivery (COD)'] })).toBe(true);
+    expect(isShopifyCod({ gateway: 'manual cod' })).toBe(true);
+    expect(isShopifyCod({ tags: 'vip, COD', financial_status: 'pending' })).toBe(true);
+    expect(isShopifyCod({ tags: 'cod', financial_status: 'paid' })).toBe(false);
+    expect(isShopifyCod({ payment_gateway_names: ['shopify_payments'] })).toBe(false);
+  });
+  it('WooCommerce: method cod or a title naming cash on delivery', () => {
+    expect(isWooCod({ payment_method: 'cod' })).toBe(true);
+    expect(isWooCod({ payment_method: 'cashondelivery' })).toBe(true);
+    expect(isWooCod({ payment_method: 'x', payment_method_title: 'Cash on delivery' })).toBe(true);
+    expect(isWooCod({ payment_method: 'stripe', payment_method_title: 'Card' })).toBe(false);
+  });
+  it('reads yes, no, and neither', () => {
+    for (const t of [
+      'Yes',
+      ' y ',
+      'CONFIRM',
+      'ok',
+      'haan',
+      '1',
+      '✅',
+      '👍',
+      'yes please',
+      'confirmed!',
+    ])
+      expect(readCodReply(t)).toBe('yes');
+    for (const t of ['no', 'N', 'cancel order', 'nahi', '2', '❌', 'no thanks', 'cancel it'])
+      expect(readCodReply(t)).toBe('no');
+    for (const t of ['maybe', 'when will it arrive', '', '3']) expect(readCodReply(t)).toBeNull();
+  });
+  it('scores risk: first-time +30, cancellations +15 each (max 30), value over 2x +25, no email +8, no phone +15', () => {
+    const base = {
+      priorCount: 3,
+      priorCancelled: 0,
+      priorFulfilled: 2,
+      total: 10,
+      average: 10,
+      hasEmail: true,
+      hasPhone: true,
+    };
+    expect(codRisk(base)).toEqual({ score: 0, level: 'low', reasons: [] });
+    expect(codRisk({ ...base, priorCount: 0, priorFulfilled: 0 }).score).toBe(30);
+    expect(codRisk({ ...base, priorFulfilled: 0 }).reasons).toEqual([
+      'No previously fulfilled order',
+    ]);
+    expect(codRisk({ ...base, priorCancelled: 5 }).score).toBe(30);
+    expect(codRisk({ ...base, total: 25 }).reasons).toEqual(['Order value 2.5× the store average']);
+    expect(codRisk({ ...base, total: 16 }).score).toBe(12);
+    const worst = codRisk({
+      priorCount: 0,
+      priorCancelled: 0,
+      priorFulfilled: 0,
+      total: 50,
+      average: 10,
+      hasEmail: false,
+      hasPhone: false,
+    });
+    expect(worst).toMatchObject({ score: 78, level: 'high' });
+    expect(codRisk({ ...base, priorFulfilled: 0, priorCancelled: 1, hasEmail: false }).level).toBe(
+      'medium',
+    );
   });
 });

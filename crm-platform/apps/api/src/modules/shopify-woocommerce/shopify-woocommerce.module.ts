@@ -12,6 +12,8 @@ import { WabaCommerceSender } from './_shims/waba-commerce-sender';
 import { EcomPublicController } from './ecom-public.controller';
 import { AutomationsController } from './automations.controller';
 import { AutomationsService } from './automations.service';
+import { CodRepository } from './cod.repository';
+import { CodService } from './cod.service';
 import { ComplianceService } from './compliance.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
@@ -52,6 +54,8 @@ import { WoocommerceService } from './woocommerce.service';
     EventsRepository,
     AutomationsService,
     ComplianceService,
+    CodRepository,
+    CodService,
     MirrorRepository,
     EventMessageService,
     WebhookService,

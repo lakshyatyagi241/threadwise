@@ -36,7 +36,7 @@ class WooStore implements WooStoreApi {
 
   /** One request to the store. Private addresses are refused unless the install allows them. Never throws. */
   private async send(
-    method: 'GET' | 'POST' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     path: string,
     json?: Json,
   ): Promise<
@@ -169,6 +169,11 @@ class WooStore implements WooStoreApi {
       else this.logger.warn({ topic }, 'woocommerce webhook not registered');
     }
     return done;
+  }
+
+  async updateOrderStatus(orderId: string, status: string): Promise<boolean> {
+    const r = await this.send('PUT', `/orders/${encodeURIComponent(orderId)}`, { status });
+    return !('error' in r) && r.status >= 200 && r.status < 300;
   }
 
   async deleteWebhooks(ids: readonly string[]): Promise<void> {
