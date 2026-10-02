@@ -6,6 +6,7 @@ import { DeviceControlService } from './runtime/device-control.service';
 import { BaileysTransport } from './outbound/baileys.transport';
 import { TwilioTransport } from './outbound/twilio.transport';
 import { InboundRouter, ReceiptRouter } from './runtime/routers';
+import { NodeWorkerStatus } from './runtime/worker-status';
 import { OutboundRegistry } from './outbound/outbound-registry.service';
 import { SenderResolver } from './outbound/sender-resolver.service';
 import { WabaTransport } from './outbound/waba.transport';
@@ -41,6 +42,7 @@ import { NodeTokenGuard } from './node-token.guard';
     QrChannelAdapter,
     InboundRouter,
     ReceiptRouter,
+    NodeWorkerStatus,
   ],
   exports: [
     NodeBridgeSettingsService,
@@ -50,6 +52,7 @@ import { NodeTokenGuard } from './node-token.guard';
     DeviceControlService,
     InboundRouter,
     ReceiptRouter,
+    NodeWorkerStatus,
   ],
 })
 export class NodeBridgeRuntimeModule implements OnModuleInit {

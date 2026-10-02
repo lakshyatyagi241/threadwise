@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import {
   Inject,
   Injectable,
@@ -25,6 +26,7 @@ import { WA_SOCKET_FACTORY } from '../../../infra/providers/node-bridge-runtime/
 import { DeviceLease, waKeys } from './wa-redis';
 import { DeviceControlService } from './device-control.service';
 import { InboundRouter, ReceiptRouter } from './routers';
+import { WORKER_ALIVE_S } from './worker-status';
 import {
   UnsupportedSendError,
   type MessageAction,
@@ -84,6 +86,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   private subscriber: Redis | null = null;
   private stopped = false;
   private passes = 0;
+  private readonly workerId = randomUUID();
   /** Pause between devices when restoring many at once, to spare the CPU (WaDesk: 2 s). Tests set 0. */
   staggerMs = 2_000;
 
@@ -109,6 +112,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       groups: (o, d, a) => this.groupAction(o, d, a),
     };
     await this.subscribe();
+    await this.beat();
     void this.restore().catch((err) =>
       this.logger.error({ err: String(err) }, '[NODE] restore failed'),
     );
@@ -121,6 +125,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       await this.lease.release(o.orgId, o.deviceId, o.token).catch(() => undefined);
     }
     this.owned.clear();
+    await this.redis.del(waKeys.worker(this.workerId)).catch(() => undefined);
     this.control.local = null;
     this.stopped = true;
     // A connection in subscriber mode cannot QUIT: unsubscribe, then close it, or this worker keeps answering commands.
@@ -257,7 +262,18 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     }
     await this.touch(alive);
     await this.flipStale();
+    await this.beat();
     if (this.passes % 3 === 1) await this.restore();
+  }
+
+  /** This worker is alive and holds this many devices: what `NodeWorkerStatus` reads (WD-NODE-004). */
+  private async beat(): Promise<void> {
+    await this.redis.set(
+      waKeys.worker(this.workerId),
+      JSON.stringify({ at: Date.now(), devices: this.owned.size }),
+      'EX',
+      WORKER_ALIVE_S,
+    );
   }
 
   /** The device's own worker says it is alive: this is the heartbeat that replaces WaDesk's bridge-to-Laravel POST. */
