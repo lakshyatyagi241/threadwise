@@ -84,55 +84,119 @@ describe('platform_setup and the migration ledger', () => {
     ).rejects.toThrow(/chk_platform_setup_complete/);
   });
 
-  it('claim succeeds once on a missing row and never again', async () => {
+  async function seedOrg(tx: Parameters<typeof repo.state>[0]): Promise<number> {
+    const { sql } = await import('drizzle-orm');
+    const res = await tx.execute(
+      sql`INSERT INTO organizations (slug, name, plan) VALUES (${`o-${Date.now()}-${Math.random()}`}, 'Seeded', 'starter') RETURNING id`,
+    );
+    return Number((res.rows[0] as { id: number }).id);
+  }
+
+  /** The operator and workspace step 4 creates, linked on the singleton row. */
+  async function provision(tx: Parameters<typeof repo.state>[0]): Promise<number> {
+    const op = await repo.insertOperator(tx, {
+      email: `op-${Date.now()}-${Math.random()}@example.test`,
+      fullName: 'Owner',
+      passwordHash: 'x',
+    });
+    await repo.lockRow(tx);
+    await repo.linkProvisioned(tx, { operatorId: op.id, orgId: await seedOrg(tx), appUrl: null });
+    return op.id;
+  }
+
+  it('keeps run_step between 0 and 6', async () => {
     await reset();
-    const org = await owner.query(
-      `INSERT INTO organizations (slug, name, plan) VALUES ('claim-org','Claim Org','starter') RETURNING id`,
-    );
-    const orgId = Number(org.rows[0].id);
-
-    const first = await withPrivileged(appDb.db, (tx) =>
-      repo.claim(tx, { version: '1.0.0', orgId, appUrl: 'http://localhost:3001' }),
-    );
-    expect(first).toBeInstanceOf(Date);
-    const second = await withPrivileged(appDb.db, (tx) =>
-      repo.claim(tx, { version: '9.9.9', orgId, appUrl: null }),
-    );
-    expect(second).toBeNull();
-
-    const row = await owner.query(
-      'SELECT completed_version, first_org_id, app_url FROM platform_setup',
-    );
-    expect(row.rows).toEqual([
-      { completed_version: '1.0.0', first_org_id: orgId, app_url: 'http://localhost:3001' },
-    ]);
+    await expect(
+      owner.query('INSERT INTO platform_setup (id, run_step) VALUES (1, 7)'),
+    ).rejects.toThrow(/chk_platform_setup_run_step/);
+    await expect(
+      owner.query('INSERT INTO platform_setup (id, run_step) VALUES (1, -1)'),
+    ).rejects.toThrow(/chk_platform_setup_run_step/);
   });
 
-  it('claim is atomic under a real race: the loser waits for the winner and gets nothing', async () => {
+  it('creates the row on first use and only ever moves the step forward', async () => {
     await reset();
-    const org = await owner.query(
-      `INSERT INTO organizations (slug, name, plan) VALUES ('race-org','Race Org','starter') RETURNING id`,
+    await withPrivileged(appDb.db, (tx) => repo.advance(tx, 2));
+    await withPrivileged(appDb.db, (tx) => repo.advance(tx, 1));
+    await withPrivileged(appDb.db, (tx) => repo.advance(tx, 3));
+    await withPrivileged(appDb.db, (tx) => repo.advance(tx, 3));
+    const state = await withPrivileged(appDb.db, (tx) => repo.state(tx));
+    expect(state.runStep).toBe(3);
+    expect(state.completedAt).toBeNull();
+  });
+
+  it('reports an empty deployment as step 0 with no row at all', async () => {
+    await reset();
+    const state = await withPrivileged(appDb.db, (tx) => repo.state(tx));
+    expect(state).toMatchObject({
+      completedAt: null,
+      runStep: 0,
+      firstOperatorId: null,
+      firstOrgId: null,
+    });
+  });
+
+  it('links what step 4 created, and counts only operators that run did not create as foreign', async () => {
+    await reset();
+    await owner.query('DELETE FROM platform_operators');
+    const first = await withPrivileged(appDb.db, (tx) => provision(tx));
+    let state = await withPrivileged(appDb.db, (tx) => repo.state(tx));
+    expect(state).toMatchObject({ firstOperatorId: first, runStep: 4, foreignOperators: 0 });
+
+    // an operator made some other way (the CLI) means somebody else already owns the platform
+    await owner.query(
+      `INSERT INTO platform_operators (email, full_name, password_hash, role) VALUES ('cli@example.test', 'CLI', 'x', 'super_admin')`,
     );
-    const orgId = Number(org.rows[0].id);
+    state = await withPrivileged(appDb.db, (tx) => repo.state(tx));
+    expect(state.foreignOperators).toBe(1);
+    await owner.query(`DELETE FROM platform_operators WHERE email = 'cli@example.test'`);
+  });
+
+  it('complete takes the lock once, and only after an operator was linked', async () => {
+    await reset();
+    await owner.query('DELETE FROM platform_operators');
+    // nothing provisioned yet: there is nothing to lock
+    await withPrivileged(appDb.db, (tx) => repo.lockRow(tx));
+    expect(await withPrivileged(appDb.db, (tx) => repo.complete(tx, '1.0.0'))).toBeNull();
+
+    await withPrivileged(appDb.db, (tx) => provision(tx));
+    const first = await withPrivileged(appDb.db, (tx) => repo.complete(tx, '1.0.0'));
+    expect(first).toBeInstanceOf(Date);
+    expect(await withPrivileged(appDb.db, (tx) => repo.complete(tx, '9.9.9'))).toBeNull();
+
+    const row = await owner.query('SELECT completed_version, run_step FROM platform_setup');
+    expect(row.rows).toEqual([{ completed_version: '1.0.0', run_step: 6 }]);
+  });
+
+  it('advance never touches a completed install', async () => {
+    await withPrivileged(appDb.db, (tx) => repo.advance(tx, 1));
+    const row = await owner.query('SELECT run_step FROM platform_setup');
+    expect(row.rows).toEqual([{ run_step: 6 }]);
+  });
+
+  it('serialises two finalizes: the second waits on the row lock, then finds the install complete', async () => {
+    await reset();
+    await owner.query('DELETE FROM platform_operators');
+    await withPrivileged(appDb.db, (tx) => provision(tx));
 
     let releaseWinner!: () => void;
     const winnerMayCommit = new Promise<void>((r) => (releaseWinner = r));
-    let winnerClaimed!: () => void;
-    const winnerHoldsLock = new Promise<void>((r) => (winnerClaimed = r));
+    let winnerLocked!: () => void;
+    const winnerHoldsLock = new Promise<void>((r) => (winnerLocked = r));
 
     const winner = withPrivileged(appDb.db, async (tx) => {
-      const at = await repo.claim(tx, { version: 'winner', orgId, appUrl: null });
-      winnerClaimed();
+      await repo.lockRow(tx);
+      winnerLocked();
       await winnerMayCommit;
-      return at;
+      return repo.complete(tx, 'winner');
     });
     await winnerHoldsLock;
 
-    // Starts while the winner's transaction is still open, so it must block on the winner's row lock.
     let loserSettled = false;
-    const loser = withPrivileged(appDb.db, (tx) =>
-      repo.claim(tx, { version: 'loser', orgId, appUrl: null }),
-    ).then((v) => {
+    const loser = withPrivileged(appDb.db, async (tx) => {
+      const row = await repo.lockRow(tx);
+      return { sawCompleted: row.completedAt !== null, at: await repo.complete(tx, 'loser') };
+    }).then((v) => {
       loserSettled = true;
       return v;
     });
@@ -142,56 +206,34 @@ describe('platform_setup and the migration ledger', () => {
     releaseWinner();
     const [w, l] = await Promise.all([winner, loser]);
     expect(w).toBeInstanceOf(Date);
-    expect(l).toBeNull();
-
+    expect(l).toEqual({ sawCompleted: true, at: null });
     const row = await owner.query('SELECT completed_version FROM platform_setup');
     expect(row.rows).toEqual([{ completed_version: 'winner' }]);
   });
 
-  it('a rolled-back claim leaves the lock open (the org and the operator vanish with it)', async () => {
+  it('a rolled-back finalize leaves the lock open', async () => {
     await reset();
-    const org = await owner.query(
-      `INSERT INTO organizations (slug, name, plan) VALUES ('rb-org','Rollback Org','starter') RETURNING id`,
-    );
+    await owner.query('DELETE FROM platform_operators');
+    await withPrivileged(appDb.db, (tx) => provision(tx));
     await expect(
       withPrivileged(appDb.db, async (tx) => {
-        await repo.claim(tx, { version: '1', orgId: Number(org.rows[0].id), appUrl: null });
-        throw new Error('boom after the claim');
+        await repo.complete(tx, '1');
+        throw new Error('boom after the lock');
       }),
     ).rejects.toThrow('boom');
     const state = await withPrivileged(appDb.db, (tx) => repo.state(tx));
     expect(state.completedAt).toBeNull();
   });
 
-  it('reports the operator count and links the first operator', async () => {
+  it('summarises the operator and workspace for the final response', async () => {
     await reset();
     await owner.query('DELETE FROM platform_operators');
-    expect((await withPrivileged(appDb.db, (tx) => repo.state(tx))).operatorCount).toBe(0);
-
-    const id = await withPrivileged(appDb.db, async (tx) => {
-      const op = await repo.insertOperator(tx, {
-        email: 'owner@example.test',
-        fullName: 'Owner',
-        passwordHash: 'x',
-      });
-      await repo.claim(tx, { version: '1', orgId: await seedOrg(tx), appUrl: null });
-      await repo.linkOperator(tx, op.id);
-      return op.id;
-    });
-    const row = await owner.query(
-      `SELECT s.first_operator_id, o.role FROM platform_setup s JOIN platform_operators o ON o.id = s.first_operator_id`,
-    );
-    expect(row.rows).toEqual([{ first_operator_id: id, role: 'super_admin' }]);
-    expect((await withPrivileged(appDb.db, (tx) => repo.state(tx))).operatorCount).toBe(1);
+    expect(await withPrivileged(appDb.db, (tx) => repo.summary(tx))).toBeNull();
+    await withPrivileged(appDb.db, (tx) => provision(tx));
+    const summary = await withPrivileged(appDb.db, (tx) => repo.summary(tx));
+    expect(summary?.operator.email).toMatch(/@example\.test$/);
+    expect(summary?.org.name).toBe('Seeded');
   });
-
-  async function seedOrg(tx: Parameters<typeof repo.state>[0]): Promise<number> {
-    const { sql } = await import('drizzle-orm');
-    const res = await tx.execute(
-      sql`INSERT INTO organizations (slug, name, plan) VALUES (${`o-${Date.now()}`}, 'Seeded', 'starter') RETURNING id`,
-    );
-    return Number((res.rows[0] as { id: number }).id);
-  }
 
   it('lets the restricted role read the migration ledger and the permission count', async () => {
     const ledger = await withPrivileged(appDb.db, (tx) => repo.ledger(tx));

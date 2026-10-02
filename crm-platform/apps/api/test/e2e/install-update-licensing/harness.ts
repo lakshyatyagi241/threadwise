@@ -20,7 +20,11 @@ export interface Harness {
  * real Redis, the real AppModule. Nothing is seeded: the database starts as a fresh deployment would, with
  * migrations applied and no operator, organization or plan.
  */
-export async function startHarness(extraEnv: Record<string, string> = {}): Promise<Harness> {
+export async function startHarness(
+  extraEnv: Record<string, string> = {},
+  /** Stands in for api.envato.com. */
+  fetchStub?: typeof fetch,
+): Promise<Harness> {
   const pg: StartedPostgreSqlContainer = await new PostgreSqlContainer('pgvector/pgvector:pg16')
     .withDatabase('crm')
     .withUsername('crm')
@@ -64,7 +68,11 @@ export async function startHarness(extraEnv: Record<string, string> = {}): Promi
 
   // Imported after the environment is set: AppModule reads configuration at import.
   const { AppModule } = await import('../../../src/app.module');
-  const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
+  const { INST_FETCH } =
+    await import('../../../src/modules/install-update-licensing/licence.service');
+  let builder = Test.createTestingModule({ imports: [AppModule] });
+  if (fetchStub) builder = builder.overrideProvider(INST_FETCH).useValue(fetchStub);
+  const moduleRef = await builder.compile();
   const app = moduleRef.createNestApplication({ rawBody: true, logger: false });
   (app.getHttpAdapter().getInstance() as { set: (k: string, v: unknown) => void }).set(
     'trust proxy',
