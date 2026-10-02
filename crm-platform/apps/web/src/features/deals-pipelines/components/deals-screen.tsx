@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, ConfirmDialog, EmptyState, Spinner, useToast } from '@crm/ui';
+import { Alert, Button, ConfirmDialog, EmptyState, Spinner, useToast } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { invalidateDeals, KEYS, useMembers, usePipelines } from '../api/hooks';
 import { dealsApi } from '../api/service';
@@ -34,6 +34,7 @@ interface PendingLost {
 /** `/deals`: the Kanban board (or the table) of one pipeline, with filters, quick add and the deal drawer. */
 export function DealsScreen() {
   const t = useTranslations('deals-pipelines.board');
+  const tReports = useTranslations('deals-pipelines.reports');
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
@@ -241,11 +242,15 @@ export function DealsScreen() {
             pipelineId={pipeline.id}
             members={members.data ?? []}
             canSettings={can.editPipelines}
+            canReports={can.report}
           />
 
           {filters.view === 'board' && (
             <>
               <KpiStrip kpis={board.kpis} currency={pipeline.currency} />
+              {board.unconverted.length > 0 && (
+                <Alert tone="warning">{tReports('unconverted', { currencies: board.unconverted.join(', ') })}</Alert>
+              )}
               {board.loadError != null && <ErrorLine error={board.loadError} onRetry={board.reload} />}
               <Board
                 pipeline={pipeline}

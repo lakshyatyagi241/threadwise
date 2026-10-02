@@ -16,6 +16,9 @@ import { filterQuery, matchesFilters, type DealFilters } from '../lib/filters';
 export function useBoard(pipeline: Pipeline | undefined, filters: DealFilters) {
   const [state, dispatch] = useReducer(boardReducer, undefined, () => initialBoard([]));
   const [nonce, setNonce] = useState(0);
+  // Currencies with no exchange rate: their deals are left out of the converted totals, and the screen says so. The first load
+  // brings the list; a refresh after a write replaces it (for the same board key only).
+  const [refreshed, setRefreshed] = useState<{ key: string; list: readonly string[] } | null>(null);
   const latest = useRef<BoardState>(state);
   useEffect(() => {
     latest.current = state;
@@ -63,10 +66,11 @@ export function useBoard(pipeline: Pipeline | undefined, filters: DealFilters) {
     try {
       const b = await dealsApi.board(pipelineId, currency, query, undefined, 1);
       dispatch({ type: 'summary', stages: b.columns.map((c) => c.summary), kpis: b.kpis });
+      setRefreshed({ key: JSON.stringify(key), list: b.unconverted });
     } catch {
       /* the local totals stay as they are until the next change */
     }
-  }, [pipelineId, currency, query]);
+  }, [pipelineId, currency, query, key]);
 
   const loadMore = useCallback(
     async (stageId: string) => {
@@ -150,6 +154,10 @@ export function useBoard(pipeline: Pipeline | undefined, filters: DealFilters) {
   return {
     state,
     kpis: state.kpis,
+    unconverted:
+      refreshed !== null && refreshed.key === JSON.stringify(key)
+        ? refreshed.list
+        : (boardData?.unconverted ?? []),
     loadError: board.isError ? board.error : null,
     loading: board.isPending && pipelineId !== '',
     loadMore,

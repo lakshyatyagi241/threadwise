@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, Field, Input, Modal, Select, Spinner, Textarea } from '@crm/ui';
+import { Button, Field, Input, Modal, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { TASK_NOTES_MAX, TASK_TITLE_MAX, type TaskResponse } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useMembers } from '../api/hooks';
@@ -36,6 +36,8 @@ type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'form';
 /** "New task" and "Edit task" (WD-TASK-003/005). Mount it only while it is open: it starts from the task every time. */
 export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalProps) {
   const t = useTranslations('tasks.form');
+  const toastText = useTranslations('tasks.toast');
+  const { toast } = useToast();
   const session = useSession();
   const members = useMembers();
   const actions = useTaskActions();
@@ -88,6 +90,8 @@ export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalPro
         saved = await tasksApi.create(createBody(draft));
       }
       actions.refresh(saved);
+      // WaDesk flashes "Task created." after the form; the modal closes, so say it in a toast.
+      toast(toastText(task ? 'saved' : 'created'), 'success');
       onSaved?.(saved);
       onClose();
     } catch (e) {

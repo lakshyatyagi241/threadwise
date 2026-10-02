@@ -53,6 +53,7 @@ export const bookingTypes = pgTable(
     capacity: smallint('capacity').notNull().default(1),
     timezone: text('timezone'),
     introMessage: text('intro_message'),
+    approvalRequired: boolean('approval_required').notNull().default(false),
     isActive: boolean('is_active').notNull().default(true),
     sortOrder: integer('sort_order').notNull().default(0),
     meta: jsonb('meta'),
@@ -70,7 +71,7 @@ export const bookingTypes = pgTable(
     }).onDelete('cascade'),
     check(
       'chk_booking_types_location_type',
-      sql`${t.locationType} in ('address', 'virtual', 'phone')`,
+      sql`${t.locationType} in ('address', 'virtual', 'phone', 'whatsapp')`,
     ),
     unique('uq_booking_types_slug').on(t.orgId, t.slug),
     foreignKey({
@@ -79,6 +80,7 @@ export const bookingTypes = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
     index('idx_booking_types_is_active').on(t.orgId, t.isActive),
+    index('idx_booking_types_sort').on(t.orgId, t.sortOrder, t.id),
   ],
 );
 
@@ -134,7 +136,6 @@ export const appointments = pgTable(
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().defaultRandom(),
     bookingTypeId: idColumn('booking_type_id'),
-    staffId: idColumn('staff_id'),
     provider: text('provider').notNull().default('baileys'),
     userId: idColumn('user_id'),
     contactId: idColumn('contact_id'),
@@ -142,26 +143,41 @@ export const appointments = pgTable(
     title: text('title').notNull(),
     description: text('description'),
     location: text('location'),
-    startsAt: timestamp('starts_at', { withTimezone: true }),
-    endsAt: timestamp('ends_at', { withTimezone: true }),
+    startsAt: timestamp('starts_at', { withTimezone: true }).notNull(),
+    endsAt: timestamp('ends_at', { withTimezone: true }).notNull(),
     timezone: text('timezone').notNull().default('UTC'),
     inviteeTimezone: text('invitee_timezone'),
     status: text('status').notNull().default('pending'),
     paymentStatus: text('payment_status').notNull().default('none'),
     depositPaidMinor: bigint('deposit_paid_minor', { mode: 'number' }).notNull().default(0),
     orderId: idColumn('order_id'),
-    googleEventId: text('google_event_id'),
-    googleCalendarId: text('google_calendar_id'),
+    calendarEventId: text('calendar_event_id'),
+    calendarId: text('calendar_id'),
     meetUrl: text('meet_url'),
-    manageToken: text('manage_token'),
+    inviteeName: text('invitee_name'),
+    inviteeEmail: text('invitee_email'),
+    inviteePhone: text('invitee_phone'),
+    notes: text('notes'),
+    manageTokenHash: text('manage_token_hash'),
+    manageTokenCipher: text('manage_token_cipher'),
+    seat: smallint('seat').notNull().default(1),
+    armedAt: timestamp('armed_at', { withTimezone: true }).notNull().defaultNow(),
+    needsReview: boolean('needs_review').notNull().default(false),
+    statusChangedAt: timestamp('status_changed_at', { withTimezone: true }).notNull().defaultNow(),
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+    cancelledBy: text('cancelled_by'),
+    cancelReason: text('cancel_reason'),
+    priceMinor: bigint('price_minor', { mode: 'number' }).notNull().default(0),
+    currency: text('currency'),
+    dueNowMinor: bigint('due_now_minor', { mode: 'number' }).notNull().default(0),
+    feeRecordedMinor: bigint('fee_recorded_minor', { mode: 'number' }).notNull().default(0),
+    holdExpiresAt: timestamp('hold_expires_at', { withTimezone: true }),
+    createdBy: idColumn('created_by'),
     meta: jsonb('meta'),
     answers: jsonb('answers'),
     reminderSentAt: timestamp('reminder_sent_at', { withTimezone: true }),
     checkedInAt: timestamp('checked_in_at', { withTimezone: true }),
-    remindersSent: jsonb('reminders_sent'),
     source: text('source').notNull().default('chat'),
-    capacityUsed: smallint('capacity_used').notNull().default(1),
-    activeSlotKey: text('active_slot_key'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -179,8 +195,11 @@ export const appointments = pgTable(
       sql`${t.paymentStatus} in ('none', 'pending', 'paid', 'partial', 'refunded')`,
     ),
     check('chk_appointments_source', sql`${t.source} in ('chat', 'link', 'manual', 'api')`),
-    unique('uq_appointments_active_slot_key').on(t.orgId, t.activeSlotKey),
-    unique('uq_appointments_manage_token').on(t.manageToken),
+    check(
+      'chk_appointments_status',
+      sql`${t.status} in ('pending', 'confirmed', 'cancelled', 'declined', 'completed', 'no_show')`,
+    ),
+    unique('uq_appointments_manage_token_hash').on(t.manageTokenHash),
     foreignKey({
       name: 'fk_appointments_booking_type_id',
       columns: [t.orgId, t.bookingTypeId],
@@ -189,6 +208,11 @@ export const appointments = pgTable(
     foreignKey({
       name: 'fk_appointments_user_id',
       columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_appointments_created_by',
+      columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
     foreignKey({
@@ -208,9 +232,15 @@ export const appointments = pgTable(
     }).onDelete('set null'),
     index('idx_appointments_contact_id').on(t.orgId, t.contactId),
     index('idx_appointments_conversation_id').on(t.orgId, t.conversationId),
-    index('idx_appointments_google_event_id').on(t.orgId, t.googleEventId),
+    index('idx_appointments_calendar_event_id').on(t.orgId, t.calendarEventId),
     index('idx_appointments_order_id').on(t.orgId, t.orderId),
-    index('idx_appointments_staff_id').on(t.orgId, t.staffId),
+    index('idx_appointments_user_id').on(t.orgId, t.userId),
+    index('idx_appointments_created_by').on(t.orgId, t.createdBy),
+    index('idx_appointments_status_starts').on(t.orgId, t.status, t.startsAt, t.id),
+    index('idx_appointments_starts_id').on(t.orgId, t.startsAt, t.id),
+    index('idx_appointments_confirmed_starts').on(t.startsAt),
+    index('idx_appointments_hold_expiry').on(t.holdExpiresAt),
+    index('idx_appointments_pending_ends').on(t.endsAt),
     index('idx_appointments_booking_type_id_starts_at').on(t.orgId, t.bookingTypeId, t.startsAt),
     index('idx_appointments_starts_at').on(t.orgId, t.startsAt),
     index('idx_appointments_status').on(t.orgId, t.status),
@@ -268,7 +298,6 @@ export const bookingAvailabilityRules = pgTable(
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().defaultRandom(),
     bookingTypeId: idColumn('booking_type_id').notNull(),
-    staffId: idColumn('staff_id'),
     weekday: smallint('weekday').notNull(),
     startTime: time('start_time').notNull(),
     endTime: time('end_time').notNull(),
@@ -450,6 +479,11 @@ export const bookingReminders = pgTable(
       t.bookingTypeId,
       t.offsetIndex,
     ),
+    unique('uq_booking_reminders_booking_type_id_offset_minutes').on(
+      t.orgId,
+      t.bookingTypeId,
+      t.offsetMinutes,
+    ),
     foreignKey({
       name: 'fk_booking_reminders_booking_type_id',
       columns: [t.orgId, t.bookingTypeId],
@@ -498,7 +532,7 @@ export const bookingTemplates = pgTable(
     ),
     check(
       'chk_booking_templates_channel',
-      sql`${t.channel} in ('whatsapp', 'telegram', 'instagram', 'facebook')`,
+      sql`${t.channel} in ('whatsapp', 'email', 'telegram', 'instagram', 'facebook')`,
     ),
     unique('uq_booking_templates_booking_type_id_event_channel').on(
       t.orgId,
@@ -528,3 +562,39 @@ export const bookingTemplates = pgTable(
 
 export type BookingTemplatesRow = typeof bookingTemplates.$inferSelect;
 export type NewBookingTemplatesRow = typeof bookingTemplates.$inferInsert;
+
+export const appointmentReminderRuns = pgTable(
+  'appointment_reminder_runs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    appointmentId: idColumn('appointment_id').notNull(),
+    reminderId: idColumn('reminder_id'),
+    offsetMinutes: integer('offset_minutes').notNull(),
+    dueAt: timestamp('due_at', { withTimezone: true }).notNull(),
+    claimedAt: timestamp('claimed_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    foreignKey({
+      name: 'fk_appointment_reminder_runs_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_reminder_runs').on(t.orgId, t.appointmentId, t.offsetMinutes),
+    foreignKey({
+      name: 'fk_appointment_reminder_runs_appointment',
+      columns: [t.orgId, t.appointmentId],
+      foreignColumns: [appointments.orgId, appointments.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_appointment_reminder_runs_reminder',
+      columns: [t.orgId, t.reminderId],
+      foreignColumns: [bookingReminders.orgId, bookingReminders.id],
+    }).onDelete('set null'),
+    index('idx_appointment_reminder_runs_appointment').on(t.orgId, t.appointmentId),
+  ],
+);
+
+export type AppointmentReminderRunsRow = typeof appointmentReminderRuns.$inferSelect;
+export type NewAppointmentReminderRunsRow = typeof appointmentReminderRuns.$inferInsert;

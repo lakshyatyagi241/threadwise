@@ -22,6 +22,7 @@ import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { toTagResponse } from './tags.mapper';
 import { TagsRepository, type TagRow } from './tags.repository';
+import { segmentNamesUsing } from '../segments/segment-usage';
 
 const MODULE_KEY = 'tags';
 
@@ -122,12 +123,22 @@ export class TagsService {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Tag', uuid);
 
-      await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
+      // Segments that use this tag are not blocked: the condition now matches nothing and is flagged
+      // (invalidConditions). GET /segments/usage?kind=tag&ref=<id> lists them before the delete.
+      const segmentNames = await segmentNamesUsing(tx, ctx.orgId, 'tag', uuid);
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'delete',
+        ...(segmentNames.length > 0
+          ? { delta: { segments: { old: segmentNames, new: null } } }
+          : {}),
+      });
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,
         aggregateId: existing.id,
         eventType: 'tag.deleted',
-        payload: { uuid },
+        payload: { uuid, segments: segmentNames },
       });
 
       await this.repo.deleteById(tx, ctx.orgId, existing.id);

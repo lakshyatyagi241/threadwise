@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { currencyCodeSchema } from './money';
-import { dealTotalsSchema, dealUserRefSchema } from './deal';
+import { dealTotalsSchema, dealUserRefSchema, dealDateSchema } from './deal';
 import { stageKindSchema } from './pipeline';
 
 /**
@@ -9,7 +9,6 @@ import { stageKindSchema } from './pipeline';
  * and labelled the total with one symbol. Here a figure is a list of per-currency totals; pass `convertTo` to also get it in
  * one currency (rates from the currency table; a currency with no rate is named in `unconverted`, never guessed at 1.0).
  */
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD');
 
 export const dealReportsQuerySchema = z
   .object({
@@ -17,8 +16,8 @@ export const dealReportsQuerySchema = z
     pipelineId: uuidSchema.optional(),
     ownerId: uuidSchema.optional(),
     /** Closed-deal metrics (won, lost, win rate, leaders, lost reasons) count deals closed in [from, to], in the workspace time zone. */
-    from: isoDate.optional(),
-    to: isoDate.optional(),
+    from: dealDateSchema.optional(),
+    to: dealDateSchema.optional(),
     convertTo: currencyCodeSchema.optional(),
   })
   .refine((q) => !q.from || !q.to || q.from <= q.to, {

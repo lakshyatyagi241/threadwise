@@ -82,6 +82,8 @@ export const contacts = pgTable(
     /** Only meaningful when status='closed_lost'. Options via status_options. */
     lostReason: text('lost_reason'),
     otherLostReason: text('other_lost_reason'),
+    wonAt: timestamp('won_at', { withTimezone: true }),
+    lostAt: timestamp('lost_at', { withTimezone: true }),
     leadScore: integer('lead_score'),
     /** Enum values are org-configurable via status_options, not a fixed set here. */
     whatsappSubscriptionStatus: text('whatsapp_subscription_status'),

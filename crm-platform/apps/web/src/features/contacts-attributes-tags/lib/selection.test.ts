@@ -15,6 +15,7 @@ const filter = {
   tag: '',
   consent: '' as const,
   imported: false,
+  segment: '',
 };
 
 describe('selectionReducer (WD-CON-019)', () => {

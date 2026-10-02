@@ -18,6 +18,8 @@ export interface LinkedTasksProps {
   /** A short heading style for narrow panels (the deal drawer). */
   compact?: boolean;
   className?: string;
+  /** Called after a task was added, completed or reopened here (the deal drawer refreshes its timeline, which mirrors them). */
+  onChanged?: () => void;
 }
 
 /**
@@ -25,10 +27,10 @@ export interface LinkedTasksProps {
  * completed ones, and a link to the Tasks hub filtered to the record. Shared by the contact page and the deal drawer, so
  * both behave the same. Renders nothing for someone who may not read tasks.
  */
-export function LinkedTasks({ kind, id, compact, className }: LinkedTasksProps) {
+export function LinkedTasks({ kind, id, compact, className, onChanged }: LinkedTasksProps) {
   const can = useTasksCan();
   if (!can.read) return null;
-  return <Panel kind={kind} id={id} compact={compact} className={className} can={can} />;
+  return <Panel kind={kind} id={id} compact={compact} className={className} onChanged={onChanged} can={can} />;
 }
 
 function Panel({
@@ -36,6 +38,7 @@ function Panel({
   id,
   compact,
   className,
+  onChanged,
   can,
 }: LinkedTasksProps & { can: ReturnType<typeof useTasksCan> }) {
   const t = useTranslations('tasks.linked');
@@ -59,6 +62,7 @@ function Panel({
       assigneeId: session.user.id,
       ...(kind === 'contact' ? { contactId: id } : { dealId: id }),
     });
+    if (next !== null) onChanged?.();
     return next !== null;
   }
 
@@ -122,7 +126,7 @@ function Panel({
                   done={isDone}
                   title={task.title}
                   disabled={!can.update}
-                  onToggle={() => void actions.toggle(task)}
+                  onToggle={() => void actions.toggle(task).then((next) => next && onChanged?.())}
                 />
                 <div className="min-w-0 flex-1">
                   <Link

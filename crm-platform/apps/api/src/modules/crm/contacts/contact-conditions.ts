@@ -1,6 +1,14 @@
 import { and, eq, inArray, notInArray, sql, type SQL } from 'drizzle-orm';
 import { schema } from '@crm/db';
 import type { RecordScope } from '@crm/contracts';
+import {
+  dateWindowPredicate,
+  escapeLike,
+  groupsPredicate,
+  tagsPredicate,
+} from './contact-predicates';
+
+export { escapeLike };
 
 const { contacts, teamMembers } = schema;
 
@@ -23,6 +31,18 @@ export interface ResolvedContactFilter {
   unsubscribed?: boolean;
   source?: string;
   status?: string;
+  /** Date windows, both ends inclusive (a bare day covers the whole day, UTC). */
+  createdFrom?: string;
+  createdTo?: string;
+  updatedFrom?: string;
+  updatedTo?: string;
+  lastActivityFrom?: string;
+  lastActivityTo?: string;
+  /**
+   * The compiled rules of a segment (segments/segment-compiler.ts): one more AND condition. Resolved
+   * by the filter resolver, never taken from the wire.
+   */
+  segment?: SQL;
   /** Explicit selection: contacts with these uuids. */
   uuids?: string[];
   /** The rows the user un-ticked after choosing "select all matching". */
@@ -51,11 +71,6 @@ export function contactScopeCondition(
   `;
 }
 
-/** `%` and `_` in what the user typed are text, not wildcards. */
-export function escapeLike(term: string): string {
-  return term.replace(/[\\%_]/g, (c) => `\\${c}`);
-}
-
 /** Words of the search box. */
 export function searchTokens(q: string): string[] {
   return q.split(/\s+/).filter(Boolean).slice(0, 8);
@@ -66,7 +81,7 @@ export function searchTokens(q: string): string[] {
  * word that looks like a number, in the digits of the phone ("9812" finds "+91 98123 45678").
  * Every word has to match: "Sharma Aarav" finds "Aarav Sharma".
  */
-function tokenCondition(token: string): SQL {
+export function tokenCondition(token: string): SQL {
   const like = `%${escapeLike(token)}%`;
   const parts: SQL[] = [
     sql`${contacts.name} ILIKE ${like}`,
@@ -82,11 +97,6 @@ function tokenCondition(token: string): SQL {
   return sql`(${sql.join(parts, sql` OR `)})`;
 }
 
-const inGroup = (orgId: number, groupId: number): SQL => sql`EXISTS (
-  SELECT 1 FROM contact_group_members m
-  WHERE m.org_id = ${orgId} AND m.contact_id = ${contacts.id} AND m.group_id = ${groupId}
-)`;
-
 export function contactConditions(
   orgId: number,
   f: ResolvedContactFilter,
@@ -101,35 +111,30 @@ export function contactConditions(
   if (f.source) c.push(eq(contacts.source, f.source));
   if (f.q) for (const token of searchTokens(f.q)) c.push(tokenCondition(token));
 
-  if (f.groupId !== undefined) c.push(inGroup(orgId, f.groupId));
-  if (f.noGroup) {
-    c.push(sql`NOT EXISTS (
-      SELECT 1 FROM contact_group_members m
-      WHERE m.org_id = ${orgId} AND m.contact_id = ${contacts.id}
-    )`);
-  }
+  if (f.groupId !== undefined)
+    c.push(groupsPredicate(orgId, sql`${contacts.id}`, 'has_any', [f.groupId]));
+  if (f.noGroup) c.push(groupsPredicate(orgId, sql`${contacts.id}`, 'is_empty', []));
 
   if (f.tagIds && f.tagIds.length > 0) {
-    if (f.tagMode === 'all') {
-      c.push(sql`(
-        SELECT count(DISTINCT ct.tag_id) FROM contact_tags ct
-        WHERE ct.org_id = ${orgId} AND ct.contact_id = ${contacts.id}
-          AND ct.tag_id IN (${sql.join(
-            f.tagIds.map((id) => sql`${id}`),
-            sql`, `,
-          )})
-      ) = ${f.tagIds.length}`);
-    } else {
-      c.push(sql`EXISTS (
-        SELECT 1 FROM contact_tags ct
-        WHERE ct.org_id = ${orgId} AND ct.contact_id = ${contacts.id}
-          AND ct.tag_id IN (${sql.join(
-            f.tagIds.map((id) => sql`${id}`),
-            sql`, `,
-          )})
-      )`);
-    }
+    c.push(
+      tagsPredicate(
+        orgId,
+        sql`${contacts.id}`,
+        f.tagMode === 'all' ? 'has_all' : 'has_any',
+        f.tagIds,
+      ),
+    );
   }
+
+  for (const [column, from, to] of [
+    [contacts.createdAt, f.createdFrom, f.createdTo],
+    [contacts.updatedAt, f.updatedFrom, f.updatedTo],
+    [contacts.lastActivityAt, f.lastActivityFrom, f.lastActivityTo],
+  ] as const) {
+    const window = dateWindowPredicate(sql`${column}`, from, to);
+    if (window) c.push(window);
+  }
+  if (f.segment) c.push(f.segment);
 
   if (f.imported !== undefined) {
     c.push(
