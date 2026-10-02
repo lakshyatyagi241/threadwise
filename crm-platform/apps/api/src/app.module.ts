@@ -30,6 +30,7 @@ import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
 import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
+import { CmsModule } from './modules/marketing-site-cms';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -108,6 +109,7 @@ import { HealthModule } from './health/health.module';
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
+    CmsModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,

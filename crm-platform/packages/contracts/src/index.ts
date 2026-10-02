@@ -36,3 +36,4 @@ export * from './install-update-licensing';
 export * from './addons-extension-registry';
 export * from './platform-support-desk';
 export * from './ai-keys-usage-admin';
+export * from './marketing-site-cms';

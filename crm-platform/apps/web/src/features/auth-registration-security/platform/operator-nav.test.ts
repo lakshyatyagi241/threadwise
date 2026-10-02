@@ -37,5 +37,11 @@ describe('groupNav', () => {
     expect(groups[3]!.items.map((i) => i.id)).toEqual(['addon-packs', 'extensions']);
     expect(groups[3]!.items.map((i) => i.id)).toEqual(['support-inbox']);
     expect(groups[3]!.items.map((i) => i.id)).toEqual(['ai-keys', 'ai-dashboard']);
+    expect(groups[3]!.items.map((i) => i.id)).toEqual([
+      'cms-frontend',
+      'cms-blog',
+      'cms-legal',
+      'cms-contact',
+    ]);
   });
 });
