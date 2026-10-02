@@ -68,6 +68,8 @@ export const wabaReadinessSchema = z.object({
   /** Interakt's `extras.setup.solutionID`; null on the direct-Meta route. */
   solutionId: z.string().nullable(),
   graphVersion: z.string(),
+  /** Whether the "connect my existing Business App number" button is offered. */
+  coexistence: z.boolean(),
   defaultProvider: wabaProviderSchema,
   /** Environment names still unset, so an admin sees exactly what blocks Embedded Signup. */
   missing: z.array(z.string()),
@@ -75,6 +77,15 @@ export const wabaReadinessSchema = z.object({
   webhookUrl: z.string().nullable(),
 });
 export type WabaReadiness = z.infer<typeof wabaReadinessSchema>;
+
+/** `GET /v2/platform/waba/callback` (super admin): what to paste into the Meta app's WhatsApp > Configuration. */
+export const wabaPlatformCallbackSchema = z.object({
+  webhookUrl: z.string().nullable(),
+  verifyToken: z.string(),
+  /** The webhook fields to subscribe. */
+  fields: z.array(z.string()),
+});
+export type WabaPlatformCallback = z.infer<typeof wabaPlatformCallbackSchema>;
 
 // --- connecting ------------------------------------------------------------------------------------------------------
 

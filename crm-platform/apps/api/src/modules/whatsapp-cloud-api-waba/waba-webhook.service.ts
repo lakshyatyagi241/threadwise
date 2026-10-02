@@ -57,7 +57,7 @@ export class WabaWebhookService {
     challenge: string | undefined,
   ): string {
     const expected = verifyTokenFor(
-      this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
+      this.env.WABA_VERIFY_TOKEN ?? this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
       this.credentialsKey(),
     );
     if (mode !== 'subscribe' || !token || !challenge || !safeEqual(token, expected)) {

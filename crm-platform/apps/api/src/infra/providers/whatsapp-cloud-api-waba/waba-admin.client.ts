@@ -109,6 +109,7 @@ export class WabaAdminClient implements WabaAdminPort {
       configId: e.META_EMBEDDED_CONFIG_ID ?? null,
       solutionId: e.INTERAKT_SOLUTION_ID ?? null,
       graphVersion: e.META_API_VERSION,
+      coexistence: e.WABA_COEXISTENCE,
       defaultProvider: e.WABA_DEFAULT_PROVIDER,
       missing,
     };

@@ -665,7 +665,7 @@ export class WabaConnectService {
         inboundUrlKey(this.config.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true })),
       ),
       verifyToken: verifyTokenFor(
-        this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
+        this.env.WABA_VERIFY_TOKEN ?? this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
         this.config.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }),
       ),
     };

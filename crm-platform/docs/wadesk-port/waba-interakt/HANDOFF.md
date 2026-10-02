@@ -337,3 +337,41 @@ Each item names the WaDesk inventory ids (in `docs/wadesk-port/inventory/`) and 
 * No `device_limit` enforcement (a workspace can connect unlimited numbers).
 * The e2e spec stubs ids as numeric strings; production ids are numeric too, but the contract rejects non-numeric ids before any call.
 * The shared dev DB and the other checkouts were not touched.
+
+
+---------------------------------------------------------------------------------------------------
+
+## 12. Update (cloud session, branch `claude/compassionate-bohr-52lcqm`)
+
+Built on top of `lakshya/waba/meta-interakt` @ `30fcee0`.
+
+**Web (staff app)**, domain `features/whatsapp-cloud-api-waba`, routes `/channels/whatsapp` and `/channels/whatsapp/:id/health`:
+numbers list with per-number actions (WD-WABA-004, 014, 016, 017, 018, 012), Embedded Signup launcher with the buffered code + `WA_EMBEDDED_SIGNUP`
+message flow, double-POST guard, 15 s no-session notice and a strict `facebook.com` origin check (WD-WABA-005, 009), manual connect with
+"Verify token" (006, 007), health page with issues, token replace and renew (019, 020, 021, 022). Pure Embedded Signup logic is unit tested
+(`lib/embedded-signup.test.ts`). Coexistence button shows when the platform setting is on (WD-WABA-010 launch only; the chat-history sync
+WD-WABA-028 is not built).
+
+**Platform admin page (WD-WABA-001)**, `/admin/settings/whatsapp`, laid out like WaDesk's Settings > Channels > WhatsApp: Meta App ID, App Secret,
+Embedded Signup Config ID, Graph version, coexistence, default route, Interakt solution id / partner key, system user, business id, webhook verify
+token, signature requirement, plus read-only Webhook URL and Verify token with copy buttons and the quick-guide panel.
+* New SET group `whatsapp` (contracts `groups.ts`; secrets: `appSecret`, `verifyToken`, `partnerAuthKey`, `systemUserToken`, stored encrypted, never returned).
+  This touches the platform-settings zone (`ownership.json`: not ours): tell its owner.
+* `WabaConfigService` overlays saved values on `WABA_ENV` in place every 15 s in the API and the worker. Saved non-empty value wins, otherwise the
+  environment; nothing saved leaves env untouched. Env remains the fallback, so nothing already configured breaks.
+* `GET /v2/platform/waba/callback` (super admin) returns the effective webhook URL and verify token.
+* `WabaReadiness` gained `coexistence`; `WabaHealth` contract added; `WABA_COEXISTENCE` and `WABA_VERIFY_TOKEN` env fallbacks added.
+
+**Not done / differences from the WaDesk page**
+* The engines card (Twilio, Unofficial/Baileys, Business API with a default radio) is not built: Baileys is out of scope per Shubham, Twilio is another channel.
+  `allowed_send_methods` and `waba_dispatch_v2_enabled` (a dead flag in WaDesk) are therefore absent.
+* "Connected WABAs" count on the admin page needs a cross-tenant privileged count: not built.
+* The health page shows only what the existing `health` endpoint returns (phone node + derived issues). WaDesk's WABA node, `debug_token` scopes, free
+  conversation allowance, template tally, webhook apps list, verified-badge, username and calling cards (WD-WABA-021/023/024/025) are not built.
+* `readiness.missing` still names env variables; the numbers page tells workspace users to ask the platform admin.
+* Business profile edit UI (endpoints exist) and message QR codes are not built.
+* No per-screen permission payload exists yet, so buttons are not hidden by role; the server returns 403 and the screen shows it.
+
+**Verification run here:** web typecheck/eslint clean, 55 web tests for the touched domains pass, full API unit suite 1652 pass, `arch:check` clean.
+**Not run:** the WABA e2e suite (needs Docker, none in this container; one assertion was updated for `coexistence`), the browser parity run against
+the running WaDesk, and anything against real Meta/Interakt.
