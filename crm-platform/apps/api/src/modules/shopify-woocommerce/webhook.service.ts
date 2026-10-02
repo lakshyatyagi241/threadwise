@@ -95,7 +95,6 @@ export class WebhookService {
           eventType,
           data,
           log: { id: log.id, createdAt: log.createdAt.toISOString() },
-          phase: 'full',
         },
         {
           attempts: 3,

@@ -81,6 +81,8 @@ export interface CommerceSender {
       senderKey?: string | null;
     },
   ): Promise<{ providerMessageId: string | null }>;
+  /** Whether a number is connected to send from now (nothing is scheduled for a workspace that has none). */
+  canSend(orgId: number): Promise<boolean>;
   /** A plain text answer to a message the customer just sent (inside their open session): the COD confirmation reply. */
   sendText(
     orgId: number,

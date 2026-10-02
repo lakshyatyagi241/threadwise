@@ -103,7 +103,6 @@ const restock = (t: Tenant, storeId: number, data: Record<string, unknown>) =>
         eventType: 'products/update',
         data,
         log: { id: Number(log.id), createdAt: new Date(log.created_at).toISOString() },
-        phase: 'full',
       };
       return pipeline.run(job);
     });

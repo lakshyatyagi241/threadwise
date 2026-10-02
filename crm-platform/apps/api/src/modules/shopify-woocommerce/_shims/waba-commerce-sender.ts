@@ -75,6 +75,13 @@ export class WabaCommerceSender implements CommerceSender {
     });
   }
 
+  async canSend(orgId: number): Promise<boolean> {
+    return this.number(orgId, null).then(
+      () => true,
+      () => false,
+    );
+  }
+
   async sendText(
     orgId: number,
     m: { to: string; body: string; reference: string },

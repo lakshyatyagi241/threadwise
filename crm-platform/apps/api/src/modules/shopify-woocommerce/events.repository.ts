@@ -84,6 +84,27 @@ export class EventsRepository {
     }));
   }
 
+  /** The active automations of a store among these event types that have a template, ordered by event type. */
+  async activeAmong(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    storeId: number,
+    types: readonly string[],
+  ): Promise<EventConfig[]> {
+    const t = tables(kind);
+    const res = await tx.execute(sql`
+      SELECT id, event_type, is_active, template_id, var_map, send_to, admin_number, delay_seconds
+      FROM ${t.events}
+      WHERE org_id = ${orgId} AND integration_id = ${storeId} AND is_active AND template_id IS NOT NULL
+        AND event_type IN (${sql.join(
+          types.map((x) => sql`${x}`),
+          sql`, `,
+        )})
+      ORDER BY event_type`);
+    return (res.rows as Array<Record<string, unknown>>).map(toConfig);
+  }
+
   /** Deliveries logged per event type. */
   async fired(
     tx: Tx,
