@@ -178,8 +178,7 @@ describe('chat page (WD-WGT-009)', () => {
     expect(page).toContain('placeholder="Type a message');
   });
 
-  it('WD-WGT-023 #2: the remembered visitor key is built from the widget, so rotating the token keeps visitors', () => {
-    expect(page).toContain(`"${widget.uuid}"`);
-    expect(page).toContain("'wgt_vid_' + ");
+  it('WD-WGT-023 rule 2 QUIRK: the remembered visitor key is built from the TOKEN, so rotating the token orphans a returning visitor (as WaDesk)', () => {
+    expect(page).toContain("'wsnap_vid_' + TOKEN");
   });
 });

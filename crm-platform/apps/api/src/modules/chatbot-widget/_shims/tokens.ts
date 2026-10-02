@@ -116,6 +116,8 @@ export interface InboxGateway {
   ): Promise<boolean>;
   /** Newest `limit` lines, oldest first. */
   recent(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]>;
+  /** The oldest `limit` lines, oldest first (the transcript the widget repaints). */
+  oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]>;
   /** Outbound lines with an id above `since`, oldest first. */
   outboundSince(tx: Tx, orgId: number, conversationId: number, since: number): Promise<InboxLine[]>;
 }

@@ -518,7 +518,8 @@
             "calling": "WhatsApp calling",
             "remove_branding": "White-label",
             "sales_pipeline": "Sales pipeline",
-            "appointment_booking": "Appointments"
+            "appointment_booking": "Appointments",
+            "chatbot_widgets": "Chatbot widgets"
           },
           "cta": {
             "continueFree": "Continue free",

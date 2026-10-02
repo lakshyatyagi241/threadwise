@@ -72,16 +72,10 @@ export const WIDGET_BUILDER_DEFAULTS = {
 export const WIDGET_HEX_COLOUR = /^#[0-9a-fA-F]{3,8}$/;
 
 /**
- * Colours are stored as free text up to 16 characters in WaDesk and applied verbatim. Here they must at least be a
- * token that cannot carry markup or a style break-out (hex, a colour name, rgb()/hsl()), a security hardening
- * recorded as an intended difference.
+ * Colours are free text up to 16 characters, as in WaDesk (no format check on the server; only the launcher fill is checked,
+ * in the browser). The embed script and chat page only ever apply them through style properties after a safety check.
  */
-const colour = z
-  .string()
-  .trim()
-  .min(1)
-  .max(WIDGET_LIMITS.colour)
-  .regex(/^[#a-zA-Z0-9(),.%\s-]+$/, 'must be a colour such as #075E54');
+const colour = z.string().trim().min(1).max(WIDGET_LIMITS.colour);
 
 const optionalText = (max: number) =>
   z
@@ -138,8 +132,9 @@ export const widgetFieldsSchema = z.object({
   collectEmail: z.boolean().optional(),
   collectPhone: z.boolean().optional(),
   /** Absent leaves the stored list alone (the builder never sends it, WD-WGT-021). */
+  // WaDesk trimmed every input and turned an empty string into null before validating, so a blank entry is "must be a string" (422).
   allowedDomains: z
-    .array(z.string().max(WIDGET_LIMITS.domain))
+    .array(z.string().trim().min(1).max(WIDGET_LIMITS.domain))
     .max(WIDGET_LIMITS.allowedDomains)
     .optional()
     .transform((v) => (v === undefined ? undefined : normaliseAllowedDomains(v))),
@@ -154,12 +149,6 @@ export const updateWidgetSchema = widgetFieldsSchema.extend({
   rowVersion: z.number().int().min(1),
 });
 export type UpdateWidgetInput = z.infer<typeof updateWidgetSchema>;
-
-export const setWidgetStatusSchema = z.object({
-  status: z.enum(WIDGET_STATUSES),
-  rowVersion: z.number().int().min(1),
-});
-export type SetWidgetStatusInput = z.infer<typeof setWidgetStatusSchema>;
 
 export const widgetAssistantRefSchema = z.object({ id: uuidSchema, name: z.string() });
 export type WidgetAssistantRef = z.infer<typeof widgetAssistantRefSchema>;
@@ -215,7 +204,6 @@ export type WidgetListItem = z.infer<typeof widgetListItemSchema>;
 /** WaDesk listed 20 per page, newest first; the cursor page keeps the size. */
 export const listWidgetsQuerySchema = paginationQuerySchema.omit({ order: true }).extend({
   limit: z.coerce.number().int().min(1).max(100).default(20),
-  status: z.enum(WIDGET_STATUSES).optional(),
 });
 export type ListWidgetsQuery = z.infer<typeof listWidgetsQuerySchema>;
 

@@ -52,6 +52,8 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'sales_pipeline', group: 'advanced', default: true },
   // Booking types, appointments and the public booking pages (WD-APPT-001). Default true: WaDesk's column default.
   { key: 'appointment_booking', group: 'advanced', default: true },
+  // The website chatbot widget builder (WD-WGT-027). Default false: WaDesk's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
+  { key: 'chatbot_widgets', group: 'messaging', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -72,6 +74,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'remove_branding',
   'sales_pipeline',
   'appointment_booking',
+  'chatbot_widgets',
 ];
 export const PLAN_CHIP_MAX = 3;
 

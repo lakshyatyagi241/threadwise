@@ -518,7 +518,8 @@
             "calling": "مكالمات واتساب",
             "remove_branding": "العلامة البيضاء",
             "sales_pipeline": "مسار المبيعات",
-            "appointment_booking": "المواعيد"
+            "appointment_booking": "المواعيد",
+            "chatbot_widgets": "أدوات الدردشة"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

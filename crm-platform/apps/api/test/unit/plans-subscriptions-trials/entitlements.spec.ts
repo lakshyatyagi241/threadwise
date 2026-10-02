@@ -58,6 +58,7 @@ describe('registry', () => {
       'remove_branding',
       'sales_pipeline',
       'appointment_booking',
+      'chatbot_widgets',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

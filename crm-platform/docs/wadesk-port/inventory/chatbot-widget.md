@@ -1001,6 +1001,29 @@ Response shape: `ok`; `widget` = { name, mode, header_title, header_bg, header_t
 - **Source refs:** `database/migrations/2026_07_10_120000_backfill_widget_messages_into_inbox_messages.php`.
 - **Port notes:** Not needed for a greenfield port (no legacy data). If importing from a WaDesk database, include the welcome-message rows from `messages` where `meta.source='welcome'` when migrating widget threads.
 
+## Port decisions: quirks reproduced deliberately
+
+The project owner asked for the port to be the same as WaDesk in everything, bugs included. Each `QUIRK:` below was checked on the running reference and is
+reproduced on purpose (tests carry the id; see `docs/wadesk-port/parity/chatbot-widget.md`).
+
+- QUIRK (WD-WGT-017): the assistant answers only the first visitor message of a conversation: any outbound line counts as "a person took over". Reproduced.
+- QUIRK (WD-WGT-020 rule 7): a non-empty allow-list blocks the chat page's own message POSTs (`cors_origin_denied`). Reproduced.
+- QUIRK (WD-WGT-006 rule 4): saving with an id that is not in the workspace creates a new widget. Reproduced (`PATCH /v2/widgets/:id` with an unknown id creates).
+- QUIRK (WD-WGT-006): a blank `allowed_domains` entry is a 422 "must be a string"; colours are any string up to 16 characters. Reproduced.
+- QUIRK (WD-WGT-015 rule 4): the opening line goes to the legacy `messages` table, so agents never see it and a reload never repaints it. Reproduced.
+- QUIRK (WD-WGT-012 rule 2): the transcript is the OLDEST 200 messages. Reproduced.
+- QUIRK (WD-WGT-016 rule 4): the history sent to the model includes the visitor's new message, which is then also quoted as "Visitor just said". Reproduced.
+- QUIRK (WD-WGT-018 rule 1, WD-WGT-011 rule 4): the history route ignores the status, and an unknown or missing visitor uuid creates a visitor row on every poll. Reproduced.
+- QUIRK (WD-WGT-022 rule 2): one throttle counter per client address shared by the message and history routes of every widget; config has none. Reproduced.
+- QUIRK (WD-WGT-001, 026): the status views are inert, nothing can pause a widget (no endpoint, no row action); the stat cards and footer are not touched by a delete; a rotation updates only the copy button. Reproduced.
+- QUIRK (WD-WGT-024): a duplicate keeps the original author and a name at the limit grows past it. Reproduced.
+- QUIRK (WD-WGT-009, 005): failed config shows a blank page with Send disabled; a refused message shows nothing; Enter sends even while Send is disabled; a double click on Launch creates two widgets. Reproduced.
+- QUIRK (WD-WGT-023 rule 2): the remembered visitor key is built from the token. Reproduced.
+- QUIRK (WD-WGT-027): `chatbot_widgets_limit` is never enforced; public routes ignore the plan. Reproduced.
+
+What cannot be reproduced because the architecture forbids it is listed as `intended` in the parity file (uuid ids, hard delete, cursor pagination, tenant isolation,
+problem+json on the admin API, the web app and API being two origins).
+
 ## Data model
 
 ### `chatbot_widgets` (model `ChatbotWidget`, soft deletes)

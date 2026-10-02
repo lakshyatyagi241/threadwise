@@ -5,7 +5,6 @@ import {
   PLAN_UPGRADE_PATH,
   createWidgetSchema,
   listWidgetsQuerySchema,
-  setWidgetStatusSchema,
   updateWidgetSchema,
   type CreateWidgetInput,
   type ListWidgetsResponse,
@@ -26,7 +25,7 @@ import {
   type AssistantDirectory,
   type WidgetPlanGate,
 } from './_shims/tokens';
-import { copyName, copySlug, freshToken, slugBase, uniqueSlug } from './widget-rules';
+import { copySlug, freshToken, slugBase, uniqueSlug } from './widget-rules';
 import { WidgetsRepository, type WidgetRow, type WidgetWrite } from './widgets.repository';
 import { toWidget, toWidgetListItem, widgetUrls } from './widgets.mapper';
 
@@ -103,7 +102,6 @@ export class WidgetsService {
       rows: await this.repo.list(tx, orgId, {
         limit: query.limit,
         afterId,
-        status: query.status ?? null,
       }),
       stats: await this.repo.stats(tx, orgId),
     }));
@@ -195,33 +193,45 @@ export class WidgetsService {
     await this.assertPlan(orgId);
     const input = parse(createWidgetSchema, body);
 
-    const row = await this.db.tx(async (tx) => {
-      const assistantId = await this.resolveAssistant(tx, orgId, input);
-      const base = slugBase(input.name);
-      const slug = uniqueSlug(base, await this.repo.slugsLike(tx, orgId, base, null));
-      const id = await this.repo.insert(
-        tx,
-        orgId,
-        ctx.userId,
-        slug,
-        freshToken(),
-        this.toWrite(input, assistantId),
-      );
-      const created = (await this.repo.findById(tx, orgId, id))!;
-      await this.record(tx, created, 'insert', 'widget.created');
-      return created;
-    });
+    const row = await this.db.tx((tx) => this.createIn(tx, orgId, ctx.userId, input));
     return toWidget(row, this.publicBase);
   }
 
+  private async createIn(
+    tx: Tx,
+    orgId: number,
+    userId: number | null,
+    input: CreateWidgetInput,
+  ): Promise<WidgetRow> {
+    const assistantId = await this.resolveAssistant(tx, orgId, input);
+    const base = slugBase(input.name);
+    await this.repo.lockSlugs(tx, orgId);
+    const slug = uniqueSlug(base, await this.repo.slugsLike(tx, orgId, base, null));
+    const id = await this.repo.insert(
+      tx,
+      orgId,
+      userId,
+      slug,
+      freshToken(),
+      this.toWrite(input, assistantId),
+    );
+    const created = (await this.repo.findById(tx, orgId, id))!;
+    await this.record(tx, created, 'insert', 'widget.created');
+    return created;
+  }
+
   async update(uuid: string, body: unknown): Promise<Widget> {
-    const orgId = RequestContextStore.orgId();
+    const ctx = RequestContextStore.require();
+    const orgId = ctx.orgId;
     await this.assertPlan(orgId);
     const input = parse(updateWidgetSchema, body);
 
     const row = await this.db.tx(async (tx) => {
       const current = await this.repo.findByUuid(tx, orgId, uuid);
-      if (!current) throw AppError.notFound('Widget', uuid);
+      // QUIRK: reproduced deliberately (WD-WGT-006 rule 4). Saving with an id that is not in this workspace (another
+      // workspace's widget, a deleted one, one that never existed) silently creates a NEW widget instead of failing, and the
+      // widget that id pointed at is untouched.
+      if (!current) return this.createIn(tx, orgId, ctx.userId, input);
       const assistantId = await this.resolveAssistant(tx, orgId, input);
       // A renamed widget keeps its slug (WaDesk): the address people may have shared does not move.
       const ok = await this.repo.update(
@@ -240,40 +250,23 @@ export class WidgetsService {
     return toWidget(row, this.publicBase);
   }
 
-  async setStatus(uuid: string, body: unknown): Promise<Widget> {
-    const orgId = RequestContextStore.orgId();
-    await this.assertPlan(orgId);
-    const input = parse(setWidgetStatusSchema, body);
-    const row = await this.db.tx(async (tx) => {
-      const current = await this.repo.findByUuid(tx, orgId, uuid);
-      if (!current) throw AppError.notFound('Widget', uuid);
-      const ok = await this.repo.setStatus(tx, orgId, current.id, input.status, input.rowVersion);
-      if (!ok) throw AppError.rowVersionConflict('Widget');
-      const saved = (await this.repo.findById(tx, orgId, current.id))!;
-      await this.record(tx, saved, 'update', 'widget.status_changed', {
-        status: { old: current.status, new: saved.status },
-      });
-      return saved;
-    });
-    return toWidget(row, this.publicBase);
-  }
-
-  /** A copy with a fresh token and a "(copy)" name, authored by the caller; visitors and threads are not copied. */
+  /** A copy with a fresh token and a "(copy)" name; visitors and threads are not copied. */
   async duplicate(uuid: string): Promise<Widget> {
-    const ctx = RequestContextStore.require();
-    const orgId = ctx.orgId;
+    const orgId = RequestContextStore.orgId();
     await this.assertPlan(orgId);
     const row = await this.db.tx(async (tx) => {
       const src = await this.repo.findByUuid(tx, orgId, uuid);
       if (!src) throw AppError.notFound('Widget', uuid);
+      // WaDesk replicated the row: the copy keeps the ORIGINAL author (`user_id`), and a name at the 120-character limit
+      // grows past it (the column here is unbounded text; WaDesk answered a database error).
       const id = await this.repo.insert(
         tx,
         orgId,
-        ctx.userId,
+        src.userId,
         copySlug(src.slug),
         freshToken(),
         {
-          name: copyName(src.name),
+          name: `${src.name} (copy)`,
           mode: src.mode,
           assistantId: src.assistantId,
           targetWhatsappCc: src.targetWhatsappCc,

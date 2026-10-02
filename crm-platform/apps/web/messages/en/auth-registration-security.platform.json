@@ -1425,7 +1425,8 @@
             "analytics": "Analytics",
             "remove_branding": "White-label (removes platform branding)",
             "sales_pipeline": "Sales pipeline (deals and tasks)",
-            "appointment_booking": "Appointments and booking pages"
+            "appointment_booking": "Appointments and booking pages",
+            "chatbot_widgets": "Website chatbot widgets"
           },
           "problems": {
             "required": "This field is required.",
