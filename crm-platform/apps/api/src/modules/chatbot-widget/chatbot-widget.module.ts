@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AI_CHAT_PORT } from '../../infra/providers/chatbot-widget/ai-chat.port';
 import { HttpAiChatAdapter } from '../../infra/providers/chatbot-widget/http-ai-chat.adapter';
-import { NoLanguageHint, OpenWidgetPlanGate } from './_shims/open-gates';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { NoLanguageHint } from './_shims/open-gates';
 import { SqlAssistantDirectory } from './_shims/sql-assistant-directory';
 import { SqlInboxGateway } from './_shims/sql-inbox-gateway';
 import {
@@ -10,6 +11,7 @@ import {
   LANGUAGE_HINT,
   WIDGET_PLAN_GATE,
 } from './_shims/tokens';
+import { EntitlementWidgetPlanGate } from './widget-plan';
 import { WidgetAiReplyService } from './widget-ai-reply.service';
 import { WidgetPublicController } from './widget-public.controller';
 import { WidgetPublicService } from './widget-public.service';
@@ -25,6 +27,7 @@ import { WidgetsService } from './widgets.service';
  * binding the real service to the same token (see _shims/README.md).
  */
 @Module({
+  imports: [PlansCoreModule],
   controllers: [WidgetsController, WidgetPublicController],
   providers: [
     WidgetsService,
@@ -36,7 +39,7 @@ import { WidgetsService } from './widgets.service';
     { provide: AI_CHAT_PORT, useClass: HttpAiChatAdapter },
     { provide: ASSISTANT_DIRECTORY, useClass: SqlAssistantDirectory },
     { provide: INBOX_GATEWAY, useClass: SqlInboxGateway },
-    { provide: WIDGET_PLAN_GATE, useClass: OpenWidgetPlanGate },
+    { provide: WIDGET_PLAN_GATE, useClass: EntitlementWidgetPlanGate },
     { provide: LANGUAGE_HINT, useClass: NoLanguageHint },
   ],
 })

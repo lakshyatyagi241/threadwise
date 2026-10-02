@@ -17,6 +17,10 @@ const SELF_SERVICE: Readonly<Record<string, string>> = {
   'modules/auth/controllers/registration.controller.ts':
     'verification mail for the caller’s own address',
   'modules/notifications/notifications.controller.ts': 'the caller’s own notification feed',
+  'infra/providers/chat-conversations/media/media.controller.ts':
+    'a short-lived signed token bound to one person and workspace, checked against the conversation’s visibility rule at read time',
+  'realtime/ticket/realtime-ticket.controller.ts':
+    'mints a one-time realtime ticket for the caller’s own session; every room is authorised again at join',
   'modules/team-chat/team-chat.controller.ts':
     'checked per action inside the service from the member’s capabilities (tchat.* keys, channel membership)',
 };

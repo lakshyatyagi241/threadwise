@@ -56,6 +56,10 @@ export const chatbotWidgets = pgTable(
     collectPhone: boolean('collect_phone').notNull().default(false),
     status: text('status').notNull().default('active'),
     allowedDomains: jsonb('allowed_domains'),
+    // migrations/20261010100300_wgt_launcher_config.sql: the WhatsApp widget's look and placement, one object (TW-WGT-028).
+    launcher: jsonb('launcher')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -88,6 +92,7 @@ export const chatbotWidgets = pgTable(
     check('chk_chatbot_widgets_position', sql`${t.position} IN ('bottom_right', 'bottom_left')`),
     check('chk_chatbot_widgets_body_bg_kind', sql`${t.bodyBgKind} IN ('color', 'image')`),
     check('chk_chatbot_widgets_status', sql`${t.status} IN ('active', 'paused')`),
+    check('chk_chatbot_widgets_launcher_object', sql`jsonb_typeof(${t.launcher}) = 'object'`),
   ],
 );
 

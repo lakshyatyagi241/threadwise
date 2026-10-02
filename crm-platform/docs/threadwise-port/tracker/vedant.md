@@ -120,10 +120,10 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-NODE-001 | todo |  |  |
-| TW-NODE-002 | todo |  |  |
+| TW-NODE-001 | blocked |  | no bridge process in this repo until decision E |
+| TW-NODE-002 | in-progress |  | guard + first route done; applies to every later bridge-facing route |
 | TW-NODE-003 | todo |  |  |
-| TW-NODE-004 | todo |  |  |
+| TW-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
 | TW-NODE-005 | todo |  |  |
 | TW-NODE-006 | todo |  |  |
 | TW-NODE-007 | todo |  |  |
@@ -148,7 +148,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-026 | todo |  |  |
 | TW-NODE-027 | todo |  |  |
 | TW-NODE-028 | todo |  |  |
-| TW-NODE-029 | todo |  |  |
+| TW-NODE-029 | in-progress |  | admin pacing + bridge pull route done; jitter, batching, daily cap wait for the send pipeline |
 | TW-NODE-030 | todo |  |  |
 | TW-NODE-031 | todo |  |  |
 | TW-NODE-032 | todo |  |  |
@@ -171,7 +171,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-049 | todo |  |  |
 | TW-NODE-050 | todo |  |  |
 | TW-NODE-051 | todo |  |  |
-| TW-NODE-052 | todo |  |  |
+| TW-NODE-052 | frontend-done |  | address, token, test connection; parity run pending |
 | TW-NODE-053 | todo |  |  |
 | TW-NODE-054 | todo |  |  |
 
@@ -593,16 +593,16 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WGT-016 | done |  |  |
 | TW-WGT-017 | done |  |  |
 | TW-WGT-018 | done |  |  |
-| TW-WGT-019 | blocked |  | Widget side done (thread, hand-off, polling contract tested); inbox screens, reply path and mobile list belong to TIB1/MOB |
+| TW-WGT-019 | partial |  | Widget side done through the InboxGateway shim (SQL writes to the inbox tables; thread, contact, opening line in the legacy messages table, polling contract tested); Team Inbox screens, the agent reply path and the mobile list belong to TIB1/MOB |
 | TW-WGT-020 | done |  |  |
-| TW-WGT-021 | backend-done |  | allowedDomains API and CORS enforcement done; the builder has no control for it, as in Reference |
+| TW-WGT-021 | done |  | as Reference has it: allowedDomains API and CORS enforcement, no builder control (its docs promise one, the screen has none); blank entry 422 and the widget's own posts blocked are reproduced quirks |
 | TW-WGT-022 | done |  |  |
 | TW-WGT-023 | done |  |  |
 | TW-WGT-024 | done |  |  |
 | TW-WGT-025 | done |  |  |
-| TW-WGT-026 | done |  |  |
-| TW-WGT-027 | blocked |  | RBAC keys done; access_chatbot_widgets is not in the PLAN catalogue (open gate shim); widget limit unenforced as in Reference |
-| TW-WGT-028 | frontend-done |  | sidebar item done; More tile, quick access and command palette belong to the shell |
+| TW-WGT-026 | done |  | as Reference: nothing can pause a widget (no endpoint or action); status views inert |
+| TW-WGT-027 | done |  | RBAC keys plus the `chatbot_widgets` plan flag (catalogue + entitlement gate, 422 PLAN_FEATURE_LOCKED, paywall); widget limit unenforced and public routes ignore the plan, as Reference |
+| TW-WGT-028 | partial |  | sidebar item done; More tile, quick access and command palette belong to the shell. Also the user-requested Interakt WhatsApp builder page and launcher (accordion of five cards, live preview, panel with Start Conversation to wa.me), `chatbot_widgets.launcher` jsonb |
 | TW-WGT-029 | done |  |  |
 | TW-WGT-030 | wontfix |  | greenfield port: no legacy widget messages to backfill |
 

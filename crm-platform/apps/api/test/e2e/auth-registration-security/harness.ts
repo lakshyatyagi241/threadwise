@@ -46,6 +46,16 @@ export interface Harness {
   stop(): Promise<void>;
 }
 
+export interface HarnessOptions {
+  /** Runs on the Nest application before `init()`: where a spec that needs sockets installs its WebSocket adapter. */
+  configureApp?: (app: INestApplication) => void | Promise<void>;
+  /**
+   * Modules added next to AppModule: how a spec runs the worker-side processors (a worker module is not part of the HTTP app) inside the
+   * same process, against the same database and Redis. A loader, so the modules are imported after the environment is set, like AppModule.
+   */
+  loadModules?: () => Promise<unknown[]>;
+}
+
 /**
  * A hermetic copy of the API: real Postgres (restricted role, real migrations),
  * real Redis, the real AppModule. Only the outbound edges are faked: mail,
@@ -53,7 +63,7 @@ export interface Harness {
  * sign-up code goes through the REAL composite sender to local HTTP stubs of
  * Meta, Twilio and the bridge, so tests follow the codes a person would receive.
  */
-export async function startHarness(): Promise<Harness> {
+export async function startHarness(options: HarnessOptions = {}): Promise<Harness> {
   const pg: StartedPostgreSqlContainer = await new PostgreSqlContainer('pgvector/pgvector:pg16')
     .withDatabase('crm')
     .withUsername('crm')
@@ -115,7 +125,10 @@ export async function startHarness(): Promise<Harness> {
 
   // Imported after the environment is set: AppModule reads configuration at import.
   const { AppModule } = await import('../../../src/app.module');
-  const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
+  const extraModules = (await options.loadModules?.()) ?? [];
+  const moduleRef = await Test.createTestingModule({
+    imports: [AppModule, ...(extraModules as never[])],
+  })
     .overrideProvider(MAIL_PORT)
     .useValue(fakeMail)
     .overrideProvider(CAPTCHA_PORT)
@@ -130,6 +143,7 @@ export async function startHarness(): Promise<Harness> {
     'loopback',
   );
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '2' });
+  await options.configureApp?.(app);
   await app.init();
 
   const redisClient = new Redis(process.env.REDIS_URL!);

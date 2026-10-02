@@ -325,6 +325,30 @@ export const tiPwaSettingsSchema = z.object({
   icon512: assetUrl(500),
 });
 
+// --- TW-WABA-001: the one Meta app (and Interakt partner) every workspace's WhatsApp numbers are onboarded through -------
+export const WABA_PROVIDERS = ['interakt', 'meta'] as const;
+const metaId = (max: number) => z.union([z.literal(''), z.string().trim().regex(/^\d+$/).max(max)]).default('');
+export const whatsappSettingsSchema = z.object({
+  /** Meta app id (also sent to the browser for the Facebook SDK). */
+  appId: metaId(64),
+  /** Embedded Signup configuration id. Empty: workspaces paste a token manually. */
+  configId: metaId(64),
+  coexistence: flag(false),
+  /** `vNN.N`; empty keeps the server default. */
+  graphVersion: z
+    .union([z.literal(''), z.string().trim().regex(/^v\d{1,2}\.\d{1,2}$/, 'must look like v25.0')])
+    .default(''),
+  /** Which route a newly connected number uses. */
+  defaultProvider: z.enum(WABA_PROVIDERS).default('interakt'),
+  /** Interakt's Embedded Signup solution id. */
+  solutionId: metaId(64),
+  /** Platform system user (assigned to each WABA) and the business used to find a WABA. */
+  systemUserId: metaId(64),
+  businessId: metaId(64),
+  /** Require a valid body signature on every webhook POST, Interakt-forwarded ones included. */
+  requireSignature: flag(false),
+});
+
 export const SET_GROUP_SCHEMAS = {
   general: generalSettingsSchema,
   branding: brandingSettingsSchema,
@@ -338,6 +362,7 @@ export const SET_GROUP_SCHEMAS = {
   storage: storageSettingsSchema,
   realtime: realtimeSettingsSchema,
   tiPwa: tiPwaSettingsSchema,
+  whatsapp: whatsappSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
 export const SET_GROUPS = Object.keys(SET_GROUP_SCHEMAS) as SetGroup[];
@@ -357,6 +382,8 @@ export const SET_SECRET_FIELDS = {
   storage: ['secret', 'storagePassword'],
   realtime: ['appSecret'],
   tiPwa: [],
+  /** appSecret signs/verifies Meta calls; verifyToken is the webhook handshake token (blank: derived). */
+  whatsapp: ['appSecret', 'verifyToken', 'partnerAuthKey', 'systemUserToken'],
 } as const satisfies Record<SetGroup, readonly string[]>;
 
 /** Groups whose saved state can be checked against the outside world (a "test" button). */

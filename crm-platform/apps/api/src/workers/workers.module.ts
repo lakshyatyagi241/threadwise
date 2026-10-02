@@ -4,6 +4,9 @@ import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '.
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
+import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
+import { CampaignsWorkerModule } from '../modules/campaigns';
+import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
@@ -12,7 +15,9 @@ import {
   TasksWorkerModule,
 } from '../modules/crm';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
+import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NotificationsWorkerModule } from '../modules/notifications';
+import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -42,6 +47,11 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
     PlansWorkerModule,
+    WabaWorkerModule,
+    MessageTemplatesWorkerModule,
+    ChatConversationsWorkerModule,
+    CampaignsWorkerModule,
+    ChannelTelegramWorkerModule,
   ],
   providers: [
     OutboxDrainService,
