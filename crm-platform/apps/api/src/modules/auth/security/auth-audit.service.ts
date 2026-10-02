@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { securityPolicySchema } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
@@ -19,16 +20,83 @@ export interface SecurityEventInput {
   payload?: Record<string, unknown>;
 }
 
-const SECRET_KEY = /pass(word)?|secret|token|code|authorization|credential|api[_-]?key|cookie/i;
+/**
+ * Key names whose value is a secret (TW-AUTH-046). This is the union of the
+ * reference product's list and ours: password, secret, token, API / access /
+ * client keys, credentials, private material, webhook and signing values,
+ * bearer and authorization headers, cookies, and one-time codes.
+ */
+const SECRET_KEY = new RegExp(
+  [
+    'passw(?:or)?d',
+    'passphrase',
+    'secret',
+    'token',
+    'api[_-]?key',
+    'access[_-]?key',
+    'credential',
+    'private',
+    'webhook',
+    'signing',
+    'bearer',
+    'authorization',
+    'cookie',
+    // A bare "code" is an OAuth or one-time code; "country_code" and friends are not matched.
+    '^code$',
+    '(?:otp|totp|mfa|recovery|verification|backup|auth)[_-]?codes?$',
+  ].join('|'),
+  'i',
+);
 
-/** Keys that look like secrets are replaced, at any depth, before anything is stored. */
+/**
+ * Names that look secret but carry configuration or a list of other names,
+ * never a secret value: the security-POLICY settings an administrator changes
+ * (the audit diff of `passwordMinLength` must stay readable) and the lists of
+ * key names other writers record on purpose.
+ */
+const NOT_SECRET_KEYS = new Set([
+  // Every security-policy setting: `passwordMinLength`, `webhookSignatureRequired` and
+  // `webhookReplayWindowSec` are switches and numbers that merely have a secret-sounding word in their name.
+  ...Object.keys(securityPolicySchema.shape),
+  'credential_keys_set',
+  'credentialKeysSet',
+  'missing_keys',
+  'missingKeys',
+  'changed_keys',
+  'changedKeys',
+]);
+
+/** A payload nested deeper than this is cut, not stored: a secret hidden at depth 12 must not survive. */
+const MAX_DEPTH = 10;
+
+/** A bare number under a secret-sounding name is a count ("webhooks": 4), unless the name says it is the secret itself. */
+const NUMERIC_SECRET_KEY = /passw|secret|token|code|otp|pin\b|key/i;
+const isHarmlessNumber = (k: string, v: unknown): boolean =>
+  typeof v === 'number' && !NUMERIC_SECRET_KEY.test(k);
+
+const isEmpty = (v: unknown): boolean =>
+  v === null ||
+  v === '' ||
+  v === false ||
+  (Array.isArray(v) && v.length === 0) ||
+  (typeof v === 'object' && v !== null && !Array.isArray(v) && Object.keys(v).length === 0);
+
+/**
+ * Replaces the value of every secret-looking key, at any depth, before anything
+ * is stored. Key names stay, so the trail still shows what changed. A null,
+ * empty or false value is kept: there is nothing to hide, and "the secret was
+ * cleared" is information worth keeping.
+ */
 export function redact(value: unknown, depth = 0): unknown {
-  if (depth > 4 || value === null || typeof value !== 'object') return value;
+  if (value === null || typeof value !== 'object') return value;
+  if (depth >= MAX_DEPTH) return '[TRUNCATED]';
   if (Array.isArray(value)) return value.map((v) => redact(v, depth + 1));
   return Object.fromEntries(
     Object.entries(value as Record<string, unknown>).map(([k, v]) => [
       k,
-      SECRET_KEY.test(k) ? '[REDACTED]' : redact(v, depth + 1),
+      SECRET_KEY.test(k) && !NOT_SECRET_KEYS.has(k) && !isEmpty(v) && !isHarmlessNumber(k, v)
+        ? '[REDACTED]'
+        : redact(v, depth + 1),
     ]),
   );
 }

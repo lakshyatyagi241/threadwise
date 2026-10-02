@@ -45,11 +45,13 @@ export class MetaCloudProvider implements WhatsAppProvider {
       bulk: params.screen?.bulk,
       source: params.screen?.source,
     });
-    this.logger.warn(
-      { to: params.to, template: params.templateName, url: this.baseUrl(credentials) },
-      'sendTemplate not implemented yet — broadcast pipeline lands with the Broadcast module',
-    );
-    throw new Error('MetaCloudProvider.sendTemplate is not implemented');
+    // No footer: approved template content cannot be changed after submission.
+    return this.post(credentials, {
+      messaging_product: 'whatsapp',
+      to: params.to,
+      type: 'template',
+      template: { name: params.templateName, language: { code: params.language } },
+    });
   }
 
   async sendText(credentials: ChannelCredentials, params: SendTextParams): Promise<SendResult> {
@@ -58,11 +60,30 @@ export class MetaCloudProvider implements WhatsAppProvider {
       bulk: params.screen?.bulk,
       source: params.screen?.source,
     });
+    // After the screen, so a platform footer is never read as the sender's own words.
+    const body = await this.guard.withFooter({ body: params.body });
+    return this.post(credentials, {
+      messaging_product: 'whatsapp',
+      to: params.to,
+      type: 'text',
+      text: { preview_url: false, body },
+    });
+  }
+
+  /**
+   * The one place a message leaves for Meta. Stubbed until channel credential
+   * storage and the send pipelines land; everything before it (halt, guardrails,
+   * the footer) is real and runs first, so a pipeline cannot reach here unguarded.
+   */
+  protected async post(
+    credentials: ChannelCredentials,
+    payload: Record<string, unknown>,
+  ): Promise<SendResult> {
     this.logger.warn(
-      { to: params.to, url: this.baseUrl(credentials) },
-      'sendText not implemented yet — inbox reply pipeline lands with the Inbox module',
+      { to: payload.to, type: payload.type, url: this.baseUrl(credentials) },
+      'send not implemented yet — the message pipelines land with the Inbox and Broadcast modules',
     );
-    throw new Error('MetaCloudProvider.sendText is not implemented');
+    throw new Error(`MetaCloudProvider.send (${String(payload.type)}) is not implemented`);
   }
 
   /**

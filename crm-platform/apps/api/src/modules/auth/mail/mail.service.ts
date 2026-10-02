@@ -4,6 +4,7 @@ import type { Env } from '../../../config/env.schema';
 import {
   MAIL_PORT,
   MailError,
+  type MailFailureReason,
   type MailPort,
 } from '../../../infra/providers/auth-registration-security/mail.port';
 
@@ -13,13 +14,25 @@ const esc = (s: string): string =>
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
   );
 
+/** Why a sign-in was worth an alert (TW-AUTH-018). */
+export type LoginAlertReason = 'new-device' | 'new-country';
+
 export interface LoginAlertInfo {
   when: Date;
   ip: string | null;
   browser: string;
-  reasons: string[];
+  reasons: LoginAlertReason[];
   signedIn: boolean;
 }
+
+/** What happened to one outgoing mail; `reason` is a closed, secret-free vocabulary. */
+export type DeliveryResult =
+  { sent: true } | { sent: false; reason: MailFailureReason | 'unknown' };
+
+const REASON_PROSE: Record<LoginAlertReason, string> = {
+  'new-device': 'a new device',
+  'new-country': 'a different location',
+};
 
 /**
  * The transactional mails of the auth domain. Wording is original; the layout
@@ -62,19 +75,33 @@ export class MailService {
       </div></body></html>`;
   }
 
-  private async deliver(to: string, subject: string, text: string, html: string): Promise<boolean> {
+  private async deliverDetailed(
+    to: string,
+    subject: string,
+    text: string,
+    html: string,
+  ): Promise<DeliveryResult> {
     try {
       await this.port.send({ to, subject, text, html });
-      return true;
+      return { sent: true };
     } catch (err) {
       const reason = err instanceof MailError ? err.reason : 'unknown';
       this.logger.warn({ reason, subject }, 'auth mail not delivered');
-      return false;
+      return { sent: false, reason };
     }
   }
 
+  private async deliver(to: string, subject: string, text: string, html: string): Promise<boolean> {
+    return (await this.deliverDetailed(to, subject, text, html)).sent;
+  }
+
   sendVerifyEmail(to: string, name: string, url: string): Promise<boolean> {
-    return this.deliver(
+    return this.sendVerifyEmailDetailed(to, name, url).then((r) => r.sent);
+  }
+
+  /** Same mail, with the coarse failure reason, for the resend button (TW-AUTH-015). */
+  sendVerifyEmailDetailed(to: string, name: string, url: string): Promise<DeliveryResult> {
+    return this.deliverDetailed(
       to,
       `Verify your email for ${this.brand}`,
       `Hi ${name},\n\nConfirm this address to finish setting up your account:\n${url}\n\nThe link works once and expires in 60 minutes.`,
@@ -163,13 +190,22 @@ export class MailService {
     );
   }
 
+  /**
+   * `actionUrl` is where the recipient goes if the sign-in was not theirs. The
+   * subject depends on why we are writing: a lone new device is named as such,
+   * anything involving the location is "from a new location" (Reference's split).
+   */
   sendLoginAlert(
     to: string,
     name: string,
     info: LoginAlertInfo,
-    accountUrl: string,
+    actionUrl: string,
   ): Promise<boolean> {
-    const reasons = info.reasons.join(' and ');
+    const reasons = info.reasons.map((r) => REASON_PROSE[r]).join(' and ');
+    const onlyDevice = info.reasons.length === 1 && info.reasons[0] === 'new-device';
+    const subject = onlyDevice
+      ? `New sign-in on a new device for your ${this.brand} account`
+      : `New sign-in from a new location on your ${this.brand} account`;
     const lines = [
       `Time (UTC): ${info.when.toISOString()}`,
       `IP address: ${info.ip ?? 'unknown'}`,
@@ -177,14 +213,14 @@ export class MailService {
     ].join('\n');
     return this.deliver(
       to,
-      `New sign-in to your ${this.brand} account`,
-      `Hi ${name},\n\nWe saw a sign-in from ${reasons}.\n\n${lines}\n\nIf this was you, nothing to do. If not, change your password: ${accountUrl}`,
+      subject,
+      `Hi ${name},\n\nWe saw a sign-in from ${reasons}.\n\n${lines}\n\nIf this was you, nothing to do. If not, secure your account now: ${actionUrl}`,
       this.layout(
         'New sign-in to your account',
         `<p>Hi ${esc(name)}, we saw a sign-in from ${esc(reasons)}.</p>
          <pre style="background:#f8fafc;padding:12px;border-radius:8px;font-size:13px">${esc(lines)}</pre>
-         <p>If this was you, there is nothing to do. If it was not, change your password now.</p>`,
-        { label: 'Review account security', url: accountUrl },
+         <p>If this was you, there is nothing to do. If it was not, secure your account now.</p>`,
+        { label: 'Secure my account', url: actionUrl },
       ),
     );
   }

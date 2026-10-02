@@ -2,6 +2,7 @@ import 'server-only';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { cookieNames, setSessionCookies, REMEMBER_COOKIE, type SessionKind } from './cookies';
+import { clientIpFrom } from './client-ip';
 import { apiBase, refreshTokens } from './server';
 
 const FORWARD_REQUEST = [
@@ -12,7 +13,6 @@ const FORWARD_REQUEST = [
   'if-match',
   'accept-language',
   'user-agent',
-  'x-forwarded-for',
 ];
 const FORWARD_RESPONSE = [
   'content-type',
@@ -62,6 +62,15 @@ export function isSameOrigin(req: Request): boolean {
   }
 }
 
+/**
+ * A redirect that keeps the browser on the host it asked. `NextResponse.redirect` needs an absolute address, and
+ * the one the server sees is its own bind address (not the public host), which would send the visitor, and their
+ * cookies, to the wrong place. A relative `Location` is valid HTTP and resolves against the page's own origin.
+ */
+export function redirectTo(path: string, status: 303 | 307 = 307): Response {
+  return new Response(null, { status, headers: { Location: path, 'Cache-Control': 'no-store' } });
+}
+
 export function problem(status: number, code: string, title: string) {
   return NextResponse.json(
     { type: 'about:blank', title, status, code },
@@ -94,8 +103,9 @@ export async function proxyRequest(req: Request, path: string[], kind: SessionKi
       const v = req.headers.get(h);
       if (v) headers.set(h, v);
     }
-    // The API records the caller's address; this proxy is the only client it sees.
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+    // The API records the caller's address; this proxy is the only client it sees. Only the
+    // entries our own proxies appended are believed (see client-ip.ts).
+    const ip = clientIpFrom(req.headers);
     if (ip) headers.set('x-forwarded-for', ip);
     if (token) headers.set('authorization', `Bearer ${token}`);
     return fetch(target, { method: req.method, headers, body, cache: 'no-store' });

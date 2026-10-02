@@ -44,6 +44,7 @@ import { SecurityPolicyService } from './platform/security-policy.service';
 import { TenantDirectory } from './platform/tenant-directory';
 import { SessionService } from './sessions/session.service';
 import { EpochService } from './sessions/epoch.service';
+import { MfaAttemptLimiter } from './support/mfa-attempts';
 import { AccountGateService } from './security/account-gate.service';
 import { AuthAuditService } from './security/auth-audit.service';
 import { CaptchaService } from './security/captcha.service';
@@ -112,6 +113,7 @@ import { TokenService } from './token.service';
     MfaService,
     PasswordService,
     RateLimitService,
+    MfaAttemptLimiter,
     EmergencyHaltService,
     SendPolicyService,
     UploadPolicyService,
