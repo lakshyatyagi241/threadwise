@@ -95,4 +95,24 @@ export class SqlInboxIngest implements InboxIngest {
       UPDATE contacts SET image_url = ${url}
       WHERE org_id = ${orgId} AND id = ${contactId} AND coalesce(image_url, '') = ''`);
   }
+
+  async recordOutbound(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    m: { body: string; providerMessageId: string | null; broadcastUuid: string },
+  ): Promise<void> {
+    const meta = {
+      source: 'telegram_broadcast',
+      broadcast_id: m.broadcastUuid,
+      ...(m.providerMessageId ? { wa_message_id: m.providerMessageId } : {}),
+    };
+    await tx.execute(sql`
+      INSERT INTO messages (org_id, conversation_id, direction, body, status, provider, meta, sent_at)
+      VALUES (${orgId}, ${conversationId}, 'out', ${m.body}, 'sent', 'telegram', ${JSON.stringify(meta)}::jsonb, now())`);
+    // Outbound is not unread: only the customer's messages are.
+    await tx.execute(sql`
+      UPDATE conversations SET last_message_at = now(), last_outbound_at = now()
+      WHERE org_id = ${orgId} AND id = ${conversationId}`);
+  }
 }

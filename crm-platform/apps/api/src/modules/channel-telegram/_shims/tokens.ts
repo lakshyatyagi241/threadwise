@@ -59,6 +59,13 @@ export interface InboxIngest {
     m: InboundMessageInput,
   ): Promise<InboundRecorded>;
   setContactImage(tx: Tx, orgId: number, contactId: number, url: string): Promise<void>;
+  /** A message we sent into a thread (a broadcast to that chat): shown as outbound, moves the thread's last-sent time, leaves unread alone. */
+  recordOutbound(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    m: { body: string; providerMessageId: string | null; broadcastUuid: string },
+  ): Promise<void>;
 }
 export const INBOX_INGEST = Symbol('TELEGRAM_INBOX_INGEST');
 
@@ -103,3 +110,19 @@ export interface InboundHooks {
   ): Promise<void>;
 }
 export const INBOUND_HOOKS = Symbol('TELEGRAM_INBOUND_HOOKS');
+
+/** A Telegram template: a row of `wa_templates` whose channel is telegram (message-templates). */
+export interface TelegramTemplate {
+  id: number;
+  uuid: string;
+  name: string;
+  body: string;
+  buttons: unknown;
+}
+
+/** Reads Telegram templates until the templates domain exports a channel-aware lookup. */
+export interface TelegramTemplates {
+  list(tx: Tx, orgId: number): Promise<TelegramTemplate[]>;
+  find(tx: Tx, orgId: number, uuid: string): Promise<TelegramTemplate | undefined>;
+}
+export const TELEGRAM_TEMPLATES = Symbol('TELEGRAM_TEMPLATES');

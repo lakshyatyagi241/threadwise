@@ -2,3 +2,4 @@
 export { ChannelTelegramModule } from './channel-telegram.module';
 export { TelegramSenderService, type ThreadReply } from './telegram-sender.service';
 export type { Outcome as TelegramSendOutcome } from './chat-send';
+export { ChannelTelegramWorkerModule } from './channel-telegram-worker.module';
