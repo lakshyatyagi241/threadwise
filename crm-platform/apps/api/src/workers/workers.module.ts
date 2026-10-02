@@ -13,6 +13,7 @@ import {
   SegmentsWorkerModule,
   TasksWorkerModule,
 } from '../modules/crm';
+import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { OutboxDrainService } from './outbox-drain.service';
@@ -46,6 +47,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
     ScheduledQueueWarmerWorkerModule,
+    NodeBridgeRuntimeWorkerModule,
   ],
   providers: [
     OutboxDrainService,
