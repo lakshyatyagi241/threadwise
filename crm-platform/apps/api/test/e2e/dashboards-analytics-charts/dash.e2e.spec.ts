@@ -157,7 +157,9 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
     const res = await api.as(t.admin).get('/v2/dashboard/summary?range=7d');
     expect(res.body.current.replies).toBe(5);
     expect(res.body.current.repliers).toBe(2);
-    expect(res.body.funnel.stages.map((s: { key: string; count: number }) => [s.key, s.count])).toEqual([
+    expect(
+      res.body.funnel.stages.map((s: { key: string; count: number }) => [s.key, s.count]),
+    ).toEqual([
       ['sent', 15],
       ['delivered', 11],
       ['replied', 5],
@@ -177,7 +179,9 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
   it('WD-DASH-003: the previous window has the same number of days as the current one', async () => {
     const res = await api.as(t.admin).get('/v2/dashboard/summary?range=30d');
     const w = res.body.window;
-    expect(Date.parse(w.to) - Date.parse(w.from)).toBe(Date.parse(w.prevTo) - Date.parse(w.prevFrom));
+    expect(Date.parse(w.to) - Date.parse(w.from)).toBe(
+      Date.parse(w.prevTo) - Date.parse(w.prevFrom),
+    );
     expect(w.prevTo).toBe(w.from);
   });
 
@@ -216,7 +220,12 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
     const res = await api.as(p.admin).get('/v2/dashboard/summary?range=7d');
     expect(res.status).toBe(200);
     expect(res.body.sparkline).toEqual(new Array(20).fill(0));
-    expect(res.body.current).toMatchObject({ sent: 0, deliverability: 0, readRate: 0, replyRate: 0 });
+    expect(res.body.current).toMatchObject({
+      sent: 0,
+      deliverability: 0,
+      readRate: 0,
+      replyRate: 0,
+    });
     expect(res.body.funnel.endToEnd).toBe(0);
   });
 
@@ -276,7 +285,9 @@ describe('throughput chart (WD-DASH-012)', () => {
   });
 
   it('30d has 31 daily buckets and qtd one per day since the quarter began; an empty workspace is flat, not an error', async () => {
-    expect((await api.as(t.admin).get('/v2/dashboard/throughput?range=30d')).body.sent).toHaveLength(31);
+    expect(
+      (await api.as(t.admin).get('/v2/dashboard/throughput?range=30d')).body.sent,
+    ).toHaveLength(31);
     const q = await api.as(t.admin).get('/v2/dashboard/throughput?range=qtd');
     expect(q.status).toBe(200);
     expect(q.body.sent.length).toBeGreaterThanOrEqual(1);
@@ -340,7 +351,9 @@ describe('analytics (WD-DASH-022..025, 027, 031, 032)', () => {
 
   it('WD-DASH-027: type mix, template before media, zero buckets omitted', async () => {
     const res = await api.as(t.admin).get('/v2/analytics/overview?range=7d');
-    const m = Object.fromEntries(res.body.types.map((x: { key: string; count: number }) => [x.key, x.count]));
+    const m = Object.fromEntries(
+      res.body.types.map((x: { key: string; count: number }) => [x.key, x.count]),
+    );
     expect(m).toEqual({ text: 1006, template: 3, media: 1 });
   });
 
@@ -356,7 +369,10 @@ describe('analytics (WD-DASH-022..025, 027, 031, 032)', () => {
     const swapped = await api
       .as(t.admin)
       .get('/v2/analytics/overview?range=custom&from=2026-05-10&to=2026-05-01');
-    expect([swapped.body.window.fromDate, swapped.body.window.toDate]).toEqual(['2026-05-01', '2026-05-10']);
+    expect([swapped.body.window.fromDate, swapped.body.window.toDate]).toEqual([
+      '2026-05-01',
+      '2026-05-10',
+    ]);
     const open = await api.as(t.admin).get('/v2/analytics/overview?range=custom');
     expect(open.body.window.days).toBe(31);
     const long = await api
@@ -414,7 +430,9 @@ describe('the workspace zone (WD-DASH-053 / 031)', () => {
     );
     const res = await api.as(t.admin).get('/v2/analytics/overview?range=7d');
     expect(res.body.window.timezone).toBe('Asia/Kolkata');
-    const cell = res.body.heatmap.flatMap((r: number[], d: number) => r.map((n, hr) => [d, hr, n])).filter((x: number[]) => x[2] > 0);
+    const cell = res.body.heatmap
+      .flatMap((r: number[], d: number) => r.map((n, hr) => [d, hr, n]))
+      .filter((x: number[]) => x[2] > 0);
     expect(cell).toHaveLength(1);
     expect(cell[0][1]).toBe(7);
   });

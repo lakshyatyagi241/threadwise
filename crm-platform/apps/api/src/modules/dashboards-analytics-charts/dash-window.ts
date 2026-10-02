@@ -53,7 +53,8 @@ export function todayIn(tz: string, now: Date = new Date()): string {
 }
 
 export const addDays = (ymd: string, n: number): string => utcToYmd(ymdToUtc(ymd) + n * DAY_MS);
-export const daysBetween = (a: string, b: string): number => Math.round((ymdToUtc(b) - ymdToUtc(a)) / DAY_MS);
+export const daysBetween = (a: string, b: string): number =>
+  Math.round((ymdToUtc(b) - ymdToUtc(a)) / DAY_MS);
 
 /** The instant the zone's calendar day `ymd` begins (DST-safe: the offset is looked up at the result). */
 export function zonedMidnight(ymd: string, tz: string): Date {
@@ -91,7 +92,11 @@ function dayWindow(fromDate: string, toDateExcl: string, tz: string): ResolvedWi
 }
 
 /** Dashboard ranges (WD-DASH-003): 24h rolling; 7d, 30d from the start of that day to the end of today; quarter to date. */
-export function resolveDashWindow(range: DashRange, tz: string, now: Date = new Date()): ResolvedWindow {
+export function resolveDashWindow(
+  range: DashRange,
+  tz: string,
+  now: Date = new Date(),
+): ResolvedWindow {
   if (range === '24h') {
     const from = new Date(now.getTime() - 24 * HOUR_MS);
     return {
@@ -109,7 +114,11 @@ export function resolveDashWindow(range: DashRange, tz: string, now: Date = new 
   if (range === 'qtd') {
     const m = Number(today.slice(5, 7));
     const qStartMonth = Math.floor((m - 1) / 3) * 3 + 1;
-    return dayWindow(`${today.slice(0, 4)}-${String(qStartMonth).padStart(2, '0')}-01`, tomorrow, tz);
+    return dayWindow(
+      `${today.slice(0, 4)}-${String(qStartMonth).padStart(2, '0')}-01`,
+      tomorrow,
+      tz,
+    );
   }
   return dayWindow(addDays(today, range === '7d' ? -7 : -30), tomorrow, tz);
 }
