@@ -10,9 +10,6 @@ interface OperatorNavEntry {
 
 const NS = 'platform-settings-branding-storage.nav';
 
-/** Camel-cased message key of a group's menu label (`site-info` -> `siteInfo`). */
-const navKey = (slug: string) => slug.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());
-
 /**
  * The settings hub and one entry per settings group, merged into the console menu by
  * `auth-registration-security/platform/operator-nav.ts` (not named nav.ts: the customer-menu generator imports every nav.ts).
@@ -27,7 +24,7 @@ export const SET_OPERATOR_NAV: readonly OperatorNavEntry[] = [
   ...GROUP_SPECS.map((s) => ({
     id: `settings-${s.slug}`,
     href: `/admin/settings/${s.slug}`,
-    labelKey: `${NS}.${navKey(s.slug)}`,
+    labelKey: `${NS}.${s.id}`,
     groupKey: `${NS}.groupHeading`,
   })),
 ];
