@@ -4,6 +4,8 @@ import {
   fieldErrorMap,
   fieldMessages,
   firstFieldMessage,
+  isAccountLocked,
+  lockedMinutes,
   requestIdOf,
   retryAfterSeconds,
   zodFieldMap,
@@ -62,5 +64,33 @@ describe('field errors', () => {
         { path: ['a', 0], message: 'Bad' },
       ]),
     ).toEqual({ name: 'Too short', 'a.0': 'Bad' });
+  });
+});
+
+describe('account lockout (429 AUTH_ACCOUNT_LOCKED)', () => {
+  const locked = (seconds?: string) =>
+    new ApiError(
+      429,
+      'AUTH_ACCOUNT_LOCKED',
+      'locked',
+      'req-1',
+      seconds ? [{ path: 'retryAfterSeconds', message: seconds }] : [],
+    );
+
+  it('recognises the lockout by its code, not by its text', () => {
+    expect(isAccountLocked(locked())).toBe(true);
+    expect(isAccountLocked(err([]))).toBe(false);
+    expect(isAccountLocked(new Error('x'))).toBe(false);
+  });
+
+  it('turns the wait into whole minutes, rounded up, at least one', () => {
+    expect(lockedMinutes(locked('900'))).toBe(15);
+    expect(lockedMinutes(locked('901'))).toBe(16);
+    expect(lockedMinutes(locked('20'))).toBe(1);
+  });
+
+  it('has no minutes when the refusal carried no wait', () => {
+    expect(lockedMinutes(locked())).toBeNull();
+    expect(lockedMinutes(new Error('x'))).toBeNull();
   });
 });

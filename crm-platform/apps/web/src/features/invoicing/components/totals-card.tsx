@@ -26,7 +26,10 @@ export function TotalsCard({
   const locale = useLocale();
   const money = (n: number) => formatMoney(n, currency, locale);
   const row = (label: string, value: string, key?: string, muted?: boolean) => (
-    <div key={key ?? label} className={`flex items-baseline justify-between gap-3 ${muted ? 'text-xs text-muted-foreground' : ''}`}>
+    <div
+      key={key ?? label}
+      className={`flex items-baseline justify-between gap-3 ${muted ? 'text-xs text-muted-foreground' : ''}`}
+    >
       <dt className={muted ? undefined : 'text-muted-foreground'}>{label}</dt>
       <dd dir="ltr" className="tabular-nums">
         {value}
@@ -34,8 +37,13 @@ export function TotalsCard({
     </div>
   );
   return (
-    <section aria-label={t('label')} className="rounded-lg border border-border bg-background p-4 text-sm">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('title')}</h2>
+    <section
+      aria-label={t('label')}
+      className="rounded-lg border border-border bg-background p-4 text-sm"
+    >
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {t('title')}
+      </h2>
       {issues && issues.length > 0 && (
         <ul role="alert" className="mb-3 list-disc space-y-0.5 ps-4 text-xs text-danger">
           {issues.map((m) => (
@@ -50,7 +58,10 @@ export function TotalsCard({
         {totals.taxRows.map((g) => {
           const label = taxLabel(g.name, g.ratePercent);
           return (
-            <div key={`${g.name}-${g.ratePercent}-${g.inclusive}`} className="flex items-baseline justify-between gap-3">
+            <div
+              key={`${g.name}-${g.ratePercent}-${g.inclusive}`}
+              className="flex items-baseline justify-between gap-3"
+            >
               <dt className="min-w-0 text-muted-foreground">
                 <span dir="auto">{g.inclusive ? t('taxIncluded', { name: label }) : label}</span>
                 <span className="block text-xs">{t('taxOn', { base: money(g.baseMinor) })}</span>
@@ -68,7 +79,8 @@ export function TotalsCard({
             {money(totals.totalMinor)}
           </dd>
         </div>
-        {totals.includedTaxMinor > 0 && row(t('includesTotal'), money(totals.includedTaxMinor), 'inc', true)}
+        {totals.includedTaxMinor > 0 &&
+          row(t('includesTotal'), money(totals.includedTaxMinor), 'inc', true)}
       </dl>
     </section>
   );

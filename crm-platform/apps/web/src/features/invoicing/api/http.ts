@@ -31,16 +31,22 @@ export async function callPublic<T>(
   req: { method?: 'GET' | 'POST'; action?: 'pay'; body?: unknown } = {},
 ): Promise<T> {
   const method = req.method ?? 'GET';
-  const headers: Record<string, string> = { Accept: 'application/json', 'X-Request-Id': crypto.randomUUID() };
+  const headers: Record<string, string> = {
+    Accept: 'application/json',
+    'X-Request-Id': crypto.randomUUID(),
+  };
   if (req.body !== undefined) headers['Content-Type'] = 'application/json';
   if (method !== 'GET') headers['Idempotency-Key'] = crypto.randomUUID();
-  const res = await fetch(`/api/public/invoices/${encodeURIComponent(token)}${req.action ? `/${req.action}` : ''}`, {
-    method,
-    headers,
-    body: req.body === undefined ? undefined : JSON.stringify(req.body),
-    cache: 'no-store',
-    credentials: 'omit',
-  });
+  const res = await fetch(
+    `/api/public/invoices/${encodeURIComponent(token)}${req.action ? `/${req.action}` : ''}`,
+    {
+      method,
+      headers,
+      body: req.body === undefined ? undefined : JSON.stringify(req.body),
+      cache: 'no-store',
+      credentials: 'omit',
+    },
+  );
   const text = await res.text();
   let json: unknown;
   try {

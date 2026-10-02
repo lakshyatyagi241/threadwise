@@ -82,7 +82,11 @@ export function InvoicesToolbar({
         </div>
         <ContactPicker
           compact
-          value={filters.contact ? { id: filters.contact, label: name.data ?? t('contactLoading') } : null}
+          value={
+            filters.contact
+              ? { id: filters.contact, label: name.data ?? t('contactLoading') }
+              : null
+          }
           onChange={(c) => onChange({ contact: c?.id ?? '' })}
         />
         <Select
@@ -102,7 +106,13 @@ export function InvoicesToolbar({
             {t('reset')}
           </Button>
         )}
-        <Button variant="secondary" onClick={onRefresh} aria-label={t('refresh')} title={t('refresh')} className="ms-auto size-10 px-0">
+        <Button
+          variant="secondary"
+          onClick={onRefresh}
+          aria-label={t('refresh')}
+          title={t('refresh')}
+          className="ms-auto size-10 px-0"
+        >
           {refreshing ? <Spinner /> : <RefreshIcon />}
         </Button>
       </div>
@@ -112,18 +122,46 @@ export function InvoicesToolbar({
           <span className="shrink-0" aria-hidden="true">
             {t('issued')}
           </span>
-          <Input type="date" value={filters.issuedFrom} max={filters.issuedTo || undefined} onChange={(e) => setIssued({ from: e.target.value })} className={date} aria-label={t('issuedFrom')} />
+          <Input
+            type="date"
+            value={filters.issuedFrom}
+            max={filters.issuedTo || undefined}
+            onChange={(e) => setIssued({ from: e.target.value })}
+            className={date}
+            aria-label={t('issuedFrom')}
+          />
           <span aria-hidden="true">-</span>
-          <Input type="date" value={filters.issuedTo} min={filters.issuedFrom || undefined} onChange={(e) => setIssued({ to: e.target.value })} className={date} aria-label={t('issuedTo')} />
+          <Input
+            type="date"
+            value={filters.issuedTo}
+            min={filters.issuedFrom || undefined}
+            onChange={(e) => setIssued({ to: e.target.value })}
+            className={date}
+            aria-label={t('issuedTo')}
+          />
         </fieldset>
         <fieldset className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <legend className="sr-only">{t('dueWindow')}</legend>
           <span className="shrink-0" aria-hidden="true">
             {t('due')}
           </span>
-          <Input type="date" value={filters.dueFrom} max={filters.dueTo || undefined} onChange={(e) => setDue({ from: e.target.value })} className={date} aria-label={t('dueFrom')} />
+          <Input
+            type="date"
+            value={filters.dueFrom}
+            max={filters.dueTo || undefined}
+            onChange={(e) => setDue({ from: e.target.value })}
+            className={date}
+            aria-label={t('dueFrom')}
+          />
           <span aria-hidden="true">-</span>
-          <Input type="date" value={filters.dueTo} min={filters.dueFrom || undefined} onChange={(e) => setDue({ to: e.target.value })} className={date} aria-label={t('dueTo')} />
+          <Input
+            type="date"
+            value={filters.dueTo}
+            min={filters.dueFrom || undefined}
+            onChange={(e) => setDue({ to: e.target.value })}
+            className={date}
+            aria-label={t('dueTo')}
+          />
         </fieldset>
         <Select
           value={filters.docType}
@@ -138,7 +176,11 @@ export function InvoicesToolbar({
             </option>
           ))}
         </Select>
-        <CurrencyBox key={filters.currency} value={filters.currency} onApply={(currency) => onChange({ currency })} />
+        <CurrencyBox
+          key={filters.currency}
+          value={filters.currency}
+          onApply={(currency) => onChange({ currency })}
+        />
         <Checkbox
           id="invoices-mine"
           checked={filters.mine}

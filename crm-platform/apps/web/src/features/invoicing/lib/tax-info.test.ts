@@ -10,13 +10,19 @@ import {
   splitPlace,
 } from './tax-info';
 
-const seller = { sellerCountry: 'IN', sellerState: 'MH', sellerTaxId: '27AAPFU0939F1ZV', date: '2026-10-02' };
+const seller = {
+  sellerCountry: 'IN',
+  sellerState: 'MH',
+  sellerTaxId: '27AAPFU0939F1ZV',
+  date: '2026-10-02',
+};
 
 describe('HSN/SAC by country', () => {
   it('India asks for it on each line; most countries do not', () => {
     expect(hsnRequired('IN')).toBe(true);
     expect(hsnRequired('in')).toBe(true);
-    for (const c of ['GB', 'DE', 'US', 'AE', 'AU', null, '', 'ZZ']) expect(hsnRequired(c), String(c)).toBe(false);
+    for (const c of ['GB', 'DE', 'US', 'AE', 'AU', null, '', 'ZZ'])
+      expect(hsnRequired(c), String(c)).toBe(false);
   });
 });
 
@@ -37,7 +43,11 @@ describe('checking a buyer tax id', () => {
     expect(checkBuyerTaxId(null, 'GB', 'GB333289454').state).toBe('valid');
   });
   it('empty input says what is expected; an unknown country is only unchecked', () => {
-    expect(checkBuyerTaxId('IN', null, '  ')).toMatchObject({ state: 'empty', label: 'GSTIN', example: expect.any(String) });
+    expect(checkBuyerTaxId('IN', null, '  ')).toMatchObject({
+      state: 'empty',
+      label: 'GSTIN',
+      example: expect.any(String),
+    });
     expect(checkBuyerTaxId('ZZ', null, 'ABC123').state).toBe('unchecked');
   });
 });
@@ -65,7 +75,13 @@ describe('place of supply', () => {
 describe('the live "Why this tax?"', () => {
   it('splits an Indian sale inside the state into CGST and SGST, across states into IGST', () => {
     const intra = previewAutoTax(
-      { ...seller, buyerCountry: 'IN', buyerTaxId: null, placeOfSupply: 'IN-MH', supplyType: 'goods' },
+      {
+        ...seller,
+        buyerCountry: 'IN',
+        buyerTaxId: null,
+        placeOfSupply: 'IN-MH',
+        supplyType: 'goods',
+      },
       [{ hsnSac: null, ratePercent: null }],
     );
     expect(intra.ok).toBe(true);
@@ -73,14 +89,29 @@ describe('the live "Why this tax?"', () => {
     expect(intra.preview.lines[0]?.items.map((i) => i.code)).toEqual(['CGST', 'SGST']);
     expect(intra.preview.reasons.length).toBeGreaterThan(0);
     const inter = previewAutoTax(
-      { ...seller, buyerCountry: 'IN', buyerTaxId: null, placeOfSupply: 'IN-KA', supplyType: 'goods' },
+      {
+        ...seller,
+        buyerCountry: 'IN',
+        buyerTaxId: null,
+        placeOfSupply: 'IN-KA',
+        supplyType: 'goods',
+      },
       [{ hsnSac: null, ratePercent: null }],
     );
     expect(inter.ok && inter.preview.lines[0]?.items.map((i) => i.code)).toEqual(['IGST']);
   });
   it('an intra-EU service to a registered business is a reverse charge', () => {
     const r = previewAutoTax(
-      { sellerCountry: 'DE', sellerState: null, sellerTaxId: 'DE136695976', buyerCountry: 'FR', buyerTaxId: 'FR40303265045', placeOfSupply: null, supplyType: 'services', date: '2026-10-02' },
+      {
+        sellerCountry: 'DE',
+        sellerState: null,
+        sellerTaxId: 'DE136695976',
+        buyerCountry: 'FR',
+        buyerTaxId: 'FR40303265045',
+        placeOfSupply: null,
+        supplyType: 'services',
+        date: '2026-10-02',
+      },
       [{ hsnSac: null, ratePercent: null }],
     );
     expect(r.ok).toBe(true);
@@ -91,8 +122,17 @@ describe('the live "Why this tax?"', () => {
   });
   it('says each reason once, however many lines there are', () => {
     const r = previewAutoTax(
-      { ...seller, buyerCountry: 'IN', buyerTaxId: null, placeOfSupply: 'IN-MH', supplyType: 'goods' },
-      [{ hsnSac: null, ratePercent: null }, { hsnSac: null, ratePercent: null }],
+      {
+        ...seller,
+        buyerCountry: 'IN',
+        buyerTaxId: null,
+        placeOfSupply: 'IN-MH',
+        supplyType: 'goods',
+      },
+      [
+        { hsnSac: null, ratePercent: null },
+        { hsnSac: null, ratePercent: null },
+      ],
     );
     expect(r.ok).toBe(true);
     if (!r.ok) return;
@@ -101,9 +141,21 @@ describe('the live "Why this tax?"', () => {
   });
   it('needs the seller country, and one the engine knows', () => {
     const line = [{ hsnSac: null, ratePercent: null }];
-    const base = { ...seller, buyerCountry: null, buyerTaxId: null, placeOfSupply: null, supplyType: 'goods' as const };
-    expect(previewAutoTax({ ...base, sellerCountry: null }, line)).toEqual({ ok: false, reason: 'noCountry' });
-    expect(previewAutoTax({ ...base, sellerCountry: 'QQ' }, line)).toEqual({ ok: false, reason: 'noProfile' });
+    const base = {
+      ...seller,
+      buyerCountry: null,
+      buyerTaxId: null,
+      placeOfSupply: null,
+      supplyType: 'goods' as const,
+    };
+    expect(previewAutoTax({ ...base, sellerCountry: null }, line)).toEqual({
+      ok: false,
+      reason: 'noCountry',
+    });
+    expect(previewAutoTax({ ...base, sellerCountry: 'QQ' }, line)).toEqual({
+      ok: false,
+      reason: 'noProfile',
+    });
   });
 });
 
@@ -117,7 +169,13 @@ describe('tax rates as line taxes', () => {
     });
   });
   it('a compound rate is its parts', () => {
-    const t = lineTaxOfRate({ ...base, components: [{ type: 'CGST', rate: '9' }, { type: 'SGST', rate: '9' }] });
+    const t = lineTaxOfRate({
+      ...base,
+      components: [
+        { type: 'CGST', rate: '9' },
+        { type: 'SGST', rate: '9' },
+      ],
+    });
     expect(t.items.map((i) => [i.code, i.name, i.rate])).toEqual([
       ['CGST', 'CGST 9%', '9'],
       ['SGST', 'SGST 9%', '9'],
@@ -125,7 +183,15 @@ describe('tax rates as line taxes', () => {
   });
   it('only a single-tax rate can act as a slab for the engine', () => {
     expect(slabPercentOf({ rate: '5', components: null })).toBe('5');
-    expect(slabPercentOf({ rate: '18', components: [{ type: 'CGST', rate: '9' }, { type: 'SGST', rate: '9' }] })).toBeNull();
+    expect(
+      slabPercentOf({
+        rate: '18',
+        components: [
+          { type: 'CGST', rate: '9' },
+          { type: 'SGST', rate: '9' },
+        ],
+      }),
+    ).toBeNull();
     expect(slabPercentOf(null)).toBeNull();
   });
 });

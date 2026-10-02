@@ -11,7 +11,7 @@
             "subtitle": "Enter your details to get back into your workspace."
           },
           "register": {
-            "eyebrow": "Create account",
+            "eyebrow": "Step 1 of 3 / Create account",
             "title": "Create your",
             "accent": "account",
             "subtitle": "A few details and your workspace is ready."
@@ -47,8 +47,7 @@
             "chip3": "Flows",
             "chip4": "Contacts",
             "chip5": "Reports",
-            "chip6": "Templates",
-            "footer": "Protected by encrypted storage and two-factor sign-in."
+            "chip6": "Templates"
           },
           "register": {
             "hero_title": "Start free",
@@ -73,8 +72,7 @@
             "chip3": "Flows",
             "chip4": "Contacts",
             "chip5": "Reports",
-            "chip6": "Team roles",
-            "footer": "No spam. You can leave any time."
+            "chip6": "Team roles"
           },
           "forgot": {
             "hero_title": "A fresh link, used once",
@@ -130,14 +128,30 @@
           "eyebrow": "Reset password",
           "heading": "Choose a new",
           "accent": "password",
-          "subtitle": "Pick something strong. You will sign in with it right after."
+          "subtitle": "Pick something strong. You will sign in with it right after.",
+          "panel": {
+            "heroTitle": "A fresh password",
+            "heroDesc": "Choose one you will remember. Your workspace may ask for a minimum length.",
+            "eyebrow": "Account recovery",
+            "heading": "A fresh",
+            "accent": "start",
+            "subheading": "Once your new password is saved you can sign in with it straight away."
+          }
         },
         "verifyEmail": {
           "title": "Confirm your email",
           "eyebrow": "Email confirmation",
           "heading": "Confirm your",
           "accent": "email",
-          "subtitle": "This page checks the link you opened from your inbox."
+          "subtitle": "This page checks the link you opened from your inbox.",
+          "panel": {
+            "heroTitle": "Confirm your address",
+            "heroDesc": "A single click proves this inbox is yours.",
+            "eyebrow": "Email confirmation",
+            "heading": "Checking your",
+            "accent": "link",
+            "subheading": "We are confirming the address from the email you opened."
+          }
         },
         "findWorkspace": {
           "title": "Find my workspace",
@@ -151,7 +165,15 @@
           "eyebrow": "Email change",
           "heading": "Confirm your",
           "accent": "new email",
-          "subtitle": "This page checks the link you opened from your inbox."
+          "subtitle": "This page checks the link you opened from your inbox.",
+          "panel": {
+            "heroTitle": "New sign-in email",
+            "heroDesc": "Your address changes as soon as you confirm it.",
+            "eyebrow": "Email change",
+            "heading": "Confirming your",
+            "accent": "new email",
+            "subheading": "We are checking the link from the message you opened."
+          }
         },
         "socialCallback": {
           "title": "Signing you in",
@@ -183,14 +205,13 @@
         "otpSendFailed": "We could not send the verification code. Check the number and try again.",
         "socialUnavailable": "That sign-in method is not available.",
         "socialExpired": "Sign-in expired. Please try again.",
-        "socialFailed": "We could not complete that sign-in. Please try again.",
+        "socialFailed": "We could not complete {provider} sign-in. Please try again.",
         "socialNoEmail": "That account did not share an email address. Use email and password instead.",
         "ipBlocked": "Sign-in is not allowed from this network.",
         "workspaceUnavailable": "That workspace is not available.",
         "workspaceRequired": "This email is used in more than one workspace. Enter your workspace to continue.",
         "validation": "Please check the highlighted fields.",
-        "sessionExpired": "Your session expired for security. Reload the page and try again.",
-        "reload": "Reload the page",
+        "sessionExpired": "Your session expired for security. Please try again.",
         "network": "We could not reach the server. Check your connection and try again.",
         "unexpected": "Something went wrong on our side. Please try again.",
         "requestId": "Request id",
@@ -201,20 +222,22 @@
           "number": "Include at least one number.",
           "symbol": "Include at least one symbol.",
           "common": "That password is too easy to guess."
-        }
+        },
+        "socialNoAccount": "No account matches that {provider} sign-in. Sign in with your email and password, or create an account.",
+        "forbidden": "That request was refused. Reload the page and try again."
       },
       "validation": {
         "orgSlug": "Enter your workspace address (letters, numbers, dash or underscore).",
         "orgSlugForSocial": "Enter your workspace address first so we know where to sign you in.",
         "email": "Enter a valid email address.",
-        "password": "Enter a password of at least 8 characters.",
+        "password": "Enter a password that meets the requirements shown.",
         "passwordRequired": "Enter your password.",
         "fullName": "Enter your full name.",
         "orgName": "Name your workspace (at least 2 characters).",
         "orgNameForSocial": "Name your workspace first, then continue with Google or Facebook.",
         "phoneRequired": "Enter your mobile number.",
         "phone": "Enter a valid mobile number for the selected country.",
-        "newPassword": "Use at least 8 characters.",
+        "newPassword": "Use at least {min, plural, one {# character} other {# characters}}.",
         "confirmPassword": "The two passwords do not match.",
         "acceptTerms": "You must accept the terms to continue.",
         "referralCode": "Referral codes use letters and numbers only.",
@@ -226,7 +249,7 @@
         "cookies": "<cookies>Cookie policy</cookies>"
       },
       "captcha": {
-        "protected": "Protected by reCAPTCHA."
+        "protected": "This site is protected by reCAPTCHA. The Google <privacy>Privacy Policy</privacy> and <terms>Terms of Service</terms> apply."
       },
       "social": {
         "divider": "or with email",
@@ -238,7 +261,9 @@
         "signup": {
           "google": "Sign up with Google",
           "facebook": "Sign up with Facebook"
-        }
+        },
+        "google": "Google",
+        "facebook": "Facebook"
       },
       "login": {
         "workspace": "Workspace",
@@ -260,6 +285,7 @@
         "loggedOut": "You've been signed out.",
         "flashReset": "Password reset. Sign in with your new password.",
         "flashExpired": "Your session expired. Please sign in again.",
+        "flashIdle": "You were signed out after {minutes, plural, one {# minute} other {# minutes}} without activity. Sign in again to continue.",
         "mfaExpired": "Your verification took too long. Sign in again.",
         "flashDeleted": "Your account was deleted."
       },
@@ -282,7 +308,6 @@
       "signup": {
         "steps": {
           "label": "Sign-up progress",
-          "position": "Step {current} of {total}",
           "account": "Account",
           "workspace": "Workspace",
           "plan": "Plan"
@@ -306,7 +331,6 @@
         "optional": "optional",
         "referralPlaceholder": "Got a friend's code?",
         "password": "Password",
-        "passwordHint": "At least 8 characters.",
         "confirmPassword": "Confirm password",
         "submit": "Continue",
         "submitting": "Creating your account",
@@ -314,7 +338,10 @@
         "signIn": "Sign in",
         "closedBody": "Registration is closed. Ask an administrator for an invitation.",
         "closedBack": "Back to sign in",
-        "restart": "Please start registration again."
+        "restart": "Please start registration again.",
+        "countryButton": "Country code +{dial}",
+        "countrySearch": "Search countries",
+        "countryEmpty": "No country matches"
       },
       "otp": {
         "sentTo": "We sent a code to",
@@ -328,7 +355,9 @@
         "resending": "Sending",
         "resent": "A new code is on its way to your WhatsApp.",
         "wrongNumber": "Wrong number?",
-        "goBack": "Go back"
+        "goBack": "Go back",
+        "addressTakenHint": "That workspace address was taken while you were verifying. Choose another one and we will send you a new code.",
+        "chooseAnotherAddress": "Choose another address"
       },
       "forgot": {
         "submit": "Email reset link",
@@ -342,7 +371,6 @@
       },
       "reset": {
         "password": "New password",
-        "passwordHint": "At least 8 characters. Your workspace may ask for more.",
         "confirmPassword": "Confirm new password",
         "submit": "Save new password",
         "submitting": "Saving",
@@ -382,6 +410,68 @@
         "cancelled": "Sign-in was cancelled.",
         "backToSignIn": "Back to sign in",
         "createAccount": "Create an account instead"
+      },
+      "layout": {
+        "noscript": "JavaScript is turned off in this browser. Turn it on to sign in or create an account."
+      },
+      "consent": {
+        "label": "Cookie notice",
+        "title": "We use cookies",
+        "message": "We use cookies to keep you signed in and to understand how this site is used. Accept them all, decline the optional ones, or choose what you allow.",
+        "learnMore": "Learn more",
+        "decline": "Decline",
+        "customize": "Customize",
+        "acceptAll": "Accept all",
+        "prefsTitle": "Your privacy choices",
+        "necessary": "Strictly necessary",
+        "necessaryHint": "Needed for sign-in and security. Always on.",
+        "analytics": "Analytics",
+        "analyticsHint": "Helps us see which pages work and which do not.",
+        "marketing": "Marketing",
+        "marketingHint": "Used to show relevant offers on other websites.",
+        "rejectAll": "Reject all",
+        "save": "Save choices"
+      },
+      "policy": {
+        "minLength": "At least {min, plural, one {# character} other {# characters}}.",
+        "mixedCase": "Mix upper and lower case letters.",
+        "number": "Include a number.",
+        "symbol": "Include a symbol.",
+        "placeholder": "At least {min, plural, one {# character} other {# characters}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "Your account is",
+        "titleAccent": "suspended"
+      },
+      "verify": {
+        "titleLead": "Please",
+        "titleAccent": "verify your email"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "Step 2 of 3 / Workspace",
+            "title": "Create your",
+            "accent": "workspace"
+          },
+          "step3": {
+            "eyebrow": "Step 3 of 3 / Plan",
+            "title": "Pick a",
+            "accent": "plan",
+            "subtitle": "Every plan comes with a monthly message allowance. Begin on the free plan, or choose one with more room."
+          }
+        },
+        "timezonePlaceholder": "Search timezone...",
+        "timezoneEmpty": "No timezone matches your search.",
+        "timezoneLabel": "Timezone",
+        "phonePlaceholder": "Number without country code",
+        "plan": {
+          "credits": "Your plan includes a set number of messages each month. If the allowance runs out while the plan is active, extra sends use wallet credits at <rate>{credits, plural, one {# credit} other {# credits}} per message</rate>. When the plan ends, sending pauses until you renew.",
+          "topUpPrompt": "Running past your allowance?",
+          "topUp": "Add message credits"
+        }
       }
     }
   }

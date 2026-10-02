@@ -17,6 +17,7 @@
     "test:integration": "vitest run --dir test/integration --testTimeout=120000",
     "test:e2e": "vitest run --dir test/e2e --testTimeout=120000",
     "openapi": "tsx src/tools/emit-openapi.ts",
+    "secrets:reencrypt": "tsx src/modules/auth/maintenance/reencrypt-secrets.cli.ts",
     "clean": "rm -rf dist coverage",
     "arch": "depcruise --config .dependency-cruiser.cjs src",
     "seed:auth": "tsx src/modules/auth/cli/seed-auth.ts",

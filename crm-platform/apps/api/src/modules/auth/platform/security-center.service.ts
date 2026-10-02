@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -10,11 +11,13 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
+import type { Env } from '../../../config/env.schema';
 import { EpochService } from '../sessions/epoch.service';
 import { AccountGateService } from '../security/account-gate.service';
 import { AuthAuditService } from '../security/auth-audit.service';
 import { EmergencyHaltService } from '../security/emergency-halt.service';
-import { ipAllowed, isValidAllowlistEntry, normalizeIp } from '../support/ip';
+import { ipAllowed, normalizeIp } from '../support/ip';
+import { isStrictAllowlistEntry } from './ip-allowlist';
 import { OperatorAuthService } from './operator-auth.service';
 import { PlatformStore } from './platform-store';
 import { SecurityPolicyService } from './security-policy.service';
@@ -100,14 +103,19 @@ const ENFORCEMENT: SecurityOverviewResponse['enforcement'] = [
   {
     key: 'apiRateLimitPerMinute',
     controls: ['apiRateLimitPerMinute'],
-    consumer: "Public API key guard: platform ceiling over each key's own limit",
+    // Reference lets a plan's own value win over the global one; here the global value is a
+    // ceiling no key (or plan) can exceed, and a key with no limit of its own gets it.
+    consumer:
+      "Public API key guard: a platform-wide ceiling over every key's own limit, never raised by a plan",
     status: 'enforced',
   },
   {
     key: 'webhookSignatureRequired',
     controls: ['webhookSignatureRequired'],
-    consumer: 'Webhook endpoint creation (API domain)',
-    status: 'partial',
+    // Nothing reads it yet (webhook signatures are always checked on inbound
+    // provider webhooks, whatever this says), so it must not claim enforcement.
+    consumer: 'Reserved: no webhook code reads this switch yet',
+    status: 'reserved',
   },
   {
     key: 'webhookReplayWindowSec / deviceTrustRequired',
@@ -144,13 +152,29 @@ const ENFORCEMENT: SecurityOverviewResponse['enforcement'] = [
 const toIso = (d: Date | string): string => (d instanceof Date ? d : new Date(d)).toISOString();
 
 /**
+ * One short line about what the event was about: an explicit label, else the
+ * identifier, reason or route the writer recorded. '' when there is nothing
+ * beyond the event name, which the screen then leaves out instead of printing twice.
+ */
+export function riskDetail(event: string, payload: Record<string, unknown> | null): string {
+  for (const key of ['_label', 'label', 'identifier', 'reason', 'route']) {
+    const v = payload?.[key];
+    if (typeof v === 'string' && v.trim() && v !== event) return v.trim().slice(0, 200);
+  }
+  return '';
+}
+
+/**
  * The platform Security Center (TW-AUTH-036/037/039/040): read model over
  * security_events, the typed policy document, and the super-admin-only danger
  * actions. Every mutation writes one audit event.
  */
 @Injectable()
 export class SecurityCenterService {
+  private readonly appName: string;
+
   constructor(
+    config: ConfigService<Env, true>,
     private readonly store: PlatformStore,
     private readonly policyService: SecurityPolicyService,
     private readonly halt: EmergencyHaltService,
@@ -160,7 +184,9 @@ export class SecurityCenterService {
     private readonly audit: AuthAuditService,
     private readonly gates: AccountGateService,
     private readonly webhookSecrets: WebhookSecretRegistry,
-  ) {}
+  ) {
+    this.appName = config.get('APP_NAME', { infer: true });
+  }
 
   private operatorId(): number {
     const id = RequestContextStore.require().actorId;
@@ -170,7 +196,7 @@ export class SecurityCenterService {
 
   async overview(): Promise<SecurityOverviewResponse> {
     const [policy, halted, totals, agg, risks] = await Promise.all([
-      this.policyService.policy(),
+      this.policyService.storedPolicy(),
       this.halt.isHalted(),
       this.operatorTotals(),
       this.aggregates(),
@@ -178,6 +204,7 @@ export class SecurityCenterService {
     ]);
 
     return {
+      appName: this.appName,
       policy,
       emergencyHalt: halted,
       kpis: {
@@ -214,39 +241,34 @@ export class SecurityCenterService {
   }
 
   private coverage(p: SecurityPolicy, halted: boolean): SecurityOverviewResponse['coverage'] {
-    const pct = (flags: boolean[]) =>
-      Math.round((flags.filter(Boolean).length / flags.length) * 100);
+    const bucket = (key: SecurityOverviewResponse['coverage'][number]['key'], flags: boolean[]) => {
+      const enabled = flags.filter(Boolean).length;
+      return {
+        key,
+        percent: Math.round((enabled / flags.length) * 100),
+        enabled,
+        total: flags.length,
+      };
+    };
     return [
-      {
-        key: 'admin_access',
-        percent: pct([
-          p.requireMfaForAdmins,
-          p.lockoutAfterFailures > 0,
-          p.sessionTimeoutMinutes > 0,
-          p.maxConcurrentSessions > 0,
-        ]),
-      },
-      {
-        key: 'send_abuse',
-        percent: pct([
-          p.waHoldOnScamPattern,
-          p.waRequireTemplateReview,
-          p.abuseBlockFinanceTerms,
-          p.abuseBlockShortLinks,
-        ]),
-      },
-      {
-        key: 'api_hardening',
-        percent: pct([
-          p.webhookSignatureRequired,
-          p.apiRateLimitPerMinute > 0,
-          p.webhookReplayWindowSec > 0,
-        ]),
-      },
-      {
-        key: 'incident_readiness',
-        percent: pct([p.alertOnNewDevice, p.alertOnNewCountry, !halted]),
-      },
+      bucket('admin_access', [
+        p.requireMfaForAdmins,
+        p.lockoutAfterFailures > 0,
+        p.sessionTimeoutMinutes > 0,
+        p.maxConcurrentSessions > 0,
+      ]),
+      bucket('send_abuse', [
+        p.waHoldOnScamPattern,
+        p.waRequireTemplateReview,
+        p.abuseBlockFinanceTerms,
+        p.abuseBlockShortLinks,
+      ]),
+      bucket('api_hardening', [
+        p.webhookSignatureRequired,
+        p.apiRateLimitPerMinute > 0,
+        p.webhookReplayWindowSec > 0,
+      ]),
+      bucket('incident_readiness', [p.alertOnNewDevice, p.alertOnNewCountry, !halted]),
     ];
   }
 
@@ -299,11 +321,21 @@ export class SecurityCenterService {
 
   private async recentRisks(): Promise<SecurityOverviewResponse['risks']> {
     return this.store.tx(async (tx) => {
+      // The newest four failure or warning rows inside the 7-day window the
+      // "open risks" figure uses. The owner is the person's name, looked up in
+      // the table the actor type names; a row with no actor id is the system's.
       const res = await tx.execute(sql`
-        SELECT e.at, e.event, e.status, e.actor_type, e.payload, o.name AS org_name
+        SELECT e.at, e.event, e.status, e.actor_type, e.actor_id, e.payload, o.name AS org_name,
+               CASE e.actor_type
+                 WHEN 'user' THEN (
+                   SELECT u.full_name FROM users u
+                   WHERE u.org_id = e.subject_org_id AND u.id = e.actor_id)
+                 WHEN 'platform_operator' THEN (
+                   SELECT po.full_name FROM platform_operators po WHERE po.id = e.actor_id)
+               END AS actor_name
         FROM security_events e LEFT JOIN organizations o ON o.id = e.subject_org_id
         WHERE e.status IN ('failure','warning') AND e.at > now() - interval '7 days'
-        ORDER BY e.at DESC LIMIT 4
+        ORDER BY e.at DESC, e.id DESC LIMIT 4
       `);
       return (
         res.rows as unknown as Array<{
@@ -311,22 +343,47 @@ export class SecurityCenterService {
           event: string;
           status: string;
           actor_type: string;
+          actor_id: number | string | null;
           payload: Record<string, unknown>;
           org_name: string | null;
+          actor_name: string | null;
         }>
-      ).map((r) => ({
-        severity:
-          r.status === 'failure' && Date.now() - new Date(r.at).getTime() < 86_400_000
-            ? ('high' as const)
-            : r.status === 'failure'
-              ? ('medium' as const)
-              : ('watch' as const),
-        signal: r.event,
-        detail: String(r.payload?.identifier ?? r.payload?.reason ?? r.payload?.route ?? r.event),
-        workspace: r.org_name,
-        actor: r.actor_type === 'system' ? 'System' : r.actor_type,
-        at: toIso(r.at),
-      }));
+      ).map((r) => {
+        const kind: 'user' | 'platform_operator' | 'system' =
+          r.actor_id === null
+            ? 'system'
+            : r.actor_type === 'platform_operator'
+              ? 'platform_operator'
+              : r.actor_type === 'user'
+                ? 'user'
+                : 'system';
+        const actor =
+          kind === 'system'
+            ? 'System'
+            : (r.actor_name ??
+              (kind === 'platform_operator'
+                ? `Operator #${String(r.actor_id)}`
+                : `User #${String(r.actor_id)}`));
+        return {
+          severity:
+            r.status === 'failure' && Date.now() - new Date(r.at).getTime() < 86_400_000
+              ? ('high' as const)
+              : r.status === 'failure'
+                ? ('medium' as const)
+                : ('watch' as const),
+          signal: r.event,
+          detail: riskDetail(r.event, r.payload),
+          workspace: r.org_name,
+          scope: r.org_name
+            ? ('workspace' as const)
+            : r.actor_type === 'platform_operator' || r.event.startsWith('platform.')
+              ? ('platform' as const)
+              : ('none' as const),
+          actor,
+          actorKind: kind,
+          at: toIso(r.at),
+        };
+      });
     });
   }
 
@@ -337,7 +394,8 @@ export class SecurityCenterService {
     const callerIp = normalizeIp(RequestContextStore.peek()?.ip);
 
     if (patch.ipAllowlistCidrs) {
-      const bad = patch.ipAllowlistCidrs.filter((e) => !isValidAllowlistEntry(e));
+      // Strict: `10.0.0.5/` or `x/` must be refused here; read leniently they become /0.
+      const bad = patch.ipAllowlistCidrs.filter((e) => !isStrictAllowlistEntry(e));
       if (bad.length > 0) {
         throw AppError.validation(
           'Some allowlist entries are not valid addresses or ranges',
@@ -350,10 +408,22 @@ export class SecurityCenterService {
     const current = await this.policyService.policy();
     const nextEnabled = patch.ipAllowlistEnabled ?? current.ipAllowlistEnabled;
     const nextList = patch.ipAllowlistCidrs ?? current.ipAllowlistCidrs;
-    if (nextEnabled && nextList.length > 0 && callerIp && !ipAllowed(callerIp, nextList)) {
-      throw AppError.validation('Your own address is not on the allowlist', [
-        { path: 'ipAllowlistCidrs', message: `Add ${callerIp} before enabling the allowlist.` },
-      ]);
+    if (nextEnabled && nextList.length > 0) {
+      // Not knowing the caller's address is not a pass: an allowlist saved blind
+      // would shut this operator out on the very next request.
+      if (!callerIp) {
+        throw AppError.validation('Your own address could not be read', [
+          {
+            path: 'ipAllowlistCidrs',
+            message: 'We cannot tell which address you are using, so the allowlist was not saved.',
+          },
+        ]);
+      }
+      if (!ipAllowed(callerIp, nextList)) {
+        throw AppError.validation('Your own address is not on the allowlist', [
+          { path: 'ipAllowlistCidrs', message: `Add ${callerIp} before enabling the allowlist.` },
+        ]);
+      }
     }
 
     const { changes } = await this.policyService.patchPolicy(patch, operatorId);
@@ -453,11 +523,27 @@ export class SecurityCenterService {
         const [at, id] = Buffer.from(query.cursor, 'base64url').toString('utf8').split('|');
         if (at && id && !Number.isNaN(new Date(at).getTime())) cursor = { at, id: Number(id) };
       }
+      const like = query.q ? `%${query.q.replace(/[\\%_]/g, (c) => `\\${c}`)}%` : null;
+      // The actor id on the row is internal; the viewer gets the public uuid, name
+      // and email, resolved from the table the actor type names (an account
+      // deleted since is simply null).
       const res = await tx.execute(sql`
-        SELECT e.id, e.at, e.event, e.status, e.actor_type, o.uuid AS org_uuid, host(e.ip) AS ip, e.payload
-        FROM security_events e LEFT JOIN organizations o ON o.id = e.subject_org_id
+        SELECT e.id, e.at, e.event, e.status, e.actor_type,
+               o.uuid AS org_uuid, o.slug AS org_slug, o.name AS org_name,
+               host(e.ip) AS ip, e.user_agent, e.request_id, e.payload,
+               a.uuid AS actor_uuid, a.name AS actor_name, a.email AS actor_email
+        FROM security_events e
+        LEFT JOIN organizations o ON o.id = e.subject_org_id
+        LEFT JOIN LATERAL (
+          SELECT u.uuid, u.full_name AS name, u.email::text AS email
+            FROM users u WHERE e.actor_type = 'user' AND u.org_id = e.subject_org_id AND u.id = e.actor_id
+          UNION ALL
+          SELECT po.uuid, po.full_name, po.email::text
+            FROM platform_operators po WHERE e.actor_type = 'platform_operator' AND po.id = e.actor_id
+        ) a ON true
         WHERE (${query.event ?? null}::text IS NULL OR e.event = ${query.event ?? null})
           AND (${query.status ?? null}::text IS NULL OR e.status = ${query.status ?? null})
+          AND (${like}::text IS NULL OR e.event ILIKE ${like} ESCAPE '\\')
           AND (${cursor?.at ?? null}::timestamptz IS NULL OR (e.at, e.id) < (${cursor?.at ?? null}::timestamptz, ${cursor?.id ?? null}::bigint))
         ORDER BY e.at DESC, e.id DESC
         LIMIT ${query.limit + 1}
@@ -469,8 +555,15 @@ export class SecurityCenterService {
         status: 'success' | 'failure' | 'warning' | 'info';
         actor_type: string;
         org_uuid: string | null;
+        org_slug: string | null;
+        org_name: string | null;
         ip: string | null;
+        user_agent: string | null;
+        request_id: string | null;
         payload: Record<string, unknown>;
+        actor_uuid: string | null;
+        actor_name: string | null;
+        actor_email: string | null;
       }>;
     });
     const hasMore = rows.length > query.limit;
@@ -484,8 +577,15 @@ export class SecurityCenterService {
         event: r.event,
         status: r.status,
         actorType: r.actor_type,
+        actorId: r.actor_uuid,
+        actorName: r.actor_name,
+        actorEmail: r.actor_email,
         orgId: r.org_uuid,
+        orgSlug: r.org_slug,
+        orgName: r.org_name,
         ip: r.ip,
+        userAgent: r.user_agent,
+        requestId: r.request_id,
         payload: r.payload,
       })),
       page: {

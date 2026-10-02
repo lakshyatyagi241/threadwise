@@ -65,24 +65,24 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-002 | todo |  |  |
 | TW-WSP-003 | todo |  |  |
 | TW-WSP-004 | todo |  |  |
-| TW-WSP-005 | todo |  |  |
+| TW-WSP-005 | done |  | built by AUTH-010 |
 | TW-WSP-006 | todo |  |  |
 | TW-WSP-007 | todo |  |  |
 | TW-WSP-008 | todo |  |  |
 | TW-WSP-009 | todo |  |  |
 | TW-WSP-010 | todo |  |  |
 | TW-WSP-011 | todo |  |  |
-| TW-WSP-012 | todo |  |  |
+| TW-WSP-012 | done |  | kernel tenant context |
 | TW-WSP-013 | todo |  |  |
 | TW-WSP-014 | todo |  |  |
-| TW-WSP-015 | todo |  |  |
-| TW-WSP-016 | todo |  |  |
-| TW-WSP-017 | todo |  |  |
-| TW-WSP-018 | todo |  |  |
-| TW-WSP-019 | todo |  |  |
-| TW-WSP-020 | todo |  |  |
-| TW-WSP-021 | todo |  |  |
-| TW-WSP-022 | todo |  |  |
+| TW-WSP-015 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-016 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-017 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-018 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-019 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-020 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-021 | wontfix |  | invite token acceptance replaces login-time activation (port note) |
+| TW-WSP-022 | frontend-done |  | teams CRUD done; device scoping picker blocked until channels (devices) domain exists |
 | TW-WSP-023 | todo |  |  |
 | TW-WSP-024 | todo |  |  |
 | TW-WSP-025 | todo |  |  |
@@ -94,7 +94,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-031 | todo |  |  |
 | TW-WSP-032 | todo |  |  |
 | TW-WSP-033 | todo |  |  |
-| TW-WSP-034 | todo |  |  |
+| TW-WSP-034 | wontfix |  | platform staff are platform_operators, outside tenant orgs |
 | TW-WSP-035 | todo |  |  |
 | TW-WSP-036 | todo |  |  |
 | TW-WSP-037 | todo |  |  |
@@ -106,50 +106,50 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-043 | todo |  |  |
 | TW-WSP-044 | todo |  |  |
 | TW-WSP-045 | todo |  |  |
-| TW-WSP-046 | todo |  |  |
-| TW-WSP-047 | todo |  |  |
+| TW-WSP-046 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-047 | done |  | built by AUTH; members contract carries invitedAt/joinedAt |
 
 ## roles-permissions (rbac)
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-RBAC-001 | todo |  |  |
-| TW-RBAC-002 | todo |  |  |
-| TW-RBAC-003 | todo |  |  |
-| TW-RBAC-004 | todo |  |  |
-| TW-RBAC-005 | todo |  |  |
-| TW-RBAC-006 | todo |  |  |
-| TW-RBAC-007 | todo |  |  |
-| TW-RBAC-008 | todo |  |  |
-| TW-RBAC-009 | todo |  |  |
-| TW-RBAC-010 | todo |  |  |
-| TW-RBAC-011 | todo |  |  |
-| TW-RBAC-012 | todo |  |  |
-| TW-RBAC-013 | todo |  |  |
-| TW-RBAC-014 | todo |  |  |
-| TW-RBAC-015 | todo |  |  |
-| TW-RBAC-016 | todo |  |  |
-| TW-RBAC-017 | todo |  |  |
-| TW-RBAC-018 | todo |  |  |
-| TW-RBAC-019 | todo |  |  |
-| TW-RBAC-020 | todo |  |  |
-| TW-RBAC-021 | todo |  |  |
-| TW-RBAC-022 | todo |  |  |
-| TW-RBAC-023 | todo |  |  |
-| TW-RBAC-024 | todo |  |  |
-| TW-RBAC-025 | todo |  |  |
-| TW-RBAC-026 | todo |  |  |
-| TW-RBAC-027 | todo |  |  |
-| TW-RBAC-028 | todo |  |  |
-| TW-RBAC-029 | todo |  |  |
-| TW-RBAC-030 | todo |  |  |
-| TW-RBAC-031 | todo |  |  |
-| TW-RBAC-032 | todo |  |  |
-| TW-RBAC-033 | todo |  |  |
-| TW-RBAC-034 | todo |  |  |
-| TW-RBAC-035 | todo |  |  |
-| TW-RBAC-036 | todo |  |  |
-| TW-RBAC-037 | todo |  |  |
+| TW-RBAC-001 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| TW-RBAC-002 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| TW-RBAC-003 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| TW-RBAC-004 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| TW-RBAC-005 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-006 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-007 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-008 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-009 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-010 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-011 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-012 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-013 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-014 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| TW-RBAC-015 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| TW-RBAC-016 | wontfix |  | operator identity pool replaces role-name staff recognition (D-RBAC-04) |
+| TW-RBAC-017 | wontfix |  | legacy users.role not ported (D-RBAC-04); plan/billing bypass is a PLAN/BILL flag |
+| TW-RBAC-018 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| TW-RBAC-019 | blocked |  | guard + keys ready; waiting on platform inbox routes (ASHELL/SUPP) |
+| TW-RBAC-020 | blocked |  | waiting on TW-WSP impersonation tokens |
+| TW-RBAC-021 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-022 | frontend-done |  | API + console screen (/admin/roles, /admin/permissions, /admin/roles/staff), 54 e2e + web unit tests; browser-checked, not compared with a running Reference |
+| TW-RBAC-023 | backend-done |  | platform layer API + tests; see parity/roles-permissions.md |
+| TW-RBAC-024 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| TW-RBAC-025 | blocked |  | each domain adopts its own permission keys; see wiring map |
+| TW-RBAC-026 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| TW-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change and on the WSP members screen (invite, resend, remove, reset, role change) |
+| TW-RBAC-028 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| TW-RBAC-029 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| TW-RBAC-030 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| TW-RBAC-031 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| TW-RBAC-032 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
+| TW-RBAC-033 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| TW-RBAC-034 | blocked |  | keys org.owner_settings.manage / org.delete registered; SET, TCHAT, CHK adopt them |
+| TW-RBAC-035 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
+| TW-RBAC-036 | blocked |  | one guard for all actor kinds already; API-key scopes belong to the public API domain |
+| TW-RBAC-037 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
 
 ## admin-console-shell (ashell)
 

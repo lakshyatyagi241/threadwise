@@ -1,4 +1,10 @@
-import { computeInvoice, createInvoiceSchema, updateInvoiceSchema, type InvoiceResponse, type TaxRateResponse } from '@crm/contracts';
+import {
+  computeInvoice,
+  createInvoiceSchema,
+  updateInvoiceSchema,
+  type InvoiceResponse,
+  type TaxRateResponse,
+} from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
   TAX_DEFAULT,
@@ -51,10 +57,25 @@ const rate = (over: Partial<TaxRateResponse> = {}): TaxRateResponse => ({
   ...over,
 });
 
-const profile = { currency: 'USD', dueDays: 14, terms: 'Pay within 14 days', sellerCountry: 'IN', sellerState: 'MH', sellerTaxId: null };
+const profile = {
+  currency: 'USD',
+  dueDays: 14,
+  terms: 'Pay within 14 days',
+  sellerCountry: 'IN',
+  sellerState: 'MH',
+  sellerTaxId: null,
+};
 const ctx = (rates: TaxRateResponse[]) => ({ rates, profile, today: '2026-10-02' });
-const line = (over: Partial<DraftLine> = {}): DraftLine => ({ ...emptyLine(), description: 'Work', price: '100', ...over });
-const draftWith = (over: Partial<InvoiceDraft> = {}): InvoiceDraft => ({ ...emptyDraft(profile, '2026-10-02'), ...over });
+const line = (over: Partial<DraftLine> = {}): DraftLine => ({
+  ...emptyLine(),
+  description: 'Work',
+  price: '100',
+  ...over,
+});
+const draftWith = (over: Partial<InvoiceDraft> = {}): InvoiceDraft => ({
+  ...emptyDraft(profile, '2026-10-02'),
+  ...over,
+});
 
 describe('defaults from the invoicing profile', () => {
   it('takes currency, due days and terms', () => {
@@ -80,12 +101,16 @@ describe('decimalOf', () => {
     expect(decimalOf(' 7 ')).toBe('7');
   });
   it('refuses what is not a non-negative decimal', () => {
-    for (const bad of ['', 'abc', '-3', '1.23456', '1e3', '1.2.3']) expect(decimalOf(bad), bad).toBeNull();
+    for (const bad of ['', 'abc', '-3', '1.23456', '1e3', '1.2.3'])
+      expect(decimalOf(bad), bad).toBeNull();
   });
 });
 
 describe('linesToInput', () => {
-  const rates = [rate({ id: UUID_A, isDefault: true }), rate({ id: UUID_B, name: 'GST', rate: '5' })];
+  const rates = [
+    rate({ id: UUID_A, isDefault: true }),
+    rate({ id: UUID_B, name: 'GST', rate: '5' }),
+  ];
   it('drops blank lines and sends decimal strings', () => {
     const out = linesToInput([emptyLine(), line({ qty: '2,5', price: '10.5' })], 'USD', rates);
     expect(out).toHaveLength(1);
@@ -93,7 +118,11 @@ describe('linesToInput', () => {
   });
   it('taxRateId: absent for the default rate, null for no tax, the uuid for a rate', () => {
     const [a, b, c] = linesToInput(
-      [line({ taxRateId: TAX_DEFAULT }), line({ taxRateId: TAX_NONE }), line({ taxRateId: UUID_B })],
+      [
+        line({ taxRateId: TAX_DEFAULT }),
+        line({ taxRateId: TAX_NONE }),
+        line({ taxRateId: UUID_B }),
+      ],
       'USD',
       rates,
     );
@@ -102,11 +131,16 @@ describe('linesToInput', () => {
     expect(c!.taxRateId).toBe(UUID_B);
   });
   it('a removed rate goes as no tax (the editor makes the person pick one before issuing)', () => {
-    expect(linesToInput([line({ taxRateId: TAX_SNAPSHOT })], 'USD', rates)[0]!.taxRateId).toBeNull();
+    expect(
+      linesToInput([line({ taxRateId: TAX_SNAPSHOT })], 'USD', rates)[0]!.taxRateId,
+    ).toBeNull();
   });
   it('line discount and HSN/SAC travel only when set', () => {
     const [x, y] = linesToInput(
-      [line({ discountKind: 'percent', discount: '10', hsnSac: '998314' }), line({ discount: '0' })],
+      [
+        line({ discountKind: 'percent', discount: '10', hsnSac: '998314' }),
+        line({ discount: '0' }),
+      ],
       'USD',
       rates,
     );
@@ -123,7 +157,9 @@ describe('lineProblems', () => {
     expect(lineProblems(line({ qty: '0' }), 'USD').qty).toBe('qtyInvalid');
     expect(lineProblems(line({ qty: 'x' }), 'USD').qty).toBe('qtyInvalid');
     expect(lineProblems(line({ price: '1.2.3' }), 'USD').unitPrice).toBe('priceInvalid');
-    expect(lineProblems(line({ discount: '150', discountKind: 'percent' }), 'USD').discount).toBe('lineDiscountInvalid');
+    expect(lineProblems(line({ discount: '150', discountKind: 'percent' }), 'USD').discount).toBe(
+      'lineDiscountInvalid',
+    );
     expect(lineProblems(line({ hsnSac: '1' }), 'USD').hsnSac).toBe('hsnInvalid');
   });
   it('asks for the HSN/SAC only where the country does', () => {
@@ -149,7 +185,15 @@ describe('the request body', () => {
   const rates = [rate({ id: UUID_A, isDefault: true })];
   it('is accepted by the create and the update contract', () => {
     const body = draftToBody(
-      draftWith({ buyerName: 'Acme', buyerEmail: 'a@b.co', buyerCountry: 'in', buyerTaxId: '27AAPFU0939F1ZV', reference: 'PO-1', shipping: '5', lines: [line()] }),
+      draftWith({
+        buyerName: 'Acme',
+        buyerEmail: 'a@b.co',
+        buyerCountry: 'in',
+        buyerTaxId: '27AAPFU0939F1ZV',
+        reference: 'PO-1',
+        shipping: '5',
+        lines: [line()],
+      }),
       rates,
       'IN',
     );
@@ -160,7 +204,14 @@ describe('the request body', () => {
   });
   it('sends the document discount and the place of supply', () => {
     const body = draftToBody(
-      draftWith({ taxMode: 'auto', buyerCountry: 'IN', placeRegion: 'ka', discountKind: 'percent', discountText: '10', lines: [line()] }),
+      draftWith({
+        taxMode: 'auto',
+        buyerCountry: 'IN',
+        placeRegion: 'ka',
+        discountKind: 'percent',
+        discountText: '10',
+        lines: [line()],
+      }),
       rates,
       'IN',
     );
@@ -170,7 +221,9 @@ describe('the request body', () => {
   });
   it('leaves the owner out unless the draft has one', () => {
     expect('ownerId' in draftToBody(draftWith({ lines: [line()] }), rates)).toBe(false);
-    expect(draftToBody(draftWith({ ownerId: UUID_B, lines: [line()] }), rates).ownerId).toBe(UUID_B);
+    expect(draftToBody(draftWith({ ownerId: UUID_B, lines: [line()] }), rates).ownerId).toBe(
+      UUID_B,
+    );
   });
 });
 
@@ -178,34 +231,58 @@ describe("live totals are computeInvoice's", () => {
   const vat = rate({ id: UUID_A, rate: '20' });
   const incl = rate({ id: UUID_B, name: 'Sales tax', rate: '10', inclusive: true });
   const rates = [vat, incl];
-  const fixtures: Array<{ name: string; draft: InvoiceDraft; wire: Parameters<typeof computeInvoice>[0] }> = [
+  const fixtures: Array<{
+    name: string;
+    draft: InvoiceDraft;
+    wire: Parameters<typeof computeInvoice>[0];
+  }> = [
     {
       name: 'exclusive tax, line discount, shipping',
       draft: draftWith({
         shipping: '7.50',
-        lines: [line({ qty: '3', price: '19.99', discount: '10', taxRateId: UUID_A }), line({ description: 'B', price: '5', taxRateId: TAX_NONE })],
+        lines: [
+          line({ qty: '3', price: '19.99', discount: '10', taxRateId: UUID_A }),
+          line({ description: 'B', price: '5', taxRateId: TAX_NONE }),
+        ],
       }),
       wire: {
         currency: 'USD',
         shipping: '7.50',
         lines: [
-          { qty: '3', unitPrice: '19.99', discount: { kind: 'percent', value: '10' }, taxRate: '20', taxName: 'VAT' },
+          {
+            qty: '3',
+            unitPrice: '19.99',
+            discount: { kind: 'percent', value: '10' },
+            taxRate: '20',
+            taxName: 'VAT',
+          },
           { qty: '1', unitPrice: '5', taxRate: '0' },
         ],
       },
     },
     {
       name: 'inclusive tax and a document discount in amount',
-      draft: draftWith({ discountKind: 'amount', discountText: '12.34', lines: [line({ qty: '2', price: '49.9', taxRateId: UUID_B })] }),
+      draft: draftWith({
+        discountKind: 'amount',
+        discountText: '12.34',
+        lines: [line({ qty: '2', price: '49.9', taxRateId: UUID_B })],
+      }),
       wire: {
         currency: 'USD',
         discount: { kind: 'amount', value: '12.34' },
-        lines: [{ qty: '2', unitPrice: '49.9', taxRate: '10', taxInclusive: true, taxName: 'Sales tax' }],
+        lines: [
+          { qty: '2', unitPrice: '49.9', taxRate: '10', taxInclusive: true, taxName: 'Sales tax' },
+        ],
       },
     },
     {
       name: 'a zero-decimal currency and a percentage document discount',
-      draft: draftWith({ currency: 'JPY', discountKind: 'percent', discountText: '12.5', lines: [line({ price: '1999', qty: '4', taxRateId: UUID_A })] }),
+      draft: draftWith({
+        currency: 'JPY',
+        discountKind: 'percent',
+        discountText: '12.5',
+        lines: [line({ price: '1999', qty: '4', taxRateId: UUID_A })],
+      }),
       wire: {
         currency: 'JPY',
         discount: { kind: 'percent', value: '12.5' },
@@ -254,7 +331,13 @@ describe('validation', () => {
     expect(check(d, 'issue').lines).toBe('amountZero');
   });
   it('flags wrong values by path', () => {
-    const d = draftWith({ buyerEmail: 'nope', issueDate: '2026-13-40', discountKind: 'percent', discountText: '120', lines: [line({ qty: '0' })] });
+    const d = draftWith({
+      buyerEmail: 'nope',
+      issueDate: '2026-13-40',
+      discountKind: 'percent',
+      discountText: '120',
+      lines: [line({ qty: '0' })],
+    });
     const p = check(d, 'draft');
     expect(p.buyerEmail).toBe('emailInvalid');
     expect(p.issueDate).toBe('issueDateInvalid');
@@ -262,24 +345,46 @@ describe('validation', () => {
     expect(p['lines.0.qty']).toBe('qtyInvalid');
   });
   it('a due date before the issue date is wrong', () => {
-    expect(check(draftWith({ issueDate: '2026-10-10', dueDate: '2026-10-01' }), 'draft').dueDate).toBe('dueBeforeIssue');
+    expect(
+      check(draftWith({ issueDate: '2026-10-10', dueDate: '2026-10-01' }), 'draft').dueDate,
+    ).toBe('dueBeforeIssue');
     // a draft made from a sales order or a schedule has no issue date yet; that is fine, issuing dates it
     expect(check(draftWith({ issueDate: '' }), 'draft').issueDate).toBeUndefined();
   });
   it('a buyer tax id that fails its checksum never blocks a save', () => {
-    const d = draftWith({ buyerName: 'Acme', buyerCountry: 'IN', buyerTaxId: '27AAPFU0939F1ZX', lines: [line()] });
+    const d = draftWith({
+      buyerName: 'Acme',
+      buyerCountry: 'IN',
+      buyerTaxId: '27AAPFU0939F1ZX',
+      lines: [line()],
+    });
     expect(hasProblems(check(d, 'issue'))).toBe(false);
   });
   it('automatic tax needs the seller country', () => {
     const d = draftWith({ taxMode: 'auto', lines: [line()] });
-    const noCountry = pricingOf(d, { rates, profile: { ...profile, sellerCountry: null }, today: '2026-10-02' });
-    expect(validateDraft(d, noCountry, { mode: 'draft', requireHsn: false, sellerCountry: null }).taxMode).toBe('autoNeedsSellerCountry');
+    const noCountry = pricingOf(d, {
+      rates,
+      profile: { ...profile, sellerCountry: null },
+      today: '2026-10-02',
+    });
+    expect(
+      validateDraft(d, noCountry, { mode: 'draft', requireHsn: false, sellerCountry: null })
+        .taxMode,
+    ).toBe('autoNeedsSellerCountry');
   });
   it('HSN/SAC is required to issue where the country asks, not to save a draft', () => {
     const d = draftWith({ buyerName: 'Acme', lines: [line()] });
     const pr = pricingOf(d, ctx(rates));
-    expect(validateDraft(d, pr, { mode: 'issue', requireHsn: true, sellerCountry: 'IN' })['lines.0.hsnSac']).toBe('hsnRequired');
-    expect(validateDraft(d, pr, { mode: 'draft', requireHsn: true, sellerCountry: 'IN' })['lines.0.hsnSac']).toBeUndefined();
+    expect(
+      validateDraft(d, pr, { mode: 'issue', requireHsn: true, sellerCountry: 'IN' })[
+        'lines.0.hsnSac'
+      ],
+    ).toBe('hsnRequired');
+    expect(
+      validateDraft(d, pr, { mode: 'draft', requireHsn: true, sellerCountry: 'IN' })[
+        'lines.0.hsnSac'
+      ],
+    ).toBeUndefined();
   });
 });
 
@@ -290,7 +395,9 @@ describe('paths of blank lines', () => {
     const d = draftWith({ lines });
     const p = pricingOf(d, ctx([]));
     expect(p.result.ok).toBe(false);
-    expect(issuesToProblems(p.result.issues, p.used)).toEqual({ 'lines.1.unitPrice': 'priceInvalid' });
+    expect(issuesToProblems(p.result.issues, p.used)).toEqual({
+      'lines.1.unitPrice': 'priceInvalid',
+    });
     expect(serverPath('lines.0.taxRateId', p.used)).toBe('lines.1.taxRateId');
     expect(serverPath('discount', p.used)).toBe('discount');
   });
@@ -298,7 +405,13 @@ describe('paths of blank lines', () => {
 
 describe('automatic tax in the form', () => {
   it('prices CGST and SGST inside the seller state and says why', () => {
-    const d = draftWith({ taxMode: 'auto', supplyType: 'goods', buyerCountry: 'IN', placeRegion: 'MH', lines: [line({ price: '1000' })] });
+    const d = draftWith({
+      taxMode: 'auto',
+      supplyType: 'goods',
+      buyerCountry: 'IN',
+      placeRegion: 'MH',
+      lines: [line({ price: '1000' })],
+    });
     const p = pricingOf(d, ctx([]));
     expect(p.auto?.ok).toBe(true);
     expect(p.result.ok).toBe(true);
@@ -309,19 +422,37 @@ describe('automatic tax in the form', () => {
     if (p.auto?.ok) expect(p.auto.preview.reasons.length).toBeGreaterThan(0);
   });
   it('prices IGST across states', () => {
-    const d = draftWith({ taxMode: 'auto', supplyType: 'goods', buyerCountry: 'IN', placeRegion: 'KA', lines: [line({ price: '1000' })] });
+    const d = draftWith({
+      taxMode: 'auto',
+      supplyType: 'goods',
+      buyerCountry: 'IN',
+      placeRegion: 'KA',
+      lines: [line({ price: '1000' })],
+    });
     const t = pricingOf(d, ctx([])).result.totals;
     expect(t.taxRows.map((r) => taxLabel(r.name, r.ratePercent))).toEqual(['IGST 18%']);
   });
   it('a rate with components prices as its parts', () => {
-    const gst = rate({ id: UUID_A, name: 'GST 18%', rate: '18', components: [{ type: 'CGST', rate: '9' }, { type: 'SGST', rate: '9' }] });
-    const p = pricingOf(draftWith({ lines: [line({ price: '1000', taxRateId: UUID_A })] }), ctx([gst]));
+    const gst = rate({
+      id: UUID_A,
+      name: 'GST 18%',
+      rate: '18',
+      components: [
+        { type: 'CGST', rate: '9' },
+        { type: 'SGST', rate: '9' },
+      ],
+    });
+    const p = pricingOf(
+      draftWith({ lines: [line({ price: '1000', taxRateId: UUID_A })] }),
+      ctx([gst]),
+    );
     expect(p.result.totals.taxRows.map((r) => r.name)).toEqual(['CGST 9%', 'SGST 9%']);
     expect(p.result.totals.totalMinor).toBe(118000);
   });
   it('reverse charge drops the tax', () => {
     const vat = rate({ id: UUID_A, isDefault: true });
-    const t = pricingOf(draftWith({ reverseCharge: true, lines: [line()] }), ctx([vat])).result.totals;
+    const t = pricingOf(draftWith({ reverseCharge: true, lines: [line()] }), ctx([vat])).result
+      .totals;
     expect(t.taxMinor).toBe(0);
     expect(t.totalMinor).toBe(10000);
   });
@@ -340,8 +471,32 @@ const invoiceFixture = (over: Partial<InvoiceResponse> = {}): InvoiceResponse =>
     daysOverdue: null,
     currency: 'USD',
     currencyExponent: 2,
-    amounts: { subtotal: '100.00', discount: '0.00', shipping: '5.00', tax: '20.00', taxAdded: '20.00', total: '125.00', paid: '0.00', refunded: '0.00', balance: '125.00', credit: '0.00', credited: '0.00' },
-    amountsMinor: { subtotal: '10000', discount: '0', shipping: '500', tax: '2000', taxAdded: '2000', total: '12500', paid: '0', refunded: '0', balance: '12500', credit: '0', credited: '0' },
+    amounts: {
+      subtotal: '100.00',
+      discount: '0.00',
+      shipping: '5.00',
+      tax: '20.00',
+      taxAdded: '20.00',
+      total: '125.00',
+      paid: '0.00',
+      refunded: '0.00',
+      balance: '125.00',
+      credit: '0.00',
+      credited: '0.00',
+    },
+    amountsMinor: {
+      subtotal: '10000',
+      discount: '0',
+      shipping: '500',
+      tax: '2000',
+      taxAdded: '2000',
+      total: '12500',
+      paid: '0',
+      refunded: '0',
+      balance: '12500',
+      credit: '0',
+      credited: '0',
+    },
     buyerName: 'Acme',
     buyerEmail: 'a@b.co',
     contact: { id: UUID_B, name: 'Acme Ltd' },
@@ -358,7 +513,14 @@ const invoiceFixture = (over: Partial<InvoiceResponse> = {}): InvoiceResponse =>
     rowVersion: 4,
     createdAt: '2026-10-02T00:00:00.000Z',
     updatedAt: '2026-10-02T00:00:00.000Z',
-    buyer: { name: 'Acme', email: 'a@b.co', phone: null, address: null, taxId: '27AAPFU0939F1ZV', country: 'IN' },
+    buyer: {
+      name: 'Acme',
+      email: 'a@b.co',
+      phone: null,
+      address: null,
+      taxId: '27AAPFU0939F1ZV',
+      country: 'IN',
+    },
     seller: null,
     taxRegime: 'none',
     placeOfSupply: 'IN-MH',
@@ -384,7 +546,14 @@ const invoiceFixture = (over: Partial<InvoiceResponse> = {}): InvoiceResponse =>
         taxRate: '18',
         taxInclusive: false,
         taxComponents: null,
-        amounts: { gross: '100.00', discount: '1.00', net: '99.00', docDiscountShare: '9.90', tax: '16.04', total: '105.14' },
+        amounts: {
+          gross: '100.00',
+          discount: '1.00',
+          net: '99.00',
+          docDiscountShare: '9.90',
+          tax: '16.04',
+          total: '105.14',
+        },
       },
     ],
     taxSummary: [],
@@ -415,7 +584,13 @@ describe('a saved draft as a working copy', () => {
       discountKind: 'percent',
       discountText: '10',
     });
-    expect(d.lines[0]).toMatchObject({ qty: '2', price: '50.00', discountKind: 'amount', discount: '1.00', hsnSac: '998314' });
+    expect(d.lines[0]).toMatchObject({
+      qty: '2',
+      price: '50.00',
+      discountKind: 'amount',
+      discount: '1.00',
+      hsnSac: '998314',
+    });
   });
   it('a line whose rate is gone keeps its tax until the person picks another', () => {
     const d = draftOf(invoiceFixture({ taxExplanation: null }));
@@ -432,7 +607,12 @@ describe('a saved draft as a working copy', () => {
   });
   it('round trips: the body of an unchanged draft is a valid update', () => {
     const rates = [rate({ id: UUID_A })];
-    const d = draftOf(invoiceFixture({ taxExplanation: null, lines: [{ ...invoiceFixture().lines[0]!, taxRateId: UUID_A }] }));
+    const d = draftOf(
+      invoiceFixture({
+        taxExplanation: null,
+        lines: [{ ...invoiceFixture().lines[0]!, taxRateId: UUID_A }],
+      }),
+    );
     const body = draftToBody(d, rates, 'IN');
     expect(updateInvoiceSchema.safeParse({ ...body, rowVersion: 4 }).success).toBe(true);
   });
@@ -450,7 +630,12 @@ describe('small helpers', () => {
     expect(isSameDraft(a, { ...a, notes: 'x' })).toBe(false);
   });
   it('withContact fills the buyer and clears it', () => {
-    const d = withContact(draftWith(), { id: UUID_B, label: 'Ann', email: 'ann@x.co', phone: '+1' });
+    const d = withContact(draftWith(), {
+      id: UUID_B,
+      label: 'Ann',
+      email: 'ann@x.co',
+      phone: '+1',
+    });
     expect(d).toMatchObject({ contactId: UUID_B, buyerName: 'Ann', buyerEmail: 'ann@x.co' });
     expect(withContact(d, null).contactId).toBeNull();
   });

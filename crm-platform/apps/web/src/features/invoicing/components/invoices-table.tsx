@@ -60,7 +60,17 @@ export function HeaderCheckbox({
 
 const NUMERIC: ReadonlySet<InvoiceColumn> = new Set(['total', 'paid', 'balance']);
 
-function Cell({ id, inv, h, locale }: { id: InvoiceColumn; inv: InvoiceSummary; h: InvoiceRowHandlers; locale: string }) {
+function Cell({
+  id,
+  inv,
+  h,
+  locale,
+}: {
+  id: InvoiceColumn;
+  inv: InvoiceSummary;
+  h: InvoiceRowHandlers;
+  locale: string;
+}) {
   const t = useTranslations('invoicing.table');
   const m = invoiceMinor(inv);
   const shown = inv.status;
@@ -95,11 +105,20 @@ function Cell({ id, inv, h, locale }: { id: InvoiceColumn; inv: InvoiceSummary; 
       );
     }
     case 'issued':
-      return <span className="tabular-nums text-muted-foreground">{formatDay(inv.issueDate, locale) || '-'}</span>;
+      return (
+        <span className="tabular-nums text-muted-foreground">
+          {formatDay(inv.issueDate, locale) || '-'}
+        </span>
+      );
     case 'due': {
       const late = shown === 'overdue' ? (inv.daysOverdue ?? 0) : 0;
       return (
-        <span className={cn('tabular-nums', late > 0 ? 'font-medium text-danger' : 'text-muted-foreground')}>
+        <span
+          className={cn(
+            'tabular-nums',
+            late > 0 ? 'font-medium text-danger' : 'text-muted-foreground',
+          )}
+        >
           {formatDay(inv.dueDate, locale) || '-'}
           {late > 0 && <span className="ms-1.5 text-xs">{t('daysLate', { count: late })}</span>}
         </span>
@@ -111,7 +130,11 @@ function Cell({ id, inv, h, locale }: { id: InvoiceColumn; inv: InvoiceSummary; 
       return shown === 'draft' || shown === 'void' ? (
         <span className="text-muted-foreground">-</span>
       ) : (
-        <Money minor={m.paid} currency={inv.currency} className={m.paid > 0 ? 'text-success' : 'text-muted-foreground'} />
+        <Money
+          minor={m.paid}
+          currency={inv.currency}
+          className={m.paid > 0 ? 'text-success' : 'text-muted-foreground'}
+        />
       );
     case 'balance': {
       const balance = rowBalanceMinor(inv);
@@ -121,7 +144,10 @@ function Cell({ id, inv, h, locale }: { id: InvoiceColumn; inv: InvoiceSummary; 
         <Money
           minor={balance}
           currency={inv.currency}
-          className={cn('font-semibold', (balance === 0 || shown === 'draft') && 'font-normal text-muted-foreground')}
+          className={cn(
+            'font-semibold',
+            (balance === 0 || shown === 'draft') && 'font-normal text-muted-foreground',
+          )}
         />
       );
     }
@@ -148,7 +174,9 @@ export function InvoicesTable({
 
   useEffect(() => {
     if (!h.activeId) return;
-    box.current?.querySelector<HTMLElement>(`[data-row-id="${h.activeId}"]`)?.scrollIntoView({ block: 'nearest' });
+    box.current
+      ?.querySelector<HTMLElement>(`[data-row-id="${h.activeId}"]`)
+      ?.scrollIntoView({ block: 'nearest' });
   }, [h.activeId]);
 
   const th =
@@ -181,7 +209,11 @@ export function InvoicesTable({
               <th
                 key={c}
                 scope="col"
-                className={cn(th, NUMERIC.has(c) && 'text-end', c === 'number' && `${STICKY_FIRST_HEAD} ${frozenEdge(scrolled)}`)}
+                className={cn(
+                  th,
+                  NUMERIC.has(c) && 'text-end',
+                  c === 'number' && `${STICKY_FIRST_HEAD} ${frozenEdge(scrolled)}`,
+                )}
               >
                 <span className="block truncate">{t(`columns.${c}`)}</span>
               </th>

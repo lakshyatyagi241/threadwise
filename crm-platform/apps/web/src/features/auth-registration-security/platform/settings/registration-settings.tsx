@@ -29,6 +29,7 @@ import { useToast } from '../ui/toast';
 import { useUnsavedGuard } from '../ui/use-unsaved-guard';
 import { DefaultPlanField } from '../plans/default-plan-field';
 import { OtpSection } from './otp-section';
+import { PlatformFooterCard } from './platform-footer-card';
 import { REGISTRATION_KEY as KEY } from './query-keys';
 import { Section, ToggleRow } from './section-parts';
 import { useProblemText } from './use-problem-text';
@@ -195,216 +196,219 @@ function RegistrationForm({ settings }: { settings: RegistrationSettingsResponse
   );
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-5">
-      <PageHeader
-        eyebrow={t('kicker')}
-        title={t('title')}
-        description={t('description')}
-        actions={
-          <Button type="submit" disabled={!canEdit || changed === 0 || save.isPending}>
-            {save.isPending && <Spinner label={t('saving')} />}
-            {save.isPending ? t('saving') : t('save')}
-          </Button>
-        }
-      />
+    <div className="space-y-5">
+      <form onSubmit={onSubmit} noValidate className="space-y-5">
+        <PageHeader
+          eyebrow={t('kicker')}
+          title={t('title')}
+          description={t('description')}
+          actions={
+            <Button type="submit" disabled={!canEdit || changed === 0 || save.isPending}>
+              {save.isPending && <Spinner label={t('saving')} />}
+              {save.isPending ? t('saving') : t('save')}
+            </Button>
+          }
+        />
 
-      {!canEdit && <ReadOnlyNotice section="registration" />}
-      {banner && (
-        <Alert tone="danger" className="space-y-2">
-          <p className="font-semibold">{t('rejected', { count: banner.count })}</p>
-          <ul className="list-disc space-y-0.5 ps-5 text-xs">
-            {banner.items.map((m, i) => (
-              <li key={i}>{m}</li>
-            ))}
-          </ul>
-        </Alert>
-      )}
-      {saveError && (
-        <Alert tone="danger" className="space-y-1">
-          <p>{t('errors.unexpected')}</p>
-          {saveError.requestId && (
-            <p className="text-xs opacity-80">
-              {t('requestId')}: <span className="font-mono">{saveError.requestId}</span>
-            </p>
-          )}
-        </Alert>
-      )}
-
-      <div className="grid items-start gap-5 lg:grid-cols-2">
-        <Section
-          kicker={t('policy.kicker')}
-          title={t('policy.title')}
-          description={t('policy.description')}
-        >
-          <ToggleRow
-            id="reg-publicRegistration"
-            label={t('fields.publicRegistration.label')}
-            hint={
-              draft.publicRegistration
-                ? t('fields.publicRegistration.hintOn')
-                : t('fields.publicRegistration.hintOff')
-            }
-            checked={draft.publicRegistration}
-            onChange={(v) => set('publicRegistration', v)}
-            disabled={dis}
-            error={errors.publicRegistration}
-          />
-          <Field
-            label={t('fields.emailVerification.label')}
-            htmlFor="reg-emailVerification"
-            hint={t(`fields.emailVerification.explain.${verification}`)}
-            error={errors.emailVerification}
-          >
-            <Select
-              id="reg-emailVerification"
-              value={verification}
-              onChange={(e) =>
-                set('emailVerification', e.target.value as RegistrationDraft['emailVerification'])
-              }
-              disabled={dis}
-              invalid={Boolean(errors.emailVerification)}
-            >
-              {(['off', 'banner', 'block'] as const).map((m) => (
-                <option key={m} value={m}>
-                  {t(`fields.emailVerification.options.${m}`)}
-                </option>
+        {!canEdit && <ReadOnlyNotice section="registration" />}
+        {banner && (
+          <Alert tone="danger" className="space-y-2">
+            <p className="font-semibold">{t('rejected', { count: banner.count })}</p>
+            <ul className="list-disc space-y-0.5 ps-5 text-xs">
+              {banner.items.map((m, i) => (
+                <li key={i}>{m}</li>
               ))}
-            </Select>
-          </Field>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <DefaultPlanField
-              value={draft.defaultPlanId}
-              onChange={(slug) => set('defaultPlanId', slug)}
-              error={errors.defaultPlanId}
+            </ul>
+          </Alert>
+        )}
+        {saveError && (
+          <Alert tone="danger" className="space-y-1">
+            <p>{t('errors.unexpected')}</p>
+            {saveError.requestId && (
+              <p className="text-xs opacity-80">
+                {t('requestId')}: <span className="font-mono">{saveError.requestId}</span>
+              </p>
+            )}
+          </Alert>
+        )}
+
+        <div className="grid items-start gap-5 lg:grid-cols-2">
+          <Section
+            kicker={t('policy.kicker')}
+            title={t('policy.title')}
+            description={t('policy.description')}
+          >
+            <ToggleRow
+              id="reg-publicRegistration"
+              label={t('fields.publicRegistration.label')}
+              hint={
+                draft.publicRegistration
+                  ? t('fields.publicRegistration.hintOn')
+                  : t('fields.publicRegistration.hintOff')
+              }
+              checked={draft.publicRegistration}
+              onChange={(v) => set('publicRegistration', v)}
               disabled={dis}
+              error={errors.publicRegistration}
             />
             <Field
-              label={t('fields.trialDays.label')}
-              htmlFor="reg-trialDays"
-              hint={t('fields.trialDays.hint', { min: TRIAL_DAYS.min, max: TRIAL_DAYS.max })}
-              error={errors.trialDays}
+              label={t('fields.emailVerification.label')}
+              htmlFor="reg-emailVerification"
+              hint={t(`fields.emailVerification.explain.${verification}`)}
+              error={errors.emailVerification}
             >
-              <Input
-                id="reg-trialDays"
-                type="number"
-                inputMode="numeric"
-                min={TRIAL_DAYS.min}
-                max={TRIAL_DAYS.max}
-                value={draft.trialDays}
-                placeholder={String(settings.trialDays)}
-                onChange={(e) => set('trialDays', e.target.value)}
-                invalid={Boolean(errors.trialDays)}
-                readOnly={dis}
-                className="font-mono"
+              <Select
+                id="reg-emailVerification"
+                value={verification}
+                onChange={(e) =>
+                  set('emailVerification', e.target.value as RegistrationDraft['emailVerification'])
+                }
+                disabled={dis}
+                invalid={Boolean(errors.emailVerification)}
+              >
+                {(['off', 'banner', 'block'] as const).map((m) => (
+                  <option key={m} value={m}>
+                    {t(`fields.emailVerification.options.${m}`)}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <DefaultPlanField
+                value={draft.defaultPlanId}
+                onChange={(slug) => set('defaultPlanId', slug)}
+                error={errors.defaultPlanId}
+                disabled={dis}
               />
-            </Field>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field
-              label={t('fields.defaultTimezone.label')}
-              htmlFor="reg-defaultTimezone"
-              hint={t('fields.defaultTimezone.hint')}
-              error={errors.defaultTimezone}
-            >
-              <Select
-                id="reg-defaultTimezone"
-                value={draft.defaultTimezone}
-                onChange={(e) => set('defaultTimezone', e.target.value)}
-                disabled={dis}
-                invalid={Boolean(errors.defaultTimezone)}
+              <Field
+                label={t('fields.trialDays.label')}
+                htmlFor="reg-trialDays"
+                hint={t('fields.trialDays.hint', { min: TRIAL_DAYS.min, max: TRIAL_DAYS.max })}
+                error={errors.trialDays}
               >
-                {zones.map((z) => (
-                  <option key={z} value={z}>
-                    {z}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field
-              label={t('fields.defaultCountryIso.label')}
-              htmlFor="reg-defaultCountryIso"
-              hint={t('fields.defaultCountryIso.hint')}
-              error={errors.defaultCountryIso}
-            >
-              <Select
-                id="reg-defaultCountryIso"
-                value={draft.defaultCountryIso}
-                onChange={(e) => set('defaultCountryIso', e.target.value)}
-                disabled={dis}
-                invalid={Boolean(errors.defaultCountryIso)}
+                <Input
+                  id="reg-trialDays"
+                  type="number"
+                  inputMode="numeric"
+                  min={TRIAL_DAYS.min}
+                  max={TRIAL_DAYS.max}
+                  value={draft.trialDays}
+                  placeholder={String(settings.trialDays)}
+                  onChange={(e) => set('trialDays', e.target.value)}
+                  invalid={Boolean(errors.trialDays)}
+                  readOnly={dis}
+                  className="font-mono"
+                />
+              </Field>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                label={t('fields.defaultTimezone.label')}
+                htmlFor="reg-defaultTimezone"
+                hint={t('fields.defaultTimezone.hint')}
+                error={errors.defaultTimezone}
               >
-                <option value="">{t('fields.defaultCountryIso.none')}</option>
-                {countries.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.name} ({c.code})
-                  </option>
-                ))}
-              </Select>
-            </Field>
-          </div>
-          <div className="space-y-4">
-            {text('termsUrl', { dir: 'ltr', mono: true })}
-            {text('privacyUrl', { dir: 'ltr', mono: true })}
-            {text('cookiesUrl', { dir: 'ltr', mono: true })}
-          </div>
-        </Section>
+                <Select
+                  id="reg-defaultTimezone"
+                  value={draft.defaultTimezone}
+                  onChange={(e) => set('defaultTimezone', e.target.value)}
+                  disabled={dis}
+                  invalid={Boolean(errors.defaultTimezone)}
+                >
+                  {zones.map((z) => (
+                    <option key={z} value={z}>
+                      {z}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field
+                label={t('fields.defaultCountryIso.label')}
+                htmlFor="reg-defaultCountryIso"
+                hint={t('fields.defaultCountryIso.hint')}
+                error={errors.defaultCountryIso}
+              >
+                <Select
+                  id="reg-defaultCountryIso"
+                  value={draft.defaultCountryIso}
+                  onChange={(e) => set('defaultCountryIso', e.target.value)}
+                  disabled={dis}
+                  invalid={Boolean(errors.defaultCountryIso)}
+                >
+                  <option value="">{t('fields.defaultCountryIso.none')}</option>
+                  {countries.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.name} ({c.code})
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            </div>
+            <div className="space-y-4">
+              {text('termsUrl', { dir: 'ltr', mono: true })}
+              {text('privacyUrl', { dir: 'ltr', mono: true })}
+              {text('cookiesUrl', { dir: 'ltr', mono: true })}
+            </div>
+          </Section>
 
-        <OtpSection
-          settings={settings}
-          draft={draft}
-          errors={errors}
-          canEdit={canEdit}
-          set={set}
-          onProblems={(problems) => setErrors((e) => ({ ...e, ...problems }))}
-          onApplied={(data) => {
-            // The OTP form was saved by the template request: it is the new baseline. Edits made
-            // elsewhere on the page stay as they are.
-            qc.setQueryData(KEY, data);
-            setDraft((d) => ({ ...d, ...otpDraftFields(data) }));
-            setErrors((e) => ({
-              ...e,
-              otpEnabled: undefined,
-              otpSender: undefined,
-              ttlMinutes: undefined,
-              length: undefined,
-              resendCooldownSec: undefined,
-              maxAttempts: undefined,
-            }));
-            setSaveError(null);
-          }}
-          onSenderGone={(ref) => {
-            if (draft.otpSender === ref) set('otpSender', '');
-          }}
-        />
-      </div>
-
-      <div
-        className={cn(
-          'sticky bottom-3 z-10 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-background px-4 py-2.5 shadow-lg',
-          changed === 0 && 'hidden',
-        )}
-        aria-live="polite"
-      >
-        <span className="text-sm">{t('unsaved', { count: changed })}</span>
-        <span className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setDraft(registrationToDraft(settings));
-              setErrors({});
-              setBanner(null);
+          <OtpSection
+            settings={settings}
+            draft={draft}
+            errors={errors}
+            canEdit={canEdit}
+            set={set}
+            onProblems={(problems) => setErrors((e) => ({ ...e, ...problems }))}
+            onApplied={(data) => {
+              // The OTP form was saved by the template request: it is the new baseline. Edits made
+              // elsewhere on the page stay as they are.
+              qc.setQueryData(KEY, data);
+              setDraft((d) => ({ ...d, ...otpDraftFields(data) }));
+              setErrors((e) => ({
+                ...e,
+                otpEnabled: undefined,
+                otpSender: undefined,
+                ttlMinutes: undefined,
+                length: undefined,
+                resendCooldownSec: undefined,
+                maxAttempts: undefined,
+              }));
+              setSaveError(null);
             }}
-            disabled={save.isPending}
-          >
-            {t('discard')}
-          </Button>
-          <Button type="submit" size="sm" disabled={!canEdit || save.isPending}>
-            {save.isPending && <Spinner label={t('saving')} />}
-            {t('save')}
-          </Button>
-        </span>
-      </div>
-    </form>
+            onSenderGone={(ref) => {
+              if (draft.otpSender === ref) set('otpSender', '');
+            }}
+          />
+        </div>
+
+        <div
+          className={cn(
+            'sticky bottom-3 z-10 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-background px-4 py-2.5 shadow-lg',
+            changed === 0 && 'hidden',
+          )}
+          aria-live="polite"
+        >
+          <span className="text-sm">{t('unsaved', { count: changed })}</span>
+          <span className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setDraft(registrationToDraft(settings));
+                setErrors({});
+                setBanner(null);
+              }}
+              disabled={save.isPending}
+            >
+              {t('discard')}
+            </Button>
+            <Button type="submit" size="sm" disabled={!canEdit || save.isPending}>
+              {save.isPending && <Spinner label={t('saving')} />}
+              {t('save')}
+            </Button>
+          </span>
+        </div>
+      </form>
+      <PlatformFooterCard />
+    </div>
   );
 }

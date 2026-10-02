@@ -76,7 +76,11 @@ export const tasksApi = {
     return sum(
       await Promise.all(
         chunk(ids).map((c) =>
-          call('/tasks/bulk/complete', { method: 'POST', body: { ids: c }, schema: taskBulkResultSchema }),
+          call('/tasks/bulk/complete', {
+            method: 'POST',
+            body: { ids: c },
+            schema: taskBulkResultSchema,
+          }),
         ),
       ),
     );
@@ -98,7 +102,11 @@ export const tasksApi = {
     return sum(
       await Promise.all(
         chunk(ids).map((c) =>
-          call('/tasks/bulk/delete', { method: 'POST', body: { ids: c }, schema: taskBulkResultSchema }),
+          call('/tasks/bulk/delete', {
+            method: 'POST',
+            body: { ids: c },
+            schema: taskBulkResultSchema,
+          }),
         ),
       ),
     );
@@ -133,8 +141,10 @@ export const tasksApi = {
 };
 
 function sum(results: readonly TaskBulkResult[]): BulkOutcome {
-  return results.map(outcome).reduce((a, b) => ({ changed: a.changed + b.changed, failed: a.failed + b.failed }), {
-    changed: 0,
-    failed: 0,
-  });
+  return results
+    .map(outcome)
+    .reduce((a, b) => ({ changed: a.changed + b.changed, failed: a.failed + b.failed }), {
+      changed: 0,
+      failed: 0,
+    });
 }

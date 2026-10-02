@@ -38,8 +38,12 @@ import {
 
 export const RECURRING_MODULE = 'recurring-invoices';
 
-const bad = (code: string, message: string, status: HttpStatus, details?: Array<{ path: string; message: string }>) =>
-  new AppError(code as never, message, status, details);
+const bad = (
+  code: string,
+  message: string,
+  status: HttpStatus,
+  details?: Array<{ path: string; message: string }>,
+) => new AppError(code as never, message, status, details);
 
 interface Shape {
   startDate: string;
@@ -58,7 +62,11 @@ export function dateOfPeriod(s: Shape, index: number): string | null {
 }
 
 /** The first period whose date is today or later, never before `floor`. Null when the schedule has no such period. */
-export function firstPeriodFrom(s: Shape, today: string, floor: number): { index: number; date: string } | null {
+export function firstPeriodFrom(
+  s: Shape,
+  today: string,
+  floor: number,
+): { index: number; date: string } | null {
   let i = floor;
   // bounded: a daily schedule that began years ago still lands within a few thousand steps
   for (let guard = 0; guard < 20_000; guard++, i++) {
@@ -90,10 +98,18 @@ export class RecurringInvoicesService {
 
   // --- reads -----------------------------------------------------------------------------------------------------------------------
 
-  async list(query: ListRecurringInvoicesQuery, scope: RecordScope): Promise<PageResponse<RecurringInvoiceResponse>> {
+  async list(
+    query: ListRecurringInvoicesQuery,
+    scope: RecordScope,
+  ): Promise<PageResponse<RecurringInvoiceResponse>> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const rows = await this.repo.list(tx, ctx.orgId, query, recurringScopeCondition(ctx.orgId, scope, ctx.userId));
+      const rows = await this.repo.list(
+        tx,
+        ctx.orgId,
+        query,
+        recurringScopeCondition(ctx.orgId, scope, ctx.userId),
+      );
       const page = buildPage(rows, query.limit);
       const data: RecurringInvoiceResponse[] = [];
       for (const r of page.items) data.push(await this.toResponse(tx, ctx.orgId, r));
@@ -109,12 +125,24 @@ export class RecurringInvoicesService {
     });
   }
 
-  async runs(uuid: string, query: { limit: number; cursor?: string }, scope: RecordScope): Promise<RecurringRunsResponse> {
+  async runs(
+    uuid: string,
+    query: { limit: number; cursor?: string },
+    scope: RecordScope,
+  ): Promise<RecurringRunsResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.load(tx, uuid, scope);
-      const before = query.cursor ? Number(Buffer.from(query.cursor, 'base64url').toString('utf8')) : undefined;
-      const rows = await this.repo.runs(tx, ctx.orgId, row.id, query.limit, Number.isFinite(before) ? before : undefined);
+      const before = query.cursor
+        ? Number(Buffer.from(query.cursor, 'base64url').toString('utf8'))
+        : undefined;
+      const rows = await this.repo.runs(
+        tx,
+        ctx.orgId,
+        row.id,
+        query.limit,
+        Number.isFinite(before) ? before : undefined,
+      );
       const hasMore = rows.length > query.limit;
       const items = hasMore ? rows.slice(0, query.limit) : rows;
       const last = items[items.length - 1];
@@ -129,7 +157,10 @@ export class RecurringInvoicesService {
           at: r.createdAt.toISOString(),
         })),
         page: {
-          nextCursor: hasMore && last ? Buffer.from(String(last.periodIndex), 'utf8').toString('base64url') : null,
+          nextCursor:
+            hasMore && last
+              ? Buffer.from(String(last.periodIndex), 'utf8').toString('base64url')
+              : null,
           hasMore,
           limit: query.limit,
         },
@@ -139,14 +170,19 @@ export class RecurringInvoicesService {
 
   // --- writes ----------------------------------------------------------------------------------------------------------------------
 
-  async create(input: CreateRecurringInvoiceInput, scope: RecordScope): Promise<RecurringInvoiceResponse> {
+  async create(
+    input: CreateRecurringInvoiceInput,
+    scope: RecordScope,
+  ): Promise<RecurringInvoiceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const profile = await this.settings.load(tx, ctx.orgId);
       const today = todayIn(resolveTimezone(profile.timezone));
       const template = await this.templateOf(tx, input, scope);
       // Validates everything the invoice would be (buyer, links, lines, tax) now, so a broken template fails here and not at 3 a.m.
-      const spec = await this.invoices.specFromInput(tx, ctx.orgId, ctx.userId, template, { source: 'recurring' });
+      const spec = await this.invoices.specFromInput(tx, ctx.orgId, ctx.userId, template, {
+        source: 'recurring',
+      });
       const shape: Shape = {
         startDate: input.startDate,
         frequency: input.frequency,
@@ -169,7 +205,9 @@ export class RecurringInvoicesService {
         );
       const first = dateOfPeriod(shape, 0);
       if (first === null)
-        throw AppError.validation('The schedule has no period before its end date', [{ path: 'endDate', message: 'before the first period' }]);
+        throw AppError.validation('The schedule has no period before its end date', [
+          { path: 'endDate', message: 'before the first period' },
+        ]);
       const id = await this.repo.insert(tx, ctx.orgId, {
         name: input.name,
         frequency: input.frequency,
@@ -204,12 +242,18 @@ export class RecurringInvoicesService {
     });
   }
 
-  async update(uuid: string, input: UpdateRecurringInvoiceInput, scope: RecordScope): Promise<RecurringInvoiceResponse> {
+  async update(
+    uuid: string,
+    input: UpdateRecurringInvoiceInput,
+    scope: RecordScope,
+  ): Promise<RecurringInvoiceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.load(tx, uuid, scope, true);
-      if (input.rowVersion !== row.rowVersion) throw AppError.rowVersionConflict('Recurring invoice');
-      if (row.status === 'ended') throw bad(ERROR_CODES.REC_ENDED, 'The schedule has ended', HttpStatus.CONFLICT);
+      if (input.rowVersion !== row.rowVersion)
+        throw AppError.rowVersionConflict('Recurring invoice');
+      if (row.status === 'ended')
+        throw bad(ERROR_CODES.REC_ENDED, 'The schedule has ended', HttpStatus.CONFLICT);
       const profile = await this.settings.load(tx, ctx.orgId);
       const today = todayIn(resolveTimezone(profile.timezone));
       const patch: Parameters<RecurringInvoicesRepository['update']>[4] = {};
@@ -220,16 +264,23 @@ export class RecurringInvoicesService {
       };
       if (input.name !== undefined && input.name !== row.name) set('name', input.name, row.name);
       if (input.mode !== undefined && input.mode !== row.mode) set('mode', input.mode, row.mode);
-      if (input.sendChannel !== undefined && input.sendChannel !== row.sendChannel) set('sendChannel', input.sendChannel, row.sendChannel);
-      if (input.endDate !== undefined && (input.endDate ?? null) !== row.endDate) set('endDate', input.endDate ?? null, row.endDate);
-      if (input.maxRuns !== undefined && (input.maxRuns ?? null) !== row.maxRuns) set('maxRuns', input.maxRuns ?? null, row.maxRuns);
-      if (input.frequency !== undefined && input.frequency !== row.frequency) set('frequency', input.frequency, row.frequency);
-      if (input.interval !== undefined && input.interval !== row.interval) set('interval', input.interval, row.interval);
+      if (input.sendChannel !== undefined && input.sendChannel !== row.sendChannel)
+        set('sendChannel', input.sendChannel, row.sendChannel);
+      if (input.endDate !== undefined && (input.endDate ?? null) !== row.endDate)
+        set('endDate', input.endDate ?? null, row.endDate);
+      if (input.maxRuns !== undefined && (input.maxRuns ?? null) !== row.maxRuns)
+        set('maxRuns', input.maxRuns ?? null, row.maxRuns);
+      if (input.frequency !== undefined && input.frequency !== row.frequency)
+        set('frequency', input.frequency, row.frequency);
+      if (input.interval !== undefined && input.interval !== row.interval)
+        set('interval', input.interval, row.interval);
       if (input.template !== undefined) {
         const { issueDate: _i, dueDate: _d, ...template } = input.template as CreateInvoiceInput;
         void _i;
         void _d;
-        const spec = await this.invoices.specFromInput(tx, ctx.orgId, ctx.userId, template, { source: 'recurring' });
+        const spec = await this.invoices.specFromInput(tx, ctx.orgId, ctx.userId, template, {
+          source: 'recurring',
+        });
         patch.template = template;
         patch.contactId = spec.contactId;
         patch.companyId = spec.companyId;
@@ -244,11 +295,24 @@ export class RecurringInvoicesService {
         maxRuns: patch.maxRuns !== undefined ? patch.maxRuns : row.maxRuns,
       };
       if (shape.endDate && shape.endDate < row.startDate)
-        throw AppError.validation('The end date is before the start date', [{ path: 'endDate', message: 'before the start date' }]);
-      if (patch.frequency || patch.interval || patch.endDate !== undefined || patch.maxRuns !== undefined) {
+        throw AppError.validation('The end date is before the start date', [
+          { path: 'endDate', message: 'before the start date' },
+        ]);
+      if (
+        patch.frequency ||
+        patch.interval ||
+        patch.endDate !== undefined ||
+        patch.maxRuns !== undefined
+      ) {
         // A changed schedule continues from today (never over a period that already ran).
-        const floor = Math.max(row.nextIndex, (await this.repo.maxRunIndex(tx, ctx.orgId, row.id)) + 1);
-        const next = patch.frequency || patch.interval ? firstPeriodFrom(shape, today, floor) : firstPeriodFrom(shape, '0000-01-01', floor);
+        const floor = Math.max(
+          row.nextIndex,
+          (await this.repo.maxRunIndex(tx, ctx.orgId, row.id)) + 1,
+        );
+        const next =
+          patch.frequency || patch.interval
+            ? firstPeriodFrom(shape, today, floor)
+            : firstPeriodFrom(shape, '0000-01-01', floor);
         patch.nextIndex = next ? next.index : floor;
         patch.nextRunDate = next ? next.date : null;
         if (!next) patch.status = 'ended';
@@ -257,7 +321,12 @@ export class RecurringInvoicesService {
       const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, patch);
       if (!ok) throw AppError.rowVersionConflict('Recurring invoice');
       const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
-      await this.audit.record(tx, { module: RECURRING_MODULE, recordId: row.id, action: 'update', delta });
+      await this.audit.record(tx, {
+        module: RECURRING_MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta,
+      });
       await this.emit(tx, 'recurring_invoice.updated', after);
       return this.toResponse(tx, ctx.orgId, after);
     });
@@ -267,11 +336,17 @@ export class RecurringInvoicesService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.load(tx, uuid, scope, true);
-      if (row.status === 'ended') throw bad(ERROR_CODES.REC_ENDED, 'The schedule has ended', HttpStatus.CONFLICT);
+      if (row.status === 'ended')
+        throw bad(ERROR_CODES.REC_ENDED, 'The schedule has ended', HttpStatus.CONFLICT);
       if (row.status === 'paused') return this.toResponse(tx, ctx.orgId, row);
       await this.repo.update(tx, ctx.orgId, row.id, null, { status: 'paused' });
       const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
-      await this.audit.record(tx, { module: RECURRING_MODULE, recordId: row.id, action: 'update', delta: { status: { old: 'active', new: 'paused' } } });
+      await this.audit.record(tx, {
+        module: RECURRING_MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta: { status: { old: 'active', new: 'paused' } },
+      });
       await this.emit(tx, 'recurring_invoice.paused', after);
       return this.toResponse(tx, ctx.orgId, after);
     });
@@ -282,11 +357,15 @@ export class RecurringInvoicesService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.load(tx, uuid, scope, true);
-      if (row.status === 'ended') throw bad(ERROR_CODES.REC_ENDED, 'The schedule has ended', HttpStatus.CONFLICT);
+      if (row.status === 'ended')
+        throw bad(ERROR_CODES.REC_ENDED, 'The schedule has ended', HttpStatus.CONFLICT);
       if (row.status === 'active') return this.toResponse(tx, ctx.orgId, row);
       const profile = await this.settings.load(tx, ctx.orgId);
       const today = todayIn(resolveTimezone(profile.timezone));
-      const floor = Math.max(row.nextIndex, (await this.repo.maxRunIndex(tx, ctx.orgId, row.id)) + 1);
+      const floor = Math.max(
+        row.nextIndex,
+        (await this.repo.maxRunIndex(tx, ctx.orgId, row.id)) + 1,
+      );
       const next = firstPeriodFrom(row, today, floor);
       await this.repo.update(tx, ctx.orgId, row.id, null, {
         status: next ? 'active' : 'ended',
@@ -294,7 +373,12 @@ export class RecurringInvoicesService {
         nextRunDate: next ? next.date : null,
       });
       const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
-      await this.audit.record(tx, { module: RECURRING_MODULE, recordId: row.id, action: 'update', delta: { status: { old: 'paused', new: after.status } } });
+      await this.audit.record(tx, {
+        module: RECURRING_MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta: { status: { old: 'paused', new: after.status } },
+      });
       await this.emit(tx, 'recurring_invoice.resumed', after);
       return this.toResponse(tx, ctx.orgId, after);
     });
@@ -306,7 +390,11 @@ export class RecurringInvoicesService {
     return this.db.tx(async (tx) => {
       const row = await this.load(tx, uuid, scope, true);
       if (row.status === 'ended' || row.nextRunDate === null)
-        throw bad(ERROR_CODES.REC_ENDED, 'The schedule has ended: nothing is left to run', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.REC_ENDED,
+          'The schedule has ended: nothing is left to run',
+          HttpStatus.CONFLICT,
+        );
       await this.generateIn(tx, ctx.orgId, ctx.userId, row, row.nextIndex, row.nextRunDate);
       const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
       return this.toResponse(tx, ctx.orgId, after);
@@ -317,7 +405,12 @@ export class RecurringInvoicesService {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
       const row = await this.load(tx, uuid, scope, true);
-      await this.audit.record(tx, { module: RECURRING_MODULE, recordId: row.id, action: 'delete', delta: { name: { old: row.name, new: null } } });
+      await this.audit.record(tx, {
+        module: RECURRING_MODULE,
+        recordId: row.id,
+        action: 'delete',
+        delta: { name: { old: row.name, new: null } },
+      });
       await this.emit(tx, 'recurring_invoice.deleted', row);
       // Invoices already generated stay (their recurring_id is cleared by the foreign key).
       await this.repo.delete(tx, ctx.orgId, row.id);
@@ -343,7 +436,8 @@ export class RecurringInvoicesService {
       let made = 0;
       for (let step = 0; step < RECURRING_CATCH_UP_MAX; step++) {
         const row = await this.repo.findById(tx, orgId, id);
-        if (!row || row.status !== 'active' || row.nextRunDate === null || row.nextRunDate > today) break;
+        if (!row || row.status !== 'active' || row.nextRunDate === null || row.nextRunDate > today)
+          break;
         if (await this.generateIn(tx, orgId, null, row, row.nextIndex, row.nextRunDate)) made++;
       }
       return made;
@@ -373,18 +467,38 @@ export class RecurringInvoicesService {
     let invoice: { id: number; uuid: string; number: string | null } | null = null;
     let error: string | null = null;
     try {
-      invoice = await tx.transaction(async (sp) => this.makeInvoice(sp, orgId, actorUserId, row, index, periodDate));
+      invoice = await tx.transaction(async (sp) =>
+        this.makeInvoice(sp, orgId, actorUserId, row, index, periodDate),
+      );
     } catch (err) {
-      error = (err instanceof AppError ? err.message : err instanceof Error ? err.message : 'unknown error').slice(0, 500);
-      this.logger.warn({ recurring: row.uuid, index, error }, 'recurring invoice generation failed');
+      error = (
+        err instanceof AppError ? err.message : err instanceof Error ? err.message : 'unknown error'
+      ).slice(0, 500);
+      this.logger.warn(
+        { recurring: row.uuid, index, error },
+        'recurring invoice generation failed',
+      );
     }
     await this.repo.finishRun(tx, orgId, runId, { invoiceId: invoice?.id ?? null, error });
-    await this.repo.advance(tx, orgId, row.id, { nextIndex, nextRunDate: nextDate, ok: error === null });
+    await this.repo.advance(tx, orgId, row.id, {
+      nextIndex,
+      nextRunDate: nextDate,
+      ok: error === null,
+    });
     const after = (await this.repo.findById(tx, orgId, row.id))!;
     if (error === null && invoice) {
-      await this.emit(tx, 'recurring_invoice.generated', after, { invoiceId: invoice.uuid, invoiceNumber: invoice.number, periodDate, periodIndex: index });
+      await this.emit(tx, 'recurring_invoice.generated', after, {
+        invoiceId: invoice.uuid,
+        invoiceNumber: invoice.number,
+        periodDate,
+        periodIndex: index,
+      });
     } else {
-      await this.emit(tx, 'recurring_invoice.failed', after, { periodDate, periodIndex: index, error });
+      await this.emit(tx, 'recurring_invoice.failed', after, {
+        periodDate,
+        periodIndex: index,
+        error,
+      });
     }
     if (after.status === 'ended') await this.emit(tx, 'recurring_invoice.ended', after);
     return error === null;
@@ -398,11 +512,21 @@ export class RecurringInvoicesService {
     index: number,
     periodDate: string,
   ): Promise<{ id: number; uuid: string; number: string | null }> {
-    const template = createInvoiceSchema.parse({ ...row.template, issueDate: periodDate, dueDate: null });
-    const spec = await this.invoices.specFromInput(tx, orgId, actorUserId ?? row.createdBy, template, {
-      source: 'recurring',
-      metaJson: { recurringId: row.uuid, periodIndex: index, periodDate },
+    const template = createInvoiceSchema.parse({
+      ...row.template,
+      issueDate: periodDate,
+      dueDate: null,
     });
+    const spec = await this.invoices.specFromInput(
+      tx,
+      orgId,
+      actorUserId ?? row.createdBy,
+      template,
+      {
+        source: 'recurring',
+        metaJson: { recurringId: row.uuid, periodIndex: index, periodDate },
+      },
+    );
     // The schedule's people win over the creator-as-default: the owner is the schedule's owner.
     spec.ownerId = row.ownerId ?? spec.ownerId;
     let inv = await this.invoices.createDraftIn(tx, orgId, actorUserId, spec);
@@ -411,15 +535,30 @@ export class RecurringInvoicesService {
       inv = await this.invoices.issueIn(tx, orgId, actorUserId, inv, { issueDate: periodDate });
     }
     if (row.mode === 'issue_send') {
-      if (row.sendChannel === 'email' && !inv.buyerEmail) throw new Error('The invoice has no buyer email to send to');
+      if (row.sendChannel === 'email' && !inv.buyerEmail)
+        throw new Error('The invoice has no buyer email to send to');
       await this.invoicesRepo.markSent(tx, orgId, inv.id, row.sendChannel);
-      await this.invoicesRepo.log(tx, orgId, inv.id, { event: 'sent', detail: row.sendChannel, actorKind: 'system' });
-      inv = (await this.invoicesRepo.findById(tx, orgId, inv.id, await this.invoices.zone(tx, orgId)))!;
+      await this.invoicesRepo.log(tx, orgId, inv.id, {
+        event: 'sent',
+        detail: row.sendChannel,
+        actorKind: 'system',
+      });
+      inv = (await this.invoicesRepo.findById(
+        tx,
+        orgId,
+        inv.id,
+        await this.invoices.zone(tx, orgId),
+      ))!;
       await this.outbox.emit(tx, {
         aggregateModule: 'invoices',
         aggregateId: inv.id,
         eventType: 'invoice.sent',
-        payload: { ...invoiceEventPayload(inv), channel: row.sendChannel, message: null, recurringId: row.uuid },
+        payload: {
+          ...invoiceEventPayload(inv),
+          channel: row.sendChannel,
+          message: null,
+          recurringId: row.uuid,
+        },
       });
     }
     return { id: inv.id, uuid: inv.uuid, number: inv.number };
@@ -427,17 +566,34 @@ export class RecurringInvoicesService {
 
   // --- helpers ---------------------------------------------------------------------------------------------------------------------
 
-  private async load(tx: Tx, uuid: string, scope: RecordScope, forUpdate = false): Promise<RecurringRow> {
+  private async load(
+    tx: Tx,
+    uuid: string,
+    scope: RecordScope,
+    forUpdate = false,
+  ): Promise<RecurringRow> {
     const ctx = RequestContextStore.require();
     const row = await this.repo.findByUuid(tx, ctx.orgId, uuid, forUpdate);
     if (!row) throw AppError.notFound('Recurring invoice', uuid);
-    if (scope !== 'all' && !(await this.repo.visible(tx, ctx.orgId, row.id, recurringScopeCondition(ctx.orgId, scope, ctx.userId))))
+    if (
+      scope !== 'all' &&
+      !(await this.repo.visible(
+        tx,
+        ctx.orgId,
+        row.id,
+        recurringScopeCondition(ctx.orgId, scope, ctx.userId),
+      ))
+    )
       throw AppError.notFound('Recurring invoice', uuid);
     return row;
   }
 
   /** The template to store: the body as given, or a copy of an existing invoice's content. Never the dates. */
-  private async templateOf(tx: Tx, input: CreateRecurringInvoiceInput, scope: RecordScope): Promise<CreateInvoiceInput> {
+  private async templateOf(
+    tx: Tx,
+    input: CreateRecurringInvoiceInput,
+    scope: RecordScope,
+  ): Promise<CreateInvoiceInput> {
     if (input.fromInvoiceId) {
       const inv = await this.invoices.get(input.fromInvoiceId, scope);
       return templateFromInvoice(inv);
@@ -449,14 +605,30 @@ export class RecurringInvoicesService {
     return rest as CreateInvoiceInput;
   }
 
-  private async toResponse(tx: Tx, orgId: number, row: RecurringRow): Promise<RecurringInvoiceResponse> {
+  private async toResponse(
+    tx: Tx,
+    orgId: number,
+    row: RecurringRow,
+  ): Promise<RecurringInvoiceResponse> {
     const profile = await this.settings.load(tx, orgId);
     const tpl = row.template as Partial<CreateInvoiceInput>;
     const currency = (tpl.currency as string | undefined) ?? profile.currency;
     let amount = minorToMajor(0n, currency);
     try {
-      const spec = await this.invoices.specFromInput(tx, orgId, row.createdBy, createInvoiceSchema.parse({ ...row.template, issueDate: null, dueDate: null }), { source: 'recurring' });
-      const priced = priceInvoice({ currency: spec.currency, specs: spec.lines, discount: spec.discount, shipping: spec.shipping, reverseCharge: spec.reverseCharge });
+      const spec = await this.invoices.specFromInput(
+        tx,
+        orgId,
+        row.createdBy,
+        createInvoiceSchema.parse({ ...row.template, issueDate: null, dueDate: null }),
+        { source: 'recurring' },
+      );
+      const priced = priceInvoice({
+        currency: spec.currency,
+        specs: spec.lines,
+        discount: spec.discount,
+        shipping: spec.shipping,
+        reverseCharge: spec.reverseCharge,
+      });
       amount = minorToMajor(priced.totals.totalMinor, spec.currency);
     } catch {
       // a template that no longer prices (a deleted tax rate): the failure shows in the run history, the list still renders
@@ -500,7 +672,12 @@ export class RecurringInvoicesService {
     };
   }
 
-  private emit(tx: Tx, eventType: string, row: RecurringRow, extra: Record<string, unknown> = {}): Promise<void> {
+  private emit(
+    tx: Tx,
+    eventType: string,
+    row: RecurringRow,
+    extra: Record<string, unknown> = {},
+  ): Promise<void> {
     return this.outbox.emit(tx, {
       aggregateModule: RECURRING_MODULE,
       aggregateId: row.id,
@@ -523,7 +700,8 @@ export class RecurringInvoicesService {
 /** An existing invoice's content as a template: what a new invoice of the same kind would be created from. */
 export function templateFromInvoice(inv: InvoiceResponse): CreateInvoiceInput {
   return {
-    docType: inv.docType === 'receipt' ? 'tax_invoice' : (inv.docType as 'tax_invoice' | 'proforma'),
+    docType:
+      inv.docType === 'receipt' ? 'tax_invoice' : (inv.docType as 'tax_invoice' | 'proforma'),
     buyerName: inv.buyer.name,
     buyerEmail: inv.buyer.email,
     buyerPhone: inv.buyer.phone,

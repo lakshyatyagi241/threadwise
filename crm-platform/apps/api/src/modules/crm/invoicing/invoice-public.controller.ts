@@ -30,9 +30,14 @@ export class InvoicePublicController {
   @Get(':token')
   @ApiOperation({
     summary: 'The invoice a buyer sees (JSON for the /i/<token> page); counts the view',
-    description: 'Rate limited to 120 requests a minute per address. 404 unknown link, 410 INV_LINK_UNAVAILABLE revoked or expired.',
+    description:
+      'Rate limited to 120 requests a minute per address. 404 unknown link, 410 INV_LINK_UNAVAILABLE revoked or expired.',
   })
-  async view(@Param('token') token: string, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async view(
+    @Param('token') token: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     await this.limiter.hit('read', req.ip ?? 'unknown', PUBLIC_READ_PER_MINUTE);
     res.set(PRIVATE);
     return this.service.view(token, req.ip);
@@ -48,7 +53,8 @@ export class InvoicePublicController {
       .set({
         ...PRIVATE,
         'Content-Type': 'text/html; charset=utf-8',
-        'Content-Security-Policy': "default-src 'none'; img-src https:; style-src 'unsafe-inline'; frame-ancestors 'none'",
+        'Content-Security-Policy':
+          "default-src 'none'; img-src https:; style-src 'unsafe-inline'; frame-ancestors 'none'",
       })
       .send(html);
   }
@@ -56,21 +62,27 @@ export class InvoicePublicController {
   @Get(':token/pdf')
   @ApiOperation({
     summary: 'The invoice as a PDF',
-    description: 'A pure render of the frozen invoice: it never triggers a send and counts no view.',
+    description:
+      'A pure render of the frozen invoice: it never triggers a send and counts no view.',
   })
   async pdf(@Param('token') token: string, @Req() req: Request, @Res() res: Response) {
     await this.limiter.hit('read', req.ip ?? 'unknown', PUBLIC_READ_PER_MINUTE);
     const file = await this.service.pdf(token, req.ip);
     res
       .status(200)
-      .set({ ...PRIVATE, 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${file.filename}"` })
+      .set({
+        ...PRIVATE,
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="${file.filename}"`,
+      })
       .send(file.bytes);
   }
 
   @Post(':token/pay')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Pay now: bank-transfer instructions, or a payment attempt when an online connection is on',
+    summary:
+      'Pay now: bank-transfer instructions, or a payment attempt when an online connection is on',
     description:
       'Display-only: it never marks the invoice paid. Only a verified webhook (or staff recording the transfer) does. 20 requests a minute per address.',
   })

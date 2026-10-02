@@ -5,7 +5,9 @@ import { z } from 'zod';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { call } from '../api/http';
 
-const memberPageSchema = z.object({ data: z.array(z.object({ id: z.string(), fullName: z.string() })) });
+const memberPageSchema = z.object({
+  data: z.array(z.object({ id: z.string(), fullName: z.string() })),
+});
 export type Member = z.infer<typeof memberPageSchema>['data'][number];
 
 /**
@@ -21,7 +23,9 @@ export function useMembers(enabled = true) {
     retry: false,
     queryFn: async ({ signal }): Promise<Member[]> => {
       try {
-        const rows = (await call('/users', { query: { limit: 200 }, schema: memberPageSchema, signal })).data;
+        const rows = (
+          await call('/users', { query: { limit: 200 }, schema: memberPageSchema, signal })
+        ).data;
         if (rows.length > 0) return rows;
       } catch {
         /* falls through to the signed-in person */

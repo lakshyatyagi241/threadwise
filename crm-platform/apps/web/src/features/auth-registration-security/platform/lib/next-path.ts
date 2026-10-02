@@ -9,3 +9,24 @@ export function safeConsolePath(value: string | null | undefined, fallback: stri
     return fallback;
   return value;
 }
+
+/**
+ * Sign-in address for an operator whose session ended while a console page was open: the reason (expired, or idle
+ * with the limit) and the console page they were on as `?next=`, like the server layout does on a page load. A page
+ * outside the console, the console home and the sign-in page itself give a plain reason with no `next`.
+ */
+export function operatorLoginPath(
+  current: string | null | undefined,
+  opts: { idleMinutes?: number } = {},
+): string {
+  const params = new URLSearchParams();
+  if (opts.idleMinutes && opts.idleMinutes > 0) {
+    params.set('expired', 'idle');
+    params.set('minutes', String(Math.floor(opts.idleMinutes)));
+  } else {
+    params.set('expired', '1');
+  }
+  const next = safeConsolePath(current, '/admin');
+  if (next !== '/admin') params.set('next', next);
+  return `/admin/login?${params.toString()}`;
+}

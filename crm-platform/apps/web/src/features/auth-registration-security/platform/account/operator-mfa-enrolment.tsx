@@ -1,19 +1,16 @@
 'use client';
 
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { QRCodeSVG } from 'qrcode.react';
-import { useState, type FormEvent } from 'react';
-import {
-  ERROR_CODES,
-  mfaEnableResponseSchema,
-  mfaSetupResponseSchema,
-  type MfaSetupResponse,
-} from '@crm/contracts';
+import { useEffect, useState, type FormEvent } from 'react';
+import { ERROR_CODES, mfaEnableResponseSchema, mfaSetupResponseSchema } from '@crm/contracts';
 import { Alert, Badge, Button, Card, Checkbox, Field, Input, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { formatSecret, recoveryCodesFile } from '../lib/mfa';
 import { useOperator } from '../operator-context';
+import { isAccountLocked, lockedMinutes } from '../../shared/error-utils';
 import { operatorFetch } from '../operator-fetch';
 import { OPERATOR_HOME } from '../operator-nav';
 import { CopyButton } from '../ui/copy-button';
@@ -21,46 +18,61 @@ import { PageHeader } from '../ui/page-header';
 
 const NS = 'auth-registration-security.platform.mfa';
 
-type Stage =
-  | { name: 'intro' }
-  | { name: 'setup'; setup: MfaSetupResponse }
-  | { name: 'codes'; codes: string[] };
+type Stage = { name: 'setup' } | { name: 'codes'; codes: string[] };
 
-/** Operator two-factor enrolment: QR + manual secret, a confirming code, recovery codes shown once. */
+const SETUP_KEY = ['operator', 'mfa-setup'] as const;
+
+/**
+ * Operator two-factor enrolment: QR + manual secret, a confirming code, recovery codes shown once.
+ * Like the account pane, the QR and the key are on screen as soon as the page opens (the API keeps the
+ * pending secret for ten minutes, so a reload shows the same code); there is no button to press first.
+ */
 export function OperatorMfaEnrolment() {
   const t = useTranslations(NS);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { operator } = useOperator();
-  const [stage, setStage] = useState<Stage>({ name: 'intro' });
+  const [stage, setStage] = useState<Stage>({ name: 'setup' });
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<{ message: string; requestId?: string } | null>(null);
   const [codeError, setCodeError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
   const fail = (e: unknown) => {
+    // Too many wrong codes: the refusal carries how long to wait.
+    if (isAccountLocked(e)) {
+      const minutes = lockedMinutes(e);
+      setError({ message: minutes ? t('errors.lockedWait', { minutes }) : t('errors.locked') });
+      return;
+    }
     setError({
       message: t('errors.unexpected'),
       requestId: e instanceof ApiError ? e.requestId : undefined,
     });
   };
 
-  async function begin() {
-    setPending(true);
+  const setupQuery = useQuery({
+    queryKey: SETUP_KEY,
+    queryFn: ({ signal }) =>
+      operatorFetch('/auth/mfa/setup', { method: 'POST', schema: mfaSetupResponseSchema, signal }),
+    enabled: !operator.mfaEnabled && stage.name === 'setup',
+    staleTime: Infinity,
+    gcTime: 0,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+  const setup = setupQuery.data;
+  const setupError = setupQuery.error;
+  // Already on (another tab): the layout knows; reload it.
+  const conflict = setupError instanceof ApiError && setupError.code === ERROR_CODES.CONFLICT;
+  useEffect(() => {
+    if (conflict) router.refresh();
+  }, [conflict, router]);
+
+  /** A fresh secret: after the pending one expired, or when the first request failed. */
+  function restart() {
     setError(null);
-    try {
-      const setup = await operatorFetch('/auth/mfa/setup', {
-        method: 'POST',
-        schema: mfaSetupResponseSchema,
-      });
-      setStage({ name: 'setup', setup });
-    } catch (e) {
-      if (e instanceof ApiError && e.code === ERROR_CODES.CONFLICT) {
-        // Already on (another tab): the layout knows; reload it.
-        router.refresh();
-      } else fail(e);
-    } finally {
-      setPending(false);
-    }
+    void queryClient.resetQueries({ queryKey: SETUP_KEY });
   }
 
   async function enable(e: FormEvent<HTMLFormElement>) {
@@ -87,8 +99,8 @@ export function OperatorMfaEnrolment() {
         setCodeError(t('errors.codeInvalid'));
         document.getElementById('mfa-code')?.focus();
       } else if (err instanceof ApiError && err.code === ERROR_CODES.AUTH_MFA_SETUP_EXPIRED) {
-        setStage({ name: 'intro' });
         setError({ message: t('errors.setupExpired') });
+        restart();
       } else fail(err);
     } finally {
       setPending(false);
@@ -148,7 +160,7 @@ export function OperatorMfaEnrolment() {
         </Card>
       )}
 
-      {!alreadyOn && stage.name === 'intro' && (
+      {!alreadyOn && stage.name === 'setup' && (
         <Card className="space-y-4">
           <h2 className="text-lg font-semibold">{t('intro.title')}</h2>
           <ol className="list-decimal space-y-1.5 ps-5 text-sm text-muted-foreground">
@@ -156,14 +168,22 @@ export function OperatorMfaEnrolment() {
             <li>{t('intro.step2')}</li>
             <li>{t('intro.step3')}</li>
           </ol>
-          <Button onClick={() => void begin()} disabled={pending}>
-            {pending && <Spinner label={t('intro.starting')} />}
-            {pending ? t('intro.starting') : t('intro.begin')}
-          </Button>
+          {!setup && !conflict && setupError ? (
+            <div className="space-y-2">
+              <Alert tone="danger">{t('errors.unexpected')}</Alert>
+              <Button variant="secondary" onClick={restart}>
+                {t('intro.begin')}
+              </Button>
+            </div>
+          ) : !setup ? (
+            <p className="flex items-center gap-2 text-sm text-muted-foreground" role="status">
+              <Spinner label={t('intro.starting')} /> {t('intro.starting')}
+            </p>
+          ) : null}
         </Card>
       )}
 
-      {!alreadyOn && stage.name === 'setup' && (
+      {!alreadyOn && stage.name === 'setup' && setup && (
         <Card className="space-y-5">
           <div className="grid gap-5 sm:grid-cols-[auto_1fr] sm:items-start">
             <div
@@ -172,7 +192,7 @@ export function OperatorMfaEnrolment() {
               className="mx-auto w-fit rounded-md border border-border bg-white p-3 sm:mx-0"
             >
               <QRCodeSVG
-                value={stage.setup.otpauthUrl}
+                value={setup.otpauthUrl}
                 size={176}
                 level="M"
                 bgColor="#ffffff"
@@ -190,9 +210,9 @@ export function OperatorMfaEnrolment() {
                     dir="ltr"
                     className="break-all rounded bg-muted px-2 py-1 font-mono text-sm"
                   >
-                    {formatSecret(stage.setup.secret)}
+                    {formatSecret(setup.secret)}
                   </code>
-                  <CopyButton text={stage.setup.secret} />
+                  <CopyButton text={setup.secret} />
                 </div>
               </div>
             </div>
@@ -229,13 +249,6 @@ export function OperatorMfaEnrolment() {
               <Button type="submit" disabled={pending}>
                 {pending && <Spinner label={t('setup.enabling')} />}
                 {pending ? t('setup.enabling') : t('setup.enable')}
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => setStage({ name: 'intro' })}
-                disabled={pending}
-              >
-                {t('setup.cancel')}
               </Button>
             </div>
           </form>

@@ -36,3 +36,6 @@ apps/web/src/features/_registry/nav.generated.ts
 
 # TypeScript incremental build caches
 *.tsbuildinfo
+
+# Redis snapshot written when redis-server runs from the repo root
+dump.rdb

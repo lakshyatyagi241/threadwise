@@ -315,7 +315,7 @@ describe('TW-BCAST-030, 031, 033, 034: the detail', () => {
     });
     await recipient(t, b.id, { status: 'failed', error: 'no phone' });
     await recipient(t, b.id, { status: 'failed', error: 'no phone' });
-    await recipient(t, b.id, { status: 'failed', error: null });
+    await recipient(t, b.id, { status: 'failed' });
     const d = (await get(t, `/v2/broadcasts/${b.uuid}`)).body;
     expect(d.deliveryCurve.labels).toEqual(['9:00', '10:00']);
     expect(d.deliveryCurve.sent).toEqual([1, 0]);

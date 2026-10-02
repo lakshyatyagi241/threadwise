@@ -18,17 +18,17 @@ in TW-PAY-016 and belongs to the platform billing domains.
 
 **What Reference actually built is narrower than the owner's reference menu.** Read this before planning:
 
-| Reference-menu item | In Reference 1.7.0? | Evidence / note |
-| --- | --- | --- |
-| Invoices | Yes, but it is an **auto-invoice (store receipt)** engine, not a classic AR invoice | `InvoicesController`, `InvoiceService`. Issued documents are frozen, numbered, PDF'd and sent over **WhatsApp only**. No draft stage, no edit, no void, no due-date behaviour. |
-| Payments | Yes, as a **manual/auto payment ledger**, plus a separate **customer-order gateway checkout** | `PaymentsController`, `PaymentLedger`, `CustomerPaymentService`. A customer cannot pay an *invoice* online; gateways pay *WaOrders* (store orders). |
-| Recurring invoices | **No** | No model, table, route, command or schedule. (Recurring exists only for platform subscriptions: `SubscriptionService`.) |
-| Credit notes | **No** (name only) | `doc_type=credit_note` and `status=credited` exist as strings in comments/PDF title match; no code path creates, reads or issues one. |
-| Tax rates (tax-rate table) | **No** | Only free-form per-line `tax_rate` on a manual invoice, one `default_tax_rate` + `tax_label` in `invoice_settings` (display only), and tax lines copied from Woo/Shopify payloads. No tax-rate CRUD screen or table. |
-| Sales Orders | **No separate object** | The closest thing is `wa_orders` (store orders, owned by the checkout/orders domain). Proposals and Estimates exist (`sales_docs`, owned by the sales-docs domain) and convert into invoices. |
-| Estimates / proposals | Yes (other domain) | `SalesDocsController::convert` calls the invoice engine; contract in TW-INV-027. |
-| Reminders / overdue sweep | **No** | `due_at`/`due_days` are stored or accepted but never set, read for status, or reminded on. |
-| Email invoices | **No** | `buyer_email` is stored; there is no invoice mail class. Delivery is WhatsApp only. |
+| Reference-menu item        | In Reference 1.7.0?                                                                              | Evidence / note                                                                                                                                                                                                      |
+| -------------------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Invoices                   | Yes, but it is an **auto-invoice (store receipt)** engine, not a classic AR invoice           | `InvoicesController`, `InvoiceService`. Issued documents are frozen, numbered, PDF'd and sent over **WhatsApp only**. No draft stage, no edit, no void, no due-date behaviour.                                       |
+| Payments                   | Yes, as a **manual/auto payment ledger**, plus a separate **customer-order gateway checkout** | `PaymentsController`, `PaymentLedger`, `CustomerPaymentService`. A customer cannot pay an _invoice_ online; gateways pay _WaOrders_ (store orders).                                                                  |
+| Recurring invoices         | **No**                                                                                        | No model, table, route, command or schedule. (Recurring exists only for platform subscriptions: `SubscriptionService`.)                                                                                              |
+| Credit notes               | **No** (name only)                                                                            | `doc_type=credit_note` and `status=credited` exist as strings in comments/PDF title match; no code path creates, reads or issues one.                                                                                |
+| Tax rates (tax-rate table) | **No**                                                                                        | Only free-form per-line `tax_rate` on a manual invoice, one `default_tax_rate` + `tax_label` in `invoice_settings` (display only), and tax lines copied from Woo/Shopify payloads. No tax-rate CRUD screen or table. |
+| Sales Orders               | **No separate object**                                                                        | The closest thing is `wa_orders` (store orders, owned by the checkout/orders domain). Proposals and Estimates exist (`sales_docs`, owned by the sales-docs domain) and convert into invoices.                        |
+| Estimates / proposals      | Yes (other domain)                                                                            | `SalesDocsController::convert` calls the invoice engine; contract in TW-INV-027.                                                                                                                                     |
+| Reminders / overdue sweep  | **No**                                                                                        | `due_at`/`due_days` are stored or accepted but never set, read for status, or reminded on.                                                                                                                           |
+| Email invoices             | **No**                                                                                        | `buyer_email` is stored; there is no invoice mail class. Delivery is WhatsApp only.                                                                                                                                  |
 
 Actors: workspace **admin** (role `workspace.role:admin`, owners and platform admins pass); the buyer (token-only
 public pages); gateways and Meta (webhooks); the platform plan system (`auto_invoice` feature).
@@ -62,56 +62,56 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 
 ## Feature index
 
-| Id | Feature | Status | Priority | Effort | Depends on |
-| --- | --- | --- | --- | --- | --- |
-| TW-INV-001 | Invoice list screen | implemented | P0 | M | TW-INV-007 |
-| TW-INV-002 | Invoices tab inside the store dashboard | implemented | P2 | S | TW-INV-001 |
-| TW-INV-003 | Invoice detail screen | implemented | P0 | S | TW-INV-007 |
-| TW-INV-004 | Generate invoice from a store order | implemented | P0 | S | TW-INV-007, TW-INV-009 |
-| TW-INV-005 | Manual invoice builder form | implemented | P0 | M | TW-INV-006 |
-| TW-INV-006 | Create manual invoice | implemented | P0 | M | TW-INV-007, TW-INV-013 |
-| TW-INV-007 | Invoice issue engine (gate, idempotency, persist) | implemented | P0 | M | TW-INV-008, TW-INV-024 |
-| TW-INV-008 | Invoice numbering and series | implemented | P0 | S | - |
-| TW-INV-009 | Own-store order to invoice mapping | implemented | P0 | M | TW-INV-013 |
-| TW-INV-010 | WooCommerce order to invoice mapping | implemented | P1 | M | TW-INV-013 |
-| TW-INV-011 | Shopify order to invoice mapping | implemented | P1 | M | TW-INV-013 |
-| TW-INV-012 | Auto-issue triggers on paid orders | implemented | P0 | M | TW-INV-007, TW-PAY-011 |
-| TW-INV-013 | Money model: minor units, exponent, display | implemented | P0 | M | - |
-| TW-INV-014 | PDF rendering, freezing and storage | implemented | P0 | M | TW-INV-007 |
-| TW-INV-015 | Merchant PDF download | implemented | P0 | S | TW-INV-014 |
-| TW-INV-016 | Public invoice page | implemented | P0 | S | TW-INV-007 |
-| TW-INV-017 | Public invoice PDF | implemented | P0 | S | TW-INV-014 |
-| TW-INV-018 | WhatsApp delivery of an invoice | implemented | P0 | L | TW-INV-014, TW-INV-023 |
-| TW-INV-019 | Resend invoice | implemented | P1 | S | TW-INV-018 |
-| TW-INV-020 | Delivery sweeper and retries | implemented | P1 | M | TW-INV-018 |
-| TW-INV-021 | Invoice settings screen | implemented | P0 | M | TW-INV-022 |
-| TW-INV-022 | Save invoice settings | implemented | P0 | M | - |
-| TW-INV-023 | WhatsApp invoice template provisioning | partial | P1 | M | TW-INV-022 |
-| TW-INV-024 | Plan gate, role gate, quota, trial interplay | partial | P0 | S | - |
-| TW-INV-025 | Invoice status model and transitions | partial | P0 | S | TW-PAY-003 |
-| TW-INV-026 | Document types (tax invoice, receipt, proforma, credit note) | partial | P1 | S | TW-INV-007 |
-| TW-INV-027 | Convert proposal or estimate to invoice | implemented | P1 | S | TW-INV-007 |
-| TW-INV-028 | CRM links and revenue read side | partial | P1 | M | TW-INV-006 |
-| TW-INV-029 | AI copilot invoice and payment tools | implemented | P2 | S | TW-INV-007, TW-PAY-003 |
-| TW-INV-030 | Due date, overdue and payment terms | dead-code | P1 | M | TW-INV-007 |
-| TW-INV-031 | Void, credit note, activity log, viewed tracking | dead-code | P1 | M | TW-INV-007 |
-| TW-PAY-001 | Payments ledger screen | implemented | P0 | M | TW-PAY-003 |
-| TW-PAY-002 | Record payment | implemented | P0 | S | TW-PAY-003 |
-| TW-PAY-003 | Payment ledger engine | implemented | P0 | M | TW-INV-007 |
-| TW-PAY-004 | Outstanding balance and aging report | implemented | P1 | S | TW-PAY-003 |
-| TW-PAY-005 | Auto-record payment on order paid | implemented | P0 | S | TW-PAY-003, TW-PAY-011 |
-| TW-PAY-006 | Merchant gateway keys | implemented | P0 | M | TW-PAY-007 |
-| TW-PAY-007 | Gateway driver catalog and contract | implemented | P0 | XL | - |
-| TW-PAY-008 | Send hosted checkout link for an order | implemented | P0 | M | TW-PAY-006, TW-PAY-007 |
-| TW-PAY-009 | Customer payment webhook | implemented | P0 | M | TW-PAY-008 |
-| TW-PAY-010 | Customer return-page confirmation | implemented | P0 | S | TW-PAY-008 |
-| TW-PAY-011 | Mark order paid, WaOrderPaid consumers, receipt | implemented | P0 | S | - |
-| TW-PAY-012 | Manual payment link on an order | implemented | P2 | S | - |
-| TW-PAY-013 | Razorpay payment-link minting and storefront webhook | implemented | P2 | M | TW-PAY-011 |
-| TW-PAY-014 | WhatsApp Pay settle path | implemented | P2 | M | TW-PAY-011 |
-| TW-PAY-015 | Online invoice payment, refunds, receipts | docs-only | P1 | L | TW-PAY-003 |
-| TW-PAY-016 | Platform subscription gateway callbacks (contrast) | implemented | P2 | S | TW-PAY-007 |
-| TW-PAY-017 | Ledger CSV and revenue report reads | implemented | P2 | S | TW-PAY-003 |
+| Id         | Feature                                                      | Status      | Priority | Effort | Depends on             |
+| ---------- | ------------------------------------------------------------ | ----------- | -------- | ------ | ---------------------- |
+| TW-INV-001 | Invoice list screen                                          | implemented | P0       | M      | TW-INV-007             |
+| TW-INV-002 | Invoices tab inside the store dashboard                      | implemented | P2       | S      | TW-INV-001             |
+| TW-INV-003 | Invoice detail screen                                        | implemented | P0       | S      | TW-INV-007             |
+| TW-INV-004 | Generate invoice from a store order                          | implemented | P0       | S      | TW-INV-007, TW-INV-009 |
+| TW-INV-005 | Manual invoice builder form                                  | implemented | P0       | M      | TW-INV-006             |
+| TW-INV-006 | Create manual invoice                                        | implemented | P0       | M      | TW-INV-007, TW-INV-013 |
+| TW-INV-007 | Invoice issue engine (gate, idempotency, persist)            | implemented | P0       | M      | TW-INV-008, TW-INV-024 |
+| TW-INV-008 | Invoice numbering and series                                 | implemented | P0       | S      | -                      |
+| TW-INV-009 | Own-store order to invoice mapping                           | implemented | P0       | M      | TW-INV-013             |
+| TW-INV-010 | WooCommerce order to invoice mapping                         | implemented | P1       | M      | TW-INV-013             |
+| TW-INV-011 | Shopify order to invoice mapping                             | implemented | P1       | M      | TW-INV-013             |
+| TW-INV-012 | Auto-issue triggers on paid orders                           | implemented | P0       | M      | TW-INV-007, TW-PAY-011 |
+| TW-INV-013 | Money model: minor units, exponent, display                  | implemented | P0       | M      | -                      |
+| TW-INV-014 | PDF rendering, freezing and storage                          | implemented | P0       | M      | TW-INV-007             |
+| TW-INV-015 | Merchant PDF download                                        | implemented | P0       | S      | TW-INV-014             |
+| TW-INV-016 | Public invoice page                                          | implemented | P0       | S      | TW-INV-007             |
+| TW-INV-017 | Public invoice PDF                                           | implemented | P0       | S      | TW-INV-014             |
+| TW-INV-018 | WhatsApp delivery of an invoice                              | implemented | P0       | L      | TW-INV-014, TW-INV-023 |
+| TW-INV-019 | Resend invoice                                               | implemented | P1       | S      | TW-INV-018             |
+| TW-INV-020 | Delivery sweeper and retries                                 | implemented | P1       | M      | TW-INV-018             |
+| TW-INV-021 | Invoice settings screen                                      | implemented | P0       | M      | TW-INV-022             |
+| TW-INV-022 | Save invoice settings                                        | implemented | P0       | M      | -                      |
+| TW-INV-023 | WhatsApp invoice template provisioning                       | partial     | P1       | M      | TW-INV-022             |
+| TW-INV-024 | Plan gate, role gate, quota, trial interplay                 | partial     | P0       | S      | -                      |
+| TW-INV-025 | Invoice status model and transitions                         | partial     | P0       | S      | TW-PAY-003             |
+| TW-INV-026 | Document types (tax invoice, receipt, proforma, credit note) | partial     | P1       | S      | TW-INV-007             |
+| TW-INV-027 | Convert proposal or estimate to invoice                      | implemented | P1       | S      | TW-INV-007             |
+| TW-INV-028 | CRM links and revenue read side                              | partial     | P1       | M      | TW-INV-006             |
+| TW-INV-029 | AI copilot invoice and payment tools                         | implemented | P2       | S      | TW-INV-007, TW-PAY-003 |
+| TW-INV-030 | Due date, overdue and payment terms                          | dead-code   | P1       | M      | TW-INV-007             |
+| TW-INV-031 | Void, credit note, activity log, viewed tracking             | dead-code   | P1       | M      | TW-INV-007             |
+| TW-PAY-001 | Payments ledger screen                                       | implemented | P0       | M      | TW-PAY-003             |
+| TW-PAY-002 | Record payment                                               | implemented | P0       | S      | TW-PAY-003             |
+| TW-PAY-003 | Payment ledger engine                                        | implemented | P0       | M      | TW-INV-007             |
+| TW-PAY-004 | Outstanding balance and aging report                         | implemented | P1       | S      | TW-PAY-003             |
+| TW-PAY-005 | Auto-record payment on order paid                            | implemented | P0       | S      | TW-PAY-003, TW-PAY-011 |
+| TW-PAY-006 | Merchant gateway keys                                        | implemented | P0       | M      | TW-PAY-007             |
+| TW-PAY-007 | Gateway driver catalog and contract                          | implemented | P0       | XL     | -                      |
+| TW-PAY-008 | Send hosted checkout link for an order                       | implemented | P0       | M      | TW-PAY-006, TW-PAY-007 |
+| TW-PAY-009 | Customer payment webhook                                     | implemented | P0       | M      | TW-PAY-008             |
+| TW-PAY-010 | Customer return-page confirmation                            | implemented | P0       | S      | TW-PAY-008             |
+| TW-PAY-011 | Mark order paid, WaOrderPaid consumers, receipt              | implemented | P0       | S      | -                      |
+| TW-PAY-012 | Manual payment link on an order                              | implemented | P2       | S      | -                      |
+| TW-PAY-013 | Razorpay payment-link minting and storefront webhook         | implemented | P2       | M      | TW-PAY-011             |
+| TW-PAY-014 | WhatsApp Pay settle path                                     | implemented | P2       | M      | TW-PAY-011             |
+| TW-PAY-015 | Online invoice payment, refunds, receipts                    | docs-only   | P1       | L      | TW-PAY-003             |
+| TW-PAY-016 | Platform subscription gateway callbacks (contrast)           | implemented | P2       | S      | TW-PAY-007             |
+| TW-PAY-017 | Ledger CSV and revenue report reads                          | implemented | P2       | S      | TW-PAY-003             |
 
 ## Features
 
@@ -126,8 +126,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/user/invoices/index.blade.php`. Header: source label ("WhatsApp Store", "WooCommerce", "Shopify" or "All stores"), title "Auto invoices", buttons "+ New invoice" (to create) and "Settings". Flash banners for `success` and `error`. Checklist card (shown only when any item fails) with five rows: Invoices enabled, Company name and tax number set (really: `seller_name` filled), WhatsApp sender connected (`send_sender` filled), Meta template approved (WABA) or Delivery ready (Baileys), Auto-send on for this store; each failing row shows a hint and the card has "Open settings". Strip "Paid orders without an invoice" with one POST button per order ("Generate for #id · total"). Table columns: Number (link to detail), Customer (or dash), Type (doc_type with underscores spaced), Total (formatted), Delivery (send_status pill with `send_reason` as tooltip), PDF link (new tab). Empty state: "No invoices yet. Generate one from a paid order above, or turn on auto-send in Settings." Right column "How it works" 4 steps and a "Good to know" box. No search, no pagination, no status filter, no date filter, no payment-status column.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri     | Route name            | Action                     | Middleware                                         | Request                                                                      | Response  |
+  | -------------- | --------------------- | -------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------- | --------- |
   | GET `invoices` | `user.invoices.index` | `InvoicesController@index` | web, auth, workspace.role:admin, plan:auto_invoice | optional `source` in `own`, `woocommerce`, `shopify` (anything else ignored) | HTML view |
 
 - **Data:** reads `invoices` (latest 100 by id desc), `wa_orders` (status in paid/completed with no linked invoice, optional source narrowing, max 25 by id desc), `invoice_settings` (created on first read).
@@ -161,9 +161,9 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/user/store/invoices.blade.php` wraps `resources/views/user/invoices/_panel.blade.php` with `panelSource = own`. The panel switches sub-views on the query string `iv`: `iv=settings` renders the settings form, `iv=<numeric id>` renders the invoice detail partial (only if the invoice belongs to the workspace, otherwise falls back to the list), absent `iv` renders a list capped at 50 and an orders strip capped at 20 plus a 5-row checklist (without hints) and a "How it works" note. Links keep the current URL via query merge. The panel's list uses `source in (own, manual)`.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `store/invoices` | `user.store.invoices` | closure to view `user.store.invoices` | web, auth, workspace.role:admin, plan:auto_invoice | optional `iv` | HTML |
+  | Method uri           | Route name            | Action                                | Middleware                                         | Request       | Response |
+  | -------------------- | --------------------- | ------------------------------------- | -------------------------------------------------- | ------------- | -------- |
+  | GET `store/invoices` | `user.store.invoices` | closure to view `user.store.invoices` | web, auth, workspace.role:admin, plan:auto_invoice | optional `iv` | HTML     |
 
 - **Data:** same as TW-INV-001; the panel runs its own queries inside the Blade partial (no controller).
 - **Rules & edge cases:** 1. Panel list limit 50, orders 20 (list page: 100 / 25). 2. The "Open settings" link in the checklist goes to the standalone settings page, not `iv=settings`. 3. Generate buttons POST to `invoices` (TW-INV-004) and return to the same URL via `back()`.
@@ -188,9 +188,9 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/user/invoices/show.blade.php` plus `_detail.blade.php`. Header: doc type label and number; right: total. Card: customer name, phone and email, send-status pill (tooltip `send_reason`), items table (Item, Qty, Amount = line subtotal, ex-tax), buttons "Download PDF" (new tab), "Public link", "Send on WhatsApp" (POST resend). If `send_status=send_failed` and a reason exists, a red line "Delivery issue: <reason with underscores spaced>". It does **not** show subtotal, discount, shipping, tax, status (issued/paid), paid amount, balance, payments, due date, seller, notes or meta. Flash banners for success/error.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `invoices/{id}` | `user.invoices.show` | `InvoicesController@show` | web, auth, admin role, plan:auto_invoice; `id` numeric | none | HTML; 404 if missing/foreign |
+  | Method uri          | Route name           | Action                    | Middleware                                             | Request | Response                     |
+  | ------------------- | -------------------- | ------------------------- | ------------------------------------------------------ | ------- | ---------------------------- |
+  | GET `invoices/{id}` | `user.invoices.show` | `InvoicesController@show` | web, auth, admin role, plan:auto_invoice; `id` numeric | none    | HTML; 404 if missing/foreign |
 
 - **Data:** `invoices` with `items`, `taxSummary`, `order` eager loaded; `Invoice::forWorkspace`.
 - **Rules & edge cases:** 1. Quantity is shown trimmed (`2.000` becomes `2`). 2. The detail has no payment history or "Record payment" button; the ledger lives on `/payments`. 3. QUIRK: money in the detail is rendered through the /100 display helper (TW-INV-013).
@@ -215,8 +215,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** buttons in the orders strip of TW-INV-001/002. Result is `back()` with flash "Invoice INV-... generated." or error "Auto-invoice is not enabled on your plan." (when the engine soft-skips).
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri      | Route name            | Action                     | Middleware                                                                                                     | Request                        | Response                                                                                                 |
+  | --------------- | --------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------- |
   | POST `invoices` | `user.invoices.store` | `InvoicesController@store` | web, auth, admin role, plan:auto_invoice (non-GET: blocked with warning flash when the plan lacks the feature) | `wa_order_id` required integer | redirect back with flash; 404 if the order is not in the workspace; 302 with validation error if missing |
 
 - **Data:** reads `wa_orders` scoped to workspace; writes via TW-INV-007 (`invoices`, `invoice_items`, `invoice_tax_summary`, `invoice_number_sequences`); then TW-INV-014/018.
@@ -248,9 +248,9 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/user/invoices/create.blade.php`, behaviour in `resources/js/charts/invoices-create.js`. Sections: Bill to (Customer name required max 191, Email, Phone max 40), Document type (Tax invoice default, Receipt, Proforma), Currency (3-letter input, uppercased on typing, default `$settings->currency` which does not exist so it is always "USD"), Items table (Description, Qty default 1 step 0.001, Unit price default 0, Tax % default 0 max 100, live Amount) with "+ Add item" and per-row remove (the last row is cleared, not removed), Adjustments (Discount, Shipping, Internal note), Summary (Subtotal, Tax, Discount, Shipping, Total, all shown to 2 decimals regardless of currency), Link to CRM (selects for Contact, Company, Deal, each limited to the 500 newest, "none" default), Cancel and "Create invoice". One starter row is injected on load; submit with zero rows re-adds a row. Validation errors list at the top.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `invoices/create` | `user.invoices.create` | `InvoicesController@createManual` | web, auth, admin role, plan:auto_invoice | none | HTML |
+  | Method uri            | Route name             | Action                            | Middleware                               | Request | Response |
+  | --------------------- | ---------------------- | --------------------------------- | ---------------------------------------- | ------- | -------- |
+  | GET `invoices/create` | `user.invoices.create` | `InvoicesController@createManual` | web, auth, admin role, plan:auto_invoice | none    | HTML     |
 
 - **Data:** reads `contacts` (id, name; newest 500), `companies` (id, name; newest 500; only if the model class exists), `deals` (id, title; newest 500), `invoice_settings`.
 - **Rules & edge cases:**
@@ -278,8 +278,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** redirect to `user.invoices.show` with flash "Invoice INV-... created." On engine soft-skip: back with input and error "Invoicing is not enabled on your plan."
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri             | Route name             | Action                           | Middleware                               | Request   | Response                                                   |
+  | ---------------------- | ---------------------- | -------------------------------- | ---------------------------------------- | --------- | ---------------------------------------------------------- |
   | POST `invoices/manual` | `user.invoices.manual` | `InvoicesController@storeManual` | web, auth, admin role, plan:auto_invoice | see rules | 302 to `invoices/{id}`; 302 back with errors on validation |
 
 - **Data:** writes as TW-INV-007; `source=manual`, `trigger=manual`, `wa_order_id=null`, `external_order_id=null`, `status=issued`, `paid_at=null`, `due_at=null`, `meta_json` holds `note`, `contact_id`, `company_id`, `deal_id` (only those provided).
@@ -555,8 +555,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** "PDF" in the list, "Download PDF" on the detail.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri              | Route name          | Action                   | Middleware                               | Request      | Response                                                                                     |
+  | ----------------------- | ------------------- | ------------------------ | ---------------------------------------- | ------------ | -------------------------------------------------------------------------------------------- |
   | GET `invoices/{id}/pdf` | `user.invoices.pdf` | `InvoicesController@pdf` | web, auth, admin role, plan:auto_invoice | `id` numeric | `application/pdf`, inline, filename `<number>.pdf`; 404 when missing/foreign or render fails |
 
 - **Data:** reads the PDF from media storage; may write via TW-INV-014.
@@ -579,8 +579,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/public/invoice.blade.php`, guest layout. Header band with doc title and number, seller name (snapshot or brand) and issue date; "Billed to" with name (or "Customer") and phone; a pill showing the **raw status string** (`issued` or `paid`); items table (Item, Qty, Amount); totals (Subtotal, Discount, Shipping, tax rows for tax invoices only, Total); "Download PDF" link; footer brand name. No due date, no balance, no payments, no paid stamp logic, no email address, no invoice notes, no seller address/tax id, no language switch.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri      | Route name            | Action                          | Middleware          | Request      | Response              |
+  | --------------- | --------------------- | ------------------------------- | ------------------- | ------------ | --------------------- |
   | GET `i/{token}` | `invoice.public.show` | `InvoicesController@publicShow` | web, throttle:120,1 | token string | HTML; 404 if no match |
 
 - **Data:** reads `invoices` by `public_token` with items and tax summary.
@@ -612,9 +612,9 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** "Download PDF" on the public page.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `i/{token}/pdf` | `invoice.public.pdf` | `InvoicesController@publicPdf` | web, throttle:120,1 | token | `application/pdf` inline; 404 |
+  | Method uri          | Route name           | Action                         | Middleware          | Request | Response                      |
+  | ------------------- | -------------------- | ------------------------------ | ------------------- | ------- | ----------------------------- |
+  | GET `i/{token}/pdf` | `invoice.public.pdf` | `InvoicesController@publicPdf` | web, throttle:120,1 | token   | `application/pdf` inline; 404 |
 
 - **Data:** as TW-INV-015.
 - **Rules & edge cases:** 1. QUIRK: if the PDF has not been rendered yet (for example just issued by a webhook), the first public hit renders it **and triggers `renderAndSend`**, which can send the WhatsApp message if a sender is configured and the invoice was never sent. A third party with the token therefore can cause the first send. 2. Same render-failure 404 as TW-INV-015.
@@ -669,8 +669,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** "Send on WhatsApp" button on the detail; flash "Invoice re-sent." or "Could not send: <code>".
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri                  | Route name             | Action                      | Middleware                               | Request      | Response                              |
+  | --------------------------- | ---------------------- | --------------------------- | ---------------------------------------- | ------------ | ------------------------------------- |
   | POST `invoices/{id}/resend` | `user.invoices.resend` | `InvoicesController@resend` | web, auth, admin role, plan:auto_invoice | `id` numeric | redirect back with flash; 404 foreign |
 
 - **Data:** as TW-INV-018.
@@ -718,9 +718,9 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/user/invoices/settings.blade.php` + `_settings_form.blade.php`. Cards: Company details (legal name, address, tax number, registration number, phone, support email, dynamic "Extra fields" label/value rows); Logo and signature (two file inputs with current-image preview, signature label, "Show" checkbox, brand colour text); Tax and numbering (tax label, default tax rate %, default HSN/SAC, number prefix, due in days, "Prices tax-inclusive" checkbox, footer note, plus a note that a taxless order becomes a Receipt); WhatsApp delivery ("Enable invoices", "Send from" select of WABA configs labelled `WABA · number · label` and devices labelled `Unofficial · +cc number · name`, three auto-send checkboxes for WhatsApp Store/WooCommerce/Shopify, template status pill and "Create & submit invoice template" button). One "Save settings" button. The `proforma_prefix`, `fy_reset` and the three `trigger_*` fields exist server-side but have **no UI controls** (so a save resets triggers to `on_paid`).
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `invoices/settings` | `user.invoices.settings` | `InvoiceSettingsController@edit` | web, auth, admin role, plan:auto_invoice | none | HTML |
+  | Method uri              | Route name               | Action                           | Middleware                               | Request | Response |
+  | ----------------------- | ------------------------ | -------------------------------- | ---------------------------------------- | ------- | -------- |
+  | GET `invoices/settings` | `user.invoices.settings` | `InvoiceSettingsController@edit` | web, auth, admin role, plan:auto_invoice | none    | HTML     |
 
 - **Data:** `invoice_settings` via `firstOrCreate(workspace_id)` (a GET creates the row), connected `wa_provider_configs` (provider waba) and `devices` of the workspace, the referenced template.
 - **Rules & edge cases:** 1. Sender dropdown lists every WABA config and device of the workspace regardless of connection state. 2. The page is a GET with a write side effect (row creation). 3. QUIRK: `fy_reset` has no checkbox, so saving the form sets it to false (`$request->boolean('fy_reset')` on an absent field) — see TW-INV-022.
@@ -742,8 +742,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** redirect back with flash "Invoice settings saved."; validation errors shown at the top.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri               | Route name                    | Action                           | Middleware                               | Request                   | Response |
+  | ------------------------ | ----------------------------- | -------------------------------- | ---------------------------------------- | ------------------------- | -------- |
   | POST `invoices/settings` | `user.invoices.settings.save` | `InvoiceSettingsController@save` | web, auth, admin role, plan:auto_invoice | multipart form, see rules | 302 back |
 
 - **Data:** updates `invoice_settings`; writes files `invoices/branding/<workspace_id>/logo_<random16>.<ext>` and `sig_<random16>.<ext>` to media storage.
@@ -780,8 +780,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** "Create & submit invoice template" in settings; status pill `none`/`pending`/`approved`/`rejected`; flash messages: "Pick a connected WhatsApp sender first...", "Unofficial is ready...", "Invoice template submitted to Meta for approval...", "Could not submit to Meta: ...".
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri               | Route name                      | Action                                     | Middleware                               | Request                           | Response                 |
+  | ------------------------ | ------------------------------- | ------------------------------------------ | ---------------------------------------- | --------------------------------- | ------------------------ |
   | POST `invoices/template` | `user.invoices.template.create` | `InvoiceSettingsController@createTemplate` | web, auth, admin role, plan:auto_invoice | `send_sender` string (form value) | redirect back with flash |
 
 - **Data:** updates `invoice_settings.send_sender`, `template_id_whatsapp`, `template_status`; creates or updates a `wa_templates` row named `<brand_slug>_invoice`; calls the Meta template API.
@@ -820,8 +820,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
   3. QUIRK: there is no admin UI to grant `auto_invoice`: it is not in the plan form's feature toggle list or the `Package` fillable/cast list, and no seeder sets it. The packages table default is false, so on a stock install only platform-admin-owned workspaces (or a manual `plan_overrides`/database edit) can use invoicing. The port should expose it in plan configuration.
   4. The engine soft-skips (returns null) instead of throwing when the feature is missing, so webhooks do not retry; manual routes then show an error flash.
   5. Monthly cap is counted per calendar month by `issued_at` and is flag-only (TW-INV-007).
-  6. The expired-free-trial hard gate (`EnsureTrialActive`) lets through any route name matching `*invoice*` or `*payment*`, so invoice and payments pages remain open after a trial expires (the pattern was meant for platform invoices). 
-  7. Roles above agent: owner, admin pass; manager, agent and viewer are redirected to `/team-inbox` (agent/viewer) or get 403 (manager). 
+  6. The expired-free-trial hard gate (`EnsureTrialActive`) lets through any route name matching `*invoice*` or `*payment*`, so invoice and payments pages remain open after a trial expires (the pattern was meant for platform invoices).
+  7. Roles above agent: owner, admin pass; manager, agent and viewer are redirected to `/team-inbox` (agent/viewer) or get 403 (manager).
   8. The public `/i/{token}` routes ignore plan and role.
 - **Async & events:** none.
 - **External systems:** none.
@@ -848,13 +848,13 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **Rules & edge cases:**
   1. Transition table:
 
-     | From | To | Trigger |
-     | --- | --- | --- |
-     | (new) | `issued` | any draft without `paidAt` (manual builder, Copilot, sales-doc convert) |
-     | (new) | `paid` | draft with `paidAt` (all Woo/Shopify/own-store drafts; they always set `paidAt`) |
-     | `issued` | `paid` | `PaymentLedger::syncInvoice` when summed payments >= total (sets `paid_at` if empty) |
-     | `paid` | any | never (no un-pay on refund or deleted payment) |
-     | any | `void` / `credited` | never in code; only the platform admin invoice screen has a void for platform orders |
+     | From     | To                  | Trigger                                                                              |
+     | -------- | ------------------- | ------------------------------------------------------------------------------------ |
+     | (new)    | `issued`            | any draft without `paidAt` (manual builder, Copilot, sales-doc convert)              |
+     | (new)    | `paid`              | draft with `paidAt` (all Woo/Shopify/own-store drafts; they always set `paidAt`)     |
+     | `issued` | `paid`              | `PaymentLedger::syncInvoice` when summed payments >= total (sets `paid_at` if empty) |
+     | `paid`   | any                 | never (no un-pay on refund or deleted payment)                                       |
+     | any      | `void` / `credited` | never in code; only the platform admin invoice screen has a void for platform orders |
 
   2. `sent`, `viewed`, `partially paid`, `overdue`, `draft` do **not** exist as invoice statuses. "Sent" is the separate `send_status`. Partial payment is derivable (sum of payments > 0 and < total) but never shown on the invoice. Overdue cannot be derived because `due_at` is null.
   3. `syncInvoice` only touches `issued` invoices, so recording a payment on a `paid` invoice is allowed but changes nothing; overpayment is not detected.
@@ -991,9 +991,9 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/user/payments/index.blade.php`, JS `resources/js/charts/payments-index.js`. Header "Payment ledger" and "+ Record payment". "How to" steps component. KPI cards: "Collected (30d)" and "Outstanding" (with invoice count). Aging card with four buckets (0-30, 31-60, 61-90, 90+ days since issue). Table "Recent payments": Date (`d M Y`), From (company name else contact name else dash), Method pill, Invoice number or dash, Amount (green). Empty: "No payments recorded yet." Right list "Outstanding invoices" (scroll max 420px): number, "due <amount>", and a "Record" link that opens the modal prefilled. Empty: "Nothing outstanding. Nice." Modal described in TW-PAY-002.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `payments` | `user.payments.index` | `PaymentsController@index` | web, auth, admin role, plan:auto_invoice | none | HTML |
+  | Method uri     | Route name            | Action                     | Middleware                               | Request | Response |
+  | -------------- | --------------------- | -------------------------- | ---------------------------------------- | ------- | -------- |
+  | GET `payments` | `user.payments.index` | `PaymentsController@index` | web, auth, admin role, plan:auto_invoice | none    | HTML     |
 
 - **Data:** reads `payments` (latest 200 by `paid_at` desc then id desc, with invoice, contact, company), `invoices` (status `issued`, newest 200) with SUM of payments per invoice, last-30-days sum, aging (TW-PAY-004).
 - **Rules & edge cases:**
@@ -1023,8 +1023,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** modal "Record payment": hidden `invoice_id`, note "For invoice <number>" (when opened from the outstanding list), Amount (number step 0.01 min 0.01, required), Currency (3 chars, uppercased, prefilled), Method select (Manual, Cash, Bank, Card, UPI), Paid on (date, default today), Reference (max 191, "Txn id / cheque no."), Note (max 2000), Cancel and Record. Closes on Escape, backdrop click, X, Cancel. From the generic "+ Record payment" button the invoice is blank and **there is no invoice picker**; the i18n hint "pick the invoice" is not backed by a control. From an outstanding row the amount is prefilled with the outstanding balance (2 decimals) and the currency with the invoice currency.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri      | Route name            | Action                     | Middleware                               | Request   | Response                                             |
+  | --------------- | --------------------- | -------------------------- | ---------------------------------------- | --------- | ---------------------------------------------------- |
   | POST `payments` | `user.payments.store` | `PaymentsController@store` | web, auth, admin role, plan:auto_invoice | see rules | redirect back, flash "Payment of <amount> recorded." |
 
 - **Data:** writes `payments` and may flip the invoice (TW-PAY-003).
@@ -1142,12 +1142,12 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/user/store/gateways.blade.php` inside the store sidebar. One card per gateway in the catalogue: name, description, status chip (`active` or `off`) and mode chip when configured; the credential inputs come from each driver's `credentialFields()` (password fields never prefilled and show "stored" placeholders; text fields prefilled); gateways with no declared fields show a "key: value" textarea; the webhook URL `<app url>/wa/checkout/webhook/<slug>`; Mode radios Live/Test; Active checkbox; Save; "Remove keys" with confirm. Flash `status` text and the first validation error.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `store/gateways` | `user.store.gateways.index` | `MerchantGatewaysController@index` | web, auth, admin role | none | HTML |
-  | POST `store/gateways/{slug}` | `user.store.gateways.save` | `@save` | same | `creds[key]` strings max 4000, `creds_raw` max 8000, `mode` in live/test, `active` bool | redirect back (or JSON `{ok,message}` for AJAX) with "<Slug> payment settings saved."; 404 unknown slug |
-  | POST `store/gateways/{slug}/toggle` | `user.store.gateways.toggle` | `@toggle` | same | none | "Enabled."/"Disabled."; 404 if no row |
-  | DELETE `store/gateways/{slug}` | `user.store.gateways.destroy` | `@destroy` | same | none | "Removed." |
+  | Method uri                          | Route name                    | Action                             | Middleware            | Request                                                                                 | Response                                                                                                |
+  | ----------------------------------- | ----------------------------- | ---------------------------------- | --------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+  | GET `store/gateways`                | `user.store.gateways.index`   | `MerchantGatewaysController@index` | web, auth, admin role | none                                                                                    | HTML                                                                                                    |
+  | POST `store/gateways/{slug}`        | `user.store.gateways.save`    | `@save`                            | same                  | `creds[key]` strings max 4000, `creds_raw` max 8000, `mode` in live/test, `active` bool | redirect back (or JSON `{ok,message}` for AJAX) with "<Slug> payment settings saved."; 404 unknown slug |
+  | POST `store/gateways/{slug}/toggle` | `user.store.gateways.toggle`  | `@toggle`                          | same                  | none                                                                                    | "Enabled."/"Disabled."; 404 if no row                                                                   |
+  | DELETE `store/gateways/{slug}`      | `user.store.gateways.destroy` | `@destroy`                         | same                  | none                                                                                    | "Removed."                                                                                              |
 
 - **Data:** `wa_merchant_gateways(workspace_id, storefront_id default 0, slug, credentials (encrypted JSON text), mode live|test, active, sort_order, meta)` unique `(workspace_id, storefront_id, slug)`. This screen writes only `storefront_id=0` (workspace-wide) rows; checkout prefers a storefront-specific row if one exists (none can be created from this UI).
 - **Rules & edge cases:**
@@ -1213,8 +1213,8 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** "Send checkout" picker on the order detail (`user.store.orders.show`), listing gateways returned by `availableGateways` with display names. Toast JSON message.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
+  | Method uri                             | Route name                        | Action                           | Middleware            | Request                                                     | Response                                                                     |
+  | -------------------------------------- | --------------------------------- | -------------------------------- | --------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
   | POST `store/orders/{id}/send-checkout` | `user.store.orders.send-checkout` | `WaOrderController@sendCheckout` | web, auth, admin role | `gateway` required string max 64 (stripped to `[a-z0-9_-]`) | JSON `{ok:true,url,message:"Checkout link sent."}`; 422 `{ok:false,message}` |
 
 - **Data:** reads `wa_orders` (workspace scoped), `wa_merchant_gateways`; writes the order: `meta_json.gateway_slug`, `meta_json.payment_ref` (`WAO-<orderid>-<6 random upper alnum>`), `meta_json.gateway_order_id`, `meta_json.gateway_payment_id` (when the driver returns them), `payment_method=<slug>` (column is 16 chars), `payment_link=<redirect url>`, `recovery_token` (`tok_` + 20 random chars) if empty; writes an outbound `messages` row.
@@ -1249,16 +1249,16 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** none.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | POST `wa/checkout/webhook/{slug}` | `wa.checkout.webhook` | `CustomerPaymentWebhookController@handle` | web (CSRF exempt) | raw body JSON; one signature header | **Always HTTP 200** with JSON `{ok,reason|status,order_id}` |
+  | Method uri                        | Route name            | Action                                    | Middleware        | Request                             | Response                                  |
+  | --------------------------------- | --------------------- | ----------------------------------------- | ----------------- | ----------------------------------- | ----------------------------------------- |
+  | POST `wa/checkout/webhook/{slug}` | `wa.checkout.webhook` | `CustomerPaymentWebhookController@handle` | web (CSRF exempt) | raw body JSON; one signature header | **Always HTTP 200** with JSON `{ok,reason | status,order_id}` |
 
 - **Data:** reads `wa_orders`, `wa_merchant_gateways`; on success sets order `status=paid` and meta (TW-PAY-011).
 - **Rules & edge cases:**
   1. The slug is stripped to `[a-z0-9_-]` and lower-cased.
   2. Order resolution **before** verification: (a) first regex match `WAO-<digits>-<alnum>` in the raw body selects order by id from **any workspace**; (b) else scan up to 200 latest unpaid orders with `payment_method = slug` and look for a stored `payment_ref` or `gateway_order_id` as a substring of the body. Unresolved returns `{ok:false,reason:order_not_resolved}`.
   3. Signature header taken from the first present of: `Stripe-Signature`, `X-Razorpay-Signature`, `Paypal-Transmission-Sig`, `x-paystack-signature`, `X-CC-Webhook-Signature`, `x-callback-token`, `x-square-hmacsha256-signature`, `verif-hash`. Other gateway headers (LemonSqueezy, Paddle, Cashfree, Mollie, Xendit variants, ...) are not passed, so those drivers receive null.
-  2b. The merchant's keys for the matched order's workspace are loaded and the **driver's** `verifyWebhookSignature` runs; failure returns `{ok:false,reason:signature_mismatch}`. QUIRK: unlike platform billing, there is **no fail-closed check for a missing webhook secret**; drivers whose check returns true when no secret is set (Stripe, Razorpay) or has no check at all (17 drivers) accept unsigned bodies.
+     2b. The merchant's keys for the matched order's workspace are loaded and the **driver's** `verifyWebhookSignature` runs; failure returns `{ok:false,reason:signature_mismatch}`. QUIRK: unlike platform billing, there is **no fail-closed check for a missing webhook secret**; drivers whose check returns true when no secret is set (Stripe, Razorpay) or has no check at all (17 drivers) accept unsigned bodies.
   4. The driver's `handleWebhook(payload)` decides. Only `status=paid` proceeds; other outcomes return `{ok:true,status:<pending|failed...>}`.
   5. Cross-check: if the order has a stored `gateway_order_id` and the result carries a different one, return `gateway_order_id_mismatch` (guards forged references). Skipped when either is empty.
   6. QUIRK: the amount and currency in the event are never compared with the order; a gateway order created at the old total will still mark the order paid.
@@ -1288,9 +1288,9 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** `resources/views/checkout/return.blade.php`: card with state badge (paid green "Payment successful", pending amber "Payment processing", cancelled grey, not found), formatted amount, order reference `WA-<id>`, customer name, status, and the hint "Return to your WhatsApp chat for your receipt." `noindex,nofollow`.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | GET `wa/checkout/return/{slug}/{token}` | `wa.checkout.return` | `CustomerCheckoutReturnController@handle` | web | all gateway query parameters | HTML (200 even for not found) |
+  | Method uri                              | Route name           | Action                                    | Middleware | Request                      | Response                      |
+  | --------------------------------------- | -------------------- | ----------------------------------------- | ---------- | ---------------------------- | ----------------------------- |
+  | GET `wa/checkout/return/{slug}/{token}` | `wa.checkout.return` | `CustomerCheckoutReturnController@handle` | web        | all gateway query parameters | HTML (200 even for not found) |
 
 - **Data:** reads the order by `recovery_token` (the slug in the URL is ignored for lookup); may mark paid.
 - **Rules & edge cases:**
@@ -1348,10 +1348,10 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** order detail "Payment link" field and status form.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | POST `store/orders/{id}/payment-link` | `user.store.orders.payment-link` | `WaOrderController@sendPaymentLink` | web, auth, admin role | `payment_link` required url max 1024 | JSON `{ok,message_id}` |
-  | PUT `store/orders/{id}` | `user.store.orders.update` | `@updateStatus` | same | `status` in the order statuses, `notes` max 1000, `payment_link` nullable url | redirect |
+  | Method uri                            | Route name                       | Action                              | Middleware            | Request                                                                       | Response               |
+  | ------------------------------------- | -------------------------------- | ----------------------------------- | --------------------- | ----------------------------------------------------------------------------- | ---------------------- |
+  | POST `store/orders/{id}/payment-link` | `user.store.orders.payment-link` | `WaOrderController@sendPaymentLink` | web, auth, admin role | `payment_link` required url max 1024                                          | JSON `{ok,message_id}` |
+  | PUT `store/orders/{id}`               | `user.store.orders.update`       | `@updateStatus`                     | same                  | `status` in the order statuses, `notes` max 1000, `payment_link` nullable url | redirect               |
 
 - **Data:** order `payment_link`; outbound `messages` row.
 - **Rules & edge cases:** 1. `sendPaymentLink` stores the URL, sends "Hi <name>, here's your payment link for <total>:" + URL (total shown with a limited symbol map: ₹ $ € £ else the code) from the shop number; returns `ok` based on delivery. 2. `updateStatus` also DMs the buyer on a status change and/or new link. 3. QUIRK: setting status `paid` here does not fire `WaOrderPaid` (TW-INV-012, TW-PAY-005). 4. The URL is not validated against allowed hosts (a merchant can send any link).
@@ -1373,10 +1373,10 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** "Generate payment link" on the order; Storefront settings hold `payment_provider=razorpay_api` and encrypted `key_id`, `key_secret`, `webhook_secret`.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Request | Response |
-  | --- | --- | --- | --- | --- | --- |
-  | POST `store/orders/{id}/generate-payment-link` | `user.store.orders.generate-payment-link` | `WaOrderController@generatePaymentLink` | web, auth, admin role | none | JSON `{ok,url,sent}`; 422/502 messages |
-  | POST `webhooks/storefront-pay` | `storefront.pay.webhook` | `StorefrontPaymentController@razorpayWebhook` | web (CSRF exempt) | raw JSON + `X-Razorpay-Signature` | JSON `{ok}`; 400 bad json/signature; 404 `storefront_unknown` |
+  | Method uri                                     | Route name                                | Action                                        | Middleware            | Request                           | Response                                                      |
+  | ---------------------------------------------- | ----------------------------------------- | --------------------------------------------- | --------------------- | --------------------------------- | ------------------------------------------------------------- |
+  | POST `store/orders/{id}/generate-payment-link` | `user.store.orders.generate-payment-link` | `WaOrderController@generatePaymentLink`       | web, auth, admin role | none                              | JSON `{ok,url,sent}`; 422/502 messages                        |
+  | POST `webhooks/storefront-pay`                 | `storefront.pay.webhook`                  | `StorefrontPaymentController@razorpayWebhook` | web (CSRF exempt)     | raw JSON + `X-Razorpay-Signature` | JSON `{ok}`; 400 bad json/signature; 404 `storefront_unknown` |
 
 - **Data:** order `payment_link`, `meta_json.payment_link_id`; on paid: `status=paid`, `meta_json.paid_via=razorpay_link`, `razorpay_payment`, `razorpay_plink`.
 - **Rules & edge cases:**
@@ -1441,11 +1441,11 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **UX & screens:** none here.
 - **Endpoints:**
 
-  | Method uri | Route name | Action | Middleware | Notes |
-  | --- | --- | --- | --- | --- |
-  | POST `payment/webhook/{gateway}` | `payment.webhook` | `CheckoutController@webhook` | web | verified per driver |
-  | GET/POST `payment/callback/{gateway}` | `payment.callback` | `CheckoutController@callback` | web | browser return |
-  | GET `payment/paddle/checkout/{order}` | `payment.paddle.checkout` | `CheckoutController@paddleCheckout` | web | Paddle overlay |
+  | Method uri                            | Route name                | Action                              | Middleware | Notes               |
+  | ------------------------------------- | ------------------------- | ----------------------------------- | ---------- | ------------------- |
+  | POST `payment/webhook/{gateway}`      | `payment.webhook`         | `CheckoutController@webhook`        | web        | verified per driver |
+  | GET/POST `payment/callback/{gateway}` | `payment.callback`        | `CheckoutController@callback`       | web        | browser return      |
+  | GET `payment/paddle/checkout/{order}` | `payment.paddle.checkout` | `CheckoutController@paddleCheckout` | web        | Paddle overlay      |
 
 - **Data:** `orders`, `payment_gateways`, `subscriptions` (platform tables, other domains).
 - **Rules & edge cases:** 1. Admin-owned gateway keys (`payment_gateways`), not merchant keys. 2. Webhook **fails closed** (403) when the gateway has a signing field that is blank unless the setting `payment.require_webhook_secret` is off; the customer webhook in TW-PAY-009 does not have this guard. 3. The callback resolves the order from a query hint (`session_id`, `razorpay_order_id`, `token`, `txnid`...), PayU `udf2`, or the session, then calls the driver's `handleCallback`. 4. Subscription events run first in the webhook. 5. Tables, routes and screens are not part of this domain's coverage except as listed.
@@ -1481,41 +1481,41 @@ All tables are MySQL InnoDB, utf8mb4. Amounts are `bigint` minor units. None has
 
 ### invoices (TW-INV-001..031)
 
-| Column | Type | Null / default | Notes |
-| --- | --- | --- | --- |
-| id | bigint unsigned PK | | |
-| workspace_id | bigint unsigned | no | index; also composite indexes with status, send_status, issued_at |
-| user_id | bigint unsigned | yes | issuing user; owner for webhook-created |
-| source | varchar(24) | no | `woocommerce`, `shopify`, `own`, `manual` |
-| doc_type | varchar(16) | `tax_invoice` | `tax_invoice`, `receipt`, `proforma`, `credit_note` (unused) |
-| wa_order_id | bigint unsigned | yes | index; link to `wa_orders`, no FK |
-| external_order_id | varchar(64) | yes | Woo/Shopify id; null for own/manual |
-| external_order_number | varchar(64) | yes | printed as "Order:" |
-| series | varchar(48) | no | e.g. `INV-2026` |
-| invoice_number | varchar(64) | no | e.g. `INV-2026-000123`; unique with workspace |
-| seq | int unsigned | no | unique `(workspace_id, series, seq)` |
-| status | varchar(16) | `issued` | `issued`, `paid`, `void`, `credited` (only first two used) |
-| send_status | varchar(16) | `pending` | `pending, rendering, ready, sending, sent, send_failed, skipped` |
-| send_attempts | tinyint unsigned | 0 | cutoff 5 |
-| send_reason | varchar(191) | yes | error code |
-| sent_at | timestamp | yes | duplicate-send guard |
-| trigger | varchar(16) | `manual` | `on_placed, on_paid, on_fulfilled, manual` (informational) |
-| issued_at | timestamp | yes | now() at issue |
-| due_at | timestamp | yes | never written |
-| paid_at | timestamp | yes | |
-| currency | varchar(3) | `USD` | |
-| currency_exponent | tinyint unsigned | 2 | |
-| subtotal_minor, discount_minor, shipping_minor, tax_minor, total_minor | bigint | 0 | |
-| tax_inclusive | tinyint(1) | 0 | label only |
-| buyer_name | varchar(191), buyer_email varchar(191), buyer_phone varchar(32) | yes | |
-| billing_json, shipping_json | json | yes | `{address}` |
-| seller_snapshot_json | json | yes | frozen seller block |
-| notes | text | yes | never written |
-| pdf_disk varchar(32), pdf_path varchar(255), pdf_sha256 char(64), pdf_bytes int unsigned | | yes | |
-| delivery_channel varchar(16), delivered_at, wa_message_id varchar(128), send_error text | | yes | |
-| public_token | varchar(48) | no | unique |
-| meta_json | json | yes | `note, contact_id, company_id, deal_id, native_source, from_sales_doc, sales_doc_number, quota_flag, woo_status, financial_status` |
-| created_at, updated_at | timestamp | yes | |
+| Column                                                                                   | Type                                                            | Null / default | Notes                                                                                                                              |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| id                                                                                       | bigint unsigned PK                                              |                |                                                                                                                                    |
+| workspace_id                                                                             | bigint unsigned                                                 | no             | index; also composite indexes with status, send_status, issued_at                                                                  |
+| user_id                                                                                  | bigint unsigned                                                 | yes            | issuing user; owner for webhook-created                                                                                            |
+| source                                                                                   | varchar(24)                                                     | no             | `woocommerce`, `shopify`, `own`, `manual`                                                                                          |
+| doc_type                                                                                 | varchar(16)                                                     | `tax_invoice`  | `tax_invoice`, `receipt`, `proforma`, `credit_note` (unused)                                                                       |
+| wa_order_id                                                                              | bigint unsigned                                                 | yes            | index; link to `wa_orders`, no FK                                                                                                  |
+| external_order_id                                                                        | varchar(64)                                                     | yes            | Woo/Shopify id; null for own/manual                                                                                                |
+| external_order_number                                                                    | varchar(64)                                                     | yes            | printed as "Order:"                                                                                                                |
+| series                                                                                   | varchar(48)                                                     | no             | e.g. `INV-2026`                                                                                                                    |
+| invoice_number                                                                           | varchar(64)                                                     | no             | e.g. `INV-2026-000123`; unique with workspace                                                                                      |
+| seq                                                                                      | int unsigned                                                    | no             | unique `(workspace_id, series, seq)`                                                                                               |
+| status                                                                                   | varchar(16)                                                     | `issued`       | `issued`, `paid`, `void`, `credited` (only first two used)                                                                         |
+| send_status                                                                              | varchar(16)                                                     | `pending`      | `pending, rendering, ready, sending, sent, send_failed, skipped`                                                                   |
+| send_attempts                                                                            | tinyint unsigned                                                | 0              | cutoff 5                                                                                                                           |
+| send_reason                                                                              | varchar(191)                                                    | yes            | error code                                                                                                                         |
+| sent_at                                                                                  | timestamp                                                       | yes            | duplicate-send guard                                                                                                               |
+| trigger                                                                                  | varchar(16)                                                     | `manual`       | `on_placed, on_paid, on_fulfilled, manual` (informational)                                                                         |
+| issued_at                                                                                | timestamp                                                       | yes            | now() at issue                                                                                                                     |
+| due_at                                                                                   | timestamp                                                       | yes            | never written                                                                                                                      |
+| paid_at                                                                                  | timestamp                                                       | yes            |                                                                                                                                    |
+| currency                                                                                 | varchar(3)                                                      | `USD`          |                                                                                                                                    |
+| currency_exponent                                                                        | tinyint unsigned                                                | 2              |                                                                                                                                    |
+| subtotal_minor, discount_minor, shipping_minor, tax_minor, total_minor                   | bigint                                                          | 0              |                                                                                                                                    |
+| tax_inclusive                                                                            | tinyint(1)                                                      | 0              | label only                                                                                                                         |
+| buyer_name                                                                               | varchar(191), buyer_email varchar(191), buyer_phone varchar(32) | yes            |                                                                                                                                    |
+| billing_json, shipping_json                                                              | json                                                            | yes            | `{address}`                                                                                                                        |
+| seller_snapshot_json                                                                     | json                                                            | yes            | frozen seller block                                                                                                                |
+| notes                                                                                    | text                                                            | yes            | never written                                                                                                                      |
+| pdf_disk varchar(32), pdf_path varchar(255), pdf_sha256 char(64), pdf_bytes int unsigned |                                                                 | yes            |                                                                                                                                    |
+| delivery_channel varchar(16), delivered_at, wa_message_id varchar(128), send_error text  |                                                                 | yes            |                                                                                                                                    |
+| public_token                                                                             | varchar(48)                                                     | no             | unique                                                                                                                             |
+| meta_json                                                                                | json                                                            | yes            | `note, contact_id, company_id, deal_id, native_source, from_sales_doc, sales_doc_number, quota_flag, woo_status, financial_status` |
+| created_at, updated_at                                                                   | timestamp                                                       | yes            |                                                                                                                                    |
 
 Unique keys: `(source, external_order_id, doc_type)`, `(workspace_id, invoice_number)`, `(workspace_id, series, seq)`, `public_token`. Read by every INV feature, CRM revenue and the ledger; written by TW-INV-007/014/018/019/020 and TW-PAY-003.
 
@@ -1545,22 +1545,22 @@ Columns: `enabled` (false, cosmetic), `numbering_prefix` ('INV'), `proforma_pref
 
 ### payments (TW-PAY-001..005, 017)
 
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | bigint PK | |
-| workspace_id | bigint unsigned, index | |
-| invoice_id, deal_id, contact_id, company_id, wa_order_id | bigint unsigned null, each indexed | all optional links, no FK |
-| amount_minor | bigint | stored >= 0 |
-| currency | varchar(8) | default USD |
-| method | varchar(32) | `manual, cash, bank, card, upi, gateway, wa_pay, storefront` |
-| source | varchar(24) | `manual, gateway, wa_pay, storefront` |
-| paid_at | timestamp null, indexed | |
-| reference | varchar(191) | txn id / cheque number |
-| note | text | |
-| gateway_payment_id | varchar(191) null | idempotency key |
-| recorded_by | bigint unsigned null | user id, null = system |
-| meta_json | json | `paid_via` |
-| created_at, updated_at | | |
+| Column                                                   | Type                               | Notes                                                        |
+| -------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| id                                                       | bigint PK                          |                                                              |
+| workspace_id                                             | bigint unsigned, index             |                                                              |
+| invoice_id, deal_id, contact_id, company_id, wa_order_id | bigint unsigned null, each indexed | all optional links, no FK                                    |
+| amount_minor                                             | bigint                             | stored >= 0                                                  |
+| currency                                                 | varchar(8)                         | default USD                                                  |
+| method                                                   | varchar(32)                        | `manual, cash, bank, card, upi, gateway, wa_pay, storefront` |
+| source                                                   | varchar(24)                        | `manual, gateway, wa_pay, storefront`                        |
+| paid_at                                                  | timestamp null, indexed            |                                                              |
+| reference                                                | varchar(191)                       | txn id / cheque number                                       |
+| note                                                     | text                               |                                                              |
+| gateway_payment_id                                       | varchar(191) null                  | idempotency key                                              |
+| recorded_by                                              | bigint unsigned null               | user id, null = system                                       |
+| meta_json                                                | json                               | `paid_via`                                                   |
+| created_at, updated_at                                   |                                    |                                                              |
 
 Unique `(workspace_id, source, gateway_payment_id)` (null ids never collide, so manual rows duplicate freely). No refunds, no status, no soft delete.
 
@@ -1583,6 +1583,7 @@ Unique `(workspace_id, source, gateway_payment_id)` (null ids never collide, so 
 ## Cross-domain contracts
 
 Consumes:
+
 - **checkout-orders-merchant-payments**: `wa_orders` (status, totals, items, `recovery_token`, meta), `WaOrderPaid` event, order status changes, `wa_merchant_gateways`, shop sender fields for WhatsApp messages.
 - **shopify-woocommerce**: webhook handlers call `InvoiceService.handleWebhookOrder(order, source, deliveryId, topic, rawPayload)` after their own signature verification; delivery-id headers `X-WC-Webhook-Delivery-ID`, `X-Shopify-Webhook-Id`.
 - **whatsapp-cloud-api-waba / whatsapp-devices-baileys / message-templates**: `TemplateSender`, `TemplateClient`, `WhatsAppDispatcher.sendRaw`, `wa_templates`, template status webhook, inbox conversation mirror.
@@ -1592,6 +1593,7 @@ Consumes:
 - **localization-translation**: i18n keys (below).
 
 Exposes:
+
 - **sales-docs-proposals**: `InvoiceService.issue(draft)` and `renderAndSend`; consumed by `SalesDocsController::convert` (TW-INV-027).
 - **ai-copilot-lead-finder**: `create_invoice`, `record_payment`, `outstanding`, `money_summary` tools call the engines (TW-INV-029).
 - **crm / deals-pipelines / companies-projects-tasks**: tables `invoices` and `payments` for dashboard counts, revenue, CSV and PDF (TW-INV-028, TW-PAY-017); `payments.deal_id|contact_id|company_id` links.
@@ -1606,6 +1608,7 @@ i18n keys (resources `lang/*.json`, English-key strings, about 80 relevant): UI 
 Resolved by reading: the reference menu names Recurring Invoices, Credit Notes, Tax Rates and Sales Orders; none of these exist (see Overview table).
 
 Unverified or ambiguous (static analysis only; confirm with `threadwise-verify-parity` before relying on them):
+
 - Aging bucket bug from signed `diffInDays` (TW-PAY-004).
 - Whether `InvoiceService::resend` always has a sender injected (the constructor parameter is nullable; the container normally supplies the concrete class).
 - Per-driver zero-decimal handling for gateways other than Stripe, Paystack and PayPal.
@@ -1616,33 +1619,33 @@ Unverified or ambiguous (static analysis only; confirm with `threadwise-verify-p
 
 ### Differences to decide
 
-| # | Reference behaviour | Recommendation |
-| --- | --- | --- |
-| D-01 | Only `issued`/`paid` statuses; `sent` is a separate delivery status; no draft, viewed, partial, overdue, void | Store `status` in `draft, issued, void` (plus `credited` once credit notes exist), keep `delivery_status` separate, and **derive** payment status (`unpaid, partially_paid, paid, overdue`) from payments and `due_at`. Record `viewed_at` on the public page. |
-| D-02 | `due_at` and `due_days` are dead; no overdue, no reminders | Implement: set `due_at = issue + due_days` (settings default, per-invoice override), derive overdue, and run a daily BullMQ reminder job on WhatsApp with a per-workspace on/off and cadence. |
-| D-03 | Reads `invoice_settings.currency` (missing) so default currency is always USD | Add a workspace currency setting (use `workspaces.currency`) and read it everywhere; fail validation if neither is set. |
-| D-04 | Display always divides by 100; three exponent tables; no 3-decimal currencies in builder | One ISO-4217 table in a shared money package; render with `Intl.NumberFormat`; never copy Reference's /100 display. |
-| D-05 | Own-store/manual generate is not idempotent (duplicate invoices) | Unique `(workspace, wa_order_id, doc_type)` and return the existing invoice. |
-| D-06 | Totals are not reconciled; no-lines fallback subtotal ignores tax | Recompute and assert `subtotal - discount + shipping + tax = total` on every issue; reject or flag mismatches. |
-| D-07 | Receipt/proforma hide tax rows while including tax in the total | Always print tax rows when `tax_minor > 0`; keep the HSN/Tax% columns for tax invoices only. |
-| D-08 | Receipts share the tax-invoice counter (gaps) | Separate series per doc type (configurable), because tax regimes require gap-free tax invoice numbers. |
-| D-09 | Settings checkbox semantics reset `fy_reset` and triggers on every save; several settings are inert | PATCH semantics; remove inert settings or implement them (`enabled` must gate issuing; trigger values must work or be dropped). |
-| D-10 | Manual `paid` status and storefront/WhatsApp-Pay paths skip the ledger and event | Any transition to paid (any source) must emit one `order.paid` event, write one ledger row and issue the invoice. |
-| D-11 | Payment can reference a foreign `invoice_id`, other-currency payments and overpayments are silently accepted | Validate tenant and currency match, warn or block on overpayment, and add payment delete/void with reversal. |
-| D-12 | Monthly invoice cap only flags | Enforce (reject with a clear error) or surface the flag in the UI; pick one and test it. |
-| D-13 | Number gap risk from separate allocation transaction | Allocate and insert in one transaction. |
-| D-14 | Plan gate does not block GET (soft paywall) and nothing grants `auto_invoice` in the admin UI | Decide: hard-block API reads when the plan lacks the feature, and expose the feature in plan configuration. |
-| D-15 | Public `/i/{token}`: no pay button, no expiry, no revoke, no noindex; public PDF can trigger a send | Add Pay, expiry/revocation, noindex and private caching; make PDF read-only. |
-| D-16 | PDF is frozen forever and depends on live logo/colour at first render | Snapshot branding at issue; allow admin re-render creating a new PDF version with an audit entry. |
-| D-17 | No email delivery though `buyer_email` is collected | Add an email channel (provider adapter) with the same PDF and public link, or drop the field from the form. |
-| D-18 | Customer payment webhook resolves orders before signature, accepts unsigned drivers when no secret is set, returns 200 on failure, no amount check, no replay ledger, no throttle | Resolve only from a signed payment attempt, require a secret per gateway (fail closed), verify amount and currency, store event ids, return 4xx/5xx appropriately, rate-limit. |
-| D-19 | Stripe and Razorpay webhooks never confirm (wrong payload shape); confirmation relies on the browser return | Parse each provider's real webhook event (`checkout.session.completed`, `payment.captured`); keep the return page display-only. |
-| D-20 | Storefront Razorpay webhook can flip another workspace's order | Require order workspace equals the verified storefront's workspace. |
-| D-21 | Stripe/Paystack multiply by 100 regardless of currency; docs claim zero-decimal support | Use per-currency exponents in every adapter, with tests for JPY, KWD and INR. |
-| D-22 | Aging by creation date and likely always bucket 0-30; mixed-currency sums | Compute by due date (fallback issue date) per currency with correct date maths. |
-| D-23 | Return endpoint GET triggers gateway API calls without throttling | Throttle per token/IP and cache results. |
-| D-24 | No audit, notification or outbound webhook for invoice or payment events | Emit `invoice.issued`, `invoice.sent`, `invoice.paid`, `payment.recorded`, `payment.failed` through outbox; write audit entries. |
-| D-25 | CRM links stored only in `meta_json` and not shown on contacts/deals | Real columns plus timeline entries. |
+| #    | Reference behaviour                                                                                                                                                                  | Recommendation                                                                                                                                                                                                                                                 |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-01 | Only `issued`/`paid` statuses; `sent` is a separate delivery status; no draft, viewed, partial, overdue, void                                                                     | Store `status` in `draft, issued, void` (plus `credited` once credit notes exist), keep `delivery_status` separate, and **derive** payment status (`unpaid, partially_paid, paid, overdue`) from payments and `due_at`. Record `viewed_at` on the public page. |
+| D-02 | `due_at` and `due_days` are dead; no overdue, no reminders                                                                                                                        | Implement: set `due_at = issue + due_days` (settings default, per-invoice override), derive overdue, and run a daily BullMQ reminder job on WhatsApp with a per-workspace on/off and cadence.                                                                  |
+| D-03 | Reads `invoice_settings.currency` (missing) so default currency is always USD                                                                                                     | Add a workspace currency setting (use `workspaces.currency`) and read it everywhere; fail validation if neither is set.                                                                                                                                        |
+| D-04 | Display always divides by 100; three exponent tables; no 3-decimal currencies in builder                                                                                          | One ISO-4217 table in a shared money package; render with `Intl.NumberFormat`; never copy Reference's /100 display.                                                                                                                                               |
+| D-05 | Own-store/manual generate is not idempotent (duplicate invoices)                                                                                                                  | Unique `(workspace, wa_order_id, doc_type)` and return the existing invoice.                                                                                                                                                                                   |
+| D-06 | Totals are not reconciled; no-lines fallback subtotal ignores tax                                                                                                                 | Recompute and assert `subtotal - discount + shipping + tax = total` on every issue; reject or flag mismatches.                                                                                                                                                 |
+| D-07 | Receipt/proforma hide tax rows while including tax in the total                                                                                                                   | Always print tax rows when `tax_minor > 0`; keep the HSN/Tax% columns for tax invoices only.                                                                                                                                                                   |
+| D-08 | Receipts share the tax-invoice counter (gaps)                                                                                                                                     | Separate series per doc type (configurable), because tax regimes require gap-free tax invoice numbers.                                                                                                                                                         |
+| D-09 | Settings checkbox semantics reset `fy_reset` and triggers on every save; several settings are inert                                                                               | PATCH semantics; remove inert settings or implement them (`enabled` must gate issuing; trigger values must work or be dropped).                                                                                                                                |
+| D-10 | Manual `paid` status and storefront/WhatsApp-Pay paths skip the ledger and event                                                                                                  | Any transition to paid (any source) must emit one `order.paid` event, write one ledger row and issue the invoice.                                                                                                                                              |
+| D-11 | Payment can reference a foreign `invoice_id`, other-currency payments and overpayments are silently accepted                                                                      | Validate tenant and currency match, warn or block on overpayment, and add payment delete/void with reversal.                                                                                                                                                   |
+| D-12 | Monthly invoice cap only flags                                                                                                                                                    | Enforce (reject with a clear error) or surface the flag in the UI; pick one and test it.                                                                                                                                                                       |
+| D-13 | Number gap risk from separate allocation transaction                                                                                                                              | Allocate and insert in one transaction.                                                                                                                                                                                                                        |
+| D-14 | Plan gate does not block GET (soft paywall) and nothing grants `auto_invoice` in the admin UI                                                                                     | Decide: hard-block API reads when the plan lacks the feature, and expose the feature in plan configuration.                                                                                                                                                    |
+| D-15 | Public `/i/{token}`: no pay button, no expiry, no revoke, no noindex; public PDF can trigger a send                                                                               | Add Pay, expiry/revocation, noindex and private caching; make PDF read-only.                                                                                                                                                                                   |
+| D-16 | PDF is frozen forever and depends on live logo/colour at first render                                                                                                             | Snapshot branding at issue; allow admin re-render creating a new PDF version with an audit entry.                                                                                                                                                              |
+| D-17 | No email delivery though `buyer_email` is collected                                                                                                                               | Add an email channel (provider adapter) with the same PDF and public link, or drop the field from the form.                                                                                                                                                    |
+| D-18 | Customer payment webhook resolves orders before signature, accepts unsigned drivers when no secret is set, returns 200 on failure, no amount check, no replay ledger, no throttle | Resolve only from a signed payment attempt, require a secret per gateway (fail closed), verify amount and currency, store event ids, return 4xx/5xx appropriately, rate-limit.                                                                                 |
+| D-19 | Stripe and Razorpay webhooks never confirm (wrong payload shape); confirmation relies on the browser return                                                                       | Parse each provider's real webhook event (`checkout.session.completed`, `payment.captured`); keep the return page display-only.                                                                                                                                |
+| D-20 | Storefront Razorpay webhook can flip another workspace's order                                                                                                                    | Require order workspace equals the verified storefront's workspace.                                                                                                                                                                                            |
+| D-21 | Stripe/Paystack multiply by 100 regardless of currency; docs claim zero-decimal support                                                                                           | Use per-currency exponents in every adapter, with tests for JPY, KWD and INR.                                                                                                                                                                                  |
+| D-22 | Aging by creation date and likely always bucket 0-30; mixed-currency sums                                                                                                         | Compute by due date (fallback issue date) per currency with correct date maths.                                                                                                                                                                                |
+| D-23 | Return endpoint GET triggers gateway API calls without throttling                                                                                                                 | Throttle per token/IP and cache results.                                                                                                                                                                                                                       |
+| D-24 | No audit, notification or outbound webhook for invoice or payment events                                                                                                          | Emit `invoice.issued`, `invoice.sent`, `invoice.paid`, `payment.recorded`, `payment.failed` through outbox; write audit entries.                                                                                                                               |
+| D-25 | CRM links stored only in `meta_json` and not shown on contacts/deals                                                                                                              | Real columns plus timeline entries.                                                                                                                                                                                                                            |
 
 ## Port decisions
 
@@ -1655,31 +1658,31 @@ port differs from Reference is listed with the "Differences to decide" row it se
 
 ### Decided as recommended (fixes)
 
-| Diff # | Decision | Where |
-| ------ | -------- | ----- |
-| D-01 | Stored status is `draft`, `issued`, `void`; the payment status (`unpaid`, `partially_paid`, `paid`) is kept by the database from the ledger and the credit notes (trigger `invoice_refresh_payment_state`), never written by the API; the status clients show is derived. Delivery (`sent`) is a separate field and event. | TW-INV-025 |
-| D-02 | `due_date` is real: an explicit date, or terms in days from the issue date, or the workspace default. Overdue is derived on every read from the due **date** in the workspace's time zone (an invoice due today is not overdue). A worker sweep stamps `overdue_at` once per invoice and raises `invoice.overdue` (with the workspace's reminders flag); no reminder is sent here, the consumer is the delivery adapter. | TW-INV-030 |
-| D-03 | The workspace's invoicing profile has a currency; an invoice's currency defaults to it and is validated as ISO 4217. | TW-INV-013 |
-| D-04 | One money module (`@crm/contracts`: `currencyExponent`, `parseMajor`, `minorToMajor`) and one tax engine (`@crm/tax`); the exponent is stored on every document (JPY 0, KWD 3). Nothing divides by 100. | TW-INV-013 |
-| D-05 | Idempotent creation from a source: a quote converts once (unique `quote_id`, the second call returns the first invoice); an order or a schedule period is claimed under a unique key. | TW-INV-004, 027 |
-| D-06 | Totals are server-computed and the database refuses a row whose figures do not add up (`chk_invoices_totals`: total = subtotal − discount + tax added + shipping). Discounts spread by largest remainder, so the parts add up exactly. | TW-INV-007 |
-| D-07 | Every document type prints its tax rows whenever tax is charged; the summary is one row per tax (CGST and SGST are two rows). | TW-INV-014 |
-| D-08 | One series per document type (`INV`, `PRO`, `RCT`, `CRN`, `SO`), configurable prefix, padding and yearly reset (fiscal-year aware). | TW-INV-008 |
-| D-09 | The profile is PATCH (absent keeps); every setting that exists does something or is gone. | TW-INV-022 |
-| D-10 | Every payment, from any source, is a ledger row plus `payment.recorded` plus the invoice's recomputed state, in one transaction. A manual "mark paid" does not exist: record a payment. | TW-PAY-003 |
-| D-11 | A payment must belong to an invoice of the same workspace and currency (`PAY_CURRENCY_MISMATCH`); an over-payment is `422 PAY_OVERPAYMENT` unless `allowOverpayment: true` (held as credit); the ledger is append-only, a correction is a refund (a negative linked entry). | TW-PAY-002, 003 |
-| D-12 | No monthly cap in this product (a quota is a plan feature of the plan module, not of invoicing). | TW-INV-024 |
-| D-13 | The number is allocated in the issuing transaction from a locked per-series counter (`allocate_series_seq`); a rollback gives it back; two concurrent issuers never share one. | TW-INV-008 |
-| D-14 | The plan gate is the `sales_pipeline` feature, hard: every route, reads included, is `422 PLAN_FEATURE_LOCKED` without it. Permissions are `record.invoices.*`, `record.payments.*`, `record.tax-rates.*` with record scope on the people of the record; the buyer's page does not depend on the seller's plan. | TW-INV-024 |
-| D-15 | The public page has pay-now, an expiry, revoke and regenerate, `noindex`, private caching, and is read-only (viewing sends nothing). Only the token's SHA-256 is stored for lookup; an AES-GCM copy lets staff copy the link. | TW-INV-016, 017 |
-| D-16 | The PDF is rendered on demand from the stored document; the seller block (name, address, tax id, bank details, brand) is **snapshotted at issue**, so an issued invoice always renders the same. No file is stored. | TW-INV-014 |
-| D-17 | Email is a channel of `send` (`invoice.sent` with the channel; a delivery adapter consumes it). A buyer email is required to send by email (`INV_NO_RECIPIENT`). | TW-INV-018, 019 |
-| D-18 | The webhook is signature-first and fail-closed: the endpoint resolves only to a connection and its secret; the signature over the raw body is verified before anything else is read; every signature problem is the same 401; the event id is claimed once (idempotent); the attempt is looked up inside the verified tenant; amount and currency must equal the attempt's; the redirect never marks anything paid. Rate limited. | TW-PAY-009 |
-| D-19, D-20, D-21 | The gateway is a port; the shipped implementations are manual transfer and a generic HMAC receiver. Real provider adapters (Stripe, Razorpay, ...) copy the HMAC skeleton and must use `currencyExponent` (no `×100`). Not built here: the platform's payment-provider work. | TW-PAY-007, 013 |
-| D-22 | Aging is by due date (issue date when none), per currency, buckets current, 1-30, 31-60, 61-90, 90+; totals are never summed across currencies. | TW-PAY-004 |
-| D-23 | Public reads and pay are rate limited per address and token. | TW-PAY-010 |
-| D-24 | Every write emits its outbox event and an audit row in the writer's transaction (list in `docs/api/sales-invoices-payments.md`). | TW-INV-031 |
-| D-25 | CRM links are real columns (contact, company, deal, owner, quote, order, recurring schedule) with composite foreign keys; `GET /contacts/:id/invoices` and `GET /deals/:id/invoices`; timeline entries on the invoice. | TW-INV-028 |
+| Diff #           | Decision                                                                                                                                                                                                                                                                                                                                                                                                                          | Where           |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| D-01             | Stored status is `draft`, `issued`, `void`; the payment status (`unpaid`, `partially_paid`, `paid`) is kept by the database from the ledger and the credit notes (trigger `invoice_refresh_payment_state`), never written by the API; the status clients show is derived. Delivery (`sent`) is a separate field and event.                                                                                                        | TW-INV-025      |
+| D-02             | `due_date` is real: an explicit date, or terms in days from the issue date, or the workspace default. Overdue is derived on every read from the due **date** in the workspace's time zone (an invoice due today is not overdue). A worker sweep stamps `overdue_at` once per invoice and raises `invoice.overdue` (with the workspace's reminders flag); no reminder is sent here, the consumer is the delivery adapter.          | TW-INV-030      |
+| D-03             | The workspace's invoicing profile has a currency; an invoice's currency defaults to it and is validated as ISO 4217.                                                                                                                                                                                                                                                                                                              | TW-INV-013      |
+| D-04             | One money module (`@crm/contracts`: `currencyExponent`, `parseMajor`, `minorToMajor`) and one tax engine (`@crm/tax`); the exponent is stored on every document (JPY 0, KWD 3). Nothing divides by 100.                                                                                                                                                                                                                           | TW-INV-013      |
+| D-05             | Idempotent creation from a source: a quote converts once (unique `quote_id`, the second call returns the first invoice); an order or a schedule period is claimed under a unique key.                                                                                                                                                                                                                                             | TW-INV-004, 027 |
+| D-06             | Totals are server-computed and the database refuses a row whose figures do not add up (`chk_invoices_totals`: total = subtotal − discount + tax added + shipping). Discounts spread by largest remainder, so the parts add up exactly.                                                                                                                                                                                            | TW-INV-007      |
+| D-07             | Every document type prints its tax rows whenever tax is charged; the summary is one row per tax (CGST and SGST are two rows).                                                                                                                                                                                                                                                                                                     | TW-INV-014      |
+| D-08             | One series per document type (`INV`, `PRO`, `RCT`, `CRN`, `SO`), configurable prefix, padding and yearly reset (fiscal-year aware).                                                                                                                                                                                                                                                                                               | TW-INV-008      |
+| D-09             | The profile is PATCH (absent keeps); every setting that exists does something or is gone.                                                                                                                                                                                                                                                                                                                                         | TW-INV-022      |
+| D-10             | Every payment, from any source, is a ledger row plus `payment.recorded` plus the invoice's recomputed state, in one transaction. A manual "mark paid" does not exist: record a payment.                                                                                                                                                                                                                                           | TW-PAY-003      |
+| D-11             | A payment must belong to an invoice of the same workspace and currency (`PAY_CURRENCY_MISMATCH`); an over-payment is `422 PAY_OVERPAYMENT` unless `allowOverpayment: true` (held as credit); the ledger is append-only, a correction is a refund (a negative linked entry).                                                                                                                                                       | TW-PAY-002, 003 |
+| D-12             | No monthly cap in this product (a quota is a plan feature of the plan module, not of invoicing).                                                                                                                                                                                                                                                                                                                                  | TW-INV-024      |
+| D-13             | The number is allocated in the issuing transaction from a locked per-series counter (`allocate_series_seq`); a rollback gives it back; two concurrent issuers never share one.                                                                                                                                                                                                                                                    | TW-INV-008      |
+| D-14             | The plan gate is the `sales_pipeline` feature, hard: every route, reads included, is `422 PLAN_FEATURE_LOCKED` without it. Permissions are `record.invoices.*`, `record.payments.*`, `record.tax-rates.*` with record scope on the people of the record; the buyer's page does not depend on the seller's plan.                                                                                                                   | TW-INV-024      |
+| D-15             | The public page has pay-now, an expiry, revoke and regenerate, `noindex`, private caching, and is read-only (viewing sends nothing). Only the token's SHA-256 is stored for lookup; an AES-GCM copy lets staff copy the link.                                                                                                                                                                                                     | TW-INV-016, 017 |
+| D-16             | The PDF is rendered on demand from the stored document; the seller block (name, address, tax id, bank details, brand) is **snapshotted at issue**, so an issued invoice always renders the same. No file is stored.                                                                                                                                                                                                               | TW-INV-014      |
+| D-17             | Email is a channel of `send` (`invoice.sent` with the channel; a delivery adapter consumes it). A buyer email is required to send by email (`INV_NO_RECIPIENT`).                                                                                                                                                                                                                                                                  | TW-INV-018, 019 |
+| D-18             | The webhook is signature-first and fail-closed: the endpoint resolves only to a connection and its secret; the signature over the raw body is verified before anything else is read; every signature problem is the same 401; the event id is claimed once (idempotent); the attempt is looked up inside the verified tenant; amount and currency must equal the attempt's; the redirect never marks anything paid. Rate limited. | TW-PAY-009      |
+| D-19, D-20, D-21 | The gateway is a port; the shipped implementations are manual transfer and a generic HMAC receiver. Real provider adapters (Stripe, Razorpay, ...) copy the HMAC skeleton and must use `currencyExponent` (no `×100`). Not built here: the platform's payment-provider work.                                                                                                                                                      | TW-PAY-007, 013 |
+| D-22             | Aging is by due date (issue date when none), per currency, buckets current, 1-30, 31-60, 61-90, 90+; totals are never summed across currencies.                                                                                                                                                                                                                                                                                   | TW-PAY-004      |
+| D-23             | Public reads and pay are rate limited per address and token.                                                                                                                                                                                                                                                                                                                                                                      | TW-PAY-010      |
+| D-24             | Every write emits its outbox event and an audit row in the writer's transaction (list in `docs/api/sales-invoices-payments.md`).                                                                                                                                                                                                                                                                                                  | TW-INV-031      |
+| D-25             | CRM links are real columns (contact, company, deal, owner, quote, order, recurring schedule) with composite foreign keys; `GET /contacts/:id/invoices` and `GET /deals/:id/invoices`; timeline entries on the invoice.                                                                                                                                                                                                            | TW-INV-028      |
 
 ### Decisions of this port (not in the difference table)
 
@@ -1688,7 +1691,7 @@ port differs from Reference is listed with the "Differences to decide" row it se
 - **Rounding.** One rule shared with sales-docs: per-line half-up on the taxable amount (`calculateDocument`), the document discount
   spread by largest remainder, shipping outside discount and tax. A quote converts to an invoice with the same total to the minor unit
   (the conversion re-prices and compares, and refuses if they differ).
-- **Exact percentages.** Tax percentages are `numeric(7,4)` (`rate_percent`), exact; `rate_bp` is a *generated* mirror for readers that
+- **Exact percentages.** Tax percentages are `numeric(7,4)` (`rate_percent`), exact; `rate_bp` is a _generated_ mirror for readers that
   want basis points. (Migration `20261008100500` restores the 0-100 range checks that dropping the old columns removed.)
 - **Country-aware tax.** Totals and tax come from `@crm/tax`. `taxMode: "auto"` decides the taxes from the profile and the buyer
   (CGST+SGST vs IGST, reverse charge, ...) and stores the reasons in the invoice's meta; `taxMode: "rates"` uses the rates the lines
@@ -1709,18 +1712,17 @@ port differs from Reference is listed with the "Differences to decide" row it se
   part taking the exact remainder. Shipping is billed once. A document discount of the source offer is folded into the lines (its tax
   is re-priced by the shared engine, so an order made from a discounted offer can differ from the offer by a rounding cent in tax).
   Voiding or deleting an order invoice returns its quantities in the same transaction; such an invoice's lines cannot be edited.
-- **No store auto-invoicing.** Reference's order-to-invoice mapping (TW-INV-004, 009-012) and the WhatsApp order flows (TW-PAY-005, 008, 012,
-  014) belong to the commerce port, which will call `InvoicesService.createDraftIn` / `PaymentsService.recordIn`.
+- **No store auto-invoicing.** Reference's order-to-invoice mapping (TW-INV-004, 009-012) and the WhatsApp order flows (TW-PAY-005, 008, 012, 014) belong to the commerce port, which will call `InvoicesService.createDraftIn` / `PaymentsService.recordIn`.
 
 ### Not built here (and why)
 
-| Item | Status |
-| ---- | ------ |
-| Delivery of invoices (email, WhatsApp) and overdue reminders | The events (`invoice.sent`, `invoice.overdue`) and the public link exist; a delivery adapter consumes them. |
-| Real payment-provider adapters (Stripe, Razorpay, Paystack, ...) and money movement on refund | The port and the webhook skeleton exist; a refund records that cash was returned, it does not call a provider. |
-| WhatsApp invoice template provisioning (TW-INV-023), AI copilot tools (TW-INV-029) | Belong to the WhatsApp and AI ports. |
-| Ledger CSV export and revenue report reads (TW-PAY-017) | The list, summary, aging and outstanding endpoints exist; CSV export is a presentation job. |
-| Credit notes for tax authorities' e-invoicing formats (India IRN, EU e-invoice), TDS/TCS handling | The data (tax ids, place of supply, HSN/SAC) is stored; the formats are a separate adapter. |
+| Item                                                                                              | Status                                                                                                         |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Delivery of invoices (email, WhatsApp) and overdue reminders                                      | The events (`invoice.sent`, `invoice.overdue`) and the public link exist; a delivery adapter consumes them.    |
+| Real payment-provider adapters (Stripe, Razorpay, Paystack, ...) and money movement on refund     | The port and the webhook skeleton exist; a refund records that cash was returned, it does not call a provider. |
+| WhatsApp invoice template provisioning (TW-INV-023), AI copilot tools (TW-INV-029)                | Belong to the WhatsApp and AI ports.                                                                           |
+| Ledger CSV export and revenue report reads (TW-PAY-017)                                           | The list, summary, aging and outstanding endpoints exist; CSV export is a presentation job.                    |
+| Credit notes for tax authorities' e-invoicing formats (India IRN, EU e-invoice), TDS/TCS handling | The data (tax ids, place of supply, HSN/SAC) is stored; the formats are a separate adapter.                    |
 
 ## Coverage
 
@@ -1834,10 +1836,7 @@ port differs from Reference is listed with the "Differences to decide" row it se
     "app/Http/Middleware/EnsureTrialActive.php"
   ],
   "node_files": [],
-  "js_assets": [
-    "resources/js/charts/invoices-create.js",
-    "resources/js/charts/payments-index.js"
-  ],
+  "js_assets": ["resources/js/charts/invoices-create.js", "resources/js/charts/payments-index.js"],
   "misc_files": [
     "app/Events/Commerce/WaOrderPaid.php",
     "app/Listeners/Commerce/RecordPaymentOnOrderPaid.php",
@@ -1864,14 +1863,29 @@ port differs from Reference is listed with the "Differences to decide" row it se
     "TW-INV-023": ["POST invoices/template"],
     "TW-PAY-001": ["GET payments"],
     "TW-PAY-002": ["POST payments"],
-    "TW-PAY-006": ["GET store/gateways", "POST store/gateways/{slug}", "POST store/gateways/{slug}/toggle", "DELETE store/gateways/{slug}"],
+    "TW-PAY-006": [
+      "GET store/gateways",
+      "POST store/gateways/{slug}",
+      "POST store/gateways/{slug}/toggle",
+      "DELETE store/gateways/{slug}"
+    ],
     "TW-PAY-008": ["POST store/orders/{id}/send-checkout"],
     "TW-PAY-009": ["POST wa/checkout/webhook/{slug}"],
     "TW-PAY-010": ["GET wa/checkout/return/{slug}/{token}"],
     "TW-PAY-012": ["POST store/orders/{id}/payment-link"],
     "TW-PAY-013": ["POST store/orders/{id}/generate-payment-link", "POST webhooks/storefront-pay"],
-    "TW-PAY-014": ["GET store/payments", "POST store/payments", "DELETE store/payments/{id}", "POST store/orders/{id}/whatsapp-pay"],
-    "TW-PAY-016": ["POST payment/webhook/{gateway}", "GET payment/callback/{gateway}", "POST payment/callback/{gateway}", "GET payment/paddle/checkout/{order}"]
+    "TW-PAY-014": [
+      "GET store/payments",
+      "POST store/payments",
+      "DELETE store/payments/{id}",
+      "POST store/orders/{id}/whatsapp-pay"
+    ],
+    "TW-PAY-016": [
+      "POST payment/webhook/{gateway}",
+      "GET payment/callback/{gateway}",
+      "POST payment/callback/{gateway}",
+      "GET payment/paddle/checkout/{order}"
+    ]
   }
 }
 ```

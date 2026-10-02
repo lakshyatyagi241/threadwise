@@ -6,9 +6,10 @@ import { ACTOR_KINDS_KEY, IS_PUBLIC_KEY } from '../../../common/decorators';
 import { RequestContextStore, type ActorType } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { OperatorAuthService } from '../platform/operator-auth.service';
 import { SecurityPolicyService } from '../platform/security-policy.service';
 import { EpochService } from '../sessions/epoch.service';
-import { SessionService } from '../sessions/session.service';
+import { SessionService, idleTimeoutError } from '../sessions/session.service';
 import { AuthKeys } from '../support/redis-keys';
 import { TokenService } from '../token.service';
 
@@ -25,6 +26,9 @@ import { TokenService } from '../token.service';
  *   - the session tombstone (sign out / revoke / reset kills a still-valid
  *     access token on its next use)
  *   - the idle timeout for sessions that did not ask to be remembered
+ *     (operators can never ask, so it always applies to them)
+ *   - the session cap, when the administrator lowered it after the session
+ *     was opened (a database sweep, only on the first request after the change)
  * and records session activity for the next idle check.
  *
  * Redis failures fail open here: the access token is only 15 minutes long,
@@ -40,6 +44,7 @@ export class JwtAuthGuard implements CanActivate {
     private readonly epoch: EpochService,
     private readonly policy: SecurityPolicyService,
     private readonly sessions: SessionService,
+    private readonly operators: OperatorAuthService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
@@ -79,7 +84,7 @@ export class JwtAuthGuard implements CanActivate {
       if ((claims.ep ?? 0) < (await this.epoch.current())) {
         throw AppError.unauthenticated('Invalid or expired token');
       }
-      await this.checkSession(claims.sid!, claims.typ, claims.rm === true);
+      await this.checkSession(claims.sid!, claims.typ, claims.rm === true, claims.org, claims.sub);
     }
 
     const ctx = RequestContextStore.require();
@@ -92,13 +97,21 @@ export class JwtAuthGuard implements CanActivate {
     return true;
   }
 
-  private async checkSession(sid: string, typ: string, remembered: boolean): Promise<void> {
+  private async checkSession(
+    sid: string,
+    typ: string,
+    remembered: boolean,
+    orgId: number,
+    subjectId: number,
+  ): Promise<void> {
     let revoked: string | null = null;
     let lastActivity: string | null = null;
+    let capMarker: string | null = null;
     try {
-      [revoked, lastActivity] = await this.redis.mget(
+      [revoked, lastActivity, capMarker] = await this.redis.mget(
         AuthKeys.revoked(sid),
         AuthKeys.activity(sid),
+        AuthKeys.capChecked(sid),
       );
     } catch (err) {
       this.logger.warn({ err }, 'session check skipped: redis unavailable');
@@ -106,17 +119,42 @@ export class JwtAuthGuard implements CanActivate {
     }
     if (revoked) throw AppError.unauthenticated('Invalid or expired token');
 
-    if (typ === 'user' && !remembered && lastActivity) {
-      const { sessionTimeoutMinutes } = await this.policy.policy();
-      if (
-        sessionTimeoutMinutes > 0 &&
-        Date.now() - Number(lastActivity) > sessionTimeoutMinutes * 60_000
-      ) {
-        // The refresh path will refuse it too; revoking here makes the next
-        // request fail without a database round trip.
+    const policy = await this.policy.policy();
+    // Remembered staff sessions are exempt, as in Reference; operators have no
+    // "keep me signed in", so for them the rule always applies (TW-AUTH-033).
+    const exempt = typ === 'user' && remembered;
+    const limit = policy.sessionTimeoutMinutes;
+    if (
+      !exempt &&
+      lastActivity &&
+      limit > 0 &&
+      Date.now() - Number(lastActivity) > limit * 60_000
+    ) {
+      if (typ === 'user') {
+        // Ends the row and writes the audit entry exactly once; the tombstone
+        // it sets makes the next request fail without a database round trip.
+        void this.sessions.expireIdle(orgId, subjectId, sid, limit, Number(lastActivity));
+      } else {
         void this.sessions.tombstone(sid);
-        throw AppError.unauthenticated('Invalid or expired token');
       }
+      throw idleTimeoutError(limit);
+    }
+
+    if (typ === 'user') {
+      void this.sessions.enforceCapIfChanged(
+        orgId,
+        subjectId,
+        sid,
+        policy.maxConcurrentSessions,
+        capMarker,
+      );
+    } else if (typ === 'platform_operator') {
+      void this.operators.enforceCapIfChanged(
+        subjectId,
+        sid,
+        policy.maxConcurrentSessions,
+        capMarker,
+      );
     }
     void this.sessions.touchActivity(sid);
   }

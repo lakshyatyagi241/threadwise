@@ -36,7 +36,11 @@ export async function fetchAll<T>(
   const out: T[] = [];
   let cursor: string | undefined;
   for (let i = 0; i < (opts.maxPages ?? 20); i++) {
-    const page = await call(path, { query: { limit: 200, ...query, cursor }, schema, signal: opts.signal });
+    const page = await call(path, {
+      query: { limit: 200, ...query, cursor },
+      schema,
+      signal: opts.signal,
+    });
     out.push(...page.data);
     if (!page.page.hasMore || !page.page.nextCursor) break;
     cursor = page.page.nextCursor;
