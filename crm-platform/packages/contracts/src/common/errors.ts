@@ -117,6 +117,10 @@ export const ERROR_CODES = {
   BCAST_LINK_EXPIRED: 'BCAST_LINK_EXPIRED',
   BCAST_NOT_RESUMABLE: 'BCAST_NOT_RESUMABLE',
 
+  // Telegram channel (TW-TG)
+  /** Telegram refused the token (getMe failed). */
+  TG_TOKEN_REJECTED: 'TG_TOKEN_REJECTED',
+
   // deals and pipelines (TW-DEAL)
   /** The stage belongs to a different pipeline than the deal (Reference ignored it, defaulted it, or 422'd by path). */
   DEAL_STAGE_MISMATCH: 'DEAL_STAGE_MISMATCH',
