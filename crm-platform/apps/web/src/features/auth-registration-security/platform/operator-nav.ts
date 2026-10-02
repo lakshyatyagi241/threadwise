@@ -50,6 +50,30 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  {
+    id: 'cms-frontend',
+    href: '/admin/frontend',
+    labelKey: 'marketing-site-cms.nav.frontend',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-blog',
+    href: '/admin/blog',
+    labelKey: 'marketing-site-cms.nav.blog',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-legal',
+    href: '/admin/legal-pages',
+    labelKey: 'marketing-site-cms.nav.legal',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-contact',
+    href: '/admin/contact-messages',
+    labelKey: 'marketing-site-cms.nav.contact',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
 ];
 
 /** The page a signed-in operator lands on and the brand link points to. */
