@@ -13,6 +13,7 @@ import { operatorFetch } from '@/features/auth-registration-security/platform/op
 
 export const KEYS = {
   packs: ['operator', 'addon-packs'] as const,
+  pack: (id: string) => ['operator', 'addon-pack', id] as const,
   fields: ['operator', 'addon-grant-fields'] as const,
   extensions: ['operator', 'extensions'] as const,
   workspace: ['workspace-addons'] as const,
@@ -20,6 +21,9 @@ export const KEYS = {
 
 export const fetchPacks = (signal?: AbortSignal) =>
   operatorFetch('/addons', { schema: addonPackListResponseSchema, signal });
+
+export const fetchPack = (id: string, signal?: AbortSignal) =>
+  operatorFetch(`/addons/${id}`, { schema: addonPackSchema, signal });
 
 export const fetchGrantFields = (signal?: AbortSignal) =>
   operatorFetch('/addons/fields', { schema: grantFieldsResponseSchema, signal });

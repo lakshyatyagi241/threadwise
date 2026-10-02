@@ -65,7 +65,12 @@ Manifest (`extension.json`), extension page, pack create/update/list, grant fiel
 
 ## Build order and status
 
-P0 (004, 005, 009, 011, 013, 025 to 028, 031, 032) and P1 (001 to 003, 007, 008, 010, 012, 014, 017 to 021, 023, 029, 030, 033) are built with tests. Not built: 006 (a package's own migrations are not run; see the first risk), 015 (dead code in Reference), 016 (route cache self-heal has no equivalent), 022 (boot teardown), 034 (EXT domain), 035 (docs only).
+Built with tests: P0 (004, 005, 009, 013 add-on side, 025 to 028, 031, 032) and P1/P2 (001 to 003, 007, 008, 010, 012, 014, 015, 017 to 023, 029, 030, 034).
+Partial and why: 011 (uploaded code is not executed), 013 (the plan form is PLAN's), 024 (settings hub tile is SET's), 033 and 032's checkout call (PAYGW, `checkout.service.ts` still refuses add-ons).
+Blocked: 006 (owner decision on running a package's own SQL). Not ported: 016 (no route cache in NestJS), 035 (docs only). Details and the hand-over list: `parity/addons-extension-registry.md`.
+
+Also in this domain: `ExtensionTokenService` (034), the browser extension's bearer tokens (hashed, always expiring), for the EXT domain's login, logout and guard; the migration
+`20261006100000_add_extension_token_rules.sql` makes expiry mandatory and cascades a user's tokens. The operator rail takes module entries from `GET /v2/platform/extensions/nav` (additive hook in `console-shell.tsx`).
 
 ## Risks
 

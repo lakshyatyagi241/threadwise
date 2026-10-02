@@ -1,4 +1,10 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+  type OnApplicationBootstrap,
+} from '@nestjs/common';
 import {
   ERROR_CODES,
   type ConnectEngineRequest,
@@ -41,7 +47,9 @@ export const NATIVE_INSTAGRAM_SLUG = 'instagram';
  * blocked while the server would accept the connect (TW-ADD-021 QUIRK).
  */
 @Injectable()
-export class EngineConnectionService {
+export class EngineConnectionService implements OnApplicationBootstrap {
+  private readonly logger = new Logger(EngineConnectionService.name);
+
   constructor(
     private readonly settings: PlatformSettingsService,
     private readonly store: ExtensionStore,
@@ -49,6 +57,47 @@ export class EngineConnectionService {
     private readonly audit: AuthAuditService,
     @Inject(ENGINE_HANDSHAKE_PORT) private readonly handshake: EngineHandshakePort,
   ) {}
+
+  /**
+   * TW-ADD-022: the native Instagram module is a plug, so once it is gone its self-wired connection must not keep
+   * claiming to be connected. A connection to a genuinely remote engine is left alone. Runs when the API starts and
+   * after the module is uninstalled; it only ever clears a flag, so running it twice is harmless.
+   */
+  async reconcileNativeInstagram(): Promise<boolean> {
+    if (await this.registry.isInstalled(NATIVE_INSTAGRAM_SLUG)) return false;
+    const s = await this.read('instagram');
+    if (!s.connected) return false;
+    const host = hostOf(s.url ?? '');
+    const local =
+      !host ||
+      host === hostOf(process.env.APP_URL ?? '') ||
+      host === '127.0.0.1' ||
+      host === 'localhost';
+    if (!local) return false;
+    await this.settings.mergeMember(
+      DOC,
+      'instagram',
+      { connected: false, lastCheckAt: new Date().toISOString() },
+      null,
+    );
+    await this.store.tx((tx) =>
+      this.audit.record(tx, {
+        event: 'platform.engine.instagram.reconciled',
+        status: 'success',
+        actorType: 'system',
+        actorId: null,
+        payload: { reason: 'native module is gone' },
+      }),
+    );
+    return true;
+  }
+
+  async onApplicationBootstrap(): Promise<void> {
+    // Never stops the API from starting (Reference swallowed these errors too).
+    await this.reconcileNativeInstagram().catch((err: unknown) =>
+      this.logger.warn({ err }, 'instagram reconcile skipped'),
+    );
+  }
 
   async nativeInstagramActive(): Promise<boolean> {
     return this.registry.isEnabled(NATIVE_INSTAGRAM_SLUG);
@@ -118,7 +167,7 @@ export class EngineConnectionService {
 
     const message = result.ok
       ? `${brand} connected.`
-      : `${brand} not connected - ${result.reason}.`;
+      : `${brand} not connected - ${result.reason?.replace(/\.$/, '')}.`;
     await this.settings.mergeMember(
       DOC,
       engine,

@@ -269,6 +269,7 @@ export class ExtensionsService {
       return { slug: row.slug, removed };
     });
     this.registry.invalidate();
+    if (result.slug === NATIVE_INSTAGRAM_SLUG) await this.engines.reconcileNativeInstagram();
     return {
       ok: true,
       message: `Removed ${result.slug} - ${result.removed} file(s) deleted.`,

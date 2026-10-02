@@ -134,6 +134,8 @@ export type AddonPackListResponse = z.infer<typeof addonPackListResponseSchema>;
 export const addonBulletSchema = z.object({
   kind: z.enum(['feature', 'limit_unlimited', 'limit_add']),
   key: z.string(),
+  /** What the screen shows for the key (a module's own label, or the key spelled out). */
+  label: z.string(),
   /** The amount for 'limit_add'. */
   amount: z.number().int().nullable(),
 });

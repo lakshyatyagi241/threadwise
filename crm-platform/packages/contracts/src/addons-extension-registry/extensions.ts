@@ -152,6 +152,8 @@ export const grantFieldSchema = z.object({
 export type GrantField = z.infer<typeof grantFieldSchema>;
 
 export const grantFieldsResponseSchema = z.object({
+  /** Active currencies for the price (the form's Currency list, TW-ADD-026). */
+  currencies: z.array(z.object({ code: z.string(), name: z.string() })).default([]),
   features: z.array(grantFieldSchema),
   limits: z.array(
     grantFieldSchema.extend({ default: z.number().int().nullable(), hint: z.string() }),
