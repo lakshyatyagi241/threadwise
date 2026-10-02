@@ -636,6 +636,140 @@ export class CampaignsRepository {
     return r?.uuid ?? null;
   }
 
+  // -------------------------------------------------------------- reports and callbacks
+
+  async recipientOf(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    contactId: number,
+  ): Promise<
+    | {
+        id: number;
+        status: string;
+        sentAt: Date | null;
+        deliveredAt: Date | null;
+        readAt: Date | null;
+      }
+    | undefined
+  > {
+    const res = await tx.execute(sql`
+      SELECT id, status, sent_at, delivered_at, read_at FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND contact_id = ${contactId}
+      ORDER BY id LIMIT 1 FOR UPDATE`);
+    const r = res.rows[0] as Raw | undefined;
+    return r
+      ? {
+          id: Number(r.id),
+          status: String(r.status),
+          sentAt: date(r.sent_at),
+          deliveredAt: date(r.delivered_at),
+          readAt: date(r.read_at),
+        }
+      : undefined;
+  }
+
+  /** Writes a reported status. Times are set once (the first report wins), the error and message id only when given. */
+  async applyReport(
+    tx: Tx,
+    orgId: number,
+    rowId: number,
+    v: {
+      status: string;
+      error?: string | null;
+      providerMessageId?: string | null;
+      variant?: string | null;
+      sentAt?: Date | null;
+      deliveredAt?: Date | null;
+      readAt?: Date | null;
+    },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = ${v.status},
+        error_message = coalesce(${v.error ? v.error.slice(0, 1024) : null}, error_message),
+        whatsapp_message_id = coalesce(${v.providerMessageId ?? null}, whatsapp_message_id),
+        variant = coalesce(${v.variant ? v.variant.slice(0, 8) : null}, variant),
+        sent_at = coalesce(sent_at, ${v.sentAt ? v.sentAt.toISOString() : null}::timestamptz),
+        delivered_at = coalesce(delivered_at, ${v.deliveredAt ? v.deliveredAt.toISOString() : null}::timestamptz),
+        read_at = coalesce(read_at, ${v.readAt ? v.readAt.toISOString() : null}::timestamptz)
+      WHERE org_id = ${orgId} AND id = ${rowId}`);
+  }
+
+  async setResponse(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    contactId: number,
+    response: string,
+    at: Date,
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET response = ${response.slice(0, 4096)}, responded_at = ${at.toISOString()}::timestamptz
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND contact_id = ${contactId}
+      RETURNING id`);
+    return res.rows.length;
+  }
+
+  /** The contact whose number is `digits`, or ends with its last ten digits. */
+  async contactByPhone(
+    tx: Tx,
+    orgId: number,
+    digits: string,
+  ): Promise<{ id: number; unsubscribed: boolean } | null> {
+    const tail = digits.slice(-10);
+    const res = await tx.execute(sql`
+      SELECT id, is_unsubscribed FROM contacts
+      WHERE org_id = ${orgId}
+        AND (regexp_replace(coalesce(phone, ''), '[^0-9]', '', 'g') = ${digits}
+             OR (${tail} <> '' AND regexp_replace(coalesce(phone, ''), '[^0-9]', '', 'g') LIKE ${`%${tail}`}))
+      ORDER BY (regexp_replace(coalesce(phone, ''), '[^0-9]', '', 'g') = ${digits}) DESC, id LIMIT 1`);
+    const r = res.rows[0] as { id: number | string; is_unsubscribed: boolean } | undefined;
+    return r ? { id: Number(r.id), unsubscribed: r.is_unsubscribed } : null;
+  }
+
+  /** The row of this campaign for a contact, else the row whose own phone matches. */
+  async unsubscribeRow(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    contactId: number | null,
+    digits: string,
+  ): Promise<{ id: number; contactId: number | null } | undefined> {
+    const tail = digits.slice(-10);
+    const res = await tx.execute(sql`
+      SELECT id, contact_id FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId}
+        AND ((${contactId}::bigint IS NOT NULL AND contact_id = ${contactId}::bigint)
+             OR regexp_replace(coalesce(phone_number, ''), '[^0-9]', '', 'g') = ${digits}
+             OR (${tail} <> '' AND regexp_replace(coalesce(phone_number, ''), '[^0-9]', '', 'g') LIKE ${`%${tail}`}))
+      ORDER BY id LIMIT 1 FOR UPDATE`);
+    const r = res.rows[0] as
+      { id: number | string; contact_id: number | string | null } | undefined;
+    return r ? { id: Number(r.id), contactId: num(r.contact_id) } : undefined;
+  }
+
+  async markUnsubscribed(tx: Tx, orgId: number, rowId: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = 'unsubscribed', is_unsubscribed = true, unsubscribed = true, unsubscribed_at = now()
+      WHERE org_id = ${orgId} AND id = ${rowId}`);
+  }
+
+  /** Flips the contact's workspace-level flag so other campaigns and broadcasts skip it. Returns whether it changed. */
+  async optOutContact(tx: Tx, orgId: number, contactId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE contacts SET is_unsubscribed = true, unsubscribed_at = coalesce(unsubscribed_at, now())
+      WHERE org_id = ${orgId} AND id = ${contactId} AND NOT is_unsubscribed
+      RETURNING id`);
+    return res.rows.length > 0;
+  }
+
+  async contactPhone(tx: Tx, orgId: number, contactId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT phone FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+    );
+    return (res.rows[0] as { phone: string | null } | undefined)?.phone ?? null;
+  }
+
   // -------------------------------------------------------------- list and tiles
 
   /** All of the workspace's campaigns with their counts, newest first: the list filters and counts it in memory like WaDesk. */

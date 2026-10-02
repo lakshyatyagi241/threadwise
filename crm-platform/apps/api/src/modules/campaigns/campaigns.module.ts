@@ -15,9 +15,12 @@ import {
   CAMPAIGN_SETTINGS,
 } from './_shims/tokens';
 import { CampaignAudienceService } from './audience.service';
+import { CampaignCallbacksController } from './campaign-callbacks.controller';
+import { CampaignCallbacksService } from './campaign-callbacks.service';
 import { CampaignEvents } from './campaign-events';
 import { CampaignMirrorService } from './campaign-mirror.service';
 import { CampaignJobs } from './campaign-jobs';
+import { CampaignReceiptsService } from './campaign-receipts.service';
 import { CampaignsActionsController } from './campaigns-actions.controller';
 import { CampaignsActionsService } from './campaigns-actions.service';
 import { CampaignsReadController } from './campaigns-read.controller';
@@ -33,7 +36,12 @@ import { CampaignsService } from './campaigns.service';
  */
 @Module({
   imports: [BroadcastsModule, CrmModule],
-  controllers: [CampaignsController, CampaignsReadController, CampaignsActionsController],
+  controllers: [
+    CampaignsController,
+    CampaignsReadController,
+    CampaignsActionsController,
+    CampaignCallbacksController,
+  ],
   providers: [
     CryptoService,
     CampaignsRepository,
@@ -44,6 +52,8 @@ import { CampaignsService } from './campaigns.service';
     CampaignEvents,
     CampaignJobs,
     CampaignMirrorService,
+    CampaignCallbacksService,
+    CampaignReceiptsService,
     { provide: CAMPAIGN_PLAN_GATE, useClass: OpenCampaignPlanGate },
     { provide: CAMPAIGN_BILLING, useClass: OpenCampaignBilling },
     { provide: CAMPAIGN_FLOW_STARTER, useClass: NoFlowStarter },
@@ -58,6 +68,7 @@ import { CampaignsService } from './campaigns.service';
     CampaignEvents,
     CampaignJobs,
     CampaignMirrorService,
+    CampaignReceiptsService,
     CAMPAIGN_PLAN_GATE,
     CAMPAIGN_BILLING,
     CAMPAIGN_FLOW_STARTER,

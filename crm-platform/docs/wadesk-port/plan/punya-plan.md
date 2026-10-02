@@ -24,23 +24,16 @@ Done: 009, 010, 011 (partly), 012, 013 (stub), 014, 015, 016, 017, 025, 026, 027
 
 ## CAMP (campaigns, WaDesk wa-campaigns)
 
-Inventory is `pending`: first write the inventory from the reference (routes, tables, wiring), then follow the same order as BCAST:
-create flow, sender, read API, actions, tracking, receipts, events, web, parity.
+Inventory written 2026-10-02: `docs/wadesk-port/inventory/campaigns.md` (WD-CAMP-001 to 028). Parity: `docs/wadesk-port/parity/campaigns.md`.
 
-Reference surface (scoped 2026-10-02, nothing written yet):
-
-- Routes: `routes/web.php` prefix `wa-campaigns` (index, create, store, edit, update, destroy, show, export, sample-csv, bulk-delete,
-  cancel, resume, send-now, resend, AI model list and AI generate) and `routes/api.php` Node callbacks (`nodeCampaignStatus`,
-  `nodeContactStatus`, `nodeStatusByMessageId`, `nodeTrackResponse`, `nodeUnsubscribe`, `nodeCampaignDrain`).
-- Code: `app/Http/Controllers/WaCampaignsController.php` (5,881 lines), models `WpCampaign` and `WpCampaignContact`,
-  `app/Services/CampaignScheduleSweeper.php`; webhook events `campaign_created`, `campaign_status_updated`,
-  `campaign_contact_status_updated`, `campaign_contact_replied`, `contact_opt_in`.
-- Screens: `resources/views/user/wa-campaigns/{index,create,edit,detail,_cards}.blade.php` and their scripts
-  `user-wa-campaigns-{index,create,edit,detail}.js`. (`user/campaigns` and `meta-ads` are the separate Meta Ads product, not CAMP.)
-- Shared with BCAST and reusable as is: the template picker and overrides panel, the sender and audience pickers, the link
-  tracker, pacing, the receipt state machine, the webhook and bell mappers.
-- Order: read the controller in slices (store and validation, audiences and CSV, A/B and AI, send and sweeper, callbacks, detail),
-  writing one inventory entry per behavior, then the same build order as BCAST. This is a multi-session job; do it one slice per commit.
+| Step | What                                                                                | Features                    |
+| ---- | ----------------------------------------------------------------------------------- | --------------------------- |
+| C1   | Inventory, create, edit, list, detail, builder, recipients (DONE)                   | 001-010, 019                |
+| C2   | Cancel, resume, send now, resend, delete, export; the sender and the sweeper (DONE) | 011-018, 020, 023           |
+| C3   | Node callbacks, provider receipts, replies, opt-outs (DONE)                         | 021, 022                    |
+| C4   | Web: list, builder (create and edit), detail                                        | 001, 002, 003, 010, 016-020 |
+| C5   | Webhook and bell mappers for `campaign.*`; segments and engagement tabs             | 019, 024                    |
+| C6   | Flow campaigns, build with AI, Meta click sync (BLOCKED: other domains)             | 025, 026, 027               |
 
 ## Channels and ECOM
 
