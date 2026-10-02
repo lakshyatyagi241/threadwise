@@ -235,7 +235,8 @@ describe('create and submit (TW-TPL-007, 024, 025)', () => {
 
     const detail = await api.as(t.admin).get(`/v2/templates/${res.body.template.id}`);
     expect(detail.status).toBe(200);
-    expect(detail.body.metaPayload).toMatchObject({ name: 'order_update', category: 'UTILITY' });
+    // The payload is rebuilt from the stored template, so it carries the category Meta settled on (it recategorised the request).
+    expect(detail.body.metaPayload).toMatchObject({ name: 'order_update', category: 'MARKETING' });
     expect(detail.body.lint.filter((i: { severity: string }) => i.severity === 'error')).toEqual(
       [],
     );
@@ -548,8 +549,8 @@ describe('sync from Meta (TW-TPL-028)', () => {
       meta_template_id: 'MC',
       status: 'approved',
       meta_category: 'MARKETING',
-      provider_config_id: String(conn.id),
     });
+    expect(Number(rows.promo_c.provider_config_id)).toBe(Number(conn.id));
     expect(a.id).toBeGreaterThan(0);
     expect(b.id).toBeGreaterThan(0);
     expect(await api.events(t.orgId, 'template.synced')).toHaveLength(2);

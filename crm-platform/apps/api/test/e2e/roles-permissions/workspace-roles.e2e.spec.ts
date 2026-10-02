@@ -203,6 +203,9 @@ describe('presets (TW-RBAC-004, 024)', () => {
       ['inbox.conversation.read', 'team'],
       ['support.ticket.create', 'all'],
       ['support.ticket.read', 'all'],
+      ['wallet.balance.read', 'all'],
+      ['wallet.statement.export', 'all'],
+      ['wallet.statement.read', 'all'],
     ]);
   });
 
@@ -441,6 +444,9 @@ describe('landing and the permission map (TW-RBAC-033, 035)', () => {
       'inbox.conversation.read',
       'support.ticket.create',
       'support.ticket.read',
+      'wallet.balance.read',
+      'wallet.statement.export',
+      'wallet.statement.read',
     ]);
   });
 });
