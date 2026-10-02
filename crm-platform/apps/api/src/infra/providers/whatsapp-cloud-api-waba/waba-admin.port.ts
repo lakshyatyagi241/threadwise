@@ -75,6 +75,7 @@ export interface PlatformReadiness {
   /** Interakt `extras.setup.solutionID`, when the Interakt route is the default. */
   solutionId: string | null;
   graphVersion: string;
+  coexistence: boolean;
   defaultProvider: WabaProviderKind;
   /** Public so the browser SDK can init; the secret never leaves the server. */
   missing: string[];

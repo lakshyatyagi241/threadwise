@@ -64,6 +64,17 @@ export const wabaEnvSchema = z.object({
   /** The platform's own business id; fallback to find a WABA when `debug_token` does not list one. */
   META_BUSINESS_ID: optionalString(64),
 
+  /** Offer "connect my existing Business App number" (coexistence) in Embedded Signup. */
+  WABA_COEXISTENCE: z.preprocess(
+    blankToUndefined,
+    z
+      .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
+      .transform((v) => v === true || v === 'true' || v === '1')
+      .default(false),
+  ),
+  /** Webhook handshake token. Normally saved in the platform settings; this is the env fallback. */
+  WABA_VERIFY_TOKEN: optionalString(96),
+
   // --- Inbound -----------------------------------------------------------------------------------------------------
   /**
    * Public origin Meta/Interakt can reach, without a trailing slash. The per-phone callback override points at

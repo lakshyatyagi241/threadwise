@@ -1,6 +1,8 @@
 {
   "whatsapp-cloud-api-waba": {
-    "nav": { "title": "WhatsApp numbers" },
+    "nav": {
+      "title": "WhatsApp numbers"
+    },
     "common": {
       "dismiss": "Dismiss",
       "cancel": "Cancel",
@@ -126,7 +128,10 @@
       "verifyGood": "Token looks good – safe to connect.",
       "verifyBad": "Problems found – fix these before connecting.",
       "idDigits": "Meta ids are numbers only",
-      "required": "This field is required"
+      "required": "This field is required",
+      "or": "or",
+      "launchCoexistence": "Connect my existing Business App number",
+      "coexistenceNote": "Scan the QR code Meta shows in its window from the WhatsApp Business app. Sending is capped at about 5 messages a second, there is no blue tick, and linked devices are unlinked while the number is connected."
     },
     "health": {
       "crumbDevices": "WhatsApp numbers",

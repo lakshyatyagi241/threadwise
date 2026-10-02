@@ -196,6 +196,28 @@ export function ConnectEmbeddedModal({
             t('launch')
           )}
         </Button>
+        {readiness.coexistence && (
+          <>
+            <div
+              className="flex items-center gap-3 text-xs text-muted-foreground"
+              aria-hidden="true"
+            >
+              <span className="h-px flex-1 bg-border" />
+              {t('or')}
+              <span className="h-px flex-1 bg-border" />
+            </div>
+            <Button
+              id="waba-launch-embedded-coex"
+              className="w-full"
+              variant="secondary"
+              disabled={busy || !fb}
+              onClick={() => launch('coexistence')}
+            >
+              {t('launchCoexistence')}
+            </Button>
+            <p className="text-xs text-muted-foreground">{t('coexistenceNote')}</p>
+          </>
+        )}
       </div>
     </Modal>
   );
