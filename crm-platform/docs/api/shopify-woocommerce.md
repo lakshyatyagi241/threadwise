@@ -5,11 +5,12 @@ session and the permission shown; the platform routes need an operator; the call
 
 ## Shopify (WD-ECOM-004 to 007, 013)
 
-| Method and path               | Permission     | What                                                                                                                                                                    |
-| ----------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /shopify`                | `ecom.read`    | `{appEnabled, scopes, eventTopics, store}`: whether the platform app is on, what it asks for, the 12 webhook topics and the workspace's store (or null). Never a token. |
-| `POST /shopify/connect/start` | `ecom.connect` | Body `{shop}` (a handle, a `*.myshopify.com` name or a pasted address). 200 `{url}`: the store's approval page. 422 `ECOM_SHOP_INVALID`, 422 `ECOM_NOT_CONFIGURED`.     |
-| `DELETE /shopify/stores/:id`  | `ecom.connect` | 204. Removes the store's webhooks (errors ignored) and the row with its mapping and logs. 404 for another workspace's store.                                            |
+| Method and path                 | Permission     | What                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /shopify`                  | `ecom.read`    | `{appEnabled, scopes, eventTopics, store}`: whether the platform app is on, what it asks for, the 12 webhook topics and the workspace's store (or null). Never a token.                                                                                                                                                    |
+| `POST /shopify/connect/start`   | `ecom.connect` | Body `{shop}` (a handle, a `*.myshopify.com` name or a pasted address). 200 `{url}`: the store's approval page. 422 `ECOM_SHOP_INVALID`, 422 `ECOM_NOT_CONFIGURED`.                                                                                                                                                        |
+| `POST /shopify/stores/:id/sync` | `ecom.connect` | Sync now: 200 `{ok, counts: {products, orders, customers}, importQueued}`. A store that does not answer is flagged `error` and answers 200 `{ok: false, message}`; a store whose app was removed asks to be connected again. 404 for another workspace's store. The import (every page, up to ten) runs in the background. |
+| `DELETE /shopify/stores/:id`    | `ecom.connect` | 204. Removes the store's webhooks (errors ignored) and the row with its mapping and logs. 404 for another workspace's store.                                                                                                                                                                                               |
 
 `ShopifyStore`: `id` (uuid), `storeUrl`, `storeName`, `status`, `connected` (credentials held), `connectedAt`, `lastVerifiedAt`, `productsSyncedAt`,
 `ordersSyncedAt`, `customersSyncedAt`, `syncStats`, `webhookUrl`, `webhookIds` (topic to the store's id), `createdAt`, `rowVersion`, `shopId`, `shopEmail`,
@@ -25,12 +26,13 @@ Give Shopify `{APP_URL}/v2/shopify/oauth/callback` as the app's redirect address
 
 ## WooCommerce (WD-ECOM-025, 026, 013)
 
-| Method and path                  | Permission     | What                                                                                                                                                                                                  |
-| -------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /woocommerce`               | `ecom.read`    | `{appEnabled, eventTopics, store}`: the 7 webhook topics and the workspace's store (or null). Never a key.                                                                                            |
-| `POST /woocommerce/test`         | `ecom.connect` | Body `{storeUrl, consumerKey, consumerSecret}`. 200 `{ok, message}` either way ("Connection verified. Store: ..." or the reason); saves nothing.                                                      |
-| `POST /woocommerce/connect`      | `ecom.connect` | Same body. 201 the store. 422 `ECOM_DISABLED`, `ECOM_STORE_INVALID`, `ECOM_STORE_UNREACHABLE` ("Could not reach WooCommerce: ..."). Registers the 7 webhooks; reconnecting keeps the row and mapping. |
-| `DELETE /woocommerce/stores/:id` | `ecom.connect` | 204, as Shopify's.                                                                                                                                                                                    |
+| Method and path                     | Permission     | What                                                                                                                                                                                                  |
+| ----------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /woocommerce`                  | `ecom.read`    | `{appEnabled, eventTopics, store}`: the 7 webhook topics and the workspace's store (or null). Never a key.                                                                                            |
+| `POST /woocommerce/test`            | `ecom.connect` | Body `{storeUrl, consumerKey, consumerSecret}`. 200 `{ok, message}` either way ("Connection verified. Store: ..." or the reason); saves nothing.                                                      |
+| `POST /woocommerce/connect`         | `ecom.connect` | Same body. 201 the store. 422 `ECOM_DISABLED`, `ECOM_STORE_INVALID`, `ECOM_STORE_UNREACHABLE` ("Could not reach WooCommerce: ..."). Registers the 7 webhooks; reconnecting keeps the row and mapping. |
+| `POST /woocommerce/stores/:id/sync` | `ecom.connect` | Sync now, as Shopify's.                                                                                                                                                                               |
+| `DELETE /woocommerce/stores/:id`    | `ecom.connect` | 204, as Shopify's.                                                                                                                                                                                    |
 
 `WoocommerceStore`: the same fields as Shopify's up to `rowVersion`, then `storeCurrency`, `storeCountry`, `storeVersion`.
 
