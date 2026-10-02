@@ -22,16 +22,10 @@ export function wabaTail(wabaId: string, n = 6): string {
   return wabaId.length <= n ? wabaId : `…${wabaId.slice(-n)}`;
 }
 
-/** `YYYY-MM` for a date, in UTC (the API cuts months in UTC). */
-export function monthKey(d: Date): string {
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
-}
-
-/** The current month and the eleven before it, newest first, each with a label in the person's language. */
-export function monthOptions(now: Date, locale: string, count = 12): Array<{ value: string; label: string }> {
-  const fmt = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' });
-  return Array.from({ length: count }, (_, i) => {
-    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
-    return { value: monthKey(d), label: fmt.format(d) };
-  });
+/** "02 Oct - 02 Oct": the P&L month window, in UTC like the API. */
+export function formatRange(from: string, to: string, locale: string): string {
+  const day = new Intl.DateTimeFormat(locale, { day: '2-digit', timeZone: 'UTC' });
+  const month = new Intl.DateTimeFormat(locale, { month: 'short', timeZone: 'UTC' });
+  const one = (iso: string) => `${day.format(new Date(iso))} ${month.format(new Date(iso))}`;
+  return `${one(from)} - ${one(to)}`;
 }

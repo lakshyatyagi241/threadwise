@@ -29,7 +29,8 @@ export function RegisterCard({ canEdit }: { canEdit: boolean }) {
     queryKey: KEYS.allocations,
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) => operatorApi.allocations(pageParam, signal),
-    getNextPageParam: (last) => (last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined),
+    getNextPageParam: (last) =>
+      last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
     refetchOnWindowFocus: false,
   });
 
@@ -77,7 +78,9 @@ export function RegisterCard({ canEdit }: { canEdit: boolean }) {
             <table className="w-full min-w-[40rem] text-sm" aria-label={t('label')}>
               <thead>
                 <tr className="border-b border-border text-start text-xs text-muted-foreground">
-                  {(['workspace', 'waba', 'allocation', 'currency', 'status', 'action'] as const).map((c) => (
+                  {(
+                    ['workspace', 'waba', 'allocation', 'currency', 'status', 'action'] as const
+                  ).map((c) => (
                     <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
                       {t(`columns.${c}`)}
                     </th>

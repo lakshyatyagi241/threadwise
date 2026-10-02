@@ -49,7 +49,9 @@ export function AttachCard({
   const reportError = (err: unknown) => {
     const view = errorView(err);
     toast.error(
-      view.kind === 'metaRejected' ? te('metaRejected', { detail: view.detail ?? '' }) : te(view.kind),
+      view.kind === 'metaRejected'
+        ? te('metaRejected', { detail: view.detail ?? '' })
+        : te(view.kind),
     );
   };
 
@@ -70,7 +72,9 @@ export function AttachCard({
   const attachAll = useMutation({
     mutationFn: () => operatorApi.attachAll(),
     onSuccess: async (r) => {
-      toast.success(t('attachAllDone', { attached: r.attached, failed: r.failed, skipped: r.skipped }));
+      toast.success(
+        t('attachAllDone', { attached: r.attached, failed: r.failed, skipped: r.skipped }),
+      );
       if (r.remaining > 0) toast.success(t('attachAllMore', { remaining: r.remaining }));
       setConfirmAll(false);
       await refresh();

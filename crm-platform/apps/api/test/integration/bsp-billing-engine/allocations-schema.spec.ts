@@ -49,7 +49,8 @@ describe('bsp_credit_allocations: schema, constraints and isolation', () => {
   });
 
   afterAll(async () => {
-    if (created.length) await owner.query(`DELETE FROM organizations WHERE id = ANY($1)`, [created]);
+    if (created.length)
+      await owner.query(`DELETE FROM organizations WHERE id = ANY($1)`, [created]);
     await Promise.all([owner.end(), app.end()]);
   });
 
@@ -83,7 +84,9 @@ describe('bsp_credit_allocations: schema, constraints and isolation', () => {
     );
     expect(seenByA).toEqual(['iso-a']);
 
-    await expect(asOrg(orgA, () => insertAs(orgB, 'smuggled'))).rejects.toThrow(/row-level security/);
+    await expect(asOrg(orgA, () => insertAs(orgB, 'smuggled'))).rejects.toThrow(
+      /row-level security/,
+    );
 
     // With no tenant context at all nothing is visible: the failure mode is empty, not everything.
     await app.query('BEGIN');
@@ -98,9 +101,14 @@ describe('bsp_credit_allocations: schema, constraints and isolation', () => {
       [orgA],
     );
     await expect(
-      owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'uniq-1')`, [orgA]),
+      owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'uniq-1')`, [
+        orgA,
+      ]),
     ).rejects.toThrow(/uq_bsp_credit_allocations_org_waba/);
-    await owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'uniq-1')`, [orgB]);
+    await owner.query(
+      `INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'uniq-1')`,
+      [orgB],
+    );
   });
 
   it('the upsert the attach path uses retries a failed row in place and never touches an attached one', async () => {
@@ -126,19 +134,28 @@ describe('bsp_credit_allocations: schema, constraints and isolation', () => {
 
   it('refuses a status outside the three, a lower-case or oversized currency and a credit source nobody implements', async () => {
     const bad = (cols: string, vals: string) =>
-      owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id, ${cols}) VALUES ($1, 'chk-' || $2, ${vals})`, [
-        orgA,
-        Math.random().toString(36).slice(2),
-      ]);
+      owner.query(
+        `INSERT INTO bsp_credit_allocations (org_id, waba_id, ${cols}) VALUES ($1, 'chk-' || $2, ${vals})`,
+        [orgA, Math.random().toString(36).slice(2)],
+      );
     await expect(bad('status', `'pending'`)).rejects.toThrow(/chk_bsp_credit_allocations_status/);
     await expect(bad('currency', `'usd'`)).rejects.toThrow(/chk_bsp_credit_allocations_currency/);
-    await expect(bad('currency', `'ABCDEFGHI'`)).rejects.toThrow(/chk_bsp_credit_allocations_currency/);
-    await expect(bad('credit_source', `'carrier-pigeon'`)).rejects.toThrow(/chk_bsp_credit_allocations_source/);
+    await expect(bad('currency', `'ABCDEFGHI'`)).rejects.toThrow(
+      /chk_bsp_credit_allocations_currency/,
+    );
+    await expect(bad('credit_source', `'carrier-pigeon'`)).rejects.toThrow(
+      /chk_bsp_credit_allocations_source/,
+    );
   });
 
   it('bumps row_version and updated_at on update (the optimistic lock)', async () => {
-    await owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'ver-1')`, [orgA]);
-    await owner.query(`UPDATE bsp_credit_allocations SET status = 'revoked' WHERE org_id = $1 AND waba_id = 'ver-1'`, [orgA]);
+    await owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'ver-1')`, [
+      orgA,
+    ]);
+    await owner.query(
+      `UPDATE bsp_credit_allocations SET status = 'revoked' WHERE org_id = $1 AND waba_id = 'ver-1'`,
+      [orgA],
+    );
     const r = await owner.query(
       `SELECT row_version FROM bsp_credit_allocations WHERE org_id = $1 AND waba_id = 'ver-1'`,
       [orgA],
@@ -155,7 +172,9 @@ describe('bsp_credit_allocations: schema, constraints and isolation', () => {
         )
       ).rows[0].id,
     );
-    await owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'gone')`, [org]);
+    await owner.query(`INSERT INTO bsp_credit_allocations (org_id, waba_id) VALUES ($1, 'gone')`, [
+      org,
+    ]);
     await owner.query(`DELETE FROM organizations WHERE id = $1`, [org]);
     const left = await owner.query(`SELECT 1 FROM bsp_credit_allocations WHERE org_id = $1`, [org]);
     expect(left.rows).toHaveLength(0);

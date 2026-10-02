@@ -32,7 +32,12 @@ beforeAll(async () => {
     let body = '';
     req.on('data', (c) => (body += c));
     req.on('end', () => {
-      seen.push({ method: req.method ?? '', url: req.url ?? '', auth: req.headers.authorization, body });
+      seen.push({
+        method: req.method ?? '',
+        url: req.url ?? '',
+        auth: req.headers.authorization,
+        body,
+      });
       const r = reply(req);
       setTimeout(() => {
         res.statusCode = r.status;
@@ -92,7 +97,9 @@ describe('attach (TW-BSP-006 rule 6)', () => {
     const res = await source.attach(conn(), '111', '2222', 'USD');
     expect(res).toEqual({ ok: true, allocationConfigId: 'alloc-9' });
     expect(seen[0]).toMatchObject({ method: 'POST', auth: `Bearer ${TOKEN}`, body: '' });
-    expect(seen[0]!.url).toBe('/v26.0/111/whatsapp_credit_sharing_and_attach?waba_id=2222&waba_currency=USD');
+    expect(seen[0]!.url).toBe(
+      '/v26.0/111/whatsapp_credit_sharing_and_attach?waba_id=2222&waba_currency=USD',
+    );
   });
 
   it('a 2xx without an allocation id is a failure, not a success', async () => {
@@ -102,17 +109,26 @@ describe('attach (TW-BSP-006 rule 6)', () => {
   });
 
   it('shows Meta own error message, or the status when it gave none', async () => {
-    reply = () => ({ status: 400, body: { error: { message: 'WABA already has a payment method' } } });
+    reply = () => ({
+      status: 400,
+      body: { error: { message: 'WABA already has a payment method' } },
+    });
     expect(await source.attach(conn(), '111', '2222', 'USD')).toEqual({
       ok: false,
       error: 'WABA already has a payment method',
     });
     reply = () => ({ status: 502 });
-    expect(await source.attach(conn(), '111', '2222', 'USD')).toEqual({ ok: false, error: 'HTTP 502' });
+    expect(await source.attach(conn(), '111', '2222', 'USD')).toEqual({
+      ok: false,
+      error: 'HTTP 502',
+    });
   });
 
   it('never echoes the token, even when Meta does', async () => {
-    reply = () => ({ status: 401, body: { error: { message: `Invalid OAuth access token ${TOKEN}` } } });
+    reply = () => ({
+      status: 401,
+      body: { error: { message: `Invalid OAuth access token ${TOKEN}` } },
+    });
     const res = await source.attach(conn(), '111', '2222', 'USD');
     expect(res.ok).toBe(false);
     expect(JSON.stringify(res)).not.toContain(TOKEN);
@@ -146,11 +162,18 @@ describe('revoke (TW-BSP-009 rule 1)', () => {
   it('deletes the stored allocation id', async () => {
     reply = () => ({ status: 200, body: { success: true } });
     expect(await source.revoke(conn(), 'alloc-9')).toEqual({ ok: true });
-    expect(seen[0]).toMatchObject({ method: 'DELETE', url: '/v26.0/alloc-9', auth: `Bearer ${TOKEN}` });
+    expect(seen[0]).toMatchObject({
+      method: 'DELETE',
+      url: '/v26.0/alloc-9',
+      auth: `Bearer ${TOKEN}`,
+    });
   });
 
   it('an empty allocation id fails locally with the Reference wording, without calling Meta', async () => {
-    expect(await source.revoke(conn(), '')).toEqual({ ok: false, error: 'No allocation id to revoke.' });
+    expect(await source.revoke(conn(), '')).toEqual({
+      ok: false,
+      error: 'No allocation id to revoke.',
+    });
     expect(seen).toHaveLength(0);
   });
 

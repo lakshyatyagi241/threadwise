@@ -137,10 +137,9 @@
     },
     "dashboard": {
       "title": "Reseller P&L",
-      "eyebrow": "Month",
+      "eyebrow": "This month",
       "intro": "Revenue is what customers were charged for delivered messages, Meta cost is what the same messages cost you, margin is the difference. Refunded and free messages are not counted.",
       "linkConnect": "Connect Meta",
-      "month": "Month",
       "revenue": "Revenue (charged)",
       "metaCost": "Meta cost",
       "margin": "Margin (profit)",

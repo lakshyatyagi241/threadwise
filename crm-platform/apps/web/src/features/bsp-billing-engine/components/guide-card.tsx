@@ -3,7 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { Badge, Card } from '@crm/ui';
 
-const PERMISSIONS = ['business_management', 'whatsapp_business_management', 'whatsapp_business_messaging'];
+const PERMISSIONS = [
+  'business_management',
+  'whatsapp_business_management',
+  'whatsapp_business_messaging',
+];
 
 /** The setup guide beside the forms: where to find each value at Meta and what to know before attaching. */
 export function GuideCard() {
