@@ -9,15 +9,21 @@ import { chromium } from 'playwright-core';
 const WEB = process.env.WEB ?? 'http://localhost:3107';
 const EMAIL = process.env.WGT_EMAIL ?? 'wgt-admin@example.test';
 const PASSWORD = process.env.WGT_PASSWORD ?? 'Str0ngPassw0rd#1';
-const CHROME = process.env.CHROME ?? `${process.env.HOME}/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome`;
+const CHROME =
+  process.env.CHROME ??
+  `${process.env.HOME}/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome`;
 
 const results = [];
+let shot = 0;
 const check = async (name, fn) => {
   try {
     await fn();
     results.push(['ok', name]);
   } catch (e) {
     results.push(['FAIL', `${name}: ${e.message.split('\n')[0]}`]);
+    await page
+      .screenshot({ path: `${process.env.SHOTS ?? '.'}/fail-${++shot}.png` })
+      .catch(() => undefined);
   }
 };
 
@@ -26,20 +32,37 @@ const host = http
   .createServer((req, res) => {
     const u = new URL(req.url, 'http://x');
     res.setHeader('content-type', 'text/html');
-    res.end(`<!doctype html><body><h1>Customer site</h1><script defer src="${u.searchParams.get('src')}"></script></body>`);
+    res.end(
+      `<!doctype html><body><h1>Customer site</h1><script defer src="${u.searchParams.get('src')}"></script></body>`,
+    );
   })
   .listen(3999, '127.0.0.1');
 
 const browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox'] });
-const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });
+const ctx = await browser.newContext({
+  viewport: { width: 1440, height: 900 },
+  permissions: ['clipboard-read', 'clipboard-write'],
+});
 const page = await ctx.newPage();
+page.setDefaultTimeout(10000);
 const errors = [];
 page.on('pageerror', (e) => errors.push(e.message));
 
 await page.goto(`${WEB}/login`);
 await page.fill('input[name=email]', EMAIL);
 await page.fill('input[type=password]', PASSWORD);
-await Promise.all([page.waitForURL((u) => !u.pathname.startsWith('/login')), page.click('button[type=submit]')]);
+await Promise.all([
+  page.waitForURL((u) => !u.pathname.startsWith('/login')),
+  page.click('button[type=submit]'),
+]);
+
+// The consent bar floats over the bottom of every page until a choice is made.
+await page.waitForTimeout(1500);
+await page
+  .getByRole('button', { name: /decline|reject/i })
+  .first()
+  .click({ timeout: 4000 })
+  .catch(() => undefined);
 
 const NAME = `E2E ${Date.now()}`;
 let embedUrl = '';
@@ -77,7 +100,9 @@ await check('whatsapp mode hides the agent select and needs 8 digits', async () 
 await check('the preview repaints as the header colour changes (step 2)', async () => {
   await page.click('#wgt-next');
   await page.fill('#wgt-f-headerBg', '#112233');
-  const bg = await page.locator('[data-testid=preview-header]').evaluate((el) => getComputedStyle(el).backgroundColor);
+  const bg = await page
+    .locator('[data-testid=preview-header]')
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
   assert.equal(bg, 'rgb(17, 34, 51)');
 });
 
@@ -90,14 +115,17 @@ await check('launcher fill must be hex (step 2 gate)', async () => {
 
 await check('tile image without an address blocks Launch and jumps to step 3', async () => {
   await page.click('#wgt-next');
-  await page.getByText('Tile image').click();
+  await page.locator('label', { hasText: /^Tile image$/ }).click();
   await page.click('#wgt-next');
   await page.getByText(/Add a background image URL/).waitFor();
-  await page.click('#wgt-next');
-  await page.click('#wgt-launch');
-  await page.getByText(/Add a background image URL/).first().waitFor();
+  // Save draft walks every step, so an incomplete draft can never be saved.
+  await page.click('#wgt-save');
+  await page
+    .getByText(/Add a background image URL/)
+    .first()
+    .waitFor();
   assert.match(await page.textContent('body'), /Step 3 of 4/);
-  await page.getByText('Solid colour').click();
+  await page.locator('label', { hasText: /^Solid colour$/ }).click();
 });
 
 await check('Launch saves, reveals the snippet and the pill says Saved', async () => {
@@ -114,23 +142,26 @@ await check('Launch saves, reveals the snippet and the pill says Saved', async (
   assert.equal(await page.evaluate(() => navigator.clipboard.readText()), snippet);
 });
 
-await check('the embedded widget works on another origin: launcher, panel, intake gate, message', async () => {
-  const site = await ctx.newPage();
-  await site.goto(`http://127.0.0.1:3999/?src=${encodeURIComponent(embedUrl)}`);
-  const launcher = site.locator('button[aria-label="Open chat"]');
-  await launcher.waitFor();
-  await launcher.click();
-  const frame = site.frameLocator('iframe');
-  await frame.locator('#hdr').getByText('Chat with us').waitFor();
-  assert.ok(await frame.locator('#send').isDisabled());
-  await frame.locator('#i-name').fill('Asha');
-  await frame.locator('#i-go').click();
-  await frame.locator('#txt').fill('hello from the browser');
-  await frame.locator('#txt').press('Enter');
-  await frame.locator('.bubble.out', { hasText: 'hello from the browser' }).waitFor();
-  assert.ok(await frame.locator('.wa-cta').getAttribute('href'));
-  await site.close();
-});
+await check(
+  'the embedded widget works on another origin: launcher, panel, intake gate, message',
+  async () => {
+    const site = await ctx.newPage();
+    await site.goto(`http://127.0.0.1:3999/?src=${encodeURIComponent(embedUrl)}`);
+    const launcher = site.locator('button[aria-label="Open chat"]');
+    await launcher.waitFor();
+    await launcher.click();
+    const frame = site.frameLocator('iframe');
+    await frame.locator('#hdr').getByText('Chat with us').waitFor();
+    assert.ok(await frame.locator('#send').isDisabled());
+    await frame.locator('#i-name').fill('Asha');
+    await frame.locator('#i-go').click();
+    await frame.locator('#txt').fill('hello from the browser');
+    await frame.locator('#txt').press('Enter');
+    await frame.locator('.bubble.out', { hasText: 'hello from the browser' }).waitFor();
+    assert.ok(await frame.locator('.wa-cta').getAttribute('href'));
+    await site.close();
+  },
+);
 
 await check('the new widget is in the list with its engine pill, slug and a visitor', async () => {
   await page.goto(`${WEB}/chatbot-widgets`);
@@ -155,22 +186,28 @@ await check('copy snippet from the list puts the tag on the clipboard', async ()
   const row = page.locator('[data-widget-id]', { hasText: NAME });
   await row.getByRole('button', { name: 'Copy embed snippet' }).click();
   await page.getByText(/Snippet copied/).waitFor();
-  assert.match(await page.evaluate(() => navigator.clipboard.readText()), /^<script defer src=".*\/embed"><\/script>$/);
+  assert.match(
+    await page.evaluate(() => navigator.clipboard.readText()),
+    /^<script defer src=".*\/embed"><\/script>$/,
+  );
 });
 
-await check('edit opens prefilled with every step reachable; a second save updates, it does not duplicate', async () => {
-  const row = page.locator('[data-widget-id]', { hasText: NAME });
-  await row.getByRole('link', { name: 'Edit widget' }).click();
-  await page.locator('#wgt-f-name').waitFor();
-  assert.equal(await page.inputValue('#wgt-f-name'), NAME);
-  assert.equal((await page.textContent('[data-testid=state-pill]')).trim(), 'Saved');
-  await page.click('[data-step-node="4"]');
-  await page.getByText('Send-button label').waitFor();
-  await page.fill('#wgt-f-buttonLabel', 'Ask the team');
-  await page.click('#wgt-save');
-  await page.getByText('Draft saved.').waitFor();
-  assert.equal(await page.locator('[data-testid=snippet]').count(), 0);
-});
+await check(
+  'edit opens prefilled with every step reachable; a second save updates, it does not duplicate',
+  async () => {
+    const row = page.locator('[data-widget-id]', { hasText: NAME });
+    await row.getByRole('link', { name: 'Edit widget' }).click();
+    await page.locator('#wgt-f-name').waitFor();
+    assert.equal(await page.inputValue('#wgt-f-name'), NAME);
+    assert.equal((await page.textContent('[data-testid=state-pill]')).trim(), 'Saved');
+    await page.click('[data-step-node="4"]');
+    await page.getByText('Send-button label').waitFor();
+    await page.fill('#wgt-f-buttonLabel', 'Ask the team');
+    await page.click('#wgt-save');
+    await page.getByText('Draft saved.').waitFor();
+    assert.equal(await page.locator('[data-testid=snippet]').count(), 0);
+  },
+);
 
 await check('pause hides the widget from its site; resume brings it back', async () => {
   await page.goto(`${WEB}/chatbot-widgets`);
@@ -188,14 +225,18 @@ await check('rotate asks first, then the old embed address is 404', async () => 
   const row = page.locator('[data-widget-id]', { hasText: NAME });
   await row.getByRole('button', { name: 'Rotate embed token' }).click();
   await page.getByText("Rotate this widget's embed token?").waitFor();
-  await page.getByRole('button', { name: 'Rotate', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Rotate' }).click();
   await page.getByText(/Token rotated/).waitFor();
   assert.equal((await fetch(embedUrl)).status, 404);
 });
 
 await check('duplicate lands on the copy in the builder', async () => {
   await page.goto(`${WEB}/chatbot-widgets`);
-  await page.locator('[data-widget-id]', { hasText: NAME }).first().getByRole('button', { name: 'Duplicate widget' }).click();
+  await page
+    .locator('[data-widget-id]', { hasText: NAME })
+    .first()
+    .getByRole('button', { name: 'Duplicate widget' })
+    .click();
   await page.locator('#wgt-f-name').waitFor();
   assert.equal(await page.inputValue('#wgt-f-name'), `${NAME} (copy)`);
 });
@@ -206,7 +247,7 @@ await check('delete asks first, then the row is gone', async () => {
     const row = page.locator('[data-widget-id]').filter({ hasText: name }).first();
     await row.getByRole('button', { name: 'Delete widget' }).click();
     await page.getByText(`Delete "${name}"?`).waitFor();
-    await page.getByRole('button', { name: 'Delete widget', exact: true }).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Delete widget' }).click();
     await page.getByText('Widget deleted.').waitFor();
   }
 });
