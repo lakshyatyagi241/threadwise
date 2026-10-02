@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { NodeBridgeProbe } from '../../infra/providers/node-bridge-runtime/node-bridge.probe';
 import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { DeviceControlService } from './runtime/device-control.service';
 import { OutboundRegistry } from './outbound/outbound-registry.service';
 import { SenderResolver } from './outbound/sender-resolver.service';
 import { WabaTransport } from './outbound/waba.transport';
@@ -26,7 +27,14 @@ import { NodeTokenGuard } from './node-token.guard';
     WabaTransport,
     OutboundRegistry,
     SenderResolver,
+    DeviceControlService,
   ],
-  exports: [NodeBridgeSettingsService, SafeFetch, OutboundRegistry, SenderResolver],
+  exports: [
+    NodeBridgeSettingsService,
+    SafeFetch,
+    OutboundRegistry,
+    SenderResolver,
+    DeviceControlService,
+  ],
 })
 export class NodeBridgeRuntimeModule {}
