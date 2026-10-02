@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 import { PacksPage } from '@/features/addons-extension-registry/components/packs-page';
 
@@ -8,5 +9,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function OperatorAddonsPage() {
-  return <PacksPage />;
+  return (
+    <Suspense>
+      <PacksPage />
+    </Suspense>
+  );
 }

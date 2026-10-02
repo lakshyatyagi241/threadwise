@@ -9,6 +9,8 @@ export interface ConsoleLeaf {
   href: string;
   /** Full next-intl key. */
   labelKey: string;
+  /** A literal label, for entries that come from data (a module's manifest) and have no message key. */
+  label?: string;
   badgeKey?: string;
 }
 

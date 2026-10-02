@@ -4,7 +4,8 @@ import type { AddonCard, OwnedAddon, WorkspaceAddonsResponse } from '@crm/contra
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { planKind } from '../plans-subscriptions-trials';
-import { cardState, grantBullets, readGrants } from './addon-grants';
+import { cardState, grantBullets, readGrants, titledKey } from './addon-grants';
+import { ModuleRegistryService } from './module-registry.service';
 
 interface PlanStateRow {
   plan_found: boolean;
@@ -39,7 +40,10 @@ interface CardRow {
  */
 @Injectable()
 export class WorkspaceAddonsService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly registry: ModuleRegistryService,
+  ) {}
 
   async forCurrentWorkspace(): Promise<WorkspaceAddonsResponse> {
     const orgId = RequestContextStore.require().orgId;
@@ -63,6 +67,14 @@ export class WorkspaceAddonsService {
         }) !== 'free' &&
         (st!.plan_ends_at === null || new Date(st!.plan_ends_at) > new Date());
       if (!eligible) return { eligible: false, owned: [], catalog: [] };
+
+      // A module's own labels win; a core key is spelled out.
+      const [mf, ml] = await Promise.all([
+        this.registry.planFeatures(),
+        this.registry.planLimits(),
+      ]);
+      const labels = new Map([...mf, ...ml].map((f) => [f.key, f.label]));
+      const labelOf = (key: string) => labels.get(key) ?? titledKey(key);
 
       const ownedRes = await tx.execute(sql`
         SELECT a.uuid, p.uuid AS pack_uuid, p.name, a.starts_at, a.ends_at, a.package_id::int AS package_id
@@ -102,7 +114,7 @@ export class WorkspaceAddonsService {
           isLifetime: r.is_lifetime,
           billingUnit: r.billing_unit,
           billingDuration: r.billing_duration,
-          grantBullets: grantBullets(grants),
+          grantBullets: grantBullets(grants, labelOf),
           ownedCount: owned,
           state: cardState(grants, owned),
         };

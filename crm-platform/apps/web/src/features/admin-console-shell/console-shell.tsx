@@ -8,6 +8,8 @@ import type { OperatorSessionResponse } from '@crm/contracts';
 import { Alert, Badge, Spinner, cn } from '@crm/ui';
 import { setLocale, setTheme } from '@/components/shell/actions';
 import { LOCALES } from '@/i18n/locales';
+import { useModuleNav } from '@/features/addons-extension-registry/use-module-nav';
+import { withModuleLeaves } from '@/features/addons-extension-registry/module-nav';
 import { OperatorProvider } from '@/features/auth-registration-security/platform/operator-context';
 import { OPERATOR_ACCOUNT_PATH } from '@/features/auth-registration-security/platform/operator-nav';
 import {
@@ -107,7 +109,12 @@ export function ConsoleShell({
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
   const blocked = gated && !onAccountPage;
 
-  const entries = useMemo(() => buildConsoleNav(CONSOLE_NAV_ITEMS), []);
+  // Active modules append their own entries (add-ons domain, WD-ADD-012).
+  const moduleNav = useModuleNav(!gated);
+  const entries = useMemo(
+    () => withModuleLeaves(buildConsoleNav(CONSOLE_NAV_ITEMS), moduleNav),
+    [moduleNav],
+  );
   const activeId = activeLeafId(pathname, entries);
   const defaultOpen = useMemo(() => initiallyOpenGroups(entries, activeId), [entries, activeId]);
   const flippedIds = flipped.path === pathname ? flipped.ids : [];
@@ -187,7 +194,7 @@ export function ConsoleShell({
   const hideWhenCollapsed = 'md:group-data-[collapsed=true]/rail:hidden';
 
   const leafLink = (leaf: ConsoleLeaf, nested: boolean) => {
-    const label = tAll(leaf.labelKey);
+    const label = leaf.label ?? tAll(leaf.labelKey);
     const badge = formatCount(leaf.badgeKey ? counts[leaf.badgeKey] : null);
     const active = leaf.id === activeId;
     const body = (

@@ -16,7 +16,13 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { AuthAuditService, PlatformStore } from '../auth';
 import { slugifyPlanName, uniquePlanSlug } from '../plans-subscriptions-trials';
-import { featuresColumn, normaliseGrants, readGrants, type AllowedKeys } from './addon-grants';
+import {
+  featuresColumn,
+  normaliseGrants,
+  readGrants,
+  titledKey,
+  type AllowedKeys,
+} from './addon-grants';
 import { ModuleRegistryService } from './module-registry.service';
 
 interface PackRow {
@@ -126,8 +132,15 @@ export class AddonPackService {
   /** Every flag and cap a pack can grant: the core registry plus what enabled modules contribute (WD-ADD-013). */
   async fields(): Promise<GrantFieldsResponse> {
     const [mf, ml] = await Promise.all([this.registry.planFeatures(), this.registry.planLimits()]);
-    const titled = (k: string) => k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+    const titled = titledKey;
+    const currencies = await this.platform.tx(async (tx) => {
+      const res = await tx.execute(
+        sql`SELECT code, name FROM currencies WHERE is_active ORDER BY code`,
+      );
+      return res.rows as unknown as Array<{ code: string; name: string }>;
+    });
     return {
+      currencies,
       features: [
         ...PLAN_FEATURE_DEFS.map((d) => ({
           key: d.key,
