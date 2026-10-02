@@ -31,6 +31,8 @@ export interface WabaRequest {
   query?: WabaQuery;
   json?: unknown;
   form?: FormData;
+  /** Raw bytes (the resumable-upload step). Sent as given; set the content type through `headers`. */
+  body?: Uint8Array;
   /** Overrides the configured version for this call (Interakt's `/media_handle` only exists on an older one). */
   apiVersion?: string;
   timeoutMs?: number;
@@ -104,7 +106,7 @@ export class WabaHttp {
 
   private async send<T>(
     url: string,
-    req: Pick<WabaRequest, 'method' | 'json' | 'form' | 'timeoutMs'>,
+    req: Pick<WabaRequest, 'method' | 'json' | 'form' | 'body' | 'timeoutMs'>,
     headers: Record<string, string>,
   ): Promise<T> {
     const init: RequestInit = {
@@ -112,7 +114,9 @@ export class WabaHttp {
       headers: { ...headers },
       signal: AbortSignal.timeout(req.timeoutMs ?? this.env.WABA_HTTP_TIMEOUT_MS),
     };
-    if (req.form) {
+    if (req.body) {
+      init.body = req.body as unknown as RequestInit['body'];
+    } else if (req.form) {
       // No content-type: fetch writes the multipart boundary itself.
       init.body = req.form;
     } else if (req.json !== undefined) {
