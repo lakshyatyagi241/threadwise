@@ -31,6 +31,7 @@ import { PlatformSettingsModule } from './modules/platform-settings-branding-sto
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
 import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
 import { CmsModule } from './modules/marketing-site-cms';
+import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -110,6 +111,7 @@ import { HealthModule } from './health/health.module';
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
     CmsModule,
+    AdminConsoleShellModule,
     SendGuardModule,
     RealtimeModule,
     HealthModule,
