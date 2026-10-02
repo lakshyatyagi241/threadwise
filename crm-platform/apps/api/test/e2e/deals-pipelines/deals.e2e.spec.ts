@@ -226,6 +226,20 @@ describe('creating a deal (WD-DEAL-009)', () => {
     expect((await api.as(t.admin).post('/v2/deals').send({ title: '   ' })).status).toBe(422);
   });
 
+  it('WD-DEAL-009 / parity run: an expected close date that is not a real day is a 422, never a 500, on create and on edit', async () => {
+    const bad = await api.as(t.admin).post('/v2/deals').send({ title: 'Bad day', expectedCloseDate: '2026-02-31' });
+    expect(bad.status).toBe(422);
+    expect(problem(bad)).toBe('VALIDATION_FAILED');
+    expect(bad.body.errors.map((e: { path: string }) => e.path)).toContain('expectedCloseDate');
+    const deal = await api.deal(t.admin, { title: 'Good day', expectedCloseDate: '2026-02-28' });
+    const edit = await api
+      .as(t.admin)
+      .patch(`/v2/deals/${deal.id}`)
+      .send({ expectedCloseDate: '2026-04-31', rowVersion: deal.rowVersion });
+    expect(edit.status).toBe(422);
+    expect(problem(edit)).toBe('VALIDATION_FAILED');
+  });
+
   it('WD-DEAL-009 #4 / D-12: an owner must be an active member of this workspace; another member is recorded in the creation event', async () => {
     const mate = await api.member(t, 'mate', DEAL_VIEWER);
     const mateUuid = await api.userUuid(mate.userId);

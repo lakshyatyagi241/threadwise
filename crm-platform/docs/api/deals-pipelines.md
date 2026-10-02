@@ -5,7 +5,7 @@ the codes this domain adds are `DEAL_*` in `@crm/contracts` `common/errors.ts`. 
 `packages/contracts/src/deals-pipelines/`. Live docs: `/docs`. Every id on the wire is a uuid. Decisions where the port differs
 from WaDesk: "Port decisions" in `docs/wadesk-port/inventory/deals-pipelines.md`.
 
-All routes need a staff bearer token, the plan's **sales pipeline** (`422 PLAN_FEATURE_LOCKED` otherwise, reads included) and the
+All routes need a staff bearer token, the plan's **sales pipeline** (plan feature `sales_pipeline`, default on; `422 PLAN_FEATURE_LOCKED` otherwise, reads included; the number of pipelines is the plan limit `pipelines`, 0 = unlimited) and the
 capability in brackets. "scope" means the caller's record scope (`all`, `team`, `own`) is applied to the deal's **owner**: a deal
 outside it is `404`, never `403`. Literal paths (`board`, `reports`, `tasks`, `order`) are registered before `:id`.
 

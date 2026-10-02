@@ -22,12 +22,14 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
+import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
+import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
@@ -126,6 +128,8 @@ import { HealthModule } from './health/health.module';
     AdminModule,
     CrmModule,
     DashboardsAnalyticsChartsModule,
+    AppointmentsBookingModule,
+    NotificationsModule,
     BroadcastsModule,
     PartnerModule,
     PublicApiModule,

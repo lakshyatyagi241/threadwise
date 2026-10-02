@@ -190,7 +190,25 @@ export class TenantDirectory {
           (${orgId}, ${agentRoleId}, 'record.tasks.read', 'allow', 'own'),
           (${orgId}, ${agentRoleId}, 'record.tasks.create', 'allow', 'all'),
           (${orgId}, ${agentRoleId}, 'record.tasks.update', 'allow', 'own'),
-          (${orgId}, ${agentRoleId}, 'record.tasks.delete', 'allow', 'own')
+          (${orgId}, ${agentRoleId}, 'record.tasks.delete', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.segments.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.segments.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.segments.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.segments.delete', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.sales-docs.send', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.invoices.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.invoices.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.invoices.update', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.payments.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.payments.create', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.tax-rates.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.booking-types.read', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.appointments.read', 'allow', 'own'),
+          (${orgId}, ${agentRoleId}, 'record.appointments.create', 'allow', 'all'),
+          (${orgId}, ${agentRoleId}, 'record.appointments.update', 'allow', 'own')
       `);
 
       const userRes = await tx.execute(sql`

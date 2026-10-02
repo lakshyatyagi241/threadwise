@@ -160,7 +160,8 @@
       },
       "due": "Due date and time",
       "add": "Add",
-      "titleRequired": "Type what needs doing."
+      "titleRequired": "Type what needs doing.",
+      "options": "More options (priority and due date)"
     },
     "form": {
       "eyebrow": "Task",

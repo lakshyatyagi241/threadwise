@@ -1,0 +1,32 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Notifications",
+      "labelUnread": "Notifications, {count} unread",
+      "title": "Notifications",
+      "markAll": "Mark all read",
+      "empty": "No notifications yet.",
+      "loading": "Loading notifications",
+      "failed": "Could not load notifications.",
+      "retry": "Try again",
+      "unread": "Unread"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Task assigned to you",
+        "body": "{actor} assigned you: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Task due",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Task completed",
+        "body": "{actor} completed: {task}",
+        "bodyNoActor": "{task}"
+      }
+    }
+  }
+}

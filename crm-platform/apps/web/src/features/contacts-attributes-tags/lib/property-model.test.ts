@@ -95,7 +95,9 @@ describe('types', () => {
   it('lists the built-in properties once each, with stage and status managed elsewhere', () => {
     const keys = BUILT_IN_PROPERTIES.map((p) => p.key);
     expect(new Set(keys).size).toBe(keys.length);
-    expect(BUILT_IN_PROPERTIES.find((p) => p.key === 'lifecycle_stage')?.manage).toBe('/contact-stages');
+    expect(BUILT_IN_PROPERTIES.find((p) => p.key === 'lifecycle_stage')?.manage).toBe(
+      '/contact-stages',
+    );
   });
 });
 
@@ -123,7 +125,12 @@ describe('groupBySection', () => {
 });
 
 describe('matchesSearch', () => {
-  const f = field({ id: 'p', key: 'order_id', label: 'Order ID', config: { description: 'From the shop' } });
+  const f = field({
+    id: 'p',
+    key: 'order_id',
+    label: 'Order ID',
+    config: { description: 'From the shop' },
+  });
   it('matches label, key and description, ignoring case', () => {
     expect(matchesSearch(f, '')).toBe(true);
     expect(matchesSearch(f, 'order')).toBe(true);
@@ -142,18 +149,34 @@ describe('checkDraft', () => {
   });
 
   it('checks the name and the key (create only)', () => {
-    expect(checkDraft({ ...ok, label: ' ' }, { editing: false, takenKeys: taken }).label).toBe('required');
-    expect(checkDraft({ ...ok, key: '' }, { editing: false, takenKeys: taken }).key).toBe('required');
-    expect(checkDraft({ ...ok, key: 'Bad Key' }, { editing: false, takenKeys: taken }).key).toBe('format');
-    expect(checkDraft({ ...ok, key: 'a'.repeat(65) }, { editing: false, takenKeys: taken }).key).toBe('tooLong');
-    expect(checkDraft({ ...ok, key: 'email' }, { editing: false, takenKeys: taken }).key).toBe('reserved');
-    expect(checkDraft({ ...ok, key: 'existing' }, { editing: false, takenKeys: taken }).key).toBe('taken');
+    expect(checkDraft({ ...ok, label: ' ' }, { editing: false, takenKeys: taken }).label).toBe(
+      'required',
+    );
+    expect(checkDraft({ ...ok, key: '' }, { editing: false, takenKeys: taken }).key).toBe(
+      'required',
+    );
+    expect(checkDraft({ ...ok, key: 'Bad Key' }, { editing: false, takenKeys: taken }).key).toBe(
+      'format',
+    );
+    expect(
+      checkDraft({ ...ok, key: 'a'.repeat(65) }, { editing: false, takenKeys: taken }).key,
+    ).toBe('tooLong');
+    expect(checkDraft({ ...ok, key: 'email' }, { editing: false, takenKeys: taken }).key).toBe(
+      'reserved',
+    );
+    expect(checkDraft({ ...ok, key: 'existing' }, { editing: false, takenKeys: taken }).key).toBe(
+      'taken',
+    );
     // an existing property's key is never re-checked
-    expect(checkDraft({ ...ok, key: 'existing' }, { editing: true, takenKeys: taken }).key).toBeUndefined();
+    expect(
+      checkDraft({ ...ok, key: 'existing' }, { editing: true, takenKeys: taken }).key,
+    ).toBeUndefined();
   });
 
   it('needs a section', () => {
-    expect(checkDraft({ ...ok, sectionId: '' }, { editing: false, takenKeys: taken }).section).toBe('required');
+    expect(checkDraft({ ...ok, sectionId: '' }, { editing: false, takenKeys: taken }).section).toBe(
+      'required',
+    );
   });
 
   it('a dropdown needs at least one option, each with a distinct label', () => {
@@ -170,7 +193,9 @@ describe('checkDraft', () => {
     ).toBe('duplicate');
     expect(run([{ value: 'a', label: 'Red' }])).toBeUndefined();
     // a text property ignores options
-    expect(checkDraft({ ...ok, options: [] }, { editing: false, takenKeys: taken }).options).toBeUndefined();
+    expect(
+      checkDraft({ ...ok, options: [] }, { editing: false, takenKeys: taken }).options,
+    ).toBeUndefined();
   });
 
   it('a condition needs a property and an option or a value', () => {
@@ -223,13 +248,20 @@ describe('request bodies', () => {
       defaultValue: 'x',
       description: 'new',
     });
-    expect(configFromDraft({ defaultValue: 'x', description: 'old' }, '  ')).toEqual({ defaultValue: 'x' });
+    expect(configFromDraft({ defaultValue: 'x', description: 'old' }, '  ')).toEqual({
+      defaultValue: 'x',
+    });
   });
 
   it('builds the update body from the saved row version, never touching the key or type', () => {
     const f = field({ id: 'p', config: { defaultValue: 'x' }, rowVersion: 7 });
     const body = toUpdateBody({ ...draftFromField(f, []), label: 'Renamed', active: false }, f);
-    expect(body).toMatchObject({ label: 'Renamed', isActive: false, rowVersion: 7, config: { defaultValue: 'x' } });
+    expect(body).toMatchObject({
+      label: 'Renamed',
+      isActive: false,
+      rowVersion: 7,
+      config: { defaultValue: 'x' },
+    });
     expect('key' in body).toBe(false);
     expect('fieldType' in body).toBe(false);
   });
@@ -243,8 +275,22 @@ describe('draftFromField', () => {
       options: [option('o2', 'B', 1), option('o1', 'A', 0)],
     });
     const deps: FieldDependencyResponse[] = [
-      { id: 'd1', fieldId: 'p', dependsOnFieldId: 'q', dependsOnOptionId: 'oq', dependsOnValue: null, createdAt: '' },
-      { id: 'd2', fieldId: 'other', dependsOnFieldId: 'q', dependsOnOptionId: null, dependsOnValue: 'x', createdAt: '' },
+      {
+        id: 'd1',
+        fieldId: 'p',
+        dependsOnFieldId: 'q',
+        dependsOnOptionId: 'oq',
+        dependsOnValue: null,
+        createdAt: '',
+      },
+      {
+        id: 'd2',
+        fieldId: 'other',
+        dependsOnFieldId: 'q',
+        dependsOnOptionId: null,
+        dependsOnValue: 'x',
+        createdAt: '',
+      },
     ];
     const d = draftFromField(f, deps);
     expect(d.options.map((o) => o.label)).toEqual(['A', 'B']);
@@ -266,7 +312,10 @@ describe('diffOptions', () => {
   });
 
   it('does nothing when nothing changed', () => {
-    const diff = diffOptions(saved, saved.map((o) => ({ id: o.id, value: o.value, label: o.label })));
+    const diff = diffOptions(
+      saved,
+      saved.map((o) => ({ id: o.id, value: o.value, label: o.label })),
+    );
     expect(diff).toEqual({ create: [], rename: [], remove: [] });
   });
 
@@ -299,15 +348,28 @@ describe('dependencies', () => {
   });
 
   it('reads a dependency as "field = option label" or "field = value"', () => {
-    const parent = field({ id: 'q', label: 'Country', fieldType: 'select', options: [option('oq', 'India')] });
+    const parent = field({
+      id: 'q',
+      label: 'Country',
+      fieldType: 'select',
+      options: [option('oq', 'India')],
+    });
     const byId = new Map([[parent.id, parent]]);
-    expect(describeCondition(dep({ dependsOnOptionId: 'oq' }), byId)).toEqual({ field: 'Country', value: 'India' });
-    expect(describeCondition(dep({ dependsOnValue: 'true' }), byId)).toEqual({ field: 'Country', value: 'true' });
+    expect(describeCondition(dep({ dependsOnOptionId: 'oq' }), byId)).toEqual({
+      field: 'Country',
+      value: 'India',
+    });
+    expect(describeCondition(dep({ dependsOnValue: 'true' }), byId)).toEqual({
+      field: 'Country',
+      value: 'true',
+    });
     expect(describeCondition(dep({ dependsOnFieldId: 'gone' }), byId)).toBeNull();
   });
 
   it('lists the properties that depend on one', () => {
-    expect(dependentsOf('q', [dep({ fieldId: 'p' }), dep({ fieldId: 'r', dependsOnFieldId: 'z' })])).toEqual(['p']);
+    expect(
+      dependentsOf('q', [dep({ fieldId: 'p' }), dep({ fieldId: 'r', dependsOnFieldId: 'z' })]),
+    ).toEqual(['p']);
   });
 });
 
@@ -383,7 +445,14 @@ describe('detailGroups', () => {
   });
 
   it('does not show the stored value of a hidden or inactive property as a stray one', () => {
-    const groups = detailGroups(fields, sections, { secret: 'x', old: 'y' }, new Set(), words, label);
+    const groups = detailGroups(
+      fields,
+      sections,
+      { secret: 'x', old: 'y' },
+      new Set(),
+      words,
+      label,
+    );
     expect(groups).toEqual([]);
   });
 });

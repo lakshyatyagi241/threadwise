@@ -89,7 +89,9 @@ export function groupBySection(
     section,
     fields: fields.filter((f) => f.sectionId === section.id).sort(byPosition),
   }));
-  const loose = fields.filter((f) => f.sectionId === null || !known.has(f.sectionId)).sort(byPosition);
+  const loose = fields
+    .filter((f) => f.sectionId === null || !known.has(f.sectionId))
+    .sort(byPosition);
   if (loose.length > 0) groups.push({ section: null, fields: loose });
   return groups;
 }

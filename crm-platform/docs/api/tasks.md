@@ -189,12 +189,27 @@ createdById, contactId, dealId, companyId, source`), plus `_meta`. At-least-once
 `TaskDueSweepService` (worker process, every 60 s, privileged, `FOR UPDATE SKIP LOCKED`, 200 per pass) claims open tasks with
 `due_at <= now()` and `reminded_at IS NULL`, stamps `reminded_at` and writes one `task.due` event each, in one transaction: a task
 is announced once however many workers run. The payload carries the assignee, and the creator for the unassigned (WaDesk's
-fallback); the in-app and push notification itself is a consumer of the event and belongs to the notifications domain. Reopening a
-task and moving its due date clear `reminded_at`, which arms it again.
+fallback). Reopening a task and moving its due date clear `reminded_at`, which arms it again.
+
+## Notifications
+
+`TaskNotificationConsumer` (worker process, `apps/api/src/modules/notifications`) turns three of these events into rows of the in-app feed
+(`inbox_notifications`, see [notifications.md](notifications.md)):
+
+| Event            | Who is told                                             | Type             |
+| ---------------- | ------------------------------------------------------- | ---------------- |
+| `task.assigned`  | the new assignee, unless they assigned it to themselves | `task_assigned`  |
+| `task.due`       | the assignee, else the creator                          | `task_due`       |
+| `task.completed` | the creator, unless they completed it themselves        | `task_completed` |
+
+Idempotent: the row's `dedupe_key` is the event type plus the outbox event id and the insert is `ON CONFLICT DO NOTHING`, so the drain's at-least-once
+delivery cannot notify twice while a later real event (assigned, reassigned, assigned back) notifies again. The task is read again at delivery: a
+`task.due` for a task completed since, or a `task.assigned` for one reassigned since, is dropped; so is a recipient who is no longer an active member.
+"Due soon" is the sweep's moment (the due time is reached); there is no earlier heads-up.
 
 ## What is not built here
 
-The notification consumers (`task.due`, `task.assigned`), the AI copilot task tools (WD-TASK-011) and any other writers (flows, the
+Email, Slack and Web Push for task notifications (the in-app feed only), per-person notification preferences, the AI copilot task tools (WD-TASK-011) and any other writers (flows, the
 public REST API, which also needs key scopes) are follow-ups: they call `TasksService.create(input, source)` (and the bulk and
 complete methods), which already take a `source`. The calendar and dashboard consumers (WD-TASK-012) read `GET /tasks` and
 `GET /tasks/counts` (`dueFrom`/`dueTo` give the calendar its month). There is no recurrence and no snooze, as in WaDesk.
