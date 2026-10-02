@@ -47,7 +47,11 @@ export const customerApi = {
   summary: (signal?: AbortSignal) =>
     apiFetch('/wallet/summary', { schema: walletSummarySchema, signal }),
   ledger: (cursor: string | undefined, limit: number, signal?: AbortSignal) =>
-    apiFetch('/wallet/ledger', { query: { limit, cursor }, schema: walletLedgerResponseSchema, signal }),
+    apiFetch('/wallet/ledger', {
+      query: { limit, cursor },
+      schema: walletLedgerResponseSchema,
+      signal,
+    }),
   statement: (
     filters: StatementFilters,
     cursor: string | undefined,
@@ -133,13 +137,15 @@ export const operatorApi = {
       body: { dryRun },
       schema: syncMetaResultSchema,
     }),
-  workspaces: (
-    query: { q?: string; lowOnly?: boolean; cursor?: string },
-    signal?: AbortSignal,
-  ) =>
+  workspaces: (query: { q?: string; lowOnly?: boolean; cursor?: string }, signal?: AbortSignal) =>
     operatorFetch('/wallet/workspaces', {
       // `lowOnly=false` would be read as true by the API's boolean coercion, so it is only sent when on.
-      query: { q: query.q, lowOnly: query.lowOnly ? true : undefined, cursor: query.cursor, limit: 25 },
+      query: {
+        q: query.q,
+        lowOnly: query.lowOnly ? true : undefined,
+        cursor: query.cursor,
+        limit: 25,
+      },
       schema: platformWalletListSchema,
       signal,
     }),
@@ -164,4 +170,3 @@ export const operatorApi = {
   reconcile: () =>
     operatorFetch('/wallet/reconciliation', { method: 'POST', schema: reconciliationSchema }),
 };
-

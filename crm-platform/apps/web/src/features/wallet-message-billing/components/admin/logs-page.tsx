@@ -23,7 +23,15 @@ export interface LogFilters {
   from: string;
   to: string;
 }
-const EMPTY: LogFilters = { scope: 'all', event: '', severity: '', workspaceId: '', q: '', from: '', to: '' };
+const EMPTY: LogFilters = {
+  scope: 'all',
+  event: '',
+  severity: '',
+  workspaceId: '',
+  q: '',
+  from: '',
+  to: '',
+};
 
 /** The filters as the API query: only what is set; a workspace id that is not a uuid is not sent. */
 export function toLogQuery(f: LogFilters): Partial<WalletLogQuery> {
@@ -45,13 +53,16 @@ export function LogsPage() {
   const [draft, setDraft] = useState<LogFilters>(EMPTY);
   const [applied, setApplied] = useState<LogFilters>(EMPTY);
   const badId = draft.workspaceId.trim() !== '' && !UUID.test(draft.workspaceId.trim());
-  const set = <K extends keyof LogFilters>(k: K, v: LogFilters[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof LogFilters>(k: K, v: LogFilters[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
 
   const list = useInfiniteQuery({
     queryKey: [...KEYS.logs, applied],
     initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam, signal }) => operatorApi.logs({ ...toLogQuery(applied), cursor: pageParam }, signal),
-    getNextPageParam: (last) => (last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined),
+    queryFn: ({ pageParam, signal }) =>
+      operatorApi.logs({ ...toLogQuery(applied), cursor: pageParam }, signal),
+    getNextPageParam: (last) =>
+      last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
   });
   const rows = list.data?.pages.flatMap((p) => p.data) ?? [];
 
@@ -67,42 +78,91 @@ export function LogsPage() {
       <Card>
         <form onSubmit={submit} role="search" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Field label={t('scope')} htmlFor="log-scope">
-            <Select id="log-scope" value={draft.scope} onChange={(e) => set('scope', e.target.value as LogFilters['scope'])}>
+            <Select
+              id="log-scope"
+              value={draft.scope}
+              onChange={(e) => set('scope', e.target.value as LogFilters['scope'])}
+            >
               {(['all', 'workspace', 'platform'] as const).map((s) => (
-                <option key={s} value={s}>{t(`scopes.${s}`)}</option>
+                <option key={s} value={s}>
+                  {t(`scopes.${s}`)}
+                </option>
               ))}
             </Select>
           </Field>
           <Field label={t('event')} htmlFor="log-event">
-            <Select id="log-event" value={draft.event} onChange={(e) => set('event', e.target.value)}>
+            <Select
+              id="log-event"
+              value={draft.event}
+              onChange={(e) => set('event', e.target.value)}
+            >
               <option value="">{t('anyEvent')}</option>
               {WALLET_LOG_EVENTS.map((ev) => (
-                <option key={ev} value={ev}>{ev}</option>
+                <option key={ev} value={ev}>
+                  {ev}
+                </option>
               ))}
             </Select>
           </Field>
           <Field label={t('severity')} htmlFor="log-sev">
-            <Select id="log-sev" value={draft.severity} onChange={(e) => set('severity', e.target.value as LogFilters['severity'])}>
+            <Select
+              id="log-sev"
+              value={draft.severity}
+              onChange={(e) => set('severity', e.target.value as LogFilters['severity'])}
+            >
               <option value="">{t('anySeverity')}</option>
               {(['info', 'warning', 'error'] as const).map((s) => (
-                <option key={s} value={s}>{t(`severities.${s}`)}</option>
+                <option key={s} value={s}>
+                  {t(`severities.${s}`)}
+                </option>
               ))}
             </Select>
           </Field>
-          <Field label={t('workspaceId')} htmlFor="log-ws" error={badId ? t('workspaceIdInvalid') : undefined}>
-            <Input id="log-ws" autoComplete="off" placeholder="00000000-0000-0000-0000-000000000000" value={draft.workspaceId} invalid={badId} onChange={(e) => set('workspaceId', e.target.value)} />
+          <Field
+            label={t('workspaceId')}
+            htmlFor="log-ws"
+            error={badId ? t('workspaceIdInvalid') : undefined}
+          >
+            <Input
+              id="log-ws"
+              autoComplete="off"
+              placeholder="00000000-0000-0000-0000-000000000000"
+              value={draft.workspaceId}
+              invalid={badId}
+              onChange={(e) => set('workspaceId', e.target.value)}
+            />
           </Field>
           <Field label={t('search')} htmlFor="log-q">
-            <Input id="log-q" type="search" maxLength={120} value={draft.q} onChange={(e) => set('q', e.target.value)} />
+            <Input
+              id="log-q"
+              type="search"
+              maxLength={120}
+              value={draft.q}
+              onChange={(e) => set('q', e.target.value)}
+            />
           </Field>
           <Field label={t('from')} htmlFor="log-from">
-            <Input id="log-from" type="date" value={draft.from} max={draft.to || undefined} onChange={(e) => set('from', e.target.value)} />
+            <Input
+              id="log-from"
+              type="date"
+              value={draft.from}
+              max={draft.to || undefined}
+              onChange={(e) => set('from', e.target.value)}
+            />
           </Field>
           <Field label={t('to')} htmlFor="log-to">
-            <Input id="log-to" type="date" value={draft.to} min={draft.from || undefined} onChange={(e) => set('to', e.target.value)} />
+            <Input
+              id="log-to"
+              type="date"
+              value={draft.to}
+              min={draft.from || undefined}
+              onChange={(e) => set('to', e.target.value)}
+            />
           </Field>
           <div className="flex items-end gap-2">
-            <Button type="submit" disabled={badId}>{t('apply')}</Button>
+            <Button type="submit" disabled={badId}>
+              {t('apply')}
+            </Button>
             <Button
               variant="secondary"
               onClick={() => {
@@ -126,7 +186,11 @@ export function LogsPage() {
           <LogTable rows={rows} />
           {list.hasNextPage && (
             <div className="flex justify-center">
-              <Button variant="secondary" onClick={() => void list.fetchNextPage()} disabled={list.isFetchingNextPage}>
+              <Button
+                variant="secondary"
+                onClick={() => void list.fetchNextPage()}
+                disabled={list.isFetchingNextPage}
+              >
                 {list.isFetchingNextPage && <Spinner label={t('loadingMore')} />}
                 {t('loadMore')}
               </Button>
@@ -140,7 +204,13 @@ export function LogsPage() {
 
 const SEVERITY_TONE = { info: 'neutral', warning: 'warning', error: 'danger' } as const;
 
-export function LogTable({ rows, defaultOpen }: { rows: readonly WalletLogRow[]; defaultOpen?: string }) {
+export function LogTable({
+  rows,
+  defaultOpen,
+}: {
+  rows: readonly WalletLogRow[];
+  defaultOpen?: string;
+}) {
   const t = useTranslations('wallet-message-billing.admin.logs');
   const locale = useLocale();
   const [open, setOpen] = useState<string | null>(defaultOpen ?? null);
@@ -149,12 +219,24 @@ export function LogTable({ rows, defaultOpen }: { rows: readonly WalletLogRow[];
       <table className="w-full min-w-[48rem] text-sm" aria-label={t('title')}>
         <thead>
           <tr className="border-b border-border text-xs text-muted-foreground">
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('columns.time')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('columns.severity')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('columns.event')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('columns.workspace')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('columns.actor')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('columns.message')}</th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('columns.time')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('columns.severity')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('columns.event')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('columns.workspace')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('columns.actor')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('columns.message')}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -164,19 +246,31 @@ export function LogTable({ rows, defaultOpen }: { rows: readonly WalletLogRow[];
             return (
               <Fragment key={r.id}>
                 <tr className="border-b border-border align-top">
-                  <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">{formatWhen(r.createdAt, locale)}</td>
-                  <td className="px-2 py-2"><Badge tone={SEVERITY_TONE[r.severity]}>{t(`severities.${r.severity}`)}</Badge></td>
+                  <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
+                    {formatWhen(r.createdAt, locale)}
+                  </td>
+                  <td className="px-2 py-2">
+                    <Badge tone={SEVERITY_TONE[r.severity]}>{t(`severities.${r.severity}`)}</Badge>
+                  </td>
                   <td className="px-2 py-2 font-mono text-xs">{r.event}</td>
                   <td className="px-2 py-2">
                     {r.workspaceId ? (
-                      <Link href={`/admin/wallet/workspaces/${r.workspaceId}`} className="text-primary hover:underline">
+                      <Link
+                        href={`/admin/wallet/workspaces/${r.workspaceId}`}
+                        className="text-primary hover:underline"
+                      >
                         {r.workspaceName ?? r.workspaceId}
                       </Link>
                     ) : (
                       <span className="text-muted-foreground">{t('platform')}</span>
                     )}
                   </td>
-                  <td className="px-2 py-2">{r.actorLabel ?? t(`actors.${r.actorType === 'platform_operator' ? 'operator' : r.actorType === 'user' ? 'customer' : 'system'}`)}</td>
+                  <td className="px-2 py-2">
+                    {r.actorLabel ??
+                      t(
+                        `actors.${r.actorType === 'platform_operator' ? 'operator' : r.actorType === 'user' ? 'customer' : 'system'}`,
+                      )}
+                  </td>
                   <td className="px-2 py-2">
                     <button
                       type="button"
@@ -186,7 +280,9 @@ export function LogTable({ rows, defaultOpen }: { rows: readonly WalletLogRow[];
                       className="text-start hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     >
                       {r.message}
-                      <span className="ms-2 text-xs text-muted-foreground">{expanded ? t('hideDetails') : t('showDetails')}</span>
+                      <span className="ms-2 text-xs text-muted-foreground">
+                        {expanded ? t('hideDetails') : t('showDetails')}
+                      </span>
                     </button>
                   </td>
                 </tr>

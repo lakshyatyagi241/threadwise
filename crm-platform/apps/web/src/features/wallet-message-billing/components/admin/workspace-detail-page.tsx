@@ -28,7 +28,7 @@ export function WorkspaceDetailPage({ id }: { id: string }) {
       <Breadcrumb
         items={[
           { label: tb('wallet'), href: '/admin/wallet' },
-          { label: tb('workspaces'), href: '/admin/wallet/workspaces' },
+          { label: tb('workspacesLabel'), href: '/admin/wallet/workspaces' },
           { label: q.data?.workspace.name ?? t('crumb') },
         ]}
       />
@@ -79,18 +79,26 @@ export function DetailBody({ d, canWrite }: { d: PlatformWalletDetail; canWrite:
       </header>
       <Card className="space-y-2">
         <div className="text-xs font-medium text-muted-foreground">{t('balance')}</div>
-        <div className="text-4xl font-semibold tabular-nums">{formatMinor(d.balanceMinor, d.currency, locale)}</div>
+        <div className="text-4xl font-semibold tabular-nums">
+          {formatMinor(d.balanceMinor, d.currency, locale)}
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <Badge>{tm(d.billingMode)}</Badge>
           {d.lowBalance && <Badge tone="warning">{t('lowBalance')}</Badge>}
           <span className="text-xs text-muted-foreground">
-            {t('threshold', { amount: formatMinor(d.lowBalanceThresholdMinor, d.currency, locale) })}
+            {t('threshold', {
+              amount: formatMinor(d.lowBalanceThresholdMinor, d.currency, locale),
+            })}
           </span>
         </div>
       </Card>
       <Card className="space-y-3">
         <h2 className="text-base font-semibold">{t('recent')}</h2>
-        {d.recent.length === 0 ? <EmptyState title={t('emptyTitle')} message={t('emptyBody')} /> : <RecentTable d={d} />}
+        {d.recent.length === 0 ? (
+          <EmptyState title={t('emptyTitle')} message={t('emptyBody')} />
+        ) : (
+          <RecentTable d={d} />
+        )}
       </Card>
       {open && (
         <AdjustDialog
@@ -114,27 +122,59 @@ export function RecentTable({ d }: { d: PlatformWalletDetail }) {
       <table className="w-full min-w-[40rem] text-sm" aria-label={t('label')}>
         <thead>
           <tr className="border-b border-border text-xs text-muted-foreground">
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('date')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('type')}</th>
-            <th scope="col" className="px-2 py-2 text-end font-medium">{t('amount')}</th>
-            <th scope="col" className="px-2 py-2 text-end font-medium">{t('balanceAfter')}</th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">{t('who')}</th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('date')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('type')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-end font-medium">
+              {t('amount')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-end font-medium">
+              {t('balanceAfter')}
+            </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('who')}
+            </th>
           </tr>
         </thead>
         <tbody>
           {d.recent.map((r) => (
             <tr key={r.id} className="border-b border-border align-top last:border-0">
-              <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">{formatWhen(r.createdAt, locale)}</td>
-              <td className="px-2 py-2"><TypePill type={r.type} /></td>
-              <td className={cn('whitespace-nowrap px-2 py-2 text-end font-medium tabular-nums', TONE_CLASS[directionTone(r.direction)])}>
+              <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
+                {formatWhen(r.createdAt, locale)}
+              </td>
+              <td className="px-2 py-2">
+                <TypePill type={r.type} />
+              </td>
+              <td
+                className={cn(
+                  'whitespace-nowrap px-2 py-2 text-end font-medium tabular-nums',
+                  TONE_CLASS[directionTone(r.direction)],
+                )}
+              >
                 {formatMovement(r.amountMinor, r.direction, d.currency, locale)}
               </td>
-              <td className="whitespace-nowrap px-2 py-2 text-end tabular-nums">{formatMinor(r.balanceAfterMinor, d.currency, locale)}</td>
+              <td className="whitespace-nowrap px-2 py-2 text-end tabular-nums">
+                {formatMinor(r.balanceAfterMinor, d.currency, locale)}
+              </td>
               <td className="px-2 py-2">
                 <div>
-                  {r.actorLabel ?? t(r.actorType === 'user' ? 'customer' : r.actorType === 'platform_operator' ? 'operator' : 'system')}
+                  {r.actorLabel ??
+                    t(
+                      r.actorType === 'user'
+                        ? 'customer'
+                        : r.actorType === 'platform_operator'
+                          ? 'operator'
+                          : 'system',
+                    )}
                 </div>
-                {r.note && <div className="mt-0.5 text-xs text-muted-foreground">{t('reason')}: {r.note}</div>}
+                {r.note && (
+                  <div className="mt-0.5 text-xs text-muted-foreground">
+                    {t('reason')}: {r.note}
+                  </div>
+                )}
               </td>
             </tr>
           ))}
@@ -143,4 +183,3 @@ export function RecentTable({ d }: { d: PlatformWalletDetail }) {
     </div>
   );
 }
-

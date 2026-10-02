@@ -42,7 +42,11 @@ export function PricingPage() {
       ) : (
         <>
           <Kpis settings={settings.data} />
-          <EconomicsForm key={settings.data.updatedAt ?? 'new'} settings={settings.data} canEdit={canEdit} />
+          <EconomicsForm
+            key={settings.data.updatedAt ?? 'new'}
+            settings={settings.data}
+            canEdit={canEdit}
+          />
           <SwitchesCard settings={settings.data} canEdit={canEdit} />
         </>
       )}

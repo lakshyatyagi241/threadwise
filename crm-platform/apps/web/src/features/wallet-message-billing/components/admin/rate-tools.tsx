@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ImportRatesResult, SyncMetaResult } from '@crm/contracts';
@@ -89,11 +89,10 @@ function SyncDialog({ onClose }: { onClose: () => void }) {
   });
 
   // The preview is requested as the dialog opens, so the operator always sees what Apply will do before it does it.
-  const started = useRef(false);
-  if (!started.current) {
-    started.current = true;
-    run.mutate(true);
-  }
+  const { mutate } = run;
+  useEffect(() => {
+    mutate(true);
+  }, [mutate]);
 
   return (
     <Modal
@@ -263,7 +262,9 @@ export function ImportPreview({ preview }: { preview: ImportRatesResult }) {
           <dd className="font-medium tabular-nums">{preview.skipped}</dd>
         </div>
       </dl>
-      <p className="text-xs text-muted-foreground">{t('currencyNote', { currency: preview.currency })}</p>
+      <p className="text-xs text-muted-foreground">
+        {t('currencyNote', { currency: preview.currency })}
+      </p>
       {preview.problems.length > 0 && (
         <div className="space-y-1">
           <p className="text-xs font-medium">{t('problems')}</p>

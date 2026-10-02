@@ -80,7 +80,10 @@ export function AdjustDialog({
   const capped = willBeCapped(balanceMinor, draft.direction, amountMinor);
   const noteLen = draft.note.trim().length;
   const amountError = shown && check.amount ? t(`problems.amount.${check.amount}`) : undefined;
-  const noteError = shown && check.note ? t(`problems.note.${check.note}`, { min: WALLET_LIMITS.noteMin, max: WALLET_LIMITS.noteMax }) : undefined;
+  const noteError =
+    shown && check.note
+      ? t(`problems.note.${check.note}`, { min: WALLET_LIMITS.noteMin, max: WALLET_LIMITS.noteMax })
+      : undefined;
 
   return (
     <Modal
@@ -126,7 +129,11 @@ export function AdjustDialog({
           <>
             <fieldset className="space-y-1.5">
               <legend className="font-medium">{t('direction')}</legend>
-              <div role="radiogroup" aria-label={t('direction')} className="inline-flex rounded-md border border-border p-0.5">
+              <div
+                role="radiogroup"
+                aria-label={t('direction')}
+                className="inline-flex rounded-md border border-border p-0.5"
+              >
                 {(['credit', 'debit'] as const).map((d: AdjustDirection) => (
                   <button
                     key={d}
@@ -136,7 +143,9 @@ export function AdjustDialog({
                     onClick={() => set({ direction: d })}
                     className={cn(
                       'rounded px-3 py-1.5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                      draft.direction === d ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted',
+                      draft.direction === d
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-muted',
                     )}
                   >
                     {t(d === 'credit' ? 'add' : 'deduct')}
@@ -144,9 +153,16 @@ export function AdjustDialog({
                 ))}
               </div>
             </fieldset>
-            <Field label={t('amount')} htmlFor="adj-amount" hint={t('amountHint')} error={amountError}>
+            <Field
+              label={t('amount')}
+              htmlFor="adj-amount"
+              hint={t('amountHint')}
+              error={amountError}
+            >
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground" aria-hidden="true">{currencySymbol(currency, locale)}</span>
+                <span className="text-muted-foreground" aria-hidden="true">
+                  {currencySymbol(currency, locale)}
+                </span>
                 <Input
                   id="adj-amount"
                   inputMode="decimal"
@@ -158,7 +174,9 @@ export function AdjustDialog({
                 />
               </div>
             </Field>
-            {capped && <Alert tone="warning">{t('cappedWarning', { balance: money(balanceMinor) })}</Alert>}
+            {capped && (
+              <Alert tone="warning">{t('cappedWarning', { balance: money(balanceMinor) })}</Alert>
+            )}
             <Field label={t('reason')} htmlFor="adj-note" hint={t('reasonHint')} error={noteError}>
               <Textarea
                 id="adj-note"
@@ -183,8 +201,12 @@ export function AdjustDialog({
               })}
             </p>
             <p>{t('newBalance', { balance: money(after) })}</p>
-            {capped && <Alert tone="warning">{t('cappedWarning', { balance: money(balanceMinor) })}</Alert>}
-            <p className="text-muted-foreground">{t('summaryReason', { reason: draft.note.trim() })}</p>
+            {capped && (
+              <Alert tone="warning">{t('cappedWarning', { balance: money(balanceMinor) })}</Alert>
+            )}
+            <p className="text-muted-foreground">
+              {t('summaryReason', { reason: draft.note.trim() })}
+            </p>
             <p className="text-xs text-muted-foreground">{t('visibleNote')}</p>
           </div>
         )}
@@ -194,7 +216,9 @@ export function AdjustDialog({
 }
 
 /** The sentence shown after an adjustment: what was applied, which differs from the request when a debit hit 0. */
-export function resultMessageKey(r: AdjustWalletResult): 'appliedAdd' | 'appliedDeduct' | 'partial' {
+export function resultMessageKey(
+  r: AdjustWalletResult,
+): 'appliedAdd' | 'appliedDeduct' | 'partial' {
   if (outcomeOf(r) === 'partial') return 'partial';
   return r.direction === 'credit' ? 'appliedAdd' : 'appliedDeduct';
 }

@@ -63,7 +63,9 @@ export function previewBalance(
   direction: AdjustDirection,
   amountMinor: number,
 ): number {
-  return direction === 'credit' ? balanceMinor + amountMinor : Math.max(0, balanceMinor - amountMinor);
+  return direction === 'credit'
+    ? balanceMinor + amountMinor
+    : Math.max(0, balanceMinor - amountMinor);
 }
 
 /** A debit larger than the balance only takes what is there. */

@@ -40,7 +40,10 @@ export function RateGrid({ rates, canEdit }: { rates: RatesResponse; canEdit: bo
   const [plan, setPlan] = useState<SavePlan | null>(null);
 
   const rows = useMemo(() => gridRows(rates.data, draft), [rates.data, draft]);
-  const names = useMemo(() => new Map(rates.countries.map((c) => [c.code, c.name] as const)), [rates.countries]);
+  const names = useMemo(
+    () => new Map(rates.countries.map((c) => [c.code, c.name] as const)),
+    [rates.countries],
+  );
   const dirtyCount = rows.filter((r) => r.dirty).length;
   const symbol = currencySymbol(rates.currency, locale);
 
@@ -50,7 +53,8 @@ export function RateGrid({ rates, canEdit }: { rates: RatesResponse; canEdit: bo
       setDraft((d) => afterSave(d, p.keys, result));
       setShowProblems(false);
       void qc.invalidateQueries({ queryKey: KEYS.rates });
-      if (result.skipped.length > 0) toast.error(t('savedSome', { saved: result.saved, skipped: result.skipped.length }));
+      if (result.skipped.length > 0)
+        toast.error(t('savedSome', { saved: result.saved, skipped: result.skipped.length }));
       else toast.success(t('saved', { count: result.saved }));
     },
     onError: (err) => toast.error(te(errorKind(err))),
@@ -101,12 +105,26 @@ export function RateGrid({ rates, canEdit }: { rates: RatesResponse; canEdit: bo
           <table className="w-full min-w-[52rem] text-sm" aria-label={t('title')}>
             <thead>
               <tr className="border-b border-border text-xs text-muted-foreground">
-                <th scope="col" className="px-2 py-2 text-start font-medium">{t('country')}</th>
-                <th scope="col" className="px-2 py-2 text-start font-medium">{t('category')}</th>
-                <th scope="col" className="px-2 py-2 text-start font-medium">{t('charge')}</th>
-                <th scope="col" className="px-2 py-2 text-start font-medium">{t('metaCost')}</th>
-                <th scope="col" className="px-2 py-2 text-start font-medium">{t('margin')}</th>
-                {canEdit && <th scope="col" className="px-2 py-2 text-end font-medium"><span className="sr-only">{t('actions')}</span></th>}
+                <th scope="col" className="px-2 py-2 text-start font-medium">
+                  {t('country')}
+                </th>
+                <th scope="col" className="px-2 py-2 text-start font-medium">
+                  {t('category')}
+                </th>
+                <th scope="col" className="px-2 py-2 text-start font-medium">
+                  {t('charge')}
+                </th>
+                <th scope="col" className="px-2 py-2 text-start font-medium">
+                  {t('metaCost')}
+                </th>
+                <th scope="col" className="px-2 py-2 text-start font-medium">
+                  {t('margin')}
+                </th>
+                {canEdit && (
+                  <th scope="col" className="px-2 py-2 text-end font-medium">
+                    <span className="sr-only">{t('actions')}</span>
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -121,7 +139,9 @@ export function RateGrid({ rates, canEdit }: { rates: RatesResponse; canEdit: bo
                   problem={problemOf(r)}
                   serverReason={draft.skipped[r.key]}
                   onChange={(field, value) => setDraft((d) => editField(d, r.key, field, value))}
-                  onRemove={() => (r.existing ? setRemoving(r) : setDraft((d) => removeAdded(d, r.key)))}
+                  onRemove={() =>
+                    r.existing ? setRemoving(r) : setDraft((d) => removeAdded(d, r.key))
+                  }
                 />
               ))}
             </tbody>
@@ -152,7 +172,9 @@ export function RateGrid({ rates, canEdit }: { rates: RatesResponse; canEdit: bo
         open={removing !== null}
         title={t('removeTitle')}
         message={t('removeBody', {
-          country: removing ? countryLabel(removing.countryCode, names.get(removing.countryCode), t('anyCountry')) : '',
+          country: removing
+            ? countryLabel(removing.countryCode, names.get(removing.countryCode), t('anyCountry'))
+            : '',
         })}
         confirmLabel={t('remove')}
         cancelLabel={t('cancel')}
@@ -197,10 +219,15 @@ function GridLine({
   const noteId = `note-${row.key}`;
   const note = problem ? t(`problems.${problem}`) : serverReason;
   return (
-    <tr className={cn('border-b border-border align-top last:border-0', row.dirty && 'bg-muted/40')} data-dirty={row.dirty || undefined}>
+    <tr
+      className={cn('border-b border-border align-top last:border-0', row.dirty && 'bg-muted/40')}
+      data-dirty={row.dirty || undefined}
+    >
       <td className="px-2 py-2">
         {row.existing ? (
-          <span className="font-medium">{countryLabel(row.countryCode, countryName, t('anyCountry'))}</span>
+          <span className="font-medium">
+            {countryLabel(row.countryCode, countryName, t('anyCountry'))}
+          </span>
         ) : (
           <Select
             aria-label={t('country')}
@@ -238,7 +265,9 @@ function GridLine({
       </td>
       <td className="px-2 py-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-muted-foreground" aria-hidden="true">{symbol}</span>
+          <span className="text-muted-foreground" aria-hidden="true">
+            {symbol}
+          </span>
           <Input
             aria-label={`${t('charge')}: ${label}`}
             inputMode="decimal"
@@ -254,7 +283,9 @@ function GridLine({
       </td>
       <td className="px-2 py-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-muted-foreground" aria-hidden="true">{symbol}</span>
+          <span className="text-muted-foreground" aria-hidden="true">
+            {symbol}
+          </span>
           <Input
             aria-label={`${t('metaCost')}: ${label}`}
             inputMode="decimal"
@@ -280,12 +311,19 @@ function GridLine({
             {margin.percent !== null && <span className="ms-1 text-xs">({margin.percent}%)</span>}
           </span>
         ) : (
-          <span className="text-muted-foreground" aria-label={t('marginUnknown')}>-</span>
+          <span className="text-muted-foreground" aria-label={t('marginUnknown')}>
+            -
+          </span>
         )}
       </td>
       {canEdit && (
         <td className="px-2 py-2 text-end">
-          <Button variant="ghost" size="sm" onClick={onRemove} aria-label={`${t('remove')}: ${label}`}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRemove}
+            aria-label={`${t('remove')}: ${label}`}
+          >
             {t('remove')}
           </Button>
         </td>
@@ -293,4 +331,3 @@ function GridLine({
     </tr>
   );
 }
-

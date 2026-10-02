@@ -49,7 +49,8 @@ export function checkSettings(d: SettingsDraft): SettingsCheck {
     for (const issue of parsed.error.issues) {
       const field = issue.path[0];
       if (typeof field === 'string' && field in d && !problems[field as SettingsField]) {
-        problems[field as SettingsField] = field === 'launchCoveragePercent' ? 'percent' : 'invalid';
+        problems[field as SettingsField] =
+          field === 'launchCoveragePercent' ? 'percent' : 'invalid';
       }
     }
   }

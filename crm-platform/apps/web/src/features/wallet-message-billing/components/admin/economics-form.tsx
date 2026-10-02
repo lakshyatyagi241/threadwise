@@ -19,7 +19,13 @@ import {
 } from '../../lib/settings-form';
 
 /** The three flat economics figures and the launch coverage, saved apart from the rate grid and the switches. */
-export function EconomicsForm({ settings, canEdit }: { settings: WalletSettings; canEdit: boolean }) {
+export function EconomicsForm({
+  settings,
+  canEdit,
+}: {
+  settings: WalletSettings;
+  canEdit: boolean;
+}) {
   const t = useTranslations('wallet-message-billing.admin.pricing.economics');
   const te = useTranslations('wallet-message-billing.errors');
   const locale = useLocale();

@@ -13,7 +13,13 @@ type SwitchName = 'perCountryEnabled' | 'payPerMessage';
 const NAMES: readonly SwitchName[] = ['perCountryEnabled', 'payPerMessage'];
 
 /** The two master switches. Each has its own save and its own confirmation, and saving one never touches the other. */
-export function SwitchesCard({ settings, canEdit }: { settings: WalletSettings; canEdit: boolean }) {
+export function SwitchesCard({
+  settings,
+  canEdit,
+}: {
+  settings: WalletSettings;
+  canEdit: boolean;
+}) {
   return (
     <Card className="space-y-5">
       {NAMES.map((name) => (
@@ -75,7 +81,11 @@ function SwitchRow({
             disabled={!canEdit || save.isPending}
           />
           {canEdit && (
-            <Button size="sm" onClick={() => setConfirm(true)} disabled={!changed || save.isPending}>
+            <Button
+              size="sm"
+              onClick={() => setConfirm(true)}
+              disabled={!changed || save.isPending}
+            >
               {t('save')}
             </Button>
           )}
