@@ -1,7 +1,11 @@
 {
   "chatbotWidget": {
-    "nav": { "title": "Chat Widget" },
-    "common": { "dismiss": "Dismiss" },
+    "nav": {
+      "title": "Chat Widget"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
     "paywall": {
       "kicker": "Plan",
       "title": "Chatbot widgets are not in your plan",
@@ -12,8 +16,16 @@
       "tip": "Tip",
       "tipBody": "Drop a one-line snippet onto any site to launch a floating chat bubble. Each widget can be powered by a smart agent, route to WhatsApp, or both — visitor conversations land in your team inbox.",
       "statusViews": "Widget status",
-      "view": { "all": "All widgets", "active": "Active", "paused": "Paused" },
-      "status": { "all": "All", "active": "Active", "paused": "Paused" },
+      "view": {
+        "all": "All widgets",
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "status": {
+        "all": "All",
+        "active": "Active",
+        "paused": "Paused"
+      },
       "trainFirst": "Train first",
       "trainBody": "Build a smart agent + add knowledge in <link>AI Training</link>, then attach it here so your widget answers in your voice.",
       "workspace": "Workspace",
@@ -31,7 +43,11 @@
         "allTime": "all-time",
         "visitorsUnit": "visitors"
       },
-      "health": { "healthy": "healthy", "empty": "empty", "attention": "attention" },
+      "health": {
+        "healthy": "healthy",
+        "empty": "empty",
+        "attention": "attention"
+      },
       "search": "Search by name or slug…",
       "col": {
         "widget": "Widget",
@@ -52,22 +68,20 @@
       "of": "of",
       "widgetsCount": "{count} widgets",
       "loadMore": "Load more",
-      "pill": { "active": "Active", "paused": "Paused" },
+      "pill": {
+        "active": "Active",
+        "paused": "Paused"
+      },
       "action": {
         "preview": "Open standalone preview",
         "copy": "Copy embed snippet",
         "edit": "Edit widget",
-        "pause": "Pause widget",
-        "resume": "Resume widget",
         "rotate": "Rotate embed token",
         "duplicate": "Duplicate widget",
         "delete": "Delete widget"
       },
       "copied": "Snippet copied — paste before {tag} on your site.",
       "duplicateFailed": "The widget could not be duplicated.",
-      "paused": "Widget paused.",
-      "resumed": "Widget resumed.",
-      "statusFailed": "The widget status could not be changed.",
       "rotated": "Token rotated — copy the new snippet.",
       "rotateFailed": "Rotate failed — {reason}",
       "networkError": "network error",
@@ -102,7 +116,12 @@
       "stateDraft": "Draft / unsaved",
       "saveDraft": "Save draft",
       "stepper": "Builder steps",
-      "steps": { "setup": "Setup", "look": "Look", "voice": "Voice", "launch": "Launch" },
+      "steps": {
+        "setup": "Setup",
+        "look": "Look",
+        "voice": "Voice",
+        "launch": "Launch"
+      },
       "previous": "Previous",
       "next": "Next",
       "stepOf": "Step {n} of {total}",
@@ -133,7 +152,10 @@
         "positionHint": "Where the round chat bubble floats on your site.",
         "engine": "Conversation engine",
         "mode": {
-          "ai": { "title": "Smart agent", "body": "Trained AI answers right in the browser." },
+          "ai": {
+            "title": "Smart agent",
+            "body": "Trained AI answers right in the browser."
+          },
           "whatsapp": {
             "title": "WhatsApp deep-link",
             "body": "Send the visitor into the WhatsApp app to chat."
@@ -183,7 +205,10 @@
         "bubbleInk": "Incoming bubble ink",
         "bubbleInkHint": "Text colour inside bubbles.",
         "canvas": "Window canvas",
-        "canvasKind": { "color": "Solid colour", "image": "Tile image" },
+        "canvasKind": {
+          "color": "Solid colour",
+          "image": "Tile image"
+        },
         "canvasColour": "Window canvas colour",
         "canvasImage": "Window canvas image URL",
         "canvasImageHint": "A tile-able PNG works best.",
@@ -191,7 +216,11 @@
         "autoOpenHint": "Opens the chat ~1.2 s after the page loads.",
         "intake": "Visitor intake",
         "intakeHint": "Pre-chat fields shown before the chat begins. Skip everything for anonymous chat.",
-        "intakeField": { "name": "Display name", "email": "Email address", "phone": "Phone number" }
+        "intakeField": {
+          "name": "Display name",
+          "email": "Email address",
+          "phone": "Phone number"
+        }
       },
       "launch": {
         "title": "Send-button & embed snippet",
@@ -210,7 +239,11 @@
         "chat": "Chat",
         "hi": "Hi!",
         "send": "Send",
-        "engine": { "ai": "Smart agent", "whatsapp": "WhatsApp", "both": "AI + WhatsApp" },
+        "engine": {
+          "ai": "Smart agent",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
         "metaEngine": "Engine",
         "metaPlacement": "Placement",
         "metaAutoOpen": "Auto-open",

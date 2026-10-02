@@ -82,7 +82,6 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
   const [furthest, setFurthest] = useState<number>(editing ? TOTAL_STEPS : 1);
   const [flash, setFlash] = useState<string | null>(null);
   const [saved, setSaved] = useState(editing);
-  const [saving, setSaving] = useState(false);
   const [snippet, setSnippet] = useState<{ embedUrl: string; previewUrl: string } | null>(null);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -127,8 +126,9 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
     if (canJump(target, current, furthest) === 'free' || gateForward(current)) showStep(target);
   };
 
+  // QUIRK: reproduced deliberately (TW-WGT-006). Nothing blocks a second click while the first save is in flight: both go out
+  // before the widget has an id, so a double click on Launch creates two widgets, as in Reference.
   const save = async (reveal: boolean) => {
-    if (saving) return;
     // Every step is checked, so an incomplete draft can never be saved; the first failing step opens.
     const bad = firstProblem(s);
     if (bad) {
@@ -137,7 +137,6 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
       flashField(bad.problem.field);
       return;
     }
-    setSaving(true);
     try {
       const body = toPayload(s);
       const out =
@@ -158,8 +157,6 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
     } catch (e) {
       const detail = e instanceof ApiError ? (e.fieldErrors[0]?.message ?? e.message) : null;
       toast(detail ?? t('saveFailed'), 'danger');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -214,7 +211,6 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
               <button
                 type="button"
                 id="wgt-save"
-                disabled={saving}
                 onClick={() => void save(false)}
                 className="rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-50"
               >
@@ -325,11 +321,10 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
                   canSave && (
                     <Button
                       id="wgt-launch"
-                      disabled={saving}
                       onClick={() => void save(true)}
                       className="h-auto gap-1.5 rounded-full bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white hover:opacity-90"
                     >
-                      {saving ? <Spinner /> : <LaunchCheckIcon className="size-3" />}
+                      <LaunchCheckIcon className="size-3" />
                       {t('launchWidget')}
                     </Button>
                   )

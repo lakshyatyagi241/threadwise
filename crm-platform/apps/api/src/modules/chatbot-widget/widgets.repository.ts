@@ -136,7 +136,6 @@ export interface ListFilter {
   limit: number;
   /** Keyset: the id of the last row of the previous page (newest first, so the next page has smaller ids). */
   afterId: number | null;
-  status: string | null;
 }
 
 /** The widget tables, tenant-scoped through the caller's transaction (RLS) and again by `org_id` in every statement. */
@@ -150,7 +149,6 @@ export class WidgetsRepository {
       FROM ${FROM}
       WHERE w.org_id = ${orgId}
         AND (${f.afterId}::bigint IS NULL OR w.id < ${f.afterId}::bigint)
-        AND (${f.status}::text IS NULL OR w.status = ${f.status}::text)
       ORDER BY w.id DESC
       LIMIT ${f.limit + 1}`);
     return (res.rows as Raw[]).map(toRow);
@@ -178,6 +176,15 @@ export class WidgetsRepository {
       SELECT ${COLUMNS} FROM ${FROM} WHERE w.org_id = ${orgId} AND w.id = ${id}`);
     const r = res.rows[0] as Raw | undefined;
     return r ? toRow(r) : undefined;
+  }
+
+  /**
+   * Serialises slug allocation per organization for the rest of the transaction. Two saves of the same name racing (a double
+   * click on Launch) would otherwise both see the slug free and the second would fail on the unique index; Reference's
+   * check-then-insert let both through only because its server handled one request at a time.
+   */
+  async lockSlugs(tx: Tx, orgId: number): Promise<void> {
+    await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${`wgt-slug:${orgId}`}, 0))`);
   }
 
   /** Slugs of the workspace that could collide with `base` (`base`, `base-2`, ...), leaving out the widget being saved. */
@@ -252,19 +259,6 @@ export class WidgetsRepository {
         allowed_domains = COALESCE(${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb, allowed_domains)
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
       RETURNING id`);
-    return res.rows.length > 0;
-  }
-
-  async setStatus(
-    tx: Tx,
-    orgId: number,
-    id: number,
-    status: string,
-    rowVersion: number,
-  ): Promise<boolean> {
-    const res = await tx.execute(sql`
-      UPDATE chatbot_widgets SET status = ${status}
-      WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion} RETURNING id`);
     return res.rows.length > 0;
   }
 

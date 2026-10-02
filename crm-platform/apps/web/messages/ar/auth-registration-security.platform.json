@@ -1425,7 +1425,8 @@
             "analytics": "التحليلات",
             "remove_branding": "العلامة البيضاء (إزالة علامة المنصة)",
             "sales_pipeline": "مسار المبيعات (الصفقات والمهام)",
-            "appointment_booking": "المواعيد وصفحات الحجز"
+            "appointment_booking": "المواعيد وصفحات الحجز",
+            "chatbot_widgets": "أدوات الدردشة للمواقع"
           },
           "problems": {
             "required": "هذا الحقل مطلوب.",

@@ -86,15 +86,14 @@ export class SqlInboxGateway implements InboxGateway {
 
     await this.linkContact(tx, orgId, widget, visitor, conversationId);
 
-    // The opening line is a message of the thread, so agents see it as the first bubble and a reload repaints it.
+    // QUIRK: reproduced deliberately (TW-WGT-015 rule 4). The opening line is stored in the legacy `messages` table, which the
+    // inbox thread view does not read, so agents never see it and a reload never repaints it.
     if (widget.welcomeMessage) {
       await tx.execute(sql`
-        INSERT INTO inbox_messages (org_id, conversation_id, user_id, direction, from_number, to_number, body, status,
-                                    meta, sent_at, provider)
-        VALUES (${orgId}, ${conversationId}, ${widget.userId}, 'out', ${botSender(widget.uuid)},
-                ${visitor.visitorUuid}, ${widget.welcomeMessage}, 'sent',
-                ${JSON.stringify({ widget_id: widget.uuid, source: 'welcome', channel: 'chatbot_widget' })}::jsonb,
-                now(), ${conv.provider})`);
+        INSERT INTO messages (org_id, conversation_id, user_id, direction, from_number, to_number, body, status, meta, sent_at)
+        VALUES (${orgId}, ${conversationId}, ${widget.userId}, 'out', ${botSender(widget.uuid)}, ${visitor.visitorUuid},
+                ${widget.welcomeMessage}, 'sent',
+                ${JSON.stringify({ widget_id: widget.uuid, source: 'welcome' })}::jsonb, now())`);
     }
     return { id: conversationId, provider: conv.provider, created: true };
   }
@@ -213,12 +212,14 @@ export class SqlInboxGateway implements InboxGateway {
     conversationId: number,
     sender: string,
   ): Promise<boolean> {
-    // The widget's own lines always carry the bot sender; an operator's reply carries the business number or none.
-    // The column is plain text here, so the comparison means what it says.
+    // QUIRK: reproduced deliberately (TW-WGT-017 rule 2). Reference compared its ENCRYPTED `from_number` column with the plain
+    // bot sender in SQL, which is true for every stored value, so ANY outbound line (the bot's own earlier reply included)
+    // counts as "a person took over" and the assistant answers only the first message of a conversation. `sender` is
+    // accepted for the day the rule is corrected and deliberately not compared.
+    void sender;
     const res = await tx.execute(sql`
       SELECT 1 FROM inbox_messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out'
-        AND (from_number IS NULL OR from_number <> ${sender})
       LIMIT 1`);
     return res.rows.length > 0;
   }
@@ -230,6 +231,15 @@ export class SqlInboxGateway implements InboxGateway {
         WHERE org_id = ${orgId} AND conversation_id = ${conversationId}
         ORDER BY id DESC LIMIT ${limit}
       ) t ORDER BY id`);
+    return (res.rows as unknown as LineRow[]).map(toLine);
+  }
+
+  /** The OLDEST `limit` lines, oldest first (TW-WGT-012 rule 2: Reference's transcript takes the first 200, not the newest). */
+  async oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
+    const res = await tx.execute(sql`
+      SELECT id, direction, body, agent_id, sent_at FROM inbox_messages
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId}
+      ORDER BY id LIMIT ${limit}`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }
 

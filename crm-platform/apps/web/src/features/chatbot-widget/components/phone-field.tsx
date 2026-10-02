@@ -1,23 +1,19 @@
 'use client';
 
-import type { CountryCode } from 'libphonenumber-js';
-import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import intlTelInput from 'intl-tel-input/intlTelInputWithUtils';
+import 'intl-tel-input/styles';
+import { useEffect, useRef } from 'react';
 import { cn } from '@crm/ui';
-import {
-  countryOf,
-  countryOptions,
-  dialCodeOf,
-  flagEmoji,
-  nationalDigits,
-  openingCountry,
-  splitInternational,
-} from '../lib/phone';
+import { nationalDigits, openingCountry } from '../lib/phone';
+
+type Iti = ReturnType<typeof intlTelInput>;
+type InitialCountry = NonNullable<Parameters<typeof intlTelInput>[1]>['initialCountry'];
 
 /**
- * The WhatsApp number: a country picker plus the national digits (TW-WGT-003). The dial code goes to `onCc` as `+<dial>`
- * on every country change, the digits to `onNumber` with everything else stripped, and a pasted international number is
- * re-split on blur so the code is not counted twice. Opens on the platform's default country when nothing is saved.
+ * The WhatsApp number as Reference shows it (TW-WGT-003): the same country picker (intl-tel-input, flag and separate dial code).
+ * The dial code goes to `onCc` as `+<dial>` on every country change, the digits to `onNumber` with everything else stripped,
+ * and on blur a pasted international number is re-split so the code is not counted twice. A saved cc + number is seeded
+ * through `setNumber`. Opens on the platform's default country (fallback India).
  */
 export function PhoneField({
   id,
@@ -36,61 +32,84 @@ export function PhoneField({
   onNumber: (digits: string) => void;
   invalid?: boolean;
 }) {
-  const t = useTranslations('chatbotWidget.builder.setup');
-  const locale = useLocale();
-  const options = useMemo(() => countryOptions(locale), [locale]);
-  // The platform default arrives after the first paint; it only decides the country while nothing is saved, typed or picked.
-  const [picked, setPicked] = useState<CountryCode | null>(null);
-  const [text, setText] = useState(number);
-  const country = picked ?? countryOf(cc, number, openingCountry(defaultIso));
-  const setCountry = (c: CountryCode) => setPicked(c);
-
-  // Reference wrote the dial code of the shown country into the form on load, whatever the engine.
+  const input = useRef<HTMLInputElement>(null);
+  const iti = useRef<Iti | null>(null);
+  // The picker is mounted once; later prop changes must not rebuild it, so its callbacks read the latest ones.
+  const live = useRef({ cc, onCc, onNumber });
   useEffect(() => {
-    const dial = dialCodeOf(country);
-    if (cc !== dial) onCc(dial);
-    // `cc` is deliberately not a dependency: this only follows the country.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [country]);
+    live.current = { cc, onCc, onNumber };
+  });
+  const seed = useRef({ cc, number, defaultIso });
+
+  useEffect(() => {
+    const el = input.current;
+    if (!el) return;
+    const s = seed.current;
+    const picker = intlTelInput(el, {
+      initialCountry: openingCountry(s.defaultIso).toLowerCase() as InitialCountry,
+      separateDialCode: true,
+      nationalMode: false,
+      autoPlaceholder: 'aggressive',
+      // The builder card clips its overflow; the country list is portalled out of it, as in Reference.
+      dropdownContainer: document.body,
+    });
+    iti.current = picker;
+
+    const seedCc = s.cc.replace(/[^\d+]/g, '');
+    const seedNumber = nationalDigits(s.number);
+    if (seedCc && seedNumber) {
+      const e164 = `${seedCc.startsWith('+') ? seedCc : `+${seedCc}`}${seedNumber}`;
+      try {
+        picker.setNumber(e164);
+      } catch {
+        el.value = seedNumber;
+      }
+    }
+
+    const syncCountry = () => {
+      const data = picker.getSelectedCountryData();
+      if (data?.dialCode) live.current.onCc(`+${data.dialCode}`);
+    };
+    const syncNumber = () => live.current.onNumber(nationalDigits(el.value));
+    const onBlur = () => {
+      try {
+        const e164 = picker.getNumber();
+        if (e164) {
+          const code = live.current.cc;
+          const stripped = e164.startsWith(code)
+            ? e164.slice(code.length)
+            : e164.replace(/^\+\d+/, '');
+          live.current.onNumber(nationalDigits(stripped));
+        }
+      } catch {
+        /* keep the raw digits */
+      }
+    };
+    el.addEventListener('countrychange', syncCountry);
+    el.addEventListener('input', syncNumber);
+    el.addEventListener('blur', onBlur);
+    syncCountry();
+    syncNumber();
+    return () => {
+      el.removeEventListener('countrychange', syncCountry);
+      el.removeEventListener('input', syncNumber);
+      el.removeEventListener('blur', onBlur);
+      picker.destroy();
+      iti.current = null;
+    };
+  }, []);
 
   return (
-    <div className="flex flex-col gap-2 sm:flex-row">
-      <select
-        aria-label={t('country')}
-        value={country}
-        onChange={(e) => {
-          setCountry(e.target.value as CountryCode);
-        }}
-        className="h-10 rounded-xl border border-border bg-background px-3 text-[13px] outline-none focus-visible:border-brand focus-visible:ring-4 focus-visible:ring-brand/10 sm:w-60 sm:shrink-0"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {flagEmoji(o.value)} {o.label} ({o.dial})
-          </option>
-        ))}
-      </select>
+    <div className="[&_.iti]:w-full">
       <input
+        ref={input}
         id={id}
         type="tel"
         autoComplete="off"
-        inputMode="tel"
-        value={text}
         aria-invalid={invalid || undefined}
-        placeholder={t('phonePlaceholder')}
-        onChange={(e) => {
-          setText(e.target.value);
-          onNumber(nationalDigits(e.target.value));
-        }}
-        onBlur={() => {
-          const split = splitInternational(text);
-          if (!split) return;
-          setCountry(split.country);
-          setText(split.national);
-          onCc(dialCodeOf(split.country));
-          onNumber(nationalDigits(split.national));
-        }}
+        placeholder="Your number without country code"
         className={cn(
-          'h-10 min-w-0 flex-1 rounded-xl border bg-background px-3 text-[13px] outline-none',
+          'h-10 w-full rounded-xl border bg-background px-3 text-[13px] outline-none',
           'focus-visible:border-brand focus-visible:ring-4 focus-visible:ring-brand/10',
           invalid ? 'border-danger ring-2 ring-danger/40' : 'border-border',
         )}

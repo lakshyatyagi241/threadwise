@@ -58,12 +58,6 @@ export function uniqueSlug(base: string, taken: ReadonlySet<string>): string {
 export const copySlug = (slug: string, random: () => string = () => freshToken(4)) =>
   `${slug}-copy-${random()}`;
 
-/** The name a duplicate gets, cut so the suffix never pushes it past the 120-character column. */
-export function copyName(name: string, max = 120): string {
-  const suffix = ' (copy)';
-  return `${name.slice(0, Math.max(0, max - suffix.length))}${suffix}`;
-}
-
 export interface WidgetModeFields {
   mode: string;
   assistantId: unknown | null;

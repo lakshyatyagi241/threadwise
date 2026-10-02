@@ -76,14 +76,6 @@ describe('permissions (TW-WGT-027)', () => {
     ).toBe(403);
     expect((await api.as(reader.token).post(`/v2/widgets/${w.id}/duplicate`)).status).toBe(403);
     expect((await api.as(reader.token).post(`/v2/widgets/${w.id}/rotate-token`)).status).toBe(403);
-    expect(
-      (
-        await api
-          .as(reader.token)
-          .patch(`/v2/widgets/${w.id}/status`)
-          .send({ status: 'paused', rowVersion: 1 })
-      ).status,
-    ).toBe(403);
     expect((await api.as(reader.token).delete(`/v2/widgets/${w.id}`)).status).toBe(403);
 
     const maker = await api.member(t, 'maker', [['wgt.widgets.read'], ['wgt.widgets.create']]);
@@ -160,6 +152,16 @@ describe('save widget (TW-WGT-006)', () => {
     expect([a.slug, b.slug]).toEqual(['support', 'support-2']);
   });
 
+  it('TW-WGT-006 QUIRK (double submit): two saves of the same name racing both create a widget, with slugs x and x-2 (Reference has no guard)', async () => {
+    const name = 'Race';
+    const [a, b] = await Promise.all([
+      api.as(t.admin).post('/v2/widgets').send(widgetBody({ name })),
+      api.as(t.admin).post('/v2/widgets').send(widgetBody({ name })),
+    ]);
+    expect([a.status, b.status]).toEqual([201, 201]);
+    expect([a.body.slug, b.body.slug].sort()).toEqual(['race', 'race-2']);
+  });
+
   it('TW-WGT-006 rule 6: a name with no Latin letters gets widget-<random>', async () => {
     const w = await api.widget(t.admin, { name: '你好' });
     expect(w.slug).toMatch(/^widget-[a-z0-9]{6}$/);
@@ -184,9 +186,22 @@ describe('save widget (TW-WGT-006)', () => {
   it('TW-WGT-006 #4: allowedDomains is normalised: trimmed, lower-cased, scheme and path stripped, de-duplicated', async () => {
     const w = await api.widget(t.admin, {
       name: 'Domains',
-      allowedDomains: ['HTTPS://Acme.com/path', 'acme.com', '', ' Shop.Acme.com '],
+      allowedDomains: ['HTTPS://Acme.com/path', 'acme.com', ' Shop.Acme.com '],
     });
     expect(w.allowedDomains).toEqual(['acme.com', 'shop.acme.com']);
+  });
+
+  it('TW-WGT-006 QUIRK: a blank allowedDomains entry is 422 "must be a string" (Laravel nulls blanks before validating), as Reference answers', async () => {
+    for (const blank of ['', '   ']) {
+      const res = await api
+        .as(t.admin)
+        .post('/v2/widgets')
+        .send(widgetBody({ allowedDomains: ['acme.com', blank] }));
+      expect(res.status, JSON.stringify(blank)).toBe(422);
+      expect(res.body.errors.some((e: { path: string }) => e.path === 'allowedDomains.1')).toBe(
+        true,
+      );
+    }
   });
 
   it('TW-WGT-021 #2: more than 50 allowed domains is a 422', async () => {
@@ -223,12 +238,7 @@ describe('save widget (TW-WGT-006)', () => {
     await bad({ targetWhatsappNumber: '1'.repeat(25) }, 'targetWhatsappNumber');
   });
 
-  it('TW-WGT-004 rule 1: a colour that could carry markup is refused (hardening; Reference stored any 16 characters)', async () => {
-    const res = await api
-      .as(t.admin)
-      .post('/v2/widgets')
-      .send(widgetBody({ headerBg: "red';}</s" }));
-    expect(res.status).toBe(422);
+  it('TW-WGT-004 rule 1: a colour is any string up to 16 characters, as in Reference (no format check on the server)', async () => {
     const ok = await api
       .as(t.admin)
       .post('/v2/widgets')
@@ -237,10 +247,19 @@ describe('save widget (TW-WGT-006)', () => {
           name: 'Colours',
           headerBg: 'rgb(1, 2, 3)',
           messageBubbleColor: 'white',
-          buttonColor: '#abc',
+          buttonColor: 'not-a-colour',
         }),
       );
-    expect(ok.status).toBe(201);
+    expect(ok.status, JSON.stringify(ok.body)).toBe(201);
+    expect(ok.body.buttonColor).toBe('not-a-colour');
+    expect(
+      (
+        await api
+          .as(t.admin)
+          .post('/v2/widgets')
+          .send(widgetBody({ headerBg: 'x'.repeat(17) }))
+      ).status,
+    ).toBe(422);
   });
 
   it('TW-WGT-006 #6: a write leaves an audit row and an outbox event; nothing is written when it is refused', async () => {
@@ -367,23 +386,32 @@ describe('update (TW-WGT-006 rules 4, 7, 8)', () => {
     t = await api.signup('wgu');
   });
 
-  it("TW-WGT-006 #5: an id that is not this workspace's is 404, never a new widget (Reference created one)", async () => {
+  it("TW-WGT-006 #5 QUIRK: an id that is not this workspace's silently creates a NEW widget, as Reference does, and the original is untouched", async () => {
     const other = await api.signup('wgu2');
     const foreign = await api.widget(other.admin, { name: 'Foreign' });
-    const before = await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets`);
+    const before = await api.count(
+      `SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`,
+      [t.orgId],
+    );
     const res = await api
       .as(t.admin)
       .patch(`/v2/widgets/${foreign.id}`)
       .send({ ...widgetBody({ name: 'Hijack' }), rowVersion: 1 });
-    expect(res.status).toBe(404);
-    expect(await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets`)).toBe(before);
-    const still = await api.as(other.admin).get(`/v2/widgets/${foreign.id}`);
-    expect(still.body.name).toBe('Foreign');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.id).not.toBe(foreign.id);
+    expect(res.body.name).toBe('Hijack');
+    expect(
+      await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`, [
+        t.orgId,
+      ]),
+    ).toBe(before + 1);
+    expect((await api.as(other.admin).get(`/v2/widgets/${foreign.id}`)).body.name).toBe('Foreign');
     const missing = await api
       .as(t.admin)
       .patch(`/v2/widgets/${crypto.randomUUID()}`)
-      .send({ ...widgetBody(), rowVersion: 1 });
-    expect(missing.status).toBe(404);
+      .send({ ...widgetBody({ name: 'From nowhere' }), rowVersion: 1 });
+    expect(missing.status).toBe(200);
+    expect(missing.body.name).toBe('From nowhere');
   });
 
   it('TW-WGT-006 rule 6: a renamed widget keeps its slug and its token', async () => {
@@ -541,20 +569,15 @@ describe('list, stats and tenant isolation (TW-WGT-001)', () => {
     expect(res.body.planLocked).toBe(false);
   });
 
-  it('TW-WGT-001 rule 2 / TW-WGT-026: the status filter returns only that status; stats ignore it', async () => {
+  it('TW-WGT-001 QUIRK: there is no status filter (the status views are inert in Reference); paused is all minus active', async () => {
     const x = await api.signup('wgl5');
     const a = await api.widget(x.admin, { name: 'A' });
     await api.widget(x.admin, { name: 'B' });
-    await api
-      .as(x.admin)
-      .patch(`/v2/widgets/${a.id}/status`)
-      .send({ status: 'paused', rowVersion: a.rowVersion });
-    const paused = await api.as(x.admin).get('/v2/widgets?status=paused');
-    expect(paused.body.data.map((w: { name: string }) => w.name)).toEqual(['A']);
-    const active = await api.as(x.admin).get('/v2/widgets?status=active');
-    expect(active.body.data.map((w: { name: string }) => w.name)).toEqual(['B']);
-    expect(paused.body.stats).toEqual({ total: 2, active: 1, visitors: 0 });
-    expect((await api.as(x.admin).get('/v2/widgets?status=weird')).status).toBe(422);
+    await api.setStatus(x.orgId, a.id, 'paused');
+    const res = await api.as(x.admin).get('/v2/widgets?status=paused');
+    expect(res.body.data.map((w: { name: string }) => w.name)).toEqual(['B', 'A']);
+    expect(res.body.data.find((w: { name: string }) => w.name === 'A').status).toBe('paused');
+    expect(res.body.stats).toEqual({ total: 2, active: 1, visitors: 0 });
   });
 
   it("TW-WGT-001 rule 1: one workspace never sees, reads or touches another's widgets", async () => {
@@ -567,14 +590,6 @@ describe('list, stats and tenant isolation (TW-WGT-001)', () => {
     expect((await api.as(other.admin).post(`/v2/widgets/${mine.id}/rotate-token`)).status).toBe(
       404,
     );
-    expect(
-      (
-        await api
-          .as(other.admin)
-          .patch(`/v2/widgets/${mine.id}/status`)
-          .send({ status: 'paused', rowVersion: 1 })
-      ).status,
-    ).toBe(404);
     expect((await api.as(t.admin).get(`/v2/widgets/${mine.id}`)).body.status).toBe('active');
   });
 
@@ -623,15 +638,14 @@ describe('duplicate (TW-WGT-024)', () => {
     expect(list.body.data.find((w: { id: string }) => w.id === src.id).visitors).toBe(1);
   });
 
-  it('TW-WGT-024 rule 1: a name at the 120-character limit is cut so the copy still saves', async () => {
+  it('TW-WGT-024 rule 1 QUIRK: the copy of a name at the 120-character limit is longer than the limit (Reference answered a database error)', async () => {
     const src = await api.widget(t.admin, { name: 'n'.repeat(120) });
     const res = await api.as(t.admin).post(`/v2/widgets/${src.id}/duplicate`);
     expect(res.status).toBe(201);
-    expect(res.body.name.length).toBe(120);
-    expect(res.body.name.endsWith(' (copy)')).toBe(true);
+    expect(res.body.name).toBe(`${'n'.repeat(120)} (copy)`);
   });
 
-  it('TW-WGT-024: the copy is authored by the caller, not by the original author', async () => {
+  it('TW-WGT-024 QUIRK: the copy keeps the ORIGINAL author, not the caller (Reference replicated the row)', async () => {
     const src = await api.widget(t.admin, { name: 'Author' });
     const maker = await api.member(t, 'dupmaker', [['wgt.widgets.read'], ['wgt.widgets.create']]);
     const copy = (await api.as(maker.token).post(`/v2/widgets/${src.id}/duplicate`))
@@ -640,15 +654,12 @@ describe('duplicate (TW-WGT-024)', () => {
       `SELECT user_id FROM chatbot_widgets WHERE org_id = $1 AND uuid = $2`,
       [t.orgId, copy.id],
     );
-    expect(Number(row.rows[0].user_id)).toBe(maker.userId);
+    expect(Number(row.rows[0].user_id)).toBe(t.adminUserId);
   });
 
   it('TW-WGT-024 rule 2: a paused widget is copied as paused', async () => {
     const src = await api.widget(t.admin, { name: 'Sleepy' });
-    await api
-      .as(t.admin)
-      .patch(`/v2/widgets/${src.id}/status`)
-      .send({ status: 'paused', rowVersion: src.rowVersion });
+    await api.setStatus(t.orgId, src.id, 'paused');
     const copy = (await api.as(t.admin).post(`/v2/widgets/${src.id}/duplicate`)).body as WidgetJson;
     expect(copy.status).toBe('paused');
   });
@@ -710,55 +721,48 @@ describe('rotate the embed token (TW-WGT-023)', () => {
   });
 });
 
-describe('pause and resume (TW-WGT-026)', () => {
+describe('paused widgets (TW-WGT-026: no screen or endpoint can set it, as in Reference)', () => {
   let t: Tenant;
   beforeAll(async () => {
     t = await api.signup('wgx');
   });
 
-  it('TW-WGT-026 #1: a paused widget answers 404 on embed, chat, config, message and history; resuming restores it', async () => {
+  it('TW-WGT-026 #1: a paused widget answers 404 on embed, chat, config and message, and resuming restores it', async () => {
     const w = await api.widget(t.admin, { name: 'Pausable' });
     const uuid = await api.visitor(w.embedToken);
+    await api.setStatus(t.orgId, w.id, 'paused');
     const pub = api.pub(w.embedToken);
-    const paused = await api
-      .as(t.admin)
-      .patch(`/v2/widgets/${w.id}/status`)
-      .send({ status: 'paused', rowVersion: w.rowVersion });
-    expect(paused.status).toBe(200);
-    expect(paused.body.status).toBe('paused');
     expect((await pub.embed()).status).toBe(404);
     expect((await pub.embed()).text).toContain('widget not found or paused');
     expect((await pub.chat()).status).toBe(404);
     expect((await pub.config(uuid)).status).toBe(404);
     expect((await pub.message({ body: 'hi', visitor_uuid: uuid })).status).toBe(404);
-    expect((await pub.history(uuid)).status).toBe(404);
-    const resumed = await api
-      .as(t.admin)
-      .patch(`/v2/widgets/${w.id}/status`)
-      .send({ status: 'active', rowVersion: paused.body.rowVersion });
-    expect(resumed.body.status).toBe('active');
+    await api.setStatus(t.orgId, w.id, 'active');
     expect((await pub.embed()).status).toBe(200);
     expect((await pub.config(uuid)).status).toBe(200);
   });
 
-  it('TW-WGT-026: a stale rowVersion or an unknown status is refused', async () => {
-    const w = await api.widget(t.admin, { name: 'Strict' });
+  it('TW-WGT-026 rule 1 QUIRK: the history route does not look at the status, so a paused widget still serves it', async () => {
+    const w = await api.widget(t.admin, { name: 'Pausable history', welcomeMessage: '' });
+    const uuid = await api.visitor(w.embedToken);
+    await api.pub(w.embedToken).message({ body: 'hi', visitor_uuid: uuid });
+    await api.agentReply(t.orgId, uuid, 'still delivered');
+    await api.setStatus(t.orgId, w.id, 'paused');
+    const res = await api.pub(w.embedToken).history(uuid, 0);
+    expect(res.status).toBe(200);
+    expect(res.body.messages.map((m: { body: string }) => m.body)).toEqual(['still delivered']);
+  });
+
+  it('TW-WGT-026: there is no status route and a save cannot change the status', async () => {
+    const w = await api.widget(t.admin, { name: 'No toggle' });
     expect(
       (
         await api
           .as(t.admin)
           .patch(`/v2/widgets/${w.id}/status`)
-          .send({ status: 'paused', rowVersion: 99 })
+          .send({ status: 'paused', rowVersion: 1 })
       ).status,
-    ).toBe(409);
-    expect(
-      (
-        await api
-          .as(t.admin)
-          .patch(`/v2/widgets/${w.id}/status`)
-          .send({ status: 'gone', rowVersion: 1 })
-      ).status,
-    ).toBe(422);
+    ).toBe(404);
   });
 });
 
@@ -836,5 +840,53 @@ describe('delete (TW-WGT-025, 029)', () => {
         x.orgId,
       ]),
     ).toBe(0);
+  });
+});
+
+describe('plan gate (TW-WGT-027)', () => {
+  let t: Tenant;
+  beforeAll(async () => {
+    t = await api.signup('wgplan');
+  });
+  const setFlag = (value: boolean | null) =>
+    h.owner.query(`UPDATE org_plan_state SET overrides = $2::jsonb WHERE org_id = $1`, [
+      t.orgId,
+      JSON.stringify(value === null ? {} : { features: { chatbot_widgets: value } }),
+    ]);
+
+  it('TW-WGT-027 #1: with the plan flag off the page still loads with planLocked, every change is refused with 422 PLAN_FEATURE_LOCKED, and nothing is written', async () => {
+    const w = await api.widget(t.admin, { name: 'Made before the lock' });
+    await setFlag(false);
+    try {
+      const list = await api.as(t.admin).get('/v2/widgets');
+      expect(list.status).toBe(200);
+      expect(list.body.planLocked).toBe(true);
+      expect((await api.as(t.admin).get(`/v2/widgets/${w.id}`)).status).toBe(200);
+      const before = await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`, [t.orgId]);
+      for (const res of [
+        await api.as(t.admin).post('/v2/widgets').send(widgetBody({ name: 'Blocked' })),
+        await api.as(t.admin).patch(`/v2/widgets/${w.id}`).send({ ...widgetBody(), rowVersion: w.rowVersion }),
+        await api.as(t.admin).post(`/v2/widgets/${w.id}/duplicate`),
+        await api.as(t.admin).post(`/v2/widgets/${w.id}/rotate-token`),
+        await api.as(t.admin).delete(`/v2/widgets/${w.id}`),
+      ]) {
+        expect(res.status).toBe(422);
+        expect(res.body.code).toBe('PLAN_FEATURE_LOCKED');
+      }
+      expect(await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`, [t.orgId])).toBe(before);
+      // TW-WGT-027 rule 4: the public routes ignore the plan, so a downgraded workspace keeps serving its embedded widgets.
+      expect((await api.pub(w.embedToken).embed()).status).toBe(200);
+      expect((await api.pub(w.embedToken).config()).status).toBe(200);
+    } finally {
+      await setFlag(null);
+    }
+  });
+
+  it('TW-WGT-027: the flag on (or an organization with no plan row) leaves everything open; the widget limit is never enforced (as Reference)', async () => {
+    await setFlag(true);
+    const list = await api.as(t.admin).get('/v2/widgets');
+    expect(list.body.planLocked).toBe(false);
+    for (let i = 0; i < 3; i++) await api.widget(t.admin, { name: `Unlimited ${i}` });
+    await setFlag(null);
   });
 });
