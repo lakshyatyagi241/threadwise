@@ -331,6 +331,8 @@ import { TagsService } from './tags/tags.service';
     PipelinesService,
     TasksService,
     SalesDocsService,
+    SalesDocsRepository,
+    RecurringInvoicesService,
     InvoicesService,
     PaymentsService,
     TaxRatesService,
