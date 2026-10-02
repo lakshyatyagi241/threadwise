@@ -3,6 +3,10 @@
  * the tests are written against it, and only the Baileys adapter knows the library. A fake implements it in the tests.
  */
 
+import type { GroupSnapshot, ReceiptUpdate } from './inbound.port';
+import type { Normalized } from './inbound-normalizer';
+import type { MessageAction, SendCommand, SendContext, SendOutcome } from './outbound.port';
+
 export type SocketEvent =
   | { type: 'connecting' }
   | { type: 'qr'; qr: string }
@@ -10,7 +14,13 @@ export type SocketEvent =
   | { type: 'open'; linkedId: string | undefined }
   | { type: 'close'; code: number | undefined; message?: string }
   /** The credentials changed and have already been persisted by the adapter. The first one after a QR means the scan succeeded. */
-  | { type: 'creds' };
+  | { type: 'creds' }
+  /** A message the library delivered, already normalized (TW-NODE-016, 018). Replays, status and empty events are not delivered. */
+  | { type: 'message'; normalized: Normalized }
+  /** Delivery progress of a message we sent (TW-NODE-020). */
+  | { type: 'receipt'; receipt: ReceiptUpdate }
+  /** The groups this account is in changed (TW-NODE-021). */
+  | { type: 'groups'; groups: GroupSnapshot[] };
 
 export interface WaSocket {
   /** One listener per socket. Events from a socket that has been ended are not delivered. */
@@ -21,7 +31,36 @@ export interface WaSocket {
   logout(): Promise<void>;
   /** Closes the connection, keeps the session. Used on shutdown and before starting over. */
   end(): void;
+  /** Sends one message. Sends through one socket run one at a time (TW-NODE-029 rule 3). */
+  send(command: SendCommand, context: SendContext): Promise<SendOutcome>;
+  /** Reacts to, pins, stars, edits or deletes a message (TW-NODE-025). */
+  act(action: MessageAction): Promise<void>;
+  /** Group directory and management (TW-NODE-021). */
+  groups(action: GroupAction): Promise<GroupResult>;
 }
+
+export type GroupAction =
+  | { type: 'list' }
+  | { type: 'metadata'; groupJid: string }
+  | { type: 'create'; subject: string; participants: string[] }
+  | {
+      type: 'participants';
+      groupJid: string;
+      participants: string[];
+      change: 'add' | 'remove' | 'promote' | 'demote';
+    }
+  | { type: 'subject'; groupJid: string; subject: string }
+  | { type: 'description'; groupJid: string; description: string }
+  | {
+      type: 'settings';
+      groupJid: string;
+      setting: 'announcement' | 'not_announcement' | 'locked' | 'unlocked';
+    }
+  | { type: 'leave'; groupJid: string }
+  | { type: 'invite'; groupJid: string };
+
+export type GroupResult =
+  { groups: GroupSnapshot[] } | { group: GroupSnapshot } | { code: string } | { ok: true };
 
 /** How to reach WhatsApp for one device: directly, or through its own proxy (TW-NODE-013). */
 export interface ProxySettings {

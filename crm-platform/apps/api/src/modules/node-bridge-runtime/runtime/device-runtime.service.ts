@@ -23,6 +23,17 @@ import type {
 } from '../../../infra/providers/node-bridge-runtime/socket.port';
 import { WA_SOCKET_FACTORY } from '../../../infra/providers/node-bridge-runtime/socket.port';
 import { DeviceLease, waKeys } from './wa-redis';
+import { DeviceControlService } from './device-control.service';
+import { InboundRouter, ReceiptRouter } from './routers';
+import {
+  UnsupportedSendError,
+  type MessageAction,
+  type SendCommand,
+  type SendContext,
+  type SendOutcome,
+} from '../../../infra/providers/node-bridge-runtime/outbound.port';
+import type { GroupAction } from '../../../infra/providers/node-bridge-runtime/socket.port';
+import { DeviceNotReadyError } from './device-session';
 import { senderDigits } from '../outbound/sender-resolver.service';
 
 /** Reference's rule: a session of fewer files than this was never finished or was logged out. */
@@ -84,9 +95,19 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     private readonly store: DeviceAuthStore,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @Inject(WA_SOCKET_FACTORY) private readonly factory: WaSocketFactory,
+    private readonly inbound: InboundRouter,
+    private readonly receipts: ReceiptRouter,
+    private readonly control: DeviceControlService,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
+    // A send for a device this process owns goes straight to its socket, not through Redis.
+    this.control.local = {
+      owns: (o, d) => this.owned.has(key(o, d)),
+      send: (o, d, c, x) => this.send(o, d, c, x),
+      act: (o, d, a) => this.act(o, d, a),
+      groups: (o, d, a) => this.groupAction(o, d, a),
+    };
     await this.subscribe();
     void this.restore().catch((err) =>
       this.logger.error({ err: String(err) }, '[NODE] restore failed'),
@@ -100,6 +121,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       await this.lease.release(o.orgId, o.deviceId, o.token).catch(() => undefined);
     }
     this.owned.clear();
+    this.control.local = null;
     this.stopped = true;
     // A connection in subscriber mode cannot QUIT: unsubscribe, then close it, or this worker keeps answering commands.
     await this.subscriber?.unsubscribe().catch(() => undefined);
@@ -139,6 +161,9 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       report: (r) => this.applyStatus(orgId, deviceId, r),
       proxyFor: async () => this.proxyOf((await this.loadDevice(orgId, deviceId)) ?? dev),
       ended: () => void this.drop(orgId, deviceId),
+      inbound: async (n) => void (await this.inbound.message(orgId, deviceId, n)),
+      receipt: async (r) => void (await this.receipts.route(r)),
+      groups: (g) => this.inbound.groups(orgId, deviceId, g),
     };
     const session = new DeviceSession(
       { orgId, deviceId, phoneDigits: senderDigits(dev.country_code, dev.phone_number) },
@@ -346,6 +371,44 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     });
   }
 
+  // --- sending (TW-NODE-022 to 025, 021) -------------------------------------------------------
+
+  /** Sends through a device this worker owns. Throws when it does not, or when the number is not connected. */
+  async send(
+    orgId: number,
+    deviceId: number,
+    command: SendCommand,
+    context: SendContext,
+  ): Promise<SendOutcome> {
+    return this.session(orgId, deviceId).send(command, context);
+  }
+
+  async act(orgId: number, deviceId: number, action: MessageAction): Promise<void> {
+    await this.session(orgId, deviceId).act(action);
+  }
+
+  async groupAction(
+    orgId: number,
+    deviceId: number,
+    action: GroupAction,
+  ): Promise<DeviceCommandResult> {
+    try {
+      return {
+        ok: true,
+        status: 'group',
+        result: await this.session(orgId, deviceId).groups(action),
+      };
+    } catch (err) {
+      return failureOf(err);
+    }
+  }
+
+  private session(orgId: number, deviceId: number): DeviceSession {
+    const o = this.owned.get(key(orgId, deviceId));
+    if (!o) throw new DeviceNotReadyError();
+    return o.session;
+  }
+
   // --- commands from the API (TW-NODE-008, 009, 010) ------------------------------------------
 
   private async subscribe(): Promise<void> {
@@ -387,6 +450,23 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   /** Public for tests. Returns null when this worker is not the one to answer. */
   async handle(cmd: DeviceCommand): Promise<DeviceCommandResult | null> {
     const { orgId, deviceId } = cmd;
+    if (cmd.type === 'send' || cmd.type === 'act' || cmd.type === 'group') {
+      // Only the worker that owns the device can send through it; the others stay silent.
+      if (!this.owned.has(key(orgId, deviceId))) return null;
+      try {
+        if (cmd.type === 'send') {
+          const r = await this.send(orgId, deviceId, cmd.command, cmd.context);
+          return { ok: true, status: 'sent', providerMessageId: r.providerMessageId };
+        }
+        if (cmd.type === 'act') {
+          await this.act(orgId, deviceId, cmd.action);
+          return { ok: true, status: 'acted' };
+        }
+        return await this.groupAction(orgId, deviceId, cmd.action);
+      } catch (err) {
+        return failureOf(err);
+      }
+    }
     if (!this.owned.has(key(orgId, deviceId))) {
       const adopted = await this.adopt(orgId, deviceId, { connect: false });
       if (adopted === 'busy') return null; // another worker owns it and will answer
@@ -402,6 +482,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       case 'terminate':
         return this.terminate(o);
     }
+    return null;
   }
 
   private async qr(o: Owned): Promise<DeviceCommandResult> {
@@ -490,4 +571,17 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     await this.applyStatus(o.orgId, o.deviceId, { status: 'disconnected', progress: 0 });
     return { ok: true, status: 'terminated' };
   }
+}
+
+/** What a failed send or action becomes for the caller: the reason, in words the user can act on. */
+function failureOf(err: unknown): DeviceCommandResult {
+  if (err instanceof DeviceNotReadyError)
+    return { ok: false, status: 'not_ready', message: err.message };
+  if (err instanceof UnsupportedSendError)
+    return { ok: false, status: 'unsupported', message: err.message };
+  return {
+    ok: false,
+    status: 'error',
+    message: err instanceof Error ? err.message : 'The message could not be sent.',
+  };
 }

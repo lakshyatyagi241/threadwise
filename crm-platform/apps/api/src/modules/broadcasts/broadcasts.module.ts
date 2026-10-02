@@ -65,6 +65,7 @@ import {
     TEMPLATE_DIRECTORY,
     WALLET_GATE,
     WARMER_GATE,
+    BroadcastReceiptsService,
   ],
   providers: [
     CryptoService,
