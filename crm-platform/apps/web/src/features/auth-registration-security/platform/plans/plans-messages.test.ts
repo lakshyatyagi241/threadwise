@@ -67,28 +67,10 @@ describe('plan catalogue messages (operator console)', () => {
 
   it('labels every nav item the console menu lists', () => {
     // Other domains merge their own entries into the menu and test their own labels.
-    const own = OPERATOR_NAV.filter((i) => i.labelKey.startsWith('auth-registration-security.'));
-    for (const item of own) {
-    // other domains label their own entries in their own message files
-    // entries merged in by other domains carry their own namespace and their own messages test
-    for (const item of OPERATOR_NAV.filter((i) =>
-      i.labelKey.startsWith('auth-registration-security.platform.'),
-    // other domains add their own entries, labelled in their own message files
-    for (const item of OPERATOR_NAV.filter((i) =>
-      i.labelKey.startsWith('auth-registration-security.'),
-    // Entries other domains add carry their own namespace and are checked by that domain's tests.
-    for (const item of OPERATOR_NAV.filter((i) =>
-      i.labelKey.startsWith('auth-registration-security.platform.'),
-    )) {
-    // Other domains register their own menu items under their own namespace and test their own labels.
     const own = OPERATOR_NAV.filter((i) =>
       i.labelKey.startsWith('auth-registration-security.platform.'),
     );
     for (const item of own) {
-    // entries other domains add to the menu are labelled in their own message files
-    for (const item of OPERATOR_NAV.filter((i) =>
-      i.labelKey.startsWith('auth-registration-security.platform.'),
-    )) {
       const key = item.labelKey.replace('auth-registration-security.platform.', '');
       expect(en[key], key).toBeTypeOf('string');
     }

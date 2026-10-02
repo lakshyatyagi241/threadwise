@@ -33,6 +33,8 @@ export * from './tasks';
 export * from './platform-settings-branding-storage';
 export * from './localization-translation';
 export * from './install-update-licensing';
+// Settings and the installer each define isValidTimezone; the installer's also checks the name's shape and length.
+export { isValidTimezone } from './install-update-licensing';
 export * from './addons-extension-registry';
 export * from './platform-support-desk';
 export * from './ai-keys-usage-admin';

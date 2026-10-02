@@ -772,7 +772,10 @@ export function resolveSections(
 /** A link a page may emit: site-relative, an anchor, http(s), mailto or tel. Never `javascript:` or protocol-relative. */
 export function isSafeLink(value: string): boolean {
   const v = value.trim();
-  if (v === '' || v.length > 500 || /[\u0000-\u001f\s]/.test(v)) return false;
+  // Whitespace and control characters (code points up to 0x1f) are never valid here.
+  if (v === '' || v.length > 500 || /\s/.test(v) || [...v].some((c) => c.charCodeAt(0) <= 0x1f)) {
+    return false;
+  }
   if (v.startsWith('//')) return false;
   return /^(\/|#|https?:\/\/|mailto:|tel:)/i.test(v);
 }
