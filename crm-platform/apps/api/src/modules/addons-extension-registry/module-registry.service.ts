@@ -113,6 +113,11 @@ export class ModuleRegistryService {
     }
   }
 
+  /** True when the module is present at all (row or folder), on or off. */
+  async isInstalled(slug: string): Promise<boolean> {
+    return (await this.snapshot()).modules.has(slug);
+  }
+
   async isEnabled(slug: string): Promise<boolean> {
     return (await this.snapshot()).modules.get(slug)?.enabled ?? false;
   }
