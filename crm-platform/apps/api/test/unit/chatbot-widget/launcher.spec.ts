@@ -56,7 +56,7 @@ describe('the config shape', () => {
     [{ greeting: 'g'.repeat(61) }, 'greeting over 60'],
     [{ introMessage: '   ' }, 'blank intro'],
     [{ introMessage: 'i'.repeat(501) }, 'intro over 500'],
-  ])('refuses %j (%s)', (input) => {
+  ])('refuses %j (%s)', (input, _label) => {
     expect(widgetLauncherSchema.safeParse(input).success).toBe(false);
   });
 
@@ -152,6 +152,7 @@ describe('the WhatsApp link', () => {
   });
   it('the API rule builds the same link, and only where the mode and number allow it', () => {
     const base = {
+      assistantId: null,
       targetWhatsappCc: '+91',
       targetWhatsappNumber: '9876543210',
       prefilledMessage: 'Hello',
