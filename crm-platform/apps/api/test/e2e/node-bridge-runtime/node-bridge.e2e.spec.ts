@@ -8,6 +8,10 @@ import {
   nodeMessageSettingsSchema,
 } from '@crm/contracts';
 import { PlatformSettingsService } from '../../../src/modules/auth';
+import {
+  PACING_SETTINGS,
+  type PacingSettingsSource,
+} from '../../../src/modules/broadcasts/send-safety';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import {
   OPERATOR_EMAIL,
@@ -315,6 +319,26 @@ describe('TW-NODE-029 pacing', () => {
       'enableBatches',
       'msgGap',
     ]);
+  });
+
+  it('feeds the broadcast sender: the saved values are what a run reads, the daily cap keeps its default', async () => {
+    const source = h.app.get<PacingSettingsSource>(PACING_SETTINGS);
+    const tx = undefined as never;
+    expect(await source.get(tx, 1)).toEqual({
+      msgGapSeconds: 3,
+      enableBatches: false,
+      batchSize: 50,
+      batchGapMinutes: 5,
+      baileysDailyCap: 4000,
+    });
+    await ops('patch', '/pacing').send(pacing());
+    expect(await source.get(tx, 1)).toEqual({
+      msgGapSeconds: 7,
+      enableBatches: true,
+      batchSize: 20,
+      batchGapMinutes: 9,
+      baileysDailyCap: 4000,
+    });
   });
 
   it('serves the defaults before anything is saved, with batching off as 0', async () => {

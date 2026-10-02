@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { AppShell } from '@/components/shell/app-shell';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
+import { WalletAppShell } from '@/features/wallet-message-billing';
 import { NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
@@ -51,7 +51,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         key={`${session.org.id}:${session.user.id}`}
         url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
       >
-        <AppShell
+        <WalletAppShell
           user={{
             fullName: session.user.displayName ?? session.user.fullName,
             email: session.user.email,
@@ -74,7 +74,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             gates={paywallGates}
             enabled={enabledFeatures ? [...enabledFeatures] : null}
           />
-        </AppShell>
+        </WalletAppShell>
       </RealtimeProvider>
     </SessionProvider>
   );

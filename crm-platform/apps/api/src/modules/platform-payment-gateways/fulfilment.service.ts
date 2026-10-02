@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { AddonFulfilmentService } from '../addons-extension-registry';
-import { creditWallet } from './_shims/wallet-credit';
+import { WalletLedgerService, WalletSettingsService } from '../wallet-message-billing';
 import { nextPlanEnd, type BillingUnit } from './fulfilment-rules';
 import { recordOrderEvent } from './order-events';
 import { OrdersRepository, type OrderRow } from './orders.repository';
@@ -32,6 +32,8 @@ export class FulfilmentService {
     private readonly orders: OrdersRepository,
     private readonly outbox: OutboxService,
     private readonly addons: AddonFulfilmentService,
+    private readonly wallet: WalletLedgerService,
+    private readonly walletSettings: WalletSettingsService,
   ) {}
 
   /** `applied` is false when the order was already paid (a replay), in which case nothing was changed. */
@@ -55,12 +57,19 @@ export class FulfilmentService {
     if (order.kind === 'wallet_topup') {
       const minor = order.walletTopupMinor ?? 0;
       if (minor <= 0) return 'nothing';
-      await creditWallet(tx, {
+      // The ledger's own idempotency key makes a replay a no-op: the order uuid is the payment's identity.
+      await this.wallet.post(tx, {
         orgId: order.orgId,
-        userId: order.userId,
-        minor,
+        unit: await this.walletSettings.currency(),
+        type: 'topup',
+        direction: 'in',
+        amountMinor: minor,
         idempotencyKey: `order:${order.uuid}`,
-        orderNumber: order.orderNumber,
+        source: 'topup.conversion',
+        description: 'Wallet top-up',
+        subject: { type: 'order', id: order.id },
+        userId: order.userId,
+        meta: { order: order.orderNumber },
       });
       return 'wallet_credited';
     }

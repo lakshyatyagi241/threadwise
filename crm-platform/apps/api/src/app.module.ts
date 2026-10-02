@@ -24,12 +24,14 @@ import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
+import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
+import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
@@ -135,10 +137,12 @@ import { HealthModule } from './health/health.module';
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
     NodeBridgeRuntimeModule,
+    ScheduledQueueWarmerModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
     BspBillingEngineModule,
+    WalletMessageBillingModule,
     SendGuardModule,
     RealtimeModule,
     // The one door chat media goes through (store, link, the authenticated media route), over the platform's storage and upload policy.
