@@ -113,7 +113,7 @@ export class MessageBillingService {
         RETURNING messages`);
       const usedBefore = Number((counted.rows[0] as { messages: number }).messages) - 1;
 
-      const priced = await this.rates.price(tx, input.recipient, category);
+      const priced = await this.rates.price(tx, input.orgId, input.recipient, category);
       const decision = decideSettlement({
         priceMinor: priced.priceMinor,
         balanceMinor: wallet.balanceMinor,
@@ -167,7 +167,7 @@ export class MessageBillingService {
            wallet_tx_id, meta, price_credits, shortfall_credits, billing_mode, free_reason)
         VALUES (${input.orgId}, ${input.provider}, ${wamid}, ${priced.country}, ${category}, ${source}, ${chargedMinor},
                 ${chargedMinor}, ${costMinor}, ${priced.metaCostMicros}, ${status}, ${txRowId},
-                ${JSON.stringify({ matched: priced.matched })}, ${priced.priceMinor}, ${shortfallMinor},
+                ${JSON.stringify({ matched: priced.matched, basis: priced.basis, margin: priced.margin })}, ${priced.priceMinor}, ${shortfallMinor},
                 ${payPerMessage ? 'wallet' : 'plan'}, ${freeReason})
         RETURNING id, created_at::text AS created_at`);
       // Carried as TEXT: a JS Date keeps milliseconds, the partition key has microseconds, and the refund must find this exact row.

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { pageInfoSchema } from '../common/pagination';
 import { WALLET_LIMITS } from './money';
+import { pricingModeSchema } from './margins';
 import { walletTransactionSchema, walletTxTypeSchema } from './wallet';
 
 // --- settings and switches (TW-WALLET-003, -005, -008) ----------------------------------------------------------------------
@@ -17,6 +18,8 @@ export const walletSettingsSchema = z.object({
   launchCoveragePercent: z.number().int().min(0).max(100),
   perCountryEnabled: z.boolean(),
   payPerMessage: z.boolean(),
+  /** `fixed` = typed prices; `margin` = Meta cost plus the margin of the workspace, its plan or the platform. */
+  pricingMode: pricingModeSchema,
   /** Whether a live Meta pricing endpoint is configured (on the reseller page); false means "Sync" uses the bundled card. */
   metaRatesLive: z.boolean(),
   updatedAt: z.string().nullable(),
@@ -50,10 +53,20 @@ export type UpdateWalletSettingsInput = z.infer<typeof updateWalletSettingsSchem
  * TW-WALLET-005 rule 1). Send only what changes.
  */
 export const updateSwitchesSchema = z
-  .object({ perCountryEnabled: z.boolean().optional(), payPerMessage: z.boolean().optional() })
-  .refine((v) => v.perCountryEnabled !== undefined || v.payPerMessage !== undefined, {
-    message: 'Send at least one switch',
-  });
+  .object({
+    perCountryEnabled: z.boolean().optional(),
+    payPerMessage: z.boolean().optional(),
+    pricingMode: pricingModeSchema.optional(),
+  })
+  .refine(
+    (v) =>
+      v.perCountryEnabled !== undefined ||
+      v.payPerMessage !== undefined ||
+      v.pricingMode !== undefined,
+    {
+      message: 'Send at least one switch',
+    },
+  );
 export type UpdateSwitchesInput = z.infer<typeof updateSwitchesSchema>;
 
 // --- workspaces and the manual adjustment ---------------------------------------------------------------------------------

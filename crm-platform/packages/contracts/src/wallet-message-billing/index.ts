@@ -6,6 +6,7 @@
 export * from './errors';
 export * from './money';
 export * from './rates';
+export * from './margins';
 export * from './wallet';
 export * from './platform';
 export * from './events';

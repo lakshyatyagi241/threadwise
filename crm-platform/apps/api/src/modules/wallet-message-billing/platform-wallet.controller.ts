@@ -19,6 +19,9 @@ import {
   adjustWalletSchema,
   importRatesSchema,
   platformWalletListQuerySchema,
+  pricePreviewQuerySchema,
+  savePlanMarginsSchema,
+  saveWorkspaceMarginsSchema,
   saveRatesSchema,
   syncMetaSchema,
   updateSwitchesSchema,
@@ -27,6 +30,9 @@ import {
   type AdjustWalletInput,
   type ImportRatesInput,
   type PlatformWalletListQuery,
+  type PricePreviewQuery,
+  type SavePlanMarginsInput,
+  type SaveWorkspaceMarginsInput,
   type SaveRatesInput,
   type SyncMetaInput,
   type UpdateSwitchesInput,
@@ -38,6 +44,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles, PlatformSettingsService } from '../auth';
+import { PlatformMarginsService } from './platform-margins.service';
 import { PlatformRatesService } from './platform-rates.service';
 import { PlatformWalletService, type Operator } from './platform-wallet.service';
 import { WalletSettingsService } from './wallet-settings.service';
@@ -61,6 +68,7 @@ export class PlatformWalletController {
   constructor(
     private readonly wallets: PlatformWalletService,
     private readonly rates: PlatformRatesService,
+    private readonly margins: PlatformMarginsService,
     private readonly settings: WalletSettingsService,
     private readonly platform: PlatformSettingsService,
   ) {}
@@ -163,6 +171,70 @@ export class PlatformWalletController {
   })
   async syncMeta(@Body(zodPipe(syncMetaSchema)) body: SyncMetaInput) {
     return this.rates.syncMeta(body.dryRun, await this.me());
+  }
+
+  // --- margin pricing: Meta cost + our margin ---------------------------------------------------------------------------------
+
+  @Get('margins')
+  @ApiOperation({
+    summary:
+      'Margins over Meta cost per country and category, for one plan (`plan=`) or the platform default (`plan` blank)',
+  })
+  async listMargins(@Query('plan') plan?: string) {
+    return this.margins.listPlan((plan ?? '').trim());
+  }
+
+  @Put('margins')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary:
+      'Save margins for a plan or the platform default (per-row reasons for a row that cannot be saved)',
+  })
+  async saveMargins(@Body(zodPipe(savePlanMarginsSchema)) body: SavePlanMarginsInput) {
+    return this.margins.savePlan(body.planSlug, body.rows, await this.me());
+  }
+
+  @Delete('margins/:id')
+  @OperatorRoles('super_admin')
+  @ApiOperation({ summary: 'Remove a plan or platform margin row' })
+  async deleteMargin(@Param('id', ParseUUIDPipe) id: string) {
+    return { deleted: await this.margins.removePlan(id, await this.me()) };
+  }
+
+  @Get('workspaces/:id/margins')
+  @ApiOperation({
+    summary: "One workspace's margin overrides (the ones that beat its plan's margins)",
+  })
+  async workspaceMargins(@Param('id', ParseUUIDPipe) id: string) {
+    return this.margins.listWorkspace(await this.margins.orgIdOf(id), id);
+  }
+
+  @Put('workspaces/:id/margins')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary: "Set or remove a workspace's margin overrides. A note saying why is mandatory",
+    description:
+      'Written to the workspace wallet log and the audit trail with the old and new margins.',
+  })
+  async saveWorkspaceMargins(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(saveWorkspaceMarginsSchema)) body: SaveWorkspaceMarginsInput,
+  ) {
+    return this.margins.saveWorkspace(await this.margins.orgIdOf(id), body, await this.me());
+  }
+
+  @Get('pricing/preview')
+  @ApiOperation({
+    summary:
+      'How one message would be priced (Meta cost, which margin matched and from which layer, the price)',
+    description:
+      'Pass `workspaceId` to price it for that workspace (its override, its plan); without it, the platform default applies.',
+  })
+  async pricePreview(@Query(zodPipe(pricePreviewQuerySchema)) q: PricePreviewQuery) {
+    return this.margins.preview(
+      q,
+      q.workspaceId ? await this.margins.orgIdOf(q.workspaceId) : null,
+    );
   }
 
   // --- workspaces' wallets ---------------------------------------------------------------------------------------------------
