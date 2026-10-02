@@ -47,6 +47,7 @@ export const toWidget = (row: WidgetRow, base: string): Widget => ({
   collectName: row.collectName,
   collectEmail: row.collectEmail,
   collectPhone: row.collectPhone,
+  launcher: row.launcher,
   allowedDomains: row.allowedDomains,
   embedToken: row.embedToken,
   ...widgetUrls(base, row.embedToken),

@@ -28,8 +28,14 @@ export const QUEUES = {
   CON_IMPORT: 'con-import',
   /** One job per broadcast: sends its pending recipients (WD-BCAST-016). Own queue so a slow provider cannot hold campaigns. */
   BCAST_DISPATCH: 'bcast-dispatch',
+  /** WhatsApp Cloud API / Interakt webhook payloads (messages, receipts, template and account events). Acked first, processed here. */
+  WABA_INGEST: 'waba-ingest',
+  /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (WD-TG-013). */
+  TG_BROADCAST: 'tg-broadcast',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
+  /** Re-reads WhatsApp templates stuck PENDING on Meta (WD-TPL-027). Own queue: a Meta outage must not hold anything else. */
+  TPL_SWEEP: 'tpl-sweep',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

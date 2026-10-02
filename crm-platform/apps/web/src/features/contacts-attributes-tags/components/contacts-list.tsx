@@ -107,6 +107,8 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <UsersIcon className={cls} />;
     case 'stage':
       return <FlagIcon className={cls} />;
+    case 'status':
+      return <FlagIcon className={cls} />;
     case 'language':
       return <GlobeIcon className={cls} />;
     case 'memo':
@@ -267,9 +269,29 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
   );
 }
 
-function StatusCell({ row, h }: { row: RowView; h: ListHandlers }) {
+/** The contact's status as a pill (its own column; the grid card shows it next to the stage). */
+function StatusChip({ value }: { value: string }) {
+  return (
+    <span
+      title={value}
+      className="inline-flex max-w-full items-center rounded-full border border-success/30 bg-success/10 px-2 py-0.5 text-xs font-medium text-success"
+    >
+      <span className="truncate">{value}</span>
+    </span>
+  );
+}
+
+function StatusCell({
+  row,
+  h,
+  showStatus = true,
+}: {
+  row: RowView;
+  h: ListHandlers;
+  showStatus?: boolean;
+}) {
   const t = useTranslations('contacts-attributes-tags.list');
-  if (!row.stage && !row.status && !row.optedOut) return <Dash />;
+  if (!row.stage && !(showStatus && row.status) && !row.optedOut) return <Dash />;
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-1">
       {row.stage && (
@@ -287,14 +309,7 @@ function StatusCell({ row, h }: { row: RowView; h: ListHandlers }) {
           }
         />
       )}
-      {row.status && (
-        <span
-          title={h.statusLabel(row.status)}
-          className="inline-flex max-w-full items-center rounded-full border border-success/30 bg-success/10 px-2 py-0.5 text-xs font-medium text-success"
-        >
-          <span className="truncate">{h.statusLabel(row.status)}</span>
-        </span>
-      )}
+      {showStatus && row.status && <StatusChip value={h.statusLabel(row.status)} />}
       {row.optedOut && (
         <span className="inline-flex items-center rounded-full border border-warning/30 bg-warning/10 px-2 py-0.5 text-xs font-medium text-warning">
           {t('optedOut')}
@@ -424,7 +439,9 @@ function Cell({
     case 'groups':
       return <GroupsCell row={row} />;
     case 'stage':
-      return <StatusCell row={row} h={h} />;
+      return <StatusCell row={row} h={h} showStatus={false} />;
+    case 'status':
+      return row.status ? <StatusChip value={h.statusLabel(row.status)} /> : <Dash />;
     case 'language':
       return row.language ? <OutlineTag value={row.language} /> : <Dash />;
     case 'memo':

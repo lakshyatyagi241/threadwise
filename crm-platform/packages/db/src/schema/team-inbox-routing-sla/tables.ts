@@ -34,6 +34,8 @@ export const agentStatuses = pgTable(
     todayReplies: integer('today_replies').notNull().default(0),
     todayResolutions: integer('today_resolutions').notNull().default(0),
     countersDate: date('counters_date'),
+    /** Round-robin clock: stamped on the agent the assignment service just picked. */
+    lastAssignedAt: timestamp('last_assigned_at', { withTimezone: true }),
     preferences: jsonb('preferences'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -54,6 +56,7 @@ export const agentStatuses = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
     index('idx_agent_statuses_last_seen_at').on(t.orgId, t.lastSeenAt),
+    index('idx_agent_statuses_last_assigned').on(t.orgId, t.lastAssignedAt.nullsFirst()),
   ],
 );
 

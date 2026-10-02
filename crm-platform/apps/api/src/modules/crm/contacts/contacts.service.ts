@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES, canonicalizePhone, composeDisplayName } from '@crm/contracts';
 import type {
@@ -40,6 +41,24 @@ import { ContactsRepository } from './contacts.repository';
 
 const MODULE_KEY = 'contacts';
 const DISPLAY_PREFIX = 'CON';
+
+/** What an inbound message knows about its sender (`ContactsService.resolveOrCreateByIdentity`). */
+export interface ResolveContactInput {
+  kind: 'phone' | 'email';
+  /** As the channel wrote it: a phone number in any format, or an email address. Canonicalised here. */
+  value: string;
+  /** The sender's own name (WhatsApp's profile name), kept only when a contact is created. */
+  name?: string | null;
+  /** Where the contact came from (`contacts.source`). */
+  source?: string;
+}
+
+export type ResolvedContact =
+  | { outcome: 'found' | 'created'; contactId: number; uuid: string }
+  /** The plan's contact cap is reached: the caller carries on without a contact (an inbound message is never dropped). */
+  | { outcome: 'quota_reached' }
+  /** The value is not a usable phone number or address. */
+  | { outcome: 'unusable' };
 
 /**
  * Contacts — the reference implementation.
@@ -289,6 +308,120 @@ export class ContactsService {
       const row = await this.repo.findById(tx, ctx.orgId, created.id);
       return toContactResponse(row!);
     });
+  }
+
+  /**
+   * "Whose message is this": the contact an identity belongs to, created when there is none. For the inbound pipeline of the
+   * inbox, which runs this inside its own transaction (`tx`), as a system actor, once per new conversation.
+   *
+   * The same rules as `create`, because the inbox must not fork a person's timeline: the phone goes through the one canonicaliser
+   * and is looked up by identity first, then by the stored number (a contact that predates identities is healed with one); the
+   * plan's contact cap is enforced (`quota_reached`, no contact, never an exception: the message must still arrive); a created
+   * contact gets the workspace's default stage and status, an identity row, an audit row and `contact.created` in the same
+   * transaction. It does not demand the workspace's required custom properties: nobody is there to fill them in (WaDesk's
+   * auto-capture skipped them too). An advisory lock serialises two messages from the same new number.
+   */
+  async resolveOrCreateByIdentity(
+    tx: Tx,
+    orgId: number,
+    input: ResolveContactInput,
+  ): Promise<ResolvedContact> {
+    const phone = input.kind === 'phone' ? canonicalizePhone({ number: input.value }) : null;
+    const value = input.kind === 'phone' ? phone?.e164 : input.value.trim().toLowerCase();
+    if (!value || (input.kind === 'phone' && !phone)) return { outcome: 'unusable' };
+
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`contact-identity:${orgId}:${input.kind}:${value}`}, 0))`,
+    );
+
+    const viaIdentity = await this.repo.findByIdentity(tx, orgId, input.kind, value);
+    if (viaIdentity !== undefined) {
+      const uuid = await this.uuidOf(tx, orgId, viaIdentity);
+      if (uuid) return { outcome: 'found', contactId: viaIdentity, uuid };
+    }
+
+    const stored = await tx.execute(
+      input.kind === 'phone'
+        ? sql`SELECT id, uuid FROM contacts
+              WHERE org_id = ${orgId} AND normalized_phone IN (${value}, ${phone!.digits})
+              ORDER BY id LIMIT 1`
+        : sql`SELECT id, uuid FROM contacts
+              WHERE org_id = ${orgId} AND normalized_email = ${value}
+              ORDER BY id LIMIT 1`,
+    );
+    const known = stored.rows[0] as { id: number | string; uuid: string } | undefined;
+    if (known) {
+      await this.repo.addIdentity(tx, orgId, Number(known.id), input.kind, value);
+      return { outcome: 'found', contactId: Number(known.id), uuid: known.uuid };
+    }
+
+    try {
+      await this.quota.assertCanAddOne(tx, orgId);
+    } catch (err) {
+      if (err instanceof AppError && err.code === ERROR_CODES.PLAN_LIMIT_REACHED) {
+        return { outcome: 'quota_reached' };
+      }
+      throw err;
+    }
+
+    // The workspace's default stage, unless it is a lost stage (those demand a reason, and nobody is here to give one).
+    let stage = await this.repo.defaultOptionValue(tx, orgId, 'lifecycle_stage');
+    const flags = stage ? await this.repo.stageFlags(tx, orgId, stage) : null;
+    if (flags?.isLost) stage = undefined;
+    const stageValues =
+      stage && flags
+        ? stageEntryValues({
+            flags,
+            current: { wonAt: null, lostAt: null, lostReason: null, otherLostReason: null },
+            now: new Date(),
+          })
+        : {};
+    const statusCtx = await this.repo.statusContext(tx, orgId);
+    const statusPlan = planStatus({
+      scope: statusCtx.scope,
+      stage: stage ?? 'new',
+      stageLabel: statusCtx.stageLabels.get(stage ?? 'new') ?? null,
+      stageChanged: true,
+      current: null,
+      requested: undefined,
+    });
+
+    const displayId = await this.displayIds.next(tx, orgId, MODULE_KEY, DISPLAY_PREFIX);
+    const created = await this.repo.insert(tx, orgId, {
+      name: input.name?.trim() || null,
+      email: input.kind === 'email' ? value : undefined,
+      phone: input.kind === 'phone' ? value : undefined,
+      lifecycleStage: stage ?? undefined,
+      wonAt: (stageValues.wonAt as Date | null | undefined) ?? null,
+      lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
+      status: statusPlan.status ?? undefined,
+      source: input.source ?? null,
+      data: {},
+      displayId,
+      createdBy: null,
+    });
+    await this.repo.addIdentity(tx, orgId, created.id, input.kind, value);
+    await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
+    await this.outbox.emit(tx, {
+      aggregateModule: MODULE_KEY,
+      aggregateId: created.id,
+      eventType: 'contact.created',
+      payload: {
+        uuid: created.uuid,
+        displayId,
+        ...(input.kind === 'email' ? { email: value } : { phone: value }),
+        via: input.source ?? 'inbound',
+      },
+      orgId,
+    });
+    return { outcome: 'created', contactId: created.id, uuid: created.uuid };
+  }
+
+  private async uuidOf(tx: Tx, orgId: number, id: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid FROM contacts WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    return (res.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
   }
 
   async update(uuid: string, input: UpdateContactInput): Promise<ContactResponse> {

@@ -65,7 +65,7 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 | `conversation_notes`             | `conversation_notes` (20261001103600_chat_wadesk_schema.sql)                 | tenant        | chat   | vedant  | 11          | 2   | 0          |
 | `conversation_participants`      | `conversation_participants` (20261001103600_chat_wadesk_schema.sql)          | tenant        | chat   | vedant  | 10          | 2   | 0          |
 | `conversation_tag`               | `conversation_tag` (20261001102600_tib1_wadesk_schema.sql)                   | child         | tib1   | vedant  | 6           | 3   | 0          |
-| `conversations`                  | `conversations` (20261001103600_chat_wadesk_schema.sql)                      | tenant        | chat   | vedant  | 50          | 10  | 1          |
+| `conversations`                  | `conversations` (reshaped by 20261014100000_chat_conversation_reshape.sql)   | tenant        | chat   | vedant  | 50          | 10  | 1          |
 | `coupons`                        | `coupons` (20261001100500_cpn_wadesk_schema.sql)                             | platform_only | cpn    | lakshya | 20          | 0   | 0          |
 | `credit_packages`                | `credit_packages` (20261001100500_cpn_wadesk_schema.sql)                     | global_read   | cpn    | lakshya | 13          | 0   | 0          |
 | `crm_briefs`                     | `crm_briefs` (20261001102100_aicrm_wadesk_schema.sql)                        | tenant        | aicrm  | punya   | 12          | 1   | 1          |
@@ -92,7 +92,7 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 | `hubspot_integration_logs`       | `hubspot_integration_logs` (20261001102300_intg_wadesk_schema.sql)           | stream        | intg   | lakshya | 9           | 0   | 1          |
 | `hubspot_integrations`           | `hubspot_integrations` (20261001102300_intg_wadesk_schema.sql)               | tenant        | intg   | lakshya | 16          | 1   | 0          |
 | `impersonation_sessions`         | `impersonation_sessions` (20261001102500_wsp_wadesk_schema.sql)              | platform_only | wsp    | lakshya | 11          | 2   | 1          |
-| `inbox_messages`                 | `inbox_messages` (20261001102600_tib1_wadesk_schema.sql)                     | stream        | tib1   | vedant  | 37          | 0   | 6          |
+| `inbox_messages`                 | folded into `messages` (20261014100100_chat_messages_fold.sql; table dropped) | stream        | tib1   | vedant  | 37          | 0   | 6          |
 | `inbox_notifications`            | `inbox_notifications` (20261001100400_notif_wadesk_schema.sql)               | tenant        | notif  | lakshya | 11          | 1   | 0          |
 | `incoming_webhook_events`        | `incoming_webhook_events` (20261001102300_intg_wadesk_schema.sql)            | child         | intg   | lakshya | 15          | 2   | 0          |
 | `incoming_webhooks`              | `incoming_webhooks` (20261001102300_intg_wadesk_schema.sql)                  | tenant        | intg   | lakshya | 14          | 1   | 0          |
@@ -118,7 +118,7 @@ Plus 6 tables that do not exist as one WaDesk table (see Virtual tables).
 | `line_rich_menus`                | `line_rich_menus` (20261001104200_line_wadesk_schema.sql)                    | tenant        | line   | punya   | 16          | 2   | 0          |
 | `message_charges`                | dropped: renamed usage_charges (level-1 ledger), see [virtual.usage_charges] | drop          | wallet | lakshya | 16          | -   | -          |
 | `message_rates`                  | `message_rates` (20261001100300_wallet_wadesk_schema.sql)                    | global_read   | wallet | lakshya | 9           | 0   | 0          |
-| `messages`                       | `messages` (20261001103600_chat_wadesk_schema.sql)                           | stream        | chat   | vedant  | 31          | 0   | 5          |
+| `messages`                       | `messages` (reshaped by 20261014100100_chat_messages_fold.sql)               | stream        | chat   | vedant  | 31          | 0   | 5          |
 | `meta_campaigns`                 | `meta_campaigns` (20261001101900_mads_wadesk_schema.sql)                     | tenant        | mads   | punya   | 35          | 1   | 0          |
 | `migrations`                     | dropped: Laravel migration journal: _migrations                              | drop          | infra  | lakshya | 3           | -   | -          |
 | `model_has_permissions`          | mapped to role_grants                                                        | existing      | rbac   | lakshya | 3           | -   | -          |
