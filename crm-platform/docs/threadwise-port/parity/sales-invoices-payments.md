@@ -1,0 +1,164 @@
+# Parity evidence: invoices and payments (INV / PAY)
+
+Reference 1.7.0 (Docker copy, `http://127.0.0.1:8000`, workspace user created through `/register`, no plan packages configured) vs our
+commit `dfcdceb` plus the working tree of this run, API `:3100`, web `:3001`. Run on 2026-10-02. Companion file for the quote side:
+[sales-proposals-estimates.md](sales-proposals-estimates.md) (it also lists the defects fixed in the shared contracts and the API pipe;
+F1 to F7 and L1 to L7 are numbered there). The deviations the owner asked for on purpose (draft/issued/partially paid/paid/overdue/void lifecycle,
+payments ledger with refunds and aging, tax rates, business profile, credit notes, recurring invoices, sales orders, the country-aware
+tax engine) are in [product-extensions.md](product-extensions.md), items 8 and 9; here they are recorded as `intended`.
+
+How it was run and how to read the classes: see the same section of the quote file. In short, no generic harness (it needs bash,
+python3 and `setsid`); the same inputs were posted to both apps with scripted Playwright 1.60 and `fetch`, Reference's state was read back
+with read-only `SELECT`s, and Reference answered in 10 to 300 seconds per request, so its side is a chosen set. Reference has no UI to edit,
+void or delete an invoice and none to delete a payment, so the invoices and payments this run created in the reference workspace
+`Parity Workspace` (9 invoices and 5 payments; its proposals and estimates were deleted again) stay there; everything created in ours is tagged `PAR-` too and was removed or voided at the end
+(issued invoices and ledger entries cannot be deleted by design).
+
+## Result in numbers
+
+49 scenarios in this file (totals on identical inputs 9, then numbers, status and pages 26, payments and the ledger 14):
+
+| Class | Count |
+| ----- | ----- |
+| same | 11 |
+| intended | 27 |
+| defect (fixed) | 3 (F1, F2, F3 in one row; F5; F6) |
+| defect (open) | 4 (L4 and the shell item in one row, L8, L9, L10) |
+| not verifiable | 4 (I07 to I09, the aging bug, hostile text on Reference invoices, store-order invoicing) |
+
+The tests behind the fixes are listed in the quote file (the same run). The invoicing suites on their own: 171 end-to-end tests (the
+three e2e files of the two modules), 70 integration tests (both modules) and the 137 unit tests of `sales-docs`, `invoicing` and
+`common`, all green.
+
+## Defects found on our side and fixed in this run
+
+The five that touch this area are the same as in the quote file; details there.
+
+| # | What was wrong | Result |
+| - | -------------- | ------ |
+| F1 | A date shaped like `YYYY-MM-DD` but not a day (`2026-02-31`) answered **500** on `issueDate`, `dueDate`, the issue call's dates, `issuedFrom/To`, `dueFrom/To`, payment `from/to`, tax-rate effective dates, recurring and sales-order dates, credit-note issue date | 422 with the field path; unit + e2e tests |
+| F2 | A NUL character in a buyer name, note, reference, SKU, tax id, payment reference or note, void reason, send message or any search box answered **500** | 422 from the validation pipe; unit + e2e tests |
+| F3 | Any three letters were accepted as an invoice currency (`ZZZ`, `XXX`, `BTC`) | refused unless ISO 4217; unit + e2e tests |
+| F5 | The invoicing error panel offered **Try again** for a plan that lacks invoicing or a missing permission | no retry button for answers that never change; `errors.test.ts` |
+| F6 | The buyer's invoice page had no `main` landmark (axe `landmark-one-main`, `region`) | the page shell is a `main` |
+
+## Defects and decisions left open
+
+| # | What | Why it is open | Recommendation |
+| - | ---- | -------------- | -------------- |
+| L8 | **The invoice PDF cannot print text outside Latin-1.** The server-side PDF is hand-written with the standard Helvetica font and a Windows-1252 encoding, so a buyer or line item in Arabic, Hindi, Chinese or with an emoji prints as `?`, and a currency symbol such as the rupee sign is printed as the code. Reference's PDF used a font with wider coverage (DejaVu Sans). Checked on a live invoice: Latin accents survive, everything else is `?`. The print page (`/print`, "Save as PDF" from the browser) has no such limit. | There is no PDF library in the repo; embedding a Unicode font is a build decision. | Embed a subset Unicode font (or render the print page with a headless browser in the worker). Until then say so next to "Download PDF". |
+| L9 | **Which currency is the workspace's?** Three sources disagree in the dev data: the organization setting (empty), the default pipeline (INR, used by the API for a new proposal) and the invoicing profile (USD, used by the invoice builder). The quote form starts in USD. | A product decision (D-03 for invoices, D-12 for quotes). | One setting, read by all three. |
+| L4 | Colour contrast 4.35 : 1 on the "partly paid" and "paid" pills and the invoice-count badges (needs 4.5) | `@crm/ui` tokens | see the quote file |
+| L5 | React "unique key" error in the app shell's top bar (dev overlay "1 Issue") | shell | see the quote file |
+| L10 | WhatsApp and email **delivery** of an invoice, overdue reminders, real payment-provider adapters (Stripe, Razorpay and the like) and server-side e-invoicing formats are not built (events and the public link exist) | recorded in the inventory's "Not built here" | build the consumers with the messaging and payments work |
+
+## Totals on identical inputs (TW-INV-005, 006, 013)
+
+Same lines, same quantities and prices, one buyer, USD unless the currency is the point. Reference's manual builder takes a tax percent per
+line; ours takes a tax rate (a row of the tax-rate table) per line, so the rates `0`, `7.25`, `10` and `18` were created as `PAR-` rates
+first (an intended difference: tax rates are a table, extension 8). Figures are minor units of the currency. Reference issues the invoice
+at once (number, PDF); ours was compared as the priced draft, which is what the issue call freezes.
+
+| # | Input | Reference | Ours | Result | Note |
+| - | ----- | ------ | ---- | ------ | ---- |
+| I04 | three lines of 1.05, tax 10 each | sub 315, tax 33, total 348 | sub 315, tax 33, total 348 | same | both round tax per line (10.5 up to 11 three times); Reference's invoice builder rounds per line, unlike its quotes |
+| I05 | 2 x 15.50 at 10 %, 1 x 9.99 at 18 %, 4 x 0.33 at 0 % | sub 4231, tax 490, total 4721; tax summary rows 10 % on 3100 = 310 and 18 % on 999 = 180 | sub 4231, tax 490, total 4721 | same | |
+| I02 | JPY, 1 x 1500, tax 10 | exponent 0, sub 1500, tax 150, total 1650 | exponent 0, same figures | same | stored figures; the display is I10 |
+| I01 | 3 x 19.99 at 10 %, discount 5.00, shipping 2.50 | sub 5997, tax 600, discount 500, shipping 250, total 6347 | sub 5997, tax 550, discount 500, shipping 250, total 6297 | intended | Reference charges tax on the undiscounted subtotal (a QUIRK in the inventory); ours takes the discount off the taxable base (D-06) |
+| I06 | 1 x 10.00 at 10 %, discount 50.00 (more than the subtotal) | sub 1000, tax 100, total 0, discount stored 5000 | sub 1000, discount 1000 (clamped), tax 0, total 0 | intended | same cause; ours never stores a discount larger than the document and charges no tax on nothing |
+| I03 | KWD, 1 x 12.500 | exponent 2: stored 1250 (12.50) | exponent 3: stored 12500 (12.500) | intended | Reference's builder had no three-decimal currencies; ours follows ISO 4217 (D-04) |
+| I10 | how a non-two-decimal total is shown | the buyer's page shows the JPY invoice as line `JPY 15`, tax `JPY 1.50`, total `JPY 16.50`, and the ledger lists it as `JPY 16.50` (every amount divided by 100); the KWD invoice reads `KWD 12.50` | `¥1,650` and `KWD 12.500` on the list, detail, ledger, buyer's page and PDF | intended | a Reference display bug (a 1650-yen invoice reads as 16.50), fixed on purpose (D-04) |
+| I07 to I09 | shipping only; 0.333 x 3 at 18 %; eight lines at 7.25 % | not run | 500, 118 and 299423 (tax 20240) | not verifiable | priced on ours only: the same per-line rule as I04 and the quote file's M10; the Reference side was left out for the reference's speed |
+| I11 | inclusive tax (the price already contains the tax) | no inclusive mode in the builder | 118.00 at an inclusive 18 % is sub 11800, tax 1800, total 11800; three 0.99 lines: tax 45; mixed with an exclusive line it adds up | intended | extensions 8 and 9; tested in `invoice-math.spec.ts` |
+
+## Flows and edge cases
+
+### Numbers, status, the frozen document and the pages
+
+| # | Scenario | Reference observed | Ours observed | Result | Note |
+| - | -------- | --------------- | ------------- | ------ | ---- |
+| N01 | Number format (TW-INV-008) | `INV-2026-000002`: prefix, year of the series, six digits; one counter per workspace and series | `INV-2026-000050`, `PRO-2026-000001` (proforma, its own series), `RCT-2026-000030` (payment receipts), `CRN-...` | same | same shape; ours adds one series per document type, a configurable prefix and a fiscal-year start, and gives a number back on rollback (D-08, D-13) |
+| N02 | When a manual invoice gets its number | at creation: status `issued`, PDF rendered at once | a draft has no number; "issue" allocates it, sets the dates and the public link | intended | the draft stage is extension 8 |
+| N03 | Several issues at once | one counter row locked per series (src) | 8 drafts issued in parallel got 8 consecutive distinct numbers; 5 parallel issues of one draft: one 200, four `INV_NOT_DRAFT` | same | |
+| N04 | Edit, void or delete an issued invoice | none exists (no route, no screen); the document and its PDF are frozen | edit refused except due date, notes, terms, reference, owner, links and contact details (`INV_NOT_DRAFT`); delete refused (`INV_NOT_DELETABLE`); void keeps the number and is refused while payments or credit notes stand | intended | extension 8 (D-01) |
+| N05 | Invoice detail page | customer, items (qty, amount), delivery status, buttons Download PDF, Public link, Send on WhatsApp; no subtotal, tax, status, payments or due date | the paper, status chip, totals, tax summary, payments, balance, credit notes, activity, public link card, actions by status | intended | TW-INV-003 port notes asked for exactly this |
+| N06 | Due date and overdue | `due_at` stays empty (live); no overdue state | a due date from terms (default due on receipt); derived `overdue` in the workspace calendar; boundaries checked: due today is not overdue, one day late is | intended | D-02 |
+| N07 | The buyer's page `/i/<token>` | platform name, number, date, billed-to name, a paid/issued pill, items, subtotal, tax without its rate, total, Download PDF; **`meta robots` is `index, follow`** (live) | seller block (name, address, tax id), billed-to, status chip, items with tax, tax summary, payments received, notes, how to pay; `noindex, nofollow` and `Cache-Control: private, no-store` | intended | D-15; the indexable buyer page is a privacy defect of Reference, not copied |
+| N08 | The buyer's PDF | `application/pdf`, 1.1 MB (embedded font), rendered on the first request and then frozen | `application/pdf`, 2 to 3 KB, rendered on demand from the stored document (seller block snapshotted at issue); characters outside Latin-1 print as `?` | intended | D-16; the character limit is L8 |
+| N09 | Unknown token | 404 | API 404 (an expired or revoked link is the same 404, by design); the page shows an in-page message | same | see L6 in the quote file for the page status |
+| N10 | Public page throttle | 120 a minute per IP, shared with the quote and brief pages (src) | 120 a minute per IP on reads, pay 20 a minute (src; the quote side was measured live: 429 from the 61st request on one link) | intended | |
+| N11 | Plan gate | GET renders with a paywall sheet over the data; a post is refused with a warning (src; no plan packages exist on the reference, so not live) | `422 PLAN_FEATURE_LOCKED` on every route, reads included; the screens say "Your plan does not include invoicing" with no retry button after F5 (shown by intercepting the answer in the browser) | intended | D-14 |
+| N12 | Who may use it | any workspace admin (role check only, src) | permission keys with record scope; verified live: the Agent preset creates and edits its own drafts but cannot issue, delete, void, refund or change settings; an `own` reader sees only its own rows in the lists, counts, summary and aging | intended | D-14 |
+| N13 | Another workspace's invoice | 404 (src) | 404 on read, edit and pay (verified with the second tenant) | same | |
+| N14 | Empty states | "No payments recorded yet." and "Nothing outstanding." on the ledger; "No invoices yet" on the list | "No payments yet" with a hint and a Record payment button; "No payments or open balances yet"; "No tax rates yet" with the load-your-country button | same | the same states, wording paraphrased |
+| N15 | Illegal date (`2026-02-31`), a NUL character, a currency that is not ISO | not applicable (the builder has no date field; its currency is any three letters) | were 500 (dates, NUL) and accepted (currency); now 422 | defect (fixed) | F1, F2, F3 |
+| N16 | Hostile text in names, notes, references and descriptions | Blade escapes (src); not run live on invoices | stored as text; the staff detail, list, buyer's page and print page show it escaped, nothing ran; the PDF writes it as text | not verifiable | Reference's escaping was observed live only on the quote page (quote file); ours was checked on every invoice surface |
+| N17 | Mistyped money in a box (`40.005` for a dollar amount) | the browser's step blocks it; the server rounds (src) | the payment box rounds half up to `40.01` and shows the recorded amount; the API refuses a third decimal (`INV_AMOUNT_INVALID`) | same | rounding of typed input is the screen's documented rule |
+| N18 | 390 px and right-to-left | the ledger, the record-payment modal and the buyer's invoice page: no horizontal overflow at 390 px (live); the Arabic ledger mirrors (`dir=rtl`) and keeps English currency words | no page overflow on the list, builder, detail, ledger, tax rates and both buyer pages at 390 px, also in Arabic (`dir=rtl`); the layout mirrors | same | |
+| N19 | Keyboard and a11y | not run on Reference | axe (WCAG A and AA): the buyer pages are clean after F6 except one contrast item; the staff screens show only the contrast items of L4 and one duplicated landmark on the builder and detail | defect (open) | L4; the landmark item (`landmark-unique`, the shell's wrapper) is in the shell with L5 |
+| N20 | Two submits of the create form | two parallel posts made two invoices with consecutive numbers (`INV-2026-000008` and `...09`, live) | the builder's Save button locks: a double click on "Save draft" made one POST; the same Idempotency-Key replays; two different keys make two drafts, and a draft takes its number only when issued, so no number is wasted | intended | |
+| N21 | Non-Latin text on the invoice PDF (a buyer in Arabic, Hindi or Chinese, an emoji, the rupee sign) | an embedded font (the file is 1.1 MB; the source names DejaVu Sans); its glyph coverage was not tested live | Latin-1 only: other characters print as `?` and the rupee sign as the code (checked on a live invoice) | defect (open) | L8 |
+| N22 | Which currency a new document starts in | the workspace currency, `USD` when none (src) | the invoice builder starts from the invoicing profile (USD in the dev data), a proposal made through the API from the default pipeline (INR), the quote form from USD | defect (open) | L9, and L2 in the quote file |
+| N23 | Delivering an invoice (WhatsApp, email) and overdue reminders | WhatsApp delivery inline from the invoice page and a retrying sweeper (src; the reference has no connected engine, so not live); no email; no reminders | the link, email and WhatsApp channels raise `invoice.sent`, the overdue sweep raises `invoice.overdue`; no delivery adapter consumes them yet | defect (open) | L10: recorded as not built in the inventory's Port decisions |
+| N24 | Invoices made from store orders, WooCommerce and Shopify (TW-INV-004, 009 to 012, TW-PAY-005, 008, 012, 014) | auto-issue on paid orders, the orders strip, the "generate" button | not built: store orders do not exist in this app yet; the commerce port will call `createDraftIn` and `recordIn` | not verifiable | the inventory's Port decisions ("No store auto-invoicing") |
+| N25 | The error panel for a locked plan or a missing permission | a flash or a paywall; no retry (src) | the panel offered "Try again" for answers that never change | defect (fixed) | F5 |
+| N26 | The buyer's invoice page for assistive technology | not run on Reference | no `main` landmark, content outside any region (axe) | defect (fixed) | F6 |
+
+### Payments and the ledger
+
+| # | Scenario | Reference observed | Ours observed | Result | Note |
+| - | -------- | --------------- | ------------- | ------ | ---- |
+| P01 | Record a part payment (50.00 of 188.80) | row written, the invoice stays `issued` | row written, the invoice becomes `partially_paid` (derived by the database from the ledger); balance 138.80 | intended | D-01 |
+| P02 | Pay more than the balance (500.00 on a part-paid invoice) | accepted silently; the invoice becomes `paid` | `422 PAY_OVERPAYMENT`; `allowOverpayment: true` records the excess as a credit; the payment box asks for a second press to confirm | intended | D-11 |
+| P03 | A payment on an invoice that is already paid | accepted (a fifth ledger row) | `422 PAY_OVERPAYMENT` (balance 0) | intended | D-11 |
+| P04 | Amount 0 and a negative amount | both refused, nothing written | both 422 | same | |
+| P05 | An invoice id that is not in the workspace | recorded unlinked, no error | `404` | intended | D-11 |
+| P06 | A payment in another currency than the invoice (10.00 EUR on a USD invoice) | recorded against the invoice | `422 PAY_CURRENCY_MISMATCH` | intended | D-11 |
+| P07 | Totals tiles | "Collected (30d) USD 571.00" adds USD and EUR; "Outstanding USD 143.16, 5 invoices" adds USD, KWD and JPY | per currency, never summed across currencies | intended | D-22 |
+| P08 | Aging | four buckets by days since creation (0-30 ... 90+); the five fresh invoices all fell in 0-30. The inventory says a signed day count puts every invoice there; that needs invoices older than a day, which the reference cannot make from its screens | five buckets by days past the due date (current, 1-30, 31-60, 61-90, 90+) per currency; boundaries checked with invoices 0, 1, 30, 31, 60, 61, 90 and 91 days late | not verifiable | Reference's claimed bug could not be reproduced; ours is exact on the boundaries |
+| P09 | Correct a wrong entry | no edit, delete or refund exists | append-only ledger; a refund is a negative linked entry (partial allowed); a refund of a refund is refused | intended | D-11 |
+| P10 | Receipt for a payment | none | `RCT-` number per payment, printable | intended | extension 8 |
+| P11 | The record-payment box | modal, amount prefilled with the outstanding balance, method, date, reference, note; from the generic button there is no invoice picker | dialog from the invoice (prefilled) or from the ledger with an invoice picker; method, date (not in the future), reference, note | intended | |
+| P12 | A second press on "Record" | would post twice (plain form post) | the box locks while it posts: a double click made one POST; the same Idempotency-Key replays; two concurrent presses with one key: one 201, one 409 | intended | |
+| P13 | Races | no lock (src) | 6 parallel full payments on one invoice: one 201, five `PAY_OVERPAYMENT`; 4 parallel refunds of 60 on a payment of 100: one 200, three `PAY_REFUND_EXCEEDS`; parallel convert, accept and decline each leave one winner | intended | |
+| P14 | Online payment | not for invoices (only store orders have gateways) | pay-now through a gateway port (manual transfer and a signed-webhook skeleton), signature-first, idempotent, amount and currency compared; the unauthenticated routes were fuzzed: no 5xx | intended | D-18; real provider adapters are L10 |
+
+### The extensions Reference does not have (owner-requested, not compared)
+
+Credit notes, recurring invoices, sales orders, tax rates and the business profile have no Reference counterpart, so they are `intended`
+by definition. They were still exercised for defects: a partial credit note with a refund (`CRN-` number, the refund is a ledger entry,
+the note cannot be voided once cash went back, a second credit above what is left is `CN_EXCEEDS_INVOICE`); a monthly recurring
+schedule (run now, pause, delete; a start date years back is `REC_START_TOO_OLD`); a sales order from an accepted estimate (confirm,
+invoice 4 of 10, 7 more refused `SO_QUANTITY_EXCEEDS`, the rest, fulfil, the order closes; a draft quote is refused). 550 malformed
+bodies across 25 write routes gave no 5xx. The 171 end-to-end and 70 integration tests of the two modules pass.
+
+## Decisions for the owner
+
+The table in [sales-proposals-estimates.md](sales-proposals-estimates.md#decisions-for-the-owner) covers both files. The ones that
+decide something in this file: **D-1** (wider price and quantity limits), **D-3** (hard plan gate), **D-5** (one workspace currency,
+L9), **D-7** (a Unicode font for the PDF, L8), **D-10** (no manual Receipt document), **D-11** (sign-off of extensions 8 and 9). Two more
+that only concern invoices and payments, with the default taken:
+
+| # | Decision | Default taken in this run |
+| - | -------- | ------------------------- |
+| D-12 | Payments above the balance are refused unless the caller says it is an overpayment held as credit (Reference accepted anything, including a payment on a paid invoice) | kept (D-11 of the port decisions) |
+| D-13 | The "Mark as paid" button records a payment for the whole balance by the chosen method; there is no way to set an invoice to paid without a ledger entry | kept (D-10 of the port decisions) |
+
+## What was not verified, and why
+
+- **Reference's aging with old invoices.** The ledger buckets by days since creation and every invoice the reference could make from its
+  screens was a minute old, so the inventory's claim (a signed day count puts every invoice in the first bucket) was neither
+  confirmed nor refuted (P08).
+- **The contents of Reference's PDF.** Only its type, size and caching were read; text, columns and the status badge were not. The
+  inventory's rules about it (tax rows hidden on receipts, the badge frozen at the first render) stand unverified here.
+- **The plan gate on Reference** (no plan packages on the reference), **its role gate** (admin only, from the source) and its
+  throttle: source only, as in the quote file.
+- **Real payments and deliveries.** No gateway, WhatsApp session or mail inbox was used on either side; ours was checked through the
+  gateway port's signed-webhook skeleton, the unit tests and the fuzzed routes (L10).
+- **Hostile text on Reference invoices** (N16) and **a manual "Receipt"** (Reference's builder offers it; ours makes receipts only as the
+  payment receipt of a ledger entry).
+- **Invoices from store orders and the Woo/Shopify mappers** (N24) are not built here by decision.
+- **Credit notes, recurring invoices, sales orders, tax rates, business profile** have no Reference twin; they were tested for defects
+  only (see above) and by the repo's own suites (171 end-to-end and 70 integration tests across the two modules, all green).
+- **The generic twin harness** was not used and no twin spec is committed (see the quote file); the stamp is `open-defects`.
+- **Run side effects:** see the quote file. The invoices and payments created on the reference cannot be removed from its screens.
