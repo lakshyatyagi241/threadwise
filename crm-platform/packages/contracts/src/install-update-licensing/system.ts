@@ -32,6 +32,27 @@ export const systemCheckSchema = z.object({
 });
 export type SystemCheck = z.infer<typeof systemCheckSchema>;
 
+/**
+ * Licence card of the Updater page (TW-INST-020). `required` is false on deployments that do not enforce a purchase code
+ * (LICENCE_MODE=off); the page then explains that instead of showing a form that could never succeed.
+ */
+export const licenceStatusSchema = z.object({
+  required: z.boolean(),
+  verified: z.boolean(),
+  verifiedAt: z.string().datetime().nullable(),
+});
+export type LicenceStatus = z.infer<typeof licenceStatusSchema>;
+
+export const verifyLicenceRequestSchema = z.object({
+  purchaseCode: z.string().trim().min(1).max(120),
+});
+export type VerifyLicenceRequest = z.infer<typeof verifyLicenceRequestSchema>;
+export const verifyLicenceResponseSchema = z.object({
+  message: z.string(),
+  licence: licenceStatusSchema,
+});
+export type VerifyLicenceResponse = z.infer<typeof verifyLicenceResponseSchema>;
+
 export const systemStatusResponseSchema = z.object({
   release: releaseInfoSchema,
   uptimeSeconds: z.number().int().nonnegative(),
@@ -48,5 +69,6 @@ export const systemStatusResponseSchema = z.object({
     rows: z.array(migrationRowSchema),
   }),
   checks: z.array(systemCheckSchema),
+  licence: licenceStatusSchema,
 });
 export type SystemStatusResponse = z.infer<typeof systemStatusResponseSchema>;
