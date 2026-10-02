@@ -9,10 +9,15 @@ export interface CountryOption {
 }
 
 /** Countries whose name or code contains the search text (case-insensitive); an empty search keeps them all. */
-export function filterCountries(countries: readonly CountryOption[], search: string): CountryOption[] {
+export function filterCountries(
+  countries: readonly CountryOption[],
+  search: string,
+): CountryOption[] {
   const q = search.trim().toLowerCase();
   if (q === '') return [...countries];
-  return countries.filter((c) => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q));
+  return countries.filter(
+    (c) => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q),
+  );
 }
 
 /**

@@ -44,9 +44,7 @@ export function metaCostFor(
 }
 
 export type PriceCell =
-  | { kind: 'unknown' }
-  | { kind: 'invalid' }
-  | { kind: 'ok'; priceMinor: number };
+  { kind: 'unknown' } | { kind: 'invalid' } | { kind: 'ok'; priceMinor: number };
 
 /** The customer price at a typed margin, live: the contract's `priceFromMargin` on Meta's cost, in hundredths. */
 export function previewPrice(metaCost: string | null, margin: string): PriceCell {
@@ -204,7 +202,10 @@ export const MAX_MARGIN_ROWS_PER_SAVE = 500;
 export type MarginProblem = 'margin' | 'duplicate';
 
 /** Why a changed row cannot be sent (the contract's own percent rules, plus the duplicate check); null = fine. */
-export function marginProblem(row: MarginGridRow, all: readonly MarginGridRow[]): MarginProblem | null {
+export function marginProblem(
+  row: MarginGridRow,
+  all: readonly MarginGridRow[],
+): MarginProblem | null {
   if (!row.dirty || row.removed) return null;
   if (percentToBps(row.margin) === null) return 'margin';
   if (!row.existing) {

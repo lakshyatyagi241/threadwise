@@ -130,7 +130,30 @@ describe('messages', () => {
     for (const k of ['wide', 'long']) want.push(`admin.pricing.tools.import.shapes.${k}`);
     for (const k of ['crossBorder', 'how', 'order'])
       want.push(`admin.pricing.guides.${k}.title`, `admin.pricing.guides.${k}.body`);
-    for (const k of ['pricing', 'workspaces', 'logs']) want.push(`admin.nav.${k}`);
+    for (const k of ['pricing', 'margins', 'packages', 'workspaces', 'logs'])
+      want.push(`admin.nav.${k}`);
+    for (const m of ['fixed', 'margin'])
+      want.push(`admin.pricing.mode.${m}.label`, `admin.pricing.mode.${m}.body`);
+    for (const k of ['margin', 'duplicate']) want.push(`admin.margins.grid.problems.${k}`);
+    for (const k of ['layers', 'specific', 'unknown'])
+      want.push(`admin.margins.help.${k}.title`, `admin.margins.help.${k}.body`);
+    for (const k of ['short', 'long']) want.push(`admin.detail.pricing.reason.problems.${k}`);
+    for (const k of ['workspace', 'plan', 'platform'])
+      want.push(`admin.detail.pricing.preview.result.layers.${k}`);
+    for (const k of ['margin', 'fixed'])
+      want.push(`admin.detail.pricing.preview.result.bases.${k}`);
+    for (const k of ['active', 'inactive', 'featured']) want.push(`admin.packages.status.${k}`);
+    for (const k of [
+      'name',
+      'slug',
+      'description',
+      'price',
+      'currency',
+      'walletCredit',
+      'badge',
+      'sortOrder',
+    ])
+      want.push(`admin.packages.form.problems.${k}`);
     expect(want.filter((k) => !en[`${ns}.${k}`])).toEqual([]);
   });
 });
@@ -148,10 +171,12 @@ describe('navigation', () => {
     expect(en[settings[0]!.descriptionKey!]).toBeTruthy();
   });
 
-  it('lists Message pricing, Workspace wallets and Wallet logs in the operator Billing group', () => {
+  it('lists the pricing, margins, packages, workspaces and logs pages in the operator Billing group', () => {
     const mine = OPERATOR_NAV.filter((i) => i.id.startsWith('wallet-'));
     expect(mine.map((i) => [i.href, en[i.labelKey]])).toEqual([
       ['/admin/wallet/pricing', 'Message pricing'],
+      ['/admin/wallet/margins', 'Margins'],
+      ['/admin/wallet/packages', 'Credit packages'],
       ['/admin/wallet/workspaces', 'Workspace wallets'],
       ['/admin/wallet/logs', 'Wallet logs'],
     ]);

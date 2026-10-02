@@ -229,7 +229,9 @@ function Overrides({
               {save.isPending && <Spinner label={t('saving')} />}
               {t('save')}
             </Button>
-            {changed && !ok && <span className="text-xs text-muted-foreground">{t('saveHint')}</span>}
+            {changed && !ok && (
+              <span className="text-xs text-muted-foreground">{t('saveHint')}</span>
+            )}
           </div>
         </div>
       ) : null}
@@ -245,7 +247,11 @@ function PreviewTool({ workspaceId, data }: { workspaceId: string; data: Margins
   const [category, setCategory] = useState<MarginCategory>('');
   const [asked, setAsked] = useState<{ country: string; category: MarginCategory } | null>(null);
   const q = useQuery({
-    queryKey: KEYS.preview({ workspaceId, country: asked?.country ?? '', category: asked?.category ?? '' }),
+    queryKey: KEYS.preview({
+      workspaceId,
+      country: asked?.country ?? '',
+      category: asked?.category ?? '',
+    }),
     queryFn: ({ signal }) =>
       operatorApi.preview(
         { workspaceId, country: asked?.country ?? '', category: asked?.category ?? '' },
@@ -314,7 +320,10 @@ export function PreviewResult({ preview }: { preview: PricePreview }) {
       t('margin'),
       preview.marginBps === null ? t('noMargin') : `${bpsToPercent(preview.marginBps)}%`,
     ],
-    [t('layer'), preview.marginSource === null ? t('noLayer') : t(`layers.${preview.marginSource}`)],
+    [
+      t('layer'),
+      preview.marginSource === null ? t('noLayer') : t(`layers.${preview.marginSource}`),
+    ],
     [t('price'), formatMinor(preview.priceMinor, preview.currency, locale)],
     [t('basis'), t(`bases.${preview.basis}`)],
   ];
