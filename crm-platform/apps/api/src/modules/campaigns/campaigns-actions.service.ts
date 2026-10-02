@@ -277,7 +277,7 @@ export class CampaignsActionsService {
     const stamp = new Date()
       .toISOString()
       .replace(/[-:T]/g, '')
-      .slice(0, 15)
+      .slice(0, 14)
       .replace(/^(\d{8})(\d{6})$/, '$1-$2');
     return {
       stream: Readable.from(lines()),

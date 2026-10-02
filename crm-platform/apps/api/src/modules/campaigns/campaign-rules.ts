@@ -299,6 +299,36 @@ export function msUntilWindowOpens(now: Date, zone: string, start: string): numb
   return (wait === 0 ? 1440 : wait) * 60_000;
 }
 
+/** The calendar date on the clock of `zone` at `now`, as `YYYY-MM-DD`. */
+export function dateInZone(now: Date, zone: string): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: isKnownTimeZone(zone) ? zone : 'UTC',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now);
+}
+
+/** The next `[date, time]` for a campaign that stopped for the daily cap or the closed window, in its own zone (TW-CAMP-011). */
+export function nextRunSlot(
+  c: { timezone: string | null; windowStart: string | null; sendTime: string | null },
+  reason: 'cap' | 'window' | 'warmer',
+  now: Date,
+): { sendDate: string; sendTime: string } {
+  const zone = c.timezone && isKnownTimeZone(c.timezone) ? c.timezone : 'UTC';
+  const open = (c.windowStart ?? c.sendTime ?? '09:00').slice(0, 5);
+  const today = dateInZone(now, zone);
+  if (reason === 'window' && c.windowStart) {
+    // Today's opening still ahead: resume today; otherwise tomorrow.
+    const todayOpen = wallTimeToUtc(today, open, zone);
+    return {
+      sendDate: now.getTime() < todayOpen.getTime() ? today : addDays(today, 1),
+      sendTime: open,
+    };
+  }
+  return { sendDate: addDays(today, 1), sendTime: open };
+}
+
 // ---------------------------------------------------------------- retries (012)
 
 export const MAX_ATTEMPTS_DEFAULT = 3;
