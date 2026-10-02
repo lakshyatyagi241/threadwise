@@ -16,7 +16,7 @@ const CODE_KEYS: Record<string, string> = {
   I18N_PROVIDER_CREDENTIALS_MISSING: 'credentialsMissing',
   I18N_PROVIDER_INACTIVE: 'providerInactive',
   I18N_LOCKDOWN_NO_OFFICIAL_PROVIDER: 'lockdownNoOfficial',
-  PLAN_FEATURE_NOT_AVAILABLE: 'planGate',
+  PLAN_FEATURE_LOCKED: 'planGate',
 };
 export function errorKey(err: unknown): string {
   return (err instanceof ApiError && CODE_KEYS[err.code]) || 'unexpected';
@@ -27,4 +27,10 @@ export function lastDays(n: number, now = new Date()): { from: string; to: strin
   const to = now.toISOString().slice(0, 10);
   const from = new Date(now.getTime() - (n - 1) * 86_400_000).toISOString().slice(0, 10);
   return { from, to };
+}
+
+/** From the first of this month to today (UTC), the range Reference's usage page opens on. */
+export function monthToDate(now = new Date()): { from: string; to: string } {
+  const to = now.toISOString().slice(0, 10);
+  return { from: `${to.slice(0, 8)}01`, to };
 }
