@@ -33,6 +33,16 @@ export class WalletController {
     return this.query.summary();
   }
 
+  @Get('snapshot')
+  @RequirePermission('wallet.balance.read')
+  @ApiOperation({
+    summary:
+      'One-call wallet view for the mobile app and the extension: mode, balance, messages left, month spend',
+  })
+  async snapshot() {
+    return this.query.snapshot();
+  }
+
   @Get('ledger')
   @RequirePermission('wallet.statement.read')
   @ApiOperation({ summary: 'Recent wallet activity, newest first (cursor paginated)' })

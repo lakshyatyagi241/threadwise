@@ -3,6 +3,7 @@ import { BspBillingEngineModule } from '../bsp-billing-engine';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { MessageBillingService } from './message-billing.service';
+import { CreditPackagesService } from './credit-packages.service';
 import { PlatformMarginsService } from './platform-margins.service';
 import { PlatformRatesService } from './platform-rates.service';
 import { PlatformWalletController } from './platform-wallet.controller';
@@ -30,6 +31,7 @@ const SERVICES = [
   PlatformWalletService,
   PlatformRatesService,
   PlatformMarginsService,
+  CreditPackagesService,
 ];
 
 const IMPORTS = [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule];

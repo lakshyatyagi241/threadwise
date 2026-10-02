@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { BspBillingEngineModule } from '../bsp-billing-engine';
 import { NotificationsRepository } from '../notifications';
+import { RealtimeEmitterModule } from '../../realtime';
+import { WalletRealtimePublisher } from './wallet-realtime.publisher';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { DeliveryBillingConsumer } from './delivery.consumer';
@@ -21,7 +23,7 @@ import { WalletRepository } from './wallet.repository';
  * worker's scheduler. An HTTP pod that also did this would multiply the polling and double every notification attempt.
  */
 @Module({
-  imports: [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule],
+  imports: [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule, RealtimeEmitterModule],
   providers: [
     WalletRepository,
     WalletLogService,
@@ -32,6 +34,7 @@ import { WalletRepository } from './wallet.repository';
     PlatformWalletService,
     PlatformRatesService,
     NotificationsRepository,
+    WalletRealtimePublisher,
     DeliveryBillingConsumer,
     WalletNotificationsConsumer,
     WalletReconcileJob,

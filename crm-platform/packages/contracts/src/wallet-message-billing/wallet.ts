@@ -127,3 +127,23 @@ export const statementResponseSchema = z.object({
   page: pageInfoSchema,
 });
 export type StatementResponse = z.infer<typeof statementResponseSchema>;
+
+/**
+ * One payload for the mobile app and the browser extension (WD-WALLET-025, -029): billing mode, balance, what is left to send, and
+ * the month's spend. `messagesRemaining` is -1 for "unlimited", as WaDesk's integrations expect.
+ */
+export const walletSnapshotSchema = z.object({
+  billingMode: walletBillingModeSchema,
+  currency: z.string(),
+  balanceMinor: z.number().int(),
+  flatPriceMinor: z.number().int(),
+  /** Wallet mode: how many messages the balance buys at the flat price. Plan mode: what is left of the plan allowance. -1 = unlimited. */
+  messagesRemaining: z.number().int(),
+  /** Plan mode only: messages the wallet would cover once the allowance is used. */
+  walletBufferMessages: z.number().int().nullable(),
+  spentThisMonthMinor: z.number().int(),
+  planActive: z.boolean(),
+  monthlyMessagesLimit: z.number().int(),
+  usedThisMonth: z.number().int(),
+});
+export type WalletSnapshot = z.infer<typeof walletSnapshotSchema>;

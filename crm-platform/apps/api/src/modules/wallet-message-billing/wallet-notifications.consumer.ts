@@ -8,6 +8,7 @@ import {
 } from '../../kernel/outbox/outbox-subscribers';
 import { NotificationsRepository } from '../notifications';
 import { formatMinor } from './wallet-rules';
+import { WalletRealtimePublisher } from './wallet-realtime.publisher';
 import { WalletSettingsService } from './wallet-settings.service';
 
 const EVENTS = ['wallet.low_balance', 'wallet.topped_up'] as const;
@@ -30,6 +31,7 @@ export class WalletNotificationsConsumer implements OutboxSubscriber, OnModuleIn
     private readonly notifications: NotificationsRepository,
     private readonly registry: OutboxSubscriberRegistry,
     private readonly settings: WalletSettingsService,
+    private readonly realtime: WalletRealtimePublisher,
   ) {}
 
   onModuleInit(): void {
@@ -38,7 +40,15 @@ export class WalletNotificationsConsumer implements OutboxSubscriber, OnModuleIn
 
   async handle(event: OutboxEvent): Promise<void> {
     const p = event.payload;
-    if (event.eventType === 'wallet.topped_up' && p.type !== 'admin_adjust') return;
+    if (event.eventType === 'wallet.topped_up') {
+      // Every credit moves the balance on open screens; only a manual one is also a notification.
+      await this.realtime.balanceChanged(
+        event.orgId,
+        Number(p.balanceAfterMinor ?? 0),
+        p.type === 'admin_adjust' ? 'adjustment' : 'topup',
+      );
+      if (p.type !== 'admin_adjust') return;
+    }
     const currency = await this.settings.currency();
     const balance = formatMinor(Number(p.balanceMinor ?? p.balanceAfterMinor ?? 0));
     const copy =

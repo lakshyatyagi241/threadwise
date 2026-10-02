@@ -11,6 +11,7 @@ import {
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
 import { MessageBillingService } from './message-billing.service';
+import { WalletRealtimePublisher } from './wallet-realtime.publisher';
 import { WalletLogService } from './wallet-log.service';
 import { DatabaseService } from '../../infra/db/database.service';
 
@@ -32,6 +33,7 @@ export class DeliveryBillingConsumer implements OutboxSubscriber, OnModuleInit {
     private readonly registry: OutboxSubscriberRegistry,
     private readonly log: WalletLogService,
     private readonly db: DatabaseService,
+    private readonly realtime: WalletRealtimePublisher,
   ) {}
 
   onModuleInit(): void {
@@ -50,9 +52,11 @@ export class DeliveryBillingConsumer implements OutboxSubscriber, OnModuleInit {
     const d = parsed.data;
     try {
       if (isFailureStatus(d.status)) {
-        await this.billing.settleFailed(event.orgId, d.providerMessageId);
+        const out = await this.billing.settleFailed(event.orgId, d.providerMessageId);
+        if (out.refunded)
+          await this.realtime.balanceChanged(event.orgId, out.balanceAfterMinor, 'refund');
       } else if (isBillableStatus(d.provider, d.status)) {
-        await this.billing.settleDelivered({
+        const out = await this.billing.settleDelivered({
           orgId: event.orgId,
           provider: d.provider,
           providerMessageId: d.providerMessageId,
@@ -60,6 +64,8 @@ export class DeliveryBillingConsumer implements OutboxSubscriber, OnModuleInit {
           category: d.category ?? null,
           source: d.source ?? null,
         });
+        if (out.status === 'charged')
+          await this.realtime.balanceChanged(event.orgId, out.balanceAfterMinor, 'charge');
       }
     } catch (err) {
       // Rethrown so the drain retries with backoff; the failure is also written where support can see it.
