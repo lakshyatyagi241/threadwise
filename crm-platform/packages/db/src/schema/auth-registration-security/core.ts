@@ -113,7 +113,9 @@ export const userTokens = pgTable(
     orgId: orgIdColumn(),
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     userId: idColumn('user_id').notNull(),
-    kind: text('kind').$type<'email_verify' | 'password_reset' | 'email_change'>().notNull(),
+    kind: text('kind')
+      .$type<'email_verify' | 'password_reset' | 'email_change' | 'invite'>()
+      .notNull(),
     tokenHash: text('token_hash').notNull(),
     payload: jsonb('payload').$type<Record<string, unknown>>().notNull().default({}),
     expiresAt: ts('expires_at').notNull(),

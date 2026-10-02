@@ -35,6 +35,7 @@ const UPSTREAM: Record<string, string | ((body: Record<string, unknown>) => stri
   signup: '/v2/auth/signup',
   'signup-otp': '/v2/auth/signup/verify-otp',
   switch: '/v2/auth/workspaces/switch',
+  'accept-invite': '/v2/workspace/invitations/accept',
   'social-callback': (b) =>
     `/v2/auth/social/${encodeURIComponent(String(b.provider ?? ''))}/callback`,
 };

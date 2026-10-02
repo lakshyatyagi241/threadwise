@@ -49,7 +49,7 @@ export interface CompleteLoginInput {
   user: { id: number; uuid: string; email: string; fullName: string };
   remember: boolean;
   mfaVerified: boolean;
-  method: 'password' | 'mfa' | 'social' | 'signup' | 'switch';
+  method: 'password' | 'mfa' | 'social' | 'signup' | 'switch' | 'invite';
   meta: ClientMeta;
 }
 

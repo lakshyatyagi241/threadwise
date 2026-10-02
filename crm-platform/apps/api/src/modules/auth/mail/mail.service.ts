@@ -126,6 +126,25 @@ export class MailService {
     );
   }
 
+  /** A workspace member invitation (WSP): the link sets the first password; there is no temporary password to read out. */
+  sendWorkspaceInvite(
+    to: string,
+    name: string,
+    info: { inviter: string | null; workspace: string; role: string; url: string; days: number },
+  ): Promise<boolean> {
+    const who = info.inviter ?? 'An administrator';
+    return this.deliver(
+      to,
+      `${who} invited you to ${info.workspace} on ${this.brand}`,
+      `Hi ${name},\n\n${who} invited you to join ${info.workspace} as ${info.role}. Open this link to choose your password and sign in:\n${info.url}\n\nThe link works once and expires in ${info.days} days.`,
+      this.layout(
+        `Join ${info.workspace}`,
+        `<p>Hi ${esc(name)}, ${esc(who)} invited you to join <strong>${esc(info.workspace)}</strong> as <strong>${esc(info.role)}</strong>. Choose a password to accept. The link works once and expires in ${info.days} days.</p>`,
+        { label: 'Accept invitation', url: info.url },
+      ),
+    );
+  }
+
   sendPasswordChanged(to: string, name: string, resetUrl: string): Promise<boolean> {
     return this.deliver(
       to,
