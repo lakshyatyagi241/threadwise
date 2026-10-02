@@ -6,6 +6,7 @@ import {
   WHATSAPP_PROVIDER,
   type WhatsAppProvider,
 } from '../../infra/providers/whatsapp/whatsapp.port';
+import { OutboundRegistry, type SendCommand } from '../node-bridge-runtime';
 import type { DispatchSender } from './_shims/tokens';
 
 export interface OutgoingMessage {
@@ -30,6 +31,36 @@ export interface OutgoingText {
   buttons?: unknown[];
   quickReplies?: unknown[];
   media?: { kind: 'image' | 'video' | 'document'; url: string } | null;
+  /** The sender's number is paced and capped by the dispatcher; the transport only needs to know it is a bulk send. */
+  screen?: { bulk?: boolean; source?: string };
+}
+
+/**
+ * A template body for engines that send plain text: each `{{n}}` or `{{name}}` takes the next resolved value (positional
+ * numbers index the list, names take their order of first appearance). A missing value renders empty, never as the raw tag.
+ */
+export function renderPlainBody(templateBody: string, values: string[] | undefined): string {
+  const seen = new Map<string, number>();
+  return templateBody.replace(/\{\{\s*([^\s{}]+?)\s*\}\}/g, (_m, key: string) => {
+    const idx = /^\d+$/.test(key)
+      ? Number(key) - 1
+      : (seen.get(key) ?? seen.set(key, seen.size).get(key)!);
+    return values?.[idx] ?? '';
+  });
+}
+
+/** What a plain-text engine sends for one recipient: header, body and footer as lines, media as the file with that text as caption. */
+export function commandForText(m: OutgoingText): SendCommand {
+  const text = [m.header, m.text, m.footer].filter((x): x is string => !!x?.trim()).join('\n\n');
+  if (m.media) {
+    return {
+      type: 'media',
+      to: m.to,
+      mediaUrl: m.media.url,
+      ...(text ? { caption: text } : {}),
+    };
+  }
+  return { type: 'text', to: m.to, body: text };
 }
 
 /** A sender with its credentials loaded once for the whole run. */
@@ -53,8 +84,9 @@ interface ConfigRow {
 }
 
 /**
- * WhatsApp Cloud API numbers (engine `waba`), sent through the shared Meta provider. The Baileys, Twilio and SMS engines
- * have no adapter yet: a broadcast on one of them fails at dispatch with a clear reason (see EngineSenderRegistry).
+/**
+ * WhatsApp Cloud API numbers (engine `waba`), sent through the shared Meta provider. The SMS engine has no adapter yet: a
+ * broadcast on it fails at dispatch with a clear reason (see EngineSenderRegistry).
  */
 @Injectable()
 export class WabaEngineSender implements EngineSender {
@@ -111,13 +143,42 @@ export class WabaEngineSender implements EngineSender {
   }
 }
 
+/**
+ * The unofficial engine and Twilio (TW-NODE-037, 038): one adapter over the NODE transports, so a broadcast reaches them
+ * through the same send port a scheduled message uses. They send free text (the rendered template), never a Meta template.
+ */
+@Injectable()
+export class TransportEngineSender implements EngineSender {
+  constructor(private readonly outbound: OutboundRegistry) {}
+
+  async open(orgId: number, sender: DispatchSender): Promise<OpenedSender> {
+    const transport = this.outbound.get(sender.engine);
+    if (!transport) throw new Error(`No sender is connected for engine ${sender.engine}.`);
+    const open = await transport.open(orgId, sender);
+    return {
+      send: async () => {
+        throw new Error('This engine sends the rendered text, not a Meta template.');
+      },
+      sendText: async (m) => {
+        const out = await open.send(commandForText(m), {
+          clientReference: m.clientReference,
+          screen: m.screen ?? { bulk: true, source: 'broadcast' },
+        });
+        return { providerMessageId: out.providerMessageId ?? null };
+      },
+    };
+  }
+}
+
 /** Which adapter sends for which engine. Tests and later domains register their own. */
 @Injectable()
 export class EngineSenderRegistry {
   private readonly senders = new Map<string, EngineSender>();
 
-  constructor(waba: WabaEngineSender) {
+  constructor(waba: WabaEngineSender, other: TransportEngineSender) {
     this.senders.set('waba', waba);
+    this.senders.set('baileys', other);
+    this.senders.set('twilio', other);
   }
 
   register(engine: string, sender: EngineSender): void {

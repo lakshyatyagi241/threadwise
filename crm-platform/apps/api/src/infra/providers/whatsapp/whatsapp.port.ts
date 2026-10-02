@@ -36,6 +36,19 @@ export interface SendTextParams {
   screen?: { bulk?: boolean; source?: string };
 }
 
+export interface SendMediaParams {
+  to: string;
+  kind: 'image' | 'video' | 'audio' | 'document';
+  /** Public https URL Meta fetches the file from. */
+  link: string;
+  /** Not allowed on audio. */
+  caption?: string;
+  /** Documents only. */
+  fileName?: string;
+  clientReference: string;
+  screen?: { bulk?: boolean; source?: string };
+}
+
 export interface SendResult {
   /** Provider's id (WhatsApp wamid). Stored on messages.provider_message_id. */
   providerMessageId: string;
@@ -66,6 +79,7 @@ export interface WhatsAppProvider {
 
   sendTemplate(channelConfig: ChannelCredentials, params: SendTemplateParams): Promise<SendResult>;
   sendText(channelConfig: ChannelCredentials, params: SendTextParams): Promise<SendResult>;
+  sendMedia(channelConfig: ChannelCredentials, params: SendMediaParams): Promise<SendResult>;
 
   /**
    * Verifies the webhook signature. Returns false on any doubt.
