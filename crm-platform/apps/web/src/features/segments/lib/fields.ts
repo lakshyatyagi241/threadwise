@@ -113,10 +113,13 @@ export function buildCatalog(l: Lookups): FieldDef[] {
   return [...system, ...custom];
 }
 
-export function fieldsByGroup(catalog: readonly FieldDef[]): Array<{ group: FieldGroup; fields: FieldDef[] }> {
-  return FIELD_GROUPS.map((group) => ({ group, fields: catalog.filter((f) => f.group === group) })).filter(
-    (g) => g.fields.length > 0,
-  );
+export function fieldsByGroup(
+  catalog: readonly FieldDef[],
+): Array<{ group: FieldGroup; fields: FieldDef[] }> {
+  return FIELD_GROUPS.map((group) => ({
+    group,
+    fields: catalog.filter((f) => f.group === group),
+  })).filter((g) => g.fields.length > 0);
 }
 
 export const findField = (catalog: readonly FieldDef[], id: string): FieldDef | undefined =>

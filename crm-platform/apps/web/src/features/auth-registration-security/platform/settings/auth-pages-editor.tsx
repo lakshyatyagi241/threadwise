@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -18,7 +19,9 @@ import {
   MEDIA_TYPES,
   MEDIA_URL_LIMIT,
   PAGES,
+  REAL_PAGE_PATHS,
   SHOWCASE_GROUPS,
+  SHOWCASE_GROUPS_BY_PAGE,
   SHOWCASE_PAGES,
   TEXT_LIMITS,
   authPagesFieldForPath,
@@ -37,6 +40,7 @@ import {
   type ShowcasePage,
   type TextField as TextFieldName,
 } from '../lib/auth-pages-draft';
+import { REGISTRATION_SETTINGS_HREF } from '../lib/links';
 import { useCanEdit } from '../operator-context';
 import { operatorFetch } from '../operator-fetch';
 import { PageHeader } from '../ui/page-header';
@@ -46,13 +50,15 @@ import { ErrorBlock, LoadingBlock } from '../ui/state';
 import { useToast } from '../ui/toast';
 import { useUnsavedGuard } from '../ui/use-unsaved-guard';
 import { DesignPicker } from './design-picker';
+import { PreviewForm } from './preview-form';
+import { PreviewFonts } from './preview-fonts';
 import { PreviewFrame, type PreviewDevice } from './preview-frame';
 
 const NS = 'auth-registration-security.platform.authPages';
 const KEY = ['operator', 'settings', 'auth-pages'] as const;
 type Errors = Record<string, string | undefined>;
 
-export function AuthPagesEditorPage() {
+export function AuthPagesEditorPage({ fontClass }: { fontClass?: string } = {}) {
   const q = useQuery({
     queryKey: KEY,
     queryFn: ({ signal }) =>
@@ -64,40 +70,10 @@ export function AuthPagesEditorPage() {
       <LoadingBlock className="flex min-h-64 items-center justify-center text-muted-foreground" />
     );
   if (q.isError) return <ErrorBlock error={q.error} onRetry={() => void q.refetch()} />;
-  return <AuthPagesForm data={q.data} />;
+  return <AuthPagesForm data={q.data} fontClass={fontClass} />;
 }
 
-/** A static stand-in for the real form, so the preview shows the page as visitors see it without anything to type into. */
-function PlaceholderForm({ page }: { page: AuthPageName }) {
-  const t = useTranslations(`${NS}.preview.form`);
-  const fields =
-    page === 'register'
-      ? (['org', 'name', 'email', 'password'] as const)
-      : page === 'forgot'
-        ? (['email'] as const)
-        : (['email', 'password'] as const);
-  return (
-    <div inert aria-hidden="true" className="space-y-4">
-      {fields.map((f) => (
-        <div key={f} className="space-y-1.5 text-sm">
-          <span className="block font-medium">{t(f)}</span>
-          <div className="h-10 rounded-md border border-border bg-background" />
-        </div>
-      ))}
-      {page === 'login' && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span className="size-4 rounded border border-border" />
-          {t('remember')}
-        </div>
-      )}
-      <div className="flex h-10 items-center justify-center rounded-md bg-[var(--auth-accent)] text-sm font-medium text-[var(--auth-ink)]">
-        {t(`submit.${page}`)}
-      </div>
-    </div>
-  );
-}
-
-function AuthPagesForm({ data }: { data: AuthPagesResponse }) {
+function AuthPagesForm({ data, fontClass }: { data: AuthPagesResponse; fontClass?: string }) {
   const t = useTranslations(NS);
   const tp = useTranslations(`${NS}.problems`);
   const qc = useQueryClient();
@@ -120,7 +96,9 @@ function AuthPagesForm({ data }: { data: AuthPagesResponse }) {
     queryKey: ['public', 'registration-config'],
     queryFn: ({ signal }) =>
       apiFetch('/auth/registration-config', { schema: registrationConfigResponseSchema, signal }),
-    staleTime: 5 * 60_000,
+    // The preview shows which providers and captcha are live, which another screen can change: look again on return.
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
     retry: false,
   });
 
@@ -244,7 +222,16 @@ function AuthPagesForm({ data }: { data: AuthPagesResponse }) {
       <PageHeader
         eyebrow={t('kicker')}
         title={t('title')}
-        description={t('description')}
+        description={t.rich('description', {
+          link: (chunks) => (
+            <Link
+              href={REGISTRATION_SETTINGS_HREF}
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {chunks}
+            </Link>
+          ),
+        })}
         actions={
           <Button type="submit" disabled={!canEdit || changed === 0 || save.isPending}>
             {save.isPending && <Spinner label={t('saving')} />}
@@ -315,7 +302,7 @@ function AuthPagesForm({ data }: { data: AuthPagesResponse }) {
               errors={errors}
               disabled={dis}
               setField={(key, value) => setPageField(page, key, value)}
-              setExtra={(key, value) => setExtra(page as ShowcasePage, key, value)}
+              setExtra={(key, value) => setExtra(page, key, value)}
             />
           </div>
         </Card>
@@ -331,10 +318,20 @@ function AuthPagesForm({ data }: { data: AuthPagesResponse }) {
               </h2>
               <p className="text-xs text-muted-foreground">
                 {t('preview.note', { page: t(`pages.${page}`) })}
-                {showcaseNote && page !== 'forgot' ? ` ${t('preview.showcaseNote')}` : ''}
+                {showcaseNote ? ` ${t('preview.showcaseNote')}` : ''}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={REAL_PAGE_PATHS[page]}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={t('preview.openRealNote')}
+                className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                {t('preview.openReal')}
+                <span className="sr-only"> {t('preview.opensNewTab')}</span>
+              </a>
               <Button
                 variant="secondary"
                 size="sm"
@@ -371,16 +368,23 @@ function AuthPagesForm({ data }: { data: AuthPagesResponse }) {
             device={device}
             title={t('preview.frameTitle', { page: t(`pages.${page}`) })}
           >
-            <AuthShell
-              variant={draft.variant}
-              page={page}
-              content={resolvePreviewContent(page, draft.pages[page], data.defaults)}
-              extra={page === 'forgot' ? undefined : resolvePreviewExtra(draft.extra[page])}
-              appName={config.data?.appName}
-              preview
-            >
-              <PlaceholderForm page={page} />
-            </AuthShell>
+            {/*
+              The guest type is defined by class names on the guest layout's wrapper; the console has no such wrapper,
+              so the preview brings its own (display: contents draws nothing and keeps the shell's height rules).
+            */}
+            <PreviewFonts fontClass={fontClass}>
+              <AuthShell
+                variant={draft.variant}
+                page={page}
+                content={resolvePreviewContent(page, draft.pages[page], data.defaults)}
+                extra={resolvePreviewExtra(draft.extra[page])}
+                appName={config.data?.appName}
+                countryIso={config.data?.defaultCountryIso}
+                preview
+              >
+                <PreviewForm page={page} config={config.data} />
+              </AuthShell>
+            </PreviewFonts>
           </PreviewFrame>
         </section>
       </div>
@@ -416,7 +420,8 @@ function AuthPagesForm({ data }: { data: AuthPagesResponse }) {
   );
 }
 
-function PageFields({
+/** The fields of one page tab. Exported for the render tests. */
+export function PageFields({
   page,
   draft,
   defaults: allDefaults,
@@ -468,7 +473,7 @@ function PageFields({
     const placeholder = tg.has(`defaults.${page}.${key}`) ? tg(`defaults.${page}.${key}`) : '';
     const props = {
       id: `ap-${control}`,
-      value: draft.extra[page as ShowcasePage]?.[key] ?? '',
+      value: draft.extra[page]?.[key] ?? '',
       onChange: (e: { target: { value: string } }) => setExtra(key, e.target.value),
       placeholder,
       maxLength: EXTRA_LIMIT,
@@ -487,6 +492,7 @@ function PageFields({
   };
 
   const hasShowcase = (SHOWCASE_PAGES as readonly string[]).includes(page);
+  const groups = SHOWCASE_GROUPS_BY_PAGE[page];
 
   return (
     <fieldset
@@ -512,7 +518,7 @@ function PageFields({
             value={d.accent}
             onChange={(e) => setField('accent', e.target.value)}
             placeholder={shippedAccent}
-            maxLength={7}
+            maxLength={9}
             dir="ltr"
             aria-label={t('fields.accentHex')}
             invalid={Boolean(errors[`${page}-accent`])}
@@ -604,52 +610,62 @@ function PageFields({
             </span>
           </summary>
           <div className="space-y-5 border-t border-border p-3">
-            <div className="space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t('showcase.groups.hero')}
-              </h4>
-              {extraField('hero_title')}
-              {extraField('hero_desc', { long: true })}
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t('showcase.groups.stats')}
-              </h4>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {SHOWCASE_GROUPS.stats.map((k) => (
-                  <div key={k}>{extraField(k)}</div>
-                ))}
+            {groups.includes('hero') && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('showcase.groups.hero')}
+                </h4>
+                {extraField('hero_title')}
+                {extraField('hero_desc', { long: true })}
               </div>
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t('showcase.groups.features')}
-              </h4>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {SHOWCASE_GROUPS.features.map((k) => (
-                  <div key={k}>{extraField(k)}</div>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t('showcase.groups.chips')}
-              </h4>
-              {extraField('inside_heading')}
-              <div className="grid gap-3 sm:grid-cols-2">
-                {SHOWCASE_GROUPS.chips
-                  .filter((k) => k !== 'inside_heading')
-                  .map((k) => (
+            )}
+            {groups.includes('stats') && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('showcase.groups.stats')}
+                </h4>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {SHOWCASE_GROUPS.stats.map((k) => (
                     <div key={k}>{extraField(k)}</div>
                   ))}
+                </div>
               </div>
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t('showcase.groups.footer')}
-              </h4>
-              {extraField('footer')}
-            </div>
+            )}
+            {groups.includes('features') && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('showcase.groups.features')}
+                </h4>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {SHOWCASE_GROUPS.features.map((k) => (
+                    <div key={k}>{extraField(k)}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {groups.includes('chips') && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('showcase.groups.chips')}
+                </h4>
+                {extraField('inside_heading')}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {SHOWCASE_GROUPS.chips
+                    .filter((k) => k !== 'inside_heading')
+                    .map((k) => (
+                      <div key={k}>{extraField(k)}</div>
+                    ))}
+                </div>
+              </div>
+            )}
+            {groups.includes('footer') && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('showcase.groups.footer')}
+                </h4>
+                {extraField('footer')}
+              </div>
+            )}
           </div>
         </details>
       )}

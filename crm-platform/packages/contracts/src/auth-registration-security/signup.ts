@@ -120,6 +120,7 @@ export const registrationConfigResponseSchema = z.object({
     extra: z.object({
       login: z.record(z.string().max(600)),
       register: z.record(z.string().max(600)),
+      forgot: z.record(z.string().max(600)).default({}),
     }),
   }),
   links: z.object({

@@ -15,7 +15,9 @@ const PATHS: Record<string, ReactNode> = {
     </>
   ),
   analytics: <path d="M2 13V3M2 13h12M5 11V7M8 11V4M11 11V8" />,
-  bell: <path d="M8 2a4 4 0 0 0-4 4v2.5L3 11h10l-1-2.5V6a4 4 0 0 0-4-4zM6.5 13a1.7 1.7 0 0 0 3 0" />,
+  bell: (
+    <path d="M8 2a4 4 0 0 0-4 4v2.5L3 11h10l-1-2.5V6a4 4 0 0 0-4-4zM6.5 13a1.7 1.7 0 0 0 3 0" />
+  ),
   inbox: (
     <>
       <rect x="2" y="3" width="12" height="9" rx="1.5" />
@@ -255,6 +257,12 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M12.5 3.5l-9 9" />
       <circle cx="4.8" cy="4.8" r="1.7" />
       <circle cx="11.2" cy="11.2" r="1.7" />
+    </>
+  ),
+  gear: (
+    <>
+      <circle cx="8" cy="8" r="2" />
+      <path d="M6.7 1.8h2.6l.4 1.7 1.2.7 1.6-.6 1.3 2.2-1.3 1.2v1.4l1.3 1.2-1.3 2.2-1.6-.6-1.2.7-.4 1.7H6.7l-.4-1.7-1.2-.7-1.6.6-1.3-2.2 1.3-1.2V7.3L2.2 6.1l1.3-2.2 1.6.6 1.2-.7z" />
     </>
   ),
   settings: (

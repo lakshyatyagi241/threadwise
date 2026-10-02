@@ -6,19 +6,19 @@ this machine, so request/response shapes, validation and edge cases below are NO
 
 ## Contacts (`ContactsController`, `Api/V1/ContactController`, `Api/App/ContactGroupController`)
 
-| Reference route                                     | Our API (v2)                                | State                                       |
-| ------------------------------------------------ | ------------------------------------------- | ------------------------------------------- |
-| GET/POST `contacts`, GET/PUT/DELETE `contacts/{id}` | `contacts` list, create, get, patch, delete | exists                                      |
-| POST `contacts/bulk-delete`                      | `contacts/bulk/delete`                      | exists                                      |
-| POST `contacts/bulk-group`                       | none                                        | missing                                     |
-| POST `contacts/bulk-tag`                         | `tags/attach` (check bulk semantics)        | partial                                     |
-| POST `contacts/bulk-export`                      | none                                        | missing                                     |
-| POST `contacts/import`, `import-preview`, GET `sample-csv` | none                              | missing                                     |
-| POST `contacts/dedupe`                           | none                                        | missing                                     |
-| GET/POST `contacts/{id}/tags`, DELETE `.../tags/{tagId}` | `contacts/:id/tags` get and delete, `tags/attach` | exists (verify)                      |
-| `api/v1/contacts` (public REST API, API-key auth) | none (API domain `api`)                    | missing, belongs to the developer-API domain |
-| `api/app/contacts`, `get-contacts` (mobile)      | none (MOB domain)                           | missing, belongs to the mobile-API domain   |
-| Extras we have and Reference lacks                  | assignees, field-history, notes, files, meetings, activities, saved views | keep, not in Reference |
+| Reference route                                               | Our API (v2)                                                              | State                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------- |
+| GET/POST `contacts`, GET/PUT/DELETE `contacts/{id}`        | `contacts` list, create, get, patch, delete                               | exists                                       |
+| POST `contacts/bulk-delete`                                | `contacts/bulk/delete`                                                    | exists                                       |
+| POST `contacts/bulk-group`                                 | none                                                                      | missing                                      |
+| POST `contacts/bulk-tag`                                   | `tags/attach` (check bulk semantics)                                      | partial                                      |
+| POST `contacts/bulk-export`                                | none                                                                      | missing                                      |
+| POST `contacts/import`, `import-preview`, GET `sample-csv` | none                                                                      | missing                                      |
+| POST `contacts/dedupe`                                     | none                                                                      | missing                                      |
+| GET/POST `contacts/{id}/tags`, DELETE `.../tags/{tagId}`   | `contacts/:id/tags` get and delete, `tags/attach`                         | exists (verify)                              |
+| `api/v1/contacts` (public REST API, API-key auth)          | none (API domain `api`)                                                   | missing, belongs to the developer-API domain |
+| `api/app/contacts`, `get-contacts` (mobile)                | none (MOB domain)                                                         | missing, belongs to the mobile-API domain    |
+| Extras we have and Reference lacks                            | assignees, field-history, notes, files, meetings, activities, saved views | keep, not in Reference                          |
 
 ## Contact groups (`contact-groups`, `api/v1/contact-groups`, `api/app/contact-groups`)
 
@@ -27,8 +27,8 @@ Our API: no module. **Missing entirely** (also needs the contact-to-group member
 
 ## Attributes (`AttributesController`; table `attributes` and `contact_custom_fields` map to our `fields` registry, ADR-0017)
 
-| Reference route                  | Our API                          | State  |
-| ----------------------------- | -------------------------------- | ------ |
+| Reference route                                                                   | Our API                              | State                                                |
+| ------------------------------------------------------------------------------ | ------------------------------------ | ---------------------------------------------------- |
 | GET/POST `attributes`, PUT/DELETE `attributes/{id}`, GET `attributes/api/list` | `fields` list, create, patch, delete | exists (verify types, system attributes, validation) |
 
 ## Tags

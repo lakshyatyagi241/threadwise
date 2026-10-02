@@ -44,10 +44,16 @@ export const isRecurringTab = (v: string | null | undefined): v is RecurringTab 
   (RECURRING_TABS as readonly string[]).includes(v ?? '');
 
 /** The `status` filter of a tab (absent for "all"). */
-export const statusFilterOf = (tab: RecurringTab): RecurringStatus | undefined => (tab === 'all' ? undefined : tab);
+export const statusFilterOf = (tab: RecurringTab): RecurringStatus | undefined =>
+  tab === 'all' ? undefined : tab;
 
 /** The API's error codes these screens answer in their own words (`invoicing.errors.codes.<code>`, chosen by `useErrorText`). */
-export const RECURRING_ERROR_CODES = ['REC_ENDED', 'REC_NOT_ACTIVE', 'REC_START_TOO_OLD', 'INV_RECURRING_INVALID'] as const;
+export const RECURRING_ERROR_CODES = [
+  'REC_ENDED',
+  'REC_NOT_ACTIVE',
+  'REC_START_TOO_OLD',
+  'INV_RECURRING_INVALID',
+] as const;
 
 export const TEMPLATE_PAYMENT_TERMS = ['', '0', '7', '14', '15', '30', '45', '60'] as const;
 
@@ -116,7 +122,9 @@ export function formFromRecurring(r: RecurringInvoiceResponse, base: RecurringFo
     endDate: r.endDate ?? '',
     maxRuns: r.maxRuns === null ? '' : String(r.maxRuns),
     mode: r.mode,
-    sendChannel: (SEND_CHANNELS as readonly string[]).includes(r.sendChannel) ? (r.sendChannel as SendChannel) : 'email',
+    sendChannel: (SEND_CHANNELS as readonly string[]).includes(r.sendChannel)
+      ? (r.sendChannel as SendChannel)
+      : 'email',
   };
 }
 
@@ -143,13 +151,21 @@ export interface ScheduleShape {
   maxRuns: number | null;
 }
 
-export function shapeOf(f: Pick<RecurringForm, 'startDate' | 'frequency' | 'interval' | 'endDate' | 'maxRuns'>): ScheduleShape | null {
+export function shapeOf(
+  f: Pick<RecurringForm, 'startDate' | 'frequency' | 'interval' | 'endDate' | 'maxRuns'>,
+): ScheduleShape | null {
   const interval = intervalOf(f.interval);
   if (interval === null || !isDay(f.startDate)) return null;
   const maxRuns = f.maxRuns.trim() === '' ? null : maxRunsOf(f.maxRuns);
   if (f.maxRuns.trim() !== '' && maxRuns === null) return null;
   if (f.endDate !== '' && !isDay(f.endDate)) return null;
-  return { startDate: f.startDate, frequency: f.frequency, interval, endDate: f.endDate === '' ? null : f.endDate, maxRuns };
+  return {
+    startDate: f.startDate,
+    frequency: f.frequency,
+    interval,
+    endDate: f.endDate === '' ? null : f.endDate,
+    maxRuns,
+  };
 }
 
 // --- the schedule as dates ------------------------------------------------------------------------------------------------------
@@ -163,7 +179,11 @@ export function dateOfPeriod(s: ScheduleShape, index: number): string | null {
 }
 
 /** The first period dated `date` or later (never before `floor`); null when none is left. */
-export function firstPeriodFrom(s: ScheduleShape, date: string, floor = 0): { index: number; date: string } | null {
+export function firstPeriodFrom(
+  s: ScheduleShape,
+  date: string,
+  floor = 0,
+): { index: number; date: string } | null {
   for (let i = floor, guard = 0; guard < 20_000; i++, guard++) {
     const d = dateOfPeriod(s, i);
     if (d === null) return null;
@@ -206,14 +226,36 @@ export interface SchedulePreview {
 export const PREVIEW_COUNT = 6;
 
 /** The next `count` runs from period `fromIndex`, flagging month-end clamping and what ends the schedule. */
-export function previewSchedule(s: ScheduleShape | null, fromIndex = 0, count = PREVIEW_COUNT): SchedulePreview | null {
+export function previewSchedule(
+  s: ScheduleShape | null,
+  fromIndex = 0,
+  count = PREVIEW_COUNT,
+): SchedulePreview | null {
   if (!s) return null;
-  const runs = upcomingRuns({ start: s.startDate, frequency: s.frequency, interval: s.interval, end: s.endDate, maxRuns: s.maxRuns, fromIndex, count }).map((u) => ({
+  const runs = upcomingRuns({
+    start: s.startDate,
+    frequency: s.frequency,
+    interval: s.interval,
+    end: s.endDate,
+    maxRuns: s.maxRuns,
+    fromIndex,
+    count,
+  }).map((u) => ({
     index: u.index,
     date: u.date,
-    clamped: (s.frequency === 'month' || s.frequency === 'year') && Number(u.date.slice(8, 10)) !== Number(s.startDate.slice(8, 10)),
+    clamped:
+      (s.frequency === 'month' || s.frequency === 'year') &&
+      Number(u.date.slice(8, 10)) !== Number(s.startDate.slice(8, 10)),
   }));
-  const next = upcomingRuns({ start: s.startDate, frequency: s.frequency, interval: s.interval, end: s.endDate, maxRuns: s.maxRuns, fromIndex: fromIndex + runs.length, count: 1 });
+  const next = upcomingRuns({
+    start: s.startDate,
+    frequency: s.frequency,
+    interval: s.interval,
+    end: s.endDate,
+    maxRuns: s.maxRuns,
+    fromIndex: fromIndex + runs.length,
+    count: 1,
+  });
   const more = next.length > 0;
   let endedBy: SchedulePreview['endedBy'] = null;
   if (!more && runs.length > 0) {
@@ -232,7 +274,8 @@ export function previewSchedule(s: ScheduleShape | null, fromIndex = 0, count = 
     endedBy,
     more,
     totalRuns,
-    clampsAtMonthEnd: (s.frequency === 'month' || s.frequency === 'year') && Number(s.startDate.slice(8, 10)) > 28,
+    clampsAtMonthEnd:
+      (s.frequency === 'month' || s.frequency === 'year') && Number(s.startDate.slice(8, 10)) > 28,
   };
 }
 
@@ -240,7 +283,11 @@ export function previewSchedule(s: ScheduleShape | null, fromIndex = 0, count = 
  * Where the preview starts when editing: the saved next run when the schedule is untouched, else the first period dated today or
  * later (a changed schedule continues from today, like the server).
  */
-export function previewStartIndex(original: RecurringInvoiceResponse, s: ScheduleShape | null, today: string): number {
+export function previewStartIndex(
+  original: RecurringInvoiceResponse,
+  s: ScheduleShape | null,
+  today: string,
+): number {
   if (!s) return 0;
   const untouched =
     s.frequency === original.frequency &&
@@ -268,9 +315,15 @@ export interface ScheduleFacts {
   outcome: 'draft' | 'issue' | 'issue_email' | 'issue_link' | 'issue_whatsapp';
 }
 
-export function scheduleFacts(f: Pick<RecurringForm, 'mode' | 'sendChannel'> & { shape: ScheduleShape }): ScheduleFacts {
+export function scheduleFacts(
+  f: Pick<RecurringForm, 'mode' | 'sendChannel'> & { shape: ScheduleShape },
+): ScheduleFacts {
   const outcome: ScheduleFacts['outcome'] =
-    f.mode === 'draft' ? 'draft' : f.mode === 'issue' ? 'issue' : (`issue_${f.sendChannel}` as ScheduleFacts['outcome']);
+    f.mode === 'draft'
+      ? 'draft'
+      : f.mode === 'issue'
+        ? 'issue'
+        : (`issue_${f.sendChannel}` as ScheduleFacts['outcome']);
   return {
     frequency: f.shape.frequency,
     interval: f.shape.interval,
@@ -291,14 +344,27 @@ export interface TemplateContext {
 }
 
 /** The template draft with the dates the builder's checks want: a template has none (every period gets its own). */
-const datedDraft = (d: InvoiceDraft, today: string): InvoiceDraft => ({ ...d, issueDate: today, dueDate: '' });
+const datedDraft = (d: InvoiceDraft, today: string): InvoiceDraft => ({
+  ...d,
+  issueDate: today,
+  dueDate: '',
+});
 
-export const pricingOfTemplate = (f: RecurringForm, ctx: Pick<TemplateContext, 'rates' | 'profile' | 'today'>): DraftPricing =>
-  pricingOf(datedDraft(f.draft, ctx.today), ctx);
+export const pricingOfTemplate = (
+  f: RecurringForm,
+  ctx: Pick<TemplateContext, 'rates' | 'profile' | 'today'>,
+): DraftPricing => pricingOf(datedDraft(f.draft, ctx.today), ctx);
 
 /** The template as the request carries it: the invoice body without the dates, with the payment terms in days. */
-export function templateOf(f: RecurringForm, ctx: Pick<TemplateContext, 'rates' | 'profile'>): Omit<CreateInvoiceInput, 'issueDate' | 'dueDate'> {
-  const { issueDate: _i, dueDate: _d, ...body } = draftToBody(f.draft, ctx.rates, ctx.profile?.sellerCountry);
+export function templateOf(
+  f: RecurringForm,
+  ctx: Pick<TemplateContext, 'rates' | 'profile'>,
+): Omit<CreateInvoiceInput, 'issueDate' | 'dueDate'> {
+  const {
+    issueDate: _i,
+    dueDate: _d,
+    ...body
+  } = draftToBody(f.draft, ctx.rates, ctx.profile?.sellerCountry);
   void _i;
   void _d;
   const days = f.paymentTermsDays.trim() === '' ? null : Number(f.paymentTermsDays);
@@ -331,7 +397,10 @@ export interface ValidateRecurringOptions {
   pricing: DraftPricing;
 }
 
-export function validateRecurring(f: RecurringForm, o: ValidateRecurringOptions): RecurringProblems {
+export function validateRecurring(
+  f: RecurringForm,
+  o: ValidateRecurringOptions,
+): RecurringProblems {
   const out: RecurringProblems = {};
   const name = f.name.trim();
   if (name === '') out.name = 'nameRequired';
@@ -344,14 +413,23 @@ export function validateRecurring(f: RecurringForm, o: ValidateRecurringOptions)
     else if (isDay(f.startDate) && f.endDate < f.startDate) out.endDate = 'endBeforeStart';
   }
   const shape = shapeOf(f);
-  if (o.kind === 'create' && shape && !out.startDate && missedPeriods(shape, o.ctx.today) > CATCH_UP_MAX) out.startDate = 'startTooOld';
+  if (
+    o.kind === 'create' &&
+    shape &&
+    !out.startDate &&
+    missedPeriods(shape, o.ctx.today) > CATCH_UP_MAX
+  )
+    out.startDate = 'startTooOld';
 
   const needsTemplate = o.kind === 'create' || o.templateChanged;
   if (needsTemplate) {
     if (f.source === 'invoice') {
       if (!f.fromInvoice) out.template = 'invoiceRequired';
     } else {
-      if (f.paymentTermsDays.trim() !== '' && (!/^\d{1,3}$/.test(f.paymentTermsDays.trim()) || Number(f.paymentTermsDays) > 365)) {
+      if (
+        f.paymentTermsDays.trim() !== '' &&
+        (!/^\d{1,3}$/.test(f.paymentTermsDays.trim()) || Number(f.paymentTermsDays) > 365)
+      ) {
         out.paymentTermsDays = 'termsInvalid';
       }
       // Generated invoices are issued without a person looking at them, so an issuing schedule needs what an issue needs.
@@ -375,11 +453,16 @@ const withoutDates = (p: DraftProblems): DraftProblems => {
 };
 
 /** The server's field errors on the form's own paths: `template.lines.1.qty` is the draft's line, `startDate` stays. */
-export function serverErrorsOn(fields: Record<string, string>, draft: InvoiceDraft): Record<string, string> {
+export function serverErrorsOn(
+  fields: Record<string, string>,
+  draft: InvoiceDraft,
+): Record<string, string> {
   const used = usedIndexes(draft.lines);
   const out: Record<string, string> = {};
   for (const [path, message] of Object.entries(fields)) {
-    const own = path.startsWith('template.') ? serverPath(path.slice('template.'.length), used) : path;
+    const own = path.startsWith('template.')
+      ? serverPath(path.slice('template.'.length), used)
+      : path;
     if (!(own in out)) out[own] = message;
   }
   return out;
@@ -389,14 +472,23 @@ export function serverErrorsOn(fields: Record<string, string>, draft: InvoiceDra
 export type RecurringWarning = 'noBuyerEmail';
 export function warningsOf(f: RecurringForm): RecurringWarning[] {
   const out: RecurringWarning[] = [];
-  if (f.mode === 'issue_send' && f.sendChannel === 'email' && f.source === 'build' && f.draft.buyerEmail.trim() === '') out.push('noBuyerEmail');
+  if (
+    f.mode === 'issue_send' &&
+    f.sendChannel === 'email' &&
+    f.source === 'build' &&
+    f.draft.buyerEmail.trim() === ''
+  )
+    out.push('noBuyerEmail');
   return out;
 }
 
 // --- the requests ---------------------------------------------------------------------------------------------------------------------
 
 /** The body of `POST /recurring-invoices`: the copied invoice (`fromInvoiceId`) or the built template, never both. */
-export function buildCreateInput(f: RecurringForm, ctx: Pick<TemplateContext, 'rates' | 'profile'>): CreateRecurringInvoiceInput {
+export function buildCreateInput(
+  f: RecurringForm,
+  ctx: Pick<TemplateContext, 'rates' | 'profile'>,
+): CreateRecurringInvoiceInput {
   const base = {
     name: f.name.trim(),
     frequency: f.frequency,
@@ -443,7 +535,8 @@ export const isEmptyPatch = (p: object): boolean => Object.keys(p).length === 0;
 
 // --- rows ---------------------------------------------------------------------------------------------------------------------------------
 
-export const isEnded = (r: Pick<RecurringInvoiceResponse, 'status'>): boolean => r.status === 'ended';
+export const isEnded = (r: Pick<RecurringInvoiceResponse, 'status'>): boolean =>
+  r.status === 'ended';
 
 export interface RecurringRowActions {
   pause: boolean;
@@ -469,14 +562,21 @@ export function rowActions(
 }
 
 /** Client-side filter of the LOADED rows by name or buyer. */
-export function matchesRecurring(r: Pick<RecurringInvoiceResponse, 'name' | 'buyerName' | 'contact'>, text: string): boolean {
+export function matchesRecurring(
+  r: Pick<RecurringInvoiceResponse, 'name' | 'buyerName' | 'contact'>,
+  text: string,
+): boolean {
   const q = text.trim().toLowerCase();
   if (q === '') return true;
-  return [r.name, r.buyerName ?? '', r.contact?.name ?? ''].some((s) => s.toLowerCase().includes(q));
+  return [r.name, r.buyerName ?? '', r.contact?.name ?? ''].some((s) =>
+    s.toLowerCase().includes(q),
+  );
 }
 
 /** "run 3 of 12" / "run 3": the progress shown in the table. */
-export const runsLabel = (r: Pick<RecurringInvoiceResponse, 'runCount' | 'maxRuns'>): { done: number; of: number | null } => ({
+export const runsLabel = (
+  r: Pick<RecurringInvoiceResponse, 'runCount' | 'maxRuns'>,
+): { done: number; of: number | null } => ({
   done: r.runCount,
   of: r.maxRuns,
 });

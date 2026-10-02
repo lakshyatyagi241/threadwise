@@ -39,7 +39,10 @@ describe('deals stand-in API through the service layer', () => {
     expect(first.summary.valueMinor).toBeGreaterThan(0);
     // the weighted value of an open column is its value times the stage probability
     const stage = p.stages[0]!;
-    expect(first.summary.weightedMinor).toBeCloseTo((first.summary.valueMinor * stage.probability) / 100, -1);
+    expect(first.summary.weightedMinor).toBeCloseTo(
+      (first.summary.valueMinor * stage.probability) / 100,
+      -1,
+    );
     expect(board.kpis.openCount).toBeGreaterThan(0);
     expect(board.kpis.winRate).toBeGreaterThanOrEqual(0);
   });
@@ -79,8 +82,15 @@ describe('deals stand-in API through the service layer', () => {
     expect(wonDeal).toMatchObject({ status: 'won', lostAt: null });
     expect(wonDeal.wonAt).not.toBeNull();
 
-    await expectApiError(dealsApi.moveDeal(deal.id, { stageId: lost.id }), 422, 'DEAL_LOST_REASON_REQUIRED');
-    const lostDeal = await dealsApi.moveDeal(deal.id, { stageId: lost.id, lostReason: 'No budget' });
+    await expectApiError(
+      dealsApi.moveDeal(deal.id, { stageId: lost.id }),
+      422,
+      'DEAL_LOST_REASON_REQUIRED',
+    );
+    const lostDeal = await dealsApi.moveDeal(deal.id, {
+      stageId: lost.id,
+      lostReason: 'No budget',
+    });
     expect(lostDeal).toMatchObject({ status: 'lost', lostReason: 'No budget', wonAt: null });
 
     const reopened = await dealsApi.moveDeal(deal.id, { stageId: open.id });
@@ -93,7 +103,10 @@ describe('deals stand-in API through the service layer', () => {
     expect(reasons.length).toBeGreaterThan(0);
     const lost = p.stages.find((s) => s.kind === 'lost')!;
     const deal = await dealsApi.createDeal({ title: 'Lose by id', pipelineId: p.id }, p.currency);
-    const out = await dealsApi.moveDeal(deal.id, { stageId: lost.id, lostReasonId: reasons[0]!.id });
+    const out = await dealsApi.moveDeal(deal.id, {
+      stageId: lost.id,
+      lostReasonId: reasons[0]!.id,
+    });
     expect(out.lostReason).toBe(reasons[0]!.name);
   });
 
@@ -107,7 +120,11 @@ describe('deals stand-in API through the service layer', () => {
     expect(col.deals.length).toBeGreaterThan(2);
     expect(await ids()).toBe(col.deals.length);
     const last = col.deals[col.deals.length - 1]!;
-    await dealsApi.moveDeal(last.id, { stageId: stage.id, beforeDealId: col.deals[0]!.id, afterDealId: null });
+    await dealsApi.moveDeal(last.id, {
+      stageId: stage.id,
+      beforeDealId: col.deals[0]!.id,
+      afterDealId: null,
+    });
     const after = await dealsApi.board(p.id, p.currency, {});
     expect(after.columns[1]!.deals[0]!.id).toBe(last.id);
     // and sending only the card above puts it directly below that card
@@ -155,7 +172,9 @@ describe('deals stand-in API through the service layer', () => {
       dueAt: new Date().toISOString(),
     });
     const list = await dealsApi.activities(d.id);
-    expect(list.some((a) => a.type === 'stage_change' && a.stageChange?.to === p.stages[1]!.name)).toBe(true);
+    expect(
+      list.some((a) => a.type === 'stage_change' && a.stageChange?.to === p.stages[1]!.name),
+    ).toBe(true);
     expect((await dealsApi.setTaskDone(d.id, task.id, true)).done).toBe(true);
     expect((await dealsApi.setTaskDone(d.id, task.id, false)).done).toBe(false);
     await expectApiError(
@@ -167,7 +186,12 @@ describe('deals stand-in API through the service layer', () => {
   it('allows one won and one lost stage, and asks where deals go before a stage or pipeline is deleted', async () => {
     const p = await pipeline();
     await expectApiError(
-      dealsApi.createStage(p.id, { name: 'Second won', color: '#16A34A', probability: 100, kind: 'won' }),
+      dealsApi.createStage(p.id, {
+        name: 'Second won',
+        color: '#16A34A',
+        probability: 100,
+        kind: 'won',
+      }),
       409,
       'DEAL_STAGE_KIND_TAKEN',
     );
@@ -183,10 +207,7 @@ describe('deals stand-in API through the service layer', () => {
 
     const withDeals = refreshed.stages.find((s) => s.dealCount > 0 && s.kind === 'open')!;
     await expectApiError(dealsApi.deleteStage(withDeals.id), 409, 'DEAL_STAGE_HAS_DEALS');
-    await expectApiError(
-      dealsApi.updateStage(withDeals, { kind: 'lost' }),
-      409,
-    );
+    await expectApiError(dealsApi.updateStage(withDeals, { kind: 'lost' }), 409);
     await dealsApi.deleteStage(withDeals.id, created.id);
     const after = await dealsApi.board(p.id, p.currency, {});
     expect(after.columns.some((c) => c.stageId === withDeals.id)).toBe(false);

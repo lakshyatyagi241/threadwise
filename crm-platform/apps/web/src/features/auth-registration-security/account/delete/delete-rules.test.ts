@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
-import { blockerOf, phraseMatches } from './delete-rules';
+import { blockerOf, buildDeleteRequest, phraseMatches } from './delete-rules';
 
 const blocked = (reason: string) =>
   new ApiError(422, 'AUTH_DELETE_BLOCKED', 'x', 'req', [{ path: 'reason', message: reason }]);
@@ -26,5 +26,22 @@ describe('blockerOf', () => {
     expect(blockerOf(new ApiError(422, 'AUTH_CURRENT_PASSWORD_WRONG', 'x'))).toBeNull();
     expect(blockerOf(new Error('boom'))).toBeNull();
     expect(blockerOf(new ApiError(422, 'AUTH_DELETE_BLOCKED', 'x'))).toBeNull();
+  });
+});
+
+describe('buildDeleteRequest', () => {
+  it('sends the trimmed phrase and the password, and nothing else', () => {
+    expect(buildDeleteRequest('  DELETE my account ', 'hunter2!')).toEqual({
+      confirmation: 'DELETE my account',
+      password: 'hunter2!',
+    });
+    expect(Object.keys(buildDeleteRequest('DELETE my account', 'pw') ?? {}).sort()).toEqual([
+      'confirmation',
+      'password',
+    ]);
+  });
+
+  it('refuses an empty password', () => {
+    expect(buildDeleteRequest('DELETE my account', '')).toBeNull();
   });
 });

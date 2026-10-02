@@ -62,7 +62,12 @@ describe('tasks stand-in', () => {
       body: { title: 'New one' },
       schema: taskResponseSchema,
     });
-    expect(t).toMatchObject({ status: 'open', priority: 'medium', assignee: { id: ME }, doneAt: null });
+    expect(t).toMatchObject({
+      status: 'open',
+      priority: 'medium',
+      assignee: { id: ME },
+      doneAt: null,
+    });
   });
 
   it('refuses an assignee who is not a member with TASK_ASSIGNEE_INVALID', async () => {
@@ -75,18 +80,35 @@ describe('tasks stand-in', () => {
   });
 
   it('complete and reopen are idempotent and keep status and doneAt in agreement', async () => {
-    const t = await mockCall('/tasks', { method: 'POST', body: { title: 'Toggle me' }, schema: taskResponseSchema });
-    const a = await mockCall(`/tasks/${t.id}/complete`, { method: 'POST', schema: taskResponseSchema });
-    const b = await mockCall(`/tasks/${t.id}/complete`, { method: 'POST', schema: taskResponseSchema });
+    const t = await mockCall('/tasks', {
+      method: 'POST',
+      body: { title: 'Toggle me' },
+      schema: taskResponseSchema,
+    });
+    const a = await mockCall(`/tasks/${t.id}/complete`, {
+      method: 'POST',
+      schema: taskResponseSchema,
+    });
+    const b = await mockCall(`/tasks/${t.id}/complete`, {
+      method: 'POST',
+      schema: taskResponseSchema,
+    });
     expect(a.status).toBe('done');
     expect(a.doneAt).not.toBeNull();
     expect(b.rowVersion).toBe(a.rowVersion);
-    const c = await mockCall(`/tasks/${t.id}/reopen`, { method: 'POST', schema: taskResponseSchema });
+    const c = await mockCall(`/tasks/${t.id}/reopen`, {
+      method: 'POST',
+      schema: taskResponseSchema,
+    });
     expect(c).toMatchObject({ status: 'open', doneAt: null });
   });
 
   it('answers 409 ROW_VERSION_CONFLICT for a stale version and applies a current one', async () => {
-    const t = await mockCall('/tasks', { method: 'POST', body: { title: 'Edit me' }, schema: taskResponseSchema });
+    const t = await mockCall('/tasks', {
+      method: 'POST',
+      body: { title: 'Edit me' },
+      schema: taskResponseSchema,
+    });
     const ok = await mockCall(`/tasks/${t.id}`, {
       method: 'PATCH',
       body: { priority: 'high', rowVersion: t.rowVersion },
@@ -103,7 +125,11 @@ describe('tasks stand-in', () => {
   });
 
   it('bulk calls report each success and each failure', async () => {
-    const t = await mockCall('/tasks', { method: 'POST', body: { title: 'Bulk' }, schema: taskResponseSchema });
+    const t = await mockCall('/tasks', {
+      method: 'POST',
+      body: { title: 'Bulk' },
+      schema: taskResponseSchema,
+    });
     const ghost = '88888888-8888-4888-8888-888888888888';
     const res = await mockCall('/tasks/bulk/complete', {
       method: 'POST',
@@ -115,8 +141,13 @@ describe('tasks stand-in', () => {
   });
 
   it('lists the tasks of one contact on the linked route', async () => {
-    const linked = await page({ limit: 100 }, '/contacts/00000000-0000-4000-8000-0000000000c1/tasks');
+    const linked = await page(
+      { limit: 100 },
+      '/contacts/00000000-0000-4000-8000-0000000000c1/tasks',
+    );
     expect(linked.data.length).toBeGreaterThan(0);
-    expect(linked.data.every((t) => t.contact?.id === '00000000-0000-4000-8000-0000000000c1')).toBe(true);
+    expect(linked.data.every((t) => t.contact?.id === '00000000-0000-4000-8000-0000000000c1')).toBe(
+      true,
+    );
   });
 });

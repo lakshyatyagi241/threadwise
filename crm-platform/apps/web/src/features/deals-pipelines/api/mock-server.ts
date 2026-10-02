@@ -69,7 +69,10 @@ interface ActivityRow {
   doneAt: string | null;
   assigneeId: string | null;
   authorId: string | null;
-  stageChange: { from: { id: string | null; name: string } | null; to: { id: string | null; name: string } } | null;
+  stageChange: {
+    from: { id: string | null; name: string } | null;
+    to: { id: string | null; name: string };
+  } | null;
   createdAt: string;
 }
 interface ReasonRow {
@@ -93,11 +96,36 @@ const MEMBERS = [
   { id: 'a0000000-0000-4000-8000-000000000003', fullName: 'Omar Farouk' },
 ];
 const CONTACTS = [
-  { id: 'b0000000-0000-4000-8000-000000000001', name: 'Ana Lopez', phone: '+34911222333', email: 'ana@example.com' },
-  { id: 'b0000000-0000-4000-8000-000000000002', name: 'Bilal Khan', phone: '+971501234567', email: null },
-  { id: 'b0000000-0000-4000-8000-000000000003', name: 'Chen Wei', phone: '+8613800138000', email: null },
-  { id: 'b0000000-0000-4000-8000-000000000004', name: 'Dana Whitfield', phone: '+14155550123', email: 'dana@example.com' },
-  { id: 'b0000000-0000-4000-8000-000000000005', name: 'Eli Cohen', phone: '+972501112222', email: null },
+  {
+    id: 'b0000000-0000-4000-8000-000000000001',
+    name: 'Ana Lopez',
+    phone: '+34911222333',
+    email: 'ana@example.com',
+  },
+  {
+    id: 'b0000000-0000-4000-8000-000000000002',
+    name: 'Bilal Khan',
+    phone: '+971501234567',
+    email: null,
+  },
+  {
+    id: 'b0000000-0000-4000-8000-000000000003',
+    name: 'Chen Wei',
+    phone: '+8613800138000',
+    email: null,
+  },
+  {
+    id: 'b0000000-0000-4000-8000-000000000004',
+    name: 'Dana Whitfield',
+    phone: '+14155550123',
+    email: 'dana@example.com',
+  },
+  {
+    id: 'b0000000-0000-4000-8000-000000000005',
+    name: 'Eli Cohen',
+    phone: '+972501112222',
+    email: null,
+  },
 ];
 const USD_PER: Record<string, number> = { USD: 1, EUR: 1.08, GBP: 1.27, AED: 0.2723, INR: 0.012 };
 
@@ -146,15 +174,47 @@ function seed(): Db {
     ],
   };
   const titles = [
-    'Acme annual plan', 'Beta Corp onboarding', 'Northwind renewal', 'Globex expansion', 'Initech pilot',
-    'Umbrella support contract', 'Stark Industries rollout', 'Wayne Enterprises CRM', 'Hooli seats upgrade',
-    'Pied Piper licences', 'Soylent migration', 'Vandelay import deal', 'Cyberdyne audit', 'Tyrell onboarding',
-    'Massive Dynamic POC', 'Oscorp bulk order', 'Gringotts treasury suite', 'Duff beverages campaign',
-    'Wonka factory CRM', 'Dunder Mifflin paper deal', 'Sterling Cooper retainer', 'Prestige Worldwide',
-    'Monsters Inc support', 'Aperture science lab', 'Los Pollos supply', 'Bluth Company housing',
-    'Krusty Krab POS', 'Planet Express fleet', 'Rekall memory plan', 'Tessier-Ashpool vault',
+    'Acme annual plan',
+    'Beta Corp onboarding',
+    'Northwind renewal',
+    'Globex expansion',
+    'Initech pilot',
+    'Umbrella support contract',
+    'Stark Industries rollout',
+    'Wayne Enterprises CRM',
+    'Hooli seats upgrade',
+    'Pied Piper licences',
+    'Soylent migration',
+    'Vandelay import deal',
+    'Cyberdyne audit',
+    'Tyrell onboarding',
+    'Massive Dynamic POC',
+    'Oscorp bulk order',
+    'Gringotts treasury suite',
+    'Duff beverages campaign',
+    'Wonka factory CRM',
+    'Dunder Mifflin paper deal',
+    'Sterling Cooper retainer',
+    'Prestige Worldwide',
+    'Monsters Inc support',
+    'Aperture science lab',
+    'Los Pollos supply',
+    'Bluth Company housing',
+    'Krusty Krab POS',
+    'Planet Express fleet',
+    'Rekall memory plan',
+    'Tessier-Ashpool vault',
   ];
-  const sources: Source[] = ['manual', 'inbox', 'order', 'form', 'api', 'flow', 'facebook', 'shopify'];
+  const sources: Source[] = [
+    'manual',
+    'inbox',
+    'order',
+    'form',
+    'api',
+    'flow',
+    'facebook',
+    'shopify',
+  ];
   const deals: DealRow[] = titles.map((title, i) => {
     const st = main.stages[i % 6]!;
     const created = -(i * 3 + 1);
@@ -167,7 +227,8 @@ function seed(): Db {
       currency: i % 7 === 6 ? 'EUR' : 'USD',
       ownerId: i % 5 === 4 ? null : MEMBERS[i % 3]!.id,
       contactId: i % 4 === 3 ? null : CONTACTS[i % 5]!.id,
-      expectedCloseDate: i % 3 === 0 ? iso(7 + i).slice(0, 10) : i % 6 === 1 ? iso(-3).slice(0, 10) : null,
+      expectedCloseDate:
+        i % 3 === 0 ? iso(7 + i).slice(0, 10) : i % 6 === 1 ? iso(-3).slice(0, 10) : null,
       source: sources[i % sources.length]!,
       lostReason: st.kind === 'lost' ? 'Price too high' : null,
       lostReasonId: null,
@@ -269,7 +330,10 @@ const dealOf = (id: string) => {
 };
 const stageOfPipeline = (p: PipelineRow, id: string) => {
   const s = p.stages.find((x) => x.id === id);
-  if (!s) throw err(422, 'DEAL_STAGE_MISMATCH', 'The stage belongs to another pipeline', [{ path: 'stageId', message: 'invalid' }]);
+  if (!s)
+    throw err(422, 'DEAL_STAGE_MISMATCH', 'The stage belongs to another pipeline', [
+      { path: 'stageId', message: 'invalid' },
+    ]);
   return s;
 };
 const findStage = (id: string) => {
@@ -289,7 +353,10 @@ const ref = (id: string | null) => {
 const convert = (minor: number, from: string, to: string) =>
   Math.round((minor * (USD_PER[from] ?? 1)) / (USD_PER[to] ?? 1));
 
-const money = (minor: number, currency: string) => ({ currency, amount: minorToMajor(BigInt(minor), currency) });
+const money = (minor: number, currency: string) => ({
+  currency,
+  amount: minorToMajor(BigInt(minor), currency),
+});
 
 function totals(rows: DealRow[], convertTo?: string, factor = (_: DealRow) => 1): DealTotals {
   const by = new Map<string, number>();
@@ -355,7 +422,9 @@ function dealResponse(d: DealRow): DealResponse {
     value: minorToMajor(BigInt(d.valueMinor), d.currency),
     currency: d.currency,
     owner: ref(d.ownerId),
-    contact: contact ? { id: contact.id, name: contact.name, phone: contact.phone, email: contact.email } : null,
+    contact: contact
+      ? { id: contact.id, name: contact.name, phone: contact.phone, email: contact.email }
+      : null,
     company: null,
     expectedCloseDate: d.expectedCloseDate,
     source: d.source,
@@ -394,7 +463,10 @@ function log(d: DealRow, from: StageRow | null, to: StageRow) {
     doneAt: null,
     assigneeId: null,
     authorId: MEMBERS[0]!.id,
-    stageChange: { from: from ? { id: from.id, name: from.name } : null, to: { id: to.id, name: to.name } },
+    stageChange: {
+      from: from ? { id: from.id, name: from.name } : null,
+      to: { id: to.id, name: to.name },
+    },
     createdAt: new Date().toISOString(),
   });
 }
@@ -459,7 +531,9 @@ const byRank = (a: DealRow, b: DealRow) => a.rank - b.rank;
 
 function board(q: URLSearchParams): BoardResponse {
   const d = get();
-  const p = q.get('pipelineId') ? pipelineOf(q.get('pipelineId')!) : (d.pipelines.find((x) => x.isDefault) ?? d.pipelines[0]!);
+  const p = q.get('pipelineId')
+    ? pipelineOf(q.get('pipelineId')!)
+    : (d.pipelines.find((x) => x.isDefault) ?? d.pipelines[0]!);
   const convertTo = q.get('convertTo') ?? p.currency;
   const narrowed = filtered(q, p.id);
   const all = d.deals.filter((x) => x.pipelineId === p.id);
@@ -468,10 +542,18 @@ function board(q: URLSearchParams): BoardResponse {
     const rows = narrowed.filter((x) => x.stageId === s.id).sort(byRank);
     const more = rows.length > limit;
     return {
-      stage: { id: s.id, name: s.name, color: s.color, probability: s.probability, kind: s.kind, sortOrder: i },
+      stage: {
+        id: s.id,
+        name: s.name,
+        color: s.color,
+        probability: s.probability,
+        kind: s.kind,
+        sortOrder: i,
+      },
       count: rows.length,
       total: totals(rows, convertTo),
-      weighted: s.kind === 'open' ? totals(rows, convertTo, () => s.probability / 100) : { byCurrency: [] },
+      weighted:
+        s.kind === 'open' ? totals(rows, convertTo, () => s.probability / 100) : { byCurrency: [] },
       deals: rows.slice(0, limit).map(dealResponse),
       page: { nextCursor: more ? String(limit) : null, hasMore: more, limit },
     };
@@ -494,7 +576,10 @@ function board(q: URLSearchParams): BoardResponse {
         won.filter((x) => x.wonAt && new Date(x.wonAt) >= monthStart),
         convertTo,
       ),
-      winRate: won.length + lost.length === 0 ? 0 : Math.round((won.length / (won.length + lost.length)) * 100),
+      winRate:
+        won.length + lost.length === 0
+          ? 0
+          : Math.round((won.length / (won.length + lost.length)) * 100),
     },
   };
 }
@@ -521,17 +606,21 @@ function report(q: URLSearchParams): DealReportsResponse {
       month: key,
       wonCount: w.length,
       wonValue: totals(w, convertTo),
-      lostCount: rows.filter((x) => stageOf(x).kind === 'lost' && x.lostAt?.slice(0, 7) === key).length,
+      lostCount: rows.filter((x) => stageOf(x).kind === 'lost' && x.lostAt?.slice(0, 7) === key)
+        .length,
     };
   });
   const byOwner = new Map<string, DealRow[]>();
-  for (const w of won) if (w.ownerId) byOwner.set(w.ownerId, [...(byOwner.get(w.ownerId) ?? []), w]);
+  for (const w of won)
+    if (w.ownerId) byOwner.set(w.ownerId, [...(byOwner.get(w.ownerId) ?? []), w]);
   const monthStart = new Date();
   monthStart.setDate(1);
   monthStart.setHours(0, 0, 0, 0);
   const reasons = new Map<string, number>();
   for (const l of lost) reasons.set(l.lostReason ?? '', (reasons.get(l.lostReason ?? '') ?? 0) + 1);
-  const monthWon = rows.filter((x) => stageOf(x).kind === 'won' && x.wonAt && new Date(x.wonAt) >= monthStart);
+  const monthWon = rows.filter(
+    (x) => stageOf(x).kind === 'won' && x.wonAt && new Date(x.wonAt) >= monthStart,
+  );
   return {
     timezone: 'UTC',
     convertedTo: convertTo,
@@ -545,11 +634,19 @@ function report(q: URLSearchParams): DealReportsResponse {
       value: totals(won, convertTo),
       thisMonth: { count: monthWon.length, value: totals(monthWon, convertTo) },
       avgDaysToClose: won.length
-        ? Math.round(won.reduce((n, x) => n + (new Date(x.wonAt!).getTime() - new Date(x.createdAt).getTime()) / DAY, 0) / won.length)
+        ? Math.round(
+            won.reduce(
+              (n, x) => n + (new Date(x.wonAt!).getTime() - new Date(x.createdAt).getTime()) / DAY,
+              0,
+            ) / won.length,
+          )
         : null,
     },
     lost: { count: lost.length, value: totals(lost, convertTo) },
-    winRate: won.length + lost.length === 0 ? 0 : Math.round((won.length / (won.length + lost.length)) * 100),
+    winRate:
+      won.length + lost.length === 0
+        ? 0
+        : Math.round((won.length / (won.length + lost.length)) * 100),
     byStage: stageSet.map((s) => {
       const inStage = open.filter((x) => x.stageId === s.id);
       return {
@@ -566,14 +663,28 @@ function report(q: URLSearchParams): DealReportsResponse {
     }),
     months,
     leaders: [...byOwner.entries()]
-      .map(([id, list]) => ({ owner: ref(id)!, wonCount: list.length, value: totals(list, convertTo) }))
-      .sort((a, b) => Number(b.value.converted?.amount ?? 0) - Number(a.value.converted?.amount ?? 0))
+      .map(([id, list]) => ({
+        owner: ref(id)!,
+        wonCount: list.length,
+        value: totals(list, convertTo),
+      }))
+      .sort(
+        (a, b) => Number(b.value.converted?.amount ?? 0) - Number(a.value.converted?.amount ?? 0),
+      )
       .slice(0, 10),
-    lostReasons: [...reasons.entries()].map(([reason, count]) => ({ reason: reason || null, count })),
+    lostReasons: [...reasons.entries()].map(([reason, count]) => ({
+      reason: reason || null,
+      count,
+    })),
   };
 }
 
-function rankBetween(stageId: string, dealId: string, before: string | null, after: string | null): number {
+function rankBetween(
+  stageId: string,
+  dealId: string,
+  before: string | null,
+  after: string | null,
+): number {
   const others = get()
     .deals.filter((x) => x.stageId === stageId && x.id !== dealId)
     .sort(byRank);
@@ -594,7 +705,8 @@ function rankBetween(stageId: string, dealId: string, before: string | null, aft
 
 function parseValue(value: unknown, currency: string): number {
   const m = majorToMinor(String(value), currency);
-  if (m === null) throw err(422, 'DEAL_VALUE_INVALID', 'Invalid value', [{ path: 'value', message: 'invalid' }]);
+  if (m === null)
+    throw err(422, 'DEAL_VALUE_INVALID', 'Invalid value', [{ path: 'value', message: 'invalid' }]);
   return Number(m);
 }
 
@@ -617,7 +729,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   if (path === '/pipelines' && method === 'GET') return d.pipelines.map(pipelineResponse);
   if (path === '/pipelines' && method === 'POST') {
     const name = String(body.name ?? '').trim();
-    if (!name) throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'name', message: 'required' }]);
+    if (!name)
+      throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'name', message: 'required' }]);
     if (d.pipelines.some((x) => x.name.toLowerCase() === name.toLowerCase())) {
       throw err(409, 'DEAL_PIPELINE_NAME_TAKEN', 'Name taken');
     }
@@ -642,7 +755,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   if ((m = path.match(/^\/pipelines\/([^/]+)$/))) {
     const p = pipelineOf(m[1]!);
     if (method === 'PATCH') {
-      if (body.rowVersion !== p.rowVersion) throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
+      if (body.rowVersion !== p.rowVersion)
+        throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
       if (typeof body.name === 'string' && body.name.trim()) p.name = body.name.trim();
       if (typeof body.currency === 'string') p.currency = body.currency;
       if (body.isDefault === true) for (const x of d.pipelines) x.isDefault = x.id === p.id;
@@ -653,7 +767,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
       if (p.isDefault) throw err(409, 'DEAL_PIPELINE_DEFAULT_PROTECTED', 'Default pipeline');
       const rows = d.deals.filter((x) => x.pipelineId === p.id);
       const target = q.get('moveDealsToPipelineId');
-      if (rows.length > 0 && !target) throw err(409, 'DEAL_PIPELINE_HAS_DEALS', 'Pipeline has deals');
+      if (rows.length > 0 && !target)
+        throw err(409, 'DEAL_PIPELINE_HAS_DEALS', 'Pipeline has deals');
       if (target) {
         const t = pipelineOf(target);
         for (const x of rows) {
@@ -671,9 +786,11 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   if ((m = path.match(/^\/pipelines\/([^/]+)\/stages$/)) && method === 'POST') {
     const p = pipelineOf(m[1]!);
     const kind = (body.kind as Kind | undefined) ?? 'open';
-    if (kind !== 'open' && p.stages.some((s) => s.kind === kind)) throw err(409, 'DEAL_STAGE_KIND_TAKEN', 'One per pipeline');
+    if (kind !== 'open' && p.stages.some((s) => s.kind === kind))
+      throw err(409, 'DEAL_STAGE_KIND_TAKEN', 'One per pipeline');
     const name = String(body.name ?? '').trim();
-    if (p.stages.some((s) => s.name.toLowerCase() === name.toLowerCase())) throw err(409, 'DEAL_STAGE_NAME_TAKEN', 'Name taken');
+    if (p.stages.some((s) => s.name.toLowerCase() === name.toLowerCase()))
+      throw err(409, 'DEAL_STAGE_NAME_TAKEN', 'Name taken');
     const s = mkStage(
       p.id,
       name,
@@ -688,24 +805,28 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   if ((m = path.match(/^\/pipelines\/([^/]+)\/stages\/order$/)) && method === 'PUT') {
     const p = pipelineOf(m[1]!);
     const ids = body.stageIds as string[];
-    if (ids.length !== p.stages.length) throw err(422, 'DEAL_ORDER_INVALID', 'Send every stage once');
+    if (ids.length !== p.stages.length)
+      throw err(422, 'DEAL_ORDER_INVALID', 'Send every stage once');
     p.stages = ids.map((id) => stageOfPipeline(p, id));
     return pipelineResponse(p);
   }
   if ((m = path.match(/^\/pipeline-stages\/([^/]+)$/))) {
     const { pipeline: p, stage: s } = findStage(m[1]!);
     if (method === 'PATCH') {
-      if (body.rowVersion !== s.rowVersion) throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
+      if (body.rowVersion !== s.rowVersion)
+        throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
       const kind = (body.kind as Kind | undefined) ?? s.kind;
       const count = d.deals.filter((x) => x.stageId === s.id).length;
-      if (kind !== s.kind && count > 0) throw err(409, 'DEAL_STAGE_HAS_DEALS', 'Only an empty stage can change kind');
+      if (kind !== s.kind && count > 0)
+        throw err(409, 'DEAL_STAGE_HAS_DEALS', 'Only an empty stage can change kind');
       if (kind !== 'open' && p.stages.some((x) => x.id !== s.id && x.kind === kind)) {
         throw err(409, 'DEAL_STAGE_KIND_TAKEN', 'One per pipeline');
       }
       if (typeof body.name === 'string' && body.name.trim()) s.name = body.name.trim();
       if (typeof body.color === 'string') s.color = body.color;
       s.kind = kind;
-      s.probability = kind === 'won' ? 100 : kind === 'lost' ? 0 : Number(body.probability ?? s.probability);
+      s.probability =
+        kind === 'won' ? 100 : kind === 'lost' ? 0 : Number(body.probability ?? s.probability);
       s.rowVersion++;
       return stageResponse(s, p.stages.indexOf(s), count);
     }
@@ -733,7 +854,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   }
   if (path === '/deal-lost-reasons' && method === 'POST') {
     const name = String(body.name ?? '').trim();
-    if (d.reasons.some((r) => r.name.toLowerCase() === name.toLowerCase())) throw err(409, 'DEAL_LOST_REASON_NAME_TAKEN', 'Name taken');
+    if (d.reasons.some((r) => r.name.toLowerCase() === name.toLowerCase()))
+      throw err(409, 'DEAL_LOST_REASON_NAME_TAKEN', 'Name taken');
     const r: ReasonRow = { id: uuid(), name, isActive: true, rowVersion: 1 };
     d.reasons.push(r);
     return reasonResponse(r, d.reasons.length - 1);
@@ -747,7 +869,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
     const r = d.reasons.find((x) => x.id === m![1]);
     if (!r) throw err(404, 'NOT_FOUND', 'Reason not found');
     if (method === 'PATCH') {
-      if (body.rowVersion !== r.rowVersion) throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
+      if (body.rowVersion !== r.rowVersion)
+        throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
       if (typeof body.name === 'string' && body.name.trim()) r.name = body.name.trim();
       if (typeof body.isActive === 'boolean') r.isActive = body.isActive;
       r.rowVersion++;
@@ -760,7 +883,10 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   }
   if (path === '/deal-settings') {
     if (method === 'PUT') {
-      d.settings = { lostReasonRequired: body.lostReasonRequired === true, rowVersion: d.settings.rowVersion + 1 };
+      d.settings = {
+        lostReasonRequired: body.lostReasonRequired === true,
+        rowVersion: d.settings.rowVersion + 1,
+      };
     }
     return d.settings;
   }
@@ -775,14 +901,19 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   }
   if (path === '/deals/reports' && method === 'GET') return report(q);
   if (path === '/deals' && method === 'GET') {
-    const rows = filtered(q, q.get('pipelineId')).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    const rows = filtered(q, q.get('pipelineId')).sort((a, b) =>
+      b.createdAt.localeCompare(a.createdAt),
+    );
     const out = paged(rows, q);
     return { data: out.data.map(dealResponse), page: out.page };
   }
   if (path === '/deals' && method === 'POST') {
-    const p = body.pipelineId ? pipelineOf(String(body.pipelineId)) : (d.pipelines.find((x) => x.isDefault) ?? d.pipelines[0]!);
+    const p = body.pipelineId
+      ? pipelineOf(String(body.pipelineId))
+      : (d.pipelines.find((x) => x.isDefault) ?? d.pipelines[0]!);
     const title = String(body.title ?? '').trim();
-    if (!title) throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'title', message: 'required' }]);
+    if (!title)
+      throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'title', message: 'required' }]);
     const st = body.stageId ? stageOfPipeline(p, String(body.stageId)) : p.stages[0]!;
     const currency = String(body.currency ?? p.currency);
     const ownerId = 'ownerId' in body ? ((body.ownerId as string | null) ?? null) : MEMBERS[0]!.id;
@@ -818,7 +949,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
     const deal = dealOf(m[1]!);
     if (method === 'GET') return dealResponse(deal);
     if (method === 'PATCH') {
-      if (body.rowVersion !== deal.rowVersion) throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
+      if (body.rowVersion !== deal.rowVersion)
+        throw err(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
       if (typeof body.title === 'string' && body.title.trim()) deal.title = body.title.trim();
       const currency = typeof body.currency === 'string' ? body.currency : deal.currency;
       if (typeof body.currency === 'string' && body.currency !== deal.currency && !body.value) {
@@ -832,7 +964,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
         deal.ownerId = id;
       }
       if ('contactId' in body) deal.contactId = (body.contactId as string | null) ?? null;
-      if ('expectedCloseDate' in body) deal.expectedCloseDate = (body.expectedCloseDate as string | null) ?? null;
+      if ('expectedCloseDate' in body)
+        deal.expectedCloseDate = (body.expectedCloseDate as string | null) ?? null;
       deal.rowVersion++;
       deal.updatedAt = new Date().toISOString();
       return dealResponse(deal);
@@ -850,15 +983,29 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
     const from = stageOf(deal);
     if (to.kind === 'lost' && from.kind !== 'lost') {
       const named = d.reasons.find((r) => r.id === body.lostReasonId);
-      const text = named?.name ?? (typeof body.lostReason === 'string' ? body.lostReason.trim().slice(0, 191) : '');
+      const text =
+        named?.name ??
+        (typeof body.lostReason === 'string' ? body.lostReason.trim().slice(0, 191) : '');
       if (d.settings.lostReasonRequired && !text) {
-        throw err(422, 'DEAL_LOST_REASON_REQUIRED', 'A reason is required', [{ path: 'lostReason', message: 'required' }]);
+        throw err(422, 'DEAL_LOST_REASON_REQUIRED', 'A reason is required', [
+          { path: 'lostReason', message: 'required' },
+        ]);
       }
-      deal.rank = rankBetween(to.id, deal.id, (body.beforeDealId as string) ?? null, (body.afterDealId as string) ?? null);
+      deal.rank = rankBetween(
+        to.id,
+        deal.id,
+        (body.beforeDealId as string) ?? null,
+        (body.afterDealId as string) ?? null,
+      );
       log(deal, from, to);
       settle(deal, to, { text: text || null, id: named?.id ?? null });
     } else {
-      deal.rank = rankBetween(to.id, deal.id, (body.beforeDealId as string) ?? null, (body.afterDealId as string) ?? null);
+      deal.rank = rankBetween(
+        to.id,
+        deal.id,
+        (body.beforeDealId as string) ?? null,
+        (body.afterDealId as string) ?? null,
+      );
       if (from.id !== to.id) log(deal, from, to);
       settle(deal, to);
     }
@@ -869,15 +1016,19 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
   if ((m = path.match(/^\/deals\/([^/]+)\/activities$/))) {
     const deal = dealOf(m[1]!);
     if (method === 'GET') {
-      const list = d.activities.filter((a) => a.dealId === deal.id).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+      const list = d.activities
+        .filter((a) => a.dealId === deal.id)
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
       const out = paged(list, q);
       return { data: out.data.map(activityResponse), page: out.page };
     }
     if (method === 'POST') {
       const type = body.type as ActivityRow['type'];
       const text = String(body.body ?? '').trim();
-      if (!text) throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'body', message: 'required' }]);
-      if (type !== 'task' && body.dueAt) throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'dueAt', message: 'tasks only' }]);
+      if (!text)
+        throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'body', message: 'required' }]);
+      if (type !== 'task' && body.dueAt)
+        throw err(422, 'VALIDATION_FAILED', 'Invalid', [{ path: 'dueAt', message: 'tasks only' }]);
       const a: ActivityRow = {
         id: uuid(),
         dealId: deal.id,
@@ -894,7 +1045,10 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
       return activityResponse(a);
     }
   }
-  if ((m = path.match(/^\/deals\/([^/]+)\/activities\/([^/]+)\/(complete|reopen)$/)) && method === 'POST') {
+  if (
+    (m = path.match(/^\/deals\/([^/]+)\/activities\/([^/]+)\/(complete|reopen)$/)) &&
+    method === 'POST'
+  ) {
     const deal = dealOf(m[1]!);
     const a = d.activities.find((x) => x.id === m![2] && x.dealId === deal.id && x.type === 'task');
     if (!a) throw err(404, 'DEAL_TASK_NOT_FOUND', 'Task not found');
@@ -908,7 +1062,8 @@ function handle(method: string, path: string, q: URLSearchParams, body: Body): u
 export async function mockCall<T>(path: string, req: ApiRequest<T>): Promise<T> {
   await new Promise((r) => setTimeout(r, 120));
   const q = new URLSearchParams();
-  for (const [k, v] of Object.entries(req.query ?? {})) if (v !== undefined && v !== '') q.set(k, String(v));
+  for (const [k, v] of Object.entries(req.query ?? {}))
+    if (v !== undefined && v !== '') q.set(k, String(v));
   const body = JSON.parse(JSON.stringify(req.body ?? {})) as Body;
   const out = handle(req.method ?? 'GET', path, q, body);
   const json: unknown = out === undefined ? undefined : JSON.parse(JSON.stringify(out));
@@ -919,4 +1074,3 @@ export async function mockCall<T>(path: string, req: ApiRequest<T>): Promise<T> 
 export function resetMock(): void {
   db = null;
 }
-

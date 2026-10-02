@@ -7,7 +7,8 @@ type Tree = { [key: string]: string | Tree };
 const isTree = (v: unknown): v is Tree => typeof v === 'object' && v !== null;
 const merge = (a: Tree, b: Tree): Tree => {
   const out: Tree = { ...a };
-  for (const [k, v] of Object.entries(b)) out[k] = isTree(v) && isTree(out[k]) ? merge(out[k] as Tree, v) : v;
+  for (const [k, v] of Object.entries(b))
+    out[k] = isTree(v) && isTree(out[k]) ? merge(out[k] as Tree, v) : v;
   return out;
 };
 function flatten(tree: Tree, prefix = ''): Record<string, string> {
@@ -24,7 +25,11 @@ const load = (locale: string): Record<string, string> =>
     readdirSync(join(WEB, 'messages', locale))
       .filter((f) => f === 'invoicing.json' || /^invoicing\..+\.json$/.test(f))
       .sort()
-      .reduce<Tree>((acc, f) => merge(acc, JSON.parse(readFileSync(join(WEB, 'messages', locale, f), 'utf8')) as Tree), {}),
+      .reduce<Tree>(
+        (acc, f) =>
+          merge(acc, JSON.parse(readFileSync(join(WEB, 'messages', locale, f), 'utf8')) as Tree),
+        {},
+      ),
   );
 
 export const en = load('en');

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { z } from 'zod';
 import {
@@ -9,11 +9,13 @@ import {
   switchWorkspaceRequestSchema,
   type LoginRequest,
   type MfaLoginRequest,
+  type PasswordPolicyHint,
   type SwitchWorkspaceRequest,
 } from '@crm/contracts';
 import { Public, ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AccountService } from './account/account.service';
+import { SecurityPolicyService } from './platform/security-policy.service';
 import { AuthService } from './auth.service';
 import { LoginService } from './flows/login.service';
 import { clientMeta } from './support/client-meta';
@@ -41,6 +43,7 @@ export class AuthController {
     private readonly account: AccountService,
     private readonly workspaces: WorkspaceSwitchService,
     private readonly settings: AuthSettingsService,
+    private readonly policy: SecurityPolicyService,
   ) {}
 
   @Public()
@@ -50,6 +53,21 @@ export class AuthController {
   })
   async registrationConfig() {
     return this.settings.publicConfig();
+  }
+
+  @Public()
+  @Get('password-policy')
+  @ApiOperation({
+    summary: 'The password rules in force right now (minimum length, mixed case, number, symbol)',
+  })
+  async passwordPolicy(): Promise<PasswordPolicyHint> {
+    const p = await this.policy.policy();
+    return {
+      minLength: p.passwordMinLength,
+      requireMixedCase: p.passwordRequireUpper,
+      requireNumber: p.passwordRequireNumber,
+      requireSymbol: p.passwordRequireSymbol,
+    };
   }
 
   @Public()
@@ -93,7 +111,7 @@ export class AuthController {
     },
   })
   async partnerLogin(@Body(zodPipe(partnerLoginSchema)) body: z.infer<typeof partnerLoginSchema>) {
-    return this.auth.loginPartnerAgent(body.orgSlug, body.email, body.password);
+    return this.auth.loginPartnerAgent(body.orgSlug, body.email, body.password, clientMeta());
   }
 
   @Public()
@@ -112,12 +130,28 @@ export class AuthController {
     return this.auth.refresh(body.refreshToken);
   }
 
+  /**
+   * Public on purpose. The access token lives 15 minutes, so the person who
+   * returns later signs out holding only a refresh token; guarding this route
+   * with the access token would leave that session alive on the server. It
+   * ends the session behind the bearer token (expired or not) and/or the
+   * refresh token in the body, and always answers ok.
+   */
+  @Public()
   @Post('logout')
-  @ActorKinds('user')
-  @AllowWhileGated({ suspended: true })
-  @ApiOperation({ summary: 'End the current session' })
-  async logout(@Body(zodPipe(logoutRequestSchema)) _body: z.infer<typeof logoutRequestSchema>) {
-    await this.login.logout();
+  @ApiOperation({
+    summary: 'End a session from its access token and/or refresh token',
+    description:
+      'Works with an expired access token and with the refresh token alone. Always answers `{ ok: true }`.',
+  })
+  async logout(
+    @Headers('authorization') authorization: string | undefined,
+    @Body(zodPipe(logoutRequestSchema)) body: z.infer<typeof logoutRequestSchema>,
+  ) {
+    const accessToken = authorization?.startsWith('Bearer ')
+      ? authorization.slice('Bearer '.length).trim()
+      : null;
+    await this.login.logout({ accessToken, refreshToken: body.refreshToken ?? null });
     return { ok: true };
   }
 

@@ -125,9 +125,9 @@ describe('message keys used in code', () => {
       ...(['title', 'contact', 'stage', 'amount', 'owner', 'close', 'status'] as const).map(
         (s) => `list.columns.${s}`,
       ),
-      ...(['nameRequired', 'nameTooLong', 'probability', 'color', 'twoWon', 'twoLost'] as const).map(
-        (s) => `settings.problems.${s}`,
-      ),
+      ...(
+        ['nameRequired', 'nameTooLong', 'probability', 'color', 'twoWon', 'twoLost'] as const
+      ).map((s) => `settings.problems.${s}`),
       ...(
         [
           'network',

@@ -392,7 +392,9 @@ export const invoiceResponseSchema = invoiceSummarySchema.extend({
   lines: z.array(invoiceLineResponseSchema),
   taxSummary: z.array(invoiceTaxSummaryRowSchema),
   /** The accepted proposal or estimate the invoice was made from (`kind` picks its page). */
-  quote: z.object({ id: uuidSchema, number: z.string(), kind: z.enum(['proposal', 'estimate']) }).nullable(),
+  quote: z
+    .object({ id: uuidSchema, number: z.string(), kind: z.enum(['proposal', 'estimate']) })
+    .nullable(),
   /** The sales order this invoice bills (a partial invoice of it). */
   salesOrder: z.object({ id: uuidSchema, number: z.string() }).nullable(),
   /** The recurring schedule that made this invoice. */

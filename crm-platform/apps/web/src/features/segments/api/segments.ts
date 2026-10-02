@@ -59,7 +59,8 @@ export const createSegment = (input: CreateSegmentInput): Promise<Segment> =>
 export const updateSegment = (id: string, input: UpdateSegmentInput): Promise<Segment> =>
   call(`/segments/${id}`, { method: 'PATCH', body: input, schema: segmentResponseSchema });
 
-export const deleteSegment = (id: string): Promise<void> => call(`/segments/${id}`, { method: 'DELETE' });
+export const deleteSegment = (id: string): Promise<void> =>
+  call(`/segments/${id}`, { method: 'DELETE' });
 
 /** Counts the members again now, bypassing the cached count. */
 export const refreshCount = (id: string): Promise<SegmentCountResponse> =>

@@ -26,7 +26,9 @@ export function useBoard(pipeline: Pipeline | undefined, filters: DealFilters) {
 
   const pipelineId = pipeline?.id ?? '';
   const currency = pipeline?.currency ?? 'USD';
-  const stageSig = (pipeline?.stages ?? []).map((s) => `${s.id}:${s.probability}:${s.kind}`).join('|');
+  const stageSig = (pipeline?.stages ?? [])
+    .map((s) => `${s.id}:${s.probability}:${s.kind}`)
+    .join('|');
   const query = useMemo(
     () => filterQuery(filters),
     // the filters that reach the server
@@ -56,7 +58,12 @@ export function useBoard(pipeline: Pipeline | undefined, filters: DealFilters) {
   const boardData = board.data;
   useEffect(() => {
     if (boardData && pipeline) {
-      dispatch({ type: 'loaded', stages: pipeline.stages, columns: boardData.columns, kpis: boardData.kpis });
+      dispatch({
+        type: 'loaded',
+        stages: pipeline.stages,
+        columns: boardData.columns,
+        kpis: boardData.kpis,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boardData, key]);

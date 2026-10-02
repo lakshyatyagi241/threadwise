@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Input, Popover, Select, cn } from '@crm/ui';
 import type { Stage, StageKind } from '../api/schemas';
-import { STAGE_COLORS, probabilityFor, validateStage, type StageProblem } from '../lib/stage-editor';
+import {
+  STAGE_COLORS,
+  probabilityFor,
+  validateStage,
+  type StageProblem,
+} from '../lib/stage-editor';
 import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from './icons';
 
 const KINDS: readonly StageKind[] = ['open', 'won', 'lost'];
@@ -36,9 +41,17 @@ function ColorPicker({
         }}
         className="flex size-10 items-center justify-center rounded-md border border-border hover:bg-muted disabled:opacity-50"
       >
-        <span className="size-5 rounded-full border border-black/10" style={{ backgroundColor: value }} />
+        <span
+          className="size-5 rounded-full border border-black/10"
+          style={{ backgroundColor: value }}
+        />
       </button>
-      <Popover open={open} onClose={() => setOpen(false)} label={label} className="start-0 end-auto w-56">
+      <Popover
+        open={open}
+        onClose={() => setOpen(false)}
+        label={label}
+        className="start-0 end-auto w-56"
+      >
         <div className="grid grid-cols-4 gap-2">
           {STAGE_COLORS.map((c) => (
             <button
@@ -51,7 +64,9 @@ function ColorPicker({
               }}
               className={cn(
                 'size-9 rounded-full border-2',
-                c.toLowerCase() === value.toLowerCase() ? 'border-foreground' : 'border-transparent',
+                c.toLowerCase() === value.toLowerCase()
+                  ? 'border-foreground'
+                  : 'border-transparent',
               )}
               style={{ backgroundColor: c }}
             />
@@ -80,13 +95,25 @@ export interface StageRowProps {
   index: number;
   count: number;
   disabled: boolean;
-  onSave: (stage: Stage, patch: { name?: string; color?: string; probability?: number; kind?: StageKind }) => void;
+  onSave: (
+    stage: Stage,
+    patch: { name?: string; color?: string; probability?: number; kind?: StageKind },
+  ) => void;
   onMove: (index: number, to: number) => void;
   onDelete: (stage: Stage) => void;
 }
 
 /** One stage of the pipeline: colour, name, win probability, kind (open, won, lost), order arrows and delete. */
-export function StageRow({ stage, siblings, index, count, disabled, onSave, onMove, onDelete }: StageRowProps) {
+export function StageRow({
+  stage,
+  siblings,
+  index,
+  count,
+  disabled,
+  onSave,
+  onMove,
+  onDelete,
+}: StageRowProps) {
   const t = useTranslations('deals-pipelines.settings');
   const [problems, setProblems] = useState<StageProblem[]>([]);
 

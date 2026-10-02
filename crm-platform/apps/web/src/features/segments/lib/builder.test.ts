@@ -19,7 +19,11 @@ const run = (root: Group, ...actions: Parameters<typeof ruleReducer>[1][]) =>
 describe('rule reducer', () => {
   it('adds a condition on the first field and a group seeded the same way', () => {
     const r0 = emptyRoot();
-    const r = run(r0, { type: 'addCondition', groupId: r0.id }, { type: 'addGroup', groupId: r0.id });
+    const r = run(
+      r0,
+      { type: 'addCondition', groupId: r0.id },
+      { type: 'addGroup', groupId: r0.id },
+    );
     expect(conditionsOf(r).map((c) => c.field)).toEqual(['lifecycleStage', 'lifecycleStage']);
     expect(r.children[1]?.kind).toBe('group');
   });
@@ -50,11 +54,16 @@ describe('rule reducer', () => {
     const r0 = emptyRoot();
     let r = run(r0, { type: 'addCondition', groupId: r0.id });
     const id = (r.children[0] as Condition).id;
-    r = run(r, { type: 'field', id, field: 'tags' }, { type: 'value', id, value: ['t1', 'gone'] }, {
-      type: 'dropMissing',
-      id,
-      missing: ['gone'],
-    });
+    r = run(
+      r,
+      { type: 'field', id, field: 'tags' },
+      { type: 'value', id, value: ['t1', 'gone'] },
+      {
+        type: 'dropMissing',
+        id,
+        missing: ['gone'],
+      },
+    );
     expect(conditionsOf(r)[0]?.value).toEqual(['t1']);
     const fresh = emptyRoot();
     expect(run(r, { type: 'reset', root: fresh })).toBe(fresh);
@@ -68,7 +77,14 @@ describe('rule reducer', () => {
 
 describe('unsaved-changes guard: which clicks leave the page', () => {
   const here = { origin: 'http://localhost:3001', pathname: '/segments/new', search: '' };
-  const click = { defaultPrevented: false, button: 0, metaKey: false, ctrlKey: false, shiftKey: false, altKey: false };
+  const click = {
+    defaultPrevented: false,
+    button: 0,
+    metaKey: false,
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+  };
   const a = (href: string, extra: Partial<{ target: string; download: boolean }> = {}) => ({
     href,
     target: extra.target ?? '',
@@ -76,17 +92,33 @@ describe('unsaved-changes guard: which clicks leave the page', () => {
   });
 
   it('holds a click on another page of the app and names where it goes', () => {
-    expect(leavingTarget(click, a('http://localhost:3001/contacts?x=1#top'), here)).toBe('/contacts?x=1#top');
+    expect(leavingTarget(click, a('http://localhost:3001/contacts?x=1#top'), here)).toBe(
+      '/contacts?x=1#top',
+    );
   });
 
   it('lets through everything that does not leave: same page, other site, new tab, modified click, download', () => {
     expect(leavingTarget(click, a('http://localhost:3001/segments/new'), here)).toBeNull();
     expect(leavingTarget(click, a('https://example.com/x'), here)).toBeNull();
-    expect(leavingTarget(click, a('http://localhost:3001/contacts', { target: '_blank' }), here)).toBeNull();
-    expect(leavingTarget({ ...click, ctrlKey: true }, a('http://localhost:3001/contacts'), here)).toBeNull();
-    expect(leavingTarget({ ...click, button: 1 }, a('http://localhost:3001/contacts'), here)).toBeNull();
-    expect(leavingTarget({ ...click, defaultPrevented: true }, a('http://localhost:3001/contacts'), here)).toBeNull();
-    expect(leavingTarget(click, a('http://localhost:3001/f.csv', { download: true }), here)).toBeNull();
+    expect(
+      leavingTarget(click, a('http://localhost:3001/contacts', { target: '_blank' }), here),
+    ).toBeNull();
+    expect(
+      leavingTarget({ ...click, ctrlKey: true }, a('http://localhost:3001/contacts'), here),
+    ).toBeNull();
+    expect(
+      leavingTarget({ ...click, button: 1 }, a('http://localhost:3001/contacts'), here),
+    ).toBeNull();
+    expect(
+      leavingTarget(
+        { ...click, defaultPrevented: true },
+        a('http://localhost:3001/contacts'),
+        here,
+      ),
+    ).toBeNull();
+    expect(
+      leavingTarget(click, a('http://localhost:3001/f.csv', { download: true }), here),
+    ).toBeNull();
     expect(leavingTarget(click, null, here)).toBeNull();
     expect(leavingTarget(click, a('not a url'), here)).toBeNull();
   });

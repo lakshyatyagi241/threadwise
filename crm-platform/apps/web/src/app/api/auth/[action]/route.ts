@@ -2,6 +2,10 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
+  REFERRAL_COOKIE,
+  withReferralFallback,
+} from '@/features/auth-registration-security/guest/referral';
+import {
   ACCESS_COOKIE,
   ORG_COOKIE,
   REFRESH_COOKIE,
@@ -9,7 +13,11 @@ import {
   clearSessionCookies,
   setSessionCookies,
 } from '@/lib/auth/cookies';
-import { isSameOrigin, problem } from '@/lib/auth/proxy';
+import { clientIpFrom } from '@/lib/auth/client-ip';
+import { logoutStaff } from '@/lib/auth/logout';
+import { loginPath, safeNextPath } from '@/lib/auth/next-path';
+import { isSameOrigin, problem, redirectTo } from '@/lib/auth/proxy';
+import { rememberForAction } from '@/lib/auth/remember';
 import { apiBase, refreshTokens } from '@/lib/auth/server';
 
 /**
@@ -27,6 +35,7 @@ const UPSTREAM: Record<string, string | ((body: Record<string, unknown>) => stri
   signup: '/v2/auth/signup',
   'signup-otp': '/v2/auth/signup/verify-otp',
   switch: '/v2/auth/workspaces/switch',
+  'accept-invite': '/v2/workspace/invitations/accept',
   'social-callback': (b) =>
     `/v2/auth/social/${encodeURIComponent(String(b.provider ?? ''))}/callback`,
 };
@@ -35,7 +44,27 @@ const SAFE_SLUG = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_-]{1,39}$/);
 
 /** Only same-site relative paths, so this cannot be turned into an open redirect. */
 function safeNext(value: string | null): string {
-  return value && /^\/(?![/\\])[\w\-./?=&%]*$/.test(value) ? value : '/';
+  return safeNextPath(value) ?? '/';
+}
+
+/**
+ * Whether administrators allow "keep me signed in". A social sign-in has no checkbox, and Reference always
+ * remembers it, so the long session applies unless the platform turned remembering off. Fails closed: when the
+ * setting cannot be read the session is not remembered.
+ */
+async function rememberMeAllowed(): Promise<boolean> {
+  try {
+    const res = await fetch(`${apiBase()}/v2/auth/registration-config`, {
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!res.ok) return false;
+    const json = (await res.json()) as { rememberMeEnabled?: unknown };
+    return json.rememberMeEnabled === true;
+  } catch {
+    return false;
+  }
 }
 
 function forwardHeaders(req: Request, token?: string): Headers {
@@ -44,7 +73,7 @@ function forwardHeaders(req: Request, token?: string): Headers {
     const v = req.headers.get(name);
     if (v) h.set(name, v);
   }
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+  const ip = clientIpFrom(req.headers);
   if (ip) h.set('x-forwarded-for', ip);
   if (!h.has('x-request-id')) h.set('x-request-id', crypto.randomUUID());
   if (token) h.set('authorization', `Bearer ${token}`);
@@ -56,17 +85,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
   const store = await cookies();
 
   if (action === 'logout') {
-    const at = store.get(ACCESS_COOKIE)?.value;
-    if (at) {
-      // Best effort: revoke the server-side session, then clear cookies regardless.
-      await fetch(`${apiBase()}/v2/auth/logout`, {
-        method: 'POST',
-        headers: forwardHeaders(req, at),
-        body: '{}',
-        cache: 'no-store',
-      }).catch(() => undefined);
-    }
-    clearSessionCookies(store);
+    // Always completes (no origin check): a logout that fails is worse than a forged one.
+    await logoutStaff(req);
     return new NextResponse(null, { status: 204 });
   }
 
@@ -83,11 +103,16 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
   // `provider` is only for building the path; the API does not take it in the body.
   const { provider: _provider, ...payload } = body;
   void _provider;
+  // A sign-up that left the referral box empty still counts the link that brought the visitor here.
+  const outgoing =
+    action === 'signup'
+      ? withReferralFallback(payload, store.get(REFERRAL_COOKIE)?.value)
+      : payload;
 
   const upstream = await fetch(`${apiBase()}${path}`, {
     method: 'POST',
     headers: forwardHeaders(req, action === 'switch' ? store.get(ACCESS_COOKIE)?.value : undefined),
-    body: JSON.stringify(payload),
+    body: JSON.stringify(outgoing),
     cache: 'no-store',
   });
   const text = await upstream.text();
@@ -101,13 +126,32 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
         ...(upstream.headers.get('x-request-id')
           ? { 'x-request-id': upstream.headers.get('x-request-id')! }
           : {}),
+        // A lockout or rate limit says how long to wait; the page reads it from here or from the body.
+        ...(upstream.headers.get('retry-after')
+          ? { 'retry-after': upstream.headers.get('retry-after')! }
+          : {}),
       },
     });
   }
 
   if (json.status === 'authenticated' && json.tokens) {
-    const remember = payload.remember === true;
+    // The API states whether it opened a long session (`remember`), and that decides the cookie lifetime. Only an
+    // answer without it falls back to the request-side rules: the checkbox for password and code sign-ins, the
+    // choice this browser already made for a switch, and "remembered unless the platform turned it off" for social.
+    const fromApi = typeof json.remember === 'boolean' ? json.remember : undefined;
+    const remember = rememberForAction({
+      fromApi,
+      action,
+      requested: payload.remember,
+      cookie: store.get(REMEMBER_COOKIE)?.value,
+      platformAllows:
+        action === 'social-callback' && fromApi === undefined ? await rememberMeAllowed() : false,
+    });
     setSessionCookies(store, json.tokens as never, { remember });
+    // The account exists now, so the referral link has done its job (Reference forgets it at the same point).
+    if ((action === 'signup' || action === 'signup-otp') && store.get(REFERRAL_COOKIE)) {
+      store.delete(REFERRAL_COOKIE);
+    }
     // Remember which workspace this browser signs in to (not a credential).
     // The API names the organization the session belongs to; the request only does for password sign-in.
     const slug = SAFE_SLUG.safeParse(json.orgSlug ?? payload.orgSlug);
@@ -133,8 +177,9 @@ export async function GET(req: Request, ctx: { params: Promise<{ action: string 
   const tokens = rt ? await refreshTokens(rt) : null;
   if (!tokens) {
     clearSessionCookies(store);
-    return NextResponse.redirect(new URL('/login?expired=1', url));
+    // Back to sign-in with the page they were after, so signing in again lands there.
+    return redirectTo(loginPath(url.searchParams.get('next'), { expired: true }));
   }
   setSessionCookies(store, tokens, { remember: store.get(REMEMBER_COOKIE)?.value === '1' });
-  return NextResponse.redirect(new URL(safeNext(url.searchParams.get('next')), url));
+  return redirectTo(safeNext(url.searchParams.get('next')));
 }

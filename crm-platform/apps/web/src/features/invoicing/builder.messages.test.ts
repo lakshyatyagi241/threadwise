@@ -59,7 +59,9 @@ describe('builder messages built at run time', () => {
     ).toEqual([]);
   });
   it('has a title for every document type on the paper', () => {
-    expect(missingKeys(['tax_invoice', 'proforma', 'receipt'].map((k) => `paper.docTitle.${k}`))).toEqual([]);
+    expect(
+      missingKeys(['tax_invoice', 'proforma', 'receipt'].map((k) => `paper.docTitle.${k}`)),
+    ).toEqual([]);
   });
   it('has the amount errors of the buyer page', () => {
     expect(missingKeys(['invalid', 'tooMuch'].map((k) => `public.amountErrors.${k}`))).toEqual([]);
@@ -70,13 +72,28 @@ describe('builder messages built at run time', () => {
   it('has the "Why this tax?" panel texts', () => {
     expect(
       missingKeys(
-        ['title', 'preview', 'previewNote', 'taxFree', 'warnings', 'placeOfSupply', 'reverseCharge', 'reverseChargeNote', 'documentNotes', 'disclaimer'].map(
-          (k) => `taxWhy.${k}`,
-        ),
+        [
+          'title',
+          'preview',
+          'previewNote',
+          'taxFree',
+          'warnings',
+          'placeOfSupply',
+          'reverseCharge',
+          'reverseChargeNote',
+          'documentNotes',
+          'disclaimer',
+        ].map((k) => `taxWhy.${k}`),
       ),
     ).toEqual([]);
   });
   it('has the method name of every payment method the paper can list', () => {
-    expect(missingKeys(['bank', 'manual', 'cash', 'card', 'upi', 'cheque', 'gateway', 'other'].map((k) => `method.${k}`))).toEqual([]);
+    expect(
+      missingKeys(
+        ['bank', 'manual', 'cash', 'card', 'upi', 'cheque', 'gateway', 'other'].map(
+          (k) => `method.${k}`,
+        ),
+      ),
+    ).toEqual([]);
   });
 });

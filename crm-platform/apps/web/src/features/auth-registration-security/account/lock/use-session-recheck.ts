@@ -26,8 +26,11 @@ export function useSessionRecheck(onFresh: (session: SessionResponse) => void): 
       try {
         handler.current(await authApi.session());
       } catch (err) {
-        // A revoked or expired session: the next page load sends them to sign in.
-        if (err instanceof ApiError && err.status === 401) window.location.assign('/login');
+        // A revoked or expired session: sign in again. An idle timeout was already sent to sign-in, with its
+        // reason, by the API client; going to plain /login here as well would drop the reason.
+        if (err instanceof ApiError && err.status === 401 && !err.isIdleTimeout) {
+          window.location.assign('/login');
+        }
       } finally {
         inFlight = false;
       }

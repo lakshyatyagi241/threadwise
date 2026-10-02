@@ -48,7 +48,11 @@ export function formatDay(day: string | null | undefined, locale: string): strin
 }
 
 /** Medium date and short time in `timeZone`; empty for a missing or unparseable value. */
-export function formatDateTime(iso: string | null | undefined, locale: string, timeZone?: string): string {
+export function formatDateTime(
+  iso: string | null | undefined,
+  locale: string,
+  timeZone?: string,
+): string {
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';

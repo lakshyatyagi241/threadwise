@@ -17,7 +17,17 @@ export interface SectionProps {
   disabled?: boolean;
 }
 
-export function Card({ title, children, single, aside }: { title: string; children: React.ReactNode; single?: boolean; aside?: React.ReactNode }) {
+export function Card({
+  title,
+  children,
+  single,
+  aside,
+}: {
+  title: string;
+  children: React.ReactNode;
+  single?: boolean;
+  aside?: React.ReactNode;
+}) {
   return (
     <section className="rounded-xl border border-border bg-background p-4 sm:p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -30,11 +40,21 @@ export function Card({ title, children, single, aside }: { title: string; childr
 }
 
 /** The live result of checking the buyer's tax id: the format, and the check digits where the country has a public algorithm. */
-function TaxIdFeedback({ draft, sellerCountry }: { draft: InvoiceDraft; sellerCountry: string | null }) {
+function TaxIdFeedback({
+  draft,
+  sellerCountry,
+}: {
+  draft: InvoiceDraft;
+  sellerCountry: string | null;
+}) {
   const t = useTranslations('invoicing.builder');
   const c = taxIdCheckOf(draft, sellerCountry);
   if (c.state === 'empty') {
-    return c.label ? <>{t('taxIdExpected', { label: c.label, example: c.example ?? '' })}</> : <>{t('taxIdHint')}</>;
+    return c.label ? (
+      <>{t('taxIdExpected', { label: c.label, example: c.example ?? '' })}</>
+    ) : (
+      <>{t('taxIdHint')}</>
+    );
   }
   if (c.state === 'unchecked') return <>{t('taxIdUnchecked')}</>;
   if (c.state === 'valid') {
@@ -52,23 +72,46 @@ function TaxIdFeedback({ draft, sellerCountry }: { draft: InvoiceDraft; sellerCo
   );
 }
 
-export function BuyerSection({ draft, setDraft, error, disabled, sellerCountry }: SectionProps & { sellerCountry: string | null }) {
+export function BuyerSection({
+  draft,
+  setDraft,
+  error,
+  disabled,
+  sellerCountry,
+}: SectionProps & { sellerCountry: string | null }) {
   const t = useTranslations('invoicing.builder');
-  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
   const check = taxIdCheckOf(draft, sellerCountry);
   return (
     <Card title={t('billTo')}>
-      <Field label={t('contact')} htmlFor="inv-contact" hint={t('contactHint')} className="sm:col-span-2" error={error('buyerName')}>
+      <Field
+        label={t('contact')}
+        htmlFor="inv-contact"
+        hint={t('contactHint')}
+        className="sm:col-span-2"
+        error={error('buyerName')}
+      >
         <ContactPicker
           id="inv-contact"
           disabled={disabled}
           invalid={!!error('buyerName')}
-          value={draft.contactId ? { id: draft.contactId, label: draft.contactLabel || draft.buyerName } : null}
+          value={
+            draft.contactId
+              ? { id: draft.contactId, label: draft.contactLabel || draft.buyerName }
+              : null
+          }
           onChange={(c) => setDraft((d) => withContact(d, c))}
         />
       </Field>
       <Field label={t('buyerName')} htmlFor="inv-name">
-        <Input id="inv-name" dir="auto" disabled={disabled} value={draft.buyerName} onChange={(e) => set('buyerName', e.target.value)} />
+        <Input
+          id="inv-name"
+          dir="auto"
+          disabled={disabled}
+          value={draft.buyerName}
+          onChange={(e) => set('buyerName', e.target.value)}
+        />
       </Field>
       <Field label={t('buyerEmail')} htmlFor="inv-email" error={error('buyerEmail')}>
         <Input
@@ -82,12 +125,31 @@ export function BuyerSection({ draft, setDraft, error, disabled, sellerCountry }
         />
       </Field>
       <Field label={t('buyerPhone')} htmlFor="inv-phone">
-        <Input id="inv-phone" type="tel" dir="ltr" disabled={disabled} value={draft.buyerPhone} onChange={(e) => set('buyerPhone', e.target.value)} />
+        <Input
+          id="inv-phone"
+          type="tel"
+          dir="ltr"
+          disabled={disabled}
+          value={draft.buyerPhone}
+          onChange={(e) => set('buyerPhone', e.target.value)}
+        />
       </Field>
       <Field label={t('buyerAddress')} htmlFor="inv-address">
-        <Textarea id="inv-address" rows={2} dir="auto" disabled={disabled} value={draft.buyerAddress} onChange={(e) => set('buyerAddress', e.target.value)} />
+        <Textarea
+          id="inv-address"
+          rows={2}
+          dir="auto"
+          disabled={disabled}
+          value={draft.buyerAddress}
+          onChange={(e) => set('buyerAddress', e.target.value)}
+        />
       </Field>
-      <Field label={t('buyerCountry')} htmlFor="inv-country" hint={t('buyerCountryHint')} error={error('buyerCountry')}>
+      <Field
+        label={t('buyerCountry')}
+        htmlFor="inv-country"
+        hint={t('buyerCountryHint')}
+        error={error('buyerCountry')}
+      >
         <Input
           id="inv-country"
           dir="ltr"
@@ -123,7 +185,8 @@ export function BuyerSection({ draft, setDraft, error, disabled, sellerCountry }
 export function DetailsSection({ draft, setDraft, error, disabled }: SectionProps) {
   const t = useTranslations('invoicing.builder');
   const tt = useTranslations('invoicing.terms');
-  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
   const termValue = (() => {
     if (!isDay(draft.dueDate)) return draft.dueDate === '' ? 'none' : 'custom';
     if (!isDay(draft.issueDate)) return 'custom';
@@ -144,12 +207,22 @@ export function DetailsSection({ draft, setDraft, error, disabled }: SectionProp
   return (
     <Card title={t('details')}>
       <Field label={t('docType')} htmlFor="inv-doctype">
-        <Select id="inv-doctype" disabled={disabled} value={draft.docType} onChange={(e) => set('docType', e.target.value as InvoiceDraft['docType'])}>
+        <Select
+          id="inv-doctype"
+          disabled={disabled}
+          value={draft.docType}
+          onChange={(e) => set('docType', e.target.value as InvoiceDraft['docType'])}
+        >
           <option value="tax_invoice">{t('docTypes.tax_invoice')}</option>
           <option value="proforma">{t('docTypes.proforma')}</option>
         </Select>
       </Field>
-      <Field label={t('currency')} htmlFor="inv-currency" hint={t('currencyHint')} error={error('currency')}>
+      <Field
+        label={t('currency')}
+        htmlFor="inv-currency"
+        hint={t('currencyHint')}
+        error={error('currency')}
+      >
         <Input
           id="inv-currency"
           list="inv-currencies"
@@ -167,10 +240,22 @@ export function DetailsSection({ draft, setDraft, error, disabled }: SectionProp
         </datalist>
       </Field>
       <Field label={t('issueDate')} htmlFor="inv-issue" error={error('issueDate')}>
-        <Input id="inv-issue" type="date" disabled={disabled} value={draft.issueDate} invalid={!!error('issueDate')} onChange={(e) => setIssueDate(e.target.value)} />
+        <Input
+          id="inv-issue"
+          type="date"
+          disabled={disabled}
+          value={draft.issueDate}
+          invalid={!!error('issueDate')}
+          onChange={(e) => setIssueDate(e.target.value)}
+        />
       </Field>
       <Field label={t('terms')} htmlFor="inv-term">
-        <Select id="inv-term" disabled={disabled} value={termValue} onChange={(e) => setTerm(e.target.value)}>
+        <Select
+          id="inv-term"
+          disabled={disabled}
+          value={termValue}
+          onChange={(e) => setTerm(e.target.value)}
+        >
           <option value="none">{t('noDueDate')}</option>
           {TERM_DAYS.map((d) => (
             <option key={d} value={String(d)}>
@@ -192,13 +277,33 @@ export function DetailsSection({ draft, setDraft, error, disabled }: SectionProp
         />
       </Field>
       <Field label={t('reference')} htmlFor="inv-ref" hint={t('referenceHint')}>
-        <Input id="inv-ref" dir="auto" maxLength={191} disabled={disabled} value={draft.reference} onChange={(e) => set('reference', e.target.value)} />
+        <Input
+          id="inv-ref"
+          dir="auto"
+          maxLength={191}
+          disabled={disabled}
+          value={draft.reference}
+          onChange={(e) => set('reference', e.target.value)}
+        />
       </Field>
     </Card>
   );
 }
 
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'INR', 'JPY', 'KWD', 'CAD', 'AUD', 'SGD', 'CHF'];
+const CURRENCIES = [
+  'USD',
+  'EUR',
+  'GBP',
+  'AED',
+  'SAR',
+  'INR',
+  'JPY',
+  'KWD',
+  'CAD',
+  'AUD',
+  'SGD',
+  'CHF',
+];
 
 /**
  * The tax of the invoice: pick a tax rate per line (`rates`), or let the tax engine decide from the seller's country (the
@@ -212,7 +317,8 @@ export function TaxSection({
   profile,
 }: SectionProps & { profile: Pick<InvoiceProfile, 'sellerCountry' | 'sellerState'> | undefined }) {
   const t = useTranslations('invoicing.builder');
-  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
   const sellerCountry = profile?.sellerCountry ?? null;
   const known = !!profileOf(sellerCountry);
   const placeCountry = draft.buyerCountry.trim() || sellerCountry || '';
@@ -221,7 +327,11 @@ export function TaxSection({
   return (
     <Card title={t('tax')} single>
       <div className="space-y-4">
-        <div role="radiogroup" aria-label={t('taxMode')} className="inline-flex w-full gap-1 rounded-md bg-muted p-1 sm:w-auto">
+        <div
+          role="radiogroup"
+          aria-label={t('taxMode')}
+          className="inline-flex w-full gap-1 rounded-md bg-muted p-1 sm:w-auto"
+        >
           {modes.map((m) => (
             <button
               key={m}
@@ -246,7 +356,10 @@ export function TaxSection({
             <div className="space-y-1.5 text-sm sm:col-span-2">
               <div className="font-medium">{t('sellerCountry')}</div>
               {sellerCountry && known ? (
-                <div dir="ltr" className="inline-block rounded-md border border-border bg-muted/40 px-3 py-2">
+                <div
+                  dir="ltr"
+                  className="inline-block rounded-md border border-border bg-muted/40 px-3 py-2"
+                >
                   {sellerCountry}
                   {profile?.sellerState ? ` - ${profile.sellerState}` : ''}
                 </div>
@@ -257,7 +370,12 @@ export function TaxSection({
               )}
             </div>
             <Field label={t('supplyType')} htmlFor="inv-supply">
-              <Select id="inv-supply" disabled={disabled} value={draft.supplyType} onChange={(e) => set('supplyType', e.target.value as SupplyKind)}>
+              <Select
+                id="inv-supply"
+                disabled={disabled}
+                value={draft.supplyType}
+                onChange={(e) => set('supplyType', e.target.value as SupplyKind)}
+              >
                 {SUPPLY_TYPES.map((s) => (
                   <option key={s} value={s}>
                     {t(`supplyTypes.${s}`)}
@@ -265,9 +383,19 @@ export function TaxSection({
                 ))}
               </Select>
             </Field>
-            <Field label={t('placeOfSupply')} htmlFor="inv-place" hint={t('placeOfSupplyHint', { country: placeCountry || '-' })} error={error('placeRegion')}>
+            <Field
+              label={t('placeOfSupply')}
+              htmlFor="inv-place"
+              hint={t('placeOfSupplyHint', { country: placeCountry || '-' })}
+              error={error('placeRegion')}
+            >
               {regions.length > 0 ? (
-                <Select id="inv-place" disabled={disabled} value={draft.placeRegion} onChange={(e) => set('placeRegion', e.target.value)}>
+                <Select
+                  id="inv-place"
+                  disabled={disabled}
+                  value={draft.placeRegion}
+                  onChange={(e) => set('placeRegion', e.target.value)}
+                >
                   <option value="">{t('placeSameCountry')}</option>
                   {regions.map((r) => (
                     <option key={r.code} value={r.code}>
@@ -310,7 +438,8 @@ export function TaxSection({
 
 export function AdjustmentsSection({ draft, setDraft, error, disabled }: SectionProps) {
   const t = useTranslations('invoicing.builder');
-  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
   return (
     <Card title={t('adjustments')}>
       <Field label={t('discountKind')} htmlFor="inv-disc-kind">
@@ -342,7 +471,12 @@ export function AdjustmentsSection({ draft, setDraft, error, disabled }: Section
           onChange={(e) => set('discountText', e.target.value)}
         />
       </Field>
-      <Field label={t('shipping', { currency: draft.currency })} htmlFor="inv-ship" hint={t('shippingHint')} error={error('shipping')}>
+      <Field
+        label={t('shipping', { currency: draft.currency })}
+        htmlFor="inv-ship"
+        hint={t('shippingHint')}
+        error={error('shipping')}
+      >
         <Input
           id="inv-ship"
           inputMode="decimal"
@@ -360,16 +494,36 @@ export function AdjustmentsSection({ draft, setDraft, error, disabled }: Section
 
 export function NotesSection({ draft, setDraft, disabled }: SectionProps) {
   const t = useTranslations('invoicing.builder');
-  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof InvoiceDraft>(k: K, v: InvoiceDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
   return (
     <Card title={t('notesAndTerms')}>
       <Field label={t('notes')} htmlFor="inv-notes" hint={t('notesHint')}>
-        <Textarea id="inv-notes" rows={3} dir="auto" disabled={disabled} value={draft.notes} onChange={(e) => set('notes', e.target.value)} />
+        <Textarea
+          id="inv-notes"
+          rows={3}
+          dir="auto"
+          disabled={disabled}
+          value={draft.notes}
+          onChange={(e) => set('notes', e.target.value)}
+        />
       </Field>
       <Field label={t('termsText')} htmlFor="inv-terms-text" hint={t('termsHint')}>
-        <Textarea id="inv-terms-text" rows={3} dir="auto" disabled={disabled} value={draft.terms} onChange={(e) => set('terms', e.target.value)} />
+        <Textarea
+          id="inv-terms-text"
+          rows={3}
+          dir="auto"
+          disabled={disabled}
+          value={draft.terms}
+          onChange={(e) => set('terms', e.target.value)}
+        />
       </Field>
-      <Field label={t('legalNotes')} htmlFor="inv-legal" hint={t('legalNotesHint')} className="sm:col-span-2">
+      <Field
+        label={t('legalNotes')}
+        htmlFor="inv-legal"
+        hint={t('legalNotesHint')}
+        className="sm:col-span-2"
+      >
         <Textarea
           id="inv-legal"
           rows={2}

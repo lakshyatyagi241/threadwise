@@ -27,7 +27,8 @@ export function RecurringRuns({ id }: { id: string }) {
   const q = useInfiniteQuery({
     queryKey: [...KEYS.recurring, 'runs-pages', id],
     initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam, signal }) => invoicingApi.recurringRuns(id, { limit: PAGE, cursor: pageParam }, signal),
+    queryFn: ({ pageParam, signal }) =>
+      invoicingApi.recurringRuns(id, { limit: PAGE, cursor: pageParam }, signal),
     getNextPageParam: (last) => (last.hasMore ? (last.nextCursor ?? undefined) : undefined),
     retry: false,
   });
@@ -37,7 +38,11 @@ export function RecurringRuns({ id }: { id: string }) {
   const td = 'border-b border-border px-3 py-2 align-top';
 
   return (
-    <section id="runs" aria-label={t('title')} className="flex max-h-[max(22rem,70dvh)] scroll-mt-4 flex-col overflow-hidden rounded-xl border border-border bg-background">
+    <section
+      id="runs"
+      aria-label={t('title')}
+      className="flex max-h-[max(22rem,70dvh)] scroll-mt-4 flex-col overflow-hidden rounded-xl border border-border bg-background"
+    >
       <header className="shrink-0 border-b border-border px-4 py-3">
         <h2 className="text-base font-semibold">{t('title')}</h2>
         <p className="text-xs text-muted-foreground">{t('subtitle')}</p>
@@ -63,7 +68,10 @@ export function RecurringRuns({ id }: { id: string }) {
             onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
             className="thin-scrollbar min-h-0 flex-1 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
           >
-            <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: TABLE_W }}>
+            <table
+              className="w-full table-fixed border-separate border-spacing-0 text-sm"
+              style={{ minWidth: TABLE_W }}
+            >
               <colgroup>
                 {COL_W.map((w, i) => (
                   <col key={i} style={{ width: w }} />
@@ -72,7 +80,14 @@ export function RecurringRuns({ id }: { id: string }) {
               <thead>
                 <tr>
                   {COLS.map((c) => (
-                    <th key={c} scope="col" className={cn(th, c === 'period' && `${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`)}>
+                    <th
+                      key={c}
+                      scope="col"
+                      className={cn(
+                        th,
+                        c === 'period' && `${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`,
+                      )}
+                    >
                       <span className="block truncate">{tc(c)}</span>
                     </th>
                   ))}
@@ -80,10 +95,18 @@ export function RecurringRuns({ id }: { id: string }) {
               </thead>
               <tbody>
                 {rows.map((r) => (
-                  <tr key={r.id} className={cn('group align-top transition-colors hover:bg-muted', r.status === 'failed' && 'bg-danger/5')}>
+                  <tr
+                    key={r.id}
+                    className={cn(
+                      'group align-top transition-colors hover:bg-muted',
+                      r.status === 'failed' && 'bg-danger/5',
+                    )}
+                  >
                     <td className={cn(td, STICKY_ONLY, frozenEdge(scrolled))}>
                       <DayText day={r.periodDate} className="font-medium" />
-                      <div className="text-xs text-muted-foreground">{t('period', { n: r.periodIndex + 1 })}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {t('period', { n: r.periodIndex + 1 })}
+                      </div>
                     </td>
                     <td className={td}>
                       <RunStatusChip status={r.status} />
@@ -103,7 +126,9 @@ export function RecurringRuns({ id }: { id: string }) {
                     </td>
                     <td className={td}>
                       {r.error ? (
-                        <UserText className="block whitespace-pre-wrap break-words text-danger">{r.error}</UserText>
+                        <UserText className="block whitespace-pre-wrap break-words text-danger">
+                          {r.error}
+                        </UserText>
                       ) : (
                         <span className="text-muted-foreground">-</span>
                       )}
@@ -122,7 +147,12 @@ export function RecurringRuns({ id }: { id: string }) {
             {t('showing', { count: rows.length })}
           </span>
           {q.hasNextPage ? (
-            <Button variant="secondary" size="sm" disabled={q.isFetchingNextPage} onClick={() => void q.fetchNextPage()}>
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={q.isFetchingNextPage}
+              onClick={() => void q.fetchNextPage()}
+            >
               {q.isFetchingNextPage && <Spinner />}
               {t('loadMore')}
             </Button>

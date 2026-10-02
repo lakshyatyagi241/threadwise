@@ -69,6 +69,8 @@ Without a key the assistant's fallback message is the reply (Reference: empty pr
 
 ## Inbox hand-off seam
 
-The widget writes `conversations` (`channel='chatbot_widget'`, `origin='web'`, `platform='WIDGET'`), `inbox_messages` and a `contacts` row through `_shims/sql-inbox-gateway.ts`
-until the team inbox and contacts domains export services. An outbound `inbox_messages` row in the visitor's conversation reaches the visitor on the next poll; one not
-written by the widget's own bot silences the AI for that thread.
+The widget writes a `channels` row (kind `webchat`, one per widget, `external_id` = the widget uuid), `conversations` (the visitor is the peer: `peer_key` = the visitor
+uuid), `messages` and a `contacts` row through `_shims/sql-inbox-gateway.ts` until the conversations and contacts domains export services. The visitor's line is an inbound
+message (`sender_kind = 'customer'`, status `received`); the opening line and the assistant's replies are `sender_kind = 'bot'`. An outbound `messages` row in the visitor's
+conversation reaches the visitor on the next poll; one with `sender_kind = 'agent'` (a staff reply from the inbox) silences the AI for that thread. Data model:
+[chat-conversations.md](chat-conversations.md).

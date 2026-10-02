@@ -5,9 +5,25 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFormatter, useTranslations } from 'next-intl';
-import { Alert, Button, ConfirmDialog, Field, Input, Spinner, Textarea, cn, useToast } from '@crm/ui';
+import {
+  Alert,
+  Button,
+  ConfirmDialog,
+  Field,
+  Input,
+  Spinner,
+  Textarea,
+  cn,
+  useToast,
+} from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { createSegment, invalidateSegments, KEYS, updateSegment, useSegment } from '../api/segments';
+import {
+  createSegment,
+  invalidateSegments,
+  KEYS,
+  updateSegment,
+  useSegment,
+} from '../api/segments';
 import { useSegmentCatalog } from '../api/lookups';
 import {
   SEGMENT_DESCRIPTION_MAX,
@@ -29,7 +45,14 @@ import {
   validateForm,
   type ServerProblems,
 } from '../lib/form';
-import { conditionsOf, countConditions, MAX_CONDITIONS, pruneIncomplete, signature, type Group } from '../lib/model';
+import {
+  conditionsOf,
+  countConditions,
+  MAX_CONDITIONS,
+  pruneIncomplete,
+  signature,
+  type Group,
+} from '../lib/model';
 import { summarize } from '../lib/summary';
 import { ROUTES } from '../lib/url';
 import { conditionAtPath, parseRules, toWire } from '../lib/wire';
@@ -97,7 +120,11 @@ export function SegmentBuilder({ id }: { id?: string }) {
 
 function BuilderSkeleton({ label }: { label: string }) {
   return (
-    <div role="status" aria-label={label} className="grid animate-pulse gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <div
+      role="status"
+      aria-label={label}
+      className="grid animate-pulse gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]"
+    >
       <div className="space-y-4">
         <div className="h-48 rounded-xl bg-muted" />
         <div className="h-72 rounded-xl bg-muted" />
@@ -108,7 +135,10 @@ function BuilderSkeleton({ label }: { label: string }) {
 }
 
 /** The server's flags (by path) as warnings on the conditions they name, kept only while the condition is unchanged. */
-function serverWarnings(segment: Segment | undefined, root: Group): Map<string, { sig: string; reason: string }> {
+function serverWarnings(
+  segment: Segment | undefined,
+  root: Group,
+): Map<string, { sig: string; reason: string }> {
   const out = new Map<string, { sig: string; reason: string }>();
   for (const bad of segment?.invalidConditions ?? []) {
     const c = conditionAtPath(root, bad.path);
@@ -168,10 +198,12 @@ function BuilderForm({
   const flagged = useMemo(() => serverWarnings(segment, initialRoot), [segment, initialRoot]);
   const warnings = useMemo(() => {
     const out = new Map<string, ConditionWarning>();
-    for (const [cid, reason] of invalidConditions(rules, catalog, lookups.ready)) out.set(cid, reason);
+    for (const [cid, reason] of invalidConditions(rules, catalog, lookups.ready))
+      out.set(cid, reason);
     for (const c of conditionsOf(rules)) {
       const hit = flagged.get(c.id);
-      if (hit && !out.has(c.id) && hit.sig === signature(c)) out.set(c.id, { type: 'server', reason: hit.reason });
+      if (hit && !out.has(c.id) && hit.sig === signature(c))
+        out.set(c.id, { type: 'server', reason: hit.reason });
     }
     return out;
   }, [rules, catalog, lookups.ready, flagged]);
@@ -185,7 +217,9 @@ function BuilderForm({
     mutationFn: async () => {
       const input = formToInput(form, catalog);
       if (!input) throw new Error('rules are not valid yet');
-      return segment ? updateSegment(segment.id, { ...input, rowVersion: segment.rowVersion }) : createSegment(input);
+      return segment
+        ? updateSegment(segment.id, { ...input, rowVersion: segment.rowVersion })
+        : createSegment(input);
     },
     onSuccess: async (saved) => {
       guard.release();
@@ -222,21 +256,33 @@ function BuilderForm({
     setShowProblems(true);
     if (hasProblems(problems)) {
       const firstCondition = Object.keys(problems.conditions)[0];
-      const target = problems.name ? 'segment-name' : problems.description ? 'segment-description' : null;
+      const target = problems.name
+        ? 'segment-name'
+        : problems.description
+          ? 'segment-description'
+          : null;
       if (target) document.getElementById(target)?.focus();
-      else if (firstCondition) document.getElementById('segment-rules')?.scrollIntoView({ block: 'center' });
+      else if (firstCondition)
+        document.getElementById('segment-rules')?.scrollIntoView({ block: 'center' });
       return;
     }
     save.mutate();
   }
 
-  const nameError = server.name ?? (showProblems && problems.name ? tp(`name.${problems.name}`) : undefined);
+  const nameError =
+    server.name ?? (showProblems && problems.name ? tp(`name.${problems.name}`) : undefined);
   const descriptionError =
-    server.description ?? (showProblems && problems.description ? tp('description.tooLong') : undefined);
-  const rulesProblem = server.rules ?? (showProblems && problems.rules ? tp(`rules.${problems.rules}`) : undefined);
-  const otherError = save.isError && !['conflict', 'validation', 'nameTaken', 'rulesInvalid'].includes(errorKind(save.error));
+    server.description ??
+    (showProblems && problems.description ? tp('description.tooLong') : undefined);
+  const rulesProblem =
+    server.rules ?? (showProblems && problems.rules ? tp(`rules.${problems.rules}`) : undefined);
+  const otherError =
+    save.isError &&
+    !['conflict', 'validation', 'nameTaken', 'rulesInvalid'].includes(errorKind(save.error));
 
-  const savedAt = segment ? format.dateTime(new Date(segment.updatedAt), { dateStyle: 'medium', timeStyle: 'short' }) : '';
+  const savedAt = segment
+    ? format.dateTime(new Date(segment.updatedAt), { dateStyle: 'medium', timeStyle: 'short' })
+    : '';
 
   return (
     <form onSubmit={submit} noValidate className="space-y-3">
@@ -246,13 +292,24 @@ function BuilderForm({
           <h1 className="truncate text-xl font-bold tracking-tight">
             {editing ? t('editTitle', { name: segment?.name ?? '' }) : t('createTitle')}
           </h1>
-          {editing && <p className="text-xs text-muted-foreground">{t('lastSaved', { when: savedAt })}</p>}
+          {editing && (
+            <p className="text-xs text-muted-foreground">{t('lastSaved', { when: savedAt })}</p>
+          )}
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="secondary" className="h-10" onClick={() => guard.ask(editing && segment ? ROUTES.detail(segment.id) : ROUTES.hub)}>
+          <Button
+            variant="secondary"
+            className="h-10"
+            onClick={() => guard.ask(editing && segment ? ROUTES.detail(segment.id) : ROUTES.hub)}
+          >
             {t('cancel')}
           </Button>
-          <Button type="submit" variant="brand" className="h-10 px-5" disabled={!allowed || save.isPending}>
+          <Button
+            type="submit"
+            variant="brand"
+            className="h-10 px-5"
+            disabled={!allowed || save.isPending}
+          >
             {save.isPending && <Spinner />}
             {t(editing ? 'save' : 'create')}
           </Button>
@@ -276,8 +333,15 @@ function BuilderForm({
       <details open={!editing} className="group rounded-xl border border-border bg-background">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary">
           {t('helpSummary')}
-          <span aria-hidden="true" className="text-xs text-muted-foreground group-open:hidden">{t('show')}</span>
-          <span aria-hidden="true" className="hidden text-xs text-muted-foreground group-open:inline">{t('hide')}</span>
+          <span aria-hidden="true" className="text-xs text-muted-foreground group-open:hidden">
+            {t('show')}
+          </span>
+          <span
+            aria-hidden="true"
+            className="hidden text-xs text-muted-foreground group-open:inline"
+          >
+            {t('hide')}
+          </span>
         </summary>
         <div className="space-y-2 border-t border-border p-4">
           <GroupVsSegment />
@@ -350,7 +414,9 @@ function BuilderForm({
                         key={v}
                         className={cn(
                           'flex cursor-pointer items-start gap-2.5 rounded-md border p-2.5 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary',
-                          visibility === v ? 'border-brand bg-brand/5' : 'border-border hover:bg-muted',
+                          visibility === v
+                            ? 'border-brand bg-brand/5'
+                            : 'border-border hover:bg-muted',
                         )}
                       >
                         <input
@@ -363,10 +429,16 @@ function BuilderForm({
                         />
                         <span className="min-w-0">
                           <span className="flex items-center gap-1.5 font-medium">
-                            {v === 'private' ? <LockIcon className="size-3.5" /> : <UsersIcon className="size-3.5" />}
+                            {v === 'private' ? (
+                              <LockIcon className="size-3.5" />
+                            ) : (
+                              <UsersIcon className="size-3.5" />
+                            )}
                             {tv(v)}
                           </span>
-                          <span className="block text-xs text-muted-foreground">{tv(v === 'private' ? 'privateHint' : 'sharedHint')}</span>
+                          <span className="block text-xs text-muted-foreground">
+                            {tv(v === 'private' ? 'privateHint' : 'sharedHint')}
+                          </span>
                         </span>
                       </label>
                     ))}
@@ -383,7 +455,9 @@ function BuilderForm({
                   aria-live="polite"
                   className="rounded-md border border-border bg-muted/50 px-3 py-2 text-sm"
                 >
-                  <span className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t('summaryLabel')}</span>
+                  <span className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {t('summaryLabel')}
+                  </span>
                   {sentence ? (
                     <span>{t('summaryLead', { rules: sentence })}</span>
                   ) : (
@@ -435,4 +509,3 @@ function BuilderForm({
     </form>
   );
 }
-

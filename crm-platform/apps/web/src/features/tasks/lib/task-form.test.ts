@@ -35,23 +35,38 @@ describe('validateDraft', () => {
   it('limits the title to 255 and the notes to 5000 characters', () => {
     expect(validateDraft({ ...emptyDraft(ME), title: 'x'.repeat(256) }).title).toBe('titleTooLong');
     expect(validateDraft({ ...emptyDraft(ME), title: 'x'.repeat(255) }).title).toBeUndefined();
-    expect(validateDraft({ ...emptyDraft(ME), title: 'a', notes: 'n'.repeat(5001) }).notes).toBe('notesTooLong');
+    expect(validateDraft({ ...emptyDraft(ME), title: 'a', notes: 'n'.repeat(5001) }).notes).toBe(
+      'notesTooLong',
+    );
   });
   it('rejects a due value that is not a date', () => {
-    expect(validateDraft({ ...emptyDraft(ME), title: 'a', due: 'tomorrow-ish' }).due).toBe('dueInvalid');
+    expect(validateDraft({ ...emptyDraft(ME), title: 'a', due: 'tomorrow-ish' }).due).toBe(
+      'dueInvalid',
+    );
   });
 });
 
 describe('createBody', () => {
   it('builds a body the contract accepts, with the due date as an instant with an offset', () => {
-    const body = createBody({ ...emptyDraft(ME), title: '  Send quote ', due: '2026-10-05T14:30', contactId: CONTACT });
+    const body = createBody({
+      ...emptyDraft(ME),
+      title: '  Send quote ',
+      due: '2026-10-05T14:30',
+      contactId: CONTACT,
+    });
     expect(body.title).toBe('Send quote');
     expect(body.dueAt).toMatch(/Z$/);
     expect(createTaskSchema.safeParse(body).success).toBe(true);
   });
   it('sends null for an empty assignee, due date and notes (nobody, no date, no notes)', () => {
     const body = createBody({ ...emptyDraft(''), title: 'a' });
-    expect(body).toMatchObject({ assigneeId: null, dueAt: null, notes: null, contactId: null, dealId: null });
+    expect(body).toMatchObject({
+      assigneeId: null,
+      dueAt: null,
+      notes: null,
+      contactId: null,
+      dealId: null,
+    });
   });
   it('defaults the assignee to the person given', () => {
     expect(createBody({ ...emptyDraft(ME), title: 'a' }).assigneeId).toBe(ME);
@@ -68,10 +83,17 @@ describe('patchBody', () => {
   });
   it('clears with null: no date, no assignee, unlinked, no notes', () => {
     const d = { ...draftOf(task), due: '', assigneeId: '', contactId: '', notes: '' };
-    expect(patchBody(task, d)).toEqual({ dueAt: null, assigneeId: null, contactId: null, notes: null });
+    expect(patchBody(task, d)).toEqual({
+      dueAt: null,
+      assigneeId: null,
+      contactId: null,
+      notes: null,
+    });
   });
   it('produces a body the update contract accepts once the row version is added', () => {
     const patch = patchBody(task, { ...draftOf(task), dealId: ME });
-    expect(updateTaskSchema.safeParse({ ...patch, rowVersion: task.rowVersion }).success).toBe(true);
+    expect(updateTaskSchema.safeParse({ ...patch, rowVersion: task.rowVersion }).success).toBe(
+      true,
+    );
   });
 });

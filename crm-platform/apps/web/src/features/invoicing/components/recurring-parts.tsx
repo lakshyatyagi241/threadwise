@@ -4,7 +4,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
-import type { RecurringFrequency, RecurringInvoiceResponse, RecurringMode, RecurringStatus } from '@crm/contracts';
+import type {
+  RecurringFrequency,
+  RecurringInvoiceResponse,
+  RecurringMode,
+  RecurringStatus,
+} from '@crm/contracts';
 import { invalidateInvoicing } from '../api/hooks';
 import { invoicingApi } from '../api/service';
 import { formatDay } from '../lib/dates';
@@ -33,7 +38,13 @@ const STATUS_DOT: Record<RecurringStatus, string> = {
   ended: 'bg-muted-foreground',
 };
 
-export function RecurringStatusChip({ status, className }: { status: RecurringStatus; className?: string }) {
+export function RecurringStatusChip({
+  status,
+  className,
+}: {
+  status: RecurringStatus;
+  className?: string;
+}) {
   const t = useTranslations('invoicing.recurring.status');
   return (
     <span
@@ -56,10 +67,15 @@ export function RunStatusChip({ status }: { status: 'created' | 'failed' }) {
     <span
       className={cn(
         'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium',
-        status === 'created' ? 'border-success/30 bg-success/10 text-success' : 'border-danger/30 bg-danger/10 text-danger',
+        status === 'created'
+          ? 'border-success/30 bg-success/10 text-success'
+          : 'border-danger/30 bg-danger/10 text-danger',
       )}
     >
-      <span aria-hidden="true" className={cn('size-1.5 rounded-full', status === 'created' ? 'bg-success' : 'bg-danger')} />
+      <span
+        aria-hidden="true"
+        className={cn('size-1.5 rounded-full', status === 'created' ? 'bg-success' : 'bg-danger')}
+      />
       {t(status)}
     </span>
   );
@@ -71,14 +87,20 @@ export function useModeText() {
   return {
     short: (mode: RecurringMode): string => t(`modeShort.${mode}`),
     full: (mode: RecurringMode, channel: string): string =>
-      mode === 'issue_send' ? t(`modeSent.${channel === 'whatsapp' ? 'whatsapp' : channel === 'link' ? 'link' : 'email'}`) : t(`modeShort.${mode}`),
+      mode === 'issue_send'
+        ? t(
+            `modeSent.${channel === 'whatsapp' ? 'whatsapp' : channel === 'link' ? 'link' : 'email'}`,
+          )
+        : t(`modeShort.${mode}`),
   };
 }
 
 /** A date or an em-less dash. */
 export function DayText({ day, className }: { day: string | null; className?: string }) {
   const locale = useLocale();
-  return <span className={cn('tabular-nums', className)}>{day ? formatDay(day, locale) : '-'}</span>;
+  return (
+    <span className={cn('tabular-nums', className)}>{day ? formatDay(day, locale) : '-'}</span>
+  );
 }
 
 /**
@@ -91,7 +113,10 @@ export function useRecurringActions(opts: { onDeleted?: () => void } = {}) {
   const qc = useQueryClient();
   const { toast } = useToast();
   const errorText = useErrorText();
-  const [confirm, setConfirm] = useState<{ kind: 'run' | 'delete'; row: RecurringInvoiceResponse } | null>(null);
+  const [confirm, setConfirm] = useState<{
+    kind: 'run' | 'delete';
+    row: RecurringInvoiceResponse;
+  } | null>(null);
   const [busy, setBusy] = useState(false);
   const [pending, setPending] = useState<string | null>(null);
 
@@ -110,7 +135,8 @@ export function useRecurringActions(opts: { onDeleted?: () => void } = {}) {
 
   async function pause(r: RecurringInvoiceResponse) {
     setPending(r.id);
-    if (await attempt(async () => void (await invoicingApi.pauseRecurring(r.id)))) toast(t('toast.paused', { name: r.name }));
+    if (await attempt(async () => void (await invoicingApi.pauseRecurring(r.id))))
+      toast(t('toast.paused', { name: r.name }));
     setPending(null);
   }
 
@@ -165,7 +191,9 @@ export function useRecurringActions(opts: { onDeleted?: () => void } = {}) {
         open={confirm?.kind === 'run'}
         busy={busy}
         title={row ? t('runNow.title', { name: row.name }) : ''}
-        message={row ? t(`runNow.message.${row.mode}`, { date: formatDay(row.nextRunDate, locale) }) : ''}
+        message={
+          row ? t(`runNow.message.${row.mode}`, { date: formatDay(row.nextRunDate, locale) }) : ''
+        }
         confirmLabel={t('runNow.confirm')}
         cancelLabel={t('cancel')}
         onClose={() => setConfirm(null)}

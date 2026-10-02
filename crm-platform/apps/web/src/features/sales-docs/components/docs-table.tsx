@@ -32,7 +32,14 @@ export interface RowHandlers {
   selected: ReadonlySet<string>;
   /** The row the keyboard is on. */
   activeId: string | null;
-  can: { update: boolean; create: boolean; delete: boolean; send: boolean; convert: boolean; order?: boolean };
+  can: {
+    update: boolean;
+    create: boolean;
+    delete: boolean;
+    send: boolean;
+    convert: boolean;
+    order?: boolean;
+  };
   today: string;
   zone: string | undefined;
   onToggleSelect: (id: string) => void;

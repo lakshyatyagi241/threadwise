@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  coverageText,
   coverageTone,
   formatMmSs,
   formatPercent,
   formatRelativeTime,
+  kpiAccents,
   mfaCoveragePercent,
   scoreState,
   severityTone,
@@ -84,5 +86,60 @@ describe('formatMmSs', () => {
     expect(formatMmSs(59)).toBe('0:59');
     expect(formatMmSs(0)).toBe('0:00');
     expect(formatMmSs(-4)).toBe('0:00');
+  });
+});
+
+describe('coverageText', () => {
+  it('shows the share alone until the API counts the controls', () => {
+    expect(coverageText({ percent: 75 })).toBe('75%');
+    expect(coverageText({ percent: 66.667 })).toBe('66.67%');
+  });
+  it('adds how many controls are on out of how many', () => {
+    expect(coverageText({ percent: 75, enabled: 3, total: 4 })).toBe('75% (3/4)');
+    expect(coverageText({ percent: 0, enabled: 0, total: 5 })).toBe('0% (0/5)');
+  });
+  it('needs both counts, a lone one is ignored', () => {
+    expect(coverageText({ percent: 50, enabled: 2 })).toBe('50%');
+    expect(coverageText({ percent: 50, total: 4 })).toBe('50%');
+  });
+});
+
+describe('kpiAccents', () => {
+  const base = { score: 80, openRisks: 0, warnings24h: 0, webhookFailurePct: 0 };
+
+  it('always outlines the score tile in green', () => {
+    expect(kpiAccents(base).score).toEqual({ border: 'success', value: null, note: 'success' });
+    expect(kpiAccents({ ...base, score: 50 }).score.border).toBe('success');
+    expect(kpiAccents({ ...base, score: 50 }).score.note).toBe('warning');
+  });
+
+  it('turns the open-risks tile red from the first risk', () => {
+    expect(kpiAccents(base).openRisks).toEqual({ border: null, value: null, note: null });
+    expect(kpiAccents({ ...base, openRisks: 1 }).openRisks).toEqual({
+      border: 'danger',
+      value: 'danger',
+      note: 'danger',
+    });
+  });
+
+  it('gives the warnings tile an amber outline and note from the first warning', () => {
+    expect(kpiAccents(base).warnings).toEqual({ border: null, value: null, note: null });
+    expect(kpiAccents({ ...base, warnings24h: 3 }).warnings).toEqual({
+      border: 'warning',
+      value: null,
+      note: 'warning',
+    });
+  });
+
+  it('reads webhook failures amber above 1% and green otherwise, never outlined', () => {
+    expect(kpiAccents(base).webhooks).toEqual({ border: null, value: null, note: 'success' });
+    expect(kpiAccents({ ...base, webhookFailurePct: 1 }).webhooks.note).toBe('success');
+    expect(kpiAccents({ ...base, webhookFailurePct: 1.5 }).webhooks.note).toBe('warning');
+  });
+
+  it('leaves blocked attempts and MFA coverage neutral', () => {
+    const a = kpiAccents({ ...base, openRisks: 9, warnings24h: 9, webhookFailurePct: 50 });
+    expect(a.blocked).toEqual({ border: null, value: null, note: null });
+    expect(a.mfa).toEqual({ border: null, value: null, note: null });
   });
 });

@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   applyTaxPresetsSchema,
@@ -29,7 +42,8 @@ export class TaxRatesController {
   @RequirePermission('record.tax-rates.read')
   @ApiOperation({
     summary: 'List tax rates (default first)',
-    description: 'active=true lists only the rates that can be picked today (active and inside their effective dates).',
+    description:
+      'active=true lists only the rates that can be picked today (active and inside their effective dates).',
   })
   async list(@Query(zodPipe(listTaxRatesQuerySchema)) query: ListTaxRatesQuery) {
     return this.taxRates.list(query);
@@ -39,7 +53,8 @@ export class TaxRatesController {
   @RequirePermission('record.tax-rates.create')
   @ApiOperation({
     summary: 'Create a tax rate',
-    description: 'Components of a compound rate must add up to the rate (422 TAX_RATE_INVALID). A taken name is 409 TAX_RATE_NAME_TAKEN. isDefault makes it the workspace default.',
+    description:
+      'Components of a compound rate must add up to the rate (422 TAX_RATE_INVALID). A taken name is 409 TAX_RATE_NAME_TAKEN. isDefault makes it the workspace default.',
   })
   async create(@Body(zodPipe(createTaxRateSchema)) body: CreateTaxRateInput) {
     return this.taxRates.create(body);
@@ -61,7 +76,8 @@ export class TaxRatesController {
   @RequirePermission('record.tax-rates.create')
   @ApiOperation({
     summary: 'Create tax rates from a country preset',
-    description: 'Names already in use are skipped, so applying twice adds nothing. The first row marked default becomes the workspace default when there is none.',
+    description:
+      'Names already in use are skipped, so applying twice adds nothing. The first row marked default becomes the workspace default when there is none.',
   })
   async applyPresets(@Body(zodPipe(applyTaxPresetsSchema)) body: ApplyTaxPresetsInput) {
     return this.taxRates.applyPresets(body);
@@ -78,16 +94,22 @@ export class TaxRatesController {
   @RequirePermission('record.tax-rates.update')
   @ApiOperation({
     summary: 'Edit a tax rate',
-    description: 'Requires the rowVersion you read. Invoices already written keep the rate they were priced with.',
+    description:
+      'Requires the rowVersion you read. Invoices already written keep the rate they were priced with.',
   })
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body(zodPipe(updateTaxRateSchema)) body: UpdateTaxRateInput) {
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(updateTaxRateSchema)) body: UpdateTaxRateInput,
+  ) {
     return this.taxRates.update(id, body);
   }
 
   @Post(':id/default')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.tax-rates.update')
-  @ApiOperation({ summary: 'Make this the workspace default rate (the previous default stops being one)' })
+  @ApiOperation({
+    summary: 'Make this the workspace default rate (the previous default stops being one)',
+  })
   async setDefault(@Param('id', ParseUUIDPipe) id: string) {
     return this.taxRates.setDefault(id);
   }

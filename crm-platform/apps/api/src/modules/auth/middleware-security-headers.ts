@@ -29,7 +29,8 @@ export class SecurityHeadersMiddleware implements NestMiddleware {
       res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     }
     if (NO_STORE.test(path)) {
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+      // `private` as well, so a shared cache that ignores no-store still may not keep it.
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private, max-age=0');
       res.setHeader('Pragma', 'no-cache');
     }
     next();

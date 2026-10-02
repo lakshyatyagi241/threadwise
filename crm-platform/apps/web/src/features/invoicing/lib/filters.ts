@@ -49,8 +49,10 @@ interface SearchLike {
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const isTab = (v: string | null): v is InvoiceTab => (TABS as readonly (string | null)[]).includes(v);
-const isDocType = (v: string | null): v is InvoiceDocType => (INVOICE_DOC_TYPES as readonly (string | null)[]).includes(v);
+const isTab = (v: string | null): v is InvoiceTab =>
+  (TABS as readonly (string | null)[]).includes(v);
+const isDocType = (v: string | null): v is InvoiceDocType =>
+  (INVOICE_DOC_TYPES as readonly (string | null)[]).includes(v);
 const day = (v: string | null) => (isDay(v) ? v.slice(0, 10) : '');
 
 /** Reads the state from the address; unknown or malformed values fall back to the defaults instead of failing. */
@@ -94,7 +96,15 @@ export function filtersToSearch(f: InvoiceFilters): string {
 
 type NarrowingFilters = Pick<
   InvoiceFilters,
-  'q' | 'contact' | 'issuedFrom' | 'issuedTo' | 'dueFrom' | 'dueTo' | 'currency' | 'docType' | 'mine'
+  | 'q'
+  | 'contact'
+  | 'issuedFrom'
+  | 'issuedTo'
+  | 'dueFrom'
+  | 'dueTo'
+  | 'currency'
+  | 'docType'
+  | 'mine'
 >;
 
 /** Anything the toolbar narrowed (the tab and the order do not count). */
