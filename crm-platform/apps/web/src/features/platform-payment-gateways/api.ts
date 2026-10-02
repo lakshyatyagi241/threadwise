@@ -34,7 +34,8 @@ export const setGatewayActive = (id: string, body: SetPaygwGatewayActiveRequest)
   });
 
 /** Workspace side: through the staff proxy (`/api/v2/*`). */
-export const checkoutKey = (kind: string, ...rest: unknown[]) => ['billing', 'checkout', kind, ...rest] as const;
+export const checkoutKey = (kind: string, ...rest: unknown[]) =>
+  ['billing', 'checkout', kind, ...rest] as const;
 
 export const fetchPlanQuote = (planSlug: string, q: PaygwQuoteQuery, signal?: AbortSignal) =>
   apiFetch(`/billing/checkout/plans/${encodeURIComponent(planSlug)}/quote`, {
@@ -46,7 +47,11 @@ export const fetchPlanQuote = (planSlug: string, q: PaygwQuoteQuery, signal?: Ab
 export const fetchWalletQuote = (q: PaygwQuoteQuery & { amount: string }, signal?: AbortSignal) =>
   apiFetch('/billing/checkout/wallet/quote', { query: q, schema: paygwQuoteSchema, signal });
 
-export const placePlanOrder = (planSlug: string, body: PlacePlanOrderRequest, idempotencyKey: string) =>
+export const placePlanOrder = (
+  planSlug: string,
+  body: PlacePlanOrderRequest,
+  idempotencyKey: string,
+) =>
   apiFetch(`/billing/checkout/plans/${encodeURIComponent(planSlug)}/orders`, {
     method: 'POST',
     body,
@@ -64,4 +69,8 @@ export const placeWalletOrder = (body: PlaceWalletOrderRequest, idempotencyKey: 
 
 export const ORDERS_KEY = ['billing', 'orders'] as const;
 export const fetchOrders = (cursor?: string, signal?: AbortSignal) =>
-  apiFetch('/billing/orders', { query: { limit: 25, cursor }, schema: paygwOrdersResponseSchema, signal });
+  apiFetch('/billing/orders', {
+    query: { limit: 25, cursor },
+    schema: paygwOrdersResponseSchema,
+    signal,
+  });

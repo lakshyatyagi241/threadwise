@@ -39,17 +39,16 @@ export function GatewaysPage() {
   const currencies = useMemo(() => currencyChoices(items), [items]);
 
   if (q.isPending) {
-    return <LoadingBlock className="flex min-h-64 items-center justify-center text-muted-foreground" />;
+    return (
+      <LoadingBlock className="flex min-h-64 items-center justify-center text-muted-foreground" />
+    );
   }
   if (q.isError) return <ErrorBlock error={q.error} onRetry={() => void q.refetch()} />;
 
   const summary = q.data.summary;
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={t('title')}
-        description={t('description', { count: summary.total })}
-      />
+      <PageHeader title={t('title')} description={t('description', { count: summary.total })} />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile label={t('kpi.total')} value={summary.total} />

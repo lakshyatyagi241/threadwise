@@ -14,7 +14,9 @@ export function filterGateways(
   tab: RegionTab,
   search: string,
 ): PaygwGatewayItem[] {
-  return items.filter((g) => (tab === 'all' || g.regions.includes(tab)) && matchesSearch(g, search));
+  return items.filter(
+    (g) => (tab === 'all' || g.regions.includes(tab)) && matchesSearch(g, search),
+  );
 }
 
 /** Live counts for the tab labels (counted before the search, as tabs are a category, not a result). */

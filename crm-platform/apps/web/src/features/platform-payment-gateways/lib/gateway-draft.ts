@@ -34,7 +34,9 @@ export function isDirty(g: PaygwGatewayItem, d: GatewayDraft): boolean {
 
 /** The PATCH body. Blank inputs are left out so a stored secret survives; a field typed AND cleared counts as typed. */
 export function buildUpdate(g: PaygwGatewayItem, d: GatewayDraft): UpdatePaygwGatewayRequest {
-  const credentials = Object.fromEntries(Object.entries(d.values).filter(([, v]) => v.trim() !== ''));
+  const credentials = Object.fromEntries(
+    Object.entries(d.values).filter(([, v]) => v.trim() !== ''),
+  );
   const sort = Number.parseInt(d.sortOrder, 10);
   return {
     mode: d.mode,
