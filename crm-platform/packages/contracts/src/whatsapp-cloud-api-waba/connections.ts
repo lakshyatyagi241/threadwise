@@ -150,6 +150,31 @@ export const updateConnectionInputSchema = z.object({
 });
 export type UpdateConnectionInput = z.infer<typeof updateConnectionInputSchema>;
 
+// --- health ----------------------------------------------------------------------------------------------------------
+
+export const wabaHealthSeveritySchema = z.enum(['ok', 'warning', 'error']);
+export type WabaHealthSeverity = z.infer<typeof wabaHealthSeveritySchema>;
+
+export const wabaHealthIssueSchema = z.object({
+  /** Stable key the screen translates from; branch on this, never on `title`. */
+  key: z.string(),
+  severity: z.enum(['warning', 'error']),
+  title: z.string(),
+  solution: z.string(),
+});
+export type WabaHealthIssue = z.infer<typeof wabaHealthIssueSchema>;
+
+/** `GET /v2/waba/numbers/:id/health`: the number as Meta reports it right now, plus what is wrong with it (WD-WABA-021, 022). */
+export const wabaHealthSchema = z.object({
+  connection: wabaConnectionSchema,
+  overall: wabaHealthSeveritySchema,
+  issues: z.array(wabaHealthIssueSchema),
+  /** The token with its middle masked; never the token. Null when none is stored. */
+  tokenHint: z.string().nullable(),
+  checkedAt: z.string().datetime(),
+});
+export type WabaHealth = z.infer<typeof wabaHealthSchema>;
+
 // --- business profile ------------------------------------------------------------------------------------------------
 
 /** The verticals Meta accepts (taken from Geta's profile validator). */
