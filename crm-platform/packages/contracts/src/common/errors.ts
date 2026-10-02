@@ -154,6 +154,22 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // campaigns (WD-CAMP)
+  /** Nobody on the audience can be messaged. */
+  CAMP_NO_RECIPIENTS: 'CAMP_NO_RECIPIENTS',
+  /** Edit: only draft, scheduled or paused campaigns can change. */
+  CAMP_NOT_EDITABLE: 'CAMP_NOT_EDITABLE',
+  /** Resend: only a finished campaign can be sent again. */
+  CAMP_NOT_RESENDABLE: 'CAMP_NOT_RESENDABLE',
+  /** Resend: nobody matches the scope. */
+  CAMP_NOTHING_TO_RESEND: 'CAMP_NOTHING_TO_RESEND',
+  /** The template cannot be used for a campaign (not approved, OTP, quality, media). */
+  CAMP_TEMPLATE_NOT_ALLOWED: 'CAMP_TEMPLATE_NOT_ALLOWED',
+  /** The auto-end date is not after the send date. */
+  CAMP_EXPIRY_BEFORE_SEND: 'CAMP_EXPIRY_BEFORE_SEND',
+  /** The campaign cannot be started or resumed in its current status. */
+  CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
+
   // deals and pipelines (WD-DEAL)
   /** The stage belongs to a different pipeline than the deal (WaDesk ignored it, defaulted it, or 422'd by path). */
   DEAL_STAGE_MISMATCH: 'DEAL_STAGE_MISMATCH',
