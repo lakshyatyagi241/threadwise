@@ -2,6 +2,7 @@
  * workspaces-teams-tenancy: tables ported from WaDesk. Mirrors migrations/20261001102500_wsp_wadesk_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
   bigint,
   boolean,
@@ -14,12 +15,13 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { aiAgents } from '../ai-agents-training/tables';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
-import { packages } from '../plans-subscriptions-trials/tables';
+import { plans } from '../plans-subscriptions-trials/plans';
 import { devices, waProviderConfigs } from '../whatsapp-devices-baileys/tables';
 
 export const impersonationSessions = pgTable(
@@ -129,10 +131,14 @@ export const workspaceAddons = pgTable(
     foreignKey({
       name: 'fk_workspace_addons_package_id',
       columns: [t.packageId],
-      foreignColumns: [packages.id],
+      foreignColumns: [plans.id],
     }).onDelete('restrict'),
     index('idx_workspace_addons_package_id').on(t.orgId, t.packageId),
     index('idx_workspace_addons_status').on(t.orgId, t.status),
+    // one purchase = one row: a replayed order finalisation is a no-op (20261002130000_add_addon_registry.sql)
+    uniqueIndex('uq_workspace_addons_order')
+      .on(t.orgId, t.orderId, t.packageId)
+      .where(sql`${t.orderId} IS NOT NULL`),
   ],
 );
 
