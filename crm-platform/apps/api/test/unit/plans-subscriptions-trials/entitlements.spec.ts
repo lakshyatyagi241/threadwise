@@ -39,6 +39,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
     overrides: {},
     planLimits: {},
     planFeatures: {},
+    state: 'paid_active',
     ...over,
   };
 }

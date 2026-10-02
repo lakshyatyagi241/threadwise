@@ -281,6 +281,8 @@ export const planActionSchema = z.enum([
   'upgrade',
   'choose',
   'downgrade_unavailable',
+  /** A workspace admin may move to a cheaper plan on the plans page (the owner's rule: upgrade and downgrade are both self-serve). */
+  'downgrade',
 ]);
 export type PlanAction = z.infer<typeof planActionSchema>;
 

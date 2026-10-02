@@ -346,13 +346,13 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-PLAN-008 | in-progress |  | 4-step default resolver + trial rule done and tested; registration default is a dropdown of active plans; billing_plan_scope not built |
 | TW-PLAN-009 | todo |  |  |
 | TW-PLAN-010 | todo |  |  |
-| TW-PLAN-011 | in-progress |  | partial: GET /v2/plans cards with the upgrade/downgrade/current classification (server side); /account/plans is a placeholder, no yearly toggle/FAQ/compare/checkout |
-| TW-PLAN-012 | todo |  |  |
-| TW-PLAN-013 | todo |  |  |
-| TW-PLAN-014 | todo |  |  |
-| TW-PLAN-015 | todo |  |  |
-| TW-PLAN-016 | todo |  |  |
-| TW-PLAN-017 | in-progress |  | partial: assertFeature/assertWithinLimit and the 422 PLAN_FEATURE_LOCKED / PLAN_LIMIT_REACHED problem; no quota ledger, no route guard |
+| TW-PLAN-011 | in-progress |  | workspace picker built on /account/plans: validity banner, cards with server-decided upgrade/downgrade/switch, compare table, confirm dialog; owner rule: admins may downgrade online (intended deviation). Not built: yearly toggle, add-ons, FAQ (TW-PLAN-009/010 settings) |
+| TW-PLAN-012 | blocked |  | needs PAYGW recurring subscriptions (no subscriptions table writer yet); no cancel button shown instead of a dead one |
+| TW-PLAN-013 | done |  | trial/renewal bar from GET /v2/billing/status, mounted in the app shell; renewal bar has no Cancel auto-renew (TW-PLAN-012 blocked); renew link goes to plans (Reference quirk fixed deliberately: no broken route guard) |
+| TW-PLAN-014 | done |  | GET /v2/billing/usage + /account/usage pane: 11 meters from the same counts enforcement uses, calendar-month reset, features unlocked; no wallet tiles (WALLET domain) |
+| TW-PLAN-015 | done |  | global TrialGateGuard after auth: 402 PLAN_TRIAL_EXPIRED + web redirect; API keys gated too (Reference leak closed); fails open on internal error; allow-list by path segment + @AllowWhenTrialExpired |
+| TW-PLAN-016 | done |  | planStateOf/validityOf + entitlement resolver uses state: lapsed paid plan falls back to the free plan's caps and flags; per-workspace org_plan_state; operator attach (PUT /v2/platform/workspace-plans/:id) and workspace change (POST /v2/billing/plan) are the writers beside PAYGW |
+| TW-PLAN-017 | in-progress |  | guards unchanged; meters now show the same counts; quota ledger (TW-PLAN-018) still todo |
 | TW-PLAN-018 | todo |  |  |
 | TW-PLAN-019 | todo |  |  |
 | TW-PLAN-020 | todo |  |  |

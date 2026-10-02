@@ -33,6 +33,7 @@ import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
+import { TrialGateGuard } from './modules/plans-subscriptions-trials/trial-gate.guard';
 import { PlatformSettingsModule } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
 import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
@@ -152,6 +153,9 @@ import { HealthModule } from './health/health.module';
     // unverified under 'block', MFA or password change required) is refused
     // here with a code the web app maps to the right lock screen.
     { provide: APP_GUARD, useClass: AccountGateGuard },
+    // The free-trial hard gate (TW-PLAN-015): a workspace whose trial ended gets 402 on every feature route until it picks a plan.
+    // After the account gate so a locked account is reported as locked first.
+    { provide: APP_GUARD, useExisting: TrialGateGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
   ],
