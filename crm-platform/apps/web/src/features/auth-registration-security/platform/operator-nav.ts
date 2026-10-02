@@ -71,6 +71,11 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/i18n/usage',
     labelKey: 'localization-translation.nav.usage',
     groupKey: 'localization-translation.nav.group',
+  {
+    id: 'system',
+    href: '/admin/system',
+    labelKey: 'install-update-licensing.system.nav.item',
+    groupKey: 'install-update-licensing.system.nav.group',
   },
 ];
 
