@@ -1749,7 +1749,7 @@ Deliberate differences from Reference in the rebuilt ticket core (TW-SUPP-001..0
 - Moving to `open`, `in_progress` or `pending` always clears `resolved_at` (Reference kept a stale value on closed to open).
 - Assignment accepts only active `super_admin` or `support` operators (Reference accepted any user id); staff are platform operators, so
   `assigned_agent_id` references `platform_operators`.
-- Unknown ticket on a priority change is a 404 (Reference silently succeeded); every operator write takes `rowVersion` (409 when stale).
+- Unknown ticket on a priority change is a 404 (Reference silently succeeded); the operator status, priority and assignment writes take `rowVersion` (409 when stale; a reply or note does not, it only appends).
 - Operator writes need the `super_admin` or `support` role; auditors read only (Reference enforced nothing).
 - The customer email outcome is stored on the message (`email_status`) and shown in the panel; Reference's banner said "sent" even when delivery threw.
 - Kept as in Reference: a customer reply on `pending` leaves it `pending`; no per-user rate limit, no dedupe; `reason` is stored and filterable.
