@@ -1,0 +1,189 @@
+{
+  "plans-subscriptions-trials": {
+    "nav": {
+      "usage": "Plan and usage",
+      "workspacePlans": "Workspace plans",
+      "group": "Subscriptions"
+    },
+    "limits": {
+      "monthly_messages": "Messages per month",
+      "broadcasts": "Broadcasts",
+      "devices": "Connected numbers",
+      "users": "Team seats",
+      "contacts": "Contacts",
+      "tags": "Tags",
+      "pipelines": "Pipelines",
+      "appointments": "Appointments per month",
+      "templates": "Templates",
+      "flows": "Flows",
+      "autoreplies": "Auto-replies"
+    },
+    "features": {
+      "automation": "Automation",
+      "ai_assistants": "AI assistants",
+      "calling": "WhatsApp calling",
+      "woocommerce": "WooCommerce",
+      "shopify": "Shopify",
+      "analytics": "Analytics",
+      "remove_branding": "Remove branding",
+      "sales_pipeline": "Sales pipeline",
+      "appointment_booking": "Appointment booking"
+    },
+    "common": {
+      "unlimited": "Unlimited",
+      "loading": "Loading",
+      "retry": "Try again",
+      "dash": "None",
+      "date": "{date, date, long}"
+    },
+    "plans": {
+      "title": "Plans",
+      "description": "Every plan is for this workspace only. Pick the one that fits and switch whenever you need to.",
+      "empty": "No plans have been set up yet. Ask your platform administrator to create one.",
+      "readOnly": "Only workspace owners and admins can change the plan. You can see the plans and what each includes.",
+      "mostPopular": "Most popular",
+      "perUnit": {
+        "days": "{count, plural, one {/ day} other {/ {count} days}}",
+        "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
+        "months": "{count, plural, one {/ month} other {/ {count} months}}",
+        "years": "{count, plural, one {/ year} other {/ {count} years}}"
+      },
+      "oneTime": "one-time",
+      "free": "Free",
+      "customQuote": "Custom",
+      "messagesUnlimited": "Unlimited messages a month",
+      "messagesLimited": "{count, number} messages a month",
+      "showAll": "Show all {count} features",
+      "showLess": "Show fewer",
+      "feature": {
+        "limit": "{label}: {value}",
+        "enabled": "{label}"
+      },
+      "banner": {
+        "expired": "Your plan expired on {date}. Paid features are paused. Renew below to restore them.",
+        "activeUntil": "Your plan is active until {date} ({days, plural, one {# day} other {# days}} left).",
+        "activeForever": "Your plan has no end date.",
+        "trial": "Your free trial ends on {date} ({days, plural, one {# day} other {# days}} left). Choose a plan to keep your workspace active.",
+        "trialEnded": "Your free trial ended on {date}. Choose a plan to keep using your workspace.",
+        "free": "You are on the {plan} plan.",
+        "customQuote": "Your plan is managed with our sales team."
+      },
+      "action": {
+        "current": "Current plan",
+        "upgrade": "Upgrade to {name}",
+        "downgrade": "Switch to {name}",
+        "choose": "Choose {name}",
+        "continueFree": "Continue free",
+        "contactSales": "Talk to sales",
+        "working": "Working"
+      },
+      "confirm": {
+        "title": "Switch to {name}?",
+        "downgradeBody": "Your workspace moves to {name} straight away. Nothing you have is deleted, but anything above the new limits can no longer be added to until you are back under them.",
+        "switchBody": "Your workspace moves to {name} straight away.",
+        "keepsPeriod": "The paid time you have left stays on your workspace.",
+        "confirm": "Switch plan",
+        "cancel": "Keep my plan"
+      },
+      "result": {
+        "switched": "Your workspace is now on {name}.",
+        "overLimit": "These are above the new plan's limits, so you can't add more until you are under them:",
+        "overLimitRow": "{label}: {used, number} of {limit, number}"
+      },
+      "errors": {
+        "PLAN_CHECKOUT_REQUIRED": "That plan needs a payment. Continue to checkout.",
+        "PLAN_CHANGE_NOT_ALLOWED": "That plan can't be selected right now.",
+        "forbidden": "You don't have permission to change the plan.",
+        "generic": "We couldn't change the plan. Please try again."
+      },
+      "compare": {
+        "title": "Compare plans",
+        "feature": "Feature",
+        "included": "Included",
+        "notIncluded": "Not included",
+        "showAll": "Show all {count} rows",
+        "showLess": "Show fewer rows"
+      },
+      "usageLink": "See usage and limits"
+    },
+    "bar": {
+      "trial": "{days, plural, one {You have # day} other {You have # days}} to explore this trial workspace. Connect a channel to unlock all features.",
+      "trialEnded": "Your free trial has ended. Buy a plan to unlock all features.",
+      "renew": "{days, plural, one {Your plan expires in # day} other {Your plan expires in # days}} on {date}. Renew to keep your features.",
+      "buy": "Buy a plan",
+      "renewNow": "Renew now",
+      "connect": "Connect a channel"
+    },
+    "usage": {
+      "title": "Plan and usage",
+      "description": "What this workspace is on, what it has used and what it can still do.",
+      "currentPlan": "Current plan",
+      "upgrade": "Upgrade plan",
+      "validUntil": "Valid until {date}",
+      "resets": "Monthly allowances reset on {date}.",
+      "meters": "Usage and limits",
+      "used": "{used, number} used",
+      "ofLimit": "{used, number} of {limit, number}",
+      "ofUnlimited": "{used, number} used, no limit",
+      "month": "this month",
+      "total": "in total",
+      "featuresTitle": "What your plan includes",
+      "unlocked": "Included",
+      "locked": "Not on your plan",
+      "moreOnHigher": "{count, plural, one {# more feature unlocks} other {# more features unlock}} on a higher plan.",
+      "comparePlans": "Compare plans"
+    },
+    "operator": {
+      "title": "Workspace plans",
+      "description": "See which plan every workspace is on. Super admins can attach a plan to a workspace and set limits for that workspace alone.",
+      "readOnly": "Only super admins can change a workspace's plan or limits.",
+      "search": "Search by workspace name or slug",
+      "allPlans": "All plans",
+      "columns": {
+        "workspace": "Workspace",
+        "plan": "Plan",
+        "state": "State",
+        "ends": "Ends",
+        "overrides": "Own limits",
+        "actions": "Actions"
+      },
+      "state": {
+        "no_plan": "No plan record",
+        "free_trial": "Free trial",
+        "free_trial_expired": "Trial ended",
+        "free": "Free",
+        "paid_active": "Active",
+        "paid_lapsed": "Lapsed",
+        "custom_quote": "Custom"
+      },
+      "never": "Never",
+      "none": "None",
+      "overrideCount": "{count, plural, one {# override} other {# overrides}}",
+      "attach": "Attach plan",
+      "edit": "Plan and limits",
+      "empty": "No workspaces match.",
+      "loadMore": "Load more",
+      "dialog": {
+        "title": "Plan and limits for {name}",
+        "plan": "Plan",
+        "endsAt": "Plan ends",
+        "endsHint": "Leave empty to use the plan's own period when the plan changes, or keep the current date when it stays the same.",
+        "neverEnds": "Never expires",
+        "limits": "This workspace's limits",
+        "limitsHint": "Empty uses the plan's limit. 0 or -1 means unlimited for this workspace.",
+        "features": "This workspace's features",
+        "featureDefault": "Plan default",
+        "featureOn": "Always on",
+        "featureOff": "Always off",
+        "planLimit": "Plan: {value}",
+        "save": "Save",
+        "saving": "Saving",
+        "cancel": "Cancel",
+        "saved": "Plan saved for {name}.",
+        "changesTrial": "Changing the plan ends the workspace's free trial.",
+        "conflict": "Someone changed this workspace's plan. Reload and try again.",
+        "failed": "Could not save the plan."
+      }
+    }
+  }
+}

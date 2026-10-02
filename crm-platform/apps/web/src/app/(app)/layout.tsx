@@ -5,6 +5,7 @@ import { AppShell } from '@/components/shell/app-shell';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
@@ -40,7 +41,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
         theme={theme}
         navFooter={<WorkspaceSwitcher />}
-        banners={<AccountBanners key="banners" />}
+        banners={
+          <>
+            <TrialBar />
+            <AccountBanners key="banners" />
+          </>
+        }
         bell={<NotificationBell key="bell" />}
       >
         <AccountGate>{children}</AccountGate>

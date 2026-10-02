@@ -144,18 +144,28 @@ export function classifyPlanAction(
   current: Pick<PlanFacts, 'slug' | 'isFree' | 'isCustomQuote' | 'amount'> | null,
   currentSlug: string | null,
   target: Pick<PlanFacts, 'slug' | 'isFree' | 'isCustomQuote' | 'amount'>,
+  /**
+   * The workspace plans page lets an admin move to a cheaper plan (the owner's rule), so a cheaper paid plan, and any free
+   * plan below a paid current plan, read `downgrade` instead of `downgrade_unavailable`. The onboarding step keeps the
+   * WaDesk rule (default false).
+   */
+  allowDowngrade = false,
 ): PlanAction {
   if (currentSlug !== null && target.slug === currentSlug) return 'current';
   const kind = planKind(target);
   if (kind === 'custom_quote') return 'contact_sales';
-  if (kind === 'free') return 'continue_free';
+  const below = allowDowngrade ? 'downgrade' : 'downgrade_unavailable';
+  const currentKind = current ? planKind(current) : null;
+  if (kind === 'free') {
+    if (!allowDowngrade) return 'continue_free';
+    return currentKind === 'paid' || currentKind === 'custom_quote' ? 'downgrade' : 'choose';
+  }
   if (!current) return 'choose';
-  const currentKind = planKind(current);
-  if (currentKind === 'custom_quote') return 'downgrade_unavailable';
+  if (currentKind === 'custom_quote') return below;
   if (currentKind === 'free') return 'upgrade';
   const diff = moneyCents(target.amount) - moneyCents(current.amount);
   if (diff > 0) return 'upgrade';
-  if (diff < 0) return 'downgrade_unavailable';
+  if (diff < 0) return below;
   return 'choose';
 }
 
@@ -174,6 +184,7 @@ export function buildPlanCard(
   plan: PlanFacts,
   currentSlug: string | null,
   currentPlan: PlanFacts | null,
+  allowDowngrade = false,
 ): PlanCard {
   const kind = planKind(plan);
   const paid = kind === 'paid';
@@ -201,7 +212,7 @@ export function buildPlanCard(
     chips: pickChips(plan.features),
     highlighted: plan.isHighlighted,
     current: currentSlug !== null && plan.slug === currentSlug,
-    action: classifyPlanAction(currentPlan, currentSlug, plan),
+    action: classifyPlanAction(currentPlan, currentSlug, plan, allowDowngrade),
     ctaLabel: plan.ctaLabel,
   };
 }

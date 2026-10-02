@@ -12,6 +12,7 @@ export interface OperatorNavItem {
 }
 
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
+import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
@@ -54,6 +55,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  // per-workspace plans and limits (PLAN domain)
+  ...PLAN_OPERATOR_NAV,
   // platform settings, branding and storage (SET domain)
   ...SET_OPERATOR_NAV,
   // roles and permissions domain (RBAC): Roles, Permissions, Staff roles
