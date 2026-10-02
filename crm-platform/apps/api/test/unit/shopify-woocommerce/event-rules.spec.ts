@@ -6,6 +6,8 @@ import {
   codRisk,
   isShopifyCod,
   isWooCod,
+  offerContext,
+  winbackContext,
   matchOutOfStock,
   readCodReply,
   renderBody,
@@ -219,5 +221,34 @@ describe('back in stock (TW-ECOM-020)', () => {
     expect(matchOutOfStock('notify me about sh-r', products)?.name).toBe('Red Shirt');
     expect(matchOutOfStock('notify me for a green hat', products)).toBeUndefined();
     expect(matchOutOfStock('anything', [{ name: '', sku: null }])).toBeUndefined();
+  });
+});
+
+describe('offer and win-back variables (TW-ECOM-014, 015)', () => {
+  const product = { name: 'Red Shirt', priceMinor: 1999, productUrl: 'https://acme.test/p/red' };
+  it('offer: first name, product, price and link; positional ends with the coupon, else the price', () => {
+    const withCoupon = offerContext(store, product, 'SAVE10', 'Ada Lovelace');
+    expect(withCoupon.positional).toEqual(['Ada', 'Red Shirt', 'SAVE10']);
+    expect(withCoupon.vars).toMatchObject({
+      price: '19.99 USD',
+      product_url: 'https://acme.test/p/red',
+      store_name: 'Acme',
+    });
+    expect(offerContext(store, product, undefined, null).positional).toEqual([
+      'there',
+      'Red Shirt',
+      '19.99 USD',
+    ]);
+  });
+  it('offer without a product leaves product and price empty', () => {
+    expect(offerContext(store, undefined, 'X', '  ').positional).toEqual(['there', '', 'X']);
+  });
+  it('win-back: there, the store name, the coupon', () => {
+    expect(winbackContext(store, 'BACK5').positional).toEqual(['there', 'Acme', 'BACK5']);
+    expect(winbackContext({ ...store, storeName: null }, undefined).positional).toEqual([
+      'there',
+      'https://acme.test/',
+      '',
+    ]);
   });
 });

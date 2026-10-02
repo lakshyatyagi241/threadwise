@@ -371,3 +371,37 @@ export function matchOutOfStock<P extends { name: string; sku: string | null }>(
     return (name !== '' && t.includes(name)) || (sku !== '' && t.includes(sku));
   });
 }
+
+// ── Offer and win-back broadcasts (TW-ECOM-014, 015) ───────────────────
+
+/** The variables of an offer sent to one contact. The positional default is `[name, product, coupon or price]`. */
+export function offerContext(
+  store: StoreFacts,
+  product: { name: string; priceMinor: number; productUrl: string | null } | undefined,
+  coupon: string | undefined,
+  contactName: string | null,
+): EventContext {
+  // Reference used the contact's first name; a contact here has one name field, so its first word stands in.
+  const name = (contactName ?? '').trim().split(/\s+/)[0] || 'there';
+  const currency = store.currency ?? '';
+  const price = product ? `${(product.priceMinor / 100).toFixed(2)} ${currency}`.trim() : '';
+  return {
+    vars: {
+      name,
+      first_name: name,
+      product_name: product?.name ?? '',
+      price,
+      product_url: product?.productUrl ?? '',
+      coupon_code: coupon ?? '',
+      store_name: label(store),
+      currency,
+    },
+    positional: [name, product?.name ?? '', coupon || price],
+  };
+}
+
+/** The variables of a win-back message. No customer name is known from the order history, so it is "there". */
+export const winbackContext = (store: StoreFacts, coupon: string | undefined): EventContext => ({
+  vars: { name: 'there', coupon_code: coupon ?? '', store_name: label(store) },
+  positional: ['there', label(store), coupon ?? ''],
+});
