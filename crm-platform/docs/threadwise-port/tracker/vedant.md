@@ -123,7 +123,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-001 | blocked |  | no bridge process in this repo until decision E |
 | TW-NODE-002 | backend-done |  | NodeTokenGuard on the one bridge-facing route; the bridge's other routes became in-process commands (Redis), so no other route needs it |
 | TW-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
-| TW-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
+| TW-NODE-004 | backend-done |  | worker heartbeat in Redis (one key per running worker, 90 s); the console health card's Node check reads it (workers and devices held), falling back to the saved-address probe when no worker reports; no HTTP surface on the worker by design |
 | TW-NODE-005 | backend-done |  | registry is a per-worker map plus a Redis lease per device; no in-memory schedules or boot sync; shutdown releases leases |
 | TW-NODE-006 | backend-done |  | shutdown closes connections and releases leases, keeps sessions, never unlinks; enableShutdownHooks already on |
 | TW-NODE-007 | backend-done |  | restore at boot and every pass: devices with a saved session (3+ rows) and no owner are opened, staggered; thin sessions reported Disconnected; also the failover when a worker dies |
@@ -134,7 +134,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-012 | backend-done |  | status goes to devices.status (same buckets as Reference), an outbox event device.status_changed and Redis for the QR and progress |
 | TW-NODE-013 | backend-done |  | per-device proxy (http, socks5) read at every connect, probed through the proxy, fail-closed, result kept on the device; NOT verified against a real proxy |
 | TW-NODE-014 | backend-done |  | liveness: owner touches last_seen_at, a device untouched for 90 s flips to disconnected; the other sweeps belong to their own domains as BullMQ jobs |
-| TW-NODE-015 | in-progress |  | CAMP's dispatcher now sends custom (non-template) campaigns on the unofficial engine and Twilio through the same registry adapter as broadcasts; not exercised end to end on this engine; template-kind content is Cloud API only |
+| TW-NODE-015 | backend-done |  | CAMP's dispatcher sends custom campaigns on the unofficial engine and Twilio through the registry adapter; e2e: real dispatcher, real adapter, fake socket; template-kind content stays Cloud API only |
 | TW-NODE-016 | backend-done |  | capture and normalization of every message (filters, 10-minute replay guard, sender and LID resolution, text priority, media, location, contact, reaction, forwarded) with per-device dedup, delivered to registered consumers; media bytes wait for storage (F5) |
 | TW-NODE-017 | backend-done |  | unofficial engine is an inbox channel kind (whatsapp_qr), one channel per device; customer messages go through the inbox ingest queue (replaces the inbound-message HTTP endpoint); small files kept, large or failed ones arrive as text saying so; groups are not threads; not run against a live number |
 | TW-NODE-018 | backend-done |  | phone-typed echoes are recorded on the thread as outbound once (ledger); group messages stay in the group directory; echo files and places are described, not copied; mirroring auto-replies belongs with 019 |
@@ -159,7 +159,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-037 | backend-done |  | broadcasts reach the unofficial engine and Twilio through TransportEngineSender (rendered text, media as link, header/footer); pacing, cap, lease already in BCAST |
 | TW-NODE-038 | backend-done |  | same adapter as 037; per-number daily cap and gaps in BCAST |
 | TW-NODE-039 | wontfix |  | dead code in Reference (campaign engine in Node is never reached and throws a ReferenceError) |
-| TW-NODE-040 | in-progress |  | campaign delivery reports from the unofficial engine reach CampaignReceiptsService through the receipt router; the Node-to-Laravel callbacks themselves are in-process, nothing else to port |
+| TW-NODE-040 | backend-done |  | campaign delivery and read reports reach CampaignReceiptsService through the receipt router; proven in the campaign e2e on the unofficial engine |
 | TW-NODE-041 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | TW-NODE-042 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | TW-NODE-043 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
