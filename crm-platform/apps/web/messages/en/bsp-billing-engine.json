@@ -1,0 +1,196 @@
+{
+  "bsp-billing-engine": {
+    "nav": {
+      "income": "Message income",
+      "reseller": "Reseller billing (Meta)",
+      "billing": "Message billing",
+      "groups": {
+        "billing": "Billing"
+      }
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "requestId": "Request id",
+      "loadFailed": "This could not be loaded.",
+      "forbidden": "You do not have access to this.",
+      "cancel": "Cancel",
+      "dismiss": "Dismiss"
+    },
+    "errors": {
+      "notConfigured": "Connect your Meta credit line first (step 1).",
+      "currencyUnsupported": "Meta accepts only AUD, EUR, GBP, IDR, INR and USD for a credit line.",
+      "wabaNotFound": "That number is not a connected WhatsApp Business number of this workspace.",
+      "metaRejected": "Meta refused: {detail}",
+      "notAttached": "Only an attached credit line can be revoked.",
+      "resellerUnavailable": "Reseller billing is not available yet: the platform's Meta credit line is not set up.",
+      "conflict": "Someone else changed this. Reload and try again.",
+      "forbidden": "Only super admins can do this.",
+      "validation": "Check the highlighted fields.",
+      "generic": "Something went wrong. Try again."
+    },
+    "console": {
+      "title": "Meta credit and keys",
+      "subtitle": "Connect your Meta business, then share your credit line with customers so Meta bills you and you bill them.",
+      "linkIncome": "Message income",
+      "optionalTitle": "Optional, only for real reselling",
+      "optionalBody": "You need Solution Partner status and an approved credit line with Meta. Everything else (wallets, prices, plans) works without it.",
+      "readOnly": "You can look at this page, but only super admins can change it.",
+      "step1": {
+        "title": "1. Connect your Meta business",
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "businessId": "Meta business id",
+        "businessIdPlaceholder": "Numeric id",
+        "token": "System-user token",
+        "tokenStored": "Stored. Leave blank to keep it.",
+        "tokenPlaceholder": "Paste the token",
+        "tokenHint": "Needs business_management, whatsapp_business_management and whatsapp_business_messaging. It is stored encrypted and never shown again.",
+        "clearToken": "Remove the stored token",
+        "creditLine": "Extended credit line id",
+        "creditLineHint": "Optional. Blank means the first credit line of your business is found and remembered.",
+        "graphVersion": "Graph API version",
+        "graphVersionHint": "Looks like v26.0. Blank uses v26.0.",
+        "ratesEndpoint": "Meta rates endpoint",
+        "ratesEndpointHint": "Optional https address that returns Meta's price list. Blank uses the bundled rate card or an uploaded file.",
+        "baseCurrency": "Base currency",
+        "baseCurrencyHint": "The currency of the income figures. Three letters, for example USD.",
+        "autoAttach": "Attach automatically",
+        "autoAttachHint": "A reseller workspace that connects a number gets your credit line without anyone pressing a button.",
+        "autoCurrency": "Bill in",
+        "auto": "Auto (base currency)",
+        "save": "Save connection",
+        "saved": "Connection saved.",
+        "invalid": {
+          "graphVersion": "Use the form v26.0.",
+          "ratesEndpoint": "Enter an https address.",
+          "autoAttachCurrency": "Meta does not accept this currency.",
+          "baseCurrency": "Use a three letter currency code.",
+          "businessId": "Enter at most 64 characters."
+        }
+      },
+      "step2": {
+        "title": "2. Attach one customer by hand",
+        "hintAuto": "Automatic attach is on: new numbers of reseller workspaces are attached for you.",
+        "hintManual": "Pick a connected number and the currency it is billed in.",
+        "attachAll": "Attach all connected now",
+        "attachAllTitle": "Attach every connected number?",
+        "attachAllBody": "Your credit line is shared with every connected number of a reseller workspace that is not attached yet. Each is a call to Meta.",
+        "attachAllConfirm": "Attach all",
+        "attachAllDone": "{attached} attached, {failed} failed, {skipped} already set up.",
+        "attachAllMore": "{remaining} more are waiting. Run it again.",
+        "empty": "No customer has connected a WhatsApp Business (Cloud API) number yet. It appears here once they do.",
+        "number": "Customer's WhatsApp number",
+        "pick": "Pick a connected number",
+        "currency": "Bill this number in",
+        "locked": "Locked once attached: Meta does not allow changing the currency later.",
+        "attach": "Attach credit line",
+        "attached": "Credit line attached to WABA {waba}.",
+        "failed": "Attach failed: {error}",
+        "finishStep1": "Finish step 1 first.",
+        "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
+        "noPhone": "no number"
+      },
+      "register": {
+        "title": "Credit lines in use",
+        "empty": "No accounts attached yet. Finish steps 1 and 2 above.",
+        "columns": {
+          "workspace": "Workspace",
+          "waba": "WABA",
+          "allocation": "Allocation id",
+          "currency": "Currency",
+          "status": "Status",
+          "action": "Action"
+        },
+        "status": {
+          "attached": "Attached",
+          "revoked": "Revoked",
+          "failed": "Failed"
+        },
+        "reseller": "Reseller billing",
+        "direct": "Pays Meta directly",
+        "revoke": "Revoke",
+        "revokeTitle": "Revoke this credit line?",
+        "revokeBody": "Meta stops billing you for this number and the customer pays Meta directly again.",
+        "revokeStillReseller": "This workspace is still on reseller billing: its wallet keeps being charged per message while Meta bills the customer directly.",
+        "revokeConfirm": "Revoke",
+        "revoked": "Credit allocation revoked.",
+        "revokeFailed": "Revoke failed: {error}",
+        "loadMore": "Load more",
+        "loadingMore": "Loading",
+        "label": "Credit allocations"
+      },
+      "guide": {
+        "title": "Setup guide",
+        "step1Title": "Business id",
+        "step1Body": "Find it in Meta Business Settings under Business info.",
+        "step2Title": "System-user token",
+        "step2Body": "Create a system user in your business and generate a token with these permissions. It is shown once.",
+        "step3Title": "Credit line",
+        "step3Body": "You need an approved extended credit line. When the id is left blank it is read from Meta automatically.",
+        "goodTitle": "Good to know",
+        "good1": "The currency of a credit line is locked once attached.",
+        "good2": "Attaching means Meta bills you, but you still set your customers' prices.",
+        "good3": "You can revoke at any time and the customer pays Meta directly again.",
+        "link": "Meta Solution Partner overview"
+      }
+    },
+    "dashboard": {
+      "title": "Reseller P&L",
+      "eyebrow": "Month",
+      "intro": "Revenue is what customers were charged for delivered messages, Meta cost is what the same messages cost you, margin is the difference. Refunded and free messages are not counted.",
+      "linkConnect": "Connect Meta",
+      "month": "Month",
+      "revenue": "Revenue (charged)",
+      "metaCost": "Meta cost",
+      "margin": "Margin (profit)",
+      "walletFloat": "Wallet float held",
+      "walletFloatHint": "Money in customer wallets, all workspaces",
+      "billed": "Billed messages",
+      "free": "Free messages",
+      "unpriced": "No Meta cost set",
+      "unpricedBanner": "{count, plural, one {# billed message has} other {# billed messages have}} no Meta cost for their country and category, so the margin counts them as pure revenue.",
+      "perWorkspace": "Per workspace",
+      "columns": {
+        "workspace": "Workspace",
+        "messages": "Msgs",
+        "revenue": "Revenue",
+        "metaCost": "Meta cost",
+        "margin": "Margin",
+        "wallet": "Wallet balance"
+      },
+      "empty": "No billed messages this month yet.",
+      "more": "Only the top workspaces by revenue are listed.",
+      "loadFailed": "The P&L could not be loaded."
+    },
+    "customer": {
+      "title": "How are messages billed?",
+      "subtitle": "Choose who bills you for WhatsApp messages sent through your connected numbers.",
+      "direct": {
+        "title": "I pay Meta directly",
+        "body": "Your own payment method is on Meta. You only need an active plan."
+      },
+      "reseller": {
+        "title": "Bill me through the platform",
+        "body": "Messages are charged per message from your wallet, and the platform's credit line is shared with your number."
+      },
+      "active": "Active",
+      "notAvailable": "Not available yet",
+      "choose": "Choose",
+      "switching": "Saving",
+      "savedReseller": "Billing set: messages are charged per message from your wallet.",
+      "savedDirect": "Billing set: Meta bills you directly.",
+      "attachSummary": "Credit line: {attached} attached, {failed} failed, {skipped} already set up.",
+      "numbers": "Your numbers",
+      "noNumbers": "No WhatsApp Business (Cloud API) number is connected yet.",
+      "noPhone": "No number shown",
+      "allocation": {
+        "none": "No credit line",
+        "attached": "Credit line attached ({currency})",
+        "failed": "Credit line failed",
+        "revoked": "Credit line revoked"
+      },
+      "readOnly": "You can see how messages are billed, but you cannot change it."
+    }
+  }
+}
