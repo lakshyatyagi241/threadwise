@@ -593,7 +593,9 @@ describe('public projection (WD-SET-011, 023, 027, 030, 033, 034, 036, 028)', ()
   });
 
   it('robots.txt follows the SEO robots directive', async () => {
-    expect((await api().get('/v2/public/robots.txt')).text).toBe('User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api\n');
+    expect((await api().get('/v2/public/robots.txt')).text).toBe(
+      'User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api\n',
+    );
     await save('seo', { robots: 'noindex, nofollow' });
     expect((await api().get('/v2/public/robots.txt')).text).toBe('User-agent: *\nDisallow: /\n');
   });

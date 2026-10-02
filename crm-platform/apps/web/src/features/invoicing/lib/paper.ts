@@ -140,7 +140,9 @@ const lineDiscountOf = (
   exp: number,
 ): PaperLine['discount'] => {
   if (!d || Number(d.value) <= 0) return null;
-  return d.kind === 'percent' ? { kind: 'percent', percent: d.value } : { kind: 'amount', amountMinor: majorToMinor(d.value, exp) };
+  return d.kind === 'percent'
+    ? { kind: 'percent', percent: d.value }
+    : { kind: 'amount', amountMinor: majorToMinor(d.value, exp) };
 };
 
 const lineTaxLabel = (name: string | null, rate: string, inclusive: boolean): string | null =>
@@ -158,7 +160,8 @@ export function paperFromDraft(
   const lines: PaperLine[] = pricing.used.map((i, k) => {
     const l = draft.lines[i]!;
     const tax = pricing.reverseCharge ? null : (pricing.taxes[k] ?? null);
-    const d = l.discount.trim() === '' ? null : decimalOf(l.discount, l.discountKind === 'percent' ? 2 : 4);
+    const d =
+      l.discount.trim() === '' ? null : decimalOf(l.discount, l.discountKind === 'percent' ? 2 : 4);
     return {
       description: l.description,
       sku: l.sku.trim() || null,
@@ -166,7 +169,10 @@ export function paperFromDraft(
       qty: decimalOf(l.qty, 4, 8) ?? '1',
       unitPriceMinor: majorToMinor(decimalOf(l.price) ?? '0', exp),
       discount: lineDiscountOf(d === null ? null : { kind: l.discountKind, value: d }, exp),
-      taxLabel: tax && tax.items.length > 0 ? lineTaxLabel(tax.name, sumPercent(tax.items), tax.inclusive) : null,
+      taxLabel:
+        tax && tax.items.length > 0
+          ? lineTaxLabel(tax.name, sumPercent(tax.items), tax.inclusive)
+          : null,
       amountMinor: pricing.result.ok ? (t.lines[k]?.netMinor ?? 0) : 0,
     };
   });
@@ -195,7 +201,10 @@ export function paperFromDraft(
     lines,
     subtotalMinor: t.subtotalMinor,
     discountMinor: t.discountMinor,
-    discountPercent: draft.discountKind === 'percent' && t.discountMinor > 0 ? draft.discountText.trim() || null : null,
+    discountPercent:
+      draft.discountKind === 'percent' && t.discountMinor > 0
+        ? draft.discountText.trim() || null
+        : null,
     shippingMinor: t.shippingMinor,
     taxRows: t.taxRows.map((r) => ({
       label: taxLabel(r.name, r.ratePercent),
@@ -254,7 +263,8 @@ export function paperFromInvoice(inv: InvoiceResponse, profile?: InvoiceProfile)
             phone: s.phone,
             logoUrl: null,
             extra: s.extra,
-            bankDetails: s.bankDetails && Object.keys(s.bankDetails).length > 0 ? s.bankDetails : null,
+            bankDetails:
+              s.bankDetails && Object.keys(s.bankDetails).length > 0 ? s.bankDetails : null,
           }
         : null),
     buyer: {
@@ -323,9 +333,19 @@ export function paperFromPublic(p: PublicInvoice): PaperModel {
       phone: p.seller.phone,
       logoUrl: p.logoUrl,
       extra: p.seller.extra,
-      bankDetails: p.seller.bankDetails && Object.keys(p.seller.bankDetails).length > 0 ? p.seller.bankDetails : null,
+      bankDetails:
+        p.seller.bankDetails && Object.keys(p.seller.bankDetails).length > 0
+          ? p.seller.bankDetails
+          : null,
     },
-    buyer: { name: p.buyer.name ?? '', address: p.buyer.address, email: null, phone: null, taxId: p.buyer.taxId, country: null },
+    buyer: {
+      name: p.buyer.name ?? '',
+      address: p.buyer.address,
+      email: null,
+      phone: null,
+      taxId: p.buyer.taxId,
+      country: null,
+    },
     showHsn: hsnRequired(p.seller.country) || p.lines.some((l) => !!l.hsnSac),
     lines: p.lines.map((l) => ({
       description: l.description,
@@ -368,5 +388,8 @@ export function paperFromPublic(p: PublicInvoice): PaperModel {
 /** True when the paper adds up: the lines make the subtotal, and subtotal - discount + added tax + shipping makes the total. */
 export function paperAddsUp(m: PaperModel): boolean {
   const lines = m.lines.reduce((acc, l) => acc + l.amountMinor, 0);
-  return lines === m.subtotalMinor && m.subtotalMinor - m.discountMinor + m.taxAddedMinor + m.shippingMinor === m.totalMinor;
+  return (
+    lines === m.subtotalMinor &&
+    m.subtotalMinor - m.discountMinor + m.taxAddedMinor + m.shippingMinor === m.totalMinor
+  );
 }

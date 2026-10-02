@@ -88,7 +88,10 @@ export const dealsApi = {
       }),
     );
   },
-  async updateStage(s: Pick<Stage, 'id' | 'rowVersion'>, input: Partial<StageInput>): Promise<Stage> {
+  async updateStage(
+    s: Pick<Stage, 'id' | 'rowVersion'>,
+    input: Partial<StageInput>,
+  ): Promise<Stage> {
     return mapStage(
       await call(`/pipeline-stages/${s.id}`, {
         method: 'PATCH',
@@ -214,10 +217,10 @@ export const dealsApi = {
   },
   async setTaskDone(dealId: string, activityId: string, done: boolean): Promise<Activity> {
     return mapActivity(
-      await call(
-        `/deals/${dealId}/activities/${activityId}/${done ? 'complete' : 'reopen'}`,
-        { method: 'POST', schema: dealActivityResponseSchema },
-      ),
+      await call(`/deals/${dealId}/activities/${activityId}/${done ? 'complete' : 'reopen'}`, {
+        method: 'POST',
+        schema: dealActivityResponseSchema,
+      }),
     );
   },
 
@@ -242,7 +245,11 @@ export const dealsApi = {
   },
   async createLostReason(name: string): Promise<LostReason> {
     return mapLostReason(
-      await call('/deal-lost-reasons', { method: 'POST', body: { name }, schema: lostReasonResponseSchema }),
+      await call('/deal-lost-reasons', {
+        method: 'POST',
+        body: { name },
+        schema: lostReasonResponseSchema,
+      }),
     );
   },
   async updateLostReason(
@@ -257,7 +264,8 @@ export const dealsApi = {
       }),
     );
   },
-  deleteLostReason: (id: string): Promise<void> => call(`/deal-lost-reasons/${id}`, { method: 'DELETE' }),
+  deleteLostReason: (id: string): Promise<void> =>
+    call(`/deal-lost-reasons/${id}`, { method: 'DELETE' }),
   async reorderLostReasons(reasonIds: string[]): Promise<LostReason[]> {
     const rows = await call('/deal-lost-reasons/order', {
       method: 'PUT',
@@ -267,7 +275,9 @@ export const dealsApi = {
     return rows.map(mapLostReason);
   },
   async settings(signal?: AbortSignal): Promise<DealSettings> {
-    return mapSettings(await call('/deal-settings', { schema: dealSettingsResponseSchema, signal }));
+    return mapSettings(
+      await call('/deal-settings', { schema: dealSettingsResponseSchema, signal }),
+    );
   },
   async saveSettings(lostReasonRequired: boolean): Promise<DealSettings> {
     return mapSettings(

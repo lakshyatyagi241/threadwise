@@ -1,7 +1,9 @@
 'use client';
 
 import type { AuthPageContent, AuthPageName } from '@crm/contracts';
+import { cn } from '@crm/ui';
 import { useTranslations } from 'next-intl';
+import type { CSSProperties, ReactNode } from 'react';
 import { safeUrl } from './safe-url';
 
 /**
@@ -76,153 +78,233 @@ export function AuthMedia({
   return <img src={src} alt="" aria-hidden="true" className={className} />;
 }
 
-/** "heading <accent word>": the accent word picks up the brand colour. */
+/** Media filling its panel, with the dark veil that keeps the text on top of it readable. */
+export function MediaBackdrop({
+  content,
+  veil = 'bg-black/55',
+}: {
+  content: Pick<AuthPageContent, 'mediaUrl' | 'mediaType'>;
+  veil?: string;
+}) {
+  if (!safeUrl(content.mediaUrl)) return null;
+  return (
+    <>
+      <AuthMedia content={content} className="absolute inset-0 size-full object-cover" />
+      <div aria-hidden="true" className={cn('absolute inset-0', veil)} />
+    </>
+  );
+}
+
+/** The two soft lights behind a dark panel. */
+export function Blobs({ variant = 'pair' }: { variant?: 'pair' | 'corner' }) {
+  if (variant === 'corner') {
+    return (
+      <div
+        aria-hidden="true"
+        className="auth-blob -end-10 -top-10 size-[280px] bg-(--auth-light)/30"
+      />
+    );
+  }
+  return (
+    <>
+      <div
+        aria-hidden="true"
+        className="auth-blob -start-12 -top-12 size-[300px] bg-(--auth-green)"
+      />
+      <div
+        aria-hidden="true"
+        className="auth-blob end-12 bottom-12 size-[260px] bg-(--auth-amber)"
+      />
+    </>
+  );
+}
+
+type HeadingTone = 'accent' | 'deep' | 'plain' | 'soft';
+
+/**
+ * "heading <accent word>.": the accent word is italic (not in scripts where italics read badly) and takes the
+ * colour of the tone: the admin's accent on dark art, the deep green on paper, none on a gradient panel.
+ */
 export function AccentHeading({
   heading,
   accent,
   tone,
-  italic = true,
 }: {
   heading?: string;
   accent?: string;
-  tone: 'on-dark' | 'on-light' | 'on-accent';
-  italic?: boolean;
+  tone: HeadingTone;
 }) {
-  const color =
-    tone === 'on-dark'
-      ? 'color-mix(in srgb, var(--auth-accent) 45%, #ffffff)'
-      : tone === 'on-accent'
-        ? 'inherit'
-        : 'color-mix(in srgb, var(--auth-accent) 82%, var(--foreground))';
+  const style: CSSProperties | undefined =
+    tone === 'accent'
+      ? { color: 'var(--auth-accent-dark)' }
+      : tone === 'deep'
+        ? { color: 'var(--auth-link)' }
+        : tone === 'soft'
+          ? { opacity: 0.9 }
+          : undefined;
   return (
     <>
       {heading}
       {heading && accent ? ' ' : null}
       {accent ? (
-        <span
-          style={{ color }}
-          className={
-            tone === 'on-accent'
-              ? 'underline decoration-2 underline-offset-4'
-              : italic
-                ? 'italic rtl:not-italic'
-                : ''
-          }
-        >
+        <span style={style} className="italic rtl:not-italic">
           {accent}
         </span>
       ) : null}
+      {heading || accent ? '.' : null}
     </>
   );
 }
 
-export function BrandMark({
-  name,
-  tone,
-}: {
-  name: string;
-  tone: 'on-dark' | 'on-light' | 'on-accent';
-}) {
+/** The product mark: a speech-bubble tile and the name in the display type. */
+export function BrandMark({ name, className }: { name: string; className?: string }) {
   return (
-    <span className="inline-flex items-center gap-2.5">
+    <span className={cn('inline-flex items-center gap-2', className)}>
       <span
         aria-hidden="true"
-        className="flex size-8 items-center justify-center rounded-lg text-sm font-bold"
-        style={
-          tone === 'on-light'
-            ? { background: 'var(--auth-accent)', color: 'var(--auth-ink)' }
-            : { background: 'rgba(255,255,255,0.16)', color: 'currentColor' }
-        }
+        className="grid size-8 place-items-center rounded-md bg-(--auth-deep) text-(--auth-light)"
       >
-        {name.slice(0, 1).toUpperCase()}
+        <svg viewBox="0 0 24 24" className="size-4" fill="currentColor">
+          <path d="M5 3h14a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-7l-5 4v-4H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z" />
+        </svg>
       </span>
-      <span className="text-sm font-semibold tracking-tight">{name}</span>
+      <span className="font-serif text-[22px] tracking-[-0.01em]">{name}</span>
     </span>
   );
 }
 
-/** The dark marketing panel of design 1 (Split showcase). */
+const EYEBROW =
+  'font-mono rtl:font-sans text-[10px] uppercase tracking-[0.18em] rtl:tracking-normal';
+
+/** Small mono line above a heading. `on` picks the colour for the surface it sits on. */
+export function Eyebrow({
+  children,
+  on = 'paper',
+  className,
+}: {
+  children: ReactNode;
+  on?: 'paper' | 'dark';
+  className?: string;
+}) {
+  return (
+    <p
+      className={cn(
+        EYEBROW,
+        on === 'dark' ? 'text-(--auth-light)/70' : 'text-(--auth-ink-500)',
+        className,
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+function Check() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className="size-3 shrink-0 text-(--auth-green)"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
+      <path d="M3 8l3 3 7-7" />
+    </svg>
+  );
+}
+
+const CARD = 'rounded-2xl border border-(--auth-light)/15 bg-(--auth-light)/8 backdrop-blur-sm';
+
+/** The hero card at the top of a showcase: icon tile, bold line, small line. */
+export function HeroCard({
+  title,
+  description,
+  icon = 1,
+}: {
+  title: string;
+  description: string;
+  icon?: number;
+}) {
+  if (!title && !description) return null;
+  return (
+    <div className={cn(CARD, 'mb-4 p-5')}>
+      <div className="flex items-start gap-3">
+        <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-(--auth-green)/25 text-(--auth-green)">
+          <Glyph index={icon} />
+        </span>
+        <div>
+          <p className="text-[14px] font-semibold leading-tight">{title}</p>
+          <p className="mt-1 text-[12px] leading-snug text-(--auth-light)/75">{description}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The dark marketing panel of design 1 (Split showcase): hero card, eyebrow, big heading with an accent word,
+ * one paragraph, then (sign-in and sign-up only) three stat tiles, four feature cards and a checklist, and a
+ * footer line at the bottom edge.
+ */
 export function ShowcasePanel({
   page,
   content,
   extra,
-  appName,
+  footer,
 }: {
   page: AuthPageName;
   content: AuthPageContent;
   extra?: Record<string, string>;
-  appName: string;
+  /** Resolved footer line (the admin's text, or year, name and country). */
+  footer: string;
 }) {
   const copy = useShowcaseCopy(page, extra);
   const showDetails = page !== 'forgot';
   const chips = CHIP_INDEXES.map((i) => copy(`chip${i}`)).filter(Boolean);
 
   return (
-    <div className="relative z-10 flex h-full min-h-0 flex-col gap-6 p-10 xl:p-12">
-      <BrandMark name={appName} tone="on-dark" />
+    <>
+      <div className="relative z-10 flex w-full flex-1 flex-col justify-center">
+        <HeroCard title={copy('hero_title')} description={copy('hero_desc')} />
 
-      <div className="my-auto space-y-6">
-        {(copy('hero_title') || copy('hero_desc')) && (
-          <div className="flex items-start gap-3 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
-            <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/15">
-              <Glyph index={1} />
-            </span>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold">{copy('hero_title')}</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-white/75">{copy('hero_desc')}</p>
-            </div>
-          </div>
+        {content.eyebrow && (
+          <Eyebrow on="dark" className="mb-3">
+            {content.eyebrow}
+          </Eyebrow>
         )}
-
-        <div className="space-y-3">
-          {content.eyebrow && (
-            <p className="font-mono rtl:font-sans text-[11px] uppercase tracking-[0.18em] rtl:tracking-normal text-white/65">
-              {content.eyebrow}
-            </p>
-          )}
-          <p className="font-serif text-4xl leading-[1.1] tracking-tight xl:text-5xl">
-            <AccentHeading
-              heading={content.heading}
-              accent={content.headingAccent}
-              tone="on-dark"
-            />
+        <h1 className="font-serif text-[42px] leading-[1.05] tracking-[-0.01em]">
+          <AccentHeading heading={content.heading} accent={content.headingAccent} tone="accent" />
+        </h1>
+        {content.subheading && (
+          <p className="mt-3 text-[13px] leading-relaxed text-(--auth-light)/85">
+            {content.subheading}
           </p>
-          {content.subheading && (
-            <p className="max-w-md text-sm leading-relaxed text-white/75">{content.subheading}</p>
-          )}
-        </div>
+        )}
 
         {showDetails && (
           <>
-            <dl className="grid grid-cols-3 gap-3">
+            <dl className="mt-5 grid grid-cols-3 gap-3">
               {STAT_INDEXES.map((i) => (
-                <div
-                  key={i}
-                  className="rounded-xl border border-white/10 bg-black/20 p-3 text-center backdrop-blur-sm"
-                >
-                  <dt className="font-serif text-xl leading-none xl:text-2xl">
-                    {copy(`stat${i}_num`)}
-                  </dt>
-                  <dd className="mt-1.5 text-[11px] leading-tight text-white/65">
+                <div key={i} className="auth-stat-pill rounded-2xl p-4 text-center">
+                  <dt className="font-serif text-[24px] leading-none">{copy(`stat${i}_num`)}</dt>
+                  <dd className="mt-1 text-[10.5px] text-(--auth-light)/70">
                     {copy(`stat${i}_label`)}
                   </dd>
                 </div>
               ))}
             </dl>
 
-            <ul className="grid grid-cols-2 gap-3">
+            <ul className="mt-5 grid grid-cols-2 gap-3">
               {FEATURE_INDEXES.map((i) => (
-                <li
-                  key={i}
-                  className="rounded-xl border border-white/12 bg-white/8 p-3.5 backdrop-blur-sm"
-                >
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <span className="flex size-6 items-center justify-center rounded-md bg-white/15">
+                <li key={i} className={cn(CARD, 'p-4')}>
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="grid size-7 place-items-center rounded-lg bg-(--auth-green)/25 text-(--auth-green)">
                       <Glyph index={i - 1} className="size-3.5" />
                     </span>
-                    {copy(`feat${i}_title`)}
+                    <span className="text-[12.5px] font-semibold">{copy(`feat${i}_title`)}</span>
                   </div>
-                  <p className="mt-2 text-xs leading-relaxed text-white/70">
+                  <p className="text-[11px] leading-snug text-(--auth-light)/70">
                     {copy(`feat${i}_desc`)}
                   </p>
                 </li>
@@ -230,17 +312,15 @@ export function ShowcasePanel({
             </ul>
 
             {chips.length > 0 && (
-              <div className="space-y-2">
-                <p className="text-[11px] uppercase tracking-[0.16em] rtl:tracking-normal text-white/55">
+              <div className={cn(CARD, 'mt-4 p-4')}>
+                <p className="mb-2 font-mono rtl:font-sans text-[10px] uppercase tracking-[0.16em] rtl:tracking-normal text-(--auth-light)/70">
                   {copy('inside_heading')}
                 </p>
-                <ul className="flex flex-wrap gap-2">
+                <ul className="grid grid-cols-3 gap-x-3 gap-y-1.5 text-[11.5px] text-(--auth-light)/85">
                   {chips.map((chip, i) => (
-                    <li
-                      key={i}
-                      className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/85"
-                    >
-                      {chip}
+                    <li key={i} className="flex items-center gap-1.5">
+                      <Check />
+                      <span>{chip}</span>
                     </li>
                   ))}
                 </ul>
@@ -250,7 +330,11 @@ export function ShowcasePanel({
         )}
       </div>
 
-      {copy('footer') && <p className="text-xs text-white/60">{copy('footer')}</p>}
-    </div>
+      {footer && (
+        <p className="relative z-10 mt-6 text-end font-mono rtl:font-sans text-[11px] text-(--auth-light)/60">
+          {footer}
+        </p>
+      )}
+    </>
   );
 }

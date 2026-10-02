@@ -6,9 +6,10 @@ import type {
 
 /**
  * Registration policy form (WD-AUTH-019, WD-AUTH-007). Numbers are text so a field can be blank.
- * The sign-up OTP knobs fall back to their documented defaults when blank (WaDesk never saved an
- * empty knob as 0); trial days keep the stored value when blank. The OTP template is not a form
- * field: it is created and refreshed through its own actions, never saved with the form.
+ * A blank sign-up OTP knob means "use the default" (WaDesk never saved an empty knob as 0): it is sent
+ * as `null`, which the API turns into the default, never as 0; trial days keep the stored value when
+ * blank. The OTP template is not a form field: it is created and refreshed through its own actions,
+ * never saved with the form.
  */
 export const OTP_KNOBS = {
   ttlMinutes: { min: 1, max: 90, default: 5 },
@@ -170,7 +171,12 @@ export function buildRegistrationPatch(
   for (const key of Object.keys(OTP_KNOBS) as OtpKnob[]) {
     const spec = OTP_KNOBS[key];
     const raw = draft[key].trim();
-    const n = raw === '' ? spec.default : wholeNumber(raw);
+    if (raw === '') {
+      // Blank = the default. Say so with `null` (never 0); nothing to send when the default already applies.
+      if (base.otp[key] !== spec.default) otp[key] = null;
+      continue;
+    }
+    const n = wholeNumber(raw);
     if (n === null || n < spec.min || n > spec.max)
       problems[key] = { code: 'range', min: spec.min, max: spec.max };
     else if (n !== base.otp[key]) otp[key] = n;
@@ -185,8 +191,8 @@ const OTP_FIELDS = ['otpSender', ...(Object.keys(OTP_KNOBS) as OtpKnob[])] as co
 /**
  * "Create & submit template" posts the whole OTP form (WaDesk): the sender is required, and the
  * knobs go with it so they are saved in the same request. Only OTP fields are checked: another
- * invalid field elsewhere on the page must not block this action. Blank knobs fall back to their
- * defaults, as on a normal save.
+ * invalid field elsewhere on the page must not block this action. Blank knobs are sent as `null`
+ * (the default), as on a normal save.
  */
 export function buildOtpTemplateRequest(
   base: RegistrationSettings,

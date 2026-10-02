@@ -25,6 +25,8 @@ import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
+import { CampaignsModule } from './modules/campaigns';
+import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
@@ -41,6 +43,7 @@ import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { TeamChatModule } from './modules/team-chat';
+import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { RealtimeModule } from './realtime/realtime.module';
@@ -136,11 +139,14 @@ import { HealthModule } from './health/health.module';
     AppointmentsBookingModule,
     NotificationsModule,
     BroadcastsModule,
+    CampaignsModule,
+    ChannelTelegramModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,
     PlatformSupportDeskModule,
     TeamChatModule,
+    WorkspacesTeamsTenancyModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

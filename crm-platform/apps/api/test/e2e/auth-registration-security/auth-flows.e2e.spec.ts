@@ -164,7 +164,7 @@ describe('registration', () => {
     expect(res.status).toBe(200);
     expect(res.body).toMatchObject({
       registrationOpen: true,
-      emailVerification: 'banner',
+      emailVerification: 'off',
       captcha: null,
       social: { google: false, facebook: false },
       otp: { enabled: false },
@@ -175,6 +175,17 @@ describe('registration', () => {
     expect(res.body.authPages.defaulted.login).toEqual(
       expect.arrayContaining(['heading', 'subheading']),
     );
+  });
+
+  it('creates verified accounts in the default mode, as WaDesk auto-verifies', async () => {
+    const a = await signup();
+    const session = await api().get('/v2/auth/session').set(bearer(a.access));
+    expect(session.body.flags).toMatchObject({ emailUnverified: false, emailBlocked: false });
+    // The flows below exercise the verification mail, so the rest of the suite runs in banner mode.
+    const switched = await op('patch', '/settings/registration').send({
+      emailVerification: 'banner',
+    });
+    expect(switched.status).toBeLessThan(300);
   });
 
   it('creates an organization with its first user and lands them in onboarding', async () => {
@@ -425,7 +436,7 @@ describe('sign-in, lockout and sessions', () => {
     );
   });
 
-  it('gives remembered sessions the long lifetime and others about a day', async () => {
+  it('gives remembered sessions the long lifetime and others seven days', async () => {
     const a = await signup();
     await login(a, PASSWORD, { remember: true });
     const rows = await h.owner.query(
@@ -434,7 +445,9 @@ describe('sign-in, lockout and sessions', () => {
     );
     const [plain, remembered] = rows.rows;
     expect(plain.remember).toBe(false);
-    expect(Number(plain.secs)).toBeLessThanOrEqual(24 * 3600 + 5);
+    // WaDesk's session lifetime is 7 days; "keep me signed in" extends it to 30.
+    expect(Number(plain.secs)).toBeLessThanOrEqual(7 * 86400 + 5);
+    expect(Number(plain.secs)).toBeGreaterThan(6 * 86400);
     expect(remembered.remember).toBe(true);
     expect(Number(remembered.secs)).toBeGreaterThan(20 * 86400);
   });
@@ -945,21 +958,24 @@ describe('account gates', () => {
     }
   });
 
-  it('refuses suspended users at sign-in and locks an existing session down to sign-out', async () => {
+  it('lets suspended users sign in, then locks every session down to sign-out', async () => {
     const a = await signup();
     await h.owner.query(`UPDATE users SET status = 'inactive' WHERE email = $1`, [a.email]);
     await h.redis.eval(
       `for _,k in ipairs(redis.call('keys','auth:gate:*')) do redis.call('del',k) end`,
       0,
     );
-    const refused = await login({ ...a, ip: nextIp() }, PASSWORD);
-    expect(refused.status).toBe(403);
-    expect(refused.body.code).toBe('AUTH_ACCOUNT_SUSPENDED');
-    const blocked = await api().get('/v2/users/me').set(bearer(a.access));
+    // As in WaDesk, the sign-in itself succeeds and the lock screen takes over.
+    const signedIn = await login({ ...a, ip: nextIp() }, PASSWORD);
+    expect(signedIn.status).toBe(201);
+    const fresh = signedIn.body.tokens.accessToken as string;
+    const blocked = await api().get('/v2/users/me').set(bearer(fresh));
     expect(blocked.body.code).toBe('AUTH_ACCOUNT_SUSPENDED');
-    const session = await api().get('/v2/auth/session').set(bearer(a.access));
+    const existing = await api().get('/v2/users/me').set(bearer(a.access));
+    expect(existing.body.code).toBe('AUTH_ACCOUNT_SUSPENDED');
+    const session = await api().get('/v2/auth/session').set(bearer(fresh));
     expect(session.body.flags.suspended).toBe(true);
-    expect((await api().post('/v2/auth/logout').set(bearer(a.access)).send({})).status).toBe(201);
+    expect((await api().post('/v2/auth/logout').set(bearer(fresh)).send({})).status).toBe(201);
   });
 });
 
@@ -1208,6 +1224,7 @@ describe('account screens and onboarding', () => {
       sizeRange: '6-20',
       timezone: 'Asia/Kolkata',
       currency: 'inr',
+      phone: '+919811122233',
     });
     expect(saved.body.step).toBe('plan');
     expect(saved.body.workspace).toMatchObject({
@@ -1572,7 +1589,7 @@ describe('platform operators and the Security Center', () => {
     }
     const pages = await op('get', '/settings/auth-pages');
     expect(pages.body.defaults.login.heading).toBeTruthy();
-    expect(pages.body.defaults.login.accent).toBe('#0f766e');
+    expect(pages.body.defaults.login.accent).toBe('#25D366');
     expect(
       (
         await op('patch', '/settings/auth-pages').send({

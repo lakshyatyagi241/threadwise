@@ -24,7 +24,8 @@ export interface DealCardProps {
 }
 
 /** The colour of the thin probability bar: strong chances read green, weak ones neutral. */
-const probabilityTone = (p: number) => (p >= 75 ? 'bg-success' : p >= 50 ? 'bg-warning' : 'bg-primary');
+const probabilityTone = (p: number) =>
+  p >= 75 ? 'bg-success' : p >= 50 ? 'bg-warning' : 'bg-primary';
 
 /**
  * One deal on the board. The card is draggable with a pointer; the "..." menu is the keyboard and touch way to do

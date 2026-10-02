@@ -29,7 +29,16 @@ export const frozenEdge = (scrolled: boolean) => (scrolled ? FROZEN_SHADOW : '')
 /** "Scrolled sideways" from a scroll container's offset; RTL containers report negative offsets. */
 export const isScrolledSideways = (scrollLeft: number) => Math.abs(scrollLeft) > 1;
 
-export const INVOICE_COLUMNS = ['number', 'contact', 'issued', 'due', 'total', 'paid', 'balance', 'status'] as const;
+export const INVOICE_COLUMNS = [
+  'number',
+  'contact',
+  'issued',
+  'due',
+  'total',
+  'paid',
+  'balance',
+  'status',
+] as const;
 export type InvoiceColumn = (typeof INVOICE_COLUMNS)[number];
 
 /** Column widths in px; the table is fixed-layout and scrolls sideways inside its card when they do not fit. */

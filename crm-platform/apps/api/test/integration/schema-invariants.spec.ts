@@ -88,7 +88,8 @@ describe('schema invariants', () => {
       .filter((r) => !r.forced)
       .map((r) => r.table)
       .sort();
-    expect(unprotected).toEqual(['_migrations', 'permission_defs']);
+    // workspace_preset_baseline: the global list of grants every organization's preset roles receive (select-only, migration-written)
+    expect(unprotected).toEqual(['_migrations', 'permission_defs', 'workspace_preset_baseline']);
   });
 
   it('every foreign key into a tenant table carries org_id (a cross-tenant reference is structurally impossible)', async () => {

@@ -27,7 +27,9 @@ export function parseHub(params: Params): HubParams {
   return {
     q: (params.get('q') ?? '').slice(0, 200),
     show: (SHOW_VALUES as readonly string[]).includes(show ?? '') ? (show as Show) : 'all',
-    per: (HUB_PAGE_SIZES as readonly number[]).includes(per) ? (per as HubPageSize) : DEFAULT_HUB.per,
+    per: (HUB_PAGE_SIZES as readonly number[]).includes(per)
+      ? (per as HubPageSize)
+      : DEFAULT_HUB.per,
     page: Number.isInteger(page) && page >= 1 ? Math.min(page, 100_000) : 1,
   };
 }
@@ -55,6 +57,7 @@ export const ROUTES = {
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** The `segment=` value of the contacts URL: a uuid, or empty. Anything else is ignored. */
-export const cleanSegmentParam = (v: string | null | undefined): string => (v && UUID.test(v) ? v : '');
+export const cleanSegmentParam = (v: string | null | undefined): string =>
+  v && UUID.test(v) ? v : '';
 
 export const isUuid = (v: string): boolean => UUID.test(v);

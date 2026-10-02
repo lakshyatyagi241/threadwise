@@ -4,7 +4,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
-import { Alert, Button, EmptyState, Menu, MenuItem, MenuSeparator, Select, Spinner, cn } from '@crm/ui';
+import {
+  Alert,
+  Button,
+  EmptyState,
+  Menu,
+  MenuItem,
+  MenuSeparator,
+  Select,
+  Spinner,
+  cn,
+} from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ContactsReadonlyTable } from '@/features/contacts-attributes-tags';
 import { useSegmentCatalog } from '../api/lookups';
@@ -28,7 +38,12 @@ import {
   WarningIcon,
 } from './icons';
 import { AttentionChip, ErrorLine, MemberCount, VisibilityChip } from './parts';
-import { SegmentDialogs, useSegmentActions, useSegmentCan, type SegmentActions } from './segment-actions';
+import {
+  SegmentDialogs,
+  useSegmentActions,
+  useSegmentCan,
+  type SegmentActions,
+} from './segment-actions';
 import { useSummaryContext } from './use-summary';
 
 /** `/segments/:id`: the segment's header and actions, its rules as sentences, and its members as the Contact Hub table. */
@@ -71,7 +86,11 @@ export function SegmentDetail({ id }: { id: string }) {
           <EmptyState
             title={t('notFoundTitle')}
             message={t('notFound')}
-            actions={<Button variant="secondary" onClick={() => router.push(ROUTES.hub)}>{t('back')}</Button>}
+            actions={
+              <Button variant="secondary" onClick={() => router.push(ROUTES.hub)}>
+                {t('back')}
+              </Button>
+            }
           />
         ) : (
           <ErrorLine error={query.error} onRetry={() => void query.refetch()} />
@@ -124,18 +143,29 @@ function Header({
             <h1 className="break-words text-xl font-bold tracking-tight">{segment.name}</h1>
             <div className="flex flex-wrap items-center gap-2">
               <VisibilityChip visibility={segment.visibility} />
-              {segment.invalidConditions.length > 0 && <AttentionChip count={segment.invalidConditions.length} />}
+              {segment.invalidConditions.length > 0 && (
+                <AttentionChip count={segment.invalidConditions.length} />
+              )}
               <span className="text-xs text-muted-foreground">
                 {owner ? t('byOwner', { name: owner }) : ''}
                 {owner ? ' · ' : ''}
-                {t('updated', { when: format.dateTime(new Date(segment.updatedAt), { dateStyle: 'medium', timeStyle: 'short' }) })}
+                {t('updated', {
+                  when: format.dateTime(new Date(segment.updatedAt), {
+                    dateStyle: 'medium',
+                    timeStyle: 'short',
+                  }),
+                })}
               </span>
             </div>
-            {segment.description && <p className="max-w-2xl text-sm text-muted-foreground">{segment.description}</p>}
+            {segment.description && (
+              <p className="max-w-2xl text-sm text-muted-foreground">{segment.description}</p>
+            )}
           </div>
         </div>
         <div className="flex flex-col items-start gap-1 sm:items-end">
-          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('members')}</span>
+          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            {t('members')}
+          </span>
           <MemberCount
             segment={segment}
             size="lg"
@@ -159,7 +189,11 @@ function Header({
           </Link>
         )}
         {can.export && (
-          <Button variant="secondary" disabled={actions.exporting.has(segment.id)} onClick={() => void actions.exportCsv(segment)}>
+          <Button
+            variant="secondary"
+            disabled={actions.exporting.has(segment.id)}
+            onClick={() => void actions.exportCsv(segment)}
+          >
             {actions.exporting.has(segment.id) ? <Spinner /> : <DownloadIcon />} {th('export')}
           </Button>
         )}
@@ -213,11 +247,17 @@ function RulesCard({ segment, canEdit }: { segment: Segment; canEdit: boolean })
     <section aria-label={t('rulesTitle')} className="rounded-xl border border-border bg-background">
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
         <h2 className="text-base font-semibold">{t('rulesTitle')}</h2>
-        <span className="text-xs text-muted-foreground">{t(segment.rules.combinator === 'and' ? 'matchAll' : 'matchAny')}</span>
+        <span className="text-xs text-muted-foreground">
+          {t(segment.rules.combinator === 'and' ? 'matchAll' : 'matchAny')}
+        </span>
       </header>
       <div className="space-y-3 p-4">
         {lines === null ? (
-          <div role="status" aria-label={t('loading')} className="h-4 w-2/3 animate-pulse rounded bg-muted" />
+          <div
+            role="status"
+            aria-label={t('loading')}
+            className="h-4 w-2/3 animate-pulse rounded bg-muted"
+          />
         ) : (
           <ul className="space-y-1.5 text-sm">
             {lines.map((line, i) => (
@@ -240,7 +280,10 @@ function RulesCard({ segment, canEdit }: { segment: Segment; canEdit: boolean })
               ))}
             </ul>
             {canEdit && (
-              <Link href={ROUTES.edit(segment.id)} className="inline-block text-xs font-semibold underline underline-offset-2">
+              <Link
+                href={ROUTES.edit(segment.id)}
+                className="inline-block text-xs font-semibold underline underline-offset-2"
+              >
                 {t('fixRules')}
               </Link>
             )}
@@ -305,7 +348,12 @@ function Members({ segment, canEdit }: { segment: Segment; canEdit: boolean }) {
             />
           </div>
         ) : (
-          <div className={cn('flex min-h-0 flex-1 flex-col transition-opacity', members.isPlaceholderData && 'opacity-60')}>
+          <div
+            className={cn(
+              'flex min-h-0 flex-1 flex-col transition-opacity',
+              members.isPlaceholderData && 'opacity-60',
+            )}
+          >
             <ContactsReadonlyTable rows={members.items} />
           </div>
         )}
@@ -327,7 +375,9 @@ function Members({ segment, canEdit }: { segment: Segment; canEdit: boolean }) {
             >
               {t('previous')}
             </button>
-            <span className="tabular-nums text-muted-foreground">{t('pageNumber', { page: members.pageNumber })}</span>
+            <span className="tabular-nums text-muted-foreground">
+              {t('pageNumber', { page: members.pageNumber })}
+            </span>
             <button
               type="button"
               disabled={!members.hasNext}

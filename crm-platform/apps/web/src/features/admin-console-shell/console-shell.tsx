@@ -18,6 +18,10 @@ import {
   MoonIcon,
   SunIcon,
 } from '@/features/auth-registration-security/platform/ui/icons';
+import {
+  IpBlockedView,
+  useIpBlock,
+} from '@/features/auth-registration-security/platform/ui/ip-blocked-view';
 import { languageName } from '@/features/auth-registration-security/platform/ui/language';
 import { ToastProvider } from '@/features/auth-registration-security/platform/ui/toast';
 import { useDocumentTheme } from '@/features/auth-registration-security/platform/ui/use-browser';
@@ -108,6 +112,8 @@ export function ConsoleShell({
   const gated = session.mfaEnrolmentRequired;
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
   const blocked = gated && !onAccountPage;
+  // The API refused this address (operator IP allowlist, WD-AUTH-038): say so instead of showing empty screens.
+  const ipBlock = useIpBlock();
 
   // Active modules append their own entries (add-ons domain, WD-ADD-012).
   const moduleNav = useModuleNav(!gated);
@@ -469,6 +475,8 @@ export function ConsoleShell({
                   <Spinner label={t('redirecting')} />
                   {t('redirecting')}
                 </div>
+              ) : ipBlock ? (
+                <IpBlockedView ip={ipBlock.ip} />
               ) : (
                 children
               )}

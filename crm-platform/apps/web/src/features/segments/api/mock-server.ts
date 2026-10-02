@@ -77,17 +77,25 @@ async function counted(rules: SegmentRules): Promise<number> {
 function csv(rows: ContactResponse[]): Blob {
   const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
   const lines = [['name', 'email', 'phone', 'stage', 'status'].join(',')];
-  for (const c of rows) lines.push([c.name, c.email, c.phone, c.lifecycleStage, c.status].map(esc).join(','));
+  for (const c of rows)
+    lines.push([c.name, c.email, c.phone, c.lifecycleStage, c.status].map(esc).join(','));
   return new Blob([String.fromCharCode(0xfeff), lines.join('\n')], { type: 'text/csv' });
 }
 
 export async function mockExport(id: string): Promise<{ blob: Blob; filename: string }> {
   const seg = load().find((s) => s.id === id);
   if (!seg) throw problem(404, 'NOT_FOUND', 'not found');
-  return { blob: csv(evaluate(await contacts(), seg.rules)), filename: `segment-${id.slice(0, 8)}.csv` };
+  return {
+    blob: csv(evaluate(await contacts(), seg.rules)),
+    filename: `segment-${id.slice(0, 8)}.csv`,
+  };
 }
 
-async function create(body: Record<string, unknown>, rules: SegmentRules, rows: Segment[]): Promise<Segment> {
+async function create(
+  body: Record<string, unknown>,
+  rules: SegmentRules,
+  rows: Segment[],
+): Promise<Segment> {
   const now = new Date().toISOString();
   const seg: Segment = {
     id: crypto.randomUUID(),
@@ -129,11 +137,19 @@ export async function mockCall<T>(path: string, req: ApiRequest<T> = {}): Promis
   }
   if (path === '/segments/preview' && method === 'POST') {
     const hit = evaluate(await contacts(), body.rules as SegmentRules);
-    return reply({ count: hit.length, countApproximate: false, sample: hit.slice(0, 10), invalidConditions: [] });
+    return reply({
+      count: hit.length,
+      countApproximate: false,
+      sample: hit.slice(0, 10),
+      invalidConditions: [],
+    });
   }
   if (path === '/segments/from-filters' && method === 'POST') {
     const rules = contactFilterToRules((body.filter ?? {}) as SegmentFilterInput);
-    if (!rules) throw problem(422, 'VALIDATION_FAILED', 'invalid', [{ path: 'filter', message: 'no conditions' }]);
+    if (!rules)
+      throw problem(422, 'VALIDATION_FAILED', 'invalid', [
+        { path: 'filter', message: 'no conditions' },
+      ]);
     check({ ...body, rules }, rows);
     return reply(await create(body, rules, rows));
   }
@@ -145,7 +161,8 @@ export async function mockCall<T>(path: string, req: ApiRequest<T> = {}): Promis
 
   if (!sub && method === 'GET') return reply(seg);
   if (!sub && method === 'PATCH') {
-    if (body.rowVersion !== seg.rowVersion) throw problem(409, 'ROW_VERSION_CONFLICT', 'changed meanwhile');
+    if (body.rowVersion !== seg.rowVersion)
+      throw problem(409, 'ROW_VERSION_CONFLICT', 'changed meanwhile');
     check(body, rows, seg.id);
     const rules = body.rules as SegmentRules;
     const next: Segment = {
@@ -188,7 +205,10 @@ export async function mockCall<T>(path: string, req: ApiRequest<T> = {}): Promis
     const ids = evaluate(await contacts(), seg.rules).map((c) => c.id);
     const real = await apiFetch(sub === 'tag' ? '/contacts/bulk/tag' : '/contacts/bulk/group', {
       method: 'POST',
-      body: sub === 'tag' ? { ids, action: 'add', ...body } : { ids, action: 'add', groupId: body.groupId },
+      body:
+        sub === 'tag'
+          ? { ids, action: 'add', ...body }
+          : { ids, action: 'add', groupId: body.groupId },
       schema: bulkSelectionResultSchema,
     });
     cache = null;

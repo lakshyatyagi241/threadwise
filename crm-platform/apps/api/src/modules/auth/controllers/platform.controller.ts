@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -12,6 +13,7 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   authPagesPatchSchema,
+  logoutRequestSchema,
   mfaEnableRequestSchema,
   mfaLoginRequestSchema,
   operatorLoginRequestSchema,
@@ -21,6 +23,7 @@ import {
   otpSenderRef,
   otpTemplateCreateRequestSchema,
   otpTestRequestSchema,
+  platformBrandingFooterPatchSchema,
   refreshRequestSchema,
   registrationSettingsPatchSchema,
   securityEventListQuerySchema,
@@ -35,7 +38,9 @@ import {
   type OtpSenderPatch,
   type OtpSendersResponse,
   type OtpTemplateCreateRequest,
+  type OtpTemplateOptionsResponse,
   type OtpTestRequest,
+  type PlatformBrandingFooterPatch,
   type RegistrationSettingsPatch,
   type SecurityEventListQuery,
   type SecurityPolicyPatch,
@@ -85,12 +90,21 @@ export class PlatformAuthController {
     return this.operators.refresh(body.refreshToken);
   }
 
+  /**
+   * Public like the user logout: it works with an expired access token and with the refresh token
+   * alone, so signing out never depends on the 15-minute access cookie still being there.
+   */
+  @Public()
   @Post('logout')
-  @ActorKinds('platform_operator')
-  @UseGuards(OperatorGuard)
-  @AllowWhileGated()
-  async logout() {
-    await this.operators.logout();
+  @ApiOperation({ summary: 'End an operator session from its access and/or refresh token' })
+  async logout(
+    @Headers('authorization') authorization: string | undefined,
+    @Body(zodPipe(logoutRequestSchema)) body: z.infer<typeof logoutRequestSchema>,
+  ) {
+    const accessToken = authorization?.startsWith('Bearer ')
+      ? authorization.slice('Bearer '.length).trim()
+      : null;
+    await this.operators.logout({ accessToken, refreshToken: body.refreshToken ?? null });
     return { ok: true };
   }
 
@@ -250,6 +264,15 @@ export class PlatformSettingsController {
     return { senders: await this.senders.list(), devAllowed: this.senders.devAllowed };
   }
 
+  @Get('registration/otp-templates')
+  @ApiOperation({
+    summary:
+      'Template picker: approved authentication templates of the saved WhatsApp Business sender (up to 300) plus the saved one with its status',
+  })
+  async otpTemplates(): Promise<OtpTemplateOptionsResponse> {
+    return this.templates.options();
+  }
+
   @Post('senders')
   @OperatorRoles('super_admin')
   @ApiOperation({ summary: 'Add an OTP sender; the secret is stored encrypted and write-only' })
@@ -356,6 +379,37 @@ export class PlatformSettingsController {
       payload: { changed },
     });
     return this.settings.getSocialCaptchaSettings();
+  }
+
+  @Get('branding-footer')
+  @ApiOperation({
+    summary:
+      'The footer appended to outgoing text messages of workspaces whose plan cannot remove branding',
+  })
+  async brandingFooter() {
+    return this.settings.getPlatformBrandingFooter();
+  }
+
+  @Patch('branding-footer')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary: 'Set the platform message footer (blank = none); applies on the next send everywhere',
+  })
+  async patchBrandingFooter(
+    @Body(zodPipe(platformBrandingFooterPatchSchema)) body: PlatformBrandingFooterPatch,
+  ) {
+    const { before, after } = await this.settings.setPlatformBrandingFooter(
+      body.footer,
+      this.operatorId(),
+    );
+    await this.audit.recordStandalone({
+      event: 'platform.settings.branding_footer_updated',
+      status: 'info',
+      actorType: 'platform_operator',
+      actorId: this.operatorId(),
+      payload: { before, after },
+    });
+    return this.settings.getPlatformBrandingFooter();
   }
 
   @Get('auth-pages')

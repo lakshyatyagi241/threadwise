@@ -17,7 +17,10 @@ import {
 import { useToday } from './parts';
 import { Section, SubHeading, type EditorCtx } from './business-profile-ui';
 
-const PREFIX_FIELD: Record<DocKind, 'numberingPrefix' | 'proformaPrefix' | 'receiptPrefix' | 'creditNotePrefix' | 'salesOrderPrefix'> = {
+const PREFIX_FIELD: Record<
+  DocKind,
+  'numberingPrefix' | 'proformaPrefix' | 'receiptPrefix' | 'creditNotePrefix' | 'salesOrderPrefix'
+> = {
   invoice: 'numberingPrefix',
   proforma: 'proformaPrefix',
   receipt: 'receiptPrefix',
@@ -41,13 +44,19 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
   const today = useToday();
   const months = useMonthNames();
   const examples = useMemo(() => numberExamples(form, today), [form, today]);
-  const warnings = useMemo(() => numberingWarnings(form.sellerCountry, examples), [form.sellerCountry, examples]);
+  const warnings = useMemo(
+    () => numberingWarnings(form.sellerCountry, examples),
+    [form.sellerCountry, examples],
+  );
   const profile = profileOf(form.sellerCountry);
   const suggestion = countrySuggestion(form.sellerCountry);
   const rules = profile?.numbering;
   const fyIssue = err('fiscalYearStartMonth');
   const monthNo = Number(form.fiscalYearStartMonth);
-  const suggestMonth = suggestion && suggestion.fiscalYearStartMonth !== monthNo ? suggestion.fiscalYearStartMonth : null;
+  const suggestMonth =
+    suggestion && suggestion.fiscalYearStartMonth !== monthNo
+      ? suggestion.fiscalYearStartMonth
+      : null;
 
   const addToken = (token: string) => set('numberFormat', `${form.numberFormat}${token}`);
   const formatErr = err('numberFormat');
@@ -79,7 +88,13 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
-        <Field label={t('format')} htmlFor={`${uid}-format`} hint={t('formatHint')} error={formatErr} className="sm:col-span-2 lg:col-span-1">
+        <Field
+          label={t('format')}
+          htmlFor={`${uid}-format`}
+          hint={t('formatHint')}
+          error={formatErr}
+          className="sm:col-span-2 lg:col-span-1"
+        >
           <Input
             id={`${uid}-format`}
             value={form.numberFormat}
@@ -92,7 +107,11 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
             onChange={(e) => set('numberFormat', e.target.value)}
           />
           {!readOnly && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1" role="group" aria-label={t('tokens')}>
+            <div
+              className="flex flex-wrap items-center gap-1.5 pt-1"
+              role="group"
+              aria-label={t('tokens')}
+            >
               <span className="text-xs text-muted-foreground">{t('tokens')}</span>
               {NUMBER_TOKENS.map((tok) => (
                 <button
@@ -107,11 +126,38 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
             </div>
           )}
         </Field>
-        <Field label={t('padding')} htmlFor={`${uid}-pad`} hint={t('paddingHint')} error={err('numberPadding')}>
-          <Input id={`${uid}-pad`} type="number" inputMode="numeric" min={1} max={10} value={form.numberPadding} disabled={readOnly} invalid={!!err('numberPadding')} dir="ltr" onChange={(e) => set('numberPadding', e.target.value)} />
+        <Field
+          label={t('padding')}
+          htmlFor={`${uid}-pad`}
+          hint={t('paddingHint')}
+          error={err('numberPadding')}
+        >
+          <Input
+            id={`${uid}-pad`}
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={10}
+            value={form.numberPadding}
+            disabled={readOnly}
+            invalid={!!err('numberPadding')}
+            dir="ltr"
+            onChange={(e) => set('numberPadding', e.target.value)}
+          />
         </Field>
-        <Field label={t('fiscalMonth')} htmlFor={`${uid}-fy`} hint={t('fiscalMonthHint')} error={fyIssue}>
-          <Select id={`${uid}-fy`} value={form.fiscalYearStartMonth} disabled={readOnly} invalid={!!fyIssue} onChange={(e) => set('fiscalYearStartMonth', e.target.value)}>
+        <Field
+          label={t('fiscalMonth')}
+          htmlFor={`${uid}-fy`}
+          hint={t('fiscalMonthHint')}
+          error={fyIssue}
+        >
+          <Select
+            id={`${uid}-fy`}
+            value={form.fiscalYearStartMonth}
+            disabled={readOnly}
+            invalid={!!fyIssue}
+            onChange={(e) => set('fiscalYearStartMonth', e.target.value)}
+          >
             {months.map((name, i) => (
               <option key={name} value={String(i + 1)}>
                 {name}
@@ -124,7 +170,10 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
               onClick={() => set('fiscalYearStartMonth', String(suggestMonth))}
               className="mt-1 inline-flex min-h-8 items-center rounded-md px-1 text-start text-xs font-medium text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
             >
-              {t('suggestMonth', { month: months[suggestMonth - 1] ?? '', country: suggestion.countryName })}
+              {t('suggestMonth', {
+                month: months[suggestMonth - 1] ?? '',
+                country: suggestion.countryName,
+              })}
             </button>
           )}
         </Field>
@@ -142,7 +191,13 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
             </p>
           )}
         </div>
-        <Switch id={`${uid}-yearly`} checked={form.yearlyReset} disabled={readOnly} label={t('yearly')} onCheckedChange={(v) => set('yearlyReset', v)} />
+        <Switch
+          id={`${uid}-yearly`}
+          checked={form.yearlyReset}
+          disabled={readOnly}
+          label={t('yearly')}
+          onCheckedChange={(v) => set('yearlyReset', v)}
+        />
       </div>
 
       <ExamplesList examples={examples} country={form.sellerCountry} />
@@ -154,7 +209,11 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
             {warnings.map((w) => (
               <li key={`${w.kind}-${w.code}`}>
                 {w.code === 'tooLong'
-                  ? t('warnTooLong', { doc: t(`docs.${w.kind}`), max: w.max ?? 0, length: w.length })
+                  ? t('warnTooLong', {
+                      doc: t(`docs.${w.kind}`),
+                      max: w.max ?? 0,
+                      length: w.length,
+                    })
                   : t('warnChars', { doc: t(`docs.${w.kind}`) })}
               </li>
             ))}
@@ -170,7 +229,13 @@ export function NumberingSection({ form, set, err, readOnly }: EditorCtx) {
   );
 }
 
-function ExamplesList({ examples, country }: { examples: ReturnType<typeof numberExamples>; country: ProfileForm['sellerCountry'] }) {
+function ExamplesList({
+  examples,
+  country,
+}: {
+  examples: ReturnType<typeof numberExamples>;
+  country: ProfileForm['sellerCountry'];
+}) {
   const t = useTranslations('invoicing.settings.numbering');
   const limit = profileOf(country)?.numbering.maxLength;
   return (
@@ -184,7 +249,15 @@ function ExamplesList({ examples, country }: { examples: ReturnType<typeof numbe
               <span dir="ltr" className="font-mono font-semibold">
                 {e.number}
               </span>{' '}
-              <span className={limit !== undefined && e.length > limit ? 'text-xs text-warning' : 'text-xs text-muted-foreground'}>{t('chars', { count: e.length })}</span>
+              <span
+                className={
+                  limit !== undefined && e.length > limit
+                    ? 'text-xs text-warning'
+                    : 'text-xs text-muted-foreground'
+                }
+              >
+                {t('chars', { count: e.length })}
+              </span>
             </span>
           </li>
         ))}

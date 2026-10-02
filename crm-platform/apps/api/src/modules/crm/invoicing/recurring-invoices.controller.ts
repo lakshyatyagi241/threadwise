@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createRecurringInvoiceSchema,
@@ -11,7 +24,12 @@ import {
   type RecordScope,
   type UpdateRecurringInvoiceInput,
 } from '@crm/contracts';
-import { ActorKinds, GrantedScope, Idempotent, RequirePermission } from '../../../common/decorators';
+import {
+  ActorKinds,
+  GrantedScope,
+  Idempotent,
+  RequirePermission,
+} from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { RecurringInvoicesService } from './recurring-invoices.service';
@@ -26,7 +44,10 @@ export class RecurringInvoicesController {
 
   @Get()
   @RequirePermission('record.recurring-invoices.read')
-  @ApiOperation({ summary: 'List recurring invoices (cursor paginated)', description: 'Filters: status (active, paused, ended), contactId.' })
+  @ApiOperation({
+    summary: 'List recurring invoices (cursor paginated)',
+    description: 'Filters: status (active, paused, ended), contactId.',
+  })
   list(
     @Query(zodPipe(listRecurringInvoicesQuerySchema)) query: ListRecurringInvoicesQuery,
     @GrantedScope('record.recurring-invoices.read') scope: RecordScope,
@@ -52,7 +73,10 @@ export class RecurringInvoicesController {
   @Get(':id')
   @RequirePermission('record.recurring-invoices.read')
   @ApiOperation({ summary: 'Get one schedule, with its next five dates' })
-  get(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.recurring-invoices.read') scope: RecordScope) {
+  get(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.recurring-invoices.read') scope: RecordScope,
+  ) {
     return this.recurring.get(id, scope);
   }
 
@@ -69,7 +93,9 @@ export class RecurringInvoicesController {
 
   @Patch(':id')
   @RequirePermission('record.recurring-invoices.update')
-  @ApiOperation({ summary: 'Edit the schedule or replace the template for future invoices (rowVersion required)' })
+  @ApiOperation({
+    summary: 'Edit the schedule or replace the template for future invoices (rowVersion required)',
+  })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(updateRecurringInvoiceSchema)) body: UpdateRecurringInvoiceInput,
@@ -82,15 +108,25 @@ export class RecurringInvoicesController {
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.recurring-invoices.update')
   @ApiOperation({ summary: 'Pause a schedule' })
-  pause(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.recurring-invoices.update') scope: RecordScope) {
+  pause(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.recurring-invoices.update') scope: RecordScope,
+  ) {
     return this.recurring.pause(id, scope);
   }
 
   @Post(':id/resume')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.recurring-invoices.update')
-  @ApiOperation({ summary: 'Resume a paused schedule', description: 'Periods that fell while paused are skipped: the next invoice is for today or later.' })
-  resume(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.recurring-invoices.update') scope: RecordScope) {
+  @ApiOperation({
+    summary: 'Resume a paused schedule',
+    description:
+      'Periods that fell while paused are skipped: the next invoice is for today or later.',
+  })
+  resume(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.recurring-invoices.update') scope: RecordScope,
+  ) {
     return this.recurring.resume(id, scope);
   }
 
@@ -99,7 +135,10 @@ export class RecurringInvoicesController {
   @Idempotent()
   @RequirePermission('record.recurring-invoices.update')
   @ApiOperation({ summary: 'Generate the next period now' })
-  run(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.recurring-invoices.update') scope: RecordScope) {
+  run(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.recurring-invoices.update') scope: RecordScope,
+  ) {
     return this.recurring.runNow(id, scope);
   }
 
@@ -107,7 +146,10 @@ export class RecurringInvoicesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.recurring-invoices.delete')
   @ApiOperation({ summary: 'Delete a schedule (invoices already generated stay)' })
-  async remove(@Param('id', ParseUUIDPipe) id: string, @GrantedScope('record.recurring-invoices.delete') scope: RecordScope) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.recurring-invoices.delete') scope: RecordScope,
+  ) {
     await this.recurring.remove(id, scope);
   }
 }

@@ -5,7 +5,19 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { TAX_PROFILES } from '@crm/tax';
 import type { TaxRateResponse, TaxType } from '@crm/contracts';
-import { Alert, Button, Field, Input, Modal, Select, Spinner, Switch, Textarea, cn, useToast } from '@crm/ui';
+import {
+  Alert,
+  Button,
+  Field,
+  Input,
+  Modal,
+  Select,
+  Spinner,
+  Switch,
+  Textarea,
+  cn,
+  useToast,
+} from '@crm/ui';
 import { invalidateInvoicing } from '../api/hooks';
 import { invoicingApi } from '../api/service';
 import { errorCode, errorKind, fieldErrors } from '../lib/errors';
@@ -54,7 +66,9 @@ export function TaxRateDialog({
   const qc = useQueryClient();
   const { toast } = useToast();
   const errorText = useErrorText();
-  const [form, setForm] = useState<TaxRateFormState>(() => (rate ? formFromRate(rate) : emptyTaxRateForm({ isDefault: !hasRates })));
+  const [form, setForm] = useState<TaxRateFormState>(() =>
+    rate ? formFromRate(rate) : emptyTaxRateForm({ isDefault: !hasRates }),
+  );
   const [errors, setErrors] = useState<Errors>({});
   const [conflict, setConflict] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -164,11 +178,24 @@ export function TaxRateDialog({
         )}
 
         <Field label={t('name')} htmlFor="tax-name" error={errors.name} className="sm:col-span-2">
-          <Input id="tax-name" autoFocus dir="auto" value={form.name} maxLength={60} invalid={!!errors.name} placeholder={t('namePlaceholder')} onChange={(e) => set({ name: e.target.value })} />
+          <Input
+            id="tax-name"
+            autoFocus
+            dir="auto"
+            value={form.name}
+            maxLength={60}
+            invalid={!!errors.name}
+            placeholder={t('namePlaceholder')}
+            onChange={(e) => set({ name: e.target.value })}
+          />
         </Field>
 
         <Field label={t('type')} htmlFor="tax-type">
-          <Select id="tax-type" value={form.type} onChange={(e) => set({ type: e.target.value as TaxType })}>
+          <Select
+            id="tax-type"
+            value={form.type}
+            onChange={(e) => set({ type: e.target.value as TaxType })}
+          >
             {TAX_TYPE_ORDER.map((x) => (
               <option key={x} value={x}>
                 {tt(x)}
@@ -178,15 +205,35 @@ export function TaxRateDialog({
         </Field>
         <Field label={t('rate')} htmlFor="tax-rate" error={errors.rate} hint={t('rateHint')}>
           <div className="relative">
-            <Input id="tax-rate" inputMode="decimal" dir="ltr" value={form.rate} invalid={!!errors.rate} className="pe-8" onChange={(e) => set({ rate: e.target.value })} />
-            <span aria-hidden="true" className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            <Input
+              id="tax-rate"
+              inputMode="decimal"
+              dir="ltr"
+              value={form.rate}
+              invalid={!!errors.rate}
+              className="pe-8"
+              onChange={(e) => set({ rate: e.target.value })}
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            >
               %
             </span>
           </div>
         </Field>
 
-        <Field label={t('applies')} htmlFor="tax-applies" hint={t(form.inclusive ? 'appliesHint.inclusive' : 'appliesHint.exclusive')} className="sm:col-span-2">
-          <Select id="tax-applies" value={form.inclusive ? 'inclusive' : 'exclusive'} onChange={(e) => set({ inclusive: e.target.value === 'inclusive' })}>
+        <Field
+          label={t('applies')}
+          htmlFor="tax-applies"
+          hint={t(form.inclusive ? 'appliesHint.inclusive' : 'appliesHint.exclusive')}
+          className="sm:col-span-2"
+        >
+          <Select
+            id="tax-applies"
+            value={form.inclusive ? 'inclusive' : 'exclusive'}
+            onChange={(e) => set({ inclusive: e.target.value === 'inclusive' })}
+          >
             <option value="exclusive">{t('exclusive')}</option>
             <option value="inclusive">{t('inclusive')}</option>
           </Select>
@@ -201,7 +248,13 @@ export function TaxRateDialog({
             <Switch
               checked={form.compound}
               onCheckedChange={(v) =>
-                set({ compound: v, components: v && form.components.length === 0 ? splitEvenly(form.rate, ['CGST', 'SGST']) : form.components })
+                set({
+                  compound: v,
+                  components:
+                    v && form.components.length === 0
+                      ? splitEvenly(form.rate, ['CGST', 'SGST'])
+                      : form.components,
+                })
               }
               label={t('compound')}
             />
@@ -210,33 +263,80 @@ export function TaxRateDialog({
             <div className="space-y-2">
               {form.components.map((c, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <Input aria-label={t('componentType', { n: i + 1 })} dir="ltr" value={c.type} maxLength={12} placeholder="CGST" className="w-28 uppercase" onChange={(e) => compoundField(i, { type: e.target.value })} />
+                  <Input
+                    aria-label={t('componentType', { n: i + 1 })}
+                    dir="ltr"
+                    value={c.type}
+                    maxLength={12}
+                    placeholder="CGST"
+                    className="w-28 uppercase"
+                    onChange={(e) => compoundField(i, { type: e.target.value })}
+                  />
                   <div className="relative min-w-0 flex-1">
-                    <Input aria-label={t('componentRate', { n: i + 1 })} inputMode="decimal" dir="ltr" value={c.rate} className="pe-8" onChange={(e) => compoundField(i, { rate: e.target.value })} />
-                    <span aria-hidden="true" className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    <Input
+                      aria-label={t('componentRate', { n: i + 1 })}
+                      inputMode="decimal"
+                      dir="ltr"
+                      value={c.rate}
+                      className="pe-8"
+                      onChange={(e) => compoundField(i, { rate: e.target.value })}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    >
                       %
                     </span>
                   </div>
-                  <Button variant="ghost" className="size-10 shrink-0 px-0" aria-label={t('removeComponent', { n: i + 1 })} onClick={() => set({ components: form.components.filter((_, j) => j !== i) })}>
+                  <Button
+                    variant="ghost"
+                    className="size-10 shrink-0 px-0"
+                    aria-label={t('removeComponent', { n: i + 1 })}
+                    onClick={() => set({ components: form.components.filter((_, j) => j !== i) })}
+                  >
                     <CloseIcon />
                   </Button>
                 </div>
               ))}
               <div className="flex flex-wrap items-center gap-2">
-                <Button variant="secondary" size="sm" disabled={form.components.length >= MAX_COMPONENTS} onClick={() => set({ components: [...form.components, { type: '', rate: '' }] })}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  disabled={form.components.length >= MAX_COMPONENTS}
+                  onClick={() => set({ components: [...form.components, { type: '', rate: '' }] })}
+                >
                   <PlusIcon /> {t('addComponent')}
                 </Button>
                 {form.components.length >= 2 && rateOk && (
-                  <Button variant="ghost" size="sm" onClick={() => set({ components: splitEvenly(form.rate, form.components.map((c) => c.type)) })}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      set({
+                        components: splitEvenly(
+                          form.rate,
+                          form.components.map((c) => c.type),
+                        ),
+                      })
+                    }
+                  >
                     {t('splitEvenly')}
                   </Button>
                 )}
                 <span
                   aria-live="polite"
-                  className={cn('ms-auto text-xs tabular-nums', sumMatches ? 'text-success' : 'text-danger')}
+                  className={cn(
+                    'ms-auto text-xs tabular-nums',
+                    sumMatches ? 'text-success' : 'text-danger',
+                  )}
                   dir="ltr"
                 >
-                  {total === null ? t('sumUnknown') : t('sum', { sum: total, rate: rateOk ? unitsToPercent(percentUnits(form.rate)) : '?' })}
+                  {total === null
+                    ? t('sumUnknown')
+                    : t('sum', {
+                        sum: total,
+                        rate: rateOk ? unitsToPercent(percentUnits(form.rate)) : '?',
+                      })}
                 </span>
               </div>
               {errors.components && (
@@ -248,10 +348,21 @@ export function TaxRateDialog({
           )}
         </div>
 
-        <Field label={t('country')} htmlFor="tax-country" error={errors.country} hint={t('countryHint')}>
-          <Select id="tax-country" value={form.country.toUpperCase()} onChange={(e) => set({ country: e.target.value })}>
+        <Field
+          label={t('country')}
+          htmlFor="tax-country"
+          error={errors.country}
+          hint={t('countryHint')}
+        >
+          <Select
+            id="tax-country"
+            value={form.country.toUpperCase()}
+            onChange={(e) => set({ country: e.target.value })}
+          >
             <option value="">{t('anyCountry')}</option>
-            {form.country && !TAX_PROFILES.some((p) => p.code === form.country.toUpperCase()) && <option value={form.country.toUpperCase()}>{form.country.toUpperCase()}</option>}
+            {form.country && !TAX_PROFILES.some((p) => p.code === form.country.toUpperCase()) && (
+              <option value={form.country.toUpperCase()}>{form.country.toUpperCase()}</option>
+            )}
             {[...TAX_PROFILES]
               .filter((p) => /^[A-Z]{2}$/.test(p.code))
               .sort((a, b) => a.name.localeCompare(b.name))
@@ -262,22 +373,66 @@ export function TaxRateDialog({
               ))}
           </Select>
         </Field>
-        <Field label={t('region')} htmlFor="tax-region" error={errors.region} hint={t('regionHint')}>
-          <Input id="tax-region" dir="ltr" value={form.region} maxLength={8} invalid={!!errors.region} onChange={(e) => set({ region: e.target.value })} />
+        <Field
+          label={t('region')}
+          htmlFor="tax-region"
+          error={errors.region}
+          hint={t('regionHint')}
+        >
+          <Input
+            id="tax-region"
+            dir="ltr"
+            value={form.region}
+            maxLength={8}
+            invalid={!!errors.region}
+            onChange={(e) => set({ region: e.target.value })}
+          />
         </Field>
 
-        <Field label={t('effectiveFrom')} htmlFor="tax-from" hint={t('effectiveHint')} error={errors.effectiveFrom}>
-          <Input id="tax-from" type="date" value={form.effectiveFrom} invalid={!!errors.effectiveFrom} onChange={(e) => set({ effectiveFrom: e.target.value })} />
+        <Field
+          label={t('effectiveFrom')}
+          htmlFor="tax-from"
+          hint={t('effectiveHint')}
+          error={errors.effectiveFrom}
+        >
+          <Input
+            id="tax-from"
+            type="date"
+            value={form.effectiveFrom}
+            invalid={!!errors.effectiveFrom}
+            onChange={(e) => set({ effectiveFrom: e.target.value })}
+          />
         </Field>
         <Field label={t('effectiveTo')} htmlFor="tax-to" error={errors.effectiveTo}>
-          <Input id="tax-to" type="date" value={form.effectiveTo} min={form.effectiveFrom || undefined} invalid={!!errors.effectiveTo} onChange={(e) => set({ effectiveTo: e.target.value })} />
+          <Input
+            id="tax-to"
+            type="date"
+            value={form.effectiveTo}
+            min={form.effectiveFrom || undefined}
+            invalid={!!errors.effectiveTo}
+            onChange={(e) => set({ effectiveTo: e.target.value })}
+          />
         </Field>
 
         <Field label={t('hsn')} htmlFor="tax-hsn" hint={t('hsnHint')} error={errors.defaultHsnSac}>
-          <Input id="tax-hsn" dir="ltr" value={form.defaultHsnSac} maxLength={12} invalid={!!errors.defaultHsnSac} onChange={(e) => set({ defaultHsnSac: e.target.value })} />
+          <Input
+            id="tax-hsn"
+            dir="ltr"
+            value={form.defaultHsnSac}
+            maxLength={12}
+            invalid={!!errors.defaultHsnSac}
+            onChange={(e) => set({ defaultHsnSac: e.target.value })}
+          />
         </Field>
         <Field label={t('description')} htmlFor="tax-desc" error={errors.description}>
-          <Textarea id="tax-desc" dir="auto" rows={2} maxLength={500} value={form.description} onChange={(e) => set({ description: e.target.value })} />
+          <Textarea
+            id="tax-desc"
+            dir="auto"
+            rows={2}
+            maxLength={500}
+            value={form.description}
+            onChange={(e) => set({ description: e.target.value })}
+          />
         </Field>
 
         <label className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2 text-sm">
@@ -285,14 +440,24 @@ export function TaxRateDialog({
             <span className="block font-medium">{t('makeDefault')}</span>
             <span className="block text-xs text-muted-foreground">{t('defaultHint')}</span>
           </span>
-          <Switch checked={form.isDefault} onCheckedChange={(v) => set({ isDefault: v })} label={t('makeDefault')} disabled={wasDefault} />
+          <Switch
+            checked={form.isDefault}
+            onCheckedChange={(v) => set({ isDefault: v })}
+            label={t('makeDefault')}
+            disabled={wasDefault}
+          />
         </label>
         <label className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2 text-sm">
           <span>
             <span className="block font-medium">{t('active')}</span>
             <span className="block text-xs text-muted-foreground">{t('activeHint')}</span>
           </span>
-          <Switch checked={form.isDefault ? true : form.isActive} onCheckedChange={(v) => set({ isActive: v })} label={t('active')} disabled={form.isDefault} />
+          <Switch
+            checked={form.isDefault ? true : form.isActive}
+            onCheckedChange={(v) => set({ isActive: v })}
+            label={t('active')}
+            disabled={form.isDefault}
+          />
         </label>
       </form>
     </Modal>

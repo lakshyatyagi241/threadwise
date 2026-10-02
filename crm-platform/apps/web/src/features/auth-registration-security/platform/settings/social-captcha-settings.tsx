@@ -35,6 +35,7 @@ import {
 } from '../lib/social-draft';
 import { useCanEdit } from '../operator-context';
 import { operatorFetch } from '../operator-fetch';
+import { OFFICIAL_DOCS } from '../lib/social-docs';
 import { CheckIcon } from '../ui/icons';
 import { CopyButton } from '../ui/copy-button';
 import { RemoveSecret } from './remove-secret';
@@ -541,6 +542,29 @@ function SocialCaptchaForm({ settings }: { settings: SocialCaptchaSettingsRespon
             >
               {t('guide.recaptcha.link')}
             </a>
+          </Card>
+          <Card className="space-y-2">
+            <header>
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                {t('docs.kicker')}
+              </p>
+              <h3 className="text-base font-semibold leading-tight">{t('docs.title')}</h3>
+            </header>
+            <ul className="space-y-1.5 text-sm">
+              {OFFICIAL_DOCS.map((d) => (
+                <li key={d.id}>
+                  <a
+                    href={d.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    {t(`docs.links.${d.id}`)}
+                    <span className="sr-only"> {t('docs.opensNewTab')}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </Card>
           <div className="rounded-md border border-primary/40 bg-primary/5 p-4 text-sm">
             <Badge tone="neutral" className="mb-2">

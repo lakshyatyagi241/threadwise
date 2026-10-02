@@ -40,11 +40,14 @@ export function compareNav(a: NavItem, b: NavItem): number {
 }
 
 /**
- * WaDesk's rule: a missing permission or unavailable channel removes the item, a missing plan feature keeps it
- * visible but locked (so it can upsell). The server stays the authority; this only shapes the menu.
- * Planned (not yet built) screens go through the same gates, then come out marked `comingSoon`.
+ * `/account/<name>`, one segment: a pane of the account hub (profile, plan, wallet, ...). A domain adds one by
+ * declaring it in its own `nav.ts`; the hub lists it in its own menu, so the main sidebar leaves it out.
  */
-export function resolveNav(
+export const HUB_PANE_HREF = /^\/account\/([a-z0-9][a-z0-9-]*)$/;
+
+export const isHubPane = (item: Pick<NavItem, 'href'>): boolean => HUB_PANE_HREF.test(item.href);
+
+export function resolveNavAll(
   items: readonly NavItem[],
   caps: Capabilities,
   options: ResolveOptions = {},
@@ -60,4 +63,20 @@ export function resolveNav(
     out.push({ ...item, locked, comingSoon });
   }
   return out.sort(compareNav);
+}
+
+/**
+ * The main sidebar's items. The account hub's panes are reached from the hub (the sidebar keeps the single
+ * "Account" entry), so they are left out here; use `resolveNavAll` where they are wanted.
+ */
+export function resolveNav(
+  items: readonly NavItem[],
+  caps: Capabilities,
+  options: ResolveOptions = {},
+): ResolvedNavItem[] {
+  return resolveNavAll(
+    items.filter((item) => !isHubPane(item)),
+    caps,
+    options,
+  );
 }

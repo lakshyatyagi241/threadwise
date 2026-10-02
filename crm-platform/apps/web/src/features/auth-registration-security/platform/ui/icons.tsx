@@ -55,3 +55,9 @@ export const AlertIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M12 3l10 18H2L12 3zM12 10v5M12 18h.01" />
   </Icon>
 );
+export const SearchIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="M20 20l-4-4" />
+  </Icon>
+);

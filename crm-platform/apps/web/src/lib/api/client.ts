@@ -1,4 +1,5 @@
 import type { z } from 'zod';
+import { redirectOnIdle } from '@/lib/auth/idle-redirect';
 import { toApiError } from './errors';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -9,7 +10,7 @@ export interface ApiRequest<T> {
   query?: Record<string, string | number | boolean | undefined>;
   body?: unknown;
   /** Parsed at the boundary: the server can be older than this build. Omit for 204 responses. */
-  schema?: z.ZodType<T>;
+  schema?: z.ZodType<T, z.ZodTypeDef, unknown>;
   idempotencyKey?: string;
   signal?: AbortSignal;
 }
@@ -41,6 +42,16 @@ export async function apiFetch<T = void>(path: string, req: ApiRequest<T> = {}):
   });
   const text = await res.text();
   const json: unknown = text ? JSON.parse(text) : undefined;
-  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  if (!res.ok) {
+    const error = toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
+    // The session ended for inactivity while the page was open: go to sign-in with the reason, as a page load does.
+    redirectOnIdle(error);
+    throw error;
+  }
   return (req.schema ? req.schema.parse(json) : (undefined as T)) as T;
 }
