@@ -9,7 +9,8 @@
     "start": "next start -p 3001",
     "typecheck": "node scripts/gen-registry.mjs && next typegen && tsc --noEmit",
     "lint": "node scripts/gen-registry.mjs && eslint src",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@crm/contracts": "workspace:*",
@@ -25,6 +26,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
