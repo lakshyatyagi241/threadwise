@@ -36,7 +36,7 @@ is not lost. The inventory details 001 to 021; 022 onward (call logs, assistants
 | WD-CALL-004 | Switch calling on a number | `call.calling.manage` | `POST /v2/calling/numbers/:id/toggle` | calling page | `CallingNumbersService.toggle`, `CALLING_GRAPH.setCalling` | built |
 | WD-CALL-005 | Permission request | `call.calls.use` | `POST /v2/calling/permission-request` | Call button, dial | `CallPermissionService.send` | built |
 | WD-CALL-006 | Permission ledger and eligibility | `call.calls.use` | `permission_update`, `GET /v2/calling/eligibility` | inbox Call button | `CallPermissionService.record`, `CallingNumbersService.eligibility` | built, `intended` (the conversation's own number; a lapsed grant reads `expired`) |
-| WD-CALL-007 | Inbox Call button | `call.calls.use` | eligibility, permission, dial | team inbox | web `CallButton` | frontend built; mounted by the inbox (TIB1) |
+| WD-CALL-007 | Inbox Call button | `call.calls.use` | eligibility, permission, dial | team inbox | web `CallButton` | frontend built; mounted in the inbox thread header |
 | WD-CALL-008 | Dial | `call.calls.use` | `POST /v2/calling/calls/dial` | browser peer | `CallActionsService.dial` | built, `intended` (calling must be on; a refused dial is `failed`) |
 | WD-CALL-009 | Browser WebRTC peer | none | dial, progress, accept | on-call panel | web `CallPeer` | frontend built; no real microphone test |
 | WD-CALL-010 | Dial progress poll | `call.calls.use` | `GET /v2/calling/calls/:id/progress` | peer | `CallActionsService.progress` | built |
