@@ -30,7 +30,6 @@ export interface InboundMessageInput {
   messageId: string | null;
   text: string;
   mediaType: string | null;
-  mediaPath: string | null;
   fileId: string | null;
   /** `successful_payment` rows carry the payment facts and run no automation. */
   event: 'successful_payment' | null;
@@ -38,6 +37,8 @@ export interface InboundMessageInput {
 }
 
 export interface InboundRecorded {
+  /** False when Telegram's message was already stored (a redelivered update). */
+  stored: boolean;
   conversationId: number;
   contactId: number | null;
   /** The contact was created by this message (its avatar is fetched once). */
@@ -47,17 +48,11 @@ export interface InboundRecorded {
 }
 
 /**
- * Writes an inbound message into the team inbox (team-inbox-conversations): finds or creates the `channel = telegram` thread
- * keyed by bot and chat, links a contact, stores the message, moves the thread (preview, unread, reopen). The inbox domain also
- * owns the live "message received" push; until it exports this, `SqlInboxIngest` does the writes only.
+ * Writes into the inbox (chat-conversations): the thread lives on the bot's `telegram` channel, keyed by the chat id, and the
+ * message goes through the same pipeline a Cloud API webhook feeds (ledger, sequence, unread, reopen, realtime). A contact is linked.
  */
 export interface InboxIngest {
-  recordInbound(
-    tx: Tx,
-    orgId: number,
-    botRowId: number,
-    m: InboundMessageInput,
-  ): Promise<InboundRecorded>;
+  recordInbound(orgId: number, botRowId: number, m: InboundMessageInput): Promise<InboundRecorded>;
   setContactImage(tx: Tx, orgId: number, contactId: number, url: string): Promise<void>;
   /** A message we sent into a thread (a broadcast to that chat): shown as outbound, moves the thread's last-sent time, leaves unread alone. */
   recordOutbound(

@@ -2,8 +2,15 @@ import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
 import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConfigService } from './waba-config.service';
+import {
+  WABA_CALLS_SINK,
+  WABA_CALLS_SINK_OVERRIDE,
+  LoggingCallsSink,
+  type WabaCallsSink,
+} from './waba-calls-sink';
 import { WabaPlatformController } from './waba-platform.controller';
 import { WabaConnectionsController } from './waba-connections.controller';
 import { WabaConnectionsRepository } from './waba-connections.repository';
@@ -28,7 +35,7 @@ import { WabaWebhookService } from './waba-webhook.service';
  */
 @Module({
   // forwardRef: the broadcasts barrel and this module import each other through node-bridge-runtime.
-  imports: [forwardRef(() => BroadcastsModule), PlatformSettingsModule],
+  imports: [forwardRef(() => BroadcastsModule), PlatformSettingsModule, WhatsAppProviderRegistryModule],
   controllers: [WabaConnectionsController, WabaWebhookController, WabaPlatformController],
   providers: [
     CryptoService,
@@ -45,7 +52,18 @@ import { WabaWebhookService } from './waba-webhook.service';
       useFactory: (override?: WabaInboundSink): WabaInboundSink =>
         override ?? new LoggingInboundSink(),
     },
+    {
+      provide: WABA_CALLS_SINK,
+      inject: [{ token: WABA_CALLS_SINK_OVERRIDE, optional: true }],
+      useFactory: (override?: WabaCallsSink): WabaCallsSink => override ?? new LoggingCallsSink(),
+    },
   ],
-  exports: [WabaConnectService, WabaConnectionsRepository, WabaIngestService, WABA_INBOUND_SINK],
+  exports: [
+    WabaConnectService,
+    WabaConnectionsRepository,
+    WabaIngestService,
+    WabaWebhookService,
+    WABA_INBOUND_SINK,
+  ],
 })
 export class WabaModule {}

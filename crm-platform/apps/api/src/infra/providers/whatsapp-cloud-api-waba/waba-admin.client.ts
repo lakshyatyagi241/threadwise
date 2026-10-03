@@ -13,7 +13,7 @@ import {
   type WabaDetails,
 } from './waba-admin.port';
 import { WabaApiError } from './waba-errors';
-import { WabaHttp, type WabaAuth } from './waba-http';
+import { WabaHttp, type WabaAuth, type WabaRequest } from './waba-http';
 
 /** Every field the connect screens and the health page read, in one request (union of WaDesk's and Geta's lists). */
 export const PHONE_FIELDS = [
@@ -268,6 +268,7 @@ export class WabaAdminClient implements WabaAdminPort {
     conn: WabaConnection,
     callback: { url: string; verifyToken: string },
   ): Promise<SubscribeResult> {
+    if (conn.registry) return this.subscribeViaRegistry(conn, callback);
     const token = conn.accessToken;
     if (!token) return { ok: false, overrideApplied: false, error: noToken() };
     return conn.provider === 'interakt'
@@ -313,6 +314,54 @@ export class WabaAdminClient implements WabaAdminPort {
       }
     }
     return { ok: true, overrideApplied: false };
+  }
+
+  /**
+   * A number on a provider of the registry (`conn.registry`): the same Graph-shaped calls, through the provider's own address and
+   * credential. Like the built-in Interakt route the WABA is subscribed first and the per-number callback override is then offered
+   * (`verify_token` first, dropped on a refusal); a provider whose webhook is configured once on the Meta app (`meta_app_level`) is
+   * only subscribed. Nothing here was exercised against a live provider.
+   */
+  private async subscribeViaRegistry(
+    conn: WabaConnection,
+    callback: { url: string; verifyToken: string },
+  ): Promise<SubscribeResult> {
+    const route = conn.registry!;
+    try {
+      await this.http.call(route, { method: 'POST', path: `/${conn.wabaId}/subscribed_apps` });
+    } catch (e) {
+      return { ok: false, overrideApplied: false, error: asApiError(e) };
+    }
+    if (route.webhookMode !== 'number_level_override') return { ok: true, overrideApplied: false };
+    for (const body of [
+      {
+        webhook_configuration: {
+          override_callback_uri: callback.url,
+          verify_token: callback.verifyToken,
+        },
+      },
+      { webhook_configuration: { override_callback_uri: callback.url } },
+    ]) {
+      try {
+        await this.http.call(route, { method: 'POST', path: `/${conn.phoneNumberId}`, json: body });
+        return { ok: true, overrideApplied: true };
+      } catch (e) {
+        const err = asApiError(e);
+        if (err.missingBusinessManagement) return { ok: false, overrideApplied: false, error: err };
+        this.logger.warn(
+          { providerKey: route.providerKey, status: err.status, code: err.code },
+          'registry provider callback override refused',
+        );
+      }
+    }
+    return { ok: true, overrideApplied: false };
+  }
+
+  /** The account node of a connection: through its registry provider, else Graph with the business token. */
+  private viaRoute<T>(conn: WabaConnection, req: WabaRequest): Promise<T> {
+    if (conn.registry) return this.http.call<T>(conn.registry, req);
+    if (!conn.accessToken) return Promise.reject(noToken());
+    return this.http.graph<T>(conn.accessToken, req);
   }
 
   /** WaDesk WD-WABA-011: atomic subscribe + override, plain subscribe fallback, then retry the override. */
@@ -410,9 +459,8 @@ export class WabaAdminClient implements WabaAdminPort {
   }
 
   async registerPhone(conn: WabaConnection, pin: string): Promise<void> {
-    const token = conn.accessToken;
-    if (!token) throw noToken();
-    await this.http.graph(token, {
+    if (!conn.registry && !conn.accessToken) throw noToken();
+    await this.viaRoute(conn, {
       method: 'POST',
       path: `/${conn.phoneNumberId}/register`,
       json: { messaging_product: 'whatsapp', pin },
@@ -420,21 +468,21 @@ export class WabaAdminClient implements WabaAdminPort {
   }
 
   async unsubscribe(conn: WabaConnection): Promise<void> {
-    if (!conn.accessToken) throw noToken();
-    await this.http.graph(conn.accessToken, {
+    if (!conn.registry && !conn.accessToken) throw noToken();
+    await this.viaRoute(conn, {
       method: 'DELETE',
       path: `/${conn.wabaId}/subscribed_apps`,
     });
   }
 
   async verifyInboundWired(conn: WabaConnection, expectedUrl: string): Promise<boolean | null> {
-    if (!conn.accessToken) return null;
+    if (!conn.registry && !conn.accessToken) return null;
     try {
-      const res = await this.http.graph<{
+      const res = await this.viaRoute<{
         data?: Array<{
           whatsapp_business_api_data?: { id?: string; override_callback_uri?: string };
         }>;
-      }>(conn.accessToken, { method: 'GET', path: `/${conn.wabaId}/subscribed_apps` });
+      }>(conn, { method: 'GET', path: `/${conn.wabaId}/subscribed_apps` });
       const want = expectedUrl.replace(/\/+$/, '');
       for (const entry of res.data ?? []) {
         const d = entry.whatsapp_business_api_data;
@@ -444,7 +492,8 @@ export class WabaAdminClient implements WabaAdminPort {
           d?.id &&
           this.env.META_APP_ID &&
           d.id === this.env.META_APP_ID &&
-          conn.provider === 'meta'
+          conn.provider === 'meta' &&
+          !conn.registry
         )
           return true;
       }

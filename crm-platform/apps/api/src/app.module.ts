@@ -27,6 +27,7 @@ import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
+import { CallingVoiceModule } from './modules/calling-voice';
 import { CampaignsModule } from './modules/campaigns';
 import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
@@ -36,6 +37,7 @@ import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
 import { StorefrontBuilderModule } from './modules/storefront-builder';
+import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -59,6 +61,7 @@ import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-
 import { TeamChatModule } from './modules/team-chat';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
+import { WhatsAppProviderAdminModule } from './modules/whatsapp-provider-admin';
 import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
@@ -144,6 +147,7 @@ import { HealthModule } from './health/health.module';
     AiKeysUsageAdminModule,
     NodeBridgeRuntimeModule,
     ScheduledQueueWarmerModule,
+    FlowRuntimeEngineModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
@@ -171,6 +175,7 @@ import { HealthModule } from './health/health.module';
     NotificationsModule,
     BroadcastsModule,
     CampaignsModule,
+    CallingVoiceModule,
     ChannelTelegramModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
@@ -183,6 +188,7 @@ import { HealthModule } from './health/health.module';
     PlatformSupportDeskModule,
     TeamChatModule,
     WabaModule,
+    WhatsAppProviderAdminModule,
     MessageTemplatesModule,
     ChatConversationsModule,
     TeamInboxConversationsModule,
