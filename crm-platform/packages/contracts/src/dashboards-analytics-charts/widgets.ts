@@ -89,6 +89,56 @@ export const dashWidgetsSchema = z.object({
       winRatePct: z.number().int(),
     })
     .nullable(),
+  /** Null until a workspace has linked an Instagram account (WD-DASH-008): the band does not render. */
+  instagram: z
+    .object({
+      accountsCount: z.number().int(),
+      accounts: z.array(
+        z.object({
+          handle: z.string(),
+          avatar: z.string().nullable(),
+          status: z.string(),
+        }),
+      ),
+      needsReply: z.number().int(),
+      open: z.number().int(),
+      unread: z.number().int(),
+      dmsIn7d: z.number().int(),
+      dmsOut7d: z.number().int(),
+      /** round(min(100, out / in * 100)), 0 with no inbound. */
+      replyRatePct: z.number().int(),
+      followers: z.number().int(),
+    })
+    .nullable(),
+  /** Flow Copilot counters and the six latest flows (WD-DASH-017). Ignores the range. */
+  flows: z.object({
+    total: z.number().int(),
+    active: z.number().int(),
+    subscribers: z.number().int(),
+    recent: z.array(
+      z.object({
+        uuid: z.string().uuid(),
+        name: z.string(),
+        active: z.boolean(),
+        trigger: z.string(),
+        steps: z.number().int(),
+        subscribers: z.number().int(),
+      }),
+    ),
+  }),
+  /** Connection state read per workspace from the integration tables (WD-DASH-020). */
+  integrations: z.object({
+    connected: z.number().int(),
+    total: z.number().int(),
+    rows: z.array(
+      z.object({
+        code: z.enum(['woocommerce', 'shopify', 'google_sheets', 'meta_catalog']),
+        connected: z.boolean(),
+        /** Events in the last 7 days for WooCommerce; null for the others. */
+        events7d: z.number().int().nullable(),
+      }),
+    ),
+  }),
   activity: z.array(
     z.object({
       at: z.string(),

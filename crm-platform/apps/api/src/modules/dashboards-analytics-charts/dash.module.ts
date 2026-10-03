@@ -5,6 +5,7 @@ import { AnalyticsController, DashboardController, QuickAccessController } from 
 import { DashRepository } from './dash.repository';
 import { DashWidgetsRepository } from './dash-widgets.repository';
 import { DashPanelsRepository } from './dash-panels.repository';
+import { DashExtrasRepository } from './dash-extras.repository';
 import { DashService } from './dash.service';
 import { QuickAccessService } from './quick-access.service';
 import { AdminDashController } from './admin-dash.controller';
@@ -28,6 +29,7 @@ import { HealthService } from './health.service';
     DashRepository,
     DashWidgetsRepository,
     DashPanelsRepository,
+    DashExtrasRepository,
     HealthService,
     PlatformMetricsService,
   ],

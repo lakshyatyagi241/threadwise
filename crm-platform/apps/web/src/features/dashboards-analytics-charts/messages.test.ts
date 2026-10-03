@@ -79,3 +79,43 @@ describe('dashboard messages', () => {
       expect(has(`${base}.templates.status.${st}`)).toBe(true);
   });
 });
+
+describe('dashboard extras messages (WD-DASH-008, 017, 020)', () => {
+  const b = 'dashboards-analytics-charts.dashboard';
+  it('every key the Instagram, Copilot, flows, quick-action and integration cards ask for exists', () => {
+    const keys = [
+      ...['title', 'accounts', 'connected', 'openInbox'].map((k) => `instagram.${k}`),
+      ...['needReply', 'openChats', 'dmsIn', 'dmsOut', 'followers', 'replyRate'].map(
+        (k) => `instagram.tile.${k}`,
+      ),
+      ...['title', 'tag', 'headline', 'body', 'try', 'generate', 'examples'].map(
+        (k) => `copilot.${k}`,
+      ),
+      ...['flows', 'active', 'subscribers'].map((k) => `copilot.stat.${k}`),
+      ...[
+        'title',
+        'summary',
+        'open',
+        'empty',
+        'build',
+        'meta',
+        'statusActive',
+        'statusPaused',
+        'subs',
+      ].map((k) => `flows.${k}`),
+      'quickActions.title',
+      ...['broadcast', 'flow', 'template', 'autoReply'].flatMap((k) => [
+        `quickActions.${k}.label`,
+        `quickActions.${k}.hint`,
+      ]),
+      ...['title', 'events', 'notConnected', 'connect', 'connectedLabel'].map(
+        (k) => `integrations.${k}`,
+      ),
+      ...['woocommerce', 'shopify', 'google_sheets', 'meta_catalog'].flatMap((k) => [
+        `integrations.name.${k}`,
+        `integrations.connected.${k}`,
+      ]),
+    ];
+    expect(keys.filter((k) => !has(`${b}.${k}`))).toEqual([]);
+  });
+});

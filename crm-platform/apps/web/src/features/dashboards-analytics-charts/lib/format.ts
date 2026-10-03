@@ -133,3 +133,7 @@ export function minutesLabel(min: number | null): string {
   const m = Math.round(min);
   return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`;
 }
+
+/** Followers read as 1.2k from a thousand up (WD-DASH-008). */
+export const followersLabel = (n: number): string =>
+  n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);

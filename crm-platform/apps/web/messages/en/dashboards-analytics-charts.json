@@ -204,6 +204,83 @@
         "subtitle": "Workspace events",
         "empty": "No recent activity logged for this workspace.",
         "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, one {# account} other {# accounts}}",
+        "connected": "Connected",
+        "openInbox": "Open inbox →",
+        "tile": {
+          "needReply": "Need reply",
+          "openChats": "Open chats",
+          "dmsIn": "DMs in · 7d",
+          "dmsOut": "DMs sent · 7d",
+          "followers": "Followers",
+          "replyRate": "Reply rate"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "AI Powered",
+        "headline": "Build a flow from a sentence.",
+        "body": "Describe a customer journey and Copilot drafts nodes, branches, and template suggestions.",
+        "try": "try:",
+        "generate": "Generate flow ✦",
+        "examples": "Examples",
+        "stat": {
+          "flows": "flows",
+          "active": "active",
+          "subscribers": "subscribers"
+        }
+      },
+      "flows": {
+        "title": "Automation flows",
+        "summary": "{active} active · {subscribers} subscribers",
+        "open": "Open",
+        "empty": "No flows yet.",
+        "build": "Build your first flow",
+        "meta": "{trigger} trigger · {steps} steps · {subs} subscribers",
+        "statusActive": "Active",
+        "statusPaused": "Paused",
+        "subs": "subs"
+      },
+      "quickActions": {
+        "title": "Quick actions",
+        "broadcast": {
+          "label": "New broadcast",
+          "hint": "to a contact group"
+        },
+        "flow": {
+          "label": "Build flow",
+          "hint": "drag & drop"
+        },
+        "template": {
+          "label": "New template",
+          "hint": "submit to Meta"
+        },
+        "autoReply": {
+          "label": "Auto-reply",
+          "hint": "keyword rule"
+        }
+      },
+      "integrations": {
+        "title": "Integrations",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} events / 7d",
+        "connected": {
+          "woocommerce": "Connected",
+          "shopify": "Connected",
+          "google_sheets": "API key issued",
+          "meta_catalog": "Catalog linked"
+        },
+        "notConnected": "not connected",
+        "connect": "Connect",
+        "connectedLabel": "Connected"
       }
     },
     "analytics": {

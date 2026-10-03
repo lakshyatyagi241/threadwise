@@ -24,6 +24,7 @@ import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { DashRepository } from './dash.repository';
 import { DashWidgetsRepository } from './dash-widgets.repository';
 import { DashPanelsRepository } from './dash-panels.repository';
+import { DashExtrasRepository } from './dash-extras.repository';
 
 const HOUR_MS = 3_600_000;
 const iso = (d: Date): string => d.toISOString();
@@ -39,6 +40,7 @@ export class DashService {
     private readonly repo: DashRepository,
     private readonly widgetsRepo: DashWidgetsRepository,
     private readonly panelsRepo: DashPanelsRepository,
+    private readonly extrasRepo: DashExtrasRepository,
     private readonly plans: PlanEntitlementService,
   ) {}
 
@@ -70,6 +72,9 @@ export class DashService {
               new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)),
             )
           : null,
+        instagram: await this.extrasRepo.instagram(tx, orgId, now),
+        flows: await this.extrasRepo.flows(tx, orgId),
+        integrations: await this.extrasRepo.integrations(tx, orgId, now),
         activity: await this.widgetsRepo.activity(tx, orgId),
       };
     });
