@@ -14,7 +14,7 @@ import {
   type InboundInput,
   type InboxIngest,
 } from './_shims/tokens';
-import { PLACEHOLDER_NAME } from './_shims/sql-inbox-ingest';
+import { PLACEHOLDER_NAME } from './_shims/chat-inbox-ingest';
 import {
   readComment,
   readEntries,
@@ -139,6 +139,8 @@ export class InboundService {
   private async storeDm(orgId: number, page: PageRow, dm: DmInput): Promise<void> {
     const input: InboundInput = {
       kind: 'dm',
+      pageId: page.pageId,
+      pageName: page.name ?? page.pageId,
       rawJid: dmThreadKey(page.pageId, dm.psid),
       title: PLACEHOLDER_NAME,
       senderId: dm.psid,
@@ -149,7 +151,7 @@ export class InboundService {
       at: dm.timestamp === null ? null : new Date(dm.timestamp),
       meta: { psid: dm.psid, kind: 'dm' },
     };
-    const rec = await this.db.txAs({ orgId }, (tx) => this.inbox.recordInbound(tx, orgId, input));
+    const rec = await this.inbox.recordInbound(orgId, input);
     if (!rec.stored) return;
 
     // The sender's real name and picture, once, when the thread is created. Best effort: the placeholder stays if Meta says nothing.
@@ -226,19 +228,19 @@ export class InboundService {
       ...(c.fromId !== '' ? { from_id: c.fromId } : {}),
       ...(c.fromName !== '' ? { from_name: c.fromName } : {}),
     };
-    await this.db.txAs({ orgId }, (tx) =>
-      this.inbox.recordInbound(tx, orgId, {
-        kind: 'comment',
-        rawJid: commentThreadKey(page.pageId, c.postId, c.fromId),
-        title: c.fromName !== '' ? c.fromName : 'Facebook commenter',
-        senderId: c.fromId,
-        body: body !== '' ? body : '[comment]',
-        mediaType: null,
-        mediaUrl: null,
-        dedup: c.commentId,
-        at: null,
-        meta,
-      }),
-    );
+    await this.inbox.recordInbound(orgId, {
+      kind: 'comment',
+      pageId: page.pageId,
+      pageName: page.name ?? page.pageId,
+      rawJid: commentThreadKey(page.pageId, c.postId, c.fromId),
+      title: c.fromName !== '' ? c.fromName : 'Facebook commenter',
+      senderId: c.fromId,
+      body: body !== '' ? body : '[comment]',
+      mediaType: null,
+      mediaUrl: null,
+      dedup: c.commentId,
+      at: null,
+      meta,
+    });
   }
 }

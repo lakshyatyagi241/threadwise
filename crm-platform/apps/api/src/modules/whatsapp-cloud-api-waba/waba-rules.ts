@@ -362,4 +362,6 @@ export const HANDLED_FIELDS = new Set([
   'account_update',
   'account_review_update',
   'flows',
+  // Calls: connect, terminate and permission_update (TW-CALL-002); one callback URL serves every field.
+  'calls',
 ]);

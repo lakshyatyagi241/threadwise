@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { InstagramAutomation, InstagramPlanGate, MediaUrls } from './tokens';
+import type { InstagramAutomation, InstagramPlanGate } from './tokens';
 
 /** `access_instagram` is not in the plan catalogue yet, so every check passes. */
 @Injectable()
@@ -18,13 +18,5 @@ export class OpenInstagramPlanGate implements InstagramPlanGate {
 export class NoInstagramAutomation implements InstagramAutomation {
   automate(): Promise<void> {
     return Promise.resolve();
-  }
-}
-
-/** No storage domain yet: only an address that is already public can be sent as an attachment. */
-@Injectable()
-export class PublicOnlyMediaUrls implements MediaUrls {
-  publicUrl(path: string): string | null {
-    return /^https?:\/\//i.test(path) ? path : null;
   }
 }

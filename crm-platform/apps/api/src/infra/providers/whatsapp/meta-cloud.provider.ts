@@ -36,6 +36,7 @@ export class MetaCloudProvider implements WhatsAppProvider {
   ) {}
 
   private auth(credentials: ChannelCredentials): WabaAuth {
+    if (credentials.registry) return credentials.registry;
     if (credentials.route === 'interakt') {
       if (!credentials.authKey || !credentials.businessAccountId) {
         throw new Error('An Interakt number needs its auth key and WABA id. Reconnect the number.');
@@ -60,8 +61,13 @@ export class MetaCloudProvider implements WhatsAppProvider {
       source: params.screen?.source,
     });
     // No footer: approved template content cannot be changed after submission.
-    const marketing = params.category?.toLowerCase() === 'marketing' && credentials.marketingLite === true;
-    return this.post(credentials, buildTemplateMessage(params), marketing ? 'marketing_messages' : 'messages');
+    const marketing =
+      params.category?.toLowerCase() === 'marketing' && credentials.marketingLite === true;
+    return this.post(
+      credentials,
+      buildTemplateMessage(params),
+      marketing ? 'marketing_messages' : 'messages',
+    );
   }
 
   async sendText(credentials: ChannelCredentials, params: SendTextParams): Promise<SendResult> {
@@ -77,12 +83,17 @@ export class MetaCloudProvider implements WhatsAppProvider {
       recipient_type: 'individual',
       to: params.to.replace(/\D+/g, ''),
       type: 'text',
-      ...(params.replyToProviderMessageId ? { context: { message_id: params.replyToProviderMessageId } } : {}),
+      ...(params.replyToProviderMessageId
+        ? { context: { message_id: params.replyToProviderMessageId } }
+        : {}),
       text: { preview_url: false, body },
     });
   }
 
-  async sendMessage(credentials: ChannelCredentials, params: SendMessageParams): Promise<SendResult> {
+  async sendMessage(
+    credentials: ChannelCredentials,
+    params: SendMessageParams,
+  ): Promise<SendResult> {
     await this.guard.beforeSend({
       body: textOf(params),
       bulk: params.screen?.bulk,
@@ -93,12 +104,18 @@ export class MetaCloudProvider implements WhatsAppProvider {
       recipient_type: 'individual',
       to: params.to.replace(/\D+/g, ''),
       type: params.type,
-      ...(params.replyToProviderMessageId ? { context: { message_id: params.replyToProviderMessageId } } : {}),
+      ...(params.replyToProviderMessageId
+        ? { context: { message_id: params.replyToProviderMessageId } }
+        : {}),
       [params.type]: params.body,
     });
   }
 
-  async markRead(credentials: ChannelCredentials, providerMessageId: string, typing = false): Promise<void> {
+  async markRead(
+    credentials: ChannelCredentials,
+    providerMessageId: string,
+    typing = false,
+  ): Promise<void> {
     try {
       await this.http.call(this.auth(credentials), {
         method: 'POST',
