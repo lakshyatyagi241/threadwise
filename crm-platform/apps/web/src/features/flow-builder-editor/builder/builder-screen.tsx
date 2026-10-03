@@ -138,7 +138,8 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
   const [busy, setBusy] = useState(false);
   const [aiOpen, setAiOpen] = useState(aiOpenInitially);
   const [testOpen, setTestOpen] = useState(testOpenInitially);
-  const [runNonce, setRunNonce] = useState(testOpenInitially ? 1 : 0);
+  // QUIRK (WaDesk): `?test=1` opens the panel but does not start a run; only the Test button and Restart do.
+  const [runNonce, setRunNonce] = useState(0);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

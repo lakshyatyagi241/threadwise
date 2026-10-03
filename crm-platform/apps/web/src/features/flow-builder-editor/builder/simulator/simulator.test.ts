@@ -382,6 +382,93 @@ describe('simulator: nodes', () => {
   });
 });
 
+describe('simulator: integration and channel nodes (copy verified against the running WaDesk)', () => {
+  const chain = (nodes: FlowNode[], handles: Record<string, string> = {}) => {
+    const all = [node('t', 'trigger'), ...nodes];
+    const edges = all.slice(0, -1).map((n, i) => edge(n.id, handles[n.id] ?? 'out', all[i + 1]!.id));
+    return harness(all, edges);
+  };
+
+  it('book_appointment lists the sample slots (slotCount clamped to 1..10 of the 5 samples) and takes booked', async () => {
+    const h = chain([node('b', 'book_appointment', { slotCount: 3, prompt: 'Choose' }), node('e', 'end')], { b: 'booked' });
+    h.sim.start();
+    h.sim.send('x');
+    await h.settle();
+    expect(h.texts()).toContain(
+      'Choose\n  1. Mon 20 May · 10:00 AM\n  2. Mon 20 May · 11:30 AM\n  3. Tue 21 May · 9:00 AM',
+    );
+    expect(h.texts()).toContain('(simulated) customer picks slot 1 → booked');
+    expect(h.texts().at(-1)).toBe('Flow ended.');
+    const many = chain([node('b', 'book_appointment', { slotCount: 99 }), node('e', 'end')], { b: 'booked' });
+    many.sim.start();
+    many.sim.send('x');
+    await many.settle();
+    expect(many.texts().find((t) => t.startsWith('Pick a time:'))!.split('\n')).toHaveLength(6);
+  });
+
+  it('google_form, deal, wa_form, notify_number, wa_to_instagram, cta and location log what the runtime would do', async () => {
+    const h = chain(
+      [
+        node('f', 'google_form', { formId: 'F1', bodyText: 'Fill {{name}}' }),
+        node('d', 'deal', { action: 'move', stageId: '3', dealName: 'Deal for {{name}}', value: '10' }),
+        node('w', 'wa_form', { formTitle: 'Survey' }),
+        node('n', 'notify_number', { copyNumber: '+911', kind: 'text', text: 'Hi {{name}}' }),
+        node('i', 'wa_to_instagram', { igUsername: '@shop', introText: 'Follow us' }),
+        node('c', 'cta', { kind: 'url', label: 'Go', url: 'https://x.y' }),
+        node('l', 'location', { name: 'HQ', address: '1 Road', lat: '12.5', lng: '77.1' }),
+        node('e', 'end'),
+      ],
+      { f: 'submitted', d: 'created' },
+    );
+    h.sim.start();
+    h.sim.send('x');
+    await h.settle();
+    expect(h.texts()).toEqual([
+      'Type any message to start the flow.',
+      'x',
+      'Fill Anya\n\nhttps://docs.google.com/forms/d/F1/viewform',
+      '(simulated) form submitted → submitted port',
+      '[CRM] move contact deal to stage 3 — "Deal for Anya" · 10 (skipped in test)',
+      'Please complete this form:',
+      '(simulated) published Meta form Survey sent → out',
+      'Copy sent to +911: Hi Anya',
+      'Follow us\nhttps://ig.me/m/shop',
+      '(CTA)\n[url] Go → https://x.y',
+      '(location) HQ\n1 Road\nlat 12.5, lng 77.1',
+      'Flow ended.',
+    ]);
+  });
+
+  it('code, mysql, ai, tag, assign, chatbot, google_sheets and google_docs are mocked lines', async () => {
+    const h = chain([
+      node('c', 'code', { save: 'r' }),
+      node('m', 'mysql', { database: 'shop', sql: 'SELECT * FROM orders WHERE id = 1 AND status = "open" LIMIT 5' }),
+      node('a', 'ai', { model: 'gpt-4o' }),
+      node('g', 'tag', { action: 'remove', tag: 'vip' }),
+      node('s', 'assign', { team: 'Sales', userId: '9' }),
+      node('b', 'chatbot', { bot: 'Helper' }),
+      node('gs', 'google_sheets', { mode: 'read', sheetId: 'abcdefghijklmnop', matchColumn: 'A', matchValue: '{{phone}}' }),
+      node('gd', 'google_docs', { templateId: 'tpl1234567890', newTitle: 'Doc {{name}}' }),
+      node('e', 'end'),
+    ]);
+    h.sim.start();
+    h.sim.send('x');
+    await h.settle();
+    expect(h.texts().slice(2)).toEqual([
+      'run JS → {{r}} (mocked — runs live only)',
+      'query shop: SELECT * FROM orders WHERE id = 1 AND status = "… (mocked)',
+      '[gpt-4o] (simulated reply)',
+      'remove tag "vip"',
+      'assigned to team "Sales" user 9',
+      '[chatbot: Helper] (simulated)',
+      '[Google Sheets · READ] Lookup row where A="+919876543210" in abcdefghij… (skipped in test)',
+      '[Google Docs] copy template tpl1234567… → "Doc Anya" (mocked URL)',
+      "Here's your document: https://docs.google.com/document/d/MOCKED/edit",
+      'Flow ended.',
+    ]);
+  });
+});
+
 describe('simulator: webhook', () => {
   const flow = (data: Record<string, unknown>) => ({
     nodes: [
