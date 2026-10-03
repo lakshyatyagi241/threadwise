@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
 import type { OperatorSessionResponse } from '@crm/contracts';
 import { Alert, Spinner, cn } from '@crm/ui';
-import { setLocale, setTheme } from '@/components/shell/actions';
-import { LOCALES } from '@/i18n/locales';
+import { LocaleSwitcher } from '@/features/localization-translation/locale-switcher';
+import { setTheme } from '@/components/shell/actions';
 import { useModuleNav } from '@/features/addons-extension-registry/use-module-nav';
 import { withModuleLeaves } from '@/features/addons-extension-registry/module-nav';
 import { OperatorProvider } from '@/features/auth-registration-security/platform/operator-context';
@@ -22,7 +22,6 @@ import {
   IpBlockedView,
   useIpBlock,
 } from '@/features/auth-registration-security/platform/ui/ip-blocked-view';
-import { languageName } from '@/features/auth-registration-security/platform/ui/language';
 import { ToastProvider } from '@/features/auth-registration-security/platform/ui/toast';
 import { useDocumentTheme } from '@/features/auth-registration-security/platform/ui/use-browser';
 import {
@@ -91,7 +90,6 @@ export function ConsoleShell({
   const tn = useTranslations(`${PLATFORM}.nav`);
   const tc = useTranslations('admin-console-shell.shell');
   const tAll = useTranslations();
-  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
   const theme = useDocumentTheme();
@@ -132,8 +130,6 @@ export function ConsoleShell({
       path: pathname,
       ids: flippedIds.includes(id) ? flippedIds.filter((x) => x !== id) : [...flippedIds, id],
     });
-
-  const languages = useMemo(() => LOCALES.map((code) => [code, languageName(code)] as const), []);
 
   useEffect(() => {
     if (blocked) router.replace(OPERATOR_ACCOUNT_PATH);
@@ -436,23 +432,7 @@ export function ConsoleShell({
                 >
                   {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
                 </button>
-                <select
-                  aria-label={t('language')}
-                  value={locale}
-                  onChange={(e) =>
-                    start(async () => {
-                      await setLocale(e.target.value);
-                      router.refresh();
-                    })
-                  }
-                  className="h-8 w-20 rounded-md border border-border bg-background px-1.5 text-sm focus-visible:ring-2 focus-visible:ring-primary sm:w-auto sm:max-w-32 sm:px-2"
-                >
-                  {languages.map(([code, name]) => (
-                    <option key={code} value={code}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
+                <LocaleSwitcher />
                 <NotificationBell enabled={!gated} />
                 <AccountMenu
                   operator={operator}
