@@ -12,7 +12,7 @@ const decimal = z
 export const paygwPeriodSchema = z.enum(['monthly', 'yearly']);
 export type PaygwPeriod = z.infer<typeof paygwPeriodSchema>;
 
-export const paygwOrderKindSchema = z.enum(['plan', 'addon', 'wallet_topup']);
+export const paygwOrderKindSchema = z.enum(['plan', 'addon', 'wallet_topup', 'manual']);
 export type PaygwOrderKind = z.infer<typeof paygwOrderKindSchema>;
 
 export const paygwOrderStatusSchema = z.enum([
@@ -35,6 +35,8 @@ export const paygwQuoteQuerySchema = z.object({
     .regex(/^[A-Z]{3,5}$/)
     .optional(),
   period: paygwPeriodSchema.optional(),
+  /** A coupon code to preview (plans and add-ons only; ignored for wallet top-ups). The server prices it, the browser sends no amount. */
+  coupon: z.string().trim().max(64).optional(),
 });
 export type PaygwQuoteQuery = z.infer<typeof paygwQuoteQuerySchema>;
 
@@ -66,6 +68,14 @@ export const paygwQuoteSchema = z.object({
   /** Wallet top-ups only: what the wallet gains, in minor units of the platform currency. */
   walletCreditMinor: z.number().int().nullable(),
   gateways: z.array(paygwCheckoutGatewaySchema),
+  /** The coupon asked for, when one was: `ok: false` carries the reason and no discount was applied. */
+  coupon: z
+    .object({ code: z.string(), ok: z.boolean(), message: z.string(), discount: z.string() })
+    .nullable(),
+  /** The country dropdown of the billing form (billing settings, TW-PAYGW-007). */
+  countries: z.array(z.string()),
+  /** The money-back guarantee line under the summary; `enabled: false` hides it. */
+  refund: z.object({ enabled: z.boolean(), days: z.number().int() }),
 });
 export type PaygwQuote = z.infer<typeof paygwQuoteSchema>;
 

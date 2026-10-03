@@ -155,7 +155,32 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     id: 'payment-gateways',
     href: '/admin/payment-gateways',
     labelKey: 'platform-payment-gateways.nav.gateways',
-    groupKey: 'platform-payment-gateways.nav.group',
+    groupKey: `${BSP}.groups.billing`,
+  },
+  // PAYGW domain (seam edit): Reference's Billing group order, Billing history, Order history, Invoices, Billing settings.
+  {
+    id: 'billing-history',
+    href: '/admin/billing-history',
+    labelKey: 'platform-payment-gateways.nav.billingHistory',
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'order-history',
+    href: '/admin/order-history',
+    labelKey: 'platform-payment-gateways.nav.orders',
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'invoices',
+    href: '/admin/invoices',
+    labelKey: 'platform-payment-gateways.nav.invoices',
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'checkout-settings',
+    href: '/admin/checkout-settings',
+    labelKey: 'platform-payment-gateways.nav.billingSettings',
+    groupKey: `${BSP}.groups.billing`,
   },
   // BSP domain (seam edit): the two reseller pages, in Reference's Billing group.
   {

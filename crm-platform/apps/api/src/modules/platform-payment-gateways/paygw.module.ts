@@ -2,8 +2,13 @@ import { Module } from '@nestjs/common';
 import { AddonsExtensionRegistryModule } from '../addons-extension-registry';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
+import { AdminBillingController } from './admin-billing.controller';
+import { AdminBillingRepository } from './admin-billing.repository';
+import { AdminBillingService } from './admin-billing.service';
+import { BillingSettingsService } from './billing-settings.service';
 import { CheckoutController } from './checkout.controller';
 import { CheckoutService } from './checkout.service';
+import { CouponService } from './coupon.service';
 import { CheckoutSettingsService } from './checkout-settings.service';
 import { FulfilmentService } from './fulfilment.service';
 import { GatewayService } from './gateway.service';
@@ -20,15 +25,24 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
  */
 @Module({
   imports: [AddonsExtensionRegistryModule, WalletMessageBillingModule],
-  controllers: [PlatformGatewaysController, CheckoutController, PaymentsController],
+  controllers: [
+    PlatformGatewaysController,
+    AdminBillingController,
+    CheckoutController,
+    PaymentsController,
+  ],
   providers: [
     CryptoService,
     PaygwStore,
     GatewayService,
     CheckoutSettingsService,
+    BillingSettingsService,
+    AdminBillingRepository,
+    AdminBillingService,
     OrdersRepository,
     OrdersService,
     FulfilmentService,
+    CouponService,
     CheckoutService,
     PaymentsService,
   ],
