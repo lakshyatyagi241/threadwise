@@ -16,6 +16,15 @@ import { FlowLaunchService } from './runtime/launch.service';
 import { RunRepository } from './runtime/run.repository';
 import { SubscriberRepository } from './runtime/subscriber.repository';
 import { FlowTriggerService } from './triggers/trigger.service';
+import { FLOW_NODE_EXECUTORS } from './runtime/node-executors';
+import { ActionNodes } from './runtime/nodes/actions/actions-nodes';
+import { ActionNodesModule } from './runtime/nodes/actions/actions-nodes.module';
+import { AiNodes } from './runtime/nodes/ai/ai-nodes';
+import { AiNodesModule } from './runtime/nodes/ai/ai-nodes.module';
+import { CommerceNodes } from './runtime/nodes/commerce/commerce-nodes';
+import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
+import { IntegrationNodes } from './runtime/nodes/integrations/integrations-nodes';
+import { IntegrationNodesModule } from './runtime/nodes/integrations/integrations-nodes.module';
 
 /**
  * The flow runtime engine (FLR): runs a flow after the editor saved it. This module holds what the HTTP app and the worker share: the
@@ -29,7 +38,14 @@ import { FlowTriggerService } from './triggers/trigger.service';
  * Kernel services (audit, outbox, RBAC), the database, Redis, the queues and the chat media door are global.
  */
 @Module({
-  imports: [ChatConversationsModule, PlansCoreModule],
+  imports: [
+    ChatConversationsModule,
+    PlansCoreModule,
+    ActionNodesModule,
+    AiNodesModule,
+    CommerceNodesModule,
+    IntegrationNodesModule,
+  ],
   controllers: [FlowRuntimeController, FlowRuntimePublicController],
   providers: [
     CryptoService,
@@ -46,6 +62,11 @@ import { FlowTriggerService } from './triggers/trigger.service';
     FlowTriggerService,
     FlowRuntimeService,
     CampaignFlowStarterImpl,
+    {
+      provide: FLOW_NODE_EXECUTORS,
+      useFactory: (...groups: unknown[]) => groups,
+      inject: [ActionNodes, AiNodes, CommerceNodes, IntegrationNodes],
+    },
   ],
   exports: [
     FlowEngine,

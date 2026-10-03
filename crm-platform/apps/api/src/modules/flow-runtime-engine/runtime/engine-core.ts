@@ -156,6 +156,7 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
   const ctx: NodeContext = {
     run,
     node,
+    stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}`,
     send: (message) => deps.send(run, message, sends++),
     render: (t) => interpolate(t, run.vars),
     note: (text) => notes.push(text),
@@ -168,6 +169,69 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
     nodeType: node.type,
     notes,
   };
+}
+
+/**
+ * Applies an answer to a `Custom` wait (a node that decodes its own reply: a booked slot, a form, a payment). The parked node's
+ * executor decides; sends in this step number from 1000 so they never share a client reference with the sends of the step that asked.
+ */
+export async function applyCustomReply(
+  run: RunState,
+  reply: InboundReply,
+  deps: StepDeps,
+): Promise<StepOutcome> {
+  const wait = run.wait;
+  const node = wait ? nodeById(run.graph, wait.nodeId) : null;
+  const base = { nodeId: wait?.nodeId ?? null, nodeType: node?.type ?? null };
+  const executor = wait?.handler ? registry(deps.executors).get(wait.handler) : undefined;
+  if (!wait || !node || !executor?.onReply) {
+    return { ...base, transition: { t: 'none' }, notes: ['no handler for this wait'] };
+  }
+  const notes: string[] = [];
+  let sends = 1000;
+  const ctx: NodeContext = {
+    run,
+    node,
+    stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}:reply`,
+    send: (message) => deps.send(run, message, sends++),
+    render: (t) => interpolate(t, run.vars),
+    note: (text) => notes.push(text),
+    now: deps.now,
+  };
+  const d = await executor.onReply(ctx, reply);
+  switch (d.action) {
+    case 'ignore':
+      return { ...base, transition: { t: 'none' }, notes: ['not an answer: still waiting'] };
+    case 'stay':
+      Object.assign(run.vars, d.setVars ?? {});
+      return {
+        ...base,
+        transition: { t: 'wait', wait: { ...wait, data: d.data ?? wait.data } },
+        notes: [...notes, 'not complete yet: still waiting'],
+      };
+    case 'route':
+      Object.assign(run.vars, d.setVars ?? {});
+      run.currentNodeId = node.id;
+      return { ...base, transition: advanceFrom(run, node.id, d.port, true, 0), notes };
+    case 'end':
+      return {
+        ...base,
+        transition: { t: 'end', status: 'completed', reason: d.reason },
+        notes,
+      };
+    case 'fail':
+      return {
+        ...base,
+        transition: {
+          t: 'end',
+          status: 'failed',
+          reason: 'send_failed',
+          failureCode: d.code,
+          failureReason: d.reason,
+        },
+        notes,
+      };
+  }
 }
 
 /** A sleeping run woke: leave the Delay node by its exit. */
