@@ -1,7 +1,26 @@
 'use client';
 
-import type { ComponentProps, ReactNode } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentProps,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '@crm/ui';
+import { usePickerFeed } from '@/features/contacts-attributes-tags';
+import {
+  attrEntries,
+  filterAttrs,
+  findSlashQuery,
+  insertAttrToken,
+  stepActive,
+  type AttrEntry,
+} from './attr-picker';
 
 /**
  * The inspector's form controls. WaDesk's inspector draws every field as label + control + hint with the same classes;
@@ -37,28 +56,214 @@ export function Field({
   );
 }
 
+/**
+ * "Type / to insert an attribute" for a text field (WaDesk's attribute-picker): "/" at the start of a word opens a list of the
+ * workspace's merge tokens under the field; type to filter, arrows move, Enter or Tab insert `{{key}}`, Escape closes.
+ */
+type AttrEl = HTMLInputElement | HTMLTextAreaElement;
+
+interface PopoverPos {
+  left: number;
+  top: number;
+  width: number;
+}
+
+const POPOVER_W = 300;
+const POPOVER_H = 280;
+
+function useAttrPicker<T extends AttrEl>(
+  value: string,
+  onChange: (v: string) => void,
+  enabled: boolean,
+) {
+  const ref = useRef<T>(null);
+  const [caret, setCaret] = useState(0);
+  const [active, setActive] = useState(0);
+  const [dismissedAt, setDismissedAt] = useState<number | null>(null);
+  const [pos, setPos] = useState<PopoverPos | null>(null);
+  const feed = usePickerFeed();
+  const entries = useMemo(() => attrEntries(feed.data), [feed.data]);
+
+  const slash = enabled ? findSlashQuery(value, Math.min(caret, value.length)) : null;
+  const open = slash !== null && dismissedAt !== slash.start;
+  const matches = useMemo(() => (slash ? filterAttrs(entries, slash.query) : []), [entries, slash]);
+  const current = Math.min(active, Math.max(matches.length - 1, 0));
+
+  // Anchor under the field, flipped above when there is no room (WaDesk anchors at the caret; a field is narrower than 300px).
+  useLayoutEffect(() => {
+    if (!open || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const width = Math.min(POPOVER_W, window.innerWidth - 16);
+    let top = r.bottom + 4;
+    if (top + POPOVER_H > window.innerHeight - 8) top = Math.max(8, r.top - POPOVER_H - 4);
+    const left = Math.max(8, Math.min(r.left, window.innerWidth - width - 8));
+    setPos({ left, top, width });
+  }, [open, value]);
+
+  // An outer scroll or resize detaches the list from the field, so it closes (scrolling inside the list does not).
+  useEffect(() => {
+    if (!open || !slash) return;
+    const start = slash.start;
+    const close = (e: Event) => {
+      if (e.target instanceof Node && document.getElementById('flb-attr-popover')?.contains(e.target))
+        return;
+      setDismissedAt(start);
+    };
+    window.addEventListener('scroll', close, true);
+    window.addEventListener('resize', close);
+    return () => {
+      window.removeEventListener('scroll', close, true);
+      window.removeEventListener('resize', close);
+    };
+  }, [open, slash]);
+
+  const pick = (entry: AttrEntry) => {
+    if (!slash || !ref.current) return;
+    const next = insertAttrToken(value, slash.start, ref.current.selectionEnd ?? caret, entry.key);
+    onChange(next.text);
+    setCaret(next.caret);
+    setActive(0);
+    const el = ref.current;
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(next.caret, next.caret);
+    });
+  };
+
+  const handlers = {
+    ref,
+    onChange: (e: { target: T }) => {
+      onChange(e.target.value);
+      setCaret(e.target.selectionStart ?? e.target.value.length);
+      setActive(0);
+      setDismissedAt(null);
+    },
+    onSelect: (e: { currentTarget: T }) => setCaret(e.currentTarget.selectionStart ?? 0),
+    onKeyDown: (e: KeyboardEvent<T>) => {
+      if (!open) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        setDismissedAt(slash!.start);
+      } else if (matches.length > 0 && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        e.preventDefault();
+        setActive(stepActive(current, matches.length, e.key === 'ArrowDown' ? 1 : -1));
+      } else if (matches.length > 0 && (e.key === 'Enter' || e.key === 'Tab')) {
+        e.preventDefault();
+        pick(matches[current]!);
+      }
+    },
+    onBlur: () => setDismissedAt(slash?.start ?? null),
+  };
+
+  const popover =
+    open && pos && typeof document !== 'undefined'
+      ? createPortal(
+          <div
+            id="flb-attr-popover"
+            role="listbox"
+            className="fixed z-[80] overflow-hidden rounded-xl border border-border bg-background shadow-[0_18px_40px_-15px_rgba(11,31,28,0.45)]"
+            style={{ left: pos.left, top: pos.top, width: pos.width, maxHeight: POPOVER_H }}
+          >
+            <div className="flex items-center gap-2 border-b border-border bg-muted px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M3 8h10" />
+              </svg>
+              Insert attribute
+              <span className="ml-auto text-foreground/80">/{slash!.query}</span>
+            </div>
+            <div className="overflow-y-auto" style={{ maxHeight: 232 }}>
+              {matches.length === 0 ? (
+                <div className="px-3 py-6 text-center text-[12px] text-muted-foreground">
+                  No attributes match.{' '}
+                  <a href="/attributes" className="font-semibold text-brand hover:underline">
+                    Create one
+                  </a>
+                  .
+                </div>
+              ) : (
+                matches.map((a, i) => (
+                  <button
+                    key={`${a.kind}-${a.key}`}
+                    type="button"
+                    role="option"
+                    aria-selected={i === current}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      pick(a);
+                    }}
+                    onMouseEnter={() => setActive(i)}
+                    className={cn(
+                      'flex w-full items-start gap-2 px-3 py-2 text-left hover:bg-muted',
+                      i === current && 'bg-brand/10',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md text-[10px] font-semibold',
+                        a.kind === 'system'
+                          ? 'bg-brand/10 text-brand'
+                          : 'bg-[#F3E9FF] text-[#5B3D8A]',
+                      )}
+                    >
+                      {a.kind === 'system' ? 'S' : 'C'}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[12.5px] font-medium text-foreground">
+                        {a.name || a.key}
+                      </span>
+                      <span className="block truncate font-mono text-[10.5px] text-muted-foreground">
+                        {a.key}
+                        {a.description ? ` / ${a.description}` : ''}
+                      </span>
+                    </span>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
+
+  return { handlers, popover };
+}
+
 export function TextInput({
   value,
   onChange,
   placeholder,
   mono,
+  noAttr,
   ...rest
 }: {
   value: unknown;
   onChange: (v: string) => void;
   placeholder?: string;
   mono?: boolean;
+  /** Turns the "/" attribute picker off (a password is never a message). */
+  noAttr?: boolean;
 } & Omit<ComponentProps<'input'>, 'value' | 'onChange'>) {
+  const text = value === null || value === undefined ? '' : String(value);
+  const picker = useAttrPicker<HTMLInputElement>(text, onChange, !noAttr && rest.type !== 'password');
+  const { handlers } = picker;
   return (
-    <input
-      type="text"
-      value={value === null || value === undefined ? '' : String(value)}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      data-attr-input="true"
-      className={cn(controlClass, mono && 'font-mono')}
-      {...rest}
-    />
+    <>
+      <input
+        type="text"
+        value={text}
+        placeholder={placeholder}
+        {...(noAttr || rest.type === 'password' ? {} : { 'data-attr-input': 'true' })}
+        className={cn(controlClass, mono && 'font-mono')}
+        {...rest}
+        ref={handlers.ref}
+        onChange={handlers.onChange}
+        onSelect={handlers.onSelect}
+        onKeyDown={handlers.onKeyDown}
+        onBlur={handlers.onBlur}
+      />
+      {picker.popover}
+    </>
   );
 }
 
@@ -95,6 +300,7 @@ export function TextArea({
   rows = 4,
   mono,
   dark,
+  noAttr,
 }: {
   value: unknown;
   onChange: (v: string) => void;
@@ -102,21 +308,32 @@ export function TextArea({
   rows?: number;
   mono?: boolean;
   dark?: boolean;
+  noAttr?: boolean;
 }) {
+  const text = value === null || value === undefined ? '' : String(value);
+  const picker = useAttrPicker<HTMLTextAreaElement>(text, onChange, !noAttr);
+  const { handlers } = picker;
   return (
-    <textarea
-      rows={rows}
-      value={value === null || value === undefined ? '' : String(value)}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      data-attr-input="true"
-      className={cn(
-        controlClass,
-        'min-h-[110px] resize-y leading-relaxed',
-        mono && 'font-mono',
-        dark && 'bg-[#1E2A33] text-[#7CF3C4]',
-      )}
-    />
+    <>
+      <textarea
+        rows={rows}
+        value={text}
+        placeholder={placeholder}
+        {...(noAttr ? {} : { 'data-attr-input': 'true' })}
+        className={cn(
+          controlClass,
+          'min-h-[110px] resize-y leading-relaxed',
+          mono && 'font-mono',
+          dark && 'bg-[#1E2A33] text-[#7CF3C4]',
+        )}
+        ref={handlers.ref}
+        onChange={handlers.onChange}
+        onSelect={handlers.onSelect}
+        onKeyDown={handlers.onKeyDown}
+        onBlur={handlers.onBlur}
+      />
+      {picker.popover}
+    </>
   );
 }
 

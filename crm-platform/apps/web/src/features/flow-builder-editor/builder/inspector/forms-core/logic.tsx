@@ -197,12 +197,10 @@ export function WebhookForm({ data: d, set }: FormProps) {
               placeholder="Header"
               className={cn(smallInputClass, '!w-2/5')}
             />
-            <input
-              type="text"
-              value={str(h.value)}
-              onChange={(e) => set('headers', patchItem(hdrs, i, { value: e.target.value }))}
+            <TextInput
+              value={h.value}
+              onChange={(v) => set('headers', patchItem(hdrs, i, { value: v }))}
               placeholder="Value"
-              data-attr-input="true"
               className={cn(smallInputClass, 'flex-1')}
             />
             <button

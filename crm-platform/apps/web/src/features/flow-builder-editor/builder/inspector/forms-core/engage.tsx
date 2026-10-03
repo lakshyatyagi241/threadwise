@@ -1,7 +1,6 @@
 'use client';
 
-import { cn } from '@crm/ui';
-import { controlClass, Field, RowCard, TextArea, TextInput } from '../kit';
+import { Field, RowCard, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import {
   changeCtaType,
@@ -10,7 +9,6 @@ import {
   ctaPlaceholder,
   moveItem,
   patchItem,
-  str,
   suggestedCtaLabel,
   type CtaAction,
 } from './helpers';
@@ -80,21 +78,16 @@ export function CtaForm({ data: d, set, env }: FormProps) {
               </select>
             </CardHeader>
             <div className="space-y-2 p-3">
-              <input
-                type="text"
-                value={str(a.label)}
-                onChange={(e) => patch(i, { label: e.target.value })}
+              <TextInput
+                value={a.label}
+                onChange={(v) => patch(i, { label: v })}
                 placeholder="Button label"
-                data-attr-input="true"
-                className={controlClass}
               />
-              <input
-                type="text"
-                value={str(a.value)}
-                onChange={(e) => patch(i, { value: e.target.value })}
+              <TextInput
+                value={a.value}
+                onChange={(v) => patch(i, { value: v })}
                 placeholder={ctaPlaceholder(type)}
-                data-attr-input="true"
-                className={cn(controlClass, 'font-mono')}
+                mono
               />
               <div className="text-[10.5px] leading-snug text-muted-foreground">
                 {ctaHint(type)}
