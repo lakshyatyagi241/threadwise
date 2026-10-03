@@ -305,20 +305,6 @@ export class ChannelsRepository {
     return r ? toRow(r) : null;
   }
 
-  /** A provider account already stored as a channel of this workspace (a WhatsApp number created before it was linked). */
-  async byExternal(
-    tx: Tx,
-    orgId: number,
-    kind: string,
-    externalId: string,
-  ): Promise<ChannelRow | null> {
-    const res = await tx.execute(
-      sql`SELECT ${COLUMNS} FROM channels WHERE org_id = ${orgId} AND kind = ${kind} AND external_id = ${externalId}`,
-    );
-    const r = rowsOf(res)[0];
-    return r ? toRow(r) : null;
-  }
-
   /**
    * The system keeping a linked channel in step with its WABA connection: the link itself, the status, the number as people write it,
    * the account id, and (when the connection came back) the last error cleared. Not versioned on purpose, like `recordHealth`: it is
