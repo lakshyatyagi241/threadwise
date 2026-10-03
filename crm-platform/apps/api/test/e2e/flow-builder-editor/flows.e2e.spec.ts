@@ -792,10 +792,77 @@ describe('builder context (WD-FLB-014, 026)', () => {
     const all = await api.as(o.admin).get('/v2/flows/builder-context/commerce-products?provider=whatsapp_shop');
     expect(all.body.data.map((p: { name: string }) => p.name).sort()).toEqual(['Blue mug', 'Red shirt']);
     const woo = await api.as(o.admin).get('/v2/flows/builder-context/commerce-products?provider=woocommerce');
-    expect(woo.body.data).toEqual([{ retailerId: 'BM-1', name: 'Blue mug', image: null, priceMinor: 500, currency: 'USD' }]);
+    expect(woo.body.data).toEqual([
+      expect.objectContaining({ retailerId: 'BM-1', name: 'Blue mug', sku: 'BM-1', image: null, priceMinor: 500, currency: 'USD', url: null, inStock: true }),
+    ]);
     const q = await api.as(o.admin).get('/v2/flows/builder-context/commerce-products?provider=whatsapp_shop&q=SHIRT');
     expect(q.body.data).toHaveLength(1);
     expect((await api.as(o.admin).get('/v2/flows/builder-context/commerce-products?provider=nope')).status).toBe(422);
+  });
+
+  it('WD-FLB-052/053/056/051: stores (active, with currency), every booking type, every form with its state, flows with channel and state, agents with provider', async () => {
+    const o = await api.signup('flbpick');
+    await h.owner.query(
+      `INSERT INTO shopify_integrations (org_id, store_url, store_name, shop_currency, access_token, webhook_secret) VALUES ($1,'a.myshopify.com','Acme','USD','t','s')`,
+      [o.orgId],
+    );
+    await h.owner.query(
+      `INSERT INTO shopify_integrations (org_id, store_url, store_name, access_token, webhook_secret, status) VALUES ($1,'gone.myshopify.com','Gone','t','s','disconnected')`,
+      [o.orgId],
+    );
+    await h.owner.query(
+      `INSERT INTO woocommerce_integrations (org_id, store_url, store_currency, consumer_key, consumer_secret, webhook_secret) VALUES ($1,'https://w.example.test','EUR','k','s','w')`,
+      [o.orgId],
+    );
+    await h.owner.query(`INSERT INTO wa_catalogs (org_id, provider, catalog_id) VALUES ($1,'meta_cloud','555')`, [o.orgId]);
+    await h.owner.query(
+      `INSERT INTO booking_types (org_id, name, slug, duration_minutes, is_active) VALUES ($1,'Consult','consult',30,true), ($1,'Retired','retired',45,false)`,
+      [o.orgId],
+    );
+    await h.owner.query(
+      `INSERT INTO wa_forms (org_id, title, slug, status, meta_flow_id) VALUES ($1,'Live form','live-form','published','9'), ($1,'WIP form','wip-form','draft',NULL)`,
+      [o.orgId],
+    );
+    await h.owner.query(
+      `INSERT INTO ai_agents (org_id, name, provider, model, is_active) VALUES ($1,'Triage','openai','gpt-4o-mini',true), ($1,'Paused','anthropic','claude-sonnet-4-6',false)`,
+      [o.orgId],
+    );
+    const live = await create(o.admin, 'A live flow');
+    const res = (await api.as(o.admin).get('/v2/flows/builder-context')).body;
+    expect(res.stores.shopify).toEqual([{ id: expect.any(String), name: 'Acme', currency: 'USD' }]);
+    expect(res.stores.woocommerce).toEqual([{ id: expect.any(String), name: 'https://w.example.test', currency: 'EUR' }]);
+    expect(res.stores.whatsapp_shop).toEqual([{ id: expect.any(String), name: 'Catalog 555', currency: null }]);
+    expect(res.bookingTypes).toEqual([
+      { id: expect.any(String), name: 'Consult', duration: 30, active: true },
+      { id: expect.any(String), name: 'Retired', duration: 45, active: false },
+    ]);
+    expect(res.forms.map((f: { title: string; isPublished: boolean }) => [f.title, f.isPublished])).toEqual([
+      ['WIP form', false],
+      ['Live form', true],
+    ]);
+    expect(res.flows).toEqual([{ id: live.id, name: 'A live flow', flowType: 'chat', isPublished: false }]);
+    expect(res.agents.map((a: { name: string; provider: string }) => [a.name, a.provider])).toEqual([
+      ['Triage', 'openai'],
+      ['Paused', 'anthropic'],
+    ]);
+    // Another workspace's store id never lists anything.
+    const other = await api.signup('flbpick2');
+    const foreign = await api.as(other.admin).get(
+      `/v2/flows/builder-context/commerce-products?provider=shopify&storeId=${res.stores.shopify[0].id}`,
+    );
+    expect(foreign.body.data).toEqual([]);
+  });
+
+  it('WD-FLB-059: the Apps Script download carries this workspace\'s webhook token and refuses anything that is not a Google form id', async () => {
+    const o = await api.signup('flbgs');
+    const ok = await api.as(o.admin).get('/v2/flows/builder-context/google/forms/1FAIpQLSc_abc-123/apps-script');
+    expect(ok.status).toBe(200);
+    expect(ok.headers['content-type']).toContain('text/plain');
+    expect(ok.headers['content-disposition']).toMatch(/attachment; filename="[a-z0-9-]*form-1FAIpQLSc_abc-123\.gs"/);
+    expect(ok.text).toContain('function onFormSubmit(e)');
+    expect(ok.text).toMatch(new RegExp(`FORM_WORKSPACE_TOKEN = "${o.orgId}\\.[0-9a-f]{64}"`));
+    expect(ok.text).toContain('/google/form-response');
+    expect((await api.as(o.admin).get('/v2/flows/builder-context/google/forms/short/apps-script')).status).toBe(422);
   });
 
   it('WD-FLB-059: the Google pickers answer 503 FLB_INTEGRATION_DISABLED while the integration is not connected', async () => {
