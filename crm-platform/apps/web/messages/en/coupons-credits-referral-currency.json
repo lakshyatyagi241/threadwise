@@ -3,7 +3,6 @@
     "nav": {
       "group": "Billing & plans",
       "coupons": "Coupons",
-      "creditPackages": "Credit packages",
       "currencies": "Currencies",
       "currenciesGroup": "Localization"
     },
@@ -35,7 +34,6 @@
       "validation": "Some of the values are not valid. Check the form and try again.",
       "codeTaken": "Another coupon already uses this code.",
       "planUnknown": "One or more of the selected plans no longer exist.",
-      "slugTaken": "Another credit package already uses this slug.",
       "currencyUnknown": "Choose one of the active currencies.",
       "currencyTaken": "A currency with this code already exists.",
       "defaultProtected": "This is the system default currency. Choose another default first.",
@@ -197,110 +195,6 @@
           "firstPurchaseHint": "Workspaces with no paid orders yet",
           "stackableTitle": "Stackable with other coupons",
           "stackableHint": "Allow combining with another active code at checkout"
-        }
-      }
-    },
-    "packages": {
-      "title": "Credit packages",
-      "titleLead": "Credit",
-      "titleAccent": "packages",
-      "crumbHere": "Credit packages",
-      "eyebrow": "Admin · Billing & plans · Credit packages",
-      "descriptionBefore": "Curated bundles users can buy from the checkout page. Each package converts to a fixed credit count when purchased — independent of the per-paise conversion rate set in ",
-      "descriptionLink": "Settings",
-      "descriptionAfter": ".",
-      "new": "New package",
-      "table": {
-        "label": "Credit packages",
-        "name": "Name",
-        "slug": "Slug",
-        "price": "Price",
-        "credits": "Credits",
-        "perSymbol": "Per {symbol}1",
-        "badge": "Badge",
-        "status": "Status",
-        "actions": "Actions"
-      },
-      "status": {
-        "active": "Active",
-        "disabled": "Disabled"
-      },
-      "actions": {
-        "edit": "Edit",
-        "enable": "Enable",
-        "disable": "Disable",
-        "delete": "Delete"
-      },
-      "empty": {
-        "title": "No credit packages yet",
-        "hintBefore": "Create the first one — it'll show up at",
-        "hintCode": "/checkout?package=<slug>",
-        "hintAfter": "and on the user's wallet page."
-      },
-      "toasts": {
-        "created": "Credit package created.",
-        "updated": "Credit package updated.",
-        "activated": "Package activated.",
-        "deactivated": "Package deactivated.",
-        "deleted": "Credit package deleted."
-      },
-      "delete": {
-        "title": "Delete credit package",
-        "body": "Delete this package? Existing purchases keep their ledger rows.",
-        "confirm": "Yes, delete"
-      },
-      "editor": {
-        "crumbNew": "New",
-        "eyebrowNew": "Admin · Credit packages · New",
-        "eyebrowEdit": "Admin · Credit packages · Edit",
-        "titleNewLead": "New",
-        "titleNewAccent": "credit package",
-        "titleEditLead": "Edit",
-        "descriptionNew": "Set price, credits, and an optional badge. Active packages appear on the user's wallet page; disabled ones stay in the DB but are hidden.",
-        "descriptionEdit": "Change price, credits or display. Existing purchases keep the price and credits they were bought at.",
-        "create": "Create package",
-        "saveChanges": "Save changes",
-        "cancel": "Cancel",
-        "problemsTitle": "Please fix the following:",
-        "problems": {
-          "name": "Name: enter a name of up to 96 characters.",
-          "slug": "Slug: letters, digits, dashes and underscores only.",
-          "price": "Price: enter an amount such as 100 or 499.50.",
-          "currencyCode": "Currency: choose one of the active currencies.",
-          "credits": "Credits: a whole number from 1 to 100,000,000.",
-          "badge": "Badge: at most 32 characters.",
-          "description": "Description: at most 500 characters.",
-          "sortOrder": "Sort order: a whole number from 0 to 9999."
-        },
-        "sections": {
-          "identity": "Identity",
-          "pricing": "Pricing",
-          "display": "Display"
-        },
-        "fields": {
-          "name": "Name",
-          "namePlaceholder": "Starter / Growth / Scale",
-          "slug": "Slug",
-          "slugPlaceholder": "auto-generated from name",
-          "slugHint": "Used in the checkout URL; leave blank to auto-generate.",
-          "description": "Description",
-          "descriptionPlaceholder": "Short blurb shown on the wallet page.",
-          "price": "Price",
-          "pricePlaceholder": "100",
-          "priceHint": "In whole currency units (100 = 100 of the unit picked at right).",
-          "currency": "Currency",
-          "credits": "Credits",
-          "creditsPlaceholder": "5000",
-          "creditsHint": "Whole number of message credits this package buys.",
-          "badge": "Badge",
-          "badgePlaceholder": "Most popular / Best value",
-          "badgeHint": "Optional label shown above the price.",
-          "sortOrder": "Sort order",
-          "sortOrderHint": "Lower numbers appear first on the wallet page.",
-          "activeTitle": "Active",
-          "activeHint": "Visible on the user-side wallet",
-          "featuredTitle": "Featured",
-          "featuredHint": "Highlighted card on wallet page"
         }
       }
     },

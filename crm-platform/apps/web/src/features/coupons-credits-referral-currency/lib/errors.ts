@@ -9,7 +9,6 @@ export type CpnErrorKey =
   | 'validation'
   | 'codeTaken'
   | 'planUnknown'
-  | 'slugTaken'
   | 'currencyUnknown'
   | 'currencyTaken'
   | 'defaultProtected'
@@ -24,9 +23,6 @@ export function cpnErrorKey(error: unknown): CpnErrorKey {
       return 'codeTaken';
     case ERROR_CODES.CPN_COUPON_PLAN_UNKNOWN:
       return 'planUnknown';
-    case ERROR_CODES.CPN_PACKAGE_SLUG_TAKEN:
-      return 'slugTaken';
-    case ERROR_CODES.CPN_CURRENCY_UNKNOWN:
       return 'currencyUnknown';
     case ERROR_CODES.CPN_CURRENCY_CODE_TAKEN:
       return 'currencyTaken';
