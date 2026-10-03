@@ -1,6 +1,7 @@
 // Runs the same behavioural probes (cart, stock caps, shipping, coupons, checkout hand-off, lists, wishlist and compare, quick view,
 // product page, review, SEO tags, 404s, tracking pages) on the reference and on our shop and prints the differing results.
 //   node parity-behave.mjs [probe]      env: REF OURS PLAYWRIGHT_DIR; results as JSON in ./beh/
+// node behave.mjs  -> runs the same probes on ref and ours, prints a side-by-side of differing results
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 const require = createRequire(
@@ -29,15 +30,13 @@ const T = (page) => ({
     return (await m.first().innerText()).trim();
   },
   cartRows: async () =>
-    page
-      .locator('.sf-cart-row')
-      .evaluateAll((rs) =>
-        rs.map((r) => ({
-          name: r.querySelector('.sf-cart-name')?.textContent.trim(),
-          price: r.querySelector('.sf-cart-price')?.textContent.trim(),
-          qty: r.querySelector('.sf-qty input')?.value,
-        })),
-      ),
+    page.locator('.sf-cart-row').evaluateAll((rs) =>
+      rs.map((r) => ({
+        name: r.querySelector('.sf-cart-name')?.textContent.trim(),
+        price: r.querySelector('.sf-cart-price')?.textContent.trim(),
+        qty: r.querySelector('.sf-qty input')?.value,
+      })),
+    ),
   footer: async () => {
     const f = page.locator('.sf-drawer-foot');
     return (await f.first().innerText()).replace(/\s+/g, ' ').trim();

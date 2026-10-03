@@ -52,6 +52,12 @@ An unknown or disabled shop is `404 STORE_NOT_AVAILABLE` ("This store is not ava
 | `POST /:slug/abandon`              | `abandonCartSchema`                          | 200 `{ "scheduled": bool }`         |
 | `POST /webhooks/razorpay`          | raw JSON, header `X-Razorpay-Signature`      | 200 `razorpayWebhookResponseSchema` |
 
+Page data (public-shop parity run): every product carries `isNew` (created in the last 14 days, the card's "New" badge), `weightGrams`
+and `tags` (the product page's meta list); the shop block carries `topStrip` and `heroSub` (the `top_strip` and `hero_sub` settings:
+no screen writes them but the page shows them, `heroSub` even when empty); the tracking order carries `customerAddress` (the
+"Delivery to" card). The WhatsApp confirmation shows the total as WaDesk's `total_display` does (INR, USD, EUR and GBP symbols, any
+other currency its code, always two decimals) and is escaped like PHP's `rawurlencode`.
+
 Checkout: only product uuids and quantities are read; prices, stock, coupon and shipping are re-derived. Errors: `422
 STORE_ITEMS_UNAVAILABLE` ("Those items are no longer available. Please refresh and try again."), `422 VALIDATION_FAILED` ("Please
 enter a valid phone number."), `409 CONFLICT` (same Idempotency-Key still running). An unknown coupon code is ignored; the quote
