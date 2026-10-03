@@ -58,6 +58,7 @@ import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-
 import { TeamChatModule } from './modules/team-chat';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
+import { WhatsAppProviderAdminModule } from './modules/whatsapp-provider-admin';
 import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
@@ -181,6 +182,7 @@ import { HealthModule } from './health/health.module';
     PlatformSupportDeskModule,
     TeamChatModule,
     WabaModule,
+    WhatsAppProviderAdminModule,
     MessageTemplatesModule,
     ChatConversationsModule,
     TeamInboxConversationsModule,
