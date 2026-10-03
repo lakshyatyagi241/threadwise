@@ -59,7 +59,7 @@ Evidence so far is automated (the screens are listed under Screens (C4); none ha
 | `CampaignPlanGate`               | plans-subscriptions-trials         | Real: the `total_campaigns` cap, on the campaigns that exist now (no delete-proof ledger). No `campaign` flag exists in the catalogue. |
 | `CampaignBilling`                | wallet-message-billing             | Plan-first billing is not applied: nothing is charged or refunded.                                                                     |
 | `CampaignFlowStarter`            | flow-runtime-engine                | Flow campaigns fail per recipient with the reason.                                                                                     |
-| `CampaignSettings` | platform-settings-branding-storage | Real: the `campaigns` settings group, edited at `/admin/settings/campaigns` (retry attempts, wait, auto-end). |
+| `CampaignSettings`               | platform-settings-branding-storage | Real: the `campaigns` settings group, edited at `/admin/settings/campaigns` (retry attempts, wait, auto-end).                          |
 | Sender, template, warmer, pacing | shared with broadcasts             | Same shims and defaults as broadcasts (`modules/broadcasts/_shims`).                                                                   |
 | Engines                          | whatsapp-devices-baileys, Twilio   | Real, through the Node bridge's outbound registry.                                                                                     |
 
