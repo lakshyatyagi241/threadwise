@@ -268,3 +268,48 @@ describe('GET /v2/platform/dashboard/analytics', () => {
     expect(audit.rows[0].n).toBe(1);
   });
 });
+
+/** Last in the file: it adds signups that the earlier counts must not see. */
+describe('TW-DASH-037 admin overview geography', () => {
+  it('no profile with a country shows the empty list and six zero regions', async () => {
+    const b = adminOverviewSchema.parse(
+      (await api().get('/v2/platform/dashboard/overview?window=30d').set(bearer(superToken))).body,
+    );
+    expect(b.countries).toEqual([]);
+    expect(b.regions.map((r) => r.count)).toEqual([0, 0, 0, 0, 0, 0]);
+  });
+
+  it('ranks the top four by signups with shares of those four; ISO and dial-prefix profiles both count', async () => {
+    let i = 0;
+    for (const [country, code, n] of [
+      ['IN', '91', 3],
+      [null, '91', 2], // Reference's dial prefix, no ISO country
+      ['US', '1', 3],
+      ['DE', '49', 1],
+      ['GB', '44', 1],
+    ] as const) {
+      for (let k = 0; k < n; k++) {
+        const u = await h.owner.query(
+          `INSERT INTO users (org_id, email, full_name, created_at) VALUES ($1, $2, 'Geo', now() - interval '20 days') RETURNING id`,
+          [alpha, `geo${i++}@x.test`],
+        );
+        await h.owner.query(
+          `INSERT INTO user_settings (org_id, user_id, country, country_code) VALUES ($1, $2, $3, $4)`,
+          [alpha, u.rows[0].id, country, code],
+        );
+      }
+    }
+    const res = await api()
+      .get('/v2/platform/dashboard/overview?window=30d')
+      .set(bearer(superToken));
+    const b = adminOverviewSchema.parse(res.body);
+    expect(b.countries).toEqual([
+      { code: 'IN', name: 'India', count: 5, pct: '50.0' },
+      { code: 'US', name: 'United States', count: 3, pct: '30.0' },
+      { code: 'DE', name: 'Germany', count: 1, pct: '10.0' },
+      { code: 'GB', name: 'United Kingdom', count: 1, pct: '10.0' },
+    ]);
+    const radar = Object.fromEntries(b.regions.map((r) => [r.region, r.count]));
+    expect(radar).toMatchObject({ Asia: 5, Americas: 3, Europe: 2 });
+  });
+});

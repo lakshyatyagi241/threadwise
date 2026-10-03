@@ -10,6 +10,7 @@ import {
   ERROR_CODES,
   type ClearQueueResponse,
   type HealthActivity,
+  type HealthEngine,
   type HealthCheck,
   type HealthQueueRow,
   type HealthResponse,
@@ -79,6 +80,7 @@ export class HealthService {
       overall: overallState(checks.map((c) => c.state)),
       checks,
       queues: queue.rows,
+      engines: await this.engines(),
       vitals: await this.vitals(),
       activity: await this.activity(),
       throughput: await this.throughput(),
@@ -96,6 +98,62 @@ export class HealthService {
     } catch {
       return 0;
     }
+  }
+
+  /**
+   * TW-DASH-050: numbers per engine across every workspace. Unofficial devices by status, then WABA and Twilio provider configs (other
+   * providers, such as Meta Ads, are not messaging engines). A query that fails omits its engine.
+   */
+  private async engines(): Promise<HealthEngine[]> {
+    const out: HealthEngine[] = [];
+    const rowsOf = async (query: ReturnType<typeof sql>) => {
+      try {
+        return await this.store.tx(
+          async (tx) =>
+            (await tx.execute(query)).rows as Array<{
+              provider?: string;
+              status: string;
+              n: number;
+            }>,
+        );
+      } catch {
+        return null;
+      }
+    };
+    const engine = (
+      key: HealthEngine['key'],
+      label: string,
+      rows: Array<{ status: string; n: number }>,
+      isUp: (status: string) => boolean,
+    ): HealthEngine => {
+      const total = rows.reduce((a, r) => a + Number(r.n), 0);
+      const connected = rows.filter((r) => isUp(r.status)).reduce((a, r) => a + Number(r.n), 0);
+      return {
+        key,
+        label,
+        connected,
+        total,
+        state: total === 0 ? 'idle' : connected > 0 ? 'up' : 'down',
+        breakdown: rows.map((r) => ({ status: r.status, count: Number(r.n) })),
+      };
+    };
+    const devices = await rowsOf(
+      sql`SELECT status, count(*)::int AS n FROM devices GROUP BY status ORDER BY status`,
+    );
+    if (devices) out.push(engine('baileys', 'Unofficial API', devices, (s) => s === 'connected'));
+    const configs = await rowsOf(sql`
+      SELECT provider, status, count(*)::int AS n FROM wa_provider_configs
+      WHERE provider IN ('waba', 'twilio') GROUP BY provider, status ORDER BY provider, status`);
+    for (const provider of ['waba', 'twilio'] as const) {
+      const rows = (configs ?? []).filter((r) => r.provider === provider);
+      if (rows.length > 0)
+        out.push(
+          engine(provider, provider === 'twilio' ? 'Twilio' : 'WhatsApp Cloud (WABA)', rows, (s) =>
+            ['connected', 'active', 'verified'].includes(s),
+          ),
+        );
+    }
+    return out;
   }
 
   /** TW-DASH-049: last 24 hours, every workspace. */

@@ -446,7 +446,12 @@
         "diskUsed": "Disk used {pct}%",
         "noDisk": "Not available"
       },
-      "error": "The health checks could not be loaded. Try again in a moment."
+      "error": "The health checks could not be loaded. Try again in a moment.",
+      "engines": {
+        "title": "WhatsApp engines & connected numbers",
+        "empty": "No engines configured yet.",
+        "caption": "connected of total numbers"
+      }
     },
     "admin": {
       "nav": {
