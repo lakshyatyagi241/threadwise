@@ -5,8 +5,11 @@
  */
 .cms-site {
   --site-serif: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
-  background: var(--site-paper-0, #fbfaf6);
+  background: #fff;
   color: var(--site-ink-900, #0b1f1c);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -470,4 +473,17 @@
 }
 .cms-edit [data-fc][data-fc-active='true'] {
   outline: 2px solid var(--site-wa-deep, #075e54);
+}
+
+/* Headlines keep the editable <em> accent (the sanitiser drops class attributes): italic, in the brand colour or green on dark. */
+.cms-site .serif em {
+  font-style: italic;
+  color: var(--site-wa-deep, #075e54);
+}
+.cms-site .em-green em {
+  color: var(--site-wa-green, #25d366);
+}
+.cms-site details > summary {
+  list-style: none;
+  cursor: pointer;
 }

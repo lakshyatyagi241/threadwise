@@ -287,6 +287,22 @@
         "pricing": "Pricing",
         "about": "About",
         "contact": "Contact"
+      },
+      "platform": "platform",
+      "menuOpen": "Open menu",
+      "menuClose": "Close menu",
+      "cookiePreferences": "Cookie preferences",
+      "priceCard": {
+        "volume": "Volume",
+        "features": "Features",
+        "support": "Support",
+        "planNum": "Plan · {n}",
+        "popular": "popular",
+        "forever": "forever",
+        "contactSales": "contact sales",
+        "getStarted": "Get started",
+        "docsCommunity": "Docs & community",
+        "prioritySupport": "Priority support"
       }
     },
     "bar": {

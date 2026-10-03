@@ -7,6 +7,8 @@ import {
   registrationConfigResponseSchema,
   type CmsPage,
 } from '@crm/contracts';
+import { headers } from 'next/headers';
+import { getSiteConfig } from '@/features/platform-settings-branding-storage/site/site-config';
 import { EMPTY_CONTENT, type SiteContent } from '../site/content';
 import type { SiteExtras } from '../site/site-ui';
 import { cmsPublic, publicApi } from './api';
@@ -20,6 +22,15 @@ export async function loadSiteContent(): Promise<SiteContent> {
 export async function loadExtras(page: CmsPage): Promise<SiteExtras> {
   const extras: SiteExtras = {};
   const jobs: Array<Promise<void>> = [];
+  if (page === 'home' || page === 'features') {
+    // the sample browser windows of the homepage show this site's own name and address
+    jobs.push(
+      Promise.all([getSiteConfig(), headers()]).then(([site, h]) => {
+        extras.brand = site?.brand.name ?? '';
+        extras.host = (h.get('host') ?? '').replace(/^(www|app)\./i, '').split(':')[0] ?? '';
+      }),
+    );
+  }
   if (page === 'home' || page === 'pricing') {
     jobs.push(
       cmsPublic('/pricing', publicPricingResponseSchema).then((p) => void (extras.pricing = p)),
