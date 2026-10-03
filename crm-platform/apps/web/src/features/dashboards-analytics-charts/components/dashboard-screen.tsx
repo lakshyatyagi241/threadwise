@@ -20,6 +20,7 @@ import {
   WalletOrAutopilotCard,
 } from './dashboard-cards';
 import { Funnel, LoadError, Panel, Trend } from './parts';
+import { QuickAccess } from './quick-access';
 
 /** The range lives in the address so a link is shareable; anything unknown reads as 7d (TW-DASH-003). */
 function useRange(): [DashRange, (r: DashRange) => void] {
@@ -300,6 +301,8 @@ export function DashboardScreen() {
               <TemplatesCard data={w.templates} />
             </>
           )}
+
+          <QuickAccess />
 
           <div className="grid gap-4 lg:grid-cols-2">
             <Panel
