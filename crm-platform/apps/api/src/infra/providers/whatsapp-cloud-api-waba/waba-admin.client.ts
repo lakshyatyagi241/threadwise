@@ -617,6 +617,42 @@ export class WabaAdminClient implements WabaAdminPort {
 
   // --- analytics, username, QR codes (TW-WABA-023, 025, 027) -------------------------------------------------------
 
+  async getTemplateClicks(
+    conn: WabaConnection,
+    templateIds: string[],
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<number> {
+    const res = await this.http.call<{
+      data?: Array<{
+        data_points?: Array<{ template_id?: string; clicked?: Array<{ count?: number }> }>;
+      }>;
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}/template_analytics`,
+      query: {
+        start: String(startSeconds),
+        end: String(endSeconds),
+        granularity: 'DAILY',
+        metric_types: JSON.stringify(['CLICKED']),
+        template_ids: JSON.stringify(templateIds.map(Number)),
+      },
+      timeoutMs: 20_000,
+    });
+    return sumClicks(res, templateIds);
+  }
+
+  async enableTemplateInsights(conn: WabaConnection): Promise<void> {
+    const form = new FormData();
+    form.set('is_enabled_for_insights', 'true');
+    await this.http.call(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.wabaId}`,
+      form,
+      timeoutMs: 15_000,
+    });
+  }
+
   async getConversationAnalytics(
     conn: WabaConnection,
     startSeconds: number,
@@ -794,3 +830,23 @@ const notConfigured = (what: string) =>
     false,
     null,
   );
+
+/** Every button `count` of every day bucket, for the requested templates only (a response may carry others). */
+export function sumClicks(
+  res: {
+    data?: Array<{
+      data_points?: Array<{ template_id?: string | number; clicked?: Array<{ count?: number }> }>;
+    }>;
+  },
+  templateIds: string[],
+): number {
+  const wanted = new Set(templateIds.map(String));
+  let total = 0;
+  for (const bucket of res.data ?? []) {
+    for (const point of bucket.data_points ?? []) {
+      if (point.template_id !== undefined && !wanted.has(String(point.template_id))) continue;
+      for (const c of point.clicked ?? []) total += Number(c.count ?? 0);
+    }
+  }
+  return total;
+}

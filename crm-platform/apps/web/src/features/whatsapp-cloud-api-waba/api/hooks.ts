@@ -11,6 +11,7 @@ export const KEYS = {
   profile: (id: string) => ['waba', 'profile', id] as const,
   username: (id: string) => ['waba', 'username', id] as const,
   qr: (id: string) => ['waba', 'qr', id] as const,
+  customers: (q: string, page: number) => ['waba', 'customers', q, page] as const,
 };
 
 export function useReadiness() {
@@ -147,3 +148,16 @@ export function useWebhookConfig(enabled: boolean) {
     staleTime: 60_000,
   });
 }
+
+/** Saved customers (TW-WABA-055): one page, searched by name, phone or company. */
+export function useCustomers(q: string, page: number) {
+  return useQuery({
+    queryKey: KEYS.customers(q, page),
+    queryFn: ({ signal }) => wabaApi.customers(q, page, signal),
+    placeholderData: (previous) => previous,
+    retry: false,
+  });
+}
+
+export const useSaveCustomer = () => useAction(wabaApi.saveCustomer);
+export const useRemoveCustomer = () => useAction(wabaApi.removeCustomer);

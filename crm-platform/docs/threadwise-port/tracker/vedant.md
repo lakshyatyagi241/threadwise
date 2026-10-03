@@ -58,63 +58,63 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-WABA-001 | todo |  |  |
+| TW-WABA-001 | frontend-done |  | platform Meta app credentials: the whatsapp settings group and admin page /admin/settings/whatsapp; saved values overlay the environment (15 s) in API and worker; secrets encrypted, never returned; waba-config.spec |
 | TW-WABA-002 | frontend-done |  | platform admin check of the four coexistence webhook fields on the Meta app (GET /platform/waba/webhook-status) shown on the WhatsApp settings page; unit tested, not run against real Meta |
 | TW-WABA-003 | frontend-done |  | one-click subscribe keeps every existing field and the callback Meta has on file (POST /platform/waba/webhook-subscribe); unit tested, not run against real Meta |
-| TW-WABA-004 | todo |  |  |
-| TW-WABA-005 | todo |  |  |
-| TW-WABA-006 | todo |  |  |
-| TW-WABA-007 | todo |  |  |
-| TW-WABA-008 | todo |  |  |
-| TW-WABA-009 | todo |  |  |
-| TW-WABA-010 | todo |  |  |
-| TW-WABA-011 | todo |  |  |
-| TW-WABA-012 | todo |  |  |
-| TW-WABA-013 | todo |  |  |
-| TW-WABA-014 | todo |  |  |
+| TW-WABA-004 | frontend-done |  | numbers section at /channels/whatsapp: cards, actions, inbound badge; waba-connect.e2e |
+| TW-WABA-005 | frontend-done |  | Meta JS SDK launcher and connect modals; embedded-signup.test.ts; the popup was never opened against real Meta |
+| TW-WABA-006 | frontend-done |  | manual connect (paste credentials) modal and API; waba-connect.e2e |
+| TW-WABA-007 | frontend-done |  | pre-save token check reports each scope; waba-connect.e2e |
+| TW-WABA-008 | wontfix |  | dead endpoint in Reference (no page calls it); connect and renew do the exchange server-side; inventory says do not port unless a UI needs it |
+| TW-WABA-009 | frontend-done |  | Embedded Signup: code exchange, Interakt registration, callback override, ids proven against token scopes; waba-connect.e2e |
+| TW-WABA-010 | frontend-done |  | coexistence launch and flag; echoes (044) and history re-sync button (028) built; history import is row 046 |
+| TW-WABA-011 | backend-done |  | subscribe the app to a WABA with callback override, warns when Interakt refuses; waba-connect.e2e |
+| TW-WABA-012 | frontend-done |  | Cloud API registration with a kept PIN, auto and manual, hint when two-step is on; waba-connect.e2e |
+| TW-WABA-013 | frontend-done |  | inbound-wired verification, stamp and badge on the card; waba-connect.e2e |
+| TW-WABA-014 | frontend-done |  | Fix inbound re-subscribes and verifies; waba-connect.e2e |
 | TW-WABA-015 | frontend-done |  | live inbound check per number with a typed verdict plus the callback URL and verify token for a customer's own Meta app; e2e with Meta faked at the HTTP edge |
-| TW-WABA-016 | todo |  |  |
-| TW-WABA-017 | todo |  |  |
-| TW-WABA-018 | todo |  |  |
-| TW-WABA-019 | todo |  |  |
-| TW-WABA-020 | todo |  |  |
-| TW-WABA-021 | todo |  |  |
-| TW-WABA-022 | todo |  |  |
+| TW-WABA-016 | frontend-done |  | primary and auto-promotion; waba-connect.e2e keeps-one-primary |
+| TW-WABA-017 | frontend-done |  | disconnect hands primary on; waba-connect.e2e |
+| TW-WABA-018 | frontend-done |  | remove hands primary on; waba-connect.e2e |
+| TW-WABA-019 | frontend-done |  | replace token only when Meta accepts it; waba-connect.e2e |
+| TW-WABA-020 | frontend-done |  | renew in place, says so when Meta cannot renew it; waba-connect.e2e |
+| TW-WABA-021 | frontend-done |  | health dashboard from live Meta reads (phone, WABA, scopes, subscribed apps, template tally); waba-connect.e2e, waba-health-details.spec |
+| TW-WABA-022 | backend-done |  | derived issues and overall status, worst first; waba-rules.spec deriveHealth |
 | TW-WABA-023 | frontend-done |  | health tile from Meta conversation analytics (optional card, omitted when analytics do not answer); allowance constant 1000 kept as Reference, may be obsolete after Meta's July 2025 per-message pricing; not run against real Meta |
-| TW-WABA-024 | in-progress |  | verified-badge checklist card built from the health snapshot; the calling toggle belongs to CALL (not built) so it is not drawn |
+| TW-WABA-024 | in-progress |  | verified-badge checklist built; the calling toggle is drawn once the calling API (vishal/CALL, PR 35) is merged: it is one switch calling that API |
 | TW-WABA-025 | frontend-done |  | claim and release a business username with Meta's handle rules checked first, suggestions from the server, error 100 explained, release always clears the local record; not run against real Meta |
 | TW-WABA-026 | backend-done |  | business_username_update webhook keeps the stored handle and status current, deleted clears it; e2e through the real webhook door |
 | TW-WABA-027 | frontend-done |  | QR codes: create (PNG, 140 chars), list and delete on the health page; Reference had the routes but no screen; not run against real Meta |
 | TW-WABA-028 | frontend-done |  | history re-sync button for coexistence numbers re-subscribes the WABA and reports the historical messages already imported; the import itself (046) is not built |
-| TW-WABA-029 | todo |  |  |
-| TW-WABA-030 | todo |  |  |
-| TW-WABA-031 | todo |  |  |
-| TW-WABA-032 | todo |  |  |
-| TW-WABA-033 | todo |  |  |
-| TW-WABA-034 | todo |  |  |
-| TW-WABA-035 | todo |  |  |
-| TW-WABA-036 | todo |  |  |
-| TW-WABA-037 | backend-done |  | delivery reports the broadcasts did not claim advance the inbox message (sent, delivered, read, failed with Meta code), forward only; wallet settlement once belongs with WALLET |
-| TW-WABA-038 | backend-done |  | built in the campaign and broadcast engines: Meta's 131049 engagement block is retried on a spaced, capped schedule (campaign-rules.ts, retry-policy.ts); nothing left in WABA |
-| TW-WABA-039 | todo |  |  |
-| TW-WABA-040 | todo |  |  |
-| TW-WABA-041 | todo |  |  |
-| TW-WABA-042 | todo |  |  |
-| TW-WABA-043 | todo |  |  |
+| TW-WABA-029 | backend-done |  | webhook GET handshake with saved, env or derived verify token; waba-rules.spec |
+| TW-WABA-030 | backend-done |  | request authentication by signature or platform key in the URL; requireSignature closes the URL-key door; waba-rules.spec |
+| TW-WABA-031 | backend-done |  | entry routing, config resolution and field dispatch; waba-rules.spec splitWebhook; waba-coexistence.e2e through WabaIngestService |
+| TW-WABA-032 | backend-done |  | inbound content extraction, in the inbox's own normaliser (infra/providers/whatsapp/meta-inbound.ts); inbox unit specs |
+| TW-WABA-033 | backend-done |  | dedupe by wamid claimed in Redis (released on failure) with the inbox ledger behind it; self-echo and reactions in the inbox normaliser; message-ingest e2e |
+| TW-WABA-034 | backend-done |  | built on main by the inbox work (PR 30): WabaInboxSink, WabaChannelLinkService and the whatsapp_cloud channel make the thread, contact and message from a WhatsApp delivery; nothing duplicated here |
+| TW-WABA-035 | backend-done |  | built on main by the inbox work (PR 30): the file is fetched in the background by the ingest worker; nothing duplicated here |
+| TW-WABA-036 | blocked |  | the post-store fan-out (flows, keyword and auto replies, AI, routing) is the InboundMessageHooks seam built with the flow runtime (vishal/FLR, PR 33); WABA needs nothing more once that merges |
+| TW-WABA-037 | backend-done |  | built on main by the inbox work (PR 30): delivery reports the broadcasts did not claim become receipts on the inbox message; wallet settlement once belongs with WALLET |
+| TW-WABA-038 | backend-done |  | built in the campaign and broadcast engines: Meta 131049 engagement block is retried on a spaced, capped schedule; nothing left in WABA |
+| TW-WABA-039 | backend-done |  | group messages are stored on a thread keyed g:<group id> with no contact, titled by the group subject, the participant in the message meta (WabaInboxSink.onGroupMessage); per-participant statuses fold into one bubble with delivered_to, billable and free counts and only move forward; waba-coexistence.e2e, waba-groups-handoff.spec. No hook fires for groups, so nothing auto-replies |
+| TW-WABA-040 | backend-done |  | the four Groups webhooks keep waba_groups in step: create, delete, participant count, join requests, settings by success flag, suspension; waba-groups-handoff.spec, waba-coexistence.e2e |
+| TW-WABA-041 | backend-done |  | template status, quality and category webhooks mirrored onto the template row scoped to the WABA; template-event-rules.spec |
+| TW-WABA-042 | backend-done |  | a catalog cart becomes one wa_orders row with lines (products by retailer id or SKU, unknown ids fall back to wsn-unknown-N, minor units, last-line currency), deduped by message id, and whatsapp.order.received goes through the outbox; the buyer acknowledgement, WhatsApp Pay charge and flow resume belong to CHK and FLR and listen to that event; waba-coexistence.e2e |
+| TW-WABA-043 | backend-done |  | form submissions (nfm_reply) and payment statuses leave through the outbox as whatsapp.form.submitted and whatsapp.payment.updated and never reach the inbox; calls are routed by the calling domain (vishal/CALL, PR 35); waba-coexistence.e2e |
 | TW-WABA-044 | backend-done |  | messages typed on the Business app (smb_message_echoes) become one outbound bubble with no unread, no routing, deduped by message id; a file or place is described, not copied (Reference downloaded echo media); e2e through the real webhook door |
-| TW-WABA-045 | todo |  |  |
-| TW-WABA-046 | todo |  |  |
-| TW-WABA-047 | todo |  |  |
+| TW-WABA-045 | backend-done |  | smb_app_state_sync adds the business app's contacts through ContactsService with quiet (no contact.created event, so no flow or notification), fills a blank name only, never applies remove; waba-coexistence.e2e |
+| TW-WABA-046 | backend-done |  | history webhook stored quietly through the inbox ingest: backdated to the real send time, both sides by own numbers, deduped by message id in the ledger, capped at 2000 per delivery, no unread, no contact, no realtime alert; waba-coexistence.e2e |
+| TW-WABA-047 | blocked |  | Twilio inbound needs the Twilio connection and an inbox channel kind for it, both part of WADEV (Baileys/Twilio devices); the shared ingest is ready for it |
 | TW-WABA-048 | wontfix |  | the bridge's inbound mirror is the in-process inbox path built in NODE (TW-NODE-017): no HTTP endpoint to port |
-| TW-WABA-049 | backend-done |  | Cloud API outbound send adapter for the inbox (text, media by upload, template, location, reaction; Meta or Interakt route; Meta error codes become retry or fail); not run against real Meta |
+| TW-WABA-049 | backend-done |  | built on main by the inbox work (PR 30): the Cloud API send adapter of the inbox channel (text, media, template, location, reaction; Meta or Interakt route); not run against real Meta |
 | TW-WABA-050 | wontfix |  | there is no Node bridge to hand credentials to: the unofficial engine runs in the worker and the Cloud API reads credentials from the number's own row |
-| TW-WABA-051 | in-progress |  | send errors are classified for the inbox (retry vs fail with Meta's code); the full user-facing message table is still to port |
+| TW-WABA-051 | backend-done |  | describeMetaError (Meta words first, code and trace appended), connect translators for 190/463/467/460, 200 and 100, a retryable flag for the inbox; waba-errors in infra/providers, meta-errors for the inbox, waba-connect.e2e |
 | TW-WABA-052 | wontfix |  | repair job for a connection without a WABA id; the connect flow here requires and proves the WABA id, so nothing creates such a row |
-| TW-WABA-053 | todo |  |  |
-| TW-WABA-054 | todo |  |  |
-| TW-WABA-055 | todo |  |  |
-| TW-WABA-056 | todo |  |  |
-| TW-WABA-057 | todo |  |  |
+| TW-WABA-053 | backend-done |  | daily worker job pulls Meta template button clicks onto wpcampaigns.meta_clicked_count (window from creation day, max 89 days, enables insights once and retries); waba-click-sync.e2e, waba-groups-handoff.spec |
+| TW-WABA-054 | blocked |  | the ads client reusing WABA ids is MADS code; WabaConnectService.resolveConnection already serves the primary number's ids to it |
+| TW-WABA-055 | frontend-done |  | saved customers: API (list, search, upsert by phone digits) and the Customers screen at /store/customers with a Settings tile; waba-customers.e2e |
+| TW-WABA-056 | frontend-done |  | removes the profile only and keeps the orders (Reference also deleted every order of that phone: a deliberate deviation, see parity); an unknown id is a 404; waba-customers.e2e |
+| TW-WABA-057 | wontfix |  | dead code in Reference (no page includes the views); the modern popup flow replaces it; the catalog link idea goes to CAT as an explicit action |
 
 ## node-bridge-runtime (node)
 

@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RequestContextStore } from '../../common/context/request-context';
 import type {
@@ -6,7 +6,12 @@ import type {
   NormalisedInboundMessage,
 } from '../../infra/providers/whatsapp/whatsapp.port';
 import { normaliseMetaWebhook } from '../../infra/providers/whatsapp';
-import type { BusinessAppEcho, InboundContext, WabaInboundSink } from '../whatsapp-cloud-api-waba';
+import type {
+  BusinessAppEcho,
+  HistoryItem,
+  InboundContext,
+  WabaInboundSink,
+} from '../whatsapp-cloud-api-waba';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
 import type { ChannelRow } from './channels.repository';
 import { CONVERSATIONS_FACADE, type ConversationsFacade } from './conversations.facade';
@@ -38,7 +43,7 @@ export class WabaInboxSink implements WabaInboundSink {
   constructor(
     private readonly links: WabaChannelLinkService,
     private readonly publisher: ChannelIngestPublisher,
-    @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    @Optional() @Inject(CONVERSATIONS_FACADE) private readonly conversations?: ConversationsFacade,
   ) {}
 
   /**
@@ -46,8 +51,10 @@ export class WabaInboxSink implements WabaInboundSink {
    * thread. No unread, no routing, no automation; the ledger makes a redelivery the same bubble.
    */
   async onEcho(ctx: InboundContext, echo: BusinessAppEcho): Promise<void> {
+    if (!this.conversations) return;
     const channel = await this.links.ensure(ctx.orgId, ctx.configId, { create: true });
     if (!channel) return;
+    const conversations = this.conversations;
     await RequestContextStore.run(
       {
         requestId: `waba-echo-${randomUUID()}`,
@@ -57,7 +64,7 @@ export class WabaInboxSink implements WabaInboundSink {
         userId: null,
       },
       () =>
-        this.conversations.recordOutbound({
+        conversations.recordOutbound({
           channelId: channel.uuid,
           peerKey: echo.to,
           source: 'business_app',
@@ -65,6 +72,56 @@ export class WabaInboxSink implements WabaInboundSink {
           providerMessageId: echo.providerMessageId,
         }),
     );
+  }
+
+  /**
+   * The chat history Meta pushes after coexistence onboarding (TW-WABA-046): one ingest job per message, stored backdated and quiet
+   * (no unread, no contact, no alert). The ledger drops a message the inbox already has, so a repeated push adds nothing.
+   */
+  async onHistory(ctx: InboundContext, items: HistoryItem[]): Promise<void> {
+    const channel = await this.links.ensure(ctx.orgId, ctx.configId, { create: true });
+    if (!channel) return;
+    for (const item of items) {
+      await this.publisher.enqueueInbound(ctx.orgId, channel.uuid, {
+        providerMessageId: item.providerMessageId,
+        peerKey: item.customer,
+        kind: 'text',
+        body: item.text,
+        providerTimestamp: item.at,
+        history: { direction: item.outgoing ? 'out' : 'in' },
+      });
+    }
+  }
+
+  /**
+   * A message in a Cloud API group (TW-WABA-039). The inbox's normaliser leaves a group message out because its sender is a member, not
+   * the thread; here it is read without the group marker (so the one reader of the payload shape stays the normaliser) and put on the
+   * group's own thread, keyed by the group id, with the participant named and no contact made.
+   */
+  async onGroupMessage(
+    ctx: InboundContext,
+    message: NormalisedInboundMessage,
+    group: { groupId: string; title: string | null },
+  ): Promise<void> {
+    const channel = await this.links.ensure(ctx.orgId, ctx.configId, { create: true });
+    if (!channel) return;
+    const participant = message.from.replace(/\D+/g, '');
+    const { group_id: _group, ...raw } = message.raw as Dict;
+    const parsed = normaliseMetaWebhook(this.payload(ctx, channel, { messages: [raw] }), {
+      phoneNumberId: ctx.phoneNumberId,
+    });
+    for (const m of parsed.messages) {
+      await this.publisher.enqueueInbound(ctx.orgId, channel.uuid, {
+        ...m,
+        peerKey: group.groupId,
+        peerName: undefined,
+        group: {
+          ...(group.title ? { title: group.title } : {}),
+          participant,
+          ...(ctx.contactName ? { participantName: ctx.contactName } : {}),
+        },
+      });
+    }
   }
 
   async onMessage(ctx: InboundContext, message: NormalisedInboundMessage): Promise<void> {

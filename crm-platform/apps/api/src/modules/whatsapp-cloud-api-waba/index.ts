@@ -9,6 +9,7 @@ export {
   type ResolvedWabaConnection,
 } from './waba-connect.service';
 export { localStatusFor } from './template-event-rules';
+export type { HistoryItem } from './waba-coexistence-rules';
 export {
   WABA_INBOUND_SINK,
   WABA_INBOUND_SINK_OVERRIDE,

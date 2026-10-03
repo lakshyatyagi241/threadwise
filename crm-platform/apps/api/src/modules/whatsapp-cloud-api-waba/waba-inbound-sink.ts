@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import type { HistoryItem } from './waba-coexistence-rules';
 import type {
   NormalisedDeliveryEvent,
   NormalisedInboundMessage,
@@ -34,6 +35,14 @@ export interface BusinessAppEcho {
 }
 
 export interface WabaInboundSink {
+  /** Imported coexistence history (TW-WABA-046): stored backdated and quiet, deduplicated by message id. */
+  onHistory?(ctx: InboundContext, items: HistoryItem[]): Promise<void>;
+  /** A message in a Cloud API group (TW-WABA-039): storage only, on the group's own thread, no contact, no automation. */
+  onGroupMessage?(
+    ctx: InboundContext,
+    message: NormalisedInboundMessage,
+    group: { groupId: string; title: string | null },
+  ): Promise<void>;
   /** Mirrors a business-app message onto its thread as outbound, without unread, routing or automation. */
   onEcho?(ctx: InboundContext, echo: BusinessAppEcho): Promise<void>;
   onMessage(ctx: InboundContext, message: NormalisedInboundMessage): Promise<void>;

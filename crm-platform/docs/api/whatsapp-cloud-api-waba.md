@@ -23,3 +23,11 @@ token for a customer's own Meta app). Health `details.conversations` carries thi
 Platform (super admin): `GET /v2/platform/waba/webhook-status` and `POST /v2/platform/waba/webhook-subscribe` for the Meta app's
 coexistence fields (`messages`, `smb_message_echoes`, `smb_app_state_sync`, `history`).
 Webhook fields now handled: `business_username_update` and `smb_message_echoes` (a message typed on the Business app becomes one outbound bubble).
+Inbox: each connected number is a `whatsapp_cloud` channel made by the inbox's `WabaChannelLinkService` (see the WABA wiring map).
+
+Added with groups, orders and saved customers: webhook fields `group_lifecycle_update`, `group_participants_update`, `group_settings_update`,
+`group_status_update`, `history` and `smb_app_state_sync` are handled; a catalog cart is stored as an order and emits `whatsapp.order.received`; a form
+submission emits `whatsapp.form.submitted` and a payment status `whatsapp.payment.updated`.
+Saved customers (`waba.customers.read` for reads, `waba.customers.manage` for changes): `GET /v2/waba/customers?q=&page=` (20 a page, name then phone,
+the search text is literal), `PUT /v2/waba/customers` (`{phone, name?, company?, address?}`; the same form creates or updates by the phone's digits),
+`DELETE /v2/waba/customers/:id` (the profile only; orders are kept; unknown id is 404).
