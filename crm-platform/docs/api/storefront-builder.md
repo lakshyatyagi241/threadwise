@@ -7,17 +7,17 @@ number** (the order's id, which WaDesk also showed buyers as `#id`).
 
 ## Admin (signed in, `@ActorKinds('user')`)
 
-| Method and path                       | Permission                | Body / query                             | Response                         |
-| ------------------------------------- | ------------------------- | ---------------------------------------- | -------------------------------- |
-| `GET /store/overview?shopId=`         | `store.dashboard.read`    | `storeOverviewQuerySchema`               | `storeOverviewSchema`            |
-| `GET /store/shops`                    | `store.storefront.read`   | -                                        | `wizardResponseSchema`           |
-| `POST /store/shops`                   | `store.shops.manage`      | `createShopSchema`                       | 201 `storefrontResponseSchema`   |
-| `POST /store/shops/reset`             | `store.shops.manage`      | `{"confirm":"yes"}`                      | 200 `resetStoreResponseSchema`   |
-| `GET /store/shops/:id`                | `store.storefront.read`   | -                                        | `storefrontResponseSchema`       |
-| `PUT /store/shops/:id`                | `store.shops.manage`      | `editShopSchema`                         | `storefrontResponseSchema`       |
-| `PUT /store/shops/:id/settings`       | `store.storefront.manage` | `updateStorefrontSchema` (+`rowVersion`) | `storefrontResponseSchema`       |
-| `POST /store/shops/:id/verify-domain` | `store.storefront.manage` | -                                        | 200 `verifyDomainResponseSchema` |
-| `DELETE /store/shops/:id`             | `store.shops.manage`      | -                                        | 204                              |
+| Method and path                       | Permission                | Body / query                             | Response                                                                                           |
+| ------------------------------------- | ------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `GET /store/overview?shopId=`         | `store.dashboard.read`    | `storeOverviewQuerySchema`               | `storeOverviewSchema` (also `counts` for the sidebar badges and `connection` for the sidebar card) |
+| `GET /store/shops`                    | `store.storefront.read`   | -                                        | `wizardResponseSchema`                                                                             |
+| `POST /store/shops`                   | `store.shops.manage`      | `createShopSchema`                       | 201 `storefrontResponseSchema`                                                                     |
+| `POST /store/shops/reset`             | `store.shops.manage`      | `{"confirm":"yes"}`                      | 200 `resetStoreResponseSchema`                                                                     |
+| `GET /store/shops/:id`                | `store.storefront.read`   | -                                        | `storefrontResponseSchema`                                                                         |
+| `PUT /store/shops/:id`                | `store.shops.manage`      | `editShopSchema`                         | `storefrontResponseSchema`                                                                         |
+| `PUT /store/shops/:id/settings`       | `store.storefront.manage` | `updateStorefrontSchema` (+`rowVersion`) | `storefrontResponseSchema`                                                                         |
+| `POST /store/shops/:id/verify-domain` | `store.storefront.manage` | -                                        | 200 `verifyDomainResponseSchema`                                                                   |
+| `DELETE /store/shops/:id`             | `store.shops.manage`      | -                                        | 204                                                                                                |
 
 Writes accept `Idempotency-Key`. Every write is audited (module `storefronts`) and emits an outbox event in the same transaction:
 `storefront.created|updated|deleted|reset|settings_updated|domain_checked`.

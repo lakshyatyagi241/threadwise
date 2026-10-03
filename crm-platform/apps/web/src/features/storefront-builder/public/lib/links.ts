@@ -8,13 +8,20 @@ export function waChatUrl(waNumber: string, text?: string): string {
   return text ? `${base}?text=${encodeURIComponent(text)}` : base;
 }
 
+/** PHP's `urlencode` (spaces as `+`, every byte but letters, digits and `-_.` escaped), which WaDesk uses for this one link. */
+const phpUrlencode = (v: string): string =>
+  encodeURIComponent(v)
+    .replace(/%20/g, '+')
+    .replace(/[!'()*~]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+
 /** The product page's "Ask a question on WhatsApp". */
 export function productQuestionUrl(
   waNumber: string,
   productName: string,
   productUrl: string,
 ): string {
-  return waChatUrl(waNumber, `Hi! I have a question about: ${productName} (${productUrl})`);
+  const text = `Hi! I have a question about: ${productName} (${productUrl})`;
+  return `https://wa.me/${digits(waNumber)}?text=${phpUrlencode(text)}`;
 }
 
 /** The tracking page's "Message us about this order". */

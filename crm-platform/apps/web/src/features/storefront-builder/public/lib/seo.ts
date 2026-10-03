@@ -2,7 +2,12 @@ import type { PublicProductPage, PublicProduct, PublicShop } from '@crm/contract
 import type { Metadata } from 'next';
 import { stripTags } from './sanitize';
 
-/** Titles, descriptions, Open Graph and JSON-LD of the public pages (WD-STORE-027). */
+/**
+ * Titles, descriptions, Open Graph and JSON-LD of the public pages (WD-STORE-027).
+ *
+ * A shop page is its own site: the staff app's title template ("... - <platform>"), its default `robots` and its Open Graph block
+ * must not leak onto it, so the title is `absolute` and the inherited fields are reset with `null`.
+ */
 
 /** Cuts text at `max` characters and marks the cut. */
 export function limit(text: string, max: number): string {
@@ -16,8 +21,9 @@ const shopDescription = (shop: PublicShop) =>
 export function homeMetadata(shop: PublicShop, url: string): Metadata {
   const image = shop.logoUrl ?? undefined;
   return {
-    title: shop.name,
+    title: { absolute: shop.name },
     description: shopDescription(shop),
+    robots: null,
     openGraph: {
       type: 'website',
       siteName: shop.name,
@@ -35,8 +41,9 @@ export function productMetadata(shop: PublicShop, product: PublicProduct, url: s
   const image = product.imageUrl ?? undefined;
   const source = stripTags(product.description) || shop.name;
   return {
-    title: `${product.name} · ${shop.name}`,
+    title: { absolute: `${product.name} · ${shop.name}` },
     description: limit(source, 160),
+    robots: null,
     openGraph: {
       siteName: shop.name,
       title: product.name,
@@ -49,7 +56,13 @@ export function productMetadata(shop: PublicShop, product: PublicProduct, url: s
 }
 
 export function orderMetadata(shop: PublicShop, orderNo: number): Metadata {
-  return { title: `Order #${orderNo} · ${shop.name}`, robots: { index: false } };
+  return {
+    title: { absolute: `Order #${orderNo} · ${shop.name}` },
+    description: null,
+    robots: { index: false },
+    openGraph: null,
+    twitter: null,
+  };
 }
 
 const present = (v: unknown): boolean =>

@@ -239,8 +239,7 @@
     },
     "placed": {
       "title": "تم إرسال الطلب",
-      "track": "تتبّع الطلب رقم {orderNo} ←",
-      "openWhatsApp": "فتح واتساب"
+      "track": "تتبّع الطلب رقم {orderNo} ←"
     },
     "share": {
       "title": "مشاركة",
@@ -318,7 +317,6 @@
       "stepTodo": "لم تتم بعد",
       "items": "العناصر",
       "qty": "الكمية {qty} · {price}",
-      "discount": "الخصم",
       "free": "مجاني",
       "deliveryTo": "التوصيل إلى",
       "payNow": "ادفع الآن",

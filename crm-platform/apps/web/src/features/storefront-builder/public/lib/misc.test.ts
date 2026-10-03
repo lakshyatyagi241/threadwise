@@ -29,8 +29,9 @@ describe('money', () => {
 describe('links', () => {
   it('builds WhatsApp and share links', () => {
     expect(waChatUrl('+1 (555) 123-4567')).toBe('https://wa.me/15551234567');
+    // PHP urlencode, as WaDesk's product link: spaces are `+`, `!` and brackets are escaped
     expect(productQuestionUrl('15551234567', 'Cap', 'https://s/p/cap')).toBe(
-      `https://wa.me/15551234567?text=${encodeURIComponent('Hi! I have a question about: Cap (https://s/p/cap)')}`,
+      'https://wa.me/15551234567?text=Hi%21+I+have+a+question+about%3A+Cap+%28https%3A%2F%2Fs%2Fp%2Fcap%29',
     );
     expect(orderQuestionUrl('1555', 12)).toBe(
       `https://wa.me/1555?text=${encodeURIComponent('Hi! About my order #12')}`,

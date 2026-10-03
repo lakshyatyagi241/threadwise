@@ -13,6 +13,6 @@ export async function ShopOrder({ slug, token }: { slug: string; token: string }
 
 export async function shopOrderMetadata(slug: string, token: string): Promise<Metadata> {
   const data = await getPublicOrder(slug, token);
-  if (!data) return { title: 'Order', robots: { index: false } };
+  if (!data) return { title: { absolute: 'Order' }, robots: { index: false } };
   return orderMetadata(data.shop, data.order.orderNo);
 }

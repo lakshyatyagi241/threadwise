@@ -251,14 +251,11 @@ describe('shops and the wizard', () => {
 
   it('editing keeps the slug, resets the verification of a changed domain, and a taken domain is a field error', async () => {
     const m = await merchant('edit', 'Old Name');
-    const res = await api
-      .as(m.t.admin)
-      .put(`/v2/store/shops/${m.s.id}`)
-      .send({
-        shopName: 'Brand New Name',
-        customDomain: 'shop.example.org',
-        deviceId: m.deviceUuid,
-      });
+    const res = await api.as(m.t.admin).put(`/v2/store/shops/${m.s.id}`).send({
+      shopName: 'Brand New Name',
+      customDomain: 'shop.example.org',
+      deviceId: m.deviceUuid,
+    });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.slug).toBe(m.slug);
     expect(res.body.shopName).toBe('Brand New Name');

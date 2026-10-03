@@ -239,8 +239,7 @@
     },
     "placed": {
       "title": "Order placed",
-      "track": "Track order #{orderNo} →",
-      "openWhatsApp": "Open WhatsApp"
+      "track": "Track order #{orderNo} →"
     },
     "share": {
       "title": "Share",
@@ -318,7 +317,6 @@
       "stepTodo": "not yet",
       "items": "Items",
       "qty": "Qty {qty} · {price}",
-      "discount": "Discount",
       "free": "Free",
       "deliveryTo": "Delivery to",
       "payNow": "Pay now",

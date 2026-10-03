@@ -31,7 +31,7 @@ export async function ShopProduct({ slug, productSlug }: { slug: string; product
 
 export async function shopProductMetadata(slug: string, productSlug: string): Promise<Metadata> {
   const page = await getPublicProduct(slug, productSlug);
-  if (!page) return { title: 'Store', robots: { index: false } };
+  if (!page) return { title: { absolute: 'Store' }, robots: { index: false } };
   const origin = await requestOrigin();
   return productMetadata(
     page.shop,
