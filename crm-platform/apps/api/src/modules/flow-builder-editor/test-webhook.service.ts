@@ -18,7 +18,11 @@ export function substitute(text: string, vars: Record<string, unknown> | null | 
   if (!text) return '';
   return text.replace(/\{\{\s*([^{}]+?)\s*\}\}/g, (_m, raw: string) => {
     const v = vars?.[raw.trim()];
-    return v === undefined || v === null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v);
+    return v === undefined || v === null
+      ? ''
+      : typeof v === 'object'
+        ? JSON.stringify(v)
+        : String(v);
   });
 }
 
@@ -45,16 +49,21 @@ export class TestWebhookService {
     // Content-Type defaults to JSON as in Reference; custom headers may replace it (any casing); a body goes out with the node's own type.
     const contentType = req.contentType || 'application/json';
     // Reference's HTTP client always identifies itself (some endpoints refuse a request with no User-Agent); so do we.
-    const headers: Record<string, string> = { 'User-Agent': USER_AGENT, 'Content-Type': contentType };
+    const headers: Record<string, string> = {
+      'User-Agent': USER_AGENT,
+      'Content-Type': contentType,
+    };
     for (const h of req.headers ?? []) {
       const k = (h.key ?? '').trim();
       if (!k) continue;
-      for (const existing of Object.keys(headers)) if (existing.toLowerCase() === k.toLowerCase()) delete headers[existing];
+      for (const existing of Object.keys(headers))
+        if (existing.toLowerCase() === k.toLowerCase()) delete headers[existing];
       headers[k] = substitute(h.value ?? '', vars);
     }
     const body = method !== 'GET' && method !== 'HEAD' ? substitute(req.body ?? '', vars) : '';
     if (body) {
-      for (const existing of Object.keys(headers)) if (existing.toLowerCase() === 'content-type') delete headers[existing];
+      for (const existing of Object.keys(headers))
+        if (existing.toLowerCase() === 'content-type') delete headers[existing];
       headers['Content-Type'] = contentType;
       headers['Content-Length'] = String(Buffer.byteLength(body));
     }
@@ -66,7 +75,8 @@ export class TestWebhookService {
       if (ct.toLowerCase().includes('json')) {
         try {
           const parsed: unknown = JSON.parse(out.text);
-          if (Array.isArray(parsed)) json = Object.fromEntries(parsed.map((v, i) => [String(i), v]));
+          if (Array.isArray(parsed))
+            json = Object.fromEntries(parsed.map((v, i) => [String(i), v]));
           else if (parsed && typeof parsed === 'object') json = parsed as Record<string, unknown>;
         } catch {
           json = null;
@@ -80,7 +90,10 @@ export class TestWebhookService {
         json,
       };
     } catch (err) {
-      return { ok: false, error: `Request failed: ${String((err as Error).message ?? err).slice(0, 200)}` };
+      return {
+        ok: false,
+        error: `Request failed: ${String((err as Error).message ?? err).slice(0, 200)}`,
+      };
     }
   }
 

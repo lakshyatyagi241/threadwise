@@ -39,7 +39,9 @@ export class PlatformFlowTemplatesController {
 
   @Get()
   @ApiOperation({ summary: 'Templates (20 per page) with the three stat tiles' })
-  async list(@Query(zodPipe(listAdminFlowTemplatesQuerySchema)) query: ListAdminFlowTemplatesQuery) {
+  async list(
+    @Query(zodPipe(listAdminFlowTemplatesQuerySchema)) query: ListAdminFlowTemplatesQuery,
+  ) {
     return this.templates.list(query);
   }
 
@@ -53,7 +55,8 @@ export class PlatformFlowTemplatesController {
   @OperatorRoles('super_admin')
   @ApiOperation({
     summary: 'Create a template from an uploaded or pasted export, or by cloning a flow',
-    description: '422 FLB_TEMPLATE_GRAPH_REQUIRED when none of the three sources is given; 422 FLB_IMPORT_INVALID when it has no flowNodes.',
+    description:
+      '422 FLB_TEMPLATE_GRAPH_REQUIRED when none of the three sources is given; 422 FLB_IMPORT_INVALID when it has no flowNodes.',
   })
   async create(@Body(zodPipe(createAdminFlowTemplateSchema)) body: CreateAdminFlowTemplateInput) {
     return this.templates.create(body);
@@ -61,7 +64,9 @@ export class PlatformFlowTemplatesController {
 
   @Put(':id')
   @OperatorRoles('super_admin')
-  @ApiOperation({ summary: 'Edit a template; leave the graph sources empty to keep the current flow' })
+  @ApiOperation({
+    summary: 'Edit a template; leave the graph sources empty to keep the current flow',
+  })
   async update(
     @Param('id', zodPipe(uuidSchema)) id: string,
     @Body(zodPipe(updateAdminFlowTemplateSchema)) body: UpdateAdminFlowTemplateInput,

@@ -73,7 +73,9 @@ export class FlowReaderService {
         const key = `${e.source}_${port}`;
         if (!(key in routes)) routes[key] = e.target;
       }
-      const start = row.graph.flowNodes.find((n) => n.isStart) ?? row.graph.flowNodes.find((n) => n.type === 'trigger');
+      const start =
+        row.graph.flowNodes.find((n) => n.isStart) ??
+        row.graph.flowNodes.find((n) => n.type === 'trigger');
       return {
         id: row.uuid,
         name: row.name,

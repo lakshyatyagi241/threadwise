@@ -12,7 +12,10 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
-import { FLOW_AI_PORT, type FlowAiPort } from '../../infra/providers/flow-builder-editor/flow-ai.port';
+import {
+  FLOW_AI_PORT,
+  type FlowAiPort,
+} from '../../infra/providers/flow-builder-editor/flow-ai.port';
 import { CALL_SYSTEM_PROMPT, CHAT_SYSTEM_PROMPT, extractFlowJson } from './flow-ai-prompts';
 
 type Raw = Record<string, unknown>;

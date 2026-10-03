@@ -13,28 +13,73 @@ export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
 };
 
 const CATEGORY_STYLE: Record<string, { icon: string; bg: string; text: string }> = {
-  welcome: { icon: 'M3 11s2-1 5-1 5 1 5 1M5 6.5h.01M11 6.5h.01M8 9.5s1 .8 0 1.5', bg: 'bg-[var(--flb-bubble)]', text: 'text-brand' },
+  welcome: {
+    icon: 'M3 11s2-1 5-1 5 1 5 1M5 6.5h.01M11 6.5h.01M8 9.5s1 .8 0 1.5',
+    bg: 'bg-[var(--flb-bubble)]',
+    text: 'text-brand',
+  },
   cart: { icon: 'M3 5h8l1 6H4z', bg: 'bg-[var(--flb-mint)]', text: 'text-brand' },
   'cart-recovery': { icon: 'M3 5h8l1 6H4z', bg: 'bg-[var(--flb-mint)]', text: 'text-brand' },
-  'post-purchase': { icon: 'M8 1.5l1.6 4.2H14l-3.5 2.5 1.4 4.3L8 9.9l-3.9 2.6 1.4-4.3L2 5.7h4.4z', bg: 'bg-[#FCE0D5]', text: 'text-[#A1431F]' },
-  're-engagement': { icon: 'M3 8a5 5 0 0 1 8.5-3.5L13 6M13 3v3h-3M13 8a5 5 0 0 1-8.5 3.5L3 10M3 13v-3h3', bg: 'bg-[#F3E9FF]', text: 'text-[#5B3D8A]' },
-  lead: { icon: 'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14c0-3 2.7-5 6-5s6 2 6 5', bg: 'bg-[#D9E5F2]', text: 'text-[#13478A]' },
-  'lead-nurture': { icon: 'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14c0-3 2.7-5 6-5s6 2 6 5', bg: 'bg-[#D9E5F2]', text: 'text-[#13478A]' },
-  event: { icon: 'M3 4h10v9H3zM3 7h10M6 2v3M10 2v3', bg: 'bg-[var(--flb-bubble)]', text: 'text-brand' },
-  'special-events': { icon: 'M3 4h10v9H3zM3 7h10M6 2v3M10 2v3', bg: 'bg-[var(--flb-bubble)]', text: 'text-brand' },
+  'post-purchase': {
+    icon: 'M8 1.5l1.6 4.2H14l-3.5 2.5 1.4 4.3L8 9.9l-3.9 2.6 1.4-4.3L2 5.7h4.4z',
+    bg: 'bg-[#FCE0D5]',
+    text: 'text-[#A1431F]',
+  },
+  're-engagement': {
+    icon: 'M3 8a5 5 0 0 1 8.5-3.5L13 6M13 3v3h-3M13 8a5 5 0 0 1-8.5 3.5L3 10M3 13v-3h3',
+    bg: 'bg-[#F3E9FF]',
+    text: 'text-[#5B3D8A]',
+  },
+  lead: {
+    icon: 'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14c0-3 2.7-5 6-5s6 2 6 5',
+    bg: 'bg-[#D9E5F2]',
+    text: 'text-[#13478A]',
+  },
+  'lead-nurture': {
+    icon: 'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14c0-3 2.7-5 6-5s6 2 6 5',
+    bg: 'bg-[#D9E5F2]',
+    text: 'text-[#13478A]',
+  },
+  event: {
+    icon: 'M3 4h10v9H3zM3 7h10M6 2v3M10 2v3',
+    bg: 'bg-[var(--flb-bubble)]',
+    text: 'text-brand',
+  },
+  'special-events': {
+    icon: 'M3 4h10v9H3zM3 7h10M6 2v3M10 2v3',
+    bg: 'bg-[var(--flb-bubble)]',
+    text: 'text-brand',
+  },
 };
 const NEUTRAL = { icon: 'M2 4h12v8H2zM2 7h12', bg: 'bg-muted', text: 'text-foreground/80' };
 export const categoryStyle = (c: string | null) => CATEGORY_STYLE[c ?? ''] ?? NEUTRAL;
 
 /** Reference's global `.pill`: mono 9.5px uppercase, 1px 7px padding, 1px border. */
-export const PILL = 'inline-flex items-center gap-1 rounded-full border px-[7px] py-px font-mono text-[9.5px] font-semibold uppercase tracking-[0.04em]';
+export const PILL =
+  'inline-flex items-center gap-1 rounded-full border px-[7px] py-px font-mono text-[9.5px] font-semibold uppercase tracking-[0.04em]';
 
 const Check = () => (
-  <svg viewBox="0 0 12 12" className="h-3 w-3 text-brand" fill="none" stroke="currentColor" strokeWidth="1.8">
+  <svg
+    viewBox="0 0 12 12"
+    className="h-3 w-3 text-brand"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+  >
     <path d="M2 6.5l3 2 5-6" />
   </svg>
 );
-const IconButton = ({ title, onClick, danger, children }: { title: string; onClick: () => void; danger?: boolean; children: React.ReactNode }) => (
+const IconButton = ({
+  title,
+  onClick,
+  danger,
+  children,
+}: {
+  title: string;
+  onClick: () => void;
+  danger?: boolean;
+  children: React.ReactNode;
+}) => (
   <button
     type="button"
     title={title}
@@ -42,14 +87,31 @@ const IconButton = ({ title, onClick, danger, children }: { title: string; onCli
     onClick={onClick}
     className={cn(
       'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border hover:bg-muted',
-      danger && 'hover:border-[var(--flb-coral)] hover:bg-[var(--flb-coral)]/10 hover:text-[var(--flb-coral)]',
+      danger &&
+        'hover:border-[var(--flb-coral)] hover:bg-[var(--flb-coral)]/10 hover:text-[var(--flb-coral)]',
     )}
   >
     {children}
   </button>
 );
-const Svg = ({ d, className = 'h-3 w-3', fill }: { d: string; className?: string; fill?: boolean }) => (
-  <svg viewBox="0 0 16 16" className={className} fill={fill ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+const Svg = ({
+  d,
+  className = 'h-3 w-3',
+  fill,
+}: {
+  d: string;
+  className?: string;
+  fill?: boolean;
+}) => (
+  <svg
+    viewBox="0 0 16 16"
+    className={className}
+    fill={fill ? 'currentColor' : 'none'}
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d={d} />
   </svg>
 );
@@ -63,7 +125,9 @@ export interface CardActions {
   can: { update: boolean; create: boolean; remove: boolean };
 }
 
-export function triggerLabelKey(kind: string): 'triggerTag' | 'triggerGroup' | 'triggerManual' | 'triggerKeyword' {
+export function triggerLabelKey(
+  kind: string,
+): 'triggerTag' | 'triggerGroup' | 'triggerManual' | 'triggerKeyword' {
   if (kind === 'tag_added') return 'triggerTag';
   if (kind === 'group_join') return 'triggerGroup';
   if (kind === 'manual_enroll') return 'triggerManual';
@@ -76,7 +140,8 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
   const tl = useTranslations('flb.list.state');
   const sty = STATE_STYLE[flow.state];
   const cat = categoryStyle(flow.category);
-  const hasSubs = flow.subscribers.active + flow.subscribers.completed + flow.subscribers.failed > 0;
+  const hasSubs =
+    flow.subscribers.active + flow.subscribers.completed + flow.subscribers.failed > 0;
   return (
     <div
       data-flow-card={flow.id}
@@ -84,19 +149,47 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
     >
       <div className="mb-3 flex items-start justify-between gap-2">
         {flow.flowType === 'instagram' ? (
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white" style={{ background: 'linear-gradient(135deg,#833AB4,#E1306C,#F77737)' }}>
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.9">
-              <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white"
+            style={{ background: 'linear-gradient(135deg,#833AB4,#E1306C,#F77737)' }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.9"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
             </svg>
           </div>
         ) : (
-          <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-full', cat.bg, cat.text)}>
-            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><path d={cat.icon} /></svg>
+          <div
+            className={cn(
+              'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
+              cat.bg,
+              cat.text,
+            )}
+          >
+            <svg
+              viewBox="0 0 16 16"
+              className="h-3.5 w-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path d={cat.icon} />
+            </svg>
           </div>
         )}
         <div className="flex flex-wrap items-center justify-end gap-1.5">
           {flow.flowType === 'instagram' ? (
-            <span className={PILL} style={{ background: '#FCE7F3', color: '#9D174D', borderColor: '#F9A8D4' }}>
+            <span
+              className={PILL}
+              style={{ background: '#FCE7F3', color: '#9D174D', borderColor: '#F9A8D4' }}
+            >
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: '#E1306C' }} />
               {t('instagram')}
             </span>
@@ -114,7 +207,9 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
       </div>
 
       <div className="mb-1 text-[14px] font-semibold">{flow.name || t('untitled')}</div>
-      <p className="text-[12.5px] leading-relaxed text-muted-foreground">{purposeOf(flow.category)}</p>
+      <p className="text-[12.5px] leading-relaxed text-muted-foreground">
+        {purposeOf(flow.category)}
+      </p>
 
       <ul className="mt-3 space-y-1 text-[12px] text-foreground/70">
         <li className="flex items-center gap-2">
@@ -129,10 +224,16 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
           <Check />
           {hasSubs ? (
             <span>
-              <span className="font-mono">{flow.subscribers.active}</span> {t('active')} · <span className="font-mono">{flow.subscribers.completed}</span> {t('done')}
+              <span className="font-mono">{flow.subscribers.active}</span> {t('active')} ·{' '}
+              <span className="font-mono">{flow.subscribers.completed}</span> {t('done')}
               {flow.subscribers.failed > 0 ? (
                 <>
-                  {' '}· <span className="font-mono text-[var(--flb-coral)]">{flow.subscribers.failed}</span> {t('failed')}
+                  {' '}
+                  ·{' '}
+                  <span className="font-mono text-[var(--flb-coral)]">
+                    {flow.subscribers.failed}
+                  </span>{' '}
+                  {t('failed')}
                 </>
               ) : null}
             </span>
@@ -172,11 +273,19 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
           </Link>
         ) : null}
         {actions.can.update ? (
-          <IconButton title={flow.isActive ? t('pause') : t('resume')} onClick={() => void actions.onToggle(flow)}>
+          <IconButton
+            title={flow.isActive ? t('pause') : t('resume')}
+            onClick={() => void actions.onToggle(flow)}
+          >
             {flow.isActive ? (
-              <svg viewBox="0 0 12 12" className="h-3 w-3" fill="currentColor"><rect x="3" y="2" width="2" height="8" rx="0.5" /><rect x="7" y="2" width="2" height="8" rx="0.5" /></svg>
+              <svg viewBox="0 0 12 12" className="h-3 w-3" fill="currentColor">
+                <rect x="3" y="2" width="2" height="8" rx="0.5" />
+                <rect x="7" y="2" width="2" height="8" rx="0.5" />
+              </svg>
             ) : (
-              <svg viewBox="0 0 12 12" className="h-3 w-3" fill="currentColor"><polygon points="3,2 10,6 3,10" /></svg>
+              <svg viewBox="0 0 12 12" className="h-3 w-3" fill="currentColor">
+                <polygon points="3,2 10,6 3,10" />
+              </svg>
             )}
           </IconButton>
         ) : null}
@@ -212,8 +321,17 @@ const NODE_VARIANT: Record<string, string> = {
   end: 'bg-[#FCE0D5] border-solid border-[var(--flb-coral)] text-[#A1431F] font-medium',
 };
 const NODE_KIND: Record<string, string> = {
-  trigger: 'trigger', delay: 'wait', condition: 'cond', message: 'send', template: 'send', media: 'send', buttons: 'send',
-  list: 'send', tag: 'tag', assign: 'tag', end: 'end',
+  trigger: 'trigger',
+  delay: 'wait',
+  condition: 'cond',
+  message: 'send',
+  template: 'send',
+  media: 'send',
+  buttons: 'send',
+  list: 'send',
+  tag: 'tag',
+  assign: 'tag',
+  end: 'end',
 };
 /** The big card for the workspace's featured flow, with a mini preview of its first nodes. */
 export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: CardActions }) {
@@ -223,57 +341,133 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
   const raw = (flow.category || 'flow').replace(/-/g, ' ');
   const catLabel = raw.charAt(0).toUpperCase() + raw.slice(1);
   const sty = STATE_STYLE[flow.isPublished ? 'live' : 'draft'];
-  const wait = flow.waitMinutes > 0 ? `~${flow.waitMinutes >= 60 ? `${Math.round((flow.waitMinutes / 60) * 10) / 10} h` : `${flow.waitMinutes} min`} total` : 'no waits';
+  const wait =
+    flow.waitMinutes > 0
+      ? `~${flow.waitMinutes >= 60 ? `${Math.round((flow.waitMinutes / 60) * 10) / 10} h` : `${flow.waitMinutes} min`} total`
+      : 'no waits';
   return (
-    <div className="mb-5 grid grid-cols-1 overflow-hidden rounded-2xl border border-border bg-background shadow-sm xl:grid-cols-[1.5fr_1fr]" data-testid="featured-flow">
+    <div
+      className="mb-5 grid grid-cols-1 overflow-hidden rounded-2xl border border-border bg-background shadow-sm xl:grid-cols-[1.5fr_1fr]"
+      data-testid="featured-flow"
+    >
       <div className="p-6 md:p-7">
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span className={cn(PILL, 'border-current bg-[var(--flb-bubble)] text-brand')}>{catLabel}</span>
+          <span className={cn(PILL, 'border-current bg-[var(--flb-bubble)] text-brand')}>
+            {catLabel}
+          </span>
           <span className={cn(PILL, 'border-primary/40 bg-[var(--flb-mint)] text-brand')}>
-            <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M2 6.5l3 2 5-6" /></svg>
+            <svg
+              viewBox="0 0 12 12"
+              className="h-3 w-3"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+            >
+              <path d="M2 6.5l3 2 5-6" />
+            </svg>
             {t('mostUsed')}
           </span>
-          <span className={cn(PILL, 'border-current', flow.isPublished ? 'bg-[var(--flb-mint)] text-brand' : 'bg-muted text-muted-foreground')}>
+          <span
+            className={cn(
+              PILL,
+              'border-current',
+              flow.isPublished
+                ? 'bg-[var(--flb-mint)] text-brand'
+                : 'bg-muted text-muted-foreground',
+            )}
+          >
             <span className={cn('h-1.5 w-1.5 rounded-full', sty.dot)} />
             {tl(flow.isPublished ? 'live' : 'draft')}
           </span>
         </div>
-        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{t('eyebrow')}</div>
-        <h2 className="font-serif text-[26px] leading-[1.05] font-normal tracking-tight sm:text-[32px] lg:text-[36px]">{flow.name}</h2>
-        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[12.5px] text-muted-foreground">
-          <span className="flex items-center gap-1.5"><Svg d="M4 4v8M12 4v8M4 8h8" className="h-3.5 w-3.5" />{t('steps', { count: flow.steps })}</span>
-          <span className="flex items-center gap-1.5"><Svg d="M2 3h12v9H2zM5 15h6" className="h-3.5 w-3.5" />{t('messages', { count: flow.messages })}</span>
-          <span className="flex items-center gap-1.5"><Svg d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zM8 5v3l2 2" className="h-3.5 w-3.5" />{wait}</span>
-          <span className="flex items-center gap-1.5"><Svg d="M3 8l3 3 7-7" className="h-3.5 w-3.5" />{t('connections', { count: flow.edgeCount })}</span>
+        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          {t('eyebrow')}
         </div>
-        <p className="mt-4 max-w-xl text-[14px] leading-[1.65] text-foreground/80">{t('updated', { when: relativeTime(flow.updatedAt) })}</p>
+        <h2 className="font-serif text-[26px] leading-[1.05] font-normal tracking-tight sm:text-[32px] lg:text-[36px]">
+          {flow.name}
+        </h2>
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[12.5px] text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <Svg d="M4 4v8M12 4v8M4 8h8" className="h-3.5 w-3.5" />
+            {t('steps', { count: flow.steps })}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Svg d="M2 3h12v9H2zM5 15h6" className="h-3.5 w-3.5" />
+            {t('messages', { count: flow.messages })}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Svg d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zM8 5v3l2 2" className="h-3.5 w-3.5" />
+            {wait}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Svg d="M3 8l3 3 7-7" className="h-3.5 w-3.5" />
+            {t('connections', { count: flow.edgeCount })}
+          </span>
+        </div>
+        <p className="mt-4 max-w-xl text-[14px] leading-[1.65] text-foreground/80">
+          {t('updated', { when: relativeTime(flow.updatedAt) })}
+        </p>
         <div className="mt-6 flex items-center gap-2">
-          <Link href={`/flows/builder/${flow.id}`} className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted">{t('open')}</Link>
+          <Link
+            href={`/flows/builder/${flow.id}`}
+            className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted"
+          >
+            {t('open')}
+          </Link>
           {actions.can.create ? (
-            <button type="button" onClick={() => void actions.onDuplicate(flow)} className="flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground hover:opacity-90">
+            <button
+              type="button"
+              onClick={() => void actions.onDuplicate(flow)}
+              className="flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground hover:opacity-90"
+            >
               {t('duplicate')}
               <Svg d="M3 13l10-10M5 3h8v8" className="h-3.5 w-3.5" />
             </button>
           ) : null}
         </div>
       </div>
-      <div className="flex items-center justify-center border-t border-border p-5 xl:border-t-0 xl:border-l" style={{ backgroundImage: 'repeating-linear-gradient(135deg,color-mix(in srgb, var(--brand) 6%, transparent) 0 6px,transparent 6px 12px)' }}>
+      <div
+        className="flex items-center justify-center border-t border-border p-5 xl:border-t-0 xl:border-l"
+        style={{
+          backgroundImage:
+            'repeating-linear-gradient(135deg,color-mix(in srgb, var(--brand) 6%, transparent) 0 6px,transparent 6px 12px)',
+        }}
+      >
         <div className="w-full max-w-xs">
           {flow.preview.length === 0 ? (
-            <div className="rounded-[10px] border border-dashed border-border bg-background px-3 py-6 text-center text-[11px] text-muted-foreground">{t('emptyPreview')}</div>
+            <div className="rounded-[10px] border border-dashed border-border bg-background px-3 py-6 text-center text-[11px] text-muted-foreground">
+              {t('emptyPreview')}
+            </div>
           ) : (
             <>
               {flow.preview.map((n, i) => (
                 <div key={i}>
-                  <div className={cn('flex items-center gap-1.5 rounded-[10px] border border-dashed border-[#C9D7CE] bg-background px-2.5 py-2 text-[11px] text-foreground/80', NODE_VARIANT[NODE_KIND[n.type] ?? ''])}>
-                    <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="6" cy="6" r="3" /></svg>
+                  <div
+                    className={cn(
+                      'flex items-center gap-1.5 rounded-[10px] border border-dashed border-[#C9D7CE] bg-background px-2.5 py-2 text-[11px] text-foreground/80',
+                      NODE_VARIANT[NODE_KIND[n.type] ?? ''],
+                    )}
+                  >
+                    <svg
+                      viewBox="0 0 12 12"
+                      className="h-3 w-3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    >
+                      <circle cx="6" cy="6" r="3" />
+                    </svg>
                     {n.label}
                   </div>
-                  {i < flow.preview.length - 1 ? <div className="my-1.5 flex justify-center text-muted-foreground">↓</div> : null}
+                  {i < flow.preview.length - 1 ? (
+                    <div className="my-1.5 flex justify-center text-muted-foreground">↓</div>
+                  ) : null}
                 </div>
               ))}
               {flow.steps > flow.preview.length ? (
-                <div className="mt-2 text-center font-mono text-[10px] text-muted-foreground">{t('more', { count: flow.steps - flow.preview.length })}</div>
+                <div className="mt-2 text-center font-mono text-[10px] text-muted-foreground">
+                  {t('more', { count: flow.steps - flow.preview.length })}
+                </div>
               ) : null}
             </>
           )}

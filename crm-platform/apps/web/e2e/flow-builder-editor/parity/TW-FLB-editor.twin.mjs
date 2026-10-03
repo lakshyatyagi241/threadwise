@@ -2013,11 +2013,9 @@ export default (h) => {
       o.enum('textarea.maxlength', await ta.getAttribute('maxlength'));
       await ta.fill('Greet the customer and ask their name');
       o.flag('generate.disabledNoModel', await gen.isDisabled());
-      const ex = c.page
-        .locator('button')
-        .filter({
-          hasText: /Customer support bot|Order tracking|Lead qualification|Appointment booking/,
-        });
+      const ex = c.page.locator('button').filter({
+        hasText: /Customer support bot|Order tracking|Lead qualification|Appointment booking/,
+      });
       o.num('exampleButtons', await ex.count());
       if (await ex.count()) {
         await ex.first().click();

@@ -19,25 +19,63 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
   it('a WhatsApp flow lists the 35 nodes Reference lists, including Template, List, Sequence, MySQL and the Google nodes', () => {
     const chat = ids('chat');
     expect(chat).toHaveLength(35);
-    for (const t of ['template', 'list', 'sequence', 'mysql', 'google_sheets', 'google_docs', 'google_form', 'deal']) {
+    for (const t of [
+      'template',
+      'list',
+      'sequence',
+      'mysql',
+      'google_sheets',
+      'google_docs',
+      'google_form',
+      'deal',
+    ]) {
       expect(chat).toContain(t);
     }
-    expect(chat.some((t) => t.startsWith('cf_') || t.startsWith('ig_') || t.startsWith('fb_'))).toBe(false);
+    expect(
+      chat.some((t) => t.startsWith('cf_') || t.startsWith('ig_') || t.startsWith('fb_')),
+    ).toBe(false);
   });
 
   it('a Facebook flow lists exactly the shared nodes plus the five fb_ nodes', () => {
     expect(ids('facebook').sort()).toEqual(
       [
-        'trigger', 'message', 'media', 'buttons', 'ask', 'condition', 'delay', 'webhook', 'ai', 'end',
-        'fb_gallery', 'fb_products', 'fb_lead', 'fb_reply_comment', 'fb_to_whatsapp',
+        'trigger',
+        'message',
+        'media',
+        'buttons',
+        'ask',
+        'condition',
+        'delay',
+        'webhook',
+        'ai',
+        'end',
+        'fb_gallery',
+        'fb_products',
+        'fb_lead',
+        'fb_reply_comment',
+        'fb_to_whatsapp',
       ].sort(),
     );
   });
 
   it('a call flow lists the eight voice nodes plus Trigger, Condition, Wait, Webhook, Run code and End only', () => {
     expect(ids('call').sort()).toEqual(
-      ['cf_say', 'cf_listen', 'cf_ai', 'cf_assistant', 'cf_menu', 'cf_search', 'cf_transfer', 'cf_hangup',
-        'trigger', 'condition', 'delay', 'webhook', 'code', 'end'].sort(),
+      [
+        'cf_say',
+        'cf_listen',
+        'cf_ai',
+        'cf_assistant',
+        'cf_menu',
+        'cf_search',
+        'cf_transfer',
+        'cf_hangup',
+        'trigger',
+        'condition',
+        'delay',
+        'webhook',
+        'code',
+        'end',
+      ].sort(),
     );
   });
 
@@ -51,7 +89,15 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
       expect(ids('instagram')).not.toContain(t);
       expect(FLB_NODE_TYPES[t]?.hidden).toBe(true);
     }
-    expect(ids('instagram')).toEqual(expect.arrayContaining(['ig_buttons', 'ig_reply_comment', 'ig_products', 'ig_lead', 'ig_to_whatsapp']));
+    expect(ids('instagram')).toEqual(
+      expect.arrayContaining([
+        'ig_buttons',
+        'ig_reply_comment',
+        'ig_products',
+        'ig_lead',
+        'ig_to_whatsapp',
+      ]),
+    );
   });
 
   it('the Trigger and End run on every channel and the Trigger is a singleton', () => {
@@ -65,7 +111,10 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
   it('searching "sheet" matches only Google Sheets by label, description and group (case-insensitive)', () => {
     const q = 'sheet';
     const hit = flbPaletteFor('chat').filter(
-      (d) => d.label.toLowerCase().includes(q) || d.desc.toLowerCase().includes(q) || d.group.toLowerCase().includes(q),
+      (d) =>
+        d.label.toLowerCase().includes(q) ||
+        d.desc.toLowerCase().includes(q) ||
+        d.group.toLowerCase().includes(q),
     );
     expect(hit.map((d) => d.id)).toEqual(['google_sheets']);
   });
@@ -77,7 +126,8 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
 });
 
 describe('node catalogue: ports and handle naming (TW-FLB-017)', () => {
-  const p = (type: string, data: Record<string, unknown> = {}) => flbPortsFor({ type, data }).map((x) => x.id);
+  const p = (type: string, data: Record<string, unknown> = {}) =>
+    flbPortsFor({ type, data }).map((x) => x.id);
 
   it('a Buttons node with options A, B, C exposes ports p0, p1, p2', () => {
     expect(p('buttons', { options: ['A', 'B', 'C'] })).toEqual(['p0', 'p1', 'p2']);
@@ -100,7 +150,11 @@ describe('node catalogue: ports and handle naming (TW-FLB-017)', () => {
     expect(p('whatsapp_shop')).toEqual(['purchased', 'abandoned']);
     expect(p('woocommerce')).toEqual(['purchased', 'abandoned']);
     expect(p('deal')).toEqual(['created', 'error']);
-    expect(p('cf_menu', { options: [{ match: 'a' }, { match: 'b' }] })).toEqual(['p0', 'p1', 'nomatch']);
+    expect(p('cf_menu', { options: [{ match: 'a' }, { match: 'b' }] })).toEqual([
+      'p0',
+      'p1',
+      'nomatch',
+    ]);
     for (const t of ['book_appointment', 'shopify', 'deal', 'cf_menu']) {
       expect(flbIsMultiPort({ type: t, data: {} })).toBe(true);
     }
@@ -113,13 +167,20 @@ describe('node catalogue: ports and handle naming (TW-FLB-017)', () => {
 
   it('a template with quick-reply buttons gets one port per button; without, a single out', () => {
     const ctx = { templateButtons: () => [{ label: 'Yes' }, { label: 'No' }] };
-    expect(flbPortsFor({ type: 'template', data: { tpl: 't' } }, ctx).map((x) => x.id)).toEqual(['p0', 'p1']);
+    expect(flbPortsFor({ type: 'template', data: { tpl: 't' } }, ctx).map((x) => x.id)).toEqual([
+      'p0',
+      'p1',
+    ]);
     expect(flbPortsFor({ type: 'template', data: { tpl: 't' } }).map((x) => x.id)).toEqual(['out']);
   });
 
   it('labels follow the node data: the trigger kind, sheets mode, deal action, telegram wait', () => {
-    expect(flbPortsFor({ type: 'trigger', data: { kind: 'tag_added' } })[0]!.label).toBe('on tag added');
-    expect(flbPortsFor({ type: 'google_sheets', data: { mode: 'read' } })[0]!.label).toBe('row loaded');
+    expect(flbPortsFor({ type: 'trigger', data: { kind: 'tag_added' } })[0]!.label).toBe(
+      'on tag added',
+    );
+    expect(flbPortsFor({ type: 'google_sheets', data: { mode: 'read' } })[0]!.label).toBe(
+      'row loaded',
+    );
     expect(flbPortsFor({ type: 'deal', data: { action: 'move' } })[0]!.label).toBe('moved');
     expect(flbPortsFor({ type: 'tg_payment', data: { wait: true } })[0]!.label).toBe('after paid');
   });
@@ -145,8 +206,16 @@ describe('node catalogue: defaults', () => {
   it('a fresh node carries Reference defaults', () => {
     expect(flbDefaultNodeData('message')).toEqual({ text: 'Type your message…' });
     expect(flbDefaultNodeData('delay')).toEqual({ amount: 5, unit: 'min' });
-    expect(flbDefaultNodeData('buttons')).toMatchObject({ prompt: 'Pick one', options: ['Option A', 'Option B'], var: 'choice' });
-    expect(flbDefaultNodeData('trigger')).toMatchObject({ kind: 'keyword', keywordMode: 'keywords', keywords: 'price, pricing, cost' });
+    expect(flbDefaultNodeData('buttons')).toMatchObject({
+      prompt: 'Pick one',
+      options: ['Option A', 'Option B'],
+      var: 'choice',
+    });
+    expect(flbDefaultNodeData('trigger')).toMatchObject({
+      kind: 'keyword',
+      keywordMode: 'keywords',
+      keywords: 'price, pricing, cost',
+    });
     expect(flbDefaultNodeData('end')).toEqual({});
     expect(flbDefaultNodeData('unknown_type')).toEqual({});
   });

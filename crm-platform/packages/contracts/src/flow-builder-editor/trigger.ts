@@ -43,8 +43,10 @@ export interface FlbTriggerExtract {
   hasTrigger: boolean;
 }
 
-const isKind = (v: unknown): v is FlbTriggerKind => (FLB_TRIGGER_KINDS as readonly string[]).includes(v as string);
-const isEngine = (v: string): v is FlbSenderEngine => (FLB_SENDER_ENGINES as readonly string[]).includes(v);
+const isKind = (v: unknown): v is FlbTriggerKind =>
+  (FLB_TRIGGER_KINDS as readonly string[]).includes(v as string);
+const isEngine = (v: string): v is FlbSenderEngine =>
+  (FLB_SENDER_ENGINES as readonly string[]).includes(v);
 
 const text = (v: unknown): string => (v === null || v === undefined ? '' : String(v)).trim();
 

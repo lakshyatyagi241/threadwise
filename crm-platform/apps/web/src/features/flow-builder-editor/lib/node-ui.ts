@@ -30,7 +30,11 @@ export const NODE_LOOK: Record<string, NodeLook> = {
     'M3 5.5A2.5 2.5 0 0 1 5.5 3h5A2.5 2.5 0 0 1 13 5.5v3A2.5 2.5 0 0 1 10.5 11H8l-3.5 2v-2A2.5 2.5 0 0 1 3 8.5v-3Z',
   ),
   template: l('#D9E5F2', '#13478A', 'M2.5 2.5h11v11h-11zM2.5 6h11M6 13.5V6'),
-  media: l('#FFF4E0', '#7B5A14', 'M2 3h12v10H2zM6 7m-1 0a1 1 0 1 0 2 0 1 1 0 1 0-2 0M3 11l3-3 4 4 3-3 0 4'),
+  media: l(
+    '#FFF4E0',
+    '#7B5A14',
+    'M2 3h12v10H2zM6 7m-1 0a1 1 0 1 0 2 0 1 1 0 1 0-2 0M3 11l3-3 4 4 3-3 0 4',
+  ),
   notify_number: l(
     '#E8F0FE',
     '#1A73E8',
@@ -44,7 +48,11 @@ export const NODE_LOOK: Record<string, NodeLook> = {
   sequence: l(MINT, DEEP, 'M2 4h12M2 8h12M2 12h8M13 11l2 2-2 2'),
   buttons: l(MINT, DEEP, 'M2.5 2.5h11v5h-7l-3 3v-8Z M2.5 11h11 M2.5 13.5h11'),
   list: l(MINT, DEEP, 'M2.5 2.5h11v11h-11zM5 6h6M5 8h6M5 10h4'),
-  ask: l('#FBE9E7', '#A1431F', 'M8 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM6 6.5a2 2 0 0 1 4 0c0 1.5-2 1.5-2 3M8 12.5h.01'),
+  ask: l(
+    '#FBE9E7',
+    '#A1431F',
+    'M8 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM6 6.5a2 2 0 0 1 4 0c0 1.5-2 1.5-2 3M8 12.5h.01',
+  ),
   condition: l('#F3E9FF', PLUM, 'M8 2v3M5 8l3-3 3 3M8 5v9'),
   delay: l('#FFF4E0', '#7B5A14', 'M8 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM8 5v3l2 2'),
   webhook: l('#E8F5E9', DEEP, 'M3 8h3l1.5-4 2 8 1.5-4h2'),
@@ -101,7 +109,11 @@ export const NODE_LOOK: Record<string, NodeLook> = {
   ),
   cf_menu: l('#F3E9FF', PLUM, 'M8 2v3M5 8l3-3 3 3M3 13h2M11 13h2M7 13h2'),
   cf_search: l('#E8F5E9', DEEP, 'M7 2a5 5 0 1 0 0 10A5 5 0 0 0 7 2zM11 11l3 3'),
-  cf_transfer: l('#FFF4E0', '#7B5A14', 'M2 11V5a2 2 0 0 1 2-2h4M14 5v6a2 2 0 0 1-2 2H8M10 1l3 3-3 3M6 15l-3-3 3-3'),
+  cf_transfer: l(
+    '#FFF4E0',
+    '#7B5A14',
+    'M2 11V5a2 2 0 0 1 2-2h4M14 5v6a2 2 0 0 1-2 2H8M10 1l3 3-3 3M6 15l-3-3 3-3',
+  ),
   cf_hangup: l('#FBE9E7', '#A1431F', 'M3 9c3-3 7-3 10 0l-1.5 1.5-2-1V7.5a6 6 0 0 0-3 0V9l-2 1z'),
 
   ig_send_dm: l('#FCE7F3', '#9D174D', 'M2 4h12v8H6l-4 3z'),

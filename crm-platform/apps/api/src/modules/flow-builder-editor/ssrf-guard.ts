@@ -7,8 +7,7 @@ import { isIP } from 'node:net';
  * returns (not to the host name again), which closes the DNS-rebinding window Reference left between its check and its request.
  */
 export type SsrfVerdict =
-  | { ok: true; url: URL; address: string; family: 4 | 6 }
-  | { ok: false; reason: string };
+  { ok: true; url: URL; address: string; family: 4 | 6 } | { ok: false; reason: string };
 
 export type Resolver = (host: string) => Promise<Array<{ address: string; family: number }>>;
 
@@ -51,7 +50,10 @@ export function isPublicIp(ip: string): boolean {
   return false;
 }
 
-export async function guardSsrf(raw: string, resolve: Resolver = defaultResolver): Promise<SsrfVerdict> {
+export async function guardSsrf(
+  raw: string,
+  resolve: Resolver = defaultResolver,
+): Promise<SsrfVerdict> {
   let url: URL;
   try {
     url = new URL(raw);
@@ -61,7 +63,10 @@ export async function guardSsrf(raw: string, resolve: Resolver = defaultResolver
   // Reference's wording: a URL without a host (`mailto:x`, `javascript:...`) is invalid; another scheme names itself.
   if (!url.hostname) return { ok: false, reason: 'invalid URL' };
   if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-    return { ok: false, reason: `scheme ${url.protocol.slice(0, -1)} not allowed (use http or https)` };
+    return {
+      ok: false,
+      reason: `scheme ${url.protocol.slice(0, -1)} not allowed (use http or https)`,
+    };
   }
   const host = url.hostname.replace(/^\[|\]$/g, '').toLowerCase();
   if (host.includes('metadata.') || host.endsWith('.internal')) {

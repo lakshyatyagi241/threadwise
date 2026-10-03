@@ -130,7 +130,7 @@ describe('acceptFor', () => {
 });
 
 describe('subflowLabel', () => {
-  it('marks a flow live or draft like Threadwise\'s Sub-flow picker', () => {
+  it("marks a flow live or draft like Reference's Sub-flow picker", () => {
     expect(subflowLabel('Welcome', true)).toBe('Welcome · live');
     expect(subflowLabel('Welcome', false)).toBe('Welcome · draft');
     expect(subflowLabel('', false)).toBe('Flow · draft');
@@ -142,7 +142,9 @@ describe('agentLabel', () => {
     expect(agentLabel({ name: 'Sales bot', provider: 'openai', model: 'gpt-4o-mini' })).toBe(
       'Sales bot · openai/gpt-4o-mini',
     );
-    expect(agentLabel({ name: 'Sales bot', provider: null, model: 'gpt-4o-mini' })).toBe('Sales bot');
+    expect(agentLabel({ name: 'Sales bot', provider: null, model: 'gpt-4o-mini' })).toBe(
+      'Sales bot',
+    );
     expect(agentLabel({ name: '', provider: 'openai', model: 'x' })).toBe('Agent · openai/x');
   });
 });

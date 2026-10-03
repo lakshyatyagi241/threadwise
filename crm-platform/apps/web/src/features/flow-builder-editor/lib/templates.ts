@@ -26,8 +26,12 @@ export function templateQuickReplies(
     .filter((b) => {
       const k = String(b.type ?? b.button_type ?? '').toLowerCase();
       return !(
-        k.includes('url') || k.includes('cta') || k.includes('visit') ||
-        k.includes('call') || k.includes('phone') || k.includes('copy')
+        k.includes('url') ||
+        k.includes('cta') ||
+        k.includes('visit') ||
+        k.includes('call') ||
+        k.includes('phone') ||
+        k.includes('copy')
       );
     })
     .map((b, i) => ({ label: label(b, i) }));

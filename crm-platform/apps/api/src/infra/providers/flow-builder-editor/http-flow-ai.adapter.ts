@@ -24,7 +24,11 @@ export class HttpFlowAiAdapter implements FlowAiPort {
     }
   }
 
-  private async post(url: string, headers: Record<string, string>, body: unknown): Promise<unknown> {
+  private async post(
+    url: string,
+    headers: Record<string, string>,
+    body: unknown,
+  ): Promise<unknown> {
     const res = await this.fetchImpl(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...headers },

@@ -46,7 +46,9 @@ export function Field({
   return (
     <div className={cn('mb-4', className)}>
       {label ? (
-        <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">{label}</label>
+        <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">
+          {label}
+        </label>
       ) : null}
       {children}
       {hint ? (
@@ -105,7 +107,10 @@ function useAttrPicker<T extends AttrEl>(
     if (!open || !slash) return;
     const start = slash.start;
     const close = (e: Event) => {
-      if (e.target instanceof Node && document.getElementById('flb-attr-popover')?.contains(e.target))
+      if (
+        e.target instanceof Node &&
+        document.getElementById('flb-attr-popover')?.contains(e.target)
+      )
         return;
       setDismissedAt(start);
     };
@@ -166,7 +171,13 @@ function useAttrPicker<T extends AttrEl>(
             style={{ left: pos.left, top: pos.top, width: pos.width, maxHeight: POPOVER_H }}
           >
             <div className="flex items-center gap-2 border-b border-border bg-muted px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <svg
+                viewBox="0 0 16 16"
+                className="h-3 w-3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+              >
                 <path d="M3 8h10" />
               </svg>
               Insert attribute
@@ -245,7 +256,11 @@ export function TextInput({
   noAttr?: boolean;
 } & Omit<ComponentProps<'input'>, 'value' | 'onChange'>) {
   const text = value === null || value === undefined ? '' : String(value);
-  const picker = useAttrPicker<HTMLInputElement>(text, onChange, !noAttr && rest.type !== 'password');
+  const picker = useAttrPicker<HTMLInputElement>(
+    text,
+    onChange,
+    !noAttr && rest.type !== 'password',
+  );
   const { handlers } = picker;
   return (
     <>
@@ -256,11 +271,13 @@ export function TextInput({
         {...(noAttr || rest.type === 'password' ? {} : { 'data-attr-input': 'true' })}
         className={cn(controlClass, mono && 'font-mono')}
         {...rest}
+        /* eslint-disable react-hooks/refs -- the hook hands back a ref object and event handlers; nothing reads ref.current while rendering */
         ref={handlers.ref}
         onChange={handlers.onChange}
         onSelect={handlers.onSelect}
         onKeyDown={handlers.onKeyDown}
         onBlur={handlers.onBlur}
+        /* eslint-enable react-hooks/refs */
       />
       {picker.popover}
     </>
@@ -295,7 +312,15 @@ export function PasswordInput({
         aria-pressed={shown}
         className="absolute inset-y-0 end-0 grid w-10 place-items-center text-muted-foreground hover:text-foreground"
       >
-        <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          viewBox="0 0 16 16"
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z" />
           <circle cx="8" cy="8" r="2" />
           {shown ? <path d="M2.5 13.5l11-11" /> : null}
@@ -364,11 +389,13 @@ export function TextArea({
           mono && 'font-mono',
           dark && 'bg-[#1E2A33] text-[#7CF3C4]',
         )}
+        /* eslint-disable react-hooks/refs -- the hook hands back a ref object and event handlers; nothing reads ref.current while rendering */
         ref={handlers.ref}
         onChange={handlers.onChange}
         onSelect={handlers.onSelect}
         onKeyDown={handlers.onKeyDown}
         onBlur={handlers.onBlur}
+        /* eslint-enable react-hooks/refs */
       />
       {picker.popover}
     </>
@@ -447,7 +474,11 @@ export function Notice({
 }) {
   return (
     <div
-      className={cn('mb-4 rounded-lg border px-3 py-2 text-[11.5px] leading-snug', NOTICE[tone], className)}
+      className={cn(
+        'mb-4 rounded-lg border px-3 py-2 text-[11.5px] leading-snug',
+        NOTICE[tone],
+        className,
+      )}
     >
       {children}
     </div>
@@ -461,7 +492,13 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
       onClick={onClick}
       className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11.5px] font-medium text-foreground/80 hover:border-brand/40 hover:bg-brand/5"
     >
-      <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <svg
+        viewBox="0 0 16 16"
+        className="h-3 w-3"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      >
         <path d="M8 3v10M3 8h10" strokeLinecap="round" />
       </svg>
       {children}
@@ -499,7 +536,14 @@ export function IconButton({
 }
 
 export const XIcon = () => (
-  <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+  <svg
+    viewBox="0 0 16 16"
+    className="h-3 w-3"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+  >
     <path d="M4 4l8 8M12 4l-8 8" />
   </svg>
 );
@@ -507,7 +551,12 @@ export const XIcon = () => (
 /** A bordered card used for repeated rows (sequence replies, cta actions, cards, columns...). */
 export function RowCard({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('mb-3 overflow-hidden rounded-lg border border-border bg-background', className)}>
+    <div
+      className={cn(
+        'mb-3 overflow-hidden rounded-lg border border-border bg-background',
+        className,
+      )}
+    >
       {children}
     </div>
   );
@@ -570,7 +619,9 @@ export function WaBubble({ html, children }: { html?: string; children?: ReactNo
           dangerouslySetInnerHTML={{ __html: html }}
         />
       ) : (
-        <div className="whitespace-pre-wrap break-words text-[12.5px] leading-relaxed">{children}</div>
+        <div className="whitespace-pre-wrap break-words text-[12.5px] leading-relaxed">
+          {children}
+        </div>
       )}
       <div className="mt-0.5 text-right text-[9.5px]" style={{ color: 'rgba(0,0,0,0.45)' }}>
         {time()} ✓✓

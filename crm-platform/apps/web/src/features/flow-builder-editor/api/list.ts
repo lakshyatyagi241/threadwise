@@ -1,6 +1,11 @@
 'use client';
 
-import { keepPreviousData, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from '@tanstack/react-query';
 import { useEffect } from 'react';
 import type { ListFlowsResponse } from '@crm/contracts';
 import { PAGE_SIZE, type ListState } from '../lib/list-model';
@@ -28,7 +33,12 @@ const pageKey = (q: Query, index: number) => [...FLB_KEYS.list, q, index] as con
  * Loads page `index` (0-based) of the cursor API. The cursor of page N is the `nextCursor` of page N-1, so every loaded page
  * is cached under its own key and a jump starts from the nearest cached page before the target.
  */
-async function loadPage(qc: QueryClient, q: Query, index: number, signal?: AbortSignal): Promise<PageResult> {
+async function loadPage(
+  qc: QueryClient,
+  q: Query,
+  index: number,
+  signal?: AbortSignal,
+): Promise<PageResult> {
   let at = index;
   let cursor: string | undefined;
   for (; at > 0; at--) {
@@ -64,7 +74,10 @@ export function useFlowsPage(state: ListState) {
   const identity = JSON.stringify(q);
   useEffect(() => {
     if (!hasMore || res.isPlaceholderData) return;
-    void qc.prefetchQuery({ queryKey: pageKey(q, index + 1), queryFn: ({ signal }) => loadPage(qc, q, index + 1, signal) });
+    void qc.prefetchQuery({
+      queryKey: pageKey(q, index + 1),
+      queryFn: ({ signal }) => loadPage(qc, q, index + 1, signal),
+    });
     // `q` is rebuilt every render; its serialisation is the stable identity.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasMore, res.isPlaceholderData, index, identity, qc]);
@@ -78,5 +91,8 @@ export function useFlowsPage(state: ListState) {
 
 /** KPI tiles, rails, the featured card and the template gallery: ignore the list filters. */
 export function useFlowsOverview() {
-  return useQuery({ queryKey: FLB_KEYS.overview, queryFn: ({ signal }) => flowsApi.overview(signal) });
+  return useQuery({
+    queryKey: FLB_KEYS.overview,
+    queryFn: ({ signal }) => flowsApi.overview(signal),
+  });
 }

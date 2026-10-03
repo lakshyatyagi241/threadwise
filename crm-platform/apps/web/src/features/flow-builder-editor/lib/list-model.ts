@@ -48,14 +48,20 @@ export function pageItems(current: number, last: number): Array<number | 'gap-a'
   return out;
 }
 
-export const lastPage = (total: number, size = PAGE_SIZE): number => Math.max(1, Math.ceil(total / size));
+export const lastPage = (total: number, size = PAGE_SIZE): number =>
+  Math.max(1, Math.ceil(total / size));
 
 /** "5 minutes ago": the card's `Edited <relative>` line. */
 export function relativeTime(iso: string, now = Date.now()): string {
   const s = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));
   if (s < 45) return 'just now';
   const units: Array<[number, string]> = [
-    [60, 'minute'], [3600, 'hour'], [86400, 'day'], [604800, 'week'], [2592000, 'month'], [31536000, 'year'],
+    [60, 'minute'],
+    [3600, 'hour'],
+    [86400, 'day'],
+    [604800, 'week'],
+    [2592000, 'month'],
+    [31536000, 'year'],
   ];
   let label = 'minute';
   let div = 60;
@@ -84,4 +90,5 @@ const PURPOSE: Record<string, string> = {
 export const purposeOf = (category: string | null): string =>
   PURPOSE[category ?? ''] ?? 'Automated WhatsApp journey built in the flow editor.';
 
-export const plural = (n: number, one: string, many = `${one}s`): string => `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`;
+export const plural = (n: number, one: string, many = `${one}s`): string =>
+  `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`;
