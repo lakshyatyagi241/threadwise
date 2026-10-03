@@ -13,25 +13,25 @@ Evidence so far is automated (the screens are listed under Screens (C4); none ha
 
 ## Status of each feature
 
-| Feature                    | Status       | Notes                                                                                                                                                |
-| -------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| TW-CAMP-001                | backend-done | `GET /campaigns`: filters, tiles, status and type counts, health cards; the opening sweep is the worker's sweeper. Screen: `/campaigns`.             |
-| TW-CAMP-002                | backend-done | `GET /campaigns/builder`: senders and templates through broadcasts' compose, groups and tags with counts, flows.                                     |
-| TW-CAMP-003, 004           | backend-done | Create with the audience union and the CSV. Media: an address, or a file uploaded through `POST /v2/media/marketing` (needs cloud object storage).   |
-| TW-CAMP-005, 006, 007      | backend-done | Template gate, named to positional, one media, A/B with variant B ownership.                                                                         |
-| TW-CAMP-008, 009           | backend-done | Schedule in the campaign's zone, recurring, end-date guard, Smart Delivery fields.                                                                   |
-| TW-CAMP-010                | backend-done | Edit rules and recipient rebuild.                                                                                                                    |
-| TW-CAMP-011, 012, 013, 014 | backend-done | The sender job and the sweeper. Engines: the Cloud API, plus Baileys and Twilio through the Node bridge's outbound registry (plain text and media).  |
-| TW-CAMP-015                | backend-done | Links in a custom text and URL buttons of a Cloud template are wrapped per recipient.                                                                |
-| TW-CAMP-016, 017, 018, 020 | backend-done | Cancel, resume, send now, resend, delete, bulk delete, export.                                                                                       |
-| TW-CAMP-019                | done         | The detail read model with the Engagement tab: engagement, per-button clicks, top groups by read rate, the opt-out list, and the message-log search. |
-| TW-CAMP-021, 022           | backend-done | Node callbacks and the provider receipt state machine; a webhook handler must call `CampaignReceiptsService.handle`.                                 |
-| TW-CAMP-023                | backend-done | Inbox bubble at send and on receipt, once per recipient.                                                                                             |
-| TW-CAMP-024                | done         | `campaign.created` and `campaign.status_updated` carry Reference's webhook payloads; the bell has completed and failed.                                 |
-| TW-CAMP-025                | blocked      | Flow campaigns need the flow runtime (shim `CampaignFlowStarter`); recipients fail with the reason.                                                  |
-| TW-CAMP-026                | blocked      | Build with AI waits on ai-keys-usage-admin exporting a text-generation call.                                                                         |
-| TW-CAMP-027                | blocked      | Meta click sync waits on a template-analytics call in the Cloud API client.                                                                          |
-| TW-CAMP-028                | skipped      | SMS and email campaigns: not ported, on the owner's word.                                                                                            |
+| Feature                    | Status       | Notes                                                                                                                                                                                             |
+| -------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TW-CAMP-001                | backend-done | `GET /campaigns`: filters, tiles, status and type counts, health cards; the opening sweep is the worker's sweeper. Screen: `/campaigns`.                                                          |
+| TW-CAMP-002                | backend-done | `GET /campaigns/builder`: senders and templates through broadcasts' compose, groups and tags with counts, flows.                                                                                  |
+| TW-CAMP-003, 004           | backend-done | Create with the audience union and the CSV. Media: an address, or a file uploaded through `POST /v2/media/marketing` (needs cloud object storage).                                                |
+| TW-CAMP-005, 006, 007      | backend-done | Template gate, named to positional, one media, A/B with variant B ownership.                                                                                                                      |
+| TW-CAMP-008, 009           | backend-done | Schedule in the campaign's zone, recurring, end-date guard, Smart Delivery fields.                                                                                                                |
+| TW-CAMP-010                | backend-done | Edit rules and recipient rebuild.                                                                                                                                                                 |
+| TW-CAMP-011, 012, 013, 014 | backend-done | The sender job and the sweeper. Engines: the Cloud API, plus Baileys and Twilio through the Node bridge's outbound registry (plain text and media).                                               |
+| TW-CAMP-015                | backend-done | Links in a custom text and URL buttons of a Cloud template are wrapped per recipient.                                                                                                             |
+| TW-CAMP-016, 017, 018, 020 | backend-done | Cancel, resume, send now, resend, delete, bulk delete, export.                                                                                                                                    |
+| TW-CAMP-019                | done         | The detail read model with the Engagement tab: engagement, per-button clicks, top groups by read rate, the opt-out list, and the message-log search.                                              |
+| TW-CAMP-021, 022           | backend-done | Node callbacks and the provider receipt state machine; a webhook handler must call `CampaignReceiptsService.handle`.                                                                              |
+| TW-CAMP-023                | backend-done | Inbox bubble at send and on receipt, once per recipient.                                                                                                                                          |
+| TW-CAMP-024                | done         | `campaign.created` and `campaign.status_updated` carry Reference's webhook payloads; the bell has completed and failed.                                                                              |
+| TW-CAMP-025                | done         | Flow campaigns: the flow runtime's `CampaignFlowStarterImpl` is bound into the campaign sender in the worker (`FlowRuntimeEngineWorkerModule`); one run per recipient with the source `campaign`. |
+| TW-CAMP-026                | blocked      | Build with AI waits on ai-keys-usage-admin exporting a text-generation call.                                                                                                                      |
+| TW-CAMP-027                | blocked      | Meta click sync waits on a template-analytics call in the Cloud API client.                                                                                                                       |
+| TW-CAMP-028                | skipped      | SMS and email campaigns: not ported, on the owner's word.                                                                                                                                         |
 
 ## Intended differences from Reference
 
@@ -58,7 +58,7 @@ Evidence so far is automated (the screens are listed under Screens (C4); none ha
 | -------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `CampaignPlanGate`               | plans-subscriptions-trials         | Real: the `total_campaigns` cap, on the campaigns that exist now (no delete-proof ledger). No `campaign` flag exists in the catalogue. |
 | `CampaignBilling`                | wallet-message-billing             | Plan-first billing is not applied: nothing is charged or refunded.                                                                     |
-| `CampaignFlowStarter`            | flow-runtime-engine                | Flow campaigns fail per recipient with the reason.                                                                                     |
+| `CampaignFlowStarter`            | flow-runtime-engine                | Real in the worker (bound at start); the HTTP process never runs a campaign.                                                           |
 | `CampaignSettings`               | platform-settings-branding-storage | Real: the `campaigns` settings group, edited at `/admin/settings/campaigns` (retry attempts, wait, auto-end).                          |
 | Sender, template, warmer, pacing | shared with broadcasts             | Same shims and defaults as broadcasts (`modules/broadcasts/_shims`).                                                                   |
 | Engines                          | whatsapp-devices-baileys, Twilio   | Real, through the Node bridge's outbound registry.                                                                                     |
