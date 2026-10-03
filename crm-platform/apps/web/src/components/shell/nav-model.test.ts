@@ -99,6 +99,7 @@ describe('the real menu', () => {
       'campaigns',
       'automation',
       'store',
+      'apps',
       'help',
       'settings',
     ]);

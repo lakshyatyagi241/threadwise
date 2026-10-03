@@ -16,6 +16,7 @@ export const NAV_GROUPS = [
   'campaigns',
   'automation',
   'store',
+  'apps',
   'help',
   'settings',
 ] as const;
