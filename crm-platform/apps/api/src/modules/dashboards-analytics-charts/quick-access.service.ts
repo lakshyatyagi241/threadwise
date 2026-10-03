@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { type QuickAccessResponse } from '@crm/contracts';
+import { type DashQuickAccessResponse as QuickAccessResponse } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';

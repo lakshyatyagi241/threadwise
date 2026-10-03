@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
-  QUICK_ACCESS_CATALOG,
-  QUICK_ACCESS_MAX,
+  DASH_QUICK_ACCESS_CATALOG as QUICK_ACCESS_CATALOG,
+  DASH_QUICK_ACCESS_MAX as QUICK_ACCESS_MAX,
   type QuickAccessItem,
-  type QuickAccessResponse,
+  type DashQuickAccessResponse as QuickAccessResponse,
 } from '@crm/contracts';
 import { Button, Checkbox, Input, Modal, ToastProvider, useToast } from '@crm/ui';
 import { useQuickAccess, useSaveQuickAccess } from '../api/hooks';

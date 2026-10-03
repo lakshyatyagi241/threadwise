@@ -4,9 +4,9 @@ import { z } from 'zod';
  * Quick-access shortcut tiles (TW-DASH-009): up to 10 per user, chosen from a fixed catalog of app pages plus optional custom links.
  * Stored on `user_settings.quick_access`; order is catalog order for ticked pages, then the custom rows (Reference has no reordering).
  */
-export const QUICK_ACCESS_MAX = 10;
+export const DASH_QUICK_ACCESS_MAX = 10;
 
-export const QUICK_ACCESS_CATALOG = [
+export const DASH_QUICK_ACCESS_CATALOG = [
   {
     key: 'inbox',
     label: 'Unified Inbox',
@@ -132,7 +132,7 @@ export const QUICK_ACCESS_CATALOG = [
 ] as const;
 
 /** What a user who never customised sees. */
-export const QUICK_ACCESS_DEFAULT_KEYS = [
+export const DASH_QUICK_ACCESS_DEFAULT_KEYS = [
   'inbox',
   'contacts',
   'campaigns',
@@ -155,7 +155,7 @@ export type QuickAccessItem = z.infer<typeof quickAccessItemSchema>;
 export const quickAccessUpdateSchema = z.object({ items: z.unknown().optional() });
 export type QuickAccessUpdate = z.infer<typeof quickAccessUpdateSchema>;
 
-export const quickAccessTileSchema = z.object({
+export const dashQuickAccessTileSchema = z.object({
   key: z.string().nullable(),
   label: z.string(),
   desc: z.string(),
@@ -163,11 +163,11 @@ export const quickAccessTileSchema = z.object({
   icon: z.string(),
   custom: z.boolean(),
 });
-export type QuickAccessTile = z.infer<typeof quickAccessTileSchema>;
+export type DashQuickAccessTile = z.infer<typeof dashQuickAccessTileSchema>;
 
-export const quickAccessResponseSchema = z.object({
+export const dashQuickAccessResponseSchema = z.object({
   /** The saved selection, or the defaults when nothing (or an empty list) is saved. */
   items: z.array(quickAccessItemSchema),
-  tiles: z.array(quickAccessTileSchema),
+  tiles: z.array(dashQuickAccessTileSchema),
 });
-export type QuickAccessResponse = z.infer<typeof quickAccessResponseSchema>;
+export type DashQuickAccessResponse = z.infer<typeof dashQuickAccessResponseSchema>;
