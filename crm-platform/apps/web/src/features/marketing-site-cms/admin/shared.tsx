@@ -47,3 +47,9 @@ export const fromLocalInput = (v: string): string | null => {
 
 /** Only a super admin changes the site (the API refuses everyone else); this decides what the screens offer. */
 export const useCmsCanWrite = (): boolean => useCanEdit('plans');
+
+/** Reference's small pill buttons of the list rows: a neutral one and a coral one for deleting. */
+export const PILL_BTN =
+  'inline-flex items-center rounded-full border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted disabled:opacity-60';
+export const PILL_DANGER =
+  'inline-flex items-center rounded-full px-2.5 py-1.5 text-[11px] font-medium text-danger hover:bg-danger/10 disabled:opacity-60';

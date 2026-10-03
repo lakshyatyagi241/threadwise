@@ -9,8 +9,17 @@ import {
   blogPostAdminSchema,
   type BlogPostAdmin,
 } from '@crm/contracts';
-import { Badge, Button, ConfirmDialog, Input, Select, StatTile } from '@crm/ui';
-import { ActionError, ErrorBlock, LoadingBlock, NS, PageHeader, operatorFetch } from './shared';
+import { Button, ConfirmDialog, Input, Select, StatTile } from '@crm/ui';
+import {
+  ActionError,
+  ErrorBlock,
+  LoadingBlock,
+  NS,
+  PageHeader,
+  operatorFetch,
+  PILL_BTN,
+  PILL_DANGER,
+} from './shared';
 
 const KEY = ['operator', 'cms', 'blog'];
 
@@ -211,9 +220,11 @@ export function BlogList() {
                     </td>
                     <td className="px-4 py-3">{p.category?.name ?? '—'}</td>
                     <td className="px-4 py-3">
-                      <Badge tone={p.status === 'published' ? 'success' : 'neutral'}>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${p.status === 'published' ? 'bg-wa-bubble text-wa-deep' : 'bg-muted text-muted-foreground'}`}
+                      >
                         {p.status === 'published' ? t('statusPublished') : t('statusDraft')}
-                      </Badge>
+                      </span>
                     </td>
                     <td className="px-4 py-3 tabular-nums">{nf.format(p.views)}</td>
                     <td className="px-4 py-3 text-muted-foreground">
@@ -221,23 +232,20 @@ export function BlogList() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Link
-                          href={`/admin/blog/${p.id}`}
-                          className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm"
-                        >
+                        <Link href={`/admin/blog/${p.id}`} className={PILL_BTN}>
                           {tc('edit')}
                         </Link>
-                        <Button
-                          size="sm"
-                          variant="secondary"
+                        <button
+                          type="button"
+                          className={PILL_BTN}
                           disabled={toggle.isPending}
                           onClick={() => toggle.mutate(p)}
                         >
                           {p.status === 'published' ? t('unpublish') : t('publish')}
-                        </Button>
-                        <Button size="sm" variant="danger" onClick={() => setDoomed(p)}>
+                        </button>
+                        <button type="button" className={PILL_DANGER} onClick={() => setDoomed(p)}>
                           {tc('delete')}
-                        </Button>
+                        </button>
                       </div>
                     </td>
                   </tr>
