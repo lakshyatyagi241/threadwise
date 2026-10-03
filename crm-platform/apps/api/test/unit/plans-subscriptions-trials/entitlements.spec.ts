@@ -63,6 +63,7 @@ describe('registry', () => {
       'wa_storefront',
       'inbox_sla',
       'inbox_routing',
+      'waba_calling',
       'inbox_kanban',
       'team_performance',
     ]);

@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Calling",
+      "description": "Turn WhatsApp calling on or off for each number.",
+      "keywords": "call, calls, voice, phone, whatsapp calling, call button"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "button": {
+      "label": "Call",
+      "tooltip": "Start a WhatsApp call",
+      "working": "Working..."
+    },
+    "confirm": {
+      "title": "No confirmed calling permission",
+      "body": "We don't have a confirmed calling permission on file for this contact.",
+      "callAnyway": "Call anyway",
+      "callAnywayHint": "Works if they already tapped \"Allow\" in WhatsApp.",
+      "askPermission": "Ask permission",
+      "askPermissionHint": "Sends them a permission request instead. No call is placed.",
+      "close": "Close"
+    },
+    "toast": {
+      "noPhone": "No phone number on this contact.",
+      "noNumber": "Calling is not enabled on any WABA number.",
+      "alreadyPermitted": "This contact already allows calls - starting the call...",
+      "permissionSent": "Permission request sent. They will see Accept/Decline in WhatsApp - try Call again after they respond.",
+      "permissionFailed": "Could not send permission request: {message}",
+      "startFailed": "Could not start call: {message}",
+      "acceptInvalid": "Could not accept call: invalid call payload from WhatsApp. Try again.",
+      "acceptFailed": "Could not accept call: {message}",
+      "alreadyAccepted": "Call already accepted by another teammate.",
+      "recordingStarted": "Recording started - it will save to Call logs on hang-up.",
+      "recordingSaved": "Call recording saved to Call logs.",
+      "recordUnsupported": "Recording is not supported in this browser.",
+      "noActiveCall": "No active call to record."
+    },
+    "incoming": {
+      "title": "Incoming WhatsApp call",
+      "caller": "Caller +{digits}",
+      "accept": "Accept",
+      "decline": "Decline",
+      "aiHandling": "AI is handling this call..."
+    },
+    "panel": {
+      "label": "Call in progress",
+      "title": "On call",
+      "ringing": "ringing...",
+      "connected": "connected",
+      "timer": "Call length",
+      "mute": "Mute",
+      "muted": "Muted",
+      "end": "End",
+      "record": "Record",
+      "recording": "Recording",
+      "recordTooltip": "Record this call",
+      "recordingTooltip": "Recording this call",
+      "recordingNotice": "This call is being recorded"
+    },
+    "failures": {
+      "REJECTED": "The customer declined the call.",
+      "BUSY": "The customer is on another call.",
+      "NO_ANSWER": "No answer - the customer did not pick up.",
+      "MISSED": "The customer missed the call.",
+      "CANCELLED": "The call was cancelled.",
+      "MIC_BLOCKED": "Microphone access blocked - the caller will not hear you. Grant mic permission in your browser and retry.",
+      "BUSY_SLOT": "Another call is already active in this tab.",
+      "INVALID_SDP": "Invalid SDP offer - missing v=0 or media line",
+      "LOCAL_SDP_EMPTY": "Local SDP empty - ICE gathering failed",
+      "ENDED_EARLY": "Call ended before it connected.",
+      "ANSWER_FAILED": "Failed to apply WhatsApp answer"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "This number is not in your workspace any more. Refresh the page and try again.",
+      "CALL_NOT_FOUND": "This call could not be found. It may have ended already.",
+      "CALL_NOT_WABA": "Calling works only on WhatsApp Cloud API numbers. This number is connected another way.",
+      "CALL_NUMBER_NOT_CONNECTED": "This number is not connected to WhatsApp Cloud API right now. Reconnect it under Channels, then try again.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "A number that is also used in the WhatsApp Business app cannot take calls.",
+      "CALL_NOT_ENABLED": "Calling is switched off for this number. Turn it on under Calling first.",
+      "CALL_META_REFUSED": "WhatsApp refused the request. Try again in a moment.",
+      "CALL_PERMISSION_REQUESTED": "Permission request sent. They will see Accept/Decline in WhatsApp - try Call again after they respond.",
+      "CALL_STATE_CONFLICT": "Call already accepted by another teammate.",
+      "CALL_RECORDING_FAILED": "The recording could not be saved.",
+      "FORBIDDEN": "You do not have permission to use calling.",
+      "PLAN_FEATURE_LOCKED": "Your plan does not include WhatsApp calling.",
+      "NETWORK": "Network error - please try again.",
+      "UNEXPECTED": "Something went wrong. Please try again."
+    },
+    "settings": {
+      "title": "Calling",
+      "intro": "Turn WhatsApp calling on for a number to show the green Call button on its chats in the inbox.",
+      "cardTitle": "WhatsApp calling",
+      "numberFallback": "WhatsApp number",
+      "connection": "Connection: {status}",
+      "enabledStatus": "Enabled - the green Call button now shows on this number's chats in the inbox.",
+      "enabledSince": "Enabled {date}",
+      "offStatus": "Off - turn it on so the Call button appears on chats with this number.",
+      "enable": "Enable calling",
+      "disable": "Turn off calling",
+      "asking": "Asking WhatsApp...",
+      "enabledDone": "Calling is now on for this number.",
+      "disabledDone": "Calling is now off for this number.",
+      "loading": "Loading numbers",
+      "loadFailed": "Could not load your numbers.",
+      "retry": "Try again",
+      "emptyTitle": "No WhatsApp numbers yet",
+      "emptyMessage": "Connect a WhatsApp Cloud API number under Channels, then come back to turn calling on.",
+      "viewOnly": "You can see the calling state of each number. Turning it on or off needs the calling management permission."
+    }
+  }
+}
