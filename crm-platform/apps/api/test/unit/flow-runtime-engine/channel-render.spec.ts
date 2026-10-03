@@ -114,7 +114,7 @@ describe('rendering for a channel', () => {
   });
 
   it('Messenger and Instagram keep up to three buttons, but a list and a pin degrade; the text-only channels number options', () => {
-    for (const kind of ['messenger', 'instagram']) {
+    for (const kind of ['facebook', 'instagram']) {
       const b = renderForChannel(
         { kind: 'buttons', body: 'Pick', buttons: items(3) },
         profileOf(kind),
