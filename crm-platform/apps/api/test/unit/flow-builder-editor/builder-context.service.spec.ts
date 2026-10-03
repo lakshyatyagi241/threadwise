@@ -146,8 +146,8 @@ describe('BuilderContextService.context (WD-FLB-026)', () => {
     expect(seen.find((q) => q.includes('FROM wa_forms'))).not.toContain("'published'");
   });
 
-  it('flows carry their channel and published state; agents carry the provider', async () => {
-    const { svc } = service([
+  it('flows carry their channel and published state; agents carry the provider (inactive agents are listed too, oldest first)', async () => {
+    const { svc, seen } = service([
       [
         /FROM flows/,
         [
@@ -172,6 +172,9 @@ describe('BuilderContextService.context (WD-FLB-026)', () => {
       { id: 'ag-1', name: 'Triage', provider: 'openai', model: 'gpt-4o-mini' },
       { id: 'ag-2', name: 'Bare', provider: null, model: null },
     ]);
+    const q = seen.find((x) => x.includes('FROM ai_agents'))!;
+    expect(q).not.toContain('is_active');
+    expect(q).toContain('ORDER BY id');
   });
 
   it('teams group their members; a team with no member has an empty list', async () => {
