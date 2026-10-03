@@ -8,7 +8,7 @@ import {
   legalPageListResponseSchema,
   type LegalPageAdmin,
 } from '@crm/contracts';
-import { Badge, Button, Card } from '@crm/ui';
+import { Badge, Card } from '@crm/ui';
 import { ActionError, ErrorBlock, LoadingBlock, NS, PageHeader, operatorFetch } from './shared';
 
 export const LEGAL_KEY = ['operator', 'cms', 'legal'];
@@ -41,14 +41,14 @@ export function LegalPages() {
       ) : list.isError ? (
         <ErrorBlock error={list.error} onRetry={() => void list.refetch()} />
       ) : (
-        <ul className="grid gap-3 md:grid-cols-2">
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {list.data.data.map((p) => (
-            <li key={p.slug}>
-              <Card className="space-y-3">
+            <li key={p.slug} className="flex">
+              <Card className="flex w-full flex-col rounded-2xl p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-medium">{p.title}</p>
-                    <p className="font-mono text-xs text-muted-foreground" dir="ltr">
+                    <p className="truncate text-[20px] font-semibold leading-tight">{p.title}</p>
+                    <p className="mt-1 font-mono text-[10.5px] text-muted-foreground" dir="ltr">
                       /legal/{p.slug}
                     </p>
                   </div>
@@ -56,33 +56,44 @@ export function LegalPages() {
                     {p.isPublished ? t('live') : t('hidden')}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="mt-3 text-[12px] text-muted-foreground">
                   {t('sectionCount', { count: p.sections.length })}
                   {p.updatedLabel ? ` · ${t('updated')} ${p.updatedLabel}` : ''}
                 </p>
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="mt-5 flex items-center gap-2 border-t border-border pt-4">
                   <Link
                     href={`/admin/legal-pages/${p.slug}`}
-                    className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm"
+                    className="flex items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-[12px] font-semibold text-primary-foreground hover:opacity-90"
                   >
+                    <svg
+                      viewBox="0 0 16 16"
+                      className="size-3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      aria-hidden
+                    >
+                      <path d="M11 2.5l2.5 2.5L5 13.5H2.5V11z" />
+                      <path d="M9.5 4l2.5 2.5" />
+                    </svg>
                     {t('edit')}
                   </Link>
                   <a
                     href={`/legal/${p.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-8 items-center rounded-md px-3 text-sm underline"
+                    className="rounded-full border border-border bg-background px-3.5 py-1.5 text-[12px] font-medium hover:bg-muted"
                   >
                     {t('view')}
                   </a>
-                  <Button
-                    size="sm"
-                    variant="secondary"
+                  <button
+                    type="button"
                     disabled={toggle.isPending}
                     onClick={() => toggle.mutate(p)}
+                    className="ms-auto rounded-full border border-border bg-background px-3 py-1.5 text-[12px] font-medium hover:bg-muted disabled:opacity-60"
                   >
                     {p.isPublished ? t('hide') : t('publish')}
-                  </Button>
+                  </button>
                 </div>
               </Card>
             </li>

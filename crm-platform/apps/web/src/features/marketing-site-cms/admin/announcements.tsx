@@ -11,7 +11,16 @@ import {
   type AnnouncementTone,
 } from '@crm/contracts';
 import { Button, ConfirmDialog, Input, StatTile, Switch } from '@crm/ui';
-import { ActionError, ErrorBlock, LoadingBlock, NS, PageHeader, operatorFetch } from './shared';
+import {
+  ActionError,
+  ErrorBlock,
+  LoadingBlock,
+  NS,
+  PageHeader,
+  operatorFetch,
+  PILL_BTN,
+  PILL_DANGER,
+} from './shared';
 
 export const ANNOUNCEMENTS_KEY = ['operator', 'cms', 'announcements'];
 const FILTERS = ['all', 'active', 'inactive', 'expired'] as const;
@@ -221,15 +230,12 @@ export function Announcements() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-2">
-                        <Link
-                          href={`/admin/announcements/${a.id}`}
-                          className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm"
-                        >
+                        <Link href={`/admin/announcements/${a.id}`} className={PILL_BTN}>
                           {tc('edit')}
                         </Link>
-                        <Button size="sm" variant="danger" onClick={() => setDoomed(a)}>
+                        <button type="button" className={PILL_DANGER} onClick={() => setDoomed(a)}>
                           {tc('delete')}
-                        </Button>
+                        </button>
                       </div>
                     </td>
                   </tr>
