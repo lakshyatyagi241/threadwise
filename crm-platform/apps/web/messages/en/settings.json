@@ -215,6 +215,11 @@
         "description": "Booking rules, reminders and the public booking page.",
         "keywords": "booking page, reminders, buffer, notice, cancellation"
       },
+      "google-calendar": {
+        "label": "Google Calendar",
+        "description": "Connect your calendar so bookings and busy times stay in step.",
+        "keywords": "google, calendar, meet, sync, busy, appointments"
+      },
       "chat-widget": {
         "label": "Chat widget",
         "description": "Add a chat bubble to your website, also called web chat.",
