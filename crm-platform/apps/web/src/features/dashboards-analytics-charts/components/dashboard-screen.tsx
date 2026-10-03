@@ -223,6 +223,8 @@ export function DashboardScreen() {
             <WalletOrAutopilotCard />
           </section>
 
+          <QuickAccess />
+
           {w?.pipeline && <PipelineStrip data={w.pipeline} />}
 
           <div className="grid gap-4 lg:grid-cols-3">
@@ -301,8 +303,6 @@ export function DashboardScreen() {
               <TemplatesCard data={w.templates} />
             </>
           )}
-
-          <QuickAccess />
 
           <div className="grid gap-4 lg:grid-cols-2">
             <Panel
