@@ -87,6 +87,24 @@ export class AdminBillingController {
     return this.billing.exportOrders(q);
   }
 
+  @Get('orders/:id/proof')
+  @ApiOperation({
+    summary: 'The payment proof the buyer attached to an offline order (bytes, sandboxed)',
+  })
+  async proof(@Param('id', id()) uuid: string, @Res({ passthrough: true }) res: Response) {
+    const proof = await this.billing.proof(uuid);
+    const ext = proof.mime === 'application/pdf' ? 'pdf' : proof.mime.split('/')[1];
+    res.set({
+      'Content-Type': proof.mime,
+      'Content-Disposition': `inline; filename="payment-proof.${ext}"`,
+      'Cache-Control': 'private, no-store',
+      // A receipt is untrusted input from a buyer: it must never run script in the console's origin.
+      'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      'X-Content-Type-Options': 'nosniff',
+    });
+    return new StreamableFile(proof.bytes);
+  }
+
   @Post('orders/:id/approve')
   @OperatorRoles('super_admin')
   @HttpCode(200)

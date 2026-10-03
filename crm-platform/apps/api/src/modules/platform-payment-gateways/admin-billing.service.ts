@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { randomInt } from 'node:crypto';
+import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   PAYGW_ADMIN_PAGE_SIZE,
@@ -542,9 +543,26 @@ export class AdminBillingService {
     });
   }
 
+  async proof(uuid: string): Promise<{ mime: string; bytes: Buffer }> {
+    const row = await this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT b.mime, b.bytes FROM orders o
+        JOIN order_proof_blobs b ON b.org_id = o.org_id AND b.order_id = o.id
+        WHERE o.uuid = ${uuid}`);
+      return (res.rows[0] as { mime: string; bytes: Buffer } | undefined) ?? null;
+    });
+    if (!row) throw AppError.notFound('Payment proof', uuid);
+    return { mime: row.mime, bytes: row.bytes };
+  }
+
   async invoiceView(uuid: string): Promise<InvoiceView> {
     const raw = await this.store.tx((tx) => this.repo.invoiceDetail(tx, uuid));
     if (!raw) throw AppError.notFound('Invoice', uuid);
+    return this.viewFromRaw(raw);
+  }
+
+  /** The invoice document from one `invoiceDetail` row. The operator's view and the buyer's view are built from the same rows. */
+  async viewFromRaw(raw: Record<string, unknown>): Promise<InvoiceView> {
     const str = (v: unknown) => (v === null || v === undefined ? null : String(v));
     const status = String(raw.status) as PaygwOrderStatus;
     const issued = new Date(String(raw.created_at));

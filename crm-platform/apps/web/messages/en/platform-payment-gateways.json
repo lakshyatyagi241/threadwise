@@ -128,7 +128,8 @@
       "couponRemove": "Remove",
       "couponDiscount": "Discount ({code})",
       "refundGuarantee": "{days}-day money-back guarantee",
-      "countryPlaceholder": "Choose a country"
+      "countryPlaceholder": "Choose a country",
+      "autoRenew": "Renew automatically each period. You can cancel any time."
     },
     "orders": {
       "title": "Order history",
@@ -151,7 +152,8 @@
         "item": "Item",
         "date": "Date",
         "amount": "Amount",
-        "status": "Status"
+        "status": "Status",
+        "actions": "Actions"
       },
       "status": {
         "pending": "Pending",
@@ -160,7 +162,9 @@
         "failed": "Failed",
         "cancelled": "Cancelled",
         "refunded": "Refunded"
-      }
+      },
+      "uploadProof": "Payment proof",
+      "invoice": "Invoice"
     },
     "billing": {
       "common": {
@@ -562,6 +566,7 @@
         "notesText": "Thank you for your business. This invoice covers the order referenced above. Reference the invoice number for any billing queries.",
         "help": "Need help?",
         "helpFallback": "Contact the platform administrator.",
+        "refundNote": "For support or refunds, write to us within {days} days of the payment.",
         "regNo": "Reg. no.",
         "computerGenerated": "This is a computer-generated invoice, no signature required."
       },
@@ -633,6 +638,32 @@
           "configured": "{count} configured."
         }
       }
+    },
+    "offline": {
+      "title": "Complete your payment",
+      "intro": {
+        "bank_transfer": "Transfer the amount below to our bank account, then upload your receipt. We approve the order once the money arrives.",
+        "offline": "Pay using the instructions below, then upload your receipt. We approve the order once we have confirmed your payment."
+      },
+      "amount": "Amount due",
+      "reference": "Payment reference",
+      "useReference": "Put this reference in the transfer so we can match your payment.",
+      "proofTitle": "Upload your receipt",
+      "proofHelp": "A photo or PDF of the receipt. You can also do this later from your order history."
+    },
+    "proof": {
+      "file": "Receipt",
+      "fileHint": "JPG, PNG, WEBP or PDF, up to 4 MB.",
+      "reference": "Transaction reference",
+      "referenceHint": "The reference on your receipt, if it has one.",
+      "note": "Note",
+      "submit": "Submit proof",
+      "sending": "Uploading",
+      "chooseFile": "Choose a receipt to upload.",
+      "tooLarge": "That file is larger than 4 MB.",
+      "rejected": "That file type is not allowed. Use a JPG, PNG, WEBP or PDF.",
+      "closed": "Proof can no longer be added to this order.",
+      "failed": "Could not upload the file. Try again."
     }
   }
 }

@@ -62,3 +62,18 @@ Screens compared against the running Reference (order history, billing history, 
 ### Not built yet
 
 - TW-PAYGW-006 whitelist is built in round 1; remaining: 012, 013 (offline gateways and proof upload; the approval queue reads `proof_*` columns), 017..025 drivers, 029, 030, 033, 034, 036, 047 (docs-only).
+
+## Round 2: payment gateway side (charging workspaces)
+
+tier P0 done: unchanged from round 1 (see above); the checkout now also handles every `next` step the new drivers return.
+tier P1 done: TW-PAYGW-006, 012, 013, 017, 020, 022, 029, 030, 034, 036
+
+Tests: `paygw-offline-subscriptions.e2e.spec.ts` (15: bank-transfer and offline instructions, proof upload with type sniffing, re-upload, RLS, approval, buyer invoice 403/404, in-app confirm, auto-renew checkout, first charge before activation, renewal idempotency, past due, cancel keeps the paid window, reconciler throttle and cancellation), `drivers-p1.spec.ts` (37, recorded fixtures: Paddle, Paystack, Flutterwave, Paytm, PhonePe, Cashfree, PayU, Instamojo, recurring on Stripe/Razorpay/PayPal), web `lib.test.ts` (next-step mapping).
+
+Deliberate deviations (P1):
+
+- Offline instructions are plain rows the browser renders (Reference returned a rendered page); proof bytes live in `order_proof_blobs` behind RLS and are served only to the buyer's order or an operator (Reference used a public disk). A re-upload replaces the file.
+- A paid provider return is never taken from the redirect parameters: every driver confirms server to server or by HMAC; an in-app client may only confirm its own order and gets the same check.
+- The first subscription charge finalises the order before activating the subscription, so a workspace gets one cycle, not two (Reference's documented 51/58-day bug is fixed on purpose).
+- The reconciler is a worker sweep (every 10 minutes, claimed with one atomic update, 6 h per subscription) instead of piggy-backing on the buyer's web traffic; only drivers with `fetchSubscription` (Razorpay) are polled, as in Reference.
+- Auto-renew is offered per gateway in the quote (`autoRenew`), never for yearly, free, lifetime or custom-quote plans; a replayed activation is a no-op that emits no second event.

@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
+import type { InvoiceView } from '@crm/contracts';
 import { Button, cn } from '@crm/ui';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
 import { BILLING_KEYS, billingApi } from '../../billing-api';
@@ -42,9 +43,7 @@ const fmtDateTime = (iso: string, locale: string) =>
 
 /** Admin > Invoices > one invoice (TW-PAYGW-046): a tax-invoice document that prints to A4 or PDF from the browser. */
 export function InvoiceViewPage({ id }: { id: string }) {
-  const t = useTranslations(NS);
   const ti = useTranslations('platform-payment-gateways.billing.invoices');
-  const locale = useLocale();
   const q = useQuery({
     queryKey: BILLING_KEYS.invoice(id),
     queryFn: ({ signal }) => billingApi.invoice(id, signal),
@@ -56,7 +55,41 @@ export function InvoiceViewPage({ id }: { id: string }) {
     );
   }
   if (q.isError) return <ErrorBlock error={q.error} onRetry={() => void q.refetch()} />;
-  const v = q.data;
+  return (
+    <InvoiceDocument
+      v={q.data}
+      crumb={[{ label: ti('title'), href: '/admin/invoices' }, { label: q.data.number }]}
+    />
+  );
+}
+
+/** What the printable document needs. The buyer's copy has no gateway name (Reference hides it), so method and currency are optional. */
+export type InvoiceDocumentView = Omit<
+  InvoiceView,
+  'workspace' | 'gatewaySlug' | 'manual' | 'payment'
+> & {
+  payment: {
+    method?: string;
+    reference: string | null;
+    paidAt: string | null;
+    currency?: string;
+    couponCode: string | null;
+  };
+  /** The buyer's footer line "refunds within N days"; absent on the operator's copy. */
+  refundDays?: number | null;
+};
+
+/** The tax-invoice document itself, shared by the operator's view and the buyer's own copy (TW-PAYGW-046, 036). */
+export function InvoiceDocument({
+  v,
+  crumb,
+}: {
+  v: InvoiceDocumentView;
+  crumb: Array<{ label: string; href?: string }>;
+}) {
+  const t = useTranslations(NS);
+  const ti = useTranslations('platform-payment-gateways.billing.invoices');
+  const locale = useLocale();
   const m = (a: string) => money(a, v.currency, locale);
   const billTo = v.billTo;
   const hasDiscount = Number(v.discount) > 0;
@@ -67,7 +100,7 @@ export function InvoiceViewPage({ id }: { id: string }) {
     <div className="space-y-5">
       <style>{PRINT_CSS}</style>
       <div className="no-print flex flex-wrap items-center justify-between gap-3">
-        <Crumb items={[{ label: ti('title'), href: '/admin/invoices' }, { label: v.number }]} />
+        <Crumb items={crumb} />
         <div className="flex flex-wrap items-center gap-2">
           <InvoiceBadge
             badge={v.badge}
@@ -90,7 +123,8 @@ export function InvoiceViewPage({ id }: { id: string }) {
       <div className="no-print flex flex-col gap-4 rounded-xl border border-border bg-background p-4 sm:flex-row sm:items-center">
         <div className="min-w-0 flex-1">
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            {t('banner.invoice', { number: v.number })} · {v.payment.method}
+            {t('banner.invoice', { number: v.number })}
+            {v.payment.method ? ` · ${v.payment.method}` : ''}
             {v.payment.reference ? ` · ${v.payment.reference}` : ''}
           </div>
           <div className="mt-0.5 text-lg font-semibold leading-tight">
@@ -183,7 +217,7 @@ export function InvoiceViewPage({ id }: { id: string }) {
             </h2>
             <dl className="grid grid-cols-[auto_auto] justify-start gap-x-3 gap-y-1 text-xs">
               <dt className="text-muted-foreground">{t('method')}</dt>
-              <dd>{v.payment.method}</dd>
+              <dd>{v.payment.method ?? '-'}</dd>
               {v.payment.reference && (
                 <>
                   <dt className="text-muted-foreground">{t('txn')}</dt>
@@ -197,7 +231,7 @@ export function InvoiceViewPage({ id }: { id: string }) {
                 </>
               )}
               <dt className="text-muted-foreground">{t('currency')}</dt>
-              <dd>{v.payment.currency}</dd>
+              <dd>{v.payment.currency ?? v.currency}</dd>
               {v.payment.couponCode && (
                 <>
                   <dt className="text-muted-foreground">{t('coupon')}</dt>
@@ -289,6 +323,11 @@ export function InvoiceViewPage({ id }: { id: string }) {
                 {t('notes')}
               </h2>
               <p className="text-xs leading-relaxed">{t('notesText')}</p>
+              {typeof v.refundDays === 'number' && (
+                <p className="mt-2 text-xs leading-relaxed">
+                  {t('refundNote', { days: v.refundDays })}
+                </p>
+              )}
             </div>
             <div>
               <h2 className="mb-2 font-mono text-[10px] font-normal uppercase tracking-[0.18em] text-muted-foreground">

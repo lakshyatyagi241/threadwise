@@ -39,6 +39,8 @@ import {
   type PlanPricingFacts,
 } from './order-pricing';
 import { OrdersRepository, type OrderRow } from './orders.repository';
+import { SubscriptionLifecycleService } from './subscription-lifecycle.service';
+import { planInterval, shouldRecur } from './subscription-rules';
 
 interface PlanRow extends PlanPricingFacts {
   slug: string;
@@ -63,8 +65,21 @@ interface Priced {
   parts: Breakdown;
   walletCreditMinor: number | null;
   planSlug: string | null;
+  /** What a recurring checkout needs to know about the plan (null for wallet top-ups). */
+  term: PlanTerm | null;
   /** The price before any coupon, period-adjusted, in `currency` (what a coupon is measured against). */
   subtotalMinor: bigint;
+}
+
+interface PlanTerm {
+  name: string;
+  unit: 'days' | 'weeks' | 'months' | 'years';
+  duration: number;
+  isFree: boolean;
+  isLifetime: boolean;
+  isCustomQuote: boolean;
+  /** The plan's list amount, major units. */
+  listAmount: string;
 }
 
 const unavailable = (message: string, code: ErrorCode = ERROR_CODES.PAYGW_GATEWAY_UNAVAILABLE) =>
@@ -92,6 +107,7 @@ export class CheckoutService {
     private readonly fulfilment: FulfilmentService,
     private readonly outbox: OutboxService,
     private readonly coupons: CouponService,
+    private readonly subscriptions: SubscriptionLifecycleService,
     private readonly config: ConfigService<Env, true>,
   ) {}
 
@@ -261,6 +277,15 @@ export class CheckoutService {
       parts,
       walletCreditMinor: null,
       planSlug: plan.slug,
+      term: {
+        name: plan.name,
+        unit: plan.billingUnit,
+        duration: plan.billingDuration,
+        isFree: plan.isFree,
+        isLifetime: plan.isLifetime,
+        isCustomQuote: plan.isCustomQuote,
+        listAmount: chargeable,
+      },
       subtotalMinor: subtotal,
     };
   }
@@ -310,8 +335,14 @@ export class CheckoutService {
       parts,
       walletCreditMinor: Number(back),
       planSlug: null,
+      term: null,
       subtotalMinor: billed,
     };
+  }
+
+  private driverCanRecur(g: GatewayRow): boolean {
+    const d = this.gateways.driverFor(g);
+    return d.supportsRecurring?.() === true && !!d.createSubscription;
   }
 
   private toQuote(p: Priced, s: CheckoutSettings, coupon: CouponResolution | null): PaygwQuote {
@@ -335,6 +366,19 @@ export class CheckoutService {
         name: g.name,
         description: g.description ?? '',
         mode: g.mode,
+        autoRenew:
+          p.kind === 'plan' &&
+          p.term !== null &&
+          shouldRecur({
+            platformEnabled: s.recurringEnabled,
+            driverSupports: this.driverCanRecur(g),
+            isFree: p.term.isFree,
+            isLifetime: p.term.isLifetime,
+            isCustomQuote: p.term.isCustomQuote,
+            planAmount: p.term.listAmount,
+            autoRenew: true,
+            period: p.period,
+          }),
       })),
       coupon: coupon
         ? {
@@ -410,6 +454,7 @@ export class CheckoutService {
       req.billing,
       req.coupon,
       idempotencyKey,
+      req.autoRenew === true,
     );
   }
 
@@ -432,6 +477,7 @@ export class CheckoutService {
     billing: PaygwBilling,
     coupon: string | undefined,
     idempotencyKey: string | undefined,
+    autoRenew = false,
   ): Promise<PlaceOrderResponse> {
     const ctx = RequestContextStore.require();
     if (!ctx.userId) throw AppError.unauthenticated();
@@ -466,6 +512,23 @@ export class CheckoutService {
       );
     }
 
+    // Recurring (TW-PAYGW-012 rule 1): the driver decides whether it can, the plan and the buyer whether it should.
+    const driver = this.gateways.driverFor(gateway);
+    const t = priced.term;
+    const recurring =
+      t !== null &&
+      priced.kind === 'plan' &&
+      shouldRecur({
+        platformEnabled: s.recurringEnabled,
+        driverSupports: driver.supportsRecurring?.() === true && !!driver.createSubscription,
+        isFree: t.isFree,
+        isLifetime: t.isLifetime,
+        isCustomQuote: t.isCustomQuote,
+        planAmount: t.listAmount,
+        autoRenew,
+        period: priced.period,
+      });
+
     // 2. the pending order, with its audit row and outbox event, committed before the provider is called.
     const order = await this.insertOrder(
       ctx.orgId,
@@ -477,6 +540,7 @@ export class CheckoutService {
       s,
       idempotencyKey,
       resolved,
+      recurring,
     );
 
     // 3. the provider, outside any transaction.
@@ -488,6 +552,14 @@ export class CheckoutService {
       description: priced.itemName,
       customerName: order.customerName,
       customerEmail: order.customerEmail,
+      planName: priced.itemName,
+      ...(recurring && t
+        ? {
+            recurring: (({ interval, count }) => ({ interval, count }))(
+              planInterval(t.unit, t.duration),
+            ),
+          }
+        : {}),
     };
     const base = this.config.get('APP_URL', { infer: true });
     const urls = {
@@ -496,7 +568,9 @@ export class CheckoutService {
     };
     let result: PaymentResult;
     try {
-      result = await this.gateways.driverFor(gateway).initiate(driverOrder, urls);
+      result = recurring
+        ? await driver.createSubscription!(driverOrder, urls)
+        : await driver.initiate(driverOrder, urls);
     } catch (e) {
       result = {
         status: 'failed',
@@ -512,7 +586,10 @@ export class CheckoutService {
       });
       return { orderNumber: order.orderNumber, orderId: order.uuid, next: { type: 'paid' } };
     }
-    if (result.status === 'failed' || (!result.redirectUrl && !result.clientAction)) {
+    if (
+      result.status === 'failed' ||
+      (!result.redirectUrl && !result.clientAction && !result.formPost && !result.instructions)
+    ) {
       const reason = result.error ?? 'provider_returned_nothing_usable';
       await this.db.tx(async (tx) => {
         if (
@@ -534,6 +611,44 @@ export class CheckoutService {
     await this.db.tx((tx) =>
       this.orders.setProviderInfo(tx, order.orgId, order.id, result.gatewayOrderId, result.payload),
     );
+    if (recurring) {
+      // TW-PAYGW-012 rule 4: failing to record the row never fails the payment (renewals just cannot be matched later).
+      try {
+        const p = result.payload ?? {};
+        const id = (v: unknown): string | null => (typeof v === 'string' && v ? v : null);
+        await this.subscriptions.recordPending(order, gateway.slug, {
+          gatewaySubscriptionId: id(p.gateway_subscription_id) ?? id(p.subscription),
+          gatewayPlanId: id(p.gateway_plan_id),
+          gatewayCustomerId: id(p.gateway_customer_id) ?? id(p.customer),
+        });
+      } catch (err) {
+        this.logger.error(
+          { err, order: order.orderNumber },
+          'recording the pending subscription failed',
+        );
+      }
+    }
+    if (result.instructions) {
+      return {
+        orderNumber: order.orderNumber,
+        orderId: order.uuid,
+        next: {
+          type: 'instructions',
+          kind: result.instructions.kind,
+          rows: result.instructions.rows,
+          notes: result.instructions.notes,
+          amount: priced.parts.total,
+          currency: priced.currency,
+        },
+      };
+    }
+    if (result.formPost) {
+      return {
+        orderNumber: order.orderNumber,
+        orderId: order.uuid,
+        next: { type: 'form_post', url: result.formPost.url, fields: result.formPost.fields },
+      };
+    }
     if (result.clientAction) {
       return {
         orderNumber: order.orderNumber,
@@ -562,6 +677,7 @@ export class CheckoutService {
     s: CheckoutSettings,
     idempotencyKey: string | undefined,
     coupon: CouponResolution | null,
+    autoRenew: boolean,
   ): Promise<OrderRow> {
     const orgName = await this.db.tx(async (tx) => {
       const r = await tx.execute(sql`SELECT name FROM organizations WHERE id = ${orgId}`);
@@ -580,6 +696,7 @@ export class CheckoutService {
             kind: p.kind,
             planSlug: p.planSlug,
             billingPeriod: p.period,
+            autoRenew,
             gatewayId: Number(gateway.id),
             gatewaySlug: gateway.slug,
             currency: p.currency,

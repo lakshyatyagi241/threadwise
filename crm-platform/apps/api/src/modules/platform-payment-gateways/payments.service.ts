@@ -3,44 +3,37 @@ import { ConfigService } from '@nestjs/config';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
-import {
-  CANCELLED_BY_USER,
-  type DriverOrder,
-} from '../../infra/providers/platform-payment-gateways';
-import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { parseForm } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService } from './checkout-settings.service';
 import { FulfilmentService } from './fulfilment.service';
 import { webhookSecretMissing } from './gateway-rules';
 import { GatewayService } from './gateway.service';
-import { recordOrderEvent } from './order-events';
-import { majorToMinor, minorToMajor } from './order-pricing';
+import { majorToMinor } from './order-pricing';
 import { OrdersRepository, type OrderRow } from './orders.repository';
 import { PaygwStore } from './paygw.store';
+import { PaymentConfirmationService } from './payment-confirmation.service';
+import { SubscriptionLifecycleService } from './subscription-lifecycle.service';
 
 export type ReturnOutcome = 'success' | 'failed' | 'cancelled' | 'pending' | 'notfound';
 
-/** The order as a driver sees it: nothing but what it needs to charge, confirm and describe. */
-export function toDriverOrder(o: OrderRow): DriverOrder {
-  const minor = majorToMinor(o.totalAmount, o.currency) ?? 0n;
-  return {
-    orderNumber: o.orderNumber,
-    amountMinor: minor,
-    amountMajor: minorToMajor(minor, o.currency),
-    currency: o.currency,
-    description: o.kind === 'wallet_topup' ? 'Wallet top-up' : (o.planSlug ?? 'Plan'),
-    customerName: o.customerName,
-    customerEmail: o.customerEmail,
-    gatewayOrderId: o.gatewayOrderId,
-  };
+/** A notification body: JSON, or form-encoded (several Indian and Asian gateways post forms). Anything else is not parsed. */
+export function parseNotificationBody(raw: Buffer): unknown {
+  const text = raw.toString('utf8');
+  try {
+    return JSON.parse(text);
+  } catch {
+    return /^[^=&\s]+=/.test(text) ? parseForm(raw) : null;
+  }
 }
 
 /**
  * The two public doors a provider or a returning buyer uses (TW-PAYGW-026, 027). Neither trusts anything it is handed:
  *   - the return finds the order by OUR opaque token (not by a provider key, not by a session cookie), then asks the driver to
  *     confirm with the provider or by signature; a redirect parameter alone never marks anything paid;
- *   - the webhook is authenticated by the driver's signature check BEFORE anything is parsed, and fails closed when the gateway
+ *   - the webhook is authenticated by the driver's check BEFORE anything is parsed, and fails closed when the gateway
  *     has a signing field that nobody filled in.
- * Both end in FulfilmentService.fulfil, whose conditional update makes any number of replays harmless.
+ * A subscription notification (renewal, cancellation, failed charge) goes to the subscription lifecycle; everything else is a
+ * payment and ends in FulfilmentService.fulfil, whose conditional update makes any number of replays harmless.
  */
 @Injectable()
 export class PaymentsService {
@@ -52,7 +45,8 @@ export class PaymentsService {
     private readonly settings: CheckoutSettingsService,
     private readonly orders: OrdersRepository,
     private readonly fulfilment: FulfilmentService,
-    private readonly outbox: OutboxService,
+    private readonly confirmation: PaymentConfirmationService,
+    private readonly subscriptions: SubscriptionLifecycleService,
     private readonly config: ConfigService<Env, true>,
   ) {}
 
@@ -70,48 +64,8 @@ export class PaymentsService {
     if (!gateway || !token) return this.webUrl('notfound');
     const order = await this.store.tx((tx) => this.orders.byReturnToken(tx, token));
     if (!order || order.gatewaySlug !== slug) return this.webUrl('notfound');
-    // A buyer who reloads the return page, or a webhook that got there first: already paid is a success, never re-confirmed
-    // and never overwritten by a later failing payload.
-    if (order.status === 'paid') return this.webUrl('success', order.orderNumber);
-
-    let result;
-    try {
-      result = await this.gateways.driverFor(gateway).confirmReturn(params, toDriverOrder(order));
-    } catch (e) {
-      result = {
-        status: 'failed' as const,
-        error: `callback_exception: ${e instanceof Error ? e.message : String(e)}`.slice(0, 200),
-      };
-    }
-
-    if (result.status === 'paid') {
-      await this.fulfilment.fulfil(order, {
-        gatewayPaymentId: result.gatewayPaymentId,
-        payload: result.payload,
-      });
-      return this.webUrl('success', order.orderNumber);
-    }
-    if (result.status === 'pending') {
-      // Reference marked these failed; the buyer may have paid and the provider simply not have settled yet.
-      return this.webUrl('pending', order.orderNumber);
-    }
-    const cancelled = result.error === CANCELLED_BY_USER;
-    await this.store.tx(async (tx) => {
-      const changed = await this.orders.markUnpaid(
-        tx,
-        order.orgId,
-        order.id,
-        cancelled ? 'cancelled' : 'failed',
-        result.error ?? null,
-        result.payload,
-      );
-      if (changed) {
-        await recordOrderEvent(tx, this.outbox, order, cancelled ? 'cancelled' : 'failed', {
-          reason: result.error ?? null,
-        });
-      }
-    });
-    return this.webUrl(cancelled ? 'cancelled' : 'failed', order.orderNumber);
+    const { outcome } = await this.confirmation.confirm(order, params);
+    return this.webUrl(outcome, order.orderNumber);
   }
 
   // ---- the provider calls --------------------------------------------------------------------------------------------
@@ -147,12 +101,25 @@ export class PaymentsService {
       );
     }
 
-    let body: unknown;
-    try {
-      body = JSON.parse(rawBody.toString('utf8'));
-    } catch {
+    const body = parseNotificationBody(rawBody);
+    if (body === null) return { ok: true };
+
+    // A subscription event wins over a payment event, as in Reference: a renewal is not a new order.
+    const evt = driver.parseSubscriptionWebhook?.(body) ?? null;
+    if (evt) {
+      try {
+        await this.subscriptions.apply(slug, evt);
+      } catch (err) {
+        // Answer 500 so the provider redelivers: applying an event is idempotent, losing one is not.
+        this.logger.error(
+          { err, gateway: slug, type: evt.type },
+          'subscription notification failed',
+        );
+        throw err;
+      }
       return { ok: true };
     }
+
     const payment = driver.parseWebhook(body);
     if (!payment) return { ok: true };
 

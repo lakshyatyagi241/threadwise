@@ -741,7 +741,7 @@ export class AdminBillingRepository {
 
   async invoiceDetail(tx: Tx, uuid: string) {
     const res = await tx.execute(sql`
-      SELECT o.uuid, o.order_number, o.created_at, o.paid_at, o.status, o.kind, o.plan_slug, o.billing_period, o.currency,
+      SELECT o.uuid, o.user_id, o.order_number, o.created_at, o.paid_at, o.status, o.kind, o.plan_slug, o.billing_period, o.currency,
              o.amount::text AS amount, o.discount_amount::text AS discount_amount, o.tax_rate::text AS tax_rate,
              o.tax_amount::text AS tax_amount, o.total_amount::text AS total_amount, o.coupon_code, o.gateway_slug,
              o.gateway_payment_id, o.payment_reference, o.customer_name, o.customer_email, o.billing_company, o.billing_address,
