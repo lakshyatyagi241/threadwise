@@ -996,10 +996,42 @@ describe('store overview', () => {
     expect(res.body.recentOrders.at(-1).source).toBe('waba');
     expect(res.body.recentOrders[0].itemsCount).toBe(1);
     expect(res.body.shop.cnameTarget).toBe('localhost');
+    // the numbers beside the sidebar entries (workspace-wide) and how the store reaches WhatsApp
+    expect(res.body.counts).toEqual({
+      orders: 3,
+      products: 2,
+      groups: 0,
+      coupons: 0,
+      reviewsPending: 0,
+      payments: 0,
+      gateways: 0,
+      customers: 0,
+    });
+    expect(res.body.connection).toEqual({ kind: 'device', label: '91 9812345678', live: true });
     expect(res.body.salesByDay.labels).toHaveLength(30);
     expect(res.body.salesByDay.revenue.at(-1)).toBe(3000);
     expect(res.body.salesByDay.orders.at(-1)).toBe(2);
     expect(res.body.shops).toHaveLength(1);
+  });
+
+  it('counts pending reviews and reports other connection kinds', async () => {
+    const t = await api.signup('counts');
+    // a shop on no device while another device is connected: Live through that device, label by kind
+    const deviceUuid = await device(t);
+    const s = await shop(t, 'Counts Shop', deviceUuid);
+    await h.owner.query(`UPDATE wa_storefronts SET device_id = NULL WHERE uuid = $1`, [s.id]);
+    const p = await product(t, { name: 'Rated', price: 1000 });
+    await h.owner.query(
+      `INSERT INTO wa_product_reviews (org_id, product_id, rating, status) VALUES ($1,$2,5,'pending'), ($1,$2,4,'approved')`,
+      [t.orgId, p.id],
+    );
+    const res = await api.as(t.admin).get('/v2/store/overview');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.counts.reviewsPending).toBe(1);
+    expect(res.body.connection).toEqual({ kind: 'other_device', label: null, live: true });
+    await h.owner.query(`UPDATE devices SET status = 'disconnected' WHERE org_id = $1`, [t.orgId]);
+    const off = await api.as(t.admin).get('/v2/store/overview');
+    expect(off.body.connection).toEqual({ kind: 'none', label: null, live: false });
   });
 
   it('a workspace with no shop answers 404 STORE_NO_SHOP', async () => {

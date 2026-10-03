@@ -5,10 +5,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useId, useRef, useState, type ReactNode } from 'react';
 import { isOnSale } from '../lib/catalog';
 import { shareLinks, productPath } from '../lib/links';
-import { formatMinor } from '../lib/money';
+import { LEGACY_FREE_THRESHOLD_MINOR, formatIn } from '../lib/money';
 import { CheckoutForm } from './checkout-form';
 import { CartDrawer, CompareBar, CompareDrawer, WishDrawer } from './drawers';
-import { CloseIcon, MailIcon, TelegramIcon, UploadIcon, WhatsAppIcon } from './icons';
+import { MailIcon, TelegramIcon, UploadIcon, WhatsAppIcon } from './icons';
 import { ProductImage } from './product-image';
 import { useStore, type ModalSpec } from './store-provider';
 import { useDialog } from './use-dialog';
@@ -25,7 +25,12 @@ function ModalFrame({
   const t = useTranslations('shopPublic');
   const card = useRef<HTMLDivElement>(null);
   const titleId = useId();
-  useDialog(card, true, onClose);
+  const { closeDrawer } = useStore();
+  // Escape closes every overlay at once, as in WaDesk (the close button and the backdrop close only the dialog).
+  useDialog(card, true, () => {
+    closeDrawer();
+    onClose();
+  });
   return (
     <div className="sf-modal" data-open="1">
       <div className="sf-modal-backdrop" onClick={onClose} aria-hidden="true" />
@@ -43,7 +48,7 @@ function ModalFrame({
           onClick={onClose}
           aria-label={t('common.close')}
         >
-          <CloseIcon size={16} />
+          ×
         </button>
         <div className="sf-modal-title" id={titleId}>
           {title}
@@ -200,21 +205,16 @@ function Placed({ spec }: { spec: Extract<ModalSpec, { kind: 'placed' }> }) {
   const t = useTranslations('shopPublic');
   const { closeModal } = useStore();
   return (
-    <ModalFrame title={t('placed.title', { orderNo: spec.orderNo })} onClose={closeModal}>
+    <ModalFrame title={t('placed.title')} onClose={closeModal}>
       <div className="sf-modal-body">
-        <p>{spec.message}</p>
-        <div className="sf-placed-links">
-          {spec.trackUrl ? (
+        {spec.message}
+        {spec.trackUrl ? (
+          <div className="sf-placed-links">
             <a className="sf-cta-ghost" href={spec.trackUrl}>
               {t('placed.track', { orderNo: spec.orderNo })}
             </a>
-          ) : null}
-          {spec.waUrl ? (
-            <a className="sf-cta-ghost" href={spec.waUrl} target="_blank" rel="noopener noreferrer">
-              {t('placed.openWhatsApp')}
-            </a>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
       <div className="sf-modal-actions">
         <button type="button" className="sf-cta" onClick={closeModal}>
@@ -228,10 +228,9 @@ function Placed({ spec }: { spec: Extract<ModalSpec, { kind: 'placed' }> }) {
 function InfoBody({ topic }: { topic: Extract<ModalSpec, { kind: 'info' }>['topic'] }) {
   const t = useTranslations('shopPublic');
   const { shop } = useStore();
-  const free = shop.shipping.freeAboveMinor;
   const extra =
-    topic === 'shipping' && free > 0
-      ? ` ${t('info.freeAbove', { amount: formatMinor(free, shop.currencyCode) })}`
+    topic === 'shipping'
+      ? ` ${t('info.freeAbove', { amount: formatIn(LEGACY_FREE_THRESHOLD_MINOR, shop.currencyCode) })}`
       : '';
   return <>{t(`info.${topic}.body`) + extra}</>;
 }

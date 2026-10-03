@@ -67,6 +67,8 @@ export function toPublicShop(
     heroText: sanitizeShopCopy(text(s.hero_text) ?? ''),
     footerText: sanitizeShopCopy(text(s.footer_text) ?? `© ${new Date().getFullYear()} ${name}`),
     logoUrl: text(s.logo_url),
+    topStrip: text(s.top_strip),
+    heroSub: typeof s.hero_sub === 'string' ? s.hero_sub : null,
     currencyCode: shop.currencyCode || 'INR',
     waNumber: extra.waNumber,
     shipping: {

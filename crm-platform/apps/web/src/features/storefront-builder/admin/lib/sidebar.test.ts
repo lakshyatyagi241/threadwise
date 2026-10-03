@@ -3,6 +3,7 @@ import {
   MAIN_ENTRIES,
   SETTINGS_ENTRIES,
   activeKey,
+  countFor,
   entryHref,
   visibleEntries,
 } from './sidebar';
@@ -61,5 +62,29 @@ describe('activeKey', () => {
     expect(activeKey('/store/products/create')).toBe('products');
     expect(activeKey('/store/unknown')).toBe('overview');
     expect(activeKey('/connect')).toBe('connection');
+  });
+});
+
+describe('countFor', () => {
+  const counts = {
+    orders: 14,
+    products: 8,
+    groups: 2,
+    coupons: 3,
+    reviewsPending: 1,
+    payments: 1,
+    gateways: 0,
+    customers: 5,
+  };
+  it('maps every counted entry to its number and leaves the others bare', () => {
+    expect(countFor('orders', counts)).toBe(14);
+    expect(countFor('products', counts)).toBe(8);
+    expect(countFor('reviews', counts)).toBe(1);
+    expect(countFor('gateways', counts)).toBe(0);
+    expect(countFor('customers', counts)).toBe(5);
+    expect(countFor('overview', counts)).toBeUndefined();
+    expect(countFor('storefront', counts)).toBeUndefined();
+    expect(countFor('invoices', counts)).toBeUndefined();
+    expect(countFor('connection', counts)).toBeUndefined();
   });
 });

@@ -64,7 +64,8 @@ export interface StoreApi {
   bumps: Readonly<Record<BadgeKind, number>>;
   addToCart: (product: PublicProduct) => void;
   addQuantity: (product: PublicProduct, qty: number) => void;
-  setLineQty: (id: string, qty: number) => void;
+  /** Returns the quantity the line really has afterwards (clamped to the stock cap, at least 1). */
+  setLineQty: (id: string, qty: number) => number;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
   toggleWish: (id: string) => void;
@@ -225,6 +226,7 @@ export function StoreProvider({
       const out = setQty(readCart(), id, qty, catalog[id]);
       if (out.clamped) flash(stockMessage(out.clamped).title);
       writeCart(out.cart);
+      return out.cart.find((l) => l.id === id)?.qty ?? 0;
     },
     [readCart, writeCart, catalog, stockMessage, flash],
   );
@@ -271,8 +273,8 @@ export function StoreProvider({
     [keys.compare, bump, flash, t],
   );
 
+  // As in WaDesk, the cart drawer stays open behind the checkout dialog.
   const openCheckout = useCallback(() => {
-    setDrawer(null);
     if (readCart().length === 0) {
       setModal({ kind: 'message', title: t('checkout.emptyTitle'), body: t('checkout.emptyBody') });
     } else {

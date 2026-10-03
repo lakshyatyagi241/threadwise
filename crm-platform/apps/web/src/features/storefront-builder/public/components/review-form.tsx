@@ -53,7 +53,7 @@ export function ReviewForm({ productId }: { productId: string }) {
         void submit();
       }}
     >
-      <h3>{t('review.write')}</h3>
+      <div className="sf-review-title">{t('review.write')}</div>
       <label htmlFor={`${uid}-name`} className="sf-sr">
         {t('review.name')}
       </label>

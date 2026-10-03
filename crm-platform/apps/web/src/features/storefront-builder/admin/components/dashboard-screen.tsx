@@ -7,7 +7,14 @@ import { useEffect } from 'react';
 import { Badge, Card, StatTile } from '@crm/ui';
 import { useOverview } from '../api/hooks';
 import { isNoShop } from '../lib/errors';
-import { barPercent, formatInt, formatMoney, formatOrderTotal, formatWhen, orderTone } from '../lib/format';
+import {
+  barPercent,
+  formatInt,
+  formatMoney,
+  formatOrderTotal,
+  formatWhen,
+  orderTone,
+} from '../lib/format';
 import { PlusIcon } from './icons';
 import { ErrorPanel, Eyebrow, LinkButton, Skeleton } from './parts';
 import { SalesChart } from './sales-chart';

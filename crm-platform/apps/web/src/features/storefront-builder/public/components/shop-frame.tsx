@@ -30,7 +30,7 @@ export function ShopFrame({
         <a href="#sf-main" className="sf-skip">
           {t('common.skip')}
         </a>
-        <div className="sf-strip">{t('strip')}</div>
+        <div className="sf-strip">{shop.topStrip || t('strip')}</div>
         <Header />
         <main id="sf-main">{children}</main>
         <Footer />

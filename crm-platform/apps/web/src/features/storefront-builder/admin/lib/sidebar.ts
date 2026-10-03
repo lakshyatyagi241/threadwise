@@ -1,3 +1,4 @@
+import type { StoreSidebarCounts } from '@crm/contracts';
 import { shopHref } from './format';
 
 /** The store area's left navigation (WD-STORE-002/023), in WaDesk's order. */
@@ -128,4 +129,28 @@ export function activeKey(pathname: string): SidebarKey {
   const second = pathname.split('/').filter(Boolean)[1];
   const keys = MAIN_ENTRIES.map((e) => e.key);
   return (keys.find((k) => k === second) ?? 'overview') as SidebarKey;
+}
+
+/** The number beside an entry (WaDesk shows it when above zero); the overview and settings entries carry none. */
+export function countFor(key: SidebarKey, counts: StoreSidebarCounts): number | undefined {
+  switch (key) {
+    case 'orders':
+      return counts.orders;
+    case 'products':
+      return counts.products;
+    case 'groups':
+      return counts.groups;
+    case 'coupons':
+      return counts.coupons;
+    case 'reviews':
+      return counts.reviewsPending;
+    case 'payments':
+      return counts.payments;
+    case 'gateways':
+      return counts.gateways;
+    case 'customers':
+      return counts.customers;
+    default:
+      return undefined;
+  }
 }

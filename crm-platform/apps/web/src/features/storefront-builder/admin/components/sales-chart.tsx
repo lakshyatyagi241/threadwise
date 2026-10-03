@@ -52,101 +52,103 @@ export function SalesChart({
         </div>
       </div>
 
-      <svg
-        viewBox={`0 0 ${BOX.width} ${BOX.height}`}
-        className="h-auto w-full"
-        role="img"
-        aria-label={t('chartLabel')}
-        onPointerLeave={() => setActive(null)}
-      >
-        {model.revenueTicks.map((v, i) => {
-          const y = yFor(v, model.revenueTop);
-          return (
-            <g key={`rt${i}`}>
-              <line
-                x1={model.plot.x}
-                x2={model.plot.x + model.plot.width}
-                y1={y}
-                y2={y}
-                className="stroke-border"
-                strokeWidth="1"
-              />
-              <text
-                x={model.plot.x - 6}
-                y={y + 3.5}
-                textAnchor="end"
-                className="fill-muted-foreground text-[10px]"
-              >
-                {compact(v)}
-              </text>
-            </g>
-          );
-        })}
-        {model.ordersTicks.map((v, i) => (
-          <text
-            key={`ot${i}`}
-            x={model.plot.x + model.plot.width + 6}
-            y={yFor(v, model.ordersTop) + 3.5}
-            textAnchor="start"
-            className="fill-muted-foreground text-[10px]"
-          >
-            {compact(v)}
-          </text>
-        ))}
-
-        {model.bars.map((b, i) => (
-          <rect
-            key={`b${i}`}
-            x={b.x}
-            y={b.y}
-            width={b.width}
-            height={b.height}
-            rx={1.5}
-            className={active === i ? 'fill-primary' : 'fill-primary/80'}
-          />
-        ))}
-        <path
-          d={model.linePath}
-          fill="none"
-          className="stroke-warning"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        {model.points.map((p, i) =>
-          (data.orders[i] ?? 0) > 0 ? (
-            <circle key={`p${i}`} cx={p.x} cy={p.y} r={2.5} className="fill-warning" />
-          ) : null,
-        )}
-
-        {labelIndexes(n).map((i) => {
-          const x = model.plot.x + slot * i + slot / 2;
-          const y = model.plot.y + model.plot.height + 14;
-          return (
+      <div className="overflow-x-auto">
+        <svg
+          viewBox={`0 0 ${BOX.width} ${BOX.height}`}
+          className="h-auto w-full min-w-[560px]"
+          role="img"
+          aria-label={t('chartLabel')}
+          onPointerLeave={() => setActive(null)}
+        >
+          {model.revenueTicks.map((v, i) => {
+            const y = yFor(v, model.revenueTop);
+            return (
+              <g key={`rt${i}`}>
+                <line
+                  x1={model.plot.x}
+                  x2={model.plot.x + model.plot.width}
+                  y1={y}
+                  y2={y}
+                  className="stroke-border"
+                  strokeWidth="1"
+                />
+                <text
+                  x={model.plot.x - 6}
+                  y={y + 3.5}
+                  textAnchor="end"
+                  className="fill-muted-foreground text-[10px]"
+                >
+                  {compact(v)}
+                </text>
+              </g>
+            );
+          })}
+          {model.ordersTicks.map((v, i) => (
             <text
-              key={`x${i}`}
-              x={x}
-              y={y}
-              textAnchor="end"
-              transform={`rotate(-35 ${x} ${y})`}
+              key={`ot${i}`}
+              x={model.plot.x + model.plot.width + 6}
+              y={yFor(v, model.ordersTop) + 3.5}
+              textAnchor="start"
               className="fill-muted-foreground text-[10px]"
             >
-              {data.labels[i]}
+              {compact(v)}
             </text>
-          );
-        })}
+          ))}
 
-        {Array.from({ length: n }, (_, i) => (
-          <rect
-            key={`h${i}`}
-            x={model.plot.x + slot * i}
-            y={model.plot.y}
-            width={slot}
-            height={model.plot.height}
-            fill="transparent"
-            onPointerEnter={() => setActive(i)}
+          {model.bars.map((b, i) => (
+            <rect
+              key={`b${i}`}
+              x={b.x}
+              y={b.y}
+              width={b.width}
+              height={b.height}
+              rx={1.5}
+              className={active === i ? 'fill-primary' : 'fill-primary/80'}
+            />
+          ))}
+          <path
+            d={model.linePath}
+            fill="none"
+            className="stroke-warning"
+            strokeWidth="2"
+            strokeLinecap="round"
           />
-        ))}
-      </svg>
+          {model.points.map((p, i) =>
+            (data.orders[i] ?? 0) > 0 ? (
+              <circle key={`p${i}`} cx={p.x} cy={p.y} r={2.5} className="fill-warning" />
+            ) : null,
+          )}
+
+          {labelIndexes(n).map((i) => {
+            const x = model.plot.x + slot * i + slot / 2;
+            const y = model.plot.y + model.plot.height + 14;
+            return (
+              <text
+                key={`x${i}`}
+                x={x}
+                y={y}
+                textAnchor="end"
+                transform={`rotate(-35 ${x} ${y})`}
+                className="fill-muted-foreground text-[10px]"
+              >
+                {data.labels[i]}
+              </text>
+            );
+          })}
+
+          {Array.from({ length: n }, (_, i) => (
+            <rect
+              key={`h${i}`}
+              x={model.plot.x + slot * i}
+              y={model.plot.y}
+              width={slot}
+              height={model.plot.height}
+              fill="transparent"
+              onPointerEnter={() => setActive(i)}
+            />
+          ))}
+        </svg>
+      </div>
 
       <table className="sr-only">
         <caption>{t('chartLabel')}</caption>
