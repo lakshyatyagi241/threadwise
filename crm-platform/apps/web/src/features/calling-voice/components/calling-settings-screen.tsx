@@ -129,3 +129,24 @@ function NumberCard({ number: n, canManage }: { number: CallingNumber; canManage
     </section>
   );
 }
+
+/**
+ * The calling card of one number on the WhatsApp health page (TW-WABA-024): the same switch as `/calling`, for the number the page is
+ * about. Nothing is drawn while the list loads or when the number is not in it (calling is not available to this workspace); a
+ * refusal to load is shown, so a plan without calling says so instead of hiding the card.
+ */
+export function CallingToggleCard({ numberId }: { numberId: string }) {
+  const t = useTranslations('calling-voice.settings');
+  const errorText = useErrorText();
+  const canManage = useCan('call.calling.manage');
+  const numbers = useCallingNumbers();
+  if (numbers.isError) {
+    return (
+      <Alert tone="info" data-testid="calling-toggle-unavailable">
+        {t('loadFailed')} {errorText(numbers.error)}
+      </Alert>
+    );
+  }
+  const n = numbers.data?.rows.find((r) => r.id === numberId);
+  return n ? <NumberCard number={n} canManage={canManage} /> : null;
+}

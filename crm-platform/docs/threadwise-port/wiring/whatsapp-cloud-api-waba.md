@@ -31,7 +31,7 @@ and tested; `intended` = deliberately different (reason in parity); `seam` = bui
 | `smb_app_state_sync`                                                                                  | `WabaIngestService.appStateSync` → `ContactsService.resolveOrCreateByIdentity({quiet: true})`                                | 045      |
 | `group_lifecycle_update`, `group_participants_update`, `group_settings_update`, `group_status_update` | `WabaGroupsService.apply` → `waba_groups`                                                                                    | 040      |
 | `flows`                                                                                               | outbox `whatsapp.flow.status_changed` (flow builder)                                                                         | —        |
-| `calls`                                                                                               | `WABA_CALLS_SINK`, bound by the calling domain (branch `vishal/CALL`)                                                        | 043      |
+| `calls`                                                                                               | `WABA_CALLS_SINK`, bound by the calling domain (calling domain)                                                              | 043      |
 
 ## Where it plugs into the rest
 
@@ -56,11 +56,11 @@ and tested; `intended` = deliberately different (reason in parity); `seam` = bui
 | TW-WABA-011 to 014         | Subscribe, register, inbound verify, fix inbound          | `waba.numbers.manage`  | `waba-connect.service.ts`                             | built                                                          |
 | TW-WABA-015                | Live inbound diagnostic                                   | `waba.numbers.read`    | `waba-diagnostics.*`                                  | built                                                          |
 | TW-WABA-016 to 020         | Primary, disconnect, remove, replace token, renew         | `waba.numbers.manage`  | `waba-connect.service.ts`                             | built                                                          |
-| TW-WABA-021 to 024         | Health page, issues, free allowance, badge checklist      | `waba.numbers.read`    | `waba-health-details.service.ts`, health screen       | built; calling toggle waits for CALL                           |
+| TW-WABA-021 to 024         | Health page, issues, free allowance, badge checklist      | `waba.numbers.read`    | `waba-health-details.service.ts`, health screen       | built, with the calling card (`CallingToggleCard`)             |
 | TW-WABA-025 to 028         | Username, status webhook, QR codes, history re-sync       | `waba.numbers.manage`  | `waba-extras.*`                                       | built                                                          |
 | TW-WABA-029 to 033         | Handshake, authentication, routing, extraction, dedupe    | public                 | `waba-webhook.*`, `waba-ingest.service.ts`            | built                                                          |
 | TW-WABA-034, 035, 037, 049 | Inbound, media, statuses, send adapter                    | inbox                  | `inbox/`                                              | built                                                          |
-| TW-WABA-036                | Post-store fan-out                                        | —                      | the flow runtime's `InboundMessageHooks`              | `seam` (blocked until `vishal/FLR` merges)                     |
+| TW-WABA-036                | Post-store fan-out                                        | —                      | the flow runtime's `InboundMessageHooks`              | built in the flow runtime                                      |
 | TW-WABA-038                | Retry on 131049                                           | —                      | campaigns and broadcasts engines                      | built there                                                    |
 | TW-WABA-039, 040           | Group messages, statuses, lifecycle                       | `waba.numbers.*`       | `waba-groups.service.ts`, `waba-group-rules.ts`       | built                                                          |
 | TW-WABA-041                | Template webhooks                                         | —                      | `waba-template-events.service.ts`                     | built                                                          |

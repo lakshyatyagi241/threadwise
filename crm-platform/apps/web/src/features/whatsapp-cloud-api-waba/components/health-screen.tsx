@@ -5,6 +5,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { WabaHealth } from '@crm/contracts';
 import { Alert, Badge, Button, Card, Field, PasswordInput, Spinner, StatTile } from '@crm/ui';
+import { CallingToggleCard } from '@/features/calling-voice';
 import { useHealth, useRenewToken, useResubscribe, useSetToken } from '../api/hooks';
 import { metaManagerUrl, qualityTone, tierLabel } from '../lib/display';
 import { BusinessProfileCard } from './business-profile-card';
@@ -308,6 +309,7 @@ export function HealthScreen({ id }: { id: string }) {
 
         <BusinessProfileCard id={id} />
         <VerifiedBadgeCard health={h} />
+        <CallingToggleCard numberId={h.connection.id} />
         <InboundCheckCard id={id} inboundWired={c.inboundWired} />
         <UsernameCard id={id} />
         <QrCodesCard id={id} />
