@@ -3,6 +3,7 @@ import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AnalyticsController, DashboardController } from './dash.controller';
 import { DashRepository } from './dash.repository';
+import { DashWidgetsRepository } from './dash-widgets.repository';
 import { DashService } from './dash.service';
 import { AdminDashController } from './admin-dash.controller';
 import { HealthController } from './health.controller';
@@ -13,6 +14,12 @@ import { HealthService } from './health.service';
 @Module({
   imports: [PlansCoreModule, NodeBridgeRuntimeModule],
   controllers: [DashboardController, AnalyticsController, HealthController, AdminDashController],
-  providers: [DashService, DashRepository, HealthService, PlatformMetricsService],
+  providers: [
+    DashService,
+    DashRepository,
+    DashWidgetsRepository,
+    HealthService,
+    PlatformMetricsService,
+  ],
 })
 export class DashboardsAnalyticsChartsModule {}

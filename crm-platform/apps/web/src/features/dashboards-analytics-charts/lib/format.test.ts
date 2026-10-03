@@ -3,6 +3,8 @@ import {
   deltaOf,
   formatMoney,
   pickOption,
+  relativeSpan,
+  throughputCsv,
   barLength,
   compact,
   directionOf,
@@ -80,5 +82,21 @@ describe('admin helpers', () => {
     expect(deltaOf('x')).toBe(0);
     expect(pickOption('30d', ['7d', '30d'] as const, '7d')).toBe('30d');
     expect(pickOption('banana', ['7d', '30d'] as const, '7d')).toBe('7d');
+  });
+});
+
+describe('dashboard helpers', () => {
+  it('relative spans pick minutes, hours or days', () => {
+    const now = new Date('2026-10-14T12:00:00Z');
+    expect(relativeSpan('2026-10-14T11:30:00Z', now, 'en')).toBe('30 minutes ago');
+    expect(relativeSpan('2026-10-14T09:00:00Z', now, 'en')).toBe('3 hours ago');
+    expect(relativeSpan('2026-10-12T12:00:00Z', now, 'en')).toBe('2 days ago');
+  });
+  it('the throughput export quotes every cell, one row per bucket', () => {
+    const csv = throughputCsv([{ label: 'Oct "1"', sent: 3, delivered: 2, failed: 1 }]);
+    expect(csv.split('\n')).toEqual([
+      '"Period","Sent","Delivered","Failed"',
+      '"Oct ""1""","3","2","1"',
+    ]);
   });
 });

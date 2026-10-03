@@ -102,3 +102,27 @@ export function pickOption<T extends string>(
 ): T {
   return (options as readonly string[]).includes(raw ?? '') ? (raw as T) : fallback;
 }
+
+/** "3 hours", "12 minutes" style span between two instants, for the oldest-unread label and relative times. */
+export function relativeSpan(from: string | Date, now: Date, locale: string): string {
+  const mins = Math.max(0, Math.round((now.getTime() - new Date(from).getTime()) / 60_000));
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'always', style: 'long' });
+  const [value, unit] =
+    mins < 60
+      ? ([mins, 'minute'] as const)
+      : mins < 1440
+        ? ([Math.round(mins / 60), 'hour'] as const)
+        : ([Math.round(mins / 1440), 'day'] as const);
+  return rtf.format(-value, unit);
+}
+
+/** The dashboard export (WD-DASH-021): one row per chart bucket, quoted, with the same columns the chart draws. */
+export function throughputCsv(
+  rows: Array<{ label: string; sent: number; delivered: number; failed: number }>,
+): string {
+  const q = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
+  return [
+    ['Period', 'Sent', 'Delivered', 'Failed'].map(q).join(','),
+    ...rows.map((r) => [r.label, r.sent, r.delivered, r.failed].map(q).join(',')),
+  ].join('\n');
+}
