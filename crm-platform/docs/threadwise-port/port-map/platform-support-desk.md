@@ -98,11 +98,16 @@ suspension, impersonation: not built).
 2. Next: agents roster (017/018), kanban (015/016), SLA board and engine (026-030, needs TIB2 `sla_policies`), reports and CSV (031/032),
    playbooks (022-024), customers (020/021), platform inbox (037-046, needs TIB1/TIB2 and WSP).
 
-## Not built (honest list)
+## Built since (second round)
 
-TW-SUPP-006 attachments, 014 SLA pills, 015/016 kanban, 017-019 agents, 020/021 customers, 022-025 playbooks, 026-030 SLA, 031/032 reports and
-export, 033 audit feed screen (rows are written), 035 reply-by-email, 037-046 platform inbox. Assignment is to active operators (a
-`support_agents` roster is the next step), so the panel's agent list is "every active super admin and support operator".
+Agents roster, kanban, SLA board and engine with the 5-minute worker scan (outbox `support.sla.breached`), customers, playbooks, reports and CSV,
+platform inbox (queue, drawer, notes, spam, flags, suspension, audit feed). Endpoints live in `desk.controller.ts` (`/v2/platform/support/*`)
+and `platform-inbox.controller.ts` (`/v2/platform/inbox/*`). Migrations `20261019090000_supp_helpdesk_platform.sql`,
+`20261019090100_supp_platform_notes_fk_dedupe.sql`. Status per feature and the list of features not ported on purpose: `parity/platform-support-desk.md`.
+
+## Still open
+
+TW-SUPP-045 session start (needs the workspaces domain; the endpoint validates and answers 501).
 
 ## Risks
 
