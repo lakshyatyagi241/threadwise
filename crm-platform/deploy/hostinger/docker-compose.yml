@@ -1,13 +1,16 @@
-# Single-VM stack for desk.wabo.ai:
-#   caddy (80/443) -> web (staff app) and api (HTTP + Socket.IO); worker; postgres; redis; minio.
-# Run from this directory:  docker compose --env-file .env up -d --build
-# Fresh database: postgres + init-roles.sh create the roles, `migrate` applies every migration, nothing is seeded.
+# desk.wabo.ai on a shared Dokploy host. The host's Traefik owns 80/443 and issues the certificate (resolver `letsencrypt`):
+# this stack publishes no ports and routes through labels on `dokploy-network`. Images are built elsewhere and loaded
+# (`pull_policy: never`), so the host never runs a build.
+#   docker compose --env-file .env up -d
+# Fresh database: postgres + init-roles.sh create the roles, `migrate` applies every migration; seed.sh adds the accounts.
 
 name: desk
 
 x-api-env: &api-env
   NODE_ENV: production
   PORT: '3000'
+  NODE_OPTIONS: --max-old-space-size=640
+  DB_POOL_MAX: '10'
   APP_URL: https://${DOMAIN}
   WEB_APP_URL: https://${DOMAIN}
   CORS_ORIGINS: https://${DOMAIN}
@@ -48,11 +51,12 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
       WORKER_DB_PASSWORD: ${WORKER_DB_PASSWORD}
-    # Sized for a small VM (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine.
+    # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine.
+    mem_limit: 1g
     command:
       - postgres
       - -c
-      - max_connections=200
+      - max_connections=100
       - -c
       - shared_buffers=${PG_SHARED_BUFFERS}
       - -c
@@ -74,7 +78,17 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     # noeviction: BullMQ job state is not a cache.
-    command: ['redis-server', '--appendonly', 'yes', '--maxmemory-policy', 'noeviction']
+    mem_limit: 256m
+    command:
+      [
+        'redis-server',
+        '--appendonly',
+        'yes',
+        '--maxmemory-policy',
+        'noeviction',
+        '--maxmemory',
+        '192mb',
+      ]
     volumes:
       - redisdata:/data
     healthcheck:
@@ -84,44 +98,24 @@ services:
       retries: 5
 
   minio:
+    # The registry no longer serves this image; the host has it locally. The API only probes S3 (no bucket access yet).
     image: minio/minio:latest
+    pull_policy: never
     restart: unless-stopped
+    mem_limit: 256m
     command: ['server', '/data']
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
       - miniodata:/data
-    healthcheck:
-      test: ['CMD', 'mc', 'ready', 'local']
-      interval: 10s
-      timeout: 5s
-      retries: 10
 
-  minio-init:
-    image: minio/mc:latest
-    depends_on:
-      minio: { condition: service_healthy }
-    restart: 'no'
-    entrypoint: >
-      /bin/sh -c "
-      mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} &&
-      mc mb --ignore-existing local/crm-media &&
-      mc mb --ignore-existing local/crm-documents &&
-      mc mb --ignore-existing local/crm-exports
-      "
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-
-  # One-shot: applies every migration as the database owner. Built from the `build` stage, which has the workspace and tsx.
+  # One-shot: applies every migration as the database owner, with the migrate CLI that ships inside the API image.
   migrate:
-    build:
-      context: ../..
-      dockerfile: apps/api/Dockerfile
-      target: build
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
     working_dir: /app
-    command: ['pnpm', '--filter', '@crm/db', 'migrate']
+    command: ['node', 'node_modules/@crm/db/dist/cli/migrate.js', 'up']
     restart: 'no'
     environment:
       NODE_ENV: production
@@ -131,10 +125,22 @@ services:
       postgres: { condition: service_healthy }
 
   api:
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
     build:
       context: ../..
       dockerfile: apps/api/Dockerfile
     restart: unless-stopped
+    mem_limit: 1g
+    networks: [default, dokploy-network]
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: dokploy-network
+      traefik.http.routers.desk-api.rule: Host(`${DOMAIN}`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/docs`))
+      traefik.http.routers.desk-api.priority: '100'
+      traefik.http.routers.desk-api.entrypoints: websecure
+      traefik.http.routers.desk-api.tls.certresolver: letsencrypt
+      traefik.http.services.desk-api.loadbalancer.server.port: '3000'
     environment:
       <<: *api-env
       WORKER_MODE: 'false'
@@ -142,14 +148,14 @@ services:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
       migrate: { condition: service_completed_successfully }
-      minio-init: { condition: service_completed_successfully }
+      minio: { condition: service_started }
 
   worker:
-    build:
-      context: ../..
-      dockerfile: apps/api/Dockerfile
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
     command: ['node', 'dist/src/worker.js']
     restart: unless-stopped
+    mem_limit: 1g
     environment:
       <<: *api-env
       WORKER_MODE: 'true'
@@ -161,36 +167,40 @@ services:
       migrate: { condition: service_completed_successfully }
 
   web:
+    image: desk-web:${IMAGE_TAG:-local}
+    pull_policy: never
     build:
       context: ../..
       dockerfile: apps/web/Dockerfile
     restart: unless-stopped
+    mem_limit: 768m
+    networks: [default, dokploy-network]
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: dokploy-network
+      traefik.http.routers.desk-web.rule: Host(`${DOMAIN}`)
+      traefik.http.routers.desk-web.priority: '10'
+      traefik.http.routers.desk-web.entrypoints: websecure
+      traefik.http.routers.desk-web.tls.certresolver: letsencrypt
+      traefik.http.services.desk-web.loadbalancer.server.port: '3001'
+      # Plain HTTP goes to HTTPS.
+      traefik.http.routers.desk-http.rule: Host(`${DOMAIN}`)
+      traefik.http.routers.desk-http.entrypoints: web
+      traefik.http.routers.desk-http.middlewares: desk-https
+      traefik.http.middlewares.desk-https.redirectscheme.scheme: https
     environment:
       NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=512
       API_URL: http://api:3000
       REALTIME_URL: https://${DOMAIN}/realtime
     depends_on:
       - api
 
-  caddy:
-    image: caddy:2-alpine
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '443:443'
-    environment:
-      SITE_ADDRESS: ${DOMAIN}
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddydata:/data
-      - caddyconfig:/config
-    depends_on:
-      - web
-      - api
+networks:
+  dokploy-network:
+    external: true
 
 volumes:
   pgdata:
   redisdata:
   miniodata:
-  caddydata:
-  caddyconfig:
