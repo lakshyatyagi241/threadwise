@@ -1,0 +1,10 @@
+{
+  "error": {
+    "message": "Message undeliverable",
+    "type": "OAuthException",
+    "code": 131026,
+    "fbtrace_id": "AbCdEfGhIj12345",
+    "error_user_title": "Cannot send",
+    "error_user_msg": "This number is not on WhatsApp."
+  }
+}

@@ -12,10 +12,8 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
-  createChannelSchema,
   createSimulatorChannelSchema,
   updateChannelSchema,
-  type CreateChannelInput,
   type CreateSimulatorChannelInput,
   type UpdateChannelInput,
 } from '@crm/contracts';
@@ -24,11 +22,11 @@ import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { ChannelRegistryService } from './channel-registry.service';
 
 /**
- * The channel registry. Reading needs only the right to read conversations (the inbox shows which channels exist); connecting,
- * editing and removing need `inbox.channel.manage`. No response ever carries a credential: `credentialHints` is the last four
- * characters of each secret and `webhookVerifyToken` appears once, on create and on rotate.
+ * The channel registry. Reading needs only the right to read conversations (the inbox shows which channels exist); editing and
+ * removing need `inbox.channel.manage`. No response ever carries a credential.
  *
- * `create` and `rotate` are not `@Idempotent`: the idempotency store would keep their response, which holds the one-time token.
+ * WhatsApp numbers are not created here: they are connected under WhatsApp numbers (the WABA domain), which also owns their token and
+ * their webhook, and each one appears in this list as a channel on its own.
  */
 @ApiTags('channels')
 @ActorKinds('user')
@@ -41,17 +39,6 @@ export class ChannelsController {
   @ApiOperation({ summary: 'Connected channels with their capabilities (no secrets)' })
   async list() {
     return this.channels.list();
-  }
-
-  @Post()
-  @RequirePermission('inbox.channel.manage')
-  @ApiOperation({
-    summary: 'Connect a provider account',
-    description:
-      'Credentials are sealed at rest. The channel is stored `disconnected` until its adapter can send. The response carries the webhook verify token once.',
-  })
-  async create(@Body(zodPipe(createChannelSchema)) body: CreateChannelInput) {
-    return this.channels.create(body);
   }
 
   // Literal path before the `:id` routes that share its first segment.
@@ -74,7 +61,7 @@ export class ChannelsController {
 
   @Patch(':id')
   @RequirePermission('inbox.channel.manage')
-  @ApiOperation({ summary: 'Rename, switch on or off, change settings, rotate credentials' })
+  @ApiOperation({ summary: 'Rename, switch on or off, change settings' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(updateChannelSchema)) body: UpdateChannelInput,
@@ -82,14 +69,16 @@ export class ChannelsController {
     return this.channels.update(id, body);
   }
 
-  @Post(':id/webhook-token')
+  @Post(':id/health')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('inbox.channel.manage')
   @ApiOperation({
-    summary: 'Issue a new webhook verify token (shown once); the old one stops working',
+    summary: 'Live health check of the provider account',
+    description:
+      "Reads the number (name, quality, messaging limit, status), the account and the webhook subscription from the provider with the connected number's credentials, stores the snapshot on the channel and answers with it. A refused token moves the channel to `needs_reauth`; a passing check on a linked number brings it back. A failed check is an answer with `ok: false`, not an error.",
   })
-  async rotateWebhookToken(@Param('id', ParseUUIDPipe) id: string) {
-    return this.channels.rotateWebhookToken(id);
+  async health(@Param('id', ParseUUIDPipe) id: string) {
+    return this.channels.checkHealth(id);
   }
 
   @Delete(':id')

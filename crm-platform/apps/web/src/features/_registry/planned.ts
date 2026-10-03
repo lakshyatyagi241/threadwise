@@ -61,8 +61,8 @@ export const PLANNED_NAV: readonly NavItem[] = [
     icon: 'team-chat',
   },
 
-  // CRM (Contacts, Contact groups, Segments and Deals are real screens; Attributes moved to Settings). Orders keep the menu sequence:
-  // Contacts 0, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Pipelines 50, Tasks 60, Companies 70, Email templates 80.
+  // CRM (Contacts, Contact groups, Segments and Deals are real screens; Attributes and Pipelines moved to Settings). Orders keep the menu sequence:
+  // Contacts 0, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Tasks 60, Companies 70, Email templates 80.
   {
     id: 'lead-finder',
     group: 'audience',
@@ -71,14 +71,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     order: 30,
     icon: 'pin',
     badge: 'new',
-  },
-  {
-    id: 'pipelines',
-    group: 'audience',
-    labelKey: L('pipelines'),
-    href: '/pipelines',
-    order: 50,
-    icon: 'pipelines',
   },
   {
     id: 'companies',
@@ -108,8 +100,22 @@ export const PLANNED_NAV: readonly NavItem[] = [
   },
 
   // Campaigns
-  { id: 'scheduled', group: 'campaigns', labelKey: L('scheduled'), href: '/scheduled', order: 20, icon: 'clock' },
-  { id: 'history', group: 'campaigns', labelKey: L('history'), href: '/message-history', order: 40, icon: 'history' },
+  {
+    id: 'scheduled',
+    group: 'campaigns',
+    labelKey: L('scheduled'),
+    href: '/scheduled',
+    order: 20,
+    icon: 'clock',
+  },
+  {
+    id: 'history',
+    group: 'campaigns',
+    labelKey: L('history'),
+    href: '/message-history',
+    order: 40,
+    icon: 'history',
+  },
 
   // Automation (Appointments is a real screen in features/appointments)
   {

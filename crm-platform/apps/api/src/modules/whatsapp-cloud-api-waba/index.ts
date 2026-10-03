@@ -3,4 +3,9 @@ export { WabaModule } from './waba.module';
 export { WabaWorkerModule } from './waba-worker.module';
 export { WabaConnectService, type ResolvedWabaConnection } from './waba-connect.service';
 export { localStatusFor } from './template-event-rules';
-export { WABA_INBOUND_SINK, type InboundContext, type WabaInboundSink } from './waba-inbound-sink';
+export {
+  WABA_INBOUND_SINK,
+  WABA_INBOUND_SINK_OVERRIDE,
+  type InboundContext,
+  type WabaInboundSink,
+} from './waba-inbound-sink';

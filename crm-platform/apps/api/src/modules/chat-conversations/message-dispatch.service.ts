@@ -86,7 +86,7 @@ export class MessageDispatchService {
         source: 'inbox',
       });
     } catch (err) {
-      return this.failed(orgId, row, ref, err, options);
+      return this.failed(orgId, row, ref, err, options, runtime.uuid);
     }
 
     await this.markSent(orgId, row, conv, ref, sent, runtime.kind);
@@ -217,9 +217,18 @@ export class MessageDispatchService {
     ref: { id: number; createdAt: string },
     err: unknown,
     options: DispatchOptions,
+    channelUuid: string,
   ): Promise<DispatchOutcome> {
     const classified = classify(err);
     if (classified.code === IN_FLIGHT) throw err;
+
+    // The provider no longer accepts the channel's credentials (an expired token): every later send would fail the same way, so the
+    // channel is marked (and the people who manage it told) instead of every message finding out on its own.
+    if (err instanceof ChannelError && (err.needsReauth || err.providerFault)) {
+      await this.channels
+        .markCredentialsRefused(orgId, channelUuid, err)
+        .catch((e: Error) => this.logger.warn({ orgId, err: e.message }, 'could not mark the channel'));
+    }
 
     if (classified.retryable && !options.finalAttempt) {
       await this.db.txAs({ orgId }, (tx) =>
@@ -227,6 +236,7 @@ export class MessageDispatchService {
           attempt: options.attempt,
           code: classified.code,
           reason: classified.reason,
+          ...(err instanceof ChannelError && err.retryAfterMs ? { retryAfterMs: err.retryAfterMs } : {}),
         }),
       );
       throw err;
@@ -244,6 +254,7 @@ export class MessageDispatchService {
       await this.messages.insertEvent(tx, orgId, ref, 'failed', {
         ...failure,
         attempt: options.attempt,
+        ...(err instanceof ChannelError && err.providerCode ? { providerCode: err.providerCode } : {}),
       });
       return this.messages.byId(tx, orgId, ref.id, ref.createdAt);
     });

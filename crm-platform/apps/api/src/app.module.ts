@@ -34,6 +34,7 @@ import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
+import { CatalogProductsModule } from './modules/catalog-products';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -43,6 +44,7 @@ import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { TrialGateGuard } from './modules/plans-subscriptions-trials/trial-gate.guard';
+import { PlanFeatureGuard } from './modules/plans-subscriptions-trials/plan-feature.guard';
 import {
   MediaStorageService,
   PlatformSettingsModule,
@@ -52,6 +54,7 @@ import { AddonsExtensionRegistryModule } from './modules/addons-extension-regist
 import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
+import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
@@ -143,6 +146,7 @@ import { HealthModule } from './health/health.module';
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
+    CouponsCreditsReferralCurrencyModule,
     BspBillingEngineModule,
     WalletMessageBillingModule,
     SendGuardModule,
@@ -170,6 +174,7 @@ import { HealthModule } from './health/health.module';
     ChannelFacebookModule,
     ChannelInstagramModule,
     ShopifyWoocommerceModule,
+    CatalogProductsModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,
@@ -196,6 +201,8 @@ import { HealthModule } from './health/health.module';
     // After the account gate so a locked account is reported as locked first.
     { provide: APP_GUARD, useExisting: TrialGateGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
+    // Route-level plan gate (WD-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
+    { provide: APP_GUARD, useExisting: PlanFeatureGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
   ],
   exports: [CryptoService],

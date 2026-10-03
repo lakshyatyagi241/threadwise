@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import {
   WHATSAPP_PROVIDER,
@@ -28,6 +28,29 @@ const text = (body: string, screen?: { bulk?: boolean; source?: string }) =>
     provider().sendText(credentials, { to: '+14155550100', body, clientReference: 'r', screen }),
   );
 
+/** Meta's Graph API, stood in for: a send that gets past the guard reaches this and is accepted. */
+const graphCalls = vi.fn();
+beforeEach(() => {
+  graphCalls.mockClear();
+  vi.stubGlobal('fetch', async (input: unknown, init?: unknown) => {
+    graphCalls(input, init);
+    return new Response(JSON.stringify({ messages: [{ id: 'wamid.stub' }] }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
+  });
+});
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+/** Resolves when the send reached the provider (the stub answered); a guard refusal rejects before any call. */
+const reached = async (send: Promise<unknown>) => {
+  const before = graphCalls.mock.calls.length;
+  await expect(send).resolves.toBeTruthy();
+  expect(graphCalls.mock.calls.length).toBe(before + 1);
+};
+
 beforeAll(async () => {
   h = await startHarness();
   const op = await h.owner.query(`SELECT id FROM platform_operators ORDER BY id LIMIT 1`);
@@ -44,8 +67,7 @@ async function policy(patch: Record<string, unknown>) {
 
 describe('outbound send guard at the provider boundary', () => {
   it('lets a send through to the provider when nothing is configured', async () => {
-    // The Meta adapter itself is still a stub, so reaching it is the proof.
-    await expect(text('hello')).rejects.toThrow(/not implemented/);
+    await reached(text('hello'));
   });
 
   it('stops every send at the provider while the emergency halt is on, and resumes after', async () => {
@@ -68,7 +90,8 @@ describe('outbound send guard at the provider boundary', () => {
     } finally {
       await halt.set(false, operatorId);
     }
-    await expect(text('hello')).rejects.toThrow(/not implemented/);
+    expect(graphCalls).not.toHaveBeenCalled();
+    await reached(text('hello'));
   });
 
   it('screens content and per-minute rate in enforce mode, and bulk skips the rate cap', async () => {
@@ -82,13 +105,11 @@ describe('outbound send guard at the provider boundary', () => {
         code: 'AUTH_SEND_BLOCKED',
       });
       // Two sends fit the cap and reach the provider; the third is refused.
-      await expect(text('one')).rejects.toThrow(/not implemented/);
-      await expect(text('two')).rejects.toThrow(/not implemented/);
+      await reached(text('one'));
+      await reached(text('two'));
       await expect(text('three')).rejects.toMatchObject({ code: 'AUTH_SEND_BLOCKED' });
       // A bulk batch is screened for content and the halt, not counted per message.
-      await expect(text('four', { bulk: true, source: 'broadcast' })).rejects.toThrow(
-        /not implemented/,
-      );
+      await reached(text('four', { bulk: true, source: 'broadcast' }));
       const blocked = await h.owner.query(
         `SELECT payload ->> 'reason' AS reason FROM security_events WHERE event = 'security.send_blocked' ORDER BY id`,
       );

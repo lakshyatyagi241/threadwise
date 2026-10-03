@@ -1415,7 +1415,8 @@
             "templates": "Message templates",
             "flows": "Flows",
             "autoreplies": "Keyword auto-replies",
-            "total_campaigns": "Campaigns created (never freed by deleting)"
+            "total_campaigns": "Campaigns created (never freed by deleting)",
+            "api_rate_limit_per_minute": "API requests per minute (0 = platform default)"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1434,6 +1435,7 @@
             "sales_pipeline": "Sales pipeline (deals and tasks)",
             "appointment_booking": "Appointments and booking pages",
             "chatbot_widgets": "Website chatbot widgets",
+            "wa_storefront": "WhatsApp storefront and catalog",
             "inbox_sla": "Inbox SLA policies",
             "inbox_routing": "Inbox routing rules and business hours",
             "inbox_kanban": "Inbox Kanban board",

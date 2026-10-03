@@ -886,8 +886,8 @@ export class CampaignsRepository {
           JOIN picked p ON p.id = cvt.tag_id
           JOIN conversations c ON c.org_id = cvt.org_id AND c.id = cvt.conversation_id
           JOIN contacts k ON k.org_id = c.org_id
-            AND regexp_replace(coalesce(k.phone, ''), '[^0-9]', '', 'g') = regexp_replace(coalesce(c.contact_digits, ''), '[^0-9]', '', 'g')
-          WHERE cvt.org_id = ${orgId} AND coalesce(c.contact_digits, '') <> ''
+            AND regexp_replace(coalesce(k.phone, ''), '[^0-9]', '', 'g') = regexp_replace(coalesce(c.peer_key, ''), '[^0-9]', '', 'g')
+          WHERE cvt.org_id = ${orgId} AND coalesce(c.peer_key, '') <> ''
       ) x ORDER BY id`);
     return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
   }

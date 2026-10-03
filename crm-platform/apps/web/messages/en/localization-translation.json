@@ -77,7 +77,7 @@
     "providers": {
       "kicker": "Admin · System",
       "title": "Translation providers",
-      "description": "Multi-language auto-reply uses one of these providers to translate inbound messages and craft replies in the customer's language. MyMemory is active out-of-box (free, no key). Plug in DeepL / Google Cloud / LibreTranslate for higher quality or self-hosted privacy.",
+      "description": "Multi-language auto-reply uses one of these providers to translate inbound messages and craft replies in the customer's language. MyMemory is active out-of-box (free, no key) — plug in DeepL / Google Cloud / LibreTranslate for higher quality or self-hosted privacy.",
       "loading": "Loading providers",
       "on": "On",
       "off": "Off",
@@ -137,7 +137,7 @@
         "fallbackHint": "primary driver failed, chain caught"
       },
       "byProvider": "By provider",
-      "emptyProvider": "No translation calls in this range.",
+      "emptyProvider": "No translation calls in this range. Send a non-English inbound to a device with an auto-reply, then refresh.",
       "free": "free",
       "last30": "Last 30 days",
       "timelineHint": "hover each bar for date / chars / cost",

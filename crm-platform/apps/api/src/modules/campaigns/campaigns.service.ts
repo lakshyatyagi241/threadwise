@@ -36,9 +36,10 @@ import {
 } from './campaign-rules';
 import { toCampaign } from './campaigns.mapper';
 import { CampaignsRepository, type NewCampaign } from './campaigns.repository';
+import { MODULE_KEY } from './campaign-events';
 import { createdWebhook, toSnapshot } from './campaign-webhook-events';
 
-export const MODULE_KEY = 'campaigns';
+export { MODULE_KEY } from './campaign-events';
 
 const refuse = (
   code: keyof typeof ERROR_CODES,
