@@ -112,4 +112,32 @@ describe('rendering for a channel', () => {
     );
     expect(threadTextOf(r)).toContain('Pick');
   });
+
+  it('Messenger and Instagram keep up to three buttons, but a list and a pin degrade; the text-only channels number options', () => {
+    for (const kind of ['messenger', 'instagram']) {
+      const b = renderForChannel(
+        { kind: 'buttons', body: 'Pick', buttons: items(3) },
+        profileOf(kind),
+      );
+      expect(b).toMatchObject({ kind: 'interactive', interactive: { type: 'buttons' } });
+      const four = renderForChannel(
+        { kind: 'buttons', body: 'Pick', buttons: items(4) },
+        profileOf(kind),
+      );
+      expect(four.kind).toBe('text');
+      const pin = renderForChannel(
+        { kind: 'location', latitude: 1, longitude: 2 },
+        profileOf(kind),
+      );
+      expect(pin.kind).toBe('text');
+    }
+    for (const kind of ['tiktok', 'line', 'viber', 'wechat', 'email']) {
+      const r = renderForChannel(
+        { kind: 'buttons', body: 'Pick', buttons: items(2) },
+        profileOf(kind),
+      );
+      expect(r.kind).toBe('text');
+      expect(profileOf(kind).paceMs).toBe(0);
+    }
+  });
 });

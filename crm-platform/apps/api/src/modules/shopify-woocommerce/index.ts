@@ -2,3 +2,10 @@
 export { ShopifyWoocommerceModule } from './shopify-woocommerce.module';
 export { ShopifyWoocommerceWorkerModule } from './shopify-woocommerce-worker.module';
 export { EcomInboundService } from './ecom-inbound.service';
+// Where the flow runtime hears that an order from a shop node was placed (WD-FLR-041).
+export {
+  EcomOrderHooks,
+  flowRefOf,
+  type EcomFlowOrder,
+  type EcomOrderListener,
+} from './order-hooks';
