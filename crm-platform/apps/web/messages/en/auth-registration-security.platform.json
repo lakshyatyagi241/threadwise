@@ -1438,6 +1438,7 @@
             "wa_storefront": "WhatsApp storefront and catalog",
             "inbox_sla": "Inbox SLA policies",
             "inbox_routing": "Inbox routing rules and business hours",
+            "waba_calling": "Place and answer WhatsApp calls from the inbox",
             "inbox_kanban": "Inbox Kanban board",
             "team_performance": "Team performance reports"
           },

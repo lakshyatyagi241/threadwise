@@ -13,6 +13,7 @@ import {
 } from '../../infra/providers/whatsapp/whatsapp.port';
 import { BroadcastReceiptsService } from '../broadcasts';
 import { WabaConnectionsRepository } from './waba-connections.repository';
+import { WABA_CALLS_SINK, type WabaCallsSink } from './waba-calls-sink';
 import { WABA_INBOUND_SINK, type InboundContext, type WabaInboundSink } from './waba-inbound-sink';
 import { HANDLED_FIELDS, type WebhookChange } from './waba-rules';
 import { WabaTemplateEvents } from './waba-template-events.service';
@@ -49,6 +50,7 @@ export class WabaIngestService {
     private readonly templates: WabaTemplateEvents,
     @Inject(WHATSAPP_PROVIDER) private readonly provider: WhatsAppProvider,
     @Inject(WABA_INBOUND_SINK) private readonly sink: WabaInboundSink,
+    @Inject(WABA_CALLS_SINK) private readonly calls: WabaCallsSink,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
@@ -128,6 +130,23 @@ export class WabaIngestService {
       case 'account_update':
       case 'account_review_update':
         return this.account(route, change);
+      case 'calls': {
+        // Calls belong to the calling domain; this only says who the number is.
+        const config = await this.db.txAs({ orgId: route.orgId }, (tx) =>
+          this.repo.findById(tx, route.orgId, route.configId),
+        );
+        return this.calls.onCalls(
+          {
+            orgId: route.orgId,
+            configId: route.configId,
+            configUuid: config?.uuid ?? '',
+            wabaId: change.wabaId,
+            phoneNumberId: change.phoneNumberId,
+            contactName: firstProfileName(change.value),
+          },
+          change.value,
+        );
+      }
       case 'flows':
         // Flow statuses belong to the flow builder; the outbox carries them until it exists.
         await this.db.txAs({ orgId: route.orgId }, (tx) =>
