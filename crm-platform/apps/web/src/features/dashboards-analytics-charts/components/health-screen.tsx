@@ -167,24 +167,24 @@ function Health({
             </ul>
           )}
         </Card>
-        <Vitals v={data.vitals} />
+        <Card className="space-y-3" data-testid="health-throughput">
+          <div className="flex items-baseline justify-between gap-2">
+            <h2 className="font-medium">{t('throughput.title')}</h2>
+            {peak > 0 ? (
+              <span className="font-mono text-xs text-muted-foreground">
+                {t('throughput.peak', { n: peak })}
+              </span>
+            ) : null}
+          </div>
+          {peak > 0 ? (
+            <Sparkline values={data.throughput.map((p) => p.count)} label={t('throughput.aria')} />
+          ) : (
+            <p className="text-sm text-muted-foreground">{t('throughput.empty')}</p>
+          )}
+        </Card>
       </div>
 
-      <Card className="space-y-3" data-testid="health-throughput">
-        <div className="flex items-baseline justify-between gap-2">
-          <h2 className="font-medium">{t('throughput.title')}</h2>
-          {peak > 0 ? (
-            <span className="font-mono text-xs text-muted-foreground">
-              {t('throughput.peak', { n: peak })}
-            </span>
-          ) : null}
-        </div>
-        {peak > 0 ? (
-          <Sparkline values={data.throughput.map((p) => p.count)} label={t('throughput.aria')} />
-        ) : (
-          <p className="text-sm text-muted-foreground">{t('throughput.empty')}</p>
-        )}
-      </Card>
+      <Vitals v={data.vitals} />
 
       <QueueTable data={data} />
     </div>
@@ -222,11 +222,13 @@ function Vitals({ v }: { v: HealthResponse['vitals'] }) {
   return (
     <Card className="space-y-3">
       <h2 className="font-medium">{t('vitals.title')}</h2>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm sm:grid-cols-4 lg:grid-cols-7">
         {rows.map(([k, val]) => (
-          <div key={k} className="contents">
-            <dt className="text-muted-foreground">{k}</dt>
-            <dd className="text-end font-mono">{val}</dd>
+          <div key={k}>
+            <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              {k}
+            </dt>
+            <dd className="mt-1 font-mono">{val}</dd>
           </div>
         ))}
       </dl>
