@@ -239,6 +239,11 @@ describe('SLA snapshot, breaches and the scanner (TW-SUPP-014, 029, 030)', () =>
     expect(rows.rows).toHaveLength(1);
     expect(rows.rows[0]).toMatchObject({ breach_type: 'first_response', severity: 'breach' });
     expect(rows.rows[0].over_by_minutes).toBeGreaterThanOrEqual(29);
+    const ev = await h.owner.query(
+      `SELECT payload->>'breachType' AS bt FROM event_outbox WHERE event_type = 'support.sla.breached' AND payload->>'ticketId' = $1`,
+      [t.id],
+    );
+    expect(ev.rows).toEqual([{ bt: 'first_response' }]);
     await slaService.scan();
     const again = await h.owner.query(
       `SELECT count(*)::int AS n FROM support_sla_breaches b JOIN support_tickets t
