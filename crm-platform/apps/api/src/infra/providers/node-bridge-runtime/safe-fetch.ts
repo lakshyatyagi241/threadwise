@@ -113,6 +113,20 @@ export interface FetchedMedia {
   finalUrl: string;
 }
 
+export interface SafeRequestInit {
+  method?: string;
+  headers?: Record<string, string>;
+  body?: string;
+  timeoutMs?: number;
+  maxBytes?: number;
+}
+
+export interface SafeResponse {
+  status: number;
+  headers: IncomingMessage['headers'];
+  text: string;
+}
+
 export interface SafeFetchOptions {
   timeoutMs?: number;
   maxBytes?: number;
@@ -129,6 +143,46 @@ export interface SafeFetchOptions {
 export class SafeFetch {
   /** Overridable in tests, which serve from 127.0.0.1. */
   isBlocked: (address: string) => boolean = isBlockedAddress;
+
+  /**
+   * One guarded HTTP request for the Webhook node (TW-FLR-032): any method, headers and body, the same address checks and
+   * pinning as media, and NO redirect following (Reference failed closed on a 3xx so a public host could not bounce a flow onto an
+   * internal one). Resolves with the body as text whatever the status; the caller decides what a non-2xx means.
+   */
+  async request(url: string, init: SafeRequestInit = {}): Promise<SafeResponse> {
+    const res = await this.get(url, init.timeoutMs ?? DEFAULT_TIMEOUT_MS, {
+      method: init.method ?? 'GET',
+      headers: init.headers ?? {},
+      body: init.body,
+    });
+    const body = await this.read(res, init.maxBytes ?? DEFAULT_MAX_BYTES);
+    return {
+      status: res.statusCode ?? 0,
+      headers: res.headers,
+      text: body.toString('utf8'),
+    };
+  }
+
+  /**
+   * Throws UnsafeMediaUrlError unless every address `host` resolves to is public. For a client that opens its own connection (a
+   * database driver): it must connect to the returned address, not look the name up again. Returns the first checked address.
+   */
+  async assertPublicHost(host: string): Promise<{ address: string; family: number }> {
+    const h = host.replace(/^\[|\]$/g, '');
+    if (h === '' || /^localhost$|\.localhost$|\.internal$|metadata\./i.test(h)) {
+      throw new UnsafeMediaUrlError('Blocked internal host');
+    }
+    const addresses =
+      isIP(h) !== 0
+        ? [{ address: h, family: isIP(h) }]
+        : await dnsLookup(h, { all: true }).catch(() => {
+            throw new UnsafeMediaUrlError('Host could not be resolved.');
+          });
+    if (addresses.length === 0 || addresses.some((a) => this.isBlocked(a.address))) {
+      throw new UnsafeMediaUrlError('Blocked internal host');
+    }
+    return addresses[0]!;
+  }
 
   async fetchMedia(url: string, options: SafeFetchOptions = {}): Promise<FetchedMedia> {
     const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
@@ -154,7 +208,11 @@ export class SafeFetch {
   }
 
   /** One request to a checked address. Throws UnsafeMediaUrlError before any connection when the target is not allowed. */
-  private async get(raw: string, timeoutMs: number): Promise<IncomingMessage> {
+  private async get(
+    raw: string,
+    timeoutMs: number,
+    init: { method?: string; headers?: Record<string, string>; body?: string } = {},
+  ): Promise<IncomingMessage> {
     let target: URL;
     try {
       target = new URL(raw);
@@ -180,9 +238,9 @@ export class SafeFetch {
       const req = open(
         target,
         {
-          method: 'GET',
+          method: init.method ?? 'GET',
           timeout: timeoutMs,
-          headers: { 'user-agent': 'Threadwise-Media/1.0', accept: '*/*' },
+          headers: init.headers ?? { 'user-agent': 'Threadwise-Media/1.0', accept: '*/*' },
           // The address that was checked is the address that is used.
           lookup: (_h, opts, cb) =>
             (opts as { all?: boolean }).all
@@ -193,7 +251,7 @@ export class SafeFetch {
       );
       req.on('timeout', () => req.destroy(new Error('Media host timed out.')));
       req.on('error', reject);
-      req.end();
+      req.end(init.body);
     });
   }
 

@@ -287,6 +287,10 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+
+  // companies (TW-CTP)
+  /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
+  COMPANY_OWNER_INVALID: 'COMPANY_OWNER_INVALID',
   // platform settings, branding and storage (TW-SET)
   SET_MAINTENANCE: 'SET_MAINTENANCE',
   // localization and translation (TW-I18N)

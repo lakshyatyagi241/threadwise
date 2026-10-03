@@ -61,7 +61,7 @@ export const PLANNED_NAV: readonly NavItem[] = [
     icon: 'team-chat',
   },
 
-  // CRM (Contacts, Contact groups, Segments and Deals are real screens; Attributes and Pipelines moved to Settings). Orders keep the menu sequence:
+  // CRM (Contacts, Contact groups, Segments, Deals, Tasks and Companies are real screens; Attributes and Pipelines moved to Settings). Orders keep the menu sequence:
   // Contacts 0, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Tasks 60, Companies 70, Email templates 80.
   {
     id: 'lead-finder',
@@ -71,14 +71,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     order: 30,
     icon: 'pin',
     badge: 'new',
-  },
-  {
-    id: 'companies',
-    group: 'audience',
-    labelKey: L('companies'),
-    href: '/companies',
-    order: 70,
-    icon: 'companies',
   },
   {
     id: 'email-templates',

@@ -26,6 +26,7 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PipelinesRepository, type StageRow } from '../pipelines/pipelines.repository';
+import { DealsPlan } from './deals-plan';
 import { between, onTop } from './deal-ordering';
 import { stampsForKind } from './deal-rules';
 import { DEAL_MODULE, DealEngine, type LostReasonValue } from './deal-engine.service';
@@ -74,6 +75,7 @@ export class DealsService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly rbac: RbacService,
+    private readonly plan: DealsPlan,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -215,6 +217,55 @@ export class DealsService {
       await this.engine.recordCreated(tx, row);
       return toDealResponse(row);
     });
+  }
+
+  /**
+   * The flow Deal step (TW-FLR-037): create a deal in a stage, or move the contact's most recent open deal there (a contact with
+   * none gets a new one, so the flow never dead-ends). Same plan gate as the board. A move into another pipeline takes the deal
+   * with it (Reference changed only the stage and left the deal pointing at the old pipeline). The stage change goes through the deal
+   * engine, so `deal.stage_changed` starts `deal_stage_changed` flows exactly as a drag does. Any refusal is an AppError the node
+   * turns into its error port. Runs as the system actor: no owner unless the node names one.
+   */
+  async flowAction(input: {
+    action: 'create' | 'move';
+    stageId: string;
+    title: string;
+    value: string;
+    ownerId: string | null;
+    contact: { id: number; uuid: string } | null;
+  }): Promise<{ dealId: string; status: string; created: boolean }> {
+    const ctx = RequestContextStore.require();
+    await this.plan.assertEnabled(ctx.orgId);
+    const stage = await this.db.tx((tx) =>
+      this.pipelines.stageByUuid(tx, ctx.orgId, input.stageId),
+    );
+    if (!stage) throw AppError.notFound('Stage', input.stageId);
+
+    if (input.action === 'move' && input.contact) {
+      const contactId = input.contact.id;
+      const moved = await this.db.tx(async (tx) => {
+        const [latest] = await this.repo.forContact(tx, ctx.orgId, contactId, 1);
+        if (!latest || latest.status !== 'open') return null;
+        const deal = (await this.repo.findById(tx, ctx.orgId, latest.id, true))!;
+        if (deal.stageId === stage.id) return deal;
+        const top = onTop(await this.repo.minOrder(tx, ctx.orgId, stage.id));
+        return this.engine.changeStage(tx, deal, stage, { sortOrder: top });
+      });
+      if (moved) return { dealId: moved.uuid, status: moved.status, created: false };
+    }
+
+    const deal = await this.create(
+      {
+        title: input.title,
+        value: input.value,
+        pipelineId: stage.pipelineUuid,
+        stageId: stage.uuid,
+        ownerId: input.ownerId,
+        ...(input.contact ? { contactId: input.contact.uuid } : {}),
+      },
+      'flow',
+    );
+    return { dealId: deal.id, status: deal.status, created: true };
   }
 
   async update(uuid: string, input: UpdateDealInput, scope: RecordScope): Promise<DealResponse> {

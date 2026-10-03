@@ -66,6 +66,8 @@ describe('registry', () => {
       'waba_calling',
       'inbox_kanban',
       'team_performance',
+      'scheduled_messages',
+      'whatsapp_warmer',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

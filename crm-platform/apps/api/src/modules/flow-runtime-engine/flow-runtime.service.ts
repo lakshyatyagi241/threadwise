@@ -3,17 +3,30 @@ import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   FLOW_ENROLL_MAX_CONTACTS,
+  FLOW_RETRY_COOLDOWN_SECONDS,
+  FLOW_RETRY_MAX_BATCH,
   type EnrollContactsInput,
   type EnrollOneInput,
   type EnrollOneResult,
   type EnrollResult,
   type FlowAnalytics,
   type FlowAnalyticsQuery,
+  type FlowErrorGroups,
+  type FlowErrorGroupsQuery,
+  type FlowHistoryList,
+  type FlowHistoryRow,
+  type FlowRetryList,
+  type FlowRetryOutcome,
   type FlowRunDetail,
   type FlowRunList,
   type FlowSubscriberList,
+  type ListFlowHistoryQuery,
+  type ListFlowRetriesQuery,
   type ListFlowRunsQuery,
   type ListFlowSubscribersQuery,
+  type RetryManyInput,
+  type RetryManyResult,
+  type RetryOneResult,
   type RetryResult,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -25,6 +38,7 @@ import { FlowRunPublisher } from './runtime/flow-run.publisher';
 import { FlowLaunchService } from './runtime/launch.service';
 import { RunRepository } from './runtime/run.repository';
 import { SubscriberRepository } from './runtime/subscriber.repository';
+import { likePattern, windowOf } from './flow-runtime.window';
 
 type Row = Record<string, unknown>;
 const rowsOf = (res: unknown): Row[] => (res as { rows: Row[] }).rows;
@@ -32,6 +46,10 @@ const iso = (v: unknown): string | null => (v ? new Date(v as string).toISOStrin
 const MODULE = 'flow_runtime';
 const notFound = (code: keyof typeof ERROR_CODES, what: string) =>
   new AppError(ERROR_CODES[code], `${what} not found`, HttpStatus.NOT_FOUND);
+
+/** Reference's three flow states: live (published and on), paused (published, switched off), draft (not published). */
+const flowState = (r: Row): 'live' | 'paused' | 'draft' =>
+  r.is_published !== true ? 'draft' : r.is_active === true ? 'live' : 'paused';
 
 /**
  * What an operator sees and does with runs and subscribers (TW-FLR-008, 009, 051 to 058): enrol contacts, list who is in a flow,
@@ -274,83 +292,418 @@ export class FlowRuntimeService {
 
   // --- retry -----------------------------------------------------------------------------------------------------------------
 
-  /** Retries one failed subscriber (TW-FLR-057): the same row, a new run; every attempt is logged with what happened. */
-  async retry(subscriberUuid: string): Promise<RetryResult> {
+  /**
+   * Retries one failed run (TW-FLR-057): the same subscriber row, a new run; every attempt is logged with what happened. The order
+   * of the checks is Reference's: a switched-off flow, then the cooldown (so a double click reads "just retried" and not "still in
+   * progress"), then the state. A retry that fails again answers 200 with `outcome: 'failed'` and the engine's reason.
+   */
+  async retry(subscriberUuid: string): Promise<RetryOneResult> {
     const orgId = this.org();
     const sub = await this.db.tx((tx) => this.subscriberOf(tx, orgId, subscriberUuid));
-    if (sub.status !== 'failed') {
-      throw new AppError(
-        ERROR_CODES.FLR_NOT_RETRYABLE,
-        'Only a failed run can be retried',
-        HttpStatus.CONFLICT,
-      );
+    const a = await this.attempt(orgId, sub.id);
+    if (a.outcome === null) {
+      switch (a.reason) {
+        case 'flow_inactive':
+          throw new AppError(
+            ERROR_CODES.FLR_FLOW_INACTIVE,
+            'This flow is switched off',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        case 'too_soon':
+          throw new AppError(
+            ERROR_CODES.FLR_RETRY_TOO_SOON,
+            'This run was just retried',
+            HttpStatus.TOO_MANY_REQUESTS,
+          );
+        case 'not_found':
+          throw notFound('FLR_SUBSCRIBER_NOT_FOUND', 'Subscriber');
+        default:
+          throw new AppError(
+            ERROR_CODES.FLR_NOT_RETRYABLE,
+            'Only a failed run can be retried',
+            HttpStatus.CONFLICT,
+          );
+      }
     }
-    return await this.retryRows(orgId, [sub]);
+    const started = a.outcome === 'queued' || a.outcome === 'succeeded';
+    return {
+      retried: started ? 1 : 0,
+      skipped: started ? 0 : 1,
+      outcome: a.outcome,
+      reason: a.reason,
+    };
   }
 
-  /** Retries every failed subscriber of a flow, up to the request cap (TW-FLR-058). */
+  /** Retries every failed subscriber of a flow, up to the request cap (TW-FLR-058, the per-flow button of the subscribers page). */
   async retryFailed(flowUuid: string): Promise<RetryResult> {
     const orgId = this.org();
-    const subs = await this.db.tx(async (tx) => {
+    const ids = await this.db.tx(async (tx) => {
       const flowId = await this.flowId(tx, orgId, flowUuid, false);
       const res = await tx.execute(sql`
         SELECT id FROM flow_subscribers WHERE org_id = ${orgId} AND flow_id = ${flowId} AND status = 'failed' ORDER BY id LIMIT ${FLOW_ENROLL_MAX_CONTACTS}`);
-      const out = [];
-      for (const r of rowsOf(res)) {
-        const s = await this.subscribers.findById(tx, orgId, Number(r.id));
-        if (s) out.push(s);
-      }
-      return out;
+      return rowsOf(res).map((r) => Number(r.id));
     });
-    return this.retryRows(orgId, subs);
-  }
-
-  private async retryRows(
-    orgId: number,
-    subs: Array<{ id: number; flowId: number; contactId: number; status: string }>,
-  ): Promise<RetryResult> {
-    const userId = RequestContextStore.require().userId ?? null;
     let retried = 0;
     let skipped = 0;
-    for (const s of subs) {
-      const prior = await this.db.tx(async (tx) => {
-        const res = await tx.execute(
-          sql`SELECT status, failure_reason FROM flow_subscribers WHERE org_id = ${orgId} AND id = ${s.id}`,
-        );
-        return rowsOf(res)[0]!;
-      });
-      let outcome: 'started' | 'failed' | 'skipped' = 'skipped';
-      let reason: string | null = null;
-      try {
-        const out = await this.launch.start(orgId, {
-          flowId: s.flowId,
-          contactId: s.contactId,
-          source: 'retry',
-          requirePublished: false,
-          withSubscriber: true,
-          retry: true,
-        });
-        outcome =
-          out.outcome === 'started' ? 'started' : out.outcome === 'failed' ? 'failed' : 'skipped';
-        reason = out.outcome === 'failed' ? out.reason : null;
-      } catch (err) {
-        outcome = 'failed';
-        reason = (err as Error).message;
-      }
-      await this.db.tx((tx) =>
-        tx.execute(sql`
-          INSERT INTO flow_retry_logs (org_id, flow_id, flow_subscriber_id, contact_id, retried_by_user_id, previous_status,
-                                       previous_failure_reason, outcome, outcome_reason)
-          VALUES (${orgId}, ${s.flowId}, ${s.id}, ${s.contactId}, ${userId}, ${String(prior.status)},
-                  ${(prior.failure_reason as string | null) ?? null}, ${outcome}, ${reason})`),
-      );
-      if (outcome === 'started') retried++;
+    for (const id of ids) {
+      const a = await this.attempt(orgId, id);
+      if (a.outcome === 'queued' || a.outcome === 'succeeded') retried++;
       else skipped++;
     }
     return { retried, skipped };
   }
 
+  /**
+   * Retries the named failed runs (TW-FLR-058): never "everything", at most one batch. A name that is not in this workspace is
+   * reported as not found, the same as one that never existed.
+   */
+  async retryMany(input: RetryManyInput): Promise<RetryManyResult> {
+    const orgId = this.org();
+    const uuids = [...new Set(input.subscriberIds)];
+    const found = await this.db.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT id, uuid FROM flow_subscribers WHERE org_id = ${orgId} AND uuid IN (${sql.join(
+          uuids.map((u) => sql`${u}::uuid`),
+          sql`, `,
+        )})`);
+      return new Map(rowsOf(res).map((r) => [String(r.uuid), Number(r.id)]));
+    });
+    const out: RetryManyResult = {
+      requested: uuids.length,
+      attempted: 0,
+      queued: 0,
+      succeeded: 0,
+      failed: 0,
+      skipped: 0,
+      results: [],
+    };
+    for (const subscriberId of uuids) {
+      const id = found.get(subscriberId);
+      const a =
+        id === undefined ? { outcome: null, reason: 'not_found' } : await this.attempt(orgId, id);
+      out.results.push({ subscriberId, outcome: a.outcome, reason: a.reason });
+      if (id !== undefined) out.attempted++;
+      if (a.outcome === 'queued') out.queued++;
+      else if (a.outcome === 'succeeded') out.succeeded++;
+      else if (a.outcome === 'failed') out.failed++;
+      else out.skipped++;
+    }
+    return out;
+  }
+
+  /**
+   * One retry: the checks, the launch, the log row. `outcome` is null when nothing was tried (then `reason` is `not_found`,
+   * `flow_inactive`, `too_soon` or `not_failed`, and no log row is written, as in Reference).
+   */
+  private async attempt(
+    orgId: number,
+    subId: number,
+  ): Promise<{ outcome: FlowRetryOutcome | null; reason: string | null }> {
+    const userId = RequestContextStore.require().userId ?? null;
+    const s = await this.db.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT s.flow_id, s.contact_id, s.status, s.failure_reason, f.is_active,
+               (s.last_retried_at IS NOT NULL
+                AND s.last_retried_at > now() - make_interval(secs => ${FLOW_RETRY_COOLDOWN_SECONDS})) AS cooling
+        FROM flow_subscribers s JOIN flows f ON f.org_id = s.org_id AND f.id = s.flow_id
+        WHERE s.org_id = ${orgId} AND s.id = ${subId}`);
+      return rowsOf(res)[0];
+    });
+    if (!s) return { outcome: null, reason: 'not_found' };
+    if (s.is_active !== true) return { outcome: null, reason: 'flow_inactive' };
+    if (s.cooling === true) return { outcome: null, reason: 'too_soon' };
+    if (s.status !== 'failed') return { outcome: null, reason: 'not_failed' };
+
+    let outcome: FlowRetryOutcome = 'skipped';
+    let reason: string | null = null;
+    try {
+      const out = await this.launch.start(orgId, {
+        flowId: Number(s.flow_id),
+        contactId: Number(s.contact_id),
+        source: 'retry',
+        requirePublished: false,
+        withSubscriber: true,
+        retry: true,
+      });
+      if (out.outcome === 'failed') {
+        outcome = 'failed';
+        reason = out.reason;
+      } else if (out.outcome === 'started') {
+        // The launch may have ended the run at once; say what the subscriber is now, as Reference does.
+        const after = await this.db.tx(
+          async (tx) =>
+            rowsOf(
+              await tx.execute(
+                sql`SELECT status, failure_reason FROM flow_subscribers WHERE org_id = ${orgId} AND id = ${subId}`,
+              ),
+            )[0],
+        );
+        outcome =
+          after?.status === 'failed'
+            ? 'failed'
+            : after?.status === 'completed'
+              ? 'succeeded'
+              : 'queued';
+        reason = outcome === 'failed' ? ((after?.failure_reason as string | null) ?? null) : null;
+      }
+    } catch (err) {
+      outcome = 'failed';
+      reason = (err as Error).message.slice(0, 190);
+    }
+    await this.db.tx((tx) =>
+      tx.execute(sql`
+        INSERT INTO flow_retry_logs (org_id, flow_id, flow_subscriber_id, contact_id, retried_by_user_id, previous_status,
+                                     previous_failure_reason, outcome, outcome_reason)
+        VALUES (${orgId}, ${Number(s.flow_id)}, ${subId}, ${Number(s.contact_id)}, ${userId}, ${String(s.status)},
+                ${(s.failure_reason as string | null) ?? null}, ${outcome}, ${reason})`),
+    );
+    return { outcome, reason };
+  }
+
+  /** The retry records (TW-FLR-056): every attempt, newest first, with the outcome chips' totals. */
+  async listRetries(q: ListFlowRetriesQuery): Promise<FlowRetryList> {
+    const orgId = this.org();
+    const { from, to } = windowOf(q);
+    return this.db.tx(async (tx) => {
+      const where = sql`l.org_id = ${orgId}
+        ${q.flowId ? sql`AND f.uuid = ${q.flowId}::uuid` : sql``}
+        ${from ? sql`AND l.created_at >= ${from}::timestamptz` : sql``}
+        ${to ? sql`AND l.created_at <= ${to}::timestamptz` : sql``}`;
+      const from_ = sql`FROM flow_retry_logs l JOIN flows f ON f.org_id = l.org_id AND f.id = l.flow_id`;
+      const cursor = q.cursor ? Number(q.cursor) : null;
+      const totalsRows = rowsOf(
+        await tx.execute(
+          sql`SELECT l.outcome, count(*)::int AS n ${from_} WHERE ${where} GROUP BY l.outcome`,
+        ),
+      );
+      const n = (o: string) => Number(totalsRows.find((r) => r.outcome === o)?.n ?? 0);
+      const res = await tx.execute(sql`
+        SELECT l.id, l.uuid, l.previous_status, l.previous_failure_reason, l.outcome, l.outcome_reason, l.created_at,
+               l.retried_by_user_id, f.uuid AS flow_uuid, f.flow_name, s.uuid AS sub_uuid,
+               c.uuid AS contact_uuid, c.name AS contact_name, c.phone AS contact_phone, u.full_name AS user_name
+        ${from_}
+        JOIN flow_subscribers s ON s.org_id = l.org_id AND s.id = l.flow_subscriber_id
+        LEFT JOIN contacts c ON c.org_id = l.org_id AND c.id = l.contact_id
+        LEFT JOIN users u ON u.org_id = l.org_id AND u.id = l.retried_by_user_id
+        WHERE ${where}
+          ${q.outcome ? sql`AND l.outcome = ${q.outcome}` : sql``}
+          ${cursor ? sql`AND l.id < ${cursor}` : sql``}
+        ORDER BY l.id DESC LIMIT ${q.limit + 1}`);
+      const rows = rowsOf(res);
+      const page = rows.slice(0, q.limit);
+      return {
+        items: page.map((r) => ({
+          id: String(r.uuid),
+          flowId: String(r.flow_uuid),
+          flowName: String(r.flow_name),
+          subscriberId: String(r.sub_uuid),
+          contact: r.contact_uuid
+            ? {
+                id: String(r.contact_uuid),
+                name: (r.contact_name as string | null) ?? null,
+                phone: (r.contact_phone as string | null) ?? null,
+              }
+            : null,
+          retriedBy: (r.user_name as string | null) ?? null,
+          source: r.retried_by_user_id === null ? ('system' as const) : ('manual' as const),
+          previousStatus: (r.previous_status as string | null) ?? null,
+          previousFailureReason: (r.previous_failure_reason as string | null) ?? null,
+          outcome: r.outcome as FlowRetryOutcome,
+          outcomeReason: (r.outcome_reason as string | null) ?? null,
+          createdAt: iso(r.created_at)!,
+        })),
+        nextCursor: rows.length > q.limit ? String(page[page.length - 1]!.id) : null,
+        totals: {
+          all: totalsRows.reduce((sum, r) => sum + Number(r.n), 0),
+          queued: n('queued'),
+          succeeded: n('succeeded'),
+          failed: n('failed'),
+          skipped: n('skipped'),
+        },
+      };
+    });
+  }
+
   // --- runs ------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * The filters of the execution history and the error logs (TW-FLR-054, 055), on `flow_subscribers s` joined to its flow `f` and
+   * contact `c`: flow, window on the enrolment time, and a search over the failure reason, the contact's name or phone and the
+   * flow's name. `status` is applied only when asked, so the tab counts can leave it out.
+   */
+  private historyFilter(
+    orgId: number,
+    q: {
+      flowId?: string | undefined;
+      status?: string | undefined;
+      q?: string | undefined;
+    } & Parameters<typeof windowOf>[0],
+    withStatus: boolean,
+  ): ReturnType<typeof sql> {
+    const { from, to } = windowOf(q);
+    const like = q.q ? likePattern(q.q) : null;
+    return sql`s.org_id = ${orgId}
+      ${q.flowId ? sql`AND f.uuid = ${q.flowId}::uuid` : sql``}
+      ${withStatus && q.status ? sql`AND s.status = ${q.status}` : sql``}
+      ${from ? sql`AND s.enrolled_at >= ${from}::timestamptz` : sql``}
+      ${to ? sql`AND s.enrolled_at <= ${to}::timestamptz` : sql``}
+      ${
+        like
+          ? sql`AND (s.failure_reason ILIKE ${like} OR f.flow_name ILIKE ${like} OR c.name ILIKE ${like} OR c.phone ILIKE ${like})`
+          : sql``
+      }`;
+  }
+
+  /**
+   * The execution history (TW-FLR-054): every contact's pass through a flow, newest first, with status counts over the same filters.
+   * Reference's "run" is the subscriber row, so a launch that failed before any run existed (no connected sender) is listed too.
+   */
+  async history(q: ListFlowHistoryQuery): Promise<FlowHistoryList> {
+    const orgId = this.org();
+    return this.db.tx(async (tx) => {
+      const cursor = q.cursor ? Number(q.cursor) : null;
+      const from = sql`FROM flow_subscribers s
+        JOIN flows f ON f.org_id = s.org_id AND f.id = s.flow_id
+        JOIN contacts c ON c.org_id = s.org_id AND c.id = s.contact_id`;
+      const countRows = rowsOf(
+        await tx.execute(sql`
+          SELECT s.status, count(*)::int AS n ${from} WHERE ${this.historyFilter(orgId, q, false)} GROUP BY s.status`),
+      );
+      const n = (st: string) => Number(countRows.find((r) => r.status === st)?.n ?? 0);
+      const res = await tx.execute(sql`
+        SELECT s.id, s.uuid, s.status, s.source, s.enrolled_at, s.completed_at, s.failed_at, s.failure_reason, s.retry_count,
+               s.last_retried_at, f.uuid AS flow_uuid, f.flow_name, f.is_active, f.is_published,
+               c.uuid AS contact_uuid, c.name AS contact_name, c.phone AS contact_phone,
+               (SELECT r.uuid FROM flow_runs r WHERE r.org_id = s.org_id AND r.id = s.last_run_id) AS run_uuid
+        ${from}
+        WHERE ${this.historyFilter(orgId, q, true)} ${cursor ? sql`AND s.id < ${cursor}` : sql``}
+        ORDER BY s.id DESC LIMIT ${q.limit + 1}`);
+      const rows = rowsOf(res);
+      const page = rows.slice(0, q.limit);
+      return {
+        items: page.map((r) => ({
+          id: String(r.uuid),
+          flowId: String(r.flow_uuid),
+          flowName: String(r.flow_name),
+          flowState: flowState(r),
+          contact: {
+            id: String(r.contact_uuid),
+            name: (r.contact_name as string | null) ?? null,
+            phone: (r.contact_phone as string | null) ?? null,
+          },
+          status: r.status as FlowHistoryRow['status'],
+          source: String(r.source),
+          enrolledAt: iso(r.enrolled_at),
+          completedAt: iso(r.completed_at),
+          failedAt: iso(r.failed_at),
+          failureReason: (r.failure_reason as string | null) ?? null,
+          retryCount: Number(r.retry_count),
+          lastRetriedAt: iso(r.last_retried_at),
+          lastRunId: (r.run_uuid as string | null) ?? null,
+          durationSeconds:
+            r.enrolled_at && r.completed_at
+              ? Math.max(
+                  0,
+                  Math.round(
+                    (new Date(r.completed_at as string).getTime() -
+                      new Date(r.enrolled_at as string).getTime()) /
+                      1000,
+                  ),
+                )
+              : null,
+          canRetry: r.status === 'failed' && r.is_active === true,
+        })),
+        nextCursor: rows.length > q.limit ? String(page[page.length - 1]!.id) : null,
+        counts: {
+          all: countRows.reduce((sum, r) => sum + Number(r.n), 0),
+          active: n('active'),
+          paused: n('paused'),
+          completed: n('completed'),
+          failed: n('failed'),
+        },
+      };
+    });
+  }
+
+  /**
+   * The error logs (TW-FLR-055): failed runs rolled up by reason, with the flows each reason hit, when it was first and last seen,
+   * and the subscribers behind it so the screen can offer "retry these" without a second trip (at most one batch per reason).
+   */
+  async errorGroups(q: FlowErrorGroupsQuery): Promise<FlowErrorGroups> {
+    const orgId = this.org();
+    return this.db.tx(async (tx) => {
+      const where = sql`${this.historyFilter(orgId, q, false)} AND s.status = 'failed'`;
+      const from = sql`FROM flow_subscribers s
+        JOIN flows f ON f.org_id = s.org_id AND f.id = s.flow_id
+        JOIN contacts c ON c.org_id = s.org_id AND c.id = s.contact_id`;
+      const rows = rowsOf(
+        await tx.execute(sql`
+          SELECT nullif(trim(s.failure_reason), '') AS reason, f.uuid AS flow_uuid, f.flow_name, count(*)::int AS n,
+                 min(s.failed_at) AS first_seen, max(s.failed_at) AS last_seen
+          ${from} WHERE ${where} GROUP BY 1, 2, 3`),
+      );
+      type Group = FlowErrorGroups['groups'][number] & { first: number; last: number };
+      const byReason = new Map<string, Group>();
+      for (const r of rows) {
+        const reason = (r.reason as string | null) ?? null;
+        const g = byReason.get(reason ?? '') ?? {
+          reason,
+          count: 0,
+          firstSeen: null,
+          lastSeen: null,
+          flows: [],
+          subscriberIds: [],
+          first: Infinity,
+          last: -Infinity,
+        };
+        g.count += Number(r.n);
+        if (r.first_seen) g.first = Math.min(g.first, new Date(r.first_seen as string).getTime());
+        if (r.last_seen) g.last = Math.max(g.last, new Date(r.last_seen as string).getTime());
+        g.flows.push({
+          flowId: String(r.flow_uuid),
+          flowName: String(r.flow_name),
+          count: Number(r.n),
+        });
+        byReason.set(reason ?? '', g);
+      }
+      if (byReason.size > 0) {
+        const newest = rowsOf(
+          await tx.execute(sql`
+            SELECT s.uuid, nullif(trim(s.failure_reason), '') AS reason ${from}
+            WHERE ${where} ORDER BY s.id DESC LIMIT 2000`),
+        );
+        for (const r of newest) {
+          const g = byReason.get((r.reason as string | null) ?? '');
+          if (g && g.subscriberIds.length < FLOW_RETRY_MAX_BATCH)
+            g.subscriberIds.push(String(r.uuid));
+        }
+      }
+      const groups = [...byReason.values()]
+        .map(({ first, last, ...g }) => ({
+          ...g,
+          flows: g.flows.sort((a, b) => b.count - a.count),
+          firstSeen: Number.isFinite(first) ? new Date(first).toISOString() : null,
+          lastSeen: Number.isFinite(last) ? new Date(last).toISOString() : null,
+        }))
+        .sort((a, b) => b.count - a.count);
+      const t = rowsOf(
+        await tx.execute(sql`
+          SELECT count(*)::int AS failed, count(DISTINCT s.flow_id)::int AS flows, count(DISTINCT s.contact_id)::int AS contacts,
+                 count(*) FILTER (WHERE s.retry_count > 0)::int AS retried
+          ${from} WHERE ${where}`),
+      )[0]!;
+      return {
+        groups,
+        totals: {
+          failed: Number(t.failed),
+          distinctReasons: groups.length,
+          affectedFlows: Number(t.flows),
+          affectedContacts: Number(t.contacts),
+          retried: Number(t.retried),
+        },
+      };
+    });
+  }
 
   async listRuns(q: ListFlowRunsQuery): Promise<FlowRunList> {
     const orgId = this.org();
@@ -495,56 +848,99 @@ export class FlowRuntimeService {
 
   /**
    * The numbers (TW-FLR-053 to 055). Reference's "completed" never moved because nothing set it; here the runtime marks a run completed
-   * when it ends normally, and every launch path writes a run, so keyword and campaign runs count too.
+   * when it ends normally, and every launch path writes a run, so keyword and campaign runs count too. The window is the last `days`
+   * UTC days (today counts), or all time for 0.
    */
   async analytics(q: FlowAnalyticsQuery): Promise<FlowAnalytics> {
     const orgId = this.org();
     return this.db.tx(async (tx) => {
-      const flowFilter = q.flowId
-        ? sql`AND r.flow_id = (SELECT id FROM flows WHERE org_id = ${orgId} AND uuid = ${q.flowId}::uuid)`
-        : sql``;
-      const since = sql`r.started_at >= now() - make_interval(days => ${q.days})`;
+      const { from } = windowOf({ days: q.days });
+      const flowIdSql = q.flowId
+        ? sql`(SELECT id FROM flows WHERE org_id = ${orgId} AND uuid = ${q.flowId}::uuid)`
+        : null;
+      const flowFilter = flowIdSql ? sql`AND r.flow_id = ${flowIdSql}` : sql``;
+      // Every run, plus the launches that failed before a run existed (no connected sender): Reference counted those as runs.
+      const ev = sql`WITH ev AS (
+        SELECT r.flow_id, r.contact_id, r.status, r.source, r.started_at, r.ended_at, r.failure_reason, r.last_activity_at
+        FROM flow_runs r WHERE r.org_id = ${orgId}
+        UNION ALL
+        SELECT s.flow_id, s.contact_id, 'failed', s.source, coalesce(s.enrolled_at, s.created_at), s.failed_at,
+               s.failure_reason, s.failed_at
+        FROM flow_subscribers s WHERE s.org_id = ${orgId} AND s.status = 'failed' AND s.last_run_id IS NULL)`;
+      const since = from ? sql`r.started_at >= ${from}::timestamptz` : sql`true`;
       const totals = rowsOf(
         await tx.execute(sql`
+          ${ev}
           SELECT count(*)::int AS enrolled,
                  count(*) FILTER (WHERE r.status IN ('running','waiting','sleeping','halted'))::int AS running,
                  count(*) FILTER (WHERE r.status = 'completed')::int AS completed,
                  count(*) FILTER (WHERE r.status = 'failed')::int AS failed,
                  count(*) FILTER (WHERE r.status = 'cancelled')::int AS cancelled,
                  count(*) FILTER (WHERE r.status = 'expired')::int AS expired,
+                 count(DISTINCT r.contact_id)::int AS contacts,
                  avg(extract(epoch FROM (r.ended_at - r.started_at))) FILTER (WHERE r.status = 'completed') AS avg_secs
-          FROM flow_runs r WHERE r.org_id = ${orgId} AND ${since} ${flowFilter}`),
+          FROM ev r WHERE ${since} ${flowFilter}`),
       )[0]!;
       const completed = Number(totals.completed);
       const failed = Number(totals.failed);
+      const enrolled = Number(totals.enrolled);
       const trend = rowsOf(
         await tx.execute(sql`
-          SELECT to_char(date_trunc('day', r.started_at), 'YYYY-MM-DD') AS day, count(*)::int AS started,
+          ${ev}
+          SELECT to_char(date_trunc('day', r.started_at AT TIME ZONE 'UTC'), 'YYYY-MM-DD') AS day, count(*)::int AS started,
                  count(*) FILTER (WHERE r.status = 'completed')::int AS completed,
                  count(*) FILTER (WHERE r.status = 'failed')::int AS failed
-          FROM flow_runs r WHERE r.org_id = ${orgId} AND ${since} ${flowFilter} GROUP BY 1 ORDER BY 1`),
+          FROM ev r WHERE ${since} ${flowFilter} GROUP BY 1 ORDER BY 1`),
       );
       const reasons = rowsOf(
         await tx.execute(sql`
-          SELECT coalesce(r.failure_reason, 'Unknown') AS reason, count(*)::int AS n
-          FROM flow_runs r WHERE r.org_id = ${orgId} AND r.status = 'failed' AND ${since} ${flowFilter}
+          ${ev}
+          SELECT coalesce(nullif(trim(r.failure_reason), ''), 'Unknown') AS reason, count(*)::int AS n,
+                 min(coalesce(r.ended_at, r.last_activity_at)) AS first_seen, max(coalesce(r.ended_at, r.last_activity_at)) AS last_seen
+          FROM ev r WHERE r.status = 'failed' AND ${since} ${flowFilter}
           GROUP BY 1 ORDER BY n DESC LIMIT 20`),
       );
       const bySource = rowsOf(
         await tx.execute(sql`
-          SELECT r.source, count(*)::int AS n FROM flow_runs r WHERE r.org_id = ${orgId} AND ${since} ${flowFilter}
+          ${ev}
+          SELECT r.source, count(*)::int AS n FROM ev r WHERE ${since} ${flowFilter}
           GROUP BY 1 ORDER BY n DESC`),
       );
       const board = rowsOf(
         await tx.execute(sql`
-          SELECT f.uuid, f.flow_name, count(*)::int AS runs, count(*) FILTER (WHERE r.status = 'completed')::int AS completed,
-                 count(*) FILTER (WHERE r.status = 'failed')::int AS failed
-          FROM flow_runs r JOIN flows f ON f.org_id = r.org_id AND f.id = r.flow_id
-          WHERE r.org_id = ${orgId} AND ${since} ${flowFilter} GROUP BY f.uuid, f.flow_name ORDER BY runs DESC LIMIT 10`),
+          ${ev}
+          SELECT f.uuid, f.flow_name, f.is_active, f.is_published, count(*)::int AS runs,
+                 count(*) FILTER (WHERE r.status IN ('running','waiting','sleeping','halted'))::int AS running,
+                 count(*) FILTER (WHERE r.status = 'completed')::int AS completed,
+                 count(*) FILTER (WHERE r.status = 'failed')::int AS failed,
+                 avg(extract(epoch FROM (r.ended_at - r.started_at))) FILTER (WHERE r.status = 'completed') AS avg_secs
+          FROM ev r JOIN flows f ON f.org_id = ${orgId} AND f.id = r.flow_id
+          WHERE ${since} ${flowFilter}
+          GROUP BY f.uuid, f.flow_name, f.is_active, f.is_published ORDER BY runs DESC LIMIT 50`),
       );
+      const sinceSub = from ? sql`s.enrolled_at >= ${from}::timestamptz` : sql`true`;
+      const subFlow = flowIdSql ? sql`AND s.flow_id = ${flowIdSql}` : sql``;
+      const subs = rowsOf(
+        await tx.execute(sql`
+          SELECT count(*) FILTER (WHERE s.status = 'paused')::int AS paused,
+                 count(*) FILTER (WHERE s.retry_count > 0)::int AS retried
+          FROM flow_subscribers s WHERE s.org_id = ${orgId} AND ${sinceSub} ${subFlow}`),
+      )[0]!;
+      const attempts = rowsOf(
+        await tx.execute(sql`
+          SELECT count(*)::int AS n FROM flow_retry_logs l
+          WHERE l.org_id = ${orgId} ${from ? sql`AND l.created_at >= ${from}::timestamptz` : sql``}
+            ${flowIdSql ? sql`AND l.flow_id = ${flowIdSql}` : sql``}`),
+      )[0]!;
+      const flows = rowsOf(
+        await tx.execute(sql`
+          SELECT count(*)::int AS total, count(*) FILTER (WHERE is_active AND is_published)::int AS live
+          FROM flows WHERE org_id = ${orgId}`),
+      )[0]!;
+      const pct = (n: number, d: number) => (d > 0 ? Math.round((n * 1000) / d) / 10 : null);
       return {
         totals: {
-          enrolled: Number(totals.enrolled),
+          enrolled,
           running: Number(totals.running),
           completed,
           failed,
@@ -552,22 +948,50 @@ export class FlowRuntimeService {
           expired: Number(totals.expired),
         },
         completionRate: completed + failed > 0 ? completed / (completed + failed) : null,
-        avgSecondsToComplete: totals.avg_secs === null ? null : Number(totals.avg_secs),
+        avgSecondsToComplete: totals.avg_secs === null ? null : Math.round(Number(totals.avg_secs)),
         trend: trend.map((t) => ({
           day: String(t.day),
           started: Number(t.started),
           completed: Number(t.completed),
           failed: Number(t.failed),
         })),
-        failureReasons: reasons.map((r) => ({ reason: String(r.reason), count: Number(r.n) })),
-        bySource: bySource.map((r) => ({ source: String(r.source), count: Number(r.n) })),
-        leaderboard: board.map((b) => ({
-          flowId: String(b.uuid),
-          flowName: String(b.flow_name),
-          runs: Number(b.runs),
-          completed: Number(b.completed),
-          failed: Number(b.failed),
+        failureReasons: reasons.map((r) => ({
+          reason: String(r.reason),
+          count: Number(r.n),
+          firstSeen: iso(r.first_seen),
+          lastSeen: iso(r.last_seen),
         })),
+        bySource: bySource.map((r) => ({ source: String(r.source), count: Number(r.n) })),
+        leaderboard: board.map((b) => {
+          const runs = Number(b.runs);
+          return {
+            flowId: String(b.uuid),
+            flowName: String(b.flow_name),
+            state:
+              b.is_published !== true
+                ? ('draft' as const)
+                : b.is_active
+                  ? ('live' as const)
+                  : ('paused' as const),
+            runs,
+            running: Number(b.running),
+            completed: Number(b.completed),
+            failed: Number(b.failed),
+            completionRate: pct(Number(b.completed), runs),
+            failureRate: pct(Number(b.failed), runs),
+            avgSecondsToComplete: b.avg_secs === null ? null : Math.round(Number(b.avg_secs)),
+          };
+        }),
+        extras: {
+          contactsReached: Number(totals.contacts),
+          pausedSubscribers: Number(subs.paused),
+          retriedRuns: Number(subs.retried),
+          retryAttempts: Number(attempts.n),
+          flowsTotal: Number(flows.total),
+          flowsLive: Number(flows.live),
+          flowsWithRuns: board.length,
+          failureRate: enrolled > 0 ? failed / enrolled : null,
+        },
       };
     });
   }

@@ -1,0 +1,221 @@
+# desk.wabo.ai on a shared Dokploy host. The host's Traefik owns 80/443 and issues the certificate (resolver `letsencrypt`):
+# this stack publishes no ports and routes through labels on `dokploy-network`. Images are built elsewhere and loaded
+# (`pull_policy: never`), so the host never runs a build.
+#   docker compose --env-file .env up -d
+# Fresh database: postgres + init-roles.sh create the roles, `migrate` applies every migration; seed.sh adds the accounts.
+
+name: desk
+
+x-api-env: &api-env
+  NODE_ENV: production
+  PORT: '3000'
+  NODE_OPTIONS: --max-old-space-size=640
+  DB_POOL_MAX: '10'
+  APP_URL: https://${DOMAIN}
+  WEB_APP_URL: https://${DOMAIN}
+  CORS_ORIGINS: https://${DOMAIN}
+  APP_NAME: ${APP_NAME}
+  TRUST_PROXY: loopback,linklocal,uniquelocal
+  WEB_TRUSTED_PROXY_HOPS: '1'
+  DATABASE_URL: postgres://crm_app_user:${APP_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  DATABASE_REPLICA_URL: postgres://crm_app_user:${APP_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  MIGRATION_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  REDIS_URL: redis://redis:6379
+  JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+  JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+  JWT_ACCESS_TTL: 15m
+  JWT_REFRESH_TTL: 30d
+  CREDENTIALS_ENCRYPTION_KEY: ${CREDENTIALS_ENCRYPTION_KEY}
+  CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+  S3_ENDPOINT: http://minio:9000
+  S3_REGION: us-east-1
+  S3_BUCKET_MEDIA: crm-media
+  S3_BUCKET_DOCUMENTS: crm-documents
+  S3_BUCKET_EXPORTS: crm-exports
+  S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+  S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+  S3_FORCE_PATH_STYLE: 'true'
+  SMTP_HOST: ${SMTP_HOST}
+  SMTP_PORT: ${SMTP_PORT}
+  SMTP_FROM: ${SMTP_FROM}
+  WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN}
+  WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET}
+  # WhatsApp Cloud API / Interakt embedded signup (blank = "not configured" on the Channels screen).
+  WABA_DEFAULT_PROVIDER: ${WABA_DEFAULT_PROVIDER:-interakt}
+  WABA_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN}
+  WABA_WEBHOOK_PUBLIC_URL: https://${DOMAIN}
+  META_APP_ID: ${META_APP_ID:-}
+  META_APP_SECRET: ${META_APP_SECRET:-}
+  META_EMBEDDED_CONFIG_ID: ${META_EMBEDDED_CONFIG_ID:-}
+  INTERAKT_PARTNER_AUTH_KEY: ${INTERAKT_PARTNER_AUTH_KEY:-}
+  INTERAKT_SOLUTION_ID: ${INTERAKT_SOLUTION_ID:-}
+  META_SYSTEM_USER_ID: ${META_SYSTEM_USER_ID:-}
+  META_SYSTEM_USER_TOKEN: ${META_SYSTEM_USER_TOKEN:-}
+  META_BUSINESS_ID: ${META_BUSINESS_ID:-}
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      WORKER_DB_PASSWORD: ${WORKER_DB_PASSWORD}
+    # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine.
+    mem_limit: 1g
+    command:
+      - postgres
+      - -c
+      - max_connections=100
+      - -c
+      - shared_buffers=${PG_SHARED_BUFFERS}
+      - -c
+      - effective_cache_size=${PG_EFFECTIVE_CACHE_SIZE}
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - log_min_duration_statement=500
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-roles.sh:/docker-entrypoint-initdb.d/01-roles.sh:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # noeviction: BullMQ job state is not a cache.
+    mem_limit: 256m
+    command:
+      [
+        'redis-server',
+        '--appendonly',
+        'yes',
+        '--maxmemory-policy',
+        'noeviction',
+        '--maxmemory',
+        '192mb',
+      ]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  minio:
+    # The registry no longer serves this image; the host has it locally. The API only probes S3 (no bucket access yet).
+    image: minio/minio:latest
+    pull_policy: never
+    restart: unless-stopped
+    mem_limit: 256m
+    command: ['server', '/data']
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - miniodata:/data
+
+  # One-shot: applies every migration as the database owner, with the migrate CLI that ships inside the API image.
+  migrate:
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
+    working_dir: /app
+    command: ['node', 'node_modules/@crm/db/dist/cli/migrate.js', 'up']
+    restart: 'no'
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      MIGRATION_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  api:
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    mem_limit: 1g
+    networks: [default, dokploy-network]
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: dokploy-network
+      traefik.http.routers.desk-api.rule: Host(`${DOMAIN}`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/docs`))
+      traefik.http.routers.desk-api.priority: '100'
+      traefik.http.routers.desk-api.entrypoints: websecure
+      traefik.http.routers.desk-api.tls.certresolver: letsencrypt
+      traefik.http.services.desk-api.loadbalancer.server.port: '3000'
+    environment:
+      <<: *api-env
+      WORKER_MODE: 'false'
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+      minio: { condition: service_started }
+
+  worker:
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
+    command: ['node', 'dist/src/worker.js']
+    restart: unless-stopped
+    mem_limit: 1g
+    # The image's HEALTHCHECK probes the API's HTTP port; the worker serves none.
+    healthcheck:
+      disable: true
+    environment:
+      <<: *api-env
+      WORKER_MODE: 'true'
+      DATABASE_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_REPLICA_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+
+  web:
+    image: desk-web:${IMAGE_TAG:-local}
+    pull_policy: never
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    mem_limit: 768m
+    networks: [default, dokploy-network]
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: dokploy-network
+      traefik.http.routers.desk-web.rule: Host(`${DOMAIN}`)
+      traefik.http.routers.desk-web.priority: '10'
+      traefik.http.routers.desk-web.entrypoints: websecure
+      traefik.http.routers.desk-web.tls.certresolver: letsencrypt
+      traefik.http.services.desk-web.loadbalancer.server.port: '3001'
+      # Plain HTTP goes to HTTPS.
+      traefik.http.routers.desk-http.rule: Host(`${DOMAIN}`)
+      traefik.http.routers.desk-http.entrypoints: web
+      traefik.http.routers.desk-http.middlewares: desk-https
+      traefik.http.middlewares.desk-https.redirectscheme.scheme: https
+    environment:
+      NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=512
+      API_URL: http://api:3000
+      REALTIME_URL: https://${DOMAIN}/realtime
+    depends_on:
+      - api
+
+networks:
+  dokploy-network:
+    external: true
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:
