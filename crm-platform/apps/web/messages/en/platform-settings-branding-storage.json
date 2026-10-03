@@ -1436,6 +1436,13 @@
         "title": "Cloud storage",
         "eyebrow": "Admin - Media storage",
         "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or any S3-compatible store. When off, media stays on the local disk, so nothing breaks until you turn it on.",
+        "status": {
+          "active": "Active: {provider}. New uploads go to your bucket.",
+          "configured": "Configured but turned off. Media still on the local disk. Test, then enable.",
+          "local": "Local disk (no cloud provider set up yet).",
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
         "sections": {
           "provider": {
             "title": "Cloud media routing"
