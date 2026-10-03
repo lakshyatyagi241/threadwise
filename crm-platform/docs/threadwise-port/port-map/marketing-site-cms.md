@@ -91,4 +91,6 @@ announcements, contact messages, guidebook (P1).
 
 ## Status
 
-See `parity/marketing-site-cms.md`: every feature except TW-CMS-027 (blocked on SET object storage) and TW-CMS-053 (dead code) is built and tested.
+See `parity/marketing-site-cms.md`: every feature except TW-CMS-053 (dead code, not ported on purpose) is built and tested; TW-CMS-027 (editor image upload) now stores on the SET media storage (`POST /v2/platform/cms/content/upload`).
+
+Public site rendering: the marketing pages are drawn in Reference's editorial layout (Tailwind utilities on the `--site-*` palette tokens, `site/wd.css` for Reference's own classes in the `components` layer). One component per Reference section lives in `site/wd-*.tsx`; the registry's field names are what they read (`site/site-render.test.tsx` renders every section and fails when a page reads a key the registry lacks or a registry field is never shown).

@@ -183,26 +183,30 @@ export function GuidebookAdmin() {
                       {votes > 0 ? `${Math.round((a.helpful / votes) * 100)}%` : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <Button
-                        size="sm"
-                        variant={a.isPublished ? 'primary' : 'secondary'}
+                      <button
+                        type="button"
                         disabled={toggle.isPending}
                         onClick={() => toggle.mutate(a)}
+                        className={`rounded-full px-3 py-1 text-[11px] font-medium disabled:opacity-60 ${a.isPublished ? 'bg-wa-mint text-wa-deep' : 'bg-muted text-muted-foreground'}`}
                       >
                         {a.isPublished ? t('live') : t('draft')}
-                      </Button>
+                      </button>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-2">
                         <Link
                           href={`/admin/guidebook/${a.id}`}
-                          className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm"
+                          className="text-[12px] text-primary hover:underline"
                         >
                           {tc('edit')}
                         </Link>
-                        <Button size="sm" variant="danger" onClick={() => setDoomed(a)}>
+                        <button
+                          type="button"
+                          className="text-[12px] text-danger hover:underline"
+                          onClick={() => setDoomed(a)}
+                        >
                           {tc('delete')}
-                        </Button>
+                        </button>
                       </div>
                     </td>
                   </tr>

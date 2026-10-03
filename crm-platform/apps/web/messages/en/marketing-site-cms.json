@@ -58,7 +58,7 @@
       "resetField": "Reset this field",
       "sections": "Sections",
       "sectionsHint": "drag · show / hide",
-      "pinned": "Always first",
+      "pinned": "fixed",
       "moveUp": "Move {name} up",
       "moveDown": "Move {name} down",
       "showSection": "Show {name}",
@@ -91,7 +91,9 @@
           "message": "Every colour goes back to the shipped palette as a draft until you publish.",
           "action": "Reset colours"
         }
-      }
+      },
+      "sectionShown": "Shown",
+      "sectionHidden": "Hidden"
     },
     "blog": {
       "title": "Blog",
@@ -248,7 +250,7 @@
       "legalTitle": "Legal",
       "rights": "All rights reserved.",
       "blogTitle": "Blog",
-      "blogLead": "News, guides and product updates.",
+      "blogLead": "Insights, guides and product updates for your team.",
       "searchPlaceholder": "Search posts",
       "searchButton": "Search",
       "allCategories": "All categories",
@@ -287,16 +289,50 @@
         "pricing": "Pricing",
         "about": "About",
         "contact": "Contact"
-      }
-    },
-    "bar": {
-      "dismiss": "Dismiss announcement",
-      "region": "Announcement"
+      },
+      "platform": "platform",
+      "menuOpen": "Open menu",
+      "menuClose": "Close menu",
+      "cookiePreferences": "Cookie preferences",
+      "priceCard": {
+        "volume": "Volume",
+        "features": "Features",
+        "support": "Support",
+        "planNum": "Plan · {n}",
+        "popular": "popular",
+        "forever": "forever",
+        "contactSales": "contact sales",
+        "getStarted": "Get started",
+        "docsCommunity": "Docs & community",
+        "prioritySupport": "Priority support"
+      },
+      "nameHint": "Alex Morgan",
+      "emailHint": "alex@company.com",
+      "companyHint": "Company name",
+      "messageHint": "What do you need help with? Be as specific as you like, the more context the faster we can help.",
+      "blogEyebrow": "The {brand} blog",
+      "blogHeadlineA": "Ideas that",
+      "blogHeadlineB": "start conversations",
+      "all": "All",
+      "readMore": "Read more",
+      "nothingYet": "Nothing here yet",
+      "nothingYetBody": "New articles are on the way. Check back soon.",
+      "keepReadingA": "Keep",
+      "keepReadingB": "reading",
+      "allPosts": "All posts →",
+      "backToAllPosts": "Back to all posts",
+      "readTime": "Read time",
+      "min": "min",
+      "contents": "Contents",
+      "questions": "Questions?",
+      "emailUs": "Email",
+      "documentVersion": "Document version",
+      "current": "current"
     },
     "guidebook": {
       "nav": "Guidebook",
       "title": "Guidebook",
-      "heading": "Guidebook & help articles",
+      "heading": "Guidebook",
       "lead": "Step-by-step answers for connecting, sending and troubleshooting.",
       "askSupport": "Can't find it? Ask support",
       "search": "Search guidebook articles…",
@@ -326,7 +362,10 @@
       "stuck": "Still stuck?",
       "openTicket": "Open a ticket →",
       "needHuman": "Need a human?",
-      "contactSupport": "Contact support"
+      "contactSupport": "Contact support",
+      "crumb": "More / Guidebook",
+      "headingRest": "& help articles",
+      "noneTitle": "No articles match."
     },
     "dpa": {
       "title": "Data processing",
