@@ -20,39 +20,41 @@ export default async function LegalPage({ params }: Props) {
   if (!page) notFound();
   const t = await getTranslations('marketing-site-cms.site');
   return (
-    <article className="mx-auto max-w-3xl space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">{page.title}</h1>
-        {page.subtitle && <p className="text-muted-foreground">{page.subtitle}</p>}
-        <p className="text-xs text-muted-foreground">
-          {page.updatedLabel && `${t('updated')}: ${page.updatedLabel}`}
-          {page.updatedLabel && page.effectiveLabel && ' · '}
-          {page.effectiveLabel && `${t('effective')}: ${page.effectiveLabel}`}
-        </p>
-      </header>
-      <nav aria-label={t('onThisPage')} className="rounded-md border border-border p-4">
-        <p className="mb-2 text-sm font-semibold">{t('onThisPage')}</p>
-        <ol className="space-y-1 text-sm">
-          {page.sections.map((s) => (
-            <li key={s.n}>
-              <a href={`#sec-${s.n}`} className="underline">
-                {s.n}. {s.title}
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
-      {page.sections.map((s) => (
-        <section key={s.n} id={`sec-${s.n}`} className="scroll-mt-6 space-y-2">
-          <h2 className="text-xl font-semibold">
-            {s.n}. {s.title}
-          </h2>
-          <div
-            className="space-y-3 leading-relaxed [&_a]:underline [&_ol]:list-decimal [&_ol]:ps-6 [&_ul]:list-disc [&_ul]:ps-6"
-            dangerouslySetInnerHTML={{ __html: s.body }}
-          />
-        </section>
-      ))}
-    </article>
+    <div className="cms-wrap cms-page">
+      <article className="mx-auto max-w-3xl space-y-6">
+        <header className="space-y-2">
+          <h1 className="text-3xl font-semibold tracking-tight">{page.title}</h1>
+          {page.subtitle && <p className="text-muted-foreground">{page.subtitle}</p>}
+          <p className="text-xs text-muted-foreground">
+            {page.updatedLabel && `${t('updated')}: ${page.updatedLabel}`}
+            {page.updatedLabel && page.effectiveLabel && ' · '}
+            {page.effectiveLabel && `${t('effective')}: ${page.effectiveLabel}`}
+          </p>
+        </header>
+        <nav aria-label={t('onThisPage')} className="rounded-md border border-border p-4">
+          <p className="mb-2 text-sm font-semibold">{t('onThisPage')}</p>
+          <ol className="space-y-1 text-sm">
+            {page.sections.map((s) => (
+              <li key={s.n}>
+                <a href={`#sec-${s.n}`} className="underline">
+                  {s.n}. {s.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        {page.sections.map((s) => (
+          <section key={s.n} id={`sec-${s.n}`} className="scroll-mt-6 space-y-2">
+            <h2 className="text-xl font-semibold">
+              {s.n}. {s.title}
+            </h2>
+            <div
+              className="space-y-3 leading-relaxed [&_a]:underline [&_ol]:list-decimal [&_ol]:ps-6 [&_ul]:list-disc [&_ul]:ps-6"
+              dangerouslySetInnerHTML={{ __html: s.body }}
+            />
+          </section>
+        ))}
+      </article>
+    </div>
   );
 }

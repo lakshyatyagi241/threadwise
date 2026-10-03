@@ -25,3 +25,24 @@ export async function cmsPublic<T>(
     return null;
   }
 }
+
+/** Reads any public API path (not only `/public/cms`) on the server; null for any failure. */
+export async function publicApi<T>(
+  path: string,
+  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+  query?: Record<string, string>,
+): Promise<T | null> {
+  const qs = new URLSearchParams(query).toString();
+  try {
+    const res = await fetch(`${apiBase()}/v2${path}${qs ? `?${qs}` : ''}`, {
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return null;
+    const parsed = schema.safeParse(await res.json());
+    return parsed.success ? parsed.data : null;
+  } catch {
+    return null;
+  }
+}

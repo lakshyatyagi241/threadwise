@@ -118,7 +118,11 @@ export class CmsContentService {
           matched = true;
         }
       }
-      if (!matched) values[r.ckey] = r.published;
+      // Rich text was sanitised on write and is sanitised again on the way out (never trusted at render).
+      if (!matched) {
+        values[r.ckey] =
+          CMS_KEYS.get(r.ckey)?.type === 'richtext' ? this.html.sanitize(r.published) : r.published;
+      }
     }
     return {
       values,

@@ -72,7 +72,7 @@ describe('registry integrity', () => {
     const tokens = new Map(THEME_TOKENS.map((t) => [t.key, t]));
     for (const preset of THEME_PRESETS) {
       for (const [key, value] of Object.entries(preset.tokens)) {
-        expect(['brand', 'accent'], `${preset.id}:${key}`).toContain(tokens.get(key)?.group);
+        expect(['wa', 'accent'], `${preset.id}:${key}`).toContain(tokens.get(key)?.group);
         expect(value).toMatch(/^#[0-9a-f]{6}$/i);
       }
     }
@@ -101,8 +101,8 @@ describe('resolveSections (TW-CMS-009)', () => {
   });
 
   it('hidden sections disappear but the pinned hero is always rendered', () => {
-    const out = resolveSections('home', ['highlights', 'hero'], []);
-    expect(out).not.toContain('highlights');
+    const out = resolveSections('home', ['logo-strip', 'hero'], []);
+    expect(out).not.toContain('logo-strip');
     expect(out[0]).toBe('hero');
   });
 
@@ -125,9 +125,9 @@ describe('resolveSections (TW-CMS-009)', () => {
 });
 
 describe('scopes', () => {
-  it('a page scope is its own prefix, site is nav and footer, all has none', () => {
+  it('a page scope is its own prefix, site is nav, ticker and footer, all has none', () => {
     expect(scopePrefixes('home')).toEqual(['home.']);
-    expect(scopePrefixes('site')).toEqual(['nav.', 'footer.']);
+    expect(scopePrefixes('site')).toEqual(['nav.', 'ticker.', 'footer.']);
     expect(scopePrefixes('theme')).toEqual(['theme.']);
     expect(scopePrefixes('all')).toBeNull();
   });

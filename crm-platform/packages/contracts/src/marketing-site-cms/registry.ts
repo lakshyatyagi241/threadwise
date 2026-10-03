@@ -48,42 +48,55 @@ const f = (key: string, type: CmsFieldType, label: string, def: string): CmsFiel
   default: def,
 });
 
-/** `n` repeated groups: item1_title, item1_body, ... */
-function items(
+const TITLE_BODY = [
+  ['title', 'text', 'title'],
+  ['body', 'longtext', 'text'],
+] as const;
+
+/** `n` repeated groups named `<name>1_<part>`: `item1_title`, `rail2_desc`, `card3_spec1_label`. */
+function repeat(
+  name: string,
   n: number,
   parts: ReadonlyArray<readonly [string, CmsFieldType, string]>,
   defaults: ReadonlyArray<Record<string, string>>,
-  label = 'Item',
+  label: string,
 ): CmsField[] {
   const out: CmsField[] = [];
   for (let i = 1; i <= n; i++) {
     for (const [part, type, partLabel] of parts) {
       out.push(
-        f(`item${i}_${part}`, type, `${label} ${i}: ${partLabel}`, defaults[i - 1]?.[part] ?? ''),
+        f(
+          `${name}${i}_${part}`,
+          type,
+          `${label} ${i}: ${partLabel}`,
+          defaults[i - 1]?.[part] ?? '',
+        ),
       );
     }
   }
   return out;
 }
 
-const TITLE_BODY = [
-  ['title', 'text', 'title'],
-  ['body', 'longtext', 'text'],
-] as const;
+const eyebrow = (def: string) => f('eyebrow', 'text', 'Eyebrow', def);
+const headline = (def: string) => f('headline', 'richtext', 'Headline', def);
+const subtitle = (def: string) => f('subtitle', 'longtext', 'Subtitle', def);
+const body = (def: string) => f('body', 'longtext', 'Text', def);
+const cta = (label: string, url: string, name = 'cta') => [
+  f(`${name}_label`, 'text', 'Button label', label),
+  f(`${name}_url`, 'link', 'Button link', url),
+];
+/** The small chips under a section title (Reference: meta1..4). */
+const metas = (defaults: readonly string[]) =>
+  defaults.map((d, i) => f(`meta${i + 1}`, 'text', `Detail ${i + 1}`, d));
 
 function faqFields(
   defaults: ReadonlyArray<readonly [string, string]>,
-  headline: string,
+  headlineText: string,
 ): CmsField[] {
   return [
     f('kicker', 'text', 'Kicker', 'Questions'),
-    f('headline', 'richtext', 'Headline', headline),
-    f(
-      'subtitle',
-      'longtext',
-      'Subtitle',
-      'Cannot find what you need? Write to us and a person will reply.',
-    ),
+    headline(headlineText),
+    subtitle('Cannot find what you need? Write to us and a person will reply.'),
     ...defaults.flatMap(([q, a], i) => [
       f(`faq${i + 1}_q`, 'text', `Question ${i + 1}`, q),
       f(`faq${i + 1}_a`, 'longtext', `Answer ${i + 1}`, a),
@@ -91,17 +104,107 @@ function faqFields(
   ];
 }
 
-const ctaFinal = (headline: string, subtitle: string): CmsSection => ({
-  slug: 'cta-final',
-  label: 'Closing call to action',
-  removable: true,
-  fields: [
-    f('headline', 'richtext', 'Headline', headline),
-    f('subtitle', 'longtext', 'Subtitle', subtitle),
-    f('cta_label', 'text', 'Button label', 'Get started'),
-    f('cta_url', 'link', 'Button link', '/register'),
-  ],
+const section = (
+  slug: string,
+  label: string,
+  fields: CmsField[],
+  removable = true,
+): CmsSection => ({
+  slug,
+  label,
+  removable,
+  fields,
 });
+
+const ctaFinal = (head: string, sub: string, kicker = 'Ready when you are'): CmsSection =>
+  section('cta-final', 'Final CTA', [
+    f('kicker', 'text', 'Kicker', kicker),
+    headline(head),
+    subtitle(sub),
+    ...cta('Get started', '/register', 'cta'),
+    ...cta('Talk to us', '/contact', 'cta2'),
+  ]);
+
+const logoStrip = (): CmsSection =>
+  section('logo-strip', 'Logo strip', [
+    f('label', 'text', 'Label', 'Built for teams in'),
+    ...[
+      'Retail',
+      'Education',
+      'Healthcare',
+      'Finance',
+      'Travel',
+      'Logistics',
+      'Media',
+      'Services',
+      'Software',
+      'Community',
+    ].map((n, i) => f(`logo${i + 1}_label`, 'text', `Name ${i + 1}`, n)),
+  ]);
+
+const pullQuote = (): CmsSection =>
+  section('pull-quote', 'Pull quote', [
+    f(
+      'quote',
+      'longtext',
+      'Quote',
+      'Replace this with a sentence that sums up what you stand for.',
+    ),
+    f('author_initials', 'text', 'Author initials', 'AB'),
+    f('author', 'text', 'Author', 'Name Surname'),
+    f('author_role', 'text', 'Author role', 'Role, Company'),
+    f('stat', 'text', 'Highlight figure', '1'),
+    f('stat_label', 'text', 'Highlight label', 'workspace for every conversation'),
+  ]);
+
+/** A product spotlight: title block, chips, a paragraph and a list of short tiles. */
+const spotlight = (
+  slug: string,
+  label: string,
+  eyebrowText: string,
+  head: string,
+  tiles: { name: string; count: number; titleKey: string; defaults: Array<Record<string, string>> },
+  extra: CmsField[] = [],
+): CmsSection =>
+  section(slug, label, [
+    eyebrow(eyebrowText),
+    f('label', 'text', 'Section label', label.replace('Feature · ', '')),
+    headline(head),
+    ...metas([
+      'Included in every plan',
+      'Set up in minutes',
+      'Works with your team',
+      'Always in sync',
+    ]),
+    body('Describe what this part of the product does and who it is for.'),
+    ...extra,
+    ...repeat(
+      tiles.name,
+      tiles.count,
+      [
+        [tiles.titleKey, 'text', 'title'],
+        ['desc', 'longtext', 'text'],
+      ],
+      tiles.defaults,
+      'Tile',
+    ),
+    ...cta('Learn more', '/features', 'cta'),
+  ]);
+
+const six = (rows: ReadonlyArray<readonly [string, string]>, key: string) =>
+  rows.map(([t, d]) => ({ [key]: t, desc: d }));
+
+const pricingHero = (): CmsSection =>
+  section(
+    'hero',
+    'Hero',
+    [
+      eyebrow('Pricing'),
+      headline('Choose the plan that fits'),
+      f('intro', 'longtext', 'Intro', 'Clear prices. Change or cancel whenever you like.'),
+    ],
+    false,
+  );
 
 export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
   home: {
@@ -109,90 +212,304 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
     label: 'Home',
     path: '/',
     sections: [
-      {
-        slug: 'hero',
-        label: 'Hero',
-        removable: false,
-        fields: [
-          f('eyebrow', 'text', 'Eyebrow', 'Customer conversations, organised'),
-          f('headline', 'richtext', 'Headline', 'Every customer conversation in one place'),
-          f(
-            'subtitle',
-            'longtext',
-            'Subtitle',
+      section(
+        'hero',
+        'Hero',
+        [
+          eyebrow('Customer conversations, organised'),
+          headline('Every customer conversation in one place'),
+          subtitle(
             'Reach people on the channels they already use, answer from one shared inbox and keep every contact organised.',
           ),
-          f('cta1_label', 'text', 'Primary button label', 'Start free'),
-          f('cta1_url', 'link', 'Primary button link', '/register'),
-          f('cta2_label', 'text', 'Secondary button label', 'See pricing'),
-          f('cta2_url', 'link', 'Secondary button link', '/pricing'),
+          ...cta('Start free', '/register', 'cta1'),
+          ...cta('See pricing', '/pricing', 'cta2'),
+          f('stat1_label', 'text', 'Point 1', 'One shared inbox'),
+          f('stat2_label', 'text', 'Point 2', 'Every channel'),
+          f('stat3_label', 'text', 'Point 3', 'One workspace'),
         ],
-      },
-      {
-        slug: 'highlights',
-        label: 'Highlights',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'Built for teams that talk to customers all day'),
-          f(
-            'subtitle',
-            'longtext',
-            'Subtitle',
-            'The essentials, without a stack of separate tools.',
-          ),
-          ...items(
-            3,
-            TITLE_BODY,
+        false,
+      ),
+      logoStrip(),
+      section('manifesto', 'Manifesto', [
+        eyebrow('Manifesto'),
+        headline('Fewer tools. <em>Better</em> conversations.'),
+        f('quote', 'longtext', 'Quote', 'We wanted one calm place to talk to customers, not five.'),
+        f('author_initials', 'text', 'Author initials', 'AB'),
+        f('author', 'text', 'Author', 'Name Surname'),
+        f('author_role', 'text', 'Author role', 'Founder'),
+        f('est_label', 'text', 'Established label', 'est.'),
+        ...repeat(
+          'stat',
+          3,
+          [
+            ['value', 'text', 'value'],
+            ['label', 'text', 'label'],
+          ],
+          [
+            { value: 'One', label: 'workspace' },
+            { value: 'Every', label: 'channel in one inbox' },
+            { value: 'All', label: 'features on every plan' },
+          ],
+          'Figure',
+        ),
+      ]),
+      spotlight(
+        'feature-broadcasts',
+        'Feature · Broadcasts',
+        'Broadcasts',
+        'Send the right message to the right people',
+        {
+          name: 'rail',
+          count: 6,
+          titleKey: 'title',
+          defaults: six(
             [
-              {
-                title: 'Shared inbox',
-                body: 'Assign, reply and hand over conversations without losing context.',
-              },
-              {
-                title: 'Broadcasts',
-                body: 'Send approved messages to the right audience at the right time.',
-              },
-              {
-                title: 'Automation',
-                body: 'Answer common questions automatically and route the rest to a person.',
-              },
+              ['Audiences', 'Pick who receives a message from your contacts.'],
+              ['Templates', 'Use approved messages your team can trust.'],
+              ['Scheduling', 'Send now or at the best time.'],
+              ['Personalisation', 'Fill in names and details automatically.'],
+              ['Delivery tracking', 'See what was sent, delivered and read.'],
+              ['Replies', 'Answers land in the shared inbox.'],
             ],
-            'Highlight',
+            'title',
           ),
-        ],
-      },
-      {
-        slug: 'use-cases',
-        label: 'Use cases',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'Made for the way you work'),
-          ...items(
-            3,
-            TITLE_BODY,
+        },
+        [f('rail_title', 'text', 'List title', 'How a broadcast works')],
+      ),
+      spotlight(
+        'feature-flows',
+        'Feature · Flows',
+        'Flows',
+        'Automate the routine, hand over the rest',
+        {
+          name: 'tile',
+          count: 4,
+          titleKey: 'label',
+          defaults: six(
             [
-              { title: 'Sales', body: 'Follow up quickly and keep every lead in view.' },
-              { title: 'Support', body: 'Resolve questions faster with shared history.' },
-              { title: 'Operations', body: 'Send reminders and updates without manual effort.' },
+              ['Trigger', 'Start when a message, keyword or event arrives.'],
+              ['Decide', 'Branch on what the customer said or who they are.'],
+              ['Reply', 'Answer common questions straight away.'],
+              ['Hand over', 'Pass the conversation to a person with context.'],
             ],
-            'Use case',
+            'label',
           ),
+        },
+      ),
+      spotlight(
+        'feature-inbox',
+        'Feature · Inbox',
+        'Shared inbox',
+        'One inbox for the whole team',
+        {
+          name: 'tile',
+          count: 6,
+          titleKey: 'title',
+          defaults: six(
+            [
+              ['Assignment', 'Give every conversation an owner.'],
+              ['Notes', 'Leave private notes for teammates.'],
+              ['Saved replies', 'Answer common questions in one click.'],
+              ['Labels', 'Group conversations your way.'],
+              ['Search', 'Find any message in seconds.'],
+              ['Status', 'See what is open, waiting or done.'],
+            ],
+            'title',
+          ),
+        },
+      ),
+      spotlight(
+        'feature-templates',
+        'Feature · Templates',
+        'Templates',
+        'Message templates that get approved',
+        {
+          name: 'step',
+          count: 4,
+          titleKey: 'title',
+          defaults: six(
+            [
+              ['Write', 'Draft the message with variables.'],
+              ['Check', 'Catch common problems before you submit.'],
+              ['Submit', 'Send it for approval.'],
+              ['Use', 'Send it as soon as it is approved.'],
+            ],
+            'title',
+          ),
+        },
+        [
+          f('how_title', 'text', 'How-to title', 'How it works'),
+          f('how_body', 'longtext', 'How-to text', 'Write once, check it, submit it and reuse it.'),
+          f('preflight_title', 'text', 'Checklist title', 'Before you submit'),
+          f('preflight_badge', 'text', 'Checklist badge', 'Checklist'),
+          ...[
+            'Use a clear, specific purpose',
+            'Keep variables in order',
+            'Avoid shouting and extra symbols',
+            'Add an opt-out where needed',
+            'Match the language you select',
+          ].map((r, i) => f(`rule${i + 1}`, 'text', `Rule ${i + 1}`, r)),
         ],
-      },
-      {
-        slug: 'pricing-strip',
-        label: 'Pricing',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'Simple plans that grow with you'),
-          f('subtitle', 'longtext', 'Subtitle', 'Start free and upgrade when you need more.'),
-        ],
-      },
-      {
-        slug: 'faq',
-        label: 'FAQ',
-        removable: true,
-        fields: faqFields(
+      ),
+      section('feature-connectivity', 'Feature · Channels', [
+        eyebrow('Channels'),
+        f('label', 'text', 'Section label', 'Channels'),
+        headline('Meet customers where they already are'),
+        ...metas(['Connect in minutes', 'One inbox', 'Your own numbers', 'Secure by default']),
+        body('Connect the channels you use and answer them all from one place.'),
+        ...[1, 2, 3].flatMap((c) => [
+          f(`card${c}_badge`, 'text', `Card ${c}: badge`, c === 1 ? 'Popular' : ''),
+          f(`card${c}_channel`, 'text', `Card ${c}: channel`, `Channel ${c}`),
+          f(`card${c}_name`, 'text', `Card ${c}: name`, `Channel name ${c}`),
+          f(`card${c}_headline`, 'text', `Card ${c}: headline`, 'What it is good for'),
+          f(`card${c}_desc`, 'longtext', `Card ${c}: text`, 'Describe how this channel works.'),
+          ...[1, 2, 3, 4].flatMap((s) => [
+            f(`card${c}_spec${s}_label`, 'text', `Card ${c} detail ${s}: label`, ''),
+            f(`card${c}_spec${s}_value`, 'text', `Card ${c} detail ${s}: value`, ''),
+          ]),
+        ]),
+      ]),
+      section('use-cases', 'Use cases', [
+        eyebrow('Use cases'),
+        f('label', 'text', 'Section label', 'Use cases'),
+        headline('Made for the way you work'),
+        ...metas(['Sales', 'Support', 'Operations']),
+        ...[1, 2, 3, 4].flatMap((c) => {
+          const d = [
+            [
+              'Sales',
+              'Follow up quickly',
+              'Reply to new leads fast',
+              'Keep every lead in view',
+              'Hand over warm leads',
+              'Track who said what',
+            ],
+            [
+              'Support',
+              'Resolve faster',
+              'Share history across the team',
+              'Answer common questions automatically',
+              'Route by topic',
+              'Keep notes private',
+            ],
+            [
+              'Operations',
+              'Stay in touch',
+              'Send reminders',
+              'Confirm appointments',
+              'Share updates',
+              'Collect replies',
+            ],
+            [
+              'Community',
+              'Keep people informed',
+              'Announce news',
+              'Answer questions',
+              'Segment by interest',
+              'Respect opt-outs',
+            ],
+          ][c - 1]!;
+          return [
+            f(`case${c}_cat`, 'text', `Case ${c}: category`, d[0]!),
+            f(`case${c}_title`, 'text', `Case ${c}: title`, d[1]!),
+            ...[2, 3, 4, 5].map((b) =>
+              f(`case${c}_bullet${b - 1}`, 'text', `Case ${c}: point ${b - 1}`, d[b]!),
+            ),
+          ];
+        }),
+      ]),
+      section('testimonials', 'Testimonials', [
+        f('eyebrow_text', 'text', 'Eyebrow', 'Customers'),
+        f('label', 'text', 'Section label', 'Customer stories'),
+        headline('What customers say'),
+        ...metas([
+          'Add real quotes here',
+          'Edit in the site editor',
+          'Hide this section if unused',
+        ]),
+        ...repeat(
+          'quote',
+          2,
+          [
+            ['text', 'longtext', 'quote'],
+            ['initials', 'text', 'initials'],
+            ['author', 'text', 'author'],
+            ['role', 'text', 'role'],
+          ],
+          [
+            {
+              text: 'Replace this with a real customer quote.',
+              initials: 'AB',
+              author: 'Name Surname',
+              role: 'Role, Company',
+            },
+            {
+              text: 'Replace this with a second customer quote.',
+              initials: 'CD',
+              author: 'Name Surname',
+              role: 'Role, Company',
+            },
+          ],
+          'Quote',
+        ),
+        f('feat_initials', 'text', 'Featured: initials', 'EF'),
+        f('feat_author', 'text', 'Featured: author', 'Name Surname'),
+        f('feat_role', 'text', 'Featured: role', 'Role, Company'),
+        f('feat_stat', 'text', 'Featured: figure', ''),
+        f('feat_stat_label', 'text', 'Featured: figure label', ''),
+      ]),
+      section('pricing-strip', 'Pricing cards', [
+        eyebrow('Pricing'),
+        headline('Simple plans that grow with you'),
+        subtitle('Start free and upgrade when you need more.'),
+        f('monthly_label', 'text', 'Monthly switch label', 'Monthly'),
+        f('yearly_label', 'text', 'Yearly switch label', 'Yearly'),
+        f('save_label', 'text', 'Savings badge text', 'Save {pct}%'),
+        f('footnote', 'longtext', 'Footnote', 'Prices exclude taxes where applicable.'),
+        ...repeat(
+          'tier',
+          3,
+          [
+            ['name', 'text', 'name'],
+            ['badge', 'text', 'badge'],
+            ['tagline', 'text', 'tagline'],
+            ['price', 'text', 'price'],
+            ['period', 'text', 'period'],
+            ['cta_label', 'text', 'button label'],
+          ],
+          [
+            {
+              name: 'Starter',
+              badge: '',
+              tagline: 'For trying things out',
+              price: 'Free',
+              period: '',
+              cta_label: 'Start free',
+            },
+            {
+              name: 'Growth',
+              badge: 'Popular',
+              tagline: 'For growing teams',
+              price: 'Contact us',
+              period: '',
+              cta_label: 'Talk to us',
+            },
+            {
+              name: 'Scale',
+              badge: '',
+              tagline: 'For larger teams',
+              price: 'Contact us',
+              period: '',
+              cta_label: 'Talk to us',
+            },
+          ],
+          'Fallback plan',
+        ),
+      ]),
+      section(
+        'faq',
+        'FAQ',
+        faqFields(
           [
             [
               'How do I get started?',
@@ -213,17 +530,12 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
           ],
           'Questions, answered',
         ),
-      },
-      {
-        slug: 'faq-slider',
-        label: 'FAQ marquee',
-        removable: true,
-        fields: [
-          f('kicker', 'text', 'Kicker', 'Quick answers'),
-          f('headline', 'richtext', 'Headline', 'Questions, answered'),
-          f('subtitle', 'longtext', 'Subtitle', 'The questions we hear most often.'),
-        ],
-      },
+      ),
+      section('faq-slider', 'FAQ marquee', [
+        f('kicker', 'text', 'Kicker', 'Quick answers'),
+        headline('Questions, answered'),
+        subtitle('The questions we hear most often.'),
+      ]),
       ctaFinal('Ready to bring your conversations together?', 'Create a workspace in minutes.'),
     ],
   },
@@ -232,68 +544,78 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
     label: 'Features',
     path: '/features',
     sections: [
-      {
-        slug: 'hero',
-        label: 'Hero',
-        removable: false,
-        fields: [
-          f('eyebrow', 'text', 'Eyebrow', 'Features'),
-          f('headline', 'richtext', 'Headline', 'Everything your team needs to talk to customers'),
-          f(
-            'subtitle',
-            'longtext',
-            'Subtitle',
-            'One workspace for conversations, contacts and campaigns.',
-          ),
+      section(
+        'hero',
+        'Hero',
+        [
+          eyebrow('Features'),
+          headline('Everything your team needs to talk to customers'),
+          subtitle('One workspace for conversations, contacts and campaigns.'),
+          ...[
+            'Inbox',
+            'Contacts',
+            'Broadcasts',
+            'Automation',
+            'Templates',
+            'Reports',
+            'Teams',
+            'Settings',
+          ].map((c, i) => f(`chip${i + 1}`, 'text', `Chip ${i + 1}`, c)),
         ],
-      },
-      {
-        slug: 'feature-grid',
-        label: 'Feature grid',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'What is inside'),
-          ...items(
-            6,
-            TITLE_BODY,
+        false,
+      ),
+      logoStrip(),
+      section('feature-bento', 'Feature bento', [
+        eyebrow('What is inside'),
+        headline('What is inside'),
+        ...repeat(
+          'item',
+          12,
+          [...TITLE_BODY],
+          six(
             [
-              {
-                title: 'Shared inbox',
-                body: 'Every conversation in one view, with owners and statuses.',
-              },
-              { title: 'Contacts', body: 'Profiles, tags and custom fields that stay in sync.' },
-              { title: 'Broadcasts', body: 'Reach segments with approved messages.' },
-              { title: 'Automation', body: 'Replies and routing that run without manual work.' },
-              { title: 'Templates', body: 'Reusable messages your team can trust.' },
-              { title: 'Reports', body: 'See response times and volumes at a glance.' },
+              ['Shared inbox', 'Every conversation in one view, with owners and statuses.'],
+              ['Contacts', 'Profiles, tags and custom fields that stay in sync.'],
+              ['Broadcasts', 'Reach segments with approved messages.'],
+              ['Automation', 'Replies and routing that run without manual work.'],
+              ['Templates', 'Reusable messages your team can trust.'],
+              ['Reports', 'See response times and volumes at a glance.'],
+              ['Teams', 'Roles and permissions for everyone who joins.'],
+              ['Notes', 'Private context beside every conversation.'],
+              ['Search', 'Find a person or a message at once.'],
+              ['Segments', 'Save the groups you message most.'],
+              ['Integrations', 'Connect the tools you already use.'],
+              ['Security', 'Sign-in protection and an audit trail.'],
             ],
-            'Feature',
-          ),
-        ],
-      },
-      {
-        slug: 'pillars',
-        label: 'Three pillars',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'Three ideas behind the product'),
-          ...items(
-            3,
-            TITLE_BODY,
-            [
-              { title: 'Clarity', body: 'Know who said what, and what happens next.' },
-              { title: 'Speed', body: 'Answer in seconds, not hours.' },
-              { title: 'Control', body: 'Decide who can see and change what.' },
-            ],
-            'Pillar',
-          ),
-        ],
-      },
-      {
-        slug: 'faq',
-        label: 'FAQ',
-        removable: true,
-        fields: faqFields(
+            'title',
+          ).map((r) => ({ title: r.title!, body: r.desc! })),
+          'Feature',
+        ),
+      ]),
+      section('pillars-three', 'Three pillars', [
+        eyebrow('Principles'),
+        headline('Three ideas behind the product'),
+        ...repeat(
+          'pillar',
+          3,
+          [
+            ['label', 'text', 'label'],
+            ['title', 'text', 'title'],
+            ['body', 'longtext', 'text'],
+          ],
+          [
+            { label: 'One', title: 'Clarity', body: 'Know who said what, and what happens next.' },
+            { label: 'Two', title: 'Speed', body: 'Answer in seconds, not hours.' },
+            { label: 'Three', title: 'Control', body: 'Decide who can see and change what.' },
+          ],
+          'Pillar',
+        ),
+      ]),
+      pullQuote(),
+      section(
+        'faq',
+        'FAQ',
+        faqFields(
           [
             [
               'Which channels are supported?',
@@ -308,7 +630,7 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
           ],
           'About the features',
         ),
-      },
+      ),
       ctaFinal('See it with your own data', 'Start free and invite your team.'),
     ],
   },
@@ -317,35 +639,57 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
     label: 'Pricing',
     path: '/pricing',
     sections: [
-      {
-        slug: 'hero',
-        label: 'Hero',
-        removable: false,
-        fields: [
-          f('eyebrow', 'text', 'Eyebrow', 'Pricing'),
-          f('headline', 'richtext', 'Headline', 'Choose the plan that fits'),
-          f(
-            'subtitle',
-            'longtext',
-            'Subtitle',
-            'Clear prices. Change or cancel whenever you like.',
-          ),
-        ],
-      },
-      {
-        slug: 'pricing-strip',
-        label: 'Plans',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'Compare plans'),
-          f('footnote', 'longtext', 'Footnote', 'Prices exclude taxes where applicable.'),
-        ],
-      },
-      {
-        slug: 'faq',
-        label: 'FAQ',
-        removable: true,
-        fields: faqFields(
+      pricingHero(),
+      section('pricing-strip', 'Pricing cards', [
+        headline('Compare plans'),
+        f('monthly_label', 'text', 'Monthly switch label', 'Monthly'),
+        f('yearly_label', 'text', 'Yearly switch label', 'Yearly'),
+        f('save_label', 'text', 'Savings badge text', 'Save {pct}%'),
+        f('footnote', 'longtext', 'Footnote', 'Prices exclude taxes where applicable.'),
+        ...repeat(
+          'tier',
+          3,
+          [
+            ['name', 'text', 'name'],
+            ['badge', 'text', 'badge'],
+            ['tagline', 'text', 'tagline'],
+            ['price', 'text', 'price'],
+            ['period', 'text', 'period'],
+            ['cta_label', 'text', 'button label'],
+          ],
+          [
+            {
+              name: 'Starter',
+              badge: '',
+              tagline: 'For trying things out',
+              price: 'Free',
+              period: '',
+              cta_label: 'Start free',
+            },
+            {
+              name: 'Growth',
+              badge: 'Popular',
+              tagline: 'For growing teams',
+              price: 'Contact us',
+              period: '',
+              cta_label: 'Talk to us',
+            },
+            {
+              name: 'Scale',
+              badge: '',
+              tagline: 'For larger teams',
+              price: 'Contact us',
+              period: '',
+              cta_label: 'Talk to us',
+            },
+          ],
+          'Fallback plan',
+        ),
+      ]),
+      section(
+        'faq',
+        'FAQ',
+        faqFields(
           [
             [
               'Can I change plans later?',
@@ -360,7 +704,7 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
           ],
           'Pricing questions',
         ),
-      },
+      ),
       ctaFinal('Start with the plan that fits today', 'Switch whenever your needs change.'),
     ],
   },
@@ -369,53 +713,148 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
     label: 'About',
     path: '/about',
     sections: [
-      {
-        slug: 'hero',
-        label: 'Hero',
-        removable: false,
-        fields: [
-          f('eyebrow', 'text', 'Eyebrow', 'About us'),
-          f('headline', 'richtext', 'Headline', 'We help teams talk to their customers'),
+      section(
+        'hero',
+        'Hero',
+        [
+          eyebrow('About us'),
+          headline('We help teams talk to their customers'),
           f(
-            'subtitle',
+            'intro',
             'longtext',
-            'Subtitle',
+            'Intro',
             'A small, focused team building calm software for busy people.',
           ),
-        ],
-      },
-      {
-        slug: 'origin-story',
-        label: 'Our story',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'Why we built this'),
-          f(
-            'body',
-            'longtext',
-            'Story',
-            'Replace this paragraph with the story of your company and the problem you set out to solve.',
-          ),
-        ],
-      },
-      {
-        slug: 'values',
-        label: 'Values',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'What we care about'),
-          ...items(
+          ...repeat(
+            'stat',
             3,
-            TITLE_BODY,
             [
-              { title: 'Be useful', body: 'Build what people need, not what looks impressive.' },
-              { title: 'Be honest', body: 'Say what the product does and what it does not.' },
-              { title: 'Be reliable', body: 'Make the basics work every single day.' },
+              ['value', 'text', 'value'],
+              ['label', 'text', 'label'],
             ],
-            'Value',
+            [
+              { value: 'One', label: 'product' },
+              { value: 'Every', label: 'conversation in one place' },
+              { value: 'All', label: 'features on every plan' },
+            ],
+            'Figure',
           ),
         ],
-      },
+        false,
+      ),
+      section('origin-story', 'Origin story', [
+        eyebrow('Our story'),
+        f('sublabel', 'text', 'Sub label', 'Why we built this'),
+        f('location', 'text', 'Location', 'Where we are based'),
+        f('since', 'text', 'Since', 'Since the start'),
+        f(
+          'para1',
+          'longtext',
+          'Paragraph 1',
+          'Replace this paragraph with the story of your company and the problem you set out to solve.',
+        ),
+        f('para2', 'longtext', 'Paragraph 2', 'Add a second paragraph about how the product grew.'),
+        f('glance_label', 'text', 'At-a-glance title', 'At a glance'),
+        ...repeat(
+          'glance_r',
+          6,
+          [
+            ['label', 'text', 'label'],
+            ['value', 'text', 'value'],
+          ],
+          [
+            { label: 'Focus', value: 'Customer conversations' },
+            { label: 'Product', value: 'Inbox, contacts, broadcasts' },
+            { label: 'Plans', value: 'Free to start' },
+            { label: 'Support', value: 'Within one working day' },
+            { label: 'Focus', value: 'Customer conversations' },
+            { label: 'Contact', value: 'See the contact page' },
+          ],
+          'Row',
+        ),
+      ]),
+      section('values', 'Values', [
+        eyebrow('Values'),
+        f('sublabel', 'text', 'Sub label', 'What we care about'),
+        f('caption', 'text', 'Caption', 'The ideas we build around'),
+        headline('What we care about'),
+        ...repeat(
+          'item',
+          3,
+          [...TITLE_BODY],
+          [
+            { title: 'Be useful', body: 'Build what people need, not what looks impressive.' },
+            { title: 'Be honest', body: 'Say what the product does and what it does not.' },
+            { title: 'Be reliable', body: 'Make the basics work every single day.' },
+          ],
+          'Value',
+        ),
+      ]),
+      section('timeline', 'Timeline', [
+        eyebrow('Timeline'),
+        f('sublabel', 'text', 'Sub label', 'How we got here'),
+        ...repeat(
+          'step',
+          4,
+          [
+            ['year', 'text', 'year'],
+            ['title', 'text', 'title'],
+            ['body', 'longtext', 'text'],
+          ],
+          [
+            { year: 'Step 1', title: 'The idea', body: 'Describe how it started.' },
+            { year: 'Step 2', title: 'First customers', body: 'Describe the first users.' },
+            { year: 'Step 3', title: 'Growth', body: 'Describe what changed.' },
+            { year: 'Step 4', title: 'Today', body: 'Describe where you are now.' },
+          ],
+          'Milestone',
+        ),
+      ]),
+      section('numbers', 'Numbers', [
+        eyebrow('Numbers'),
+        f('sublabel', 'text', 'Sub label', 'Add your own figures'),
+        ...repeat(
+          'stat',
+          4,
+          [
+            ['value', 'text', 'value'],
+            ['label', 'text', 'label'],
+          ],
+          [
+            { value: 'Shared', label: 'inbox' },
+            { value: 'Simple', label: 'setup' },
+            { value: 'Clear', label: 'pricing' },
+            { value: 'Real', label: 'support' },
+          ],
+          'Figure',
+        ),
+      ]),
+      section('press', 'Press', [
+        eyebrow('Press'),
+        f('sublabel', 'text', 'Sub label', 'In the news'),
+        headline('Words from others'),
+        ...repeat(
+          'item',
+          3,
+          [
+            ['source', 'text', 'source'],
+            ['text', 'longtext', 'text'],
+          ],
+          [
+            { source: 'Publication', text: 'Add a quote from the press.' },
+            { source: 'Publication', text: 'Add a quote from the press.' },
+            { source: 'Publication', text: 'Add a quote from the press.' },
+          ],
+          'Mention',
+        ),
+      ]),
+      section('backers', 'Backers', [
+        eyebrow('Backers'),
+        f('sublabel', 'text', 'Sub label', 'Who supports us'),
+        f('operators_label', 'text', 'List label', 'Supporters'),
+        ...[1, 2, 3, 4].map((i) => f(`backer${i}_name`, 'text', `Name ${i}`, `Supporter ${i}`)),
+      ]),
+      pullQuote(),
       ctaFinal('Want to talk?', 'We would like to hear from you.'),
     ],
   },
@@ -424,65 +863,108 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
     label: 'Contact',
     path: '/contact',
     sections: [
-      {
-        slug: 'hero',
-        label: 'Hero',
-        removable: false,
-        fields: [
-          f('eyebrow', 'text', 'Eyebrow', 'Contact'),
-          f('headline', 'richtext', 'Headline', 'Tell us how we can help'),
-          f(
-            'subtitle',
-            'longtext',
-            'Subtitle',
-            'Send a message and a person on the team will reply.',
+      section(
+        'hero',
+        'Hero',
+        [
+          eyebrow('Contact'),
+          headline('Tell us how we can help'),
+          f('intro', 'longtext', 'Intro', 'Send a message and a person on the team will reply.'),
+          ...repeat(
+            'stat',
+            3,
+            [
+              ['value', 'text', 'value'],
+              ['label', 'text', 'label'],
+            ],
+            [
+              { value: '1', label: 'working day to reply' },
+              { value: 'Real', label: 'people on the team' },
+              { value: 'Any', label: 'question welcome' },
+            ],
+            'Figure',
           ),
         ],
-      },
-      {
-        slug: 'channels',
-        label: 'Contact channels',
-        removable: true,
-        fields: [
-          f('email_title', 'text', 'Email card title', 'Email'),
-          f('email_body', 'longtext', 'Email card text', 'Write to us any time.'),
-          f('whatsapp_title', 'text', 'Chat card title', 'Chat'),
-          f('whatsapp_body', 'longtext', 'Chat card text', 'Message us on WhatsApp.'),
-          f('sales_title', 'text', 'Sales card title', 'Sales'),
-          f('sales_body', 'longtext', 'Sales card text', 'Talk to us about plans and onboarding.'),
-        ],
-      },
-      {
-        slug: 'form',
-        label: 'Contact form',
-        removable: true,
-        fields: [
-          f('headline', 'richtext', 'Headline', 'Send us a message'),
-          f('name_label', 'text', 'Name label', 'Your name'),
-          f('email_label', 'text', 'Email label', 'Work email'),
-          f('company_label', 'text', 'Company label', 'Company (optional)'),
-          f('topic_label', 'text', 'Topic label', 'What is this about?'),
-          f('message_label', 'text', 'Message label', 'Message'),
-          f('submit_label', 'text', 'Button label', 'Send message'),
-          f(
-            'success_text',
-            'longtext',
-            'Success text',
-            'Thanks, your message is on its way. We will reply soon.',
-          ),
-          f(
-            'error_text',
-            'longtext',
-            'Error text',
-            'Something went wrong. Please check the form and try again.',
-          ),
-        ],
-      },
-      {
-        slug: 'faq',
-        label: 'FAQ',
-        removable: true,
-        fields: faqFields(
+        false,
+      ),
+      section('channels', 'Channels', [
+        eyebrow('Ways to reach us'),
+        f('sublabel', 'text', 'Sub label', 'Pick what suits you'),
+        f('caption1', 'text', 'Caption 1', 'We read everything'),
+        f('caption2', 'text', 'Caption 2', 'Pick a channel'),
+        f('bestfor_label', 'text', 'Best-for label', 'Best for'),
+        f('replytime_label', 'text', 'Reply-time label', 'Usually replies'),
+        ...repeat(
+          'ch',
+          3,
+          [
+            ['badge', 'text', 'badge'],
+            ['label', 'text', 'label'],
+            ['title', 'text', 'title'],
+            ['desc', 'longtext', 'text'],
+            ['bestfor', 'text', 'best for'],
+            ['replytime', 'text', 'reply time'],
+          ],
+          [
+            {
+              badge: '',
+              label: 'Email',
+              title: 'Write to us',
+              desc: 'Write to us any time.',
+              bestfor: 'Questions and feedback',
+              replytime: 'Within a working day',
+            },
+            {
+              badge: 'Fast',
+              label: 'Chat',
+              title: 'Message us',
+              desc: 'Message us on WhatsApp.',
+              bestfor: 'Quick questions',
+              replytime: 'Within hours',
+            },
+            {
+              badge: '',
+              label: 'Sales',
+              title: 'Talk to sales',
+              desc: 'Talk to us about plans and onboarding.',
+              bestfor: 'Plans and demos',
+              replytime: 'Within a working day',
+            },
+          ],
+          'Channel',
+        ),
+        f('office_label', 'text', 'Office block label', 'Head office'),
+      ]),
+      section('form', 'Contact form', [
+        eyebrow('Send a message'),
+        f('sublabel', 'text', 'Sub label', 'We reply to every message'),
+        f('caption', 'text', 'Caption', 'Tell us a little about what you need'),
+        headline('Send us a message'),
+        f('name_label', 'text', 'Name label', 'Your name'),
+        f('email_label', 'text', 'Email label', 'Work email'),
+        f('company_label', 'text', 'Company label', 'Company (optional)'),
+        f('topic_label', 'text', 'Topic label', 'What is this about?'),
+        f('message_label', 'text', 'Message label', 'Message'),
+        f('sla', 'text', 'Reply promise', 'We aim to reply within one working day.'),
+        f('submit_label', 'text', 'Button label', 'Send message'),
+        f('success_title', 'text', 'Success title', 'Message sent'),
+        f(
+          'success_text',
+          'longtext',
+          'Success text',
+          'Thanks, your message is on its way. We will reply soon.',
+        ),
+        f(
+          'error_text',
+          'longtext',
+          'Error text',
+          'Something went wrong. Please check the form and try again.',
+        ),
+      ]),
+      section(
+        'faq',
+        'FAQ',
+        faqFields(
           [
             ['How quickly will you reply?', 'We aim to reply within one working day.'],
             [
@@ -496,14 +978,15 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
           ],
           'Before you write',
         ),
-      },
+      ),
+      ctaFinal('Prefer to start right away?', 'Create a workspace and look around.'),
     ],
   },
 };
 
 // --- site chrome (shared by every page) ---------------------------------------------------------------------------
 
-/** The navigation and footer, edited next to the pages but not hideable or orderable. */
+/** The navigation, the ticker's fallback lines and the footer, edited next to the pages but not hideable or orderable. */
 export const CMS_SITE_SECTIONS: CmsSection[] = [
   {
     slug: 'nav',
@@ -525,6 +1008,18 @@ export const CMS_SITE_SECTIONS: CmsSection[] = [
       f('cta_label', 'text', 'Call to action label', 'Start free'),
       f('dashboard_label', 'text', 'Dashboard label', 'Dashboard'),
     ],
+  },
+  {
+    slug: 'ticker',
+    label: 'Ticker',
+    removable: false,
+    fields: [
+      'Welcome. Take a look around.',
+      'Start free and invite your team.',
+      'Questions? Write to us any time.',
+      'Every feature, on every plan.',
+      'Read the latest on the blog.',
+    ].map((m, i) => f(`message${i + 1}`, 'text', `Fallback message ${i + 1}`, m)),
   },
   {
     slug: 'footer',
@@ -573,11 +1068,18 @@ export const CMS_SITE_SECTIONS: CmsSection[] = [
 
 // --- theme --------------------------------------------------------------------------------------------------------
 
-export const THEME_GROUPS = ['brand', 'ink', 'paper', 'accent'] as const;
+/** Reference's panel groups: WhatsApp (here "Brand"), ink, paper and accent. */
+export const THEME_GROUPS = ['wa', 'ink', 'paper', 'accent'] as const;
 export type ThemeGroup = (typeof THEME_GROUPS)[number];
+export const THEME_GROUP_LABELS: Record<ThemeGroup, string> = {
+  wa: 'Brand',
+  ink: 'Ink (text)',
+  paper: 'Paper (bg)',
+  accent: 'Accent',
+};
 
 export interface ThemeToken {
-  /** The last two segments of the content key: `theme.brand.deep`. */
+  /** The last two segments of the content key: `theme.wa.deep`. */
   key: string;
   group: ThemeGroup;
   label: string;
@@ -591,104 +1093,125 @@ const t = (key: string, label: string, def: string): ThemeToken => ({
   default: def,
 });
 
+/** The 24 colour tokens of Reference's palette, with its shipped values. */
 export const THEME_TOKENS: readonly ThemeToken[] = [
-  t('brand.deep', 'Brand, deep', '#0f4c45'),
-  t('brand.main', 'Brand, main', '#15766a'),
-  t('brand.bright', 'Brand, bright', '#1fae77'),
-  t('brand.soft', 'Brand, soft', '#d8f3e4'),
-  t('brand.tint', 'Brand, tint', '#ecf9f1'),
-  t('ink.900', 'Ink 900', '#0b1713'),
-  t('ink.700', 'Ink 700', '#1f3a34'),
-  t('ink.500', 'Ink 500', '#5b706b'),
-  t('ink.300', 'Ink 300', '#b7c4c0'),
-  t('paper.0', 'Paper 0', '#fcfbf8'),
-  t('paper.50', 'Paper 50', '#f6f4ee'),
-  t('paper.100', 'Paper 100', '#ece8dc'),
-  t('accent.warm', 'Accent, warm', '#e07a5f'),
-  t('accent.cool', 'Accent, cool', '#3d7ea6'),
+  t('wa.deep', 'Deep', '#075E54'),
+  t('wa.teal', 'Teal', '#128C7E'),
+  t('wa.green', 'Green', '#25D366'),
+  t('wa.mint', 'Mint', '#DCF8C6'),
+  t('wa.bubble', 'Bubble', '#E7FFDB'),
+  t('wa.chat', 'Chat', '#ECE5DD'),
+  t('ink.950', '950', '#070D0C'),
+  t('ink.900', '900', '#0B1F1C'),
+  t('ink.800', '800', '#13312D'),
+  t('ink.700', '700', '#1F4540'),
+  t('ink.600', '600', '#3A5A55'),
+  t('ink.500', '500', '#6B807C'),
+  t('ink.400', '400', '#9AA8A4'),
+  t('ink.300', '300', '#C3CCC9'),
+  t('paper.0', '0', '#FBFAF6'),
+  t('paper.50', '50', '#F5F3EC'),
+  t('paper.100', '100', '#EFEBE0'),
+  t('paper.200', '200', '#E5DFD0'),
+  t('paper.300', '300', '#D4CCB6'),
+  t('accent.coral', 'Coral', '#E87A5D'),
+  t('accent.amber', 'Amber', '#E5A04E'),
+  t('accent.sand', 'Sand', '#D9C9A3'),
+  t('accent.plum', 'Plum', '#5B3D8A'),
+  t('accent.sky', 'Sky', '#3E7AA1'),
 ];
 
 export const THEME_KEYS: readonly string[] = THEME_TOKENS.map((x) => `theme.${x.key}`);
 
-/** One-click re-skins: they rewrite the brand and accent tokens only, never ink or paper. */
+/** One-click re-skins: they rewrite the brand and the two warm accents only, never ink or paper (Reference's six presets). */
 export const THEME_PRESETS: ReadonlyArray<{
   id: string;
   label: string;
+  swatch: string;
   tokens: Record<string, string>;
 }> = [
   {
     id: 'emerald',
     label: 'Emerald',
-    tokens: Object.fromEntries(
-      THEME_TOKENS.filter((x) => x.group === 'brand' || x.group === 'accent').map((x) => [
-        x.key,
-        x.default,
-      ]),
-    ),
+    swatch: '#075E54',
+    tokens: {
+      'wa.deep': '#075E54',
+      'wa.teal': '#128C7E',
+      'wa.green': '#25D366',
+      'wa.mint': '#DCF8C6',
+      'wa.bubble': '#E7FFDB',
+      'accent.coral': '#E87A5D',
+      'accent.amber': '#E5A04E',
+    },
   },
   {
     id: 'ocean',
     label: 'Ocean',
+    swatch: '#0B4F6C',
     tokens: {
-      'brand.deep': '#0b3a5c',
-      'brand.main': '#14639a',
-      'brand.bright': '#2f9bd8',
-      'brand.soft': '#d6ebf8',
-      'brand.tint': '#eaf5fb',
-      'accent.warm': '#f08a4b',
-      'accent.cool': '#6a5acd',
+      'wa.deep': '#0B4F6C',
+      'wa.teal': '#1B98C9',
+      'wa.green': '#20A4F3',
+      'wa.mint': '#CDEFFF',
+      'wa.bubble': '#E3F6FF',
+      'accent.coral': '#FF8552',
+      'accent.amber': '#FFB627',
     },
   },
   {
     id: 'forest',
     label: 'Forest',
+    swatch: '#1B4332',
     tokens: {
-      'brand.deep': '#1d3b24',
-      'brand.main': '#2f6b3a',
-      'brand.bright': '#5aa05f',
-      'brand.soft': '#dcebd9',
-      'brand.tint': '#eef6ec',
-      'accent.warm': '#c9893b',
-      'accent.cool': '#4b7f8c',
+      'wa.deep': '#1B4332',
+      'wa.teal': '#2D6A4F',
+      'wa.green': '#40916C',
+      'wa.mint': '#D8F3DC',
+      'wa.bubble': '#E9F7EF',
+      'accent.coral': '#E76F51',
+      'accent.amber': '#E9C46A',
     },
   },
   {
     id: 'royal',
     label: 'Royal',
+    swatch: '#4A2C6F',
     tokens: {
-      'brand.deep': '#2b1a5c',
-      'brand.main': '#4b2fa0',
-      'brand.bright': '#7a5ce0',
-      'brand.soft': '#e3dcf8',
-      'brand.tint': '#f1edfc',
-      'accent.warm': '#e0668a',
-      'accent.cool': '#3d8fd1',
+      'wa.deep': '#4A2C6F',
+      'wa.teal': '#6C3FA0',
+      'wa.green': '#9B59D0',
+      'wa.mint': '#EADCF7',
+      'wa.bubble': '#F3EAFB',
+      'accent.coral': '#E0689A',
+      'accent.amber': '#E5A04E',
     },
   },
   {
     id: 'sunset',
     label: 'Sunset',
+    swatch: '#B23A48',
     tokens: {
-      'brand.deep': '#5c1f12',
-      'brand.main': '#b8431f',
-      'brand.bright': '#ee7a3c',
-      'brand.soft': '#fbe1d1',
-      'brand.tint': '#fdf0e7',
-      'accent.warm': '#f2b134',
-      'accent.cool': '#5b6fb5',
+      'wa.deep': '#B23A48',
+      'wa.teal': '#D9594C',
+      'wa.green': '#F08A4B',
+      'wa.mint': '#FCE4D6',
+      'wa.bubble': '#FFEFE3',
+      'accent.coral': '#E5533D',
+      'accent.amber': '#F2A65A',
     },
   },
   {
     id: 'slate',
     label: 'Slate',
+    swatch: '#2B2D42',
     tokens: {
-      'brand.deep': '#1c2733',
-      'brand.main': '#3b4f63',
-      'brand.bright': '#6b8299',
-      'brand.soft': '#dde4ea',
-      'brand.tint': '#eef1f4',
-      'accent.warm': '#d98c5f',
-      'accent.cool': '#4f8a8b',
+      'wa.deep': '#2B2D42',
+      'wa.teal': '#4A4E69',
+      'wa.green': '#5C8A72',
+      'wa.mint': '#E2E4ED',
+      'wa.bubble': '#EDEEF4',
+      'accent.coral': '#D98B7B',
+      'accent.amber': '#C9A86A',
     },
   },
 ];

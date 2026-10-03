@@ -4,7 +4,10 @@ import { useTranslations } from 'next-intl';
 import { useState, type FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { CMS_CONTACT_TOPICS, cmsContactSubmitResponseSchema } from '@crm/contracts';
-import { Alert, Button, Field, Input, Select, Textarea } from '@crm/ui';
+import {
+  useCaptcha,
+  type CaptchaConfig,
+} from '@/features/auth-registration-security/guest/captcha';
 import { apiFetch } from '@/lib/api/client';
 import { ApiError } from '@/lib/api/errors';
 
@@ -15,21 +18,50 @@ const TOPIC_KEY = {
   other: 'topicOther',
 } as const;
 
-/** The public contact form (TW-CMS-005/006). The hidden `website` field is the honeypot: people never fill it. */
-export function ContactForm() {
+/** The editable texts of the form (registry keys of the contact page's `form` section). */
+export interface ContactLabels {
+  name_label: string;
+  email_label: string;
+  company_label: string;
+  topic_label: string;
+  message_label: string;
+  sla: string;
+  submit_label: string;
+  success_title: string;
+  success_text: string;
+  error_text: string;
+}
+
+/**
+ * The public contact form (TW-CMS-005/006). The hidden `website` field is the honeypot: people never fill it. When the
+ * platform has reCAPTCHA on, the widget (v2) or the invisible token (v3, action `contact`) rides along as `captchaToken`.
+ * In the editor preview the form is shown but never sends.
+ */
+export function ContactForm({
+  labels,
+  captcha: captchaConfig,
+  preview = false,
+}: {
+  labels: ContactLabels;
+  captcha: CaptchaConfig | null;
+  preview?: boolean;
+}) {
   const t = useTranslations('marketing-site-cms.site');
+  const captcha = useCaptcha(captchaConfig, 'contact');
+  const [captchaMissing, setCaptchaMissing] = useState(false);
   const [f, setF] = useState({
     name: '',
     email: '',
     company: '',
-    topic: 'sales',
+    topic: 'sales' as string,
     message: '',
     website: '',
   });
   const set = (k: keyof typeof f, v: string) => setF((s) => ({ ...s, [k]: v }));
   const send = useMutation({
-    mutationFn: () =>
-      apiFetch('/public/cms/contact', {
+    mutationFn: async () => {
+      const captchaToken = await captcha.token();
+      return apiFetch('/public/cms/contact', {
         method: 'POST',
         body: {
           name: f.name,
@@ -38,36 +70,62 @@ export function ContactForm() {
           topic: f.topic,
           message: f.message,
           website: f.website,
+          ...(captchaToken ? { captchaToken } : {}),
         },
         schema: cmsContactSubmitResponseSchema,
-      }),
+      });
+    },
+    onError: () => captcha.reset(),
   });
   const submit = (e: FormEvent) => {
     e.preventDefault();
+    if (preview) return;
+    if (captcha.needsInteraction) {
+      setCaptchaMissing(true);
+      return;
+    }
+    setCaptchaMissing(false);
     send.mutate();
   };
-  if (send.isSuccess) return <Alert tone="success">{t('thanks')}</Alert>;
+  if (send.isSuccess) {
+    return (
+      <div
+        id="contact-sent"
+        className="cms-alert"
+        data-tone="ok"
+        role="status"
+        style={{ marginTop: '1.5rem' }}
+      >
+        <strong>{labels.success_title}</strong>
+        <p style={{ margin: '0.25rem 0 0' }}>{labels.success_text}</p>
+      </div>
+    );
+  }
   const err = send.error;
   return (
-    <form onSubmit={submit} className="space-y-4">
-      {err && (
-        <Alert tone="danger">
-          {err instanceof ApiError && err.status === 429 ? t('tooMany') : t('failed')}
-        </Alert>
+    <form onSubmit={submit} className="cms-form">
+      {(err || captchaMissing) && (
+        <div className="cms-alert" data-tone="bad" role="alert">
+          {captchaMissing
+            ? t('captchaMissing')
+            : err instanceof ApiError && err.status === 429
+              ? t('tooMany')
+              : labels.error_text}
+        </div>
       )}
-      <Field label={t('name')} htmlFor="c-name">
-        <Input
-          id="c-name"
+      <label>
+        {labels.name_label}
+        <input
           value={f.name}
           onChange={(e) => set('name', e.target.value)}
           required
           maxLength={120}
           autoComplete="name"
         />
-      </Field>
-      <Field label={t('email')} htmlFor="c-email">
-        <Input
-          id="c-email"
+      </label>
+      <label>
+        {labels.email_label}
+        <input
           type="email"
           value={f.email}
           onChange={(e) => set('email', e.target.value)}
@@ -76,36 +134,58 @@ export function ContactForm() {
           autoComplete="email"
           dir="ltr"
         />
-      </Field>
-      <Field label={t('company')} htmlFor="c-company">
-        <Input
-          id="c-company"
+      </label>
+      <label>
+        {labels.company_label}
+        <input
           value={f.company}
           onChange={(e) => set('company', e.target.value)}
           maxLength={160}
           autoComplete="organization"
         />
-      </Field>
-      <Field label={t('topic')} htmlFor="c-topic">
-        <Select id="c-topic" value={f.topic} onChange={(e) => set('topic', e.target.value)}>
+      </label>
+      <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
+        <legend style={{ fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.35rem' }}>
+          {labels.topic_label}
+        </legend>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1.25rem' }}>
           {CMS_CONTACT_TOPICS.map((k) => (
-            <option key={k} value={k}>
-              {t(TOPIC_KEY[k])}
-            </option>
+            <label
+              key={k}
+              style={{ display: 'inline-flex', gridAutoFlow: 'column', gap: '0.4rem' }}
+            >
+              <input
+                type="radio"
+                name="topic"
+                value={k}
+                checked={f.topic === k}
+                onChange={() => set('topic', k)}
+              />
+              <span style={{ fontWeight: 400 }}>{t(TOPIC_KEY[k])}</span>
+            </label>
           ))}
-        </Select>
-      </Field>
-      <Field label={t('message')} htmlFor="c-message">
-        <Textarea
-          id="c-message"
+        </div>
+      </fieldset>
+      <label>
+        {labels.message_label}
+        <textarea
           rows={6}
           value={f.message}
           onChange={(e) => set('message', e.target.value)}
           required
           maxLength={5000}
         />
-      </Field>
-      <div aria-hidden className="absolute -start-[9999px] h-0 w-0 overflow-hidden">
+      </label>
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          insetInlineStart: '-9999px',
+          height: 0,
+          width: 0,
+          overflow: 'hidden',
+        }}
+      >
         <label>
           Website
           <input
@@ -116,9 +196,13 @@ export function ContactForm() {
           />
         </label>
       </div>
-      <Button type="submit" disabled={send.isPending}>
-        {send.isPending ? t('sending') : t('send')}
-      </Button>
+      {captcha.widget}
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem' }}>
+        <button type="submit" className="cms-btn" disabled={send.isPending}>
+          {send.isPending ? t('sending') : labels.submit_label}
+        </button>
+        {labels.sla && <span className="cms-small">{labels.sla}</span>}
+      </div>
     </form>
   );
 }
