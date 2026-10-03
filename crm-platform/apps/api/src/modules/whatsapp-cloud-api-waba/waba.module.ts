@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
@@ -27,7 +27,8 @@ import { WabaWebhookService } from './waba-webhook.service';
  * where nothing provides it, inbound messages are acknowledged and logged.
  */
 @Module({
-  imports: [BroadcastsModule, PlatformSettingsModule],
+  // forwardRef: the broadcasts barrel and this module import each other through node-bridge-runtime.
+  imports: [forwardRef(() => BroadcastsModule), PlatformSettingsModule],
   controllers: [WabaConnectionsController, WabaWebhookController, WabaPlatformController],
   providers: [
     CryptoService,

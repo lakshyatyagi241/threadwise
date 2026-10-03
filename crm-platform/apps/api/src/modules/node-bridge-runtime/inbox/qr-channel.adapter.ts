@@ -75,7 +75,7 @@ export class QrChannelAdapter implements ChannelAdapter {
     const to = digits(envelope.to);
     const context = { clientReference: envelope.clientReference, screen: { source: 'inbox' } };
     try {
-      let providerMessageId: string | null;
+      let providerMessageId: string | null = null;
       switch (envelope.kind) {
         case 'text':
           providerMessageId = (
