@@ -7,7 +7,6 @@ export const CPN_ERROR_CODES = {
   CPN_COUPON_CODE_TAKEN: 'CPN_COUPON_CODE_TAKEN',
   /** `applicablePlans` names a plan or add-on that does not exist. `details` lists the unknown slugs. */
   CPN_COUPON_PLAN_UNKNOWN: 'CPN_COUPON_PLAN_UNKNOWN',
-  CPN_PACKAGE_SLUG_TAKEN: 'CPN_PACKAGE_SLUG_TAKEN',
   /** A package or coupon names a currency that is not an active catalog currency. */
   CPN_CURRENCY_UNKNOWN: 'CPN_CURRENCY_UNKNOWN',
   CPN_CURRENCY_CODE_TAKEN: 'CPN_CURRENCY_CODE_TAKEN',

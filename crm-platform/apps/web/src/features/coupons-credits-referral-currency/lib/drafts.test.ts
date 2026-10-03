@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { CouponItem, CreditPackageItem, CurrencyItem } from '@crm/contracts';
+import type { CouponItem, CurrencyItem } from '@crm/contracts';
 import {
   buildCouponRequest,
   couponToDraft,
@@ -9,7 +9,6 @@ import {
 } from './coupon-draft';
 import { buildCurrencyRequest, currencyToDraft, newCurrencyDraft } from './currency-draft';
 import { pageWindow, relativeTime, validityParts } from './format';
-import { buildPackageRequest, newPackageDraft, packageToDraft } from './package-draft';
 
 const coupon: CouponItem = {
   id: '11111111-1111-4111-8111-111111111111',
@@ -94,70 +93,6 @@ describe('coupon form draft', () => {
     expect(iso).toMatch(/^2026-06-1[45]T/);
     expect(toLocalInput(iso)).toBe('2026-06-15T09:30');
     expect(toLocalInput(null)).toBe('');
-  });
-});
-
-describe('credit package draft', () => {
-  const pkg: CreditPackageItem = {
-    id: '22222222-2222-4222-8222-222222222222',
-    name: 'Growth',
-    slug: 'growth',
-    price: '500.00',
-    priceMinor: 50000,
-    priceDisplay: '$6.00',
-    currencyCode: 'INR',
-    credits: 27500,
-    creditsPerMajor: '55.0',
-    badge: 'Most popular',
-    description: null,
-    isActive: true,
-    isFeatured: true,
-    sortOrder: 20,
-    createdAt: '2026-01-01T00:00:00.000Z',
-    updatedAt: '2026-01-01T00:00:00.000Z',
-    rowVersion: 1,
-  };
-
-  it('builds a request with a blank slug as null (derived on the server)', () => {
-    const r = buildPackageRequest({
-      ...newPackageDraft('INR'),
-      name: 'Starter Pack',
-      price: '499.50',
-      credits: '2500',
-    });
-    expect(r.ok).toBe(true);
-    if (r.ok) {
-      expect(r.body).toMatchObject({
-        slug: null,
-        currencyCode: 'INR',
-        credits: 2500,
-        sortOrder: 0,
-        isActive: true,
-      });
-    }
-  });
-
-  it('flags the bad fields: zero credits, a bad slug, a huge sort order', () => {
-    const r = buildPackageRequest({
-      ...newPackageDraft('INR'),
-      name: 'X',
-      price: '1',
-      credits: '0',
-      slug: 'bad slug!',
-      sortOrder: '10000',
-    });
-    expect(r).toEqual({ ok: false, problems: ['slug', 'credits', 'sortOrder'] });
-  });
-
-  it('round-trips a stored package', () => {
-    const d = packageToDraft(pkg);
-    expect(d).toMatchObject({
-      price: '500.00',
-      credits: '27500',
-      badge: 'Most popular',
-      isFeatured: true,
-    });
-    expect(buildPackageRequest(d).ok).toBe(true);
   });
 });
 

@@ -6,10 +6,8 @@ import {
   majorString,
   minorToMajor,
   parseToMinor,
-  slugifyPackageName,
   type CurrencyRow,
 } from '@crm/contracts';
-import { creditsPerMajor } from '../../../src/modules/coupons-credits-referral-currency/credit-package-admin.service';
 import { trimRate } from '../../../src/modules/coupons-credits-referral-currency/currency-admin.service';
 import { trimDecimal } from '../../../src/modules/coupons-credits-referral-currency/coupon-row';
 
@@ -87,20 +85,7 @@ describe('minor-unit helpers (TW-CPN-028)', () => {
   });
 });
 
-describe('credit-package and coupon display helpers', () => {
-  it('slugifies a package name the way Reference did', () => {
-    expect(slugifyPackageName('Starter Pack')).toBe('starter-pack');
-    expect(slugifyPackageName('  Café & Crème!! ')).toBe('cafe-creme');
-    expect(slugifyPackageName('!!!')).toBe('package');
-    expect(slugifyPackageName('日本語')).toBe('package');
-  });
-  it('computes credits per major unit to one decimal, exactly', () => {
-    expect(creditsPerMajor(27500, 50000, 'INR')).toBe('55.0');
-    expect(creditsPerMajor(5000, 10000, 'INR')).toBe('50.0');
-    expect(creditsPerMajor(100, 1500, 'JPY')).toBe('0.1');
-    expect(creditsPerMajor(10, 0, 'USD')).toBe('0.0');
-    expect(creditsPerMajor(1, 3, 'USD')).toBe('33.3');
-  });
+describe('coupon display helpers', () => {
   it('trims a stored decimal for display', () => {
     expect(trimDecimal('10.0000')).toBe('10');
     expect(trimDecimal('12.5000')).toBe('12.5');

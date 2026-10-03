@@ -22,7 +22,7 @@ const get = (path: string): string | Tree | undefined => {
 const has = (path: string): boolean => get(path) !== undefined;
 const ROOT = 'coupons-credits-referral-currency';
 
-describe('coupons, credit packages and currencies messages', () => {
+describe('coupons and currencies messages', () => {
   it('has every menu label and group the console asks for', () => {
     for (const n of CPN_OPERATOR_NAV) {
       if (n.labelKey.startsWith(ROOT)) expect(has(n.labelKey), n.labelKey).toBe(true);
@@ -34,7 +34,6 @@ describe('coupons, credit packages and currencies messages', () => {
     const ids = OPERATOR_NAV.filter((n) => CPN_OPERATOR_NAV.some((c) => c.id === n.id));
     expect(ids.map((n) => n.href)).toEqual([
       '/admin/coupons',
-      '/admin/credit-packages',
       '/admin/currencies',
     ]);
   });
@@ -60,19 +59,6 @@ describe('coupons, credit packages and currencies messages', () => {
         'maxUses',
         'perUserLimit',
       ].map((f) => `${ROOT}.coupons.editor.problems.${f}`),
-      ...[
-        'name',
-        'slug',
-        'price',
-        'currencyCode',
-        'credits',
-        'badge',
-        'description',
-        'sortOrder',
-      ].map((f) => `${ROOT}.packages.editor.problems.${f}`),
-      ...['created', 'updated', 'activated', 'deactivated', 'deleted'].map(
-        (k) => `${ROOT}.packages.toasts.${k}`,
-      ),
       ...['name', 'code', 'symbol', 'precision', 'exchangeRate'].map(
         (f) => `${ROOT}.currencies.form.problems.${f}`,
       ),
@@ -84,7 +70,6 @@ describe('coupons, credit packages and currencies messages', () => {
         'validation',
         'codeTaken',
         'planUnknown',
-        'slugTaken',
         'currencyUnknown',
         'currencyTaken',
         'defaultProtected',
@@ -99,9 +84,6 @@ describe('coupons, credit packages and currencies messages', () => {
     expect(get(`${ROOT}.coupons.title`)).toBe('Discount coupons');
     expect(get(`${ROOT}.coupons.empty.title`)).toBe('No coupons match.');
     expect(get(`${ROOT}.coupons.toasts.deleted`)).toBe('Coupon removed.');
-    expect(get(`${ROOT}.packages.delete.body`)).toBe(
-      'Delete this package? Existing purchases keep their ledger rows.',
-    );
     expect(get(`${ROOT}.currencies.toasts.defaultSet`)).toBe('Default currency set to {code}.');
   });
 

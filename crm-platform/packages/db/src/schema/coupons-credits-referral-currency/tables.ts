@@ -160,7 +160,7 @@ export type ReferralCodesRow = typeof referralCodes.$inferSelect;
 export type NewReferralCodesRow = typeof referralCodes.$inferInsert;
 
 /**
- * One row per redeemed order: the guard that makes counting a redemption idempotent (migration 20261015090100). The composite
+ * One row per redeemed order: the guard that makes counting a redemption idempotent (migration 20261017090100). The composite
  * foreign key to `orders` lives in the SQL only: the paygw schema already imports this file (orders.coupon_id), so mirroring it
  * here would be a circular import.
  */

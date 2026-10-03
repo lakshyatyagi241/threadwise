@@ -2,7 +2,6 @@ import request from 'supertest';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   couponListResponseSchema,
-  creditPackageListResponseSchema,
   currencyListResponseSchema,
   type CouponItem,
 } from '@crm/contracts';
@@ -486,173 +485,6 @@ describe('the service the checkout calls (TW-CPN-006..008)', () => {
   });
 });
 
-describe('credit packages (TW-CPN-009..013)', () => {
-  const list = async () => {
-    const res = await ops('get', '/credit-packages');
-    expect(res.status).toBe(200);
-    return creditPackageListResponseSchema.parse(res.body).data;
-  };
-
-  it('lists the three starter packages in display order with the computed rate', async () => {
-    const all = await list();
-    expect(all.map((p) => p.slug)).toEqual(['starter', 'growth', 'scale']);
-    expect(all[1]).toMatchObject({
-      badge: 'Most popular',
-      isFeatured: true,
-      price: '500.00',
-      priceMinor: 50000,
-      credits: 27500,
-      creditsPerMajor: '55.0',
-    });
-    expect(all[0]!.creditsPerMajor).toBe('50.0');
-  });
-
-  it('derives the slug from the name, with -2 on a clash, and prices in the currency minor units', async () => {
-    const a = await ops('post', '/credit-packages').send({
-      name: 'Starter Pack',
-      price: '499.50',
-      currencyCode: 'inr',
-      credits: 2500,
-    });
-    expect(a.status, JSON.stringify(a.body)).toBe(201);
-    expect(a.body).toMatchObject({
-      slug: 'starter-pack',
-      priceMinor: 49950,
-      price: '499.50',
-      isActive: true,
-      isFeatured: false,
-      sortOrder: 0,
-    });
-    const b = await ops('post', '/credit-packages').send({
-      name: 'Starter Pack',
-      price: '1',
-      currencyCode: 'INR',
-      credits: 1,
-    });
-    expect(b.body.slug).toBe('starter-pack-2');
-  });
-
-  it('uses the real number of decimals of the currency (JPY has none, KWD three)', async () => {
-    const jpy = await ops('post', '/credit-packages').send({
-      name: 'Yen',
-      price: '1500',
-      currencyCode: 'JPY',
-      credits: 100,
-    });
-    expect(jpy.body).toMatchObject({ priceMinor: 1500, price: '1500' });
-    const kwd = await ops('post', '/credit-packages').send({
-      name: 'Dinar',
-      price: '1.5',
-      currencyCode: 'KWD',
-      credits: 100,
-    });
-    // KWD is not in the seeded catalogue, so it is refused until added
-    expect(kwd.status).toBe(422);
-    expect(kwd.body.code).toBe('CPN_CURRENCY_UNKNOWN');
-  });
-
-  it('refuses a currency outside the active catalogue, zero credits and a bad slug', async () => {
-    const base = { name: 'X', price: '1', currencyCode: 'INR', credits: 5 };
-    expect(
-      (await ops('post', '/credit-packages').send({ ...base, currencyCode: 'XXX' })).body.code,
-    ).toBe('CPN_CURRENCY_UNKNOWN');
-    expect((await ops('post', '/credit-packages').send({ ...base, credits: 0 })).status).toBe(422);
-    expect(
-      (await ops('post', '/credit-packages').send({ ...base, slug: 'bad slug!' })).status,
-    ).toBe(422);
-    expect((await ops('post', '/credit-packages').send({ ...base, sortOrder: 10000 })).status).toBe(
-      422,
-    );
-  });
-
-  it('an explicit slug that is taken is refused', async () => {
-    const res = await ops('post', '/credit-packages').send({
-      name: 'Other',
-      slug: 'growth',
-      price: '1',
-      currencyCode: 'INR',
-      credits: 5,
-    });
-    expect(res.status).toBe(409);
-    expect(res.body.code).toBe('CPN_PACKAGE_SLUG_TAKEN');
-  });
-
-  it('edits with an optimistic lock; clearing the slug re-derives it from the name', async () => {
-    const growth = (await list()).find((p) => p.slug === 'growth')!;
-    const up = await ops('patch', `/credit-packages/${growth.id}`).send({
-      price: '600',
-      rowVersion: growth.rowVersion,
-    });
-    expect(up.body).toMatchObject({ priceMinor: 60000, price: '600.00' });
-    const stale = await ops('patch', `/credit-packages/${growth.id}`).send({
-      price: '700',
-      rowVersion: growth.rowVersion,
-    });
-    expect(stale.status).toBe(409);
-    const cleared = await ops('patch', `/credit-packages/${growth.id}`).send({
-      slug: null,
-      rowVersion: up.body.rowVersion,
-    });
-    expect(cleared.body.slug).toBe('growth');
-    const clash = await ops('patch', `/credit-packages/${growth.id}`).send({
-      slug: 'scale',
-      rowVersion: cleared.body.rowVersion,
-    });
-    expect(clash.status).toBe(409);
-  });
-
-  it('toggles idempotently and the row shows as disabled', async () => {
-    const starter = (await list()).find((p) => p.slug === 'starter')!;
-    const off = await ops('patch', `/credit-packages/${starter.id}/active`).send({
-      isActive: false,
-    });
-    expect(off.body.isActive).toBe(false);
-    const n = await events('platform.credit_package.deactivated');
-    await ops('patch', `/credit-packages/${starter.id}/active`).send({ isActive: false });
-    expect(await events('platform.credit_package.deactivated')).toBe(n);
-    const on = await ops('patch', `/credit-packages/${starter.id}/active`).send({ isActive: true });
-    expect(on.body.isActive).toBe(true);
-  });
-
-  it('delete keeps the orders that bought the package (their link is nulled) and a missing id is a 404', async () => {
-    const created = await ops('post', '/credit-packages').send({
-      name: 'Gone',
-      price: '5',
-      currencyCode: 'USD',
-      credits: 10,
-      sortOrder: 99,
-    });
-    const org = await h.owner.query(
-      `INSERT INTO organizations (slug, name) VALUES ('cpn-pkg', 'pkg') RETURNING id`,
-    );
-    const pk = await h.owner.query(`SELECT id FROM credit_packages WHERE uuid = $1`, [
-      created.body.id,
-    ]);
-    await h.owner.query(
-      `INSERT INTO orders (org_id, order_number, currency, amount, kind, plan_slug, status, credit_package_id) VALUES ($1, 'ORD-PKG', 'USD', 5, 'plan', 'x', 'paid', $2)`,
-      [org.rows[0].id, pk.rows[0].id],
-    );
-    expect((await ops('delete', `/credit-packages/${created.body.id}`)).status).toBe(200);
-    expect((await ops('get', `/credit-packages/${created.body.id}`)).status).toBe(404);
-    const o = await h.owner.query(
-      `SELECT credit_package_id FROM orders WHERE order_number = 'ORD-PKG'`,
-    );
-    expect(o.rows[0].credit_package_id).toBeNull();
-    expect((await ops('delete', `/credit-packages/${created.body.id}`)).status).toBe(404);
-  });
-
-  it('only a super admin writes; a support operator reads', async () => {
-    expect((await ops('get', '/credit-packages', supportToken)).status).toBe(200);
-    const res = await ops('post', '/credit-packages', supportToken).send({
-      name: 'N',
-      price: '1',
-      currencyCode: 'INR',
-      credits: 1,
-    });
-    expect(res.status).toBe(403);
-  });
-});
-
 describe('currency catalogue (TW-CPN-018..025)', () => {
   const list = async (qs = '') => {
     const res = await ops('get', `/currencies${qs}`);
@@ -787,13 +619,10 @@ describe('currency catalogue (TW-CPN-018..025)', () => {
     expect((await ops('delete', `/currencies/${chf.id}`)).status).toBe(200);
     expect((await list('?q=chf')).data).toEqual([]);
     const jpy = await byCode('JPY');
-    const jpyPkg = await ops('post', '/credit-packages').send({
-      name: 'Yen pack',
-      price: '1500',
-      currencyCode: 'JPY',
-      credits: 10,
-    });
-    expect(jpyPkg.status).toBe(201);
+    // credit packages belong to the wallet domain; a package row is all this check needs
+    await h.owner.query(
+      `INSERT INTO credit_packages (name, slug, price_minor, currency_code, credits, sort_order) VALUES ('Yen pack', 'yen-pack', 1500, 'JPY', 10, 99)`,
+    );
     const inUse = await ops('delete', `/currencies/${jpy.id}`);
     expect(inUse.status).toBe(409);
     expect(inUse.body.code).toBe('CPN_CURRENCY_IN_USE');

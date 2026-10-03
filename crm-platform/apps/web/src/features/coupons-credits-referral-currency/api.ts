@@ -2,8 +2,6 @@ import {
   billingOptionsResponseSchema,
   couponItemSchema,
   couponListResponseSchema,
-  creditPackageItemSchema,
-  creditPackageListResponseSchema,
   currencyItemSchema,
   currencyListResponseSchema,
   fetchRatesResponseSchema,
@@ -19,8 +17,6 @@ export const KEYS = {
   couponList: (q: Partial<CouponListQuery>) => ['operator', 'coupons', 'list', q] as const,
   coupon: (id: string) => ['operator', 'coupons', 'one', id] as const,
   options: ['operator', 'billing-options'] as const,
-  packages: ['operator', 'credit-packages'] as const,
-  package: (id: string) => ['operator', 'credit-packages', 'one', id] as const,
   currencies: ['operator', 'currencies'] as const,
   currencyList: (q: Partial<CurrencyListQuery>) => ['operator', 'currencies', 'list', q] as const,
 };
@@ -42,12 +38,6 @@ export const fetchCoupon = (id: string, signal?: AbortSignal) =>
 export const fetchOptions = (signal?: AbortSignal) =>
   operatorFetch('/billing-options', { schema: billingOptionsResponseSchema, signal });
 
-export const fetchPackages = (signal?: AbortSignal) =>
-  operatorFetch('/credit-packages', { schema: creditPackageListResponseSchema, signal });
-
-export const fetchPackage = (id: string, signal?: AbortSignal) =>
-  operatorFetch(`/credit-packages/${id}`, { schema: creditPackageItemSchema, signal });
-
 export const fetchCurrencies = (q: Partial<CurrencyListQuery>, signal?: AbortSignal) =>
   operatorFetch('/currencies', {
     query: { q: q.q, page: q.page && q.page > 1 ? q.page : undefined },
@@ -57,7 +47,6 @@ export const fetchCurrencies = (q: Partial<CurrencyListQuery>, signal?: AbortSig
 
 export {
   couponItemSchema,
-  creditPackageItemSchema,
   currencyItemSchema,
   fetchRatesResponseSchema,
   setDefaultCurrencyResponseSchema,
