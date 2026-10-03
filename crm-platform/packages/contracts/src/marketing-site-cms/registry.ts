@@ -48,11 +48,6 @@ const f = (key: string, type: CmsFieldType, label: string, def: string): CmsFiel
   default: def,
 });
 
-const TITLE_BODY = [
-  ['title', 'text', 'title'],
-  ['body', 'longtext', 'text'],
-] as const;
-
 /** `n` repeated groups named `<name>1_<part>`: `item1_title`, `rail2_desc`, `card3_spec1_label`. */
 function repeat(
   name: string,
