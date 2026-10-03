@@ -97,6 +97,8 @@ export interface RunPatch {
   endReason: FlowRunEndReason | null;
   failureCode: string | null;
   failureReason: string | null;
+  /** Set only when a Sub-flow swapped the graph: the run row keeps the new graph. Left out, the stored graph is untouched. */
+  graph?: RuntimeGraph;
 }
 
 /** SQL for runs and their log. Every method runs in the caller's transaction, under the tenant's row-level security. */
@@ -176,10 +178,33 @@ export class RunRepository {
         max_expires_at = ${p.maxExpiresAt.toISOString()}::timestamptz,
         resume_at = ${p.resumeAt?.toISOString() ?? null}::timestamptz,
         ended_at = ${p.endedAt?.toISOString() ?? null}::timestamptz,
-        end_reason = ${p.endReason}, failure_code = ${p.failureCode}, failure_reason = ${p.failureReason}
+        end_reason = ${p.endReason}, failure_code = ${p.failureCode}, failure_reason = ${p.failureReason},
+        graph = ${p.graph ? json(p.graph) : sql`graph`}
       WHERE org_id = ${orgId} AND id = ${id} AND step_seq = ${expectedSeq}
       RETURNING id`);
     return rowsOf(res).length > 0;
+  }
+
+  /** A flow a Sub-flow node may run: of this workspace, whatever its state (the caller decides what is live enough). */
+  async flowForSubflow(
+    tx: Tx,
+    orgId: number,
+    ref: number | string,
+  ): Promise<{ id: number; data: unknown; isPublished: boolean; isActive: boolean } | null> {
+    // The editor may store the flow's number (WaDesk) or its public uuid.
+    const by = typeof ref === 'number' ? sql`id = ${ref}` : sql`uuid = ${ref}::uuid`;
+    const res = await tx.execute(
+      sql`SELECT id, flow_data, is_published, is_active FROM flows WHERE org_id = ${orgId} AND ${by}`,
+    );
+    const r = rowsOf(res)[0];
+    return r
+      ? {
+          id: num(r.id),
+          data: r.flow_data,
+          isPublished: Boolean(r.is_published),
+          isActive: Boolean(r.is_active),
+        }
+      : null;
   }
 
   async appendStep(

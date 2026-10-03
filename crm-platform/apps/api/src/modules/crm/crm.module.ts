@@ -5,6 +5,9 @@ import { AttributesController } from './attributes/attributes.controller';
 import { AttributesRepository } from './attributes/attributes.repository';
 import { AttributesService } from './attributes/attributes.service';
 import { MergeTagService } from './attributes/merge-tag.service';
+import { CompaniesController } from './companies/companies.controller';
+import { CompaniesRepository } from './companies/companies.repository';
+import { CompaniesService } from './companies/companies.service';
 import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
 import { ContactBulkRepository } from './contact-bulk/contact-bulk.repository';
 import { ContactBulkService } from './contact-bulk/contact-bulk.service';
@@ -181,6 +184,9 @@ import { TagsService } from './tags/tags.service';
     ContactFilesController,
     ContactActivitiesController,
     ContactMeetingsController,
+    // Companies: `companies/stats`, `industries`, `select-data` and `bulk/delete` are literal paths declared before `companies/:id`
+    // inside the controller.
+    CompaniesController,
     // Deals: `deals/board`, `deals/reports` and `deals/tasks` are literal paths declared before `deals/:id` inside the controller.
     DealsController,
     ContactDealsController,
@@ -255,6 +261,8 @@ import { TagsService } from './tags/tags.service';
     ContactActivitiesRepository,
     ContactMeetingsService,
     ContactMeetingsRepository,
+    CompaniesRepository,
+    CompaniesService,
     DealsPlan,
     SalesPipelineGuard,
     DealsRepository,
@@ -327,6 +335,7 @@ import { TagsService } from './tags/tags.service';
     ContactFilesService,
     ContactActivitiesService,
     ContactMeetingsService,
+    CompaniesService,
     DealsService,
     PipelinesService,
     TasksService,

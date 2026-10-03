@@ -39,6 +39,7 @@ import { WoocommerceController } from './woocommerce.controller';
 import { SegmentsRepository } from './segments.repository';
 import { StockRepository } from './stock.repository';
 import { StockService } from './stock.service';
+import { EcomOrderHooks } from './order-hooks';
 import { WebhookPipelineService } from './webhook-pipeline.service';
 import { EcomWebhookController } from './webhook.controller';
 import { WebhookService } from './webhook.service';
@@ -86,6 +87,7 @@ import { WoocommerceService } from './woocommerce.service';
     EventMessageService,
     WebhookService,
     WebhookPipelineService,
+    EcomOrderHooks,
     HttpShopifyFactory,
     HttpWooFactory,
     { provide: SHOPIFY, useExisting: HttpShopifyFactory },
@@ -96,12 +98,17 @@ import { WoocommerceService } from './woocommerce.service';
     { provide: COMMERCE_SENDER, useClass: EngineCommerceSender },
   ],
   exports: [
+    // Pipeline, cart and broadcast services: the worker's EcomWebhookProcessor (ShopifyWoocommerceWorkerModule) injects them.
+    WebhookPipelineService,
+    CartService,
+    BroadcastService,
     EcomSettingsService,
     StoresRepository,
     ShopifyService,
     WoocommerceService,
     ImportService,
     EcomInboundService,
+    EcomOrderHooks,
   ],
 })
 export class ShopifyWoocommerceModule {}

@@ -11,6 +11,7 @@ import {
   activeItemId,
   activeNavId,
   helpItems,
+  isFullWidthScreen,
   matchesHref,
   menuItems,
   railSections,
@@ -125,6 +126,19 @@ describe('the real menu', () => {
       { ...CAPABILITIES_UNKNOWN, permissions: new Set() },
     );
     expect(toSections(gated)).toEqual([]);
+  });
+});
+
+describe('full-width screens', () => {
+  const resolved = resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: PLANNED_NAV });
+  const tiles = resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN, { planned: PLANNED_SETTINGS });
+
+  it('slims the menu on the inbox and team chat, and nowhere else', () => {
+    expect(isFullWidthScreen(resolved, tiles, '/inbox')).toBe(true);
+    expect(isFullWidthScreen(resolved, tiles, '/team-chat')).toBe(true);
+    expect(isFullWidthScreen(resolved, tiles, '/contacts')).toBe(false);
+    expect(isFullWidthScreen(resolved, tiles, '/deals')).toBe(false);
+    expect(isFullWidthScreen(resolved, tiles, '/settings')).toBe(false);
   });
 });
 

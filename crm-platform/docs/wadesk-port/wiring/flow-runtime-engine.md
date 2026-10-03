@@ -72,15 +72,29 @@ the reference source directly.
 | Retry one, bulk, retry records (`flow_retry_logs`)               | WD-FLR-056, 057, 058 |
 | Concurrency and idempotency                                      | WD-FLR-059           |
 
-| Not built                                                   | Id                          | Why                                                                  |
-| ----------------------------------------------------------- | --------------------------- | -------------------------------------------------------------------- |
-| Template node                                               | WD-FLR-026                  | needs the template library's lookup by id within the workspace (TPL) |
-| AI node, Chatbot and Sub-flow                               | WD-FLR-030, 031             | AI keys and agents domain; Sub-flow needs a run stack                |
-| Webhook, Code, MySQL                                        | WD-FLR-032, 033, 034        | need the guarded HTTP client and the sandbox                         |
-| Tag, Assign agent, Deal                                     | WD-FLR-035, 036, 037        | each calls a domain facade (tags, assignment, deals)                 |
-| Notify number, WA to Instagram, Google nodes, Meet, AI call | WD-FLR-038, 039, 044 to 048 | integrations                                                         |
-| Book appointment, Commerce shop, ordering, WA Form          | WD-FLR-040, 041, 042, 043   | booking, commerce and forms domains                                  |
-| Other-channel engines and the call flow                     | WD-FLR-060 to 069           | other channels' ingest; call flow is the CALL domain                 |
-| Dead session tables                                         | WD-FLR-070                  | dead code in WaDesk                                                  |
+| Not built (waits on another domain) | Id                | Why                                                                                                                                       |
+| ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Chatbot hand-off to an AI agent     | WD-FLR-031        | no AI agent engine exists; the executor and `AI_AGENT_HANDOFF_PORT` are built and answer unavailable                                      |
+| MySQL node driver                   | WD-FLR-034        | no `mysql2` in the repo; the executor, the read-only guard and the row cap are built against `MysqlQueryPort`                             |
+| AI voice call adapter               | WD-FLR-048        | `AiCallPort` is built; the calling domain (`vishal/CALL`) binds the real adapter                                                          |
+| Google nodes' account store         | WD-FLR-044 to 047 | `GoogleWorkspacePort` and an HTTP adapter are built; no Google account store exists, so every Google node reports no account and moves on |
+| Shop adapter                        | WD-FLR-041        | `FlowShopPort` (stock, native list, checkout link): the store domains bind it                                                             |
+| Voice and photo orders, group post  | WD-FLR-042        | behind `ORDER_MEDIA_PORT` and `ORDER_GROUP_NOTIFY_PORT`                                                                                   |
+| Telegram payment node               | WD-FLR-064        | needs the Telegram payment provider                                                                                                       |
+| Call flow (voice IVR)               | WD-FLR-069        | the calling domain's                                                                                                                      |
+| Dead session tables                 | WD-FLR-070        | dead code in WaDesk                                                                                                                       |
 
 A node type without an executor is not dropped: the run notes it in its log and moves on (WD-FLR-016 rule 4), and `compileGraph` keeps its raw data for the executor that will read it.
+
+## The analytics screens and what feeds them (WD-FLR-053 to 058)
+
+Screen `/flow-runtime/analytics` (tabs Overview, Execution history, Error logs, Retry records; the state lives in the address). Reads need `flr.runs.read`, retries `flr.runs.manage`. WaDesk's "run" in the history, the errors and the retries is a `flow_subscribers` row, so those three read subscribers (a launch that failed before any run existed is listed); the Overview numbers read runs plus those launch failures.
+
+| Part                      | Endpoint                                      | Service                          | Tables                                             | State |
+| ------------------------- | --------------------------------------------- | -------------------------------- | -------------------------------------------------- | ----- |
+| KPIs, trend, mix, board   | `GET /v2/flow-runtime/analytics`              | `FlowRuntimeService.analytics`   | `flow_runs`, `flow_subscribers`, `flow_retry_logs` | built |
+| Execution history         | `GET /v2/flow-runtime/history`                | `FlowRuntimeService.history`     | `flow_subscribers`, `flows`, `contacts`            | built |
+| Error logs (groups)       | `GET /v2/flow-runtime/errors`                 | `FlowRuntimeService.errorGroups` | `flow_subscribers`, `flows`, `contacts`            | built |
+| Retry records             | `GET /v2/flow-runtime/retries`                | `FlowRuntimeService.listRetries` | `flow_retry_logs`, `flow_subscribers`, `users`     | built |
+| Retry one                 | `POST /v2/flow-runtime/subscribers/:id/retry` | `FlowRuntimeService.retry`       | `flow_subscribers`, `flow_retry_logs`              | built |
+| Retry named runs (max 50) | `POST /v2/flow-runtime/retry`                 | `FlowRuntimeService.retryMany`   | same                                               | built |

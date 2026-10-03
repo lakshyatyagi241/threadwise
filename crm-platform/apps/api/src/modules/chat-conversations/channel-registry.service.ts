@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
@@ -22,7 +22,10 @@ import {
 } from '../../infra/providers/chat-conversations';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { WabaConnectService } from '../whatsapp-cloud-api-waba';
+import {
+  WABA_CONNECTIONS,
+  type WabaConnectionsPort,
+} from '../whatsapp-cloud-api-waba/waba-connections.port';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { mergeSettings, normalizeSettings } from './channel-settings';
 import { ChannelVault } from './channel-vault';
@@ -63,7 +66,7 @@ export class ChannelRegistryService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly realtime: ChatRealtimePublisher,
-    private readonly waba: WabaConnectService,
+    @Inject(WABA_CONNECTIONS) private readonly waba: WabaConnectionsPort,
     config: ConfigService<Env, true>,
   ) {
     this.publicBaseUrl = config.get('APP_URL', { infer: true }).replace(/\/$/, '');

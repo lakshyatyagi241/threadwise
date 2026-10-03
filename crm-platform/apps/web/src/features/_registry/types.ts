@@ -39,6 +39,11 @@ export interface NavItem {
   icon?: string;
   /** Small pill next to the label ("New") for screens worth pointing out. */
   badge?: 'new';
+  /**
+   * A screen that needs the whole width (a multi-pane inbox, a chat): while it is open the menu shows as the slim icon rail,
+   * whatever the person pinned, and a click on the expand button opens it for that visit only.
+   */
+  fullWidth?: boolean;
 }
 
 /** `null` = not known yet (the app-init payload does not exist): show the item and do not lock it. */
