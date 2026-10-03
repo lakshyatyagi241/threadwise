@@ -218,6 +218,18 @@ export const wabaHealthSchema = z.object({
       isOfficialBusinessAccount: z.boolean().nullable(),
       isPinEnabled: z.boolean().nullable(),
     }),
+    /** This month's free service conversations (TW-WABA-023). Null when Meta's analytics did not answer: the card is then not shown. */
+    conversations: z
+      .object({
+        freeUsed: z.number().int(),
+        freeTotal: z.number().int(),
+        freeLeft: z.number().int(),
+        paid: z.number().int(),
+        total: z.number().int(),
+        cost: z.number(),
+      })
+      .nullable()
+      .optional(),
     errors: z.array(z.string()),
   }),
 });

@@ -9,6 +9,7 @@ import {
   WabaApiError,
   describeMetaError,
 } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
+import { conversationsFrom } from './waba-extras-rules';
 import {
   WABA_TEMPLATES,
   type WabaTemplatePort,
@@ -23,6 +24,12 @@ export interface DetailFacts {
   tokenScopes: string[] | null;
   subscribedApps: number | null;
   templatesErrorCode: number | null;
+}
+
+/** The current calendar month in unix seconds, up to now. */
+function monthWindow(now: Date): { start: number; end: number } {
+  const start = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1) / 1000;
+  return { start, end: Math.floor(now.getTime() / 1000) };
 }
 
 const reason = (e: unknown): string =>
@@ -50,11 +57,15 @@ export class WabaHealthDetailsService {
       isPinEnabled: boolean | null;
     },
   ): Promise<{ details: Details; facts: DetailFacts }> {
-    const [waba, apps, token, tpl] = await Promise.allSettled([
+    const month = monthWindow(new Date());
+    const [waba, apps, token, tpl, analytics] = await Promise.allSettled([
       this.admin.getWabaDetails(conn),
       this.admin.getSubscribedApps(conn),
       conn.accessToken ? this.admin.inspectToken(conn.accessToken) : Promise.resolve(null),
       this.templates.list(conn, { limit: 100 }),
+      Promise.resolve().then(() =>
+        this.admin.getConversationAnalytics(conn, month.start, month.end),
+      ),
     ]);
     const errors: string[] = [];
     const fail = (what: string, r: PromiseRejectedResult) =>
@@ -86,6 +97,8 @@ export class WabaHealthDetailsService {
         templates:
           tpl.status === 'fulfilled' ? { sampled: tpl.value.items.length, byStatus } : null,
         phone,
+        // Optional: any failure or change of shape in Meta's analytics simply leaves the card out (TW-WABA-023).
+        conversations: analytics.status === 'fulfilled' ? conversationsFrom(analytics.value) : null,
         errors,
       },
       facts: {

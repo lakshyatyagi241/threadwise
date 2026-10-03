@@ -42,6 +42,7 @@ const stored: PlanAdminItem = {
   limits: {
     monthly_messages: 10000,
     broadcasts: 0,
+    scheduled_messages: 0,
     total_campaigns: 0,
     devices: 3,
     users: 0,
@@ -73,6 +74,8 @@ const stored: PlanAdminItem = {
     waba_calling: true,
     inbox_kanban: true,
     team_performance: true,
+    scheduled_messages: true,
+    whatsapp_warmer: true,
   },
   inUse: 2,
   isRegistrationDefault: false,

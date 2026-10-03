@@ -1,3 +1,4 @@
+import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
 
 /** What the editor saves (TW-FLR-013): nodes with a lower-case `type` and a `data` bag, edges with a source handle. */
@@ -123,6 +124,8 @@ function replyType(kind: string): 'Text' | 'Image' | 'Video' | 'Audio' | 'Docume
 }
 
 function shapeNode(type: string, data: Record<string, unknown>): Record<string, unknown> {
+  const commerce = shapeCommerceNode(type, data);
+  if (commerce) return commerce;
   switch (type) {
     case 'message':
       return { replies: [{ type: 'Text', data: str(data.text) }] };
@@ -291,6 +294,13 @@ export function compileGraph(input: unknown): RuntimeGraph {
       to: target,
     });
   }
+  // A Template node whose quick replies are wired to their own branches waits for the tap; one with no `pN` edge moves straight on.
+  const tapWired = new Set(
+    (arr(g.flowEdges).map(obj) as BuilderEdge[])
+      .filter((e) => /^p\d+$/.test(str(e.sourceHandle)))
+      .map((e) => str(e.source)),
+  );
+  for (const n of nodes) if (n.type === 'Template') n.props.buttonsWired = tapWired.has(n.id);
   return { nodes, edges, vars: obj(g.vars) };
 }
 
