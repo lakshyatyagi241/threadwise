@@ -76,6 +76,25 @@ describe('BuilderContextService.context (TW-FLB-026)', () => {
     expect(on.senders.email).toEqual([{ key: 'email:em-1', label: 'a@b.test' }]);
   });
 
+  it('reads only label columns of the channel tables, never `*` (those rows hold access tokens)', async () => {
+    const { svc, seen } = service([], {
+      facebook_enabled: true,
+      tiktok_enabled: true,
+      email_enabled: true,
+    });
+    await run(() => svc.context());
+    const channelQueries = seen.filter((q) =>
+      /FROM (workspace_ig_accounts|facebook_pages|tiktok_accounts|telegram_bots|line_channels|wechat_channels|viber_channels|workspace_email_accounts)\b/.test(
+        q,
+      ),
+    );
+    expect(channelQueries).toHaveLength(8);
+    for (const q of channelQueries) {
+      expect(q).not.toMatch(/SELECT \*/);
+      expect(q).not.toMatch(/token|secret|auth/i);
+    }
+  });
+
   it('keeps an Instagram mirror account unless it was flagged disconnected', async () => {
     const { svc, seen } = service([
       [/FROM workspace_ig_accounts/, [{ id: 3, uuid: 'ig-1', username: 'shop' }]],

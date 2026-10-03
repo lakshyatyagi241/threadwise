@@ -131,7 +131,7 @@ export const Mono = ({ children }: { children: ReactNode }) => (
 /** The grey explanation box at the top of a form, with an optional smaller second line. */
 export function Intro({ children, sub }: { children: ReactNode; sub?: ReactNode }) {
   return (
-    <Notice>
+    <Notice className="mb-3">
       {children}
       {sub ? <div className="mt-1 text-[10.5px] text-muted-foreground">{sub}</div> : null}
     </Notice>
@@ -250,7 +250,7 @@ export function OrderDetailsFields({ p, detailsHint }: { p: FormProps; detailsHi
 export function LeadForm({ p, askName }: { p: FormProps; askName: string }) {
   return (
     <>
-      <Notice>
+      <Notice className="mb-3">
         Maps variables collected by earlier <Mono>{askName}</Mono> nodes into a saved lead. Leave a
         field blank to skip it.
       </Notice>
@@ -305,7 +305,7 @@ export function WhatsappHandoffForm({
   );
   return (
     <>
-      <div className="mb-4 rounded-lg border border-[#A7E8C0] bg-[#DCFCE7] p-2.5 text-[11.5px] leading-snug text-[#14532D]">
+      <div className="mb-3 rounded-lg border border-[#A7E8C0] bg-[#DCFCE7] p-2.5 text-[11.5px] leading-snug text-[#14532D]">
         Move this {surface} to WhatsApp. {platform} and WhatsApp identities aren&apos;t linked, so
         the person has to reach your WhatsApp themselves (deep link) or give you their number first.
       </div>
@@ -338,7 +338,7 @@ export function WhatsappHandoffForm({
         </>
       ) : (
         <>
-          <Notice tone="warn">
+          <Notice tone="warn" className="mb-3">
             ⚠ Meta only lets you message a WhatsApp number that has opted in or messaged you in the
             last 24h. If it hasn&apos;t, the first message is blocked. Prefer the deep-link method
             unless you know the number opted in.
