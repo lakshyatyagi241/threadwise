@@ -5,6 +5,8 @@ import { NavLayoutService } from './nav-layout.service';
 import { OperatorNotificationsController } from './operator-notifications.controller';
 import { OperatorNotificationsService } from './operator-notifications.service';
 import { PlatformShellController, ShellController } from './shell.controller';
+import { ShellUserController } from './shell-user.controller';
+import { ShellUserService } from './shell-user.service';
 import { WorkspaceExportService } from './workspace-export.service';
 import {
   PreferencesController,
@@ -20,6 +22,7 @@ import { WorkspaceSettingsService } from './workspace-settings.service';
   imports: [PlatformSettingsModule],
   controllers: [
     ShellController,
+    ShellUserController,
     PlatformShellController,
     OperatorNotificationsController,
     WorkspaceSettingsController,
@@ -28,6 +31,7 @@ import { WorkspaceSettingsService } from './workspace-settings.service';
   providers: [
     CryptoService,
     NavLayoutService,
+    ShellUserService,
     OperatorNotificationsService,
     WorkspaceSettingsService,
     WorkspaceExportService,

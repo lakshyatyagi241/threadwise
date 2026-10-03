@@ -137,6 +137,140 @@
       },
       "showing": "Showing {count, plural, one {# recent event} other {# recent events}}",
       "live": "Live feed, newest first"
+    },
+    "settings": {
+      "workspace": {
+        "label": "Workspace settings",
+        "description": "Name, timezone, currency, notifications, data export and deleting the workspace.",
+        "keywords": "workspace, name, timezone, currency, notifications, export, delete, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "Workspace",
+      "titleTail": "settings",
+      "subtitle": "Configure your workspace, team, and integrations.",
+      "tabs": {
+        "general": "General",
+        "notifications": "Notifications",
+        "data": "Data"
+      },
+      "general": {
+        "workspace": "Workspace",
+        "ownerOnly": "Only the workspace owner can change timezone, currency, or workspace name.",
+        "name": "Workspace name",
+        "url": "Workspace URL",
+        "urlHint": "URL slug isn't editable here. Contact support to change.",
+        "timezone": "Default timezone",
+        "timezoneHint": "All scheduled sends, business-hours checks, and SLA timers run in this zone.",
+        "currency": "Currency",
+        "currencyHint": "Used on plan checkout, invoices, and wallet display.",
+        "save": "Save",
+        "saved": "Settings saved.",
+        "saveFailed": "The settings could not be saved.",
+        "loadFailed": "The settings could not be loaded.",
+        "hours": {
+          "title": "Working hours",
+          "note": "Shown for reference. Working hours are not enforced yet, so these controls are read-only.",
+          "weekdays": "Mon - Fri",
+          "saturday": "Saturday",
+          "sunday": "Sunday",
+          "from": "From",
+          "to": "To"
+        },
+        "preferences": {
+          "title": "Auto AI summarize",
+          "note": "Get a live AI review on every message-body textarea: what's working in green, what to fix in red, plus a one-tap \"best version\" you can paste back. When off, the same review runs on demand from the sparkle icon inside the toolbar.",
+          "save": "Save",
+          "saved": "Preference saved.",
+          "saveFailed": "The preference could not be saved."
+        }
+      },
+      "notifications": {
+        "title": "Workspace notifications",
+        "note": "Toggle delivery per channel. Anything turned off here will never produce an in-app bell entry, email, or Slack message.",
+        "readOnly": "Read-only. The workspace owner can edit these.",
+        "save": "Save preferences",
+        "saved": "Notification preferences saved.",
+        "saveFailed": "The preferences could not be saved.",
+        "loadFailed": "The preferences could not be loaded.",
+        "specificEvents": "Specific events",
+        "byCategory": "By category",
+        "event": "Event",
+        "category": "Category",
+        "channels": {
+          "inapp": "In-app",
+          "email": "Email",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "Device connected",
+          "device_disconnected": "Device disconnected",
+          "campaign_completed": "Campaign completed",
+          "campaign_failed": "Campaign failed",
+          "broadcast_completed": "Broadcast completed",
+          "new_customer_reply": "New customer reply",
+          "mention_in_inbox": "You were @mentioned",
+          "conversation_assigned": "Conversation assigned to you",
+          "sla_breached": "SLA breached",
+          "wallet_low_balance": "Wallet low balance",
+          "plan_changed": "Plan upgraded / downgraded",
+          "payment_failed": "Payment failed",
+          "webhook_delivery_failed": "Webhook delivery failed",
+          "flow_started": "Flow started",
+          "flow_failed": "Flow failed",
+          "integration_disconnected": "Integration disconnected",
+          "appointment_booked": "Appointment booked",
+          "weekly_summary": "Weekly summary"
+        },
+        "categories": {
+          "device": "Devices",
+          "contact": "Contacts",
+          "campaign": "Campaigns",
+          "broadcast": "Broadcasts",
+          "template": "Templates",
+          "chat": "Chat",
+          "webhook": "Webhooks",
+          "billing": "Billing",
+          "system": "System"
+        },
+        "slackLabel": "Slack incoming webhook URL",
+        "slackHint": "Create one in Slack under Apps, Incoming Webhooks. Events with the Slack toggle on post here.",
+        "channelStatus": "Channel status",
+        "statusInapp": "In-app bell: live, drives the badge in the top header.",
+        "statusEmailLive": "Email: live, sent through the platform mail settings.",
+        "statusEmailOff": "Email: sent once SMTP is configured by the platform administrator.",
+        "statusSlackOn": "Slack: webhook saved.",
+        "statusSlackOff": "Slack: add a webhook URL to turn it on."
+      },
+      "data": {
+        "loadFailed": "The export counts could not be loaded.",
+        "exportTitle": "Data export",
+        "exportNote": "Download your workspace data as CSV. Each link streams a fresh export.",
+        "exportOwnerOnly": "Only the workspace owner can download exports.",
+        "types": {
+          "contacts": "Contacts",
+          "conversations": "Conversations",
+          "messages": "Messages"
+        },
+        "count": {
+          "contacts": "{count, plural, one {# record} other {# records}} · CSV",
+          "conversations": "{count, plural, one {# thread} other {# threads}} · CSV",
+          "messages": "{count, plural, one {# message} other {# messages}} · CSV"
+        },
+        "delete": {
+          "title": "Delete workspace",
+          "note": "Permanently delete this workspace, all conversations, automations, and billing history.",
+          "irreversible": "Cannot be undone.",
+          "ownerOnly": "Only the workspace owner can delete the workspace.",
+          "typeName": "Type the workspace name:",
+          "password": "Confirm with password",
+          "submit": "Delete workspace permanently",
+          "cancel": "Cancel",
+          "confirmTitle": "Delete this workspace?",
+          "confirmMessage": "\"{name}\" and everything in it will be deleted and everyone will be signed out. This is irreversible.",
+          "failed": "The workspace could not be deleted."
+        }
+      }
     }
   }
 }
