@@ -16,6 +16,8 @@ export interface ThreadRef {
   id: string;
   channelId: string;
   peerKey: string;
+  /** The customer's last message on the thread: the anchor of the 24 hour window a sender checks before it sends. */
+  lastInboundAt: Date | null;
 }
 
 export interface RecordOutboundInput {

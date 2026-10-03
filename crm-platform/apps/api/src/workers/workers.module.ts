@@ -25,6 +25,7 @@ import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
@@ -67,6 +68,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChannelInstagramWorkerModule,
     ShopifyWoocommerceWorkerModule,
     ScheduledQueueWarmerWorkerModule,
+    FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
   ],
   providers: [

@@ -141,6 +141,13 @@ export class QrChannelAdapter implements ChannelAdapter {
             'Templates are a WhatsApp Cloud API feature; this number sends plain messages',
             false,
           );
+        case 'contacts':
+        case 'interactive':
+          throw new ChannelError(
+            'CHANNEL_CAPABILITY_UNSUPPORTED',
+            'Contact cards and buttons are not sent through a number connected by QR code',
+            false,
+          );
       }
       const id = providerMessageId ?? `qr-${envelope.clientReference}`;
       // So a delivery report for this message finds the channel it belongs to (see InboxBridge).
