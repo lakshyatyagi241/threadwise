@@ -36,3 +36,4 @@ Not compared side by side with the running reference in this run (the reference 
 
 Tier P0 done: WD-BSP-003, 004, 005, 006, 011, 012, 014, 016. Tier P1 done: WD-BSP-007, 008, 009, 010, 015, 017. Tier P2 done: WD-BSP-001, 002. WD-BSP-013 stays blocked on the workspace admin form.
 Round-3 note: the web unit tests (17) pass; the API e2e and integration suites were not re-run because the local Postgres was not reachable (docker daemon down).
+Round-4 verification (Postgres up, crm_bsp migrated, 178 migrations): API unit 39, BSP plus wallet-message-billing e2e 156 (6 files), integration 9, web 17 all pass; arch:check and db:verify-schema clean (0 errors). Remaining typecheck errors (8 in api specs, 1 in web plan-draft.test.ts) are in other domains' files. Screens were still not compared side by side with the running WaDesk.
