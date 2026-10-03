@@ -17,6 +17,7 @@ import {
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { coupons, creditPackages } from '../coupons-credits-referral-currency/tables';
 import { companies, contacts } from '../crm';
@@ -185,6 +186,8 @@ export const orders = pgTable(
     returnToken: text('return_token').notNull(),
     walletTopupMinor: bigint('wallet_topup_minor', { mode: 'number' }),
     idempotencyKey: text('idempotency_key'),
+    // 20261017090000_paygw_admin_billing.sql: the line printed on a manual invoice.
+    description: text('description'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -235,6 +238,14 @@ export const orders = pgTable(
     index('idx_orders_gateway_order_id').on(t.orgId, t.gatewayOrderId),
     index('idx_orders_package_id').on(t.orgId, t.packageId),
     index('idx_orders_status').on(t.orgId, t.status),
+    // 20261017090000_paygw_admin_billing.sql
+    index('idx_orders_created_all').on(t.createdAt.desc(), t.id.desc()),
+    index('idx_orders_paid_at_paid')
+      .on(t.paidAt)
+      .where(sql`status = 'paid'`),
+    index('idx_orders_proof_queue')
+      .on(t.proofSubmittedAt.desc())
+      .where(sql`proof_submitted_at IS NOT NULL AND status IN ('pending', 'awaiting_approval')`),
   ],
 );
 
