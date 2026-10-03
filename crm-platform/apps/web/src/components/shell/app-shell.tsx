@@ -9,7 +9,14 @@ import { SettingsBack } from '@/features/settings-hub/settings-back';
 import { PageSettingsShortcut } from '@/features/settings-hub/page-settings-shortcut';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { NavDrawer, NavRail } from './nav-rail';
-import { SETTINGS_NAV_ID, activeNavId, helpItems, menuItems, toSections } from './nav-model';
+import {
+  SETTINGS_NAV_ID,
+  activeNavId,
+  helpItems,
+  isFullWidthScreen,
+  menuItems,
+  toSections,
+} from './nav-model';
 import { TopBar, type WalletChipData } from './top-bar';
 import type { ShellUser } from './user-menu';
 
@@ -63,7 +70,12 @@ export function AppShell({
   const [drawer, setDrawer] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const [pinnedRaw, setPinned] = useStoredValue(NAV_PINNED_KEY);
-  const pinned = pinnedRaw === '1';
+  const wide = isFullWidthScreen(nav, settings, pathname);
+  // On a full-width screen the menu is the slim rail; the expand button opens it for that visit only (the saved choice stays).
+  const [openHere, setOpenHere] = useState<string | null>(null);
+  const pinned = wide ? openHere === pathname : pinnedRaw === '1';
+  const togglePinned = () =>
+    wide ? setOpenHere(pinned ? null : pathname) : setPinned(pinned ? '0' : '1');
 
   const sections = useMemo(() => toSections(menuItems(nav)), [nav]);
   const help = useMemo(() => helpItems(nav), [nav]);
@@ -79,7 +91,7 @@ export function AppShell({
         sections={sections}
         activeId={activeId}
         pinned={pinned}
-        onTogglePinned={() => setPinned(pinned ? '0' : '1')}
+        onTogglePinned={togglePinned}
         footer={navFooter}
       />
       <NavDrawer
