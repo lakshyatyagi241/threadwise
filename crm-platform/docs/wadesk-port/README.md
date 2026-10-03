@@ -84,7 +84,7 @@ the device idle-logout consumer (037), a WebKit/Safari pass and a signed-in WaDe
 | ai-copilot-lead-finder                            | AICRM  | writer interrupted, no file      |          |       |
 | contacts-attributes-tags                          | CON    | writer interrupted, no file      |          |       |
 | deals-pipelines                                   | DEAL   | writer interrupted, no file      |          |       |
-| companies-projects-tasks                          | CTP    | writer interrupted, no file      |          |       |
+| companies-projects-tasks                          | CTP    | written, API + web built         | 13       | 426   |
 | sales-docs-proposals                              | SALES  | writer interrupted, no file      |          |       |
 | invoicing                                         | INV    | writer interrupted, no file      |          |       |
 | appointments-booking                              | APPT   | written, API port built          | 40       | 1021  |
