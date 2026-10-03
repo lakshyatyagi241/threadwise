@@ -1,10 +1,14 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { PlanCampaignGate } from './_shims/plan-gate';
+import { PlatformCampaignSettings } from './_shims/platform-campaign-settings';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { BroadcastsModule } from '../broadcasts';
 import { ChatConversationsModule } from '../chat-conversations';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CrmModule } from '../crm';
-import { DefaultCampaignSettings, NoFlowStarter, OpenCampaignPlanGate } from './_shims/open-gates';
+import { NoFlowStarter } from './_shims/open-gates';
 import {
   CAMPAIGN_BILLING,
   CAMPAIGN_FLOW_STARTER,
@@ -33,7 +37,14 @@ import { CampaignsService } from './campaigns.service';
  * same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [BroadcastsModule, ChatConversationsModule, CrmModule, WalletMessageBillingModule],
+  imports: [
+    BroadcastsModule,
+    ChatConversationsModule,
+    CrmModule,
+    PlansCoreModule,
+    PlatformSettingsModule,
+    WalletMessageBillingModule,
+  ],
   controllers: [
     CampaignsController,
     CampaignsReadController,
@@ -52,10 +63,10 @@ import { CampaignsService } from './campaigns.service';
     CampaignMirrorService,
     CampaignCallbacksService,
     CampaignReceiptsService,
-    { provide: CAMPAIGN_PLAN_GATE, useClass: OpenCampaignPlanGate },
+    { provide: CAMPAIGN_PLAN_GATE, useClass: PlanCampaignGate },
     { provide: CAMPAIGN_BILLING, useClass: WalletCampaignBilling },
     { provide: CAMPAIGN_FLOW_STARTER, useClass: NoFlowStarter },
-    { provide: CAMPAIGN_SETTINGS, useClass: DefaultCampaignSettings },
+    { provide: CAMPAIGN_SETTINGS, useClass: PlatformCampaignSettings },
   ],
   // The worker module reuses this module's providers and the kits it was built from.
   exports: [

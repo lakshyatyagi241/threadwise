@@ -180,7 +180,8 @@ export class ConversationsService implements ConversationsFacade {
         seq: after.msgSeq,
         direction: 'out',
         kind: 'text',
-        senderKind: senderKindOfSource(input.source),
+        senderKind: input.senderUserId ? 'agent' : senderKindOfSource(input.source),
+        senderUserId: input.senderUserId ?? null,
         body: input.body,
         // The provider already took it: the other domain sent it, this only records it in the thread.
         status: 'sent',

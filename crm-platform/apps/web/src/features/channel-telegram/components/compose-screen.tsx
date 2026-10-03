@@ -27,6 +27,7 @@ import {
   previewText,
 } from '../lib/compose-model';
 import { BackIcon } from './tg-icons';
+import { UploadMediaButton } from '@/features/broadcasts/components/upload-media-button';
 
 const TG = '#229ED9';
 
@@ -237,6 +238,9 @@ export function ComposeScreen() {
                 placeholder="https://…/promo.png"
                 invalid={!mediaOk}
               />
+              <div className="mt-1.5">
+                <UploadMediaButton onUploaded={(m) => setMediaUrl(m.url)} />
+              </div>
             </Field>
 
             <div>
