@@ -15,6 +15,7 @@ import {
   adminFlowTemplateSchema,
   adminFlowTemplatesResponseSchema,
   type FlbAiGenerateRequest,
+  type FlbAiGenerateResponse,
   type FlbCommerceProductsQuery,
   type CreateAdminFlowTemplateInput,
   type ListFlowsQuery,
@@ -25,6 +26,7 @@ import {
 } from '@crm/contracts';
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
+import { ApiError, toApiError } from '@/lib/api/errors';
 
 /**
  * Typed calls to the flows API through the same-origin proxy. Every response is parsed with its contract schema at the
@@ -72,9 +74,42 @@ export const flowsApi = {
     apiFetch(`/flows/builder-context/google/${kind}`, { schema: flbGoogleFilesResponseSchema, signal }),
   testWebhook: (body: FlbTestWebhookRequest) =>
     apiFetch('/flows/test-webhook', { method: 'POST', body, schema: flbTestWebhookResponseSchema }),
-  aiGenerate: (body: FlbAiGenerateRequest) =>
-    apiFetch('/flows/ai-generate', { method: 'POST', body, schema: flbAiGenerateResponseSchema }),
+  aiGenerate,
 };
+
+/**
+ * "Generate with AI". Not through `apiFetch`: a gateway timeout or proxy error answers HTML, and the modal must then say
+ * `Generation failed (<status>)` like Reference's does, not a JSON parse error. Problem+json bodies keep their own message.
+ */
+async function aiGenerate(body: FlbAiGenerateRequest): Promise<FlbAiGenerateResponse> {
+  const res = await fetch('/api/v2/flows/ai-generate', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Request-Id': crypto.randomUUID(),
+      'Idempotency-Key': crypto.randomUUID(),
+    },
+    body: JSON.stringify(body),
+    credentials: 'same-origin',
+  });
+  const text = await res.text();
+  let json: unknown;
+  try {
+    json = text ? JSON.parse(text) : undefined;
+  } catch {
+    json = undefined;
+  }
+  if (!res.ok) {
+    const err = toApiError(res.status, json, res.headers.get('x-request-id'), res.headers.get('retry-after'));
+    throw err.code === 'UNKNOWN' || err.code === 'INTERNAL'
+      ? new ApiError(res.status, err.code, `Generation failed (${res.status})`, err.requestId)
+      : err;
+  }
+  const parsed = flbAiGenerateResponseSchema.safeParse(json);
+  if (!parsed.success) throw new ApiError(res.status, 'INTERNAL', `Generation failed (${res.status})`);
+  return parsed.data;
+}
 
 /** Platform operator calls (the admin template gallery) go through the operator proxy, `/api/platform/*`. */
 async function platformFetch<T>(

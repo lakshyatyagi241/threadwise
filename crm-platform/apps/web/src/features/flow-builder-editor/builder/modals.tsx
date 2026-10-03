@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import type { FlbAiGenerateResponse, FlbBuilderContext, FlowType } from '@crm/contracts';
-import { ApiError } from '@/lib/api/errors';
 import { flowsApi } from '../api/flows';
+import { aiGenerateError } from './ai-generate-error';
 import { Icon } from './node-card';
 
 const Spinner = () => (
@@ -183,7 +183,7 @@ function AIGenInner({
       setPrompt('');
       onClose();
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : ((e as Error)?.message ?? 'Network error'));
+      setError(aiGenerateError(e));
     } finally {
       setLoading(false);
     }
@@ -206,7 +206,11 @@ function AIGenInner({
             <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">Choose model</label>
             {models.length === 0 ? (
               <div className="rounded-lg border border-border bg-muted px-3 py-3 text-[12px] text-foreground/80">
-                No AI providers enabled. Admin needs to add a key in AI Keys before this can run.
+                No AI providers enabled. Admin needs to add a key in{' '}
+                <a href="/admin/api-keys" className="text-brand underline">
+                  AI Keys
+                </a>{' '}
+                before this can run.
               </div>
             ) : (
               <div className={`grid gap-2 ${cols}`}>
@@ -218,7 +222,7 @@ function AIGenInner({
                       type="button"
                       onClick={() => setModel(m.value)}
                       aria-pressed={entry?.value === m.value}
-                      className={`flex flex-col items-start gap-1 rounded-xl border p-3 transition ${entry?.value === m.value ? 'border-brand bg-[var(--flb-mint)]' : 'border-border bg-background hover:bg-muted'}`}
+                      className={`flex flex-col items-start gap-1 rounded-xl border p-3 transition ${entry?.value === m.value ? 'border-brand bg-[color-mix(in_srgb,var(--flb-mint)_30%,transparent)]' : 'border-border bg-background hover:bg-muted'}`}
                     >
                       <span className="flex items-center gap-1.5">
                         <span className="h-2 w-2 rounded-full" style={{ background: meta?.dot ?? '#888' }} />
