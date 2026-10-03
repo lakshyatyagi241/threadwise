@@ -105,7 +105,7 @@ export class ChannelRegistryService {
    * domains see never carries credentials.
    *
    * A WhatsApp channel's credentials are its linked connection's, decrypted by the WABA domain: `route`, `accessToken` (Meta) or
-   * `authKey` (Interakt), `businessAccountId`; the phone number id is the channel's `externalId`. A connection that is no longer
+   * `authKey` (Interakt), `registry` (a provider of the platform's registry), `businessAccountId`; the phone number id is the channel's `externalId`. A connection that is no longer
    * connected makes the channel read `disconnected` here whatever its own row says, so a send never leaves from a number a person
    * has disconnected, even in the moment before the link service has caught up.
    */
@@ -128,6 +128,8 @@ export class ChannelRegistryService {
             authKey: conn.authKey,
             businessAccountId: conn.wabaId,
             phoneNumberId: conn.phoneNumberId,
+            // A number on a provider of the platform's registry: its resolved route (address, version, rendered headers).
+            ...(conn.registry ? { registry: JSON.stringify(conn.registry) } : {}),
           }
         : {};
     } else {
@@ -182,39 +184,63 @@ export class ChannelRegistryService {
     orgId: number,
     device: { uuid: string; name: string; displayAddress: string | null; connected: boolean },
   ): Promise<{ id: number; uuid: string; created: boolean }> {
-    const status = device.connected ? 'connected' : 'disconnected';
+    return this.syncExternalChannel(orgId, {
+      kind: 'whatsapp_qr',
+      externalId: device.uuid,
+      name: device.name,
+      displayAddress: device.displayAddress,
+      connected: device.connected,
+    });
+  }
+
+  /**
+   * Keeps the inbox channel of an account another domain owns in step with that account: one channel per (kind, `externalId`), created
+   * the first time, then only what changed is written (the Facebook Page, the Instagram account, the Telegram bot, the unofficial
+   * engine's device). No credentials: the owning domain keeps them and its adapter reads them itself. Not metered: these channels
+   * have no per-message bill, so a send does not draw on the wallet. The system context is opened here.
+   */
+  async syncExternalChannel(
+    orgId: number,
+    account: {
+      kind: string;
+      externalId: string;
+      name: string;
+      displayAddress: string | null;
+      connected: boolean;
+    },
+  ): Promise<{ id: number; uuid: string; created: boolean }> {
+    const status = account.connected ? 'connected' : 'disconnected';
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
-      const found = await this.repo.byExternal(tx, orgId, 'whatsapp_qr', device.uuid);
+      const found = await this.repo.byExternal(tx, orgId, account.kind, account.externalId);
       if (found) {
         if (
           found.status !== status ||
-          found.name !== device.name ||
-          found.displayAddress !== device.displayAddress
+          found.name !== account.name ||
+          found.displayAddress !== account.displayAddress
         ) {
           await this.repo.update(tx, orgId, found.id, found.rowVersion, {
             status,
-            name: device.name,
-            displayAddress: device.displayAddress,
+            name: account.name,
+            displayAddress: account.displayAddress,
           });
         }
         return { id: found.id, uuid: found.uuid, created: false };
       }
       const row = await this.repo.insert(tx, orgId, {
-        kind: 'whatsapp_qr',
-        name: device.name,
+        kind: account.kind,
+        name: account.name,
         status,
-        externalId: device.uuid,
-        displayAddress: device.displayAddress,
+        externalId: account.externalId,
+        displayAddress: account.displayAddress,
         credentialsEnc: null,
         credentialHints: {},
         webhookTokenHash: null,
-        // The unofficial engine has no per-message bill from Meta: it does not draw on the wallet.
-        settings: normalizeSettings('whatsapp_qr', { metered: false }),
+        settings: normalizeSettings(account.kind, { metered: false }),
         createdBy: null,
       });
       // Another worker created it between the read and the insert: take theirs.
-      const won = row ?? (await this.repo.byExternal(tx, orgId, 'whatsapp_qr', device.uuid));
-      if (!won) throw new Error('device channel could not be created');
+      const won = row ?? (await this.repo.byExternal(tx, orgId, account.kind, account.externalId));
+      if (!won) throw new Error(`${account.kind} channel could not be created`);
       if (row) await this.recordCreated(tx, row);
       return { id: won.id, uuid: won.uuid, created: row !== null };
     });

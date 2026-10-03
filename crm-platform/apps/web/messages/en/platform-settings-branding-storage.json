@@ -15,7 +15,8 @@
       "pwa": "PWA",
       "storage": "Cloud storage",
       "realtime": "Real-time",
-      "whatsapp": "WhatsApp (WABA)"
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "Campaigns"
     },
     "hub": {
       "kicker": "Admin - Project settings",
@@ -895,6 +896,35 @@
             "meta": "Meta (direct)"
           }
         }
+      },
+      "campaigns": {
+        "title": "Campaigns",
+        "description": "How a campaign retries a failed message and when an unfinished one ends.",
+        "sections": {
+          "retry": {
+            "title": "Retries"
+          },
+          "expiry": {
+            "title": "Auto-end"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "Retry attempts",
+            "hint": "Tries per recipient before it is marked failed (0 to 10)."
+          },
+          "retryBackoffSec": {
+            "label": "Retry wait (seconds)",
+            "hint": "The pause before the next try; it grows with each one."
+          },
+          "autoExpiryEnabled": {
+            "label": "End unfinished campaigns",
+            "hint": "Ends a campaign that is still running after the hours below."
+          },
+          "defaultExpiryHours": {
+            "label": "End after (hours)"
+          }
+        }
       }
     },
     "cards": {
@@ -1002,6 +1032,11 @@
         "title": "WhatsApp (WABA)",
         "description": "The Meta app every workspace connects its WhatsApp numbers through: app id and secret, Embedded Signup, webhook and the Interakt route.",
         "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "Campaigns",
+        "description": "Retries and the automatic end of a campaign that was never finished.",
+        "tags": "Retry / expiry"
       }
     },
     "signup": {
@@ -1556,6 +1591,32 @@
         "tip": {
           "title": "Tip",
           "body": "Switching the default route or the app mid-traffic affects only numbers connected afterwards. Pause campaigns before changing the Meta app."
+        }
+      },
+      "campaigns": {
+        "title": "Campaign delivery",
+        "eyebrow": "Admin - Campaigns",
+        "description": "Platform-wide rules for every workspace's campaigns: how often a failed message is tried again and when an unfinished campaign is ended.",
+        "sections": {
+          "retry": {
+            "title": "Retries"
+          },
+          "expiry": {
+            "title": "Auto-end"
+          }
+        },
+        "guide": {
+          "title": "How it works",
+          "items": {
+            "retry": {
+              "title": "Retries",
+              "body": "A recipient whose send fails is tried again after the wait, up to the attempts set here."
+            },
+            "expiry": {
+              "title": "Auto-end",
+              "body": "A campaign still running after the hours set here is ended so it cannot hold a sender for ever."
+            }
+          }
         }
       }
     },

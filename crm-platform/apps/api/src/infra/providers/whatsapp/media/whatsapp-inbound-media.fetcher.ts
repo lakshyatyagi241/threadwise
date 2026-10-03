@@ -42,7 +42,7 @@ export class WhatsappInboundMediaFetcher implements InboundMediaFetcher {
     const cfg = whatsappMediaConfig();
     const client = new GraphMediaClient(cfg, this.http);
     const ctx = authContextOf(req.channel);
-    const profile = profileOf(this.http, ctx.route);
+    const profile = profileOf(this.http, ctx.route, ctx.registry);
     // Every header value the provider asked for: removed from any text that leaves this function.
     const secrets = secretsIn(profile.buildHeaders(ctx));
 

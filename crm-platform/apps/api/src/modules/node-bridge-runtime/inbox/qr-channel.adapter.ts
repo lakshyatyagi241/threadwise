@@ -75,7 +75,7 @@ export class QrChannelAdapter implements ChannelAdapter {
     const to = digits(envelope.to);
     const context = { clientReference: envelope.clientReference, screen: { source: 'inbox' } };
     try {
-      let providerMessageId: string | null;
+      let providerMessageId: string | null = null;
       switch (envelope.kind) {
         case 'text':
           providerMessageId = (
@@ -139,6 +139,13 @@ export class QrChannelAdapter implements ChannelAdapter {
           throw new ChannelError(
             'CHANNEL_CAPABILITY_UNSUPPORTED',
             'Templates are a WhatsApp Cloud API feature; this number sends plain messages',
+            false,
+          );
+        case 'contacts':
+        case 'interactive':
+          throw new ChannelError(
+            'CHANNEL_CAPABILITY_UNSUPPORTED',
+            'Contact cards and interactive messages are WhatsApp Cloud API features; this number sends plain messages',
             false,
           );
       }
