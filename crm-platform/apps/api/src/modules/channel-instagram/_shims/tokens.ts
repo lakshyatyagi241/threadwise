@@ -34,13 +34,12 @@ export interface IngestOutcome {
 }
 
 /**
- * Writes an inbound or pulled Instagram message into the team inbox (team-inbox-conversations): finds or creates the
- * `channel = instagram` thread, stores the message once, moves the thread (preview, unread, the 24 hour window) and links a contact
- * for a genuine inbound. The inbox domain also owns the live "message received" push; until it exports this, `SqlInstagramIngest`
- * does the writes only.
+ * Writes an inbound or pulled Instagram message into the inbox (chat-conversations): the thread lives on the account's `instagram`
+ * channel, keyed by the engine's thread key; the message is stored once through the shared pipeline (ledger dedup on the engine's
+ * id, sequence, unread, realtime), and a genuine inbound's sender becomes a contact.
  */
 export interface InstagramInboxIngest {
-  record(tx: Tx, orgId: number, n: Normalized): Promise<IngestOutcome>;
+  record(orgId: number, n: Normalized): Promise<IngestOutcome>;
   /** The time of the last message of every Instagram thread we hold, by thread key: the pull skips a thread with nothing newer. */
   threadClock(tx: Tx, orgId: number): Promise<Map<string, Date | null>>;
   /** The threads with these public ids, whatever their channel (the caller checks that they are Instagram ones). */
@@ -53,8 +52,8 @@ export interface InstagramInboxIngest {
     limit: number,
   ): Promise<Array<{ uuid: string; title: string; lastInboundAt: Date | null }>>;
   /**
-   * A message we sent into a thread, shown as outbound: the engine's id is kept at `wa_message_id` so the pull never shows it a
-   * second time, the thread's last-sent time and preview move, and its unread count is left alone.
+   * A message we sent into a thread, shown as outbound: the engine's id is the ledger key so the pull never shows it a second time,
+   * the thread's last-sent time and preview move, and its unread count is left alone.
    */
   recordOutbound(
     tx: Tx,
@@ -94,13 +93,6 @@ export interface InstagramAutomation {
   automate(ctx: AutomationContext): Promise<void>;
 }
 export const INSTAGRAM_AUTOMATION = Symbol('INSTAGRAM_AUTOMATION');
-
-/** A public address for a stored file, for an outbound attachment (platform-settings-branding-storage). */
-export interface MediaUrls {
-  /** The address the engine can fetch, or null when the path has none. An address that is already public is returned as it is. */
-  publicUrl(path: string): string | null;
-}
-export const INSTAGRAM_MEDIA_URLS = Symbol('INSTAGRAM_MEDIA_URLS');
 
 /** An Instagram template: a row of `wa_templates` whose channel is instagram (message-templates). */
 export interface InstagramTemplate {

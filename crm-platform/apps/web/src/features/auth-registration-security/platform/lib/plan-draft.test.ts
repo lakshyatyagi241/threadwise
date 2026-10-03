@@ -54,6 +54,7 @@ const stored: PlanAdminItem = {
     templates: 0,
     flows: 0,
     autoreplies: 0,
+    api_rate_limit_per_minute: 0,
   },
   features: {
     automation: true,
@@ -69,6 +70,7 @@ const stored: PlanAdminItem = {
     wa_storefront: false,
     inbox_sla: false,
     inbox_routing: true,
+    waba_calling: true,
     inbox_kanban: true,
     team_performance: true,
   },

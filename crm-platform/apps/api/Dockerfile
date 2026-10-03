@@ -11,7 +11,8 @@
 # ---------------------------------------------------------------------------
 
 FROM node:22-alpine AS base
-RUN corepack enable pnpm
+# git: `pnpm deploy` re-resolves baileys' git-hosted dependency (libsignal-node), and alpine ships without git.
+RUN apk add --no-cache git && corepack enable pnpm
 WORKDIR /app
 
 # --- dependencies ----------------------------------------------------------

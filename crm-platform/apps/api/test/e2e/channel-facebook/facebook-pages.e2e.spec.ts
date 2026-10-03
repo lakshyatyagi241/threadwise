@@ -345,20 +345,30 @@ describe('TW-FB-001, 004: the hub and managing a Page', () => {
 
   it('disconnect unsubscribes and removes the Page; its inbox threads stay', async () => {
     const { t, id } = await connected('fb11');
-    await h.owner.query(
-      `INSERT INTO conversations (org_id, title, channel, provider, origin, status, inbox_status, raw_jid)
-       VALUES ($1, 'Asha', 'facebook', 'facebook', 'facebook', 'pending', 'open', 'fb:P1:555')`,
+    const channel = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1, 'facebook', 'Shop', 'connected', 'P1') RETURNING id`,
       [t.orgId],
+    );
+    await h.owner.query(
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, 'fb:p1:555', 'Asha')`,
+      [t.orgId, channel.rows[0].id],
     );
     const res = await api.http().delete(`/v2/facebook/pages/${id}`).set(bearer(t.admin));
     expect(res.status).toBe(204);
     expect(calls.some((c) => c.method === 'unsubscribe')).toBe(true);
     expect(await rows(t)).toHaveLength(0);
     const threads = await h.owner.query(
-      `SELECT 1 FROM conversations WHERE org_id = $1 AND channel = 'facebook'`,
+      `SELECT c.id FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE c.org_id = $1 AND ch.kind = 'facebook'`,
       [t.orgId],
     );
     expect(threads.rows).toHaveLength(1);
+    // The Page is gone, so its inbox channel is switched off but kept.
+    const after = await h.owner.query(
+      `SELECT status FROM channels WHERE org_id = $1 AND kind = 'facebook'`,
+      [t.orgId],
+    );
+    expect(after.rows[0].status).toBe('disconnected');
     expect((await api.http().delete(`/v2/facebook/pages/${id}`).set(bearer(t.admin))).status).toBe(
       404,
     );

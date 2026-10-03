@@ -5,6 +5,7 @@ import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
+import { CallingVoiceWorkerModule } from '../modules/calling-voice';
 import { CatalogProductsWorkerModule } from '../modules/catalog-products';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
 import { CampaignsWorkerModule } from '../modules/campaigns';
@@ -25,6 +26,7 @@ import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
@@ -58,6 +60,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     PlansWorkerModule,
     PaygwWorkerModule,
     WabaWorkerModule,
+    CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,
@@ -67,6 +70,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChannelInstagramWorkerModule,
     ShopifyWoocommerceWorkerModule,
     ScheduledQueueWarmerWorkerModule,
+    FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
   ],
   providers: [

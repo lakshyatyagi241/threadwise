@@ -83,6 +83,8 @@ import { StorefrontProductsReader } from './storefront-reader';
     { provide: CONVERSATION_MIRROR, useClass: InboxConversationMirror },
   ],
   exports: [
+    // CatalogsRepository: the worker's resync sweep (CatalogProductsWorkerModule) reads the catalogs directly.
+    CatalogsRepository,
     StorefrontProductsReader,
     InventoryService,
     CatalogConciergeService,

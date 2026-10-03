@@ -4,7 +4,6 @@ import {
   type InstagramBridgeFactory,
 } from '../../infra/providers/channel-instagram/instagram-bridge.port';
 import { EngineConnectionService } from '../addons-extension-registry';
-import { INSTAGRAM_MEDIA_URLS, type MediaUrls } from './_shims/tokens';
 import {
   engineThreadId,
   noEngineThread,
@@ -17,8 +16,8 @@ export interface ThreadReply {
   /** The thread key, `ig:<engine conversation id>`. */
   rawJid: string | null;
   text: string;
-  /** A stored file path (ours) or an absolute address, with the inbox's media type. */
-  media?: { type: string | null; path: string } | null;
+  /** An address the engine can fetch, with the inbox's media type. */
+  media?: { type: string | null; url: string } | null;
   /** The template's buttons, as the inbox keeps them (`{text|title, value|url, type}`). */
   buttons?: readonly unknown[];
 }
@@ -42,7 +41,6 @@ export class SenderService {
   constructor(
     private readonly engines: EngineConnectionService,
     @Inject(INSTAGRAM_BRIDGE) private readonly bridge: InstagramBridgeFactory,
-    @Inject(INSTAGRAM_MEDIA_URLS) private readonly media: MediaUrls,
   ) {}
 
   async reply(r: ThreadReply): Promise<SendOutcome> {
@@ -51,18 +49,10 @@ export class SenderService {
     if (threadId === '') return failed(noEngineThread(conn.brand));
     if (conn.url === '' || conn.secret === '') return failed(notConnected(conn.brand));
 
-    let media: { type: string | null; url: string } | null = null;
-    if (r.media) {
-      const url = this.media.publicUrl(r.media.path);
-      if (url === null)
-        return failed('That attachment has no public address the engine can fetch.');
-      media = { type: r.media.type, url };
-    }
-
     try {
       const res = await this.bridge
         .with(conn)
-        .reply(threadId, shapeReply({ text: r.text, media, buttons: r.buttons }));
+        .reply(threadId, shapeReply({ text: r.text, media: r.media ?? null, buttons: r.buttons }));
       if (res.ok) return { ok: true, providerMessageId: res.data.messageId, error: null };
       return failed(sendFailure(conn.brand, res.status, res.error));
     } catch (err) {

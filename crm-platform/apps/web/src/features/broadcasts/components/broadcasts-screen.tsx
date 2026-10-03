@@ -21,8 +21,9 @@ import { parseState, RANGES, stateToSearch, type ListState } from '../lib/list-m
 import { downloadBlob } from '../lib/download';
 import { BroadcastsPagination } from './broadcasts-pagination';
 import { BroadcastsTable } from './broadcasts-table';
-import { PlusIcon, RefreshIcon, SearchIcon } from './icons';
+import { RefreshIcon, SearchIcon } from './icons';
 import { KpiStrip } from './kpi-strip';
+import { NewBroadcast } from './new-broadcast';
 import { ListRail } from './list-rail';
 
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
@@ -146,15 +147,7 @@ export function BroadcastsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && (
-                <Link
-                  href="/broadcasts/create"
-                  className="inline-flex h-10 items-center gap-2 rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
-                >
-                  <PlusIcon className="size-3.5" />
-                  {t('newBroadcast')}
-                </Link>
-              )}
+              {canCreate && <NewBroadcast />}
             </div>
           </div>
 

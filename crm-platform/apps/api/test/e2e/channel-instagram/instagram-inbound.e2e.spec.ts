@@ -114,8 +114,9 @@ const dm = (t: Tenant, over: Record<string, unknown> = {}, conv: Record<string, 
 const rowsOf = async (t: Tenant) =>
   (
     await h.owner.query(
-      `SELECT c.id, c.title, c.preview, c.unread_count, c.contact_id, c.last_inbound_at, c.last_outbound_at, c.raw_jid
-       FROM conversations c WHERE c.org_id = $1 AND c.channel = 'instagram' ORDER BY c.id`,
+      `SELECT c.id, c.title, c.preview, c.unread_count, c.contact_id, c.last_inbound_at, c.last_outbound_at, c.peer_key
+       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE c.org_id = $1 AND ch.kind = 'instagram' ORDER BY c.id`,
       [t.orgId],
     )
   ).rows;
@@ -123,7 +124,11 @@ const rowsOf = async (t: Tenant) =>
 const messagesOf = async (t: Tenant) =>
   (
     await h.owner.query(
-      `SELECT direction, body, media_type, status, meta, provider FROM messages WHERE org_id = $1 AND provider = 'instagram' ORDER BY id`,
+      `SELECT m.direction, m.body, m.kind, m.status, m.meta, m.provider_message_id
+       FROM messages m
+       JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+       JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE m.org_id = $1 AND ch.kind = 'instagram' ORDER BY m.id`,
       [t.orgId],
     )
   ).rows;
@@ -173,17 +178,23 @@ describe('a message into the inbox (TW-IG-008)', () => {
       title: 'Asha',
       preview: 'hello',
       unread_count: 1,
-      raw_jid: 'ig:A1_555',
+      // Thread keys are stored lower-cased.
+      peer_key: 'ig:a1_555',
     });
     expect(c.last_inbound_at).not.toBeNull();
     const [m] = await messagesOf(t);
-    expect(m).toMatchObject({ direction: 'in', body: 'hello', status: 'received' });
-    expect(m.meta.instagram).toMatchObject({
-      message_id: 'm1',
-      handle: 'asha',
-      account: 'shop',
-      account_id: 'A1',
+    expect(m).toMatchObject({
+      direction: 'in',
+      body: 'hello',
+      status: 'received',
+      provider_message_id: 'm1',
     });
+    // The account is one inbox channel, named by its handle.
+    const channel = await h.owner.query(
+      `SELECT name, display_address, external_id FROM channels WHERE org_id = $1 AND kind = 'instagram'`,
+      [t.orgId],
+    );
+    expect(channel.rows).toEqual([{ name: '@shop', display_address: '@shop', external_id: 'A1' }]);
     const contact = await h.owner.query(
       `SELECT name, channel, channel_uid FROM contacts WHERE id = $1 AND org_id = $2`,
       [c.contact_id, t.orgId],
@@ -239,13 +250,13 @@ describe('a message into the inbox (TW-IG-008)', () => {
     expect(automated).toHaveLength(0);
   });
 
-  it('a media message with no text shows [Image] as the preview and keeps its address', async () => {
+  it('a media message with no text shows its kind as the preview; an address that is not Meta’s is not downloaded', async () => {
     const t = await api.signup('igmf');
     await push(dm(t, { id: 'p1', type: 'image', text: '', media_url: 'https://cdn.test/p.jpg' }));
-    expect((await rowsOf(t))[0].preview).toBe('[Image]');
+    expect((await rowsOf(t))[0].preview).toBe('📎 Image');
     const [m] = await messagesOf(t);
-    expect(m.media_type).toBe('image');
-    expect(m.meta.instagram.media_url).toBe('https://cdn.test/p.jpg');
+    // Only Meta's own media hosts are fetched, so the message stays as an image without its file.
+    expect(m.kind).toBe('image');
   });
 
   it('a story mention with no text still runs an automation, with its own trigger', async () => {
@@ -322,7 +333,6 @@ describe('the pull (TW-IG-009)', () => {
     const first = await pull.pull(t.orgId);
     expect(first).toEqual({ ingested: 2, scanned: 1 });
     expect((await messagesOf(t)).map((m) => m.direction)).toEqual(['in', 'out']);
-    expect((await messagesOf(t))[0].meta.instagram.account).toBe('shop');
 
     const again = await pull.pull(t.orgId, true);
     expect(again).toEqual({ ingested: 0, scanned: 1 });

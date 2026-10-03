@@ -2,6 +2,7 @@
  * flow-builder-editor: tables ported from Reference. Mirrors migrations/20261001101400_flb_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
   bigint,
   boolean,
@@ -17,6 +18,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
+import { chatChannels as channels } from '../chat-conversations';
 import { organizations, users } from '../foundation';
 
 export const flows = pgTable(
@@ -34,6 +36,8 @@ export const flows = pgTable(
     triggerValue: bigint('trigger_value', { mode: 'number' }),
     triggerKeywords: text('trigger_keywords'),
     triggerDeviceId: idColumn('trigger_device_id'),
+    // 20261019090000_flr_runtime.sql: the channel a flow listens on and sends through (replaces the polymorphic trigger_device_id).
+    triggerChannelId: idColumn('trigger_channel_id'),
     isPublished: boolean('is_published').notNull().default(false),
     isActive: boolean('is_active').notNull().default(true),
     publishedAt: timestamp('published_at', { withTimezone: true }),
@@ -63,6 +67,14 @@ export const flows = pgTable(
     index('idx_flows_trigger_kind_trigger_value').on(t.orgId, t.triggerKind, t.triggerValue),
     index('idx_flows_user_id_is_active').on(t.orgId, t.userId, t.isActive),
     index('idx_flows_provider').on(t.orgId, t.provider),
+    index('idx_flows_live_trigger')
+      .on(t.orgId, t.triggerKind, t.triggerValue)
+      .where(sql`${t.isPublished} AND ${t.isActive}`),
+    foreignKey({
+      name: 'fk_flows_trigger_channel_id',
+      columns: [t.orgId, t.triggerChannelId],
+      foreignColumns: [channels.orgId, channels.id],
+    }).onDelete('set null'),
   ],
 );
 
