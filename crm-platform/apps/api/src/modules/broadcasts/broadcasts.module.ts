@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
@@ -45,7 +45,13 @@ import {
  * the real service to the same token (see _shims/README.md).
  */
 @Module({
-  imports: [PlansCoreModule, CrmModule, NodeBridgeRuntimeModule, WalletMessageBillingModule],
+  // forwardRef: the node bridge reaches broadcasts back through the inbox and WABA.
+  imports: [
+    PlansCoreModule,
+    CrmModule,
+    forwardRef(() => NodeBridgeRuntimeModule),
+    WalletMessageBillingModule,
+  ],
   controllers: [
     BroadcastsController,
     BroadcastsReadController,
