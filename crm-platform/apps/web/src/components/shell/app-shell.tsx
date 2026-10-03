@@ -14,6 +14,9 @@ import {
 import { railTheme, type ShellConfigResponse } from '@crm/contracts';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
+import { ConnectDeviceSheet } from '@/features/admin-console-shell/connect-device/connect-device-sheet';
+import { EmbedFlag } from '@/features/admin-console-shell/connect-device/embed-flag';
+import { InboxBell } from '@/features/admin-console-shell/inbox-bell/inbox-bell';
 import { QuickAccessDrawer } from '@/features/admin-console-shell/quick-access/quick-access-drawer';
 import { GuidedTour } from '@/features/admin-console-shell/tour/guided-tour';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
@@ -148,6 +151,9 @@ export function AppShell({
   const page = (
     <main className="relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">
       <SettingsTilesProvider tiles={settings}>
+        <Suspense fallback={null}>
+          <EmbedFlag />
+        </Suspense>
         <SettingsBack />
         {children}
       </SettingsTilesProvider>
@@ -157,6 +163,8 @@ export function AppShell({
     <>
       <CommandPalette nav={nav} tiles={settings} />
       <QuickAccessDrawer />
+      <ConnectDeviceSheet />
+      <InboxBell />
       <Suspense fallback={null}>
         <GuidedTour run={shell.tour.run && mode === 'topbar'} />
       </Suspense>
