@@ -72,6 +72,8 @@ export function useNumberedPage<R extends Envelope>(o: NumberedPageOptions<R>) {
     queryKey: pageKey(o.key, o.query, index),
     queryFn: ({ signal }) => loadPage(qc, o.key, o.path, o.schema, o.query, index, signal),
     placeholderData: keepPreviousData,
+    // a failed page shows its error and Retry at once instead of a spinner through three silent retries
+    retry: false,
   });
   const hasMore = res.data?.response.page.hasMore ?? false;
   const identity = JSON.stringify(o.query);
