@@ -8,7 +8,7 @@ export const TgPaymentForm: FormComponent = (p) => {
   const payMode = p.data.mode === 'paylink' ? 'paylink' : 'invoice';
   return (
     <>
-      <div className="mb-4 rounded-lg border border-[#BEE3F5] bg-[#EAF6FC] p-2.5 text-[11.5px] leading-snug text-[#1B4C63]">
+      <div className="mb-3 rounded-lg border border-[#BEE3F5] bg-[#EAF6FC] p-2.5 text-[11.5px] leading-snug text-[#1B4C63]">
         Charge the customer inside Telegram. The bot needs a payment provider token (get one from{' '}
         <Mono>@BotFather → /mybots → Payments</Mono>). The paid confirmation lands back in your
         inbox.

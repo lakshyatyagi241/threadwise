@@ -33,6 +33,18 @@ const STORE_TABLES: Partial<Record<FlbCommerceProductsQuery['provider'], string>
   shopify: 'shopify_integrations',
 };
 
+/** The columns each channel table is read by for the sender pickers (never its tokens). */
+const CHANNEL_LABEL_COLUMNS: Record<string, string> = {
+  workspace_ig_accounts: 'uuid, id, username, name',
+  facebook_pages: 'uuid, id, name, page_id',
+  tiktok_accounts: 'uuid, id, display_name, username',
+  telegram_bots: 'uuid, id, bot_name, bot_username',
+  line_channels: 'uuid, id, display_name, basic_id',
+  wechat_channels: 'uuid, id, account_name, wx_id',
+  viber_channels: 'uuid, id, bot_name, bot_uri',
+  workspace_email_accounts: 'uuid, id, name, email',
+};
+
 type Raw = Record<string, unknown>;
 const rows = (r: { rows: unknown[] }): Raw[] => r.rows as Raw[];
 const s = (v: unknown): string => (v === null || v === undefined ? '' : String(v));
@@ -461,9 +473,10 @@ export class BuilderContextService {
     engine: string,
     orderBy: string,
   ): Promise<FlowSender[]> {
-    // `table`, `where`, `orderBy` are literals from this file, never request input.
+    // `table`, `where`, `orderBy` and the column list are literals from this file, never request input. Only the columns a label
+    // is made of are read: these rows also hold the channel's access tokens, which must never reach this process's memory.
     const res = await tx.execute(
-      sql`SELECT * FROM ${sql.raw(table)} WHERE org_id = ${orgId} AND (${sql.raw(where)}) ORDER BY ${sql.raw(orderBy)}, id`,
+      sql`SELECT ${sql.raw(CHANNEL_LABEL_COLUMNS[table] ?? 'uuid, id')} FROM ${sql.raw(table)} WHERE org_id = ${orgId} AND (${sql.raw(where)}) ORDER BY ${sql.raw(orderBy)}, id`,
     );
     return rows(res).map((r) => ({ key: `${engine}:${s(r.uuid)}`, label: label(r) }));
   }
