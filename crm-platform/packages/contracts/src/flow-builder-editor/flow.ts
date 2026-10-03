@@ -109,8 +109,8 @@ export const flowFeaturedSchema = flowSummarySchema.extend({
   steps: z.number().int(),
   messages: z.number().int(),
   waitMinutes: z.number(),
-  /** The first four nodes, for the card's mini preview. */
-  preview: z.array(z.object({ type: z.string() })),
+  /** The first four nodes with a type, for the card's mini preview: the type styles the row, the label is Reference's text for it. */
+  preview: z.array(z.object({ type: z.string(), label: z.string() })),
 });
 export type FlowFeatured = z.infer<typeof flowFeaturedSchema>;
 
@@ -209,6 +209,10 @@ export const flowTemplateOptionSchema = z.object({
   carousel: z.array(z.record(z.unknown())),
 });
 
+/** A connected store a commerce node can sell from. `currency` is null for a WhatsApp catalog (mixed currencies). */
+export const flbStoreSchema = z.object({ id: uuidSchema, name: z.string(), currency: z.string().nullable() });
+export type FlbStore = z.infer<typeof flbStoreSchema>;
+
 export const flbBuilderContextSchema = z.object({
   /** Channels this workspace can run a flow on (WhatsApp always); an unavailable channel is never offered. */
   channels: z.array(flowTypeSchema),
@@ -233,22 +237,29 @@ export const flbBuilderContextSchema = z.object({
       members: z.array(z.object({ id: uuidSchema, name: z.string() })),
     }),
   ),
-  agents: z.array(z.object({ id: uuidSchema, name: z.string(), model: z.string().nullable() })),
+  agents: z.array(
+    z.object({ id: uuidSchema, name: z.string(), provider: z.string().nullable(), model: z.string().nullable() }),
+  ),
   stages: z.array(z.object({ id: uuidSchema, name: z.string(), pipeline: z.string().nullable() })),
   templates: z.array(flowTemplateOptionSchema),
-  flows: z.array(z.object({ id: uuidSchema, name: z.string() })),
+  /** The workspace's flows (slim): the channel and published state feed the Sub-flow and hand-off pickers (`<name> · live`). */
+  flows: z.array(z.object({ id: uuidSchema, name: z.string(), flowType: flowTypeSchema, isPublished: z.boolean() })),
   aiModels: z.array(z.object({ value: z.string(), label: z.string(), provider: z.string() })),
   assistants: z.array(
     z.object({ id: uuidSchema, name: z.string(), status: z.string().nullable(), sources: z.number().int() }),
   ),
   callAssistants: z.array(z.object({ id: uuidSchema, name: z.string() })),
-  bookingTypes: z.array(z.object({ id: uuidSchema, name: z.string() })),
-  forms: z.array(z.object({ id: uuidSchema, title: z.string() })),
+  /** Every booking type, inactive ones included (Reference labels them `(inactive)`), with its length in minutes. */
+  bookingTypes: z.array(
+    z.object({ id: uuidSchema, name: z.string(), duration: z.number().int().nullable(), active: z.boolean() }),
+  ),
+  /** Every WhatsApp form; `isPublished` = published to Meta and live (a draft is listed too, as in Reference). */
+  forms: z.array(z.object({ id: uuidSchema, title: z.string(), isPublished: z.boolean() })),
   /** Commerce stores per provider (WhatsApp catalog, WooCommerce, Shopify). */
   stores: z.object({
-    whatsapp_shop: z.array(z.object({ id: uuidSchema, name: z.string() })),
-    woocommerce: z.array(z.object({ id: uuidSchema, name: z.string() })),
-    shopify: z.array(z.object({ id: uuidSchema, name: z.string() })),
+    whatsapp_shop: z.array(flbStoreSchema),
+    woocommerce: z.array(flbStoreSchema),
+    shopify: z.array(flbStoreSchema),
   }),
 });
 export type FlbBuilderContext = z.infer<typeof flbBuilderContextSchema>;
@@ -264,11 +275,18 @@ export type FlbCommerceProductsQuery = z.infer<typeof flbCommerceProductsQuerySc
 
 /** A product a commerce node can offer. `retailerId` is the id the runtime sends; the rest is for the picker. */
 export const flbCommerceProductSchema = z.object({
+  /** The product's own id (a uuid), unlike `retailerId` which is what the channel sends. */
+  id: z.string(),
   retailerId: z.string(),
   name: z.string(),
+  sku: z.string().nullable(),
   image: z.string().nullable(),
   priceMinor: z.number().int().nullable(),
   currency: z.string().nullable(),
+  /** The product page (the "View" link). */
+  url: z.string().nullable(),
+  /** False products are shown but cannot be picked (Reference disables them). */
+  inStock: z.boolean(),
 });
 export type FlbCommerceProduct = z.infer<typeof flbCommerceProductSchema>;
 export const flbCommerceProductsResponseSchema = z.object({ data: z.array(flbCommerceProductSchema) });

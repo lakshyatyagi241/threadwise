@@ -49,6 +49,7 @@ import { FlowAiService } from './flow-ai.service';
 import { FlowMediaTooLargeInterceptor } from './flow-media-too-large.interceptor';
 import { FLOW_MEDIA_MAX_BYTES, FLOW_MEDIA_TYPES, FlowMediaService } from './flow-media.service';
 import { flowExportFileName } from './flow-rules';
+import { GOOGLE_FORM_ID_RE } from './google-apps-script';
 import { FlowsService } from './flows.service';
 import { TestWebhookService } from './test-webhook.service';
 
@@ -63,6 +64,7 @@ export const FLB_PLAN_FEATURE = 'automation' satisfies PlanFeatureKey;
 
 const uploadTypeSchema = z.enum(FLOW_MEDIA_TYPES);
 const googleKindSchema = z.enum(FLB_GOOGLE_PICKER_KINDS);
+const googleFormIdSchema = z.string().regex(GOOGLE_FORM_ID_RE, 'Not a Google form id');
 const upload = FileInterceptor('file', {
   limits: { fileSize: FLOW_MEDIA_MAX_BYTES, files: 1 },
 });
@@ -156,6 +158,23 @@ export class FlowsController {
       'Google integration is not connected.',
       HttpStatus.SERVICE_UNAVAILABLE,
     );
+  }
+
+  @Get('builder-context/google/forms/:formId/apps-script')
+  @RequirePermission('flb.flows.read')
+  @ApiOperation({
+    summary: 'The Apps Script that reports a Google Form submission back to the flow',
+    description:
+      'Plain-text `.gs` download for the Google Form node\'s one-time setup. It carries this workspace\'s webhook token. 422 when the form id is not a Google form id.',
+  })
+  googleFormScript(
+    @Param('formId', zodPipe(googleFormIdSchema)) formId: string,
+    @Res() res: { setHeader(name: string, value: string): unknown; send(body: string): unknown },
+  ) {
+    const { fileName, source } = this.context.googleFormScript(formId);
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.send(source);
   }
 
   @Post('import')
