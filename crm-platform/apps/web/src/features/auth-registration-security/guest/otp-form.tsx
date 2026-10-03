@@ -1,7 +1,6 @@
 'use client';
 
 import { signupResendOtpResponseSchema } from '@crm/contracts';
-import { Alert, Button, Input, Spinner } from '@crm/ui';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -22,9 +21,10 @@ import {
   saveChallenge,
   type StoredChallenge,
 } from './otp-challenge';
-import { forgetReferral } from './referral';
 import { bffAuthenticatedSchema } from './schemas';
 import { completeSignIn } from './sign-in-complete';
+import { clearDraft } from './signup-draft';
+import { Alert, ArrowIcon, Button, Input, LINK, PRIMARY_LINK, Spinner, cn } from './ui';
 import { useCountdown } from './use-countdown';
 
 /**
@@ -52,7 +52,7 @@ export function OtpForm() {
 
   if (!challenge) {
     return (
-      <div className="flex justify-center py-8">
+      <div className="flex justify-center py-8 text-(--auth-ink-500)">
         <Spinner />
       </div>
     );
@@ -86,6 +86,8 @@ function OtpEntry({ initial }: { initial: StoredChallenge }) {
     router.replace('/signup?restart=1');
   }
 
+  const addressTaken = error?.key === 'slugTaken';
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (pending) return;
@@ -105,7 +107,7 @@ function OtpEntry({ initial }: { initial: StoredChallenge }) {
         bffAuthenticatedSchema,
       );
       clearChallenge();
-      forgetReferral();
+      clearDraft();
       completeSignIn(res);
     } catch (err) {
       const mapped = mapAuthError(err);
@@ -168,17 +170,29 @@ function OtpEntry({ initial }: { initial: StoredChallenge }) {
       onSubmit={(e) => void onSubmit(e)}
       onInput={() => setFieldError(null)}
       noValidate
-      className="space-y-5"
+      className="space-y-4"
     >
-      <p className="text-sm text-muted-foreground">
+      <p className="text-[12.5px] text-(--auth-ink-600)">
         {t('sentTo')}{' '}
-        <span dir="ltr" className="font-medium text-foreground">
+        <span dir="ltr" className="font-semibold text-foreground">
           {challenge.maskedPhone}
         </span>
       </p>
 
       {resent && <Alert tone="success">{t('resent')}</Alert>}
       <FormError error={error} skipFieldMessage={error?.field === 'code'} />
+      {addressTaken && (
+        <div className="space-y-2">
+          <p className="text-[12.5px] text-(--auth-ink-600)">{t('addressTakenHint')}</p>
+          <Link
+            href="/signup?back=1&slug=taken"
+            onClick={() => clearChallenge()}
+            className={PRIMARY_LINK}
+          >
+            {t('chooseAnotherAddress')}
+          </Link>
+        </div>
+      )}
 
       <FormField
         label={t('code')}
@@ -195,22 +209,26 @@ function OtpEntry({ initial }: { initial: StoredChallenge }) {
             maxLength={8}
             placeholder={'0'.repeat(challenge.codeLength)}
             onChange={(e) => setCode(cleanCode(e.target.value, challenge.codeLength))}
-            className="h-12 text-center font-mono text-xl tracking-[0.4em]"
+            className="py-3 text-center font-mono text-[22px] tracking-[0.4em]"
           />
         )}
       </FormField>
 
-      <Button type="submit" className="h-11 w-full" disabled={pending}>
-        {pending && <Spinner label={t('verifying')} />}
+      <Button type="submit" className="w-full" disabled={pending || addressTaken}>
+        {pending ? <Spinner label={t('verifying')} /> : null}
         {pending ? t('verifying') : t('verify')}
+        {!pending && <ArrowIcon />}
       </Button>
 
-      <div className="flex flex-col items-center gap-2 text-sm">
+      <div className="mt-1 flex items-center justify-between gap-3 text-[12px]">
         <button
           type="button"
           onClick={() => void resend()}
           disabled={resending || resendIn > 0}
-          className="font-medium text-primary underline-offset-2 hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
+          className={cn(
+            LINK,
+            'disabled:cursor-not-allowed disabled:font-normal disabled:text-(--auth-ink-500) disabled:no-underline',
+          )}
         >
           {resending
             ? t('resending')
@@ -218,16 +236,13 @@ function OtpEntry({ initial }: { initial: StoredChallenge }) {
               ? t('resendIn', { time: formatClock(resendIn) })
               : t('resend')}
         </button>
-        <p className="text-muted-foreground">
-          {t('wrongNumber')}{' '}
-          <Link
-            href="/signup"
-            onClick={() => clearChallenge()}
-            className="font-medium text-primary underline-offset-2 hover:underline"
-          >
-            {t('goBack')}
-          </Link>
-        </p>
+        <Link
+          href="/signup?back=1"
+          onClick={() => clearChallenge()}
+          className="text-(--auth-ink-500) hover:text-foreground"
+        >
+          {t('wrongNumber')} {t('goBack')}
+        </Link>
       </div>
     </form>
   );

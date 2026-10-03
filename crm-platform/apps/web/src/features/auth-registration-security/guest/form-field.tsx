@@ -36,26 +36,24 @@ export function FormField({
   const errorId = `${id}-error`;
   const describedBy = [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(' ');
   return (
-    <div className={cn('space-y-1.5 text-sm', className)}>
-      <div className="flex items-baseline justify-between gap-2">
-        <label htmlFor={id} className="font-medium">
+    <div className={className}>
+      <div className="mb-1.5 flex items-center justify-between gap-2">
+        <label htmlFor={id} className="text-[11.5px] font-semibold text-(--auth-ink-700)">
           {label}
           {optionalLabel && (
-            <span className="ms-1 text-xs font-normal text-muted-foreground">
-              ({optionalLabel})
-            </span>
+            <span className="ms-1 font-normal text-(--auth-ink-500)">({optionalLabel})</span>
           )}
         </label>
         {labelEnd}
       </div>
       {children({ id, 'aria-describedby': describedBy || undefined, invalid: Boolean(error) })}
       {error ? (
-        <div id={errorId} role="alert" className="text-xs text-danger">
+        <div id={errorId} role="alert" className="mt-1 text-[11.5px] text-(--auth-coral-ink)">
           {error}
         </div>
       ) : null}
       {hint ? (
-        <p id={hintId} className="text-xs text-muted-foreground">
+        <p id={hintId} className={cn('mt-1 text-[10.5px] text-(--auth-ink-500)')}>
           {hint}
         </p>
       ) : null}

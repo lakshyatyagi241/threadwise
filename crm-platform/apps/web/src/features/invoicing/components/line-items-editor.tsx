@@ -18,7 +18,10 @@ import { taxLabel } from '../lib/totals';
 import { PlusIcon, TrashIcon } from './icons';
 
 /** "GST 18%" or "Sales tax 10% incl.", the label of a tax rate in a select. */
-export function rateLabel(r: Pick<TaxRateResponse, 'name' | 'rate' | 'inclusive'>, inclusiveWord: string): string {
+export function rateLabel(
+  r: Pick<TaxRateResponse, 'name' | 'rate' | 'inclusive'>,
+  inclusiveWord: string,
+): string {
   return `${taxLabel(r.name, r.rate)}${r.inclusive ? ` (${inclusiveWord})` : ''}`;
 }
 
@@ -75,7 +78,11 @@ export function InvoiceLinesEditor({
     const last = lines[lines.length - 1];
     onChange([
       ...lines,
-      { ...emptyLine(last?.taxRateId ?? TAX_DEFAULT), key: newKey(), taxSnapshot: last?.taxSnapshot ?? null },
+      {
+        ...emptyLine(last?.taxRateId ?? TAX_DEFAULT),
+        key: newKey(),
+        taxSnapshot: last?.taxSnapshot ?? null,
+      },
     ]);
   };
   const active = taxRates.filter((r) => r.isActive);
@@ -86,7 +93,9 @@ export function InvoiceLinesEditor({
       {lines.map((l, i) => {
         const err = (field: string) => errors[`lines.${i}.${field}`];
         const id = (f: string) => `line-${l.key}-${f}`;
-        const known = [TAX_DEFAULT, TAX_NONE, TAX_SNAPSHOT].includes(l.taxRateId) || taxRates.some((r) => r.id === l.taxRateId);
+        const known =
+          [TAX_DEFAULT, TAX_NONE, TAX_SNAPSHOT].includes(l.taxRateId) ||
+          taxRates.some((r) => r.id === l.taxRateId);
         const inactiveUsed = taxRates.filter((r) => !r.isActive && r.id === l.taxRateId);
         const amount = amounts?.[i];
         const hsnHint = rateOfLine(l, taxRates)?.defaultHsnSac ?? '';
@@ -98,7 +107,12 @@ export function InvoiceLinesEditor({
             aria-label={t('lineN', { n: i + 1 })}
           >
             <div className="flex items-start gap-2">
-              <Field label={t('description')} htmlFor={id('desc')} error={err('description')} className="min-w-0 flex-1">
+              <Field
+                label={t('description')}
+                htmlFor={id('desc')}
+                error={err('description')}
+                className="min-w-0 flex-1"
+              >
                 <Textarea
                   id={id('desc')}
                   rows={1}
@@ -134,7 +148,11 @@ export function InvoiceLinesEditor({
                   onChange={(e) => set(l.key, { qty: e.target.value })}
                 />
               </Field>
-              <Field label={t('price', { currency })} htmlFor={id('price')} error={err('unitPrice')}>
+              <Field
+                label={t('price', { currency })}
+                htmlFor={id('price')}
+                error={err('unitPrice')}
+              >
                 <Input
                   id={id('price')}
                   inputMode="decimal"
@@ -153,7 +171,9 @@ export function InvoiceLinesEditor({
                     disabled={disabled}
                     value={l.discountKind}
                     className="w-20 shrink-0"
-                    onChange={(e) => set(l.key, { discountKind: e.target.value as DraftLine['discountKind'] })}
+                    onChange={(e) =>
+                      set(l.key, { discountKind: e.target.value as DraftLine['discountKind'] })
+                    }
                   >
                     <option value="percent">%</option>
                     <option value="amount">{currency}</option>
@@ -185,7 +205,11 @@ export function InvoiceLinesEditor({
                       taxSnapshot: v === TAX_SNAPSHOT ? l.taxSnapshot : null,
                     };
                     // The code of the rate fills an empty HSN/SAC box (or one that only held the previous rate's code).
-                    if (showHsn && picked?.defaultHsnSac && (l.hsnSac.trim() === '' || l.hsnSac === prev)) {
+                    if (
+                      showHsn &&
+                      picked?.defaultHsnSac &&
+                      (l.hsnSac.trim() === '' || l.hsnSac === prev)
+                    ) {
                       patch.hsnSac = picked.defaultHsnSac;
                     }
                     set(l.key, patch);
@@ -203,7 +227,11 @@ export function InvoiceLinesEditor({
                     <option value={TAX_SNAPSHOT}>
                       {t('removedRateOption', {
                         rate: rateLabel(
-                          { name: l.taxSnapshot.name, rate: l.taxSnapshot.rate, inclusive: l.taxSnapshot.inclusive },
+                          {
+                            name: l.taxSnapshot.name,
+                            rate: l.taxSnapshot.rate,
+                            inclusive: l.taxSnapshot.inclusive,
+                          },
                           t('inclusive'),
                         ),
                       })}

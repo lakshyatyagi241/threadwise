@@ -14,6 +14,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PasswordService } from '../../auth';
+import { WorkspaceRoleRulesService } from '../../roles-permissions';
 import { toUserResponse } from './users.mapper';
 import { UsersRepository } from './users.repository';
 
@@ -31,6 +32,7 @@ export class UsersService {
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
     private readonly passwords: PasswordService,
+    private readonly roleRules: WorkspaceRoleRulesService,
   ) {}
 
   async list(query: ListUsersQuery): Promise<PageResponse<UserResponse>> {
@@ -111,6 +113,17 @@ export class UsersService {
 
       const roleIds = await this.repo.resolveRoleIds(tx, ctx.orgId, input.roleIds);
       if (roleIds.length > 0) {
+        // Creating a member needs org.member.invite (WD-RBAC-027) and each role handed out must be one the actor may grant (WD-RBAC-026).
+        const actorGrants = await this.rbac.grantsForUser(ctx.orgId, ctx.userId!);
+        if (!this.rbac.can(actorGrants, 'org.member.invite').allowed)
+          throw AppError.forbidden('org.member.invite');
+        await this.roleRules.assertCanChangeRoles(tx, {
+          orgId: ctx.orgId,
+          actorUserId: ctx.userId!,
+          targetUserId: created.id,
+          currentRoleIds: [],
+          newRoleIds: roleIds,
+        });
         await this.repo.replaceRoles(tx, ctx.orgId, created.id, roleIds);
       }
 
@@ -137,6 +150,17 @@ export class UsersService {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('User', uuid);
 
+      if (input.status === 'inactive' && existing.status !== 'inactive') {
+        const held = await this.repo.currentRoles(tx, ctx.orgId, existing.id);
+        await this.roleRules.assertCanDeactivate(
+          tx,
+          ctx.orgId,
+          ctx.userId!,
+          existing.id,
+          held.map((r) => r.id),
+        );
+      }
+
       const values: Record<string, unknown> = {};
       if (input.fullName !== undefined) values.fullName = input.fullName;
       if (input.status !== undefined) values.status = input.status;
@@ -154,9 +178,30 @@ export class UsersService {
 
       if (input.roleIds !== undefined) {
         const roleIds = await this.repo.resolveRoleIds(tx, ctx.orgId, input.roleIds);
+        const before = await this.repo.currentRoles(tx, ctx.orgId, existing.id);
+        const beforeIds = before.map((r) => r.id);
+        await this.roleRules.assertCanChangeRoles(tx, {
+          orgId: ctx.orgId,
+          actorUserId: ctx.userId!,
+          targetUserId: existing.id,
+          currentRoleIds: beforeIds,
+          newRoleIds: roleIds,
+        });
         await this.repo.replaceRoles(tx, ctx.orgId, existing.id, roleIds);
         // Role membership changed — every cached grant set for this user is stale.
         await this.rbac.bumpRolesVersion(ctx.orgId);
+        // WaDesk's member.role_changed row carried only the new role; the previous one is recorded too.
+        await this.audit.record(tx, {
+          module: MODULE_KEY,
+          recordId: existing.id,
+          action: 'update',
+          delta: {
+            roles: {
+              old: before.map((r) => r.name).sort(),
+              new: await this.repo.roleNames(tx, ctx.orgId, roleIds),
+            },
+          },
+        });
       }
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'update' });

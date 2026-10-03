@@ -67,7 +67,9 @@ export function PickInvoiceDialog({
         ) : list.isError ? (
           <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
         ) : list.items.length === 0 ? (
-          <p className="py-4 text-center text-sm text-muted-foreground">{term ? t('noMatch') : t('nothingOwed')}</p>
+          <p className="py-4 text-center text-sm text-muted-foreground">
+            {term ? t('noMatch') : t('nothingOwed')}
+          </p>
         ) : (
           <ul className="thin-scrollbar max-h-72 divide-y divide-border overflow-y-auto rounded-md border border-border">
             {list.items.map((inv) => (
@@ -88,7 +90,11 @@ export function PickInvoiceDialog({
                   <StatusChip status={inv.status} />
                   <span className="text-end">
                     <span className="block text-xs text-muted-foreground">{t('balance')}</span>
-                    <Money minor={rowBalanceMinor(inv) ?? 0} currency={inv.currency} className="font-semibold" />
+                    <Money
+                      minor={rowBalanceMinor(inv) ?? 0}
+                      currency={inv.currency}
+                      className="font-semibold"
+                    />
                   </span>
                 </button>
               </li>
@@ -96,7 +102,12 @@ export function PickInvoiceDialog({
           </ul>
         )}
         {list.hasNextPage && (
-          <Button variant="secondary" size="sm" onClick={() => void list.fetchNextPage()} disabled={list.isFetchingNextPage}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => void list.fetchNextPage()}
+            disabled={list.isFetchingNextPage}
+          >
             {t('more')}
           </Button>
         )}

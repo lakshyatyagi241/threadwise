@@ -16,7 +16,9 @@ import { MailIcon } from '../../shared/icons';
 import { PhoneField, type PhoneValue } from '../../shared/phone-field';
 import { TimezoneCombobox } from '../../shared/timezone-combobox';
 import { useGateRedirect } from '../../shared/use-gate-redirect';
+import { useSession } from '../../shared/session-context';
 import { authApi, keys } from '../api';
+import { firstNameOf } from '../hub/person-text';
 import { EmailChangeModal } from './email-change-modal';
 import { profileChanges, savedZone } from './profile-changes';
 
@@ -63,12 +65,16 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
   const c = useTranslations('auth-registration-security.account.common');
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { org } = useSession();
   const uid = useId();
   const formRef = useRef<HTMLFormElement>(null);
 
   const initialZone = savedZone(profile);
   const [fullName, setFullName] = useState(profile.fullName);
-  const [displayName, setDisplayName] = useState(profile.displayName ?? '');
+  // Like WaDesk, a person with no display name sees their first name in the box as its value, so
+  // saving the form as it stands stores it.
+  const defaultDisplayName = profile.displayName ?? firstNameOf(profile.fullName);
+  const [displayName, setDisplayName] = useState(defaultDisplayName);
   const [phone, setPhone] = useState<PhoneValue>({
     e164: profile.phone,
     empty: !profile.phone,
@@ -133,7 +139,12 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
       }
     }
     if (Object.keys(next).length) return fail(next);
-    if (!dirty) return;
+    // WaDesk's Save is always live; with nothing changed there is nothing to send and the page just confirms.
+    if (!dirty) {
+      setErrors({});
+      setSaved(true);
+      return;
+    }
 
     setPending(true);
     setErrors({});
@@ -172,7 +183,7 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
 
   function reset() {
     setFullName(profile.fullName);
-    setDisplayName(profile.displayName ?? '');
+    setDisplayName(defaultDisplayName);
     setPhone({ e164: profile.phone, empty: !profile.phone, problem: null });
     setLocaleValue(profile.locale ?? '');
     setThemeValue(profile.theme);
@@ -213,7 +224,6 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
                 id={id('display')}
                 value={displayName}
                 maxLength={120}
-                placeholder={fullName.trim().split(/\s+/)[0] ?? ''}
                 onChange={(e) => setDisplayName(e.target.value)}
                 invalid={Boolean(errors.displayName)}
               />
@@ -248,21 +258,47 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
             )}
           </Field>
 
-          <Field
-            label={t('phone')}
-            htmlFor={id('phone')}
-            hint={t('phoneHint')}
-            error={errors.phone}
-          >
-            <PhoneField
-              key={resetCount}
-              id={id('phone')}
-              initial={profile.phone}
-              onChange={setPhone}
-              invalid={Boolean(errors.phone)}
-            />
-          </Field>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field
+              label={t('phone')}
+              htmlFor={id('phone')}
+              hint={t('phoneHint')}
+              error={errors.phone}
+            >
+              <PhoneField
+                key={resetCount}
+                id={id('phone')}
+                initial={profile.phone}
+                onChange={setPhone}
+                invalid={Boolean(errors.phone)}
+              />
+            </Field>
 
+            {/* Everyone sees the workspace timezone; only whoever the API allows can change it. */}
+            <Field
+              label={
+                <>
+                  {t('workspaceTimezone')}{' '}
+                  <span className="text-xs font-normal text-muted-foreground">
+                    {t('workspaceTag')}
+                  </span>
+                </>
+              }
+              htmlFor={id('tz')}
+              hint={t('workspaceTimezoneHint', { workspace: org.name })}
+              error={errors.workspaceTimezone}
+            >
+              <TimezoneCombobox
+                id={id('tz')}
+                value={zone}
+                onChange={setZone}
+                invalid={Boolean(errors.workspaceTimezone)}
+                disabled={!profile.canEditWorkspaceTimezone}
+              />
+            </Field>
+          </div>
+
+          {/* Beyond WaDesk's form: the person's own language and theme. */}
           <div className="grid gap-4 md:grid-cols-2">
             <Field
               label={t('language')}
@@ -298,30 +334,14 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
             </Field>
           </div>
 
-          {profile.canEditWorkspaceTimezone && (
-            <Field
-              label={t('workspaceTimezone')}
-              htmlFor={id('tz')}
-              hint={t('workspaceTimezoneHint')}
-              error={errors.workspaceTimezone}
-            >
-              <TimezoneCombobox
-                id={id('tz')}
-                value={zone}
-                onChange={setZone}
-                invalid={Boolean(errors.workspaceTimezone)}
-              />
-            </Field>
-          )}
-
           <ErrorNote error={error} />
           {saved && <Alert tone="success">{t('saved')}</Alert>}
 
-          <div className="flex flex-wrap justify-end gap-2">
-            <Button type="button" variant="secondary" onClick={reset} disabled={pending || !dirty}>
+          <div className="flex flex-wrap justify-end gap-2 border-t border-border pt-4">
+            <Button type="button" variant="secondary" onClick={reset} disabled={pending}>
               {c('reset')}
             </Button>
-            <Button type="submit" disabled={pending || !dirty}>
+            <Button type="submit" disabled={pending}>
               {pending && <Spinner label={c('saving')} />}
               {pending ? c('saving') : c('save')}
             </Button>

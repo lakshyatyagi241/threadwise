@@ -50,11 +50,18 @@ export interface SalesOrderFilters {
   contactId: string;
 }
 
-export const DEFAULT_SO_FILTERS: SalesOrderFilters = { tab: 'all', quick: '', q: '', contactId: '' };
+export const DEFAULT_SO_FILTERS: SalesOrderFilters = {
+  tab: 'all',
+  quick: '',
+  q: '',
+  contactId: '',
+};
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export function parseSalesOrderFilters(search: { get(name: string): string | null }): SalesOrderFilters {
+export function parseSalesOrderFilters(search: {
+  get(name: string): string | null;
+}): SalesOrderFilters {
   const tab = search.get('tab') ?? '';
   const quick = search.get('quick') ?? '';
   const contact = search.get('contact') ?? '';
@@ -77,7 +84,8 @@ export function salesOrderFiltersToSearch(f: SalesOrderFilters): string {
   return s ? `?${s}` : '';
 }
 
-export const hasActiveSalesOrderFilter = (f: SalesOrderFilters): boolean => !!(f.q.trim() || f.quick || f.contactId);
+export const hasActiveSalesOrderFilter = (f: SalesOrderFilters): boolean =>
+  !!(f.q.trim() || f.quick || f.contactId);
 
 /**
  * The `GET /sales-orders` query. A quick filter means "a confirmed order with something left", so it pins the status to
@@ -97,7 +105,10 @@ export function salesOrderListQuery(f: SalesOrderFilters): Record<string, string
 }
 
 /** The count a tab (or quick filter) shows, from `GET /sales-orders/counts`. */
-export function salesOrderTabCount(counts: SalesOrderCounts | undefined, tab: SalesOrderTab | 'toInvoice' | 'toFulfil'): number | undefined {
+export function salesOrderTabCount(
+  counts: SalesOrderCounts | undefined,
+  tab: SalesOrderTab | 'toInvoice' | 'toFulfil',
+): number | undefined {
   return counts ? counts[tab] : undefined;
 }
 
@@ -151,7 +162,11 @@ export function lineFacts(line: QtyLine): LineFacts {
 /** All lines together (quantities of different items add up: it is a progress figure, not a quantity of anything). */
 export function orderFacts(lines: readonly QtyLine[]): LineFacts {
   const sum = lines.map(lineFacts).reduce(
-    (a, l) => ({ ordered: a.ordered + l.ordered, invoiced: a.invoiced + l.invoiced, fulfilled: a.fulfilled + l.fulfilled }),
+    (a, l) => ({
+      ordered: a.ordered + l.ordered,
+      invoiced: a.invoiced + l.invoiced,
+      fulfilled: a.fulfilled + l.fulfilled,
+    }),
     { ordered: 0n, invoiced: 0n, fulfilled: 0n },
   );
   return {
@@ -164,8 +179,7 @@ export function orderFacts(lines: readonly QtyLine[]): LineFacts {
 }
 
 export type QtyCheck =
-  | { ok: true; scaled: bigint; qty: string }
-  | { ok: false; reason: 'invalid' | 'exceeds' };
+  { ok: true; scaled: bigint; qty: string } | { ok: false; reason: 'invalid' | 'exceeds' };
 
 /**
  * A quantity typed against what is left. Empty and 0 mean "none of this line" (scaled 0): the line is left out of the request.
@@ -182,7 +196,8 @@ export function checkQty(text: string, max: bigint): QtyCheck {
 
 // --- what a row offers -----------------------------------------------------------------------------------------------------------
 
-export type SalesOrderAction = 'open' | 'edit' | 'confirm' | 'invoice' | 'fulfil' | 'cancel' | 'delete';
+export type SalesOrderAction =
+  'open' | 'edit' | 'confirm' | 'invoice' | 'fulfil' | 'cancel' | 'delete';
 
 export interface SalesOrderCan {
   updateSalesOrder: boolean;
@@ -229,7 +244,9 @@ export const fulfilmentTone = (s: FulfilmentStatus): ChipTone =>
   s === 'fulfilled' ? 'success' : s === 'partially_fulfilled' ? 'warning' : 'neutral';
 
 /** A linked invoice's status as the order sends it (`draft`, `void`, or its payment state) as an invoice status chip value. */
-export function linkedInvoiceStatus(s: string): 'draft' | 'issued' | 'partially_paid' | 'paid' | 'void' {
+export function linkedInvoiceStatus(
+  s: string,
+): 'draft' | 'issued' | 'partially_paid' | 'paid' | 'void' {
   if (s === 'draft' || s === 'void' || s === 'paid' || s === 'partially_paid') return s;
   return 'issued';
 }
@@ -243,8 +260,14 @@ export const quoteHrefGuess = (quote: { id: string; number: string }): string =>
   `${/^EST/i.test(quote.number) ? '/estimates' : '/proposals'}/${quote.id}`;
 
 /** The page of the offer an order or invoice came from: its `kind` says proposal or estimate (the number is only a fallback guess). */
-export const quoteHref = (quote: { id: string; number: string; kind?: 'proposal' | 'estimate' }): string =>
-  quote.kind ? `${quote.kind === 'estimate' ? '/estimates' : '/proposals'}/${quote.id}` : quoteHrefGuess(quote);
+export const quoteHref = (quote: {
+  id: string;
+  number: string;
+  kind?: 'proposal' | 'estimate';
+}): string =>
+  quote.kind
+    ? `${quote.kind === 'estimate' ? '/estimates' : '/proposals'}/${quote.id}`
+    : quoteHrefGuess(quote);
 
 // --- invoice and delivery payloads -----------------------------------------------------------------------------------------------
 
@@ -272,7 +295,14 @@ export const emptyInvoiceForm = (shippingPending: boolean): InvoiceForm => ({
   includeShipping: shippingPending,
 });
 
-export type DeliveryProblem = 'nothing' | 'qtyInvalid' | 'qtyExceeds' | 'issueDateInvalid' | 'dueDateInvalid' | 'dueBeforeIssue' | 'noteTooLong';
+export type DeliveryProblem =
+  | 'nothing'
+  | 'qtyInvalid'
+  | 'qtyExceeds'
+  | 'issueDateInvalid'
+  | 'dueDateInvalid'
+  | 'dueBeforeIssue'
+  | 'noteTooLong';
 
 export interface LineQtyProblems {
   /** By line id. */
@@ -286,8 +316,10 @@ const invoiceLeft: LeftOf = (l) => lineFacts(l).toInvoice;
 const fulfilLeft: LeftOf = (l) => lineFacts(l).toFulfil;
 
 /** The quantity the dialog proposes for a line: everything that is left. */
-export const defaultQty = (l: SalesOrderResponse['lines'][number], kind: 'invoice' | 'fulfil'): string =>
-  qtyText((kind === 'invoice' ? invoiceLeft : fulfilLeft)(l));
+export const defaultQty = (
+  l: SalesOrderResponse['lines'][number],
+  kind: 'invoice' | 'fulfil',
+): string => qtyText((kind === 'invoice' ? invoiceLeft : fulfilLeft)(l));
 
 /** Per-line quantities the person chose (a line they did not touch means all that is left). */
 function chosen(
@@ -309,7 +341,10 @@ function chosen(
   return { picks, problems };
 }
 
-export function invoiceFormProblems(form: InvoiceForm, lines: readonly SalesOrderResponse['lines'][number][]): LineQtyProblems {
+export function invoiceFormProblems(
+  form: InvoiceForm,
+  lines: readonly SalesOrderResponse['lines'][number][],
+): LineQtyProblems {
   const out: LineQtyProblems = { lines: {}, form: [] };
   if (form.mode === 'lines') {
     const c = chosen(lines, form.qty, invoiceLeft, 'invoice');
@@ -319,12 +354,14 @@ export function invoiceFormProblems(form: InvoiceForm, lines: readonly SalesOrde
   if (form.issueDate.trim() !== '' && !isDay(form.issueDate)) out.form.push('issueDateInvalid');
   if (form.dueDate.trim() !== '') {
     if (!isDay(form.dueDate)) out.form.push('dueDateInvalid');
-    else if (isDay(form.issueDate) && form.dueDate < form.issueDate) out.form.push('dueBeforeIssue');
+    else if (isDay(form.issueDate) && form.dueDate < form.issueDate)
+      out.form.push('dueBeforeIssue');
   }
   return out;
 }
 
-export const hasInvoiceProblems = (p: LineQtyProblems): boolean => p.form.length > 0 || Object.keys(p.lines).length > 0;
+export const hasInvoiceProblems = (p: LineQtyProblems): boolean =>
+  p.form.length > 0 || Object.keys(p.lines).length > 0;
 
 /** The `POST /sales-orders/:id/invoice` body. `all: true` bills every unbilled quantity; otherwise only the lines named. */
 export function buildInvoicePayload(
@@ -354,7 +391,10 @@ export interface FulfilForm {
 export const emptyFulfilForm = (): FulfilForm => ({ mode: 'all', qty: {}, note: '' });
 export const FULFIL_NOTE_MAX = 500;
 
-export function fulfilFormProblems(form: FulfilForm, lines: readonly SalesOrderResponse['lines'][number][]): LineQtyProblems {
+export function fulfilFormProblems(
+  form: FulfilForm,
+  lines: readonly SalesOrderResponse['lines'][number][],
+): LineQtyProblems {
   const out: LineQtyProblems = { lines: {}, form: [] };
   if (form.mode === 'lines') {
     const c = chosen(lines, form.qty, fulfilLeft, 'fulfil');
@@ -365,11 +405,21 @@ export function fulfilFormProblems(form: FulfilForm, lines: readonly SalesOrderR
   return out;
 }
 
-export function buildFulfilPayload(form: FulfilForm, lines: readonly SalesOrderResponse['lines'][number][]): FulfilOrderInput {
+export function buildFulfilPayload(
+  form: FulfilForm,
+  lines: readonly SalesOrderResponse['lines'][number][],
+): FulfilOrderInput {
   const note = form.note.trim();
   const base = note ? { note } : {};
   if (form.mode === 'all') return { ...base, all: true };
-  return { ...base, all: false, lines: chosen(lines, form.qty, fulfilLeft, 'fulfil').picks.map((p) => ({ lineId: p.lineId, qty: p.qty })) };
+  return {
+    ...base,
+    all: false,
+    lines: chosen(lines, form.qty, fulfilLeft, 'fulfil').picks.map((p) => ({
+      lineId: p.lineId,
+      qty: p.qty,
+    })),
+  };
 }
 
 // --- the builder's form ----------------------------------------------------------------------------------------------------------
@@ -411,7 +461,8 @@ export const emptyOrderDraft = (currency: string, terms = ''): OrderDraft => ({
 });
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const trimPercent = (p: string): string => (p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p);
+const trimPercent = (p: string): string =>
+  p.includes('.') ? p.replace(/0+$/, '').replace(/\.$/, '') : p;
 
 /** Half-up division of non-negative bigints (the pricing rounds quantity x price the same way). */
 const divRound = (n: bigint, d: bigint): bigint => (2n * n + d) / (2n * d);
@@ -421,11 +472,21 @@ const divRound = (n: bigint, d: bigint): bigint => (2n * n + d) / (2n * d);
  * a current rate by name, percent and inclusivity (else it is kept as a "removed rate" the person re-picks), and a discount is
  * recovered as the amount that lies between quantity x price and the line's net. Nothing is sent back unless the person edits lines.
  */
-export function draftLineOf(l: SalesOrderResponse['lines'][number], currency: string, rates: readonly TaxRateResponse[]): DraftLine {
+export function draftLineOf(
+  l: SalesOrderResponse['lines'][number],
+  currency: string,
+  rates: readonly TaxRateResponse[],
+): DraftLine {
   const rate = trimPercent(l.taxRate);
   const taxed = rate !== '0' && rate !== '' ? true : !!l.taxName;
   const match =
-    rates.find((r) => r.isActive && r.inclusive === l.taxInclusive && trimPercent(r.rate) === rate && r.name === l.taxName) ??
+    rates.find(
+      (r) =>
+        r.isActive &&
+        r.inclusive === l.taxInclusive &&
+        trimPercent(r.rate) === rate &&
+        r.name === l.taxName,
+    ) ??
     rates.find((r) => r.isActive && r.inclusive === l.taxInclusive && trimPercent(r.rate) === rate);
   const unit = parseMajor(l.unitPrice, currency);
   const net = parseMajor(l.amounts.net, currency);
@@ -446,7 +507,10 @@ export function draftLineOf(l: SalesOrderResponse['lines'][number], currency: st
     discountKind: 'amount',
     discount,
     taxRateId: !taxed ? TAX_NONE : match ? match.id : TAX_SNAPSHOT,
-    taxSnapshot: taxed && !match ? { name: l.taxName ?? '', rate, inclusive: l.taxInclusive, components: null } : null,
+    taxSnapshot:
+      taxed && !match
+        ? { name: l.taxName ?? '', rate, inclusive: l.taxInclusive, components: null }
+        : null,
   };
 }
 
@@ -466,7 +530,8 @@ export function draftOfOrder(o: SalesOrderResponse, rates: readonly TaxRateRespo
     shipping: shipping > 0n ? o.amounts.shipping : '',
     notes: o.notes ?? '',
     terms: o.terms ?? '',
-    lines: o.lines.length > 0 ? o.lines.map((l) => draftLineOf(l, o.currency, rates)) : [emptyLine()],
+    lines:
+      o.lines.length > 0 ? o.lines.map((l) => draftLineOf(l, o.currency, rates)) : [emptyLine()],
   };
 }
 
@@ -480,7 +545,9 @@ export type OrderProblem =
   | 'referenceTooLong';
 
 export interface OrderProblems {
-  fields: Partial<Record<'buyer' | 'email' | 'currency' | 'expectedDate' | 'shipping' | 'reference', OrderProblem>>;
+  fields: Partial<
+    Record<'buyer' | 'email' | 'currency' | 'expectedDate' | 'shipping' | 'reference', OrderProblem>
+  >;
   /** By line index of the draft: `lines.<i>.<field>` -> problem code (line problem codes of the invoice builder). */
   lines: Record<string, string>;
   list?: OrderProblem;
@@ -502,16 +569,23 @@ export function validateOrderDraft(d: OrderDraft, opts: ValidateOrderOptions): O
   const out: OrderProblems = { fields: {}, lines: {} };
   const fromQuote = opts.creating && d.quoteId !== null;
   if (!fromQuote && !d.contactId && d.buyerName.trim() === '') out.fields.buyer = 'buyerRequired';
-  if (d.buyerEmail.trim() !== '' && !EMAIL.test(d.buyerEmail.trim())) out.fields.email = 'emailInvalid';
-  if (opts.creating && !fromQuote && !/^[A-Za-z]{3}$/.test(d.currency.trim())) out.fields.currency = 'currencyInvalid';
-  if (d.expectedDate.trim() !== '' && !isDay(d.expectedDate.trim())) out.fields.expectedDate = 'expectedDateInvalid';
-  if (d.shipping.trim() !== '' && decimalOf(d.shipping) === null) out.fields.shipping = 'shippingInvalid';
+  if (d.buyerEmail.trim() !== '' && !EMAIL.test(d.buyerEmail.trim()))
+    out.fields.email = 'emailInvalid';
+  if (opts.creating && !fromQuote && !/^[A-Za-z]{3}$/.test(d.currency.trim()))
+    out.fields.currency = 'currencyInvalid';
+  if (d.expectedDate.trim() !== '' && !isDay(d.expectedDate.trim()))
+    out.fields.expectedDate = 'expectedDateInvalid';
+  if (d.shipping.trim() !== '' && decimalOf(d.shipping) === null)
+    out.fields.shipping = 'shippingInvalid';
   if (d.reference.trim().length > 191) out.fields.reference = 'referenceTooLong';
   if (opts.creating ? !fromQuote : !!opts.linesTouched) {
     const used = d.lines.map((l, i) => [l, i] as const).filter(([l]) => !isBlankLine(l));
     if (used.length === 0) out.list = 'noLines';
     for (const [l, i] of used) {
-      for (const [field, problem] of Object.entries(lineProblems(l, d.currency, { requireHsn: opts.requireHsn }))) out.lines[`lines.${i}.${field}`] = problem;
+      for (const [field, problem] of Object.entries(
+        lineProblems(l, d.currency, { requireHsn: opts.requireHsn }),
+      ))
+        out.lines[`lines.${i}.${field}`] = problem;
     }
   }
   return out;
@@ -521,8 +595,12 @@ const orNull = (s: string): string | null => (s.trim() === '' ? null : s.trim())
 const orUndef = (s: string): string | undefined => (s.trim() === '' ? undefined : s.trim());
 
 /** `POST /sales-orders`. From an accepted offer the lines, currency and buyer come from the offer; typed values refine them. */
-export function buildCreateInput(d: OrderDraft, rates: readonly TaxRateResponse[]): CreateSalesOrderInput {
-  const shipping = d.shipping.trim() === '' ? undefined : (decimalOf(d.shipping) ?? d.shipping.trim());
+export function buildCreateInput(
+  d: OrderDraft,
+  rates: readonly TaxRateResponse[],
+): CreateSalesOrderInput {
+  const shipping =
+    d.shipping.trim() === '' ? undefined : (decimalOf(d.shipping) ?? d.shipping.trim());
   const common = {
     contactId: d.contactId ?? undefined,
     dealId: d.dealId ?? undefined,
@@ -537,8 +615,14 @@ export function buildCreateInput(d: OrderDraft, rates: readonly TaxRateResponse[
   };
   const body: CreateSalesOrderInput = d.quoteId
     ? { ...common, quoteId: d.quoteId }
-    : { ...common, currency: d.currency.trim().toUpperCase(), lines: linesToInput(d.lines, d.currency, rates) };
-  return Object.fromEntries(Object.entries(body).filter(([, v]) => v !== undefined)) as CreateSalesOrderInput;
+    : {
+        ...common,
+        currency: d.currency.trim().toUpperCase(),
+        lines: linesToInput(d.lines, d.currency, rates),
+      };
+  return Object.fromEntries(
+    Object.entries(body).filter(([, v]) => v !== undefined),
+  ) as CreateSalesOrderInput;
 }
 
 const sameLines = (a: readonly DraftLine[], b: readonly DraftLine[]): boolean =>
@@ -557,7 +641,8 @@ const sameLines = (a: readonly DraftLine[], b: readonly DraftLine[]): boolean =>
     );
   });
 
-export const linesChanged = (draft: OrderDraft, initial: OrderDraft): boolean => !sameLines(draft.lines, initial.lines);
+export const linesChanged = (draft: OrderDraft, initial: OrderDraft): boolean =>
+  !sameLines(draft.lines, initial.lines);
 
 /**
  * `PATCH /sales-orders/:id` (without `rowVersion`: the service adds it). Every header field is sent so a cleared box clears it;
@@ -579,7 +664,8 @@ export function buildUpdateInput(
     notes: orNull(d.notes),
     terms: orNull(d.terms),
   };
-  if (d.shipping.trim() !== initial.shipping.trim()) out.shipping = d.shipping.trim() === '' ? null : (decimalOf(d.shipping) ?? d.shipping.trim());
+  if (d.shipping.trim() !== initial.shipping.trim())
+    out.shipping = d.shipping.trim() === '' ? null : (decimalOf(d.shipping) ?? d.shipping.trim());
   if (linesChanged(d, initial)) out.lines = linesToInput(d.lines, d.currency, rates);
   return out;
 }
@@ -600,7 +686,10 @@ export const isSameOrderDraft = (a: OrderDraft, b: OrderDraft): boolean =>
   sameLines(a.lines, b.lines);
 
 /** Live pricing of the builder's lines (same rule the server prices with); an unreadable form prices as nothing. */
-export function priceOrderDraft(d: OrderDraft, rates: readonly TaxRateResponse[]): PricingResult | null {
+export function priceOrderDraft(
+  d: OrderDraft,
+  rates: readonly TaxRateResponse[],
+): PricingResult | null {
   const used = d.lines.filter((l) => !isBlankLine(l));
   if (used.length === 0 || !/^[A-Za-z]{3}$/.test(d.currency.trim())) return null;
   return priceInvoice({
@@ -623,13 +712,17 @@ export function priceOrderDraft(d: OrderDraft, rates: readonly TaxRateResponse[]
 /** Per-line amounts (minor units) for the editor, aligned with the draft's line indexes (blank lines get null). */
 export function lineAmountsOf(d: OrderDraft, pricing: PricingResult | null): Array<number | null> {
   let k = 0;
-  return d.lines.map((l) => (isBlankLine(l) ? null : (pricing?.totals.lines[k++]?.netMinor ?? null)));
+  return d.lines.map((l) =>
+    isBlankLine(l) ? null : (pricing?.totals.lines[k++]?.netMinor ?? null),
+  );
 }
 
 // --- the picker of accepted offers -----------------------------------------------------------------------------------------------
 
 /** An order made from an accepted offer, found again after SO_QUOTE_TAKEN: the live one (not cancelled) for that offer. */
-export function liveOrderForQuote<T extends { quote: { id: string } | null; status: SalesOrderStatus }>(orders: readonly T[], quoteId: string): T | undefined {
+export function liveOrderForQuote<
+  T extends { quote: { id: string } | null; status: SalesOrderStatus },
+>(orders: readonly T[], quoteId: string): T | undefined {
   return orders.find((o) => o.quote?.id === quoteId && o.status !== 'cancelled');
 }
 

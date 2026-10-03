@@ -1,6 +1,10 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { planAdminListResponseSchema } from '@crm/contracts';
+import {
+  couponListResponseSchema,
+  planAdminListResponseSchema,
+  platformRoleListResponseSchema,
+} from '@crm/contracts';
 import { cookieNames } from '@/lib/auth/cookies';
 import { apiBase } from '@/lib/auth/server';
 
@@ -29,6 +33,38 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
     }
   } catch {
     // network failure: the plans badge stays blank
+  }
+
+  // Roles and permissions: one call carries both totals (WaDesk's sidebar badges are raw row counts). An operator without
+  // platform.role.manage gets a 403 here and simply sees no badge.
+  try {
+    const res = await fetch(`${apiBase()}/v2/platform/roles`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const parsed = platformRoleListResponseSchema.safeParse(await res.json());
+      if (parsed.success) {
+        counts.roles = parsed.data.kpis.totalRoles;
+        counts.permissions = parsed.data.kpis.totalPermissions;
+      }
+    }
+  } catch {
+    // network failure: the badges stay blank
+  }
+
+  // Coupons: the badge counts ACTIVE coupons only, whatever their expiry (WD-CPN-001 rule 3).
+  try {
+    const res = await fetch(`${apiBase()}/v2/platform/coupons`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const parsed = couponListResponseSchema.safeParse(await res.json());
+      if (parsed.success) counts.coupons = parsed.data.summary.active;
+    }
+  } catch {
+    // network failure: the coupons badge stays blank
   }
 
   return counts;

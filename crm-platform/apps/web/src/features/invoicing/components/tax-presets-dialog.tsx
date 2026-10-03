@@ -5,7 +5,18 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { TAX_PROFILES } from '@crm/tax';
 import type { ApplyTaxPresetsResponse, TaxPresetRow } from '@crm/contracts';
-import { Alert, Badge, Button, Checkbox, Field, Modal, Select, Spinner, Switch, useToast } from '@crm/ui';
+import {
+  Alert,
+  Badge,
+  Button,
+  Checkbox,
+  Field,
+  Modal,
+  Select,
+  Spinner,
+  Switch,
+  useToast,
+} from '@crm/ui';
 import { invalidateInvoicing, useInvoiceSettings, useTaxPresets } from '../api/hooks';
 import { invoicingApi } from '../api/service';
 import { formatDay } from '../lib/dates';
@@ -13,7 +24,9 @@ import { percentLabel } from '../lib/wire';
 import { codesToApply, defaultPicked, inForce, pickedHasDefault } from '../lib/tax-presets';
 import { ErrorLine, useErrorText } from './parts';
 
-const COUNTRIES = [...TAX_PROFILES].filter((p) => /^[A-Z]{2}$/.test(p.code)).sort((a, b) => a.name.localeCompare(b.name));
+const COUNTRIES = [...TAX_PROFILES]
+  .filter((p) => /^[A-Z]{2}$/.test(p.code))
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 /**
  * "Load rates for my country": a country's tax rates from the tax engine, ready to tick and add. They are defaults compiled from
@@ -34,10 +47,22 @@ export function TaxPresetsDialog({
   // The person's own choice wins; until they pick, the country follows the prop, then the business profile once it has loaded.
   const [chosen, setChosen] = useState<string | null>(null);
   const code = chosen ?? initial;
-  return <Body key={code} code={code} onChoose={setChosen} onClose={onClose} onApplied={onApplied} />;
+  return (
+    <Body key={code} code={code} onChoose={setChosen} onClose={onClose} onApplied={onApplied} />
+  );
 }
 
-function Body({ code, onChoose, onClose, onApplied }: { code: string; onChoose: (c: string) => void; onClose: () => void; onApplied?: (r: ApplyTaxPresetsResponse) => void }) {
+function Body({
+  code,
+  onChoose,
+  onClose,
+  onApplied,
+}: {
+  code: string;
+  onChoose: (c: string) => void;
+  onClose: () => void;
+  onApplied?: (r: ApplyTaxPresetsResponse) => void;
+}) {
   const t = useTranslations('invoicing.taxRates.presets');
   const tt = useTranslations('invoicing.taxRates.types');
   const locale = useLocale();
@@ -70,7 +95,11 @@ function Body({ code, onChoose, onClose, onApplied }: { code: string; onChoose: 
     setBusy(true);
     setError(null);
     try {
-      const r = await invoicingApi.applyTaxPresets({ country: code, codes, setDefault: setDefault && hasDefault });
+      const r = await invoicingApi.applyTaxPresets({
+        country: code,
+        codes,
+        setDefault: setDefault && hasDefault,
+      });
       await invalidateInvoicing(qc);
       setResult(r);
       toast(t('applied', { created: r.created.length }));
@@ -102,7 +131,11 @@ function Body({ code, onChoose, onClose, onApplied }: { code: string; onChoose: 
             <Button variant="secondary" onClick={onClose} disabled={busy}>
               {t('cancel')}
             </Button>
-            <Button variant="brand" onClick={() => void apply()} disabled={busy || codes.length === 0}>
+            <Button
+              variant="brand"
+              onClick={() => void apply()}
+              disabled={busy || codes.length === 0}
+            >
               {busy && <Spinner />}
               {t('apply', { count: codes.length })}
             </Button>
@@ -112,9 +145,16 @@ function Body({ code, onChoose, onClose, onApplied }: { code: string; onChoose: 
     >
       <div className="space-y-4">
         <Field label={t('country')} htmlFor="preset-country">
-          <Select id="preset-country" value={code} onChange={(e) => onChoose(e.target.value)} disabled={busy || result !== null}>
+          <Select
+            id="preset-country"
+            value={code}
+            onChange={(e) => onChoose(e.target.value)}
+            disabled={busy || result !== null}
+          >
             <option value="">{t('pickCountry')}</option>
-            {code && !COUNTRIES.some((c) => c.code === code) && <option value={code}>{code}</option>}
+            {code && !COUNTRIES.some((c) => c.code === code) && (
+              <option value={code}>{code}</option>
+            )}
             {COUNTRIES.map((c) => (
               <option key={c.code} value={c.code}>
                 {c.name} ({c.code})
@@ -126,7 +166,9 @@ function Body({ code, onChoose, onClose, onApplied }: { code: string; onChoose: 
         {result ? (
           <div className="space-y-3" role="status">
             <Alert tone={result.created.length > 0 ? 'success' : 'info'}>
-              <span className="font-medium">{t('result', { created: result.created.length, skipped: result.skipped.length })}</span>
+              <span className="font-medium">
+                {t('result', { created: result.created.length, skipped: result.skipped.length })}
+              </span>
             </Alert>
             {result.skipped.length > 0 && (
               <ul className="space-y-1 text-sm text-muted-foreground">
@@ -151,31 +193,60 @@ function Body({ code, onChoose, onClose, onApplied }: { code: string; onChoose: 
           <>
             {data && <Disclaimer notes={data.notes} disclaimer={data.disclaimer} />}
             {rows.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('noRates', { country: data?.countryName ?? code })}</p>
+              <p className="text-sm text-muted-foreground">
+                {t('noRates', { country: data?.countryName ?? code })}
+              </p>
             ) : (
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-                  <span>{t('asOf', { country: data?.countryName ?? code, date: formatDay(asOf, locale) })}</span>
+                  <span>
+                    {t('asOf', {
+                      country: data?.countryName ?? code,
+                      date: formatDay(asOf, locale),
+                    })}
+                  </span>
                   <span className="flex gap-2">
-                    <button type="button" className="hover:text-foreground hover:underline" onClick={() => setPicked(defaultPicked(rows, asOf))}>
+                    <button
+                      type="button"
+                      className="hover:text-foreground hover:underline"
+                      onClick={() => setPicked(defaultPicked(rows, asOf))}
+                    >
                       {t('selectRecommended')}
                     </button>
-                    <button type="button" className="hover:text-foreground hover:underline" onClick={() => setPicked(new Set())}>
+                    <button
+                      type="button"
+                      className="hover:text-foreground hover:underline"
+                      onClick={() => setPicked(new Set())}
+                    >
                       {t('selectNone')}
                     </button>
                   </span>
                 </div>
                 <ul className="divide-y divide-border rounded-lg border border-border">
                   {rows.map((r) => (
-                    <PresetRow key={r.code} row={r} asOf={asOf} checked={selection.has(r.code)} onToggle={() => toggle(r.code)} typeLabel={tt(r.type)} />
+                    <PresetRow
+                      key={r.code}
+                      row={r}
+                      asOf={asOf}
+                      checked={selection.has(r.code)}
+                      onToggle={() => toggle(r.code)}
+                      typeLabel={tt(r.type)}
+                    />
                   ))}
                 </ul>
                 <label className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2 text-sm">
                   <span>
                     <span className="block font-medium">{t('setDefault')}</span>
-                    <span className="block text-xs text-muted-foreground">{t('setDefaultHint')}</span>
+                    <span className="block text-xs text-muted-foreground">
+                      {t('setDefaultHint')}
+                    </span>
                   </span>
-                  <Switch checked={setDefault && hasDefault} onCheckedChange={setSetDefault} label={t('setDefault')} disabled={!hasDefault} />
+                  <Switch
+                    checked={setDefault && hasDefault}
+                    onCheckedChange={setSetDefault}
+                    label={t('setDefault')}
+                    disabled={!hasDefault}
+                  />
                 </label>
               </div>
             )}
@@ -206,7 +277,19 @@ function Disclaimer({ notes, disclaimer }: { notes: readonly string[]; disclaime
   );
 }
 
-function PresetRow({ row, asOf, checked, onToggle, typeLabel }: { row: TaxPresetRow; asOf: string; checked: boolean; onToggle: () => void; typeLabel: string }) {
+function PresetRow({
+  row,
+  asOf,
+  checked,
+  onToggle,
+  typeLabel,
+}: {
+  row: TaxPresetRow;
+  asOf: string;
+  checked: boolean;
+  onToggle: () => void;
+  typeLabel: string;
+}) {
   const t = useTranslations('invoicing.taxRates.presets');
   const locale = useLocale();
   const active = inForce(row, asOf);
@@ -232,8 +315,11 @@ function PresetRow({ row, asOf, checked, onToggle, typeLabel }: { row: TaxPreset
             </span>
             <span className="mt-0.5 block text-xs text-muted-foreground">
               {typeLabel} - {row.inclusive ? t('inclusive') : t('exclusive')}
-              {row.region ? ` - ${row.region}` : ''} - {t('from', { date: formatDay(row.effectiveFrom, locale) })}
-              {row.effectiveTo ? ` - ${t('until', { date: formatDay(row.effectiveTo, locale) })}` : ''}
+              {row.region ? ` - ${row.region}` : ''} -{' '}
+              {t('from', { date: formatDay(row.effectiveFrom, locale) })}
+              {row.effectiveTo
+                ? ` - ${t('until', { date: formatDay(row.effectiveTo, locale) })}`
+                : ''}
             </span>
             {row.components && row.components.length > 0 && (
               <span dir="ltr" className="mt-0.5 block text-xs text-muted-foreground">

@@ -17,11 +17,13 @@
     "test:integration": "vitest run --dir test/integration --testTimeout=120000",
     "test:e2e": "vitest run --dir test/e2e --testTimeout=120000",
     "openapi": "tsx src/tools/emit-openapi.ts",
+    "waba:smoke": "tsx src/tools/waba-smoke.ts",
+    "secrets:reencrypt": "tsx src/modules/auth/maintenance/reencrypt-secrets.cli.ts",
     "clean": "rm -rf dist coverage",
     "arch": "depcruise --config .dependency-cruiser.cjs src",
     "seed:auth": "tsx src/modules/auth/cli/seed-auth.ts",
     "operator:create": "tsx src/modules/auth/cli/create-operator.ts",
-    "auto-reply:translate-existing": "tsx src/modules/localization-translation/cli/translate-existing.ts"
+    "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js"
   },
   "dependencies": {
     "@clerk/backend": "^3.18.1",
@@ -41,8 +43,11 @@
     "@node-rs/argon2": "^2.0.2",
     "@sentry/node": "^8.51.0",
     "@socket.io/redis-adapter": "^8.3.0",
+    "@socket.io/redis-emitter": "^5.1.0",
+    "baileys": "6.7.24",
     "bullmq": "^5.34.10",
     "drizzle-orm": "^0.38.4",
+    "https-proxy-agent": "7.0.6",
     "ioredis": "^5.4.2",
     "nestjs-pino": "^4.3.0",
     "nodemailer": "^10.0.13",
@@ -53,6 +58,7 @@
     "rxjs": "^7.8.1",
     "sanitize-html": "^2.18.0",
     "socket.io": "^4.8.1",
+    "socks-proxy-agent": "8.0.5",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -73,6 +79,7 @@
     "dependency-cruiser": "^16.9.0",
     "dotenv": "^16.4.7",
     "pino-pretty": "^13.0.0",
+    "socket.io-client": "^4.8.1",
     "supertest": "^7.0.0",
     "testcontainers": "^10.16.0",
     "tsx": "^4.19.2",

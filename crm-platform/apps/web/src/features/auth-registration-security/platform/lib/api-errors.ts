@@ -1,4 +1,11 @@
+import { ERROR_CODES } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
+
+/** The API refused because the operator's role may not do this (not because of an IP block or missing MFA). */
+export const isRoleRefusal = (error: unknown): error is ApiError =>
+  error instanceof ApiError &&
+  error.status === 403 &&
+  error.code === ERROR_CODES.AUTH_OPERATOR_ROLE_REQUIRED;
 
 /** The message the API attached to one field path, if any. */
 export function fieldMessage(error: ApiError, path: string): string | undefined {

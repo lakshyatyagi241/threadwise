@@ -37,7 +37,8 @@ const base = () => ({
 /**
  * Tokens live only in httpOnly cookies, so page JavaScript can never read them.
  * Without "keep me signed in" the refresh cookie is a browser-session cookie
- * (gone when the browser closes), matching the server-side 24 h absolute limit.
+ * (gone when the browser closes); the API ends such a session after 7 days at the latest. `remember` is what the
+ * API reported for the session it just opened (`Authenticated.remember`), never a guess made here.
  */
 export function setSessionCookies(
   store: CookieWriter,

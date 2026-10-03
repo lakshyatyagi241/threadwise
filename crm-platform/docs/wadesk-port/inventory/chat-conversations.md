@@ -1679,3 +1679,13 @@ Unknowns to confirm during parity checks
   }
 }
 ```
+
+
+## Port note: data model reshape (2026-10-02, plan-inbox-chat.md owner decision 2)
+
+The rebuild folds this domain's two message tables (`messages` and TIB1's `inbox_messages`) into one `messages` stream and reshapes
+`conversations` before any code depends on them. Where the entries above say otherwise, the schema is: `channel_id` replaces
+`device_id` + `provider` + `platform` + `channel`; `peer_key` replaces `raw_jid`, `alt_jid` and `contact_digits`; one lifecycle
+`status` replaces `status` (Quick Send roll-up) and `inbox_status`; Quick Send columns (`recipients_count`, `scheduled_*`) are gone and
+the roll-up becomes a derived value; `messages` gains `seq`, `sender_kind`, `client_message_id`, `provider_message_id` (idempotency in
+`message_ledger`) and loses `to_number`/`from_number`. Details: [docs/api/chat-conversations.md](../../api/chat-conversations.md).

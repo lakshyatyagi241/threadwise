@@ -1,13 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { BroadcastPlanGate, WalletGate, WarmerGate } from './tokens';
-
-/** No wallet precheck until the wallet domain exposes one: every send is allowed (WaDesk: a no-op for plan-quota orgs). */
-@Injectable()
-export class OpenWalletGate implements WalletGate {
-  precheck(): Promise<void> {
-    return Promise.resolve();
-  }
-}
+import type { BroadcastPlanGate, WarmerGate } from './tokens';
 
 /** No warmer until the scheduled-queue-warmer domain exposes one: nothing is ever held. */
 @Injectable()

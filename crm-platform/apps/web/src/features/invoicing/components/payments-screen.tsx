@@ -17,8 +17,18 @@ import {
   Switch,
   cn,
 } from '@crm/ui';
-import { PAYMENT_KINDS, type InvoiceSummary, type PaymentKind, type PaymentResponse } from '@crm/contracts';
-import { invalidateInvoicing, useContactName, usePaymentSummary, usePaymentsList } from '../api/hooks';
+import {
+  PAYMENT_KINDS,
+  type InvoiceSummary,
+  type PaymentKind,
+  type PaymentResponse,
+} from '@crm/contracts';
+import {
+  invalidateInvoicing,
+  useContactName,
+  usePaymentSummary,
+  usePaymentsList,
+} from '../api/hooks';
 import { minorNum } from '../lib/aging';
 import { formatDay, todayKey } from '../lib/dates';
 import {
@@ -38,16 +48,43 @@ import { currenciesOf } from '../lib/summary';
 import { frozenEdge, isScrolledSideways, STICKY_ONLY, STICKY_ONLY_HEAD } from '../lib/sticky';
 import { AgingReport } from './aging-report';
 import { ContactPicker } from './contact-picker';
-import { CloseIcon, EyeIcon, InvoiceIcon, PaymentIcon, PlusIcon, RefreshIcon, SearchIcon, UndoIcon } from './icons';
+import {
+  CloseIcon,
+  EyeIcon,
+  InvoiceIcon,
+  PaymentIcon,
+  PlusIcon,
+  RefreshIcon,
+  SearchIcon,
+  UndoIcon,
+} from './icons';
 import { LedgerSummary } from './ledger-summary';
 import { OutstandingView } from './outstanding-view';
-import { ContactPill, ErrorLine, MethodChip, Money, useInvoicingCan, useWorkspaceZone } from './parts';
+import {
+  ContactPill,
+  ErrorLine,
+  MethodChip,
+  Money,
+  useInvoicingCan,
+  useWorkspaceZone,
+} from './parts';
 import { RecordPaymentDialog, RefundDialog } from './payment-dialogs';
 import { PickInvoiceDialog } from './pick-invoice-dialog';
 import { ReceiptDialog } from './receipt-dialog';
 import { RowMenu } from './row-menu';
 
-const COLS = ['date', 'receipt', 'invoice', 'contact', 'method', 'reference', 'amount', 'refunded', 'recordedBy', 'actions'] as const;
+const COLS = [
+  'date',
+  'receipt',
+  'invoice',
+  'contact',
+  'method',
+  'reference',
+  'amount',
+  'refunded',
+  'recordedBy',
+  'actions',
+] as const;
 const COL_W: Record<(typeof COLS)[number], number> = {
   date: 156,
   receipt: 170,
@@ -80,7 +117,9 @@ export function PaymentsScreen() {
   const filters = useMemo(() => parsePaymentFilters(search), [search]);
   const setFilters = useCallback(
     (patch: Partial<PaymentFilters>) =>
-      router.replace(`${pathname}${paymentFiltersToSearch({ ...filters, ...patch })}`, { scroll: false }),
+      router.replace(`${pathname}${paymentFiltersToSearch({ ...filters, ...patch })}`, {
+        scroll: false,
+      }),
     [router, pathname, filters],
   );
 
@@ -116,7 +155,10 @@ export function PaymentsScreen() {
     <div className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
-          <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+          <span
+            aria-hidden="true"
+            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
+          >
             <PaymentIcon className="size-5" />
           </span>
           <div className="min-w-0">
@@ -125,7 +167,10 @@ export function PaymentsScreen() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link href="/invoices" className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+          <Link
+            href="/invoices"
+            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+          >
             {t('invoices')}
           </Link>
           {can.recordPayment && (
@@ -147,7 +192,11 @@ export function PaymentsScreen() {
         />
       )}
 
-      <div role="tablist" aria-label={t('viewLabel')} className="thin-scrollbar flex gap-1 overflow-x-auto border-b border-border">
+      <div
+        role="tablist"
+        aria-label={t('viewLabel')}
+        className="thin-scrollbar flex gap-1 overflow-x-auto border-b border-border"
+      >
         {PAYMENTS_VIEWS.map((v: PaymentsView) => (
           <button
             key={v}
@@ -160,7 +209,9 @@ export function PaymentsScreen() {
             onClick={() => setFilters({ view: v })}
             className={cn(
               'shrink-0 border-b-2 px-3 py-2.5 text-sm font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-              filters.view === v ? 'border-brand text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
+              filters.view === v
+                ? 'border-brand text-foreground'
+                : 'border-transparent text-muted-foreground hover:text-foreground',
             )}
           >
             {t(`views.${v}`)}
@@ -168,7 +219,12 @@ export function PaymentsScreen() {
         ))}
       </div>
 
-      <div id={panelId} role="tabpanel" aria-labelledby={`${panelId}-${filters.view}`} className="space-y-3">
+      <div
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={`${panelId}-${filters.view}`}
+        className="space-y-3"
+      >
         <Toolbar
           filters={filters}
           q={q}
@@ -191,7 +247,12 @@ export function PaymentsScreen() {
             aria-busy={list.isFetching}
             className="flex max-h-[max(26rem,calc(100dvh-24rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
           >
-            <div className={cn('flex min-h-0 flex-1 flex-col transition-opacity', list.isPlaceholderData && 'opacity-60')}>
+            <div
+              className={cn(
+                'flex min-h-0 flex-1 flex-col transition-opacity',
+                list.isPlaceholderData && 'opacity-60',
+              )}
+            >
               {list.isPending ? (
                 <div role="status" aria-label={t('loading')} className="divide-y divide-border">
                   {Array.from({ length: 6 }, (_, i) => (
@@ -241,7 +302,12 @@ export function PaymentsScreen() {
                   {t('showing', { count: rows.length })}
                 </span>
                 {list.hasNextPage ? (
-                  <Button variant="secondary" size="sm" disabled={list.isFetchingNextPage} onClick={() => void list.fetchNextPage()}>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={list.isFetchingNextPage}
+                    onClick={() => void list.fetchNextPage()}
+                  >
                     {list.isFetchingNextPage && <Spinner />}
                     {t('loadMore')}
                   </Button>
@@ -264,8 +330,20 @@ export function PaymentsScreen() {
           }}
         />
       )}
-      {paying && <RecordPaymentDialog invoice={paying} onClose={() => setPaying(null)} onDone={() => void invalidateInvoicing(qc)} />}
-      {refunding && <RefundDialog payment={refunding} onClose={() => setRefunding(null)} onDone={() => void invalidateInvoicing(qc)} />}
+      {paying && (
+        <RecordPaymentDialog
+          invoice={paying}
+          onClose={() => setPaying(null)}
+          onDone={() => void invalidateInvoicing(qc)}
+        />
+      )}
+      {refunding && (
+        <RefundDialog
+          payment={refunding}
+          onClose={() => setRefunding(null)}
+          onDone={() => void invalidateInvoicing(qc)}
+        />
+      )}
       {receipt && <ReceiptDialog payment={receipt} onClose={() => setReceipt(null)} />}
     </div>
   );
@@ -297,7 +375,8 @@ function Toolbar({
   const tk = useTranslations('invoicing.payments.kinds');
   const name = useContactName(filters.contact);
   const view = filters.view;
-  const setWindow = (p: { from?: string; to?: string }) => onChange(orderedWindow(p.from ?? filters.from, p.to ?? filters.to));
+  const setWindow = (p: { from?: string; to?: string }) =>
+    onChange(orderedWindow(p.from ?? filters.from, p.to ?? filters.to));
   return (
     <div className="flex flex-wrap items-center gap-2">
       {view !== 'aging' && (
@@ -315,7 +394,12 @@ function Toolbar({
       )}
       {view === 'ledger' && (
         <>
-          <Select value={filters.kind} onChange={(e) => onChange({ kind: e.target.value as PaymentKind | '' })} aria-label={t('kind')} className="w-auto min-w-32">
+          <Select
+            value={filters.kind}
+            onChange={(e) => onChange({ kind: e.target.value as PaymentKind | '' })}
+            aria-label={t('kind')}
+            className="w-auto min-w-32"
+          >
             <option value="">{t('allKinds')}</option>
             {PAYMENT_KINDS.map((k) => (
               <option key={k} value={k}>
@@ -325,11 +409,19 @@ function Toolbar({
           </Select>
           <Menu
             label={t('method')}
-            trigger={filters.methods.length === 0 ? t('allMethods') : t('methodsCount', { count: filters.methods.length })}
+            trigger={
+              filters.methods.length === 0
+                ? t('allMethods')
+                : t('methodsCount', { count: filters.methods.length })
+            }
             triggerClassName="h-10 min-w-36 justify-between"
           >
             {METHOD_ORDER.map((m) => (
-              <MenuCheckboxItem key={m} checked={filters.methods.includes(m)} onCheckedChange={() => onChange({ methods: toggleMethod(filters.methods, m) })}>
+              <MenuCheckboxItem
+                key={m}
+                checked={filters.methods.includes(m)}
+                onCheckedChange={() => onChange({ methods: toggleMethod(filters.methods, m) })}
+              >
                 {tm(m)}
               </MenuCheckboxItem>
             ))}
@@ -341,7 +433,12 @@ function Toolbar({
           </Menu>
         </>
       )}
-      <Select value={filters.currency} onChange={(e) => onChange({ currency: e.target.value })} aria-label={t('currency')} className="w-auto min-w-28">
+      <Select
+        value={filters.currency}
+        onChange={(e) => onChange({ currency: e.target.value })}
+        aria-label={t('currency')}
+        className="w-auto min-w-28"
+      >
         <option value="">{t('allCurrencies')}</option>
         {currencies.map((c) => (
           <option key={c} value={c}>
@@ -350,17 +447,35 @@ function Toolbar({
         ))}
       </Select>
       {view !== 'outstanding' && (
-        <ContactPicker compact value={filters.contact ? { id: filters.contact, label: name.data ?? '...' } : null} onChange={(c) => onChange({ contact: c?.id ?? '' })} />
+        <ContactPicker
+          compact
+          value={filters.contact ? { id: filters.contact, label: name.data ?? '...' } : null}
+          onChange={(c) => onChange({ contact: c?.id ?? '' })}
+        />
       )}
       {view === 'ledger' && (
         <>
           <label className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <span className="shrink-0">{t('from')}</span>
-            <Input type="date" value={filters.from} max={filters.to || undefined} onChange={(e) => setWindow({ from: e.target.value })} className="w-40" aria-label={t('paidFrom')} />
+            <Input
+              type="date"
+              value={filters.from}
+              max={filters.to || undefined}
+              onChange={(e) => setWindow({ from: e.target.value })}
+              className="w-40"
+              aria-label={t('paidFrom')}
+            />
           </label>
           <label className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <span className="shrink-0">{t('to')}</span>
-            <Input type="date" value={filters.to} min={filters.from || undefined} onChange={(e) => setWindow({ to: e.target.value })} className="w-40" aria-label={t('paidTo')} />
+            <Input
+              type="date"
+              value={filters.to}
+              min={filters.from || undefined}
+              onChange={(e) => setWindow({ to: e.target.value })}
+              className="w-40"
+              aria-label={t('paidTo')}
+            />
           </label>
           {filters.invoice && (
             <button
@@ -377,7 +492,11 @@ function Toolbar({
       )}
       {view === 'outstanding' && (
         <label className="flex h-10 items-center gap-2 rounded-md border border-border px-3 text-sm">
-          <Switch checked={filters.onlyOverdue} onCheckedChange={(v) => onChange({ onlyOverdue: v })} label={t('onlyOverdue')} />
+          <Switch
+            checked={filters.onlyOverdue}
+            onCheckedChange={(v) => onChange({ onlyOverdue: v })}
+            label={t('onlyOverdue')}
+          />
           <span>{t('onlyOverdue')}</span>
         </label>
       )}
@@ -386,7 +505,13 @@ function Toolbar({
           {t('reset')}
         </Button>
       )}
-      <Button variant="secondary" onClick={onRefresh} aria-label={t('refresh')} title={t('refresh')} className="ms-auto size-10 px-0">
+      <Button
+        variant="secondary"
+        onClick={onRefresh}
+        aria-label={t('refresh')}
+        title={t('refresh')}
+        className="ms-auto size-10 px-0"
+      >
         {refreshing ? <Spinner /> : <RefreshIcon />}
       </Button>
     </div>
@@ -410,7 +535,8 @@ function PaymentsTable({
   const locale = useLocale();
   const zone = useWorkspaceZone();
   const [scrolled, setScrolled] = useState(false);
-  const th = 'sticky top-0 z-20 border-b border-border bg-muted px-3 py-3 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
+  const th =
+    'sticky top-0 z-20 border-b border-border bg-muted px-3 py-3 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
   const numeric = new Set(['amount', 'refunded']);
   const day = (iso: string) => formatDay(todayKey(new Date(iso), zone), locale);
   return (
@@ -421,7 +547,10 @@ function PaymentsTable({
       onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
       className="thin-scrollbar h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
-      <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: TABLE_W }}>
+      <table
+        className="w-full table-fixed border-separate border-spacing-0 text-sm"
+        style={{ minWidth: TABLE_W }}
+      >
         <colgroup>
           {COLS.map((c) => (
             <col key={c} style={{ width: COL_W[c] }} />
@@ -430,8 +559,20 @@ function PaymentsTable({
         <thead>
           <tr>
             {COLS.map((c) => (
-              <th key={c} scope="col" className={cn(th, numeric.has(c) && 'text-end', c === 'date' && `${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`)}>
-                {c === 'actions' ? <span className="sr-only">{t('columns.actions')}</span> : <span className="block truncate">{t(`columns.${c}`)}</span>}
+              <th
+                key={c}
+                scope="col"
+                className={cn(
+                  th,
+                  numeric.has(c) && 'text-end',
+                  c === 'date' && `${STICKY_ONLY_HEAD} ${frozenEdge(scrolled)}`,
+                )}
+              >
+                {c === 'actions' ? (
+                  <span className="sr-only">{t('columns.actions')}</span>
+                ) : (
+                  <span className="block truncate">{t(`columns.${c}`)}</span>
+                )}
               </th>
             ))}
           </tr>
@@ -442,13 +583,31 @@ function PaymentsTable({
             const refunded = minorNum(p.refunded, p.currency);
             const refundable = minorNum(p.refundable, p.currency);
             return (
-              <tr key={p.id} data-row-id={p.id} className="group h-14 align-middle transition-colors hover:bg-muted">
+              <tr
+                key={p.id}
+                data-row-id={p.id}
+                className="group h-14 align-middle transition-colors hover:bg-muted"
+              >
                 {COLS.map((c) => (
-                  <td key={c} className={cn('max-w-0 border-b border-border px-3 py-2', numeric.has(c) && 'text-end', c === 'date' && `${STICKY_ONLY} ${frozenEdge(scrolled)}`)}>
-                    {c === 'date' && <span className="font-medium tabular-nums">{day(p.paidAt)}</span>}
+                  <td
+                    key={c}
+                    className={cn(
+                      'max-w-0 border-b border-border px-3 py-2',
+                      numeric.has(c) && 'text-end',
+                      c === 'date' && `${STICKY_ONLY} ${frozenEdge(scrolled)}`,
+                    )}
+                  >
+                    {c === 'date' && (
+                      <span className="font-medium tabular-nums">{day(p.paidAt)}</span>
+                    )}
                     {c === 'receipt' && (
                       <>
-                        <button type="button" onClick={() => onReceipt(p)} dir="ltr" className="block max-w-full truncate text-start font-medium hover:text-primary hover:underline">
+                        <button
+                          type="button"
+                          onClick={() => onReceipt(p)}
+                          dir="ltr"
+                          className="block max-w-full truncate text-start font-medium hover:text-primary hover:underline"
+                        >
                           {p.receiptNumber ?? '-'}
                         </button>
                         {refund && p.refundOf && (
@@ -460,7 +619,11 @@ function PaymentsTable({
                     )}
                     {c === 'invoice' &&
                       (p.invoice ? (
-                        <Link href={`/invoices/${p.invoice.id}`} className="font-medium hover:text-primary hover:underline" dir="ltr">
+                        <Link
+                          href={`/invoices/${p.invoice.id}`}
+                          className="font-medium hover:text-primary hover:underline"
+                          dir="ltr"
+                        >
                           {p.invoice.number ?? '-'}
                         </Link>
                       ) : (
@@ -469,17 +632,31 @@ function PaymentsTable({
                     {c === 'contact' && <ContactPill contact={p.contact} />}
                     {c === 'method' && <MethodChip method={p.method} />}
                     {c === 'reference' && (
-                      <span className="block truncate text-muted-foreground" dir="auto" title={p.reference ?? undefined}>
+                      <span
+                        className="block truncate text-muted-foreground"
+                        dir="auto"
+                        title={p.reference ?? undefined}
+                      >
                         {p.reference ?? '-'}
                       </span>
                     )}
-                    {c === 'amount' && <Money minor={minorNum(p.amount, p.currency)} currency={p.currency} className={cn('font-semibold', refund ? 'text-danger' : 'text-success')} />}
+                    {c === 'amount' && (
+                      <Money
+                        minor={minorNum(p.amount, p.currency)}
+                        currency={p.currency}
+                        className={cn('font-semibold', refund ? 'text-danger' : 'text-success')}
+                      />
+                    )}
                     {c === 'refunded' &&
                       (refund ? (
                         <span className="text-muted-foreground">-</span>
                       ) : (
                         <>
-                          {refunded > 0 ? <Money minor={refunded} currency={p.currency} className="text-danger" /> : <span className="text-muted-foreground">-</span>}
+                          {refunded > 0 ? (
+                            <Money minor={refunded} currency={p.currency} className="text-danger" />
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
                           {refundable > 0 && refundable !== minorNum(p.amount, p.currency) && (
                             <span className="block truncate text-xs text-muted-foreground">
                               {t('refundable')} <Money minor={refundable} currency={p.currency} />
@@ -487,21 +664,41 @@ function PaymentsTable({
                           )}
                         </>
                       ))}
-                    {c === 'recordedBy' && <span className="block truncate text-muted-foreground">{p.recordedBy?.name ?? '-'}</span>}
+                    {c === 'recordedBy' && (
+                      <span className="block truncate text-muted-foreground">
+                        {p.recordedBy?.name ?? '-'}
+                      </span>
+                    )}
                     {c === 'actions' && (
                       <RowMenu label={t('moreFor', { date: day(p.paidAt) })}>
                         {(close) => (
                           <>
-                            <MenuItem onSelect={() => { close(); onReceipt(p); }}>
+                            <MenuItem
+                              onSelect={() => {
+                                close();
+                                onReceipt(p);
+                              }}
+                            >
                               <EyeIcon /> {t('receipt')}
                             </MenuItem>
                             {p.invoice && (
-                              <MenuItem onSelect={() => { close(); onOpen(p); }}>
+                              <MenuItem
+                                onSelect={() => {
+                                  close();
+                                  onOpen(p);
+                                }}
+                              >
                                 <InvoiceIcon /> {t('openInvoice')}
                               </MenuItem>
                             )}
                             {canRefund && !refund && refundable > 0 && (
-                              <MenuItem danger onSelect={() => { close(); onRefund(p); }}>
+                              <MenuItem
+                                danger
+                                onSelect={() => {
+                                  close();
+                                  onRefund(p);
+                                }}
+                              >
                                 <UndoIcon /> {t('refund')}
                               </MenuItem>
                             )}

@@ -43,10 +43,27 @@ const doc = (over: Partial<PublicInvoice> = {}): PublicInvoice => ({
       taxRate: '20',
       taxInclusive: false,
       taxComponents: null,
-      amounts: { gross: '1000.00', discount: '0.00', net: '1000.00', docDiscountShare: '0.00', tax: '200.00', total: '1200.00' },
+      amounts: {
+        gross: '1000.00',
+        discount: '0.00',
+        net: '1000.00',
+        docDiscountShare: '0.00',
+        tax: '200.00',
+        total: '1200.00',
+      },
     },
   ],
-  taxSummary: [{ name: 'VAT', type: 'vat', rate: '20', inclusive: false, base: '1000.00', tax: '200.00', components: null }],
+  taxSummary: [
+    {
+      name: 'VAT',
+      type: 'vat',
+      rate: '20',
+      inclusive: false,
+      base: '1000.00',
+      tax: '200.00',
+      components: null,
+    },
+  ],
   amounts: {
     subtotal: '1000.00',
     discount: '0.00',
@@ -70,7 +87,10 @@ const doc = (over: Partial<PublicInvoice> = {}): PublicInvoice => ({
   logoUrl: null,
   payments: [],
   payable: true,
-  paymentOptions: { bankTransfer: { instructions: 'Pay to account 123', details: { IBAN: 'XX00 1234' } }, online: false },
+  paymentOptions: {
+    bankTransfer: { instructions: 'Pay to account 123', details: { IBAN: 'XX00 1234' } },
+    online: false,
+  },
   voidedAt: null,
   voidReason: null,
   ...over,
@@ -91,9 +111,13 @@ describe('rendering (WD-INV-014, WD-INV-015, D-16)', () => {
     expect(text.trimEnd().endsWith('%%EOF')).toBe(true);
     const startxref = Number(/startxref\n(\d+)/.exec(text)![1]);
     expect(text.slice(startxref, startxref + 4)).toBe('xref');
-    const entries = [...text.slice(startxref).matchAll(/(\d{10}) 00000 n /g)].map((m) => Number(m[1]));
+    const entries = [...text.slice(startxref).matchAll(/(\d{10}) 00000 n /g)].map((m) =>
+      Number(m[1]),
+    );
     expect(entries.length).toBeGreaterThanOrEqual(6);
-    entries.forEach((off, i) => expect(text.slice(off, off + 12), `object ${i + 1}`).toMatch(new RegExp(`^${i + 1} 0 obj`)));
+    entries.forEach((off, i) =>
+      expect(text.slice(off, off + 12), `object ${i + 1}`).toMatch(new RegExp(`^${i + 1} 0 obj`)),
+    );
   });
 
   it('is deterministic: an issued invoice renders the same bytes every time (nothing live is read at render time)', () => {
@@ -101,7 +125,11 @@ describe('rendering (WD-INV-014, WD-INV-015, D-16)', () => {
   });
 
   it('breaks a long invoice over several pages and keeps every page inside the object list', () => {
-    const many = Array.from({ length: 70 }, (_, i) => ({ ...doc().lines[0]!, position: i, description: `Line item number ${i} with some words to wrap around the column` }));
+    const many = Array.from({ length: 70 }, (_, i) => ({
+      ...doc().lines[0]!,
+      position: i,
+      description: `Line item number ${i} with some words to wrap around the column`,
+    }));
     const pdf = renderInvoicePdf(doc({ lines: many }));
     const text = pdf.toString('latin1');
     const count = Number(/\/Count (\d+)/.exec(text)![1]);
@@ -110,7 +138,9 @@ describe('rendering (WD-INV-014, WD-INV-015, D-16)', () => {
   });
 
   it('escapes PDF string syntax and turns characters outside Windows-1252 into "?" instead of corrupting the file', () => {
-    const pdf = renderInvoicePdf(doc({ buyer: { name: 'Evil ) Tj (pwned) \\ 日本語 €', address: null, taxId: null } }));
+    const pdf = renderInvoicePdf(
+      doc({ buyer: { name: 'Evil ) Tj (pwned) \\ 日本語 €', address: null, taxId: null } }),
+    );
     const text = pdf.toString('latin1');
     expect(text).toContain('Evil \\) Tj \\(pwned\\) \\\\ ??? \\200');
     expect(text.startsWith('%PDF-')).toBe(true);
@@ -119,7 +149,11 @@ describe('rendering (WD-INV-014, WD-INV-015, D-16)', () => {
   it('the printable page escapes every buyer-supplied string and tells search engines to stay away', () => {
     const html = renderInvoiceHtml(
       doc({
-        buyer: { name: '<script>alert(1)</script>', address: '"><img src=x onerror=alert(2)>', taxId: null },
+        buyer: {
+          name: '<script>alert(1)</script>',
+          address: '"><img src=x onerror=alert(2)>',
+          taxId: null,
+        },
         notes: '<b>bold</b>',
         lines: [{ ...doc().lines[0]!, description: '<svg onload=alert(3)>' }],
         logoUrl: 'http://internal.test/logo.png',
@@ -136,7 +170,15 @@ describe('rendering (WD-INV-014, WD-INV-015, D-16)', () => {
 
   it('shows what a buyer needs: number, due date, tax summary, the bank details to pay with, the reverse-charge sentence', () => {
     const html = renderInvoiceHtml(doc({ reverseCharge: true }));
-    for (const s of ['INV-2026-000001', '2026-10-15', 'VAT 20%', 'Pay to account 123', 'IBAN: XX00 1234', 'Reverse charge']) expect(html).toContain(s);
+    for (const s of [
+      'INV-2026-000001',
+      '2026-10-15',
+      'VAT 20%',
+      'Pay to account 123',
+      'IBAN: XX00 1234',
+      'Reverse charge',
+    ])
+      expect(html).toContain(s);
   });
 
   it('D-07: tax is always printed when there is tax, whatever the document type (WaDesk hid it on receipts and proformas)', () => {
@@ -148,7 +190,9 @@ describe('rendering (WD-INV-014, WD-INV-015, D-16)', () => {
   });
 
   it('a void invoice carries a banner and offers no payment instructions', () => {
-    const html = renderInvoiceHtml(doc({ status: 'void', payable: false, voidReason: 'duplicate' }));
+    const html = renderInvoiceHtml(
+      doc({ status: 'void', payable: false, voidReason: 'duplicate' }),
+    );
     expect(html).toContain('voided');
     expect(html).not.toContain('How to pay');
   });

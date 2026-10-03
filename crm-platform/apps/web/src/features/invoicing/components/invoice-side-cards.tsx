@@ -13,11 +13,33 @@ import { NoteIcon, PlusIcon } from './icons';
 import { creditNoteHref } from './invoice-menu';
 import { ContactPill, ErrorLine, Money, useInvoicingCan } from './parts';
 
-function Tile({ label, children, strong, tone }: { label: string; children: React.ReactNode; strong?: boolean; tone?: 'danger' | 'success' }) {
+function Tile({
+  label,
+  children,
+  strong,
+  tone,
+}: {
+  label: string;
+  children: React.ReactNode;
+  strong?: boolean;
+  tone?: 'danger' | 'success';
+}) {
   return (
-    <div className={cn('min-w-0 rounded-lg border border-border px-3 py-2', strong && 'col-span-2 bg-muted/50')}>
+    <div
+      className={cn(
+        'min-w-0 rounded-lg border border-border px-3 py-2',
+        strong && 'col-span-2 bg-muted/50',
+      )}
+    >
       <dt className="truncate text-xs text-muted-foreground">{label}</dt>
-      <dd className={cn('mt-0.5 truncate', strong ? 'text-lg font-bold' : 'text-sm font-semibold', tone === 'danger' && 'text-danger', tone === 'success' && 'text-success')}>
+      <dd
+        className={cn(
+          'mt-0.5 truncate',
+          strong ? 'text-lg font-bold' : 'text-sm font-semibold',
+          tone === 'danger' && 'text-danger',
+          tone === 'success' && 'text-success',
+        )}
+      >
         {children}
       </dd>
     </div>
@@ -34,7 +56,10 @@ export function SummaryCards({ invoice }: { invoice: InvoiceResponse }) {
   const c = invoice.currency;
   const issued = invoice.status !== 'draft';
   return (
-    <section aria-label={t('amountsLabel')} className="rounded-xl border border-border bg-background p-4">
+    <section
+      aria-label={t('amountsLabel')}
+      className="rounded-xl border border-border bg-background p-4"
+    >
       <dl className="grid grid-cols-2 gap-2">
         <Tile label={t('total')}>
           <Money minor={m.total} currency={c} />
@@ -60,7 +85,11 @@ export function SummaryCards({ invoice }: { invoice: InvoiceResponse }) {
           </Tile>
         )}
         {issued && invoice.status !== 'void' && (
-          <Tile label={t('balance')} strong tone={invoice.status === 'overdue' && m.balance > 0 ? 'danger' : undefined}>
+          <Tile
+            label={t('balance')}
+            strong
+            tone={invoice.status === 'overdue' && m.balance > 0 ? 'danger' : undefined}
+          >
             <Money minor={m.balance} currency={c} />
           </Tile>
         )}
@@ -87,10 +116,14 @@ export function DetailsCard({ invoice }: { invoice: InvoiceResponse }) {
   const locale = useLocale();
   const late = invoice.status === 'overdue' ? (invoice.daysOverdue ?? 0) : 0;
   // An order's invoice carries the order's number as its reference: keep that text for an invoice that predates the link.
-  const orderText = !invoice.salesOrder && invoice.source === 'sales_order' ? invoice.reference : null;
+  const orderText =
+    !invoice.salesOrder && invoice.source === 'sales_order' ? invoice.reference : null;
   const linkClass = 'text-primary underline underline-offset-2';
   return (
-    <section aria-label={t('detailsLabel')} className="rounded-xl border border-border bg-background p-4 text-xs">
+    <section
+      aria-label={t('detailsLabel')}
+      className="rounded-xl border border-border bg-background p-4 text-xs"
+    >
       <dl className="space-y-1.5">
         <Row label={t('issued')}>{formatDay(invoice.issueDate, locale) || '-'}</Row>
         <Row label={t('due')}>
@@ -99,7 +132,9 @@ export function DetailsCard({ invoice }: { invoice: InvoiceResponse }) {
             {late > 0 && ` (${t('daysLate', { count: late })})`}
           </span>
         </Row>
-        <Row label={t('source')}>{isKnownSource(invoice.source) ? t(`sources.${invoice.source}`) : invoice.source}</Row>
+        <Row label={t('source')}>
+          {isKnownSource(invoice.source) ? t(`sources.${invoice.source}`) : invoice.source}
+        </Row>
         {invoice.contact && (
           <Row label={t('contact')}>
             <ContactPill contact={invoice.contact} />
@@ -108,7 +143,10 @@ export function DetailsCard({ invoice }: { invoice: InvoiceResponse }) {
         {invoice.company && <Row label={t('company')}>{invoice.company.name ?? '-'}</Row>}
         {invoice.deal && (
           <Row label={t('deal')}>
-            <Link href={`/deals?deal=${invoice.deal.id}`} className="text-primary underline underline-offset-2">
+            <Link
+              href={`/deals?deal=${invoice.deal.id}`}
+              className="text-primary underline underline-offset-2"
+            >
               {invoice.deal.title || t('dealFallback')}
             </Link>
           </Row>
@@ -135,7 +173,9 @@ export function DetailsCard({ invoice }: { invoice: InvoiceResponse }) {
             </Link>
           </Row>
         )}
-        {invoice.reference && !orderText && !invoice.salesOrder && <Row label={t('reference')}>{invoice.reference}</Row>}
+        {invoice.reference && !orderText && !invoice.salesOrder && (
+          <Row label={t('reference')}>{invoice.reference}</Row>
+        )}
         {invoice.owner && <Row label={t('owner')}>{invoice.owner.name}</Row>}
         {invoice.createdBy && <Row label={t('createdBy')}>{invoice.createdBy.name}</Row>}
       </dl>
@@ -144,20 +184,32 @@ export function DetailsCard({ invoice }: { invoice: InvoiceResponse }) {
 }
 
 /** The credit notes issued against this invoice, each a link to its page, and the button that starts a new one. */
-export function CreditNotesCard({ invoiceId, canCreate }: { invoiceId: string; canCreate: boolean }) {
+export function CreditNotesCard({
+  invoiceId,
+  canCreate,
+}: {
+  invoiceId: string;
+  canCreate: boolean;
+}) {
   const t = useTranslations('invoicing.detail.creditNotes');
   const locale = useLocale();
   const can = useInvoicingCan();
   const list = useCreditNotesList({ invoiceId }, { enabled: can.readCreditNotes });
   if (!can.readCreditNotes) return null;
   return (
-    <section aria-labelledby="inv-credits" className="rounded-xl border border-border bg-background p-4 print:hidden">
+    <section
+      aria-labelledby="inv-credits"
+      className="rounded-xl border border-border bg-background p-4 print:hidden"
+    >
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 id="inv-credits" className="text-sm font-semibold">
           {t('title')}
         </h2>
         {canCreate && (
-          <Link href={creditNoteHref(invoiceId)} className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+          <Link
+            href={creditNoteHref(invoiceId)}
+            className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+          >
             <PlusIcon className="size-3.5" /> {t('create')}
           </Link>
         )}
@@ -193,7 +245,10 @@ export function CreditNotesCard({ invoiceId, canCreate }: { invoiceId: string; c
                 <Money
                   minor={minorOf(cn_.totalMinor)}
                   currency={cn_.currency}
-                  className={cn('text-sm font-medium', cn_.status === 'void' && 'text-muted-foreground line-through')}
+                  className={cn(
+                    'text-sm font-medium',
+                    cn_.status === 'void' && 'text-muted-foreground line-through',
+                  )}
                 />
               </Link>
             </li>

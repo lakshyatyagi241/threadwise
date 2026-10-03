@@ -1,6 +1,8 @@
 import type { z } from 'zod';
 import { ERROR_CODES } from '@crm/contracts';
 import { ApiError, toApiError } from '@/lib/api/errors';
+import { blockedAddress, ipBlockStore, isIpBlocked, type IpBlockStore } from './lib/ip-blocked';
+import { operatorLoginPath } from './lib/next-path';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 const MUTATING: ReadonlySet<Method> = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
@@ -29,15 +31,27 @@ function qs(query: OperatorRequest<unknown>['query']): string {
 /**
  * Where the console must send the person when the API refuses a call for an
  * authentication reason, or null when the error is an ordinary one. The proxy
- * has already tried one refresh by the time a 401 reaches here.
+ * has already tried one refresh by the time a 401 reaches here. A session ended
+ * for inactivity says so (and how long the limit is); either way the console page
+ * they were on rides along as `?next=` when `currentPath` is given.
  */
-export function operatorAuthRedirect(error: unknown): string | null {
+export function operatorAuthRedirect(error: unknown, currentPath?: string): string | null {
   if (!(error instanceof ApiError)) return null;
   if (error.code === ERROR_CODES.AUTH_MFA_ENROLMENT_REQUIRED) return OPERATOR_ENROLMENT_PATH;
   if (error.status === 401 && error.code === ERROR_CODES.UNAUTHENTICATED) {
-    return `${OPERATOR_LOGIN_PATH}?expired=1`;
+    return operatorLoginPath(currentPath, { idleMinutes: error.idleMinutes });
   }
   return null;
+}
+
+/**
+ * Tells the console its address is blocked by the operator IP allowlist, so the shell can show the
+ * dedicated 403 view instead of every screen's generic "forbidden" block. True when it was a block.
+ */
+export function reportIpBlock(error: unknown, store: IpBlockStore = ipBlockStore): boolean {
+  if (!isIpBlocked(error)) return false;
+  store.report(blockedAddress(error));
+  return true;
 }
 
 /**
@@ -72,8 +86,19 @@ export async function operatorFetch<T = void>(
     json = undefined;
   }
   if (!res.ok) {
-    const error = toApiError(res.status, json, res.headers.get('x-request-id'));
-    const to = operatorAuthRedirect(error);
+    const error = toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
+    if (typeof window !== 'undefined') reportIpBlock(error);
+    const to = operatorAuthRedirect(
+      error,
+      typeof window === 'undefined'
+        ? undefined
+        : `${window.location.pathname}${window.location.search}`,
+    );
     if (to && typeof window !== 'undefined' && window.location.pathname !== to.split('?')[0]) {
       window.location.assign(to);
     }

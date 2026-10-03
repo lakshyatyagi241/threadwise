@@ -34,9 +34,33 @@ describe('ledger messages built at run time (English and Arabic)', () => {
     expect(
       missingKeys([
         ...['ledger', 'aging', 'outstanding'].map((v) => `payments.views.${v}`),
-        ...['date', 'receipt', 'invoice', 'contact', 'method', 'reference', 'amount', 'refunded', 'recordedBy', 'actions'].map((c) => `payments.table.columns.${c}`),
-        ...['contact', 'currency', 'outstanding', 'overdue', 'invoices', 'oldestDue'].map((c) => `payments.outstanding.columns.${c}`),
-        ...['name', 'type', 'rate', 'applies', 'where', 'effective', 'status', 'used', 'hsn', 'actions'].map((c) => `taxRates.columns.${c}`),
+        ...[
+          'date',
+          'receipt',
+          'invoice',
+          'contact',
+          'method',
+          'reference',
+          'amount',
+          'refunded',
+          'recordedBy',
+          'actions',
+        ].map((c) => `payments.table.columns.${c}`),
+        ...['contact', 'currency', 'outstanding', 'overdue', 'invoices', 'oldestDue'].map(
+          (c) => `payments.outstanding.columns.${c}`,
+        ),
+        ...[
+          'name',
+          'type',
+          'rate',
+          'applies',
+          'where',
+          'effective',
+          'status',
+          'used',
+          'hsn',
+          'actions',
+        ].map((c) => `taxRates.columns.${c}`),
       ]),
     ).toEqual([]);
   });
@@ -56,9 +80,23 @@ describe('ledger messages built at run time (English and Arabic)', () => {
   it('has the preset dialog texts, including the disclaimer heading', () => {
     expect(
       missingKeys(
-        ['eyebrow', 'title', 'country', 'verify', 'apply', 'result', 'applied', 'setDefault', 'standard', 'exists', 'notInForce', 'from', 'until', 'asOf', 'noRates'].map(
-          (k) => `taxRates.presets.${k}`,
-        ),
+        [
+          'eyebrow',
+          'title',
+          'country',
+          'verify',
+          'apply',
+          'result',
+          'applied',
+          'setDefault',
+          'standard',
+          'exists',
+          'notInForce',
+          'from',
+          'until',
+          'asOf',
+          'noRates',
+        ].map((k) => `taxRates.presets.${k}`),
       ),
     ).toEqual([]);
   });

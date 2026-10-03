@@ -7,6 +7,7 @@ import { FIELD_TAB, SECURITY_TABS } from './lib/policy-draft';
 import { SHOWCASE_GROUPS } from './lib/auth-pages-draft';
 import { OTP_ACTIVATION_REASONS, OTP_SENDER_KINDS } from '@crm/contracts';
 import { KIND_FIELDS } from './lib/otp-senders';
+import { OFFICIAL_DOCS } from './lib/social-docs';
 import { sectionEditors } from './operator-role';
 
 type Tree = { [key: string]: string | Tree };
@@ -88,6 +89,17 @@ describe('platform messages', () => {
       expected.push(`common.readOnly.${sectionEditors(section)}`);
     }
     for (const status of EVENT_STATUSES) expected.push(`events.status.${status}`);
+    for (const kind of ['user', 'platform_operator', 'system'])
+      expected.push(`events.actorTypes.${kind}`);
+    for (const kind of ['user', 'platform_operator'])
+      expected.push(`security.risks.owner.types.${kind}`);
+    for (const doc of OFFICIAL_DOCS) expected.push(`social.docs.links.${doc.id}`);
+    for (const control of [
+      'passwordRequireUpper',
+      'passwordRequireNumber',
+      'passwordRequireSymbol',
+    ])
+      expected.push(`security.controls.${control}.short`);
     for (const key of Object.values(SHOWCASE_GROUPS).flat())
       expected.push(`authPages.showcase.keys.${key}`);
     for (const p of ['login', 'register', 'forgot']) {
@@ -125,8 +137,23 @@ describe('platform messages', () => {
       'already_pending',
       'already_approved',
       'refreshed',
+      'approvedNow',
+      'rejectedNow',
     ])
       expected.push(`${reg}.otp.template.outcome.${outcome}`);
+    for (const key of [
+      'label',
+      'hint',
+      'none',
+      'loading',
+      'option',
+      'otherSender',
+      'failed',
+      'unavailable',
+    ])
+      expected.push(`${reg}.otp.template.picker.${key}`);
+    expected.push(`${reg}.otp.sender.noneConnected`, `${reg}.otp.sender.unfinished`);
+    expected.push(`${reg}.otp.template.createHint`);
     for (const status of ['pending', 'approved', 'rejected', 'local'])
       expected.push(`${reg}.otp.template.refreshed.${status}`);
     for (const what of ['submit', 'check', 'rejected', 'unexpected'])
@@ -156,5 +183,33 @@ describe('platform messages', () => {
     ])
       expected.push(`${reg}.problems.${code}`);
     expect(expected.filter((k) => !keys.has(k))).toEqual([]);
+  });
+
+  it('names the OTP template button as the operator expects to read it', () => {
+    const create = en.find(([k]) => k.endsWith('registration.otp.template.create'))?.[1];
+    expect(create).toBe('Create & submit OTP template');
+  });
+
+  it('tells the truth about the API rate limit: a ceiling no key can exceed, not something a plan overrides', () => {
+    for (const rows of [en, ar]) {
+      const hint = rows.find(([k]) => k.endsWith('apiRateLimitPerMinute.hint'))?.[1] ?? '';
+      expect(hint).not.toBe('');
+      expect(hint.toLowerCase()).not.toContain('override');
+    }
+    const english = en.find(([k]) => k.endsWith('apiRateLimitPerMinute.hint'))?.[1] ?? '';
+    expect(english).toContain('never a higher one');
+  });
+
+  it('has the lockout and idle sentences in both languages with their minutes placeholder', () => {
+    for (const key of [
+      'mfa.errors.lockedWait',
+      'login.problems.lockedWait',
+      'login.notices.idle',
+    ]) {
+      for (const rows of [en, ar]) {
+        const text = rows.find(([k]) => k.endsWith(key))?.[1] ?? '';
+        expect(text, key).toContain('{minutes');
+      }
+    }
   });
 });

@@ -7,11 +7,9 @@
       "sales": "المبيعات",
       "campaigns": "الحملات",
       "automation": "الأتمتة",
-      "channels": "القنوات",
       "store": "المتجر",
-      "developer": "المطوّرون",
       "help": "الدعم والمساعدة",
-      "settings": "الإعدادات ومساحة العمل"
+      "settings": "الإعدادات"
     },
     "locked": "ترقية",
     "soon": "قريبًا",
@@ -43,7 +41,6 @@
       "quickChat": "دردشة سريعة",
       "callLogs": "سجل المكالمات",
       "teamChat": "دردشة الفريق",
-      "teamMembers": "أعضاء الفريق",
       "leadFinder": "الباحث عن العملاء",
       "campaigns": "الحملات",
       "broadcasts": "البث",
@@ -52,26 +49,12 @@
       "history": "السجل",
       "flows": "التدفقات",
       "aiAssistants": "مساعدو الذكاء الاصطناعي",
-      "autoReply": "الرد التلقائي",
       "appointments": "المواعيد",
-      "chatWidget": "أداة الدردشة",
-      "channels": "القنوات",
-      "telegram": "تيليجرام",
-      "sms": "الرسائل النصية",
-      "line": "لاين",
-      "viber": "فايبر",
-      "wechat": "وي شات",
-      "email": "البريد الإلكتروني",
-      "waLinks": "روابط واتساب",
       "crmDashboard": "لوحة CRM",
       "store": "المتجر",
       "catalog": "الكتالوج",
-      "integrations": "التكاملات",
-      "restApi": "واجهة REST",
-      "webhooks": "الويب هوك",
       "support": "الدعم",
       "guidebook": "الدليل",
-      "activityLog": "سجل النشاط",
       "pipelines": "مسارات المبيعات",
       "tasks": "المهام",
       "companies": "الشركات",
@@ -80,6 +63,7 @@
       "estimates": "التقديرات",
       "invoices": "الفواتير",
       "payments": "المدفوعات"
-    }
+    },
+    "help": "المساعدة"
   }
 }

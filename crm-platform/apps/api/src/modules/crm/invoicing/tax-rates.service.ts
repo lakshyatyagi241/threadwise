@@ -39,7 +39,9 @@ export function toTaxRateResponse(r: TaxRateRow): TaxRateResponse {
     description: r.description,
     country: r.country,
     region: r.region,
-    components: r.components ? r.components.map((c) => ({ type: c.type, rate: c.ratePercent })) : null,
+    components: r.components
+      ? r.components.map((c) => ({ type: c.type, rate: c.ratePercent }))
+      : null,
     effectiveFrom: r.effectiveFrom,
     effectiveTo: r.effectiveTo,
     defaultHsnSac: r.defaultHsnSac,
@@ -51,22 +53,29 @@ export function toTaxRateResponse(r: TaxRateRow): TaxRateResponse {
 }
 
 const bad = (message: string, path: string): AppError =>
-  new AppError(ERROR_CODES.TAX_RATE_INVALID, message, HttpStatus.UNPROCESSABLE_ENTITY, [{ path, message }]);
+  new AppError(ERROR_CODES.TAX_RATE_INVALID, message, HttpStatus.UNPROCESSABLE_ENTITY, [
+    { path, message },
+  ]);
 
 /** The percentage exactly (up to 4 decimals, 0 to 100), and the components of a compound rate (their sum must be the rate). */
 function parsePercent(
   rate: string,
   components: Array<{ type: string; rate: string }> | null | undefined,
-): { ratePercent: string; components: Array<{ type: string; ratePercent: string }> | null | undefined } {
+): {
+  ratePercent: string;
+  components: Array<{ type: string; ratePercent: string }> | null | undefined;
+} {
   const ppm = parseRate(rate);
-  if (ppm === null || ppm < 0n || ppm > 1_000_000n) throw bad('a rate is between 0 and 100 with at most 4 decimals', 'rate');
+  if (ppm === null || ppm < 0n || ppm > 1_000_000n)
+    throw bad('a rate is between 0 and 100 with at most 4 decimals', 'rate');
   const ratePercent = formatRate(ppm);
   if (components === undefined) return { ratePercent, components: undefined };
   if (components === null) return { ratePercent, components: null };
   let sum = 0n;
   const parsed = components.map((c, i) => {
     const p = parseRate(c.rate);
-    if (p === null || p < 0n || p > 1_000_000n) throw bad('a component rate is between 0 and 100', `components.${i}.rate`);
+    if (p === null || p < 0n || p > 1_000_000n)
+      throw bad('a component rate is between 0 and 100', `components.${i}.rate`);
     sum += p;
     return { type: c.type.toUpperCase(), ratePercent: formatRate(p) };
   });
@@ -74,7 +83,8 @@ function parsePercent(
   return { ratePercent, components: parsed };
 }
 
-const asTaxType = (t: string): TaxType => ((TAX_TYPES as readonly string[]).includes(t) ? (t as TaxType) : 'other');
+const asTaxType = (t: string): TaxType =>
+  (TAX_TYPES as readonly string[]).includes(t) ? (t as TaxType) : 'other';
 
 /**
  * Tax rates (WD-INV "tax rates": absent in WaDesk). One transaction per write: the lock, the change, the audit row and the outbox
@@ -95,7 +105,10 @@ export class TaxRatesService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const today = query.active ? await this.today(tx, ctx.orgId) : undefined;
-      const rows = await this.repo.list(tx, ctx.orgId, { pickableOn: today, country: query.country });
+      const rows = await this.repo.list(tx, ctx.orgId, {
+        pickableOn: today,
+        country: query.country,
+      });
       return { data: rows.map(toTaxRateResponse) };
     });
   }
@@ -111,10 +124,17 @@ export class TaxRatesService {
 
   async create(input: CreateTaxRateInput): Promise<TaxRateResponse> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => toTaxRateResponse(await this.createIn(tx, ctx.orgId, ctx.userId, input)));
+    return this.db.tx(async (tx) =>
+      toTaxRateResponse(await this.createIn(tx, ctx.orgId, ctx.userId, input)),
+    );
   }
 
-  private async createIn(tx: Tx, orgId: number, userId: number | null, input: CreateTaxRateInput): Promise<TaxRateRow> {
+  private async createIn(
+    tx: Tx,
+    orgId: number,
+    userId: number | null,
+    input: CreateTaxRateInput,
+  ): Promise<TaxRateRow> {
     const { ratePercent, components } = parsePercent(input.rate, input.components);
     const isActive = input.isActive ?? true;
     const isDefault = input.isDefault ?? false;
@@ -163,7 +183,8 @@ export class TaxRatesService {
       const patch: Parameters<TaxRatesRepository['update']>[4] = {};
       const delta: Record<string, { old: unknown; new: unknown }> = {};
       if (input.name !== undefined && input.name !== row.name) {
-        if (await this.repo.nameTaken(tx, ctx.orgId, input.name, row.id)) throw this.nameTaken(input.name);
+        if (await this.repo.nameTaken(tx, ctx.orgId, input.name, row.id))
+          throw this.nameTaken(input.name);
         patch.name = input.name;
         delta.name = { old: row.name, new: input.name };
       }
@@ -197,7 +218,14 @@ export class TaxRatesService {
           delta.isDefault = { old: true, new: false };
         }
       }
-      for (const k of ['description', 'country', 'region', 'effectiveFrom', 'effectiveTo', 'defaultHsnSac'] as const) {
+      for (const k of [
+        'description',
+        'country',
+        'region',
+        'effectiveFrom',
+        'effectiveTo',
+        'defaultHsnSac',
+      ] as const) {
         if (input[k] !== undefined && (input[k] ?? null) !== row[k]) {
           patch[k] = input[k] ?? null;
           delta[k] = { old: row[k], new: input[k] ?? null };
@@ -210,7 +238,12 @@ export class TaxRatesService {
       if (Object.keys(patch).length > 0) {
         const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, patch);
         if (!ok) throw AppError.rowVersionConflict('Tax rate');
-        await this.audit.record(tx, { module: TAX_RATE_MODULE, recordId: row.id, action: 'update', delta });
+        await this.audit.record(tx, {
+          module: TAX_RATE_MODULE,
+          recordId: row.id,
+          action: 'update',
+          delta,
+        });
         await this.emit(tx, 'tax_rate.updated', (await this.repo.findById(tx, ctx.orgId, row.id))!);
       }
       return toTaxRateResponse((await this.repo.findById(tx, ctx.orgId, row.id))!);
@@ -262,9 +295,12 @@ export class TaxRatesService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const profile = getTaxProfile(query.country);
-      if (!profile) throw bad(`There is no tax preset for ${query.country}; add rates by hand`, 'country');
+      if (!profile)
+        throw bad(`There is no tax preset for ${query.country}; add rates by hand`, 'country');
       const asOf = query.asOf ?? (await this.today(tx, ctx.orgId));
-      const existing = new Set((await this.repo.list(tx, ctx.orgId, {})).map((r) => r.name.toLowerCase()));
+      const existing = new Set(
+        (await this.repo.list(tx, ctx.orgId, {})).map((r) => r.name.toLowerCase()),
+      );
       const rows = this.presetRows(profile.code, asOf);
       return {
         country: profile.code,
@@ -366,7 +402,10 @@ export class TaxRatesService {
           name: `${p.name} (CGST + SGST)`.slice(0, 60),
           type: 'gst',
           rate: trimPercent(p.ratePercent),
-          components: p.components.intra.map((c) => ({ type: c.code, rate: trimPercent(c.ratePercent) })),
+          components: p.components.intra.map((c) => ({
+            type: c.code,
+            rate: trimPercent(c.ratePercent),
+          })),
         });
         out.push({
           ...common,
@@ -378,7 +417,14 @@ export class TaxRatesService {
           components: null,
         });
       } else {
-        out.push({ ...common, code: p.code, name: p.name, type: asTaxType(p.type), rate: trimPercent(p.ratePercent), components: null });
+        out.push({
+          ...common,
+          code: p.code,
+          name: p.name,
+          type: asTaxType(p.type),
+          rate: trimPercent(p.ratePercent),
+          components: null,
+        });
       }
     }
     return out;
@@ -402,13 +448,17 @@ export class TaxRatesService {
   }
 
   private assertWindow(from: string | null | undefined, to: string | null | undefined): void {
-    if (from && to && to < from) throw bad('the effective-to date is before the effective-from date', 'effectiveTo');
+    if (from && to && to < from)
+      throw bad('the effective-to date is before the effective-from date', 'effectiveTo');
   }
 
   private nameTaken(name: string): AppError {
-    return new AppError(ERROR_CODES.TAX_RATE_NAME_TAKEN, `A tax rate named "${name}" already exists`, HttpStatus.CONFLICT, [
-      { path: 'name', message: 'taken' },
-    ]);
+    return new AppError(
+      ERROR_CODES.TAX_RATE_NAME_TAKEN,
+      `A tax rate named "${name}" already exists`,
+      HttpStatus.CONFLICT,
+      [{ path: 'name', message: 'taken' }],
+    );
   }
 
   private async today(tx: Tx, orgId: number): Promise<string> {

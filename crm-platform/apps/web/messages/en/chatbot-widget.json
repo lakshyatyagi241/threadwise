@@ -1,0 +1,349 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Chat Widget"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "paywall": {
+      "kicker": "Plan",
+      "title": "Chatbot widgets are not in your plan",
+      "body": "Your plan doesn't include chatbot widgets. Upgrade to unlock this feature.",
+      "upgrade": "See plans"
+    },
+    "list": {
+      "tip": "Tip",
+      "tipBody": "Drop a one-line snippet onto any site to launch a floating chat bubble. Each widget can be powered by a smart agent, route to WhatsApp, or both — visitor conversations land in your team inbox.",
+      "statusViews": "Widget status",
+      "view": {
+        "all": "All widgets",
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "status": {
+        "all": "All",
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "trainFirst": "Train first",
+      "trainBody": "Build a smart agent + add knowledge in <link>AI Training</link>, then attach it here so your widget answers in your voice.",
+      "workspace": "Workspace",
+      "title": "Chatbot",
+      "titleAccent": "widgets",
+      "intro": "Embed a floating chat bubble on any page. Smart-agent replies in-browser, hands off to Unified Inbox when needed.",
+      "activePill": "{count} active",
+      "newWidget": "New widget",
+      "card": {
+        "total": "Total widgets",
+        "visitors": "Visitors",
+        "avg": "Avg / widget",
+        "health": "Health",
+        "activeHint": "{count} active",
+        "allTime": "all-time",
+        "visitorsUnit": "visitors"
+      },
+      "health": {
+        "healthy": "healthy",
+        "empty": "empty",
+        "attention": "attention"
+      },
+      "search": "Search by name or slug…",
+      "col": {
+        "widget": "Widget",
+        "engine": "Engine",
+        "agent": "Smart agent",
+        "visitors": "Visitors",
+        "updated": "Updated",
+        "actions": "Actions"
+      },
+      "loading": "Loading widgets",
+      "loadError": "The widgets could not be loaded.",
+      "retry": "Try again",
+      "emptyTitle": "No widgets yet",
+      "emptyBody": "Build your first chat widget — it'll live as a floating bubble on the page you embed it on.",
+      "createWidget": "Create widget",
+      "noMatch": "No widget on this page matches your search.",
+      "showing": "Showing",
+      "of": "of",
+      "widgetsCount": "{count} widgets",
+      "loadMore": "Load more",
+      "pill": {
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "action": {
+        "preview": "Open standalone preview",
+        "copy": "Copy embed snippet",
+        "edit": "Edit widget",
+        "rotate": "Rotate embed token",
+        "duplicate": "Duplicate widget",
+        "delete": "Delete widget"
+      },
+      "copied": "Snippet copied — paste before {tag} on your site.",
+      "duplicateFailed": "The widget could not be duplicated.",
+      "rotated": "Token rotated — copy the new snippet.",
+      "rotateFailed": "Rotate failed — {reason}",
+      "networkError": "network error",
+      "deleted": "Widget deleted.",
+      "deleteFailed": "Delete failed — {reason}",
+      "rotateTitle": "Rotate this widget's embed token?",
+      "rotateBody": "The current snippet on your site will stop working immediately. You'll need to copy and paste the new snippet.",
+      "rotate": "Rotate",
+      "cancel": "Cancel",
+      "deleteTitle": "Delete \"{name}\"?",
+      "deleteBody": "The embed snippet on your site will stop working immediately. Past conversations stay in your team inbox.",
+      "delete": "Delete widget",
+      "keep": "Keep",
+      "copyManuallyTitle": "Copy this manually",
+      "gotIt": "Got it",
+      "close": "Close"
+    },
+    "builder": {
+      "loading": "Loading widget",
+      "notFoundTitle": "Widget not found",
+      "notFoundBody": "This widget does not exist in your workspace.",
+      "loadError": "The widget could not be loaded.",
+      "backToWidgets": "Back to widgets",
+      "back": "Back to widgets",
+      "crumb": "Chatbot widgets",
+      "crumbEdit": "Edit",
+      "crumbNew": "New",
+      "titleNew": "Build a chatbot",
+      "titleEdit": "Edit chatbot",
+      "titleAccent": "widget",
+      "stateSaved": "Saved",
+      "stateDraft": "Draft / unsaved",
+      "saveDraft": "Save draft",
+      "stepper": "Builder steps",
+      "steps": {
+        "setup": "Setup",
+        "look": "Look",
+        "voice": "Voice",
+        "launch": "Launch"
+      },
+      "previous": "Previous",
+      "next": "Next",
+      "stepOf": "Step {n} of {total}",
+      "launchWidget": "Launch widget",
+      "draftSaved": "Draft saved.",
+      "savedEmbed": "Saved — embed ready to copy.",
+      "saveFailed": "Save failed — check the highlighted step.",
+      "snippetCopied": "Snippet copied.",
+      "clipboardBlocked": "Clipboard blocked — select the snippet manually.",
+      "problem": {
+        "name": "Name your widget.",
+        "assistant": "Link a smart agent — or switch the engine to WhatsApp deep-link.",
+        "whatsapp": "Add a full WhatsApp number — country code and digits.",
+        "launcherColour": "Launcher fill must be a hex colour (e.g. #075E54).",
+        "headerTitle": "Give the chat window a title.",
+        "welcome": "Write an opening line.",
+        "bgImage": "Add a background image URL or switch to solid colour."
+      },
+      "setup": {
+        "title": "Widget setup",
+        "required": "required",
+        "name": "Internal name",
+        "namePlaceholder": "e.g. Pricing-page widget",
+        "nameHint": "For your team. Visitors don't see this label.",
+        "position": "Launcher placement",
+        "bottomRight": "Bottom right corner",
+        "bottomLeft": "Bottom left corner",
+        "positionHint": "Where the round chat bubble floats on your site.",
+        "engine": "Conversation engine",
+        "mode": {
+          "ai": {
+            "title": "Smart agent",
+            "body": "Trained AI answers right in the browser."
+          },
+          "whatsapp": {
+            "title": "WhatsApp deep-link",
+            "body": "Send the visitor into the WhatsApp app to chat."
+          },
+          "both": {
+            "title": "Smart + WhatsApp",
+            "body": "Visitor picks — chat here or open WhatsApp."
+          }
+        },
+        "agent": "Smart agent (the brain)",
+        "agentPlaceholder": "— Pick a saved smart agent —",
+        "agentHintBefore": "Don't see one?",
+        "agentBuild": "Build a smart agent",
+        "agentHintAfter": "first.",
+        "whatsapp": "WhatsApp number",
+        "country": "Country",
+        "phonePlaceholder": "Your number without country code",
+        "whatsappHint": "Pick the country flag — the dial code is added automatically.",
+        "prefilled": "Pre-typed message (lands in WhatsApp)",
+        "prefilledPlaceholder": "Hi, I'd like to know more about pricing.",
+        "prefilledHint": "The visitor lands in WhatsApp with this message already typed."
+      },
+      "look": {
+        "title": "Launcher & window styling",
+        "tag": "brand",
+        "launcherFill": "Launcher fill",
+        "launcherFillHint": "Background of the round bubble.",
+        "headerTint": "Window header tint",
+        "headerTintHint": "Top strip of the chat window.",
+        "headerInk": "Header ink",
+        "headerInkHint": "Text/icon colour for the header.",
+        "windowTitle": "Window title (shown in the header)",
+        "windowTitlePlaceholder": "Chat with our team",
+        "windowTitleHint": "Keep under ~30 characters.",
+        "icon": "Custom launcher icon URL",
+        "optional": "optional",
+        "iconHint": "PNG / SVG · 80×80 px recommended · transparent background."
+      },
+      "voice": {
+        "title": "Opening message & chat surface",
+        "tag": "content",
+        "opening": "Opening line",
+        "openingPlaceholder": "Hi! How can we help today?",
+        "openingHint": "First bubble shown when the chat opens.",
+        "bubbleFill": "Incoming bubble fill",
+        "bubbleFillHint": "Colour of bubbles from your side.",
+        "bubbleInk": "Incoming bubble ink",
+        "bubbleInkHint": "Text colour inside bubbles.",
+        "canvas": "Window canvas",
+        "canvasKind": {
+          "color": "Solid colour",
+          "image": "Tile image"
+        },
+        "canvasColour": "Window canvas colour",
+        "canvasImage": "Window canvas image URL",
+        "canvasImageHint": "A tile-able PNG works best.",
+        "autoOpen": "Pop open automatically",
+        "autoOpenHint": "Opens the chat ~1.2 s after the page loads.",
+        "intake": "Visitor intake",
+        "intakeHint": "Pre-chat fields shown before the chat begins. Skip everything for anonymous chat.",
+        "intakeField": {
+          "name": "Display name",
+          "email": "Email address",
+          "phone": "Phone number"
+        }
+      },
+      "launch": {
+        "title": "Send-button & embed snippet",
+        "tag": "launch",
+        "label": "Send-button label",
+        "labelPlaceholder": "Send message",
+        "labelHint": "Avoid \"Submit\". Try \"Send message\" or \"Ask the team\".",
+        "fill": "Send-button fill",
+        "ink": "Send-button ink",
+        "ready": "Ready. Paste this just before <code>{tag}</code> on the page you want the widget on.",
+        "copy": "Copy to clipboard",
+        "preview": "Open standalone preview"
+      },
+      "preview": {
+        "title": "Live preview",
+        "chat": "Chat",
+        "hi": "Hi!",
+        "send": "Send",
+        "engine": {
+          "ai": "Smart agent",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
+        "metaEngine": "Engine",
+        "metaPlacement": "Placement",
+        "metaAutoOpen": "Auto-open",
+        "metaIntake": "Intake",
+        "left": "Left",
+        "right": "Right",
+        "on": "On",
+        "off": "Off",
+        "none": "None"
+      }
+    },
+    "whatsappBuilder": {
+      "crumb": "WhatsApp Widget",
+      "title": "WhatsApp Widget",
+      "titleAccent": "Install & Customize",
+      "type": "Widget type",
+      "nameHint": "Only you see this name. It is also the business name shown in the messenger.",
+      "save": "Save Changes",
+      "saved": "Changes saved. Your widget is live.",
+      "card": {
+        "1": {
+          "title": "Style your WhatsApp chat button",
+          "subtitle": "Pick a beautiful chat button designs what suits your website best",
+          "buttonType": "Button Type",
+          "type": {
+            "pill": "Chat With Us button",
+            "icon": "Icon-only round button"
+          },
+          "iconOnly": "Icon only",
+          "buttonColor": "Button Color",
+          "pickCustom": "Pick a custom color",
+          "custom": "Custom {hex}"
+        },
+        "2": {
+          "title": "Design your messenger",
+          "subtitle": "Pick a beautiful image for your messenger",
+          "image": "Messenger image",
+          "names": {
+            "support": "Support",
+            "store": "Store",
+            "chat": "Chat",
+            "person": "Person"
+          },
+          "url": "Or use your own image address",
+          "urlHint": "Paste the address of a square image (https://...). Uploading a file is not available yet."
+        },
+        "3": {
+          "title": "Set your welcome message",
+          "subtitle": "Welcome your customers",
+          "greeting": "Greetings",
+          "greetingHint": "Say Hi to your customers when they open messenger",
+          "intro": "Intro Message",
+          "introHint": "Introduce your business and tell customers how you can help"
+        },
+        "4": {
+          "title": "Set your Chat Button position",
+          "subtitle": "Adjust your button position on computers and mobile",
+          "preview": "Chat Button Preview",
+          "desktopPreview": "Desktop Preview",
+          "mobilePreview": "Mobile Preview",
+          "desktopPosition": "Desktop Launcher Position",
+          "mobilePosition": "Mobile Launcher Position",
+          "left": "Left",
+          "right": "Right",
+          "desktopSideSpacing": "Desktop Side Spacing",
+          "desktopBottomSpacing": "Desktop Bottom Spacing",
+          "mobileSideSpacing": "Mobile Side Spacing",
+          "mobileBottomSpacing": "Mobile Bottom Spacing",
+          "px": "px"
+        },
+        "5": {
+          "title": "Configure your WhatsApp number",
+          "subtitle": "Connect the WhatsApp number to the messenger",
+          "number": "WhatsApp Number",
+          "numberHint": "Messenger will send your customers to this WhatsApp number",
+          "prefilled": "Pre-filled Message",
+          "prefilledHint": "This will be first default message text"
+        }
+      },
+      "install": {
+        "title": "Install on your website",
+        "body": "Paste this tag just before the closing body tag of every page that should show the widget.",
+        "copy": "Copy code"
+      },
+      "problem": {
+        "name": "Name your widget.",
+        "avatar": "Use a built-in image or an http(s) image address.",
+        "greeting": "Add a greeting.",
+        "intro": "Add an intro message.",
+        "spacing": "Spacing must be a whole number of pixels from 0 to 500.",
+        "whatsapp": "Add a full WhatsApp number: country code and digits."
+      },
+      "preview": {
+        "title": "Live preview",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "frameTitle": "Live preview of your WhatsApp widget",
+        "hint": "Collapse the panel with the round button, open it again from the launcher, and try Start Conversation.",
+        "businessName": "Your business"
+      }
+    }
+  }
+}

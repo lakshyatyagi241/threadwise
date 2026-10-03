@@ -14,7 +14,10 @@ import {
   type DriverOrder,
   type DriverUrls,
   type PaymentDriver,
+  type CancelResult,
   type PaymentResult,
+  type SubscriptionEvent,
+  type SubscriptionRef,
   type WebhookPayment,
 } from './payment-driver';
 
@@ -105,7 +108,12 @@ export class StripeDriver implements PaymentDriver {
       ) {
         return failed('stripe_amount_mismatch', { session: s });
       }
-      return paid(str(s.payment_intent), { session: s });
+      return paid(str(s.payment_intent), {
+        session: s,
+        ...(str(s.subscription)
+          ? { gateway_subscription_id: str(s.subscription), gateway_customer_id: str(s.customer) }
+          : {}),
+      });
     } catch (e) {
       return failed(`stripe_exception: ${brief(e)}`);
     }
@@ -151,5 +159,109 @@ export class StripeDriver implements PaymentDriver {
       currency: str(s.currency)?.toUpperCase(),
       payload: { session: s },
     };
+  }
+
+  supportsRecurring(): boolean {
+    return true;
+  }
+
+  /** A subscription-mode Checkout Session with inline recurring price data (no Price object to pre-create). */
+  async createSubscription(order: DriverOrder, urls: DriverUrls): Promise<PaymentResult> {
+    if (!this.ctx.credentials.secret_key) return failed('stripe_secret_key_missing');
+    const sep = urls.returnUrl.includes('?') ? '&' : '?';
+    const rec = order.recurring ?? { interval: 'month' as const, count: 1 };
+    const entries: Array<[string, string]> = [
+      ['mode', 'subscription'],
+      ['client_reference_id', order.orderNumber],
+      ['metadata[order_number]', order.orderNumber],
+      ['subscription_data[metadata][order_number]', order.orderNumber],
+      ['line_items[0][quantity]', '1'],
+      ['line_items[0][price_data][currency]', order.currency.toLowerCase()],
+      ['line_items[0][price_data][unit_amount]', order.amountMinor.toString()],
+      ['line_items[0][price_data][product_data][name]', order.planName ?? order.description],
+      ['line_items[0][price_data][recurring][interval]', rec.interval],
+      ['line_items[0][price_data][recurring][interval_count]', String(rec.count)],
+      ['success_url', `${urls.returnUrl}${sep}session_id={CHECKOUT_SESSION_ID}`],
+      ['cancel_url', `${urls.returnUrl}${sep}cancelled=1`],
+    ];
+    if (order.customerEmail) entries.push(['customer_email', order.customerEmail]);
+    try {
+      const res = await this.ctx.http(`${API}/checkout/sessions`, {
+        method: 'POST',
+        headers: this.auth,
+        body: form(entries),
+      });
+      const body = asRecord(res.json);
+      if (!isOk(res) || !str(body.url)) {
+        return failed(`stripe: ${str(asRecord(body.error).message) ?? `HTTP ${res.status}`}`);
+      }
+      return pending({
+        redirectUrl: str(body.url),
+        gatewayOrderId: str(body.id),
+        payload: { session_id: body.id },
+      });
+    } catch (e) {
+      return failed(`stripe_subscription_exception: ${brief(e)}`);
+    }
+  }
+
+  parseSubscriptionWebhook(body: unknown): SubscriptionEvent | null {
+    const evt = asRecord(body);
+    const o = asRecord(asRecord(evt.data).object);
+    const orderOf = (m: unknown): string | null => str(asRecord(m).order_number) ?? null;
+    switch (evt.type) {
+      case 'invoice.paid':
+      case 'invoice.payment_succeeded': {
+        const sub = str(o.subscription);
+        if (!sub) return null;
+        const lines = asRecord(o.lines).data;
+        const line = asRecord(Array.isArray(lines) ? lines[0] : null);
+        return {
+          type: o.billing_reason === 'subscription_create' ? 'created' : 'renewed',
+          subscriptionId: sub,
+          paymentId: str(o.payment_intent) ?? str(o.id),
+          periodEnd:
+            (asRecord(line.period).end as number | undefined) ??
+            (o.period_end as number | undefined) ??
+            null,
+          orderNumber: orderOf(asRecord(o.subscription_details).metadata) ?? orderOf(line.metadata),
+        };
+      }
+      case 'invoice.payment_failed':
+        return str(o.subscription)
+          ? {
+              type: 'payment_failed',
+              subscriptionId: str(o.subscription) ?? null,
+              paymentId: str(o.id),
+            }
+          : null;
+      case 'customer.subscription.deleted':
+        return { type: 'canceled', subscriptionId: str(o.id) ?? null };
+      case 'checkout.session.completed':
+        return o.mode === 'subscription'
+          ? {
+              type: 'created',
+              subscriptionId: str(o.subscription) ?? null,
+              paymentId: str(o.payment_intent),
+              orderNumber: orderOf(o.metadata),
+            }
+          : null;
+      default:
+        return null;
+    }
+  }
+
+  /** Stripe: `cancel_at_period_end=true` stops renewal and keeps the paid period, which is what the customer was told. */
+  async cancelSubscription(ref: SubscriptionRef): Promise<CancelResult> {
+    if (!this.ctx.credentials.secret_key) return { ok: false, reason: 'stripe_secret_key_missing' };
+    try {
+      const res = await this.ctx.http(
+        `${API}/subscriptions/${encodeURIComponent(ref.gatewaySubscriptionId)}`,
+        { method: 'POST', headers: this.auth, body: form([['cancel_at_period_end', 'true']]) },
+      );
+      return isOk(res) ? { ok: true } : { ok: false, reason: `stripe_http_${res.status}` };
+    } catch (e) {
+      return { ok: false, reason: `stripe_exception: ${brief(e)}` };
+    }
   }
 }

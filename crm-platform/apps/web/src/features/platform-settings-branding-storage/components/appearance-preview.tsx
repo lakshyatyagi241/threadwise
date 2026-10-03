@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Card } from '@crm/ui';
 
 /** The shipped colour of every token: what the preview shows for a token left blank. Mirrors the API's palette. */
-const DEFAULTS: Record<string, string> = {
+export const PALETTE_DEFAULTS: Record<string, string> = {
   'wa-deep': '#075E54',
   'wa-teal': '#128C7E',
   'wa-green': '#25D366',
@@ -28,7 +28,7 @@ export function AppearancePreview({ fields }: { fields: Record<string, string | 
   const t = useTranslations('platform-settings-branding-storage.appearance');
   const c = (token: string) => {
     const v = String(fields[`colors.${token}`] ?? '').trim();
-    return /^#[0-9A-Fa-f]{3,8}$/.test(v) ? v : DEFAULTS[token]!;
+    return /^#[0-9A-Fa-f]{3,8}$/.test(v) ? v : PALETTE_DEFAULTS[token]!;
   };
   const scale = Math.min(130, Math.max(80, Number(fields.fontScale) || 100));
   const opacity = Math.min(100, Math.max(55, Number(fields.uiOpacity) || 100)) / 100;
