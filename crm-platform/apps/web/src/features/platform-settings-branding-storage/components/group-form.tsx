@@ -292,7 +292,11 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             disabled={draft.clear[f.key] === true}
             autoComplete="new-password"
             placeholder={
-              isSet ? '••••••••' : tg.has(`fields.${f.key}.placeholder`) ? tg(`fields.${f.key}.placeholder`) : ''
+              isSet
+                ? '••••••••'
+                : tg.has(`fields.${f.key}.placeholder`)
+                  ? tg(`fields.${f.key}.placeholder`)
+                  : ''
             }
             showLabel={t('common.secretShow')}
             hideLabel={t('common.secretHide')}
@@ -472,7 +476,13 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
           <input
             type="color"
             aria-label={label(f)}
-            value={/^#[0-9A-Fa-f]{6}$/.test(hex) ? hex : /^#[0-9A-Fa-f]{6}$/.test(shipped) ? shipped : '#000000'}
+            value={
+              /^#[0-9A-Fa-f]{6}$/.test(hex)
+                ? hex
+                : /^#[0-9A-Fa-f]{6}$/.test(shipped)
+                  ? shipped
+                  : '#000000'
+            }
             onChange={(e) => setField(f.key, e.target.value.toUpperCase())}
             disabled={!canEdit}
             className="h-9 w-12 shrink-0 cursor-pointer rounded-md border border-border bg-background p-1"
@@ -567,7 +577,9 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       const hasConfig =
         Boolean(draft.fields.bucket || draft.fields.accessKeyId || draft.fields.storageZone) ||
         data.secrets.secret?.isSet === true;
-      const name = tg.has(`options.provider.${provider}`) ? tg(`options.provider.${provider}`) : provider;
+      const name = tg.has(`options.provider.${provider}`)
+        ? tg(`options.provider.${provider}`)
+        : provider;
       description = on
         ? tp('status.active', { provider: name })
         : hasConfig
@@ -608,7 +620,12 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       body = fieldsGrid(s);
     }
     return (
-      <Section key={s.id} kicker={s.eyebrow ?? tp('title')} title={title} description={description}>
+      <Section
+        key={s.id}
+        kicker={s.eyebrow?.replace(/-/g, ' ') ?? tp('title')}
+        title={title}
+        description={description}
+      >
         {body}
       </Section>
     );
