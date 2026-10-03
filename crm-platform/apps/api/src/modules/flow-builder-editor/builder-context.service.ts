@@ -373,8 +373,9 @@ export class BuilderContextService {
   }
 
   /**
-   * Products a commerce node can offer (WD-FLB-052): the workspace's own catalogue rows (archived ones excluded, newest first, drafts
-   * and out-of-stock included as WaDesk lists them). WooCommerce and Shopify offer the products their sync mirrored into the
+   * Products a commerce node can offer (WD-FLB-052): the workspace's own catalogue rows, active ones only (intended deviation: WaDesk
+   * listed drafts too, but a draft is never pushed to the Meta catalogue so a flow could not send it), newest first, out-of-stock
+   * ones included and flagged as WaDesk lists them. WooCommerce and Shopify offer the products their sync mirrored into the
    * catalogue (architecture-forced: WaDesk fetched them live from the shop's API). A store id that is not this workspace's is an
    * empty list, never another workspace's data.
    */
@@ -388,7 +389,7 @@ export class BuilderContextService {
         );
         if (rows(owned).length === 0) return { data: [] };
       }
-      const where = [sql`p.org_id = ${ctx.orgId}`, sql`p.status <> 'archived'`];
+      const where = [sql`p.org_id = ${ctx.orgId}`, sql`p.status = 'active'`];
       if (query.provider === 'woocommerce') where.push(sql`p.woo_product_id IS NOT NULL`);
       if (query.provider === 'shopify') where.push(sql`p.shopify_product_id IS NOT NULL`);
       if (query.q)
