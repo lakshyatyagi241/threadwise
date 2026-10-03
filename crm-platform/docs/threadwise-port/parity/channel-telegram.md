@@ -14,25 +14,25 @@ Evidence so far is automated, no screen yet:
 
 ## Status of each feature
 
-| Feature          | Status       | Notes                                                                                                                                                    |
-| ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| TW-TG-001        | partial      | The list endpoint exists (`GET /telegram/bots`); the hub screen is T5.                                                                                   |
-| TW-TG-002        | backend-done | Connect by token, encrypted, re-paste updates, webhook registered, refusal keeps it.                                                                     |
-| TW-TG-007        | screen-done  | Fix inbound, pause and resume, payment settings, disconnect, on each bot card.                                                                           |
-| TW-TG-019        | partial      | Permission keys added (`tg.*`). The plan flags are a shim (see below).                                                                                   |
-| TW-TG-003        | backend-done | Public webhook, routing token, secret header, always 200, flood limit, tenant by a narrow lookup function.                                               |
-| TW-TG-004        | partial      | Thread, contact, message and unread are done. Media is not downloaded (no storage upload yet) and automation is a stand-in.                              |
-| TW-TG-005        | backend-done | Taps answered; `tqr:` taps replayed as typed messages.                                                                                                   |
-| TW-TG-006        | backend-done | Pre-checkout approved first; payment recorded as its own row; resume hook called.                                                                        |
-| TW-TG-008        | backend-done | `TelegramSenderService.reply`: the thread's bot sends text, media (file id, address or upload), long captions follow up. The inbox composer is TIB's.    |
-| TW-TG-009        | backend-done | Template buttons become the keyboard; phone buttons are appended to the text.                                                                            |
-| TW-TG-010        | backend-done | `GET /telegram/bots/:id/chats`: the bot's threads, newest 500, type from recent messages. Picker is T5.                                                  |
-| TW-TG-011        | backend-done | `GET /telegram/broadcasts`: 50 newest plus totals over all of them (Reference counted "Sending" over the 50 only). Screen is T5.                            |
-| TW-TG-012        | partial      | Draft with a frozen recipient list, forged ids dropped, template body and buttons. File upload is blocked on storage; a public address works. Screen T5. |
-| TW-TG-013        | backend-done | BullMQ job `tg-broadcast`: batches of 25, 50 ms apart, file id reused, blocked vs failed, counters recomputed, inbox mirror through the shim.            |
-| TW-TG-014        | backend-done | Start, pause, retry failed (blocked stay), delete in any status. Events `telegram.broadcast.*`.                                                          |
-| TW-TG-015 to 017 | blocked      | Needs the Node bridge (T6).                                                                                                                              |
-| TW-TG-018        | blocked      | Needs the flow runtime (T7).                                                                                                                             |
+| Feature          | Status       | Notes                                                                                                                                                                                                |
+| ---------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TW-TG-001        | partial      | The list endpoint exists (`GET /telegram/bots`); the hub screen is T5.                                                                                                                               |
+| TW-TG-002        | backend-done | Connect by token, encrypted, re-paste updates, webhook registered, refusal keeps it.                                                                                                                 |
+| TW-TG-007        | screen-done  | Fix inbound, pause and resume, payment settings, disconnect, on each bot card.                                                                                                                       |
+| TW-TG-019        | partial      | Permission keys added (`tg.*`). The plan flags are a shim (see below).                                                                                                                               |
+| TW-TG-003        | backend-done | Public webhook, routing token, secret header, always 200, flood limit, tenant by a narrow lookup function.                                                                                           |
+| TW-TG-004        | partial      | Thread, contact, message and unread are done. Files are copied into the inbox store with the bot's token (on cloud storage); automation is a stand-in.                                               |
+| TW-TG-005        | backend-done | Taps answered; `tqr:` taps replayed as typed messages.                                                                                                                                               |
+| TW-TG-006        | backend-done | Pre-checkout approved first; payment recorded as its own row; resume hook called.                                                                                                                    |
+| TW-TG-008        | backend-done | `TelegramSenderService.reply`: the thread's bot sends text, media (file id, address or upload), long captions follow up. The inbox composer is TIB's.                                                |
+| TW-TG-009        | backend-done | Template buttons become the keyboard; phone buttons are appended to the text.                                                                                                                        |
+| TW-TG-010        | backend-done | `GET /telegram/bots/:id/chats`: the bot's threads, newest 500, type from recent messages. Picker is T5.                                                                                              |
+| TW-TG-011        | backend-done | `GET /telegram/broadcasts`: 50 newest plus totals over all of them (Reference counted "Sending" over the 50 only). Screen is T5.                                                                        |
+| TW-TG-012        | partial      | Draft with a frozen recipient list, forged ids dropped, template body and buttons. A file can be uploaded through `POST /v2/media/marketing` (cloud storage), or a public address pasted. Screen T5. |
+| TW-TG-013        | backend-done | BullMQ job `tg-broadcast`: batches of 25, 50 ms apart, file id reused, blocked vs failed, counters recomputed, inbox mirror through the shim.                                                        |
+| TW-TG-014        | backend-done | Start, pause, retry failed (blocked stay), delete in any status. Events `telegram.broadcast.*`.                                                                                                      |
+| TW-TG-015 to 017 | blocked      | Needs the Node bridge (T6).                                                                                                                                                                          |
+| TW-TG-018        | blocked      | Needs the flow runtime (T7).                                                                                                                                                                         |
 
 ## Intended differences from Reference
 
@@ -59,7 +59,7 @@ Evidence so far is automated, no screen yet:
 | -------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `TelegramPlanGate`                           | plans-subscriptions-trials (PLAN)                       | `access_telegram`, `telegram_broadcasts` and the bot cap are not enforced (Reference never enforced the cap).         |
 | `InboxIngest` (`ChatInboxIngest`)            | chat-conversations                                      | Real: the inbound pipeline, one channel per bot; the sender is still a contact keyed by the Telegram user id here. |
-| `MediaStore` (`NoMediaStore`)                | platform-settings-branding-storage                      | Files and avatars are not downloaded; blocked on a storage upload.                                                 |
+| `MediaStore` (`StorageMediaStore`)           | platform-settings-branding-storage                      | Real: contact avatars on the workspace's object storage; local disk saves nothing.                                 |
 | `TelegramTemplates` (`SqlTelegramTemplates`) | message-templates                                       | Reads `wa_templates` rows whose channel is telegram directly.                                                      |
 | `InboundHooks` (`NoInboundHooks`)            | flow-runtime-engine, TIB routing, AI agents, auto-reply | Nothing consumes a message and nothing replies; payments do not resume flows.                                      |
 

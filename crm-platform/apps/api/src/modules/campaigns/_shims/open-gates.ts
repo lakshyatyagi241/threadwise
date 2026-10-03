@@ -1,25 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type {
-  CampaignFlowStarter,
-  CampaignPlanGate,
-  CampaignSettings,
-  CampaignSettingsSource,
-} from './tokens';
-
-/**
- * The `campaign` flag and `total_campaigns_limit` are not in the plan catalogue yet (only `broadcasts` and the other numeric caps
- * are), so every check passes.
- */
-@Injectable()
-export class OpenCampaignPlanGate implements CampaignPlanGate {
-  assertEnabled(): Promise<void> {
-    return Promise.resolve();
-  }
-
-  assertWithinCap(): Promise<void> {
-    return Promise.resolve();
-  }
-}
+import type { CampaignFlowStarter, CampaignSettings, CampaignSettingsSource } from './tokens';
 
 /** No flow runtime yet: a flow campaign cannot start sessions, so its recipients fail with the reason. */
 @Injectable()

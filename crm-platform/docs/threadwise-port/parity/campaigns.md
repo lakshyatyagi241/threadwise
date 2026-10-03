@@ -17,11 +17,11 @@ Evidence so far is automated (the screens are listed under Screens (C4); none ha
 | -------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | TW-CAMP-001                | backend-done | `GET /campaigns`: filters, tiles, status and type counts, health cards; the opening sweep is the worker's sweeper. Screen: `/campaigns`.             |
 | TW-CAMP-002                | backend-done | `GET /campaigns/builder`: senders and templates through broadcasts' compose, groups and tags with counts, flows.                                     |
-| TW-CAMP-003, 004           | backend-done | Create with the audience union and the CSV. File upload of media is blocked on storage (an address works).                                           |
+| TW-CAMP-003, 004           | backend-done | Create with the audience union and the CSV. Media: an address, or a file uploaded through `POST /v2/media/marketing` (needs cloud object storage).   |
 | TW-CAMP-005, 006, 007      | backend-done | Template gate, named to positional, one media, A/B with variant B ownership.                                                                         |
 | TW-CAMP-008, 009           | backend-done | Schedule in the campaign's zone, recurring, end-date guard, Smart Delivery fields.                                                                   |
 | TW-CAMP-010                | backend-done | Edit rules and recipient rebuild.                                                                                                                    |
-| TW-CAMP-011, 012, 013, 014 | backend-done | The sender job and the sweeper. Engines: only those registered with `EngineSenderRegistry` (the Cloud API now). See shims.                           |
+| TW-CAMP-011, 012, 013, 014 | backend-done | The sender job and the sweeper. Engines: the Cloud API, plus Baileys and Twilio through the Node bridge's outbound registry (plain text and media).  |
 | TW-CAMP-015                | backend-done | Links in a custom text and URL buttons of a Cloud template are wrapped per recipient.                                                                |
 | TW-CAMP-016, 017, 018, 020 | backend-done | Cancel, resume, send now, resend, delete, bulk delete, export.                                                                                       |
 | TW-CAMP-019                | done         | The detail read model with the Engagement tab: engagement, per-button clicks, top groups by read rate, the opt-out list, and the message-log search. |
@@ -54,14 +54,14 @@ Evidence so far is automated (the screens are listed under Screens (C4); none ha
 
 ## Stubbed inputs (shims, in `modules/campaigns/_shims`)
 
-| Shim                             | Real owner                         | Effect now                                                                                               |
-| -------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `CampaignPlanGate`               | plans-subscriptions-trials         | The `campaign` flag and `total_campaigns_limit` are not enforced.                                        |
-| `CampaignBilling`                | wallet-message-billing             | Plan-first billing is not applied: nothing is charged or refunded.                                       |
-| `CampaignFlowStarter`            | flow-runtime-engine                | Flow campaigns fail per recipient with the reason.                                                       |
-| `CampaignSettings`               | platform-settings-branding-storage | `campaign_retry_attempts` 3, `campaign_retry_backoff_sec` 60, auto-end 24 hours.                         |
-| Sender, template, warmer, pacing | shared with broadcasts             | Same shims and defaults as broadcasts (`modules/broadcasts/_shims`).                                     |
-| Engines                          | whatsapp-devices-baileys, Twilio   | Only the Cloud API adapter is registered; a campaign on another engine fails at the run with the reason. |
+| Shim                             | Real owner                         | Effect now                                                                                                                             |
+| -------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `CampaignPlanGate`               | plans-subscriptions-trials         | Real: the `total_campaigns` cap, on the campaigns that exist now (no delete-proof ledger). No `campaign` flag exists in the catalogue. |
+| `CampaignBilling`                | wallet-message-billing             | Plan-first billing is not applied: nothing is charged or refunded.                                                                     |
+| `CampaignFlowStarter`            | flow-runtime-engine                | Flow campaigns fail per recipient with the reason.                                                                                     |
+| `CampaignSettings`               | platform-settings-branding-storage | `campaign_retry_attempts` 3, `campaign_retry_backoff_sec` 60, auto-end 24 hours.                                                       |
+| Sender, template, warmer, pacing | shared with broadcasts             | Same shims and defaults as broadcasts (`modules/broadcasts/_shims`).                                                                   |
+| Engines                          | whatsapp-devices-baileys, Twilio   | Real, through the Node bridge's outbound registry.                                                                                     |
 
 ## Not verified
 
