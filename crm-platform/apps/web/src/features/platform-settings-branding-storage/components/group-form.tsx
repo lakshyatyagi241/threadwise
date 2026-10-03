@@ -266,7 +266,11 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
         <ToggleRow
           key={f.key}
           id={id}
-          label={label(f)}
+          label={
+            spec.id === 'storage' && f.key === 'enabled'
+              ? tp(value === true ? 'status.enabled' : 'status.disabled')
+              : label(f)
+          }
           hint={hint(f)}
           checked={value === true}
           onChange={(v) => setField(f.key, v)}
@@ -554,9 +558,22 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
 
   const renderSection = (s: SectionSpec) => {
     const title = tp(`sections.${s.id}.title`);
-    const description = tp.has(`sections.${s.id}.description`)
+    let description = tp.has(`sections.${s.id}.description`)
       ? tp(`sections.${s.id}.description`)
       : undefined;
+    if (spec.id === 'storage' && s.id === 'provider') {
+      const on = draft.fields.enabled === true;
+      const provider = String(draft.fields.provider ?? '');
+      const hasConfig =
+        Boolean(draft.fields.bucket || draft.fields.accessKeyId || draft.fields.storageZone) ||
+        data.secrets.secret?.isSet === true;
+      const name = tg.has(`options.provider.${provider}`) ? tg(`options.provider.${provider}`) : provider;
+      description = on
+        ? tp('status.active', { provider: name })
+        : hasConfig
+          ? tp('status.configured')
+          : tp('status.local');
+    }
     let body: ReactNode;
     if (s.custom === 'brandAssets') body = <BrandAssets canEdit={canEdit} />;
     else if (s.custom === 'teamInboxApp') body = <TeamInboxApp canEdit={canEdit} />;
