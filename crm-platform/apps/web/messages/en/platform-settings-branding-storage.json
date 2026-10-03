@@ -451,58 +451,70 @@
           },
           "metaDescription": {
             "label": "Meta description",
-            "hint": "Shows under the title in Google."
+            "hint": "Shows under the title in Google.",
+            "placeholder": "A 1–2 sentence pitch shown under the title in Google."
           },
           "metaKeywords": {
-            "label": "Meta keywords"
+            "label": "Meta keywords",
+            "placeholder": "whatsapp marketing, whatsapp crm, campaigns, automation, inbox"
           },
           "robots": {
-            "label": "Robots"
+            "label": "Robots directive",
+            "hint": "Tell search crawlers whether to list and follow links."
           },
           "canonical": {
-            "label": "Canonical"
+            "label": "Canonical",
+            "placeholder": "https://app.example.com"
           },
           "author": {
             "label": "Author"
           },
           "ogTitle": {
-            "label": "Open Graph title"
+            "label": "Open Graph title",
+            "placeholder": "Defaults to Meta title"
           },
           "ogDescription": {
-            "label": "Open Graph description"
+            "label": "Open Graph description",
+            "placeholder": "Defaults to Meta description"
           },
           "ogType": {
             "label": "Open Graph type"
           },
           "ogUrl": {
-            "label": "Open Graph URL"
+            "label": "Open Graph URL",
+            "placeholder": "https://app.example.com"
           },
           "ogImage": {
             "label": "Open Graph image",
-            "hint": "Recommended 1200x630. Used by Slack, X, WhatsApp, Discord."
+            "hint": "Recommended 1200x630. Used by Slack, X, WhatsApp, Discord.",
+            "placeholder": "https://app.example.com/og.png"
           },
           "twitterCard": {
             "label": "Twitter card"
           },
           "twitterSite": {
-            "label": "Twitter site"
+            "label": "Twitter site",
+            "placeholder": "@yourbrand"
           },
           "twitterCreator": {
-            "label": "Twitter creator"
+            "label": "Twitter creator",
+            "placeholder": "@author"
           },
           "googleVerification": {
-            "label": "Google verification"
+            "label": "Google verification",
+            "placeholder": "google-site-verification=…"
           },
           "bingVerification": {
-            "label": "Bing verification"
+            "label": "Bing verification",
+            "placeholder": "msvalidate.01=…"
           }
         },
         "options": {
           "robots": {
-            "index, follow": "index, follow",
-            "index, nofollow": "index, nofollow",
-            "noindex, follow": "noindex, follow",
-            "noindex, nofollow": "noindex, nofollow"
+            "index, follow": "Index, follow — public site",
+            "index, nofollow": "Index, nofollow",
+            "noindex, follow": "Noindex, follow",
+            "noindex, nofollow": "Noindex, nofollow — hide from search"
           }
         }
       },
@@ -722,43 +734,62 @@
             "label": "Provider"
           },
           "visibility": {
-            "label": "Visibility",
+            "label": "File visibility",
             "hint": "Private objects need signed links; use public or a CDN URL for media people open directly."
           },
           "basePath": {
-            "label": "Base path",
+            "label": "Base folder path (optional)",
             "hint": "Prefix for the probe object. Uploads will use it once the file module lands."
           },
           "accessKeyId": {
             "label": "Access key ID"
           },
           "secret": {
-            "label": "Secret",
-            "hint": "Stored encrypted and never shown again."
+            "label": "Secret access key",
+            "hint": "Stored encrypted and never shown again.",
+            "placeholder": "paste secret"
           },
           "region": {
-            "label": "Region"
+            "label": "Region",
+            "placeholder": "us-east-1"
           },
           "bucket": {
             "label": "Bucket"
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Required for Spaces, R2 and MinIO. A trailing /bucket is removed."
+            "hint": "Required for Spaces, R2 and MinIO. A trailing /bucket is removed.",
+            "placeholder": "https://… (required for Spaces / R2 / MinIO; auto for Wasabi & Bunny)"
           },
           "cdnUrl": {
-            "label": "CDN URL"
+            "label": "Public / CDN URL (optional)",
+            "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Path style"
+            "label": "Use path-style endpoint (MinIO / some S3-compatible stores)"
           },
           "storageZone": {
             "label": "Storage zone",
             "hint": "Bunny only."
           },
           "storagePassword": {
-            "label": "Storage password",
-            "hint": "Bunny only: the storage zone password. Stored encrypted."
+            "label": "Storage password (access key)",
+            "hint": "Bunny only: the storage zone password. Stored encrypted.",
+            "placeholder": "paste password"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO"
+          },
+          "visibility": {
+            "private": "Private (signed URLs)",
+            "public": "Public"
           }
         }
       },
