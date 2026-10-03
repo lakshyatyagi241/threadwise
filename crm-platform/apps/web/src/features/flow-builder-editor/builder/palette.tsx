@@ -24,9 +24,12 @@ function ModeBadge({ mode }: { mode: FlowType }) {
   return <span className={`${base} bg-[var(--flb-mint)] text-brand`}>WhatsApp</span>;
 }
 
-/** Search matches label, description and group, case-insensitively (TW-FLB-016 rule 2). */
+/**
+ * Search matches label, description and group, case-insensitively (TW-FLB-016 rule 2). QUIRK reproduced: the query is NOT
+ * trimmed, so a query with leading or trailing spaces ("  sheet  ") matches nothing, and a blank-but-not-empty one too.
+ */
 export function filterPalette(mode: FlowType, query: string): Array<[string, FlbNodeTypeDef[]]> {
-  const q = query.trim().toLowerCase();
+  const q = query.toLowerCase();
   const groups = new Map<string, FlbNodeTypeDef[]>();
   for (const d of flbPaletteFor(mode)) {
     if (
