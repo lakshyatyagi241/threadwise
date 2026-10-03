@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
 import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConfigService } from './waba-config.service';
 import { WabaPlatformController } from './waba-platform.controller';
@@ -27,7 +28,7 @@ import { WabaWebhookService } from './waba-webhook.service';
  * where nothing provides it, inbound messages are acknowledged and logged.
  */
 @Module({
-  imports: [BroadcastsModule, PlatformSettingsModule],
+  imports: [BroadcastsModule, PlatformSettingsModule, WhatsAppProviderRegistryModule],
   controllers: [WabaConnectionsController, WabaWebhookController, WabaPlatformController],
   providers: [
     CryptoService,
