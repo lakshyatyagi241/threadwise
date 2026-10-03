@@ -1,0 +1,437 @@
+{
+  "plans-subscriptions-trials": {
+    "nav": {
+      "usage": "Plan and usage",
+      "workspacePlans": "Workspace plans",
+      "group": "Subscriptions",
+      "pricingFaqs": "Pricing FAQs",
+      "planSettings": "Pricing settings",
+      "analytics": "Package analytics",
+      "financial": "Financial",
+      "premium": "Premium"
+    },
+    "limits": {
+      "monthly_messages": "Messages per month",
+      "broadcasts": "Broadcasts",
+      "devices": "Connected numbers",
+      "users": "Team seats",
+      "contacts": "Contacts",
+      "tags": "Tags",
+      "pipelines": "Pipelines",
+      "appointments": "Appointments per month",
+      "templates": "Templates",
+      "flows": "Flows",
+      "autoreplies": "Auto-replies",
+      "total_campaigns": "Campaigns created",
+      "api_rate_limit_per_minute": "API requests per minute (0 = platform default)",
+      "saved_replies": "Saved replies",
+      "routing_rules": "Routing rules"
+    },
+    "features": {
+      "automation": "Automation",
+      "ai_assistants": "AI assistants",
+      "calling": "WhatsApp calling",
+      "woocommerce": "WooCommerce",
+      "shopify": "Shopify",
+      "analytics": "Analytics",
+      "remove_branding": "Remove branding",
+      "sales_pipeline": "Sales pipeline",
+      "appointment_booking": "Appointment booking",
+      "chatbot_widgets": "Chatbot widgets",
+      "inbox_sla": "SLA policies",
+      "inbox_routing": "Routing rules",
+      "inbox_kanban": "Kanban view",
+      "team_performance": "Team performance"
+    },
+    "common": {
+      "unlimited": "Unlimited",
+      "loading": "Loading",
+      "retry": "Try again",
+      "dash": "None",
+      "date": "{date, date, long}"
+    },
+    "plans": {
+      "title": "Plans",
+      "description": "Every plan is for this workspace only. Pick the one that fits and switch whenever you need to.",
+      "empty": "No plans have been set up yet. Ask your platform administrator to create one.",
+      "readOnly": "Only workspace owners and admins can change the plan. You can see the plans and what each includes.",
+      "mostPopular": "Most popular",
+      "perUnit": {
+        "days": "{count, plural, one {/ day} other {/ {count} days}}",
+        "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
+        "months": "{count, plural, one {/ month} other {/ {count} months}}",
+        "years": "{count, plural, one {/ year} other {/ {count} years}}"
+      },
+      "oneTime": "one-time",
+      "free": "Free",
+      "customQuote": "Custom",
+      "messagesUnlimited": "Unlimited messages a month",
+      "messagesLimited": "{count, number} messages a month",
+      "showAll": "Show all {count} features",
+      "showLess": "Show fewer",
+      "feature": {
+        "limit": "{label}: {value}",
+        "enabled": "{label}"
+      },
+      "banner": {
+        "expired": "Your plan expired on {date}. Paid features are paused. Renew below to restore them.",
+        "activeUntil": "Your plan is active until {date} ({days, plural, one {# day} other {# days}} left).",
+        "activeForever": "Your plan has no end date.",
+        "trial": "Your free trial ends on {date} ({days, plural, one {# day} other {# days}} left). Choose a plan to keep your workspace active.",
+        "trialEnded": "Your free trial ended on {date}. Choose a plan to keep using your workspace.",
+        "free": "You are on the {plan} plan.",
+        "customQuote": "Your plan is managed with our sales team."
+      },
+      "action": {
+        "current": "Current plan",
+        "upgrade": "Upgrade to {name}",
+        "downgrade": "Switch to {name}",
+        "choose": "Choose {name}",
+        "continueFree": "Continue free",
+        "contactSales": "Talk to sales",
+        "working": "Working"
+      },
+      "confirm": {
+        "title": "Switch to {name}?",
+        "downgradeBody": "Your workspace moves to {name} straight away. Nothing you have is deleted, but anything above the new limits can no longer be added to until you are back under them.",
+        "switchBody": "Your workspace moves to {name} straight away.",
+        "keepsPeriod": "The paid time you have left stays on your workspace.",
+        "confirm": "Switch plan",
+        "cancel": "Keep my plan"
+      },
+      "result": {
+        "switched": "Your workspace is now on {name}.",
+        "overLimit": "These are above the new plan's limits, so you can't add more until you are under them:",
+        "overLimitRow": "{label}: {used, number} of {limit, number}"
+      },
+      "errors": {
+        "PLAN_CHECKOUT_REQUIRED": "That plan needs a payment. Continue to checkout.",
+        "PLAN_CHANGE_NOT_ALLOWED": "That plan can't be selected right now.",
+        "forbidden": "You don't have permission to change the plan.",
+        "generic": "We couldn't change the plan. Please try again."
+      },
+      "compare": {
+        "title": "Compare plans",
+        "feature": "Feature",
+        "included": "Included",
+        "notIncluded": "Not included",
+        "showAll": "Show all {count} rows",
+        "showLess": "Show fewer rows"
+      },
+      "usageLink": "See usage and limits",
+      "period": {
+        "label": "Billing period",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "save": "save {pct}%"
+      },
+      "faq": {
+        "title": "Frequently asked questions"
+      },
+      "addons": {
+        "title": "Add-ons",
+        "owned": "Add-ons you own",
+        "oneTime": "one-time",
+        "buy": "Buy add-on",
+        "buyAgain": "Buy again",
+        "active": "Active",
+        "unlimitedBullet": "Unlimited {label}",
+        "addBullet": "+{amount, number} {label}",
+        "per": {
+          "days": "{count, plural, one {/ day} other {/ {count} days}}",
+          "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
+          "months": "{count, plural, one {/ month} other {/ {count} months}}",
+          "years": "{count, plural, one {/ year} other {/ {count} years}}"
+        }
+      },
+      "renewal": {
+        "renewsOn": "Your plan renews automatically on {date}.",
+        "renews": "Your plan renews automatically.",
+        "cancel": "Cancel auto-renew",
+        "confirmTitle": "Cancel auto-renew?",
+        "confirmBody": "Your plan stays active until it expires, then it will not renew.",
+        "confirm": "Cancel auto-renew",
+        "keep": "Keep auto-renew",
+        "cancelled": "Auto-renew cancelled. Your plan stays active until it expires.",
+        "forbidden": "You don't have permission to change the plan.",
+        "none": "There is no active subscription to cancel.",
+        "failed": "We couldn't cancel auto-renew. Please try again."
+      }
+    },
+    "bar": {
+      "trial": "{days, plural, one {You have # day} other {You have # days}} to explore this trial workspace. Connect a channel to unlock all features.",
+      "trialEnded": "Your free trial has ended. Buy a plan to unlock all features.",
+      "renew": "{days, plural, one {Your plan expires in # day} other {Your plan expires in # days}} on {date}. Renew to keep your features.",
+      "buy": "Buy a plan",
+      "renewNow": "Renew now",
+      "connect": "Connect a channel",
+      "autoRenew": "{days, plural, one {Your plan auto-renews in # day} other {Your plan auto-renews in # days}} on {date}.",
+      "managePlan": "Manage plan"
+    },
+    "usage": {
+      "title": "Plan and usage",
+      "description": "What this workspace is on, what it has used and what it can still do.",
+      "currentPlan": "Current plan",
+      "upgrade": "Upgrade plan",
+      "validUntil": "Valid until {date}",
+      "resets": "Monthly allowances reset on {date}.",
+      "meters": "Usage and limits",
+      "used": "{used, number} used",
+      "ofLimit": "{used, number} of {limit, number}",
+      "ofUnlimited": "{used, number} used, no limit",
+      "month": "this month",
+      "total": "in total",
+      "featuresTitle": "What your plan includes",
+      "unlocked": "Included",
+      "locked": "Not on your plan",
+      "moreOnHigher": "{count, plural, one {# more feature unlocks} other {# more features unlock}} on a higher plan.",
+      "comparePlans": "Compare plans"
+    },
+    "operator": {
+      "title": "Workspace plans",
+      "description": "See which plan every workspace is on. Super admins can attach a plan to a workspace and set limits for that workspace alone.",
+      "readOnly": "Only super admins can change a workspace's plan or limits.",
+      "search": "Search by workspace name or slug",
+      "allPlans": "All plans",
+      "columns": {
+        "workspace": "Workspace",
+        "plan": "Plan",
+        "state": "State",
+        "ends": "Ends",
+        "overrides": "Own limits",
+        "actions": "Actions"
+      },
+      "state": {
+        "no_plan": "No plan record",
+        "free_trial": "Free trial",
+        "free_trial_expired": "Trial ended",
+        "free": "Free",
+        "paid_active": "Active",
+        "paid_lapsed": "Lapsed",
+        "custom_quote": "Custom"
+      },
+      "never": "Never",
+      "none": "None",
+      "overrideCount": "{count, plural, one {# override} other {# overrides}}",
+      "attach": "Attach plan",
+      "edit": "Plan and limits",
+      "empty": "No workspaces match.",
+      "loadMore": "Load more",
+      "dialog": {
+        "title": "Plan and limits for {name}",
+        "plan": "Plan",
+        "endsAt": "Plan ends",
+        "endsHint": "Leave empty to use the plan's own period when the plan changes, or keep the current date when it stays the same.",
+        "neverEnds": "Never expires",
+        "limits": "This workspace's limits",
+        "limitsHint": "Empty uses the plan's limit. 0 or -1 means unlimited for this workspace.",
+        "features": "This workspace's features",
+        "featureDefault": "Plan default",
+        "featureOn": "Always on",
+        "featureOff": "Always off",
+        "planLimit": "Plan: {value}",
+        "save": "Save",
+        "saving": "Saving",
+        "cancel": "Cancel",
+        "saved": "Plan saved for {name}.",
+        "changesTrial": "Changing the plan ends the workspace's free trial.",
+        "conflict": "Someone changed this workspace's plan. Reload and try again.",
+        "failed": "Could not save the plan.",
+        "trialEnd": "Free trial ends",
+        "endTrialNow": "End the trial now",
+        "trialHint": "Set a date to extend or shorten this workspace's trial. A changed plan clears the trial unless you set a date here.",
+        "retention": "Data retention override (days)",
+        "retentionPlaceholder": "Plan default",
+        "retentionHint": "Days after a paid plan lapses before this workspace's data is deleted. Empty uses the plan's value; 0 never deletes this workspace."
+      },
+      "faqs": {
+        "title": "Pricing FAQs",
+        "description": "The questions shown on the plans page and the public pricing page. The lowest sort order shows first.",
+        "readOnly": "Only super admins can change FAQs.",
+        "empty": "No FAQs yet. Add one above.",
+        "newFaq": "New FAQ",
+        "question": "Question",
+        "answer": "Answer",
+        "answerHint": "Plain text. Markdown is not supported.",
+        "sortOrder": "Sort order",
+        "auto": "auto",
+        "placement": "Shows on",
+        "placements": {
+          "pricing": "Pricing page",
+          "home": "Homepage slider",
+          "both": "Both"
+        },
+        "active": "Active",
+        "add": "Add FAQ",
+        "save": "Save",
+        "delete": "Delete",
+        "deleteTitle": "Delete FAQ",
+        "deleteBody": "This FAQ is removed for good.",
+        "deleteConfirm": "Yes, delete",
+        "cancel": "Cancel",
+        "conflict": "Someone changed this FAQ. Reload and try again.",
+        "invalid": "Check the question, answer and sort order.",
+        "failed": "We couldn't save the FAQ."
+      },
+      "retention": {
+        "title": "Data retention",
+        "description": "Paid plans can set a retention period. A workspace whose paid plan ended longer ago than that has its data deleted once, by a nightly job. A preview deletes nothing.",
+        "preview": "Preview what would be wiped",
+        "typeToConfirm": "Type {word} to run it now",
+        "wipeNow": "Wipe now",
+        "previewDone": "{count, plural, =0 {No workspaces are due.} one {# workspace is due.} other {# workspaces are due.}}",
+        "wiped": "{count, plural, =0 {Nothing was wiped.} one {# workspace was wiped.} other {# workspaces were wiped.}}",
+        "rows": "{count, number} rows",
+        "forbidden": "Only super admins can run this.",
+        "failed": "The run failed. Nothing was changed."
+      },
+      "settings": {
+        "title": "Pricing settings",
+        "description": "Platform-wide pricing choices. Changes apply to checkout, the plans page and the public pricing page at once.",
+        "yearlyToggle": "Offer yearly billing",
+        "yearlyToggleHint": "Shows the Monthly/Yearly switch on the plans pages when some plan can be billed yearly.",
+        "discount": "Yearly discount (%)",
+        "discountHint": "0 to 90. A year costs twelve months less this discount.",
+        "save": "Save",
+        "saved": "Pricing settings saved.",
+        "forbidden": "Only super admins can change these settings.",
+        "failed": "We couldn't save the settings."
+      },
+      "analytics": {
+        "title": "Package analytics",
+        "description": "How each plan performs: recurring revenue, subscribers, churn and upgrade paths.",
+        "window": "Window",
+        "days30": "Last 30 days",
+        "days90": "Last 90 days",
+        "days365": "This year",
+        "export": "Export CSV",
+        "package": "Package",
+        "allPackages": "All packages",
+        "empty": "No data yet.",
+        "mrrByPackage": "MRR by package",
+        "planShare": "Plan share",
+        "leaderboard": "Leaderboard",
+        "upgradePaths": "Upgrade paths",
+        "cancellationReasons": "Cancellation reasons",
+        "noReasons": "Cancellation reasons are not collected yet.",
+        "featureAdoption": "Feature adoption (paying workspaces)",
+        "footnote": "Amounts are converted to {currency}. MRR is the monthly price of every active paid workspace; LTV is ARPA times 28 months.",
+        "kpi": {
+          "mrr": "Total MRR",
+          "subscribers": "Subscribers",
+          "netNew": "{count} net new",
+          "arpa": "ARPA",
+          "ltv": "LTV (avg)",
+          "ltvHint": "ARPA x 28 months",
+          "churn": "Churn",
+          "cancelled": "{count} cancelled or lapsed",
+          "trialToPaid": "Trial to paid",
+          "ofTrials": "of {count} trials"
+        },
+        "columns": {
+          "plan": "Package",
+          "price": "Price",
+          "subscribers": "Subscribers",
+          "mrr": "MRR",
+          "arpa": "ARPA",
+          "ltv": "LTV",
+          "netNew": "Net new",
+          "cancellations": "Cancellations",
+          "churn": "Churn"
+        },
+        "kind": {
+          "upgrade": "upgrade",
+          "downgrade": "downgrade",
+          "first_paid": "first paid"
+        }
+      },
+      "financial": {
+        "title": "Financial",
+        "description": "Revenue, recurring revenue, refunds and what is still outstanding.",
+        "window": "Window",
+        "windows": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days",
+          "1y": "Last year"
+        },
+        "revenue": "Revenue",
+        "paymentMethods": "Payment methods",
+        "orderStatus": "Order status",
+        "topWorkspaces": "Top paying workspaces",
+        "noPaidOrders": "No paid orders yet in this window.",
+        "recentOrders": "Latest orders",
+        "noData": "No data",
+        "kpi": {
+          "revenue": "Revenue",
+          "mrr": "MRR",
+          "active": "active",
+          "arr": "ARR",
+          "projected": "projected",
+          "refunds": "Refunds",
+          "outstanding": "Outstanding"
+        }
+      },
+      "premium": {
+        "title": "Premium",
+        "description": "The subscription base: paid and free workspaces, ARPU, conversion and plan mix.",
+        "window": "Window",
+        "windows": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days",
+          "1y": "Last year"
+        },
+        "distribution": "Plan distribution",
+        "revenueByPlan": "Revenue by plan",
+        "newPaid": "New paid signups",
+        "popular": "Most popular plans",
+        "popularHint": "Last 90 days",
+        "noPopular": "No paid orders in last 90 days.",
+        "allPlans": "All plans",
+        "noPlans": "No plans defined yet.",
+        "noData": "No data",
+        "active": "Active",
+        "inactive": "Inactive",
+        "kpi": {
+          "paid": "Paid workspaces",
+          "free": "Free workspaces",
+          "arpu": "ARPU",
+          "conversion": "Trial to paid"
+        },
+        "columns": {
+          "plan": "Plan",
+          "price": "Price",
+          "duration": "Duration",
+          "workspaces": "Workspaces",
+          "mrr": "MRR",
+          "revenue": "Window revenue",
+          "status": "Status"
+        }
+      }
+    },
+    "public": {
+      "title": "Simple, honest, and flat.",
+      "lead": "Pick the plan that fits. Change it any time.",
+      "empty": "Pricing isn't available right now. Please check back soon.",
+      "billedYearly": "Billed {amount} a year",
+      "talkToSales": "Talk to sales",
+      "startFree": "Start free",
+      "volume": "Volume",
+      "features": "Features"
+    },
+    "paywall": {
+      "premium": "Premium feature",
+      "title": "{feature} is not on your plan",
+      "lead": "Pick a plan below that includes it. Upgrade and unlock this feature instantly.",
+      "popular": "Popular",
+      "free": "Free",
+      "custom": "Custom",
+      "talk": "Talk to sales",
+      "continueFree": "Continue free",
+      "choose": "Choose {name}",
+      "back": "Go back",
+      "compare": "Compare all plans"
+    }
+  }
+}

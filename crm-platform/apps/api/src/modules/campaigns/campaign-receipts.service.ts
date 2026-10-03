@@ -1,8 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import type { DeliveryReceipt } from '../broadcasts';
-import { CAMPAIGN_BILLING, type CampaignBilling } from './_shims/tokens';
 import { CampaignEvents, asSystem } from './campaign-events';
 import { CampaignMirrorService } from './campaign-mirror.service';
 import { isNewer } from './campaign-rules';
@@ -21,7 +20,6 @@ export class CampaignReceiptsService {
     private readonly repo: CampaignsRepository,
     private readonly events: CampaignEvents,
     private readonly mirror: CampaignMirrorService,
-    @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
   ) {}
 
   /**
@@ -64,6 +62,15 @@ export class CampaignReceiptsService {
         const c = await this.repo.findById(tx, orgId, campaignId);
         // A repeat of the same status is accepted but is not news: no event.
         if (c && row.status !== receipt.status) {
+          await this.events.deliveryReported(
+            tx,
+            orgId,
+            campaignId,
+            contactId,
+            row.status,
+            receipt.status,
+            receipt.providerMessageId,
+          );
           await this.events.contactStatus(
             tx,
             campaignId,
@@ -75,15 +82,6 @@ export class CampaignReceiptsService {
               providerMessageId: receipt.providerMessageId,
               error: receipt.status === 'failed' ? receipt.errorMessage : null,
             },
-          );
-        }
-        if (receipt.status === 'failed')
-          await this.billing.settleFailed(orgId, receipt.providerMessageId);
-        else if (receipt.status !== 'sent') {
-          await this.billing.settleDelivered(
-            orgId,
-            receipt.providerMessageId,
-            await this.repo.contactPhone(tx, orgId, contactId),
           );
         }
         await this.repo.recount(tx, orgId, campaignId);

@@ -8,12 +8,15 @@ import {
   type PlanFeatureKey,
   type PlanLimitKey,
   type PlansResponse,
+  type PlanState,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlanCatalogService } from './plan-catalog.service';
-import { trialFor, type DefaultPlanStep, type TrialStamp } from './plan-rules';
+import { fallsBackToFree, planStateOf } from './plan-lifecycle';
+import { toFacts, PLAN_COLUMNS, type PlanRow } from './plan-row';
+import { planKind, trialFor, type DefaultPlanStep, type TrialStamp } from './plan-rules';
 
 export interface InitialPlan extends TrialStamp {
   planSlug: string;
@@ -36,6 +39,8 @@ export interface Entitlements {
   overrides: { limits?: Record<string, unknown>; features?: Record<string, unknown> };
   planLimits: Record<string, unknown>;
   planFeatures: Record<string, unknown>;
+  /** The lifecycle state (TW-PLAN-016). A lapsed paid plan reports the free plan's limits and flags above. */
+  state: PlanState;
 }
 
 interface EntitlementRow {
@@ -49,6 +54,9 @@ interface EntitlementRow {
   plan_limits: Record<string, unknown> | null;
   plan_features: Record<string, unknown> | null;
   plan_found: boolean;
+  plan_is_free: boolean | null;
+  plan_is_custom_quote: boolean | null;
+  plan_amount: string | null;
 }
 
 /**
@@ -116,7 +124,9 @@ export class PlanEntitlementService {
         SELECT o.plan AS plan_slug,
                s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.overrides, s.platform_owned,
                p.name AS plan_name, p.limits AS plan_limits, p.features AS plan_features,
-               (p.id IS NOT NULL) AS plan_found
+               (p.id IS NOT NULL) AS plan_found,
+               p.is_free AS plan_is_free, p.is_custom_quote AS plan_is_custom_quote,
+               p.amount::text AS plan_amount
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -132,19 +142,61 @@ export class PlanEntitlementService {
         'an organization is on a plan with no catalogue row: its entitlements are open (nothing is locked)',
       );
     }
+    const trialEndsAt = row.trial_ends_at ? new Date(row.trial_ends_at) : null;
+    const planEndsAt = row.plan_ends_at ? new Date(row.plan_ends_at) : null;
+    const state = planStateOf({
+      plan: row.plan_found
+        ? {
+            isFree: row.plan_is_free ?? false,
+            isCustomQuote: row.plan_is_custom_quote ?? false,
+            amount: row.plan_amount ?? '0.00',
+          }
+        : null,
+      trialEndsAt,
+      planEndsAt,
+      now: new Date(),
+    });
+    let planLimits = row.plan_limits ?? {};
+    let planFeatures = row.plan_features ?? {};
+    if (fallsBackToFree(state)) {
+      // A lapsed paid plan locks to the free plan: paid flags lock and the caps shrink (TW-PLAN-016). With no free plan in
+      // the catalogue there is nothing to fall back to, so the stored plan keeps applying rather than locking everything.
+      const free = await this.freePlan();
+      if (free) {
+        planLimits = free.limits;
+        planFeatures = free.features;
+      }
+    }
     return {
       orgId,
       planSlug: row.plan_slug,
       planKnown: row.plan_found,
       planName: row.plan_name,
-      trialEndsAt: row.trial_ends_at ? new Date(row.trial_ends_at) : null,
-      planEndsAt: row.plan_ends_at ? new Date(row.plan_ends_at) : null,
+      trialEndsAt,
+      planEndsAt,
       billingCycle: row.billing_cycle ?? 'monthly',
       platformOwned: row.platform_owned ?? false,
       overrides: row.overrides ?? {},
-      planLimits: row.plan_limits ?? {},
-      planFeatures: row.plan_features ?? {},
+      planLimits,
+      planFeatures,
+      state,
     };
+  }
+
+  /** The first active free plan by catalogue order (Reference's "free package"), or null when the catalogue has none. */
+  private async freePlan(): Promise<{
+    limits: Record<string, unknown>;
+    features: Record<string, unknown>;
+  } | null> {
+    const res = await this.db.primary.execute(sql`
+      SELECT ${PLAN_COLUMNS} FROM plans
+      WHERE kind = 'plan' AND is_active AND NOT is_custom_quote AND (is_free OR amount = 0)
+      ORDER BY sort_order, plans.amount, slug LIMIT 1
+    `);
+    const row = res.rows[0] as unknown as PlanRow | undefined;
+    if (!row) return null;
+    const facts = toFacts(row);
+    return planKind(facts) === 'free' ? { limits: row.limits, features: row.features } : null;
   }
 
   /** Whether the organization's plan (or an override) grants the flag. */

@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import type { WalletDeliveryStatus } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { MODULE_KEY } from './campaigns.service';
+import { isNewer } from './campaign-rules';
 import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
 import {
   statusNotification,
   statusWebhook,
   type CampaignSnapshot,
 } from './campaign-webhook-events';
+
+export const MODULE_KEY = 'campaigns';
 
 export const toSnapshot = (c: CampaignRow): CampaignSnapshot => ({
   uuid: c.uuid,
@@ -83,6 +87,44 @@ export class CampaignEvents {
         status,
         providerMessageId: o.providerMessageId ?? null,
         error: o.error ?? null,
+      },
+    });
+  }
+
+  /**
+   * `message.delivery_reported` for the wallet (TW-WALLET-012), in the caller's transaction. Call it on a real status transition of a
+   * recipient whose message has a provider id; `engine` is the sender that really sent it when the caller knows (the dispatcher),
+   * else the campaign's own engine.
+   */
+  async deliveryReported(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    contactId: number,
+    previous: string,
+    status: string,
+    providerMessageId: string | null | undefined,
+    engine?: string,
+  ): Promise<void> {
+    if (!providerMessageId || !['sent', 'delivered', 'read', 'failed'].includes(status)) return;
+    // Only a real step forward is news: a repeat, an older status, or a failure after the provider confirmed delivery is not.
+    if (previous === status || !isNewer(previous, status)) return;
+    if (status === 'failed' && (previous === 'delivered' || previous === 'read')) return;
+    const facts = await this.repo.deliveryFacts(tx, orgId, campaignId, contactId);
+    if (!facts) return;
+    const provider = deliveryProviderOf(engine ?? facts.provider);
+    if (!provider) return;
+    await emitDeliveryReported(this.outbox, tx, {
+      orgId,
+      aggregateModule: MODULE_KEY,
+      aggregateId: campaignId,
+      report: {
+        provider,
+        providerMessageId,
+        status: status as WalletDeliveryStatus,
+        recipient: facts.phone,
+        category: facts.category,
+        source: 'campaign',
       },
     });
   }

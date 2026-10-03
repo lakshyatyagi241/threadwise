@@ -1,5 +1,6 @@
 import {
   BRAND_THEMES,
+  WABA_PROVIDERS,
   FONT_FAMILIES,
   MAILERS,
   STORAGE_PROVIDERS,
@@ -47,7 +48,8 @@ export interface FieldSpec {
 }
 
 /** A block that is not a plain list of fields. */
-export type CustomSection = 'brandAssets' | 'signupLink' | 'seoPreview' | 'teamInboxApp';
+export type CustomSection =
+  'brandAssets' | 'signupLink' | 'seoPreview' | 'teamInboxApp' | 'wabaCallback';
 
 export interface SectionSpec {
   id: string;
@@ -460,6 +462,42 @@ export const GROUP_SPECS: GroupSpec[] = [
       },
     ],
   },
+  {
+    id: 'whatsapp',
+    group: 'whatsapp',
+    slug: 'whatsapp',
+    guide: ['api', 'app', 'webhook', 'perWorkspace', 'login'],
+    sections: [
+      {
+        id: 'metaApp',
+        eyebrow: 'business-api-waba',
+        fields: [
+          ...halves(f('appId', 'text', { mono: true }), f('appSecret', 'secret')),
+          ...halves(
+            f('configId', 'text', { mono: true }),
+            f('graphVersion', 'text', { mono: true }),
+          ),
+          f('coexistence', 'toggle'),
+        ],
+      },
+      {
+        id: 'interakt',
+        eyebrow: 'interakt-route',
+        fields: [
+          f('defaultProvider', 'select', { options: WABA_PROVIDERS }),
+          ...halves(f('solutionId', 'text', { mono: true }), f('partnerAuthKey', 'secret')),
+          ...halves(f('systemUserId', 'text', { mono: true }), f('systemUserToken', 'secret')),
+          f('businessId', 'text', { mono: true }),
+        ],
+      },
+      {
+        id: 'inbound',
+        eyebrow: 'webhook',
+        custom: 'wabaCallback',
+        fields: [f('verifyToken', 'secret'), f('requireSignature', 'toggle')],
+      },
+    ],
+  },
 ];
 
 export const specBySlug = (slug: string): GroupSpec | undefined =>
@@ -493,6 +531,7 @@ export const HUB_ORDER = [
   'paymentGateways',
   'aiKeys',
   'mail',
+  'whatsapp',
   'auditLog',
   'privacy',
   'menuOrder',

@@ -7,4 +7,5 @@ export {
   type SimulatorFault,
 } from './simulator.adapter';
 export { WebchatChannelAdapter } from './webchat-channel.adapter';
+export { TelegramChannelAdapter } from './telegram-channel.adapter';
 export { ChatChannelProvidersModule } from './chat-channel-providers.module';
