@@ -21,7 +21,7 @@ export function LogBubble({ entry }: { entry: LogEntry }): ReactElement {
     return <div className="py-1 text-center font-mono text-[10.5px] italic text-muted-foreground">{entry.text}</div>;
   if (entry.kind === 'user')
     return (
-      <div className="max-w-[80%] self-end whitespace-pre-wrap rounded-lg rounded-br-[4px] bg-brand/20 px-3 py-2 text-[12.5px] leading-snug">
+      <div className="max-w-[80%] self-end whitespace-pre-wrap rounded-lg rounded-br-[4px] bg-[var(--flb-mint)] px-3 py-2 text-[#0b1f1c] text-[12.5px] leading-snug">
         {entry.text}
       </div>
     );
@@ -133,7 +133,7 @@ export function TestPanel({
           </span>
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Test runner</div>
-            <div className="text-[15px] leading-tight">Simulate a chat</div>
+            <div className="font-serif text-[15px] leading-tight">Simulate a chat</div>
           </div>
         </div>
         <div className="flex items-center gap-1">
