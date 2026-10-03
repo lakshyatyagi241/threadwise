@@ -103,22 +103,25 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
     <>
       <div className="sf-pd">
         <div className="sf-pd-gallery">
-          {images.length > 0 ? (
-            <div className="sf-pd-thumbs" role="group" aria-label={t('product.gallery')}>
-              {images.map((src, i) => (
-                <button
-                  key={src}
-                  type="button"
-                  className={i === active ? 'is-on' : ''}
-                  aria-pressed={i === active}
-                  aria-label={t('product.showImage', { n: i + 1 })}
-                  onClick={() => setActive(i)}
-                >
-                  <ProductImage src={src} alt="" />
-                </button>
-              ))}
-            </div>
-          ) : null}
+          {/* The column is there even without images (WaDesk keeps the empty 84px thumbnail track). */}
+          <div
+            className="sf-pd-thumbs"
+            role={images.length > 0 ? 'group' : undefined}
+            aria-label={images.length > 0 ? t('product.gallery') : undefined}
+          >
+            {images.map((src, i) => (
+              <button
+                key={src}
+                type="button"
+                className={i === active ? 'is-on' : ''}
+                aria-pressed={i === active}
+                aria-label={t('product.showImage', { n: i + 1 })}
+                onClick={() => setActive(i)}
+              >
+                <ProductImage src={src} alt="" />
+              </button>
+            ))}
+          </div>
           <div className="sf-pd-main">
             <ProductImage
               key={images[active] ?? 'none'}

@@ -640,11 +640,18 @@ export default (h) => {
       });
     }
   }
-  const mainText = (c) =>
-    c.page
-      .locator('main')
-      .innerText()
-      .catch(() => '');
+  // the page text; read again when the page was in the middle of a navigation (the reference reloads after every save)
+  const mainText = async (c) => {
+    for (let i = 0; i < 4; i++) {
+      const t = await c.page
+        .locator('main')
+        .innerText({ timeout: 4000 })
+        .catch(() => '');
+      if (t) return t;
+      await c.page.waitForTimeout(400);
+    }
+    return '';
+  };
   const asideText = (c) =>
     c.page
       .locator('aside')
@@ -922,26 +929,37 @@ export default (h) => {
       c.onCleanup(() => cleanup(c));
       await open(c);
       await fillValue(c, f, k.value);
+      const baseline = JSON.stringify(read(c));
       const before = lines(await mainText(c));
       const mark = c.rec.mark();
       await submit(c);
       await c.afterAction({ quiet: 900, timeout: 6000 });
-      await c.page.waitForTimeout(500);
+      await c.page.waitForLoadState('domcontentloaded').catch(() => {});
+      await c.page.waitForTimeout(700);
       const after = lines(await mainText(c));
       const fresh = newLines(before, after);
-      c.obs.set('map.stored', read(c));
-      c.obs.flag(
-        'feedbackShown',
-        fresh.some((l) => FEEDBACK_RX.test(l)) || (await c.visible({ role: 'alert' })),
-      );
+      const stored = read(c);
+      const saved = JSON.stringify(stored) !== baseline;
+      const text = fresh.filter((l) => FEEDBACK_RX.test(l));
+      // a value the browser's own validation bubble refuses leaves the form invalid in place: that is feedback too
+      const bubble = await c.page
+        .evaluate(() =>
+          [...document.querySelectorAll('input,select,textarea')].some(
+            (e) => e.willValidate && !e.checkValidity(),
+          ),
+        )
+        .catch(() => false);
+      c.obs.set('map.stored', stored);
       c.obs.num(
         'requests',
         c.rec.since(mark).http.filter((h2) => h2.method !== 'GET').length > 0 ? 1 : 0,
       );
-      c.obs.info(
-        'feedbackText',
-        fresh.filter((l) => FEEDBACK_RX.test(l)),
+      c.obs.set(
+        'low.silentRejection',
+        !saved && !text.length && !bubble && !(await c.visible({ role: 'alert' })) ? 1 : 0,
       );
+      c.obs.info('feedbackText', text);
+      c.obs.info('nativeBubble', bubble);
       c.obs.set(
         'sec.xssExecuted',
         (await c.page.evaluate(() => !!window.__xss).catch(() => false)) ||
@@ -2158,12 +2176,36 @@ export default (h) => {
           'deliberate hardening: a NUL character is refused with a field message (problem+json 422) instead of being stored; the shared input rule of the platform',
       },
       {
-        scenario: 'wizard-db.shop_name.zero-width',
+        scenario: /^(wizard-db\.shop_name|settings-db\.hero_text)\.zero-width$/,
         key: 'map.stored',
         quirk:
           'WaDesk trims zero-width characters at the ends of an input (Laravel TrimStrings); the platform trims whitespace only',
         reason:
           'platform-wide input normalisation (zod trim), not store specific: a trailing zero-width joiner stays in the stored name; the slug is identical (zero-width characters are a word break in both)',
+      },
+      {
+        scenario: /^(settings-db|wizard-db)\./,
+        key: 'num.requests',
+        quirk:
+          'WaDesk sends an invalid value to the server, or the browser blocks it with its own bubble',
+        reason:
+          'ours checks the value in the form first (inline message, field focused) and sends nothing when it is invalid; the stored result and the message are compared separately (map.stored, low.silentRejection)',
+      },
+      {
+        scenario: 'settings-db.brand_color.empty',
+        key: 'map.stored',
+        quirk:
+          'WaDesk resets its colour picker to black when the hex box is emptied and saves #000000',
+        reason:
+          'a blank hex means "not set" and keeps the default brand colour; the accidental black is not reproduced',
+      },
+      {
+        scenario: 'settings-db.logo_url.ftp',
+        key: /^(map\.stored|num\.requests)$/,
+        quirk:
+          'WaDesk accepts any URL scheme the Laravel url rule knows, ftp included, as the logo address',
+        reason:
+          'only http and https logo addresses are accepted: browsers do not load an ftp image, so saving one only breaks the storefront header',
       },
       {
         scenario: 'settings.unowned-keys',

@@ -219,22 +219,23 @@ export function Catalog({ home }: { home: PublicHome }) {
         </aside>
 
         <div className="sf-grid-wrap">
-          {shown.length > 0 ? (
-            <div className={`sf-grid${view === 'list' ? ' is-list' : ''}`}>
-              {shown.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          ) : (
-            <div className="sf-no-results">
-              <div className="sf-no-results-title">{t('catalog.noMatch')}</div>
-              <button type="button" className="sf-reset" onClick={reset}>
-                {t('catalog.filters.clear')}
-              </button>
-            </div>
-          )}
+          <div className={`sf-grid${view === 'list' ? ' is-list' : ''}`}>
+            {shown.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* As in WaDesk, the "nothing matches" block sits below the layout (the empty grid stays above it). */}
+      {shown.length === 0 ? (
+        <div className="sf-no-results">
+          <div className="sf-no-results-title">{t('catalog.noMatch')}</div>
+          <button type="button" className="sf-reset" onClick={reset}>
+            {t('catalog.filters.clear')}
+          </button>
+        </div>
+      ) : null}
 
       {hasMore ? (
         <div className="sf-more">

@@ -188,6 +188,7 @@ function SettingsFormView({ shop, onReload }: { shop: StorefrontResponse; onRelo
       type?: string;
       className?: string;
       inputMode?: 'decimal';
+      required?: boolean;
     },
   ) => (
     <Field
@@ -202,6 +203,7 @@ function SettingsFormView({ shop, onReload }: { shop: StorefrontResponse; onRelo
         type={props.type ?? 'text'}
         value={String(form[field])}
         maxLength={props.maxLength}
+        required={props.required}
         placeholder={props.placeholder}
         inputMode={props.inputMode}
         invalid={Boolean(errorOf(field))}
@@ -282,6 +284,7 @@ function SettingsFormView({ shop, onReload }: { shop: StorefrontResponse; onRelo
         {flatInput('slug', {
           label: t('slug.label'),
           maxLength: 64,
+          required: true,
           mono: true,
           hint: (
             <>

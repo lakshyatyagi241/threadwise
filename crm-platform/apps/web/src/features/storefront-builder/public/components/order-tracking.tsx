@@ -45,7 +45,7 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
 
         <section className="sf-ot-card" aria-label={t('order.progress')}>
           {cancelled ? (
-            <div className="sf-ot-muted sf-ot-center">{t('order.cancelled')}</div>
+            <div className="sf-ot-muted sf-ot-cancelled">{t('order.cancelled')}</div>
           ) : (
             <ol className="sf-ot-steps">
               {TRACK_STEPS.map((step, i) => (
@@ -132,11 +132,11 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
 
         {footer ? (
           <p
-            className="sf-ot-muted sf-ot-center sf-ot-foot"
+            className="sf-ot-muted sf-ot-foot"
             dangerouslySetInnerHTML={{ __html: footer }}
           />
         ) : (
-          <p className="sf-ot-muted sf-ot-center sf-ot-foot">
+          <p className="sf-ot-muted sf-ot-foot">
             {t('footer.copyright', { year: new Date().getFullYear(), shop: shop.name })}
           </p>
         )}
