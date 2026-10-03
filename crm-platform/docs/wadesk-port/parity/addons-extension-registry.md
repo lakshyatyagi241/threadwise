@@ -81,3 +81,7 @@ WD-ADD-032 and WD-ADD-033 are no longer blocked: PAYGW's `checkout.service.ts` s
 workspace page's Buy link `/billing/checkout/<slug>` resolves to PAYGW's checkout route. Tier P0 done: WD-ADD-001..005, 007..010, 014, 015, 018..023, 025..034 as listed above (032, 033 closed here).
 Still partial because the missing piece is in another domain's zone: 011 (uploaded code is not executed, owner decision), 012 (IG card), 013 (PLAN form), 017 (IG), 024 (SET tile). 006 stays blocked (owner decision).
 This run had no Postgres (docker daemon not running, no local service), so migrations and DB-backed tests were not re-run; unit 39, web 12, tsc and `pnpm arch:check` (0 errors) pass.
+
+## Round 4 (DB-backed re-verification)
+
+Postgres was up: `pnpm db:migrate` (178 applied, up to date), unit 39, API e2e 30, integration 14, web 12 all pass on the tip; `arch:check` and `db:verify-schema` run clean (see the run notes). Tier P0 done: WD-ADD-001..005, 007..010, 014, 015, 018..023, 025..034. Partial rows 011, 012, 013, 017, 024 and blocked 006 are unchanged: each needs an edit in another domain's zone (IG, PLAN, SET) or an owner decision, none in the ADD zone.
