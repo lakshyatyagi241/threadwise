@@ -5,19 +5,31 @@ export function minorToMajor(minor: number): number {
   return minor / 100;
 }
 
-/** "₹3,000.00" in the viewer's language; an unknown currency code falls back to "CODE 3,000.00". */
+/** "₹3,000.00": the KPI tiles always carry two decimals (Reference's `formatIn`); an unknown code falls back to "CODE 3,000.00". */
 export function formatMoney(minor: number, currency: string, locale: string): string {
   const major = minorToMajor(minor);
   try {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency,
-      minimumFractionDigits: Number.isInteger(major) ? 0 : 2,
+      minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(major);
   } catch {
-    return `${currency} ${major.toLocaleString(locale)}`;
+    return `${currency} ${major.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
+}
+
+const ORDER_SYMBOLS: Record<string, string> = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
+
+/** The recent-orders Total cell as Reference prints it: "₹ 2,998.00" (symbol for four currencies, the code for the rest, a space). */
+export function formatOrderTotal(minor: number, currency: string, locale: string): string {
+  const symbol = ORDER_SYMBOLS[currency] ?? currency;
+  const n = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(minorToMajor(minor));
+  return `${symbol} ${n}`;
 }
 
 export function formatInt(n: number, locale: string): string {

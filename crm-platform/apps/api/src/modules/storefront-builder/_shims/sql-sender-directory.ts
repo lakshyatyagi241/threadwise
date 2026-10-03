@@ -1,8 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import type { StoreConnection } from '@crm/contracts';
 import { digitsOnly } from '../rules/phone';
 import type { RecoverySender, SenderDirectory, WizardDevice } from './tokens';
+
+const PROVIDER_LABELS: Record<string, string> = {
+  waba: 'Official WABA (Meta Cloud)',
+  baileys: 'Baileys (Node bridge)',
+  twilio: 'Twilio WhatsApp',
+};
 
 const SEND_ENGINES = ['waba', 'baileys', 'twilio'];
 
@@ -87,6 +94,33 @@ export class SqlSenderDirectory implements SenderDirectory {
       else out.push(await officialLabel());
     }
     return out;
+  }
+
+  async connection(tx: Tx, orgId: number, deviceId: number | null): Promise<StoreConnection> {
+    const primary = await this.primaryConfig(tx, orgId);
+    if (primary?.status === 'connected') {
+      return {
+        kind: 'official',
+        label: PROVIDER_LABELS[primary.provider] ?? primary.provider.toUpperCase(),
+        live: true,
+      };
+    }
+    if (deviceId !== null) {
+      const res = await tx.execute(sql`
+        SELECT id, uuid, device_name, country_code, phone_number FROM devices
+        WHERE org_id = ${orgId} AND id = ${deviceId} AND status = 'connected'`);
+      const d = res.rows[0] as unknown as DeviceRow | undefined;
+      if (d) {
+        // Reference joins the stored country code and number with a space and does not add a plus.
+        const label = `${d.country_code ?? ''} ${d.phone_number ?? ''}`.trim();
+        return { kind: 'device', label, live: true };
+      }
+    }
+    const any = await tx.execute(
+      sql`SELECT 1 FROM devices WHERE org_id = ${orgId} AND status = 'connected' LIMIT 1`,
+    );
+    if (any.rows.length > 0) return { kind: 'other_device', label: null, live: true };
+    return { kind: 'none', label: null, live: false };
   }
 
   async waNumber(tx: Tx, orgId: number, deviceId: number | null): Promise<string | null> {

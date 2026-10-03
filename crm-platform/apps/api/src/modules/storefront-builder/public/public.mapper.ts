@@ -8,6 +8,9 @@ import type { StorefrontProduct } from '../../catalog-products';
 import { sanitizeProductBody, sanitizeShopCopy } from '../rules/html';
 import type { ShopRow } from '../shops/shops.repository';
 
+/** The card's "New" badge: created within the last 14 days (Reference `created_at > now()-14 days`). */
+const NEW_WINDOW_MS = 14 * 24 * 60 * 60 * 1000;
+
 export function toPublicProduct(p: StorefrontProduct): PublicProduct {
   const onSale = p.comparePriceMinor !== null && p.comparePriceMinor > p.priceMinor;
   return {
@@ -30,6 +33,9 @@ export function toPublicProduct(p: StorefrontProduct): PublicProduct {
     category: p.category,
     stockQty: p.stockQty,
     brand: p.brand,
+    isNew: p.createdAt ? p.createdAt.getTime() > Date.now() - NEW_WINDOW_MS : false,
+    weightGrams: p.weightGrams ?? null,
+    tags: p.tags ?? [],
   };
 }
 

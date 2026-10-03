@@ -187,11 +187,14 @@ export interface ResolvedTheme {
   vars: Record<string, string>;
 }
 
-/** Fonts are system stacks: the shop loads nothing from a CDN (decision D-13). */
+/**
+ * Reference's three families, self-hosted (decision D-13: nothing is loaded from Google's CDN; the files and their `@font-face`
+ * rules live in `styles/fonts.css`). Same fallbacks as the reference.
+ */
 export const FONT_STACKS = {
-  serif: "Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif",
-  sans: "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-  mono: "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace",
+  serif: "'Fraunces', Georgia, serif",
+  sans: "'Plus Jakarta Sans', system-ui, sans-serif",
+  mono: "'JetBrains Mono', monospace",
 } as const;
 
 /**
@@ -224,10 +227,10 @@ export function resolveTheme(
       '--sf-muted': tokens.muted,
       '--sf-border': tokens.border,
       '--sf-brand': brand,
-      '--sf-on-brand': readableOn(brand),
-      '--sf-brand-ink': brandInk,
+      '--sf-on-brand': '#FFFFFF',
+      '--sf-brand-ink': brand,
       '--sf-accent': accent,
-      '--sf-on-accent': readableOn(accent),
+      '--sf-on-accent': '#FFFFFF',
       '--sf-radius': tokens.radius,
       '--sf-hero-size': tokens.heroSize,
       '--sf-serif': FONT_STACKS.serif,

@@ -9,6 +9,25 @@ export function niceMax(max: number): number {
   return 10 * base;
 }
 
+/**
+ * An axis that ends on a multiple of a round step (1, 2 or 5 times a power of ten) with at most six intervals, as a charting
+ * library would pick it: 5998 gives 0..6000 in steps of 1000. `minStep` keeps an orders axis on whole numbers.
+ */
+export function niceScale(max: number, minStep = 0): { top: number; step: number; count: number } {
+  if (!(max > 0)) return { top: 1, step: 1, count: 1 };
+  const exp = Math.floor(Math.log10(max)) - 1;
+  for (let k = exp; k < exp + 4; k++) {
+    for (const m of [1, 2, 5]) {
+      const step = m * 10 ** k;
+      if (step < minStep) continue;
+      const count = Math.ceil(max / step - 1e-9);
+      if (count <= 6) return { top: count * step, step, count };
+    }
+  }
+  const step = 10 ** (exp + 4);
+  return { top: step, step, count: 1 };
+}
+
 /** `count + 1` evenly spaced tick values from 0 to `top`. */
 export function ticks(top: number, count = 4): number[] {
   return Array.from({ length: count + 1 }, (_, i) => (top / count) * i);
@@ -78,8 +97,10 @@ export function buildSalesChart(
     width: Math.max(0, box.width - box.left - box.right),
     height: Math.max(0, box.height - box.top - box.bottom),
   };
-  const revenueTop = niceMax(Math.max(0, ...revenue));
-  const ordersTop = niceMax(Math.max(0, ...orders));
+  const rev = niceScale(Math.max(0, ...revenue));
+  const ord = niceScale(Math.max(0, ...orders), 1);
+  const revenueTop = rev.top;
+  const ordersTop = ord.top;
   const slot = n > 0 ? plot.width / n : 0;
   const barWidth = Math.max(1, slot * 0.62);
   const bars = Array.from({ length: n }, (_, i) => {
@@ -96,12 +117,11 @@ export function buildSalesChart(
     x: plot.x + slot * i + slot / 2,
     y: plot.y + plot.height - (Math.max(0, orders[i] ?? 0) / ordersTop) * plot.height,
   }));
-  const tickCount = (top: number) => (top >= 4 ? 4 : top >= 2 ? 2 : 1);
   return {
     revenueTop,
     ordersTop,
-    revenueTicks: ticks(revenueTop, tickCount(revenueTop)),
-    ordersTicks: ticks(ordersTop, tickCount(ordersTop)),
+    revenueTicks: ticks(revenueTop, rev.count),
+    ordersTicks: ticks(ordersTop, ord.count),
     bars,
     points,
     linePath: smoothPath(points),

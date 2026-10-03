@@ -1,3 +1,4 @@
+import type { StoreConnection, StoreSidebarCounts } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import type { CouponTerms } from '../rules/coupon-rules';
 import type { PhoneHistory } from '../rules/rto';
@@ -103,6 +104,8 @@ export interface OrdersGateway {
     limit: number,
   ): Promise<Array<{ name: string; qty: number }>>;
   recent(tx: Tx, orgId: number, limit: number): Promise<RecentOrder[]>;
+  /** The counts beside the store sidebar entries (orders, groups, coupons, pending reviews, payment configs, gateways, customers). */
+  sidebarCounts(tx: Tx, orgId: number): Promise<Omit<StoreSidebarCounts, 'products'>>;
   /** Prior orders of a phone over every channel, compared as digits. */
   phoneHistory(tx: Tx, orgId: number, phoneDigits: string): Promise<PhoneHistory>;
   /** Average of every positive order total of the organization, minor units; 0 when there is none. */
@@ -181,6 +184,8 @@ export interface SenderDirectory {
     orgId: number,
     deviceIds: ReadonlyArray<number | null>,
   ): Promise<Array<string | null>>;
+  /** How the workspace reaches WhatsApp as the sidebar card shows it (Reference `_sidebar`): official config, the shop's device, any device, or nothing. */
+  connection(tx: Tx, orgId: number, deviceId: number | null): Promise<StoreConnection>;
   /** Digits of the number the buyer is sent to chat with (TW-STORE-011 rule 1); null when there is none. */
   waNumber(tx: Tx, orgId: number, deviceId: number | null): Promise<string | null>;
   /** Who sends a cart-recovery nudge; null when the workspace has no sender for its engine (nothing is scheduled then). */

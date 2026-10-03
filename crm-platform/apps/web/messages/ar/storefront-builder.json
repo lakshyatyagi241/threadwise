@@ -99,6 +99,8 @@
         "setup": "قيد الإعداد",
         "yourStore": "متجرك",
         "notConnected": "غير متصل",
+        "unofficialApi": "واجهة غير رسمية",
+        "deviceConnected": "جهاز متصل · /channels",
         "switchShop": "تبديل المتجر",
         "shopFallback": "متجر",
         "manageShops": "إدارة كل المتاجر ←",
@@ -241,6 +243,8 @@
             "keySecret": "سر المفتاح",
             "webhookSecret": "سر الـ webhook",
             "stored": "محفوظ — اتركه فارغًا للإبقاء عليه",
+            "show": "إظهار السر",
+            "hide": "إخفاء السر",
             "webhookHelp": "في لوحة Razorpay اضبط رابط الـ webhook على",
             "webhookEvent": "لحدث payment_link.paid."
           }

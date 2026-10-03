@@ -129,11 +129,3 @@ export function activeKey(pathname: string): SidebarKey {
   const keys = MAIN_ENTRIES.map((e) => e.key);
   return (keys.find((k) => k === second) ?? 'overview') as SidebarKey;
 }
-
-/** "Live" is about WhatsApp being reachable, not about the shop being enabled (Reference's rule). */
-export function isLive(shop: {
-  hasUsableConnection: boolean;
-  sendingLabel: string | null;
-}): boolean {
-  return shop.hasUsableConnection || shop.sendingLabel !== null;
-}

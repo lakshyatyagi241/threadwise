@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { Badge, Card, StatTile } from '@crm/ui';
 import { useOverview } from '../api/hooks';
 import { isNoShop } from '../lib/errors';
-import { barPercent, formatInt, formatMoney, formatWhen, orderTone } from '../lib/format';
+import { barPercent, formatInt, formatMoney, formatOrderTotal, formatWhen, orderTone } from '../lib/format';
 import { PlusIcon } from './icons';
 import { ErrorPanel, Eyebrow, LinkButton, Skeleton } from './parts';
 import { SalesChart } from './sales-chart';
@@ -203,12 +203,10 @@ function Body({ data, locale }: { data: StoreOverview; locale: string }) {
                       <Badge className="font-mono">{o.source}</Badge>
                     </td>
                     <td className="px-4 py-3 text-xs">
-                      {itemsOf(o) === null
-                        ? '—'
-                        : t('recent.itemsCount', { count: itemsOf(o) ?? 0 })}
+                      {t('recent.itemsCount', { count: o.itemsCount })}
                     </td>
                     <td className="px-4 py-3 text-end font-semibold tabular-nums">
-                      {formatMoney(o.totalMinor, o.currencyCode, locale)}
+                      {formatOrderTotal(o.totalMinor, o.currencyCode, locale)}
                     </td>
                     <td className="px-4 py-3">
                       <Badge tone={orderTone(o.status)} className="font-mono">
@@ -233,13 +231,4 @@ function Body({ data, locale }: { data: StoreOverview; locale: string }) {
       </Card>
     </>
   );
-}
-
-/**
- * Contract gap: `storeRecentOrderSchema` has no line count, so Reference's "N items" cell cannot be filled yet. It shows a
- * dash until the contract gains `itemsCount` (then this reads it, no other change).
- */
-function itemsOf(o: object): number | null {
-  const n = (o as { itemsCount?: unknown }).itemsCount;
-  return typeof n === 'number' ? n : null;
 }

@@ -37,7 +37,7 @@ export function Footer() {
           </div>
         </div>
         <div className="sf-foot-col">
-          <h2>{t('footer.shopHeading')}</h2>
+          <h4>{t('footer.shopHeading')}</h4>
           <a href={home}>{t('footer.allProducts')}</a>
           <a href={`${home}#categories`}>{t('header.categories')}</a>
           <button type="button" onClick={() => toggleDrawer('wish')}>
@@ -48,7 +48,7 @@ export function Footer() {
           </button>
         </div>
         <div className="sf-foot-col">
-          <h2>{t('footer.helpHeading')}</h2>
+          <h4>{t('footer.helpHeading')}</h4>
           {TOPICS.map((topic) => (
             <button key={topic} type="button" onClick={() => openModal({ kind: 'info', topic })}>
               {t(`footer.help.${topic}`)}
@@ -56,10 +56,10 @@ export function Footer() {
           ))}
         </div>
         <div className="sf-foot-col">
-          <h2>{t('footer.contactHeading')}</h2>
+          <h4>{t('footer.contactHeading')}</h4>
           {digits ? (
             <a href={waChatUrl(digits)} target="_blank" rel="noopener noreferrer">
-              {t('footer.whatsappLink', { number: `+${digits}` })}
+              {t('footer.whatsappLink', { number: digits })}
             </a>
           ) : null}
           <button type="button" onClick={() => flash(t('footer.hoursToast'))}>

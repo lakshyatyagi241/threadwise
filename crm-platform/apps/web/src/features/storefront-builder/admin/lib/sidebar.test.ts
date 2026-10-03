@@ -4,7 +4,6 @@ import {
   SETTINGS_ENTRIES,
   activeKey,
   entryHref,
-  isLive,
   visibleEntries,
 } from './sidebar';
 
@@ -62,13 +61,5 @@ describe('activeKey', () => {
     expect(activeKey('/store/products/create')).toBe('products');
     expect(activeKey('/store/unknown')).toBe('overview');
     expect(activeKey('/connect')).toBe('connection');
-  });
-});
-
-describe('isLive', () => {
-  it('is true with a usable connection or a resolved sending number', () => {
-    expect(isLive({ hasUsableConnection: true, sendingLabel: null })).toBe(true);
-    expect(isLive({ hasUsableConnection: false, sendingLabel: '+1 555' })).toBe(true);
-    expect(isLive({ hasUsableConnection: false, sendingLabel: null })).toBe(false);
   });
 });

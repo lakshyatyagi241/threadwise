@@ -1,8 +1,9 @@
 /*
  * The public shop (TW-STORE-009..011). Standalone: it does not use the staff app's shell or tokens. Every rule belongs to a
  * class prefixed `sf-`, and the theme tokens are CSS variables set on the one `.sf-root` element (see lib/themes.ts), so nothing
- * reaches outside the shop. Fonts are system stacks (decision D-13); nothing is loaded from a CDN.
+ * reaches outside the shop. Fonts are self-hosted (decision D-13, styles/fonts.css); nothing is loaded from a CDN.
  */
+@import './fonts.css';
 
 .sf-root {
   --sf-danger: #c93a57;
@@ -20,62 +21,60 @@
   -webkit-font-smoothing: antialiased;
   /* clip, not hidden: hidden would make this a scroll container and break the sticky header */
   overflow-x: clip;
+  max-width: 100vw;
 }
+/*
+ * Reference draws its controls with the browser's own defaults (Arial 13.33px, system button/field colours) except where a rule
+ * says otherwise, and its headings and SVGs keep the UA look. The staff app's Tailwind preflight resets all of that, so roll it
+ * back first; the reset below and every component rule then apply on top, exactly as in the reference.
+ */
+.sf-root :where(button, input, select, textarea) {
+  all: revert;
+}
+.sf-root :where(h1, h2, h3, h4, h5, h6) {
+  font-size: revert;
+  font-weight: revert;
+}
+.sf-root :where(svg) {
+  display: inline;
+  vertical-align: baseline;
+}
+/* Reference's skeleton starts with `* { box-sizing: border-box; margin: 0; padding: 0 }`; the same reset, scoped to the shop. */
 .sf-root *,
 .sf-root *::before,
 .sf-root *::after {
   box-sizing: border-box;
-}
-.sf-root h1,
-.sf-root h2,
-.sf-root h3,
-.sf-root p {
-  overflow-wrap: anywhere;
-}
-.sf-root a {
-  color: inherit;
-  text-decoration: none;
-}
-.sf-root img {
-  display: block;
-  max-width: 100%;
-}
-.sf-root ul,
-.sf-root ol {
-  list-style: none;
   margin: 0;
   padding: 0;
 }
-.sf-root button {
+/* Element rules below are :where() so they carry no specificity and every component class wins over them. */
+.sf-root :where(h1, h2, h3, p) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.sf-root :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+.sf-root :where(img) {
+  display: block;
+  max-width: 100%;
+}
+.sf-root :where(ul, ol) {
+  list-style: none;
+}
+.sf-root :where(button) {
   cursor: pointer;
 }
-.sf-root button:disabled {
+.sf-root :where(button:disabled) {
   cursor: not-allowed;
 }
 .sf-root :focus-visible {
   outline: 2px solid var(--sf-brand-ink);
   outline-offset: 2px;
 }
-.sf-root input,
-.sf-root select,
-.sf-root textarea {
-  font: inherit;
-  color: var(--sf-text);
-  background: var(--sf-bg);
-  border: 1px solid var(--sf-border);
-  border-radius: 9px;
-}
-.sf-root input:focus,
-.sf-root textarea:focus,
-.sf-root select:focus {
-  outline: none;
-  border-color: var(--sf-brand-ink);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sf-brand-ink) 28%, transparent);
-}
-.sf-root fieldset {
+.sf-root :where(fieldset) {
   border: 0;
-  margin: 0;
-  padding: 0;
   min-width: 0;
 }
 .sf-root [hidden] {
@@ -132,7 +131,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 14px 24px;
+  padding: 16px 24px;
   border-bottom: 1px solid var(--sf-border);
   background: color-mix(in srgb, var(--sf-surface) 88%, transparent);
   backdrop-filter: saturate(1.1) blur(10px);
@@ -148,19 +147,17 @@
   flex-shrink: 0;
   min-width: 0;
   max-width: 42vw;
+  overflow: hidden;
   font-family: var(--sf-serif);
   font-size: 23px;
   font-weight: 600;
   letter-spacing: -0.015em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .sf-brand img {
   max-height: 34px;
   width: auto;
-}
-.sf-brand span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .sf-nav {
   display: flex;
@@ -179,18 +176,25 @@
   position: relative;
   flex: 1;
   max-width: 520px;
-  margin-inline-start: auto;
+  margin-left: auto;
 }
 .sf-search input {
   width: 100%;
-  padding: 10px 14px;
-  padding-inline-start: 40px;
+  padding: 10px 14px 10px 40px;
+  border: 1px solid var(--sf-border);
   border-radius: 9999px;
+  background: var(--sf-bg);
+  color: var(--sf-text);
   font-size: 13px;
+}
+.sf-search input:focus {
+  outline: none;
+  border-color: var(--sf-brand);
+  background: var(--sf-surface);
 }
 .sf-search svg {
   position: absolute;
-  inset-inline-start: 14px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--sf-muted);
@@ -205,8 +209,8 @@
   position: relative;
   display: inline-grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: 1px solid currentColor;
   border-radius: 50%;
   background: transparent;
@@ -219,18 +223,17 @@
 .sf-badge {
   position: absolute;
   top: -4px;
-  inset-inline-end: -4px;
+  right: -4px;
   display: inline-grid;
   place-items: center;
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
   border-radius: 9999px;
-  background: var(--sf-badge-bg);
-  color: var(--sf-badge-fg);
+  background: #e87a5d;
+  color: #fff;
   font-size: 10.5px;
   font-weight: 700;
-  line-height: 1;
 }
 .sf-badge.is-bump {
   animation: sf-bump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -263,9 +266,6 @@
   line-height: 1.06;
   letter-spacing: -0.02em;
 }
-.sf-hero h1 a {
-  text-decoration: underline;
-}
 .sf-hero p {
   max-width: 560px;
   margin: 18px auto 0;
@@ -273,8 +273,8 @@
   font-size: 15.5px;
   line-height: 1.6;
 }
-.sf-hero-trust {
-  display: flex;
+.sf-hero .sf-hero-trust {
+  display: inline-flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
@@ -285,7 +285,7 @@
   text-transform: uppercase;
   color: var(--sf-muted);
 }
-.sf-hero-trust li {
+.sf-hero .sf-hero-trust span {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -294,14 +294,14 @@
   border-radius: 9999px;
   background: var(--sf-surface);
 }
-.sf-hero-trust svg {
+.sf-hero .sf-hero-trust span svg {
   color: var(--sf-accent);
 }
 
 /* ───────── Catalog: toolbar, filters, grid ───────── */
+/* QUIRK: like Reference, the catalog section has no max-width; the grid inside it is 1280px wide, so between roughly 880 and 1570px
+   the product grid is wider than its column and the right edge is clipped (Reference hides horizontal overflow on the page). */
 .sf-catalog {
-  max-width: 1280px;
-  margin: 0 auto;
   padding: 0 24px 24px;
 }
 .sf-toolbar {
@@ -310,8 +310,9 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 22px;
+  padding: 0 24px;
 }
-.sf-count {
+.sf-toolbar .sf-count {
   font-family: var(--sf-mono);
   font-size: 12.5px;
   color: var(--sf-muted);
@@ -321,44 +322,42 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin-inline-start: auto;
+  margin-left: auto;
 }
 .sf-toolbar select {
   padding: 9px 14px;
+  border: 1px solid var(--sf-border);
   border-radius: 9999px;
   background: var(--sf-surface);
+  color: var(--sf-text);
   font-size: 12.5px;
   cursor: pointer;
-}
-.sf-view-toggle {
-  display: inline-flex;
 }
 .sf-view-toggle button {
   display: inline-grid;
   place-items: center;
-  width: 42px;
-  height: 36px;
+  padding: 8px 12px;
   border: 1px solid var(--sf-border);
   background: var(--sf-surface);
   color: var(--sf-text);
+  font-size: 12px;
+  cursor: pointer;
 }
 .sf-view-toggle button:first-child {
-  border-start-start-radius: 9999px;
-  border-end-start-radius: 9999px;
+  border-radius: 9999px 0 0 9999px;
 }
 .sf-view-toggle button:last-child {
-  margin-inline-start: -1px;
-  border-start-end-radius: 9999px;
-  border-end-end-radius: 9999px;
+  border-radius: 0 9999px 9999px 0;
+  margin-left: -1px;
 }
 .sf-view-toggle button.is-on {
   background: var(--sf-brand);
   border-color: var(--sf-brand);
-  color: var(--sf-on-brand);
+  color: #fff;
 }
 .sf-shop-layout {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 240px 1fr;
   gap: 24px;
   min-width: 0;
 }
@@ -374,11 +373,21 @@
   border-radius: 16px;
   background: var(--sf-surface);
 }
-.sf-filters h2 {
-  margin: 0 0 14px;
+.sf-filters h3 {
+  margin: 0 0 10px;
+  font-family: var(--sf-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sf-muted);
+}
+.sf-filters > h3:first-child {
+  margin-bottom: 14px;
+  font-family: inherit;
   font-size: 15px;
-  font-weight: 600;
   letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--sf-text);
 }
 .sf-filter-group {
   padding: 14px 0;
@@ -386,21 +395,7 @@
 }
 .sf-filter-group:first-of-type {
   padding-top: 0;
-  border-top: 0;
-}
-.sf-filter-group legend {
-  float: left;
-  width: 100%;
-  margin: 0 0 10px;
-  padding: 0;
-  font-family: var(--sf-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--sf-muted);
-}
-.sf-filter-group legend + * {
-  clear: both;
+  border-top: none;
 }
 .sf-filter-group label {
   display: flex;
@@ -408,12 +403,11 @@
   gap: 8px;
   padding: 5px 0;
   font-size: 13px;
+  color: var(--sf-text);
   cursor: pointer;
 }
 .sf-filter-group input[type='checkbox'] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--sf-brand-ink);
+  accent-color: var(--sf-brand);
 }
 .sf-price-range {
   display: flex;
@@ -423,46 +417,51 @@
 }
 .sf-price-range input {
   width: 100%;
-  min-width: 0;
   padding: 8px 10px;
+  border: 1px solid var(--sf-border);
+  border-radius: 9px;
+  background: var(--sf-bg);
+  color: var(--sf-text);
   font-family: var(--sf-mono);
   font-size: 12px;
+}
+.sf-price-range span {
+  color: #6b807c;
 }
 .sf-range-hint {
   margin-top: 6px;
   font-family: var(--sf-mono);
   font-size: 10.5px;
-  color: var(--sf-muted);
+  color: #6b807c;
 }
 .sf-reset {
   width: 100%;
   margin-top: 14px;
-  padding: 9px 14px;
+  padding: 8px 12px;
   border: 1px solid var(--sf-border);
   border-radius: 9999px;
   background: transparent;
-  color: var(--sf-text);
-  font: inherit;
-  font-size: 12px;
-}
-.sf-reset:hover {
-  border-color: var(--sf-brand-ink);
+  font-family: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
 }
 .sf-no-results {
   padding: 60px 24px;
   text-align: center;
-  color: var(--sf-muted);
+  color: #6b807c;
   font-size: 14px;
 }
 .sf-no-results .sf-reset {
   width: auto;
+  margin-top: 14px;
   padding: 9px 18px;
+  font-size: 12px;
 }
 .sf-no-results-title {
   margin-bottom: 6px;
-  font-family: var(--sf-serif);
+  font-family: 'Fraunces', serif;
   font-size: 22px;
-  color: var(--sf-text);
+  color: #0b1f1c;
 }
 .sf-more {
   padding: 24px;
@@ -476,18 +475,15 @@
   border: 1px solid var(--sf-border);
   border-radius: 9999px;
   background: var(--sf-surface);
-  color: var(--sf-text);
-  font: inherit;
+  font-family: inherit;
   font-size: 13px;
-}
-.sf-more-btn:hover:not(:disabled) {
-  border-color: var(--sf-brand-ink);
+  cursor: pointer;
 }
 .sf-more-count {
   margin-top: 8px;
-  font-family: var(--sf-mono);
+  font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: var(--sf-muted);
+  color: #6b807c;
 }
 .sf-empty-page {
   padding: 96px 24px;
@@ -498,14 +494,18 @@
   margin-bottom: 8px;
   font-family: var(--sf-serif);
   font-size: 30px;
-  font-weight: 600;
   color: var(--sf-text);
 }
 
+.sf-grid-wrap {
+  display: contents;
+}
 .sf-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 248px), 1fr));
   gap: 22px;
+  max-width: 1280px;
+  margin: 0 auto;
   min-width: 0;
 }
 .sf-grid.is-list {
@@ -516,7 +516,10 @@
 }
 .sf-grid.is-list .sf-card-img {
   width: 220px;
-  flex: none;
+  aspect-ratio: 1 / 1;
+}
+.sf-grid.is-list .sf-card-body {
+  flex: 1;
 }
 
 /* ───────── Product card ───────── */
@@ -536,10 +539,10 @@
 }
 .sf-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 44px -16px var(--sf-shadow);
-  border-color: color-mix(in srgb, var(--sf-brand-ink) 20%, var(--sf-border));
+  box-shadow: 0 18px 44px -16px rgba(15, 30, 28, 0.22);
+  border-color: color-mix(in srgb, var(--sf-brand) 20%, transparent);
 }
-.sf-card-img {
+.sf-card .sf-card-img {
   position: relative;
   display: grid;
   place-items: center;
@@ -568,12 +571,12 @@
 .sf-img-fallback svg {
   width: 34px;
   height: 34px;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 .sf-card-badge {
   position: absolute;
   top: 12px;
-  inset-inline-start: 12px;
+  left: 12px;
   z-index: 1;
   display: inline-flex;
   flex-wrap: wrap;
@@ -592,16 +595,14 @@
 }
 .sf-card-badge .is-new {
   background: var(--sf-accent);
-  color: var(--sf-on-accent);
 }
 .sf-card-badge .is-out {
   background: var(--sf-muted);
-  color: var(--sf-surface);
 }
 .sf-wish,
 .sf-quick {
   position: absolute;
-  inset-inline-end: 12px;
+  right: 12px;
   z-index: 2;
   display: grid;
   place-items: center;
@@ -618,6 +619,7 @@
   transition:
     opacity 0.2s,
     transform 0.25s,
+    background 0.15s,
     color 0.15s;
 }
 .sf-wish {
@@ -631,7 +633,7 @@
 .sf-card:focus-within .sf-wish,
 .sf-card:focus-within .sf-quick {
   opacity: 1;
-  transform: none;
+  transform: translateY(0);
 }
 @media (hover: none) {
   .sf-wish,
@@ -642,15 +644,22 @@
 }
 .sf-wish:hover,
 .sf-quick:hover {
-  color: var(--sf-brand-ink);
+  color: var(--sf-brand);
 }
 .sf-wish.is-on {
   opacity: 1;
-  transform: none;
-  color: var(--sf-danger);
+  transform: translateY(0);
+  color: #e8506b;
+}
+.sf-wish svg {
+  transition: transform 0.2s;
+}
+.sf-wish:hover svg {
+  transform: scale(1.15);
 }
 .sf-wish.is-on svg {
-  fill: currentColor;
+  fill: #e8506b;
+  stroke: #e8506b;
 }
 .sf-card-body {
   display: flex;
@@ -668,7 +677,7 @@
 }
 .sf-card h3 {
   min-width: 0;
-  margin: 0 0 8px;
+  margin-bottom: 8px;
   font-family: var(--sf-serif);
   font-size: 17px;
   font-weight: 600;
@@ -682,9 +691,9 @@
   overflow: hidden;
 }
 .sf-card h3 a:hover {
-  color: var(--sf-brand-ink);
+  color: var(--sf-brand);
 }
-.sf-card-price {
+.sf-card .sf-card-price {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -692,6 +701,7 @@
   margin-bottom: 14px;
   font-family: var(--sf-mono);
   font-size: 14px;
+  color: var(--sf-text);
 }
 .sf-card-price b {
   font-size: 16px;
@@ -699,36 +709,40 @@
   letter-spacing: -0.01em;
 }
 .sf-card-was {
+  margin-left: 6px;
+  font-family: var(--sf-mono);
   font-size: 12px;
   color: var(--sf-muted);
+  text-decoration: line-through;
 }
-.sf-add {
+.sf-card .sf-add {
   margin-top: auto;
   padding: 11px 14px;
   border: 1px solid var(--sf-brand);
   border-radius: 10px;
   background: var(--sf-brand);
-  color: var(--sf-on-brand);
-  font: inherit;
+  color: #fff;
+  font-family: inherit;
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.01em;
+  cursor: pointer;
   transition:
     filter 0.15s,
-    transform 0.1s,
-    background 0.15s,
-    color 0.15s;
+    transform 0.1s;
 }
-.sf-add:hover:not(:disabled) {
+.sf-card .sf-add:hover {
   filter: brightness(1.08);
 }
-.sf-add:active:not(:disabled) {
+.sf-card .sf-add:active {
   transform: scale(0.98);
 }
-.sf-add:disabled {
+.sf-card .sf-add:disabled {
   border-color: var(--sf-border);
   background: var(--sf-border);
   color: var(--sf-muted);
+  cursor: not-allowed;
+  filter: none;
 }
 
 /* ───────── Buttons shared by the dialogs and the product page ───────── */
@@ -1222,11 +1236,10 @@
   max-width: 1280px;
   margin: 0 auto;
 }
-.sf-foot-col > h2 {
-  margin: 0 0 14px;
+.sf-foot-col > h4 {
+  margin-bottom: 14px;
   font-family: var(--sf-mono);
   font-size: 11px;
-  font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--sf-muted);
@@ -1241,11 +1254,11 @@
   font-size: 13px;
   text-align: start;
   color: var(--sf-text);
-  opacity: 0.85;
+  opacity: 0.8;
 }
 .sf-foot-col a:hover,
 .sf-foot-col button:hover {
-  color: var(--sf-brand-ink);
+  color: var(--sf-brand);
   opacity: 1;
 }
 .sf-foot-brand {

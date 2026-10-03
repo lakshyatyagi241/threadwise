@@ -99,6 +99,8 @@
         "setup": "Setup",
         "yourStore": "Your store",
         "notConnected": "Not connected",
+        "unofficialApi": "Unofficial API",
+        "deviceConnected": "Device connected · /channels",
         "switchShop": "Switch shop",
         "shopFallback": "Shop",
         "manageShops": "Manage all shops →",
@@ -241,6 +243,8 @@
             "keySecret": "Key secret",
             "webhookSecret": "Webhook secret",
             "stored": "saved — leave blank to keep",
+            "show": "Show secret",
+            "hide": "Hide secret",
             "webhookHelp": "In Razorpay dashboard, set the webhook URL to",
             "webhookEvent": "for the payment_link.paid event."
           }

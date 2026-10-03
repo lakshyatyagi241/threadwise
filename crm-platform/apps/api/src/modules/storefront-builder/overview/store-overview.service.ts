@@ -4,7 +4,12 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { StorefrontProductsReader } from '../../catalog-products';
-import { ORDERS_GATEWAY, type OrdersGateway } from '../_shims/tokens';
+import {
+  ORDERS_GATEWAY,
+  SENDER_DIRECTORY,
+  type OrdersGateway,
+  type SenderDirectory,
+} from '../_shims/tokens';
 import { ShopsRepository } from '../shops/shops.repository';
 import { ShopsService } from '../shops/shops.service';
 
@@ -32,6 +37,7 @@ export class StoreOverviewService {
     private readonly shops: ShopsService,
     private readonly products: StorefrontProductsReader,
     @Inject(ORDERS_GATEWAY) private readonly orders: OrdersGateway,
+    @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
   ) {}
 
   async overview(query: StoreOverviewQuery): Promise<StoreOverview> {
@@ -48,13 +54,15 @@ export class StoreOverviewService {
       }
 
       const win = await this.orders.window(tx, ctx.orgId, WINDOW_DAYS);
-      const [views, productCount, byDay, top, recent, shopResponse] = await Promise.all([
+      const [views, productCount, byDay, top, recent, shopResponse, counts, connection] = await Promise.all([
         this.repo.viewsSince(tx, ctx.orgId, WINDOW_DAYS),
         this.products.countProducts(tx, ctx.orgId),
         this.orders.salesByDay(tx, ctx.orgId, WINDOW_DAYS),
         this.orders.topProducts(tx, ctx.orgId, WINDOW_DAYS, 5),
         this.orders.recent(tx, ctx.orgId, 8),
         this.shops.respond(tx, ctx.orgId, shop),
+        this.orders.sidebarCounts(tx, ctx.orgId),
+        this.senders.connection(tx, ctx.orgId, shop.deviceId),
       ]);
 
       return {
@@ -67,6 +75,8 @@ export class StoreOverviewService {
           products: productCount,
           storefrontViews30: views,
         },
+        counts: { ...counts, products: productCount },
+        connection,
         salesByDay: {
           labels: byDay.map((b) => dayLabel(b.day)),
           // Whole major units, truncated, as Reference drew them.
