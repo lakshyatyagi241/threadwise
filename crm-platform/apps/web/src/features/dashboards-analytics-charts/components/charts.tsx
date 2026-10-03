@@ -354,7 +354,7 @@ export function LineChart({
               key={i}
               x={x(i)}
               y={H - 8}
-              textAnchor="middle"
+              textAnchor={labels.length > 1 && i === labels.length - 1 ? 'end' : 'middle'}
               fontSize={10}
               fill="var(--muted-foreground)"
             >
