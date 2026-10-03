@@ -17,6 +17,7 @@ import { CONVERSATIONS_FACADE } from './conversations.facade';
 import { ConversationsRepository } from './conversations.repository';
 import { ConversationsService } from './conversations.service';
 import { ExternalChannelIngest } from './external-channel-ingest.service';
+import { InboundMessageHooks } from './inbound-hooks';
 import { InboundIngestService } from './inbound-ingest.service';
 import { MediaFetchPublisher } from './media-fetch.publisher';
 import { MediaFetchService } from './media-fetch.service';
@@ -80,6 +81,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ChatRealtimePublisher,
     MessageViewService,
     MediaFetchPublisher,
+    InboundMessageHooks,
     InboundIngestService,
     ExternalChannelIngest,
     ReceiptsService,
@@ -99,6 +101,8 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ExternalChannelIngest,
     CONVERSATIONS_FACADE,
     WabaChannelLinkService,
+    // Where the flow runtime (and any later reader of inbound traffic) listens.
+    InboundMessageHooks,
     // The pipelines the workers drive.
     InboundIngestService,
     ReceiptsService,

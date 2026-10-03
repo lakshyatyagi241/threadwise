@@ -73,3 +73,4 @@ export * from './whatsapp-devices-baileys';
 export * from './workspaces-teams-tenancy';
 // <wadesk-schema:end>
 export * from './roles-permissions';
+export * from './whatsapp-providers';
