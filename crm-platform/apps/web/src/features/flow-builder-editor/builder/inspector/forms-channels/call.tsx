@@ -30,7 +30,10 @@ export const CfListenForm: FormComponent = (p) => {
       >
         {Txt(p, 'save', 'caller_said')}
       </Field>
-      <Field label="Stop after silence (seconds)" hint="How long to wait for them to finish talking before moving on.">
+      <Field
+        label="Stop after silence (seconds)"
+        hint="How long to wait for them to finish talking before moving on."
+      >
         <NumberInput
           value={p.data.silenceTimeout ?? 6}
           min={1}
@@ -69,7 +72,10 @@ export const CfAssistantForm: FormComponent = (p) => (
     >
       {Sel(p, 'assistant', voiceAssistantOptions(p, 'assistant', '— pick a voice assistant —'))}
     </Field>
-    <Field label="Extra instructions (optional)" hint="Appended to the assistant persona for this node only.">
+    <Field
+      label="Extra instructions (optional)"
+      hint="Appended to the assistant persona for this node only."
+    >
       {Ta(p, 'prompt', '', 3)}
     </Field>
     <Field label="Save spoken reply to">{Txt(p, 'save', 'assistant_reply')}</Field>
@@ -107,11 +113,25 @@ export const CfMenuForm: FormComponent = (p) => {
               placeholder={p.data.mode === 'digit' ? '1' : 'sales'}
               className="w-1/3"
             />
-            <RowInput value={o.label} onChange={(v) => setOpt(i, 'label', v)} placeholder="Branch label" className="flex-1" />
-            <RemoveButton onClick={() => p.set('options', opts.filter((_, j) => j !== i))} />
+            <RowInput
+              value={o.label}
+              onChange={(v) => setOpt(i, 'label', v)}
+              placeholder="Branch label"
+              className="flex-1"
+            />
+            <RemoveButton
+              onClick={() =>
+                p.set(
+                  'options',
+                  opts.filter((_, j) => j !== i),
+                )
+              }
+            />
           </div>
         ))}
-        <AddButton onClick={() => p.set('options', opts.concat([{ match: '', label: '' }]))}>Add branch</AddButton>
+        <AddButton onClick={() => p.set('options', opts.concat([{ match: '', label: '' }]))}>
+          Add branch
+        </AddButton>
       </Field>
     </>
   );
@@ -124,7 +144,10 @@ export const CfSearchForm: FormComponent = (p) => {
       <Field label="Search query" hint="What to look up. Use {{variables}} from earlier nodes.">
         {Txt(p, 'query', '{{caller_said}}')}
       </Field>
-      <Field label="Save results to" hint={`Usually fed into the next AI Respond node via {{${save}}}.`}>
+      <Field
+        label="Save results to"
+        hint={`Usually fed into the next AI Respond node via {{${save}}}.`}
+      >
         {Txt(p, 'save', 'search')}
       </Field>
       <Field
@@ -142,12 +165,17 @@ export const CfTransferForm: FormComponent = (p) => (
     <Field label="Transfer to number" hint="The call is bridged to this number (agent / queue).">
       {Txt(p, 'number', '+1555…')}
     </Field>
-    <Field label="Say before transferring">{Txt(p, 'message', 'Connecting you to an agent now.')}</Field>
+    <Field label="Say before transferring">
+      {Txt(p, 'message', 'Connecting you to an agent now.')}
+    </Field>
   </>
 );
 
 export const CfHangupForm: FormComponent = (p) => (
-  <Field label="Goodbye message" hint="Spoken just before the call ends. Leave blank to hang up silently.">
+  <Field
+    label="Goodbye message"
+    hint="Spoken just before the call ends. Leave blank to hang up silently."
+  >
     {Txt(p, 'goodbye', 'Thanks for calling. Goodbye!')}
   </Field>
 );

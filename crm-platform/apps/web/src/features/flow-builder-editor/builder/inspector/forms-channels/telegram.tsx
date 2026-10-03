@@ -10,7 +10,8 @@ export const TgPaymentForm: FormComponent = (p) => {
     <>
       <div className="mb-4 rounded-lg border border-[#BEE3F5] bg-[#EAF6FC] p-2.5 text-[11.5px] leading-snug text-[#1B4C63]">
         Charge the customer inside Telegram. The bot needs a payment provider token (get one from{' '}
-        <Mono>@BotFather → /mybots → Payments</Mono>). The paid confirmation lands back in your inbox.
+        <Mono>@BotFather → /mybots → Payments</Mono>). The paid confirmation lands back in your
+        inbox.
       </div>
       <Field label="Type">
         {Sel(p, 'mode', [
@@ -38,7 +39,9 @@ export const TgPaymentForm: FormComponent = (p) => {
       <Field label="Line-item label" hint="The single price row label shown on the invoice.">
         {Txt(p, 'label', 'Total')}
       </Field>
-      {payMode === 'paylink' ? <Field label="Message before the link">{Ta(p, 'linkText', 'Tap to pay:', 2)}</Field> : null}
+      {payMode === 'paylink' ? (
+        <Field label="Message before the link">{Ta(p, 'linkText', 'Tap to pay:', 2)}</Field>
+      ) : null}
       <Field
         label="Reconciliation id (optional)"
         hint="Stored on the payment so you can match it to an order. Leave blank to auto-generate."

@@ -10,29 +10,40 @@ import {
   formatPrice,
   mergePicked,
   readProductItems,
+  storeLabel,
   toProductItem,
   withSavedOption,
   type ProductItem,
 } from './helpers';
-import { Intro, RemoveButton } from './shared';
+import { ExtLink, Intro, RemoveButton } from './shared';
 
 type Provider = 'whatsapp_shop' | 'woocommerce' | 'shopify';
 
-const PROVIDER_COPY: Record<Provider, { title: string; storeHint: string; noStore: string }> = {
+/**
+ * Reference's copy. Its WooCommerce hint links to `/integrations`; the store connection lives at `/woocommerce` in this app, so
+ * the link goes there (intended deviation: the other path is not a page here).
+ */
+const PROVIDER_COPY: Record<
+  Provider,
+  { title: string; hintBefore: string; href: string; noStore: string }
+> = {
   whatsapp_shop: {
     title: 'WhatsApp catalog products',
-    storeHint: 'WhatsApp catalog connected in Catalog.',
-    noStore: 'No catalog linked — connect one in Catalog',
+    hintBefore: 'WhatsApp catalog connected via ',
+    href: '/catalog',
+    noStore: 'No catalog linked — go to /catalog',
   },
   woocommerce: {
     title: 'WooCommerce products',
-    storeHint: 'WooCommerce stores connected in Integrations.',
-    noStore: 'No store connected — connect one in Integrations',
+    hintBefore: 'WooCommerce stores connected via ',
+    href: '/woocommerce',
+    noStore: 'No store connected — go to /woocommerce',
   },
   shopify: {
     title: 'Shopify products',
-    storeHint: 'Shopify stores connected in Shopify.',
-    noStore: 'No store connected — connect one in Shopify',
+    hintBefore: 'Shopify stores connected via ',
+    href: '/shopify',
+    noStore: 'No store connected — go to /shopify',
   },
 };
 
@@ -77,7 +88,10 @@ function PickerBody({
   const list = products.data?.data ?? [];
   const query = q.trim().toLowerCase();
   const filtered = query
-    ? list.filter((pr) => pr.name.toLowerCase().includes(query) || pr.retailerId.toLowerCase().includes(query))
+    ? list.filter(
+        (pr) =>
+          pr.name.toLowerCase().includes(query) || (pr.sku ?? '').toLowerCase().includes(query),
+      )
     : list;
   const count = Object.keys(picked).length;
   const toggle = (item: ProductItem) =>
@@ -98,7 +112,9 @@ function PickerBody({
       />
       <div className="max-h-[50vh] overflow-y-auto">
         {products.isPending ? (
-          <div className="py-12 text-center text-[12.5px] italic text-muted-foreground">Loading products…</div>
+          <div className="py-12 text-center text-[12.5px] italic text-muted-foreground">
+            Loading products…
+          </div>
         ) : null}
         {products.isError ? (
           <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-700">
@@ -114,27 +130,39 @@ function PickerBody({
           {filtered.map((pr) => {
             const item = toProductItem(pr);
             const onNode = already.has(pr.retailerId);
+            const blocked = onNode || !pr.inStock;
             const isPicked = !!picked[pr.retailerId];
             return (
               <button
                 key={pr.retailerId}
                 type="button"
-                disabled={onNode}
+                disabled={blocked}
                 onClick={() => toggle(item)}
                 className={cn(
                   'rounded-lg border p-2 text-left transition',
-                  isPicked ? 'border-brand bg-brand/10' : 'border-border bg-background hover:bg-muted',
-                  onNode ? 'cursor-not-allowed opacity-40' : 'cursor-pointer',
+                  isPicked
+                    ? 'border-brand bg-brand/10'
+                    : 'border-border bg-background hover:bg-muted',
+                  blocked ? 'cursor-not-allowed opacity-40' : 'cursor-pointer',
                 )}
               >
                 <Thumb src={pr.image} className="mb-2 aspect-square w-full" />
-                <div className="line-clamp-2 text-[12px] font-semibold leading-tight">{pr.name}</div>
+                <div className="line-clamp-2 text-[12px] font-semibold leading-tight">
+                  {pr.name}
+                </div>
                 <div className="mt-1 font-mono text-[10.5px] text-muted-foreground">
                   {formatPrice(pr.currency, pr.priceMinor)}
                 </div>
                 <div className="mt-1 flex items-center gap-1">
-                  {onNode ? <span className="font-mono text-[9.5px] text-muted-foreground">on node</span> : null}
-                  {isPicked ? <span className="font-mono text-[9.5px] text-brand">✓ picked</span> : null}
+                  {!pr.inStock ? (
+                    <span className="font-mono text-[9.5px] text-red-600">out of stock</span>
+                  ) : null}
+                  {onNode ? (
+                    <span className="font-mono text-[9.5px] text-muted-foreground">on node</span>
+                  ) : null}
+                  {isPicked ? (
+                    <span className="font-mono text-[9.5px] text-brand">✓ picked</span>
+                  ) : null}
                 </div>
               </button>
             );
@@ -202,7 +230,7 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
   const items = readProductItems(p.data.productItems);
   const first = p.env.loading ? 'Loading stores…' : stores.length ? '— pick store —' : copy.noStore;
   const storeOpts = withSavedOption(
-    [{ v: '', l: first }, ...stores.map((s) => ({ v: s.id, l: s.name }))],
+    [{ v: '', l: first }, ...stores.map((s) => ({ v: s.id, l: storeLabel(s.name, s.currency) }))],
     storeId,
     (id) => `Store ${id.slice(0, 8)} (not in workspace)`,
   );
@@ -211,15 +239,24 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
       <Intro
         sub={
           <>
-            Ports: <span className="font-mono text-brand">purchased</span> fires when the order webhook lands;{' '}
-            <span className="font-mono text-[#E87A5D]">abandoned</span> fires after the wait window with no purchase.
+            Ports: <span className="font-mono text-brand">purchased</span> fires when the order
+            webhook lands; <span className="font-mono text-[#E87A5D]">abandoned</span> fires after
+            the wait window with no purchase.
           </>
         }
       >
-        Pick a store, then pick the products this node will send. On a WABA conversation we send a native catalog message;
-        on Baileys we send each product as a card + a checkout link.
+        Pick a store, then pick the products this node will send. On a WABA conversation we send a
+        native catalog message; on Baileys we send each product as a card + a checkout link.
       </Intro>
-      <Field label="Store" hint={copy.storeHint}>
+      <Field
+        label="Store"
+        hint={
+          <>
+            {copy.hintBefore}
+            <ExtLink href={copy.href}>{copy.href}</ExtLink>.
+          </>
+        }
+      >
         <SelectInput value={storeId} onChange={(v) => p.set('storeId', v)} options={storeOpts} />
       </Field>
       <Field label="Products" hint={`Max ${MAX_PRODUCT_ITEMS} products per node. Tap × to remove.`}>
@@ -231,7 +268,9 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
             >
               <Thumb src={it.image} className="h-10 w-10 shrink-0" />
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[12px] font-semibold">{it.name || it.retailer_id}</div>
+                <div className="truncate text-[12px] font-semibold">
+                  {it.name || it.retailer_id}
+                </div>
                 <div className="truncate font-mono text-[10.5px] text-muted-foreground">
                   {formatPrice(it.currency, it.price_minor)} · {it.retailer_id}
                 </div>
@@ -247,7 +286,9 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
             </div>
           ))}
           {items.length === 0 ? (
-            <div className="text-[11.5px] italic text-muted-foreground">No products yet. Click below to add some.</div>
+            <div className="text-[11.5px] italic text-muted-foreground">
+              No products yet. Click below to add some.
+            </div>
           ) : null}
           <button
             type="button"
@@ -260,7 +301,11 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
         </div>
       </Field>
       <Field label="Header (optional)">
-        <TextInput value={p.data.headerText} onChange={(v) => p.set('headerText', v)} placeholder="Our spring picks" />
+        <TextInput
+          value={p.data.headerText}
+          onChange={(v) => p.set('headerText', v)}
+          placeholder="Our spring picks"
+        />
       </Field>
       <Field label="Body">
         <TextArea
@@ -271,13 +316,18 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
         />
       </Field>
       <Field label="Footer (optional)">
-        <TextInput value={p.data.footerText} onChange={(v) => p.set('footerText', v)} placeholder="Free shipping over $50" />
+        <TextInput
+          value={p.data.footerText}
+          onChange={(v) => p.set('footerText', v)}
+          placeholder="Free shipping over $50"
+        />
       </Field>
       <Field
         label="Abandoned-cart wait"
         hint={
           <>
-            If no purchase within this window, the <b>abandoned</b> port fires so you can route to a drip / follow-up.
+            If no purchase within this window, the <b>abandoned</b> port fires so you can route to a
+            drip / follow-up.
           </>
         }
       >

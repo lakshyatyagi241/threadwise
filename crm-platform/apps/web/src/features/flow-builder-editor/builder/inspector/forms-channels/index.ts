@@ -10,6 +10,7 @@ import {
   CfTransferForm,
 } from './call';
 import { ShopifyForm, WhatsappShopForm, WoocommerceForm } from './commerce';
+import { ChatbotForm, SubflowForm } from './engage';
 import { AiCallForm, BookAppointmentForm, DealForm, GoogleMeetForm, WaFormForm } from './crm';
 import {
   FbGalleryForm,
@@ -37,6 +38,9 @@ import { TgPaymentForm } from './telegram';
  * `ig_ask` are the legacy Instagram types the palette hides; they stay here so old flows remain editable.
  */
 export const CHANNEL_FORMS: Record<string, FormComponent> = {
+  // These two replace the same-named entries of CORE_FORMS (the registry spreads CHANNEL_FORMS last): see engage.tsx.
+  subflow: SubflowForm,
+  chatbot: ChatbotForm,
   whatsapp_shop: WhatsappShopForm,
   woocommerce: WoocommerceForm,
   shopify: ShopifyForm,
