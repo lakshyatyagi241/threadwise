@@ -1,12 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import { RequestContextStore } from '../../common/context/request-context';
 import type {
   NormalisedDeliveryEvent,
   NormalisedInboundMessage,
 } from '../../infra/providers/whatsapp/whatsapp.port';
 import { normaliseMetaWebhook } from '../../infra/providers/whatsapp';
-import type { InboundContext, WabaInboundSink } from '../whatsapp-cloud-api-waba';
+import type { BusinessAppEcho, InboundContext, WabaInboundSink } from '../whatsapp-cloud-api-waba';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
 import type { ChannelRow } from './channels.repository';
+import { CONVERSATIONS_FACADE, type ConversationsFacade } from './conversations.facade';
 import { WabaChannelLinkService } from './waba-channel-link.service';
 
 type Dict = Record<string, unknown>;
@@ -35,7 +38,34 @@ export class WabaInboxSink implements WabaInboundSink {
   constructor(
     private readonly links: WabaChannelLinkService,
     private readonly publisher: ChannelIngestPublisher,
+    @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
+
+  /**
+   * A message typed on the WhatsApp Business app (the `smb_message_echoes` field, WD-WABA-044): an outbound bubble on the customer's
+   * thread. No unread, no routing, no automation; the ledger makes a redelivery the same bubble.
+   */
+  async onEcho(ctx: InboundContext, echo: BusinessAppEcho): Promise<void> {
+    const channel = await this.links.ensure(ctx.orgId, ctx.configId, { create: true });
+    if (!channel) return;
+    await RequestContextStore.run(
+      {
+        requestId: `waba-echo-${randomUUID()}`,
+        orgId: ctx.orgId,
+        actorType: 'system',
+        actorId: null,
+        userId: null,
+      },
+      () =>
+        this.conversations.recordOutbound({
+          channelId: channel.uuid,
+          peerKey: echo.to,
+          source: 'business_app',
+          body: echo.text,
+          providerMessageId: echo.providerMessageId,
+        }),
+    );
+  }
 
   async onMessage(ctx: InboundContext, message: NormalisedInboundMessage): Promise<void> {
     const channel = await this.links.ensure(ctx.orgId, ctx.configId, { create: true });

@@ -8,6 +8,14 @@ import { Alert, Badge, Button, Card, Field, PasswordInput, Spinner, StatTile } f
 import { useHealth, useRenewToken, useResubscribe, useSetToken } from '../api/hooks';
 import { metaManagerUrl, qualityTone, tierLabel } from '../lib/display';
 import { BusinessProfileCard } from './business-profile-card';
+import {
+  FreeConversationsTile,
+  InboundCheckCard,
+  QrCodesCard,
+  SyncHistoryCard,
+  UsernameCard,
+  VerifiedBadgeCard,
+} from './extras-cards';
 import { InboundBadge } from './inbound-badge';
 import { useErrorText } from './use-error-text';
 
@@ -109,7 +117,7 @@ export function HealthScreen({ id }: { id: string }) {
 
       {msg && <Alert tone={msg.tone}>{msg.text}</Alert>}
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
         <StatTile
           label={t('overall')}
           value={<span data-testid="waba-overall">{t(o.title)}</span>}
@@ -122,6 +130,7 @@ export function HealthScreen({ id }: { id: string }) {
           hint={t('qualityHint')}
         />
         <StatTile label={t('limit')} value={tier ?? '—'} hint={t('limitHint')} />
+        {d.conversations && <FreeConversationsTile conversations={d.conversations} />}
       </div>
 
       <section aria-labelledby="waba-issues">
@@ -298,6 +307,11 @@ export function HealthScreen({ id }: { id: string }) {
         </Card>
 
         <BusinessProfileCard id={id} />
+        <VerifiedBadgeCard health={h} />
+        <InboundCheckCard id={id} inboundWired={c.inboundWired} />
+        <UsernameCard id={id} />
+        <QrCodesCard id={id} />
+        {c.coexistence && <SyncHistoryCard id={id} />}
 
         <Card className="p-4 md:col-span-2">
           <h3 className="mb-2 font-semibold">{t('deliveryCard')}</h3>

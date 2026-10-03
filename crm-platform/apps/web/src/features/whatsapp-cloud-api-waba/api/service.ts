@@ -5,6 +5,12 @@ import {
   wabaConnectionSchema,
   wabaBusinessProfileSchema,
   wabaHealthSchema,
+  wabaInboundCheckSchema,
+  wabaWebhookConfigSchema,
+  wabaQrCodeListSchema,
+  wabaQrCodeSchema,
+  wabaSyncHistoryResultSchema,
+  wabaUsernameSchema,
   wabaReadinessSchema,
   type ConnectEmbeddedInput,
   type ConnectManualInput,
@@ -64,6 +70,35 @@ export const wabaApi = {
       schema: wabaBusinessProfileSchema,
     }),
   remove: (id: string) => apiFetch(`${base}/numbers/${id}`, { method: 'DELETE' }),
+  inboundCheck: (id: string) =>
+    apiFetch(`${base}/numbers/${id}/inbound-check`, { schema: wabaInboundCheckSchema }),
+  webhookConfig: (signal?: AbortSignal) =>
+    apiFetch(`${base}/webhook-config`, { schema: wabaWebhookConfigSchema, signal }),
+  username: (id: string, signal?: AbortSignal) =>
+    apiFetch(`${base}/numbers/${id}/username`, { schema: wabaUsernameSchema, signal }),
+  claimUsername: (id: string, username: string) =>
+    apiFetch(`${base}/numbers/${id}/username`, {
+      method: 'POST',
+      body: { username },
+      schema: wabaUsernameSchema,
+    }),
+  releaseUsername: (id: string) =>
+    apiFetch(`${base}/numbers/${id}/username`, { method: 'DELETE', schema: wabaUsernameSchema }),
+  qrCodes: (id: string, signal?: AbortSignal) =>
+    apiFetch(`${base}/numbers/${id}/qr-codes`, { schema: wabaQrCodeListSchema, signal }),
+  createQrCode: (id: string, prefilledMessage: string) =>
+    apiFetch(`${base}/numbers/${id}/qr-codes`, {
+      method: 'POST',
+      body: { prefilledMessage },
+      schema: wabaQrCodeSchema,
+    }),
+  deleteQrCode: (id: string, code: string) =>
+    apiFetch(`${base}/numbers/${id}/qr-codes/${encodeURIComponent(code)}`, { method: 'DELETE' }),
+  syncHistory: (id: string) =>
+    apiFetch(`${base}/numbers/${id}/sync-history`, {
+      method: 'POST',
+      schema: wabaSyncHistoryResultSchema,
+    }),
   setToken: (id: string, accessToken: string) =>
     apiFetch(`${base}/numbers/${id}/token`, {
       method: 'PUT',

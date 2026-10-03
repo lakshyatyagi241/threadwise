@@ -59,8 +59,8 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | Feature | Status | PR | Notes |
 |---|---|---|---|
 | WD-WABA-001 | todo |  |  |
-| WD-WABA-002 | todo |  |  |
-| WD-WABA-003 | todo |  |  |
+| WD-WABA-002 | frontend-done |  | platform admin check of the four coexistence webhook fields on the Meta app (GET /platform/waba/webhook-status) shown on the WhatsApp settings page; unit tested, not run against real Meta |
+| WD-WABA-003 | frontend-done |  | one-click subscribe keeps every existing field and the callback Meta has on file (POST /platform/waba/webhook-subscribe); unit tested, not run against real Meta |
 | WD-WABA-004 | todo |  |  |
 | WD-WABA-005 | todo |  |  |
 | WD-WABA-006 | todo |  |  |
@@ -72,7 +72,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WABA-012 | todo |  |  |
 | WD-WABA-013 | todo |  |  |
 | WD-WABA-014 | todo |  |  |
-| WD-WABA-015 | todo |  |  |
+| WD-WABA-015 | frontend-done |  | live inbound check per number with a typed verdict plus the callback URL and verify token for a customer's own Meta app; e2e with Meta faked at the HTTP edge |
 | WD-WABA-016 | todo |  |  |
 | WD-WABA-017 | todo |  |  |
 | WD-WABA-018 | todo |  |  |
@@ -80,12 +80,12 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WABA-020 | todo |  |  |
 | WD-WABA-021 | todo |  |  |
 | WD-WABA-022 | todo |  |  |
-| WD-WABA-023 | todo |  |  |
-| WD-WABA-024 | todo |  |  |
-| WD-WABA-025 | todo |  |  |
-| WD-WABA-026 | todo |  |  |
-| WD-WABA-027 | todo |  |  |
-| WD-WABA-028 | todo |  |  |
+| WD-WABA-023 | frontend-done |  | health tile from Meta conversation analytics (optional card, omitted when analytics do not answer); allowance constant 1000 kept as WaDesk, may be obsolete after Meta's July 2025 per-message pricing; not run against real Meta |
+| WD-WABA-024 | in-progress |  | verified-badge checklist card built from the health snapshot; the calling toggle belongs to CALL (not built) so it is not drawn |
+| WD-WABA-025 | frontend-done |  | claim and release a business username with Meta's handle rules checked first, suggestions from the server, error 100 explained, release always clears the local record; not run against real Meta |
+| WD-WABA-026 | backend-done |  | business_username_update webhook keeps the stored handle and status current, deleted clears it; e2e through the real webhook door |
+| WD-WABA-027 | frontend-done |  | QR codes: create (PNG, 140 chars), list and delete on the health page; WaDesk had the routes but no screen; not run against real Meta |
+| WD-WABA-028 | frontend-done |  | history re-sync button for coexistence numbers re-subscribes the WABA and reports the historical messages already imported; the import itself (046) is not built |
 | WD-WABA-029 | todo |  |  |
 | WD-WABA-030 | todo |  |  |
 | WD-WABA-031 | todo |  |  |
@@ -94,22 +94,22 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WABA-034 | todo |  |  |
 | WD-WABA-035 | todo |  |  |
 | WD-WABA-036 | todo |  |  |
-| WD-WABA-037 | todo |  |  |
-| WD-WABA-038 | todo |  |  |
+| WD-WABA-037 | backend-done |  | delivery reports the broadcasts did not claim advance the inbox message (sent, delivered, read, failed with Meta code), forward only; wallet settlement once belongs with WALLET |
+| WD-WABA-038 | backend-done |  | built in the campaign and broadcast engines: Meta's 131049 engagement block is retried on a spaced, capped schedule (campaign-rules.ts, retry-policy.ts); nothing left in WABA |
 | WD-WABA-039 | todo |  |  |
 | WD-WABA-040 | todo |  |  |
 | WD-WABA-041 | todo |  |  |
 | WD-WABA-042 | todo |  |  |
 | WD-WABA-043 | todo |  |  |
-| WD-WABA-044 | todo |  |  |
+| WD-WABA-044 | backend-done |  | messages typed on the Business app (smb_message_echoes) become one outbound bubble with no unread, no routing, deduped by message id; a file or place is described, not copied (WaDesk downloaded echo media); e2e through the real webhook door |
 | WD-WABA-045 | todo |  |  |
 | WD-WABA-046 | todo |  |  |
 | WD-WABA-047 | todo |  |  |
-| WD-WABA-048 | todo |  |  |
-| WD-WABA-049 | todo |  |  |
-| WD-WABA-050 | todo |  |  |
-| WD-WABA-051 | todo |  |  |
-| WD-WABA-052 | todo |  |  |
+| WD-WABA-048 | wontfix |  | the bridge's inbound mirror is the in-process inbox path built in NODE (WD-NODE-017): no HTTP endpoint to port |
+| WD-WABA-049 | backend-done |  | Cloud API outbound send adapter for the inbox (text, media by upload, template, location, reaction; Meta or Interakt route; Meta error codes become retry or fail); not run against real Meta |
+| WD-WABA-050 | wontfix |  | there is no Node bridge to hand credentials to: the unofficial engine runs in the worker and the Cloud API reads credentials from the number's own row |
+| WD-WABA-051 | in-progress |  | send errors are classified for the inbox (retry vs fail with Meta's code); the full user-facing message table is still to port |
+| WD-WABA-052 | wontfix |  | repair job for a connection without a WABA id; the connect flow here requires and proves the WABA id, so nothing creates such a row |
 | WD-WABA-053 | todo |  |  |
 | WD-WABA-054 | todo |  |  |
 | WD-WABA-055 | todo |  |  |
