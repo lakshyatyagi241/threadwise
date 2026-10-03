@@ -20,6 +20,7 @@ function Panels({ data }: { data: AnalyticsPanels }) {
   const locale = useLocale();
   const now = new Date();
   const deviceMax = Math.max(...data.devices.rows.map((d) => d.sent), 1);
+  const geoMax = Math.max(...data.geo.map((g) => g.count), 1);
   return (
     <>
       <div className="grid gap-4 lg:grid-cols-3">
@@ -100,6 +101,59 @@ function Panels({ data }: { data: AnalyticsPanels }) {
                   </span>
                   <span className="tabular-nums text-muted-foreground">
                     {t('contacts.msgs', { n: c.messages })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Panel>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Panel
+          title={t('geo.title')}
+          subtitle={t('geo.subtitle')}
+          action={<Badge>{t('geo.markets', { n: data.geo.length })}</Badge>}
+        >
+          {data.geo.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">{t('geo.empty')}</p>
+          ) : (
+            <ul aria-label={t('geo.title')} className="space-y-2 text-sm">
+              {data.geo.map((g) => (
+                <li key={g.code ?? 'none'} className="space-y-1">
+                  <div className="flex justify-between gap-2">
+                    <span className="font-mono">{g.code ?? t('geo.unspecified')}</span>
+                    <span className="tabular-nums text-muted-foreground">{compact(g.count)}</span>
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${(g.count / geoMax) * 100}%` }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Panel>
+
+        <Panel title={t('events.title')} subtitle={t('events.subtitle')}>
+          {data.events.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">{t('events.empty')}</p>
+          ) : (
+            <ul aria-label={t('events.title')} className="space-y-2 text-sm">
+              {data.events.map((e) => (
+                <li key={e.uuid} className="flex items-start gap-3">
+                  <span aria-hidden className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-medium">
+                      {e.direction === 'out'
+                        ? t('events.sent', { peer: e.peer })
+                        : t('events.received', { peer: e.peer })}
+                    </span>
+                    <span className="block text-xs text-muted-foreground">
+                      {relativeSpan(e.at, now, locale)} · {e.kind} · {e.status}
+                    </span>
                   </span>
                 </li>
               ))}

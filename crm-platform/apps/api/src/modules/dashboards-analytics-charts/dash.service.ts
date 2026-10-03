@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   type DashWidgets,
   type AnalyticsPanels,
@@ -10,6 +11,7 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { deltaPp, funnelOf, percentChange, totalsOf } from './dash-metrics';
 import {
@@ -42,6 +44,7 @@ export class DashService {
     private readonly panelsRepo: DashPanelsRepository,
     private readonly extrasRepo: DashExtrasRepository,
     private readonly plans: PlanEntitlementService,
+    private readonly config: ConfigService<Env, true>,
   ) {}
 
   /** WaDesk's hard-coded slot count when the plan sets no device limit. */
@@ -166,6 +169,8 @@ export class DashService {
         templates: await this.panelsRepo.templates(tx, orgId, w.from, w.to),
         contacts: await this.panelsRepo.contacts(tx, orgId, w.from, w.to),
         team: await this.panelsRepo.team(tx, orgId, w.from, w.to),
+        geo: await this.panelsRepo.geo(tx, orgId, w.from, w.to),
+        events: await this.panelsRepo.events(tx, orgId, w.from, w.to),
       };
     });
   }
@@ -229,12 +234,27 @@ export class DashService {
     });
   }
 
-  /** The analytics window as CSV: the KPI grid, then the daily series (WD-DASH-032; WaDesk exported five counts). */
-  async analyticsCsv(q: AnalyticsQuery, now: Date = new Date()): Promise<string> {
+  /**
+   * The analytics window as CSV: WaDesk's five rows (outbound messages, campaigns, broadcasts, contacts added, the range) and, because
+   * WaDesk's export left them out while its docs promised them (WD-DASH-032 rule 4), the KPI grid and the daily series. The file is
+   * named like WaDesk's: the app name, "analytics" and the two dates, as a slug.
+   */
+  async analyticsCsv(
+    q: AnalyticsQuery,
+    now: Date = new Date(),
+  ): Promise<{ filename: string; body: string }> {
+    const { orgId } = RequestContextStore.require();
     const a = await this.analytics(q, now);
+    const made = await this.db.tx((tx) =>
+      this.panelsRepo.created(tx, orgId, new Date(a.window.from), new Date(a.window.to)),
+    );
     const rows: string[][] = [
       ['Metric', 'Value'],
       ['Range', `${a.window.fromDate} to ${a.window.toDate}`],
+      ['Outbound messages', String(a.current.sent)],
+      ['Campaigns', String(made.campaigns)],
+      ['Broadcasts', String(made.broadcasts)],
+      ['Contacts added', String(made.contacts)],
       ['Sent', String(a.current.sent)],
       ['Delivered', String(a.current.delivered)],
       ['Read', String(a.current.read)],
@@ -254,7 +274,15 @@ export class DashService {
         String(a.daily.queued[i]),
       ]),
     ];
-    return rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
+    const slug =
+      `${this.config.get('APP_NAME', { infer: true })} analytics ${a.window.fromDate} ${a.window.toDate}`
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    return {
+      filename: `${slug}.csv`,
+      body: rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n',
+    };
   }
 }
 

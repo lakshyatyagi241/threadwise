@@ -49,5 +49,18 @@ export const analyticsPanelsSchema = z.object({
       csatCount: z.number().int(),
     }),
   ),
+  /** Conversations of the window by the country of the contact's number, top 7; a null code is "Unspecified" (WD-DASH-029). */
+  geo: z.array(z.object({ code: z.string().length(2).nullable(), count: z.number().int() })),
+  /** The six newest messages of the window, both directions (WD-DASH-029). */
+  events: z.array(
+    z.object({
+      uuid: z.string().uuid(),
+      direction: z.enum(['in', 'out']),
+      peer: z.string(),
+      kind: z.string(),
+      status: z.string(),
+      at: z.string(),
+    }),
+  ),
 });
 export type AnalyticsPanels = z.infer<typeof analyticsPanelsSchema>;

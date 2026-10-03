@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Header, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Header, Put, Query, Res, StreamableFile } from '@nestjs/common';
+import type { Response } from 'express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   analyticsQuerySchema,
@@ -77,10 +78,14 @@ export class AnalyticsController {
   @Get('export')
   @RequirePermission('dash.analytics.read')
   @Header('Content-Type', 'text/csv; charset=utf-8')
-  @Header('Content-Disposition', 'attachment; filename="analytics.csv"')
-  @ApiOperation({ summary: 'The same window as CSV' })
-  export(@Query(zodPipe(analyticsQuerySchema)) q: AnalyticsQuery) {
-    return this.dash.analyticsCsv(q);
+  @ApiOperation({ summary: 'The same window as CSV, named after the app and the dates' })
+  async export(
+    @Query(zodPipe(analyticsQuerySchema)) q: AnalyticsQuery,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const file = await this.dash.analyticsCsv(q);
+    res.setHeader('Content-Disposition', `attachment; filename="${file.filename}"`);
+    return new StreamableFile(Buffer.from(file.body, 'utf8'));
   }
 }
 

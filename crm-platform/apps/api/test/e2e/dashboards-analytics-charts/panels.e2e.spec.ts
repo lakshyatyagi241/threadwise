@@ -145,4 +145,83 @@ describe('GET /v2/analytics/panels', () => {
     ]);
     expect((await get(empty.admin)).body.team).toEqual([]);
   });
+
+  it('WD-DASH-029: geography groups conversations of the window by the country of the number; the stream lists both directions', async () => {
+    const g = await api.signup('dpan3');
+    await q(`UPDATE org_plan_state SET overrides = $2::jsonb WHERE org_id = $1`, [
+      g.orgId,
+      JSON.stringify({ features: { analytics: true } }),
+    ]);
+    const ch = await q(
+      `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'simulator', 'sim') RETURNING id`,
+      [g.orgId],
+    );
+    let seq = 0;
+    const chat = async (peer: string, ago: string, direction: 'in' | 'out') => {
+      const c = await q(
+        `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, $3, $3) RETURNING id`,
+        [g.orgId, ch.rows[0].id, peer],
+      );
+      await q(
+        `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, kind, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, 'text', now() - $7::interval)`,
+        [
+          g.orgId,
+          c.rows[0].id,
+          ++seq,
+          direction,
+          direction === 'in' ? 'customer' : 'agent',
+          direction === 'in' ? 'received' : 'sent',
+          ago,
+        ],
+      );
+    };
+    for (const [peer, ago, dir] of [
+      ['919876543210', '1 minute', 'in'],
+      ['+919876543211', '3 hours', 'in'],
+      ['919876543212', '4 hours', 'in'],
+      ['14155550100', '2 minutes', 'out'],
+      ['14155550101', '5 hours', 'in'],
+      ['447700900123', '6 hours', 'in'],
+      ['9999999999', '7 hours', 'in'], // no known prefix
+      ['ig_handle', '8 hours', 'in'], // not a phone number
+    ] as const)
+      await chat(peer, ago, dir);
+    // a conversation with no message in the window is not counted
+    await q(
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, '4915112345678', 'quiet')`,
+      [g.orgId, ch.rows[0].id],
+    );
+
+    const res = await get(g.admin);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const body = analyticsPanelsSchema.parse(res.body);
+    expect(body.geo).toEqual([
+      { code: 'IN', count: 3 },
+      { code: null, count: 2 },
+      { code: 'US', count: 2 },
+      { code: 'GB', count: 1 },
+    ]);
+    expect(body.events).toHaveLength(6);
+    expect(body.events[0]).toMatchObject({
+      direction: 'in',
+      peer: '919876543210',
+      status: 'received',
+    });
+    expect(body.events[1]).toMatchObject({ direction: 'out', peer: '14155550100', status: 'sent' });
+    expect(body.events.map((e) => e.at)).toEqual(
+      [...body.events.map((e) => e.at)].sort().reverse(),
+    );
+  });
+
+  it('WD-DASH-029: no activity reads empty geography and an empty stream', async () => {
+    const empty = await api.signup('dpan4');
+    await q(`UPDATE org_plan_state SET overrides = $2::jsonb WHERE org_id = $1`, [
+      empty.orgId,
+      JSON.stringify({ features: { analytics: true } }),
+    ]);
+    const b = (await get(empty.admin)).body;
+    expect(b.geo).toEqual([]);
+    expect(b.events).toEqual([]);
+  });
 });
