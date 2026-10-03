@@ -1,7 +1,9 @@
-import { Controller, Get, Header, Query } from '@nestjs/common';
+import { Body, Controller, Get, Header, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   analyticsQuerySchema,
+  quickAccessUpdateSchema,
+  type QuickAccessUpdate,
   dashSummaryQuerySchema,
   type AnalyticsQuery,
   type DashSummaryQuery,
@@ -10,6 +12,7 @@ import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { DashService } from './dash.service';
+import { QuickAccessService } from './quick-access.service';
 
 /** Workspace dashboard (TW-DASH-001..005, 012, 018). Read-only; gated on `dash.dashboard.read` (Reference: role manager or above). */
 @ApiTags('dashboard')
@@ -23,6 +26,16 @@ export class DashboardController {
   @ApiOperation({ summary: 'KPI cards, sparkline and funnel for a range (24h, 7d, 30d, qtd)' })
   summary(@Query(zodPipe(dashSummaryQuerySchema)) q: DashSummaryQuery) {
     return this.dash.summary(q.range);
+  }
+
+  @Get('widgets')
+  @RequirePermission('dash.dashboard.read')
+  @ApiOperation({
+    summary:
+      'Contacts, campaigns, devices, templates, inbox, pipeline and activity cards for a range',
+  })
+  widgets(@Query(zodPipe(dashSummaryQuerySchema)) q: DashSummaryQuery) {
+    return this.dash.widgets(q.range);
   }
 
   @Get('throughput')
@@ -52,6 +65,15 @@ export class AnalyticsController {
     return this.dash.analytics(q);
   }
 
+  @Get('panels')
+  @RequirePermission('dash.analytics.read')
+  @ApiOperation({
+    summary: 'Per-device sends, top templates, top conversations and team performance',
+  })
+  panels(@Query(zodPipe(analyticsQuerySchema)) q: AnalyticsQuery) {
+    return this.dash.panels(q);
+  }
+
   @Get('export')
   @RequirePermission('dash.analytics.read')
   @Header('Content-Type', 'text/csv; charset=utf-8')
@@ -59,5 +81,27 @@ export class AnalyticsController {
   @ApiOperation({ summary: 'The same window as CSV' })
   export(@Query(zodPipe(analyticsQuerySchema)) q: AnalyticsQuery) {
     return this.dash.analyticsCsv(q);
+  }
+}
+
+/** Quick-access tiles (TW-DASH-009): any signed-in user, own row only (Reference: auth middleware, no role or plan gate). */
+@ApiTags('quick-access')
+@ActorKinds('user')
+@Controller({ path: 'quick-access', version: '2' })
+export class QuickAccessController {
+  constructor(private readonly quick: QuickAccessService) {}
+
+  @Get()
+  @ApiOperation({
+    summary: 'The shortcut tiles of the caller (the ten defaults until they customise)',
+  })
+  get() {
+    return this.quick.get();
+  }
+
+  @Put()
+  @ApiOperation({ summary: 'Save the shortcut tiles of the caller (max 10, sanitised)' })
+  save(@Body(zodPipe(quickAccessUpdateSchema)) body: QuickAccessUpdate) {
+    return this.quick.save(body.items);
   }
 }
