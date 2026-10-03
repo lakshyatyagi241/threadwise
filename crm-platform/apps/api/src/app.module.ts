@@ -28,9 +28,13 @@ import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
+import { ChannelFacebookModule } from './modules/channel-facebook';
+import { ChannelInstagramModule } from './modules/channel-instagram';
+import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
+import { CatalogProductsModule } from './modules/catalog-products';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -50,6 +54,7 @@ import { AddonsExtensionRegistryModule } from './modules/addons-extension-regist
 import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
+import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
@@ -142,6 +147,7 @@ import { HealthModule } from './health/health.module';
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
+    CouponsCreditsReferralCurrencyModule,
     BspBillingEngineModule,
     WalletMessageBillingModule,
     SendGuardModule,
@@ -166,6 +172,10 @@ import { HealthModule } from './health/health.module';
     BroadcastsModule,
     CampaignsModule,
     ChannelTelegramModule,
+    ChannelFacebookModule,
+    ChannelInstagramModule,
+    ShopifyWoocommerceModule,
+    CatalogProductsModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,

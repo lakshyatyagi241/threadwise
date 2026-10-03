@@ -174,6 +174,54 @@ export class ChannelRegistryService {
     });
   }
 
+  /**
+   * Keeps the inbox channel of an unofficial-engine device in step with the device (WD-NODE-017): one `whatsapp_qr` channel per
+   * device, its handle the device uuid, `connected` while the device is. Called by the NODE runtime, which owns the device; the
+   * caller supplies the system context (audit and outbox read it). Creates the channel the first time, then only touches what
+   * changed. No credentials: the session lives in the runtime, not here.
+   */
+  async syncDeviceChannel(
+    orgId: number,
+    device: { uuid: string; name: string; displayAddress: string | null; connected: boolean },
+  ): Promise<{ id: number; uuid: string; created: boolean }> {
+    const status = device.connected ? 'connected' : 'disconnected';
+    return this.db.txAs({ orgId, userId: null }, async (tx) => {
+      const found = await this.repo.byExternal(tx, orgId, 'whatsapp_qr', device.uuid);
+      if (found) {
+        if (
+          found.status !== status ||
+          found.name !== device.name ||
+          found.displayAddress !== device.displayAddress
+        ) {
+          await this.repo.update(tx, orgId, found.id, found.rowVersion, {
+            status,
+            name: device.name,
+            displayAddress: device.displayAddress,
+          });
+        }
+        return { id: found.id, uuid: found.uuid, created: false };
+      }
+      const row = await this.repo.insert(tx, orgId, {
+        kind: 'whatsapp_qr',
+        name: device.name,
+        status,
+        externalId: device.uuid,
+        displayAddress: device.displayAddress,
+        credentialsEnc: null,
+        credentialHints: {},
+        webhookTokenHash: null,
+        // The unofficial engine has no per-message bill from Meta: it does not draw on the wallet.
+        settings: normalizeSettings('whatsapp_qr', { metered: false }),
+        createdBy: null,
+      });
+      // Another worker created it between the read and the insert: take theirs.
+      const won = row ?? (await this.repo.byExternal(tx, orgId, 'whatsapp_qr', device.uuid));
+      if (!won) throw new Error('device channel could not be created');
+      if (row) await this.recordCreated(tx, row);
+      return { id: won.id, uuid: won.uuid, created: row !== null };
+    });
+  }
+
   async update(uuid: string, input: UpdateChannelInput): Promise<ChannelResponse> {
     const { orgId } = this.actor();
 

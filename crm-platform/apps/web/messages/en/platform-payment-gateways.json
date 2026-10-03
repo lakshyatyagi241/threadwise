@@ -3,7 +3,10 @@
     "nav": {
       "gateways": "Payment gateways",
       "group": "Billing",
-      "orders": "Order history"
+      "orders": "Order history",
+      "billingHistory": "Billing history",
+      "invoices": "Invoices",
+      "billingSettings": "Billing settings"
     },
     "admin": {
       "title": "Payment gateways",
@@ -116,8 +119,19 @@
         "forbidden": "You do not have permission to buy.",
         "notFound": "We could not find that plan.",
         "widgetBlocked": "The payment window could not open. Check that your browser allows it and try again.",
-        "generic": "Something went wrong. Try again."
-      }
+        "generic": "Something went wrong. Try again.",
+        "couponRejected": "That coupon cannot be used."
+      },
+      "coupon": "Coupon code",
+      "couponApply": "Apply",
+      "couponApplied": "Coupon {code} applied: {amount} off.",
+      "couponRemove": "Remove",
+      "couponDiscount": "Discount ({code})",
+      "refundGuarantee": "{days}-day money-back guarantee",
+      "countryPlaceholder": "Choose a country",
+      "autoRenew": "Renew automatically each period. You can cancel any time.",
+      "cardTitle": "Pay by card",
+      "payNow": "Pay now"
     },
     "orders": {
       "title": "Order history",
@@ -133,14 +147,16 @@
         "failed": "Payment did not complete. Try again or pick another gateway.",
         "cancelled": "You cancelled the payment.",
         "pending": "We are waiting for the payment provider to confirm your payment. This page updates once it does.",
-        "notfound": "We could not find that order."
+        "notfound": "We could not find that order.",
+        "proof": "Payment proof submitted. We will verify and activate your plan shortly."
       },
       "col": {
         "order": "Order",
         "item": "Item",
         "date": "Date",
         "amount": "Amount",
-        "status": "Status"
+        "status": "Status",
+        "actions": "Actions"
       },
       "status": {
         "pending": "Pending",
@@ -149,7 +165,519 @@
         "failed": "Failed",
         "cancelled": "Cancelled",
         "refunded": "Refunded"
+      },
+      "uploadProof": "Payment proof",
+      "invoice": "Invoice"
+    },
+    "billing": {
+      "common": {
+        "admin": "Admin",
+        "breadcrumb": "Breadcrumb",
+        "billingHistory": "Billing history",
+        "analytics": "Analytics",
+        "exportCsv": "Export CSV",
+        "exportTruncated": "The export stopped at {rows} rows. Narrow the filters to export the rest.",
+        "exportFailed": "The export could not be created. Try again.",
+        "actionFailed": "That did not work. Reload the page and try again.",
+        "cancel": "Cancel",
+        "back": "Keep it",
+        "close": "Close",
+        "openWorkspace": "Open workspace",
+        "showing": "Showing {from}–{to} of {total} {noun}",
+        "pager": "Pages",
+        "previous": "Previous",
+        "next": "Next",
+        "chartEmpty": "No data in this window.",
+        "periods": {
+          "monthly": "monthly",
+          "yearly": "yearly"
+        },
+        "status": {
+          "pending": "pending",
+          "awaiting_approval": "awaiting approval",
+          "paid": "paid",
+          "failed": "failed",
+          "cancelled": "cancelled",
+          "refunded": "refunded"
+        },
+        "windows": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days",
+          "1y": "Last year",
+          "all": "All time"
+        }
+      },
+      "orders": {
+        "title": "Order history",
+        "eyebrow": "Admin · Billing & plans · Order history",
+        "titleFirst": "Order",
+        "titleSecond": "history",
+        "description": "Subscription orders, plan upgrades and downgrades, add-on purchases and one-time top-ups: every commercial decision a workspace has made.",
+        "window": "Time window",
+        "windows": {
+          "90d": "Last 90 days",
+          "this_year": "This year",
+          "all": "All time"
+        },
+        "kpi": {
+          "total": "Total orders",
+          "vsPrevious": "vs previous period",
+          "upgrades": "Upgrades",
+          "mrrAdded": "+{amount} MRR added",
+          "downgrades": "Downgrades",
+          "mrrLowered": "{amount} on lower plans",
+          "addons": "Add-on bundles",
+          "attached": "{amount} attached",
+          "cancellations": "Cancellations",
+          "mrrLost": "-{amount} MRR lost"
+        },
+        "typeFilter": "Filter by order type",
+        "types": {
+          "all": "All",
+          "new": "New subscription",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "cancel": "Cancel"
+        },
+        "rowTypes": {
+          "new": "New",
+          "renewal": "Renewal",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "wallet_topup": "Wallet top-up",
+          "manual": "Manual"
+        },
+        "search": "Search by order #, workspace, plan…",
+        "noun": "orders",
+        "col": {
+          "order": "Order #",
+          "date": "Date",
+          "workspace": "Workspace",
+          "type": "Type",
+          "item": "Plan / item",
+          "mrr": "MRR Δ",
+          "total": "Total",
+          "status": "Status"
+        },
+        "empty": "No orders in this window.",
+        "awaitingApproval": "awaiting approval",
+        "actions": {
+          "markPaid": "Mark paid",
+          "cancelOrder": "Cancel",
+          "approve": "Approve",
+          "reject": "Reject"
+        },
+        "confirm": {
+          "approveTitle": "Mark this order as paid?",
+          "approve": "Mark this order as paid and activate the plan?",
+          "cancelTitle": "Cancel this order?",
+          "cancel": "Cancel this pending order? It will be marked cancelled and drop out of outstanding."
+        },
+        "reject": {
+          "title": "Reject {order}",
+          "reason": "Reason (optional)"
+        },
+        "awaiting": {
+          "title": "Awaiting approval",
+          "ref": "Ref:",
+          "proofAttached": "Payment proof attached"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Order analytics",
+        "eyebrow": "Admin · Billing & plans · Order analytics",
+        "titleFirst": "Order",
+        "titleSecond": "analytics",
+        "description": "Subscriptions, upgrades, downgrades, add-ons and cancellations: what is driving net revenue motion across the platform.",
+        "window": "Time window",
+        "viewLedger": "View ledger",
+        "kpi": {
+          "total": "Total orders",
+          "newMrr": "Net new MRR",
+          "paid": "{count} paid",
+          "lostMrr": "Lost MRR",
+          "cancels": "{count} cancels",
+          "aov": "Avg order value",
+          "paidOrders": "paid orders",
+          "attach": "Add-on attach",
+          "attachLabel": "{addons} add-ons / {total}",
+          "conversion": "Conversion rate",
+          "conversionHint": "paid orders over {signups} sign-ups"
+        },
+        "motion": {
+          "kicker": "Order motion",
+          "title": "Paid orders and cancellations",
+          "paid": "Paid",
+          "cancelled": "Cancelled or failed"
+        },
+        "typeMix": {
+          "kicker": "Order type mix",
+          "title": "By type"
+        },
+        "addons": {
+          "kicker": "Add-ons sold",
+          "title": "Top performers",
+          "empty": "No add-on orders in this window."
+        },
+        "funnel": {
+          "kicker": "Conversion funnel",
+          "title": "Sign-up to paid",
+          "note": "Only counted stages are shown."
+        },
+        "countries": {
+          "kicker": "By country",
+          "title": "Top markets",
+          "empty": "No billing country has been entered yet."
+        },
+        "cohorts": {
+          "kicker": "Cohort retention",
+          "title": "% of workspaces still active N months later",
+          "last": "last 6 cohorts",
+          "emptyTitle": "No workspace sign-ups yet",
+          "empty": "Cohorts appear once workspaces have signed up."
+        }
+      },
+      "history": {
+        "title": "Billing history",
+        "eyebrow": "Admin · Billing & plans · Billing history",
+        "titleFirst": "Billing",
+        "titleSecond": "history",
+        "description": "Every payment event the platform has processed — charges, refunds, and retries across every workspace.",
+        "window": "Time window",
+        "kpi": {
+          "gross": "Gross revenue",
+          "vsPrev": "vs prev period",
+          "charges": "Successful charges",
+          "successRate": "{pct}% success rate",
+          "failed": "Failed",
+          "dunning": "to retry / dunning",
+          "refunds": "Refunds issued",
+          "refundsTotal": "{amount} total",
+          "chargebacks": "Chargebacks",
+          "disputed": "{amount} disputed"
+        },
+        "trend": {
+          "kicker": "Trend",
+          "title": "Daily charges & refunds",
+          "charges": "Charges",
+          "refunds": "Refunds"
+        },
+        "statusFilter": "Filter by payment status",
+        "statuses": {
+          "all": "All",
+          "paid": "Successful",
+          "failed": "Failed",
+          "refunded": "Refunded",
+          "pending": "Pending"
+        },
+        "gateway": "Gateway",
+        "allGateways": "All gateways",
+        "search": "Search order #, workspace, customer…",
+        "noun": "events",
+        "col": {
+          "date": "Date",
+          "order": "Order #",
+          "workspace": "Workspace",
+          "gateway": "Gateway",
+          "plan": "Plan",
+          "amount": "Amount",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "empty": "No payment events match."
+      },
+      "billingAnalytics": {
+        "title": "Billing analytics",
+        "eyebrow": "Admin · Billing & plans · Billing analytics",
+        "titleFirst": "Billing",
+        "titleSecond": "analytics",
+        "description": "Cash flow, payment success, gateway split and refund trends across the platform.",
+        "window": "Time window",
+        "viewLedger": "View ledger",
+        "kpi": {
+          "gross": "Gross revenue",
+          "net": "Net revenue",
+          "netPct": "{pct}% net",
+          "success": "Auth success",
+          "failed": "Failed",
+          "events": "{count, plural, one {# event} other {# events}}",
+          "refunds": "Refunds",
+          "chargebacks": "Chargebacks",
+          "disputes": "{count, plural, one {# dispute} other {# disputes}}"
+        },
+        "cashFlow": {
+          "kicker": "Cash flow",
+          "title": "Charges, refunds & failures",
+          "charges": "Charges",
+          "refunds": "Refunds",
+          "failed": "Failed"
+        },
+        "gatewayShare": {
+          "title": "Gateway share",
+          "hint": "Paid revenue split by provider"
+        },
+        "topPayers": {
+          "title": "Top paying workspaces",
+          "hint": "Highest spend in window",
+          "all": "All workspaces",
+          "workspace": "Workspace",
+          "orders": "Orders",
+          "total": "Total",
+          "empty": "No paid orders yet in this window.",
+          "unknown": "Deleted workspace"
+        },
+        "statusMix": {
+          "title": "Order status mix",
+          "hint": "Count by lifecycle state"
+        }
+      },
+      "invoices": {
+        "title": "Invoices",
+        "eyebrow": "Admin · Billing & plans · Invoices",
+        "titleFirst": "All",
+        "titleSecond": "invoices",
+        "description": "Every order as a billing document. Filter by status, open and print an invoice, mark one paid, void it or issue a manual one.",
+        "window": "Time window",
+        "windows": {
+          "all": "All time",
+          "this_month": "This month",
+          "last_month": "Last month",
+          "this_quarter": "This quarter",
+          "this_year": "This year"
+        },
+        "kpi": {
+          "total": "Total invoices",
+          "allTime": "all time",
+          "paid": "Paid",
+          "outstanding": "Outstanding",
+          "due": "{amount} due",
+          "overdue": "Overdue",
+          "overdueHint": ">15 days late",
+          "thisMonth": "This month",
+          "mom": "MoM"
+        },
+        "statusFilter": "Filter by invoice status",
+        "statuses": {
+          "all": "All",
+          "paid": "Paid",
+          "outstanding": "Outstanding",
+          "overdue": "Overdue",
+          "refunded": "Refunded",
+          "void": "Void"
+        },
+        "badges": {
+          "paid": "paid",
+          "outstanding": "outstanding",
+          "overdue": "overdue",
+          "refunded": "refunded",
+          "void": "void"
+        },
+        "search": "Search by invoice #, workspace, owner…",
+        "noun": "invoices",
+        "col": {
+          "number": "Invoice #",
+          "issued": "Issue date",
+          "due": "Due date",
+          "workspace": "Workspace",
+          "item": "Item",
+          "amount": "Amount",
+          "status": "Status",
+          "view": "View",
+          "actions": "Actions"
+        },
+        "daysLate": "{days}d late",
+        "refunded": "refunded",
+        "viewInvoice": "View invoice",
+        "rowMenu": "Actions for {number}",
+        "empty": "No invoices in this window.",
+        "actions": {
+          "view": "View",
+          "markPaid": "Mark as paid",
+          "void": "Void",
+          "delete": "Delete"
+        },
+        "confirm": {
+          "markPaidTitle": "Mark this invoice as paid?",
+          "markPaid": "Mark this invoice as paid? The plan, add-on or wallet credit it was bought for is applied too.",
+          "markPaidManual": "Mark this manual invoice as paid? Only the payment is recorded.",
+          "voidTitle": "Void this invoice?",
+          "void": "Void this invoice? It stays on record but is cancelled.",
+          "deleteTitle": "Delete this invoice?",
+          "delete": "Permanently delete this invoice? This cannot be undone."
+        },
+        "manual": {
+          "tag": "manual",
+          "open": "Manual invoice",
+          "eyebrow": "Invoices",
+          "title": "Manual invoice",
+          "workspace": "Workspace",
+          "chooseWorkspace": "Choose a workspace",
+          "customerName": "Customer name",
+          "customerNameHint": "Defaults to the workspace name.",
+          "customerEmail": "Customer email",
+          "description": "Description",
+          "amount": "Amount",
+          "currency": "Currency",
+          "status": "Status",
+          "statuses": {
+            "pending": "Pending",
+            "paid": "Paid"
+          },
+          "issuedAt": "Issue date",
+          "issuedAtHint": "Leave empty for today. A past date back-dates the invoice.",
+          "submit": "Create invoice",
+          "created": "Manual invoice {number} created."
+        }
+      },
+      "invoice": {
+        "title": "Invoice",
+        "print": "Print",
+        "downloadPdf": "Download PDF",
+        "banner": {
+          "invoice": "Invoice #{number}",
+          "issued": "Issued {date}",
+          "settled": "settled {date}",
+          "paidInFull": "paid in full"
+        },
+        "taxInvoice": "Tax invoice",
+        "invoiceWord": "INVOICE",
+        "taxIdLabel": "GSTIN/VAT",
+        "number": "Invoice #",
+        "issueDate": "Issue date",
+        "paidDate": "Paid date",
+        "status": "Status",
+        "billTo": "Bill to",
+        "payment": "Payment",
+        "method": "Method",
+        "txn": "Txn ID",
+        "captured": "Captured at",
+        "currency": "Currency",
+        "coupon": "Coupon",
+        "description": "Description",
+        "qty": "Qty",
+        "unit": "Unit",
+        "total": "Total",
+        "discount": "Discount",
+        "code": "code",
+        "subtotal": "Subtotal",
+        "amountPaid": "Amount paid",
+        "balanceDue": "Balance due",
+        "notes": "Notes",
+        "notesText": "Thank you for your business. This invoice covers the order referenced above. Reference the invoice number for any billing queries.",
+        "help": "Need help?",
+        "helpFallback": "Contact the platform administrator.",
+        "refundNote": "For support or refunds, write to us within {days} days of the payment.",
+        "regNo": "Reg. no.",
+        "computerGenerated": "This is a computer-generated invoice, no signature required."
+      },
+      "settings": {
+        "title": "Billing settings",
+        "eyebrow": "Admin · Billing & plans · Settings",
+        "titleFirst": "Billing",
+        "titleSecond": "settings",
+        "description": "Everything the pricing and checkout pages read: tax, refund window, yearly discount, auto-renew, your invoice identity and the country list. Changes apply on the next page load.",
+        "previewPlans": "Preview plans page",
+        "readOnly": "Only a super admin can change the billing settings.",
+        "conflict": "Someone else changed these settings. They have been reloaded; review them and save again.",
+        "saved": "Billing settings saved.",
+        "save": "Save settings",
+        "tax": {
+          "title": "Tax",
+          "hint": "Applied to every checkout subtotal. Turn off if your displayed prices are tax-inclusive.",
+          "rate": "Rate (%)",
+          "label": "Label",
+          "labelPlaceholder": "GST / VAT / Sales tax"
+        },
+        "company": {
+          "title": "Company & billing identity",
+          "hint": "Your legal entity details. These print on every invoice: the \"bill from\" block, the tax number and the footer.",
+          "name": "Legal company name",
+          "taxId": "Tax number (GSTIN / VAT)",
+          "address": "Registered address",
+          "regNo": "Registration / CIN no.",
+          "email": "Billing email",
+          "phone": "Support phone"
+        },
+        "logo": {
+          "title": "Invoice logo",
+          "hint": "Shown at the top of every invoice and receipt. PNG, JPG, SVG or WebP, up to {kb} KB. Leave empty to use your site logo.",
+          "none": "No logo",
+          "choose": "Choose a logo file",
+          "remove": "Remove current logo (fall back to site logo)",
+          "fallback": "Currently using the site brand logo as a fallback.",
+          "tooBig": "The logo must be at most {kb} KB."
+        },
+        "refund": {
+          "title": "Money-back guarantee",
+          "hint": "When enabled, checkout shows the guarantee window under the order summary. Turn off to hide it everywhere.",
+          "days": "Window (days)"
+        },
+        "yearly": {
+          "title": "Yearly billing toggle",
+          "hint": "Shows the Monthly / Yearly switcher on the pricing page. Hide it entirely if every plan is monthly-only.",
+          "discount": "Yearly discount (%)",
+          "formula": "Yearly price = monthly × 12 × (1 − discount%)."
+        },
+        "recurring": {
+          "title": "Auto-renewing subscriptions",
+          "hint": "When on, timed paid plans (monthly or yearly) renew automatically: the gateway charges the card each cycle and the plan validity extends on its own. Free, lifetime and custom-quote plans never recur, and any gateway without recurring support stays a one-time charge. Turn this off to bill every purchase once.",
+          "gateways": "Gateways that support auto-renew",
+          "note": "Braintree only auto-renews once you set a Plan ID in its gateway credentials. Square bills each cycle by emailing the customer an invoice (no silent card charge). Every renewal needs the gateway webhook URL set in the provider dashboard."
+        },
+        "countries": {
+          "title": "Checkout country list",
+          "hint": "The options in the Country selector of the checkout billing form, used for the invoice address. One country per line; order is preserved."
+        },
+        "links": {
+          "coupons": "Coupons",
+          "couponsTitle": "Manage discount codes",
+          "couponsHint": "Add, edit or disable any coupon.",
+          "faqs": "FAQs",
+          "faqsTitle": "Edit pricing-page FAQs",
+          "faqsHint": "Accordion items shown below the plans.",
+          "configured": "{count} configured."
+        }
       }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Checkout / Bank transfer",
+        "offline": "Checkout / Offline"
+      },
+      "title": {
+        "bank_transfer": "Wire the payment",
+        "offline": "Contact us to complete this order"
+      },
+      "intro": {
+        "bank_transfer": "Send <strong>{amount}</strong> to the account below. Use <mono>{ref}</mono> as the reference so we can match it to your order.",
+        "offline": "Order <mono>{ref}</mono> · <strong>{amount}</strong> · billed in {currency}"
+      },
+      "instructions": "Instructions",
+      "referenceNote": "<strong>Reference:</strong> include <mono>{ref}</mono> on the transfer, then submit your payment proof below. Your plan activates once our team verifies the payment.",
+      "proofTitle": "Submit payment proof",
+      "proofHelp": "Already paid? Upload your receipt and reference so we can verify and activate your plan.",
+      "later": {
+        "bank_transfer": "I've sent the payment — submit proof later",
+        "offline": "Got it — I'll submit proof later"
+      }
+    },
+    "proof": {
+      "file": "Payment screenshot / receipt",
+      "fileHint": "JPG, PNG, WEBP or PDF · up to 4 MB",
+      "reference": "Reference / UTR number",
+      "referencePlaceholder": "e.g. UTR / transaction id",
+      "note": "Note (optional)",
+      "notePlaceholder": "Anything we should know about this payment",
+      "submit": "Submit payment proof",
+      "sending": "Uploading",
+      "chooseFile": "Choose a receipt to upload.",
+      "tooLarge": "That file is larger than 4 MB.",
+      "rejected": "That file type is not allowed. Use a JPG, PNG, WEBP or PDF.",
+      "closed": "Payment proof can no longer be submitted for this order.",
+      "failed": "Could not upload the file. Try again."
     }
   }
 }

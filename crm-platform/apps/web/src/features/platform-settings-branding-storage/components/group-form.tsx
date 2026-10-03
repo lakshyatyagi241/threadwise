@@ -43,7 +43,7 @@ import { allFields, type FieldSpec, type GroupSpec, type SectionSpec } from '../
 import { buildPatch, fieldForPath, patchSize, toDraft, type Draft } from '../lib/draft';
 import { groupKey, hubKey } from '../lib/query-keys';
 import { downloadSitemap } from '../lib/sitemap-download';
-import { AppearancePreview, ResetColours } from './appearance-preview';
+import { AppearancePreview, PALETTE_DEFAULTS, ResetColours } from './appearance-preview';
 import { BrandAssets } from './brand-assets';
 import { ConnectionTest } from './connection-test';
 import { Counter, GuideCard, SetHeader, TipCard } from './page-parts';
@@ -287,7 +287,9 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             readOnly={!canEdit}
             disabled={draft.clear[f.key] === true}
             autoComplete="new-password"
-            placeholder={isSet ? '••••••••' : ''}
+            placeholder={
+              isSet ? '••••••••' : tg.has(`fields.${f.key}.placeholder`) ? tg(`fields.${f.key}.placeholder`) : ''
+            }
             showLabel={t('common.secretShow')}
             hideLabel={t('common.secretHide')}
           />
@@ -444,12 +446,29 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       );
     } else if (f.kind === 'color') {
       const hex = String(value ?? '');
+      // A blank colour shows the shipped one in the swatch and the placeholder (WaDesk shows its default the same way).
+      const shipped = f.key.startsWith('colors.')
+        ? (PALETTE_DEFAULTS[f.key.slice(7)] ?? '')
+        : f.key === 'sidebarColor'
+          ? '#06100E'
+          : f.key === 'sidebarTextColor'
+            ? '#FFFFFF'
+            : f.key === 'sidebarAccentColor'
+              ? '#A7E8C0'
+              : '';
+      // WaDesk labels the two derived sidebar colours instead of showing a hex.
+      const hint =
+        f.key === 'sidebarTextColor'
+          ? 'Auto (contrast)'
+          : f.key === 'sidebarAccentColor'
+            ? 'Default green'
+            : shipped || '#RRGGBB';
       input = (
         <div className="flex items-center gap-2">
           <input
             type="color"
             aria-label={label(f)}
-            value={/^#[0-9A-Fa-f]{6}$/.test(hex) ? hex : '#000000'}
+            value={/^#[0-9A-Fa-f]{6}$/.test(hex) ? hex : /^#[0-9A-Fa-f]{6}$/.test(shipped) ? shipped : '#000000'}
             onChange={(e) => setField(f.key, e.target.value.toUpperCase())}
             disabled={!canEdit}
             className="h-9 w-12 shrink-0 cursor-pointer rounded-md border border-border bg-background p-1"
@@ -460,7 +479,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             onChange={(e) => setField(f.key, e.target.value)}
             readOnly={!canEdit}
             invalid={Boolean(err)}
-            placeholder="#RRGGBB"
+            placeholder={hint}
             spellCheck={false}
             className="font-mono"
           />
@@ -597,7 +616,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             >
               {t('common.back')}
             </Link>
-            {spec.test && canEdit && (
+            {spec.test && spec.test !== 'mail' && canEdit && (
               <Button
                 type="button"
                 variant="secondary"

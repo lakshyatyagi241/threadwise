@@ -98,6 +98,7 @@ Connections to other domains: SET (platform default language value lives in `sys
   - Given the default is `en`, when the page renders, then the English row shows a "Default" badge with no Delete link and every other row shows a "Set" button and a Delete link.
   - Given a non-admin or an IP outside the allowlist, when they request the URL, then access is denied by middleware.
   - Given DemoMode is on, when an admin submits any mutating form from this page, then the request is rejected by DemoMode.
+- **Reference check (round 2):** the running page matches this entry. It is not in the admin sidebar: it is tile 10 of the Settings hub and is linked from General settings ("Manage languages →"). The stat numerals and headings use a serif face (theme).
 - **Source refs:** `app/Http/Controllers/Admin/LanguagesController.php`, `app/Models/Language.php`, `resources/views/admin/languages/index.blade.php`, `routes/admin.php`, `app/Http/Middleware/DemoMode.php`, `resources/js/app.js`, `Documentation/pages/admin-panel/localization.html`.
 - **Port notes:** Suggested home `apps/api/src/modules/i18n/languages.controller.ts` (platform-admin guard) and `apps/web/.../admin/languages/page.tsx`. `languages` is a global (non-tenant) table, so it needs no RLS. Show the real count instead of the hard-coded "20". Add the missing edit UI (see WD-I18N-002).
 
@@ -484,6 +485,7 @@ Connections to other domains: SET (platform default language value lives in `sys
   - Given a DeepL row with a saved key, when the page renders, then the API key field is empty with the keep-blank placeholder and the key is not present in the HTML.
   - Given lockdown is ON, when the page renders, then MyMemory, LibreTranslate and Google (free) show the "Lockdown - skipped" badge and reduced opacity.
   - Given the table is empty, when the page renders, then the empty-state message with the seeder hint is shown.
+- **Reference check (round 2):** the running page has no sidebar entry either (URL only, plus the admin link on the Account translation tab). Card copy: MyMemory "Free, no key — out-of-box default. 50k req/day per IP with admin email."; credential labels are "Admin email (optional)", "Endpoint URL", "DeepL API key" and "Google Cloud API key".
 - **Source refs:** `app/Http/Controllers/Admin/TranslationProviderController.php`, `app/Services/Translation/TranslationProviderManager.php`, `app/Models/TranslationProvider.php`, `database/seeders/TranslationProviderSeeder.php`, `database/migrations/2026_05_20_010000_create_translation_providers_table.php`, `resources/views/admin/translation-providers/index.blade.php`, `resources/views/components/admin/flash.blade.php`, `app/Http/Controllers/InstallController.php`, `Documentation/pages/admin-panel/translation.html`.
 - **Port notes:** Table `translation_providers` is platform-global (no tenant column, no RLS; readable only by platform-admin role). Implement providers as adapters behind an interface (`TranslationProvider` port with `translate`, `detectAndTranslate`, `credentialSchema`). Store credentials with the platform's envelope encryption; never return secret values to the client, and mask non-secret ones consistently. Seed idempotently with `ON CONFLICT DO NOTHING`.
 
@@ -969,6 +971,7 @@ Connections to other domains: SET (platform default language value lives in `sys
   - Given rows from two providers, then the per-provider table lists them by calls desc with a rate of "free" for MyMemory.
   - Given no rows, then the empty states show and the timeline is hidden.
   - Given a row with NULL workspace, then it appears as "unassigned" in top workspaces.
+- **Reference check (round 2):** the running page shows the date form as `From [date] To [date] [Apply]` under the intro, four cards (Wire calls, Chars translated with `out:`, Estimated cost, Fallback hits), "By provider" with a `Rate / 1M chars` column, a "Last 30 days" bar chart and "Top spending workspaces". With no display currency configured the cost prints as a plain `0.00` (`FormatSettings::display`). There is no sidebar entry: the page is reached by URL.
 - **Source refs:** `app/Http/Controllers/Admin/TranslationUsageController.php`, `app/Models/TranslationUsage.php`, `resources/views/admin/translation-usage/index.blade.php`, `Documentation/pages/admin-panel/translation.html`.
 - **Port notes:** `GET /api/v1/admin/translation/usage?from&to` returning the aggregated payload; validate dates; add per-language and per-tenant drill-down and CSV export. Recompute the "cache saved" ratio from real lookup counters (dictionary/cache hit metrics) instead of inferring.
 

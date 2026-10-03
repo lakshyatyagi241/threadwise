@@ -8,6 +8,9 @@ import {
  * these with already-decrypted maps so every rule is testable on its own.
  */
 
+/** Gateways that take no online payment: their orders are only ever settled by an operator (WD-PAYGW-013, 038). */
+export const MANUAL_GATEWAYS: readonly string[] = ['offline', 'bank_transfer'];
+
 export type Credentials = Record<string, string>;
 
 export interface MergeResult {

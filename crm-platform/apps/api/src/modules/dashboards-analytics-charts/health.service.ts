@@ -19,7 +19,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { AuthAuditService } from '../auth';
-import { NodeBridgeSettingsService } from '../node-bridge-runtime';
+import { NodeBridgeSettingsService, NodeWorkerStatus } from '../node-bridge-runtime';
 import { overallState, queueState, shortError } from './health-rules';
 
 /** A poll storm (several consoles at 20 s) shares one run of the probes. */
@@ -43,6 +43,7 @@ export class HealthService {
     private readonly moduleRef: ModuleRef,
     private readonly audit: AuthAuditService,
     @Optional() private readonly bridge?: NodeBridgeSettingsService,
+    @Optional() private readonly workers?: NodeWorkerStatus,
   ) {}
 
   /** Every queue by its fixed name. */
@@ -155,6 +156,17 @@ export class HealthService {
 
   /** Reachability, not correctness: any HTTP answer counts as up (WD-DASH-048 rule 3). */
   private async probeBridge(): Promise<HealthCheck> {
+    // The runtime is a worker with no HTTP surface: when one reports in, that is the answer (WD-NODE-004).
+    const running = await this.workers?.read().catch(() => null);
+    if (running && running.workers > 0) {
+      return {
+        key: 'bridge',
+        state: 'up',
+        value: `${running.workers} worker${running.workers === 1 ? '' : 's'}`,
+        detail: `${running.devices} device${running.devices === 1 ? '' : 's'} connected`,
+        ping: null,
+      };
+    }
     // The address an operator saved in the Node bridge panel (WD-NODE-052) wins; the environment is the fallback.
     const saved = await this.bridge?.target();
     const url = saved?.serverUrl || this.config.get<string>('NODE_BRIDGE_URL')?.trim();

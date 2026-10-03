@@ -6,6 +6,7 @@ import { DeviceRuntimeService } from './runtime/device-runtime.service';
 import { WA_SOCKET_FACTORY } from '../../infra/providers/node-bridge-runtime/socket.port';
 import { DeviceLease } from './runtime/wa-redis';
 import { NodeBridgeRuntimeModule } from './node-bridge-runtime.module';
+import { InboxBridge } from './inbox/inbox-bridge.service';
 
 /**
  * The unofficial WhatsApp engine's runtime: sockets, leases, status, restore and commands. Imported ONLY by WorkersModule
@@ -20,6 +21,7 @@ import { NodeBridgeRuntimeModule } from './node-bridge-runtime.module';
     BaileysSocketFactory,
     { provide: WA_SOCKET_FACTORY, useExisting: BaileysSocketFactory },
     DeviceRuntimeService,
+    InboxBridge,
   ],
   exports: [DeviceRuntimeService, DeviceLease],
 })

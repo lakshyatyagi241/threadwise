@@ -46,6 +46,8 @@ beforeAll(async () => {
     },
     downloadFile: () => Promise.resolve(null),
     getUserProfilePhoto: () => Promise.resolve(null),
+    sendMessage: () => Promise.resolve({ ok: true, result: { message_id: 1 } }),
+    sendMedia: () => Promise.resolve({ ok: true, result: { message_id: 2 } }),
   };
   h.app.get<TelegramApiFactory>(TELEGRAM_API).forToken = () => fake;
   const hooks = h.app.get<InboundHooks>(INBOUND_HOOKS);

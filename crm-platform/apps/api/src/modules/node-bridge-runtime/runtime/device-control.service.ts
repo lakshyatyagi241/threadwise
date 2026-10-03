@@ -65,7 +65,21 @@ export class DeviceControlService {
   ): Promise<SendOutcome> {
     if (this.local?.owns(orgId, deviceId))
       return this.local.send(orgId, deviceId, command, context);
-    const r = await this.sendIfOwned({ type: 'send', orgId, deviceId, command, context });
+    // The file does not travel in the command (it is JSON on a channel): it waits in Redis for the worker that owns the device.
+    let wire = command;
+    if (command.type === 'media' && command.data) {
+      const { data, ...rest } = command;
+      const bufferKey = `wa:out:${orgId}:${deviceId}:${randomUUID()}`;
+      await this.redis.set(bufferKey, data, 'EX', 300);
+      wire = { ...rest, bufferKey };
+    }
+    const r = await this.sendIfOwned({
+      type: 'send',
+      orgId,
+      deviceId,
+      command: wire,
+      context,
+    });
     if (r.ok && r.status === 'sent') return { providerMessageId: r.providerMessageId };
     throw failure(r);
   }

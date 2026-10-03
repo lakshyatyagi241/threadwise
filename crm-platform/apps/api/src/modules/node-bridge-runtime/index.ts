@@ -21,6 +21,7 @@ export {
   type SenderRef,
 } from './outbound/outbound';
 export { NodeBridgeRuntimeWorkerModule } from './node-bridge-runtime-worker.module';
+export { NodeWorkerStatus } from './runtime/worker-status';
 export { DeviceControlService, type DeviceStatusView } from './runtime/device-control.service';
 export type { DeviceCommandResult } from './runtime/device-command';
 export {
