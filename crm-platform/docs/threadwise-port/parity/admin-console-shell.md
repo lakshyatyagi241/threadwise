@@ -42,3 +42,35 @@ and the rest of the domain are not built yet, and are not covered here.
 - **Twin run depth:** only `quick`, three custom scenarios. The harness's page probes (accessibility, keyboard, degraded states, performance) were not run on the console because its default login is the staff login, not the operator login. Our own Playwright spec covers keyboard and phone behaviour.
 - **Environment:** Reference ran from a Windows bind mount in Docker, with cold pages taking several seconds; the twin spec uses long timeouts for it.
 - **Tracker and stamp:** the tracker rows were not changed (these domains are listed under another owner in `ownership.json`, which needs the team's approval to change).
+
+## Round 2 status (supersedes the "Not done yet" list above where they differ)
+
+Built and tested on this branch (unit, API e2e against a real database, web unit): 003 to 005, 006, 009, 012 to 016, 019 to 023, 026, 028, 029,
+032, 033, 035, 038, 042 (informational pane), 043, 044, 046. Gates run: API unit 38, API e2e 44 (4 files), web 3383 (318 files), arch:check,
+db:verify-schema (0 errors), eslint on the zone.
+
+tier P0 done: 012, 013, 014 (customer shell modes, top bar, rail catalogue) on top of the AUTH/PLAN work (001, 002, 017 are theirs).
+tier P1 done: 005, 006, 009, 015, 016, 019, 020, 026, 028, 029, 032, 033, 038, 043, 044.
+tier P2 done: 021, 022, 023, 035, 042 (partial), 046.
+
+Delivered by another domain, consumed here: 010 and 011 (the platform Appearance editor lives in platform-settings; the shell reads mode and rail colours
+through `/v2/shell/config`), 024 (header theme switcher, one cookie), 027 (PlanPaywall and the crown on gated menu entries), 031 (the @crm/ui kit),
+036 (account branding page), 037 (settings/team), 039 (ai-keys), 040 and 041 (account/security); the Settings rail links to these pages.
+007: the warning variant is the `@crm/ui` Alert tone; toasts stay success and danger (Reference's toast also ignored warning).
+
+Not built, with reasons: 030 impersonation strip (blocked: no impersonation session exists in AUTH or WSP yet), 025 workspace white-label colours in
+the shell and 036 logo and favicon upload in the shell (blocked on the branding storage endpoints of platform-settings), 008 admin settings hub KPI strip
+(the hub itself is the platform-settings page), 045 data residency toggle (needs the i18n translation settings, blocked on that domain), 042's Sheets key
+status and webhook counts (blocked on the integration modules). Not ported on purpose: 034 working hours card (docs-only, static), 047 unrouted
+prototype pages (dead code).
+
+## Intended differences added in round 2
+
+| #   | Area                  | Reference                                              | Here                                                          | Why                                                                            |
+| --- | --------------------- | --------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 5   | Settings tabs         | Nine panes swapped client-side on one page          | Rail of nine; four tabs link to the page that owns them       | Each already has its own route in another domain (inventory port notes agree)   |
+| 6   | Themes                | Paper, bright, doodle, dark; two stores that differ | Light and dark; one cookie shared by header and Settings      | The design system ships two themes; removes Reference's disagreement (046 quirk)   |
+| 7   | Connect-device sheet  | Accepted a message from any window                  | Accepts only this origin and only the sheet's own frame       | Security hardening; behaviour for the real page is unchanged                    |
+| 8   | New-message pill      | Polled with a fixed interval                        | Backs off after a 429 or error up to 5 minutes, pauses hidden | Keeps load down on a throttled API; the normal interval is the same 15 seconds  |
+
+Live visual twin comparison was not repeated in round 2 (Reference was shared and slow); layout was matched from the Blade views and recorded above.
