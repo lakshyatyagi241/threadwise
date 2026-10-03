@@ -4,6 +4,15 @@ import { settingsTile } from '../_registry/settings-types';
 export const settings = [
   settingsTile({
     id: 'business-profile',
+    shortcutFrom: [
+      '/invoices',
+      '/credit-notes',
+      '/sales-orders',
+      '/recurring-invoices',
+      '/payments',
+      '/estimates',
+      '/proposals',
+    ],
     section: 'business',
     href: '/business-profile',
     icon: 'building',
@@ -12,6 +21,15 @@ export const settings = [
   }),
   settingsTile({
     id: 'tax-rates',
+    shortcutFrom: [
+      '/invoices',
+      '/credit-notes',
+      '/sales-orders',
+      '/recurring-invoices',
+      '/payments',
+      '/estimates',
+      '/proposals',
+    ],
     section: 'business',
     href: '/tax-rates',
     icon: 'percent',

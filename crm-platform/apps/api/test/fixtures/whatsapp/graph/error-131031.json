@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Account has been locked",
+    "type": "OAuthException",
+    "code": 131031,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

@@ -11,7 +11,10 @@ import {
   ChatChannelProvidersModule,
   type ChannelAdapter,
 } from '../../../src/infra/providers/chat-conversations';
-import { MetaCloudProvider } from '../../../src/infra/providers/whatsapp/meta-cloud.provider';
+import { ChatMediaStore } from '../../../src/infra/providers/chat-conversations/media';
+import { OUTBOUND_SEND_GUARD } from '../../../src/infra/providers/whatsapp/send-guard.port';
+import { WABA_ADMIN } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-admin.port';
+import { WabaHttp } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-http';
 import { SimulatorPolicy } from '../../../src/modules/chat-conversations/simulator-policy.service';
 
 describe('the simulator flag', () => {
@@ -87,10 +90,17 @@ describe('SimulatorPolicy (evaluated on every call)', () => {
 });
 
 describe('ChatChannelProvidersModule: what is bound where', () => {
+  // What the WhatsApp adapter takes from the rest of the platform: the one WhatsApp client and its account port (global from
+  // WabaProvidersModule), the send guard (SendGuardModule) and the chat media store (ChatMediaModule).
   @Global()
   @Module({
-    providers: [{ provide: MetaCloudProvider, useValue: {} }],
-    exports: [MetaCloudProvider],
+    providers: [
+      { provide: WabaHttp, useValue: {} },
+      { provide: WABA_ADMIN, useValue: {} },
+      { provide: OUTBOUND_SEND_GUARD, useValue: {} },
+      { provide: ChatMediaStore, useValue: {} },
+    ],
+    exports: [WabaHttp, WABA_ADMIN, OUTBOUND_SEND_GUARD, ChatMediaStore],
   })
   class FakeProvidersModule {}
 
@@ -117,12 +127,12 @@ describe('ChatChannelProvidersModule: what is bound where', () => {
       (await adaptersFor({ NODE_ENV: 'test', CHANNEL_SIMULATOR_ENABLED: 'true' })).map(
         (a) => a.kind,
       ),
-    ).toEqual(['whatsapp_cloud', 'webchat', 'simulator']);
+    ).toEqual(['whatsapp_cloud', 'webchat', 'telegram', 'simulator']);
     expect(
       (await adaptersFor({ NODE_ENV: 'test', CHANNEL_SIMULATOR_ENABLED: 'false' })).map(
         (a) => a.kind,
       ),
-    ).toEqual(['whatsapp_cloud', 'webchat']);
+    ).toEqual(['whatsapp_cloud', 'webchat', 'telegram']);
   });
 
   it('REFUSES TO BOOT when the flag is set in production', async () => {
@@ -135,6 +145,6 @@ describe('ChatChannelProvidersModule: what is bound where', () => {
     const kinds = (
       await adaptersFor({ NODE_ENV: 'production', CHANNEL_SIMULATOR_ENABLED: undefined })
     ).map((a) => a.kind);
-    expect(kinds).toEqual(['whatsapp_cloud', 'webchat']);
+    expect(kinds).toEqual(['whatsapp_cloud', 'webchat', 'telegram']);
   });
 });

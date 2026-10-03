@@ -82,3 +82,19 @@ export function tileForPath(
   }
   return best;
 }
+
+/**
+ * The tiles to offer as a gear on the screen at `pathname`: live tiles that name it (or a parent of it) in `shortcutFrom`.
+ * Nothing is offered on the Settings pages, nor on a tile's own screen (the "Back to Settings" breadcrumb covers that). The
+ * tiles arrive already filtered by the person's permissions, so a role that cannot open a tile never gets its shortcut.
+ */
+export function tilesForScreen(
+  tiles: readonly ResolvedSettingsTile[],
+  pathname: string,
+): ResolvedSettingsTile[] {
+  if (pathname === '/settings' || pathname.startsWith('/settings/')) return [];
+  if (tileForPath(tiles, pathname)) return [];
+  return tiles.filter(
+    (tile) => !tile.comingSoon && tile.shortcutFrom?.some((from) => covers(pathname, from)),
+  );
+}

@@ -218,6 +218,7 @@ export class ChannelDispatcher {
       unsupported(`${envelope.media.mediaKind} files`);
     }
     if (envelope.kind === 'location' && !caps.media.includes('location')) unsupported('locations');
+    if (envelope.kind === 'contacts' && !caps.media.includes('contact')) unsupported('contact cards');
 
     const window = adapter.windowInfo(channel, lastInboundAt, now);
     // A template is the one thing allowed outside the window; everything else is a free-form reply.

@@ -72,7 +72,7 @@ export const ConversationRow = memo(function ConversationRow({
             <span dir="auto" className={cn('truncate text-sm', unread ? 'font-semibold' : 'font-medium')}>
               {row.title}
             </span>
-            {showChannel && <ChannelTag kind={row.channel.kind} name={row.channel.name} />}
+            {showChannel && <ChannelTag decorative kind={row.channel.kind} name={row.channel.name} />}
             <span className="ms-auto flex shrink-0 items-center gap-1.5">
               {row.pinned && <PinIcon width={12} height={12} className="text-primary" />}
               {unread && (
@@ -106,6 +106,14 @@ export const ConversationRow = memo(function ConversationRow({
             <span dir="auto" className="truncate">{row.preview ?? t('noMessages')}</span>
           </span>
           <span className="mt-1 flex flex-wrap items-center gap-1">
+            {showChannel && (
+              <span
+                data-testid="inbox-row-channel"
+                className="max-w-[9rem] truncate rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
+              >
+                {row.channel.name}
+              </span>
+            )}
             {chip && (
               <span
                 className={cn(

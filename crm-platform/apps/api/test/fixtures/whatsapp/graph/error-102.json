@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "API Session",
+    "type": "OAuthException",
+    "code": 102,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

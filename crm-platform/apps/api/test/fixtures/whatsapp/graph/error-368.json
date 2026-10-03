@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Temporarily blocked for policies violations",
+    "type": "OAuthException",
+    "code": 368,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

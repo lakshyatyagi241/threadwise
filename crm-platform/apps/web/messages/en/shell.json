@@ -32,6 +32,10 @@
     "userMenu": "Account menu",
     "account": "Account",
     "balance": "Balance",
+    "pageSettings": {
+      "label": "Settings for this page",
+      "hint": "These settings are only shown because your role allows changing them."
+    },
     "notifications": "Notifications",
     "settings": "Settings",
     "nav": {
