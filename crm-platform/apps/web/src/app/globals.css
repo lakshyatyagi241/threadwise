@@ -1,3 +1,16 @@
 @import 'tailwindcss';
 @import '@crm/ui/tokens.css';
 @source '../../../../packages/ui/src';
+
+/* The announcement strip's marquee (TW-ASHELL-026): two copies side by side, shifted by exactly one copy. */
+@keyframes ann-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+[dir='rtl'] .animate-\[ann-scroll_var\(--ann-seconds\)_linear_infinite\] {
+  animation-direction: reverse;
+}
