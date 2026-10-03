@@ -1,6 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type RefObject,
+} from 'react';
 import type { FlbBuilderContext, FlbPortContext } from '@crm/contracts';
 import {
   NODE_W,
@@ -20,7 +29,9 @@ interface Props {
   invalidIds: ReadonlySet<string>;
   pan: { x: number; y: number };
   zoom: number;
-  setPan: (p: { x: number; y: number } | ((p: { x: number; y: number }) => { x: number; y: number })) => void;
+  setPan: (
+    p: { x: number; y: number } | ((p: { x: number; y: number }) => { x: number; y: number }),
+  ) => void;
   setZoom: (z: number) => void;
   onSelect: (id: string | null) => void;
   /** A change that should not enter the undo history yet (a node being dragged). */
@@ -73,8 +84,16 @@ export function Canvas({
   const [panning, setPanning] = useState(false);
   const [portOffsets, setPortOffsets] = useState<Record<string, Pt>>({});
 
-  const dragNode = useRef<{ id: string; offX: number; offY: number; startX: number; startY: number } | null>(null);
-  const panRef = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null);
+  const dragNode = useRef<{
+    id: string;
+    offX: number;
+    offY: number;
+    startX: number;
+    startY: number;
+  } | null>(null);
+  const panRef = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(
+    null,
+  );
   const pointers = useRef(new Map<number, Pt>());
   const pinch = useRef<{ d: number } | null>(null);
   // The latest state for the window listeners, which are installed once per interaction change.
@@ -162,10 +181,13 @@ export function Canvas({
     setDraggingId(id);
   };
 
-  const onPortPointerDown = useCallback((e: React.PointerEvent, nodeId: string, handleId: string) => {
-    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    setPendingFrom({ nodeId, handleId });
-  }, []);
+  const onPortPointerDown = useCallback(
+    (e: React.PointerEvent, nodeId: string, handleId: string) => {
+      pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      setPendingFrom({ nodeId, handleId });
+    },
+    [],
+  );
 
   useEffect(() => {
     const dist = () => {
@@ -173,7 +195,8 @@ export function Canvas({
       return pts.length < 2 ? 0 : Math.hypot(pts[0]!.x - pts[1]!.x, pts[0]!.y - pts[1]!.y);
     };
     const onMove = (e: PointerEvent) => {
-      if (pointers.current.has(e.pointerId)) pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.current.has(e.pointerId))
+        pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
       const wrap = wrapperRef.current;
       if (!wrap) return;
       const { pan: p, zoom: z, state: st } = live.current;
@@ -248,6 +271,18 @@ export function Canvas({
     };
   }, [pendingFrom, onConnect, onLive, onMoved, setPan, setZoom, toWorld, wrapperRef]);
 
+  // Escape cancels a connection that is being drawn (the builder also clears the selection on the same key).
+  useEffect(() => {
+    if (!pendingFrom) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setPendingFrom(null);
+      setTempEdge(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [pendingFrom]);
+
   // Wheel: plain scroll pans, Ctrl/Cmd + wheel zooms around the pointer. Needs a non-passive listener to prevent the page scroll.
   useEffect(() => {
     const el = wrapperRef.current;
@@ -260,7 +295,13 @@ export function Canvas({
         return;
       }
       const r = el.getBoundingClientRect();
-      const res = zoomAround(p, z, z * (1 + -e.deltaY * 0.0015), e.clientX - r.left, e.clientY - r.top);
+      const res = zoomAround(
+        p,
+        z,
+        z * (1 + -e.deltaY * 0.0015),
+        e.clientX - r.left,
+        e.clientY - r.top,
+      );
       setPan(res.pan);
       setZoom(res.zoom);
     };
@@ -275,12 +316,19 @@ export function Canvas({
       return;
     }
     if (e.button !== 0) return;
-    if (e.target !== e.currentTarget && !(e.target as HTMLElement).classList.contains('canvas-empty')) return;
+    if (
+      e.target !== e.currentTarget &&
+      !(e.target as HTMLElement).classList.contains('canvas-empty')
+    )
+      return;
     panRef.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y };
     setPanning(true);
   };
   const onCanvasClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget || (e.target as HTMLElement).classList.contains('canvas-empty')) {
+    if (
+      e.target === e.currentTarget ||
+      (e.target as HTMLElement).classList.contains('canvas-empty')
+    ) {
       onSelect(null);
       setEdgePopup(null);
     }
@@ -302,6 +350,10 @@ export function Canvas({
       data-testid="canvas"
       onPointerDown={onCanvasPointerDown}
       onClick={onCanvasClick}
+      // The view is moved by `pan`, never by scrolling: undo any scroll the browser does to reveal a focused control.
+      onScroll={(e) => {
+        if (e.currentTarget.scrollTop || e.currentTarget.scrollLeft) e.currentTarget.scrollTo(0, 0);
+      }}
       onDrop={onDrop}
       onDragOver={(e) => {
         e.preventDefault();
@@ -312,9 +364,23 @@ export function Canvas({
     >
       <div
         className="absolute top-0 left-0 origin-top-left"
-        style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0', willChange: 'transform' }}
+        style={{
+          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          transformOrigin: '0 0',
+          willChange: 'transform',
+        }}
       >
-        <svg width={4000} height={3000} style={{ position: 'absolute', left: 0, top: 0, pointerEvents: 'none', overflow: 'visible' }}>
+        <svg
+          width={4000}
+          height={3000}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            pointerEvents: 'none',
+            overflow: 'visible',
+          }}
+        >
           <g style={{ pointerEvents: 'auto' }}>
             {edgePaths.map((e) => (
               <g key={e.id} data-edge-id={e.id}>
@@ -341,7 +407,12 @@ export function Canvas({
                   const src = nodes.find((n) => n.id === pendingFrom.nodeId);
                   const o = portOffsets[`out:${pendingFrom.nodeId}:${pendingFrom.handleId}`];
                   if (!src || !o) return null;
-                  return <path className="edge-path preview" d={bezierPath(src.x + o.x, src.y + o.y, tempEdge.x, tempEdge.y)} />;
+                  return (
+                    <path
+                      className="edge-path preview"
+                      d={bezierPath(src.x + o.x, src.y + o.y, tempEdge.x, tempEdge.y)}
+                    />
+                  );
                 })()
               : null}
           </g>

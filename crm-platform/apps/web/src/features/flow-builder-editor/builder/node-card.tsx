@@ -14,7 +14,15 @@ import { NODE_W } from '../lib/graph-ops';
 import { NodePreview } from './node-preview';
 
 export const Icon = ({ d, className = 'h-4 w-4' }: { d: string; className?: string }) => (
-  <svg viewBox="0 0 16 16" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    viewBox="0 0 16 16"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d={d} />
   </svg>
 );
@@ -100,7 +108,7 @@ export const NodeCard = memo(function NodeCard({
         </div>
       ) : null}
 
-      <div className="flex items-center gap-2.5 border-b border-border/60 px-3 pt-3 pb-2.5">
+      <div className="flex items-center gap-2.5 border-b border-[var(--flb-rule)] px-3 pt-3 pb-2.5">
         <span className="chip-icon" style={{ background: look.bg, color: look.fg }}>
           <Icon d={look.icon} />
         </span>
@@ -114,30 +122,52 @@ export const NodeCard = memo(function NodeCard({
       </div>
 
       {node.type === 'end' ? (
-        <div className="px-3 py-4 text-center text-[11.5px] italic text-muted-foreground">flow ends here</div>
+        <div className="px-3 py-4 text-center text-[11.5px] italic text-muted-foreground">
+          flow ends here
+        </div>
       ) : null}
 
       <NodePreview node={node} ctx={ctx} />
 
       {multi ? (
-        <div className="border-t border-border/60 px-2 pt-1 pb-2">
+        <div className="border-t border-[var(--flb-rule)] px-2 pt-1 pb-2">
           {rows.map((r) => (
             <div key={r.id} className="node-row relative flex items-center gap-2 px-2 py-2">
               <span
                 className="chip-icon-sm"
                 style={{
-                  background: r.kind === 'yes' ? 'var(--flb-mint)' : r.kind === 'no' ? '#FBE9E7' : 'var(--muted)',
-                  color: r.kind === 'yes' ? 'var(--brand)' : r.kind === 'no' ? '#A1431F' : 'var(--muted-foreground)',
+                  background:
+                    r.kind === 'yes'
+                      ? 'var(--flb-mint)'
+                      : r.kind === 'no'
+                        ? '#FBE9E7'
+                        : 'var(--muted)',
+                  color:
+                    r.kind === 'yes'
+                      ? 'var(--brand)'
+                      : r.kind === 'no'
+                        ? '#A1431F'
+                        : 'var(--flb-ink-600)',
                 }}
               >
                 <Icon
-                  d={r.kind === 'yes' ? 'M3 8l3 3 7-7' : r.kind === 'no' ? 'M4 4l8 8M12 4l-8 8' : 'M3 8h10M9 4l4 4-4 4'}
+                  d={
+                    r.kind === 'yes'
+                      ? 'M3 8l3 3 7-7'
+                      : r.kind === 'no'
+                        ? 'M4 4l8 8M12 4l-8 8'
+                        : 'M3 8h10M9 4l4 4-4 4'
+                  }
                   className="h-3 w-3"
                 />
               </span>
               <div
                 className={`min-w-0 flex-1 truncate text-[12px] ${
-                  r.kind === 'yes' ? 'font-semibold text-brand' : r.kind === 'no' ? 'font-semibold text-[var(--flb-coral)]' : 'text-foreground/80'
+                  r.kind === 'yes'
+                    ? 'font-semibold text-[var(--flb-yes)]'
+                    : r.kind === 'no'
+                      ? 'font-semibold text-[var(--flb-coral)]'
+                      : 'text-[var(--flb-ink-700)]'
                 }`}
               >
                 {r.label}

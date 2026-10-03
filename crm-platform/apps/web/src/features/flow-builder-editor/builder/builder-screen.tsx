@@ -38,6 +38,7 @@ import {
 } from '../lib/graph-ops';
 import { templateQuickReplies } from '../lib/templates';
 import './builder.css';
+import { BuilderFonts } from './builder-fonts';
 import { Canvas } from './canvas';
 import { InspectorPanel, Minimap, NodeActionBar, ValidationPopup } from './overlays';
 import type { FormEnv } from './inspector/types';
@@ -53,7 +54,8 @@ const DEFAULT_VARS = [
   { name: 'phone', desc: 'Phone number', default: '' },
 ];
 
-const errMessage = (e: unknown): string => (e instanceof ApiError ? e.message : ((e as Error)?.message ?? 'unknown'));
+const errMessage = (e: unknown): string =>
+  e instanceof ApiError ? e.message : ((e as Error)?.message ?? 'unknown');
 
 /**
  * The builder (WD-FLB-014..019, 022): the whole screen, full viewport like WaDesk's (palette, canvas, inspector, toolbar,
@@ -78,6 +80,7 @@ export function BuilderScreen({ flowId: initialFlowId }: { flowId?: string }) {
   if (!ready) {
     return (
       <div className="flb-root fixed inset-0 z-40 grid place-items-center bg-background text-[13px] text-muted-foreground">
+        <BuilderFonts />
         Loading flow builder...
       </div>
     );
@@ -106,11 +109,22 @@ interface InnerProps {
   testOpenInitially: boolean;
 }
 
-function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially, aiPrompt, testOpenInitially }: InnerProps) {
+function BuilderInner({
+  initial,
+  ctx,
+  refreshContext,
+  typeParam,
+  aiOpenInitially,
+  aiPrompt,
+  testOpenInitially,
+}: InnerProps) {
   const seed = useMemo<CanvasState>(
     () => ({
       nodes: initial?.graph.flowNodes ?? [],
-      edges: (initial?.graph.flowEdges ?? []).map((e) => ({ ...e, kind: e.sourceHandle === 'no' ? ('no' as const) : null })),
+      edges: (initial?.graph.flowEdges ?? []).map((e) => ({
+        ...e,
+        kind: e.sourceHandle === 'no' ? ('no' as const) : null,
+      })),
     }),
     [initial],
   );
@@ -121,16 +135,26 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
   const [rowVersion, setRowVersion] = useState(initial?.rowVersion ?? 1);
   const [status, setStatus] = useState(initial?.isPublished ? 'Published' : 'Draft');
   const category = initial?.category ?? null;
-  const vars = useMemo(() => (initial?.graph.vars.length ? initial.graph.vars : DEFAULT_VARS), [initial]);
+  const vars = useMemo(
+    () => (initial?.graph.vars.length ? initial.graph.vars : DEFAULT_VARS),
+    [initial],
+  );
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [insOpen, setInsOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(() => !(typeof window !== 'undefined' && window.matchMedia?.('(max-width: 767.98px)').matches));
+  const [sidebarOpen, setSidebarOpen] = useState(
+    () => !(typeof window !== 'undefined' && window.matchMedia?.('(max-width: 767.98px)').matches),
+  );
   const [query, setQuery] = useState('');
   const [pan, setPan] = useState({ x: 40, y: 40 });
   const [zoom, setZoom] = useState(ZOOM_DEFAULT);
   // The red outlines and the popup belong to the wiring they were computed for: any change to the edges clears them.
-  const [vres, setVres] = useState<{ edges: unknown; ids: ReadonlySet<string>; items: string[]; popup: boolean } | null>(null);
+  const [vres, setVres] = useState<{
+    edges: unknown;
+    ids: ReadonlySet<string>;
+    items: string[];
+    popup: boolean;
+  } | null>(null);
   const valid = vres !== null && vres.edges === state.edges ? vres : null;
   const invalid: ReadonlySet<string> = valid?.ids ?? NO_IDS;
   const validationItems = valid?.popup ? valid.items : null;
@@ -155,7 +179,9 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => setViewport({ width: el.clientWidth, height: el.clientHeight }));
+    const ro = new ResizeObserver(() =>
+      setViewport({ width: el.clientWidth, height: el.clientHeight }),
+    );
     ro.observe(el);
     setViewport({ width: el.clientWidth, height: el.clientHeight });
     return () => ro.disconnect();
@@ -185,8 +211,10 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
   );
   const live = useCallback((next: CanvasState) => setState(next), []);
 
-
-  const selectedNode = useMemo(() => state.nodes.find((n) => n.id === selectedId) ?? null, [state.nodes, selectedId]);
+  const selectedNode = useMemo(
+    () => state.nodes.find((n) => n.id === selectedId) ?? null,
+    [state.nodes, selectedId],
+  );
 
   const doUndo = useCallback(() => {
     const r = undo(hist);
@@ -242,7 +270,13 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
-      if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable) return;
+      if (
+        t.tagName === 'INPUT' ||
+        t.tagName === 'TEXTAREA' ||
+        t.tagName === 'SELECT' ||
+        t.isContentEditable
+      )
+        return;
       const k = e.key.toLowerCase();
       const mod = e.ctrlKey || e.metaKey;
       if (mod && k === 'z' && !e.shiftKey) {
@@ -267,10 +301,9 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
 
   // --- save / publish -----------------------------------------------------------------------------------------------------
   const senderAvailable = useMemo(() => {
-    if (mode === 'chat') return ctx.senders.chat.length > 0;
     if (mode === 'instagram') return ctx.senders.instagram.length > 0;
     if (mode === 'facebook') return ctx.senders.facebook.length > 0;
-    return false;
+    return ctx.senders.chat.length > 0;
   }, [mode, ctx.senders]);
 
   const runValidation = (): boolean => {
@@ -290,7 +323,12 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
     flowType: mode,
     graph: {
       flowNodes: state.nodes as unknown as Array<Record<string, unknown>>,
-      flowEdges: state.edges.map(({ id, source, sourceHandle, target }) => ({ id, source, sourceHandle, target })),
+      flowEdges: state.edges.map(({ id, source, sourceHandle, target }) => ({
+        id,
+        source,
+        sourceHandle,
+        target,
+      })),
       vars: vars as unknown as Array<Record<string, unknown>>,
     },
   });
@@ -311,11 +349,14 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
 
   const saveFlow = async (flowName: string) => {
     if (busy) return;
+    const statusAtClick = status;
     setBusy(true);
     try {
       setStatus('Saving...');
       const saved = await persist(flowName);
-      setStatus(saved.isPublished ? 'Published' : 'Draft');
+      // QUIRK kept from WaDesk: the pill keeps "Published" only when the click happened with nothing edited; saving edits
+      // to a live flow reads "Draft" although the flow stays live on the server (the next Save republishes silently).
+      setStatus(statusAtClick === 'Published' ? 'Published' : 'Draft');
       toast(`Flow saved · "${saved.name}"`);
       setSaveOpen(false);
     } catch (e) {
@@ -356,7 +397,10 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
   const applyGenerated = (flow: FlbAiGenerateResponse['flow'], modelLabel: string) => {
     const next: CanvasState = {
       nodes: flow.flowNodes,
-      edges: flow.flowEdges.map((e) => ({ ...e, kind: e.sourceHandle === 'no' ? ('no' as const) : null })),
+      edges: flow.flowEdges.map((e) => ({
+        ...e,
+        kind: e.sourceHandle === 'no' ? ('no' as const) : null,
+      })),
     };
     setState(next);
     setHist((h) => pushHistory(h, next));
@@ -380,9 +424,19 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
         const fd = new FormData();
         fd.append('file', file);
         fd.append('type', kind);
-        const res = await fetch('/api/v2/flows/upload-media', { method: 'POST', body: fd, credentials: 'same-origin', headers: { Accept: 'application/json' } });
-        const json = (await res.json().catch(() => ({}))) as { data?: { url: string; filename: string }; detail?: string; title?: string };
-        if (!res.ok || !json.data) throw new Error(json.detail ?? json.title ?? `HTTP ${res.status}`);
+        const res = await fetch('/api/v2/flows/upload-media', {
+          method: 'POST',
+          body: fd,
+          credentials: 'same-origin',
+          headers: { Accept: 'application/json' },
+        });
+        const json = (await res.json().catch(() => ({}))) as {
+          data?: { url: string; filename: string };
+          detail?: string;
+          title?: string;
+        };
+        if (!res.ok || !json.data)
+          throw new Error(json.detail ?? json.title ?? `HTTP ${res.status}`);
         return { url: json.data.url, filename: json.data.filename };
       },
     }),
@@ -390,7 +444,11 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
   );
 
   return (
-    <div className="flb-root fixed inset-0 z-40 flex flex-col bg-background text-foreground" data-testid="flow-builder">
+    <div
+      className="flb-root fixed inset-0 z-40 flex flex-col bg-background text-foreground"
+      data-testid="flow-builder"
+    >
+      <BuilderFonts />
       <Toolbar
         flowId={flowId}
         flowName={name}
@@ -433,7 +491,11 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
             setHist((h) => pushHistory(h, next));
             markDirty();
           }}
-          onConnect={(from, target) => commit(connect(state, from, target))}
+          onConnect={(from, target) => {
+            // A self connection is ignored: no history entry, no "unsaved".
+            const next = connect(state, from, target);
+            if (next !== state) commit(next);
+          }}
           onDropNode={doAdd}
           onDeleteEdge={(id) => commit(deleteEdge(state, id))}
           wrapperRef={wrapperRef}
@@ -457,7 +519,10 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
             title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
             aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
           >
-            <Icon d={sidebarOpen ? 'M9 4l-3 4 3 4' : 'M7 4l3 4-3 4'} className="h-3 w-3 text-muted-foreground" />
+            <Icon
+              d={sidebarOpen ? 'M9 4l-3 4 3 4' : 'M7 4l3 4-3 4'}
+              className="h-3 w-3 text-muted-foreground"
+            />
           </button>
 
           {!sidebarOpen ? (
@@ -476,22 +541,51 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
 
           <div className="absolute right-4 bottom-4 z-20 flex items-center gap-2">
             <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
-              <button type="button" onClick={doUndo} disabled={!canUndo(hist)} className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40" title="Undo (Ctrl+Z)" aria-label="Undo">
+              <button
+                type="button"
+                onClick={doUndo}
+                disabled={!canUndo(hist)}
+                className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                title="Undo (Ctrl+Z)"
+                aria-label="Undo"
+              >
                 <Icon d="M4 8h6a3 3 0 0 1 0 6M4 8l3-3M4 8l3 3" className="h-3.5 w-3.5" />
               </button>
               <div className="h-5 w-px bg-border" />
-              <button type="button" onClick={doRedo} disabled={!canRedo(hist)} className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">
+              <button
+                type="button"
+                onClick={doRedo}
+                disabled={!canRedo(hist)}
+                className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                title="Redo (Ctrl+Shift+Z)"
+                aria-label="Redo"
+              >
                 <Icon d="M12 8H6a3 3 0 0 0 0 6M12 8L9 5M12 8l-3 3" className="h-3.5 w-3.5" />
               </button>
             </div>
             <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
-              <button type="button" onClick={() => setZoom(Math.min(1.8, zoom + 0.1))} className="grid h-9 w-9 place-items-center hover:bg-muted" title="Zoom in" aria-label="Zoom in">
+              <button
+                type="button"
+                onClick={() => setZoom(Math.min(1.8, zoom + 0.1))}
+                className="grid h-9 w-9 place-items-center hover:bg-muted"
+                title="Zoom in"
+                aria-label="Zoom in"
+              >
                 <Icon d="M8 4v8M4 8h8" className="h-3.5 w-3.5" />
               </button>
-              <div className="grid h-9 min-w-[44px] place-items-center border-x border-border px-2 text-center font-mono text-[10.5px] text-foreground/70" data-testid="zoom-level">
+              <div
+                className="grid h-9 min-w-[44px] place-items-center border-x border-border px-2 text-center font-mono text-[10.5px] text-foreground/70"
+                data-testid="zoom-level"
+              >
                 {Math.round(zoom * 100)}%
               </div>
-              <button type="button" onClick={() => setZoom(Math.max(0.4, zoom - 0.1))} className="grid h-9 w-9 place-items-center hover:bg-muted" title="Zoom out" aria-label="Zoom out">
+              <button
+                type="button"
+                onClick={() => setZoom(Math.max(0.4, zoom - 0.1))}
+                className="grid h-9 w-9 place-items-center hover:bg-muted"
+                title="Zoom out"
+                aria-label="Zoom out"
+              >
                 <Icon d="M4 8h8" className="h-3.5 w-3.5" />
               </button>
               <button
@@ -528,9 +622,27 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
         />
       </div>
 
-      <SaveConfirmModal open={saveOpen} busy={busy} initialName={name} onClose={() => !busy && setSaveOpen(false)} onSave={(n) => void saveFlow(n)} />
-      {validationItems ? <ValidationPopup items={validationItems} onClose={() => setVres((v) => (v ? { ...v, popup: false } : v))} /> : null}
-      <AIGenModal open={aiOpen} models={ctx.aiModels} initialPrompt={aiPrompt} flowType={mode} onClose={() => setAiOpen(false)} onGenerate={applyGenerated} />
+      <SaveConfirmModal
+        open={saveOpen}
+        busy={busy}
+        initialName={name}
+        onClose={() => !busy && setSaveOpen(false)}
+        onSave={(n) => void saveFlow(n)}
+      />
+      {validationItems ? (
+        <ValidationPopup
+          items={validationItems}
+          onClose={() => setVres((v) => (v ? { ...v, popup: false } : v))}
+        />
+      ) : null}
+      <AIGenModal
+        open={aiOpen}
+        models={ctx.aiModels}
+        initialPrompt={aiPrompt}
+        flowType={mode}
+        onClose={() => setAiOpen(false)}
+        onGenerate={applyGenerated}
+      />
       <TestPanel
         open={testOpen}
         onClose={() => setTestOpen(false)}
@@ -541,7 +653,10 @@ function BuilderInner({ initial, ctx, refreshContext, typeParam, aiOpenInitially
         flowName={(id) => ctx.flows.find((f) => f.id === id)?.name}
       />
       {toastMsg ? (
-        <div className="fixed top-20 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-[12px] font-medium text-background shadow-lg" role="status">
+        <div
+          className="fixed top-20 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-[12px] font-medium text-background shadow-lg"
+          role="status"
+        >
           {toastMsg}
         </div>
       ) : null}

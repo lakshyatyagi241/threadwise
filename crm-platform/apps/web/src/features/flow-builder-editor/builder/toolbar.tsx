@@ -18,11 +18,21 @@ interface Props {
 }
 
 /** The top bar: back arrow, editable name, Generate with AI, Test, the status pill, Save and Publish (WD-FLB-015). */
-export function Toolbar({ flowId, flowName, setFlowName, status, busy, onSave, onPublish, onTest, onAIGen }: Props) {
+export function Toolbar({
+  flowId,
+  flowName,
+  setFlowName,
+  status,
+  busy,
+  onSave,
+  onPublish,
+  onTest,
+  onAIGen,
+}: Props) {
   const isPublished = status === 'Published';
   const isUnsaved = status.includes('unsaved');
   const label = isPublished ? 'Published' : isUnsaved ? 'Unsaved' : 'Draft';
-  const dot = isPublished ? 'var(--primary)' : isUnsaved ? 'var(--flb-coral)' : '#92A29E';
+  const dot = isPublished ? 'var(--flb-green)' : isUnsaved ? 'var(--flb-coral)' : '#92A29E';
   return (
     <header className="flow-toolbar relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
       <Link
@@ -35,12 +45,23 @@ export function Toolbar({ flowId, flowName, setFlowName, status, busy, onSave, o
       </Link>
       <div className="flex min-w-0 items-center gap-2.5 py-1 pr-1 pl-1">
         <span className="grid h-9 w-9 place-items-center rounded-md bg-brand text-brand-foreground">
-          <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7">
-            <circle cx="3.5" cy="8" r="1.6" /><circle cx="12.5" cy="3.5" r="1.6" /><circle cx="12.5" cy="12.5" r="1.6" /><path d="M5 7l6-3M5 9l6 3" />
+          <svg
+            viewBox="0 0 16 16"
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+          >
+            <circle cx="3.5" cy="8" r="1.6" />
+            <circle cx="12.5" cy="3.5" r="1.6" />
+            <circle cx="12.5" cy="12.5" r="1.6" />
+            <path d="M5 7l6-3M5 9l6 3" />
           </svg>
         </span>
         <div className="min-w-0">
-          <div className="font-mono text-[9.5px] uppercase leading-none tracking-[0.16em] text-muted-foreground">Flow Builder</div>
+          <div className="flow-eyebrow font-mono text-[9.5px] uppercase leading-none tracking-[0.16em] text-muted-foreground">
+            Flow Builder
+          </div>
           <input
             value={flowName}
             onChange={(e) => setFlowName(e.target.value)}
@@ -56,19 +77,22 @@ export function Toolbar({ flowId, flowName, setFlowName, status, busy, onSave, o
         title="Generate with AI"
         className="btn-ai-shine relative isolate inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[11.5px] font-semibold"
       >
-        <Icon d="M8 1v3M8 12v3M1 8h3M12 8h3M3.5 3.5l2 2M10.5 10.5l2 2M3.5 12.5l2-2M10.5 5.5l2-2" className="h-3 w-3" />
+        <Icon
+          d="M8 1v3M8 12v3M1 8h3M12 8h3M3.5 3.5l2 2M10.5 10.5l2 2M3.5 12.5l2-2M10.5 5.5l2-2"
+          className="h-3 w-3"
+        />
         <span className="flow-ai-text">Generate with AI</span>
       </button>
       <button
         type="button"
         onClick={onTest}
-        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-medium hover:bg-muted"
+        className="flow-test-btn inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-medium hover:bg-muted"
       >
         <Icon d="M5 3l8 5-8 5z" className="h-3 w-3" />
         <span className="flow-btn-text">Test</span>
       </button>
       <span
-        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[10.5px] font-medium text-foreground/80"
+        className="flow-status inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[10.5px] font-medium text-[var(--flb-ink-700)]"
         title={label}
         role="status"
       >
