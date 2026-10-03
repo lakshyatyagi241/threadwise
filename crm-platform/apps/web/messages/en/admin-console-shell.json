@@ -10,7 +10,8 @@
     "shell": {
       "collapse": "Collapse sidebar",
       "expand": "Expand sidebar",
-      "toggleGroup": "Show or hide {group}"
+      "toggleGroup": "Show or hide {group}",
+      "backToApp": "Back to app"
     },
     "overview": {
       "title": "Platform console",
@@ -61,6 +62,81 @@
         "support": "Support",
         "more": "More"
       }
+    },
+    "header": {
+      "health": {
+        "title": "Platform health",
+        "ok": "All systems normal",
+        "stuck": "{count, plural, one {# stuck job} other {# stuck jobs}}",
+        "down": "Database unreachable"
+      },
+      "bell": {
+        "title": "Notifications",
+        "labelUnread": "Notifications, {count} unread",
+        "inbox": "Inbox",
+        "markAllRead": "Mark all read",
+        "clearAll": "Clear all",
+        "viewAll": "View all",
+        "loading": "Loading...",
+        "empty": "No notifications yet."
+      },
+      "account": {
+        "menu": "Account menu",
+        "open": "Account menu for {name}",
+        "myAccount": "My account",
+        "settings": "Settings",
+        "overview": "Admin overview",
+        "signOut": "Sign out"
+      },
+      "feed": {
+        "signup": "New signup",
+        "paymentReceived": "Payment received",
+        "newOrder": "New order",
+        "newTicket": "New support ticket",
+        "newContactMessage": "New contact message",
+        "newWorkspace": "New workspace"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "Admin - Platform activity - Notifications",
+      "title": "Admin notifications",
+      "note": "Everything happening across the platform: new signups, payments, support tickets, contact messages and new workspaces. Separate from a workspace member's personal notifications.",
+      "tiles": {
+        "all": "All events",
+        "signup": "Signups",
+        "payment": "Payments",
+        "ticket": "Support",
+        "contact": "Messages",
+        "workspace": "Workspaces"
+      },
+      "pills": {
+        "all": "All",
+        "signup": "Signups",
+        "payment": "Payments",
+        "ticket": "Support",
+        "contact": "Messages",
+        "workspace": "Workspaces"
+      },
+      "kinds": {
+        "signup": "Signup",
+        "payment": "Payment",
+        "ticket": "Support",
+        "contact": "Message",
+        "workspace": "Workspace"
+      },
+      "last30": "last 30 days",
+      "search": "Search events...",
+      "empty": "No platform activity in this view.",
+      "loadFailed": "The feed could not be loaded.",
+      "cols": {
+        "type": "Type",
+        "event": "Event",
+        "detail": "Detail",
+        "when": "When",
+        "open": "Open"
+      },
+      "showing": "Showing {count, plural, one {# recent event} other {# recent events}}",
+      "live": "Live feed, newest first"
     }
   }
 }
