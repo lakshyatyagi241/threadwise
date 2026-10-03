@@ -143,11 +143,11 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
       { status: 'sent', ago: '2 days' },
     ]);
     await seed(t, [
-      { status: 'delivered', ago: '1 day', read: true }, // read_at set while status stays delivered
-      { status: 'delivered', ago: '1 day', read: true },
-      { status: 'failed', ago: '1 day' },
-      { status: 'queued', ago: '1 day' },
-      { status: 'sent', ago: '1 day' },
+      { status: 'delivered', ago: '26 hours', read: true }, // read_at set while status stays delivered
+      { status: 'delivered', ago: '26 hours', read: true },
+      { status: 'failed', ago: '26 hours' },
+      { status: 'queued', ago: '26 hours' },
+      { status: 'sent', ago: '26 hours' },
     ]);
     // 30 inbound across two conversations (one legacy-stream row has no conversation)
     const c1 = await conversation(t);
