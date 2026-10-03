@@ -17,6 +17,8 @@ export type PlanLimitGroup = (typeof PLAN_LIMIT_GROUPS)[number];
 export const PLAN_LIMIT_DEFS = [
   { key: 'monthly_messages', group: 'messaging' },
   { key: 'broadcasts', group: 'messaging' },
+  // Campaigns CREATED over the life of a plan period, deleted ones included (the delete-proof quota ledger, TW-PLAN-018). 0 = unlimited.
+  { key: 'total_campaigns', group: 'messaging' },
   { key: 'devices', group: 'workspace' },
   { key: 'users', group: 'workspace' },
   { key: 'contacts', group: 'workspace' },
@@ -30,6 +32,9 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'templates', group: 'content' },
   { key: 'flows', group: 'content' },
   { key: 'autoreplies', group: 'content' },
+  // Customer REST API requests per minute per key (TW-PLAN-022). NOT like the other caps: 0 means "use the platform default", not unlimited;
+  // a workspace override of -1 means unlimited.
+  { key: 'api_rate_limit_per_minute', group: 'workspace' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -55,6 +60,8 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'sales_pipeline', group: 'advanced', default: true },
   // Booking types, appointments and the public booking pages (TW-APPT-001). Default true: Reference's column default.
   { key: 'appointment_booking', group: 'advanced', default: true },
+  // The website chatbot widget builder (TW-WGT-027). Default false: Reference's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
+  { key: 'chatbot_widgets', group: 'messaging', default: false },
   // Team inbox gates (plan-inbox-chat.md decision 11), with Reference's column defaults: SLA policies off, the other three on.
   { key: 'inbox_sla', group: 'messaging', default: false },
   { key: 'inbox_routing', group: 'messaging', default: true },
@@ -63,6 +70,24 @@ export const PLAN_FEATURE_DEFS = [
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
+
+/** The words a lock message and the paywall sheet use for a feature (TW-PLAN-019 rule 5). */
+export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
+  automation: 'Automation',
+  ai_assistants: 'AI assistants',
+  calling: 'WhatsApp calling',
+  woocommerce: 'WooCommerce',
+  shopify: 'Shopify',
+  analytics: 'Analytics',
+  remove_branding: 'White-label branding',
+  sales_pipeline: 'Sales pipeline',
+  appointment_booking: 'Appointment booking',
+  chatbot_widgets: 'Chatbot widgets',
+  inbox_sla: 'SLA policies',
+  inbox_routing: 'Routing rules',
+  inbox_kanban: 'Kanban view',
+  team_performance: 'Team performance',
+};
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
 /**
@@ -80,6 +105,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'remove_branding',
   'sales_pipeline',
   'appointment_booking',
+  'chatbot_widgets',
   'inbox_sla',
   'inbox_routing',
   'inbox_kanban',

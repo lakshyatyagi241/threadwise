@@ -1,4 +1,4 @@
-import { Controller, Get, Header, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Header, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   analyticsQuerySchema,
@@ -8,7 +8,7 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
-import { AnalyticsPlanGuard } from './dash-plan';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { DashService } from './dash.service';
 
 /** Workspace dashboard (TW-DASH-001..005, 012, 018). Read-only; gated on `dash.dashboard.read` (Reference: role manager or above). */
@@ -38,7 +38,7 @@ export class DashboardController {
 /** Workspace analytics (TW-DASH-022..032): `dash.analytics.read` and the plan's analytics feature. */
 @ApiTags('analytics')
 @ActorKinds('user')
-@UseGuards(AnalyticsPlanGuard)
+@RequirePlanFeature('analytics')
 @Controller({ path: 'analytics', version: '2' })
 export class AnalyticsController {
   constructor(private readonly dash: DashService) {}

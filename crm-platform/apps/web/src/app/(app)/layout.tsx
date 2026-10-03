@@ -1,10 +1,13 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { AppShell } from '@/components/shell/app-shell';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
+import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
+import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
+import { WalletAppShell } from '@/features/wallet-message-billing';
 import { NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
@@ -28,10 +31,17 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   if (!session) redirect(await signedOutTarget(expired, idleMinutes));
 
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
+  // The plan's features lock the menu entries that need one and drive the paywall sheet; unknown (null) locks nothing.
+  const enabledFeatures = await fetchEnabledFeatures();
   const capabilities = {
     ...CAPABILITIES_UNKNOWN,
     permissions: new Set(Object.keys(session.permissions)),
+    planFeatures: enabledFeatures,
   };
+  const paywallGates = NAV.filter((n) => n.gates?.planFeature).map((n) => ({
+    href: n.href,
+    feature: n.gates!.planFeature!,
+  }));
 
   return (
     <SessionProvider session={session}>
@@ -41,7 +51,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         key={`${session.org.id}:${session.user.id}`}
         url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
       >
-        <AppShell
+        <WalletAppShell
           user={{
             fullName: session.user.displayName ?? session.user.fullName,
             email: session.user.email,
@@ -51,11 +61,20 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
           theme={theme}
           navFooter={<WorkspaceSwitcher />}
-          banners={<AccountBanners key="banners" />}
+          banners={
+            <>
+              <TrialBar />
+              <AccountBanners key="banners" />
+            </>
+          }
           bell={<NotificationBell key="bell" />}
         >
           <AccountGate>{children}</AccountGate>
-        </AppShell>
+          <PlanPaywall
+            gates={paywallGates}
+            enabled={enabledFeatures ? [...enabledFeatures] : null}
+          />
+        </WalletAppShell>
       </RealtimeProvider>
     </SessionProvider>
   );

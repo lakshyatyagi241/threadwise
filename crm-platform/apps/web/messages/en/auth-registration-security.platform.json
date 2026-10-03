@@ -1364,6 +1364,10 @@
             },
             "billingUnit": {
               "label": "Unit"
+            },
+            "dataRetentionDays": {
+              "label": "Data retention (days after expiry)",
+              "hint": "Days after a paid plan lapses before the workspace's data is deleted. 0 = never. Deleting is permanent."
             }
           },
           "flags": {
@@ -1410,7 +1414,9 @@
             "routing_rules": "Routing rules",
             "templates": "Message templates",
             "flows": "Flows",
-            "autoreplies": "Keyword auto-replies"
+            "autoreplies": "Keyword auto-replies",
+            "total_campaigns": "Campaigns created (never freed by deleting)",
+            "api_rate_limit_per_minute": "API requests per minute (0 = platform default)"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1428,6 +1434,7 @@
             "remove_branding": "White-label (removes platform branding)",
             "sales_pipeline": "Sales pipeline (deals and tasks)",
             "appointment_booking": "Appointments and booking pages",
+            "chatbot_widgets": "Website chatbot widgets",
             "inbox_sla": "Inbox SLA policies",
             "inbox_routing": "Inbox routing rules and business hours",
             "inbox_kanban": "Inbox Kanban board",
