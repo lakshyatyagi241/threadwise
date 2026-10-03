@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { CATALOG_SEND_MAX_PRODUCTS } from './catalog';
+import { waString } from './text';
 
 /**
  * Collections (product sets, WD-CAT-017/018): a saved, ordered group of products that is sent as one multi-product message.
@@ -36,8 +37,8 @@ export const collectionResponseSchema = z.object({
 export type CollectionResponse = z.infer<typeof collectionResponseSchema>;
 
 export const collectionFieldsSchema = z.object({
-  name: z.string().trim().min(1).max(COLLECTION_NAME_MAX),
-  description: z.string().trim().max(COLLECTION_DESCRIPTION_MAX).nullish(),
+  name: waString(COLLECTION_NAME_MAX, 1),
+  description: waString(COLLECTION_DESCRIPTION_MAX).nullish(),
   /** 1 to 30 products of this workspace, in the order they are shown. */
   productIds: z.array(uuidSchema).min(1).max(CATALOG_SEND_MAX_PRODUCTS),
   isActive: z.boolean().default(true),
