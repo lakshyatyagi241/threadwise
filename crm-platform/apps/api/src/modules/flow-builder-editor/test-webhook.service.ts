@@ -8,13 +8,17 @@ const METHODS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD']);
 const TIMEOUT_MS = 15_000;
 const KEEP_CHARS = 4000;
 const MAX_BYTES = 1_000_000;
+const USER_AGENT = 'Threadwise-FlowTest/1.0';
 
-/** `{{ name }}` (spaces allowed; a dotted key such as `response.id` is looked up literally, not as a path). */
+/**
+ * `{{ name }}` (spaces allowed; a dotted key such as `response.id` is looked up literally, not as a path). As in Reference, a
+ * variable that is not set becomes an empty string (the live runtime does the same), unlike the chat preview, which keeps it.
+ */
 export function substitute(text: string, vars: Record<string, unknown> | null | undefined): string {
   if (!text) return '';
-  return text.replace(/\{\{\s*([\w.-]+)\s*\}\}/g, (m, k: string) => {
-    const v = vars?.[k];
-    return v === undefined || v === null ? m : typeof v === 'object' ? JSON.stringify(v) : String(v);
+  return text.replace(/\{\{\s*([^{}]+?)\s*\}\}/g, (_m, raw: string) => {
+    const v = vars?.[raw.trim()];
+    return v === undefined || v === null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v);
   });
 }
 
@@ -38,14 +42,22 @@ export class TestWebhookService {
 
     const asked = (req.method ?? 'POST').toUpperCase();
     const method = METHODS.has(asked) ? asked : 'POST';
-    const headers: Record<string, string> = {};
+    // Content-Type defaults to JSON as in Reference; custom headers may replace it (any casing); a body goes out with the node's own type.
+    const contentType = req.contentType || 'application/json';
+    // Reference's HTTP client always identifies itself (some endpoints refuse a request with no User-Agent); so do we.
+    const headers: Record<string, string> = { 'User-Agent': USER_AGENT, 'Content-Type': contentType };
     for (const h of req.headers ?? []) {
       const k = (h.key ?? '').trim();
-      if (k) headers[k] = substitute(h.value ?? '', vars);
+      if (!k) continue;
+      for (const existing of Object.keys(headers)) if (existing.toLowerCase() === k.toLowerCase()) delete headers[existing];
+      headers[k] = substitute(h.value ?? '', vars);
     }
-    if (req.contentType) headers['Content-Type'] = req.contentType;
     const body = method !== 'GET' && method !== 'HEAD' ? substitute(req.body ?? '', vars) : '';
-    if (body) headers['Content-Length'] = String(Buffer.byteLength(body));
+    if (body) {
+      for (const existing of Object.keys(headers)) if (existing.toLowerCase() === 'content-type') delete headers[existing];
+      headers['Content-Type'] = contentType;
+      headers['Content-Length'] = String(Buffer.byteLength(body));
+    }
 
     try {
       const out = await this.send(verdict, method, headers, body);
