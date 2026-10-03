@@ -303,7 +303,11 @@
         "getStarted": "Get started",
         "docsCommunity": "Docs & community",
         "prioritySupport": "Priority support"
-      }
+      },
+      "nameHint": "Alex Morgan",
+      "emailHint": "alex@company.com",
+      "companyHint": "Company name",
+      "messageHint": "What do you need help with? Be as specific as you like, the more context the faster we can help."
     },
     "bar": {
       "dismiss": "Dismiss announcement",

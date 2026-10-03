@@ -12,7 +12,17 @@ import {
 } from '@crm/contracts';
 import type { CaptchaConfig } from '@/features/auth-registration-security/guest/captcha';
 import type { Fc } from './content';
-import { ContactForm, type ContactLabels } from '../public/contact-form';
+import {
+  AboutHero,
+  Backers,
+  ContactHero,
+  Numbers,
+  OriginStory,
+  Press,
+  Timeline,
+  Values,
+} from './tw-about';
+import { ContactChannels, ContactFormSection } from './tw-contact';
 import { UseCases, Testimonials } from './tw-more';
 import { FeatureBento, HeroFeatures, PillarsThree, PullQuote } from './tw-features-page';
 import {
@@ -313,110 +323,6 @@ export function GenericSection({
 
 // --- specialised sections -------------------------------------------------------------------------------------------
 
-function ChannelsSection({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
-  const slug = def.slug;
-  const info = ctx.extras.siteInfo;
-  const hrefs = [
-    info?.emailSupport ? `mailto:${info.emailSupport}` : null,
-    info?.whatsapp ? `https://wa.me/${info.whatsapp}` : null,
-    '#contact-form',
-  ];
-  const k = (f: string) => keyOf(ctx, slug, f);
-  const office =
-    info &&
-    (info.companyName || info.address || info.cityCountry || info.emailGeneral || info.phone);
-  return (
-    <section className="cms-section" data-section={slug} id={slug}>
-      <div className="cms-wrap">
-        <p className="cms-eyebrow">
-          <T ctx={ctx} k={k('eyebrow')} />
-          {ctx.fc(k('sublabel')) !== '' && ' · '}
-          <T ctx={ctx} k={k('sublabel')} />
-        </p>
-        <T ctx={ctx} k={k('caption1')} as="p" className="cms-lead" />
-        <div className="cms-grid">
-          {[1, 2, 3].map((i) => {
-            const href = hrefs[i - 1];
-            return (
-              <div key={i} className="cms-card">
-                {(ctx.edit || ctx.fc(k(`ch${i}_badge`)) !== '') && (
-                  <T ctx={ctx} k={k(`ch${i}_badge`)} className="cms-badge" />
-                )}
-                <p className="cms-eyebrow" style={{ marginTop: '0.5rem' }}>
-                  <T ctx={ctx} k={k(`ch${i}_label`)} />
-                </p>
-                <T ctx={ctx} k={k(`ch${i}_title`)} as="h3" />
-                <T ctx={ctx} k={k(`ch${i}_desc`)} as="p" className="cms-small" />
-                <p className="cms-small">
-                  <T ctx={ctx} k={k('bestfor_label')} />: <T ctx={ctx} k={k(`ch${i}_bestfor`)} />
-                </p>
-                <p className="cms-small">
-                  <T ctx={ctx} k={k('replytime_label')} />:{' '}
-                  <T ctx={ctx} k={k(`ch${i}_replytime`)} />
-                </p>
-                {href && !ctx.edit && (
-                  <p className="cms-small">
-                    <a href={href}>
-                      {i === 1 ? info?.emailSupport : i === 2 ? (info?.phone ?? '') : ''}
-                      {i === 3 ? '↓' : ''}
-                    </a>
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-        {office && (
-          <div className="cms-card" style={{ marginTop: '1rem' }}>
-            <p className="cms-eyebrow">
-              <T ctx={ctx} k={k('office_label')} />
-            </p>
-            {[info.companyName, info.address, info.cityCountry, info.emailGeneral, info.phone]
-              .filter(Boolean)
-              .map((line) => (
-                <p key={line} className="cms-small" style={{ margin: 0 }}>
-                  {line}
-                </p>
-              ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function FormSection({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
-  const slug = def.slug;
-  const labels = Object.fromEntries(
-    [
-      'name_label',
-      'email_label',
-      'company_label',
-      'topic_label',
-      'message_label',
-      'sla',
-      'submit_label',
-      'success_title',
-      'success_text',
-      'error_text',
-    ].map((f) => [f, ctx.fc(keyOf(ctx, slug, f))]),
-  ) as unknown as ContactLabels;
-  return (
-    <section className="cms-section" data-tone="alt" data-section={slug} id="contact-form">
-      <div className="cms-wrap">
-        <p className="cms-eyebrow">
-          <T ctx={ctx} k={keyOf(ctx, slug, 'eyebrow')} />
-          {ctx.fc(keyOf(ctx, slug, 'sublabel')) !== '' && ' · '}
-          <T ctx={ctx} k={keyOf(ctx, slug, 'sublabel')} />
-        </p>
-        <T ctx={ctx} k={keyOf(ctx, slug, 'headline')} as="h2" className="cms-h2" />
-        <T ctx={ctx} k={keyOf(ctx, slug, 'caption')} as="p" className="cms-lead" />
-        <ContactForm labels={labels} captcha={ctx.extras.captcha ?? null} preview={ctx.edit} />
-      </div>
-    </section>
-  );
-}
-
 const TONES: Record<string, 'alt' | 'deep' | undefined> = {
   manifesto: 'alt',
   'feature-inbox': 'alt',
@@ -440,11 +346,25 @@ export function SectionView({ ctx, slug }: { ctx: SiteCtx; slug: string }) {
           </HeroHome>
         );
       if (ctx.page === 'features') return <HeroFeatures ctx={ctx} def={def} />;
+      if (ctx.page === 'about') return <AboutHero ctx={ctx} def={def} />;
+      if (ctx.page === 'contact') return <ContactHero ctx={ctx} def={def} />;
       return ctx.page === 'pricing' ? (
         <PageHero ctx={ctx} def={def} />
       ) : (
         <GenericSection ctx={ctx} def={def} hero />
       );
+    case 'origin-story':
+      return <OriginStory ctx={ctx} def={def} />;
+    case 'values':
+      return <Values ctx={ctx} def={def} />;
+    case 'timeline':
+      return <Timeline ctx={ctx} def={def} />;
+    case 'numbers':
+      return <Numbers ctx={ctx} def={def} />;
+    case 'press':
+      return <Press ctx={ctx} def={def} />;
+    case 'backers':
+      return <Backers ctx={ctx} def={def} />;
     case 'logo-strip':
       return <LogoStrip ctx={ctx} def={def} />;
     case 'manifesto':
@@ -478,9 +398,9 @@ export function SectionView({ ctx, slug }: { ctx: SiteCtx; slug: string }) {
     case 'pricing-strip':
       return <PricingSection ctx={ctx} def={def} />;
     case 'channels':
-      return <ChannelsSection ctx={ctx} def={def} />;
+      return <ContactChannels ctx={ctx} def={def} />;
     case 'form':
-      return <FormSection ctx={ctx} def={def} />;
+      return <ContactFormSection ctx={ctx} def={def} />;
     default:
       return <GenericSection ctx={ctx} def={def} tone={TONES[slug]} />;
   }

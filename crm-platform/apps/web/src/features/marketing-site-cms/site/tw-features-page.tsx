@@ -1589,7 +1589,7 @@ export function PillarsThree({ ctx, def }: P) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="col-span-12 lg:col-span-3">
               <span className="badge-num" {...a('eyebrow')}>
-                —{ctx.fc(k('eyebrow'))}
+                — {ctx.fc(k('eyebrow'))}
               </span>
               <T
                 ctx={ctx}
