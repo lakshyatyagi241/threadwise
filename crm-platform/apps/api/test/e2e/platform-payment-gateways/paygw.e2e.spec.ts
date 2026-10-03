@@ -782,7 +782,8 @@ describe('checkout, return, webhook and fulfilment (WD-PAYGW-009, 011, 026..028,
 
   it('razorpay: INR order through the widget parameters; a good signature pays, a bad one fails', async () => {
     await h.owner.query(
-      `INSERT INTO currencies (name, code, symbol, exchange_rate) VALUES ('US Dollar','USD','$',1), ('Indian Rupee','INR','Rs',83.5) ON CONFLICT (code) DO NOTHING`,
+      `INSERT INTO currencies (name, code, symbol, exchange_rate) VALUES ('US Dollar','USD','$',1), ('Indian Rupee','INR','Rs',83.5)
+       ON CONFLICT (code) DO UPDATE SET exchange_rate = EXCLUDED.exchange_rate, is_active = true`,
     );
     await configure('razorpay', {
       key_id: 'rzp_test_1',

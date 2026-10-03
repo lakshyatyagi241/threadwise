@@ -5,6 +5,8 @@
 import {
   bigint,
   boolean,
+  customType,
+  integer,
   foreignKey,
   index,
   jsonb,
@@ -25,6 +27,8 @@ import { deals } from '../deals-pipelines/tables';
 import { organizations, users } from '../foundation';
 import { invoices } from '../invoicing/tables';
 import { packages } from '../plans-subscriptions-trials/tables';
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
 
 export const payments = pgTable(
   'payments',
@@ -251,3 +255,33 @@ export const orders = pgTable(
 
 export type OrdersRow = typeof orders.$inferSelect;
 export type NewOrdersRow = typeof orders.$inferInsert;
+
+/** 20261018090000_paygw_proof_and_subscriptions.sql: the bytes of an offline-payment proof, one per order. */
+export const orderProofBlobs = pgTable(
+  'order_proof_blobs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    orderId: idColumn('order_id').notNull(),
+    mime: text('mime').notNull(),
+    byteSize: integer('byte_size').notNull(),
+    bytes: bytea('bytes').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_order_proof_blobs_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_order_proof_blobs_order_id').on(t.orgId, t.orderId),
+    foreignKey({
+      name: 'fk_order_proof_blobs_order_id',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type OrderProofBlobsRow = typeof orderProofBlobs.$inferSelect;
+export type NewOrderProofBlobsRow = typeof orderProofBlobs.$inferInsert;

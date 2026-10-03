@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import type { PaygwBilling, PaygwPeriod, PaygwQuote } from '@crm/contracts';
-import { Alert, Button, Card, Field, Input, Select, Spinner } from '@crm/ui';
+import { Alert, Button, Card, Checkbox, Field, Input, Select, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import {
   checkoutKey,
@@ -15,8 +15,10 @@ import {
   placeWalletOrder,
 } from '../api';
 import { formatMoney } from '../lib/money';
-import { nextStep } from '../lib/next-action';
+import { nextStep, type NextStep } from '../lib/next-action';
+import { openCashfree, openPaddle, postForm } from '../lib/provider-widgets';
 import { openRazorpay } from '../lib/razorpay';
+import { OfflineInstructions } from './offline-instructions';
 
 const NS = 'platform-payment-gateways.checkout';
 
@@ -54,6 +56,12 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const [coupon, setCoupon] = useState<string | undefined>(undefined);
   const [problem, setProblem] = useState<string | null>(null);
   const [launching, setLaunching] = useState(false);
+  const [autoRenew, setAutoRenew] = useState(false);
+  const [offline, setOffline] = useState<{
+    step: Extract<NextStep, { kind: 'instructions' }>;
+    orderNumber: string;
+    orderId: string;
+  } | null>(null);
   const amount = params.get('amount') ?? '';
   // One key per distinct submission: a retry of the same form replays the order instead of creating a second one.
   const attempt = useRef<{ sig: string; key: string } | null>(null);
@@ -117,6 +125,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         amount,
         payload,
         couponToSend,
+        selected.autoRenew && autoRenew,
       ]);
       if (attempt.current?.sig !== sig) attempt.current = { sig, key: crypto.randomUUID() };
       const key = attempt.current.key;
@@ -128,6 +137,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               currency: q.currency,
               period: q.billingPeriod,
               coupon: couponToSend,
+              autoRenew: selected.autoRenew && autoRenew ? true : undefined,
               billing: payload,
             },
             key,
@@ -143,6 +153,19 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
       if (step.kind === 'navigate') {
         setLaunching(true);
         window.location.assign(step.url);
+      } else if (step.kind === 'instructions') {
+        setOffline({ step, orderNumber: res.orderNumber, orderId: res.orderId });
+      } else if (step.kind === 'form_post') {
+        setLaunching(true);
+        postForm(step.url, step.fields);
+      } else if (step.kind === 'paddle' || step.kind === 'cashfree') {
+        setLaunching(true);
+        try {
+          await (step.kind === 'paddle' ? openPaddle(step.params) : openCashfree(step.params));
+        } catch {
+          setLaunching(false);
+          setProblem(te('widgetBlocked'));
+        }
       } else if (step.kind === 'razorpay') {
         setLaunching(true);
         try {
@@ -165,6 +188,15 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
 
   if (quote.isError && !q) {
     return <Alert tone="danger">{explain(quote.error)}</Alert>;
+  }
+  if (offline) {
+    return (
+      <OfflineInstructions
+        step={offline.step}
+        orderNumber={offline.orderNumber}
+        orderId={offline.orderId}
+      />
+    );
   }
   if (!q) {
     return (
@@ -385,6 +417,14 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
                 </label>
               ))}
             </fieldset>
+          )}
+          {selected?.autoRenew && (
+            <Checkbox
+              id="co-autorenew"
+              checked={autoRenew}
+              onChange={(e) => setAutoRenew(e.target.checked)}
+              label={t('autoRenew')}
+            />
           )}
         </Card>
 

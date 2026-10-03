@@ -6,6 +6,7 @@ import { AdminBillingController } from './admin-billing.controller';
 import { AdminBillingRepository } from './admin-billing.repository';
 import { AdminBillingService } from './admin-billing.service';
 import { BillingSettingsService } from './billing-settings.service';
+import { BuyerInvoiceService } from './buyer-invoice.service';
 import { CheckoutController } from './checkout.controller';
 import { CheckoutService } from './checkout.service';
 import { CouponService } from './coupon.service';
@@ -14,6 +15,10 @@ import { FulfilmentService } from './fulfilment.service';
 import { GatewayService } from './gateway.service';
 import { OrdersRepository } from './orders.repository';
 import { OrdersService } from './orders.service';
+import { PaymentConfirmationService } from './payment-confirmation.service';
+import { ProofService } from './proof.service';
+import { SubscriptionLifecycleService } from './subscription-lifecycle.service';
+import { SubscriptionReconcilerService } from './subscription-reconciler.service';
 import { PaygwStore } from './paygw.store';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
@@ -42,10 +47,20 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     OrdersRepository,
     OrdersService,
     FulfilmentService,
+    SubscriptionLifecycleService,
+    SubscriptionReconcilerService,
+    PaymentConfirmationService,
+    ProofService,
+    BuyerInvoiceService,
     CouponService,
     CheckoutService,
     PaymentsService,
   ],
-  exports: [GatewayService],
+  exports: [
+    GatewayService,
+    PaymentConfirmationService,
+    SubscriptionLifecycleService,
+    SubscriptionReconcilerService,
+  ],
 })
 export class PlatformPaymentGatewaysModule {}

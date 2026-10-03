@@ -92,6 +92,7 @@ export interface NewOrder {
   kind: OrderRow['kind'];
   planSlug: string | null;
   billingPeriod: 'monthly' | 'yearly';
+  autoRenew: boolean;
   gatewayId: number;
   gatewaySlug: string;
   currency: string;
@@ -122,7 +123,7 @@ export class OrdersRepository {
       INSERT INTO orders AS o (org_id, user_id, order_number, kind, plan_slug, billing_period, auto_renew, gateway_id, gateway_slug,
         currency, amount, discount_amount, tax_rate, tax_amount, total_amount, customer_name, customer_email, billing_company,
         billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, idempotency_key, coupon_id, coupon_code, status)
-      VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, ${o.kind}, ${o.planSlug}, ${o.billingPeriod}, false, ${o.gatewayId},
+      VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, ${o.kind}, ${o.planSlug}, ${o.billingPeriod}, ${o.autoRenew}, ${o.gatewayId},
         ${o.gatewaySlug}, ${o.currency}, ${o.totalAmount}, ${o.discountAmount}, ${o.taxRate}, ${o.taxAmount}, ${o.totalAmount},
         ${o.customerName}, ${o.customerEmail}, ${o.billingCompany}, ${o.billingAddress}, ${o.billingCity}, ${o.billingPostal},
         ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.idempotencyKey}, ${o.couponId}, ${o.couponCode}, 'pending')

@@ -3,6 +3,16 @@ import type { PlaceOrderResponse } from '@crm/contracts';
 export type NextStep =
   | { kind: 'navigate'; url: string }
   | { kind: 'razorpay'; options: Record<string, unknown>; returnUrl: string }
+  | { kind: 'paddle' | 'cashfree'; params: Record<string, string | number | boolean> }
+  | { kind: 'form_post'; url: string; fields: Record<string, string> }
+  | {
+      kind: 'instructions';
+      method: 'bank_transfer' | 'offline';
+      rows: Array<{ label: string; value: string }>;
+      notes: string | null;
+      amount: string;
+      currency: string;
+    }
   | { kind: 'done' };
 
 /** Turns the API's `next` into what the browser does. The widget options are built here from plain parameters, never from HTML. */
@@ -10,6 +20,18 @@ export function nextStep(res: PlaceOrderResponse): NextStep {
   const n = res.next;
   if (n.type === 'redirect') return { kind: 'navigate', url: n.url };
   if (n.type === 'paid') return { kind: 'done' };
+  if (n.type === 'form_post') return { kind: 'form_post', url: n.url, fields: n.fields };
+  if (n.type === 'instructions') {
+    return {
+      kind: 'instructions',
+      method: n.kind,
+      rows: n.rows,
+      notes: n.notes,
+      amount: n.amount,
+      currency: n.currency,
+    };
+  }
+  if (n.provider !== 'razorpay') return { kind: n.provider, params: n.params };
   const p = n.params;
   return {
     kind: 'razorpay',
