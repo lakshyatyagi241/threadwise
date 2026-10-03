@@ -589,6 +589,18 @@
           }
         }
       }
+    },
+    "inboxBell": {
+      "label": "{count, plural, one {1 unread conversation} other {# unread conversations}}",
+      "pill": "{count, plural, one {new message} other {new messages}}",
+      "dismiss": "Dismiss until something newer arrives",
+      "title": "New messages",
+      "viewInbox": "Open the inbox"
+    },
+    "connectDevice": {
+      "title": "Connect a number",
+      "close": "Close",
+      "connected": "Number connected"
     }
   }
 }
