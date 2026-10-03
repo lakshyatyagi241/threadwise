@@ -150,12 +150,4 @@ export const PLANNED_NAV: readonly NavItem[] = [
     order: 0,
     icon: 'help',
   },
-  {
-    id: 'guidebook',
-    group: 'help',
-    labelKey: L('guidebook'),
-    href: '/guidebook',
-    order: 10,
-    icon: 'book',
-  },
 ];

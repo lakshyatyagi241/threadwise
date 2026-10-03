@@ -24,26 +24,72 @@
       }
     },
     "frontend": {
-      "title": "Site editor",
-      "description": "Edit the text, links and colours of the public pages. Changes are drafts until you publish.",
-      "pending": "{count, plural, =0 {No unpublished changes} one {# unpublished change} other {# unpublished changes}}",
-      "publish": "Publish all",
-      "discard": "Discard drafts",
-      "discardConfirmTitle": "Discard every unpublished change?",
-      "discardConfirmMessage": "Drafts are thrown away and the live site stays as it is.",
+      "title": "Frontend editor",
       "published": "Published {count, plural, one {# change} other {# changes}}.",
       "discarded": "Discarded {count, plural, one {# draft} other {# drafts}}.",
-      "saved": "Draft saved.",
-      "homepage": "Public homepage",
-      "homepageHint": "Off redirects the homepage to sign-in. The other pages stay up.",
-      "page": "Page",
-      "site": "Site-wide",
+      "homepage": "Homepage",
+      "homepageHint": "When off, the public homepage redirects visitors to login. Pricing, privacy, terms & other pages still work.",
+      "discard": "Discard",
+      "publish": "Publish",
+      "drafts": "{count, plural, one {# draft} other {# drafts}}",
+      "status": {
+        "saving": "Saving...",
+        "saved": "All changes saved",
+        "failed": "Could not save"
+      },
+      "device": {
+        "desktop": "Desktop",
+        "tablet": "Tablet",
+        "mobile": "Mobile"
+      },
+      "fullscreen": "Full-screen editor",
+      "openSite": "Open the live site",
+      "previewTitle": "Site preview",
+      "readOnly": "Only super admins can change the site. You can look at the preview.",
+      "howTitle": "How to edit",
+      "howBody": "Click any text in the preview to edit inline - Enter saves, Esc cancels. Try a brand preset or tweak colours below, preview on tablet/mobile from the top bar, and Publish when ready. Nothing is public until then.",
+      "selected": "Selected field",
+      "selectedEmpty": "Click a text element in the preview to select it.",
+      "type": "Type",
+      "linkTarget": "Link target",
+      "set": "Set",
+      "resetField": "Reset this field",
+      "sections": "Sections",
+      "sectionsHint": "drag · show / hide",
+      "pinned": "Always first",
+      "moveUp": "Move {name} up",
+      "moveDown": "Move {name} down",
+      "showSection": "Show {name}",
+      "presets": "Brand presets",
       "theme": "Theme colours",
-      "resetField": "Use the default",
-      "saveSection": "Save draft",
-      "dirty": "Edited",
-      "hasDraft": "Draft",
-      "default": "Default"
+      "resetColours": "Reset all colours",
+      "reset": "Reset",
+      "resetPage": "Reset this page",
+      "resetSite": "Reset entire site",
+      "siteWide": "Company details, footer text and social links are edited in the platform settings.",
+      "siteInfoLink": "Site info",
+      "confirm": {
+        "discard": {
+          "title": "Discard every unpublished change?",
+          "message": "Drafts are thrown away and the live site stays as it is.",
+          "action": "Discard"
+        },
+        "page": {
+          "title": "Reset this page?",
+          "message": "Every text on this page goes back to its shipped default as a draft. Discard brings your edits back; nothing changes for visitors until you publish.",
+          "action": "Reset page"
+        },
+        "site": {
+          "title": "Reset the entire site?",
+          "message": "Every text and colour goes back to its shipped default as a draft. Discard brings your edits back; nothing changes for visitors until you publish.",
+          "action": "Reset site"
+        },
+        "colours": {
+          "title": "Reset all colours?",
+          "message": "Every colour goes back to the shipped palette as a draft until you publish.",
+          "action": "Reset colours"
+        }
+      }
     },
     "blog": {
       "title": "Blog",
@@ -167,7 +213,17 @@
       "thanks": "Thank you. Your message has been sent.",
       "tooMany": "Too many messages in a short time. Try again in a minute.",
       "failed": "We could not send your message. Check the form and try again.",
-      "pricing": "Pricing"
+      "pricing": "Pricing",
+      "navLabel": "Main navigation",
+      "social": "Follow",
+      "captchaMissing": "Please complete the captcha and try again.",
+      "pages": {
+        "home": "Home",
+        "features": "Features",
+        "pricing": "Pricing",
+        "about": "About",
+        "contact": "Contact"
+      }
     }
   }
 }

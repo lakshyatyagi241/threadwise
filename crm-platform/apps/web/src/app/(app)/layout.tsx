@@ -7,6 +7,7 @@ import { WorkspaceSwitcher } from '@/features/auth-registration-security/account
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
+import { AnnouncementBar } from '@/features/marketing-site-cms/announcement-bar';
 import { WalletAppShell } from '@/features/wallet-message-billing';
 import { NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
@@ -63,6 +64,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           navFooter={<WorkspaceSwitcher />}
           banners={
             <>
+              <AnnouncementBar key="announcements" />
               <TrialBar />
               <AccountBanners key="banners" />
             </>

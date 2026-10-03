@@ -7,6 +7,7 @@ import {
   type CmsContactListQuery,
   type CmsContactListResponse,
   type CmsContactMessage,
+  type PublicSiteInfo,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -17,12 +18,8 @@ import {
   MAIL_PORT,
   type MailPort,
 } from '../../infra/providers/auth-registration-security/mail.port';
-import {
-  AuthAuditService,
-  CaptchaService,
-  PlatformSettingsService,
-  RateLimitService,
-} from '../auth';
+import { AuthAuditService, CaptchaService, RateLimitService } from '../auth';
+import { BrandingService, SettingsService } from '../platform-settings-branding-storage';
 import { CMS_EVENTS, iso, num, operatorId } from './cms-context';
 import { escapeLike } from './cms-rules';
 import { CmsStore } from './cms-store';
@@ -82,12 +79,27 @@ export class ContactService {
     private readonly audit: AuthAuditService,
     private readonly rate: RateLimitService,
     private readonly captcha: CaptchaService,
-    private readonly settings: PlatformSettingsService,
+    private readonly branding: BrandingService,
+    private readonly siteSettings: SettingsService,
     @Inject(MAIL_PORT) private readonly mail: MailPort,
     config: ConfigService<Env, true>,
   ) {
     this.brand = config.get('APP_NAME', { infer: true });
     this.fallbackTo = config.get('SMTP_FROM', { infer: true });
+  }
+
+  /** The company details of the contact page, from SET's site info (TW-CMS-005). Nothing secret is read. */
+  async siteInfo(host?: string): Promise<PublicSiteInfo> {
+    const site = await this.siteSettings.values('site');
+    return {
+      companyName: site.companyName ?? '',
+      address: site.address ?? '',
+      cityCountry: site.cityCountry ?? '',
+      emailGeneral: site.emailGeneral ?? '',
+      emailSupport: await this.branding.email('support', host),
+      phone: site.phone ?? '',
+      whatsapp: (site.whatsapp ?? '').replace(/\D/g, ''),
+    };
   }
 
   async submit(raw: unknown): Promise<void> {
@@ -135,7 +147,7 @@ export class ContactService {
     topic?: string | null;
     message: string;
   }) {
-    const to = (await this.settings.get<string>('site.email_support')) || this.fallbackTo;
+    const to = (await this.branding.email('support')) || this.fallbackTo;
     if (!to) return;
     await this.mail.send({
       to,

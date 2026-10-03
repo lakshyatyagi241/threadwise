@@ -49,6 +49,8 @@ const BADGE_KEYS: Readonly<Record<string, string>> = {
   coupons: 'coupons',
   roles: 'roles',
   permissions: 'permissions',
+  'cms-announcements': 'announcements',
+  'cms-guidebook': 'guidebook',
 };
 
 /**
