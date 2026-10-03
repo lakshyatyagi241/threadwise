@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { InboundHooks, MediaStore, TelegramPlanGate } from './tokens';
+import type { InboundHooks, TelegramPlanGate } from './tokens';
 
 /**
  * The Telegram flags are not in the plan catalogue yet (only the numeric caps are), so every check passes.
@@ -17,25 +17,6 @@ export class OpenTelegramPlanGate implements TelegramPlanGate {
 
   assertBotCap(): Promise<void> {
     return Promise.resolve();
-  }
-}
-
-/** No storage upload yet: media is not downloaded, so a message with a photo is stored with its caption and no file. */
-@Injectable()
-export class NoMediaStore implements MediaStore {
-  readonly enabled = false;
-
-  save(): Promise<string | null> {
-    return Promise.resolve(null);
-  }
-
-  read(): Promise<null> {
-    return Promise.resolve(null);
-  }
-
-  /** An address that is already public is used as it is; a stored path needs the storage domain. */
-  publicUrl(path: string): string | null {
-    return /^https?:\/\//i.test(path) ? path : null;
   }
 }
 

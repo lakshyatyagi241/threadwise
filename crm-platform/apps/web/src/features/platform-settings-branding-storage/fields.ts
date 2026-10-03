@@ -463,6 +463,30 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
+    id: 'campaigns',
+    group: 'campaigns',
+    slug: 'campaigns',
+    guide: ['retry', 'expiry'],
+    sections: [
+      {
+        id: 'retry',
+        eyebrow: 'delivery',
+        fields: halves(
+          f('retryAttempts', 'number', { min: 0, max: 10 }),
+          f('retryBackoffSec', 'number', { min: 10, max: 3600 }),
+        ),
+      },
+      {
+        id: 'expiry',
+        eyebrow: 'lifecycle',
+        fields: halves(
+          f('autoExpiryEnabled', 'toggle'),
+          f('defaultExpiryHours', 'number', { min: 1, max: 720 }),
+        ),
+      },
+    ],
+  },
+  {
     id: 'whatsapp',
     group: 'whatsapp',
     slug: 'whatsapp',
@@ -547,4 +571,5 @@ export const HUB_ORDER = [
   'custom',
   'storage',
   'realtime',
+  'campaigns',
 ] as const;

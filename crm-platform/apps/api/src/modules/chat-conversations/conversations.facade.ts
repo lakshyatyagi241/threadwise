@@ -16,6 +16,8 @@ export interface ThreadRef {
   id: string;
   channelId: string;
   peerKey: string;
+  /** The customer's last message on the thread: the anchor of the 24 hour window a sender checks before it sends. */
+  lastInboundAt: Date | null;
 }
 
 export interface RecordOutboundInput {
@@ -37,6 +39,8 @@ export interface RecordOutboundInput {
   direction?: 'in' | 'out';
   /** What the screens that render the line read (`{ event: 'call', callStatus, durationSec }`). Merged with `{ source }`. */
   meta?: Record<string, unknown>;
+  /** The person who sent it, when one did (the thread then shows their name instead of the source). */
+  senderUserId?: number | null;
 }
 
 // --- sending from the inbox ---------------------------------------------------------------------------------------------

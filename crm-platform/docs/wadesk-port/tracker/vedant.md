@@ -550,26 +550,26 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-FLR-001 | todo |  |  |
-| WD-FLR-002 | todo |  |  |
-| WD-FLR-003 | todo |  |  |
-| WD-FLR-004 | todo |  |  |
-| WD-FLR-005 | todo |  |  |
-| WD-FLR-006 | todo |  |  |
-| WD-FLR-007 | todo |  |  |
-| WD-FLR-008 | todo |  |  |
-| WD-FLR-009 | todo |  |  |
-| WD-FLR-010 | todo |  |  |
-| WD-FLR-011 | todo |  |  |
-| WD-FLR-012 | todo |  |  |
-| WD-FLR-013 | todo |  |  |
-| WD-FLR-014 | todo |  |  |
-| WD-FLR-015 | todo |  |  |
-| WD-FLR-016 | todo |  |  |
-| WD-FLR-017 | todo |  |  |
-| WD-FLR-018 | todo |  |  |
-| WD-FLR-019 | todo |  |  |
-| WD-FLR-020 | todo |  |  |
+| WD-FLR-001 | backend-done |  | trigger kinds (ten), live = published and active, workspace-scoped lookup, trigger_channel_id replaces trigger_device_id; the editor (FLB) writes the columns; 12 e2e |
+| WD-FLR-002 | backend-done |  | keyword start, restart on the same text, default route last, replaces a live run; typed digits also answer a menu (numbered text channels); fuzzy and media-order matching stay with Auto reply |
+| WD-FLR-003 | backend-done |  | same inbound hook for every channel; consumed handshake returned to the pipeline; the auto reply and AI agent that must read it do not exist yet |
+| WD-FLR-004 | backend-done |  | no shadow keyword rows: keyword flows queried directly, catch-all spellings last; Auto reply can call matchKeywordFlow |
+| WD-FLR-005 | backend-done |  | tag, group, created, opt-in through outbox events; imports never fire contact_created; no producer yet for a contact re-subscribing |
+| WD-FLR-006 | backend-done |  | order placed (once per order) and deal stage changed (once per deal and stage); no producer yet for order.placed |
+| WD-FLR-007 | backend-done |  | away and out of hours from the workspace settings; overnight ranges; re-arms after 12 h; unit-tested hours |
+| WD-FLR-008 | frontend-done |  | enroll API plus the Enroll panel on the subscribers page, runs, run detail and analytics screens; not opened in a browser; no Playwright parity run yet |
+| WD-FLR-009 | backend-done |  | GET/POST /public/v1/flows under the API-key guard; counts over every subscriber; not exercised with a real signed key in e2e |
+| WD-FLR-010 | backend-done |  | campaign (CAMPAIGN_FLOW_STARTER bound) and inbox start built; routing trigger_flow, lead webhook and hand-off call FlowLaunchService.start when their domains exist |
+| WD-FLR-011 | backend-done |  | FlowLaunchService: one door, run row on every path, failed launch marks the subscriber with the reason; queue instead of HTTP; retry via flow_retry_logs |
+| WD-FLR-012 | backend-done |  | intended: appointment_booked and comment_to_dm are not accepted; forced flowId path dropped |
+| WD-FLR-013 | backend-done |  | compileGraph (pure, unit-tested ports and handles); the editor must save flowNodes and flowEdges; runs keep a graph snapshot |
+| WD-FLR-014 | backend-done |  | run row before any node; contact and workspace attribute defaults seeded by the engine; conversation_id set |
+| WD-FLR-015 | backend-done |  | QUIRK fixed: runs are rows, Delay is a wake-up time, idle and absolute limits, sweeper; a lost job is recovered; e2e restart-style test |
+| WD-FLR-016 | backend-done |  | job per step, first edge per port, dead end keeps the last menu, End node, loop guard 20 (run fails with the reason), pause 1.5 s only on the unofficial engine |
+| WD-FLR-017 | backend-done |  | one strong resolver for every node, JSON-escape mode; WaDesk condition tests ported |
+| WD-FLR-018 | backend-done |  | taps routed to the menu they belong to (old menus work), 20-character label match, media-only ignored unless accepted, location to a maps link, persistent menus |
+| WD-FLR-019 | backend-done |  | one send door (dispatcher then thread), interactive content degraded per channel (buttons, list, link button, pin); no branding footer; a 24 hour window refusal fails the run with the reason |
+| WD-FLR-020 | backend-done |  | daily cap shared with broadcasts through the Redis tally, channel down halts and retries every 5 minutes |
 
 ## chatbot-widget (wgt)
 

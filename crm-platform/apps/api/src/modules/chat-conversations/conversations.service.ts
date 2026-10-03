@@ -181,7 +181,13 @@ export class ConversationsService implements ConversationsFacade {
         seq: after.msgSeq,
         direction: input.direction ?? 'out',
         kind: input.kind ?? 'text',
-        senderKind: input.kind === 'system' ? 'system' : senderKindOfSource(input.source),
+        senderKind:
+          input.kind === 'system'
+            ? 'system'
+            : input.senderUserId
+              ? 'agent'
+              : senderKindOfSource(input.source),
+        senderUserId: input.senderUserId ?? null,
         body: input.body,
         // The provider already took it: the other domain sent it, this only records it in the thread.
         status: input.direction === 'in' ? 'received' : 'sent',
@@ -332,6 +338,11 @@ export class ConversationsService implements ConversationsFacade {
   }
 
   private ref(conv: ConversationRow, channel: ChannelRow): ThreadRef {
-    return { id: conv.uuid, channelId: channel.uuid, peerKey: conv.peerKey };
+    return {
+      id: conv.uuid,
+      channelId: channel.uuid,
+      peerKey: conv.peerKey,
+      lastInboundAt: conv.lastInboundAt,
+    };
   }
 }

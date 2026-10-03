@@ -16,6 +16,7 @@ import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
 import { CALL_ERROR_CODES } from '../calling-voice/errors';
+import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
 
 export const ERROR_CODES = {
   ...CPN_ERROR_CODES,
@@ -30,6 +31,7 @@ export const ERROR_CODES = {
   ...WAP_ERROR_CODES,
   ...WALLET_ERROR_CODES,
   ...CALL_ERROR_CODES,
+  ...FLR_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',

@@ -7,7 +7,6 @@ import {
   type FacebookGraphFactory,
   type GraphResult,
 } from '../../infra/providers/channel-facebook/facebook.port';
-import { MEDIA_URLS, type MediaUrls } from './_shims/tokens';
 import {
   TOKEN_INVALID_MESSAGE,
   attachmentType,
@@ -21,8 +20,8 @@ export interface ThreadReply {
   /** The thread key: `fb:<page>:<psid>` or `fb:<page>:post:<post>:<commenter>`. */
   rawJid: string;
   text: string;
-  /** A stored file path (ours) or an absolute address, with the inbox's media type. */
-  media?: { type: string | null; path: string } | null;
+  /** An address Meta can fetch, with the inbox's media type. */
+  media?: { type: string | null; url: string } | null;
 }
 
 export interface SendOutcome {
@@ -30,6 +29,9 @@ export interface SendOutcome {
   providerMessageId: string | null;
   error: string | null;
 }
+
+/** The reason a reply gives when the Page is gone or not connected. */
+export const PAGE_NOT_CONNECTED = 'Facebook Page not connected';
 
 const failed = (error: string): SendOutcome => ({ ok: false, providerMessageId: null, error });
 
@@ -46,7 +48,6 @@ export class SenderService {
     private readonly pages: PagesRepository,
     private readonly crypto: CryptoService,
     @Inject(FACEBOOK_GRAPH) private readonly graph: FacebookGraphFactory,
-    @Inject(MEDIA_URLS) private readonly media: MediaUrls,
   ) {}
 
   async reply(orgId: number, r: ThreadReply): Promise<SendOutcome> {
@@ -56,7 +57,7 @@ export class SenderService {
     const page = await this.db.txAs({ orgId }, (tx) =>
       this.pages.findByPageId(tx, orgId, target.pageId),
     );
-    if (!page || page.status !== 'connected') return failed('Facebook Page not connected');
+    if (!page || page.status !== 'connected') return failed(PAGE_NOT_CONNECTED);
     const api = this.graph.forPage(this.crypto.decrypt(page.accessToken ?? ''), page.pageId);
 
     const done = async <T>(res: GraphResult<T>, idOf: (d: T) => string): Promise<SendOutcome> => {
@@ -81,9 +82,7 @@ export class SenderService {
     }
 
     if (r.media) {
-      const url = this.media.publicUrl(r.media.path);
-      if (!url) return failed('The file could not be reached.');
-      const sent = await api.sendAttachment(target.psid, attachmentType(r.media.type), url);
+      const sent = await api.sendAttachment(target.psid, attachmentType(r.media.type), r.media.url);
       // Messenger cannot carry a file and text in one message: the text follows as its own bubble.
       if (sent.ok && r.text.trim() !== '') await api.sendText(target.psid, r.text);
       return done(sent, (d) => d.messageId);
@@ -92,11 +91,14 @@ export class SenderService {
   }
 
   private async latestCommentId(orgId: number, rawJid: string): Promise<string | null> {
+    // A comment is stored with Meta's comment id as its provider message id.
     const res = await this.db.txAs({ orgId }, (tx) =>
       tx.execute(sql`
-        SELECT m.meta -> 'facebook' ->> 'comment_id' AS comment_id
-        FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-        WHERE c.org_id = ${orgId} AND c.channel = 'facebook' AND c.raw_jid = ${rawJid} AND m.direction = 'in'
+        SELECT m.provider_message_id AS comment_id
+        FROM messages m
+        JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+        JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+        WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND c.peer_key = ${rawJid} AND m.direction = 'in'
         ORDER BY m.id DESC LIMIT 1`),
     );
     const id = (res.rows[0] as { comment_id: string | null } | undefined)?.comment_id;
