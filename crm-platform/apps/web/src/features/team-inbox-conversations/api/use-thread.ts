@@ -13,6 +13,7 @@ import {
   type PendingSend,
   type ThreadState,
 } from '../lib/thread';
+import { anyMediaPending } from '@/features/channel-whatsapp-cloud';
 import { inboxApi, uploadMedia } from './service';
 
 const PAGE = 50;
@@ -122,7 +123,10 @@ export function useThread(
 
   // A tick that is still "sending" after a while may be one whose event never arrived (the socket was down, or the provider's answer
   // was published before this screen joined the room): ask for the tail again, a few times, instead of showing a clock for ever.
-  const waiting = state.messages.some((m) => m.direction === 'out' && m.status === 'queued');
+  // The same goes for a file still being downloaded from the provider: its completion is a change the thread has to go and read.
+  const waiting =
+    state.messages.some((m) => m.direction === 'out' && m.status === 'queued') ||
+    anyMediaPending(state.messages);
   useEffect(() => {
     if (!waiting) return;
     let tries = 0;

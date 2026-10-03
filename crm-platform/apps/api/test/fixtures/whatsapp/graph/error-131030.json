@@ -1,0 +1,12 @@
+{
+  "error": {
+    "message": "Recipient phone number not in allowed list",
+    "type": "OAuthException",
+    "code": 131030,
+    "fbtrace_id": "AbCdEfGhIj12345",
+    "error_data": {
+      "messaging_product": "whatsapp",
+      "details": "Add the number to the allowed list in the app dashboard"
+    }
+  }
+}

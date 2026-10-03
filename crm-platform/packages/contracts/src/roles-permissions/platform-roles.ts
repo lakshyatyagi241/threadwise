@@ -6,7 +6,7 @@ import { uuidSchema } from '../common/ids';
  * `/v2/platform/staff` (the operator console, WD-RBAC-001..013, 021). Platform layer: no organization is involved.
  */
 
-/** The 16 keys the code checks (WD-RBAC-003). The console reads the caller's map of these to hide what the server would refuse. */
+/** The keys the code checks (the 16 of WD-RBAC-003, and the registry's three). The console reads the caller's map of these to hide what the server would refuse. */
 export const PLATFORM_PERMISSION_KEYS = [
   'platform.workspace.view_all',
   'platform.workspace.suspend',
@@ -24,6 +24,10 @@ export const PLATFORM_PERMISSION_KEYS = [
   'platform.permission.manage',
   'platform.billing.view',
   'platform.system.settings',
+  // The WhatsApp provider registry: read it, change it (providers, defaults, workspace assignment), move a number to another provider.
+  'platform.whatsapp_providers.view',
+  'platform.whatsapp_providers.manage',
+  'platform.whatsapp_providers.switch',
 ] as const;
 export type PlatformPermissionKey = (typeof PLATFORM_PERMISSION_KEYS)[number];
 

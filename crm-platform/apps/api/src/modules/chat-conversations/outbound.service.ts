@@ -104,6 +104,7 @@ export class OutboundService {
             mediaKey: fields.media?.key ?? null,
             mediaMime: fields.media?.mime ?? null,
             mediaName: fields.media?.name ?? null,
+            mediaSha256: fields.media?.sha256 ?? null,
             meta: fields.meta,
             clientMessageId: input.clientMessageId,
             uuid: input.clientMessageId,

@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Parameter value is not valid",
+    "type": "OAuthException",
+    "code": 131009,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

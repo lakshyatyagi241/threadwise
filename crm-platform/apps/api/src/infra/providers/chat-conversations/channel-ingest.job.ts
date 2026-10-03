@@ -24,6 +24,8 @@ const inboundSchema = z.object({
       mime: z.string(),
       name: z.string().optional(),
       sizeBytes: z.number().optional(),
+      sha256: z.string().optional(),
+      voice: z.boolean().optional(),
     })
     .optional(),
   location: z
@@ -36,6 +38,7 @@ const inboundSchema = z.object({
     .optional(),
   replyToProviderMessageId: z.string().optional(),
   reactionEmoji: z.string().optional(),
+  meta: z.record(z.unknown()).optional(),
   providerTimestamp: z.string().datetime(),
 });
 
