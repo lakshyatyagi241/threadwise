@@ -28,9 +28,6 @@
   padding-top: 3rem;
   padding-bottom: 4rem;
 }
-.cms-site a {
-  color: inherit;
-}
 .cms-wrap {
   width: 100%;
   max-width: 72rem;
@@ -486,4 +483,136 @@
 .cms-site details > summary {
   list-style: none;
   cursor: pointer;
+}
+
+/* The article body of a blog post (Reference's .tw-article), scoped to the public site. */
+.cms-site .tw-article {
+  color: var(--site-ink-700, #1f4540);
+  font-size: 17px;
+  line-height: 1.78;
+}
+.cms-site .tw-article > * + * {
+  margin-top: 1.35em;
+}
+.cms-site .tw-article h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 32px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--site-ink-900, #0b1f1c);
+  margin-top: 1.8em;
+}
+.cms-site .tw-article h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 25px;
+  line-height: 1.2;
+  color: var(--site-ink-900, #0b1f1c);
+  margin-top: 1.6em;
+}
+.cms-site .tw-article h4 {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--site-ink-900, #0b1f1c);
+  margin-top: 1.4em;
+}
+.cms-site .tw-article p {
+  color: var(--site-ink-700, #1f4540);
+}
+.cms-site .tw-article a {
+  color: var(--site-wa-deep, #075e54);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.cms-site .tw-article a:hover {
+  color: var(--site-wa-teal, #128c7e);
+}
+.cms-site .tw-article strong {
+  color: var(--site-ink-900, #0b1f1c);
+  font-weight: 700;
+}
+.cms-site .tw-article ul,
+.cms-site .tw-article ol {
+  padding-inline-start: 1.4em;
+}
+.cms-site .tw-article ul {
+  list-style: disc;
+}
+.cms-site .tw-article ol {
+  list-style: decimal;
+}
+.cms-site .tw-article li {
+  margin-top: 0.5em;
+}
+.cms-site .tw-article img {
+  border-radius: 16px;
+  max-width: 100%;
+  height: auto;
+}
+.cms-site .tw-article blockquote {
+  border-inline-start: 3px solid var(--site-wa-deep, #075e54);
+  padding-inline-start: 1.1em;
+  color: var(--site-ink-600, #3a5a55);
+  font-style: italic;
+}
+.cms-site .tw-article pre {
+  background: var(--site-ink-900, #0b1f1c);
+  color: var(--site-paper-50, #f5f3ec);
+  padding: 1.1em 1.3em;
+  border-radius: 14px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+}
+.cms-site .tw-article code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+}
+.cms-site .tw-article :not(pre) > code {
+  background: var(--site-paper-100, #efebe0);
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+}
+.cms-site .tw-article hr {
+  border: 0;
+  border-top: 1px solid var(--site-paper-200, #e5dfd0);
+  margin: 2em 0;
+}
+
+/* The body of a legal section (Reference's .legal-prose). */
+.cms-site .legal-prose .prose-body p {
+  margin: 0 0 1em;
+}
+.cms-site .legal-prose .prose-body ul,
+.cms-site .legal-prose .prose-body ol {
+  margin: 0 0 1em 1.5em;
+}
+.cms-site .legal-prose .prose-body ul {
+  list-style: disc;
+}
+.cms-site .legal-prose .prose-body ol {
+  list-style: decimal;
+}
+.cms-site .legal-prose .prose-body li {
+  margin-bottom: 0.4em;
+}
+.cms-site .legal-prose .prose-body strong {
+  color: var(--site-ink-900, #0b1f1c);
+  font-weight: 600;
+}
+.cms-site .legal-prose .prose-body a {
+  color: var(--site-wa-deep, #075e54);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cms-site .legal-prose .prose-body h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px;
+  margin: 1.5em 0 0.6em;
+}
+.cms-site .legal-prose .prose-body code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  background: var(--site-paper-50, #f5f3ec);
+  padding: 1px 6px;
+  border-radius: 4px;
 }
