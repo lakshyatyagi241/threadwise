@@ -151,7 +151,7 @@
       "free": "Free messages",
       "unpriced": "No Meta cost set",
       "unpricedBanner": "{count, plural, one {# billed message has} other {# billed messages have}} no Meta cost for their country and category, so the margin counts them as pure revenue.",
-      "perWorkspace": "Per workspace",
+      "perWorkspace": "Per workspace (this month)",
       "columns": {
         "workspace": "Workspace",
         "messages": "Msgs",
