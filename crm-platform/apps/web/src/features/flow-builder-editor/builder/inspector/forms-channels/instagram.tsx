@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { cn } from '@crm/ui';
 import { useCommerceProducts } from '../../../api/hooks';
-import { AddButton, Field, controlClass } from '../kit';
+import { Field, controlClass } from '../kit';
 import type { FormComponent } from '../types';
 import {
+  AddLink,
   LeadForm,
   Mono,
   OrderDetailsFields,
@@ -66,9 +67,9 @@ export const IgQuickForm: FormComponent = (p) => {
             />
           </div>
         ))}
-        <AddButton onClick={() => p.set('options', opts.concat([{ title: '', payload: '' }]))}>
+        <AddLink onClick={() => p.set('options', opts.concat([{ title: '', payload: '' }]))}>
           Add quick reply
-        </AddButton>
+        </AddLink>
       </Field>
     </>
   );
@@ -131,11 +132,11 @@ export const IgButtonsForm: FormComponent = (p) => {
           );
         })}
         {btns.length < 3 ? (
-          <AddButton
+          <AddLink
             onClick={() => p.set('buttons', btns.concat([{ type: 'web_url', title: '', url: '' }]))}
           >
             Add button
-          </AddButton>
+          </AddLink>
         ) : null}
       </Field>
     </>

@@ -1,10 +1,11 @@
 'use client';
 
 import { useGoogleFiles } from '../../../api/hooks';
-import { AddButton, Check, Field, Notice, SelectInput, TextInput } from '../kit';
+import { Check, Field, Notice, SelectInput, TextInput } from '../kit';
 import type { FormComponent, FormProps } from '../types';
 import { appsScriptHref, extractGoogleId, withSavedOption } from './helpers';
 import {
+  AddLink,
   ExtLink,
   Intro,
   Mono,
@@ -150,9 +151,12 @@ export const GoogleSheetsForm: FormComponent = (p) => {
                   />
                 </div>
               ))}
-              <AddButton onClick={() => p.set('columns', cols.concat([{ header: '', value: '' }]))}>
+              <AddLink
+                plain
+                onClick={() => p.set('columns', cols.concat([{ header: '', value: '' }]))}
+              >
                 Add column
-              </AddButton>
+              </AddLink>
             </div>
           </Field>
           <div className="mb-2 px-1">
@@ -243,9 +247,12 @@ export const GoogleDocsForm: FormComponent = (p) => {
               />
             </div>
           ))}
-          <AddButton onClick={() => p.set('placeholders', phs.concat([{ key: '', value: '' }]))}>
+          <AddLink
+            plain
+            onClick={() => p.set('placeholders', phs.concat([{ key: '', value: '' }]))}
+          >
             Add placeholder
-          </AddButton>
+          </AddLink>
         </div>
       </Field>
       <Field label="Make link viewable by anyone">

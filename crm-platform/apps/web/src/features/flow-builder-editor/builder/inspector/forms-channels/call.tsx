@@ -1,8 +1,9 @@
 'use client';
 
-import { AddButton, Check, Field, NumberInput } from '../kit';
+import { Check, Field, NumberInput } from '../kit';
 import type { FormComponent } from '../types';
 import {
+  AddLink,
   RemoveButton,
   RowInput,
   Sel,
@@ -129,9 +130,9 @@ export const CfMenuForm: FormComponent = (p) => {
             />
           </div>
         ))}
-        <AddButton onClick={() => p.set('options', opts.concat([{ match: '', label: '' }]))}>
+        <AddLink onClick={() => p.set('options', opts.concat([{ match: '', label: '' }]))}>
           Add branch
-        </AddButton>
+        </AddLink>
       </Field>
     </>
   );
