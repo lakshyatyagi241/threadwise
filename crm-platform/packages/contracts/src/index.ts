@@ -73,3 +73,5 @@ export * from './catalog-products';
 export * from './calling-voice';
 export * from './flow-runtime-engine';
 export * from './scheduled-queue-warmer';
+export * from './marketplace';
+export * from './leads';

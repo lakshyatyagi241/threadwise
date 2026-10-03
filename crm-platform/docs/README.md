@@ -9,6 +9,8 @@
 | add a table           | [architecture/multi-tenancy.md](architecture/multi-tenancy.md#adding-a-new-table--the-checklist) |
 | add a module          | copy `apps/api/src/modules/crm/contacts/`                                                        |
 | see what is planned   | [backlog.md](backlog.md) and the product specs in [specs/](specs/)                               |
+| take leads in         | [api/leads.md](api/leads.md): lead sources, the webhook door, the pipeline                       |
+| extend or connect     | [api/marketplace.md](api/marketplace.md): mini apps, integrations, the kill switch               |
 
 ## Architecture
 
@@ -25,12 +27,13 @@
 
 ## Runbooks
 
-| Document                                                      | For                                                      |
-| ------------------------------------------------------------- | -------------------------------------------------------- |
-| [local-development.md](runbooks/local-development.md)         | getting it running, day-to-day commands                  |
-| [migrations.md](runbooks/migrations.md)                       | writing and applying schema changes safely               |
-| [outbox-backlog.md](runbooks/outbox-backlog.md)               | when events stop being processed                         |
-| [google-calendar-setup.md](runbooks/google-calendar-setup.md) | creating the Google OAuth client for workspace calendars |
+| Document                                                                  | For                                                             |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [local-development.md](runbooks/local-development.md)                     | getting it running, day-to-day commands                         |
+| [migrations.md](runbooks/migrations.md)                                   | writing and applying schema changes safely                      |
+| [outbox-backlog.md](runbooks/outbox-backlog.md)                           | when events stop being processed                                |
+| [google-calendar-setup.md](runbooks/google-calendar-setup.md)             | creating the Google OAuth client for workspace calendars        |
+| [marketplace-publish-listing.md](runbooks/marketplace-publish-listing.md) | publishing a Marketplace listing and writing a connector recipe |
 
 ## Database
 

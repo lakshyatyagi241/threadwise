@@ -17,6 +17,8 @@ import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
 import { CALL_ERROR_CODES } from '../calling-voice/errors';
 import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
+import { MKT_ERROR_CODES } from '../marketplace/errors';
+import { LEAD_ERROR_CODES } from '../leads/errors';
 
 export const ERROR_CODES = {
   ...CPN_ERROR_CODES,
@@ -32,6 +34,8 @@ export const ERROR_CODES = {
   ...WALLET_ERROR_CODES,
   ...CALL_ERROR_CODES,
   ...FLR_ERROR_CODES,
+  ...MKT_ERROR_CODES,
+  ...LEAD_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',

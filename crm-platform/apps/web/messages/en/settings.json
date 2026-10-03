@@ -230,10 +230,10 @@
         "description": "Greet customers and answer when you are away.",
         "keywords": "away message, welcome, greeting, out of office, keywords"
       },
-      "integrations": {
-        "label": "Integrations",
-        "description": "Connect Shopify, Google, payments and other tools.",
-        "keywords": "apps, connect, zapier, shopify, woocommerce, google"
+      "lead-sources": {
+        "label": "Social leads",
+        "description": "Bring in leads from ads and landing pages through a webhook.",
+        "keywords": "lead ads, facebook leads, meta, linkedin, tiktok, google ads, webhook, zapier, capture, forms"
       },
       "rest-api": {
         "label": "REST API",

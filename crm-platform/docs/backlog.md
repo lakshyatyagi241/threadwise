@@ -80,3 +80,16 @@ Specs: [email channel and social leads](specs/email-channel-and-social-leads.md)
 | BL-055 | GitHub Action that posts PR opened/merged/ready events to the team's Google Chat space, with the webhook as a repository secret; regenerate the webhook that was pasted in chat | P2 | S | idea | Offered, not built |
 | BL-056 | `pnpm dev:refresh` follow-ups: make it work when its output is piped on Windows; optional pointer to the local mock Graph server | P2 | S | idea | |
 | BL-057 | Seed or sample data for Companies and other new screens in the dev database | P2 | S | idea | |
+
+## G. Lead pipeline and marketplace follow-ups (from the first build)
+
+| Id | Item | Pri | Size | Status | Notes |
+| --- | --- | --- | --- | --- | --- |
+| BL-060 | Marketplace API: expose a `pattern` for pasted keys in the setup view, the app's setup fields on the installation answer, sample payload names, and whether a connection's secret can be rotated | P1 | S | ready | The UI currently learns these only from errors or a second call |
+| BL-061 | Lead sources API returns a full public webhook address (today only `hookPath`; the UI builds it from `API_PUBLIC_URL`, which must be configured) | P1 | S | ready | Also add the limit and used values to the plan-limit error so the UI can say "5 of 5" |
+| BL-062 | Operator catalogue: category filter on the list API, a way to list a version's scopes before saving, reserve the listing slugs `new`, `categories`, `requests`, `usage`, and tell "no recipe" from "recipe fails the schema" | P2 | S | ready | |
+| BL-063 | Pull, OAuth and email-parse connectors: make them publishable (portal recipes: IndiaMART, JustDial, 99acres, MagicBricks, Housing.com, Shiksha) after verifying each portal's real mechanism and partner terms | P1 | L | spec | Draft listings are seeded and hidden from tenants |
+| BL-064 | Meta lead forms, TikTok, LinkedIn and Google Ads doors for the lead pipeline (shown as "Coming soon" in the Social leads Ads tab) | P1 | L | spec | See BL-011 and BL-014 |
+| BL-065 | Rules tab for Social leads and the lead-source `Popular` shelf hides when identical to `Featured`; look at the new Marketplace, Social leads and operator screens at 390px, right-to-left and dark mode | P2 | S | ready | Built and tested, only viewed by a person in desktop light mode |
+| BL-066 | Uninstall "delete data" has no consumer yet (it deletes nothing; contacts stay either way) | P2 | S | idea | |
+| BL-067 | Run the Playwright parity-style check for the new screens; add wiring and parity docs for the web routes | P2 | M | blocked | No Reference counterpart; write twin-less e2e instead |

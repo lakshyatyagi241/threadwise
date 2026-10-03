@@ -13,9 +13,9 @@ and each domain has exclusive directories in every layer, so the three of you do
 
 | Person | Cluster | Domains | Features written | Domain est. days | Foundation days | Total |
 |---|---|---|---|---|---|---|
-| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 23 | 705 | 2765 | 48 | 2813 |
+| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 25 | 705 | 2805 | 48 | 2853 |
 | Vedant (`vedant`) | WhatsApp core, inbox and automation | 17 | 591 | 2802 | 55 | 2858 |
-| Punya (`punya`) | CRM, commerce, AI and the other channels | 22 | 0 | 2740 | 22 | 2762 |
+| Punya (`punya`) | CRM, commerce, AI and the other channels | 22 | 288 | 2740 | 22 | 2762 |
 
 The people are interchangeable: to swap two clusters, change `owner` in `assignment-input.json` `clusters` and regenerate.
 
@@ -68,7 +68,9 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 | dashboards-analytics-charts | dash | /dashboard | 3 | 132 | written | 54 |
 | developer-rest-api-v1 | api | /developer | 3 | 130 | pending |  |
 | integrations-hubspot-slack-trello-google-webhooks | intg | /integrations | 3 | 150 | pending |  |
+| leads | lead | /lead-sources | 3 | 15 | pending |  |
 | marketing-site-cms | cms | /cms | 3 | 152 | written | 53 |
+| marketplace | mkt | /marketplace | 3 | 25 | pending |  |
 | mobile-app-api | mob | /mobile | 3 | 140 | pending |  |
 | platform-support-desk | supp | /support | 3 | 122 | written | 46 |
 
@@ -98,25 +100,25 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 
 | Domain | Code | Route | Wave | Est. days | Inventory | Features |
 |---|---|---|---|---|---|---|
-| contacts-attributes-tags | con | /contacts | 1 | 200 | pending |  |
-| appointments-booking | appt | /appointments | 2 | 130 | pending |  |
+| contacts-attributes-tags | con | /contacts | 1 | 200 | pending | 65 |
+| appointments-booking | appt | /appointments | 2 | 130 | pending | 40 |
 | companies-projects-tasks | ctp | /companies | 2 | 140 | pending |  |
-| deals-pipelines | deal | /deals | 2 | 120 | pending |  |
+| deals-pipelines | deal | /deals | 2 | 120 | pending | 47 |
 | invoicing | inv | /invoices | 2 | 120 | pending |  |
 | sales-docs-proposals | sales | /proposals | 2 | 110 | pending |  |
-| catalog-products | cat | /catalog | 3 | 110 | written | 34 |
+| catalog-products | cat | /catalog | 3 | 110 | pending | 36 |
 | channel-email | mail | /email | 3 | 110 | pending |  |
-| channel-facebook | fb | /facebook | 3 | 130 | pending |  |
-| channel-instagram | ig | /instagram | 3 | 90 | pending |  |
+| channel-facebook | fb | /facebook | 3 | 130 | pending | 23 |
+| channel-instagram | ig | /instagram | 3 | 90 | pending | 20 |
 | channel-line | line | /line | 3 | 100 | pending |  |
 | channel-sms | sms | /sms | 3 | 90 | pending |  |
-| channel-telegram | tg | /telegram | 3 | 100 | pending |  |
+| channel-telegram | tg | /telegram | 3 | 100 | pending | 19 |
 | channel-tiktok | tt | /tiktok | 3 | 110 | pending |  |
 | channel-viber | vib | /viber | 3 | 80 | pending |  |
 | channel-wechat | wech | /wechat | 3 | 100 | pending |  |
 | checkout-orders-merchant-payments | chk | /checkout | 3 | 190 | pending |  |
 | meta-ads | mads | /meta-ads | 3 | 120 | pending |  |
-| shopify-woocommerce | ecom | /ecommerce | 3 | 130 | pending |  |
+| shopify-woocommerce | ecom | /ecommerce | 3 | 130 | pending | 38 |
 | storefront-builder | store | /store | 3 | 150 | pending |  |
 | ai-agents-training | aiag | /ai-agents | 4 | 180 | pending |  |
 | ai-copilot-lead-finder | aicrm | /ai-copilot | 4 | 130 | pending |  |
