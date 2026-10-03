@@ -1,6 +1,10 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { planAdminListResponseSchema, platformRoleListResponseSchema } from '@crm/contracts';
+import {
+  couponListResponseSchema,
+  planAdminListResponseSchema,
+  platformRoleListResponseSchema,
+} from '@crm/contracts';
 import { cookieNames } from '@/lib/auth/cookies';
 import { apiBase } from '@/lib/auth/server';
 
@@ -47,6 +51,20 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
     }
   } catch {
     // network failure: the badges stay blank
+  }
+
+  // Coupons: the badge counts ACTIVE coupons only, whatever their expiry (TW-CPN-001 rule 3).
+  try {
+    const res = await fetch(`${apiBase()}/v2/platform/coupons`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const parsed = couponListResponseSchema.safeParse(await res.json());
+      if (parsed.success) counts.coupons = parsed.data.summary.active;
+    }
+  } catch {
+    // network failure: the coupons badge stays blank
   }
 
   return counts;

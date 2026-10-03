@@ -9,7 +9,12 @@ Spec: `inventory/localization-translation.md`. Zone: `ownership.json` key `local
 | `apps/api/src/modules/localization-translation/`         | languages, providers admin, settings, usage, layered translator, detector, conversation translation                                              |
 | `apps/api/src/infra/providers/localization-translation/` | `TranslationDriver` port, five drivers (MyMemory, Google GTX, LibreTranslate, DeepL, Google Cloud), SSRF endpoint guard, Redis breaker and cache |
 | `packages/contracts/src/localization-translation/`       | locale rules (`resolveLocale`), language, provider, settings and usage schemas                                                                   |
-| `apps/web/src/features/localization-translation/`        | operator pages (languages, providers, usage), workspace translation settings, `nav.ts`                                                           |
+| `apps/web/src/features/localization-translation/`        | operator pages (languages, providers, usage), workspace translation settings, `nav.ts`, `LocaleSwitcher`, `catalog-tools.ts`                     |
+
+Round 2 additions in `apps/api/src/modules/localization-translation/`: `keyword-translation.ts` (pure rules and the 111-code target list),
+`keyword-translation.service.ts` (fan-out, backfill, `resolveInbound`, `pickContent`), `keyword-rule-store.ts` and
+`conversation-message-store.ts` (ports with Postgres shims over the auto-reply and inbox tables), `cli/translate-existing.ts`
+(`pnpm --filter @crm/api auto-reply:translate-existing`). Migration `20261006090000_i18n_provider_copy.sql` puts Reference's provider descriptions on the seed rows.
 
 ## Tables (already ported under `schema/`; this domain adds one migration)
 
