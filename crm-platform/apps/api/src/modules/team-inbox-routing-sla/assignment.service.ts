@@ -144,6 +144,60 @@ export class AssignmentService {
   }
 
   /**
+   * The flow Assign step (TW-FLR-036): a flow hands the thread to a member and/or a team, with an optional note on the timeline
+   * (`note_added`, source `flow`). The same target rules as the manual route (an ACTIVE member who can open the inbox, a team of this
+   * workspace); a refused target throws CONVERSATION_ASSIGNEE_INVALID and changes nothing, and the node moves on. No permission check
+   * (the flow's author decided), no row-version check, and handing over what is already assigned is a no-op. Strategy is always
+   * `manual`: a team given without a member keeps the thread on the team (round robin inside a team is a later phase).
+   * Runs as the system actor, inside the caller's request context for `orgId`.
+   */
+  async assignFromFlow(
+    orgId: number,
+    input: {
+      conversationUuid: string;
+      userId?: string | null;
+      teamId?: string | null;
+      note?: string;
+    },
+  ): Promise<{ changed: boolean }> {
+    const done = await this.db.tx(async (tx) => {
+      const locked = await this.repo.lockByUuid(tx, orgId, input.conversationUuid);
+      if (!locked) throw conversationNotFound();
+      const target = await this.resolveTarget(tx, orgId, {
+        rowVersion: locked.rowVersion,
+        strategy: 'manual',
+        ...(input.userId !== undefined ? { userId: input.userId } : {}),
+        ...(input.teamId !== undefined ? { teamId: input.teamId } : {}),
+      });
+      const next = {
+        userId: target.userId === undefined ? locked.assigneeUserId : target.userId,
+        teamId: target.teamId === undefined ? locked.assigneeTeamId : target.teamId,
+      };
+      let change: AssignmentChange | null = null;
+      if (next.userId !== locked.assigneeUserId || next.teamId !== locked.assigneeTeamId) {
+        change = await this.assignInTx(
+          tx,
+          orgId,
+          locked,
+          { ...next, userUuid: target.userUuid, teamUuid: target.teamUuid },
+          { kind: 'flow' },
+        );
+      }
+      if (input.note) {
+        await this.events.append(tx, orgId, {
+          conversationId: locked.id,
+          type: 'note_added',
+          actorKind: 'flow',
+          payload: { note: input.note.slice(0, 1024), source: 'flow' },
+        });
+      }
+      return change;
+    });
+    if (done) await this.afterCommit(orgId, done);
+    return { changed: done !== null };
+  }
+
+  /**
    * Writes the assignee columns for a locked conversation, with the timeline event, the audit row and the outbox event, inside the
    * caller's transaction. `locked` must come from `ConversationsRepository.lockByUuid` in that same transaction. The caller decides
    * who may do this (the route does; routing rules are the system); this method only enforces what must hold for every caller.

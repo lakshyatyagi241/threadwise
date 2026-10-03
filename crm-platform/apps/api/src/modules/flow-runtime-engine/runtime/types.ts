@@ -118,7 +118,24 @@ export type OutboundMessage =
       }>;
     }
   | { kind: 'cta_url'; body: string; header?: string; footer?: string; text: string; url: string }
-  | { kind: 'location'; latitude: number; longitude: number; name?: string; address?: string };
+  | { kind: 'location'; latitude: number; longitude: number; name?: string; address?: string }
+  /**
+   * An approved WhatsApp template (TW-FLR-026). `variables` are the Cloud API's positional or named body parameters; `text` is the
+   * message as the customer reads it (header, body, footer with the values filled in), what a channel without templates is sent
+   * and what the thread shows; `buttons` are the quick replies, numbered in that text.
+   */
+  | {
+      kind: 'template';
+      name: string;
+      language: string;
+      variables: Record<string, string>;
+      /** The provider's own component list, when `variables` cannot say it (a header with placeholders). */
+      components?: Array<Record<string, unknown>>;
+      text: string;
+      buttons?: MenuItem[];
+    }
+  /** A WhatsApp Form (a Meta flow message, TW-FLR-043): opens the published form behind `flowId`; the submission comes back as an outside event. */
+  | { kind: 'form'; body: string; flowId: string; flowToken: string; cta: string };
 
 export type SendOutcome =
   | { ok: true }
@@ -134,6 +151,8 @@ export type NodeResult =
   /** A branch ran out of nodes: re-arm the last menu, or end when the customer was never shown one (TW-FLR-016 rule 6). */
   | { kind: 'park' }
   | { kind: 'end'; reason: FlowRunEndReason }
+  /** Sub-flow (TW-FLR-031): replace the running graph with another flow's, keep the variables, start at its first node. */
+  | { kind: 'subflow'; flowId: number | string }
   | { kind: 'halt'; reason: string }
   | { kind: 'fail'; code: string; reason: string };
 

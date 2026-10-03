@@ -2,6 +2,8 @@ import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import type { Tx } from '@crm/db';
 import type { FlowRunEndReason } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { compileGraph } from '../graph/compile-graph';
+import { nodeById } from '../graph/runtime-graph';
 import { profileOf } from './channel-render';
 import {
   applyCustomReply,
@@ -21,6 +23,9 @@ import type { InboundReply, NodeExecutor, RunState } from './types';
 import { FLOW_NODE_EXECUTORS } from './node-executors';
 
 const DAY_MS = 86_400_000;
+/** How deep Sub-flows may nest in one run. Each swap resets the visit counters, so the node loop guard alone cannot stop a flow that calls itself. */
+export const MAX_SUBFLOW_DEPTH = 10;
+const SUBFLOW_DEPTH_VAR = '__subflow_depth';
 
 /** What a call did, for the worker's log and the tests. */
 export type AdvanceResult = 'stepped' | 'stale' | 'ended' | 'lost' | 'not_due';
@@ -59,7 +64,9 @@ export class FlowEngine {
     private readonly subscribers: SubscriberRepository,
     private readonly publisher: FlowRunPublisher,
     private readonly sender: FlowSender,
-    @Optional() @Inject(FLOW_NODE_EXECUTORS) private readonly executors: readonly NodeExecutor[] = [],
+    @Optional()
+    @Inject(FLOW_NODE_EXECUTORS)
+    private readonly executors: readonly NodeExecutor[] = [],
   ) {}
 
   private deps(): StepDeps {
@@ -97,6 +104,9 @@ export class FlowEngine {
     } else {
       // A halted run that is due simply runs its node again; its sends were never made, so nothing doubles.
       outcome = await executeCurrent(state, this.deps());
+      if (outcome.transition.t === 'subflow') {
+        outcome = await this.enterSubflow(orgId, state, outcome, outcome.transition.flowId);
+      }
     }
 
     const committed = await this.db.txAs({ orgId }, async (tx) => {
@@ -108,6 +118,61 @@ export class FlowEngine {
       await this.publisher.schedule(orgId, runId, committed.next.seq, committed.next.delayMs);
     }
     return outcome.transition.t === 'end' ? 'ended' : 'stepped';
+  }
+
+  /**
+   * A Sub-flow node ran (TW-FLR-031): replace the run's graph with another flow's of the same workspace and start at its first node,
+   * keeping the variables. Like Reference's code (not its docs) the run does not come back to the parent flow. A flow that is missing,
+   * another tenant's, or not live is refused the way Reference refuses a flow it cannot load: the node is passed by its first exit.
+   */
+  private async enterSubflow(
+    orgId: number,
+    state: RunState,
+    outcome: StepOutcome,
+    flowId: number | string,
+  ): Promise<StepOutcome> {
+    const nodeId = state.currentNodeId ?? '';
+    const pass = (note: string): StepOutcome => ({
+      ...outcome,
+      transition: advanceFrom(state, nodeId, 1, false, profileOf(state.channelKind ?? '').paceMs),
+      notes: [...outcome.notes, note],
+    });
+    const depth = Number(state.vars[SUBFLOW_DEPTH_VAR] ?? 0) || 0;
+    if (depth >= MAX_SUBFLOW_DEPTH) {
+      return {
+        ...outcome,
+        transition: {
+          t: 'end',
+          status: 'failed',
+          reason: 'loop_guard',
+          failureCode: 'FLR_SUBFLOW_DEPTH',
+          failureReason: `Sub-flows nested more than ${MAX_SUBFLOW_DEPTH} deep: a flow calls itself without an exit`,
+        },
+      };
+    }
+    const flow = await this.db.txAs({ orgId }, (tx) => this.runs.flowForSubflow(tx, orgId, flowId));
+    if (!flow) return pass(`sub-flow ${flowId} not found: moved on`);
+    if (!flow.isPublished || !flow.isActive) {
+      return pass(`sub-flow ${flowId} is not live (publish it and switch it on): moved on`);
+    }
+    const graph = compileGraph(flow.data);
+    const first = graph.nodes[0];
+    if (!first || !nodeById(graph, first.id)) {
+      return {
+        ...outcome,
+        transition: { t: 'end', status: 'completed', reason: 'dead_end' },
+        notes: [...outcome.notes, `sub-flow ${flowId} has no steps: the run ended`],
+      };
+    }
+    state.graph = graph;
+    state.visits = {};
+    state.menus = { latest: null, byNode: {} };
+    state.vars[SUBFLOW_DEPTH_VAR] = depth + 1;
+    return {
+      ...outcome,
+      transition: { t: 'goto', nodeId: first.id, delayMs: 0, subflowId: flow.id },
+      notes: [...outcome.notes, `entered sub-flow ${flowId}`],
+    };
   }
 
   // --- a reply ---------------------------------------------------------------------------------------------------------------
@@ -278,6 +343,7 @@ export class FlowEngine {
     const detail: Record<string, unknown> = {};
     if (outcome.notes.length > 0) detail.notes = outcome.notes;
     if (t.t === 'goto') detail.next = t.nodeId;
+    if (t.t === 'goto' && t.subflowId !== undefined) detail.flow_id = t.subflowId;
     if (t.t === 'wait') detail.waitingOn = t.wait.nodeId;
     if (t.t === 'sleep') detail.seconds = t.seconds;
     if (t.t === 'halt') detail.reason = t.reason;
@@ -346,7 +412,12 @@ export class FlowEngine {
     };
     switch (t.t) {
       case 'goto':
-        return { ...base, status: 'running', currentNodeId: t.nodeId };
+        return {
+          ...base,
+          status: 'running',
+          currentNodeId: t.nodeId,
+          ...(t.subflowId !== undefined ? { graph: state.graph } : {}),
+        };
       case 'wait':
         return {
           ...base,
@@ -380,6 +451,7 @@ export class FlowEngine {
           failureReason: t.failureReason?.slice(0, 500) ?? null,
         };
       case 'none':
+      case 'subflow': // resolved into a goto before it is written
         return base;
     }
   }

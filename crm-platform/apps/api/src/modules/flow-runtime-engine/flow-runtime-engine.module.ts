@@ -21,8 +21,11 @@ import { ActionNodes } from './runtime/nodes/actions/actions-nodes';
 import { ActionNodesModule } from './runtime/nodes/actions/actions-nodes.module';
 import { AiNodes } from './runtime/nodes/ai/ai-nodes';
 import { AiNodesModule } from './runtime/nodes/ai/ai-nodes.module';
+import { OrderingFlowController } from './runtime/nodes/ai/ordering.controller';
 import { CommerceNodes } from './runtime/nodes/commerce/commerce-nodes';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
+import { GoogleFormWebhookController } from './runtime/nodes/integrations/google-form-webhook.controller';
+import { GoogleFormWebhookService } from './runtime/nodes/integrations/google-form-webhook.service';
 import { IntegrationNodes } from './runtime/nodes/integrations/integrations-nodes';
 import { IntegrationNodesModule } from './runtime/nodes/integrations/integrations-nodes.module';
 
@@ -46,7 +49,12 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     CommerceNodesModule,
     IntegrationNodesModule,
   ],
-  controllers: [FlowRuntimeController, FlowRuntimePublicController],
+  controllers: [
+    FlowRuntimeController,
+    FlowRuntimePublicController,
+    GoogleFormWebhookController,
+    OrderingFlowController,
+  ],
   providers: [
     CryptoService,
     ApiKeyGuard,
@@ -61,6 +69,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     FlowLaunchService,
     FlowTriggerService,
     FlowRuntimeService,
+    GoogleFormWebhookService,
     CampaignFlowStarterImpl,
     {
       provide: FLOW_NODE_EXECUTORS,

@@ -13,12 +13,20 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   enrollContactsInputSchema,
   flowAnalyticsQuerySchema,
+  flowErrorGroupsQuerySchema,
+  listFlowHistoryQuerySchema,
+  listFlowRetriesQuerySchema,
   listFlowRunsQuerySchema,
+  retryManyInputSchema,
   listFlowSubscribersQuerySchema,
   startFlowOnConversationInputSchema,
   type EnrollContactsInput,
   type FlowAnalyticsQuery,
+  type FlowErrorGroupsQuery,
+  type ListFlowHistoryQuery,
+  type ListFlowRetriesQuery,
   type ListFlowRunsQuery,
+  type RetryManyInput,
   type ListFlowSubscribersQuery,
   type StartFlowOnConversationInput,
 } from '@crm/contracts';
@@ -51,6 +59,45 @@ export class FlowRuntimeController {
   @ApiOperation({ summary: 'Runs, newest first, by flow, contact, status or what started them' })
   runs(@Query(zodPipe(listFlowRunsQuerySchema)) q: ListFlowRunsQuery) {
     return this.svc.listRuns(q);
+  }
+
+  @Get('history')
+  @RequirePermission('flr.runs.read')
+  @ApiOperation({
+    summary:
+      'The execution history: every contact pass through a flow, with filters and status counts',
+  })
+  history(@Query(zodPipe(listFlowHistoryQuerySchema)) q: ListFlowHistoryQuery) {
+    return this.svc.history(q);
+  }
+
+  @Get('errors')
+  @RequirePermission('flr.runs.read')
+  @ApiOperation({
+    summary: 'Failed runs grouped by reason, with the flows each hit and the subscribers to retry',
+  })
+  errors(@Query(zodPipe(flowErrorGroupsQuerySchema)) q: FlowErrorGroupsQuery) {
+    return this.svc.errorGroups(q);
+  }
+
+  @Get('retries')
+  @RequirePermission('flr.runs.read')
+  @ApiOperation({
+    summary: 'The retry records: every attempt to run a failed run again, newest first',
+  })
+  retries(@Query(zodPipe(listFlowRetriesQuerySchema)) q: ListFlowRetriesQuery) {
+    return this.svc.listRetries(q);
+  }
+
+  @Post('retry')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('flr.runs.manage')
+  @ApiOperation({
+    summary: 'Retry the named failed runs (their subscriber ids), at most 50 at a time',
+    description: 'Answers with a count per outcome and the outcome of each run.',
+  })
+  retryMany(@Body(zodPipe(retryManyInputSchema)) body: RetryManyInput) {
+    return this.svc.retryMany(body);
   }
 
   @Get('runs/:id')

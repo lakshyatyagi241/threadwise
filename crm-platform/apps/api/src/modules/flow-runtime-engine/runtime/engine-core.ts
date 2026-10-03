@@ -16,7 +16,15 @@ import { interpolate } from './variables';
 /** Where a run goes after one step. The engine persists it; nothing here touches the database, the clock (but `now`) or a queue. */
 export type Transition =
   /** Run `nodeId` next, after `delayMs` (the humanising pause on a plain move; 0 on a routed choice). */
-  | { t: 'goto'; nodeId: string; delayMs: number }
+  | {
+      t: 'goto';
+      nodeId: string;
+      delayMs: number;
+      /** A sub-flow swapped `run.graph` for this flow's: the engine persists the new graph and logs the flow id. */
+      subflowId?: number;
+    }
+  /** The node asked to run another flow in this run: the engine resolves it (it needs the database) and turns this into a `goto`. */
+  | { t: 'subflow'; flowId: number | string }
   | { t: 'wait'; wait: NonNullable<RunState['wait']> }
   | { t: 'sleep'; seconds: number }
   | {
@@ -100,6 +108,8 @@ function transitionOf(run: RunState, nodeId: string, r: NodeResult, deps: StepDe
       return parkOrEnd(run);
     case 'end':
       return { t: 'end', status: 'completed', reason: r.reason };
+    case 'subflow':
+      return { t: 'subflow', flowId: r.flowId };
     case 'halt':
       return { t: 'halt', reason: r.reason };
     case 'fail':
