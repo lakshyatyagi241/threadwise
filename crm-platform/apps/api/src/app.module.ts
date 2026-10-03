@@ -36,6 +36,7 @@ import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
+import { StorefrontBuilderModule } from './modules/storefront-builder';
 import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
 import { FlowBuilderEditorModule } from './modules/flow-builder-editor';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
@@ -182,6 +183,7 @@ import { HealthModule } from './health/health.module';
     ChannelInstagramModule,
     ShopifyWoocommerceModule,
     CatalogProductsModule,
+    StorefrontBuilderModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,
