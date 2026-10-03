@@ -171,23 +171,30 @@ export class ConversationsService implements ConversationsFacade {
         messageId: alloc.id,
         arrivedAt: alloc.createdAt,
         preview: previewOf({ kind: 'text', body: input.body }),
-        sentAt: new Date(),
+        // A line on the customer's side is not something the business sent.
+        ...(input.direction === 'in' ? {} : { sentAt: new Date() }),
       });
       await this.messages.insert(tx, orgId, {
         id: alloc.id,
         createdAt: alloc.createdAt,
         conversationId: conv.id,
         seq: after.msgSeq,
-        direction: 'out',
-        kind: 'text',
-        senderKind: senderKindOfSource(input.source),
+        direction: input.direction ?? 'out',
+        kind: input.kind ?? 'text',
+        senderKind:
+          input.kind === 'system'
+            ? 'system'
+            : input.senderUserId
+              ? 'agent'
+              : senderKindOfSource(input.source),
+        senderUserId: input.senderUserId ?? null,
         body: input.body,
         // The provider already took it: the other domain sent it, this only records it in the thread.
-        status: 'sent',
+        status: input.direction === 'in' ? 'received' : 'sent',
         providerMessageId: input.providerMessageId ?? null,
-        meta: { source: input.source },
+        meta: { source: input.source, ...(input.meta ?? {}) },
         providerTs: new Date(),
-        sentAt: new Date(),
+        ...(input.direction === 'in' ? {} : { sentAt: new Date() }),
       });
       await this.messages.insertEvent(
         tx,
@@ -331,6 +338,11 @@ export class ConversationsService implements ConversationsFacade {
   }
 
   private ref(conv: ConversationRow, channel: ChannelRow): ThreadRef {
-    return { id: conv.uuid, channelId: channel.uuid, peerKey: conv.peerKey };
+    return {
+      id: conv.uuid,
+      channelId: channel.uuid,
+      peerKey: conv.peerKey,
+      lastInboundAt: conv.lastInboundAt,
+    };
   }
 }

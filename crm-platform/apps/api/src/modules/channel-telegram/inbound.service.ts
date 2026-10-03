@@ -156,13 +156,6 @@ export class InboundService {
     const x = payment ? { text: payment.body, mediaType: null, fileId: null } : extract(m);
     const api = this.telegram.forToken(this.crypto.decrypt(bot.botToken));
 
-    // The file is copied into our own storage; the tokened Telegram URL is never kept.
-    let mediaPath: string | null = null;
-    if (x.fileId && this.media.enabled) {
-      const file = await api.downloadFile(x.fileId);
-      if (file) mediaPath = await this.media.save(orgId, file.bytes, file.extension);
-    }
-
     const input: InboundMessageInput = {
       chatId,
       chatType: (str(dict(m.chat).type) ?? 'private').toLowerCase(),
@@ -175,7 +168,6 @@ export class InboundService {
       messageId: str(m.message_id),
       text: x.text,
       mediaType: x.mediaType,
-      mediaPath,
       fileId: x.fileId,
       event: payment ? 'successful_payment' : null,
       payment: payment
@@ -193,9 +185,10 @@ export class InboundService {
         : null,
     };
 
-    const recorded = await this.db.txAs({ orgId }, (tx) =>
-      this.inbox.recordInbound(tx, orgId, bot.id, input),
-    );
+    // The file is copied into the inbox's own storage by the channel adapter; the tokened Telegram URL is never kept.
+    const recorded = await this.inbox.recordInbound(orgId, bot.id, input);
+    // A redelivered update is stored once: nothing runs a second time.
+    if (!recorded.stored) return;
 
     // A new private contact gets the profile photo once, best effort, only when we can store files.
     if (

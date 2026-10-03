@@ -16,6 +16,7 @@ import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/opera
 import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
 import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
+import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
@@ -69,6 +70,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...ROLES_OPERATOR_NAV,
   // Node bridge domain (NODE): address, token and sender pacing
   ...NODE_OPERATOR_NAV,
+  // WhatsApp provider registry (WAP): providers, workspace assignments and the number switch
+  ...WAP_OPERATOR_NAV,
   // catalog domain (CAT): the platform's WhatsApp Catalog settings
   ...CAT_OPERATOR_NAV,
   {

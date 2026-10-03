@@ -29,14 +29,16 @@ interface RawTemplate {
 }
 
 const authOf = (c: WabaConnection, phone = false): WabaAuth =>
-  c.provider === 'interakt'
-    ? {
-        provider: 'interakt',
-        authKey: c.authKey ?? '',
-        wabaId: c.wabaId,
-        ...(phone ? { phoneNumberId: c.phoneNumberId } : {}),
-      }
-    : { provider: 'meta', accessToken: c.accessToken ?? '' };
+  c.registry
+    ? c.registry
+    : c.provider === 'interakt'
+      ? {
+          provider: 'interakt',
+          authKey: c.authKey ?? '',
+          wabaId: c.wabaId,
+          ...(phone ? { phoneNumberId: c.phoneNumberId } : {}),
+        }
+      : { provider: 'meta', accessToken: c.accessToken ?? '' };
 
 function toRemote(t: RawTemplate): RemoteTemplate {
   const q = t.quality_score;
@@ -145,6 +147,13 @@ export class WabaTemplateClient implements WabaTemplatePort {
   }
 
   async uploadHeaderMedia(conn: WabaConnection, media: MediaUpload): Promise<string> {
+    if (conn.registry) {
+      // The resumable upload and Interakt's media handle are two provider-specific flows; a registry provider declares neither, so
+      // a header example cannot be uploaded through it. Better a clear refusal than a call to the wrong host.
+      throw new Error(
+        'Uploading a template header example is not available through this WhatsApp provider. Use a header without media, or a text header.',
+      );
+    }
     if (conn.provider === 'interakt') {
       // One multipart call, only on Interakt's older API version.
       const form = new FormData();

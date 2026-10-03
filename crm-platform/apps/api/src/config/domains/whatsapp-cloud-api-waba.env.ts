@@ -92,6 +92,18 @@ export const wabaEnvSchema = z.object({
       .transform((v) => v === true || v === 'true' || v === '1')
       .default(false),
   ),
+  /**
+   * Development only: let a provider of the WhatsApp provider registry live on a loopback or private address over plain http (a stand-in
+   * server on the developer's machine). Ignored when NODE_ENV is `production`: the registry's addresses are typed by an operator and
+   * every call to them carries a credential, so production only ever reaches public https hosts.
+   */
+  WABA_PROVIDER_ALLOW_PRIVATE_HOSTS: z.preprocess(
+    blankToUndefined,
+    z
+      .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
+      .transform((v) => v === true || v === 'true' || v === '1')
+      .default(false),
+  ),
   /** Per-request ceiling for calls to Meta/Interakt, in ms. */
   WABA_HTTP_TIMEOUT_MS: z.preprocess(
     blankToUndefined,

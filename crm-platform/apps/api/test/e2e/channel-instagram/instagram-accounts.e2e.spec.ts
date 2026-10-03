@@ -87,20 +87,34 @@ const rows = async (t: Tenant) =>
     ])
   ).rows;
 
+/** A thread on a channel of its own (`instagram`, or `whatsapp` standing for a Cloud API number), with one customer message. */
 async function thread(t: Tenant, channel: string, key: string): Promise<number> {
+  const ch = await h.owner.query(
+    `INSERT INTO channels (org_id, kind, name, status) VALUES ($1, $2, 'T', 'connected') RETURNING id`,
+    [t.orgId, channel === 'whatsapp' ? 'whatsapp_cloud' : channel],
+  );
   const c = await h.owner.query(
-    `INSERT INTO conversations (org_id, title, channel, provider, origin, status, inbox_status, raw_jid, last_message_at)
-     VALUES ($1, 'T', $2, $2, $2, 'pending', 'open', $3, now()) RETURNING id`,
-    [t.orgId, channel, key],
+    `INSERT INTO conversations (org_id, channel_id, peer_key, title, last_message_at)
+     VALUES ($1, $2, $3, 'T', now()) RETURNING id`,
+    [t.orgId, ch.rows[0].id, key],
   );
   const id = Number(c.rows[0].id);
   await h.owner.query(
-    `INSERT INTO messages (org_id, conversation_id, direction, body, status, provider, sent_at)
-     VALUES ($1, $2, 'in', 'hi', 'received', $3, now())`,
-    [t.orgId, id, channel],
+    `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, body, status)
+     VALUES ($1, $2, 1, 'in', 'customer', 'hi', 'received')`,
+    [t.orgId, id],
   );
   return id;
 }
+
+const instagramThreads = async (orgId: number) =>
+  (
+    await h.owner.query(
+      `SELECT count(*)::int AS n FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE c.org_id = $1 AND ch.kind = 'instagram'`,
+      [orgId],
+    )
+  ).rows[0].n as number;
 
 const link = (t: Tenant, body: Record<string, unknown>) =>
   api.http().post('/v2/instagram/accounts').set(bearer(t.admin)).send(body);
@@ -260,11 +274,7 @@ describe('unlink (WD-IG-006)', () => {
       .set(bearer(t.admin));
     expect(first.status).toBe(200);
     expect(first.body.purgedThreads).toBe(0);
-    const left = await h.owner.query(
-      `SELECT count(*)::int AS n FROM conversations WHERE org_id = $1 AND channel = 'instagram'`,
-      [t.orgId],
-    );
-    expect(left.rows[0].n).toBe(1);
+    expect(await instagramThreads(t.orgId)).toBe(1);
 
     const last = await api
       .http()
@@ -272,16 +282,18 @@ describe('unlink (WD-IG-006)', () => {
       .set(bearer(t.admin));
     expect(last.body.purgedThreads).toBe(1);
     const mine = await h.owner.query(
-      `SELECT channel, (SELECT count(*)::int FROM messages m WHERE m.org_id = c.org_id AND m.conversation_id = c.id) AS msgs
-       FROM conversations c WHERE org_id = $1`,
+      `SELECT ch.kind, (SELECT count(*)::int FROM messages m WHERE m.org_id = c.org_id AND m.conversation_id = c.id) AS msgs
+       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id WHERE c.org_id = $1`,
       [t.orgId],
     );
-    expect(mine.rows).toEqual([{ channel: 'whatsapp', msgs: 1 }]);
-    const theirs = await h.owner.query(
-      `SELECT count(*)::int AS n FROM conversations WHERE org_id = $1 AND channel = 'instagram'`,
-      [other.orgId],
+    expect(mine.rows).toEqual([{ kind: 'whatsapp_cloud', msgs: 1 }]);
+    expect(await instagramThreads(other.orgId)).toBe(1);
+    // The unlinked accounts' inbox channels are kept, switched off.
+    const channels = await h.owner.query(
+      `SELECT status FROM channels WHERE org_id = $1 AND kind = 'instagram' AND external_id IN ('1', '2')`,
+      [t.orgId],
     );
-    expect(theirs.rows[0].n).toBe(1);
+    expect(channels.rows.map((r) => r.status)).toEqual(['disconnected', 'disconnected']);
     expect(await rows(t)).toHaveLength(0);
   });
 

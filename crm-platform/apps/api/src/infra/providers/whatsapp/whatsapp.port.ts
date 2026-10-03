@@ -7,6 +7,7 @@
  * adapter and a `provider` value on the channel row — not a rewrite of the
  * send pipeline.
  */
+import type { WabaRegistryAuth } from '../whatsapp-cloud-api-waba/waba-http';
 
 export interface SendTemplateParams {
   /** E.164 destination. */
@@ -69,7 +70,16 @@ export interface NormalisedInboundMessage {
  */
 export interface SendMessageParams {
   to: string;
-  type: 'image' | 'video' | 'audio' | 'document' | 'sticker' | 'location' | 'contacts' | 'interactive' | 'reaction';
+  type:
+    | 'image'
+    | 'video'
+    | 'audio'
+    | 'document'
+    | 'sticker'
+    | 'location'
+    | 'contacts'
+    | 'interactive'
+    | 'reaction';
   body: Record<string, unknown>;
   clientReference: string;
   /** Quote an earlier message (`context.message_id`). */
@@ -84,7 +94,11 @@ export interface WhatsAppProvider {
   sendText(channelConfig: ChannelCredentials, params: SendTextParams): Promise<SendResult>;
   sendMessage(channelConfig: ChannelCredentials, params: SendMessageParams): Promise<SendResult>;
   /** Marks an inbound message read; `typing` also shows the typing indicator. */
-  markRead(channelConfig: ChannelCredentials, providerMessageId: string, typing?: boolean): Promise<void>;
+  markRead(
+    channelConfig: ChannelCredentials,
+    providerMessageId: string,
+    typing?: boolean,
+  ): Promise<void>;
 
   /**
    * Verifies the webhook signature. Returns false on any doubt.
@@ -113,6 +127,8 @@ export interface ChannelCredentials {
   authKey?: string;
   /** Marketing Messages Lite: marketing templates go to `/marketing_messages`. */
   marketingLite?: boolean;
+  /** A number on a provider of the platform's provider registry: the route resolved for it. Wins over `route`. */
+  registry?: WabaRegistryAuth;
 }
 
 export const WHATSAPP_PROVIDER = Symbol('WHATSAPP_PROVIDER');

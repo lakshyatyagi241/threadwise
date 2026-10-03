@@ -19,6 +19,7 @@ import {
 } from '../../infra/providers/channel-telegram/telegram.port';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { ChatInboxIngest } from './_shims/chat-inbox-ingest';
 import { TELEGRAM_PLAN_GATE, type TelegramPlanGate } from './_shims/tokens';
 import { clipError, randomToken, webhookRefusedMessage, webhookUrl } from './bot-rules';
 import { BotsRepository, type BotRow } from './bots.repository';
@@ -45,8 +46,18 @@ export class BotsService {
     private readonly outbox: OutboxService,
     private readonly config: ConfigService<Env, true>,
     @Inject(TELEGRAM_API) private readonly telegram: TelegramApiFactory,
+    private readonly inbox: ChatInboxIngest,
     @Inject(TELEGRAM_PLAN_GATE) private readonly plan: TelegramPlanGate,
   ) {}
+
+  /** Keeps the bot's inbox channel in step with the bot. Best effort: the bot itself is already saved. */
+  private async syncChannel(orgId: number, bot: BotRow, connected: boolean): Promise<void> {
+    try {
+      await this.inbox.syncBot(orgId, bot, connected);
+    } catch (err) {
+      this.logger.warn({ err, orgId, bot: bot.id }, 'telegram inbox channel not synced');
+    }
+  }
 
   private url(row: BotRow): string {
     return webhookUrl(this.config.get('APP_URL', { infer: true }), row.webhookToken);
@@ -129,6 +140,7 @@ export class BotsService {
     const row = await this.db.tx((tx) =>
       this.repo.setError(tx, ctx.orgId, saved.id, hook.ok ? null : clipError(hook.error)),
     );
+    await this.syncChannel(ctx.orgId, row, row.active);
     this.logger.log(
       { orgId: ctx.orgId, bot: row.username, webhook: hook.ok },
       'telegram bot connected',
@@ -164,7 +176,7 @@ export class BotsService {
   async toggle(uuid: string): Promise<BotResponse> {
     const ctx = RequestContextStore.require();
     await this.plan.assertChannel(ctx.orgId);
-    return this.db.tx(async (tx) => {
+    const toggled = await this.db.tx(async (tx) => {
       const bot = await this.repo.findByUuid(tx, ctx.orgId, uuid, true);
       if (!bot) throw AppError.notFound('Telegram bot', uuid);
       const row = await this.repo.setActive(tx, ctx.orgId, bot.id, !bot.active);
@@ -174,8 +186,10 @@ export class BotsService {
         action: 'update',
         delta: { active: { old: bot.active, new: row.active } },
       });
-      return this.toResponse(row);
+      return row;
     });
+    await this.syncChannel(ctx.orgId, toggled, toggled.active);
+    return this.toResponse(toggled);
   }
 
   /** Payment provider settings: a blank token keeps the saved one, a value replaces it, `clearPaymentToken` removes it. */
@@ -217,5 +231,6 @@ export class BotsService {
         payload: { uuid: bot.uuid, username: bot.username },
       });
     });
+    await this.syncChannel(ctx.orgId, bot, false);
   }
 }
