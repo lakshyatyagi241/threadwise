@@ -1,0 +1,37 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { getPublicProduct, requestOrigin } from '../api/server';
+import { ProductDetail } from '../components/product-detail';
+import { ShopFrame } from '../components/shop-frame';
+import { productPath } from '../lib/links';
+import { jsonLdString, productJsonLd, productMetadata } from '../lib/seo';
+
+/** The product page (TW-STORE-010). An unknown shop or product is a 404. */
+export async function ShopProduct({ slug, productSlug }: { slug: string; productSlug: string }) {
+  const page = await getPublicProduct(slug, productSlug);
+  if (!page) notFound();
+  const origin = await requestOrigin();
+  const url = `${origin}${productPath(slug, page.product.slug)}`;
+  return (
+    <ShopFrame shop={page.shop} products={[page.product, ...page.related]}>
+      {/* React hoists these into <head>. `og:type` is `product` here, which the typed metadata API does not offer. */}
+      <meta property="og:type" content="product" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdString(productJsonLd(page, url)) }}
+      />
+      <ProductDetail page={page} />
+    </ShopFrame>
+  );
+}
+
+export async function shopProductMetadata(slug: string, productSlug: string): Promise<Metadata> {
+  const page = await getPublicProduct(slug, productSlug);
+  if (!page) return { title: 'Store', robots: { index: false } };
+  const origin = await requestOrigin();
+  return productMetadata(
+    page.shop,
+    page.product,
+    `${origin}${productPath(slug, page.product.slug)}`,
+  );
+}

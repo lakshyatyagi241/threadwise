@@ -32,6 +32,7 @@ import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
+import { StorefrontBuilderModule } from './modules/storefront-builder';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -167,6 +168,7 @@ import { HealthModule } from './health/health.module';
     CampaignsModule,
     ChannelTelegramModule,
     CatalogProductsModule,
+    StorefrontBuilderModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,

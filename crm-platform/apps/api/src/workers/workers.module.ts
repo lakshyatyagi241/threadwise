@@ -6,6 +6,7 @@ import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-bill
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CatalogProductsWorkerModule } from '../modules/catalog-products';
+import { StorefrontBuilderWorkerModule } from '../modules/storefront-builder';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
 import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
@@ -54,6 +55,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     PlansWorkerModule,
     WabaWorkerModule,
     CatalogProductsWorkerModule,
+    StorefrontBuilderWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,
     CampaignsWorkerModule,

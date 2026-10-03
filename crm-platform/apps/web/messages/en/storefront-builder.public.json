@@ -1,0 +1,331 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "Close",
+      "ok": "OK",
+      "done": "Done",
+      "skip": "Skip to content"
+    },
+    "strip": "Order on WhatsApp · Cash on delivery available · Free chats, fast replies",
+    "header": {
+      "navLabel": "Shop sections",
+      "shop": "Shop",
+      "categories": "Categories",
+      "about": "About",
+      "searchPlaceholder": "Search products…",
+      "searchLabel": "Search products",
+      "wishlist": "Wishlist",
+      "compare": "Compare",
+      "cart": "Cart",
+      "withCount": "{label}, {count, plural, one {# item} other {# items}}"
+    },
+    "hero": {
+      "welcome": "Welcome to {shop}.",
+      "sub": "Hand-picked products. Order any item directly on WhatsApp — no checkout forms, no app installs.",
+      "trust": {
+        "cod": "Cash on delivery",
+        "chat": "Free chat support",
+        "returns": "Easy returns"
+      }
+    },
+    "catalog": {
+      "label": "Products",
+      "emptyTitle": "No products yet",
+      "emptyBody": "The owner is still setting things up — please check back soon.",
+      "count": "{count, plural, one {# product} other {# products}}",
+      "sort": {
+        "label": "Sort products",
+        "featured": "Sort · Featured",
+        "priceAsc": "Price · Low to high",
+        "priceDesc": "Price · High to low",
+        "nameAsc": "Name · A → Z",
+        "nameDesc": "Name · Z → A"
+      },
+      "view": {
+        "label": "Layout",
+        "grid": "Grid view",
+        "list": "List view"
+      },
+      "filters": {
+        "title": "Filter",
+        "category": "Category",
+        "price": "Price",
+        "min": "Min",
+        "max": "Max",
+        "range": "Range: {min} — {max}",
+        "availability": "Availability",
+        "inStock": "In stock only",
+        "onSale": "On sale",
+        "reset": "Reset filters",
+        "clear": "Clear filters"
+      },
+      "noMatch": "Nothing matches those filters",
+      "showMore": "Show more products",
+      "loading": "Loading…",
+      "retry": "Try again",
+      "showing": "Showing {shown} of {total} products"
+    },
+    "card": {
+      "new": "New",
+      "soldOut": "Sold out",
+      "soldOutNamed": "{name}: sold out",
+      "addToCart": "Add to cart",
+      "addToCartNamed": "Add {name} to cart",
+      "addWish": "Add {name} to wishlist",
+      "removeWish": "Remove {name} from wishlist",
+      "quickView": "Quick view of {name}",
+      "quickViewTitle": "Quick view",
+      "was": "Was"
+    },
+    "quick": {
+      "details": "Full details →"
+    },
+    "product": {
+      "gallery": "Product images",
+      "showImage": "Show image {n}",
+      "breadcrumb": "You are here",
+      "save": "Save {percent}%",
+      "onlyLeft": "Only {count} left",
+      "inStock": "In stock · ready to ship",
+      "quantity": "Quantity",
+      "addCompare": "Add to compare",
+      "removeCompare": "Remove from compare",
+      "share": "Share this product",
+      "shareTitle": "Share this product",
+      "ask": "Ask a question on WhatsApp",
+      "sku": "SKU",
+      "category": "Category",
+      "weight": "Weight",
+      "grams": "{count} g",
+      "delivery": "Delivery",
+      "deliveryTime": "2–5 business days",
+      "tags": "Tags",
+      "tabs": {
+        "label": "Product information",
+        "desc": "Description",
+        "ship": "Shipping & returns",
+        "reviews": "Reviews"
+      },
+      "noDescription": "No description available yet — message the seller on WhatsApp to learn more.",
+      "shippingHeading": "Shipping.",
+      "shippingBody": "Orders are dispatched within 1–2 business days. Delivery times depend on your location — typically 2–5 business days.",
+      "freeAbove": "Free shipping on orders above {amount}.",
+      "returnsHeading": "Returns.",
+      "returnsBody": "Unused items can be returned within 7 days of delivery. Message us on WhatsApp to start a return — we’ll arrange the pickup.",
+      "reviewCount": "{count, plural, one {# review} other {# reviews}}",
+      "anonymous": "Anonymous",
+      "ratingOf": "{rating} out of 5",
+      "noReviews": "No reviews yet — be the first to review this product.",
+      "related": "You may also like"
+    },
+    "review": {
+      "write": "Write a review",
+      "name": "Your name",
+      "rating": "Rating",
+      "ratings": {
+        "5": "Excellent",
+        "4": "Good",
+        "3": "Okay",
+        "2": "Poor",
+        "1": "Bad"
+      },
+      "bodyLabel": "Your review",
+      "body": "Share your experience (optional)",
+      "submit": "Submit review",
+      "nameRequired": "Please add your name.",
+      "thanks": "Thanks for your review!",
+      "network": "Network error. Please try again.",
+      "failed": "Could not submit your review."
+    },
+    "cart": {
+      "title": "Your cart",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "FREE ✓",
+      "total": "Total",
+      "addForFree": "Add {amount} more for free shipping",
+      "order": "Order on WhatsApp →",
+      "payVia": "Pay via {method} · Cash on delivery",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "Card",
+        "paypal": "PayPal",
+        "bank": "Bank transfer"
+      },
+      "codOnly": "Cash on delivery · Confirm in chat",
+      "emptyTitle": "Your cart is empty",
+      "emptyBody": "Browse the catalog and add a few favourites.",
+      "keepBrowsing": "Keep browsing",
+      "quantityOf": "Quantity of {name}",
+      "decrease": "Decrease quantity",
+      "increase": "Increase quantity",
+      "remove": "Remove {name} from cart",
+      "fullTitle": "Your cart is full",
+      "fullBody": "A cart holds up to 100 different products. Order these first, then start a new cart."
+    },
+    "wish": {
+      "title": "Wishlist",
+      "emptyTitle": "No favourites yet",
+      "emptyBody": "Tap the heart on any product to save it for later.",
+      "remove": "Remove {name} from wishlist"
+    },
+    "compare": {
+      "title": "Compare products",
+      "emptyTitle": "Nothing to compare",
+      "emptyBody": "Tap “Compare” on any two products to see them side by side.",
+      "attribute": "Attribute",
+      "rows": {
+        "image": "Image",
+        "name": "Name",
+        "price": "Price",
+        "sku": "SKU",
+        "category": "Category",
+        "description": "Description"
+      },
+      "remove": "Remove {name} from compare",
+      "bar": "Products to compare",
+      "open": "Compare →",
+      "fullTitle": "Compare full",
+      "fullBody": "You can compare up to {count} products at once. Remove one from the compare bar to add a new one."
+    },
+    "stock": {
+      "title": "Only {count} in stock",
+      "soldOut": "This product is sold out. We’ll restock soon — message us on WhatsApp to be notified.",
+      "limit": "{count, plural, one {There is only 1 unit available, and you already have all of them in your cart.} other {There are only # units available, and you already have all of them in your cart.}}",
+      "maxTitle": "Limit reached",
+      "maxBody": "You can order up to {count} units of one product at a time."
+    },
+    "toast": {
+      "added": "{name} · added to cart",
+      "wishAdded": "Added to wishlist ♡",
+      "wishRemoved": "Removed from wishlist",
+      "compareAdded": "Added to compare",
+      "compareRemoved": "Removed from compare"
+    },
+    "checkout": {
+      "title": "Checkout",
+      "summary": "{count, plural, one {# item} other {# items}} · {total}",
+      "name": "Your name",
+      "phone": "WhatsApp number",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "Delivery address",
+      "note": "Note (optional)",
+      "coupon": "Discount code",
+      "apply": "Apply",
+      "payment": "Payment",
+      "prepaid": "Pay online / on delivery details",
+      "cod": "Cash on delivery",
+      "place": "Place order",
+      "placing": "Placing order…",
+      "nameRequired": "Please enter your name.",
+      "phoneInvalid": "Please enter a valid WhatsApp number.",
+      "cartEmpty": "Your cart is empty.",
+      "emptyTitle": "Your cart is empty",
+      "emptyBody": "Browse the catalog and add a product before checking out.",
+      "failed": "Could not place the order. Please try again.",
+      "network": "Network error. Please try again.",
+      "couponSave": "You save {discount} · New total {total}",
+      "couponFree": "Free shipping applied · New total {total}",
+      "couponInvalid": "That code is not valid for this cart.",
+      "couponNetwork": "Could not check that code.",
+      "couponFallback": "Invalid code."
+    },
+    "errors": {
+      "itemsUnavailable": "Those items are no longer available. Please refresh and try again.",
+      "notAvailable": "This store is not available.",
+      "rateLimited": "Too many requests. Please wait a moment and try again."
+    },
+    "placed": {
+      "title": "Order #{orderNo} placed",
+      "track": "Track order #{orderNo} →",
+      "openWhatsApp": "Open WhatsApp"
+    },
+    "share": {
+      "title": "Share",
+      "url": "Link to share",
+      "copy": "Copy",
+      "copied": "Copied ✓",
+      "copyFailed": "Could not copy the link",
+      "linkCopied": "Link copied",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "Send to a chat",
+      "email": "Email",
+      "emailHint": "Open mail app",
+      "telegram": "Telegram",
+      "telegramHint": "Share to chat",
+      "more": "More…",
+      "moreHint": "Phone share menu",
+      "showQr": "Show QR code →",
+      "qrTitle": "QR code of the link",
+      "scan": "Scan to open the shop"
+    },
+    "info": {
+      "freeAbove": "Free shipping above {amount}.",
+      "shipping": {
+        "title": "Shipping & delivery",
+        "body": "Orders are confirmed via WhatsApp. Delivery times depend on your location — typically 2-5 business days."
+      },
+      "returns": {
+        "title": "Returns",
+        "body": "Unused items can be returned within 7 days. Message us on WhatsApp to start a return."
+      },
+      "howToOrder": {
+        "title": "How to order",
+        "body": "Browse the catalog, add to cart, then tap “Order on WhatsApp”. We confirm your order in chat and arrange delivery."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "body": "We only collect what you share in chat to fulfill your order. We never sell your data."
+      }
+    },
+    "footer": {
+      "blurb": "Hand-picked products, ordered on WhatsApp like a phone call. No app needed — just chat with us to buy.",
+      "paymentsLabel": "Ways to pay",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "Cash on delivery",
+        "bank": "Bank transfer"
+      },
+      "shopHeading": "Shop",
+      "allProducts": "All products",
+      "helpHeading": "Help",
+      "help": {
+        "shipping": "Shipping",
+        "returns": "Returns",
+        "howToOrder": "How to order",
+        "privacy": "Privacy"
+      },
+      "contactHeading": "Contact",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "Mon–Sun · 9am–9pm",
+      "hoursToast": "Hours: 9am–9pm",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "Order #{orderNo}",
+      "progress": "Order progress",
+      "cancelled": "This order was cancelled. Contact us if that’s unexpected.",
+      "steps": {
+        "placed": "Placed",
+        "confirmed": "Confirmed",
+        "paid": "Paid",
+        "shipped": "Shipped"
+      },
+      "stepDone": "done",
+      "stepTodo": "not yet",
+      "items": "Items",
+      "qty": "Qty {qty} · {price}",
+      "discount": "Discount",
+      "free": "Free",
+      "deliveryTo": "Delivery to",
+      "payNow": "Pay now",
+      "message": "Message us about this order"
+    },
+    "notFound": {
+      "title": "This store is not available",
+      "body": "The page you opened does not exist or the store is offline right now."
+    }
+  }
+}
