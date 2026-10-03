@@ -29,14 +29,16 @@ export interface LocalPost {
 @Injectable()
 export class InsightsRepository {
   async stats(tx: Tx, orgId: number, pageId: string, pageRowId: number): Promise<LocalStats> {
-    const like = `fb:${pageId}:%`;
     const convos = await tx.execute(sql`
-      SELECT count(*)::int AS convos, count(*) FILTER (WHERE inbox_status IN ('open', 'pending'))::int AS open
-      FROM conversations WHERE org_id = ${orgId} AND channel = 'facebook' AND raw_jid LIKE ${like}`);
+      SELECT count(*)::int AS convos, count(*) FILTER (WHERE c.status IN ('open', 'pending'))::int AS open
+      FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND ch.external_id = ${pageId}`);
     const msgs = await tx.execute(sql`
       SELECT count(*) FILTER (WHERE m.direction = 'in')::int AS msg_in, count(*) FILTER (WHERE m.direction = 'out')::int AS msg_out
-      FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-      WHERE c.org_id = ${orgId} AND c.channel = 'facebook' AND c.raw_jid LIKE ${like}
+      FROM messages m
+      JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+      JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND ch.external_id = ${pageId}
         AND m.created_at >= now() - interval '28 days'`);
     const posts = await tx.execute(sql`
       SELECT count(*)::int AS posts, count(*) FILTER (WHERE status = 'published')::int AS published,
@@ -66,8 +68,10 @@ export class InsightsRepository {
   ): Promise<Map<string, { in: number; out: number }>> {
     const res = await tx.execute(sql`
       SELECT to_char(m.created_at AT TIME ZONE ${tz}, 'YYYY-MM-DD') AS day, m.direction, count(*)::int AS n
-      FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-      WHERE c.org_id = ${orgId} AND c.channel = 'facebook' AND c.raw_jid LIKE ${`fb:${pageId}:%`}
+      FROM messages m
+      JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+      JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND ch.external_id = ${pageId}
         AND m.created_at >= (${firstDay}::date)::timestamp AT TIME ZONE ${tz}
       GROUP BY 1, 2`);
     const out = new Map<string, { in: number; out: number }>();
@@ -80,11 +84,12 @@ export class InsightsRepository {
     return out;
   }
 
-  /** Threads by status (an unset status counts as open). */
+  /** Threads by status. */
   async threadMix(tx: Tx, orgId: number, pageId: string): Promise<Record<string, number>> {
     const res = await tx.execute(sql`
-      SELECT coalesce(inbox_status, 'open') AS status, count(*)::int AS n
-      FROM conversations WHERE org_id = ${orgId} AND channel = 'facebook' AND raw_jid LIKE ${`fb:${pageId}:%`}
+      SELECT c.status AS status, count(*)::int AS n
+      FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND ch.external_id = ${pageId}
       GROUP BY 1`);
     return Object.fromEntries(
       (res.rows as Array<{ status: string; n: number }>).map((r) => [r.status, r.n]),

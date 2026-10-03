@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, type OnModuleInit } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { TELEGRAM_API } from '../../infra/providers/channel-telegram/telegram.port';
 import { TelegramBotApiFactory } from '../../infra/providers/channel-telegram/telegram-bot-api.client';
 import { NoInboundHooks, NoMediaStore, OpenTelegramPlanGate } from './_shims/open-gates';
-import { SqlInboxIngest } from './_shims/sql-inbox-ingest';
+import { ChatInboxIngest } from './_shims/chat-inbox-ingest';
 import { SqlTelegramTemplates } from './_shims/sql-telegram-templates';
 import {
   INBOUND_HOOKS,
@@ -12,10 +12,12 @@ import {
   TELEGRAM_PLAN_GATE,
   TELEGRAM_TEMPLATES,
 } from './_shims/tokens';
+import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
 import { BotsController } from './bots.controller';
 import { BotsRepository } from './bots.repository';
 import { BotsService } from './bots.service';
 import { InboundService } from './inbound.service';
+import { TelegramChannelAdapter } from './telegram-channel.adapter';
 import { TelegramSenderService } from './telegram-sender.service';
 import { TgBroadcastSenderService } from './tg-broadcast-sender.service';
 import { TgBroadcastsController } from './tg-broadcasts.controller';
@@ -28,6 +30,7 @@ import { WebhookController } from './webhook.controller';
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
+  imports: [ChatConversationsModule],
   controllers: [BotsController, TgBroadcastsController, WebhookController],
   providers: [
     CryptoService,
@@ -35,17 +38,29 @@ import { WebhookController } from './webhook.controller';
     BotsRepository,
     InboundService,
     TelegramSenderService,
+    TelegramChannelAdapter,
     TgBroadcastsService,
     TgBroadcastsRepository,
     TgBroadcastSenderService,
     TelegramBotApiFactory,
     { provide: TELEGRAM_API, useExisting: TelegramBotApiFactory },
     { provide: TELEGRAM_PLAN_GATE, useClass: OpenTelegramPlanGate },
-    { provide: INBOX_INGEST, useClass: SqlInboxIngest },
+    ChatInboxIngest,
+    { provide: INBOX_INGEST, useExisting: ChatInboxIngest },
     { provide: MEDIA_STORE, useClass: NoMediaStore },
     { provide: INBOUND_HOOKS, useClass: NoInboundHooks },
     { provide: TELEGRAM_TEMPLATES, useClass: SqlTelegramTemplates },
   ],
   exports: [BotsService, TelegramSenderService, TgBroadcastSenderService],
 })
-export class ChannelTelegramModule {}
+export class ChannelTelegramModule implements OnModuleInit {
+  constructor(
+    private readonly channels: ChannelAdapterRegistry,
+    private readonly telegram: TelegramChannelAdapter,
+  ) {}
+
+  /** A bot is an inbox channel (kind `telegram`); this adapter replaces the skeleton that refused every send. */
+  onModuleInit(): void {
+    this.channels.register(this.telegram);
+  }
+}
