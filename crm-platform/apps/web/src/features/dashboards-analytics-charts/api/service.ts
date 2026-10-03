@@ -1,5 +1,7 @@
 import {
   analyticsResponseSchema,
+  dashWidgetsSchema,
+  type DashWidgets,
   dashSummaryResponseSchema,
   dashThroughputResponseSchema,
   type AnalyticsResponse,
@@ -21,6 +23,13 @@ export const dashApi = {
     return apiFetch('/dashboard/summary', {
       query: { range },
       schema: dashSummaryResponseSchema,
+      signal,
+    });
+  },
+  widgets(range: DashRange, signal?: AbortSignal): Promise<DashWidgets> {
+    return apiFetch('/dashboard/widgets', {
+      query: { range },
+      schema: dashWidgetsSchema,
       signal,
     });
   },

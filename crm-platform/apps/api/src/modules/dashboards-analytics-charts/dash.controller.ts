@@ -25,6 +25,16 @@ export class DashboardController {
     return this.dash.summary(q.range);
   }
 
+  @Get('widgets')
+  @RequirePermission('dash.dashboard.read')
+  @ApiOperation({
+    summary:
+      'Contacts, campaigns, devices, templates, inbox, pipeline and activity cards for a range',
+  })
+  widgets(@Query(zodPipe(dashSummaryQuerySchema)) q: DashSummaryQuery) {
+    return this.dash.widgets(q.range);
+  }
+
   @Get('throughput')
   @RequirePermission('dash.dashboard.read')
   @ApiOperation({

@@ -27,3 +27,11 @@ export const useAnalytics = (p: AnalyticsParams) =>
     placeholderData: keepPreviousData,
     retry: false,
   });
+
+export const useWidgets = (range: DashRange) =>
+  useQuery({
+    queryKey: ['dash', 'widgets', range],
+    queryFn: ({ signal }) => dashApi.widgets(range, signal),
+    placeholderData: keepPreviousData,
+    retry: false,
+  });

@@ -52,7 +52,7 @@
         "afternoon": "Good afternoon, {name}.",
         "evening": "Good evening, {name}."
       },
-      "subline": "{range}: {sent, plural, one {# message sent} other {# messages sent}}, {rate}% delivered.",
+      "subline": "{date} - {range} showing {sent} outbound, {rate}% deliverability across {devices, plural, one {# connected device} other {# connected devices}}.",
       "kpis": "Key numbers",
       "kpi": {
         "sent": "Messages sent · {range}",
@@ -61,7 +61,12 @@
         "deliverability": "Deliverability",
         "deliveredOf": "{delivered} of {sent} messages",
         "replies": "Replies",
-        "replyRate": "{rate}% reply rate"
+        "replyRate": "{rate}% reply rate",
+        "readMini": {
+          "sent": "Sent",
+          "delivered": "Deliv",
+          "read": "Read"
+        }
       },
       "throughput": {
         "title": "Message throughput",
@@ -81,11 +86,124 @@
       },
       "sparkline": {
         "title": "Last 20 hours",
-        "subtitle": "Messages sent per hour, oldest first"
+        "subtitle": "Messages sent per hour, oldest first",
+        "inCard": "Last 20 hours"
       },
       "funnel": {
         "title": "Engagement funnel",
         "viewAll": "View analytics"
+      },
+      "kicker": "Operator dashboard",
+      "calm": "Workspace is calm.",
+      "running": "{n, plural, one {# broadcast is running.} other {# broadcasts are running.}}",
+      "export": "Export",
+      "newCampaign": "New campaign",
+      "contacts": {
+        "title": "Active contacts",
+        "subscribed": "Subscribed",
+        "optedIn": "Opted-in",
+        "blocked": "Blocked"
+      },
+      "wallet": {
+        "title": "Wallet balance",
+        "payPerMessage": "pay per message",
+        "topUp": "Top up",
+        "earn": "Earn via affiliate"
+      },
+      "autopilot": {
+        "kicker": "Get more done",
+        "title": "Put replies on autopilot",
+        "body": "Build a flow or launch a campaign to reach more customers automatically.",
+        "flow": "Build a flow",
+        "campaign": "New campaign"
+      },
+      "pipeline": {
+        "kicker": "Sales pipeline",
+        "open": "Open pipeline",
+        "deals": "Open deals",
+        "won": "Won this month",
+        "winRate": "Win rate",
+        "board": "Open board"
+      },
+      "inbox": {
+        "title": "Live inbox",
+        "unread": "{n} unread",
+        "oldest": "oldest {when}",
+        "open": "Open inbox",
+        "recent": "Recent conversations",
+        "empty": "No conversations yet."
+      },
+      "campaigns": {
+        "title": "Active campaigns",
+        "summary": "{running} running - {scheduled} scheduled - {paused} paused",
+        "viewAll": "View all {n}",
+        "untitled": "Untitled broadcast",
+        "delivered": "{done} / {total} delivered",
+        "emptyTitle": "No active broadcasts",
+        "emptyBody": "Spin one up to start sending to a contact group.",
+        "new": "New broadcast",
+        "status": {
+          "processing": "Sending",
+          "sending": "Sending",
+          "running": "Sending",
+          "active": "Sending",
+          "scheduled": "Scheduled",
+          "pending": "Scheduled",
+          "queued": "Scheduled",
+          "paused": "Paused",
+          "cancelled": "Paused",
+          "failed": "Failed",
+          "completed": "Completed",
+          "completed_with_errors": "Completed",
+          "done": "Completed",
+          "sent": "Completed"
+        }
+      },
+      "devices": {
+        "title": "Connected devices",
+        "summary": "{total} of {cap} slots used - {online} online",
+        "connect": "Connect",
+        "emptyTitle": "No devices connected",
+        "emptyBody": "Pair a WhatsApp number to start sending.",
+        "connectDevice": "Connect a device",
+        "unzoned": "unzoned",
+        "per24h": "{n}/24h",
+        "deliv": "deliv",
+        "free": "{n, plural, one {# device slot available} other {# device slots available}}"
+      },
+      "templates": {
+        "title": "Top performing templates",
+        "subtitle": "By send volume - selected range",
+        "count": "{n, plural, one {# template} other {# templates}}",
+        "new": "New template",
+        "empty": "No templates yet.",
+        "create": "Create your first",
+        "col": {
+          "template": "Template",
+          "type": "Type",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "read": "Read",
+          "readRate": "Read rate",
+          "performance": "Performance",
+          "status": "Status"
+        },
+        "status": {
+          "approved": "Approved",
+          "public": "Approved",
+          "active": "Approved",
+          "pending": "In review",
+          "submitted": "In review",
+          "in_review": "In review",
+          "rejected": "Rejected",
+          "disabled": "Rejected"
+        }
+      },
+      "activity": {
+        "title": "Activity log",
+        "subtitle": "Workspace events",
+        "empty": "No recent activity logged for this workspace.",
+        "by": "{actor} - {module} {action}"
       }
     },
     "analytics": {
