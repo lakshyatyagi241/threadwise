@@ -88,7 +88,7 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   },
   {
     id: 'system',
-    href: '/admin/update',
+    href: '/admin/system',
     labelKey: 'install-update-licensing.system.nav.item',
     groupKey: 'install-update-licensing.system.nav.group',
   },
