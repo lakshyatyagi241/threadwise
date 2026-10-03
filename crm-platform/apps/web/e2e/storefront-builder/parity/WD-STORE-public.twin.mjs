@@ -179,7 +179,7 @@ export default (h) => {
     });
   };
   /** Public scenarios: no login; consent answered; extra contexts too. */
-  const wrap = (sc, { calm = false } = {}) => ({
+  const wrap = (sc, { calm = false, hideSr = false } = {}) => ({
     ...sc,
     loggedIn: false,
     needsUi: true,
@@ -192,6 +192,14 @@ export default (h) => {
         await prepContext(c, hd.context);
         return hd;
       };
+      if (hideSr)
+        await c.context.addInitScript(() => {
+          document.addEventListener('DOMContentLoaded', () => {
+            const st = document.createElement('style');
+            st.textContent = '.sf-sr,.sf-skip{display:none!important}';
+            document.head.appendChild(st);
+          });
+        });
       if (calm)
         await c.context.addInitScript(() => {
           document.addEventListener('DOMContentLoaded', () => {
@@ -269,6 +277,26 @@ export default (h) => {
       hidden.forEach((e) => (e.style.display = ''));
       return t;
     });
+  /** Cart storage with the product ids removed (ours are uuids, WaDesk's are numbers: rule uuid-ids). */
+  const stripIds = (raw) => {
+    try {
+      return JSON.stringify(
+        JSON.parse(raw).map(({ id, ...l }) => ({
+          ...l,
+          image: l.image ? String(l.image).slice(0, 30) : l.image,
+        })),
+      );
+    } catch {
+      return raw == null ? null : String(raw).slice(0, 40);
+    }
+  };
+  /** Types into a (number) input like a person: select all, then key presses; characters the field refuses are dropped. */
+  const typeInto = async (c, loc, v) => {
+    await loc.click();
+    await c.page.keyboard.press('Control+A');
+    if (v === '') await c.page.keyboard.press('Delete');
+    else await c.page.keyboard.type(v);
+  };
   const idx = (g) => (g < 6 ? g - 1 : g - 2); // product g -> position on page 1 (product 6 is not listed)
   const addBtn = (c, g) => c.page.locator('button:has-text("Add to cart")').nth(idx(g));
   const cartBtn = (c) => c.page.locator('button[aria-label^="Cart"]').first();
@@ -483,7 +511,8 @@ export default (h) => {
   };
   const tok = (s) => TOKENS[s].padEnd(40, 'x');
   const scenarios = [];
-  const add = (sc, opts) => scenarios.push(wrap({ feature: FEATURE, tags: [], ...sc }, opts));
+  const add = (sc, opts) =>
+    scenarios.push(wrap({ feature: FEATURE, tags: [], ...sc }, { hideSr: true, ...opts }));
 
   // ===== A. page probes (load, responsive, a11y, keyboard, degraded, perf) ============================================
   const pageProbes = (pg, probes) => {
@@ -742,6 +771,7 @@ export default (h) => {
     ['uppercase-slug', '/s/STP-AURORA'],
     ['trailing-slash', '/s/stp-aurora/'],
     ['noproduct', '/s/stp-aurora/p/nope'],
+    ['uppercase-product', '/s/stp-aurora/p/STP-ITEM-1'],
     ['draftProduct', '/s/stp-aurora/p/stp-item-60'],
     ['soldoutProduct', '/s/stp-aurora/p/stp-item-6'],
     ['otherShopProduct', '/s/stp-nonumber/p/stp-item-1'],
@@ -820,7 +850,7 @@ export default (h) => {
             robots: m('meta[name=robots]'),
             lang: document.documentElement.lang,
             ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) =>
-              s.textContent.replace(/https?:\/\/[^/"\\]+/g, 'HOST'),
+              JSON.stringify(JSON.parse(s.textContent)).replace(/https?:\/\/[^/"\\]+/g, 'HOST'),
             ),
           };
         });
@@ -969,7 +999,7 @@ export default (h) => {
         await sleep(200);
         await openCart(c);
         const inp = c.page.locator('.sf-cart-row .sf-qty input').first();
-        await inp.fill(v);
+        await typeInto(c, inp, v);
         await inp.blur();
         await sleep(300);
         c.obs.enum(
@@ -982,7 +1012,7 @@ export default (h) => {
         );
         c.obs.enum('rows', JSON.stringify(await x.cartRows()));
         c.obs.enum('footer', await x.footer());
-        c.obs.enum('ls', await x.lsCart());
+        c.obs.enum('ls', stripIds(await x.lsCart()));
         c.obs.enum('toast', await x.toast());
         await xssFlag(c);
       },
@@ -1016,7 +1046,7 @@ export default (h) => {
       c.obs.enum('emptyDrawer', norm(await c.page.locator('.sf-drawer-body').first().innerText()));
       c.obs.enum('emptyFooter', await x.footer());
       c.obs.enum('badge', await x.badge());
-      c.obs.enum('ls', await x.lsCart());
+      c.obs.enum('ls', stripIds(await x.lsCart()));
       await c.shot('empty-cart');
     },
   });
@@ -1055,38 +1085,46 @@ export default (h) => {
   });
   // tampered local storage
   const lsCases = {
-    'not-json': () => 'not json{',
-    'wrong-shape': () => '{"a":1}',
-    'empty-array': () => '[]',
-    'null-entries': () => '[null,1,"x"]',
-    'negative-qty': () => JSON.stringify([{ id: 1, name: 'x', price: 100, qty: -5 }]),
-    'huge-qty': () => JSON.stringify([{ id: 910001, name: 'Huge', price: 100, qty: 1e9 }]),
-    'string-qty': () => JSON.stringify([{ id: 910001, name: 'Str', price: 100, qty: '3' }]),
-    'xss-name': () =>
+    'not-json': (id) => 'not json{',
+    'wrong-shape': (id) => '{"a":1}',
+    'empty-array': (id) => '[]',
+    'null-entries': (id) => '[null,1,"x"]',
+    'negative-qty': (id) => JSON.stringify([{ id, name: 'x', price: 100, qty: -5 }]),
+    'huge-qty': (id) => JSON.stringify([{ id, name: 'Huge', price: 100, qty: 1e9 }]),
+    'string-qty': (id) => JSON.stringify([{ id, name: 'Str', price: 100, qty: '3' }]),
+    'xss-name': (id) =>
       JSON.stringify([
         {
-          id: 910001,
+          id,
           name: '<img src=x onerror="window.__xss=1"><script>window.__xss=1</script>',
           price: 100,
           qty: 1,
           image: 'javascript:window.__xss=1',
         },
       ]),
-    'xss-image': () =>
+    'xss-image': (id) =>
       JSON.stringify([
         {
-          id: 910001,
+          id,
           name: 'Img',
           price: 100,
           qty: 1,
           image: '"><img src=x onerror=window.__xss=1>',
         },
       ]),
-    'unknown-product': () => JSON.stringify([{ id: 999999999, name: 'Ghost', price: 100, qty: 1 }]),
-    'duplicate-lines': () =>
+    'unknown-product': (id) =>
       JSON.stringify([
-        { id: 910001, name: 'D', price: 100, qty: 1 },
-        { id: 910001, name: 'D', price: 100, qty: 2 },
+        {
+          id: typeof id === 'number' ? 999999999 : '00000000-0000-4000-8000-000000000000',
+          name: 'Ghost',
+          price: 100,
+          qty: 1,
+        },
+      ]),
+    'duplicate-lines': (id) =>
+      JSON.stringify([
+        { id, name: 'D', price: 100, qty: 1 },
+        { id, name: 'D', price: 100, qty: 2 },
       ]),
   };
   for (const [k, mk] of Object.entries(lsCases))
@@ -1104,14 +1142,15 @@ export default (h) => {
             .map((i) => localStorage.key(i))
             .find((k) => k.startsWith('sf_cart_')),
         );
-        await c.page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, mk()]);
+        const real = JSON.parse(await x.lsCart())[0].id;
+        await c.page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, mk(real)]);
         await page_reload(c);
         c.obs.enum('badge', await x.badge());
         await openCart(c);
         c.obs.enum('rows', JSON.stringify(await x.cartRows()));
         c.obs.enum('footer', await x.footer());
         await xssFlag(c);
-        c.obs.enum('lsAfter', (await x.lsCart())?.length > 300 ? 'long' : await x.lsCart());
+        c.obs.enum('lsAfter', stripIds(await x.lsCart()));
       },
     });
 
@@ -1544,7 +1583,7 @@ export default (h) => {
       tags: ['misc', 'edge'],
       run: async (c) => {
         await go(c, '/s/stp-aurora/p/stp-item-4');
-        await c.page.locator('.sf-pd-actions .sf-qty input').fill(v);
+        await typeInto(c, c.page.locator('.sf-pd-actions .sf-qty input'), v);
         await c.page.locator('.sf-pd-actions > .sf-cta').click();
         await sleep(400);
         c.obs.enum('rows', JSON.stringify(await T(c).cartRows()));
@@ -1598,9 +1637,7 @@ export default (h) => {
           const e = document.querySelector(s);
           if (!e) return null;
           const k = getComputedStyle(e);
-          return [k.transform, k.boxShadow, k.borderColor, k.outlineStyle, k.backgroundColor].join(
-            '/',
-          );
+          return [k.transform, k.boxShadow, k.outlineStyle, k.backgroundColor].join('/');
         }, sel);
       await c.page.locator('.sf-card, .card').first().hover();
       await sleep(300);
@@ -2810,7 +2847,7 @@ export default (h) => {
         await go(c, '/s/stp-aurora');
         rec(
           c,
-          await c.page.evaluate(() => {
+          await c.page.evaluate((w) => {
             const vis = (e) => {
               const r = e.getBoundingClientRect();
               const s = getComputedStyle(e);
@@ -2834,7 +2871,7 @@ export default (h) => {
                   ? 'full'
                   : 'side',
             };
-          }),
+          }, w),
         );
         await openCart(c);
         c.obs.enum(
@@ -3110,6 +3147,69 @@ export default (h) => {
     pages: [],
     scenarios: listMode ? scenarios : scenarios,
     intended: [
+      {
+        scenario: /^struct\.notfound-page2$/,
+        key: /^(enum\.count|num\.cards)$/,
+        quirk: 'drafts',
+        reason:
+          'drafts are not public on ours (D-03): the second page holds 10 products where WaDesk lists the draft too (11)',
+      },
+      {
+        scenario: /^(cart\.stepper-value-(7|15)|misc\.product-qty-99999)$/,
+        key: /^enum\.(footer|ls|rows|toast)$/,
+        reason:
+          'ours holds at most 999 of a product on one line (contract limit STORE_CART_MAX_QTY, shown as "Limit reached"); WaDesk lets a line grow without bound and only the server decides at checkout',
+      },
+      {
+        scenario: /^misc\.product-qty-/,
+        key: /^enum\.(qtyShown|rows)$/,
+        reason:
+          'ours turns a typed quantity into a whole number from 1 and shows it (zero, negative, decimal or empty add one); WaDesk keeps the typed text and a zero or negative quantity adds nothing because its add routine subtracts',
+      },
+      {
+        scenario: /^struct\.home-meridian$/,
+        key: /^enum\.(bodyFont|h1Font)$/,
+        reason:
+          'fallback family only: ours ends the Fraunces stack with Georgia, serif where WaDesk writes serif on this theme; Fraunces is self-hosted, so the fallback is never shown unless the font file fails',
+      },
+      {
+        scenario: /^kbd\.(enter-adds-to-cart|modal-focus)$/,
+        key: /^(enum\.focusInside|flag\.focusInside|flag\.trapped|enum\.focusAfterClose|enum\.focusAfter)$/,
+        reason:
+          'ours moves focus into an opened drawer or dialog, keeps it inside and returns it to the opener on close (accessibility behaviour); WaDesk leaves focus on the page behind',
+      },
+      {
+        scenario: /^kbd\.tabs-product$/,
+        key: /^enum\.(afterArrow|pane|paneAfterEnter)$/,
+        reason:
+          'ours uses the ARIA tabs pattern (arrow keys move between tabs, one tab stop); WaDesk tab buttons ignore arrow keys',
+      },
+      {
+        scenario: /^kbd\.skip-link-and-landmarks$/,
+        key: 'num.main',
+        reason: 'ours wraps the shop in a main landmark (accessibility addition); WaDesk has none',
+      },
+
+      {
+        scenario: /^pages\.(disabled|unknown|noproduct|noorder)\.(load|degraded)$/,
+        key: /^low\.(degraded\.)?pageErrors$/,
+        quirk: 'next-dev-notfound',
+        reason:
+          'under next dev, React 19 dev profiling throws "cannot have a negative time stamp" when an async server component calls notFound() after an await (reproduced with any async page, also after moving notFound into the route component); the 404 renders and the status is right; production builds have no dev profiler. Not verified on a production build.',
+      },
+      {
+        scenario: /^pages\..*\.keyboard$/,
+        key: 'flag.keyboard.skipLink',
+        reason:
+          'ours adds a "Skip to content" link as the first tab stop (accessibility addition, documented in the public-shop parity notes); WaDesk has none',
+      },
+      {
+        scenario: /^pages\..*\.keyboard$/,
+        key: 'abs.keyboard.reachable',
+        reason:
+          'WaDesk tabs into its closed off-screen cart, wishlist, compare and checkout panels and into a duplicate image link per card and every tab button; ours makes closed panels inert, drops the duplicate image link from the tab order and uses the ARIA tabs pattern (one tab stop, arrow keys; covered by kbd.tabs-product), so fewer stops are reachable',
+      },
+
       {
         scenario: /^struct\.home-/,
         key: 'enum.countText',

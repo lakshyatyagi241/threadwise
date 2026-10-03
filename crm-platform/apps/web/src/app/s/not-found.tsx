@@ -17,7 +17,7 @@ export default async function ShopNotFound() {
   const site = await getSiteConfig();
   const brand = site?.brand.name || 'WaDesk';
   return (
-    <div className="sf-404">
+    <main className="sf-404">
       <div className="sf-404-card">
         <a href="/" className="sf-404-brand">
           <svg viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
@@ -61,6 +61,6 @@ export default async function ShopNotFound() {
           {t('help')} <a href="/support">{t('support')}</a>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
