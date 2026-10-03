@@ -7,8 +7,8 @@ import { WhatsappOutboundMediaUploader } from './whatsapp-outbound-media.uploade
 /**
  * The WhatsApp media ports, bound: `INBOUND_MEDIA_FETCHER` (copy a customer's file into the store) and `OUTBOUND_MEDIA_UPLOADER` (get a
  * stored file to WhatsApp before sending). Import it wherever the Meta channel adapter is built. Injected and not imported here:
- * `ChatMediaStore` (global, from `ChatMediaModule`), the Redis client (global), and `WHATSAPP_PROVIDER_RESOLVER` (global, from
- * `WhatsappProviderResolverModule`: which provider a channel talks through, direct Meta or a BSP proxy; optional, direct Meta when absent).
+ * `ChatMediaStore` (global, from `ChatMediaModule`), the Redis client (global) and `WabaHttp` (global, from `WabaProvidersModule`: the
+ * platform's one WhatsApp client, which knows the Meta and Interakt routes).
  */
 @Module({
   providers: [

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { FetchGraphHttp, GRAPH_HTTP, type GraphHttp } from './graph-http';
-import { graphApiConfig } from './graph-api.config';
+import { WABA_ADMIN, type WabaAdminPort } from '../whatsapp-cloud-api-waba/waba-admin.port';
+import { WabaHttp } from '../whatsapp-cloud-api-waba/waba-http';
 import {
   INBOUND_MEDIA_FETCHER,
   OUTBOUND_MEDIA_UPLOADER,
@@ -9,40 +9,36 @@ import {
   type OutboundMediaUploader,
 } from './media';
 import { MetaCloudChannelAdapter } from './meta-cloud-channel.adapter';
-import { MetaGraphClient } from './meta-graph.client';
-import { WHATSAPP_PROVIDER_RESOLVER, type WhatsAppProviderResolver } from './whatsapp-provider.resolver';
+import { OUTBOUND_SEND_GUARD, type OutboundSendGuard } from './send-guard.port';
 
 /**
- * The WhatsApp channel adapter, built from its parts: the HTTP seam (`GRAPH_HTTP`, replaceable in a test), the Graph client, the
- * provider resolver (global, bound by `WhatsappProviderResolverModule`) and the two media ports (bound by `WhatsappMediaModule`).
- * The channel providers module registers the adapter under `CHANNEL_ADAPTERS`; nothing else needs to know this class exists.
+ * The WhatsApp channel adapter, built from its parts: the platform's one WhatsApp client (`WabaHttp`) and account port (`WABA_ADMIN`),
+ * both global from `WabaProvidersModule`; the pre-send guard (`OUTBOUND_SEND_GUARD`, global from the auth domain's `SendGuardModule`:
+ * only its outgoing footer is used here, the halt and the content screen run in the dispatcher); and the two media ports, bound by
+ * `WhatsappMediaModule`. The channel providers module registers the adapter under `CHANNEL_ADAPTERS`; nothing else needs to know this
+ * class exists.
  */
 @Module({
   imports: [WhatsappMediaModule],
   providers: [
-    { provide: GRAPH_HTTP, useFactory: (): GraphHttp => new FetchGraphHttp() },
-    {
-      provide: MetaGraphClient,
-      inject: [GRAPH_HTTP],
-      // Timeouts are read per call, so a test (or an operator) can change them without rebuilding the app.
-      useFactory: (http: GraphHttp) =>
-        new MetaGraphClient(
-          http,
-          () => graphApiConfig().sendTimeoutMs,
-          () => graphApiConfig().readTimeoutMs,
-        ),
-    },
     {
       provide: MetaCloudChannelAdapter,
-      inject: [MetaGraphClient, WHATSAPP_PROVIDER_RESOLVER, OUTBOUND_MEDIA_UPLOADER, INBOUND_MEDIA_FETCHER],
+      inject: [
+        WabaHttp,
+        WABA_ADMIN,
+        OUTBOUND_SEND_GUARD,
+        OUTBOUND_MEDIA_UPLOADER,
+        INBOUND_MEDIA_FETCHER,
+      ],
       useFactory: (
-        graph: MetaGraphClient,
-        resolver: WhatsAppProviderResolver,
+        http: WabaHttp,
+        admin: WabaAdminPort,
+        guard: OutboundSendGuard,
         up: OutboundMediaUploader,
         down: InboundMediaFetcher,
-      ) => new MetaCloudChannelAdapter(graph, resolver, up, down),
+      ) => new MetaCloudChannelAdapter(http, admin, guard, up, down),
     },
   ],
-  exports: [MetaCloudChannelAdapter, MetaGraphClient, GRAPH_HTTP],
+  exports: [MetaCloudChannelAdapter],
 })
 export class WhatsappCloudModule {}

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
-import { WhatsappProviderResolverModule } from '../../infra/providers/whatsapp';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { ChannelDispatcher } from './channel-dispatcher.service';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
@@ -26,17 +26,19 @@ import { OutboundService } from './outbound.service';
 import { DeliveryReporter } from './delivery-reporter';
 import { ReceiptsService } from './receipts.service';
 import { ChannelsController } from './channels.controller';
-import { ProviderWebhooksController } from './provider-webhooks.controller';
-import { ProviderWebhooksService } from './provider-webhooks.service';
 import { ChannelsFacade } from './channels.facade';
 import { ChannelsRepository } from './channels.repository';
 import { SimulatorController } from './simulator.controller';
 import { SimulatorPolicy } from './simulator-policy.service';
 import { SimulatorService } from './simulator.service';
+import { WabaChannelLinkService } from './waba-channel-link.service';
 
 /**
  * Chat conversations (CHAT): the conversation core. The channel registry, the channel port with its dispatcher, the dev simulator and
- * the public webhook door, and the message pipelines: inbound ingest, delivery receipts, outbound enqueue and dispatch. The workers
+ * the public webhook door, and the message pipelines: inbound ingest, delivery receipts, outbound enqueue and dispatch. WhatsApp is not
+ * received or connected here: its numbers, tokens and webhook belong to the WABA domain (`WabaModule`), and this module is a consumer of
+ * it (`WabaChannelLinkService` keeps a channel per connected number; the inbound sink bound by `WabaInboxBindingModule` feeds the ingest
+ * queue). The workers
  * that run the pipelines live in `ChatConversationsWorkerModule` (worker process only); this module holds everything the HTTP app and
  * the worker share, and binds `CONVERSATIONS_FACADE`.
  *
@@ -45,19 +47,18 @@ import { SimulatorService } from './simulator.service';
  */
 @Module({
   imports: [
-    // Which WhatsApp provider a channel talks through. The default is Meta directly with the channel's own token; the WhatsApp
-    // provider registry replaces it by passing its resolver here (`register({ imports: [...], resolver: { useExisting: ... } })`).
-    WhatsappProviderResolverModule.register(),
     ChatChannelProvidersModule,
     PlansCoreModule,
     CrmModule,
+    // The WhatsApp numbers a channel is the inbox view of: their decrypted connection is what a send, a file transfer and a health
+    // check run with (`ChannelRegistryService.runtime`).
+    WabaModule,
   ],
   controllers: [
     ChannelsController,
     SimulatorController,
     // Public: the signature is the authentication.
     ChannelWebhooksController,
-    ProviderWebhooksController,
   ],
   providers: [
     CryptoService,
@@ -69,7 +70,7 @@ import { SimulatorService } from './simulator.service';
     ChannelIngestPublisher,
     ChannelDispatcher,
     ChannelWebhooksService,
-    ProviderWebhooksService,
+    WabaChannelLinkService,
     SimulatorService,
     ChannelsFacade,
     ConversationsRepository,
@@ -93,6 +94,7 @@ import { SimulatorService } from './simulator.service';
     ChannelDispatcher,
     ChannelIngestPublisher,
     CONVERSATIONS_FACADE,
+    WabaChannelLinkService,
     // The pipelines the workers drive.
     InboundIngestService,
     ReceiptsService,

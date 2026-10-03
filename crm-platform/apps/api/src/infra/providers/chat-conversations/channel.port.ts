@@ -351,9 +351,12 @@ export interface ChannelAdapter {
    * `connected`, so nothing is sent through it, until the adapter goes live.
    */
   readonly live: boolean;
-  /** Whether a provider posts to `/v2/webhooks/channels/:uuid` for this kind (and so a verify token and a URL exist). */
+  /**
+   * Whether a provider posts to `/v2/webhooks/channels/:uuid` for this kind (and so a verify token and a URL exist). False for a kind that
+   * is received elsewhere: WhatsApp through the WABA domain's webhook, Telegram and the web chat widget through their own routes.
+   */
   readonly publicWebhook: boolean;
-  /** Shape of the credentials a channel of this kind takes; null when it takes none. */
+  /** Shape of the credentials a channel of this kind takes; null when it takes none (WhatsApp: the connection's are used). */
   readonly credentialsSchema: z.ZodType<Record<string, string | undefined>> | null;
   /** Credential keys that are secrets: only their last four characters are ever shown back. */
   readonly secretFields: readonly string[];
@@ -394,37 +397,10 @@ export interface ChannelAdapter {
   readonly inboundMedia?: InboundMediaFetcher;
 
   /**
-   * A live read of the provider account with the stored credentials. Never throws for a provider's answer (a refused token is a
-   * result: `needsReauth`); throws `ChannelError` only when there is nothing to check with.
+   * A live read of the provider account with the channel's credentials (for WhatsApp: its connection's). Never throws for a provider's
+   * answer (a refused token is a result: `needsReauth`); throws `ChannelError` only when there is nothing to check with.
    */
   checkHealth?(channel: ChannelRuntime): Promise<ChannelHealthResult>;
-
-  /**
-   * How this channel's provider takes webhook configuration: `subscribe` (subscribe the app to the account; the callback URL is the
-   * app's own, set in the provider's dashboard) or `number_override` (the callback URL and verify token are set per number, and must
-   * be, because the provider has no app-level URL for this customer).
-   */
-  webhookMode?(channel: ChannelRuntime): Promise<'subscribe' | 'number_override'>;
-
-  /**
-   * Points the provider's webhooks for this channel at us. Without `config`: subscribe the app to the account (no callback is
-   * changed). With it: override the callback URL and verify token at the finest level the provider offers (the number, else the
-   * account); the provider verifies the URL with the token during the call, so the token's hash must already be stored.
-   */
-  configureNumberWebhook?(
-    channel: ChannelRuntime,
-    config?: { callbackUrl: string; verifyToken: string },
-  ): Promise<{ overrideApplied: boolean }>;
-
-  /**
-   * What a channel of this kind needs in its credentials in this workspace (it depends on how the workspace's provider is set up:
-   * the customer's own token, or the platform's). Used to validate a connection and to tell the screen which fields to ask for.
-   */
-  credentialRequirements?(orgId: number): Promise<{
-    providerKey: string;
-    credentialMode: 'platform_token' | 'channel_token';
-    required: string[];
-  }>;
 
   /** Tells the provider the customer's message was read (and, optionally, that an agent is typing). Throws `ChannelError`. */
   markRead?(

@@ -8,7 +8,13 @@ import { ChatMediaStore } from '../../../src/infra/providers/chat-conversations/
 import { LocalDiskMediaStore } from '../../../src/infra/providers/chat-conversations/media/local-disk-media.store';
 import { MediaTokenService } from '../../../src/infra/providers/chat-conversations/media/media-token.service';
 import type { ChatMediaObjectGateway } from '../../../src/infra/providers/chat-conversations/media/media.ports';
-import type { MediaProviderProfile } from '../../../src/infra/providers/whatsapp/media/media-provider';
+import type { WabaEnv } from '../../../src/config/domains/whatsapp-cloud-api-waba.env';
+import {
+  profileOf,
+  type MediaAuthContext,
+  type MediaProviderProfile,
+} from '../../../src/infra/providers/whatsapp/media/media-provider';
+import { WabaHttp } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-http';
 import { UploadPolicyService } from '../../../src/modules/auth/security/upload-policy.service';
 import type { FakeGraph } from './fake-graph';
 
@@ -23,50 +29,95 @@ export async function makeStore(disk: 'local' | 'cloud' = 'local') {
     destination: vi.fn(async () => ({ disk })),
     put: vi.fn(async (key: string) => (disk === 'cloud' ? { key } : null)),
     remove: vi.fn(async () => undefined),
-    url: vi.fn(async (key: string, ttl?: number) => `https://bucket.example/${key}?ttl=${ttl}&sig=SIGNED`),
-  } as unknown as ChatMediaObjectGateway & Record<'destination' | 'put' | 'remove' | 'url', ReturnType<typeof vi.fn>>;
+    url: vi.fn(
+      async (key: string, ttl?: number) => `https://bucket.example/${key}?ttl=${ttl}&sig=SIGNED`,
+    ),
+  } as unknown as ChatMediaObjectGateway &
+    Record<'destination' | 'put' | 'remove' | 'url', ReturnType<typeof vi.fn>>;
   const store = new ChatMediaStore(
     gateway,
     new UploadPolicyService(),
     local,
     new MediaTokenService(
-      new CryptoService(new ConfigService({ CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 5).toString('base64') }) as never),
+      new CryptoService(
+        new ConfigService({
+          CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 5).toString('base64'),
+        }) as never,
+      ),
     ),
   );
   return { store, local, dir, gateway, cleanup: () => rm(dir, { recursive: true, force: true }) };
 }
 
-/** Direct Meta pointed at the fake: Authorization: Bearer from the channel's own token. */
-export const metaProfile = (g: FakeGraph): MediaProviderProfile => ({
-  baseUrl: g.graphUrl,
-  apiVersion: 'v23.0',
-  credentialMode: 'channel_token',
-  buildHeaders: ({ channelToken }) => (channelToken ? { authorization: `Bearer ${channelToken}` } : {}),
-  capabilities: { mediaUpload: true },
-});
+/** The platform's one WhatsApp client, with both routes pointed at the fake (Meta on v23.0, Interakt on v24.0). */
+export const wabaHttpFor = (g: FakeGraph): WabaHttp =>
+  new WabaHttp({
+    META_API_ENDPOINT: g.graphUrl,
+    META_API_VERSION: 'v23.0',
+    INTERAKT_API_ENDPOINT: g.graphUrl,
+    INTERAKT_API_VERSION: 'v24.0',
+    WABA_HTTP_TIMEOUT_MS: 5_000,
+  } as unknown as WabaEnv);
 
-/** An Interakt-shaped provider: one platform token in custom headers, never an Authorization header. */
+/** Direct Meta pointed at the fake: Authorization: Bearer from the connection's own token. */
+export const metaProfile = (g: FakeGraph): MediaProviderProfile =>
+  profileOf(wabaHttpFor(g), 'meta');
+
+/** An Interakt-shaped route: one partner key in custom headers, never an Authorization header, no upload endpoint unless asked. */
 export const bspProfile = (g: FakeGraph, mediaUpload = false): MediaProviderProfile => ({
-  baseUrl: g.graphUrl,
-  apiVersion: 'v24.0',
-  credentialMode: 'platform_token',
-  buildHeaders: ({ wabaId }) => ({ 'x-access-token': BSP_TOKEN, 'x-waba-id': wabaId ?? '' }),
+  ...profileOf(wabaHttpFor(g), 'interakt'),
   capabilities: { mediaUpload },
 });
 
-export const channel = (over: Partial<{ orgId: number; uuid: string; externalId: string | null; credentials: Record<string, string | undefined> }> = {}) => ({
+/** What the pipeline reads off a channel: Meta route with the token, or Interakt route with the partner key. */
+export const metaCtx: MediaAuthContext = {
+  route: 'meta',
+  wabaId: '555',
+  phoneNumberId: '1000000001',
+  channelToken: TOKEN,
+};
+export const bspCtx: MediaAuthContext = {
+  route: 'interakt',
+  wabaId: '555',
+  phoneNumberId: '1000000001',
+  authKey: BSP_TOKEN,
+};
+
+export const channel = (
+  over: Partial<{
+    orgId: number;
+    uuid: string;
+    externalId: string | null;
+    credentials: Record<string, string | undefined>;
+  }> = {},
+) => ({
   orgId: 11,
   uuid: '11111111-1111-4111-8111-111111111111',
   externalId: '1000000001',
-  credentials: { accessToken: TOKEN, appSecret: 'app-secret-9911', businessAccountId: '555' } as Record<string, string | undefined>,
+  credentials: {
+    accessToken: TOKEN,
+    appSecret: 'app-secret-9911',
+    businessAccountId: '555',
+  } as Record<string, string | undefined>,
   ...over,
 });
+
+/** A channel on the Interakt route (the connection's partner key, no business token). */
+export const bspChannel = () =>
+  channel({ credentials: { route: 'interakt', authKey: BSP_TOKEN, businessAccountId: '555' } });
 
 /** Everything the Nest logger was asked to write, so a spec can search it for a secret. */
 export function captureLogs(Logger: { overrideLogger(l: unknown): void }) {
   const lines: string[] = [];
   const push = (m: unknown, ...rest: unknown[]) => void lines.push(JSON.stringify([m, ...rest]));
-  Logger.overrideLogger({ log: push, error: push, warn: push, debug: push, verbose: push, fatal: push });
+  Logger.overrideLogger({
+    log: push,
+    error: push,
+    warn: push,
+    debug: push,
+    verbose: push,
+    fatal: push,
+  });
   return {
     lines,
     restore: () => Logger.overrideLogger(['error', 'warn']),

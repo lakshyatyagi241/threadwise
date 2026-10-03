@@ -30,7 +30,7 @@ export const META_MEDIA_HOST_SUFFIXES: readonly string[] = [
   '.facebook.com',
 ];
 
-/** What a request may reach. Built from the channel's provider profile by `providerPolicy` / `downloadPolicy`. */
+/** What a request may reach. Built from the channel's provider profile by `downloadPolicy`. */
 export interface HostPolicy {
   /** Exact host names (`graph.facebook.com`) and `.suffix` entries. */
   hosts: readonly string[];
@@ -55,11 +55,6 @@ function loopbackHostOf(profile: MediaProviderProfile, cfg: WhatsappMediaConfig)
     'The WhatsApp provider address must be https.',
     false,
   );
-}
-
-/** Calls to the provider's own API (the media lookup, the upload): the provider's host and nothing else. */
-export function providerPolicy(profile: MediaProviderProfile, cfg: WhatsappMediaConfig): HostPolicy {
-  return { hosts: [providerHostOf(profile)], loopbackHost: loopbackHostOf(profile, cfg) };
 }
 
 /**
@@ -87,7 +82,8 @@ export function downloadPolicy(
   };
 }
 
-export const isMetaMediaHost = (host: string): boolean => hostAllowed(host.toLowerCase(), META_MEDIA_HOST_SUFFIXES);
+export const isMetaMediaHost = (host: string): boolean =>
+  hostAllowed(host.toLowerCase(), META_MEDIA_HOST_SUFFIXES);
 
 /**
  * Whether the provider's credentials go with a download from `host`: to the provider's own host always (it is theirs), to Meta's media
@@ -118,7 +114,8 @@ export function assertAllowedUrl(raw: string, policy: HostPolicy): URL {
     return reject('not a url');
   }
   const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, '');
-  const loopback = policy.loopbackHost !== null && host === policy.loopbackHost.replace(/^\[|\]$/g, '');
+  const loopback =
+    policy.loopbackHost !== null && host === policy.loopbackHost.replace(/^\[|\]$/g, '');
 
   if (url.username !== '' || url.password !== '') return reject('credentials in the url');
   if (url.protocol === 'http:') {
@@ -131,7 +128,8 @@ export function assertAllowedUrl(raw: string, policy: HostPolicy): URL {
   if (!loopback) {
     // An address literal would skip the DNS step, so it is never a media host (a Meta host is always a name).
     if (isIP(host) !== 0) return reject('an ip address, not a host name');
-    if (!hostAllowed(host, policy.hosts)) return reject(`host ${host} is not a WhatsApp media host`);
+    if (!hostAllowed(host, policy.hosts))
+      return reject(`host ${host} is not a WhatsApp media host`);
   }
   return url;
 }
@@ -206,7 +204,8 @@ export function isPublicAddress(address: string): boolean {
     if (allZero(0, 15) && b[15] === 1) return false; // ::1
     if (allZero(0, 10) && b[10] === 0xff && b[11] === 0xff) return publicV4(b.slice(12)); // ::ffff:a.b.c.d
     if (allZero(0, 12)) return false; // ::a.b.c.d (deprecated IPv4-compatible)
-    if (b[0] === 0x00 && b[1] === 0x64 && b[2] === 0xff && b[3] === 0x9b && allZero(4, 12)) return publicV4(b.slice(12)); // NAT64
+    if (b[0] === 0x00 && b[1] === 0x64 && b[2] === 0xff && b[3] === 0x9b && allZero(4, 12))
+      return publicV4(b.slice(12)); // NAT64
     if (b[0] === 0x20 && b[1] === 0x02) return publicV4(b.slice(2, 6)); // 6to4
     if ((b[0]! & 0xfe) === 0xfc) return false; // fc00::/7 unique local
     if (b[0] === 0xfe && (b[1]! & 0xc0) === 0x80) return false; // fe80::/10 link local
@@ -238,7 +237,11 @@ type LookupCallback = (
  * fake) is the one name that may resolve to a loopback address.
  */
 export function guardedLookup(policy: HostPolicy, resolver: DnsResolver = systemResolver) {
-  return (hostname: string, options: { all?: boolean } | number | undefined, cb: LookupCallback): void => {
+  return (
+    hostname: string,
+    options: { all?: boolean } | number | undefined,
+    cb: LookupCallback,
+  ): void => {
     const all = typeof options === 'object' && options?.all === true;
     const finish = (list: LookupAddress[]) =>
       all ? cb(null, list) : cb(null, list[0]!.address, list[0]!.family);
@@ -246,12 +249,16 @@ export function guardedLookup(policy: HostPolicy, resolver: DnsResolver = system
 
     resolver(bare, (err, addresses) => {
       if (err) return cb(err);
-      if (!addresses.length) return cb(Object.assign(new Error(`no address for ${bare}`), { code: 'ENOTFOUND' }));
-      const loopbackOk = policy.loopbackHost !== null && bare === policy.loopbackHost.replace(/^\[|\]$/g, '');
+      if (!addresses.length)
+        return cb(Object.assign(new Error(`no address for ${bare}`), { code: 'ENOTFOUND' }));
+      const loopbackOk =
+        policy.loopbackHost !== null && bare === policy.loopbackHost.replace(/^\[|\]$/g, '');
       const bad = addresses.find((a) => !isPublicAddress(a.address) && !loopbackOk);
       if (bad) {
         return cb(
-          Object.assign(new Error(`${bare} resolves to a non-public address`), { code: 'EBLOCKED' }),
+          Object.assign(new Error(`${bare} resolves to a non-public address`), {
+            code: 'EBLOCKED',
+          }),
         );
       }
       finish(addresses);

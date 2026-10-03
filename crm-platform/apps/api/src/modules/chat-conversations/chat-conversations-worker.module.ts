@@ -8,6 +8,8 @@ import { MediaFetchProcessor } from './media-fetch.processor';
 import { MediaFetchRecoveryService } from './media-fetch-recovery.service';
 import { MessageDispatchProcessor } from './message-dispatch.processor';
 import { QueuedMessageRecoveryService } from './queued-message-recovery.service';
+import { WabaChannelSyncConsumer } from './waba-channel-sync.consumer';
+import { WabaInboxBindingModule } from './waba-inbox-binding.module';
 
 /**
  * The message pipelines' workers: the ingest processor (`webhook-ingest`: inbound messages and delivery receipts), the send processor
@@ -21,6 +23,8 @@ import { QueuedMessageRecoveryService } from './queued-message-recovery.service'
 @Module({
   imports: [
     ChatConversationsModule,
+    // The WhatsApp webhook worker (`WabaWorkerModule`) hands every inbound message and unclaimed delivery report to the inbox through this.
+    WabaInboxBindingModule,
     ChatMediaModule.register({
       imports: [PlatformSettingsModule],
       objectGateway: { useExisting: MediaStorageService },
@@ -33,6 +37,7 @@ import { QueuedMessageRecoveryService } from './queued-message-recovery.service'
     QueuedMessageRecoveryService,
     MediaFetchProcessor,
     MediaFetchRecoveryService,
+    WabaChannelSyncConsumer,
   ],
 })
 export class ChatConversationsWorkerModule {}

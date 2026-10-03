@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../../common/errors/app-error';
 import {
@@ -7,19 +7,19 @@ import {
   MediaTooLargeError,
   type StoredMedia,
 } from '../../chat-conversations/media';
+import { WabaHttp } from '../../whatsapp-cloud-api-waba/waba-http';
 import { GraphMediaClient } from './graph-media.client';
 import type { InboundMediaFetcher, InboundMediaRequest } from './inbound-media-fetcher.port';
 import { MEDIA_FAILURE, MediaFetchError, redact, safeUrlForLog } from './media-fetch-error';
-import { authContextOf, secretsIn, type MediaProviderResolver } from './media-provider';
-import { StaticMetaDirectResolver, WHATSAPP_PROVIDER_RESOLVER } from '../whatsapp-provider.resolver';
+import { authContextOf, profileOf, secretsIn } from './media-provider';
 import { inboundByteCap, sha256HexFrom } from './whatsapp-media-rules';
 import { whatsappMediaConfig } from './whatsapp-media.config';
 
 /**
  * Copies a customer's WhatsApp file into the chat media store:
  *
- *   1. `GET {provider}/{media-id}` for the short-lived download address, against the channel's provider profile (direct Meta, or a BSP
- *      proxy with its own address and headers; with `phone_number_id` on Meta, so a forged id for another number is refused);
+ *   1. `GET {provider}/{media-id}` for the short-lived download address, through `WabaHttp` with the channel's connection (direct Meta,
+ *      or Interakt's proxy with its own address and headers; with `phone_number_id` on Meta, so a forged id for another number is refused);
  *   2. an early refusal when Meta announces a size over the limit for the kind (nothing is downloaded);
  *   3. the download, as a stream, through the SSRF guard; the provider's headers go only to the provider's own host and Meta's media hosts;
  *   4. `ChatMediaStore.storeInboundStream`: size capped while streaming, sha256 verified against what Meta announced, the real type
@@ -33,20 +33,16 @@ import { whatsappMediaConfig } from './whatsapp-media.config';
 export class WhatsappInboundMediaFetcher implements InboundMediaFetcher {
   private readonly logger = new Logger(WhatsappInboundMediaFetcher.name);
 
-  private readonly resolver: MediaProviderResolver;
-
   constructor(
     private readonly store: ChatMediaStore,
-    @Optional() @Inject(WHATSAPP_PROVIDER_RESOLVER) resolver?: MediaProviderResolver,
-  ) {
-    this.resolver = resolver ?? new StaticMetaDirectResolver();
-  }
+    private readonly http: WabaHttp,
+  ) {}
 
   async fetchAndStore(req: InboundMediaRequest): Promise<StoredMedia> {
     const cfg = whatsappMediaConfig();
-    const client = new GraphMediaClient(cfg);
-    const profile = await this.resolver.resolveForChannel(req.channel);
+    const client = new GraphMediaClient(cfg, this.http);
     const ctx = authContextOf(req.channel);
+    const profile = profileOf(this.http, ctx.route);
     // Every header value the provider asked for: removed from any text that leaves this function.
     const secrets = secretsIn(profile.buildHeaders(ctx));
 
@@ -55,7 +51,7 @@ export class WhatsappInboundMediaFetcher implements InboundMediaFetcher {
     const cap = inboundByteCap(req.mediaKind);
 
     try {
-      const found = await client.lookup(profile, ctx, req.mediaId, signal);
+      const found = await client.lookup(profile, ctx, req.mediaId);
       if (found.fileSize !== null && found.fileSize > cap) {
         throw new MediaFetchError(
           MEDIA_FAILURE.TOO_LARGE,
@@ -68,7 +64,10 @@ export class WhatsappInboundMediaFetcher implements InboundMediaFetcher {
       const announced = req.sha256 ?? found.sha256;
       const expected = sha256HexFrom(announced);
       if (announced && !expected) {
-        this.logger.warn({ ref: req.ref }, 'media sha256 announced in an unknown format; not verified');
+        this.logger.warn(
+          { ref: req.ref },
+          'media sha256 announced in an unknown format; not verified',
+        );
       }
 
       const download = await client.download(profile, ctx, found.url, signal);
