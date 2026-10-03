@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { aiDashboardResponseSchema, type AiUsageWindow } from '@crm/contracts';
@@ -51,12 +52,7 @@ export function DashboardPage() {
             <StatTile
               label={t('kpis.tokens')}
               value={compactNumber(q.data.kpis.tokens, locale)}
-              hint={t('kpis.calls', { count: q.data.kpis.calls })}
-            />
-            <StatTile
-              label={t('kpis.platform')}
-              value={compactNumber(q.data.kpis.platformTokens, locale)}
-              hint={`${t('kpis.ownKeys')}: ${compactNumber(q.data.kpis.ownKeyTokens, locale)}`}
+              hint={t('kpis.tokensHint')}
             />
             <StatTile
               label={t('kpis.cost')}
@@ -65,30 +61,44 @@ export function DashboardPage() {
               tone="accent"
             />
             <StatTile
+              label={t('kpis.calls')}
+              value={compactNumber(q.data.kpis.calls, locale)}
+              hint={t('kpis.callsHint')}
+            />
+            <StatTile
               label={t('kpis.workspaces')}
-              value={num(q.data.kpis.workspaces)}
-              hint={`${t('kpis.providers')}: ${num(q.data.kpis.providers)}`}
+              value={compactNumber(q.data.kpis.workspaces, locale)}
+              hint={t('kpis.workspacesHint')}
             />
           </div>
 
-          <Card>
+          <Card className="space-y-2">
             <DailyBars data={q.data.daily} caption={t('daily')} />
+            {q.data.daily.some((d) => d.tokens > 0) ? (
+              <p className="text-xs text-muted-foreground">
+                {t('peak', {
+                  value: compactNumber(Math.max(...q.data.daily.map((d) => d.tokens)), locale),
+                })}
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">{t('dailyEmpty')}</p>
+            )}
           </Card>
 
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
             <Card>
               <ShareBars
                 caption={t('byProvider')}
-                empty={t('empty')}
+                empty={t('providerEmpty')}
                 rows={q.data.byProvider.map((p) => ({
                   key: p.provider,
                   label: p.provider,
                   value: p.tokens,
-                  note: t('kpis.calls', { count: p.calls }),
+                  note: t('providerCalls', { count: p.calls }),
                 }))}
               />
             </Card>
-            <Card>
+            <Card className="space-y-3">
               <SourceSplit
                 caption={t('split')}
                 platformLabel={t('splitPlatform')}
@@ -96,64 +106,65 @@ export function DashboardPage() {
                 platform={q.data.sourceSplit.admin}
                 own={q.data.sourceSplit.workspace}
               />
+              <p className="border-t border-border pt-3 text-xs text-muted-foreground">
+                {t('splitNote')}
+              </p>
             </Card>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <Card className="space-y-2 overflow-x-auto">
+            <Card className="space-y-2">
               <h3 className="text-sm font-medium">{t('topWorkspaces')}</h3>
               {q.data.topWorkspaces.length === 0 ? (
-                <p className="text-sm text-muted-foreground">{t('empty')}</p>
+                <p className="py-4 text-center text-sm text-muted-foreground">
+                  {t('workspaceEmpty')}
+                </p>
               ) : (
-                <table className="w-full text-sm">
-                  <thead className="text-start text-xs text-muted-foreground">
-                    <tr>
-                      <th className="py-1 text-start font-medium">{t('columns.workspace')}</th>
-                      <th className="py-1 text-end font-medium">{t('columns.tokens')}</th>
-                      <th className="py-1 text-end font-medium">{t('columns.calls')}</th>
-                      <th className="py-1 text-end font-medium">{t('columns.ownKey')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {q.data.topWorkspaces.map((w) => (
-                      <tr key={w.id} className="border-t border-border">
-                        <td className="max-w-48 truncate py-1.5">{w.name}</td>
-                        <td className="py-1.5 text-end font-mono">{num(w.tokens)}</td>
-                        <td className="py-1.5 text-end font-mono">{num(w.calls)}</td>
-                        <td className="py-1.5 text-end font-mono">{num(w.ownKeyTokens)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <ul className="divide-y divide-border">
+                  {q.data.topWorkspaces.map((w) => (
+                    <li key={w.id} className="flex items-center justify-between gap-3 py-2.5">
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-medium">{w.name}</span>
+                        <span className="block text-xs text-muted-foreground">
+                          {t('workspaceMeta', { count: w.calls })}
+                          {w.ownKeyTokens > 0
+                            ? ` · ${t('workspaceByok', { tokens: compactNumber(w.ownKeyTokens, locale) })}`
+                            : ''}
+                        </span>
+                      </span>
+                      <span className="shrink-0 font-mono text-sm">
+                        {compactNumber(w.tokens, locale)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               )}
             </Card>
-            <Card className="space-y-2 overflow-x-auto">
+            <Card className="space-y-2">
               <h3 className="text-sm font-medium">{t('topModels')}</h3>
               {q.data.byModel.length === 0 ? (
-                <p className="text-sm text-muted-foreground">{t('empty')}</p>
+                <p className="py-4 text-center text-sm text-muted-foreground">{t('modelEmpty')}</p>
               ) : (
-                <table className="w-full text-sm">
-                  <thead className="text-xs text-muted-foreground">
-                    <tr>
-                      <th className="py-1 text-start font-medium">{t('columns.model')}</th>
-                      <th className="py-1 text-start font-medium">{t('columns.provider')}</th>
-                      <th className="py-1 text-end font-medium">{t('columns.tokens')}</th>
-                      <th className="py-1 text-end font-medium">{t('columns.calls')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {q.data.byModel.map((m) => (
-                      <tr key={`${m.provider}:${m.model ?? ''}`} className="border-t border-border">
-                        <td className="max-w-40 truncate py-1.5 font-mono text-xs" dir="ltr">
+                <ul className="divide-y divide-border">
+                  {q.data.byModel.map((m) => (
+                    <li
+                      key={`${m.provider}:${m.model ?? ''}`}
+                      className="flex items-center justify-between gap-3 py-2.5"
+                    >
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-medium" dir="ltr">
                           {m.model ?? tc('dash')}
-                        </td>
-                        <td className="py-1.5">{m.provider}</td>
-                        <td className="py-1.5 text-end font-mono">{num(m.tokens)}</td>
-                        <td className="py-1.5 text-end font-mono">{num(m.calls)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </span>
+                        <span className="block text-xs capitalize text-muted-foreground">
+                          {t('modelMeta', { provider: m.provider, count: m.calls })}
+                        </span>
+                      </span>
+                      <span className="shrink-0 font-mono text-sm">
+                        {compactNumber(m.tokens, locale)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               )}
             </Card>
           </div>
@@ -161,35 +172,45 @@ export function DashboardPage() {
           <Card className="space-y-3">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="text-sm font-medium">{t('keyHealth')}</h3>
-              <p className="text-xs text-muted-foreground">
-                {t('byok')}:{' '}
-                {t('byokSummary', {
-                  count: q.data.keys.byok.count,
-                  workspaces: q.data.keys.byok.workspaces,
-                })}
+              <Link
+                href="/admin/ai-keys"
+                className="text-xs font-semibold text-primary hover:underline"
+              >
+                {t('manageKeys')}
+              </Link>
+            </div>
+            {q.data.keys.platform.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t('noPlatformKeys')}</p>
+            ) : (
+              <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {q.data.keys.platform.map((k) => (
+                  <li
+                    key={k.provider}
+                    className="flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2 text-sm"
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate font-medium capitalize">{k.provider}</span>
+                      <span className="block truncate text-xs text-muted-foreground" dir="ltr">
+                        {k.defaultModel ?? t('noDefaultModel')}
+                      </span>
+                    </span>
+                    <Badge tone={k.live ? 'success' : 'neutral'}>
+                      {k.live ? t('live') : t('notLive')}
+                    </Badge>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="flex flex-wrap gap-x-8 gap-y-1 border-t border-border pt-3 text-sm">
+              <p>
+                <span className="text-muted-foreground">{t('byokKeys')}:</span>{' '}
+                <span className="font-semibold">{num(q.data.keys.byok.count)}</span>
+              </p>
+              <p>
+                <span className="text-muted-foreground">{t('byokWorkspaces')}:</span>{' '}
+                <span className="font-semibold">{num(q.data.keys.byok.workspaces)}</span>
               </p>
             </div>
-            <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {q.data.keys.platform.map((k) => (
-                <li
-                  key={k.provider}
-                  className="flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2 text-sm"
-                >
-                  <span className="min-w-0">
-                    <span className="block truncate font-medium">{k.provider}</span>
-                    <span
-                      className="block truncate font-mono text-xs text-muted-foreground"
-                      dir="ltr"
-                    >
-                      {k.defaultModel ?? tc('dash')}
-                    </span>
-                  </span>
-                  <Badge tone={k.live ? 'success' : 'neutral'}>
-                    {k.live ? t('live') : t('notLive')}
-                  </Badge>
-                </li>
-              ))}
-            </ul>
           </Card>
         </div>
       )}

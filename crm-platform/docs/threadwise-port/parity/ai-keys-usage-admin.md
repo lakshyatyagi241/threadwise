@@ -19,3 +19,13 @@ Not done: side-by-side browser comparison with the live Reference (see not verif
 tier P0 done: TW-AIADM-001, 002, 003, 004, 006, 010, 016 (ledger write path; voice/bridge writers blocked)
 tier P1 done: TW-AIADM-005, 008, 009, 011..015, 017, 020..027
 tier P2 done: TW-AIADM-007, 019, 028
+
+## Round 2 close-out
+
+DB-backed gates run against crm_aiadm after `pnpm db:migrate` (178 migrations): integration `ai-schema.spec.ts` 10/10, API e2e `ai-keys.e2e.spec.ts` 57/57, API unit 39/39, web feature tests 24/24, `db:verify-schema` 0 errors, arch:check clean (one pre-existing orphan warning in paygw), web lint and API lint clean. Typecheck errors that remain are in other domains' files (chat channel-dispatcher spec, auth plan-draft test), none in AIADM.
+
+Conformance, read from `admin/ai-dashboard/index.blade.php` and `user/ai-usage/index.blade.php` (no live-page side-by-side was run): the admin dashboard now carries Reference's copy and structure: title "AI usage & token burn", KPI strip Tokens burned / Estimated cost / AI calls / Workspaces using AI with Reference's sub-lines, "Daily token burn" with the peak line, "Tokens by provider", "Who pays — platform vs BYOK" with the plan-cap note, "Top token-burning workspaces" (calls and BYOK per row), "Top models", "AI key health" with "Manage keys", "no default model", Live/Off, "BYOK keys active", "Workspaces on BYOK". The workspace usage page uses Reference's headings (By provider, By model, Plan keys vs your keys, This month · plan AI cap), cap and BYOK notes and the cost disclaimer.
+
+Intended deviations (added): "Live" means active and the key decrypts (Reference showed the raw Active flag, inventory TW-AIADM-024 quirk 5); the "AI voice calls" figure is omitted until CALL writes voice usage (blocked); charts are bars built from @crm/ui tokens rather than Reference's inline SVG line, same data.
+
+The inventory "implemented / partial / dead-code" column describes Reference itself, not this port; the partial rows (002, 015, 016, 026) are partial in Reference and are ported with their documented behaviour.
