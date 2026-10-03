@@ -29,7 +29,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { BrandingService } from '../platform-settings-branding-storage';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
-import { encodeFlowCursor, parseImportPayload, stateOf } from './flow-rules';
+import { encodeFlowCursor, nameWithSuffix, parseImportPayload, stateOf } from './flow-rules';
 import { flowEventPayload, toFeatured, toFlowDetail, toFlowSummary } from './flows.mapper';
 import {
   FlowsRepository,
@@ -265,7 +265,7 @@ export class FlowsService {
       await this.assertRoom(tx, ctx.orgId);
       const graph = src.graph ?? { flowNodes: [], flowEdges: [], vars: [] };
       const id = await this.insertFlow(tx, ctx.orgId, ctx.userId, {
-        name: `${src.name} (Copy)`.slice(0, 255),
+        name: nameWithSuffix(src.name, ' (Copy)'),
         graph,
         category: src.category,
         flowType: src.flowType as FlowType,

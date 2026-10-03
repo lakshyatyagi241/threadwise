@@ -8,6 +8,17 @@ import { FLB_MAX_FLOW_EDGES, FLB_MAX_FLOW_NODES } from './graph';
  * Flows API shapes (WD-FLB-001..029). Identifiers are uuids; the graph is WaDesk's `{ flowNodes, flowEdges, vars }`.
  */
 
+/**
+ * `max:n` the way WaDesk's validator counts it: characters (code points), not UTF-16 units, so a name of 191 emoji is accepted and
+ * 192 is not. `.max()` of zod counts units and would refuse a 191-emoji name.
+ */
+export const flbMaxChars =
+  (max: number) =>
+  (value: string, ctx: z.RefinementCtx): void => {
+    if ([...value].length > max)
+      ctx.addIssue({ code: z.ZodIssueCode.too_big, type: 'string', maximum: max, inclusive: true, message: `String must contain at most ${max} character(s)` });
+  };
+
 export const FLOW_NAME_MAX = 255;
 /** The rename dialog and endpoint allow fewer characters than Save does (WaDesk: 191 vs 255); kept. */
 export const FLOW_RENAME_MAX = 191;
@@ -147,8 +158,8 @@ export const flowDetailSchema = flowSummarySchema.extend({
 export type FlowDetail = z.infer<typeof flowDetailSchema>;
 
 export const saveFlowRequestSchema = z.object({
-  name: z.string().trim().min(1, 'Flow name is required').max(FLOW_NAME_MAX),
-  category: z.string().trim().max(FLOW_CATEGORY_MAX).nullish(),
+  name: z.string().trim().min(1, 'Flow name is required').superRefine(flbMaxChars(FLOW_NAME_MAX)),
+  category: z.string().trim().superRefine(flbMaxChars(FLOW_CATEGORY_MAX)).nullish(),
   flowType: flowTypeSchema.nullish(),
   graph: flowGraphInputSchema,
 });
@@ -160,7 +171,7 @@ export const updateFlowRequestSchema = saveFlowRequestSchema.extend({
 export type UpdateFlowRequest = z.infer<typeof updateFlowRequestSchema>;
 
 export const renameFlowRequestSchema = z.object({
-  name: z.string().trim().min(1, 'Flow name is required').max(FLOW_RENAME_MAX),
+  name: z.string().trim().min(1, 'Flow name is required').superRefine(flbMaxChars(FLOW_RENAME_MAX)),
 });
 export type RenameFlowRequest = z.infer<typeof renameFlowRequestSchema>;
 
@@ -392,10 +403,10 @@ export type AdminFlowTemplateDetail = z.infer<typeof adminFlowTemplateDetailSche
 
 /** Create and edit share the form. On create the graph is required (one of three sources); on edit it is optional. */
 export const adminFlowTemplateFieldsSchema = z.object({
-  name: z.string().trim().min(1, 'The name field is required.').max(160),
-  description: z.string().trim().max(1000).nullish(),
+  name: z.string().trim().min(1, 'The name field is required.').superRefine(flbMaxChars(160)),
+  description: z.string().trim().superRefine(flbMaxChars(1000)).nullish(),
   flowType: z.enum(FLB_TEMPLATE_FLOW_TYPES),
-  category: z.string().trim().max(64).nullish(),
+  category: z.string().trim().superRefine(flbMaxChars(64)).nullish(),
   sortOrder: z.coerce.number().int().min(0).max(9999).default(0),
   isActive: z.boolean().default(true),
 });
