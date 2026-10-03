@@ -12,6 +12,9 @@ const snap = (over: Partial<HealthResponse>): HealthResponse => ({
     { name: 'outbox', pending: 4, failed: 0 },
     { name: 'campaign', pending: 0, failed: 0 },
   ],
+  engines: [],
+  activity: { messages: 0, aiCalls: 0, conversations: 0, webhooks: 0 },
+  throughput: [],
   vitals: {
     nodeVersion: '22',
     appVersion: '1',
