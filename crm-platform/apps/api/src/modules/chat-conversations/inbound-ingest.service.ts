@@ -13,6 +13,7 @@ import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
+import { InboundMessageHooks } from './inbound-hooks';
 import { MediaFetchPublisher } from './media-fetch.publisher';
 import { identityOfPeer, defaultTitle, normalizePeerKey } from './peer-key';
 import {
@@ -87,6 +88,7 @@ export class InboundIngestService {
     private readonly media: ChatMediaStore,
     private readonly realtime: ChatRealtimePublisher,
     private readonly mediaFetch: MediaFetchPublisher,
+    private readonly hooks: InboundMessageHooks,
   ) {}
 
   async ingest(job: InboundJob, options: IngestOptions = {}): Promise<IngestOutcome> {
@@ -128,6 +130,26 @@ export class InboundIngestService {
       if (stored.pending) await this.enqueueMediaFetch(orgId, result.message.uuid);
       await this.realtime.messageStored(orgId, result.conv, result.message, result.changed, {
         unread: true,
+      });
+      await this.hooks.run({
+        orgId,
+        channelId: channel.id,
+        conversationId: result.conv.id,
+        contactId: result.conv.contactId,
+        channelUuid: channel.uuid,
+        channelKind: channel.kind,
+        conversationUuid: result.conv.uuid,
+        messageUuid: result.message.uuid,
+        peerKey,
+        peerName: result.conv.peerName,
+        createdConversation: result.createdConversation,
+        message: {
+          kind: m.kind,
+          body: result.message.body,
+          meta: result.message.meta,
+          location: m.location ?? null,
+          mediaKey: result.message.mediaKey,
+        },
       });
       return {
         outcome: 'stored',

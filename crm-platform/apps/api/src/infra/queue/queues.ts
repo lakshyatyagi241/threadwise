@@ -48,6 +48,8 @@ export const QUEUES = {
   SEGMENT_ACTIONS: 'segment-actions',
   /** Copies a customer's WhatsApp file from the provider into the media store: downloads can be large and slow, and a provider outage must not hold message ingest. */
   MEDIA_FETCH: 'media-fetch',
+  /** One job per step of a flow run (WD-FLR-015, 016): the node to run next, a Delay waking, a halted run trying again. Own queue so a long flow cannot hold a send. */
+  FLOW_RUN: 'flow-run',
   /** Re-reads WhatsApp templates stuck PENDING on Meta (WD-TPL-027). Own queue: a Meta outage must not hold anything else. */
   TPL_SWEEP: 'tpl-sweep',
 } as const;
