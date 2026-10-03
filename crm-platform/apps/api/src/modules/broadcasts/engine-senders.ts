@@ -1,5 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
+import { isBuiltinWhatsappProviderKey } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
+import {
+  providerKeyOf,
+  WabaRegistryRoutes,
+} from '../../infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -95,6 +100,7 @@ export class WabaEngineSender implements EngineSender {
     private readonly db: DatabaseService,
     private readonly crypto: CryptoService,
     @Inject(WHATSAPP_PROVIDER) private readonly provider: WhatsAppProvider,
+    @Optional() private readonly routes?: WabaRegistryRoutes,
   ) {}
 
   async open(orgId: number, sender: DispatchSender): Promise<OpenedSender> {
@@ -121,8 +127,22 @@ export class WabaEngineSender implements EngineSender {
     const senderId = String(creds.phone_number_id ?? meta.phone_number_id ?? '');
     const wabaId = String(meta.waba_id ?? '');
     // `provider` in meta_json says which route reaches the number; rows from the manual connect predate it and are direct.
-    const route = meta.provider === 'interakt' ? 'interakt' : 'meta';
-    const usable = route === 'interakt' ? Boolean(authKey && wabaId) : Boolean(accessToken);
+    const providerKey = providerKeyOf(meta);
+    const route = providerKey === 'interakt' ? 'interakt' : 'meta';
+    // A number on a provider of the platform's registry sends through that provider's own route (address, version, headers).
+    const registry = isBuiltinWhatsappProviderKey(providerKey)
+      ? undefined
+      : this.routes?.authFor(providerKey, { wabaId, phoneNumberId: senderId, accessToken });
+    if (!isBuiltinWhatsappProviderKey(providerKey) && !registry) {
+      throw new Error(
+        'The WhatsApp provider of this number is not available. Ask the platform admin, or reconnect the number.',
+      );
+    }
+    const usable = registry
+      ? true
+      : route === 'interakt'
+        ? Boolean(authKey && wabaId)
+        : Boolean(accessToken);
     if (!usable || !senderId) {
       throw new Error(
         'This WhatsApp Cloud API number has no access token or phone number id. Reconnect the number.',
@@ -133,6 +153,7 @@ export class WabaEngineSender implements EngineSender {
       accessToken,
       route,
       ...(route === 'interakt' ? { authKey } : {}),
+      ...(registry ? { registry } : {}),
       ...(wabaId ? { businessAccountId: wabaId } : {}),
       marketingLite: meta.is_mm_lite_onboarded === true,
     } as const;
