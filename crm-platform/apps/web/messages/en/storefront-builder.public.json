@@ -111,7 +111,7 @@
       "shippingBody": "Orders are dispatched within 1–2 business days. Delivery times depend on your location — typically 2–5 business days.",
       "freeAbove": "Free shipping on orders above {amount}.",
       "returnsHeading": "Returns.",
-      "returnsBody": "Unused items can be returned within 7 days of delivery. Message us on WhatsApp to start a return — we’ll arrange the pickup.",
+      "returnsBody": "Unused items can be returned within 7 days of delivery. Message us on WhatsApp to start a return — we'll arrange the pickup.",
       "reviewCount": "{count, plural, one {# review} other {# reviews}}",
       "anonymous": "Anonymous",
       "ratingOf": "{rating} out of 5",
@@ -191,7 +191,7 @@
     },
     "stock": {
       "title": "Only {count} in stock",
-      "soldOut": "This product is sold out. We’ll restock soon — message us on WhatsApp to be notified.",
+      "soldOut": "This product is sold out. We'll restock soon — message us on WhatsApp to be notified.",
       "limit": "{count, plural, one {There is only 1 unit available, and you already have all of them in your cart.} other {There are only # units available, and you already have all of them in your cart.}}",
       "maxTitle": "Limit reached",
       "maxBody": "You can order up to {count} units of one product at a time."
@@ -218,6 +218,7 @@
       "cod": "Cash on delivery",
       "place": "Place order",
       "placing": "Placing order…",
+      "opening": "Order placed! Opening WhatsApp…",
       "nameRequired": "Please enter your name.",
       "phoneInvalid": "Please enter a valid WhatsApp number.",
       "cartEmpty": "Your cart is empty.",
@@ -237,7 +238,7 @@
       "rateLimited": "Too many requests. Please wait a moment and try again."
     },
     "placed": {
-      "title": "Order #{orderNo} placed",
+      "title": "Order placed",
       "track": "Track order #{orderNo} →",
       "openWhatsApp": "Open WhatsApp"
     },
@@ -306,7 +307,7 @@
     "order": {
       "title": "Order #{orderNo}",
       "progress": "Order progress",
-      "cancelled": "This order was cancelled. Contact us if that’s unexpected.",
+      "cancelled": "This order was cancelled. Contact us if that's unexpected.",
       "steps": {
         "placed": "Placed",
         "confirmed": "Confirmed",

@@ -173,6 +173,11 @@ export function cleanOursSql() {
 export function refSql() {
   const out = [];
   out.push('SET FOREIGN_KEY_CHECKS=0;', ...refCleanStatements());
+  // The reference's currencies table is empty on a fresh install; Reference's seeder has INR (symbol + 2 decimals), which the
+  // free-shipping text and the "Range" hint format through. Tagged by its name so `clean` removes exactly this row.
+  out.push(
+    `INSERT IGNORE INTO currencies (name, code, symbol, \`precision\`, exchange_rate, is_active, created_at, updated_at) VALUES ('stp Indian Rupee', 'INR', '\u20B9', 2, 83.25, 1, NOW(), NOW());`,
+  );
   out.push(
     `INSERT INTO workspaces (id, owner_user_id, name, slug, created_at, updated_at) VALUES (${WS}, 1, 'stp Workspace', 'stp-workspace', NOW(), NOW());`,
     `INSERT INTO devices (id, user_id, workspace_id, device_name, country_code, phone_number, status, active, created_at, updated_at) VALUES (${WS}, 1, ${WS}, ${q(enc('stp device'))}, ${q(enc(WA.country))}, ${q(enc(WA.phone))}, 'connected', 1, NOW(), NOW());`,
@@ -236,6 +241,7 @@ function cleanRef() {
   stmts.push(
     `DELETE FROM wa_storefront_views WHERE storefront_id NOT IN (SELECT id FROM wa_storefronts);`,
     `DELETE FROM workspaces WHERE id = ${WS};`,
+    `DELETE FROM currencies WHERE name = 'stp Indian Rupee';`,
     'SET FOREIGN_KEY_CHECKS=1;',
   );
   maria(stmts.join('\n'));

@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import type { CSSProperties } from 'react';
 import { orderQuestionUrl, safeHttpUrl } from '../lib/links';
 import { footerParts } from '../lib/footer';
-import { DEFAULT_BRAND, isHexColor, readableOn } from '../lib/themes';
+import { DEFAULT_BRAND, isHexColor } from '../lib/themes';
 import { TRACK_STEPS, isCancelled, statusLabel, trackerIndex } from '../lib/tracker';
 import { formatMinor } from '../lib/money';
 import '../styles/storefront.css';
@@ -17,10 +17,11 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
   const money = (minor: number) => formatMinor(minor, order.currencyCode);
   const cancelled = isCancelled(order.status);
   const reached = trackerIndex(order.status);
-  const subtotal = order.items.reduce((n, i) => n + i.priceMinor * i.qty, 0);
+  // Reference's page shows total minus shipping as the subtotal (a coupon is already inside it) and has no discount row.
+  const subtotal = order.totalMinor - order.shippingMinor;
   const payLink = order.status.toLowerCase() !== 'paid' ? safeHttpUrl(order.paymentLink) : null;
   const footer = footerParts(shop).bottom;
-  const style = { '--sf-brand': brand, '--sf-on-brand': readableOn(brand) } as CSSProperties;
+  const style = { '--sf-brand': brand } as CSSProperties;
 
   return (
     <div className="sf-order" style={style}>
@@ -92,12 +93,6 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
               <dt>{t('cart.subtotal')}</dt>
               <dd>{money(subtotal)}</dd>
             </div>
-            {order.discountMinor > 0 ? (
-              <div>
-                <dt>{t('order.discount')}</dt>
-                <dd>−{money(order.discountMinor)}</dd>
-              </div>
-            ) : null}
             <div>
               <dt>{t('cart.shipping')}</dt>
               <dd>{order.shippingMinor > 0 ? money(order.shippingMinor) : t('order.free')}</dd>
@@ -118,7 +113,7 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
         ) : null}
 
         {payLink ? (
-          <a className="sf-ot-btn" href={payLink} rel="noopener noreferrer">
+          <a className="sf-ot-btn is-pay" href={payLink} rel="noopener noreferrer">
             <CardIcon size={16} />
             {t('order.payNow')}
           </a>

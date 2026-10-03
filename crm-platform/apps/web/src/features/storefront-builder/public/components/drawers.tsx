@@ -6,7 +6,7 @@ import { useRef, type ReactNode } from 'react';
 import { cartTotal, shippingRow } from '../lib/cart';
 import { formatMinor } from '../lib/money';
 import { productPath } from '../lib/links';
-import { BagIcon, BigCompareIcon, BigHeartIcon, CloseIcon } from './icons';
+import { BagIcon, BigCompareIcon, BigHeartIcon } from './icons';
 import { ProductImage } from './product-image';
 import { useStore, type DrawerKind } from './store-provider';
 import { useDialog } from './use-dialog';
@@ -25,10 +25,11 @@ function Drawer({
   footer?: ReactNode;
 }) {
   const t = useTranslations('shopPublic');
-  const { drawer, closeDrawer } = useStore();
+  const { drawer, closeDrawer, modal } = useStore();
   const open = drawer === kind;
   const panel = useRef<HTMLElement>(null);
-  useDialog(panel, open, closeDrawer);
+  // While a dialog sits on top of the drawer (checkout), the dialog owns focus and Escape.
+  useDialog(panel, open && modal === null, closeDrawer);
   return (
     <div className="sf-drawer" data-open={open ? '1' : '0'} inert={!open}>
       <div className="sf-drawer-backdrop" onClick={closeDrawer} aria-hidden="true" />
@@ -43,7 +44,7 @@ function Drawer({
         <header className="sf-drawer-head">
           <h2 id={`sf-drawer-${kind}-title`}>{title}</h2>
           <button type="button" onClick={closeDrawer} aria-label={t('common.close')}>
-            <CloseIcon size={18} />
+            ×
           </button>
         </header>
         <div className="sf-drawer-body">{children}</div>
@@ -156,7 +157,7 @@ export function CartDrawer() {
           {cart.map((line) => (
             <li key={line.id} className="sf-cart-row">
               <div className="sf-cart-img">
-                <ProductImage src={line.image} alt="" />
+                <ProductImage src={line.image} alt="" emoji />
               </div>
               <div className="sf-cart-meta">
                 <div className="sf-cart-name">{line.name}</div>
@@ -183,7 +184,10 @@ export function CartDrawer() {
                     aria-label={t('cart.quantityOf', { name: line.name })}
                     onBlur={(e) => {
                       const n = Number.parseInt(e.target.value, 10);
-                      if (n !== line.qty) setLineQty(line.id, Number.isFinite(n) ? n : 1);
+                      // Show what the cart really holds afterwards (a typed 10 on a stock of 3 reads 3).
+                      const at =
+                        n !== line.qty ? setLineQty(line.id, Number.isFinite(n) ? n : 1) : line.qty;
+                      e.target.value = String(at);
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') e.currentTarget.blur();
@@ -204,7 +208,7 @@ export function CartDrawer() {
                 aria-label={t('cart.remove', { name: line.name })}
                 onClick={() => removeFromCart(line.id)}
               >
-                <CloseIcon size={14} />
+                ×
               </button>
             </li>
           ))}
@@ -227,7 +231,7 @@ export function WishDrawer() {
           {items.map((p) => (
             <li key={p.id} className="sf-cart-row">
               <a className="sf-cart-img" href={productPath(shop.slug, p.slug)} aria-label={p.name}>
-                <ProductImage src={p.imageUrl} alt="" />
+                <ProductImage src={p.imageUrl} alt="" emoji />
               </a>
               <div className="sf-cart-meta">
                 <a className="sf-cart-name" href={productPath(shop.slug, p.slug)}>
@@ -244,7 +248,7 @@ export function WishDrawer() {
                 aria-label={t('wish.remove', { name: p.name })}
                 onClick={() => toggleWish(p.id)}
               >
-                <CloseIcon size={14} />
+                ×
               </button>
             </li>
           ))}
@@ -282,7 +286,7 @@ export function CompareDrawer() {
                       aria-label={t('compare.remove', { name: p.name })}
                       onClick={() => toggleCompare(p.id)}
                     >
-                      <CloseIcon size={12} />
+                      ×
                     </button>
                   </th>
                 ))}
@@ -294,7 +298,7 @@ export function CompareDrawer() {
                 {cols.map((p) => (
                   <td key={p.id}>
                     <div className="sf-compare-img">
-                      <ProductImage src={p.imageUrl} alt={p.name} />
+                      <ProductImage src={p.imageUrl} alt={p.name} emoji />
                     </div>
                   </td>
                 ))}
@@ -349,11 +353,11 @@ export function CompareBar() {
   const chips = compare.map((id) => catalog[id]).filter((p): p is PublicProduct => p !== undefined);
   return (
     <div className="sf-compare-bar" role="region" aria-label={t('compare.bar')}>
-      <ul>
+      <div>
         {chips.map((p) => (
-          <li key={p.id} className="sf-cmp-chip">
+          <div key={p.id} className="sf-cmp-chip">
             <span className="sf-cmp-thumb">
-              <ProductImage src={p.imageUrl} alt="" />
+              <ProductImage src={p.imageUrl} alt="" emoji />
             </span>
             <span className="sf-cmp-name">{p.name}</span>
             <button
@@ -362,11 +366,11 @@ export function CompareBar() {
               aria-label={t('compare.remove', { name: p.name })}
               onClick={() => toggleCompare(p.id)}
             >
-              <CloseIcon size={12} />
+              ×
             </button>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
       <button type="button" className="sf-cmp-cta" onClick={() => toggleDrawer('compare')}>
         {t('compare.open')}
       </button>

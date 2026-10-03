@@ -15,7 +15,7 @@ import {
   type FilterState,
   type SortMode,
 } from '../lib/catalog';
-import { formatMinor } from '../lib/money';
+import { formatIn } from '../lib/money';
 import { ChevronDownIcon, GridIcon, ListIcon } from './icons';
 import { ProductCard } from './product-card';
 import { useStore } from './store-provider';
@@ -180,8 +180,8 @@ export function Catalog({ home }: { home: PublicHome }) {
               </div>
               <div className="sf-range-hint">
                 {t('catalog.filters.range', {
-                  min: formatMinor(range.min * 100, shop.currencyCode),
-                  max: formatMinor(range.max * 100, shop.currencyCode),
+                  min: formatIn(range.min * 100, shop.currencyCode),
+                  max: formatIn(range.max * 100, shop.currencyCode),
                 })}
               </div>
             </div>

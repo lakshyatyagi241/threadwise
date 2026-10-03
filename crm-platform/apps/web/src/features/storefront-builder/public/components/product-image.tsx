@@ -8,18 +8,25 @@ export function ProductImage({
   src,
   alt,
   eager = false,
+  emoji = false,
   className,
 }: {
   src: string | null | undefined;
   alt: string;
   eager?: boolean;
+  /** Cart, wishlist and compare show Reference's package emoji instead of the glyph when there is no image. */
+  emoji?: boolean;
   className?: string;
 }) {
   const [failed, setFailed] = useState<string | null>(null);
   if (!src || failed === src) {
     return (
-      <span className="sf-img-fallback" role="img" aria-label={alt}>
-        <PackageIcon />
+      <span
+        className={emoji ? undefined : 'sf-img-fallback'}
+        role="img"
+        aria-label={alt}
+      >
+        {emoji ? '📦' : <PackageIcon />}
       </span>
     );
   }

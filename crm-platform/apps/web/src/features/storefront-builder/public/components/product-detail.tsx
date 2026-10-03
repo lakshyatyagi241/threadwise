@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useId, useMemo, useState } from 'react';
 import { discountPercent, isOnSale, isSoldOut } from '../lib/catalog';
 import { productPath, productQuestionUrl, shopPath } from '../lib/links';
-import { formatMinor } from '../lib/money';
+import { LEGACY_FREE_THRESHOLD_MINOR, formatIn } from '../lib/money';
 import { sanitizeHtml } from '../lib/sanitize';
 import { CheckIcon, CompareIcon, HeartIcon, ShareIcon } from './icons';
 import { ProductCard } from './product-card';
@@ -27,10 +27,46 @@ function Stars({ value }: { value: number }) {
   );
 }
 
+/** The rating summary, the approved reviews and the review form: rendered in the Reviews tab and again in the page's Reviews block. */
+function ReviewsBlock({ page }: { page: PublicProductPage }) {
+  const t = useTranslations('shopPublic');
+  const { product, reviews, ratingAvg, ratingCount } = page;
+  return (
+    <>
+      {ratingCount > 0 && ratingAvg !== null ? (
+        <>
+          <div className="sf-rating-sum">
+            <span className="sf-rating-avg">{ratingAvg}</span>
+            <Stars value={ratingAvg} />
+            <span className="sf-rating-count">
+              {t('product.reviewCount', { count: ratingCount })}
+            </span>
+          </div>
+          <ul className="sf-reviews">
+            {reviews.map((r) => (
+              <li key={r.id}>
+                <div className="sf-review-head">
+                  <strong>{r.customerName || t('product.anonymous')}</strong>
+                  <Stars value={r.rating} />
+                  <span className="sf-sr">{t('product.ratingOf', { rating: r.rating })}</span>
+                </div>
+                {r.body ? <p>{r.body}</p> : null}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p className="sf-reviews-empty">{t('product.noReviews')}</p>
+      )}
+      <ReviewForm productId={product.id} />
+    </>
+  );
+}
+
 /** The product page body (TW-STORE-010): gallery, buy box, tabs, reviews with the one review form, related products. */
 export function ProductDetail({ page }: { page: PublicProductPage }) {
   const t = useTranslations('shopPublic');
-  const { shop, product, related, reviews, ratingAvg, ratingCount } = page;
+  const { shop, product, related } = page;
   const store = useStore();
   const { wish, compare, addQuantity, toggleWish, toggleCompare, openShare, toggleDrawer, drawer } =
     store;
@@ -55,11 +91,11 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
   const url = `${origin}${productPath(shop.slug, product.slug)}`;
   const body = sanitizeHtml(product.bodyHtml, 'rich');
   const lowStock = product.stockQty !== null && product.stockQty <= 10;
-  const freeAbove = shop.shipping.freeAboveMinor;
 
   const parsedQty = () => Math.max(1, Number.parseInt(qty || '1', 10) || 1);
   const add = () => {
-    addQuantity(product, parsedQty());
+    // QUIRK (Reference): no stock cap here, the page's own product is in the browser catalog without a stock quantity.
+    addQuantity({ ...product, stockQty: null }, parsedQty());
     if (drawer !== 'cart') toggleDrawer('cart');
   };
 
@@ -95,12 +131,11 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
 
         <div className="sf-pd-info">
           <nav className="sf-breadcrumb" aria-label={t('product.breadcrumb')}>
-            <a href={home}>{shop.name}</a>
-            <span aria-hidden="true">/</span>
+            <a href={home}>{shop.name}</a> <span aria-hidden="true">/</span>{' '}
             {product.category ? (
               <>
-                <a href={`${home}#categories`}>{product.category}</a>
-                <span aria-hidden="true">/</span>
+                <a href={`${home}#categories`}>{product.category}</a>{' '}
+                <span aria-hidden="true">/</span>{' '}
               </>
             ) : null}
             <span aria-current="page">{product.name}</span>
@@ -297,9 +332,7 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
         >
           <p>
             <strong>{t('product.shippingHeading')}</strong> {t('product.shippingBody')}
-            {freeAbove > 0
-              ? ` ${t('product.freeAbove', { amount: formatMinor(freeAbove, shop.currencyCode) })}`
-              : ''}
+            {` ${t('product.freeAbove', { amount: formatIn(LEGACY_FREE_THRESHOLD_MINOR, shop.currencyCode) })}`}
           </p>
           <p>
             <strong>{t('product.returnsHeading')}</strong> {t('product.returnsBody')}
@@ -313,32 +346,7 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
           className="sf-tabs-pane"
           hidden={tab !== 'reviews'}
         >
-          {ratingCount > 0 && ratingAvg !== null ? (
-            <>
-              <div className="sf-rating-sum">
-                <span className="sf-rating-avg">{ratingAvg}</span>
-                <Stars value={ratingAvg} />
-                <span className="sf-rating-count">
-                  {t('product.reviewCount', { count: ratingCount })}
-                </span>
-              </div>
-              <ul className="sf-reviews">
-                {reviews.map((r) => (
-                  <li key={r.id}>
-                    <div className="sf-review-head">
-                      <strong>{r.customerName || t('product.anonymous')}</strong>
-                      <Stars value={r.rating} />
-                      <span className="sf-sr">{t('product.ratingOf', { rating: r.rating })}</span>
-                    </div>
-                    {r.body ? <p>{r.body}</p> : null}
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <p>{t('product.noReviews')}</p>
-          )}
-          <ReviewForm productId={product.id} />
+          <ReviewsBlock page={page} />
         </div>
       </div>
 
@@ -352,6 +360,13 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
           </div>
         </section>
       ) : null}
+
+      <section className="sf-reviews-section">
+        <h2>{t('product.tabs.reviews')}</h2>
+        <div className="sf-reviews-box">
+          <ReviewsBlock page={page} />
+        </div>
+      </section>
     </>
   );
 }

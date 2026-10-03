@@ -17,7 +17,7 @@ export function Hero({ shop }: { shop: PublicShop }) {
       ) : (
         <h1 id="sf-hero-title">{t('hero.welcome', { shop: shop.name })}</h1>
       )}
-      <p>{t('hero.sub')}</p>
+      <p>{shop.heroSub ?? t('hero.sub')}</p>
       <div className="sf-hero-trust">
         {(['cod', 'chat', 'returns'] as const).map((k) => (
           <span key={k}>

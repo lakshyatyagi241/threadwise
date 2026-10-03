@@ -84,6 +84,10 @@ export function ShopForm({
   const slug = shop?.slug ?? previewSlug(form.shopName);
   const builtInUrl = shop?.publicUrl ?? (origin ? pathModeUrl(origin, slug) : '');
   const pathMode = !shop || shop.publicUrl.endsWith(`/s/${shop.slug}`);
+  // Reference shows the whole address in front of the slug box: "http://host/s/".
+  const slugPrefix = builtInUrl.endsWith(`/${slug}`)
+    ? builtInUrl.slice(0, builtInUrl.length - slug.length)
+    : '/s/';
   const noDevices = wizard.devices.length === 0 && !official;
 
   const set = <K extends keyof WizardForm>(key: K, value: WizardForm[K]) => {
@@ -201,7 +205,7 @@ export function ShopForm({
                   className="grid place-items-center whitespace-nowrap rounded-s-md border border-e-0 border-border bg-muted px-3 font-mono text-xs text-muted-foreground"
                   dir="ltr"
                 >
-                  {pathMode ? '/s/' : 'https://'}
+                  {pathMode ? slugPrefix : 'https://'}
                 </span>
                 <div
                   className="min-w-0 flex-1 select-all truncate rounded-e-md border border-border bg-muted px-3 py-2 font-mono text-sm"

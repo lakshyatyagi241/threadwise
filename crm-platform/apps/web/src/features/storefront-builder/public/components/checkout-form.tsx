@@ -126,14 +126,19 @@ export function CheckoutForm() {
     // Order recorded: the cart is done with, whatever happens to the hand-off.
     clearCart();
     const waUrl = isWaHandoff(res.data.waUrl) ? res.data.waUrl : null;
+    if (waUrl) {
+      // As in Reference: the form stays up with "Order placed! Opening WhatsApp…" while the browser leaves for the chat.
+      setStatus({ tone: 'ok', text: t('checkout.opening') });
+      window.location.assign(waUrl);
+      return;
+    }
     openModal({
       kind: 'placed',
       message: res.data.message,
       trackUrl: res.data.trackUrl,
       orderNo: res.data.orderNo,
-      waUrl,
+      waUrl: null,
     });
-    if (waUrl) window.location.assign(waUrl);
   };
 
   return (
@@ -145,7 +150,7 @@ export function CheckoutForm() {
         void submit();
       }}
     >
-      <p className="sf-checkout-summary">{itemsLabel}</p>
+      <div className="sf-checkout-summary">{itemsLabel}</div>
 
       <label className="sf-field" htmlFor={`${uid}-name`}>
         <span>{t('checkout.name')}</span>
@@ -209,15 +214,15 @@ export function CheckoutForm() {
         </button>
       </div>
       <div
-        className={`sf-form-msg${couponLine ? ` is-${couponLine.tone}` : ''}`}
+        className={`sf-form-msg sf-coupon-msg${couponLine ? ` is-${couponLine.tone}` : ''}`}
         role="status"
         aria-live="polite"
       >
         {couponLine?.text}
       </div>
 
-      <fieldset className="sf-pay">
-        <legend>{t('checkout.payment')}</legend>
+      <div className="sf-pay" role="radiogroup" aria-label={t('checkout.payment')}>
+        <span>{t('checkout.payment')}</span>
         <label>
           <input
             type="radio"
@@ -238,9 +243,9 @@ export function CheckoutForm() {
           />
           {t('checkout.cod')}
         </label>
-      </fieldset>
+      </div>
 
-      <div className={`sf-form-msg${status ? ` is-${status.tone}` : ''}`} role="alert">
+      <div className={`sf-form-msg sf-status-msg${status ? ` is-${status.tone}` : ''}`} role="alert">
         {status?.text}
       </div>
       <button type="submit" className="sf-cta sf-cta-wide" disabled={busy}>

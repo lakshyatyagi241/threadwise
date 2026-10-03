@@ -47,7 +47,8 @@ export class SqlSenderDirectory implements SenderDirectory {
         id: Number(d.id),
         uuid: d.uuid,
         label: d.device_name || `Device #${d.id}`,
-        phone: devicePhone(d) || null,
+        // The wizard prints the stored country code and number as they are, joined by a space (no plus added).
+        phone: `${d.country_code ?? ''} ${d.phone_number ?? ''}`.trim() || null,
       })),
       // A connected PRIMARY official config counts, a connected non-primary one does not (TW-STORE-004).
       hasSender: rows.length > 0 || primary?.status === 'connected',

@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-import type { StoreSidebarCounts } from '@crm/contracts';
 import { Select, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useOverview } from '../api/hooks';
@@ -14,36 +13,13 @@ import {
   MAIN_ENTRIES,
   SETTINGS_ENTRIES,
   activeKey,
+  countFor,
   entryHref,
   visibleEntries,
   type SidebarEntry,
 } from '../lib/sidebar';
 import { ErrorPanel, Eyebrow, Skeleton } from './parts';
 import { ExternalIcon, PathIcon, StoreIcon } from './icons';
-
-/** The number beside an entry (Reference shows it when above zero); the overview and settings entries carry none. */
-function countFor(key: SidebarEntry['key'], counts: StoreSidebarCounts): number | undefined {
-  switch (key) {
-    case 'orders':
-      return counts.orders;
-    case 'products':
-      return counts.products;
-    case 'groups':
-      return counts.groups;
-    case 'coupons':
-      return counts.coupons;
-    case 'reviews':
-      return counts.reviewsPending;
-    case 'payments':
-      return counts.payments;
-    case 'gateways':
-      return counts.gateways;
-    case 'customers':
-      return counts.customers;
-    default:
-      return undefined;
-  }
-}
 
 const CARD = 'rounded-xl border border-border bg-background p-3 shadow-sm';
 

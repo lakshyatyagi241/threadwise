@@ -47,6 +47,10 @@ export const publicShopSchema = z.object({
   heroText: z.string(),
   footerText: z.string(),
   logoUrl: z.string().nullable(),
+  /** `settings.top_strip`: replaces the utility strip's default copy when set. No screen writes it; Reference reads it. */
+  topStrip: z.string().nullable().optional(),
+  /** `settings.hero_sub`: replaces the hero's default sub copy when present (even an empty string, as in Reference). */
+  heroSub: z.string().nullable().optional(),
   currencyCode: z.string(),
   /** Digits of the number "Order on WhatsApp" opens; null when the shop has no sending number. */
   waNumber: z.string().nullable(),

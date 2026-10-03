@@ -1,7 +1,7 @@
 // Re-runnable Playwright walk of the admin store screens on OUR app (the twin of the reference walk in ref-walk.mjs).
 //
-//   export PATH=$HOME/.nvm/versions/node/v22.23.0/bin:$PATH
-//   BASE=http://localhost:3108 EMAIL=... PASS=... node apps/web/e2e/storefront-builder/admin/walk.mjs
+//   source ~/.nvm/nvm.sh && nvm use 22
+//   BASE=http://localhost:3109 EMAIL=... PASS=... node apps/web/e2e/storefront-builder/admin/walk.mjs
 //
 // Needs: the web app, the API, an org admin (see the signup call in the parity notes) and one connected device row for
 // that org (the wizard refuses to create a shop without a sender). Screenshots land in OUT (default /tmp/sf-admin-shots).
@@ -9,10 +9,15 @@
 import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
 
-const require = createRequire('/home/getaweblpubt10/.npm/_npx/6bcb61ec6d5aea22/node_modules/');
+// Playwright comes from the parity harness (`.claude/skills/threadwise-playwright-parity/harness`); PLAYWRIGHT_FROM overrides.
+const require = createRequire(
+  process.env.PLAYWRIGHT_FROM ??
+    new URL('../../../../../.claude/skills/threadwise-playwright-parity/harness/', import.meta.url)
+      .pathname,
+);
 const { chromium } = require('playwright');
 
-const BASE = process.env.BASE ?? 'http://localhost:3108';
+const BASE = process.env.BASE ?? 'http://localhost:3109';
 const EMAIL = process.env.EMAIL ?? 'store-admin@example.com';
 const PASS = process.env.PASS ?? 'Str0ngPassw0rd#1';
 const OUT = process.env.OUT ?? '/tmp/sf-admin-shots';
@@ -65,7 +70,7 @@ if (gate > 0) {
     (await page.locator('a[href="/channels"]').count()) > 0,
   );
   console.log(
-    'No connected device for this org: insert one in crm_commerce.devices and re-run to walk the rest.',
+    'No connected device for this org: insert one in crm_store.devices and re-run to walk the rest.',
   );
   await browser.close();
   process.exit(results.some((r) => !r.ok) ? 1 : 0);
@@ -202,6 +207,30 @@ check(
   'sidebar: public URL box has Open and Copy',
   (await side.getByText('Copy', { exact: true }).count()) === 1,
 );
+check(
+  'sidebar: the card says how WhatsApp is reached and the Live pill shows',
+  (await side.getByText('Live', { exact: true }).count()) >= 1 &&
+    (await side
+      .getByText(/Unofficial API|Device connected|Not connected|WABA|Baileys|Twilio/)
+      .count()) >= 1,
+);
+check(
+  'dashboard: recent-orders rows say "N item(s)" or the empty copy',
+  (await page.getByText(/\d+ items?$|No orders yet/).count()) > 0,
+);
+
+// ---- the catalog pages sit beside the same rail (TW-CAT-036)
+for (const path of ['/store/products', '/store/products/create', '/store/reviews']) {
+  await page.goto(`${BASE}${path}`);
+  await settle();
+  check(
+    `rail: ${path} shows the store sidebar`,
+    (await page.getByRole('complementary', { name: 'Store' }).count()) === 1 &&
+      (await page.getByRole('link', { name: 'Overview' }).count()) >= 1,
+  );
+}
+await page.goto(`${BASE}/store`);
+await settle();
 
 // ---- settings
 await side.getByRole('link', { name: 'Storefront' }).click();
