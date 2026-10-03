@@ -5,6 +5,7 @@ import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
+import { CallingVoiceWorkerModule } from '../modules/calling-voice';
 import { CatalogProductsWorkerModule } from '../modules/catalog-products';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
 import { CampaignsWorkerModule } from '../modules/campaigns';
@@ -59,6 +60,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     PlansWorkerModule,
     PaygwWorkerModule,
     WabaWorkerModule,
+    CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,

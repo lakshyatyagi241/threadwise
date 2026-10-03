@@ -27,6 +27,7 @@ import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
+import { CallingVoiceModule } from './modules/calling-voice';
 import { CampaignsModule } from './modules/campaigns';
 import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
@@ -173,6 +174,7 @@ import { HealthModule } from './health/health.module';
     NotificationsModule,
     BroadcastsModule,
     CampaignsModule,
+    CallingVoiceModule,
     ChannelTelegramModule,
     ChannelFacebookModule,
     ChannelInstagramModule,

@@ -647,24 +647,24 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-CALL-001 | todo |  |  |
-| WD-CALL-002 | todo |  |  |
-| WD-CALL-003 | todo |  |  |
-| WD-CALL-004 | todo |  |  |
-| WD-CALL-005 | todo |  |  |
-| WD-CALL-006 | todo |  |  |
-| WD-CALL-007 | todo |  |  |
-| WD-CALL-008 | todo |  |  |
-| WD-CALL-009 | todo |  |  |
-| WD-CALL-010 | todo |  |  |
-| WD-CALL-011 | todo |  |  |
-| WD-CALL-012 | todo |  |  |
-| WD-CALL-013 | todo |  |  |
-| WD-CALL-014 | todo |  |  |
-| WD-CALL-015 | todo |  |  |
-| WD-CALL-016 | todo |  |  |
-| WD-CALL-017 | todo |  |  |
-| WD-CALL-018 | todo |  |  |
-| WD-CALL-019 | todo |  |  |
-| WD-CALL-020 | todo |  |  |
-| WD-CALL-021 | todo |  |  |
+| WD-CALL-001 | backend-done |  | alias of the WABA handshake at /v2/public/webhooks/wa-calling; e2e |
+| WD-CALL-002 | backend-done |  | calls field handled through WABA_CALLS_SINK; one handler instead of two; indexed route lookup |
+| WD-CALL-003 | backend-done |  | GET /v2/calling/numbers; call.calls.use and plan feature waba_calling |
+| WD-CALL-004 | backend-done |  | toggle with Meta first, coexistence refused locally, Meta refusals in words; e2e against a fake Meta |
+| WD-CALL-005 | backend-done |  | permission request, 138017 treated as already permitted, ledger reset; e2e |
+| WD-CALL-006 | backend-done |  | ledger from permission_update, eligibility from the conversation's own number, lapsed grant reads expired |
+| WD-CALL-007 | frontend-done |  | CallButton component with modal flow; exported for the team inbox to mount; not tried with a real number |
+| WD-CALL-008 | backend-done |  | permission first, calling must be on, refused dial is failed not ringing; e2e |
+| WD-CALL-009 | frontend-done |  | CallPeer with SDP rules and recording, 36 unit tests on fakes; no real microphone or Meta test |
+| WD-CALL-010 | backend-done |  | progress poll returns the SDP answer only for an active call; e2e |
+| WD-CALL-011 | backend-done |  | connect: inbound ringing row matched to contact and thread, outbound answered; idempotent; AI answer and voicemail timer not built |
+| WD-CALL-012 | frontend-done |  | pending endpoint and IncomingCallToast; poll only, no push |
+| WD-CALL-013 | backend-done |  | atomic claim, pre_accept, 900 ms, accept, rollback to ringing on refusal; two simultaneous accepts e2e |
+| WD-CALL-014 | wontfix |  | dead code in WaDesk; pre_accept is a step of accept (inventory port note) |
+| WD-CALL-015 | backend-done |  | decline only a ringing call |
+| WD-CALL-016 | backend-done |  | terminate, idempotent; row closes on Meta's terminate event |
+| WD-CALL-017 | backend-done |  | terminate event closes the row with Meta's status and duration, one system bubble in the customer's thread; Node bridge close not built |
+| WD-CALL-018 | frontend-done |  | OnCallPanel with timer, mute, end, record, consent line |
+| WD-CALL-019 | backend-done |  | recording upload and playback in private storage, workspace only, replaced file removed; browser recorder in the web feature |
+| WD-CALL-020 | wontfix |  | dead code in WaDesk; AI calls arm recording from the assistant (not built) |
+| WD-CALL-021 | backend-done |  | wa_call_events written at every step (connect, dial_sent, accept_sent, terminate, ...) |
