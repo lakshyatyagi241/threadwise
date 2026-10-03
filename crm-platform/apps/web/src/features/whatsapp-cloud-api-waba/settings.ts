@@ -4,6 +4,7 @@ import { settingsTile } from '../_registry/settings-types';
 export const settings = [
   settingsTile({
     id: 'whatsapp',
+    shortcutFrom: ['/inbox', '/broadcasts', '/templates'],
     section: 'channels',
     href: '/channels/whatsapp',
     icon: 'whatsapp',
