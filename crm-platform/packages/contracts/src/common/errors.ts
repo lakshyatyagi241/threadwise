@@ -4,6 +4,7 @@ import { z } from 'zod';
  * Machine-readable application error codes. The frontend switches on `code`,
  * never on the human-readable message — messages get reworded, codes do not.
  */
+import { CPN_ERROR_CODES } from '../coupons-credits-referral-currency/errors';
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
 import { WABA_ERROR_CODES } from '../whatsapp-cloud-api-waba/errors';
@@ -15,6 +16,7 @@ import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
 
 export const ERROR_CODES = {
+  ...CPN_ERROR_CODES,
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
   ...WABA_ERROR_CODES,

@@ -1,13 +1,31 @@
-import { Body, Controller, Get, Headers, Param, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  PAYGW_PROOF_MAX_BYTES,
+  paygwConfirmRequestSchema,
   paygwOrdersQuerySchema,
+  paygwProofFieldsSchema,
+  uuidSchema,
   paygwPlanSlugParamSchema,
   paygwQuoteQuerySchema,
   paygwWalletQuoteQuerySchema,
   placePlanOrderRequestSchema,
   placeWalletOrderRequestSchema,
+  type PaygwConfirmRequest,
   type PaygwOrdersQuery,
+  type PaygwProofFields,
   type PaygwQuoteQuery,
   type PaygwWalletQuoteQuery,
   type PlacePlanOrderRequest,
@@ -15,8 +33,10 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { BuyerInvoiceService } from './buyer-invoice.service';
 import { CheckoutService } from './checkout.service';
 import { OrdersService } from './orders.service';
+import { ProofService } from './proof.service';
 
 /** A workspace buying from the platform (WD-PAYGW-009, 011, 031, 035). */
 @ApiTags('billing')
@@ -26,6 +46,8 @@ export class CheckoutController {
   constructor(
     private readonly checkout: CheckoutService,
     private readonly orders: OrdersService,
+    private readonly proofs: ProofService,
+    private readonly invoices: BuyerInvoiceService,
   ) {}
 
   @Get('checkout/wallet/quote')
@@ -75,5 +97,44 @@ export class CheckoutController {
   @ApiOperation({ summary: 'My purchases, newest first, with lifetime spend per currency' })
   listOrders(@Query(zodPipe(paygwOrdersQuerySchema)) q: PaygwOrdersQuery) {
     return this.orders.listMine(q);
+  }
+
+  @Post('orders/:id/proof')
+  @RequirePermission('paygw.checkout.create')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('proof', { limits: { fileSize: PAYGW_PROOF_MAX_BYTES + 1, files: 1 } }),
+  )
+  @ApiOperation({
+    summary:
+      'Attach proof of an offline payment (JPG, PNG, WEBP or PDF up to 4 MB) to a pending order',
+  })
+  submitProof(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+    @UploadedFile() file: { buffer: Buffer } | undefined,
+    @Body(zodPipe(paygwProofFieldsSchema)) body: PaygwProofFields,
+  ) {
+    return this.proofs.submit(id, file?.buffer, body);
+  }
+
+  @Post('orders/:id/confirm')
+  @HttpCode(200)
+  @RequirePermission('paygw.checkout.create')
+  @ApiOperation({
+    summary:
+      'An in-app client confirms its own order with what the provider returned (verified server side)',
+  })
+  confirm(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+    @Body(zodPipe(paygwConfirmRequestSchema)) body: PaygwConfirmRequest,
+  ) {
+    return this.orders.confirmMine(id, body);
+  }
+
+  @Get('orders/:id/invoice')
+  @RequirePermission('paygw.orders.read')
+  @ApiOperation({ summary: 'The invoice of one of my orders, ready to print' })
+  invoice(@Param('id', zodPipe(uuidSchema)) id: string) {
+    return this.invoices.view(id);
   }
 }

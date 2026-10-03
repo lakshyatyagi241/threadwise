@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  activeTheme,
   appendFooterToBody,
   brandEmail,
   brandName,
@@ -176,5 +177,15 @@ describe('legal links (WD-SET-030 rule 5)', () => {
     expect(legalUrl('terms', saved)).toBe('https://x.test/t');
     expect(legalUrl('privacy', saved)).toBe('/legal/privacy');
     expect(legalUrl('cookies', saved)).toBe('/legal/cookies');
+  });
+});
+
+describe('active theme (WD-SET-017)', () => {
+  it('the cookie wins, then the saved preference, then paper; doodle only from the cookie', () => {
+    expect(activeTheme('dark', 'bright')).toBe('dark');
+    expect(activeTheme('doodle')).toBe('doodle');
+    expect(activeTheme(undefined, 'bright')).toBe('bright');
+    expect(activeTheme('nonsense', 'doodle')).toBe('paper');
+    expect(activeTheme(null)).toBe('paper');
   });
 });
