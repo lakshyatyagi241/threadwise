@@ -23,7 +23,7 @@
     "arch": "depcruise --config .dependency-cruiser.cjs src",
     "seed:auth": "tsx src/modules/auth/cli/seed-auth.ts",
     "operator:create": "tsx src/modules/auth/cli/create-operator.ts",
-    "auto-reply:translate-existing": "tsx src/modules/localization-translation/cli/translate-existing.ts"
+    "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js"
   },
   "dependencies": {
     "@clerk/backend": "^3.18.1",
