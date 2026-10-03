@@ -2,7 +2,8 @@ import { Module, type OnModuleInit } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { TELEGRAM_API } from '../../infra/providers/channel-telegram/telegram.port';
 import { TelegramBotApiFactory } from '../../infra/providers/channel-telegram/telegram-bot-api.client';
-import { NoInboundHooks, NoMediaStore, OpenTelegramPlanGate } from './_shims/open-gates';
+import { NoInboundHooks, OpenTelegramPlanGate } from './_shims/open-gates';
+import { StorageMediaStore } from './_shims/storage-media-store';
 import { ChatInboxIngest } from './_shims/chat-inbox-ingest';
 import { SqlTelegramTemplates } from './_shims/sql-telegram-templates';
 import {
@@ -13,6 +14,7 @@ import {
   TELEGRAM_TEMPLATES,
 } from './_shims/tokens';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { BotsController } from './bots.controller';
 import { BotsRepository } from './bots.repository';
 import { BotsService } from './bots.service';
@@ -30,7 +32,7 @@ import { WebhookController } from './webhook.controller';
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [ChatConversationsModule],
+  imports: [ChatConversationsModule, PlatformSettingsModule],
   controllers: [BotsController, TgBroadcastsController, WebhookController],
   providers: [
     CryptoService,
@@ -47,7 +49,7 @@ import { WebhookController } from './webhook.controller';
     { provide: TELEGRAM_PLAN_GATE, useClass: OpenTelegramPlanGate },
     ChatInboxIngest,
     { provide: INBOX_INGEST, useExisting: ChatInboxIngest },
-    { provide: MEDIA_STORE, useClass: NoMediaStore },
+    { provide: MEDIA_STORE, useClass: StorageMediaStore },
     { provide: INBOUND_HOOKS, useClass: NoInboundHooks },
     { provide: TELEGRAM_TEMPLATES, useClass: SqlTelegramTemplates },
   ],
