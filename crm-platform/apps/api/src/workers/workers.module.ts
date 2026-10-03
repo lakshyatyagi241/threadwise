@@ -7,6 +7,7 @@ import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CallingVoiceWorkerModule } from '../modules/calling-voice';
 import { CatalogProductsWorkerModule } from '../modules/catalog-products';
+import { StorefrontBuilderWorkerModule } from '../modules/storefront-builder';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
 import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
@@ -62,6 +63,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     WabaWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
+    StorefrontBuilderWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,
     CampaignsWorkerModule,

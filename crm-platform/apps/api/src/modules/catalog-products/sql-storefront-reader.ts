@@ -35,6 +35,9 @@ const toStorefrontProduct = (r: Raw): StorefrontProduct => {
     brand: p.brand,
     stockQty: p.stockQty,
     metaRetailerId: p.metaRetailerId,
+    createdAt: p.createdAt,
+    weightGrams: p.weightGrams,
+    tags: p.tags,
   };
 };
 
