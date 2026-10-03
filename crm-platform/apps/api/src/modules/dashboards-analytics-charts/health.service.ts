@@ -9,6 +9,7 @@ import type { Redis } from 'ioredis';
 import {
   ERROR_CODES,
   type ClearQueueResponse,
+  type HealthActivity,
   type HealthCheck,
   type HealthQueueRow,
   type HealthResponse,
@@ -18,7 +19,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { AuthAuditService } from '../auth';
+import { AuthAuditService, PlatformStore } from '../auth';
 import { NodeBridgeSettingsService, NodeWorkerStatus } from '../node-bridge-runtime';
 import { overallState, queueState, shortError } from './health-rules';
 
@@ -42,6 +43,7 @@ export class HealthService {
     private readonly config: ConfigService,
     private readonly moduleRef: ModuleRef,
     private readonly audit: AuthAuditService,
+    private readonly store: PlatformStore,
     @Optional() private readonly bridge?: NodeBridgeSettingsService,
     @Optional() private readonly workers?: NodeWorkerStatus,
   ) {}
@@ -78,8 +80,64 @@ export class HealthService {
       checks,
       queues: queue.rows,
       vitals: await this.vitals(),
+      activity: await this.activity(),
+      throughput: await this.throughput(),
       ts: new Date().toISOString(),
     };
+  }
+
+  /** A counter that fails or finds no table reads 0 (WaDesk rule); one tx each so a failure cannot abort the others. */
+  private async count(query: ReturnType<typeof sql>): Promise<number> {
+    try {
+      return await this.store.tx(async (tx) => {
+        const r = await tx.execute(query);
+        return Number((r.rows[0] as { n: number | string } | undefined)?.n ?? 0);
+      });
+    } catch {
+      return 0;
+    }
+  }
+
+  /** WD-DASH-049: last 24 hours, every workspace. */
+  private async activity(): Promise<HealthActivity> {
+    const [messages, aiCalls, conversations, webhooks] = await Promise.all([
+      this.count(
+        sql`SELECT count(*)::int AS n FROM messages WHERE created_at >= now() - interval '24 hours'`,
+      ),
+      this.count(
+        sql`SELECT count(*)::int AS n FROM ai_token_usage WHERE created_at >= now() - interval '24 hours'`,
+      ),
+      this.count(
+        sql`SELECT count(*)::int AS n FROM conversations WHERE created_at >= now() - interval '24 hours'`,
+      ),
+      this.count(
+        sql`SELECT count(*)::int AS n FROM incoming_webhook_events WHERE created_at >= now() - interval '24 hours'`,
+      ),
+    ]);
+    return { messages, aiCalls, conversations, webhooks };
+  }
+
+  /** WD-DASH-049: 14 UTC days (today and 13 before), every direction and status, soft-deleted rows included like WaDesk. */
+  private async throughput(): Promise<Array<{ date: string; count: number }>> {
+    let rows: Array<{ d: string; n: number }> = [];
+    try {
+      rows = await this.store.tx(
+        async (tx) =>
+          (
+            await tx.execute(sql`
+            SELECT to_char(created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD') AS d, count(*)::int AS n FROM messages
+            WHERE created_at >= date_trunc('day', now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC' - interval '13 days' GROUP BY 1`)
+          ).rows as Array<{ d: string; n: number }>,
+      );
+    } catch {
+      rows = [];
+    }
+    const by = new Map(rows.map((r) => [r.d, Number(r.n)]));
+    const today = Date.now();
+    return Array.from({ length: 14 }, (_, i) => {
+      const date = new Date(today - (13 - i) * 86_400_000).toISOString().slice(0, 10);
+      return { date, count: by.get(date) ?? 0 };
+    });
   }
 
   /** One probe: a thrown error downgrades only its own card (rule 2). */

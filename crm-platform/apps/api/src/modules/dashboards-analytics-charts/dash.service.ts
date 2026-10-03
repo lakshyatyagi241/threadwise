@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
+  type DashWidgets,
+  type AnalyticsPanels,
   type AnalyticsQuery,
   type AnalyticsResponse,
   type DashRange,
@@ -18,7 +20,10 @@ import {
   zonedHourStart,
   zonedMidnight,
 } from './dash-window';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { DashRepository } from './dash.repository';
+import { DashWidgetsRepository } from './dash-widgets.repository';
+import { DashPanelsRepository } from './dash-panels.repository';
 
 const HOUR_MS = 3_600_000;
 const iso = (d: Date): string => d.toISOString();
@@ -32,7 +37,43 @@ export class DashService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: DashRepository,
+    private readonly widgetsRepo: DashWidgetsRepository,
+    private readonly panelsRepo: DashPanelsRepository,
+    private readonly plans: PlanEntitlementService,
   ) {}
+
+  /** WaDesk's hard-coded slot count when the plan sets no device limit. */
+  static readonly DEFAULT_SLOTS = 6;
+
+  /** The dashboard's data cards (WD-DASH-006, 011, 013..016, 019); one transaction, one payload. */
+  async widgets(range: DashRange, now: Date = new Date()): Promise<DashWidgets> {
+    const { orgId } = RequestContextStore.require();
+    const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
+    const deviceCap = await this.plans.limit(orgId, 'devices');
+    return this.db.tx(async (tx) => {
+      const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
+      const w = resolveDashWindow(range, tz, now);
+      const devices = await this.widgetsRepo.devices(tx, orgId);
+      return {
+        contacts: await this.widgetsRepo.contacts(tx, orgId, w.from),
+        campaigns: await this.widgetsRepo.campaigns(tx, orgId),
+        devices: {
+          ...devices,
+          slotCap: Math.max(devices.total, deviceCap > 0 ? deviceCap : DashService.DEFAULT_SLOTS),
+        },
+        templates: await this.widgetsRepo.templates(tx, orgId, w.from, w.to),
+        inbox: await this.widgetsRepo.inbox(tx, orgId),
+        pipeline: pipelineOn
+          ? await this.widgetsRepo.pipeline(
+              tx,
+              orgId,
+              new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)),
+            )
+          : null,
+        activity: await this.widgetsRepo.activity(tx, orgId),
+      };
+    });
+  }
 
   async summary(range: DashRange, now: Date = new Date()): Promise<DashSummaryResponse> {
     const { orgId } = RequestContextStore.require();
@@ -101,6 +142,25 @@ export class DashService {
             ? { start: iso(new Date(now.getTime() - (slot + 1) * HOUR_MS)), count: top }
             : null,
         avgPerHour: Math.round(hourly.reduce((a, b) => a + b, 0) / 24),
+      };
+    });
+  }
+
+  /** The analytics list panels (WD-DASH-026, 028, 030) for the same window rules as the overview. */
+  async panels(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsPanels> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
+      const w = resolveAnalyticsWindow(q, tz, now);
+      if (!w)
+        throw AppError.validation('The range is too long', [
+          { path: 'from', message: 'at most 366 days' },
+        ]);
+      return {
+        devices: await this.panelsRepo.devices(tx, orgId),
+        templates: await this.panelsRepo.templates(tx, orgId, w.from, w.to),
+        contacts: await this.panelsRepo.contacts(tx, orgId, w.from, w.to),
+        team: await this.panelsRepo.team(tx, orgId, w.from, w.to),
       };
     });
   }
