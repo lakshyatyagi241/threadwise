@@ -19,6 +19,7 @@ import {
   OperatorGuidebookController,
 } from './operator-site.controller';
 import { PublicCmsController } from './public-cms.controller';
+import { CmsUploadService } from './upload.service';
 import {
   WorkspaceAnnouncementsController,
   WorkspaceGuidebookController,
@@ -51,6 +52,7 @@ import {
     PricingService,
     AnnouncementService,
     GuidebookService,
+    CmsUploadService,
   ],
 })
 export class CmsModule {}

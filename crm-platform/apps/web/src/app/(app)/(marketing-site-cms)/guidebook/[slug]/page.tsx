@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { guidebookArticleSchema, guidebookBrowseResponseSchema } from '@crm/contracts';
+import { GuidebookHeader } from '@/features/marketing-site-cms/guidebook/header';
 import { userCms } from '@/features/marketing-site-cms/guidebook/server';
 import { GuidebookSidebar } from '@/features/marketing-site-cms/guidebook/sidebar';
 import { VoteButtons } from '@/features/marketing-site-cms/guidebook/vote';
@@ -26,57 +27,102 @@ export default async function GuidebookArticle({ params }: Props) {
   const t = await getTranslations('marketing-site-cms.guidebook');
   const fmt = await getFormatter();
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
-      <Link href="/guidebook" className="text-sm underline">
-        {t('back')}
-      </Link>
-      <div className="flex flex-col gap-6 md:flex-row">
-        <GuidebookSidebar
-          categories={list?.categories ?? []}
-          total={list?.totalPublished ?? 0}
-          active={article.category}
-        />
-        <article className="min-w-0 max-w-3xl flex-1 space-y-5">
-          <header className="space-y-2">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              <Link href={`/guidebook?category=${encodeURIComponent(article.category)}`}>
-                {article.category}
-              </Link>{' '}
-              · {t('readMinutes', { count: article.readMinutes })} · {t('updated')}{' '}
-              {fmt.relativeTime(new Date(article.updatedAt))}
-            </p>
-            <h1 className="text-3xl font-semibold tracking-tight">{article.title}</h1>
-          </header>
-          <div
-            className="space-y-4 leading-relaxed [&_a]:underline [&_blockquote]:border-s-4 [&_blockquote]:border-border [&_blockquote]:ps-4 [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-4 [&_h3]:font-semibold [&_ol]:list-decimal [&_ol]:ps-6 [&_pre]:overflow-x-auto [&_pre]:rounded [&_pre]:bg-muted [&_pre]:p-3 [&_ul]:list-disc [&_ul]:ps-6"
-            dangerouslySetInnerHTML={{ __html: article.bodyHtml }}
+    <>
+      <GuidebookHeader
+        backHref="/guidebook"
+        crumbs={`${t('crumb')} / ${article.category}`}
+        accent={article.title}
+      />
+      <main className="mx-auto max-w-none px-4 py-6 sm:px-6 lg:px-7">
+        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[280px_minmax(0,1fr)]">
+          <GuidebookSidebar
+            categories={list?.categories ?? []}
+            total={list?.totalPublished ?? 0}
+            active={article.category}
           />
-          <VoteButtons slug={article.slug} initial={article.myVote} />
-          <p className="text-sm text-muted-foreground">
-            {t('stuck')}{' '}
-            <Link href="/support" className="underline">
-              {t('openTicket')}
-            </Link>
-          </p>
-          {article.related.length > 0 && (
-            <section className="space-y-3 border-t border-border pt-4">
-              <h2 className="text-lg font-semibold">{t('related')}</h2>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {article.related.map((a) => (
-                  <Link
-                    key={a.slug}
-                    href={`/guidebook/${a.slug}`}
-                    className="rounded-lg border border-border p-3 hover:bg-muted"
-                  >
-                    <span className="block text-xs text-muted-foreground">{a.category}</span>
-                    <span className="font-medium">{a.title}</span>
-                  </Link>
-                ))}
+          <article className="min-w-0 rounded-[14px] border border-border bg-background shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border px-4 py-5 sm:px-7">
+              <Link
+                href="/guidebook"
+                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary hover:underline"
+              >
+                <svg
+                  viewBox="0 0 16 16"
+                  className="size-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  aria-hidden
+                >
+                  <path d="M10 4l-4 4 4 4" />
+                </svg>
+                {t('back')}
+              </Link>
+              <div className="flex items-center gap-2 text-[11px]">
+                <span className="font-mono text-muted-foreground">
+                  {t('readMinutes', { count: article.readMinutes })}
+                </span>
+                <span className="text-muted-foreground">·</span>
+                <span className="text-muted-foreground">
+                  {t('updated')} {fmt.relativeTime(new Date(article.updatedAt))}
+                </span>
               </div>
-            </section>
-          )}
-        </article>
-      </div>
-    </div>
+            </div>
+            <div className="px-4 py-6 sm:px-7">
+              <div className="mb-3 flex items-center gap-2">
+                <Link
+                  href={`/guidebook?category=${encodeURIComponent(article.category)}`}
+                  className="rounded-full bg-wa-mint px-2 py-0.5 font-mono text-[10.5px] text-wa-deep"
+                >
+                  {article.category}
+                </Link>
+              </div>
+              <h2 className="text-[32px] font-semibold leading-tight tracking-[-0.02em]">
+                {article.title}
+              </h2>
+              <div
+                className="mt-5 max-w-[760px] space-y-4 text-[14px] leading-[1.7] text-foreground/80 [&_a]:text-primary [&_a]:underline [&_blockquote]:border-s-4 [&_blockquote]:border-border [&_blockquote]:ps-4 [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-4 [&_h3]:font-semibold [&_ol]:list-decimal [&_ol]:ps-6 [&_pre]:overflow-x-auto [&_pre]:rounded [&_pre]:bg-muted [&_pre]:p-3 [&_ul]:list-disc [&_ul]:ps-6"
+                dangerouslySetInnerHTML={{ __html: article.bodyHtml }}
+              />
+              <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
+                <VoteButtons slug={article.slug} initial={article.myVote} />
+                <Link
+                  href="/support"
+                  className="text-[12px] font-semibold text-primary hover:underline"
+                >
+                  {t('stuck')} {t('openTicket')}
+                </Link>
+              </div>
+            </div>
+            {article.related.length > 0 && (
+              <div className="rounded-b-[14px] border-t border-border bg-muted/30 px-4 py-5 sm:px-7">
+                <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                  {t('related')}
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {article.related.slice(0, 4).map((a) => (
+                    <Link
+                      key={a.slug}
+                      href={`/guidebook/${a.slug}`}
+                      className="block rounded-[10px] border border-border bg-background p-4 transition hover:border-primary"
+                    >
+                      <div className="mb-1.5 flex items-center gap-2">
+                        <span className="rounded-full bg-wa-mint px-2 py-0.5 font-mono text-[10.5px] text-wa-deep">
+                          {a.category}
+                        </span>
+                        <span className="font-mono text-[10.5px] text-muted-foreground">
+                          {t('readMinutes', { count: a.readMinutes })}
+                        </span>
+                      </div>
+                      <div className="text-[15px] font-semibold leading-tight">{a.title}</div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </article>
+        </div>
+      </main>
+    </>
   );
 }
