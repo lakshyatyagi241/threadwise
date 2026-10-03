@@ -7,12 +7,21 @@ import { useState, useTransition } from 'react';
 import { Popover, cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { LocaleSwitcher } from '@/features/localization-translation/locale-switcher';
+import { useOptionalShellData } from './shell-data';
+import { TOUR_START_EVENT } from '@/features/admin-console-shell/tour/tour-model';
 import { setTheme } from './actions';
 
 export interface ShellUser {
   fullName: string;
   email: string;
   avatarUrl?: string | null;
+}
+
+export interface ProfileMenuData {
+  plan: string;
+  role: string;
+  /** Formatted balance next to the Wallet row; the row shows without it when the wallet domain is absent. */
+  walletLabel?: string;
 }
 
 export function Avatar({ user, className }: { user: ShellUser; className?: string }) {
@@ -37,6 +46,7 @@ export function UserMenu({
   theme,
   settingsHref,
   helpItems = [],
+  profile: profileProp,
 }: {
   user: ShellUser;
   theme: 'light' | 'dark';
@@ -44,8 +54,13 @@ export function UserMenu({
   settingsHref?: string;
   /** Support and Guidebook: a screen that is not built yet shows disabled with a "Soon" mark. */
   helpItems?: readonly ResolvedNavItem[];
+  /** The rich profile block (WD-ASHELL-019): plan and role chip, wallet, orders, plans and the tour replay. */
+  profile?: ProfileMenuData;
 }) {
   const t = useTranslations('shell');
+  const tm = useTranslations('admin-console-shell.profileMenu');
+  const shellData = useOptionalShellData();
+  const profile = profileProp ?? shellData?.profile;
   const tAll = useTranslations();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -93,6 +108,14 @@ export function UserMenu({
             </div>
           </div>
         </div>
+        {profile && (
+          <p
+            className="mx-3 mb-1 inline-flex rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
+            data-testid="profile-chip"
+          >
+            {tm('chip', { plan: profile.plan, role: profile.role })}
+          </p>
+        )}
         <div className="my-1 h-px bg-border" />
         {settingsHref && (
           <Link href={settingsHref} onClick={() => setOpen(false)} className={row}>
@@ -102,6 +125,32 @@ export function UserMenu({
         <Link href="/account" onClick={() => setOpen(false)} className={row}>
           {t('account')}
         </Link>
+        {profile && (
+          <>
+            <Link href="/billing/wallet" onClick={() => setOpen(false)} className={row}>
+              <span>{tm('wallet')}</span>
+              {profile.walletLabel && (
+                <span className="tabular-nums text-muted-foreground">{profile.walletLabel}</span>
+              )}
+            </Link>
+            <Link href="/billing/orders" onClick={() => setOpen(false)} className={row}>
+              {tm('orders')}
+            </Link>
+            <Link href="/account/plans" onClick={() => setOpen(false)} className={row}>
+              {tm('plans')}
+            </Link>
+            <button
+              type="button"
+              className={row}
+              onClick={() => {
+                setOpen(false);
+                window.dispatchEvent(new CustomEvent(TOUR_START_EVENT));
+              }}
+            >
+              {tm('tour')}
+            </button>
+          </>
+        )}
         <div className={row}>
           <span>{t('language')}</span>
           <LocaleSwitcher />

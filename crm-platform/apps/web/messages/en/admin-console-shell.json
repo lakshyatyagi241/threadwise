@@ -10,7 +10,8 @@
     "shell": {
       "collapse": "Collapse sidebar",
       "expand": "Expand sidebar",
-      "toggleGroup": "Show or hide {group}"
+      "toggleGroup": "Show or hide {group}",
+      "backToApp": "Back to app"
     },
     "overview": {
       "title": "Platform console",
@@ -61,6 +62,585 @@
         "support": "Support",
         "more": "More"
       }
+    },
+    "header": {
+      "health": {
+        "title": "Platform health",
+        "ok": "All systems normal",
+        "stuck": "{count, plural, one {# stuck job} other {# stuck jobs}}",
+        "down": "Database unreachable"
+      },
+      "bell": {
+        "title": "Notifications",
+        "labelUnread": "Notifications, {count} unread",
+        "inbox": "Inbox",
+        "markAllRead": "Mark all read",
+        "clearAll": "Clear all",
+        "viewAll": "View all",
+        "loading": "Loading...",
+        "empty": "No notifications yet."
+      },
+      "account": {
+        "menu": "Account menu",
+        "open": "Account menu for {name}",
+        "myAccount": "My account",
+        "settings": "Settings",
+        "overview": "Admin overview",
+        "signOut": "Sign out"
+      },
+      "feed": {
+        "signup": "New signup",
+        "paymentReceived": "Payment received",
+        "newOrder": "New order",
+        "newTicket": "New support ticket",
+        "newContactMessage": "New contact message",
+        "newWorkspace": "New workspace"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "Admin - Platform activity - Notifications",
+      "title": "Admin notifications",
+      "note": "Everything happening across the platform: new signups, payments, support tickets, contact messages and new workspaces. Separate from a workspace member's personal notifications.",
+      "tiles": {
+        "all": "All events",
+        "signup": "Signups",
+        "payment": "Payments",
+        "ticket": "Support",
+        "contact": "Messages",
+        "workspace": "Workspaces"
+      },
+      "pills": {
+        "all": "All",
+        "signup": "Signups",
+        "payment": "Payments",
+        "ticket": "Support",
+        "contact": "Messages",
+        "workspace": "Workspaces"
+      },
+      "kinds": {
+        "signup": "Signup",
+        "payment": "Payment",
+        "ticket": "Support",
+        "contact": "Message",
+        "workspace": "Workspace"
+      },
+      "last30": "last 30 days",
+      "search": "Search events...",
+      "empty": "No platform activity in this view.",
+      "loadFailed": "The feed could not be loaded.",
+      "cols": {
+        "type": "Type",
+        "event": "Event",
+        "detail": "Detail",
+        "when": "When",
+        "open": "Open"
+      },
+      "showing": "Showing {count, plural, one {# recent event} other {# recent events}}",
+      "live": "Live feed, newest first"
+    },
+    "settings": {
+      "workspace": {
+        "label": "Workspace settings",
+        "description": "Name, timezone, currency, notifications, data export and deleting the workspace.",
+        "keywords": "workspace, name, timezone, currency, notifications, export, delete, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "Workspace",
+      "titleTail": "settings",
+      "subtitle": "Configure your workspace, team, and integrations.",
+      "tabs": {
+        "general": "General",
+        "branding": "Branding",
+        "team": "Team & roles",
+        "notifications": "Notifications",
+        "aikeys": "AI keys",
+        "security": "Security",
+        "api": "API & webhooks",
+        "data": "Data & export",
+        "appearance": "Appearance"
+      },
+      "general": {
+        "workspace": "Workspace",
+        "ownerOnly": "Only the workspace owner can change timezone, currency, or workspace name.",
+        "name": "Workspace name",
+        "url": "Workspace URL",
+        "urlHint": "URL slug isn't editable here. Contact support to change.",
+        "timezone": "Default timezone",
+        "timezoneHint": "All scheduled sends, business-hours checks, and SLA timers run in this zone.",
+        "currency": "Currency",
+        "currencyHint": "Used on plan checkout, invoices, and wallet display.",
+        "save": "Save",
+        "saved": "Settings saved.",
+        "saveFailed": "The settings could not be saved.",
+        "loadFailed": "The settings could not be loaded.",
+        "hours": {
+          "title": "Working hours",
+          "note": "Shown for reference. Working hours are not enforced yet, so these controls are read-only.",
+          "weekdays": "Mon - Fri",
+          "saturday": "Saturday",
+          "sunday": "Sunday",
+          "from": "From",
+          "to": "To"
+        },
+        "preferences": {
+          "title": "Auto AI summarize",
+          "note": "Get a live AI review on every message-body textarea: what's working in green, what to fix in red, plus a one-tap \"best version\" you can paste back. When off, the same review runs on demand from the sparkle icon inside the toolbar.",
+          "save": "Save",
+          "saved": "Preference saved.",
+          "saveFailed": "The preference could not be saved."
+        }
+      },
+      "notifications": {
+        "title": "Workspace notifications",
+        "note": "Toggle delivery per channel. Anything turned off here will never produce an in-app bell entry, email, or Slack message.",
+        "readOnly": "Read-only. The workspace owner can edit these.",
+        "save": "Save preferences",
+        "saved": "Notification preferences saved.",
+        "saveFailed": "The preferences could not be saved.",
+        "loadFailed": "The preferences could not be loaded.",
+        "specificEvents": "Specific events",
+        "byCategory": "By category",
+        "event": "Event",
+        "category": "Category",
+        "channels": {
+          "inapp": "In-app",
+          "email": "Email",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "Device connected",
+          "device_disconnected": "Device disconnected",
+          "campaign_completed": "Campaign completed",
+          "campaign_failed": "Campaign failed",
+          "broadcast_completed": "Broadcast completed",
+          "new_customer_reply": "New customer reply",
+          "mention_in_inbox": "You were @mentioned",
+          "conversation_assigned": "Conversation assigned to you",
+          "sla_breached": "SLA breached",
+          "wallet_low_balance": "Wallet low balance",
+          "plan_changed": "Plan upgraded / downgraded",
+          "payment_failed": "Payment failed",
+          "webhook_delivery_failed": "Webhook delivery failed",
+          "flow_started": "Flow started",
+          "flow_failed": "Flow failed",
+          "integration_disconnected": "Integration disconnected",
+          "appointment_booked": "Appointment booked",
+          "weekly_summary": "Weekly summary"
+        },
+        "categories": {
+          "device": "Devices",
+          "contact": "Contacts",
+          "campaign": "Campaigns",
+          "broadcast": "Broadcasts",
+          "template": "Templates",
+          "chat": "Chat",
+          "webhook": "Webhooks",
+          "billing": "Billing",
+          "system": "System"
+        },
+        "slackLabel": "Slack incoming webhook URL",
+        "slackHint": "Create one in Slack under Apps, Incoming Webhooks. Events with the Slack toggle on post here.",
+        "channelStatus": "Channel status",
+        "statusInapp": "In-app bell: live, drives the badge in the top header.",
+        "statusEmailLive": "Email: live, sent through the platform mail settings.",
+        "statusEmailOff": "Email: sent once SMTP is configured by the platform administrator.",
+        "statusSlackOn": "Slack: webhook saved.",
+        "statusSlackOff": "Slack: add a webhook URL to turn it on."
+      },
+      "data": {
+        "loadFailed": "The export counts could not be loaded.",
+        "exportTitle": "Data export",
+        "exportNote": "Download your workspace data as CSV. Each link streams a fresh export.",
+        "exportOwnerOnly": "Only the workspace owner can download exports.",
+        "types": {
+          "contacts": "Contacts",
+          "conversations": "Conversations",
+          "messages": "Messages"
+        },
+        "count": {
+          "contacts": "{count, plural, one {# record} other {# records}} · CSV",
+          "conversations": "{count, plural, one {# thread} other {# threads}} · CSV",
+          "messages": "{count, plural, one {# message} other {# messages}} · CSV"
+        },
+        "delete": {
+          "title": "Delete workspace",
+          "note": "Permanently delete this workspace, all conversations, automations, and billing history.",
+          "irreversible": "Cannot be undone.",
+          "ownerOnly": "Only the workspace owner can delete the workspace.",
+          "typeName": "Type the workspace name:",
+          "password": "Confirm with password",
+          "submit": "Delete workspace permanently",
+          "cancel": "Cancel",
+          "confirmTitle": "Delete this workspace?",
+          "confirmMessage": "\"{name}\" and everything in it will be deleted and everyone will be signed out. This is irreversible.",
+          "failed": "The workspace could not be deleted."
+        }
+      },
+      "groups": {
+        "workspace": "Workspace",
+        "system": "System"
+      },
+      "railLabel": "Settings sections",
+      "personal": {
+        "title": "Your account",
+        "body": "Profile, password and personal preferences."
+      },
+      "api": {
+        "restTitle": "General REST API",
+        "rest1": "Create an API key to read and write contacts, conversations and messages from your own systems.",
+        "rest2": "Every key is scoped to this workspace and can be revoked at any time.",
+        "rest3": "Requests are limited per minute according to your plan.",
+        "webhooksTitle": "Webhooks",
+        "webhooksBody": "Send events to your own endpoints and receive events from other tools.",
+        "manage": "Manage integrations"
+      },
+      "appearance": {
+        "title": "Appearance",
+        "note": "Choose how the app looks for you. This is the same choice as the sun and moon button in the header.",
+        "choices": {
+          "light": {
+            "label": "Light",
+            "body": "Bright pages with soft paper tones."
+          },
+          "dark": {
+            "label": "Dark",
+            "body": "Dim pages that are easier on the eyes at night."
+          }
+        },
+        "save": "Save",
+        "saved": "Appearance updated."
+      }
+    },
+    "topNav": {
+      "more": "More",
+      "search": "Search",
+      "premium": "Premium feature: upgrade your plan to unlock"
+    },
+    "palette": {
+      "title": "Search pages",
+      "placeholder": "Search pages, settings, tools...",
+      "empty": "No results for \"{query}\"",
+      "hintNavigate": "Up and down to navigate",
+      "hintOpen": "Enter to open",
+      "hintToggle": "Ctrl K to toggle",
+      "tags": {
+        "page": "page",
+        "account": "account",
+        "plan": "plan",
+        "help": "help",
+        "system": "system"
+      },
+      "entries": {
+        "profile": "Profile",
+        "profileHint": "Your name, photo and contact details",
+        "password": "Password and security",
+        "passwordHint": "Password, two-factor sign-in and active sessions"
+      }
+    },
+    "strip": {
+      "jump": "Search or jump to...",
+      "account": {
+        "group": "Account",
+        "account": "Account",
+        "wallet": "Wallet",
+        "notifications": "Notifications"
+      },
+      "greeting": {
+        "midnightOil": "Burning the midnight oil",
+        "morning": "Good morning",
+        "afternoon": "Good afternoon",
+        "evening": "Good evening",
+        "night": "Good night"
+      }
+    },
+    "profileMenu": {
+      "chip": "{plan} plan - {role}",
+      "wallet": "Wallet",
+      "orders": "Order history",
+      "plans": "Pricing and plans",
+      "tour": "Take the tour"
+    },
+    "quickAccess": {
+      "title": "Quick access",
+      "open": "Open quick access",
+      "close": "Close",
+      "edit": "Edit shortcuts",
+      "editTitle": "Edit quick access",
+      "editNote": "Pin up to ten pages or your own links. They show on the dashboard and in the side drawer.",
+      "dashboard": "Dashboard",
+      "allApps": "All apps",
+      "limit": "You can pin up to {max} shortcuts.",
+      "saveFailed": "The shortcuts could not be saved.",
+      "customLinks": "Custom links",
+      "linkLabel": "Label",
+      "linkUrl": "Link",
+      "addLink": "Add a link",
+      "removeLink": "Remove this link",
+      "counter": "{count} / {max} pinned",
+      "cancel": "Cancel",
+      "save": "Save shortcuts",
+      "problem": {
+        "incomplete": "A link needs a label and an address.",
+        "unsafe": "Use an address inside this app (starting with one slash) or an http or https address."
+      },
+      "catalog": {
+        "inbox": {
+          "label": "Unified Inbox",
+          "desc": "Every conversation in one place"
+        },
+        "contacts": {
+          "label": "Contacts",
+          "desc": "Your audience and their details"
+        },
+        "campaigns": {
+          "label": "Campaigns",
+          "desc": "Plan and send campaigns"
+        },
+        "broadcasts": {
+          "label": "Broadcasts",
+          "desc": "Send one message to many contacts"
+        },
+        "templates": {
+          "label": "Templates",
+          "desc": "Approved message templates"
+        },
+        "flows": {
+          "label": "Flows",
+          "desc": "Automate conversations"
+        },
+        "scheduled": {
+          "label": "Scheduled",
+          "desc": "Messages waiting to go out"
+        },
+        "catalog": {
+          "label": "Catalog",
+          "desc": "Products you sell on WhatsApp"
+        },
+        "store": {
+          "label": "Store",
+          "desc": "Your storefront and orders"
+        },
+        "deals": {
+          "label": "Sales Pipeline",
+          "desc": "Deals by stage"
+        },
+        "analytics": {
+          "label": "Analytics",
+          "desc": "Delivery and response numbers"
+        },
+        "auto-reply": {
+          "label": "Auto Reply",
+          "desc": "Keyword and out-of-hours replies"
+        },
+        "devices": {
+          "label": "Devices",
+          "desc": "Connected WhatsApp numbers"
+        },
+        "chatbots": {
+          "label": "Chat Widgets",
+          "desc": "Chat widget for your website"
+        },
+        "ai": {
+          "label": "AI Assistants",
+          "desc": "Assistants that answer for you"
+        },
+        "appointments": {
+          "label": "Appointments",
+          "desc": "Bookings and availability"
+        },
+        "webhooks": {
+          "label": "Webhooks",
+          "desc": "Send events to other systems"
+        },
+        "history": {
+          "label": "Message Log",
+          "desc": "Every message sent and received"
+        },
+        "account": {
+          "label": "Account",
+          "desc": "Profile, plan and wallet"
+        },
+        "more": {
+          "label": "More apps",
+          "desc": "Every tool in one page"
+        }
+      }
+    },
+    "announcements": {
+      "label": "Announcements",
+      "dismiss": "Dismiss"
+    },
+    "tour": {
+      "close": "Close tour",
+      "back": "Back",
+      "next": "Next",
+      "done": "Done",
+      "progress": "{current} of {total}",
+      "steps": {
+        "welcome": {
+          "title": "Welcome to {app}",
+          "body": "A quick tour of the places you will use most. It takes under a minute."
+        },
+        "navbar": {
+          "title": "Your menu",
+          "body": "Everything you do day to day is one click away in the top bar."
+        },
+        "metaads": {
+          "title": "Meta Ads",
+          "body": "Run click-to-WhatsApp ads and see what they bring in."
+        },
+        "campaigns": {
+          "title": "Campaigns",
+          "body": "Plan, send and track WhatsApp campaigns."
+        },
+        "flows": {
+          "title": "Flows",
+          "body": "Build automations that reply for you."
+        },
+        "templates": {
+          "title": "Templates",
+          "body": "Keep your approved message templates here."
+        },
+        "devices": {
+          "title": "Channels",
+          "body": "Connect the numbers and accounts you send from."
+        },
+        "more": {
+          "title": "More",
+          "body": "Every other tool lives here, grouped and searchable."
+        },
+        "kpi": {
+          "title": "Your numbers",
+          "body": "Messages, replies and delivery at a glance."
+        },
+        "newCampaign": {
+          "title": "Start a campaign",
+          "body": "Create your first campaign from here."
+        },
+        "pipeline": {
+          "title": "Sales pipeline",
+          "body": "Follow deals from first message to won."
+        }
+      }
+    },
+    "more": {
+      "titleLead": "More",
+      "titleTail": "features",
+      "subtitle": "Every tool in one place.",
+      "navigation": "Navigation",
+      "allTools": "All tools",
+      "noTools": "Nothing here yet.",
+      "tabs": {
+        "all": "All",
+        "automation": "Automation",
+        "data": "Data",
+        "help": "Help"
+      },
+      "plan": "Your plan",
+      "managePlan": "Manage plan",
+      "wallet": "Wallet",
+      "topUp": "Top up",
+      "tips": {
+        "title": "Tip",
+        "pager": "Tips",
+        "templates": {
+          "title": "Use templates",
+          "body": "Approved templates reach customers outside the 24 hour window."
+        },
+        "flows": {
+          "title": "Automate replies",
+          "body": "A flow can answer the same question for you every time."
+        },
+        "palette": {
+          "title": "Jump anywhere",
+          "body": "Press Ctrl K to search every page."
+        },
+        "scheduled": {
+          "title": "Schedule ahead",
+          "body": "Queue a message now and let it go out at the right time."
+        },
+        "wallet": {
+          "title": "Watch your balance",
+          "body": "Top up before it runs low so sends never stop."
+        }
+      },
+      "shortcuts": {
+        "title": "Shortcuts",
+        "customise": "Customise",
+        "empty": "No shortcuts selected. Use Customise to add some.",
+        "editTitle": "Customise shortcuts",
+        "emptyEditor": "No shortcuts selected",
+        "up": "Move {item} up",
+        "down": "Move {item} down",
+        "remove": "Remove {item}",
+        "customTitle": "Title",
+        "customSubtitle": "Subtitle",
+        "customUrl": "Link",
+        "customProblem": "A custom shortcut needs a title and a link.",
+        "addCustom": "Add custom shortcut",
+        "reset": "Reset defaults",
+        "cancel": "Cancel",
+        "save": "Save",
+        "presets": {
+          "new-auto-reply": {
+            "title": "New auto reply",
+            "subtitle": "Answer common questions automatically"
+          },
+          "schedule-send": {
+            "title": "Schedule send",
+            "subtitle": "Queue a message for later"
+          },
+          "test-webhook": {
+            "title": "Webhooks",
+            "subtitle": "Send events to other systems"
+          },
+          "export-history": {
+            "title": "Message history",
+            "subtitle": "Review and export what was sent"
+          },
+          "contact-support": {
+            "title": "Contact support",
+            "subtitle": "Ask the team for help"
+          },
+          "new-broadcast": {
+            "title": "New broadcast",
+            "subtitle": "Message many contacts at once"
+          },
+          "open-contacts": {
+            "title": "Contacts",
+            "subtitle": "Your audience"
+          },
+          "pair-device": {
+            "title": "Connect a number",
+            "subtitle": "Pair a WhatsApp number"
+          },
+          "team-inbox": {
+            "title": "Inbox",
+            "subtitle": "Every conversation"
+          },
+          "create-flow": {
+            "title": "Create flow",
+            "subtitle": "Build an automation"
+          },
+          "new-template": {
+            "title": "New template",
+            "subtitle": "Write a message template"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, one {1 unread conversation} other {# unread conversations}}",
+      "pill": "{count, plural, one {new message} other {new messages}}",
+      "dismiss": "Dismiss until something newer arrives",
+      "title": "New messages",
+      "viewInbox": "Open the inbox"
+    },
+    "connectDevice": {
+      "title": "Connect a number",
+      "close": "Close",
+      "connected": "Number connected"
     }
   }
 }
