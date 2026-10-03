@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { quickAccessResponseSchema } from '@crm/contracts';
+import { dashQuickAccessResponseSchema as quickAccessResponseSchema } from '@crm/contracts';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 
 /** Quick-access tiles over HTTP (WD-DASH-009). */

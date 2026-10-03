@@ -12,9 +12,9 @@ import {
   type DashThroughputResponse,
 } from '@crm/contracts';
 import {
-  quickAccessResponseSchema,
+  dashQuickAccessResponseSchema as quickAccessResponseSchema,
   type QuickAccessItem,
-  type QuickAccessResponse,
+  type DashQuickAccessResponse as QuickAccessResponse,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 
