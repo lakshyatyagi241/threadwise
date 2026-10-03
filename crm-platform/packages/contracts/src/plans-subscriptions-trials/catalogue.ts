@@ -85,6 +85,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   sales_pipeline: 'Sales pipeline',
   appointment_booking: 'Appointment booking',
   chatbot_widgets: 'Chatbot widgets',
+  wa_storefront: 'WhatsApp catalog',
   inbox_sla: 'SLA policies',
   inbox_routing: 'Routing rules',
   inbox_kanban: 'Kanban view',
