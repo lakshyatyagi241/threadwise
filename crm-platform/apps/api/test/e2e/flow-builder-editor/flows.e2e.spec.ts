@@ -577,9 +577,16 @@ describe('templates: gallery, clone and the operator catalogue (WD-FLB-010, 011,
     const none = await ops('post', '/flow-templates').send({ name: 'No graph', flowType: 'chat' });
     expect(none.status).toBe(422);
     expect(code(none)).toBe('FLB_TEMPLATE_GRAPH_REQUIRED');
-    const noNodes = await tpl({ payload: { nope: true } });
-    expect(noNodes.status).toBe(422);
-    expect(noNodes.body.detail).toBe("That doesn't look like a valid flow (missing flowNodes).");
+    // QUIRK: JSON that is neither an export wrapper nor a graph is "no graph supplied" (WaDesk's extractGraph returns null).
+    const nothing = await tpl({ payload: { nope: true } });
+    expect(nothing.status).toBe(422);
+    expect(code(nothing)).toBe('FLB_TEMPLATE_GRAPH_REQUIRED');
+    // A graph or wrapper whose flowNodes is missing or not a list is the "doesn't look like a valid flow" error.
+    for (const payload of [{ flow_data: {} }, { flowNodes: 'x' }]) {
+      const noNodes = await tpl({ payload });
+      expect(noNodes.status).toBe(422);
+      expect(noNodes.body.detail).toBe("That doesn't look like a valid flow (missing flowNodes).");
+    }
     expect((await tpl({ sortOrder: 10000 })).status).toBe(422);
     expect((await tpl({ sortOrder: -1 })).status).toBe(422);
     expect((await tpl({ name: ' ' })).status).toBe(422);
@@ -592,7 +599,10 @@ describe('templates: gallery, clone and the operator catalogue (WD-FLB-010, 011,
     const res = await ops('post', '/flow-templates').send({ name: 'From a flow', flowType: 'chat', sourceFlowId: f.id });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     expect(res.body.steps).toBe(2);
-    expect((await ops('post', '/flow-templates').send({ name: 'Ghost', flowType: 'chat', sourceFlowId: '11111111-1111-4111-8111-111111111111' })).status).toBe(404);
+    // A flow id that matches nothing is "no graph supplied" (WaDesk's Flow::find returned null), so a create asks for the flow.
+    const ghost = await ops('post', '/flow-templates').send({ name: 'Ghost', flowType: 'chat', sourceFlowId: '11111111-1111-4111-8111-111111111111' });
+    expect(ghost.status).toBe(422);
+    expect(code(ghost)).toBe('FLB_TEMPLATE_GRAPH_REQUIRED');
   });
 
   it('WD-FLB-012 #2: an edit with no graph source keeps the current graph; with one, it replaces it; a stale version is 409', async () => {
@@ -604,8 +614,12 @@ describe('templates: gallery, clone and the operator catalogue (WD-FLB-010, 011,
     expect(replace.body.steps).toBe(1);
     const stale = await ops('put', `/flow-templates/${c.body.id}`).send({ name: 'x', flowType: 'chat', rowVersion: 1 });
     expect(stale.status).toBe(409);
-    const bad = await ops('put', `/flow-templates/${c.body.id}`).send({ name: 'x', flowType: 'chat', rowVersion: replace.body.rowVersion, payload: { nothing: 1 } });
+    const bad = await ops('put', `/flow-templates/${c.body.id}`).send({ name: 'x', flowType: 'chat', rowVersion: replace.body.rowVersion, payload: { flowNodes: 'x' } });
     expect(bad.status).toBe(422);
+    // QUIRK: an unreadable payload on an edit is "nothing supplied": the old graph stays and the save goes through.
+    const same = await ops('put', `/flow-templates/${c.body.id}`).send({ name: 'x', flowType: 'chat', rowVersion: replace.body.rowVersion, payload: {} });
+    expect(same.status).toBe(200);
+    expect(same.body.steps).toBe(1);
   });
 
   it('WD-FLB-011 #1: 25 templates list 20 per page with the stat tiles; support operators read but cannot write', async () => {

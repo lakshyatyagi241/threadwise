@@ -26,6 +26,9 @@ const CATEGORY_STYLE: Record<string, { icon: string; bg: string; text: string }>
 const NEUTRAL = { icon: 'M2 4h12v8H2zM2 7h12', bg: 'bg-muted', text: 'text-foreground/80' };
 export const categoryStyle = (c: string | null) => CATEGORY_STYLE[c ?? ''] ?? NEUTRAL;
 
+/** WaDesk's global `.pill`: mono 9.5px uppercase, 1px 7px padding, 1px border. */
+export const PILL = 'inline-flex items-center gap-1 rounded-full border px-[7px] py-px font-mono text-[9.5px] font-semibold uppercase tracking-[0.04em]';
+
 const Check = () => (
   <svg viewBox="0 0 12 12" className="h-3 w-3 text-brand" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M2 6.5l3 2 5-6" />
@@ -38,7 +41,7 @@ const IconButton = ({ title, onClick, danger, children }: { title: string; onCli
     aria-label={title}
     onClick={onClick}
     className={cn(
-      'flex h-7 w-7 items-center justify-center rounded-full border border-border hover:bg-muted',
+      'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border hover:bg-muted',
       danger && 'hover:border-[var(--flb-coral)] hover:bg-[var(--flb-coral)]/10 hover:text-[var(--flb-coral)]',
     )}
   >
@@ -93,17 +96,17 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
         )}
         <div className="flex flex-wrap items-center justify-end gap-1.5">
           {flow.flowType === 'instagram' ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium" style={{ background: '#FCE7F3', color: '#9D174D', borderColor: '#F9A8D4' }}>
+            <span className={PILL} style={{ background: '#FCE7F3', color: '#9D174D', borderColor: '#F9A8D4' }}>
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: '#E1306C' }} />
               {t('instagram')}
             </span>
           ) : flow.flowType === 'call' ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/50 bg-amber-100/60 px-2.5 py-1 text-[11px] font-medium text-[#7B5A14]">
+            <span className={cn(PILL, 'border-amber-300/50 bg-amber-100/60 text-[#7B5A14]')}>
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
               {t('call')}
             </span>
           ) : null}
-          <span className={cn('inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium', sty.pill)} data-state={flow.state}>
+          <span className={cn(PILL, sty.pill)} data-state={flow.state}>
             <span className={cn('h-1.5 w-1.5 rounded-full', sty.dot)} />
             {tl(flow.state)}
           </span>
@@ -140,12 +143,34 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
       </ul>
 
       <div className="mt-4 flex items-center gap-2">
-        <Link
-          href={`/flows/builder/${flow.id}`}
-          className="flex-1 rounded-full border border-border px-3 py-1.5 text-center text-[11.5px] font-medium hover:bg-muted"
-        >
-          {t('openBuilder')}
-        </Link>
+        {flow.triggerKind === 'manual_enroll' ? (
+          // QUIRK kept: a manual-enroll flow has "Enroll contacts" in place of "Open builder" on its card.
+          <Link
+            href={`/flow-runtime/flows/${flow.id}`}
+            data-flow-enroll={flow.id}
+            className="min-w-0 flex-1 rounded-full bg-brand px-2 py-1.5 text-center text-[11.5px] font-semibold text-brand-foreground hover:opacity-90"
+          >
+            {t('enroll')}
+          </Link>
+        ) : (
+          <Link
+            href={`/flows/builder/${flow.id}`}
+            className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
+          >
+            {t('openBuilder')}
+          </Link>
+        )}
+        {flow.flowType !== 'instagram' ? (
+          // Per-flow runs, errors and retries live in the runtime's analytics (FLR); an Instagram flow has no local runs.
+          <Link
+            href={`/flow-runtime/analytics?flowId=${flow.id}`}
+            title={t('analytics')}
+            aria-label={t('analytics')}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border hover:bg-muted"
+          >
+            <Svg d="M2 13.5h12M4.5 13.5V9M8 13.5V3.5M11.5 13.5V6.5" />
+          </Link>
+        ) : null}
         {actions.can.update ? (
           <IconButton title={flow.isActive ? t('pause') : t('resume')} onClick={() => void actions.onToggle(flow)}>
             {flow.isActive ? (
@@ -190,28 +215,25 @@ const NODE_KIND: Record<string, string> = {
   trigger: 'trigger', delay: 'wait', condition: 'cond', message: 'send', template: 'send', media: 'send', buttons: 'send',
   list: 'send', tag: 'tag', assign: 'tag', end: 'end',
 };
-const label = (type: string): string =>
-  ({ trigger: 'Trigger', message: 'Send message', template: 'Send template', media: 'Send media', buttons: 'Quick replies', list: 'List message', ask: 'Ask', condition: 'If condition', delay: 'Wait', webhook: 'Webhook', ai: 'AI', tag: 'Tag', assign: 'Assign', end: 'End flow' })[type] ??
-  type.charAt(0).toUpperCase() + type.slice(1);
-
 /** The big card for the workspace's featured flow, with a mini preview of its first nodes. */
 export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: CardActions }) {
   const t = useTranslations('flb.featured');
   const tl = useTranslations('flb.list.state');
-  const lc = useTranslations('flb.list.library_cat');
-  const catLabel = flow.category && ['cart', 'welcome', 'post-purchase', 're-engagement', 'event', 'lead'].includes(flow.category) ? lc(flow.category as 'cart') : (flow.category ?? t('category'));
+  // `ucfirst(str_replace('-', ' ', category))`, "Flow" when there is none; the pill style upper-cases it.
+  const raw = (flow.category || 'flow').replace(/-/g, ' ');
+  const catLabel = raw.charAt(0).toUpperCase() + raw.slice(1);
   const sty = STATE_STYLE[flow.isPublished ? 'live' : 'draft'];
   const wait = flow.waitMinutes > 0 ? `~${flow.waitMinutes >= 60 ? `${Math.round((flow.waitMinutes / 60) * 10) / 10} h` : `${flow.waitMinutes} min`} total` : 'no waits';
   return (
     <div className="mb-5 grid grid-cols-1 overflow-hidden rounded-2xl border border-border bg-background shadow-sm xl:grid-cols-[1.5fr_1fr]" data-testid="featured-flow">
       <div className="p-6 md:p-7">
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-[var(--flb-bubble)] px-2.5 py-1 text-[11px] font-medium text-brand">{catLabel}</span>
-          <span className="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-[var(--flb-mint)] px-2.5 py-1 text-[11px] font-medium text-brand">
+          <span className={cn(PILL, 'border-current bg-[var(--flb-bubble)] text-brand')}>{catLabel}</span>
+          <span className={cn(PILL, 'border-primary/40 bg-[var(--flb-mint)] text-brand')}>
             <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M2 6.5l3 2 5-6" /></svg>
             {t('mostUsed')}
           </span>
-          <span className={cn('inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium', flow.isPublished ? 'bg-[var(--flb-mint)] text-brand' : 'bg-muted text-muted-foreground')}>
+          <span className={cn(PILL, 'border-current', flow.isPublished ? 'bg-[var(--flb-mint)] text-brand' : 'bg-muted text-muted-foreground')}>
             <span className={cn('h-1.5 w-1.5 rounded-full', sty.dot)} />
             {tl(flow.isPublished ? 'live' : 'draft')}
           </span>
@@ -245,7 +267,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
                 <div key={i}>
                   <div className={cn('flex items-center gap-1.5 rounded-[10px] border border-dashed border-[#C9D7CE] bg-background px-2.5 py-2 text-[11px] text-foreground/80', NODE_VARIANT[NODE_KIND[n.type] ?? ''])}>
                     <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="6" cy="6" r="3" /></svg>
-                    {label(n.type)}
+                    {n.label}
                   </div>
                   {i < flow.preview.length - 1 ? <div className="my-1.5 flex justify-center text-muted-foreground">↓</div> : null}
                 </div>

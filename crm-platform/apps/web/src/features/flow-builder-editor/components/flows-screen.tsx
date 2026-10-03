@@ -1,6 +1,7 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -14,7 +15,7 @@ import {
 } from '@crm/contracts';
 import { ConfirmDialog, Modal, useToast, Button } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { flowsApi } from '../api/flows';
 import { FLB_KEYS } from '../api/hooks';
 import { useFlowsOverview, useFlowsPage } from '../api/list';
@@ -31,6 +32,8 @@ const LIB_ICON: Record<string, string> = {
   event: 'M2 3h12v11H2zM2 6h12M5 1v3M11 1v3',
   lead: 'M5 6a3 3 0 1 0 0-0.01M2 14c0-3 3-4 6-4s6 1 6 4',
 };
+/** The upload types WaDesk accepts for an import (`mimetypes:application/json,text/plain,text/json`). */
+const IMPORT_MIME_TYPES = ['application/json', 'text/plain', 'text/json'];
 const STATUS_DOT = { live: 'bg-primary', paused: 'bg-[#5B3D8A]', draft: 'bg-border' } as const;
 
 const Svg = ({ d, className = 'h-3.5 w-3.5' }: { d: string; className?: string }) => (
@@ -53,11 +56,15 @@ const flash = (m: string) => {
 export function FlowsScreen() {
   const t = useTranslations('flb.list');
   const tc = useTranslations('flb.common');
+  const tt = useTranslations('flb.toast');
+  const td = useTranslations('flb.delete');
+  const tr = useTranslations('flb.rename');
   const router = useRouter();
   const qc = useQueryClient();
   const { toast } = useToast();
   const params = useSearchParams();
   const state = parseState(params);
+  const orgName = useSession().org.name;
   const canCreate = useCan('flb.flows.create');
   const canUpdate = useCan('flb.flows.update');
   const canDelete = useCan('flb.flows.delete');
@@ -92,14 +99,16 @@ export function FlowsScreen() {
   }, [draft, go]);
 
   const refresh = () => qc.invalidateQueries({ queryKey: FLB_KEYS.all });
-  const fail = (e: unknown) => toast(t('refreshFailed', { message: e instanceof ApiError ? e.message : String((e as Error)?.message ?? e) }), 'danger');
+  const reason = (e: unknown) => (e instanceof ApiError ? e.message : String((e as Error)?.message ?? e));
+  // WaDesk words a failed row action "Action failed: ..." and a failed list refetch "Could not refresh: ...".
+  const fail = (e: unknown) => toast(t('actionFailed', { message: reason(e) }), 'danger');
 
   const actions: CardActions = {
     can: { update: canUpdate, create: canCreate, remove: canDelete },
     onToggle: async (f) => {
       try {
         const r = await flowsApi.toggle(f.id);
-        toast(r.isActive ? 'Flow resumed' : 'Flow paused', 'success');
+        toast(r.isActive ? tt('resumed') : tt('paused'), 'success');
         await refresh();
       } catch (e) {
         fail(e);
@@ -109,7 +118,7 @@ export function FlowsScreen() {
     onDuplicate: async (f: FlowSummary | FlowFeatured) => {
       try {
         const copy = await flowsApi.duplicate(f.id);
-        flash('Flow duplicated.');
+        flash(tt('duplicated'));
         router.push(`/flows/builder/${copy.id}`);
       } catch (e) {
         fail(e);
@@ -137,7 +146,7 @@ export function FlowsScreen() {
     setBusy(true);
     try {
       await flowsApi.remove(deleting.id);
-      toast('Flow deleted', 'success');
+      toast(td('toast'), 'success');
       setDeleting(null);
       await refresh();
     } catch (e) {
@@ -150,29 +159,35 @@ export function FlowsScreen() {
   const onImport = async (file: File | undefined) => {
     if (!file) return;
     setImportError(null);
-    if (file.size > FLOW_IMPORT_MAX_BYTES) return setImportError(t('importFileTooLarge'));
+    // The same checks, in the same order and words, as WaDesk's upload validation (`file|max:4096|mimetypes:...`).
+    if (file.size > FLOW_IMPORT_MAX_BYTES) return finishImport(t('importFileTooLarge'));
+    if (file.size === 0 || (file.type && !IMPORT_MIME_TYPES.includes(file.type))) return finishImport(t('importWrongType'));
     let payload: unknown;
     try {
       payload = JSON.parse(await file.text());
     } catch {
-      return setImportError(t('importNotJson'));
+      payload = null;
     }
-    if (typeof payload !== 'object' || payload === null || Array.isArray(payload)) return setImportError(t('importNotJson'));
     try {
-      const created = await flowsApi.importFlow(payload as Record<string, unknown>);
-      flash('Flow imported — review it, then Publish when ready.');
+      // Not JSON / not an object: let the server answer, so the "not a valid <brand> flow export" wording is the one source.
+      const created = await flowsApi.importFlow(typeof payload === 'object' && payload !== null && !Array.isArray(payload) ? (payload as Record<string, unknown>) : {});
+      flash(tt('imported'));
       router.push(`/flows/builder/${created.id}`);
     } catch (e) {
-      setImportError(e instanceof ApiError ? e.message : t('importNotJson'));
+      setImportError(e instanceof ApiError ? e.message : t('importFailed'));
     } finally {
       if (fileRef.current) fileRef.current.value = '';
     }
+  };
+  const finishImport = (message: string) => {
+    setImportError(message);
+    if (fileRef.current) fileRef.current.value = '';
   };
 
   const cloneTemplate = async (tpl: FlowTemplateCard) => {
     try {
       const created = await flowsApi.cloneTemplate(tpl.id);
-      flash(`Template "${tpl.name}" cloned — customise it, then Publish.`);
+      flash(tt('cloned', { name: tpl.name }));
       router.push(`/flows/builder/${created.id}`);
     } catch (e) {
       setImportError(e instanceof ApiError ? e.message : 'Could not clone the template.');
@@ -192,7 +207,7 @@ export function FlowsScreen() {
     <div className="flb-root mx-auto max-w-none" data-testid="flows-screen">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
         <aside className="space-y-3 self-start lg:sticky lg:top-6">
-          <div className="rounded-2xl border border-primary/30 bg-[var(--flb-bubble)] p-3 text-[11px] leading-relaxed text-foreground/80">
+          <div className="rounded-2xl border border-border bg-[var(--flb-bubble)]/40 p-3 text-[11px] leading-relaxed text-foreground/80">
             <div className="mb-1 flex items-center gap-1.5 font-semibold text-foreground">
               <svg viewBox="0 0 16 16" className="h-3 w-3 text-brand" fill="currentColor"><circle cx="8" cy="8" r="6" /></svg>
               {t('tipTitle')}
@@ -241,13 +256,17 @@ export function FlowsScreen() {
         <main>
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{t('workspace')}</div>
+              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{t('workspace')} · {orgName}</div>
               <h1 className="font-serif text-[32px] leading-[1.05] font-normal tracking-tight sm:text-[38px] lg:text-[44px]">
                 {t('title')} <span className="text-brand italic">{t('titleAccent')}</span>.
               </h1>
               <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('subtitle')}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <Link href="/flow-runtime/analytics" title={t('analyticsTitle')} className="flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted">
+                <Svg d="M2 13V3M2 13h12M5 11V8M8 11V5M11 11V9.5" className="h-3.5 w-3.5 text-brand" />
+                {t('analytics')}
+              </Link>
               {canCreate ? (
                 <button type="button" onClick={() => router.push('/flows/builder?ai=1')} className="flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted">
                   <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 text-brand" fill="currentColor"><path d="M8 1l1.5 4L14 6.5 9.5 8 8 12 6.5 8 2 6.5 6.5 5z" /></svg>
@@ -336,7 +355,7 @@ export function FlowsScreen() {
                 <p className="mx-auto mt-2 max-w-md text-[13px] text-muted-foreground">{t('empty')}</p>
                 <div className="mt-4 flex justify-center gap-2">
                   <button type="button" onClick={() => router.push('/flows')} className="rounded-full border border-border px-4 py-2 text-[12px] font-medium hover:bg-muted">{t('reset')}</button>
-                  {canCreate ? <button type="button" onClick={() => setCreateOpen(true)} className="rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground">{t('create')}</button> : null}
+                  {canCreate ? <Link href="/flows/builder" className="rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground">{t('create')}</Link> : null}
                 </div>
               </div>
             ) : (
@@ -403,7 +422,7 @@ export function FlowsScreen() {
         flow={renaming}
         onClose={() => setRenaming(null)}
         onDone={async () => {
-          toast('Flow renamed', 'success');
+          toast(tr('toast'), 'success');
           setRenaming(null);
           await refresh();
         }}
@@ -411,9 +430,9 @@ export function FlowsScreen() {
       />
       <ConfirmDialog
         open={deleting !== null}
-        title="Delete flow?"
-        message={`Delete "${deleting?.name ?? ''}"? This can't be undone.`}
-        confirmLabel="Delete"
+        title={td('title')}
+        message={td('message', { name: deleting?.name ?? '' })}
+        confirmLabel={td('confirm')}
         cancelLabel={tc('cancel')}
         tone="danger"
         busy={busy}

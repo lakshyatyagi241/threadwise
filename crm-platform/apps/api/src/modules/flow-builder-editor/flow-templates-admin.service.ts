@@ -7,7 +7,6 @@ import {
   type AdminFlowTemplateDetail,
   type AdminFlowTemplatesResponse,
   type CreateAdminFlowTemplateInput,
-  type FlowGraph,
   type FlowType,
   type ListAdminFlowTemplatesQuery,
   type UpdateAdminFlowTemplateInput,
@@ -43,10 +42,20 @@ const toTemplate = (r: Raw): AdminFlowTemplate => ({
   updatedAt: new Date(r.updated_at as string).toISOString(),
 });
 
+/**
+ * Unwraps what the form supplied the way WaDesk's `extractGraph` does: a `flow_data` object inside the export wrapper, else the
+ * bare graph when it has a `flowNodes` key, else nothing (null: "no graph supplied", not an error). QUIRK kept: JSON that is
+ * neither (`{"hello": 1}`) is treated as "nothing supplied", so a create asks for the flow again and an edit keeps the old one.
+ */
+function extractGraph(raw: unknown): unknown | null {
+  if (!isRecord(raw)) return null;
+  if (isRecord(raw.flow_data) || Array.isArray(raw.flow_data)) return raw.flow_data;
+  if (raw.flowNodes !== undefined && raw.flowNodes !== null) return raw;
+  return null;
+}
+
 /** The stored shape of a template graph: `{ flowNodes, flowEdges (default []), vars }`, plain JSON, not normalised. */
-function storedGraph(raw: unknown): { flowNodes: unknown[]; flowEdges: unknown[]; vars: unknown[] } | null {
-  const wrapped = isRecord(raw) && (raw._wadesk_flow_export !== undefined || isRecord(raw.flow_data));
-  const src = wrapped ? (raw as Raw).flow_data : raw;
+function storedGraph(src: unknown): { flowNodes: unknown[]; flowEdges: unknown[]; vars: unknown[] } | null {
   if (!isRecord(src) || !Array.isArray(src.flowNodes)) return null;
   return {
     flowNodes: [...src.flowNodes],
@@ -186,7 +195,7 @@ export class FlowTemplatesAdminService {
     );
     const r = res.rows[0] as Raw | undefined;
     if (!r) throw AppError.notFound('Template', uuid);
-    const g = (r.flow_data ?? {}) as Partial<FlowGraph>;
+    const g = (r.flow_data ?? {}) as Partial<Record<'flowNodes' | 'flowEdges' | 'vars', Raw[]>>;
     return {
       ...toTemplate(r),
       graph: {
@@ -199,7 +208,8 @@ export class FlowTemplatesAdminService {
 
   /**
    * Graph source precedence: the uploaded or pasted payload, then a flow to clone (any workspace: the operator is
-   * platform-wide). Null when neither was supplied; throws when one was supplied but is not a flow.
+   * platform-wide). Null when neither was supplied or what was supplied cannot be read as a graph at all; throws when it is a
+   * graph without a `flowNodes` array.
    */
   private async graphFrom(tx: Tx, payload: Record<string, unknown> | undefined, sourceFlowId: string | undefined) {
     const invalid = () =>
@@ -210,14 +220,17 @@ export class FlowTemplatesAdminService {
         [{ path: 'flow_json', message: "That doesn't look like a valid flow (missing flowNodes)." }],
       );
     if (payload !== undefined) {
-      const g = storedGraph(payload);
+      const src = extractGraph(payload);
+      if (src === null) return null;
+      const g = storedGraph(src);
       if (!g) throw invalid();
       return g;
     }
     if (sourceFlowId) {
       const res = await tx.execute(sql`SELECT flow_data FROM flows WHERE uuid = ${sourceFlowId}`);
       const row = res.rows[0] as Raw | undefined;
-      if (!row) throw AppError.notFound('Flow', sourceFlowId);
+      // A flow id that matches nothing is "no graph supplied" (WaDesk's `Flow::find` returned null).
+      if (!row) return null;
       const g = storedGraph(row.flow_data);
       if (!g) throw invalid();
       return g;
