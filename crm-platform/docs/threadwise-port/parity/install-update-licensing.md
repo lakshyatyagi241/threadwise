@@ -54,3 +54,10 @@ conscious departure from "same behaviour" and need the owner's sign-off.
 - `apps/api/test/unit/install-update-licensing/*` (50), `test/e2e/install-update-licensing/*` (53, HTTP incl. licence, run order,
   idempotency, demo guard), `test/integration/install-update-licensing/setup-schema.spec.ts` (RLS, claim race).
 - `apps/web/src/features/install-update-licensing/**/*.test.ts` (32).
+
+## Verification (round 2 re-run)
+
+tier P0 done: TW-INST-008, 012, 013, 014, 015. tier P1 done: 001, 004, 005, 006, 007, 009, 010, 027, 029 (011 not ported on purpose).
+tier P2 done: 002, 003, 016 (not ported, see above), 017, 019, 020, 025. Re-run on a freshly migrated `crm_inst`: API unit 50, API e2e + integration 66,
+web 32, all green; `pnpm arch:check` and `pnpm db:verify-schema` show 0 errors. Typecheck failures in `chat-conversations` and
+`auth-registration-security` specs belong to other domains (upstream).
