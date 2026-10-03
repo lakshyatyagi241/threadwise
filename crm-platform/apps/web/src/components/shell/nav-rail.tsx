@@ -199,53 +199,57 @@ export function NavRail({
 
   const { main, bottom } = splitBottom(sections);
   return (
-    <aside className="sticky top-0 hidden h-dvh w-[4.5rem] shrink-0 flex-col border-e border-nav-border bg-nav text-nav-foreground md:flex">
-      <div className="flex h-14 shrink-0 items-center justify-center border-b border-nav-border">
-        <PanelBrand collapsed />
-      </div>
-      <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-        <RailGroups
-          sections={main}
-          activeId={activeId}
-          show={show}
-          hide={() => setTip(null)}
-          rtl={rtl}
-        />
-      </div>
-      {bottom.length > 0 && (
-        <nav
-          aria-label={t('shell.settings')}
-          className="flex shrink-0 flex-col items-center gap-1 border-t border-nav-border px-2 py-2"
-        >
-          {bottom.map((item) => (
-            <RailLink
-              key={item.id}
-              item={item}
-              active={item.id === activeId}
-              show={show}
-              hide={() => setTip(null)}
-            />
-          ))}
-        </nav>
-      )}
-      <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
-        {footer && <NavCollapsedContext.Provider value>{footer}</NavCollapsedContext.Provider>}
-      </div>
-      {/* Portalled to <body>: inside the aside the page content would paint over the label. */}
-      {tip &&
-        typeof document !== 'undefined' &&
-        createPortal(
-          <div
-            role="presentation"
-            aria-hidden="true"
-            className="pointer-events-none fixed z-[100] -translate-y-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1.5 text-xs font-medium text-background shadow-lg"
-            style={{ top: tip.top, ...(rtl ? { right: tip.edge } : { left: tip.edge }) }}
+    // The rail is fixed to the viewport (sticky would stop following once the page is taller than its wrapper); the wrapper only
+    // keeps its width in the layout so the page content starts beside it.
+    <div className="hidden w-[4.5rem] shrink-0 md:block">
+      <aside className="fixed inset-y-0 start-0 z-30 flex w-[4.5rem] flex-col border-e border-nav-border bg-nav text-nav-foreground">
+        <div className="flex h-14 shrink-0 items-center justify-center border-b border-nav-border">
+          <PanelBrand collapsed />
+        </div>
+        <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+          <RailGroups
+            sections={main}
+            activeId={activeId}
+            show={show}
+            hide={() => setTip(null)}
+            rtl={rtl}
+          />
+        </div>
+        {bottom.length > 0 && (
+          <nav
+            aria-label={t('shell.settings')}
+            className="flex shrink-0 flex-col items-center gap-1 border-t border-nav-border px-2 py-2"
           >
-            {tip.label}
-          </div>,
-          document.body,
+            {bottom.map((item) => (
+              <RailLink
+                key={item.id}
+                item={item}
+                active={item.id === activeId}
+                show={show}
+                hide={() => setTip(null)}
+              />
+            ))}
+          </nav>
         )}
-    </aside>
+        <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
+          {footer && <NavCollapsedContext.Provider value>{footer}</NavCollapsedContext.Provider>}
+        </div>
+        {/* Portalled to <body>: inside the aside the page content would paint over the label. */}
+        {tip &&
+          typeof document !== 'undefined' &&
+          createPortal(
+            <div
+              role="presentation"
+              aria-hidden="true"
+              className="pointer-events-none fixed z-[100] -translate-y-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1.5 text-xs font-medium text-background shadow-lg"
+              style={{ top: tip.top, ...(rtl ? { right: tip.edge } : { left: tip.edge }) }}
+            >
+              {tip.label}
+            </div>,
+            document.body,
+          )}
+      </aside>
+    </div>
   );
 }
 
