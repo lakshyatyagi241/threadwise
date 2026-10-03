@@ -100,7 +100,8 @@ export function ShopForm({
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (save.isPending) return;
+    // after a successful save the page is on its way back to the list: a second click must not send it again
+    if (save.isPending || save.isSuccess) return;
     setTopError(null);
     setServerErrors({});
     const found = validateWizard(form);
@@ -163,7 +164,7 @@ export function ShopForm({
       <form
         onSubmit={onSubmit}
         noValidate
-        aria-busy={save.isPending}
+        aria-busy={save.isPending || save.isSuccess}
         className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
       >
         {topError && (
@@ -339,7 +340,7 @@ export function ShopForm({
             type="submit"
             variant="brand"
             className="ms-auto rounded-full px-5"
-            disabled={save.isPending || noDevices}
+            disabled={save.isPending || save.isSuccess || noDevices}
           >
             {save.isPending && <Spinner />}
             {shop ? t('saveChanges') : t('create')}

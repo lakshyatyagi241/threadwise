@@ -49,6 +49,14 @@ describe('fromShop', () => {
     expect(f.cartRecoveryDelayMin).toBe('30');
     expect(f.shippingFlat).toBe('49.50');
   });
+  it('shows a whole fee with two decimals, as the Reference amount boxes did', () => {
+    const f = fromShop({ ...SHOP, shipping: { ...SHOP.shipping, flat: '100', freeAbove: '999' } });
+    expect(f.shippingFlat).toBe('100.00');
+    expect(f.shippingFreeAbove).toBe('999.00');
+    expect(
+      fromShop({ ...SHOP, shipping: { flat: null, freeAbove: null, note: null } }).shippingFlat,
+    ).toBe('');
+  });
   it('never carries a stored secret into the form', () => {
     const f = fromShop(SHOP);
     expect(f.rzpKeySecret).toBe('');
@@ -103,6 +111,37 @@ describe('validate', () => {
     expect(
       validate({ ...base, cartRecoveryDelayMin: '1440' }).cartRecoveryDelayMin,
     ).toBeUndefined();
+  });
+});
+
+describe('amounts, delay and colour follow the Reference boxes', () => {
+  const base = fromShop(SHOP);
+  it('takes exponent notation and a sign like a number box, refuses more than two decimals', () => {
+    expect(validate({ ...base, shippingFlat: '1e5' }).shippingFlat).toBeUndefined();
+    expect(validate({ ...base, shippingFlat: '+12.5' }).shippingFlat).toBeUndefined();
+    expect(validate({ ...base, shippingFlat: '.5' }).shippingFlat).toBeUndefined();
+    expect(validate({ ...base, shippingFlat: '12.345' }).shippingFlat?.key).toBe('amountInvalid');
+    expect(validate({ ...base, shippingFreeAbove: '1e30' }).shippingFreeAbove?.key).toBe(
+      'amountTooBig',
+    );
+    expect(toInput({ ...base, shippingFlat: '1e5', shippingFreeAbove: '12.5' }, 1)).toMatchObject({
+      shippingFlat: '100000.00',
+      shippingFreeAbove: '12.50',
+    });
+  });
+  it('refuses a delay the integer rule refuses: exponent, leading zeros', () => {
+    expect(validate({ ...base, cartRecoveryDelayMin: '1e3' }).cartRecoveryDelayMin?.key).toBe(
+      'delayRange',
+    );
+    expect(validate({ ...base, cartRecoveryDelayMin: '007' }).cartRecoveryDelayMin?.key).toBe(
+      'delayRange',
+    );
+    expect(validate({ ...base, cartRecoveryDelayMin: '+30' }).cartRecoveryDelayMin).toBeUndefined();
+  });
+  it('lets the brand colour be blank (default) and sends it in lower case', () => {
+    expect(validate({ ...base, brandColor: '' }).brandColor).toBeUndefined();
+    expect(toInput({ ...base, brandColor: '' }, 1).brandColor).toBeNull();
+    expect(toInput({ ...base, brandColor: '#1A2B3C' }, 1).brandColor).toBe('#1a2b3c');
   });
 });
 

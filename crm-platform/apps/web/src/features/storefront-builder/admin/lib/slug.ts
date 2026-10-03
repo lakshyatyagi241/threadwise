@@ -1,10 +1,57 @@
 import { STORE_SLUG_MAX } from '@crm/contracts';
 
+/** The Arabic letters the server turns into Latin ones (the same table as the API's slug rule). */
+const ARABIC: Record<string, string> = {
+  ا: 'a',
+  ب: 'b',
+  ت: 't',
+  ث: 'th',
+  ج: 'g',
+  ح: 'h',
+  خ: 'kh',
+  د: 'd',
+  ذ: 'th',
+  ر: 'r',
+  ز: 'z',
+  س: 's',
+  ش: 'sh',
+  ص: 's',
+  ض: 'd',
+  ط: 't',
+  ظ: 'th',
+  ع: 'aa',
+  غ: 'gh',
+  ف: 'f',
+  ق: 'k',
+  ك: 'k',
+  ل: 'l',
+  م: 'm',
+  ن: 'n',
+  ه: 'h',
+  و: 'o',
+  ي: 'y',
+  ء: 'aa',
+  '٠': '0',
+  '١': '1',
+  '٢': '2',
+  '٣': '3',
+  '٤': '4',
+  '٥': '5',
+  '٦': '6',
+  '٧': '7',
+  '٨': '8',
+  '٩': '9',
+};
+
 /** What the wizard shows while the merchant types a shop name: lower case, accents dropped, words joined by dashes. */
 export function slugify(input: string): string {
   return input
-    .toLowerCase()
     .normalize('NFKD')
+    .replace(/\p{M}+/gu, '')
+    .replace(/[\u200b-\u200d\u2060\ufeff]/g, ' ')
+    .replace(/[\u0600-\u06ff]/g, (c) => ARABIC[c] ?? c)
+    .toLowerCase()
+    .replace(/_+/g, '-')
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')

@@ -15,17 +15,25 @@ import { StoreProvider } from './store-provider';
 export function ShopFrame({
   shop,
   products,
+  page,
   children,
 }: {
   shop: PublicShop;
   /** Products the page already knows (the cart, quick view, wishlist and compare resolve ids through them). */
   products: readonly PublicProduct[];
+  /** Which page this is: Reference's per-theme styles mostly apply to the home page only. */
+  page: 'home' | 'product';
   children: ReactNode;
 }) {
   const t = useTranslations('shopPublic');
   const theme = resolveTheme(shop.themeKey, shop.brandColor);
   return (
-    <div className="sf-root" data-sf-theme={theme.key} style={theme.vars as CSSProperties}>
+    <div
+      className="sf-root"
+      data-sf-theme={theme.key}
+      data-sf-page={page}
+      style={theme.vars as CSSProperties}
+    >
       <StoreProvider shop={shop} products={products}>
         <a href="#sf-main" className="sf-skip">
           {t('common.skip')}
