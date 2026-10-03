@@ -450,19 +450,20 @@ describe('enrolling contacts', () => {
       .as(t3.admin)
       .post(`/v2/flow-runtime/subscribers/${subs.body.items[0].id}/retry`);
     expect(retry.status, JSON.stringify(retry.body)).toBe(200);
-    expect(retry.body).toEqual({ retried: 1, skipped: 0 });
+    expect(retry.body).toEqual({ retried: 1, skipped: 0, outcome: 'queued', reason: null });
     expect(await untilSent(p, t3, ch3, '919811100007', 1)).toEqual(['hello again']);
     const logs = await p.h.owner.query(
       `SELECT outcome, previous_status FROM flow_retry_logs WHERE org_id = $1`,
       [t3.orgId],
     );
-    expect(logs.rows).toEqual([{ outcome: 'started', previous_status: 'failed' }]);
+    expect(logs.rows).toEqual([{ outcome: 'queued', previous_status: 'failed' }]);
 
     const notFailed = await p.api
       .as(t3.admin)
       .post(`/v2/flow-runtime/subscribers/${subs.body.items[0].id}/retry`);
-    expect(notFailed.status).toBe(409);
-    expect(notFailed.body.code).toBe('FLR_NOT_RETRYABLE');
+    // The cooldown is checked before the state, as Reference does: a second press right away reads "just retried".
+    expect(notFailed.status).toBe(429);
+    expect(notFailed.body.code).toBe('FLR_RETRY_TOO_SOON');
   });
 
   it('only people who may manage runs can enrol', async () => {

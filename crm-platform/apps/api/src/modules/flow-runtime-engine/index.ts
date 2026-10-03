@@ -8,3 +8,10 @@ export { FlowRuntimeEngineWorkerModule } from './flow-runtime-engine-worker.modu
 export { FlowLaunchService, type LaunchInput, type LaunchOutcome } from './runtime/launch.service';
 export { FlowTriggerService, type OrderPlaced } from './triggers/trigger.service';
 export { FlowEngine } from './runtime/engine.service';
+// Where a store domain binds what the Commerce shop node needs: stock, the native product list, a checkout link (TW-FLR-041).
+export {
+  FlowShopGate,
+  flowTag,
+  type FlowShopPort,
+  type ShopProvider,
+} from './runtime/nodes/commerce/shop-port';

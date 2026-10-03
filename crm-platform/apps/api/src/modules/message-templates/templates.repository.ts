@@ -214,6 +214,15 @@ export class TemplatesRepository {
     return res.rows[0] ? toRow(res.rows[0]) : null;
   }
 
+  /** A flow node names a template by its name: an approved one wins, then the newest (TW-FLR-026). */
+  async findByName(tx: Tx, orgId: number, name: string): Promise<TemplateRow | null> {
+    const res = await tx.execute(sql`
+      SELECT ${SELECT} FROM ${FROM}
+      WHERE t.org_id = ${orgId} AND lower(t.template_name) = lower(${name})
+      ORDER BY (t.status IN ('approved', 'public')) DESC, t.id DESC LIMIT 1`);
+    return res.rows[0] ? toRow(res.rows[0]) : null;
+  }
+
   async findById(tx: Tx, orgId: number, id: number): Promise<TemplateRow | null> {
     const res = await tx.execute(sql`
       SELECT ${SELECT} FROM ${FROM} WHERE t.org_id = ${orgId} AND t.id = ${id}`);
