@@ -53,6 +53,9 @@ const ORG = login.json.orgSlug;
 psql(
   `UPDATE org_plan_state SET overrides = '{"features":{"automation":true}}'::jsonb WHERE org_id = (SELECT id FROM organizations WHERE slug = '${ORG}')`,
 );
+// The twin spec compares pickers against the reference workspace, which has these contact tags: seed the same names (idempotent).
+for (const name of ['Customer', 'Follow Up', 'Interested', 'New Lead', 'Not Interested', 'VIP'])
+  await call('/tags', token, 'POST', { name, color: '#075E54' }); // a duplicate name answers 4xx, which is fine
 writeFileSync(
   out,
   JSON.stringify(
