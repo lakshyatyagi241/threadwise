@@ -126,3 +126,10 @@ export function throughputCsv(
     ...rows.map((r) => [r.label, r.sent, r.delivered, r.failed].map(q).join(',')),
   ].join('\n');
 }
+
+/** Minutes as WaDesk writes them: under an hour "13m", else "2h 5m"; null is "-". */
+export function minutesLabel(min: number | null): string {
+  if (min === null) return '-';
+  const m = Math.round(min);
+  return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`;
+}

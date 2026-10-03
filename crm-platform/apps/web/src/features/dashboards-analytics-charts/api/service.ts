@@ -1,5 +1,7 @@
 import {
   analyticsResponseSchema,
+  analyticsPanelsSchema,
+  type AnalyticsPanels,
   dashWidgetsSchema,
   type DashWidgets,
   dashSummaryResponseSchema,
@@ -48,6 +50,17 @@ export const dashApi = {
         to: p.range === 'custom' ? p.to : undefined,
       },
       schema: analyticsResponseSchema,
+      signal,
+    });
+  },
+  panels(p: AnalyticsParams, signal?: AbortSignal): Promise<AnalyticsPanels> {
+    return apiFetch('/analytics/panels', {
+      query: {
+        range: p.range,
+        from: p.range === 'custom' ? p.from : undefined,
+        to: p.range === 'custom' ? p.to : undefined,
+      },
+      schema: analyticsPanelsSchema,
       signal,
     });
   },

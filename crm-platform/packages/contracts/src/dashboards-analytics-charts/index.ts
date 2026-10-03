@@ -157,3 +157,4 @@ export type AnalyticsResponse = z.infer<typeof analyticsResponseSchema>;
 export * from './health';
 export * from './admin';
 export * from './widgets';
+export * from './panels';

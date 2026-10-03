@@ -30,8 +30,8 @@ export function AdminOverviewScreen({ window }: { window: AdminOverviewWindow })
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             {t('overview.kicker')}
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            {t('overview.title')}
+          <h1 className="font-serif text-3xl leading-tight sm:text-4xl">
+            {t('overview.titleLead')} <em className="text-primary">{t('overview.titleAccent')}</em>.
           </h1>
           <p className="text-sm text-muted-foreground">{t('overview.subtitle')}</p>
         </div>

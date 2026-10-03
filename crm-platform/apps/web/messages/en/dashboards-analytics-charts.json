@@ -259,6 +259,39 @@
         "subtitle": "Message volume by weekday and hour, {zone}. Darker means busier.",
         "empty": "No message volume in this window.",
         "footer": "Computed from {total} messages, time zone {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "By device",
+          "subtitle": "Sends in the last 24 hours",
+          "online": "{online}/{total} online",
+          "empty": "No connected devices yet.",
+          "msg": "{n} msg"
+        },
+        "templates": {
+          "title": "Templates",
+          "subtitle": "Top performers by sends",
+          "empty": "No template sends in this window."
+        },
+        "contacts": {
+          "title": "Top contacts",
+          "subtitle": "Most engaged conversations",
+          "empty": "No conversations in this window.",
+          "msgs": "{n} msgs"
+        },
+        "team": {
+          "title": "Team performance",
+          "subtitle": "Agents in this window",
+          "count": "{n, plural, one {# agent} other {# agents}}",
+          "col": {
+            "agent": "Agent",
+            "convos": "Convos",
+            "resolved": "Resolved",
+            "first": "Avg 1st resp.",
+            "resolution": "Avg resolution",
+            "csat": "CSAT"
+          }
+        }
       }
     },
     "health": {
@@ -411,7 +444,9 @@
           "subtitle": "Priority queue",
           "open": "{n} open",
           "empty": "All systems healthy - no alerts."
-        }
+        },
+        "titleLead": "Admin",
+        "titleAccent": "dashboard"
       },
       "analytics": {
         "title": "Admin analytics.",
@@ -524,7 +559,9 @@
           "users": "{n, plural, one {# new user} other {# new users}}",
           "usersHint": "Review the latest signups",
           "clear": "All clear"
-        }
+        },
+        "titleLead": "Admin",
+        "titleAccent": "analytics"
       }
     }
   }

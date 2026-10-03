@@ -9,6 +9,7 @@ import { dashApi, type AnalyticsParams } from '../api/service';
 import { compact, shares } from '../lib/format';
 import { BarChart, Donut, Heatmap, Sparkline } from './charts';
 import { RangePicker } from './dashboard-screen';
+import { AnalyticsPanelsSection } from './analytics-panels';
 import { Funnel, LoadError, Panel, Trend } from './parts';
 
 type Range = AnalyticsQuery['range'];
@@ -245,6 +246,7 @@ export function AnalyticsScreen() {
               </p>
             </Panel>
           </div>
+          <AnalyticsPanelsSection params={params} />
         </>
       )}
     </div>
