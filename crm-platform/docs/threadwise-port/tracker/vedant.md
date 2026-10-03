@@ -138,7 +138,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-016 | backend-done |  | capture and normalization of every message (filters, 10-minute replay guard, sender and LID resolution, text priority, media, location, contact, reaction, forwarded) with per-device dedup, delivered to registered consumers; media bytes wait for storage (F5) |
 | TW-NODE-017 | backend-done |  | unofficial engine is an inbox channel kind (whatsapp_qr), one channel per device; customer messages go through the inbox ingest queue (replaces the inbound-message HTTP endpoint); small files kept, large or failed ones arrive as text saying so; groups are not threads; not run against a live number |
 | TW-NODE-018 | backend-done |  | phone-typed echoes are recorded on the thread as outbound once (ledger); group messages stay in the group directory; echo files and places are described, not copied; mirroring auto-replies belongs with 019 |
-| TW-NODE-019 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-019 | backend-done |  | keyword auto-reply and flow triggering are the flow runtime's trigger service (TW-FLR-001 to 004): the bridge's in-process matcher became module code; vishal/FLR |
 | TW-NODE-020 | backend-done |  | receipts go to the broadcast recipient, the scheduled recipient or the inbox message that owns the id (marker per inbox send), upward only |
 | TW-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
 | TW-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
@@ -160,16 +160,16 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-038 | backend-done |  | same adapter as 037; per-number daily cap and gaps in BCAST |
 | TW-NODE-039 | wontfix |  | dead code in Reference (campaign engine in Node is never reached and throws a ReferenceError) |
 | TW-NODE-040 | backend-done |  | campaign delivery and read reports reach CampaignReceiptsService through the receipt router; proven in the campaign e2e on the unofficial engine |
-| TW-NODE-041 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-042 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-043 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-044 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-045 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-046 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-047 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-048 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-041 | backend-done |  | flow start, resume and end are FlowLaunchService.start, the engine's reply routing and cancel/takeover (TW-FLR-011, 013, 050); no bridge endpoint is needed; vishal/FLR |
+| TW-NODE-042 | in-progress |  | the WhatsApp Cloud API inbound handoff is the InboundMessageHooks seam of the flow runtime (vishal/FLR); the Twilio part waits for the Twilio inbound row TW-WABA-047 (WADEV) |
+| TW-NODE-043 | backend-done |  | flow definition, attributes, template data and media store are module-internal calls of the flow runtime (compile-graph, TemplateService, ChatMediaStore); vishal/FLR |
+| TW-NODE-044 | in-progress |  | tag, assign, deal, AI, Meet and WhatsApp form are node executors (TW-FLR-030, 035 to 037, 043, 047); the MySQL node waits for a driver (TW-FLR-034); web search is not built |
+| TW-NODE-045 | backend-done |  | the ordering endpoints are TW-FLR-042 (parse, shipping, confirm, cancel, reply under /public/v1/flows/ordering); vishal/FLR |
+| TW-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes are built against GoogleWorkspacePort (TW-FLR-044 to 047); no Google account store exists yet, so they report no account |
+| TW-NODE-047 | in-progress |  | the Commerce shop node is built over FlowShopPort (TW-FLR-041); the store domains bind stock, native list and checkout link |
+| TW-NODE-048 | backend-done |  | booking for flows is the Book appointment node over the appointments domain (TW-FLR-040); vishal/FLR |
 | TW-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-050 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| TW-NODE-050 | backend-done |  | one flow engine serves every channel through channel profiles (TW-FLR-060 to 068): the per-channel Node engines and Laravel callbacks are not needed; vishal/FLR |
 | TW-NODE-051 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | TW-NODE-052 | frontend-done |  | address, token, test connection; parity run pending |
 | TW-NODE-053 | wontfix |  | developer-only file-sync endpoint (tw-sync); not a product feature |
