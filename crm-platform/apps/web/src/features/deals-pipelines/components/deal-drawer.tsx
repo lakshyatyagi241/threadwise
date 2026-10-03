@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Button, ConfirmDialog, Field, Input, Select, cn, useToast } from '@crm/ui';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
+import { CompanyLink } from '@/features/companies';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useDealDetail, useMembers } from '../api/hooks';
 import { dealsApi } from '../api/service';
@@ -215,7 +216,13 @@ function DrawerBody({
           {!deal.contact && <p className="text-xs text-muted-foreground">{t('noContact')}</p>}
           {deal.company && (
             <p className="text-xs text-muted-foreground">
-              {t('company', { name: deal.company.name })}
+              <CompanyLink
+                id={deal.company.id}
+                name={deal.company.name}
+                className="hover:text-foreground hover:underline"
+              >
+                {t('company', { name: deal.company.name })}
+              </CompanyLink>
             </p>
           )}
           {deal.contact && (
