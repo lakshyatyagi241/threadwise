@@ -378,7 +378,16 @@ export const adminFlowTemplatesResponseSchema = z.object({
 });
 export type AdminFlowTemplatesResponse = z.infer<typeof adminFlowTemplatesResponseSchema>;
 
-export const adminFlowTemplateDetailSchema = adminFlowTemplateSchema.extend({ graph: flowGraphSchema });
+/**
+ * A template's graph is stored exactly as the operator supplied it (Reference stores `{flowNodes, flowEdges, vars}` as given, nodes
+ * without ids or positions included); it is normalised only when a tenant clones it. So the detail's graph is the loose shape.
+ */
+export const adminFlowTemplateGraphSchema = z.object({
+  flowNodes: z.array(z.record(z.unknown())),
+  flowEdges: z.array(z.record(z.unknown())),
+  vars: z.array(z.record(z.unknown())),
+});
+export const adminFlowTemplateDetailSchema = adminFlowTemplateSchema.extend({ graph: adminFlowTemplateGraphSchema });
 export type AdminFlowTemplateDetail = z.infer<typeof adminFlowTemplateDetailSchema>;
 
 /** Create and edit share the form. On create the graph is required (one of three sources); on edit it is optional. */

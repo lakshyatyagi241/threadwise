@@ -15,6 +15,10 @@ import { ApiError } from '@/lib/api/errors';
 import { adminTemplatesApi } from '../api/flows';
 import { FLB_KEYS } from '../api/hooks';
 
+/** Upload types Reference accepts for the flow file (`mimetypes:application/json,text/plain,text/json`). */
+const FILE_TYPES = ['application/json', 'text/plain', 'text/json'];
+/** The "Template saved." notice Reference flashes onto the list after a save; the list shows it once. */
+export const ADMIN_FLASH_KEY = 'flb:admin-flash';
 const inputCls = 'w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand focus:ring-4 focus:ring-brand/10';
 
 /** `/admin/flow-templates/new` and `/{id}/edit` (TW-FLB-012). */
@@ -43,41 +47,39 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // The checks Reference's request validation runs first, in its order and words.
     const errs: string[] = [];
     if (!name.trim()) errs.push(t('nameRequired'));
-    const sort = Number.parseInt(sortOrder || '0', 10);
-    if (!Number.isInteger(sort) || sort < 0 || sort > 9999) errs.push(t('sortRange'));
+    const sortRaw = sortOrder.trim();
+    const sort = sortRaw === '' ? 0 : Number(sortRaw);
+    if (sortRaw !== '' && !Number.isInteger(sort)) errs.push(t('sortInteger'));
+    else if (sort < 0) errs.push(t('sortMin'));
+    else if (sort > 9999) errs.push(t('sortMax'));
+    if (file) {
+      if (file.size > FLOW_IMPORT_MAX_BYTES) errs.push(t('fileTooLarge'));
+      else if (file.size === 0 || (file.type && !FILE_TYPES.includes(file.type))) errs.push(t('fileType'));
+    }
+    if (errs.length) return setErrors(errs);
 
-    // Graph source precedence: the uploaded file, then the pasted JSON, then a flow id.
-    let payload: Record<string, unknown> | undefined;
-    const parse = (text: string): Record<string, unknown> | undefined => {
+    // Graph source precedence: the uploaded file, then the pasted JSON, then a flow id; the first one supplied is the only one
+    // read. JSON that cannot be read is sent as `{}`: "supplied, but no graph in it" (the server answers as Reference does: a create
+    // asks for the flow, an edit keeps the current one). QUIRK kept: no warning for a file that is not JSON.
+    const parse = (text: string): Record<string, unknown> => {
       try {
         const j: unknown = JSON.parse(text);
-        return typeof j === 'object' && j !== null && !Array.isArray(j) ? (j as Record<string, unknown>) : undefined;
+        return typeof j === 'object' && j !== null && !Array.isArray(j) ? (j as Record<string, unknown>) : {};
       } catch {
-        return undefined;
+        return {};
       }
     };
-    let fileUsable = false;
-    if (file && file.size <= FLOW_IMPORT_MAX_BYTES) {
-      // A file that is not valid JSON counts as "no graph supplied" (Reference's quirk, kept).
-      const p = parse(await file.text());
-      if (p) {
-        payload = p;
-        fileUsable = true;
-      }
-    }
-    if (!fileUsable && pasted.trim()) {
-      payload = parse(pasted);
-      if (!payload) errs.push(t('notJson'));
-    }
+    let payload: Record<string, unknown> | undefined;
     let source: string | undefined;
-    if (!payload && !errs.length && sourceFlowId.trim()) {
+    if (file) payload = parse(await file.text());
+    else if (pasted.trim()) payload = parse(pasted);
+    else if (sourceFlowId.trim()) {
       if (uuidSchema.safeParse(sourceFlowId.trim()).success) source = sourceFlowId.trim();
-      else errs.push(t('graphRequired'));
+      else payload = {}; // not a flow id of this platform: nothing found, as an unknown id was in Reference
     }
-    if (!editing && !payload && !source && !errs.length) errs.push(t('graphRequired'));
-    if (errs.length) return setErrors(errs);
 
     setBusy(true);
     setErrors([]);
@@ -94,6 +96,11 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
     try {
       if (template) await adminTemplatesApi.update(template.id, { ...base, rowVersion: template.rowVersion });
       else await adminTemplatesApi.create(base);
+      try {
+        sessionStorage.setItem(ADMIN_FLASH_KEY, t('saved'));
+      } catch {
+        /* private mode: the notice is a convenience */
+      }
       router.push('/admin/flow-templates');
     } catch (err) {
       setErrors(
@@ -112,16 +119,25 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
 
   return (
     <form onSubmit={(e) => void submit(e)} className="flb-root space-y-5" noValidate data-testid="admin-template-form">
-      <header className="flex flex-wrap items-start justify-between gap-4">
+      <nav className="font-mono text-[12px] text-muted-foreground" aria-label="Breadcrumb">
+        <span className="tracking-[0.16em] uppercase">{t('breadcrumbAdmin')}</span> ›{' '}
+        <Link href="/admin/flow-templates" className="hover:text-foreground">{t('breadcrumbTemplates')}</Link> ›{' '}
+        <span className="text-foreground">{editing ? t('edit') : t('new')}</span>
+      </nav>
+      <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <nav className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground" aria-label="Breadcrumb">
-            {t('breadcrumbAdmin')} › <Link href="/admin/flow-templates" className="hover:underline">{t('breadcrumbTemplates')}</Link> › {editing ? t('edit') : t('new')}
-          </nav>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">{editing ? template.name : t('create')}</h1>
+          <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            {t('eyebrow')}{editing ? t('edit') : t('new')}
+          </div>
+          <h1 className="font-serif text-[28px] leading-none font-normal tracking-tight sm:text-[36px]">
+            {editing ? t('edit') : t('new')} <span className="text-brand italic">{t('titleAccent')}</span>
+          </h1>
+          <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Link href="/admin/flow-templates" className="rounded-full border border-border px-4 py-2 text-[13px] hover:bg-muted">{t('cancel')}</Link>
-          <button type="submit" disabled={busy} className="rounded-full bg-brand px-4 py-2 text-[13px] font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60">
+          <Link href="/admin/flow-templates" className="rounded-full border border-border bg-background px-3.5 py-1.5 text-[12px] font-medium hover:bg-muted">{t('cancel')}</Link>
+          <button type="submit" disabled={busy} className="flex items-center gap-2 rounded-full bg-brand px-4 py-1.5 text-[12px] font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60">
+            <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 8l5 5 7-9" /></svg>
             {editing ? t('save') : t('create')}
           </button>
         </div>
@@ -134,63 +150,85 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
         </div>
       ) : null}
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-5">
-          <section className="space-y-4 rounded-2xl border border-border bg-background p-5">
-            <h2 className="font-serif text-lg">{t('details')}</h2>
-            <label className="block text-sm">
-              <span className="mb-1.5 block font-medium">{t('name')}</span>
-              <input value={name} maxLength={160} onChange={(e) => setName(e.target.value)} placeholder={t('namePlaceholder')} className={inputCls} />
-            </label>
-            <label className="block text-sm">
-              <span className="mb-1.5 block font-medium">{t('description')}</span>
-              <textarea value={description} maxLength={1000} rows={3} onChange={(e) => setDescription(e.target.value)} className={inputCls} />
-              <span className="mt-1 block text-xs text-muted-foreground">{t('descriptionHint')}</span>
-            </label>
-            <label className="block text-sm">
-              <span className="mb-1.5 block font-medium">{t('category')}</span>
-              <input value={category} maxLength={64} onChange={(e) => setCategory(e.target.value)} placeholder={t('categoryPlaceholder')} className={inputCls} />
-            </label>
+      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="min-w-0 space-y-5">
+          <section className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+            <div className="border-b border-border px-5 py-4">
+              <div className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">{t('detailsKicker')}</div>
+              <h2 className="mt-1 font-serif text-[22px] leading-tight">{t('details')}</h2>
+            </div>
+            <div className="space-y-4 p-5">
+              <label className="block space-y-1.5">
+                <span className="text-[11.5px] font-semibold">{t('name')} <span className="text-[var(--flb-coral)]">*</span></span>
+                <input value={name} maxLength={160} onChange={(e) => setName(e.target.value)} placeholder={t('namePlaceholder')} className={`${inputCls} text-[14px]`} />
+              </label>
+              <label className="block space-y-1.5">
+                <span className="text-[11.5px] font-semibold">{t('description')}</span>
+                <textarea value={description} maxLength={1000} rows={2} onChange={(e) => setDescription(e.target.value)} placeholder={t('descriptionHint')} className={inputCls} />
+              </label>
+              <label className="block space-y-1.5">
+                <span className="text-[11.5px] font-semibold">{t('category')}</span>
+                <input value={category} maxLength={64} onChange={(e) => setCategory(e.target.value)} placeholder={t('categoryPlaceholder')} className={inputCls} />
+              </label>
+            </div>
           </section>
 
-          <section className="space-y-4 rounded-2xl border border-border bg-background p-5">
-            <h2 className="font-serif text-lg">{t('flowTitle')}</h2>
-            {editing ? <p className="text-sm text-muted-foreground">{t('currently', { count: template.steps })}</p> : null}
-            <label className="block text-sm">
-              <span className="mb-1.5 block font-medium">{t('upload')}</span>
-              <input type="file" accept="application/json,.json" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="block w-full text-sm" />
-            </label>
-            <label className="block text-sm">
-              <span className="mb-1.5 block font-medium">{t('paste')}</span>
-              <textarea value={pasted} onChange={(e) => setPasted(e.target.value)} rows={6} placeholder={t('pastePlaceholder')} spellCheck={false} className={`${inputCls} bg-[#1E2A33] font-mono text-[12px] text-[#7CF3C4]`} />
-            </label>
-            <label className="block text-sm">
-              <span className="mb-1.5 block font-medium">{t('clone')}</span>
-              <input value={sourceFlowId} onChange={(e) => setSourceFlowId(e.target.value)} className={`${inputCls} font-mono`} />
-              <span className="mt-1 block text-xs text-muted-foreground">{t('cloneHint')}</span>
-            </label>
+          <section className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+            <div className="border-b border-border px-5 py-4">
+              <div className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">{t('flowKicker')}</div>
+              <h2 className="mt-1 font-serif text-[22px] leading-tight">{t('flowTitle')}</h2>
+            </div>
+            <div className="space-y-4 p-5">
+              {editing ? (
+                <div className="rounded-xl border border-border bg-muted/50 px-3 py-2.5 text-[12px] text-foreground/70">{t('currently', { count: template.steps })}</div>
+              ) : (
+                <p className="text-[12.5px] text-foreground/70">{t('provide')}</p>
+              )}
+              <label className="block space-y-1.5">
+                <span className="text-[11.5px] font-semibold">{t('upload')}</span>
+                <input type="file" accept="application/json,.json" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="block w-full text-[12.5px] file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-brand file:px-3 file:py-1.5 file:text-[12px] file:font-semibold file:text-brand-foreground" />
+              </label>
+              <label className="block space-y-1.5">
+                <span className="text-[11.5px] font-semibold">{t('paste')}</span>
+                <textarea value={pasted} onChange={(e) => setPasted(e.target.value)} rows={6} placeholder={t('pastePlaceholder')} spellCheck={false} className={`${inputCls} !bg-[#0F1720] font-mono text-[11.5px] leading-relaxed !text-[#D7E3DC] placeholder:text-[#D7E3DC]/50`} />
+              </label>
+              <label className="block space-y-1.5">
+                <span className="text-[11.5px] font-semibold">{t('clone')}</span>
+                <input value={sourceFlowId} onChange={(e) => setSourceFlowId(e.target.value)} placeholder={t('cloneHint')} className={inputCls} />
+              </label>
+            </div>
           </section>
         </div>
 
-        <aside className="space-y-4 self-start rounded-2xl border border-border bg-background p-5">
-          <h2 className="font-serif text-lg">{t('visibility')}</h2>
-          <label className="block text-sm">
-            <span className="mb-1.5 block font-medium">{t('flowType')}</span>
-            <select value={flowType} onChange={(e) => setFlowType(e.target.value)} className={inputCls}>
-              <option value="chat">{t('typeChat')}</option>
-              <option value="call">{t('typeCall')}</option>
-              <option value="instagram">{t('typeInstagram')}</option>
-            </select>
-          </label>
-          <label className="block text-sm">
-            <span className="mb-1.5 block font-medium">{t('sortOrder')}</span>
-            <input type="number" min={0} max={9999} value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className={inputCls} />
-            <span className="mt-1 block text-xs text-muted-foreground">{t('sortHint')}</span>
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
-            {t('isActive')}
-          </label>
+        <aside className="self-start overflow-hidden rounded-2xl border border-border bg-background shadow-sm lg:sticky lg:top-6">
+          <div className="border-b border-border px-5 py-4">
+            <div className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">{t('settingsKicker')}</div>
+            <h2 className="mt-1 font-serif text-[22px] leading-tight">{t('visibility')}</h2>
+          </div>
+          <div className="space-y-4 p-5">
+            <label className="block space-y-1.5">
+              <span className="text-[11.5px] font-semibold">{t('flowType')}</span>
+              <select value={flowType} onChange={(e) => setFlowType(e.target.value)} className={inputCls}>
+                <option value="chat">{t('typeChat')}</option>
+                <option value="call">{t('typeCall')}</option>
+                <option value="instagram">{t('typeInstagram')}</option>
+              </select>
+            </label>
+            <label className="block space-y-1.5">
+              <span className="text-[11.5px] font-semibold">{t('sortOrder')}</span>
+              <input type="number" min={0} max={9999} value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className={inputCls} />
+              <span className="block text-[11px] text-muted-foreground">{t('sortHint')}</span>
+            </label>
+            <label className="flex cursor-pointer items-start gap-2.5 pt-1">
+              <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[var(--brand)]" />
+              <span className="text-[12.5px] text-foreground/80">{t('isActive')}</span>
+            </label>
+          </div>
+          <div className="border-t border-border px-5 py-4">
+            <button type="submit" disabled={busy} className="w-full rounded-full bg-brand px-4 py-2 text-[12.5px] font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60">
+              {editing ? t('save') : t('create')}
+            </button>
+          </div>
         </aside>
       </div>
     </form>

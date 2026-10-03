@@ -6,6 +6,7 @@ import {
   flbGraphStats,
   flbGridPosition,
   flbIsCatchAllKeywords,
+  flbPreviewLabel,
   flbNormalizeAiGraph,
   flbNormalizeGraph,
   flbTriggerKeywordsTooLong,
@@ -93,8 +94,11 @@ describe('pre-save validation (TW-FLB-018)', () => {
     ).toBe(true);
   });
 
-  it('the sender check only applies to chat, Instagram and Facebook', () => {
-    expect(flbValidateGraph([node('t', 'trigger')], [], { mode: 'telegram', senderAvailable: true }).ok).toBe(true);
+  it('the sender check follows the mode: Instagram accounts, Facebook Pages, otherwise numbers (Reference fallback)', () => {
+    const tg = flbValidateGraph([node('t', 'trigger')], [], { mode: 'telegram', senderAvailable: true });
+    expect(tg.items).toEqual(['The Trigger node has no number selected — pick one on the Trigger step.']);
+    const fb = flbValidateGraph([node('t', 'trigger')], [], { mode: 'facebook', senderAvailable: true });
+    expect(fb.items[0]).toContain('Facebook Page');
     const ig = flbValidateGraph([node('t', 'trigger')], [], { mode: 'instagram', senderAvailable: true });
     expect(ig.items[0]).toContain('Instagram account');
   });
@@ -320,5 +324,55 @@ describe('export file name (TW-FLB-008)', () => {
     expect(flowExportFileName('Welcome Flow!', 'abc')).toBe('welcome-flow.threadwise-flow.json');
     expect(flowExportFileName('Café ñandú', 'abc')).toBe('cafe-nandu.threadwise-flow.json');
     expect(flowExportFileName('★★★', 'abc')).toBe('flow-abc.threadwise-flow.json');
+  });
+});
+
+describe('featured card mini preview (TW-FLB-002)', () => {
+  const label = (type: string, data: Record<string, unknown> = {}) => flbPreviewLabel({ type, data });
+
+  it('reads each node the way Reference labels it', () => {
+    expect(label('trigger', { kind: 'tag_added' })).toBe('Trigger / tag_added');
+    expect(label('trigger')).toBe('Trigger / manual');
+    expect(label('delay', { amount: 30, unit: 'min' })).toBe('Wait 30 min');
+    expect(label('delay')).toBe('Wait ? min');
+    expect(label('tag', { action: 'remove', tag: 'vip' })).toBe('Tag: remove vip');
+    expect(label('assign', { team: 'Sales' })).toBe('Assign to Sales');
+    expect(label('webhook', {})).toBe('Webhook POST');
+    expect(label('media', { kind: 'image' })).toBe('Send image');
+    expect(label('template', { tpl: 'welcome' })).toBe('Send template welcome');
+    expect(label('end')).toBe('End flow');
+    expect(label('buttons')).toBe('Quick replies');
+    expect(label('cta')).toBe('Cta');
+  });
+
+  it('cuts a long message or prompt at 28 characters, trims the edge and adds "..."', () => {
+    expect(label('message', { text: 'Hello there, welcome to our store and thanks for stopping by' })).toBe('Hello there, welcome to our...');
+    expect(label('message', { text: 'short' })).toBe('short');
+    expect(label('message', {})).toBe('Send message');
+    expect(label('ask', { prompt: 'p'.repeat(40) })).toBe(`${'p'.repeat(28)}...`);
+  });
+
+  it('QUIRK: a condition in the current shape reads "If value == " (the card only knows the legacy fields)', () => {
+    expect(label('condition', { kind: 'var', variable: 'x', op: 'contains', value: '1' })).toBe('If value contains 1');
+    expect(label('condition', {})).toBe('If value == ');
+    expect(label('condition', { var: 'plan', op: '!=', value: 'free' })).toBe('If plan != free');
+  });
+
+  it('counts a wait unit only when it is exactly sec, hour or day: any other spelling is minutes (Reference match)', () => {
+    const w = (amount: unknown, unit: string) =>
+      flbGraphStats({ flowNodes: [{ id: 'a', type: 'delay', x: 0, y: 0, data: { amount, unit } }], flowEdges: [] }).waitMinutes;
+    expect(w(2, 'hour')).toBe(120);
+    expect(w(2, 'hours')).toBe(2);
+    expect(w(90, 'sec')).toBe(1);
+    expect(w('2.7', 'min')).toBe(2);
+    expect(w('abc', 'min')).toBe(0);
+  });
+});
+
+describe('import error wording (TW-FLB-009)', () => {
+  it('names the brand like Reference: "This is not a valid <brand> flow export."', () => {
+    expect(() => parseImportPayload({ hello: 'world' }, { brand: 'Acme' })).toThrow('This is not a valid Acme flow export.');
+    expect(() => parseImportPayload([1, 2], { brand: 'Acme' })).toThrow('This is not a valid Acme flow export.');
+    expect(() => parseImportPayload({ flowNodes: 'x' })).toThrow('This is not a valid flow export.');
   });
 });
