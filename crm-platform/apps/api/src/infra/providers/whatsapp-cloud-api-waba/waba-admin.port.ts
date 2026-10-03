@@ -1,5 +1,5 @@
 import type { WabaApiError } from './waba-errors';
-import type { WabaAuth, WabaProviderKind } from './waba-http';
+import type { WabaAuth, WabaProviderKind, WabaRegistryAuth } from './waba-http';
 
 /**
  * Account-level operations on a WhatsApp Business Account: everything between "the customer finished Embedded Signup" and
@@ -15,6 +15,13 @@ export interface WabaConnection {
   phoneNumberId: string;
   accessToken?: string;
   authKey?: string;
+  /** The provider registry key the number is on (`meta_json.provider_key`); absent on rows that predate the registry. */
+  providerKey?: string;
+  /**
+   * Set only when the number is on a provider of the registry that is not one of the two built-in routes: the route resolved for this
+   * number (address, version, rendered headers). `provider` is then the legacy family (`meta`) and means nothing for routing.
+   */
+  registry?: WabaRegistryAuth;
 }
 
 export interface PhoneInfo {
@@ -144,6 +151,7 @@ export interface WabaAdminPort {
 export const WABA_ADMIN = Symbol('WABA_ADMIN');
 
 export function authOf(conn: WabaConnection): WabaAuth {
+  if (conn.registry) return conn.registry;
   if (conn.provider === 'interakt') {
     if (!conn.authKey) throw new Error('Interakt connection without an auth key');
     return {

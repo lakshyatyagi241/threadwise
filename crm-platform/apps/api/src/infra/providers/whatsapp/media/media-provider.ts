@@ -1,4 +1,8 @@
-import { WabaHttp, type WabaAuth } from '../../whatsapp-cloud-api-waba/waba-http';
+import {
+  WabaHttp,
+  type WabaAuth,
+  type WabaRegistryAuth,
+} from '../../whatsapp-cloud-api-waba/waba-http';
 
 /**
  * Where a channel's WhatsApp calls go and how they are authenticated, as the media pipeline needs it.
@@ -22,6 +26,8 @@ export interface MediaAuthContext {
   channelToken?: string;
   /** Interakt route: the tech-partner key. */
   authKey?: string;
+  /** A number on a provider of the platform's WhatsApp provider registry: its resolved route (address, version, rendered headers). */
+  registry?: WabaRegistryAuth;
 }
 
 export interface MediaProviderProfile {
@@ -45,10 +51,28 @@ export interface MediaChannel {
   credentials: Readonly<Record<string, string | undefined>>;
 }
 
+/** The registry route a channel registry put in the opened credentials (`registry`, JSON), or undefined when absent or not one. */
+function registryOf(raw: string | undefined): WabaRegistryAuth | undefined {
+  if (!raw) return undefined;
+  try {
+    const r = JSON.parse(raw) as Partial<WabaRegistryAuth>;
+    return r.provider === 'registry' &&
+      typeof r.baseUrl === 'string' &&
+      typeof r.apiVersion === 'string' &&
+      typeof r.headers === 'object' &&
+      r.headers !== null
+      ? (r as WabaRegistryAuth)
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** What a channel contributes to header building. */
 export function authContextOf(channel: MediaChannel): MediaAuthContext {
   const c = channel.credentials;
   return {
+    registry: registryOf(c.registry),
     route: c.route === 'interakt' ? 'interakt' : 'meta',
     wabaId: c.businessAccountId,
     phoneNumberId: channel.externalId ?? c.phoneNumberId,
@@ -59,6 +83,7 @@ export function authContextOf(channel: MediaChannel): MediaAuthContext {
 
 /** The `WabaHttp` credentials for a context, or null when the connection has none (nothing is sent without them). */
 export function wabaAuthOf(ctx: MediaAuthContext): WabaAuth | null {
+  if (ctx.registry) return ctx.registry;
   if (ctx.route === 'interakt') {
     return ctx.authKey && ctx.wabaId
       ? {
@@ -73,7 +98,20 @@ export function wabaAuthOf(ctx: MediaAuthContext): WabaAuth | null {
 }
 
 /** The profile of one route, from `WabaHttp`'s own configuration (read on each call: the platform admin can change it live). */
-export function profileOf(http: WabaHttp, route: MediaRoute): MediaProviderProfile {
+export function profileOf(
+  http: WabaHttp,
+  route: MediaRoute,
+  registry?: WabaRegistryAuth,
+): MediaProviderProfile {
+  if (registry) {
+    return {
+      baseUrl: registry.baseUrl.replace(/\/+$/, ''),
+      apiVersion: registry.apiVersion,
+      credentialMode: registry.credentialMode,
+      buildHeaders: () => ({ ...registry.headers }),
+      capabilities: { mediaUpload: registry.capabilities.mediaUpload },
+    };
+  }
   const root = http.baseUrl(route);
   const cut = root.lastIndexOf('/');
   return {

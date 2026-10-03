@@ -13,6 +13,7 @@ import {
   useResubscribe,
   useSetPrimary,
 } from '../api/hooks';
+import { WorkspaceProviderNote } from '@/features/whatsapp-providers';
 import { cardTitle } from '../lib/display';
 import { ConnectEmbeddedModal } from './connect-embedded-modal';
 import { ConnectManualModal } from './connect-manual-modal';
@@ -142,6 +143,8 @@ export function NumbersScreen() {
           <Button onClick={() => open(embeddedReady ? 'embedded' : 'manual')}>{t('add')}</Button>
         )}
       </header>
+
+      <WorkspaceProviderNote />
 
       {notice && (
         <Alert tone={notice.tone} onClick={undefined}>
