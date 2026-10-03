@@ -1,0 +1,436 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Store"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Dismiss"
+      },
+      "errors": {
+        "requestId": "Request id",
+        "retry": "Try again",
+        "network": {
+          "title": "Can't reach the server",
+          "message": "Check your connection and try again."
+        },
+        "forbidden": {
+          "title": "No access",
+          "message": "Your role doesn't allow this."
+        },
+        "signedOut": {
+          "title": "You're signed out",
+          "message": "Sign in again to continue."
+        },
+        "conflict": {
+          "title": "Changed elsewhere",
+          "message": "Someone else changed this while you were editing. Reload to see the latest."
+        },
+        "validation": {
+          "title": "Check the form",
+          "message": "Some fields need attention."
+        },
+        "unavailable": {
+          "title": "Not available yet",
+          "message": "The store service is not available on this server."
+        },
+        "rateLimited": {
+          "title": "Too many requests",
+          "message": "Wait a moment and try again."
+        },
+        "notFound": {
+          "title": "Not found",
+          "message": "That shop does not exist in this workspace."
+        },
+        "noShop": {
+          "title": "No shop yet",
+          "message": "Set up your store first."
+        },
+        "slugTaken": {
+          "title": "Address taken",
+          "message": "That store address is already in use."
+        },
+        "deviceInvalid": {
+          "title": "Pick a connected device",
+          "message": "Pick one of your connected devices."
+        },
+        "noSender": {
+          "title": "Connect WhatsApp first",
+          "message": "A shop needs a connected WhatsApp number. Connect one, then try again."
+        },
+        "resetNotConfirmed": {
+          "title": "Not confirmed",
+          "message": "Reset not confirmed."
+        },
+        "domainNotSet": {
+          "title": "No custom domain",
+          "message": "No custom domain set."
+        },
+        "unexpected": {
+          "title": "Something went wrong",
+          "message": "Something went wrong. Try again in a moment."
+        }
+      },
+      "sidebar": {
+        "label": "Store",
+        "navLabel": "Store sections",
+        "section": "Store",
+        "settings": "Settings",
+        "items": {
+          "overview": "Overview",
+          "orders": "Orders",
+          "products": "Products",
+          "groups": "Groups",
+          "storefront": "Storefront",
+          "coupons": "Coupons",
+          "reviews": "Reviews",
+          "payments": "Payments",
+          "gateways": "Checkout gateways",
+          "customers": "Customers",
+          "invoices": "Invoices",
+          "connection": "Connection"
+        },
+        "comingSoon": "Coming soon",
+        "comingSoonHint": "Coming soon",
+        "noShopTitle": "No shop yet",
+        "noShopMessage": "Create your first shop to use the store tools.",
+        "noShopAction": "Set up your store",
+        "live": "Live",
+        "setup": "Setup",
+        "yourStore": "Your store",
+        "notConnected": "Not connected",
+        "switchShop": "Switch shop",
+        "shopFallback": "Shop",
+        "manageShops": "Manage all shops →",
+        "publicUrl": "Public URL",
+        "open": "Open",
+        "copy": "Copy",
+        "copied": "Copied!",
+        "providerLive": "Provider live",
+        "sendingFrom": "Sending from",
+        "noDevice": "No device connected.",
+        "connectOne": "Connect one",
+        "thenBind": "then bind it to this store from the",
+        "connectWizard": "connect wizard"
+      },
+      "dashboard": {
+        "eyebrow": "Store / Overview",
+        "title": "Sales overview",
+        "subtitle": "Last 30 days. Orders are merged from every channel — WABA, storefront, Twilio.",
+        "addProduct": "Add product",
+        "loading": "Loading the store overview",
+        "kpi": {
+          "revenue": "Revenue (30d)",
+          "orders": "Orders (30d)",
+          "aov": "Avg order",
+          "products": "Products",
+          "visits": "Visits (30d)"
+        },
+        "trend": {
+          "eyebrow": "Sales trend",
+          "title": "Revenue over time"
+        },
+        "legendRevenue": "Revenue ({symbol})",
+        "legendOrders": "Orders",
+        "dayReadout": "{day}: {revenue}, {orders, plural, one {# order} other {# orders}}",
+        "chartLabel": "Revenue and orders per day, last 30 days",
+        "tableDay": "Day",
+        "tableRevenue": "Revenue ({symbol})",
+        "tableOrders": "Orders",
+        "top": {
+          "eyebrow": "Top products (30d)",
+          "title": "Bestsellers",
+          "empty": "No sales yet — share your store link."
+        },
+        "recent": {
+          "title": "Recent orders",
+          "viewAll": "View all",
+          "open": "Open",
+          "comingSoon": "Coming soon",
+          "columns": {
+            "when": "When",
+            "customer": "Customer",
+            "source": "Source",
+            "items": "Items",
+            "total": "Total",
+            "status": "Status",
+            "open": "Open"
+          },
+          "itemsCount": "{count, plural, one {# item} other {# items}}",
+          "emptyTitle": "No orders yet",
+          "emptyMessage": "Once customers order from your storefront or WhatsApp, they'll appear here."
+        }
+      },
+      "settings": {
+        "eyebrow": "Store / Storefront",
+        "title": "Storefront design",
+        "viewLive": "View live",
+        "noAccess": "Your role doesn't have access to the storefront settings.",
+        "loading": "Loading the storefront settings",
+        "saved": "Storefront updated.",
+        "conflict": "This storefront was changed elsewhere while you were editing. Reload to get the latest settings, then make your changes again.",
+        "reload": "Reload",
+        "fixErrors": "Fix the highlighted fields and save again.",
+        "optional": "(optional)",
+        "save": "Save",
+        "readOnly": "You can view these settings but not change them.",
+        "live": "Storefront live (unchecking takes it offline)",
+        "theme": {
+          "title": "Theme"
+        },
+        "slug": {
+          "label": "Storefront slug",
+          "hint": "Your store will be at"
+        },
+        "domain": {
+          "label": "Custom domain",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "Verified — your domain is live",
+          "addCname": "Add this CNAME at your DNS provider:",
+          "cname": "CNAME",
+          "verify": "Verify now",
+          "verified": "Domain verified ✓",
+          "notPointing": "CNAME not pointing to {expected}",
+          "notSet": "No custom domain set.",
+          "verifyFailed": "Could not check the domain. Try again."
+        },
+        "brand": {
+          "logoUrl": "Logo URL",
+          "color": "Brand color (hex)",
+          "colorPicker": "Pick the brand color",
+          "heroText": "Hero text",
+          "heroPlaceholder": "Welcome to our store",
+          "footerText": "Footer text",
+          "footerPlaceholder": "© 2026 Your store"
+        },
+        "currency": {
+          "title": "Currency",
+          "label": "Currency",
+          "hint": "Default for new products + the symbol shown in the cart drawer."
+        },
+        "shipping": {
+          "title": "Shipping",
+          "flat": "Flat shipping fee",
+          "flatHint": "Added to every order. Blank or 0 = free.",
+          "freeAbove": "Free shipping above",
+          "freeAboveHint": "Carts over this amount ship free.",
+          "note": "Shipping note",
+          "noteHint": "Shown in the cart and on the product page.",
+          "notePlaceholder": "2–5 business days · Tracked"
+        },
+        "payment": {
+          "title": "Payment link",
+          "intro": "Pick a payment provider and we'll append the payment link to every WhatsApp order message. Buyer pays via the link, you confirm in chat. No checkout flow built into the storefront.",
+          "provider": "Provider",
+          "providers": {
+            "none": "None · cash on delivery",
+            "upi": "UPI (India) — VPA + name",
+            "razorpay_link": "Razorpay Payment Link (paste static link)",
+            "razorpay_api": "Razorpay (auto-generate links + auto-confirm)",
+            "stripe_link": "Stripe Payment Link",
+            "paypal_me": "PayPal.me handle",
+            "bank_transfer": "Bank transfer instructions"
+          },
+          "handle": "Payment detail",
+          "handleHint": "UPI VPA, payment link URL, PayPal.me handle, or bank account.",
+          "handlePlaceholder": "e.g. shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "Razorpay API (auto links)",
+            "keyId": "Key ID",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Key secret",
+            "webhookSecret": "Webhook secret",
+            "stored": "saved — leave blank to keep",
+            "webhookHelp": "In Razorpay dashboard, set the webhook URL to",
+            "webhookEvent": "for the payment_link.paid event."
+          }
+        },
+        "recovery": {
+          "title": "Abandoned-cart recovery",
+          "enable": "Send a WhatsApp nudge to customers who start checkout but don't finish",
+          "enableHint": "Captures the phone at checkout; the nudge auto-cancels if they order. Needs a connected device.",
+          "delay": "Delay (minutes)",
+          "message": "Message",
+          "messageHint": "(blank = default; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Hi '{name}'! You left items in your cart at '{shop}'. Finish here: '{url}'"
+        },
+        "problems": {
+          "required": "This field is required.",
+          "tooLong": "At most {max} characters.",
+          "slugPattern": "Use lowercase letters, numbers and dashes only.",
+          "domainInvalid": "That doesn't look like a valid domain (e.g. shop.yourbiz.com).",
+          "urlInvalid": "Enter a full address starting with http:// or https://.",
+          "colorInvalid": "Use a hex color like #075E54.",
+          "amountInvalid": "Enter a number, zero or more.",
+          "amountTooBig": "At most {max}.",
+          "delayRange": "Enter a whole number from {min} to {max}.",
+          "themeInvalid": "Pick one of the themes.",
+          "currencyInvalid": "Pick one of the currencies in the list.",
+          "providerInvalid": "Pick one of the providers in the list.",
+          "slugTaken": "That slug is already taken. Pick another."
+        }
+      },
+      "share": {
+        "message": "Check out my shop: {name}",
+        "subject": "Check out my shop · {name}",
+        "eyebrow": "Share your shop",
+        "fallbackName": "My shop",
+        "close": "Close",
+        "link": "Shop link",
+        "copy": "Copy",
+        "copied": "Copied ✓",
+        "copiedShort": "Copied",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Send to a chat",
+        "email": "Email",
+        "emailHint": "Open mail app",
+        "telegram": "Telegram",
+        "telegramHint": "Share to channel",
+        "more": "More…",
+        "moreHint": "Phone share menu",
+        "nativeUnsupported": "Not supported on this browser",
+        "showQr": "Show QR code",
+        "qrAlt": "QR code",
+        "qrCaption": "Scan to open the shop"
+      },
+      "wizard": {
+        "loading": "Loading your shops",
+        "back": "Back",
+        "breadcrumb": "Connect / WhatsApp Store",
+        "manageConnections": "Manage all connections →",
+        "titles": {
+          "list": "Your shops",
+          "add": "Set up your store",
+          "edit": "Edit {name}",
+          "shopFallback": "shop"
+        },
+        "gate": {
+          "step": "Step 1 of 3",
+          "title": "Connect WhatsApp first",
+          "message": "Your store needs a connected WhatsApp number to send order confirmations and let customers chat. Head to your channels to pair one — it takes 30 seconds.",
+          "action": "Go to devices"
+        },
+        "list": {
+          "headline": "{count, plural, one {# shop} other {# shops}} in {workspace}",
+          "intro": "Each shop has its own public URL, theme, and sending device. Add as many as you need — different brands, languages, or regions.",
+          "add": "Add shop",
+          "addAnother": "Add another shop",
+          "addAnotherHint": "Run a separate storefront with its own URL, theme, and WhatsApp number."
+        },
+        "share": {
+          "fallbackName": "My shop"
+        },
+        "noAccess": {
+          "title": "You can't change shops",
+          "message": "Your role can view the shops but not create or edit them.",
+          "action": "Back to shops"
+        },
+        "delete": {
+          "title": "Delete {name}?",
+          "message": "Permanently deletes the storefront and its orders. Products in your workspace are not affected. There's no undo.",
+          "confirm": "Yes, delete",
+          "cancel": "Cancel",
+          "done": "Shop deleted.",
+          "thisShop": "this shop"
+        },
+        "reset": {
+          "open": "Clear all store data",
+          "title": "Clear all store data?",
+          "message": "Permanently deletes every shop, order and product of this workspace. There's no undo.",
+          "confirm": "Yes, clear everything",
+          "done": "All store data cleared for this workspace.",
+          "notConfirmed": "Reset not confirmed."
+        },
+        "card": {
+          "live": "Live",
+          "disabled": "Disabled",
+          "theme": "{theme} theme",
+          "untitled": "Untitled shop",
+          "sendingFrom": "Sending from",
+          "noDevice": "No device",
+          "domain": "Domain",
+          "pending": "pending",
+          "builtIn": "Built-in URL",
+          "manage": "Manage",
+          "manageTitle": "Open admin dashboard",
+          "preview": "Preview",
+          "previewTitle": "Open public storefront in a new tab",
+          "edit": "Edit",
+          "editTitle": "Edit shop settings",
+          "share": "Share",
+          "shareAria": "Share {name}",
+          "delete": "Delete shop",
+          "deleteAria": "Delete {name}"
+        },
+        "form": {
+          "backToShops": "Back to shops",
+          "creatingShop": "Creating shop #{n}",
+          "progress": "Steps",
+          "steps": {
+            "details": "Shop details",
+            "url": "Public URL",
+            "device": "Sending device"
+          },
+          "optional": "(optional)",
+          "details": {
+            "title": "Shop details",
+            "hint": "Customer-facing name + the URL slug under which products will live.",
+            "name": "Shop name",
+            "nameHint": "Shown on the storefront header and on order confirmations.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "e.g. {workspace} · Mumbai",
+            "slug": "Storefront slug",
+            "auto": "(auto)",
+            "slugLocked": "Locked once the store is live so shared links keep working.",
+            "slugAuto": "Generated from your shop name — finalised when you save."
+          },
+          "url": {
+            "title": "Public URL",
+            "hint": "Choose how buyers reach your store — built-in URL is free, custom domain looks more professional.",
+            "builtIn": "Built-in URL · free",
+            "pathMode": "Works as soon as you save. Path-based URL because no public storefront host is configured.",
+            "subdomainMode": "Works as soon as you save. Hosted on the platform's storefront domain.",
+            "domain": "Custom domain",
+            "domainHint": "You'll add a CNAME at your DNS provider and verify from the storefront settings page after save. Leave blank to use the built-in URL.",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} is verified.",
+            "pending": "{domain} pending DNS verification."
+          },
+          "device": {
+            "title": "Sending device",
+            "hint": "Which WhatsApp number sends order confirmations and replies to buyers.",
+            "none": "No connected devices on this account.",
+            "pair": "Pair one in your channels →",
+            "official": "Official API · Meta (WABA)",
+            "officialDetail": "Workspace WhatsApp Business number",
+            "fallback": "Device",
+            "noNumber": "No number",
+            "connected": "connected"
+          },
+          "cancel": "Cancel",
+          "deleteThis": "Delete this shop",
+          "saveChanges": "Save changes",
+          "create": "Create shop →",
+          "created": "Shop \"{name}\" created.",
+          "updated": "Shop \"{name}\" updated.",
+          "problems": {
+            "nameRequired": "Enter a shop name.",
+            "nameTooLong": "At most 191 characters.",
+            "domainInvalid": "That doesn't look like a valid domain (e.g. shop.yourbiz.com).",
+            "domainTooLong": "At most 191 characters.",
+            "deviceInvalid": "Pick one of your connected devices.",
+            "slugTaken": "That shop name produces an address that is already taken. Change the name a little."
+          },
+          "live": {
+            "eyebrow": "This shop is live",
+            "fallbackName": "Your shop",
+            "hint": "Add products, pick a theme, view orders, and share your link.",
+            "view": "View shop",
+            "share": "Share shop",
+            "dashboard": "Open dashboard"
+          }
+        }
+      }
+    }
+  }
+}
