@@ -1,0 +1,389 @@
+/*
+ * The flow builder's canvas styles. Same look as Reference's builder (dot grid, rounded node cards, dashed connectors,
+ * round ports, dark minimap) expressed in the platform's theme tokens: the brand green is `--brand`, paper is
+ * `--background` / `--muted`, rules are `--border`. Nothing here names a hex that belongs to Reference's branding except the
+ * semantic yes / no colours of a port.
+ */
+.flb-root {
+  --flb-mint: color-mix(in srgb, var(--brand) 12%, var(--background));
+  --flb-plum: #5b3d8a;
+  --flb-coral: #e87a5d;
+  --flb-bubble: color-mix(in srgb, var(--brand) 16%, var(--background));
+}
+[data-theme='dark'] .flb-root {
+  --flb-plum: #b79ae6;
+  --flb-bubble: color-mix(in srgb, var(--brand) 30%, var(--background));
+}
+
+.flb-root .canvas-dots {
+  background-color: var(--muted);
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--foreground) 14%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.flb-root .canvas-dots.dragging {
+  cursor: grabbing;
+}
+/* Touch: stop the page from scrolling or zooming while dragging a node, connecting a port, panning or pinching. */
+.flb-root .fb-touch-canvas,
+.flb-root .fb-touch-canvas .node-card,
+.flb-root .fb-touch-canvas .port {
+  touch-action: none;
+}
+
+.flb-root .node-card {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 0 rgb(0 0 0 / 0.04),
+    0 6px 16px -10px rgb(0 0 0 / 0.22);
+  transition:
+    box-shadow 0.14s ease,
+    border-color 0.14s ease;
+  color: var(--foreground);
+}
+.flb-root .node-card.selected {
+  border-color: var(--brand);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--brand) 28%, transparent),
+    0 14px 30px -14px color-mix(in srgb, var(--brand) 36%, transparent);
+}
+.flb-root .node-card.dragging {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--brand) 34%, transparent),
+    0 18px 30px -14px color-mix(in srgb, var(--brand) 42%, transparent);
+}
+.flb-root .node-row {
+  transition: background 0.14s ease;
+  border-radius: 10px;
+}
+.flb-root .node-row:hover {
+  background: var(--muted);
+}
+
+.flb-root .port {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--background);
+  border: 2px solid var(--muted-foreground);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+.flb-root .port.is-yes {
+  background: var(--flb-mint);
+  border-color: var(--brand);
+}
+.flb-root .port.is-no {
+  background: #fbe9e7;
+  border-color: var(--flb-coral);
+}
+.flb-root .port.out {
+  cursor: crosshair;
+  right: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+.flb-root .port.in {
+  cursor: cell;
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+.flb-root .port:hover,
+.flb-root .port.active {
+  background: var(--flb-mint);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 14%, transparent);
+}
+.flb-root .port.out:hover,
+.flb-root .port.out.active,
+.flb-root .port.in:hover,
+.flb-root .port.in.active {
+  transform: translateY(-50%) scale(1.18);
+}
+
+.flb-root .edge-path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--muted-foreground) 55%, transparent);
+  stroke-width: 1.6;
+  stroke-dasharray: 6 6;
+  transition:
+    stroke 0.14s,
+    stroke-width 0.14s;
+}
+.flb-root .edge-path.hover {
+  stroke: var(--muted-foreground);
+  stroke-width: 2;
+  cursor: pointer;
+}
+.flb-root .edge-path.no {
+  stroke: #e0a39a;
+}
+.flb-root .edge-path.no.hover {
+  stroke: #c56b4f;
+}
+.flb-root .edge-path.preview {
+  stroke: var(--brand);
+  stroke-dasharray: 5 4;
+  stroke-width: 2;
+  pointer-events: none;
+}
+.flb-root .edge-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 14;
+  cursor: pointer;
+  pointer-events: stroke;
+}
+
+.flb-root .node-actions {
+  position: absolute;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow:
+    0 6px 16px -6px rgb(0 0 0 / 0.22),
+    0 1px 2px rgb(0 0 0 / 0.08);
+  padding: 4px;
+  display: flex;
+  gap: 2px;
+  z-index: 25;
+}
+.flb-root .node-actions button {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+.flb-root .node-actions button:hover {
+  background: var(--muted);
+  color: var(--brand);
+}
+.flb-root .node-actions button.danger:hover {
+  background: #fbe9e7;
+  color: #c56b4f;
+}
+
+.flb-root .minimap {
+  position: absolute;
+  right: 16px;
+  bottom: 64px;
+  width: 170px;
+  height: 110px;
+  background: #0e2a26;
+  border: 1px solid #1f3f3a;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.35);
+  overflow: hidden;
+  z-index: 20;
+}
+.flb-root .minimap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.flb-root .minimap .mm-node {
+  fill: var(--primary);
+  stroke: var(--brand);
+  stroke-width: 1;
+  opacity: 0.85;
+}
+.flb-root .minimap .mm-view {
+  fill: color-mix(in srgb, var(--primary) 18%, transparent);
+  stroke: var(--primary);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  cursor: move;
+}
+
+.flb-root .edge-popup {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow:
+    0 6px 16px -6px rgb(0 0 0 / 0.22),
+    0 1px 2px rgb(0 0 0 / 0.08);
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.flb-root .edge-popup:hover {
+  color: #c56b4f;
+}
+.flb-root .edge-popup::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--background);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.flb-root .pal-card {
+  transition:
+    background 0.14s,
+    border-color 0.14s;
+}
+.flb-root .pal-card:hover {
+  background: var(--muted);
+  border-color: var(--brand);
+}
+
+.flb-root .ins-panel {
+  animation: flb-slide-in 0.22s ease;
+}
+@keyframes flb-slide-in {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.flb-root .bubble {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 10px 10px 10px 3px;
+  padding: 7px 9px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--foreground);
+}
+.flb-root .bubble.wa {
+  background: var(--flb-bubble);
+  border-color: color-mix(in srgb, var(--brand) 28%, var(--border));
+  border-radius: 10px 10px 3px 10px;
+}
+
+.flb-root .chip-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.flb-root .chip-icon-sm {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* The "Generate with AI" button: a green light running around its edge. */
+.flb-root .btn-ai-shine {
+  color: var(--brand);
+  background: transparent;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.1),
+    0 0 0 1px rgb(0 0 0 / 0.04);
+}
+.flb-root .btn-ai-shine::before {
+  content: '';
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: -2;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 240deg, #16a34a 300deg, #4ade80 330deg, #bbf7d0 345deg, transparent 360deg);
+  animation: flb-ai-spin 2.4s linear infinite;
+}
+.flb-root .btn-ai-shine::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 45%, #bbf7d0 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6);
+}
+[data-theme='dark'] .flb-root .btn-ai-shine::after {
+  background: linear-gradient(135deg, #0f3d2e 0%, #14532d 45%, #166534 100%);
+}
+.flb-root .btn-ai-shine:hover::after {
+  background: linear-gradient(135deg, #d1fae5 0%, #bbf7d0 45%, #86efac 100%);
+}
+@keyframes flb-ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flb-root .btn-ai-shine::before,
+  .flb-root .ins-panel {
+    animation: none;
+  }
+}
+
+/* Palette drawer on phones: an overlay, closed by default. */
+@media (max-width: 767.98px) {
+  .flb-root .flow-palette {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 30;
+    box-shadow: 8px 0 24px -12px rgb(0 0 0 / 0.35);
+  }
+  .flb-root .flow-palette-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+    background: rgb(0 0 0 / 0.3);
+  }
+  .flb-root .ins-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: min(360px, 100%);
+    z-index: 30;
+  }
+  .flb-root .flow-save-full {
+    display: none;
+  }
+  .flb-root .flow-toolbar .flow-btn-text {
+    display: none;
+  }
+  .flb-root .flow-ai-text {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  .flb-root .flow-save-short {
+    display: none;
+  }
+  .flb-root .flow-palette-backdrop {
+    display: none;
+  }
+}
