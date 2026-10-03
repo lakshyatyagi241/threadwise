@@ -138,7 +138,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-016 | backend-done |  | capture and normalization of every message (filters, 10-minute replay guard, sender and LID resolution, text priority, media, location, contact, reaction, forwarded) with per-device dedup, delivered to registered consumers; media bytes wait for storage (F5) |
 | WD-NODE-017 | backend-done |  | unofficial engine is an inbox channel kind (whatsapp_qr), one channel per device; customer messages go through the inbox ingest queue (replaces the inbound-message HTTP endpoint); small files kept, large or failed ones arrive as text saying so; groups are not threads; not run against a live number |
 | WD-NODE-018 | backend-done |  | phone-typed echoes are recorded on the thread as outbound once (ledger); group messages stay in the group directory; echo files and places are described, not copied; mirroring auto-replies belongs with 019 |
-| WD-NODE-019 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-019 | backend-done |  | keyword auto-reply and flow triggering are the flow runtime's trigger service (WD-FLR-001 to 004): the bridge's in-process matcher became module code; vishal/FLR |
 | WD-NODE-020 | backend-done |  | receipts go to the broadcast recipient, the scheduled recipient or the inbox message that owns the id (marker per inbox send), upward only |
 | WD-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
 | WD-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
@@ -160,16 +160,16 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-038 | backend-done |  | same adapter as 037; per-number daily cap and gaps in BCAST |
 | WD-NODE-039 | wontfix |  | dead code in WaDesk (campaign engine in Node is never reached and throws a ReferenceError) |
 | WD-NODE-040 | backend-done |  | campaign delivery and read reports reach CampaignReceiptsService through the receipt router; proven in the campaign e2e on the unofficial engine |
-| WD-NODE-041 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-042 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-043 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-044 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-045 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-046 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-047 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-048 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-041 | backend-done |  | flow start, resume and end are FlowLaunchService.start, the engine's reply routing and cancel/takeover (WD-FLR-011, 013, 050); no bridge endpoint is needed; vishal/FLR |
+| WD-NODE-042 | in-progress |  | the WhatsApp Cloud API inbound handoff is the InboundMessageHooks seam of the flow runtime (vishal/FLR); the Twilio part waits for the Twilio inbound row WD-WABA-047 (WADEV) |
+| WD-NODE-043 | backend-done |  | flow definition, attributes, template data and media store are module-internal calls of the flow runtime (compile-graph, TemplateService, ChatMediaStore); vishal/FLR |
+| WD-NODE-044 | in-progress |  | tag, assign, deal, AI, Meet and WhatsApp form are node executors (WD-FLR-030, 035 to 037, 043, 047); the MySQL node waits for a driver (WD-FLR-034); web search is not built |
+| WD-NODE-045 | backend-done |  | the ordering endpoints are WD-FLR-042 (parse, shipping, confirm, cancel, reply under /public/v1/flows/ordering); vishal/FLR |
+| WD-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes are built against GoogleWorkspacePort (WD-FLR-044 to 047); no Google account store exists yet, so they report no account |
+| WD-NODE-047 | in-progress |  | the Commerce shop node is built over FlowShopPort (WD-FLR-041); the store domains bind stock, native list and checkout link |
+| WD-NODE-048 | backend-done |  | booking for flows is the Book appointment node over the appointments domain (WD-FLR-040); vishal/FLR |
 | WD-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| WD-NODE-050 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
+| WD-NODE-050 | backend-done |  | one flow engine serves every channel through channel profiles (WD-FLR-060 to 068): the per-channel Node engines and Laravel callbacks are not needed; vishal/FLR |
 | WD-NODE-051 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | WD-NODE-052 | frontend-done |  | address, token, test connection; parity run pending |
 | WD-NODE-053 | wontfix |  | developer-only file-sync endpoint (wd-sync); not a product feature |
@@ -570,6 +570,57 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-FLR-018 | backend-done |  | taps routed to the menu they belong to (old menus work), 20-character label match, media-only ignored unless accepted, location to a maps link, persistent menus |
 | WD-FLR-019 | backend-done |  | one send door (dispatcher then thread), interactive content degraded per channel (buttons, list, link button, pin); no branding footer; a 24 hour window refusal fails the run with the reason |
 | WD-FLR-020 | backend-done |  | daily cap shared with broadcasts through the Redis tally, channel down halts and retries every 5 minutes |
+| WD-FLR-021 | backend-done |  | Message, Sequence and Media nodes: each reply in order, files by chatmedia key; flow-runtime e2e |
+| WD-FLR-022 | backend-done |  | Ask node: validated answers, retry text, timeout; flow-runtime e2e |
+| WD-FLR-023 | backend-done |  | Buttons node (three buttons; four to ten become a list where the channel has lists; numbered text elsewhere); channel-render.spec |
+| WD-FLR-024 | backend-done |  | List node and its numbered fallback; channel-render.spec |
+| WD-FLR-025 | backend-done |  | Poll as a list or numbered text (no native poll on any channel here), as WaDesk's own partial |
+| WD-FLR-026 | backend-done |  | Template node: approved templates by id within the workspace, variables filled from the run, a text fallback on channels without templates; commerce-template e2e |
+| WD-FLR-027 | backend-done |  | CTA and Location nodes; channel-render.spec |
+| WD-FLR-028 | backend-done |  | Condition node and the operator rules; condition unit spec |
+| WD-FLR-029 | backend-done |  | Delay node as a sleeping run with a resume time; flow-runtime e2e |
+| WD-FLR-030 | backend-done |  | AI node: one-shot, extraction, silent, conversation mode with an exit keyword, token ledger and the monthly cap on the platform key; ai-nodes e2e (20), ai-call-service spec |
+| WD-FLR-031 | in-progress |  | Sub-flow built (same workspace, published flows only, depth cap 10); the Chatbot hand-off to an AI agent waits for the AI agents domain: the executor and port are built and the port answers unavailable |
+| WD-FLR-032 | backend-done |  | Webhook node through the guarded fetch (no private hosts, no redirects, 5 MB cap), JSON-escaped variables, saved response; integrations-nodes e2e |
+| WD-FLR-033 | backend-done |  | Code node in a worker-thread vm with a memory cap and a 2 s limit; the ceiling (vm is not a hard security boundary) is written in the file header; integrations-nodes spec |
+| WD-FLR-034 | blocked |  | MySQL node: the executor, the read-only guard and the 100-row cap are built against a port; there is no mysql2 driver in the repo, so the default adapter says so |
+| WD-FLR-035 | backend-done |  | Tag node on the run's contact (add or remove, by id or name); actions-nodes e2e. Does not fire tag_added flows, as WaDesk |
+| WD-FLR-036 | backend-done |  | Assign agent node through AssignmentService with the flow actor; actions-nodes e2e |
+| WD-FLR-037 | backend-done |  | Deal node creates or moves the contact's open deal through the stage engine; actions-nodes e2e |
+| WD-FLR-038 | backend-done |  | Copy-to-number node through the run's channel, nothing recorded on the customer thread; actions-nodes e2e |
+| WD-FLR-039 | backend-done |  | WhatsApp-to-Instagram link node; actions-nodes e2e |
+| WD-FLR-040 | backend-done |  | Book appointment node through the appointments domain; commerce-book e2e |
+| WD-FLR-041 | backend-done |  | Commerce shop node over a store port (stock check, native product list, checkout link); the port says cannot until the store domains bind an adapter, which is WaDesk's own failure path; commerce-shop-form spec |
+| WD-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e |
+| WD-FLR-043 | backend-done |  | WhatsApp Form node and the form-submission resume; commerce-shop-form spec |
+| WD-FLR-044 | backend-done |  | Google Sheets node against a workspace port; no Google account store exists yet, so the nodes report no account and move on; integrations-nodes e2e |
+| WD-FLR-045 | backend-done |  | Google Docs node against the same port; integrations-nodes spec |
+| WD-FLR-046 | backend-done |  | Google Form node: sends the link, parks the run on a custom wait, the response webhook (per-org token) resumes it or the timeout port leaves; integrations-nodes e2e |
+| WD-FLR-047 | backend-done |  | Google Meet node against the Google port; integrations-nodes spec |
+| WD-FLR-048 | blocked |  | AI voice call node: built against AiCallPort whose default answers calls_unavailable; the real adapter binds when the calling domain (vishal/CALL) merges |
+| WD-FLR-049 | backend-done |  | Inbound media as an answer is kept as a chatmedia key, never a public link; flow-runtime e2e |
+| WD-FLR-050 | backend-done |  | Ending a run from outside: cancel by hand, agent takeover and a removed sender end the run; flow-runtime e2e |
+| WD-FLR-051 | backend-done |  | Run lifecycle: completed is really set (WaDesk never set it); statuses and the subscriber mirror; flow-runtime e2e |
+| WD-FLR-052 | frontend-done |  | Subscriber list, counts, pause and resume; per-row retry through the same confirmation as the history tab |
+| WD-FLR-053 | frontend-done |  | Analytics: KPIs, trend, status mix, source bars, leaderboard, all-time period and flow scope, the second counter band; counts launches that failed before a run existed; flow-runtime-read e2e |
+| WD-FLR-054 | frontend-done |  | Execution history: filters, status counts that ignore the status filter, search, dates, bulk retry bar; flow-runtime-read e2e |
+| WD-FLR-055 | frontend-done |  | Error logs: grouped reasons with first and last seen, retry these, show these runs; flow-runtime-read e2e |
+| WD-FLR-056 | frontend-done |  | Retry records table with outcome chips and totals; flow-runtime-read e2e |
+| WD-FLR-057 | frontend-done |  | Retry one: flow off 422, 30 s cooldown (FLR_RETRY_TOO_SOON, 429), then state 409; outcome and reason returned; flow-runtime-read e2e |
+| WD-FLR-058 | frontend-done |  | Bulk retry of up to 50 named runs with a count per outcome; flow-runtime-read e2e |
+| WD-FLR-059 | backend-done |  | Compare-and-set on step_seq, one job id per step, sweeper for lost jobs; flow-runtime e2e |
+| WD-FLR-060 | backend-done |  | One engine for every channel: a channel profile (buttons, list, link, location, templates, pace) says what a kind can show, the rest degrades to numbered text; channel-render.spec |
+| WD-FLR-061 | backend-done |  | Facebook Messenger: profile with reply buttons and a link button, no list or location; the channel adapter joins by registering for the kind (branch punya/punyafix, PR 34) |
+| WD-FLR-062 | backend-done |  | Instagram: the same profile as Messenger; the channel adapter joins by registering for the kind (PR 34) |
+| WD-FLR-063 | backend-done |  | TikTok: text with numbered options through the default profile |
+| WD-FLR-064 | backend-done |  | Telegram: text with numbered options; the payment node is not built (needs the Telegram payment provider) |
+| WD-FLR-065 | backend-done |  | LINE: text with numbered options through the default profile |
+| WD-FLR-066 | backend-done |  | Viber: text with numbered options through the default profile |
+| WD-FLR-067 | backend-done |  | WeChat: text with numbered options through the default profile |
+| WD-FLR-068 | backend-done |  | Email: text with numbered options through the default profile |
+| WD-FLR-069 | blocked |  | Call-flow (voice IVR) is the calling domain's: vishal/CALL, PR 35, and its AI assistant rows |
+| WD-FLR-070 | wontfix |  | dead code in WaDesk: the per-channel session tables are replaced by flow_runs |
+| WD-FLR-071 | backend-done |  | the runtime regression suite is the unit and e2e specs of this domain (218 unit, 80 e2e) |
 
 ## chatbot-widget (wgt)
 

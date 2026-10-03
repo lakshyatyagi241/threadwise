@@ -17,7 +17,11 @@ const digits = (to: string): string => to.replace(/\D+/g, '');
 export function metaRecipient(to: string): string {
   const d = digits(to);
   if (d.length < 4 || d.length > 20) {
-    throw new ChannelError(META_FAILURE.RECIPIENT_REFUSED, 'The recipient is not a phone number', false);
+    throw new ChannelError(
+      META_FAILURE.RECIPIENT_REFUSED,
+      'The recipient is not a phone number',
+      false,
+    );
   }
   return d;
 }
@@ -60,7 +64,11 @@ function interactiveBody(i: Extract<OutboundEnvelope, { kind: 'interactive' }>['
     case 'list': {
       const rows = i.sections.reduce((n, s) => n + s.rows.length, 0);
       if (rows > 10) {
-        throw new ChannelError(META_FAILURE.REQUEST_INVALID, 'A list holds at most 10 rows in total', false);
+        throw new ChannelError(
+          META_FAILURE.REQUEST_INVALID,
+          'A list holds at most 10 rows in total',
+          false,
+        );
       }
       return {
         type: 'list',
@@ -84,11 +92,32 @@ function interactiveBody(i: Extract<OutboundEnvelope, { kind: 'interactive' }>['
         ...head,
         action: { name: 'cta_url', parameters: { display_text: i.text, url: i.url } },
       };
+    case 'flow':
+      return {
+        type: 'flow',
+        ...(i.header ? { header: { type: 'text', text: i.header } } : {}),
+        body: { text: i.body },
+        ...(i.footer ? { footer: { text: i.footer } } : {}),
+        action: {
+          name: 'flow',
+          parameters: {
+            flow_message_version: '3',
+            flow_token: i.flowToken,
+            flow_id: i.flowId,
+            flow_cta: i.cta,
+            flow_action: 'navigate',
+            mode: 'published',
+          },
+        },
+      };
   }
 }
 
 /** Builds the message body. `media` is what the uploader returned for a `media` envelope (the file is uploaded before this runs). */
-export function buildMessageBody(envelope: OutboundEnvelope, media?: PreparedWhatsappMedia): MetaMessageBody {
+export function buildMessageBody(
+  envelope: OutboundEnvelope,
+  media?: PreparedWhatsappMedia,
+): MetaMessageBody {
   const base = {
     messaging_product: 'whatsapp',
     recipient_type: 'individual',
@@ -132,7 +161,10 @@ export function buildMessageBody(envelope: OutboundEnvelope, media?: PreparedWha
       return {
         ...base,
         type: 'reaction',
-        reaction: { message_id: envelope.reaction.providerMessageId, emoji: envelope.reaction.emoji },
+        reaction: {
+          message_id: envelope.reaction.providerMessageId,
+          emoji: envelope.reaction.emoji,
+        },
       };
 
     case 'location':
@@ -174,7 +206,12 @@ export function buildMessageBody(envelope: OutboundEnvelope, media?: PreparedWha
       };
 
     case 'interactive':
-      return { ...base, ...context, type: 'interactive', interactive: interactiveBody(envelope.interactive) };
+      return {
+        ...base,
+        ...context,
+        type: 'interactive',
+        interactive: interactiveBody(envelope.interactive),
+      };
   }
 }
 

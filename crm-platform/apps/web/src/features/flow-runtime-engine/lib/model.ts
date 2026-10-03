@@ -123,6 +123,8 @@ export function errorKey(code: string): string | null {
       return 'runStateConflict';
     case FLR_ERROR_CODES.FLR_NOT_RETRYABLE:
       return 'notRetryable';
+    case FLR_ERROR_CODES.FLR_RETRY_TOO_SOON:
+      return 'retryTooSoon';
     case FLR_ERROR_CODES.FLR_FLOW_EMPTY:
       return 'flowEmpty';
     case FLR_ERROR_CODES.FLR_CONVERSATION_NOT_FOUND:
