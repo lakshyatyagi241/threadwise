@@ -14,12 +14,12 @@ import {
   refreshAll,
   resumeSubscriber,
   retryFailed,
-  retrySubscriber,
   useFlowOptions,
   useSubscribers,
 } from '../api/flow-runtime';
 import { parseSubscriberStatus, shortId } from '../lib/model';
 import { EnrollPanel } from './enroll-panel';
+import { useRetryActions } from './use-retry';
 import {
   CARD,
   Denied,
@@ -72,6 +72,7 @@ export function SubscribersScreen({ flowId }: { flowId: string }) {
   const [confirmAll, setConfirmAll] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
+  const retry = useRetryActions();
 
   const act = async (s: FlowSubscriber, fn: (id: string) => Promise<unknown>, done: string) => {
     setBusyId(s.id);
@@ -300,8 +301,8 @@ export function SubscribersScreen({ flowId }: { flowId: string }) {
                               <Button
                                 variant="secondary"
                                 size="sm"
-                                disabled={busyId === s.id}
-                                onClick={() => void act(s, retrySubscriber, t('subs.retried'))}
+                                disabled={retry.busy}
+                                onClick={() => retry.ask([s.id])}
                               >
                                 {t('subs.retry')}
                               </Button>
@@ -330,6 +331,7 @@ export function SubscribersScreen({ flowId }: { flowId: string }) {
         </>
       )}
 
+      {retry.dialog}
       <ConfirmDialog
         open={confirmAll}
         title={t('subs.retryAllTitle')}

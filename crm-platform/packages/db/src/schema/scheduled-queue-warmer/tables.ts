@@ -16,6 +16,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
@@ -71,6 +72,10 @@ export const scheduledMessages = pgTable(
     totalDelivered: integer('total_delivered').notNull().default(0),
     totalFailed: integer('total_failed').notNull().default(0),
     chargedSent: integer('charged_sent').notNull().default(0),
+    warmerReserved: integer('warmer_reserved').notNull().default(0),
+    warmerReservedDay: date('warmer_reserved_day'),
+    source: text('source').notNull().default('manual'),
+    externalKey: text('external_key'),
     provider: text('provider'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -107,6 +112,11 @@ export const scheduledMessages = pgTable(
     index('idx_scheduled_messages_user_id').on(t.orgId, t.userId),
     index('idx_scheduled_messages_schedule_type').on(t.orgId, t.scheduleType),
     index('idx_scheduled_messages_status_next_run_at').on(t.orgId, t.status, t.nextRunAt),
+    check('chk_scheduled_messages_warmer_reserved', sql`${t.warmerReserved} >= 0`),
+    check('chk_scheduled_messages_source', sql`${t.source} ~ '^[a-z][a-z0-9_]{1,31}$'`),
+    uniqueIndex('uq_scheduled_messages_external_key')
+      .on(t.orgId, t.externalKey)
+      .where(sql`${t.externalKey} IS NOT NULL`),
   ],
 );
 

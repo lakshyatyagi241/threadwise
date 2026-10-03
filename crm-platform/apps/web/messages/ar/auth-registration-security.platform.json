@@ -1416,7 +1416,8 @@
             "flows": "التدفقات",
             "autoreplies": "الردود التلقائية بالكلمات المفتاحية",
             "total_campaigns": "الحملات المنشأة (لا يحررها الحذف)",
-            "api_rate_limit_per_minute": "طلبات API في الدقيقة (0 = الافتراضي للمنصة)"
+            "api_rate_limit_per_minute": "طلبات API في الدقيقة (0 = الافتراضي للمنصة)",
+            "scheduled_messages": "الرسائل المجدولة المحفوظة"
           },
           "featureGroups": {
             "messaging": "المراسلة",
@@ -1440,7 +1441,9 @@
             "inbox_routing": "قواعد التوجيه وساعات العمل في صندوق الوارد",
             "waba_calling": "إجراء مكالمات واتساب والرد عليها من صندوق الوارد",
             "inbox_kanban": "لوحة كانبان لصندوق الوارد",
-            "team_performance": "تقارير أداء الفريق"
+            "team_performance": "تقارير أداء الفريق",
+            "scheduled_messages": "الرسائل المجدولة",
+            "whatsapp_warmer": "إحماء أرقام واتساب"
           },
           "problems": {
             "required": "هذا الحقل مطلوب.",

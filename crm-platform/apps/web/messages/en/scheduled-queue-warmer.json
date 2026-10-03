@@ -1,0 +1,483 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": { "scheduled": "Scheduled", "warmer": "Warmer" },
+    "common": { "dismiss": "Dismiss" },
+    "status": {
+      "scheduled": "Queued",
+      "running": "Running",
+      "paused": "Paused",
+      "completed": "Done",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "type": { "plain": "Plain", "template": "Template", "media": "Media", "location": "Location" },
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "VALIDATION_FAILED": "Some fields need attention.",
+      "ROW_VERSION_CONFLICT": "This schedule changed in the meantime. Reload and try again.",
+      "PLAN_FEATURE_LOCKED": "Your plan does not include this feature.",
+      "PLAN_LIMIT_REACHED": "You have reached the limit of your plan.",
+      "AUTH_SEND_HALTED": "Sending is halted for this workspace.",
+      "upgrade": "See plans and upgrade",
+      "requestId": "Request {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Schedule paused.",
+        "resume": "Schedule resumed.",
+        "cancel": "Schedule cancelled.",
+        "run-now": "Schedule is running now.",
+        "destroy": "Schedule deleted.",
+        "retry": "Schedule queued with the new time."
+      }
+    },
+    "confirm": {
+      "yes": "Yes, proceed",
+      "keep": "Keep it",
+      "cancel": {
+        "title": "Cancel this schedule?",
+        "body": "\"{name}\" will not send. This cannot be undone."
+      },
+      "run-now": {
+        "title": "Run this schedule now?",
+        "body": "\"{name}\" will start sending right away instead of at its set time."
+      },
+      "destroy": {
+        "title": "Delete this schedule?",
+        "body": "\"{name}\" and its recipient list will be removed."
+      }
+    },
+    "retry": {
+      "title": "Retry with new time",
+      "body": "Pick a fresh send time for \"{name}\". It goes back to Queued.",
+      "date": "Send date",
+      "time": "Time",
+      "timezone": "Timezone",
+      "keep": "Keep failed",
+      "confirm": "Retry now"
+    },
+    "list": {
+      "crumb": "Campaigns / Scheduled messages",
+      "title": "Scheduled messages",
+      "queued": "{n} queued",
+      "create": "Schedule message",
+      "stats": {
+        "total": "Total scheduled",
+        "totalHint": "across all states",
+        "active": "Active queue",
+        "activeHint": "waiting to fire",
+        "sent": "Total sent",
+        "sentHint": "messages out (this page)",
+        "delivery": "Delivery rate",
+        "deliveryHint": "across completed (this page)"
+      },
+      "upNext": {
+        "eyebrow": "Up next",
+        "title": "Next to fire",
+        "pending": "{n} pending",
+        "empty": "Nothing scheduled yet.",
+        "createOne": "Create one →",
+        "recurring": "recurring",
+        "queued": "queued"
+      },
+      "tip": {
+        "eyebrow": "Tip",
+        "title": "Send when they read",
+        "body": "Open rates peak between 9–11 AM and 6–8 PM in your contacts' local timezones. Pick a send time that matches the recipient cohort — recurring schedules let you set this once and forget.",
+        "cta": "Schedule one"
+      },
+      "tabs": {
+        "all": "All",
+        "upcoming": "Upcoming",
+        "running": "Running",
+        "paused": "Paused",
+        "completed": "Completed",
+        "failed": "Failed"
+      },
+      "search": "Search by name…",
+      "cols": {
+        "schedule": "Schedule",
+        "type": "Type",
+        "recipients": "Recipients",
+        "sendTime": "Send time",
+        "repeat": "Repeat",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "recipients": { "group": "Group", "tag": "Tag", "queue": "Queue", "number": "Numbers" },
+      "when": {
+        "overdue": "overdue",
+        "now": "now",
+        "minutes": "in {n}m",
+        "hours": "in {n}h",
+        "tomorrow": "tomorrow",
+        "date": "later"
+      },
+      "completedAt": "completed {when}",
+      "once": "once",
+      "actions": {
+        "open": "Open",
+        "pause": "Pause",
+        "resume": "Resume",
+        "runNow": "Run now",
+        "cancel": "Cancel",
+        "retry": "Retry with new time",
+        "delete": "Delete",
+        "deleteHistory": "Delete from history"
+      },
+      "empty": {
+        "title": "No schedules",
+        "none": "Schedule your first message.",
+        "filtered": "No schedules match the current filters. Try clearing filters or schedule your first message.",
+        "reset": "Reset filters"
+      },
+      "page": "Page {page} of {pages}",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "composer": {
+      "crumb": "Scheduled / New",
+      "title": "Schedule a message",
+      "back": "Back",
+      "forbidden": "You do not have permission to schedule messages.",
+      "steps": "Steps",
+      "stepNames": {
+        "basics": "Basics",
+        "audience": "Recipients",
+        "message": "Message",
+        "when": "When",
+        "review": "Review"
+      },
+      "required": "required",
+      "previous": "Previous",
+      "next": "Next",
+      "submit": "Schedule message",
+      "stepOf": "Step {n} of {total}",
+      "engine": {
+        "baileys": "Unofficial API",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": { "title": "Plain text", "hint": "Just words and emojis.", "pill": "plain text" },
+        "template": {
+          "title": "Template",
+          "hint": "Approved WhatsApp template.",
+          "pill": "template"
+        },
+        "media": { "title": "With media", "hint": "Image, video, doc, audio.", "pill": "media" },
+        "location": { "title": "Location", "hint": "Lat/long pin.", "pill": "location" }
+      },
+      "basics": {
+        "title": "Schedule basics",
+        "name": "Schedule name",
+        "nameHint": "Internal label only — recipients don't see this.",
+        "namePlaceholder": "e.g. Spring promo / VIP segment",
+        "sender": "Sender",
+        "senders": "Senders",
+        "tickAll": "Tick all that apply",
+        "noSenders": "No connected sender. Connect a number first.",
+        "warming": "Warming",
+        "splitHint": "Each ticked sender runs its own schedule with a fair share of the audience.",
+        "messageType": "Message type"
+      },
+      "audience": {
+        "title": "Recipients",
+        "source": "Recipient source",
+        "sources": {
+          "group": { "title": "Group", "hint": "Pick one or more saved contact groups." },
+          "tag": { "title": "Tags", "hint": "Everyone carrying a tag" },
+          "queue": {
+            "title": "Audience queue",
+            "hint": "Re-target a past broadcast's recipients."
+          },
+          "number": { "title": "Numbers", "hint": "Paste a list manually." }
+        },
+        "chooseGroups": "Choose group(s)",
+        "chooseTags": "Pick one or more tags",
+        "chooseQueues": "Pick one or more past broadcasts",
+        "tickAny": "(tick any number)",
+        "noGroups": "No groups yet",
+        "noTags": "No tags yet",
+        "noQueues": "No completed broadcasts yet",
+        "contacts": "Go to Contacts",
+        "broadcast": "Go to Broadcasts",
+        "tagsHint": "Recipients are recalculated when the schedule fires, so newly tagged contacts are included.",
+        "queuesHint": "Tick any number of broadcasts. Recipients are de-duplicated automatically before sending.",
+        "paste": "Paste numbers",
+        "pasteHint": "Country code first, no leading +. Newlines or commas separate entries.",
+        "pastePlaceholder": "One number per line — include the country code, no plus sign",
+        "total": "Total recipients:",
+        "optedOut": "{n} left out: opted out or archived"
+      },
+      "message": {
+        "title": "Compose message",
+        "content": "Message content",
+        "caption": "Caption",
+        "placeholder": "Hi '{name}', your scheduled update is here…",
+        "personalise": "Use '{name}', '{phone}', '{email}' for personalization.",
+        "template": "Approved template",
+        "chooseTemplate": "Choose an approved template",
+        "browse": "Click to browse your templates",
+        "approved": "APPROVED",
+        "change": "Change",
+        "mediaLink": "Media link",
+        "mediaHint": "A link to the file (https://…). Image, video, audio or document.",
+        "pin": "Pin location",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "estimate": "Estimated send time",
+        "minutes": "about {n} min",
+        "estimateHint": "at 60 msg/min",
+        "estimateEmpty": "pick recipients first.",
+        "variables": "Variables in message",
+        "variablesHint": "placeholders detected.",
+        "pickerEyebrow": "templates",
+        "pickerTitle": "Choose a template",
+        "pickerHint": "Only approved, active templates are shown.",
+        "pickerSearch": "Search by name or language…",
+        "pickerEmpty": "No templates match.",
+        "manageTemplates": "Manage templates →",
+        "cancel": "Cancel"
+      },
+      "when": {
+        "title": "When to send",
+        "modes": {
+          "once": { "title": "Send once", "hint": "A single delivery at the chosen date & time." },
+          "recurring": {
+            "title": "Recurring",
+            "hint": "Repeat daily, weekly, or monthly on a fixed cadence."
+          }
+        },
+        "date": "Send date",
+        "time": "Time",
+        "timezone": "Timezone",
+        "recurrence": "Recurrence",
+        "every": "Repeat every",
+        "interval": "Interval",
+        "intervals": { "daily": "day(s)", "weekly": "week(s)", "monthly": "month(s)" },
+        "end": "End",
+        "endNever": "Never",
+        "endDate": "On a specific date",
+        "endOn": "Last day",
+        "days": "Days of week",
+        "daysHint": "Click any day to toggle. Weekly schedules need at least one.",
+        "lead": "A schedule must be at least {n} minutes ahead."
+      },
+      "review": {
+        "title": "Review & schedule",
+        "final": "final",
+        "schedule": "Schedule",
+        "name": "Name",
+        "sender": "Sender",
+        "type": "Type",
+        "mode": "Mode",
+        "at": "First send",
+        "once": "Send once",
+        "recurring": "Every {n} {interval}",
+        "delivery": "Delivery",
+        "source": "Recipient source",
+        "recipients": "Recipients",
+        "estimated": "Estimated time",
+        "testTitle": "Send a test first",
+        "testHint": "Receive one preview message at a number you enter before the full blast.",
+        "testNumber": "Send a test to this number",
+        "testNumberHint": "Country code first, no leading +."
+      },
+      "preview": {
+        "title": "Live preview",
+        "channel": "WhatsApp",
+        "empty": "Your message will appear here…",
+        "media": "[ media attached ]",
+        "pin": "Location pin",
+        "noTemplate": "No template chosen"
+      },
+      "errors": {
+        "nameRequired": "Give the schedule a name.",
+        "senderRequired": "Pick at least one sender.",
+        "wabaTemplate": "WhatsApp Cloud API numbers cannot send template schedules. Untick them or choose another message type.",
+        "audienceRequired": "Pick at least one.",
+        "numbersRequired": "Paste at least one number.",
+        "messageRequired": "Write the message.",
+        "messageTooLong": "The message is over 1024 characters.",
+        "templateRequired": "Choose a template.",
+        "mediaLink": "Enter a link starting with http:// or https://.",
+        "latitude": "Enter a latitude between -90 and 90.",
+        "longitude": "Enter a longitude between -180 and 180.",
+        "dateRequired": "Choose a date.",
+        "timeRequired": "Enter a time such as 14:30.",
+        "timezoneRequired": "Choose a timezone.",
+        "tooSoon": "Pick a time at least a few minutes from now.",
+        "repeatEvery": "Enter a whole number from 1 to 365.",
+        "daysRequired": "Choose the days of the week.",
+        "endDateRequired": "Choose the last day.",
+        "endBeforeStart": "The end date is before the first send.",
+        "testNumber": "Enter the number with its country code."
+      }
+    },
+    "detail": {
+      "crumb": "Scheduled / Analytics",
+      "title": "Schedule analytics",
+      "back": "Back to scheduled messages",
+      "eyebrow": "Scheduled message",
+      "untitled": "Untitled",
+      "recurs": "Recurs · {interval} × {n}",
+      "fires": "Fires {when}",
+      "actions": {
+        "pause": "Pause",
+        "resume": "Resume",
+        "runNow": "Run now",
+        "cancel": "Cancel",
+        "retry": "Retry with new time",
+        "delete": "Delete"
+      },
+      "kpi": {
+        "recipients": "Recipients",
+        "delivered": "Delivered",
+        "read": "Read",
+        "sent": "Sent",
+        "status": "Status",
+        "ofSent": "of sent",
+        "failedCount": "{n} failed",
+        "pendingCount": "{n} pending",
+        "fires": "fires {when}",
+        "paused": "paused",
+        "done": "done {when}"
+      },
+      "funnel": {
+        "eyebrow": "Delivery funnel",
+        "title": "From send to action",
+        "recipients": "Recipients",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "failed": "Failed"
+      },
+      "mix": {
+        "eyebrow": "Status mix",
+        "title": "Delivery status",
+        "empty": "No send activity yet.",
+        "delivered": "Delivered",
+        "sentOnly": "Sent · not delivered",
+        "failed": "Failed",
+        "pending": "Pending"
+      },
+      "recipients": {
+        "eyebrow": "Recipients",
+        "title": "Who got what",
+        "none": "No recipients on file for this schedule.",
+        "emptyTab": "No recipients in this tab yet.",
+        "truncated": "Showing the first {n} of {total} recipients.",
+        "tabs": {
+          "all": "All",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "read": "Read",
+          "failed": "Failed",
+          "pending": "Pending"
+        },
+        "cols": {
+          "recipient": "Recipient",
+          "phone": "Phone",
+          "status": "Status",
+          "when": "When",
+          "note": "Note"
+        },
+        "status": {
+          "pending": "Pending",
+          "processing": "Pending",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "read": "Read",
+          "failed": "Failed"
+        }
+      },
+      "config": {
+        "eyebrow": "Schedule details",
+        "title": "Configuration",
+        "scheduleType": "Schedule type",
+        "messageType": "Message type",
+        "scheduledAt": "Scheduled at",
+        "nextRun": "Next run",
+        "lastRun": "Last run",
+        "repeats": "Repeats every",
+        "until": "until {date}",
+        "sender": "From sender",
+        "provider": "Engine",
+        "attempts": "Send attempts"
+      },
+      "preview": {
+        "eyebrow": "Message preview",
+        "title": "What recipients see",
+        "empty": "(empty body)"
+      },
+      "another": "Schedule another"
+    },
+    "warmer": {
+      "warming": "{n} warming",
+      "name": "WhatsApp Warmer",
+      "tagline": "Number warm-up",
+      "how": {
+        "title": "How it works",
+        "one": "Turn warming on for a number.",
+        "two": "Each day it may send a little more than the day before.",
+        "three": "Messages go out slowly, only during the hours you choose.",
+        "four": "Campaigns, broadcasts and scheduled sends all respect the limit."
+      },
+      "good": {
+        "title": "Good to know",
+        "body": "Warming lowers the risk of a ban on Unofficial API numbers — it is not a guarantee. For high volume, use an official WhatsApp Business (Cloud API) number, which needs no warming."
+      },
+      "crumb": "Campaigns / Warmer",
+      "heading": "Warm up your numbers",
+      "lead": "Ramp each Unofficial API number's daily send limit with human-like gaps and active hours to reduce ban risk. Each number warms up on its own schedule.",
+      "tiles": {
+        "warming": "Numbers warming",
+        "warmingHint": "of {n} connected",
+        "budget": "Today's budget",
+        "budgetHint": "messages allowed today",
+        "sent": "Sent today",
+        "sentHint": "counted toward warm-up",
+        "health": "Avg health",
+        "healthHint": "across all numbers"
+      },
+      "empty": "No connected numbers yet.",
+      "connect": "Connect a number",
+      "number": "Number",
+      "engines": { "baileys": "Unofficial API", "waba": "WABA", "twilio": "Twilio" },
+      "health": "Health {n}",
+      "healthTitle": "Health score (higher = safer to ramp)",
+      "switch": "Warming",
+      "budgetToday": "Today's budget",
+      "remaining": "Remaining today",
+      "sentToday": "Sent today",
+      "fields": {
+        "dailyBase": "Start budget/day",
+        "stepPct": "Ramp +% / step",
+        "stepDays": "Ramp every (days)",
+        "maxDaily": "Max budget/day",
+        "gapMin": "Min gap (sec)",
+        "gapMax": "Max gap (sec)",
+        "activeStart": "Active from (hr)",
+        "activeEnd": "Active to (hr)"
+      },
+      "hints": {
+        "dailyBase": "How many messages this number may send on day one.",
+        "stepPct": "Grow that daily limit by this percent each step.",
+        "stepDays": "How often the limit grows (every N days).",
+        "maxDaily": "The highest the daily limit ever reaches.",
+        "gapMin": "Shortest wait between two messages.",
+        "gapMax": "Longest wait between two messages.",
+        "activeStart": "Only start sending after this hour (24-hour clock).",
+        "activeEnd": "Stop sending after this hour."
+      },
+      "spintax": {
+        "title": "Spintax variety",
+        "hint": "Send slightly different wording to each person so messages don't look identical. Write choices like '{Hi|Hello|Hey}' there."
+      },
+      "save": "Save warm-up",
+      "saved": "Warm-up saved."
+    }
+  }
+}
