@@ -73,6 +73,10 @@ admin analytics tab map (panel visibility per tab, as Reference's `data-wa-tab-p
 | TW-DASH-054         | dead code, not ported on purpose                                                                                                                                   |
 | Add workspace, rows | the admin overview's "Add workspace" button and row links need the operator workspace screens (WSP admin), not built; "View all" opens workspace plans             |
 
+## Verification (round 2 close)
+
+API unit 43, API e2e 67 (6 files), web 28 passed against a freshly migrated crm_dash; arch:check 0 errors; db:verify-schema 0 errors. Typecheck errors that remain belong to other domains' specs (campaigns, telegram, bridge, chat, plan-draft), none in DASH files.
+
 ## Not verified
 
 - Charts with real traffic: all screenshots ran on a database with almost no messages, orders or devices.
