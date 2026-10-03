@@ -327,19 +327,19 @@ export class WorkspaceSettingsService {
     const { orgId, userId } = this.actor();
     const res = await this.db.txAs({ orgId, userId }, (tx) =>
       tx.execute(
-        sql`SELECT settings ->> 'autoAiSummarize' AS v FROM users WHERE org_id = ${orgId} AND id = ${userId}`,
+        sql`SELECT auto_ai_summarize_enabled AS v FROM user_settings WHERE org_id = ${orgId} AND user_id = ${userId}`,
       ),
     );
-    const v = (res.rows[0] as { v: string | null } | undefined)?.v;
-    return { autoAiSummarize: v === 'true' };
+    return { autoAiSummarize: (res.rows[0] as { v: boolean } | undefined)?.v === true };
   }
 
   async savePreferences(body: SavePreferencesRequest): Promise<PreferencesResponse> {
     const { orgId, userId } = this.actor();
     await this.db.txAs({ orgId, userId }, async (tx) => {
       await tx.execute(sql`
-        UPDATE users SET settings = settings || ${JSON.stringify({ autoAiSummarize: body.autoAiSummarize })}::jsonb
-         WHERE org_id = ${orgId} AND id = ${userId}
+        INSERT INTO user_settings (org_id, user_id, auto_ai_summarize_enabled)
+        VALUES (${orgId}, ${userId}, ${body.autoAiSummarize})
+        ON CONFLICT (org_id, user_id) DO UPDATE SET auto_ai_summarize_enabled = EXCLUDED.auto_ai_summarize_enabled
       `);
       await this.audit.record(tx, {
         event: 'user.preferences_updated',
