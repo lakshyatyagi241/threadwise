@@ -31,8 +31,8 @@ Inventory written 2026-10-02: `docs/threadwise-port/inventory/campaigns.md` (TW-
 | C1   | Inventory, create, edit, list, detail, builder, recipients (DONE)                   | 001-010, 019                |
 | C2   | Cancel, resume, send now, resend, delete, export; the sender and the sweeper (DONE) | 011-018, 020, 023           |
 | C3   | Node callbacks, provider receipts, replies, opt-outs (DONE)                         | 021, 022                    |
-| C4   | Web: list, builder (create and edit), detail                                        | 001, 002, 003, 010, 016-020 |
-| C5   | Webhook and bell mappers for `campaign.*`; segments and engagement tabs             | 019, 024                    |
+| C4   | Web: list, builder (create and edit), detail (DONE)                                 | 001, 002, 003, 010, 016-020 |
+| C5   | Webhook and bell mappers for `campaign.*`; segments and engagement tabs (DONE)      | 019, 024                    |
 | C6   | Flow campaigns, build with AI, Meta click sync (BLOCKED: other domains)             | 025, 026, 027               |
 
 ## Channels and ECOM
