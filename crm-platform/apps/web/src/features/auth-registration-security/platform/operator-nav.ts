@@ -11,6 +11,7 @@ export interface OperatorNavItem {
   groupKey: string;
 }
 
+import { CPN_OPERATOR_NAV } from '../../coupons-credits-referral-currency/operator-nav';
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
 import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
 import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
@@ -59,6 +60,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   },
   // per-workspace plans and limits (PLAN domain)
   ...PLAN_OPERATOR_NAV,
+  // coupons, credit packages and currencies (CPN domain)
+  ...CPN_OPERATOR_NAV,
   // platform settings, branding and storage (SET domain)
   ...SET_OPERATOR_NAV,
   // roles and permissions domain (RBAC): Roles, Permissions, Staff roles
