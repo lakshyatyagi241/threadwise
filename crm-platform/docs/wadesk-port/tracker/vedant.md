@@ -516,86 +516,86 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-FLB-001 | todo |  |  |
-| WD-FLB-002 | todo |  |  |
-| WD-FLB-003 | todo |  |  |
-| WD-FLB-004 | todo |  |  |
-| WD-FLB-005 | todo |  |  |
-| WD-FLB-006 | todo |  |  |
-| WD-FLB-007 | todo |  |  |
-| WD-FLB-008 | todo |  |  |
-| WD-FLB-009 | todo |  |  |
-| WD-FLB-010 | todo |  |  |
-| WD-FLB-011 | todo |  |  |
-| WD-FLB-012 | todo |  |  |
-| WD-FLB-013 | todo |  |  |
-| WD-FLB-014 | todo |  |  |
-| WD-FLB-015 | todo |  |  |
-| WD-FLB-016 | todo |  |  |
-| WD-FLB-017 | todo |  |  |
-| WD-FLB-018 | todo |  |  |
-| WD-FLB-019 | todo |  |  |
-| WD-FLB-020 | todo |  |  |
-| WD-FLB-021 | todo |  |  |
-| WD-FLB-022 | todo |  |  |
-| WD-FLB-023 | todo |  |  |
-| WD-FLB-024 | todo |  |  |
-| WD-FLB-025 | todo |  |  |
-| WD-FLB-026 | todo |  |  |
-| WD-FLB-027 | todo |  |  |
-| WD-FLB-028 | todo |  |  |
-| WD-FLB-029 | todo |  |  |
-| WD-FLB-030 | todo |  |  |
-| WD-FLB-031 | todo |  |  |
-| WD-FLB-032 | todo |  |  |
-| WD-FLB-033 | todo |  |  |
-| WD-FLB-034 | todo |  |  |
-| WD-FLB-035 | todo |  |  |
-| WD-FLB-036 | todo |  |  |
-| WD-FLB-037 | todo |  |  |
-| WD-FLB-038 | todo |  |  |
-| WD-FLB-039 | todo |  |  |
-| WD-FLB-040 | todo |  |  |
-| WD-FLB-041 | todo |  |  |
-| WD-FLB-042 | todo |  |  |
-| WD-FLB-043 | todo |  |  |
-| WD-FLB-044 | todo |  |  |
-| WD-FLB-045 | todo |  |  |
-| WD-FLB-046 | todo |  |  |
-| WD-FLB-047 | todo |  |  |
-| WD-FLB-048 | todo |  |  |
-| WD-FLB-049 | todo |  |  |
-| WD-FLB-050 | todo |  |  |
-| WD-FLB-051 | todo |  |  |
-| WD-FLB-052 | todo |  |  |
-| WD-FLB-053 | todo |  |  |
-| WD-FLB-054 | todo |  |  |
-| WD-FLB-055 | todo |  |  |
-| WD-FLB-056 | todo |  |  |
-| WD-FLB-057 | todo |  |  |
-| WD-FLB-058 | todo |  |  |
-| WD-FLB-059 | todo |  |  |
-| WD-FLB-060 | todo |  |  |
-| WD-FLB-061 | todo |  |  |
-| WD-FLB-062 | todo |  |  |
-| WD-FLB-063 | todo |  |  |
-| WD-FLB-064 | todo |  |  |
-| WD-FLB-065 | todo |  |  |
-| WD-FLB-066 | todo |  |  |
-| WD-FLB-067 | todo |  |  |
-| WD-FLB-068 | todo |  |  |
-| WD-FLB-069 | todo |  |  |
-| WD-FLB-070 | todo |  |  |
-| WD-FLB-071 | todo |  |  |
-| WD-FLB-072 | todo |  |  |
-| WD-FLB-073 | todo |  |  |
-| WD-FLB-074 | todo |  |  |
-| WD-FLB-075 | todo |  |  |
-| WD-FLB-076 | todo |  |  |
-| WD-FLB-077 | todo |  |  |
-| WD-FLB-078 | todo |  |  |
-| WD-FLB-079 | todo |  |  |
-| WD-FLB-080 | todo |  |  |
+| WD-FLB-001 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-002 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-003 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-004 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-005 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-006 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-007 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-008 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-009 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-010 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-011 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-012 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-013 | verified |  | list twin run: fixed, 0 open defects (parity/flow-builder-editor-list.md) |
+| WD-FLB-014 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-015 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-016 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-017 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-018 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-019 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-020 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-021 | done |  | managed keyword row intentionally not created (FLR matches flows directly, WD-FLR-004) |
+| WD-FLB-022 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-023 | wontfix |  | dead code in WaDesk: the Variables modal has no button; identical to the observer |
+| WD-FLB-024 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-025 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-026 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-027 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-028 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-029 | done |  | editor twin run, 1 open defect elsewhere (051); parity/flow-builder-editor.md |
+| WD-FLB-030 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-031 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-032 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-033 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-034 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-035 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-036 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-037 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-038 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-039 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-040 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-041 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-042 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-043 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-044 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-045 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-046 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-047 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-048 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-049 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-050 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-051 | blocked |  | Create new AI agent dialog waits on the AI agents create API |
+| WD-FLB-052 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-053 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-054 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-055 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| WD-FLB-056 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-057 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| WD-FLB-058 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| WD-FLB-059 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| WD-FLB-060 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-061 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-062 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-063 | done |  | builder forms done; runtime executors for these types are missing in FLR TYPE_MAP |
+| WD-FLB-064 | done |  | builder forms done; runtime executors for these types are missing in FLR TYPE_MAP |
+| WD-FLB-065 | done |  | builder forms done; runtime executors for these types are missing in FLR TYPE_MAP |
+| WD-FLB-066 | done |  | builder forms done; runtime executors for these types are missing in FLR TYPE_MAP |
+| WD-FLB-067 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
+| WD-FLB-068 | done |  | owned by FLR (ordering contracts and endpoints there) |
+| WD-FLB-069 | done |  | owned by NODE/FLR: the Node bridge is replaced by the in-process engine |
+| WD-FLB-070 | done |  | flbToRuntimeData + FlowReaderService done; FLR compileGraph hook is the FLR owner's one-liner (parity doc, Open runtime items) |
+| WD-FLB-071 | done |  | owned by FLR, built there (WD-FLR-052..058) |
+| WD-FLB-072 | done |  | owned by FLR, built there (WD-FLR-052..058) |
+| WD-FLB-073 | done |  | owned by FLR, built there (WD-FLR-052..058) |
+| WD-FLB-074 | done |  | owned by FLR, built there (WD-FLR-052..058) |
+| WD-FLB-075 | done |  | owned by FLR, built there (WD-FLR-052..058) |
+| WD-FLB-076 | done |  | owned by FLR, built there (WD-FLR-052..058) |
+| WD-FLB-077 | done |  | owned by FLR, built there (WD-FLR-052..058) |
+| WD-FLB-078 | wontfix |  | dead code in WaDesk: table kept, no screen or writer |
+| WD-FLB-079 | blocked |  | needs the Instaflow remote service (IG domain) |
+| WD-FLB-080 | wontfix |  | dev fixture; superseded by compile-seam and runtime-shape-compile specs |
 
 ## flow-runtime-engine (flr)
 

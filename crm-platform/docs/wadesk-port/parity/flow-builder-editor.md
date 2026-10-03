@@ -2,6 +2,46 @@
 
 WaDesk 1.7.0 reference (http://127.0.0.1:8000) vs this branch. The flows LIST screens (WD-FLB-001..013) are in [flow-builder-editor-list.md](flow-builder-editor-list.md).
 
+## Domain summary: backend, quirks, runtime seam
+
+Backend (WD-FLB-019..022, 028, 029, 070 editor side), checked by 97 API e2e tests against real Postgres plus the unit and integration suites (counts in
+the PR description): the save writes the columns the runtime reads (`trigger_kind`, `trigger_value`, `trigger_keywords`, `trigger_channel_id` resolved from the
+sender key, `provider`), the keyword-too-long rule is WaDesk's (only `kind=keyword`, characters not UTF-16 units, nothing written on refusal), catch-all keywords are
+matched exactly like the runtime matcher, every mutation writes an audit row and a `flow.*` outbox event in the same transaction, the plan cap `flows` applies on
+create, import, clone and duplicate, the plan feature `automation` is the soft paywall (reads, pause, unpublish and delete stay open).
+
+QUIRKs reproduced on purpose (all verified on the reference unless noted): pausing a draft flips `is_active` but the pill stays Draft; a category cannot be cleared
+through save; a flow without a Trigger saves as a keyword flow with no keywords and never fires; the first Trigger node wins; publish does no graph validation and does
+not save unsaved edits first; saving edits of a live flow leaves it live but the pill reads Draft; duplicate of a paused flow stays paused; unknown engine prefix sets
+neither sender nor provider; Mistral appears in the AI model picker but is refused with 422; upload `type` only names the kind; the Variables modal is unreachable;
+the featured card's Condition label reads the legacy `var/op/value` fields; "most used" is the newest published and active flow; manual-enroll cards have no
+Open-builder button; only Instagram and Call cards carry a channel badge; the palette search is not trimmed; the Ask node's `validate` is stored and never enforced.
+
+Intended / architecture-forced (beyond the lists below): `rowVersion` optimistic lock on save (409), duplicate checks the plan cap, uuid ids, jsonb graph and plain-text
+names (WaDesk encrypted both and kept a file mirror), no managed `keyword_replies` row (the runtime reads `flows` directly, WD-FLR-004), publish publishes the saved row,
+500 node / 2000 edge caps, writes need the `automation` plan feature, problem+json errors, media served from `/v2/flow-media`, saved `vars` are kept.
+
+## Open runtime items (owned by flow-runtime-engine, not changed here)
+
+- **Field mapping hook.** The editor saves WaDesk's builder field names (so exports and imports interoperate). `flbToRuntimeData` (contracts `runtime-shape.ts`, 98 + 83 + 92
+  tests, additive and idempotent, proven against the real `compileGraph`) is WaDesk's FlowNormalizer mapping, and `FlowReaderService.getRunnableFlow` already returns the
+  graph shaped with it. FLR's `compileGraph` does not call it yet; the one-line hook is
+  `props: shapeNode(builderType, flbToRuntimeData({ type: builderType, data: n.data }))` in `flow-runtime-engine/graph/compile-graph.ts`. Until it lands ten node types reach
+  the executors with the builder's names and misbehave at run time: ai (reply variable, assistant, extraction fields), chatbot (agent), subflow (target), webhook / code /
+  mysql (save variable), poll (multiple answers), location (coordinates sent as 0,0), a legacy single-kind CTA. After the hook, delete the `FLR hook status` block in
+  `apps/api/test/unit/flow-builder-editor/editor-field-seam.spec.ts`.
+- **Executors for 23 channel-specific types** are missing from FLR's `TYPE_MAP`: `cf_*` (8), `ig_*` (9), `fb_*` (5), `tg_payment`. The editor saves them; the run notes them and moves on
+  (WD-FLR-016 rule 4). `compile-seam.spec.ts` pins the list.
+- **UUID ids against numeric reads.** The editor stores uuids for templates, AI assistants and `ai_call` assistants; the executors read numeric ids (`templateId`,
+  `assistant_id`, `assistantId`), so lookup falls back to name or is empty. Needs a uuid-to-id resolution scoped by org in FLR.
+- **Two additive lines in FLR's barrel and module** export `GoogleFormWebhookService`, which the editor needs to mint the Google Form Apps Script token (WD-FLB-059).
+
+## Blocked on other domains
+
+Create new AI agent dialog on the Chatbot node (AI agents create API), Google Sheets / Docs / Forms file pickers (503 until a Google account store exists; the node shows
+a not-connected note and an id / link field), Instagram flow import and Instaflow sync (WD-FLB-079), Instagram product picker (no `instagram_products` table), Woo / Shopify
+products come from the synced `wa_products` mirror rather than a live shop call.
+
 ## Evidence
 
 Twin harness `wadesk-playwright-parity`, spec `apps/web/e2e/flow-builder-editor/parity/WD-FLB-editor.twin.mjs` (180 scenarios), depth `full`, against the live
