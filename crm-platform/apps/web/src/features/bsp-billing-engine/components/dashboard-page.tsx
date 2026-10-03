@@ -30,11 +30,18 @@ export function DashboardPage() {
         title={t('title')}
         description={q.data ? formatRange(q.data.from, q.data.to, locale) : undefined}
         actions={
-          <Link href="/admin/bsp/credit">
-            <Button variant="secondary" size="sm">
-              {t('linkConnect')}
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/admin/wallet/pricing">
+              <Button variant="secondary" size="sm">
+                {t('linkRates')}
+              </Button>
+            </Link>
+            <Link href="/admin/bsp/credit">
+              <Button variant="secondary" size="sm">
+                {t('linkConnect')}
+              </Button>
+            </Link>
+          </div>
         }
       />
       {q.isPending ? (

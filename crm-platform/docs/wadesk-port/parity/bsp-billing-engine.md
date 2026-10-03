@@ -22,13 +22,17 @@ real Postgres and a stand-in Graph API), `test/integration/bsp-billing-engine/al
 
 | Id                        | State      | Reason                                                                                                                                                                |
 | ------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WD-BSP-012                | partial    | `BillingModeService` and the Meta cost resolver ship as the contract; the settle/refund/precheck engine that consumes them is the WALLET domain's                     |
-| WD-BSP-013                | blocked    | The admin workspace form (create/edit with the reseller flag) is the workspace admin domain's screen                                                                  |
-| WD-BSP-017                | partial    | Cost resolution and the rates endpoint setting are ported; the sync/import UI belongs with the WALLET "Message pricing" page                                          |
-| WD-BSP-002                | partial    | Billing menu entries ported (Message income, Reseller billing). "Message pricing", the `/admin/bsp/rate-cards` redirect and the "Rates & margin" pill wait for WALLET |
+| WD-BSP-012                | done       | Settle, refund and precheck run in the WALLET module (`wallet-message-billing`: `message-billing.service.ts`, `wallet-gate.service.ts`) and consume `BillingModeService` from this barrel; covered by `test/e2e/wallet-message-billing/engine.e2e.spec.ts` (reseller vs direct mode, idempotent charge, refund, empty-wallet free row) |
+| WD-BSP-013                | blocked    | The admin workspace form (create/edit with the reseller flag) is the workspace admin domain's screen; the wallet admin workspace detail already shows and sets the mode |
+| WD-BSP-017                | done       | `ratesEndpoint` and the token are this domain's settings; sync/import live in WALLET (`platform-rates.service.ts` `syncMeta` reads the BSP `connection.ratesEndpoint`; live fetch falls back to the bundled card) |
+| WD-BSP-002                | done       | Billing menu entries, "Message pricing" link on the credit page, "Rates & margin" link on the P&L page, and `/admin/bsp/rate-cards` redirects to `/admin/wallet/pricing` |
 | WD-BSP-018, 019, 020, 021 | not ported | Docs-only or dead code in WaDesk (no behaviour to port)                                                                                                               |
 
 ## Screens
 
 Not compared side by side with the running reference in this run (the reference was not opened); layout follows the inventory descriptions
 (KPI tiles, per-workspace table, two-card billing choice, three steps on the credit page).
+
+
+Tier P0 done: WD-BSP-003, 004, 005, 006, 011, 012, 014, 016. Tier P1 done: WD-BSP-007, 008, 009, 010, 015, 017. Tier P2 done: WD-BSP-001, 002. WD-BSP-013 stays blocked on the workspace admin form.
+Round-3 note: the web unit tests (17) pass; the API e2e and integration suites were not re-run because the local Postgres was not reachable (docker daemon down).
