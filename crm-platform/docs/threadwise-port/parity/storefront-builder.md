@@ -236,3 +236,162 @@ Open defects: none. Blocked (not store defects): sibling store screens above. No
 real Razorpay and WhatsApp sends, permission-denied roles (no second role in the reference), Arabic and RTL rendering and dark mode, the all-data reset
 (ours only: refuses without confirm; Reference has no UI entry and wipes the workspace's products), orders with a second currency, production-build timing
 (run against `next dev`; one `wizard-add.load` LCP outlier of 1.6 s did not repeat).
+
+## Public shop (visual and behavioural parity)
+
+Scope: TW-STORE-009, 010, 011, 012, 013 (browser side), 014, 015 (beacon), 016, 017, 020, 026, 027, 031: the buyer-facing shop at
+`/s/{slug}` with all eight themes. Code: `apps/web/src/features/storefront-builder/public/**`, routes `apps/web/src/app/s/**`, public API
+`apps/api/src/modules/storefront-builder/public/**` (+ three small fields in the CAT product reader).
+
+### Method
+
+- **Same data on both sides.** `apps/web/e2e/storefront-builder/public/seed-both.mjs` seeds identical shops (`stp-<theme>`, a disabled
+  `stp-off`, an empty `stp-empty`, a no-number `stp-nonumber`), 60 products (sale, new, low stock 3 / 1 / 0, gallery, rich body with a
+  `<script>`, no category, no image, one draft), reviews (2 approved, 1 pending), five coupons, six tracking orders (one per status)
+  and a sending number. Ours: SQL on `crm_store`, org `pubshop-e2e`. Reference: tagged rows in MariaDB (workspaces 9001-9003, product
+  ids 910001+, orders 9100+, an `INR` row in `currencies` because that table is empty on a fresh install and Reference's `formatIn`
+  needs it). `node seed-both.mjs clean ref` removes exactly those rows again (done at the end of this run).
+- **Visual.** `parity-capture.mjs` takes the same page states on both sides, `parity-diff.py` counts the pixels that differ by more
+  than 24/255 (text anti-aliasing included), and every pair was looked at. 302 pairs: 175 at 1440x900, 97 at 390x844, 30 at 768x1024,
+  in `scratchpad/shots/pub/pub-<theme>-<page>-<viewport>-{ref,ours}.png`. Order tracking, the 404 screens and the two edge shops
+  are theme independent and were captured once per status or state.
+- **Behavioural.** `parity-behave.mjs` runs the same probes on both (265 compared values the same, 51 different; every difference is
+  classified below). `parity-edge-shops.mjs` covers the empty and no-number shops. `shop.e2e.mjs` (129 checks on our app) is the
+  regression run.
+- The staff app's cookie banner exists only on ours (root layout, TW-SET-033); the captures press "Decline" first. "Cart" in the
+  header carries a count in its label on ours (`Cart, 2 items`, a11y).
+
+### Visual result
+
+Largest share of differing pixels per theme and page group, at 1440 / 768 / 390 px (`-` = not captured). Everything under 1% is
+text anti-aliasing, the fading toast of a moment earlier, or a one-pixel sub-pixel shift; the pairs are visually identical.
+
+| Theme    | Home               | Product            | Cart drawer        | Checkout (form and errors) | Hover and focus | Search and filter | Quick view, wishlist, compare |
+| -------- | ------------------ | ------------------ | ------------------ | -------------------------- | --------------- | ----------------- | ----------------------------- |
+| aurora   | 0.00 / 0.01 / 0.01 | 0.02 / 0.03 / 0.07 | 0.47 / 0.00 / 2.26 | 0.05 / 0.09 / 0.00         | 0.00 / - / -    | 0.00 / - / -      | 0.10 / - / 0.01               |
+| meridian | 0.00 / 0.01 / 0.01 | 0.02 / 0.03 / 0.07 | 0.00 / 0.00 / 0.00 | 0.05 / 0.09 / 0.00         | 0.00 / - / -    | -                 | -                             |
+| verdure  | 0.02 / - / 0.01    | 0.04 / - / 0.14    | 0.00 / - / 0.00    | 0.05 / - / 0.00            | 0.01 / - / -    | -                 | -                             |
+| bazaar   | 0.00 / - / 0.01    | 0.02 / - / 0.07    | 0.00 / - / 0.00    | 0.05 / - / 0.00            | 0.00 / - / -    | -                 | -                             |
+| noir     | 0.00 / - / 0.01    | 0.02 / - / 0.07    | 0.31 / - / 0.00    | 0.05 / - / 0.00            | 0.00 / - / -    | 0.00 / - / -      | 0.75 / - / -                  |
+| kraft    | 0.00 / 0.00 / 0.02 | 0.02 / 0.03 / 0.07 | 0.49 / 0.00 / 0.00 | 0.05 / 0.09 / 0.00         | 0.11 / - / -    | 0.00 / - / -      | 0.00 / - / -                  |
+| mercato  | 0.00 / - / 0.01    | 0.02 / - / 0.07    | 0.00 / - / 0.00    | 0.05 / - / 0.00            | 0.00 / - / -    | -                 | -                             |
+| studio   | 0.08 / - / 0.01    | 0.05 / - / 0.17    | 0.00 / - / 0.00    | 0.05 / - / 0.00            | 0.01 / - / -    | -                 | -                             |
+
+Home covers the top, the catalog, the bottom (footer) and the list view; Product covers the top, the scrolled page, the bottom and the
+full page (gallery, tabs, related, the Reviews block); Hover and focus is a card, its add button, the search box, a nav link, an
+icon button and a scrolled page. Not theme dependent: tracking page for the six statuses 0.01% at 1440 and 0.05% at 390; `stp-empty`
+home 0.00%; `stp-nonumber` home 0.00%, product 0.00%, "Order placed" dialog 0.02%; the 404 screens 0.37% at 1440 and 1.5% at 390 (only
+the brand name differs, see below).
+
+| Area                                                                                                                                | Result          | Note                                                                                                                                                                                                                                                          |
+| ----------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Home, all 8 themes x 3 viewports (strip, header, hero, trust pills, toolbar, filters, grid, cards, badges, show-more block, footer) | same            | Includes Reference's own layout defect: the catalog grid is wider than its column between about 880 and 1570px and is clipped at the right edge (QUIRK, reproduced).                                                                                             |
+| Theme cascades (which theme rule really applies)                                                                                    | same            | Reference's theme CSS is only partly effective (see "QUIRKs reproduced"); the port translates each theme literally, keeping the specificity relations, and scopes the home-only rules to the home page.                                                          |
+| Fonts                                                                                                                               | defect-fixed    | The first port used system stacks, so nothing looked like Reference. Fraunces, Plus Jakarta Sans and JetBrains Mono (latin and latin-ext) are now self-hosted in `styles/fonts.css` (D-13: no CDN), plus Fraunces with its optical-size axis for the 404 screen. |
+| Product page, 8 themes x 3 viewports                                                                                                | same            | Needed: weight, tags and the "New" flag from the API, the second Reviews block, Reference's meta grid, the empty thumbnail track when a product has no image.                                                                                                    |
+| Cart drawer: rows, stepper, shipping row, FREE state, hint, note, payment caption, empty state                                      | same            | Light panel in every theme, also Noir.                                                                                                                                                                                                                        |
+| Checkout dialog and validation errors                                                                                               | same            | Opens over the still open cart drawer.                                                                                                                                                                                                                        |
+| Order tracking, six statuses, desktop and phone                                                                                     | same            | Subtotal is total minus shipping, no discount row, Total always with two decimals.                                                                                                                                                                            |
+| Quick view, wishlist drawer (with items), compare bar and drawer, share dialog                                                      | same / intended | Share: Reference prints the stray text `this.textContent='Copy',1500)">` and loads the QR from a third-party service; ours is clean and local (intended).                                                                                                        |
+| Unknown / disabled shop, unknown product or order                                                                                   | same / intended | Reference answers with its platform "Page not found" screen; ours is that screen, with the platform brand name instead of "Reference" (intended).                                                                                                                   |
+| Empty shop, shop without a sending number                                                                                           | same            | No "Ask a question", no footer WhatsApp link, checkout ends on the dialog with the tracking link.                                                                                                                                                             |
+
+### Behaviour result
+
+| Area                                                                                                                                            | Result       | Note                                                                                                                                                                                                          |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cart: add, badge bump, toast "<name> · added to cart", localStorage line shape, reload persistence, stepper, minimum 1, remove                  | same         | Key is `sf_cart_<slug>` (Reference: `sf_cart_<shop id>`; ours has no numeric public id): intended.                                                                                                               |
+| Stock caps: stock 1 / 3 / 0 modals and texts, drawer typing above stock (toast "Only 3 in stock", value shown 3), typing 0 gives 1              | same         |                                                                                                                                                                                                               |
+| Shipping row (fee, hint, FREE), total, note, caption                                                                                            | same         |                                                                                                                                                                                                               |
+| Coupon quote texts (SAVE10, FLAT100 with minimum, SHIPFREE, inactive, expired, unknown, cleared)                                                | same         |                                                                                                                                                                                                               |
+| Checkout validation texts, field limits and placeholder, payment radios, request content, cart cleared, status line, wa.me URL and message text | same         | The request and response use camelCase keys (`paymentMethod`, `waUrl`) where Reference used snake_case: contract convention, intended.                                                                           |
+| Tracking link in the hand-off and the "Order placed" dialog without a number                                                                    | same         |                                                                                                                                                                                                               |
+| Abandoned-cart beacon: fires once on a valid phone blur, not on a short one, same body                                                          | same         |                                                                                                                                                                                                               |
+| Search, categories (OR), price range, on sale, "In stock only", sort, list view, reset, clear, "Nothing matches"                                | same         |                                                                                                                                                                                                               |
+| Show more                                                                                                                                       | intended     | Reference's "Show more" is broken (HTTP 500, see QUIRKs); ours loads page 2 as the inventory specifies.                                                                                                          |
+| Wishlist, compare (4 max, "Compare full"), quick view, share                                                                                    | same         |                                                                                                                                                                                                               |
+| Product page: pill texts, thumbnails, Save %, meta list, tabs, ask link, related order, review block, sanitised body                            | same         | The "Ask" link now uses PHP's `urlencode` (`+` for spaces) like Reference.                                                                                                                                       |
+| Review form: empty name message, success message, stored `pending`                                                                              | same         | Each of the two forms posts its own fields (Reference's duplicate ids made the bottom one unusable).                                                                                                             |
+| SEO: title, description, og:*, twitter, robots, JSON-LD                                                                                         | defect-fixed | The platform's title suffix ("... - CRM Platform"), default `robots` and Open Graph block leaked onto every shop page; now absolute titles and nothing inherited. JSON-LD escapes `<` as `<` (same document). |
+| View counter                                                                                                                                    | same         | One row per shop and day, +1 per full render (also the product page).                                                                                                                                         |
+| Drafts and archived products                                                                                                                    | intended     | Not listed, product page 404 (D-03); Reference lists drafts and serves them. Counts differ by one on the seeded catalog (58 vs 59).                                                                              |
+| RTO band of a COD order for a returning phone                                                                                                   | intended     | Reference never matches the history (`+` in the stored phone, digits in the lookup); ours does.                                                                                                                  |
+| Responsive: filters stack at 880px, 2 columns at 560px, 1 at 340px, search and nav hidden below 760px, drawers 95vw                             | same         |                                                                                                                                                                                                               |
+| Hover cards (lift, shadow, zoom, heart and eye buttons), focus ring of the search box, nav and icon hovers                                      | same         |                                                                                                                                                                                                               |
+
+### Defects fixed in this run
+
+1. Fonts were system stacks: all eight themes looked different from Reference. Now the real families, self-hosted.
+2. The shell inherited the staff app's Tailwind preflight (inputs, buttons, headings, SVGs); Reference draws them with browser defaults
+   (Arial controls, bold headings). Rolled back inside `.sf-root`, element rules are `:where()` so component classes win.
+3. Hero trust pills had no top margin and the filter groups no bottom padding (reset specificity), toolbar, filters, view toggle,
+   header and icon buttons were 2 to 4px off, the catalog had a 1280px cap Reference does not have.
+4. Product cards: the "New" badge, weight and tags in the meta list were missing (the API did not send them); stock 0 products were
+   shown as "Sold out" and hidden by "In stock only", Reference lists them with a working button and stops at the cart.
+5. Product page: Reviews block missing, meta list a different grid, tab and quantity controls with another size and font, the
+   shipping text computed a threshold Reference never shows, no empty thumbnail column without an image.
+6. Drawers, modal, toast and compare bar followed the theme palette; Reference's are always light. Drawer buttons were icons,
+   Reference uses the text glyph; the empty cart image fallback is the package emoji.
+7. Checkout closed the cart drawer; success with a wa.me URL opened another dialog instead of "Order placed! Opening WhatsApp…".
+8. The order tracking page: missing "Delivery to" card (the API never sent the address), a coloured link and footer margin lost to a
+   reset, discount row and item-sum subtotal instead of total minus shipping, grey text darker than Reference's.
+9. The "Nothing matches" block replaced the grid beside the filters instead of sitting below the layout.
+10. The 404 was a small custom page; Reference shows its platform "Page not found" screen.
+11. `top_strip` and `hero_sub` settings are now honoured (Reference reads them although no screen writes them).
+12. The tracking page's `Total` and the WhatsApp confirmation always show two decimals (`WaOrder::total_display`), and the confirmation
+    text is escaped like PHP's `rawurlencode`.
+13. The drawer stepper kept the typed number (10) when the cart clamped to 3.
+14. SEO leak of the platform title, robots and Open Graph tags (see above).
+
+### QUIRKs reproduced on purpose
+
+Recorded in the inventory entries (TW-STORE-009 rules 10-14, 010 rules 11-13, 011 rule 7, 012 rule 8, 031 rule 8):
+clipped catalog grid between 880 and 1570px; "Featured" keeps the last sort; "In stock only" does nothing; below 760px the header
+search and nav are hidden; closed drawers' shadow on the right edge; the page's own product is not clamped to its stock on its page
+and the pill reads "Only 0 left"; the Reviews list and form appear twice; the free-shipping copy always says 999.00 in the shop
+currency; `formatIn` formats (`₹109.00 — ₹589.00`) next to the card format (`₹ 109`); the Range hint comes from page 1 only; the
+checkout dialog opens over the open cart drawer; Noir and Mercato have no gold or yellow cart button, the themes' `.add` rules lose to
+the base rule (only hovers apply), the theme badge is always coral; drawers and modals are light in Noir too; "Reset filters",
+"Clear filters" and "Show more" use the default (black) text colour; sort select, search box and product-page buttons use Arial.
+
+### Differences kept on purpose (not defects)
+
+- Drafts and archived products are not public (D-03); the seeded catalog therefore has 58 listed products where Reference shows 59.
+- "Show more" works (Reference: broken, see below). The hidden toast no longer swallows taps (Reference's has no `pointer-events: none`, so
+  on a phone it covers part of "Order on WhatsApp" even when invisible). The share dialog and QR are clean and local.
+- Header and filter box stay sticky when scrolling (Reference's CSS says sticky but `overflow-x: hidden` on html and body stops it in every
+  browser). Scrolled screenshots are compared with `UNSTICK=1`.
+- On touch devices the heart and eye buttons of a card are always visible (Reference shows them on hover only).
+- Local storage keys use the slug, request and response keys are camelCase, product ids are uuids, screen-reader labels (count in the
+  cart label, "Skip to content", rating text) are additions, the 404 shows the platform brand name from the site settings.
+- The staff app's cookie banner and Next's dev indicator appear on ours only.
+
+### Reference defects found (not reproduced)
+
+- "Show more products" always fails: `index()` is typed to return a `View` but returns a `Response` for `?partial=1&page>1`, a
+  TypeError (HTTP 500); the script then removes the button, so only the first 48 products are ever reachable.
+- The share dialog's Copy button is built with `JSON.stringify` inside an `onclick` attribute: the attribute ends early and stray text is
+  printed.
+- The invisible toast keeps catching taps (no `pointer-events: none`).
+- The checkout RTO lookup compares digits with a stored phone that contains `+`, so no history is ever found.
+
+### Not verified, and why
+
+- Real WhatsApp, Razorpay and UPI flows (nothing is sent; the hand-off URL and text were compared, the navigation was stubbed). The
+  Razorpay-link and webhook paths belong to TW-STORE-018 (backend tests).
+- Arabic / RTL rendering of the shop, dark mode of the staff app, keyboard-only walk-through on the reference (ours: focus trap and
+  Escape are covered by the e2e script).
+- Custom-domain and subdomain hosts (needs DNS), production-build timing (everything ran against `next dev`).
+- Quick view, wishlist and compare of products brought in by "Show more" (cannot be reached on the reference).
+- Currencies other than INR (the reference has only the one `currencies` row seeded), shops with a logo other than Kraft's, brand
+  colours other than the two seeded (#B8860B Noir, #7B2D8E Studio), long product names and descriptions.
+- Hover and focus were compared on 8 themes for cards and on aurora, noir and kraft for the remaining states; keyboard focus rings
+  other than the search box were not compared.
+- Checkout through the reference left tagged orders in workspace 9001 (removed by `clean ref`).
+
+### Tests
+
+Web unit (vitest, `src/features/storefront-builder`): 154 pass, 4 added in `misc.test.ts` for the money variants, the head tags and the
+PHP encodings, `catalog.test.ts` covers the sort quirk. API unit (`test/unit/storefront-builder`): 73 pass (new: `totalDisplay`,
+`rawurlencode`). API e2e (`test/e2e/storefront-builder`, testcontainers): 45 pass (new: card fields and settings, the address on the
+tracking order). `shop.e2e.mjs`: 129 checks pass against `crm_store`.

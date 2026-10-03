@@ -131,10 +131,7 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
         ) : null}
 
         {footer ? (
-          <p
-            className="sf-ot-muted sf-ot-foot"
-            dangerouslySetInnerHTML={{ __html: footer }}
-          />
+          <p className="sf-ot-muted sf-ot-foot" dangerouslySetInnerHTML={{ __html: footer }} />
         ) : (
           <p className="sf-ot-muted sf-ot-foot">
             {t('footer.copyright', { year: new Date().getFullYear(), shop: shop.name })}
