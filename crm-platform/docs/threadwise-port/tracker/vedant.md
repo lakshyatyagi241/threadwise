@@ -432,36 +432,36 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-SCHED-001 | todo |  |  |
-| TW-SCHED-002 | todo |  |  |
-| TW-SCHED-003 | todo |  |  |
-| TW-SCHED-004 | todo |  |  |
-| TW-SCHED-005 | todo |  |  |
-| TW-SCHED-006 | todo |  |  |
-| TW-SCHED-007 | todo |  |  |
-| TW-SCHED-008 | todo |  |  |
-| TW-SCHED-009 | todo |  |  |
-| TW-SCHED-010 | todo |  |  |
-| TW-SCHED-011 | todo |  |  |
-| TW-SCHED-012 | todo |  |  |
-| TW-SCHED-013 | todo |  |  |
-| TW-SCHED-014 | todo |  |  |
-| TW-SCHED-015 | todo |  |  |
-| TW-SCHED-016 | todo |  |  |
-| TW-SCHED-017 | todo |  |  |
-| TW-SCHED-018 | todo |  |  |
-| TW-SCHED-019 | todo |  |  |
-| TW-SCHED-020 | todo |  |  |
-| TW-SCHED-021 | todo |  |  |
-| TW-SCHED-022 | todo |  |  |
-| TW-SCHED-023 | todo |  |  |
-| TW-SCHED-024 | todo |  |  |
-| TW-SCHED-025 | todo |  |  |
-| TW-SCHED-026 | todo |  |  |
-| TW-SCHED-027 | todo |  |  |
-| TW-SCHED-028 | todo |  |  |
-| TW-SCHED-029 | todo |  |  |
-| TW-SCHED-030 | todo |  |  |
+| TW-SCHED-001 | frontend-done |  | list with stats, up-next, tabs, search and row actions (web + API); the stats strip is computed from the page shown; not opened in a browser or run against Reference side by side |
+| TW-SCHED-002 | frontend-done |  | 5-step composer: basics and senders, audience with live preview, message, schedule, review; not in a browser; media is a link, no file drop; no template categories |
+| TW-SCHED-003 | backend-done |  | plan flag and limit, 2-minute lead time, audience, halt and content guard, wallet, multi-sender split, warmer reservation, one transaction; 16 e2e |
+| TW-SCHED-004 | backend-done |  | group, tag, earlier broadcasts, typed numbers; opted-out and archived contacts never messaged, one copy per person (Reference's gap fixed); recipients fixed when saved |
+| TW-SCHED-005 | backend-done |  | round-robin split, one schedule per sender named after it, tag audiences split too (Reference left them empty) |
+| TW-SCHED-006 | in-progress |  | text, media by link, location, template as text on the unofficial engine and Twilio; no upload until the send port takes file bytes; no Cloud API template |
+| TW-SCHED-007 | backend-done |  | a test message to a number typed in the composer after the schedule is saved; a failure never undoes the schedule |
+| TW-SCHED-008 | backend-done |  | reserved per send date for one-off schedules from a warming number, held with Reference's wording, and released on cancel, delete or fail |
+| TW-SCHED-009 | backend-done |  | emergency halt and content guardrails before saving, wallet precheck once for the whole audience |
+| TW-SCHED-010 | backend-done |  | covered by TW-NODE-030: the row is the schedule, no bridge registration |
+| TW-SCHED-011 | backend-done |  | covered by TW-NODE-030, 032: cadence, weekdays, end date inclusive, next run in the schedule's zone |
+| TW-SCHED-012 | frontend-done |  | detail with progress, funnel, recipients and actions; no engagement curve or donut chart; not in a browser |
+| TW-SCHED-013 | frontend-done |  | pause and resume from list and detail; 409 when the status does not allow it |
+| TW-SCHED-014 | frontend-done |  | cancel from list and detail; releases the warmer budget the unsent part reserved |
+| TW-SCHED-015 | frontend-done |  | run now: due at once from waiting, running, paused or failed; recipients already sent are skipped |
+| TW-SCHED-016 | backend-done |  | PATCH name, time, message with a version check, 2-minute lead time and zone check; the web has no edit screen (the reference detail has none) |
+| TW-SCHED-017 | frontend-done |  | retry with a new time; only failed recipients are tried again (Reference re-sent to everyone) |
+| TW-SCHED-018 | frontend-done |  | delete from list and detail; hard delete; releases the warmer budget |
+| TW-SCHED-019 | backend-done |  | plan feature and limit scheduled_messages, permissions sched.schedules.read and manage (Owner, Admin, Manager) |
+| TW-SCHED-020 | backend-done |  | covered by TW-NODE-030: BullMQ and the due poller replace the bridge's in-memory cron |
+| TW-SCHED-021 | backend-done |  | covered by TW-NODE-031: ScheduledRunService; now also applies the number's warmer hours, gap and spintax |
+| TW-SCHED-022 | backend-done |  | covered by TW-NODE-032 |
+| TW-SCHED-023 | backend-done |  | covered by TW-NODE-033: counters on the row |
+| TW-SCHED-024 | backend-done |  | covered by TW-NODE-035: per-recipient receipts; wallet settlement per delivery is not verified for scheduled sends |
+| TW-SCHED-025 | backend-done |  | covered by TW-NODE-030: nothing to restore, state is in the database |
+| TW-SCHED-026 | backend-done |  | covered by TW-NODE-036: durable retry of failed one-offs |
+| TW-SCHED-027 | backend-done |  | covered: the broadcast retry policy is shared |
+| TW-SCHED-028 | blocked |  | needs the customer API domain; public-api here is a lead-intake skeleton; ScheduleCreateService is the use case to call |
+| TW-SCHED-029 | blocked |  | needs the mobile domain |
+| TW-SCHED-030 | backend-done |  | ScheduleProducerService: ordinary schedules with source and external_key; a key replaces its old schedule; cancel by key; e2e |
 
 ## auto-reply-keywords (ar)
 
