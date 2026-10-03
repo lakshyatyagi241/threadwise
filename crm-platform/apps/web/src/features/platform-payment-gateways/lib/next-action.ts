@@ -3,7 +3,10 @@ import type { PlaceOrderResponse } from '@crm/contracts';
 export type NextStep =
   | { kind: 'navigate'; url: string }
   | { kind: 'razorpay'; options: Record<string, unknown>; returnUrl: string }
-  | { kind: 'paddle' | 'cashfree'; params: Record<string, string | number | boolean> }
+  | {
+      kind: 'paddle' | 'cashfree' | 'hyperpay' | 'braintree';
+      params: Record<string, string | number | boolean>;
+    }
   | { kind: 'form_post'; url: string; fields: Record<string, string> }
   | {
       kind: 'instructions';
@@ -49,7 +52,14 @@ export function nextStep(res: PlaceOrderResponse): NextStep {
 }
 
 /** Where the return endpoint sent the buyer: `?payment=` plus the order number. */
-export type PaymentOutcome = 'success' | 'failed' | 'cancelled' | 'pending' | 'notfound';
-const OUTCOMES: readonly string[] = ['success', 'failed', 'cancelled', 'pending', 'notfound'];
+export type PaymentOutcome = 'success' | 'failed' | 'cancelled' | 'pending' | 'proof' | 'notfound';
+const OUTCOMES: readonly string[] = [
+  'success',
+  'failed',
+  'cancelled',
+  'pending',
+  'proof',
+  'notfound',
+];
 export const parseOutcome = (v: string | null): PaymentOutcome | null =>
   v && OUTCOMES.includes(v) ? (v as PaymentOutcome) : null;

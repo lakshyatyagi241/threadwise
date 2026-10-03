@@ -238,7 +238,7 @@ describe('gateway catalogue and configuration (WD-PAYGW-001..005)', () => {
     expect((await gateway('stripe')).mode).toBe('live');
   });
 
-  it('activation is refused without the required fields (audited), without a driver, and for a support operator', async () => {
+  it('activation is refused without the required fields (audited) and for a support operator', async () => {
     const blocked = await activate('razorpay');
     expect(blocked.status).toBe(422);
     expect(blocked.body.code).toBe('PAYGW_GATEWAY_NOT_CONFIGURED');
@@ -252,10 +252,10 @@ describe('gateway catalogue and configuration (WD-PAYGW-001..005)', () => {
       payload: { missingFields: ['key_id', 'key_secret'] },
     });
 
-    await configure('mollie', { api_key: 'test_x' });
-    const noDriver = await activate('mollie');
-    expect(noDriver.status).toBe(422);
-    expect(noDriver.body.code).toBe('PAYGW_GATEWAY_UNAVAILABLE');
+    // every catalogue gateway has a driver now, so an unconfigured one is refused by the required-field guard instead
+    const unconfigured = await activate('mollie');
+    expect(unconfigured.status).toBe(422);
+    expect(unconfigured.body.code).toBe('PAYGW_GATEWAY_NOT_CONFIGURED');
 
     const g = await gateway('stripe');
     const asSupport = await api()

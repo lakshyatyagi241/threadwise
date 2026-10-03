@@ -10,8 +10,8 @@ import {
 } from './payment-driver';
 
 const BANK_ROWS: Array<[string, string]> = [
-  ['beneficiary_name', 'Beneficiary name'],
-  ['bank_name', 'Bank name'],
+  ['beneficiary_name', 'Beneficiary'],
+  ['bank_name', 'Bank'],
   ['account_number', 'Account number'],
   ['ifsc_or_swift', 'IFSC / SWIFT'],
   ['branch', 'Branch'],

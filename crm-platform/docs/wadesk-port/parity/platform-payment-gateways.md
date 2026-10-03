@@ -77,3 +77,24 @@ Deliberate deviations (P1):
 - The first subscription charge finalises the order before activating the subscription, so a workspace gets one cycle, not two (WaDesk's documented 51/58-day bug is fixed on purpose).
 - The reconciler is a worker sweep (every 10 minutes, claimed with one atomic update, 6 h per subscription) instead of piggy-backing on the buyer's web traffic; only drivers with `fetchSubscription` (Razorpay) are polled, as in WaDesk.
 - Auto-renew is offered per gateway in the quote (`autoRenew`), never for yearly, free, lifetime or custom-quote plans; a replayed activation is a no-op that emits no second event.
+
+tier P2 done: WD-PAYGW-018, 019, 021, 023, 024, 025 (drivers) and 033 (negative requirement: no endpoint credits a wallet or activates a plan without a confirmed payment, tested)
+Every catalogue gateway now has a driver (33 of 33), so no card shows "driver not available yet". Not ported on purpose: WD-PAYGW-032 (dead code), WD-PAYGW-033's mock pages and self-confirm endpoint (replaced by the real order result on Order history), WD-PAYGW-047 (docs-only: refunds and chargebacks).
+
+Tests: `drivers-p2.spec.ts` (57, recorded fixtures for all 20 drivers: request bodies and amounts, return confirmation, signature checks, forged-input cases), `paygw-p2.e2e.spec.ts` (6: Coinbase end to end, PayTR plain `OK` ack, Skrill form post, HyperPay widget, LigdiCash currency refusal, the 033 regression).
+
+Deliberate deviations (P2), all fixes of WaDesk bugs recorded in the inventory:
+
+- A redirect or an unsigned body is never proof of payment. Mercado Pago (trusted `status=approved` in the URL), Authorize.Net (fell back to the query string when the lookup failed), Braintree (nonce posted with an order number typed by the buyer, a `disbursement` counted as a payment), Square, Tap, Mollie, CinetPay, LigdiCash and Xendit now re-read the payment from the provider and compare our order reference and amount. Notifications without a signature (Tap, Mollie, CinetPay, LigdiCash, Mercado Pago, Authorize.Net) are accepted only when the provider itself returns that payment; the body is used for the id only.
+- Lemon Squeezy, Coinbase, Skrill, PayTR, Mollie one-time: a buyer's return leaves the order pending (WaDesk marked it failed) and the signed notification finalises it, matched by the order number we put in the checkout metadata (not an internal id).
+- Lemon Squeezy now verifies `X-Signature` (WaDesk never forwarded the header, so no webhook was ever accepted). PayTR is answered with the plain body `OK`. Skrill compares the signed `mb_amount`; a notification in another currency than the order is left for an operator.
+- LigdiCash refuses non-XOF orders instead of relabelling them. CinetPay amounts keep WaDesk's multiple-of-5 rounding for XOF, XAF, CDF and GNF.
+- Mollie's first recurring payment is completed on the buyer's return (which also creates the subscription), not by the notification, so a plan never ends up paid but never renewing.
+- iyzico and PayTR send `127.0.0.1` as the buyer IP and the placeholders WaDesk used for address and phone; PayTR gets `TL` for Turkish lira (WaDesk sent `TRY`).
+- Midtrans, Duitku, iyzico, PayTR and Skrill checkout pages open as redirects; WaDesk's inline `snap.pay` script and PayTR iframe are not needed. HyperPay and Braintree render their own widgets in the browser from plain parameters.
+- Square auto-renew leaves the buyer on the order history to wait for the first invoice (WaDesk showed a static page).
+- Bank transfer and offline checkout pages follow WaDesk's copy and order (eyebrow, "Wire the payment", reference callout, proof form, "submit proof later" link).
+
+### Not built
+
+- WD-PAYGW-025 rule 1, the DNS-over-HTTPS fallback of CinetPay (pinning the API host to an address resolved through Cloudflare or Google when local DNS fails). It needs an HTTP client that connects to a fixed IP with the real host name for TLS; the change to the shared HTTP helper was refused by the permission system in this run, so the user must decide. Every other CinetPay rule is built.

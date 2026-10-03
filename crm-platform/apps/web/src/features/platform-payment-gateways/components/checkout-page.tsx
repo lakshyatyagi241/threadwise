@@ -18,6 +18,7 @@ import { formatMoney } from '../lib/money';
 import { nextStep, type NextStep } from '../lib/next-action';
 import { openCashfree, openPaddle, postForm } from '../lib/provider-widgets';
 import { openRazorpay } from '../lib/razorpay';
+import { BraintreeWidget, HyperpayWidget } from './card-widgets';
 import { OfflineInstructions } from './offline-instructions';
 
 const NS = 'platform-payment-gateways.checkout';
@@ -57,6 +58,10 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const [problem, setProblem] = useState<string | null>(null);
   const [launching, setLaunching] = useState(false);
   const [autoRenew, setAutoRenew] = useState(false);
+  const [cardWidget, setCardWidget] = useState<{
+    kind: 'hyperpay' | 'braintree';
+    params: Record<string, string | number | boolean>;
+  } | null>(null);
   const [offline, setOffline] = useState<{
     step: Extract<NextStep, { kind: 'instructions' }>;
     orderNumber: string;
@@ -158,6 +163,8 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
       } else if (step.kind === 'form_post') {
         setLaunching(true);
         postForm(step.url, step.fields);
+      } else if (step.kind === 'hyperpay' || step.kind === 'braintree') {
+        setCardWidget({ kind: step.kind, params: step.params });
       } else if (step.kind === 'paddle' || step.kind === 'cashfree') {
         setLaunching(true);
         try {
@@ -188,6 +195,13 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
 
   if (quote.isError && !q) {
     return <Alert tone="danger">{explain(quote.error)}</Alert>;
+  }
+  if (cardWidget) {
+    return cardWidget.kind === 'hyperpay' ? (
+      <HyperpayWidget params={cardWidget.params} />
+    ) : (
+      <BraintreeWidget params={cardWidget.params} />
+    );
   }
   if (offline) {
     return (

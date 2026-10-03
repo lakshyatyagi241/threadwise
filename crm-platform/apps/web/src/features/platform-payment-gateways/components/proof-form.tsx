@@ -56,10 +56,11 @@ export function ProofForm({ orderId, onDone }: { orderId: string; onDone: () => 
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
       </Field>
-      <Field label={t('reference')} htmlFor="proof-ref" hint={t('referenceHint')}>
+      <Field label={t('reference')} htmlFor="proof-ref">
         <Input
           id="proof-ref"
           maxLength={120}
+          placeholder={t('referencePlaceholder')}
           value={reference}
           onChange={(e) => setReference(e.target.value)}
         />
@@ -68,6 +69,7 @@ export function ProofForm({ orderId, onDone }: { orderId: string; onDone: () => 
         <Textarea
           id="proof-note"
           maxLength={1000}
+          placeholder={t('notePlaceholder')}
           rows={3}
           value={note}
           onChange={(e) => setNote(e.target.value)}
