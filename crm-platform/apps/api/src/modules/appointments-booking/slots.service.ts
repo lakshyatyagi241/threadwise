@@ -106,6 +106,8 @@ export class SlotsService {
         lt.children.integration?.calendarId ?? null,
         new Date(fromMs),
         new Date(toMs),
+        // A group type's seats are counted by its bookings: the first booking's own calendar event must not close the slot for the rest.
+        { ignoreOwnEvents: lt.engine.capacity > 1 },
       );
       return busy.map((b) => ({ startMs: b.start.getTime(), endMs: b.end.getTime() }));
     } catch (err) {
