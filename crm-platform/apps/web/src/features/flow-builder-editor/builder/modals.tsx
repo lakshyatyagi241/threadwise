@@ -88,7 +88,6 @@ function SaveConfirmInner({
               onKeyDown={(e) => e.key === 'Enter' && submit()}
               autoFocus
               placeholder="e.g. Welcome flow"
-              maxLength={255}
               className="w-full rounded-lg border border-border bg-background px-3 py-2 text-[13px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10"
             />
           </label>
@@ -246,7 +245,6 @@ function AIGenInner({
               rows={5}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              maxLength={2000}
               placeholder="Example: Create a customer support bot that asks for user name, email, and issue type, then sends a confirmation message…"
               className="w-full resize-y rounded-lg border border-border bg-background px-3 py-2 text-[12.5px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10"
             />

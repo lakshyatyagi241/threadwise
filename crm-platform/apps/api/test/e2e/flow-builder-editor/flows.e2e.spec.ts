@@ -886,13 +886,14 @@ describe('webhook test (WD-FLB-024)', () => {
     expect(res.body).toEqual({ ok: false, error: 'Blocked: host resolves to a private/reserved IP (169.254.169.254)' });
   });
 
-  it('WD-FLB-024: loopback, private ranges, metadata names and other schemes are refused; an empty URL is soft', async () => {
+  it('WD-FLB-024: loopback, private ranges, metadata names and other schemes are refused; a blank URL is a 422 (WaDesk required rule)', async () => {
     for (const url of ['http://127.0.0.1:3999/', 'http://10.0.0.1/', 'http://[::1]/', 'http://metadata.google.internal/', 'ftp://example.com/']) {
       const res = await call({ url });
       expect(res.body.ok, url).toBe(false);
       expect(res.body.error, url).toMatch(/^Blocked: /);
     }
-    expect((await call({ url: '' })).body).toEqual({ ok: false, error: 'No URL configured on the webhook node.' });
+    expect((await call({ url: '' })).status).toBe(422);
+    expect((await call({ url: '   ' })).status).toBe(422);
     expect((await call({ url: 'x'.repeat(2049) })).status).toBe(422);
   });
 });

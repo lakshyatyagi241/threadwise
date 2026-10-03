@@ -4,10 +4,12 @@ import type { ReactNode } from 'react';
 import type { FlbBuilderContext, FlowNode, FlbNodeData } from '@crm/contracts';
 import { findTemplate } from '../lib/templates';
 
+/** Message text (140) and media caption (80) end in an ellipsis when cut, as in WaDesk; every other preview line is a plain cut. */
 const trunc = (s: unknown, n: number): string => {
   const t = String(s ?? '');
   return t.length > n ? `${t.slice(0, n)}…` : t;
 };
+const cut = (s: unknown, n: number): string => String(s ?? '').slice(0, n);
 const asArr = (v: unknown): Array<Record<string, unknown>> =>
   Array.isArray(v) ? (v as Array<Record<string, unknown>>) : [];
 const str = (v: unknown): string => (v === null || v === undefined ? '' : String(v));
@@ -151,7 +153,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
               </div>
               <div className="text-[10.5px] text-muted-foreground">
                 {kind}
-                {d.caption ? ` · ${trunc(d.caption, 30)}` : ''}
+                {d.caption ? ` · ${cut(d.caption, 30)}` : ''}
               </div>
             </div>
           </div>
@@ -173,7 +175,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             const type = str(r.type) || 'text';
             const lbl =
               type === 'text'
-                ? trunc(str(r.text), 38) || 'empty text'
+                ? cut(str(r.text), 38) || 'empty text'
                 : str(r.filename) || (r.url ? lastSeg(str(r.url)) : type);
             return (
               <div
@@ -285,7 +287,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             {str(d.method) || 'POST'}
           </span>
           <span className="flex-1 truncate font-mono text-[11px]">
-            {trunc(str(d.url) || 'https://…', 32)}
+            {cut(str(d.url) || 'https://…', 32)}
           </span>
         </div>
       );
@@ -356,7 +358,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           ) : null}
           {d.message ? (
             <div className="mt-1 truncate text-[10.5px] italic text-muted-foreground">
-              &quot;{trunc(d.message, 40)}&quot;
+              &quot;{cut(d.message, 40)}&quot;
             </div>
           ) : null}
         </div>
@@ -507,7 +509,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           <Muted>offer </Muted>
           <Mono>{str(d.slotCount) || 5} slot(s)</Mono>
           <div className="truncate text-[10.5px] text-muted-foreground">
-            {trunc(str(d.prompt) || 'Pick a time…', 40)}
+            {cut(str(d.prompt) || 'Pick a time…', 40)}
           </div>
         </div>
       );
@@ -584,7 +586,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <Box>
           <div className="bubble wa whitespace-pre-wrap break-words">
-            {trunc(str(d.text) || 'Say something…', 120)}
+            {cut(str(d.text) || 'Say something…', 120)}
           </div>
         </Box>
       );
@@ -603,7 +605,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             {d.assistant ? ' · KB' : ''}
           </div>
           <div className="truncate text-[12px] text-foreground">
-            {trunc(str(d.prompt) || 'AI answers…', 46)}
+            {cut(str(d.prompt) || 'AI answers…', 46)}
           </div>
         </div>
       );
@@ -642,14 +644,14 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
     case 'cf_hangup':
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px] italic text-muted-foreground">
-          {trunc(str(d.goodbye) || 'End the call', 40)}
+          {cut(str(d.goodbye) || 'End the call', 40)}
         </div>
       );
     case 'ig_send_dm':
       return (
         <Box>
           <div className="bubble wa whitespace-pre-wrap break-words">
-            {trunc(str(d.text) || 'Send a DM…', 120)}
+            {cut(str(d.text) || 'Send a DM…', 120)}
           </div>
         </Box>
       );
@@ -657,7 +659,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5">
           <div className="bubble wa mb-1 whitespace-pre-wrap break-words">
-            {trunc(str(d.text) || 'Pick one…', 80)}
+            {cut(str(d.text) || 'Pick one…', 80)}
           </div>
           <Count>{asArr(d.options).length} quick reply(s)</Count>
         </div>
@@ -666,7 +668,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5">
           <div className="bubble wa mb-1 whitespace-pre-wrap break-words">
-            {trunc(str(d.text) || 'Buttons…', 80)}
+            {cut(str(d.text) || 'Buttons…', 80)}
           </div>
           <Count>{asArr(d.buttons).length} button(s)</Count>
         </div>
@@ -675,7 +677,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <Line>
           <Muted>public reply · </Muted>
-          <span className="text-foreground">{trunc(str(d.message) || '…', 40)}</span>
+          <span className="text-foreground">{cut(str(d.message) || '…', 40)}</span>
         </Line>
       );
     case 'ig_ai':
@@ -686,7 +688,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             {d.assistant ? ' · KB' : ''}
           </div>
           <div className="truncate text-[12px] text-foreground">
-            {trunc(str(d.prompt) || 'AI answers…', 46)}
+            {cut(str(d.prompt) || 'AI answers…', 46)}
           </div>
         </div>
       );
@@ -705,7 +707,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5">
           <div className="bubble wa mb-1 whitespace-pre-wrap break-words">
-            {trunc(str(d.question) || 'Ask something…', 80)}
+            {cut(str(d.question) || 'Ask something…', 80)}
           </div>
           <Count>{`answer → {{${str(d.save) || 'answer'}}}`}</Count>
         </div>
@@ -736,7 +738,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <Line>
           <Muted>public reply · </Muted>
-          <span className="text-foreground">{trunc(str(d.text) || '…', 40)}</span>
+          <span className="text-foreground">{cut(str(d.text) || '…', 40)}</span>
         </Line>
       );
     case 'tg_payment':
@@ -747,7 +749,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           </div>
           <Count>
             {str(d.currency) || 'USD'} {str(d.amount) || '0'}
-            {d.title ? ` · ${trunc(d.title, 20)}` : ''}
+            {d.title ? ` · ${cut(d.title, 20)}` : ''}
           </Count>
         </div>
       );

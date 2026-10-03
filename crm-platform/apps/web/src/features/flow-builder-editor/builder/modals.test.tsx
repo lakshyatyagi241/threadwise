@@ -52,7 +52,8 @@ describe('Generate with AI modal (WD-FLB-025)', () => {
       'Generate',
     ])
       expect(html, t).toContain(t);
-    expect(html).toContain('maxLength="2000"');
+    // WaDesk's textarea has no maxlength (the server answers 422 past 2000 characters)
+    expect(html).not.toContain('maxLength');
   });
 
   it('no providers: the empty state names AI Keys as a link to the platform page, and Generate is disabled', () => {

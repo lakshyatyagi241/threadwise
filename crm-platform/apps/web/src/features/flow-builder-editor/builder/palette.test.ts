@@ -95,4 +95,10 @@ describe('palette (WD-FLB-016)', () => {
     ]);
     expect(ids('chat', 'zzzz')).toEqual([]);
   });
+
+  it('QUIRK: the query is not trimmed, a padded query matches nothing', () => {
+    expect(ids('chat', 'sheet')).toEqual(['google_sheets']);
+    expect(ids('chat', '  sheet  ')).toEqual([]);
+    expect(ids('chat', ' ').length).toBe(35); // every description holds a space
+  });
 });

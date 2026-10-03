@@ -316,7 +316,8 @@ export const FLOW_ENGINE_LABELS: Record<string, string> = {
 // --- test runner / AI ----------------------------------------------------------------------------------------------
 
 export const flbTestWebhookRequestSchema = z.object({
-  url: z.string().max(2048),
+  /** Required like WaDesk (its validator rejects a blank url with 422; the builder skips a blank webhook before calling). */
+  url: z.string().trim().min(1, 'The url field is required.').max(2048),
   method: z.string().max(10).nullish(),
   body: z.string().nullish(),
   contentType: z.string().max(120).nullish(),
