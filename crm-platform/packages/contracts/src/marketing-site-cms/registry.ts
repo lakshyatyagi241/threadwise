@@ -167,6 +167,7 @@ const spotlight = (
   head: string,
   tiles: { name: string; count: number; titleKey: string; defaults: Array<Record<string, string>> },
   extra: CmsField[] = [],
+  withCta = true,
 ): CmsSection =>
   section(slug, label, [
     eyebrow(eyebrowText),
@@ -190,7 +191,7 @@ const spotlight = (
       tiles.defaults,
       'Tile',
     ),
-    ...cta('Learn more', '/features', 'cta'),
+    ...(withCta ? cta('Learn more', '/features', 'cta') : []),
   ]);
 
 const six = (rows: ReadonlyArray<readonly [string, string]>, key: string) =>
@@ -442,6 +443,8 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
             'title',
           ),
         },
+        [],
+        false,
       ),
       spotlight(
         'feature-templates',
@@ -475,6 +478,7 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
             'Match the language you select',
           ].map((r, i) => f(`rule${i + 1}`, 'text', `Rule ${i + 1}`, r)),
         ],
+        false,
       ),
       section('feature-connectivity', 'Feature · Channels', [
         eyebrow('Feature five'),
@@ -483,7 +487,9 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
         ...metas(['Connect in minutes', 'One inbox', 'Your own numbers', 'Secure by default']),
         body('Connect the channels you use and answer them all from one place.'),
         ...[1, 2, 3].flatMap((c) => [
-          f(`card${c}_badge`, 'text', `Card ${c}: badge`, c === 1 ? 'Popular' : ''),
+          ...(c === 2
+            ? []
+            : [f(`card${c}_badge`, 'text', `Card ${c}: badge`, c === 1 ? 'Popular' : '')]),
           f(`card${c}_channel`, 'text', `Card ${c}: channel`, `Channel ${c}`),
           f(`card${c}_name`, 'text', `Card ${c}: name`, `Channel name ${c}`),
           f(`card${c}_headline`, 'text', `Card ${c}: headline`, 'What it is good for'),
@@ -1156,7 +1162,7 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
             },
           ],
           'Channel',
-        ),
+        ).filter((fld) => !/^ch[13]_badge$/.test(fld.key)),
         f('ch3_headline', 'text', 'Channel 3: headline', 'Talk to a person about plans.'),
         f('office_label', 'text', 'Office block label', 'Head office'),
       ]),
