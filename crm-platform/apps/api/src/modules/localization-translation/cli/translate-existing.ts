@@ -1,18 +1,15 @@
-#!/usr/bin/env tsx
 /* eslint-disable no-console -- command-line tool: console is its interface */
 import 'reflect-metadata';
-import { resolve } from 'node:path';
 import { NestFactory } from '@nestjs/core';
-import { config as loadEnv } from 'dotenv';
-
-loadEnv({ path: resolve(__dirname, '../../../../../../.env') });
-loadEnv({ path: resolve(process.cwd(), '.env') });
 
 /**
  * WD-I18N-033, the port of WaDesk's `auto-reply:translate-existing`: translates every existing auto-reply keyword and
  * reply text into the owning workspace's target languages.
  *
- *   pnpm --filter @crm/api auto-reply:translate-existing [-- --workspace <slug>] [--force]
+ *   pnpm --filter @crm/api build && pnpm --filter @crm/api auto-reply:translate-existing [-- --workspace <slug>] [--force]
+ *
+ * It runs from the build (like `start`), because the application's dependency injection needs the compiler's decorator
+ * metadata, which `tsx` does not emit. The app's own config module finds the `.env`.
  *
  * Without `--force` only rules that have no translations yet are visited. The exit code is 1 when any rule failed.
  * `--workspace` takes the workspace slug (internal ids never leave the system).
@@ -23,7 +20,6 @@ function arg(name: string): string | undefined {
 }
 
 async function main(): Promise<number> {
-  // Imported late so the env file is loaded before the config module validates it.
   const { AppModule } = await import('../../../app.module');
   const { TenantDirectory } = await import('../../auth');
   const { KeywordTranslationService } = await import('../keyword-translation.service');

@@ -520,6 +520,7 @@
             "sales_pipeline": "Sales pipeline",
             "appointment_booking": "Appointments",
             "chatbot_widgets": "Chatbot widgets",
+            "wa_storefront": "WhatsApp catalog",
             "inbox_sla": "Inbox SLA",
             "inbox_routing": "Inbox routing",
             "inbox_kanban": "Inbox Kanban",

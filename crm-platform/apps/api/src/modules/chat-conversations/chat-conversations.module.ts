@@ -89,6 +89,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     { provide: CONVERSATIONS_FACADE, useExisting: ConversationsService },
   ],
   exports: [
+    ChannelAdapterRegistry,
     ChannelsFacade,
     ChannelRegistryService,
     ChannelDispatcher,

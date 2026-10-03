@@ -4,6 +4,7 @@ import { z } from 'zod';
  * Machine-readable application error codes. The frontend switches on `code`,
  * never on the human-readable message — messages get reworded, codes do not.
  */
+import { CPN_ERROR_CODES } from '../coupons-credits-referral-currency/errors';
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
 import { WABA_ERROR_CODES } from '../whatsapp-cloud-api-waba/errors';
@@ -16,6 +17,7 @@ import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
 
 export const ERROR_CODES = {
+  ...CPN_ERROR_CODES,
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
   ...WABA_ERROR_CODES,
@@ -410,6 +412,26 @@ export const ERROR_CODES = {
   APPT_BOOKING_UNAVAILABLE: 'APPT_BOOKING_UNAVAILABLE',
   /** A booking type with pending or confirmed bookings still to come is not deleted. */
   BOOKING_TYPE_HAS_UPCOMING: 'BOOKING_TYPE_HAS_UPCOMING',
+
+  // catalog and products (WD-CAT)
+  /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */
+  CAT_NOT_CONNECTED: 'CAT_NOT_CONNECTED',
+  /** Meta refused the catalog id or token while connecting; the problem carries Meta's code and a hint. */
+  CAT_META_REJECTED: 'CAT_META_REJECTED',
+  CAT_NO_WABA: 'CAT_NO_WABA',
+  CAT_WABA_TOKEN_MISSING: 'CAT_WABA_TOKEN_MISSING',
+  CAT_NO_CATALOG_LINKED: 'CAT_NO_CATALOG_LINKED',
+  CAT_NO_RECIPIENTS: 'CAT_NO_RECIPIENTS',
+  CAT_TOO_MANY_RECIPIENTS: 'CAT_TOO_MANY_RECIPIENTS',
+  CAT_NO_PRODUCTS: 'CAT_NO_PRODUCTS',
+  CAT_NO_SENDER: 'CAT_NO_SENDER',
+  CAT_SEND_FAILED: 'CAT_SEND_FAILED',
+  CAT_COLLECTION_PRODUCTS_INVALID: 'CAT_COLLECTION_PRODUCTS_INVALID',
+  CAT_PROVIDER_FAILED: 'CAT_PROVIDER_FAILED',
+  /** The catalog has no phone number id: commerce settings and Meta sends need one (WD-CAT-005, 034). */
+  CAT_NO_PHONE_NUMBER: 'CAT_NO_PHONE_NUMBER',
+  /** A catalog link without a Meta catalog sends the shop link, and the workspace has no shop (WD-CAT-015). */
+  CAT_NO_SHOP: 'CAT_NO_SHOP',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
