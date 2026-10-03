@@ -25,5 +25,7 @@ export async function pageMetadata(page: CmsPage): Promise<Metadata> {
   const hero = CMS_REGISTRY[page].sections[0]!;
   const leadKey = hero.fields.find((f) => f.key === 'subtitle' || f.key === 'intro')?.key;
   const description = leadKey ? stripTags(fc(`${page}.hero.${leadKey}`)).slice(0, 300) : undefined;
-  return { title: t(page), description: description || undefined };
+  // The home page sits in the root segment, where the title template does not apply: leave the title to the site-wide
+  // default (the SEO title or brand name) like Reference's homepage.
+  return { ...(page === 'home' ? {} : { title: t(page) }), description: description || undefined };
 }

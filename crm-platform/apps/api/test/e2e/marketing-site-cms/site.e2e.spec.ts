@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { PlatformSettingsService } from '../../../src/modules/auth';
+import { GuidebookService } from '../../../src/modules/marketing-site-cms/guidebook.service';
+import { GUIDEBOOK_SEED } from '../../../src/modules/marketing-site-cms/guidebook-seed';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import {
   OPERATOR_EMAIL,
@@ -308,6 +310,28 @@ describe('guidebook, operator side (TW-CMS-044..046)', () => {
     expect(audit.some((e) => e.payload.action === 'deleted' && e.payload.title === 'Gone')).toBe(
       true,
     );
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------------------
+describe('guidebook starter articles (TW-CMS-050)', () => {
+  it('seeds only an empty help centre, once, and never puts back an edited or deleted article', async () => {
+    await h.owner.query(`DELETE FROM guidebook_articles`);
+    const svc = h.app.get(GuidebookService);
+    expect(await svc.seed()).toBe(GUIDEBOOK_SEED.length);
+    const rows = await h.owner.query(
+      `SELECT is_published, body FROM guidebook_articles ORDER BY sort_order`,
+    );
+    expect(rows.rows).toHaveLength(GUIDEBOOK_SEED.length);
+    expect(rows.rows.every((r: { is_published: boolean }) => r.is_published)).toBe(true);
+    expect(rows.rows.some((r: { body: string }) => r.body.includes('{{app}}'))).toBe(false);
+    // a second boot adds nothing, and a deleted article stays deleted
+    expect(await svc.seed()).toBe(0);
+    await h.owner.query(`DELETE FROM guidebook_articles WHERE sort_order = 0`);
+    expect(await svc.seed()).toBe(0);
+    expect(
+      (await h.owner.query(`SELECT count(*)::int AS n FROM guidebook_articles`)).rows[0].n,
+    ).toBe(GUIDEBOOK_SEED.length - 1);
   });
 });
 
