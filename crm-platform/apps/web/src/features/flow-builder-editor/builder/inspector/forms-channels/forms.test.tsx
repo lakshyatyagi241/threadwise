@@ -295,3 +295,31 @@ describe('Call-flow, Instagram, Facebook and Telegram forms render their Referen
     expect(render('tg_payment', { mode: 'paylink' })).toContain('Message before the link');
   });
 });
+
+describe('Legacy Instagram nodes stay editable (hidden from the palette, still on old flows)', () => {
+  it('ig_send_dm, ig_quick, ig_ai and ig_ask have their Reference fields', () => {
+    expect(render('ig_send_dm', { text: 'Hi' })).toContain(
+      'The DM text. {{variables}} from earlier nodes are substituted.',
+    );
+    const quick = render('ig_quick', {
+      text: 'x',
+      options: [{ title: 'Pricing', payload: 'PRICING' }],
+    });
+    for (const t of ['Quick replies', 'Add quick reply', 'PAYLOAD']) expect(quick).toContain(t);
+    const ai = render('ig_ai', {
+      model: 'gpt-4o-mini',
+      prompt: '',
+      assistant: '',
+      save: 'ai_reply',
+    });
+    for (const t of [
+      'Model',
+      'Instructions (system prompt)',
+      'Knowledge base (optional)',
+      'Save reply to',
+    ])
+      expect(ai).toContain(t);
+    const ask = render('ig_ask', { question: 'Name?', save: 'lead_name' });
+    for (const t of ['Question', 'Save answer to variable']) expect(ask).toContain(t);
+  });
+});

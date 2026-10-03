@@ -216,7 +216,7 @@ export class BuilderContextService {
             LEFT JOIN users u ON u.org_id = tm.org_id AND u.id = tm.user_id
             WHERE t.org_id = ${o} ORDER BY t.sort, lower(t.name), t.id, lower(u.full_name)`),
         tx.execute(
-          sql`SELECT uuid, name, provider, model FROM ai_agents WHERE org_id = ${o} AND is_active ORDER BY name`,
+          sql`SELECT uuid, name, provider, model FROM ai_agents WHERE org_id = ${o} ORDER BY id`,
         ),
         tx.execute(sql`
             SELECT st.uuid, st.name, p.name AS pipeline
