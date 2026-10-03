@@ -47,7 +47,21 @@ export class PaymentsController {
   @ApiOperation({
     summary: 'Asynchronous provider notification (signature-verified, 200 once authenticated)',
   })
-  webhook(@Param('slug') slug: string, @Req() req: Request & { rawBody?: Buffer }) {
-    return this.payments.handleWebhook(slug, req.rawBody ?? Buffer.alloc(0), lower(req.headers));
+  async webhook(
+    @Param('slug') slug: string,
+    @Req() req: Request & { rawBody?: Buffer },
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const ack = await this.payments.handleWebhook(
+      slug,
+      req.rawBody ?? Buffer.alloc(0),
+      lower(req.headers),
+    );
+    // PayTR keeps re-sending a notification until the body is exactly `OK` (WaDesk answered JSON, so it never stopped).
+    if (slug === 'paytr') {
+      res.type('text/plain');
+      return 'OK';
+    }
+    return ack;
   }
 }
