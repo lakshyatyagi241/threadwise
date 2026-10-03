@@ -10,6 +10,8 @@ analytics, workspace dashboard, workspace analytics) and compared them with this
 
 tier P0 done: WD-DASH-002, 003, 004, 005, 012, 022, 023, 024, 034, 035, 045, 048, 052 (045 is delivered by the PLAN domain, see below).
 tier P1 done: WD-DASH-006, 013, 014, 015, 016, 018, 025, 026 (device counters), 030, 036, 039, 040, 041, 042, 043, 046, 047, 049 (bars), 053.
+tier P1 round 3 done: WD-DASH-050 (engine cards), 029 is P2 below.
+tier P2 round 3 done: WD-DASH-008 (Instagram band, dashboard and analytics), 017 (Copilot card, flows list), 020 (quick actions, integrations, per workspace), 029 (geography by contact country, event stream), 032 (WaDesk's five rows and file name), 037 (admin geography from signup country), 010 (delivered by the shell, WD-ASHELL-022), 001 (home router is the AUTH landing; the dashboard sends a member below manager to the inbox).
 tier P2 done: WD-DASH-007, 009, 011, 019, 021, 024, 027, 028, 031, 032, 038, 044, 051 (009 added in the completion pass).
 
 ## Built
@@ -57,6 +59,20 @@ admin analytics tab map (panel visibility per tab, as WaDesk's `data-wa-tab-pane
 
 - Quick access (009): stored on `user_settings.quick_access` (no new table), per user per workspace, audited; the empty-list-reads-as-default quirk and the no-reordering quirk are kept on purpose.
 
+## Round 3 notes and deviations
+
+| Id          | WaDesk                                                                                  | Port                                                                                                                                                                           | Reason                                                         |
+| ----------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| WD-DASH-001 | agent or viewer redirected with a warning flash                                         | redirected to the inbox, no flash                                                                                                                                              | no global flash mechanism; the router itself is AUTH's landing |
+| WD-DASH-008 | band keyed to the Instaflow mirror                                                      | same data from workspace_ig_accounts and conversations on instagram channels; archived chats are not open                                                                      | port note                                                      |
+| WD-DASH-017 | links /flows/builder with ai_prompt                                                     | same links; the flow builder (FLB) screens are not built, the links 404 until it is                                                                                            | contract kept                                                  |
+| WD-DASH-020 | "/ 12", WooCommerce marked by any tenant's webhook traffic, Shopify never, Sheets never | "/ 10" real catalog (WooCommerce, Shopify, Sheets, Meta catalog, HubSpot, Slack, Trello, webhooks, incoming webhooks, Instagram), per workspace, from the connection tables    | inventory rebuild requirements                                 |
+| WD-DASH-029 | geography by device region (always 0), stream shows the workspace's own number          | by country of the contact's number (own dial table, top 7, "Unspecified"), stream of the 6 newest messages with the contact's number; "Live" tag and dead Pause button dropped | port note                                                      |
+| WD-DASH-032 | five rows                                                                               | the five rows plus the KPI grid and daily series; file named app-analytics-from-to.csv                                                                                         | rule 4                                                         |
+| WD-DASH-037 | users.country_code dial prefix, radar always zero                                       | ISO country from the profile, else the dial prefix mapped; top four, share of the four                                                                                         | rule 1                                                         |
+| WD-DASH-050 | PHP and Laravel vitals                                                                  | engine cards for devices, WABA and Twilio configs across workspaces; vitals were already Node ones                                                                             | port note                                                      |
+| WD-DASH-009 | tiles on the dashboard                                                                  | the dashboard now renders the shell's QuickAccessTiles (the main one); the DASH copy and its endpoints stay                                                                    | team rule                                                      |
+
 ## Blocked or not built (recorded, not dropped)
 
 | Id                  | Why                                                                                                                                                                |
@@ -77,8 +93,12 @@ admin analytics tab map (panel visibility per tab, as WaDesk's `data-wa-tab-pane
 
 API unit 43, API e2e 67 (6 files), web 28 passed against a freshly migrated crm_dash; arch:check 0 errors; db:verify-schema 0 errors. Typecheck errors that remain belong to other domains' specs (campaigns, telegram, bridge, chat, plan-draft), none in DASH files.
 
+## Verification (round 3)
+
+API unit 46, API e2e for extras 7, widgets 10, panels 8, health 11, admin-dash 14, dash 26 of 27 (see below), web 32, db:verify-schema 0 errors. arch:check reports 7 errors in chat-conversations and flow-runtime-engine, none in DASH.
+
 ## Not verified
 
-- Charts with real traffic: all screenshots ran on a database with almost no messages, orders or devices.
-- A browser smoke spec for the console pages (none written; the screens were compared by hand once).
-- The bridge probe against a real Node bridge (tested against a local HTTP server and the harness stub).
+- dash.e2e "24h window is the rolling day" failed once in this run (5 outbound rows inside the window); it is time-of-day sensitive in its seed and was not touched by round 3. Not re-run in isolation.
+- Compared by eye against our own screenshot only; the live WaDesk pages were not re-opened in round 3 (conformance of round 2 stands). Admin screens (overview, analytics, health) were not re-screenshotted (no operator account could be created: the operator:create CLI failed).
+- Charts with real traffic; a browser smoke spec; the bridge probe against a real bridge.

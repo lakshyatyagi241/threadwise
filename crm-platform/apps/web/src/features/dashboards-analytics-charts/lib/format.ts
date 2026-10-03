@@ -1,3 +1,4 @@
+import { ApiError } from '@/lib/api/errors';
 /** Display helpers for the dashboard and analytics. Pure. */
 
 /** 1,234 -> "1.2k", 1,500,000 -> "1.5M"; below a thousand the number as written (WD-DASH-004 rule 4). */
@@ -137,3 +138,7 @@ export function minutesLabel(min: number | null): string {
 /** Followers read as 1.2k from a thousand up (WD-DASH-008). */
 export const followersLabel = (n: number): string =>
   n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+
+/** WD-DASH-001: a workspace member below manager is sent to the inbox instead of seeing an error (WaDesk redirects, it does not 403). */
+export const isForbidden = (error: unknown): boolean =>
+  error instanceof ApiError && error.status === 403;

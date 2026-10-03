@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 import { DASH_RANGES, dashRangeSchema, type DashRange } from '@crm/contracts';
 import { Button, Card, Select, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
-import { compact, greetingKey, throughputCsv } from '../lib/format';
+import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
 import { BarChart, Legend, Sparkline } from './charts';
 import {
   ActivityCard,
@@ -85,6 +86,12 @@ export function DashboardScreen() {
   const summary = useSummary(range);
   const flow = useThroughput(range);
   const widgets = useWidgets(range);
+  const router = useRouter();
+  const bounced = isForbidden(summary.error);
+  // WaDesk sends an agent or viewer to the team inbox rather than showing an error.
+  useEffect(() => {
+    if (bounced) router.replace('/inbox');
+  }, [bounced, router]);
   const tz = session.org.timezone ?? 'UTC';
   const name = session.user.displayName ?? session.user.fullName;
 
@@ -174,7 +181,9 @@ export function DashboardScreen() {
         </div>
       </header>
 
-      {summary.error && !s ? (
+      {bounced ? (
+        <Spinner />
+      ) : summary.error && !s ? (
         <LoadError error={summary.error} />
       ) : (
         <>

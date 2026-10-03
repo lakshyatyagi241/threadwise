@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { ApiError } from '@/lib/api/errors';
 import {
   deltaOf,
   followersLabel,
+  isForbidden,
   formatMoney,
   minutesLabel,
   pickOption,
@@ -113,5 +115,14 @@ describe('followersLabel', () => {
     expect(followersLabel(999)).toBe('999');
     expect(followersLabel(1000)).toBe('1.0k');
     expect(followersLabel(1500)).toBe('1.5k');
+  });
+});
+
+describe('isForbidden', () => {
+  it('WD-DASH-001: only a 403 sends the member to the inbox', () => {
+    expect(isForbidden(new ApiError(403, 'FORBIDDEN', 'no'))).toBe(true);
+    expect(isForbidden(new ApiError(500, 'INTERNAL', 'boom'))).toBe(false);
+    expect(isForbidden(new Error('x'))).toBe(false);
+    expect(isForbidden(null)).toBe(false);
   });
 });
