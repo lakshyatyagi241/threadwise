@@ -143,7 +143,7 @@ export function CheckoutForm() {
 
   return (
     <form
-      className="sf-checkout"
+      className="sf-checkout sf-modal-body"
       noValidate
       onSubmit={(e) => {
         e.preventDefault();
@@ -245,7 +245,10 @@ export function CheckoutForm() {
         </label>
       </div>
 
-      <div className={`sf-form-msg sf-status-msg${status ? ` is-${status.tone}` : ''}`} role="alert">
+      <div
+        className={`sf-form-msg sf-status-msg${status ? ` is-${status.tone}` : ''}`}
+        role="alert"
+      >
         {status?.text}
       </div>
       <button type="submit" className="sf-cta sf-cta-wide" disabled={busy}>

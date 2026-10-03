@@ -53,7 +53,10 @@ describe('filters (WD-STORE-031)', () => {
   });
 
   it('bounds the price in major units (100 to 500 means 10000..50000 minor)', () => {
-    expect(names(applyFilters(list, f({ min: '150', max: '300' })))).toEqual(['Red shirt', 'Jeans']);
+    expect(names(applyFilters(list, f({ min: '150', max: '300' })))).toEqual([
+      'Red shirt',
+      'Jeans',
+    ]);
     expect(applyFilters(list, f({ min: 'abc', max: '' }))).toHaveLength(4);
   });
 

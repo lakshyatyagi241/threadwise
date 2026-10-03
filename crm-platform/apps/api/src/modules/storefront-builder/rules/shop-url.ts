@@ -1,4 +1,3 @@
-import { formatProductMoney } from '@crm/contracts';
 import type { StorefrontEnv } from '../../../config/domains/storefront-builder.env';
 import { digitsOnly } from './phone';
 
@@ -29,6 +28,20 @@ export function pagesOrigin(shop: ShopAddress, env: StorefrontEnv): string {
   return env.webAppUrl;
 }
 
+const TOTAL_SYMBOLS: Record<string, string> = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
+
+/**
+ * WaDesk's `WaOrder::total_display`: one of four symbols (any other currency shows its code), a space, and always two decimals
+ * with thousands separators. The confirmation text and the tracking page's Total use it; card prices do not.
+ */
+export function totalDisplay(minor: number, code: string): string {
+  const text = (minor / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return `${TOTAL_SYMBOLS[code] ?? code} ${text}`;
+}
+
 export const trackPath = (slug: string, token: string): string => `/s/${slug}/order/${token}`;
 
 export const trackUrl = (shop: ShopAddress, token: string, env: StorefrontEnv): string =>
@@ -51,7 +64,12 @@ export function buildWaUrl(input: {
   if (!to) return null;
   const text =
     `Hi ${input.shopName}! I just placed order #${input.orderNo}` +
-    ` (${formatProductMoney(input.totalMinor, input.currencyCode)}). My name is ${input.customerName || '—'}.` +
+    ` (${totalDisplay(input.totalMinor, input.currencyCode)}). My name is ${input.customerName || '—'}.` +
     `\nTrack: ${input.trackUrl}`;
-  return `https://wa.me/${to}?text=${encodeURIComponent(text)}`;
+  // PHP `rawurlencode` also escapes ! ' ( ) *
+  const encoded = encodeURIComponent(text).replace(
+    /[!'()*]/g,
+    (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
+  );
+  return `https://wa.me/${to}?text=${encoded}`;
 }

@@ -10,9 +10,16 @@ import {
   shareLinks,
   waChatUrl,
 } from './links';
-import { formatMinor } from './money';
+import { LEGACY_FREE_THRESHOLD_MINOR, formatIn, formatMinor, totalDisplay } from './money';
 import { isSameOrigin } from './same-origin';
-import { jsonLdString, limit, productJsonLd } from './seo';
+import {
+  homeMetadata,
+  jsonLdString,
+  limit,
+  orderMetadata,
+  productJsonLd,
+  productMetadata,
+} from './seo';
 import { TRACK_STEPS, isCancelled, statusLabel, trackerIndex } from './tracker';
 
 const headers = (h: Record<string, string>) => ({ get: (k: string) => h[k.toLowerCase()] ?? null });
@@ -23,6 +30,23 @@ describe('money', () => {
     expect(formatMinor(49950, 'USD')).toBe('$ 499.50');
     expect(formatMinor(0, 'EUR')).toBe('€ 0');
     expect(formatMinor(1000, 'JPY')).toBe('JPY 10');
+  });
+});
+
+describe('WaDesk money variants', () => {
+  it('formatIn glues the symbol to two decimals (Range hint, free-shipping text)', () => {
+    expect(formatIn(10900, 'INR')).toBe('₹109.00');
+    expect(formatIn(123456789, 'USD')).toBe('$1,234,567.89');
+    expect(formatIn(5000, 'JPY')).toBe('JPY 50.00');
+    // QUIRK: the shipping copy always says 999.00, whatever the shop's free-above rule is
+    expect(formatIn(LEGACY_FREE_THRESHOLD_MINOR, 'INR')).toBe('₹999.00');
+  });
+
+  it('totalDisplay is WaOrder::total_display: four symbols, other currencies by code, always two decimals', () => {
+    expect(totalDisplay(47700, 'INR')).toBe('₹ 477.00');
+    expect(totalDisplay(5000, 'GBP')).toBe('£ 50.00');
+    expect(totalDisplay(5000, 'AED')).toBe('AED 50.00');
+    expect(totalDisplay(123456, 'EUR')).toBe('€ 1,234.56');
   });
 });
 
@@ -141,5 +165,34 @@ describe('seo', () => {
   it('limits text with a marker', () => {
     expect(limit('abcdef', 3)).toBe('abc...');
     expect(limit('abc', 3)).toBe('abc');
+  });
+});
+
+describe('shop head tags do not inherit the staff app', () => {
+  const shop = {
+    name: 'Aurora Goods',
+    heroText: '',
+    logoUrl: null,
+  } as unknown as Parameters<typeof homeMetadata>[0];
+
+  it('uses absolute titles and resets robots', () => {
+    const home = homeMetadata(shop, 'https://x/s/a');
+    expect(home.title).toEqual({ absolute: 'Aurora Goods' });
+    expect(home.robots).toBeNull();
+    const product = productMetadata(
+      shop,
+      { name: 'Mug', description: 'Nice', imageUrl: null } as never,
+      'https://x/s/a/p/mug',
+    );
+    expect(product.title).toEqual({ absolute: 'Mug · Aurora Goods' });
+    expect(product.robots).toBeNull();
+  });
+
+  it('the tracking page is noindex and carries no social tags', () => {
+    const m = orderMetadata(shop, 9100);
+    expect(m.title).toEqual({ absolute: 'Order #9100 · Aurora Goods' });
+    expect(m.robots).toEqual({ index: false });
+    expect(m.openGraph).toBeNull();
+    expect(m.twitter).toBeNull();
   });
 });

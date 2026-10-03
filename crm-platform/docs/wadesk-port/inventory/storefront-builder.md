@@ -500,6 +500,11 @@ cart_recovery_delay_min, cart_recovery_message}`).
   7. View counted once per full page render (not per partial). Tracking failures never break the page.
   8. Theme fallback: unknown/missing theme key renders `aurora`.
   9. Sold-out handling: because only `in_stock = true` rows are listed, the "Sold out" badge/disabled button appears only for rows where the in-stock flag is true yet the template computes not-in-stock (practically never); stock quantity zero is enforced at the cart/checkout instead.
+  10. QUIRK (reproduced, found in the public-shop parity run): the catalog section has no max-width and the grid inside it is 1280px wide with `margin: 0 auto` as a grid item, so between roughly 880 and 1570px the product grid is wider than its column and its right edge is clipped by `overflow-x: hidden` (at 1440px the fourth card column is cut off). Breakpoints: filters stack below 880px (`order: 2`), 2 card columns below 560px, 1 below 340px.
+  11. QUIRK (WaDesk defect, **not** reproduced): "Show more products" never works in WaDesk. `?page=2&partial=1` makes `index()` return a `Response` from a method typed to return `View`, a TypeError (HTTP 500); the browser script then finds no meta, treats it as "no more pages" and removes the button, so buyers only ever see page 1. The port loads the next page as specified above (intended difference, listed in the parity file).
+  12. QUIRK (reproduced): below 760px the header search box and the nav links are hidden (no search on phones); the closed drawers are only translated off screen, so their box-shadow bleeds onto the right edge of every page; the "In stock only" filter never hides anything (no listed card is ever disabled).
+  13. `settings.top_strip` and `settings.hero_sub` are read by the page (the strip text; the hero sub copy, even when empty) although no screen writes them; the port reads them too (`topStrip`, `heroSub` on the public shop block).
+  14. The 404 of an unknown or disabled shop is WaDesk's platform-wide "Page not found" screen (logo and brand name, "Lost in the workspace", a big 404, "This page took a wrong turn.", Go back / Sign in, "Need help? Talk to support"), not a shop page; the product and order 404s are the same screen.
 - **Async & events:** view counter write (WD-STORE-020). No jobs.
 - **External systems:** Google Fonts (CSS) on every page load (Fraunces, Plus Jakarta Sans, JetBrains Mono).
 - **Settings:** shop settings (WD-STORE-006); `app.url` (subdomain match).
@@ -546,6 +551,9 @@ cart_recovery_delay_min, cart_recovery_message}`).
   8. The view counter is incremented on every product page load too (same counter as the home).
   9. `window.SF_CATALOG` is filled with the product and related items for cart, quick view and compare.
   10. JSON-LD and Open Graph tags (WD-STORE-027).
+  11. QUIRK (reproduced): the page's own product enters the browser catalog (`SF_CATALOG`) without `stock_qty` (only the related cards carry it), so the quantity add on the product page and the drawer stepper do not clamp that product to its stock; a stock of 0 reads "Only 0 left" on the pill.
+  12. QUIRK (reproduced, rules 6 and 7 above are kept on purpose): the page shows the Reviews list and the review form twice (once in the Reviews tab, once in the "Reviews" block every theme appends after the related rail) and the shipping tab and the footer say "Free shipping ... above <999.00 in the shop's currency>" whatever the real free-above rule is. One deliberate fix: each form posts its own fields (in WaDesk both read the first `#rv-name`, so the visible bottom form always answered "Please add your name.").
+  13. The shipping tab and the filter's "Range" hint are formatted by `FormatSettings::formatIn` (symbol glued to the amount, two decimals: `₹999.00`, `₹109.00 — ₹589.00`) while cards, the drawer and the checkout use symbol, a space and whole amounts (`₹ 109`). The tracking page's Total and the WhatsApp confirmation use `WaOrder::total_display` (INR/USD/EUR/GBP symbol, any other currency its code; always two decimals).
 - **Async & events:** view counter write.
 - **External systems:** Google Fonts; the optional external image URLs.
 - **Settings:** none beyond the shop settings.
@@ -559,7 +567,7 @@ cart_recovery_delay_min, cart_recovery_message}`).
   - Given a body containing a script tag, When rendered, Then the script is removed.
 - **Source refs:** app/Http/Controllers/StorefrontPublicController.php (product), resources/views/storefront/_partials/product.blade.php, _theme-base.blade.php (reviews section), app/Support/html_sanitize.php, app/Models/WaProductReview.php, routes/web.php:163.
 - **Port notes:** same renderer as WD-STORE-009. Reviews and products are read through the CAT module's query service (public projection: id, slug, name, price_minor, compare_price_minor, currency, images, stock, category, tags, sku, weight). Keep the sanitiser (use a maintained HTML sanitiser, not regex).
-  Fix the duplicated review form and the wrong free-shipping threshold.
+  The duplicated review block and the fixed "999.00" free-shipping text are kept for parity (rule 12); decided in the public-shop parity run.
 
 ### WD-STORE-011 — The 8 themes and the shared theme context
 
@@ -603,6 +611,7 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   4. A currency symbol table in the browser covers the 21 currencies (code shown with a space when unknown); amounts are formatted as symbol + space + value with no decimals when whole, else 2 decimals.
   5. `window.SF_SHOP` (id, name, currency, shipping rule, payment provider and handle) and `window.SF_CATALOG` (id -> name, price, compare, image, url, slug, sku, category, description, stock_qty, currency) are the hand-off to the browser logic; the catalog map holds only the products rendered in the page (and related ones), not the whole catalog.
   6. Product themes only override colours and a few rules; the product page of each theme uses the same partial.
+  7. QUIRK (measured in the parity run; the table above was read from the theme files and is corrected here): (a) `.cart-btn` is not an element of the shell, so Noir's gold-outlined cart button and Mercato's yellow cart button never render; the header icons are plain round buttons and the count badge is always coral `#E87A5D` with white text; (b) a theme's `.add { ... }` has the specificity of one class and loses to the base `.card .add`, so the outlined gold button (Noir), the yellow button (Mercato) and the teal pill (Studio) never show at rest (cards keep the brand-coloured filled button with white text); only their `:hover` rules apply (Noir: accent fill with black text, Mercato: terracotta, Studio: navy); (c) Meridian's `.grid { padding: 24px 8% }` is dead because the grid has inline `padding: 0`, and below 560px Meridian shows 2 columns, not 1; (d) drawers, modal, toast, compare bar and the checkout form are always the light Aurora look (white panel, `#0B1F1C` ink), also on Noir; (e) the "Reset filters", "Clear filters" and "Show more products" buttons use the browser's default button text colour (black), unreadable on Noir's dark surface; (f) buttons, inputs and selects without a font rule use the browser default (Arial), e.g. the sort select, the search box and the product page's Add to cart.
 - **Async & events:** none.
 - **External systems:** Google Fonts.
 - **Settings:** per shop `theme_key`; settings keys `brand_color`, `hero_text`, `footer_text`, `logo_url`, and the unwritten `hero_sub`, `top_strip`.
@@ -613,7 +622,7 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   - Given hero text containing markup, When rendered, Then (WaDesk) it is output as HTML; the port escapes or sanitises it (documented difference).
   - Given an unknown theme key in the database, When rendered, Then Aurora is used.
   - Given no logo URL, When rendered, Then the header shows only the shop name; with a logo, the image precedes the name.
-- **Source refs:** resources/views/storefront/_theme-base.blade.php, _shared.blade.php, _partials/_.blade.php, themes/_/*.blade.php, app/Http/Controllers/StorefrontPublicController.php (context, resolveWaNumber, themeView), app/Models/WaStorefront.php (THEMES, getSendingLabelAttribute).
+- **Source refs:** resources/views/storefront/_theme-base.blade.php, _shared.blade.php, *partials/*.blade.php, themes/_/*.blade.php, app/Http/Controllers/StorefrontPublicController.php (context, resolveWaNumber, themeView), app/Models/WaStorefront.php (THEMES, getSendingLabelAttribute).
 - **Port notes:** implement the shell once as React components with a theme token object (CSS variables `--sf-*`) and per-theme CSS modules; the eight themes are data (tokens + small overrides) not eight codebases. Fonts via `next/font` (self-host) instead of Google CDN. Keep the same HTML structure for the public pages only as far as the tests need.
   Escape or sanitise hero text. Add a visual regression test per theme.
 
@@ -649,6 +658,8 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   5. A buyer who edits the stored cart price changes only the display: the server ignores prices.
   6. No quantity maximum in the UI beyond stock; the server rejects quantities over 999 per line and more than 100 lines.
   7. Wishlist and compare drawers are WD-STORE-026.
+  8. QUIRK (reproduced): the checkout dialog opens over the cart drawer, which stays open behind it; Escape closes both. A successful order with a WhatsApp URL keeps the form up with "Order placed! Opening WhatsApp…" and clears the cart.
+  9. QUIRK (WaDesk defect, **not** reproduced): the share dialog's Copy button is built with `JSON.stringify` inside an HTML attribute, so the attribute ends early and the dialog shows the stray text `this.textContent='Copy',1500)">` next to the button; the port renders a clean button.
 - **Async & events:** the abandoned-cart beacon fires on phone blur (WD-STORE-015).
 - **External systems:** `wa.me` hand-off (WD-STORE-013).
 - **Settings:** shop currency, shipping, payment provider label, shipping note.
@@ -702,6 +713,7 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   13. The order is created with status `new`; model observers (HubSpot sync, WhatsApp group notifications, invoice sweeper, paid/completed hooks) belong to CHK and run on this insert/updates.
   14. No idempotency key: a double submit creates two orders (the page disables the button while the request is in flight).
   15. The tracking URL is built from the request's own host, so on a custom domain it carries the custom domain.
+      Parity run: the RTO band of a COD order differs from WaDesk for a returning phone. WaDesk stores the phone with its `+` but looks the history up by digits only, so the lookup never matches and every buyer scores as a first-time buyer (+30, band medium); the port compares digits on both sides, so a returning buyer is found (intended difference).
 - **Async & events:** the order insert is the trigger for CHK's observers (HubSpot deal, invoice, group notifications); abandoned-cart cancellation (WD-STORE-015); optional WhatsApp Pay auto-charge request; Meta catalog stock settles later by nightly resync. No outbound webhook from this domain.
 - **External systems:** WhatsApp `wa.me` deep link (client side redirect); WhatsApp Pay (CHK).
 - **Settings:** shop shipping, currency; coupons; workspace WhatsApp Pay `auto_charge`.
@@ -859,6 +871,7 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   5. The payment link is whatever the merchant minted/pasted (WD-STORE-018); the page does not poll for payment: refreshing shows the new status.
   6. The pill shows the raw status word capitalised.
   7. No rate limit on this route (only the unguessable token).
+  8. Parity run: the page is standalone and the same in every theme; its 404 is the platform "Page not found" screen. The footer line has WaDesk's 20px top and 13px bottom margin.
 - **Async & events:** none.
 - **External systems:** none.
 - **Settings:** none.
@@ -1199,6 +1212,7 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   2. JSON-LD (product pages): `Product` with name, image list, description (500 chars), sku, brand (when set), an `Offer` with price as a decimal string, `priceCurrency` (product currency, else shop currency, else INR), availability InStock/OutOfStock from the product's effective availability, url, and an `AggregateRating` when at least one approved review exists. Null/empty keys removed.
   3. No canonical tag, no sitemap, no `robots` rules for the shop pages, no alternate language tags. Order tracking: `robots noindex`.
   4. The page is not server-cached; heavy crawling hits the database each time.
+  5. Parity run: the shop pages carry only the tags above. The staff app's title suffix ("... - <platform>"), default `robots` and Open Graph block must not leak onto them (the metadata uses `absolute` titles and resets the inherited fields); the order page has only `noindex`. The JSON-LD is the same document, with `<` escaped as `\u003c`.
 - **Async & events:** none.
 - **External systems:** none.
 - **Settings:** none.
@@ -1308,6 +1322,7 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   5. Cards appended by Show more join the filter set and get the active filters/sort applied; cart and wishlist behaviour re-render.
   6. The category facet and price range are computed from page 1 only (WD-STORE-009 rule 4), so categories that first appear on later pages are not filterable.
   7. Search input is shared with the header on every page but only has an effect on the home grid.
+  8. Parity run: confirmed in the browser on the reference: "Featured" keeps the last sort order (reproduced), "In stock only" is a no-op (reproduced) and the "Range" hint reads `₹109.00 — ₹589.00`.
 - **Async & events:** none besides the page fetches.
 - **External systems:** none.
 - **Settings:** none.
@@ -1318,7 +1333,7 @@ but no screen writes them. The nav anchors `#categories` exist, `#about` points 
   - Given no card matches, When filters apply, Then the "Nothing matches those filters" block shows and "Clear filters" resets everything.
   - Given a shop with more than 48 products, When "Show more products" is pressed, Then the next cards append, the filters re-apply and the button disappears after the last page.
 - **Source refs:** resources/views/storefront/_partials/index.blade.php (script and markup), _partials/_cards-only.blade.php.
-- **Port notes:** consider server-side search/filter/sort with cursor pagination (the public products endpoint takes `q`, `category`, `min`, `max`, `sort`, `sale`) and return facets for the full catalog; keep client instant filtering as progressive enhancement. Fix the Featured-restore quirk.
+- **Port notes:** consider server-side search/filter/sort with cursor pagination (the public products endpoint takes `q`, `category`, `min`, `max`, `sort`, `sale`) and return facets for the full catalog; keep client instant filtering as progressive enhancement. The Featured-keeps-last-sort quirk is kept for parity (rule 4).
 
 ## Data model
 

@@ -1,5 +1,5 @@
 // Makes an organisation for a WD-STORE run: wa_storefront on, one connected WhatsApp device (the wizard refuses to save a shop
-// without a sender) and, with --shop, one shop plus a few products. Writes the PARITY_CONFIG json the twin harness reads.
+// without a sender) and, with --shop, one shop plus two products. Writes the PARITY_CONFIG json the twin harness reads.
 //   API=http://localhost:53109 WEB=http://localhost:3109 node prepare-org.mjs out.json [--shop] [--email store-dev@example.com]
 // Needs docker with the dev Postgres (psql through `docker exec crm-postgres`; PSQL='["docker","exec","crm-postgres","psql","-U","crm","-d","crm_store","-tAc"]' overrides).
 import assert from 'node:assert/strict';
@@ -46,7 +46,10 @@ assert.equal(signup.status, 201, `signup ${signup.status}`);
 const login = await call('/auth/login', null, 'POST', { email: EMAIL, password: PASS });
 const token = login.json.tokens.accessToken;
 const ORG = login.json.orgSlug;
-await call('/onboarding/workspace', token, 'POST', { name: `Store Twin ${STAMP}`, timezone: 'UTC' });
+await call('/onboarding/workspace', token, 'POST', {
+  name: `Store Twin ${STAMP}`,
+  timezone: 'UTC',
+});
 assert.ok((await call('/onboarding/complete', token, 'POST', {})).status < 300);
 const orgSql = `(SELECT id FROM organizations WHERE slug = '${ORG}')`;
 psql(
@@ -56,9 +59,14 @@ psql(
   `INSERT INTO devices (org_id, device_name, country_code, phone_number, status, active) VALUES (${orgSql}, 'Store Twin Phone', '91', '9810411122', 'connected', true)`,
 );
 if (withShop) {
-  const shop = await call('/store/shops', token, 'POST', { shopName: `Store Twin ${STAMP}` });
+  const wizard = await call('/store/shops', token);
+  const deviceId = wizard.json?.devices?.[0]?.id ?? null;
+  const shop = await call('/store/shops', token, 'POST', {
+    shopName: `Store Twin ${STAMP}`,
+    ...(deviceId ? { deviceId } : {}),
+  });
   assert.equal(shop.status, 201, `shop ${shop.status} ${JSON.stringify(shop.json)}`);
-  for (const [i, name] of ['Linen Shirt', 'Clay Mug', 'Canvas Tote'].entries()) {
+  for (const [i, name] of ['Linen Shirt', 'Clay Mug'].entries()) {
     const p = await call('/catalog/products', token, 'POST', {
       name: `${name} ${STAMP}`,
       sku: `ST-${STAMP}-${i}`,

@@ -323,8 +323,13 @@
       "message": "Message us about this order"
     },
     "notFound": {
-      "title": "This store is not available",
-      "body": "The page you opened does not exist or the store is offline right now."
+      "kicker": "Lost in the workspace",
+      "title": "This page took a wrong turn.",
+      "body": "We couldn't find what you were looking for. The link may be broken, the page may have moved, or it might have never existed in the first place.",
+      "back": "Go back",
+      "signIn": "Sign in",
+      "help": "Need help?",
+      "support": "Talk to support"
     }
   }
 }

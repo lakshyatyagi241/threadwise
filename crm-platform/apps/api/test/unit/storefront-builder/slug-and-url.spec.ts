@@ -13,6 +13,7 @@ import {
   pagesOrigin,
   publicUrl,
   trackPath,
+  totalDisplay,
   trackUrl,
 } from '../../../src/modules/storefront-builder/rules/shop-url';
 import {
@@ -144,8 +145,17 @@ describe('WhatsApp hand-off (WD-STORE-013 rule 12)', () => {
     expect(url.startsWith('https://wa.me/919812345678?text=')).toBe(true);
     const text = decodeURIComponent(url.split('?text=')[1]!);
     expect(text).toBe(
-      'Hi Acme! I just placed order #42 (₹ 280). My name is Asha.\nTrack: https://app.example.com/s/acme/order/tok',
+      'Hi Acme! I just placed order #42 (₹ 280.00). My name is Asha.\nTrack: https://app.example.com/s/acme/order/tok',
     );
+  });
+
+  it('escapes the text like PHP rawurlencode and shows the total with two decimals (WaOrder::total_display)', () => {
+    const url = buildWaUrl({ ...base, waNumber: '9199', totalMinor: 123456 })!;
+    expect(url).toContain('Hi%20Acme%21%20I%20just');
+    expect(decodeURIComponent(url.split('?text=')[1]!)).toContain('(₹ 1,234.56)');
+    expect(totalDisplay(47700, 'INR')).toBe('₹ 477.00');
+    expect(totalDisplay(5000, 'USD')).toBe('$ 50.00');
+    expect(totalDisplay(5000, 'AED')).toBe('AED 50.00');
   });
 
   it('no sending number means no link; no name shows a dash', () => {

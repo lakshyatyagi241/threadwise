@@ -1767,6 +1767,9 @@
 .sf-qv-actions .sf-cta-ghost {
   margin-top: 10px;
 }
+.sf-checkout {
+  text-align: left;
+}
 .sf-checkout-summary {
   margin-bottom: 12px;
   font-size: 12.5px;
@@ -1936,7 +1939,13 @@
   min-height: 100vh;
   background: #f4f6f5;
   color: #1d2b27;
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   line-height: normal;
 }
 .sf-order *,
@@ -1944,25 +1953,19 @@
 .sf-order *::after {
   box-sizing: border-box;
 }
-.sf-order a {
+.sf-order :where(a) {
   color: inherit;
   text-decoration: none;
 }
-.sf-order img {
+.sf-order :where(img) {
   display: block;
   max-width: 100%;
 }
-.sf-order ul,
-.sf-order ol,
-.sf-order dl,
-.sf-order dd,
-.sf-order h1,
-.sf-order p {
+.sf-order :where(ul, ol, dl, dd, h1, p) {
   margin: 0;
   padding: 0;
 }
-.sf-order ul,
-.sf-order ol {
+.sf-order :where(ul, ol) {
   list-style: none;
 }
 .sf-order-wrap {
@@ -2028,6 +2031,7 @@
 }
 .sf-ot-steps li {
   position: relative;
+  display: block;
   flex: 1;
   text-align: center;
 }
@@ -2178,6 +2182,31 @@
 .sf-order-missing h1 {
   margin: 0 0 6px;
   font-size: 22px;
+}
+
+/* ───────── Responsive, in WaDesk's source order ─────────
+   1. the skeleton's own phone rules (below), 2. the theme overrides, 3. the catalog partial's breakpoints, 4. the shared
+   stylesheet's. A theme therefore beats the skeleton's phone rules (Studio keeps its 96px hero padding on a phone). */
+@media (max-width: 760px) {
+  .sf-pd {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+  .sf-hero {
+    padding: 36px 16px 24px;
+  }
+  .sf-hero h1 {
+    font-size: 32px;
+  }
+  .sf-search,
+  .sf-nav {
+    display: none;
+  }
+  .sf-foot-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
 }
 
 /* ───────── The eight themes: tokens come from lib/themes.ts, these are the overrides ─────────
@@ -2351,18 +2380,21 @@
 :where([data-sf-theme='studio']) .sf-card .sf-card-img {
   aspect-ratio: 5 / 4;
 }
-:where([data-sf-theme='studio']) .sf-card .sf-add {
-  padding: 9px 18px;
-  border: none;
-  border-radius: 9999px;
-  background: #2a9d8f;
-  color: #fff;
-}
+/* WaDesk's studio `.add { teal pill }` has the specificity of one class and loses to the base `.card .add`: only its hover applies. */
 :where([data-sf-theme='studio']) .sf-add:hover {
   background: #264653;
 }
 
-/* ───────── Responsive (WaDesk's own breakpoints) ───────── */
+@media (max-width: 600px) {
+  :where([data-sf-theme='meridian']) .sf-grid {
+    grid-template-columns: 1fr;
+    padding: 24px 16px;
+  }
+  :where([data-sf-theme='studio']) .sf-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ───────── Breakpoints of the catalog partial and the shared stylesheet (they come after the themes) ───────── */
 @media (max-width: 880px) {
   .sf-shop-layout {
     grid-template-columns: 1fr;
@@ -2371,26 +2403,18 @@
     order: 2;
   }
 }
-@media (max-width: 760px) {
-  .sf-pd {
+@media (max-width: 560px) {
+  .sf-grid:not(.is-list) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+@media (max-width: 340px) {
+  .sf-grid:not(.is-list) {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 24px;
   }
-  .sf-hero {
-    padding: 36px 16px 24px;
-  }
-  .sf-hero h1 {
-    font-size: 32px;
-  }
-  .sf-search,
-  .sf-nav {
-    display: none;
-  }
-  .sf-foot-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
+}
+@media (max-width: 760px) {
   .sf-drawer-panel {
     width: 95vw;
   }
@@ -2402,28 +2426,8 @@
     overflow-x: auto;
   }
 }
-@media (max-width: 600px) {
-  :where([data-sf-theme='meridian']) .sf-grid {
-    grid-template-columns: 1fr;
-    padding: 24px 16px;
-  }
-  :where([data-sf-theme='studio']) .sf-grid {
-    grid-template-columns: 1fr;
-  }
-}
 @media (max-width: 580px) {
   .sf-qv {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 560px) {
-  .sf-grid:not(.is-list) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-}
-@media (max-width: 340px) {
-  .sf-grid:not(.is-list) {
     grid-template-columns: 1fr;
   }
 }
@@ -2441,5 +2445,152 @@
   }
   .sf-card:hover .sf-card-img img {
     transform: none;
+  }
+}
+
+/* ───────── The 404 screen (WaDesk's platform "Page not found") ───────── */
+.sf-404 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 24px;
+  background: #f5f3ec;
+  color: #0b1f1c;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.sf-404 *,
+.sf-404 *::before,
+.sf-404 *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.sf-404 :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+.sf-404 :where(h1) {
+  font-size: inherit;
+  font-weight: inherit;
+}
+.sf-404-card {
+  width: 100%;
+  max-width: 560px;
+  padding: 40px;
+  border: 1px solid #e5dfd0;
+  border-radius: 18px;
+  background: #fbfaf6;
+  box-shadow:
+    0 1px 0 0 rgba(11, 31, 28, 0.04),
+    0 1px 2px 0 rgba(11, 31, 28, 0.04);
+  text-align: center;
+}
+.sf-404-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: -0.01em;
+}
+.sf-404-brand svg {
+  border-radius: 6px;
+}
+.sf-404-kicker {
+  margin-bottom: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6b807c;
+}
+.sf-404-code {
+  font-family: 'Fraunces', serif;
+  font-size: 120px;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: #075e54;
+}
+.sf-404-card h1 {
+  margin-top: 16px;
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.sf-404-card p {
+  max-width: 28rem;
+  margin: 12px auto 0;
+  font-size: 13px;
+  line-height: 1.625;
+  color: #3a5a55;
+}
+.sf-404-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+}
+.sf-404-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.sf-404-back {
+  border: 1px solid #e5dfd0;
+  background: #fbfaf6;
+  font-weight: 500;
+}
+.sf-404-back:hover {
+  background: #f5f3ec;
+}
+.sf-404-signin {
+  background: #075e54;
+  color: #fbfaf6;
+  font-weight: 600;
+}
+.sf-404-signin:hover {
+  background: #0a7a6c;
+}
+.sf-404-help {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #e5dfd0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6b807c;
+}
+.sf-404-help a {
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  color: #075e54;
+}
+.sf-404-help a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 640px) {
+  .sf-404-code {
+    font-size: 72px;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .sf-404-code {
+    font-size: 96px;
   }
 }
