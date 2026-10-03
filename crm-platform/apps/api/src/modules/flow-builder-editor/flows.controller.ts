@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -33,6 +34,7 @@ import {
   type FlbCommerceProductsQuery,
   type ImportFlowRequest,
   type ListFlowsQuery,
+  type PlanFeatureKey,
   type RenameFlowRequest,
   type SaveFlowRequest,
   type FlbTestWebhookRequest,
@@ -41,11 +43,23 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { BuilderContextService } from './builder-context.service';
 import { FlowAiService } from './flow-ai.service';
+import { FlowMediaTooLargeInterceptor } from './flow-media-too-large.interceptor';
 import { FLOW_MEDIA_MAX_BYTES, FLOW_MEDIA_TYPES, FlowMediaService } from './flow-media.service';
+import { flowExportFileName } from './flow-rules';
 import { FlowsService } from './flows.service';
 import { TestWebhookService } from './test-webhook.service';
+
+/**
+ * The plan flag behind the soft paywall (WD-FLB-028; WaDesk `autoflow`, the registry's `automation`). The page and every read
+ * stay open so a workspace without the flag still sees its flows under the upgrade sheet; anything that creates or edits a flow, or uses
+ * the builder's tools, answers 422 PLAN_FEATURE_LOCKED. Pause, unpublish and delete stay open so a downgraded workspace can still
+ * stop a live flow and free a slot. WaDesk's JSON endpoints ignored the flag: intended deviation, the
+ * same one the plan guard documents for every gated feature.
+ */
+export const FLB_PLAN_FEATURE = 'automation' satisfies PlanFeatureKey;
 
 const uploadTypeSchema = z.enum(FLOW_MEDIA_TYPES);
 const googleKindSchema = z.enum(FLB_GOOGLE_PICKER_KINDS);
@@ -100,6 +114,7 @@ export class FlowsController {
   @Post('templates/:id/clone')
   @Idempotent()
   @RequirePermission('flb.flows.create')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Clone a template into a new unpublished flow',
     description: 'Counts against the plan flow cap (422 PLAN_LIMIT_REACHED). A hidden or deleted template is 404.',
@@ -146,6 +161,7 @@ export class FlowsController {
   @Post('import')
   @Idempotent()
   @RequirePermission('flb.flows.create')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Import an export file (or a bare graph) as a new unpublished flow "<name> (imported)"',
     description: '422 FLB_IMPORT_INVALID when there is no flowNodes array; 422 PLAN_LIMIT_REACHED at the plan cap.',
@@ -157,6 +173,7 @@ export class FlowsController {
   @Post('test-webhook')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Fire a Webhook node for real from the Test runner (SSRF guarded)',
     description:
@@ -169,6 +186,7 @@ export class FlowsController {
   @Post('ai-generate')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Generate a flow graph from a prompt',
     description: `Providers: ${FLB_AI_PROVIDERS.join(', ')}. At most 20 nodes and 40 edges come back. 422 FLB_AI_NO_KEY, 502 FLB_AI_PROVIDER_FAILED, 422 FLB_AI_BAD_JSON.`,
@@ -179,8 +197,9 @@ export class FlowsController {
 
   @Post('upload-media')
   @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(upload)
+  @UseInterceptors(FlowMediaTooLargeInterceptor, upload)
   @ApiOperation({
     summary: 'Upload an image, video, audio or document for a Media / Sequence node (up to 50 MB)',
     description: 'The type and content are checked by the shared upload guard; the stored name is server generated.',
@@ -202,6 +221,7 @@ export class FlowsController {
   @Post()
   @Idempotent()
   @RequirePermission('flb.flows.create')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Save a new flow (an unpublished draft)',
     description: 'The plan flow cap applies here and on import / clone / duplicate; editing never counts.',
@@ -220,6 +240,7 @@ export class FlowsController {
   @Put(':id')
   @Idempotent()
   @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Save the graph, name, category and channel of a flow',
     description: 'Needs the current `rowVersion` (409 ROW_VERSION_CONFLICT when someone saved first). Re-derives the trigger columns.',
@@ -234,6 +255,7 @@ export class FlowsController {
   @Patch(':id/rename')
   @Idempotent()
   @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({ summary: 'Rename a flow (up to 191 characters)' })
   async rename(
     @Param('id', zodPipe(uuidSchema)) id: string,
@@ -254,6 +276,7 @@ export class FlowsController {
   @Post(':id/duplicate')
   @Idempotent()
   @RequirePermission('flb.flows.create')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({ summary: 'Copy a flow as an unpublished draft "<name> (Copy)"' })
   async duplicate(@Param('id', zodPipe(uuidSchema)) id: string) {
     return this.flows.duplicate(id);
@@ -263,6 +286,7 @@ export class FlowsController {
   @HttpCode(HttpStatus.OK)
   @Idempotent()
   @RequirePermission('flb.flows.publish')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({ summary: 'Publish a saved flow' })
   async publish(@Param('id', zodPipe(uuidSchema)) id: string) {
     return this.flows.publish(id);
@@ -283,8 +307,13 @@ export class FlowsController {
     summary: 'The portable export file of a flow',
     description: 'Graph verbatim under the `_wadesk_flow_export` marker, no workspace or user ids.',
   })
-  async exportFlow(@Param('id', zodPipe(uuidSchema)) id: string) {
-    return (await this.flows.export(id)).file;
+  async exportFlow(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+    @Res({ passthrough: true }) res: { setHeader(name: string, value: string): unknown },
+  ) {
+    const { file, name } = await this.flows.export(id);
+    res.setHeader('Content-Disposition', `attachment; filename="${flowExportFileName(name, id)}"`);
+    return file;
   }
 
   @Delete(':id')

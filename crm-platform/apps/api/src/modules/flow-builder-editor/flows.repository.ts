@@ -16,6 +16,8 @@ export interface FlowRow {
   triggerValue: number | null;
   triggerKeywords: string | null;
   triggerDeviceId: number | null;
+  /** The inbox channel (`channels.id`) the flow listens on and sends through: what the runtime reads. */
+  triggerChannelId: number | null;
   provider: string;
   isPublished: boolean;
   isActive: boolean;
@@ -56,6 +58,8 @@ const toRow = (r: Raw): FlowRow => ({
   triggerKeywords: (r.trigger_keywords as string | null) ?? null,
   triggerDeviceId:
     r.trigger_device_id === null || r.trigger_device_id === undefined ? null : Number(r.trigger_device_id),
+  triggerChannelId:
+    r.trigger_channel_id === null || r.trigger_channel_id === undefined ? null : Number(r.trigger_channel_id),
   provider: r.provider as string,
   isPublished: r.is_published as boolean,
   isActive: r.is_active as boolean,
@@ -76,7 +80,7 @@ const toRow = (r: Raw): FlowRow => ({
 
 const COLUMNS = sql`
   f.id, f.uuid, f.user_id, f.flow_name, f.category, f.flow_type, f.trigger_kind, f.trigger_value, f.trigger_keywords,
-  f.trigger_device_id, f.provider, f.is_published, f.is_active, f.published_at, f.created_at, f.updated_at,
+  f.trigger_device_id, f.trigger_channel_id, f.provider, f.is_published, f.is_active, f.published_at, f.created_at, f.updated_at,
   to_char(f.updated_at at time zone 'UTC', ${sql.raw(ISO)}) AS updated_at_iso, f.row_version,
   coalesce(jsonb_array_length(CASE WHEN jsonb_typeof(f.flow_data->'flowNodes') = 'array' THEN f.flow_data->'flowNodes' END), 0) AS node_count,
   coalesce(jsonb_array_length(CASE WHEN jsonb_typeof(f.flow_data->'flowEdges') = 'array' THEN f.flow_data->'flowEdges' END), 0) AS edge_count,
@@ -127,7 +131,10 @@ export interface NewFlow {
   triggerValue: number | null;
   triggerKeywords: string | null;
   triggerDeviceId: number | null;
+  triggerChannelId: number | null;
   provider: string | null;
+  /** Only a duplicate sets it (WaDesk's replicate() kept the source's pause switch); everything else starts active. */
+  isActive?: boolean;
 }
 
 export interface FlowUpdate {
@@ -140,6 +147,7 @@ export interface FlowUpdate {
   triggerValue: number | null;
   triggerKeywords: string | null;
   triggerDeviceId: number | null;
+  triggerChannelId: number | null;
   /** Only changes when the trigger names a valid engine prefix. */
   provider: string | null;
 }
@@ -240,10 +248,10 @@ export class FlowsRepository {
   async insert(tx: Tx, orgId: number, f: NewFlow): Promise<number> {
     const res = await tx.execute(sql`
       INSERT INTO flows (org_id, user_id, flow_name, flow_data, category, flow_type, trigger_kind, trigger_value,
-        trigger_keywords, trigger_device_id, provider, is_published, is_active)
+        trigger_keywords, trigger_device_id, trigger_channel_id, provider, is_published, is_active)
       VALUES (${orgId}, ${f.userId}, ${f.name}, ${JSON.stringify(f.graph)}::jsonb, ${f.category}, ${f.flowType},
-        ${f.triggerKind}, ${f.triggerValue}, ${f.triggerKeywords}, ${f.triggerDeviceId},
-        coalesce(${f.provider}, 'baileys'), false, true)
+        ${f.triggerKind}, ${f.triggerValue}, ${f.triggerKeywords}, ${f.triggerDeviceId}, ${f.triggerChannelId},
+        coalesce(${f.provider}, 'baileys'), false, ${f.isActive ?? true})
       RETURNING id
     `);
     return Number((res.rows[0] as Raw).id);
@@ -261,7 +269,7 @@ export class FlowsRepository {
       UPDATE flows SET flow_name = ${f.name}, flow_data = ${JSON.stringify(f.graph)}::jsonb,
         category = coalesce(${f.category}, category), flow_type = ${f.flowType}, trigger_kind = ${f.triggerKind},
         trigger_value = ${f.triggerValue}, trigger_keywords = ${f.triggerKeywords},
-        trigger_device_id = ${f.triggerDeviceId}, provider = coalesce(${f.provider}, provider)
+        trigger_device_id = ${f.triggerDeviceId}, trigger_channel_id = ${f.triggerChannelId}, provider = coalesce(${f.provider}, provider)
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${expectedVersion}
       RETURNING id
     `);
@@ -299,6 +307,32 @@ export class FlowsRepository {
     const res = await tx.execute(
       sql`SELECT id FROM ${sql.raw(table)} WHERE org_id = ${orgId} AND uuid = ${uuid}`,
     );
+    const r = res.rows[0] as Raw | undefined;
+    return r ? Number(r.id) : null;
+  }
+
+  /**
+   * The inbox channel (`channels.id`) a sender key points at, or null when that sender has no channel row (yet). A sender is
+   * named `<engine>:<uuid>` after its engine's own table (devices, wa_provider_configs, ...); the runtime matches on
+   * `channels`, so the save translates once: an unofficial device is the `whatsapp_qr` channel whose handle is its uuid, a
+   * WABA / Twilio number is the channel linked to its connection, any other engine a channel of that kind with the uuid as
+   * handle. The lookup is scoped by org, so another workspace's sender never resolves.
+   */
+  async resolveChannel(tx: Tx, orgId: number, engine: string, uuid: string): Promise<number | null> {
+    if (!UUID_RE.test(uuid)) return null;
+    const res =
+      engine === 'baileys'
+        ? await tx.execute(
+            sql`SELECT id FROM channels WHERE org_id = ${orgId} AND kind = 'whatsapp_qr' AND external_id = ${uuid} ORDER BY id LIMIT 1`,
+          )
+        : engine === 'waba' || engine === 'twilio'
+          ? await tx.execute(sql`
+              SELECT c.id FROM channels c
+              JOIN wa_provider_configs w ON w.org_id = c.org_id AND w.id = c.waba_config_id
+              WHERE c.org_id = ${orgId} AND w.uuid = ${uuid} ORDER BY c.id LIMIT 1`)
+          : await tx.execute(
+              sql`SELECT id FROM channels WHERE org_id = ${orgId} AND kind = ${engine} AND external_id = ${uuid} ORDER BY id LIMIT 1`,
+            );
     const r = res.rows[0] as Raw | undefined;
     return r ? Number(r.id) : null;
   }

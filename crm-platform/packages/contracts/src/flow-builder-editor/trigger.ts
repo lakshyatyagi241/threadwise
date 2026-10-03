@@ -124,10 +124,16 @@ export function flbExtractTrigger(graph: Pick<FlowGraph, 'flowNodes'>): FlbTrigg
 export const FLB_TRIGGER_KEYWORDS_MAX = 255;
 
 export function flbTriggerKeywordsTooLong(keywords: string | null): string | null {
-  if (keywords === null || keywords.length <= FLB_TRIGGER_KEYWORDS_MAX) return null;
-  return `Trigger keyword is too long (${keywords.length} characters; the limit is ${FLB_TRIGGER_KEYWORDS_MAX}). Open the flow's Trigger node and shorten the keywords — remove duplicates or extra phrases.`;
+  if (keywords === null) return null;
+  // WaDesk counted characters (mb_strlen), not UTF-16 units: an emoji is one.
+  const length = Array.from(keywords).length;
+  if (length <= FLB_TRIGGER_KEYWORDS_MAX || flbIsCatchAllKeywords(keywords)) return null;
+  return `Trigger keyword is too long (${length} characters; the limit is ${FLB_TRIGGER_KEYWORDS_MAX}). Open the flow's Trigger node and shorten the keywords — remove duplicates or extra phrases.`;
 }
 
-/** The catch-all spellings (`*`, `.*`, `.+`, `any`) of a keyword trigger (WD-FLB-021). */
+/**
+ * The catch-all spellings (`*`, `.*`, `.+`, `any`) of a keyword trigger (WD-FLB-021). Compared exactly after trimming, as
+ * WaDesk's sync and the runtime matcher (FLR `isCatchAll`) do: `ANY` typed by hand is an ordinary keyword.
+ */
 export const flbIsCatchAllKeywords = (keywords: string | null): boolean =>
-  keywords !== null && ['*', '.*', '.+', 'any'].includes(keywords.trim().toLowerCase());
+  keywords !== null && ['*', '.*', '.+', 'any'].includes(keywords.trim());

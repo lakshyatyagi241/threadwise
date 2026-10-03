@@ -184,6 +184,16 @@ describe('flows: schema, constraints and isolation', () => {
       expect((await owner.query(`SELECT count(*)::int AS n FROM flow_subscribers WHERE flow_id = $1`, [tmp])).rows[0].n).toBe(0);
     });
 
+    it('WD-FLB-020: trigger_channel_id is a composite FK to channels (another workspace\'s channel is refused) and a deleted channel unpins the flow instead of deleting it', async () => {
+      const chB = Number((await owner.query(`INSERT INTO channels (org_id, kind, name) VALUES ($1,'whatsapp_qr','B') RETURNING id`, [orgB])).rows[0].id);
+      await rejects(`UPDATE flows SET trigger_channel_id = $1 WHERE id = $2 AND org_id = $3`, [chB, flowA, orgA], /fk_flows_trigger_channel_id/);
+      const chA = Number((await owner.query(`INSERT INTO channels (org_id, kind, name) VALUES ($1,'whatsapp_qr','A') RETURNING id`, [orgA])).rows[0].id);
+      await owner.query(`UPDATE flows SET trigger_channel_id = $1 WHERE id = $2 AND org_id = $3`, [chA, flowA, orgA]);
+      await owner.query(`DELETE FROM channels WHERE id = $1 AND org_id = $2`, [chA, orgA]);
+      const row = (await owner.query(`SELECT trigger_channel_id FROM flows WHERE id = $1 AND org_id = $2`, [flowA, orgA])).rows[0];
+      expect(row.trigger_channel_id).toBeNull();
+    });
+
     it('row_version moves on every update (the optimistic lock the save relies on)', async () => {
       const before = Number((await owner.query(`SELECT row_version FROM flows WHERE id = $1`, [flowA])).rows[0].row_version);
       await owner.query(`UPDATE flows SET flow_name = 'Flow A2' WHERE id = $1`, [flowA]);

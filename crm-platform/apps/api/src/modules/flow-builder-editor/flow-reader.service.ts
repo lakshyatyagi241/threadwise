@@ -11,6 +11,12 @@ export interface RunnableFlow {
   flowType: FlowType;
   isPublished: boolean;
   isActive: boolean;
+  /** The trigger columns the save denormalised (what the runtime's keyword matcher and enrolment read). */
+  triggerKind: string;
+  triggerKeywords: string | null;
+  /** The engine stamp (`baileys`, `waba`, `telegram`...), with the channel it is pinned to, when it is pinned. */
+  provider: string;
+  triggerChannelId: number | null;
   graph: FlowGraph;
   /** `<sourceNodeId>_<port>` -> target node id: the lookup table WaDesk's FlowNormalizer built for the Node runtime. */
   routes: Record<string, string>;
@@ -26,6 +32,8 @@ export interface EnrollableFlow {
   triggerKeywords: string | null;
   provider: string;
   triggerDeviceId: number | null;
+  /** `channels.id` the flow listens on; null = every channel of its `provider` (the runtime's own rule). */
+  triggerChannelId: number | null;
 }
 
 /**
@@ -62,6 +70,10 @@ export class FlowReaderService {
         flowType: row.flowType as FlowType,
         isPublished: row.isPublished,
         isActive: row.isActive,
+        triggerKind: row.triggerKind,
+        triggerKeywords: row.triggerKeywords,
+        provider: row.provider,
+        triggerChannelId: row.triggerChannelId,
         graph: row.graph,
         routes,
         startNodeId: start?.id ?? null,
@@ -69,7 +81,11 @@ export class FlowReaderService {
     });
   }
 
-  /** Published AND active flows with this trigger kind (and value), the set tag / group / event enrolment fans out to. */
+  /**
+   * Published AND active flows with this trigger kind (and value), the set tag / group / event enrolment fans out to. A value-less
+   * trigger stores 0, and a flow whose value is null counts as 0, exactly as the runtime's own enrolment query reads it
+   * (`coalesce(trigger_value, 0)`).
+   */
   async listEnrollable(
     orgId: number,
     kind: string,
@@ -77,10 +93,10 @@ export class FlowReaderService {
   ): Promise<EnrollableFlow[]> {
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
       const res = await tx.execute(sql`
-        SELECT id, uuid, flow_type, trigger_kind, trigger_value, trigger_keywords, provider, trigger_device_id
+        SELECT id, uuid, flow_type, trigger_kind, trigger_value, trigger_keywords, provider, trigger_device_id, trigger_channel_id
         FROM flows
         WHERE org_id = ${orgId} AND is_published AND is_active AND trigger_kind = ${kind}
-          ${value === undefined || value === null ? sql`` : sql`AND trigger_value = ${value}`}
+          ${value === undefined || value === null ? sql`` : sql`AND coalesce(trigger_value, 0) = ${value}`}
         ORDER BY id
       `);
       return (res.rows as Array<Record<string, unknown>>).map((r) => ({
@@ -92,6 +108,7 @@ export class FlowReaderService {
         triggerKeywords: (r.trigger_keywords as string | null) ?? null,
         provider: r.provider as string,
         triggerDeviceId: r.trigger_device_id === null ? null : Number(r.trigger_device_id),
+        triggerChannelId: r.trigger_channel_id === null ? null : Number(r.trigger_channel_id),
       }));
     });
   }

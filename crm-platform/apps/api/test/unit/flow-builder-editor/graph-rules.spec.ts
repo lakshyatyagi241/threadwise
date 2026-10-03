@@ -215,6 +215,19 @@ describe('trigger column extraction (WD-FLB-020)', () => {
     expect(t({ kind: 'comment_to_dm', keywordRuleIds: [] }).keywords).toBeNull();
   });
 
+  it('WD-FLB-020 rule 4: a legacy Trigger with only `triggerMode: any` still reads as the catch-all after normalisation (the default keywordMode must not hide it)', () => {
+    const g = flbNormalizeGraph({ flowNodes: [{ id: 't', type: 'trigger', data: { kind: 'keyword', keywords: 'hi', triggerMode: 'any' } }] });
+    expect(flbExtractTrigger(g).keywords).toBe('any');
+    const explicit = flbNormalizeGraph({ flowNodes: [{ id: 't', type: 'trigger', data: { keywordMode: 'keywords', keywords: 'hi', triggerMode: 'any' } }] });
+    expect(flbExtractTrigger(explicit).keywords).toBe('hi'); // keywordMode wins, as in WaDesk
+  });
+
+  it('WD-FLB-021 #4: the length limit counts characters, not UTF-16 units, and a catch-all is never too long', () => {
+    expect(flbTriggerKeywordsTooLong('😀'.repeat(255))).toBeNull();
+    expect(flbTriggerKeywordsTooLong('😀'.repeat(256))).toContain('(256 characters;');
+    expect(flbTriggerKeywordsTooLong('any')).toBeNull();
+  });
+
   it('a flow with no Trigger saves as keyword with no keywords', () => {
     expect(flbExtractTrigger({ flowNodes: [] })).toMatchObject({ kind: 'keyword', keywords: null, hasTrigger: false });
   });
@@ -224,7 +237,8 @@ describe('trigger column extraction (WD-FLB-020)', () => {
     expect(flbTriggerKeywordsTooLong('a'.repeat(300))).toBe(
       "Trigger keyword is too long (300 characters; the limit is 255). Open the flow's Trigger node and shorten the keywords — remove duplicates or extra phrases.",
     );
-    for (const k of ['*', '.*', '.+', 'any', ' ANY ']) expect(flbIsCatchAllKeywords(k)).toBe(true);
+    for (const k of ['*', '.*', '.+', 'any', ' any ']) expect(flbIsCatchAllKeywords(k)).toBe(true);
+    expect(flbIsCatchAllKeywords('ANY')).toBe(false); // exact, like WaDesk's sync and the runtime matcher
     expect(flbIsCatchAllKeywords('price')).toBe(false);
   });
 });
@@ -297,5 +311,14 @@ describe('export file names and import payloads (WD-FLB-008, 009)', () => {
   it('unknown node types are kept as they are (no schema validation, as WaDesk)', () => {
     const p = parseImportPayload({ flowNodes: [{ id: 'q', type: 'from_the_future', data: { a: 1 } }] });
     expect(p.graph.flowNodes[0]).toMatchObject({ type: 'from_the_future', data: { a: 1 } });
+  });
+});
+
+describe('export file name (WD-FLB-008)', () => {
+  it('is the slug of the name plus .wadesk-flow.json, with a fallback for a name with no letters or digits', async () => {
+    const { flowExportFileName } = await import('../../../src/modules/flow-builder-editor/flow-rules');
+    expect(flowExportFileName('Welcome Flow!', 'abc')).toBe('welcome-flow.wadesk-flow.json');
+    expect(flowExportFileName('Café ñandú', 'abc')).toBe('cafe-nandu.wadesk-flow.json');
+    expect(flowExportFileName('★★★', 'abc')).toBe('flow-abc.wadesk-flow.json');
   });
 });

@@ -27,6 +27,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { BrandingService } from '../platform-settings-branding-storage';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { encodeFlowCursor, parseImportPayload, stateOf } from './flow-rules';
 import { flowEventPayload, toFeatured, toFlowDetail, toFlowSummary } from './flows.mapper';
@@ -60,8 +61,12 @@ interface TriggerColumns {
   triggerValue: number | null;
   triggerKeywords: string | null;
   triggerDeviceId: number | null;
+  triggerChannelId: number | null;
   provider: string | null;
 }
+
+/** Flow types whose inbound path reads `flows` directly in WaDesk: no keyword rule, so no keyword length limit. */
+const KEYWORD_LENGTH_EXEMPT: ReadonlySet<string> = new Set(['instagram', 'facebook', 'tiktok', 'telegram', 'email']);
 
 type Raw = Record<string, unknown>;
 
@@ -82,6 +87,7 @@ export class FlowsService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly plans: PlanEntitlementService,
+    private readonly branding: BrandingService,
   ) {}
 
   // --- reads ---------------------------------------------------------------------------------------------------------
@@ -163,7 +169,7 @@ export class FlowsService {
         category: input.category?.trim() || null,
         flowType: input.flowType ?? 'chat',
       });
-      return this.afterInsert(tx, ctx.orgId, id, 'flb.flow.created');
+      return this.afterInsert(tx, ctx.orgId, id, 'flow.created');
     });
   }
 
@@ -180,7 +186,7 @@ export class FlowsService {
         graph,
         category: input.category?.trim() || null,
         flowType,
-        ...(await this.triggerColumns(tx, ctx.orgId, graph)),
+        ...(await this.triggerColumns(tx, ctx.orgId, graph, flowType)),
       };
       const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, update);
       if (!ok) throw AppError.rowVersionConflict('Flow');
@@ -197,7 +203,7 @@ export class FlowsService {
       await this.outbox.emit(tx, {
         aggregateModule: FLOW_MODULE,
         aggregateId: row.id,
-        eventType: 'flb.flow.updated',
+        eventType: 'flow.saved',
         payload: flowEventPayload(after),
       });
       return toFlowDetail(after);
@@ -220,7 +226,7 @@ export class FlowsService {
       await this.outbox.emit(tx, {
         aggregateModule: FLOW_MODULE,
         aggregateId: row.id,
-        eventType: 'flb.flow.renamed',
+        eventType: 'flow.renamed',
         payload: flowEventPayload(after),
       });
       return toFlowDetail(after);
@@ -244,7 +250,7 @@ export class FlowsService {
       await this.outbox.emit(tx, {
         aggregateModule: FLOW_MODULE,
         aggregateId: row.id,
-        eventType: next ? 'flb.flow.resumed' : 'flb.flow.paused',
+        eventType: next ? 'flow.resumed' : 'flow.paused',
         payload: flowEventPayload(after),
       });
       return { isActive: next, state: stateOf(after.isPublished, after.isActive) };
@@ -263,8 +269,9 @@ export class FlowsService {
         graph,
         category: src.category,
         flowType: src.flowType as FlowType,
+        isActive: src.isActive,
       });
-      return this.afterInsert(tx, ctx.orgId, id, 'flb.flow.duplicated');
+      return this.afterInsert(tx, ctx.orgId, id, 'flow.duplicated');
     });
   }
 
@@ -278,7 +285,7 @@ export class FlowsService {
       await this.outbox.emit(tx, {
         aggregateModule: FLOW_MODULE,
         aggregateId: row.id,
-        eventType: 'flb.flow.deleted',
+        eventType: 'flow.deleted',
         payload: flowEventPayload(row),
       });
     });
@@ -296,7 +303,7 @@ export class FlowsService {
   async importFlow(input: ImportFlowRequest): Promise<FlowDetail> {
     const ctx = RequestContextStore.require();
     // Parse first: an invalid file must not be told "plan limit reached".
-    const parsed = parseImportPayload(input.payload, { suffix: ' (imported)' });
+    const parsed = parseImportPayload(input.payload, { suffix: ' (imported)', brand: await this.branding.name() });
     return this.db.tx(async (tx) => {
       await this.assertRoom(tx, ctx.orgId);
       const id = await this.insertFlow(tx, ctx.orgId, ctx.userId, {
@@ -305,7 +312,7 @@ export class FlowsService {
         category: parsed.category,
         flowType: parsed.flowType,
       });
-      return this.afterInsert(tx, ctx.orgId, id, 'flb.flow.imported');
+      return this.afterInsert(tx, ctx.orgId, id, 'flow.imported');
     });
   }
 
@@ -333,7 +340,7 @@ export class FlowsService {
         category: t.category ? String(t.category).slice(0, 64) : null,
         flowType: flbIsFlowType(t.flow_type) ? t.flow_type : 'chat',
       });
-      return this.afterInsert(tx, ctx.orgId, id, 'flb.flow.cloned', { templateId: templateUuid });
+      return this.afterInsert(tx, ctx.orgId, id, 'flow.cloned', { templateId: templateUuid });
     });
     // flow_templates is platform data (writes need the privileged role): the counter moves after the clone committed.
     await this.db.privileged(async (tx) => {
@@ -375,7 +382,7 @@ export class FlowsService {
       await this.outbox.emit(tx, {
         aggregateModule: FLOW_MODULE,
         aggregateId: row.id,
-        eventType: published ? 'flb.flow.published' : 'flb.flow.unpublished',
+        eventType: published ? 'flow.published' : 'flow.unpublished',
         payload: flowEventPayload(after),
       });
       return toFlowDetail(after);
@@ -403,15 +410,16 @@ export class FlowsService {
     tx: Tx,
     orgId: number,
     userId: number | null,
-    f: { name: string; graph: FlowGraph; category: string | null; flowType: FlowType },
+    f: { name: string; graph: FlowGraph; category: string | null; flowType: FlowType; isActive?: boolean },
   ): Promise<number> {
-    const t = await this.triggerColumns(tx, orgId, f.graph);
+    const t = await this.triggerColumns(tx, orgId, f.graph, f.flowType);
     const nf: NewFlow = {
       userId,
       name: f.name,
       graph: f.graph,
       category: f.category,
       flowType: f.flowType,
+      isActive: f.isActive,
       ...t,
     };
     return this.repo.insert(tx, orgId, nf);
@@ -441,9 +449,11 @@ export class FlowsService {
    * WaDesk stored null for a non-numeric id. A keyword text over 255 characters is refused with the same message WaDesk
    * showed, and nothing has been written yet (WaDesk wrote first and threw after).
    */
-  private async triggerColumns(tx: Tx, orgId: number, graph: FlowGraph): Promise<TriggerColumns> {
+  private async triggerColumns(tx: Tx, orgId: number, graph: FlowGraph, flowType: string): Promise<TriggerColumns> {
     const t = flbExtractTrigger(graph);
-    const tooLong = flbTriggerKeywordsTooLong(t.keywords);
+    // WaDesk raised this only from the keyword-rule sync: keyword triggers on a WhatsApp-style flow (it skipped Instagram,
+    // Facebook, TikTok, Telegram and Email flows, which read `flows` directly, and every non-keyword trigger).
+    const tooLong = t.kind === 'keyword' && !KEYWORD_LENGTH_EXEMPT.has(flowType) ? flbTriggerKeywordsTooLong(t.keywords) : null;
     if (tooLong) {
       throw new AppError(ERROR_CODES.FLB_TRIGGER_KEYWORDS_TOO_LONG, tooLong, HttpStatus.UNPROCESSABLE_ENTITY, [
         { path: 'graph', message: tooLong },
@@ -457,14 +467,19 @@ export class FlowsService {
       triggerValue = table ? await this.repo.resolveRef(tx, orgId, table, t.valueRef) : null;
     }
     let triggerDeviceId: number | null = null;
+    let triggerChannelId: number | null = null;
     if (t.engine && t.senderRef) {
       triggerDeviceId = await this.repo.resolveRef(tx, orgId, ENGINE_TABLE[t.engine]!, t.senderRef);
+      // What the runtime reads: the inbox channel of that sender. A sender with no channel row yet leaves it null, and the
+      // runtime then matches by the `provider` stamp (every connected channel of that engine), as for a flow with no sender.
+      triggerChannelId = await this.repo.resolveChannel(tx, orgId, t.engine, t.senderRef);
     }
     return {
       triggerKind: t.kind,
       triggerValue,
       triggerKeywords: t.keywords,
       triggerDeviceId,
+      triggerChannelId,
       provider: t.engine,
     };
   }
