@@ -7,21 +7,23 @@ import {
   type MediaSource,
   type TelegramApiFactory,
 } from '../../infra/providers/channel-telegram/telegram.port';
-import { MEDIA_STORE, type MediaStore } from './_shims/tokens';
 import { BotsRepository, type BotRow } from './bots.repository';
 import { sendToChat, type Outcome } from './chat-send';
 import { templateButtonsMarkup } from './telegram-markup';
-import { parseThreadKey } from './update-rules';
 
 export interface ThreadReply {
-  /** The thread key, `tg:<bot row id>:<chat id>`. */
-  rawJid: string;
+  /** The bot that carried the thread (the channel's handle) and the Telegram chat. */
+  botRowId: number;
+  chatId: string;
   text: string;
-  /** A stored file path (ours) or an absolute address. */
-  media?: { kind: MediaKind; path: string } | null;
+  /** The file to send: its bytes, an address or a Telegram file id. */
+  media?: { kind: MediaKind; source: MediaSource } | null;
   /** A Telegram template's buttons: they become the keyboard. */
   buttons?: readonly unknown[] | null;
 }
+
+/** The reason a reply gives when the bot is gone or paused. */
+export const BOT_NOT_CONNECTED = 'Telegram bot not connected';
 
 const failed = (error: string): Outcome => ({
   ok: false,
@@ -42,20 +44,14 @@ export class TelegramSenderService {
     private readonly repo: BotsRepository,
     private readonly crypto: CryptoService,
     @Inject(TELEGRAM_API) private readonly telegram: TelegramApiFactory,
-    @Inject(MEDIA_STORE) private readonly media: MediaStore,
   ) {}
 
   async reply(orgId: number, r: ThreadReply): Promise<Outcome> {
-    const key = parseThreadKey(r.rawJid);
-    if (!key) return failed('Not a Telegram thread.');
-
-    // The bot named in the key must still be connected; an older key without a bot falls back to the first active one.
+    // The bot that carried the thread must still be there and switched on.
     const bot: BotRow | undefined = await this.db.txAs({ orgId }, (tx) =>
-      key.botRowId === null
-        ? this.repo.findFirstActive(tx, orgId)
-        : this.repo.findById(tx, orgId, key.botRowId),
+      this.repo.findById(tx, orgId, r.botRowId),
     );
-    if (!bot) return failed('Telegram bot not connected');
+    if (!bot?.active) return failed(BOT_NOT_CONNECTED);
 
     let text = r.text;
     let markup: object | null = null;
@@ -65,22 +61,7 @@ export class TelegramSenderService {
       if (mk.append !== '') text = `${text}${mk.append}`.trim();
     }
 
-    let media: { kind: MediaKind; source: MediaSource } | null = null;
-    if (r.media) {
-      const source = await this.mediaSource(r.media.path);
-      if (!source) return failed('The file could not be read or reached.');
-      media = { kind: r.media.kind, source };
-    }
-
     const api = this.telegram.forToken(this.crypto.decrypt(bot.botToken));
-    return sendToChat(api, key.chatId, { text, media, markup });
-  }
-
-  /** Uploaded from our storage when the file is ours (no public address needed), else sent by address. */
-  private async mediaSource(path: string): Promise<MediaSource | null> {
-    const local = await this.media.read(path);
-    if (local) return { bytes: local.bytes, filename: local.filename };
-    const url = this.media.publicUrl(path);
-    return url ? { url } : null;
+    return sendToChat(api, r.chatId, { text, media: r.media ?? null, markup });
   }
 }
