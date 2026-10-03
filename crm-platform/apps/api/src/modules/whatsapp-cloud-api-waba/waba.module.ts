@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { forwardRef, Global, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
@@ -8,6 +8,7 @@ import { WabaConfigService } from './waba-config.service';
 import { WabaPlatformController } from './waba-platform.controller';
 import { WabaConnectionsController } from './waba-connections.controller';
 import { WabaConnectionsRepository } from './waba-connections.repository';
+import { WABA_CONNECTIONS } from './waba-connections.port';
 import { WabaConnectService } from './waba-connect.service';
 import {
   WABA_INBOUND_SINK,
@@ -27,6 +28,11 @@ import { WabaWebhookService } from './waba-webhook.service';
  * The inbox takes inbound traffic through `WABA_INBOUND_SINK_OVERRIDE` (a global provider in the worker process: chat-conversations);
  * where nothing provides it, inbound messages are acknowledged and logged.
  */
+/**
+ * Global so the inbox can inject `WABA_CONNECTIONS` without importing this module: a static import here closes a file cycle (inbox, WABA,
+ * broadcasts, node bridge) that leaves broadcast classes undefined when a spec enters through `broadcasts/send-safety`.
+ */
+@Global()
 @Module({
   // forwardRef: the broadcasts barrel and this module import each other through node-bridge-runtime.
   imports: [
@@ -44,6 +50,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaWebhookService,
     WabaIngestService,
     WabaTemplateEvents,
+    { provide: WABA_CONNECTIONS, useExisting: WabaConnectService },
     {
       provide: WABA_INBOUND_SINK,
       inject: [{ token: WABA_INBOUND_SINK_OVERRIDE, optional: true }],
@@ -51,6 +58,12 @@ import { WabaWebhookService } from './waba-webhook.service';
         override ?? new LoggingInboundSink(),
     },
   ],
-  exports: [WabaConnectService, WabaConnectionsRepository, WabaIngestService, WABA_INBOUND_SINK],
+  exports: [
+    WabaConnectService,
+    WabaConnectionsRepository,
+    WabaIngestService,
+    WABA_INBOUND_SINK,
+    WABA_CONNECTIONS,
+  ],
 })
 export class WabaModule {}

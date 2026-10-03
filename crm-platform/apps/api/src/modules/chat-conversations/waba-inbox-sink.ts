@@ -4,7 +4,7 @@ import type {
   NormalisedInboundMessage,
 } from '../../infra/providers/whatsapp/whatsapp.port';
 import { normaliseMetaWebhook } from '../../infra/providers/whatsapp';
-import type { InboundContext, WabaInboundSink } from '../whatsapp-cloud-api-waba';
+import type { InboundContext, WabaInboundSink } from '../whatsapp-cloud-api-waba/waba-inbound-sink';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
 import type { ChannelRow } from './channels.repository';
 import { WabaChannelLinkService } from './waba-channel-link.service';
