@@ -1,8 +1,9 @@
 'use client';
 
-import { AddButton, Field } from '../kit';
+import { Field } from '../kit';
 import type { FormComponent } from '../types';
 import {
+  AddLink,
   LeadForm,
   OrderDetailsFields,
   RemoveButton,
@@ -77,7 +78,7 @@ export const FbGalleryForm: FormComponent = (p) => {
           </div>
         ))}
         {cards.length < MAX_CARDS ? (
-          <AddButton
+          <AddLink
             onClick={() =>
               p.set(
                 'cards',
@@ -88,7 +89,7 @@ export const FbGalleryForm: FormComponent = (p) => {
             }
           >
             Add card
-          </AddButton>
+          </AddLink>
         ) : null}
       </Field>
     </>
@@ -146,13 +147,13 @@ export const FbProductsForm: FormComponent = (p) => {
           </div>
         ))}
         {items.length < MAX_CARDS ? (
-          <AddButton
+          <AddLink
             onClick={() =>
               p.set('products', items.concat([{ title: '', subtitle: '', imageUrl: '', url: '' }]))
             }
           >
             Add product
-          </AddButton>
+          </AddLink>
         ) : null}
       </Field>
       <OrderDetailsFields p={p} detailsHint="Only appears on products that have a URL." />

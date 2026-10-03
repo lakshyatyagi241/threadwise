@@ -107,7 +107,7 @@ describe('Chatbot form', () => {
     );
     expect(html).toContain('Triage · openai/gpt-4o-mini');
     expect(html).toContain('— pick AI agent —');
-    expect(html).toMatch(/<button[^>]*disabled[^>]*>Create new AI agent<\/button>/);
+    expect(html).toMatch(/<button[^>]*disabled[^>]*>(<svg.*?<\/svg>)?Create new AI agent<\/button>/);
     expect(html).toContain('not available yet');
   });
   it('with no agent it says so and points at the team inbox', () => {
@@ -134,7 +134,7 @@ describe('Commerce forms (WD-FLB-052)', () => {
   it('says Loading stores while loading; the product button is off until a store is picked', () => {
     const html = render('whatsapp_shop', {}, {}, { loading: true });
     expect(html).toContain('Loading stores…');
-    expect(html).toMatch(/disabled=""[^>]*>Pick products/);
+    expect(html).toMatch(/disabled=""[^>]*>(<svg.*?<\/svg>)?Pick products/);
   });
   it('shows each saved product with price and retailer id, and the wait choices', () => {
     const html = render('woocommerce', {

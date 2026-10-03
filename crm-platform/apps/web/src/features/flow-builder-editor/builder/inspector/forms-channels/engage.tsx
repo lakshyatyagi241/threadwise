@@ -3,7 +3,7 @@
 import { Field, SelectInput } from '../kit';
 import type { FormComponent } from '../types';
 import { agentOptionLabel, flowOptionLabel, withSavedOption } from './helpers';
-import { ExtLink } from './shared';
+import { ExtLink, PlusIcon } from './shared';
 
 /**
  * Sub-flow and Chatbot forms (WD-FLB-046, 051). They register in `CHANNEL_FORMS`, which the registry spreads over
@@ -69,6 +69,7 @@ export const ChatbotForm: FormComponent = (p) => {
         title="Creating an AI agent from the builder is not available yet. Add one in the team inbox."
         className="mt-2 inline-flex w-full cursor-not-allowed items-center justify-center gap-1.5 rounded-lg border border-dashed border-brand/50 bg-muted px-3 py-2 text-[12px] font-semibold text-brand opacity-40"
       >
+        <PlusIcon />
         Create new AI agent
       </button>
       <div className="mt-1.5 flex items-center justify-between text-[10.5px] text-muted-foreground">

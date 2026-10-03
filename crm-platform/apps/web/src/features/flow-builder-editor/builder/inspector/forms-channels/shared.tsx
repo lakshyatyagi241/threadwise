@@ -69,6 +69,61 @@ export const ExtLink = ({ href, children }: { href: string; children: ReactNode 
   </a>
 );
 
+/**
+ * WaDesk's "Add ..." control in these forms: a bold green text link with a plus (`plain`: the smaller "+ Add column" text
+ * link of the Sheets and Docs forms), not the bordered pill other forms use.
+ */
+export function AddLink({
+  onClick,
+  children,
+  plain,
+}: {
+  onClick: () => void;
+  children: ReactNode;
+  plain?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'text-brand hover:underline',
+        plain ? 'text-[11.5px]' : 'inline-flex items-center gap-1 text-[12px] font-semibold',
+      )}
+    >
+      {plain ? (
+        <>+ {children}</>
+      ) : (
+        <>
+          <svg
+            viewBox="0 0 16 16"
+            className="h-3 w-3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          >
+            <path d="M8 3v10M3 8h10" strokeLinecap="round" />
+          </svg>
+          {children}
+        </>
+      )}
+    </button>
+  );
+}
+
+/** The plus drawn in front of WaDesk's dashed "Pick products" / "Create new AI agent" buttons. */
+export const PlusIcon = () => (
+  <svg
+    viewBox="0 0 16 16"
+    className="h-3.5 w-3.5"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+  >
+    <path d="M8 3v10M3 8h10" strokeLinecap="round" />
+  </svg>
+);
+
 export const Mono = ({ children }: { children: ReactNode }) => (
   <span className="font-mono">{children}</span>
 );

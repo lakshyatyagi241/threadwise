@@ -15,7 +15,7 @@ import {
   withSavedOption,
   type ProductItem,
 } from './helpers';
-import { ExtLink, Intro, RemoveButton } from './shared';
+import { ExtLink, Intro, PlusIcon, RemoveButton } from './shared';
 
 type Provider = 'whatsapp_shop' | 'woocommerce' | 'shopify';
 
@@ -296,6 +296,7 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
             onClick={() => setPickerOpen(true)}
             className="mt-1 inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-brand/50 bg-muted px-3 py-2 text-[12px] font-semibold text-brand hover:bg-brand/10 disabled:cursor-not-allowed disabled:opacity-40"
           >
+            <PlusIcon />
             {items.length === 0 ? 'Pick products' : 'Pick more products'}
           </button>
         </div>
