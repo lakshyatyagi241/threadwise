@@ -1,8 +1,4 @@
-import {
-  whatsappCloudCredentialsSchema,
-  type ChannelCapabilities,
-  type WhatsappCloudCredentials,
-} from '@crm/contracts';
+import type { ChannelCapabilities } from '@crm/contracts';
 import {
   ChannelError,
   windowFromLastInbound,
@@ -14,17 +10,21 @@ import {
   type SendResult,
   type WindowInfo,
 } from '../chat-conversations/channel.port';
-import type { InboundMediaFetcher, OutboundMediaUploader, PreparedWhatsappMedia } from './media';
+import type { WabaAdminPort, WabaConnection } from '../whatsapp-cloud-api-waba/waba-admin.port';
+import { WabaApiError } from '../whatsapp-cloud-api-waba/waba-errors';
+import type { WabaHttp } from '../whatsapp-cloud-api-waba/waba-http';
+import {
+  authContextOf,
+  wabaAuthOf,
+  type InboundMediaFetcher,
+  type OutboundMediaUploader,
+  type PreparedWhatsappMedia,
+} from './media';
 import { buildHealth, type Read } from './meta-health';
-import { META_FAILURE } from './meta-errors';
-import type { MetaCtx, MetaGraphClient } from './meta-graph.client';
+import { META_FAILURE, metaFailure } from './meta-errors';
 import { normaliseMetaWebhook } from './meta-inbound';
 import { buildMessageBody } from './meta-outbound';
-import { verifyDelivery } from './meta-signature';
-import type {
-  ResolvedWhatsAppProvider,
-  WhatsAppProviderResolver,
-} from './whatsapp-provider.resolver';
+import type { OutboundSendGuard } from './send-guard.port';
 
 const META_CAPABILITIES: ChannelCapabilities = {
   windowHours: 24,
@@ -37,59 +37,59 @@ const META_CAPABILITIES: ChannelCapabilities = {
   typing: true,
 };
 
-const settle = async <T>(p: Promise<T>): Promise<Read<T>> => {
-  try {
-    return { ok: true, value: await p };
-  } catch (err) {
-    return {
-      ok: false,
-      error:
-        err instanceof ChannelError
-          ? err
-          : new ChannelError(META_FAILURE.PROVIDER_UNREACHABLE, (err as Error).message, true),
-    };
-  }
-};
+/** The Graph API normally answers in well under a second; a hung connection must not hold a send worker. */
+const SEND_TIMEOUT_MS = 15_000;
 
 /** What a platform-level credential failing means: not something the customer can fix by pasting a token. */
 export const PROVIDER_CREDENTIALS_REJECTED = 'PROVIDER_CREDENTIALS_REJECTED';
 
+const NOT_LINKED_MESSAGE =
+  'This WhatsApp channel is not linked to a connected WhatsApp number with a usable token. Connect or reconnect the number under WhatsApp numbers.';
+
 /**
- * WhatsApp through a Graph-API-shaped provider as a channel adapter: the first real channel (plan-inbox-chat.md Phase 2).
+ * WhatsApp as a channel adapter: the inbox's view of a number connected in the WABA domain (plan-inbox-chat.md Phase 2).
  *
- * WHICH provider is decided per channel by the `WhatsAppProviderResolver` port: Meta directly with the customer's own token, or a
- * BSP proxy with the platform's credential. The adapter never names a host, a version or a header; it asks the resolver and hands
- * the profile to the Graph client.
+ * There is ONE WhatsApp stack. A number is connected, its token kept and its webhook received by the WABA domain
+ * (`wa_provider_configs`, `WabaConnectService`, the public webhook with its signature check); this adapter is a consumer of it:
  *
- *   send         every outbound kind through `POST /{phone-number-id}/messages`; a file is uploaded first by the media pipeline
- *                (`OutboundMediaUploader`). A refusal comes back as a `ChannelError` with a stable code and a retry decision
- *                (`meta-errors.ts`); the client itself never retries.
- *   inbound      the signature scheme the provider's profile names, over the raw body, with this channel's secret or the provider's;
- *                the payload is normalised by `normaliseMetaWebhook`. Inbound files are copied by the media pipeline (`inboundMedia`).
- *   health       live reads of the number, the account, the webhook subscription and (own token and app id) the token itself.
- *   webhooks     `configureNumberWebhook`: per-number callback override where the provider offers it, else app subscription.
+ *   credentials  none of its own. The channel registry opens them for the one call from the connection the channel is linked to
+ *                (`channels.waba_config_id`): `route` ('meta' | 'interakt'), `accessToken`, `authKey`, `businessAccountId`; the sender
+ *                is the channel's `externalId` (the phone number id).
+ *   send         every outbound kind through `POST /{phone-number-id}/messages` on `WabaHttp` (the platform's one WhatsApp client:
+ *                address, version, auth headers and timeout per route); a file is first got to WhatsApp by the media pipeline
+ *                (`OutboundMediaUploader`: an upload on the Meta route, a temporary public link on Interakt, which documents no upload).
+ *                A refusal (`WabaApiError`) comes back as a `ChannelError` with a stable code and a retry decision (`meta-errors.ts`);
+ *                nothing here retries. The emergency halt and the content screen run once, in the dispatcher; the workspace's outgoing
+ *                footer is appended to plain text here, after the screen, so it is never read as the sender's own words.
+ *   inbound      not here: the WABA webhook authenticates, routes and de-duplicates, then hands each message and delivery report to
+ *                the inbox (`WabaInboundSink`), which normalises them with `normaliseMetaWebhook`. Files are copied by the media
+ *                pipeline (`inboundMedia`).
+ *   health       live reads of the number, the account, the webhook subscription and the token through `WabaAdminPort`.
  *   markRead     read receipt, with the typing indicator on request.
  *
- * Nothing here was exercised against a live Meta or BSP account; the unit and end-to-end tests run it against recorded payload
- * shapes and a fake Graph server.
+ * Nothing here was exercised against a live Meta or Interakt account; the unit tests run it against recorded payload shapes and a
+ * stubbed `fetch`.
  */
 export class MetaCloudChannelAdapter implements ChannelAdapter {
   readonly kind = 'whatsapp_cloud' as const;
   readonly live = true;
-  readonly publicWebhook = true;
-  readonly credentialsSchema = whatsappCloudCredentialsSchema;
-  readonly secretFields = ['accessToken', 'appSecret'] as const;
+  /** The webhook is the WABA domain's (`/v2/public/webhooks/whatsapp`), not a per-channel URL. */
+  readonly publicWebhook = false;
+  /** A WhatsApp channel takes no credentials: they are the connection's. */
+  readonly credentialsSchema = null;
+  readonly secretFields = [] as const;
 
   constructor(
-    private readonly graph: MetaGraphClient,
-    private readonly resolver: WhatsAppProviderResolver,
+    private readonly http: WabaHttp,
+    private readonly admin: WabaAdminPort,
+    private readonly guard: OutboundSendGuard,
     private readonly uploader: OutboundMediaUploader,
     readonly inboundMedia: InboundMediaFetcher,
     private readonly clock: () => Date = () => new Date(),
   ) {}
 
-  externalIdOf(credentials: Readonly<Record<string, string | undefined>>): string | null {
-    return (credentials as Partial<WhatsappCloudCredentials>).phoneNumberId ?? null;
+  externalIdOf(): string | null {
+    return null;
   }
 
   capabilities(): ChannelCapabilities {
@@ -103,7 +103,7 @@ export class MetaCloudChannelAdapter implements ChannelAdapter {
   // --- outbound --------------------------------------------------------------------------------------------------------------
 
   async send(channel: ChannelRuntime, envelope: OutboundEnvelope): Promise<SendResult> {
-    const { ctx, provider } = await this.context(channel);
+    const call = this.callContext(channel);
     try {
       let prepared: PreparedWhatsappMedia | undefined;
       if (envelope.kind === 'media') {
@@ -112,173 +112,176 @@ export class MetaCloudChannelAdapter implements ChannelAdapter {
           mediaKind: envelope.media.mediaKind,
           mime: envelope.media.mime,
           name: envelope.media.name,
+          sha256: envelope.media.sha256,
         });
       }
-      const sent = await this.graph.sendMessage(ctx, buildMessageBody(envelope, prepared));
-      return { providerMessageId: sent.messageId, acceptedAt: this.clock() };
+      const outgoing =
+        envelope.kind === 'text'
+          ? {
+              ...envelope,
+              body: await this.guard.withFooter({ orgId: channel.orgId, body: envelope.body }),
+            }
+          : envelope;
+      const json = await this.http.call<{
+        messages?: Array<{ id?: unknown; message_status?: unknown }>;
+      }>(call.auth, {
+        method: 'POST',
+        path: `/${call.phoneNumberId}/messages`,
+        json: buildMessageBody(outgoing, prepared),
+        timeoutMs: SEND_TIMEOUT_MS,
+      });
+      const first = json.messages?.[0];
+      if (typeof first?.id !== 'string' || first.id === '') {
+        // Accepted without an id: it may have been sent, so a retry could double-send. Not retryable.
+        throw new ChannelError(
+          META_FAILURE.BAD_RESPONSE,
+          'The provider accepted the message but returned no message id',
+          false,
+        );
+      }
+      // A 200 with message_status "failed" is a rejection the receipt webhook will repeat; fail it now.
+      if (first.message_status === 'failed') {
+        throw new ChannelError(
+          META_FAILURE.PROVIDER_REJECTED,
+          'WhatsApp rejected the message',
+          false,
+        );
+      }
+      return { providerMessageId: first.id, acceptedAt: this.clock() };
     } catch (err) {
       // Meta no longer has the uploaded file (a cached media id went stale): the next attempt must upload again.
-      if (envelope.kind === 'media' && err instanceof ChannelError && err.code === META_FAILURE.MEDIA_REJECTED) {
-        await this.uploader.forget(channel, { key: envelope.media.key, mime: envelope.media.mime }).catch(() => undefined);
+      const failure = this.classify(err, call);
+      if (
+        envelope.kind === 'media' &&
+        failure instanceof ChannelError &&
+        failure.code === META_FAILURE.MEDIA_REJECTED
+      ) {
+        await this.uploader
+          .forget(channel, {
+            key: envelope.media.key,
+            mime: envelope.media.mime,
+            sha256: envelope.media.sha256,
+          })
+          .catch(() => undefined);
       }
-      throw this.attribute(err, provider);
+      throw failure;
     }
   }
 
-  async markRead(channel: ChannelRuntime, providerMessageId: string, options: { typing?: boolean } = {}): Promise<void> {
-    const { ctx, provider } = await this.context(channel);
+  async markRead(
+    channel: ChannelRuntime,
+    providerMessageId: string,
+    options: { typing?: boolean } = {},
+  ): Promise<void> {
+    const call = this.callContext(channel);
     try {
-      await this.graph.markRead(ctx, providerMessageId, options.typing === true);
+      await this.http.call(call.auth, {
+        method: 'POST',
+        path: `/${call.phoneNumberId}/messages`,
+        json: {
+          messaging_product: 'whatsapp',
+          status: 'read',
+          message_id: providerMessageId,
+          ...(options.typing === true ? { typing_indicator: { type: 'text' } } : {}),
+        },
+        timeoutMs: SEND_TIMEOUT_MS,
+      });
     } catch (err) {
-      throw this.attribute(err, provider);
+      throw this.classify(err, call);
     }
   }
 
   // --- inbound ---------------------------------------------------------------------------------------------------------------
 
-  async verifyInbound(
-    channel: ChannelRuntime,
-    rawBody: Buffer,
-    headers: Readonly<Record<string, string | undefined>>,
-  ): Promise<boolean> {
-    let provider: ResolvedWhatsAppProvider;
-    try {
-      provider = await this.resolver.resolveForChannel(channel);
-    } catch {
-      return false; // no provider for this channel's workspace: nothing to verify against, nothing accepted
-    }
-    // The channel's own app secret wins when it has one (a customer's own Meta app signs with that); otherwise the provider's.
-    const secret = channel.credentials.appSecret ?? provider.webhook.secret;
-    return verifyDelivery(provider.webhook.signatureScheme, secret, provider.webhook.headerName, rawBody, headers);
+  /** Never: no provider posts to a channel URL for WhatsApp (see `publicWebhook`). The WABA webhook is the authenticated door. */
+  verifyInbound(): boolean {
+    return false;
   }
 
   parseInbound(channel: ChannelRuntime, payload: unknown): ParsedInbound {
-    return normaliseMetaWebhook(payload, {
-      phoneNumberId: channel.externalId ?? channel.credentials.phoneNumberId ?? null,
-    });
+    return normaliseMetaWebhook(payload, { phoneNumberId: channel.externalId ?? null });
   }
 
   // --- connection ------------------------------------------------------------------------------------------------------------
 
-  async credentialRequirements(orgId: number) {
-    const provider = await this.resolver.resolveForChannel({ orgId, uuid: '', externalId: null, credentials: {} });
-    return {
-      providerKey: provider.providerKey,
-      credentialMode: provider.credentialMode,
-      // The webhook signature needs an app secret only when the customer's own Meta app is the sender.
-      required:
-        provider.credentialMode === 'platform_token'
-          ? ['phoneNumberId', 'businessAccountId']
-          : ['phoneNumberId', 'accessToken', 'appSecret'],
-    };
-  }
-
   async checkHealth(channel: ChannelRuntime): Promise<ChannelHealthResult> {
-    const { ctx, provider } = await this.context(channel);
-    const withAccount = ctx.wabaId ? { ...ctx, wabaId: ctx.wabaId } : null;
-    const withApp =
-      provider.credentialMode === 'channel_token' && ctx.channelToken && ctx.appId && ctx.appSecret
-        ? { ...ctx, channelToken: ctx.channelToken, appId: ctx.appId, appSecret: ctx.appSecret }
-        : null;
-
+    const call = this.callContext(channel);
+    const { conn, auth } = call;
+    const read = async <T>(p: Promise<T>): Promise<Read<T>> => {
+      try {
+        return { ok: true, value: await p };
+      } catch (err) {
+        const failure = this.classify(err, call);
+        return {
+          ok: false,
+          error:
+            failure instanceof ChannelError
+              ? failure
+              : new ChannelError(META_FAILURE.PROVIDER_UNREACHABLE, failure.message, true),
+        };
+      }
+    };
     const [phone, waba, subscribedApps, token] = await Promise.all([
-      settle(this.graph.getPhoneNumber(ctx)),
-      withAccount ? settle(this.graph.getWaba(withAccount)) : Promise.resolve(null),
-      withAccount ? settle(this.graph.getSubscribedApps(withAccount)) : Promise.resolve(null),
-      withApp ? settle(this.graph.debugToken(withApp)) : Promise.resolve(null),
+      read(this.admin.getPhone(auth, call.phoneNumberId)),
+      conn.wabaId ? read(this.admin.getWabaDetails(conn)) : Promise.resolve(null),
+      conn.wabaId ? read(this.admin.getSubscribedApps(conn)) : Promise.resolve(null),
+      conn.accessToken ? read(this.admin.inspectToken(conn.accessToken)) : Promise.resolve(null),
     ]);
-    const attributed = <T>(r: Read<T> | null): Read<T> | null =>
-      r && !r.ok ? { ok: false, error: this.attribute(r.error, provider) as ChannelError } : r;
-    const verdict = buildHealth({
-      now: this.clock(),
-      phone: attributed(phone)!,
-      waba: attributed(waba),
-      subscribedApps: attributed(subscribedApps),
-      token,
-    });
-    // A platform credential failing is not something the customer can fix: never ask them to paste a token for it.
-    return provider.credentialMode === 'platform_token' ? { ...verdict, needsReauth: false } : verdict;
-  }
-
-  async webhookMode(channel: ChannelRuntime): Promise<'subscribe' | 'number_override'> {
-    const { provider } = await this.context(channel);
-    // A BSP proxy has no app-level callback for this customer: the URL must be set per number.
-    return provider.credentialMode === 'platform_token' && provider.capabilities.numberWebhookConfig ? 'number_override' : 'subscribe';
-  }
-
-  async configureNumberWebhook(
-    channel: ChannelRuntime,
-    config?: { callbackUrl: string; verifyToken: string },
-  ): Promise<{ overrideApplied: boolean }> {
-    const { ctx, provider } = await this.context(channel);
-    try {
-      if (config && provider.capabilities.numberWebhookConfig) {
-        await this.graph.setNumberWebhook(ctx, config);
-        return { overrideApplied: true };
-      }
-      if (!ctx.wabaId) {
-        throw new ChannelError(
-          'CHANNEL_ACCOUNT_ID_MISSING',
-          'Add the WhatsApp Business Account id to this channel before configuring its webhook',
-          false,
-        );
-      }
-      await this.graph.subscribeApp({ ...ctx, wabaId: ctx.wabaId }, config);
-      return { overrideApplied: config !== undefined };
-    } catch (err) {
-      throw this.attribute(err, provider);
-    }
+    const verdict = buildHealth({ now: this.clock(), phone, waba, subscribedApps, token });
+    // The partner key of the Interakt route is the platform's: never ask the customer to paste a token for it.
+    return conn.provider === 'interakt'
+      ? {
+          ...verdict,
+          needsReauth: false,
+          providerFault: verdict.needsReauth || verdict.providerFault,
+        }
+      : verdict;
   }
 
   // --- internals -------------------------------------------------------------------------------------------------------------
 
-  /** The provider profile and the call context for one channel. Missing ids are a permanent refusal that needs a person. */
-  private async context(channel: ChannelRuntime): Promise<{ ctx: MetaCtx; provider: ResolvedWhatsAppProvider }> {
-    const c = channel.credentials;
-    const phoneNumberId = channel.externalId ?? c.phoneNumberId;
-    const provider = await this.resolver.resolveForChannel(channel).catch((err: Error) => {
-      throw new ChannelError(
-        PROVIDER_CREDENTIALS_REJECTED,
-        `No WhatsApp provider is available for this workspace: ${err.message}`,
-        false,
-        { providerFault: true },
-      );
-    });
-    const own = provider.credentialMode === 'channel_token';
-    if (!phoneNumberId || (own && !c.accessToken)) {
-      throw new ChannelError(
-        META_FAILURE.NO_CREDENTIALS,
-        'This WhatsApp channel has no usable access token or phone number id. Enter the credentials again.',
-        false,
-        { needsReauth: true },
-      );
+  /** The call context of one channel. A missing id or credential is a permanent refusal that needs a person. */
+  private callContext(channel: ChannelRuntime) {
+    const ctx = authContextOf(channel);
+    const auth = wabaAuthOf(ctx);
+    if (!ctx.phoneNumberId || !auth) {
+      throw new ChannelError(META_FAILURE.NO_CREDENTIALS, NOT_LINKED_MESSAGE, false, {
+        needsReauth: true,
+      });
     }
+    const conn: WabaConnection = {
+      provider: ctx.route,
+      wabaId: ctx.wabaId ?? '',
+      phoneNumberId: ctx.phoneNumberId,
+      accessToken: ctx.channelToken,
+      authKey: ctx.authKey,
+    };
     return {
-      provider,
-      ctx: {
-        provider,
-        phoneNumberId,
-        wabaId: c.businessAccountId,
-        channelToken: own ? c.accessToken : undefined,
-        appId: c.appId,
-        appSecret: c.appSecret,
-      },
+      auth,
+      conn,
+      phoneNumberId: ctx.phoneNumberId,
+      secrets: [ctx.channelToken, ctx.authKey],
     };
   }
 
   /**
-   * In `platform_token` mode a refused credential is the platform's: the code says so and the channel goes to `error`, not to
-   * `needs_reauth`, because there is no token the customer could paste.
+   * An error as our vocabulary: a `WabaApiError` through the code table; on the Interakt route a refused credential is the platform's
+   * (there is no token the customer could paste), so it goes to `error` and not `needs_reauth`.
    */
-  private attribute(err: unknown, provider: ResolvedWhatsAppProvider): unknown {
-    if (provider.credentialMode === 'platform_token' && err instanceof ChannelError && err.needsReauth) {
+  private classify(
+    err: unknown,
+    call: { conn: WabaConnection; secrets: Array<string | undefined> },
+  ): Error {
+    if (!(err instanceof WabaApiError)) return err as Error;
+    const failure = metaFailure(err, call.secrets);
+    if (call.conn.provider === 'interakt' && failure.needsReauth) {
       return new ChannelError(
         PROVIDER_CREDENTIALS_REJECTED,
-        `The WhatsApp provider refused the platform's credentials (${err.providerCode ?? err.code}). Contact support.`,
+        `The WhatsApp provider refused the platform's credentials (${failure.providerCode ?? failure.code}). Contact support.`,
         false,
-        { providerFault: true, providerCode: err.providerCode },
+        { providerFault: true, providerCode: failure.providerCode },
       );
     }
-    return err;
+    return failure;
   }
 }

@@ -15,11 +15,14 @@ export {
   type OutboundMediaUploader,
   type PreparedWhatsappMedia,
 } from './outbound-media-uploader.port';
-export type {
-  MediaAuthContext,
-  MediaChannel,
-  MediaProviderProfile,
-  MediaProviderResolver,
+export {
+  authContextOf,
+  profileOf,
+  wabaAuthOf,
+  type MediaAuthContext,
+  type MediaChannel,
+  type MediaProviderProfile,
+  type MediaRoute,
 } from './media-provider';
 export { MEDIA_FAILURE, MediaFetchError, type MediaFailureCode } from './media-fetch-error';
 export { whatsappMediaMessage } from './whatsapp-media-message';

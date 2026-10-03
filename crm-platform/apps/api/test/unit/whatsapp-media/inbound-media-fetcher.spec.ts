@@ -2,11 +2,21 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Logger } from '@nestjs/common';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { MEDIA_FAILURE, MediaFetchError } from '../../../src/infra/providers/whatsapp/media/media-fetch-error';
-import type { MediaProviderProfile } from '../../../src/infra/providers/whatsapp/media/media-provider';
+import {
+  MEDIA_FAILURE,
+  MediaFetchError,
+} from '../../../src/infra/providers/whatsapp/media/media-fetch-error';
 import { WhatsappInboundMediaFetcher } from '../../../src/infra/providers/whatsapp/media/whatsapp-inbound-media.fetcher';
 import { FakeGraph, bearer, bspHeaders, pdfBytes, pngBytes, sha256Hex } from './fake-graph';
-import { BSP_TOKEN, TOKEN, bspProfile, captureLogs, channel, makeStore, metaProfile } from './support';
+import {
+  BSP_TOKEN,
+  TOKEN,
+  bspChannel,
+  captureLogs,
+  channel,
+  makeStore,
+  wabaHttpFor,
+} from './support';
 
 /**
  * The inbound half of the pipeline without a database: lookup -> guarded download -> streamed into the real media store, against a
@@ -32,9 +42,7 @@ afterEach(async () => {
   delete process.env.WHATSAPP_MEDIA_REQUEST_TIMEOUT_MS;
 });
 
-const fetcherFor = (profile: MediaProviderProfile) =>
-  new WhatsappInboundMediaFetcher(env.store, { resolveForChannel: () => Promise.resolve(profile as never) });
-const meta = () => fetcherFor(metaProfile(graph));
+const meta = () => new WhatsappInboundMediaFetcher(env.store, wabaHttpFor(graph));
 
 const request = (id: string, over: Record<string, unknown> = {}) => ({
   channel: channel(),
@@ -60,7 +68,12 @@ describe('an image, a document and a voice note go end to end into the store', (
     const bytes = pngBytes(30_000);
     graph.add({ id: 'img-1', bytes, mime: 'image/png' });
     const stored = await meta().fetchAndStore(request('img-1', { sha256: sha256Hex(bytes) }));
-    expect(stored).toMatchObject({ mime: 'image/png', size: 30_000, kind: 'image', sha256: sha256Hex(bytes) });
+    expect(stored).toMatchObject({
+      mime: 'image/png',
+      size: 30_000,
+      kind: 'image',
+      sha256: sha256Hex(bytes),
+    });
     expect(stored.key).toMatch(/^chat\/11\/\d{4}\/\d{2}\/\d+_[0-9a-f]{24}\.png$/);
     expect((await readFile(join(env.dir, ...stored.key.split('/')))).equals(bytes)).toBe(true);
 
@@ -75,15 +88,28 @@ describe('an image, a document and a voice note go end to end into the store', (
   it('document: a PDF with its file name, kept for display only', async () => {
     const bytes = pdfBytes(300_000);
     graph.add({ id: 'doc-1', bytes, mime: 'application/pdf' });
-    const stored = await meta().fetchAndStore(request('doc-1', { mediaKind: 'document', declaredMime: 'application/pdf', filename: 'Quote Q4.pdf' }));
-    expect(stored).toMatchObject({ mime: 'application/pdf', kind: 'document', name: 'Quote Q4.pdf', size: 300_000 });
+    const stored = await meta().fetchAndStore(
+      request('doc-1', {
+        mediaKind: 'document',
+        declaredMime: 'application/pdf',
+        filename: 'Quote Q4.pdf',
+      }),
+    );
+    expect(stored).toMatchObject({
+      mime: 'application/pdf',
+      kind: 'document',
+      name: 'Quote Q4.pdf',
+      size: 300_000,
+    });
   });
 
-  it('audio: an Ogg voice note keeps its Ogg type (the lookup\'s mime and the declared one only decide shared signatures)', async () => {
+  it("audio: an Ogg voice note keeps its Ogg type (the lookup's mime and the declared one only decide shared signatures)", async () => {
     const { oggOpusBytes } = await import('./fake-graph');
     const bytes = oggOpusBytes(9000);
     graph.add({ id: 'aud-1', bytes, mime: 'audio/ogg; codecs=opus' });
-    const stored = await meta().fetchAndStore(request('aud-1', { mediaKind: 'audio', declaredMime: 'audio/ogg; codecs=opus' }));
+    const stored = await meta().fetchAndStore(
+      request('aud-1', { mediaKind: 'audio', declaredMime: 'audio/ogg; codecs=opus' }),
+    );
     expect(stored).toMatchObject({ mime: 'audio/ogg', kind: 'media', size: 9000 });
     expect(stored.key.endsWith('.ogg')).toBe(true);
   });
@@ -97,21 +123,35 @@ describe('the announced sha256', () => {
   });
 
   it('a mismatch is refused, retryable (a cut transfer), and stores nothing', async () => {
-    graph.add({ id: 'sha-bad', bytes: pngBytes(4000), mime: 'image/png', sha256: sha256Hex(Buffer.from('another file')) });
+    graph.add({
+      id: 'sha-bad',
+      bytes: pngBytes(4000),
+      mime: 'image/png',
+      sha256: sha256Hex(Buffer.from('another file')),
+    });
     const e = await failure(meta().fetchAndStore(request('sha-bad')));
     expect(e).toMatchObject({ code: MEDIA_FAILURE.SHA256_MISMATCH, retryable: true });
     expect(await env.local.stat('chat')).toBeNull();
   });
 
-  it('the webhook\'s digest wins over the lookup\'s: that is the one that was signed', async () => {
+  it("the webhook's digest wins over the lookup's: that is the one that was signed", async () => {
     const bytes = pngBytes(4000);
     graph.add({ id: 'sha-w', bytes, mime: 'image/png' }); // the lookup announces the true digest
-    const e = await failure(meta().fetchAndStore(request('sha-w', { sha256: sha256Hex(Buffer.from('what the webhook claimed')) })));
+    const e = await failure(
+      meta().fetchAndStore(
+        request('sha-w', { sha256: sha256Hex(Buffer.from('what the webhook claimed')) }),
+      ),
+    );
     expect(e.code).toBe(MEDIA_FAILURE.SHA256_MISMATCH);
   });
 
   it('a digest in a format nobody knows does not block the file', async () => {
-    graph.add({ id: 'sha-odd', bytes: pngBytes(4000), mime: 'image/png', sha256: 'something-weird' });
+    graph.add({
+      id: 'sha-odd',
+      bytes: pngBytes(4000),
+      mime: 'image/png',
+      sha256: 'something-weird',
+    });
     await expect(meta().fetchAndStore(request('sha-odd'))).resolves.toMatchObject({ size: 4000 });
   });
 
@@ -130,13 +170,24 @@ describe('size limits are enforced before and while the file streams', () => {
   });
 
   it('a content length over the limit stops the download at the headers', async () => {
-    graph.add({ id: 'big-2', bytes: Buffer.concat([pngBytes(100), Buffer.alloc(5 * 1024 * 1024 + 10)]), mime: 'image/png', fileSize: null });
+    graph.add({
+      id: 'big-2',
+      bytes: Buffer.concat([pngBytes(100), Buffer.alloc(5 * 1024 * 1024 + 10)]),
+      mime: 'image/png',
+      fileSize: null,
+    });
     const e = await failure(meta().fetchAndStore(request('big-2')));
     expect(e).toMatchObject({ code: MEDIA_FAILURE.TOO_LARGE, retryable: false });
   });
 
   it('a body that never says how long it is is counted as it flows and cut at the limit', async () => {
-    graph.add({ id: 'big-3', bytes: pngBytes(1000), mime: 'image/png', download: ['huge'], fileSize: null });
+    graph.add({
+      id: 'big-3',
+      bytes: pngBytes(1000),
+      mime: 'image/png',
+      download: ['huge'],
+      fileSize: null,
+    });
     const e = await failure(meta().fetchAndStore(request('big-3', { mediaKind: 'sticker' }))); // sticker: 500 KB
     expect(e).toMatchObject({ code: MEDIA_FAILURE.TOO_LARGE, retryable: false });
     expect(await env.local.stat('chat')).toBeNull();
@@ -145,7 +196,11 @@ describe('size limits are enforced before and while the file streams', () => {
   it('the kind decides the limit: the same size passes as a document', async () => {
     const bytes = pdfBytes(6 * 1024 * 1024);
     graph.add({ id: 'big-4', bytes, mime: 'application/pdf' });
-    await expect(meta().fetchAndStore(request('big-4', { mediaKind: 'document', declaredMime: 'application/pdf' }))).resolves.toMatchObject({ size: bytes.length });
+    await expect(
+      meta().fetchAndStore(
+        request('big-4', { mediaKind: 'document', declaredMime: 'application/pdf' }),
+      ),
+    ).resolves.toMatchObject({ size: bytes.length });
   });
 });
 
@@ -160,9 +215,19 @@ describe('failures are classified for the worker', () => {
   });
 
   it('a 500 on the download is retryable; a truncated body too, and neither leaves a file', async () => {
-    graph.add({ id: 'retry-2', bytes: pngBytes(50_000), mime: 'image/png', download: ['500', 'truncate', 'ok'] });
-    expect(await failure(meta().fetchAndStore(request('retry-2')))).toMatchObject({ retryable: true });
-    expect(await failure(meta().fetchAndStore(request('retry-2')))).toMatchObject({ code: MEDIA_FAILURE.DOWNLOAD_FAILED, retryable: true });
+    graph.add({
+      id: 'retry-2',
+      bytes: pngBytes(50_000),
+      mime: 'image/png',
+      download: ['500', 'truncate', 'ok'],
+    });
+    expect(await failure(meta().fetchAndStore(request('retry-2')))).toMatchObject({
+      retryable: true,
+    });
+    expect(await failure(meta().fetchAndStore(request('retry-2')))).toMatchObject({
+      code: MEDIA_FAILURE.DOWNLOAD_FAILED,
+      retryable: true,
+    });
     expect(await env.local.stat('chat')).toBeNull();
     await expect(meta().fetchAndStore(request('retry-2'))).resolves.toMatchObject({ size: 50_000 });
   });
@@ -180,13 +245,19 @@ describe('failures are classified for the worker', () => {
   });
 
   it('bytes the platform does not accept are permanent (a script sent as an image)', async () => {
-    graph.add({ id: 'bad-1', bytes: Buffer.from('<html><script>steal()</script></html>'), mime: 'image/png' });
+    graph.add({
+      id: 'bad-1',
+      bytes: Buffer.from('<html><script>steal()</script></html>'),
+      mime: 'image/png',
+    });
     const e = await failure(meta().fetchAndStore(request('bad-1')));
     expect(e).toMatchObject({ code: MEDIA_FAILURE.REJECTED, retryable: false });
   });
 
   it('a channel with no credentials never reaches the network', async () => {
-    const e = await failure(meta().fetchAndStore(request('x', { channel: channel({ credentials: {} }) })));
+    const e = await failure(
+      meta().fetchAndStore(request('x', { channel: channel({ credentials: {} }) })),
+    );
     expect(e).toMatchObject({ code: MEDIA_FAILURE.NO_CREDENTIALS, retryable: false });
     expect(graph.requests).toHaveLength(0);
   });
@@ -202,21 +273,29 @@ describe('failures are classified for the worker', () => {
   });
 
   it('a worker that is being stopped cancels the transfer', async () => {
-    graph.add({ id: 'abort-1', bytes: pngBytes(1000), mime: 'image/png', download: ['huge'], fileSize: null });
+    graph.add({
+      id: 'abort-1',
+      bytes: pngBytes(1000),
+      mime: 'image/png',
+      download: ['huge'],
+      fileSize: null,
+    });
     const ctl = new AbortController();
     setTimeout(() => ctl.abort(), 150);
-    const e = await failure(meta().fetchAndStore(request('abort-1', { mediaKind: 'document', signal: ctl.signal })));
+    const e = await failure(
+      meta().fetchAndStore(request('abort-1', { mediaKind: 'document', signal: ctl.signal })),
+    );
     expect(e.retryable).toBe(true);
   });
 });
 
-describe('providers: the headers and the host come from the channel\'s provider, never from a constant', () => {
-  it('an Interakt-shaped provider: custom headers on the lookup and the download, no Authorization anywhere, its own version', async () => {
+describe("providers: the headers and the host come from the channel's provider, never from a constant", () => {
+  it('the Interakt route: custom headers on the lookup and the download, no Authorization anywhere, its own version', async () => {
     graph.auth = bspHeaders(BSP_TOKEN, '555');
     graph.mediaAuth = bspHeaders(BSP_TOKEN, '555');
     const bytes = pngBytes(7000);
     graph.add({ id: 'bsp-1', bytes, mime: 'image/png' });
-    const stored = await fetcherFor(bspProfile(graph)).fetchAndStore(request('bsp-1', { channel: channel({ credentials: { businessAccountId: '555' } }) }));
+    const stored = await meta().fetchAndStore(request('bsp-1', { channel: bspChannel() }));
     expect(stored.size).toBe(7000);
     for (const r of graph.requests) {
       expect(r.headers['x-access-token']).toBe(BSP_TOKEN);
@@ -227,12 +306,12 @@ describe('providers: the headers and the host come from the channel\'s provider,
     expect(graph.of('graph')[0]!.query).toEqual({}); // the Meta-only ownership parameter is not sent to a proxy
   });
 
-  it('the provider\'s credential failure is not the customer\'s token problem: no channel token is needed in platform mode', async () => {
+  it("the provider's credential failure is not the customer's token problem: no channel token is needed in platform mode", async () => {
     graph.auth = bspHeaders(BSP_TOKEN, '555');
     graph.mediaAuth = bspHeaders(BSP_TOKEN, '555');
     graph.add({ id: 'bsp-2', bytes: pngBytes(), mime: 'image/png' });
     await expect(
-      fetcherFor(bspProfile(graph)).fetchAndStore(request('bsp-2', { channel: channel({ credentials: { businessAccountId: '555' } }) })),
+      meta().fetchAndStore(request('bsp-2', { channel: bspChannel() })),
     ).resolves.toBeTruthy();
   });
 });
@@ -242,7 +321,12 @@ describe('credentials and signed addresses never reach a log or an error', () =>
     const logs = captureLogs(Logger);
     try {
       const bytes = pngBytes(5000);
-      graph.add({ id: 'log-ok', bytes, mime: 'image/png', downloadUrl: `${graph.mediaUrl}/files/log-ok?hash=SIGNEDQUERY&ext=1` });
+      graph.add({
+        id: 'log-ok',
+        bytes,
+        mime: 'image/png',
+        downloadUrl: `${graph.mediaUrl}/files/log-ok?hash=SIGNEDQUERY&ext=1`,
+      });
       await meta().fetchAndStore(request('log-ok'));
 
       graph.auth = bearer('another');
@@ -252,7 +336,13 @@ describe('credentials and signed addresses never reach a log or an error', () =>
         errors.push(e.message, JSON.stringify(e), e.stack ?? '');
       }
       graph.auth = bearer(TOKEN);
-      graph.add({ id: 'log-5xx', bytes, mime: 'image/png', download: ['500'], downloadUrl: `${graph.mediaUrl}/files/log-5xx?hash=SIGNEDQUERY` });
+      graph.add({
+        id: 'log-5xx',
+        bytes,
+        mime: 'image/png',
+        download: ['500'],
+        downloadUrl: `${graph.mediaUrl}/files/log-5xx?hash=SIGNEDQUERY`,
+      });
       const e500 = await failure(meta().fetchAndStore(request('log-5xx')));
       errors.push(e500.message, e500.stack ?? '');
 
@@ -266,7 +356,9 @@ describe('credentials and signed addresses never reach a log or an error', () =>
     }
   });
 
-  it('the fake server saw the token (it is sent), so the assertion above is not vacuous', () => {
+  it('the fake server saw the token (it is sent), so the assertion above is not vacuous', async () => {
+    graph.add({ id: 'log-seen', bytes: pngBytes(1000), mime: 'image/png' });
+    await meta().fetchAndStore(request('log-seen'));
     expect(graph.dump()).toContain(TOKEN);
   });
 });

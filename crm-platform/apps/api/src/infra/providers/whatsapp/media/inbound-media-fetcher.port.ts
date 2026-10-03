@@ -8,7 +8,7 @@
  *     without the file (`mediaStatus: 'pending'`) and a `media-fetch` job calls `fetchAndStore` in the background, with retries.
  *     The adapter normalises the webhook (media id, mime, sha256, filename) and does nothing else about files.
  *   - `fetchAndStore` is what the worker calls. Where the file is looked up and how the call is authenticated come from the channel's
- *     provider profile (`MEDIA_PROVIDER_RESOLVER`: direct Meta, or a BSP proxy with its own address and headers). It is safe to call twice for the same file (it stores a new object each time and
+ *     route and connection (`profileOf` in `media-provider.ts`, over `WabaHttp`: direct Meta, or Interakt's proxy with its own address and headers). It is safe to call twice for the same file (it stores a new object each time and
  *     the caller keeps only the first result), and it never throws anything but `MediaFetchError`: `retryable` tells the worker
  *     whether to back off and try again or to mark the file failed.
  *

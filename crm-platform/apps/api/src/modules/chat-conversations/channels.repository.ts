@@ -31,6 +31,8 @@ export interface ChannelRow {
   externalId: string | null;
   displayAddress: string | null;
   businessAccountId: string | null;
+  /** `wa_provider_configs.id` of the WhatsApp connection this channel is the inbox view of (null: not a WhatsApp number, or detached). */
+  wabaConfigId: number | null;
   hasCredentials: boolean;
   credentialHints: Record<string, string>;
   capabilities: Partial<ChannelCapabilities>;
@@ -43,7 +45,7 @@ export interface ChannelRow {
   rowVersion: number;
 }
 
-const COLUMNS = sql`id, uuid, kind, name, status, external_id, display_address, business_account_id, credential_hints,
+const COLUMNS = sql`id, uuid, kind, name, status, external_id, display_address, business_account_id, waba_config_id, credential_hints,
   (credentials_enc IS NOT NULL) AS has_credentials, capabilities, settings, health, last_error, last_event_at, created_at, updated_at, row_version`;
 
 const toRow = (r: Raw): ChannelRow => ({
@@ -55,6 +57,8 @@ const toRow = (r: Raw): ChannelRow => ({
   externalId: (r.external_id as string | null) ?? null,
   displayAddress: (r.display_address as string | null) ?? null,
   businessAccountId: (r.business_account_id as string | null) ?? null,
+  wabaConfigId:
+    r.waba_config_id === null || r.waba_config_id === undefined ? null : Number(r.waba_config_id),
   hasCredentials: r.has_credentials === true,
   credentialHints: (r.credential_hints as Record<string, string>) ?? {},
   capabilities: (r.capabilities as Partial<ChannelCapabilities>) ?? {},
@@ -74,6 +78,7 @@ export interface NewChannel {
   externalId: string | null;
   displayAddress: string | null;
   businessAccountId?: string | null;
+  wabaConfigId?: number | null;
   credentialsEnc: string | null;
   credentialHints: Record<string, string>;
   webhookTokenHash: string | null;
@@ -142,9 +147,9 @@ export class ChannelsRepository {
    */
   async insert(tx: Tx, orgId: number, c: NewChannel): Promise<ChannelRow | null> {
     const res = await tx.execute(sql`
-      INSERT INTO channels (org_id, kind, name, status, external_id, display_address, business_account_id, credentials_enc, credential_hints,
+      INSERT INTO channels (org_id, kind, name, status, external_id, display_address, business_account_id, waba_config_id, credentials_enc, credential_hints,
                             webhook_token_hash, webhook_token_rotated_at, settings, created_by)
-      VALUES (${orgId}, ${c.kind}, ${c.name}, ${c.status}, ${c.externalId}, ${c.displayAddress}, ${c.businessAccountId ?? null}, ${c.credentialsEnc},
+      VALUES (${orgId}, ${c.kind}, ${c.name}, ${c.status}, ${c.externalId}, ${c.displayAddress}, ${c.businessAccountId ?? null}, ${c.wabaConfigId ?? null}, ${c.credentialsEnc},
               ${JSON.stringify(c.credentialHints)}::jsonb, ${c.webhookTokenHash},
               ${c.webhookTokenHash ? sql`now()` : sql`NULL`}, ${JSON.stringify(c.settings)}::jsonb, ${c.createdBy})
       ON CONFLICT DO NOTHING
@@ -181,7 +186,9 @@ export class ChannelsRepository {
     }
     if (p.lastError !== undefined) {
       sets.push(
-        p.lastError === null ? sql`last_error = NULL` : sql`last_error = ${JSON.stringify(p.lastError)}::jsonb`,
+        p.lastError === null
+          ? sql`last_error = NULL`
+          : sql`last_error = ${JSON.stringify(p.lastError)}::jsonb`,
       );
     }
     if (p.settings !== undefined) sets.push(sql`settings = ${JSON.stringify(p.settings)}::jsonb`);
@@ -273,17 +280,73 @@ export class ChannelsRepository {
     return r ? { id: Number(r.channel_id), orgId: Number(r.channel_org_id) } : null;
   }
 
-  /**
-   * The provider-level webhook names a number, not a workspace: this resolves it to its channel and tenant through the SECURITY DEFINER
-   * lookup (no tenant exists yet on a public route). One row at most (one number, one channel).
-   */
-  async locateByExternal(
-    db: { execute: (q: SQL) => Promise<{ rows: unknown[] }> },
+  // --- the WhatsApp link ------------------------------------------------------------------------------------------------------------
+
+  /** The channel that is the inbox view of this WABA connection. */
+  async byWabaConfig(tx: Tx, orgId: number, configId: number): Promise<ChannelRow | null> {
+    const res = await tx.execute(
+      sql`SELECT ${COLUMNS} FROM channels WHERE org_id = ${orgId} AND waba_config_id = ${configId}`,
+    );
+    const r = rowsOf(res)[0];
+    return r ? toRow(r) : null;
+  }
+
+  /** A provider account already stored as a channel of this workspace (a WhatsApp number created before it was linked). */
+  async byExternal(
+    tx: Tx,
+    orgId: number,
     kind: string,
     externalId: string,
-  ): Promise<{ id: number; orgId: number; uuid: string } | null> {
-    const res = await db.execute(sql`SELECT * FROM chat_channel_by_external(${kind}, ${externalId})`);
+  ): Promise<ChannelRow | null> {
+    const res = await tx.execute(
+      sql`SELECT ${COLUMNS} FROM channels WHERE org_id = ${orgId} AND kind = ${kind} AND external_id = ${externalId}`,
+    );
     const r = rowsOf(res)[0];
-    return r ? { id: Number(r.channel_id), orgId: Number(r.channel_org_id), uuid: r.channel_uuid as string } : null;
+    return r ? toRow(r) : null;
+  }
+
+  /**
+   * The system keeping a linked channel in step with its WABA connection: the link itself, the status, the number as people write it,
+   * the account id, and (when the connection came back) the last error cleared. Not versioned on purpose, like `recordHealth`: it is
+   * bookkeeping, not an edit a person is making.
+   */
+  async syncWaba(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    p: {
+      wabaConfigId?: number;
+      status?: ChannelStatus;
+      displayAddress?: string | null;
+      businessAccountId?: string | null;
+      clearLastError?: boolean;
+    },
+  ): Promise<ChannelRow | null> {
+    const sets: SQL[] = [];
+    if (p.wabaConfigId !== undefined) sets.push(sql`waba_config_id = ${p.wabaConfigId}`);
+    if (p.status !== undefined) sets.push(sql`status = ${p.status}`);
+    if (p.displayAddress !== undefined) sets.push(sql`display_address = ${p.displayAddress}`);
+    if (p.businessAccountId !== undefined)
+      sets.push(sql`business_account_id = ${p.businessAccountId}`);
+    if (p.clearLastError) sets.push(sql`last_error = NULL`);
+    if (sets.length === 0) return this.byId(tx, orgId, id);
+    const res = await tx.execute(sql`
+      UPDATE channels SET ${sql.join(sets, sql`, `)}
+      WHERE org_id = ${orgId} AND id = ${id}
+      RETURNING ${COLUMNS}`);
+    const r = rowsOf(res)[0];
+    return r ? toRow(r) : null;
+  }
+
+  /**
+   * After a WABA connection was deleted: the channels of this kind that lost their link (the foreign key nulls it) and still say
+   * `connected` are shown `disconnected`. Returns the rows that moved.
+   */
+  async disconnectUnlinked(tx: Tx, orgId: number, kind: string): Promise<ChannelRow[]> {
+    const res = await tx.execute(sql`
+      UPDATE channels SET status = 'disconnected'
+      WHERE org_id = ${orgId} AND kind = ${kind} AND waba_config_id IS NULL AND status = 'connected'
+      RETURNING ${COLUMNS}`);
+    return rowsOf(res).map(toRow);
   }
 }

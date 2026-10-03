@@ -1,5 +1,5 @@
 import { ChannelError } from '../chat-conversations/channel.port';
-import { GraphTransportError, type GraphResponse } from './graph-http';
+import { WabaApiError } from '../whatsapp-cloud-api-waba/waba-errors';
 
 /**
  * What a Graph API failure means for us, as data: a table from Meta's error codes to a decision (our stable code, retry or not,
@@ -80,7 +80,8 @@ export const META_ERROR_RULES: readonly Rule[] = [
     code: META_FAILURE.AUTH_EXPIRED,
     retryable: false,
     needsReauth: true,
-    reason: 'The WhatsApp access token has expired. Generate a new permanent System User token and paste it.',
+    reason:
+      'The WhatsApp access token has expired. Generate a new permanent System User token and paste it.',
   },
   {
     codes: [190],
@@ -96,7 +97,8 @@ export const META_ERROR_RULES: readonly Rule[] = [
     code: META_FAILURE.AUTH_EXPIRED,
     retryable: false,
     needsReauth: true,
-    reason: 'The Facebook password changed, which invalidated the token. Reconnect with a new token.',
+    reason:
+      'The Facebook password changed, which invalidated the token. Reconnect with a new token.',
   },
   {
     codes: [190, 102],
@@ -118,19 +120,22 @@ export const META_ERROR_RULES: readonly Rule[] = [
     codes: [131047],
     code: META_FAILURE.WINDOW_CLOSED,
     retryable: false,
-    reason: 'More than 24 hours have passed since the customer last wrote. Send an approved template instead.',
+    reason:
+      'More than 24 hours have passed since the customer last wrote. Send an approved template instead.',
   },
   {
     codes: [131026],
     code: META_FAILURE.UNDELIVERABLE,
     retryable: false,
-    reason: 'The message could not be delivered: the number is not on WhatsApp, or the customer cannot receive it.',
+    reason:
+      'The message could not be delivered: the number is not on WhatsApp, or the customer cannot receive it.',
   },
   {
     codes: [131021, 131030],
     code: META_FAILURE.RECIPIENT_REFUSED,
     retryable: false,
-    reason: 'This number cannot be messaged from this account (it is the sender, or not on the test recipient list).',
+    reason:
+      'This number cannot be messaged from this account (it is the sender, or not on the test recipient list).',
   },
   {
     codes: [131049],
@@ -144,7 +149,8 @@ export const META_ERROR_RULES: readonly Rule[] = [
     code: META_FAILURE.SPAM_RATE_LIMITED,
     retryable: true,
     retryAfterMs: 15 * MIN,
-    reason: 'Sending is limited for a while because too many recent messages were reported as spam.',
+    reason:
+      'Sending is limited for a while because too many recent messages were reported as spam.',
   },
   {
     codes: [131056],
@@ -179,7 +185,8 @@ export const META_ERROR_RULES: readonly Rule[] = [
     codes: [368, 131031],
     code: META_FAILURE.ACCOUNT_RESTRICTED,
     retryable: false,
-    reason: 'The WhatsApp account is restricted or locked by Meta. Check the account in WhatsApp Manager.',
+    reason:
+      'The WhatsApp account is restricted or locked by Meta. Check the account in WhatsApp Manager.',
   },
   {
     codes: [131045, 133010, 133004, 133005, 133006, 133008, 133009, 133015, 133016],
@@ -269,42 +276,48 @@ interface MetaErrorBody {
   error_data?: { details?: unknown };
 }
 
-const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() !== '' ? v.trim() : null);
+const str = (v: unknown): string | null =>
+  typeof v === 'string' && v.trim() !== '' ? v.trim() : null;
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
 /** Removes every secret from text that came from outside before it can reach a log, a message row or a screen. */
 export function scrub(text: string, secrets: readonly (string | undefined)[]): string {
   let out = text;
   for (const s of secrets) if (s && s.length >= 6) out = out.split(s).join('[redacted]');
-  return out.replace(/Bearer\s+[A-Za-z0-9._~+/=-]+/gi, 'Bearer [redacted]').replace(/EAA[A-Za-z0-9]{20,}/g, '[redacted]');
+  return out
+    .replace(/Bearer\s+[A-Za-z0-9._~+/=-]+/gi, 'Bearer [redacted]')
+    .replace(/EAA[A-Za-z0-9]{20,}/g, '[redacted]');
 }
 
 /**
  * The sentence an agent reads: Meta's own words when it is specific (`error_user_msg`, then `error_data.details`, then `message`),
  * with the title in front when it adds information, and the code and trace id behind (WaDesk's `MetaError::describe`).
  */
-export function describeMetaError(error: MetaErrorBody | undefined, secrets: readonly (string | undefined)[] = []): string {
+export function describeMetaError(
+  error: MetaErrorBody | undefined,
+  secrets: readonly (string | undefined)[] = [],
+): string {
   if (!error) return 'Unknown Meta error';
   const primary =
-    str(error.error_user_msg) ?? str(error.error_data?.details) ?? str(error.message) ?? 'Unknown Meta error';
+    str(error.error_user_msg) ??
+    str(error.error_data?.details) ??
+    str(error.message) ??
+    'Unknown Meta error';
   const title = str(error.error_user_title);
-  const lead = title && !primary.toLowerCase().includes(title.toLowerCase()) ? `${title} - ${primary}` : primary;
+  const lead =
+    title && !primary.toLowerCase().includes(title.toLowerCase())
+      ? `${title} - ${primary}`
+      : primary;
   const code = num(error.code);
   const sub = num(error.error_subcode);
   const trace = str(error.fbtrace_id);
-  const tail = [code !== null ? `#${code}${sub !== null ? `/${sub}` : ''}` : null, trace ? `trace ${trace}` : null]
+  const tail = [
+    code !== null ? `#${code}${sub !== null ? `/${sub}` : ''}` : null,
+    trace ? `trace ${trace}` : null,
+  ]
     .filter(Boolean)
     .join(', ');
   return scrub(tail ? `${lead} (${tail})` : lead, secrets).slice(0, 480);
-}
-
-function retryAfterFromHeader(headers: Record<string, string>): number | null {
-  const raw = headers['retry-after'];
-  if (!raw) return null;
-  const seconds = Number(raw);
-  if (Number.isFinite(seconds) && seconds >= 0) return Math.min(seconds * 1000, MAX_RETRY_AFTER_MS);
-  const when = Date.parse(raw);
-  return Number.isFinite(when) ? Math.min(Math.max(when - Date.now(), 0), MAX_RETRY_AFTER_MS) : null;
 }
 
 export interface ClassifiedFailure {
@@ -321,10 +334,14 @@ export interface ClassifiedFailure {
  * Meta error code (and optional subcode) to a decision; `null` when the table has no row. Also used for the `errors` of a failed
  * delivery status, which carry the same codes.
  */
-export function classifyMetaCode(code: number | null, subcode: number | null = null): ClassifiedFailure | null {
+export function classifyMetaCode(
+  code: number | null,
+  subcode: number | null = null,
+): ClassifiedFailure | null {
   if (code === null) return null;
   const rule = META_ERROR_RULES.find(
-    (r) => r.codes.includes(code) && (!r.subcodes || (subcode !== null && r.subcodes.includes(subcode))),
+    (r) =>
+      r.codes.includes(code) && (!r.subcodes || (subcode !== null && r.subcodes.includes(subcode))),
   );
   if (!rule) return null;
   return {
@@ -338,45 +355,50 @@ export function classifyMetaCode(code: number | null, subcode: number | null = n
 }
 
 /**
- * A Graph answer that is not a success, as the `ChannelError` the dispatch worker acts on.
+ * A failed call through `WabaHttp` as the `ChannelError` the dispatch worker acts on. `WabaHttp` has already turned the answer into a
+ * `WabaApiError` (HTTP status, Meta's code and subcode, the decoded body); this is the table lookup that gives it our vocabulary.
  *
  * Order of decisions: (1) Meta's own code through the table; (2) Meta saying the failure is transient; (3) the HTTP status
  * (401 and 403 are about the token, 429 and 5xx are worth another try, other 4xx are not). The reason carries Meta's words
- * (`describeMetaError`) because they are usually more specific than ours; the access token is scrubbed out of it.
+ * (`describeMetaError`) because they are usually more specific than ours; the access token is scrubbed out of it. A connection that
+ * failed before any answer (status 0) is retryable: the message may not have left.
  */
-export function metaFailure(res: GraphResponse, secrets: readonly (string | undefined)[] = []): ChannelError {
-  const error = (res.json as { error?: MetaErrorBody } | null)?.error;
-  const code = num(error?.code);
-  const sub = num(error?.error_subcode);
-  const meta = describeMetaError(error ?? { message: res.text.slice(0, 200) || `HTTP ${res.status}` }, secrets);
-  const hint = retryAfterFromHeader(res.headers);
+export function metaFailure(
+  err: WabaApiError,
+  secrets: readonly (string | undefined)[] = [],
+): ChannelError {
+  if (err.status === 0) {
+    return new ChannelError(META_FAILURE.PROVIDER_UNREACHABLE, scrub(err.message, secrets), true, {
+      retryAfterMs: 10_000,
+    });
+  }
+  const error = (err.body as { error?: MetaErrorBody } | null)?.error;
+  const code = num(error?.code) ?? err.code;
+  const sub = num(error?.error_subcode) ?? err.subcode;
+  const meta = describeMetaError(error ?? { message: err.message }, secrets);
 
   const row = classifyMetaCode(code, sub);
   if (row) {
     return new ChannelError(row.code, `${meta}`, row.retryable, {
       needsReauth: row.needsReauth,
-      retryAfterMs: row.retryable ? (hint ?? row.retryAfterMs) : null,
+      retryAfterMs: row.retryAfterMs,
       providerCode: row.providerCode,
     });
   }
-  const providerCode = code !== null ? String(code) : String(res.status);
-  if (error?.is_transient === true || res.status === 429 || res.status >= 500) {
+  const providerCode = code !== null ? String(code) : String(err.status);
+  if (error?.is_transient === true || err.transient || err.status === 429 || err.status >= 500) {
     return new ChannelError(
-      res.status === 429 ? META_FAILURE.RATE_LIMITED : META_FAILURE.PROVIDER_ERROR,
+      err.status === 429 ? META_FAILURE.RATE_LIMITED : META_FAILURE.PROVIDER_ERROR,
       meta,
       true,
-      { retryAfterMs: hint ?? (res.status === 429 ? MIN : 30_000), providerCode },
+      { retryAfterMs: err.status === 429 ? MIN : 30_000, providerCode },
     );
   }
-  if (res.status === 401 || res.status === 403) {
-    return new ChannelError(META_FAILURE.AUTH_EXPIRED, meta, false, { needsReauth: true, providerCode });
+  if (err.status === 401 || err.status === 403) {
+    return new ChannelError(META_FAILURE.AUTH_EXPIRED, meta, false, {
+      needsReauth: true,
+      providerCode,
+    });
   }
   return new ChannelError(META_FAILURE.PROVIDER_REJECTED, meta, false, { providerCode });
-}
-
-/** A connection that failed before any answer. Retryable: the message may not have left. */
-export function transportFailure(err: GraphTransportError): ChannelError {
-  return new ChannelError(META_FAILURE.PROVIDER_UNREACHABLE, err.message, true, {
-    retryAfterMs: 10_000,
-  });
 }

@@ -4,12 +4,12 @@
  * Who calls what: `MetaCloudChannelAdapter.send` calls `prepare` for an `OutboundEnvelope` of kind `media`, then builds the Graph
  * message from the answer with `whatsappMediaMessage` (same folder). Nothing here sends the message itself.
  *
- * How the file travels is decided by the channel's provider profile (`MEDIA_PROVIDER_RESOLVER`, see `media-provider.ts`):
+ * How the file travels is decided by the channel's route (`profileOf` in `media-provider.ts`, over `WabaHttp`):
  *
- *   - `capabilities.mediaUpload` (direct Meta; assumed for a BSP only once verified with a real account): the file is uploaded to the
- *     provider's own storage (`POST {provider}/{phone-number-id}/media`) and the message names the returned media id (`via: 'id'`).
+ *   - `capabilities.mediaUpload` (the Meta route): the file is uploaded to the provider's own storage through `WabaHttp`
+ *     (`POST {provider}/{phone-number-id}/media`) and the message names the returned media id (`via: 'id'`).
  *     We never expose files publicly: the store has no public address, every read is authenticated and short lived.
- *   - no upload endpoint (a BSP proxy that documents sending media by id or public URL only): the message carries a link
+ *   - no upload endpoint (the Interakt route: its Cloud API proxy documents sending media by id or public URL only): the message carries a link
  *     (`via: 'link'`) IF the store can make a temporary signed link (a cloud bucket). That is a deliberate privacy trade: the link needs
  *     no session, so until it expires (`WHATSAPP_MEDIA_LINK_TTL_SECONDS`, default 15 minutes) anyone holding it can read the file. When
  *     the store cannot make one (local disk) the send fails with `WA_MEDIA_UPLOAD_UNSUPPORTED`, a permanent error that says why.
@@ -76,11 +76,7 @@ export type PreparedWhatsappMedia = PreparedCommon &
   );
 
 export interface OutboundMediaUploader {
-  prepare(
-    channel: OutboundMediaChannel,
-    file: OutboundMediaFile,
-    signal?: AbortSignal,
-  ): Promise<PreparedWhatsappMedia>;
+  prepare(channel: OutboundMediaChannel, file: OutboundMediaFile): Promise<PreparedWhatsappMedia>;
 
   /** Drops the cached media id of this file (call it when the provider says the id is gone). */
   forget(

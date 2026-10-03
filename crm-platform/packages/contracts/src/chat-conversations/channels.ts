@@ -98,54 +98,6 @@ export const channelSettingsPatchSchema = z
   .strict();
 export type ChannelSettingsPatch = z.infer<typeof channelSettingsPatchSchema>;
 
-// --- credentials (write only) -------------------------------------------------------------------------------------------
-
-/**
- * What a WhatsApp channel holds. Which keys are REQUIRED depends on how the workspace's WhatsApp provider is set up, so the schema
- * only fixes their shape and the server checks the rest against `whatsappCredentialRequirementsSchema` (`GET /channels/requirements/
- * whatsapp_cloud`): in `channel_token` mode (Meta directly) the customer supplies `accessToken` and `appSecret`; in `platform_token`
- * mode (a BSP, the platform's own credential) only `phoneNumberId` and `businessAccountId` are needed and no token is ever asked.
- */
-export const whatsappCloudCredentialsSchema = z
-  .object({
-    /** Meta's phone number id: the sender in every send. */
-    phoneNumberId: z
-      .string()
-      .trim()
-      .regex(/^\d{5,32}$/, 'Digits only'),
-    /** The customer's own permanent access token (`channel_token` mode only). */
-    accessToken: z.string().trim().min(10).max(2048).optional(),
-    /** Signs every webhook delivery (X-Hub-Signature-256) when the customer's own Meta app is the sender (`channel_token` mode). */
-    appSecret: z.string().trim().min(8).max(256).optional(),
-    /** The WhatsApp Business Account (WABA) id: needed to subscribe the app to webhooks and to read the account. */
-    businessAccountId: z
-      .string()
-      .trim()
-      .regex(/^\d{5,32}$/, 'Digits only')
-      .optional(),
-    /**
-     * The Meta app id. Optional: with it, a health check can ask Meta when the token expires and which permissions it has
-     * (`debug_token` needs `app_id|app_secret`); without it the token is judged only by whether Meta accepts it.
-     */
-    appId: z
-      .string()
-      .trim()
-      .regex(/^\d{5,32}$/, 'Digits only')
-      .optional(),
-  })
-  .strict();
-export type WhatsappCloudCredentials = z.infer<typeof whatsappCloudCredentialsSchema>;
-
-/** What this workspace's provider needs in a connection: `GET /channels/requirements/whatsapp_cloud`. */
-export const whatsappCredentialRequirementsSchema = z.object({
-  /** The platform's key for the provider the workspace sends through (`meta_direct`, `interakt`, ...). */
-  providerKey: z.string(),
-  credentialMode: z.enum(['platform_token', 'channel_token']),
-  /** Credential keys the connection form must collect. */
-  required: z.array(z.enum(['phoneNumberId', 'businessAccountId', 'accessToken', 'appSecret'])),
-});
-export type WhatsappCredentialRequirements = z.infer<typeof whatsappCredentialRequirementsSchema>;
-
 // --- health -------------------------------------------------------------------------------------------------------------
 
 export const channelHealthIssueSchema = z.object({
@@ -213,26 +165,6 @@ export const channelHealthResponseSchema = channelHealthSchema.extend({
 });
 export type ChannelHealthResponse = z.infer<typeof channelHealthResponseSchema>;
 
-/** `POST /channels/:id/subscribe`. */
-export const subscribeChannelSchema = z
-  .object({
-    /**
-     * Point this account's webhooks at this platform even when the Meta app's own configuration names another URL (the account-level
-     * callback override). Issues a new verify token, which Meta is told in the same call and which is shown once in the answer.
-     */
-    overrideCallback: z.boolean().default(false),
-  })
-  .default({});
-export type SubscribeChannelInput = z.infer<typeof subscribeChannelSchema>;
-
-export const subscribeChannelResponseSchema = z.object({
-  subscribed: z.literal(true),
-  overrideApplied: z.boolean(),
-  /** Only when `overrideCallback` was used: the new verify token. */
-  webhookVerifyToken: z.string().nullable(),
-});
-export type SubscribeChannelResponse = z.infer<typeof subscribeChannelResponseSchema>;
-
 // --- responses ----------------------------------------------------------------------------------------------------------
 
 export const channelResponseSchema = z.object({
@@ -268,28 +200,9 @@ export type ChannelResponse = z.infer<typeof channelResponseSchema>;
 export const channelListResponseSchema = z.object({ data: z.array(channelResponseSchema) });
 export type ChannelListResponse = z.infer<typeof channelListResponseSchema>;
 
-/** Returned once, by create and by rotate: the value the provider's verification challenge must echo. */
-export const channelWebhookRevealSchema = channelResponseSchema.extend({
-  webhookVerifyToken: z.string(),
-});
-export type ChannelWebhookReveal = z.infer<typeof channelWebhookRevealSchema>;
-
 // --- requests -----------------------------------------------------------------------------------------------------------
 
 const channelName = z.string().trim().min(1).max(120);
-
-/** A real provider channel. The union grows with the adapters: one member per kind that takes credentials. */
-export const createChannelSchema = z.discriminatedUnion('kind', [
-  z.object({
-    kind: z.literal('whatsapp_cloud'),
-    name: channelName,
-    credentials: whatsappCloudCredentialsSchema,
-    /** The number as people write it, shown in the list ("+91 98765 43210"). */
-    displayAddress: z.string().trim().min(1).max(40).optional(),
-    settings: channelSettingsPatchSchema.optional(),
-  }),
-]);
-export type CreateChannelInput = z.infer<typeof createChannelSchema>;
 
 /** The dev-only simulated channel: no credentials, never reachable from outside. */
 export const createSimulatorChannelSchema = z.object({
@@ -305,8 +218,6 @@ export const updateChannelSchema = z
     /** A person can switch a channel on or off; `error` is only ever set by the system. */
     status: z.enum(['connected', 'disconnected']).optional(),
     settings: channelSettingsPatchSchema.optional(),
-    /** Rotating credentials: only the keys sent are replaced. */
-    credentials: whatsappCloudCredentialsSchema.partial().optional(),
     displayAddress: z.string().trim().min(1).max(40).nullable().optional(),
   })
   .refine((v) => Object.keys(v).some((k) => k !== 'rowVersion'), {

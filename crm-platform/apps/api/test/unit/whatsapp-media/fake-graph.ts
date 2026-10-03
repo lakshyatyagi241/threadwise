@@ -1,10 +1,16 @@
 import { createHash } from 'node:crypto';
-import { createServer, type IncomingHttpHeaders, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
+import {
+  createServer,
+  type IncomingHttpHeaders,
+  type IncomingMessage,
+  type Server,
+  type ServerResponse,
+} from 'node:http';
 import type { AddressInfo } from 'node:net';
 
 /**
  * A stand-in for the Graph API and for the host that serves WhatsApp media, both on 127.0.0.1 (two ports), for the unit and end-to-end
- * specs of the media pipeline. `GRAPH_API_BASE_URL` (or a provider profile's `baseUrl`) points at `graphUrl`; the lookup answers with a
+ * specs of the media pipeline. `META_API_ENDPOINT` and `INTERAKT_API_ENDPOINT` (the `WabaHttp` the spec builds, or a provider profile's `baseUrl`) point at `graphUrl`; the lookup answers with a
  * download address on the media server.
  *
  * It records every request (method, path, query, headers) so a spec can assert what was sent where, and every behaviour a spec needs is a
@@ -14,13 +20,7 @@ import type { AddressInfo } from 'node:net';
 
 export type LookupStep = 'ok' | '500' | '429' | '404' | '401' | 'no-url' | 'bad-json';
 export type DownloadMode =
-  | 'ok'
-  | '500'
-  | '404'
-  | 'truncate'
-  | 'huge'
-  | 'slow'
-  | `redirect:${string}`;
+  'ok' | '500' | '404' | 'truncate' | 'huge' | 'slow' | `redirect:${string}`;
 
 export interface FakeMediaFile {
   id: string;
@@ -76,7 +76,11 @@ function parseMultipart(body: Buffer, contentType: string): Recorded['upload'] {
   if (!boundary) return undefined;
   const sep = Buffer.from(`--${boundary}`);
   const fields: Record<string, string> = {};
-  let file = { filename: '', fileType: '', bytes: Buffer.alloc(0) };
+  let file: { filename: string; fileType: string; bytes: Buffer } = {
+    filename: '',
+    fileType: '',
+    bytes: Buffer.alloc(0),
+  };
   let at = body.indexOf(sep);
   while (at !== -1) {
     const next = body.indexOf(sep, at + sep.length);
@@ -88,7 +92,11 @@ function parseMultipart(body: Buffer, contentType: string): Recorded['upload'] {
     const name = /name="([^"]*)"/.exec(head)?.[1] ?? '';
     const filename = /filename="([^"]*)"/.exec(head)?.[1];
     if (filename !== undefined) {
-      file = { filename, fileType: /Content-Type: (.+)/i.exec(head)?.[1]?.trim() ?? '', bytes: data };
+      file = {
+        filename,
+        fileType: /Content-Type: (.+)/i.exec(head)?.[1]?.trim() ?? '',
+        bytes: data,
+      };
     } else {
       fields[name] = data.toString('utf8');
     }
@@ -163,10 +171,19 @@ export class FakeGraph {
 
   /** Everything the server saw, as text: what a spec greps for a leaked secret. */
   dump(): string {
-    return JSON.stringify(this.requests.map((r) => ({ ...r, upload: r.upload ? { ...r.upload, bytes: undefined } : undefined })));
+    return JSON.stringify(
+      this.requests.map((r) => ({
+        ...r,
+        upload: r.upload ? { ...r.upload, bytes: undefined } : undefined,
+      })),
+    );
   }
 
-  private record(server: Recorded['server'], req: IncomingMessage, upload?: Recorded['upload']): Recorded {
+  private record(
+    server: Recorded['server'],
+    req: IncomingMessage,
+    upload?: Recorded['upload'],
+  ): Recorded {
     const url = new URL(req.url ?? '/', 'http://x');
     const r: Recorded = {
       method: req.method ?? 'GET',
@@ -192,26 +209,40 @@ export class FakeGraph {
     if (req.method === 'POST' && segments[2] === 'media') {
       const body = await readBody(req);
       this.record('graph', req, parseMultipart(body, String(req.headers['content-type'] ?? '')));
-      if (!this.auth(req.headers)) return this.json(res, 401, { error: { message: 'Invalid OAuth access token.', code: 190 } });
-      if (this.noUploadEndpoint) return this.json(res, 404, { error: { message: 'Unknown path components', code: 2500 } });
+      if (!this.auth(req.headers))
+        return this.json(res, 401, {
+          error: { message: 'Invalid OAuth access token.', code: 190 },
+        });
+      if (this.noUploadEndpoint)
+        return this.json(res, 404, { error: { message: 'Unknown path components', code: 2500 } });
       this.uploads += 1;
       const answer = this.uploadAnswer(this.uploads);
       return this.json(res, answer.status, answer.body);
     }
 
     this.record('graph', req);
-    if (!this.auth(req.headers)) return this.json(res, 401, { error: { message: 'Invalid OAuth access token.', code: 190 } });
+    if (!this.auth(req.headers))
+      return this.json(res, 401, { error: { message: 'Invalid OAuth access token.', code: 190 } });
     const id = segments[1] ?? '';
     const file = this.files.get(id);
     const n = (this.lookupCalls.get(id) ?? 0) + 1;
     this.lookupCalls.set(id, n);
-    if (!file) return this.json(res, 400, { error: { message: 'Unsupported get request. Object does not exist', code: 100, error_subcode: 33 } });
+    if (!file)
+      return this.json(res, 400, {
+        error: {
+          message: 'Unsupported get request. Object does not exist',
+          code: 100,
+          error_subcode: 33,
+        },
+      });
 
     const steps = file.lookup ?? ['ok'];
     const step = steps[Math.min(n, steps.length) - 1]!;
     switch (step) {
       case '500':
-        return this.json(res, 500, { error: { message: 'An unexpected error has occurred.', code: 2 } });
+        return this.json(res, 500, {
+          error: { message: 'An unexpected error has occurred.', code: 2 },
+        });
       case '429':
         return this.json(res, 429, { error: { message: 'Too many calls', code: 80007 } });
       case '404':
@@ -238,7 +269,14 @@ export class FakeGraph {
           url: file.downloadUrl ?? `${this.mediaUrl}/files/${id}`,
           mime_type: file.mime,
           ...(announced === null ? {} : { sha256: announced }),
-          ...(file.fileSize === null ? {} : { file_size: file.fileSize === 'auto' || file.fileSize === undefined ? file.bytes.length : file.fileSize }),
+          ...(file.fileSize === null
+            ? {}
+            : {
+                file_size:
+                  file.fileSize === 'auto' || file.fileSize === undefined
+                    ? file.bytes.length
+                    : file.fileSize,
+              }),
         });
       }
     }
