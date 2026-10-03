@@ -49,7 +49,7 @@ export class FlowMediaService {
       this.logger.error(`flow media store failed: ${(err as Error).message}`);
       throw new AppError(
         ERROR_CODES.FLB_STORAGE_UNAVAILABLE,
-        'Upload failed: media storage is not available.',
+        'Media storage is not available right now. Paste a file URL instead, or try again later.',
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }
