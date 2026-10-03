@@ -61,8 +61,9 @@ describe('catalogue', () => {
   });
   it('only drivers that exist can be activated', () => {
     expect(['stripe', 'razorpay', 'paypal'].every(hasDriver)).toBe(true);
-    expect(hasDriver('mollie')).toBe(false);
-    expect(() => createDriver('mollie', ctx({}, never))).toThrow();
+    expect(hasDriver('mollie')).toBe(true);
+    expect(hasDriver('no_such_gateway')).toBe(false);
+    expect(() => createDriver('no_such_gateway', ctx({}, never))).toThrow();
   });
 });
 
