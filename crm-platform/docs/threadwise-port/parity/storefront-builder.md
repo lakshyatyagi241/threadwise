@@ -407,3 +407,48 @@ Web unit (vitest, `src/features/storefront-builder`): 154 pass, 4 added in `misc
 PHP encodings, `catalog.test.ts` covers the sort quirk. API unit (`test/unit/storefront-builder`): 73 pass (new: `totalDisplay`,
 `rawurlencode`). API e2e (`test/e2e/storefront-builder`, testcontainers): 45 pass (new: card fields and settings, the address on the
 tracking order). `shop.e2e.mjs`: 129 checks pass against `crm_store`.
+
+Post-merge status (origin/main merged): the pages and generated form scenarios were re-run clean (same 589, intended 17, defects 0, review 26). The value matrices and custom scenarios were re-run too, but 14 scenarios failed because the harness could not log in to our app mid-run (login timeout, likely a login or realtime-ticket rate limit after many sessions) and 2 `brand_color` cases timed out filling the field; they were not re-run or triaged, so they are unverified, not passed.
+Merged-run totals (segments merged): same 1531, intended 134, 14 error scenarios untriaged, review 26 (shell counts, as before). The pre-merge result above (0 open defects) stands for everything that did not error.
+The run was stopped on request; the tagged reference rows were removed.
+
+## Twin harness: public shop
+
+Scope: TW-STORE-009..017, 020, 021, 026, 027, 031 (the buyer shop at `/s/{slug}`). Spec: `apps/web/e2e/storefront-builder/parity/TW-STORE-public.twin.mjs`
+(477 scenarios per side at depth full; fixture from `public/seed-both.mjs`, cleaned afterwards, the tagged reference rows 9001-9003 are removed).
+Run in segments (`--only` on the id prefix): public pages are opened without a login, so our 15-minute token is not involved. Throttled routes need
+`--workers 1`; the spec clears the reference's throttle cache rows and our Redis counters (database 9) before the scenarios that post.
+
+### What ran, and what did not (honest status)
+
+| Segment (id prefix)                                                                                                       | Scenarios | Last result                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pages.` (all 8 themes, product, tracking, 404, empty/no-number shops; probes load, responsive, a11y, keyboard, degraded) | 93        | same 793, intended 28, 3 minor defects (a11y moderate count on the 404 screen) fixed afterwards in `app/s/not-found.tsx` (main landmark), not re-run                               |
+| `struct.` `cart.` `misc.` `list.` `kbd.`                                                                                  | 177       | same 1112, intended 110 after the last triage, 1 blocker (uppercase product address) fixed in the API afterwards, not re-run                                                       |
+| `fail.` `coupon.`                                                                                                         | 42        | after the fixes: same 168, intended 3, 4 minor open at the last compare (raw checkout class: throttle counter had been reset in the wrong Redis DB, fixed in the spec, not re-run) |
+| `co.` (checkout matrix)                                                                                                   | 121       | only the first 30 scenarios ran cleanly (no defect after triage); the run died at `co.phone.brackets` (browser closed), the rest are **not verified**                              |
+| `review.` `xss.`                                                                                                          | 47        | **not run**                                                                                                                                                                        |
+
+Not verified: checkout matrix beyond name cases, phone/address/note matrices, payment methods, coupon-at-checkout, double submit, beacon scenarios, review form
+matrix, review/checkout rate-limit scenarios on a fresh run, the all-theme interactive flows other than aurora/noir/bazaar cart and the pages probes. Production-build
+behaviour (everything ran against `next dev`). Real WhatsApp/Razorpay.
+
+### Defects found and fixed (code)
+
+| Defect                                                                                                 | Fix                                                                                       |
+| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `/s/STP-AURORA` and product addresses in capitals were 404 on ours (Reference matches case-insensitively) | api `public-shop.loader.ts` and `public-catalog.service.ts` lower-case the slug           |
+| Rate limits counted only well-formed bodies (the 422 came first), Reference counts every call             | api `public-rate-limit.guard.ts` (`@PublicLimit`) counts before validation; new e2e cases |
+| 404 screen had no `main` landmark (extra axe findings)                                                 | web `app/s/not-found.tsx`                                                                 |
+
+### Intended (reasons in the spec `intended[]`)
+
+Drafts not public (counts differ by one); show more works; share dialog clean; platform brand on the 404; sticky header; hidden toast lets taps through; RTO band for a returning COD phone;
+NUL refused; trailing zero-width kept; line quantity capped at 999 and typed quantities normalised; storage read back is validated (Reference renders junk and negative totals);
+fallback font in one stack; focus moves into drawers and dialogs, ARIA tabs, skip link, main landmark, closed panels inert, autocomplete hints, search label (accessibility additions);
+same-origin-only shop routes (a cross-origin POST is 403); `notFound()` page error "negative time stamp" appears only under `next dev` (not verified on a production build).
+Reference quirk not copied: its four throttled routes share one counter per address; ours counts per route.
+
+### Open
+
+No open store defect known; the unrun and unverified parts above are the gap. Status stamp: open-defects (unverified), not `clean`.

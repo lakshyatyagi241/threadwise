@@ -37,6 +37,7 @@ import { StoreOverviewService } from './overview/store-overview.service';
 import { CartPricingService } from './public/cart-pricing.service';
 import { CheckoutService } from './public/checkout.service';
 import { PublicCatalogService } from './public/public-catalog.service';
+import { PublicRateLimitGuard } from './public/public-rate-limit.guard';
 import { PublicRateLimiter } from './public/public-rate-limiter';
 import { PublicShopLoader } from './public/public-shop.loader';
 import { PublicStoreController } from './public/public-store.controller';
@@ -95,6 +96,7 @@ import { StorefrontSettingsService } from './shops/storefront-settings.service';
     StorefrontPaymentService,
     PaymentWebhookService,
     PublicRateLimiter,
+    PublicRateLimitGuard,
     PublicShopLoader,
     PublicCatalogService,
     CartPricingService,

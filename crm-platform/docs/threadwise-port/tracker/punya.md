@@ -48,34 +48,34 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-STORE-001 | todo |  |  |
-| TW-STORE-002 | todo |  |  |
-| TW-STORE-003 | todo |  |  |
-| TW-STORE-004 | todo |  |  |
-| TW-STORE-005 | todo |  |  |
-| TW-STORE-006 | todo |  |  |
-| TW-STORE-007 | todo |  |  |
-| TW-STORE-008 | todo |  |  |
-| TW-STORE-009 | todo |  |  |
-| TW-STORE-010 | todo |  |  |
-| TW-STORE-011 | todo |  |  |
-| TW-STORE-012 | todo |  |  |
-| TW-STORE-013 | todo |  |  |
-| TW-STORE-014 | todo |  |  |
-| TW-STORE-015 | todo |  |  |
-| TW-STORE-016 | todo |  |  |
-| TW-STORE-017 | todo |  |  |
-| TW-STORE-018 | todo |  |  |
-| TW-STORE-019 | todo |  |  |
-| TW-STORE-020 | todo |  |  |
-| TW-STORE-021 | todo |  |  |
-| TW-STORE-022 | todo |  |  |
-| TW-STORE-023 | todo |  |  |
-| TW-STORE-024 | todo |  |  |
-| TW-STORE-025 | todo |  |  |
-| TW-STORE-026 | todo |  |  |
-| TW-STORE-027 | todo |  |  |
-| TW-STORE-028 | todo |  |  |
-| TW-STORE-029 | todo |  |  |
-| TW-STORE-030 | todo |  |  |
-| TW-STORE-031 | todo |  |  |
+| TW-STORE-001 | done |  |  |
+| TW-STORE-002 | in-progress |  | partial: sibling pages (orders, coupons...) belong to CHK, shown Coming soon |
+| TW-STORE-003 | done |  |  |
+| TW-STORE-004 | done |  |  |
+| TW-STORE-005 | done |  |  |
+| TW-STORE-006 | done |  |  |
+| TW-STORE-007 | done |  |  |
+| TW-STORE-008 | done |  |  |
+| TW-STORE-009 | done |  |  |
+| TW-STORE-010 | done |  |  |
+| TW-STORE-011 | done |  |  |
+| TW-STORE-012 | done |  |  |
+| TW-STORE-013 | done |  |  |
+| TW-STORE-014 | done |  |  |
+| TW-STORE-015 | done |  |  |
+| TW-STORE-016 | done |  |  |
+| TW-STORE-017 | done |  |  |
+| TW-STORE-018 | done |  |  |
+| TW-STORE-019 | done |  |  |
+| TW-STORE-020 | done |  |  |
+| TW-STORE-021 | in-progress |  | partial: workspace-level custom domain not consulted |
+| TW-STORE-022 | done |  |  |
+| TW-STORE-023 | blocked |  | sibling store pages belong to checkout-orders-merchant-payments |
+| TW-STORE-024 | done |  |  |
+| TW-STORE-025 | wontfix |  | dead code in Reference |
+| TW-STORE-026 | done |  |  |
+| TW-STORE-027 | done |  |  |
+| TW-STORE-028 | done |  | partial as Reference: handle stored, never used |
+| TW-STORE-029 | done |  |  |
+| TW-STORE-030 | done |  |  |
+| TW-STORE-031 | done |  |  |

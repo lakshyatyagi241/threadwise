@@ -103,7 +103,8 @@ export class PublicCatalogService {
         tx,
         handle.orgId,
         handle.storefrontId,
-        productSlug,
+        // Reference's MySQL collation made the product address case-insensitive; slugs are stored lower case.
+        productSlug.toLowerCase(),
       );
       if (!product) throw AppError.notFound('Product');
       const [related, reviews] = await Promise.all([
