@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
 import type { OperatorSessionResponse } from '@crm/contracts';
-import { Alert, Badge, Spinner, cn } from '@crm/ui';
+import { Alert, Spinner, cn } from '@crm/ui';
 import { setLocale, setTheme } from '@/components/shell/actions';
 import { LOCALES } from '@/i18n/locales';
 import { useModuleNav } from '@/features/addons-extension-registry/use-module-nav';
@@ -36,10 +36,12 @@ import {
   type ConsoleLeaf,
 } from './console-nav';
 import type { ConsoleCounts } from './console-counts';
+import { AccountMenu } from './header/account-menu';
+import { HealthPill } from './header/health-pill';
+import { NotificationBell } from './header/notification-bell';
 import { sidebarCookie, type SidebarState } from './sidebar-state';
 
 const PLATFORM = 'auth-registration-security.platform';
-const ROLE_TONE = { super_admin: 'success', support: 'neutral', auditor: 'neutral' } as const;
 
 const Chevron = ({ open }: { open: boolean }) => (
   <svg
@@ -407,6 +409,33 @@ export function ConsoleShell({
               <span className="min-w-0 truncate text-sm font-medium">{t('title')}</span>
 
               <div className="ms-auto flex items-center gap-1.5 sm:gap-2">
+                <HealthPill enabled={!gated} />
+                <Link
+                  href="/dashboard"
+                  title={tc('backToApp')}
+                  aria-label={tc('backToApp')}
+                  className="inline-flex size-8 items-center justify-center rounded-full border border-border hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 16 16"
+                    className="size-3.5 rtl:-scale-x-100"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  >
+                    <path d="M9 4 5 8l4 4M5 8h8" />
+                  </svg>
+                </Link>
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={theme === 'dark' ? t('themeToLight') : t('themeToDark')}
+                  title={theme === 'dark' ? t('themeToLight') : t('themeToDark')}
+                  className="inline-flex size-8 items-center justify-center rounded-full border border-border hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+                </button>
                 <select
                   aria-label={t('language')}
                   value={locale}
@@ -424,37 +453,12 @@ export function ConsoleShell({
                     </option>
                   ))}
                 </select>
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  aria-label={theme === 'dark' ? t('themeToLight') : t('themeToDark')}
-                  title={theme === 'dark' ? t('themeToLight') : t('themeToDark')}
-                  className="inline-flex size-8 items-center justify-center rounded-md border border-border hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-                </button>
-                <Link
-                  href={OPERATOR_ACCOUNT_PATH}
-                  title={t('accountLink', { email: operator.email })}
-                  className="flex items-center gap-2 rounded-md px-1 py-0.5 text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
-                  >
-                    {operator.fullName.slice(0, 1).toUpperCase()}
-                  </span>
-                  <span className="hidden max-w-36 truncate text-muted-foreground lg:inline">
-                    {operator.fullName}
-                  </span>
-                  <span className="hidden sm:inline-flex">
-                    <Badge tone={ROLE_TONE[operator.role]}>{t(`roles.${operator.role}`)}</Badge>
-                  </span>
-                  <span className="sr-only sm:hidden">
-                    {operator.fullName}, {t(`roles.${operator.role}`)}
-                  </span>
-                </Link>
-                {signOutButton('hidden h-8 sm:inline-flex')}
+                <NotificationBell enabled={!gated} />
+                <AccountMenu
+                  operator={operator}
+                  disabled={signingOut}
+                  onSignOut={() => void signOut()}
+                />
               </div>
             </header>
 
