@@ -143,52 +143,68 @@ export class FlowSender {
     });
   }
 
-  /** The outbound envelope. A file is fetched through the guarded fetcher and stored once: the envelope carries a key, never a link. */
-  private async envelopeOf(run: RunState, r: Rendered, clientReference: string): Promise<unknown> {
-    const common = { to: run.peerKey, clientReference };
-    switch (r.kind) {
-      case 'text':
-        return { ...common, kind: 'text', body: r.body };
-      case 'location':
-        return { ...common, kind: 'location', location: r.location };
-      case 'interactive':
-        return { ...common, kind: 'interactive', interactive: r.interactive };
-      case 'media': {
-        // A file the customer sent earlier in this run (`chatmedia:<key>`) is already in the media store: send it as it is.
-        if (r.url.startsWith(CHAT_MEDIA_PREFIX)) {
-          const key = r.url.slice(CHAT_MEDIA_PREFIX.length);
-          return {
-            ...common,
-            kind: 'media',
-            media: {
-              key,
-              mediaKind: r.mediaKind,
-              mime: mimeForKey(key) ?? 'application/octet-stream',
-              ...(r.filename ? { name: r.filename } : {}),
-              ...(r.caption ? { caption: r.caption } : {}),
-            },
-          };
-        }
-        const got = await this.fetcher.fetchMedia(r.url);
-        const filename = r.filename || `file${got.extension}`;
-        const stored = await this.media.store({
-          orgId: run.orgId,
-          filename,
-          buffer: got.buffer,
-        });
+  private envelopeOf(run: RunState, r: Rendered, clientReference: string): Promise<unknown> {
+    return envelopeFor(this.fetcher, this.media, run.orgId, run.peerKey, r, clientReference);
+  }
+}
+
+/**
+ * The outbound envelope to `to`. A file is fetched through the guarded fetcher and stored once: the envelope carries a key, never a
+ * link. Shared with the nodes that write to a number other than the customer (WD-FLR-038).
+ */
+export async function envelopeFor(
+  fetcher: SafeFetch,
+  media: ChatMediaStore,
+  orgId: number,
+  to: string,
+  r: Rendered,
+  clientReference: string,
+): Promise<unknown> {
+  const common = { to, clientReference };
+  switch (r.kind) {
+    case 'text':
+      return { ...common, kind: 'text', body: r.body };
+    case 'location':
+      return { ...common, kind: 'location', location: r.location };
+    case 'interactive':
+      return { ...common, kind: 'interactive', interactive: r.interactive };
+    case 'template':
+      return { ...common, kind: 'template', template: r.template };
+    case 'media': {
+      // A file the customer sent earlier in this run (`chatmedia:<key>`) is already in the media store: send it as it is.
+      if (r.url.startsWith(CHAT_MEDIA_PREFIX)) {
+        const key = r.url.slice(CHAT_MEDIA_PREFIX.length);
         return {
           ...common,
           kind: 'media',
           media: {
-            key: stored.key,
-            mediaKind: r.mediaKind === 'audio' ? 'audio' : r.mediaKind,
-            mime: stored.mime,
-            name: stored.name,
-            sha256: stored.sha256,
+            key,
+            mediaKind: r.mediaKind,
+            mime: mimeForKey(key) ?? 'application/octet-stream',
+            ...(r.filename ? { name: r.filename } : {}),
             ...(r.caption ? { caption: r.caption } : {}),
           },
         };
       }
+      const got = await fetcher.fetchMedia(r.url);
+      const filename = r.filename || `file${got.extension}`;
+      const stored = await media.store({
+        orgId,
+        filename,
+        buffer: got.buffer,
+      });
+      return {
+        ...common,
+        kind: 'media',
+        media: {
+          key: stored.key,
+          mediaKind: r.mediaKind === 'audio' ? 'audio' : r.mediaKind,
+          mime: stored.mime,
+          name: stored.name,
+          sha256: stored.sha256,
+          ...(r.caption ? { caption: r.caption } : {}),
+        },
+      };
     }
   }
 }
