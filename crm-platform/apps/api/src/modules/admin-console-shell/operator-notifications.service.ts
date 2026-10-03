@@ -54,7 +54,8 @@ export class OperatorNotificationsService {
     private readonly settings: PlatformSettingsService,
   ) {}
 
-  async recent(operatorId: number, now = new Date()): Promise<OperatorNotificationsRecent> {
+  async recent(operatorId: number, at?: Date): Promise<OperatorNotificationsRecent> {
+    const now = at ?? (await this.dbNow());
     const seen = await this.seen(operatorId, now);
     const rows = await this.read(OPERATOR_NOTIFICATION_TYPES);
     const all = merge(rows, seen, Number.MAX_SAFE_INTEGER);
@@ -69,8 +70,9 @@ export class OperatorNotificationsService {
   async page(
     operatorId: number,
     query: OperatorNotificationsQuery,
-    now = new Date(),
+    at?: Date,
   ): Promise<OperatorNotificationsPage> {
+    const now = at ?? (await this.dbNow());
     const seen = await this.seen(operatorId, now);
     const kinds: readonly OperatorNotificationType[] =
       query.type === 'all' ? OPERATOR_NOTIFICATION_TYPES : [query.type];
@@ -81,13 +83,21 @@ export class OperatorNotificationsService {
   }
 
   /** "Mark all read" and "Clear all" are the same act on a live feed: move the marker to now. */
-  async markSeen(operatorId: number, now = new Date()): Promise<{ unread: 0 }> {
+  async markSeen(operatorId: number, at?: Date): Promise<{ unread: 0 }> {
+    const now = at ?? (await this.dbNow());
     await this.settings.mergeDocument(
       NOTIF_SEEN_SETTING,
       { [String(operatorId)]: now.toISOString() },
       operatorId,
     );
     return { unread: 0 };
+  }
+
+  /** Event times come from the database clock, so the marker must too (an app clock that drifts would hide or resurrect events). */
+  private async dbNow(): Promise<Date> {
+    const res = await this.store.tx((tx) => tx.execute(sql`SELECT now() AS t`));
+    const t = (res.rows[0] as { t: Date | string }).t;
+    return t instanceof Date ? t : new Date(t);
   }
 
   private async seen(operatorId: number, now: Date): Promise<Date> {
