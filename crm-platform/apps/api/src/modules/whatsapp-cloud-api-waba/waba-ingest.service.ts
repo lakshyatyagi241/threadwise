@@ -15,11 +15,41 @@ import { BroadcastReceiptsService } from '../broadcasts';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import { WABA_CALLS_SINK, type WabaCallsSink } from './waba-calls-sink';
 import { WABA_INBOUND_SINK, type InboundContext, type WabaInboundSink } from './waba-inbound-sink';
+import { usernameOf, usernameUpdatePatch } from './waba-extras-rules';
 import { HANDLED_FIELDS, type WebhookChange } from './waba-rules';
 import { WabaTemplateEvents } from './waba-template-events.service';
 
 const INBOUND_DEDUPE_TTL_S = 24 * 3600;
 const MODULE = 'wa_provider_configs';
+
+interface EchoPayload {
+  id?: string;
+  to?: string;
+  recipient_id?: string;
+  context?: { from?: string };
+  timestamp?: string | number;
+  type?: string;
+  text?: { body?: string };
+  [file: string]: unknown;
+}
+
+const ECHO_LABEL: Record<string, string> = {
+  image: 'Photo',
+  video: 'Video',
+  audio: 'Voice message',
+  document: 'Document',
+  sticker: 'Sticker',
+  location: 'Location',
+  contacts: 'Contact',
+};
+
+/** The words an echo shows on the thread: its text or caption; a file or place is described, its bytes are not copied. */
+function echoText(e: EchoPayload): string {
+  if (e.type === 'text' || e.text?.body) return e.text?.body ?? '';
+  const file = e.type ? (e[e.type] as { caption?: string } | undefined) : undefined;
+  const label = `[${ECHO_LABEL[e.type ?? ''] ?? 'Message'}]`;
+  return file?.caption ? `${label} ${file.caption}` : label;
+}
 
 interface Route {
   orgId: number;
@@ -125,6 +155,10 @@ export class WabaIngestService {
           ),
         );
         return;
+      case 'business_username_update':
+        return this.username(route, change);
+      case 'smb_message_echoes':
+        return this.echoes(route, change);
       case 'phone_number_quality_update':
       case 'phone_number_name_update':
       case 'account_update':
@@ -227,6 +261,67 @@ export class WabaIngestService {
         metaPatch: { inbound_wired: true, inbound_checked_at: new Date().toISOString() },
       });
     });
+  }
+
+  /**
+   * Messages typed on the WhatsApp Business app are mirrored as outbound bubbles (TW-WABA-044). Claimed by message id like an
+   * inbound one, so a redelivery is one bubble; a missing customer number is skipped, as Reference did.
+   */
+  private async echoes(route: Route, change: WebhookChange): Promise<void> {
+    const echoes = (change.value.message_echoes ?? []) as Array<EchoPayload>;
+    const config = await this.db.txAs({ orgId: route.orgId }, (tx) =>
+      this.repo.findById(tx, route.orgId, route.configId),
+    );
+    const ctx: InboundContext = {
+      orgId: route.orgId,
+      configId: route.configId,
+      configUuid: config?.uuid ?? '',
+      wabaId: change.wabaId,
+      phoneNumberId: change.phoneNumberId,
+      contactName: null,
+    };
+    for (const e of echoes) {
+      const to = String(e.to ?? e.recipient_id ?? e.context?.from ?? '').replace(/\D+/g, '');
+      if (!e.id || !to) {
+        this.logger.warn(
+          { number: ctx.configUuid },
+          'a business-app echo without a customer number was skipped',
+        );
+        continue;
+      }
+      const key = `waba:echo:${route.orgId}:${e.id}`;
+      const claimed = await this.redis.set(key, '1', 'EX', INBOUND_DEDUPE_TTL_S, 'NX');
+      if (claimed !== 'OK') continue;
+      try {
+        await this.sink.onEcho?.(ctx, {
+          providerMessageId: e.id,
+          to,
+          text: echoText(e),
+          occurredAt: new Date(Number(e.timestamp) * 1000 || Date.now()),
+        });
+      } catch (err) {
+        await this.redis.del(key);
+        throw err;
+      }
+    }
+  }
+
+  /** The handle and its badge follow Meta (TW-WABA-026); an error here is logged and swallowed, as Reference did. */
+  private async username(route: Route, change: WebhookChange): Promise<void> {
+    try {
+      await this.db.txAs({ orgId: route.orgId }, async (tx) => {
+        const row = await this.repo.findById(tx, route.orgId, route.configId);
+        if (!row) return;
+        const patch = usernameUpdatePatch(
+          change.value,
+          usernameOf(row.meta_json),
+          new Date().toISOString(),
+        );
+        if (patch) await this.repo.update(tx, route.orgId, route.configId, { metaPatch: patch });
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err) }, 'business_username_update could not be applied');
+    }
   }
 
   // --- account and number events -----------------------------------------------------------------------------------

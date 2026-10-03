@@ -12,6 +12,7 @@ export { localStatusFor } from './template-event-rules';
 export {
   WABA_INBOUND_SINK,
   WABA_INBOUND_SINK_OVERRIDE,
+  type BusinessAppEcho,
   type InboundContext,
   type WabaInboundSink,
 } from './waba-inbound-sink';

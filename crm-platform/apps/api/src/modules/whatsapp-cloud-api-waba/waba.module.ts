@@ -3,6 +3,10 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
+import { WabaDiagnosticsController, WabaPlatformDiagnosticsController } from './waba-diagnostics.controller';
+import { WabaDiagnosticsService } from './waba-diagnostics.service';
+import { WabaExtrasController } from './waba-extras.controller';
+import { WabaExtrasService } from './waba-extras.service';
 import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConfigService } from './waba-config.service';
 import {
@@ -36,13 +40,22 @@ import { WabaWebhookService } from './waba-webhook.service';
 @Module({
   // forwardRef: the broadcasts barrel and this module import each other through node-bridge-runtime.
   imports: [forwardRef(() => BroadcastsModule), PlatformSettingsModule, WhatsAppProviderRegistryModule],
-  controllers: [WabaConnectionsController, WabaWebhookController, WabaPlatformController],
+  controllers: [
+    WabaConnectionsController,
+    WabaExtrasController,
+    WabaDiagnosticsController,
+    WabaPlatformDiagnosticsController,
+    WabaWebhookController,
+    WabaPlatformController,
+  ],
   providers: [
     CryptoService,
     WabaConfigService,
     WabaHealthDetailsService,
     WabaConnectionsRepository,
     WabaConnectService,
+    WabaExtrasService,
+    WabaDiagnosticsService,
     WabaWebhookService,
     WabaIngestService,
     WabaTemplateEvents,

@@ -361,6 +361,8 @@ export const HANDLED_FIELDS = new Set([
   'phone_number_name_update',
   'account_update',
   'account_review_update',
+  'business_username_update',
+  'smb_message_echoes',
   'flows',
   // Calls: connect, terminate and permission_update (TW-CALL-002); one callback URL serves every field.
   'calls',
