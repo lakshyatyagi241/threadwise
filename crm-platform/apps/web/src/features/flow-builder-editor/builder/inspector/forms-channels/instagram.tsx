@@ -37,15 +37,38 @@ export const IgQuickForm: FormComponent = (p) => {
   return (
     <>
       <Field label="Message">{Ta(p, 'text', 'What can I help you with?', 2)}</Field>
-      <Field label="Quick replies" hint="Each becomes an output port — wire the next node off the one they tap.">
+      <Field
+        label="Quick replies"
+        hint="Each becomes an output port — wire the next node off the one they tap."
+      >
         {opts.map((o, i) => (
           <div key={i} className="mb-1.5 flex items-center gap-2">
-            <RowInput value={o.title} onChange={(v) => setOpt(i, 'title', v)} placeholder="Button label" className="flex-1" />
-            <RowInput value={o.payload} onChange={(v) => setOpt(i, 'payload', v)} placeholder="PAYLOAD" mono className="w-1/3" />
-            <RemoveButton onClick={() => p.set('options', opts.filter((_, j) => j !== i))} />
+            <RowInput
+              value={o.title}
+              onChange={(v) => setOpt(i, 'title', v)}
+              placeholder="Button label"
+              className="flex-1"
+            />
+            <RowInput
+              value={o.payload}
+              onChange={(v) => setOpt(i, 'payload', v)}
+              placeholder="PAYLOAD"
+              mono
+              className="w-1/3"
+            />
+            <RemoveButton
+              onClick={() =>
+                p.set(
+                  'options',
+                  opts.filter((_, j) => j !== i),
+                )
+              }
+            />
           </div>
         ))}
-        <AddButton onClick={() => p.set('options', opts.concat([{ title: '', payload: '' }]))}>Add quick reply</AddButton>
+        <AddButton onClick={() => p.set('options', opts.concat([{ title: '', payload: '' }]))}>
+          Add quick reply
+        </AddButton>
       </Field>
     </>
   );
@@ -75,19 +98,42 @@ export const IgButtonsForm: FormComponent = (p) => {
                   <option value="web_url">Open URL</option>
                   <option value="postback">Postback</option>
                 </select>
-                <RowInput value={b.title} onChange={(v) => setB(i, 'title', v)} placeholder="Button label" className="flex-1" />
-                <RemoveButton onClick={() => p.set('buttons', btns.filter((_, j) => j !== i))} />
+                <RowInput
+                  value={b.title}
+                  onChange={(v) => setB(i, 'title', v)}
+                  placeholder="Button label"
+                  className="flex-1"
+                />
+                <RemoveButton
+                  onClick={() =>
+                    p.set(
+                      'buttons',
+                      btns.filter((_, j) => j !== i),
+                    )
+                  }
+                />
               </div>
               {type === 'postback' ? (
-                <RowInput value={b.payload} onChange={(v) => setB(i, 'payload', v)} placeholder="PAYLOAD" mono />
+                <RowInput
+                  value={b.payload}
+                  onChange={(v) => setB(i, 'payload', v)}
+                  placeholder="PAYLOAD"
+                  mono
+                />
               ) : (
-                <RowInput value={b.url} onChange={(v) => setB(i, 'url', v)} placeholder="https://…" />
+                <RowInput
+                  value={b.url}
+                  onChange={(v) => setB(i, 'url', v)}
+                  placeholder="https://…"
+                />
               )}
             </div>
           );
         })}
         {btns.length < 3 ? (
-          <AddButton onClick={() => p.set('buttons', btns.concat([{ type: 'web_url', title: '', url: '' }]))}>
+          <AddButton
+            onClick={() => p.set('buttons', btns.concat([{ type: 'web_url', title: '', url: '' }]))}
+          >
             Add button
           </AddButton>
         ) : null}
@@ -97,7 +143,10 @@ export const IgButtonsForm: FormComponent = (p) => {
 };
 
 export const IgReplyCommentForm: FormComponent = (p) => (
-  <Field label="Public reply" hint="Posted as a public reply under the comment that triggered the flow.">
+  <Field
+    label="Public reply"
+    hint="Posted as a public reply under the comment that triggered the flow."
+  >
     {Ta(p, 'message', 'Thanks! Just sent you a DM.', 2)}
   </Field>
 );
@@ -122,13 +171,20 @@ export const IgAiForm: FormComponent = (p) => (
  * Inline picker for the Instagram "Send products" node: a searchable multi-select over the synced catalog. The selection
  * is a list of the products' retailer ids, in the order they were tapped (that is the order they are sent).
  */
-function IgProductPicker({ value, onChange }: { value: string[]; onChange: (ids: string[]) => void }) {
+function IgProductPicker({
+  value,
+  onChange,
+}: {
+  value: string[];
+  onChange: (ids: string[]) => void;
+}) {
   const [q, setQ] = useState('');
   const products = useCommerceProducts({ provider: 'instagram', limit: 100 });
   const list = products.data?.data ?? [];
   const query = q.trim().toLowerCase();
   const filtered = query ? list.filter((p) => p.name.toLowerCase().includes(query)) : list;
-  const toggle = (id: string) => onChange(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
+  const toggle = (id: string) =>
+    onChange(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
   return (
     <div>
       <input
@@ -139,10 +195,14 @@ function IgProductPicker({ value, onChange }: { value: string[]; onChange: (ids:
         className={cn(controlClass, 'mb-2 px-2.5 py-1.5 text-[12px]')}
       />
       {products.isPending ? (
-        <div className="py-3 text-center text-[12px] italic text-muted-foreground">Loading synced products…</div>
+        <div className="py-3 text-center text-[12px] italic text-muted-foreground">
+          Loading synced products…
+        </div>
       ) : null}
       {products.isError ? (
-        <div className="py-2 text-[12px] text-red-600">Couldn&apos;t load: {products.error.message}</div>
+        <div className="py-2 text-[12px] text-red-600">
+          Couldn&apos;t load: {products.error.message}
+        </div>
       ) : null}
       {products.isSuccess && list.length === 0 ? (
         <div className="py-3 text-center text-[12px] italic leading-snug text-muted-foreground">
@@ -165,7 +225,11 @@ function IgProductPicker({ value, onChange }: { value: string[]; onChange: (ids:
               )}
             >
               {pr.image ? (
-                <img src={pr.image} alt="" className="h-8 w-8 shrink-0 rounded border border-border object-cover" />
+                <img
+                  src={pr.image}
+                  alt=""
+                  className="h-8 w-8 shrink-0 rounded border border-border object-cover"
+                />
               ) : (
                 <div className="h-8 w-8 shrink-0 rounded border border-border bg-muted" />
               )}
@@ -180,10 +244,12 @@ function IgProductPicker({ value, onChange }: { value: string[]; onChange: (ids:
           );
         })}
       </div>
-      <div className="mt-1.5 text-[10.5px] text-muted-foreground">{value.length} selected · sent in this order</div>
+      <div className="mt-1.5 text-[10.5px] text-muted-foreground">
+        {value.length} selected · sent in this order
+      </div>
     </div>
   );
-};
+}
 
 function Seg({ on, onClick, children }: { on: boolean; onClick: () => void; children: string }) {
   return (
@@ -192,7 +258,9 @@ function Seg({ on, onClick, children }: { on: boolean; onClick: () => void; chil
       onClick={onClick}
       className={cn(
         'rounded-lg border px-3 py-1.5 text-[12px] font-medium transition',
-        on ? 'border-brand bg-brand/10 text-brand' : 'border-border bg-background text-foreground/70 hover:bg-muted',
+        on
+          ? 'border-brand bg-brand/10 text-brand'
+          : 'border-border bg-background text-foreground/70 hover:bg-muted',
       )}
     >
       {children}
@@ -230,7 +298,10 @@ export const IgProductsForm: FormComponent = (p) => {
       >
         {Ta(p, 'intro', 'Here are some products you might like:', 2)}
       </Field>
-      <OrderDetailsFields p={p} detailsHint="Only appears on products that have a link in your catalog." />
+      <OrderDetailsFields
+        p={p}
+        detailsHint="Only appears on products that have a link in your catalog."
+      />
     </>
   );
 };
@@ -266,6 +337,8 @@ export const IgToWhatsappForm: FormComponent = (p) => (
     p={p}
     platform="Instagram"
     surface="Instagram conversation"
+    dmName="IG"
+    excludeChannels={['instagram']}
     prefillDefault="Hi! I came from Instagram"
   />
 );

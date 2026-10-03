@@ -3,13 +3,29 @@
 import { useGoogleFiles } from '../../../api/hooks';
 import { AddButton, Check, Field, Notice, SelectInput, TextInput } from '../kit';
 import type { FormComponent, FormProps } from '../types';
-import { extractGoogleId, withSavedOption } from './helpers';
-import { Intro, Mono, Num, RemoveButton, RowInput, Sel, Ta, Txt, readRows } from './shared';
+import { appsScriptHref, extractGoogleId, withSavedOption } from './helpers';
+import {
+  ExtLink,
+  Intro,
+  Mono,
+  Num,
+  RemoveButton,
+  RowInput,
+  Sel,
+  Ta,
+  Txt,
+  readRows,
+} from './shared';
 
 type Kind = 'sheets' | 'docs' | 'forms';
 
 const COPY: Record<Kind, { pick: string; empty: string; saved: string; noun: string }> = {
-  sheets: { pick: '— pick a sheet —', empty: 'No spreadsheets found — paste a URL/ID below', saved: 'Sheet', noun: 'sheets' },
+  sheets: {
+    pick: '— pick a sheet —',
+    empty: 'No spreadsheets found — paste a URL/ID below',
+    saved: 'Sheet',
+    noun: 'sheets',
+  },
   docs: { pick: '— pick a template doc —', empty: 'No docs found', saved: 'Doc', noun: 'docs' },
   forms: { pick: '— pick a form —', empty: 'No forms found', saved: 'Form', noun: 'forms' },
 };
@@ -26,13 +42,17 @@ function GoogleFilePicker({ p, kind, dataKey }: { p: FormProps; kind: Kind; data
     return (
       <>
         <Notice tone="warn" className="mb-2">
-          Google isn&apos;t connected for this workspace, so your {copy.noun} can&apos;t be listed. Paste the {copy.saved.toLowerCase()}{' '}
-          id or link instead.
+          Google isn&apos;t connected for this workspace, so your {copy.noun} can&apos;t be listed.
+          Paste the {copy.saved.toLowerCase()} id or link instead.
         </Notice>
         <TextInput
           value={value}
           mono
-          placeholder={kind === 'sheets' ? 'https://docs.google.com/spreadsheets/d/<ID>/edit' : `${copy.saved} id`}
+          placeholder={
+            kind === 'sheets'
+              ? 'https://docs.google.com/spreadsheets/d/<ID>/edit'
+              : `${copy.saved} id`
+          }
           onChange={(v) => p.set(dataKey, extractGoogleId(v))}
         />
       </>
@@ -60,8 +80,9 @@ export const GoogleSheetsForm: FormComponent = (p) => {
   return (
     <>
       <Intro>
-        Append a row to a Google Sheet (write mode) or look up a row by a key column (read mode). Uses the workspace&apos;s
-        connected Google account.
+        Append a row to a Google Sheet (write mode) or look up a row by a key column (read mode).
+        Uses the workspace&apos;s connected Google account at{' '}
+        <ExtLink href="/google-account">/google-account</ExtLink>.
       </Intro>
       <Field label="Mode">
         {Sel(p, 'mode', [
@@ -84,7 +105,8 @@ export const GoogleSheetsForm: FormComponent = (p) => {
             label="Save row under variable"
             hint={
               <>
-                Cells become <Mono>{'{{saveAs.Name}}'}</Mono>, <Mono>{'{{saveAs.Phone}}'}</Mono> etc.
+                Cells become <Mono>{'{{saveAs.Name}}'}</Mono>, <Mono>{'{{saveAs.Phone}}'}</Mono>{' '}
+                etc.
               </>
             }
           >
@@ -94,7 +116,9 @@ export const GoogleSheetsForm: FormComponent = (p) => {
       ) : (
         <>
           <Field
-            label={byHeader ? 'Columns (matched by header name)' : 'Columns to append (in sheet order)'}
+            label={
+              byHeader ? 'Columns (matched by header name)' : 'Columns to append (in sheet order)'
+            }
             hint={
               byHeader
                 ? 'Each value is written under the sheet column whose header matches the Header field — any order. Values support {{merge_tags}}.'
@@ -104,12 +128,31 @@ export const GoogleSheetsForm: FormComponent = (p) => {
             <div className="space-y-2">
               {cols.map((c, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <RowInput value={c.header} onChange={(v) => setCol(i, 'header', v)} placeholder="Header" className="w-1/3" />
-                  <RowInput value={c.value} onChange={(v) => setCol(i, 'value', v)} placeholder="{{name}}" className="flex-1" />
-                  <RemoveButton onClick={() => p.set('columns', cols.filter((_, j) => j !== i))} />
+                  <RowInput
+                    value={c.header}
+                    onChange={(v) => setCol(i, 'header', v)}
+                    placeholder="Header"
+                    className="w-1/3"
+                  />
+                  <RowInput
+                    value={c.value}
+                    onChange={(v) => setCol(i, 'value', v)}
+                    placeholder="{{name}}"
+                    className="flex-1"
+                  />
+                  <RemoveButton
+                    onClick={() =>
+                      p.set(
+                        'columns',
+                        cols.filter((_, j) => j !== i),
+                      )
+                    }
+                  />
                 </div>
               ))}
-              <AddButton onClick={() => p.set('columns', cols.concat([{ header: '', value: '' }]))}>Add column</AddButton>
+              <AddButton onClick={() => p.set('columns', cols.concat([{ header: '', value: '' }]))}>
+                Add column
+              </AddButton>
             </div>
           </Field>
           <div className="mb-2 px-1">
@@ -117,8 +160,8 @@ export const GoogleSheetsForm: FormComponent = (p) => {
               Match columns by header name
             </Check>
             <div className="ml-6 text-[10.5px] text-muted-foreground">
-              Write each value into the sheet column with that header (any order). Leave off to append left-to-right by
-              position — the default.
+              Write each value into the sheet column with that header (any order). Leave off to
+              append left-to-right by position — the default.
             </div>
           </div>
         </>
@@ -157,8 +200,9 @@ export const GoogleDocsForm: FormComponent = (p) => {
   return (
     <>
       <Intro>
-        Copy a template doc, fill <Mono>{'{{placeholders}}'}</Mono>, share anyone-with-link, send the URL to the customer.
-        Place <Mono>{'{{key}}'}</Mono> in your template where the value should go.
+        Copy a template doc, fill <Mono>{'{{placeholders}}'}</Mono>, share anyone-with-link, send
+        the URL to the customer. Place <Mono>{'{{key}}'}</Mono> in your template where the value
+        should go.
       </Intro>
       <Field label="Template document">
         <GoogleFilePicker p={p} kind="docs" dataKey="templateId" />
@@ -168,20 +212,40 @@ export const GoogleDocsForm: FormComponent = (p) => {
         label="Placeholders to fill"
         hint={
           <>
-            Every flow variable is also auto-injected — so <Mono>{'{{name}}'}</Mono> works in the template without listing it
-            here.
+            Every flow variable is also auto-injected — so <Mono>{'{{name}}'}</Mono> works in the
+            template without listing it here.
           </>
         }
       >
         <div className="space-y-2">
           {phs.map((c, i) => (
             <div key={i} className="flex items-center gap-2">
-              <RowInput value={c.key} onChange={(v) => setPh(i, 'key', v)} placeholder="customer_name" mono className="w-1/3" />
-              <RowInput value={c.value} onChange={(v) => setPh(i, 'value', v)} placeholder="{{name}}" className="flex-1" />
-              <RemoveButton onClick={() => p.set('placeholders', phs.filter((_, j) => j !== i))} />
+              <RowInput
+                value={c.key}
+                onChange={(v) => setPh(i, 'key', v)}
+                placeholder="customer_name"
+                mono
+                className="w-1/3"
+              />
+              <RowInput
+                value={c.value}
+                onChange={(v) => setPh(i, 'value', v)}
+                placeholder="{{name}}"
+                className="flex-1"
+              />
+              <RemoveButton
+                onClick={() =>
+                  p.set(
+                    'placeholders',
+                    phs.filter((_, j) => j !== i),
+                  )
+                }
+              />
             </div>
           ))}
-          <AddButton onClick={() => p.set('placeholders', phs.concat([{ key: '', value: '' }]))}>Add placeholder</AddButton>
+          <AddButton onClick={() => p.set('placeholders', phs.concat([{ key: '', value: '' }]))}>
+            Add placeholder
+          </AddButton>
         </div>
       </Field>
       <Field label="Make link viewable by anyone">
@@ -207,13 +271,15 @@ export const GoogleDocsForm: FormComponent = (p) => {
 export const GoogleFormForm: FormComponent = (p) => (
   <>
     <Intro>
-      Sends the form URL via WhatsApp, pauses the flow, resumes via the <b>submitted</b> port when the customer fills it.
-      Answers become flow variables.
+      Sends the form URL via WhatsApp, pauses the flow, resumes via the <b>submitted</b> port when
+      the customer fills it. Answers become flow variables.
     </Intro>
     <Field label="Google Form">
       <GoogleFilePicker p={p} kind="forms" dataKey="formId" />
     </Field>
-    <Field label="Body bubble (sent above the link)">{Ta(p, 'bodyText', 'Please fill out this short form:', 3)}</Field>
+    <Field label="Body bubble (sent above the link)">
+      {Ta(p, 'bodyText', 'Please fill out this short form:', 3)}
+    </Field>
     <Field
       label="Save responses under variable"
       hint={
@@ -224,8 +290,40 @@ export const GoogleFormForm: FormComponent = (p) => (
     >
       {Txt(p, 'saveAs', 'google_form')}
     </Field>
-    <Field label="Expire after (seconds)" hint="How long to wait for a submission before timing out. 86400 = 24h.">
+    <Field
+      label="Expire after (seconds)"
+      hint="How long to wait for a submission before timing out. 86400 = 24h."
+    >
       {Num(p, 'expiresInSec', '86400')}
     </Field>
+    {p.data.formId ? (
+      <div className="mt-3 rounded-lg border border-border bg-muted p-3">
+        <div className="mb-1 text-[12px] font-semibold">
+          One-time setup — paste this into your Form&apos;s Script editor
+        </div>
+        <ol className="mb-2 list-inside list-decimal space-y-0.5 text-[11.5px] text-foreground/80">
+          <li>
+            Open your form → <Mono>⋮ menu</Mono> → <Mono>Script editor</Mono>
+          </li>
+          <li>
+            <a
+              href={appsScriptHref(String(p.data.formId))}
+              download
+              className="text-brand underline"
+            >
+              Download the script (.gs)
+            </a>{' '}
+            and paste it
+          </li>
+          <li>
+            Add a trigger: <Mono>onFormSubmit</Mono> · From form · On form submit
+          </li>
+        </ol>
+        <div className="font-mono text-[10.5px] text-muted-foreground">
+          Without this script the form will still record answers in Google Forms, but the flow
+          won&apos;t resume.
+        </div>
+      </div>
+    ) : null}
   </>
 );

@@ -2,23 +2,59 @@
 
 import type { ReactNode } from 'react';
 import { cn } from '@crm/ui';
-import { Check, Field, IconButton, NumberInput, Notice, SelectInput, TextArea, TextInput, XIcon, controlClass } from '../kit';
+import {
+  Check,
+  Field,
+  IconButton,
+  NumberInput,
+  Notice,
+  SelectInput,
+  TextArea,
+  TextInput,
+  XIcon,
+  controlClass,
+} from '../kit';
 import type { Opt } from '../kit';
 import type { FormProps } from '../types';
-import { withSavedOption } from './helpers';
+import { flowOptionLabel, handoffFlows, withSavedOption } from './helpers';
 
 /** Field-bound controls: WaDesk's `Txt`, `Ta`, `Num` and `Sel` helpers, reading and writing `data[key]`. */
 export function Txt({ data, set }: FormProps, key: string, placeholder?: string, mono?: boolean) {
-  return <TextInput value={data[key]} onChange={(v) => set(key, v)} placeholder={placeholder} mono={mono} />;
+  return (
+    <TextInput
+      value={data[key]}
+      onChange={(v) => set(key, v)}
+      placeholder={placeholder}
+      mono={mono}
+    />
+  );
 }
 
 export function Ta({ data, set }: FormProps, key: string, placeholder?: string, rows = 4) {
-  return <TextArea value={data[key]} onChange={(v) => set(key, v)} placeholder={placeholder} rows={rows} />;
+  return (
+    <TextArea
+      value={data[key]}
+      onChange={(v) => set(key, v)}
+      placeholder={placeholder}
+      rows={rows}
+    />
+  );
 }
 
-export function Num({ data, set }: FormProps, key: string, placeholder?: string, range?: { min?: number; max?: number }) {
+export function Num(
+  { data, set }: FormProps,
+  key: string,
+  placeholder?: string,
+  range?: { min?: number; max?: number },
+) {
   return (
-    <NumberInput value={data[key]} onChange={(v) => set(key, v)} placeholder={placeholder} min={range?.min} max={range?.max} />
+    <NumberInput
+      value={data[key]}
+      onChange={(v) => set(key, v)}
+      placeholder={placeholder}
+      min={range?.min}
+      max={range?.max}
+    />
   );
 }
 
@@ -26,7 +62,16 @@ export function Sel({ data, set }: FormProps, key: string, options: Opt[]) {
   return <SelectInput value={data[key]} onChange={(v) => set(key, v)} options={options} />;
 }
 
-export const Mono = ({ children }: { children: ReactNode }) => <span className="font-mono">{children}</span>;
+/** A link to another part of the product, styled like WaDesk's inline `text-wa-deep underline` anchors. */
+export const ExtLink = ({ href, children }: { href: string; children: ReactNode }) => (
+  <a href={href} className="text-brand underline">
+    {children}
+  </a>
+);
+
+export const Mono = ({ children }: { children: ReactNode }) => (
+  <span className="font-mono">{children}</span>
+);
 
 /** The grey explanation box at the top of a form, with an optional smaller second line. */
 export function Intro({ children, sub }: { children: ReactNode; sub?: ReactNode }) {
@@ -63,7 +108,13 @@ export function RowInput({
   );
 }
 
-export function RemoveButton({ onClick, title = 'Remove' }: { onClick: () => void; title?: string }) {
+export function RemoveButton({
+  onClick,
+  title = 'Remove',
+}: {
+  onClick: () => void;
+  title?: string;
+}) {
   return (
     <IconButton onClick={onClick} title={title} danger>
       <XIcon />
@@ -73,7 +124,9 @@ export function RemoveButton({ onClick, title = 'Remove' }: { onClick: () => voi
 
 /** Reads an array field of objects, ignoring anything that is not an object. */
 export function readRows(value: unknown): Record<string, unknown>[] {
-  return Array.isArray(value) ? value.map((v) => (typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {})) : [];
+  return Array.isArray(value)
+    ? value.map((v) => (typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {}))
+    : [];
 }
 
 /** Model + knowledge-base dropdowns shared by the AI nodes (the options WaDesk builds from its AI caches). */
@@ -83,7 +136,8 @@ export function aiModelOptions(p: FormProps): Opt[] {
     ? [{ v: '', l: '— pick model —' }, ...aiModels.map((m) => ({ v: m.value, l: m.label }))]
     : [{ v: '', l: 'No AI models enabled — ask admin' }];
   const model = p.data.model;
-  if (model && !aiModels.some((m) => m.value === model)) opts.push({ v: String(model), l: `${String(model)} (not enabled)` });
+  if (model && !aiModels.some((m) => m.value === model))
+    opts.push({ v: String(model), l: `${String(model)} (not enabled)` });
   return opts;
 }
 
@@ -96,7 +150,10 @@ export function knowledgeBaseOptions(p: FormProps): Opt[] {
 }
 
 export function voiceAssistantOptions(p: FormProps, key: string, first: string): Opt[] {
-  const opts: Opt[] = [{ v: '', l: first }, ...p.env.ctx.callAssistants.map((a) => ({ v: a.id, l: a.name }))];
+  const opts: Opt[] = [
+    { v: '', l: first },
+    ...p.env.ctx.callAssistants.map((a) => ({ v: a.id, l: a.name })),
+  ];
   return withSavedOption(opts, p.data[key], (id) => `Assistant ${id.slice(0, 8)}`);
 }
 
@@ -110,7 +167,8 @@ export function OrderDetailsFields({ p, detailsHint }: { p: FormProps; detailsHi
         label="Order button"
         hint={
           <>
-            Tapping it sends <Mono>ORDER_&lt;product&gt;</Mono> — the ordering flow / keyword rule picks it up.
+            Tapping it sends <Mono>ORDER_&lt;product&gt;</Mono> — the ordering flow / keyword rule
+            picks it up.
           </>
         }
       >
@@ -138,7 +196,8 @@ export function LeadForm({ p, askName }: { p: FormProps; askName: string }) {
   return (
     <>
       <Notice>
-        Maps variables collected by earlier <Mono>{askName}</Mono> nodes into a saved lead. Leave a field blank to skip it.
+        Maps variables collected by earlier <Mono>{askName}</Mono> nodes into a saved lead. Leave a
+        field blank to skip it.
       </Notice>
       <Field label="Name from variable">{Txt(p, 'nameVar', 'lead_name')}</Field>
       <Field label="Email from variable">{Txt(p, 'emailVar', 'lead_email')}</Field>
@@ -164,6 +223,8 @@ export function WhatsappHandoffForm({
   p,
   platform,
   surface,
+  dmName,
+  excludeChannels,
   prefillDefault,
 }: {
   p: FormProps;
@@ -171,15 +232,18 @@ export function WhatsappHandoffForm({
   platform: string;
   /** "Instagram conversation" / "Messenger conversation" */
   surface: string;
+  /** How the hint names the DM: WaDesk says "IG DM" on Instagram and "Messenger DM" on Facebook. */
+  dmName: string;
+  /** Flow channels this node does not offer as the WhatsApp flow to start (WaDesk's per-channel exclusion list, quirks included). */
+  excludeChannels: readonly string[];
   prefillDefault: string;
 }) {
   const mode = p.data.mode === 'direct' ? 'direct' : 'deeplink';
-  // The flow list carries no channel, so every flow is offered; the runtime only starts WhatsApp flows.
-  const flows = p.env.ctx.flows;
+  const flows = handoffFlows(p.env.ctx.flows, excludeChannels);
   const waFlowOpts = withSavedOption(
     [
       { v: '', l: flows.length ? '— pick WhatsApp flow —' : 'No WhatsApp flows yet' },
-      ...flows.map((f) => ({ v: f.id, l: f.name })),
+      ...flows.map((f) => ({ v: f.id, l: flowOptionLabel(f.name, f.isPublished) })),
     ],
     p.data.waFlowId,
     (id) => `Flow ${id.slice(0, 8)}`,
@@ -187,8 +251,8 @@ export function WhatsappHandoffForm({
   return (
     <>
       <div className="mb-4 rounded-lg border border-[#A7E8C0] bg-[#DCFCE7] p-2.5 text-[11.5px] leading-snug text-[#14532D]">
-        Move this {surface} to WhatsApp. {platform} and WhatsApp identities aren&apos;t linked, so the person has to reach your
-        WhatsApp themselves (deep link) or give you their number first.
+        Move this {surface} to WhatsApp. {platform} and WhatsApp identities aren&apos;t linked, so
+        the person has to reach your WhatsApp themselves (deep link) or give you their number first.
       </div>
       <Field label="Handoff method">
         {Sel(p, 'mode', [
@@ -212,7 +276,7 @@ export function WhatsappHandoffForm({
           </Field>
           <Field
             label={`DM shown on ${platform}`}
-            hint={`The ${platform === 'Facebook' ? 'Messenger' : platform} DM sent with the wa.me link. Supports {{variables}}.`}
+            hint={`The ${dmName} DM sent with the wa.me link. Supports {{variables}}.`}
           >
             {Ta(p, 'introText', "Let's continue on WhatsApp 👇", 2)}
           </Field>
@@ -220,17 +284,27 @@ export function WhatsappHandoffForm({
       ) : (
         <>
           <Notice tone="warn">
-            ⚠ Meta only lets you message a WhatsApp number that has opted in or messaged you in the last 24h. If it hasn&apos;t,
-            the first message is blocked. Prefer the deep-link method unless you know the number opted in.
+            ⚠ Meta only lets you message a WhatsApp number that has opted in or messaged you in the
+            last 24h. If it hasn&apos;t, the first message is blocked. Prefer the deep-link method
+            unless you know the number opted in.
           </Notice>
           <Field
             label="WhatsApp number from variable"
-            hint={'A flow variable captured earlier (e.g. an Ask node "What\'s your WhatsApp number?").'}
+            hint={
+              'A flow variable captured earlier (e.g. an Ask node "What\'s your WhatsApp number?").'
+            }
           >
             {Txt(p, 'numberVar', 'wa_number')}
           </Field>
-          <Field label="WhatsApp flow to start" hint="The WhatsApp flow that runs for that number once handed off.">
-            <SelectInput value={p.data.waFlowId} onChange={(v) => p.set('waFlowId', v)} options={waFlowOpts} />
+          <Field
+            label="WhatsApp flow to start"
+            hint="The WhatsApp flow that runs for that number once handed off."
+          >
+            <SelectInput
+              value={p.data.waFlowId}
+              onChange={(v) => p.set('waFlowId', v)}
+              options={waFlowOpts}
+            />
           </Field>
         </>
       )}

@@ -2,7 +2,15 @@
 
 import { AddButton, Field } from '../kit';
 import type { FormComponent } from '../types';
-import { LeadForm, OrderDetailsFields, RemoveButton, RowInput, Ta, WhatsappHandoffForm, readRows } from './shared';
+import {
+  LeadForm,
+  OrderDetailsFields,
+  RemoveButton,
+  RowInput,
+  Ta,
+  WhatsappHandoffForm,
+  readRows,
+} from './shared';
 
 /** Facebook Messenger limits: a generic-template carousel holds up to 10 elements. */
 const MAX_CARDS = 10;
@@ -31,12 +39,27 @@ export const FbGalleryForm: FormComponent = (p) => {
             <div className="flex items-center gap-2">
               <span className="font-mono text-[10px] text-muted-foreground">Card {i + 1}</span>
               <span className="ml-auto">
-                <RemoveButton onClick={() => p.set('cards', cards.filter((_, j) => j !== i))} />
+                <RemoveButton
+                  onClick={() =>
+                    p.set(
+                      'cards',
+                      cards.filter((_, j) => j !== i),
+                    )
+                  }
+                />
               </span>
             </div>
             <RowInput value={c.title} onChange={(v) => setC(i, 'title', v)} placeholder="Title" />
-            <RowInput value={c.subtitle} onChange={(v) => setC(i, 'subtitle', v)} placeholder="Subtitle (optional)" />
-            <RowInput value={c.imageUrl} onChange={(v) => setC(i, 'imageUrl', v)} placeholder="Image URL (https://…)" />
+            <RowInput
+              value={c.subtitle}
+              onChange={(v) => setC(i, 'subtitle', v)}
+              placeholder="Subtitle (optional)"
+            />
+            <RowInput
+              value={c.imageUrl}
+              onChange={(v) => setC(i, 'imageUrl', v)}
+              placeholder="Image URL (https://…)"
+            />
             <div className="flex gap-2">
               <RowInput
                 value={c.buttonLabel}
@@ -56,7 +79,12 @@ export const FbGalleryForm: FormComponent = (p) => {
         {cards.length < MAX_CARDS ? (
           <AddButton
             onClick={() =>
-              p.set('cards', cards.concat([{ title: '', subtitle: '', imageUrl: '', buttonLabel: '', buttonUrl: '' }]))
+              p.set(
+                'cards',
+                cards.concat([
+                  { title: '', subtitle: '', imageUrl: '', buttonLabel: '', buttonUrl: '' },
+                ]),
+              )
             }
           >
             Add card
@@ -85,18 +113,43 @@ export const FbProductsForm: FormComponent = (p) => {
             <div className="flex items-center gap-2">
               <span className="font-mono text-[10px] text-muted-foreground">Product {i + 1}</span>
               <span className="ml-auto">
-                <RemoveButton onClick={() => p.set('products', items.filter((_, j) => j !== i))} />
+                <RemoveButton
+                  onClick={() =>
+                    p.set(
+                      'products',
+                      items.filter((_, j) => j !== i),
+                    )
+                  }
+                />
               </span>
             </div>
-            <RowInput value={it.title} onChange={(v) => setP(i, 'title', v)} placeholder="Product name" />
-            <RowInput value={it.subtitle} onChange={(v) => setP(i, 'subtitle', v)} placeholder="Price / description (optional)" />
-            <RowInput value={it.imageUrl} onChange={(v) => setP(i, 'imageUrl', v)} placeholder="Image URL (https://…)" />
-            <RowInput value={it.url} onChange={(v) => setP(i, 'url', v)} placeholder="Product page URL (for the View button)" />
+            <RowInput
+              value={it.title}
+              onChange={(v) => setP(i, 'title', v)}
+              placeholder="Product name"
+            />
+            <RowInput
+              value={it.subtitle}
+              onChange={(v) => setP(i, 'subtitle', v)}
+              placeholder="Price / description (optional)"
+            />
+            <RowInput
+              value={it.imageUrl}
+              onChange={(v) => setP(i, 'imageUrl', v)}
+              placeholder="Image URL (https://…)"
+            />
+            <RowInput
+              value={it.url}
+              onChange={(v) => setP(i, 'url', v)}
+              placeholder="Product page URL (for the View button)"
+            />
           </div>
         ))}
         {items.length < MAX_CARDS ? (
           <AddButton
-            onClick={() => p.set('products', items.concat([{ title: '', subtitle: '', imageUrl: '', url: '' }]))}
+            onClick={() =>
+              p.set('products', items.concat([{ title: '', subtitle: '', imageUrl: '', url: '' }]))
+            }
           >
             Add product
           </AddButton>
@@ -110,7 +163,10 @@ export const FbProductsForm: FormComponent = (p) => {
 export const FbLeadForm: FormComponent = (p) => <LeadForm p={p} askName="Ask question" />;
 
 export const FbReplyCommentForm: FormComponent = (p) => (
-  <Field label="Public reply" hint="Posted as a public reply under the comment that triggered the flow.">
+  <Field
+    label="Public reply"
+    hint="Posted as a public reply under the comment that triggered the flow."
+  >
     {Ta(p, 'text', 'Thanks! Just sent you a DM.', 2)}
   </Field>
 );
@@ -120,6 +176,9 @@ export const FbToWhatsappForm: FormComponent = (p) => (
     p={p}
     platform="Facebook"
     surface="Messenger conversation"
+    dmName="Messenger"
+    // WaDesk's exclusion list: LINE, WeChat and Viber flows stay offered (QUIRK).
+    excludeChannels={['instagram', 'facebook', 'tiktok', 'telegram', 'email']}
     prefillDefault="Hi! I came from Facebook"
   />
 );
