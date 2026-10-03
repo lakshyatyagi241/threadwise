@@ -332,6 +332,11 @@ export class ConversationsService implements ConversationsFacade {
   }
 
   private ref(conv: ConversationRow, channel: ChannelRow): ThreadRef {
-    return { id: conv.uuid, channelId: channel.uuid, peerKey: conv.peerKey };
+    return {
+      id: conv.uuid,
+      channelId: channel.uuid,
+      peerKey: conv.peerKey,
+      lastInboundAt: conv.lastInboundAt,
+    };
   }
 }

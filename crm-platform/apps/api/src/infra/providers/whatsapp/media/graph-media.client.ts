@@ -146,7 +146,7 @@ export class GraphMediaClient {
     const auth = this.auth(ctx);
     // `phone_number_id` makes Meta refuse an id that belongs to another number: an id from a forged webhook cannot make us fetch
     // another business's file with this business's credentials. A proxy may not know the parameter, so it is sent on the Meta route only.
-    const withPhone = ctx.route === 'meta';
+    const withPhone = ctx.route === 'meta' && !ctx.registry;
     let json: { url?: unknown; mime_type?: unknown; sha256?: unknown; file_size?: unknown };
     try {
       json = await this.http.call(auth, {

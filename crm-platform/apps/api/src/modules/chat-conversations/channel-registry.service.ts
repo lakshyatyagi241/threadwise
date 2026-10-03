@@ -105,7 +105,7 @@ export class ChannelRegistryService {
    * domains see never carries credentials.
    *
    * A WhatsApp channel's credentials are its linked connection's, decrypted by the WABA domain: `route`, `accessToken` (Meta) or
-   * `authKey` (Interakt), `businessAccountId`; the phone number id is the channel's `externalId`. A connection that is no longer
+   * `authKey` (Interakt), `registry` (a provider of the platform's registry), `businessAccountId`; the phone number id is the channel's `externalId`. A connection that is no longer
    * connected makes the channel read `disconnected` here whatever its own row says, so a send never leaves from a number a person
    * has disconnected, even in the moment before the link service has caught up.
    */
@@ -128,6 +128,8 @@ export class ChannelRegistryService {
             authKey: conn.authKey,
             businessAccountId: conn.wabaId,
             phoneNumberId: conn.phoneNumberId,
+            // A number on a provider of the platform's registry: its resolved route (address, version, rendered headers).
+            ...(conn.registry ? { registry: JSON.stringify(conn.registry) } : {}),
           }
         : {};
     } else {
