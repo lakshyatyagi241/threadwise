@@ -53,7 +53,9 @@ const dateOnly = z
   .refine((v) => !Number.isNaN(Date.parse(`${v}T00:00:00Z`)), 'is not a real date');
 const timeOfDay = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'must be HH:mm (24 hour)');
 /** What a `datetime-local` input posts. Read in the campaign's time zone. */
-const localDateTime = z.string().regex(/^\d{4}-\d{2}-\d{2}T([01]\d|2[0-3]):[0-5]\d$/, 'must be YYYY-MM-DDTHH:mm');
+const localDateTime = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}T([01]\d|2[0-3]):[0-5]\d$/, 'must be YYYY-MM-DDTHH:mm');
 
 const buttonSchema = z.record(z.unknown());
 
@@ -129,19 +131,20 @@ type Shape = {
 
 /** The cross-field rules shared by create and update. */
 function refine(v: Shape, ctx: z.RefinementCtx) {
-  const issue = (path: string, message: string) => ctx.addIssue({ code: 'custom', path: [path], message });
-  if (v.type && (CUSTOM_BODY_TYPES as readonly string[]).includes(v.type) && !v.customMessage?.trim()) {
+  const issue = (path: string, message: string) =>
+    ctx.addIssue({ code: 'custom', path: [path], message });
+  if (
+    v.type &&
+    (CUSTOM_BODY_TYPES as readonly string[]).includes(v.type) &&
+    !v.customMessage?.trim()
+  ) {
     issue('customMessage', 'A message is required for this campaign type');
   }
   if (v.scheduleType && v.scheduleType !== 'now') {
     if (!v.sendDate) issue('sendDate', 'sendDate is required to schedule');
     if (!v.sendTime) issue('sendTime', 'sendTime is required to schedule');
   }
-  if (
-    v.throttleMinSec != null &&
-    v.throttleMaxSec != null &&
-    v.throttleMaxSec < v.throttleMinSec
-  ) {
+  if (v.throttleMinSec != null && v.throttleMaxSec != null && v.throttleMaxSec < v.throttleMinSec) {
     issue('throttleMaxSec', 'must be at least throttleMinSec');
   }
 }

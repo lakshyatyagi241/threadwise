@@ -5,8 +5,12 @@ import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
+import { CatalogProductsWorkerModule } from '../modules/catalog-products';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
 import { CampaignsWorkerModule } from '../modules/campaigns';
+import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
+import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
+import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
@@ -15,6 +19,7 @@ import {
   SegmentsWorkerModule,
   TasksWorkerModule,
 } from '../modules/crm';
+import { PaygwWorkerModule } from '../modules/platform-payment-gateways';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
 import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
@@ -51,11 +56,16 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
     PlansWorkerModule,
+    PaygwWorkerModule,
     WabaWorkerModule,
+    CatalogProductsWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ChannelFacebookWorkerModule,
+    ChannelInstagramWorkerModule,
+    ShopifyWoocommerceWorkerModule,
     ScheduledQueueWarmerWorkerModule,
     NodeBridgeRuntimeWorkerModule,
   ],
