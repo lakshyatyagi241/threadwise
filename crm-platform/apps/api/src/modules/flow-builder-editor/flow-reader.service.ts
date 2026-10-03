@@ -1,10 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { flbHandleToPort, flbPortsFor, type FlowGraph, type FlowType } from '@crm/contracts';
+import {
+  flbHandleToPort,
+  flbPortsFor,
+  flbRuntimeNodeData,
+  type FlowGraph,
+  type FlowType,
+} from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { FlowsRepository } from './flows.repository';
 
-/** A flow as the runtime executes it: the graph plus the 1-based port number of every edge (`<nodeId>_<port>`). */
+/**
+ * A flow as the runtime executes it: the graph plus the 1-based port number of every edge (`<nodeId>_<port>`). `graph` is the saved
+ * graph with each node's `data` shaped by `flbRuntimeNodeData` (WaDesk's FlowNormalizer field mapping: `save` also as `variable`, `lat` /
+ * `lng` as `latitude` / `longitude`, ...); every saved field is still there, the runtime-named ones are added.
+ */
 export interface RunnableFlow {
   id: string;
   name: string;
@@ -74,7 +84,7 @@ export class FlowReaderService {
         triggerKeywords: row.triggerKeywords,
         provider: row.provider,
         triggerChannelId: row.triggerChannelId,
-        graph: row.graph,
+        graph: flbRuntimeNodeData(row.graph),
         routes,
         startNodeId: start?.id ?? null,
       };
