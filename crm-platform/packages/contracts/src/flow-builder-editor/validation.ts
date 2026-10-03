@@ -9,8 +9,9 @@ import { FLOW_TYPE_LABELS, flbNodeInMode, FLB_NODE_TYPES, type FlowType, type Fl
  *    to anything". The start node and the Trigger are exempt, and a leaf with no outgoing edge is fine (a flow may end on
  *    any node)
  *  - a node whose type does not run on the flow's channel is flagged (hidden / unknown types are left alone)
- *  - the Trigger must name a sender, but only when the workspace has one to pick for chat / Instagram / Facebook (with
- *    none connected a draft must still save)
+ *  - the Trigger must name a sender, but only when the workspace has one to pick (with none connected a draft must still
+ *    save). WaDesk looks in the Instagram list for an Instagram flow, the Facebook list for a Facebook flow and the
+ *    WhatsApp numbers for every other mode, so the caller passes that list's emptiness and the message follows the mode
  *
  * Not checked, on purpose (inventory rule 5): a missing Trigger, empty required fields, dangling edges, cycles, port
  * completeness, node count.
@@ -38,8 +39,9 @@ export interface FlbValidationContext {
   /** The channel the flow runs as (see `flbFlowTypeOf`). */
   mode: FlowType;
   /**
-   * Whether the workspace has a connected sender for this channel to pick. Only chat, Instagram and Facebook are checked
-   * (WaDesk consulted its picker cache for those three alone); pass false for the others.
+   * Whether the workspace has a sender to pick: Instagram accounts for an Instagram flow, Facebook Pages for a Facebook
+   * flow, connected WhatsApp numbers for every other mode (WaDesk's `avail` fallback), so a Telegram flow is checked
+   * against the numbers and asks for a "number".
    */
   senderAvailable: boolean;
 }
@@ -93,8 +95,7 @@ export function flbValidateGraph(
 
   const trig = nodes.find((n) => n.type === 'trigger');
   if (trig && !String(trig.data?.deviceId ?? '').trim()) {
-    const checked = ctx.mode === 'chat' || ctx.mode === 'instagram' || ctx.mode === 'facebook';
-    if (checked && ctx.senderAvailable) {
+    if (ctx.senderAvailable) {
       bad.add(trig.id);
       const what =
         ctx.mode === 'instagram' ? 'Instagram account' : ctx.mode === 'facebook' ? 'Facebook Page' : 'number';
