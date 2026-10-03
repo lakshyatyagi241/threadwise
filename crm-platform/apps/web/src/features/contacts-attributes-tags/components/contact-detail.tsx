@@ -9,6 +9,7 @@ import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { LinkedAppointments } from '@/features/appointments';
+import { CompanyLink } from '@/features/companies';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
@@ -189,6 +190,7 @@ export function ContactDetail({ id }: { id: string }) {
                 </span>
               )}
               {c.email && <span dir="ltr">{c.email}</span>}
+              {c.companyId && <CompanyLink id={c.companyId} />}
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
               {c.lifecycleStage && (

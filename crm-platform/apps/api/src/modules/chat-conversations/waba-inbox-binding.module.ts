@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { WABA_INBOUND_SINK_OVERRIDE } from '../whatsapp-cloud-api-waba';
+import { WABA_INBOUND_SINK_OVERRIDE } from '../whatsapp-cloud-api-waba/waba-inbound-sink';
 import { ChatConversationsModule } from './chat-conversations.module';
 import { WabaInboxSink } from './waba-inbox-sink';
 

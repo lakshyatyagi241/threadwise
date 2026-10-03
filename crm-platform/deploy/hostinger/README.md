@@ -1,43 +1,47 @@
-# Deploy to the Hostinger server (desk.wabo.ai)
+# desk.wabo.ai: deployment
 
-One VM, Docker Compose: Caddy (TLS) -> web + api, plus worker, Postgres (pgvector), Redis, MinIO. A fresh database:
-roles are created on first start, every migration is applied, nothing is seeded.
+Runs on a shared Dokploy host: Docker Compose project `desk` in `/opt/desk` (web, api, worker, postgres+pgvector, redis,
+minio). The host's Traefik owns 80/443 and issues the TLS certificate (resolver `letsencrypt`); this stack publishes no ports
+and routes through container labels on `dokploy-network`: `/v2`, `/socket.io`, `/health`, `/ready`, `/docs` go to the API,
+everything else to the web app. Images are built on a workstation and loaded over SSH (`ship.sh`), never on the host.
+Memory is capped per container (about 4 GB in total) because the host runs many other apps.
 
-## Before you start
-
-1. DNS: an `A` record `desk.wabo.ai` -> `187.127.155.227` (not proxied). `deploy.sh` refuses to run until it resolves.
-2. The server is Linux with ports 80 and 443 open. SSH in with a key, not the root password (and change that password).
-3. Mail: SMTP details for sign-up verification and password reset.
-
-## Deploy
+## Ship / update
 
 ```bash
-ssh <you>@187.127.155.227
-git clone <repo-url> app && cd app/crm-platform/deploy/hostinger
-sudo ./deploy.sh      # 1st run writes .env with generated secrets and stops
-nano .env             # set SMTP_*; adjust PG_* to the server's RAM
-sudo ./deploy.sh      # 2nd run builds and starts everything
+SERVER=root@<host> SSH_KEY=~/.ssh/<deploy key> deploy/hostinger/ship.sh
 ```
 
-The script prints the command to create the first platform super admin. Then sign in at
-`https://desk.wabo.ai/admin/login` (two-factor is enrolled at first sign-in). Customers register at `/signup`.
+Builds `desk-api` and `desk-web` tagged with the git commit, loads them, keeps `.env` and data, applies new migrations and
+restarts. A first run creates `/opt/desk/.env` with generated secrets (mode 600).
+
+## Seed (once, fresh database)
+
+Run on the server from `/opt/desk`. Passwords are generated and written to a root-only file, never printed.
+
+```bash
+# platform super admin (two-factor is enrolled at first sign-in)
+docker compose --env-file .env run --rm -T -e OPERATOR_PASSWORD='<password>' api \
+  node dist/src/modules/auth/cli/create-operator.js --email superadmin@desk.wabo.ai --name "Super Admin" --role super_admin
+# one workspace with the five preset roles and one account per role (owner/admin/manager/agent/viewer@demo.desk.wabo.ai)
+docker compose --env-file .env run --rm -T -v ./seed.js:/app/seed.js:ro -e WORKSPACE_PASSWORD='<password>' api node /app/seed.js
+```
+
+Sign in: platform console `/admin/login`, workspace `/login`.
 
 ## Operate
 
 ```bash
+cd /opt/desk
 docker compose --env-file .env ps
 docker compose --env-file .env logs -f api worker web
-docker compose --env-file .env exec api node dist/src/modules/auth/cli/create-operator.js --help
+docker compose --env-file .env exec -T postgres pg_dump -U crm crm | gzip > desk-$(date +%F).sql.gz   # backup
 ```
 
-Update: `git pull && sudo ./deploy.sh` (migrations run on every start; an already applied one is skipped).
+Keep `.env` safe: losing `CREDENTIALS_ENCRYPTION_KEY` makes stored channel credentials unreadable.
 
-## Back up
+## Not set up
 
-`docker compose exec postgres pg_dump -U crm crm | gzip > desk-$(date +%F).sql.gz`, plus the `miniodata` volume. Keep `.env`
-safe: losing `CREDENTIALS_ENCRYPTION_KEY` makes stored channel credentials unreadable.
-
-## Not covered
-
-Meta/WhatsApp webhooks (point them at `https://desk.wabo.ai/v2/public/webhooks/whatsapp` and set the real
-`WHATSAPP_APP_SECRET`), Clerk (set `CLERK_SECRET_KEY` only if used), an off-box backup, monitoring.
+Outgoing mail (set `SMTP_*` in `.env`, then `docker compose up -d api worker`): until then sign-up verification and password
+reset emails do not send. Meta/WhatsApp webhooks (`https://desk.wabo.ai/v2/public/webhooks/whatsapp`, real
+`WHATSAPP_APP_SECRET`), Clerk (`CLERK_SECRET_KEY` is a placeholder), off-box backups and monitoring.

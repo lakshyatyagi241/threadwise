@@ -31,6 +31,7 @@ import {
   WabaConnectService,
   type ResolvedWabaConnection,
 } from '../whatsapp-cloud-api-waba';
+import type { FlowTemplate } from './flow-template';
 import { describeTemplateFailure, providerProblem } from './template-errors';
 import {
   BUILDABLE_TYPES,
@@ -107,6 +108,38 @@ export class TemplatesService {
 
   async get(uuid: string): Promise<TemplateDetail> {
     return toDetail(await this.require(uuid));
+  }
+
+  /**
+   * The template a flow node sends (TW-FLR-026), by the row id the builder stamped or by name, within one workspace. Runs outside
+   * a request (the flow worker), so the caller names the organization. Null when there is no such template here.
+   */
+  async findForFlow(
+    orgId: number,
+    ref: { id?: number | null; name?: string | null },
+  ): Promise<FlowTemplate | null> {
+    const row = await this.db.txAs({ orgId }, async (tx) => {
+      if (ref.id && ref.id > 0) {
+        const byId = await this.repo.findById(tx, orgId, ref.id);
+        if (byId) return byId;
+      }
+      return ref.name?.trim() ? this.repo.findByName(tx, orgId, ref.name.trim()) : null;
+    });
+    if (!row) return null;
+    const d = toDetail(row);
+    return {
+      id: row.id,
+      uuid: row.uuid,
+      name: row.templateName,
+      language: row.language,
+      status: statusOf(row),
+      header: d.header,
+      body: row.templateBody,
+      footer: d.footer,
+      buttons: d.buttons,
+      variableMap: d.variableMap,
+      parameterFormat: d.parameterFormat,
+    };
   }
 
   /** Instant feedback for the form (TW-TPL-023): the same preparation and rules as a save, nothing stored, nothing sent. */

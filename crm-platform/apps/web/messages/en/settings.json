@@ -269,6 +269,11 @@
         "label": "Privacy and data",
         "description": "Consent, retention and requests to delete data.",
         "keywords": "gdpr, consent, retention, delete data, dpa, personal data"
+      },
+      "whatsapp-customers": {
+        "label": "Saved customers",
+        "description": "Pre-set a customer's name and delivery address for WhatsApp orders.",
+        "keywords": "customers, address, delivery, order, store"
       }
     }
   }

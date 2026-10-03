@@ -10,6 +10,7 @@ import type {
 } from '@crm/contracts';
 import { ReconnectBanner, TemplatesSoon } from '@/features/channel-whatsapp-cloud';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { CallButton } from '@/features/calling-voice';
 import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
@@ -136,6 +137,13 @@ export function ThreadPane(props: ThreadPaneProps) {
           </div>
         )}
         <div className="flex shrink-0 items-center gap-1">
+          {detail && (
+            <CallButton
+              conversationId={detail.id}
+              displayName={detail.title}
+              contactId={detail.contact?.id}
+            />
+          )}
           {detail && !props.panelOpen && !detail.assignment.user && props.can.assignSelf && (
             <Button
               variant="secondary"

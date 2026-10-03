@@ -21,6 +21,7 @@ import {
   type SendCommand,
 } from '../../../src/modules/node-bridge-runtime';
 import { ScheduledDueService } from '../../../src/modules/scheduled-queue-warmer/scheduled-due.service';
+import { WarmerService } from '../../../src/modules/scheduled-queue-warmer';
 import { ScheduledRunService } from '../../../src/modules/scheduled-queue-warmer/scheduled-run.service';
 import { SchedulerService } from '../../../src/modules/scheduled-queue-warmer';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
@@ -78,6 +79,7 @@ beforeAll(async () => {
     runtime,
     cap,
     h.app.get(SenderLease),
+    h.app.get(WarmerService),
   );
   dueService = new ScheduledDueService(db, queue as never);
 }, 240_000);

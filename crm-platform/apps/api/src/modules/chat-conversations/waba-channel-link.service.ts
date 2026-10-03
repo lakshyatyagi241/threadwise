@@ -1,10 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { ChannelStatus } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { WabaConnectService, type ResolvedWabaConnection } from '../whatsapp-cloud-api-waba';
+import type { ResolvedWabaConnection } from '../whatsapp-cloud-api-waba/waba-connect.service';
+import {
+  WABA_CONNECTIONS,
+  type WabaConnectionsPort,
+} from '../whatsapp-cloud-api-waba/waba-connections.port';
 import { CHANNELS_MODULE } from './channel-registry.service';
 import { normalizeSettings } from './channel-settings';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
@@ -44,7 +48,7 @@ export class WabaChannelLinkService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: ChannelsRepository,
-    private readonly waba: WabaConnectService,
+    @Inject(WABA_CONNECTIONS) private readonly waba: WabaConnectionsPort,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly realtime: ChatRealtimePublisher,

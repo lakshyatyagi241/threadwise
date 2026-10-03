@@ -22,6 +22,7 @@ import {
   type StoreKind,
 } from './mirror-rules';
 import { MirrorRepository } from './mirror.repository';
+import { EcomOrderHooks, flowRefOf } from './order-hooks';
 import { StoresRepository } from './stores.repository';
 
 type Json = Record<string, unknown>;
@@ -55,6 +56,7 @@ export class WebhookPipelineService {
     private readonly codService: CodService,
     private readonly stockService: StockService,
     private readonly cartService: CartService,
+    private readonly orderHooks: EcomOrderHooks,
     @Inject(STORE_MIRROR) private readonly mirror: StoreMirror,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<WebhookJob>,
@@ -74,6 +76,7 @@ export class WebhookPipelineService {
     await this.guarded(job, 'mirror', () => this.upkeep(job));
     await this.guarded(job, 'cod', () => this.cod(job));
     await this.guarded(job, 'cart', () => this.cart(job));
+    await this.guarded(job, 'flow', () => this.flowOrder(job));
     if (job.kind === 'shopify') {
       if (job.eventType === 'fulfillments/update')
         await this.guarded(job, 'delivered', () => this.delivered(job));
@@ -151,6 +154,30 @@ export class WebhookPipelineService {
         : job.eventType === 'order.created' || job.eventType === 'order.updated'
     )
       await this.cartService.cancelOnOrder(job.orgId, job.kind, job.data);
+  }
+
+  /**
+   * An order that came from a flow's shop node closes the loop: the node waits for it (TW-FLR-041). Only the order events count
+   * (Shopify created or paid, WooCommerce created or updated); an order without the flow's reference is nobody's business here.
+   */
+  private async flowOrder(job: WebhookJob): Promise<void> {
+    const shopify = job.kind === 'shopify';
+    const order = shopify
+      ? job.eventType === 'orders/create' || job.eventType === 'orders/paid'
+      : job.eventType === 'order.created' || job.eventType === 'order.updated';
+    if (!order) return;
+    const flowRef = flowRefOf(job.kind, job.data);
+    if (!flowRef) return;
+    const d = job.data;
+    await this.orderHooks.run({
+      orgId: job.orgId,
+      kind: job.kind,
+      storeId: job.storeId,
+      flowRef,
+      orderId: String(d.id ?? d.name ?? ''),
+      total: String((shopify ? d.total_price : d.total) ?? ''),
+      currency: String(d.currency ?? ''),
+    });
   }
 
   /** A new cash-on-delivery order: risk score (WooCommerce), the confirmation, the prepaid nudge, then the risk log. */
