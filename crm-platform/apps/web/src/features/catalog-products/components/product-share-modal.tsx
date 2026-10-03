@@ -89,6 +89,8 @@ export function ProductShareModal({
 
   const [phone, setPhone] = useState('');
   const [busy, setBusy] = useState(false);
+  // a second click lands before the first render disables the button: the ref closes that gap
+  const sending = useRef(false);
   const [result, setResult] = useState<{ ok: boolean; text: string } | null>(null);
   const [lastId, setLastId] = useState<string | null>(null);
   if (id !== lastId) {
@@ -99,11 +101,12 @@ export function ProductShareModal({
   }
 
   const send = async () => {
-    if (!id) return;
+    if (!id || sending.current) return;
     if (!isValidPhone(phone)) {
       setResult({ ok: false, text: t('invalidPhone') });
       return;
     }
+    sending.current = true;
     setBusy(true);
     setResult(null);
     try {
@@ -113,6 +116,7 @@ export function ProductShareModal({
     } catch (e) {
       setResult({ ok: false, text: errorText(e) });
     } finally {
+      sending.current = false;
       setBusy(false);
     }
   };

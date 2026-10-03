@@ -2,6 +2,7 @@ import {
   CATALOG_SEND_MAX_PRODUCTS,
   COLLECTION_DESCRIPTION_MAX,
   COLLECTION_NAME_MAX,
+  trimLikeThreadwise,
   type CollectionResponse,
   type CreateCollectionInput,
   type UpdateCollectionInput,
@@ -80,19 +81,20 @@ export type CollectionProblem =
 
 export function collectionProblems(form: CollectionForm): CollectionProblem[] {
   const out: CollectionProblem[] = [];
-  const name = form.name.trim();
+  const name = trimLikeThreadwise(form.name);
   if (!name) out.push('nameRequired');
   else if (name.length > COLLECTION_NAME_MAX) out.push('nameTooLong');
-  if (form.description.trim().length > COLLECTION_DESCRIPTION_MAX) out.push('descriptionTooLong');
+  if (trimLikeThreadwise(form.description).length > COLLECTION_DESCRIPTION_MAX)
+    out.push('descriptionTooLong');
   if (form.productIds.length === 0) out.push('noProducts');
   if (form.productIds.length > COLLECTION_MAX_PRODUCTS) out.push('tooManyProducts');
   return out;
 }
 
 export function buildCollectionInput(form: CollectionForm): CreateCollectionInput {
-  const description = form.description.trim();
+  const description = trimLikeThreadwise(form.description);
   return {
-    name: form.name.trim(),
+    name: trimLikeThreadwise(form.name),
     description: description || null,
     productIds: form.productIds,
     isActive: true,

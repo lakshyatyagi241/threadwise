@@ -157,12 +157,32 @@ export function CollectionEditor({
     e.preventDefault();
     setPicked(true);
     setError(null);
-    if (problems.length > 0) return;
+    if (problems.length > 0) {
+      // the first thing to fix gets focus: the name, then the description, then the product grid
+      const target = problems.some((p) => p === 'nameRequired' || p === 'nameTooLong')
+        ? `${idPrefix}-name`
+        : problems.includes('descriptionTooLong')
+          ? `${idPrefix}-description`
+          : null;
+      (target
+        ? document.getElementById(target)
+        : document.querySelector<HTMLElement>(`#${CSS.escape(`${idPrefix}-picker`)} input`)
+      )?.focus();
+      return;
+    }
     setBusy(true);
     try {
       await onSubmit(form);
     } catch (err) {
       setError(err);
+      const fields = fieldErrors(err);
+      const id =
+        'name' in fields
+          ? `${idPrefix}-name`
+          : 'description' in fields
+            ? `${idPrefix}-description`
+            : null;
+      if (id) document.getElementById(id)?.focus();
     } finally {
       setBusy(false);
     }
@@ -180,6 +200,7 @@ export function CollectionEditor({
             id={`${idPrefix}-name`}
             value={form.name}
             maxLength={COLLECTION_NAME_MAX}
+            required
             placeholder={t('namePlaceholder')}
             invalid={Boolean(nameError || server.name)}
             onChange={(e) => patch({ name: e.target.value })}

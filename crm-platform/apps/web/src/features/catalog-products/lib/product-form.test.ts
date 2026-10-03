@@ -34,13 +34,22 @@ describe('currency list', () => {
 });
 
 describe('parseTags', () => {
-  it('trims, drops blanks and repeats', () => {
-    expect(parseTags('cotton, summer ,, Cotton, bestseller')).toEqual([
+  it('trims, drops blanks and exact repeats, keeps case variants', () => {
+    expect(parseTags('cotton, summer ,, cotton, bestseller')).toEqual([
       'cotton',
       'summer',
       'bestseller',
     ]);
+    expect(parseTags('Cotton, cotton, COTTON')).toEqual(['Cotton', 'cotton', 'COTTON']);
     expect(parseTags('')).toEqual([]);
+  });
+  it('trims the whole box of invisible characters, each part like PHP trim()', () => {
+    expect(parseTags('\u200bcotton , summer\u200d')).toEqual(['cotton', 'summer']);
+    expect(parseTags('cotton, \u200bsummer\u200d ,x')).toEqual([
+      'cotton',
+      '\u200bsummer\u200d',
+      'x',
+    ]);
   });
 });
 
@@ -65,6 +74,35 @@ describe('validate', () => {
     expect(validate(form({ stockQty: '1000001' })).stockQty).toBe('outOfRange');
     expect(validate(form({ sortOrder: '10000' })).sortOrder).toBe('outOfRange');
     expect(validate(form({ weightGrams: '-3' })).weightGrams).toBe('notWhole');
+  });
+  it('reads amounts as a browser number box and Reference do', () => {
+    expect(validate(form({ priceMajor: '1e3' })).priceMajor).toBeUndefined();
+    expect(validate(form({ priceMajor: '.5' })).priceMajor).toBeUndefined();
+    expect(validate(form({ priceMajor: '12.50' })).priceMajor).toBeUndefined();
+    expect(validate(form({ priceMajor: '0.123456789' })).priceMajor).toBe('notNumber');
+    expect(validate(form({ priceMajor: '19.999' })).priceMajor).toBe('notNumber');
+    expect(validate(form({ priceMajor: '1e400' })).priceMajor).toBe('notNumber');
+    expect(validate(form({ priceMajor: '1e7' })).priceMajor).toBe('tooBig');
+    expect(validate(form({ comparePriceMajor: '1e3' })).comparePriceMajor).toBeUndefined();
+    expect(buildInput(form({ priceMajor: '1e3' })).priceMajor).toBe('1000');
+    expect(buildInput(form({ priceMajor: '.5' })).priceMajor).toBe('0.5');
+    expect(buildInput(form({ priceMajor: '12.50' })).priceMajor).toBe('12.50');
+    expect(buildInput(form({ comparePriceMajor: '2e2' })).comparePriceMajor).toBe('200');
+    expect(buildInput(form({ comparePriceMajor: ' ' })).comparePriceMajor).toBeNull();
+  });
+  it('trims text the Reference way before checking and posting it', () => {
+    const f = form({ name: '\u200d Tee\u200b\u200d', description: ' \u200bsoft\u200d ' });
+    expect(buildInput(f).name).toBe('Tee');
+    expect(buildInput(f).description).toBe('soft');
+    expect(validate(form({ name: '\u200b\u200d' })).name).toBe('required');
+    expect(buildInput(form({ category: '\u200dApparel\u200d' })).category).toBe('Apparel');
+  });
+  it('refuses whole numbers with leading zeros, a sign or an exponent', () => {
+    expect(validate(form({ stockQty: '007' })).stockQty).toBe('notWhole');
+    expect(validate(form({ stockQty: '0' })).stockQty).toBeUndefined();
+    expect(validate(form({ stockQty: '1e3' })).stockQty).toBe('notWhole');
+    expect(validate(form({ stockQty: '+5' })).stockQty).toBe('notWhole');
+    expect(validate(form({ sortOrder: '0' })).sortOrder).toBeUndefined();
   });
   it('checks the image urls and the gallery size', () => {
     expect(validate(form({ imageUrl: 'not a url' })).imageUrl).toBe('badUrl');

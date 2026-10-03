@@ -35,6 +35,7 @@ import {
   STATUS_OPTIONS,
   buildInput,
   fieldOfPath,
+  focusFirstInvalid,
   formFromProduct,
   previewCompare,
   previewPrice,
@@ -98,7 +99,10 @@ export function ProductForm({
     e.preventDefault();
     setPicked(true);
     setError(null);
-    if (Object.keys(problems).length > 0) return;
+    if (Object.keys(problems).length > 0) {
+      focusFirstInvalid(Object.keys(problems) as FieldKey[]);
+      return;
+    }
     setBusy(true);
     try {
       const input = buildInput(form);
@@ -112,6 +116,10 @@ export function ProductForm({
     } catch (err) {
       setError(err);
       setBusy(false);
+      const keys = Object.keys(fieldErrors(err))
+        .map(fieldOfPath)
+        .filter((k): k is FieldKey => k !== null);
+      if (keys.length > 0) focusFirstInvalid(keys);
     }
   };
 

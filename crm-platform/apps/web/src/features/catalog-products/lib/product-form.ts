@@ -7,6 +7,8 @@ import {
   PRODUCT_PRICE_MAX,
   PRODUCT_SKU_MAX,
   formatProductMoney,
+  trimLikePhp,
+  trimLikeThreadwise,
   type CreateProductInput,
   type ProductCurrency,
   type ProductResponse,
@@ -122,15 +124,15 @@ export function formFromProduct(p: ProductResponse): ProductForm {
   };
 }
 
-/** "cotton, summer ,, bestseller" becomes three tags: trimmed, blanks dropped, no repeats. */
+/** "cotton, summer ,, bestseller" becomes three tags: trimmed, blanks dropped, exact repeats dropped ("Cotton" and "cotton" stay two, as Reference keeps them). */
 export function parseTags(csv: string): string[] {
   const seen = new Set<string>();
   const out: string[] = [];
-  for (const raw of csv.split(',')) {
-    const tag = raw.trim();
-    const key = tag.toLowerCase();
-    if (tag && !seen.has(key)) {
-      seen.add(key);
+  // the whole box is trimmed the Reference way first, then each part the PHP way (a zero-width character beside a comma stays)
+  for (const raw of trimLikeThreadwise(csv).split(',')) {
+    const tag = trimLikePhp(raw);
+    if (tag && !seen.has(tag)) {
+      seen.add(tag);
       out.push(tag);
     }
   }
@@ -165,8 +167,10 @@ export const PROBLEM_KEYS = [
 export type ProblemKey = (typeof PROBLEM_KEYS)[number];
 export type Problems = Partial<Record<FieldKey, ProblemKey>>;
 
-const AMOUNT = /^\d+(\.\d+)?$/;
-const WHOLE = /^\d+$/;
+/** What the number box takes: digits with an optional fraction, `.5`, and exponent forms such as `1e3` (a browser number box and Reference's numeric rule accept them). */
+const AMOUNT = /^(\d+(\.\d+)?|\.\d+)(e[+-]?\d+)?$/i;
+/** A whole number as Reference's integer rule reads it: no sign, no fraction, no leading zeros. */
+const WHOLE = /^(0|[1-9]\d*)$/;
 
 export function isHttpUrl(value: string): boolean {
   try {
@@ -181,7 +185,11 @@ function amountProblem(value: string, required: boolean): ProblemKey | undefined
   const v = value.trim();
   if (!v) return required ? 'required' : undefined;
   if (!AMOUNT.test(v)) return 'notNumber';
-  if (Number(v) > PRODUCT_PRICE_MAX) return 'tooBig';
+  const n = Number(v);
+  if (!Number.isFinite(n)) return 'notNumber';
+  if (n > PRODUCT_PRICE_MAX) return 'tooBig';
+  // the price boxes step by 0.01: a third decimal is refused, as the browser does on Reference's form
+  if (Math.abs(n * 100 - Math.round(n * 100)) > 1e-6) return 'notNumber';
   return undefined;
 }
 
@@ -199,39 +207,46 @@ export function validate(form: ProductForm): Problems {
   const set = (key: FieldKey, p: ProblemKey | undefined) => {
     if (p) out[key] = p;
   };
-  const name = form.name.trim();
+  const name = trimLikeThreadwise(form.name);
   if (!name) out.name = 'required';
   else if (name.length > PRODUCT_NAME_MAX) out.name = 'tooLong';
-  if (form.sku.trim().length > PRODUCT_SKU_MAX) out.sku = 'tooLong';
-  if (form.description.length > PRODUCT_DESCRIPTION_MAX) out.description = 'tooLong';
-  if (form.bodyHtml.length > PRODUCT_BODY_HTML_MAX) out.bodyHtml = 'tooLong';
-  if (form.category.trim().length > 96) out.category = 'tooLong';
-  if (form.tags.length > 1024) out.tags = 'tooLong';
+  if (trimLikeThreadwise(form.sku).length > PRODUCT_SKU_MAX) out.sku = 'tooLong';
+  if (trimLikeThreadwise(form.description).length > PRODUCT_DESCRIPTION_MAX)
+    out.description = 'tooLong';
+  if (trimLikeThreadwise(form.bodyHtml).length > PRODUCT_BODY_HTML_MAX) out.bodyHtml = 'tooLong';
+  if (trimLikeThreadwise(form.category).length > 96) out.category = 'tooLong';
+  if (trimLikeThreadwise(form.tags).length > 1024) out.tags = 'tooLong';
   set('priceMajor', amountProblem(form.priceMajor, true));
   set('comparePriceMajor', amountProblem(form.comparePriceMajor, false));
   set('stockQty', wholeProblem(form.stockQty, 1_000_000));
   set('weightGrams', wholeProblem(form.weightGrams, 1_000_000));
   set('sortOrder', wholeProblem(form.sortOrder, 9999));
-  const image = form.imageUrl.trim();
+  const image = trimLikeThreadwise(form.imageUrl);
   if (image && (image.length > 1024 || !isHttpUrl(image))) out.imageUrl = 'badUrl';
-  const gallery = form.galleryUrls.map((u) => u.trim()).filter(Boolean);
+  const gallery = form.galleryUrls.map(trimLikeThreadwise).filter(Boolean);
   if (gallery.length > PRODUCT_GALLERY_MAX) out.gallery = 'tooMany';
   else if (gallery.some((u) => u.length > 1024 || !isHttpUrl(u))) out.gallery = 'badUrl';
   return out;
 }
 
 const int = (v: string): number | null => (v.trim() ? Number.parseInt(v.trim(), 10) : null);
-const text = (v: string): string | null => (v.trim() ? v.trim() : null);
+/** `1e3` and `.5` as plain decimals the contract takes ("1000", "0.5"); `12.50` stays as typed. */
+const amount = (v: string): string => {
+  const t = v.trim();
+  return /^\d+(\.\d{1,2})?$/.test(t) ? t : String(Number(t));
+};
+const text = (v: string): string | null => trimLikeThreadwise(v) || null;
 
 /** The request body. Blank optional fields are posted as null so an edit can clear them. */
 export function buildInput(form: ProductForm): CreateProductInput {
   return {
-    name: form.name.trim(),
+    name: trimLikeThreadwise(form.name),
     sku: text(form.sku),
-    description: form.description.trim() ? form.description : null,
-    bodyHtml: form.bodyHtml.trim() ? form.bodyHtml : null,
-    priceMajor: form.priceMajor.trim(),
-    comparePriceMajor: text(form.comparePriceMajor),
+    description: text(form.description),
+    bodyHtml: text(form.bodyHtml),
+    priceMajor: amount(form.priceMajor),
+    comparePriceMajor:
+      text(form.comparePriceMajor) === null ? null : amount(form.comparePriceMajor),
     currencyCode: form.currencyCode as ProductCurrency,
     inStock: form.inStock,
     stockQty: int(form.stockQty),
@@ -241,7 +256,7 @@ export function buildInput(form: ProductForm): CreateProductInput {
     category: text(form.category),
     tags: parseTags(form.tags),
     imageUrl: text(form.imageUrl),
-    galleryUrls: form.galleryUrls.map((u) => u.trim()).filter(Boolean),
+    galleryUrls: form.galleryUrls.map(trimLikeThreadwise).filter(Boolean),
   };
 }
 
@@ -278,6 +293,33 @@ export function previewCompare(
   )
     return null;
   return formatProductMoney(Math.round(compare * 100), form.currencyCode);
+}
+
+/** The element id of each field, and the order they appear in: where focus goes when a submit is refused. */
+const FIELD_IDS: Partial<Record<FieldKey, string>> = {
+  name: 'cat-p-name',
+  sku: 'cat-p-sku',
+  description: 'cat-p-description',
+  bodyHtml: 'cat-p-body',
+  imageUrl: 'cat-p-image',
+  priceMajor: 'cat-p-price',
+  comparePriceMajor: 'cat-p-compare',
+  stockQty: 'cat-p-stock',
+  weightGrams: 'cat-p-weight',
+  sortOrder: 'cat-p-sort',
+  category: 'cat-p-category',
+  tags: 'cat-p-tags',
+};
+
+/** Moves focus to the first of `keys` in screen order (gallery rows have no fixed id and keep the alert line). */
+export function focusFirstInvalid(keys: readonly FieldKey[]): void {
+  if (typeof document === 'undefined') return;
+  for (const [key, id] of Object.entries(FIELD_IDS) as [FieldKey, string][]) {
+    if (keys.includes(key)) {
+      document.getElementById(id)?.focus();
+      return;
+    }
+  }
 }
 
 /** The server's field names to the form's: the API answers `priceMajor`, `galleryUrls.2` and so on. */
