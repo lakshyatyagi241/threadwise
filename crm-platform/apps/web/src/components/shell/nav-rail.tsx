@@ -8,7 +8,7 @@ import { cn } from '@crm/ui';
 import { dirOf } from '@/i18n/locales';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { NavCollapsedContext } from './nav-context';
-import { BrandMark, ChevronIcon, CloseIcon, NavIcon } from './nav-icons';
+import { BrandMark, CloseIcon, NavIcon } from './nav-icons';
 import { railSections, type NavSection } from './nav-model';
 
 /** The Settings group is pinned under the scrolling list, always in reach; everything else scrolls. */
@@ -93,7 +93,7 @@ function PanelItem({
 }
 
 /**
- * Every group with its heading, coming-soon entries included. Used by the pinned panel and the mobile drawer.
+ * Every group with its heading, coming-soon entries included. Used by the mobile drawer.
  * A section is only ever built from items that survived the menu's gates, so a group with nothing visible has no
  * heading (an empty one is skipped here as well).
  */
@@ -168,22 +168,19 @@ interface Tip {
 }
 
 /**
- * The navigation column (light in the light theme, dark in the dark theme): brand at the top, the list (a slim icon rail by default, the grouped
- * panel when pinned open) scrolling in the middle with a thin scrollbar, and a footer that stays put (the workspace
- * card, then the pin button). The pinned choice is remembered per browser by the shell.
+ * The navigation column (light in the light theme, dark in the dark theme): the brand at the top, one icon per menu group scrolling in
+ * the middle (resting on or clicking an icon opens a panel with the group's entries), Settings under the list, and a footer that stays
+ * put (the workspace card, shrunk to its avatar). There is no wide mode: the panels carry the labels. The mobile drawer still lists
+ * every group with its heading.
  */
 export function NavRail({
   sections,
   activeId,
-  pinned,
-  onTogglePinned,
   footer,
 }: {
   sections: readonly NavSection[];
   activeId: string | undefined;
-  pinned: boolean;
-  onTogglePinned: () => void;
-  /** Card under the list (the workspace switcher); it shrinks to its avatar when the rail is slim. */
+  /** Card under the list (the workspace switcher); it shrinks to its avatar. */
   footer?: ReactNode;
 }) {
   const t = useTranslations();
@@ -200,110 +197,39 @@ export function NavRail({
     });
   };
 
-  const toggleLabel = t(pinned ? 'shell.collapseMenu' : 'shell.expandMenu');
   const { main, bottom } = splitBottom(sections);
   return (
-    <aside
-      className={cn(
-        'sticky top-0 hidden h-dvh shrink-0 flex-col border-e border-nav-border bg-nav text-nav-foreground md:flex',
-        'transition-[width] duration-200 motion-reduce:transition-none',
-        pinned ? 'w-64' : 'w-[4.5rem]',
-      )}
-    >
-      <div
-        className={cn(
-          'flex h-14 shrink-0 items-center border-b border-nav-border',
-          pinned ? 'px-4' : 'justify-center',
-        )}
-      >
-        <PanelBrand collapsed={!pinned} />
-        {pinned && (
-          <div className="ms-auto">
-            <>
-              <button
-                type="button"
-                onClick={() => {
-                  setTip(null);
-                  onTogglePinned();
-                }}
-                aria-expanded={pinned}
-                aria-label={toggleLabel}
-                title={pinned ? undefined : toggleLabel}
-                className={cn(
-                  'flex items-center gap-3 rounded-xl text-sm text-nav-muted outline-none transition',
-                  'hover:bg-nav-hover hover:text-nav-active-foreground focus-visible:ring-2 focus-visible:ring-nav-ring',
-                  'size-9 justify-center',
-                )}
-              >
-                <ChevronIcon dir={pinned === rtl ? 'right' : 'left'} className="size-[18px]" />
-              </button>
-            </>
-          </div>
-        )}
+    <aside className="sticky top-0 hidden h-dvh w-[4.5rem] shrink-0 flex-col border-e border-nav-border bg-nav text-nav-foreground md:flex">
+      <div className="flex h-14 shrink-0 items-center justify-center border-b border-nav-border">
+        <PanelBrand collapsed />
       </div>
-      {!pinned && (
-        <div className="flex shrink-0 justify-center border-b border-nav-border py-2">
-          <>
-            <button
-              type="button"
-              onClick={() => {
-                setTip(null);
-                onTogglePinned();
-              }}
-              aria-expanded={pinned}
-              aria-label={toggleLabel}
-              title={pinned ? undefined : toggleLabel}
-              className={cn(
-                'flex items-center gap-3 rounded-xl text-sm text-nav-muted outline-none transition',
-                'hover:bg-nav-hover hover:text-nav-active-foreground focus-visible:ring-2 focus-visible:ring-nav-ring',
-                'size-9 justify-center',
-              )}
-            >
-              <ChevronIcon dir={pinned === rtl ? 'right' : 'left'} className="size-[18px]" />
-            </button>
-          </>
-        </div>
-      )}
       <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-        {pinned ? (
-          <NavPanel sections={main} activeId={activeId} />
-        ) : (
-          <RailGroups
-            sections={main}
-            activeId={activeId}
-            show={show}
-            hide={() => setTip(null)}
-            rtl={rtl}
-          />
-        )}
+        <RailGroups
+          sections={main}
+          activeId={activeId}
+          show={show}
+          hide={() => setTip(null)}
+          rtl={rtl}
+        />
       </div>
       {bottom.length > 0 && (
         <nav
           aria-label={t('shell.settings')}
-          className={cn(
-            'shrink-0 border-t border-nav-border',
-            pinned ? 'space-y-0.5 px-3 py-2' : 'flex flex-col items-center gap-1 px-2 py-2',
-          )}
+          className="flex shrink-0 flex-col items-center gap-1 border-t border-nav-border px-2 py-2"
         >
-          {bottom.map((item) =>
-            pinned ? (
-              <PanelItem key={item.id} item={item} active={item.id === activeId} t={t} />
-            ) : (
-              <RailLink
-                key={item.id}
-                item={item}
-                active={item.id === activeId}
-                show={show}
-                hide={() => setTip(null)}
-              />
-            ),
-          )}
+          {bottom.map((item) => (
+            <RailLink
+              key={item.id}
+              item={item}
+              active={item.id === activeId}
+              show={show}
+              hide={() => setTip(null)}
+            />
+          ))}
         </nav>
       )}
       <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
-        {footer && (
-          <NavCollapsedContext.Provider value={!pinned}>{footer}</NavCollapsedContext.Provider>
-        )}
+        {footer && <NavCollapsedContext.Provider value>{footer}</NavCollapsedContext.Provider>}
       </div>
       {/* Portalled to <body>: inside the aside the page content would paint over the label. */}
       {tip &&
