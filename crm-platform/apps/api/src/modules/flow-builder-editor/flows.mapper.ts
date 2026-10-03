@@ -1,6 +1,7 @@
 import {
   flowState,
   flbGraphStats,
+  flbPreviewLabel,
   type FlowDetail,
   type FlowFeatured,
   type FlowGraph,
@@ -44,7 +45,11 @@ export function toFeatured(row: FlowRow): FlowFeatured {
     steps: stats.nodes,
     messages: stats.messages,
     waitMinutes: stats.waitMinutes,
-    preview: graph.flowNodes.slice(0, 4).map((n) => ({ type: n.type })),
+    // Reference previews the first four nodes that have a type, each with its own label.
+    preview: graph.flowNodes
+      .filter((n) => n.type)
+      .slice(0, 4)
+      .map((n) => ({ type: n.type, label: flbPreviewLabel(n) })),
   };
 }
 
@@ -55,7 +60,11 @@ export function flowEventPayload(row: FlowRow): Record<string, unknown> {
     name: row.name,
     flowType: row.flowType,
     state: flowState(row),
+    isPublished: row.isPublished,
+    isActive: row.isActive,
     triggerKind: row.triggerKind,
+    triggerChannelId: row.triggerChannelId,
+    provider: row.provider,
     nodeCount: row.nodeCount,
   };
 }

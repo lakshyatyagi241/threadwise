@@ -79,14 +79,11 @@ const isRecord = (v: unknown): v is Record<string, unknown> =>
  * `flow_type` outside the ten channels falls back to chat. The graph is normalised (ids, defaults, grid positions for nodes
  * that have none, one start node). `suffix` is appended to the name: ` (imported)`.
  */
-export function parseImportPayload(raw: unknown, opts: { suffix?: string } = {}): ParsedImport {
+export function parseImportPayload(raw: unknown, opts: { suffix?: string; brand?: string } = {}): ParsedImport {
+  // Reference: "This is not a valid <brand> flow export."
+  const message = `This is not a valid ${opts.brand ? `${opts.brand} ` : ''}flow export.`;
   const invalid = () =>
-    new AppError(
-      ERROR_CODES.FLB_IMPORT_INVALID,
-      'This is not a valid flow export.',
-      422,
-      [{ path: 'file', message: 'This is not a valid flow export.' }],
-    );
+    new AppError(ERROR_CODES.FLB_IMPORT_INVALID, message, 422, [{ path: 'file', message }]);
   if (!isRecord(raw)) throw invalid();
 
   const wrapped = FLOW_EXPORT_MARKER in raw || isRecord(raw.flow_data);
@@ -122,4 +119,15 @@ export function triggerLabel(kind: string): string {
     default:
       return 'Keyword';
   }
+}
+
+/** `<slug>.threadwise-flow.json`, the download name Reference's export uses (a name with no letters or digits falls back to `flow-<id>`). */
+export function flowExportFileName(name: string, fallbackId: string): string {
+  const slug = name
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `${slug || `flow-${fallbackId}`}.threadwise-flow.json`;
 }

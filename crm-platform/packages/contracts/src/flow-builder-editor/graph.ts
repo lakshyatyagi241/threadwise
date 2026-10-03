@@ -91,12 +91,17 @@ export function flbNormalizeGraph(
     const nx = Number(nd.x);
     const ny = Number(nd.y);
     const pos = fallback === 'grid' ? flbGridPosition(i) : fallback;
+    const data = { ...flbDefaultNodeData(type), ...(isRecord(nd.data) ? nd.data : {}) };
+    // A legacy Trigger carries `triggerMode` (TW-FLB-020 rule 4); the default `keywordMode` must not hide it.
+    if (type === 'trigger' && isRecord(nd.data) && nd.data.keywordMode === undefined && nd.data.triggerMode !== undefined) {
+      data.keywordMode = nd.data.triggerMode;
+    }
     return {
       id,
       type,
       x: Number.isFinite(nx) ? nx : pos.x,
       y: Number.isFinite(ny) ? ny : pos.y,
-      data: { ...flbDefaultNodeData(type), ...(isRecord(nd.data) ? nd.data : {}) },
+      data,
       isStart: !!nd.isStart,
     };
   });
@@ -174,11 +179,12 @@ export function flbGraphStats(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges'>)
   for (const n of graph.flowNodes) {
     if (MESSAGE_TYPES.has(n.type)) messages++;
     if (n.type === 'delay') {
-      const amount = Number(n.data.amount) || 0;
+      // PHP `(int)` cast and an exact `match` on the unit: any other spelling counts as minutes, as Reference does.
+      const amount = Math.trunc(Number(n.data.amount)) || 0;
       const unit = String(n.data.unit ?? 'min');
-      if (unit === 'sec' || unit === 's') waitMinutes += Math.max(1, Math.floor(amount / 60));
-      else if (unit === 'hour' || unit === 'h' || unit === 'hours') waitMinutes += amount * 60;
-      else if (unit === 'day' || unit === 'd' || unit === 'days') waitMinutes += amount * 1440;
+      if (unit === 'sec') waitMinutes += Math.max(1, Math.floor(amount / 60));
+      else if (unit === 'hour') waitMinutes += amount * 60;
+      else if (unit === 'day') waitMinutes += amount * 1440;
       else waitMinutes += amount;
     }
   }
@@ -191,4 +197,52 @@ export function flbWaitLabel(minutes: number): string {
   if (minutes < 60) return `~${Math.round(minutes)} min`;
   const h = Math.round((minutes / 60) * 10) / 10;
   return `~${h} h total`;
+}
+
+// --- featured card mini preview (TW-FLB-002) -----------------------------------------------------------------------------
+
+/** Reference's `??`: a missing or null key falls back; an empty string does not. */
+const orElse = (v: unknown, fallback: string): string => (v === undefined || v === null ? fallback : String(v));
+
+/** `Str::limit($s, 28)`: cut at 28 characters, trim the right edge, add "...". */
+const limit28 = (s: string): string => (s.length <= 28 ? s : `${s.slice(0, 28).trimEnd()}...`);
+
+/**
+ * The text of one node in the featured card's mini preview, built from the node's data the way Reference's card does. QUIRK kept:
+ * the Condition label reads the legacy `var` / `op` / `value` fields, so a condition in the current shape reads "If value == ".
+ */
+export function flbPreviewLabel(node: { type: string; data?: Record<string, unknown> }): string {
+  const d = node.data ?? {};
+  switch (node.type) {
+    case 'trigger':
+      return `Trigger / ${orElse(d.kind, 'manual')}`;
+    case 'message':
+      return limit28(orElse(d.text, 'Send message'));
+    case 'template':
+      return `Send template ${orElse(d.tpl, '')}`;
+    case 'media':
+      return `Send ${orElse(d.kind, 'media')}`;
+    case 'buttons':
+      return 'Quick replies';
+    case 'list':
+      return 'List message';
+    case 'ask':
+      return limit28(orElse(d.prompt, 'Ask'));
+    case 'condition':
+      return `If ${orElse(d.var, 'value')} ${orElse(d.op, '==')} ${orElse(d.value, '')}`;
+    case 'delay':
+      return `Wait ${orElse(d.amount, '?')} ${orElse(d.unit, 'min')}`;
+    case 'webhook':
+      return `Webhook ${orElse(d.method, 'POST')}`;
+    case 'ai':
+      return `AI ${orElse(d.model, '')}`;
+    case 'tag':
+      return `Tag: ${orElse(d.action, 'add')} ${orElse(d.tag, '')}`;
+    case 'assign':
+      return `Assign to ${orElse(d.team, 'team')}`;
+    case 'end':
+      return 'End flow';
+    default:
+      return node.type.charAt(0).toUpperCase() + node.type.slice(1);
+  }
 }

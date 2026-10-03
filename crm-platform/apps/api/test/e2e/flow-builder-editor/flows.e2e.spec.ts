@@ -4,6 +4,7 @@ import { FLOW_AI_PORT } from '../../../src/infra/providers/flow-builder-editor/f
 import type { HttpFlowAiAdapter } from '../../../src/infra/providers/flow-builder-editor/http-flow-ai.adapter';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import { FlowReaderService } from '../../../src/modules/flow-builder-editor';
+import { FlowTriggerService } from '../../../src/modules/flow-runtime-engine';
 import { OPERATOR_EMAIL, OPERATOR_PASSWORD } from '../auth-registration-security/harness';
 import {
   Api,
@@ -417,10 +418,10 @@ describe('save, versions, trigger columns and publish (TW-FLB-019, 020, 021, 022
     expect(await api.auditCount(o.orgId, 'flows', 'insert')).toBe(1);
     expect(await api.auditCount(o.orgId, 'flows', 'update')).toBeGreaterThanOrEqual(3);
     expect(await api.auditCount(o.orgId, 'flows', 'delete')).toBe(1);
-    for (const ev of ['created', 'updated', 'published', 'paused', 'deleted']) {
-      expect((await api.events(o.orgId, `flb.flow.${ev}`)).length, ev).toBe(1);
+    for (const ev of ['created', 'saved', 'published', 'paused', 'deleted']) {
+      expect((await api.events(o.orgId, `flow.${ev}`)).length, ev).toBe(1);
     }
-    const created = (await api.events(o.orgId, 'flb.flow.created'))[0]!;
+    const created = (await api.events(o.orgId, 'flow.created'))[0]!;
     expect(created).toMatchObject({ name: 'Audited', flowType: 'chat', nodeCount: 2 });
     expect(JSON.stringify(created)).not.toContain('hello');
   });
@@ -735,6 +736,9 @@ describe('builder context (TW-FLB-014, 026)', () => {
 
   it('TW-FLB-026 #2: the AI model list is the active admin keys\' models, and a workspace key replaces that provider\'s admin models with the fixed set', async () => {
     const o = await api.signup('flbai');
+    // main seeds platform keys and keeps one row per provider: set them aside, run on the fixture, put them back.
+    const stashed = (await h.owner.query(`SELECT coalesce(jsonb_agg(to_jsonb(k)), '[]'::jsonb) AS rows FROM admin_ai_keys k`)).rows[0].rows;
+    await h.owner.query(`DELETE FROM admin_ai_keys`);
     await h.owner.query(
       `INSERT INTO admin_ai_keys (provider, name, api_key, default_model, extra_config, is_active, sort_order) VALUES
         ('openai','OpenAI','sk-admin','gpt-4o-mini','{"models":["gpt-4o","gpt-4o-mini"]}',true,1),
@@ -759,6 +763,7 @@ describe('builder context (TW-FLB-014, 026)', () => {
     expect(JSON.stringify(res)).not.toContain('sk-admin');
     expect(JSON.stringify(res)).not.toContain('sk-mine');
     await h.owner.query(`DELETE FROM admin_ai_keys`);
+    await h.owner.query(`INSERT INTO admin_ai_keys SELECT * FROM jsonb_populate_recordset(NULL::admin_ai_keys, $1::jsonb)`, [JSON.stringify(stashed)]);
   });
 
   it('TW-FLB-052: commerce products come from the workspace catalogue, filtered by provider and name', async () => {
@@ -917,7 +922,8 @@ describe('media upload (TW-FLB-027)', () => {
 
   it('TW-FLB-027 #3: a file over 50 MB is refused before it is stored', async () => {
     const res = await api.as(t.admin).post('/v2/flows/upload-media').field('type', 'video').attach('file', Buffer.alloc(51 * 1024 * 1024 + 1, 1), 'big.mp4');
-    expect(res.status).toBe(413);
+    expect(res.status).toBe(422);
+    expect(res.body.detail).toBe('The file may not be greater than 51200 kilobytes.');
   });
 
   it('the public media path serves only the exact shape and 404s anything else', async () => {
@@ -969,6 +975,462 @@ describe('the runtime seam (TW-FLB-070, 071)', () => {
     expect(mine.map((x) => x.id)).toEqual([a.id]);
     expect(await reader.listEnrollable(o.orgId, 'contact_created', 0)).toEqual([]);
     expect(await reader.getRunnableFlow(o.orgId, a.id)).toBeNull();
+  });
+});
+
+/**
+ * One named test per acceptance criterion of TW-FLB-019, 020, 021, 022, 028 and 029 (the numbered "#n" is the position in the
+ * inventory's list). The runtime half of 021 runs against FLR's real keyword matcher: the editor writes flows, the runtime
+ * reads them, nothing in between.
+ */
+describe('acceptance: save, trigger columns, keyword matching, publish, gates, persistence (TW-FLB-019..022, 028, 029)', () => {
+  let t: Tenant;
+  const sql = (q: string, p: unknown[] = []) => h.owner.query(q, p);
+  const col = async (flowUuid: string, c: string) =>
+    (await sql(`SELECT ${c} AS v FROM flows WHERE uuid = $1`, [flowUuid])).rows[0].v;
+  const device = async (orgId: number, name = 'Phone') =>
+    (await sql(`INSERT INTO devices (org_id, device_name, phone_number, status) VALUES ($1,$2,'+15550009','connected') RETURNING id, uuid`, [orgId, name])).rows[0] as { id: string; uuid: string };
+  const qrChannel = async (orgId: number, deviceUuid: string) =>
+    Number((await sql(`INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1,'whatsapp_qr','Phone','connected',$2) RETURNING id`, [orgId, deviceUuid])).rows[0].id);
+  const triggers = () => h.app.get(FlowTriggerService, { strict: false });
+
+  beforeAll(async () => {
+    t = await api.signup('flbacc');
+  });
+
+  // --- TW-FLB-019 -------------------------------------------------------------------------------------------------
+
+  it('TW-FLB-019 #1: Save of a new flow answers a draft row (is_published=false, is_active=true) and the second Save updates the same row', async () => {
+    const o = await api.signup('flb19a');
+    const f = await create(o.admin, 'Welcome');
+    expect(await col(f.id, 'is_published')).toBe(false);
+    expect(await col(f.id, 'is_active')).toBe(true);
+    expect((await api.as(o.admin).put(`/v2/flows/${f.id}`).send({ name: 'Welcome', graph: simpleGraph(), rowVersion: f.rowVersion })).body.id).toBe(f.id);
+    expect((await sql(`SELECT count(*)::int AS n FROM flows WHERE org_id = $1`, [o.orgId])).rows[0].n).toBe(1);
+  });
+
+  it('TW-FLB-019 #2: at the plan limit creating is 422 with the exact plan message and no row; editing the same flow succeeds', async () => {
+    const o = await api.signup('flb19b');
+    const a = await create(o.admin, 'L1');
+    await setLimit(o.orgId, 1);
+    const blocked = await api.as(o.admin).post('/v2/flows').send({ name: 'L2', graph: simpleGraph() });
+    expect(blocked.status).toBe(422);
+    expect(blocked.body.detail).toBe(
+      "You've reached your plan's limit of 1 flows. Upgrade your plan to add more, or delete an existing one to free up space.",
+    );
+    expect((await sql(`SELECT count(*)::int AS n FROM flows WHERE org_id = $1`, [o.orgId])).rows[0].n).toBe(1);
+    expect((await api.as(o.admin).put(`/v2/flows/${a.id}`).send({ name: 'L1b', graph: simpleGraph(), rowVersion: a.rowVersion })).status).toBe(200);
+  });
+
+  it('TW-FLB-019 #3: a 300-character keyword trigger is 422 with the length message, and (deliberate fix) nothing is written: row, audit and outbox are untouched', async () => {
+    const o = await api.signup('flb19c');
+    const f = await create(o.admin, 'Long');
+    const before = (await sql(`SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1`, [o.orgId])).rows[0].n;
+    const res = await api.as(o.admin).put(`/v2/flows/${f.id}`).send({
+      name: 'Long 2', graph: { flowNodes: [trigger({ keywords: 'k'.repeat(300) })], flowEdges: [] }, rowVersion: f.rowVersion,
+    });
+    expect(res.status).toBe(422);
+    expect(res.body.detail).toContain('Trigger keyword is too long (300 characters; the limit is 255).');
+    expect(await col(f.id, 'flow_name')).toBe('Long');
+    expect((await sql(`SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1`, [o.orgId])).rows[0].n).toBe(before);
+    expect(await api.events(o.orgId, 'flow.saved')).toHaveLength(0);
+  });
+
+  it('TW-FLB-019 #4: a flow id from another workspace is 404 on save, publish and delete, and the other workspace\'s flow is unchanged', async () => {
+    const a = await api.signup('flb19d1');
+    const b = await api.signup('flb19d2');
+    const theirs = await create(b.admin, 'Theirs');
+    const put = await api.as(a.admin).put(`/v2/flows/${theirs.id}`).send({ name: 'Mine now', graph: simpleGraph(), rowVersion: 1 });
+    expect(put.status).toBe(404);
+    expect((await api.as(a.admin).post(`/v2/flows/${theirs.id}/publish`)).status).toBe(404);
+    expect((await api.as(a.admin).delete(`/v2/flows/${theirs.id}`)).status).toBe(404);
+    expect(await col(theirs.id, 'flow_name')).toBe('Theirs');
+  });
+
+  it('TW-FLB-019 rules 2/4/6: a category cannot be cleared by a save, flow_type falls back to the stored one, an unknown flow_type is 422, a category over 64 is 422', async () => {
+    const o = await api.signup('flb19e');
+    const f = await create(o.admin, 'Typed', simpleGraph(), { category: 'Sales', flowType: 'telegram' });
+    expect(f).toMatchObject({ category: 'Sales', flowType: 'telegram' });
+    const again = await api.as(o.admin).put(`/v2/flows/${f.id}`).send({ name: 'Typed', graph: simpleGraph(), rowVersion: f.rowVersion });
+    expect(again.body).toMatchObject({ category: 'Sales', flowType: 'telegram' });
+    expect((await create(o.admin, 'Default type')).flowType).toBe('chat');
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'x', graph: simpleGraph(), flowType: 'sms' })).status).toBe(422);
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'x', graph: simpleGraph(), category: 'c'.repeat(65) })).status).toBe(422);
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'x', graph: simpleGraph(), category: 'c'.repeat(64) })).status).toBe(201);
+  });
+
+  it('TW-FLB-019: the graph is stored under flowNodes / flowEdges / vars and the variables survive a save and a reload', async () => {
+    const o = await api.signup('flb19f');
+    const graph = { ...simpleGraph(), vars: [{ name: 'city', desc: 'Where', default: 'Pune' }] };
+    const f = await create(o.admin, 'Vars', graph);
+    const stored = await col(f.id, 'flow_data');
+    expect(Object.keys(stored).sort()).toEqual(['flowEdges', 'flowNodes', 'vars']);
+    expect(stored.vars).toEqual([{ name: 'city', desc: 'Where', default: 'Pune' }]);
+    const reload = (await api.as(o.admin).get(`/v2/flows/${f.id}`)).body;
+    expect(reload.graph.vars).toEqual(stored.vars);
+    expect(reload.graph.flowEdges).toEqual(stored.flowEdges);
+  });
+
+  // --- TW-FLB-020 -------------------------------------------------------------------------------------------------
+
+  it('TW-FLB-020 #1: {kind: tag_added, tagId, deviceId: waba:<n>} stores trigger_kind, trigger_value, provider=waba and the sender row, and the channel the runtime reads', async () => {
+    const o = await api.signup('flb20a');
+    const tagUuid = (await api.as(o.admin).post('/v2/tags').send({ name: 'vip' })).body.id as string;
+    const tagId = (await sql(`SELECT id FROM tags WHERE uuid = $1`, [tagUuid])).rows[0].id;
+    const cfg = (await sql(`INSERT INTO wa_provider_configs (org_id, provider, status, phone_number) VALUES ($1,'waba','connected','+15550003') RETURNING id, uuid`, [o.orgId])).rows[0];
+    const ch = Number((await sql(`INSERT INTO channels (org_id, kind, name, status, waba_config_id) VALUES ($1,'whatsapp_cloud','Cloud','connected',$2) RETURNING id`, [o.orgId, cfg.id])).rows[0].id);
+    const f = await create(o.admin, 'Tagged', { flowNodes: [trigger({ kind: 'tag_added', tagId: tagUuid, deviceId: `waba:${cfg.uuid}` })], flowEdges: [] });
+    const row = (await sql(`SELECT trigger_kind, trigger_value, trigger_device_id, trigger_channel_id, provider FROM flows WHERE uuid = $1`, [f.id])).rows[0];
+    expect(row.trigger_kind).toBe('tag_added');
+    expect(Number(row.trigger_value)).toBe(Number(tagId));
+    expect(Number(row.trigger_device_id)).toBe(Number(cfg.id));
+    expect(Number(row.trigger_channel_id)).toBe(ch);
+    expect(row.provider).toBe('waba');
+  });
+
+  it('TW-FLB-020 #2: {kind: keyword, keywordMode: any} stores trigger_keywords = any (the legacy triggerMode spelling too)', async () => {
+    const o = await api.signup('flb20b');
+    const a = await create(o.admin, 'Any 1', { flowNodes: [trigger({ keywordMode: 'any' })], flowEdges: [] });
+    const b = await create(o.admin, 'Any 2', { flowNodes: [trigger({ triggerMode: 'any' })], flowEdges: [] });
+    expect(await col(a.id, 'trigger_keywords')).toBe('any');
+    expect(await col(b.id, 'trigger_keywords')).toBe('any');
+    const kw = await create(o.admin, 'Kw', { flowNodes: [trigger({ keywords: '  price, cost  ' })], flowEdges: [] });
+    expect(await col(kw.id, 'trigger_keywords')).toBe('price, cost');
+    const blank = await create(o.admin, 'Blank', { flowNodes: [trigger({ keywords: '   ' })], flowEdges: [] });
+    expect(await col(blank.id, 'trigger_keywords')).toBeNull();
+  });
+
+  it('TW-FLB-020 #3: value-less event triggers store trigger_value = 0 (contact_created, opt_in, order_placed, away, out_of_hours, comment_to_dm); manual_enroll stores null', async () => {
+    const o = await api.signup('flb20c');
+    for (const kind of ['contact_created', 'opt_in', 'order_placed', 'away', 'out_of_hours', 'comment_to_dm']) {
+      const f = await create(o.admin, kind, { flowNodes: [trigger({ kind })], flowEdges: [] });
+      expect(Number(await col(f.id, 'trigger_value')), kind).toBe(0);
+    }
+    const m = await create(o.admin, 'Manual', { flowNodes: [trigger({ kind: 'manual_enroll' })], flowEdges: [] });
+    expect(await col(m.id, 'trigger_value')).toBeNull();
+    expect(await col(m.id, 'trigger_keywords')).toBeNull();
+  });
+
+  it('TW-FLB-020 #4: {kind: nonsense} stores trigger_kind = keyword; a graph without a Trigger saves as keyword with no keywords; the FIRST Trigger node wins', async () => {
+    const o = await api.signup('flb20d');
+    const n = await create(o.admin, 'Nonsense', { flowNodes: [trigger({ kind: 'nonsense' })], flowEdges: [] });
+    expect(await col(n.id, 'trigger_kind')).toBe('keyword');
+    const none = await create(o.admin, 'No trigger', { flowNodes: [{ id: 'm', type: 'message', x: 0, y: 0, data: { text: 'x' } }], flowEdges: [] });
+    expect(await col(none.id, 'trigger_kind')).toBe('keyword');
+    expect(await col(none.id, 'trigger_keywords')).toBeNull();
+    const two = await create(o.admin, 'Two', { flowNodes: [{ ...trigger({ kind: 'opt_in' }), id: 't1' }, { ...trigger({ kind: 'away' }), id: 't2' }], flowEdges: [] });
+    expect(await col(two.id, 'trigger_kind')).toBe('opt_in');
+  });
+
+  it('TW-FLB-020 rule 3 / port: an unofficial device resolves to its whatsapp_qr channel (trigger_channel_id), another workspace\'s never does, a blank sender stores null and the next save re-derives it', async () => {
+    const o = await api.signup('flb20e');
+    const other = await api.signup('flb20f');
+    const d = await device(o.orgId);
+    const ch = await qrChannel(o.orgId, d.uuid);
+    const theirs = await device(other.orgId, 'Theirs');
+    await qrChannel(other.orgId, theirs.uuid);
+
+    const f = await create(o.admin, 'Pinned', { flowNodes: [trigger({ deviceId: `baileys:${d.uuid}` })], flowEdges: [] });
+    expect(Number(await col(f.id, 'trigger_channel_id'))).toBe(ch);
+    expect(await col(f.id, 'provider')).toBe('baileys');
+
+    const foreign = await create(o.admin, 'Foreign', { flowNodes: [trigger({ deviceId: `baileys:${theirs.uuid}` })], flowEdges: [] });
+    expect(await col(foreign.id, 'trigger_channel_id')).toBeNull();
+    expect(await col(foreign.id, 'trigger_device_id')).toBeNull();
+
+    const cleared = await api.as(o.admin).put(`/v2/flows/${f.id}`).send({ name: 'Pinned', graph: { flowNodes: [trigger({ deviceId: '' })], flowEdges: [] }, rowVersion: f.rowVersion });
+    expect(cleared.status).toBe(200);
+    expect(await col(f.id, 'trigger_channel_id')).toBeNull();
+    expect(await col(f.id, 'trigger_device_id')).toBeNull();
+    expect(await col(f.id, 'provider')).toBe('baileys'); // a blank sender leaves the engine stamp alone
+  });
+
+  it('TW-FLB-020 rule 1: an unknown engine prefix (unofficial:<id>) sets neither the sender nor the provider', async () => {
+    const o = await api.signup('flb20g');
+    const d = await device(o.orgId);
+    const f = await create(o.admin, 'Unofficial', { flowNodes: [trigger({ deviceId: `unofficial:${d.uuid}` })], flowEdges: [] });
+    expect(await col(f.id, 'trigger_device_id')).toBeNull();
+    expect(await col(f.id, 'trigger_channel_id')).toBeNull();
+    expect(await col(f.id, 'provider')).toBe('baileys');
+  });
+
+  // --- TW-FLB-021 (the runtime reads the flow row itself: no synthetic auto-reply rows) ---------------------------------
+
+  it('TW-FLB-021 #1: a published+active WhatsApp flow with keywords "price, cost" and a number pinned starts on those words only on that channel; pausing and deleting stop it', async () => {
+    const o = await api.signup('flb21a');
+    const d = await device(o.orgId);
+    const ch = await qrChannel(o.orgId, d.uuid);
+    const otherCh = await qrChannel(o.orgId, (await device(o.orgId, 'Second')).uuid);
+    const f = await create(o.admin, 'Pricing', { flowNodes: [trigger({ keywords: 'price, cost', deviceId: `baileys:${d.uuid}` })], flowEdges: [] });
+    const id = Number((await sql(`SELECT id FROM flows WHERE uuid = $1`, [f.id])).rows[0].id);
+
+    expect(await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'price please')).toBeNull(); // still a draft
+    await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    expect((await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'What is the PRICE?'))?.id).toBe(id);
+    expect(await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'hello')).toBeNull();
+    expect(await triggers().keywordFlow(o.orgId, otherCh, 'whatsapp_qr', 'price')).toBeNull(); // pinned to the other number
+    await api.as(o.admin).post(`/v2/flows/${f.id}/toggle`);
+    expect(await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'price')).toBeNull();
+    await api.as(o.admin).post(`/v2/flows/${f.id}/toggle`);
+    expect((await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'cost'))?.id).toBe(id);
+    await api.as(o.admin).delete(`/v2/flows/${f.id}`);
+    expect(await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'cost')).toBeNull();
+  });
+
+  it('TW-FLB-021 #2: keywordMode any is the catch-all tier: it answers only when no keyword flow matched, and the legacy * .* .+ spellings work the same', async () => {
+    const o = await api.signup('flb21b');
+    const d = await device(o.orgId);
+    const ch = await qrChannel(o.orgId, d.uuid);
+    const sender = `baileys:${d.uuid}`;
+    const mk = async (name: string, data: Record<string, unknown>) => {
+      const f = await create(o.admin, name, { flowNodes: [trigger({ deviceId: sender, ...data })], flowEdges: [] });
+      await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+      return Number((await sql(`SELECT id FROM flows WHERE uuid = $1`, [f.id])).rows[0].id);
+    };
+    const catchAll = await mk('Default route', { keywordMode: 'any' });
+    expect((await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'anything at all'))?.id).toBe(catchAll);
+    const book = await mk('Book', { keywords: 'book' });
+    expect((await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'I want to book'))?.id).toBe(book);
+    expect((await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'weather?'))?.id).toBe(catchAll);
+    for (const spelling of ['*', '.*', '.+']) {
+      const o2 = await api.signup('flb21c');
+      const d2 = await device(o2.orgId);
+      const ch2 = await qrChannel(o2.orgId, d2.uuid);
+      const f = await create(o2.admin, `Legacy ${spelling}`, { flowNodes: [trigger({ keywords: spelling, deviceId: `baileys:${d2.uuid}` })], flowEdges: [] });
+      await api.as(o2.admin).post(`/v2/flows/${f.id}/publish`);
+      expect(await triggers().keywordFlow(o2.orgId, ch2, 'whatsapp_qr', 'hi there'), spelling).not.toBeNull();
+    }
+  });
+
+  it('TW-FLB-021 #3: a Facebook flow gets no auto-reply row (none is ever written: the runtime reads the flow itself)', async () => {
+    const o = await api.signup('flb21d');
+    await create(o.admin, 'FB', { flowNodes: [trigger({ keywords: 'hi' })], flowEdges: [] }, { flowType: 'facebook' });
+    expect((await sql(`SELECT count(*)::int AS n FROM keyword_replies WHERE org_id = $1`, [o.orgId])).rows[0].n).toBe(0);
+  });
+
+  it('TW-FLB-021 #4: a 300-character keyword is refused with the length message on a WhatsApp flow, but not on Instagram, Facebook, TikTok, Telegram or Email flows (Reference skipped the rule sync for those); a long catch-all-free comment_to_dm list is never checked', async () => {
+    const o = await api.signup('flb21e');
+    const long = { flowNodes: [trigger({ keywords: 'k'.repeat(300) })], flowEdges: [] };
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'wa', graph: long })).status).toBe(422);
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'call', graph: long, flowType: 'call' })).status).toBe(422);
+    for (const flowType of ['instagram', 'facebook', 'tiktok', 'telegram', 'email']) {
+      expect((await api.as(o.admin).post('/v2/flows').send({ name: flowType, graph: long, flowType })).status, flowType).toBe(201);
+    }
+    const chars = { flowNodes: [trigger({ keywords: '😀'.repeat(255) })], flowEdges: [] };
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'emoji', graph: chars })).status).toBe(201); // characters, not UTF-16 units
+  });
+
+  it('TW-FLB-021: an Import, Duplicate or Clone whose keyword text is too long is a 422 with the same message (Reference answered 500)', async () => {
+    const o = await api.signup('flb21f');
+    const res = await api.as(o.admin).post('/v2/flows/import').send({ payload: { flowNodes: [trigger({ keywords: 'k'.repeat(300) })], flowEdges: [] } });
+    expect(res.status).toBe(422);
+    expect(code(res)).toBe('FLB_TRIGGER_KEYWORDS_TOO_LONG');
+  });
+
+  // --- TW-FLB-022 -------------------------------------------------------------------------------------------------
+
+  it('TW-FLB-022 #1: Publish on a saved draft sets is_published and published_at, the pill reads live and the keyword flow becomes matchable', async () => {
+    const o = await api.signup('flb22a');
+    const d = await device(o.orgId);
+    const ch = await qrChannel(o.orgId, d.uuid);
+    const f = await create(o.admin, 'Pub', { flowNodes: [trigger({ keywords: 'hello', deviceId: `baileys:${d.uuid}` })], flowEdges: [] });
+    expect(await col(f.id, 'published_at')).toBeNull();
+    const pub = await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    expect(pub.body).toMatchObject({ state: 'live', isPublished: true });
+    expect(await col(f.id, 'published_at')).not.toBeNull();
+    expect(await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'hello')).not.toBeNull();
+  });
+
+  it('TW-FLB-022 #4: Unpublish sets is_published=false, clears published_at and the flow stops matching', async () => {
+    const o = await api.signup('flb22b');
+    const d = await device(o.orgId);
+    const ch = await qrChannel(o.orgId, d.uuid);
+    const f = await create(o.admin, 'Unpub', { flowNodes: [trigger({ keywords: 'hello', deviceId: `baileys:${d.uuid}` })], flowEdges: [] });
+    await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    const un = await api.as(o.admin).post(`/v2/flows/${f.id}/unpublish`);
+    expect(un.body).toMatchObject({ state: 'draft', isPublished: false, publishedAt: null });
+    expect(await col(f.id, 'published_at')).toBeNull();
+    expect(await triggers().keywordFlow(o.orgId, ch, 'whatsapp_qr', 'hello')).toBeNull();
+  });
+
+  it('TW-FLB-022 #3: a brand-new graph that is saved and then published leaves exactly one flow row, published (Reference created two)', async () => {
+    const o = await api.signup('flb22c');
+    const f = await create(o.admin, 'Fresh');
+    await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    const rows = (await sql(`SELECT is_published FROM flows WHERE org_id = $1`, [o.orgId])).rows;
+    expect(rows).toEqual([{ is_published: true }]);
+  });
+
+  it('TW-FLB-022 rule 2/5: publish does not re-validate the graph, keeps the trigger columns, and an edit of a published flow stays live on Save; publish is 404 for another workspace\'s flow', async () => {
+    const o = await api.signup('flb22d');
+    const f = await create(o.admin, 'Keep', { flowNodes: [trigger({ kind: 'opt_in' })], flowEdges: [] });
+    await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    expect(await col(f.id, 'trigger_kind')).toBe('opt_in');
+    const saved = await api.as(o.admin).put(`/v2/flows/${f.id}`).send({ name: 'Keep', graph: simpleGraph(), rowVersion: (await api.as(o.admin).get(`/v2/flows/${f.id}`)).body.rowVersion });
+    expect(saved.body).toMatchObject({ isPublished: true, state: 'live' });
+    const stranger = await api.signup('flb22e');
+    expect((await api.as(stranger.admin).post(`/v2/flows/${f.id}/unpublish`)).status).toBe(404);
+  });
+
+  // --- TW-FLB-028 -------------------------------------------------------------------------------------------------
+
+  it('TW-FLB-028 #1: flow_limit 3 with 3 flows: save-new, import and clone are refused with the plan message; duplicate is refused too (documented deviation: Reference let duplicate through)', async () => {
+    const o = await api.signup('flb28a');
+    const a = await create(o.admin, 'F1');
+    await create(o.admin, 'F2');
+    await create(o.admin, 'F3');
+    await setLimit(o.orgId, 3);
+    for (const res of [
+      await api.as(o.admin).post('/v2/flows').send({ name: 'F4', graph: simpleGraph() }),
+      await api.as(o.admin).post('/v2/flows/import').send({ payload: { flowNodes: [] } }),
+      await api.as(o.admin).post(`/v2/flows/${a.id}/duplicate`),
+    ]) {
+      expect(res.status).toBe(422);
+      expect(code(res)).toBe('PLAN_LIMIT_REACHED');
+    }
+    await setLimit(o.orgId, null);
+  });
+
+  it('TW-FLB-028 rule 2: a limit of 0 means unlimited and a delete frees a slot', async () => {
+    const o = await api.signup('flb28b');
+    await setLimit(o.orgId, 0);
+    for (let i = 0; i < 4; i++) await create(o.admin, `U${i}`);
+    await setLimit(o.orgId, 4);
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'U5', graph: simpleGraph() })).status).toBe(422);
+    const one = (await list(o.admin)).data[0]!;
+    await api.as(o.admin).delete(`/v2/flows/${one.id}`);
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: 'U5', graph: simpleGraph() })).status).toBe(201);
+    await setLimit(o.orgId, null);
+  });
+
+  it('TW-FLB-028 #2: a member with no flb key (a manager in Reference) is 403 FORBIDDEN opening the list', async () => {
+    const o = await api.signup('flb28c');
+    const manager = await api.member(o, 'manager', [['dash.dashboard.read']]);
+    const res = await api.as(manager.token).get('/v2/flows');
+    expect(res.status).toBe(403);
+    expect(code(res)).toBe('FORBIDDEN');
+  });
+
+  it('TW-FLB-028: the organization Admin role holds the five flb keys after the migration', async () => {
+    const o = await api.signup('flb28d');
+    const keys = (await sql(
+      `SELECT g.permission_key FROM role_grants g JOIN roles r ON r.org_id = g.org_id AND r.id = g.role_id
+       WHERE g.org_id = $1 AND r.system_key = 'admin' AND g.permission_key LIKE 'flb.flows.%' ORDER BY 1`, [o.orgId])).rows.map((r) => r.permission_key);
+    expect(keys).toEqual(['flb.flows.create', 'flb.flows.delete', 'flb.flows.publish', 'flb.flows.read', 'flb.flows.update']);
+  });
+
+  it('TW-FLB-028 #3: with the plan feature `automation` off the page data still loads (soft paywall) but creating or editing is 422 PLAN_FEATURE_LOCKED; pause, unpublish and delete stay open', async () => {
+    const o = await api.signup('flb28e');
+    const f = await create(o.admin, 'Before downgrade');
+    await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    await sql(`UPDATE org_plan_state SET overrides = '{"features":{"automation":false}}'::jsonb WHERE org_id = $1`, [o.orgId]);
+    for (const path of ['/v2/flows', '/v2/flows/overview', '/v2/flows/templates', '/v2/flows/builder-context', `/v2/flows/${f.id}`, `/v2/flows/${f.id}/export`]) {
+      expect((await api.as(o.admin).get(path)).status, path).toBe(200);
+    }
+    const locked = [
+      await api.as(o.admin).post('/v2/flows').send({ name: 'x', graph: simpleGraph() }),
+      await api.as(o.admin).put(`/v2/flows/${f.id}`).send({ name: 'x', graph: simpleGraph(), rowVersion: f.rowVersion }),
+      await api.as(o.admin).post(`/v2/flows/${f.id}/publish`),
+      await api.as(o.admin).post(`/v2/flows/${f.id}/duplicate`),
+      await api.as(o.admin).post('/v2/flows/import').send({ payload: { flowNodes: [] } }),
+      await api.as(o.admin).patch(`/v2/flows/${f.id}/rename`).send({ name: 'y' }),
+    ];
+    for (const res of locked) {
+      expect(res.status).toBe(422);
+      expect(code(res)).toBe('PLAN_FEATURE_LOCKED');
+    }
+    expect((await api.as(o.admin).post(`/v2/flows/${f.id}/toggle`)).status).toBe(200);
+    expect((await api.as(o.admin).post(`/v2/flows/${f.id}/unpublish`)).status).toBe(200);
+    expect((await api.as(o.admin).delete(`/v2/flows/${f.id}`)).status).toBe(204);
+    await sql(`UPDATE org_plan_state SET overrides = '{}'::jsonb WHERE org_id = $1`, [o.orgId]);
+  });
+
+  it('TW-FLB-028 rule 4: the node cap (500) is enforced server-side (Reference never enforced flow_steps_limit): 500 nodes save, 501 are refused', async () => {
+    const o = await api.signup('flb28f');
+    const nodes = (n: number) => ({ flowNodes: Array.from({ length: n }, (_, i) => ({ id: `n${i}`, type: 'message', x: i, y: 0, data: {} })), flowEdges: [] });
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: '500', graph: nodes(500) })).status).toBe(201);
+    expect((await api.as(o.admin).post('/v2/flows').send({ name: '501', graph: nodes(501) })).status).toBe(422);
+  });
+
+  // --- TW-FLB-029 -------------------------------------------------------------------------------------------------
+
+  it('TW-FLB-029 #1: the graph is jsonb (not ciphertext) with the nodes readable in the row, and the name is plain text', async () => {
+    const o = await api.signup('flb29a');
+    const f = await create(o.admin, 'Readable');
+    const r = (await sql(`SELECT flow_name, jsonb_typeof(flow_data) AS t, flow_data->'flowNodes'->0->>'type' AS first FROM flows WHERE uuid = $1`, [f.id])).rows[0];
+    expect(r).toEqual({ flow_name: 'Readable', t: 'object', first: 'trigger' });
+  });
+
+  it('TW-FLB-029 #2: a row whose flow_data is NULL or malformed loads as an empty graph, never an error (the file mirror does not exist here)', async () => {
+    const o = await api.signup('flb29b');
+    const f = await create(o.admin, 'Hollow');
+    await sql(`UPDATE flows SET flow_data = NULL WHERE uuid = $1`, [f.id]);
+    const r = await api.as(o.admin).get(`/v2/flows/${f.id}`);
+    expect(r.status).toBe(200);
+    expect(r.body.graph).toEqual({ flowNodes: [], flowEdges: [], vars: [] });
+    expect(r.body.nodeCount).toBe(0);
+  });
+
+  it('TW-FLB-029 #3: deleting a flow removes the row, its subscribers and runs (database cascade) and writes flow.deleted', async () => {
+    const o = await api.signup('flb29c');
+    const f = await create(o.admin, 'Gone');
+    const id = (await sql(`SELECT id FROM flows WHERE uuid = $1`, [f.id])).rows[0].id;
+    const contact = (await sql(`INSERT INTO contacts (org_id) VALUES ($1) RETURNING id`, [o.orgId])).rows[0].id;
+    await sql(`INSERT INTO flow_subscribers (org_id, flow_id, contact_id, status) VALUES ($1,$2,$3,'active')`, [o.orgId, id, contact]);
+    expect((await api.as(o.admin).delete(`/v2/flows/${f.id}`)).status).toBe(204);
+    expect((await sql(`SELECT count(*)::int AS n FROM flow_subscribers WHERE flow_id = $1 AND org_id = $2`, [id, o.orgId])).rows[0].n).toBe(0);
+    expect(await api.events(o.orgId, 'flow.deleted')).toHaveLength(1);
+  });
+
+  it('TW-FLB-029 rule 1: provider defaults to baileys on create and only a trigger sender with a valid engine changes it; the state pair starts (false, true)', async () => {
+    const o = await api.signup('flb29d');
+    const f = await create(o.admin, 'Defaults');
+    expect(await col(f.id, 'provider')).toBe('baileys');
+    expect(await col(f.id, 'flow_type')).toBe('chat');
+    expect(await col(f.id, 'row_version')).toBe(1);
+  });
+
+  it('TW-FLB-006 quirk kept: a duplicate of a paused flow keeps the pause switch off (Reference replicate()), is unpublished and has no published_at', async () => {
+    const o = await api.signup('flb06');
+    const f = await create(o.admin, 'Src');
+    await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    await api.as(o.admin).post(`/v2/flows/${f.id}/toggle`);
+    const copy = (await api.as(o.admin).post(`/v2/flows/${f.id}/duplicate`)).body as Flow;
+    expect(copy).toMatchObject({ name: 'Src (Copy)', isPublished: false, isActive: false, state: 'draft', publishedAt: null });
+  });
+
+  it('TW-FLB-008/009 compat: the export downloads as <slug>.threadwise-flow.json, imports back unchanged, and a file Reference wrote (no vars, no coordinates, unknown type) imports as a chat draft', async () => {
+    const o = await api.signup('flb08');
+    const f = await create(o.admin, 'My Flow', simpleGraph(), { category: 'Sales', flowType: 'telegram' });
+    const res = await api.as(o.admin).get(`/v2/flows/${f.id}/export`);
+    expect(res.status).toBe(200);
+    expect(res.headers['content-disposition']).toBe('attachment; filename="my-flow.threadwise-flow.json"');
+    expect(res.body).toMatchObject({ _threadwise_flow_export: 1, name: 'My Flow', flow_type: 'telegram', category: 'Sales' });
+    const back = await api.as(o.admin).post('/v2/flows/import').send({ payload: res.body });
+    expect(back.body).toMatchObject({ name: 'My Flow (imported)', flowType: 'telegram', category: 'Sales', isPublished: false, nodeCount: 2, edgeCount: 1 });
+    const threadwise = {
+      _threadwise_flow_export: 1, exported_at: '2026-05-01T10:00:00+00:00', name: 'From Reference', flow_type: 'sms', category: null,
+      flow_data: { flowNodes: [{ id: 'a', type: 'trigger', data: { kind: 'keyword', keywords: 'hi' } }, { id: 'b', type: 'message', data: { text: 'yo' } }], flowEdges: [{ id: 'e', source: 'a', sourceHandle: 'out', target: 'b' }] },
+    };
+    const imp = await api.as(o.admin).post('/v2/flows/import').send({ payload: threadwise });
+    expect(imp.status).toBe(201);
+    expect(imp.body).toMatchObject({ name: 'From Reference (imported)', flowType: 'chat', nodeCount: 2, edgeCount: 1 });
+    expect(imp.body.graph.flowNodes.every((n: { x: number; y: number }) => Number.isFinite(n.x) && Number.isFinite(n.y))).toBe(true);
+    expect(imp.body.graph.vars).toEqual([]);
+  });
+
+  it('TW-FLB-070: the runtime seam hands the runtime the same columns its matcher reads (trigger kind, keywords, provider, channel) and the same value rule (null counts as 0)', async () => {
+    const o = await api.signup('flb70a');
+    const d = await device(o.orgId);
+    const ch = await qrChannel(o.orgId, d.uuid);
+    const f = await create(o.admin, 'Seam', { flowNodes: [trigger({ kind: 'opt_in', deviceId: `baileys:${d.uuid}` })], flowEdges: [] });
+    await api.as(o.admin).post(`/v2/flows/${f.id}/publish`);
+    const reader = h.app.get(FlowReaderService);
+    const run = await reader.getRunnableFlow(o.orgId, f.id);
+    expect(run).toMatchObject({ triggerKind: 'opt_in', provider: 'baileys', triggerChannelId: ch, triggerKeywords: null });
+    await sql(`UPDATE flows SET trigger_value = NULL WHERE uuid = $1`, [f.id]);
+    expect((await reader.listEnrollable(o.orgId, 'opt_in', 0)).map((x) => x.id)).toEqual([f.id]);
+    expect((await reader.listEnrollable(o.orgId, 'opt_in', 0))[0]!.triggerChannelId).toBe(ch);
   });
 });
 
