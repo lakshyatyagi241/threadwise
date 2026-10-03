@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import { Popover, cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
-import { LOCALES } from '@/i18n/locales';
-import { setLocale, setTheme } from './actions';
+import { LocaleSwitcher } from '@/features/localization-translation/locale-switcher';
+import { setTheme } from './actions';
 
 export interface ShellUser {
   fullName: string;
@@ -47,7 +47,6 @@ export function UserMenu({
 }) {
   const t = useTranslations('shell');
   const tAll = useTranslations();
-  const locale = useLocale();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(theme);
@@ -103,26 +102,10 @@ export function UserMenu({
         <Link href="/account" onClick={() => setOpen(false)} className={row}>
           {t('account')}
         </Link>
-        <label className={cn(row, 'cursor-pointer')}>
+        <div className={row}>
           <span>{t('language')}</span>
-          <select
-            aria-label={t('language')}
-            value={locale}
-            onChange={(e) =>
-              start(async () => {
-                await setLocale(e.target.value);
-                router.refresh();
-              })
-            }
-            className="h-8 rounded-md border border-border bg-background px-2 text-sm"
-          >
-            {LOCALES.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </label>
+          <LocaleSwitcher />
+        </div>
         <button type="button" onClick={toggleTheme} className={row}>
           <span>{t('theme')}</span>
           <span className="text-muted-foreground">
