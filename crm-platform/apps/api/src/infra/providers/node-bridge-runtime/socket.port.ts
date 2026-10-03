@@ -16,7 +16,12 @@ export type SocketEvent =
   /** The credentials changed and have already been persisted by the adapter. The first one after a QR means the scan succeeded. */
   | { type: 'creds' }
   /** A message the library delivered, already normalized (WD-NODE-016, 018). Replays, status and empty events are not delivered. */
-  | { type: 'message'; normalized: Normalized }
+  | {
+      type: 'message';
+      normalized: Normalized;
+      /** A customer's file, downloaded at capture (it cannot be fetched later without the live message). Absent when too large or it failed. */
+      media?: Buffer;
+    }
   /** Delivery progress of a message we sent (WD-NODE-020). */
   | { type: 'receipt'; receipt: ReceiptUpdate }
   /** The groups this account is in changed (WD-NODE-021). */

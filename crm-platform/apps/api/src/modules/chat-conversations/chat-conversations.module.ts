@@ -72,6 +72,7 @@ import { SimulatorService } from './simulator.service';
     { provide: CONVERSATIONS_FACADE, useExisting: ConversationsService },
   ],
   exports: [
+    ChannelAdapterRegistry,
     ChannelsFacade,
     ChannelRegistryService,
     ChannelDispatcher,

@@ -64,3 +64,4 @@ export * from './team-inbox-routing-sla';
 export * from './campaigns';
 export * from './workspaces-teams-tenancy';
 export * from './coupons-credits-referral-currency';
+export * from './catalog-products';

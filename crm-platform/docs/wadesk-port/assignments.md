@@ -104,7 +104,7 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 | deals-pipelines | deal | /deals | 2 | 120 | pending |  |
 | invoicing | inv | /invoices | 2 | 120 | pending |  |
 | sales-docs-proposals | sales | /proposals | 2 | 110 | pending |  |
-| catalog-products | cat | /catalog | 3 | 110 | pending |  |
+| catalog-products | cat | /catalog | 3 | 110 | written | 34 |
 | channel-email | mail | /email | 3 | 110 | pending |  |
 | channel-facebook | fb | /facebook | 3 | 130 | pending |  |
 | channel-instagram | ig | /instagram | 3 | 90 | pending |  |

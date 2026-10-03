@@ -16,7 +16,17 @@ import type { Normalized } from '../../../infra/providers/node-bridge-runtime/in
  */
 export interface InboundSink {
   /** A customer message, the business's own message (echo), or a group message. */
-  message(ctx: { orgId: number; deviceId: number }, n: Normalized): Promise<void>;
+  message(
+    ctx: { orgId: number; deviceId: number },
+    n: Normalized,
+    /** The customer's file, when the message carries one and it was small enough to keep. */
+    media?: Buffer,
+  ): Promise<void>;
+  /** The device's connection state changed (the inbox keeps its channel in step). */
+  deviceStatus?(
+    ctx: { orgId: number; deviceId: number },
+    state: { status: string; connected: boolean },
+  ): Promise<void>;
   /** The groups this device is in, after a change. */
   groups?(ctx: { orgId: number; deviceId: number }, groups: GroupSnapshot[]): Promise<void>;
 }
@@ -48,6 +58,7 @@ export class InboundRouter {
     orgId: number,
     deviceId: number,
     n: Normalized,
+    media?: Buffer,
   ): Promise<'delivered' | 'duplicate' | 'no_consumer'> {
     const first = await this.redis.set(
       `wa:in:${orgId}:${deviceId}:${n.message.providerMessageId}:${n.kind}`,
@@ -68,7 +79,7 @@ export class InboundRouter {
     }
     for (const s of this.sinks) {
       try {
-        await s.message({ orgId, deviceId }, n);
+        await s.message({ orgId, deviceId }, n, media);
       } catch (err) {
         // One consumer failing must not stop the others, and must not lose the message for them.
         this.logger.error(
@@ -78,6 +89,20 @@ export class InboundRouter {
       }
     }
     return 'delivered';
+  }
+
+  async deviceStatus(
+    orgId: number,
+    deviceId: number,
+    state: { status: string; connected: boolean },
+  ): Promise<void> {
+    for (const s of this.sinks) {
+      try {
+        await s.deviceStatus?.({ orgId, deviceId }, state);
+      } catch (err) {
+        this.logger.error({ orgId, deviceId, err: String(err) }, '[NODE] a status consumer failed');
+      }
+    }
   }
 
   async groups(orgId: number, deviceId: number, groups: GroupSnapshot[]): Promise<void> {
@@ -93,6 +118,9 @@ export class InboundRouter {
 
 /** One delivery report about a message we sent, in our terms (the same shape the broadcast receipts take). */
 export interface DeliveryReport {
+  /** Which number reported it, for a consumer that keeps messages per channel (the inbox). */
+  orgId: number;
+  deviceId: number;
   providerMessageId: string;
   status: 'delivered' | 'read';
   occurredAt: Date;
@@ -120,10 +148,16 @@ export class ReceiptRouter {
     this.sinks.push(sink);
   }
 
-  async route(u: ReceiptUpdate, now: Date = new Date()): Promise<boolean> {
+  async route(
+    ctx: { orgId: number; deviceId: number },
+    u: ReceiptUpdate,
+    now: Date = new Date(),
+  ): Promise<boolean> {
     const status = ackStatus(u.ack);
     if (!status) return false;
     const report: DeliveryReport = {
+      orgId: ctx.orgId,
+      deviceId: ctx.deviceId,
       providerMessageId: u.providerMessageId,
       status,
       occurredAt: now,
