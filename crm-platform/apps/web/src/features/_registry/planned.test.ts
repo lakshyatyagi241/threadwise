@@ -32,7 +32,7 @@ describe('planned screens', () => {
       PLANNED_NAV.filter((i) => i.group === g)
         .sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
         .map((i) => i.id);
-    expect(ids('audience')).toEqual(['lead-finder', 'companies', 'email-templates']);
+    expect(ids('audience')).toEqual(['lead-finder', 'email-templates']);
     expect(ids('sales')).toEqual(['crm-dashboard']);
   });
 
