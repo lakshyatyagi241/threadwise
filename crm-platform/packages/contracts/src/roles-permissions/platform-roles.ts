@@ -28,6 +28,9 @@ export const PLATFORM_PERMISSION_KEYS = [
   'platform.whatsapp_providers.view',
   'platform.whatsapp_providers.manage',
   'platform.whatsapp_providers.switch',
+  // The Marketplace catalogue: operate it (listings, categories, hide, kill, requests), and review (approve, reject, publish versions).
+  'platform.market.manage',
+  'platform.market.review',
 ] as const;
 export type PlatformPermissionKey = (typeof PLATFORM_PERMISSION_KEYS)[number];
 

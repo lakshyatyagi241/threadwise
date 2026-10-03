@@ -38,7 +38,7 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   tile('automation', 'auto-reply', '/auto-reply', 'reply', 20),
 
   // Integrations and developer (these were the menu's Developer group)
-  tile('integrations', 'integrations', '/integrations', 'plug', 0),
+  // Integrations is now the Marketplace tile (features/marketplace/settings.ts).
   tile('integrations', 'rest-api', '/developers', 'code', 10),
   tile('integrations', 'webhooks', '/webhooks', 'webhook', 20),
 

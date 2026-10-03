@@ -10,8 +10,8 @@ import type {
   BusinessAppEcho,
   InboundContext,
   WabaInboundSink,
-} from '../whatsapp-cloud-api-waba/waba-inbound-sink';
-import type { HistoryItem } from '../whatsapp-cloud-api-waba/waba-coexistence-rules';
+} from '../whatsapp-cloud-api-waba/waba-inbound.port';
+import type { HistoryItem } from '../whatsapp-cloud-api-waba/waba-inbound.port';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
 import type { ChannelRow } from './channels.repository';
 import { CONVERSATIONS_FACADE, type ConversationsFacade } from './conversations.facade';

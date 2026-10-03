@@ -52,6 +52,8 @@ export const QUEUES = {
   FLOW_RUN: 'flow-run',
   /** Re-reads WhatsApp templates stuck PENDING on Meta (WD-TPL-027). Own queue: a Meta outage must not hold anything else. */
   TPL_SWEEP: 'tpl-sweep',
+  /** One job per due pull connection of the Marketplace (M-05): fetches the portal's new leads and hands them to the lead pipeline. Own queue: a slow portal must not hold a lead from another door. */
+  MKT_PULL: 'mkt-pull',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

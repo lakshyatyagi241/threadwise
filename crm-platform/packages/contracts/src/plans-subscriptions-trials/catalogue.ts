@@ -37,6 +37,10 @@ export const PLAN_LIMIT_DEFS = [
   // Customer REST API requests per minute per key (WD-PLAN-022). NOT like the other caps: 0 means "use the platform default", not unlimited;
   // a workspace override of -1 means unlimited.
   { key: 'api_rate_limit_per_minute', group: 'workspace' },
+  // Marketplace apps and integrations a workspace has installed at once (spec marketplace-mini-apps-and-integrations, M-09). 0 = unlimited; counts what is installed now, an uninstall frees a place.
+  { key: 'installed_apps', group: 'workspace' },
+  // Lead sources (webhook doors into the lead pipeline) a workspace has at once (spec email-channel-and-social-leads, L-12). 0 = unlimited.
+  { key: 'lead_sources', group: 'workspace' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -76,6 +80,10 @@ export const PLAN_FEATURE_DEFS = [
   // Scheduled messages and the number warmer (WD-SCHED-019, 041). Default true: neither was gated here before, so every plan row that predates them keeps the area.
   { key: 'scheduled_messages', group: 'messaging', default: true },
   { key: 'whatsapp_warmer', group: 'messaging', default: true },
+  // The Marketplace of mini apps and integrations (M-09). Default true: no plan row held it before, so every one that predates it keeps the area.
+  { key: 'marketplace', group: 'integrations', default: true },
+  // Lead sources: webhook and connector doors that turn ad and portal leads into contacts and deals (L-12). Default true: no plan row held it before.
+  { key: 'lead_sources', group: 'integrations', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -100,6 +108,8 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   team_performance: 'Team performance',
   scheduled_messages: 'Scheduled messages',
   whatsapp_warmer: 'WhatsApp warmer',
+  marketplace: 'Marketplace',
+  lead_sources: 'Lead sources',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -127,6 +137,8 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'team_performance',
   'scheduled_messages',
   'whatsapp_warmer',
+  'marketplace',
+  'lead_sources',
 ];
 export const PLAN_CHIP_MAX = 3;
 

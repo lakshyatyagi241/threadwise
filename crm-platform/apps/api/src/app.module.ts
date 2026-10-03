@@ -65,6 +65,8 @@ import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/cha
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
+import { LeadsModule } from './modules/leads';
+import { MarketplaceModule } from './modules/marketplace';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
@@ -192,6 +194,8 @@ import { HealthModule } from './health/health.module';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
     WorkspacesTeamsTenancyModule,
+    LeadsModule,
+    MarketplaceModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

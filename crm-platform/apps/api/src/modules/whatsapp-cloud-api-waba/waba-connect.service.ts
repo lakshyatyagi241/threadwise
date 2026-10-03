@@ -1,3 +1,4 @@
+import type { ResolvedWabaConnection } from './waba-connections.port';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
@@ -70,19 +71,7 @@ interface StoredCredentials {
   register_pin?: string;
 }
 
-/** What `resolveConnection` returns. */
-export interface ResolvedWabaConnection {
-  id: number;
-  uuid: string;
-  status: string;
-  label: string | null;
-  /** The number as people write it (`wa_provider_configs.phone_number`). */
-  phoneNumber: string | null;
-  /** From `meta_json`; set even when `conn` is null (no usable credentials), so another domain can still identify the number. */
-  wabaId: string | null;
-  phoneNumberId: string | null;
-  conn: WabaConnection | null;
-}
+export type { ResolvedWabaConnection };
 
 /** The provider a number is being moved to (the operator's switch). `registry` is the provider's descriptor, secrets opened; null for a built-in route. */
 export interface ProviderMoveTarget {
