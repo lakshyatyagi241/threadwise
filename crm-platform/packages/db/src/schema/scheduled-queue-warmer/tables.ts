@@ -143,7 +143,7 @@ export const scheduledMessageContacts = pgTable(
     }).onDelete('cascade'),
     check(
       'chk_scheduled_message_contacts_status',
-      sql`${t.status} in ('pending', 'sent', 'delivered', 'read', 'failed')`,
+      sql`${t.status} in ('pending', 'processing', 'sent', 'delivered', 'read', 'failed')`,
     ),
     foreignKey({
       name: 'fk_scheduled_message_contacts_scheduled_message_id',

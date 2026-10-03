@@ -7,6 +7,7 @@ import {
 import { CHANNEL_ADAPTERS, type ChannelAdapter } from './channel.port';
 import { MetaCloudChannelAdapter } from './meta-cloud-channel.adapter';
 import { SimulatorAdapter } from './simulator.adapter';
+import { TelegramChannelAdapter } from './telegram-channel.adapter';
 import { WebchatChannelAdapter } from './webchat-channel.adapter';
 
 /**
@@ -25,6 +26,7 @@ import { WebchatChannelAdapter } from './webchat-channel.adapter';
         const adapters: ChannelAdapter[] = [
           new MetaCloudChannelAdapter(meta),
           new WebchatChannelAdapter(),
+          new TelegramChannelAdapter(),
         ];
         if (simulatorAllowed()) adapters.push(new SimulatorAdapter());
         return adapters;

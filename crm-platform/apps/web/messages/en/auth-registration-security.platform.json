@@ -1364,6 +1364,10 @@
             },
             "billingUnit": {
               "label": "Unit"
+            },
+            "dataRetentionDays": {
+              "label": "Data retention (days after expiry)",
+              "hint": "Days after a paid plan lapses before the workspace's data is deleted. 0 = never. Deleting is permanent."
             }
           },
           "flags": {
@@ -1410,7 +1414,9 @@
             "routing_rules": "Routing rules",
             "templates": "Message templates",
             "flows": "Flows",
-            "autoreplies": "Keyword auto-replies"
+            "autoreplies": "Keyword auto-replies",
+            "total_campaigns": "Campaigns created (never freed by deleting)",
+            "api_rate_limit_per_minute": "API requests per minute (0 = platform default)"
           },
           "featureGroups": {
             "messaging": "Messaging",

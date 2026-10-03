@@ -91,6 +91,25 @@ export interface PaymentDriver {
   verifyWebhook(rawBody: Buffer, headers: Record<string, string | undefined>): Promise<boolean>;
   /** The payment a verified notification announces, or null when it is some other event. */
   parseWebhook(body: unknown): WebhookPayment | null;
+  /**
+   * Stop a recurring subscription from renewing (TW-PLAN-012). The period already paid for keeps running. Optional: a driver without a
+   * recurring product leaves it out and the caller records that the remote cancel was not possible. Never throws for a provider
+   * failure: returns `{ ok: false, reason }`.
+   */
+  cancelSubscription?(ref: SubscriptionRef): Promise<CancelResult>;
+}
+
+/** What a gateway needs to find one subscription (the ids it handed us when the subscription was created). */
+export interface SubscriptionRef {
+  gatewaySubscriptionId: string;
+  gatewayCustomerId: string | null;
+  gatewayPlanId: string | null;
+}
+
+export interface CancelResult {
+  ok: boolean;
+  /** Machine-ish reason on failure, stored on the subscription so a failed remote cancel is visible. */
+  reason?: string;
 }
 
 /** One HTTP call, injectable so drivers are tested against fixtures and never touch the network in tests. */

@@ -33,6 +33,7 @@ export interface PlanRow {
   is_custom_quote: boolean;
   sort_order: number;
   cta_label: string;
+  data_retention_days: number;
   limits: Record<string, unknown>;
   features: Record<string, unknown>;
   created_at: string | Date;
@@ -43,7 +44,7 @@ export interface PlanRow {
 export const PLAN_COLUMNS: SQL = sql.raw(
   `id, uuid, slug, name, subtitle, detail, kind, amount::text AS amount, offer_amount::text AS offer_amount,
    currency, billing_unit, billing_duration, is_free, is_lifetime, is_active, is_default, is_highlighted,
-   is_custom_quote, sort_order, cta_label, limits, features, created_at, updated_at`,
+   is_custom_quote, sort_order, cta_label, data_retention_days, limits, features, created_at, updated_at`,
 );
 
 export function toFacts(row: PlanRow): PlanFacts {
@@ -107,6 +108,7 @@ export function toAdminItem(
     isCustomQuote: row.is_custom_quote,
     sortOrder: row.sort_order,
     ctaLabel: row.cta_label,
+    dataRetentionDays: Number(row.data_retention_days),
     limits: fullLimits(row.limits),
     features: fullFeatures(row.features),
     inUse: extra.inUse,

@@ -21,3 +21,9 @@ export function moneyCents(value: string): number {
 
 export const isZeroMoney = (value: string | null | undefined): boolean =>
   value == null || moneyCents(value) === 0;
+
+/** Integer minor units back to a decimal string ("1999" -> "19.99"). */
+export function centsToMoney(cents: number): string {
+  const whole = Math.floor(cents / 100);
+  return `${whole}.${String(cents % 100).padStart(2, '0')}`;
+}

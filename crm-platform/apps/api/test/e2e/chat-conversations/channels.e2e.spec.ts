@@ -946,6 +946,9 @@ describe('the dispatcher, through the real app', () => {
     });
     expect(again).toMatchObject({ providerMessageId: first.providerMessageId, replayed: true });
 
+    // The caller queues the simulated receipts after it has stored the provider's id; twice is safe (fixed job ids).
+    await dispatcher().scheduleReceipts(runtime, first);
+    await dispatcher().scheduleReceipts(runtime, first);
     const jobs = await ingest.getJobs(['delayed', 'waiting']);
     const receipts = jobs
       .filter((j) => j.id?.startsWith(`ingest-${sim.id}-rc-${first.providerMessageId}-`))
