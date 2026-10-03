@@ -9,6 +9,9 @@ export const KEYS = {
   list: ['waba', 'numbers'] as const,
   health: (id: string) => ['waba', 'health', id] as const,
   profile: (id: string) => ['waba', 'profile', id] as const,
+  username: (id: string) => ['waba', 'username', id] as const,
+  qr: (id: string) => ['waba', 'qr', id] as const,
+  customers: (q: string, page: number) => ['waba', 'customers', q, page] as const,
 };
 
 export function useReadiness() {
@@ -81,3 +84,80 @@ export function useUpdateProfile(id: string) {
     onSuccess: (data) => qc.setQueryData(KEYS.profile(id), data),
   });
 }
+
+export function useUsername(id: string) {
+  return useQuery({
+    queryKey: KEYS.username(id),
+    queryFn: ({ signal }) => wabaApi.username(id, signal),
+    retry: false,
+  });
+}
+
+export function useClaimUsername(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (username: string) => wabaApi.claimUsername(id, username),
+    onSuccess: (data) => qc.setQueryData(KEYS.username(id), data),
+  });
+}
+
+export function useReleaseUsername(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => wabaApi.releaseUsername(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.username(id) }),
+  });
+}
+
+export function useQrCodes(id: string) {
+  return useQuery({
+    queryKey: KEYS.qr(id),
+    queryFn: ({ signal }) => wabaApi.qrCodes(id, signal),
+    retry: false,
+  });
+}
+
+export function useCreateQrCode(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (prefilledMessage: string) => wabaApi.createQrCode(id, prefilledMessage),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.qr(id) }),
+  });
+}
+
+export function useDeleteQrCode(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (code: string) => wabaApi.deleteQrCode(id, code),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.qr(id) }),
+  });
+}
+
+export const useSyncHistory = () => useAction((id: string) => wabaApi.syncHistory(id));
+
+/** A live read of Meta: never cached, and it changes nothing here. */
+export const useInboundCheck = () =>
+  useMutation({ mutationFn: (id: string) => wabaApi.inboundCheck(id) });
+
+export function useWebhookConfig(enabled: boolean) {
+  return useQuery({
+    queryKey: ['waba', 'webhook-config'] as const,
+    queryFn: ({ signal }) => wabaApi.webhookConfig(signal),
+    enabled,
+    retry: false,
+    staleTime: 60_000,
+  });
+}
+
+/** Saved customers (WD-WABA-055): one page, searched by name, phone or company. */
+export function useCustomers(q: string, page: number) {
+  return useQuery({
+    queryKey: KEYS.customers(q, page),
+    queryFn: ({ signal }) => wabaApi.customers(q, page, signal),
+    placeholderData: (previous) => previous,
+    retry: false,
+  });
+}
+
+export const useSaveCustomer = () => useAction(wabaApi.saveCustomer);
+export const useRemoveCustomer = () => useAction(wabaApi.removeCustomer);

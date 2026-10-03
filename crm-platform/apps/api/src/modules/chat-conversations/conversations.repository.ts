@@ -249,6 +249,45 @@ export class ConversationsRepository {
     return { row, reopenedFrom: reopened ? previous : null };
   }
 
+  /**
+   * An imported history message lands on its thread (coexistence). Takes the next `seq`; the latest-message pointers and the
+   * preview move only when the message is newer than what the thread already shows (a live message always wins); an inbound one
+   * moves `last_inbound_at` forward so the 24 hour window is right. No unread, no wait, no reopening.
+   */
+  async applyHistory(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    t: {
+      messageId: number;
+      at: string;
+      inbound: boolean;
+      windowHours: number | null;
+      preview: string | null;
+    },
+  ): Promise<ConversationRow> {
+    const newer = sql`(last_message_at IS NULL OR last_message_at <= ${t.at}::timestamptz)`;
+    const res = await tx.execute(sql`
+      UPDATE conversations SET
+        msg_seq = msg_seq + 1,
+        last_message_id = CASE WHEN ${newer} THEN ${t.messageId} ELSE last_message_id END,
+        last_message_at = CASE WHEN ${newer} THEN ${t.at}::timestamptz ELSE last_message_at END,
+        preview = CASE WHEN ${newer} THEN COALESCE(${t.preview}, preview) ELSE preview END
+        ${
+          t.inbound
+            ? sql`, last_inbound_at = GREATEST(last_inbound_at, ${t.at}::timestamptz),
+        window_expires_at = ${
+          t.windowHours === null
+            ? sql`NULL`
+            : sql`GREATEST(last_inbound_at, ${t.at}::timestamptz) + make_interval(hours => ${t.windowHours})`
+        }`
+            : sql`, last_outbound_at = GREATEST(last_outbound_at, ${t.at}::timestamptz)`
+        }
+      WHERE org_id = ${orgId} AND id = ${id}
+      RETURNING ${COLUMNS}`);
+    return toConversationRow(rowsOf(res)[0]!);
+  }
+
   /** An outbound message is queued on its thread: the next `seq`, the latest-message pointers and the list preview. */
   async applyOutboundQueued(
     tx: Tx,

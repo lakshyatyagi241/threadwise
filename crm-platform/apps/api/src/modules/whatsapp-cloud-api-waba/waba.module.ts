@@ -1,8 +1,16 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
+import { CrmModule } from '../crm';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
+import {
+  WabaDiagnosticsController,
+  WabaPlatformDiagnosticsController,
+} from './waba-diagnostics.controller';
+import { WabaDiagnosticsService } from './waba-diagnostics.service';
+import { WabaExtrasController } from './waba-extras.controller';
+import { WabaExtrasService } from './waba-extras.service';
 import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConfigService } from './waba-config.service';
 import {
@@ -23,6 +31,11 @@ import {
 } from './waba-inbound-sink';
 import { WabaIngestService } from './waba-ingest.service';
 import { WabaTemplateEvents } from './waba-template-events.service';
+import { WabaGroupsService } from './waba-groups.service';
+import { WabaOrdersService } from './waba-orders.service';
+import { WabaClickSyncService } from './waba-click-sync.service';
+import { CustomerProfilesController } from './customer-profiles.controller';
+import { CustomerProfilesService } from './customer-profiles.service';
 import { WabaWebhookController } from './waba-webhook.controller';
 import { WabaWebhookService } from './waba-webhook.service';
 
@@ -35,14 +48,29 @@ import { WabaWebhookService } from './waba-webhook.service';
  */
 @Module({
   // forwardRef: the broadcasts barrel and this module import each other through node-bridge-runtime.
-  imports: [forwardRef(() => BroadcastsModule), PlatformSettingsModule, WhatsAppProviderRegistryModule],
-  controllers: [WabaConnectionsController, WabaWebhookController, WabaPlatformController],
+  imports: [
+    forwardRef(() => BroadcastsModule),
+    PlatformSettingsModule,
+    WhatsAppProviderRegistryModule,
+    CrmModule,
+  ],
+  controllers: [
+    WabaConnectionsController,
+    WabaExtrasController,
+    WabaDiagnosticsController,
+    WabaPlatformDiagnosticsController,
+    WabaWebhookController,
+    WabaPlatformController,
+    CustomerProfilesController,
+  ],
   providers: [
     CryptoService,
     WabaConfigService,
     WabaHealthDetailsService,
     WabaConnectionsRepository,
     WabaConnectService,
+    WabaExtrasService,
+    WabaDiagnosticsService,
     WabaWebhookService,
     WabaIngestService,
     WabaTemplateEvents,
@@ -57,12 +85,17 @@ import { WabaWebhookService } from './waba-webhook.service';
       inject: [{ token: WABA_CALLS_SINK_OVERRIDE, optional: true }],
       useFactory: (override?: WabaCallsSink): WabaCallsSink => override ?? new LoggingCallsSink(),
     },
+    WabaGroupsService,
+    WabaOrdersService,
+    WabaClickSyncService,
+    CustomerProfilesService,
   ],
   exports: [
     WabaConnectService,
     WabaConnectionsRepository,
     WabaIngestService,
     WabaWebhookService,
+    WabaClickSyncService,
     WABA_INBOUND_SINK,
   ],
 })

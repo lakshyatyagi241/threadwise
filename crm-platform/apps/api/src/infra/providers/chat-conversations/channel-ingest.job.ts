@@ -40,6 +40,14 @@ const inboundSchema = z.object({
   reactionEmoji: z.string().optional(),
   meta: z.record(z.unknown()).optional(),
   providerTimestamp: z.string().datetime(),
+  group: z
+    .object({
+      title: z.string().optional(),
+      participant: z.string(),
+      participantName: z.string().optional(),
+    })
+    .optional(),
+  history: z.object({ direction: z.enum(['in', 'out']) }).optional(),
 });
 
 const receiptSchema = z.object({

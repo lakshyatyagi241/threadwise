@@ -58,63 +58,63 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-WABA-001 | todo |  |  |
-| WD-WABA-002 | todo |  |  |
-| WD-WABA-003 | todo |  |  |
-| WD-WABA-004 | todo |  |  |
-| WD-WABA-005 | todo |  |  |
-| WD-WABA-006 | todo |  |  |
-| WD-WABA-007 | todo |  |  |
-| WD-WABA-008 | todo |  |  |
-| WD-WABA-009 | todo |  |  |
-| WD-WABA-010 | todo |  |  |
-| WD-WABA-011 | todo |  |  |
-| WD-WABA-012 | todo |  |  |
-| WD-WABA-013 | todo |  |  |
-| WD-WABA-014 | todo |  |  |
-| WD-WABA-015 | todo |  |  |
-| WD-WABA-016 | todo |  |  |
-| WD-WABA-017 | todo |  |  |
-| WD-WABA-018 | todo |  |  |
-| WD-WABA-019 | todo |  |  |
-| WD-WABA-020 | todo |  |  |
-| WD-WABA-021 | todo |  |  |
-| WD-WABA-022 | todo |  |  |
-| WD-WABA-023 | todo |  |  |
-| WD-WABA-024 | todo |  |  |
-| WD-WABA-025 | todo |  |  |
-| WD-WABA-026 | todo |  |  |
-| WD-WABA-027 | todo |  |  |
-| WD-WABA-028 | todo |  |  |
-| WD-WABA-029 | todo |  |  |
-| WD-WABA-030 | todo |  |  |
-| WD-WABA-031 | todo |  |  |
-| WD-WABA-032 | todo |  |  |
-| WD-WABA-033 | todo |  |  |
-| WD-WABA-034 | todo |  |  |
-| WD-WABA-035 | todo |  |  |
-| WD-WABA-036 | todo |  |  |
-| WD-WABA-037 | todo |  |  |
-| WD-WABA-038 | todo |  |  |
-| WD-WABA-039 | todo |  |  |
-| WD-WABA-040 | todo |  |  |
-| WD-WABA-041 | todo |  |  |
-| WD-WABA-042 | todo |  |  |
-| WD-WABA-043 | todo |  |  |
-| WD-WABA-044 | todo |  |  |
-| WD-WABA-045 | todo |  |  |
-| WD-WABA-046 | todo |  |  |
-| WD-WABA-047 | todo |  |  |
-| WD-WABA-048 | todo |  |  |
-| WD-WABA-049 | todo |  |  |
-| WD-WABA-050 | todo |  |  |
-| WD-WABA-051 | todo |  |  |
-| WD-WABA-052 | todo |  |  |
-| WD-WABA-053 | todo |  |  |
-| WD-WABA-054 | todo |  |  |
-| WD-WABA-055 | todo |  |  |
-| WD-WABA-056 | todo |  |  |
-| WD-WABA-057 | todo |  |  |
+| WD-WABA-001 | frontend-done |  | platform Meta app credentials: the whatsapp settings group and admin page /admin/settings/whatsapp; saved values overlay the environment (15 s) in API and worker; secrets encrypted, never returned; waba-config.spec |
+| WD-WABA-002 | frontend-done |  | platform admin check of the four coexistence webhook fields on the Meta app (GET /platform/waba/webhook-status) shown on the WhatsApp settings page; unit tested, not run against real Meta |
+| WD-WABA-003 | frontend-done |  | one-click subscribe keeps every existing field and the callback Meta has on file (POST /platform/waba/webhook-subscribe); unit tested, not run against real Meta |
+| WD-WABA-004 | frontend-done |  | numbers section at /channels/whatsapp: cards, actions, inbound badge; waba-connect.e2e |
+| WD-WABA-005 | frontend-done |  | Meta JS SDK launcher and connect modals; embedded-signup.test.ts; the popup was never opened against real Meta |
+| WD-WABA-006 | frontend-done |  | manual connect (paste credentials) modal and API; waba-connect.e2e |
+| WD-WABA-007 | frontend-done |  | pre-save token check reports each scope; waba-connect.e2e |
+| WD-WABA-008 | wontfix |  | dead endpoint in WaDesk (no page calls it); connect and renew do the exchange server-side; inventory says do not port unless a UI needs it |
+| WD-WABA-009 | frontend-done |  | Embedded Signup: code exchange, Interakt registration, callback override, ids proven against token scopes; waba-connect.e2e |
+| WD-WABA-010 | frontend-done |  | coexistence launch and flag; echoes (044) and history re-sync button (028) built; history import is row 046 |
+| WD-WABA-011 | backend-done |  | subscribe the app to a WABA with callback override, warns when Interakt refuses; waba-connect.e2e |
+| WD-WABA-012 | frontend-done |  | Cloud API registration with a kept PIN, auto and manual, hint when two-step is on; waba-connect.e2e |
+| WD-WABA-013 | frontend-done |  | inbound-wired verification, stamp and badge on the card; waba-connect.e2e |
+| WD-WABA-014 | frontend-done |  | Fix inbound re-subscribes and verifies; waba-connect.e2e |
+| WD-WABA-015 | frontend-done |  | live inbound check per number with a typed verdict plus the callback URL and verify token for a customer's own Meta app; e2e with Meta faked at the HTTP edge |
+| WD-WABA-016 | frontend-done |  | primary and auto-promotion; waba-connect.e2e keeps-one-primary |
+| WD-WABA-017 | frontend-done |  | disconnect hands primary on; waba-connect.e2e |
+| WD-WABA-018 | frontend-done |  | remove hands primary on; waba-connect.e2e |
+| WD-WABA-019 | frontend-done |  | replace token only when Meta accepts it; waba-connect.e2e |
+| WD-WABA-020 | frontend-done |  | renew in place, says so when Meta cannot renew it; waba-connect.e2e |
+| WD-WABA-021 | frontend-done |  | health dashboard from live Meta reads (phone, WABA, scopes, subscribed apps, template tally); waba-connect.e2e, waba-health-details.spec |
+| WD-WABA-022 | backend-done |  | derived issues and overall status, worst first; waba-rules.spec deriveHealth |
+| WD-WABA-023 | frontend-done |  | health tile from Meta conversation analytics (optional card, omitted when analytics do not answer); allowance constant 1000 kept as WaDesk, may be obsolete after Meta's July 2025 per-message pricing; not run against real Meta |
+| WD-WABA-024 | frontend-done |  | verified-badge checklist and the calling card (CallingToggleCard of the calling domain, the same switch as /calling) on the health page; the card reuses the /calling number card and has no component test of its own |
+| WD-WABA-025 | frontend-done |  | claim and release a business username with Meta's handle rules checked first, suggestions from the server, error 100 explained, release always clears the local record; not run against real Meta |
+| WD-WABA-026 | backend-done |  | business_username_update webhook keeps the stored handle and status current, deleted clears it; e2e through the real webhook door |
+| WD-WABA-027 | frontend-done |  | QR codes: create (PNG, 140 chars), list and delete on the health page; WaDesk had the routes but no screen; not run against real Meta |
+| WD-WABA-028 | frontend-done |  | history re-sync button for coexistence numbers re-subscribes the WABA and reports the historical messages already imported; the import itself (046) is not built |
+| WD-WABA-029 | backend-done |  | webhook GET handshake with saved, env or derived verify token; waba-rules.spec |
+| WD-WABA-030 | backend-done |  | request authentication by signature or platform key in the URL; requireSignature closes the URL-key door; waba-rules.spec |
+| WD-WABA-031 | backend-done |  | entry routing, config resolution and field dispatch; waba-rules.spec splitWebhook; waba-coexistence.e2e through WabaIngestService |
+| WD-WABA-032 | backend-done |  | inbound content extraction, in the inbox's own normaliser (infra/providers/whatsapp/meta-inbound.ts); inbox unit specs |
+| WD-WABA-033 | backend-done |  | dedupe by wamid claimed in Redis (released on failure) with the inbox ledger behind it; self-echo and reactions in the inbox normaliser; message-ingest e2e |
+| WD-WABA-034 | backend-done |  | built on main by the inbox work (PR 30): WabaInboxSink, WabaChannelLinkService and the whatsapp_cloud channel make the thread, contact and message from a WhatsApp delivery; nothing duplicated here |
+| WD-WABA-035 | backend-done |  | built on main by the inbox work (PR 30): the file is fetched in the background by the ingest worker; nothing duplicated here |
+| WD-WABA-036 | backend-done |  | the post-store fan-out is the flow runtime's InboundMessageHooks, run by the inbox ingest after the commit for every stored inbound message (flows, keyword and away replies); history imports and group messages deliberately skip it |
+| WD-WABA-037 | backend-done |  | built on main by the inbox work (PR 30): delivery reports the broadcasts did not claim become receipts on the inbox message; wallet settlement once belongs with WALLET |
+| WD-WABA-038 | backend-done |  | built in the campaign and broadcast engines: Meta 131049 engagement block is retried on a spaced, capped schedule; nothing left in WABA |
+| WD-WABA-039 | backend-done |  | group messages are stored on a thread keyed g:<group id> with no contact, titled by the group subject, the participant in the message meta (WabaInboxSink.onGroupMessage); per-participant statuses fold into one bubble with delivered_to, billable and free counts and only move forward; waba-coexistence.e2e, waba-groups-handoff.spec. No hook fires for groups, so nothing auto-replies |
+| WD-WABA-040 | backend-done |  | the four Groups webhooks keep waba_groups in step: create, delete, participant count, join requests, settings by success flag, suspension; waba-groups-handoff.spec, waba-coexistence.e2e |
+| WD-WABA-041 | backend-done |  | template status, quality and category webhooks mirrored onto the template row scoped to the WABA; template-event-rules.spec |
+| WD-WABA-042 | backend-done |  | a catalog cart becomes one wa_orders row with lines (products by retailer id or SKU, unknown ids fall back to wsn-unknown-N, minor units, last-line currency), deduped by message id, and whatsapp.order.received goes through the outbox; the buyer acknowledgement, WhatsApp Pay charge and flow resume belong to CHK and FLR and listen to that event; waba-coexistence.e2e |
+| WD-WABA-043 | backend-done |  | form submissions and payment statuses leave through the outbox (whatsapp.form.submitted, whatsapp.payment.updated) and never reach the inbox; calls reach the calling domain through WABA_CALLS_SINK; waba-coexistence.e2e |
+| WD-WABA-044 | backend-done |  | messages typed on the Business app (smb_message_echoes) become one outbound bubble with no unread, no routing, deduped by message id; a file or place is described, not copied (WaDesk downloaded echo media); e2e through the real webhook door |
+| WD-WABA-045 | backend-done |  | smb_app_state_sync adds the business app's contacts through ContactsService with quiet (no contact.created event, so no flow or notification), fills a blank name only, never applies remove; waba-coexistence.e2e |
+| WD-WABA-046 | backend-done |  | history webhook stored quietly through the inbox ingest: backdated to the real send time, both sides by own numbers, deduped by message id in the ledger, capped at 2000 per delivery, no unread, no contact, no realtime alert; waba-coexistence.e2e |
+| WD-WABA-047 | blocked |  | Twilio inbound needs the Twilio connection and an inbox channel kind for it, both part of WADEV (Baileys/Twilio devices); the shared ingest is ready for it |
+| WD-WABA-048 | wontfix |  | the bridge's inbound mirror is the in-process inbox path built in NODE (WD-NODE-017): no HTTP endpoint to port |
+| WD-WABA-049 | backend-done |  | built on main by the inbox work (PR 30): the Cloud API send adapter of the inbox channel (text, media, template, location, reaction; Meta or Interakt route); not run against real Meta |
+| WD-WABA-050 | wontfix |  | there is no Node bridge to hand credentials to: the unofficial engine runs in the worker and the Cloud API reads credentials from the number's own row |
+| WD-WABA-051 | backend-done |  | describeMetaError (Meta words first, code and trace appended), connect translators for 190/463/467/460, 200 and 100, a retryable flag for the inbox; waba-errors in infra/providers, meta-errors for the inbox, waba-connect.e2e |
+| WD-WABA-052 | wontfix |  | repair job for a connection without a WABA id; the connect flow here requires and proves the WABA id, so nothing creates such a row |
+| WD-WABA-053 | backend-done |  | daily worker job pulls Meta template button clicks onto wpcampaigns.meta_clicked_count (window from creation day, max 89 days, enables insights once and retries); waba-click-sync.e2e, waba-groups-handoff.spec |
+| WD-WABA-054 | blocked |  | the ads client reusing WABA ids is MADS code; WabaConnectService.resolveConnection already serves the primary number's ids to it |
+| WD-WABA-055 | frontend-done |  | saved customers: API (list, search, upsert by phone digits) and the Customers screen at /store/customers with a Settings tile; waba-customers.e2e |
+| WD-WABA-056 | frontend-done |  | removes the profile only and keeps the orders (WaDesk also deleted every order of that phone: a deliberate deviation, see parity); an unknown id is a 404; waba-customers.e2e |
+| WD-WABA-057 | wontfix |  | dead code in WaDesk (no page includes the views); the modern popup flow replaces it; the catalog link idea goes to CAT as an explicit action |
 
 ## node-bridge-runtime (node)
 
