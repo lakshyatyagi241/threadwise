@@ -16,6 +16,7 @@ import {
   type SectionMeta,
 } from '../lib/overrides-model';
 import { PlusIcon } from './icons';
+import { UploadMediaButton } from './upload-media-button';
 
 interface Attr {
   key: string;
@@ -345,6 +346,16 @@ export function OverridesPanel({
                 className="h-8 text-[12.5px]"
               />
               <div className="text-[10.5px] text-muted-foreground">{t('pasteLinkHint')}</div>
+              <UploadMediaButton
+                accept={
+                  kind === 'video'
+                    ? 'video/*'
+                    : kind === 'image'
+                      ? 'image/*'
+                      : '.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt'
+                }
+                onUploaded={(m) => update({ ...state, mediaUrl: m.url })}
+              />
             </div>
           </Section>
         )}

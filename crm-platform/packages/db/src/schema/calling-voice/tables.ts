@@ -321,6 +321,9 @@ export const waCalls = pgTable(
     index('idx_wa_calls_contact_id_started_at').on(t.orgId, t.contactId, t.startedAt),
     index('idx_wa_calls_wa_provider_config_id').on(t.orgId, t.waProviderConfigId),
     index('idx_wa_calls_status').on(t.orgId, t.status),
+    index('idx_wa_calls_ringing')
+      .on(t.orgId, t.startedAt.desc())
+      .where(sql`${t.status} = 'ringing'`),
     index('idx_wa_calls_provider').on(t.orgId, t.provider),
   ],
 );

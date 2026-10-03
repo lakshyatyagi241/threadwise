@@ -67,6 +67,8 @@ export const PLAN_FEATURE_DEFS = [
   // Team inbox gates (plan-inbox-chat.md decision 11), with Reference's column defaults: SLA policies off, the other three on.
   { key: 'inbox_sla', group: 'messaging', default: false },
   { key: 'inbox_routing', group: 'messaging', default: true },
+  // WhatsApp calling from the inbox (TW-CALL-003). Default true: no plan row held it here before, so every one that predates it keeps calling.
+  { key: 'waba_calling', group: 'messaging', default: true },
   { key: 'inbox_kanban', group: 'messaging', default: true },
   { key: 'team_performance', group: 'advanced', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
@@ -88,6 +90,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   wa_storefront: 'WhatsApp catalog',
   inbox_sla: 'SLA policies',
   inbox_routing: 'Routing rules',
+  waba_calling: 'WhatsApp calling',
   inbox_kanban: 'Kanban view',
   team_performance: 'Team performance',
 };
@@ -112,6 +115,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'wa_storefront',
   'inbox_sla',
   'inbox_routing',
+  'waba_calling',
   'inbox_kanban',
   'team_performance',
 ];

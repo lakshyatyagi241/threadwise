@@ -110,16 +110,14 @@ export class AccountsRepository {
   }
 
   /**
-   * Deletes every Instagram thread of the organization and its messages, and returns how many threads went. Messages carry no
-   * foreign key to their thread, so they are removed first by name; the other tables that point at a thread cascade or null out.
+   * Deletes every Instagram thread of the organization, and returns how many went. Their messages, ledger rows and events go with
+   * them (the foreign keys cascade); the channels stay, switched off, so the inbox keeps the names of what was linked.
    */
   async purgeInbox(tx: Tx, orgId: number): Promise<number> {
-    await tx.execute(sql`
-      DELETE FROM messages WHERE org_id = ${orgId}
-        AND conversation_id IN (SELECT id FROM conversations WHERE org_id = ${orgId} AND channel = 'instagram')`);
-    const res = await tx.execute(
-      sql`DELETE FROM conversations WHERE org_id = ${orgId} AND channel = 'instagram' RETURNING id`,
-    );
+    const res = await tx.execute(sql`
+      DELETE FROM conversations WHERE org_id = ${orgId}
+        AND channel_id IN (SELECT id FROM channels WHERE org_id = ${orgId} AND kind = 'instagram')
+      RETURNING id`);
     return res.rows.length;
   }
 

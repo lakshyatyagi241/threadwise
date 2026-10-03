@@ -31,8 +31,8 @@ Inventory written 2026-10-02: `docs/threadwise-port/inventory/campaigns.md` (TW-
 | C1   | Inventory, create, edit, list, detail, builder, recipients (DONE)                   | 001-010, 019                |
 | C2   | Cancel, resume, send now, resend, delete, export; the sender and the sweeper (DONE) | 011-018, 020, 023           |
 | C3   | Node callbacks, provider receipts, replies, opt-outs (DONE)                         | 021, 022                    |
-| C4   | Web: list, builder (create and edit), detail                                        | 001, 002, 003, 010, 016-020 |
-| C5   | Webhook and bell mappers for `campaign.*`; segments and engagement tabs             | 019, 024                    |
+| C4   | Web: list, builder (create and edit), detail (DONE)                                 | 001, 002, 003, 010, 016-020 |
+| C5   | Webhook and bell mappers for `campaign.*`; segments and engagement tabs (DONE)      | 019, 024                    |
 | C6   | Flow campaigns, build with AI, Meta click sync (BLOCKED: other domains)             | 025, 026, 027               |
 
 ## Channels and ECOM
@@ -71,7 +71,7 @@ Inventory written 2026-10-02: `docs/threadwise-port/inventory/channel-facebook.m
 | F1   | Pages: connect (login, popup, token), manage, webhook in, inbox ingest, backfill, reply, health sweep (DONE)      | 001-006, 007-011   |
 | F2   | Messenger broadcasts: audience, compose, BullMQ sender, start, pause, retry, delete (DONE)                        | 012, 013, 014      |
 | F3   | Messenger setup: Get Started, greeting, persistent menu, ice breakers (DONE)                                      | 015                |
-| F4   | Posts: composer, schedule, list, publish now, delete, my posts, insights (DONE; uploads blocked on storage)       | 016, 017, 018, 019 |
+| F4   | Posts: composer, schedule, list, publish now, delete, my posts, insights (DONE; post files upload through the marketing-media route)       | 016, 017, 018, 019 |
 | F5   | Web: hub, broadcasts, setup, posts, composer, my posts, insights (DONE; not yet compared with the running Reference) | 001, 012-019       |
 | F6   | AI composer tools, flow hand-off and node callbacks, social calendar (BLOCKED: AI provider, flow runtime, owner)  | 020, 021, 023      |
 

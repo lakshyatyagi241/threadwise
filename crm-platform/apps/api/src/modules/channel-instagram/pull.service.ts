@@ -71,7 +71,7 @@ export class PullService {
     let scanned = 0;
     for (const t of threads) {
       if (t.id === '') continue;
-      if (skipThread(known.get(`ig:${t.id}`), t.lastAt, force)) continue;
+      if (skipThread(known.get(`ig:${t.id}`.toLowerCase()), t.lastAt, force)) continue;
       scanned += 1;
       for (const m of await api.messages(t.id)) {
         // A message with no id cannot be told from one already stored, so it would be stored again on every pull.

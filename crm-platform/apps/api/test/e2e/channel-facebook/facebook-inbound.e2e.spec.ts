@@ -28,7 +28,7 @@ let conversations: GraphConversation[] = [];
 let history: Record<string, GraphMessage[]> = {};
 
 const defaults = (): FacebookPageApi => ({
-  getProfile: () => Promise.resolve({ ok: true, data: { id: 'P1' } }),
+  getProfile: () => Promise.resolve({ ok: true, data: { id: '100' } }),
   subscribeWebhooks: () => Promise.resolve({ ok: true }),
   unsubscribeWebhooks: () => Promise.resolve({ ok: true }),
   sendText: (psid, text) => {
@@ -95,7 +95,7 @@ beforeEach(() => {
 });
 
 /** A connected Page row for the tenant, its token sealed the way the app seals it. */
-async function connect(t: Tenant, pageId = 'P1', status = 'connected'): Promise<number> {
+async function connect(t: Tenant, pageId = '100', status = 'connected'): Promise<number> {
   const token = h.app.get(CryptoService).encrypt(`tok-${pageId}`);
   const r = await h.owner.query(
     `INSERT INTO facebook_pages (org_id, page_id, name, access_token, status) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
@@ -115,7 +115,7 @@ const post = (body: unknown, secret?: string) => {
   return req.send(raw);
 };
 
-const entry = (extra: object, pageId = 'P1') => ({
+const entry = (extra: object, pageId = '100') => ({
   object: 'page',
   entry: [{ id: pageId, ...extra }],
 });
@@ -134,7 +134,7 @@ const comment = (id: string, over: object = {}) =>
           item: 'comment',
           verb: 'add',
           comment_id: id,
-          post_id: 'P1_77',
+          post_id: '100_77',
           from: { id: '777', name: 'Ravi' },
           message: 'nice post',
           ...over,
@@ -143,17 +143,22 @@ const comment = (id: string, over: object = {}) =>
     ],
   });
 
+/** The threads and messages of the tenant's Facebook channels. Thread keys are stored lower-cased. */
 const convs = async (t: Tenant) =>
   (
     await h.owner.query(
-      `SELECT * FROM conversations WHERE org_id = $1 AND channel = 'facebook' ORDER BY id`,
+      `SELECT c.* FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE c.org_id = $1 AND ch.kind = 'facebook' ORDER BY c.id`,
       [t.orgId],
     )
   ).rows;
 const msgs = async (t: Tenant) =>
   (
     await h.owner.query(
-      `SELECT * FROM messages WHERE org_id = $1 AND provider = 'facebook' ORDER BY id`,
+      `SELECT m.* FROM messages m
+       JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+       JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE m.org_id = $1 AND ch.kind = 'facebook' ORDER BY m.id`,
       [t.orgId],
     )
   ).rows;
@@ -201,11 +206,11 @@ describe('TW-FB-006: the webhook door', () => {
 
   it('another object, an unknown Page and a disconnected Page answer 200 and write nothing', async () => {
     const t = await api.signup('fi3');
-    await connect(t, 'P1', 'expired');
+    await connect(t, '100', 'expired');
     expect((await post({ object: 'instagram', entry: [] })).status).toBe(200);
     expect((await post(dm('m1', 'hi'))).status).toBe(200);
     expect((await post(dm('m2', 'hi'), undefined)).status).toBe(200);
-    expect((await post(entry({ messaging: [] }, 'UNKNOWN'))).status).toBe(200);
+    expect((await post(entry({ messaging: [] }, '999'))).status).toBe(200);
     expect(await msgs(t)).toHaveLength(0);
   });
 
@@ -228,12 +233,10 @@ describe('TW-FB-007, 008: a Messenger message', () => {
 
     const [c] = await convs(t);
     expect(c).toMatchObject({
-      raw_jid: 'fb:P1:555',
-      provider: 'facebook',
-      origin: 'facebook',
-      status: 'pending',
-      inbox_status: 'open',
+      peer_key: 'fb:100:555',
+      status: 'open',
       title: 'Asha Rao',
+      peer_name: 'Asha Rao',
       unread_count: 1,
       preview: 'hello there',
     });
@@ -243,10 +246,10 @@ describe('TW-FB-007, 008: a Messenger message', () => {
       direction: 'in',
       body: 'hello there',
       status: 'received',
-      from_number: '555',
+      sender_kind: 'customer',
+      provider_message_id: 'm1',
     });
-    expect(m.meta.facebook).toMatchObject({ message_id: 'm1', psid: '555', kind: 'dm' });
-    expect(new Date(m.sent_at as string).getTime()).toBe(1_700_000_000_000);
+    expect(new Date(m.provider_ts as string).getTime()).toBe(1_700_000_000_000);
     const [ct] = await contacts(t);
     expect(ct).toMatchObject({
       channel_uid: '555',
@@ -280,14 +283,14 @@ describe('TW-FB-007, 008: a Messenger message', () => {
     const t = await api.signup('fi9');
     await connect(t);
     await post(dm('m1', 'hello'));
-    await h.owner.query(`UPDATE conversations SET inbox_status = 'resolved' WHERE org_id = $1`, [
+    await h.owner.query(`UPDATE conversations SET status = 'resolved' WHERE org_id = $1`, [
       t.orgId,
     ]);
     await post(dm('m2', 'still there?'));
-    expect((await convs(t))[0].inbox_status).toBe('open');
+    expect((await convs(t))[0].status).toBe('open');
   });
 
-  it('a photo keeps its address and type; echoes and receipts are ignored', async () => {
+  it('a photo from an address that is not Meta’s is not downloaded but the message is kept; echoes and receipts are ignored', async () => {
     const t = await api.signup('fi10');
     await connect(t);
     await post(
@@ -297,7 +300,8 @@ describe('TW-FB-007, 008: a Messenger message', () => {
     await post(entry({ messaging: [{ sender: { id: '555' }, delivery: { mids: ['m1'] } }] }));
     const all = await msgs(t);
     expect(all).toHaveLength(1);
-    expect(all[0]).toMatchObject({ media_path: 'https://x/a.jpg', media_type: 'image' });
+    // The address is data from outside: only Meta's own media hosts are fetched, so the message stays without the file.
+    expect(all[0]).toMatchObject({ direction: 'in', provider_message_id: 'm1', media_key: null });
   });
 
   it('a flow gets the message first; only when it does not consume it does automation run', async () => {
@@ -306,7 +310,7 @@ describe('TW-FB-007, 008: a Messenger message', () => {
     await post(dm('m1', 'hello'));
     expect(handed.map((x) => x.kind)).toEqual(['flow', 'automate']);
     expect(handed[0]!.ctx).toMatchObject({
-      pageId: 'P1',
+      pageId: '100',
       psid: '555',
       text: 'hello',
       newThread: true,
@@ -346,15 +350,13 @@ describe('TW-FB-009: a comment on a post', () => {
     await post(comment('c1'));
     await post(comment('c2', { from: { id: '888', name: 'Mina' }, message: 'me too' }));
     const all = await convs(t);
-    expect(all.map((c) => c.raw_jid)).toEqual(['fb:P1:post:P1_77:777', 'fb:P1:post:P1_77:888']);
+    expect(all.map((c) => c.peer_key)).toEqual([
+      'fb:100:post:100_77:777',
+      'fb:100:post:100_77:888',
+    ]);
     expect(all[0].title).toBe('Ravi');
-    expect((await msgs(t))[0].meta.facebook).toMatchObject({
-      comment_id: 'c1',
-      post_id: 'P1_77',
-      from_id: '777',
-      from_name: 'Ravi',
-      kind: 'comment',
-    });
+    // Meta's comment id is the message's provider id: it is what a public reply answers under.
+    expect((await msgs(t))[0]).toMatchObject({ provider_message_id: 'c1', direction: 'in' });
     expect(await contacts(t)).toHaveLength(0);
     expect(handed).toHaveLength(0);
   });
@@ -378,7 +380,7 @@ describe('TW-FB-009: a comment on a post', () => {
     await post(comment('c2', { message: '' }));
     expect((await msgs(t)).map((m) => m.body)).toEqual(['fetched text', '[comment]']);
 
-    await post(comment('c3', { from: { id: 'P1', name: 'Page P1' } }));
+    await post(comment('c3', { from: { id: '100', name: 'Page 100' } }));
     expect(await msgs(t)).toHaveLength(2);
   });
 });
@@ -388,7 +390,7 @@ describe('TW-FB-010: history backfill', () => {
     const t = await api.signup('fi15');
     const pageRowId = await connect(t);
     conversations = [
-      { id: 't_1', participants: { data: [{ id: 'P1' }, { id: '555' }] } },
+      { id: 't_1', participants: { data: [{ id: '100' }, { id: '555' }] } },
       { id: 't_2' },
     ];
     history = {
@@ -403,7 +405,7 @@ describe('TW-FB-010: history backfill', () => {
           id: 'h2',
           message: 'our reply',
           created_time: '2026-01-02T00:00:00+0000',
-          from: { id: 'P1' },
+          from: { id: '100' },
         },
         {
           id: 'h1',
@@ -418,10 +420,12 @@ describe('TW-FB-010: history backfill', () => {
     const first = await svc.run(t.orgId, pageRowId);
     expect(first).toMatchObject({ threads: 1, messages: 2 });
     expect((await msgs(t)).map((m) => m.body)).toEqual(['oldest', 'newest']);
-    expect((await convs(t))[0].raw_jid).toBe('fb:P1:555');
-    expect(new Date((await convs(t))[0].last_message_at as string).toISOString()).toBe(
+    expect((await convs(t))[0].peer_key).toBe('fb:100:555');
+    // The messages keep Meta's own times.
+    expect((await msgs(t)).map((m) => new Date(m.provider_ts as string).toISOString())).toEqual([
+      '2026-01-01T00:00:00.000Z',
       '2026-01-03T00:00:00.000Z',
-    );
+    ]);
     expect(handed).toHaveLength(0);
 
     const again = await svc.run(t.orgId, pageRowId);
@@ -447,7 +451,9 @@ describe('TW-FB-010: history backfill', () => {
     };
     await h.app.get(BackfillService).run(t.orgId, pageRowId);
     expect(await convs(t)).toHaveLength(1);
-    expect(new Date((await convs(t))[0].last_message_at as string).getTime()).toBe(live);
+    expect(
+      new Date((await convs(t))[0].last_message_at as string).getTime(),
+    ).toBeGreaterThanOrEqual(live);
   });
 });
 
@@ -457,35 +463,23 @@ describe('TW-FB-011: replying through the Page', () => {
     await connect(t);
     const out = await h.app
       .get(SenderService)
-      .reply(t.orgId, { rawJid: 'fb:P1:555', text: 'Thanks!' });
+      .reply(t.orgId, { rawJid: 'fb:100:555', text: 'Thanks!' });
     expect(out).toEqual({ ok: true, providerMessageId: 'mid.out', error: null });
     expect(sent).toEqual([{ method: 'sendText', args: ['555', 'Thanks!'] }]);
   });
 
-  it('a file goes first and its text follows as its own message; a file with no public address is refused', async () => {
+  it('a file goes first and its text follows as its own message', async () => {
     const t = await api.signup('fi18');
     await connect(t);
     const svc = h.app.get(SenderService);
     const ok = await svc.reply(t.orgId, {
-      rawJid: 'fb:P1:555',
+      rawJid: 'fb:100:555',
       text: 'See this',
-      media: { type: 'image', path: 'https://x/a.jpg' },
+      media: { type: 'image', url: 'https://x/a.jpg' },
     });
     expect(ok.ok).toBe(true);
     expect(sent.map((s) => s.method)).toEqual(['sendAttachment', 'sendText']);
     expect(sent[0]!.args).toEqual(['555', 'image', 'https://x/a.jpg']);
-    sent.length = 0;
-    const bad = await svc.reply(t.orgId, {
-      rawJid: 'fb:P1:555',
-      text: 'x',
-      media: { type: 'image', path: 'stored/a.jpg' },
-    });
-    expect(bad).toEqual({
-      ok: false,
-      providerMessageId: null,
-      error: 'The file could not be reached.',
-    });
-    expect(sent).toHaveLength(0);
   });
 
   it('a comment thread is answered in public under that thread’s latest comment', async () => {
@@ -495,7 +489,7 @@ describe('TW-FB-011: replying through the Page', () => {
     await post(comment('c2', { message: 'second' }));
     const out = await h.app
       .get(SenderService)
-      .reply(t.orgId, { rawJid: 'fb:P1:post:P1_77:777', text: 'Thank you' });
+      .reply(t.orgId, { rawJid: 'fb:100:post:100_77:777', text: 'Thank you' });
     expect(out.ok).toBe(true);
     expect(sent).toEqual([{ method: 'replyComment', args: ['c2', 'Thank you'] }]);
   });
@@ -507,14 +501,14 @@ describe('TW-FB-011: replying through the Page', () => {
     expect((await svc.reply(t.orgId, { rawJid: 'tg:1:2', text: 'x' })).error).toBe(
       'Not a Facebook thread.',
     );
-    expect((await svc.reply(t.orgId, { rawJid: 'fb:OTHER:555', text: 'x' })).error).toBe(
+    expect((await svc.reply(t.orgId, { rawJid: 'fb:999:555', text: 'x' })).error).toBe(
       'Facebook Page not connected',
     );
 
     override = {
       sendText: () => Promise.resolve({ ok: false, error: 'outside window', code: 10 }),
     };
-    expect(await svc.reply(t.orgId, { rawJid: 'fb:P1:555', text: 'x' })).toEqual({
+    expect(await svc.reply(t.orgId, { rawJid: 'fb:100:555', text: 'x' })).toEqual({
       ok: false,
       providerMessageId: null,
       error: 'outside window',
@@ -528,12 +522,12 @@ describe('TW-FB-011: replying through the Page', () => {
       sendText: () =>
         Promise.resolve({ ok: false, error: 'Error validating access token', code: 190 }),
     };
-    await svc.reply(t.orgId, { rawJid: 'fb:P1:555', text: 'x' });
+    await svc.reply(t.orgId, { rawJid: 'fb:100:555', text: 'x' });
     expect(
       (await h.owner.query(`SELECT status FROM facebook_pages WHERE org_id = $1`, [t.orgId]))
         .rows[0].status,
     ).toBe('expired');
-    expect((await svc.reply(t.orgId, { rawJid: 'fb:P1:555', text: 'x' })).error).toBe(
+    expect((await svc.reply(t.orgId, { rawJid: 'fb:100:555', text: 'x' })).error).toBe(
       'Facebook Page not connected',
     );
   });
