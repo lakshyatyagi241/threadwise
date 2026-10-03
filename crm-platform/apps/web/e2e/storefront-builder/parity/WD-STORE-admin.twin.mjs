@@ -2192,6 +2192,14 @@ export default (h) => {
           'ours checks the value in the form first (inline message, field focused) and sends nothing when it is invalid; the stored result and the message are compared separately (map.stored, low.silentRejection)',
       },
       {
+        scenario: 'settings-db.brand_color.spaces',
+        key: 'map.stored',
+        quirk:
+          'the pattern attribute of the WaDesk hex box refuses a spaces-only value in the browser',
+        reason:
+          'ours trims first, so a spaces-only hex box is blank (not set) and saves; nothing is stored wrongly',
+      },
+      {
         scenario: 'settings-db.brand_color.empty',
         key: 'map.stored',
         quirk:
