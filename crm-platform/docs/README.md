@@ -8,6 +8,7 @@
 | run it locally        | [runbooks/local-development.md](runbooks/local-development.md)                                   |
 | add a table           | [architecture/multi-tenancy.md](architecture/multi-tenancy.md#adding-a-new-table--the-checklist) |
 | add a module          | copy `apps/api/src/modules/crm/contacts/`                                                        |
+| see what is planned   | [backlog.md](backlog.md) and the product specs in [specs/](specs/)                               |
 
 ## Architecture
 
