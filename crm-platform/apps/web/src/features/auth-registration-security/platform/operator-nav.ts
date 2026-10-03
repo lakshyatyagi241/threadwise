@@ -16,6 +16,7 @@ import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/opera
 import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
 import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
+import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -106,12 +107,7 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: 'addons-extension-registry.nav.group',
   },
   // Platform support desk (SUPP): its own message file, so the keys live outside this domain's namespace.
-  {
-    id: 'support-inbox',
-    href: '/admin/support',
-    labelKey: 'platform-support-desk.nav.inbox',
-    groupKey: 'platform-support-desk.nav.group',
-  },
+  ...SUPP_OPERATOR_NAV,
   {
     id: 'ai-keys',
     href: '/admin/api-keys',

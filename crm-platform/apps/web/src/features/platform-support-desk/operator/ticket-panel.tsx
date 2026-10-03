@@ -7,8 +7,10 @@ import {
   SUPP_TICKET_PRIORITIES,
   SUPP_TICKET_STATUSES,
   operatorTicketDetailSchema,
+  runnablePlaybooksResponseSchema,
   ticketAssigneesResponseSchema,
   type OperatorTicketDetail,
+  type SlaTimer,
 } from '@crm/contracts';
 import { Alert, Badge, Button, Checkbox, Select, Spinner, Textarea, cn } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
@@ -18,6 +20,8 @@ import { ApiError } from '@/lib/api/errors';
 import { INBOX_KEY, errorKey, formatWhen } from '../lib/display';
 
 const NS = 'platform-support-desk';
+
+const SLA_TONE = { ok: 'success', met: 'success', warn: 'warning', breach: 'danger' } as const;
 
 /** The slide-in ticket panel: quick-action pills, assignment, the whole thread and the reply box. */
 export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }) {
@@ -34,6 +38,7 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
   const key = ['support', 'operator', 'ticket', id] as const;
   const [body, setBody] = useState('');
   const [note, setNote] = useState(false);
+  const [playbookId, setPlaybookId] = useState('');
 
   const q = useQuery({
     queryKey: key,
@@ -45,6 +50,16 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
     queryFn: ({ signal }) =>
       operatorFetch('/support/tickets/assignees', {
         schema: ticketAssigneesResponseSchema,
+        signal,
+      }),
+    enabled: canWrite,
+  });
+
+  const playbooks = useQuery({
+    queryKey: ['support', 'operator', 'runnable'],
+    queryFn: ({ signal }) =>
+      operatorFetch('/support/playbooks/runnable', {
+        schema: runnablePlaybooksResponseSchema,
         signal,
       }),
     enabled: canWrite,
@@ -69,6 +84,20 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
         schema: operatorTicketDetailSchema,
       }),
     onSuccess: (d, v) => done(d, v.ok),
+    onError: failed,
+  });
+
+  const runPlaybook = useMutation({
+    mutationFn: (v: { id: string; name: string }) =>
+      operatorFetch(`/support/tickets/${id}/playbooks/${v.id}/run`, {
+        method: 'POST',
+        schema: operatorTicketDetailSchema,
+      }),
+    onSuccess: (d, v) => {
+      setPlaybookId('');
+      void qc.invalidateQueries({ queryKey: ['support', 'operator', 'playbooks'] });
+      done(d, tt('playbook', { name: v.name }));
+    },
     onError: failed,
   });
 
@@ -180,6 +209,53 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
               </Select>
             </label>
 
+            {canWrite && (playbooks.data?.data.length ?? 0) > 0 && (
+              <form
+                className="flex items-center gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const pb = playbooks.data?.data.find((p) => p.id === playbookId);
+                  if (pb) runPlaybook.mutate({ id: pb.id, name: pb.name });
+                }}
+              >
+                <span className="shrink-0 text-sm font-medium">{t('runPlaybook')}</span>
+                <Select
+                  aria-label={t('runPlaybook')}
+                  value={playbookId}
+                  disabled={busy || runPlaybook.isPending}
+                  onChange={(e) => setPlaybookId(e.target.value)}
+                >
+                  <option value="">{t('pickPlaybook')}</option>
+                  {playbooks.data?.data.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </Select>
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  disabled={!playbookId || busy || runPlaybook.isPending}
+                >
+                  {t('run')}
+                </Button>
+              </form>
+            )}
+
+            <dl
+              className="grid grid-cols-2 gap-1 border-t pt-3 font-mono text-xs"
+              data-testid="sla"
+            >
+              <dt className="text-muted-foreground">{t('slaFirst')}</dt>
+              <dd>
+                <SlaPill timer={d.sla.firstResponse} policy={d.sla.policy !== null} />
+              </dd>
+              <dt className="text-muted-foreground">{t('slaResolution')}</dt>
+              <dd>
+                <SlaPill timer={d.sla.resolution} policy={d.sla.policy !== null} />
+              </dd>
+            </dl>
+
             <ol className="space-y-2" data-testid="thread">
               <Bubble who={t('customerInitial', { name: d.customerName || d.customerEmail })}>
                 {d.message}
@@ -230,6 +306,19 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
       )}
     </aside>
   );
+}
+
+/** "12m left", "8m over", "met" or "no policy" (TW-SUPP-014). */
+function SlaPill({ timer, policy }: { timer: SlaTimer | null; policy: boolean }) {
+  const t = useTranslations(`${NS}.operator.panel`);
+  if (!timer || !policy) return <span className="text-muted-foreground">{t('noPolicy')}</span>;
+  const text =
+    timer.severity === 'met'
+      ? t('met')
+      : timer.breached
+        ? t('over', { n: timer.minutesOver ?? 0 })
+        : t('left', { n: timer.minutesRemaining ?? 0 });
+  return <Badge tone={SLA_TONE[timer.severity]}>{text}</Badge>;
 }
 
 function Meta({ label, children }: { label: string; children: React.ReactNode }) {
