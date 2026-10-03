@@ -1,0 +1,12 @@
+{
+  "error": {
+    "message": "Access denied",
+    "type": "OAuthException",
+    "code": 131005,
+    "fbtrace_id": "AbCdEfGhIj12345",
+    "error_data": {
+      "messaging_product": "whatsapp",
+      "details": "Permission denied"
+    }
+  }
+}

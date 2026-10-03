@@ -59,3 +59,4 @@ export * from './team-inbox-conversations';
 export * from './team-inbox-routing-sla';
 export * from './campaigns';
 export * from './workspaces-teams-tenancy';
+export * from './whatsapp-providers';

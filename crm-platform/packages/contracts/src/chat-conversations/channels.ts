@@ -15,7 +15,11 @@ export const CHANNEL_KINDS = ['simulator', 'whatsapp_cloud', 'webchat'] as const
 export const channelKindSchema = z.enum(CHANNEL_KINDS);
 export type ChannelKind = z.infer<typeof channelKindSchema>;
 
-export const channelStatusSchema = z.enum(['connected', 'disconnected', 'error']);
+/**
+ * `needs_reauth` is `error` with a known cure: the provider no longer accepts the credentials (an expired or revoked token), so a
+ * person must paste a new one. Set by the system only, like `error`.
+ */
+export const channelStatusSchema = z.enum(['connected', 'disconnected', 'error', 'needs_reauth']);
 export type ChannelStatus = z.infer<typeof channelStatusSchema>;
 
 export const messageMediaKindSchema = z.enum([
@@ -96,6 +100,12 @@ export type ChannelSettingsPatch = z.infer<typeof channelSettingsPatchSchema>;
 
 // --- credentials (write only) -------------------------------------------------------------------------------------------
 
+/**
+ * What a WhatsApp channel holds. Which keys are REQUIRED depends on how the workspace's WhatsApp provider is set up, so the schema
+ * only fixes their shape and the server checks the rest against `whatsappCredentialRequirementsSchema` (`GET /channels/requirements/
+ * whatsapp_cloud`): in `channel_token` mode (Meta directly) the customer supplies `accessToken` and `appSecret`; in `platform_token`
+ * mode (a BSP, the platform's own credential) only `phoneNumberId` and `businessAccountId` are needed and no token is ever asked.
+ */
 export const whatsappCloudCredentialsSchema = z
   .object({
     /** Meta's phone number id: the sender in every send. */
@@ -103,10 +113,21 @@ export const whatsappCloudCredentialsSchema = z
       .string()
       .trim()
       .regex(/^\d{5,32}$/, 'Digits only'),
-    accessToken: z.string().trim().min(10).max(2048),
-    /** Signs every webhook delivery (X-Hub-Signature-256). */
-    appSecret: z.string().trim().min(8).max(256),
+    /** The customer's own permanent access token (`channel_token` mode only). */
+    accessToken: z.string().trim().min(10).max(2048).optional(),
+    /** Signs every webhook delivery (X-Hub-Signature-256) when the customer's own Meta app is the sender (`channel_token` mode). */
+    appSecret: z.string().trim().min(8).max(256).optional(),
+    /** The WhatsApp Business Account (WABA) id: needed to subscribe the app to webhooks and to read the account. */
     businessAccountId: z
+      .string()
+      .trim()
+      .regex(/^\d{5,32}$/, 'Digits only')
+      .optional(),
+    /**
+     * The Meta app id. Optional: with it, a health check can ask Meta when the token expires and which permissions it has
+     * (`debug_token` needs `app_id|app_secret`); without it the token is judged only by whether Meta accepts it.
+     */
+    appId: z
       .string()
       .trim()
       .regex(/^\d{5,32}$/, 'Digits only')
@@ -114,6 +135,103 @@ export const whatsappCloudCredentialsSchema = z
   })
   .strict();
 export type WhatsappCloudCredentials = z.infer<typeof whatsappCloudCredentialsSchema>;
+
+/** What this workspace's provider needs in a connection: `GET /channels/requirements/whatsapp_cloud`. */
+export const whatsappCredentialRequirementsSchema = z.object({
+  /** The platform's key for the provider the workspace sends through (`meta_direct`, `interakt`, ...). */
+  providerKey: z.string(),
+  credentialMode: z.enum(['platform_token', 'channel_token']),
+  /** Credential keys the connection form must collect. */
+  required: z.array(z.enum(['phoneNumberId', 'businessAccountId', 'accessToken', 'appSecret'])),
+});
+export type WhatsappCredentialRequirements = z.infer<typeof whatsappCredentialRequirementsSchema>;
+
+// --- health -------------------------------------------------------------------------------------------------------------
+
+export const channelHealthIssueSchema = z.object({
+  severity: z.enum(['critical', 'warning', 'info']),
+  /** Stable, for the web to translate: `TOKEN_INVALID`, `TOKEN_EXPIRING`, `NO_WEBHOOK_SUBSCRIPTION`, `QUALITY_RED`, ... */
+  code: z.string(),
+  title: z.string(),
+  detail: z.string().nullable(),
+});
+export type ChannelHealthIssue = z.infer<typeof channelHealthIssueSchema>;
+
+/**
+ * What the last health check found, stored on the channel and returned by `POST /channels/:id/health`. Built from live reads of
+ * the provider (for WhatsApp: the phone number node, the account node, the app's subscription and, with an app id, the token).
+ * One failing read never blanks the rest; what could not be read is in `issues`.
+ */
+export const channelHealthSchema = z.object({
+  /** The number is reachable with the stored token and the provider reports it usable. */
+  ok: z.boolean(),
+  /** blocked: a critical issue; attention: a warning; healthy otherwise. */
+  overall: z.enum(['healthy', 'attention', 'blocked']),
+  checkedAt: z.string().datetime(),
+  /** The name Meta verified for the number. */
+  displayName: z.string().nullable(),
+  displayPhoneNumber: z.string().nullable(),
+  /** Meta's `quality_rating`: GREEN, YELLOW, RED, UNKNOWN. */
+  qualityRating: z.string().nullable(),
+  /** Meta's `messaging_limit_tier` (TIER_250, TIER_1K, ..., TIER_UNLIMITED). */
+  messagingLimitTier: z.string().nullable(),
+  /** Meta's number `status`: CONNECTED, PENDING, FLAGGED, RESTRICTED, ... */
+  phoneStatus: z.string().nullable(),
+  codeVerificationStatus: z.string().nullable(),
+  nameStatus: z.string().nullable(),
+  platformType: z.string().nullable(),
+  token: z.object({
+    /** null: not asked (no app id stored), or the read failed. */
+    valid: z.boolean().nullable(),
+    expiresAt: z.string().datetime().nullable(),
+    scopes: z.array(z.string()).nullable(),
+  }),
+  webhook: z.object({
+    /** Whether the app is subscribed to the account's webhooks; null when it could not be read (no account id, or a failed read). */
+    subscribed: z.boolean().nullable(),
+  }),
+  issues: z.array(channelHealthIssueSchema),
+  /** The first thing that stopped the number being usable, in our vocabulary (a problem+json code or a Meta error code). */
+  errorCode: z.string().nullable(),
+  errorMessage: z.string().nullable(),
+});
+export type ChannelHealth = z.infer<typeof channelHealthSchema>;
+
+/** The last failure the system recorded on a channel: a send the provider refused for credentials, or a failed health check. */
+export const channelLastErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
+  at: z.string().datetime(),
+});
+export type ChannelLastError = z.infer<typeof channelLastErrorSchema>;
+
+/** `POST /channels/:id/health`: the snapshot, plus the channel's status after it (a token Meta refused moves it to `needs_reauth`). */
+export const channelHealthResponseSchema = channelHealthSchema.extend({
+  status: channelStatusSchema,
+  /** The channel's version after the check wrote its snapshot: the next PATCH must send this one, not the one read before. */
+  rowVersion: z.number().int(),
+});
+export type ChannelHealthResponse = z.infer<typeof channelHealthResponseSchema>;
+
+/** `POST /channels/:id/subscribe`. */
+export const subscribeChannelSchema = z
+  .object({
+    /**
+     * Point this account's webhooks at this platform even when the Meta app's own configuration names another URL (the account-level
+     * callback override). Issues a new verify token, which Meta is told in the same call and which is shown once in the answer.
+     */
+    overrideCallback: z.boolean().default(false),
+  })
+  .default({});
+export type SubscribeChannelInput = z.infer<typeof subscribeChannelSchema>;
+
+export const subscribeChannelResponseSchema = z.object({
+  subscribed: z.literal(true),
+  overrideApplied: z.boolean(),
+  /** Only when `overrideCallback` was used: the new verify token. */
+  webhookVerifyToken: z.string().nullable(),
+});
+export type SubscribeChannelResponse = z.infer<typeof subscribeChannelResponseSchema>;
 
 // --- responses ----------------------------------------------------------------------------------------------------------
 
@@ -129,9 +247,15 @@ export const channelResponseSchema = z.object({
   /** What the adapter reports plus this channel's overrides. */
   capabilities: channelCapabilitiesSchema,
   settings: channelSettingsSchema,
+  /** The provider's account id when it has one (WhatsApp: the WABA id). Not a secret. */
+  businessAccountId: z.string().nullable().optional(),
   hasCredentials: z.boolean(),
   /** Last four characters of each stored secret, for recognising which token is connected. */
   credentialHints: z.record(z.string()),
+  /** The last health check (null: never run). Always sent by the API; optional only so a fixture built before it still parses. */
+  health: channelHealthSchema.nullable().optional(),
+  /** Why the system last stopped trusting the channel; cleared when it is switched on again. */
+  lastError: channelLastErrorSchema.nullable().optional(),
   /** Where the provider posts (absolute). Null for a channel no provider can reach (the simulator). */
   webhookUrl: z.string().nullable(),
   lastEventAt: z.string().datetime().nullable(),

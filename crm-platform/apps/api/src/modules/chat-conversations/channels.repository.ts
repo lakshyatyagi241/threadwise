@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { ChannelCapabilities, ChannelSettings, ChannelStatus } from '@crm/contracts';
+import type {
+  ChannelCapabilities,
+  ChannelHealth,
+  ChannelLastError,
+  ChannelSettings,
+  ChannelStatus,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 /**
@@ -24,18 +30,21 @@ export interface ChannelRow {
   status: ChannelStatus;
   externalId: string | null;
   displayAddress: string | null;
+  businessAccountId: string | null;
   hasCredentials: boolean;
   credentialHints: Record<string, string>;
   capabilities: Partial<ChannelCapabilities>;
   settings: ChannelSettings;
+  health: ChannelHealth | null;
+  lastError: ChannelLastError | null;
   lastEventAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
   rowVersion: number;
 }
 
-const COLUMNS = sql`id, uuid, kind, name, status, external_id, display_address, credential_hints,
-  (credentials_enc IS NOT NULL) AS has_credentials, capabilities, settings, last_event_at, created_at, updated_at, row_version`;
+const COLUMNS = sql`id, uuid, kind, name, status, external_id, display_address, business_account_id, credential_hints,
+  (credentials_enc IS NOT NULL) AS has_credentials, capabilities, settings, health, last_error, last_event_at, created_at, updated_at, row_version`;
 
 const toRow = (r: Raw): ChannelRow => ({
   id: Number(r.id),
@@ -45,10 +54,13 @@ const toRow = (r: Raw): ChannelRow => ({
   status: r.status as ChannelStatus,
   externalId: (r.external_id as string | null) ?? null,
   displayAddress: (r.display_address as string | null) ?? null,
+  businessAccountId: (r.business_account_id as string | null) ?? null,
   hasCredentials: r.has_credentials === true,
   credentialHints: (r.credential_hints as Record<string, string>) ?? {},
   capabilities: (r.capabilities as Partial<ChannelCapabilities>) ?? {},
   settings: (r.settings as ChannelSettings) ?? { metered: true },
+  health: (r.health as ChannelHealth | null) ?? null,
+  lastError: (r.last_error as ChannelLastError | null) ?? null,
   lastEventAt: date(r.last_event_at),
   createdAt: new Date(r.created_at as string),
   updatedAt: new Date(r.updated_at as string),
@@ -61,6 +73,7 @@ export interface NewChannel {
   status: ChannelStatus;
   externalId: string | null;
   displayAddress: string | null;
+  businessAccountId?: string | null;
   credentialsEnc: string | null;
   credentialHints: Record<string, string>;
   webhookTokenHash: string | null;
@@ -73,9 +86,14 @@ export interface ChannelPatch {
   status?: ChannelStatus;
   displayAddress?: string | null;
   externalId?: string | null;
+  businessAccountId?: string | null;
   settings?: ChannelSettings;
   credentialsEnc?: string;
   credentialHints?: Record<string, string>;
+  /** The last health check; stored with its time. */
+  health?: ChannelHealth | null;
+  /** null clears it (the channel was switched on again, or a check passed). */
+  lastError?: ChannelLastError | null;
 }
 
 @Injectable()
@@ -118,15 +136,18 @@ export class ChannelsRepository {
     return (rowsOf(res)[0]?.webhook_token_hash as string | null | undefined) ?? null;
   }
 
-  /** Null when the same provider account is already connected here (the unique key on kind + external id). */
+  /**
+   * Null when the same provider account is already connected: here (the unique key on org + kind + external id) or, for a WhatsApp
+   * number, in any workspace (one number, one channel).
+   */
   async insert(tx: Tx, orgId: number, c: NewChannel): Promise<ChannelRow | null> {
     const res = await tx.execute(sql`
-      INSERT INTO channels (org_id, kind, name, status, external_id, display_address, credentials_enc, credential_hints,
+      INSERT INTO channels (org_id, kind, name, status, external_id, display_address, business_account_id, credentials_enc, credential_hints,
                             webhook_token_hash, webhook_token_rotated_at, settings, created_by)
-      VALUES (${orgId}, ${c.kind}, ${c.name}, ${c.status}, ${c.externalId}, ${c.displayAddress}, ${c.credentialsEnc},
+      VALUES (${orgId}, ${c.kind}, ${c.name}, ${c.status}, ${c.externalId}, ${c.displayAddress}, ${c.businessAccountId ?? null}, ${c.credentialsEnc},
               ${JSON.stringify(c.credentialHints)}::jsonb, ${c.webhookTokenHash},
               ${c.webhookTokenHash ? sql`now()` : sql`NULL`}, ${JSON.stringify(c.settings)}::jsonb, ${c.createdBy})
-      ON CONFLICT (org_id, kind, external_id) DO NOTHING
+      ON CONFLICT DO NOTHING
       RETURNING ${COLUMNS}`);
     const r = rowsOf(res)[0];
     return r ? toRow(r) : null;
@@ -148,6 +169,21 @@ export class ChannelsRepository {
     if (p.status !== undefined) sets.push(sql`status = ${p.status}`);
     if (p.displayAddress !== undefined) sets.push(sql`display_address = ${p.displayAddress}`);
     if (p.externalId !== undefined) sets.push(sql`external_id = ${p.externalId}`);
+    if (p.businessAccountId !== undefined) {
+      sets.push(sql`business_account_id = ${p.businessAccountId}`);
+    }
+    if (p.health !== undefined) {
+      sets.push(
+        p.health === null
+          ? sql`health = NULL, health_checked_at = NULL`
+          : sql`health = ${JSON.stringify(p.health)}::jsonb, health_checked_at = ${p.health.checkedAt}::timestamptz`,
+      );
+    }
+    if (p.lastError !== undefined) {
+      sets.push(
+        p.lastError === null ? sql`last_error = NULL` : sql`last_error = ${JSON.stringify(p.lastError)}::jsonb`,
+      );
+    }
     if (p.settings !== undefined) sets.push(sql`settings = ${JSON.stringify(p.settings)}::jsonb`);
     if (p.credentialsEnc !== undefined) {
       sets.push(sql`credentials_enc = ${p.credentialsEnc}`);
@@ -160,6 +196,47 @@ export class ChannelsRepository {
       RETURNING ${COLUMNS}`);
     const r = rowsOf(res)[0];
     return r ? toRow(r) : null;
+  }
+
+  /**
+   * The system noticed the provider no longer accepts this channel's credentials: a `connected` channel moves to `status`
+   * (`needs_reauth`, or `error` when the platform's own credential is what failed), with the reason. Conditional on the status so the
+   * first send to notice wins and every later one is a no-op; returns the row only when it moved.
+   */
+  async markCredentialsRefused(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    status: 'needs_reauth' | 'error',
+    error: ChannelLastError,
+  ): Promise<ChannelRow | null> {
+    const res = await tx.execute(sql`
+      UPDATE channels SET status = ${status}, last_error = ${JSON.stringify(error)}::jsonb
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'connected'
+      RETURNING ${COLUMNS}`);
+    const r = rowsOf(res)[0];
+    return r ? toRow(r) : null;
+  }
+
+  /**
+   * A health check's outcome: the snapshot, the (possibly moved) status and the last error. Not versioned on purpose: it is the
+   * system's bookkeeping, not an edit a person is making, so it must not fail against a person's stale `rowVersion` (the answer
+   * carries the new version for the next edit).
+   */
+  async recordHealth(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    r: { status: ChannelStatus; health: ChannelHealth; lastError: ChannelLastError | null },
+  ): Promise<ChannelRow | null> {
+    const res = await tx.execute(sql`
+      UPDATE channels SET status = ${r.status}, health = ${JSON.stringify(r.health)}::jsonb,
+        health_checked_at = ${r.health.checkedAt}::timestamptz,
+        last_error = ${r.lastError === null ? sql`NULL` : sql`${JSON.stringify(r.lastError)}::jsonb`}
+      WHERE org_id = ${orgId} AND id = ${id}
+      RETURNING ${COLUMNS}`);
+    const x = rowsOf(res)[0];
+    return x ? toRow(x) : null;
   }
 
   async setWebhookTokenHash(
@@ -194,5 +271,19 @@ export class ChannelsRepository {
     const res = await db.execute(sql`SELECT * FROM chat_channel_lookup(${uuid}::uuid)`);
     const r = rowsOf(res)[0];
     return r ? { id: Number(r.channel_id), orgId: Number(r.channel_org_id) } : null;
+  }
+
+  /**
+   * The provider-level webhook names a number, not a workspace: this resolves it to its channel and tenant through the SECURITY DEFINER
+   * lookup (no tenant exists yet on a public route). One row at most (one number, one channel).
+   */
+  async locateByExternal(
+    db: { execute: (q: SQL) => Promise<{ rows: unknown[] }> },
+    kind: string,
+    externalId: string,
+  ): Promise<{ id: number; orgId: number; uuid: string } | null> {
+    const res = await db.execute(sql`SELECT * FROM chat_channel_by_external(${kind}, ${externalId})`);
+    const r = rowsOf(res)[0];
+    return r ? { id: Number(r.channel_id), orgId: Number(r.channel_org_id), uuid: r.channel_uuid as string } : null;
   }
 }

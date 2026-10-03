@@ -2,25 +2,36 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
+  type ChannelHealthResponse,
   type ChannelListResponse,
   type ChannelResponse,
+  type ChannelStatus,
   type ChannelWebhookReveal,
   type CreateChannelInput,
   type CreateSimulatorChannelInput,
+  type SubscribeChannelInput,
+  type SubscribeChannelResponse,
   type UpdateChannelInput,
+  type WhatsappCredentialRequirements,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
-import type { ChannelAdapter, ChannelRuntime } from '../../infra/providers/chat-conversations';
+import {
+  ChannelError,
+  type ChannelAdapter,
+  type ChannelHealthResult,
+  type ChannelRuntime,
+} from '../../infra/providers/chat-conversations';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { mergeSettings, normalizeSettings } from './channel-settings';
 import { ChannelVault, type Credentials } from './channel-vault';
-import { toChannelResponse } from './channels.mapper';
+import { ChatRealtimePublisher } from './chat-realtime.publisher';
+import { toChannelResponse, webhookPath } from './channels.mapper';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { SimulatorPolicy } from './simulator-policy.service';
 
@@ -52,6 +63,7 @@ export class ChannelRegistryService {
     private readonly simulator: SimulatorPolicy,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly realtime: ChatRealtimePublisher,
     config: ConfigService<Env, true>,
   ) {
     this.publicBaseUrl = config.get('APP_URL', { infer: true }).replace(/\/$/, '');
@@ -143,18 +155,20 @@ export class ChannelRegistryService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    const credentials = this.parseCredentials(adapter, input.credentials);
     const { orgId, userId } = this.actor();
+    const credentials = this.parseCredentials(adapter, input.credentials);
+    await this.assertRequirements(adapter, orgId, credentials);
     const sealed = this.vault.seal(credentials, adapter.secretFields);
     const token = this.vault.newWebhookToken();
     return this.db.tx(async (tx) => {
       const row = await this.repo.insert(tx, orgId, {
         kind: adapter.kind,
         name: input.name,
-        // Connected only once the adapter can send AND a health check has passed; neither exists yet for a skeleton adapter.
+        // Connected only when a person switches it on, and then only after a live health check passed (see `update`).
         status: 'disconnected',
         externalId: adapter.externalIdOf(credentials),
         displayAddress: input.displayAddress ?? null,
+        businessAccountId: credentials.businessAccountId ?? null,
         credentialsEnc: sealed.cipher,
         credentialHints: sealed.hints,
         webhookTokenHash: token.hash,
@@ -172,13 +186,40 @@ export class ChannelRegistryService {
 
   async update(uuid: string, input: UpdateChannelInput): Promise<ChannelResponse> {
     const { orgId } = this.actor();
+
+    // Read first, and prove the credentials work before anything is written: a call to the provider never holds a transaction open,
+    // and a channel is never switched on with credentials nobody has tried.
+    const pre = await this.db.tx(async (tx) => {
+      const before = await this.row(tx, orgId, uuid);
+      const adapter = this.adapters.for(before.kind);
+      const connecting = input.status === 'connected' && before.status !== 'connected';
+      if (connecting) this.assertCanConnect(adapter, before);
+      const merged =
+        input.credentials !== undefined
+          ? await this.rotatedCredentials(tx, orgId, before, adapter, input.credentials)
+          : null;
+      const opened = connecting ? await this.runtime(tx, orgId, before) : null;
+      const runtime = opened && merged ? { ...opened, credentials: merged } : opened;
+      return { adapter, merged, runtime, connecting };
+    });
+    if (pre.merged) await this.assertRequirements(pre.adapter, orgId, pre.merged);
+
+    let proven: ChannelHealthResult | null = null;
+    if (pre.connecting && pre.runtime && pre.adapter.checkHealth) {
+      proven = await this.probe(pre.adapter, pre.runtime);
+      if (!proven.health.ok) {
+        await this.storeHealth(orgId, uuid, proven);
+        throw new AppError(
+          ERROR_CODES.CHANNEL_HEALTH_FAILED,
+          `The provider did not accept this channel: ${proven.health.errorMessage ?? 'the health check failed'}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }
+
     return this.db.tx(async (tx) => {
       const before = await this.row(tx, orgId, uuid);
       const adapter = this.adapters.for(before.kind);
-
-      if (input.status === 'connected' && before.status !== 'connected') {
-        this.assertCanConnect(adapter, before);
-      }
 
       const patch: Parameters<ChannelsRepository['update']>[4] = {};
       if (input.name !== undefined) patch.name = input.name;
@@ -187,15 +228,24 @@ export class ChannelRegistryService {
       if (input.settings !== undefined) {
         patch.settings = mergeSettings(before.kind, before.settings, input.settings);
       }
-      if (input.credentials !== undefined) {
-        const merged = await this.rotatedCredentials(tx, orgId, before, adapter, input.credentials);
-        const sealed = this.vault.seal(merged, adapter.secretFields);
+      if (pre.merged) {
+        const sealed = this.vault.seal(pre.merged, adapter.secretFields);
         patch.credentialsEnc = sealed.cipher;
         patch.credentialHints = sealed.hints;
-        patch.externalId = adapter.externalIdOf(merged);
-        // New credentials have not been checked: the channel waits for a person to switch it on again.
-        if (before.status === 'connected' && input.status === undefined)
+        patch.externalId = adapter.externalIdOf(pre.merged);
+        patch.businessAccountId = pre.merged.businessAccountId ?? null;
+        // New credentials have not been checked: the channel waits for a person to switch it on again (and a channel the provider
+        // had refused is no longer refused, as far as anyone knows).
+        if (input.status === undefined && before.status !== 'disconnected')
           patch.status = 'disconnected';
+        patch.health = null;
+        patch.lastError = null;
+      }
+      if (proven) {
+        patch.health = proven.health;
+        patch.lastError = null;
+      } else if (patch.status === 'connected') {
+        patch.lastError = null;
       }
 
       let after: ChannelRow | null;
@@ -224,6 +274,164 @@ export class ChannelRegistryService {
       });
       return toChannelResponse(after, adapter, this.publicBaseUrl);
     });
+  }
+
+  // --- connection: requirements, health, webhook -----------------------------------------------------------------------------
+
+  /** What a connection of this kind needs in this workspace (which credential keys the form must ask for). */
+  async requirements(kind: string): Promise<WhatsappCredentialRequirements> {
+    const { orgId } = this.actor();
+    const adapter = this.adapters.for(kind);
+    const req = await adapter.credentialRequirements?.(orgId);
+    if (!req) {
+      throw new AppError(
+        ERROR_CODES.CHANNEL_KIND_UNAVAILABLE,
+        `Channel kind "${kind}" has no connection requirements`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return req as WhatsappCredentialRequirements;
+  }
+
+  /**
+   * A live read of the provider account with the stored credentials; stores the snapshot (and moves the status when the provider
+   * refused the credentials) and answers with it. A failed check is an answer (`ok: false` with the reason), not an error.
+   */
+  async checkHealth(uuid: string): Promise<ChannelHealthResponse> {
+    const { orgId } = this.actor();
+    const { row, adapter, runtime } = await this.db.tx(async (tx) => {
+      const found = await this.row(tx, orgId, uuid);
+      const a = this.adapters.for(found.kind);
+      return { row: found, adapter: a, runtime: await this.runtime(tx, orgId, found) };
+    });
+    if (!adapter.checkHealth) {
+      throw new AppError(
+        ERROR_CODES.CHANNEL_KIND_UNAVAILABLE,
+        'This channel has no health check',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const result = await this.probe(adapter, runtime);
+    const after = await this.storeHealth(orgId, uuid, result);
+    return {
+      ...result.health,
+      status: after?.status ?? row.status,
+      rowVersion: after?.rowVersion ?? row.rowVersion,
+    };
+  }
+
+  /**
+   * Points the provider's webhooks for this channel at us. With the provider's per-number override (a BSP proxy always; Meta when
+   * asked) a new verify token is issued FIRST and committed, because the provider checks it against our GET challenge during the
+   * call; the token is shown once in the answer.
+   */
+  async configureWebhook(
+    uuid: string,
+    input: SubscribeChannelInput,
+  ): Promise<SubscribeChannelResponse> {
+    const { orgId } = this.actor();
+    const { adapter, runtime } = await this.db.tx(async (tx) => {
+      const row = await this.row(tx, orgId, uuid);
+      return { adapter: this.adapters.for(row.kind), runtime: await this.runtime(tx, orgId, row) };
+    });
+    if (!adapter.configureNumberWebhook) {
+      throw new AppError(
+        ERROR_CODES.CHANNEL_KIND_UNAVAILABLE,
+        'This channel has no webhook to configure',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const mode = (await adapter.webhookMode?.(runtime)) ?? 'subscribe';
+    const override = input.overrideCallback || mode === 'number_override';
+
+    let config: { callbackUrl: string; verifyToken: string } | undefined;
+    if (override) {
+      const token = this.vault.newWebhookToken();
+      await this.db.tx(async (tx) => {
+        const row = await this.row(tx, orgId, uuid);
+        await this.repo.setWebhookTokenHash(tx, orgId, row.id, token.hash);
+        await this.audit.record(tx, {
+          module: CHANNELS_MODULE,
+          recordId: row.id,
+          action: 'update',
+          delta: { webhookToken: { old: '[hash]', new: '[rotated]' } },
+        });
+      });
+      config = { callbackUrl: `${this.publicBaseUrl}${webhookPath(uuid)}`, verifyToken: token.token };
+    }
+    try {
+      const done = await adapter.configureNumberWebhook(runtime, config);
+      return {
+        subscribed: true,
+        overrideApplied: done.overrideApplied,
+        webhookVerifyToken: config?.verifyToken ?? null,
+      };
+    } catch (err) {
+      if (err instanceof ChannelError) {
+        throw new AppError(
+          ERROR_CODES.CHANNEL_PROVIDER_REFUSED,
+          `The provider refused the webhook configuration: ${err.message}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      throw err;
+    }
+  }
+
+  /**
+   * A send (or a media fetch) found that the provider no longer accepts the channel's credentials. A connected channel moves to
+   * `needs_reauth` (the customer can paste a new token) or `error` (the platform's own credential failed), with the reason, an audit
+   * row and an outbox event in one transaction, and the people who manage channels are told after the commit. Idempotent: only the
+   * first call finds the channel still connected.
+   */
+  async markCredentialsRefused(
+    orgId: number,
+    channelUuid: string,
+    err: ChannelError,
+  ): Promise<boolean> {
+    const status = err.providerFault ? 'error' : 'needs_reauth';
+    const lastError = {
+      code: err.code,
+      message: err.message.slice(0, 500),
+      at: new Date().toISOString(),
+    };
+    const moved = await this.db.txAs({ orgId }, async (tx) => {
+      const found = await this.repo.byUuid(tx, orgId, channelUuid);
+      if (!found) return null;
+      const after = await this.repo.markCredentialsRefused(tx, orgId, found.id, status, lastError);
+      if (!after) return null;
+      await this.audit.record(tx, {
+        module: CHANNELS_MODULE,
+        recordId: after.id,
+        action: 'update',
+        delta: {
+          status: { old: found.status, new: after.status },
+          lastError: { old: null, new: err.code },
+        },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: CHANNELS_MODULE,
+        aggregateId: after.id,
+        eventType: 'channel.status_changed',
+        payload: {
+          uuid: after.uuid,
+          kind: after.kind,
+          from: found.status,
+          to: after.status,
+          code: err.code,
+        },
+      });
+      return after;
+    });
+    if (!moved) return false;
+    await this.realtime.channelStatus(
+      orgId,
+      moved.uuid,
+      moved.status,
+      lastError.code,
+      lastError.message,
+    );
+    return true;
   }
 
   /** Issues a new webhook verify token; the old one stops working at once. Shown once. */
@@ -283,6 +491,117 @@ export class ChannelRegistryService {
   }
 
   // --- helpers -----------------------------------------------------------------------------------------------------------------
+
+  /** Runs the adapter's health check; a refusal to even try (no credentials) is a failed check, not an exception. */
+  private async probe(
+    adapter: ChannelAdapter,
+    runtime: ChannelRuntime,
+  ): Promise<ChannelHealthResult> {
+    try {
+      return await adapter.checkHealth!(runtime);
+    } catch (err) {
+      if (!(err instanceof ChannelError)) throw err;
+      return {
+        needsReauth: err.needsReauth,
+        providerFault: err.providerFault,
+        health: {
+          ok: false,
+          overall: 'blocked',
+          checkedAt: new Date().toISOString(),
+          displayName: null,
+          displayPhoneNumber: null,
+          qualityRating: null,
+          messagingLimitTier: null,
+          phoneStatus: null,
+          codeVerificationStatus: null,
+          nameStatus: null,
+          platformType: null,
+          token: { valid: null, expiresAt: null, scopes: null },
+          webhook: { subscribed: null },
+          issues: [{ severity: 'critical', code: err.code, title: err.message, detail: null }],
+          errorCode: err.code,
+          errorMessage: err.message,
+        },
+      };
+    }
+  }
+
+  /**
+   * Stores a health check's outcome and moves the status by what it found: credentials the provider refuses take a connected (or
+   * already refused) channel to `needs_reauth` / `error`; a passing check takes a refused channel back to `disconnected` (usable,
+   * waiting for a person to switch it on); anything else (the provider unreachable) leaves the status alone.
+   */
+  private async storeHealth(
+    orgId: number,
+    uuid: string,
+    r: ChannelHealthResult,
+  ): Promise<ChannelRow | null> {
+    const done = await this.db.tx(async (tx) => {
+      const before = await this.row(tx, orgId, uuid);
+      let status: ChannelStatus = before.status;
+      if (r.health.ok) {
+        if (before.status === 'needs_reauth' || before.status === 'error') status = 'disconnected';
+      } else if (r.providerFault) {
+        if (before.status === 'connected') status = 'error';
+      } else if (r.needsReauth) {
+        if (before.status === 'connected' || before.status === 'error') status = 'needs_reauth';
+      }
+      const lastError = r.health.ok
+        ? null
+        : {
+            code: r.health.errorCode ?? 'HEALTH_CHECK_FAILED',
+            message: (r.health.errorMessage ?? 'The health check failed').slice(0, 500),
+            at: r.health.checkedAt,
+          };
+      const after = await this.repo.recordHealth(tx, orgId, before.id, {
+        status,
+        health: r.health,
+        lastError,
+      });
+      if (after && after.status !== before.status) {
+        await this.outbox.emit(tx, {
+          aggregateModule: CHANNELS_MODULE,
+          aggregateId: after.id,
+          eventType: 'channel.status_changed',
+          payload: {
+            uuid: after.uuid,
+            kind: after.kind,
+            from: before.status,
+            to: after.status,
+            code: lastError?.code ?? null,
+          },
+        });
+      }
+      return { before, after, lastError };
+    });
+    if (done.after && done.after.status !== done.before.status) {
+      await this.realtime.channelStatus(
+        orgId,
+        done.after.uuid,
+        done.after.status,
+        done.lastError?.code ?? null,
+        done.lastError?.message ?? null,
+      );
+    }
+    return done.after;
+  }
+
+  /** The credential keys this workspace's provider needs (own token, or the platform's) must all be present. */
+  private async assertRequirements(
+    adapter: ChannelAdapter,
+    orgId: number,
+    credentials: Credentials,
+  ): Promise<void> {
+    const req = await adapter.credentialRequirements?.(orgId);
+    if (!req) return;
+    const missing = req.required.filter((k) => !credentials[k]);
+    if (missing.length > 0) {
+      throw AppError.validation(
+        'Credentials are incomplete',
+        missing.map((k) => ({ path: `credentials.${k}`, message: 'required' })),
+      );
+    }
+  }
 
   private actor(): { orgId: number; userId: number } {
     const ctx = RequestContextStore.require();

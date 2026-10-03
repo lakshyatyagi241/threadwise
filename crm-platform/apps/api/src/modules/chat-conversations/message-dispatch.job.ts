@@ -20,8 +20,24 @@ export type MessageSendJob = z.infer<typeof messageSendJobSchema>;
  */
 export const MESSAGE_SEND_JOB_OPTIONS = {
   attempts: 8,
-  backoff: { type: 'exponential' as const, delay: 2_000 },
+  // `custom`: exponential from 2 s like before, except when the provider said how long to wait (a rate limit): then that long.
+  // The strategy lives in `sendBackoffStrategy`, registered on the worker.
+  backoff: { type: 'custom' as const, delay: 2_000 },
 };
+
+/** Never wait longer than this between two attempts, whatever the provider asked: a message must come back to a person. */
+const MAX_BACKOFF_MS = 60 * 60_000;
+
+/**
+ * BullMQ's `settings.backoffStrategy` for `message.send` jobs. A `ChannelError` that carries `retryAfterMs` (rate limits: Meta 130429,
+ * 80007, 131048, an HTTP Retry-After) sets the wait; anything else keeps the exponential rule. Jobs queued before this existed carry
+ * the built-in `exponential` type and never reach it.
+ */
+export function sendBackoffStrategy(attemptsMade: number, _type?: string, err?: Error): number {
+  const hint = (err as { retryAfterMs?: unknown } | undefined)?.retryAfterMs;
+  if (typeof hint === 'number' && hint > 0) return Math.min(hint, MAX_BACKOFF_MS);
+  return 2_000 * 2 ** Math.max(attemptsMade - 1, 0);
+}
 
 export const messageSendJobId = (messageUuid: string, generation: number): string =>
   `msg-${messageUuid}-${generation}`;
