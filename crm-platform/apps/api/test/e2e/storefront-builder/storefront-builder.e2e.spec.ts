@@ -963,6 +963,32 @@ describe('checkout', () => {
     }
     expect(last).toBe(429);
   });
+
+  it('malformed requests count against the limit too (the review route allows 10 a minute)', async () => {
+    const m = await merchant('throttle-junk');
+    const addr = '10.99.99.98';
+    const codes: number[] = [];
+    for (let i = 0; i < 12; i += 1) {
+      const r = await api
+        .http()
+        .post(`/v2/store-public/${m.slug}/review`)
+        .set('x-forwarded-for', addr)
+        .send({});
+      codes.push(r.status);
+    }
+    expect(codes.slice(0, 10).every((c) => c === 422)).toBe(true);
+    expect(codes.slice(10)).toEqual([429, 429]);
+  });
+
+  it('a shop and a product are found whatever the case of the address (WaDesk used a case-insensitive collation)', async () => {
+    const m = await merchant('case');
+    const p = await product(m.t, { name: 'Case Mug', price: 1000 });
+    const home = await pub(`/${m.slug.toUpperCase()}/home`);
+    expect(home.status).toBe(200);
+    const row = await h.owner.query(`SELECT slug FROM wa_products WHERE id = $1`, [p.id]);
+    const page = await pub(`/${m.slug}/products/${String(row.rows[0].slug).toUpperCase()}`);
+    expect(page.status).toBe(200);
+  });
 });
 
 // --- tracking page (WD-STORE-017) -----------------------------------------------------------------------------------

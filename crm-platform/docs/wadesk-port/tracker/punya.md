@@ -48,34 +48,34 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-STORE-001 | todo |  |  |
-| WD-STORE-002 | todo |  |  |
-| WD-STORE-003 | todo |  |  |
-| WD-STORE-004 | todo |  |  |
-| WD-STORE-005 | todo |  |  |
-| WD-STORE-006 | todo |  |  |
-| WD-STORE-007 | todo |  |  |
-| WD-STORE-008 | todo |  |  |
-| WD-STORE-009 | todo |  |  |
-| WD-STORE-010 | todo |  |  |
-| WD-STORE-011 | todo |  |  |
-| WD-STORE-012 | todo |  |  |
-| WD-STORE-013 | todo |  |  |
-| WD-STORE-014 | todo |  |  |
-| WD-STORE-015 | todo |  |  |
-| WD-STORE-016 | todo |  |  |
-| WD-STORE-017 | todo |  |  |
-| WD-STORE-018 | todo |  |  |
-| WD-STORE-019 | todo |  |  |
-| WD-STORE-020 | todo |  |  |
-| WD-STORE-021 | todo |  |  |
-| WD-STORE-022 | todo |  |  |
-| WD-STORE-023 | todo |  |  |
-| WD-STORE-024 | todo |  |  |
-| WD-STORE-025 | todo |  |  |
-| WD-STORE-026 | todo |  |  |
-| WD-STORE-027 | todo |  |  |
-| WD-STORE-028 | todo |  |  |
-| WD-STORE-029 | todo |  |  |
-| WD-STORE-030 | todo |  |  |
-| WD-STORE-031 | todo |  |  |
+| WD-STORE-001 | done |  |  |
+| WD-STORE-002 | in-progress |  | partial: sibling pages (orders, coupons...) belong to CHK, shown Coming soon |
+| WD-STORE-003 | done |  |  |
+| WD-STORE-004 | done |  |  |
+| WD-STORE-005 | done |  |  |
+| WD-STORE-006 | done |  |  |
+| WD-STORE-007 | done |  |  |
+| WD-STORE-008 | done |  |  |
+| WD-STORE-009 | done |  |  |
+| WD-STORE-010 | done |  |  |
+| WD-STORE-011 | done |  |  |
+| WD-STORE-012 | done |  |  |
+| WD-STORE-013 | done |  |  |
+| WD-STORE-014 | done |  |  |
+| WD-STORE-015 | done |  |  |
+| WD-STORE-016 | done |  |  |
+| WD-STORE-017 | done |  |  |
+| WD-STORE-018 | done |  |  |
+| WD-STORE-019 | done |  |  |
+| WD-STORE-020 | done |  |  |
+| WD-STORE-021 | in-progress |  | partial: workspace-level custom domain not consulted |
+| WD-STORE-022 | done |  |  |
+| WD-STORE-023 | blocked |  | sibling store pages belong to checkout-orders-merchant-payments |
+| WD-STORE-024 | done |  |  |
+| WD-STORE-025 | wontfix |  | dead code in WaDesk |
+| WD-STORE-026 | done |  |  |
+| WD-STORE-027 | done |  |  |
+| WD-STORE-028 | done |  | partial as WaDesk: handle stored, never used |
+| WD-STORE-029 | done |  |  |
+| WD-STORE-030 | done |  |  |
+| WD-STORE-031 | done |  |  |

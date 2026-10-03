@@ -29,6 +29,7 @@ import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { CartRecoveryService } from '../recovery/cart-recovery.service';
 import { CheckoutService } from './checkout.service';
 import { PublicCatalogService } from './public-catalog.service';
+import { PublicLimit } from './public-rate-limit.guard';
 import { PublicRateLimiter } from './public-rate-limiter';
 
 /**
@@ -87,6 +88,7 @@ export class PublicStoreController {
   }
 
   @Public()
+  @PublicLimit('checkout')
   @Post(':slug/checkout')
   @ApiOperation({
     summary: 'Place an order',
@@ -96,14 +98,13 @@ export class PublicStoreController {
   async place(
     @Param('slug') slug: string,
     @Body(zodPipe(checkoutSchema)) body: CheckoutInput,
-    @Ip() ip: string,
     @Headers('idempotency-key') idempotencyKey: string | undefined,
   ) {
-    await this.limiter.hit('checkout', ip);
     return this.checkout.checkout(slug, body, idempotencyKey?.trim() || undefined);
   }
 
   @Public()
+  @PublicLimit('coupon')
   @Post(':slug/coupon')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -113,13 +114,12 @@ export class PublicStoreController {
   async coupon(
     @Param('slug') slug: string,
     @Body(zodPipe(couponQuoteSchema)) body: CouponQuoteInput,
-    @Ip() ip: string,
   ) {
-    await this.limiter.hit('coupon', ip);
     return this.checkout.quote(slug, body);
   }
 
   @Public()
+  @PublicLimit('review')
   @Post(':slug/review')
   @ApiOperation({
     summary: 'Submit a product review (stored pending)',
@@ -129,13 +129,12 @@ export class PublicStoreController {
   async review(
     @Param('slug') slug: string,
     @Body(zodPipe(publicReviewInputSchema)) body: PublicReviewInput,
-    @Ip() ip: string,
   ) {
-    await this.limiter.hit('review', ip);
     return this.catalog.review(slug, body);
   }
 
   @Public()
+  @PublicLimit('abandon')
   @Post(':slug/abandon')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -146,9 +145,7 @@ export class PublicStoreController {
   async abandon(
     @Param('slug') slug: string,
     @Body(zodPipe(abandonCartSchema)) body: AbandonCartInput,
-    @Ip() ip: string,
   ) {
-    await this.limiter.hit('abandon', ip);
     return this.recovery.abandon(slug, body);
   }
 }

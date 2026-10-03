@@ -62,7 +62,7 @@ export default (h) => {
     try {
       if (c.side === 'wadesk')
         mysql(
-          "delete from cache where `key` regexp '^laravel-cache-[0-9a-f]{32}(:timer)?$' or `key` like '%throttle%'",
+          "delete from cache where `key` regexp '^laravel-cache-[0-9a-f]{32,40}(:timer)?$' or `key` like '%throttle%'",
         );
       else
         execFileSync(
@@ -71,6 +71,8 @@ export default (h) => {
             'exec',
             'crm-redis',
             'redis-cli',
+            '-n',
+            process.env.STORE_REDIS_DB || '9',
             'eval',
             "for _,k in ipairs(redis.call('keys','store_rl:*')) do redis.call('del',k) end return 0",
             '0',
@@ -3148,6 +3150,47 @@ export default (h) => {
     scenarios: listMode ? scenarios : scenarios,
     intended: [
       {
+        scenario: /^co\..*zero-width$/,
+        key: /^(map\.stored|enum\.waText|enum\.req\.[a-z]+|num\.valueLength)$/,
+        reason:
+          'a trailing zero-width character is kept by ours (the platform trims whitespace only, not store specific; same decision as the admin screens); WaDesk trims it',
+      },
+      {
+        scenario: /^co\.form-structure$/,
+        key: 'enum.attrs',
+        reason:
+          'ours sets autocomplete hints (name, tel) on the buyer fields (WCAG 1.3.5, helps autofill); WaDesk sets none',
+      },
+
+      {
+        scenario: /^fail\.csrf-less-cross-origin-post$/,
+        key: 'enum.class',
+        reason:
+          'the shop routes of ours serve same-origin callers only (a POST without an Origin of the shop is refused with 403); WaDesk answers it (with a redirect) because the shop routes are open to any origin',
+      },
+
+      {
+        scenario: /(null-byte|apply-nul)$/,
+        key: /^enum\.(msg|summary|statusMsg|outcome|msgAfter|waHost|waText|statusClass\..*|req\..*)$|^flag\.|^num\.|^map\./,
+        reason:
+          'a NUL (0x00) character is refused with a validation message on ours (platform input rule: PostgreSQL text cannot hold it); WaDesk stores or ignores it',
+      },
+
+      {
+        scenario:
+          /^cart\.storage-(duplicate-lines|huge-qty|negative-qty|string-qty|null-entries|wrong-shape)$/,
+        key: /^enum\.(badge|footer|rows)$/,
+        reason:
+          'ours validates what it reads back from local storage (lines with a bad quantity are dropped, a repeated product keeps its first line, one line holds at most 999, junk is ignored); WaDesk draws and prices whatever it finds (negative subtotals, a billion-unit line) and its drawer render stops on junk, leaving a first-paint footer without shipping',
+      },
+      {
+        scenario: /^kbd\.home-tab-order$/,
+        key: 'seq.stops',
+        reason:
+          'the only difference is the search box label: ours names it with an aria-label, WaDesk exposes only the placeholder text with a trailing ellipsis',
+      },
+
+      {
         scenario: /^struct\.notfound-page2$/,
         key: /^(enum\.count|num\.cards)$/,
         quirk: 'drafts',
@@ -3156,7 +3199,7 @@ export default (h) => {
       },
       {
         scenario: /^(cart\.stepper-value-(7|15)|misc\.product-qty-99999)$/,
-        key: /^enum\.(footer|ls|rows|toast)$/,
+        key: /^enum\.(footer|ls|rows|toast|qtyShown)$/,
         reason:
           'ours holds at most 999 of a product on one line (contract limit STORE_CART_MAX_QTY, shown as "Limit reached"); WaDesk lets a line grow without bound and only the server decides at checkout',
       },
