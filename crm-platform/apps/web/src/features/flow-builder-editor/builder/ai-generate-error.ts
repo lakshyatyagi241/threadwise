@@ -1,6 +1,11 @@
 import { ApiError } from '@/lib/api/errors';
 
-const FIELD_LABEL: Record<string, string> = { prompt: 'prompt', model: 'model', provider: 'provider', flowType: 'flow type' };
+const FIELD_LABEL: Record<string, string> = {
+  prompt: 'prompt',
+  model: 'model',
+  provider: 'provider',
+  flowType: 'flow type',
+};
 const MAX: Record<string, number> = { prompt: 2000, model: 120 };
 
 /**
@@ -15,7 +20,8 @@ export function aiGenerateError(e: unknown): string {
       const label = FIELD_LABEL[f.path] ?? f.path;
       if (/at most|too_big|too long/i.test(f.message) && MAX[f.path])
         return `The ${label} may not be greater than ${MAX[f.path]} characters.`;
-      if (/at least|required|too_small|empty/i.test(f.message)) return `The ${label} field is required.`;
+      if (/at least|required|too_small|empty/i.test(f.message))
+        return `The ${label} field is required.`;
       return `The selected ${label} is invalid.`;
     }
     return e.message;

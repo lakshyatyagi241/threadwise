@@ -7,14 +7,28 @@ vi.mock('../api/flows', () => ({ flowsApi: { aiGenerate: vi.fn() } }));
 const noop = () => undefined;
 const render = (models: Array<{ value: string; label: string; provider: string }>, prompt = '') =>
   renderToStaticMarkup(
-    <AIGenModal open models={models} initialPrompt={prompt} flowType="chat" onClose={noop} onGenerate={noop} />,
+    <AIGenModal
+      open
+      models={models}
+      initialPrompt={prompt}
+      flowType="chat"
+      onClose={noop}
+      onGenerate={noop}
+    />,
   );
 
 describe('Generate with AI modal (TW-FLB-025)', () => {
   it('renders nothing while closed', () => {
     expect(
       renderToStaticMarkup(
-        <AIGenModal open={false} models={[]} initialPrompt="" flowType="chat" onClose={noop} onGenerate={noop} />,
+        <AIGenModal
+          open={false}
+          models={[]}
+          initialPrompt=""
+          flowType="chat"
+          onClose={noop}
+          onGenerate={noop}
+        />,
       ),
     ).toBe('');
   });
@@ -61,19 +75,33 @@ describe('Generate with AI modal (TW-FLB-025)', () => {
     expect(three).toContain('grid-cols-3');
     expect(three).toContain('Anthropic');
     expect(three.match(/aria-pressed="true"/g)).toHaveLength(1);
-    expect(render([{ value: 'a', label: 'OpenAI (your key) · a', provider: 'openai' }, { value: 'b', label: 'Google · b', provider: 'gemini' }])).toContain('grid-cols-2');
+    expect(
+      render([
+        { value: 'a', label: 'OpenAI (your key) · a', provider: 'openai' },
+        { value: 'b', label: 'Google · b', provider: 'gemini' },
+      ]),
+    ).toContain('grid-cols-2');
   });
 
   it('a prompt carried in the URL (?ai_prompt=) pre-fills the textarea and enables Generate', () => {
-    const html = render([{ value: 'gpt-4o', label: 'OpenAI · gpt-4o', provider: 'openai' }], 'Greet the customer');
+    const html = render(
+      [{ value: 'gpt-4o', label: 'OpenAI · gpt-4o', provider: 'openai' }],
+      'Greet the customer',
+    );
     expect(html).toContain('>Greet the customer</textarea>');
   });
 });
 
 describe('Save confirm modal', () => {
   it('is mounted only while open and starts from the current name', () => {
-    expect(renderToStaticMarkup(<SaveConfirmModal open={false} initialName="x" busy={false} onSave={noop} onClose={noop} />)).toBe('');
-    const html = renderToStaticMarkup(<SaveConfirmModal open initialName="Welcome" busy={false} onSave={noop} onClose={noop} />);
+    expect(
+      renderToStaticMarkup(
+        <SaveConfirmModal open={false} initialName="x" busy={false} onSave={noop} onClose={noop} />,
+      ),
+    ).toBe('');
+    const html = renderToStaticMarkup(
+      <SaveConfirmModal open initialName="Welcome" busy={false} onSave={noop} onClose={noop} />,
+    );
     expect(html).toContain('value="Welcome"');
     expect(html).toContain('Save flow');
   });

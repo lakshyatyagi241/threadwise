@@ -10,7 +10,7 @@ export interface TestPanelProps {
   onClose: () => void;
   nodes: FlowNode[];
   edges: FlowEdge[];
-  /** Bump to restart the run (the toolbar Test button / `?test=1`). */
+  /** Bump to restart the run (the toolbar Test button). 0 = never started: a panel opened by `?test=1` stays empty until Restart. */
   runNonce: number;
   templateButtons?: (node: FlowNode) => FlbTemplateButtonRef[];
   flowName?: (id: string) => string | undefined;
@@ -98,7 +98,8 @@ export function TestPanel({
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    // `runNonce` 0 is a panel opened by `?test=1`: it waits, empty, for Restart (Reference quirk).
+    if (!open || runNonce === 0) return;
     // Starting the run resets the transcript; the simulator is an external system that this effect synchronises with.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     restart();

@@ -26,7 +26,9 @@ export class FlowMediaTooLargeInterceptor implements NestInterceptor {
         catchError((err: unknown) =>
           throwError(() =>
             err instanceof PayloadTooLargeException
-              ? AppError.validation(FLOW_MEDIA_TOO_LARGE, [{ path: 'file', message: FLOW_MEDIA_TOO_LARGE }])
+              ? AppError.validation(FLOW_MEDIA_TOO_LARGE, [
+                  { path: 'file', message: FLOW_MEDIA_TOO_LARGE },
+                ])
               : err,
           ),
         ),

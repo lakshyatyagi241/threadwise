@@ -12,7 +12,9 @@ import { LocalFlowMediaAdapter } from '../../../src/infra/providers/flow-builder
 
 const ctx = {} as never;
 const run = (err: unknown) =>
-  lastValueFrom(new FlowMediaTooLargeInterceptor().intercept(ctx, { handle: () => throwError(() => err) }));
+  lastValueFrom(
+    new FlowMediaTooLargeInterceptor().intercept(ctx, { handle: () => throwError(() => err) }),
+  );
 
 describe('flow media upload (TW-FLB-027)', () => {
   it('a file over 50 MB is the Reference validation message, 422, with the field named', async () => {
@@ -26,7 +28,11 @@ describe('flow media upload (TW-FLB-027)', () => {
   it('any other transport error passes through untouched; a good upload is not touched', async () => {
     const boom = new Error('boom');
     expect(await run(boom).catch((x: unknown) => x)).toBe(boom);
-    expect(await lastValueFrom(new FlowMediaTooLargeInterceptor().intercept(ctx, { handle: () => of('ok') }))).toBe('ok');
+    expect(
+      await lastValueFrom(
+        new FlowMediaTooLargeInterceptor().intercept(ctx, { handle: () => of('ok') }),
+      ),
+    ).toBe('ok');
   });
 
   const policy = {
@@ -34,7 +40,10 @@ describe('flow media upload (TW-FLB-027)', () => {
   };
 
   it('a storage that is not available is a 503 with a message the builder can show after "Upload failed:"', async () => {
-    const store = { put: () => Promise.reject(new Error('ECONNREFUSED minio:9000')), get: () => Promise.resolve(null) };
+    const store = {
+      put: () => Promise.reject(new Error('ECONNREFUSED minio:9000')),
+      get: () => Promise.resolve(null),
+    };
     const svc = new FlowMediaService({} as never, policy as never, store);
     const e = (await svc
       .upload({ originalname: 'a.png', buffer: Buffer.from('x') }, 'image', 'org-1')
@@ -53,7 +62,9 @@ describe('flow media upload (TW-FLB-027)', () => {
       get: () => Promise.resolve(null),
     };
     const svc = new FlowMediaService({} as never, policy as never, store);
-    expect(await svc.upload({ originalname: 'clip.mp4', buffer: Buffer.from('x') }, 'video', 'org-1')).toEqual({
+    expect(
+      await svc.upload({ originalname: 'clip.mp4', buffer: Buffer.from('x') }, 'video', 'org-1'),
+    ).toEqual({
       url: 'http://x/1700000000_aaaaaaaaaaaaaaaaaaaaaaaa.png',
       filename: '1700000000_aaaaaaaaaaaaaaaaaaaaaaaa.png',
       type: 'video',
@@ -70,7 +81,9 @@ describe('flow media upload (TW-FLB-027)', () => {
     expect((await store.get('org-1', name))!.data.toString()).toBe('hi');
     expect((await store.get('org-1', name))!.mime).toBe('image/png');
     await expect(store.put('..', name, Buffer.from('x'))).rejects.toThrow('unsafe');
-    await expect(store.put('org-1', '../../etc/passwd', Buffer.from('x'))).rejects.toThrow('unsafe');
+    await expect(store.put('org-1', '../../etc/passwd', Buffer.from('x'))).rejects.toThrow(
+      'unsafe',
+    );
     expect(await store.get('org-1', '../x.png')).toBeNull();
     expect(await store.get('org-1', '1700000002_cccccccccccccccccccccccc.png')).toBeNull();
   });
