@@ -86,11 +86,16 @@ beforeEach(async () => {
   await engine(true);
 });
 
+/** A thread on a channel of its own (`instagram`, or `whatsapp` standing for a Cloud API number), keyed by `key`. */
 async function thread(t: Tenant, channel: string, key: string): Promise<string> {
+  const ch = await h.owner.query(
+    `INSERT INTO channels (org_id, kind, name, status) VALUES ($1, $2, 'T', 'connected') RETURNING id`,
+    [t.orgId, channel === 'whatsapp' ? 'whatsapp_cloud' : channel],
+  );
   const c = await h.owner.query(
-    `INSERT INTO conversations (org_id, title, channel, provider, origin, status, inbox_status, raw_jid, last_message_at)
-     VALUES ($1, 'T', $2, $2, $2, 'pending', 'open', $3, now()) RETURNING uuid`,
-    [t.orgId, channel, key],
+    `INSERT INTO conversations (org_id, channel_id, peer_key, title, last_message_at)
+     VALUES ($1, $2, $3, 'T', now()) RETURNING uuid`,
+    [t.orgId, ch.rows[0].id, key],
   );
   return c.rows[0].uuid as string;
 }
@@ -116,7 +121,7 @@ describe('the reply sender (WD-IG-010)', () => {
     await sender.reply({
       rawJid: 'ig:A1_555',
       text: '',
-      media: { type: 'image', path: 'https://cdn.test/p.jpg' },
+      media: { type: 'image', url: 'https://cdn.test/p.jpg' },
     });
     expect(sent[1]!.reply).toMatchObject({
       type: 'image',
@@ -129,15 +134,6 @@ describe('the reply sender (WD-IG-010)', () => {
     expect((await sender.reply({ rawJid: null, text: 'x' })).error).toBe(
       'This Instagram thread has no IgDesk conversation id.',
     );
-    expect(
-      (
-        await sender.reply({
-          rawJid: 'ig:A1_5',
-          text: 'x',
-          media: { type: 'image', path: 'uploads/p.jpg' },
-        })
-      ).error,
-    ).toContain('no public address');
     replyAnswer = { ok: false, error: 'Outside the 24 hour window', status: 400 };
     expect(await sender.reply({ rawJid: 'ig:A1_5', text: 'x' })).toEqual({
       ok: false,

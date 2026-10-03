@@ -44,8 +44,8 @@ function mediaKindOf(type: string | null): InboundMedia['mediaKind'] {
  * unique key `(workspace, channel, peer)` does the finding and creating that the old SQL did by hand. A message goes through the
  * shared pipeline (ledger dedup on Meta's id, gap-free sequence, unread, 24 hour window, realtime).
  *
- * A Messenger sender has no phone or email to match, so no contact is created (the thread says who it is by name); WaDesk linked a
- * contact row to a DM.
+ * Still ours, because the inbox cannot know it: a DM sender becomes a lead keyed by the Messenger id (no phone), as in WaDesk. A
+ * commenter never does (WD-FB-009 rule 6).
  */
 @Injectable()
 export class ChatInboxIngest implements InboxIngest {
@@ -97,19 +97,33 @@ export class ChatInboxIngest implements InboxIngest {
       message,
     );
     if (out.outcome !== 'stored') return NOT_STORED;
-    const id = await this.db.txAs({ orgId }, async (tx) => {
+    return this.db.txAs({ orgId }, async (tx) => {
       const res = await tx.execute(
-        sql`SELECT id FROM conversations WHERE org_id = ${orgId} AND uuid = ${out.conversationUuid}::uuid`,
+        sql`SELECT id, contact_id FROM conversations WHERE org_id = ${orgId} AND uuid = ${out.conversationUuid}::uuid`,
       );
-      return (res.rows[0] as { id: number | string } | undefined)?.id;
+      const conv = res.rows[0] as
+        | { id: number | string; contact_id: number | string | null }
+        | undefined;
+      if (!conv) return NOT_STORED;
+      const conversationId = Number(conv.id);
+      let contactId = conv.contact_id === null ? null : Number(conv.contact_id);
+      if (m.kind === 'dm' && m.senderId !== '') {
+        const c = await tx.execute(sql`
+          INSERT INTO contacts (org_id, name, channel, channel_uid, message)
+          VALUES (${orgId}, ${m.title}, ${FACEBOOK_KIND}, ${m.senderId}, 'Source: Facebook DM')
+          ON CONFLICT (org_id, channel, channel_uid) WHERE channel IS NOT NULL AND channel_uid IS NOT NULL
+          DO UPDATE SET name = coalesce(nullif(contacts.name, ''), EXCLUDED.name)
+          RETURNING id`);
+        const id = Number((c.rows[0] as { id: number | string }).id);
+        if (contactId === null) {
+          contactId = id;
+          await tx.execute(
+            sql`UPDATE conversations SET contact_id = ${id} WHERE org_id = ${orgId} AND id = ${conversationId}`,
+          );
+        }
+      }
+      return { stored: true, conversationId, contactId, newThread: out.createdConversation };
     });
-    if (id === undefined) return NOT_STORED;
-    return {
-      stored: true,
-      conversationId: Number(id),
-      contactId: null,
-      newThread: out.createdConversation,
-    };
   }
 
   /** Has Meta's id already been stored? The ledger is the authority (it is what makes a late duplicate a no-op). */
@@ -126,13 +140,18 @@ export class ChatInboxIngest implements InboxIngest {
     tx: Tx,
     orgId: number,
     conversationId: number,
-    _contactId: number | null,
+    contactId: number | null,
     p: { name: string; avatarUrl: string | null },
   ): Promise<void> {
     await tx.execute(sql`
       UPDATE conversations SET title = ${p.name}, peer_name = ${p.name},
              routing_meta = coalesce(routing_meta, '{}'::jsonb) || ${JSON.stringify({ fb_avatar: p.avatarUrl ?? '' })}::jsonb
       WHERE org_id = ${orgId} AND id = ${conversationId}`);
+    if (contactId !== null) {
+      await tx.execute(sql`
+        UPDATE contacts SET name = ${p.name}, image_url = coalesce(nullif(image_url, ''), ${p.avatarUrl})
+        WHERE org_id = ${orgId} AND id = ${contactId} AND coalesce(name, '') IN ('', ${PLACEHOLDER_NAME})`);
+    }
   }
 
   /** A broadcast copy in the thread, shown as outbound from the broadcast. Leaves unread alone. */

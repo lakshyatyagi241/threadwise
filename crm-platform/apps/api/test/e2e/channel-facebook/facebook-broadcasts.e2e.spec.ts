@@ -73,6 +73,17 @@ async function connectPage(t: Tenant, pageId: string, status = 'connected') {
 }
 type Page = Awaited<ReturnType<typeof connectPage>>;
 
+/** The Page's inbox channel (kind `facebook`, the Page id its handle); thread keys are stored lower-cased. */
+async function channelOf(t: Tenant, pageId: string) {
+  const r = await h.owner.query(
+    `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1, 'facebook', $2, 'connected', $3)
+     ON CONFLICT (org_id, kind, external_id) DO UPDATE SET name = EXCLUDED.name RETURNING id`,
+    [t.orgId, `Page ${pageId}`, pageId],
+  );
+  return Number(r.rows[0].id);
+}
+const keyOf = (pageId: string, rest: string) => `fb:${pageId.toLowerCase()}:${rest}`;
+
 /** A Messenger thread whose person last wrote `hoursAgo` hours ago. */
 async function thread(
   t: Tenant,
@@ -82,10 +93,10 @@ async function thread(
   title = `Person ${psid}`,
 ) {
   const r = await h.owner.query(
-    `INSERT INTO conversations (org_id, title, channel, provider, origin, status, inbox_status, raw_jid, last_inbound_at, last_message_at)
-     VALUES ($1, $2, 'facebook', 'facebook', 'facebook', 'pending', 'open', $3, now() - ($4 || ' hours')::interval, now())
+    `INSERT INTO conversations (org_id, channel_id, peer_key, title, last_inbound_at, last_message_at)
+     VALUES ($1, $2, $3, $4, now() - ($5 || ' hours')::interval, now())
      RETURNING id`,
-    [t.orgId, title, `fb:${page.pageId}:${psid}`, String(hoursAgo)],
+    [t.orgId, await channelOf(t, page.pageId), keyOf(page.pageId, psid), title, String(hoursAgo)],
   );
   return Number(r.rows[0].id);
 }
@@ -139,14 +150,14 @@ describe('WD-FB-012: the audience and the draft', () => {
     await thread(t, page, '1002', 5);
     await thread(t, page, '1003', 1);
     await h.owner.query(
-      `INSERT INTO conversations (org_id, title, channel, provider, origin, status, inbox_status, raw_jid, last_inbound_at)
-       VALUES ($1, 'Ravi', 'facebook', 'facebook', 'facebook', 'pending', 'open', 'fb:P1:post:P1_77:777', now())`,
-      [t.orgId],
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title, last_inbound_at)
+       VALUES ($1, $2, 'fb:p1:post:p1_77:777', 'Ravi', now())`,
+      [t.orgId, await channelOf(t, 'P1')],
     );
     await h.owner.query(
-      `INSERT INTO conversations (org_id, title, channel, provider, origin, status, inbox_status, raw_jid, last_inbound_at)
-       VALUES ($1, 'Other page', 'facebook', 'facebook', 'facebook', 'pending', 'open', 'fb:OTHER:555', now())`,
-      [t.orgId],
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title, last_inbound_at)
+       VALUES ($1, $2, 'fb:other:555', 'Other page', now())`,
+      [t.orgId, await channelOf(t, 'OTHER')],
     );
     const res = await api.http().get('/v2/facebook/broadcasts/compose').set(bearer(t.admin));
     expect(res.status, JSON.stringify(res.body)).toBe(200);
@@ -261,6 +272,8 @@ describe('WD-FB-013: sending', () => {
   it('a run sends to everyone, personalised, in batches, mirrors into each thread and ends done', async () => {
     const t = await api.signup('fbb5');
     const page = await pageWithPeople(t, 'P1', 30);
+    // Meta gives every message its own id; the thread records each by it, once.
+    answer = (psid) => ({ ok: true, data: { messageId: `mid.${psid}` } });
     const made = await create(t, page, { psids: psids(30) });
     expect(made.body.total).toBe(30);
     const started = await post(t, `broadcasts/${made.body.id}/start`);
@@ -277,23 +290,29 @@ describe('WD-FB-013: sending', () => {
     const rows = await recipients(made.body.id);
     expect(
       rows.every(
-        (r) => r.status === 'sent' && r.provider_message_id === 'mid.sent' && r.sent_at !== null,
+        (r) =>
+          r.status === 'sent' && r.provider_message_id === `mid.${r.psid}` && r.sent_at !== null,
       ),
     ).toBe(true);
 
     const mirrored = await h.owner.query(
-      `SELECT meta, direction, body FROM messages WHERE org_id = $1 AND provider = 'facebook' AND direction = 'out' ORDER BY id`,
+      `SELECT m.meta, m.direction, m.body, m.sender_kind, m.provider_message_id
+       FROM messages m
+       JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+       JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE m.org_id = $1 AND ch.kind = 'facebook' AND m.direction = 'out' ORDER BY m.id`,
       [t.orgId],
     );
     expect(mirrored.rows).toHaveLength(30);
-    expect(mirrored.rows[0].meta).toMatchObject({
-      source: 'facebook_broadcast',
-      broadcast_id: made.body.id,
-      wa_message_id: 'mid.sent',
+    // The thread shows where it came from; the broadcast's own id lives on its recipient row.
+    expect(mirrored.rows[0]).toMatchObject({
+      meta: { source: 'broadcast' },
+      sender_kind: 'broadcast',
+      provider_message_id: 'mid.1001',
     });
     const thread1 = (
       await h.owner.query(
-        `SELECT unread_count, last_outbound_at FROM conversations WHERE org_id = $1 AND raw_jid = 'fb:P1:1001'`,
+        `SELECT unread_count, last_outbound_at FROM conversations WHERE org_id = $1 AND peer_key = 'fb:p1:1001'`,
         [t.orgId],
       )
     ).rows[0];
@@ -331,7 +350,7 @@ describe('WD-FB-013: sending', () => {
     const page = await pageWithPeople(t, 'P1', 3);
     const made = await create(t, page, { psids: psids(3) });
     await h.owner.query(
-      `UPDATE conversations SET last_inbound_at = now() - interval '30 hours' WHERE org_id = $1 AND raw_jid = 'fb:P1:1002'`,
+      `UPDATE conversations SET last_inbound_at = now() - interval '30 hours' WHERE org_id = $1 AND peer_key = 'fb:p1:1002'`,
       [t.orgId],
     );
     await post(t, `broadcasts/${made.body.id}/start`);

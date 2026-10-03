@@ -113,10 +113,12 @@ const push = (b: { token: string; secret: string }, update: unknown, secret = b.
     .set('x-telegram-bot-api-secret-token', secret)
     .send(update as object);
 
+/** Telegram numbers the messages of a chat one after another; the inbox keeps each by `<chat>:<message id>`, once. */
+let mid = 10;
 const message = (chat: object, extra: object = {}) => ({
   update_id: 1,
   message: {
-    message_id: 11,
+    message_id: ++mid,
     chat: { id: 555, type: 'private', first_name: 'Asha', last_name: 'Rao' },
     from: { id: 555, username: 'asha', first_name: 'Asha' },
     date: 1,
@@ -183,7 +185,8 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
     const t = await api.signup('ti3');
     const b = await bot(t);
     await h.owner.query(`UPDATE telegram_bots SET last_error = 'old' WHERE id = $1`, [b.rowId]);
-    const res = await push(b, message({ text: 'Hello there' }));
+    const first = message({ text: 'Hello there' });
+    const res = await push(b, first);
     expect(res.body).toEqual({ ok: true, note: 'ok' });
 
     const [c] = await convs(t);
@@ -201,7 +204,7 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
       status: 'received',
       kind: 'text',
       sender_kind: 'customer',
-      provider_message_id: '11',
+      provider_message_id: `555:${first.message.message_id}`,
     });
     // The thread lives on the bot's own channel, keyed by the bot's row id.
     const channel = (
@@ -210,7 +213,7 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
     expect(channel).toMatchObject({ kind: 'telegram', external_id: String(b.rowId) });
     expect(m.meta.telegram).toMatchObject({
       chat_id: '555',
-      message_id: '11',
+      message_id: String(first.message.message_id),
       chat_type: 'private',
       username: 'asha',
       from_id: '555',
@@ -303,7 +306,18 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
     expect(uids.map((r: { channel_uid: string }) => r.channel_uid)).toEqual(['-100999', '42']);
   });
 
-  it('a photo is stored with its caption and, with no file storage yet, no file', async () => {
+  it('a redelivered update is stored once and runs no automation a second time', async () => {
+    const t = await api.signup('ti5b');
+    const b = await bot(t);
+    const update = message({ text: 'only once' });
+    await push(b, update);
+    await push(b, update);
+    expect(await msgs(t)).toHaveLength(1);
+    expect((await convs(t))[0].unread_count).toBe(1);
+    expect(handed.filter((x) => x.kind === 'flow')).toHaveLength(1);
+  });
+
+  it('a photo keeps its caption and its kind; when the file cannot be fetched the message is stored without it', async () => {
     const t = await api.signup('ti6');
     const b = await bot(t);
     await push(
@@ -311,7 +325,7 @@ describe('WD-TG-004: a message becomes a thread, a contact and a message', () =>
       message({ photo: [{ file_id: 'small' }, { file_id: 'LARGE' }], caption: 'Look' }),
     );
     const [m] = await msgs(t);
-    expect(m).toMatchObject({ body: 'Look', media_key: null, kind: 'text' });
+    expect(m).toMatchObject({ body: 'Look', media_key: null, kind: 'image' });
     expect(m.meta.telegram.file_id).toBe('LARGE');
   });
 

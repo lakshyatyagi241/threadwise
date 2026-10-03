@@ -28,6 +28,8 @@ export interface RecordOutboundInput {
   body: string;
   /** The provider's id once it accepted the message; the ledger makes a repeated call with the same id a no-op. */
   providerMessageId?: string;
+  /** The person who sent it, when one did (the thread then shows their name instead of the source). */
+  senderUserId?: number | null;
 }
 
 // --- sending from the inbox ---------------------------------------------------------------------------------------------
