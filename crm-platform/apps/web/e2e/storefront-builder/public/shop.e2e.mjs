@@ -56,14 +56,18 @@ async function placeOrder(page) {
     route.fulfill({ status: 200, contentType: 'text/html', body: 'wa' });
   });
   await page.click('.sf-checkout button[type=submit]');
-  await page.waitForFunction(
-    () =>
-      document.querySelector('.sf-status-msg')?.textContent?.includes('Opening WhatsApp') ||
-      document.querySelector('.sf-modal-title')?.textContent?.includes('placed'),
-    null,
-    { timeout: 15000 },
-  );
-  await page.waitForTimeout(500);
+  // The hand-off navigates away to the stubbed wa.me page; without a number the "Order placed" dialog opens instead.
+  for (let i = 0; i < 60 && !waUrl; i++) {
+    if (
+      await page
+        .locator('.sf-modal-title:has-text("placed")')
+        .count()
+        .catch(() => 0)
+    )
+      break;
+    await page.waitForTimeout(250);
+  }
+  await page.waitForTimeout(300);
   return waUrl;
 }
 
@@ -146,10 +150,11 @@ for (const [label, viewport] of [
   await page.keyboard.press('Escape');
   check(`[${label}] Escape closes the modal`, (await page.locator('.sf-modal-card').count()) === 0);
 
-  // stock cap on the cards: product 2 (stock 3) is the second card
+  // stock cap on the cards: products 2 and 3 have a stock of 3 (the phone run uses the other one: a placed order takes stock)
+  const lowStock = label === 'desktop' ? 2 : 3;
   await open(page, `/s/${SHOP}`);
-  for (let i = 0; i < 3; i++) await addBtn(page, 1).click();
-  await addBtn(page, 1).click();
+  for (let i = 0; i < 3; i++) await addBtn(page, lowStock - 1).click();
+  await addBtn(page, lowStock - 1).click();
   check(
     `[${label}] a 4th add of a 3-in-stock product is refused`,
     (await page.locator('.sf-modal-title').innerText()).includes('Only 3 in stock'),
@@ -165,7 +170,7 @@ for (const [label, viewport] of [
   await page.keyboard.press('Escape');
 
   // product page: low stock pill, the product's own stock is not capped there (QUIRK), tabs, two review blocks
-  await open(page, `/s/${SHOP}/p/stp-item-2`);
+  await open(page, `/s/${SHOP}/p/stp-item-${lowStock}`);
   check(
     `[${label}] low stock pill`,
     (await page.locator('.sf-pd-stock').innerText()).includes('Only 3 left'),

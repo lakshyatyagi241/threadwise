@@ -2384,11 +2384,11 @@
 }
 
 @media (max-width: 600px) {
-  :where([data-sf-theme='meridian']) .sf-grid {
+  /* Reference also sets `padding: 24px 16px` here, dead for the same reason as on desktop (the grid has inline `padding: 0`) */
+  :where([data-sf-theme='meridian'][data-sf-page='home']) .sf-grid {
     grid-template-columns: 1fr;
-    padding: 24px 16px;
   }
-  :where([data-sf-theme='studio']) .sf-grid {
+  :where([data-sf-theme='studio'][data-sf-page='home']) .sf-grid {
     grid-template-columns: 1fr;
   }
 }

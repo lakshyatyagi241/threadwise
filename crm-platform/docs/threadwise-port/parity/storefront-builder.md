@@ -61,7 +61,7 @@ Screenshots: `admin-<screen>-<viewport>-{ref,ours}.png` in the session scratchpa
 | ----------------------------------------------------------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Wizard gate "Connect WhatsApp first" (no device)                                                            | same + intended                   | Same card and copy; "/devices" in the sentence and link reads "your channels" / `/channels` (our route).                                                                                                                                                                                                                                                                      |
 | Wizard first-run form (name prefilled with the workspace name, slug readout, 3 sections)                    | same                              | Slug box now shows the whole address in front (`http://host/s/`), as Reference (was `/s/`). Device row shows the stored country code and number joined by a space (was `+` prepended: "++91").                                                                                                                                                                                   |
-| Wizard validation: empty name, bad domain                                                                   | same + intended                   | Reference blocks an empty name with the browser bubble; ours shows the inline error "Enter a shop name." Bad domain: field error "That doesn't look like a valid domain".                                                                                                                                                                        |
+| Wizard validation: empty name, bad domain                                                                   | same + intended                   | Reference blocks an empty name with the browser bubble; ours shows the inline error "Enter a shop name." Bad domain: field error "That doesn't look like a valid domain".                                                                                                                                                                                                        |
 | Wizard list: card (theme, URL, sending from, domain, Manage / Preview / Edit / Share / Delete), add tile    | same                              | Card header uses the theme brand token (`wizardShopSchema` has no brand colour). Extra "Clear all store data" link is ours (inventory 005).                                                                                                                                                                                                                                   |
 | Wizard edit form, locked slug note, "This shop is live" panel                                               | same                              |                                                                                                                                                                                                                                                                                                                                                                               |
 | Share modal (copy, WhatsApp, Email, Telegram, More, QR)                                                     | same + intended                   | "More..." shows "Not supported on this browser" and falls back to copying when `navigator.share` is missing (Reference keeps "Phone share menu" dimmed). QR drawn locally.                                                                                                                                                                                                       |
@@ -167,3 +167,72 @@ Endpoint list: `docs/api/storefront-builder.md`.
 - Real WhatsApp sends: the Baileys nudge is tested against a local stub of the Node bridge; the WABA nudge path reads the encrypted config and calls the shared Meta provider but was not run against Meta. The Twilio path is blocked (no Twilio sender in the repo).
 - DNS CNAME check on real domains (fixture resolver in tests). Custom-domain root routing needs a web seam; TLS for customer domains is infrastructure.
 - Cross-domain shims (`_shims/README.md`) read CHK, device and WABA tables directly until those domains export services.
+
+---
+
+## Twin harness: admin screens
+
+Scope: TW-STORE-001..008, 022..025, 029 (web side), 030, plus the store rail on `/store/products` and `/store/reviews`.
+Spec: `apps/web/e2e/storefront-builder/parity/TW-STORE-admin.twin.mjs` (329 generated + custom scenarios; `prepare-org.mjs --shop`
+makes our throw-away org; the reference gets a device row and one shop `stw-demo` in workspace 1, removed after the run).
+Run: `parity.sh run <spec> --depth full --workers 1` (one worker: the reference edits "the first shop" and the scenarios share it), split
+into segments of under 15 minutes because the harness logs in once per run and our access token lives 15 minutes.
+Final state (the segments merged into one run): same 1583, intended 138, defects 0, review 26, skipped 1, spec-issue 0; 334 scenarios
+per side. First full run: 723 difference rows in 203 scenarios. Triage below.
+
+Per-field value matrix: the generated matrix was replaced by `settings-db.*` and `wizard-db.*` scenarios that compare what was
+**stored** (database readback) and whether the page told the user something. Reason: Reference prints its validation errors in a plain box
+without alert semantics, which the harness reads as "silent", so every rejected value looked like a difference although the message is shown
+(checked by hand: "The custom domain field format is invalid."). Structure, happy path, empty submit, required, Enter, double submit, slow
+server, server error, offline and session-expired still come from the generated form scenarios.
+
+### Defects found and fixed (7)
+
+| Defect                                                                                                                                               | Fix                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Settings: a whole shipping fee showed as `999`; Reference prints two decimals (`999.00`)                                                                | web `settings-form.ts` `amountBox`                                           |
+| Shipping amounts: `1e5` and `+12.5` were refused, `12.345` (three decimals) was accepted and stored as 12 minor units                                | web: PHP `numeric` rule, two-decimal step, sent as a plain two-place decimal |
+| Recovery delay: `1e3` and `007` were accepted; the integer rule refuses both                                                                         | web: integer pattern without exponent or leading zero                        |
+| Brand colour: stored as typed (`#1A2B3C`, default `#075E54`); the picker value is lower case; a blank hex was refused                                | web: sent lower case, blank means "not set"                                  |
+| Shop slug: Arabic names fell back to `shop` (Reference folds them: `مرحبا` gives `mrhba`); a zero-width character joined words instead of breaking them | api `rules/slug.ts` and web preview `lib/slug.ts`, new unit tests            |
+| Wizard edit: a double click on Save sent two PUTs (the guard ended when the save finished, before the page left)                                     | web `shop-form.tsx` guards after success too                                 |
+| Settings: the slug box had no required marker (Reference has one)                                                                                       | web `settings-screen.tsx` `required`                                         |
+
+### Same
+
+Wizard: gate with no connected number, first-run form, list card (links, actions, theme, sending line, add tiles), add form (three steps, live slug
+readout, device choice), edit form, slug kept on rename, a save re-enables a disabled shop (quirk kept), same name twice gives `-2`, markup in a shop name is
+text on list, share, dashboard and edit screens, delete modal (cancel keeps, confirm removes shop and its orders, products kept), share modal (copy to
+clipboard, WhatsApp, Email, Telegram links, QR, three ways to close), unknown shop id. Dashboard: empty and with six orders and ten days of visits
+(KPI tiles, bestsellers, recent orders text), shop switcher. Sidebar: pill, public URL, Open and Copy, connection cases, count badges. Settings: every theme
+tile saves, full round trip (stored and re-read form), provider fields per provider, Razorpay secrets write-only (never in the page, never stored in clear, kept
+when left blank), Verify now, all matrix values stored equal. All store pages: no console or page errors, axe, three viewports, degraded and no-session
+probes equal to the reference.
+
+### Intended (reasons are in the spec `intended[]`)
+
+| Difference                                                                                                             | Reason                                                                                  |
+| ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Sidebar sibling screens (orders, groups, coupons, payments, gateways, customers, invoices) disabled with "Coming soon" | blocked: owned by checkout-orders-merchant-payments, not ported                         |
+| Overview and Storefront sidebar links carry `?shop=<id>`; settings of a second shop open that shop                     | decision D-02 (Reference edits the first shop)                                             |
+| Catalog pages of a workspace without a shop answer 200 with a "set up your store" card                                 | Reference answers HTTP 500 (null shop)                                                     |
+| Invalid values send no request (checked in the form, inline message); Reference sends them or uses the browser bubble     | earlier decision: validation in the form; stored result and message compared separately |
+| Long shop name (up to 191) saves; Reference fails in the database                                                         | slug cut to 64 before the suffix                                                        |
+| Taken custom domain is a field error; Reference database error                                                            | deliberate fix                                                                          |
+| NUL byte refused; Reference stores it                                                                                     | platform input rule                                                                     |
+| Trailing zero-width character kept in a name or hero text                                                              | platform trims whitespace only (not store specific)                                     |
+| Blank brand hex means default; Reference saves black by accident; ftp logo URL refused; spaces-only hex trims to blank    | deliberate fixes                                                                        |
+| Unowned `settings_json` keys kept on save                                                                              | deliberate fix (Reference erases `top_strip`, `hero_sub`)                                  |
+| Two tabs: second save gets 409                                                                                         | optimistic locking rule                                                                 |
+| Session expiry keeps the form with a message; Reference redirects                                                         | shared API client, auth domain                                                          |
+| Keyboard focus on the Next dev-tools portal has no ring                                                                | exists only under `next dev` (verified: the only ring-less stops)                       |
+
+Review items (26) were read in the gallery and ignored: button, nav-landmark and table counts differ because of the CRM shell and an
+accessibility data table behind the chart; the shell's mobile nav is collapsed.
+
+### Open, blocked-env, not verified
+
+Open defects: none. Blocked (not store defects): sibling store screens above. Not verified: Verify now success path (needs a real CNAME),
+real Razorpay and WhatsApp sends, permission-denied roles (no second role in the reference), Arabic and RTL rendering and dark mode, the all-data reset
+(ours only: refuses without confirm; Reference has no UI entry and wipes the workspace's products), orders with a second currency, production-build timing
+(run against `next dev`; one `wizard-add.load` LCP outlier of 1.6 s did not repeat).
