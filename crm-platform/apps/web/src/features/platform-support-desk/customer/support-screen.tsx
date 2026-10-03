@@ -19,6 +19,38 @@ import { STATUS_TONE, errorKey, formatWhen } from '../lib/display';
 const NS = 'platform-support-desk';
 export const TICKETS_KEY = ['support', 'tickets'] as const;
 
+/** Rail icon per reason: a 16x16 outline and the tint of its tile, as WaDesk draws them. */
+const REASON_ICON: Record<SuppTicketReason, { tint: string; path: string }> = {
+  bug: {
+    tint: 'bg-danger/10 text-danger',
+    path: 'M8 2v3M8 11v3M2 8h3M11 8h3M4 4l2 2M10 10l2 2M12 4l-2 2M6 10l-2 2',
+  },
+  delivery: { tint: 'bg-success/10 text-success', path: 'M2 8h10M8 4l4 4-4 4M14 3v10' },
+  template: { tint: 'bg-primary/10 text-primary', path: 'M2 3h12v10H2zM2 7h12M6 7v6' },
+  billing: { tint: 'bg-warning/10 text-warning', path: 'M2 4h12v8H2zM2 7h12M4 10h3' },
+  integration: { tint: 'bg-primary/10 text-primary', path: 'm5 5-3 3 3 3M11 5l3 3-3 3M9 3l-2 10' },
+  account: {
+    tint: 'bg-success/10 text-success',
+    path: 'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 14c0-3 2-5 5-5s5 2 5 5',
+  },
+  other: { tint: 'bg-muted text-muted-foreground', path: 'M3 8h.01M8 8h.01M13 8h.01' },
+};
+
+const Icon = ({ path }: { path: string }) => (
+  <svg
+    viewBox="0 0 16 16"
+    className="size-4"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d={path} />
+  </svg>
+);
+
 const sizeLabel = (bytes: number): string =>
   bytes >= 1_048_576
     ? `${(bytes / 1_048_576).toFixed(1)} MB`
@@ -126,13 +158,23 @@ export function SupportScreen() {
                     aria-pressed={reason === r}
                     onClick={() => setReason(r)}
                     className={cn(
-                      'w-full border-s-[3px] px-4 py-3 text-start hover:bg-muted/60',
+                      'flex w-full items-start gap-3 border-s-[3px] px-4 py-3 text-start hover:bg-muted/60',
                       reason === r ? 'border-primary bg-muted/40' : 'border-transparent',
                     )}
                   >
-                    <span className="block text-sm font-semibold">{tr(`${r}.label`)}</span>
-                    <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
-                      {tr(`${r}.hint`)}
+                    <span
+                      className={cn(
+                        'inline-flex size-10 shrink-0 items-center justify-center rounded-lg',
+                        REASON_ICON[r].tint,
+                      )}
+                    >
+                      <Icon path={REASON_ICON[r].path} />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold">{tr(`${r}.label`)}</span>
+                      <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
+                        {tr(`${r}.hint`)}
+                      </span>
                     </span>
                   </button>
                 </li>
@@ -156,17 +198,20 @@ export function SupportScreen() {
                     name="name"
                     required
                     maxLength={191}
+                    placeholder={t('form.name')}
                     defaultValue={prefill?.name}
                     invalid={fieldErrors.has('name')}
                   />
                 </Field>
-                <Field label={`${t('form.email')} *`} htmlFor="sp-email" hint={t('form.emailHint')}>
+                <Field label={`${t('form.email')} *`} htmlFor="sp-email">
                   <Input
                     id="sp-email"
                     name="email"
                     type="email"
                     required
                     maxLength={191}
+                    className="font-mono"
+                    placeholder="you@brand.example"
                     defaultValue={prefill?.email}
                     invalid={fieldErrors.has('email')}
                   />
@@ -209,7 +254,10 @@ export function SupportScreen() {
                   htmlFor="sp-files"
                   className="block cursor-pointer rounded-lg border-2 border-dashed p-6 text-center hover:border-primary"
                 >
-                  <span className="text-sm font-semibold">
+                  <span className="mb-2 inline-flex size-10 items-center justify-center rounded-full bg-muted text-primary">
+                    <Icon path="M2 3h12v10H2zM3 11l3-3 4 4 3-3" />
+                  </span>
+                  <span className="block text-sm font-semibold">
                     {t('form.drop')} <span className="text-primary">{t('form.browse')}</span>
                   </span>
                   <span className="mt-1 block font-mono text-xs text-muted-foreground">
@@ -259,7 +307,23 @@ export function SupportScreen() {
                     {t('cancel')}
                   </Button>
                   <Button type="submit" disabled={create.isPending}>
-                    {create.isPending ? t('form.sending') : t('form.submit')}
+                    {create.isPending ? (
+                      t('form.sending')
+                    ) : (
+                      <>
+                        <svg
+                          viewBox="0 0 16 16"
+                          className="size-3"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          aria-hidden="true"
+                        >
+                          <path d="M2 8h10M8 4l4 4-4 4" />
+                        </svg>
+                        {t('form.submit')}
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>

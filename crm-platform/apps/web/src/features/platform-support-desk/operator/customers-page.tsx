@@ -100,7 +100,7 @@ export function CustomersPage() {
                       {minutesLabel(r.avgResolutionMinutes)}
                     </td>
                     <td className="p-3 font-mono text-xs">
-                      {r.lastTicketAt ? relativeTime(r.lastTicketAt, locale) : '-'}
+                      {r.lastTicketAt ? relativeTime(r.lastTicketAt, locale) : '—'}
                     </td>
                     <td className="p-3 text-end">
                       <Link
@@ -214,7 +214,7 @@ export function CustomerDetailPage({ id }: { id: string }) {
                   <td className="p-3 text-center">
                     <Badge tone={PRIORITY_TONE[tk.priority]}>{tp(tk.priority)}</Badge>
                   </td>
-                  <td className="p-3">{tk.assignee ?? '-'}</td>
+                  <td className="p-3">{tk.assignee ?? '—'}</td>
                   <td className="p-3 text-end font-mono text-xs">
                     {minutesLabel(tk.resolvedInMinutes)}
                   </td>

@@ -17,7 +17,7 @@ import { useOperator } from '@/features/auth-registration-security/platform/oper
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { ApiError } from '@/lib/api/errors';
-import { INBOX_KEY, errorKey, formatWhen } from '../lib/display';
+import { INBOX_KEY, PRIORITY_PILL, STATUS_PILL, errorKey, formatWhen } from '../lib/display';
 
 const NS = 'platform-support-desk';
 
@@ -39,6 +39,7 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
   const [body, setBody] = useState('');
   const [note, setNote] = useState(false);
   const [playbookId, setPlaybookId] = useState('');
+  const [pickedAssignee, setPickedAssignee] = useState<string | null>(null);
 
   const q = useQuery({
     queryKey: key,
@@ -67,6 +68,7 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
 
   const done = (d: OperatorTicketDetail, message: string) => {
     qc.setQueryData(key, d);
+    setPickedAssignee(null);
     void qc.invalidateQueries({ queryKey: INBOX_KEY });
     toast.success(message);
   };
@@ -130,6 +132,8 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
   };
 
   const d = q.data;
+  const assigneeId = pickedAssignee ?? d?.assignee?.id ?? '';
+  const setAssigneeId = setPickedAssignee;
   const busy = patch.isPending || reply.isPending;
 
   return (
@@ -156,58 +160,64 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
         {d && (
           <>
             {!canWrite && <Alert>{t('readOnly')}</Alert>}
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-              <Meta label={t('customer')}>{d.customerName || d.customerEmail}</Meta>
-              <Meta label={t('workspace')}>{d.workspace.name}</Meta>
-              <Meta label={t('assignedTo')}>{d.assignee?.name ?? t('none')}</Meta>
-              <Meta label={t('firstReply')}>
-                {d.firstResponseAt ? formatWhen(d.firstResponseAt, locale) : '-'}
-              </Meta>
-              <Meta label={t('opened')}>{formatWhen(d.createdAt, locale)}</Meta>
-            </dl>
-
-            <Pills
-              label={t('status')}
-              values={SUPP_TICKET_STATUSES}
-              current={d.status}
-              text={ts}
-              disabled={!canWrite || busy}
-              onPick={(status) =>
-                patch.mutate({ path: 'status', body: { status }, ok: tt('status') })
-              }
-            />
-            <Pills
-              label={t('priority')}
-              values={SUPP_TICKET_PRIORITIES}
-              current={d.priority}
-              text={tp}
-              disabled={!canWrite || busy}
-              onPick={(priority) =>
-                patch.mutate({ path: 'priority', body: { priority }, ok: tt('priority') })
-              }
-            />
-
-            <label className="block space-y-1 text-sm">
-              <span className="font-medium">{t('assign')}</span>
-              <Select
-                value={d.assignee?.id ?? ''}
+            <div className="space-y-3">
+              <Pills
+                values={SUPP_TICKET_STATUSES}
+                current={d.status}
+                text={ts}
+                tint={STATUS_PILL}
                 disabled={!canWrite || busy}
-                onChange={(e) =>
+                onPick={(status) =>
+                  patch.mutate({ path: 'status', body: { status }, ok: tt('status') })
+                }
+              />
+              <Pills
+                label={t('priority')}
+                mono
+                values={SUPP_TICKET_PRIORITIES}
+                current={d.priority}
+                text={tp}
+                tint={PRIORITY_PILL}
+                disabled={!canWrite || busy}
+                onPick={(priority) =>
+                  patch.mutate({ path: 'priority', body: { priority }, ok: tt('priority') })
+                }
+              />
+              <form
+                className="flex items-center gap-2 text-sm"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (assigneeId === (d.assignee?.id ?? '')) return;
                   patch.mutate({
                     path: 'assignee',
-                    body: { agentId: e.target.value || null },
-                    ok: e.target.value ? tt('assigned') : tt('unassigned'),
-                  })
-                }
+                    body: { agentId: assigneeId || null },
+                    ok: assigneeId ? tt('assigned') : tt('unassigned'),
+                  });
+                }}
               >
-                <option value="">{t('unassign')}</option>
-                {assignees.data?.data.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.name}
-                  </option>
-                ))}
-              </Select>
-            </label>
+                <label htmlFor="tp-assign" className="shrink-0 text-xs text-muted-foreground">
+                  {t('assign')}
+                </label>
+                <Select
+                  id="tp-assign"
+                  value={assigneeId}
+                  disabled={!canWrite || busy}
+                  onChange={(e) => setAssigneeId(e.target.value)}
+                >
+                  <option value="">{t('unassign')}</option>
+                  {assignees.data?.data.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name}
+                    </option>
+                  ))}
+                </Select>
+                {canWrite && (
+                  <Button type="submit" size="sm" disabled={busy}>
+                    {t('assignSave')}
+                  </Button>
+                )}
+              </form>
+            </div>
 
             {canWrite && (playbooks.data?.data.length ?? 0) > 0 && (
               <form
@@ -256,15 +266,25 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
               </dd>
             </dl>
 
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 border-b pb-3 text-sm">
+              <Meta label={t('status')}>{ts(d.status)}</Meta>
+              <Meta label={t('priority')}>{tp(d.priority)}</Meta>
+              <Meta label={t('customer')}>{d.customerName || d.customerEmail}</Meta>
+              <Meta label={t('workspace')}>{d.workspace.name}</Meta>
+              <Meta label={t('assignedTo')}>{d.assignee?.name ?? t('none')}</Meta>
+              <Meta label={t('firstReply')}>
+                {d.firstResponseAt ? formatWhen(d.firstResponseAt, locale) : '—'}
+              </Meta>
+              <Meta label={t('opened')}>{formatWhen(d.createdAt, locale)}</Meta>
+            </dl>
+
             <ol className="space-y-2" data-testid="thread">
-              <Bubble who={t('customerInitial', { name: d.customerName || d.customerEmail })}>
-                {d.message}
-              </Bubble>
+              <Bubble who={t('customerInitial')}>{d.message}</Bubble>
               {d.messages.map((m) => (
                 <Bubble
                   key={m.id}
                   admin={m.role === 'admin'}
-                  who={`${m.authorName} - ${formatWhen(m.createdAt, locale)}`}
+                  who={`${m.authorName} · ${m.role} · ${formatWhen(m.createdAt, locale)}`}
                   badges={
                     <>
                       {m.isInternalNote && <Badge tone="warning">{t('internal')}</Badge>}
@@ -323,31 +343,39 @@ function SlaPill({ timer, policy }: { timer: SlaTimer | null; policy: boolean })
 
 function Meta({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div>
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd>{children}</dd>
+    <div className="flex flex-wrap gap-x-1">
+      <dt className="text-xs text-muted-foreground">{label}:</dt>
+      <dd className="text-xs">{children}</dd>
     </div>
   );
 }
 
 function Pills<T extends string>({
   label,
+  mono,
   values,
   current,
   text,
+  tint,
   disabled,
   onPick,
 }: {
-  label: string;
+  label?: string;
+  mono?: boolean;
   values: readonly T[];
   current: T;
   text: (v: T) => string;
+  tint: Record<string, string>;
   disabled: boolean;
   onPick: (v: T) => void;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs font-medium text-muted-foreground">{label}:</span>
+    <div className="flex flex-wrap items-center gap-1.5">
+      {label && (
+        <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+          {label}:
+        </span>
+      )}
       {values.map((v) => (
         <button
           key={v}
@@ -356,10 +384,10 @@ function Pills<T extends string>({
           aria-pressed={v === current}
           onClick={() => onPick(v)}
           className={cn(
-            'rounded-full border px-3 py-1 text-xs',
-            v === current
-              ? 'border-primary bg-primary/10 ring-1 ring-primary'
-              : 'border-border hover:bg-muted',
+            'rounded-full px-2.5 py-0.5 text-[11px]',
+            mono ? 'font-mono text-[10px] uppercase' : 'lowercase',
+            tint[v],
+            v === current && 'ring-2 ring-primary',
             'disabled:cursor-not-allowed',
           )}
         >
@@ -388,7 +416,7 @@ function Bubble({
         admin ? 'border-primary/40 bg-primary/5' : 'border-border',
       )}
     >
-      <p className="mb-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <p className="mb-1 flex flex-wrap items-center gap-2 font-mono text-[10.5px] text-muted-foreground">
         {who}
         {badges}
       </p>

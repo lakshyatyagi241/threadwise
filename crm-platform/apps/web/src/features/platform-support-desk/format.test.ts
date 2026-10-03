@@ -4,8 +4,8 @@ import { minutesLabel, relativeTime, shortDate } from './lib/format';
 describe('support desk formatting', () => {
   it('prints minutes and a dash for zero or missing', () => {
     expect(minutesLabel(45)).toBe('45m');
-    expect(minutesLabel(0)).toBe('-');
-    expect(minutesLabel(null)).toBe('-');
+    expect(minutesLabel(0)).toBe('—');
+    expect(minutesLabel(null)).toBe('—');
   });
 
   it('says how long ago in the viewer language', () => {
