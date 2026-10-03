@@ -29,7 +29,7 @@ import {
  */
 
 export const controlClass =
-  'w-full rounded-lg border border-border bg-background px-3 py-2 text-[12.5px] text-foreground outline-none focus:border-brand focus:ring-4 focus:ring-brand/10';
+  'w-full rounded-lg border border-border bg-background px-3 py-2 text-[12.5px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10';
 
 /** Label, control and an optional hint (hints may carry a link, so they are nodes, not strings). */
 export function Field({
@@ -264,6 +264,44 @@ export function TextInput({
       />
       {picker.popover}
     </>
+  );
+}
+
+/** A password field with Reference's show/hide eye (its app shell adds one to every password input). */
+export function PasswordInput({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: unknown;
+  onChange: (v: string) => void;
+  placeholder?: string;
+}) {
+  const [shown, setShown] = useState(false);
+  return (
+    <div className="relative">
+      <input
+        type={shown ? 'text' : 'password'}
+        value={value === null || value === undefined ? '' : String(value)}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        autoComplete="new-password"
+        className={cn(controlClass, 'pe-10')}
+      />
+      <button
+        type="button"
+        onClick={() => setShown((v) => !v)}
+        aria-label={shown ? 'Hide password' : 'Show password'}
+        aria-pressed={shown}
+        className="absolute inset-y-0 end-0 grid w-10 place-items-center text-muted-foreground hover:text-foreground"
+      >
+        <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z" />
+          <circle cx="8" cy="8" r="2" />
+          {shown ? <path d="M2.5 13.5l11-11" /> : null}
+        </svg>
+      </button>
+    </div>
   );
 }
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   acceptFor,
   addConditionRow,
+  agentLabel,
   changeCtaType,
   ctaActions,
   groupBySection,
@@ -11,6 +12,7 @@ import {
   resolveTriggerChannel,
   senderLabel,
   senderOptions,
+  subflowLabel,
   toggleId,
   withCurrent,
 } from './helpers';
@@ -124,5 +126,23 @@ describe('acceptFor', () => {
     expect(acceptFor('video')).toBe('video/*');
     expect(acceptFor('document')).toBe('.pdf,.doc,.docx,.xls,.xlsx');
     expect(acceptFor('image')).toBe('image/*');
+  });
+});
+
+describe('subflowLabel', () => {
+  it('marks a flow live or draft like Threadwise\'s Sub-flow picker', () => {
+    expect(subflowLabel('Welcome', true)).toBe('Welcome · live');
+    expect(subflowLabel('Welcome', false)).toBe('Welcome · draft');
+    expect(subflowLabel('', false)).toBe('Flow · draft');
+  });
+});
+
+describe('agentLabel', () => {
+  it('appends provider/model only when both are known', () => {
+    expect(agentLabel({ name: 'Sales bot', provider: 'openai', model: 'gpt-4o-mini' })).toBe(
+      'Sales bot · openai/gpt-4o-mini',
+    );
+    expect(agentLabel({ name: 'Sales bot', provider: null, model: 'gpt-4o-mini' })).toBe('Sales bot');
+    expect(agentLabel({ name: '', provider: 'openai', model: 'x' })).toBe('Agent · openai/x');
   });
 });
