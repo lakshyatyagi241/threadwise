@@ -59,3 +59,20 @@ export type SetCmsContactReadRequest = z.infer<typeof setCmsContactReadRequestSc
 
 export const markAllCmsContactReadResponseSchema = z.object({ updated: z.number().int() });
 export type MarkAllCmsContactReadResponse = z.infer<typeof markAllCmsContactReadResponseSchema>;
+
+/**
+ * GET /public/cms/site-info (WD-CMS-005): the company details the contact page shows, read from the platform's site
+ * info settings. Only non-secret fields; an empty string means "not set" and the page hides that line.
+ */
+export const publicSiteInfoSchema = z.object({
+  companyName: z.string(),
+  address: z.string(),
+  cityCountry: z.string(),
+  emailGeneral: z.string(),
+  /** The saved support mailbox, else `support@<site domain>` (WaDesk's `brand_email('support')`). */
+  emailSupport: z.string(),
+  phone: z.string(),
+  /** Digits only, ready for `https://wa.me/<digits>`. */
+  whatsapp: z.string(),
+});
+export type PublicSiteInfo = z.infer<typeof publicSiteInfoSchema>;
