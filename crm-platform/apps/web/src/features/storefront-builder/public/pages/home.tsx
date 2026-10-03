@@ -27,7 +27,7 @@ export async function ShopHome({ slug, page = 1 }: { slug: string; page?: number
 
 export async function shopHomeMetadata(slug: string, page = 1): Promise<Metadata> {
   const home = await getPublicHome(slug, page);
-  if (!home) return { title: 'Store', robots: { index: false } };
+  if (!home) return { title: { absolute: 'Store' }, robots: { index: false } };
   const origin = await requestOrigin();
   return homeMetadata(home.shop, `${origin}${shopPath(slug)}${page > 1 ? `?page=${page}` : ''}`);
 }

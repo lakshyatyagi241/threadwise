@@ -85,7 +85,7 @@ describe('brand colour', () => {
     expect(resolveTheme('studio', 'red').brand).toBe('#2A9D8F');
   });
 
-  it('exports every token as a --sf variable and system font stacks only', () => {
+  it('exports every token as a --sf variable and the three self-hosted font stacks', () => {
     const { vars } = resolveTheme('kraft', null);
     for (const k of [
       'bg',
@@ -100,8 +100,12 @@ describe('brand colour', () => {
     ]) {
       expect(vars[`--sf-${k}`], k).toBeTruthy();
     }
+    // Reference's three families, self-hosted (styles/fonts.css); nothing points at a CDN
+    expect(vars['--sf-serif']).toMatch(/^'Fraunces'/);
+    expect(vars['--sf-sans']).toMatch(/^'Plus Jakarta Sans'/);
+    expect(vars['--sf-mono']).toMatch(/^'JetBrains Mono'/);
     for (const stack of [vars['--sf-serif'], vars['--sf-sans'], vars['--sf-mono']]) {
-      expect(stack).not.toMatch(/fraunces|jakarta|jetbrains|googleapis/i);
+      expect(stack).not.toMatch(/googleapis|gstatic|https?:/i);
     }
   });
 });

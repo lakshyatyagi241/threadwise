@@ -54,16 +54,17 @@ export class StoreOverviewService {
       }
 
       const win = await this.orders.window(tx, ctx.orgId, WINDOW_DAYS);
-      const [views, productCount, byDay, top, recent, shopResponse, counts, connection] = await Promise.all([
-        this.repo.viewsSince(tx, ctx.orgId, WINDOW_DAYS),
-        this.products.countProducts(tx, ctx.orgId),
-        this.orders.salesByDay(tx, ctx.orgId, WINDOW_DAYS),
-        this.orders.topProducts(tx, ctx.orgId, WINDOW_DAYS, 5),
-        this.orders.recent(tx, ctx.orgId, 8),
-        this.shops.respond(tx, ctx.orgId, shop),
-        this.orders.sidebarCounts(tx, ctx.orgId),
-        this.senders.connection(tx, ctx.orgId, shop.deviceId),
-      ]);
+      const [views, productCount, byDay, top, recent, shopResponse, counts, connection] =
+        await Promise.all([
+          this.repo.viewsSince(tx, ctx.orgId, WINDOW_DAYS),
+          this.products.countProducts(tx, ctx.orgId),
+          this.orders.salesByDay(tx, ctx.orgId, WINDOW_DAYS),
+          this.orders.topProducts(tx, ctx.orgId, WINDOW_DAYS, 5),
+          this.orders.recent(tx, ctx.orgId, 8),
+          this.shops.respond(tx, ctx.orgId, shop),
+          this.orders.sidebarCounts(tx, ctx.orgId),
+          this.senders.connection(tx, ctx.orgId, shop.deviceId),
+        ]);
 
       return {
         shop: shopResponse,
