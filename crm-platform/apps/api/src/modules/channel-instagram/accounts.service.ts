@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
@@ -30,6 +30,7 @@ import {
 } from './account-rules';
 import { AccountsRepository, type AccountRow } from './accounts.repository';
 import { INSTAGRAM_PLAN_GATE, type InstagramPlanGate } from './_shims/tokens';
+import { ChatInstagramIngest } from './_shims/chat-instagram-ingest';
 
 export const MODULE_KEY = 'instagram_accounts';
 
@@ -49,6 +50,8 @@ const refuse = (
  */
 @Injectable()
 export class AccountsService {
+  private readonly logger = new Logger(AccountsService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: AccountsRepository,
@@ -58,7 +61,24 @@ export class AccountsService {
     private readonly config: ConfigService<Env, true>,
     @Inject(INSTAGRAM_BRIDGE) private readonly bridge: InstagramBridgeFactory,
     @Inject(INSTAGRAM_PLAN_GATE) private readonly plan: InstagramPlanGate,
+    private readonly inbox: ChatInstagramIngest,
   ) {}
+
+  /** Keeps the account's inbox channel in step with the link. Best effort: the link itself is already saved. */
+  private async syncChannel(orgId: number, row: AccountRow, connected: boolean): Promise<void> {
+    try {
+      await this.inbox.syncAccount(orgId, {
+        accountId: row.instaflowAccountId,
+        username: row.username,
+        connected,
+      });
+    } catch (err) {
+      this.logger.warn(
+        { err, orgId, account: row.instaflowAccountId },
+        'instagram inbox channel not synced',
+      );
+    }
+  }
 
   toResponse(row: AccountRow): IgAccount {
     return {
@@ -139,7 +159,7 @@ export class AccountsService {
     }
     const profile = resolveProfile(input, found);
 
-    return this.db.tx(async (tx) => {
+    const linked = await this.db.tx(async (tx) => {
       const saved = await this.repo.upsert(
         tx,
         ctx.orgId,
@@ -163,8 +183,10 @@ export class AccountsService {
           relinked: !saved.created,
         },
       });
-      return this.toResponse(saved.row);
+      return saved.row;
     });
+    await this.syncChannel(ctx.orgId, linked, true);
+    return this.toResponse(linked);
   }
 
   /** The sign-in popup's address; a window with no opener comes back to the hub with the account id. */
@@ -197,7 +219,7 @@ export class AccountsService {
   async unlink(uuid: string): Promise<IgUnlinkResult> {
     const { orgId } = RequestContextStore.require();
     await this.plan.assertChannel(orgId);
-    return this.db.tx(async (tx) => {
+    const done = await this.db.tx(async (tx) => {
       const row = await this.repo.findByUuid(tx, orgId, uuid);
       if (!row) throw AppError.notFound('Instagram account', uuid);
       await this.repo.remove(tx, orgId, row.id);
@@ -215,7 +237,9 @@ export class AccountsService {
           purgedThreads,
         },
       });
-      return { purgedThreads };
+      return { row, purgedThreads };
     });
+    await this.syncChannel(orgId, done.row, false);
+    return { purgedThreads: done.purgedThreads };
   }
 }

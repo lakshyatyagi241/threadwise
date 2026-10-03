@@ -67,7 +67,7 @@ export class WhatsappOutboundMediaUploader implements OutboundMediaUploader {
   ): Promise<PreparedWhatsappMedia> {
     const cfg = whatsappMediaConfig();
     const ctx = authContextOf(channel);
-    const profile = profileOf(this.http, ctx.route);
+    const profile = profileOf(this.http, ctx.route, ctx.registry);
     const secrets = secretsIn(profile.buildHeaders(ctx));
 
     const head = await this.head(channel.orgId, file.key);

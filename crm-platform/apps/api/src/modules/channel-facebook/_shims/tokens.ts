@@ -21,6 +21,9 @@ export const FACEBOOK_PLAN_GATE = Symbol('FACEBOOK_PLAN_GATE');
 /** One received Facebook message or comment, ready to be written into the inbox (TW-FB-007, 009, 010). */
 export interface InboundInput {
   kind: 'dm' | 'comment';
+  /** Meta's Page id and the Page's name: they name the inbox channel the thread belongs to. */
+  pageId: string;
+  pageName: string;
   /** The thread key: `fb:<page>:<psid>` or `fb:<page>:post:<post>:<commenter>`. */
   rawJid: string;
   /** The thread title when it is created; a DM starts as a placeholder until the sender's name is known. */
@@ -41,18 +44,19 @@ export interface InboundInput {
 export interface InboundRecorded {
   /** False when the Meta id was already stored. */
   stored: boolean;
+  /** `conversations.id`, 0 when nothing was stored. */
   conversationId: number;
+  /** The lead made for a DM sender (keyed by the Messenger id); null for a comment. */
   contactId: number | null;
   newThread: boolean;
 }
 
 /**
- * Writes an inbound message into the team inbox (team-inbox-conversations): finds or creates the `channel = facebook` thread, links a
- * contact (a DM sender only), stores the message, moves the thread (preview, unread, reopen). The inbox domain also owns the live
- * "message received" push; until it exports this, `SqlInboxIngest` does the writes only.
+ * Writes into the inbox (chat-conversations): the thread lives on the Page's `facebook` channel, keyed by the thread key, and the
+ * message goes through the same pipeline a Cloud API webhook feeds (ledger, sequence, unread, 24 hour window, realtime).
  */
 export interface InboxIngest {
-  recordInbound(tx: Tx, orgId: number, input: InboundInput): Promise<InboundRecorded>;
+  recordInbound(orgId: number, input: InboundInput): Promise<InboundRecorded>;
   /** Has this Meta id already been stored in this organization? Checked BEFORE any Graph call. */
   alreadyStored(tx: Tx, orgId: number, dedup: string): Promise<boolean>;
   /** The sender's name and picture, learned once when a thread is created. */
@@ -120,10 +124,3 @@ export interface InboundHooks {
   automate(ctx: InboundContext): Promise<void>;
 }
 export const INBOUND_HOOKS = Symbol('FACEBOOK_INBOUND_HOOKS');
-
-/** A public address for a stored file, for an outbound attachment (platform-settings-branding-storage). */
-export interface MediaUrls {
-  /** The address Meta can fetch, or null when the path has none. An address that is already public is returned as it is. */
-  publicUrl(path: string): string | null;
-}
-export const MEDIA_URLS = Symbol('FACEBOOK_MEDIA_URLS');

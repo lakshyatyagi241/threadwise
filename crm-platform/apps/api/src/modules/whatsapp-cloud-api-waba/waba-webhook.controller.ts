@@ -35,6 +35,10 @@ export class WabaWebhookController {
       rawBody: req.rawBody,
       signatureHeader: req.header('x-hub-signature-256') ?? undefined,
       queryKey: typeof k === 'string' ? k : undefined,
+      header: (name) => {
+        const v = req.header(name);
+        return typeof v === 'string' ? v : undefined;
+      },
     });
     return { received: true };
   }

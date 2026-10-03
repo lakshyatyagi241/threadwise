@@ -5,6 +5,7 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { DeviceRuntimeService } from './runtime/device-runtime.service';
 import { WA_SOCKET_FACTORY } from '../../infra/providers/node-bridge-runtime/socket.port';
 import { DeviceLease } from './runtime/wa-redis';
+import { ChatConversationsModule } from '../chat-conversations';
 import { NodeBridgeRuntimeModule } from './node-bridge-runtime.module';
 import { InboxBridge } from './inbox/inbox-bridge.service';
 
@@ -13,7 +14,8 @@ import { InboxBridge } from './inbox/inbox-bridge.service';
  * (the worker process): the HTTP app never opens a WhatsApp connection.
  */
 @Module({
-  imports: [NodeBridgeRuntimeModule],
+  // ChatConversationsModule: InboxBridge injects its publisher, registry and conversations facade directly.
+  imports: [NodeBridgeRuntimeModule, ChatConversationsModule],
   providers: [
     CryptoService,
     DeviceAuthStore,

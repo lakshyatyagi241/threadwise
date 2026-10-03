@@ -7,6 +7,7 @@ import type { AttributeCatalog, CampaignBuilder, CampaignType } from '@crm/contr
 import { OverridesPanel } from '@/features/broadcasts/components/overrides-panel';
 import { editorType, type BuilderForm, type ButtonRow } from '../lib/builder-model';
 import { PlusIcon, TrashIcon } from './icons';
+import { UploadMediaButton } from '@/features/broadcasts/components/upload-media-button';
 
 /** One numbered card of the builder, the frame Reference's create page uses for each step. */
 export function Section({
@@ -155,6 +156,9 @@ export function MessageSection({
                   onChange={(e) => patch({ mediaUrl: e.target.value })}
                   placeholder="https://…/promo.png"
                 />
+                <div className="mt-1.5">
+                  <UploadMediaButton onUploaded={(m) => patch({ mediaUrl: m.url })} />
+                </div>
               </Field>
               <div>
                 <div className="mb-1.5 flex items-center justify-between">

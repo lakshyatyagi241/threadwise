@@ -1,0 +1,196 @@
+# Single-VM stack for desk.wabo.ai:
+#   caddy (80/443) -> web (staff app) and api (HTTP + Socket.IO); worker; postgres; redis; minio.
+# Run from this directory:  docker compose --env-file .env up -d --build
+# Fresh database: postgres + init-roles.sh create the roles, `migrate` applies every migration, nothing is seeded.
+
+name: desk
+
+x-api-env: &api-env
+  NODE_ENV: production
+  PORT: '3000'
+  APP_URL: https://${DOMAIN}
+  WEB_APP_URL: https://${DOMAIN}
+  CORS_ORIGINS: https://${DOMAIN}
+  APP_NAME: ${APP_NAME}
+  TRUST_PROXY: loopback,linklocal,uniquelocal
+  WEB_TRUSTED_PROXY_HOPS: '1'
+  DATABASE_URL: postgres://crm_app_user:${APP_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  DATABASE_REPLICA_URL: postgres://crm_app_user:${APP_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  MIGRATION_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  REDIS_URL: redis://redis:6379
+  JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+  JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+  JWT_ACCESS_TTL: 15m
+  JWT_REFRESH_TTL: 30d
+  CREDENTIALS_ENCRYPTION_KEY: ${CREDENTIALS_ENCRYPTION_KEY}
+  CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+  S3_ENDPOINT: http://minio:9000
+  S3_REGION: us-east-1
+  S3_BUCKET_MEDIA: crm-media
+  S3_BUCKET_DOCUMENTS: crm-documents
+  S3_BUCKET_EXPORTS: crm-exports
+  S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+  S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+  S3_FORCE_PATH_STYLE: 'true'
+  SMTP_HOST: ${SMTP_HOST}
+  SMTP_PORT: ${SMTP_PORT}
+  SMTP_FROM: ${SMTP_FROM}
+  WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN}
+  WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET}
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      WORKER_DB_PASSWORD: ${WORKER_DB_PASSWORD}
+    # Sized for a small VM (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine.
+    command:
+      - postgres
+      - -c
+      - max_connections=200
+      - -c
+      - shared_buffers=${PG_SHARED_BUFFERS}
+      - -c
+      - effective_cache_size=${PG_EFFECTIVE_CACHE_SIZE}
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - log_min_duration_statement=500
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-roles.sh:/docker-entrypoint-initdb.d/01-roles.sh:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # noeviction: BullMQ job state is not a cache.
+    command: ['redis-server', '--appendonly', 'yes', '--maxmemory-policy', 'noeviction']
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: ['server', '/data']
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio: { condition: service_healthy }
+    restart: 'no'
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} &&
+      mc mb --ignore-existing local/crm-media &&
+      mc mb --ignore-existing local/crm-documents &&
+      mc mb --ignore-existing local/crm-exports
+      "
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+
+  # One-shot: applies every migration as the database owner. Built from the `build` stage, which has the workspace and tsx.
+  migrate:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+      target: build
+    working_dir: /app
+    command: ['pnpm', '--filter', '@crm/db', 'migrate']
+    restart: 'no'
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      MIGRATION_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    environment:
+      <<: *api-env
+      WORKER_MODE: 'false'
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+      minio-init: { condition: service_completed_successfully }
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    command: ['node', 'dist/src/worker.js']
+    restart: unless-stopped
+    environment:
+      <<: *api-env
+      WORKER_MODE: 'true'
+      DATABASE_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_REPLICA_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      API_URL: http://api:3000
+      REALTIME_URL: https://${DOMAIN}/realtime
+    depends_on:
+      - api
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      SITE_ADDRESS: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on:
+      - web
+      - api
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:
+  caddydata:
+  caddyconfig:
