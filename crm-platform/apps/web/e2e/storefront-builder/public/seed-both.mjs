@@ -18,6 +18,8 @@ export const THEMES = [
 ];
 const PRODUCT_COUNT = 60;
 const WS = 9001; // reference workspace id
+const WS2 = 9002; // an empty workspace: the shop `stp-empty` (no products, no sending number)
+const WS3 = 9003; // workspace of the shop `stp-nonumber` (products, no sending number)
 const P0 = 910000; // product id base (same ids on both sides)
 const O0 = 9100; // order id base
 
@@ -237,6 +239,20 @@ export function oursSql() {
       `INSERT INTO wa_orders (org_id, id, source, customer_phone, customer_name, customer_address, items_json, total_minor, shipping_minor, currency_code, status, payment_link, storefront_id, recovery_token, payment_method) OVERRIDING SYSTEM VALUE VALUES (oid, ${o.id}, 'storefront', '+919876543210', 'Asha Test', ${q(o.address)}, ${q(j(o.items))}::jsonb, ${o.total}, ${o.shipping}, 'INR', ${q(o.status)}, ${q(o.payment_link)}, (SELECT id FROM wa_storefronts WHERE org_id = oid AND slug = ${q(o.shop)}), ${q(o.token)}, 'prepaid');`,
     );
   out.push('END $$;');
+  // an empty organization: the shop `stp-empty` has no products and no sending number
+  out.push(
+    `INSERT INTO organizations (slug, name) VALUES ('pubshop-empty-e2e', 'Public Shop Empty') ON CONFLICT (slug) DO NOTHING;`,
+  );
+  out.push(
+    `DO $$ DECLARE oid bigint := (SELECT id FROM organizations WHERE slug = 'pubshop-empty-e2e'); BEGIN PERFORM set_config('app.org_id', oid::text, true); DELETE FROM wa_orders WHERE org_id = oid; DELETE FROM wa_storefronts WHERE org_id = oid; INSERT INTO wa_storefronts (org_id, shop_name, slug, theme_key, enabled, currency_code, settings_json) VALUES (oid, 'Empty Goods', 'stp-empty', 'aurora', true, 'INR', '{}'::jsonb); END $$;`,
+  );
+  // a shop with products but no sending number: the buyer-side WhatsApp links are left out and checkout ends on the dialog
+  out.push(
+    `INSERT INTO organizations (slug, name) VALUES ('pubshop-nonumber-e2e', 'Public Shop No Number') ON CONFLICT (slug) DO NOTHING;`,
+  );
+  out.push(
+    `DO $$ DECLARE oid bigint := (SELECT id FROM organizations WHERE slug = 'pubshop-nonumber-e2e'); BEGIN PERFORM set_config('app.org_id', oid::text, true); DELETE FROM wa_orders WHERE org_id = oid; DELETE FROM wa_products WHERE org_id = oid; DELETE FROM wa_storefronts WHERE org_id = oid; INSERT INTO wa_storefronts (org_id, shop_name, slug, theme_key, enabled, currency_code, shipping_json, settings_json) VALUES (oid, 'No Number Goods', 'stp-nonumber', 'aurora', true, 'INR', '{"flat_minor": 5000, "free_above_minor": 50000}'::jsonb, '{}'::jsonb); ${[1, 2, 3].map((n) => `INSERT INTO wa_products (org_id, id, name, slug, price_minor, status, in_stock, sort_order, created_at) OVERRIDING SYSTEM VALUE VALUES (oid, ${920000 + n}, 'stp Plain ${n}', 'stp-plain-${n}', ${n * 10000}, 'active', true, ${n}, now() - interval '30 days');`).join(' ')} END $$;`,
+  );
   return out.join('\n');
 }
 
@@ -249,7 +265,10 @@ export function cleanOursSql() {
       .replace(
         "INSERT INTO organizations (slug, name) VALUES ('pubshop-e2e', 'Public Shop E2E') ON CONFLICT (slug) DO NOTHING;",
         '',
-      ) + '\nEND $$;'
+      ) +
+    '\nEND $$;' +
+    `\nDO $$ DECLARE oid bigint := (SELECT id FROM organizations WHERE slug = 'pubshop-empty-e2e'); BEGIN PERFORM set_config('app.org_id', oid::text, true); DELETE FROM wa_orders WHERE org_id = oid; DELETE FROM wa_storefronts WHERE org_id = oid; END $$;` +
+    `\nDO $$ DECLARE oid bigint := (SELECT id FROM organizations WHERE slug = 'pubshop-nonumber-e2e'); BEGIN PERFORM set_config('app.org_id', oid::text, true); DELETE FROM wa_orders WHERE org_id = oid; DELETE FROM wa_products WHERE org_id = oid; DELETE FROM wa_storefronts WHERE org_id = oid; END $$;`
   );
 }
 
@@ -264,6 +283,18 @@ export function refSql() {
   out.push(
     `INSERT INTO workspaces (id, owner_user_id, name, slug, created_at, updated_at) VALUES (${WS}, 1, 'stp Workspace', 'stp-workspace', NOW(), NOW());`,
     `INSERT INTO devices (id, user_id, workspace_id, device_name, country_code, phone_number, status, active, created_at, updated_at) VALUES (${WS}, 1, ${WS}, ${q(enc('stp device'))}, ${q(enc(WA.country))}, ${q(enc(WA.phone))}, 'connected', 1, NOW(), NOW());`,
+  );
+  out.push(
+    `INSERT INTO workspaces (id, owner_user_id, name, slug, created_at, updated_at) VALUES (${WS2}, 1, 'stp Empty Workspace', 'stp-empty-workspace', NOW(), NOW());`,
+    `INSERT INTO wa_storefronts (workspace_id, device_id, shop_name, slug, theme_key, enabled, currency_code, shipping_json, settings_json, created_at, updated_at) VALUES (${WS2}, NULL, 'Empty Goods', 'stp-empty', 'aurora', 1, 'INR', NULL, '{}', NOW(), NOW());`,
+  );
+  out.push(
+    `INSERT INTO workspaces (id, owner_user_id, name, slug, created_at, updated_at) VALUES (${WS3}, 1, 'stp No Number Workspace', 'stp-nonumber-workspace', NOW(), NOW());`,
+    `INSERT INTO wa_storefronts (workspace_id, device_id, shop_name, slug, theme_key, enabled, currency_code, shipping_json, settings_json, created_at, updated_at) VALUES (${WS3}, NULL, 'No Number Goods', 'stp-nonumber', 'aurora', 1, 'INR', '{"flat_minor": 5000, "free_above_minor": 50000}', '{}', NOW(), NOW());`,
+    ...[1, 2, 3].map(
+      (n) =>
+        `INSERT INTO wa_products (id, workspace_id, user_id, name, slug, price_minor, status, in_stock, sort_order, created_at, updated_at) VALUES (${920000 + n}, ${WS3}, 1, 'stp Plain ${n}', 'stp-plain-${n}', ${n * 10000}, 'active', 1, ${n}, NOW() - INTERVAL 30 DAY, NOW());`,
+    ),
   );
   for (const s of shops())
     out.push(
@@ -334,10 +365,11 @@ function cleanRef() {
     .slice(1)
     .filter(Boolean);
   const stmts = ['SET FOREIGN_KEY_CHECKS=0;'];
-  for (const t of tables) stmts.push(`DELETE FROM \`${t}\` WHERE workspace_id = ${WS};`);
+  for (const t of tables)
+    stmts.push(`DELETE FROM \`${t}\` WHERE workspace_id IN (${WS}, ${WS2}, ${WS3});`);
   stmts.push(
     `DELETE FROM wa_storefront_views WHERE storefront_id NOT IN (SELECT id FROM wa_storefronts);`,
-    `DELETE FROM workspaces WHERE id = ${WS};`,
+    `DELETE FROM workspaces WHERE id IN (${WS}, ${WS2}, ${WS3});`,
     `DELETE FROM currencies WHERE name = 'stp Indian Rupee';`,
     'SET FOREIGN_KEY_CHECKS=1;',
   );

@@ -1126,7 +1126,6 @@
 .sf-review-form input,
 .sf-review-form select,
 .sf-review-form textarea {
-  display: block;
   width: 100%;
   margin-bottom: 8px;
   padding: 8px 10px;
@@ -2000,7 +1999,7 @@
   font-size: 13px;
   color: #6b807c;
 }
-.sf-ot-center {
+.sf-ot-cancelled {
   padding: 8px 0;
   text-align: center;
 }
@@ -2081,9 +2080,6 @@
   gap: 12px;
   padding: 10px 0;
   border-bottom: 1px solid #f0f4f2;
-}
-.sf-ot-row:last-child {
-  border-bottom: 0;
 }
 .sf-ot-row img,
 .sf-ot-ph {
@@ -2495,7 +2491,7 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 28px;
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces Display', serif;
   font-size: 24px;
   line-height: 36px;
   letter-spacing: -0.01em;
@@ -2513,7 +2509,7 @@
   color: #6b807c;
 }
 .sf-404-code {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces Display', serif;
   font-size: 120px;
   line-height: 0.9;
   letter-spacing: -0.02em;
@@ -2521,7 +2517,7 @@
 }
 .sf-404-card h1 {
   margin-top: 16px;
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces Display', serif;
   font-size: 28px;
   line-height: 1.25;
   letter-spacing: -0.01em;

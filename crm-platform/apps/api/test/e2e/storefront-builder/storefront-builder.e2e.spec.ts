@@ -587,6 +587,26 @@ describe('public shop pages', () => {
     ).toBe(404);
   });
 
+  it('serves what the cards need: the New flag (14 days), weight and tags, and the strip and hero copy nothing writes', async () => {
+    const m = await merchant('cardfields');
+    await product(m.t, { name: 'Fresh', price: 1000 });
+    const old = await product(m.t, { name: 'Old', price: 1000 });
+    await h.owner.query(
+      `UPDATE wa_products SET created_at = now() - interval '15 days', weight_grams = 250, tags_json = '["a","b"]'::jsonb WHERE id = $1`,
+      [old.id],
+    );
+    await h.owner.query(
+      `UPDATE wa_storefronts SET settings_json = COALESCE(settings_json, '{}'::jsonb) || '{"top_strip":"Free delivery today","hero_sub":""}'::jsonb WHERE uuid = $1`,
+      [m.s.id],
+    );
+    const res = await pub(`/${m.slug}/home`);
+    const byName = Object.fromEntries(res.body.products.map((p: any) => [p.name, p]));
+    expect(byName.Fresh).toMatchObject({ isNew: true, tags: [], weightGrams: null });
+    expect(byName.Old).toMatchObject({ isNew: false, tags: ['a', 'b'], weightGrams: 250 });
+    // Reference shows top_strip when set and hero_sub even when it is empty
+    expect(res.body.shop).toMatchObject({ topStrip: 'Free delivery today', heroSub: '' });
+  });
+
   it('hero and footer text are sanitised before they are served', async () => {
     const m = await merchant('hero');
     await setShipping(m, {
@@ -687,7 +707,7 @@ describe('checkout', () => {
     const token = res.body.trackUrl.split('/order/')[1] as string;
     expect(token).toMatch(/^[A-Za-z0-9]{40}$/);
     expect(res.body.waUrl.startsWith('https://wa.me/919812345678?text=')).toBe(true);
-    expect(decodeURIComponent(res.body.waUrl)).toContain(`order #${res.body.orderNo} (₹ 280)`);
+    expect(decodeURIComponent(res.body.waUrl)).toContain(`order #${res.body.orderNo} (₹ 280.00)`);
     expect(decodeURIComponent(res.body.waUrl)).toContain(
       `Track: http://localhost:3001/s/${m.slug}/order/${token}`,
     );
@@ -946,6 +966,8 @@ describe('order tracking', () => {
       totalMinor: 12000,
       customerName: 'Asha',
     });
+    // the "Delivery to" card needs the address the buyer typed
+    expect(res.body.order).toHaveProperty('customerAddress');
     expect(JSON.stringify(res.body)).not.toMatch(/9876543210|recovery|org_id/);
     expect((await pub(`/${m.slug}/orders/${'x'.repeat(40)}`)).status).toBe(404);
     const other = await merchant('track-other');
