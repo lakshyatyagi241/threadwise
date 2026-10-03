@@ -46,6 +46,7 @@ export const CONSOLE_NAV_ITEMS: readonly OperatorNavItem[] = [...OPERATOR_NAV, .
 /** Which operator-nav items carry a live count, and under which count name. */
 const BADGE_KEYS: Readonly<Record<string, string>> = {
   plans: 'plans',
+  coupons: 'coupons',
   roles: 'roles',
   permissions: 'permissions',
 };
