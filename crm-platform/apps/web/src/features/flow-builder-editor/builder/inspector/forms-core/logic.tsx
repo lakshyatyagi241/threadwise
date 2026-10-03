@@ -7,6 +7,7 @@ import {
   Field,
   IconButton,
   NumberInput,
+  PasswordInput,
   SelectInput,
   TextArea,
   TextInput,
@@ -20,6 +21,7 @@ import {
   patchItem,
   removeConditionRow,
   str,
+  subflowLabel,
   withCurrent,
   type ConditionRow,
 } from './helpers';
@@ -317,11 +319,9 @@ export function MysqlForm({ data: d, set }: FormProps) {
         <TextInput value={d.username} placeholder="db_user" onChange={(v) => set('username', v)} />
       </Field>
       <Field label="Password">
-        <TextInput
-          type="password"
+        <PasswordInput
           value={d.password}
           placeholder="••••••••"
-          autoComplete="new-password"
           onChange={(v) => set('password', v)}
         />
       </Field>
@@ -484,7 +484,9 @@ export function SubflowForm({ data: d, set, env }: FormProps) {
     [
       { v: '', l: env.loading ? 'Loading flows…' : '— pick flow —' },
       // A flow cannot run itself: the flow being edited is not offered.
-      ...env.ctx.flows.filter((f) => f.id !== env.flowId).map((f) => ({ v: f.id, l: f.name })),
+      ...env.ctx.flows
+        .filter((f) => f.id !== env.flowId)
+        .map((f) => ({ v: f.id, l: subflowLabel(f.name, f.isPublished) })),
     ],
     d.flow,
     (v) => `Flow ${v.slice(0, 8)} (not in workspace)`,

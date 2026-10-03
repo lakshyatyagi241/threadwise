@@ -48,6 +48,20 @@ export function withCurrent(
   return opts;
 }
 
+/** "<name> · live" / "<name> · draft": the Sub-flow picker marks each flow with its published state (WaDesk). */
+export const subflowLabel = (name: string, isPublished: boolean): string =>
+  `${name || 'Flow'}${isPublished ? ' · live' : ' · draft'}`;
+
+/** "<name> · <provider>/<model>" (the model alone when the provider is unknown): the Chatbot picker's agent label. */
+export function agentLabel(a: {
+  name: string;
+  provider?: string | null | undefined;
+  model?: string | null | undefined;
+}): string {
+  const tag = a.provider && a.model ? ` · ${a.provider}/${a.model}` : '';
+  return `${a.name || 'Agent'}${tag}`;
+}
+
 // --- trigger -------------------------------------------------------------------------------------------------------
 
 export type SenderChannel =

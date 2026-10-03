@@ -2,7 +2,7 @@
 
 import { Field, SelectInput, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
-import { str, withCurrent } from './helpers';
+import { agentLabel, str, withCurrent } from './helpers';
 import { Link } from './parts';
 
 export function TagForm({ data: d, set, setMany, env }: FormProps) {
@@ -116,10 +116,7 @@ export function ChatbotForm({ data: d, set, env }: FormProps) {
   const opts = withCurrent(
     [
       { v: '', l: agents.length ? '— pick AI agent —' : 'No agents yet' },
-      ...agents.map((a) => ({
-        v: a.id,
-        l: (a.name || 'Agent') + (a.model ? ` · ${a.model}` : ''),
-      })),
+      ...agents.map((a) => ({ v: a.id, l: agentLabel(a) })),
     ],
     d.bot,
     (v) => `Agent ${v.slice(0, 8)} (not in workspace)`,
