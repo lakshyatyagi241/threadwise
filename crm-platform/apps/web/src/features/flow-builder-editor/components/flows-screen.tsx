@@ -65,9 +65,15 @@ export function FlowsScreen() {
   const params = useSearchParams();
   const state = parseState(params);
   const orgName = useSession().org.name;
+  const canRead = useCan('flb.flows.read');
   const canCreate = useCan('flb.flows.create');
   const canUpdate = useCan('flb.flows.update');
   const canDelete = useCan('flb.flows.delete');
+
+  // Reference sends an agent or viewer who opens /flows to their home, the team inbox, instead of showing an empty page.
+  useEffect(() => {
+    if (!canRead) router.replace('/inbox');
+  }, [canRead, router]);
 
   const list = useFlowsPage(state);
   const overview = useFlowsOverview();
@@ -81,6 +87,7 @@ export function FlowsScreen() {
   const [deleting, setDeleting] = useState<FlowSummary | null>(null);
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const duplicating = useRef(new Set<string>());
 
   const go = useCallback(
     (next: Partial<ListState>) => router.push(`/flows${toSearch({ ...state, page: 1, ...next })}`, { scroll: false }),
@@ -116,11 +123,15 @@ export function FlowsScreen() {
     },
     onRename: setRenaming,
     onDuplicate: async (f: FlowSummary | FlowFeatured) => {
+      // a second click while the first copy is being made would make a second copy (the browser form post of Reference leaves the page)
+      if (duplicating.current.has(f.id)) return;
+      duplicating.current.add(f.id);
       try {
         const copy = await flowsApi.duplicate(f.id);
         flash(tt('duplicated'));
         router.push(`/flows/builder/${copy.id}`);
       } catch (e) {
+        duplicating.current.delete(f.id);
         fail(e);
       }
     },
@@ -203,6 +214,8 @@ export function FlowsScreen() {
   const railBtn = (active: boolean) =>
     `flex w-full items-center justify-between rounded-xl px-3 py-2 text-[13px] ${active ? 'bg-brand font-medium text-brand-foreground' : 'text-foreground/80 hover:bg-muted'}`;
 
+  if (!canRead) return null;
+
   return (
     <div className="flb-root mx-auto max-w-none" data-testid="flows-screen">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
@@ -253,7 +266,8 @@ export function FlowsScreen() {
           </div>
         </aside>
 
-        <main>
+        {/* a div: the app shell already provides the page's one main landmark (a second one fails WCAG landmark rules) */}
+        <div>
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
               <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{t('workspace')} · {orgName}</div>
@@ -413,7 +427,7 @@ export function FlowsScreen() {
               {t('footer', { shown: list.items.length.toLocaleString('en-US'), total: total.toLocaleString('en-US') })}
             </div>
           ) : null}
-        </main>
+        </div>
       </div>
 
       <CreateSheet open={createOpen} onClose={() => setCreateOpen(false)} />

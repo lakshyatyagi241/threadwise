@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
@@ -12,7 +13,12 @@ import { BuilderScreen } from './builder-screen';
  */
 export function BuilderRoute({ flowId }: { flowId?: string }) {
   const allowed = useCan('flb.flows.read');
+  const router = useRouter();
   const { toast } = useToast();
+  // Reference sends an agent or viewer to the team inbox instead of leaving them on a dead end.
+  useEffect(() => {
+    if (!allowed) router.replace('/inbox');
+  }, [allowed, router]);
   useEffect(() => {
     try {
       const m = sessionStorage.getItem(FLASH_KEY);
@@ -24,12 +30,6 @@ export function BuilderRoute({ flowId }: { flowId?: string }) {
       /* no storage: nothing to show */
     }
   }, [toast]);
-  if (!allowed) {
-    return (
-      <div className="fixed inset-0 z-40 grid place-items-center bg-background text-[13px] text-muted-foreground" role="alert">
-        You do not have access to the flow builder.
-      </div>
-    );
-  }
+  if (!allowed) return null;
   return <BuilderScreen flowId={flowId} />;
 }
