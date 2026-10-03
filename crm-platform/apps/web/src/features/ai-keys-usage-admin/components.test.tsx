@@ -49,9 +49,9 @@ describe('provider card (WD-AIADM-001, 002, 003, 005)', () => {
     expect(out).toContain('OpenAI');
     expect(out).toContain('Active');
     expect(out).toContain('Key saved, ends in ABCD');
-    expect(out).toContain('Saved. Paste a new key to replace it');
+    expect(out).toContain('(saved — leave blank to keep)');
     expect(out).toMatch(/type="password"[^>]*value=""|value=""[^>]*type="password"/);
-    expect(out).toContain('Turn off');
+    expect(out).toContain('Disable');
   });
 
   it('keeps a stored model outside the catalogue selectable, tagged custom', () => {
@@ -71,10 +71,10 @@ describe('provider card (WD-AIADM-001, 002, 003, 005)', () => {
     expect(html(<KeyCard item={plain} />)).not.toContain('Max tokens per request');
   });
 
-  it('says no key, offers Turn on, and has no remove button when nothing is saved', () => {
+  it('says no key, offers Activate, and has no remove button when nothing is saved', () => {
     const out = html(<KeyCard item={item({ isActive: false, hasKey: false, keyLast4: null })} />);
     expect(out).toContain('No key');
-    expect(out).toContain('Turn on');
+    expect(out).toContain('Activate');
     // the closed confirm dialog always carries one "Remove key" button; the card's own trigger would be a second
     expect(out.match(/Remove key/g)).toHaveLength(1);
     expect(html(<KeyCard item={item()} />).match(/Remove key/g)).toHaveLength(2);
