@@ -30,6 +30,12 @@ export interface WabaInboundSink {
 
 export const WABA_INBOUND_SINK = Symbol('WABA_INBOUND_SINK');
 
+/**
+ * Where another domain announces its sink. `WabaModule` binds `WABA_INBOUND_SINK` to this when some (global) module provides it, and to
+ * the logging default otherwise, so the inbox can take over without this module importing the inbox (the dependency points the other way).
+ */
+export const WABA_INBOUND_SINK_OVERRIDE = Symbol('WABA_INBOUND_SINK_OVERRIDE');
+
 @Injectable()
 export class LoggingInboundSink implements WabaInboundSink {
   private readonly logger = new Logger('WabaInbound');

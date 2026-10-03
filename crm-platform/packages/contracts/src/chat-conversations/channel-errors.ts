@@ -16,4 +16,8 @@ export const CHANNEL_ERROR_CODES = {
   CHANNEL_SIMULATOR_DISABLED: 'CHANNEL_SIMULATOR_DISABLED',
   /** The message needs something the channel cannot do (a template, a media kind). */
   CHANNEL_CAPABILITY_UNSUPPORTED: 'CHANNEL_CAPABILITY_UNSUPPORTED',
+  /** Switching a channel on is refused: the provider did not accept the stored credentials (the detail names why). */
+  CHANNEL_HEALTH_FAILED: 'CHANNEL_HEALTH_FAILED',
+  /** The provider refused a connection step (subscribing the webhook): the detail is the provider's reason. */
+  CHANNEL_PROVIDER_REFUSED: 'CHANNEL_PROVIDER_REFUSED',
 } as const;

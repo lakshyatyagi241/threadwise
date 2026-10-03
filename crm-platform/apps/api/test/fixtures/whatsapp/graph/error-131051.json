@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Unsupported message type",
+    "type": "OAuthException",
+    "code": 131051,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

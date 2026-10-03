@@ -13,10 +13,12 @@ import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
+import { MediaFetchPublisher } from './media-fetch.publisher';
 import { identityOfPeer, defaultTitle, normalizePeerKey } from './peer-key';
 import {
   UNSUPPORTED_BODY,
   clampProviderTime,
+  channelMetaOf,
   inboundMessageKind,
   previewOf,
 } from './message-rules';
@@ -84,6 +86,7 @@ export class InboundIngestService {
     private readonly lifecycle: ConversationLifecycleService,
     private readonly media: ChatMediaStore,
     private readonly realtime: ChatRealtimePublisher,
+    private readonly mediaFetch: MediaFetchPublisher,
   ) {}
 
   async ingest(job: InboundJob, options: IngestOptions = {}): Promise<IngestOutcome> {
@@ -122,6 +125,7 @@ export class InboundIngestService {
       await this.media.remove(orgId, stored.media.key).catch(() => undefined);
     }
     if (result.outcome === 'stored') {
+      if (stored.pending) await this.enqueueMediaFetch(orgId, result.message.uuid);
       await this.realtime.messageStored(orgId, result.conv, result.message, result.changed, {
         unread: true,
       });
@@ -213,7 +217,8 @@ export class InboundIngestService {
     ).windowHours;
 
     const kind = inboundMessageKind(m);
-    const body = m.kind === 'unsupported' ? UNSUPPORTED_BODY : (m.body ?? null);
+    // An unsupported message may carry its own placeholder text ("[Poll message]"): the adapter knows what the customer sent.
+    const body = m.kind === 'unsupported' ? (m.body ?? UNSUPPORTED_BODY) : (m.body ?? null);
     const replyTo = m.replyToProviderMessageId
       ? await this.replyTargetUuid(tx, orgId, channel.id, m.replyToProviderMessageId)
       : null;
@@ -221,8 +226,22 @@ export class InboundIngestService {
     if (m.location?.name) meta.locationName = m.location.name;
     if (m.location?.address) meta.locationAddress = m.location.address;
     if (m.kind === 'unsupported') meta.unsupported = true;
+    Object.assign(meta, channelMetaOf(m.meta));
     if (stored.error) meta.mediaError = stored.error;
     if (m.media && !stored.media) meta.mediaName = m.media.name ?? null;
+    if (stored.pending && m.media) {
+      // The file is copied by a `media-fetch` job after this transaction commits; everything that job needs is kept on the row.
+      meta.mediaStatus = 'pending';
+      meta.mediaGen = 1;
+      meta.mediaFetch = {
+        providerMediaId: m.media.providerMediaId,
+        mediaKind: m.media.mediaKind,
+        mime: m.media.mime,
+        ...(m.media.sha256 ? { sha256: m.media.sha256 } : {}),
+        ...(m.media.name ? { name: m.media.name } : {}),
+        ...(m.media.sizeBytes !== undefined ? { sizeBytes: m.media.sizeBytes } : {}),
+      };
+    }
 
     const { row: after, reopenedFrom } = await this.conversations.applyInbound(tx, orgId, conv.id, {
       messageId: alloc.id,
@@ -367,6 +386,21 @@ export class InboundIngestService {
   }
 
   /**
+   * Puts the file's download on its queue, after the message committed. Best effort: if this fails (Redis down) the message stays
+   * `pending` and the recovery sweep enqueues it, so an inbound message is never lost to a queue error.
+   */
+  private async enqueueMediaFetch(orgId: number, messageUuid: string): Promise<void> {
+    try {
+      await this.mediaFetch.enqueue(orgId, messageUuid, 1);
+    } catch (err) {
+      this.logger.warn(
+        { orgId, err: (err as Error).message },
+        'could not queue the file download; the recovery sweep will',
+      );
+    }
+  }
+
+  /**
    * Downloads and stores the file of a media message, outside the transaction (no connection is held across a network call). A file
    * the upload policy refuses is not an error to retry: the message is stored without it and says why. A download that failed is
    * retried by the queue, and on the last attempt the message is stored without the file rather than lost.
@@ -379,6 +413,8 @@ export class InboundIngestService {
   ): Promise<FetchedMedia> {
     if (m.kind !== 'media' || !m.media) return { media: null };
     const adapter = this.adapters.for(runtime.kind);
+    // A provider whose files are copied in the background (WhatsApp Cloud): store the message now, the file follows.
+    if (adapter.inboundMedia) return { media: null, pending: true };
     if (!adapter.fetchMedia) return { media: null, error: 'unsupported' };
     try {
       const file = await adapter.fetchMedia(runtime, m.media);
@@ -408,6 +444,8 @@ export class InboundIngestService {
 interface FetchedMedia {
   media: StoredMedia | null;
   error?: 'rejected' | 'unavailable' | 'unsupported';
+  /** The file is fetched later by the `media-fetch` worker; the message is stored `pending`. */
+  pending?: boolean;
 }
 
 type TxResult =

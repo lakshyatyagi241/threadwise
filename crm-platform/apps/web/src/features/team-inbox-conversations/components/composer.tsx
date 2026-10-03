@@ -12,12 +12,26 @@ import {
   type Ref,
 } from 'react';
 import { MESSAGE_BODY_MAX, NOTE_BODY_MAX } from '@crm/contracts';
+import {
+  AttachmentHints,
+  acceptAttribute,
+  checkAttachment,
+  hasWhatsappLimits,
+  useAttachmentError,
+} from '@/features/channel-whatsapp-cloud';
 import { Button, Spinner, cn } from '@crm/ui';
 import { humanSize } from '../lib/time';
 import { CloseIcon, FileIcon, PaperclipIcon, SendIcon } from './icons';
 
 /** What the file picker offers; the server decides what it really accepts, by the file's bytes. */
 const ACCEPT = 'image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.csv';
+
+/** What the channel takes as an attachment: only a channel with WhatsApp's rules is checked here (the server checks the rest). */
+export interface AttachmentRules {
+  channelKind: string;
+  /** The channel's media capability. */
+  allowed: readonly string[];
+}
 
 /** Drafts survive switching to another conversation and back (not a reload): the first thing an agent expects. */
 const DRAFTS = new Map<string, string>();
@@ -39,6 +53,8 @@ export interface ComposerProps {
   canReply: boolean;
   canNote: boolean;
   canAttach: boolean;
+  /** The type and size rules of the channel, so a file WhatsApp would refuse is turned away before it is uploaded. */
+  attachments?: AttachmentRules;
   /** Reading only: neither tab can write. */
   onSend: (draft: { body: string; file: File | null }) => void;
   onNote: (body: string) => Promise<boolean>;
@@ -61,6 +77,9 @@ export function Composer(props: ComposerProps) {
   const area = useRef<HTMLTextAreaElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
+  const attachmentError = useAttachmentError();
+  const limited = props.attachments && hasWhatsappLimits(props.attachments.channelKind) ? props.attachments : null;
+  const accept = limited ? acceptAttribute(limited.allowed) || ACCEPT : ACCEPT;
 
   // Another conversation: its own draft (the previous one was saved as it was typed).
   const [seen, setSeen] = useState(conversationId);
@@ -134,6 +153,15 @@ export function Composer(props: ComposerProps) {
   function pick(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0] ?? null;
     setFileError(null);
+    if (f && limited) {
+      const check = checkAttachment(f, limited.allowed);
+      if (!check.ok) {
+        setFileError(attachmentError(check));
+        setFile(null);
+        e.target.value = '';
+        return;
+      }
+    }
     setFile(f);
   }
 
@@ -197,7 +225,7 @@ export function Composer(props: ComposerProps) {
             <input
               ref={input}
               type="file"
-              accept={ACCEPT}
+              accept={accept}
               onChange={pick}
               className="sr-only"
               tabIndex={-1}
@@ -253,6 +281,12 @@ export function Composer(props: ComposerProps) {
       </div>
       <p id={hintId} className="px-3 pb-2 text-[11px] text-muted-foreground">
         {t('hint')}
+        {limited && !isNote && props.canAttach && (
+          <>
+            {' '}
+            <AttachmentHints allowed={limited.allowed} />
+          </>
+        )}
       </p>
     </div>
   );

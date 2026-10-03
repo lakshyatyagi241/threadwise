@@ -5,29 +5,10 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { isNewer } from './campaign-rules';
-import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
-import {
-  statusNotification,
-  statusWebhook,
-  type CampaignSnapshot,
-} from './campaign-webhook-events';
+import { CampaignsRepository } from './campaigns.repository';
+import { statusNotification, statusWebhook, toSnapshot } from './campaign-webhook-events';
 
 export const MODULE_KEY = 'campaigns';
-
-export const toSnapshot = (c: CampaignRow): CampaignSnapshot => ({
-  uuid: c.uuid,
-  name: c.name,
-  type: c.type,
-  status: c.status,
-  scheduleType: c.scheduleType,
-  totalRecipients: c.totalRecipients,
-  sent: c.counts.sent,
-  delivered: c.counts.delivered,
-  read: c.counts.read,
-  failed: c.counts.failed,
-  responded: c.counts.responded,
-  createdBy: c.createdBy,
-});
 
 /**
  * The events a campaign emits (WD-CAMP-024), through the outbox in the same transaction as the change they describe. WaDesk fired

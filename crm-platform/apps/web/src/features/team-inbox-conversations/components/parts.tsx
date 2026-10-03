@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import type { MessageStatus } from '@crm/contracts';
+import { WhatsappGlyph } from '@/features/channel-whatsapp-cloud';
 import { errorCode, errorKind, requestIdOf } from '../lib/errors';
 import { avatarColor, initials } from '../lib/time';
 import { AlertIcon, CloseIcon, ClockIcon } from './icons';
@@ -35,15 +36,34 @@ export function Avatar({
   );
 }
 
-/** A short coloured tag for the channel kind (WaDesk's channel badge). */
-export function ChannelTag({ kind, name, className }: { kind: string; name: string; className?: string }) {
-  const label = kind === 'whatsapp_cloud' ? 'WA' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
+/**
+ * A short coloured tag for the channel kind (WaDesk's channel badge): the WhatsApp mark for a WhatsApp number, three letters for the
+ * rest. The name is the tooltip and the accessible name, so the icon is never the only way to tell channels apart.
+ */
+export function ChannelTag({
+  kind,
+  name,
+  className,
+  decorative = false,
+}: {
+  kind: string;
+  name: string;
+  className?: string;
+  /** The name is written next to the tag: hide the tag from assistive technology instead of saying it twice. */
+  decorative?: boolean;
+}) {
+  const whatsapp = kind === 'whatsapp_cloud';
+  const label = kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
   return (
     <span
       title={name}
+      role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : name}
+      aria-hidden={decorative || undefined}
+      data-channel-kind={kind}
       className={cn(
         'inline-flex h-4 items-center rounded px-1 text-[9px] font-semibold uppercase tracking-wide',
-        kind === 'whatsapp_cloud'
+        whatsapp || kind === 'whatsapp_qr'
           ? 'bg-success/15 text-success'
           : kind === 'simulator'
             ? 'bg-warning/15 text-warning'
@@ -51,7 +71,7 @@ export function ChannelTag({ kind, name, className }: { kind: string; name: stri
         className,
       )}
     >
-      {label}
+      {whatsapp ? <WhatsappGlyph className="size-3" /> : label}
     </span>
   );
 }

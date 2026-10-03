@@ -6,6 +6,7 @@ import {
   defaultSection,
   resolveSettings,
   tileForPath,
+  tilesForScreen,
   toSettingsSections,
 } from './settings-resolve';
 import { SETTINGS_SECTIONS, settingsTile, type SettingsTile } from './settings-types';
@@ -129,6 +130,49 @@ describe('toSettingsSections', () => {
       caps([], [], []),
     );
     expect(toSettingsSections(r)).toEqual([]);
+  });
+});
+
+describe('tilesForScreen', () => {
+  const r = resolveSettings(
+    [
+      tile('props', { href: '/contact-properties', shortcutFrom: ['/contacts'] }),
+      tile('stages', { href: '/contact-stages', shortcutFrom: ['/contacts', '/segments'] }),
+      tile('other', { href: '/other', shortcutFrom: ['/deals'] }),
+      tile('none', { href: '/none' }),
+    ],
+    CAPABILITIES_UNKNOWN,
+    { planned: [tile('soon', { href: '/soon', shortcutFrom: ['/contacts'] })] },
+  );
+
+  it('offers the tiles that name the screen, or a parent of it, and never a planned one', () => {
+    expect(tilesForScreen(r, '/contacts').map((t) => t.id)).toEqual(['props', 'stages']);
+    expect(tilesForScreen(r, '/contacts/42').map((t) => t.id)).toEqual(['props', 'stages']);
+    expect(tilesForScreen(r, '/segments').map((t) => t.id)).toEqual(['stages']);
+  });
+
+  it('respects path boundaries and offers nothing elsewhere', () => {
+    expect(tilesForScreen(r, '/contacts-archive')).toEqual([]);
+    expect(tilesForScreen(r, '/tasks')).toEqual([]);
+  });
+
+  it('stays out of the Settings pages and of the screen the tile opens', () => {
+    expect(tilesForScreen(r, '/settings/data')).toEqual([]);
+    expect(tilesForScreen(r, '/contact-properties')).toEqual([]);
+  });
+
+  it('is empty for a role that may not open the tile, because the gates already hid it', () => {
+    const gated = resolveSettings(
+      [
+        tile('g', {
+          href: '/g',
+          shortcutFrom: ['/contacts'],
+          gates: { permission: 'record.x.read' },
+        }),
+      ],
+      caps([], [], []),
+    );
+    expect(tilesForScreen(gated, '/contacts')).toEqual([]);
   });
 });
 

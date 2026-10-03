@@ -68,6 +68,11 @@ export interface ResolvedWabaConnection {
   uuid: string;
   status: string;
   label: string | null;
+  /** The number as people write it (`wa_provider_configs.phone_number`). */
+  phoneNumber: string | null;
+  /** From `meta_json`; set even when `conn` is null (no usable credentials), so another domain can still identify the number. */
+  wabaId: string | null;
+  phoneNumberId: string | null;
   conn: WabaConnection | null;
 }
 
@@ -709,6 +714,10 @@ export class WabaConnectService {
       uuid: row.uuid,
       status: row.status,
       label: row.display_label ?? row.phone_number,
+      phoneNumber: row.phone_number,
+      wabaId: typeof row.meta_json?.waba_id === 'string' ? row.meta_json.waba_id : null,
+      phoneNumberId:
+        typeof row.meta_json?.phone_number_id === 'string' ? row.meta_json.phone_number_id : null,
       conn: conn && (conn.accessToken || conn.authKey) ? conn : null,
     };
   }

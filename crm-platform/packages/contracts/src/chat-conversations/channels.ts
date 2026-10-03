@@ -11,11 +11,15 @@ import { uuidSchema } from '../common/ids';
 // --- vocabulary ---------------------------------------------------------------------------------------------------------
 
 /** Adapter families. A new channel type is a new member here and a new adapter; the database stores the plain string. */
-export const CHANNEL_KINDS = ['simulator', 'whatsapp_cloud', 'webchat', 'telegram'] as const;
+export const CHANNEL_KINDS = ['simulator', 'whatsapp_cloud', 'whatsapp_qr', 'webchat', 'telegram'] as const;
 export const channelKindSchema = z.enum(CHANNEL_KINDS);
 export type ChannelKind = z.infer<typeof channelKindSchema>;
 
-export const channelStatusSchema = z.enum(['connected', 'disconnected', 'error']);
+/**
+ * `needs_reauth` is `error` with a known cure: the provider no longer accepts the credentials (an expired or revoked token), so a
+ * person must paste a new one. Set by the system only, like `error`.
+ */
+export const channelStatusSchema = z.enum(['connected', 'disconnected', 'error', 'needs_reauth']);
 export type ChannelStatus = z.infer<typeof channelStatusSchema>;
 
 export const messageMediaKindSchema = z.enum([
@@ -94,26 +98,72 @@ export const channelSettingsPatchSchema = z
   .strict();
 export type ChannelSettingsPatch = z.infer<typeof channelSettingsPatchSchema>;
 
-// --- credentials (write only) -------------------------------------------------------------------------------------------
+// --- health -------------------------------------------------------------------------------------------------------------
 
-export const whatsappCloudCredentialsSchema = z
-  .object({
-    /** Meta's phone number id: the sender in every send. */
-    phoneNumberId: z
-      .string()
-      .trim()
-      .regex(/^\d{5,32}$/, 'Digits only'),
-    accessToken: z.string().trim().min(10).max(2048),
-    /** Signs every webhook delivery (X-Hub-Signature-256). */
-    appSecret: z.string().trim().min(8).max(256),
-    businessAccountId: z
-      .string()
-      .trim()
-      .regex(/^\d{5,32}$/, 'Digits only')
-      .optional(),
-  })
-  .strict();
-export type WhatsappCloudCredentials = z.infer<typeof whatsappCloudCredentialsSchema>;
+export const channelHealthIssueSchema = z.object({
+  severity: z.enum(['critical', 'warning', 'info']),
+  /** Stable, for the web to translate: `TOKEN_INVALID`, `TOKEN_EXPIRING`, `NO_WEBHOOK_SUBSCRIPTION`, `QUALITY_RED`, ... */
+  code: z.string(),
+  title: z.string(),
+  detail: z.string().nullable(),
+});
+export type ChannelHealthIssue = z.infer<typeof channelHealthIssueSchema>;
+
+/**
+ * What the last health check found, stored on the channel and returned by `POST /channels/:id/health`. Built from live reads of
+ * the provider (for WhatsApp: the phone number node, the account node, the app's subscription and, with an app id, the token).
+ * One failing read never blanks the rest; what could not be read is in `issues`.
+ */
+export const channelHealthSchema = z.object({
+  /** The number is reachable with the stored token and the provider reports it usable. */
+  ok: z.boolean(),
+  /** blocked: a critical issue; attention: a warning; healthy otherwise. */
+  overall: z.enum(['healthy', 'attention', 'blocked']),
+  checkedAt: z.string().datetime(),
+  /** The name Meta verified for the number. */
+  displayName: z.string().nullable(),
+  displayPhoneNumber: z.string().nullable(),
+  /** Meta's `quality_rating`: GREEN, YELLOW, RED, UNKNOWN. */
+  qualityRating: z.string().nullable(),
+  /** Meta's `messaging_limit_tier` (TIER_250, TIER_1K, ..., TIER_UNLIMITED). */
+  messagingLimitTier: z.string().nullable(),
+  /** Meta's number `status`: CONNECTED, PENDING, FLAGGED, RESTRICTED, ... */
+  phoneStatus: z.string().nullable(),
+  codeVerificationStatus: z.string().nullable(),
+  nameStatus: z.string().nullable(),
+  platformType: z.string().nullable(),
+  token: z.object({
+    /** null: not asked (no app id stored), or the read failed. */
+    valid: z.boolean().nullable(),
+    expiresAt: z.string().datetime().nullable(),
+    scopes: z.array(z.string()).nullable(),
+  }),
+  webhook: z.object({
+    /** Whether the app is subscribed to the account's webhooks; null when it could not be read (no account id, or a failed read). */
+    subscribed: z.boolean().nullable(),
+  }),
+  issues: z.array(channelHealthIssueSchema),
+  /** The first thing that stopped the number being usable, in our vocabulary (a problem+json code or a Meta error code). */
+  errorCode: z.string().nullable(),
+  errorMessage: z.string().nullable(),
+});
+export type ChannelHealth = z.infer<typeof channelHealthSchema>;
+
+/** The last failure the system recorded on a channel: a send the provider refused for credentials, or a failed health check. */
+export const channelLastErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
+  at: z.string().datetime(),
+});
+export type ChannelLastError = z.infer<typeof channelLastErrorSchema>;
+
+/** `POST /channels/:id/health`: the snapshot, plus the channel's status after it (a token Meta refused moves it to `needs_reauth`). */
+export const channelHealthResponseSchema = channelHealthSchema.extend({
+  status: channelStatusSchema,
+  /** The channel's version after the check wrote its snapshot: the next PATCH must send this one, not the one read before. */
+  rowVersion: z.number().int(),
+});
+export type ChannelHealthResponse = z.infer<typeof channelHealthResponseSchema>;
 
 // --- responses ----------------------------------------------------------------------------------------------------------
 
@@ -129,9 +179,15 @@ export const channelResponseSchema = z.object({
   /** What the adapter reports plus this channel's overrides. */
   capabilities: channelCapabilitiesSchema,
   settings: channelSettingsSchema,
+  /** The provider's account id when it has one (WhatsApp: the WABA id). Not a secret. */
+  businessAccountId: z.string().nullable().optional(),
   hasCredentials: z.boolean(),
   /** Last four characters of each stored secret, for recognising which token is connected. */
   credentialHints: z.record(z.string()),
+  /** The last health check (null: never run). Always sent by the API; optional only so a fixture built before it still parses. */
+  health: channelHealthSchema.nullable().optional(),
+  /** Why the system last stopped trusting the channel; cleared when it is switched on again. */
+  lastError: channelLastErrorSchema.nullable().optional(),
   /** Where the provider posts (absolute). Null for a channel no provider can reach (the simulator). */
   webhookUrl: z.string().nullable(),
   lastEventAt: z.string().datetime().nullable(),
@@ -144,28 +200,9 @@ export type ChannelResponse = z.infer<typeof channelResponseSchema>;
 export const channelListResponseSchema = z.object({ data: z.array(channelResponseSchema) });
 export type ChannelListResponse = z.infer<typeof channelListResponseSchema>;
 
-/** Returned once, by create and by rotate: the value the provider's verification challenge must echo. */
-export const channelWebhookRevealSchema = channelResponseSchema.extend({
-  webhookVerifyToken: z.string(),
-});
-export type ChannelWebhookReveal = z.infer<typeof channelWebhookRevealSchema>;
-
 // --- requests -----------------------------------------------------------------------------------------------------------
 
 const channelName = z.string().trim().min(1).max(120);
-
-/** A real provider channel. The union grows with the adapters: one member per kind that takes credentials. */
-export const createChannelSchema = z.discriminatedUnion('kind', [
-  z.object({
-    kind: z.literal('whatsapp_cloud'),
-    name: channelName,
-    credentials: whatsappCloudCredentialsSchema,
-    /** The number as people write it, shown in the list ("+91 98765 43210"). */
-    displayAddress: z.string().trim().min(1).max(40).optional(),
-    settings: channelSettingsPatchSchema.optional(),
-  }),
-]);
-export type CreateChannelInput = z.infer<typeof createChannelSchema>;
 
 /** The dev-only simulated channel: no credentials, never reachable from outside. */
 export const createSimulatorChannelSchema = z.object({
@@ -181,8 +218,6 @@ export const updateChannelSchema = z
     /** A person can switch a channel on or off; `error` is only ever set by the system. */
     status: z.enum(['connected', 'disconnected']).optional(),
     settings: channelSettingsPatchSchema.optional(),
-    /** Rotating credentials: only the keys sent are replaced. */
-    credentials: whatsappCloudCredentialsSchema.partial().optional(),
     displayAddress: z.string().trim().min(1).max(40).nullable().optional(),
   })
   .refine((v) => Object.keys(v).some((k) => k !== 'rowVersion'), {
