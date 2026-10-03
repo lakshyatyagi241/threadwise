@@ -3,7 +3,7 @@
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import { dirOf } from '@/i18n/locales';
 import type { ResolvedNavItem } from '@/features/_registry/types';
@@ -268,11 +268,12 @@ export function NavRail({
         {pinned ? (
           <NavPanel sections={main} activeId={activeId} />
         ) : (
-          <RailIcons
-            sections={railSections(main)}
+          <RailGroups
+            sections={main}
             activeId={activeId}
             show={show}
             hide={() => setTip(null)}
+            rtl={rtl}
           />
         )}
       </div>
@@ -369,41 +370,185 @@ function RailLink({
   );
 }
 
-function RailIcons({
+/** The icon that stands for each menu group on the slim rail (a group not listed here uses its first entry's icon). */
+export const GROUP_ICON: Readonly<Record<string, string>> = {
+  overview: 'dashboard',
+  inbox: 'inbox',
+  audience: 'contacts',
+  sales: 'crm',
+  campaigns: 'campaign',
+  automation: 'flow',
+  store: 'store',
+};
+
+/** How long the pointer must rest on a group icon before its panel opens, and how long it may be away before the panel closes. */
+const FLYOUT_OPEN_MS = 70;
+const FLYOUT_CLOSE_MS = 160;
+
+interface FlyoutAnchor {
+  top: number;
+  edge: number;
+}
+
+/**
+ * The slim rail: one icon per menu group. Resting the pointer on an icon (or clicking or pressing Enter on it) opens a panel
+ * beside the rail with the group's heading and every entry in it, coming-soon ones included, as the labelled panel shows
+ * them. A group with a single live screen and nothing planned is a plain link. Escape and a click elsewhere close the panel.
+ */
+function RailGroups({
   sections,
   activeId,
   show,
   hide,
+  rtl,
 }: {
   sections: readonly NavSection[];
   activeId: string | undefined;
   show: (el: HTMLElement, label: string) => void;
   hide: () => void;
+  rtl: boolean;
 }) {
   const t = useTranslations();
+  const uid = useId();
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [anchor, setAnchor] = useState<FlyoutAnchor | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const buttons = useRef(new Map<string, HTMLButtonElement>());
+  const panel = useRef<HTMLElement | null>(null);
+
+  const live = railSections(sections);
+  const groups = live.map((s) => {
+    const full = sections.find((x) => x.group === s.group);
+    return { group: s.group, items: full?.items ?? s.items, liveCount: s.items.length };
+  });
+
+  const clear = useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = undefined;
+  }, []);
+  const place = (group: string) => {
+    const btn = buttons.current.get(group);
+    if (!btn) return;
+    const r = btn.getBoundingClientRect();
+    const rail = btn.closest('aside')?.getBoundingClientRect() ?? r;
+    setAnchor({
+      top: Math.max(8, r.top),
+      edge: rtl ? window.innerWidth - rail.left + 6 : rail.right + 6,
+    });
+    setOpenGroup(group);
+    hide();
+  };
+  const schedule = (fn: () => void, ms: number) => {
+    clear();
+    timer.current = setTimeout(fn, ms);
+  };
+  const close = useCallback(() => {
+    clear();
+    setOpenGroup(null);
+  }, [clear]);
+
+  useEffect(() => clear, [clear]);
+  useEffect(() => {
+    if (!openGroup) return;
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (panel.current?.contains(target)) return;
+      if (buttons.current.get(openGroup)?.contains(target)) return;
+      close();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      buttons.current.get(openGroup)?.focus();
+      close();
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [openGroup, close]);
+
+  const current = groups.find((g) => g.group === openGroup);
   return (
     <nav aria-label={t('shell.mainMenu')} className="flex flex-col items-center gap-1 px-2 py-3">
-      {sections.map((section, i) => (
-        <div
-          key={section.group}
-          role="group"
-          aria-label={t(`shell.groups.${section.group}`)}
-          className={cn(
-            'flex w-full flex-col items-center gap-1',
-            i > 0 && 'mt-1 border-t border-nav-border pt-2',
-          )}
-        >
-          {section.items.map((item) => (
-            <RailLink
-              key={item.id}
-              item={item}
-              active={item.id === activeId}
-              show={show}
-              hide={hide}
-            />
-          ))}
-        </div>
-      ))}
+      {groups.map((g, i) => {
+        const single = g.liveCount === 1 && g.items.length === 1;
+        const wrap = cn(
+          'flex w-full flex-col items-center gap-1',
+          i > 0 && 'mt-1 border-t border-nav-border pt-2',
+        );
+        if (single) {
+          const item = g.items[0]!;
+          return (
+            <div key={g.group} className={wrap}>
+              <RailLink item={item} active={item.id === activeId} show={show} hide={hide} />
+            </div>
+          );
+        }
+        const label = t(`shell.groups.${g.group}`);
+        const active = g.items.some((it) => it.id === activeId);
+        const open = openGroup === g.group;
+        const icon = GROUP_ICON[g.group] ?? g.items.find((it) => !it.comingSoon)?.icon;
+        return (
+          <div key={g.group} className={wrap}>
+            <button
+              type="button"
+              ref={(el) => {
+                if (el) buttons.current.set(g.group, el);
+                else buttons.current.delete(g.group);
+              }}
+              aria-label={label}
+              aria-haspopup="true"
+              aria-expanded={open}
+              aria-controls={open ? `${uid}-flyout` : undefined}
+              onClick={() => (open ? close() : place(g.group))}
+              onMouseEnter={() => schedule(() => place(g.group), FLYOUT_OPEN_MS)}
+              onMouseLeave={() => schedule(close, FLYOUT_CLOSE_MS)}
+              className={cn(
+                'relative flex size-11 items-center justify-center rounded-xl outline-none transition',
+                'focus-visible:ring-2 focus-visible:ring-nav-ring focus-visible:ring-offset-2 focus-visible:ring-offset-nav',
+                active || open
+                  ? 'bg-nav-active text-nav-active-foreground'
+                  : 'text-nav-foreground hover:bg-nav-hover hover:text-nav-active-foreground',
+              )}
+            >
+              <NavIcon name={icon} />
+            </button>
+          </div>
+        );
+      })}
+      {/* Portalled to <body>: inside the aside the page content would paint over the panel. */}
+      {current &&
+        anchor &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <nav
+            ref={panel}
+            id={`${uid}-flyout`}
+            aria-label={t(`shell.groups.${current.group}`)}
+            onMouseEnter={clear}
+            onMouseLeave={() => schedule(close, FLYOUT_CLOSE_MS)}
+            className="fixed z-[90] w-64 overflow-y-auto rounded-xl border border-nav-border bg-nav p-2 text-nav-foreground shadow-2xl"
+            style={{
+              top: anchor.top,
+              maxHeight: `calc(100dvh - ${anchor.top}px - 12px)`,
+              ...(rtl ? { right: anchor.edge } : { left: anchor.edge }),
+            }}
+          >
+            <div className="px-3 pb-1.5 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-nav-muted">
+              {t(`shell.groups.${current.group}`)}
+            </div>
+            <ul className="space-y-0.5">
+              {current.items.map((item) => (
+                <li key={item.id}>
+                  <PanelItem item={item} active={item.id === activeId} t={t} onNavigate={close} />
+                </li>
+              ))}
+            </ul>
+          </nav>,
+          document.body,
+        )}
     </nav>
   );
 }
