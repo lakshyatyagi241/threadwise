@@ -67,7 +67,12 @@ function ShellHidden() {
     while (node && node.parentElement && node.parentElement !== document.body) {
       const parent: Element = node.parentElement;
       for (const sib of Array.from(parent.children)) {
-        if (sib === node || !(sib instanceof HTMLElement) || sib.className.toString().includes('pointer-events-none')) continue;
+        if (
+          sib === node ||
+          !(sib instanceof HTMLElement) ||
+          sib.className.toString().includes('pointer-events-none')
+        )
+          continue;
         hidden.push([sib, sib.style.display]);
         sib.style.display = 'none';
       }

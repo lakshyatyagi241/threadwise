@@ -7,12 +7,26 @@ import { aiGenerateError } from './ai-generate-error';
 import { Icon } from './node-card';
 
 const Spinner = () => (
-  <svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="h-3.5 w-3.5 animate-spin"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <circle cx="8" cy="8" r="6" strokeDasharray="20 8" />
   </svg>
 );
 
-const Backdrop = ({ onClose, disabled, children }: { onClose: () => void; disabled?: boolean; children: React.ReactNode }) => (
+const Backdrop = ({
+  onClose,
+  disabled,
+  children,
+}: {
+  onClose: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
+}) => (
   <div
     onClick={(e) => {
       if (e.target === e.currentTarget && !disabled) onClose();
@@ -68,20 +82,32 @@ function SaveConfirmInner({
   };
   return (
     <Backdrop onClose={onClose} disabled={busy}>
-      <div role="dialog" aria-modal="true" aria-label="Save flow" className="w-full max-w-[460px] rounded-2xl border border-border bg-background shadow-xl">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Save flow"
+        className="w-full max-w-[460px] rounded-2xl border border-border bg-background shadow-xl"
+      >
         <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Save flow</div>
-            <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em]">Confirm name, then save</h3>
+            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              Save flow
+            </div>
+            <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em]">
+              Confirm name, then save
+            </h3>
             <p className="mt-0.5 text-[12px] text-muted-foreground">
-              Saving keeps your nodes + edges as a draft. Publish separately when you&apos;re ready to run it.
+              Saving keeps your nodes + edges as a draft. Publish separately when you&apos;re ready
+              to run it.
             </p>
           </div>
           <CloseButton onClose={onClose} disabled={busy} />
         </div>
         <div className="space-y-3 px-5 py-4">
           <label className="block">
-            <span className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">Flow name</span>
+            <span className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">
+              Flow name
+            </span>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -93,7 +119,12 @@ function SaveConfirmInner({
           </label>
         </div>
         <div className="flex items-center justify-end gap-2 border-t border-border bg-muted/40 px-5 py-3">
-          <button type="button" onClick={onClose} disabled={busy} className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] hover:bg-muted">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={busy}
+            className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] hover:bg-muted"
+          >
             Cancel
           </button>
           <button
@@ -143,7 +174,13 @@ export function AIGenModal({
   onGenerate: (flow: FlbAiGenerateResponse['flow'], modelLabel: string) => void;
 }) {
   return open ? (
-    <AIGenInner models={models} initialPrompt={initialPrompt} flowType={flowType} onClose={onClose} onGenerate={onGenerate} />
+    <AIGenInner
+      models={models}
+      initialPrompt={initialPrompt}
+      flowType={flowType}
+      onClose={onClose}
+      onGenerate={onGenerate}
+    />
   ) : null;
 }
 
@@ -188,21 +225,35 @@ function AIGenInner({
     }
   };
 
-  const cols = models.length >= 3 ? 'grid-cols-3' : models.length === 2 ? 'grid-cols-2' : 'grid-cols-1';
+  const cols =
+    models.length >= 3 ? 'grid-cols-3' : models.length === 2 ? 'grid-cols-2' : 'grid-cols-1';
   return (
     <Backdrop onClose={onClose} disabled={loading}>
-      <div role="dialog" aria-modal="true" aria-label="Generate a flow with AI" className="flex max-h-[88vh] w-full max-w-[640px] flex-col rounded-2xl border border-border bg-background shadow-xl">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Generate a flow with AI"
+        className="flex max-h-[88vh] w-full max-w-[640px] flex-col rounded-2xl border border-border bg-background shadow-xl"
+      >
         <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">AI Flow Generator</div>
-            <h3 className="font-serif text-[22px] leading-tight tracking-[-0.01em]">Generate a flow with AI</h3>
-            <p className="mt-0.5 text-[12px] text-muted-foreground">Pick a model, describe what you want, and AI will build the nodes.</p>
+            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              AI Flow Generator
+            </div>
+            <h3 className="font-serif text-[22px] leading-tight tracking-[-0.01em]">
+              Generate a flow with AI
+            </h3>
+            <p className="mt-0.5 text-[12px] text-muted-foreground">
+              Pick a model, describe what you want, and AI will build the nodes.
+            </p>
           </div>
           <CloseButton onClose={onClose} disabled={loading} />
         </div>
         <div className="flex-1 space-y-4 overflow-y-auto p-5">
           <div>
-            <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">Choose model</label>
+            <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">
+              Choose model
+            </label>
             {models.length === 0 ? (
               <div className="rounded-lg border border-border bg-muted px-3 py-3 text-[12px] text-foreground/80">
                 No AI providers enabled. Admin needs to add a key in{' '}
@@ -224,10 +275,17 @@ function AIGenInner({
                       className={`flex flex-col items-start gap-1 rounded-xl border p-3 transition ${entry?.value === m.value ? 'border-brand bg-[color-mix(in_srgb,var(--flb-mint)_30%,transparent)]' : 'border-border bg-background hover:bg-muted'}`}
                     >
                       <span className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full" style={{ background: meta?.dot ?? '#888' }} />
-                        <span className="truncate text-[12.5px] font-semibold">{m.label.split(' · ')[1] ?? m.label}</span>
+                        <span
+                          className="h-2 w-2 rounded-full"
+                          style={{ background: meta?.dot ?? '#888' }}
+                        />
+                        <span className="truncate text-[12.5px] font-semibold">
+                          {m.label.split(' · ')[1] ?? m.label}
+                        </span>
                       </span>
-                      <span className="text-[10.5px] text-muted-foreground">{meta?.label ?? m.provider}</span>
+                      <span className="text-[10.5px] text-muted-foreground">
+                        {meta?.label ?? m.provider}
+                      </span>
                     </button>
                   );
                 })}
@@ -235,12 +293,17 @@ function AIGenInner({
             )}
           </div>
           {error ? (
-            <div role="alert" className="rounded-lg border border-[var(--flb-coral)]/30 bg-[var(--flb-coral)]/10 px-3 py-2 text-[12px] text-[var(--flb-coral)]">
+            <div
+              role="alert"
+              className="rounded-lg border border-[var(--flb-coral)]/30 bg-[var(--flb-coral)]/10 px-3 py-2 text-[12px] text-[var(--flb-coral)]"
+            >
               {error}
             </div>
           ) : null}
           <div>
-            <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">Describe your flow</label>
+            <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">
+              Describe your flow
+            </label>
             <textarea
               rows={5}
               value={prompt}
@@ -250,7 +313,9 @@ function AIGenInner({
             />
           </div>
           <div>
-            <div className="mb-1.5 text-[11px] font-semibold text-foreground/80">Quick examples</div>
+            <div className="mb-1.5 text-[11px] font-semibold text-foreground/80">
+              Quick examples
+            </div>
             <div className="space-y-1">
               {EXAMPLES.map((ex) => (
                 <button
@@ -267,9 +332,16 @@ function AIGenInner({
           </div>
         </div>
         <div className="flex items-center justify-between border-t border-border bg-muted/40 px-5 py-3">
-          <div className="text-[10.5px] text-muted-foreground">{loading ? 'Generating…' : 'AI will replace the current flow.'}</div>
+          <div className="text-[10.5px] text-muted-foreground">
+            {loading ? 'Generating…' : 'AI will replace the current flow.'}
+          </div>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={onClose} disabled={loading} className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] hover:bg-muted">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] hover:bg-muted"
+            >
               Cancel
             </button>
             <button

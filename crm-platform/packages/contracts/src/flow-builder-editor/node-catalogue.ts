@@ -35,7 +35,10 @@ export const SOCIAL_FLOW_TYPES = [
 ] as const satisfies readonly FlowType[];
 
 /** Channels a Trigger node can switch to (everything except `call`, which is a distinct builder). */
-export const MESSAGING_FLOW_TYPES = ['chat', ...SOCIAL_FLOW_TYPES] as const satisfies readonly FlowType[];
+export const MESSAGING_FLOW_TYPES = [
+  'chat',
+  ...SOCIAL_FLOW_TYPES,
+] as const satisfies readonly FlowType[];
 
 export const FLOW_TYPE_LABELS: Record<FlowType, string> = {
   chat: 'WhatsApp',
@@ -149,14 +152,33 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('cf_hangup', 'Hang up', 'Call control', 'End the call', CALL, { terminal: true }),
 
   // Instagram. The first four legacy types are superseded by the shared nodes but still render on old flows.
-  def('ig_send_dm', 'Send DM', 'Instagram', 'Send a direct message', ['instagram'], { hidden: true }),
-  def('ig_quick', 'Quick replies', 'Instagram', 'DM with tap-to-pick buttons', ['instagram'], { hidden: true }),
+  def('ig_send_dm', 'Send DM', 'Instagram', 'Send a direct message', ['instagram'], {
+    hidden: true,
+  }),
+  def('ig_quick', 'Quick replies', 'Instagram', 'DM with tap-to-pick buttons', ['instagram'], {
+    hidden: true,
+  }),
   def('ig_buttons', 'Button message', 'Instagram', 'DM with URL / action buttons', ['instagram']),
-  def('ig_reply_comment', 'Reply to comment', 'Instagram', 'Public reply under the comment', ['instagram']),
-  def('ig_ai', 'AI Reply', 'Instagram', 'AI answers with your knowledge base', ['instagram'], { hidden: true }),
-  def('ig_products', 'Send products', 'Instagram', 'Shoppable carousel from your catalog', ['instagram']),
-  def('ig_ask', 'Ask a question', 'Instagram', 'Ask, then save the reply to a variable', ['instagram'], { hidden: true }),
-  def('ig_lead', 'Capture lead', 'Instagram', 'Save name / email / phone as a lead + deal', ['instagram']),
+  def('ig_reply_comment', 'Reply to comment', 'Instagram', 'Public reply under the comment', [
+    'instagram',
+  ]),
+  def('ig_ai', 'AI Reply', 'Instagram', 'AI answers with your knowledge base', ['instagram'], {
+    hidden: true,
+  }),
+  def('ig_products', 'Send products', 'Instagram', 'Shoppable carousel from your catalog', [
+    'instagram',
+  ]),
+  def(
+    'ig_ask',
+    'Ask a question',
+    'Instagram',
+    'Ask, then save the reply to a variable',
+    ['instagram'],
+    { hidden: true },
+  ),
+  def('ig_lead', 'Capture lead', 'Instagram', 'Save name / email / phone as a lead + deal', [
+    'instagram',
+  ]),
   def(
     'ig_to_whatsapp',
     'Hand off to WhatsApp',
@@ -166,10 +188,22 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   ),
 
   // Facebook Messenger.
-  def('fb_gallery', 'Card gallery', 'Facebook', 'Generic-template carousel of custom cards', ['facebook']),
-  def('fb_products', 'Send products', 'Facebook', 'Shoppable carousel with Order buttons', ['facebook']),
-  def('fb_lead', 'Capture lead', 'Facebook', 'Save name / email / phone as a lead + deal', ['facebook']),
-  def('fb_reply_comment', 'Reply to comment', 'Facebook', 'Public reply under the triggering comment', ['facebook']),
+  def('fb_gallery', 'Card gallery', 'Facebook', 'Generic-template carousel of custom cards', [
+    'facebook',
+  ]),
+  def('fb_products', 'Send products', 'Facebook', 'Shoppable carousel with Order buttons', [
+    'facebook',
+  ]),
+  def('fb_lead', 'Capture lead', 'Facebook', 'Save name / email / phone as a lead + deal', [
+    'facebook',
+  ]),
+  def(
+    'fb_reply_comment',
+    'Reply to comment',
+    'Facebook',
+    'Public reply under the triggering comment',
+    ['facebook'],
+  ),
   def(
     'fb_to_whatsapp',
     'Hand off to WhatsApp',
@@ -179,7 +213,13 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   ),
 
   // Telegram.
-  def('tg_payment', 'Payment / Invoice', 'Telegram', 'Send a Telegram invoice or a shareable pay link', ['telegram']),
+  def(
+    'tg_payment',
+    'Payment / Invoice',
+    'Telegram',
+    'Send a Telegram invoice or a shareable pay link',
+    ['telegram'],
+  ),
 ];
 
 export const FLB_NODE_TYPES: Readonly<Record<string, FlbNodeTypeDef>> = Object.fromEntries(
@@ -188,7 +228,8 @@ export const FLB_NODE_TYPES: Readonly<Record<string, FlbNodeTypeDef>> = Object.f
 
 export const flbNodeTypeDef = (type: string): FlbNodeTypeDef | undefined => FLB_NODE_TYPES[type];
 
-export const flbNodeInMode = (def: FlbNodeTypeDef, mode: FlowType): boolean => def.modes.includes(mode);
+export const flbNodeInMode = (def: FlbNodeTypeDef, mode: FlowType): boolean =>
+  def.modes.includes(mode);
 
 export const flbIsFlowType = (v: unknown): v is FlowType =>
   typeof v === 'string' && (FLOW_TYPES as readonly string[]).includes(v);
@@ -255,7 +296,14 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'delay':
       return { amount: 5, unit: 'min' };
     case 'webhook':
-      return { method: 'POST', url: '', body: '', contentType: 'application/json', headers: [], save: 'response' };
+      return {
+        method: 'POST',
+        url: '',
+        body: '',
+        contentType: 'application/json',
+        headers: [],
+        save: 'response',
+      };
     case 'code':
       return {
         code: '// Available variables:\n// - previousResponse : output of the previous node\n// - allResponses     : every saved {{variable}} so far\n// - functionArgs     : args passed in\n\nreturn {\n  ok: true,\n  message: "Hello from the code node"\n};',
@@ -364,7 +412,8 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
       return {
         mode: 'deeplink',
         waNumber: '',
-        prefillText: type === 'ig_to_whatsapp' ? 'Hi! I came from Instagram' : 'Hi! I came from Facebook',
+        prefillText:
+          type === 'ig_to_whatsapp' ? 'Hi! I came from Instagram' : 'Hi! I came from Facebook',
         introText: "Let's continue on WhatsApp 👇",
         numberVar: 'wa_number',
         waFlowId: '',
@@ -372,7 +421,13 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'fb_gallery':
       return {
         cards: [
-          { title: 'Card title', subtitle: '', imageUrl: '', buttonLabel: 'Learn more', buttonUrl: 'https://' },
+          {
+            title: 'Card title',
+            subtitle: '',
+            imageUrl: '',
+            buttonLabel: 'Learn more',
+            buttonUrl: 'https://',
+          },
         ],
         intro: '',
       };
@@ -551,10 +606,14 @@ export interface FlbPortContext {
 }
 
 const asArray = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
-const str = (v: unknown): string => (typeof v === 'string' ? v : v === null || v === undefined ? '' : String(v));
+const str = (v: unknown): string =>
+  typeof v === 'string' ? v : v === null || v === undefined ? '' : String(v);
 
 /** WaDesk `listOpt`: older flows saved list items as bare strings. */
-export function flbListOption(o: unknown, i: number): { title: string; description: string; section: string } {
+export function flbListOption(
+  o: unknown,
+  i: number,
+): { title: string; description: string; section: string } {
   if (typeof o === 'string') return { title: o, description: '', section: '' };
   const r = (o ?? {}) as Record<string, unknown>;
   return {
@@ -595,7 +654,11 @@ export function flbPortsFor(
     case 'template': {
       const qr = ctx.templateButtons?.({ data: d }) ?? [];
       if (qr.length === 0) return out('next');
-      return qr.map((b, i) => ({ id: `p${i}`, label: b.label || `Button ${i + 1}`, kind: 'flow' as const }));
+      return qr.map((b, i) => ({
+        id: `p${i}`,
+        label: b.label || `Button ${i + 1}`,
+        kind: 'flow' as const,
+      }));
     }
     case 'notify_number':
       return out('sent');
@@ -604,7 +667,11 @@ export function flbPortsFor(
     case 'buttons':
     case 'poll': {
       const opts = asArray(d.options);
-      return (opts.length ? opts : ['Option']).map((o, i) => ({ id: `p${i}`, label: str(o), kind: 'flow' as const }));
+      return (opts.length ? opts : ['Option']).map((o, i) => ({
+        id: `p${i}`,
+        label: str(o),
+        kind: 'flow' as const,
+      }));
     }
     case 'list': {
       const opts = asArray(d.options);
@@ -618,7 +685,11 @@ export function flbPortsFor(
       const exp = asArray(d.options);
       if (exp.length === 0) return out('reply received');
       return [
-        ...exp.map((o, i) => ({ id: `p${i}`, label: str(o) || `Answer ${i + 1}`, kind: 'flow' as const })),
+        ...exp.map((o, i) => ({
+          id: `p${i}`,
+          label: str(o) || `Answer ${i + 1}`,
+          kind: 'flow' as const,
+        })),
         { id: 'else', label: 'else / no match', kind: 'no' as const },
       ];
     }
@@ -716,7 +787,10 @@ export function flbPortsFor(
 }
 
 /** A node card draws one dot per row instead of a single dot when it has more than one branch (every declared port). */
-export const flbIsMultiPort = (node: { type: string; data?: FlbNodeData | null }, ctx: FlbPortContext = {}): boolean =>
+export const flbIsMultiPort = (
+  node: { type: string; data?: FlbNodeData | null },
+  ctx: FlbPortContext = {},
+): boolean =>
   flbPortsFor(node, ctx).length > 1 ||
   ['buttons', 'list', 'poll', 'condition', 'google_form'].includes(node.type);
 

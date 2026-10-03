@@ -124,7 +124,9 @@ Output ONLY the JSON object. No explanation. No code fences.`;
  * The model's text to a graph candidate: strip code fences wherever they appear, slice to the OUTERMOST `{...}` (leading or
  * trailing chatter no longer breaks it), decode, and require a `flowNodes` array. Null when it is not a flow.
  */
-export function extractFlowJson(raw: string): { flowNodes: unknown[]; flowEdges: unknown[] } | null {
+export function extractFlowJson(
+  raw: string,
+): { flowNodes: unknown[]; flowEdges: unknown[] } | null {
   let clean = raw.trim().replace(/```(?:json)?/gi, '');
   clean = clean.replace(/^[\s`\0]+|[\s`\0]+$/g, '');
   const first = clean.indexOf('{');

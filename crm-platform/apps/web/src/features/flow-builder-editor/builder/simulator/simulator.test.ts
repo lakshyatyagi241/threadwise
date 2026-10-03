@@ -1,8 +1,18 @@
-import type { FlowEdge, FlowNode, FlbTestWebhookRequest, FlbTestWebhookResponse } from '@crm/contracts';
+import type {
+  FlowEdge,
+  FlowNode,
+  FlbTestWebhookRequest,
+  FlbTestWebhookResponse,
+} from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { createSimulator, type LogEntry, type SimulatorOptions } from './simulator';
 
-const node = (id: string, type: string, data: Record<string, unknown> = {}, extra: Partial<FlowNode> = {}): FlowNode => ({
+const node = (
+  id: string,
+  type: string,
+  data: Record<string, unknown> = {},
+  extra: Partial<FlowNode> = {},
+): FlowNode => ({
   id,
   type,
   x: 0,
@@ -17,11 +27,7 @@ const edge = (source: string, sourceHandle: string, target: string): FlowEdge =>
   target,
 });
 
-function harness(
-  nodes: FlowNode[],
-  edges: FlowEdge[],
-  over: Partial<SimulatorOptions> = {},
-) {
+function harness(nodes: FlowNode[], edges: FlowEdge[], over: Partial<SimulatorOptions> = {}) {
   const log: LogEntry[] = [];
   const queue: Array<() => void> = [];
   let awaiting = false;
@@ -58,7 +64,9 @@ describe('simulator: start', () => {
   it('empty canvas', () => {
     const h = harness([], []);
     h.sim.start();
-    expect(h.texts()).toEqual(['Canvas is empty. Add a trigger and at least one node, then click Restart.']);
+    expect(h.texts()).toEqual([
+      'Canvas is empty. Add a trigger and at least one node, then click Restart.',
+    ]);
     expect(h.awaiting()).toBe(false);
   });
 
@@ -74,7 +82,10 @@ describe('simulator: start', () => {
 
   it('off-keyword first message runs anyway with a note', async () => {
     const h = harness(
-      [node('t', 'trigger', { keywords: 'hi' }), node('m', 'message', { text: 'ok {{user_message}}' })],
+      [
+        node('t', 'trigger', { keywords: 'hi' }),
+        node('m', 'message', { text: 'ok {{user_message}}' }),
+      ],
       [edge('t', 'out', 'm')],
     );
     h.sim.start();
@@ -99,7 +110,11 @@ describe('simulator: start', () => {
     ]);
     await pinned.settle();
     expect(pinned.texts()).toContain('P');
-    const trig = mk([node('a', 'message', { text: 'A' }), node('t', 'trigger'), node('b', 'message', { text: 'B' })]);
+    const trig = mk([
+      node('a', 'message', { text: 'A' }),
+      node('t', 'trigger'),
+      node('b', 'message', { text: 'B' }),
+    ]);
     await trig.settle();
     expect(trig.texts()).not.toContain('A');
     const zero = mk([node('a', 'message', { text: 'A' }), node('b', 'message', { text: 'B' })]);
@@ -111,7 +126,11 @@ describe('simulator: start', () => {
 describe('simulator: nodes', () => {
   it('Trigger -> Ask(name) -> Message "Hi {{name}}"', async () => {
     const h = harness(
-      [node('t', 'trigger'), node('a', 'ask', { prompt: 'Your name?', var: 'name' }), node('m', 'message', { text: 'Hi {{name}}' })],
+      [
+        node('t', 'trigger'),
+        node('a', 'ask', { prompt: 'Your name?', var: 'name' }),
+        node('m', 'message', { text: 'Hi {{name}}' }),
+      ],
       [edge('t', 'out', 'a'), edge('a', 'out', 'm')],
     );
     h.sim.start();
@@ -175,7 +194,12 @@ describe('simulator: nodes', () => {
   it('condition with an unset var takes NO; AND/OR chain and legacy shape', async () => {
     const run = async (cond: Record<string, unknown>) => {
       const h = harness(
-        [node('t', 'trigger'), node('c', 'condition', cond), node('y', 'message', { text: 'Y' }), node('n', 'message', { text: 'N' })],
+        [
+          node('t', 'trigger'),
+          node('c', 'condition', cond),
+          node('y', 'message', { text: 'Y' }),
+          node('n', 'message', { text: 'N' }),
+        ],
         [edge('t', 'out', 'c'), edge('c', 'yes', 'y'), edge('c', 'no', 'n')],
       );
       h.sim.start();
@@ -210,7 +234,10 @@ describe('simulator: nodes', () => {
   it('condition operators gt/lt/not_equals/not_contains', async () => {
     const run = async (operator: string, value: string, variable = 'phone') => {
       const h = harness(
-        [node('t', 'trigger'), node('c', 'condition', { conditions: [{ variable, operator, value }] })],
+        [
+          node('t', 'trigger'),
+          node('c', 'condition', { conditions: [{ variable, operator, value }] }),
+        ],
         [edge('t', 'out', 'c')],
       );
       h.sim.start();
@@ -260,7 +287,11 @@ describe('simulator: nodes', () => {
     const h = harness(
       [
         node('t', 'trigger'),
-        node('l', 'list', { prompt: 'Pick', var: 'choice', options: [{ title: 'Alpha', description: 'first', section: 'S' }, { title: 'Beta' }] }),
+        node('l', 'list', {
+          prompt: 'Pick',
+          var: 'choice',
+          options: [{ title: 'Alpha', description: 'first', section: 'S' }, { title: 'Beta' }],
+        }),
         node('m', 'message', { text: 'chose {{choice}}' }),
       ],
       [edge('t', 'out', 'l'), edge('l', 'p1', 'm')],
@@ -276,7 +307,11 @@ describe('simulator: nodes', () => {
   });
 
   it('template with quick replies awaits a tap and routes p<i>', async () => {
-    const nodes = [node('t', 'trigger'), node('tp', 'template', { tpl: 'promo', preview: 'Hello' }), node('m', 'message', { text: 'B' })];
+    const nodes = [
+      node('t', 'trigger'),
+      node('tp', 'template', { tpl: 'promo', preview: 'Hello' }),
+      node('m', 'message', { text: 'B' }),
+    ];
     const h = harness(nodes, [edge('t', 'out', 'tp'), edge('tp', 'p1', 'm')], {
       templateButtons: () => [{ label: 'Yes' }, { label: 'No' }],
     });
@@ -287,7 +322,9 @@ describe('simulator: nodes', () => {
     h.sim.send('no');
     await h.settle();
     expect(h.texts()).toContain('B');
-    const g = harness(nodes, [edge('t', 'out', 'tp')], { templateButtons: () => [{ label: 'Yes' }] });
+    const g = harness(nodes, [edge('t', 'out', 'tp')], {
+      templateButtons: () => [{ label: 'Yes' }],
+    });
     g.sim.start();
     g.sim.send('go');
     await g.settle();
@@ -298,8 +335,12 @@ describe('simulator: nodes', () => {
   it('commerce: number purchases, anything else abandons, no products abandons', async () => {
     const nodes = [
       node('t', 'trigger'),
-      node('s', 'shopify', { productItems: [{ retailer_id: 'sku1', name: 'Mug', price_minor: 1250, currency: 'USD' }] }),
-      node('p', 'message', { text: 'order {{order_id}} {{order_total}} {{order_currency}} {{commerce_choice}}' }),
+      node('s', 'shopify', {
+        productItems: [{ retailer_id: 'sku1', name: 'Mug', price_minor: 1250, currency: 'USD' }],
+      }),
+      node('p', 'message', {
+        text: 'order {{order_id}} {{order_total}} {{order_currency}} {{commerce_choice}}',
+      }),
       node('a', 'message', { text: 'abandoned' }),
     ];
     const edges = [edge('t', 'out', 's'), edge('s', 'purchased', 'p'), edge('s', 'abandoned', 'a')];
@@ -348,7 +389,11 @@ describe('simulator: nodes', () => {
     await h.settle();
     expect(h.log.filter((l) => l.kind === 'bot')).toEqual([
       { kind: 'bot', text: 'Hi Anya' },
-      { kind: 'bot', text: 'Look', media: { kind: 'image', url: '/uploads/a.png', filename: 'a.png' } },
+      {
+        kind: 'bot',
+        text: 'Look',
+        media: { kind: 'image', url: '/uploads/a.png', filename: 'a.png' },
+      },
       { kind: 'bot', text: '', media: { kind: 'document', url: '/uploads/b.pdf', filename: '' } },
       { kind: 'bot', text: '', media: { kind: 'video', url: '/v.mp4', filename: '' } },
     ]);
@@ -385,12 +430,17 @@ describe('simulator: nodes', () => {
 describe('simulator: integration and channel nodes (copy verified against the running WaDesk)', () => {
   const chain = (nodes: FlowNode[], handles: Record<string, string> = {}) => {
     const all = [node('t', 'trigger'), ...nodes];
-    const edges = all.slice(0, -1).map((n, i) => edge(n.id, handles[n.id] ?? 'out', all[i + 1]!.id));
+    const edges = all
+      .slice(0, -1)
+      .map((n, i) => edge(n.id, handles[n.id] ?? 'out', all[i + 1]!.id));
     return harness(all, edges);
   };
 
   it('book_appointment lists the sample slots (slotCount clamped to 1..10 of the 5 samples) and takes booked', async () => {
-    const h = chain([node('b', 'book_appointment', { slotCount: 3, prompt: 'Choose' }), node('e', 'end')], { b: 'booked' });
+    const h = chain(
+      [node('b', 'book_appointment', { slotCount: 3, prompt: 'Choose' }), node('e', 'end')],
+      { b: 'booked' },
+    );
     h.sim.start();
     h.sim.send('x');
     await h.settle();
@@ -399,18 +449,30 @@ describe('simulator: integration and channel nodes (copy verified against the ru
     );
     expect(h.texts()).toContain('(simulated) customer picks slot 1 → booked');
     expect(h.texts().at(-1)).toBe('Flow ended.');
-    const many = chain([node('b', 'book_appointment', { slotCount: 99 }), node('e', 'end')], { b: 'booked' });
+    const many = chain([node('b', 'book_appointment', { slotCount: 99 }), node('e', 'end')], {
+      b: 'booked',
+    });
     many.sim.start();
     many.sim.send('x');
     await many.settle();
-    expect(many.texts().find((t) => t.startsWith('Pick a time:'))!.split('\n')).toHaveLength(6);
+    expect(
+      many
+        .texts()
+        .find((t) => t.startsWith('Pick a time:'))!
+        .split('\n'),
+    ).toHaveLength(6);
   });
 
   it('google_form, deal, wa_form, notify_number, wa_to_instagram, cta and location log what the runtime would do', async () => {
     const h = chain(
       [
         node('f', 'google_form', { formId: 'F1', bodyText: 'Fill {{name}}' }),
-        node('d', 'deal', { action: 'move', stageId: '3', dealName: 'Deal for {{name}}', value: '10' }),
+        node('d', 'deal', {
+          action: 'move',
+          stageId: '3',
+          dealName: 'Deal for {{name}}',
+          value: '10',
+        }),
         node('w', 'wa_form', { formTitle: 'Survey' }),
         node('n', 'notify_number', { copyNumber: '+911', kind: 'text', text: 'Hi {{name}}' }),
         node('i', 'wa_to_instagram', { igUsername: '@shop', introText: 'Follow us' }),
@@ -442,12 +504,20 @@ describe('simulator: integration and channel nodes (copy verified against the ru
   it('code, mysql, ai, tag, assign, chatbot, google_sheets and google_docs are mocked lines', async () => {
     const h = chain([
       node('c', 'code', { save: 'r' }),
-      node('m', 'mysql', { database: 'shop', sql: 'SELECT * FROM orders WHERE id = 1 AND status = "open" LIMIT 5' }),
+      node('m', 'mysql', {
+        database: 'shop',
+        sql: 'SELECT * FROM orders WHERE id = 1 AND status = "open" LIMIT 5',
+      }),
       node('a', 'ai', { model: 'gpt-4o' }),
       node('g', 'tag', { action: 'remove', tag: 'vip' }),
       node('s', 'assign', { team: 'Sales', userId: '9' }),
       node('b', 'chatbot', { bot: 'Helper' }),
-      node('gs', 'google_sheets', { mode: 'read', sheetId: 'abcdefghijklmnop', matchColumn: 'A', matchValue: '{{phone}}' }),
+      node('gs', 'google_sheets', {
+        mode: 'read',
+        sheetId: 'abcdefghijklmnop',
+        matchColumn: 'A',
+        matchValue: '{{phone}}',
+      }),
       node('gd', 'google_docs', { templateId: 'tpl1234567890', newTitle: 'Doc {{name}}' }),
       node('e', 'end'),
     ]);
@@ -485,7 +555,10 @@ describe('simulator: webhook', () => {
     const h = harness(nodes, edges, {
       callWebhook: (r) => {
         calls.push(r);
-        return Promise.resolve({ ok: false, error: 'Blocked: host resolves to a private/reserved IP (169.254.169.254)' });
+        return Promise.resolve({
+          ok: false,
+          error: 'Blocked: host resolves to a private/reserved IP (169.254.169.254)',
+        });
       },
     });
     h.sim.start();
@@ -493,7 +566,9 @@ describe('simulator: webhook', () => {
     await h.settle();
     expect(calls).toHaveLength(1);
     expect(h.texts()).toContain('Calling POST http://169.254.169.254/x …');
-    expect(h.texts()).toContain('webhook failed: Blocked: host resolves to a private/reserved IP (169.254.169.254)');
+    expect(h.texts()).toContain(
+      'webhook failed: Blocked: host resolves to a private/reserved IP (169.254.169.254)',
+    );
     expect(h.texts()).toContain('after  {{response.name}} {{response.nested}}');
   });
 

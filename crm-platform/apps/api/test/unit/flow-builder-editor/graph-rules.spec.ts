@@ -25,8 +25,12 @@ import {
 } from '../../../src/modules/flow-builder-editor/flow-rules';
 import { flbExportFileName, flbSlugify } from '@crm/contracts';
 
-const node = (id: string, type: string, data: Record<string, unknown> = {}, extra: Partial<FlbValidationNode> = {}) =>
-  ({ id, type, data, ...extra }) as FlbValidationNode;
+const node = (
+  id: string,
+  type: string,
+  data: Record<string, unknown> = {},
+  extra: Partial<FlbValidationNode> = {},
+) => ({ id, type, data, ...extra }) as FlbValidationNode;
 
 describe('pre-save validation (WD-FLB-018)', () => {
   const ctx = { mode: 'chat' as const, senderAvailable: false };
@@ -45,14 +49,21 @@ describe('pre-save validation (WD-FLB-018)', () => {
   it('a node that only has outgoing edges reads "has no incoming connection"', () => {
     const r = flbValidateGraph(
       [node('t', 'trigger'), node('a', 'message'), node('b', 'message')],
-      [{ source: 'a', target: 'b' }, { source: 't', target: 'b' }],
+      [
+        { source: 'a', target: 'b' },
+        { source: 't', target: 'b' },
+      ],
       ctx,
     );
     expect(r.items).toEqual(['"Send message" has no incoming connection — nothing leads into it.']);
   });
 
   it('a leaf with no outgoing edge is fine, and the trigger and start node are exempt', () => {
-    const r = flbValidateGraph([node('t', 'trigger'), node('m', 'message')], [{ source: 't', target: 'm' }], ctx);
+    const r = flbValidateGraph(
+      [node('t', 'trigger'), node('m', 'message')],
+      [{ source: 't', target: 'm' }],
+      ctx,
+    );
     expect(r.ok).toBe(true);
   });
 
@@ -79,27 +90,54 @@ describe('pre-save validation (WD-FLB-018)', () => {
   it('hidden and unknown types are left alone by the channel check', () => {
     const r = flbValidateGraph(
       [node('t', 'trigger'), node('x', 'ig_send_dm'), node('y', 'brand_new_type')],
-      [{ source: 't', target: 'x' }, { source: 't', target: 'y' }],
+      [
+        { source: 't', target: 'x' },
+        { source: 't', target: 'y' },
+      ],
       { mode: 'chat', senderAvailable: false },
     );
     expect(r.ok).toBe(true);
   });
 
   it('a Trigger without a sender is blocked when the workspace has senders, and saves when it has none', () => {
-    const blocked = flbValidateGraph([node('t', 'trigger', { deviceId: '' })], [], { mode: 'chat', senderAvailable: true });
-    expect(blocked.items).toEqual(['The Trigger node has no number selected — pick one on the Trigger step.']);
-    expect(flbValidateGraph([node('t', 'trigger', { deviceId: '' })], [], { mode: 'chat', senderAvailable: false }).ok).toBe(true);
+    const blocked = flbValidateGraph([node('t', 'trigger', { deviceId: '' })], [], {
+      mode: 'chat',
+      senderAvailable: true,
+    });
+    expect(blocked.items).toEqual([
+      'The Trigger node has no number selected — pick one on the Trigger step.',
+    ]);
     expect(
-      flbValidateGraph([node('t', 'trigger', { deviceId: 'waba:1' })], [], { mode: 'chat', senderAvailable: true }).ok,
+      flbValidateGraph([node('t', 'trigger', { deviceId: '' })], [], {
+        mode: 'chat',
+        senderAvailable: false,
+      }).ok,
+    ).toBe(true);
+    expect(
+      flbValidateGraph([node('t', 'trigger', { deviceId: 'waba:1' })], [], {
+        mode: 'chat',
+        senderAvailable: true,
+      }).ok,
     ).toBe(true);
   });
 
   it('the sender check follows the mode: Instagram accounts, Facebook Pages, otherwise numbers (WaDesk fallback)', () => {
-    const tg = flbValidateGraph([node('t', 'trigger')], [], { mode: 'telegram', senderAvailable: true });
-    expect(tg.items).toEqual(['The Trigger node has no number selected — pick one on the Trigger step.']);
-    const fb = flbValidateGraph([node('t', 'trigger')], [], { mode: 'facebook', senderAvailable: true });
+    const tg = flbValidateGraph([node('t', 'trigger')], [], {
+      mode: 'telegram',
+      senderAvailable: true,
+    });
+    expect(tg.items).toEqual([
+      'The Trigger node has no number selected — pick one on the Trigger step.',
+    ]);
+    const fb = flbValidateGraph([node('t', 'trigger')], [], {
+      mode: 'facebook',
+      senderAvailable: true,
+    });
     expect(fb.items[0]).toContain('Facebook Page');
-    const ig = flbValidateGraph([node('t', 'trigger')], [], { mode: 'instagram', senderAvailable: true });
+    const ig = flbValidateGraph([node('t', 'trigger')], [], {
+      mode: 'instagram',
+      senderAvailable: true,
+    });
     expect(ig.items[0]).toContain('Instagram account');
   });
 });
@@ -107,7 +145,11 @@ describe('pre-save validation (WD-FLB-018)', () => {
 describe('boot normalisation (WD-FLB-015)', () => {
   it('backfills ids, types, coordinates and data under the saved data, and exactly one start (the trigger)', () => {
     const g = flbNormalizeGraph({
-      flowNodes: [{ type: 'message', data: { text: 'hi' } }, { type: 'trigger' }, { id: 'z', x: 5, y: 6, type: 'end' }],
+      flowNodes: [
+        { type: 'message', data: { text: 'hi' } },
+        { type: 'trigger' },
+        { id: 'z', x: 5, y: 6, type: 'end' },
+      ],
       flowEdges: [],
     });
     expect(g.flowNodes[0]).toMatchObject({ x: 120, y: 120, data: { text: 'hi' } });
@@ -118,15 +160,30 @@ describe('boot normalisation (WD-FLB-015)', () => {
   });
 
   it('with no trigger the first node is the start; several starts collapse to one', () => {
-    expect(flbNormalizeGraph({ flowNodes: [{ type: 'message' }, { type: 'end' }] }).flowNodes[0]!.isStart).toBe(true);
-    const g = flbNormalizeGraph({ flowNodes: [{ id: 'a', type: 'message', isStart: true }, { id: 'b', type: 'end', isStart: true }] });
+    expect(
+      flbNormalizeGraph({ flowNodes: [{ type: 'message' }, { type: 'end' }] }).flowNodes[0]!
+        .isStart,
+    ).toBe(true);
+    const g = flbNormalizeGraph({
+      flowNodes: [
+        { id: 'a', type: 'message', isStart: true },
+        { id: 'b', type: 'end', isStart: true },
+      ],
+    });
     expect(g.flowNodes.filter((n) => n.isStart)).toHaveLength(1);
   });
 
   it('drops edges whose endpoints do not exist and defaults the handle to out', () => {
     const g = flbNormalizeGraph({
-      flowNodes: [{ id: 'a', type: 'trigger' }, { id: 'b', type: 'message' }],
-      flowEdges: [{ source: 'a', target: 'b' }, { source: 'a', target: 'ghost' }, { source: 'ghost', target: 'b' }],
+      flowNodes: [
+        { id: 'a', type: 'trigger' },
+        { id: 'b', type: 'message' },
+      ],
+      flowEdges: [
+        { source: 'a', target: 'b' },
+        { source: 'a', target: 'ghost' },
+        { source: 'ghost', target: 'b' },
+      ],
     });
     expect(g.flowEdges).toHaveLength(1);
     expect(g.flowEdges[0]).toMatchObject({ source: 'a', target: 'b', sourceHandle: 'out' });
@@ -142,7 +199,12 @@ describe('boot normalisation (WD-FLB-015)', () => {
   });
 
   it('the AI path forces the start to the first trigger and falls back to (100, 200)', () => {
-    const g = flbNormalizeAiGraph({ flowNodes: [{ id: 'a', type: 'message', isStart: true }, { id: 'b', type: 'trigger' }] });
+    const g = flbNormalizeAiGraph({
+      flowNodes: [
+        { id: 'a', type: 'message', isStart: true },
+        { id: 'b', type: 'trigger' },
+      ],
+    });
     expect(g.flowNodes.map((n) => n.isStart)).toEqual([false, true]);
     expect(g.flowNodes[0]).toMatchObject({ x: 100, y: 200 });
   });
@@ -170,7 +232,10 @@ describe('featured card numbers (WD-FLB-002)', () => {
 
   it('seconds round to at least one minute, days are 1440, and no delay reads "no waits"', () => {
     const s = (amount: number, unit: string) =>
-      flbGraphStats({ flowNodes: [{ id: 'a', type: 'delay', x: 0, y: 0, data: { amount, unit } }], flowEdges: [] }).waitMinutes;
+      flbGraphStats({
+        flowNodes: [{ id: 'a', type: 'delay', x: 0, y: 0, data: { amount, unit } }],
+        flowEdges: [],
+      }).waitMinutes;
     expect(s(5, 'sec')).toBe(1);
     expect(s(120, 'sec')).toBe(2);
     expect(s(1, 'day')).toBe(1440);
@@ -180,7 +245,10 @@ describe('featured card numbers (WD-FLB-002)', () => {
 
   it('counts message-type nodes only', () => {
     const mk = (type: string) => ({ id: type, type, x: 0, y: 0, data: {} });
-    const g = flbGraphStats({ flowNodes: ['message', 'template', 'media', 'buttons', 'list', 'cta', 'ask', 'tag'].map(mk), flowEdges: [] });
+    const g = flbGraphStats({
+      flowNodes: ['message', 'template', 'media', 'buttons', 'list', 'cta', 'ask', 'tag'].map(mk),
+      flowEdges: [],
+    });
     expect(g.messages).toBe(6);
     expect(g.nodes).toBe(8);
   });
@@ -192,13 +260,19 @@ describe('trigger column extraction (WD-FLB-020)', () => {
 
   it('tag_added with a waba sender reads kind, tag reference, engine and sender reference', () => {
     expect(t({ kind: 'tag_added', tagId: '7', deviceId: 'waba:3' })).toMatchObject({
-      kind: 'tag_added', valueKind: 'tag', valueRef: '7', engine: 'waba', senderRef: '3',
+      kind: 'tag_added',
+      valueKind: 'tag',
+      valueRef: '7',
+      engine: 'waba',
+      senderRef: '3',
     });
   });
 
   it('keywordMode any is the literal any; otherwise the trimmed keywords', () => {
     expect(t({ kind: 'keyword', keywordMode: 'any' }).keywords).toBe('any');
-    expect(t({ kind: 'keyword', keywordMode: 'keywords', keywords: '  price, cost ' }).keywords).toBe('price, cost');
+    expect(
+      t({ kind: 'keyword', keywordMode: 'keywords', keywords: '  price, cost ' }).keywords,
+    ).toBe('price, cost');
   });
 
   it('kinds without a value carry 0 and an unknown kind becomes keyword', () => {
@@ -220,9 +294,21 @@ describe('trigger column extraction (WD-FLB-020)', () => {
   });
 
   it('WD-FLB-020 rule 4: a legacy Trigger with only `triggerMode: any` still reads as the catch-all after normalisation (the default keywordMode must not hide it)', () => {
-    const g = flbNormalizeGraph({ flowNodes: [{ id: 't', type: 'trigger', data: { kind: 'keyword', keywords: 'hi', triggerMode: 'any' } }] });
+    const g = flbNormalizeGraph({
+      flowNodes: [
+        { id: 't', type: 'trigger', data: { kind: 'keyword', keywords: 'hi', triggerMode: 'any' } },
+      ],
+    });
     expect(flbExtractTrigger(g).keywords).toBe('any');
-    const explicit = flbNormalizeGraph({ flowNodes: [{ id: 't', type: 'trigger', data: { keywordMode: 'keywords', keywords: 'hi', triggerMode: 'any' } }] });
+    const explicit = flbNormalizeGraph({
+      flowNodes: [
+        {
+          id: 't',
+          type: 'trigger',
+          data: { keywordMode: 'keywords', keywords: 'hi', triggerMode: 'any' },
+        },
+      ],
+    });
     expect(flbExtractTrigger(explicit).keywords).toBe('hi'); // keywordMode wins, as in WaDesk
   });
 
@@ -233,10 +319,14 @@ describe('trigger column extraction (WD-FLB-020)', () => {
   });
 
   it('a flow with no Trigger saves as keyword with no keywords', () => {
-    expect(flbExtractTrigger({ flowNodes: [] })).toMatchObject({ kind: 'keyword', keywords: null, hasTrigger: false });
+    expect(flbExtractTrigger({ flowNodes: [] })).toMatchObject({
+      kind: 'keyword',
+      keywords: null,
+      hasTrigger: false,
+    });
   });
 
-  it('keywords over 255 characters produce WaDesk\'s message, and catch-all spellings are recognised', () => {
+  it("keywords over 255 characters produce WaDesk's message, and catch-all spellings are recognised", () => {
     expect(flbTriggerKeywordsTooLong('a'.repeat(255))).toBeNull();
     expect(flbTriggerKeywordsTooLong('a'.repeat(300))).toBe(
       "Trigger keyword is too long (300 characters; the limit is 255). Open the flow's Trigger node and shorten the keywords — remove duplicates or extra phrases.",
@@ -288,46 +378,70 @@ describe('export file names and import payloads (WD-FLB-008, 009)', () => {
 
   it('accepts the canonical wrapper and names the copy "<name> (imported)"', () => {
     const p = parseImportPayload(
-      { _wadesk_flow_export: 1, name: 'Welcome', flow_type: 'telegram', category: 'welcome', flow_data: { flowNodes: [{ id: 'a', type: 'trigger' }], flowEdges: [] } },
+      {
+        _wadesk_flow_export: 1,
+        name: 'Welcome',
+        flow_type: 'telegram',
+        category: 'welcome',
+        flow_data: { flowNodes: [{ id: 'a', type: 'trigger' }], flowEdges: [] },
+      },
       { suffix: ' (imported)' },
     );
-    expect(p).toMatchObject({ name: 'Welcome (imported)', flowType: 'telegram', category: 'welcome' });
+    expect(p).toMatchObject({
+      name: 'Welcome (imported)',
+      flowType: 'telegram',
+      category: 'welcome',
+    });
     expect(p.graph.flowNodes).toHaveLength(1);
   });
 
   it('accepts a bare graph, lays out nodes without coordinates on the 3-column grid, and defaults to "Imported flow" and chat', () => {
     const p = parseImportPayload(
-      { flowNodes: [{ type: 'trigger' }, { type: 'message' }, { type: 'message' }, { type: 'end' }] },
+      {
+        flowNodes: [{ type: 'trigger' }, { type: 'message' }, { type: 'message' }, { type: 'end' }],
+      },
       { suffix: ' (imported)' },
     );
     expect(p.name).toBe('Imported flow (imported)');
     expect(p.flowType).toBe('chat');
-    expect(p.graph.flowNodes.map((n) => [n.x, n.y])).toEqual([[120, 120], [380, 120], [640, 120], [120, 300]]);
+    expect(p.graph.flowNodes.map((n) => [n.x, n.y])).toEqual([
+      [120, 120],
+      [380, 120],
+      [640, 120],
+      [120, 300],
+    ]);
   });
 
   it('an unknown flow_type falls back to chat; a missing or non-array flowNodes is refused', () => {
-    expect(parseImportPayload({ flow_type: 'fax', flow_data: { flowNodes: [] } }).flowType).toBe('chat');
+    expect(parseImportPayload({ flow_type: 'fax', flow_data: { flowNodes: [] } }).flowType).toBe(
+      'chat',
+    );
     for (const bad of [{}, { flowNodes: 'x' }, { flow_data: {} }, [], 'text', null]) {
       expect(() => parseImportPayload(bad)).toThrow(/not a valid flow export/);
     }
   });
 
   it('unknown node types are kept as they are (no schema validation, as WaDesk)', () => {
-    const p = parseImportPayload({ flowNodes: [{ id: 'q', type: 'from_the_future', data: { a: 1 } }] });
+    const p = parseImportPayload({
+      flowNodes: [{ id: 'q', type: 'from_the_future', data: { a: 1 } }],
+    });
     expect(p.graph.flowNodes[0]).toMatchObject({ type: 'from_the_future', data: { a: 1 } });
   });
 });
 
 describe('export file name (WD-FLB-008)', () => {
   it('is the slug of the name plus .wadesk-flow.json, with a fallback for a name with no letters or digits', async () => {
-    const { flowExportFileName } = await import('../../../src/modules/flow-builder-editor/flow-rules');
+    const { flowExportFileName } =
+      await import('../../../src/modules/flow-builder-editor/flow-rules');
     expect(flowExportFileName('Welcome Flow!', 'abc')).toBe('welcome-flow.wadesk-flow.json');
     expect(flowExportFileName('Café ñandú', 'abc')).toBe('cafe-nandu.wadesk-flow.json');
     expect(flowExportFileName('★★★', 'abc')).toBe('flow-abc.wadesk-flow.json');
     // Laravel's Str::slug drops punctuation instead of turning it into a dash, reads "@" as "at" and treats "_" as a separator
     expect(flowExportFileName('a/b\\c:d*e?f"g<h>i|j', 'abc')).toBe('abcdefghij.wadesk-flow.json');
     expect(flowExportFileName("Q&A v1.2 it's", 'abc')).toBe('qa-v12-its.wadesk-flow.json');
-    expect(flowExportFileName('sale_2024 @ shop', 'abc')).toBe('sale-2024-at-shop.wadesk-flow.json');
+    expect(flowExportFileName('sale_2024 @ shop', 'abc')).toBe(
+      'sale-2024-at-shop.wadesk-flow.json',
+    );
   });
 });
 
@@ -345,7 +459,8 @@ describe('name with a suffix (WD-FLB-006 / 009)', () => {
 });
 
 describe('featured card mini preview (WD-FLB-002)', () => {
-  const label = (type: string, data: Record<string, unknown> = {}) => flbPreviewLabel({ type, data });
+  const label = (type: string, data: Record<string, unknown> = {}) =>
+    flbPreviewLabel({ type, data });
 
   it('reads each node the way WaDesk labels it', () => {
     expect(label('trigger', { kind: 'tag_added' })).toBe('Trigger / tag_added');
@@ -363,21 +478,28 @@ describe('featured card mini preview (WD-FLB-002)', () => {
   });
 
   it('cuts a long message or prompt at 28 characters, trims the edge and adds "..."', () => {
-    expect(label('message', { text: 'Hello there, welcome to our store and thanks for stopping by' })).toBe('Hello there, welcome to our...');
+    expect(
+      label('message', { text: 'Hello there, welcome to our store and thanks for stopping by' }),
+    ).toBe('Hello there, welcome to our...');
     expect(label('message', { text: 'short' })).toBe('short');
     expect(label('message', {})).toBe('Send message');
     expect(label('ask', { prompt: 'p'.repeat(40) })).toBe(`${'p'.repeat(28)}...`);
   });
 
   it('QUIRK: a condition in the current shape reads "If value == " (the card only knows the legacy fields)', () => {
-    expect(label('condition', { kind: 'var', variable: 'x', op: 'contains', value: '1' })).toBe('If value contains 1');
+    expect(label('condition', { kind: 'var', variable: 'x', op: 'contains', value: '1' })).toBe(
+      'If value contains 1',
+    );
     expect(label('condition', {})).toBe('If value == ');
     expect(label('condition', { var: 'plan', op: '!=', value: 'free' })).toBe('If plan != free');
   });
 
   it('counts a wait unit only when it is exactly sec, hour or day: any other spelling is minutes (WaDesk match)', () => {
     const w = (amount: unknown, unit: string) =>
-      flbGraphStats({ flowNodes: [{ id: 'a', type: 'delay', x: 0, y: 0, data: { amount, unit } }], flowEdges: [] }).waitMinutes;
+      flbGraphStats({
+        flowNodes: [{ id: 'a', type: 'delay', x: 0, y: 0, data: { amount, unit } }],
+        flowEdges: [],
+      }).waitMinutes;
     expect(w(2, 'hour')).toBe(120);
     expect(w(2, 'hours')).toBe(2);
     expect(w(90, 'sec')).toBe(1);
@@ -388,8 +510,14 @@ describe('featured card mini preview (WD-FLB-002)', () => {
 
 describe('import error wording (WD-FLB-009)', () => {
   it('names the brand like WaDesk: "This is not a valid <brand> flow export."', () => {
-    expect(() => parseImportPayload({ hello: 'world' }, { brand: 'Acme' })).toThrow('This is not a valid Acme flow export.');
-    expect(() => parseImportPayload([1, 2], { brand: 'Acme' })).toThrow('This is not a valid Acme flow export.');
-    expect(() => parseImportPayload({ flowNodes: 'x' })).toThrow('This is not a valid flow export.');
+    expect(() => parseImportPayload({ hello: 'world' }, { brand: 'Acme' })).toThrow(
+      'This is not a valid Acme flow export.',
+    );
+    expect(() => parseImportPayload([1, 2], { brand: 'Acme' })).toThrow(
+      'This is not a valid Acme flow export.',
+    );
+    expect(() => parseImportPayload({ flowNodes: 'x' })).toThrow(
+      'This is not a valid flow export.',
+    );
   });
 });

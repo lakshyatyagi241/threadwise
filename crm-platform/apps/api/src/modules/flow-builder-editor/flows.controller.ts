@@ -119,7 +119,8 @@ export class FlowsController {
   @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Clone a template into a new unpublished flow',
-    description: 'Counts against the plan flow cap (422 PLAN_LIMIT_REACHED). A hidden or deleted template is 404.',
+    description:
+      'Counts against the plan flow cap (422 PLAN_LIMIT_REACHED). A hidden or deleted template is 404.',
   })
   async cloneTemplate(@Param('id', zodPipe(uuidSchema)) id: string) {
     return this.flows.cloneTemplate(id);
@@ -165,7 +166,7 @@ export class FlowsController {
   @ApiOperation({
     summary: 'The Apps Script that reports a Google Form submission back to the flow',
     description:
-      'Plain-text `.gs` download for the Google Form node\'s one-time setup. It carries this workspace\'s webhook token. 422 when the form id is not a Google form id.',
+      "Plain-text `.gs` download for the Google Form node's one-time setup. It carries this workspace's webhook token. 422 when the form id is not a Google form id.",
   })
   googleFormScript(
     @Param('formId', zodPipe(googleFormIdSchema)) formId: string,
@@ -182,8 +183,10 @@ export class FlowsController {
   @RequirePermission('flb.flows.create')
   @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
-    summary: 'Import an export file (or a bare graph) as a new unpublished flow "<name> (imported)"',
-    description: '422 FLB_IMPORT_INVALID when there is no flowNodes array; 422 PLAN_LIMIT_REACHED at the plan cap.',
+    summary:
+      'Import an export file (or a bare graph) as a new unpublished flow "<name> (imported)"',
+    description:
+      '422 FLB_IMPORT_INVALID when there is no flowNodes array; 422 PLAN_LIMIT_REACHED at the plan cap.',
   })
   async importFlow(@Body(zodPipe(importFlowRequestSchema)) body: ImportFlowRequest) {
     return this.flows.importFlow(body);
@@ -221,18 +224,23 @@ export class FlowsController {
   @UseInterceptors(FlowMediaTooLargeInterceptor, upload)
   @ApiOperation({
     summary: 'Upload an image, video, audio or document for a Media / Sequence node (up to 50 MB)',
-    description: 'The type and content are checked by the shared upload guard; the stored name is server generated.',
+    description:
+      'The type and content are checked by the shared upload guard; the stored name is server generated.',
   })
   async uploadMedia(
     @UploadedFile() file: { originalname: string; buffer: Buffer } | undefined,
     @Body('type') rawType: unknown,
   ) {
     if (!file) {
-      throw AppError.validation('Choose a file to upload', [{ path: 'file', message: 'Required.' }]);
+      throw AppError.validation('Choose a file to upload', [
+        { path: 'file', message: 'Required.' },
+      ]);
     }
     const type = uploadTypeSchema.safeParse(rawType);
     if (!type.success) {
-      throw AppError.validation('Invalid upload type', [{ path: 'type', message: 'Use image, video, audio or document.' }]);
+      throw AppError.validation('Invalid upload type', [
+        { path: 'type', message: 'Use image, video, audio or document.' },
+      ]);
     }
     return { data: await this.media.upload(file, type.data, await this.media.orgUuid()) };
   }
@@ -243,7 +251,8 @@ export class FlowsController {
   @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Save a new flow (an unpublished draft)',
-    description: 'The plan flow cap applies here and on import / clone / duplicate; editing never counts.',
+    description:
+      'The plan flow cap applies here and on import / clone / duplicate; editing never counts.',
   })
   async create(@Body(zodPipe(saveFlowRequestSchema)) body: SaveFlowRequest) {
     return this.flows.create(body);
@@ -262,7 +271,8 @@ export class FlowsController {
   @RequirePlanFeature(FLB_PLAN_FEATURE)
   @ApiOperation({
     summary: 'Save the graph, name, category and channel of a flow',
-    description: 'Needs the current `rowVersion` (409 ROW_VERSION_CONFLICT when someone saved first). Re-derives the trigger columns.',
+    description:
+      'Needs the current `rowVersion` (409 ROW_VERSION_CONFLICT when someone saved first). Re-derives the trigger columns.',
   })
   async save(
     @Param('id', zodPipe(uuidSchema)) id: string,

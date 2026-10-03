@@ -1,4 +1,10 @@
-import { FLOW_TYPE_LABELS, flbNodeInMode, FLB_NODE_TYPES, type FlowType, type FlbNodeData } from './node-catalogue';
+import {
+  FLOW_TYPE_LABELS,
+  flbNodeInMode,
+  FLB_NODE_TYPES,
+  type FlowType,
+  type FlbNodeData,
+} from './node-catalogue';
 
 /**
  * Pre-save graph validation (WD-FLB-018): the guard Save and Publish run before anything is stored. Messages are
@@ -98,13 +104,21 @@ export function flbValidateGraph(
     if (ctx.senderAvailable) {
       bad.add(trig.id);
       const what =
-        ctx.mode === 'instagram' ? 'Instagram account' : ctx.mode === 'facebook' ? 'Facebook Page' : 'number';
+        ctx.mode === 'instagram'
+          ? 'Instagram account'
+          : ctx.mode === 'facebook'
+            ? 'Facebook Page'
+            : 'number';
       items.push(`The Trigger node has no ${what} selected — pick one on the Trigger step.`);
     }
   }
 
   const unique = Array.from(new Set(items));
-  return { ok: bad.size === 0, items: unique, badNodeIds: nodes.filter((n) => bad.has(n.id)).map((n) => n.id) };
+  return {
+    ok: bad.size === 0,
+    items: unique,
+    badNodeIds: nodes.filter((n) => bad.has(n.id)).map((n) => n.id),
+  };
 }
 
 export const flbChannelLabel = (t: FlowType): string => FLOW_TYPE_LABELS[t];

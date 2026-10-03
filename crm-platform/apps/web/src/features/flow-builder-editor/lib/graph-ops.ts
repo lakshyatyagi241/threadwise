@@ -19,7 +19,8 @@ export interface CanvasState {
   edges: FlowEdge[];
 }
 
-export type OpResult = { ok: true; state: CanvasState; id?: string } | { ok: false; message: string };
+export type OpResult =
+  { ok: true; state: CanvasState; id?: string } | { ok: false; message: string };
 
 export const NODE_W = 280;
 export const OPTION_CAPS: Record<string, { max: number; message: string; label: string }> = {
@@ -59,7 +60,10 @@ export function duplicateNode(s: CanvasState, id: string): OpResult {
   if (!src) return { ok: false, message: 'Node not found.' };
   const def = FLB_NODE_TYPES[src.type];
   if (def?.singleton) {
-    return { ok: false, message: `${def.label || 'This node'} can only exist once — can’t duplicate.` };
+    return {
+      ok: false,
+      message: `${def.label || 'This node'} can only exist once — can’t duplicate.`,
+    };
   }
   const copy: FlowNode = {
     id: flbNewNodeId(),
@@ -106,8 +110,15 @@ export function connect(
   return { ...s, edges: [...filtered, edge] };
 }
 
-export function updateData(s: CanvasState, id: string, patch: Record<string, unknown>): CanvasState {
-  return { ...s, nodes: s.nodes.map((n) => (n.id === id ? { ...n, data: { ...n.data, ...patch } } : n)) };
+export function updateData(
+  s: CanvasState,
+  id: string,
+  patch: Record<string, unknown>,
+): CanvasState {
+  return {
+    ...s,
+    nodes: s.nodes.map((n) => (n.id === id ? { ...n, data: { ...n.data, ...patch } } : n)),
+  };
 }
 
 export function moveNode(s: CanvasState, id: string, x: number, y: number): CanvasState {
@@ -164,7 +175,8 @@ export interface History {
   index: number;
 }
 
-export const snapshot = (s: CanvasState): string => JSON.stringify({ nodes: s.nodes, edges: s.edges });
+export const snapshot = (s: CanvasState): string =>
+  JSON.stringify({ nodes: s.nodes, edges: s.edges });
 export const createHistory = (s: CanvasState): History => ({ stack: [snapshot(s)], index: 0 });
 
 /** Records a state after the current index (dropping any redo tail), keeping at most 60 snapshots. */

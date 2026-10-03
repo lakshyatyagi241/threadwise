@@ -17,30 +17,30 @@ create, import, clone and duplicate (WaDesk skipped duplicate: an `intended` dev
 the soft paywall: reads, pause, unpublish and delete stay open, every other write answers 422 `PLAN_FEATURE_LOCKED`. Literal paths are
 registered before `:id`.
 
-| Method and path                                | Key     | Notes                                                                                                                                                                         |
-| ---------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /flows?status&category&q&limit&cursor`    | read    | `status` all / live / paused / draft, `category` exact, `q` case-insensitive substring of the name; newest updated first, 12 per page, cursor paginated; `includeTotal=true` adds `total` |
-| `GET /flows/overview`                          | read    | KPI tiles (live / total / draft / paused), library and status rails (counts ignore the list filters), the featured card (`preview[]` labels), the template gallery           |
-| `GET /flows/templates`                         | read    | Active templates, `sort_order` then newest                                                                                                                                    |
-| `POST /flows/templates/:id/clone`              | create  | New unpublished flow named like the template; counts against the cap; hidden or deleted template 404; bumps `clone_count`                                                    |
-| `GET /flows/builder-context`                   | read    | Everything the builder's dropdowns need in one call: channels and senders (`<engine>:<uuid>` keys, labels only, never tokens), tags, groups, teams, agents, stages, templates, flows, AI models, assistants, booking types, forms, stores |
-| `GET /flows/builder-context/commerce-products` | read    | `?provider&storeId`: products a commerce node can offer; a store of another workspace gives an empty list                                                                     |
-| `GET /flows/builder-context/google/:kind`      | read    | 503 `FLB_INTEGRATION_DISABLED`: no Google account store exists on this deployment                                                                                              |
-| `GET /flows/builder-context/google/forms/:formId/apps-script` | read | The one-time setup script for a Google Form node; mints the workspace webhook token                                                                                |
-| `POST /flows/import`                           | create  | Body `{ payload }`: an export file or a bare `{ flowNodes, flowEdges, vars }` graph. New draft "<name> (imported)"; 422 `FLB_IMPORT_INVALID` without `flowNodes`; plan cap    |
-| `POST /flows/test-webhook`                     | update  | Fires a Webhook node for real from the Test runner, SSRF guarded; failures are 200 `{ ok: false, error }`                                                                     |
-| `POST /flows/ai-generate`                      | update  | `{ prompt, model, provider, flowType }` (openai, anthropic, gemini); at most 20 nodes and 40 edges back; 422 `FLB_AI_NO_KEY`, 502 `FLB_AI_PROVIDER_FAILED`, 422 `FLB_AI_BAD_JSON` |
-| `POST /flows/upload-media`                     | update  | multipart `file` + `type` (image, video, audio, document), up to 50 MB; over the limit 422 "The file may not be greater than 51200 kilobytes."; storage down 503 `FLB_STORAGE_UNAVAILABLE` |
-| `GET /flow-media/:org/:name`                   | none    | Serves what `upload-media` stored (local disk adapter until object storage lands)                                                                                             |
-| `POST /flows`                                  | create  | `{ name, category, flowType, graph }`; 201 with the flow (a draft). Name up to 255                                                                                             |
-| `GET /flows/:id`                               | read    | The flow with its `graph` (`flowNodes`, `flowEdges`, `vars`) and `rowVersion`                                                                                                  |
-| `PUT /flows/:id`                               | update  | Save: `{ name, category, flowType, graph, rowVersion }`; 409 `ROW_VERSION_CONFLICT`; re-derives `trigger_kind / trigger_value / trigger_keywords / trigger_channel_id / provider`; 422 `FLB_TRIGGER_KEYWORDS_TOO_LONG` (writes nothing) |
-| `PATCH /flows/:id/rename`                      | update  | `{ name }` up to 191                                                                                                                                                          |
-| `POST /flows/:id/toggle`                       | update  | Pause or resume (flips `is_active`): `{ isActive, state }`                                                                                                                    |
-| `POST /flows/:id/duplicate`                    | create  | Copy "<name> (Copy)", unpublished, keeps the source's `is_active`; plan cap                                                                                                   |
-| `POST /flows/:id/publish` / `unpublish`        | publish | Publish stamps `published_at`; no graph validation (WaDesk)                                                                                                                   |
-| `GET /flows/:id/export`                        | read    | Attachment `<slug>.wadesk-flow.json`: `{ _wadesk_flow_export: 1, exported_at, name, flow_type, category, flow_data }`                                                          |
-| `DELETE /flows/:id`                            | delete  | 204; hard delete; subscribers, runs and retry logs cascade                                                                                                                    |
+| Method and path                                               | Key     | Notes                                                                                                                                                                                                                                     |
+| ------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /flows?status&category&q&limit&cursor`                   | read    | `status` all / live / paused / draft, `category` exact, `q` case-insensitive substring of the name; newest updated first, 12 per page, cursor paginated; `includeTotal=true` adds `total`                                                 |
+| `GET /flows/overview`                                         | read    | KPI tiles (live / total / draft / paused), library and status rails (counts ignore the list filters), the featured card (`preview[]` labels), the template gallery                                                                        |
+| `GET /flows/templates`                                        | read    | Active templates, `sort_order` then newest                                                                                                                                                                                                |
+| `POST /flows/templates/:id/clone`                             | create  | New unpublished flow named like the template; counts against the cap; hidden or deleted template 404; bumps `clone_count`                                                                                                                 |
+| `GET /flows/builder-context`                                  | read    | Everything the builder's dropdowns need in one call: channels and senders (`<engine>:<uuid>` keys, labels only, never tokens), tags, groups, teams, agents, stages, templates, flows, AI models, assistants, booking types, forms, stores |
+| `GET /flows/builder-context/commerce-products`                | read    | `?provider&storeId`: products a commerce node can offer; a store of another workspace gives an empty list                                                                                                                                 |
+| `GET /flows/builder-context/google/:kind`                     | read    | 503 `FLB_INTEGRATION_DISABLED`: no Google account store exists on this deployment                                                                                                                                                         |
+| `GET /flows/builder-context/google/forms/:formId/apps-script` | read    | The one-time setup script for a Google Form node; mints the workspace webhook token                                                                                                                                                       |
+| `POST /flows/import`                                          | create  | Body `{ payload }`: an export file or a bare `{ flowNodes, flowEdges, vars }` graph. New draft "<name> (imported)"; 422 `FLB_IMPORT_INVALID` without `flowNodes`; plan cap                                                                |
+| `POST /flows/test-webhook`                                    | update  | Fires a Webhook node for real from the Test runner, SSRF guarded; failures are 200 `{ ok: false, error }`                                                                                                                                 |
+| `POST /flows/ai-generate`                                     | update  | `{ prompt, model, provider, flowType }` (openai, anthropic, gemini); at most 20 nodes and 40 edges back; 422 `FLB_AI_NO_KEY`, 502 `FLB_AI_PROVIDER_FAILED`, 422 `FLB_AI_BAD_JSON`                                                         |
+| `POST /flows/upload-media`                                    | update  | multipart `file` + `type` (image, video, audio, document), up to 50 MB; over the limit 422 "The file may not be greater than 51200 kilobytes."; storage down 503 `FLB_STORAGE_UNAVAILABLE`                                                |
+| `GET /flow-media/:org/:name`                                  | none    | Serves what `upload-media` stored (local disk adapter until object storage lands)                                                                                                                                                         |
+| `POST /flows`                                                 | create  | `{ name, category, flowType, graph }`; 201 with the flow (a draft). Name up to 255                                                                                                                                                        |
+| `GET /flows/:id`                                              | read    | The flow with its `graph` (`flowNodes`, `flowEdges`, `vars`) and `rowVersion`                                                                                                                                                             |
+| `PUT /flows/:id`                                              | update  | Save: `{ name, category, flowType, graph, rowVersion }`; 409 `ROW_VERSION_CONFLICT`; re-derives `trigger_kind / trigger_value / trigger_keywords / trigger_channel_id / provider`; 422 `FLB_TRIGGER_KEYWORDS_TOO_LONG` (writes nothing)   |
+| `PATCH /flows/:id/rename`                                     | update  | `{ name }` up to 191                                                                                                                                                                                                                      |
+| `POST /flows/:id/toggle`                                      | update  | Pause or resume (flips `is_active`): `{ isActive, state }`                                                                                                                                                                                |
+| `POST /flows/:id/duplicate`                                   | create  | Copy "<name> (Copy)", unpublished, keeps the source's `is_active`; plan cap                                                                                                                                                               |
+| `POST /flows/:id/publish` / `unpublish`                       | publish | Publish stamps `published_at`; no graph validation (WaDesk)                                                                                                                                                                               |
+| `GET /flows/:id/export`                                       | read    | Attachment `<slug>.wadesk-flow.json`: `{ _wadesk_flow_export: 1, exported_at, name, flow_type, category, flow_data }`                                                                                                                     |
+| `DELETE /flows/:id`                                           | delete  | 204; hard delete; subscribers, runs and retry logs cascade                                                                                                                                                                                |
 
 Example save:
 
@@ -51,8 +51,24 @@ Example save:
   "flowType": "chat",
   "graph": {
     "flowNodes": [
-      { "id": "n_trig", "type": "trigger", "x": 120, "y": 120, "data": { "kind": "keyword", "keywords": "hi, hello", "deviceId": "baileys:3fa85f64-5717-4562-b3fc-2c963f66afa6" } },
-      { "id": "n_msg", "type": "message", "x": 420, "y": 120, "data": { "text": "Hello {{name}}!" } }
+      {
+        "id": "n_trig",
+        "type": "trigger",
+        "x": 120,
+        "y": 120,
+        "data": {
+          "kind": "keyword",
+          "keywords": "hi, hello",
+          "deviceId": "baileys:3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        }
+      },
+      {
+        "id": "n_msg",
+        "type": "message",
+        "x": 420,
+        "y": 120,
+        "data": { "text": "Hello {{name}}!" }
+      }
     ],
     "flowEdges": [{ "id": "e_1", "source": "n_trig", "sourceHandle": "out", "target": "n_msg" }],
     "vars": []
@@ -73,14 +89,14 @@ Events (outbox, same transaction): `flow.created`, `flow.saved`, `flow.renamed`,
 The starter-template catalogue (WaDesk `/admin/flow-templates`). Every operator role reads; only `super_admin` writes, and every write is a
 security event.
 
-| Method and path                            | Notes                                                                                                                         |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `GET /platform/flow-templates?limit&cursor` | 20 per page with the three stat tiles                                                                                         |
-| `GET /platform/flow-templates/:id`         | One template with its graph (the edit form)                                                                                   |
-| `POST /platform/flow-templates`            | From an uploaded or pasted export, or by cloning a flow (`flowId`); 422 `FLB_TEMPLATE_GRAPH_REQUIRED`, 422 `FLB_IMPORT_INVALID` |
-| `PUT /platform/flow-templates/:id`         | Edit; without a new graph source the old graph is kept (QUIRK: unreadable JSON counts as "no graph supplied")                  |
-| `POST /platform/flow-templates/:id/toggle` | Show or hide in the tenant gallery                                                                                            |
-| `DELETE /platform/flow-templates/:id`      | 204; flows already cloned stay                                                                                                |
+| Method and path                             | Notes                                                                                                                           |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /platform/flow-templates?limit&cursor` | 20 per page with the three stat tiles                                                                                           |
+| `GET /platform/flow-templates/:id`          | One template with its graph (the edit form)                                                                                     |
+| `POST /platform/flow-templates`             | From an uploaded or pasted export, or by cloning a flow (`flowId`); 422 `FLB_TEMPLATE_GRAPH_REQUIRED`, 422 `FLB_IMPORT_INVALID` |
+| `PUT /platform/flow-templates/:id`          | Edit; without a new graph source the old graph is kept (QUIRK: unreadable JSON counts as "no graph supplied")                   |
+| `POST /platform/flow-templates/:id/toggle`  | Show or hide in the tenant gallery                                                                                              |
+| `DELETE /platform/flow-templates/:id`       | 204; flows already cloned stay                                                                                                  |
 
 ## Runtime seam (FLR)
 

@@ -18,7 +18,11 @@ export interface TestPanelProps {
 
 export function LogBubble({ entry }: { entry: LogEntry }): ReactElement {
   if (entry.kind === 'system')
-    return <div className="py-1 text-center font-mono text-[10.5px] italic text-muted-foreground">{entry.text}</div>;
+    return (
+      <div className="py-1 text-center font-mono text-[10.5px] italic text-muted-foreground">
+        {entry.text}
+      </div>
+    );
   if (entry.kind === 'user')
     return (
       <div className="max-w-[80%] self-end whitespace-pre-wrap rounded-lg rounded-br-[4px] bg-[var(--flb-mint)] px-3 py-2 text-[#0b1f1c] text-[12.5px] leading-snug">
@@ -47,14 +51,22 @@ export function LogBubble({ entry }: { entry: LogEntry }): ReactElement {
             rel="noopener noreferrer"
             className="flex items-center gap-2 rounded border border-border bg-muted px-2.5 py-2 text-[11.5px] text-foreground no-underline hover:bg-muted/70"
           >
-            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 text-brand" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg
+              viewBox="0 0 16 16"
+              className="h-3.5 w-3.5 text-brand"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
               <path d="M4 2h6l2 2v10H4zM6 6h4M6 9h4M6 12h3" />
             </svg>
             <span className="truncate">{media.filename || media.url.split('/').pop()}</span>
           </a>
         )
       ) : null}
-      {entry.text ? <div className="whitespace-pre-wrap px-1 text-[12.5px] leading-snug">{entry.text}</div> : null}
+      {entry.text ? (
+        <div className="whitespace-pre-wrap px-1 text-[12.5px] leading-snug">{entry.text}</div>
+      ) : null}
     </div>
   );
 }
@@ -133,12 +145,18 @@ export function TestPanel({
             </svg>
           </span>
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Test runner</div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              Test runner
+            </div>
             <div className="font-serif text-[15px] leading-tight">Simulate a chat</div>
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <button type="button" onClick={restart} className="px-1.5 text-[11px] font-semibold text-brand hover:underline">
+          <button
+            type="button"
+            onClick={restart}
+            className="px-1.5 text-[11px] font-semibold text-brand hover:underline"
+          >
             Restart
           </button>
           <button
@@ -147,13 +165,24 @@ export function TestPanel({
             aria-label="Close"
             className="grid h-8 w-8 place-items-center rounded-full hover:bg-muted"
           >
-            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+            <svg
+              viewBox="0 0 16 16"
+              className="h-3.5 w-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden
+            >
               <path d="M4 4l8 8M12 4l-8 8" />
             </svg>
           </button>
         </div>
       </div>
-      <div ref={logRef} data-testid="test-log" className="flex flex-1 flex-col space-y-2 overflow-y-auto bg-muted/40 p-3">
+      <div
+        ref={logRef}
+        data-testid="test-log"
+        className="flex flex-1 flex-col space-y-2 overflow-y-auto bg-muted/40 p-3"
+      >
         {log.map((entry, i) => (
           <LogBubble key={i} entry={entry} />
         ))}

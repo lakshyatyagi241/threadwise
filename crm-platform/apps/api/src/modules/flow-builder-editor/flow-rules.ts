@@ -62,7 +62,6 @@ export function decodeFlowCursor(raw: string): { updatedAtIso: string; id: numbe
   }
 }
 
-
 /**
  * `name + suffix` within `max` characters (code points; the flows table caps a name at 255): a long name is cut and the suffix
  * stays, so a copy still reads "... (Copy)". WaDesk's column had no such cap.
@@ -89,7 +88,10 @@ const isRecord = (v: unknown): v is Record<string, unknown> =>
  * `flow_type` outside the ten channels falls back to chat. The graph is normalised (ids, defaults, grid positions for nodes
  * that have none, one start node). `suffix` is appended to the name: ` (imported)`.
  */
-export function parseImportPayload(raw: unknown, opts: { suffix?: string; brand?: string } = {}): ParsedImport {
+export function parseImportPayload(
+  raw: unknown,
+  opts: { suffix?: string; brand?: string } = {},
+): ParsedImport {
   // WaDesk: "This is not a valid <brand> flow export."
   const message = `This is not a valid ${opts.brand ? `${opts.brand} ` : ''}flow export.`;
   const invalid = () =>

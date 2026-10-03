@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { flbDefaultNodeData, flbIsFlowType, type FlowType, type FlbNodeData } from './node-catalogue';
+import {
+  flbDefaultNodeData,
+  flbIsFlowType,
+  type FlowType,
+  type FlbNodeData,
+} from './node-catalogue';
 
 /**
  * The flow graph as the builder stores it (WD-FLB-015, 019, 029): `{ flowNodes, flowEdges, vars }`. The vocabulary is
@@ -93,7 +98,12 @@ export function flbNormalizeGraph(
     const pos = fallback === 'grid' ? flbGridPosition(i) : fallback;
     const data = { ...flbDefaultNodeData(type), ...(isRecord(nd.data) ? nd.data : {}) };
     // A legacy Trigger carries `triggerMode` (WD-FLB-020 rule 4); the default `keywordMode` must not hide it.
-    if (type === 'trigger' && isRecord(nd.data) && nd.data.keywordMode === undefined && nd.data.triggerMode !== undefined) {
+    if (
+      type === 'trigger' &&
+      isRecord(nd.data) &&
+      nd.data.keywordMode === undefined &&
+      nd.data.triggerMode !== undefined
+    ) {
       data.keywordMode = nd.data.triggerMode;
     }
     return {
@@ -202,7 +212,8 @@ export function flbWaitLabel(minutes: number): string {
 // --- featured card mini preview (WD-FLB-002) -----------------------------------------------------------------------------
 
 /** WaDesk's `??`: a missing or null key falls back; an empty string does not. */
-const orElse = (v: unknown, fallback: string): string => (v === undefined || v === null ? fallback : String(v));
+const orElse = (v: unknown, fallback: string): string =>
+  v === undefined || v === null ? fallback : String(v);
 
 /** `Str::limit($s, 28)`: cut at 28 characters, trim the right edge, add "...". */
 const limit28 = (s: string): string => (s.length <= 28 ? s : `${s.slice(0, 28).trimEnd()}...`);

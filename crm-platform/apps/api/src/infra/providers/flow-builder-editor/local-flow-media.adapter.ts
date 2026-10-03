@@ -10,10 +10,28 @@ const SAFE = /^[A-Za-z0-9_-]{1,64}$/;
 const SAFE_NAME = /^\d{6,}_[a-f0-9]{24}\.[a-z0-9]{1,5}$/;
 
 const MIME: Record<string, string> = {
-  jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif', webp: 'image/webp', bmp: 'image/bmp',
-  tiff: 'image/tiff', mp4: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime', '3gp': 'video/3gpp',
-  mkv: 'video/x-matroska', mp3: 'audio/mpeg', ogg: 'audio/ogg', opus: 'audio/ogg', m4a: 'audio/mp4', aac: 'audio/aac',
-  wav: 'audio/wav', amr: 'audio/amr', pdf: 'application/pdf', txt: 'text/plain', csv: 'text/csv',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  gif: 'image/gif',
+  webp: 'image/webp',
+  bmp: 'image/bmp',
+  tiff: 'image/tiff',
+  mp4: 'video/mp4',
+  webm: 'video/webm',
+  mov: 'video/quicktime',
+  '3gp': 'video/3gpp',
+  mkv: 'video/x-matroska',
+  mp3: 'audio/mpeg',
+  ogg: 'audio/ogg',
+  opus: 'audio/ogg',
+  m4a: 'audio/mp4',
+  aac: 'audio/aac',
+  wav: 'audio/wav',
+  amr: 'audio/amr',
+  pdf: 'application/pdf',
+  txt: 'text/plain',
+  csv: 'text/csv',
 };
 
 /**

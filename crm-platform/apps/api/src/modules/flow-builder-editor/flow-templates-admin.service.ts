@@ -55,7 +55,9 @@ function extractGraph(raw: unknown): unknown | null {
 }
 
 /** The stored shape of a template graph: `{ flowNodes, flowEdges (default []), vars }`, plain JSON, not normalised. */
-function storedGraph(src: unknown): { flowNodes: unknown[]; flowEdges: unknown[]; vars: unknown[] } | null {
+function storedGraph(
+  src: unknown,
+): { flowNodes: unknown[]; flowEdges: unknown[]; vars: unknown[] } | null {
   if (!isRecord(src) || !Array.isArray(src.flowNodes)) return null;
   return {
     flowNodes: [...src.flowNodes],
@@ -101,7 +103,10 @@ export class FlowTemplatesAdminService {
       return {
         data: items.map(toTemplate),
         page: {
-          nextCursor: hasMore && lastKey ? encodeCursor(Number(lastKey.sort_order), Number(lastKey.id)) : null,
+          nextCursor:
+            hasMore && lastKey
+              ? encodeCursor(Number(lastKey.sort_order), Number(lastKey.id))
+              : null,
           hasMore,
           limit: query.limit,
         },
@@ -123,7 +128,13 @@ export class FlowTemplatesAdminService {
           ERROR_CODES.FLB_TEMPLATE_GRAPH_REQUIRED,
           'Provide the flow — upload an exported .json, paste the JSON, or enter an existing flow id to clone.',
           422,
-          [{ path: 'flow_json', message: 'Provide the flow — upload an exported .json, paste the JSON, or enter an existing flow id to clone.' }],
+          [
+            {
+              path: 'flow_json',
+              message:
+                'Provide the flow — upload an exported .json, paste the JSON, or enter an existing flow id to clone.',
+            },
+          ],
         );
       }
       const res = await tx.execute(sql`
@@ -138,14 +149,18 @@ export class FlowTemplatesAdminService {
     });
   }
 
-  async update(uuid: string, input: UpdateAdminFlowTemplateInput): Promise<AdminFlowTemplateDetail> {
+  async update(
+    uuid: string,
+    input: UpdateAdminFlowTemplateInput,
+  ): Promise<AdminFlowTemplateDetail> {
     return this.db.privileged(async (tx) => {
       const cur = await tx.execute(
         sql`SELECT id, row_version FROM flow_templates WHERE uuid = ${uuid} FOR UPDATE`,
       );
       const row = cur.rows[0] as Raw | undefined;
       if (!row) throw AppError.notFound('Template', uuid);
-      if (Number(row.row_version) !== input.rowVersion) throw AppError.rowVersionConflict('Template');
+      if (Number(row.row_version) !== input.rowVersion)
+        throw AppError.rowVersionConflict('Template');
       // On edit the graph is optional: nothing sent keeps the current one.
       const graph = await this.graphFrom(tx, input.payload, input.sourceFlowId);
       await tx.execute(sql`
@@ -155,7 +170,10 @@ export class FlowTemplatesAdminService {
           ${graph ? sql`, flow_data = ${JSON.stringify(graph)}::jsonb` : sql``}
         WHERE id = ${Number(row.id)}
       `);
-      await this.record(tx, 'platform.flow_template.updated', uuid, { name: input.name, graphReplaced: !!graph });
+      await this.record(tx, 'platform.flow_template.updated', uuid, {
+        name: input.name,
+        graphReplaced: !!graph,
+      });
       return this.detail(tx, uuid);
     });
   }
@@ -175,7 +193,9 @@ export class FlowTemplatesAdminService {
   /** Hard delete; tenants who already cloned it keep their copy (a clone is an ordinary flow). */
   async remove(uuid: string): Promise<void> {
     await this.db.privileged(async (tx) => {
-      const res = await tx.execute(sql`DELETE FROM flow_templates WHERE uuid = ${uuid} RETURNING uuid`);
+      const res = await tx.execute(
+        sql`DELETE FROM flow_templates WHERE uuid = ${uuid} RETURNING uuid`,
+      );
       if (res.rows.length === 0) throw AppError.notFound('Template', uuid);
       await this.record(tx, 'platform.flow_template.deleted', uuid, {});
     });
@@ -211,13 +231,22 @@ export class FlowTemplatesAdminService {
    * platform-wide). Null when neither was supplied or what was supplied cannot be read as a graph at all; throws when it is a
    * graph without a `flowNodes` array.
    */
-  private async graphFrom(tx: Tx, payload: Record<string, unknown> | undefined, sourceFlowId: string | undefined) {
+  private async graphFrom(
+    tx: Tx,
+    payload: Record<string, unknown> | undefined,
+    sourceFlowId: string | undefined,
+  ) {
     const invalid = () =>
       new AppError(
         ERROR_CODES.FLB_IMPORT_INVALID,
         "That doesn't look like a valid flow (missing flowNodes).",
         422,
-        [{ path: 'flow_json', message: "That doesn't look like a valid flow (missing flowNodes)." }],
+        [
+          {
+            path: 'flow_json',
+            message: "That doesn't look like a valid flow (missing flowNodes).",
+          },
+        ],
       );
     if (payload !== undefined) {
       const src = extractGraph(payload);
@@ -238,8 +267,17 @@ export class FlowTemplatesAdminService {
     return null;
   }
 
-  private async record(tx: Tx, event: string, uuid: string, payload: Record<string, unknown>): Promise<void> {
-    await this.audit.record(tx, { event, status: 'success', payload: { template: uuid, ...payload } });
+  private async record(
+    tx: Tx,
+    event: string,
+    uuid: string,
+    payload: Record<string, unknown>,
+  ): Promise<void> {
+    await this.audit.record(tx, {
+      event,
+      status: 'success',
+      payload: { template: uuid, ...payload },
+    });
   }
 }
 

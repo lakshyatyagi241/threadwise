@@ -66,7 +66,13 @@ interface TriggerColumns {
 }
 
 /** Flow types whose inbound path reads `flows` directly in WaDesk: no keyword rule, so no keyword length limit. */
-const KEYWORD_LENGTH_EXEMPT: ReadonlySet<string> = new Set(['instagram', 'facebook', 'tiktok', 'telegram', 'email']);
+const KEYWORD_LENGTH_EXEMPT: ReadonlySet<string> = new Set([
+  'instagram',
+  'facebook',
+  'tiktok',
+  'telegram',
+  'email',
+]);
 
 type Raw = Record<string, unknown>;
 
@@ -197,7 +203,12 @@ export class FlowsService {
         action: 'update',
         delta: this.audit.diff(
           { name: row.name, category: row.category, flowType: row.flowType, nodes: row.nodeCount },
-          { name: after.name, category: after.category, flowType: after.flowType, nodes: after.nodeCount },
+          {
+            name: after.name,
+            category: after.category,
+            flowType: after.flowType,
+            nodes: after.nodeCount,
+          },
         ),
       });
       await this.outbox.emit(tx, {
@@ -303,7 +314,10 @@ export class FlowsService {
   async importFlow(input: ImportFlowRequest): Promise<FlowDetail> {
     const ctx = RequestContextStore.require();
     // Parse first: an invalid file must not be told "plan limit reached".
-    const parsed = parseImportPayload(input.payload, { suffix: ' (imported)', brand: await this.branding.name() });
+    const parsed = parseImportPayload(input.payload, {
+      suffix: ' (imported)',
+      brand: await this.branding.name(),
+    });
     return this.db.tx(async (tx) => {
       await this.assertRoom(tx, ctx.orgId);
       const id = await this.insertFlow(tx, ctx.orgId, ctx.userId, {
@@ -344,7 +358,9 @@ export class FlowsService {
     });
     // flow_templates is platform data (writes need the privileged role): the counter moves after the clone committed.
     await this.db.privileged(async (tx) => {
-      await tx.execute(sql`UPDATE flow_templates SET clone_count = clone_count + 1 WHERE id = ${templateId}`);
+      await tx.execute(
+        sql`UPDATE flow_templates SET clone_count = clone_count + 1 WHERE id = ${templateId}`,
+      );
     });
     return detail;
   }
@@ -410,7 +426,13 @@ export class FlowsService {
     tx: Tx,
     orgId: number,
     userId: number | null,
-    f: { name: string; graph: FlowGraph; category: string | null; flowType: FlowType; isActive?: boolean },
+    f: {
+      name: string;
+      graph: FlowGraph;
+      category: string | null;
+      flowType: FlowType;
+      isActive?: boolean;
+    },
   ): Promise<number> {
     const t = await this.triggerColumns(tx, orgId, f.graph, f.flowType);
     const nf: NewFlow = {
@@ -449,21 +471,38 @@ export class FlowsService {
    * WaDesk stored null for a non-numeric id. A keyword text over 255 characters is refused with the same message WaDesk
    * showed, and nothing has been written yet (WaDesk wrote first and threw after).
    */
-  private async triggerColumns(tx: Tx, orgId: number, graph: FlowGraph, flowType: string): Promise<TriggerColumns> {
+  private async triggerColumns(
+    tx: Tx,
+    orgId: number,
+    graph: FlowGraph,
+    flowType: string,
+  ): Promise<TriggerColumns> {
     const t = flbExtractTrigger(graph);
     // WaDesk raised this only from the keyword-rule sync: keyword triggers on a WhatsApp-style flow (it skipped Instagram,
     // Facebook, TikTok, Telegram and Email flows, which read `flows` directly, and every non-keyword trigger).
-    const tooLong = t.kind === 'keyword' && !KEYWORD_LENGTH_EXEMPT.has(flowType) ? flbTriggerKeywordsTooLong(t.keywords) : null;
+    const tooLong =
+      t.kind === 'keyword' && !KEYWORD_LENGTH_EXEMPT.has(flowType)
+        ? flbTriggerKeywordsTooLong(t.keywords)
+        : null;
     if (tooLong) {
-      throw new AppError(ERROR_CODES.FLB_TRIGGER_KEYWORDS_TOO_LONG, tooLong, HttpStatus.UNPROCESSABLE_ENTITY, [
-        { path: 'graph', message: tooLong },
-      ]);
+      throw new AppError(
+        ERROR_CODES.FLB_TRIGGER_KEYWORDS_TOO_LONG,
+        tooLong,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'graph', message: tooLong }],
+      );
     }
     let triggerValue: number | null = null;
     if (t.valueKind === 'zero') triggerValue = 0;
     else if (t.valueRef) {
       const table: RefTable | null =
-        t.valueKind === 'tag' ? 'tags' : t.valueKind === 'group' ? 'contact_groups' : t.valueKind === 'stage' ? 'pipeline_stages' : null;
+        t.valueKind === 'tag'
+          ? 'tags'
+          : t.valueKind === 'group'
+            ? 'contact_groups'
+            : t.valueKind === 'stage'
+              ? 'pipeline_stages'
+              : null;
       triggerValue = table ? await this.repo.resolveRef(tx, orgId, table, t.valueRef) : null;
     }
     let triggerDeviceId: number | null = null;

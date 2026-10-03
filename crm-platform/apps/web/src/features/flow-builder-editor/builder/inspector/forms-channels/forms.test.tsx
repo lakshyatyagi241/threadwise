@@ -107,7 +107,9 @@ describe('Chatbot form', () => {
     );
     expect(html).toContain('Triage · openai/gpt-4o-mini');
     expect(html).toContain('— pick AI agent —');
-    expect(html).toMatch(/<button[^>]*disabled[^>]*>(<svg.*?<\/svg>)?Create new AI agent<\/button>/);
+    expect(html).toMatch(
+      /<button[^>]*disabled[^>]*>(<svg.*?<\/svg>)?Create new AI agent<\/button>/,
+    );
     expect(html).toContain('not available yet');
   });
   it('with no agent it says so and points at the team inbox', () => {

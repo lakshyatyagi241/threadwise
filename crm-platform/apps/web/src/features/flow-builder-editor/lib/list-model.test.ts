@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { lastPage, pageItems, parseState, plural, purposeOf, relativeTime, toSearch } from './list-model';
+import {
+  lastPage,
+  pageItems,
+  parseState,
+  plural,
+  purposeOf,
+  relativeTime,
+  toSearch,
+} from './list-model';
 
 describe('list state in the address (WD-FLB-001)', () => {
   const params = (s: string) => new URLSearchParams(s);
@@ -7,16 +15,26 @@ describe('list state in the address (WD-FLB-001)', () => {
   it('reads status, category, q and page, with the defaults for anything missing or invalid', () => {
     expect(parseState(params(''))).toEqual({ status: 'all', category: 'all', q: '', page: 1 });
     expect(parseState(params('status=paused&category=welcome&q=hi&page=3'))).toEqual({
-      status: 'paused', category: 'welcome', q: 'hi', page: 3,
+      status: 'paused',
+      category: 'welcome',
+      q: 'hi',
+      page: 3,
     });
-    expect(parseState(params('status=bogus&page=-4&category='))).toEqual({ status: 'all', category: 'all', q: '', page: 1 });
+    expect(parseState(params('status=bogus&page=-4&category='))).toEqual({
+      status: 'all',
+      category: 'all',
+      q: '',
+      page: 1,
+    });
     expect(parseState(params('page=abc')).page).toBe(1);
   });
 
   it('writes only what differs from the defaults: the Paused tab is /flows?status=paused', () => {
     expect(toSearch({ status: 'paused' })).toBe('?status=paused');
     expect(toSearch({ status: 'all', category: 'all', q: '', page: 1 })).toBe('');
-    expect(toSearch({ status: 'live', category: 'lead', q: 'a b', page: 2 })).toBe('?status=live&category=lead&q=a+b&page=2');
+    expect(toSearch({ status: 'live', category: 'lead', q: 'a b', page: 2 })).toBe(
+      '?status=live&category=lead&q=a+b&page=2',
+    );
   });
 });
 

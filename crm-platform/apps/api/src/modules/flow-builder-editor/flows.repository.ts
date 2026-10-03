@@ -54,12 +54,17 @@ const toRow = (r: Raw): FlowRow => ({
   category: (r.category as string | null) ?? null,
   flowType: r.flow_type as string,
   triggerKind: r.trigger_kind as string,
-  triggerValue: r.trigger_value === null || r.trigger_value === undefined ? null : Number(r.trigger_value),
+  triggerValue:
+    r.trigger_value === null || r.trigger_value === undefined ? null : Number(r.trigger_value),
   triggerKeywords: (r.trigger_keywords as string | null) ?? null,
   triggerDeviceId:
-    r.trigger_device_id === null || r.trigger_device_id === undefined ? null : Number(r.trigger_device_id),
+    r.trigger_device_id === null || r.trigger_device_id === undefined
+      ? null
+      : Number(r.trigger_device_id),
   triggerChannelId:
-    r.trigger_channel_id === null || r.trigger_channel_id === undefined ? null : Number(r.trigger_channel_id),
+    r.trigger_channel_id === null || r.trigger_channel_id === undefined
+      ? null
+      : Number(r.trigger_channel_id),
   provider: r.provider as string,
   isPublished: r.is_published as boolean,
   isActive: r.is_active as boolean,
@@ -223,7 +228,12 @@ export class FlowsRepository {
     return r ? toRow(r) : null;
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string, forUpdate = false): Promise<FlowRow | null> {
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    forUpdate = false,
+  ): Promise<FlowRow | null> {
     const res = await tx.execute(sql`
       SELECT ${COLUMNS}, f.flow_data FROM flows f WHERE f.org_id = ${orgId} AND f.uuid = ${uuid}
       ${forUpdate ? sql`FOR UPDATE OF f` : sql``}
@@ -277,11 +287,15 @@ export class FlowsRepository {
   }
 
   async rename(tx: Tx, orgId: number, id: number, name: string): Promise<void> {
-    await tx.execute(sql`UPDATE flows SET flow_name = ${name} WHERE org_id = ${orgId} AND id = ${id}`);
+    await tx.execute(
+      sql`UPDATE flows SET flow_name = ${name} WHERE org_id = ${orgId} AND id = ${id}`,
+    );
   }
 
   async setActive(tx: Tx, orgId: number, id: number, active: boolean): Promise<void> {
-    await tx.execute(sql`UPDATE flows SET is_active = ${active} WHERE org_id = ${orgId} AND id = ${id}`);
+    await tx.execute(
+      sql`UPDATE flows SET is_active = ${active} WHERE org_id = ${orgId} AND id = ${id}`,
+    );
   }
 
   async setPublished(tx: Tx, orgId: number, id: number, published: boolean): Promise<void> {
@@ -318,7 +332,12 @@ export class FlowsRepository {
    * WABA / Twilio number is the channel linked to its connection, any other engine a channel of that kind with the uuid as
    * handle. The lookup is scoped by org, so another workspace's sender never resolves.
    */
-  async resolveChannel(tx: Tx, orgId: number, engine: string, uuid: string): Promise<number | null> {
+  async resolveChannel(
+    tx: Tx,
+    orgId: number,
+    engine: string,
+    uuid: string,
+  ): Promise<number | null> {
     if (!UUID_RE.test(uuid)) return null;
     const res =
       engine === 'baileys'

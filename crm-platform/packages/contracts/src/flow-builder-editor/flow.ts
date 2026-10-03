@@ -16,7 +16,13 @@ export const flbMaxChars =
   (max: number) =>
   (value: string, ctx: z.RefinementCtx): void => {
     if ([...value].length > max)
-      ctx.addIssue({ code: z.ZodIssueCode.too_big, type: 'string', maximum: max, inclusive: true, message: `String must contain at most ${max} character(s)` });
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        type: 'string',
+        maximum: max,
+        inclusive: true,
+        message: `String must contain at most ${max} character(s)`,
+      });
   };
 
 export const FLOW_NAME_MAX = 255;
@@ -42,7 +48,9 @@ export function flowState(f: { isPublished: boolean; isActive: boolean }): FlowS
 // --- graph on the wire -------------------------------------------------------------------------------------------
 
 export const flowGraphInputSchema = z.object({
-  flowNodes: z.array(z.record(z.unknown())).max(FLB_MAX_FLOW_NODES, `A flow can hold at most ${FLB_MAX_FLOW_NODES} nodes.`),
+  flowNodes: z
+    .array(z.record(z.unknown()))
+    .max(FLB_MAX_FLOW_NODES, `A flow can hold at most ${FLB_MAX_FLOW_NODES} nodes.`),
   flowEdges: z.array(z.record(z.unknown())).max(FLB_MAX_FLOW_EDGES).default([]),
   vars: z.array(z.record(z.unknown())).default([]),
 });
@@ -65,7 +73,9 @@ const edgeSchema = z.object({
 export const flowGraphSchema = z.object({
   flowNodes: z.array(nodeSchema),
   flowEdges: z.array(edgeSchema),
-  vars: z.array(z.object({ name: z.string(), desc: z.string().optional(), default: z.string().optional() })),
+  vars: z.array(
+    z.object({ name: z.string(), desc: z.string().optional(), default: z.string().optional() }),
+  ),
 });
 
 // --- list --------------------------------------------------------------------------------------------------------
@@ -221,7 +231,11 @@ export const flowTemplateOptionSchema = z.object({
 });
 
 /** A connected store a commerce node can sell from. `currency` is null for a WhatsApp catalog (mixed currencies). */
-export const flbStoreSchema = z.object({ id: uuidSchema, name: z.string(), currency: z.string().nullable() });
+export const flbStoreSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  currency: z.string().nullable(),
+});
 export type FlbStore = z.infer<typeof flbStoreSchema>;
 
 export const flbBuilderContextSchema = z.object({
@@ -249,20 +263,42 @@ export const flbBuilderContextSchema = z.object({
     }),
   ),
   agents: z.array(
-    z.object({ id: uuidSchema, name: z.string(), provider: z.string().nullable(), model: z.string().nullable() }),
+    z.object({
+      id: uuidSchema,
+      name: z.string(),
+      provider: z.string().nullable(),
+      model: z.string().nullable(),
+    }),
   ),
   stages: z.array(z.object({ id: uuidSchema, name: z.string(), pipeline: z.string().nullable() })),
   templates: z.array(flowTemplateOptionSchema),
   /** The workspace's flows (slim): the channel and published state feed the Sub-flow and hand-off pickers (`<name> · live`). */
-  flows: z.array(z.object({ id: uuidSchema, name: z.string(), flowType: flowTypeSchema, isPublished: z.boolean() })),
+  flows: z.array(
+    z.object({
+      id: uuidSchema,
+      name: z.string(),
+      flowType: flowTypeSchema,
+      isPublished: z.boolean(),
+    }),
+  ),
   aiModels: z.array(z.object({ value: z.string(), label: z.string(), provider: z.string() })),
   assistants: z.array(
-    z.object({ id: uuidSchema, name: z.string(), status: z.string().nullable(), sources: z.number().int() }),
+    z.object({
+      id: uuidSchema,
+      name: z.string(),
+      status: z.string().nullable(),
+      sources: z.number().int(),
+    }),
   ),
   callAssistants: z.array(z.object({ id: uuidSchema, name: z.string() })),
   /** Every booking type, inactive ones included (WaDesk labels them `(inactive)`), with its length in minutes. */
   bookingTypes: z.array(
-    z.object({ id: uuidSchema, name: z.string(), duration: z.number().int().nullable(), active: z.boolean() }),
+    z.object({
+      id: uuidSchema,
+      name: z.string(),
+      duration: z.number().int().nullable(),
+      active: z.boolean(),
+    }),
   ),
   /** Every WhatsApp form; `isPublished` = published to Meta and live (a draft is listed too, as in WaDesk). */
   forms: z.array(z.object({ id: uuidSchema, title: z.string(), isPublished: z.boolean() })),
@@ -275,7 +311,12 @@ export const flbBuilderContextSchema = z.object({
 });
 export type FlbBuilderContext = z.infer<typeof flbBuilderContextSchema>;
 
-export const FLB_COMMERCE_PROVIDERS = ['whatsapp_shop', 'woocommerce', 'shopify', 'instagram'] as const;
+export const FLB_COMMERCE_PROVIDERS = [
+  'whatsapp_shop',
+  'woocommerce',
+  'shopify',
+  'instagram',
+] as const;
 export const flbCommerceProductsQuerySchema = z.object({
   provider: z.enum(FLB_COMMERCE_PROVIDERS),
   storeId: uuidSchema.optional(),
@@ -300,7 +341,9 @@ export const flbCommerceProductSchema = z.object({
   inStock: z.boolean(),
 });
 export type FlbCommerceProduct = z.infer<typeof flbCommerceProductSchema>;
-export const flbCommerceProductsResponseSchema = z.object({ data: z.array(flbCommerceProductSchema) });
+export const flbCommerceProductsResponseSchema = z.object({
+  data: z.array(flbCommerceProductSchema),
+});
 
 export const FLB_GOOGLE_PICKER_KINDS = ['sheets', 'docs', 'forms'] as const;
 export const flbGoogleFilesResponseSchema = z.object({
@@ -321,7 +364,9 @@ export const flbTestWebhookRequestSchema = z.object({
   method: z.string().max(10).nullish(),
   body: z.string().nullish(),
   contentType: z.string().max(120).nullish(),
-  headers: z.array(z.object({ key: z.string().optional(), value: z.string().optional() })).nullish(),
+  headers: z
+    .array(z.object({ key: z.string().optional(), value: z.string().optional() }))
+    .nullish(),
   vars: z.record(z.unknown()).nullish(),
 });
 export type FlbTestWebhookRequest = z.infer<typeof flbTestWebhookRequestSchema>;
@@ -399,7 +444,9 @@ export const adminFlowTemplateGraphSchema = z.object({
   flowEdges: z.array(z.record(z.unknown())),
   vars: z.array(z.record(z.unknown())),
 });
-export const adminFlowTemplateDetailSchema = adminFlowTemplateSchema.extend({ graph: adminFlowTemplateGraphSchema });
+export const adminFlowTemplateDetailSchema = adminFlowTemplateSchema.extend({
+  graph: adminFlowTemplateGraphSchema,
+});
 export type AdminFlowTemplateDetail = z.infer<typeof adminFlowTemplateDetailSchema>;
 
 /** Create and edit share the form. On create the graph is required (one of three sources); on edit it is optional. */

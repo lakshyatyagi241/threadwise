@@ -28,8 +28,28 @@ export default (h) => {
   // ---------------------------------------------------------------------------------------------------------------
   // database access (set-up that no screen offers, and read-back)
   // ---------------------------------------------------------------------------------------------------------------
-  const REF_DB = ['exec', 'wadesk-db', 'mariadb', '-uwadesk', '-pwadesk_local_pw', 'wadesk', '-N', '-B', '-r', '-e'];
-  const OURS_DB = ['exec', 'crm-postgres', 'psql', '-U', 'crm', '-d', process.env.FLB_DB || 'crm_flb', '-tAc'];
+  const REF_DB = [
+    'exec',
+    'wadesk-db',
+    'mariadb',
+    '-uwadesk',
+    '-pwadesk_local_pw',
+    'wadesk',
+    '-N',
+    '-B',
+    '-r',
+    '-e',
+  ];
+  const OURS_DB = [
+    'exec',
+    'crm-postgres',
+    'psql',
+    '-U',
+    'crm',
+    '-d',
+    process.env.FLB_DB || 'crm_flb',
+    '-tAc',
+  ];
   const mysql = (sql) => execFileSync('docker', [...REF_DB, sql], { encoding: 'utf8' }).trim();
   const psql = (sql) => execFileSync('docker', [...OURS_DB, sql], { encoding: 'utf8' }).trim();
   const q = (s) => String(s).replace(/\\/g, '\\\\').replace(/'/g, "''");
@@ -57,7 +77,9 @@ export default (h) => {
   ];
   const graphOf = (nodes) => ({
     flowNodes: nodes,
-    flowEdges: nodes.slice(1).map((_, i) => ({ id: `e${i}`, source: `n${i}`, sourceHandle: 'out', target: `n${i + 1}` })),
+    flowEdges: nodes
+      .slice(1)
+      .map((_, i) => ({ id: `e${i}`, source: `n${i}`, sourceHandle: 'out', target: `n${i + 1}` })),
     vars: [],
   });
   const NODES = (kind = 'keyword') => [trig(kind), ...BASE_NODES()];
@@ -69,7 +91,9 @@ export default (h) => {
   const scope = (c) => `${c.tagBase}-${c.sid}`;
 
   async function removeFlow(c, id) {
-    return WD(c) ? c.http('DELETE', `/flows/${id}`) : c.http('DELETE', `/v2/flows/${id}`, { headers: idem() });
+    return WD(c)
+      ? c.http('DELETE', `/flows/${id}`)
+      : c.http('DELETE', `/v2/flows/${id}`, { headers: idem() });
   }
 
   /** Every flow of the workspace as {id, name, state, isActive, isPublished, category}. */
@@ -92,7 +116,9 @@ export default (h) => {
     const out = [];
     let cursor;
     for (let i = 0; i < 10; i++) {
-      const r = await c.http('GET', '/v2/flows', { query: { limit: 100, q: needle || undefined, cursor } });
+      const r = await c.http('GET', '/v2/flows', {
+        query: { limit: 100, q: needle || undefined, cursor },
+      });
       for (const f of r.body?.data ?? [])
         out.push({
           id: f.id,
@@ -110,7 +136,8 @@ export default (h) => {
   }
   const flowById = async (c, id) => (await allFlows(c)).find((f) => String(f.id) === String(id));
   /** The newest of some flows (WaDesk lists oldest first by id, ours newest updated first). */
-  const newest = (c, arr) => (WD(c) ? [...arr].sort((a, b) => Number(b.id) - Number(a.id))[0] : arr[0]);
+  const newest = (c, arr) =>
+    WD(c) ? [...arr].sort((a, b) => Number(b.id) - Number(a.id))[0] : arr[0];
 
   /**
    * Cleanup for UI-made rows (copies, imports, clones): rows that are new since this call and carry the run tag (or are the
@@ -121,7 +148,8 @@ export default (h) => {
     c.onCleanup(async () => {
       for (const f of await allFlows(c)) {
         if (before.has(String(f.id))) continue;
-        if (String(f.name).includes(c.tagBase) || String(f.name).startsWith('Imported flow')) await removeFlow(c, f.id);
+        if (String(f.name).includes(c.tagBase) || String(f.name).startsWith('Imported flow'))
+          await removeFlow(c, f.id);
       }
     });
     return before;
@@ -136,7 +164,12 @@ export default (h) => {
     let id;
     if (WD(c)) {
       r = await c.http('POST', '/flows/api/save', {
-        data: { flow_name: name, category: o.category ?? null, flow_type: o.flowType ?? 'chat', flow_data: graph },
+        data: {
+          flow_name: name,
+          category: o.category ?? null,
+          flow_type: o.flowType ?? 'chat',
+          flow_data: graph,
+        },
       });
       id = r.body?.data?.flow_id;
     } else {
@@ -159,7 +192,9 @@ export default (h) => {
       ? c.http('POST', '/flows/api/publish', { data: { flow_id: id } })
       : c.http('POST', `/v2/flows/${id}/publish`, { headers: idem() });
   const toggleFlow = (c, id) =>
-    WD(c) ? c.http('POST', `/flows/${id}/toggle`) : c.http('POST', `/v2/flows/${id}/toggle`, { headers: idem() });
+    WD(c)
+      ? c.http('POST', `/flows/${id}/toggle`)
+      : c.http('POST', `/v2/flows/${id}/toggle`, { headers: idem() });
 
   /** Workspace-wide counts as each side reports them. */
   async function counts(c) {
@@ -174,7 +209,9 @@ export default (h) => {
   }
 
   /** The "<id>" of the flow a redirect / navigation landed on (numeric on WaDesk, uuid on ours). */
-  const builderIdOf = (url) => /\/flows\/builder(?:\/([\w-]+)|\?(?:.*&)?id=([\w-]+))/.exec(url)?.slice(1).find(Boolean) ?? null;
+  const builderIdOf = (url) =>
+    /\/flows\/builder(?:\/([\w-]+)|\?(?:.*&)?id=([\w-]+))/.exec(url)?.slice(1).find(Boolean) ??
+    null;
 
   // ---------------------------------------------------------------------------------------------------------------
   // a second organisation / workspace with one flow (the "foreign id" cases)
@@ -198,7 +235,9 @@ export default (h) => {
       return { id, exists: () => mysql(`SELECT count(*) FROM flows WHERE id = ${id}`) === '1' };
     }
     const slug = q(name).slice(0, 60);
-    const org = psql(`INSERT INTO organizations (slug, name) VALUES ('${slug}', '${slug}') RETURNING id`).split('\n')[0];
+    const org = psql(
+      `INSERT INTO organizations (slug, name) VALUES ('${slug}', '${slug}') RETURNING id`,
+    ).split('\n')[0];
     const id = psql(
       `INSERT INTO flows (org_id, flow_name, flow_data) VALUES (${org}, '${q(name)}', '${q(g)}'::jsonb) RETURNING uuid`,
     ).split('\n')[0];
@@ -242,12 +281,18 @@ export default (h) => {
   const S = {
     cards: '[data-flow-card]',
     stat: (k) => ({ wadesk: `[data-fl-stat="${k}"]`, ours: `[data-stat="${k}"]` }),
-    tab: (k) => ({ wadesk: `main [data-fl-filter="status"][data-fl-value="${k}"]`, ours: `[data-tab="${k}"]` }),
+    tab: (k) => ({
+      wadesk: `main [data-fl-filter="status"][data-fl-value="${k}"]`,
+      ours: `[data-tab="${k}"]`,
+    }),
     railStatus: (k) => ({
       wadesk: `aside [data-fl-filter="status"][data-fl-value="${k}"]`,
       ours: `[data-filter="status"][data-value="${k}"]`,
     }),
-    cat: (k) => ({ wadesk: `[data-fl-filter="category"][data-fl-value="${k}"]`, ours: `[data-filter="category"][data-value="${k}"]` }),
+    cat: (k) => ({
+      wadesk: `[data-fl-filter="category"][data-fl-value="${k}"]`,
+      ours: `[data-filter="category"][data-value="${k}"]`,
+    }),
     search: { wadesk: '#fl-search', ours: 'input[type=search]' },
     featured: { wadesk: '#fl-featured', ours: '[data-testid=featured-flow]' },
     pager: 'nav[aria-label*="agination" i]',
@@ -267,8 +312,14 @@ export default (h) => {
   const confirmEls = {
     box: { wadesk: '#globalConfirmModal', ours: 'dialog[open]' },
     msg: { wadesk: '#globalConfirmModal [data-confirm-message]', ours: 'dialog[open]' },
-    accept: { wadesk: '#globalConfirmModal [data-confirm-accept]', ours: 'dialog[open] button:text-is("Delete")' },
-    cancel: { wadesk: '#globalConfirmModal [data-confirm-cancel]', ours: 'dialog[open] button:text-is("Cancel")' },
+    accept: {
+      wadesk: '#globalConfirmModal [data-confirm-accept]',
+      ours: 'dialog[open] button:text-is("Delete")',
+    },
+    cancel: {
+      wadesk: '#globalConfirmModal [data-confirm-cancel]',
+      ours: 'dialog[open] button:text-is("Cancel")',
+    },
   };
 
   /** Our dev stack revokes older sessions when anything else signs in (a session cap): sign in again instead of failing. */
@@ -319,7 +370,12 @@ export default (h) => {
   const cardOf = (c, name) => c.page.locator(S.cards).filter({ hasText: name }).first();
   const cardCount = (c) => c.page.locator(S.cards).count();
   const num = async (c, spec) => {
-    const t = (await c.loc(spec).first().innerText().catch(() => '')) ?? '';
+    const t =
+      (await c
+        .loc(spec)
+        .first()
+        .innerText()
+        .catch(() => '')) ?? '';
     const m = /(\d[\d,]*)\s*$/.exec(t.trim());
     return m ? Number(m[1].replace(/,/g, '')) : null;
   };
@@ -339,7 +395,10 @@ export default (h) => {
     let t = String(s ?? '');
     for (const n of [...names].sort((a, b) => b.length - a.length)) t = t.split(n).join('NAME');
     t = t.replace(/zz-flb-pwp-[a-z0-9-]+/gi, 'NAME').replace(/pwp-[a-z0-9-]+/gi, 'TAG');
-    t = t.replace(/\b\d+\s+(?:second|minute|hour|day|week|month|year)s?\s+ago\b|\bjust now\b|\ba few seconds ago\b/gi, 'AGO');
+    t = t.replace(
+      /\b\d+\s+(?:second|minute|hour|day|week|month|year)s?\s+ago\b|\bjust now\b|\ba few seconds ago\b/gi,
+      'AGO',
+    );
     return t;
   };
   const linesOf = (c, text, names = []) =>
@@ -359,7 +418,11 @@ export default (h) => {
     {
       k: 'contactcreated',
       kind: 'contact_created',
-      nodes: [trig('contact_created'), N('condition', 1, { kind: 'var', variable: 'x', op: '==', value: '1' }), N('end', 2, {})],
+      nodes: [
+        trig('contact_created'),
+        N('condition', 1, { kind: 'var', variable: 'x', op: '==', value: '1' }),
+        N('end', 2, {}),
+      ],
     },
     { k: 'event', category: 'event', pub: true },
     { k: 'postpurchase', category: 'post-purchase', pub: true, active: false },
@@ -386,7 +449,8 @@ export default (h) => {
   // ===============================================================================================================
   ui({
     id: 'list.cards-matrix',
-    title: 'List: twelve flows of every kind, card by card, order newest updated first, KPI and rail counts',
+    title:
+      'List: twelve flows of every kind, card by card, order newest updated first, KPI and rail counts',
     run: async (c) => {
       const o = c.obs;
       const before = await counts(c);
@@ -397,10 +461,16 @@ export default (h) => {
         await sleep(1100); // the reference orders by a one-second timestamp
       }
       const after = await counts(c);
-      for (const k of ['all', 'live', 'paused', 'draft']) o.num(`delta.${k}`, (after[k] ?? 0) - (before[k] ?? 0));
-      o.set('map.delta.categories', Object.fromEntries(
-        ['welcome', 'cart', 'lead', 'event', 'post-purchase', 'Showcase', 'uncategorized'].map((k) => [k, (after.cats[k] ?? 0) - (before.cats[k] ?? 0)]),
-      ));
+      for (const k of ['all', 'live', 'paused', 'draft'])
+        o.num(`delta.${k}`, (after[k] ?? 0) - (before[k] ?? 0));
+      o.set(
+        'map.delta.categories',
+        Object.fromEntries(
+          ['welcome', 'cart', 'lead', 'event', 'post-purchase', 'Showcase', 'uncategorized'].map(
+            (k) => [k, (after.cats[k] ?? 0) - (before.cats[k] ?? 0)],
+          ),
+        ),
+      );
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       const names = made.map((m) => m.name);
       o.num('cards', await cardCount(c));
@@ -408,16 +478,37 @@ export default (h) => {
       const order = [];
       for (const t of texts) order.push(made.find((m) => t.includes(m.name))?.k ?? '?');
       o.seq('order', order);
-      o.flag('orderNewestFirst', order.join() === [...made].reverse().map((m) => m.k).join());
+      o.flag(
+        'orderNewestFirst',
+        order.join() ===
+          [...made]
+            .reverse()
+            .map((m) => m.k)
+            .join(),
+      );
       for (const m of made) {
-        const t = await cardOf(c, m.name).innerText().catch(() => '');
+        const t = await cardOf(c, m.name)
+          .innerText()
+          .catch(() => '');
         o.set(`seq.card.${m.k}`, linesOf(c, t, names));
         const hasBuilder = await cardOf(c, m.name).locator(ACT.open).count();
-        const hasEnroll = await cardOf(c, m.name).getByText(/enroll contacts/i).count();
+        const hasEnroll = await cardOf(c, m.name)
+          .getByText(/enroll contacts/i)
+          .count();
         o.flag(`card.${m.k}.openBuilder`, hasBuilder > 0);
         o.flag(`card.${m.k}.enroll`, hasEnroll > 0);
-        o.flag(`card.${m.k}.analyticsLink`, (await cardOf(c, m.name).locator('[title="Analytics"]').count()) > 0);
-        o.enum(`card.${m.k}.pauseTitle`, (await cardOf(c, m.name).locator(ACT.toggle).first().getAttribute('title').catch(() => null)) ?? 'none');
+        o.flag(
+          `card.${m.k}.analyticsLink`,
+          (await cardOf(c, m.name).locator('[title="Analytics"]').count()) > 0,
+        );
+        o.enum(
+          `card.${m.k}.pauseTitle`,
+          (await cardOf(c, m.name)
+            .locator(ACT.toggle)
+            .first()
+            .getAttribute('title')
+            .catch(() => null)) ?? 'none',
+        );
       }
       await c.shot('cards');
       // KPI tiles, tab and rail numbers equal what the API reports
@@ -426,16 +517,38 @@ export default (h) => {
         o.flag(`tile.${k}.matchesApi`, (await num(c, S.stat(k))) === (api[k] ?? 0));
         o.flag(`tab.${k}.matchesApi`, (await num(c, S.tab(k))) === (api[k] ?? 0));
       }
-      for (const k of ['live', 'paused', 'draft']) o.flag(`rail.${k}.matchesApi`, (await num(c, S.railStatus(k))) === (api[k] ?? 0));
+      for (const k of ['live', 'paused', 'draft'])
+        o.flag(`rail.${k}.matchesApi`, (await num(c, S.railStatus(k))) === (api[k] ?? 0));
       for (const k of ['all', 'cart', 'welcome', 'post-purchase', 're-engagement', 'event', 'lead'])
-        o.flag(`railCat.${k}.matchesApi`, (await num(c, S.cat(k))) === (k === 'all' ? api.all : (api.cats[k] ?? 0)));
-      o.set('seq.railCategories', await c.page.locator(`${WD(c) ? '[data-fl-filter="category"]' : '[data-filter="category"]'}`).evaluateAll((els) =>
-        els.map((e) => e.getAttribute('data-fl-value') ?? e.getAttribute('data-value')),
-      ));
-      o.set('seq.tiles', await c.page.locator(WD(c) ? '[data-fl-stat]' : '[data-stat]').evaluateAll((els) =>
-        els.map((e) => `${e.getAttribute('data-fl-stat') ?? e.getAttribute('data-stat')}`),
-      ));
-      o.flag('pagerHidden', (await c.page.locator(S.pager).count()) === 0 || !(await c.page.locator(S.pager).first().isVisible().catch(() => false)));
+        o.flag(
+          `railCat.${k}.matchesApi`,
+          (await num(c, S.cat(k))) === (k === 'all' ? api.all : (api.cats[k] ?? 0)),
+        );
+      o.set(
+        'seq.railCategories',
+        await c.page
+          .locator(`${WD(c) ? '[data-fl-filter="category"]' : '[data-filter="category"]'}`)
+          .evaluateAll((els) =>
+            els.map((e) => e.getAttribute('data-fl-value') ?? e.getAttribute('data-value')),
+          ),
+      );
+      o.set(
+        'seq.tiles',
+        await c.page
+          .locator(WD(c) ? '[data-fl-stat]' : '[data-stat]')
+          .evaluateAll((els) =>
+            els.map((e) => `${e.getAttribute('data-fl-stat') ?? e.getAttribute('data-stat')}`),
+          ),
+      );
+      o.flag(
+        'pagerHidden',
+        (await c.page.locator(S.pager).count()) === 0 ||
+          !(await c.page
+            .locator(S.pager)
+            .first()
+            .isVisible()
+            .catch(() => false)),
+      );
       o.flag('footerShowsCount', await seen(c, /Showing\s+12\s+of\s+12\s+filtered flows/i, 1500));
     },
   });
@@ -455,9 +568,21 @@ export default (h) => {
         o.flag(`featured.${label}.isExpected`, t.includes(expectName));
         const nameOnly = t.includes(expectName) ? t : '';
         if (nameOnly) o.set(`seq.featured.${label}`, linesOf(c, t, [expectName]));
-        o.flag(`featured.${label}.openLink`, (await loc.locator('a:has-text("Open flow")').count()) > 0);
-        o.flag(`featured.${label}.duplicateControl`, (await loc.locator('button:has-text("Duplicate"), [title="Duplicate"]').count()) > 0);
-        o.num(`featured.${label}.previewSteps`, await loc.locator('li, [data-step]').count().catch(() => 0));
+        o.flag(
+          `featured.${label}.openLink`,
+          (await loc.locator('a:has-text("Open flow")').count()) > 0,
+        );
+        o.flag(
+          `featured.${label}.duplicateControl`,
+          (await loc.locator('button:has-text("Duplicate"), [title="Duplicate"]').count()) > 0,
+        );
+        o.num(
+          `featured.${label}.previewSteps`,
+          await loc
+            .locator('li, [data-step]')
+            .count()
+            .catch(() => 0),
+        );
       };
       const live = await createFlow(c, { label: 'live', pub: true, category: 'cart-recovery' });
       await sleep(1100);
@@ -473,10 +598,23 @@ export default (h) => {
       await feat('newestPaused', live.name);
       void draft;
       // the card shows the steps of the flow in order
-      const steps = await createFlow(c, { label: 'steps', pub: true, nodes: [trig('keyword'), ...BASE_NODES(), N('message', 6, { text: 'six' }), N('message', 7, { text: 'seven' })] });
+      const steps = await createFlow(c, {
+        label: 'steps',
+        pub: true,
+        nodes: [
+          trig('keyword'),
+          ...BASE_NODES(),
+          N('message', 6, { text: 'six' }),
+          N('message', 7, { text: 'seven' }),
+        ],
+      });
       await sleep(1100);
       await openList(c);
-      const t = await c.loc(S.featured).first().innerText().catch(() => '');
+      const t = await c
+        .loc(S.featured)
+        .first()
+        .innerText()
+        .catch(() => '');
       o.set('seq.featured.steps', linesOf(c, t, [steps.name]));
       await c.shot('featured');
     },
@@ -494,7 +632,9 @@ export default (h) => {
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       const whichShown = async () => {
         const texts = await c.page.locator(S.cards).allInnerTexts();
-        return mine.filter((m) => texts.some((t) => t.includes(m.name))).map((m) => m.name.split('-').slice(-2)[0]);
+        return mine
+          .filter((m) => texts.some((t) => t.includes(m.name)))
+          .map((m) => m.name.split('-').slice(-2)[0]);
       };
       o.set('seq.tab.all', await whichShown());
       const base = await counts(c);
@@ -504,8 +644,23 @@ export default (h) => {
         o.set(`seq.tab.${k}`, await whichShown());
         o.enum(`url.tab.${k}`, urlQuery(c));
         const now = await counts(c);
-        o.flag(`tab.${k}.countsUnchanged`, ['all', 'live', 'paused', 'draft'].every((s) => now[s] === base[s]));
-        o.flag(`tab.${k}.active`, ((await c.loc(S.tab(k)).first().getAttribute('class').catch(() => '')) ?? '') !== ((await c.loc(S.tab(k === 'all' ? 'live' : 'all')).first().getAttribute('class').catch(() => '')) ?? ''));
+        o.flag(
+          `tab.${k}.countsUnchanged`,
+          ['all', 'live', 'paused', 'draft'].every((s) => now[s] === base[s]),
+        );
+        o.flag(
+          `tab.${k}.active`,
+          ((await c
+            .loc(S.tab(k))
+            .first()
+            .getAttribute('class')
+            .catch(() => '')) ?? '') !==
+            ((await c
+              .loc(S.tab(k === 'all' ? 'live' : 'all'))
+              .first()
+              .getAttribute('class')
+              .catch(() => '')) ?? ''),
+        );
       }
       // the rail does the same
       for (const k of ['paused', 'draft', 'live']) {
@@ -537,7 +692,8 @@ export default (h) => {
 
   ui({
     id: 'list.category-rail',
-    title: 'List: the library rail filters by category, counts follow, custom categories count but have no rail entry',
+    title:
+      'List: the library rail filters by category, counts follow, custom categories count but have no rail entry',
     run: async (c) => {
       const o = c.obs;
       const before = await counts(c);
@@ -547,11 +703,14 @@ export default (h) => {
       const e = await createFlow(c, { label: 'none' });
       const mine = [a, b, d, e];
       const after = await counts(c);
-      for (const k of ['welcome', 'cart', 'Showcase', 'uncategorized']) o.num(`delta.${k}`, (after.cats[k] ?? 0) - (before.cats[k] ?? 0));
+      for (const k of ['welcome', 'cart', 'Showcase', 'uncategorized'])
+        o.num(`delta.${k}`, (after.cats[k] ?? 0) - (before.cats[k] ?? 0));
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       const shown = async () => {
         const texts = await c.page.locator(S.cards).allInnerTexts();
-        return mine.filter((m) => texts.some((t) => t.includes(m.name))).map((m) => m.name.split('-').slice(-2)[0]);
+        return mine
+          .filter((m) => texts.some((t) => t.includes(m.name)))
+          .map((m) => m.name.split('-').slice(-2)[0]);
       };
       o.set('seq.all', await shown());
       for (const k of ['welcome', 'cart']) {
@@ -559,7 +718,19 @@ export default (h) => {
         await settle(c);
         o.set(`seq.cat.${k}`, await shown());
         o.enum(`url.cat.${k}`, urlQuery(c));
-        o.flag(`cat.${k}.railActive`, ((await c.loc(S.cat(k)).first().getAttribute('class').catch(() => '')) ?? '') !== ((await c.loc(S.cat('lead')).first().getAttribute('class').catch(() => '')) ?? ''));
+        o.flag(
+          `cat.${k}.railActive`,
+          ((await c
+            .loc(S.cat(k))
+            .first()
+            .getAttribute('class')
+            .catch(() => '')) ?? '') !==
+            ((await c
+              .loc(S.cat('lead'))
+              .first()
+              .getAttribute('class')
+              .catch(() => '')) ?? ''),
+        );
       }
       await c.click(S.cat('all'));
       await settle(c);
@@ -567,7 +738,10 @@ export default (h) => {
       // a custom category is reachable by URL, with no rail entry
       await openList(c, `?category=Showcase&q=${encodeURIComponent(scope(c))}`);
       o.set('seq.cat.custom', await shown());
-      o.num('rail.customEntries', await c.page.locator(`[data-fl-value="Showcase"], [data-value="Showcase"]`).count());
+      o.num(
+        'rail.customEntries',
+        await c.page.locator(`[data-fl-value="Showcase"], [data-value="Showcase"]`).count(),
+      );
       // category AND status together
       await openList(c, `?category=welcome&status=live&q=${encodeURIComponent(scope(c))}`);
       o.set('seq.cat.welcome.live', await shown());
@@ -579,7 +753,8 @@ export default (h) => {
 
   ui({
     id: 'list.search',
-    title: 'List: search is a case-insensitive substring, resets the page, survives a reload, takes hostile text',
+    title:
+      'List: search is a case-insensitive substring, resets the page, survives a reload, takes hostile text',
     run: async (c) => {
       const o = c.obs;
       let fired = false;
@@ -605,9 +780,14 @@ export default (h) => {
       const probe = async (id, term, expectNames) => {
         await searchFor(c, term);
         const texts = await c.page.locator(S.cards).allInnerTexts();
-        const hits = mine.filter((m) => texts.some((x) => x.includes(m.name))).map((m) => m.name.replace(`zz-flb-${t}-`, ''));
+        const hits = mine
+          .filter((m) => texts.some((x) => x.includes(m.name)))
+          .map((m) => m.name.replace(`zz-flb-${t}-`, ''));
         o.set(`seq.search.${id}`, hits);
-        o.flag(`search.${id}.empty`, (await cardCount(c)) === 0 && (await seen(c, /no flows match/i, 800)));
+        o.flag(
+          `search.${id}.empty`,
+          (await cardCount(c)) === 0 && (await seen(c, /no flows match/i, 800)),
+        );
         void expectNames;
       };
       await probe('prefix', `${t}-wel`);
@@ -629,8 +809,18 @@ export default (h) => {
       await probe('long', rep(400, 'a'));
       await probe('miss', `${t}-nothing-like-this`);
       o.flag('miss.emptyState', await seen(c, /no flows match/i, 1500));
-      o.flag('miss.resetControl', (await c.page.getByRole('button', { name: /reset/i }).count()) + (await c.page.getByRole('link', { name: /reset/i }).count()) > 0);
-      o.flag('miss.createControl', (await c.page.getByRole('button', { name: /create flow/i }).count()) + (await c.page.getByRole('link', { name: /create flow/i }).count()) > 0);
+      o.flag(
+        'miss.resetControl',
+        (await c.page.getByRole('button', { name: /reset/i }).count()) +
+          (await c.page.getByRole('link', { name: /reset/i }).count()) >
+          0,
+      );
+      o.flag(
+        'miss.createControl',
+        (await c.page.getByRole('button', { name: /create flow/i }).count()) +
+          (await c.page.getByRole('link', { name: /create flow/i }).count()) >
+          0,
+      );
       o.flag('sec.xssExecuted', fired);
       const ev = c.rec.since(mark);
       o.flag('noCrash', ev.pageErrors.length === 0 && !ev.http.some((x) => x.status >= 500));
@@ -639,7 +829,12 @@ export default (h) => {
       o.enum('url.search', urlQuery(c));
       await c.page.reload();
       await listReady(c);
-      o.set('seq.search.afterReload', (await c.page.locator(S.cards).allInnerTexts()).filter((x) => x.includes(a.name)).map(() => 'Welcome Series'));
+      o.set(
+        'seq.search.afterReload',
+        (await c.page.locator(S.cards).allInnerTexts())
+          .filter((x) => x.includes(a.name))
+          .map(() => 'Welcome Series'),
+      );
       o.enum('box.afterReload', (await c.loc(S.search).first().inputValue()).replace(t, 'T'));
       await searchFor(c, '');
       o.flag('cleared.showsList', (await cardCount(c)) > 0);
@@ -648,7 +843,8 @@ export default (h) => {
 
   ui({
     id: 'list.pagination',
-    title: 'List: 12 per page, the pager appears at 13, page 2 holds the rest, an out-of-range page is clamped',
+    title:
+      'List: 12 per page, the pager appears at 13, page 2 holds the rest, an out-of-range page is clamped',
     run: async (c) => {
       const o = c.obs;
       const made = [];
@@ -658,7 +854,12 @@ export default (h) => {
       }
       const q = `?q=${encodeURIComponent(scope(c))}`;
       const pagerShown = async () =>
-        (await c.page.locator(S.pager).count()) > 0 && (await c.page.locator(S.pager).first().isVisible().catch(() => false));
+        (await c.page.locator(S.pager).count()) > 0 &&
+        (await c.page
+          .locator(S.pager)
+          .first()
+          .isVisible()
+          .catch(() => false));
       await openList(c, q);
       o.num('twelve.cards', await cardCount(c));
       o.flag('twelve.pager', await pagerShown());
@@ -669,7 +870,17 @@ export default (h) => {
       o.flag('thirteen.pager', await pagerShown());
       o.flag('thirteen.footer', await seen(c, /Showing\s+12\s+of\s+13\s+filtered flows/i, 1200));
       o.flag('thirteen.pagerText', await seen(c, /Showing\s+1\s*[-–]\s*12\s+of\s+13/i, 1200));
-      const prevDisabledOnFirst = await c.page.locator(S.pager).getByText(/^prev/i).first().evaluate((e) => e.tagName !== 'A' && e.tagName !== 'BUTTON' || e.hasAttribute('disabled') || e.getAttribute('aria-disabled') === 'true').catch(() => null);
+      const prevDisabledOnFirst = await c.page
+        .locator(S.pager)
+        .getByText(/^prev/i)
+        .first()
+        .evaluate(
+          (e) =>
+            (e.tagName !== 'A' && e.tagName !== 'BUTTON') ||
+            e.hasAttribute('disabled') ||
+            e.getAttribute('aria-disabled') === 'true',
+        )
+        .catch(() => null);
       o.flag('thirteen.prevInert', prevDisabledOnFirst);
       // next
       const next = c.page.locator(S.pager).getByText(/^next/i).first();
@@ -703,13 +914,19 @@ export default (h) => {
   // ---- layout, keyboard, states -----------------------------------------------------------------------------
   ui({
     id: 'list.responsive-390',
-    title: 'List: at 390px nothing overflows, the cards stack, every card action is reachable; RTL does not overflow',
+    title:
+      'List: at 390px nothing overflows, the cards stack, every card action is reachable; RTL does not overflow',
     run: async (c) => {
       const o = c.obs;
       const f = await createFlow(c, { label: 'r', pub: true, category: 'welcome' });
       await c.page.setViewportSize({ width: 390, height: 800 });
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
-      o.set('low.overflowX.390', await c.page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)));
+      o.set(
+        'low.overflowX.390',
+        await c.page.evaluate(() =>
+          Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+        ),
+      );
       const card = cardOf(c, f.name);
       const box = await card.boundingBox();
       o.flag('card.fitsViewport', !!box && box.x >= -1 && box.x + box.width <= 391);
@@ -721,21 +938,39 @@ export default (h) => {
         if (b && b.x >= -1 && b.x + b.width <= 391 && b.width >= 20 && b.height >= 20) reachable++;
       }
       o.num('card.actionsReachable', reachable);
-      o.flag('create.visible', await c.loc(S.create).first().isVisible().catch(() => false));
+      o.flag(
+        'create.visible',
+        await c
+          .loc(S.create)
+          .first()
+          .isVisible()
+          .catch(() => false),
+      );
       await c.page.setViewportSize({ width: 820, height: 900 });
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
-      o.set('low.overflowX.820', await c.page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)));
+      o.set(
+        'low.overflowX.820',
+        await c.page.evaluate(() =>
+          Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+        ),
+      );
       await c.page.setViewportSize({ width: 1366, height: 900 });
       await c.page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
       await c.page.waitForTimeout(300);
-      o.set('low.overflowX.rtl', await c.page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)));
+      o.set(
+        'low.overflowX.rtl',
+        await c.page.evaluate(() =>
+          Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+        ),
+      );
       await c.shot('rtl');
     },
   });
 
   ui({
     id: 'list.keyboard',
-    title: 'List: Tab reaches search and the card actions, Enter pauses, Escape closes the confirm, Enter confirms',
+    title:
+      'List: Tab reaches search and the card actions, Enter pauses, Escape closes the confirm, Enter confirms',
     run: async (c) => {
       const o = c.obs;
       const f = await createFlow(c, { label: 'k', pub: true });
@@ -745,7 +980,9 @@ export default (h) => {
       let reached = false;
       for (let i = 0; i < 80 && !reached; i++) {
         await c.page.keyboard.press('Tab');
-        reached = await c.page.evaluate(() => document.activeElement?.matches('input[type=search]'));
+        reached = await c.page.evaluate(() =>
+          document.activeElement?.matches('input[type=search]'),
+        );
       }
       o.flag('tabReachesSearch', reached);
       // the pause button of the card takes keyboard activation
@@ -761,10 +998,23 @@ export default (h) => {
       await card.locator('a, button').first().focus();
       const order = [];
       for (let i = 0; i < 7; i++) {
-        order.push(await c.page.evaluate(() => (document.activeElement?.getAttribute('title') ?? document.activeElement?.textContent ?? '').trim().slice(0, 14)));
+        order.push(
+          await c.page.evaluate(() =>
+            (
+              document.activeElement?.getAttribute('title') ??
+              document.activeElement?.textContent ??
+              ''
+            )
+              .trim()
+              .slice(0, 14),
+          ),
+        );
         await c.page.keyboard.press('Tab');
       }
-      o.seq('card.tabOrder', order.map((t) => t.replace(/^(Pause|Resume)$/, 'Toggle')));
+      o.seq(
+        'card.tabOrder',
+        order.map((t) => t.replace(/^(Pause|Resume)$/, 'Toggle')),
+      );
       // the confirm dialog: Escape cancels, Enter on the focused confirm button deletes
       await card.locator(ACT.del).first().focus();
       await c.page.keyboard.press('Enter');
@@ -777,7 +1027,9 @@ export default (h) => {
       await card.locator(ACT.del).first().focus();
       await c.page.keyboard.press('Enter');
       await c.visible(confirmEls.box, undefined, 3000);
-      const focusOnAccept = await c.page.evaluate(() => /^delete$/i.test((document.activeElement?.textContent ?? '').trim()));
+      const focusOnAccept = await c.page.evaluate(() =>
+        /^delete$/i.test((document.activeElement?.textContent ?? '').trim()),
+      );
       o.flag('confirm.initialFocusOnAccept', focusOnAccept);
       await c.loc(confirmEls.accept).first().focus();
       await c.page.keyboard.press('Enter');
@@ -788,44 +1040,83 @@ export default (h) => {
 
   ui({
     id: 'list.states',
-    title: 'List: a failing refresh, offline, a failing action and the empty state keep the page usable',
+    title:
+      'List: a failing refresh, offline, a failing action and the empty state keep the page usable',
     run: async (c) => {
       const o = c.obs;
       const f = await createFlow(c, { label: 's', pub: true });
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       const refresh = (req) =>
         req.method() === 'GET' &&
-        (WD(c) ? /\/flows(\?|$)/.test(req.url()) && /partial=1/.test(req.url()) : /\/api\/v2\/flows(\?|$)/.test(req.url()));
+        (WD(c)
+          ? /\/flows(\?|$)/.test(req.url()) && /partial=1/.test(req.url())
+          : /\/api\/v2\/flows(\?|$)/.test(req.url()));
       // 1. the data request fails
       const dispose = await c.failRequests(refresh, 500);
       await c.click(S.tab('paused'));
       await settle(c, 1500);
       const failText = await bodyText(c);
-      o.flag('refreshFail.feedback', /could not|failed|error|try again|retry/i.test(failText.replace(/zz-flb-\S+/g, '')));
+      o.flag(
+        'refreshFail.feedback',
+        /could not|failed|error|try again|retry/i.test(failText.replace(/zz-flb-\S+/g, '')),
+      );
       o.flag('refreshFail.pageStillHasTabs', await c.visible(S.tab('live')));
       await dispose();
       await c.click(S.tab('all'));
       await settle(c, 1500);
       o.flag('refreshFail.recovers', (await cardCount(c)) > 0);
       // 2. the toggle fails
-      const d2 = await c.failRequests((req) => req.method() === 'POST' && /\/toggle/.test(req.url()), 500);
+      const d2 = await c.failRequests(
+        (req) => req.method() === 'POST' && /\/toggle/.test(req.url()),
+        500,
+      );
       await cardOf(c, f.name).locator(ACT.toggle).first().click();
       await settle(c, 1500);
-      o.flag('toggleFail.feedback', /could not|failed|error|try again/i.test((await bodyText(c)).replace(/zz-flb-\S+/g, '')));
+      o.flag(
+        'toggleFail.feedback',
+        /could not|failed|error|try again/i.test((await bodyText(c)).replace(/zz-flb-\S+/g, '')),
+      );
       o.enum('toggleFail.state', (await flowById(c, f.id))?.state);
-      o.flag('toggleFail.buttonUsable', await cardOf(c, f.name).locator(ACT.toggle).first().isEnabled().catch(() => false));
+      o.flag(
+        'toggleFail.buttonUsable',
+        await cardOf(c, f.name)
+          .locator(ACT.toggle)
+          .first()
+          .isEnabled()
+          .catch(() => false),
+      );
       await d2();
       // 3. offline
       await c.context.setOffline(true);
-      await cardOf(c, f.name).locator(ACT.toggle).first().click().catch(() => undefined);
+      await cardOf(c, f.name)
+        .locator(ACT.toggle)
+        .first()
+        .click()
+        .catch(() => undefined);
       await settle(c, 1500);
-      o.enum('offline.state', (await c.context.setOffline(false), (await flowById(c, f.id))?.state));
+      o.enum(
+        'offline.state',
+        (await c.context.setOffline(false), (await flowById(c, f.id))?.state),
+      );
       // 4. a miss is the empty state, with both ways out
       await openList(c, `?q=${encodeURIComponent(scope(c) + '-no-such')}`);
       o.flag('empty.message', await seen(c, /no flows match/i, 2000));
-      o.flag('empty.reset', (await c.page.getByRole('button', { name: /reset/i }).count()) + (await c.page.getByRole('link', { name: /reset/i }).count()) > 0);
-      o.flag('empty.create', (await c.page.getByRole('button', { name: /create flow/i }).count()) + (await c.page.getByRole('link', { name: /create flow/i }).count()) > 1);
-      const reset = c.page.getByRole('button', { name: /reset/i }).or(c.page.getByRole('link', { name: /reset/i })).first();
+      o.flag(
+        'empty.reset',
+        (await c.page.getByRole('button', { name: /reset/i }).count()) +
+          (await c.page.getByRole('link', { name: /reset/i }).count()) >
+          0,
+      );
+      o.flag(
+        'empty.create',
+        (await c.page.getByRole('button', { name: /create flow/i }).count()) +
+          (await c.page.getByRole('link', { name: /create flow/i }).count()) >
+          1,
+      );
+      const reset = c.page
+        .getByRole('button', { name: /reset/i })
+        .or(c.page.getByRole('link', { name: /reset/i }))
+        .first();
       if (await reset.count()) {
         await reset.click();
         await settle(c, 1200);
@@ -840,11 +1131,31 @@ export default (h) => {
   // row actions (WD-FLB-004 pause / resume, 005 rename, 006 duplicate, 007 delete)
   // ===============================================================================================================
   const pill = async (c, name) => {
-    const t = await cardOf(c, name).innerText().catch(() => '');
+    const t = await cardOf(c, name)
+      .innerText()
+      .catch(() => '');
     return /\b(LIVE|PAUSED|DRAFT)\b/i.exec(t)?.[1]?.toLowerCase() ?? 'none';
   };
-  const requestsTo = (c, mark, re) => c.rec.since(mark).http.filter((x) => re.test(x.path) && x.method !== 'GET');
-  const klass = (s) => (s >= 200 && s < 300 ? 'ok' : s === 302 ? 'ok' : s === 401 ? 'unauthenticated' : s === 403 ? 'forbidden' : s === 404 ? 'not-found' : s === 409 ? 'conflict' : s === 429 ? 'throttled' : s >= 500 ? 'crash' : 'rejected');
+  const requestsTo = (c, mark, re) =>
+    c.rec.since(mark).http.filter((x) => re.test(x.path) && x.method !== 'GET');
+  const klass = (s) =>
+    s >= 200 && s < 300
+      ? 'ok'
+      : s === 302
+        ? 'ok'
+        : s === 401
+          ? 'unauthenticated'
+          : s === 403
+            ? 'forbidden'
+            : s === 404
+              ? 'not-found'
+              : s === 409
+                ? 'conflict'
+                : s === 429
+                  ? 'throttled'
+                  : s >= 500
+                    ? 'crash'
+                    : 'rejected';
 
   ui({
     id: 'action.toggle',
@@ -860,7 +1171,10 @@ export default (h) => {
       o.flag('pause.toast', await seen(c, /flow paused/i, 4000));
       await settle(c, 1000);
       o.enum('pause.pill', await pill(c, live.name));
-      o.enum('pause.buttonTitle', await cardOf(c, live.name).locator(ACT.toggle).first().getAttribute('title'));
+      o.enum(
+        'pause.buttonTitle',
+        await cardOf(c, live.name).locator(ACT.toggle).first().getAttribute('title'),
+      );
       o.enum('pause.api', (await flowById(c, live.id))?.state);
       const mid = await counts(c);
       o.num('pause.delta.live', mid.live - before.live);
@@ -898,7 +1212,10 @@ export default (h) => {
       const f = await createFlow(c, { label: 'ids', pub: true });
       const foreign = foreignFlow(c, `zz-flb-${c.tag('foreign')}`);
       const unknown = WD(c) ? '999999999' : uuid();
-      const t = async (id) => (WD(c) ? c.http('POST', `/flows/${id}/toggle`) : c.http('POST', `/v2/flows/${id}/toggle`, { headers: idem() }));
+      const t = async (id) =>
+        WD(c)
+          ? c.http('POST', `/flows/${id}/toggle`)
+          : c.http('POST', `/v2/flows/${id}/toggle`, { headers: idem() });
       o.enum('unknown', klass((await t(unknown)).status));
       o.enum('foreign', klass((await t(foreign.id)).status));
       o.flag('foreign.untouched', foreign.exists());
@@ -923,8 +1240,16 @@ export default (h) => {
     } else {
       await card.locator(ACT.rename).first().click();
       const dlg = c.page.locator('dialog[open]');
-      out.opened = await dlg.waitFor({ timeout: 5000 }).then(() => true).catch(() => false);
-      out.prefilled = (await dlg.locator('input').first().inputValue().catch(() => null)) === name;
+      out.opened = await dlg
+        .waitFor({ timeout: 5000 })
+        .then(() => true)
+        .catch(() => false);
+      out.prefilled =
+        (await dlg
+          .locator('input')
+          .first()
+          .inputValue()
+          .catch(() => null)) === name;
       await dlg.locator('input').first().fill(value);
       await dlg.getByRole('button', { name: /^rename$/i }).click();
     }
@@ -941,7 +1266,11 @@ export default (h) => {
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       let current = f.name;
       const attempt = async (id, value, expectFind) => {
-        await c.page.waitForFunction(() => !/flow renamed/i.test(document.body.innerText), undefined, { timeout: 12000 }).catch(() => undefined);
+        await c.page
+          .waitForFunction(() => !/flow renamed/i.test(document.body.innerText), undefined, {
+            timeout: 12000,
+          })
+          .catch(() => undefined);
         const mark = c.rec.mark();
         const r = await renameViaUi(c, current, value);
         const reqs = requestsTo(c, mark, /rename/);
@@ -953,7 +1282,12 @@ export default (h) => {
         o.flag(`${id}.changed`, stored !== current);
         o.num(`${id}.storedLength`, stored.length);
         o.flag(`${id}.toast`, await seen(c, /flow renamed/i, 1500));
-        o.flag(`${id}.feedback`, /could not|failed|error|invalid|must not|too long|required/i.test((await bodyText(c)).replace(/zz-flb-\S+/g, '')));
+        o.flag(
+          `${id}.feedback`,
+          /could not|failed|error|invalid|must not|too long|required/i.test(
+            (await bodyText(c)).replace(/zz-flb-\S+/g, ''),
+          ),
+        );
         if (stored !== current) {
           current = stored;
           if (!expectFind) {
@@ -1010,7 +1344,10 @@ export default (h) => {
         const f = await createFlow(c, { label: 'rn' });
         const r = WD(c)
           ? await c.http('POST', `/flows/${f.id}/rename`, { data: { name: value } })
-          : await c.http('PATCH', `/v2/flows/${f.id}/rename`, { data: { name: value }, headers: idem() });
+          : await c.http('PATCH', `/v2/flows/${f.id}/rename`, {
+              data: { name: value },
+              headers: idem(),
+            });
         const accepted = r.status === 200;
         o.flag('accepted', accepted);
         o.enum('outcome', accepted ? 'saved' : r.status >= 500 ? 'crash' : 'rejected');
@@ -1039,25 +1376,47 @@ export default (h) => {
       o.enum('foreign', klass((await call(foreign.id)).status));
       o.flag('foreign.untouched', foreign.exists());
       o.enum('malformed', klass((await call('abc')).status));
-      o.enum('noBody', klass((await (WD(c) ? c.http('POST', `/flows/${unknown}/rename`, { data: {} }) : c.http('PATCH', `/v2/flows/${unknown}/rename`, { data: {}, headers: idem() }))).status));
+      o.enum(
+        'noBody',
+        klass(
+          (
+            await (WD(c)
+              ? c.http('POST', `/flows/${unknown}/rename`, { data: {} })
+              : c.http('PATCH', `/v2/flows/${unknown}/rename`, { data: {}, headers: idem() }))
+          ).status,
+        ),
+      );
     },
   });
 
   // ---- duplicate -------------------------------------------------------------------------------------------------
   ui({
     id: 'action.duplicate',
-    title: 'Duplicate: lands in the builder, "(Copy)", draft, keeps is_active, source untouched, double click',
+    title:
+      'Duplicate: lands in the builder, "(Copy)", draft, keeps is_active, source untouched, double click',
     run: async (c) => {
       const o = c.obs;
       await guard(c);
       const live = await createFlow(c, { label: 'live', pub: true, category: 'welcome' });
-      const paused = await createFlow(c, { label: 'paused', pub: true, active: false, category: 'cart' });
+      const paused = await createFlow(c, {
+        label: 'paused',
+        pub: true,
+        active: false,
+        category: 'cart',
+      });
       const draft = await createFlow(c, { label: 'draft' });
-      for (const [id, src] of [['live', live], ['paused', paused], ['draft', draft]]) {
+      for (const [id, src] of [
+        ['live', live],
+        ['paused', paused],
+        ['draft', draft],
+      ]) {
         await openList(c, `?q=${encodeURIComponent(scope(c))}`);
         const marker = new Set((await allFlows(c, scope(c))).map((f) => String(f.id)));
         await cardOf(c, src.name).locator(ACT.dup).first().click();
-        const landed = await c.page.waitForURL(/flows\/builder/, { timeout: 25000 }).then(() => true).catch(() => false);
+        const landed = await c.page
+          .waitForURL(/flows\/builder/, { timeout: 25000 })
+          .then(() => true)
+          .catch(() => false);
         o.flag(`${id}.landsInBuilder`, landed);
         o.flag(`${id}.landingHasId`, !!builderIdOf(c.page.url()));
         const copies = (await allFlows(c, scope(c))).filter((f) => !marker.has(String(f.id)));
@@ -1069,7 +1428,10 @@ export default (h) => {
         o.flag(`${id}.copyActive`, copy?.isActive);
         o.enum(`${id}.copyCategory`, copy?.category ?? 'none');
         o.enum(`${id}.copyType`, copy?.flowType);
-        o.flag(`${id}.landingIsTheCopy`, !!copy && String(builderIdOf(c.page.url())) === String(copy.id));
+        o.flag(
+          `${id}.landingIsTheCopy`,
+          !!copy && String(builderIdOf(c.page.url())) === String(copy.id),
+        );
         o.enum(`${id}.sourceStateAfter`, (await flowById(c, src.id))?.state);
         o.flag(`${id}.toast`, await seen(c, /flow duplicated/i, 2500));
       }
@@ -1089,11 +1451,15 @@ export default (h) => {
     title: 'Duplicate by API: long names, unknown and foreign ids',
     run: async (c) => {
       const o = c.obs;
-      const call = (id) => (WD(c) ? c.http('POST', `/flows/${id}/duplicate`) : c.http('POST', `/v2/flows/${id}/duplicate`, { headers: idem() }));
+      const call = (id) =>
+        WD(c)
+          ? c.http('POST', `/flows/${id}/duplicate`)
+          : c.http('POST', `/v2/flows/${id}/duplicate`, { headers: idem() });
       const startIds = new Set((await allFlows(c)).map((f) => String(f.id)));
       const before = new Set(startIds);
       c.onCleanup(async () => {
-        for (const f of await allFlows(c, c.tagBase)) if (!startIds.has(String(f.id))) await removeFlow(c, f.id);
+        for (const f of await allFlows(c, c.tagBase))
+          if (!startIds.has(String(f.id))) await removeFlow(c, f.id);
       });
       const name = (n) => `zz-flb-${c.tag('dn')}-${rep(n)}`.slice(0, n);
       for (const n of [150, 191, 192, 250]) {
@@ -1103,7 +1469,9 @@ export default (h) => {
         before.add(String(f.id));
         const r = await call(f.id);
         o.enum(`len${n}.status`, klass(r.status));
-        const copies = (await allFlows(c, c.tagBase)).filter((x) => !before.has(String(x.id)) && String(x.id) !== String(f.id));
+        const copies = (await allFlows(c, c.tagBase)).filter(
+          (x) => !before.has(String(x.id)) && String(x.id) !== String(f.id),
+        );
         o.num(`len${n}.copies`, copies.length);
         o.num(`len${n}.copyNameLength`, copies[0]?.name?.length ?? null);
         o.flag(`len${n}.copyEndsWithCopy`, !!copies[0]?.name?.endsWith('(Copy)'));
@@ -1111,7 +1479,12 @@ export default (h) => {
       }
       const foreign = foreignFlow(c, `zz-flb-${c.tag('foreign')}`);
       o.enum('foreign', klass((await call(foreign.id)).status));
-      o.num('foreign.copiesMade', (await allFlows(c, foreign ? c.tagBase : '')).filter((x) => /\(Copy\)$/.test(x.name) && x.name.includes('foreign')).length);
+      o.num(
+        'foreign.copiesMade',
+        (await allFlows(c, foreign ? c.tagBase : '')).filter(
+          (x) => /\(Copy\)$/.test(x.name) && x.name.includes('foreign'),
+        ).length,
+      );
       o.enum('unknown', klass((await call(WD(c) ? '999999999' : uuid())).status));
     },
   });
@@ -1119,7 +1492,8 @@ export default (h) => {
   // ---- export ----------------------------------------------------------------------------------------------------
   const exportOf = async (c, id) =>
     WD(c) ? c.http('GET', `/flows/${id}/export`) : c.http('GET', `/v2/flows/${id}/export`);
-  const fileNameOf = (r) => /filename="?([^";]+)"?/i.exec(r.headers['content-disposition'] ?? '')?.[1] ?? null;
+  const fileNameOf = (r) =>
+    /filename="?([^";]+)"?/i.exec(r.headers['content-disposition'] ?? '')?.[1] ?? null;
   const shapeOf = (c, text, name) => {
     let j = null;
     try {
@@ -1149,7 +1523,12 @@ export default (h) => {
     tags: ['download'],
     run: async (c) => {
       const o = c.obs;
-      const f = await createFlow(c, { label: 'exp', pub: true, category: 'welcome', nodes: [trig('keyword'), N('message', 1, { text: 'a/b → café 你好' }), N('end', 2, {})] });
+      const f = await createFlow(c, {
+        label: 'exp',
+        pub: true,
+        category: 'welcome',
+        nodes: [trig('keyword'), N('message', 1, { text: 'a/b → café 你好' }), N('end', 2, {})],
+      });
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       const [dl] = await Promise.all([
         c.page.waitForEvent('download', { timeout: 20000 }),
@@ -1157,21 +1536,41 @@ export default (h) => {
       ]);
       const fileName = dl.suggestedFilename();
       o.enum('fileName', fileName.replace(/^.*?(\.[^.]+\.json)$/i, 'NAME$1'));
-      o.flag('fileName.startsWithSlug', fileName.toLowerCase().startsWith(f.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 20)));
+      o.flag(
+        'fileName.startsWithSlug',
+        fileName.toLowerCase().startsWith(
+          f.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .slice(0, 20),
+        ),
+      );
       const path = await dl.path();
       const text = readFileSync(path, 'utf8');
       const s = shapeOf(c, text, f.name);
-      for (const [k, v] of Object.entries(s)) o.set(Array.isArray(v) ? `seq.shape.${k}` : typeof v === 'boolean' ? `flag.shape.${k}` : `enum.shape.${k}`, Array.isArray(v) ? v : typeof v === 'boolean' ? v : String(v));
+      for (const [k, v] of Object.entries(s))
+        o.set(
+          Array.isArray(v)
+            ? `seq.shape.${k}`
+            : typeof v === 'boolean'
+              ? `flag.shape.${k}`
+              : `enum.shape.${k}`,
+          Array.isArray(v) ? v : typeof v === 'boolean' ? v : String(v),
+        );
       o.flag('prettyPrinted', /\n\s+"/.test(text));
       o.flag('unicodeRaw', text.includes('你好') && text.includes('café') && text.includes('→'));
       o.flag('slashesRaw', text.includes('a/b') && !text.includes('a\\/b'));
-      o.flag('noWorkspaceIds', !/workspace|user_id|"id":\s*\d{3,}/.test(text.replace(/"id":\s*"n\d+"/g, '')));
+      o.flag(
+        'noWorkspaceIds',
+        !/workspace|user_id|"id":\s*\d{3,}/.test(text.replace(/"id":\s*"n\d+"/g, '')),
+      );
     },
   });
 
   api({
     id: 'export.names',
-    title: 'Export by API: attachment names for awkward flow names; unknown, foreign, malformed ids',
+    title:
+      'Export by API: attachment names for awkward flow names; unknown, foreign, malformed ids',
     run: async (c) => {
       const o = c.obs;
       const nm = [
@@ -1185,7 +1584,10 @@ export default (h) => {
         ['upper', 'UPPER Case'],
       ];
       for (const [id, name] of nm) {
-        const f = await createFlow(c, { name: id === 'plain' || id === 'upper' ? `${name} ${c.tag('e')}` : name, label: id });
+        const f = await createFlow(c, {
+          name: id === 'plain' || id === 'upper' ? `${name} ${c.tag('e')}` : name,
+          label: id,
+        });
         if (!f.ok) {
           o.flag(`${id}.created`, false);
           continue;
@@ -1193,7 +1595,15 @@ export default (h) => {
         const r = await exportOf(c, f.id);
         o.status(`${id}.status`, r.status);
         const fn = fileNameOf(r);
-        o.enum(`${id}.fileName`, (fn ?? 'none').replace(c.tagBase, 'TAG').replace(String(f.id), 'ID').replace(/[0-9a-f]{8}-[0-9a-f-]{27}/g, 'ID').replace(/pwp-[a-z0-9-]+/gi, 'TAG').slice(0, 60));
+        o.enum(
+          `${id}.fileName`,
+          (fn ?? 'none')
+            .replace(c.tagBase, 'TAG')
+            .replace(String(f.id), 'ID')
+            .replace(/[0-9a-f]{8}-[0-9a-f-]{27}/g, 'ID')
+            .replace(/pwp-[a-z0-9-]+/gi, 'TAG')
+            .slice(0, 60),
+        );
         o.enum(`${id}.contentType`, (r.headers['content-type'] ?? '').split(';')[0]);
       }
       const foreign = foreignFlow(c, `zz-flb-${c.tag('foreign')}`);
@@ -1216,28 +1626,156 @@ export default (h) => {
     name: 'imported-name',
     flow_type: 'chat',
     category: 'welcome',
-    flow_data: { flowNodes: goodNodes(), flowEdges: [{ id: 'e', source: 'a', sourceHandle: 'out', target: 'b' }], vars: [] },
+    flow_data: {
+      flowNodes: goodNodes(),
+      flowEdges: [{ id: 'e', source: 'a', sourceHandle: 'out', target: 'b' }],
+      vars: [],
+    },
     ...over,
   });
   const importFiles = (tag) => [
-    ['wrapper', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-wrapper` }))) }],
-    ['bare-graph', { name: 'graph.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ flowNodes: goodNodes().concat(goodNodes().map((n) => ({ ...n, id: n.id + '2' }))) })) }],
-    ['plain-text-type', { name: 'flow.txt', mimeType: 'text/plain', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-txt` }))) }],
-    ['bad-flow-type', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-type`, flow_type: 'pigeon' }))) }],
-    ['blank-name', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: '   ' }))) }],
-    ['no-name-key', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ flow_data: wrapper().flow_data })) }],
-    ['xss-name', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-<img src=x onerror=window.__xss=1>` }))) }],
-    ['long-name', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-${rep(250)}`.slice(0, 250) }))) }],
-    ['nodes-without-position', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-nopos` }))) }],
-    ['not-json', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from('this is not json {') }],
-    ['json-array', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from('[1,2,3]') }],
+    [
+      'wrapper',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-wrapper` }))),
+      },
+    ],
+    [
+      'bare-graph',
+      {
+        name: 'graph.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(
+          JSON.stringify({
+            flowNodes: goodNodes().concat(goodNodes().map((n) => ({ ...n, id: n.id + '2' }))),
+          }),
+        ),
+      },
+    ],
+    [
+      'plain-text-type',
+      {
+        name: 'flow.txt',
+        mimeType: 'text/plain',
+        buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-txt` }))),
+      },
+    ],
+    [
+      'bad-flow-type',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(
+          JSON.stringify(wrapper({ name: `zz-flb-${tag}-type`, flow_type: 'pigeon' })),
+        ),
+      },
+    ],
+    [
+      'blank-name',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify(wrapper({ name: '   ' }))),
+      },
+    ],
+    [
+      'no-name-key',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify({ flow_data: wrapper().flow_data })),
+      },
+    ],
+    [
+      'xss-name',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(
+          JSON.stringify(wrapper({ name: `zz-flb-${tag}-<img src=x onerror=window.__xss=1>` })),
+        ),
+      },
+    ],
+    [
+      'long-name',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(
+          JSON.stringify(wrapper({ name: `zz-flb-${tag}-${rep(250)}`.slice(0, 250) })),
+        ),
+      },
+    ],
+    [
+      'nodes-without-position',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-nopos` }))),
+      },
+    ],
+    [
+      'not-json',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from('this is not json {'),
+      },
+    ],
+    [
+      'json-array',
+      { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from('[1,2,3]') },
+    ],
     ['json-scalar', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from('42') }],
-    ['no-flow-keys', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ hello: 'world' })) }],
-    ['nodes-not-list', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ flowNodes: 'x' })) }],
-    ['empty-nodes', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-nonodes`, flow_data: { flowNodes: [], flowEdges: [] } }))) }],
-    ['png', { name: 'pic.png', mimeType: 'image/png', buffer: Buffer.from('89504e470d0a1a0a0000000d49484452', 'hex') }],
+    [
+      'no-flow-keys',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify({ hello: 'world' })),
+      },
+    ],
+    [
+      'nodes-not-list',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify({ flowNodes: 'x' })),
+      },
+    ],
+    [
+      'empty-nodes',
+      {
+        name: 'flow.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(
+          JSON.stringify(
+            wrapper({ name: `zz-flb-${tag}-nonodes`, flow_data: { flowNodes: [], flowEdges: [] } }),
+          ),
+        ),
+      },
+    ],
+    [
+      'png',
+      {
+        name: 'pic.png',
+        mimeType: 'image/png',
+        buffer: Buffer.from('89504e470d0a1a0a0000000d49484452', 'hex'),
+      },
+    ],
     ['empty-file', { name: 'flow.json', mimeType: 'application/json', buffer: Buffer.alloc(0) }],
-    ['too-big', { name: 'big.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${tag}-big`, pad: rep(4 * 1024 * 1024 + 2048) }))) }],
+    [
+      'too-big',
+      {
+        name: 'big.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from(
+          JSON.stringify(wrapper({ name: `zz-flb-${tag}-big`, pad: rep(4 * 1024 * 1024 + 2048) })),
+        ),
+      },
+    ],
   ];
   for (const [fid] of importFiles('x')) {
     ui({
@@ -1275,7 +1813,17 @@ export default (h) => {
             break;
           }
           const lines = (await bodyText(c).catch(() => '')).split('\n').map((l) => l.trim());
-          if (lines.some((l) => l && !beforeText.has(l) && /not a valid|must be a file|must not be greater|failed to upload|plan limit/i.test(l))) break;
+          if (
+            lines.some(
+              (l) =>
+                l &&
+                !beforeText.has(l) &&
+                /not a valid|must be a file|must not be greater|failed to upload|plan limit/i.test(
+                  l,
+                ),
+            )
+          )
+            break;
           await sleep(250);
         }
         if (landed) toast = await seen(c, /flow imported/i, 2500);
@@ -1285,21 +1833,46 @@ export default (h) => {
         o.flag('landsInBuilder', landed);
         o.flag('landingHasId', !!builderIdOf(c.page.url()));
         // other people may be working in the same workspace: only the rows that are ours (tagged, or the default import name)
-        const mine = (f) => String(f.name).includes(c.tagBase) || String(f.name).startsWith('Imported flow');
+        const mine = (f) =>
+          String(f.name).includes(c.tagBase) || String(f.name).startsWith('Imported flow');
         const made = (await allFlows(c)).filter((f) => !beforeIds.has(String(f.id)) && mine(f));
         o.num('created', made.length);
         const m = newest(c, made);
-        o.enum('name', norm(c, m?.name ?? 'none', []).replace(new RegExp(`zz-flb-${tag}-`, 'g'), 'P-'));
+        o.enum(
+          'name',
+          norm(c, m?.name ?? 'none', []).replace(new RegExp(`zz-flb-${tag}-`, 'g'), 'P-'),
+        );
         o.num('nameLength', m ? m.name.length : null);
         o.enum('state', m?.state ?? 'none');
         o.enum('flowType', m?.flowType ?? 'none');
         o.enum('category', m?.category ?? 'none');
         o.flag('landingIsTheNewFlow', !!m && String(builderIdOf(c.page.url())) === String(m.id));
-        const fresh = (await bodyText(c)).split('\n').map((l) => l.trim()).filter((l) => l && !beforeText.has(l));
-        o.set('seq.messages', fresh.filter((l) => /valid|file|flow export|must|kilobytes|plan limit|upload/i.test(l) && !/flow imported/i.test(l)).map((l) => norm(c, l).replace(/WaDesk|CRM Platform/g, 'BRAND').slice(0, 160)));
+        const fresh = (await bodyText(c))
+          .split('\n')
+          .map((l) => l.trim())
+          .filter((l) => l && !beforeText.has(l));
+        o.set(
+          'seq.messages',
+          fresh
+            .filter(
+              (l) =>
+                /valid|file|flow export|must|kilobytes|plan limit|upload/i.test(l) &&
+                !/flow imported/i.test(l),
+            )
+            .map((l) =>
+              norm(c, l)
+                .replace(/WaDesk|CRM Platform/g, 'BRAND')
+                .slice(0, 160),
+            ),
+        );
         o.flag('sec.xssExecuted', fired);
         o.num('importRequests', requestsTo(c, mark, /import/).length);
-        o.enum('importStatus', requestsTo(c, mark, /import/)[0] ? klass(requestsTo(c, mark, /import/)[0].status) : 'none');
+        o.enum(
+          'importStatus',
+          requestsTo(c, mark, /import/)[0]
+            ? klass(requestsTo(c, mark, /import/)[0].status)
+            : 'none',
+        );
         await c.shot('after');
       },
     });
@@ -1311,15 +1884,30 @@ export default (h) => {
     run: async (c) => {
       const o = c.obs;
       await guard(c);
-      const src = await createFlow(c, { label: 'rt', pub: true, category: 'lead', flowType: 'chat', nodes: NODES('tag_added') });
+      const src = await createFlow(c, {
+        label: 'rt',
+        pub: true,
+        category: 'lead',
+        flowType: 'chat',
+        nodes: NODES('tag_added'),
+      });
       const r = await exportOf(c, src.id);
       const text = typeof r.body === 'string' ? r.body : JSON.stringify(r.body);
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       const before = new Set((await allFlows(c)).map((f) => String(f.id)));
-      await c.page.locator(S.fileInput).first().setInputFiles({ name: 'rt.json', mimeType: 'application/json', buffer: Buffer.from(text) });
+      await c.page
+        .locator(S.fileInput)
+        .first()
+        .setInputFiles({
+          name: 'rt.json',
+          mimeType: 'application/json',
+          buffer: Buffer.from(text),
+        });
       await c.page.waitForTimeout(2500);
       await settle(c, 1500);
-      const made = (await allFlows(c)).filter((f) => !before.has(String(f.id)) && String(f.name).includes(c.tagBase));
+      const made = (await allFlows(c)).filter(
+        (f) => !before.has(String(f.id)) && String(f.name).includes(c.tagBase),
+      );
       o.num('created', made.length);
       const got = newest(c, made);
       o.enum('name', norm(c, got?.name ?? 'none', [src.name]));
@@ -1327,7 +1915,13 @@ export default (h) => {
       o.enum('category', got?.category ?? 'none');
       const again = got ? await exportOf(c, got.id) : null;
       const a = shapeOf(c, text, src.name);
-      const b = again ? shapeOf(c, typeof again.body === 'string' ? again.body : JSON.stringify(again.body), got.name) : {};
+      const b = again
+        ? shapeOf(
+            c,
+            typeof again.body === 'string' ? again.body : JSON.stringify(again.body),
+            got.name,
+          )
+        : {};
       o.flag('sameNodeTypes', JSON.stringify(a.nodeTypes) === JSON.stringify(b.nodeTypes));
       o.flag('sameEdges', a.edgeCount === b.edgeCount);
       o.flag('sameTrigger', a.triggerKind === b.triggerKind);
@@ -1337,12 +1931,15 @@ export default (h) => {
   // ---- delete ----------------------------------------------------------------------------------------------------
   ui({
     id: 'action.delete.ui',
-    title: 'Delete: confirmation, cancel keeps, confirm removes, stays gone, counts drop, double click',
+    title:
+      'Delete: confirmation, cancel keeps, confirm removes, stays gone, counts drop, double click',
     run: async (c) => {
       const o = c.obs;
       const keep = await createFlow(c, { label: 'keep', pub: true });
       const gone = await createFlow(c, { label: 'gone', pub: true, category: 'welcome' });
-      const hostile = await createFlow(c, { name: `zz-flb-${c.tag('x')}-<img src=x onerror=window.__xss=1> "q" 'a'` });
+      const hostile = await createFlow(c, {
+        name: `zz-flb-${c.tag('x')}-<img src=x onerror=window.__xss=1> "q" 'a'`,
+      });
       let fired = false;
       await c.page.exposeFunction('__xssFired', () => (fired = true)).catch(() => undefined);
       await c.page.addInitScript(() => {
@@ -1360,10 +1957,23 @@ export default (h) => {
       const mark = c.rec.mark();
       await cardOf(c, gone.name).locator(ACT.del).first().click();
       o.flag('confirm.shown', await c.visible(confirmEls.box, undefined, 3000));
-      const msg = await c.loc(confirmEls.msg).first().innerText().catch(() => '');
+      const msg = await c
+        .loc(confirmEls.msg)
+        .first()
+        .innerText()
+        .catch(() => '');
       o.enum(
         'confirm.text',
-        norm(c, msg.replace(/\s+/g, ' ').replace(/^\s*Confirm\s+/, '').replace(/^Delete flow\?\s*/, '').replace(/\s*Cancel\s+Delete\s*$/, '').trim(), [gone.name]),
+        norm(
+          c,
+          msg
+            .replace(/\s+/g, ' ')
+            .replace(/^\s*Confirm\s+/, '')
+            .replace(/^Delete flow\?\s*/, '')
+            .replace(/\s*Cancel\s+Delete\s*$/, '')
+            .trim(),
+          [gone.name],
+        ),
       );
       o.flag('confirm.namesFlow', msg.includes(gone.name));
       await c.click(confirmEls.cancel);
@@ -1390,7 +2000,16 @@ export default (h) => {
       // a hostile name in the confirmation text
       await cardOf(c, hostile.name).locator(ACT.del).first().click();
       await c.visible(confirmEls.box, undefined, 3000);
-      o.flag('hostile.nameAsText', (await c.loc(confirmEls.msg).first().innerText().catch(() => '')).includes('<img src=x'));
+      o.flag(
+        'hostile.nameAsText',
+        (
+          await c
+            .loc(confirmEls.msg)
+            .first()
+            .innerText()
+            .catch(() => '')
+        ).includes('<img src=x'),
+      );
       await c.click(confirmEls.cancel);
       o.flag('sec.xssExecuted', fired);
       // a double click on the confirm button deletes once and does not crash
@@ -1401,19 +2020,32 @@ export default (h) => {
       await accept.dblclick({ timeout: 3000 }).catch(() => undefined);
       await settle(c, 1500);
       o.flag('double.flowGone', !(await flowById(c, keep.id)));
-      o.flag('double.noCrash', c.rec.since(m2).pageErrors.length === 0 && !c.rec.since(m2).http.some((x) => x.status >= 500));
-      o.num('double.deleteRequests', requestsTo(c, m2, /\/flows\/[\w-]+$/).length > 1 ? 2 : requestsTo(c, m2, /\/flows\/[\w-]+$/).length);
+      o.flag(
+        'double.noCrash',
+        c.rec.since(m2).pageErrors.length === 0 &&
+          !c.rec.since(m2).http.some((x) => x.status >= 500),
+      );
+      o.num(
+        'double.deleteRequests',
+        requestsTo(c, m2, /\/flows\/[\w-]+$/).length > 1
+          ? 2
+          : requestsTo(c, m2, /\/flows\/[\w-]+$/).length,
+      );
     },
   });
 
   api({
     id: 'delete.api',
-    title: 'Delete by API: twice, unknown, foreign (stays), malformed; a deleted flow cannot be exported or renamed',
+    title:
+      'Delete by API: twice, unknown, foreign (stays), malformed; a deleted flow cannot be exported or renamed',
     run: async (c) => {
       const o = c.obs;
       const f = await createFlow(c, { label: 'del', pub: true });
       const foreign = foreignFlow(c, `zz-flb-${c.tag('foreign')}`);
-      const del = (id) => (WD(c) ? c.http('DELETE', `/flows/${id}`) : c.http('DELETE', `/v2/flows/${id}`, { headers: idem() }));
+      const del = (id) =>
+        WD(c)
+          ? c.http('DELETE', `/flows/${id}`)
+          : c.http('DELETE', `/v2/flows/${id}`, { headers: idem() });
       o.enum('first', klass((await del(f.id)).status));
       o.enum('second', klass((await del(f.id)).status));
       o.enum('exportAfter', klass((await exportOf(c, f.id)).status));
@@ -1431,7 +2063,8 @@ export default (h) => {
   const b32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
   const totp = (secret, t = Date.now()) => {
     let bits = '';
-    for (const ch of secret.replace(/[\s=]/g, '').toUpperCase()) bits += b32.indexOf(ch).toString(2).padStart(5, '0');
+    for (const ch of secret.replace(/[\s=]/g, '').toUpperCase())
+      bits += b32.indexOf(ch).toString(2).padStart(5, '0');
     const key = Buffer.from(bits.match(/.{8}/g).map((b) => parseInt(b, 2)));
     const ctr = Buffer.alloc(8);
     ctr.writeBigUInt64BE(BigInt(Math.floor(t / 30000)));
@@ -1447,15 +2080,27 @@ export default (h) => {
   async function operatorSession(c) {
     if (WD(c)) return;
     const op = c.cfg.ours.operator;
-    if (!op?.email) throw new Error('PARITY_CONFIG has no ours.operator { email, password, totpSecret }: the admin screens need a platform operator');
+    if (!op?.email)
+      throw new Error(
+        'PARITY_CONFIG has no ours.operator { email, password, totpSecret }: the admin screens need a platform operator',
+      );
     const web = c.sideObj.baseUrl.replace(/\/$/, '');
     const probe = async () =>
-      (await c.context.request.get(`${web}/api/platform/flow-templates?limit=1`, { failOnStatusCode: false })).ok();
+      (
+        await c.context.request.get(`${web}/api/platform/flow-templates?limit=1`, {
+          failOnStatusCode: false,
+        })
+      ).ok();
     await c.context.clearCookies();
     if (opCookies) {
       await c.context.addCookies(opCookies);
       if (await probe()) return;
-      await c.context.request.get(`${web}/api/platform-auth/refresh?next=/admin`, { maxRedirects: 0, failOnStatusCode: false }).catch(() => undefined);
+      await c.context.request
+        .get(`${web}/api/platform-auth/refresh?next=/admin`, {
+          maxRedirects: 0,
+          failOnStatusCode: false,
+        })
+        .catch(() => undefined);
       if (await probe()) {
         opCookies = (await c.context.storageState()).cookies;
         return;
@@ -1463,7 +2108,10 @@ export default (h) => {
       await c.context.clearCookies();
     }
     for (let attempt = 0; attempt < 3; attempt++) {
-      const lr = await c.context.request.post(`${web}/api/platform-auth/login`, { data: { email: op.email, password: op.password }, failOnStatusCode: false });
+      const lr = await c.context.request.post(`${web}/api/platform-auth/login`, {
+        data: { email: op.email, password: op.password },
+        failOnStatusCode: false,
+      });
       const j = await lr.json().catch(() => ({}));
       if (j.status === 'mfa_required') {
         let step = Math.floor(Date.now() / 30000);
@@ -1503,7 +2151,14 @@ export default (h) => {
     return { status: r.status(), body, text, headers: r.headers() };
   };
 
-  const TPL_GRAPH = () => graphOf([trig('keyword'), N('message', 1, { text: 'hello' }), N('delay', 2, { amount: 1, unit: 'min' }), N('message', 3, { text: 'bye' }), N('end', 4, {})]);
+  const TPL_GRAPH = () =>
+    graphOf([
+      trig('keyword'),
+      N('message', 1, { text: 'hello' }),
+      N('delay', 2, { amount: 1, unit: 'min' }),
+      N('message', 3, { text: 'bye' }),
+      N('end', 4, {}),
+    ]);
   const tplName = (c, label = 't') => `zz-flb-tpl-${c.tag(label)}`;
 
   const tplRow = (c, name) => {
@@ -1574,15 +2229,23 @@ export default (h) => {
         is_active: o.active === false ? '0' : '1',
       };
       if (graph !== null) mp.flow_json = typeof graph === 'string' ? graph : JSON.stringify(graph);
-      if (o.file) mp.flow_file = { name: 'tpl.json', mimeType: 'application/json', buffer: Buffer.from(o.file) };
+      if (o.file)
+        mp.flow_file = {
+          name: 'tpl.json',
+          mimeType: 'application/json',
+          buffer: Buffer.from(o.file),
+        };
       if (o.sourceFlowId != null) mp.source_flow_id = String(o.sourceFlowId);
       r = await c.http('POST', '/admin/flow-templates', { multipart: mp });
     } else {
       let payload;
-      const text = o.file ?? (typeof graph === 'string' ? graph : graph === null ? null : JSON.stringify(graph));
+      const text =
+        o.file ??
+        (typeof graph === 'string' ? graph : graph === null ? null : JSON.stringify(graph));
       try {
         payload = text ? JSON.parse(text) : undefined;
-        if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) payload = undefined;
+        if (payload === null || typeof payload !== 'object' || Array.isArray(payload))
+          payload = undefined;
       } catch {
         payload = undefined;
       }
@@ -1605,7 +2268,9 @@ export default (h) => {
     const b = r.body && typeof r.body === 'object' ? r.body : {};
     const camel = (k) => k.replace(/_([a-z])/g, (_, m) => m.toUpperCase());
     if (WD(c)) return Object.keys(b.errors ?? {}).map((k) => camel(k.replace(/\.\d+$/, '')));
-    return (Array.isArray(b.errors) ? b.errors : []).map((e) => String(e.path).replace(/\.\d+$/, ''));
+    return (Array.isArray(b.errors) ? b.errors : []).map((e) =>
+      String(e.path).replace(/\.\d+$/, ''),
+    );
   };
 
   // ---- the category and the name a flow is saved with (WD-FLB-013) -----------------------------------------------
@@ -1634,14 +2299,29 @@ export default (h) => {
       run: async (c) => {
         const o = c.obs;
         const base = `zz-flb-${c.tag('sv')}`;
-        const name = over.pad ? (base + rep(over.pad)).slice(0, over.pad) : over.padName ? `   ${base}   ` : over.name !== undefined ? over.name : base;
-        const f = await createFlow(c, { name, category: over.category === undefined ? null : over.category, flowType: over.flowType ?? 'chat' });
+        const name = over.pad
+          ? (base + rep(over.pad)).slice(0, over.pad)
+          : over.padName
+            ? `   ${base}   `
+            : over.name !== undefined
+              ? over.name
+              : base;
+        const f = await createFlow(c, {
+          name,
+          category: over.category === undefined ? null : over.category,
+          flowType: over.flowType ?? 'chat',
+        });
         o.flag('accepted', f.ok);
         o.enum('outcome', f.ok ? 'saved' : f.r.status >= 500 ? 'crash' : 'rejected');
         o.enum('statusClass', klass(f.r.status));
         if (f.ok) {
           const got = await flowById(c, f.id);
-          o.enum('stored.category', got?.category === null || got?.category === undefined ? 'null' : norm(c, got.category).slice(0, 80));
+          o.enum(
+            'stored.category',
+            got?.category === null || got?.category === undefined
+              ? 'null'
+              : norm(c, got.category).slice(0, 80),
+          );
           o.num('stored.nameLength', got ? [...got.name].length : null);
           o.flag('stored.nameTrimmed', got ? got.name === got.name.trim() : null);
           o.enum('stored.type', got?.flowType);
@@ -1685,17 +2365,67 @@ export default (h) => {
     ['type-bogus', { flowType: 'pigeon' }],
     ['type-empty', { flowType: '' }],
     ['hidden', { active: false }],
-    ['graph-bare', { graph: { flowNodes: [{ id: 'a', type: 'trigger', data: { kind: 'keyword', keywords: 'x' } }, { type: 'end', data: {} }], flowEdges: [] } }],
-    ['graph-wrapper-flow-data', { graph: { _wadesk_flow_export: 1, name: 'x', flow_data: { flowNodes: [{ type: 'end', data: {} }], flowEdges: [] } } }],
+    [
+      'graph-bare',
+      {
+        graph: {
+          flowNodes: [
+            { id: 'a', type: 'trigger', data: { kind: 'keyword', keywords: 'x' } },
+            { type: 'end', data: {} },
+          ],
+          flowEdges: [],
+        },
+      },
+    ],
+    [
+      'graph-wrapper-flow-data',
+      {
+        graph: {
+          _wadesk_flow_export: 1,
+          name: 'x',
+          flow_data: { flowNodes: [{ type: 'end', data: {} }], flowEdges: [] },
+        },
+      },
+    ],
     ['graph-none', { graph: null }],
     ['graph-not-json', { graph: 'this is not json {' }],
     ['graph-no-nodes-key', { graph: { hello: 'world' } }],
     ['graph-nodes-not-list', { graph: { flowNodes: 'x' } }],
     ['graph-empty-nodes', { graph: { flowNodes: [], flowEdges: [] } }],
     ['graph-array', { graph: '[1,2,3]' }],
-    ['graph-file', { graph: null, file: JSON.stringify({ flowNodes: [{ type: 'end', data: {} }], flowEdges: [] }) }],
-    ['graph-file-over-paste', { graph: { flowNodes: [{ type: 'end', data: {} }, { type: 'end', data: {} }], flowEdges: [] }, file: JSON.stringify({ flowNodes: [{ type: 'end', data: {} }], flowEdges: [] }) }],
-    ['graph-file-bad-json-paste-ok', { graph: { flowNodes: [{ type: 'end', data: {} }, { type: 'end', data: {} }], flowEdges: [] }, file: 'not json at all' }],
+    [
+      'graph-file',
+      {
+        graph: null,
+        file: JSON.stringify({ flowNodes: [{ type: 'end', data: {} }], flowEdges: [] }),
+      },
+    ],
+    [
+      'graph-file-over-paste',
+      {
+        graph: {
+          flowNodes: [
+            { type: 'end', data: {} },
+            { type: 'end', data: {} },
+          ],
+          flowEdges: [],
+        },
+        file: JSON.stringify({ flowNodes: [{ type: 'end', data: {} }], flowEdges: [] }),
+      },
+    ],
+    [
+      'graph-file-bad-json-paste-ok',
+      {
+        graph: {
+          flowNodes: [
+            { type: 'end', data: {} },
+            { type: 'end', data: {} },
+          ],
+          flowEdges: [],
+        },
+        file: 'not json at all',
+      },
+    ],
   ];
   for (const [id, over] of tplCases) {
     ui({
@@ -1709,11 +2439,16 @@ export default (h) => {
         const o2 = { ...over };
         if (o2.pad) {
           const base = `zz-flb-tpl-${c.tag('n')}-`;
-          o2.name = o2.emoji ? base + '😀'.repeat(Math.max(0, o2.pad - [...base].length)) : (base + rep(o2.pad)).slice(0, o2.pad);
+          o2.name = o2.emoji
+            ? base + '😀'.repeat(Math.max(0, o2.pad - [...base].length))
+            : (base + rep(o2.pad)).slice(0, o2.pad);
           delete o2.pad;
           delete o2.emoji;
         }
-        if (o2.name === undefined || (o2.name !== '' && o2.name.trim() !== '' && !o2.name.startsWith('zz-flb-tpl-'))) {
+        if (
+          o2.name === undefined ||
+          (o2.name !== '' && o2.name.trim() !== '' && !o2.name.startsWith('zz-flb-tpl-'))
+        ) {
           const salt = tplName(c, 'n');
           o2.name = o2.name === undefined ? salt : `${salt} ${o2.name}`;
         }
@@ -1722,9 +2457,23 @@ export default (h) => {
         o.enum('outcomeClass', t.r.status >= 500 ? 'crash' : t.created ? 'saved' : 'rejected');
         if (!id.startsWith('graph')) o.list('flagged', flagsOf(c, t.r));
         const row = normTpl(c, t.row);
-        o.set('map.stored', row ? { ...row, name: row.name.length > 40 ? `len${[...t.row.name].length}` : row.name.replace(/NAME/g, 'N') } : null);
+        o.set(
+          'map.stored',
+          row
+            ? {
+                ...row,
+                name:
+                  row.name.length > 40
+                    ? `len${[...t.row.name].length}`
+                    : row.name.replace(/NAME/g, 'N'),
+              }
+            : null,
+        );
         o.num('storedNameLength', t.row ? [...t.row.name].length : null);
-        o.num('storedDescriptionLength', t.row?.description != null ? [...t.row.description].length : null);
+        o.num(
+          'storedDescriptionLength',
+          t.row?.description != null ? [...t.row.description].length : null,
+        );
       },
     });
   }
@@ -1734,38 +2483,96 @@ export default (h) => {
   // ===============================================================================================================
   ui({
     id: 'tpl.gallery',
-    title: 'Gallery: active templates in order (sort, then newest), card text, hidden ones absent; Use template clones',
+    title:
+      'Gallery: active templates in order (sort, then newest), card text, hidden ones absent; Use template clones',
     run: async (c) => {
       const o = c.obs;
       trackTemplates(c);
       await guard(c);
       await operatorSession(c);
-      const chat = await createTemplate(c, { label: 'a', description: 'Welcome new customers and route them to the right team quickly.', category: 'welcome', sort: 5 });
-      const hidden = await createTemplate(c, { label: 'b', flowType: 'call', active: false, sort: 0 });
-      const ig = await createTemplate(c, { label: 'c', flowType: 'instagram', description: '', category: 'lead', sort: 2 });
+      const chat = await createTemplate(c, {
+        label: 'a',
+        description: 'Welcome new customers and route them to the right team quickly.',
+        category: 'welcome',
+        sort: 5,
+      });
+      const hidden = await createTemplate(c, {
+        label: 'b',
+        flowType: 'call',
+        active: false,
+        sort: 0,
+      });
+      const ig = await createTemplate(c, {
+        label: 'c',
+        flowType: 'instagram',
+        description: '',
+        category: 'lead',
+        sort: 2,
+      });
       const same = await createTemplate(c, { label: 'd', sort: 5, description: 'x'.repeat(200) });
       o.flag('made', chat.created && hidden.created && ig.created && same.created);
       // the tenant side: log in again as the tenant (ours: the base session of this context was the operator's)
       const tenant = await c.openAlso({ role: 'admin' });
       const tp = tenant.page;
       tp.setDefaultTimeout(30000);
-      await tp.goto(c.url('/flows?q=' + encodeURIComponent('no-such-flow-' + scope(c))), { waitUntil: 'load' });
-      await tp.locator('main h1').first().waitFor().catch(() => undefined);
+      await tp.goto(c.url('/flows?q=' + encodeURIComponent('no-such-flow-' + scope(c))), {
+        waitUntil: 'load',
+      });
+      await tp
+        .locator('main h1')
+        .first()
+        .waitFor()
+        .catch(() => undefined);
       await tp.waitForTimeout(2000);
-      const cardOfTpl = (name) => tp.locator('div').filter({ hasText: name }).filter({ has: tp.getByRole('button', { name: /use template/i }) }).last();
+      const cardOfTpl = (name) =>
+        tp
+          .locator('div')
+          .filter({ hasText: name })
+          .filter({ has: tp.getByRole('button', { name: /use template/i }) })
+          .last();
       const bodyOf = (await tp.locator('body').innerText()).split('\n');
       const names = [chat, hidden, ig, same].map((t) => t.name);
       o.flag('gallery.shown', /start from a template/i.test(bodyOf.join('\n')));
-      o.set('seq.gallery.order', [chat, ig, same, hidden].filter((t) => bodyOf.some((l) => l.includes(t.name))).sort((a, b) => bodyOf.findIndex((l) => l.includes(a.name)) - bodyOf.findIndex((l) => l.includes(b.name))).map((t) => ({ [chat.name]: 'a-sort5', [ig.name]: 'c-sort2', [same.name]: 'd-sort5-newer', [hidden.name]: 'b-hidden' })[t.name]));
+      o.set(
+        'seq.gallery.order',
+        [chat, ig, same, hidden]
+          .filter((t) => bodyOf.some((l) => l.includes(t.name)))
+          .sort(
+            (a, b) =>
+              bodyOf.findIndex((l) => l.includes(a.name)) -
+              bodyOf.findIndex((l) => l.includes(b.name)),
+          )
+          .map(
+            (t) =>
+              ({
+                [chat.name]: 'a-sort5',
+                [ig.name]: 'c-sort2',
+                [same.name]: 'd-sort5-newer',
+                [hidden.name]: 'b-hidden',
+              })[t.name],
+          ),
+      );
       o.flag('gallery.hiddenAbsent', !bodyOf.some((l) => l.includes(hidden.name)));
-      for (const [k, t] of [['a', chat], ['c', ig], ['d', same]]) {
+      for (const [k, t] of [
+        ['a', chat],
+        ['c', ig],
+        ['d', same],
+      ]) {
         const card = cardOfTpl(t.name);
-        o.set(`seq.gallery.card.${k}`, norm(c, await card.innerText().catch(() => ''), names).split('\n').map((l) => l.trim()).filter(Boolean));
+        o.set(
+          `seq.gallery.card.${k}`,
+          norm(c, await card.innerText().catch(() => ''), names)
+            .split('\n')
+            .map((l) => l.trim())
+            .filter(Boolean),
+        );
       }
       // Use template
       const flowsBefore = (await allFlows(c)).length;
       const countBefore = (await counts(c)).all;
-      await cardOfTpl(chat.name).getByRole('button', { name: /use template/i }).click();
+      await cardOfTpl(chat.name)
+        .getByRole('button', { name: /use template/i })
+        .click();
       await tp.waitForURL(/flows\/builder/, { timeout: 25000 }).catch(() => undefined);
       o.flag('clone.landsInBuilder', /flows\/builder/.test(tp.url()));
       o.flag('clone.landingHasId', !!builderIdOf(tp.url()));
@@ -1777,7 +2584,10 @@ export default (h) => {
       o.enum('clone.state', made[0]?.state ?? 'none');
       o.enum('clone.flowType', made[0]?.flowType ?? 'none');
       o.enum('clone.category', made[0]?.category ?? 'none');
-      o.flag('clone.landingIsTheCopy', !!made[0] && String(builderIdOf(tp.url())) === String(made[0].id));
+      o.flag(
+        'clone.landingIsTheCopy',
+        !!made[0] && String(builderIdOf(tp.url())) === String(made[0].id),
+      );
       o.num('clone.counter', normTpl(c, tplRow(c, chat.name)) ? tplRow(c, chat.name).clones : -1);
       // a second click makes a second copy (templates are patterns, not one-shots)
       await c.page.waitForTimeout(100);
@@ -1797,22 +2607,34 @@ export default (h) => {
       let id;
       let hiddenId;
       if (WD(c)) {
-        mysql(`insert into flow_templates (name, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(name)}', 'chat', '${q(g)}', 1, 0, now(), now())`);
-        mysql(`insert into flow_templates (name, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(name)}-hidden', 'chat', '${q(g)}', 0, 0, now(), now())`);
+        mysql(
+          `insert into flow_templates (name, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(name)}', 'chat', '${q(g)}', 1, 0, now(), now())`,
+        );
+        mysql(
+          `insert into flow_templates (name, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(name)}-hidden', 'chat', '${q(g)}', 0, 0, now(), now())`,
+        );
         id = mysql(`select id from flow_templates where name='${q(name)}'`);
         hiddenId = mysql(`select id from flow_templates where name='${q(name)}-hidden'`);
         c.onCleanup(() => mysql(`delete from flow_templates where name like '${q(name)}%'`));
       } else {
-        id = psql(`insert into flow_templates (name, flow_type, flow_data, is_active) values ('${q(name)}', 'chat', '${q(g)}'::jsonb, true) returning uuid`).split('\n')[0];
-        hiddenId = psql(`insert into flow_templates (name, flow_type, flow_data, is_active) values ('${q(name)}-hidden', 'chat', '${q(g)}'::jsonb, false) returning uuid`).split('\n')[0];
+        id = psql(
+          `insert into flow_templates (name, flow_type, flow_data, is_active) values ('${q(name)}', 'chat', '${q(g)}'::jsonb, true) returning uuid`,
+        ).split('\n')[0];
+        hiddenId = psql(
+          `insert into flow_templates (name, flow_type, flow_data, is_active) values ('${q(name)}-hidden', 'chat', '${q(g)}'::jsonb, false) returning uuid`,
+        ).split('\n')[0];
         c.onCleanup(() => psql(`delete from flow_templates where name like '${q(name)}%'`));
       }
       const startIds = new Set((await allFlows(c)).map((f) => String(f.id)));
       const before = new Set(startIds);
       c.onCleanup(async () => {
-        for (const f of await allFlows(c, c.tagBase)) if (!startIds.has(String(f.id))) await removeFlow(c, f.id);
+        for (const f of await allFlows(c, c.tagBase))
+          if (!startIds.has(String(f.id))) await removeFlow(c, f.id);
       });
-      const clone = (tid) => (WD(c) ? c.http('POST', `/flows/templates/${tid}/clone`) : c.http('POST', `/v2/flows/templates/${tid}/clone`, { headers: idem() }));
+      const clone = (tid) =>
+        WD(c)
+          ? c.http('POST', `/flows/templates/${tid}/clone`)
+          : c.http('POST', `/v2/flows/templates/${tid}/clone`, { headers: idem() });
       const r = await clone(id);
       o.enum('visible', klass(r.status));
       const made = (await allFlows(c, c.tagBase)).filter((f) => !before.has(String(f.id)));
@@ -1821,7 +2643,10 @@ export default (h) => {
       o.enum('createdName', norm(c, made[0]?.name ?? 'none', [name]));
       for (const f of made) before.add(String(f.id));
       o.enum('hidden', klass((await clone(hiddenId)).status));
-      o.num('hiddenCreated', (await allFlows(c, c.tagBase)).filter((f) => !before.has(String(f.id))).length);
+      o.num(
+        'hiddenCreated',
+        (await allFlows(c, c.tagBase)).filter((f) => !before.has(String(f.id))).length,
+      );
       o.enum('unknown', klass((await clone(WD(c) ? '999999999' : uuid())).status));
       o.enum('malformed', klass((await clone('abc')).status));
     },
@@ -1835,7 +2660,11 @@ export default (h) => {
     create: { wadesk: '/admin/flow-templates/create', ours: '/admin/flow-templates/new' },
   };
   const rowOfTpl = (c, name) =>
-    c.page.locator('div').filter({ hasText: name }).filter({ has: c.page.locator('[title="Edit"]') }).last();
+    c.page
+      .locator('div')
+      .filter({ hasText: name })
+      .filter({ has: c.page.locator('[title="Edit"]') })
+      .last();
   async function openAdmin(c, path = ADM.list, ready = 'h1') {
     c.page.setDefaultTimeout(30000);
     await operatorSession(c);
@@ -1851,26 +2680,94 @@ export default (h) => {
       const o = c.obs;
       trackTemplates(c);
       await operatorSession(c);
-      const long = 'This is a very long description for the template that is going to be cut by the list at ninety characters and then some more words.';
-      const a = await createTemplate(c, { label: 'a', description: long, category: 'welcome', sort: 3 });
+      const long =
+        'This is a very long description for the template that is going to be cut by the list at ninety characters and then some more words.';
+      const a = await createTemplate(c, {
+        label: 'a',
+        description: long,
+        category: 'welcome',
+        sort: 3,
+      });
       const b = await createTemplate(c, { label: 'b', flowType: 'call', active: false, sort: 1 });
-      const d = await createTemplate(c, { label: 'c', flowType: 'instagram', description: 'Instagram DM starter', category: 'lead', sort: 1 });
+      const d = await createTemplate(c, {
+        label: 'c',
+        flowType: 'instagram',
+        description: 'Instagram DM starter',
+        category: 'lead',
+        sort: 1,
+      });
       const names = [a, b, d].map((t) => t.name);
       await openAdmin(c);
-      for (const [k, t] of [['a', a], ['b', b], ['c', d]]) {
-        const t1 = await rowOfTpl(c, t.name).innerText().catch(() => '');
-        o.set(`seq.row.${k}`, norm(c, t1, names).split('\n').map((l) => l.trim()).filter(Boolean));
-        o.flag(`row.${k}.toggle`, (await rowOfTpl(c, t.name).locator('[title="Hide from tenants"], [title="Show to tenants"]').count()) > 0);
-        o.enum(`row.${k}.toggleTitle`, (await rowOfTpl(c, t.name).locator('[title="Hide from tenants"], [title="Show to tenants"]').first().getAttribute('title')) ?? 'none');
+      for (const [k, t] of [
+        ['a', a],
+        ['b', b],
+        ['c', d],
+      ]) {
+        const t1 = await rowOfTpl(c, t.name)
+          .innerText()
+          .catch(() => '');
+        o.set(
+          `seq.row.${k}`,
+          norm(c, t1, names)
+            .split('\n')
+            .map((l) => l.trim())
+            .filter(Boolean),
+        );
+        o.flag(
+          `row.${k}.toggle`,
+          (await rowOfTpl(c, t.name)
+            .locator('[title="Hide from tenants"], [title="Show to tenants"]')
+            .count()) > 0,
+        );
+        o.enum(
+          `row.${k}.toggleTitle`,
+          (await rowOfTpl(c, t.name)
+            .locator('[title="Hide from tenants"], [title="Show to tenants"]')
+            .first()
+            .getAttribute('title')) ?? 'none',
+        );
         o.flag(`row.${k}.edit`, (await rowOfTpl(c, t.name).locator('[title="Edit"]').count()) > 0);
-        o.flag(`row.${k}.delete`, (await rowOfTpl(c, t.name).locator('[title="Delete"]').count()) > 0);
+        o.flag(
+          `row.${k}.delete`,
+          (await rowOfTpl(c, t.name).locator('[title="Delete"]').count()) > 0,
+        );
       }
       const body = await bodyText(c);
       const order = names.map((n) => body.indexOf(n));
-      o.seq('order', [['a', order[0]], ['b', order[1]], ['c', order[2]]].sort((x, y) => x[1] - y[1]).map((x) => x[0]));
-      o.set('seq.pageLines', [...new Set(body.split('\n').map((l) => l.trim()).filter((l) => l && !/zz-flb/.test(l) && !/^[\d,]+$/.test(l) && l.length < 80 && !/^ADMIN|^Flow templates$|Template saved/.test(l)).filter((l) => /^(templates|total|visible to tenants|hidden|clone|new template)/i.test(l)).map((l) => l.replace(/\d+/g, 'N')))]);
+      o.seq(
+        'order',
+        [
+          ['a', order[0]],
+          ['b', order[1]],
+          ['c', order[2]],
+        ]
+          .sort((x, y) => x[1] - y[1])
+          .map((x) => x[0]),
+      );
+      o.set('seq.pageLines', [
+        ...new Set(
+          body
+            .split('\n')
+            .map((l) => l.trim())
+            .filter(
+              (l) =>
+                l &&
+                !/zz-flb/.test(l) &&
+                !/^[\d,]+$/.test(l) &&
+                l.length < 80 &&
+                !/^ADMIN|^Flow templates$|Template saved/.test(l),
+            )
+            .filter((l) =>
+              /^(templates|total|visible to tenants|hidden|clone|new template)/i.test(l),
+            )
+            .map((l) => l.replace(/\d+/g, 'N')),
+        ),
+      ]);
       await c.shot('admin-list');
-      o.flag('addButton', (await c.page.getByRole('link', { name: /add|new|create/i }).count()) > 0);
+      o.flag(
+        'addButton',
+        (await c.page.getByRole('link', { name: /add|new|create/i }).count()) > 0,
+      );
     },
   });
 
@@ -1884,17 +2781,31 @@ export default (h) => {
       o.flag('startedEmpty', existing === 0);
       await openAdmin(c);
       if (existing === 0) {
-        o.set('seq.empty', (await bodyText(c)).split('\n').map((l) => l.trim()).filter((l) => /no templates|first template|add your first|nothing here/i.test(l)));
-        o.flag('empty.addLink', (await c.page.getByRole('link', { name: /add|new|create/i }).count()) > 0);
+        o.set(
+          'seq.empty',
+          (await bodyText(c))
+            .split('\n')
+            .map((l) => l.trim())
+            .filter((l) => /no templates|first template|add your first|nothing here/i.test(l)),
+        );
+        o.flag(
+          'empty.addLink',
+          (await c.page.getByRole('link', { name: /add|new|create/i }).count()) > 0,
+        );
       }
       const dispose = await c.failRequests(
-        (req) => req.method() === 'GET' && (WD(c) ? false : /\/api\/platform\/flow-templates/.test(req.url())),
+        (req) =>
+          req.method() === 'GET' &&
+          (WD(c) ? false : /\/api\/platform\/flow-templates/.test(req.url())),
         500,
       );
       if (!WD(c)) {
         await c.goto(ADM.list, { ready: 'h1' });
         await c.page.waitForTimeout(3500);
-        o.flag('listFail.feedback', /could not|failed|error|try again|retry/i.test(await bodyText(c)));
+        o.flag(
+          'listFail.feedback',
+          /could not|failed|error|try again|retry/i.test(await bodyText(c)),
+        );
         o.flag('listFail.stillHasHeading', (await c.page.locator('h1').count()) > 0);
       } else {
         o.flag('listFail.feedback', true);
@@ -1906,7 +2817,7 @@ export default (h) => {
 
   ui({
     id: 'tpl.admin.toggle',
-    title: 'Admin templates: hide / show flips the chip and the tenants\' gallery',
+    title: "Admin templates: hide / show flips the chip and the tenants' gallery",
     run: async (c) => {
       const o = c.obs;
       trackTemplates(c);
@@ -1914,17 +2825,32 @@ export default (h) => {
       const t = await createTemplate(c, { label: 'tg' });
       await openAdmin(c);
       const gallery = async () => {
-        const r = WD(c) ? await c.http('GET', '/flows') : await c.http('GET', '/v2/flows/templates');
+        const r = WD(c)
+          ? await c.http('GET', '/flows')
+          : await c.http('GET', '/v2/flows/templates');
         return JSON.stringify(r.body ?? r.text ?? '').includes(t.name);
       };
       o.flag('visible.initial', await gallery());
       await rowOfTpl(c, t.name).locator('[title="Hide from tenants"]').first().click();
       o.flag('hide.flash', await seen(c, /hidden from tenants/i, 5000));
       await settle(c, 800);
-      o.flag('hide.rowChip', /hidden/i.test(await rowOfTpl(c, t.name).innerText().catch(() => '')));
+      o.flag(
+        'hide.rowChip',
+        /hidden/i.test(
+          await rowOfTpl(c, t.name)
+            .innerText()
+            .catch(() => ''),
+        ),
+      );
       o.flag('hide.dbActive', !!tplRow(c, t.name)?.active);
       o.flag('hide.gallery', await gallery());
-      o.enum('hide.nextTitle', (await rowOfTpl(c, t.name).locator('[title="Show to tenants"], [title="Hide from tenants"]').first().getAttribute('title')) ?? 'none');
+      o.enum(
+        'hide.nextTitle',
+        (await rowOfTpl(c, t.name)
+          .locator('[title="Show to tenants"], [title="Hide from tenants"]')
+          .first()
+          .getAttribute('title')) ?? 'none',
+      );
       await rowOfTpl(c, t.name).locator('[title="Show to tenants"]').first().click();
       o.flag('show.flash', await seen(c, /visible to tenants/i, 5000));
       await settle(c, 800);
@@ -1942,7 +2868,9 @@ export default (h) => {
       await guard(c);
       await operatorSession(c);
       const t = await createTemplate(c, { label: 'dl' });
-      const cloneR = WD(c) ? await c.http('POST', `/flows/templates/${t.id}/clone`) : await c.http('POST', `/v2/flows/templates/${t.id}/clone`, { headers: idem() });
+      const cloneR = WD(c)
+        ? await c.http('POST', `/flows/templates/${t.id}/clone`)
+        : await c.http('POST', `/v2/flows/templates/${t.id}/clone`, { headers: idem() });
       o.enum('clone', klass(cloneR.status));
       await openAdmin(c);
       // the reference opens its own modal (Cancel / Confirm); ours the shared dialog
@@ -1955,8 +2883,17 @@ export default (h) => {
         const shown = await c.visible(adm.accept, undefined, 3000);
         if (!shown) return null;
         const m = WD(c)
-          ? await c.page.locator('[data-ui-ok]').locator('xpath=ancestor::div[3]').first().innerText().catch(() => '')
-          : await c.page.locator('dialog[open]').first().innerText().catch(() => '');
+          ? await c.page
+              .locator('[data-ui-ok]')
+              .locator('xpath=ancestor::div[3]')
+              .first()
+              .innerText()
+              .catch(() => '')
+          : await c.page
+              .locator('dialog[open]')
+              .first()
+              .innerText()
+              .catch(() => '');
         await c.click(accept ? adm.accept : adm.cancel);
         return m;
       };
@@ -1986,19 +2923,39 @@ export default (h) => {
       trackTemplates(c);
       await operatorSession(c);
       const unknown = WD(c) ? '999999999' : uuid();
-      const resp = await c.page.goto(c.url(`/admin/flow-templates/${unknown}/edit`), { waitUntil: 'load' });
+      const resp = await c.page.goto(c.url(`/admin/flow-templates/${unknown}/edit`), {
+        waitUntil: 'load',
+      });
       await c.page.waitForTimeout(2500);
-      o.flag('edit.notFoundShown', klass(resp?.status() ?? 0) === 'not-found' || /not found|404|no template|could not|does not exist/i.test(await bodyText(c)));
+      o.flag(
+        'edit.notFoundShown',
+        klass(resp?.status() ?? 0) === 'not-found' ||
+          /not found|404|no template|could not|does not exist/i.test(await bodyText(c)),
+      );
       o.flag('edit.formShown', (await fl(c, F.name).count()) > 0);
-      const t = WD(c) ? await c.http('POST', `/admin/flow-templates/${unknown}/toggle`) : await opFetch(c, 'POST', `/flow-templates/${unknown}/toggle`);
+      const t = WD(c)
+        ? await c.http('POST', `/admin/flow-templates/${unknown}/toggle`)
+        : await opFetch(c, 'POST', `/flow-templates/${unknown}/toggle`);
       o.enum('toggle', klass(t.status));
-      const d = WD(c) ? await c.http('DELETE', `/admin/flow-templates/${unknown}`) : await opFetch(c, 'DELETE', `/flow-templates/${unknown}`);
+      const d = WD(c)
+        ? await c.http('DELETE', `/admin/flow-templates/${unknown}`)
+        : await opFetch(c, 'DELETE', `/flow-templates/${unknown}`);
       o.enum('delete', klass(d.status));
       const u = WD(c)
-        ? await c.http('PUT', `/admin/flow-templates/${unknown}`, { multipart: { name: 'x', flow_type: 'chat', sort_order: '0', is_active: '1' } })
-        : await opFetch(c, 'PUT', `/flow-templates/${unknown}`, { name: 'x', flowType: 'chat', sortOrder: 0, isActive: true, rowVersion: 1 });
+        ? await c.http('PUT', `/admin/flow-templates/${unknown}`, {
+            multipart: { name: 'x', flow_type: 'chat', sort_order: '0', is_active: '1' },
+          })
+        : await opFetch(c, 'PUT', `/flow-templates/${unknown}`, {
+            name: 'x',
+            flowType: 'chat',
+            sortOrder: 0,
+            isActive: true,
+            rowVersion: 1,
+          });
       o.enum('update', klass(u.status));
-      const m = WD(c) ? await c.http('POST', '/admin/flow-templates/abc/toggle') : await opFetch(c, 'POST', '/flow-templates/abc/toggle');
+      const m = WD(c)
+        ? await c.http('POST', '/admin/flow-templates/abc/toggle')
+        : await opFetch(c, 'POST', '/flow-templates/abc/toggle');
       o.enum('malformed', klass(m.status));
     },
   });
@@ -2048,13 +3005,29 @@ export default (h) => {
     await c.page.waitForTimeout(1800);
     await c.page.waitForLoadState('load').catch(() => undefined);
     await settle(c, 1200);
-    const lines = (await bodyText(c)).split('\n').map((l) => l.trim()).filter((l) => l && !before.has(l));
+    const lines = (await bodyText(c))
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l && !before.has(l));
     return { lines, mark, url: new URL(c.page.url()).pathname };
   };
   const msgLines = (c, lines, names) =>
     lines
-      .filter((l) => l.length < 140 && !/^ADMIN|^Bot |Build a standard|^Templates$|^Template$|^Visible to tenants$|^HIDDEN$/.test(l) && /required|must|valid|supplied|saved|deleted|graph|selected|not found|no flow|greater|at least/i.test(l))
-      .map((l) => norm(c, l, names).replace(/WaDesk|CRM Platform/g, 'BRAND').slice(0, 140))
+      .filter(
+        (l) =>
+          l.length < 140 &&
+          !/^ADMIN|^Bot |Build a standard|^Templates$|^Template$|^Visible to tenants$|^HIDDEN$/.test(
+            l,
+          ) &&
+          /required|must|valid|supplied|saved|deleted|graph|selected|not found|no flow|greater|at least/i.test(
+            l,
+          ),
+      )
+      .map((l) =>
+        norm(c, l, names)
+          .replace(/WaDesk|CRM Platform/g, 'BRAND')
+          .slice(0, 140),
+      )
       .filter((l, i, all) => all.indexOf(l) === i);
 
   ui({
@@ -2063,19 +3036,42 @@ export default (h) => {
     run: async (c) => {
       const o = c.obs;
       await openForm(c);
-      for (const [k, sel] of Object.entries(F)) o.flag(`field.${k}`, (await c.page.locator(sel).count()) > 0);
+      for (const [k, sel] of Object.entries(F))
+        o.flag(`field.${k}`, (await c.page.locator(sel).count()) > 0);
       o.set('seq.typeOptions', await fl(c, `${F.type} option`).allInnerTexts());
       o.enum('default.sort', await fl(c, F.sort).first().inputValue());
       o.flag('default.active', await fl(c, F.active).first().isChecked());
       o.enum('default.type', await fl(c, F.type).first().inputValue());
       o.enum('limit.name', (await fl(c, F.name).first().getAttribute('maxlength')) ?? 'none');
-      o.enum('limit.description', (await fl(c, F.description).first().getAttribute('maxlength')) ?? 'none');
-      o.enum('limit.category', (await fl(c, F.category).first().getAttribute('maxlength')) ?? 'none');
-      o.enum('limit.sort', `${await fl(c, F.sort).first().getAttribute('min')}..${await fl(c, F.sort).first().getAttribute('max')}`);
+      o.enum(
+        'limit.description',
+        (await fl(c, F.description).first().getAttribute('maxlength')) ?? 'none',
+      );
+      o.enum(
+        'limit.category',
+        (await fl(c, F.category).first().getAttribute('maxlength')) ?? 'none',
+      );
+      o.enum(
+        'limit.sort',
+        `${await fl(c, F.sort).first().getAttribute('min')}..${await fl(c, F.sort).first().getAttribute('max')}`,
+      );
       o.enum('file.accept', (await fl(c, F.file).first().getAttribute('accept')) ?? 'none');
-      o.set('seq.headings', (await c.page.locator('h1, h2').allInnerTexts()).map((t) => t.trim()).filter(Boolean));
-      o.set('seq.submitLabel', (await c.page.getByRole('button', { name: /^(create|save|update)/i }).allInnerTexts()).map((t) => t.trim()));
-      o.set('seq.cancelLink', (await c.page.getByRole('link', { name: /cancel/i }).allInnerTexts()).length > 0 ? ['cancel'] : []);
+      o.set(
+        'seq.headings',
+        (await c.page.locator('h1, h2').allInnerTexts()).map((t) => t.trim()).filter(Boolean),
+      );
+      o.set(
+        'seq.submitLabel',
+        (await c.page.getByRole('button', { name: /^(create|save|update)/i }).allInnerTexts()).map(
+          (t) => t.trim(),
+        ),
+      );
+      o.set(
+        'seq.cancelLink',
+        (await c.page.getByRole('link', { name: /cancel/i }).allInnerTexts()).length > 0
+          ? ['cancel']
+          : [],
+      );
       await c.shot('form');
     },
   });
@@ -2086,16 +3082,115 @@ export default (h) => {
     ['paste-not-json', { name: 'N', paste: 'not json' }, 'paste'],
     ['paste-object', { name: 'N', paste: '{"a":1}' }, 'paste'],
     ['paste-nodes-string', { name: 'N', paste: '{"flowNodes":"x"}' }, 'paste'],
-    ['paste-bare', { name: 'N', paste: '{"flowNodes":[{"type":"end","data":{}}],"flowEdges":[]}' }, 'paste'],
-    ['paste-wrapper', { name: 'N', paste: JSON.stringify({ _wadesk_flow_export: 1, flow_data: { flowNodes: [{ type: 'end', data: {} }, { type: 'end', data: {} }], flowEdges: [] } }) }, 'paste'],
-    ['file-not-json', { name: 'N', file: { name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('nope {') } }, 'file'],
-    ['file-png', { name: 'N', file: { name: 'x.png', mimeType: 'image/png', buffer: Buffer.from('89504e470d0a1a0a0000000d49484452', 'hex') } }, 'file'],
-    ['file-good', { name: 'N', file: { name: 'x.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ flowNodes: [{ type: 'end', data: {} }, { type: 'end', data: {} }, { type: 'end', data: {} }], flowEdges: [] })) } }, 'file'],
-    ['file-over-paste', { name: 'N', paste: '{"flowNodes":[{"type":"end","data":{}}],"flowEdges":[]}', file: { name: 'x.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ flowNodes: [{ type: 'end', data: {} }, { type: 'end', data: {} }, { type: 'end', data: {} }], flowEdges: [] })) } }, 'file'],
+    [
+      'paste-bare',
+      { name: 'N', paste: '{"flowNodes":[{"type":"end","data":{}}],"flowEdges":[]}' },
+      'paste',
+    ],
+    [
+      'paste-wrapper',
+      {
+        name: 'N',
+        paste: JSON.stringify({
+          _wadesk_flow_export: 1,
+          flow_data: {
+            flowNodes: [
+              { type: 'end', data: {} },
+              { type: 'end', data: {} },
+            ],
+            flowEdges: [],
+          },
+        }),
+      },
+      'paste',
+    ],
+    [
+      'file-not-json',
+      {
+        name: 'N',
+        file: { name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('nope {') },
+      },
+      'file',
+    ],
+    [
+      'file-png',
+      {
+        name: 'N',
+        file: {
+          name: 'x.png',
+          mimeType: 'image/png',
+          buffer: Buffer.from('89504e470d0a1a0a0000000d49484452', 'hex'),
+        },
+      },
+      'file',
+    ],
+    [
+      'file-good',
+      {
+        name: 'N',
+        file: {
+          name: 'x.json',
+          mimeType: 'application/json',
+          buffer: Buffer.from(
+            JSON.stringify({
+              flowNodes: [
+                { type: 'end', data: {} },
+                { type: 'end', data: {} },
+                { type: 'end', data: {} },
+              ],
+              flowEdges: [],
+            }),
+          ),
+        },
+      },
+      'file',
+    ],
+    [
+      'file-over-paste',
+      {
+        name: 'N',
+        paste: '{"flowNodes":[{"type":"end","data":{}}],"flowEdges":[]}',
+        file: {
+          name: 'x.json',
+          mimeType: 'application/json',
+          buffer: Buffer.from(
+            JSON.stringify({
+              flowNodes: [
+                { type: 'end', data: {} },
+                { type: 'end', data: {} },
+                { type: 'end', data: {} },
+              ],
+              flowEdges: [],
+            }),
+          ),
+        },
+      },
+      'file',
+    ],
     ['source-unknown', { name: 'N', source: 'unknown' }, 'source'],
-    ['sort-10000', { name: 'N', sort: 10000, paste: '{"flowNodes":[{"type":"end","data":{}}]}' }, 'paste'],
-    ['sort-negative', { name: 'N', sort: -1, paste: '{"flowNodes":[{"type":"end","data":{}}]}' }, 'paste'],
-    ['hidden-valid', { name: 'N', active: false, type: 'call', category: 'support', description: 'D', sort: 9, paste: '{"flowNodes":[{"type":"end","data":{}}]}' }, 'paste'],
+    [
+      'sort-10000',
+      { name: 'N', sort: 10000, paste: '{"flowNodes":[{"type":"end","data":{}}]}' },
+      'paste',
+    ],
+    [
+      'sort-negative',
+      { name: 'N', sort: -1, paste: '{"flowNodes":[{"type":"end","data":{}}]}' },
+      'paste',
+    ],
+    [
+      'hidden-valid',
+      {
+        name: 'N',
+        active: false,
+        type: 'call',
+        category: 'support',
+        description: 'D',
+        sort: 9,
+        paste: '{"flowNodes":[{"type":"end","data":{}}]}',
+      },
+      'paste',
+    ],
   ];
   for (const [id, vals, kind] of formCases) {
     ui({
@@ -2116,11 +3211,21 @@ export default (h) => {
         void ownFlow;
         const row = v.name ? tplRow(c, v.name) : null;
         o.flag('created', !!row);
-        o.enum('landing', r.url.replace(/\/\d+(\/|$)/, '/ID$1').replace(/\/[0-9a-f-]{36}(\/|$)/, '/ID$1'));
+        o.enum(
+          'landing',
+          r.url.replace(/\/\d+(\/|$)/, '/ID$1').replace(/\/[0-9a-f-]{36}(\/|$)/, '/ID$1'),
+        );
         o.set('seq.messages', msgLines(c, r.lines, v.name ? [v.name] : []));
         o.set('map.stored', row ? { ...normTpl(c, row), name: 'N' } : null);
         o.flag('formStillShown', (await fl(c, F.name).count()) > 0 && /create|new/.test(r.url));
-        o.enum('nameKept', v.name && (await fl(c, F.name).count()) > 0 ? ((await fl(c, F.name).first().inputValue()) === v.name ? 'kept' : 'cleared') : 'n/a');
+        o.enum(
+          'nameKept',
+          v.name && (await fl(c, F.name).count()) > 0
+            ? (await fl(c, F.name).first().inputValue()) === v.name
+              ? 'kept'
+              : 'cleared'
+            : 'n/a',
+        );
         await c.shot('after');
       },
     });
@@ -2133,7 +3238,12 @@ export default (h) => {
       const o = c.obs;
       trackTemplates(c);
       await operatorSession(c);
-      const f = await createFlow(c, { label: 'src', nodes: NODES('keyword'), category: 'lead', flowType: 'chat' });
+      const f = await createFlow(c, {
+        label: 'src',
+        nodes: NODES('keyword'),
+        category: 'lead',
+        flowType: 'chat',
+      });
       await openForm(c);
       const name = tplName(c, 'srcflow');
       await fillForm(c, { name, source: f.id });
@@ -2147,18 +3257,30 @@ export default (h) => {
 
   ui({
     id: 'tpl.edit',
-    title: 'Template edit: prefilled values, unchanged save, name change, graph kept or replaced, bad paste keeps the graph',
+    title:
+      'Template edit: prefilled values, unchanged save, name change, graph kept or replaced, bad paste keeps the graph',
     run: async (c) => {
       const o = c.obs;
       trackTemplates(c);
       await operatorSession(c);
-      const t = await createTemplate(c, { label: 'ed', description: 'Original description', category: 'welcome', sort: 7, flowType: 'instagram', active: false });
+      const t = await createTemplate(c, {
+        label: 'ed',
+        description: 'Original description',
+        category: 'welcome',
+        sort: 7,
+        flowType: 'instagram',
+        active: false,
+      });
       await openAdmin(c);
       await rowOfTpl(c, t.name).locator('[title="Edit"]').first().click();
       await fl(c, F.name).first().waitFor({ timeout: 20000 });
       if (!WD(c)) await hydrated(c);
       await c.page.waitForTimeout(800);
-      await c.page.waitForFunction(() => document.querySelector('input[maxlength="160"]')?.value, undefined, { timeout: 15000 }).catch(() => undefined);
+      await c.page
+        .waitForFunction(() => document.querySelector('input[maxlength="160"]')?.value, undefined, {
+          timeout: 15000,
+        })
+        .catch(() => undefined);
       const val = async (sel) => fl(c, sel).first().inputValue();
       o.flag('prefill.name', (await val(F.name)) === t.name);
       o.enum('prefill.description', await val(F.description));
@@ -2167,7 +3289,13 @@ export default (h) => {
       o.enum('prefill.type', await val(F.type));
       o.flag('prefill.active', await fl(c, F.active).first().isChecked());
       o.enum('prefill.paste', (await val(F.paste)).slice(0, 0) || 'empty');
-      o.enum('heading', (await c.page.locator('h1').first().innerText()).replace(t.name, 'NAME').trim().replace(/zz-flb\S+/, 'NAME'));
+      o.enum(
+        'heading',
+        (await c.page.locator('h1').first().innerText())
+          .replace(t.name, 'NAME')
+          .trim()
+          .replace(/zz-flb\S+/, 'NAME'),
+      );
       const nodesBefore = tplRow(c, t.name).nodes;
       const r1 = await submitForm(c);
       o.enum('unchanged.landing', r1.url);
@@ -2181,7 +3309,12 @@ export default (h) => {
       await fl(c, F.name).first().waitFor({ timeout: 20000 });
       if (!WD(c)) await hydrated(c);
       const newName = `${t.name}-v2`;
-      await fillForm(c, { name: newName, paste: '{"flowNodes":[{"type":"end","data":{}},{"type":"end","data":{}}],"flowEdges":[]}', sort: 1, active: true });
+      await fillForm(c, {
+        name: newName,
+        paste: '{"flowNodes":[{"type":"end","data":{}},{"type":"end","data":{}}],"flowEdges":[]}',
+        sort: 1,
+        active: true,
+      });
       const r2 = await submitForm(c);
       o.set('seq.replaced.messages', msgLines(c, r2.lines, [newName]));
       o.set('map.afterReplace', normTpl(c, tplRow(c, newName)));
@@ -2224,9 +3357,24 @@ export default (h) => {
         },
       }));
   const pageScenarios = [
-    ...h.pageScenarios({ id: 'page.list', title: 'Flows list', path: '/flows', ready: 'main h1', feature: 'WD-FLB-001' }),
-    ...adminPage('page.admin-list', '/admin/flow-templates', ['load', 'a11y', 'keyboard', 'degraded']),
-    ...adminPage('page.admin-form', { wadesk: '/admin/flow-templates/create', ours: '/admin/flow-templates/new' }, ['load', 'a11y', 'keyboard']),
+    ...h.pageScenarios({
+      id: 'page.list',
+      title: 'Flows list',
+      path: '/flows',
+      ready: 'main h1',
+      feature: 'WD-FLB-001',
+    }),
+    ...adminPage('page.admin-list', '/admin/flow-templates', [
+      'load',
+      'a11y',
+      'keyboard',
+      'degraded',
+    ]),
+    ...adminPage(
+      'page.admin-form',
+      { wadesk: '/admin/flow-templates/create', ours: '/admin/flow-templates/new' },
+      ['load', 'a11y', 'keyboard'],
+    ),
   ];
   for (const sc of pageScenarios) scenarios.push(sc);
 
@@ -2240,11 +3388,35 @@ export default (h) => {
       await c.page.goto(c.url('/admin/flow-templates'), { waitUntil: 'load' });
       await c.page.waitForTimeout(2000);
       o.enum('landing', new URL(c.page.url()).pathname.replace(/^\/admin\/login$/, '/login'));
-      o.flag('sec.unauthContentVisible', /zz-flb|flow templates/i.test(await bodyText(c)) && !/sign in|log in|password/i.test(await bodyText(c)));
-      const api = WD(c) ? await c.http('GET', '/admin/flow-templates', { anonymous: true }) : await c.http('GET', '/api/platform/flow-templates', { anonymous: true }).catch(() => ({ status: 0 }));
+      o.flag(
+        'sec.unauthContentVisible',
+        /zz-flb|flow templates/i.test(await bodyText(c)) &&
+          !/sign in|log in|password/i.test(await bodyText(c)),
+      );
+      const api = WD(c)
+        ? await c.http('GET', '/admin/flow-templates', { anonymous: true })
+        : await c
+            .http('GET', '/api/platform/flow-templates', { anonymous: true })
+            .catch(() => ({ status: 0 }));
       void api;
-      const w = WD(c) ? await c.http('POST', '/admin/flow-templates', { anonymous: true, multipart: { name: 'x' } }) : await c.http('POST', '/v2/platform/flow-templates', { anonymous: true, data: { name: 'x' }, headers: idem() });
-      o.enum('anonymousWrite', ['unauthenticated', 'forbidden'].includes(klass(w.status)) || w.status === 302 || w.status === 419 ? 'refused' : klass(w.status));
+      const w = WD(c)
+        ? await c.http('POST', '/admin/flow-templates', {
+            anonymous: true,
+            multipart: { name: 'x' },
+          })
+        : await c.http('POST', '/v2/platform/flow-templates', {
+            anonymous: true,
+            data: { name: 'x' },
+            headers: idem(),
+          });
+      o.enum(
+        'anonymousWrite',
+        ['unauthenticated', 'forbidden'].includes(klass(w.status)) ||
+          w.status === 302 ||
+          w.status === 419
+          ? 'refused'
+          : klass(w.status),
+      );
     },
   });
 
@@ -2256,16 +3428,29 @@ export default (h) => {
       trackTemplates(c);
       await operatorSession(c);
       await createTemplate(c, { label: 'rs', description: rep(120, 'word ') });
-      for (const [label, path] of [['list', ADM.list], ['form', ADM.create]]) {
+      for (const [label, path] of [
+        ['list', ADM.list],
+        ['form', ADM.create],
+      ]) {
         await c.page.setViewportSize({ width: 390, height: 800 });
         await c.goto(path, { ready: 'h1' });
         if (!WD(c)) await hydrated(c);
         await c.page.waitForTimeout(800);
-        o.set(`low.overflowX.${label}.390`, await c.page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)));
+        o.set(
+          `low.overflowX.${label}.390`,
+          await c.page.evaluate(() =>
+            Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+          ),
+        );
         await c.page.setViewportSize({ width: 1366, height: 800 });
         await c.page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
         await c.page.waitForTimeout(300);
-        o.set(`low.overflowX.${label}.rtl`, await c.page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)));
+        o.set(
+          `low.overflowX.${label}.rtl`,
+          await c.page.evaluate(() =>
+            Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+          ),
+        );
       }
     },
   });
@@ -2284,7 +3469,9 @@ export default (h) => {
     const name = `zz-flb-${c.tag('user')}`;
     const harnessRole = `flb-${wdRole}-${c.sid}`;
     if (WD(c)) {
-      const r = await c.http('POST', '/team-inbox/api/members/invite', { data: { name, email, role: wdRole } });
+      const r = await c.http('POST', '/team-inbox/api/members/invite', {
+        data: { name, email, role: wdRole },
+      });
       const id = r.body?.member?.id;
       c.cfg.wadesk.users[harnessRole] = { email, password: r.body?.temp_password };
       c.onCleanup(async () => {
@@ -2316,7 +3503,14 @@ export default (h) => {
       : method === 'GET'
         ? {}
         : idem();
-    const r = await h.request.fetch(base.replace(/\/$/, '') + path, { method, headers, data, multipart, failOnStatusCode: false, maxRedirects: 0 });
+    const r = await h.request.fetch(base.replace(/\/$/, '') + path, {
+      method,
+      headers,
+      data,
+      multipart,
+      failOnStatusCode: false,
+      maxRedirects: 0,
+    });
     const text = await r.text().catch(() => '');
     let body = text;
     try {
@@ -2326,12 +3520,15 @@ export default (h) => {
     }
     return { status: r.status(), body, text, headers: r.headers() };
   }
-  const refusal = (r) => ([401, 403, 404, 419].includes(r.status) || r.status === 302 ? 'refused' : klass(r.status));
-  const landingOf = (url) => new URL(url).pathname.replace(/\/\d+(\/|$)/, '/ID$1').replace(/\/[0-9a-f-]{36}(\/|$)/, '/ID$1');
+  const refusal = (r) =>
+    [401, 403, 404, 419].includes(r.status) || r.status === 302 ? 'refused' : klass(r.status);
+  const landingOf = (url) =>
+    new URL(url).pathname.replace(/\/\d+(\/|$)/, '/ID$1').replace(/\/[0-9a-f-]{36}(\/|$)/, '/ID$1');
 
   ui({
     id: 'perm.agent',
-    title: 'A workspace member without the flows role: no list, no actions, no data; the flow is untouched',
+    title:
+      'A workspace member without the flows role: no list, no actions, no data; the flow is untouched',
     run: async (c) => {
       const o = c.obs;
       const f = await createFlow(c, { label: 'perm', pub: true, category: 'welcome' });
@@ -2345,7 +3542,14 @@ export default (h) => {
       o.enum('landing.flows', landingOf(p.url()).replace(/^\/(team-inbox|inbox)$/, '/INBOX'));
       const text = await p.locator('body').innerText();
       o.flag('sec.flowNameVisible', text.includes(f.name));
-      o.flag('flowsScreenShown', await p.locator(S.cards).count().then((n) => n > 0).catch(() => false));
+      o.flag(
+        'flowsScreenShown',
+        await p
+          .locator(S.cards)
+          .count()
+          .then((n) => n > 0)
+          .catch(() => false),
+      );
       o.flag('createButtonShown', (await p.locator(S.create).count()) > 0);
       await p.goto(c.url('/flows/builder'), { waitUntil: 'load' });
       await p.waitForTimeout(2000);
@@ -2356,32 +3560,51 @@ export default (h) => {
       const calls = WD(c)
         ? {
             list: () => as(c, h, 'GET', '/flows?partial=1'),
-            rename: () => as(c, h, 'POST', `/flows/${id}/rename`, { data: { name: 'renamed by agent' } }),
+            rename: () =>
+              as(c, h, 'POST', `/flows/${id}/rename`, { data: { name: 'renamed by agent' } }),
             toggle: () => as(c, h, 'POST', `/flows/${id}/toggle`),
             duplicate: () => as(c, h, 'POST', `/flows/${id}/duplicate`),
             exportFlow: () => as(c, h, 'GET', `/flows/${id}/export`),
             remove: () => as(c, h, 'DELETE', `/flows/${id}`),
-            save: () => as(c, h, 'POST', '/flows/api/save', { data: { flow_name: 'by agent', flow_data: graphOf(NODES()) } }),
-            importFlow: () => as(c, h, 'POST', '/flows/import', { multipart: { file: { name: 'a.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper())) } } }),
+            save: () =>
+              as(c, h, 'POST', '/flows/api/save', {
+                data: { flow_name: 'by agent', flow_data: graphOf(NODES()) },
+              }),
+            importFlow: () =>
+              as(c, h, 'POST', '/flows/import', {
+                multipart: {
+                  file: {
+                    name: 'a.json',
+                    mimeType: 'application/json',
+                    buffer: Buffer.from(JSON.stringify(wrapper())),
+                  },
+                },
+              }),
             cloneUnknown: () => as(c, h, 'POST', `/flows/templates/${unknown}/clone`),
             adminTemplates: () => as(c, h, 'GET', '/admin/flow-templates'),
           }
         : {
             list: () => as(c, h, 'GET', '/v2/flows'),
-            rename: () => as(c, h, 'PATCH', `/v2/flows/${id}/rename`, { data: { name: 'renamed by agent' } }),
+            rename: () =>
+              as(c, h, 'PATCH', `/v2/flows/${id}/rename`, { data: { name: 'renamed by agent' } }),
             toggle: () => as(c, h, 'POST', `/v2/flows/${id}/toggle`),
             duplicate: () => as(c, h, 'POST', `/v2/flows/${id}/duplicate`),
             exportFlow: () => as(c, h, 'GET', `/v2/flows/${id}/export`),
             remove: () => as(c, h, 'DELETE', `/v2/flows/${id}`),
-            save: () => as(c, h, 'POST', '/v2/flows', { data: { name: 'by agent', graph: graphOf(NODES()) } }),
-            importFlow: () => as(c, h, 'POST', '/v2/flows/import', { data: { payload: wrapper() } }),
+            save: () =>
+              as(c, h, 'POST', '/v2/flows', {
+                data: { name: 'by agent', graph: graphOf(NODES()) },
+              }),
+            importFlow: () =>
+              as(c, h, 'POST', '/v2/flows/import', { data: { payload: wrapper() } }),
             cloneUnknown: () => as(c, h, 'POST', `/v2/flows/templates/${unknown}/clone`),
             adminTemplates: () => as(c, h, 'GET', '/v2/platform/flow-templates'),
           };
       for (const [k, fn] of Object.entries(calls)) {
         const r = await fn();
         o.enum(`api.${k}`, refusal(r));
-        if (k === 'list' || k === 'exportFlow') o.flag(`sec.api.${k}.leaksName`, JSON.stringify(r.body ?? r.text).includes(f.name));
+        if (k === 'list' || k === 'exportFlow')
+          o.flag(`sec.api.${k}.leaksName`, JSON.stringify(r.body ?? r.text).includes(f.name));
       }
       const after = await flowById(c, f.id);
       o.flag('flowUntouched', !!after && after.state === 'live' && after.name === f.name);
@@ -2395,7 +3618,8 @@ export default (h) => {
   // ===============================================================================================================
   ui({
     id: 'plan.limit',
-    title: 'Plan cap: create, duplicate, import and template clone refused at the cap; rename, pause and delete still work',
+    title:
+      'Plan cap: create, duplicate, import and template clone refused at the cap; rename, pause and delete still work',
     run: async (c) => {
       const o = c.obs;
       await guard(c);
@@ -2406,11 +3630,15 @@ export default (h) => {
       const g = JSON.stringify(TPL_GRAPH());
       let tid;
       if (WD(c)) {
-        mysql(`insert into flow_templates (name, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(tname)}', 'chat', '${q(g)}', 1, 0, now(), now())`);
+        mysql(
+          `insert into flow_templates (name, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(tname)}', 'chat', '${q(g)}', 1, 0, now(), now())`,
+        );
         tid = mysql(`select id from flow_templates where name='${q(tname)}'`);
         c.onCleanup(() => mysql(`delete from flow_templates where name='${q(tname)}'`));
       } else {
-        tid = psql(`insert into flow_templates (name, flow_type, flow_data, is_active) values ('${q(tname)}', 'chat', '${q(g)}'::jsonb, true) returning uuid`).split('\n')[0];
+        tid = psql(
+          `insert into flow_templates (name, flow_type, flow_data, is_active) values ('${q(tname)}', 'chat', '${q(g)}'::jsonb, true) returning uuid`,
+        ).split('\n')[0];
         c.onCleanup(() => psql(`delete from flow_templates where name='${q(tname)}'`));
       }
       // who hits the cap: ours the owner; WaDesk a workspace admin (the platform administrator never meets a plan cap there)
@@ -2421,54 +3649,125 @@ export default (h) => {
         o.flag('actorReady', m.ok);
         h = await c.openAlso({ role: m.harnessRole });
       } else o.flag('actorReady', true);
-      const act = (method, wd, ours, opts = {}) => (WD(c) ? as(c, h, method, wd, opts) : as(c, { request: c.request }, method, ours.path ?? ours, ours.opts ?? {}));
+      const act = (method, wd, ours, opts = {}) =>
+        WD(c)
+          ? as(c, h, method, wd, opts)
+          : as(c, { request: c.request }, method, ours.path ?? ours, ours.opts ?? {});
       // set the cap just under the current number of flows (somebody else deleting one meanwhile must not open a slot), restore afterwards
       const cap = Math.max(1, total - 2);
       if (WD(c)) {
         const prev = mysql('select plan_overrides from workspaces where id = 1');
-        c.onCleanup(() => mysql(prev && prev !== 'NULL' ? `update workspaces set plan_overrides = '${q(prev)}' where id = 1` : 'update workspaces set plan_overrides = NULL where id = 1'));
-        mysql(`update workspaces set plan_overrides = '${JSON.stringify({ flow_limit: cap })}' where id = 1`);
+        c.onCleanup(() =>
+          mysql(
+            prev && prev !== 'NULL'
+              ? `update workspaces set plan_overrides = '${q(prev)}' where id = 1`
+              : 'update workspaces set plan_overrides = NULL where id = 1',
+          ),
+        );
+        mysql(
+          `update workspaces set plan_overrides = '${JSON.stringify({ flow_limit: cap })}' where id = 1`,
+        );
       } else {
-        const prev = psql(`select overrides::text from org_plan_state where org_id = ${orgIdOf(c)}`);
-        c.onCleanup(() => psql(`update org_plan_state set overrides = '${q(prev)}'::jsonb where org_id = ${orgIdOf(c)}`));
-        psql(`update org_plan_state set overrides = overrides || jsonb_build_object('limits', coalesce(overrides->'limits', '{}'::jsonb) || jsonb_build_object('flows', ${cap})) where org_id = ${orgIdOf(c)}`);
+        const prev = psql(
+          `select overrides::text from org_plan_state where org_id = ${orgIdOf(c)}`,
+        );
+        c.onCleanup(() =>
+          psql(
+            `update org_plan_state set overrides = '${q(prev)}'::jsonb where org_id = ${orgIdOf(c)}`,
+          ),
+        );
+        psql(
+          `update org_plan_state set overrides = overrides || jsonb_build_object('limits', coalesce(overrides->'limits', '{}'::jsonb) || jsonb_build_object('flows', ${cap})) where org_id = ${orgIdOf(c)}`,
+        );
       }
       void actor;
       const created = async (name) => (await allFlows(c, name)).length;
       const idPath = (p1, p2) => (WD(c) ? p1 : p2);
-      const r1 = WD(c) ? await as(c, h, 'POST', '/flows/api/save', { data: { flow_name: `zz-flb-${c.tag('capnew')}`, flow_data: graphOf(NODES()) } }) : await as(c, { request: c.request }, 'POST', '/v2/flows', { data: { name: `zz-flb-${c.tag('capnew')}`, graph: graphOf(NODES()) } });
+      const r1 = WD(c)
+        ? await as(c, h, 'POST', '/flows/api/save', {
+            data: { flow_name: `zz-flb-${c.tag('capnew')}`, flow_data: graphOf(NODES()) },
+          })
+        : await as(c, { request: c.request }, 'POST', '/v2/flows', {
+            data: { name: `zz-flb-${c.tag('capnew')}`, graph: graphOf(NODES()) },
+          });
       o.enum('create', klass(r1.status));
-      o.flag('create.messageMentionsLimit', /limit|plan|upgrade/i.test(JSON.stringify(r1.body ?? r1.text)));
+      o.flag(
+        'create.messageMentionsLimit',
+        /limit|plan|upgrade/i.test(JSON.stringify(r1.body ?? r1.text)),
+      );
       o.num('create.made', await created(c.tagBase + '-' + c.sid + '-capnew'));
-      const r2 = WD(c) ? await as(c, h, 'POST', `/flows/${src.id}/duplicate`) : await as(c, { request: c.request }, 'POST', `/v2/flows/${src.id}/duplicate`);
+      const r2 = WD(c)
+        ? await as(c, h, 'POST', `/flows/${src.id}/duplicate`)
+        : await as(c, { request: c.request }, 'POST', `/v2/flows/${src.id}/duplicate`);
       o.enum('duplicate', r2.status === 422 ? 'refused' : klass(r2.status));
       const dupMade = (await allFlows(c, src.name)).filter((x) => x.id !== src.id).length;
       o.num('duplicate.made', dupMade);
-      const r3 = WD(c) ? await as(c, h, 'POST', '/flows/import', { multipart: { file: { name: 'a.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${c.tag('capimp')}` }))) } } }) : await as(c, { request: c.request }, 'POST', '/v2/flows/import', { data: { payload: wrapper({ name: `zz-flb-${c.tag('capimp')}` }) } });
+      const r3 = WD(c)
+        ? await as(c, h, 'POST', '/flows/import', {
+            multipart: {
+              file: {
+                name: 'a.json',
+                mimeType: 'application/json',
+                buffer: Buffer.from(JSON.stringify(wrapper({ name: `zz-flb-${c.tag('capimp')}` }))),
+              },
+            },
+          })
+        : await as(c, { request: c.request }, 'POST', '/v2/flows/import', {
+            data: { payload: wrapper({ name: `zz-flb-${c.tag('capimp')}` }) },
+          });
       o.enum('import', [302, 422].includes(r3.status) ? 'refused' : klass(r3.status));
       o.num('import.made', await created(c.tagBase + '-' + c.sid + '-capimp'));
-      const r4 = WD(c) ? await as(c, h, 'POST', `/flows/templates/${tid}/clone`) : await as(c, { request: c.request }, 'POST', `/v2/flows/templates/${tid}/clone`);
+      const r4 = WD(c)
+        ? await as(c, h, 'POST', `/flows/templates/${tid}/clone`)
+        : await as(c, { request: c.request }, 'POST', `/v2/flows/templates/${tid}/clone`);
       o.enum('clone', [302, 422].includes(r4.status) ? 'refused' : klass(r4.status));
       o.num('clone.made', await created(tname));
       // editing and housekeeping are not blocked
-      const r5 = WD(c) ? await as(c, h, 'POST', `/flows/${src.id}/rename`, { data: { name: `${src.name}-r` } }) : await as(c, { request: c.request }, 'PATCH', `/v2/flows/${src.id}/rename`, { data: { name: `${src.name}-r` } });
+      const r5 = WD(c)
+        ? await as(c, h, 'POST', `/flows/${src.id}/rename`, { data: { name: `${src.name}-r` } })
+        : await as(c, { request: c.request }, 'PATCH', `/v2/flows/${src.id}/rename`, {
+            data: { name: `${src.name}-r` },
+          });
       o.enum('rename', klass(r5.status));
-      const r6 = WD(c) ? await as(c, h, 'POST', `/flows/${src.id}/toggle`) : await as(c, { request: c.request }, 'POST', `/v2/flows/${src.id}/toggle`);
+      const r6 = WD(c)
+        ? await as(c, h, 'POST', `/flows/${src.id}/toggle`)
+        : await as(c, { request: c.request }, 'POST', `/v2/flows/${src.id}/toggle`);
       o.enum('toggle', klass(r6.status));
       // the screen: duplicate from the card says why it did not happen
       const page = WD(c) ? h.page : c.page;
       page.setDefaultTimeout(30000);
       await page.goto(c.url(`/flows?q=${encodeURIComponent(scope(c))}`), { waitUntil: 'load' });
-      await page.locator(S.cards).first().waitFor().catch(() => undefined);
+      await page
+        .locator(S.cards)
+        .first()
+        .waitFor()
+        .catch(() => undefined);
       if (!WD(c)) await hydrated(c);
       await page.waitForTimeout(800);
-      const before = new Set((await page.locator('body').innerText()).split('\n').map((l) => l.trim()));
-      await page.locator(S.cards).filter({ hasText: src.name }).first().locator(ACT.dup).first().click();
+      const before = new Set(
+        (await page.locator('body').innerText()).split('\n').map((l) => l.trim()),
+      );
+      await page
+        .locator(S.cards)
+        .filter({ hasText: src.name })
+        .first()
+        .locator(ACT.dup)
+        .first()
+        .click();
       await page.waitForTimeout(3000);
-      const fresh = (await page.locator('body').innerText()).split('\n').map((l) => l.trim()).filter((l) => l && !before.has(l));
-      o.flag('ui.duplicate.limitMessageShown', fresh.some((l) => /limit|plan|upgrade/i.test(l)));
+      const fresh = (await page.locator('body').innerText())
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l && !before.has(l));
+      o.flag(
+        'ui.duplicate.limitMessageShown',
+        fresh.some((l) => /limit|plan|upgrade/i.test(l)),
+      );
       o.flag('ui.duplicate.staysOnList', !/flows\/builder/.test(page.url()));
-      o.num('ui.duplicate.made', (await allFlows(c, src.name)).filter((x) => x.id !== src.id).length);
+      o.num(
+        'ui.duplicate.made',
+        (await allFlows(c, src.name)).filter((x) => x.id !== src.id).length,
+      );
       void idPath;
     },
   });
@@ -2484,18 +3783,34 @@ export default (h) => {
       const before = await counts(c);
       const foreign = foreignFlow(c, `zz-flb-${c.tag('foreign')}`);
       // make it the newest, published and active one if it could
-      if (WD(c)) mysql(`update flows set is_published = 1, is_active = 1, published_at = now(), updated_at = now() + interval 1 minute where id = ${foreign.id}`);
-      else psql(`update flows set is_published = true, is_active = true, published_at = now(), updated_at = now() + interval '1 minute' where uuid = '${foreign.id}'`);
+      if (WD(c))
+        mysql(
+          `update flows set is_published = 1, is_active = 1, published_at = now(), updated_at = now() + interval 1 minute where id = ${foreign.id}`,
+        );
+      else
+        psql(
+          `update flows set is_published = true, is_active = true, published_at = now(), updated_at = now() + interval '1 minute' where uuid = '${foreign.id}'`,
+        );
       const after = await counts(c);
-      for (const k of ['all', 'live', 'paused', 'draft']) o.num(`delta.${k}`, (after[k] ?? 0) - (before[k] ?? 0));
+      for (const k of ['all', 'live', 'paused', 'draft'])
+        o.num(`delta.${k}`, (after[k] ?? 0) - (before[k] ?? 0));
       await openList(c, `?q=${encodeURIComponent(c.tagBase)}`);
       o.num('listCards', await cardCount(c));
-      const feat = await c.loc(S.featured).first().innerText().catch(() => '');
+      const feat = await c
+        .loc(S.featured)
+        .first()
+        .innerText()
+        .catch(() => '');
       o.flag('featuredIsForeign', feat.includes(c.tagBase));
       o.flag('foreign.fetchByIdVisible', (await allFlows(c, c.tagBase)).length > 0);
-      const detail = WD(c) ? await c.http('GET', `/flows/builder/${foreign.id}`) : await c.http('GET', `/v2/flows/${foreign.id}`);
+      const detail = WD(c)
+        ? await c.http('GET', `/flows/builder/${foreign.id}`)
+        : await c.http('GET', `/v2/flows/${foreign.id}`);
       o.enum('crossTenant', klass(detail.status));
-      o.flag('sec.foreignNameLeaked', JSON.stringify(detail.body ?? detail.text ?? '').includes(c.tagBase));
+      o.flag(
+        'sec.foreignNameLeaked',
+        JSON.stringify(detail.body ?? detail.text ?? '').includes(c.tagBase),
+      );
     },
   });
 
@@ -2521,41 +3836,88 @@ export default (h) => {
 
   ui({
     id: 'xss.tenant-surfaces',
-    title: 'Hostile flow and template names: list card, featured card, gallery, rename dialog, delete confirm, toasts',
+    title:
+      'Hostile flow and template names: list card, featured card, gallery, rename dialog, delete confirm, toasts',
     run: async (c) => {
       const o = c.obs;
       const box = await xssHook(c);
       await guard(c);
-      const f = await createFlow(c, { name: `zz-flb-${c.tag('x')}-${HOSTILE}`, pub: true, category: 'welcome' });
+      const f = await createFlow(c, {
+        name: `zz-flb-${c.tag('x')}-${HOSTILE}`,
+        pub: true,
+        category: 'welcome',
+      });
       o.flag('created', f.ok);
       const tname = `zz-flb-tpl-${c.tag('x')}-${HOSTILE}`;
       const g = JSON.stringify(TPL_GRAPH());
       if (WD(c)) {
-        mysql(`insert into flow_templates (name, description, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(tname)}', '${q(HOSTILE)}', 'chat', '${q(g)}', 1, 0, now(), now())`);
+        mysql(
+          `insert into flow_templates (name, description, flow_type, flow_data, is_active, sort_order, created_at, updated_at) values ('${q(tname)}', '${q(HOSTILE)}', 'chat', '${q(g)}', 1, 0, now(), now())`,
+        );
         c.onCleanup(() => mysql(`delete from flow_templates where name='${q(tname)}'`));
       } else {
-        psql(`insert into flow_templates (name, description, flow_type, flow_data, is_active) values ('${q(tname)}', '${q(HOSTILE)}', 'chat', '${q(g)}'::jsonb, true)`);
+        psql(
+          `insert into flow_templates (name, description, flow_type, flow_data, is_active) values ('${q(tname)}', '${q(HOSTILE)}', 'chat', '${q(g)}'::jsonb, true)`,
+        );
         c.onCleanup(() => psql(`delete from flow_templates where name='${q(tname)}'`));
       }
       await openList(c);
       await c.page.waitForTimeout(1500);
       const body = await bodyText(c);
       o.flag('card.nameAsText', body.includes('<img src=x'));
-      o.flag('featured.nameAsText', (await c.loc(S.featured).first().innerText().catch(() => '')).includes('<img src=x'));
-      o.flag('gallery.nameAsText', /<img src=x[^\n]*\n?/.test(body) && (body.match(/<img src=x/g) ?? []).length >= 2);
+      o.flag(
+        'featured.nameAsText',
+        (
+          await c
+            .loc(S.featured)
+            .first()
+            .innerText()
+            .catch(() => '')
+        ).includes('<img src=x'),
+      );
+      o.flag(
+        'gallery.nameAsText',
+        /<img src=x[^\n]*\n?/.test(body) && (body.match(/<img src=x/g) ?? []).length >= 2,
+      );
       o.num('injected.imgElements', await c.page.locator('img[src="x"]').count());
-      o.num('injected.scripts', await c.page.locator('script:not([src])').evaluateAll((els) => els.filter((e) => e.textContent.includes('window.__xss=2')).length));
+      o.num(
+        'injected.scripts',
+        await c.page
+          .locator('script:not([src])')
+          .evaluateAll((els) => els.filter((e) => e.textContent.includes('window.__xss=2')).length),
+      );
       const q2 = `?q=${encodeURIComponent(scope(c))}`;
       await openList(c, q2);
       if (WD(c)) c.page.once('dialog', (d) => void d.dismiss());
-      await cardOf(c, f.name).locator(ACT.rename).first().click().catch(() => undefined);
+      await cardOf(c, f.name)
+        .locator(ACT.rename)
+        .first()
+        .click()
+        .catch(() => undefined);
       await c.page.waitForTimeout(800);
       await c.page.keyboard.press('Escape');
-      await cardOf(c, f.name).locator(ACT.del).first().click().catch(() => undefined);
+      await cardOf(c, f.name)
+        .locator(ACT.del)
+        .first()
+        .click()
+        .catch(() => undefined);
       await c.page.waitForTimeout(800);
-      o.flag('confirm.nameAsText', (await c.loc(confirmEls.msg).first().innerText().catch(() => '')).includes('<img src=x'));
+      o.flag(
+        'confirm.nameAsText',
+        (
+          await c
+            .loc(confirmEls.msg)
+            .first()
+            .innerText()
+            .catch(() => '')
+        ).includes('<img src=x'),
+      );
       await c.page.keyboard.press('Escape');
-      await cardOf(c, f.name).locator(ACT.dup).first().click().catch(() => undefined);
+      await cardOf(c, f.name)
+        .locator(ACT.dup)
+        .first()
+        .click()
+        .catch(() => undefined);
       await c.page.waitForTimeout(3500);
       o.flag('sec.xssExecuted', box.fired);
     },
@@ -2569,22 +3931,50 @@ export default (h) => {
       trackTemplates(c);
       await operatorSession(c);
       const box = await xssHook(c);
-      const t = await createTemplate(c, { name: `zz-flb-tpl-${c.tag('x')}-${HOSTILE}`, description: HOSTILE, category: '<b>cat</b>' });
+      const t = await createTemplate(c, {
+        name: `zz-flb-tpl-${c.tag('x')}-${HOSTILE}`,
+        description: HOSTILE,
+        category: '<b>cat</b>',
+      });
       o.flag('created', t.created);
       await openAdmin(c);
       const row = rowOfTpl(c, t.name.slice(0, 40));
       o.flag('list.nameAsText', (await bodyText(c)).includes('<img src=x'));
       o.num('injected.imgElements', await c.page.locator('img[src="x"]').count());
-      await row.locator('[title="Delete"]').first().click().catch(() => undefined);
+      await row
+        .locator('[title="Delete"]')
+        .first()
+        .click()
+        .catch(() => undefined);
       await c.page.waitForTimeout(800);
       const adm = { ours: 'dialog[open]', wadesk: '[data-ui-ok]' };
       o.flag('confirm.opened', await c.visible(adm, undefined, 2000));
       await c.page.keyboard.press('Escape');
-      if (WD(c)) await c.page.locator('[data-ui-cancel]').first().click().catch(() => undefined);
-      await row.locator('[title="Edit"]').first().click().catch(() => undefined);
-      await fl(c, F.name).first().waitFor({ timeout: 15000 }).catch(() => undefined);
+      if (WD(c))
+        await c.page
+          .locator('[data-ui-cancel]')
+          .first()
+          .click()
+          .catch(() => undefined);
+      await row
+        .locator('[title="Edit"]')
+        .first()
+        .click()
+        .catch(() => undefined);
+      await fl(c, F.name)
+        .first()
+        .waitFor({ timeout: 15000 })
+        .catch(() => undefined);
       await c.page.waitForTimeout(1200);
-      o.flag('edit.prefilledVerbatim', (await fl(c, F.name).first().inputValue().catch(() => '')).includes('<img src=x'));
+      o.flag(
+        'edit.prefilledVerbatim',
+        (
+          await fl(c, F.name)
+            .first()
+            .inputValue()
+            .catch(() => '')
+        ).includes('<img src=x'),
+      );
       o.flag('sec.xssExecuted', box.fired);
     },
   });
@@ -2599,7 +3989,10 @@ export default (h) => {
       await openForm(c);
       const name = tplName(c, 'dbl');
       await fillForm(c, { name, paste: '{"flowNodes":[{"type":"end","data":{}}],"flowEdges":[]}' });
-      await fl(c, F.submit).first().dblclick({ timeout: 4000, noWaitAfter: true }).catch(() => undefined);
+      await fl(c, F.submit)
+        .first()
+        .dblclick({ timeout: 4000, noWaitAfter: true })
+        .catch(() => undefined);
       await c.page.waitForTimeout(3500);
       o.num('rows', tplRows(c, name).length);
     },
@@ -2610,22 +4003,38 @@ export default (h) => {
   // ===============================================================================================================
   ui({
     id: 'create.sheet-and-links',
-    title: 'Create flow sheet (Messaging / Call), Escape, backdrop; the header and card links land where they should',
+    title:
+      'Create flow sheet (Messaging / Call), Escape, backdrop; the header and card links land where they should',
     run: async (c) => {
       const o = c.obs;
       const f = await createFlow(c, { label: 'lnk', pub: true });
       await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       const chat = '[data-channel="chat"]';
       const call = '[data-channel="call"]';
-      const shown = () => c.page.locator(chat).first().isVisible().catch(() => false);
+      const shown = () =>
+        c.page
+          .locator(chat)
+          .first()
+          .isVisible()
+          .catch(() => false);
       const opens = async () => {
         await c.click(S.create);
         await c.page.waitForTimeout(700);
         return shown();
       };
       o.flag('sheet.opens', await opens());
-      o.flag('sheet.hasCall', await c.page.locator(call).first().isVisible().catch(() => false));
-      o.flag('sheet.hasCancel', (await c.page.getByRole('button', { name: /^cancel$/i }).count()) > 0);
+      o.flag(
+        'sheet.hasCall',
+        await c.page
+          .locator(call)
+          .first()
+          .isVisible()
+          .catch(() => false),
+      );
+      o.flag(
+        'sheet.hasCancel',
+        (await c.page.getByRole('button', { name: /^cancel$/i }).count()) > 0,
+      );
       await c.page.keyboard.press('Escape');
       await c.page.waitForTimeout(500);
       o.flag('sheet.escapeCloses', !(await shown()));
@@ -2634,24 +4043,46 @@ export default (h) => {
       await c.page.waitForTimeout(500);
       o.flag('sheet.backdropCloses', !(await shown()));
       await opens();
-      await c.page.getByRole('button', { name: /^cancel$/i }).first().click();
+      await c.page
+        .getByRole('button', { name: /^cancel$/i })
+        .first()
+        .click();
       await c.page.waitForTimeout(500);
       o.flag('sheet.cancelCloses', !(await shown()));
       const go = async (label, act, back = true) => {
         await act();
-        await c.page.waitForURL((u) => !/^\/flows$/.test(u.pathname) || u.search.includes('ai'), { timeout: 20000 }).catch(() => undefined);
-        o.enum(`${label}.landing`, landingOf(c.page.url()) + new URL(c.page.url()).search.replace(/id=[\w-]+/, 'id=ID').replace(/q=[^&]*/, ''));
+        await c.page
+          .waitForURL((u) => !/^\/flows$/.test(u.pathname) || u.search.includes('ai'), {
+            timeout: 20000,
+          })
+          .catch(() => undefined);
+        o.enum(
+          `${label}.landing`,
+          landingOf(c.page.url()) +
+            new URL(c.page.url()).search.replace(/id=[\w-]+/, 'id=ID').replace(/q=[^&]*/, ''),
+        );
         if (back) await openList(c, `?q=${encodeURIComponent(scope(c))}`);
       };
       await opens();
       await go('messaging', () => c.page.locator(chat).first().click());
       await opens();
       await go('call', () => c.page.locator(call).first().click());
-      await go('ai', () => c.page.getByText(/use ai prompt/i).first().click());
-      await go('analytics', () => c.page.locator('a[title^="Flow execution history"]').first().click());
+      await go('ai', () =>
+        c.page
+          .getByText(/use ai prompt/i)
+          .first()
+          .click(),
+      );
+      await go('analytics', () =>
+        c.page.locator('a[title^="Flow execution history"]').first().click(),
+      );
       await go('openBuilder', () => cardOf(c, f.name).locator(ACT.open).first().click());
-      await go('cardAnalytics', () => cardOf(c, f.name).locator('[title="Analytics"]').first().click());
-      await go('featuredOpen', () => c.loc(S.featured).first().locator('a:has-text("Open flow")').first().click());
+      await go('cardAnalytics', () =>
+        cardOf(c, f.name).locator('[title="Analytics"]').first().click(),
+      );
+      await go('featuredOpen', () =>
+        c.loc(S.featured).first().locator('a:has-text("Open flow")').first().click(),
+      );
     },
   });
 
@@ -2663,7 +4094,8 @@ export default (h) => {
     pages: [],
     intended: [
       {
-        scenario: /^(rename\.ids|action\.toggle\.ids|delete\.api|export\.names|tpl\.clone\.api|tpl\.admin\.ids)$/,
+        scenario:
+          /^(rename\.ids|action\.toggle\.ids|delete\.api|export\.names|tpl\.clone\.api|tpl\.admin\.ids)$/,
         key: 'enum.malformed',
         quirk: 'a path id that is not a number is an unknown row (404)',
         reason:
@@ -2672,7 +4104,8 @@ export default (h) => {
       {
         scenario: /^tpl\.form\.file-png$/,
         key: /^(enum\.nameKept|seq\.messages)$/,
-        quirk: "a wrong file type is refused by the server and the page comes back with no message and an empty form",
+        quirk:
+          'a wrong file type is refused by the server and the page comes back with no message and an empty form',
         reason:
           'ours says why (the same Laravel wording, shown in the page) and keeps what was typed; nothing is saved either way (flag.created is equal). A deliberate fix of a silent WaDesk failure, recorded in docs/wadesk-port/parity/flow-builder-editor-list.md',
       },
@@ -2721,9 +4154,10 @@ export default (h) => {
       {
         scenario: /^(tpl\.form\.(all-empty|sort-10000|sort-negative)|tpl\.edit)$/,
         key: /^seq\.(messages|emptyName\.messages)$/,
-        quirk: "the browser's own required / min / max bubble is the only message (it is not part of the page text)",
+        quirk:
+          "the browser's own required / min / max bubble is the only message (it is not part of the page text)",
         reason:
-          'our form is `novalidate` and prints the validation message in the page (the same words WaDesk\'s server uses); WaDesk relies on the native bubble, so nothing is submitted and nothing is stored on either side (flag.created / stored are equal)',
+          "our form is `novalidate` and prints the validation message in the page (the same words WaDesk's server uses); WaDesk relies on the native bubble, so nothing is submitted and nothing is stored on either side (flag.created / stored are equal)",
       },
       {
         scenario: /^import\./,
@@ -2742,7 +4176,8 @@ export default (h) => {
       {
         scenario: /^import\.json-scalar$/,
         key: 'seq.messages',
-        quirk: "a file that holds only a bare number is reported as the wrong file type (PHP's libmagic sniffing)",
+        quirk:
+          "a file that holds only a bare number is reported as the wrong file type (PHP's libmagic sniffing)",
         reason:
           'WaDesk judges a tiny file by what libmagic guesses and calls "42" a wrong type; we judge the declared type and then the content, so it is the same rejection with the "not a valid flow export" wording; nothing is created either way',
       },
@@ -2763,7 +4198,8 @@ export default (h) => {
       {
         scenario: /^action\.rename\.ui$/,
         key: /^(enum\.len192\.status|num\.len192\.requests|flag\.len192\.feedback)$/,
-        quirk: "the browser's rename prompt has no length limit and the server answers 422 for 192 characters",
+        quirk:
+          "the browser's rename prompt has no length limit and the server answers 422 for 192 characters",
         reason:
           'our rename dialog is the shared dialog with a 191-character input: typing and pasting are cut at the limit, so a 192-character name never reaches the server (the API still answers 422, see rename.192)',
       },

@@ -145,7 +145,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         return advance('out');
       case 'notify_number': {
         const num = interp(d.copyNumber, v) || '(no number set)';
-        const what = d.kind && d.kind !== 'text' ? `[${str(d.kind)}] ${interp(d.url, v)}` : interp(d.text, v);
+        const what =
+          d.kind && d.kind !== 'text' ? `[${str(d.kind)}] ${interp(d.url, v)}` : interp(d.text, v);
         sys(`Copy sent to ${num}: ${what}`);
         return advance('out');
       }
@@ -177,7 +178,9 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         const qr = opts.templateButtons?.(node) ?? [];
         const head = `[template: ${str(d.tpl) || '?'}]\n${interp(d.preview, v)}`;
         if (qr.length) {
-          bot(`${head}\n${qr.map((b, i) => `  ${i + 1}. ${b.label || `Button ${i + 1}`}`).join('\n')}`);
+          bot(
+            `${head}\n${qr.map((b, i) => `  ${i + 1}. ${b.label || `Button ${i + 1}`}`).join('\n')}`,
+          );
           opts.onAwaiting(true);
           return;
         }
@@ -186,7 +189,11 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       }
       case 'media': {
         const kind = (str(d.kind) || 'image').toLowerCase();
-        bot(d.caption ? interp(d.caption, v) : '', { kind, url: str(d.url || d.data), filename: str(d.filename) });
+        bot(d.caption ? interp(d.caption, v) : '', {
+          kind,
+          url: str(d.url || d.data),
+          filename: str(d.filename),
+        });
         return advance('out');
       }
       case 'buttons':
@@ -223,7 +230,10 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           }
         }
         const summary = conds
-          .map((c, i) => `${i ? ` ${str(ops[i - 1]) || 'AND'} ` : ''}${str(c.variable)} ${str(c.operator)} ${str(c.value)}`)
+          .map(
+            (c, i) =>
+              `${i ? ` ${str(ops[i - 1]) || 'AND'} ` : ''}${str(c.variable)} ${str(c.operator)} ${str(c.value)}`,
+          )
           .join('');
         sys(`if ${summary} → ${ok ? 'YES' : 'NO'}`);
         return advance(ok ? 'yes' : 'no');
@@ -247,7 +257,9 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           method: d.method === undefined ? undefined : str(d.method),
           body: d.body === undefined ? undefined : str(d.body),
           contentType: d.contentType === undefined ? undefined : str(d.contentType),
-          headers: Array.isArray(d.headers) ? (d.headers as { key?: string; value?: string }[]) : undefined,
+          headers: Array.isArray(d.headers)
+            ? (d.headers as { key?: string; value?: string }[])
+            : undefined,
           vars: v,
         };
         void opts
@@ -300,7 +312,9 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       case 'cta': {
         const actions = arr(d.actions).map(rec);
         const lines = actions.length
-          ? actions.map((a) => `[${str(a.type) || 'url'}] ${str(a.label)} → ${str(a.value)}`).join('\n')
+          ? actions
+              .map((a) => `[${str(a.type) || 'url'}] ${str(a.label)} → ${str(a.value)}`)
+              .join('\n')
           : `[${str(d.kind) || 'url'}] ${str(d.label)} → ${str(d.url || d.phone || d.code)}`;
         bot(`(CTA)\n${lines}`);
         return advance('out');
@@ -342,7 +356,9 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           'Wed 22 May · 2:30 PM',
         ];
         const slots = sample.slice(0, Math.max(1, Math.min(10, Number(d.slotCount) || 5)));
-        bot(`${str(d.prompt) || 'Pick a time:'}\n${slots.map((s, i) => `  ${i + 1}. ${s}`).join('\n')}`);
+        bot(
+          `${str(d.prompt) || 'Pick a time:'}\n${slots.map((s, i) => `  ${i + 1}. ${s}`).join('\n')}`,
+        );
         sys('(simulated) customer picks slot 1 → booked');
         return advance('booked');
       }
@@ -352,7 +368,9 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           d.mode === 'read'
             ? `Lookup row where ${str(d.matchColumn) || '?'}="${interp(d.matchValue, v)}" in ${sheet}`
             : `Append row to ${sheet} — ${arr(d.columns).length} columns`;
-        sys(`[Google Sheets · ${(str(d.mode) || 'write').toUpperCase()}] ${summary} (skipped in test)`);
+        sys(
+          `[Google Sheets · ${(str(d.mode) || 'write').toUpperCase()}] ${summary} (skipped in test)`,
+        );
         return advance('out');
       }
       case 'google_docs': {
@@ -360,7 +378,12 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           `[Google Docs] copy template ${d.templateId ? `${str(d.templateId).slice(0, 10)}…` : '(no template)'} → "${interp(d.newTitle, v)}" (mocked URL)`,
         );
         const mockUrl = 'https://docs.google.com/document/d/MOCKED/edit';
-        bot(interp(d.messageTemplate || "Here's your document: {{doc_url}}", { ...v, doc_url: mockUrl }));
+        bot(
+          interp(d.messageTemplate || "Here's your document: {{doc_url}}", {
+            ...v,
+            doc_url: mockUrl,
+          }),
+        );
         return advance('out');
       }
       case 'google_form': {
@@ -416,7 +439,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     pendingStart = null;
     opts.onReset?.();
     // Prefer the pinned start node, else the first trigger, else node 0 so a canvas without a trigger still gives feedback.
-    const first = nodes.find((n) => n.isStart) ?? nodes.find((n) => n.type === 'trigger') ?? nodes[0];
+    const first =
+      nodes.find((n) => n.isStart) ?? nodes.find((n) => n.type === 'trigger') ?? nodes[0];
     if (!first) {
       sys('Canvas is empty. Add a trigger and at least one node, then click Restart.');
       opts.onAwaiting(false);
@@ -464,10 +488,14 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       const expected = arr(d.options);
       let handle: string | null = null;
       if (expected.length > 0) {
-        const idx = expected.findIndex((o) => typeof o === 'string' && o.toLowerCase() === value.toLowerCase());
+        const idx = expected.findIndex(
+          (o) => typeof o === 'string' && o.toLowerCase() === value.toLowerCase(),
+        );
         handle = idx >= 0 ? `p${idx}` : 'else';
       }
-      const e = edges.find((x) => x.source === node.id && (handle ? x.sourceHandle === handle : true));
+      const e = edges.find(
+        (x) => x.source === node.id && (handle ? x.sourceHandle === handle : true),
+      );
       const next = e ? findNode(e.target) : null;
       if (next) later(STEP_DELAY_MS, () => stepTest(next));
       else if (handle) sys(`Port "${handle}" not connected — stop.`);
@@ -475,7 +503,10 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     } else if (node.type === 'buttons' || node.type === 'list' || node.type === 'poll') {
       // List items are objects: match and save their title, never the object ("[object Object]").
       const raw = arr(d.options);
-      const titles = node.type === 'list' ? raw.map((o, i) => flbListOption(o, i).title) : raw.map((o) => str(o));
+      const titles =
+        node.type === 'list'
+          ? raw.map((o, i) => flbListOption(o, i).title)
+          : raw.map((o) => str(o));
       const idx = pickIndex(titles, value);
       vars[str(d.var) || 'choice'] = titles[idx] || value;
       opts.onAwaiting(false);
@@ -488,7 +519,11 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       );
       opts.onAwaiting(false);
       route(node, `p${idx}`, `Button "${qr[idx]?.label || `p${idx}`}" not connected — stop.`);
-    } else if (node.type === 'whatsapp_shop' || node.type === 'woocommerce' || node.type === 'shopify') {
+    } else if (
+      node.type === 'whatsapp_shop' ||
+      node.type === 'woocommerce' ||
+      node.type === 'shopify'
+    ) {
       // Numeric pick = purchase; anything else = abandon (the runtime's resume / abandon-timer ports).
       const items = arr(d.productItems).map(rec);
       const n = parseInt(value, 10);

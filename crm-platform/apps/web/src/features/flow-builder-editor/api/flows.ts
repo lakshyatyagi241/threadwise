@@ -56,8 +56,7 @@ export const flowsApi = {
     apiFetch(`/flows/${id}/publish`, { method: 'POST', schema: flowDetailSchema }),
   unpublish: (id: string) =>
     apiFetch(`/flows/${id}/unpublish`, { method: 'POST', schema: flowDetailSchema }),
-  exportFlow: (id: string) =>
-    apiFetch(`/flows/${id}/export`, { schema: flowExportSchema }),
+  exportFlow: (id: string) => apiFetch(`/flows/${id}/export`, { schema: flowExportSchema }),
   importFlow: (payload: Record<string, unknown>) =>
     apiFetch('/flows/import', { method: 'POST', body: { payload }, schema: flowDetailSchema }),
   cloneTemplate: (id: string) =>
@@ -71,7 +70,10 @@ export const flowsApi = {
       signal,
     }),
   googleFiles: (kind: 'sheets' | 'docs' | 'forms', signal?: AbortSignal) =>
-    apiFetch(`/flows/builder-context/google/${kind}`, { schema: flbGoogleFilesResponseSchema, signal }),
+    apiFetch(`/flows/builder-context/google/${kind}`, {
+      schema: flbGoogleFilesResponseSchema,
+      signal,
+    }),
   testWebhook: (body: FlbTestWebhookRequest) =>
     apiFetch('/flows/test-webhook', { method: 'POST', body, schema: flbTestWebhookResponseSchema }),
   aiGenerate,
@@ -101,13 +103,19 @@ async function aiGenerate(body: FlbAiGenerateRequest): Promise<FlbAiGenerateResp
     json = undefined;
   }
   if (!res.ok) {
-    const err = toApiError(res.status, json, res.headers.get('x-request-id'), res.headers.get('retry-after'));
+    const err = toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
     throw err.code === 'UNKNOWN' || err.code === 'INTERNAL'
       ? new ApiError(res.status, err.code, `Generation failed (${res.status})`, err.requestId)
       : err;
   }
   const parsed = flbAiGenerateResponseSchema.safeParse(json);
-  if (!parsed.success) throw new ApiError(res.status, 'INTERNAL', `Generation failed (${res.status})`);
+  if (!parsed.success)
+    throw new ApiError(res.status, 'INTERNAL', `Generation failed (${res.status})`);
   return parsed.data;
 }
 
@@ -117,7 +125,8 @@ async function platformFetch<T>(
   init: { method?: string; body?: unknown; schema?: z.ZodType<T>; query?: Query } = {},
 ): Promise<T> {
   const qs = new URLSearchParams();
-  for (const [k, v] of Object.entries(init.query ?? {})) if (v !== undefined && v !== '') qs.set(k, String(v));
+  for (const [k, v] of Object.entries(init.query ?? {}))
+    if (v !== undefined && v !== '') qs.set(k, String(v));
   const method = init.method ?? 'GET';
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (init.body !== undefined) headers['Content-Type'] = 'application/json';
@@ -140,12 +149,24 @@ async function platformFetch<T>(
 export const adminTemplatesApi = {
   list: (q: { limit?: number; cursor?: string } = {}) =>
     platformFetch('/flow-templates', { query: q, schema: adminFlowTemplatesResponseSchema }),
-  get: (id: string) => platformFetch(`/flow-templates/${id}`, { schema: adminFlowTemplateDetailSchema }),
+  get: (id: string) =>
+    platformFetch(`/flow-templates/${id}`, { schema: adminFlowTemplateDetailSchema }),
   create: (body: CreateAdminFlowTemplateInput) =>
-    platformFetch('/flow-templates', { method: 'POST', body, schema: adminFlowTemplateDetailSchema }),
+    platformFetch('/flow-templates', {
+      method: 'POST',
+      body,
+      schema: adminFlowTemplateDetailSchema,
+    }),
   update: (id: string, body: UpdateAdminFlowTemplateInput) =>
-    platformFetch(`/flow-templates/${id}`, { method: 'PUT', body, schema: adminFlowTemplateDetailSchema }),
+    platformFetch(`/flow-templates/${id}`, {
+      method: 'PUT',
+      body,
+      schema: adminFlowTemplateDetailSchema,
+    }),
   toggle: (id: string) =>
-    platformFetch(`/flow-templates/${id}/toggle`, { method: 'POST', schema: adminFlowTemplateSchema }),
+    platformFetch(`/flow-templates/${id}/toggle`, {
+      method: 'POST',
+      schema: adminFlowTemplateSchema,
+    }),
   remove: (id: string) => platformFetch(`/flow-templates/${id}`, { method: 'DELETE' }),
 };

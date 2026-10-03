@@ -23,16 +23,36 @@ import {
   type CanvasState,
 } from './graph-ops';
 
-const node = (id: string, type: string, data: Record<string, unknown> = {}, extra: Partial<FlowNode> = {}): FlowNode => ({
-  id, type, x: 0, y: 0, data, ...extra,
+const node = (
+  id: string,
+  type: string,
+  data: Record<string, unknown> = {},
+  extra: Partial<FlowNode> = {},
+): FlowNode => ({
+  id,
+  type,
+  x: 0,
+  y: 0,
+  data,
+  ...extra,
 });
-const edge = (id: string, source: string, sourceHandle: string, target: string): FlowEdge => ({ id, source, sourceHandle, target });
+const edge = (id: string, source: string, sourceHandle: string, target: string): FlowEdge => ({
+  id,
+  source,
+  sourceHandle,
+  target,
+});
 const empty: CanvasState = { nodes: [], edges: [] };
 
 describe('adding nodes (WD-FLB-015)', () => {
   it('the first node on an empty canvas becomes START; later ones do not', () => {
     const a = addNode(empty, 'message', 10, 20);
-    expect(a.ok && a.state.nodes[0]).toMatchObject({ type: 'message', x: 10, y: 20, isStart: true });
+    expect(a.ok && a.state.nodes[0]).toMatchObject({
+      type: 'message',
+      x: 10,
+      y: 20,
+      isStart: true,
+    });
     const b = addNode((a as { state: CanvasState }).state, 'end', 0, 0);
     expect(b.ok && b.state.nodes[1]!.isStart).toBeUndefined();
   });
@@ -56,7 +76,10 @@ describe('adding nodes (WD-FLB-015)', () => {
 
 describe('duplicate, delete, pin (WD-FLB-015 rules 4, 5)', () => {
   const s: CanvasState = {
-    nodes: [node('a', 'trigger', {}, { isStart: true }), node('b', 'message', { text: 'hi', nested: { k: 1 } }, { x: 100, y: 100, isStart: false })],
+    nodes: [
+      node('a', 'trigger', {}, { isStart: true }),
+      node('b', 'message', { text: 'hi', nested: { k: 1 } }, { x: 100, y: 100, isStart: false }),
+    ],
     edges: [edge('e1', 'a', 'out', 'b')],
   };
 
@@ -65,7 +88,12 @@ describe('duplicate, delete, pin (WD-FLB-015 rules 4, 5)', () => {
     expect(r.ok).toBe(true);
     if (!r.ok) return;
     const copy = r.state.nodes[2]!;
-    expect(copy).toMatchObject({ type: 'message', x: 140, y: 140, data: { text: 'hi', nested: { k: 1 } } });
+    expect(copy).toMatchObject({
+      type: 'message',
+      x: 140,
+      y: 140,
+      data: { text: 'hi', nested: { k: 1 } },
+    });
     expect(copy.isStart).toBeUndefined();
     expect(copy.id).not.toBe('b');
     expect(r.state.edges).toHaveLength(1);
@@ -74,7 +102,10 @@ describe('duplicate, delete, pin (WD-FLB-015 rules 4, 5)', () => {
   });
 
   it('the Trigger cannot be duplicated', () => {
-    expect(duplicateNode(s, 'a')).toEqual({ ok: false, message: 'Trigger can only exist once — can’t duplicate.' });
+    expect(duplicateNode(s, 'a')).toEqual({
+      ok: false,
+      message: 'Trigger can only exist once — can’t duplicate.',
+    });
   });
 
   it('deleting a node removes all its incident edges', () => {
@@ -95,7 +126,10 @@ describe('duplicate, delete, pin (WD-FLB-015 rules 4, 5)', () => {
 });
 
 describe('connecting (WD-FLB-015 rule 3)', () => {
-  const s: CanvasState = { nodes: [node('a', 'message'), node('b', 'message'), node('c', 'message')], edges: [] };
+  const s: CanvasState = {
+    nodes: [node('a', 'message'), node('b', 'message'), node('c', 'message')],
+    edges: [],
+  };
 
   it('a self connection is ignored', () => {
     expect(connect(s, { nodeId: 'a', handleId: 'out' }, 'a')).toBe(s);
@@ -119,17 +153,25 @@ describe('connecting (WD-FLB-015 rule 3)', () => {
 
 describe('options (WD-FLB-015 rule 9, WD-FLB-035..050)', () => {
   const buttons = (n: number): CanvasState => ({
-    nodes: [node('b', 'buttons', { options: Array.from({ length: n }, (_, i) => `O${i}`) }), node('x', 'end'), node('y', 'end'), node('z', 'end')],
+    nodes: [
+      node('b', 'buttons', { options: Array.from({ length: n }, (_, i) => `O${i}`) }),
+      node('x', 'end'),
+      node('y', 'end'),
+      node('z', 'end'),
+    ],
     edges: [edge('e0', 'b', 'p0', 'x'), edge('e1', 'b', 'p1', 'y'), edge('e2', 'b', 'p2', 'z')],
   });
 
   it('removing option 2 of 3 deletes its edge and option 3 now hangs off p1', () => {
     const r = removeOption(buttons(3), 'b', 1);
     expect(r.nodes[0]!.data.options).toEqual(['O0', 'O2']);
-    expect(r.edges.map((e) => [e.id, e.sourceHandle])).toEqual([['e0', 'p0'], ['e2', 'p1']]);
+    expect(r.edges.map((e) => [e.id, e.sourceHandle])).toEqual([
+      ['e0', 'p0'],
+      ['e2', 'p1'],
+    ]);
   });
 
-  it('removing an option never touches another node\'s edges', () => {
+  it("removing an option never touches another node's edges", () => {
     const s = { ...buttons(3), edges: [...buttons(3).edges, edge('e9', 'x', 'p2', 'y')] };
     expect(removeOption(s, 'b', 0).edges.find((e) => e.id === 'e9')!.sourceHandle).toBe('p2');
   });
@@ -138,16 +180,33 @@ describe('options (WD-FLB-015 rule 9, WD-FLB-035..050)', () => {
     expect(addOption(buttons(3), 'b')).toEqual({ ok: false, message: 'Max 3 quick reply buttons' });
     const ask: CanvasState = { nodes: [node('a', 'ask', { options: ['1', '2', '3'] })], edges: [] };
     expect(addOption(ask, 'a')).toEqual({ ok: false, message: 'Max 3 expected answers' });
-    const poll: CanvasState = { nodes: [node('p', 'poll', { options: ['1', '2', '3'] })], edges: [] };
+    const poll: CanvasState = {
+      nodes: [node('p', 'poll', { options: ['1', '2', '3'] })],
+      edges: [],
+    };
     expect(addOption(poll, 'p')).toEqual({ ok: false, message: 'Max 3 poll options' });
-    const list: CanvasState = { nodes: [node('l', 'list', { options: Array.from({ length: 10 }, (_, i) => ({ title: `i${i}`, description: '', section: '' })) })], edges: [] };
+    const list: CanvasState = {
+      nodes: [
+        node('l', 'list', {
+          options: Array.from({ length: 10 }, (_, i) => ({
+            title: `i${i}`,
+            description: '',
+            section: '',
+          })),
+        }),
+      ],
+      edges: [],
+    };
     expect(addOption(list, 'l')).toEqual({ ok: false, message: 'Max 10 items' });
   });
 
-  it('a new option gets the type\'s default label; a list item inherits the last section', () => {
+  it("a new option gets the type's default label; a list item inherits the last section", () => {
     const r = addOption(buttons(2), 'b');
     expect(r.ok && r.state.nodes[0]!.data.options).toEqual(['O0', 'O1', 'Button 3']);
-    const list: CanvasState = { nodes: [node('l', 'list', { options: [{ title: 'A', description: '', section: 'Menu' }] })], edges: [] };
+    const list: CanvasState = {
+      nodes: [node('l', 'list', { options: [{ title: 'A', description: '', section: 'Menu' }] })],
+      edges: [],
+    };
     const l = addOption(list, 'l');
     expect(l.ok && l.state.nodes[0]!.data.options).toEqual([
       { title: 'A', description: '', section: 'Menu' },
@@ -163,7 +222,10 @@ describe('options (WD-FLB-015 rule 9, WD-FLB-035..050)', () => {
 });
 
 describe('undo and redo (WD-FLB-015 rules 6, 7)', () => {
-  const at = (n: number): CanvasState => ({ nodes: [node('n', 'message', {}, { x: n })], edges: [] });
+  const at = (n: number): CanvasState => ({
+    nodes: [node('n', 'message', {}, { x: n })],
+    edges: [],
+  });
 
   it('three moves then two undos returns to the state after the first move; redo re-applies', () => {
     let h = createHistory(at(0));
