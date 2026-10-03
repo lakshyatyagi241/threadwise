@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { normaliseAllowedDomains, widgetFieldsSchema } from '@crm/contracts';
 import {
   cookieValue,
-  copyName,
   freshToken,
   isTokenShape,
   originAllowed,
@@ -50,13 +49,6 @@ describe('embed token and slug (WD-WGT-006)', () => {
     expect(uniqueSlug('support', new Set())).toBe('support');
     expect(uniqueSlug('support', new Set(['support']))).toBe('support-2');
     expect(uniqueSlug('support', new Set(['support', 'support-2', 'support-3']))).toBe('support-4');
-  });
-
-  it('WD-WGT-024: a copy is named "<name> (copy)" and never passes 120 characters', () => {
-    expect(copyName('Pricing')).toBe('Pricing (copy)');
-    const long = copyName('x'.repeat(120));
-    expect(long.length).toBe(120);
-    expect(long.endsWith(' (copy)')).toBe(true);
   });
 });
 

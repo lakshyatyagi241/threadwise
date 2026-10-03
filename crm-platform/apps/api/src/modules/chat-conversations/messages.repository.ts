@@ -407,6 +407,15 @@ export class MessagesRepository {
     return rowsOf(res).length > 0;
   }
 
+  /** The category a template is billed under (Meta's pricing category, else the template's own); null without a template. */
+  async templateCategory(tx: Tx, orgId: number, templateId: number | null): Promise<string | null> {
+    if (templateId === null) return null;
+    const res = await tx.execute(
+      sql`SELECT coalesce(meta_category, category) AS category FROM wa_templates WHERE org_id = ${orgId} AND id = ${templateId}`,
+    );
+    return (rowsOf(res)[0]?.category as string | null | undefined) ?? null;
+  }
+
   /** The agent's Retry: failed -> queued again, with a fresh dispatch generation. False when the message was not failed. */
   async requeue(
     tx: Tx,

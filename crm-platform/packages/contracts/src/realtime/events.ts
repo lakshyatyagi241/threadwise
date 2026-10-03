@@ -52,6 +52,8 @@ export const REALTIME_EVENT = {
   presence: 'inbox.presence',
   /** A channel's status moved without a person asking (the provider stopped accepting its credentials): the UI warns. */
   channelStatus: 'inbox.channel.status',
+  /** The workspace wallet's balance moved (a message charge, a refund, a top-up, an adjustment). */
+  walletUpdated: 'wallet.updated',
 } as const;
 
 const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
@@ -100,6 +102,11 @@ export const realtimeEventSchemas = {
     status: z.enum(['connected', 'disconnected', 'error', 'needs_reauth']),
     code: z.string().nullable(),
     message: z.string().nullable(),
+  }),
+  /** A signal with the new figure; the client may also refetch `/wallet/summary` for the rest. Hundredths of the wallet currency. */
+  [REALTIME_EVENT.walletUpdated]: z.object({
+    balanceMinor: z.number().int(),
+    reason: z.enum(['charge', 'refund', 'topup', 'adjustment']),
   }),
 } as const;
 

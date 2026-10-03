@@ -12,11 +12,14 @@ export interface OperatorNavItem {
 }
 
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
+import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
+import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
+const WALLET = 'wallet-message-billing.admin.nav';
 
 export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   {
@@ -55,10 +58,14 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
+  // per-workspace plans and limits (PLAN domain)
+  ...PLAN_OPERATOR_NAV,
   // platform settings, branding and storage (SET domain)
   ...SET_OPERATOR_NAV,
   // roles and permissions domain (RBAC): Roles, Permissions, Staff roles
   ...ROLES_OPERATOR_NAV,
+  // Node bridge domain (NODE): address, token and sender pacing
+  ...NODE_OPERATOR_NAV,
   {
     id: 'i18n-languages',
     href: '/admin/i18n/languages',
@@ -164,6 +171,37 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     id: 'bsp-credit',
     href: '/admin/bsp/credit',
     labelKey: `${BSP}.reseller`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  // Wallet domain (seam edit): same Billing group as the reseller pages.
+  {
+    id: 'wallet-pricing',
+    href: '/admin/wallet/pricing',
+    labelKey: `${WALLET}.pricing`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'wallet-margins',
+    href: '/admin/wallet/margins',
+    labelKey: `${WALLET}.margins`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'wallet-packages',
+    href: '/admin/wallet/packages',
+    labelKey: `${WALLET}.packages`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'wallet-workspaces',
+    href: '/admin/wallet/workspaces',
+    labelKey: `${WALLET}.workspaces`,
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'wallet-logs',
+    href: '/admin/wallet/logs',
+    labelKey: `${WALLET}.logs`,
     groupKey: `${BSP}.groups.billing`,
   },
 ];

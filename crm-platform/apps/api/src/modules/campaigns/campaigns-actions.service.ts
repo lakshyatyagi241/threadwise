@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Readable } from 'node:stream';
 import {
   ERROR_CODES,
@@ -15,6 +15,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { WALLET_GATE, type WalletGate } from '../broadcasts';
 import { CampaignEvents } from './campaign-events';
 import { CampaignJobs } from './campaign-jobs';
 import { csvSafe } from './campaign-rules';
@@ -57,7 +58,15 @@ export class CampaignsActionsService {
     private readonly outbox: OutboxService,
     private readonly events: CampaignEvents,
     private readonly jobs: CampaignJobs,
+    @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
+
+  /** A run that starts again needs a funded wallet for what is still unsent (WD-WALLET-013); the transaction rolls back on refusal. */
+  private assertFunded(orgId: number, c: { totalRecipients: number; counts: { sent: number } }) {
+    return this.wallet.precheck(orgId, Math.max(0, c.totalRecipients - c.counts.sent), {
+      source: 'campaign',
+    });
+  }
 
   /** Sets the status and tells the world. `previous` is what it was. */
   private async move(
@@ -100,7 +109,10 @@ export class CampaignsActionsService {
       const c = await this.repo.findByUuid(tx, orgId, uuid);
       if (!c) throw AppError.notFound('Campaign', uuid);
       await this.repo.lock(tx, orgId, uuid);
-      if (c.status !== 'running') await this.move(tx, orgId, c, 'running', { reopen: true });
+      if (c.status !== 'running') {
+        await this.assertFunded(orgId, c);
+        await this.move(tx, orgId, c, 'running', { reopen: true });
+      }
       return c;
     });
     await this.jobs.enqueue(orgId, row.id, row.uuid);
@@ -129,8 +141,10 @@ export class CampaignsActionsService {
         sendDate: `${get('year')}-${get('month')}-${get('day')}`,
         sendTime: `${get('hour')}:${get('minute')}`,
       });
-      if (c.status !== 'running')
+      if (c.status !== 'running') {
+        await this.assertFunded(orgId, c);
         await this.move(tx, orgId, c, 'running', { reopen: true, lastRun: true });
+      }
       return c;
     });
     await this.jobs.enqueue(orgId, row.id, row.uuid);
@@ -167,6 +181,7 @@ export class CampaignsActionsService {
             : 'Nothing to resend — no matching recipients.',
         );
       }
+      await this.wallet.precheck(orgId, n, { source: 'campaign' });
       await this.repo.recount(tx, orgId, c.id);
       // `now` campaigns run at once for the reset rows; the others go back to the schedule.
       const next: CampaignStatus = c.scheduleType === 'now' ? 'running' : 'scheduled';

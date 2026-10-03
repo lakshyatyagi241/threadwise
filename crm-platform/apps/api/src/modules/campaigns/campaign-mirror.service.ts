@@ -1,7 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { randomUUID } from 'node:crypto';
+import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { CONVERSATIONS_FACADE, type ConversationsFacade } from '../chat-conversations';
 import { MergeTagService, resolveToken } from '../crm';
 import {
   TEMPLATE_DIRECTORY,
@@ -11,7 +14,6 @@ import {
 } from '../broadcasts';
 
 const MIRROR_STATUSES: ReadonlySet<string> = new Set(['sent', 'delivered', 'read']);
-const PREVIEW_LENGTH = 200;
 const digitsOf = (v: string | null | undefined) => (v ?? '').replace(/\D+/g, '');
 
 /**
@@ -30,6 +32,7 @@ export class CampaignMirrorService {
     private readonly merge: MergeTagService,
     private readonly crypto: CryptoService,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
+    @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
   /** True when a bubble was written. */
@@ -45,13 +48,11 @@ export class CampaignMirrorService {
       return await this.db.txAs({ orgId }, async (tx) => {
         const c = (
           await tx.execute(sql`
-            SELECT uuid, provider, device_id, template_id, custom_message FROM wpcampaigns
+            SELECT uuid, template_id, custom_message FROM wpcampaigns
             WHERE org_id = ${orgId} AND id = ${campaignId}`)
         ).rows[0] as
           | {
               uuid: string;
-              provider: string | null;
-              device_id: number | string | null;
               template_id: number | string | null;
               custom_message: string | null;
             }
@@ -64,16 +65,15 @@ export class CampaignMirrorService {
         const digits = digitsOf(k?.phone);
         if (!c || digits === '') return false;
 
-        // A multi-number workspace: the send lands in the sending number's thread, never another's.
-        const bound = c.provider === 'baileys' && c.device_id !== null ? Number(c.device_id) : null;
+        // The recipient's existing thread, on whichever channel it lives (a cold recipient gets none). The thread is keyed by the peer
+        // on its channel, so the contact link or the phone digits find it.
         const conv = (
           await tx.execute(sql`
-            SELECT id, provider FROM conversations
-            WHERE org_id = ${orgId}
-              AND (contact_id = ${contactId} OR contact_digits = ${digits} OR split_part(raw_jid, '@', 1) = ${digits})
-              AND (${bound}::bigint IS NULL OR device_id IS NULL OR device_id = ${bound}::bigint)
-            ORDER BY id LIMIT 1`)
-        ).rows[0] as { id: number | string; provider: string | null } | undefined;
+            SELECT c.id, c.peer_key, ch.uuid AS channel_uuid FROM conversations c
+            JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+            WHERE c.org_id = ${orgId} AND (c.contact_id = ${contactId} OR c.peer_key = ${digits})
+            ORDER BY c.id LIMIT 1`)
+        ).rows[0] as { id: number | string; peer_key: string; channel_uuid: string } | undefined;
         if (!conv) return false;
 
         const tpl =
@@ -91,38 +91,22 @@ export class CampaignMirrorService {
         }
         if (body.trim() === '') return false; // a contentless bubble helps nobody
 
+        // One bubble per (campaign, contact): the ledger makes the second report with the same id a no-op, so a lost `sent` heals
+        // from `delivered` and two reports at once cannot both insert.
         const key = `campaign:${campaignId}:contact:${contactId}`;
-        await tx.execute(
-          sql`SELECT pg_advisory_xact_lock(hashtextextended(${`camp-mirror:${orgId}:${key}`}, 0))`,
+        return await RequestContextStore.run(
+          { requestId: randomUUID(), orgId, actorType: 'system', actorId: null, userId: null },
+          async () => {
+            const done = await this.conversations.recordOutbound({
+              channelId: conv.channel_uuid,
+              peerKey: conv.peer_key,
+              source: 'campaign',
+              body,
+              providerMessageId: providerMessageId ?? key,
+            });
+            return Boolean(done.messageId);
+          },
         );
-        const seen = await tx.execute(sql`
-          SELECT 1 FROM messages
-          WHERE org_id = ${orgId} AND conversation_id = ${Number(conv.id)}
-            AND (meta ->> 'src_key' = ${key} OR (${providerMessageId}::text IS NOT NULL AND meta ->> 'wa_message_id' = ${providerMessageId}))
-          LIMIT 1`);
-        if (seen.rows.length > 0) return false;
-
-        const buttons = Array.isArray(tpl?.buttons) && tpl.buttons.length > 0 ? tpl.buttons : null;
-        const meta = {
-          source: 'campaign',
-          type: tpl ? 'template' : 'text',
-          ...(tpl ? { template_name: tpl.templateName } : {}),
-          ...(buttons ? { buttons } : {}),
-          campaign_id: c.uuid,
-          ...(providerMessageId ? { wa_message_id: providerMessageId } : {}),
-          src_key: key,
-        };
-        await tx.execute(sql`
-          INSERT INTO messages (org_id, conversation_id, contact_id, template_id, direction, to_number, body, status,
-                                provider, meta, sent_at, delivered_at, read_at)
-          VALUES (${orgId}, ${Number(conv.id)}, ${contactId}, ${c.template_id === null ? null : Number(c.template_id)},
-                  'out', ${digits}, ${body}, ${status}, ${c.provider ?? conv.provider}, ${JSON.stringify(meta)}::jsonb, now(),
-                  ${status === 'sent' ? null : sql`now()`}, ${status === 'read' ? sql`now()` : null})`);
-        await tx.execute(sql`
-          UPDATE conversations SET last_message_at = now(), last_outbound_at = now(),
-                                   preview = left(${body}, ${PREVIEW_LENGTH})
-          WHERE org_id = ${orgId} AND id = ${Number(conv.id)}`);
-        return true;
       });
     } catch (err) {
       this.logger.warn({ err, orgId, campaignId, contactId }, '[CAMP] inbox mirror failed');

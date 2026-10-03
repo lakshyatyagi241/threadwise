@@ -26,14 +26,29 @@ export interface BilledSend {
   usedThisMonth: number;
 }
 
+export interface SettledSend {
+  orgId: number;
+  provider: 'waba' | 'twilio' | 'baileys';
+  providerMessageId: string;
+  /** The recipient's number: the country sets the rate. */
+  to: string | null;
+  category?: string | null;
+}
+
 /**
- * Plan-first billing (wallet-message-billing): a send is free under the plan's monthly messages and costs one wallet credit after.
- * `consume` throws `PlanLimitReached` when the cap is reached and the wallet is empty; `settle` is the delivery side.
+ * Campaign billing on top of wallet-message-billing. Charging happens after delivery, per provider message id and exactly once
+ * (the wallet domain owns that rule); the launch precheck is `WALLET_GATE` (broadcasts' sending kit, `source: 'campaign'`).
+ * The receipt paths do not call `settle*` themselves: they report `message.delivery_reported` through the outbox and the wallet's
+ * subscriber settles it, so one rule decides which status charges. `settle*` stay for a caller that holds the id and wants the
+ * answer now.
  */
 export interface CampaignBilling {
-  /** Resolves false when the plan cap is reached and the wallet is empty: nothing may be sent. */
+  /**
+   * Send-time overflow billing (WaDesk's legacy mode, where the plan cap and an empty wallet stopped a send). Intentionally not
+   * ported: the launch gate and delivery-time charging replace it, so this always resolves true and nothing is blocked per message.
+   */
   consume(send: BilledSend): Promise<boolean>;
-  settleDelivered(orgId: number, providerMessageId: string, to: string | null): Promise<void>;
+  settleDelivered(send: SettledSend): Promise<void>;
   settleFailed(orgId: number, providerMessageId: string): Promise<void>;
 }
 export const CAMPAIGN_BILLING = Symbol('CAMPAIGN_BILLING');

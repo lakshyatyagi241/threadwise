@@ -50,7 +50,7 @@ interface PlanRow extends PlanPricingFacts {
 }
 
 interface Priced {
-  kind: 'plan' | 'wallet_topup';
+  kind: 'plan' | 'addon' | 'wallet_topup';
   itemName: string;
   itemSubtitle: string | null;
   period: 'monthly' | 'yearly';
@@ -133,14 +133,36 @@ export class CheckoutService {
     plan: PlanRow,
     rates: ReadonlyMap<string, string>,
   ): Promise<void> {
-    if (plan.kind !== 'plan') {
-      throw unavailable('Add-ons are not purchasable yet.', ERROR_CODES.PAYGW_PLAN_NOT_PURCHASABLE);
-    }
     if (plan.isFree || plan.isCustomQuote) {
       throw unavailable(
-        'This plan is not sold through checkout. Free plans are switched on the Plans page; custom quotes go through sales.',
+        plan.kind === 'addon'
+          ? 'This add-on is not sold through checkout.'
+          : 'This plan is not sold through checkout. Free plans are switched on the Plans page; custom quotes go through sales.',
         ERROR_CODES.PAYGW_PLAN_NOT_PURCHASABLE,
       );
+    }
+    if (plan.kind === 'addon') {
+      // An add-on sits on top of an active paid plan (WD-ADD-033). WaDesk enforced this only in the view; a direct POST bypassed it.
+      const base = await tx.execute(sql`
+        SELECT p.is_free, p.is_custom_quote, s.plan_ends_at
+        FROM organizations o
+        LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
+        LEFT JOIN org_plan_state s ON s.org_id = o.id
+        WHERE o.id = ${RequestContextStore.require().orgId}`);
+      const b = base.rows[0] as
+        | { is_free: boolean | null; is_custom_quote: boolean | null; plan_ends_at: string | null }
+        | undefined;
+      const paidActive =
+        b !== undefined &&
+        b.is_free === false &&
+        (b.plan_ends_at === null || new Date(b.plan_ends_at) > new Date());
+      if (!paidActive) {
+        throw unavailable(
+          'Add-ons need an active paid plan. Choose or renew a plan first.',
+          ERROR_CODES.PAYGW_PLAN_NOT_PURCHASABLE,
+        );
+      }
+      return;
     }
     // Downgrade guard, server-side (WaDesk enforced it only on the page, so a direct POST bypassed it).
     const cur = await tx.execute(sql`
@@ -218,7 +240,7 @@ export class CheckoutService {
         : converted;
     const parts = breakdown(subtotal, currency, 0n, s.taxEnabled ? s.taxRate : '0');
     return {
-      kind: 'plan',
+      kind: plan.kind === 'addon' ? 'addon' : 'plan',
       itemName: plan.name,
       itemSubtitle: plan.subtitle,
       period,
