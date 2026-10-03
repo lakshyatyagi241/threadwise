@@ -254,14 +254,38 @@ export interface PreviewDraft {
 
 // ---- settings ------------------------------------------------------------------------------------------------------
 
+export const CALENDAR_STATUSES = [
+  'unavailable',
+  'disconnected',
+  'connected',
+  'needs_reconnect',
+] as const;
+export type CalendarState = (typeof CALENDAR_STATUSES)[number];
+
+/**
+ * The workspace's Google Calendar link. `unavailable`: the platform has no Google OAuth client; `disconnected`: it could be connected;
+ * `needs_reconnect`: Google stopped honouring the grant. `account` is the connected Google account.
+ */
 export const calendarStatusSchema = z.object({
   provider: z.literal('google'),
-  /** `unavailable`: the workspace's plan or the platform has no calendar sync; `disconnected`: it could be connected. */
-  status: z.enum(['unavailable', 'disconnected', 'connected']),
+  status: z.enum(CALENDAR_STATUSES),
+  account: nullableText,
   calendarId: nullableText,
   calendarName: nullableText,
   connectedAt: instant.nullable(),
 });
+export type CalendarConnection = z.infer<typeof calendarStatusSchema>;
+
+/** A calendar of the connected account that bookings can be written to. */
+export const calendarOptionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  primary: z.boolean(),
+  timezone: nullableText,
+});
+export type CalendarOption = z.infer<typeof calendarOptionSchema>;
+
+export const calendarStartSchema = z.object({ url: z.string(), expiresInSeconds: z.number() });
 
 export const bookingSettingsSchema = z.object({
   timezone: nullableText,

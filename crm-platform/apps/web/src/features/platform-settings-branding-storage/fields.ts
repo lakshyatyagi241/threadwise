@@ -49,7 +49,7 @@ export interface FieldSpec {
 
 /** A block that is not a plain list of fields. */
 export type CustomSection =
-  'brandAssets' | 'signupLink' | 'seoPreview' | 'teamInboxApp' | 'wabaCallback';
+  'brandAssets' | 'signupLink' | 'seoPreview' | 'teamInboxApp' | 'wabaCallback' | 'googleCallback';
 
 export interface SectionSpec {
   id: string;
@@ -487,6 +487,24 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
+    id: 'googleCalendar',
+    group: 'googleCalendar',
+    slug: 'google-calendar',
+    guide: ['project', 'redirect', 'consent', 'workspaces'],
+    sections: [
+      {
+        id: 'oauth',
+        eyebrow: 'google-oauth',
+        custom: 'googleCallback',
+        fields: [
+          f('enabled', 'toggle'),
+          ...halves(f('clientId', 'text', { mono: true }), f('clientSecret', 'secret')),
+          f('redirectUri', 'url', { mono: true }),
+        ],
+      },
+    ],
+  },
+  {
     id: 'whatsapp',
     group: 'whatsapp',
     slug: 'whatsapp',
@@ -572,4 +590,5 @@ export const HUB_ORDER = [
   'storage',
   'realtime',
   'campaigns',
+  'googleCalendar',
 ] as const;

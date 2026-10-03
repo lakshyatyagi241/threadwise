@@ -46,6 +46,7 @@ import { downloadSitemap } from '../lib/sitemap-download';
 import { AppearancePreview, PALETTE_DEFAULTS, ResetColours } from './appearance-preview';
 import { BrandAssets } from './brand-assets';
 import { ConnectionTest } from './connection-test';
+import { GoogleCallback } from './google-callback';
 import { Counter, GuideCard, SetHeader, TipCard } from './page-parts';
 import { SeoPreview } from './seo-preview';
 import { TeamInboxApp } from './team-inbox-app';
@@ -564,6 +565,13 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       body = (
         <div className="space-y-4">
           <WabaCallback />
+          {fieldsGrid(s)}
+        </div>
+      );
+    else if (s.custom === 'googleCallback')
+      body = (
+        <div className="space-y-4">
+          <GoogleCallback uri={String(data.extra?.redirectUri ?? '')} />
           {fieldsGrid(s)}
         </div>
       );

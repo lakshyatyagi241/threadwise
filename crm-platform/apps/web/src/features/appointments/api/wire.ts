@@ -2,6 +2,8 @@ import type { z } from 'zod';
 import type {
   AppointmentResponse,
   BookingTypeResponse,
+  CalendarListResponse,
+  CalendarStatusResponse,
   PublicBookResponse,
   PublicBookingPage,
   PublicBookingType,
@@ -17,6 +19,8 @@ import { minorToInput, parseMajor } from '../lib/money';
 import { addDays, dayKeyOf } from '../lib/zone';
 import type {
   Appointment,
+  CalendarConnection,
+  CalendarOption,
   BookingType,
   BookingTypeInput,
   PreviewDraft,
@@ -349,6 +353,24 @@ export function toSlotList(r: SlotsResponse, range?: { from: string; to: string 
   }
   slots.sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
   return { timezone: r.timezone, slots };
+}
+
+// ---- the Google Calendar link --------------------------------------------------------------------------------------
+
+/** The server's answer for `GET /appointments/calendar`. The calendar's own name stays empty until an admin picks one. */
+export function toCalendar(r: CalendarStatusResponse): CalendarConnection {
+  return {
+    provider: 'google',
+    status: r.status,
+    account: r.account,
+    calendarId: r.calendarId,
+    calendarName: r.calendarName,
+    connectedAt: r.connectedAt,
+  };
+}
+
+export function toCalendarOptions(r: CalendarListResponse): CalendarOption[] {
+  return r.data.map((c) => ({ id: c.id, name: c.name, primary: c.primary, timezone: c.timezone }));
 }
 
 // ---- the visitor's pages -------------------------------------------------------------------------------------------
