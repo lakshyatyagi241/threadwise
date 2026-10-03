@@ -6,7 +6,7 @@ import {
   type FacebookGraphFactory,
 } from '../../infra/providers/channel-facebook/facebook.port';
 import { INBOX_INGEST, type InboxIngest } from './_shims/tokens';
-import { PLACEHOLDER_NAME } from './_shims/sql-inbox-ingest';
+import { PLACEHOLDER_NAME } from './_shims/chat-inbox-ingest';
 import { readHistory } from './event-rules';
 import { dmThreadKey } from './page-rules';
 import { PagesRepository } from './pages.repository';
@@ -70,20 +70,20 @@ export class BackfillService {
         }
         if (psid === '') psid = m.fromId;
         try {
-          const rec = await this.db.txAs({ orgId }, (tx) =>
-            this.inbox.recordInbound(tx, orgId, {
-              kind: 'dm',
-              rawJid: dmThreadKey(page.pageId, psid),
-              title: PLACEHOLDER_NAME,
-              senderId: psid,
-              body: m.text,
-              mediaType: m.mediaType,
-              mediaUrl: m.mediaUrl,
-              dedup: m.mid,
-              at: m.timestamp === null ? null : new Date(m.timestamp),
-              meta: { psid, kind: 'dm', backfill: true },
-            }),
-          );
+          const rec = await this.inbox.recordInbound(orgId, {
+            kind: 'dm',
+            pageId: page.pageId,
+            pageName: page.name ?? page.pageId,
+            rawJid: dmThreadKey(page.pageId, psid),
+            title: PLACEHOLDER_NAME,
+            senderId: psid,
+            body: m.text,
+            mediaType: m.mediaType,
+            mediaUrl: m.mediaUrl,
+            dedup: m.mid,
+            at: m.timestamp === null ? null : new Date(m.timestamp),
+            meta: { psid, kind: 'dm', backfill: true },
+          });
           if (rec.stored) {
             result.messages += 1;
             imported = true;

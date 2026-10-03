@@ -103,6 +103,9 @@ export const UNSUPPORTED_BODY = 'This message type is not supported yet';
 const CHANNEL_META_KEYS = [
   'contacts',
   'interactive',
+  'buttons',
+  'telegram',
+  'payment',
   'referral',
   'rawType',
   'forwarded',

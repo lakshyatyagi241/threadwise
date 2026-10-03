@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { FacebookPlanGate, InboundHooks, MediaUrls } from './tokens';
+import type { FacebookPlanGate, InboundHooks } from './tokens';
 
 /**
  * The Facebook flags are not in the plan catalogue yet, so every check passes and the AI agent is allowed. This matches Reference for
@@ -33,13 +33,5 @@ export class NoInboundHooks implements InboundHooks {
 
   automate(): Promise<void> {
     return Promise.resolve();
-  }
-}
-
-/** No storage domain yet: only an address that is already public can be sent as an attachment. */
-@Injectable()
-export class PublicOnlyMediaUrls implements MediaUrls {
-  publicUrl(path: string): string | null {
-    return /^https?:\/\//i.test(path) ? path : null;
   }
 }

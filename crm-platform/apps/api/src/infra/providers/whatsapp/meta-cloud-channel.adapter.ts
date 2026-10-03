@@ -225,11 +225,14 @@ export class MetaCloudChannelAdapter implements ChannelAdapter {
       read(this.admin.getPhone(auth, call.phoneNumberId)),
       conn.wabaId ? read(this.admin.getWabaDetails(conn)) : Promise.resolve(null),
       conn.wabaId ? read(this.admin.getSubscribedApps(conn)) : Promise.resolve(null),
-      conn.accessToken ? read(this.admin.inspectToken(conn.accessToken)) : Promise.resolve(null),
+      // A token of a provider outside Meta cannot be inspected on Graph.
+      conn.accessToken && conn.registry?.credentialMode !== 'channel_token'
+        ? read(this.admin.inspectToken(conn.accessToken))
+        : Promise.resolve(null),
     ]);
     const verdict = buildHealth({ now: this.clock(), phone, waba, subscribedApps, token });
     // The partner key of the Interakt route is the platform's: never ask the customer to paste a token for it.
-    return conn.provider === 'interakt'
+    return usesPlatformCredential(conn)
       ? {
           ...verdict,
           needsReauth: false,
@@ -255,12 +258,13 @@ export class MetaCloudChannelAdapter implements ChannelAdapter {
       phoneNumberId: ctx.phoneNumberId,
       accessToken: ctx.channelToken,
       authKey: ctx.authKey,
+      ...(ctx.registry ? { registry: ctx.registry } : {}),
     };
     return {
       auth,
       conn,
       phoneNumberId: ctx.phoneNumberId,
-      secrets: [ctx.channelToken, ctx.authKey],
+      secrets: [ctx.channelToken, ctx.authKey, ...Object.values(ctx.registry?.headers ?? {})],
     };
   }
 
@@ -274,7 +278,7 @@ export class MetaCloudChannelAdapter implements ChannelAdapter {
   ): Error {
     if (!(err instanceof WabaApiError)) return err as Error;
     const failure = metaFailure(err, call.secrets);
-    if (call.conn.provider === 'interakt' && failure.needsReauth) {
+    if (usesPlatformCredential(call.conn) && failure.needsReauth) {
       return new ChannelError(
         PROVIDER_CREDENTIALS_REJECTED,
         `The WhatsApp provider refused the platform's credentials (${failure.providerCode ?? failure.code}). Contact support.`,
@@ -284,4 +288,9 @@ export class MetaCloudChannelAdapter implements ChannelAdapter {
     }
     return failure;
   }
+}
+
+/** The platform's own credential does the work (Interakt's partner key, a registry provider in `platform_token` mode): a customer has no token to paste. */
+function usesPlatformCredential(conn: WabaConnection): boolean {
+  return conn.provider === 'interakt' || conn.registry?.credentialMode === 'platform_token';
 }

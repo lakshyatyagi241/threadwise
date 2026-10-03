@@ -20,6 +20,13 @@ export {
 export { ChannelAdapterRegistry } from './channel-adapter.registry';
 export { ChannelRegistryService } from './channel-registry.service';
 export { ChannelIngestPublisher } from './channel-ingest.publisher';
+export { InboundIngestService, type IngestOutcome } from './inbound-ingest.service';
+export { ExternalChannelIngest, type ExternalAccount } from './external-channel-ingest.service';
 export { ChatConversationsWorkerModule } from './chat-conversations-worker.module';
 export { MessageMediaAccessPolicy } from './media-access.policy';
-export { normalizePeerKey, identityOfPeer } from './peer-key';
+export { normalizePeerKey, identityOfPeer, isPhoneChannel } from './peer-key';
+export {
+  InboundMessageHooks,
+  type InboundMessageListener,
+  type InboundStoredEvent,
+} from './inbound-hooks';
