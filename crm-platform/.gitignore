@@ -40,3 +40,6 @@ apps/web/src/features/_registry/settings.generated.ts
 
 # Redis snapshot written when redis-server runs from the repo root
 dump.rdb
+
+# Logs of the local dev stack started by tools/dev-refresh.sh
+.dev-run/
