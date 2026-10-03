@@ -2,6 +2,9 @@
    It sits in the components layer so Tailwind utilities override it, as they do on WaDesk's own pages. */
 @layer theme, base, components, utilities;
 @layer components {
+  .cms-site a {
+    color: inherit;
+  }
   .cms-site .serif {
     font-family: 'Instrument Serif', serif;
     letter-spacing: -0.014em;
