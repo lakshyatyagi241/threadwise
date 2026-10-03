@@ -95,6 +95,10 @@ import { WoocommerceService } from './woocommerce.service';
     { provide: COMMERCE_SENDER, useClass: EngineCommerceSender },
   ],
   exports: [
+    // Pipeline, cart and broadcast services: the worker's EcomWebhookProcessor (ShopifyWoocommerceWorkerModule) injects them.
+    WebhookPipelineService,
+    CartService,
+    BroadcastService,
     EcomSettingsService,
     StoresRepository,
     ShopifyService,
