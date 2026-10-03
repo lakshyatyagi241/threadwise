@@ -24,11 +24,12 @@
 
 ## Runbooks
 
-| Document                                              | For                                        |
-| ----------------------------------------------------- | ------------------------------------------ |
-| [local-development.md](runbooks/local-development.md) | getting it running, day-to-day commands    |
-| [migrations.md](runbooks/migrations.md)               | writing and applying schema changes safely |
-| [outbox-backlog.md](runbooks/outbox-backlog.md)       | when events stop being processed           |
+| Document                                                      | For                                                      |
+| ------------------------------------------------------------- | -------------------------------------------------------- |
+| [local-development.md](runbooks/local-development.md)         | getting it running, day-to-day commands                  |
+| [migrations.md](runbooks/migrations.md)                       | writing and applying schema changes safely               |
+| [outbox-backlog.md](runbooks/outbox-backlog.md)               | when events stop being processed                         |
+| [google-calendar-setup.md](runbooks/google-calendar-setup.md) | creating the Google OAuth client for workspace calendars |
 
 ## Database
 

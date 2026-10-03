@@ -598,3 +598,60 @@ export const appointmentReminderRuns = pgTable(
 
 export type AppointmentReminderRunsRow = typeof appointmentReminderRuns.$inferSelect;
 export type NewAppointmentReminderRunsRow = typeof appointmentReminderRuns.$inferInsert;
+
+/**
+ * The workspace's connected Google Calendar (WD-APPT-028, 029). Mirrors migrations/20261019110000_appt_google_calendar.sql: one row per
+ * workspace, tokens sealed with the credentials key.
+ */
+export const appointmentCalendarConnections = pgTable(
+  'appointment_calendar_connections',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    provider: text('provider').notNull().default('google'),
+    connectedBy: idColumn('connected_by'),
+    accountEmail: text('account_email'),
+    accountSub: text('account_sub'),
+    /** AES-GCM ciphertext (credentials key); never plain text. */
+    refreshTokenEnc: text('refresh_token_enc').notNull(),
+    /** The cached short-lived access token, same sealing. */
+    accessTokenEnc: text('access_token_enc'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
+    scopes: text('scopes'),
+    calendarId: text('calendar_id').notNull().default('primary'),
+    calendarName: text('calendar_name'),
+    status: text('status').notNull().default('active'),
+    statusReason: text('status_reason'),
+    statusAt: timestamp('status_at', { withTimezone: true }).notNull().defaultNow(),
+    connectedAt: timestamp('connected_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_appointment_calendar_connections_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_appointment_calendar_connections_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_calendar_connections_org').on(t.orgId),
+    check('chk_appointment_calendar_connections_provider', sql`${t.provider} in ('google')`),
+    check(
+      'chk_appointment_calendar_connections_status',
+      sql`${t.status} in ('active', 'needs_reconnect')`,
+    ),
+    foreignKey({
+      name: 'fk_appointment_calendar_connections_connected_by',
+      columns: [t.orgId, t.connectedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_appointment_calendar_connections_connected_by').on(t.orgId, t.connectedBy),
+  ],
+);
+
+export type AppointmentCalendarConnectionsRow = typeof appointmentCalendarConnections.$inferSelect;
+export type NewAppointmentCalendarConnectionsRow =
+  typeof appointmentCalendarConnections.$inferInsert;
