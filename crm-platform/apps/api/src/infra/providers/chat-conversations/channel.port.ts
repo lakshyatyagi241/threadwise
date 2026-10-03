@@ -307,6 +307,16 @@ export interface NormalisedInbound {
   meta?: Record<string, unknown>;
   /** When the provider says the customer sent it. */
   providerTimestamp: Date;
+  /**
+   * The message came from a group, not from one person: `peerKey` is the group's id, the thread is the group and has no contact,
+   * and `participant` says who wrote it. Storage only: nothing may auto-reply to a group (a big group would bill per member).
+   */
+  group?: { title?: string; participant: string; participantName?: string };
+  /**
+   * Imported history (WhatsApp Business app coexistence): stored quietly and backdated to when it was really sent, with no unread,
+   * no reopening, no contact creation and no realtime alert. `direction` is who wrote it.
+   */
+  history?: { direction: 'in' | 'out' };
 }
 
 export interface NormalisedReceipt {
