@@ -4,6 +4,8 @@ import { FLOW_AI_PORT } from '../../infra/providers/flow-builder-editor/flow-ai.
 import { FLOW_MEDIA_STORE } from '../../infra/providers/flow-builder-editor/flow-media.port';
 import { HttpFlowAiAdapter } from '../../infra/providers/flow-builder-editor/http-flow-ai.adapter';
 import { LocalFlowMediaAdapter } from '../../infra/providers/flow-builder-editor/local-flow-media.adapter';
+import { FlowRuntimeEngineModule } from '../flow-runtime-engine';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BuilderContextService } from './builder-context.service';
 import { FlowAiService } from './flow-ai.service';
@@ -26,7 +28,7 @@ import { TestWebhookService } from './test-webhook.service';
  * until object storage lands; see the port's note). No worker jobs live here: nothing in the editor runs in the background.
  */
 @Module({
-  imports: [PlansCoreModule],
+  imports: [PlansCoreModule, PlatformSettingsModule, FlowRuntimeEngineModule],
   controllers: [FlowsController, FlowMediaController, PlatformFlowTemplatesController],
   providers: [
     CryptoService,
