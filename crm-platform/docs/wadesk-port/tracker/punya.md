@@ -44,3 +44,38 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-CAT-035 | done |  |  |
 | WD-CAT-036 | blocked |  | Store rail belongs to the STORE domain |
 
+## storefront-builder (store)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-STORE-001 | done |  |  |
+| WD-STORE-002 | in-progress |  | partial: sibling pages (orders, coupons...) belong to CHK, shown Coming soon |
+| WD-STORE-003 | done |  |  |
+| WD-STORE-004 | done |  |  |
+| WD-STORE-005 | done |  |  |
+| WD-STORE-006 | done |  |  |
+| WD-STORE-007 | done |  |  |
+| WD-STORE-008 | done |  |  |
+| WD-STORE-009 | done |  |  |
+| WD-STORE-010 | done |  |  |
+| WD-STORE-011 | done |  |  |
+| WD-STORE-012 | done |  |  |
+| WD-STORE-013 | done |  |  |
+| WD-STORE-014 | done |  |  |
+| WD-STORE-015 | done |  |  |
+| WD-STORE-016 | done |  |  |
+| WD-STORE-017 | done |  |  |
+| WD-STORE-018 | done |  |  |
+| WD-STORE-019 | done |  |  |
+| WD-STORE-020 | done |  |  |
+| WD-STORE-021 | in-progress |  | partial: workspace-level custom domain not consulted |
+| WD-STORE-022 | done |  |  |
+| WD-STORE-023 | blocked |  | sibling store pages belong to checkout-orders-merchant-payments |
+| WD-STORE-024 | done |  |  |
+| WD-STORE-025 | wontfix |  | dead code in WaDesk |
+| WD-STORE-026 | done |  |  |
+| WD-STORE-027 | done |  |  |
+| WD-STORE-028 | done |  | partial as WaDesk: handle stored, never used |
+| WD-STORE-029 | done |  |  |
+| WD-STORE-030 | done |  |  |
+| WD-STORE-031 | done |  |  |

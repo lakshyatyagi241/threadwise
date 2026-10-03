@@ -19,7 +19,7 @@ export function ProductFormScreen({ id }: { id?: string }) {
   const [reloads, setReloads] = useState(0);
 
   const frame = (title: string, body: React.ReactNode) => (
-    <div className="mx-auto min-h-full max-w-none px-4 py-7 sm:px-6 lg:px-7">
+    <div>
       <section className="min-w-0 space-y-5">
         <nav aria-label={t('breadcrumb')} className={CRUMB}>
           <Link href="/store/products" className="hover:text-brand">

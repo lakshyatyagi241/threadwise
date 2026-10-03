@@ -70,6 +70,7 @@ export * from './workspaces-teams-tenancy';
 export * from './whatsapp-providers';
 export * from './coupons-credits-referral-currency';
 export * from './catalog-products';
+export * from './storefront-builder';
 export * from './calling-voice';
 export * from './flow-runtime-engine';
 export * from './scheduled-queue-warmer';
