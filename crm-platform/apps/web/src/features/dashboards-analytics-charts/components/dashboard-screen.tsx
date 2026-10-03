@@ -20,7 +20,14 @@ import {
   WalletOrAutopilotCard,
 } from './dashboard-cards';
 import { Funnel, LoadError, Panel, Trend } from './parts';
-import { QuickAccess } from './quick-access';
+import { QuickAccessTiles } from '@/features/admin-console-shell/quick-access/quick-access-tiles';
+import {
+  CopilotCard,
+  FlowsCard,
+  InstagramBand,
+  IntegrationsCard,
+  QuickActionsCard,
+} from './dashboard-extras';
 
 /** The range lives in the address so a link is shareable; anything unknown reads as 7d (TW-DASH-003). */
 function useRange(): [DashRange, (r: DashRange) => void] {
@@ -223,100 +230,133 @@ export function DashboardScreen() {
             <WalletOrAutopilotCard />
           </section>
 
-          <QuickAccess />
+          {w?.instagram && <InstagramBand data={w.instagram} />}
+
+          <QuickAccessTiles />
 
           {w?.pipeline && <PipelineStrip data={w.pipeline} />}
 
-          <div className="grid gap-4 lg:grid-cols-3">
-            <Panel
-              className="lg:col-span-2"
-              title={t('throughput.title')}
-              subtitle={t(`throughput.subtitle.${range}`)}
-              action={
-                f?.peak ? (
-                  <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
-                    {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
-                  </span>
-                ) : null
-              }
-            >
-              {f ? (
+          <div className="grid gap-4 lg:grid-cols-12">
+            <div className="space-y-4 lg:col-span-8">
+              <Panel
+                title={t('throughput.title')}
+                subtitle={t(`throughput.subtitle.${range}`)}
+                action={
+                  f?.peak ? (
+                    <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
+                      {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
+                    </span>
+                  ) : null
+                }
+              >
+                {f ? (
+                  <>
+                    <BarChart
+                      label={t('throughput.title')}
+                      labels={f.starts.map(label)}
+                      series={[
+                        { name: t('throughput.sent'), values: f.sent, color: 'var(--brand)' },
+                        {
+                          name: t('throughput.delivered'),
+                          values: f.delivered,
+                          color: 'var(--success)',
+                        },
+                        { name: t('throughput.failed'), values: f.failed, color: 'var(--danger)' },
+                      ]}
+                    />
+                    {s && (
+                      <>
+                        <Legend
+                          series={[
+                            {
+                              name: t('throughput.sent'),
+                              color: 'var(--brand)',
+                              total: s.current.sent,
+                            },
+                            {
+                              name: t('throughput.delivered'),
+                              color: 'var(--success)',
+                              total: s.current.delivered,
+                            },
+                            {
+                              name: t('throughput.failed'),
+                              color: 'var(--danger)',
+                              total: s.current.failed,
+                            },
+                          ]}
+                        />
+                        <dl className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-sm sm:grid-cols-4">
+                          <Tile label={t('throughput.avgHour')} value={compact(f.avgPerHour)} />
+                          <Tile
+                            label={t('throughput.replies')}
+                            value={compact(s.current.replies)}
+                          />
+                          <Tile
+                            label={t('throughput.replyRate')}
+                            value={`${s.current.replyRate}%`}
+                          />
+                          <Tile label={t('throughput.failed')} value={compact(s.current.failed)} />
+                        </dl>
+                      </>
+                    )}
+                  </>
+                ) : flow.error ? (
+                  <LoadError error={flow.error} />
+                ) : (
+                  <Spinner />
+                )}
+              </Panel>
+
+              {w && (
                 <>
-                  <BarChart
-                    label={t('throughput.title')}
-                    labels={f.starts.map(label)}
-                    series={[
-                      { name: t('throughput.sent'), values: f.sent, color: 'var(--brand)' },
-                      {
-                        name: t('throughput.delivered'),
-                        values: f.delivered,
-                        color: 'var(--success)',
-                      },
-                      { name: t('throughput.failed'), values: f.failed, color: 'var(--danger)' },
-                    ]}
-                  />
-                  {s && (
-                    <>
-                      <Legend
-                        series={[
-                          {
-                            name: t('throughput.sent'),
-                            color: 'var(--brand)',
-                            total: s.current.sent,
-                          },
-                          {
-                            name: t('throughput.delivered'),
-                            color: 'var(--success)',
-                            total: s.current.delivered,
-                          },
-                          {
-                            name: t('throughput.failed'),
-                            color: 'var(--danger)',
-                            total: s.current.failed,
-                          },
-                        ]}
-                      />
-                      <dl className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-sm sm:grid-cols-4">
-                        <Tile label={t('throughput.avgHour')} value={compact(f.avgPerHour)} />
-                        <Tile label={t('throughput.replies')} value={compact(s.current.replies)} />
-                        <Tile label={t('throughput.replyRate')} value={`${s.current.replyRate}%`} />
-                        <Tile label={t('throughput.failed')} value={compact(s.current.failed)} />
-                      </dl>
-                    </>
-                  )}
+                  <div className="grid gap-4 lg:grid-cols-12">
+                    <div className="lg:col-span-7">
+                      <CampaignsCard data={w.campaigns} />
+                    </div>
+                    <div className="lg:col-span-5">
+                      <DevicesCard data={w.devices} />
+                    </div>
+                  </div>
+                  <TemplatesCard data={w.templates} />
                 </>
-              ) : flow.error ? (
-                <LoadError error={flow.error} />
-              ) : (
-                <Spinner />
               )}
-            </Panel>
-            {w ? <InboxCard data={w.inbox} /> : <Card className="min-h-32" />}
+            </div>
+            <div className="flex flex-col gap-4 lg:col-span-4">
+              {w ? <InboxCard data={w.inbox} /> : <Card className="min-h-32" />}
+              {w && (
+                <>
+                  <CopilotCard data={w.flows} />
+                  <FlowsCard data={w.flows} />
+                </>
+              )}
+            </div>
           </div>
 
-          {w && (
-            <>
-              <div className="grid gap-4 lg:grid-cols-2">
-                <CampaignsCard data={w.campaigns} />
-                <DevicesCard data={w.devices} />
-              </div>
-              <TemplatesCard data={w.templates} />
-            </>
-          )}
-
-          <div className="grid gap-4 lg:grid-cols-2">
-            <Panel
-              title={t('funnel.title')}
-              subtitle={tr(`long.${range}`)}
-              action={
-                <Link href="/analytics" className="text-xs font-medium text-primary underline">
-                  {t('funnel.viewAll')}
-                </Link>
-              }
-            >
-              {s ? <Funnel funnel={s.funnel} /> : <Spinner />}
-            </Panel>
-            {w && <ActivityCard data={w.activity} />}
+          <div className="grid gap-4 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <Panel
+                title={t('funnel.title')}
+                subtitle={tr(`long.${range}`)}
+                action={
+                  <Link href="/analytics" className="text-xs font-medium text-primary underline">
+                    {t('funnel.viewAll')}
+                  </Link>
+                }
+              >
+                {s ? <Funnel funnel={s.funnel} /> : <Spinner />}
+              </Panel>
+            </div>
+            <div className="md:col-span-1 lg:col-span-4">
+              {w && <ActivityCard data={w.activity} />}
+            </div>
+            <div className="space-y-3 lg:col-span-3">
+              {w && (
+                <>
+                  <QuickActionsCard />
+                  <IntegrationsCard data={w.integrations} />
+                </>
+              )}
+            </div>
           </div>
         </>
       )}

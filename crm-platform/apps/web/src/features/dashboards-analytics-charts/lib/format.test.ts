@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   deltaOf,
+  followersLabel,
   formatMoney,
   minutesLabel,
   pickOption,
@@ -104,5 +105,13 @@ describe('dashboard helpers', () => {
       '"Period","Sent","Delivered","Failed"',
       '"Oct ""1""","3","2","1"',
     ]);
+  });
+});
+
+describe('followersLabel', () => {
+  it('TW-DASH-008: plain below a thousand, one decimal and k from a thousand up', () => {
+    expect(followersLabel(999)).toBe('999');
+    expect(followersLabel(1000)).toBe('1.0k');
+    expect(followersLabel(1500)).toBe('1.5k');
   });
 });
