@@ -46,8 +46,13 @@ describe('SSRF guard (WD-FLB-024 rule 7)', () => {
   it('refuses metadata host names and .internal, other schemes, unparsable URLs and unresolvable hosts', async () => {
     expect(await guardSsrf('http://metadata.google.internal/', async () => PUBLIC)).toEqual({ ok: false, reason: 'metadata host not allowed' });
     expect(await guardSsrf('http://db.internal/', async () => PUBLIC)).toEqual({ ok: false, reason: 'metadata host not allowed' });
-    expect((await guardSsrf('ftp://example.com/', async () => PUBLIC)).ok).toBe(false);
-    expect((await guardSsrf('not a url', async () => PUBLIC)).ok).toBe(false);
+    expect(await guardSsrf('ftp://example.com/', async () => PUBLIC)).toEqual({
+      ok: false,
+      reason: 'scheme ftp not allowed (use http or https)',
+    });
+    expect(await guardSsrf('not a url', async () => PUBLIC)).toEqual({ ok: false, reason: 'invalid URL' });
+    expect(await guardSsrf('javascript:alert(1)', async () => PUBLIC)).toEqual({ ok: false, reason: 'invalid URL' });
+    expect(await guardSsrf('mailto:a@b.c', async () => PUBLIC)).toEqual({ ok: false, reason: 'invalid URL' });
     expect(await guardSsrf('http://nowhere.test/', async () => [])).toEqual({ ok: false, reason: 'hostname did not resolve to a public IP' });
     expect(
       await guardSsrf('http://nowhere.test/', async () => {
@@ -63,9 +68,11 @@ describe('SSRF guard (WD-FLB-024 rule 7)', () => {
 });
 
 describe('webhook test request (WD-FLB-024 rule 6)', () => {
-  it('substitutes {{ var }} with spaces and dotted keys, leaving unknown names literal', () => {
-    expect(substitute('Hi {{ name }} {{response.id}} {{nope}}', { name: 'Sam', 'response.id': 7 })).toBe('Hi Sam 7 {{nope}}');
+  it('substitutes {{ var }} with spaces and dotted keys; an unset name becomes empty, as in WaDesk', () => {
+    expect(substitute('Hi {{ name }} {{response.id}} [{{nope}}]', { name: 'Sam', 'response.id': 7 })).toBe('Hi Sam 7 []');
     expect(substitute('{{o}}', { o: { a: 1 } })).toBe('{"a":1}');
+    expect(substitute('[{{ a b }}]{{x}}', { 'a b': 1, x: null })).toBe('[1]');
+    expect(substitute('', {})).toBe('');
   });
 
   class Fake extends TestWebhookService {
@@ -122,6 +129,26 @@ describe('webhook test request (WD-FLB-024 rule 6)', () => {
 
     await s.run({ url: 'https://api.example.com/', method: 'get', body: 'ignored' });
     expect(s.calls[1]).toMatchObject({ method: 'GET', body: '' });
+  });
+
+  it('Content-Type defaults to JSON; a body goes out with the node type; custom headers replace it in any casing', async () => {
+    const s = svc();
+    await s.run({ url: 'https://api.example.com/', body: '{}' });
+    expect(s.calls[0]!.headers['Content-Type']).toBe('application/json');
+    await s.run({ url: 'https://api.example.com/', method: 'GET' });
+    expect(s.calls[1]!.headers['Content-Type']).toBe('application/json');
+    await s.run({ url: 'https://api.example.com/', contentType: 'text/xml', body: '<a/>', headers: [{ key: 'content-type', value: 'x/y' }] });
+    expect(s.calls[2]!.headers).toMatchObject({ 'Content-Type': 'text/xml', 'Content-Length': '4' });
+    expect(Object.keys(s.calls[2]!.headers).filter((k) => k.toLowerCase() === 'content-type')).toHaveLength(1);
+    await s.run({ url: 'https://api.example.com/', method: 'GET', headers: [{ key: 'content-type', value: 'x/y' }] });
+    expect(s.calls[3]!.headers).toEqual({ 'User-Agent': 'WaDesk-FlowTest/1.0', 'content-type': 'x/y' });
+  });
+
+  it('an unset variable in the URL, body and header values becomes empty', async () => {
+    const s = svc();
+    await s.run({ url: 'https://api.example.com/{{p}}x', body: '[{{ missing }}]', headers: [{ key: 'X-T', value: '{{nope}}' }], vars: {} });
+    expect(s.calls[0]).toMatchObject({ url: 'https://api.example.com/x', body: '[]' });
+    expect(s.calls[0]!.headers['X-T']).toBe('');
   });
 
   it('a non-2xx answer is ok:true with success:false; the response text is cut at 4000 characters; arrays flatten by index', async () => {
