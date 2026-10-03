@@ -519,7 +519,9 @@ export function FrontendEditor({ initialPage }: { initialPage?: string }) {
             <ul className="space-y-1.5" data-testid="section-list">
               <li className="flex items-center gap-2 rounded-lg border border-border bg-muted px-3 py-2 text-[12.5px]">
                 <span className="flex-1">{def.sections[0]?.label}</span>
-                <span className="text-[10.5px] text-muted-foreground">{t('pinned')}</span>
+                <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+                  {t('pinned')}
+                </span>
               </li>
               {order.map((slug, i) => (
                 <li
@@ -562,16 +564,27 @@ export function FrontendEditor({ initialPage }: { initialPage?: string }) {
                   >
                     ↓
                   </button>
-                  <Switch
-                    checked={!hidden.includes(slug)}
-                    label={t('showSection', { name: labelOf(slug) })}
+                  <button
+                    type="button"
+                    aria-pressed={!hidden.includes(slug)}
+                    aria-label={t('showSection', { name: labelOf(slug) })}
                     disabled={!canWrite || layout.isPending}
-                    onCheckedChange={(show) =>
+                    className={cn(
+                      'inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold transition disabled:opacity-50',
+                      hidden.includes(slug)
+                        ? 'bg-muted text-muted-foreground'
+                        : 'bg-success/15 text-primary',
+                    )}
+                    onClick={() =>
                       layout.mutate({
-                        hidden: show ? hidden.filter((h) => h !== slug) : [...hidden, slug],
+                        hidden: hidden.includes(slug)
+                          ? hidden.filter((h) => h !== slug)
+                          : [...hidden, slug],
                       })
                     }
-                  />
+                  >
+                    {hidden.includes(slug) ? t('sectionHidden') : t('sectionShown')}
+                  </button>
                 </li>
               ))}
             </ul>

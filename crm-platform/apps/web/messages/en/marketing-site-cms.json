@@ -58,7 +58,7 @@
       "resetField": "Reset this field",
       "sections": "Sections",
       "sectionsHint": "drag · show / hide",
-      "pinned": "Always first",
+      "pinned": "fixed",
       "moveUp": "Move {name} up",
       "moveDown": "Move {name} down",
       "showSection": "Show {name}",
@@ -91,7 +91,9 @@
           "message": "Every colour goes back to the shipped palette as a draft until you publish.",
           "action": "Reset colours"
         }
-      }
+      },
+      "sectionShown": "Shown",
+      "sectionHidden": "Hidden"
     },
     "blog": {
       "title": "Blog",
@@ -327,14 +329,10 @@
       "documentVersion": "Document version",
       "current": "current"
     },
-    "bar": {
-      "dismiss": "Dismiss announcement",
-      "region": "Announcement"
-    },
     "guidebook": {
       "nav": "Guidebook",
       "title": "Guidebook",
-      "heading": "Guidebook & help articles",
+      "heading": "Guidebook",
       "lead": "Step-by-step answers for connecting, sending and troubleshooting.",
       "askSupport": "Can't find it? Ask support",
       "search": "Search guidebook articles…",
@@ -364,7 +362,10 @@
       "stuck": "Still stuck?",
       "openTicket": "Open a ticket →",
       "needHuman": "Need a human?",
-      "contactSupport": "Contact support"
+      "contactSupport": "Contact support",
+      "crumb": "More / Guidebook",
+      "headingRest": "& help articles",
+      "noneTitle": "No articles match."
     },
     "dpa": {
       "title": "Data processing",

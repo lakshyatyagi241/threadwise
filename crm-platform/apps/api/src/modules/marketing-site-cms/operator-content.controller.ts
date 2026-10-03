@@ -1,6 +1,19 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  CMS_UPLOAD_MAX_BYTES,
   applyPresetRequestSchema,
   homepageSwitchRequestSchema,
   resetRequestSchema,
@@ -18,6 +31,7 @@ import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
 import { CmsContentService } from './content.service';
+import { CmsUploadService } from './upload.service';
 
 /**
  * The page editor's API (TW-CMS-018..028). Every operator role reads the drafts; only super admins write. Reference
@@ -28,7 +42,10 @@ import { CmsContentService } from './content.service';
 @UseGuards(OperatorGuard)
 @Controller({ path: 'platform/cms/content', version: '2' })
 export class OperatorContentController {
-  constructor(private readonly content: CmsContentService) {}
+  constructor(
+    private readonly content: CmsContentService,
+    private readonly uploads: CmsUploadService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -89,5 +106,26 @@ export class OperatorContentController {
   @ApiOperation({ summary: 'Turn the public homepage on or off (live at once, not a draft)' })
   async homepage(@Body(zodPipe(homepageSwitchRequestSchema)) body: HomepageSwitchRequest) {
     return { enabled: await this.content.setHomepageEnabled(body.enabled) };
+  }
+
+  @Post('upload')
+  @HttpCode(HttpStatus.OK)
+  @OperatorRoles('super_admin')
+  @ApiConsumes('multipart/form-data')
+  // the parser's own cap sits above the policy's, so an oversize file is answered 422 like every other refusal
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: CMS_UPLOAD_MAX_BYTES * 2, files: 1 } }),
+  )
+  @ApiOperation({
+    summary:
+      'Upload an image for the site to object storage; with a link field `key` it becomes that field draft',
+    description:
+      '422 for a type, content or size the upload policy refuses, for a key that is not a link field, and when storage is local or private.',
+  })
+  upload(
+    @UploadedFile() file: { originalname: string; buffer: Buffer } | undefined,
+    @Body() body: { key?: string },
+  ) {
+    return this.uploads.upload(file, body?.key);
   }
 }

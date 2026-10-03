@@ -99,10 +99,15 @@ export function toPricingCard(p: PublicPlanCard, index: number, w: CardWords): P
 
   const on: CardRow[] = [];
   const off: CardRow[] = [];
+  const seen = new Set<string>();
   for (const key of PLAN_FEATURE_KEYS) {
+    const label = w.feature(key);
+    // two flags can carry the same words (WhatsApp calling); a card shows each line once
+    if (seen.has(label)) continue;
+    seen.add(label);
     if (flags[key]) {
-      if (on.length < FEATURE_ON_MAX) on.push({ label: w.feature(key), included: true });
-    } else if (off.length < FEATURE_OFF_MAX) off.push({ label: w.feature(key), included: false });
+      if (on.length < FEATURE_ON_MAX) on.push({ label, included: true });
+    } else if (off.length < FEATURE_OFF_MAX) off.push({ label, included: false });
   }
 
   const support: CardRow[] = [{ label: w.docsCommunity, included: true }];
