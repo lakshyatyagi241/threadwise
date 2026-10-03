@@ -80,3 +80,23 @@ export async function forwardPublicHome(req: Request, slug: string): Promise<Res
     }),
   );
 }
+
+/**
+ * Razorpay's webhook for shop payment links. The raw bytes and the signature header go through untouched (the signature is of
+ * the exact body); the API is the only judge. Not same-origin checked: Razorpay posts from its own servers.
+ */
+export async function forwardPaymentWebhook(req: Request): Promise<Response> {
+  const raw = await req.text();
+  if (raw.length > MAX_BODY) return problem(413, 'VALIDATION_FAILED', 'Request too large');
+  const headers = forwardHeaders(req, true);
+  const signature = req.headers.get('x-razorpay-signature');
+  if (signature) headers['X-Razorpay-Signature'] = signature;
+  return relay(
+    fetch(`${apiBase()}/v2/store-public/webhooks/razorpay`, {
+      method: 'POST',
+      headers,
+      body: raw,
+      cache: 'no-store',
+    }),
+  );
+}
