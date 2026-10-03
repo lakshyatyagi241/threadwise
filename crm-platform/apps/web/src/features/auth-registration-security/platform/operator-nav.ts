@@ -146,6 +146,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: 'marketing-site-cms.nav.group',
   },
   {
+    id: 'platform-analytics',
+    href: '/admin/analytics',
+    labelKey: 'dashboards-analytics-charts.admin.nav.analytics',
+    groupKey: 'dashboards-analytics-charts.health.group',
+  },
+  {
     id: 'system-health',
     href: '/admin/health',
     labelKey: 'dashboards-analytics-charts.health.nav',

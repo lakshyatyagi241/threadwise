@@ -294,3 +294,200 @@ export function Heatmap({
     </div>
   );
 }
+
+/** Smooth lines over shared labels (admin revenue against its target); a flat zero series still draws, never an error. */
+export function LineChart({
+  labels,
+  series,
+  label,
+  format,
+}: {
+  labels: string[];
+  series: Series[];
+  label: string;
+  /** Axis value formatter. */
+  format: (n: number) => string;
+}) {
+  const t = useTranslations('dashboards-analytics-charts.chart');
+  const top = niceMax(Math.max(...series.flatMap((s) => s.values), 0));
+  const plotW = W - PAD.l - PAD.r;
+  const plotH = H - PAD.t - PAD.b;
+  const x = (i: number) =>
+    PAD.l + (labels.length <= 1 ? plotW / 2 : (i / (labels.length - 1)) * plotW);
+  const y = (v: number) => PAD.t + plotH - barLength(v, top, plotH);
+  const every = Math.max(1, Math.ceil(labels.length / 8));
+  const path = (values: number[]) =>
+    values
+      .map((v, i) => {
+        if (i === 0) return `M${x(0)},${y(v)}`;
+        const mid = (x(i - 1) + x(i)) / 2;
+        return `C${mid},${y(values[i - 1]!)} ${mid},${y(v)} ${x(i)},${y(v)}`;
+      })
+      .join(' ');
+  return (
+    <figure className="m-0">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} className="h-auto w-full">
+        {[0, 0.25, 0.5, 0.75, 1].map((f) => (
+          <g key={f}>
+            <line
+              x1={PAD.l}
+              x2={W - PAD.r}
+              y1={PAD.t + plotH * (1 - f)}
+              y2={PAD.t + plotH * (1 - f)}
+              stroke="var(--border)"
+              strokeWidth={1}
+            />
+            <text
+              x={PAD.l - 6}
+              y={PAD.t + plotH * (1 - f) + 3}
+              textAnchor="end"
+              fontSize={10}
+              fill="var(--muted-foreground)"
+            >
+              {format(top * f)}
+            </text>
+          </g>
+        ))}
+        {labels.map((l, i) =>
+          i % every === 0 ? (
+            <text
+              key={i}
+              x={x(i)}
+              y={H - 8}
+              textAnchor="middle"
+              fontSize={10}
+              fill="var(--muted-foreground)"
+            >
+              {l}
+            </text>
+          ) : null,
+        )}
+        {series.map((s) => (
+          <path
+            key={s.name}
+            d={path(s.values)}
+            fill="none"
+            stroke={s.color}
+            strokeWidth={3}
+            strokeLinecap="round"
+          />
+        ))}
+      </svg>
+      <table className="sr-only">
+        <caption>{label}</caption>
+        <thead>
+          <tr>
+            <th>{t('bucket')}</th>
+            {series.map((s) => (
+              <th key={s.name}>{s.name}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {labels.map((l, i) => (
+            <tr key={i}>
+              <th>{l}</th>
+              {series.map((s) => (
+                <td key={s.name}>{s.values[i] ?? 0}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </figure>
+  );
+}
+
+/** One ring showing a percentage, with a centre label (registered users gauge). */
+export function Ring({
+  pct,
+  label,
+  centre,
+  caption,
+}: {
+  pct: number;
+  label: string;
+  centre: string;
+  caption: string;
+}) {
+  const p = Math.max(0, Math.min(100, pct));
+  return (
+    <div
+      role="img"
+      aria-label={label}
+      className="relative mx-auto size-36 rounded-full"
+      style={{ background: `conic-gradient(var(--primary) ${p}%, var(--muted) 0)` }}
+    >
+      <div className="absolute inset-[14%] flex flex-col items-center justify-center rounded-full bg-background text-center">
+        <span className="text-xl font-semibold tabular-nums">{centre}</span>
+        <span className="text-[11px] text-muted-foreground">{caption}</span>
+      </div>
+    </div>
+  );
+}
+
+/** A radar over named axes; all zeros draws the empty web, never an error. */
+export function Radar({
+  axes,
+  label,
+}: {
+  axes: Array<{ name: string; value: number }>;
+  label: string;
+}) {
+  const size = 220;
+  const c = size / 2;
+  const r = 78;
+  const top = Math.max(...axes.map((a) => a.value), 1);
+  const point = (i: number, f: number): [number, number] => {
+    const a = (Math.PI * 2 * i) / axes.length - Math.PI / 2;
+    return [c + Math.cos(a) * r * f, c + Math.sin(a) * r * f];
+  };
+  const poly = (f: (i: number) => number) => axes.map((_, i) => point(i, f(i)).join(',')).join(' ');
+  return (
+    <figure className="m-0">
+      <svg
+        viewBox={`0 0 ${size} ${size}`}
+        role="img"
+        aria-label={label}
+        className="mx-auto h-auto w-full max-w-60"
+      >
+        {[0.25, 0.5, 0.75, 1].map((f) => (
+          <polygon key={f} points={poly(() => f)} fill="none" stroke="var(--border)" />
+        ))}
+        {axes.map((a, i) => {
+          const [lx, ly] = point(i, 1.22);
+          return (
+            <text
+              key={a.name}
+              x={lx}
+              y={ly + 3}
+              textAnchor="middle"
+              fontSize={9}
+              fill="var(--muted-foreground)"
+            >
+              {a.name}
+            </text>
+          );
+        })}
+        <polygon
+          points={poly((i) => axes[i]!.value / top)}
+          fill="var(--primary)"
+          fillOpacity={0.16}
+          stroke="var(--primary)"
+          strokeWidth={2}
+        />
+      </svg>
+      <table className="sr-only">
+        <caption>{label}</caption>
+        <tbody>
+          {axes.map((a) => (
+            <tr key={a.name}>
+              <th>{a.name}</th>
+              <td>{a.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </figure>
+  );
+}

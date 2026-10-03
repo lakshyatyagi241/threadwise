@@ -155,3 +155,4 @@ export const analyticsResponseSchema = z.object({
 });
 export type AnalyticsResponse = z.infer<typeof analyticsResponseSchema>;
 export * from './health';
+export * from './admin';

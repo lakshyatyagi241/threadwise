@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+  deltaOf,
+  formatMoney,
+  pickOption,
   barLength,
   compact,
   directionOf,
@@ -63,5 +66,19 @@ describe('format helpers', () => {
       ]).map((s) => s.pct),
     ).toEqual([60, 30, 10]);
     expect(shares([])).toEqual([]);
+  });
+});
+
+describe('admin helpers', () => {
+  it('formats money for the locale and falls back for an unknown currency', () => {
+    expect(formatMoney('1050', 'USD', 'en-US')).toBe('$1,050.00');
+    expect(formatMoney(19.5, 'usd', 'en-US', 0)).toBe('$20');
+    expect(formatMoney(5, 'not-a-code', 'en-US')).toBe('not-a-code 5.00');
+  });
+  it('reads a delta and a picker value', () => {
+    expect(deltaOf('31.25')).toBe(31.25);
+    expect(deltaOf('x')).toBe(0);
+    expect(pickOption('30d', ['7d', '30d'] as const, '7d')).toBe('30d');
+    expect(pickOption('banana', ['7d', '30d'] as const, '7d')).toBe('7d');
   });
 });

@@ -67,3 +67,38 @@ export function shares(
     pct: total > 0 ? Math.round((r.count / total) * 1000) / 10 : 0,
   }));
 }
+
+/** An amount in a currency, grouped for the locale; a currency code the runtime does not know falls back to the code and the number. */
+export function formatMoney(
+  amount: string | number,
+  currency: string,
+  locale: string,
+  digits = 2,
+): string {
+  const n = Number(amount);
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  } catch {
+    return `${currency} ${n.toFixed(digits)}`;
+  }
+}
+
+/** A delta string from the API ("31.25") as a signed number for the trend pill; anything unparsable is 0. */
+export const deltaOf = (changePct: string): number => {
+  const n = Number(changePct);
+  return Number.isFinite(n) ? n : 0;
+};
+
+/** `<select>` value for a window the URL carried: unknown values read as the default, as the API does. */
+export function pickOption<T extends string>(
+  raw: string | undefined,
+  options: readonly T[],
+  fallback: T,
+): T {
+  return (options as readonly string[]).includes(raw ?? '') ? (raw as T) : fallback;
+}
