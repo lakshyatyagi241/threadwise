@@ -40,7 +40,36 @@ Partial: TW-SUPP-045 (impersonation launcher: reason and target validated, sessi
 
 Inbox, Team inbox (kanban), Agents, SLA board, Customers (+ workspace history), Playbooks, Reports (+ CSV), Platform inbox. Customer: `/support` and `/support/[id]`.
 
+## Conformance against the running Reference (round 2)
+
+Compared one by one with the live Reference (admin console and a workspace user) at 1440 px, empty state and with one ticket: operator inbox
+and ticket panel, team kanban, agents, SLA board, customers, playbooks, reports, platform inbox, customer form, customer thread, history.
+Fixed in this round: Reference's own punctuation and copy (middle dot, arrow, em dash, ellipsis in eyebrows, starters, hints, placeholders and
+KPI labels), small uppercase mono field labels on the side forms (`Field eyebrow`, additive in `@crm/ui`), playbook empty-state icon tile,
+reason rail icon tiles, attachment icon, send arrow, mono email field, ticket panel order (status pills, priority pills, assign with
+Save, SLA, meta, thread), tinted lowercase status pills and mono priority pills in the inbox rows, unassigned in italics, customer
+thread header (eyebrow, relative "Opened", tinted status pill), "Customer . initial" bubble label, back link under the reply card.
+
+Intended differences, each on purpose:
+
+- Page chrome (serif display titles with an italic accent word, warm paper palette, console sidebar) belongs to the operator console
+  shell and the workspace shell, not to this domain.
+- Agents: the roster is of platform operators ("Operator", "pick an operator"); Reference promoted platform users. The Reference sentence about
+  auto-assignment is dropped because it is docs-only (TW-SUPP-019).
+- Customers subtitle drops "+ impersonate": the impersonation session start belongs to the workspaces domain (TW-SUPP-045).
+- Customer form hint keeps Reference's wording but our thread renders plain text (so does Reference; its "Markdown supported" is untrue there).
+- Kanban keeps a keyboard "Move to" menu on every card and a one-line hint (accessibility; drag and drop works as in Reference).
+- Customer ticket confirmation banner after sending and the "Reopens when replied" hint on resolved tickets are kept.
+- KPI "Avg 1st reply" shows a bare dash when empty; Reference prints a dash followed by a stray "m".
+- "Full history" link on the recent-tickets card is not shown: it points at Reference's account page tab, which another domain owns.
+
+## Blocked
+
+TW-SUPP-045 (impersonate): the launcher modal, reason validation (8 to 500 characters) and the target check are built and tested;
+starting the session (minting the workspace owner's access, banner, audit start and stop) needs the workspaces and auth domains and
+answers 501 until they provide it. A shim inside this zone is not possible without editing auth session code.
+
 ## Not verified
 
-Side-by-side Playwright comparison with the running Reference was not repeated in this run; the screens were built from the Blade views and
-controllers in the earlier run. Per-item count badges in the menu have no slot in the operator nav.
+Drag-and-drop in a real browser, the CSV download in a browser and the email send against a live SMTP server were not exercised in this
+run (covered by API e2e and unit tests). No browser spec was added.

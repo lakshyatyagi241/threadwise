@@ -73,19 +73,18 @@
       "form": {
         "name": "Your name",
         "email": "Reply email",
-        "emailHint": "Replies go to this address.",
         "subject": "Subject",
         "message": "Tell us what happened",
         "submit": "Send to support",
         "sending": "Sending...",
         "subjectPlaceholder": "One-line summary of the issue",
         "messagePlaceholder": "Steps you took, what you expected, what actually happened. Paste any error messages or message IDs if you have them.",
-        "messageHint": "Be as specific as you can, it speeds things up.",
+        "messageHint": "Markdown supported. Be as specific as you can — it speeds things up.",
         "attachments": "Screenshots / attachments",
         "optional": "(optional)",
         "drop": "Drop files or",
         "browse": "browse",
-        "attachmentTypes": "Image, PDF, TXT, LOG / max 10 MB each",
+        "attachmentTypes": "Image · PDF · TXT · LOG / max 10 MB each",
         "attachmentNote": "Attachments are not sent: only the ticket text reaches support."
       },
       "created": "Ticket {number} created. We will follow up shortly.",
@@ -104,12 +103,13 @@
         "support": "Support team",
         "initial": "initial",
         "replyTitle": "Reply",
-        "replyPlaceholder": "Add more details or a link to a screenshot",
+        "replyPlaceholder": "Add details, share a screenshot link, or follow up…",
         "send": "Send reply",
         "sending": "Sending...",
         "reopenHint": "Replying to a resolved ticket reopens it.",
         "closed": "This ticket is closed.",
-        "openNew": "Open a new ticket"
+        "openNew": "Open a new ticket",
+        "crumb": "Support"
       },
       "eyebrow": "More / Support",
       "headline": "Talk to support",
@@ -138,7 +138,7 @@
         "all": "All",
         "me": "Assigned to me",
         "unassigned": "Unassigned",
-        "search": "Search ticket / customer...",
+        "search": "Search ticket / customer…",
         "clear": "Clear",
         "allStatus": "All status",
         "allPriority": "All priority",
@@ -159,7 +159,7 @@
       "panel": {
         "title": "Ticket #{number}",
         "close": "Close",
-        "loading": "Loading...",
+        "loading": "Loading…",
         "status": "Status",
         "priority": "Priority",
         "customer": "Customer",
@@ -169,8 +169,8 @@
         "opened": "Opened",
         "none": "none",
         "assign": "Assign to",
-        "unassign": "- unassigned -",
-        "customerInitial": "{name} - initial",
+        "unassign": "— unassigned —",
+        "customerInitial": "Customer · initial",
         "internal": "internal",
         "emailFailed": "email not sent",
         "replyPlaceholder": "Reply to the customer or add an internal note",
@@ -179,14 +179,14 @@
         "addNote": "Add note",
         "sending": "Sending...",
         "readOnly": "Your role can read tickets but not change them.",
-        "slaFirst": "SLA - 1st reply:",
-        "slaResolution": "SLA - resolution:",
+        "slaFirst": "SLA · 1st reply:",
+        "slaResolution": "SLA · resolution:",
         "noPolicy": "no policy",
         "met": "met",
         "left": "{n}m left",
         "over": "{n}m over",
         "runPlaybook": "Run playbook",
-        "pickPlaybook": "- pick playbook -",
+        "pickPlaybook": "— pick playbook —",
         "run": "Run",
         "assignSave": "Save"
       },
@@ -200,11 +200,11 @@
         "unassigned": "Unassigned.",
         "playbook": "Playbook \"{name}\" executed."
       },
-      "eyebrow": "Admin / Support / Inbox",
+      "eyebrow": "Admin · Support · Inbox",
       "kanbanView": "Kanban view"
     },
     "board": {
-      "eyebrow": "Admin / Support / Team",
+      "eyebrow": "Admin · Support · Team",
       "title": "Team kanban",
       "subtitle": "Drag a ticket between columns to flip its status. \"Resolved\" sets resolved_at to now. Filter to your own tickets if you want to focus.",
       "mine": "Mine only",
@@ -221,7 +221,7 @@
       "keyboardHint": "Each card has a Move to menu as well, for keyboard use."
     },
     "agents": {
-      "eyebrow": "Admin / Support / Agents",
+      "eyebrow": "Admin · Support · Agents",
       "title": "Support agents",
       "subtitle": "Add any platform operator as a support agent. Active agents appear in the ticket-assign dropdown.",
       "kpi": {
@@ -246,7 +246,7 @@
       "promote": "Promote operator",
       "newAgent": "New agent",
       "operator": "Operator *",
-      "pickOperator": "- pick an operator -",
+      "pickOperator": "— pick an operator —",
       "specialtyPlaceholder": "billing / integrations / general",
       "add": "Add agent",
       "added": "Agent added.",
@@ -256,14 +256,14 @@
       "cancel": "Cancel"
     },
     "sla": {
-      "eyebrow": "Admin / Support / SLA",
+      "eyebrow": "Admin · Support · SLA",
       "title": "SLA board",
       "subtitle": "Policies define how fast first response + resolution must happen. Breaches list shows tickets that already missed their window.",
       "kpi": {
         "policies": "Policies",
         "breaches": "Open breaches",
         "atRisk": "At risk now",
-        "compliance": "Compliance - 7d"
+        "compliance": "Compliance · 7d"
       },
       "policies": "Policies",
       "name": "Name",
@@ -304,7 +304,7 @@
       "deleted": "Policy deleted."
     },
     "customers": {
-      "eyebrow": "Admin / Support / Customers",
+      "eyebrow": "Admin · Support · Customers",
       "title": "Customer workspaces",
       "subtitle": "Workspaces ranked by support load. Click through to view all their tickets.",
       "kpi": {
@@ -314,7 +314,7 @@
         "top": "Top open"
       },
       "list": "Workspaces with tickets",
-      "filter": "Filter workspace...",
+      "filter": "Filter workspace…",
       "workspace": "Workspace",
       "openCol": "Open",
       "totalCol": "Total",
@@ -323,7 +323,7 @@
       "view": "Open",
       "empty": "No customers have raised tickets yet.",
       "detail": {
-        "eyebrow": "Admin / Support / Customer",
+        "eyebrow": "Admin · Support · Customer",
         "subtitle": "All tickets, response stats, and quick links for this customer workspace.",
         "all": "All customers",
         "total": "Total tickets",
@@ -343,9 +343,9 @@
       }
     },
     "playbooks": {
-      "eyebrow": "Admin / Support / Playbooks",
+      "eyebrow": "Admin · Support · Playbooks",
       "title": "Reply playbooks",
-      "subtitle": "Reusable sequences of actions, applied with one click from any ticket. Each playbook runs its steps in order (set status, send reply, assign agent, etc.).",
+      "subtitle": "Reusable sequences of actions — apply with one click from any ticket. Each playbook runs its steps in order (set status, send reply, assign agent, etc.).",
       "kpi": {
         "total": "Total",
         "active": "Active",
@@ -354,26 +354,26 @@
       "library": "Playbook library",
       "active": "active",
       "paused": "paused",
-      "meta": "{steps} steps, used {uses}x, {slug}",
+      "meta": "{steps} steps · used {uses}× · {slug}",
       "pause": "Pause",
       "activate": "Activate",
       "delete": "Delete",
       "deleteTitle": "Delete playbook",
       "deleteConfirm": "Delete playbook '{name}'?",
       "emptyTitle": "No playbooks yet",
-      "emptyBody": "A playbook bundles a few actions you'd normally do one-by-one, applied with one click from any ticket.",
+      "emptyBody": "A playbook bundles a few actions you'd normally do one-by-one — apply with one click from any ticket.",
       "starters": "Common starters",
-      "starter1": "Refund - standard",
-      "starter1Body": "Send refund template, mark resolved, tag \"refund\"",
-      "starter2": "Escalate - urgent",
-      "starter2Body": "Set priority urgent, assign on-call agent, internal note",
-      "starter3": "Pause - awaiting customer",
-      "starter3Body": "Set status pending, send \"we need more info\" reply",
-      "starterHint": "Build any of these on the right.",
+      "starter1": "Refund · standard",
+      "starter1Body": "Send refund template → Mark resolved → Tag \"refund\"",
+      "starter2": "Escalate · urgent",
+      "starter2Body": "Set priority urgent → Assign on-call agent → Internal note",
+      "starter3": "Pause · awaiting customer",
+      "starter3Body": "Set status pending → Send \"we need more info\" reply",
+      "starterHint": "Build any of these on the right →",
       "newPlaybook": "New playbook",
       "build": "Build a macro",
       "nameLabel": "Name *",
-      "namePlaceholder": "Refund - standard",
+      "namePlaceholder": "Refund · standard",
       "trigger": "Trigger",
       "triggerValue": "Value (if applicable)",
       "triggerValuePlaceholder": "refund",
@@ -383,9 +383,9 @@
         "tag_added": "Tag added"
       },
       "steps": "Steps",
-      "skip": "- skip -",
+      "skip": "— skip —",
       "valuePlaceholder": "value",
-      "stepsHint": "Empty rows are ignored. 3 step slots, create another playbook to chain more.",
+      "stepsHint": "Empty rows are ignored. 3 step slots — clone the playbook to chain more.",
       "create": "Create playbook",
       "actions": {
         "set_status": "Set status",
@@ -402,9 +402,9 @@
       "cancel": "Cancel"
     },
     "reports": {
-      "eyebrow": "Admin / Support / Reports",
+      "eyebrow": "Admin · Support · Reports",
       "title": "Support analytics",
-      "subtitle": "Last {days} days. Response, resolution, and SLA compliance at a glance, drill down by exporting raw rows.",
+      "subtitle": "Last {days} days. Response, resolution, and SLA compliance at a glance — drill down by exporting raw rows.",
       "windows": {
         "7": "7d",
         "30": "30d",
@@ -413,17 +413,17 @@
       },
       "csv": "Download CSV",
       "kpi": {
-        "tickets": "Tickets - {days}d",
-        "resolved": "Resolved - {days}d",
+        "tickets": "Tickets · {days}d",
+        "resolved": "Resolved · {days}d",
         "avgFirst": "Avg 1st reply",
         "avgRes": "Avg resolution",
         "compliance": "SLA compliance"
       },
-      "volume": "Volume - last {days} days",
+      "volume": "Volume · last {days} days",
       "noVolume": "No tickets in the last {days} days.",
-      "byStatus": "By status (all time)",
+      "byStatus": "By status",
       "noStatus": "No tickets yet.",
-      "top": "Top agents - {days} days",
+      "top": "Top agents · {days} days",
       "agent": "Agent",
       "resolvedCol": "Resolved",
       "avgFirstCol": "Avg 1st reply",
@@ -431,7 +431,7 @@
       "noTop": "No resolved tickets yet."
     },
     "inbox": {
-      "eyebrow": "Platform / Cross-workspace inbox",
+      "eyebrow": "Platform · Cross-workspace inbox",
       "title": "Team inbox",
       "subtitle": "Read-only view across every customer workspace. Use it to triage SLA breaches, flag spam, and (with reason) impersonate workspace owners for support cases.",
       "auditLink": "Audit log",
@@ -477,7 +477,7 @@
         "thread": "Thread",
         "noMessages": "No messages yet.",
         "platformNotes": "Platform notes",
-        "noteHint": "Write a platform-only note...",
+        "noteHint": "Write a platform-only note…",
         "severity": "Severity",
         "addNote": "Add note",
         "workspaceNotes": "Workspace notes",
@@ -513,7 +513,7 @@
       "impersonation": {
         "title": "Start impersonation",
         "body": "You'll be viewing the customer's workspace as if you were their owner. The session is audit-logged.",
-        "reason": "Reason (required, min 8 chars)...",
+        "reason": "Reason (required, min 8 chars)…",
         "cancel": "Cancel",
         "start": "Start session",
         "short": "Reason must be at least 8 characters.",

@@ -193,7 +193,7 @@ export function PlatformInboxPage() {
                         )}
                         <p className="mt-0.5 text-[11px] text-muted-foreground">
                           {c.workspaceName} · {c.assigneeName ?? t('unassignedWord')} ·{' '}
-                          {c.teamName ?? '-'}
+                          {c.teamName ?? '—'}
                         </p>
                       </button>
                     </li>
@@ -265,7 +265,7 @@ export function PlatformInboxPage() {
               {audit.data?.data.map((e) => (
                 <li key={e.id} className="flex items-center gap-3 px-5 py-2 text-xs">
                   <span className="font-mono">{e.action}</span>
-                  <span className="text-muted-foreground">{e.workspaceName ?? '-'}</span>
+                  <span className="text-muted-foreground">{e.workspaceName ?? '—'}</span>
                   <span className="ms-auto text-muted-foreground">
                     {relativeTime(e.at, locale)}
                   </span>
@@ -491,7 +491,7 @@ function ConversationDrawer({
                   >
                     <p className="whitespace-pre-wrap">{n.body}</p>
                     <p className="mt-1 font-mono text-[10px] text-muted-foreground">
-                      {n.authorName ?? '-'} · {relativeTime(n.createdAt, locale)}
+                      {n.authorName ?? '—'} · {relativeTime(n.createdAt, locale)}
                     </p>
                   </div>
                 ))}

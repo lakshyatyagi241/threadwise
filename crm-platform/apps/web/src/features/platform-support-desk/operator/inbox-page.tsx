@@ -11,11 +11,11 @@ import {
   operatorTicketListResponseSchema,
   type OperatorTicketListResponse,
 } from '@crm/contracts';
-import { Badge, Button, Card, Input, Select, StatTile } from '@crm/ui';
+import { Button, Card, Input, Select, StatTile } from '@crm/ui';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
-import { INBOX_KEY, PRIORITY_TONE, STATUS_TONE } from '../lib/display';
+import { INBOX_KEY, PRIORITY_PILL, STATUS_PILL } from '../lib/display';
 import { shortDate } from '../lib/format';
 import { TicketPanel } from './ticket-panel';
 
@@ -151,7 +151,7 @@ export function InboxPage() {
       {q.data && (
         <Card className="overflow-x-auto p-0">
           <table className="w-full text-sm">
-            <thead className="border-b text-start text-xs uppercase tracking-wide text-muted-foreground">
+            <thead className="border-b bg-muted/40 text-start text-xs text-muted-foreground">
               <tr>
                 <th className="p-3 text-start">{t('table.when')}</th>
                 <th className="p-3 text-start">{t('table.ticket')}</th>
@@ -185,18 +185,30 @@ export function InboxPage() {
                   </td>
                   <td className="p-3">
                     <p className="font-medium">{r.subject || t('table.noSubject')}</p>
-                    <p className="text-xs text-muted-foreground">
-                      #{r.ticketNumber} - {r.customerName || r.customerEmail}
+                    <p className="font-mono text-[10.5px] text-muted-foreground">
+                      #{r.ticketNumber} · {r.customerName || r.customerEmail}
                     </p>
                   </td>
                   <td className="p-3">
-                    <Badge tone={PRIORITY_TONE[r.priority]}>{tp(r.priority)}</Badge>
+                    <span
+                      className={`rounded-full px-2 py-0.5 font-mono text-[10px] uppercase ${PRIORITY_PILL[r.priority]}`}
+                    >
+                      {tp(r.priority)}
+                    </span>
                   </td>
                   <td className="p-3">
-                    <Badge tone={STATUS_TONE[r.status]}>{ts(r.status)}</Badge>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[11px] lowercase ${STATUS_PILL[r.status]}`}
+                    >
+                      {ts(r.status)}
+                    </span>
                   </td>
-                  <td className="p-3">{r.assignee?.name ?? t('table.unassigned')}</td>
-                  <td className="p-3 text-primary">{t('table.open')} &rarr;</td>
+                  <td className="p-3">
+                    {r.assignee?.name ?? (
+                      <em className="text-muted-foreground">{t('table.unassigned')}</em>
+                    )}
+                  </td>
+                  <td className="p-3 text-xs text-primary">{t('table.open')} &rarr;</td>
                 </tr>
               ))}
             </tbody>

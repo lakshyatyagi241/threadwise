@@ -130,7 +130,7 @@ export function AgentsPage() {
                           {a.operator.email}
                         </p>
                       </td>
-                      <td className="p-3">{a.specialty || '-'}</td>
+                      <td className="p-3">{a.specialty || '—'}</td>
                       <td className="p-3 text-end font-mono">{a.openCount}</td>
                       <td className="p-3 text-end font-mono">{a.resolved30d}</td>
                       <td className="p-3 text-end font-mono">
@@ -168,7 +168,7 @@ export function AgentsPage() {
                     </p>
                     <h3 className="text-lg font-semibold">{t('newAgent')}</h3>
                   </div>
-                  <Field label={t('operator')} htmlFor="ag-op">
+                  <Field eyebrow label={t('operator')} htmlFor="ag-op">
                     <Select
                       id="ag-op"
                       required
@@ -183,7 +183,7 @@ export function AgentsPage() {
                       ))}
                     </Select>
                   </Field>
-                  <Field label={t('specialty')} htmlFor="ag-spec">
+                  <Field eyebrow label={t('specialty')} htmlFor="ag-spec">
                     <Input
                       id="ag-spec"
                       maxLength={60}

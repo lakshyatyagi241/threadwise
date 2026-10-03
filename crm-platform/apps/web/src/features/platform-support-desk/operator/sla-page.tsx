@@ -240,7 +240,7 @@ export function SlaPage() {
                     </p>
                     <h3 className="text-lg font-semibold">{t('addTarget')}</h3>
                   </div>
-                  <Field label={t('nameLabel')} htmlFor="sla-name">
+                  <Field eyebrow label={t('nameLabel')} htmlFor="sla-name">
                     <Input
                       id="sla-name"
                       required
@@ -251,7 +251,7 @@ export function SlaPage() {
                     />
                   </Field>
                   <div className="grid grid-cols-2 gap-3">
-                    <Field label={t('firstLabel')} htmlFor="sla-first">
+                    <Field eyebrow label={t('firstLabel')} htmlFor="sla-first">
                       <Input
                         id="sla-first"
                         type="number"
@@ -262,7 +262,7 @@ export function SlaPage() {
                         onChange={(e) => set('firstResponseMinutes', e.target.value)}
                       />
                     </Field>
-                    <Field label={t('resolveLabel')} htmlFor="sla-res">
+                    <Field eyebrow label={t('resolveLabel')} htmlFor="sla-res">
                       <Input
                         id="sla-res"
                         type="number"

@@ -125,6 +125,18 @@ export function PlaybooksPage() {
               <h2 className="border-b px-5 py-4 text-lg font-semibold">{t('library')}</h2>
               {q.data.data.length === 0 ? (
                 <div className="space-y-4 p-8 text-center">
+                  <span className="mx-auto inline-flex size-14 items-center justify-center rounded-2xl bg-success/10 text-success">
+                    <svg
+                      viewBox="0 0 16 16"
+                      className="size-6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.4"
+                      aria-hidden="true"
+                    >
+                      <path d="M3 2h7l3 3v9H3zM10 2v3h3M5.5 8h5M5.5 11h5" />
+                    </svg>
+                  </span>
                   <h3 className="text-xl font-semibold">{t('emptyTitle')}</h3>
                   <p className="mx-auto max-w-xs text-sm text-muted-foreground">{t('emptyBody')}</p>
                   <div className="mx-auto max-w-md space-y-2 text-start">
@@ -207,7 +219,7 @@ export function PlaybooksPage() {
                     </p>
                     <h3 className="text-lg font-semibold">{t('build')}</h3>
                   </div>
-                  <Field label={t('nameLabel')} htmlFor="pb-name">
+                  <Field eyebrow label={t('nameLabel')} htmlFor="pb-name">
                     <Input
                       id="pb-name"
                       required
@@ -218,7 +230,7 @@ export function PlaybooksPage() {
                     />
                   </Field>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <Field label={t('trigger')} htmlFor="pb-trigger">
+                    <Field eyebrow label={t('trigger')} htmlFor="pb-trigger">
                       <Select
                         id="pb-trigger"
                         value={trigger}
@@ -231,7 +243,7 @@ export function PlaybooksPage() {
                         ))}
                       </Select>
                     </Field>
-                    <Field label={t('triggerValue')} htmlFor="pb-tv">
+                    <Field eyebrow label={t('triggerValue')} htmlFor="pb-tv">
                       <Input
                         id="pb-tv"
                         maxLength={120}

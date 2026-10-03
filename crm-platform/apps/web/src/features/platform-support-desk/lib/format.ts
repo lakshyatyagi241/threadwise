@@ -1,5 +1,5 @@
 /** `45m`, or a dash for a missing or zero value (Reference prints a dash for zero). */
-export const minutesLabel = (n: number | null | undefined): string => (n ? `${n}m` : '-');
+export const minutesLabel = (n: number | null | undefined): string => (n ? `${n}m` : '—');
 
 const UNITS: Array<[Intl.RelativeTimeFormatUnit, number]> = [
   ['year', 31_536_000],
