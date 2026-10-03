@@ -9,6 +9,8 @@
  */
 export { PlansCoreModule } from './plans-core.module';
 export { PlanCatalogService } from './plan-catalog.service';
+export { PlanQuotaService } from './plan-quota.service';
+export { PlanUsageService } from './plan-usage.service';
 export {
   PlanEntitlementService,
   resolveFeature,
@@ -30,3 +32,6 @@ export {
   type ResolvedDefaultPlan,
   type TrialStamp,
 } from './plan-rules';
+export { PlansWorkerModule } from './plans-worker.module';
+export { PlanRetentionService } from './plan-retention.service';
+export { RequirePlanFeature, planFeatureLabel } from './plan-feature.guard';

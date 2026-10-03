@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
+import { ChatConversationsModule } from '../chat-conversations';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CrmModule } from '../crm';
-import {
-  DefaultCampaignSettings,
-  NoFlowStarter,
-  OpenCampaignBilling,
-  OpenCampaignPlanGate,
-} from './_shims/open-gates';
+import { DefaultCampaignSettings, NoFlowStarter, OpenCampaignPlanGate } from './_shims/open-gates';
 import {
   CAMPAIGN_BILLING,
   CAMPAIGN_FLOW_STARTER,
   CAMPAIGN_PLAN_GATE,
   CAMPAIGN_SETTINGS,
 } from './_shims/tokens';
+import { WalletCampaignBilling } from './_shims/wallet-billing';
 import { CampaignAudienceService } from './audience.service';
 import { CampaignCallbacksController } from './campaign-callbacks.controller';
 import { CampaignCallbacksService } from './campaign-callbacks.service';
@@ -35,7 +33,7 @@ import { CampaignsService } from './campaigns.service';
  * same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [BroadcastsModule, CrmModule],
+  imports: [BroadcastsModule, ChatConversationsModule, CrmModule, WalletMessageBillingModule],
   controllers: [
     CampaignsController,
     CampaignsReadController,
@@ -55,7 +53,7 @@ import { CampaignsService } from './campaigns.service';
     CampaignCallbacksService,
     CampaignReceiptsService,
     { provide: CAMPAIGN_PLAN_GATE, useClass: OpenCampaignPlanGate },
-    { provide: CAMPAIGN_BILLING, useClass: OpenCampaignBilling },
+    { provide: CAMPAIGN_BILLING, useClass: WalletCampaignBilling },
     { provide: CAMPAIGN_FLOW_STARTER, useClass: NoFlowStarter },
     { provide: CAMPAIGN_SETTINGS, useClass: DefaultCampaignSettings },
   ],

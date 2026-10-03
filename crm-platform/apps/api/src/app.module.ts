@@ -24,6 +24,7 @@ import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
+import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
@@ -31,6 +32,7 @@ import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
+import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
@@ -38,6 +40,8 @@ import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
+import { TrialGateGuard } from './modules/plans-subscriptions-trials/trial-gate.guard';
+import { PlanFeatureGuard } from './modules/plans-subscriptions-trials/plan-feature.guard';
 import {
   MediaStorageService,
   PlatformSettingsModule,
@@ -134,10 +138,12 @@ import { HealthModule } from './health/health.module';
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
     NodeBridgeRuntimeModule,
+    ScheduledQueueWarmerModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
     BspBillingEngineModule,
+    WalletMessageBillingModule,
     SendGuardModule,
     RealtimeModule,
     // The one door chat media goes through (store, link, the authenticated media route), over the platform's storage and upload policy.
@@ -183,7 +189,12 @@ import { HealthModule } from './health/health.module';
     // unverified under 'block', MFA or password change required) is refused
     // here with a code the web app maps to the right lock screen.
     { provide: APP_GUARD, useClass: AccountGateGuard },
+    // The free-trial hard gate (WD-PLAN-015): a workspace whose trial ended gets 402 on every feature route until it picks a plan.
+    // After the account gate so a locked account is reported as locked first.
+    { provide: APP_GUARD, useExisting: TrialGateGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
+    // Route-level plan gate (WD-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
+    { provide: APP_GUARD, useExisting: PlanFeatureGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
   ],
   exports: [CryptoService],

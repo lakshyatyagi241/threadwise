@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import type {
-  BilledSend,
-  CampaignBilling,
   CampaignFlowStarter,
   CampaignPlanGate,
   CampaignSettings,
@@ -19,22 +17,6 @@ export class OpenCampaignPlanGate implements CampaignPlanGate {
   }
 
   assertWithinCap(): Promise<void> {
-    return Promise.resolve();
-  }
-}
-
-/** No wallet integration yet: every send is allowed and nothing is charged or refunded. */
-@Injectable()
-export class OpenCampaignBilling implements CampaignBilling {
-  consume(_send: BilledSend): Promise<boolean> {
-    return Promise.resolve(true);
-  }
-
-  settleDelivered(): Promise<void> {
-    return Promise.resolve();
-  }
-
-  settleFailed(): Promise<void> {
     return Promise.resolve();
   }
 }

@@ -28,6 +28,7 @@ export const CTA_MAX = 64;
 export const DURATION = { min: 1, max: 120 } as const;
 export const SORT_MAX = 100_000;
 export const CAP_MAX = 2_000_000_000;
+export const RETENTION_MAX = 3650;
 
 export interface PlanDraft {
   name: string;
@@ -46,6 +47,8 @@ export interface PlanDraft {
   isCustomQuote: boolean;
   sortOrder: string;
   ctaLabel: string;
+  /** Days after a paid plan lapses before the workspace's data is wiped; 0 = never (WD-PLAN-023). */
+  dataRetentionDays: string;
   /** Blank = unlimited (stored as 0). */
   limits: Record<PlanLimitKey, string>;
   features: Record<PlanFeatureKey, boolean>;
@@ -61,6 +64,7 @@ export type PlanScalarField =
   | 'billingDuration'
   | 'sortOrder'
   | 'ctaLabel'
+  | 'dataRetentionDays'
   | 'isFree'
   | 'isDefault';
 export type PlanField = PlanScalarField | `limits.${PlanLimitKey}`;
@@ -95,6 +99,7 @@ export function newPlanDraft(currency = 'USD'): PlanDraft {
     isCustomQuote: false,
     sortOrder: '0',
     ctaLabel: 'Get started',
+    dataRetentionDays: '0',
     limits: Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, ''])) as PlanDraft['limits'],
     features: Object.fromEntries(PLAN_FEATURE_KEYS.map((k) => [k, true])) as PlanDraft['features'],
   };
@@ -119,6 +124,7 @@ export function planToDraft(p: PlanAdminItem): PlanDraft {
     isCustomQuote: p.isCustomQuote,
     sortOrder: String(p.sortOrder),
     ctaLabel: p.ctaLabel,
+    dataRetentionDays: String(p.dataRetentionDays),
     limits: Object.fromEntries(
       PLAN_LIMIT_KEYS.map((k) => [k, p.limits[k] > 0 ? String(p.limits[k]) : '']),
     ) as PlanDraft['limits'],
@@ -199,6 +205,12 @@ export function buildPlanRequest(
   if (sort === null || sort > SORT_MAX)
     problems.sortOrder = { code: 'range', min: 0, max: SORT_MAX };
 
+  const retention = wholeNumber(
+    draft.dataRetentionDays.trim() === '' ? '0' : draft.dataRetentionDays,
+  );
+  if (retention === null || retention > RETENTION_MAX)
+    problems.dataRetentionDays = { code: 'range', min: 0, max: RETENTION_MAX };
+
   const limits: Record<string, number> = {};
   for (const key of PLAN_LIMIT_KEYS) {
     const raw = draft.limits[key].trim();
@@ -246,6 +258,7 @@ export function buildPlanRequest(
       isCustomQuote: draft.isCustomQuote,
       sortOrder: sort!,
       ctaLabel: cta,
+      dataRetentionDays: retention!,
       limits,
       features: { ...draft.features },
     },
@@ -264,6 +277,7 @@ export function planFieldForPath(path: string): PlanField | null {
     'billingDuration',
     'sortOrder',
     'ctaLabel',
+    'dataRetentionDays',
     'isFree',
     'isDefault',
   ];
