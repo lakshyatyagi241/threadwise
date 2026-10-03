@@ -32,6 +32,7 @@ import {
   VideoIcon,
 } from './fb-icons';
 import { PageSelect } from './page-select';
+import { UploadMediaButton } from '@/features/broadcasts/components/upload-media-button';
 
 const TYPE_ICON: Record<ComposeType, (p: { className?: string }) => ReactNode> = {
   photo: ImageIcon,
@@ -243,6 +244,14 @@ export function ComposePostScreen() {
                       className="font-mono text-xs"
                     />
                     <p className="text-[11px] text-muted-foreground">{t('photoHint')}</p>
+                    <UploadMediaButton
+                      accept="image/*"
+                      onUploaded={(m) =>
+                        set({
+                          photoText: s.photoText.trim() ? `${s.photoText.trim()}\n${m.url}` : m.url,
+                        })
+                      }
+                    />
                   </div>
                 )}
                 {s.type === 'link' && (
@@ -273,6 +282,10 @@ export function ComposePostScreen() {
                       onChange={(e) => set({ videoUrl: e.target.value })}
                       placeholder="https://…/clip.mp4"
                       className="font-mono"
+                    />
+                    <UploadMediaButton
+                      accept="video/*"
+                      onUploaded={(m) => set({ videoUrl: m.url })}
                     />
                     <p className="text-[11px] text-muted-foreground">
                       {s.type === 'reel' ? t('reelNote') : t('videoNote')}

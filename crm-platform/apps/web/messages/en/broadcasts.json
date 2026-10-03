@@ -311,6 +311,32 @@
       "code": "Code",
       "value": "Value",
       "keepTemplate": "Leave blank to keep the template value"
+    },
+    "mediaUpload": {
+      "upload": "Upload a file",
+      "uploading": "Uploading…",
+      "failed": "The file could not be uploaded."
+    },
+    "chooser": {
+      "newBroadcast": "New broadcast",
+      "eyebrow": "New broadcast",
+      "title": "Pick a channel",
+      "close": "Close",
+      "whatsapp": {
+        "name": "WhatsApp",
+        "hint": "Send an approved template to selected phone contacts.",
+        "cta": "Create WhatsApp broadcast"
+      },
+      "telegram": {
+        "name": "Telegram",
+        "hint": "Send a bot message to the chats your bot already has.",
+        "cta": "Create Telegram broadcast"
+      },
+      "instagram": {
+        "name": "Instagram",
+        "hint": "Message people already in your Instagram DMs — no template approval.",
+        "cta": "Create Instagram broadcast"
+      }
     }
   }
 }

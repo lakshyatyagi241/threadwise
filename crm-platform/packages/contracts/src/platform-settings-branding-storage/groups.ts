@@ -349,6 +349,17 @@ export const whatsappSettingsSchema = z.object({
   requireSignature: flag(false),
 });
 
+// --- WD-CAMP: how a campaign retries and when it ends on its own (WaDesk's campaign_* system settings) -----------------------
+export const campaignsSettingsSchema = z.object({
+  /** Tries per recipient before it is marked failed. */
+  retryAttempts: clamped(0, 10, 3),
+  /** Seconds between tries (it grows with each one). */
+  retryBackoffSec: clamped(10, 3600, 60),
+  /** A campaign nobody finished is ended after `defaultExpiryHours`. */
+  autoExpiryEnabled: flag(true),
+  defaultExpiryHours: clamped(1, 720, 24),
+});
+
 export const SET_GROUP_SCHEMAS = {
   general: generalSettingsSchema,
   branding: brandingSettingsSchema,
@@ -363,6 +374,7 @@ export const SET_GROUP_SCHEMAS = {
   realtime: realtimeSettingsSchema,
   tiPwa: tiPwaSettingsSchema,
   whatsapp: whatsappSettingsSchema,
+  campaigns: campaignsSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
 export const SET_GROUPS = Object.keys(SET_GROUP_SCHEMAS) as SetGroup[];
@@ -384,6 +396,7 @@ export const SET_SECRET_FIELDS = {
   tiPwa: [],
   /** appSecret signs/verifies Meta calls; verifyToken is the webhook handshake token (blank: derived). */
   whatsapp: ['appSecret', 'verifyToken', 'partnerAuthKey', 'systemUserToken'],
+  campaigns: [],
 } as const satisfies Record<SetGroup, readonly string[]>;
 
 /** Groups whose saved state can be checked against the outside world (a "test" button). */

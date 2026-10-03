@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { DatabaseService } from '../../infra/db/database.service';
 import { normalize, shouldAutomate } from './ingest-rules';
 import {
   INSTAGRAM_AUTOMATION,
@@ -24,7 +23,6 @@ export class IngestService {
   private readonly logger = new Logger(IngestService.name);
 
   constructor(
-    private readonly db: DatabaseService,
     @Inject(INSTAGRAM_INBOX_INGEST) private readonly inbox: InstagramInboxIngest,
     @Inject(INSTAGRAM_AUTOMATION) private readonly automation: InstagramAutomation,
   ) {}
@@ -39,7 +37,7 @@ export class IngestService {
     isHistory = false,
   ): Promise<IngestResult> {
     const n = normalize(data, new Date(), isHistory);
-    const out = await this.db.txAs({ orgId }, (tx) => this.inbox.record(tx, orgId, n));
+    const out = await this.inbox.record(orgId, n);
 
     this.logger.log(
       {
