@@ -1,22 +1,17 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
-import { useMemo, useTransition, type ReactNode } from 'react';
-import { setLocale, setTheme } from '@/components/shell/actions';
-import { LOCALES } from '@/i18n/locales';
+import { useTranslations } from 'next-intl';
+import { useTransition, type ReactNode } from 'react';
+import { LocaleSwitcher } from '@/features/localization-translation/locale-switcher';
+import { setTheme } from '@/components/shell/actions';
 import { MoonIcon, SunIcon } from '../ui/icons';
-import { languageName } from '../ui/language';
 import { useDocumentTheme } from '../ui/use-browser';
 
 /** The bare page around the operator sign-in card: brand, language and theme, nothing else. */
 export function LoginChrome({ children }: { children: ReactNode }) {
   const t = useTranslations('auth-registration-security.platform.shell');
-  const locale = useLocale();
-  const router = useRouter();
   const [, start] = useTransition();
   const theme = useDocumentTheme();
-  const languages = useMemo(() => LOCALES.map((code) => [code, languageName(code)] as const), []);
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -34,23 +29,7 @@ export function LoginChrome({ children }: { children: ReactNode }) {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <select
-            aria-label={t('language')}
-            value={locale}
-            onChange={(e) =>
-              start(async () => {
-                await setLocale(e.target.value);
-                router.refresh();
-              })
-            }
-            className="h-8 max-w-32 rounded-md border border-border bg-background px-2 text-sm focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            {languages.map(([code, name]) => (
-              <option key={code} value={code}>
-                {name}
-              </option>
-            ))}
-          </select>
+          <LocaleSwitcher />
           <button
             type="button"
             onClick={toggleTheme}
