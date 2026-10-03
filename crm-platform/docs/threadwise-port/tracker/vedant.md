@@ -570,6 +570,57 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-018 | backend-done |  | taps routed to the menu they belong to (old menus work), 20-character label match, media-only ignored unless accepted, location to a maps link, persistent menus |
 | TW-FLR-019 | backend-done |  | one send door (dispatcher then thread), interactive content degraded per channel (buttons, list, link button, pin); no branding footer; a 24 hour window refusal fails the run with the reason |
 | TW-FLR-020 | backend-done |  | daily cap shared with broadcasts through the Redis tally, channel down halts and retries every 5 minutes |
+| TW-FLR-021 | backend-done |  | Message, Sequence and Media nodes: each reply in order, files by chatmedia key; flow-runtime e2e |
+| TW-FLR-022 | backend-done |  | Ask node: validated answers, retry text, timeout; flow-runtime e2e |
+| TW-FLR-023 | backend-done |  | Buttons node (three buttons; four to ten become a list where the channel has lists; numbered text elsewhere); channel-render.spec |
+| TW-FLR-024 | backend-done |  | List node and its numbered fallback; channel-render.spec |
+| TW-FLR-025 | backend-done |  | Poll as a list or numbered text (no native poll on any channel here), as Reference's own partial |
+| TW-FLR-026 | backend-done |  | Template node: approved templates by id within the workspace, variables filled from the run, a text fallback on channels without templates; commerce-template e2e |
+| TW-FLR-027 | backend-done |  | CTA and Location nodes; channel-render.spec |
+| TW-FLR-028 | backend-done |  | Condition node and the operator rules; condition unit spec |
+| TW-FLR-029 | backend-done |  | Delay node as a sleeping run with a resume time; flow-runtime e2e |
+| TW-FLR-030 | backend-done |  | AI node: one-shot, extraction, silent, conversation mode with an exit keyword, token ledger and the monthly cap on the platform key; ai-nodes e2e (20), ai-call-service spec |
+| TW-FLR-031 | in-progress |  | Sub-flow built (same workspace, published flows only, depth cap 10); the Chatbot hand-off to an AI agent waits for the AI agents domain: the executor and port are built and the port answers unavailable |
+| TW-FLR-032 | backend-done |  | Webhook node through the guarded fetch (no private hosts, no redirects, 5 MB cap), JSON-escaped variables, saved response; integrations-nodes e2e |
+| TW-FLR-033 | backend-done |  | Code node in a worker-thread vm with a memory cap and a 2 s limit; the ceiling (vm is not a hard security boundary) is written in the file header; integrations-nodes spec |
+| TW-FLR-034 | blocked |  | MySQL node: the executor, the read-only guard and the 100-row cap are built against a port; there is no mysql2 driver in the repo, so the default adapter says so |
+| TW-FLR-035 | backend-done |  | Tag node on the run's contact (add or remove, by id or name); actions-nodes e2e. Does not fire tag_added flows, as Reference |
+| TW-FLR-036 | backend-done |  | Assign agent node through AssignmentService with the flow actor; actions-nodes e2e |
+| TW-FLR-037 | backend-done |  | Deal node creates or moves the contact's open deal through the stage engine; actions-nodes e2e |
+| TW-FLR-038 | backend-done |  | Copy-to-number node through the run's channel, nothing recorded on the customer thread; actions-nodes e2e |
+| TW-FLR-039 | backend-done |  | WhatsApp-to-Instagram link node; actions-nodes e2e |
+| TW-FLR-040 | backend-done |  | Book appointment node through the appointments domain; commerce-book e2e |
+| TW-FLR-041 | backend-done |  | Commerce shop node over a store port (stock check, native product list, checkout link); the port says cannot until the store domains bind an adapter, which is Reference's own failure path; commerce-shop-form spec |
+| TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e |
+| TW-FLR-043 | backend-done |  | WhatsApp Form node and the form-submission resume; commerce-shop-form spec |
+| TW-FLR-044 | backend-done |  | Google Sheets node against a workspace port; no Google account store exists yet, so the nodes report no account and move on; integrations-nodes e2e |
+| TW-FLR-045 | backend-done |  | Google Docs node against the same port; integrations-nodes spec |
+| TW-FLR-046 | backend-done |  | Google Form node: sends the link, parks the run on a custom wait, the response webhook (per-org token) resumes it or the timeout port leaves; integrations-nodes e2e |
+| TW-FLR-047 | backend-done |  | Google Meet node against the Google port; integrations-nodes spec |
+| TW-FLR-048 | blocked |  | AI voice call node: built against AiCallPort whose default answers calls_unavailable; the real adapter binds when the calling domain (vishal/CALL) merges |
+| TW-FLR-049 | backend-done |  | Inbound media as an answer is kept as a chatmedia key, never a public link; flow-runtime e2e |
+| TW-FLR-050 | backend-done |  | Ending a run from outside: cancel by hand, agent takeover and a removed sender end the run; flow-runtime e2e |
+| TW-FLR-051 | backend-done |  | Run lifecycle: completed is really set (Reference never set it); statuses and the subscriber mirror; flow-runtime e2e |
+| TW-FLR-052 | frontend-done |  | Subscriber list, counts, pause and resume; per-row retry through the same confirmation as the history tab |
+| TW-FLR-053 | frontend-done |  | Analytics: KPIs, trend, status mix, source bars, leaderboard, all-time period and flow scope, the second counter band; counts launches that failed before a run existed; flow-runtime-read e2e |
+| TW-FLR-054 | frontend-done |  | Execution history: filters, status counts that ignore the status filter, search, dates, bulk retry bar; flow-runtime-read e2e |
+| TW-FLR-055 | frontend-done |  | Error logs: grouped reasons with first and last seen, retry these, show these runs; flow-runtime-read e2e |
+| TW-FLR-056 | frontend-done |  | Retry records table with outcome chips and totals; flow-runtime-read e2e |
+| TW-FLR-057 | frontend-done |  | Retry one: flow off 422, 30 s cooldown (FLR_RETRY_TOO_SOON, 429), then state 409; outcome and reason returned; flow-runtime-read e2e |
+| TW-FLR-058 | frontend-done |  | Bulk retry of up to 50 named runs with a count per outcome; flow-runtime-read e2e |
+| TW-FLR-059 | backend-done |  | Compare-and-set on step_seq, one job id per step, sweeper for lost jobs; flow-runtime e2e |
+| TW-FLR-060 | backend-done |  | One engine for every channel: a channel profile (buttons, list, link, location, templates, pace) says what a kind can show, the rest degrades to numbered text; channel-render.spec |
+| TW-FLR-061 | backend-done |  | Facebook Messenger: profile with reply buttons and a link button, no list or location; the channel adapter joins by registering for the kind (branch punya/punyafix, PR 34) |
+| TW-FLR-062 | backend-done |  | Instagram: the same profile as Messenger; the channel adapter joins by registering for the kind (PR 34) |
+| TW-FLR-063 | backend-done |  | TikTok: text with numbered options through the default profile |
+| TW-FLR-064 | backend-done |  | Telegram: text with numbered options; the payment node is not built (needs the Telegram payment provider) |
+| TW-FLR-065 | backend-done |  | LINE: text with numbered options through the default profile |
+| TW-FLR-066 | backend-done |  | Viber: text with numbered options through the default profile |
+| TW-FLR-067 | backend-done |  | WeChat: text with numbered options through the default profile |
+| TW-FLR-068 | backend-done |  | Email: text with numbered options through the default profile |
+| TW-FLR-069 | blocked |  | Call-flow (voice IVR) is the calling domain's: vishal/CALL, PR 35, and its AI assistant rows |
+| TW-FLR-070 | wontfix |  | dead code in Reference: the per-channel session tables are replaced by flow_runs |
+| TW-FLR-071 | backend-done |  | the runtime regression suite is the unit and e2e specs of this domain (218 unit, 80 e2e) |
 
 ## chatbot-widget (wgt)
 
