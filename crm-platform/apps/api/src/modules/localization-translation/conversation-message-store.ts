@@ -24,6 +24,8 @@ export interface StoredMessage {
  */
 export interface ConversationMessageStore {
   load(orgId: number, messageId: number): Promise<StoredMessage | null>;
+  /** The internal id of a message known by its public uuid (the inbox hands out uuids only). */
+  idOfUuid(orgId: number, uuid: string): Promise<number | null>;
   /** Stores the reading on the message and pins the conversation's language when it has none yet. */
   saveInbound(orgId: number, message: StoredMessage, outcome: InboundOutcome): Promise<void>;
   /** Stores the agent's original and the delivered language on a translated reply. */
@@ -51,6 +53,16 @@ interface Row {
 @Injectable()
 export class PgConversationMessageStore implements ConversationMessageStore {
   constructor(private readonly db: DatabaseService) {}
+
+  async idOfUuid(orgId: number, uuid: string): Promise<number | null> {
+    const res = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      tx.execute(
+        sql`SELECT id FROM messages WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid ORDER BY created_at DESC LIMIT 1`,
+      ),
+    );
+    const r = res.rows[0] as { id: string | number } | undefined;
+    return r ? Number(r.id) : null;
+  }
 
   async load(orgId: number, messageId: number): Promise<StoredMessage | null> {
     const res = await this.db.txAs({ orgId, userId: null }, (tx) =>

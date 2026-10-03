@@ -193,6 +193,34 @@ export class ConversationTranslationService {
     }
   }
 
+  /** TW-I18N-036 for a message the inbox knows by its public uuid. */
+  async translateInboundByUuid(orgId: number, messageUuid: string): Promise<InboundOutcome | null> {
+    try {
+      const id = await this.messages.idOfUuid(orgId, messageUuid);
+      return id === null ? null : await this.translateInboundMessage(orgId, id);
+    } catch (err) {
+      this.logger.warn({ err, messageUuid }, 'inbound translation lookup failed');
+      return null;
+    }
+  }
+
+  /**
+   * TW-I18N-039 for the website widget: the visitor's language code when translation is live and it differs from the
+   * team language, else null. Never throws.
+   */
+  async replyLanguage(orgId: number, visitorMessage: string): Promise<string | null> {
+    const text = visitorMessage.trim();
+    if (!text) return null;
+    try {
+      const config = await this.config(orgId);
+      if (!config.enabled) return null;
+      const lang = (await this.translation.detect(text, { orgId }))?.toLowerCase() ?? null;
+      return lang && lang !== config.teamLanguage ? lang : null;
+    } catch {
+      return null;
+    }
+  }
+
   /**
    * TW-I18N-037 for a stored message: the text to deliver (translated into the customer's language, or exactly as
    * typed). The agent's original is stored beside it when the text was translated.
@@ -200,6 +228,7 @@ export class ConversationTranslationService {
   async translateOutboundMessage(
     orgId: number,
     messageId: number,
+    options: { retry?: boolean } = {},
   ): Promise<OutboundOutcome | null> {
     try {
       const m = await this.messages.load(orgId, messageId);
@@ -210,7 +239,9 @@ export class ConversationTranslationService {
         customerLanguage: m.customerLanguage,
         isTemplate: m.isTemplate,
         isForwarded: m.isForwarded,
-        alreadyTranslated: m.isTranslated,
+        // A send retry finds its own earlier reading stored; the row's body is still what the agent typed, so translate it
+        // again (the provider cache answers) instead of sending the untranslated text.
+        alreadyTranslated: options.retry ? false : m.isTranslated,
       });
       if (outcome.isTranslated) await this.messages.saveOutbound(orgId, m, outcome);
       return outcome;
@@ -225,7 +256,11 @@ export class ConversationTranslationService {
     orgId: number,
     messages: readonly T[],
   ): Promise<T[]> {
-    const { enabled } = await this.config(orgId);
+    // Fail closed: if the gate cannot be read, show originals rather than a reading that may no longer be allowed.
+    const enabled = await this.config(orgId).then(
+      (c) => c.enabled,
+      () => false,
+    );
     return messages.map((m) => ({ ...m, ...visibleTranslation(enabled, m) }));
   }
 }
