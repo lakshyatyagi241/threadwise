@@ -14,7 +14,13 @@ import type {
 import { cn, useToast } from '@crm/ui';
 import { invalidateInvoicing } from '../api/hooks';
 import { invoicingApi } from '../api/service';
-import { fulfilmentTone, invoicingTone, orderStatusTone, quoteHref, type ChipTone } from '../lib/sales-orders';
+import {
+  fulfilmentTone,
+  invoicingTone,
+  orderStatusTone,
+  quoteHref,
+  type ChipTone,
+} from '../lib/sales-orders';
 import { useErrorText } from './parts';
 import type { Outcome } from './use-invoice-actions';
 
@@ -22,7 +28,11 @@ export const salesOrderHref = (id: string): string => `/sales-orders/${id}`;
 export const salesOrderEditHref = (id: string): string => `/sales-orders/${id}/edit`;
 
 /** `/sales-orders/new`, optionally from an accepted offer (`quote`), a contact or a deal. */
-export function newSalesOrderHref(from?: { quote?: string; contact?: string; deal?: string }): string {
+export function newSalesOrderHref(from?: {
+  quote?: string;
+  contact?: string;
+  deal?: string;
+}): string {
   const p = new URLSearchParams();
   if (from?.quote) p.set('quote', from.quote);
   if (from?.contact) p.set('contact', from.contact);
@@ -46,7 +56,15 @@ const DOT: Record<ChipTone, string> = {
   danger: 'bg-danger',
 };
 
-function Chip({ tone, children, className }: { tone: ChipTone; children: React.ReactNode; className?: string }) {
+function Chip({
+  tone,
+  children,
+  className,
+}: {
+  tone: ChipTone;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <span
       className={cn(
@@ -61,16 +79,31 @@ function Chip({ tone, children, className }: { tone: ChipTone; children: React.R
   );
 }
 
-export function OrderStatusChip({ status, className }: { status: SalesOrderStatus; className?: string }) {
+export function OrderStatusChip({
+  status,
+  className,
+}: {
+  status: SalesOrderStatus;
+  className?: string;
+}) {
   const t = useTranslations('invoicing.salesOrders.status');
   return (
-    <Chip tone={orderStatusTone(status)} className={cn(status === 'cancelled' && 'line-through decoration-danger/60', className)}>
+    <Chip
+      tone={orderStatusTone(status)}
+      className={cn(status === 'cancelled' && 'line-through decoration-danger/60', className)}
+    >
       {t(status)}
     </Chip>
   );
 }
 
-export function InvoicingChip({ status, className }: { status: InvoicingStatus; className?: string }) {
+export function InvoicingChip({
+  status,
+  className,
+}: {
+  status: InvoicingStatus;
+  className?: string;
+}) {
   const t = useTranslations('invoicing.salesOrders.invoicingStatus');
   return (
     <Chip tone={invoicingTone(status)} className={className}>
@@ -79,7 +112,13 @@ export function InvoicingChip({ status, className }: { status: InvoicingStatus; 
   );
 }
 
-export function FulfilmentChip({ status, className }: { status: FulfilmentStatus; className?: string }) {
+export function FulfilmentChip({
+  status,
+  className,
+}: {
+  status: FulfilmentStatus;
+  className?: string;
+}) {
   const t = useTranslations('invoicing.salesOrders.fulfilmentStatus');
   return (
     <Chip tone={fulfilmentTone(status)} className={className}>
@@ -91,7 +130,15 @@ export function FulfilmentChip({ status, className }: { status: FulfilmentStatus
 const BAR: Record<'brand' | 'success', string> = { brand: 'bg-primary', success: 'bg-success' };
 
 /** A thin progress bar: `pct` is a whole percent computed with integer math (lib/sales-orders `progressPercent`). */
-export function ProgressBar({ pct, label, className }: { pct: number; label: string; className?: string }) {
+export function ProgressBar({
+  pct,
+  label,
+  className,
+}: {
+  pct: number;
+  label: string;
+  className?: string;
+}) {
   return (
     <div
       role="progressbar"
@@ -102,20 +149,36 @@ export function ProgressBar({ pct, label, className }: { pct: number; label: str
       className={cn('h-1.5 w-full overflow-hidden rounded-full bg-muted', className)}
     >
       {/* the fill grows from the reading start, so it mirrors in RTL by itself */}
-      <div className={cn('h-full rounded-full transition-[width]', pct >= 100 ? BAR.success : BAR.brand)} style={{ width: `${pct}%` }} />
+      <div
+        className={cn(
+          'h-full rounded-full transition-[width]',
+          pct >= 100 ? BAR.success : BAR.brand,
+        )}
+        style={{ width: `${pct}%` }}
+      />
     </div>
   );
 }
 
 /** The offer an order or invoice came from: a link to its proposal or estimate page (the order carries the kind of the document). */
-export function QuoteLink({ quote, className }: { quote: { id: string; number: string; kind?: 'proposal' | 'estimate' } | null; refine?: boolean; className?: string }) {
+export function QuoteLink({
+  quote,
+  className,
+}: {
+  quote: { id: string; number: string; kind?: 'proposal' | 'estimate' } | null;
+  refine?: boolean;
+  className?: string;
+}) {
   if (!quote) return <span className="text-muted-foreground">-</span>;
   return (
     <Link
       href={quoteHref(quote)}
       title={quote.number}
       onClick={(e) => e.stopPropagation()}
-      className={cn('block truncate text-primary outline-none hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary', className)}
+      className={cn(
+        'block truncate text-primary outline-none hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary',
+        className,
+      )}
     >
       <span dir="ltr">{quote.number}</span>
     </Link>
@@ -129,7 +192,11 @@ export function useSalesOrderActions() {
   const { toast } = useToast();
   const errorText = useErrorText();
 
-  async function run<T>(fn: () => Promise<T>, done: (r: T) => string, opts: { quiet?: boolean } = {}): Promise<Outcome<T>> {
+  async function run<T>(
+    fn: () => Promise<T>,
+    done: (r: T) => string,
+    opts: { quiet?: boolean } = {},
+  ): Promise<Outcome<T>> {
     try {
       const value = await fn();
       await invalidateInvoicing(qc);
@@ -143,17 +210,37 @@ export function useSalesOrderActions() {
 
   return {
     confirm: (id: string, opts?: { quiet?: boolean }) =>
-      run(() => invoicingApi.confirmSalesOrder(id), (o) => t('confirmed', { number: o.number }), opts),
+      run(
+        () => invoicingApi.confirmSalesOrder(id),
+        (o) => t('confirmed', { number: o.number }),
+        opts,
+      ),
     invoice: (id: string, body: InvoiceFromOrderInput, opts?: { quiet?: boolean }) =>
       run(
         () => invoicingApi.invoiceSalesOrder(id, body),
-        (r) => t(r.invoice.status === 'draft' ? 'invoicedDraft' : 'invoicedIssued', { number: r.invoice.number ?? '' }),
+        (r) =>
+          t(r.invoice.status === 'draft' ? 'invoicedDraft' : 'invoicedIssued', {
+            number: r.invoice.number ?? '',
+          }),
         opts,
       ),
     fulfil: (id: string, body: FulfilOrderInput, opts?: { quiet?: boolean }) =>
-      run(() => invoicingApi.fulfilSalesOrder(id, body), () => t('fulfilled'), opts),
+      run(
+        () => invoicingApi.fulfilSalesOrder(id, body),
+        () => t('fulfilled'),
+        opts,
+      ),
     cancel: (id: string, body: CancelOrderInput, opts?: { quiet?: boolean }) =>
-      run(() => invoicingApi.cancelSalesOrder(id, body), (o) => t('cancelled', { number: o.number }), opts),
-    remove: (id: string, opts?: { quiet?: boolean }) => run(() => invoicingApi.removeSalesOrder(id), () => t('deleted'), opts),
+      run(
+        () => invoicingApi.cancelSalesOrder(id, body),
+        (o) => t('cancelled', { number: o.number }),
+        opts,
+      ),
+    remove: (id: string, opts?: { quiet?: boolean }) =>
+      run(
+        () => invoicingApi.removeSalesOrder(id),
+        () => t('deleted'),
+        opts,
+      ),
   };
 }

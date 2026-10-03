@@ -21,11 +21,18 @@ import { RuleBuilder, type ConditionWarning } from './rule-builder';
 import { ValueInput } from './value-inputs';
 
 const read = (locale: string) =>
-  JSON.parse(readFileSync(join(process.cwd(), 'messages', locale, 'segments.json'), 'utf8')) as Record<string, unknown>;
+  JSON.parse(
+    readFileSync(join(process.cwd(), 'messages', locale, 'segments.json'), 'utf8'),
+  ) as Record<string, unknown>;
 
 const html = (el: ReactElement, locale = 'en') =>
   renderToStaticMarkup(
-    <NextIntlClientProvider locale={locale} messages={read(locale)} timeZone="UTC" now={new Date('2026-10-02T12:00:00Z')}>
+    <NextIntlClientProvider
+      locale={locale}
+      messages={read(locale)}
+      timeZone="UTC"
+      now={new Date('2026-10-02T12:00:00Z')}
+    >
       <QueryClientProvider client={new QueryClient()}>{el}</QueryClientProvider>
     </NextIntlClientProvider>,
   );
@@ -44,7 +51,11 @@ const lookups: Lookups = {
 const catalog = buildCatalog(lookups);
 const field = (id: string): FieldDef => catalog.find((f) => f.id === id)!;
 const label = (f: FieldDef) => ('key' in f.label ? f.label.key : f.label.text);
-const cond = (id: string, operator: Condition['operator'], value: Condition['value']): Condition => ({
+const cond = (
+  id: string,
+  operator: Condition['operator'],
+  value: Condition['value'],
+): Condition => ({
   ...newCondition(field(id)),
   operator,
   value,
@@ -77,7 +88,8 @@ const builder = (over: Partial<Parameters<typeof RuleBuilder>[0]> = {}) =>
 describe('rule builder', () => {
   it('draws every condition with a field picker grouped Journey / Who / Activity / Properties, an operator and a value', () => {
     const out = builder();
-    for (const g of ['Journey', 'Who', 'Activity', 'Properties']) expect(out).toContain(`label="${g}"`);
+    for (const g of ['Journey', 'Who', 'Activity', 'Properties'])
+      expect(out).toContain(`label="${g}"`);
     expect(out).toContain('aria-label="Field of condition 1"');
     expect(out).toContain('aria-label="Operator of condition 2"');
     expect(out).toContain('aria-label="Value of condition 3.1"');
@@ -168,7 +180,15 @@ describe('rule builder', () => {
 
 describe('value inputs by operator', () => {
   const input = (id: string, operator: Condition['operator'], value: Condition['value']) =>
-    html(<ValueInput field={field(id)} operator={operator} value={value} onChange={noop} label="Value" />);
+    html(
+      <ValueInput
+        field={field(id)}
+        operator={operator}
+        value={value}
+        onChange={noop}
+        label="Value"
+      />,
+    );
 
   it('text, number, date', () => {
     expect(input('source', 'contains', 'web')).toContain('value="web"');
@@ -185,7 +205,9 @@ describe('value inputs by operator', () => {
   it('ranges show two inputs', () => {
     const out = input('createdAt', 'between', { from: '2026-01-01', to: '2026-02-01' });
     expect(out.match(/type="date"/g)?.length).toBe(2);
-    expect(input('leadScore', 'between', { from: '1', to: '9' }).match(/type="number"/g)?.length).toBe(2);
+    expect(
+      input('leadScore', 'between', { from: '1', to: '9' }).match(/type="number"/g)?.length,
+    ).toBe(2);
   });
 
   it('a single choice is a select of the field options, with a stale value shown as deleted', () => {
@@ -218,7 +240,11 @@ const segment = (over: Partial<Segment> = {}): Segment => ({
   visibility: 'private',
   ownerId: 'u1',
   ownerName: 'Asha',
-  rules: { type: 'group', combinator: 'and', children: [{ type: 'condition', field: 'source', operator: 'is_empty' }] },
+  rules: {
+    type: 'group',
+    combinator: 'and',
+    children: [{ type: 'condition', field: 'source', operator: 'is_empty' }],
+  },
   rulesVersion: 1,
   memberCount: 1204,
   countApproximate: false,
@@ -234,8 +260,12 @@ const segment = (over: Partial<Segment> = {}): Segment => ({
 describe('member count, chips and help', () => {
   it('shows an exact count, "about N" for an estimate, and "-" before the first count', () => {
     expect(html(<MemberCount segment={segment()} />)).toContain('1,204');
-    expect(html(<MemberCount segment={segment({ memberCount: 12000, countApproximate: true })} />)).toContain('about 12,000');
-    expect(html(<MemberCount segment={segment({ memberCount: null, memberCountAt: null })} />)).toContain('>-<');
+    expect(
+      html(<MemberCount segment={segment({ memberCount: 12000, countApproximate: true })} />),
+    ).toContain('about 12,000');
+    expect(
+      html(<MemberCount segment={segment({ memberCount: null, memberCountAt: null })} />),
+    ).toContain('>-<');
   });
 
   it('has a recount button only when the person can recount, and says when it was counted', () => {
@@ -272,7 +302,11 @@ describe('live preview', () => {
   });
 
   it('shows a loading state while the first answer is on its way', () => {
-    const rules = { type: 'group', combinator: 'and', children: [{ type: 'condition', field: 'source', operator: 'is_empty' }] } as const;
+    const rules = {
+      type: 'group',
+      combinator: 'and',
+      children: [{ type: 'condition', field: 'source', operator: 'is_empty' }],
+    } as const;
     const out = html(<LivePreview rules={rules as never} incomplete={0} stageLabel={(v) => v} />);
     expect(out).toContain('aria-label="Loading preview"');
   });

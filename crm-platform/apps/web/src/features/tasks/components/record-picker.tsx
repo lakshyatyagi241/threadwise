@@ -146,7 +146,9 @@ export function RecordPicker({
                 >
                   <Icon className="size-4 shrink-0 text-muted-foreground" />
                   <span className="min-w-0 flex-1 truncate">{r.label}</span>
-                  {r.hint && <span className="shrink-0 text-xs text-muted-foreground">{r.hint}</span>}
+                  {r.hint && (
+                    <span className="shrink-0 text-xs text-muted-foreground">{r.hint}</span>
+                  )}
                 </button>
               </li>
             ))}

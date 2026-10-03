@@ -8,7 +8,14 @@ import { Button, ConfirmDialog, EmptyState, Spinner, cn, useToast } from '@crm/u
 import type { TaskResponse } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useStoredValue } from '@/lib/use-stored-value';
-import { invalidateTasks, removeTaskFromCache, useMembers, useTaskCounts, useTasksList, useTasksSetup } from '../api/hooks';
+import {
+  invalidateTasks,
+  removeTaskFromCache,
+  useMembers,
+  useTaskCounts,
+  useTasksList,
+  useTasksSetup,
+} from '../api/hooks';
 import { tasksApi } from '../api/service';
 import type { BulkOutcome } from '../api/schemas';
 import {
@@ -152,7 +159,12 @@ export function TasksScreen() {
     dispatch({ type: 'clear' });
     await invalidateTasks(qc);
     const name = (members.data ?? []).find((m) => m.id === assigneeId)?.fullName ?? '';
-    report(assigneeId ? tb('assigned', { count: out.changed, name }) : tb('unassigned', { count: out.changed }), out);
+    report(
+      assigneeId
+        ? tb('assigned', { count: out.changed, name })
+        : tb('unassigned', { count: out.changed }),
+      out,
+    );
   }
 
   async function bulkDelete() {
@@ -362,7 +374,14 @@ export function TasksScreen() {
                         variant="secondary"
                         onClick={() => {
                           setQ('');
-                          setFilters({ q: '', status: 'open', priority: '', assignee: '', contact: '', deal: '' });
+                          setFilters({
+                            q: '',
+                            status: 'open',
+                            priority: '',
+                            assignee: '',
+                            contact: '',
+                            deal: '',
+                          });
                         }}
                       >
                         {t('resetFilters')}

@@ -5,7 +5,6 @@ import {
   neutralAckSchema,
   type RegistrationConfigResponse,
 } from '@crm/contracts';
-import { Alert, Button, Input, Spinner } from '@crm/ui';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useRef, useState, type FormEvent } from 'react';
@@ -15,6 +14,7 @@ import { captchaMissing, mapAuthError, type MappedError } from './errors';
 import { dropKey, focusFirstInvalid } from './focus';
 import { FormError } from './form-error';
 import { FormField } from './form-field';
+import { Alert, ArrowIcon, Button, Input, LINK, Spinner, cn } from './ui';
 import { failedFields } from './zod-fields';
 
 const FIELD_ORDER = ['orgSlug', 'email'] as const;
@@ -75,24 +75,24 @@ export function ForgotForm({
     return (
       <div className="space-y-5">
         <Alert tone="success" className="space-y-1">
-          <p className="font-medium">{t('doneTitle')}</p>
+          <p className="font-semibold">{t('doneTitle')}</p>
           <p>{t('doneBody')}</p>
         </Alert>
-        <p className="text-sm text-muted-foreground">{t('doneHint')}</p>
-        <div className="flex flex-col items-center gap-2 text-sm">
+        <p className="text-[12.5px] text-(--auth-ink-600)">{t('doneHint')}</p>
+        <div className="flex flex-col items-center gap-2 text-[12.5px]">
           <button
             type="button"
             onClick={() => {
               setDone(false);
               setPending(false);
             }}
-            className="font-medium text-primary underline-offset-2 hover:underline"
+            className={LINK}
           >
             {t('tryAnother')}
           </button>
           <Link
             href={orgSlug.trim() ? `/login?org=${encodeURIComponent(orgSlug.trim())}` : '/login'}
-            className="text-muted-foreground underline-offset-2 hover:underline"
+            className="text-(--auth-ink-500) hover:text-foreground"
           >
             {t('back')}
           </Link>
@@ -102,7 +102,7 @@ export function ForgotForm({
   }
 
   return (
-    <div className="space-y-5">
+    <div>
       <form
         method="post"
         ref={form}
@@ -117,7 +117,18 @@ export function ForgotForm({
       >
         <FormError error={error} />
 
-        <FormField label={tl('workspace')} hint={tl('workspaceHint')} error={fieldErrors.orgSlug}>
+        <FormField
+          label={tl('workspace')}
+          hint={
+            <>
+              {tl('workspaceHint')}{' '}
+              <Link href="/find-workspace" className={cn(LINK, 'whitespace-nowrap')}>
+                {tl('findWorkspace')}
+              </Link>
+            </>
+          }
+          error={fieldErrors.orgSlug}
+        >
           {(p) => (
             <Input
               {...p}
@@ -152,21 +163,22 @@ export function ForgotForm({
 
         {captcha.widget}
 
-        <Button type="submit" className="h-11 w-full" disabled={pending}>
-          {pending && <Spinner label={t('submitting')} />}
+        <Button type="submit" className="mt-2 w-full" disabled={pending}>
+          {pending ? <Spinner label={t('submitting')} /> : null}
           {pending ? t('submitting') : t('submit')}
+          {!pending && <ArrowIcon />}
         </Button>
-      </form>
 
-      <p className="text-center text-sm text-muted-foreground">
-        {t('remembered')}{' '}
-        <Link
-          href={orgSlug.trim() ? `/login?org=${encodeURIComponent(orgSlug.trim())}` : '/login'}
-          className="font-medium text-primary underline-offset-2 hover:underline"
-        >
-          {t('back')}
-        </Link>
-      </p>
+        <p className="mt-2 text-center text-[12.5px] text-(--auth-ink-600)">
+          {t('remembered')}{' '}
+          <Link
+            href={orgSlug.trim() ? `/login?org=${encodeURIComponent(orgSlug.trim())}` : '/login'}
+            className={LINK}
+          >
+            {t('back')}
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }

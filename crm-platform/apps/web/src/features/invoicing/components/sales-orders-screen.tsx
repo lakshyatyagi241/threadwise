@@ -7,7 +7,12 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { SalesOrderCounts } from '@crm/contracts';
 import { Button, EmptyState, Input, Spinner, cn } from '@crm/ui';
-import { invalidateInvoicing, useContactName, useSalesOrderCounts, useSalesOrdersList } from '../api/hooks';
+import {
+  invalidateInvoicing,
+  useContactName,
+  useSalesOrderCounts,
+  useSalesOrdersList,
+} from '../api/hooks';
 import { exponentOf, formatMoney } from '../lib/money';
 import {
   DEFAULT_SO_FILTERS,
@@ -46,7 +51,9 @@ export function SalesOrdersScreen() {
   const filters = useMemo(() => parseSalesOrderFilters(search), [search]);
   const setFilters = useCallback(
     (patch: Partial<SalesOrderFilters>) =>
-      router.replace(`${pathname}${salesOrderFiltersToSearch({ ...filters, ...patch })}`, { scroll: false }),
+      router.replace(`${pathname}${salesOrderFiltersToSearch({ ...filters, ...patch })}`, {
+        scroll: false,
+      }),
     [router, pathname, filters],
   );
 
@@ -78,7 +85,10 @@ export function SalesOrdersScreen() {
     <div className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
-          <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+          <span
+            aria-hidden="true"
+            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
+          >
             <InvoiceIcon className="size-5" />
           </span>
           <div className="min-w-0">
@@ -106,7 +116,11 @@ export function SalesOrdersScreen() {
       />
 
       <div className="flex flex-wrap items-center gap-2">
-        <QuickFilters value={filters.quick} counts={counts.data} onChange={(quick) => setFilters({ quick, tab: quick ? 'confirmed' : 'all' })} />
+        <QuickFilters
+          value={filters.quick}
+          counts={counts.data}
+          onChange={(quick) => setFilters({ quick, tab: quick ? 'confirmed' : 'all' })}
+        />
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
@@ -146,7 +160,12 @@ export function SalesOrdersScreen() {
         // As tall as the window allows: the rows scroll inside it and the footer stays pinned.
         className="flex max-h-[max(26rem,calc(100dvh-22rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
-        <div className={cn('flex min-h-0 flex-1 flex-col transition-opacity', list.isPlaceholderData && 'opacity-60')}>
+        <div
+          className={cn(
+            'flex min-h-0 flex-1 flex-col transition-opacity',
+            list.isPlaceholderData && 'opacity-60',
+          )}
+        >
           {!can.readSalesOrders ? (
             <div className="p-4">
               <EmptyState title={t('noAccessTitle')} message={t('noAccess')} />
@@ -189,7 +208,12 @@ export function SalesOrdersScreen() {
               {t('showing', { count: rows.length })}
             </span>
             {list.hasNextPage ? (
-              <Button variant="secondary" size="sm" disabled={list.isFetchingNextPage} onClick={() => void list.fetchNextPage()}>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={list.isFetchingNextPage}
+                onClick={() => void list.fetchNextPage()}
+              >
                 {list.isFetchingNextPage && <Spinner />}
                 {t('loadMore')}
               </Button>
@@ -209,13 +233,17 @@ export function SalesOrdersScreen() {
 function OpenValueStrip({ counts }: { counts: SalesOrderCounts | undefined }) {
   const t = useTranslations('invoicing.salesOrders.strip');
   const locale = useLocale();
-  const open = (counts?.openValue ?? []).filter((v) => majorToMinor(v.amount, exponentOf(v.currency)) > 0);
+  const open = (counts?.openValue ?? []).filter(
+    (v) => majorToMinor(v.amount, exponentOf(v.currency)) > 0,
+  );
   if (open.length === 0) return null;
   return (
     <section aria-label={t('label')} className="flex flex-wrap gap-2">
       {open.map((v) => (
         <div key={v.currency} className="rounded-xl border border-border bg-background px-4 py-2.5">
-          <div className="text-xs font-medium text-muted-foreground">{t('openValue', { currency: v.currency })}</div>
+          <div className="text-xs font-medium text-muted-foreground">
+            {t('openValue', { currency: v.currency })}
+          </div>
           <div dir="ltr" className="text-lg font-semibold tabular-nums">
             {formatMoney(majorToMinor(v.amount, exponentOf(v.currency)), v.currency, locale)}
           </div>
@@ -258,7 +286,11 @@ function OrderTabs({
     document.getElementById(`${base}-${SO_TABS[next]}`)?.focus();
   };
   return (
-    <div role="tablist" aria-label={t('label')} className="thin-scrollbar flex gap-1 overflow-x-auto overflow-y-hidden border-b border-border">
+    <div
+      role="tablist"
+      aria-label={t('label')}
+      className="thin-scrollbar flex gap-1 overflow-x-auto overflow-y-hidden border-b border-border"
+    >
       {SO_TABS.map((tab, i) => {
         const n = salesOrderTabCount(counts, tab);
         const selected = tab === value;
@@ -275,7 +307,9 @@ function OrderTabs({
             onKeyDown={(e) => onKey(e, i)}
             className={cn(
               'inline-flex shrink-0 items-center gap-2 border-b-2 px-3 py-2.5 text-sm font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-              selected ? 'border-brand text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
+              selected
+                ? 'border-brand text-foreground'
+                : 'border-transparent text-muted-foreground hover:text-foreground',
             )}
           >
             {t(tab)}
@@ -284,7 +318,9 @@ function OrderTabs({
                 aria-label={t('count', { count: n })}
                 className={cn(
                   'min-w-5 rounded-full px-1.5 py-0.5 text-center text-xs font-semibold tabular-nums',
-                  selected ? 'bg-brand/15 text-brand dark:text-primary' : 'bg-muted text-muted-foreground',
+                  selected
+                    ? 'bg-brand/15 text-brand dark:text-primary'
+                    : 'bg-muted text-muted-foreground',
                 )}
               >
                 {n.toLocaleString()}
@@ -325,7 +361,11 @@ function QuickFilters({
             )}
           >
             {t(k)}
-            {n !== undefined && <span className="rounded-full bg-muted px-1.5 text-xs font-semibold tabular-nums text-muted-foreground">{n.toLocaleString()}</span>}
+            {n !== undefined && (
+              <span className="rounded-full bg-muted px-1.5 text-xs font-semibold tabular-nums text-muted-foreground">
+                {n.toLocaleString()}
+              </span>
+            )}
           </button>
         );
       })}
@@ -337,7 +377,11 @@ function ContactFilter({ id, onChange }: { id: string; onChange: (id: string) =>
   const t = useTranslations('invoicing.salesOrders.list');
   const name = useContactName(id);
   return (
-    <ContactPicker compact value={id ? { id, label: name.data ?? t('contactLoading') } : null} onChange={(c) => onChange(c?.id ?? '')} />
+    <ContactPicker
+      compact
+      value={id ? { id, label: name.data ?? t('contactLoading') } : null}
+      onChange={(c) => onChange(c?.id ?? '')}
+    />
   );
 }
 

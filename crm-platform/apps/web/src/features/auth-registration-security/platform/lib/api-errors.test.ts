@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
-import { fieldErrorMap, fieldMessage, retryAfterSeconds, rootPath } from './api-errors';
+import {
+  fieldErrorMap,
+  fieldMessage,
+  isRoleRefusal,
+  retryAfterSeconds,
+  rootPath,
+} from './api-errors';
 
 const withFields = (fields: Array<{ path: string; message: string }>) =>
   new ApiError(429, 'AUTH_ACCOUNT_LOCKED', 'locked', 'req-1', fields);
@@ -34,5 +40,15 @@ describe('field error helpers', () => {
     expect(rootPath('abuseBlockKeywordList.3')).toBe('abuseBlockKeywordList');
     expect(rootPath('otp.ttlMinutes')).toBe('otp');
     expect(rootPath('trialDays')).toBe('trialDays');
+  });
+});
+
+describe('isRoleRefusal', () => {
+  it('is true only for a 403 that names the role requirement', () => {
+    expect(isRoleRefusal(new ApiError(403, 'AUTH_OPERATOR_ROLE_REQUIRED', 'no'))).toBe(true);
+    expect(isRoleRefusal(new ApiError(403, 'AUTH_IP_BLOCKED', 'no'))).toBe(false);
+    expect(isRoleRefusal(new ApiError(403, 'AUTH_MFA_ENROLMENT_REQUIRED', 'no'))).toBe(false);
+    expect(isRoleRefusal(new ApiError(401, 'AUTH_OPERATOR_ROLE_REQUIRED', 'no'))).toBe(false);
+    expect(isRoleRefusal(new Error('x'))).toBe(false);
   });
 });

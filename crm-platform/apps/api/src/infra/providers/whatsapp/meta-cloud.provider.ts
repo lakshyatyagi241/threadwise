@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import type { Env } from '../../../config/env.schema';
+import { WabaHttp, type WabaAuth } from '../whatsapp-cloud-api-waba/waba-http';
 import type {
   ChannelCredentials,
   NormalisedDeliveryEvent,
   NormalisedInboundMessage,
+  SendMessageParams,
   SendResult,
   SendTemplateParams,
   SendTextParams,
@@ -18,11 +18,12 @@ import { buildTemplateMessage } from './meta-template-payload';
 const SEND_TIMEOUT_MS = 15_000;
 
 /**
- * Meta WhatsApp Cloud API adapter.
+ * WhatsApp Cloud API adapter, direct to Meta or through Interakt (`credentials.route`). Both speak the same Cloud API
+ * paths; `WabaHttp` picks host, version and auth headers. Errors surface as `WabaApiError` carrying Meta's code, so a caller
+ * can classify them (`classifySendError`) instead of matching message text.
  *
- * `sendTemplate` is real (text templates with positional variables; the broadcast sender uses it). `sendText` is still a
- * stub until the inbox reply pipeline lands. Signature verification and webhook parsing are real, because getting them
- * wrong is a security issue rather than a missing feature.
+ * Signature verification and webhook parsing are real, because getting them wrong is a security issue rather than a
+ * missing feature.
  */
 @Injectable()
 export class MetaCloudProvider implements WhatsAppProvider {
@@ -30,13 +31,23 @@ export class MetaCloudProvider implements WhatsAppProvider {
   private readonly logger = new Logger(MetaCloudProvider.name);
 
   constructor(
-    private readonly config: ConfigService<Env, true>,
+    private readonly http: WabaHttp,
     @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
   ) {}
 
-  private baseUrl(credentials: ChannelCredentials): string {
-    const version = this.config.get('META_GRAPH_VERSION', { infer: true });
-    return `https://graph.facebook.com/${version}/${credentials.senderId}/messages`;
+  private auth(credentials: ChannelCredentials): WabaAuth {
+    if (credentials.route === 'interakt') {
+      if (!credentials.authKey || !credentials.businessAccountId) {
+        throw new Error('An Interakt number needs its auth key and WABA id. Reconnect the number.');
+      }
+      return {
+        provider: 'interakt',
+        authKey: credentials.authKey,
+        wabaId: credentials.businessAccountId,
+        phoneNumberId: credentials.senderId,
+      };
+    }
+    return { provider: 'meta', accessToken: credentials.accessToken };
   }
 
   async sendTemplate(
@@ -48,27 +59,9 @@ export class MetaCloudProvider implements WhatsAppProvider {
       bulk: params.screen?.bulk,
       source: params.screen?.source,
     });
-    const res = await fetch(this.baseUrl(credentials), {
-      method: 'POST',
-      headers: {
-        authorization: `Bearer ${credentials.accessToken}`,
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(buildTemplateMessage(params)),
-      signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
-    });
-    const json = (await res.json().catch(() => ({}))) as {
-      messages?: Array<{ id?: string }>;
-      error?: { message?: string; code?: number };
-    };
-    if (!res.ok) {
-      throw new Error(json.error?.message ?? `Meta Cloud API answered ${res.status}`);
-    }
-    const providerMessageId = json.messages?.[0]?.id;
-    if (!providerMessageId)
-      throw new Error('Meta Cloud API accepted the send but returned no message id');
-    this.logger.debug({ template: params.templateName, providerMessageId }, 'template sent');
-    return { providerMessageId, acceptedAt: new Date() };
+    // No footer: approved template content cannot be changed after submission.
+    const marketing = params.category?.toLowerCase() === 'marketing' && credentials.marketingLite === true;
+    return this.post(credentials, buildTemplateMessage(params), marketing ? 'marketing_messages' : 'messages');
   }
 
   async sendText(credentials: ChannelCredentials, params: SendTextParams): Promise<SendResult> {
@@ -77,11 +70,76 @@ export class MetaCloudProvider implements WhatsAppProvider {
       bulk: params.screen?.bulk,
       source: params.screen?.source,
     });
-    this.logger.warn(
-      { to: params.to, url: this.baseUrl(credentials) },
-      'sendText not implemented yet — inbox reply pipeline lands with the Inbox module',
-    );
-    throw new Error('MetaCloudProvider.sendText is not implemented');
+    // After the screen, so a platform footer is never read as the sender's own words.
+    const body = await this.guard.withFooter({ body: params.body });
+    return this.post(credentials, {
+      messaging_product: 'whatsapp',
+      recipient_type: 'individual',
+      to: params.to.replace(/\D+/g, ''),
+      type: 'text',
+      ...(params.replyToProviderMessageId ? { context: { message_id: params.replyToProviderMessageId } } : {}),
+      text: { preview_url: false, body },
+    });
+  }
+
+  async sendMessage(credentials: ChannelCredentials, params: SendMessageParams): Promise<SendResult> {
+    await this.guard.beforeSend({
+      body: textOf(params),
+      bulk: params.screen?.bulk,
+      source: params.screen?.source,
+    });
+    return this.post(credentials, {
+      messaging_product: 'whatsapp',
+      recipient_type: 'individual',
+      to: params.to.replace(/\D+/g, ''),
+      type: params.type,
+      ...(params.replyToProviderMessageId ? { context: { message_id: params.replyToProviderMessageId } } : {}),
+      [params.type]: params.body,
+    });
+  }
+
+  async markRead(credentials: ChannelCredentials, providerMessageId: string, typing = false): Promise<void> {
+    try {
+      await this.http.call(this.auth(credentials), {
+        method: 'POST',
+        path: `/${credentials.senderId}/messages`,
+        json: {
+          messaging_product: 'whatsapp',
+          status: 'read',
+          message_id: providerMessageId,
+          ...(typing ? { typing_indicator: { type: 'text' } } : {}),
+        },
+        timeoutMs: SEND_TIMEOUT_MS,
+      });
+    } catch (err) {
+      // A missed read receipt is cosmetic; it must never fail the pipeline that called it.
+      this.logger.debug({ providerMessageId, err: (err as Error).message }, 'mark read failed');
+    }
+  }
+
+  /**
+   * The one place a message leaves for Meta or Interakt. Everything before it (halt, guardrails, the footer) is real and runs
+   * first, so a pipeline cannot reach here unguarded.
+   */
+  protected async post(
+    credentials: ChannelCredentials,
+    payload: Record<string, unknown>,
+    endpoint: 'messages' | 'marketing_messages' = 'messages',
+  ): Promise<SendResult> {
+    const json = await this.http.call<{
+      messages?: Array<{ id?: string; message_status?: string }>;
+    }>(this.auth(credentials), {
+      method: 'POST',
+      path: `/${credentials.senderId}/${endpoint}`,
+      json: payload,
+      timeoutMs: SEND_TIMEOUT_MS,
+    });
+    const first = json.messages?.[0];
+    if (!first?.id) throw new Error('WhatsApp accepted the send but returned no message id');
+    // A 200 with message_status "failed" is a rejection that the receipt webhook will repeat; fail it now.
+    if (first.message_status === 'failed') throw new Error('WhatsApp rejected the message');
+    this.logger.debug({ type: payload.type, providerMessageId: first.id }, 'message sent');
+    return { providerMessageId: first.id, acceptedAt: new Date() };
   }
 
   /**
@@ -151,6 +209,14 @@ export class MetaCloudProvider implements WhatsAppProvider {
 
     return { deliveryEvents, inboundMessages };
   }
+}
+
+/** The words a content filter should see: a caption, a body, a list's text. */
+function textOf(p: SendMessageParams): string {
+  const b = p.body as { caption?: string; body?: { text?: string } | string };
+  if (typeof b.caption === 'string') return b.caption;
+  if (typeof b.body === 'string') return b.body;
+  return b.body?.text ?? '';
 }
 
 const META_STATUS_MAP: Record<string, NormalisedDeliveryEvent['event'] | undefined> = {

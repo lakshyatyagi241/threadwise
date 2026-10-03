@@ -1,7 +1,11 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { salesDocPageResponseSchema, salesDocSummarySchema, type SalesDocSummary } from '@crm/contracts';
+import {
+  salesDocPageResponseSchema,
+  salesDocSummarySchema,
+  type SalesDocSummary,
+} from '@crm/contracts';
 import { call } from './http';
 import { invoicingApi } from './service';
 

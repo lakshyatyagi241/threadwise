@@ -5,6 +5,8 @@
 
 /** The template language the OTP template is created and sent in. */
 export const OTP_TEMPLATE_LANGUAGE = 'en_US';
+/** The copy-code button text of the authentication template. */
+export const OTP_COPY_BUTTON_TEXT = 'Copy code';
 /** Meta template names: lowercase letters, digits and underscores. */
 export const WABA_OTP_TEMPLATE_NAME = 'crm_signup_otp';
 export const LOCAL_OTP_TEMPLATE_NAME = 'crm_signup_otp_local';
@@ -22,6 +24,7 @@ export function localTemplateBody(ttlMinutes: number): string {
 /**
  * The message a non-template sender delivers: the template body with the code
  * substituted, else a plain sentence with the code, the expiry and a warning.
+ * WhatsApp bolds `*code*`, which is how the code stands out in the chat list.
  */
 export function renderOtpText(opts: {
   templateBody: string | null;
@@ -31,7 +34,7 @@ export function renderOtpText(opts: {
 }): string {
   const body = opts.templateBody?.trim();
   if (body) return body.replace(/\{\{\s*(?:1|code|otp)\s*\}\}/gi, opts.code);
-  return `_${opts.code}_ is your ${opts.appName} verification code. It expires in ${minutesWord(opts.ttlMinutes)}. Do not share it with anyone.`;
+  return `*${opts.code}* is your ${opts.appName} verification code. It expires in ${minutesWord(opts.ttlMinutes)}. Do not share it with anyone.`;
 }
 
 // --- Meta Cloud API (waba) ---------------------------------------------------------------------------------------
@@ -41,7 +44,10 @@ const metaOtpComponents = (ttlMinutes: number) => [
   // verification code."); the recommendation line is the only switch.
   { type: 'BODY', add_security_recommendation: true },
   { type: 'FOOTER', code_expiration_minutes: ttlMinutes },
-  { type: 'BUTTONS', buttons: [{ type: 'OTP', otp_type: 'COPY_CODE', text: 'Copy code' }] },
+  {
+    type: 'BUTTONS',
+    buttons: [{ type: 'OTP', otp_type: 'COPY_CODE', text: OTP_COPY_BUTTON_TEXT }],
+  },
 ];
 
 /** Body of `POST {graph}/{wabaId}/message_templates`. */

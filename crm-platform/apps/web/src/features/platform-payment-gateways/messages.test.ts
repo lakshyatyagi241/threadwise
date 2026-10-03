@@ -68,7 +68,9 @@ describe('platform payment gateways messages', () => {
     for (const k of wanted) expect(en[k], k).toBeTypeOf('string');
     for (const item of OPERATOR_NAV.filter((i) => i.labelKey.startsWith(ROOT))) {
       expect(en[item.labelKey], item.labelKey).toBeTypeOf('string');
-      expect(en[item.groupKey], item.groupKey).toBeTypeOf('string');
+      // The Billing group heading is shared with the other billing domains and lives in the BSP messages.
+      if (item.groupKey.startsWith(ROOT))
+        expect(en[item.groupKey], item.groupKey).toBeTypeOf('string');
     }
   });
 
@@ -92,5 +94,41 @@ describe('platform payment gateways messages', () => {
       }
     }
     expect(missing).toEqual([]);
+  });
+
+  it('labels every dynamic key the billing screens build from a value', () => {
+    const B = `${ROOT}.billing`;
+    const wanted = [
+      ...['all', 'new', 'upgrade', 'downgrade', 'addon', 'cancel'].map(
+        (k) => `${B}.orders.types.${k}`,
+      ),
+      ...['new', 'renewal', 'upgrade', 'downgrade', 'addon', 'wallet_topup', 'manual'].map(
+        (k) => `${B}.orders.rowTypes.${k}`,
+      ),
+      ...['90d', 'this_year', 'all'].map((k) => `${B}.orders.windows.${k}`),
+      ...['pending', 'awaiting_approval', 'paid', 'failed', 'cancelled', 'refunded'].map(
+        (k) => `${B}.common.status.${k}`,
+      ),
+      ...['7d', '30d', '90d', '1y', 'all'].map((k) => `${B}.common.windows.${k}`),
+      ...['monthly', 'yearly'].map((k) => `${B}.common.periods.${k}`),
+      ...['all', 'paid', 'failed', 'refunded', 'pending'].map((k) => `${B}.history.statuses.${k}`),
+      ...['all', 'paid', 'outstanding', 'overdue', 'refunded', 'void'].flatMap((k) => [
+        `${B}.invoices.statuses.${k}`,
+        ...(k === 'all' ? [] : [`${B}.invoices.badges.${k}`]),
+      ]),
+      ...['all', 'this_month', 'last_month', 'this_quarter', 'this_year'].map(
+        (k) => `${B}.invoices.windows.${k}`,
+      ),
+      ...[
+        'orders',
+        'history',
+        'invoices',
+        'settings',
+        'invoice',
+        'orderAnalytics',
+        'billingAnalytics',
+      ].map((k) => `${B}.${k}.title`),
+    ];
+    for (const k of wanted) expect(en[k], k).toBeTypeOf('string');
   });
 });

@@ -58,7 +58,10 @@ export function resolveAutoTax(
     );
   }
   const buyerCountry = (ctx.buyerCountry ?? ctx.placeOfSupply?.slice(0, 2) ?? code).toUpperCase();
-  const region = ctx.placeOfSupply && ctx.placeOfSupply.includes('-') ? ctx.placeOfSupply.split('-')[1] : undefined;
+  const region =
+    ctx.placeOfSupply && ctx.placeOfSupply.includes('-')
+      ? ctx.placeOfSupply.split('-')[1]
+      : undefined;
 
   const explanation: AutoTaxExplanation = {
     reasons: [],
@@ -98,7 +101,8 @@ export function resolveAutoTax(
     push(explanation.documentNotes, res.documentNotes);
     if (res.reverseCharge) explanation.reverseCharge = true;
     if (!res.taxFree) explanation.taxFree = false;
-    if (res.documentTypeHint && res.documentTypeHint !== 'tax_invoice') explanation.documentTypeHint = res.documentTypeHint;
+    if (res.documentTypeHint && res.documentTypeHint !== 'tax_invoice')
+      explanation.documentTypeHint = res.documentTypeHint;
 
     const taxes = res.taxes.filter((t) => t.category !== 'withholding' && Number(t.rate) >= 0);
     if (taxes.length === 0) return null;
@@ -117,6 +121,7 @@ export function resolveAutoTax(
       items,
     };
   });
-  if (specs.every((s) => s === null) && lines.length > 0 && !explanation.reverseCharge) explanation.taxFree = true;
+  if (specs.every((s) => s === null) && lines.length > 0 && !explanation.reverseCharge)
+    explanation.taxFree = true;
   return { specs, explanation };
 }

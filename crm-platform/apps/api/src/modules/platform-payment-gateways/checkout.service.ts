@@ -22,6 +22,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
+import { CouponService, type CouponResolution } from './coupon.service';
 import { FulfilmentService } from './fulfilment.service';
 import { acceptsCurrency, availableCurrencies } from './gateway-rules';
 import { GatewayService, type GatewayRow } from './gateway.service';
@@ -31,12 +32,15 @@ import {
   breakdown,
   convertMinor,
   majorToMinor,
+  minorToMajor,
   newOrderNumber,
   yearlyMinor,
   type Breakdown,
   type PlanPricingFacts,
 } from './order-pricing';
 import { OrdersRepository, type OrderRow } from './orders.repository';
+import { SubscriptionLifecycleService } from './subscription-lifecycle.service';
+import { planInterval, shouldRecur } from './subscription-rules';
 
 interface PlanRow extends PlanPricingFacts {
   slug: string;
@@ -50,7 +54,7 @@ interface PlanRow extends PlanPricingFacts {
 }
 
 interface Priced {
-  kind: 'plan' | 'wallet_topup';
+  kind: 'plan' | 'addon' | 'wallet_topup';
   itemName: string;
   itemSubtitle: string | null;
   period: 'monthly' | 'yearly';
@@ -61,6 +65,21 @@ interface Priced {
   parts: Breakdown;
   walletCreditMinor: number | null;
   planSlug: string | null;
+  /** What a recurring checkout needs to know about the plan (null for wallet top-ups). */
+  term: PlanTerm | null;
+  /** The price before any coupon, period-adjusted, in `currency` (what a coupon is measured against). */
+  subtotalMinor: bigint;
+}
+
+interface PlanTerm {
+  name: string;
+  unit: 'days' | 'weeks' | 'months' | 'years';
+  duration: number;
+  isFree: boolean;
+  isLifetime: boolean;
+  isCustomQuote: boolean;
+  /** The plan's list amount, major units. */
+  listAmount: string;
 }
 
 const unavailable = (message: string, code: ErrorCode = ERROR_CODES.PAYGW_GATEWAY_UNAVAILABLE) =>
@@ -87,6 +106,8 @@ export class CheckoutService {
     private readonly orders: OrdersRepository,
     private readonly fulfilment: FulfilmentService,
     private readonly outbox: OutboxService,
+    private readonly coupons: CouponService,
+    private readonly subscriptions: SubscriptionLifecycleService,
     private readonly config: ConfigService<Env, true>,
   ) {}
 
@@ -133,14 +154,36 @@ export class CheckoutService {
     plan: PlanRow,
     rates: ReadonlyMap<string, string>,
   ): Promise<void> {
-    if (plan.kind !== 'plan') {
-      throw unavailable('Add-ons are not purchasable yet.', ERROR_CODES.PAYGW_PLAN_NOT_PURCHASABLE);
-    }
     if (plan.isFree || plan.isCustomQuote) {
       throw unavailable(
-        'This plan is not sold through checkout. Free plans are switched on the Plans page; custom quotes go through sales.',
+        plan.kind === 'addon'
+          ? 'This add-on is not sold through checkout.'
+          : 'This plan is not sold through checkout. Free plans are switched on the Plans page; custom quotes go through sales.',
         ERROR_CODES.PAYGW_PLAN_NOT_PURCHASABLE,
       );
+    }
+    if (plan.kind === 'addon') {
+      // An add-on sits on top of an active paid plan (TW-ADD-033). Reference enforced this only in the view; a direct POST bypassed it.
+      const base = await tx.execute(sql`
+        SELECT p.is_free, p.is_custom_quote, s.plan_ends_at
+        FROM organizations o
+        LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
+        LEFT JOIN org_plan_state s ON s.org_id = o.id
+        WHERE o.id = ${RequestContextStore.require().orgId}`);
+      const b = base.rows[0] as
+        | { is_free: boolean | null; is_custom_quote: boolean | null; plan_ends_at: string | null }
+        | undefined;
+      const paidActive =
+        b !== undefined &&
+        b.is_free === false &&
+        (b.plan_ends_at === null || new Date(b.plan_ends_at) > new Date());
+      if (!paidActive) {
+        throw unavailable(
+          'Add-ons need an active paid plan. Choose or renew a plan first.',
+          ERROR_CODES.PAYGW_PLAN_NOT_PURCHASABLE,
+        );
+      }
+      return;
     }
     // Downgrade guard, server-side (Reference enforced it only on the page, so a direct POST bypassed it).
     const cur = await tx.execute(sql`
@@ -218,7 +261,7 @@ export class CheckoutService {
         : converted;
     const parts = breakdown(subtotal, currency, 0n, s.taxEnabled ? s.taxRate : '0');
     return {
-      kind: 'plan',
+      kind: plan.kind === 'addon' ? 'addon' : 'plan',
       itemName: plan.name,
       itemSubtitle: plan.subtitle,
       period,
@@ -234,6 +277,16 @@ export class CheckoutService {
       parts,
       walletCreditMinor: null,
       planSlug: plan.slug,
+      term: {
+        name: plan.name,
+        unit: plan.billingUnit,
+        duration: plan.billingDuration,
+        isFree: plan.isFree,
+        isLifetime: plan.isLifetime,
+        isCustomQuote: plan.isCustomQuote,
+        listAmount: chargeable,
+      },
+      subtotalMinor: subtotal,
     };
   }
 
@@ -282,10 +335,17 @@ export class CheckoutService {
       parts,
       walletCreditMinor: Number(back),
       planSlug: null,
+      term: null,
+      subtotalMinor: billed,
     };
   }
 
-  private toQuote(p: Priced, s: CheckoutSettings): PaygwQuote {
+  private driverCanRecur(g: GatewayRow): boolean {
+    const d = this.gateways.driverFor(g);
+    return d.supportsRecurring?.() === true && !!d.createSubscription;
+  }
+
+  private toQuote(p: Priced, s: CheckoutSettings, coupon: CouponResolution | null): PaygwQuote {
     return {
       kind: p.kind,
       itemName: p.itemName,
@@ -306,20 +366,79 @@ export class CheckoutService {
         name: g.name,
         description: g.description ?? '',
         mode: g.mode,
+        autoRenew:
+          p.kind === 'plan' &&
+          p.term !== null &&
+          shouldRecur({
+            platformEnabled: s.recurringEnabled,
+            driverSupports: this.driverCanRecur(g),
+            isFree: p.term.isFree,
+            isLifetime: p.term.isLifetime,
+            isCustomQuote: p.term.isCustomQuote,
+            planAmount: p.term.listAmount,
+            autoRenew: true,
+            period: p.period,
+          }),
       })),
+      coupon: coupon
+        ? {
+            code: coupon.code,
+            ok: coupon.ok,
+            message: coupon.message,
+            discount: minorToMajor(coupon.discountMinor, p.currency),
+          }
+        : null,
+      countries: s.countries,
+      refund: { enabled: s.refundEnabled, days: s.refundDays },
+    };
+  }
+
+  /**
+   * Measures a coupon against the priced item and rebuilds the breakdown with the discount (before tax). Done outside the tenant
+   * transaction: coupons are operator-only data read through the module's privileged store. A refused coupon leaves the price
+   * as it was and carries the reason. Wallet top-ups take no coupon (Reference disables the field there).
+   */
+  private async withCoupon(
+    p: Priced,
+    code: string | undefined,
+    s: CheckoutSettings,
+  ): Promise<{ priced: Priced; coupon: CouponResolution | null }> {
+    if (!code?.trim() || p.kind === 'wallet_topup') return { priced: p, coupon: null };
+    const ctx = RequestContextStore.require();
+    const coupon = await this.coupons.resolve({
+      code,
+      planSlug: p.planSlug,
+      subtotalMinor: p.subtotalMinor,
+      currency: p.currency,
+      orgId: ctx.orgId,
+      userId: ctx.userId ?? null,
+    });
+    if (!coupon.ok) return { priced: p, coupon };
+    return {
+      priced: {
+        ...p,
+        parts: breakdown(
+          p.subtotalMinor,
+          p.currency,
+          coupon.discountMinor,
+          s.taxEnabled ? s.taxRate : '0',
+        ),
+      },
+      coupon,
     };
   }
 
   async quotePlan(planSlug: string, query: PaygwQuoteQuery): Promise<PaygwQuote> {
     const s = await this.settings.load();
-    const priced = await this.db.tx((tx) => this.pricePlan(tx, planSlug, query, s));
-    return this.toQuote(priced, s);
+    const base = await this.db.tx((tx) => this.pricePlan(tx, planSlug, query, s));
+    const { priced, coupon } = await this.withCoupon(base, query.coupon, s);
+    return this.toQuote(priced, s, coupon);
   }
 
   async quoteWallet(query: PaygwWalletQuoteQuery): Promise<PaygwQuote> {
     const s = await this.settings.load();
     const priced = await this.db.tx((tx) => this.priceWallet(tx, query, s));
-    return this.toQuote(priced, s);
+    return this.toQuote(priced, s, null);
   }
 
   // ---- placing an order ----------------------------------------------------------------------------------------------
@@ -335,6 +454,7 @@ export class CheckoutService {
       req.billing,
       req.coupon,
       idempotencyKey,
+      req.autoRenew === true,
     );
   }
 
@@ -357,32 +477,57 @@ export class CheckoutService {
     billing: PaygwBilling,
     coupon: string | undefined,
     idempotencyKey: string | undefined,
+    autoRenew = false,
   ): Promise<PlaceOrderResponse> {
     const ctx = RequestContextStore.require();
     if (!ctx.userId) throw AppError.unauthenticated();
-    // Coupons belong to CPN, which is not built: refuse rather than silently charge full price for a code the buyer typed.
-    if (coupon) {
-      throw unavailable('Coupons are not available yet.', ERROR_CODES.PAYGW_COUPON_UNAVAILABLE);
-    }
     const s = await this.settings.load();
 
     // 1. validate + price, no writes. The gateway check precedes creation: an inactive gateway leaves no order behind.
     const gateway = await this.gateways.byUuid(gatewayUuid);
     if (!gateway || !gateway.is_active)
       throw unavailable('That gateway is not currently available.');
-    const { priced, user } = await this.db.tx(async (tx) => {
+    const { unpriced, user } = await this.db.tx(async (tx) => {
       const p = await price(tx, s);
       const u = await tx.execute(
         sql`SELECT full_name, email::text AS email FROM users WHERE org_id = ${ctx.orgId} AND id = ${ctx.userId}`,
       );
-      return { priced: p, user: u.rows[0] as { full_name: string; email: string } | undefined };
+      return { unpriced: p, user: u.rows[0] as { full_name: string; email: string } | undefined };
     });
+    // The coupon is judged again here, authoritatively (the preview was advisory): a refused code stops the purchase instead of
+    // silently charging full price for a code the buyer typed.
+    const { priced, coupon: resolved } = await this.withCoupon(unpriced, coupon, s);
+    if (resolved && !resolved.ok) {
+      throw new AppError(
+        ERROR_CODES.PAYGW_COUPON_REJECTED,
+        resolved.message,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'coupon', message: resolved.message }],
+      );
+    }
     if (!acceptsCurrency(gateway.supported_currencies, priced.currency)) {
       throw unavailable(
         `${gateway.name} does not support ${priced.currency}.`,
         ERROR_CODES.PAYGW_CURRENCY_UNSUPPORTED,
       );
     }
+
+    // Recurring (TW-PAYGW-012 rule 1): the driver decides whether it can, the plan and the buyer whether it should.
+    const driver = this.gateways.driverFor(gateway);
+    const t = priced.term;
+    const recurring =
+      t !== null &&
+      priced.kind === 'plan' &&
+      shouldRecur({
+        platformEnabled: s.recurringEnabled,
+        driverSupports: driver.supportsRecurring?.() === true && !!driver.createSubscription,
+        isFree: t.isFree,
+        isLifetime: t.isLifetime,
+        isCustomQuote: t.isCustomQuote,
+        planAmount: t.listAmount,
+        autoRenew,
+        period: priced.period,
+      });
 
     // 2. the pending order, with its audit row and outbox event, committed before the provider is called.
     const order = await this.insertOrder(
@@ -394,6 +539,8 @@ export class CheckoutService {
       user,
       s,
       idempotencyKey,
+      resolved,
+      recurring,
     );
 
     // 3. the provider, outside any transaction.
@@ -405,6 +552,14 @@ export class CheckoutService {
       description: priced.itemName,
       customerName: order.customerName,
       customerEmail: order.customerEmail,
+      planName: priced.itemName,
+      ...(recurring && t
+        ? {
+            recurring: (({ interval, count }) => ({ interval, count }))(
+              planInterval(t.unit, t.duration),
+            ),
+          }
+        : {}),
     };
     const base = this.config.get('APP_URL', { infer: true });
     const urls = {
@@ -413,7 +568,9 @@ export class CheckoutService {
     };
     let result: PaymentResult;
     try {
-      result = await this.gateways.driverFor(gateway).initiate(driverOrder, urls);
+      result = recurring
+        ? await driver.createSubscription!(driverOrder, urls)
+        : await driver.initiate(driverOrder, urls);
     } catch (e) {
       result = {
         status: 'failed',
@@ -429,7 +586,10 @@ export class CheckoutService {
       });
       return { orderNumber: order.orderNumber, orderId: order.uuid, next: { type: 'paid' } };
     }
-    if (result.status === 'failed' || (!result.redirectUrl && !result.clientAction)) {
+    if (
+      result.status === 'failed' ||
+      (!result.redirectUrl && !result.clientAction && !result.formPost && !result.instructions)
+    ) {
       const reason = result.error ?? 'provider_returned_nothing_usable';
       await this.db.tx(async (tx) => {
         if (
@@ -451,6 +611,44 @@ export class CheckoutService {
     await this.db.tx((tx) =>
       this.orders.setProviderInfo(tx, order.orgId, order.id, result.gatewayOrderId, result.payload),
     );
+    if (recurring) {
+      // TW-PAYGW-012 rule 4: failing to record the row never fails the payment (renewals just cannot be matched later).
+      try {
+        const p = result.payload ?? {};
+        const id = (v: unknown): string | null => (typeof v === 'string' && v ? v : null);
+        await this.subscriptions.recordPending(order, gateway.slug, {
+          gatewaySubscriptionId: id(p.gateway_subscription_id) ?? id(p.subscription),
+          gatewayPlanId: id(p.gateway_plan_id),
+          gatewayCustomerId: id(p.gateway_customer_id) ?? id(p.customer),
+        });
+      } catch (err) {
+        this.logger.error(
+          { err, order: order.orderNumber },
+          'recording the pending subscription failed',
+        );
+      }
+    }
+    if (result.instructions) {
+      return {
+        orderNumber: order.orderNumber,
+        orderId: order.uuid,
+        next: {
+          type: 'instructions',
+          kind: result.instructions.kind,
+          rows: result.instructions.rows,
+          notes: result.instructions.notes,
+          amount: priced.parts.total,
+          currency: priced.currency,
+        },
+      };
+    }
+    if (result.formPost) {
+      return {
+        orderNumber: order.orderNumber,
+        orderId: order.uuid,
+        next: { type: 'form_post', url: result.formPost.url, fields: result.formPost.fields },
+      };
+    }
     if (result.clientAction) {
       return {
         orderNumber: order.orderNumber,
@@ -478,6 +676,8 @@ export class CheckoutService {
     user: { full_name: string; email: string } | undefined,
     s: CheckoutSettings,
     idempotencyKey: string | undefined,
+    coupon: CouponResolution | null,
+    autoRenew: boolean,
   ): Promise<OrderRow> {
     const orgName = await this.db.tx(async (tx) => {
       const r = await tx.execute(sql`SELECT name FROM organizations WHERE id = ${orgId}`);
@@ -496,6 +696,7 @@ export class CheckoutService {
             kind: p.kind,
             planSlug: p.planSlug,
             billingPeriod: p.period,
+            autoRenew,
             gatewayId: Number(gateway.id),
             gatewaySlug: gateway.slug,
             currency: p.currency,
@@ -514,6 +715,8 @@ export class CheckoutService {
             billingTaxId: b.taxId ?? null,
             walletTopupMinor: p.walletCreditMinor,
             idempotencyKey: idempotencyKey ?? null,
+            couponId: coupon?.ok ? coupon.couponId : null,
+            couponCode: coupon?.ok ? coupon.code : null,
           });
           await recordOrderEvent(tx, this.outbox, order, 'created', { gateway: gateway.slug });
           return order;

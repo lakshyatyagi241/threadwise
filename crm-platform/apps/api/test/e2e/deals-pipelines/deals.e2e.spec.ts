@@ -227,7 +227,10 @@ describe('creating a deal (TW-DEAL-009)', () => {
   });
 
   it('TW-DEAL-009 / parity run: an expected close date that is not a real day is a 422, never a 500, on create and on edit', async () => {
-    const bad = await api.as(t.admin).post('/v2/deals').send({ title: 'Bad day', expectedCloseDate: '2026-02-31' });
+    const bad = await api
+      .as(t.admin)
+      .post('/v2/deals')
+      .send({ title: 'Bad day', expectedCloseDate: '2026-02-31' });
     expect(bad.status).toBe(422);
     expect(problem(bad)).toBe('VALIDATION_FAILED');
     expect(bad.body.errors.map((e: { path: string }) => e.path)).toContain('expectedCloseDate');
@@ -308,14 +311,11 @@ describe('creating a deal (TW-DEAL-009)', () => {
     expect((await api.events(t.orgId, 'deal.created')).length).toBe(before.events + 1);
 
     const { pipeline } = await api.defaultPipeline(t.admin);
-    const refused = await api
-      .as(t.admin)
-      .post('/v2/deals')
-      .send({
-        title: 'Refused',
-        pipelineId: pipeline.id,
-        ownerId: '00000000-0000-4000-8000-000000000000',
-      });
+    const refused = await api.as(t.admin).post('/v2/deals').send({
+      title: 'Refused',
+      pipelineId: pipeline.id,
+      ownerId: '00000000-0000-4000-8000-000000000000',
+    });
     expect(refused.status).toBe(422);
     expect(await api.auditCount(t.orgId, 'deals', 'insert')).toBe(before.audit + 1);
     expect((await api.events(t.orgId, 'deal.created')).length).toBe(before.events + 1);

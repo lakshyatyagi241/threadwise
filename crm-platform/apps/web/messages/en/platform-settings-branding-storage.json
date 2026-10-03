@@ -14,7 +14,8 @@
       "custom": "Custom code",
       "pwa": "PWA",
       "storage": "Cloud storage",
-      "realtime": "Real-time"
+      "realtime": "Real-time",
+      "whatsapp": "WhatsApp (WABA)"
     },
     "hub": {
       "kicker": "Admin - Project settings",
@@ -117,19 +118,23 @@
             "label": "App URL"
           },
           "supportEmail": {
-            "label": "Support email"
+            "label": "Support email",
+            "placeholder": "support@…"
           },
           "fromEmail": {
-            "label": "From email"
+            "label": "From email",
+            "placeholder": "hello@…"
           },
           "contactNumber": {
-            "label": "Contact number"
+            "label": "Contact number",
+            "placeholder": "+91 …"
           },
           "address": {
             "label": "Address"
           },
           "mapIframeUrl": {
-            "label": "Map iframe URL"
+            "label": "Map iframe URL",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
           },
           "platformFooter": {
             "label": "Platform footer",
@@ -380,10 +385,14 @@
         },
         "fields": {
           "fromName": {
-            "label": "From name"
+            "label": "From name",
+            "placeholder": "Acme Inc.",
+            "hint": "Shown to recipients as the \"From\" name."
           },
           "fromAddress": {
-            "label": "From address"
+            "label": "From address",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "Domain must have valid SPF + DKIM or mail lands in spam."
           },
           "mailer": {
             "label": "Mailer",
@@ -391,20 +400,24 @@
           },
           "host": {
             "label": "Host",
+            "placeholder": "smtp.mailgun.org",
             "hint": "Leave empty to keep the server default."
           },
           "port": {
-            "label": "Port"
+            "label": "Port",
+            "hint": "587 for TLS, 465 for SSL, 25 (avoid)."
           },
           "encryption": {
             "label": "Encryption",
             "hint": "ssl means implicit TLS (usually port 465); tls and starttls upgrade on port 587."
           },
           "username": {
-            "label": "Username"
+            "label": "Username",
+            "placeholder": "postmaster@mg.example.com"
           },
           "password": {
             "label": "Password",
+            "placeholder": "Enter SMTP password",
             "hint": "Stored encrypted and never shown again."
           }
         },
@@ -438,58 +451,70 @@
           },
           "metaDescription": {
             "label": "Meta description",
-            "hint": "Shows under the title in Google."
+            "hint": "Shows under the title in Google.",
+            "placeholder": "A 1–2 sentence pitch shown under the title in Google."
           },
           "metaKeywords": {
-            "label": "Meta keywords"
+            "label": "Meta keywords",
+            "placeholder": "whatsapp marketing, whatsapp crm, campaigns, automation, inbox"
           },
           "robots": {
-            "label": "Robots"
+            "label": "Robots directive",
+            "hint": "Tell search crawlers whether to list and follow links."
           },
           "canonical": {
-            "label": "Canonical"
+            "label": "Canonical",
+            "placeholder": "https://app.example.com"
           },
           "author": {
             "label": "Author"
           },
           "ogTitle": {
-            "label": "Open Graph title"
+            "label": "Open Graph title",
+            "placeholder": "Defaults to Meta title"
           },
           "ogDescription": {
-            "label": "Open Graph description"
+            "label": "Open Graph description",
+            "placeholder": "Defaults to Meta description"
           },
           "ogType": {
             "label": "Open Graph type"
           },
           "ogUrl": {
-            "label": "Open Graph URL"
+            "label": "Open Graph URL",
+            "placeholder": "https://app.example.com"
           },
           "ogImage": {
             "label": "Open Graph image",
-            "hint": "Recommended 1200x630. Used by Slack, X, WhatsApp, Discord."
+            "hint": "Recommended 1200x630. Used by Slack, X, WhatsApp, Discord.",
+            "placeholder": "https://app.example.com/og.png"
           },
           "twitterCard": {
             "label": "Twitter card"
           },
           "twitterSite": {
-            "label": "Twitter site"
+            "label": "Twitter site",
+            "placeholder": "@yourbrand"
           },
           "twitterCreator": {
-            "label": "Twitter creator"
+            "label": "Twitter creator",
+            "placeholder": "@author"
           },
           "googleVerification": {
-            "label": "Google verification"
+            "label": "Google verification",
+            "placeholder": "google-site-verification=…"
           },
           "bingVerification": {
-            "label": "Bing verification"
+            "label": "Bing verification",
+            "placeholder": "msvalidate.01=…"
           }
         },
         "options": {
           "robots": {
-            "index, follow": "index, follow",
-            "index, nofollow": "index, nofollow",
-            "noindex, follow": "noindex, follow",
-            "noindex, nofollow": "noindex, nofollow"
+            "index, follow": "Index, follow — public site",
+            "index, nofollow": "Index, nofollow",
+            "noindex, follow": "Noindex, follow",
+            "noindex, nofollow": "Noindex, nofollow — hide from search"
           }
         }
       },
@@ -709,43 +734,62 @@
             "label": "Provider"
           },
           "visibility": {
-            "label": "Visibility",
+            "label": "File visibility",
             "hint": "Private objects need signed links; use public or a CDN URL for media people open directly."
           },
           "basePath": {
-            "label": "Base path",
+            "label": "Base folder path (optional)",
             "hint": "Prefix for the probe object. Uploads will use it once the file module lands."
           },
           "accessKeyId": {
             "label": "Access key ID"
           },
           "secret": {
-            "label": "Secret",
-            "hint": "Stored encrypted and never shown again."
+            "label": "Secret access key",
+            "hint": "Stored encrypted and never shown again.",
+            "placeholder": "paste secret"
           },
           "region": {
-            "label": "Region"
+            "label": "Region",
+            "placeholder": "us-east-1"
           },
           "bucket": {
             "label": "Bucket"
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Required for Spaces, R2 and MinIO. A trailing /bucket is removed."
+            "hint": "Required for Spaces, R2 and MinIO. A trailing /bucket is removed.",
+            "placeholder": "https://… (required for Spaces / R2 / MinIO; auto for Wasabi & Bunny)"
           },
           "cdnUrl": {
-            "label": "CDN URL"
+            "label": "Public / CDN URL (optional)",
+            "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Path style"
+            "label": "Use path-style endpoint (MinIO / some S3-compatible stores)"
           },
           "storageZone": {
             "label": "Storage zone",
             "hint": "Bunny only."
           },
           "storagePassword": {
-            "label": "Storage password",
-            "hint": "Bunny only: the storage zone password. Stored encrypted."
+            "label": "Storage password (access key)",
+            "hint": "Bunny only: the storage zone password. Stored encrypted.",
+            "placeholder": "paste password"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO"
+          },
+          "visibility": {
+            "private": "Private (signed URLs)",
+            "public": "Public"
           }
         }
       },
@@ -774,6 +818,81 @@
           "appSecret": {
             "label": "App secret",
             "hint": "Stored encrypted and never shown again."
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp settings",
+        "description": "The Meta app and Interakt partner used to onboard WhatsApp numbers.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Interakt route"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "Empty falls back to the server environment."
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "Stored encrypted, never shown again. Leave blank to keep the stored secret."
+          },
+          "configId": {
+            "label": "Embedded Signup Config ID",
+            "hint": "Empty means workspaces paste a token manually."
+          },
+          "graphVersion": {
+            "label": "Graph API version",
+            "hint": "Looks like v25.0. Empty keeps the server default."
+          },
+          "coexistence": {
+            "label": "Coexistence",
+            "hint": "Offer \"Connect my existing Business App number\" in Embedded Signup."
+          },
+          "defaultProvider": {
+            "label": "Default route",
+            "hint": "Which API newly connected numbers use."
+          },
+          "solutionId": {
+            "label": "Interakt solution ID",
+            "hint": "Sent to Meta as extras.setup.solutionID and to Interakt on registration."
+          },
+          "partnerAuthKey": {
+            "label": "Interakt partner key",
+            "hint": "The shared tech-partner key. Stored encrypted."
+          },
+          "systemUserId": {
+            "label": "System user ID",
+            "hint": "Assigned to each connected WABA with the MANAGE task."
+          },
+          "systemUserToken": {
+            "label": "System user token",
+            "hint": "Used to inspect tokens and assign the system user. Stored encrypted."
+          },
+          "businessId": {
+            "label": "Business ID",
+            "hint": "Fallback used to find a WABA when the token does not list one."
+          },
+          "verifyToken": {
+            "label": "Webhook verify token",
+            "hint": "Any random string. Leave blank to use the generated one shown above."
+          },
+          "requireSignature": {
+            "label": "Require a signature on every webhook",
+            "hint": "Rejects Interakt-forwarded events that carry no valid Meta signature. Turn on only if Interakt signs them."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (Meta proxy)",
+            "meta": "Meta (direct)"
           }
         }
       }
@@ -878,6 +997,11 @@
         "title": "Real-time",
         "description": "Pusher keys that power the live Team Inbox feed for every workspace.",
         "tags": "Pusher / broadcasting"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "The Meta app every workspace connects its WhatsApp numbers through: app id and secret, Embedded Signup, webhook and the Interakt route.",
+        "tags": "Meta / Embedded Signup / Interakt"
       }
     },
     "signup": {
@@ -1143,7 +1267,7 @@
           "items": {
             "hosts": {
               "title": "Typical settings",
-              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.<region>.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls with an app password."
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls with an app password."
             },
             "used": {
               "title": "Mailables in the system",
@@ -1379,6 +1503,53 @@
             }
           }
         }
+      },
+      "whatsapp": {
+        "title": "WhatsApp settings",
+        "eyebrow": "Admin - Settings - Channels - WhatsApp",
+        "description": "The one Meta app (and Interakt partner) every workspace's WhatsApp numbers are onboarded through. Without an app id and secret, Embedded Signup and token renewal do not work; without a config id, workspaces paste a token manually. Saved values override the server defaults within seconds, in every process.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Meta's official Cloud API. Required for high-volume traffic, template messages and a verified business profile. Supports both manual token paste and Embedded Signup (WhatsApp login)."
+          },
+          "interakt": {
+            "title": "Interakt route",
+            "description": "Numbers connected through Embedded Signup are sent and received through Interakt's Meta proxy by default. Switch to Meta (direct) to skip Interakt. Existing numbers keep the route they were connected with."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Meta's official Cloud API. Required for high-volume traffic, template messages, and a verified business profile. Supports both manual token paste and Embedded Signup (WhatsApp login)."
+            },
+            "app": {
+              "title": "Facebook app ID + secret",
+              "body": "developers.facebook.com/apps, Basic settings. Changing the app invalidates tokens issued by the old one, so workspaces must reconnect."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "App dashboard, WhatsApp, Configuration: paste the Callback URL and Verify token from this page, then subscribe to messages and message_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "Per-workspace",
+              "body": "Each workspace connects its own number from Channels, WhatsApp numbers. Phone number ID and a permanent token are collected there."
+            },
+            "login": {
+              "title": "WABA login (optional)",
+              "body": "Fill the Embedded Signup Config ID to enable one-click Sign in with Meta. Requires the Tech Provider role on the app. Leave blank to use manual paste only."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tip",
+          "body": "Switching the default route or the app mid-traffic affects only numbers connected afterwards. Pause campaigns before changing the Meta app."
+        }
       }
     },
     "cookie": {
@@ -1417,6 +1588,18 @@
       "primary": "Primary",
       "cancel": "Cancel",
       "active": "Active"
+    },
+    "wabaCallback": {
+      "loading": "Loading webhook details…",
+      "unavailable": "Webhook details are shown to super admins only.",
+      "webhookUrl": "Webhook URL",
+      "noUrl": "Set APP_URL or WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "Paste into the Meta app (WhatsApp, Configuration, Callback URL). Subscribe to: {fields}.",
+      "verifyToken": "Verify token",
+      "verifyHint": "Paste into the same screen as the Verify token.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "connected": "Connected WABAs (all workspaces)"
     }
   }
 }

@@ -64,27 +64,12 @@ async function main(): Promise<void> {
       const orgId = orgRows[0]!.id;
 
       // --- roles -----------------------------------------------------------
-      // Admin is created locked. The role_grants trigger then refuses further
-      // grant changes, so its grants are inserted BEFORE the lock is set.
-      const { rows: adminRoleRows } = await client.query<{ id: number }>(
-        `INSERT INTO roles (org_id, name, system_key, is_locked)
-         VALUES ($1, 'Admin', 'admin', false)
-         ON CONFLICT (org_id, name) DO UPDATE SET is_locked = false
-         RETURNING id`,
+      // The five workspace presets (Owner, Admin, Manager, Agent, Viewer) with their grants, from the same SQL function sign-up uses.
+      const { rows: ownerRows } = await client.query<{ id: string }>(
+        `SELECT provision_workspace_presets($1) AS id`,
         [orgId],
       );
-      const adminRoleId = adminRoleRows[0]!.id;
-
-      await client.query(
-        `INSERT INTO role_grants (org_id, role_id, permission_key, effect, record_scope)
-         SELECT $1, $2, key, 'allow', 'all' FROM permission_defs
-         ON CONFLICT (org_id, role_id, permission_key) DO NOTHING`,
-        [orgId, adminRoleId],
-      );
-      await client.query(`UPDATE roles SET is_locked = true WHERE org_id = $1 AND id = $2`, [
-        orgId,
-        adminRoleId,
-      ]);
+      const adminRoleId = Number(ownerRows[0]!.id);
 
       const { rows: agentRoleRows } = await client.query<{ id: number }>(
         `INSERT INTO roles (org_id, name, system_key)
@@ -104,6 +89,8 @@ async function main(): Promise<void> {
            ($1, $2, 'record.contacts.update', 'allow', 'own'),
            ($1, $2, 'inbox.conversation.read','allow', 'own'),
            ($1, $2, 'inbox.conversation.reply','allow','own'),
+           ($1, $2, 'inbox.conversation.note','allow','own'),
+           ($1, $2, 'inbox.conversation.assign_self','allow','own'),
            ($1, $2, 'record.deals.read',   'allow', 'own'),
            ($1, $2, 'record.deals.create', 'allow', 'all'),
            ($1, $2, 'record.deals.update', 'allow', 'own'),
@@ -129,15 +116,16 @@ async function main(): Promise<void> {
       );
 
       // --- users -----------------------------------------------------------
-      // No password_hash: staff sign in via Clerk now (see AuthService.loginViaClerk).
-      // auth_subject starts null and gets linked on that user's first Clerk login —
+      // password_hash set so the seeded staff admin can also sign in with
+      // DEMO_PASSWORD via the password flow, not just Clerk. auth_subject
+      // starts null and still gets linked on that user's first Clerk login —
       // matched by (org_id, email), same row, same role, no re-provisioning.
       const { rows: userRows } = await client.query<{ id: number }>(
-        `INSERT INTO users (org_id, email, full_name)
-         VALUES ($1, $2, 'Demo Admin')
-         ON CONFLICT (org_id, email) DO UPDATE SET full_name = EXCLUDED.full_name
+        `INSERT INTO users (org_id, email, full_name, password_hash)
+         VALUES ($1, $2, 'Demo Admin', $3)
+         ON CONFLICT (org_id, email) DO UPDATE SET full_name = EXCLUDED.full_name, password_hash = EXCLUDED.password_hash
          RETURNING id`,
-        [orgId, org.adminEmail],
+        [orgId, org.adminEmail, passwordHash],
       );
       const adminUserId = userRows[0]!.id;
 
@@ -205,8 +193,8 @@ async function main(): Promise<void> {
 
     await client.query('COMMIT');
     console.log(
-      `\ndone. Staff login (Clerk): sign in as ${ORGS[0]!.adminEmail} (org: ${ORGS[0]!.slug}) — ` +
-        'first login links this seeded row automatically, no password set.',
+      `\ndone. Staff login: ${ORGS[0]!.adminEmail} / ${DEMO_PASSWORD} (org: ${ORGS[0]!.slug}). ` +
+        'Clerk also works and links this same row on first sign-in.',
     );
     console.log(
       `     Agent login (password, unchanged): agent@${ORGS[0]!.slug}.test / ${DEMO_PASSWORD}`,

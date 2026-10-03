@@ -58,20 +58,24 @@ function fieldValue(c: ContactResponse, field: string): Scalar | string[] {
     case 'lastActivityAt':
       return c.lastActivityAt;
     case 'search':
-      return [c.name, c.firstName, c.lastName, c.email, c.phone?.replace(/\D/g, '')].filter(Boolean).join(' ');
+      return [c.name, c.firstName, c.lastName, c.email, c.phone?.replace(/\D/g, '')]
+        .filter(Boolean)
+        .join(' ');
     default:
       return null;
   }
 }
 
-const isEmpty = (v: Scalar | string[]) => v === null || v === '' || (Array.isArray(v) && v.length === 0);
+const isEmpty = (v: Scalar | string[]) =>
+  v === null || v === '' || (Array.isArray(v) && v.length === 0);
 const text = (v: unknown) => String(v ?? '').toLowerCase();
 const isDateField = (f: string) => f === 'createdAt' || f === 'updatedAt' || f === 'lastActivityAt';
 
 function testCondition(c: ContactResponse, cond: SegmentCondition, now: number): boolean {
   const v = fieldValue(c, cond.field);
   const arg = cond.value;
-  const date = isDateField(cond.field) || (typeof arg === 'string' && /^\d{4}-\d{2}-\d{2}/.test(arg));
+  const date =
+    isDateField(cond.field) || (typeof arg === 'string' && /^\d{4}-\d{2}-\d{2}/.test(arg));
   const cmp = (): number => {
     // dates by calendar day, numbers by value
     if (date && typeof arg === 'string') return dayOf(String(v)) - dayOf(arg);
@@ -88,7 +92,11 @@ function testCondition(c: ContactResponse, cond: SegmentCondition, now: number):
       return v === false || v === null;
     case 'equals':
       if (isEmpty(v)) return false;
-      return date ? cmp() === 0 : typeof arg === 'number' ? Number(v) === arg : text(v) === text(arg);
+      return date
+        ? cmp() === 0
+        : typeof arg === 'number'
+          ? Number(v) === arg
+          : text(v) === text(arg);
     case 'not_equals':
       return isEmpty(v) || text(v) !== text(arg);
     case 'contains':
@@ -117,7 +125,8 @@ function testCondition(c: ContactResponse, cond: SegmentCondition, now: number):
     case 'between': {
       const r = arg as { from: string | number; to: string | number };
       if (isEmpty(v) || !r || typeof r !== 'object') return false;
-      if (typeof r.from === 'string') return dayOf(String(v)) >= dayOf(r.from) && dayOf(String(v)) <= dayOf(String(r.to));
+      if (typeof r.from === 'string')
+        return dayOf(String(v)) >= dayOf(r.from) && dayOf(String(v)) <= dayOf(String(r.to));
       return Number(v) >= Number(r.from) && Number(v) <= Number(r.to);
     }
     case 'in':
@@ -146,5 +155,8 @@ export function matches(c: ContactResponse, rules: SegmentGroup, now = Date.now(
   return rules.combinator === 'and' ? rules.children.every(test) : rules.children.some(test);
 }
 
-export const evaluate = (contacts: readonly ContactResponse[], rules: SegmentGroup, now = Date.now()) =>
-  contacts.filter((c) => matches(c, rules, now));
+export const evaluate = (
+  contacts: readonly ContactResponse[],
+  rules: SegmentGroup,
+  now = Date.now(),
+) => contacts.filter((c) => matches(c, rules, now));

@@ -6,8 +6,10 @@ import {
   mfaSetupResponseSchema,
   mfaStatusResponseSchema,
   onboardingResponseSchema,
+  passwordPolicyHintSchema,
   plansResponseSchema,
   profileResponseSchema,
+  resendVerificationResponseSchema,
   revokeOthersResponseSchema,
   sessionListResponseSchema,
   sessionResponseSchema,
@@ -23,6 +25,7 @@ import {
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
+import { SESSIONS_PER_PAGE } from './security/session-page';
 
 /**
  * Every call the account hub, lock screens and onboarding make. Shapes come
@@ -36,17 +39,18 @@ const avatarSchema = z.object({ avatarUrl: z.string() });
 const changePasswordResponseSchema = z.object({
   revokedOtherSessions: z.number().int().nonnegative(),
 });
-const resendVerificationSchema = z.object({ sent: z.boolean(), alreadyVerified: z.boolean() });
 
 export const keys = {
   profile: ['auth', 'profile'] as const,
   branding: ['auth', 'branding'] as const,
   mfa: ['auth', 'mfa'] as const,
+  mfaSetup: ['auth', 'mfa-setup'] as const,
   sessions: ['auth', 'sessions'] as const,
   workspaces: ['auth', 'workspaces'] as const,
   onboarding: ['auth', 'onboarding'] as const,
   plans: ['plans'] as const,
   registrationConfig: ['auth', 'registration-config'] as const,
+  passwordPolicy: ['auth', 'password-policy'] as const,
 };
 
 export const authApi = {
@@ -56,7 +60,7 @@ export const authApi = {
     apiFetch('/auth/verify-email/resend', {
       method: 'POST',
       body: {},
-      schema: resendVerificationSchema,
+      schema: resendVerificationResponseSchema,
     }),
 
   onboarding: () => apiFetch('/onboarding', { schema: onboardingResponseSchema }),
@@ -70,6 +74,9 @@ export const authApi = {
     }),
 
   plans: () => apiFetch('/plans', { schema: plansResponseSchema }),
+
+  /** The password rules in force right now (public); the hint under the new-password box follows it. */
+  passwordPolicy: () => apiFetch('/auth/password-policy', { schema: passwordPolicyHintSchema }),
 
   profile: () => apiFetch('/account/profile', { schema: profileResponseSchema }),
   updateProfile: (body: UpdateProfileRequest) =>
@@ -104,7 +111,12 @@ export const authApi = {
       schema: mfaEnableResponseSchema,
     }),
 
-  sessions: () => apiFetch('/account/sessions', { schema: sessionListResponseSchema }),
+  /** One page of the device list (ten rows, the current device first); pass the previous page's `nextCursor` for the next. */
+  sessions: (cursor?: string) =>
+    apiFetch('/account/sessions', {
+      query: { limit: SESSIONS_PER_PAGE, cursor },
+      schema: sessionListResponseSchema,
+    }),
   revokeSession: (id: string) =>
     apiFetch(`/account/sessions/${encodeURIComponent(id)}`, { method: 'DELETE', schema: okSchema }),
   revokeOtherSessions: () =>
@@ -139,7 +151,13 @@ export async function uploadAvatar(file: File): Promise<string> {
   } catch {
     json = undefined;
   }
-  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  if (!res.ok)
+    throw toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
   return avatarSchema.parse(json).avatarUrl;
 }
 
@@ -186,6 +204,12 @@ export async function bffPost<T>(
   } catch {
     json = undefined;
   }
-  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  if (!res.ok)
+    throw toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
   return schema.parse(json);
 }

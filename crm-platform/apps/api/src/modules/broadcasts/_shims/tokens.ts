@@ -71,8 +71,18 @@ export interface TemplateDirectory {
 export const TEMPLATE_DIRECTORY = Symbol('BROADCAST_TEMPLATE_DIRECTORY');
 
 export interface WalletGate {
-  /** Throws a BCAST_SEND_BLOCKED problem when the wallet cannot cover `count` messages. No-op for plan-quota orgs. */
-  precheck(orgId: number, count: number): Promise<void>;
+  /**
+   * The launch precheck (TW-WALLET-013): throws 422 `WALLET_EMPTY` when the wallet cannot cover `count` messages. Passes for
+   * platform-owned workspaces and for plan-quota workspaces still inside their free monthly messages. Called before any row exists.
+   */
+  precheck(orgId: number, count: number, opts?: WalletGateOptions): Promise<void>;
+}
+export interface WalletGateOptions {
+  /** What is launching, for the wallet log. Defaults to `broadcast`. */
+  source?: 'broadcast' | 'campaign' | 'scheduled';
+  /** The recipients' numbers when known, so the estimate follows each country's price. */
+  phones?: readonly string[];
+  category?: string | null;
 }
 export const WALLET_GATE = Symbol('BROADCAST_WALLET_GATE');
 

@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   countryFromInternational,
   evaluatePhone,
-  flagEmoji,
+  flagClass,
   formatNational,
   listCountries,
+  maskPhone,
   pickDefaultCountry,
 } from './phone';
 
@@ -48,25 +49,60 @@ describe('phone helpers', () => {
     expect(countryFromInternational('+')).toBeNull();
   });
 
-  it('picks the default country: admin setting, then browser region, then fallback', () => {
-    expect(pickDefaultCountry('ae', ['en-GB'])).toBe('AE');
-    expect(pickDefaultCountry(null, ['en-GB'])).toBe('GB');
-    expect(pickDefaultCountry('ZZ', ['en', 'fr-CA'])).toBe('CA');
-    expect(pickDefaultCountry(null, ['en'], 'IN')).toBe('IN');
+  it('opens on the platform default country, else on the reference fallback (India)', () => {
+    expect(pickDefaultCountry('ae')).toBe('AE');
+    expect(pickDefaultCountry(' gb ')).toBe('GB');
+    expect(pickDefaultCountry(null)).toBe('IN');
+    expect(pickDefaultCountry('ZZ')).toBe('IN');
+    expect(pickDefaultCountry(undefined, 'US')).toBe('US');
   });
 
-  it('lists countries with dial code, flag and a sorted name', () => {
+  it('lists countries with dial code, a searchable text and a sorted name', () => {
     const list = listCountries('en');
     const india = list.find((c) => c.iso === 'IN');
     expect(india).toMatchObject({ dial: '91', name: 'India' });
-    expect(india?.flag).toBe(flagEmoji('IN'));
+    expect(india?.search).toBe('india in +91');
     const names = list.map((c) => c.name);
     expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'en')));
     expect(listCountries('en')).toBe(list);
   });
 
-  it('builds a flag emoji from an ISO code', () => {
-    expect(flagEmoji('IN')).toBe('\u{1F1EE}\u{1F1F3}');
-    expect(flagEmoji('x')).toBe('');
+  it('names the flag image class of a country, and nothing for a non-code', () => {
+    expect(flagClass('IN')).toBe('fi fi-in');
+    expect(flagClass(' gb ')).toBe('fi fi-gb');
+    expect(flagClass('x')).toBe('');
+    expect(flagClass('')).toBe('');
+  });
+
+  it('resolves shared calling codes by the typed number, not by a short lookup table', () => {
+    // Reference only knew eleven dial codes; any other fell back to the default country.
+    expect(countryFromInternational('+14155552671')).toBe('US');
+    expect(countryFromInternational('+12025550123')).toBe('US');
+    expect(countryFromInternational('+971501234567')).toBe('AE');
+    expect(countryFromInternational('+353871234567')).toBe('IE');
+    expect(countryFromInternational('+9779812345678')).toBe('NP');
+  });
+});
+
+describe('maskPhone', () => {
+  it('keeps the real calling code, whatever its length', () => {
+    expect(maskPhone('+919876543210')).toBe('+91 •••• ••10');
+    expect(maskPhone('+14155552671')).toBe('+1 •••• ••71');
+    expect(maskPhone('+971501234567')).toBe('+971 •••• ••67');
+    expect(maskPhone('+353871234567')).toBe('+353 •••• ••67');
+    expect(maskPhone('+442079460958')).toBe('+44 •••• ••58');
+  });
+
+  it('never shows more than the last two digits', () => {
+    for (const n of ['+919876543210', '+14155552671', '+971501234567']) {
+      const masked = maskPhone(n);
+      expect(masked.replace(/\D/g, '').length).toBeLessThanOrEqual(5);
+      expect(masked).not.toContain(n.slice(-6));
+    }
+  });
+
+  it('masks a number without a readable calling code', () => {
+    expect(maskPhone('9876543210')).toBe('•••• ••10');
+    expect(maskPhone('')).toBe('');
   });
 });

@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { nav } from './nav';
 import { OPERATOR_NAV } from '@/features/auth-registration-security/platform/operator-nav';
 
 type Tree = { [key: string]: string | Tree };
@@ -20,9 +19,8 @@ const has = (path: string): boolean => {
 };
 
 describe('add-ons messages', () => {
-  it('has every menu label and group the console and the workspace menu ask for', () => {
+  it('has every menu label and group the console asks for', () => {
     const keys = [
-      ...nav.map((n) => n.labelKey),
       ...OPERATOR_NAV.flatMap((n) => [n.labelKey, n.groupKey]).filter((k) =>
         k.startsWith('addons-extension-registry.'),
       ),

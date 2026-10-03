@@ -69,8 +69,12 @@ export function toPaymentResponse(r: PaymentRow): PaymentResponse {
   };
 }
 
-const bad = (code: string, message: string, status: HttpStatus, details?: Array<{ path: string; message: string }>) =>
-  new AppError(code as never, message, status, details);
+const bad = (
+  code: string,
+  message: string,
+  status: HttpStatus,
+  details?: Array<{ path: string; message: string }>,
+) => new AppError(code as never, message, status, details);
 
 /** What recording a payment needs, with the amount already in minor units. */
 export interface RecordInput {
@@ -110,7 +114,13 @@ export class PaymentsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = await this.invoices.zone(tx, ctx.orgId);
-      const rows = await this.repo.list(tx, ctx.orgId, query, paymentScopeCondition(ctx.orgId, scope, ctx.userId), tz);
+      const rows = await this.repo.list(
+        tx,
+        ctx.orgId,
+        query,
+        paymentScopeCondition(ctx.orgId, scope, ctx.userId),
+        tz,
+      );
       const page = buildPage(rows, query.limit);
       return { data: page.items.map(toPaymentResponse), page: page.page };
     });
@@ -130,7 +140,12 @@ export class PaymentsService {
   async forInvoice(invoiceUuid: string, scope: RecordScope): Promise<{ data: PaymentResponse[] }> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const inv = await this.invoicesRepo.findByUuid(tx, ctx.orgId, invoiceUuid, await this.invoices.zone(tx, ctx.orgId));
+      const inv = await this.invoicesRepo.findByUuid(
+        tx,
+        ctx.orgId,
+        invoiceUuid,
+        await this.invoices.zone(tx, ctx.orgId),
+      );
       if (!inv) throw AppError.notFound('Invoice', invoiceUuid);
       await this.invoices.assertScope(tx, scope, inv);
       return { data: (await this.repo.forInvoice(tx, ctx.orgId, inv.id)).map(toPaymentResponse) };
@@ -144,7 +159,12 @@ export class PaymentsService {
       if (!p) throw AppError.notFound('Payment', uuid);
       await this.assertPaymentScope(tx, scope, p);
       const inv = p.invoiceId
-        ? await this.invoicesRepo.findById(tx, ctx.orgId, p.invoiceId, await this.invoices.zone(tx, ctx.orgId))
+        ? await this.invoicesRepo.findById(
+            tx,
+            ctx.orgId,
+            p.invoiceId,
+            await this.invoices.zone(tx, ctx.orgId),
+          )
         : undefined;
       const profile = await this.settings.load(tx, ctx.orgId);
       const seller = toSeller(inv?.sellerSnapshot ?? null);
@@ -166,7 +186,14 @@ export class PaymentsService {
           number: inv?.number ?? null,
           total: inv ? major(inv.totalMinor, inv.currency) : '0',
           paid: inv ? major(inv.paidMinor, inv.currency) : '0',
-          balance: inv ? major(inv.totalMinor > inv.paidMinor + inv.creditedMinor ? inv.totalMinor - inv.paidMinor - inv.creditedMinor : 0n, inv.currency) : '0',
+          balance: inv
+            ? major(
+                inv.totalMinor > inv.paidMinor + inv.creditedMinor
+                  ? inv.totalMinor - inv.paidMinor - inv.creditedMinor
+                  : 0n,
+                inv.currency,
+              )
+            : '0',
         },
       };
     });
@@ -175,7 +202,11 @@ export class PaymentsService {
   // --- writes ------------------------------------------------------------------------------------------------------------------
 
   /** Records money received against an issued invoice (a person, by hand). */
-  async record(invoiceUuid: string, input: RecordPaymentInput, scope: RecordScope): Promise<PaymentOutcome> {
+  async record(
+    invoiceUuid: string,
+    input: RecordPaymentInput,
+    scope: RecordScope,
+  ): Promise<PaymentOutcome> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = await this.invoices.zone(tx, ctx.orgId);
@@ -183,9 +214,12 @@ export class PaymentsService {
       const exp = currencyExponent(input.currency ?? inv.currency);
       const amountMinor = parseScaled(input.amount, exp);
       if (amountMinor === null || amountMinor <= 0n)
-        throw bad(ERROR_CODES.INV_AMOUNT_INVALID, `An amount is above 0 with at most ${exp} decimals in ${input.currency ?? inv.currency}`, HttpStatus.UNPROCESSABLE_ENTITY, [
-          { path: 'amount', message: 'invalid' },
-        ]);
+        throw bad(
+          ERROR_CODES.INV_AMOUNT_INVALID,
+          `An amount is above 0 with at most ${exp} decimals in ${input.currency ?? inv.currency}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'amount', message: 'invalid' }],
+        );
       const paidAt = await this.resolvePaidAt(tx, input.paidAt, tz);
       const { payment, invoice } = await this.recordIn(tx, ctx.orgId, ctx.userId, inv, {
         amountMinor,
@@ -216,7 +250,9 @@ export class PaymentsService {
     if (inv.storedStatus !== 'issued')
       throw bad(
         ERROR_CODES.INV_NOT_ISSUED,
-        inv.storedStatus === 'void' ? 'A void invoice cannot be paid' : 'Only an issued invoice can be paid',
+        inv.storedStatus === 'void'
+          ? 'A void invoice cannot be paid'
+          : 'Only an issued invoice can be paid',
         HttpStatus.CONFLICT,
       );
     if (v.currency && v.currency !== inv.currency)
@@ -234,7 +270,10 @@ export class PaymentsService {
         `The payment is more than the open balance of ${major(decision.balanceMinor, inv.currency)} ${inv.currency}`,
         HttpStatus.UNPROCESSABLE_ENTITY,
         [
-          { path: 'amount', message: `above the balance ${major(decision.balanceMinor, inv.currency)}` },
+          {
+            path: 'amount',
+            message: `above the balance ${major(decision.balanceMinor, inv.currency)}`,
+          },
           { path: 'allowOverpayment', message: 'send true to record the excess as a credit' },
         ],
       );
@@ -260,18 +299,30 @@ export class PaymentsService {
       gatewayPaymentId: v.gatewayPaymentId ?? null,
       attemptId: v.attemptId ?? null,
       recordedBy: actorUserId,
-      metaJson: { ...(v.metaJson ?? {}), ...(decision.creditMinor > 0n ? { overpaymentMinor: decision.creditMinor.toString() } : {}) },
+      metaJson: {
+        ...(v.metaJson ?? {}),
+        ...(decision.creditMinor > 0n ? { overpaymentMinor: decision.creditMinor.toString() } : {}),
+      },
     };
     // A replayed gateway payment id is recognised BEFORE a receipt number is spent on it.
-    if (v.gatewayPaymentId && (await this.repo.gatewayPaymentExists(tx, orgId, v.source, v.gatewayPaymentId))) {
-      return { payment: undefined, invoice: (await this.invoicesRepo.findById(tx, orgId, inv.id, tz))! };
+    if (
+      v.gatewayPaymentId &&
+      (await this.repo.gatewayPaymentExists(tx, orgId, v.source, v.gatewayPaymentId))
+    ) {
+      return {
+        payment: undefined,
+        invoice: (await this.invoicesRepo.findById(tx, orgId, inv.id, tz))!,
+      };
     }
     // The receipt number is allocated before the insert and inside this transaction.
     const seq = await this.invoicesRepo.allocateSeq(tx, orgId, receiptSeries);
     insert.receiptNumber = formatNumber('receipt', numbering, dateForNumber, seq);
     const id = await this.repo.insert(tx, orgId, insert);
     if (id === undefined) {
-      return { payment: undefined, invoice: (await this.invoicesRepo.findById(tx, orgId, inv.id, tz))! };
+      return {
+        payment: undefined,
+        invoice: (await this.invoicesRepo.findById(tx, orgId, inv.id, tz))!,
+      };
     }
     const payment = (await this.repo.findById(tx, orgId, id))!;
     const after = (await this.invoicesRepo.findById(tx, orgId, inv.id, tz))!;
@@ -305,7 +356,11 @@ export class PaymentsService {
   }
 
   /** A refund: a negative entry that names the payment it returns. Idempotent through the Idempotency-Key on the route. */
-  async refund(paymentUuid: string, input: RefundPaymentInput, scope: RecordScope): Promise<PaymentOutcome> {
+  async refund(
+    paymentUuid: string,
+    input: RefundPaymentInput,
+    scope: RecordScope,
+  ): Promise<PaymentOutcome> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = await this.invoices.zone(tx, ctx.orgId);
@@ -313,7 +368,11 @@ export class PaymentsService {
       if (!p) throw AppError.notFound('Payment', paymentUuid);
       await this.assertPaymentScope(tx, scope, p);
       if (p.kind !== 'payment')
-        throw bad(ERROR_CODES.PAY_NOT_REFUNDABLE, 'Only a payment can be refunded', HttpStatus.CONFLICT);
+        throw bad(
+          ERROR_CODES.PAY_NOT_REFUNDABLE,
+          'Only a payment can be refunded',
+          HttpStatus.CONFLICT,
+        );
       // Lock order is always invoice first, payment second (the database trigger takes them in that order too).
       if (p.invoiceUuid) await this.invoicesRepo.findByUuid(tx, ctx.orgId, p.invoiceUuid, tz, true);
       const fresh = (await this.repo.findById(tx, ctx.orgId, p.id))!;
@@ -323,9 +382,12 @@ export class PaymentsService {
       if (input.amount !== undefined) {
         const parsed = parseScaled(input.amount, exp);
         if (parsed === null || parsed <= 0n)
-          throw bad(ERROR_CODES.INV_AMOUNT_INVALID, `An amount is above 0 with at most ${exp} decimals`, HttpStatus.UNPROCESSABLE_ENTITY, [
-            { path: 'amount', message: 'invalid' },
-          ]);
+          throw bad(
+            ERROR_CODES.INV_AMOUNT_INVALID,
+            `An amount is above 0 with at most ${exp} decimals`,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: 'amount', message: 'invalid' }],
+          );
         amountMinor = parsed;
       }
       if (amountMinor <= 0n || amountMinor > refundable)
@@ -337,10 +399,17 @@ export class PaymentsService {
         );
 
       const paidAt = input.paidAt ? await this.resolvePaidAt(tx, input.paidAt, tz) : new Date();
-      const { refund, invoice: after } = await this.refundIn(tx, ctx.orgId, ctx.userId, fresh, amountMinor, {
-        reason: input.reason ?? null,
-        paidAt,
-      });
+      const { refund, invoice: after } = await this.refundIn(
+        tx,
+        ctx.orgId,
+        ctx.userId,
+        fresh,
+        amountMinor,
+        {
+          reason: input.reason ?? null,
+          paidAt,
+        },
+      );
       return this.outcome(refund, after, fresh);
     });
   }
@@ -367,7 +436,11 @@ export class PaymentsService {
     const profile = await this.settings.load(tx, orgId);
     const numbering = numberingOf(profile.row);
     const date = todayIn(tz);
-    const seq = await this.invoicesRepo.allocateSeq(tx, orgId, seriesKey('receipt', numbering, date));
+    const seq = await this.invoicesRepo.allocateSeq(
+      tx,
+      orgId,
+      seriesKey('receipt', numbering, date),
+    );
     const paidAt = opts.paidAt ?? new Date();
     const id = await this.repo.insert(tx, orgId, {
       invoiceId: payment.invoiceId,
@@ -387,7 +460,9 @@ export class PaymentsService {
       metaJson: opts.creditNote ? { creditNote: opts.creditNote } : null,
     });
     const refund = (await this.repo.findById(tx, orgId, id!))!;
-    const after = payment.invoiceId ? await this.invoicesRepo.findById(tx, orgId, payment.invoiceId, tz) : undefined;
+    const after = payment.invoiceId
+      ? await this.invoicesRepo.findById(tx, orgId, payment.invoiceId, tz)
+      : undefined;
     await this.audit.record(tx, {
       module: PAYMENT_MODULE,
       recordId: refund.id,
@@ -411,7 +486,11 @@ export class PaymentsService {
       aggregateModule: PAYMENT_MODULE,
       aggregateId: refund.id,
       eventType: 'payment.refunded',
-      payload: { ...this.paymentPayload(refund, after), reason: opts.reason, refundOf: payment.uuid },
+      payload: {
+        ...this.paymentPayload(refund, after),
+        reason: opts.reason,
+        refundOf: payment.uuid,
+      },
     });
     return { refund, invoice: after };
   }
@@ -459,7 +538,10 @@ export class PaymentsService {
         invoiceScopeCondition(ctx.orgId, scope, ctx.userId),
         tz,
       );
-      const money = (r: { currency: string; amount: bigint }) => ({ currency: r.currency, amount: major(r.amount, r.currency) });
+      const money = (r: { currency: string; amount: bigint }) => ({
+        currency: r.currency,
+        amount: major(r.amount, r.currency),
+      });
       return {
         days: query.days,
         collected: s.collected.map(money),
@@ -489,11 +571,18 @@ export class PaymentsService {
           .sort(([a], [b]) => a.localeCompare(b))
           .map(([currency, list]) => ({
             currency,
-            total: major(list.reduce((a, r) => a + r.amount, 0n), currency),
+            total: major(
+              list.reduce((a, r) => a + r.amount, 0n),
+              currency,
+            ),
             invoices: list.reduce((a, r) => a + r.invoices, 0),
             buckets: AGING_BUCKETS.map((bucket) => {
               const r = list.find((x) => x.bucket === bucket);
-              return { bucket, amount: major(r?.amount ?? 0n, currency), invoices: r?.invoices ?? 0 };
+              return {
+                bucket,
+                amount: major(r?.amount ?? 0n, currency),
+                invoices: r?.invoices ?? 0,
+              };
             }),
           })),
       };
@@ -504,7 +593,13 @@ export class PaymentsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = await this.invoices.zone(tx, ctx.orgId);
-      const rows = await this.repo.outstanding(tx, ctx.orgId, query, invoiceScopeCondition(ctx.orgId, scope, ctx.userId), tz);
+      const rows = await this.repo.outstanding(
+        tx,
+        ctx.orgId,
+        query,
+        invoiceScopeCondition(ctx.orgId, scope, ctx.userId),
+        tz,
+      );
       const hasMore = rows.length > query.limit;
       const items = hasMore ? rows.slice(0, query.limit) : rows;
       const last = items[items.length - 1];
@@ -520,7 +615,10 @@ export class PaymentsService {
         page: {
           nextCursor:
             hasMore && last
-              ? Buffer.from(`${last.currency}|${last.outstanding}|${last.contactId ?? 0}`, 'utf8').toString('base64url')
+              ? Buffer.from(
+                  `${last.currency}|${last.outstanding}|${last.contactId ?? 0}`,
+                  'utf8',
+                ).toString('base64url')
               : null,
           hasMore,
           limit: query.limit,
@@ -540,23 +638,39 @@ export class PaymentsService {
     if (!when) return new Date();
     if (/^\d{4}-\d{2}-\d{2}$/.test(when)) {
       if (when > todayIn(tz))
-        throw bad(ERROR_CODES.PAY_FUTURE_DATE, 'A payment cannot be dated in the future', HttpStatus.UNPROCESSABLE_ENTITY, [
-          { path: 'paidAt', message: 'in the future' },
-        ]);
+        throw bad(
+          ERROR_CODES.PAY_FUTURE_DATE,
+          'A payment cannot be dated in the future',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'paidAt', message: 'in the future' }],
+        );
       return { date: when };
     }
     const d = new Date(when);
     if (d.getTime() > Date.now() + 5 * 60_000)
-      throw bad(ERROR_CODES.PAY_FUTURE_DATE, 'A payment cannot be dated in the future', HttpStatus.UNPROCESSABLE_ENTITY, [
-        { path: 'paidAt', message: 'in the future' },
-      ]);
+      throw bad(
+        ERROR_CODES.PAY_FUTURE_DATE,
+        'A payment cannot be dated in the future',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'paidAt', message: 'in the future' }],
+      );
     void tx;
     return d;
   }
 
-  private outcome(payment: PaymentRow, invoice: InvoiceRow | undefined, _parent?: PaymentRow): PaymentOutcome {
-    const bal = invoice && invoice.totalMinor > invoice.paidMinor + invoice.creditedMinor ? invoice.totalMinor - invoice.paidMinor - invoice.creditedMinor : 0n;
-    const credit = invoice && invoice.paidMinor + invoice.creditedMinor > invoice.totalMinor ? invoice.paidMinor + invoice.creditedMinor - invoice.totalMinor : 0n;
+  private outcome(
+    payment: PaymentRow,
+    invoice: InvoiceRow | undefined,
+    _parent?: PaymentRow,
+  ): PaymentOutcome {
+    const bal =
+      invoice && invoice.totalMinor > invoice.paidMinor + invoice.creditedMinor
+        ? invoice.totalMinor - invoice.paidMinor - invoice.creditedMinor
+        : 0n;
+    const credit =
+      invoice && invoice.paidMinor + invoice.creditedMinor > invoice.totalMinor
+        ? invoice.paidMinor + invoice.creditedMinor - invoice.totalMinor
+        : 0n;
     return {
       payment: toPaymentResponse(payment),
       invoice: invoice
@@ -598,7 +712,14 @@ export class PaymentsService {
       invoiceNumber: p.invoiceNumber,
       contactId: p.contactUuid,
       invoicePaymentStatus: inv?.paymentStatus ?? null,
-      invoiceBalance: inv ? major(inv.totalMinor > inv.paidMinor + inv.creditedMinor ? inv.totalMinor - inv.paidMinor - inv.creditedMinor : 0n, inv.currency) : null,
+      invoiceBalance: inv
+        ? major(
+            inv.totalMinor > inv.paidMinor + inv.creditedMinor
+              ? inv.totalMinor - inv.paidMinor - inv.creditedMinor
+              : 0n,
+            inv.currency,
+          )
+        : null,
     };
   }
 
@@ -608,7 +729,12 @@ export class PaymentsService {
     if (scope === 'all') return;
     if (p.recordedById !== null && p.recordedById === ctx.userId) return;
     if (p.invoiceId) {
-      const inv = await this.invoicesRepo.findById(tx, ctx.orgId, p.invoiceId, await this.invoices.zone(tx, ctx.orgId));
+      const inv = await this.invoicesRepo.findById(
+        tx,
+        ctx.orgId,
+        p.invoiceId,
+        await this.invoices.zone(tx, ctx.orgId),
+      );
       if (inv) {
         try {
           await this.invoices.assertScope(tx, scope, inv);

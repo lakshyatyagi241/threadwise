@@ -108,6 +108,25 @@ export class RolesRepository {
     return rows as RoleGrantRow[];
   }
 
+  /** Members per role, for the roles screen and the delete guard. */
+  async userCounts(tx: Tx, orgId: number, roleIds: number[]): Promise<Map<number, number>> {
+    if (roleIds.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT role_id, count(*)::int AS n FROM user_roles
+      WHERE org_id = ${orgId} AND role_id IN (${sql.join(
+        roleIds.map((i) => sql`${i}`),
+        sql`, `,
+      )})
+      GROUP BY role_id
+    `);
+    return new Map(
+      (res.rows as Array<{ role_id: number; n: number }>).map((r) => [
+        Number(r.role_id),
+        Number(r.n),
+      ]),
+    );
+  }
+
   async insert(tx: Tx, orgId: number, name: string): Promise<{ id: number; uuid: string }> {
     const [row] = await tx
       .insert(roles)

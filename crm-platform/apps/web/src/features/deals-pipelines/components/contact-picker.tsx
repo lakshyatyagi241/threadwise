@@ -49,7 +49,9 @@ export function ContactPicker({
         <Avatar name={value.name} />
         <span className="min-w-0 flex-1">
           <span className="block truncate font-medium">{value.name}</span>
-          {value.phone && <span className="block truncate text-xs text-muted-foreground">{value.phone}</span>}
+          {value.phone && (
+            <span className="block truncate text-xs text-muted-foreground">{value.phone}</span>
+          )}
         </span>
         {!disabled && (
           <button
@@ -120,7 +122,9 @@ export function ContactPicker({
                 >
                   <Avatar name={label(c)} />
                   <span className="min-w-0 flex-1 truncate">{label(c)}</span>
-                  {c.phone && <span className="shrink-0 text-xs text-muted-foreground">{c.phone}</span>}
+                  {c.phone && (
+                    <span className="shrink-0 text-xs text-muted-foreground">{c.phone}</span>
+                  )}
                 </button>
               </li>
             ))}

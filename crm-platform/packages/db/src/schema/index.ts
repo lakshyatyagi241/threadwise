@@ -72,3 +72,4 @@ export * from './whatsapp-cloud-api-waba';
 export * from './whatsapp-devices-baileys';
 export * from './workspaces-teams-tenancy';
 // <threadwise-schema:end>
+export * from './roles-permissions';

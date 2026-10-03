@@ -7,7 +7,13 @@ import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { InvoiceProfile, RecurringInvoiceResponse, TaxRateResponse } from '@crm/contracts';
 import { Alert, Button, Field, Input, Select, Spinner, cn, useToast } from '@crm/ui';
-import { invalidateInvoicing, useInvoice, useInvoiceSettings, useRecurring, useTaxRates } from '../api/hooks';
+import {
+  invalidateInvoicing,
+  useInvoice,
+  useInvoiceSettings,
+  useRecurring,
+  useTaxRates,
+} from '../api/hooks';
 import { invoicingApi } from '../api/service';
 import { errorCode, errorKind, fieldErrors } from '../lib/errors';
 import {
@@ -58,11 +64,21 @@ export function RecurringInvoiceBuilder({ recurringId }: { recurringId?: string 
   if (failed) {
     return (
       <div className="space-y-3">
-        <ErrorLine error={failed} onRetry={() => void Promise.all([rates.refetch(), settings.refetch(), existing.refetch()])} />
+        <ErrorLine
+          error={failed}
+          onRetry={() =>
+            void Promise.all([rates.refetch(), settings.refetch(), existing.refetch()])
+          }
+        />
       </div>
     );
   }
-  if (!rates.data || !settings.data || (recurringId && !existing.data) || (fromInvoiceId && source.isPending)) {
+  if (
+    !rates.data ||
+    !settings.data ||
+    (recurringId && !existing.data) ||
+    (fromInvoiceId && source.isPending)
+  ) {
     return (
       <div role="status" className="flex items-center gap-2 p-6 text-muted-foreground">
         <Spinner /> {t('loading')}
@@ -73,7 +89,10 @@ export function RecurringInvoiceBuilder({ recurringId }: { recurringId?: string 
     return (
       <Alert tone="warning" className="space-y-2">
         <p>{t('endedNoEdit')}</p>
-        <Link href={`/recurring-invoices/${existing.data.id}`} className="font-medium underline underline-offset-2">
+        <Link
+          href={`/recurring-invoices/${existing.data.id}`}
+          className="font-medium underline underline-offset-2"
+        >
           {t('openSchedule')}
         </Link>
       </Alert>
@@ -143,16 +162,23 @@ function BuilderForm({
   const shape = useMemo(() => shapeOf(form), [form]);
   const templateChanged = !editing || replaceTemplate;
   const problems = useMemo(
-    () => validateRecurring(form, { kind: editing ? 'edit' : 'create', templateChanged, ctx, pricing }),
+    () =>
+      validateRecurring(form, { kind: editing ? 'edit' : 'create', templateChanged, ctx, pricing }),
     [form, editing, templateChanged, ctx, pricing],
   );
 
   const problemText = (code: string): string => {
-    if (code === 'startTooOld') return tp('startTooOld', { count: shape ? missedPeriods(shape, today) : 0, max: CATCH_UP_MAX });
+    if (code === 'startTooOld')
+      return tp('startTooOld', {
+        count: shape ? missedPeriods(shape, today) : 0,
+        max: CATCH_UP_MAX,
+      });
     return tp.has(code) ? tp(code) : tp('generic');
   };
   const errors: Record<string, string> = {
-    ...(showProblems ? Object.fromEntries(Object.entries(problems).map(([k, v]) => [k, problemText(v)])) : {}),
+    ...(showProblems
+      ? Object.fromEntries(Object.entries(problems).map(([k, v]) => [k, problemText(v)]))
+      : {}),
     ...serverErrors,
   };
 
@@ -240,12 +266,19 @@ function BuilderForm({
             <BackIcon className="size-4 rtl:rotate-180" />
           </Link>
           <div className="min-w-0">
-            <h1 className="truncate text-xl font-bold tracking-tight">{editing ? t('editTitle', { name: existing.name }) : t('newTitle')}</h1>
-            <p className="hidden text-sm text-muted-foreground sm:block">{editing ? t('editSubtitle') : t('newSubtitle')}</p>
+            <h1 className="truncate text-xl font-bold tracking-tight">
+              {editing ? t('editTitle', { name: existing.name }) : t('newTitle')}
+            </h1>
+            <p className="hidden text-sm text-muted-foreground sm:block">
+              {editing ? t('editSubtitle') : t('newSubtitle')}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link href={back} className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+          <Link
+            href={back}
+            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+          >
             {t('cancel')}
           </Link>
           <Button type="submit" variant="brand" className="h-10 min-w-28" disabled={busy}>
@@ -272,7 +305,14 @@ function BuilderForm({
               {t('schedule')}
             </h2>
             <Field label={t('name')} htmlFor="rec-name" error={errors.name} hint={t('nameHint')}>
-              <Input id="rec-name" dir="auto" maxLength={130} value={form.name} invalid={!!errors.name} onChange={(e) => patch({ name: e.target.value })} />
+              <Input
+                id="rec-name"
+                dir="auto"
+                maxLength={130}
+                value={form.name}
+                invalid={!!errors.name}
+                onChange={(e) => patch({ name: e.target.value })}
+              />
             </Field>
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label={t('every')} htmlFor="rec-interval" error={errors.interval}>
@@ -286,7 +326,13 @@ function BuilderForm({
                 />
               </Field>
               <Field label={t('frequency')} htmlFor="rec-frequency">
-                <Select id="rec-frequency" value={form.frequency} onChange={(e) => patch({ frequency: e.target.value as RecurringForm['frequency'] })}>
+                <Select
+                  id="rec-frequency"
+                  value={form.frequency}
+                  onChange={(e) =>
+                    patch({ frequency: e.target.value as RecurringForm['frequency'] })
+                  }
+                >
                   {FREQUENCIES.map((f) => (
                     <option key={f} value={f}>
                       {tf(f)}
@@ -294,13 +340,44 @@ function BuilderForm({
                   ))}
                 </Select>
               </Field>
-              <Field label={t('startDate')} htmlFor="rec-start" error={errors.startDate} hint={editing ? t('startFixed') : t('startHint')}>
-                <Input id="rec-start" type="date" dir="ltr" disabled={editing} value={form.startDate} invalid={!!errors.startDate} onChange={(e) => patch({ startDate: e.target.value })} />
+              <Field
+                label={t('startDate')}
+                htmlFor="rec-start"
+                error={errors.startDate}
+                hint={editing ? t('startFixed') : t('startHint')}
+              >
+                <Input
+                  id="rec-start"
+                  type="date"
+                  dir="ltr"
+                  disabled={editing}
+                  value={form.startDate}
+                  invalid={!!errors.startDate}
+                  onChange={(e) => patch({ startDate: e.target.value })}
+                />
               </Field>
-              <Field label={t('endDate')} htmlFor="rec-end" error={errors.endDate} hint={t('endHint')}>
-                <Input id="rec-end" type="date" dir="ltr" value={form.endDate} invalid={!!errors.endDate} min={form.startDate || undefined} onChange={(e) => patch({ endDate: e.target.value })} />
+              <Field
+                label={t('endDate')}
+                htmlFor="rec-end"
+                error={errors.endDate}
+                hint={t('endHint')}
+              >
+                <Input
+                  id="rec-end"
+                  type="date"
+                  dir="ltr"
+                  value={form.endDate}
+                  invalid={!!errors.endDate}
+                  min={form.startDate || undefined}
+                  onChange={(e) => patch({ endDate: e.target.value })}
+                />
               </Field>
-              <Field label={t('maxRuns')} htmlFor="rec-max" error={errors.maxRuns} hint={t('maxRunsHint')}>
+              <Field
+                label={t('maxRuns')}
+                htmlFor="rec-max"
+                error={errors.maxRuns}
+                hint={t('maxRunsHint')}
+              >
                 <Input
                   id="rec-max"
                   inputMode="numeric"
@@ -336,7 +413,13 @@ function BuilderForm({
               </div>
               {form.mode === 'issue_send' && (
                 <Field label={t('sendChannel')} htmlFor="rec-channel" hint={t('sendChannelHint')}>
-                  <Select id="rec-channel" value={form.sendChannel} onChange={(e) => patch({ sendChannel: e.target.value as RecurringForm['sendChannel'] })}>
+                  <Select
+                    id="rec-channel"
+                    value={form.sendChannel}
+                    onChange={(e) =>
+                      patch({ sendChannel: e.target.value as RecurringForm['sendChannel'] })
+                    }
+                  >
                     {SEND_CHANNELS.map((c) => (
                       <option key={c} value={c}>
                         {tc(c)}
@@ -345,7 +428,9 @@ function BuilderForm({
                   </Select>
                 </Field>
               )}
-              {warnings.includes('noBuyerEmail') && <p className="text-xs text-warning">{tw('noBuyerEmail')}</p>}
+              {warnings.includes('noBuyerEmail') && (
+                <p className="text-xs text-warning">{tw('noBuyerEmail')}</p>
+              )}
             </fieldset>
           </section>
 
@@ -356,9 +441,17 @@ function BuilderForm({
               <h2 id="rec-template-kept" className="text-base font-semibold">
                 {t('templateTitle')}
               </h2>
-              <TemplateKept buyer={existing.buyerName} lineCount={existing.lineCount} amount={{ minor: amountMinorOf(existing), currency: existing.currency }} />
+              <TemplateKept
+                buyer={existing.buyerName}
+                lineCount={existing.lineCount}
+                amount={{ minor: amountMinorOf(existing), currency: existing.currency }}
+              />
               <p className="text-xs text-muted-foreground">{t('templateFuture')}</p>
-              <Button variant="secondary" className="min-h-10" onClick={() => setReplaceTemplate(true)}>
+              <Button
+                variant="secondary"
+                className="min-h-10"
+                onClick={() => setReplaceTemplate(true)}
+              >
                 {t('replaceTemplate')}
               </Button>
             </section>
@@ -393,7 +486,10 @@ function BuilderForm({
           )}
 
           <div className="flex flex-wrap items-center justify-end gap-2 pb-2">
-            <Link href={back} className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+            <Link
+              href={back}
+              className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            >
               {t('cancel')}
             </Link>
             <Button type="submit" variant="brand" className="h-10 min-w-28" disabled={busy}>

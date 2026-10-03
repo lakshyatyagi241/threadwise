@@ -10,7 +10,16 @@ import { fromLocalInput, presetDue, toLocalInput, type DuePreset } from '../lib/
 import { formatDateTime } from '../lib/format';
 import { Drawer } from './drawer';
 import { CheckIcon, PencilIcon, TrashIcon } from './icons';
-import { Avatar, CompleteCheck, ErrorLine, PriorityChip, RecordPill, useNow, useWorkspaceZone, DueText } from './parts';
+import {
+  Avatar,
+  CompleteCheck,
+  ErrorLine,
+  PriorityChip,
+  RecordPill,
+  useNow,
+  useWorkspaceZone,
+  DueText,
+} from './parts';
 import { RecordPicker } from './record-picker';
 import { useTaskActions } from './use-task-actions';
 
@@ -113,7 +122,10 @@ function DrawerBody({
               readOnly={!canUpdate}
               invalid={titleError}
               dir="auto"
-              className={cn('h-11 text-base font-semibold', done && 'text-muted-foreground line-through')}
+              className={cn(
+                'h-11 text-base font-semibold',
+                done && 'text-muted-foreground line-through',
+              )}
               onBlur={(e) => {
                 const v = e.target.value.trim();
                 if (v === task.title) return setTitleError(false);
@@ -141,14 +153,21 @@ function DrawerBody({
         </div>
         {canUpdate && (
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant={done ? 'secondary' : 'brand'} onClick={() => void actions.toggle(task)}>
+            <Button
+              variant={done ? 'secondary' : 'brand'}
+              onClick={() => void actions.toggle(task)}
+            >
               <CheckIcon /> {done ? t('reopen') : t('complete')}
             </Button>
             <Button variant="secondary" onClick={() => onEdit(task)}>
               <PencilIcon /> {t('edit')}
             </Button>
             {canDelete && (
-              <Button variant="ghost" className="ms-auto text-danger" onClick={() => setConfirmDelete(true)}>
+              <Button
+                variant="ghost"
+                className="ms-auto text-danger"
+                onClick={() => setConfirmDelete(true)}
+              >
                 <TrashIcon /> {t('delete')}
               </Button>
             )}
@@ -216,7 +235,10 @@ function DrawerBody({
                     const iso = fromLocalInput(v);
                     if (v !== '' && iso === null) return setDueError(true);
                     setDueError(false);
-                    if (iso !== task.dueAt && !(iso && task.dueAt && Date.parse(iso) === Date.parse(task.dueAt))) {
+                    if (
+                      iso !== task.dueAt &&
+                      !(iso && task.dueAt && Date.parse(iso) === Date.parse(task.dueAt))
+                    ) {
                       void actions.save(task, { dueAt: iso });
                     }
                   }}
@@ -230,13 +252,19 @@ function DrawerBody({
                       key={preset}
                       size="sm"
                       variant="secondary"
-                      onClick={() => void actions.save(task, { dueAt: presetDue(preset, new Date()) })}
+                      onClick={() =>
+                        void actions.save(task, { dueAt: presetDue(preset, new Date()) })
+                      }
                     >
                       {tf(`presets.${preset}`)}
                     </Button>
                   ))}
                 {canUpdate && task.dueAt && (
-                  <Button size="sm" variant="ghost" onClick={() => void actions.save(task, { dueAt: null })}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => void actions.save(task, { dueAt: null })}
+                  >
                     {tf('clearDue')}
                   </Button>
                 )}
@@ -289,7 +317,8 @@ function DrawerBody({
           </Field>
           {task.company && (
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              {t('company')}: <span className="font-medium text-foreground">{task.company.name}</span>
+              {t('company')}:{' '}
+              <span className="font-medium text-foreground">{task.company.name}</span>
             </p>
           )}
           {!task.contact && !task.deal && !task.company && (
@@ -297,13 +326,18 @@ function DrawerBody({
           )}
           {(task.contact || task.deal) && (
             <div className="flex flex-wrap gap-2">
-              {task.contact && <RecordPill kind="contact" id={task.contact.id} label={task.contact.name} />}
+              {task.contact && (
+                <RecordPill kind="contact" id={task.contact.id} label={task.contact.name} />
+              )}
               {task.deal && <RecordPill kind="deal" id={task.deal.id} label={task.deal.title} />}
             </div>
           )}
         </section>
 
-        <section aria-labelledby="task-drawer-activity" className="space-y-3 border-t border-border pt-5">
+        <section
+          aria-labelledby="task-drawer-activity"
+          className="space-y-3 border-t border-border pt-5"
+        >
           <h3 id="task-drawer-activity" className="text-sm font-semibold">
             {t('activity')}
           </h3>
@@ -344,7 +378,9 @@ function DrawerBody({
 type EventKey = 'created' | 'createdBy' | 'reminded' | 'completed';
 
 /** What happened to the task, newest last: derived from the timestamps the task carries (the API has no event log yet). */
-function activityOf(task: TaskResponse): Array<{ key: EventKey; at: string; person: string | null }> {
+function activityOf(
+  task: TaskResponse,
+): Array<{ key: EventKey; at: string; person: string | null }> {
   const out: Array<{ key: EventKey; at: string; person: string | null }> = [
     task.createdBy
       ? { key: 'createdBy', at: task.createdAt, person: task.createdBy.name }

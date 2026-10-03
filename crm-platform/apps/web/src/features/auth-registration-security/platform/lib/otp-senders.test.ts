@@ -1,18 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import type { OtpSenderView, OtpTemplateState } from '@crm/contracts';
+import type { OtpSenderView, OtpTemplateOptionsResponse, OtpTemplateState } from '@crm/contracts';
 import {
   addableKinds,
   buildSenderCreate,
   buildSenderPatch,
   canRefreshTemplate,
   emptySenderDraft,
+  isConnected,
   normalizePhoneInput,
+  outcomeKey,
+  outcomeTone,
+  pickerSenders,
   senderFieldForPath,
   senderRef,
   senderSummary,
   senderToDraft,
   templateFor,
   templateIsStale,
+  templatePicker,
   templateState,
 } from './otp-senders';
 
@@ -22,7 +27,7 @@ const waba: OtpSenderView = {
   label: 'Main',
   phoneNumberId: '100200300',
   wabaId: '555666777',
-  graphBaseUrl: 'https://graph.facebook.com/v21.0',
+  graphBaseUrl: 'https://graph.facebook.com/v23.0',
   hasSecret: true,
 };
 const twilio: OtpSenderView = {
@@ -199,7 +204,7 @@ describe('buildSenderPatch', () => {
   it('restores the default address when it is cleared', () => {
     const custom = { ...waba, graphBaseUrl: 'http://127.0.0.1:9' } as OtpSenderView;
     expect(buildSenderPatch(custom, { ...senderToDraft(custom), graphBaseUrl: '' }).patch).toEqual({
-      graphBaseUrl: 'https://graph.facebook.com/v21.0',
+      graphBaseUrl: 'https://graph.facebook.com/v23.0',
     });
   });
 
@@ -249,5 +254,89 @@ describe('normalizePhoneInput', () => {
   it('refuses what cannot be an international number', () => {
     for (const bad of ['', '12345', '+0123456789', 'abc', '+1234567890123456', '+91 98765 abc'])
       expect(normalizePhoneInput(bad)).toBeNull();
+  });
+});
+
+describe('pickerSenders', () => {
+  const half = { ...waba, id: 'zz99yy88', hasSecret: false, connected: false } as OtpSenderView;
+  const ok = { ...waba, connected: true } as OtpSenderView;
+
+  it('keeps connected senders and drops unfinished ones', () => {
+    expect(pickerSenders([ok, half], '').map((s) => s.id)).toEqual(['ab12cd34']);
+  });
+
+  it('keeps an unfinished sender that is the current choice', () => {
+    expect(pickerSenders([ok, half], 'waba:zz99yy88').map((s) => s.id)).toEqual([
+      'ab12cd34',
+      'zz99yy88',
+    ]);
+  });
+
+  it('counts a missing flag as connected (an API that predates it)', () => {
+    expect(isConnected(waba)).toBe(true);
+    expect(isConnected(half)).toBe(false);
+  });
+});
+
+describe('templatePicker', () => {
+  const options: OtpTemplateOptionsResponse = {
+    sender: 'waba:ab12cd34',
+    unavailableReason: null,
+    templates: [
+      {
+        id: '99',
+        name: 'saved',
+        language: 'en_US',
+        kind: 'waba',
+        status: 'pending',
+        selected: true,
+        buttonLabel: null,
+      },
+      {
+        id: '5',
+        name: 'other',
+        language: 'en',
+        kind: 'waba',
+        status: 'approved',
+        selected: false,
+        buttonLabel: null,
+      },
+    ],
+  };
+
+  it('returns the rows of the saved sender and which one is saved', () => {
+    expect(templatePicker(options, 'waba:ab12cd34')).toEqual({
+      rows: options.templates,
+      selectedId: '99',
+    });
+  });
+
+  it('returns nothing for another sender, an empty choice or no data', () => {
+    expect(templatePicker(options, 'twilio:tw000001').rows).toEqual([]);
+    expect(templatePicker(options, '').rows).toEqual([]);
+    expect(templatePicker(undefined, 'waba:ab12cd34')).toEqual({ rows: [], selectedId: '' });
+  });
+});
+
+describe('outcomeKey / outcomeTone', () => {
+  it('reads a settled submission from the template status', () => {
+    expect(outcomeKey('submitted', 'approved')).toBe('approvedNow');
+    expect(outcomeKey('resubmitted', 'approved')).toBe('approvedNow');
+    expect(outcomeKey('submitted', 'rejected')).toBe('rejectedNow');
+    expect(outcomeKey('submitted', 'pending')).toBe('submitted');
+  });
+
+  it('leaves the other outcomes alone', () => {
+    expect(outcomeKey('local_ready', 'local')).toBe('local_ready');
+    expect(outcomeKey('already_approved', 'approved')).toBe('already_approved');
+    expect(outcomeKey('already_pending', 'pending')).toBe('already_pending');
+  });
+
+  it('tells approved-at-once apart from waiting for Meta', () => {
+    expect(outcomeTone('approvedNow')).toBe('success');
+    expect(outcomeTone('local_ready')).toBe('success');
+    expect(outcomeTone('submitted')).toBe('info');
+    expect(outcomeTone('already_pending')).toBe('info');
+    expect(outcomeTone('rejectedNow')).toBe('danger');
   });
 });

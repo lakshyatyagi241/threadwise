@@ -75,7 +75,9 @@ export function ctaFor(action: PlanAction): CardCta {
       return { kind: 'link', href: SUPPORT_PATH, label: 'talkToSales' };
     case 'upgrade':
       return { kind: 'link', href: PLANS_PATH, label: 'upgrade' };
+    // Only the plans page's own view model carries `downgrade`; the onboarding step reads the same link as a plain choice.
     case 'choose':
+    case 'downgrade':
       return { kind: 'link', href: PLANS_PATH, label: 'choose' };
     case 'downgrade_unavailable':
       return { kind: 'disabled', label: 'downgradeUnavailable' };

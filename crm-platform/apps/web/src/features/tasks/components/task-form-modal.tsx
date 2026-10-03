@@ -62,7 +62,8 @@ export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalPro
   );
   const [errors, setErrors] = useState<Partial<Record<FormField, string>>>({});
   const [busy, setBusy] = useState(false);
-  const set = <K extends keyof TaskDraft>(k: K, v: TaskDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof TaskDraft>(k: K, v: TaskDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
 
   async function submit() {
     const problems = validateDraft(draft);
@@ -149,7 +150,12 @@ export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalPro
             {errors.form}
           </p>
         )}
-        <Field label={t('title')} htmlFor="task-title" error={errors.title} className="sm:col-span-2">
+        <Field
+          label={t('title')}
+          htmlFor="task-title"
+          error={errors.title}
+          className="sm:col-span-2"
+        >
           <Input
             id="task-title"
             autoFocus
@@ -181,7 +187,9 @@ export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalPro
             onChange={(e) => set('assigneeId', e.target.value)}
           >
             <option value="">{t('unassigned')}</option>
-            {!known && task?.assignee && <option value={task.assignee.id}>{task.assignee.name}</option>}
+            {!known && task?.assignee && (
+              <option value={task.assignee.id}>{task.assignee.name}</option>
+            )}
             {people.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.id === session.user.id ? t('me', { name: m.fullName }) : m.fullName}
@@ -189,7 +197,13 @@ export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalPro
             ))}
           </Select>
         </Field>
-        <Field label={t('due')} htmlFor="task-due" error={errors.due} hint={t('dueHint')} className="sm:col-span-2">
+        <Field
+          label={t('due')}
+          htmlFor="task-due"
+          error={errors.due}
+          hint={t('dueHint')}
+          className="sm:col-span-2"
+        >
           <div className="flex flex-wrap items-center gap-2">
             <Input
               id="task-due"
@@ -238,7 +252,12 @@ export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalPro
             }}
           />
         </Field>
-        <Field label={t('notes')} htmlFor="task-notes" error={errors.notes} className="sm:col-span-2">
+        <Field
+          label={t('notes')}
+          htmlFor="task-notes"
+          error={errors.notes}
+          className="sm:col-span-2"
+        >
           <Textarea
             id="task-notes"
             rows={3}

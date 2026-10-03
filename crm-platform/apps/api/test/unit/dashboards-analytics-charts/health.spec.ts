@@ -1,6 +1,7 @@
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { QUEUES } from '../../../src/infra/queue/queues';
 import { HealthService } from '../../../src/modules/dashboards-analytics-charts/health.service';
 import {
   diskTone,
@@ -8,6 +9,9 @@ import {
   queueState,
   shortError,
 } from '../../../src/modules/dashboards-analytics-charts/health-rules';
+
+/** The probe walks every registered queue, so the expected counts follow the registry instead of a fixed number. */
+const QUEUE_COUNT = Object.keys(QUEUES).length;
 
 describe('health rules (TW-DASH-048)', () => {
   it('overall is down if any core probe is down, else degraded if any is, else up; idle is ignored', () => {
@@ -101,7 +105,7 @@ describe('health probes (TW-DASH-048)', () => {
     const r = await service({ failed: 3, env: { NODE_BRIDGE_URL: bridgeUrl } }).snapshot(true);
     const q = state(r, 'queue');
     expect(q.state).toBe('warn');
-    expect(q.detail).toMatch(/ 33 failed$/); // 11 queues x 3
+    expect(q.detail).toMatch(new RegExp(` ${QUEUE_COUNT * 3} failed$`)); // every queue x 3
     expect(r.overall).toBe('warn');
   });
 
@@ -130,8 +134,8 @@ describe('health probes (TW-DASH-048)', () => {
   it('clearing reports what it removed per the BullMQ counts and refuses an unknown queue', async () => {
     const svc = service({ failed: 2 });
     const r = await svc.clearQueues();
-    expect(r).toMatchObject({ ok: true, clearedFailed: 22, clearedPending: 0 });
-    expect(r.message).toBe('Cleared 0 pending and 22 failed job(s).');
+    expect(r).toMatchObject({ ok: true, clearedFailed: QUEUE_COUNT * 2, clearedPending: 0 });
+    expect(r.message).toBe(`Cleared 0 pending and ${QUEUE_COUNT * 2} failed job(s).`);
     await expect(svc.clearQueues('nope')).rejects.toMatchObject({ status: 422 });
   });
 });

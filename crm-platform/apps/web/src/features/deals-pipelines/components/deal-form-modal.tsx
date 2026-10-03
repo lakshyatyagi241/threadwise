@@ -111,7 +111,12 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
             {errors.form}
           </p>
         )}
-        <Field label={t('titleLabel')} htmlFor="deal-title" error={errors.title} className="sm:col-span-2">
+        <Field
+          label={t('titleLabel')}
+          htmlFor="deal-title"
+          error={errors.title}
+          className="sm:col-span-2"
+        >
           <Input
             id="deal-title"
             autoFocus
@@ -160,11 +165,21 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
             ))}
           </Select>
         </Field>
-        <Field label={t('contact')} htmlFor="deal-contact" hint={t('contactHint')} className="sm:col-span-2">
+        <Field
+          label={t('contact')}
+          htmlFor="deal-contact"
+          hint={t('contactHint')}
+          className="sm:col-span-2"
+        >
           <ContactPicker id="deal-contact" value={contact} onChange={setContact} />
         </Field>
         <Field label={t('expectedClose')} htmlFor="deal-close" className="sm:col-span-2">
-          <Input id="deal-close" type="date" value={close} onChange={(e) => setClose(e.target.value)} />
+          <Input
+            id="deal-close"
+            type="date"
+            value={close}
+            onChange={(e) => setClose(e.target.value)}
+          />
         </Field>
       </form>
     </Modal>
