@@ -704,18 +704,18 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CALL-004 | backend-done |  | toggle with Meta first, coexistence refused locally, Meta refusals in words; e2e against a fake Meta |
 | TW-CALL-005 | backend-done |  | permission request, 138017 treated as already permitted, ledger reset; e2e |
 | TW-CALL-006 | backend-done |  | ledger from permission_update, eligibility from the conversation's own number, lapsed grant reads expired |
-| TW-CALL-007 | frontend-done |  | CallButton component with modal flow; exported for the team inbox to mount; not tried with a real number |
+| TW-CALL-007 | frontend-done |  | CallButton with the modal flow, mounted in the inbox thread header (InboxProviders and thread-pane); component tests pass; not tried with a real number |
 | TW-CALL-008 | backend-done |  | permission first, calling must be on, refused dial is failed not ringing; e2e |
 | TW-CALL-009 | frontend-done |  | CallPeer with SDP rules and recording, 36 unit tests on fakes; no real microphone or Meta test |
 | TW-CALL-010 | backend-done |  | progress poll returns the SDP answer only for an active call; e2e |
 | TW-CALL-011 | backend-done |  | connect: inbound ringing row matched to contact and thread, outbound answered; idempotent; AI answer and voicemail timer not built |
-| TW-CALL-012 | frontend-done |  | pending endpoint and IncomingCallToast; poll only, no push |
+| TW-CALL-012 | frontend-done |  | pending endpoint and IncomingCallToast, mounted by InboxProviders; poll only, no push |
 | TW-CALL-013 | backend-done |  | atomic claim, pre_accept, 900 ms, accept, rollback to ringing on refusal; two simultaneous accepts e2e |
 | TW-CALL-014 | wontfix |  | dead code in Reference; pre_accept is a step of accept (inventory port note) |
 | TW-CALL-015 | backend-done |  | decline only a ringing call |
 | TW-CALL-016 | backend-done |  | terminate, idempotent; row closes on Meta's terminate event |
 | TW-CALL-017 | backend-done |  | terminate event closes the row with Meta's status and duration, one system bubble in the customer's thread; Node bridge close not built |
-| TW-CALL-018 | frontend-done |  | OnCallPanel with timer, mute, end, record, consent line |
+| TW-CALL-018 | frontend-done |  | OnCallPanel with timer, mute, end, record and the consent line, mounted by InboxProviders |
 | TW-CALL-019 | backend-done |  | recording upload and playback in private storage, workspace only, replaced file removed; browser recorder in the web feature |
 | TW-CALL-020 | wontfix |  | dead code in Reference; AI calls arm recording from the assistant (not built) |
 | TW-CALL-021 | backend-done |  | wa_call_events written at every step (connect, dial_sent, accept_sent, terminate, ...) |
