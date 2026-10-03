@@ -32,6 +32,16 @@ export const QUEUES = {
   WABA_INGEST: 'waba-ingest',
   /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (WD-TG-013). */
   TG_BROADCAST: 'tg-broadcast',
+  /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (WD-FB-010). */
+  FB_BACKFILL: 'fb-backfill',
+  /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (WD-FB-013). */
+  FB_BROADCAST: 'fb-broadcast',
+  /** One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (WD-IG-009). */
+  IG_PULL: 'ig-pull',
+  /** One job per connected store: imports its products, orders and customers into the mirror (WD-ECOM-011). */
+  ECOM_IMPORT: 'ecom-import',
+  /** One job per verified store webhook: the event message, the order-status automation and the mirror upkeep (WD-ECOM-008, 010, 027). */
+  ECOM_WEBHOOK: 'ecom-webhook',
   /** One job per run of a scheduled message (WD-NODE-030, 031): sends its pending recipients with the pacing rules. Own queue so a long run cannot hold a broadcast. */
   SCHED_RUN: 'sched-run',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */

@@ -8,6 +8,9 @@ import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CatalogProductsWorkerModule } from '../modules/catalog-products';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
 import { CampaignsWorkerModule } from '../modules/campaigns';
+import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
+import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
+import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
@@ -60,6 +63,9 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChatConversationsWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ChannelFacebookWorkerModule,
+    ChannelInstagramWorkerModule,
+    ShopifyWoocommerceWorkerModule,
     ScheduledQueueWarmerWorkerModule,
     NodeBridgeRuntimeWorkerModule,
   ],

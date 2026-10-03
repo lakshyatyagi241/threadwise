@@ -113,6 +113,16 @@ export const envSchema = z.object({
   LINK_TRACKING_TTL_DAYS: z.coerce.number().int().min(7).default(90),
   WHATSAPP_VERIFY_TOKEN: z.string().optional(),
   WHATSAPP_APP_SECRET: z.string().optional(),
+  /** The Meta app Facebook logs in through (WD-FB-002). Each falls back to the WhatsApp app's value, as in WaDesk. */
+  META_APP_ID: z.string().optional(),
+  FB_APP_ID: z.string().optional(),
+  FB_APP_SECRET: z.string().optional(),
+  FB_WEBHOOK_VERIFY_TOKEN: z.string().optional(),
+  /** A Login-for-Business configuration id; when set it drives the login dialog. */
+  FB_CONFIG_ID: z.string().optional(),
+  FB_GRAPH_VERSION: z.string().optional(),
+  /** The Graph version the welcome greeting is retried on when the configured one has dropped it; empty disables the retry. */
+  FB_GREETING_GRAPH_VERSION: z.string().default('v19.0'),
   /**
    * Dev-only simulated messaging channel (chat conversations). Declared here so a value in .env reaches process.env (only validated
    * keys are assigned there); the rule lives in config/domains/chat-conversations.env.ts. A production process that sets it does not boot.
