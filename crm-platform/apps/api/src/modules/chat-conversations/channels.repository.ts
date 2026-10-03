@@ -95,6 +95,20 @@ export class ChannelsRepository {
     return r ? toRow(r) : null;
   }
 
+  /** The channel of a provider account, by its handle (the unofficial engine: the device uuid). */
+  async byExternal(
+    tx: Tx,
+    orgId: number,
+    kind: string,
+    externalId: string,
+  ): Promise<ChannelRow | null> {
+    const res = await tx.execute(sql`
+      SELECT ${COLUMNS} FROM channels
+      WHERE org_id = ${orgId} AND kind = ${kind} AND external_id = ${externalId}`);
+    const r = rowsOf(res)[0];
+    return r ? toRow(r) : null;
+  }
+
   async byId(tx: Tx, orgId: number, id: number): Promise<ChannelRow | null> {
     const res = await tx.execute(
       sql`SELECT ${COLUMNS} FROM channels WHERE org_id = ${orgId} AND id = ${id}`,

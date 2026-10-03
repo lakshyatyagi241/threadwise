@@ -5,6 +5,7 @@ import type { Queue } from 'bullmq';
 import { clearQueueResponseSchema, healthResponseSchema } from '@crm/contracts';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import { QUEUES } from '../../../src/infra/queue/queues';
+import { REDIS_CLIENT } from '../../../src/infra/redis/redis.module';
 import {
   OPERATOR_EMAIL,
   OPERATOR_PASSWORD,
@@ -68,6 +69,22 @@ describe('GET /v2/platform/health', () => {
     expect(body.overall).toBe('warn');
     expect(body.queues.map((q) => q.name).sort()).toEqual(Object.values(QUEUES).sort());
     expect(body.vitals.nodeVersion).toBe(process.version);
+  });
+
+  it('a running device worker is the runtime check: up, with the devices it holds (TW-NODE-004)', async () => {
+    const redis = h.app.get<import('ioredis').Redis>(REDIS_CLIENT, { strict: false });
+    await redis.set('wa:worker:spec', JSON.stringify({ at: Date.now(), devices: 2 }), 'EX', 60);
+    try {
+      const res = await api().get('/v2/platform/health?fresh=1').set(bearer(supportToken));
+      const bridge = res.body.checks.find((c: { key: string }) => c.key === 'bridge');
+      expect(bridge).toMatchObject({
+        state: 'up',
+        value: '1 worker',
+        detail: '2 devices connected',
+      });
+    } finally {
+      await redis.del('wa:worker:spec');
+    }
   });
 
   it('a reachable bridge that answers 401 or 404 still counts as up', async () => {
