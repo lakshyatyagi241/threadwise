@@ -17,7 +17,7 @@ export class SqlInboxIngest implements InboxIngest {
     if (dedup === '') return false;
     const res = await tx.execute(sql`
       SELECT 1 FROM messages
-      WHERE org_id = ${orgId} AND provider = 'facebook' AND meta -> 'facebook' ->> 'message_id' = ${dedup}
+      WHERE org_id = ${orgId} AND meta -> 'facebook' ->> 'message_id' = ${dedup}
       LIMIT 1`);
     return res.rows.length > 0;
   }
