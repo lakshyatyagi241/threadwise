@@ -309,6 +309,18 @@
         "refreshing": "Checking..."
       },
       "core": "Core services",
+      "activity": {
+        "messages": "Messages · 24h",
+        "aiCalls": "AI calls · 24h",
+        "conversations": "Conversations · 24h",
+        "webhooks": "Webhooks · 24h"
+      },
+      "throughput": {
+        "title": "Message throughput · 14 days",
+        "peak": "peak {n}/day",
+        "empty": "No message activity in the last 14 days.",
+        "aria": "Messages per day, last 14 days"
+      },
       "state": {
         "up": "Operational",
         "warn": "Degraded",
@@ -377,7 +389,7 @@
       "overview": {
         "title": "Admin dashboard.",
         "kicker": "Admin / Overview",
-        "subtitle": "Revenue, signups and workspace health across the whole platform.",
+        "subtitle": "Platform health, revenue, usage, and workspace activity in one place.",
         "addWorkspace": "Add workspace",
         "kpi": {
           "income": "Total income",
@@ -397,17 +409,17 @@
         },
         "countries": {
           "title": "Session by country",
-          "subtitle": "New users by country in the window",
+          "subtitle": "Top sessions by region",
           "empty": "No country data yet - users haven't shared their region."
         },
         "regions": {
           "title": "Sales by region",
-          "subtitle": "New users by region",
+          "subtitle": "Platform revenue share",
           "aria": "New users per region"
         },
         "platform": {
           "title": "Sales by platform",
-          "subtitle": "Paid revenue by payment gateway",
+          "subtitle": "E-commerce integrations",
           "empty": "No paid orders in this window.",
           "aria": "Paid revenue by payment gateway"
         },
@@ -421,7 +433,7 @@
         },
         "workspaces": {
           "title": "Workspace activity",
-          "subtitle": "Most recently active workspaces",
+          "subtitle": "Recent high-value admin events",
           "viewAll": "View all",
           "empty": "No workspaces yet.",
           "col": {

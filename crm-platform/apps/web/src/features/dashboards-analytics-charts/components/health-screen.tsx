@@ -13,6 +13,7 @@ import {
 import { Alert, Badge, Button, Card, ConfirmDialog, Spinner } from '@crm/ui';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
+import { Sparkline } from './charts';
 import { diskToneOf, latencyBars, toneOf } from '../lib/health';
 
 const NS = 'dashboards-analytics-charts.health';
@@ -85,6 +86,7 @@ function Health({
   const t = useTranslations(NS);
   const time = new Intl.DateTimeFormat(locale, { timeStyle: 'medium' }).format(new Date(data.ts));
   const bars = latencyBars(data.checks);
+  const peak = Math.max(0, ...data.throughput.map((p) => p.count));
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
@@ -115,6 +117,15 @@ function Health({
           {fetching ? t('banner.refreshing') : t('banner.refresh')}
         </Button>
       </Card>
+
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" data-testid="health-activity">
+        {(['messages', 'aiCalls', 'conversations', 'webhooks'] as const).map((k) => (
+          <Card key={k} className="space-y-1">
+            <p className="font-mono text-2xl">{data.activity[k].toLocaleString(locale)}</p>
+            <p className="text-xs text-muted-foreground">{t(`activity.${k}`)}</p>
+          </Card>
+        ))}
+      </div>
 
       <section aria-labelledby="core-h" className="space-y-3">
         <h2
@@ -158,6 +169,22 @@ function Health({
         </Card>
         <Vitals v={data.vitals} />
       </div>
+
+      <Card className="space-y-3" data-testid="health-throughput">
+        <div className="flex items-baseline justify-between gap-2">
+          <h2 className="font-medium">{t('throughput.title')}</h2>
+          {peak > 0 ? (
+            <span className="font-mono text-xs text-muted-foreground">
+              {t('throughput.peak', { n: peak })}
+            </span>
+          ) : null}
+        </div>
+        {peak > 0 ? (
+          <Sparkline values={data.throughput.map((p) => p.count)} label={t('throughput.aria')} />
+        ) : (
+          <p className="text-sm text-muted-foreground">{t('throughput.empty')}</p>
+        )}
+      </Card>
 
       <QueueTable data={data} />
     </div>
