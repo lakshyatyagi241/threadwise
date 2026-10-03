@@ -68,3 +68,7 @@ the four-theme switcher live in the customer shell and AUTH profile, which are o
 tier P0 done: TW-SET-001, 002, 005, 024 (7 is AUTH's). tier P1 done: 003, 006, 008, 010-015, 017, 022, 023, 025-030, 032, 033, 035, 036, 038-041, 044-046.
 tier P2 done: 004, 014, 015, 034. Not ported on purpose: 009, 021, 031 and 037 (stored only), 042 (Socket.IO gateway replaces Pusher).
 Owned by other domains: 007, 016, 018-020 (AUTH/ASHELL), 043 (PLAN).
+
+Round 2 re-check: the tree already holds the whole domain. Postgres was not reachable in the re-check session (localhost:5432 refused, Docker engine down), so migrate, API e2e and integration were not re-run; unit suites re-run green (API 86, web 45).
+
+Round 2 DB-backed re-run (Postgres up, crm_set at 178 migrations): API e2e 49 passed, web feature tests 45 passed, arch:check 0 errors, db:verify-schema 0 errors. tier P0 done: TW-SET-001, 002, 005, 024. tier P1 and P2 as listed above.
