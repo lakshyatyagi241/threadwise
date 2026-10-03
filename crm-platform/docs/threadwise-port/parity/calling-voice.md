@@ -16,7 +16,7 @@ What differs from Reference 1.7.0, and why. Status per feature is in the [tracke
 | 008 | `contact_id` and `conversation_id` were not checked against the workspace | looked up by uuid in the workspace; an unknown one is ignored | tenant safety |
 | 011 | contact matched by decrypting every contact of every workspace member | the indexed normalised phone; the thread by the customer's key on the number's channel | cost; tenant scope |
 | 011 | the row lookup `OR`ed an unset correlation against a literal sentinel | each side of the match is only used when it has a value | inventory quirk |
-| 012 | the poll ran only on the Team Inbox page | same endpoint; the web `IncomingCallToast` is a component the inbox mounts | the inbox is TIB1's screen; a push channel is a later step (the inventory's port note) |
+| 012 | the poll ran only on the Team Inbox page | same endpoint; the web `IncomingCallToast` is a component the inbox mounts (mounted by `InboxProviders`, with the Call button in the thread header) | the inbox is TIB1's screen; a push channel is a later step (the inventory's port note) |
 | 013 | a transaction with a row lock | one atomic `UPDATE ... WHERE status = 'ringing'`; the loser gets 409 `CALL_STATE_CONFLICT` | same guarantee, no long lock |
 | 014, 020 | dead endpoints | not ported | the inventory's port notes: pre_accept is a step of accept; AI calls arm recording from the assistant |
 | 015 | any status could be rejected | only a ringing call; 409 otherwise | a live call could be cut by a stray click (inventory port note) |
