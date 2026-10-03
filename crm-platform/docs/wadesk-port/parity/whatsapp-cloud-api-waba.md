@@ -44,17 +44,14 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/wadesk-port/waba-interak
 
 ## Health-page extras and diagnostics (WD-WABA-002, 003, 015, 023 to 028, 044)
 
-- Built: free-conversation tile (023, optional, from Meta analytics), verified-badge checklist (024, without the calling toggle: CALL owns it), business username with
+- Built: free-conversation tile (023, optional, from Meta analytics), verified-badge checklist and the calling card (024, the calling domain's switch), business username with
   rules, suggestions and the status webhook (025, 026), QR codes (027), history re-sync button (028), the platform app's webhook-field check and one-click subscribe (002, 003, on
   the console WhatsApp settings page), the per-number live inbound check with a typed verdict and the own-app paste-in values (015), and business-app echoes (044).
 - Evidence: `waba-extras.e2e.spec.ts` (10), `waba-coexistence.e2e.spec.ts` (echoes), unit `waba-extras-rules.spec.ts` and `waba-diagnostics.spec.ts`. Meta is faked at the HTTP edge;
   nothing ran against real Meta or Interakt.
 - Deviations: the QR screen is new (WaDesk had the routes and no screen); echo files and places are described on the thread, not downloaded; the free-allowance constant is
   kept as WaDesk has it though Meta's pricing changed; the own-app panel reads `GET /v2/waba/webhook-config`.
-- Not built, with the reason: 036 automation fan-out (needs the flow and auto-reply engines), 039 and 040 groups and 042 catalog orders and 043 hand-offs to forms, Pay and
-  calling (other domains' tables and engines), 045 contact sync and 046 history import (need an import mode in the contacts module and in the inbox ingest: no flows or
-  notifications on an imported address book, backdated messages with no unread), 047 Twilio inbound (needs the Twilio connection from WADEV), 053 button-click analytics sync
-  (campaign and template columns belong to CAMP and TPL), 054 ads reuse (no ads client), 055 and 056 saved customers (commerce tables).
+- Not built here: nothing of this group; the rows that are not built are listed at the end of the next section.
 
 ## Groups, hand-offs, coexistence imports, orders, click sync, saved customers (WD-WABA-039, 040, 042, 043, 045, 046, 053, 055, 056)
 
@@ -66,6 +63,6 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/wadesk-port/waba-interak
   Meta's retry of an order is one order (WaDesk could double it); saved-customer **delete keeps the orders** (WaDesk deleted every order of that phone, a destructive quirk);
   the customer list pages by offset with a total; history media and echo media are described on the thread, not downloaded; a synced contact stores the source
   `whatsapp_business_app` instead of WaDesk's free-text note.
-- Not built, with the reason: 036 automation fan-out (the flow runtime's inbound hook, branch `vishal/FLR`), 047 Twilio inbound (the Twilio connection and its inbox
-  channel kind belong to WADEV), 054 ads reuse (MADS is the consumer), the calling toggle of 024 (waits for the calling API, branch `vishal/CALL`), and the buyer
+- Not built, with the reason: 047 Twilio inbound (the Twilio connection and its inbox
+  channel kind belong to WADEV), 054 ads reuse (MADS is the consumer), the buyer
   acknowledgement and pay link of 042 (CHK listens to `whatsapp.order.received`).
