@@ -254,7 +254,7 @@ describe('BuilderContextService.commerceProducts (TW-FLB-052)', () => {
     in_stock: false,
   };
 
-  it('lists the catalogue newest first without archived products, out-of-stock ones included and flagged', async () => {
+  it('lists the active catalogue newest first, out-of-stock ones included and flagged', async () => {
     const { svc, seen } = service([[/FROM wa_products/, [productRow]]]);
     const res = await run(() => svc.commerceProducts({ provider: 'whatsapp_shop', limit: 50 }));
     expect(res.data).toEqual([
@@ -271,7 +271,7 @@ describe('BuilderContextService.commerceProducts (TW-FLB-052)', () => {
       },
     ]);
     const q = seen.find((x) => x.includes('FROM wa_products'))!;
-    expect(q).toContain("status <> 'archived'");
+    expect(q).toContain("status = 'active'");
     expect(q).toContain('ORDER BY p.id DESC');
   });
 
