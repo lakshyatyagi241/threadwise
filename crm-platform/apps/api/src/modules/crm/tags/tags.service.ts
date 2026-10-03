@@ -300,6 +300,58 @@ export class TagsService {
     });
   }
 
+  /**
+   * The flow Tag step (WD-FLR-035). The tag is found by uuid first, then by name (created when the name is new, add only); an
+   * unresolvable tag is CON_TAG_REQUIRED. No `contact.tag_added` event is emitted: WaDesk's Tag step never started `tag_added` flows,
+   * and that is kept (a flow that tags its own contact must not re-enter itself). Idempotent: `changed` says whether a row moved.
+   */
+  async applyFromFlow(
+    orgId: number,
+    contactId: number,
+    action: 'add' | 'remove',
+    ref: { tagId?: string; name?: string },
+  ): Promise<{ tagUuid: string; tagName: string; changed: boolean }> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const uuidShaped = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      let tag: TagRow | undefined =
+        ref.tagId && uuidShaped.test(ref.tagId)
+          ? await this.repo.findByUuid(tx, orgId, ref.tagId)
+          : undefined;
+      const name = ref.name?.trim();
+      if (!tag && name) {
+        tag =
+          action === 'add'
+            ? (await this.findOrCreateByName(tx, orgId, name, { enforcePermission: false })).row
+            : await this.repo.findByName(tx, orgId, name);
+      }
+      if (!tag) {
+        throw new AppError(
+          ERROR_CODES.CON_TAG_REQUIRED,
+          'The tag could not be resolved.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      const changed =
+        action === 'add'
+          ? (await this.repo.attach(tx, orgId, [contactId], [tag.id], null)).length > 0
+          : await this.repo.detach(tx, orgId, contactId, tag.id);
+      if (changed) {
+        await this.audit.record(tx, {
+          module: 'contacts',
+          recordId: contactId,
+          action: 'update',
+          delta: {
+            tags: {
+              old: action === 'add' ? null : `-${tag.name}`,
+              new: action === 'add' ? `+${tag.name}` : null,
+            },
+          },
+        });
+      }
+      return { tagUuid: tag.uuid, tagName: tag.name, changed };
+    });
+  }
+
   async detachFromContact(contactUuid: string, tagUuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {

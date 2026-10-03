@@ -31,6 +31,8 @@ import {
   type ScheduledRow,
 } from './scheduled-message';
 import { nextRun } from './schedule-time';
+import { spin } from './warmer/warmer-rules';
+import { WarmerService } from './warmer/warmer.service';
 
 export type RunResult = 'skipped' | 'failed' | 'busy' | 'paused' | 'stopped' | 'finished';
 
@@ -69,6 +71,7 @@ export class ScheduledRunService {
     private readonly runtime: PacingRuntime,
     private readonly cap: CapTally,
     private readonly lease: SenderLease,
+    private readonly warmer: WarmerService,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -103,6 +106,14 @@ export class ScheduledRunService {
       if (!sender) return fail('Client not found');
       const transport = this.outbound.get(sender.engine);
       if (!transport) return fail(`No sender for the ${sender.engine} engine`);
+      // A warming number only sends inside its active hours: wait and look again, never fail the schedule for it.
+      if (!(await this.warmer.mayRunNow(tx, sender))) {
+        await tx.execute(sql`
+          UPDATE scheduled_messages SET status = 'paused', next_attempt_at = now() + interval '30 minutes',
+                 last_error = 'Waiting for the number''s warmer active hours'
+           WHERE org_id = ${orgId} AND id = ${scheduledId}`);
+        return { skip: true as const };
+      }
 
       await tx.execute(sql`
         UPDATE scheduled_message_contacts SET status = 'failed', error_message = 'Send was interrupted before it finished', failed_at = now()
@@ -122,13 +133,15 @@ export class ScheduledRunService {
         sender,
         transport,
         pacing: await this.pacingSettings.get(tx, orgId),
+        warm: await this.warmer.gap(tx, sender),
+        spinOn: await this.warmer.spintaxOn(tx, sender),
         mergeBase: wantsMerge ? await this.merge.baseContext(tx, orgId) : null,
         pendingTotal,
       };
     });
     if (prep.skip) return 'skipped';
     if (prep.failed) return 'failed';
-    const { row, sender, transport, pacing, mergeBase, pendingTotal } = prep;
+    const { row, sender, transport, pacing, warm, spinOn, mergeBase, pendingTotal } = prep;
 
     let opened: OpenTransport;
     try {
@@ -194,7 +207,9 @@ export class ScheduledRunService {
           }
 
           try {
-            const body = await this.render(orgId, row, r, mergeBase);
+            const rendered = await this.render(orgId, row, r, mergeBase);
+            // A warming number may vary the wording ({a|b}); spun after the merge tags, so a name is never touched.
+            const body = spinOn ? spin(rendered, this.runtime.random) : rendered;
             const sent = await opened.send(commandFor(row, to, body), {
               clientReference: `sched-${scheduledId}-${r.id}`,
               screen: { bulk: true, source: 'scheduled' },
@@ -235,7 +250,7 @@ export class ScheduledRunService {
               sinceBatch = 0;
               await this.rest(batchCooldownMs(pacing, this.runtime.random), leaseKey, leaseToken);
             } else {
-              await this.rest(nextGapMs(pacing, null, this.runtime.random), leaseKey, leaseToken);
+              await this.rest(nextGapMs(pacing, warm, this.runtime.random), leaseKey, leaseToken);
             }
           }
         }

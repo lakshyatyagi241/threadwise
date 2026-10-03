@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Companies"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again to continue.",
+      "conflict": "Someone else changed this company while you were editing. Their changes are loaded; your edits are kept, so review them and save again.",
+      "validation": "Some of what was entered is not valid. Check the fields and try again.",
+      "unavailable": "Companies are not available on this server yet.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "notFound": "That company no longer exists.",
+      "planDisabled": "Your plan does not include companies. Upgrade to unlock them.",
+      "ownerInvalid": "The owner must be an active member of this workspace.",
+      "unexpected": "Something went wrong. Try again in a moment.",
+      "requestId": "Request id",
+      "retry": "Try again"
+    },
+    "list": {
+      "eyebrow": "CRM · Organizations",
+      "title": "Companies",
+      "subtitle": "Group contacts and deals under an organization — see every contact, open deal and won revenue in one place.",
+      "newCompany": "New company",
+      "tiles": {
+        "companies": "Companies",
+        "withDeals": "With open deals",
+        "wonRevenue": "Won revenue"
+      },
+      "bulk": {
+        "label": "Bulk actions",
+        "selected": "{count, plural, one {# company selected} other {# companies selected}}",
+        "delete": "Delete",
+        "clear": "Clear selection"
+      },
+      "loading": "Loading companies",
+      "unavailableTitle": "Companies are not available",
+      "unavailable": "The companies service is not deployed on this server yet.",
+      "emptyFilteredTitle": "No companies match",
+      "emptyFiltered": "Try a different search or clear the filters.",
+      "clearFilters": "Clear filters",
+      "emptyTitle": "No companies yet",
+      "empty": "No companies yet. Create your first one.",
+      "showing": "{count, plural, one {# company loaded} other {# companies loaded}}",
+      "loadMore": "Load more",
+      "allLoaded": "All companies loaded",
+      "deleteTitle": "Delete company",
+      "deleteMessage": "Delete this company? Its contacts and deals are kept and just unlinked.",
+      "deleteManyTitle": "Delete companies",
+      "deleteManyMessage": "{count, plural, one {Delete this company? Its contacts and deals are kept and just unlinked.} other {Delete these # companies? Their contacts and deals are kept and just unlinked.}}",
+      "delete": "Delete",
+      "keep": "Keep"
+    },
+    "toolbar": {
+      "label": "Filter companies",
+      "search": "Search companies…",
+      "industry": "Industry",
+      "allIndustries": "All industries",
+      "owner": "Owner",
+      "allOwners": "All owners",
+      "noOwner": "No owner",
+      "withOpenDeals": "With open deals",
+      "sort": "Order",
+      "sorts": {
+        "created": "Newest first",
+        "name": "Name A to Z"
+      },
+      "clear": "Clear",
+      "refresh": "Refresh"
+    },
+    "table": {
+      "label": "Companies",
+      "selectAll": "Select all loaded companies",
+      "select": "Select {name}",
+      "company": "Company",
+      "industry": "Industry",
+      "contacts": "Contacts",
+      "openDeals": "Open deals",
+      "wonValue": "Won value",
+      "actions": "Actions",
+      "delete": "Delete company",
+      "deleteNamed": "Delete company {name}"
+    },
+    "form": {
+      "eyebrow": "Company",
+      "newTitle": "New company",
+      "editTitle": "Edit company",
+      "close": "Close",
+      "cancel": "Cancel",
+      "create": "Create",
+      "save": "Save changes",
+      "name": "Company name *",
+      "namePlaceholder": "Acme Ltd",
+      "industry": "Industry",
+      "website": "Website",
+      "email": "Email",
+      "phone": "Phone",
+      "notes": "Notes",
+      "moreDetails": "More details",
+      "sizeRange": "Size",
+      "sizeHint": "For example 1-10 or 11-50.",
+      "owner": "Owner",
+      "noOwner": "No owner",
+      "me": "{name} (you)",
+      "address": "Address",
+      "problems": {
+        "required": "A company name is required.",
+        "tooLong": "Too long: at most {limit} characters.",
+        "email": "Enter a valid email address.",
+        "invalid": "Some of what was entered is not valid.",
+        "ownerInvalid": "The owner must be an active member of this workspace."
+      }
+    },
+    "toast": {
+      "created": "Company created.",
+      "updated": "Company updated.",
+      "deleted": "{count, plural, one {Company deleted.} other {# companies deleted.}}",
+      "deletedSome": "{count, plural, one {# company deleted} other {# companies deleted}}, {failed, plural, one {# could not be deleted.} other {# could not be deleted.}}",
+      "deleteFailed": "Could not delete. Try again.",
+      "contactUnlinked": "Contact removed from the company.",
+      "contactAlreadyOut": "That contact is no longer in this company.",
+      "contactUnlinkFailed": "Could not remove the contact. Try again.",
+      "contactsLinked": "{count, plural, one {# contact added to the company.} other {# contacts added to the company.}}",
+      "contactsLinkedSome": "{count, plural, one {# contact added} other {# contacts added}}, {failed, plural, one {# could not be added.} other {# could not be added.}}",
+      "contactsLinkFailed": "Could not add the contacts. Try again."
+    },
+    "detail": {
+      "back": "All companies",
+      "loading": "Loading company",
+      "notFoundTitle": "Company not found",
+      "notFound": "This company does not exist or was deleted.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "keep": "Keep",
+      "tiles": {
+        "contacts": "Contacts",
+        "openDeals": "Open deals",
+        "wonRevenue": "Won revenue"
+      },
+      "notes": "Notes",
+      "deleteTitle": "Delete company",
+      "deleteMessage": "Delete this company? Its contacts and deals are kept and just unlinked.",
+      "details": "Details",
+      "owner": "Owner",
+      "sizeRange": "Size",
+      "address": "Address",
+      "createdBy": "Created by",
+      "created": "Created",
+      "updated": "Last changed"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "add": "Add contacts",
+      "loading": "Loading contacts",
+      "empty": "No contacts linked to this company.",
+      "unnamed": "(no name)",
+      "unlink": "Remove from company",
+      "unlinkNamed": "Remove {name} from the company",
+      "loadMore": "Load more",
+      "addModal": {
+        "title": "Add contacts to the company",
+        "close": "Close",
+        "cancel": "Cancel",
+        "add": "{count, plural, one {Add # contact} other {Add # contacts}}",
+        "search": "Search contacts by name, email or number",
+        "loading": "Searching contacts",
+        "noneTitle": "No contacts found",
+        "none": "No contact matches. Try another name, email or number.",
+        "unnamed": "(no name)",
+        "already": "Already here",
+        "willMove": "In another company",
+        "hint": "A contact can belong to one company. Adding a contact that is in another company moves it here."
+      }
+    },
+    "deals": {
+      "title": "Deals",
+      "loading": "Loading deals",
+      "empty": "No deals for this company.",
+      "loadMore": "Load more",
+      "status": {
+        "open": "Open",
+        "won": "Won",
+        "lost": "Lost"
+      }
+    },
+    "activity": {
+      "title": "Activity",
+      "loading": "Loading activity",
+      "none": "Nothing has happened to this company yet.",
+      "loadMore": "Load more",
+      "empty": "empty",
+      "system": "The system",
+      "actions": {
+        "insert": "created the company",
+        "update": "changed the company",
+        "delete": "deleted the company"
+      },
+      "contactLinked": "Added contact",
+      "contactUnlinked": "Removed contact",
+      "deletedContact": "a deleted contact",
+      "fields": {
+        "name": "Name",
+        "website": "Website",
+        "email": "Email",
+        "phone": "Phone",
+        "industry": "Industry",
+        "sizeRange": "Size",
+        "address": "Address",
+        "notes": "Notes",
+        "owner": "Owner"
+      }
+    }
+  }
+}

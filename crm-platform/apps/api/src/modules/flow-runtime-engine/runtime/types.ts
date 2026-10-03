@@ -16,7 +16,14 @@ export interface WaitSpec {
   nodeId: string;
   /** The variable the answer is stored under (and under the node id). */
   variable: string;
-  kind: 'Question' | 'List' | 'Poll';
+  kind: 'Question' | 'List' | 'Poll' | 'Custom';
+  /** `Custom` only: the node type whose executor decodes the answer (`onReply`), and what it keeps between the question and the answer. */
+  handler?: string;
+  data?: Record<string, unknown>;
+  /** Overrides the run's idle limit for this wait (a form the customer fills in, a cart they may abandon). */
+  timeoutSeconds?: number;
+  /** When the wait times out, leave the node by this port instead of ending the run (a Google Form's `timeout`, a shop's `abandoned`). */
+  timeoutPort?: number;
   answerItems?: MenuItem[];
   listItems?: ListRow[];
   /** A buttons menu stays tappable after a leaf branch finishes (WD-FLR-018 rule 7). */
@@ -111,7 +118,24 @@ export type OutboundMessage =
       }>;
     }
   | { kind: 'cta_url'; body: string; header?: string; footer?: string; text: string; url: string }
-  | { kind: 'location'; latitude: number; longitude: number; name?: string; address?: string };
+  | { kind: 'location'; latitude: number; longitude: number; name?: string; address?: string }
+  /**
+   * An approved WhatsApp template (WD-FLR-026). `variables` are the Cloud API's positional or named body parameters; `text` is the
+   * message as the customer reads it (header, body, footer with the values filled in), what a channel without templates is sent
+   * and what the thread shows; `buttons` are the quick replies, numbered in that text.
+   */
+  | {
+      kind: 'template';
+      name: string;
+      language: string;
+      variables: Record<string, string>;
+      /** The provider's own component list, when `variables` cannot say it (a header with placeholders). */
+      components?: Array<Record<string, unknown>>;
+      text: string;
+      buttons?: MenuItem[];
+    }
+  /** A WhatsApp Form (a Meta flow message, WD-FLR-043): opens the published form behind `flowId`; the submission comes back as an outside event. */
+  | { kind: 'form'; body: string; flowId: string; flowToken: string; cta: string };
 
 export type SendOutcome =
   | { ok: true }
@@ -127,11 +151,15 @@ export type NodeResult =
   /** A branch ran out of nodes: re-arm the last menu, or end when the customer was never shown one (WD-FLR-016 rule 6). */
   | { kind: 'park' }
   | { kind: 'end'; reason: FlowRunEndReason }
+  /** Sub-flow (WD-FLR-031): replace the running graph with another flow's, keep the variables, start at its first node. */
+  | { kind: 'subflow'; flowId: number | string }
   | { kind: 'halt'; reason: string }
   | { kind: 'fail'; code: string; reason: string };
 
 export interface NodeContext {
   run: RunState;
+  /** Stable for this execution of the node (`flow:<run>:<step>:<node>`): the key for a side effect that must not happen twice. */
+  stepKey: string;
   node: { id: string; type: string; props: Record<string, unknown> };
   /** Sends one message; the id of the send is stable for this step, so a retried step never sends twice. */
   send(message: OutboundMessage): Promise<SendOutcome>;
@@ -142,14 +170,29 @@ export interface NodeContext {
   now(): Date;
 }
 
+/** What a `Custom` wait's executor decides about an answer (a customer's reply, or an outside event such as a form submission). */
+export type CustomDecision =
+  | { action: 'ignore' }
+  /** Not the answer yet: keep waiting, optionally with updated `data`/variables. */
+  | { action: 'stay'; setVars?: Record<string, unknown>; data?: Record<string, unknown> }
+  | { action: 'route'; port: number; setVars?: Record<string, unknown> }
+  | { action: 'end'; reason: FlowRunEndReason }
+  | { action: 'fail'; code: string; reason: string };
+
 export interface NodeExecutor {
   readonly types: readonly string[];
   execute(ctx: NodeContext): Promise<NodeResult>;
+  /** Decodes the answer to a `Custom` wait this executor parked (`wait.handler` is the node type). */
+  onReply?(ctx: NodeContext, reply: InboundReply): Promise<CustomDecision>;
 }
+
+/** The executors a domain adds to the core set; each is an injectable class listed under this token (see `node-executors.ts`). */
 
 /** What the channel adapter hands the engine for a customer's message (WD-FLR-018 port notes: never a provider shape). */
 export interface InboundReply {
-  kind: 'text' | 'tap' | 'location' | 'media';
+  kind: 'text' | 'tap' | 'location' | 'media' | 'external';
+  /** `external`: what the outside event carried (a form submission, a payment result). */
+  data?: Record<string, unknown>;
   /** The option id a tap carried (button, list row or template button); empty for typed text. */
   id: string;
   text: string;

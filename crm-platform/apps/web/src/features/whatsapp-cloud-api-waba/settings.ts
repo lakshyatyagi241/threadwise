@@ -11,4 +11,12 @@ export const settings = [
     order: 10,
     gates: { permission: 'waba.numbers.read' },
   }),
+  settingsTile({
+    id: 'whatsapp-customers',
+    section: 'business',
+    href: '/store/customers',
+    icon: 'user',
+    order: 40,
+    gates: { permission: 'waba.customers.read' },
+  }),
 ];

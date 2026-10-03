@@ -3,7 +3,6 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
-import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { ChannelDispatcher } from './channel-dispatcher.service';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
@@ -48,14 +47,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
  * door are global.
  */
 @Module({
-  imports: [
-    ChatChannelProvidersModule,
-    PlansCoreModule,
-    CrmModule,
-    // The WhatsApp numbers a channel is the inbox view of: their decrypted connection is what a send, a file transfer and a health
-    // check run with (`ChannelRegistryService.runtime`).
-    WabaModule,
-  ],
+  imports: [ChatChannelProvidersModule, PlansCoreModule, CrmModule],
   controllers: [
     ChannelsController,
     SimulatorController,
