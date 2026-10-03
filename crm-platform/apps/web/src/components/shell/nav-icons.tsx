@@ -178,6 +178,14 @@ const PATHS: Record<string, ReactNode> = {
       <rect x="9" y="9" width="5" height="4.5" rx="1" />
     </>
   ),
+  apps: (
+    <>
+      <rect x="2" y="2.5" width="5" height="5" rx="1" />
+      <rect x="9" y="2.5" width="5" height="5" rx="1" />
+      <rect x="2" y="9" width="5" height="4.5" rx="1" />
+      <path d="M11.5 9.5v4M9.5 11.5h4" />
+    </>
+  ),
   plug: (
     <>
       <rect x="2" y="6" width="5" height="5" rx="1" />

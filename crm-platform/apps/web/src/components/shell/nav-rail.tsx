@@ -309,6 +309,7 @@ export const GROUP_ICON: Readonly<Record<string, string>> = {
   campaigns: 'campaign',
   automation: 'flow',
   store: 'store',
+  apps: 'apps',
 };
 
 /** How long the pointer must rest on a group icon before its panel opens, and how long it may be away before the panel closes. */
