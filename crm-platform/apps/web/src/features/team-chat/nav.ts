@@ -12,5 +12,6 @@ export const nav: NavItem[] = [
     href: '/team-chat',
     order: 30,
     icon: 'team-chat',
+    fullWidth: true,
   },
 ];

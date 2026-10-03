@@ -35,6 +35,7 @@ export * from './channel-instagram';
 export * from './shopify-woocommerce';
 export * from './deals-pipelines';
 export * from './tasks';
+export * from './companies';
 export * from './platform-settings-branding-storage';
 export * from './localization-translation';
 export * from './install-update-licensing';
