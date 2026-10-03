@@ -42,6 +42,8 @@ const fakeFactory: TelegramApiFactory = {
       answerPreCheckoutQuery: () => Promise.resolve({ ok: true }),
       downloadFile: () => Promise.resolve(null),
       getUserProfilePhoto: () => Promise.resolve(null),
+      sendMessage: () => Promise.resolve({ ok: true, result: { message_id: 1 } }),
+      sendMedia: () => Promise.resolve({ ok: true, result: { message_id: 2 } }),
     };
   },
 };
@@ -69,7 +71,7 @@ beforeEach(() => {
   hook = { ok: true };
 });
 
-const post = (t: Tenant, path: string, body?: unknown) =>
+const post = (t: Tenant, path: string, body?: string | object) =>
   api.http().post(path).set(bearer(t.admin)).set('idempotency-key', randomUUID()).send(body);
 const connect = (t: Tenant, botToken: string) => post(t, '/v2/telegram/bots', { botToken });
 const list = (t: Tenant) => api.http().get('/v2/telegram/bots').set(bearer(t.admin));
@@ -207,7 +209,7 @@ describe('TW-TG-007: manage a bot', () => {
   it('payment settings: a blank token keeps, a value replaces, clear removes; the token is never returned', async () => {
     const t = await api.signup('tg8');
     const bot = (await connect(t, token(1001001))).body;
-    const put = (body: unknown) =>
+    const put = (body: string | object) =>
       api.http().put(`/v2/telegram/bots/${bot.id}/payments`).set(bearer(t.admin)).send(body);
 
     const saved = await put({

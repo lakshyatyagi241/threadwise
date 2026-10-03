@@ -12,7 +12,7 @@ const decimal = z
 export const paygwPeriodSchema = z.enum(['monthly', 'yearly']);
 export type PaygwPeriod = z.infer<typeof paygwPeriodSchema>;
 
-export const paygwOrderKindSchema = z.enum(['plan', 'addon', 'wallet_topup']);
+export const paygwOrderKindSchema = z.enum(['plan', 'addon', 'wallet_topup', 'manual']);
 export type PaygwOrderKind = z.infer<typeof paygwOrderKindSchema>;
 
 export const paygwOrderStatusSchema = z.enum([
@@ -35,6 +35,8 @@ export const paygwQuoteQuerySchema = z.object({
     .regex(/^[A-Z]{3,5}$/)
     .optional(),
   period: paygwPeriodSchema.optional(),
+  /** A coupon code to preview (plans and add-ons only; ignored for wallet top-ups). The server prices it, the browser sends no amount. */
+  coupon: z.string().trim().max(64).optional(),
 });
 export type PaygwQuoteQuery = z.infer<typeof paygwQuoteQuerySchema>;
 
@@ -46,6 +48,8 @@ export const paygwCheckoutGatewaySchema = z.object({
   name: z.string(),
   description: z.string(),
   mode: z.enum(['sandbox', 'live']),
+  /** True when the buyer may tick "renew automatically" with this gateway for this purchase (TW-PAYGW-012). */
+  autoRenew: z.boolean(),
 });
 
 export const paygwQuoteSchema = z.object({
@@ -66,6 +70,14 @@ export const paygwQuoteSchema = z.object({
   /** Wallet top-ups only: what the wallet gains, in minor units of the platform currency. */
   walletCreditMinor: z.number().int().nullable(),
   gateways: z.array(paygwCheckoutGatewaySchema),
+  /** The coupon asked for, when one was: `ok: false` carries the reason and no discount was applied. */
+  coupon: z
+    .object({ code: z.string(), ok: z.boolean(), message: z.string(), discount: z.string() })
+    .nullable(),
+  /** The country dropdown of the billing form (billing settings, TW-PAYGW-007). */
+  countries: z.array(z.string()),
+  /** The money-back guarantee line under the summary; `enabled: false` hides it. */
+  refund: z.object({ enabled: z.boolean(), days: z.number().int() }),
 });
 export type PaygwQuote = z.infer<typeof paygwQuoteSchema>;
 
@@ -112,8 +124,23 @@ export const placeOrderResponseSchema = z.object({
     z.object({ type: z.literal('redirect'), url: z.string().url() }),
     z.object({
       type: z.literal('client_action'),
-      provider: z.literal('razorpay'),
+      provider: z.enum(['razorpay', 'paddle', 'cashfree', 'hyperpay', 'braintree']),
       params: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
+    }),
+    /** The browser POSTs these fields to the provider's page (PayU): built from plain data, never from server HTML. */
+    z.object({
+      type: z.literal('form_post'),
+      url: z.string().url(),
+      fields: z.record(z.string(), z.string()),
+    }),
+    /** Bank transfer and offline gateways: what to do, then upload proof (TW-PAYGW-013). The order number is the payment reference. */
+    z.object({
+      type: z.literal('instructions'),
+      kind: z.enum(['bank_transfer', 'offline']),
+      rows: z.array(z.object({ label: z.string(), value: z.string() })),
+      notes: z.string().nullable(),
+      amount: z.string(),
+      currency: z.string(),
     }),
     z.object({ type: z.literal('paid') }),
   ]),
@@ -134,6 +161,8 @@ export const paygwOrderItemSchema = z.object({
   couponCode: z.string().nullable(),
   gatewayName: z.string().nullable(),
   failureReason: z.string().nullable(),
+  /** A pending bank-transfer or offline order: the buyer can still attach (or replace) payment proof. */
+  acceptsProof: z.boolean(),
   createdAt: z.string(),
   paidAt: z.string().nullable(),
 });
@@ -154,3 +183,36 @@ export const paygwOrdersResponseSchema = z.object({
   ),
 });
 export type PaygwOrdersResponse = z.infer<typeof paygwOrdersResponseSchema>;
+
+/** Proof of an offline payment (TW-PAYGW-013): the file is multipart `proof`; these are the text fields beside it. */
+export const PAYGW_PROOF_MAX_BYTES = 4 * 1024 * 1024;
+export const paygwProofFieldsSchema = z.object({
+  paymentReference: z.string().trim().max(120).optional(),
+  proofNote: z.string().trim().max(1000).optional(),
+});
+export type PaygwProofFields = z.infer<typeof paygwProofFieldsSchema>;
+
+export const paygwProofResponseSchema = z.object({
+  orderNumber: z.string(),
+  status: paygwOrderStatusSchema,
+  proofSubmittedAt: z.string(),
+});
+export type PaygwProofResponse = z.infer<typeof paygwProofResponseSchema>;
+
+/**
+ * In-app payment confirmation (TW-PAYGW-034): a client that finished a provider flow itself (a native SDK, a signed result)
+ * posts what the provider gave it for ITS OWN order. The server asks the driver to verify it exactly as the web return does;
+ * nothing the client says marks an order paid by itself.
+ */
+export const paygwConfirmRequestSchema = z.object({
+  payload: z.record(z.string().max(64), z.string().max(4096)).default({}),
+});
+export type PaygwConfirmRequest = z.infer<typeof paygwConfirmRequestSchema>;
+
+export const paygwConfirmResponseSchema = z.object({
+  orderNumber: z.string(),
+  status: z.enum(['paid', 'pending', 'failed', 'cancelled']),
+  /** True when the order was already paid before this call (a replay): nothing was applied twice. */
+  alreadyPaid: z.boolean(),
+});
+export type PaygwConfirmResponse = z.infer<typeof paygwConfirmResponseSchema>;

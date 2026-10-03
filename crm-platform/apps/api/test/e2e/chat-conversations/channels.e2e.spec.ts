@@ -1,4 +1,3 @@
-import { createHash, createHmac } from 'node:crypto';
 import { Queue } from 'bullmq';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
@@ -18,10 +17,12 @@ import {
   type Harness,
   type Tenant,
 } from '../contacts-attributes-tags/support';
+import { connectNumber, linkChannel, whatsappChannel } from './whatsapp-support';
 
 /**
- * The channel registry, the dev simulator, the public webhook door and the dispatcher through the whole app (plan-inbox-chat.md
- * Phase 0). One app, one database, one Redis; each block works in an organization of its own.
+ * The channel registry, the dev simulator and the dispatcher through the whole app (plan-inbox-chat.md Phase 0), and the WhatsApp
+ * channel as the inbox view of a number connected in the WABA domain (one WhatsApp stack: no credentials, no webhook of its own).
+ * One app, one database, one Redis; each block works in an organization of its own.
  *
  * The simulator flag is set before the app is built (it is read at boot to bind the adapter). The production refusal is checked by
  * changing the environment for the length of one request, because the policy is evaluated on every call.
@@ -49,12 +50,6 @@ afterAll(async () => {
 const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const READER: Grant[] = [['inbox.conversation.read']];
 
-const SECRETS = {
-  accessToken: 'EAAB-top-secret-access-token-7788',
-  appSecret: 'app-secret-do-not-leak-9911',
-};
-const creds = (phoneNumberId = '1000000001') => ({ phoneNumberId, ...SECRETS });
-
 interface Channel {
   id: string;
   kind: string;
@@ -67,20 +62,19 @@ interface Channel {
   hasCredentials: boolean;
   credentialHints: Record<string, string>;
   webhookUrl: string | null;
+  businessAccountId?: string | null;
   rowVersion: number;
-  webhookVerifyToken?: string;
 }
 
+/** A WhatsApp number connected in the WABA domain and its inbox channel, read back the way the web reads it. */
 async function createWa(
-  token: string,
+  t: Tenant,
   name = 'Main number',
-  phoneNumberId?: string,
+  phoneNumberId = '1000000001',
 ): Promise<Channel> {
-  const res = await api
-    .as(token)
-    .post('/v2/channels')
-    .send({ kind: 'whatsapp_cloud', name, credentials: creds(phoneNumberId) });
-  expect(res.status, JSON.stringify(res.body)).toBe(201);
+  const { channel } = await whatsappChannel(h, t.orgId, { phoneNumberId, label: name });
+  const res = await api.as(t.admin).get(`/v2/channels/${channel.uuid}`);
+  expect(res.status, JSON.stringify(res.body)).toBe(200);
   return res.body as Channel;
 }
 
@@ -122,7 +116,7 @@ describe('permissions', () => {
     t = await api.signup('chp');
     reader = await api.member(t, 'reader', READER);
     nobody = await api.member(t, 'nobody', []);
-    ch = await createWa(t.admin);
+    ch = await createWa(t);
   });
 
   it('listing channels needs the right to read conversations; with it, any member sees them', async () => {
@@ -134,22 +128,15 @@ describe('permissions', () => {
     expect((await api.as(nobody.token).get(`/v2/channels/${ch.id}`)).status).toBe(403);
   });
 
-  it('connecting, editing, rotating, removing and the dev routes need inbox.channel.manage (a reader gets 403 on each)', async () => {
+  it('editing, removing and the dev routes need inbox.channel.manage (a reader gets 403 on each)', async () => {
     const r = api.as(reader.token);
-    expect(
-      (
-        await r
-          .post('/v2/channels')
-          .send({ kind: 'whatsapp_cloud', name: 'x', credentials: creds('1000000002') })
-      ).status,
-    ).toBe(403);
     expect(
       (await r.post('/v2/channels/simulator').set('idempotency-key', 'k1').send({})).status,
     ).toBe(403);
     expect((await r.patch(`/v2/channels/${ch.id}`).send({ rowVersion: 1, name: 'x' })).status).toBe(
       403,
     );
-    expect((await r.post(`/v2/channels/${ch.id}/webhook-token`)).status).toBe(403);
+    expect((await r.post(`/v2/channels/${ch.id}/health`)).status).toBe(403);
     expect((await r.delete(`/v2/channels/${ch.id}`)).status).toBe(403);
     expect(
       (
@@ -177,129 +164,194 @@ describe('permissions', () => {
   });
 });
 
-describe('connecting a provider channel, and secrets never coming back', () => {
+describe('a WhatsApp channel is the inbox view of a connected number', () => {
   let t: Tenant;
   let ch: Channel;
+  let number: Awaited<ReturnType<typeof connectNumber>>;
 
   beforeAll(async () => {
     t = await api.signup('chc');
-    ch = await createWa(t.admin, 'Support line');
+    number = await connectNumber(h, t.orgId, {
+      phoneNumberId: '1000000100',
+      label: 'Support line',
+      phone: '+1 555 000 1111',
+    });
+    const row = await linkChannel(h, t.orgId, number);
+    ch = (await api.as(t.admin).get(`/v2/channels/${row.uuid}`)).body as Channel;
   });
 
-  it('creates it disconnected (its adapter cannot send yet) with capabilities, a webhook URL and a verify token shown once', () => {
+  it('is made from the connection: connected, with the number, the account id and the Cloud capabilities; it takes no credentials and has no webhook of its own', () => {
     expect(ch.id).toMatch(uuidRe);
     expect(ch).toMatchObject({
       kind: 'whatsapp_cloud',
       name: 'Support line',
-      status: 'disconnected',
-      externalId: '1000000001',
-      hasCredentials: true,
+      status: 'connected',
+      externalId: '1000000100',
+      displayAddress: '+1 555 000 1111',
+      businessAccountId: number.wabaId,
+      hasCredentials: false,
+      credentialHints: {},
+      webhookUrl: null,
       rowVersion: 1,
     });
     expect(ch.capabilities).toMatchObject({ windowHours: 24, templates: true });
-    expect(ch.webhookUrl).toMatch(new RegExp(`/v2/webhooks/channels/${ch.id}$`));
     expect(ch.settings).toEqual({ metered: true });
-    expect(ch.webhookVerifyToken).toMatch(/^[A-Za-z0-9_-]{30,}$/);
     expect(ch).not.toHaveProperty('orgId');
   });
 
-  it('no response, list or single, carries a credential, the verify token or its hash; only last-four hints', async () => {
-    const dump = JSON.stringify([
-      (await api.as(t.admin).get('/v2/channels')).body,
-      (await api.as(t.admin).get(`/v2/channels/${ch.id}`)).body,
-      (
-        await api
-          .as(t.admin)
-          .patch(`/v2/channels/${ch.id}`)
-          .send({ rowVersion: ch.rowVersion, name: 'Support' })
-      ).body,
-    ]);
-    for (const secret of [SECRETS.accessToken, SECRETS.appSecret, ch.webhookVerifyToken!]) {
-      expect(dump).not.toContain(secret);
-    }
-    expect(dump).not.toMatch(/credentials_enc|credentialsEnc|webhook_token_hash|webhookTokenHash/);
-    const got = (await api.as(t.admin).get(`/v2/channels/${ch.id}`)).body as Channel;
-    expect(got.credentialHints).toEqual({ accessToken: '7788', appSecret: '9911' });
-    expect(got).not.toHaveProperty('webhookVerifyToken');
-  });
-
-  it('at rest: the credentials are sealed (no plaintext anywhere in the row) and only a SHA-256 of the token is kept', async () => {
+  it('is linked to the connection by a composite key, holds no secret at rest, and no response carries one', async () => {
     const row = (
       await h.owner.query(`SELECT * FROM channels WHERE org_id = $1 AND uuid = $2`, [
         t.orgId,
         ch.id,
       ])
     ).rows[0];
-    expect(row.credentials_enc).toMatch(/^v1:/);
-    expect(JSON.stringify(row)).not.toContain(SECRETS.accessToken);
-    expect(JSON.stringify(row)).not.toContain(SECRETS.appSecret);
-    expect(JSON.stringify(row)).not.toContain(ch.webhookVerifyToken);
-    expect(row.webhook_token_hash).toBe(
-      createHash('sha256').update(ch.webhookVerifyToken!).digest('hex'),
+    expect(Number(row.waba_config_id)).toBe(number.configId);
+    expect(row.credentials_enc).toBeNull();
+    expect(row.webhook_token_hash).toBeNull();
+    const dump = JSON.stringify([
+      (await api.as(t.admin).get('/v2/channels')).body,
+      (await api.as(t.admin).get(`/v2/channels/${ch.id}`)).body,
+    ]);
+    expect(dump).not.toMatch(
+      /credentials_enc|credentialsEnc|webhook_token_hash|webhookTokenHash|accessToken|appSecret/,
     );
   });
 
-  it('the write leaves one audit row and one outbox event, and no secret in either', async () => {
+  it('making it is idempotent, leaves one audit row and one outbox event, and finds the same channel again', async () => {
+    const again = await linkChannel(h, t.orgId, number);
+    expect(again.uuid).toBe(ch.id);
+    expect(
+      await count(`SELECT count(*) n FROM channels WHERE org_id = $1 AND kind = 'whatsapp_cloud'`, [
+        t.orgId,
+      ]),
+    ).toBe(1);
     expect(await api.auditCount(t.orgId, 'channels', 'insert')).toBe(1);
     const events = await api.events(t.orgId, 'channel.created');
     expect(events).toHaveLength(1);
     expect(events[0]).toMatchObject({ uuid: ch.id, kind: 'whatsapp_cloud', name: 'Support line' });
-    const all = JSON.stringify([
-      (await h.owner.query(`SELECT * FROM audit_log WHERE org_id = $1`, [t.orgId])).rows,
-      (await h.owner.query(`SELECT * FROM event_outbox WHERE org_id = $1`, [t.orgId])).rows,
-    ]);
-    expect(all).not.toContain(SECRETS.accessToken);
-    expect(all).not.toContain(SECRETS.appSecret);
-    expect(all).not.toContain(ch.webhookVerifyToken);
   });
 
-  it('validates the credentials: digits for the number id, a long enough token and secret, no unknown keys', async () => {
-    const send = (credentials: unknown, kind = 'whatsapp_cloud') =>
-      api.as(t.admin).post('/v2/channels').send({ kind, name: 'x', credentials });
-    for (const bad of [
-      { ...creds('abc') },
-      { ...creds(), accessToken: 'short' },
-      { phoneNumberId: '1000000009', accessToken: SECRETS.accessToken },
-      { ...creds('1000000009'), extra: 'nope' },
-    ]) {
-      const res = await send(bad);
-      expect(res.status, JSON.stringify(bad)).toBe(422);
-      expect(res.body.code).toBe('VALIDATION_FAILED');
-    }
-    expect((await send(creds('1000000009'), 'carrier_pigeon')).status).toBe(422);
-    // `simulator` is not a kind a person connects with credentials.
-    expect((await send({}, 'simulator')).status).toBe(422);
-    expect(await count(`SELECT count(*) n FROM channels WHERE org_id = $1`, [t.orgId])).toBe(1);
-  });
-
-  it('the same provider account cannot be connected twice in a workspace (409), but another workspace may', async () => {
-    const dup = await api
+  it('a channel is not made by hand: there is no route to connect one with credentials (the number is connected under WhatsApp numbers)', async () => {
+    const res = await api
       .as(t.admin)
       .post('/v2/channels')
-      .send({ kind: 'whatsapp_cloud', name: 'again', credentials: creds() });
-    expect(dup.status).toBe(409);
-    expect(dup.body.code).toBe('CHANNEL_ALREADY_CONNECTED');
-    const other = await api.signup('chc2');
-    await expect(createWa(other.admin, 'same number elsewhere')).resolves.toBeDefined();
+      .send({
+        kind: 'whatsapp_cloud',
+        name: 'x',
+        credentials: { phoneNumberId: '1000000009', accessToken: 'EAAB-token-12345' },
+      });
+    expect(res.status).toBe(404);
+    expect((await api.as(t.admin).post(`/v2/channels/${ch.id}/subscribe`).send({})).status).toBe(
+      404,
+    );
+    expect((await api.as(t.admin).post(`/v2/channels/${ch.id}/webhook-token`)).status).toBe(404);
+    expect((await api.as(t.admin).get('/v2/channels/requirements/whatsapp_cloud')).status).toBe(
+      404,
+    );
   });
 
-  it('a skeleton adapter can be stored but never switched on: connecting is refused, and nothing leaks into the answer', async () => {
+  it('an update cannot carry credentials: the connection owns them', async () => {
     const res = await api
       .as(t.admin)
       .patch(`/v2/channels/${ch.id}`)
-      .send({ rowVersion: 2, status: 'connected' });
+      .send({ rowVersion: ch.rowVersion, credentials: { accessToken: 'EAAB-token-12345' } });
+    expect(res.status).toBe(422);
+  });
+
+  it('a channel made before the link for the same phone number is adopted, not duplicated', async () => {
+    const t2 = await api.signup('chc3');
+    const early = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1, 'whatsapp_cloud', 'Pasted earlier', 'needs_reauth', '1000000333') RETURNING id, uuid`,
+      [t2.orgId],
+    );
+    const n = await connectNumber(h, t2.orgId, {
+      phoneNumberId: '1000000333',
+      label: 'Reconnected',
+    });
+    const row = await linkChannel(h, t2.orgId, n, { revive: true });
+    expect(row.uuid).toBe(early.rows[0].uuid);
+    expect(row).toMatchObject({
+      wabaConfigId: n.configId,
+      status: 'connected',
+      name: 'Pasted earlier',
+      lastError: null,
+    });
+    expect(await count(`SELECT count(*) n FROM channels WHERE org_id = $1`, [t2.orgId])).toBe(1);
+  });
+
+  it('a reconnected number brings its channel back from needs_reauth; a disconnected number shows it disconnected; a removed one detaches it', async () => {
+    const t3 = await api.signup('chc4');
+    const { number: n3, channel } = await whatsappChannel(h, t3.orgId, {
+      phoneNumberId: '1000000444',
+    });
+    const statusOf = async () =>
+      (
+        await h.owner.query(`SELECT status, waba_config_id FROM channels WHERE id = $1`, [
+          channel.id,
+        ])
+      ).rows[0];
+
+    await h.owner.query(
+      `UPDATE channels SET status = 'needs_reauth', last_error = '{"code":"CHANNEL_AUTH_EXPIRED","message":"x","at":"2026-10-01T00:00:00Z"}' WHERE id = $1`,
+      [channel.id],
+    );
+    // The first inbound message finds the channel as it is: a lazy link never revives a refused token.
+    await linkChannel(h, t3.orgId, n3);
+    expect((await statusOf()).status).toBe('needs_reauth');
+    await linkChannel(h, t3.orgId, n3, { revive: true });
+    expect((await statusOf()).status).toBe('connected');
+
+    await h.owner.query(`UPDATE wa_provider_configs SET status = 'disconnected' WHERE id = $1`, [
+      n3.configId,
+    ]);
+    await linkChannel(h, t3.orgId, n3);
+    expect((await statusOf()).status).toBe('disconnected');
+
+    await h.owner.query(`UPDATE channels SET status = 'connected' WHERE id = $1`, [channel.id]);
+    await h.owner.query(`DELETE FROM wa_provider_configs WHERE id = $1`, [n3.configId]);
+    const detached = await statusOf();
+    expect(detached.waba_config_id).toBeNull(); // ON DELETE SET NULL on the link column only: the channel and its threads stay
+  });
+
+  it("the link is a composite key: a channel cannot point at another workspace's number, and one number has one channel", async () => {
+    const other = await api.signup('chc5');
+    const foreign = await connectNumber(h, other.orgId, { phoneNumberId: '1000000555' });
+    await expect(
+      h.owner.query(
+        `INSERT INTO channels (org_id, kind, name, waba_config_id) VALUES ($1, 'whatsapp_cloud', 'x', $2)`,
+        [t.orgId, foreign.configId],
+      ),
+    ).rejects.toThrow(/fk_channels_waba_config/);
+    await expect(
+      h.owner.query(
+        `INSERT INTO channels (org_id, kind, name, waba_config_id) VALUES ($1, 'whatsapp_cloud', 'again', $2)`,
+        [t.orgId, number.configId],
+      ),
+    ).rejects.toThrow(/uq_channels_waba_config/);
+  });
+
+  it('a connected channel stays on its number: it is never connected by hand without a link', async () => {
+    const orphan = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1, 'whatsapp_cloud', 'Unlinked', 'disconnected', '1000000666') RETURNING uuid, row_version`,
+      [t.orgId],
+    );
+    const res = await api
+      .as(t.admin)
+      .patch(`/v2/channels/${orphan.rows[0].uuid}`)
+      .send({ rowVersion: Number(orphan.rows[0].row_version), status: 'connected' });
     expect(res.status).toBe(422);
     expect(res.body.code).toBe('CHANNEL_KIND_UNAVAILABLE');
   });
 });
 
-describe('editing, rotating and removing', () => {
+describe('editing and removing', () => {
   let t: Tenant;
   let ch: Channel;
 
   beforeAll(async () => {
     t = await api.signup('che');
-    ch = await createWa(t.admin, 'Editable', '2000000001');
+    ch = await createWa(t, 'Editable', '2000000001');
   });
 
   it('renames with the row version, and a stale version is a 409 ROW_VERSION_CONFLICT', async () => {
@@ -345,42 +397,6 @@ describe('editing, rotating and removing', () => {
     ).toBe(422);
   });
 
-  it('rotating credentials replaces only the keys sent, updates the hint and the external id, and audits without any secret', async () => {
-    const res = await api
-      .as(t.admin)
-      .patch(`/v2/channels/${ch.id}`)
-      .send({
-        rowVersion: ch.rowVersion,
-        credentials: { accessToken: 'EAAB-rotated-token-0042', phoneNumberId: '2000000002' },
-      });
-    expect(res.status, JSON.stringify(res.body)).toBe(200);
-    expect(res.body.credentialHints).toEqual({ accessToken: '0042', appSecret: '9911' });
-    expect(res.body.externalId).toBe('2000000002');
-    expect(JSON.stringify(res.body)).not.toContain('rotated-token');
-    const audit = JSON.stringify(
-      (
-        await h.owner.query(`SELECT delta FROM audit_log WHERE org_id = $1 AND action = 'update'`, [
-          t.orgId,
-        ])
-      ).rows,
-    );
-    expect(audit).not.toContain('rotated-token');
-    expect(audit).not.toContain(SECRETS.appSecret);
-    expect(audit).toContain('[rotated]');
-    ch = res.body as Channel;
-  });
-
-  it('a rotation that would leave the credentials invalid is a 422 and changes nothing', async () => {
-    const res = await api
-      .as(t.admin)
-      .patch(`/v2/channels/${ch.id}`)
-      .send({ rowVersion: ch.rowVersion, credentials: { phoneNumberId: 'not-digits' } });
-    expect(res.status).toBe(422);
-    expect((await api.as(t.admin).get(`/v2/channels/${ch.id}`)).body.rowVersion).toBe(
-      ch.rowVersion,
-    );
-  });
-
   it('settings: metering can be switched on a provider channel; unknown settings are refused', async () => {
     const res = await api
       .as(t.admin)
@@ -398,31 +414,8 @@ describe('editing, rotating and removing', () => {
     ch = res.body as Channel;
   });
 
-  it('the webhook verify token can be rotated: shown once, the old one stops working', async () => {
-    const created = await createWa(t.admin, 'Hooked', '2000000003');
-    const old = created.webhookVerifyToken!;
-    const challenge = (token: string) =>
-      api
-        .http()
-        .get(`/v2/webhooks/channels/${created.id}`)
-        .query({ 'hub.mode': 'subscribe', 'hub.verify_token': token, 'hub.challenge': 'abc123' });
-    expect((await challenge(old)).status).toBe(200);
-
-    const rotated = await api.as(t.admin).post(`/v2/channels/${created.id}/webhook-token`);
-    expect(rotated.status).toBe(200);
-    const fresh = rotated.body.webhookVerifyToken as string;
-    expect(fresh).not.toBe(old);
-    expect((await challenge(old)).status).toBe(401);
-    const ok = await challenge(fresh);
-    expect(ok.status).toBe(200);
-    expect(ok.text).toBe('abc123');
-    expect((await api.as(t.admin).get(`/v2/channels/${created.id}`)).body).not.toHaveProperty(
-      'webhookVerifyToken',
-    );
-  });
-
   it('removes a channel nobody has talked through: 204, gone, one audit row and one outbox event', async () => {
-    const doomed = await createWa(t.admin, 'Doomed', '2000000004');
+    const doomed = await createWa(t, 'Doomed', '2000000004');
     const res = await api.as(t.admin).delete(`/v2/channels/${doomed.id}`);
     expect(res.status).toBe(204);
     expect((await api.as(t.admin).get(`/v2/channels/${doomed.id}`)).status).toBe(404);
@@ -437,7 +430,7 @@ describe('editing, rotating and removing', () => {
       `SELECT 1 FROM information_schema.columns WHERE table_name = 'conversations' AND column_name = 'channel_id'`,
     );
     if (fk.rowCount === 0) ctx.skip();
-    const busy = await createWa(t.admin, 'Busy', '2000000005');
+    const busy = await createWa(t, 'Busy', '2000000005');
     const row = await h.owner.query(`SELECT id FROM channels WHERE org_id = $1 AND uuid = $2`, [
       t.orgId,
       busy.id,
@@ -463,7 +456,7 @@ describe('tenant isolation', () => {
   beforeAll(async () => {
     a = await api.signup('cha');
     b = await api.signup('chb');
-    chA = await createWa(a.admin, 'A only', '3000000001');
+    chA = await createWa(a, 'A only', '3000000001');
   });
 
   it("another workspace's admin gets 404 on every route naming the channel, and the list never shows it", async () => {
@@ -472,7 +465,7 @@ describe('tenant isolation', () => {
     expect(
       (await o.patch(`/v2/channels/${chA.id}`).send({ rowVersion: 1, name: 'x' })).status,
     ).toBe(404);
-    expect((await o.post(`/v2/channels/${chA.id}/webhook-token`)).status).toBe(404);
+    expect((await o.post(`/v2/channels/${chA.id}/health`)).status).toBe(404);
     expect((await o.delete(`/v2/channels/${chA.id}`)).status).toBe(404);
     expect(
       (
@@ -497,7 +490,7 @@ describe('tenant isolation', () => {
     const seenByA = await db.txAs({ orgId: a.orgId, userId: null }, (tx) =>
       facade.findByUuid(tx, a.orgId, chA.id),
     );
-    expect(seenByA).toMatchObject({ uuid: chA.id, kind: 'whatsapp_cloud', status: 'disconnected' });
+    expect(seenByA).toMatchObject({ uuid: chA.id, kind: 'whatsapp_cloud', status: 'connected' });
     expect(JSON.stringify(seenByA)).not.toMatch(/token|secret|credential/i);
     const list = await db.txAs({ orgId: a.orgId, userId: null }, (tx) => facade.list(tx, a.orgId));
     expect(list.map((c) => c.uuid)).toEqual([chA.id]);
@@ -505,7 +498,7 @@ describe('tenant isolation', () => {
 });
 
 describe('channels created by other domains (the web chat widget)', () => {
-  it('a widget channel inserted by its domain is listed with the web chat capabilities and no webhook, and has no token to rotate', async () => {
+  it('a widget channel inserted by its domain is listed with the web chat capabilities and no webhook', async () => {
     const t = await api.signup('chw0');
     const widgetUuid = '66666666-6666-4666-8666-666666666666';
     const row = await h.owner.query(
@@ -522,9 +515,6 @@ describe('channels created by other domains (the web chat widget)', () => {
       hasCredentials: false,
     });
     expect(widget.capabilities).toMatchObject({ windowHours: null, templates: false });
-    const rotate = await api.as(t.admin).post(`/v2/channels/${id}/webhook-token`);
-    expect(rotate.status).toBe(422);
-    expect(rotate.body.code).toBe('CHANNEL_KIND_UNAVAILABLE');
     const challenge = await api
       .http()
       .get(`/v2/webhooks/channels/${id}`)
@@ -533,150 +523,37 @@ describe('channels created by other domains (the web chat widget)', () => {
   });
 });
 
-describe('the public webhook door', () => {
-  let t: Tenant;
-  let ch: Channel;
-  const post = (id: string, body: string, signature?: string) => {
-    const req = api
+describe("the WhatsApp webhook is the WABA domain's: a channel has no door of its own", () => {
+  it('the per-channel URL refuses every delivery and every subscription challenge for a WhatsApp channel, whatever is sent', async () => {
+    const t = await api.signup('chw');
+    const ch = await createWa(t, 'Hooked', '4000000001');
+    expect(ch.webhookUrl).toBeNull();
+    const body = JSON.stringify({ entry: [{ changes: [{ value: { messages: [] } }] }] });
+    const post = await api
       .http()
-      .post(`/v2/webhooks/channels/${id}`)
-      .set('content-type', 'application/json');
-    if (signature) req.set('x-hub-signature-256', signature);
-    return req.send(body);
-  };
-  const sign = (body: string, secret = SECRETS.appSecret) =>
-    `sha256=${createHmac('sha256', secret).update(Buffer.from(body)).digest('hex')}`;
-  const payload = (id: string, text: string) =>
-    JSON.stringify({
-      entry: [
-        {
-          changes: [
-            {
-              value: {
-                contacts: [{ wa_id: '919812345678', profile: { name: 'Meera' } }],
-                messages: [
-                  {
-                    id: id,
-                    from: '919812345678',
-                    type: 'text',
-                    timestamp: '1760000000',
-                    text: { body: text },
-                  },
-                ],
-                statuses: [{ id: `out-${id}`, status: 'delivered', timestamp: '1760000050' }],
-              },
-            },
-          ],
-        },
-      ],
-    });
-
-  beforeAll(async () => {
-    t = await api.signup('chw');
-    ch = await createWa(t.admin, 'Hooked', '4000000001');
+      .post(`/v2/webhooks/channels/${ch.id}`)
+      .set('content-type', 'application/json')
+      .set('x-hub-signature-256', 'sha256=' + 'a'.repeat(64))
+      .send(body);
+    expect(post.status).toBe(401);
+    const challenge = await api
+      .http()
+      .get(`/v2/webhooks/channels/${ch.id}`)
+      .query({ 'hub.mode': 'subscribe', 'hub.verify_token': 'x', 'hub.challenge': 'c' });
+    expect(challenge.status).toBe(401);
+    expect(await ingest.getJob(`ingest-${ch.id}-in-nothing`)).toBeUndefined();
   });
 
-  it('the subscription challenge echoes hub.challenge for the right token only; an unknown channel is 404', async () => {
-    const q = (id: string, token: string, mode = 'subscribe') =>
-      api
-        .http()
-        .get(`/v2/webhooks/channels/${id}`)
-        .query({ 'hub.mode': mode, 'hub.verify_token': token, 'hub.challenge': 'xyz789' });
-    const ok = await q(ch.id, ch.webhookVerifyToken!);
-    expect(ok.status).toBe(200);
-    expect(ok.text).toBe('xyz789');
-    expect((await q(ch.id, 'wrong-token')).status).toBe(401);
-    expect((await q(ch.id, ch.webhookVerifyToken!, 'unsubscribe')).status).toBe(401);
-    expect((await q('00000000-0000-4000-8000-000000000000', 'x')).status).toBe(404);
-    expect((await q('not-a-uuid', 'x')).status).toBe(404);
-  });
-
-  it('a delivery with a wrong, missing or malformed signature is a 401 and queues nothing', async () => {
-    const id = `wamid.bad.${Date.now()}`;
-    const body = payload(id, 'hello');
-    for (const sig of [
-      sign(body, 'someone-elses-secret'),
-      undefined,
-      'sha256=zz',
-      `md5=${'a'.repeat(32)}`,
-    ]) {
-      const res = await post(ch.id, body, sig);
-      expect(res.status).toBe(401);
-      expect(res.body.code).toBe('SIGNATURE_INVALID');
-    }
-    expect(await ingest.getJob(`ingest-${ch.id}-in-${id}`)).toBeUndefined();
-  });
-
-  it('a signature made over a different body does not verify (the raw bytes are what is signed)', async () => {
-    const id = `wamid.swap.${Date.now()}`;
-    const res = await post(ch.id, payload(id, 'tampered'), sign(payload(id, 'original')));
-    expect(res.status).toBe(401);
-  });
-
-  it('a correctly signed delivery is answered at once and queued as a normalised message and receipt', async () => {
-    const id = `wamid.good.${Date.now()}`;
-    const body = payload(id, 'Hi, is this open?');
-    const res = await post(ch.id, body, sign(body));
-    expect(res.status, JSON.stringify(res.body)).toBe(200);
-    expect(res.body).toEqual({ received: true });
-
-    const msg = await ingest.getJob(`ingest-${ch.id}-in-${id}`);
-    expect(msg?.data).toMatchObject({
-      type: 'inbound',
-      orgId: t.orgId,
-      channelUuid: ch.id,
-      message: {
-        providerMessageId: id,
-        peerKey: '919812345678',
-        peerName: 'Meera',
-        kind: 'text',
-        body: 'Hi, is this open?',
-      },
-    });
-    const rc = await ingest.getJob(`ingest-${ch.id}-rc-out-${id}-delivered`);
-    expect(rc?.data).toMatchObject({
-      type: 'receipt',
-      receipt: { providerMessageId: `out-${id}`, status: 'delivered' },
-    });
-  });
-
-  it('a redelivery of the same message collapses into one job (the ledger stays the real guard)', async () => {
-    const id = `wamid.dup.${Date.now()}`;
-    const body = payload(id, 'twice');
-    await post(ch.id, body, sign(body));
-    await post(ch.id, body, sign(body));
-    const jobs = (
-      await ingest.getJobs(['waiting', 'delayed', 'active', 'completed', 'failed'])
-    ).filter((j) => j.id === `ingest-${ch.id}-in-${id}`);
-    expect(jobs).toHaveLength(1);
-  });
-
-  it('a signed body that is not JSON is a 400, an empty body a 401', async () => {
-    const junk = 'not json at all';
-    expect((await post(ch.id, junk, sign(junk))).status).toBe(400);
-    expect((await post(ch.id, '', sign(''))).status).toBe(401);
-  });
-
-  it('an unknown channel is 404, and a simulator channel has no public door (401 whatever is sent)', async () => {
-    expect((await post('00000000-0000-4000-8000-000000000000', '{}', sign('{}'))).status).toBe(404);
-    const sim = await createSim(t.admin);
-    const body = '{"messages":[]}';
-    expect((await post(sim.id, body, sign(body))).status).toBe(401);
+  it('an unknown channel is 404', async () => {
     expect(
       (
         await api
           .http()
-          .get(`/v2/webhooks/channels/${sim.id}`)
-          .query({ 'hub.mode': 'subscribe', 'hub.verify_token': 'x', 'hub.challenge': 'c' })
+          .post('/v2/webhooks/channels/00000000-0000-4000-8000-000000000000')
+          .set('content-type', 'application/json')
+          .send('{}')
       ).status,
-    ).toBe(401);
-  });
-
-  it('a disconnected channel still takes deliveries (the provider must not be made to retry)', async () => {
-    expect(ch.status).toBe('disconnected');
-    const id = `wamid.disc.${Date.now()}`;
-    const body = payload(id, 'hello');
-    expect((await post(ch.id, body, sign(body))).status).toBe(200);
+    ).toBe(404);
   });
 });
 
@@ -827,7 +704,7 @@ describe('the dev simulator', () => {
   });
 
   it('a real channel takes no simulated traffic (404), and an unknown uuid is 404 too', async () => {
-    const wa = await createWa(t.admin, 'Real', '5000000001');
+    const wa = await createWa(t, 'Real', '5000000001');
     expect(
       (
         await api

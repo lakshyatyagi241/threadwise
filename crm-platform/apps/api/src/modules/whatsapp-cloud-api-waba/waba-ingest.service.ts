@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -43,7 +43,9 @@ export class WabaIngestService {
     private readonly repo: WabaConnectionsRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
-    private readonly receipts: BroadcastReceiptsService,
+    // A type-only annotation: the decorator-metadata read of the class would hit the broadcasts <-> waba import cycle.
+    @Inject(forwardRef(() => BroadcastReceiptsService))
+    private readonly receipts: InstanceType<typeof BroadcastReceiptsService>,
     private readonly templates: WabaTemplateEvents,
     @Inject(WHATSAPP_PROVIDER) private readonly provider: WhatsAppProvider,
     @Inject(WABA_INBOUND_SINK) private readonly sink: WabaInboundSink,

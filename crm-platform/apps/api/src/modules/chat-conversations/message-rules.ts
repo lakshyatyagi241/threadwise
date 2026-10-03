@@ -72,7 +72,8 @@ export function previewOf(m: {
 export function inboundMessageKind(m: Pick<NormalisedInbound, 'kind' | 'media'>): MessageKind {
   switch (m.kind) {
     case 'media':
-      return m.media?.mediaKind ?? 'document';
+      // A voice note is its own kind: the bubble plays it, and a recorded message reads differently from a sent audio file.
+      return m.media?.voice ? 'voice' : (m.media?.mediaKind ?? 'document');
     case 'location':
       return 'location';
     case 'contact':
@@ -97,6 +98,36 @@ export function kindOfFileMime(mime: string): 'image' | 'video' | 'audio' | 'doc
 
 /** Text shown for a delivery the adapter could not turn into anything we render. */
 export const UNSUPPORTED_BODY = 'This message type is not supported yet';
+
+/** The keys of an adapter's `meta` that are stored on the message (screens read them), and nothing else. */
+const CHANNEL_META_KEYS = [
+  'contacts',
+  'interactive',
+  'referral',
+  'rawType',
+  'forwarded',
+  'referredProduct',
+  'buttonPayload',
+  'flowName',
+  'flowResponse',
+  'providerErrors',
+  'order',
+  'animated',
+  'interactiveType',
+  'reason',
+] as const;
+const CHANNEL_META_MAX_BYTES = 16_384;
+
+/**
+ * What of an adapter's `meta` goes on the message row: only the known keys, and nothing at all when it is oversized. The adapter is
+ * trusted to be ours, but its input is a customer's, and a row is not a place to keep whatever a webhook happened to carry.
+ */
+export function channelMetaOf(meta: Record<string, unknown> | undefined): Record<string, unknown> {
+  if (!meta) return {};
+  const picked: Record<string, unknown> = {};
+  for (const k of CHANNEL_META_KEYS) if (meta[k] !== undefined) picked[k] = meta[k];
+  return JSON.stringify(picked).length > CHANNEL_META_MAX_BYTES ? {} : picked;
+}
 
 /** A failure reason is one short line. */
 export function failureReason(message: string): string {

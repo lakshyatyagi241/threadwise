@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { AuthAuditService } from '../auth';
 import { AddonFulfilmentService } from '../addons-extension-registry';
 import { WalletLedgerService, WalletSettingsService } from '../wallet-message-billing';
 import { nextPlanEnd, type BillingUnit } from './fulfilment-rules';
@@ -12,6 +13,8 @@ import { PaygwStore } from './paygw.store';
 export interface PaidFacts {
   gatewayPaymentId?: string;
   payload?: Record<string, unknown>;
+  /** An operator settled the order by hand (approve, mark paid): who, and the security event to write in the same transaction. */
+  operator?: { id: number; event: string };
 }
 
 /**
@@ -34,6 +37,7 @@ export class FulfilmentService {
     private readonly addons: AddonFulfilmentService,
     private readonly wallet: WalletLedgerService,
     private readonly walletSettings: WalletSettingsService,
+    private readonly audit: AuthAuditService,
   ) {}
 
   /** `applied` is false when the order was already paid (a replay), in which case nothing was changed. */
@@ -48,6 +52,29 @@ export class FulfilmentService {
       );
       if (!paid) return { applied: false };
       const effect = await this.apply(tx, paid);
+      // The coupon is counted once, in the same transaction as the payment: only the call that owns the paid transition gets here.
+      if (paid.couponId !== null) {
+        await tx.execute(
+          sql`UPDATE coupons SET uses_count = uses_count + 1 WHERE id = ${paid.couponId}`,
+        );
+      }
+      if (facts.operator) {
+        await tx.execute(
+          sql`UPDATE orders SET reviewed_at = now() WHERE org_id = ${paid.orgId} AND id = ${paid.id}`,
+        );
+        await this.audit.record(tx, {
+          event: facts.operator.event,
+          status: 'success',
+          actorType: 'platform_operator',
+          actorId: facts.operator.id,
+          payload: {
+            order: paid.orderNumber,
+            amount: paid.totalAmount,
+            currency: paid.currency,
+            applied: effect,
+          },
+        });
+      }
       await recordOrderEvent(tx, this.outbox, paid, 'paid', { applied: effect });
       return { applied: true };
     });

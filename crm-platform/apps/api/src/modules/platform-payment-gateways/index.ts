@@ -4,3 +4,7 @@
  */
 export { PlatformPaymentGatewaysModule } from './paygw.module';
 export { GatewayService } from './gateway.service';
+export { PaymentConfirmationService } from './payment-confirmation.service';
+export { SubscriptionLifecycleService } from './subscription-lifecycle.service';
+export { PaygwWorkerModule } from './paygw-worker.module';
+export { SubscriptionReconcilerService } from './subscription-reconciler.service';

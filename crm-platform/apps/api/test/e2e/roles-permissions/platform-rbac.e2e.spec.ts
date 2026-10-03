@@ -496,7 +496,7 @@ describe('permission catalogue (TW-RBAC-011..013)', () => {
     expect(list.kpis.usedInRoles + list.kpis.orphans).toBe(list.kpis.total);
     const users = list.data.find((p) => p.name === 'users.view')!;
     expect(users.roleCount).toBeGreaterThanOrEqual(4);
-    expect(list.data.filter((p) => p.isSystem)).toHaveLength(16);
+    expect(list.data.filter((p) => p.isSystem)).toHaveLength(PLATFORM_PERMISSION_KEYS.length);
   });
 
   it('composes module.action when the name has no dot, and the new key starts orphaned', async () => {

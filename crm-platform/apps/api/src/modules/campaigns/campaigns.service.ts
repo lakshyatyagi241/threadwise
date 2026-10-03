@@ -36,8 +36,8 @@ import {
 } from './campaign-rules';
 import { toCampaign } from './campaigns.mapper';
 import { CampaignsRepository, type NewCampaign } from './campaigns.repository';
-import { MODULE_KEY, toSnapshot } from './campaign-events';
-import { createdWebhook } from './campaign-webhook-events';
+import { MODULE_KEY } from './campaign-events';
+import { createdWebhook, toSnapshot } from './campaign-webhook-events';
 
 export { MODULE_KEY } from './campaign-events';
 

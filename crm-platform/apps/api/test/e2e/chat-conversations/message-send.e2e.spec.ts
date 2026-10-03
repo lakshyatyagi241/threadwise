@@ -14,6 +14,7 @@ import { MessageDispatchService } from '../../../src/modules/chat-conversations/
 import { OutboundService } from '../../../src/modules/chat-conversations/outbound.service';
 import { QueuedMessageRecoveryService } from '../../../src/modules/chat-conversations/queued-message-recovery.service';
 import type { Tenant } from '../contacts-attributes-tags/support';
+import { whatsappChannel } from './whatsapp-support';
 import {
   asUser,
   conversationOf,
@@ -558,25 +559,11 @@ describe('what is refused before anything is stored', () => {
       [t.orgId],
     );
 
-    // A metered channel: WhatsApp Cloud (connected by the owner connection; its adapter cannot send yet, which is not the point here).
-    const created = await p.api
-      .as(t.admin)
-      .post('/v2/channels')
-      .send({
-        kind: 'whatsapp_cloud',
-        name: 'Metered',
-        credentials: {
-          phoneNumberId: '6000000001',
-          accessToken: 'EAAB-secret-token-1122',
-          appSecret: 'app-secret-123456',
-        },
-      });
-    expect(created.status).toBe(201);
-    const wa = Number(
-      (await p.h.owner.query(`SELECT id FROM channels WHERE uuid = $1`, [created.body.id])).rows[0]
-        .id,
-    );
-    await p.h.owner.query(`UPDATE channels SET status = 'connected' WHERE id = $1`, [wa]);
+    // A metered channel: a WhatsApp number connected in the WABA domain and its inbox channel (its adapter is not driven here: the
+    // monthly cap is checked before any send).
+    const wa = (
+      await whatsappChannel(p.h, t.orgId, { phoneNumberId: '6000000001', label: 'Metered' })
+    ).channel.id;
     const waConv = (
       await p.h.owner.query(
         `INSERT INTO conversations (org_id, channel_id, peer_key, title, last_inbound_at, window_expires_at)
@@ -606,14 +593,16 @@ describe('what is refused before anything is stored', () => {
       ]),
     ).toBe(4);
 
-    // Room again (cap 3): the same send is accepted and stored; the WhatsApp adapter then refuses (not live), so it ends failed.
+    // Room again (cap 3): the same send is accepted and stored; the connection has no token (none was stored for this arrangement), so the live adapter refuses before any call and it ends failed.
     await p.h.owner.query(
       `UPDATE org_plan_state SET overrides = '{"limits":{"monthly_messages":3}}' WHERE org_id = $1`,
       [t.orgId],
     );
     const ok = await send(t, th, text('fits now'));
     expect(ok.message.status).toBe('queued');
-    expect((await waitStatus(ok.message.id, 'failed')).failure_code).toBe('CHANNEL_NOT_LIVE');
+    expect((await waitStatus(ok.message.id, 'failed')).failure_code).toBe(
+      'CHANNEL_CREDENTIALS_MISSING',
+    );
 
     // The simulator is a development tool: it never spends the allowance, however low the cap.
     await p.h.owner.query(

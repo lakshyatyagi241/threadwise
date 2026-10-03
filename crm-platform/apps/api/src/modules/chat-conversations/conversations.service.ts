@@ -22,6 +22,7 @@ import type {
 } from './conversations.facade';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
 import { defaultTitle, isPhoneChannel, normalizePeerKey } from './peer-key';
+import { MediaFetchService } from './media-fetch.service';
 import { previewOf } from './message-rules';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository } from './messages.repository';
@@ -52,6 +53,7 @@ export class ConversationsService implements ConversationsFacade {
     private readonly realtime: ChatRealtimePublisher,
     private readonly outbound: OutboundService,
     private readonly view: MessageViewService,
+    private readonly mediaFetch: MediaFetchService,
   ) {}
 
   // --- threads -------------------------------------------------------------------------------------------------------------------
@@ -224,8 +226,10 @@ export class ConversationsService implements ConversationsFacade {
     return this.outbound.enqueue(input);
   }
 
-  retryOutbound(messageId: string): Promise<MessageResponse> {
-    return this.outbound.retry(messageId);
+  async retryOutbound(messageId: string): Promise<MessageResponse> {
+    // One Retry button for both directions: on a customer's message it starts the failed file download again.
+    const inbound = await this.mediaFetch.retryIfInbound(messageId);
+    return inbound ?? this.outbound.retry(messageId);
   }
 
   async listMessages(

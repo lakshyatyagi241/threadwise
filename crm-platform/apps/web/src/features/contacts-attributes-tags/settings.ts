@@ -4,6 +4,7 @@ import { settingsTile } from '../_registry/settings-types';
 export const settings = [
   settingsTile({
     id: 'contact-stages',
+    shortcutFrom: ['/contacts', '/contact-groups', '/segments'],
     section: 'data',
     href: '/contact-stages',
     icon: 'pipelines',
@@ -12,6 +13,7 @@ export const settings = [
   }),
   settingsTile({
     id: 'contact-properties',
+    shortcutFrom: ['/contacts', '/contact-groups', '/segments'],
     section: 'data',
     href: '/contact-properties',
     icon: 'catalog',
@@ -20,6 +22,7 @@ export const settings = [
   }),
   settingsTile({
     id: 'attributes',
+    shortcutFrom: ['/contacts', '/contact-groups'],
     section: 'data',
     href: '/attributes',
     icon: 'attributes',
