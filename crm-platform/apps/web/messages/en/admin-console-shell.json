@@ -151,8 +151,14 @@
       "subtitle": "Configure your workspace, team, and integrations.",
       "tabs": {
         "general": "General",
+        "branding": "Branding",
+        "team": "Team & roles",
         "notifications": "Notifications",
-        "data": "Data"
+        "aikeys": "AI keys",
+        "security": "Security",
+        "api": "API & webhooks",
+        "data": "Data & export",
+        "appearance": "Appearance"
       },
       "general": {
         "workspace": "Workspace",
@@ -270,6 +276,40 @@
           "confirmMessage": "\"{name}\" and everything in it will be deleted and everyone will be signed out. This is irreversible.",
           "failed": "The workspace could not be deleted."
         }
+      },
+      "groups": {
+        "workspace": "Workspace",
+        "system": "System"
+      },
+      "railLabel": "Settings sections",
+      "personal": {
+        "title": "Your account",
+        "body": "Profile, password and personal preferences."
+      },
+      "api": {
+        "restTitle": "General REST API",
+        "rest1": "Create an API key to read and write contacts, conversations and messages from your own systems.",
+        "rest2": "Every key is scoped to this workspace and can be revoked at any time.",
+        "rest3": "Requests are limited per minute according to your plan.",
+        "webhooksTitle": "Webhooks",
+        "webhooksBody": "Send events to your own endpoints and receive events from other tools.",
+        "manage": "Manage integrations"
+      },
+      "appearance": {
+        "title": "Appearance",
+        "note": "Choose how the app looks for you. This is the same choice as the sun and moon button in the header.",
+        "choices": {
+          "light": {
+            "label": "Light",
+            "body": "Bright pages with soft paper tones."
+          },
+          "dark": {
+            "label": "Dark",
+            "body": "Dim pages that are easier on the eyes at night."
+          }
+        },
+        "save": "Save",
+        "saved": "Appearance updated."
       }
     },
     "topNav": {

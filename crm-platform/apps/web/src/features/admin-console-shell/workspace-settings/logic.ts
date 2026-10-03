@@ -8,10 +8,40 @@ import {
   type SaveNotificationPrefsRequest,
 } from '@crm/contracts';
 
-export const SETTINGS_TABS = ['general', 'notifications', 'data'] as const;
+export const SETTINGS_TABS = [
+  'general',
+  'branding',
+  'team',
+  'notifications',
+  'aikeys',
+  'security',
+  'api',
+  'data',
+  'appearance',
+] as const;
 export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
-/** `?tab=` value to a tab; anything unknown reads as General (Reference). */
+/** The rail's two groups, in Reference's order (TW-ASHELL-032). */
+export const TAB_GROUPS: ReadonlyArray<{
+  id: 'workspace' | 'system';
+  tabs: readonly SettingsTab[];
+}> = [
+  { id: 'workspace', tabs: ['general', 'branding', 'team', 'notifications', 'aikeys'] },
+  { id: 'system', tabs: ['security', 'api', 'data', 'appearance'] },
+];
+
+/**
+ * Tabs whose screen lives in another domain's page: the rail links straight to it and a ?tab= deep link is redirected there
+ * (Reference swapped panes client-side; each of these now has its own route, as the inventory's port notes ask).
+ */
+export const TAB_LINKS: Partial<Record<SettingsTab, string>> = {
+  branding: '/account/branding',
+  team: '/settings/team',
+  aikeys: '/ai-keys',
+  security: '/account/security',
+};
+
+/** ?tab= value to a tab; anything unknown reads as General (Reference). */
 export const parseTab = (raw: string | null | undefined): SettingsTab =>
   (SETTINGS_TABS as readonly string[]).includes(raw ?? '') ? (raw as SettingsTab) : 'general';
 

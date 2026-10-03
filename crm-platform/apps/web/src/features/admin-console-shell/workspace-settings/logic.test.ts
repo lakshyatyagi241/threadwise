@@ -6,7 +6,17 @@ import {
   NOTIFICATION_EVENT_KEYS,
   type NotificationPrefsResponse,
 } from '@crm/contracts';
-import { canSubmitDelete, parseTab, timeZoneList, toMatrix, toRequest, toggleFlag } from './logic';
+import {
+  SETTINGS_TABS,
+  TAB_GROUPS,
+  TAB_LINKS,
+  canSubmitDelete,
+  parseTab,
+  timeZoneList,
+  toMatrix,
+  toRequest,
+  toggleFlag,
+} from './logic';
 
 const prefs = (): NotificationPrefsResponse => ({
   events: NOTIFICATION_EVENT_KEYS.map((key) => ({
@@ -33,6 +43,14 @@ describe('Settings tab shell (TW-ASHELL-032)', () => {
     expect(parseTab('data')).toBe('data');
     expect(parseTab('nope')).toBe('general');
     expect(parseTab(null)).toBe('general');
+    expect(parseTab('security')).toBe('security');
+  });
+
+  it('has the nine Reference tabs in two rail groups, and links the ones another domain owns', () => {
+    expect(SETTINGS_TABS).toHaveLength(9);
+    expect(TAB_GROUPS.flatMap((g) => g.tabs).sort()).toEqual([...SETTINGS_TABS].sort());
+    expect(TAB_GROUPS[0]?.tabs).toEqual(['general', 'branding', 'team', 'notifications', 'aikeys']);
+    expect(Object.keys(TAB_LINKS).sort()).toEqual(['aikeys', 'branding', 'security', 'team']);
   });
 });
 
