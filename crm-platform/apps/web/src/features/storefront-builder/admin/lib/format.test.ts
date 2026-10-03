@@ -3,6 +3,7 @@ import {
   barPercent,
   formatInt,
   formatMoney,
+  formatOrderTotal,
   formatWhen,
   orderTone,
   shopHref,
@@ -10,13 +11,21 @@ import {
 } from './format';
 
 describe('formatMoney', () => {
-  it('divides the minor amount by 100 and drops .00 on whole amounts', () => {
-    expect(formatMoney(300000, 'USD', 'en')).toBe('$3,000');
+  it('divides the minor amount by 100 and always keeps two decimals', () => {
+    expect(formatMoney(300000, 'USD', 'en')).toBe('$3,000.00');
     expect(formatMoney(150050, 'USD', 'en')).toBe('$1,500.50');
-    expect(formatMoney(0, 'USD', 'en')).toBe('$0');
+    expect(formatMoney(0, 'USD', 'en')).toBe('$0.00');
   });
   it('falls back to the code for an unknown currency', () => {
     expect(formatMoney(12345, 'ZZZZ', 'en')).toBe('ZZZZ 123.45');
+  });
+});
+
+describe('formatOrderTotal', () => {
+  it('prints symbol, space and two decimals for the four known currencies, the code for the rest', () => {
+    expect(formatOrderTotal(299800, 'INR', 'en')).toBe('₹ 2,998.00');
+    expect(formatOrderTotal(1050, 'USD', 'en')).toBe('$ 10.50');
+    expect(formatOrderTotal(1050, 'KES', 'en')).toBe('KES 10.50');
   });
 });
 

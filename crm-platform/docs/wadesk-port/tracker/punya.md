@@ -44,3 +44,38 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-CAT-035 | done |  |  |
 | WD-CAT-036 | blocked |  | Store rail belongs to the STORE domain |
 
+## storefront-builder (store)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-STORE-001 | todo |  |  |
+| WD-STORE-002 | todo |  |  |
+| WD-STORE-003 | todo |  |  |
+| WD-STORE-004 | todo |  |  |
+| WD-STORE-005 | todo |  |  |
+| WD-STORE-006 | todo |  |  |
+| WD-STORE-007 | todo |  |  |
+| WD-STORE-008 | todo |  |  |
+| WD-STORE-009 | todo |  |  |
+| WD-STORE-010 | todo |  |  |
+| WD-STORE-011 | todo |  |  |
+| WD-STORE-012 | todo |  |  |
+| WD-STORE-013 | todo |  |  |
+| WD-STORE-014 | todo |  |  |
+| WD-STORE-015 | todo |  |  |
+| WD-STORE-016 | todo |  |  |
+| WD-STORE-017 | todo |  |  |
+| WD-STORE-018 | todo |  |  |
+| WD-STORE-019 | todo |  |  |
+| WD-STORE-020 | todo |  |  |
+| WD-STORE-021 | todo |  |  |
+| WD-STORE-022 | todo |  |  |
+| WD-STORE-023 | todo |  |  |
+| WD-STORE-024 | todo |  |  |
+| WD-STORE-025 | todo |  |  |
+| WD-STORE-026 | todo |  |  |
+| WD-STORE-027 | todo |  |  |
+| WD-STORE-028 | todo |  |  |
+| WD-STORE-029 | todo |  |  |
+| WD-STORE-030 | todo |  |  |
+| WD-STORE-031 | todo |  |  |

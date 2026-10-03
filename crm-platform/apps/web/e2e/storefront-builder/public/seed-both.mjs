@@ -71,7 +71,7 @@ export function products() {
       price,
       compare: g % 5 === 0 || g === 1 ? Math.round((price * 14) / 10) : null,
       category: g === 9 ? null : cats[g % 4],
-      status: g === 8 ? 'draft' : 'active', // drafts that are in stock are visible (QUIRK)
+      status: g === 60 ? 'draft' : 'active', // drafts that are in stock are visible (QUIRK)
       in_stock: g !== 6,
       stock_qty: g === 2 || g === 3 ? 3 : g === 4 ? 1 : g % 7 === 0 ? 10 : g === 12 ? 0 : null,
       sort_order: g,

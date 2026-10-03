@@ -7,6 +7,7 @@ import {
   discountPercent,
   mergeProducts,
   priceRange,
+  sortProducts,
   type FilterState,
 } from './catalog';
 
@@ -56,15 +57,15 @@ describe('filters (WD-STORE-031)', () => {
     expect(applyFilters(list, f({ min: 'abc', max: '' }))).toHaveLength(3);
   });
 
-  it('hides sold-out products unless asked, and filters on sale', () => {
-    expect(names(applyFilters(list, f({})))).not.toContain('Jeans');
-    expect(names(applyFilters(list, f({ inStockOnly: false })))).toContain('Jeans');
+  it('"In stock only" never hides a listed product (WaDesk lists only in-stock rows), and filters on sale', () => {
+    expect(names(applyFilters(list, f({})))).toContain('Jeans');
     expect(names(applyFilters(list, f({ saleOnly: true })))).toEqual(['Red shirt']);
   });
 
-  it('sorts, and Featured restores the server order (WaDesk left the last sort)', () => {
+  it('sorts', () => {
     expect(names(applyFilters(list, f({ sort: 'price-desc' })))).toEqual([
       'Cap',
+      'Jeans',
       'Red shirt',
       'Blue Shirt',
     ]);
@@ -72,14 +73,29 @@ describe('filters (WD-STORE-031)', () => {
     expect(names(applyFilters(list, f({ sort: 'name-asc' })))).toEqual([
       'Blue Shirt',
       'Cap',
+      'Jeans',
       'Red shirt',
     ]);
     expect(names(applyFilters(list, f({ sort: 'name-desc' })))[0]).toBe('Red shirt');
     expect(names(applyFilters(list, f({ sort: 'featured' })))).toEqual([
       'Blue Shirt',
       'Red shirt',
+      'Jeans',
       'Cap',
     ]);
+  });
+
+  it('QUIRK: Featured keeps the last sort order instead of restoring the server order', () => {
+    const last = sortProducts(list, 'price-desc').map((p) => p.id);
+    expect(names(applyFilters(list, f({ sort: 'featured' }), last))).toEqual([
+      'Cap',
+      'Jeans',
+      'Red shirt',
+      'Blue Shirt',
+    ]);
+    // a card appended later (Show more) lands after the known ones
+    const more = [...list, mk(5, { name: 'Late' })];
+    expect(names(applyFilters(more, f({ sort: 'featured' }), last)).at(-1)).toBe('Late');
   });
 
   it('derives facets from everything loaded', () => {

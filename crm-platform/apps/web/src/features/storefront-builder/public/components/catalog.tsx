@@ -11,7 +11,9 @@ import {
   isSortMode,
   mergeProducts,
   priceRange,
+  sortProducts,
   type FilterState,
+  type SortMode,
 } from '../lib/catalog';
 import { formatMinor } from '../lib/money';
 import { ChevronDownIcon, GridIcon, ListIcon } from './icons';
@@ -34,13 +36,22 @@ export function Catalog({ home }: { home: PublicHome }) {
   const [failed, setFailed] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [view, setView] = useState<'grid' | 'list'>('grid');
+  // QUIRK (WaDesk): "Featured" keeps the order of the last sort; this is that order.
+  const [lastOrder, setLastOrder] = useState<string[] | null>(null);
 
   const state = useMemo<FilterState>(() => ({ ...filters, term: search }), [filters, search]);
-  const shown = useMemo(() => applyFilters(products, state), [products, state]);
+  const shown = useMemo(
+    () => applyFilters(products, state, lastOrder),
+    [products, state, lastOrder],
+  );
   const categories = useMemo(() => categoriesOf(products), [products]);
   const range = useMemo(() => priceRange(products), [products]);
 
   const patch = (p: Partial<FilterState>) => setFilters((f) => ({ ...f, ...p }));
+  const pickSort = (mode: SortMode) => {
+    patch({ sort: mode });
+    if (mode !== 'featured') setLastOrder(sortProducts(products, mode).map((p) => p.id));
+  };
   const toggleCategory = (c: string) =>
     patch({
       categories: filters.categories.includes(c)
@@ -63,7 +74,10 @@ export function Catalog({ home }: { home: PublicHome }) {
       return;
     }
     register(res.data.products);
-    setProducts((cur) => mergeProducts(cur, res.data.products));
+    const merged = mergeProducts(products, res.data.products);
+    setProducts(merged);
+    if (filters.sort !== 'featured')
+      setLastOrder(sortProducts(merged, filters.sort).map((p) => p.id));
     setLoadedPage(res.data.page);
     setHasMore(res.data.hasMore);
     setTotal(res.data.total);
@@ -91,7 +105,7 @@ export function Catalog({ home }: { home: PublicHome }) {
           <select
             id={`${uid}-sort`}
             value={filters.sort}
-            onChange={(e) => isSortMode(e.target.value) && patch({ sort: e.target.value })}
+            onChange={(e) => isSortMode(e.target.value) && pickSort(e.target.value)}
           >
             <option value="featured">{t('catalog.sort.featured')}</option>
             <option value="price-asc">{t('catalog.sort.priceAsc')}</option>
@@ -108,7 +122,7 @@ export function Catalog({ home }: { home: PublicHome }) {
               onClick={() => setView('grid')}
             >
               <GridIcon size={13} />
-            </button>
+            </button>{' '}
             <button
               type="button"
               aria-pressed={view === 'list'}
@@ -124,10 +138,10 @@ export function Catalog({ home }: { home: PublicHome }) {
 
       <div className="sf-shop-layout">
         <aside className="sf-filters" aria-label={t('catalog.filters.title')}>
-          <h2>{t('catalog.filters.title')}</h2>
+          <h3>{t('catalog.filters.title')}</h3>
           {categories.length > 0 ? (
-            <fieldset className="sf-filter-group">
-              <legend>{t('catalog.filters.category')}</legend>
+            <div className="sf-filter-group" role="group" aria-label={t('catalog.filters.category')}>
+              <h3>{t('catalog.filters.category')}</h3>
               {categories.map((c) => (
                 <label key={c}>
                   <input
@@ -138,11 +152,11 @@ export function Catalog({ home }: { home: PublicHome }) {
                   {c}
                 </label>
               ))}
-            </fieldset>
+            </div>
           ) : null}
           {range.max > 0 ? (
-            <fieldset className="sf-filter-group">
-              <legend>{t('catalog.filters.price')}</legend>
+            <div className="sf-filter-group" role="group" aria-label={t('catalog.filters.price')}>
+              <h3>{t('catalog.filters.price')}</h3>
               <div className="sf-price-range">
                 <input
                   type="number"
@@ -170,10 +184,10 @@ export function Catalog({ home }: { home: PublicHome }) {
                   max: formatMinor(range.max * 100, shop.currencyCode),
                 })}
               </div>
-            </fieldset>
+            </div>
           ) : null}
-          <fieldset className="sf-filter-group">
-            <legend>{t('catalog.filters.availability')}</legend>
+          <div className="sf-filter-group" role="group" aria-label={t('catalog.filters.availability')}>
+            <h3>{t('catalog.filters.availability')}</h3>
             <label>
               <input
                 type="checkbox"
@@ -190,7 +204,7 @@ export function Catalog({ home }: { home: PublicHome }) {
               />
               {t('catalog.filters.onSale')}
             </label>
-          </fieldset>
+          </div>
           <button type="button" className="sf-reset" onClick={reset}>
             {t('catalog.filters.reset')}
           </button>

@@ -28,11 +28,41 @@ export const storeRecentOrderSchema = z.object({
   createdAt: z.string().datetime(),
 });
 
+/** The numbers beside the store sidebar entries (WaDesk shows each when above zero). Workspace-wide, every shop. */
+export const storeSidebarCountsSchema = z.object({
+  orders: z.number().int(),
+  products: z.number().int(),
+  groups: z.number().int(),
+  coupons: z.number().int(),
+  /** Reviews waiting for a decision. */
+  reviewsPending: z.number().int(),
+  /** Payment configurations of the workspace. */
+  payments: z.number().int(),
+  /** Active workspace-level checkout gateways. */
+  gateways: z.number().int(),
+  customers: z.number().int(),
+});
+export type StoreSidebarCounts = z.infer<typeof storeSidebarCountsSchema>;
+
+/**
+ * How the store reaches WhatsApp, for the sidebar's top card and its Live pill (WaDesk: any of the three ways makes it Live).
+ * `official`: the primary official config is connected (`label` is its provider name). `device`: the shop's own bound device is
+ * connected (`label` is "+91 98..."). `other_device`: some other device of the workspace is connected. `none`: Setup.
+ */
+export const storeConnectionSchema = z.object({
+  kind: z.enum(['official', 'device', 'other_device', 'none']),
+  label: z.string().nullable(),
+  live: z.boolean(),
+});
+export type StoreConnection = z.infer<typeof storeConnectionSchema>;
+
 export const storeOverviewSchema = z.object({
   shop: storefrontResponseSchema,
   /** Every shop of the workspace, newest update first: feeds the shop switcher (shown with two or more). */
   shops: z.array(z.object({ id: uuidSchema, shopName: z.string().nullable(), slug: z.string() })),
   stats: storeStatsSchema,
+  counts: storeSidebarCountsSchema,
+  connection: storeConnectionSchema,
   salesByDay: z.object({
     labels: z.array(z.string()),
     /** Major units, whole numbers. */

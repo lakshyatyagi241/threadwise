@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildSalesChart, labelIndexes, niceMax, smoothPath, ticks } from './chart';
+import { buildSalesChart, labelIndexes, niceMax, niceScale, smoothPath, ticks } from './chart';
 
 const BOX = { width: 600, height: 260, left: 40, right: 30, top: 10, bottom: 30 };
 
@@ -13,6 +13,18 @@ describe('niceMax and ticks', () => {
   });
   it('spaces ticks evenly from zero', () => {
     expect(ticks(100, 4)).toEqual([0, 25, 50, 75, 100]);
+  });
+});
+
+describe('niceScale', () => {
+  it('ends on a round multiple with at most six intervals', () => {
+    expect(niceScale(5998)).toEqual({ top: 6000, step: 1000, count: 6 });
+    expect(niceScale(1440)).toEqual({ top: 1500, step: 500, count: 3 });
+    expect(niceScale(0)).toEqual({ top: 1, step: 1, count: 1 });
+  });
+  it('keeps an orders axis on whole numbers', () => {
+    expect(niceScale(2, 1)).toEqual({ top: 2, step: 1, count: 2 });
+    expect(niceScale(1, 1)).toEqual({ top: 1, step: 1, count: 1 });
   });
 });
 
@@ -57,7 +69,7 @@ describe('buildSalesChart', () => {
   });
   it('scales each axis on its own', () => {
     expect(model.revenueTop).toBe(1000);
-    expect(model.ordersTop).toBe(5);
+    expect(model.ordersTop).toBe(4);
   });
   it('survives an all-zero series', () => {
     const flat = buildSalesChart([0, 0], [0, 0], BOX);

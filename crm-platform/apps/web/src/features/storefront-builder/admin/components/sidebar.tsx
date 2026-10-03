@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import type { StoreSidebarCounts } from '@crm/contracts';
 import { Select, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useOverview } from '../api/hooks';
@@ -14,12 +15,35 @@ import {
   SETTINGS_ENTRIES,
   activeKey,
   entryHref,
-  isLive,
   visibleEntries,
   type SidebarEntry,
 } from '../lib/sidebar';
 import { ErrorPanel, Eyebrow, Skeleton } from './parts';
 import { ExternalIcon, PathIcon, StoreIcon } from './icons';
+
+/** The number beside an entry (WaDesk shows it when above zero); the overview and settings entries carry none. */
+function countFor(key: SidebarEntry['key'], counts: StoreSidebarCounts): number | undefined {
+  switch (key) {
+    case 'orders':
+      return counts.orders;
+    case 'products':
+      return counts.products;
+    case 'groups':
+      return counts.groups;
+    case 'coupons':
+      return counts.coupons;
+    case 'reviews':
+      return counts.reviewsPending;
+    case 'payments':
+      return counts.payments;
+    case 'gateways':
+      return counts.gateways;
+    case 'customers':
+      return counts.customers;
+    default:
+      return undefined;
+  }
+}
 
 const CARD = 'rounded-xl border border-border bg-background p-3 shadow-sm';
 
@@ -78,7 +102,17 @@ function NavRow({
       >
         <PathIcon d={entry.icon} />
         {label}
-        <span className="ms-auto rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium">
+        {badge !== undefined && badge > 0 && (
+          <span className="ms-auto text-[11px] tabular-nums opacity-80">
+            {formatInt(badge, locale)}
+          </span>
+        )}
+        <span
+          className={cn(
+            'rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium',
+            !(badge !== undefined && badge > 0) && 'ms-auto',
+          )}
+        >
           {t('comingSoon')}
         </span>
       </span>
@@ -152,10 +186,17 @@ export function StoreSidebar() {
     );
   }
 
-  const { shop, shops, stats } = overview.data;
-  const live = isLive(shop);
+  const { shop, shops, counts, connection } = overview.data;
+  const live = connection.live;
   const name = shop.shopName?.trim() || session.org.name || t('yourStore');
-  const connection = shop.sendingLabel ?? t('notConnected');
+  const connectionLine =
+    connection.kind === 'official'
+      ? (connection.label ?? t('notConnected'))
+      : connection.kind === 'device'
+        ? `${t('unofficialApi')} · ${connection.label ?? ''}`.trim()
+        : connection.kind === 'other_device'
+          ? t('deviceConnected')
+          : t('notConnected');
   const entries = visibleEntries(MAIN_ENTRIES, (p) =>
     p === 'store.storefront.read' ? canStorefront : true,
   );
@@ -181,7 +222,7 @@ export function StoreSidebar() {
         </div>
         <div className="mt-3 text-lg font-semibold leading-tight">{name}</div>
         <div className="mt-0.5 truncate text-xs text-muted-foreground" dir="auto">
-          {connection}
+          {connectionLine}
         </div>
       </div>
 
@@ -241,7 +282,7 @@ export function StoreSidebar() {
             entry={e}
             active={active === e.key}
             shopId={shop.id}
-            badge={e.key === 'products' ? stats.products : undefined}
+            badge={countFor(e.key, counts)}
           />
         ))}
         <Eyebrow className="px-3 pb-1.5 pt-3">{t('settings')}</Eyebrow>

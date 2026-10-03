@@ -12,7 +12,7 @@ import {
   Input,
   Select,
   Spinner,
-  Textarea,
+  PasswordInput,
   cn,
   useToast,
 } from '@crm/ui';
@@ -463,9 +463,10 @@ function SettingsFormView({ shop, onReload }: { shop: StorefrontResponse; onRelo
               htmlFor={id('rzpKeySecret')}
               error={errorOf('rzpKeySecret')}
             >
-              <Input
+              <PasswordInput
                 id={id('rzpKeySecret')}
-                type="password"
+                showLabel={t('payment.razorpay.show')}
+                hideLabel={t('payment.razorpay.hide')}
                 autoComplete="new-password"
                 value={form.rzpKeySecret}
                 placeholder={shop.razorpay.hasKeySecret ? t('payment.razorpay.stored') : ''}
@@ -480,9 +481,10 @@ function SettingsFormView({ shop, onReload }: { shop: StorefrontResponse; onRelo
               htmlFor={id('rzpWebhookSecret')}
               error={errorOf('rzpWebhookSecret')}
             >
-              <Input
+              <PasswordInput
                 id={id('rzpWebhookSecret')}
-                type="password"
+                showLabel={t('payment.razorpay.show')}
+                hideLabel={t('payment.razorpay.hide')}
                 autoComplete="new-password"
                 value={form.rzpWebhookSecret}
                 placeholder={shop.razorpay.hasWebhookSecret ? t('payment.razorpay.stored') : ''}
@@ -536,9 +538,8 @@ function SettingsFormView({ shop, onReload }: { shop: StorefrontResponse; onRelo
             error={errorOf('cartRecoveryMessage')}
             className="md:col-span-3"
           >
-            <Textarea
+            <Input
               id={id('cartRecoveryMessage')}
-              rows={2}
               maxLength={1024}
               value={form.cartRecoveryMessage}
               placeholder={t('recovery.messagePlaceholder')}

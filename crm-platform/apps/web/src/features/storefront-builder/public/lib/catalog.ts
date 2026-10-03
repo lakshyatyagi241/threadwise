@@ -25,8 +25,11 @@ export const DEFAULT_FILTERS: FilterState = {
   sort: 'featured',
 };
 
-export const isSoldOut = (p: Pick<PublicProduct, 'stockQty'>): boolean =>
-  p.stockQty !== null && p.stockQty <= 0;
+/**
+ * The card's "Sold out" state. WaDesk lists only products whose in-stock flag is on, so a listed product is never sold out on
+ * the card or the product page; a stock of 0 is enforced when it is added to the cart instead (see the cart store).
+ */
+export const isSoldOut = (_p: Pick<PublicProduct, 'stockQty'>): boolean => false;
 
 export const isOnSale = (p: Pick<PublicProduct, 'comparePriceMinor' | 'priceMinor'>): boolean =>
   p.comparePriceMinor !== null && p.comparePriceMinor > p.priceMinor;
@@ -44,8 +47,40 @@ const bound = (raw: string): number | null => {
   return Number.isNaN(n) ? null : n * 100;
 };
 
-/** Multiple categories are OR, every other filter is AND. "Featured" is the server order, restored whenever it is picked. */
-export function applyFilters(products: readonly PublicProduct[], f: FilterState): PublicProduct[] {
+/** The products in the order a sort mode puts them (ties keep the incoming order). */
+export function sortProducts(products: readonly PublicProduct[], mode: SortMode): PublicProduct[] {
+  const sorted = [...products];
+  switch (mode) {
+    case 'price-asc':
+      return sorted.sort((a, b) => a.priceMinor - b.priceMinor);
+    case 'price-desc':
+      return sorted.sort((a, b) => b.priceMinor - a.priceMinor);
+    case 'name-asc':
+      return sorted.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+    case 'name-desc':
+      return sorted.sort((a, b) => b.name.toLowerCase().localeCompare(a.name.toLowerCase()));
+    default:
+      return sorted;
+  }
+}
+
+/** Puts `list` in the order of `previous` ids; products it does not know keep their place after the known ones. */
+function orderLike(list: PublicProduct[], previous: readonly string[]): PublicProduct[] {
+  const at = new Map(previous.map((id, i) => [id, i] as const));
+  const known = list.filter((p) => at.has(p.id)).sort((a, b) => at.get(a.id)! - at.get(b.id)!);
+  return [...known, ...list.filter((p) => !at.has(p.id))];
+}
+
+/**
+ * Multiple categories are OR, every other filter is AND.
+ * QUIRK (WaDesk): picking "Featured" does not restore the server order, the cards stay where the last price or name sort left
+ * them. `previousOrder` is the id order of that last sort; without it "Featured" is the server order.
+ */
+export function applyFilters(
+  products: readonly PublicProduct[],
+  f: FilterState,
+  previousOrder?: readonly string[] | null,
+): PublicProduct[] {
   const term = f.term.trim().toLowerCase();
   const min = bound(f.min);
   const max = bound(f.max);
@@ -58,18 +93,8 @@ export function applyFilters(products: readonly PublicProduct[], f: FilterState)
     if (f.saleOnly && !isOnSale(p)) return false;
     return true;
   });
-  if (f.sort === 'featured') return shown;
-  const sorted = [...shown];
-  switch (f.sort) {
-    case 'price-asc':
-      return sorted.sort((a, b) => a.priceMinor - b.priceMinor);
-    case 'price-desc':
-      return sorted.sort((a, b) => b.priceMinor - a.priceMinor);
-    case 'name-asc':
-      return sorted.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-    default:
-      return sorted.sort((a, b) => b.name.toLowerCase().localeCompare(a.name.toLowerCase()));
-  }
+  if (f.sort === 'featured') return previousOrder ? orderLike(shown, previousOrder) : shown;
+  return sortProducts(shown, f.sort);
 }
 
 /** Distinct non-empty categories, in order of first appearance, over everything loaded so far. */

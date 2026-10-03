@@ -18,14 +18,14 @@ export function Hero({ shop }: { shop: PublicShop }) {
         <h1 id="sf-hero-title">{t('hero.welcome', { shop: shop.name })}</h1>
       )}
       <p>{t('hero.sub')}</p>
-      <ul className="sf-hero-trust">
+      <div className="sf-hero-trust">
         {(['cod', 'chat', 'returns'] as const).map((k) => (
-          <li key={k}>
+          <span key={k}>
             <CheckIcon size={14} />
             {t(`hero.trust.${k}`)}
-          </li>
+          </span>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }

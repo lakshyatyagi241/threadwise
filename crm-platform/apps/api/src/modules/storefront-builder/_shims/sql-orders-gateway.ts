@@ -171,6 +171,28 @@ export class SqlOrdersGateway implements OrdersGateway {
     }));
   }
 
+  async sidebarCounts(tx: Tx, orgId: number) {
+    const res = await tx.execute(sql`
+      SELECT
+        (SELECT count(*) FROM wa_orders WHERE org_id = ${orgId})::int AS orders,
+        (SELECT count(*) FROM wa_groups WHERE org_id = ${orgId})::int AS groups,
+        (SELECT count(*) FROM wa_coupons WHERE org_id = ${orgId})::int AS coupons,
+        (SELECT count(*) FROM wa_product_reviews WHERE org_id = ${orgId} AND status = 'pending')::int AS reviews_pending,
+        (SELECT count(*) FROM workspace_payment_configs WHERE org_id = ${orgId})::int AS payments,
+        (SELECT count(*) FROM wa_merchant_gateways WHERE org_id = ${orgId} AND coalesce(storefront_id, 0) = 0 AND active)::int AS gateways,
+        (SELECT count(*) FROM wa_customer_profiles WHERE org_id = ${orgId})::int AS customers`);
+    const r = res.rows[0] as Record<string, number | string>;
+    return {
+      orders: Number(r.orders),
+      groups: Number(r.groups),
+      coupons: Number(r.coupons),
+      reviewsPending: Number(r.reviews_pending),
+      payments: Number(r.payments),
+      gateways: Number(r.gateways),
+      customers: Number(r.customers),
+    };
+  }
+
   async phoneHistory(tx: Tx, orgId: number, phoneDigits: string): Promise<PhoneHistory> {
     if (!phoneDigits) return { priorCount: 0, priorCancelled: 0, priorDelivered: 0 };
     // Digits on both sides: WaDesk compared the digits-only phone with a column that kept the "+", so a returning buyer who

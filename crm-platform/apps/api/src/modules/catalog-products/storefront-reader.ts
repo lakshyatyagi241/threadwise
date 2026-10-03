@@ -31,6 +31,10 @@ export interface StorefrontProduct {
   /** Null means unlimited. */
   stockQty: number | null;
   metaRetailerId: string | null;
+  /** Optional so older fixtures still type-check; the public shop shows them ("New" badge, weight and tags in the meta list). */
+  createdAt?: Date;
+  weightGrams?: number | null;
+  tags?: string[];
 }
 
 export interface StorefrontReview {

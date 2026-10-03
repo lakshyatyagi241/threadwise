@@ -62,13 +62,6 @@ afterAll(async () => {
 
 // --- arranging ----------------------------------------------------------------------------------------------------------
 
-const ADMIN = [
-  ['store.dashboard.read'],
-  ['store.shops.manage'],
-  ['store.storefront.read'],
-  ['store.storefront.manage'],
-] as Array<[string, ('all' | 'team' | 'own')?]>;
-
 async function device(t: Tenant, phone = '9812345678'): Promise<string> {
   const r = await h.owner.query(
     `INSERT INTO devices (org_id, device_name, country_code, phone_number, status, active)
