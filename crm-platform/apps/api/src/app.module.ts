@@ -28,6 +28,9 @@ import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CampaignsModule } from './modules/campaigns';
+import { ChannelFacebookModule } from './modules/channel-facebook';
+import { ChannelInstagramModule } from './modules/channel-instagram';
+import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
@@ -168,6 +171,9 @@ import { HealthModule } from './health/health.module';
     BroadcastsModule,
     CampaignsModule,
     ChannelTelegramModule,
+    ChannelFacebookModule,
+    ChannelInstagramModule,
+    ShopifyWoocommerceModule,
     CatalogProductsModule,
     ChatbotWidgetModule,
     PartnerModule,

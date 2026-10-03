@@ -177,6 +177,64 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // Facebook channel (TW-FB)
+  /** No Meta app is configured on this install, so a Page cannot be connected. */
+  FB_NOT_CONFIGURED: 'FB_NOT_CONFIGURED',
+  /** The OAuth state did not round-trip: a forged or stale callback (login-CSRF guard). */
+  FB_STATE_INVALID: 'FB_STATE_INVALID',
+  /** Meta refused the code. */
+  FB_CODE_REJECTED: 'FB_CODE_REJECTED',
+  /** The account manages no Page we could store. */
+  FB_NO_PAGES: 'FB_NO_PAGES',
+  /** A pasted token did not resolve to a Page. */
+  FB_TOKEN_NOT_A_PAGE: 'FB_TOKEN_NOT_A_PAGE',
+  /** Refresh: Meta did not answer for the Page (its token may need re-auth). */
+  FB_REFRESH_FAILED: 'FB_REFRESH_FAILED',
+  /** A broadcast needs a message. */
+  FB_BROADCAST_EMPTY: 'FB_BROADCAST_EMPTY',
+  /** None of the picked people are inside the 24 hour window of that Page. */
+  FB_NO_RECIPIENTS: 'FB_NO_RECIPIENTS',
+  /** The Page is not connected, or Meta revoked its token. */
+  FB_PAGE_UNAVAILABLE: 'FB_PAGE_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  FB_NOTHING_TO_SEND: 'FB_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  FB_NOTHING_TO_RETRY: 'FB_NOTHING_TO_RETRY',
+  /** Meta refused a Messenger profile change; the message carries its reason. */
+  FB_SETUP_REJECTED: 'FB_SETUP_REJECTED',
+  /** Meta's Graph version no longer accepts the field (the welcome greeting). */
+  FB_SETUP_UNSUPPORTED: 'FB_SETUP_UNSUPPORTED',
+  /** A post cannot be made as written (nothing in it, photos and a link together, a video address that is not HTTPS). */
+  FB_POST_INVALID: 'FB_POST_INVALID',
+  /** The schedule is outside Meta's window (10 minutes to 75 days ahead). */
+  FB_SCHEDULE_INVALID: 'FB_SCHEDULE_INVALID',
+
+  // Instagram channel (TW-IG)
+  /** The Instagram engine is not connected on this install. */
+  IG_NOT_CONNECTED: 'IG_NOT_CONNECTED',
+  /** The engine does not list that account to this workspace or person. */
+  IG_ACCOUNT_NOT_FOUND: 'IG_ACCOUNT_NOT_FOUND',
+  /** The engine did not give a sign-in address for a new account. */
+  IG_CONNECT_FAILED: 'IG_CONNECT_FAILED',
+  /** Run a flow: the thread is not an Instagram thread. */
+  IG_NOT_AN_INSTAGRAM_THREAD: 'IG_NOT_AN_INSTAGRAM_THREAD',
+  /** Run a flow: the thread has no engine conversation id (its key is not `ig:...`). */
+  IG_THREAD_NO_ENGINE_ID: 'IG_THREAD_NO_ENGINE_ID',
+  /** The engine refused to start the flow. */
+  IG_FLOW_RUN_FAILED: 'IG_FLOW_RUN_FAILED',
+
+  // Shopify and WooCommerce integrations (TW-ECOM)
+  /** The Shopify app is off on this install, or has no client id. */
+  ECOM_NOT_CONFIGURED: 'ECOM_NOT_CONFIGURED',
+  /** The WooCommerce integration is switched off by the platform. */
+  ECOM_DISABLED: 'ECOM_DISABLED',
+  /** The Shopify domain is not `<handle>.myshopify.com`. */
+  ECOM_SHOP_INVALID: 'ECOM_SHOP_INVALID',
+  /** The WooCommerce store address has no host. */
+  ECOM_STORE_INVALID: 'ECOM_STORE_INVALID',
+  /** The WooCommerce store did not accept the keys, or could not be reached. */
+  ECOM_STORE_UNREACHABLE: 'ECOM_STORE_UNREACHABLE',
+
   // campaigns (TW-CAMP)
   /** Nobody on the audience can be messaged. */
   CAMP_NO_RECIPIENTS: 'CAMP_NO_RECIPIENTS',
