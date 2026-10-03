@@ -1,0 +1,24 @@
+{
+  "verified_name": "Geta Academy",
+  "display_phone_number": "+1 555-000-1111",
+  "quality_rating": "GREEN",
+  "messaging_limit_tier": "TIER_1K",
+  "code_verification_status": "VERIFIED",
+  "name_status": "APPROVED",
+  "status": "CONNECTED",
+  "platform_type": "CLOUD_API",
+  "throughput": {
+    "level": "STANDARD"
+  },
+  "id": "109876543210001",
+  "health_status": {
+    "can_send_message": "AVAILABLE",
+    "entities": [
+      {
+        "entity_type": "PHONE_NUMBER",
+        "id": "109876543210001",
+        "can_send_message": "AVAILABLE"
+      }
+    ]
+  }
+}

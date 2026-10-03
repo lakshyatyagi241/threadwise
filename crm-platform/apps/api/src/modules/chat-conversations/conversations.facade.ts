@@ -92,6 +92,9 @@ export interface ConversationsFacade {
   /**
    * `POST /inbox/messages/:id/retry`: puts a `failed` outbound message back in the queue (same guards as a new send).
    * `MESSAGE_NOT_FOUND`, `MESSAGE_NOT_RETRYABLE` (only a failed outbound message can be retried).
+   *
+   * Also the Retry of a customer's message whose file failed to download (`mediaState: 'failed'`): the download is queued again and the
+   * message comes back `mediaState: 'pending'`. An inbound message with no failed file is `MESSAGE_NOT_RETRYABLE`.
    */
   retryOutbound(messageId: string): Promise<MessageResponse>;
 

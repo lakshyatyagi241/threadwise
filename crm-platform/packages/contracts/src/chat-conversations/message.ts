@@ -58,6 +58,44 @@ export const messageTemplateSchema = z.object({
 });
 export type MessageTemplate = z.infer<typeof messageTemplateSchema>;
 
+/** A shared contact card (WhatsApp `contacts` message). Kept to what a bubble shows; the full card stays in the message meta. */
+export const messageContactCardSchema = z.object({
+  name: z.string().nullable(),
+  phones: z.array(z.string()),
+  emails: z.array(z.string()).optional(),
+  org: z.string().nullable().optional(),
+});
+export type MessageContactCard = z.infer<typeof messageContactCardSchema>;
+
+/** The customer's answer to a button or a list (or a template quick-reply button): what they picked. */
+export const messageInteractiveSchema = z.object({
+  type: z.enum(['button_reply', 'list_reply', 'button']),
+  /** The button or row id we gave the customer; null for a template quick reply, which carries a payload instead. */
+  id: z.string().nullable(),
+  title: z.string(),
+  description: z.string().nullable(),
+});
+export type MessageInteractive = z.infer<typeof messageInteractiveSchema>;
+
+/** Where a first message came from when the customer tapped an ad or a link that opens WhatsApp (Meta `referral`). */
+export const messageReferralSchema = z.object({
+  sourceType: z.string().nullable(),
+  sourceUrl: z.string().nullable(),
+  sourceId: z.string().nullable(),
+  headline: z.string().nullable(),
+  body: z.string().nullable(),
+});
+export type MessageReferral = z.infer<typeof messageReferralSchema>;
+
+/**
+ * `pending`: the message is stored and its file is still being copied from the provider (a background job, with retries): show a
+ * placeholder, the file arrives by a later `inbox.message.new` for the same message. `ready`: the file is stored. `failed`: the
+ * provider's file could not be fetched or was refused (the text, if any, is kept); `mediaFailure` says why and a Retry
+ * (`POST /inbox/messages/:id/retry`) starts the download again.
+ */
+export const messageMediaStateSchema = z.enum(['pending', 'ready', 'failed']);
+export type MessageMediaState = z.infer<typeof messageMediaStateSchema>;
+
 export const messageFailureSchema = z.object({
   /** Stable code (`SIM_REJECTED`, a Meta error code such as `131047`, a platform code such as `AUTH_SEND_HALTED`). */
   code: z.string().nullable(),
@@ -77,6 +115,14 @@ export const messageResponseSchema = z.object({
   media: messageMediaSchema.nullable(),
   location: messageLocationSchema.nullable(),
   template: messageTemplateSchema.nullable(),
+  /** Channel-specific content. Always sent by the API; optional so a fixture built before they existed still parses. */
+  contacts: z.array(messageContactCardSchema).nullable().optional(),
+  interactive: messageInteractiveSchema.nullable().optional(),
+  referral: messageReferralSchema.nullable().optional(),
+  /** Set for an inbound media message: whether its file could be stored. */
+  mediaState: messageMediaStateSchema.nullable().optional(),
+  /** Present while `mediaState` is `failed`: a stable code (`MEDIA_EXPIRED`, `MEDIA_TOO_LARGE`, ...) and a reason an agent can read. */
+  mediaFailure: messageFailureSchema.nullable().optional(),
   status: messageStatusSchema,
   /** Present only while `status` is `failed`. */
   failure: messageFailureSchema.nullable(),

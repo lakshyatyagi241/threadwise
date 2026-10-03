@@ -5,7 +5,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import { ERROR_CODES } from '@crm/contracts';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { CryptoService } from '../../common/crypto/crypto.service';
@@ -13,6 +13,7 @@ import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { SecurityPolicyService } from '../auth';
+import { PlanEntitlementService, resolveLimit } from '../plans-subscriptions-trials';
 
 interface ApiKeyRow {
   org_id: number;
@@ -59,6 +60,7 @@ export class ApiKeyGuard implements CanActivate {
     private readonly config: ConfigService<Env, true>,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly securityPolicy: SecurityPolicyService,
+    private readonly entitlements: PlanEntitlementService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -88,11 +90,26 @@ export class ApiKeyGuard implements CanActivate {
     }
 
     this.verifySignature(request, key);
-    const ceiling = await this.securityPolicy
-      .policy()
-      .then((p) => p.apiRateLimitPerMinute)
-      .catch(() => 0);
-    await this.enforceRateLimit(prefix, effectiveRateLimit(key.rate_limit_per_minute, ceiling));
+    // The workspace's plan caps its keys (WD-PLAN-022); a plan with 0 (or no plan state) falls back to the platform ceiling, and a
+    // workspace override of -1 lifts the limit altogether (WaDesk: 0 or -1 = unlimited on an override).
+    const entitlements = await this.entitlements.forOrg(key.org_id).catch(() => null);
+    const raw = entitlements?.overrides.limits?.api_rate_limit_per_minute;
+    const unlimited = raw === -1;
+    const planLimit = entitlements ? resolveLimit(entitlements, 'api_rate_limit_per_minute') : 0;
+    const ceiling =
+      planLimit > 0
+        ? planLimit
+        : await this.securityPolicy
+            .policy()
+            .then((p) => p.apiRateLimitPerMinute)
+            .catch(() => 0);
+    if (!unlimited) {
+      await this.enforceRateLimit(
+        request.res,
+        prefix,
+        effectiveRateLimit(key.rate_limit_per_minute, ceiling),
+      );
+    }
 
     const ctx = RequestContextStore.require();
     ctx.orgId = key.org_id;
@@ -151,7 +168,11 @@ export class ApiKeyGuard implements CanActivate {
    * enough for abuse protection; a caller can burst across a window boundary
    * and that is an acceptable trade for one INCR per request.
    */
-  private async enforceRateLimit(prefix: string, limit: number): Promise<void> {
+  private async enforceRateLimit(
+    res: Response | undefined,
+    prefix: string,
+    limit: number,
+  ): Promise<void> {
     const bucket = Math.floor(Date.now() / 60_000);
     const key = `ratelimit:apikey:${prefix}:${bucket}`;
 
@@ -160,7 +181,10 @@ export class ApiKeyGuard implements CanActivate {
     if (count === 1) {
       await this.redis.expire(key, 120).catch(() => undefined);
     }
+    res?.setHeader('X-RateLimit-Limit', String(limit));
+    res?.setHeader('X-RateLimit-Remaining', String(Math.max(0, limit - count)));
     if (count > limit) {
+      res?.setHeader('Retry-After', String(60 - Math.floor((Date.now() % 60_000) / 1000)));
       throw new AppError(
         ERROR_CODES.RATE_LIMITED,
         `Rate limit exceeded (${limit} requests/minute)`,

@@ -6,6 +6,6 @@ export {
   outboundFault,
   type SimulatorFault,
 } from './simulator.adapter';
-export { MetaCloudChannelAdapter } from './meta-cloud-channel.adapter';
 export { WebchatChannelAdapter } from './webchat-channel.adapter';
+export { TelegramChannelAdapter } from './telegram-channel.adapter';
 export { ChatChannelProvidersModule } from './chat-channel-providers.module';

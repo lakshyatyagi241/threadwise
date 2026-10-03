@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Number of parameters does not match the expected number of params",
+    "type": "OAuthException",
+    "code": 132000,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

@@ -4,6 +4,7 @@ import { settingsTile } from '../_registry/settings-types';
 export const settings = [
   settingsTile({
     id: 'booking-types',
+    shortcutFrom: ['/appointments'],
     section: 'automation',
     href: '/appointments/types',
     icon: 'calendar',
@@ -12,6 +13,7 @@ export const settings = [
   }),
   settingsTile({
     id: 'appointment-settings',
+    shortcutFrom: ['/appointments'],
     section: 'automation',
     href: '/appointments/settings',
     icon: 'sliders',

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import makeWASocket, {
   BufferJSON,
+  downloadMediaMessage,
   Browsers,
   fetchLatestBaileysVersion,
   fetchLatestWaWebVersion,
@@ -15,7 +16,7 @@ import makeWASocket, {
   type WAVersion,
 } from 'baileys';
 import pino from 'pino';
-import { normalizeMessage, type RawMessage } from './inbound-normalizer';
+import { normalizeMessage, type Normalized, type RawMessage } from './inbound-normalizer';
 import type { GroupSnapshot } from './inbound.port';
 import {
   UnsupportedSendError,
@@ -37,6 +38,9 @@ import { DeviceAuthStore } from './device-auth-store';
 import { buildProxyAgent, probeProxy } from './proxy';
 
 const VERSION_TTL_MS = 60 * 60 * 1000;
+/** A customer's file is kept for the inbox up to this size; WhatsApp allows more, but Redis holds it until the inbox stores it. */
+const INBOUND_MEDIA_MAX_BYTES = 25 * 1024 * 1024;
+const DOWNLOAD_TIMEOUT_MS = 60_000;
 
 /** A chat id for a number, or the id as given when it already is one. Digits only: WaDesk's last-12-digits cut misrouted some countries. */
 const jidOf = (to: string): string =>
@@ -158,15 +162,20 @@ export class BaileysSocketFactory implements WaSocketFactory {
       }
     });
     sock.ev.on('messages.upsert', ({ messages, type }) => {
-      for (const m of messages) {
-        try {
-          const normalized = normalizeMessage(m as unknown as RawMessage, type, new Date());
-          if (normalized) emit({ type: 'message', normalized });
-        } catch (err) {
-          // One bad message must not drop the rest of the batch (WD-NODE-016 rule 10).
-          this.logger.warn({ err: String(err) }, '[NODE] a message could not be read');
+      // In arrival order: a file's download finishes before the next message is emitted.
+      void (async () => {
+        for (const m of messages) {
+          try {
+            const normalized = normalizeMessage(m as unknown as RawMessage, type, new Date());
+            if (!normalized) continue;
+            const media = await this.downloadMedia(sock, m, normalized);
+            emit({ type: 'message', normalized, ...(media ? { media } : {}) });
+          } catch (err) {
+            // One bad message must not drop the rest of the batch (WD-NODE-016 rule 10).
+            this.logger.warn({ err: String(err) }, '[NODE] a message could not be read');
+          }
         }
-      }
+      })();
     });
     sock.ev.on('messages.update', (updates) => {
       for (const u of updates) {
@@ -331,7 +340,12 @@ export class BaileysSocketFactory implements WaSocketFactory {
         return { contacts: { displayName: command.name, contacts: [{ vcard }] } };
       }
       case 'media': {
-        const file = await this.fetcher.fetchMedia(command.mediaUrl, { timeoutMs: 180_000 });
+        if (!command.data && !command.mediaUrl) {
+          throw new UnsupportedSendError('The media to send has no file.');
+        }
+        const file = command.data
+          ? { buffer: command.data, mimetype: command.mimeType ?? 'application/octet-stream' }
+          : await this.fetcher.fetchMedia(command.mediaUrl, { timeoutMs: 180_000 });
         // The caller's type wins unless it is blank or the generic one; then what the host said; then the extension (WD-NODE-023 rule 3).
         const mimetype =
           command.mimeType && command.mimeType !== 'application/octet-stream'
@@ -344,13 +358,46 @@ export class BaileysSocketFactory implements WaSocketFactory {
           return { audio: file.buffer, mimetype, ptt: command.voiceNote === true };
         }
         const fileName =
-          command.fileName ?? (new URL(command.mediaUrl).pathname.split('/').pop() || 'file');
+          command.fileName ||
+          (command.mediaUrl ? new URL(command.mediaUrl).pathname.split('/').pop() : '') ||
+          'file';
         return { document: file.buffer, mimetype, fileName, caption };
       }
       default:
         throw new UnsupportedSendError(
           'This kind of message cannot be sent on the unofficial engine.',
         );
+    }
+  }
+
+  /**
+   * A customer's file, kept for the inbox (WD-NODE-016 rule 6). Only inbound customer messages: an echo or a group message is stored
+   * as text. Skipped past the size cap, and a failed or slow download delivers the message without the file instead of losing it.
+   */
+  private async downloadMedia(
+    sock: ReturnType<typeof makeWASocket>,
+    m: unknown,
+    n: Normalized,
+  ): Promise<Buffer | null> {
+    if (n.kind !== 'inbound' || !n.message.media) return null;
+    const size = n.message.media.sizeBytes;
+    if (size !== null && size > INBOUND_MEDIA_MAX_BYTES) return null;
+    try {
+      const bytes = await Promise.race([
+        downloadMediaMessage(
+          m as Parameters<typeof downloadMediaMessage>[0],
+          'buffer',
+          {},
+          { logger: pino({ level: 'silent' }), reuploadRequest: sock.updateMediaMessage },
+        ),
+        new Promise<never>((_, rej) =>
+          setTimeout(() => rej(new Error('download timed out')), DOWNLOAD_TIMEOUT_MS),
+        ),
+      ]);
+      return bytes.length <= INBOUND_MEDIA_MAX_BYTES ? bytes : null;
+    } catch (err) {
+      this.logger.warn({ err: String(err) }, '[NODE] a customer file could not be downloaded');
+      return null;
     }
   }
 

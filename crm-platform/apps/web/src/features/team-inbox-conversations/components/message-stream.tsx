@@ -33,6 +33,7 @@ export interface MessageStreamProps {
   onSeenLatest: (seq: number) => void;
   onLoadOlder: () => void;
   onRetryMessage: (id: string) => Promise<void>;
+  canManageChannel: boolean;
   onRetryPending: (clientMessageId: string) => void;
   onDismissPending: (clientMessageId: string) => void;
   onDeleteNote: (id: string) => void;
@@ -253,6 +254,7 @@ export function MessageStream(props: MessageStreamProps) {
                     message={item.message}
                     quoted={quotedOf(item.message, byId)}
                     onRetry={props.onRetryMessage}
+                    canManageChannel={props.canManageChannel}
                   />
                 );
               case 'note':

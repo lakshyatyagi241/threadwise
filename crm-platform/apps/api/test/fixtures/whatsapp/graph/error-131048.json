@@ -1,0 +1,12 @@
+{
+  "error": {
+    "message": "Spam rate limit hit",
+    "type": "OAuthException",
+    "code": 131048,
+    "fbtrace_id": "AbCdEfGhIj12345",
+    "error_data": {
+      "messaging_product": "whatsapp",
+      "details": "Spam rate limit"
+    }
+  }
+}

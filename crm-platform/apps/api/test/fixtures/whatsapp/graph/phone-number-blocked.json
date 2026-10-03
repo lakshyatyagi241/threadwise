@@ -1,0 +1,28 @@
+{
+  "verified_name": "Geta Academy",
+  "display_phone_number": "+1 555-000-1111",
+  "quality_rating": "RED",
+  "messaging_limit_tier": "TIER_250",
+  "code_verification_status": "VERIFIED",
+  "name_status": "APPROVED",
+  "status": "CONNECTED",
+  "platform_type": "CLOUD_API",
+  "id": "109876543210001",
+  "health_status": {
+    "can_send_message": "BLOCKED",
+    "entities": [
+      {
+        "entity_type": "PHONE_NUMBER",
+        "id": "109876543210001",
+        "can_send_message": "BLOCKED",
+        "errors": [
+          {
+            "error_code": 141000,
+            "error_description": "Phone number is flagged",
+            "possible_solution": "Appeal in WhatsApp Manager"
+          }
+        ]
+      }
+    ]
+  }
+}

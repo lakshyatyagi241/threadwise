@@ -4,10 +4,11 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { MODULE_KEY } from './campaigns.service';
 import { isNewer } from './campaign-rules';
 import { CampaignsRepository } from './campaigns.repository';
 import { statusNotification, statusWebhook, toSnapshot } from './campaign-webhook-events';
+
+export const MODULE_KEY = 'campaigns';
 
 /**
  * The events a campaign emits (WD-CAMP-024), through the outbox in the same transaction as the change they describe. WaDesk fired

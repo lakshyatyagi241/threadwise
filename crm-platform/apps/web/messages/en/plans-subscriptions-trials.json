@@ -5,7 +5,10 @@
       "workspacePlans": "Workspace plans",
       "group": "Subscriptions",
       "pricingFaqs": "Pricing FAQs",
-      "planSettings": "Pricing settings"
+      "planSettings": "Pricing settings",
+      "analytics": "Package analytics",
+      "financial": "Financial",
+      "premium": "Premium"
     },
     "limits": {
       "monthly_messages": "Messages per month",
@@ -19,7 +22,10 @@
       "templates": "Templates",
       "flows": "Flows",
       "autoreplies": "Auto-replies",
-      "total_campaigns": "Campaigns created"
+      "total_campaigns": "Campaigns created",
+      "api_rate_limit_per_minute": "API requests per minute (0 = platform default)",
+      "saved_replies": "Saved replies",
+      "routing_rules": "Routing rules"
     },
     "features": {
       "automation": "Automation",
@@ -30,7 +36,13 @@
       "analytics": "Analytics",
       "remove_branding": "Remove branding",
       "sales_pipeline": "Sales pipeline",
-      "appointment_booking": "Appointment booking"
+      "appointment_booking": "Appointment booking",
+      "chatbot_widgets": "Chatbot widgets",
+      "wa_storefront": "WhatsApp catalog",
+      "inbox_sla": "SLA policies",
+      "inbox_routing": "Routing rules",
+      "inbox_kanban": "Kanban view",
+      "team_performance": "Team performance"
     },
     "common": {
       "unlimited": "Unlimited",
@@ -285,6 +297,118 @@
         "saved": "Pricing settings saved.",
         "forbidden": "Only super admins can change these settings.",
         "failed": "We couldn't save the settings."
+      },
+      "analytics": {
+        "title": "Package analytics",
+        "description": "How each plan performs: recurring revenue, subscribers, churn and upgrade paths.",
+        "window": "Window",
+        "days30": "Last 30 days",
+        "days90": "Last 90 days",
+        "days365": "This year",
+        "export": "Export CSV",
+        "package": "Package",
+        "allPackages": "All packages",
+        "empty": "No data yet.",
+        "mrrByPackage": "MRR by package",
+        "planShare": "Plan share",
+        "leaderboard": "Leaderboard",
+        "upgradePaths": "Upgrade paths",
+        "cancellationReasons": "Cancellation reasons",
+        "noReasons": "Cancellation reasons are not collected yet.",
+        "featureAdoption": "Feature adoption (paying workspaces)",
+        "footnote": "Amounts are converted to {currency}. MRR is the monthly price of every active paid workspace; LTV is ARPA times 28 months.",
+        "kpi": {
+          "mrr": "Total MRR",
+          "subscribers": "Subscribers",
+          "netNew": "{count} net new",
+          "arpa": "ARPA",
+          "ltv": "LTV (avg)",
+          "ltvHint": "ARPA x 28 months",
+          "churn": "Churn",
+          "cancelled": "{count} cancelled or lapsed",
+          "trialToPaid": "Trial to paid",
+          "ofTrials": "of {count} trials"
+        },
+        "columns": {
+          "plan": "Package",
+          "price": "Price",
+          "subscribers": "Subscribers",
+          "mrr": "MRR",
+          "arpa": "ARPA",
+          "ltv": "LTV",
+          "netNew": "Net new",
+          "cancellations": "Cancellations",
+          "churn": "Churn"
+        },
+        "kind": {
+          "upgrade": "upgrade",
+          "downgrade": "downgrade",
+          "first_paid": "first paid"
+        }
+      },
+      "financial": {
+        "title": "Financial",
+        "description": "Revenue, recurring revenue, refunds and what is still outstanding.",
+        "window": "Window",
+        "windows": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days",
+          "1y": "Last year"
+        },
+        "revenue": "Revenue",
+        "paymentMethods": "Payment methods",
+        "orderStatus": "Order status",
+        "topWorkspaces": "Top paying workspaces",
+        "noPaidOrders": "No paid orders yet in this window.",
+        "recentOrders": "Latest orders",
+        "noData": "No data",
+        "kpi": {
+          "revenue": "Revenue",
+          "mrr": "MRR",
+          "active": "active",
+          "arr": "ARR",
+          "projected": "projected",
+          "refunds": "Refunds",
+          "outstanding": "Outstanding"
+        }
+      },
+      "premium": {
+        "title": "Premium",
+        "description": "The subscription base: paid and free workspaces, ARPU, conversion and plan mix.",
+        "window": "Window",
+        "windows": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days",
+          "1y": "Last year"
+        },
+        "distribution": "Plan distribution",
+        "revenueByPlan": "Revenue by plan",
+        "newPaid": "New paid signups",
+        "popular": "Most popular plans",
+        "popularHint": "Last 90 days",
+        "noPopular": "No paid orders in last 90 days.",
+        "allPlans": "All plans",
+        "noPlans": "No plans defined yet.",
+        "noData": "No data",
+        "active": "Active",
+        "inactive": "Inactive",
+        "kpi": {
+          "paid": "Paid workspaces",
+          "free": "Free workspaces",
+          "arpu": "ARPU",
+          "conversion": "Trial to paid"
+        },
+        "columns": {
+          "plan": "Plan",
+          "price": "Price",
+          "duration": "Duration",
+          "workspaces": "Workspaces",
+          "mrr": "MRR",
+          "revenue": "Window revenue",
+          "status": "Status"
+        }
       }
     },
     "public": {
@@ -296,6 +420,19 @@
       "startFree": "Start free",
       "volume": "Volume",
       "features": "Features"
+    },
+    "paywall": {
+      "premium": "Premium feature",
+      "title": "{feature} is not on your plan",
+      "lead": "Pick a plan below that includes it. Upgrade and unlock this feature instantly.",
+      "popular": "Popular",
+      "free": "Free",
+      "custom": "Custom",
+      "talk": "Talk to sales",
+      "continueFree": "Continue free",
+      "choose": "Choose {name}",
+      "back": "Go back",
+      "compare": "Compare all plans"
     }
   }
 }

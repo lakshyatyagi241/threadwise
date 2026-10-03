@@ -1,0 +1,12 @@
+{
+  "data": {
+    "app_id": "4000000000001",
+    "type": "USER",
+    "expires_at": 1760100000,
+    "is_valid": true,
+    "scopes": [
+      "whatsapp_business_management",
+      "whatsapp_business_messaging"
+    ]
+  }
+}

@@ -6,7 +6,15 @@ import type { MessageRow } from './messages.repository';
 export function envelopeOf(
   row: Pick<
     MessageRow,
-    'kind' | 'body' | 'mediaKey' | 'mediaMime' | 'mediaName' | 'meta' | 'clientMessageId' | 'uuid'
+    | 'kind'
+    | 'body'
+    | 'mediaKey'
+    | 'mediaMime'
+    | 'mediaName'
+    | 'mediaSha256'
+    | 'meta'
+    | 'clientMessageId'
+    | 'uuid'
   >,
   peerKey: string,
   replyToProviderMessageId: string | null,
@@ -36,6 +44,7 @@ export function envelopeOf(
           mediaKind: row.kind,
           mime: row.mediaMime ?? 'application/octet-stream',
           ...(row.mediaName ? { name: row.mediaName } : {}),
+          ...(row.mediaSha256 ? { sha256: row.mediaSha256 } : {}),
           ...(row.body ? { caption: row.body } : {}),
         },
       };

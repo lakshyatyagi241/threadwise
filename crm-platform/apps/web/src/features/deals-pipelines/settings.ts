@@ -4,6 +4,7 @@ import { settingsTile } from '../_registry/settings-types';
 export const settings = [
   settingsTile({
     id: 'deal-pipelines',
+    shortcutFrom: ['/deals'],
     section: 'data',
     href: '/deals/settings',
     icon: 'deal',

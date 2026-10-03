@@ -217,6 +217,7 @@ export class CampaignsReadService {
       const buttons = (
         tpl && Array.isArray(tpl.buttons) ? tpl.buttons : (c.customButtons ?? [])
       ) as Array<Record<string, unknown>>;
+      const buttonClicks = await this.repo.clicksByUrl(tx, orgId, c.id);
       return {
         campaign,
         rates: {
@@ -260,7 +261,12 @@ export class CampaignsReadService {
         optOutCount: makeup.optedOut,
         optInCount: await this.repo.optInCount(tx, orgId, c.id),
         engagement: engagement(n, makeup.optedOut),
-        buttonRows: buttonRows(buttons, await this.repo.clicksByUrl(tx, orgId, c.id), n.clicks),
+        // The share is of all clicks on the campaign's links, the same unit as each button's count (not of the people who clicked).
+        buttonRows: buttonRows(
+          buttons,
+          buttonClicks,
+          [...buttonClicks.values()].reduce((a, v) => a + v, 0),
+        ),
         segments: await this.repo.segments(tx, orgId, c.id, 5),
         optOuts: (await this.repo.optOuts(tx, orgId, c.id, 200)).map((o) => ({
           ...o,

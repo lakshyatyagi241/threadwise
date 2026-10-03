@@ -113,7 +113,6 @@ describe('the real menu', () => {
       'segments',
       'lead-finder',
       'deals',
-      'pipelines',
       'tasks',
       'companies',
       'email-templates',

@@ -1,7 +1,9 @@
 import {
   paygwGatewayItemSchema,
   paygwGatewayListResponseSchema,
+  paygwBuyerInvoiceSchema,
   paygwOrdersResponseSchema,
+  paygwProofResponseSchema,
   paygwQuoteSchema,
   placeOrderResponseSchema,
   type PaygwQuoteQuery,
@@ -11,6 +13,7 @@ import {
   type UpdatePaygwGatewayRequest,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 
 /** Operator console: through the same-origin operator proxy (`/api/platform/*`). */
@@ -74,3 +77,51 @@ export const fetchOrders = (cursor?: string, signal?: AbortSignal) =>
     schema: paygwOrdersResponseSchema,
     signal,
   });
+
+export const orderInvoiceKey = (id: string) => ['billing', 'orders', id, 'invoice'] as const;
+export const fetchOrderInvoice = (id: string, signal?: AbortSignal) =>
+  apiFetch(`/billing/orders/${encodeURIComponent(id)}/invoice`, {
+    schema: paygwBuyerInvoiceSchema,
+    signal,
+  });
+
+/**
+ * The proof upload is a multipart POST, which the JSON helper does not send. Same proxy and error mapping; the browser sets
+ * the multipart boundary itself.
+ */
+export async function uploadProof(
+  orderId: string,
+  file: File,
+  fields: { paymentReference?: string; proofNote?: string },
+) {
+  const form = new FormData();
+  if (fields.paymentReference) form.set('paymentReference', fields.paymentReference);
+  if (fields.proofNote) form.set('proofNote', fields.proofNote);
+  form.set('proof', file);
+  const res = await fetch(`/api/v2/billing/orders/${encodeURIComponent(orderId)}/proof`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'X-Request-Id': crypto.randomUUID(),
+      'Idempotency-Key': crypto.randomUUID(),
+    },
+    body: form,
+    credentials: 'same-origin',
+  });
+  const text = await res.text();
+  let json: unknown;
+  try {
+    json = text ? JSON.parse(text) : undefined;
+  } catch {
+    json = undefined;
+  }
+  if (!res.ok) {
+    throw toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
+  }
+  return paygwProofResponseSchema.parse(json);
+}

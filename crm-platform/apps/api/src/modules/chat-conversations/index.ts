@@ -17,6 +17,7 @@ export {
   type DispatchResult,
   type QueueCheckOptions,
 } from './channel-dispatcher.service';
+export { ChannelAdapterRegistry } from './channel-adapter.registry';
 export { ChannelRegistryService } from './channel-registry.service';
 export { ChannelIngestPublisher } from './channel-ingest.publisher';
 export { ChatConversationsWorkerModule } from './chat-conversations-worker.module';

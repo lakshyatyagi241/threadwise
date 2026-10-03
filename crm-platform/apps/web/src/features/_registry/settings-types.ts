@@ -40,6 +40,12 @@ export interface SettingsTile {
   order?: number;
   /** The same gates as a menu entry: a missing permission or channel hides the tile, a missing plan feature locks it. */
   gates?: NavGates;
+  /**
+   * Screens that offer this tile as a shortcut: on `/contacts` (or anything under it) a person who may open the tile sees a
+   * gear in the top bar that lists it with its help line. The tile's own gates decide who sees it, so a role without the
+   * permission never sees the gear. Paths are route prefixes, matched on segment boundaries.
+   */
+  shortcutFrom?: readonly string[];
 }
 
 export interface ResolvedSettingsTile extends SettingsTile {

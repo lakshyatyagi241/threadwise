@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Phone number not registered",
+    "type": "OAuthException",
+    "code": 133010,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

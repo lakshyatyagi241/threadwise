@@ -28,6 +28,12 @@ New in this slice: `TrialGateGuard` (global, after JwtAuthGuard and AccountGateG
 - Add-on checkout: `platform-payment-gateways/checkout.service.ts` (eligibility, no downgrade guard), `fulfilment.service.ts` -> `AddonFulfilmentService`.
 - Subscriptions: read and cancelled by `SubscriptionService`; written by the (unbuilt) recurring checkout of PAYGW. Driver port `cancelSubscription`.
 - Retention: `PlanRetentionService` (HTTP preview/run) and `PlanRetentionSweepService` (worker cron). New columns `plans.data_retention_days`, `org_plan_state.data_wiped_at`.
+- Route gate (WD-PLAN-019): `@RequirePlanFeature('key')` on a controller or route, enforced by `PlanFeatureGuard` (APP_GUARD after `PermissionsGuard`). Used by the analytics
+  routes (`dashboards-analytics-charts/dash.controller.ts`, replacing its own guard). `sales_pipeline`, `appointment_booking`, `chatbot_widgets` keep their in-context gates;
+  `inbox_sla`, `inbox_routing`, `inbox_kanban`, `team_performance` have no controllers yet, so the owning inbox/performance domains put the decorator on them when they land.
+- Paywall and menu lock (WD-PLAN-020, 021): `GET /billing/entitlements` (feature keys), `GET /billing/plans?unlocks=<key>`; read by the `(app)` layout (`fetchEnabledFeatures`) for `PlanPaywall` and the nav.
+- API rate limit (WD-PLAN-022): `public-api/api-key.guard.ts` reads the plan's `api_rate_limit_per_minute` (0 = platform default, workspace override -1 = unlimited).
+- Reports (WD-PLAN-024..027): `PlanAnalyticsService` + `PlatformPlanAnalyticsController` (`/platform/plan-analytics`, `/export`, `/financial`, `/premium`), screens `/admin/plan-analytics|financial|premium`.
 - FAQs: one table (`pricing_faqs`) for the in-app picker, the public pricing page and (later) the homepage slider; CMS-037/038 are satisfied by this CRUD.
 
 ## Meters and the enforcing count (must stay equal)

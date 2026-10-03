@@ -1,0 +1,11 @@
+{
+  "data": {
+    "app_id": "4000000000001",
+    "is_valid": false,
+    "error": {
+      "code": 190,
+      "message": "Error validating access token: Session has expired",
+      "subcode": 463
+    }
+  }
+}
