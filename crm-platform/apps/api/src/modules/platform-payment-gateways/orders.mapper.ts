@@ -15,7 +15,12 @@ export function toOrderResponse(o: OrderRow & { planName: string | null }): Payg
     id: o.uuid,
     orderNumber: o.orderNumber,
     kind: o.kind,
-    itemName: o.kind === 'wallet_topup' ? 'Wallet top-up' : (o.planName ?? o.planSlug ?? 'Plan'),
+    itemName:
+      o.kind === 'wallet_topup'
+        ? 'Wallet top-up'
+        : o.kind === 'manual'
+          ? (o.description ?? 'Invoice')
+          : (o.planName ?? o.planSlug ?? 'Plan'),
     status: o.status,
     billingPeriod: o.billingPeriod,
     currency: o.currency,
