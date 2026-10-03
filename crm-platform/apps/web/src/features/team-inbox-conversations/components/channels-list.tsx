@@ -114,7 +114,7 @@ export function ChannelsList({ className }: { className?: string }) {
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="flex items-center gap-2 font-medium">
-                  <ChannelTag kind={c.kind} name={c.name} />
+                  <ChannelTag decorative kind={c.kind} name={c.name} />
                   <span className="truncate">{c.name}</span>
                 </p>
                 {c.displayAddress && (

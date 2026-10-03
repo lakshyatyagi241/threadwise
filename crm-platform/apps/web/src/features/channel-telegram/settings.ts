@@ -4,6 +4,7 @@ import { settingsTile } from '../_registry/settings-types';
 export const settings = [
   settingsTile({
     id: 'telegram',
+    shortcutFrom: ['/inbox'],
     section: 'channels',
     href: '/telegram',
     icon: 'send',

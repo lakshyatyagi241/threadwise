@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CrmModule } from '../crm';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ApiKeyGuard } from './api-key.guard';
 import { PublicApiController } from './public-api.controller';
 import { PublicApiService } from './public-api.service';
@@ -13,7 +14,7 @@ import { PublicApiService } from './public-api.service';
  * separately from the internal one.
  */
 @Module({
-  imports: [CrmModule],
+  imports: [CrmModule, PlansCoreModule],
   controllers: [PublicApiController],
   providers: [PublicApiService, ApiKeyGuard, CryptoService],
   exports: [PublicApiService],

@@ -5,6 +5,11 @@ export { Card } from './components/card';
 export { Badge } from './components/badge';
 export { Field, type FieldProps } from './components/field';
 export { Select, type SelectProps } from './components/select';
+export {
+  MultiSelect,
+  type MultiSelectOption,
+  type MultiSelectProps,
+} from './components/multi-select';
 export { Textarea, type TextareaProps } from './components/textarea';
 export { Checkbox, type CheckboxProps } from './components/checkbox';
 export { Switch, type SwitchProps } from './components/switch';

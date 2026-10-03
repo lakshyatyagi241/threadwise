@@ -6,6 +6,7 @@ import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
 import { SettingsBack } from '@/features/settings-hub/settings-back';
+import { PageSettingsShortcut } from '@/features/settings-hub/page-settings-shortcut';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { NavDrawer, NavRail } from './nav-rail';
 import { SETTINGS_NAV_ID, activeNavId, helpItems, menuItems, toSections } from './nav-model';
@@ -101,6 +102,7 @@ export function AppShell({
           notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
           notificationCount={notificationCount}
           bell={liveBell}
+          pageSettings={<PageSettingsShortcut tiles={settings} />}
           settingsHref={settingsLink?.href}
           helpItems={help}
         />

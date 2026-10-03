@@ -1373,7 +1373,7 @@
    "cluster": "crm",
    "wave": 3,
    "estDays": 110,
-   "inventory": "pending",
+   "inventory": "written",
    "routeBase": "catalog",
    "zone": [
     "apps/api/src/modules/catalog-products/",

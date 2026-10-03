@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { REALTIME_EVENT, type MessageStatus } from '@crm/contracts';
-import { AudienceResolver, RealtimeEmitter } from '../../realtime';
+import { AudienceResolver, MemberDirectory, RealtimeEmitter } from '../../realtime';
 import type { ConversationRow } from './conversations.repository';
 import { toRealtimeMessage } from './message.mapper';
 import type { MessageRow } from './messages.repository';
@@ -22,7 +22,30 @@ export class ChatRealtimePublisher {
   constructor(
     private readonly emitter: RealtimeEmitter,
     private readonly audience: AudienceResolver,
+    private readonly members: MemberDirectory,
   ) {}
+
+  /**
+   * A channel's status moved without a person asking (the provider stopped accepting its credentials): the people who manage channels
+   * are told, so the inbox can show a reconnect warning. A signal with the reason; nobody else hears it.
+   */
+  async channelStatus(
+    orgId: number,
+    channelUuid: string,
+    status: 'connected' | 'disconnected' | 'error' | 'needs_reauth',
+    code: string | null,
+    message: string | null,
+  ): Promise<void> {
+    await this.safely('channelStatus', async () => {
+      const viewers = await this.members.viewers(orgId, 'inbox.channel.manage');
+      await this.emitter.emitToUsers(
+        orgId,
+        viewers.filter((v) => v.scope !== null).map((v) => v.userId),
+        REALTIME_EVENT.channelStatus,
+        { channelId: channelUuid, status, code, message },
+      );
+    });
+  }
 
   /** A message was stored on the thread: it goes to the open thread, and the list row is told to refetch. */
   async messageStored(
@@ -38,6 +61,25 @@ export class ChatRealtimePublisher {
         message: toRealtimeMessage(message),
       });
       await this.list(orgId, conv, changed, opts);
+    });
+  }
+
+  /**
+   * A stored message changed in place (an inbound file finished downloading, or failed): the thread gets the message again, and a client
+   * that sees a message it already has refetches it, because the event never carries the file's link (it is minted per reader).
+   */
+  async messageUpdated(
+    orgId: number,
+    conv: ConversationRow,
+    message: MessageRow,
+    changed: string[],
+  ): Promise<void> {
+    await this.safely('messageUpdated', async () => {
+      await this.emitter.emit(orgId, [{ kind: 'conv', id: conv.uuid }], REALTIME_EVENT.messageNew, {
+        conversationId: conv.uuid,
+        message: toRealtimeMessage(message),
+      });
+      await this.list(orgId, conv, changed, {});
     });
   }
 

@@ -9,7 +9,7 @@ import type { OrderRow } from './orders.repository';
  * AuditService it takes the org from the order, because the return and webhook receivers run with no tenant context at all.
  * Order numbers, statuses and amounts are recorded; credentials and provider payloads never are.
  */
-export type OrderEvent = 'created' | 'paid' | 'failed' | 'cancelled';
+export type OrderEvent = 'created' | 'paid' | 'failed' | 'cancelled' | 'proof_submitted';
 
 export async function recordOrderEvent(
   tx: Tx,
@@ -25,7 +25,10 @@ export async function recordOrderEvent(
   const actorType =
     ctx && ctx.orgId === order.orgId && ctx.actorType === 'user' ? 'user' : 'system';
   const delta = {
-    status: { old: null, new: event === 'created' ? 'pending' : event === 'paid' ? 'paid' : event },
+    // A proof changes no status: the order stays pending until an operator decides.
+    ...(event === 'proof_submitted'
+      ? {}
+      : { status: { old: null, new: event === 'created' ? 'pending' : event } }),
     orderNumber: { old: null, new: order.orderNumber },
     ...Object.fromEntries(Object.entries(extra).map(([k, v]) => [k, { old: null, new: v }])),
   };

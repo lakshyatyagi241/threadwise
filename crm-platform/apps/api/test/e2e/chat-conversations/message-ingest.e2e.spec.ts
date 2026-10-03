@@ -1,4 +1,4 @@
-import { createHmac, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import {
@@ -7,6 +7,8 @@ import {
 } from '../../../src/modules/chat-conversations';
 import { InboundIngestService } from '../../../src/modules/chat-conversations/inbound-ingest.service';
 import { ReceiptsService } from '../../../src/modules/chat-conversations/receipts.service';
+import { WabaIngestService } from '../../../src/modules/whatsapp-cloud-api-waba/waba-ingest.service';
+import { splitWebhook } from '../../../src/modules/whatsapp-cloud-api-waba/waba-rules';
 import type { Grant, Tenant } from '../contacts-attributes-tags/support';
 import {
   asUser,
@@ -24,11 +26,12 @@ import {
   type Pipeline,
   type SimChannel,
 } from './pipeline-support';
+import { connectNumber } from './whatsapp-support';
 
 /**
- * The inbound pipeline end to end (plan-inbox-chat.md 3.4): a customer message from the simulator, or from a signed provider webhook,
+ * The inbound pipeline end to end (plan-inbox-chat.md 3.4): a customer message from the simulator, or from the WhatsApp webhook,
  * goes through the queue, the ingest processor and the database, and comes out as a contact, a thread and a message, announced to the
- * right people only. Real Postgres (restricted role), real Redis, real BullMQ workers in the same process, real sockets.
+ * right people only. A WhatsApp delivery arrives through the WABA domain's webhook ingest, which hands it to the inbox's sink. Real Postgres (restricted role), real Redis, real BullMQ workers in the same process, real sockets.
  */
 let p: Pipeline;
 
@@ -518,70 +521,68 @@ describe('who is told', () => {
   }, 60_000);
 });
 
-describe('the public webhook feeds the same pipeline', () => {
-  it('a signed delivery is queued, stored and attributed like a simulator one; a bad signature stores nothing', async () => {
-    const t = await p.api.signup('hook');
-    const secret = 'webhook-app-secret-0001';
-    const created = await p.api
-      .as(t.admin)
-      .post('/v2/channels')
-      .send({
-        kind: 'whatsapp_cloud',
-        name: 'Hooked',
-        credentials: {
-          phoneNumberId: '5000000001',
-          accessToken: 'EAAB-secret-token-9988',
-          appSecret: secret,
-        },
-      });
-    expect(created.status, JSON.stringify(created.body)).toBe(201);
-    const ch = created.body.id as string;
-    const internal = Number(
-      (await p.h.owner.query(`SELECT id FROM channels WHERE uuid = $1`, [ch])).rows[0].id,
-    );
-
-    const body = JSON.stringify({
-      entry: [
-        {
-          changes: [
-            {
-              value: {
-                contacts: [{ wa_id: '919840000001', profile: { name: 'Meera' } }],
-                messages: [
-                  {
-                    id: `wamid.hook.${randomUUID()}`,
-                    from: '919840000001',
-                    type: 'text',
-                    timestamp: String(Math.floor(Date.now() / 1000)),
-                    text: { body: 'hello from whatsapp' },
-                  },
-                ],
-              },
+describe('the WhatsApp webhook feeds the same pipeline', () => {
+  /** What Meta posts for one customer text on a number; the WABA domain splits it per change and routes it by the number's ids. */
+  const delivery = (
+    wabaId: string,
+    phoneNumberId: string,
+    text: string,
+    waId = '919840000001',
+  ) => ({
+    object: 'whatsapp_business_account',
+    entry: [
+      {
+        id: wabaId,
+        time: Math.floor(Date.now() / 1000),
+        changes: [
+          {
+            field: 'messages',
+            value: {
+              messaging_product: 'whatsapp',
+              metadata: { display_phone_number: '15550001111', phone_number_id: phoneNumberId },
+              contacts: [{ wa_id: waId, profile: { name: 'Meera' } }],
+              messages: [
+                {
+                  id: `wamid.hook.${randomUUID()}`,
+                  from: waId,
+                  type: 'text',
+                  timestamp: String(Math.floor(Date.now() / 1000)),
+                  text: { body: text },
+                },
+              ],
             },
-          ],
-        },
-      ],
-    });
-    const sign = (s: string) =>
-      `sha256=${createHmac('sha256', s).update(Buffer.from(body)).digest('hex')}`;
-    const post = (signature: string) =>
-      p.api
-        .http()
-        .post(`/v2/webhooks/channels/${ch}`)
-        .set('content-type', 'application/json')
-        .set('x-hub-signature-256', signature)
-        .send(body);
+          },
+        ],
+      },
+    ],
+  });
+  const feed = (payload: unknown) => p.h.app.get(WabaIngestService).process(splitWebhook(payload));
 
-    expect((await post(sign('not-the-secret'))).status).toBe(401);
-    await sleep(500);
+  it('a message for a connected number makes its channel, the thread, the contact and the message, attributed like a simulator one', async () => {
+    const t = await p.api.signup('hook');
+    const number = await connectNumber(p.h, t.orgId, {
+      phoneNumberId: '5000000001',
+      label: 'Hooked',
+      phone: '+1 555 000 1111',
+    });
     expect(
-      await scalar(p, `SELECT count(*)::int AS n FROM conversations WHERE channel_id = $1`, [
-        internal,
-      ]),
+      await scalar(p, `SELECT count(*)::int AS n FROM channels WHERE org_id = $1`, [t.orgId]),
     ).toBe(0);
 
-    const ok = await post(sign(secret));
-    expect(ok.status).toBe(200);
+    const result = await feed(delivery(number.wabaId, number.phoneNumberId, 'hello from whatsapp'));
+    expect(result).toEqual({ handled: 1, dropped: 0 });
+
+    const channel = await p.h.owner.query(`SELECT * FROM channels WHERE org_id = $1`, [t.orgId]);
+    expect(channel.rows).toHaveLength(1);
+    expect(channel.rows[0]).toMatchObject({
+      kind: 'whatsapp_cloud',
+      name: 'Hooked',
+      status: 'connected',
+      external_id: '5000000001',
+    });
+    expect(Number(channel.rows[0].waba_config_id)).toBe(number.configId);
+    const internal = Number(channel.rows[0].id);
+
     const conv = await until('the thread', async () => {
       const r = await p.h.owner.query(`SELECT * FROM conversations WHERE channel_id = $1`, [
         internal,
@@ -599,6 +600,55 @@ describe('the public webhook feeds the same pipeline', () => {
       new Date(conv.window_expires_at as string).getTime() -
         new Date(conv.last_inbound_at as string).getTime(),
     ).toBe(DAY);
+  }, 60_000);
+
+  it('the same delivery twice stores one message (Meta redelivers): the WABA claim and the ledger both hold', async () => {
+    const t = await p.api.signup('hookdup');
+    const number = await connectNumber(p.h, t.orgId, { phoneNumberId: '5000000002' });
+    const payload = delivery(number.wabaId, number.phoneNumberId, 'twice', '919840000002');
+    await feed(payload);
+    await feed(payload);
+    const internal = Number(
+      (await p.h.owner.query(`SELECT id FROM channels WHERE org_id = $1`, [t.orgId])).rows[0].id,
+    );
+    const conv = await until('the thread', async () => {
+      const r = await p.h.owner.query(`SELECT id FROM conversations WHERE channel_id = $1`, [
+        internal,
+      ]);
+      return r.rows[0] as { id: number } | undefined;
+    });
+    await sleep(800);
+    expect(await messagesOf(p, conv.id)).toHaveLength(1);
+  }, 60_000);
+
+  it('a number nobody has connected is acknowledged and dropped: no channel, no thread', async () => {
+    const t = await p.api.signup('hookno');
+    const result = await feed(delivery('88000000999', '5000000999', 'who is this'));
+    expect(result).toEqual({ handled: 0, dropped: 1 });
+    expect(
+      await scalar(p, `SELECT count(*)::int AS n FROM channels WHERE org_id = $1`, [t.orgId]),
+    ).toBe(0);
+  });
+
+  it("another workspace's number never receives it: the message lands only in the workspace that owns the number", async () => {
+    const a = await p.api.signup('hookA');
+    const b = await p.api.signup('hookB');
+    const na = await connectNumber(p.h, a.orgId, { phoneNumberId: '5000000011' });
+    await connectNumber(p.h, b.orgId, { phoneNumberId: '5000000012' });
+    await feed(delivery(na.wabaId, na.phoneNumberId, 'for A only', '919840000011'));
+    await until(
+      'A thread',
+      async () =>
+        (await scalar(p, `SELECT count(*)::int AS n FROM conversations WHERE org_id = $1`, [
+          a.orgId,
+        ])) === 1 || undefined,
+    );
+    expect(
+      await scalar(p, `SELECT count(*)::int AS n FROM conversations WHERE org_id = $1`, [b.orgId]),
+    ).toBe(0);
+    expect(
+      await scalar(p, `SELECT count(*)::int AS n FROM channels WHERE org_id = $1`, [b.orgId]),
+    ).toBe(0);
   }, 60_000);
 });
 

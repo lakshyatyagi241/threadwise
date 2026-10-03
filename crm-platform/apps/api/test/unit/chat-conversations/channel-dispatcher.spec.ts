@@ -62,7 +62,10 @@ const text = (body = 'hello', ref = 'msg-1') => ({
 
 function build(adapter: ChannelAdapter = sim) {
   const redis = new FakeRedis();
-  const guard = { beforeSend: vi.fn(async () => undefined) };
+  const guard = {
+    beforeSend: vi.fn(async () => undefined),
+    withFooter: vi.fn(async ({ body }: { body: string }) => body),
+  };
   const publisher = { enqueueReceipt: vi.fn(async () => 'job') };
   const plans = { assertWithinLimit: vi.fn(async () => undefined) };
   const registry = new ChannelAdapterRegistry([adapter]);

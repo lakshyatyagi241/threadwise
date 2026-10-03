@@ -464,12 +464,18 @@ describe('delivery receipts (TW-NODE-020)', () => {
         occurredAt: new Date(),
       }),
     ).toBe(false);
-    expect(await receipts.route({ providerMessageId: 'wamid.UNKNOWN', chatJid: 'x', ack: 3 })).toBe(
-      false,
-    );
-    expect(await receipts.route({ providerMessageId: 'wamid.UNKNOWN', chatJid: 'x', ack: 1 })).toBe(
-      false,
-    );
+    expect(
+      await receipts.route(
+        { orgId: 1, deviceId: 1 },
+        { providerMessageId: 'wamid.UNKNOWN', chatJid: 'x', ack: 3 },
+      ),
+    ).toBe(false);
+    expect(
+      await receipts.route(
+        { orgId: 1, deviceId: 1 },
+        { providerMessageId: 'wamid.UNKNOWN', chatJid: 'x', ack: 1 },
+      ),
+    ).toBe(false);
   });
 });
 

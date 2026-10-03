@@ -4,6 +4,7 @@ import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { DeviceAuthStore } from '../../../src/infra/providers/node-bridge-runtime/device-auth-store';
 import { DeviceControlService } from '../../../src/modules/node-bridge-runtime';
 import { DeviceRuntimeService } from '../../../src/modules/node-bridge-runtime/runtime/device-runtime.service';
+import { NodeWorkerStatus } from '../../../src/modules/node-bridge-runtime/runtime/worker-status';
 import { waKeys } from '../../../src/modules/node-bridge-runtime/runtime/wa-redis';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 import { FakeFactory, rig, worker as buildWorker, type Rig } from './support';
@@ -268,6 +269,22 @@ describe('failover and liveness (TW-NODE-005, 014)', () => {
     expect(factory.last.loggedOut).toBe(false);
     expect(await store.count(t.orgId, deviceId)).toBe(3);
     expect(await redis.get(waKeys.lease(t.orgId, deviceId))).toBeNull();
+  });
+});
+
+describe('worker heartbeat (TW-NODE-004)', () => {
+  it('a running worker reports itself and the devices it holds, and is gone when it stops', async () => {
+    const status = new NodeWorkerStatus(redis);
+    expect(await status.read()).toEqual({ workers: 0, devices: 0 });
+    const { t, deviceId } = await arrange('beat');
+    const { rt } = await worker();
+    expect(await status.read()).toEqual({ workers: 1, devices: 0 });
+    await rt.adopt(t.orgId, deviceId);
+    await settle();
+    await rt.pass();
+    expect(await status.read()).toEqual({ workers: 1, devices: 1 });
+    await rt.onApplicationShutdown();
+    expect(await status.read()).toEqual({ workers: 0, devices: 0 });
   });
 });
 

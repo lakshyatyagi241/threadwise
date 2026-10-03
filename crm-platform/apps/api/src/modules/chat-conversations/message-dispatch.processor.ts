@@ -4,7 +4,7 @@ import { DelayedError, UnrecoverableError, type Job } from 'bullmq';
 import { RequestContextStore } from '../../common/context/request-context';
 import { ChannelError } from '../../infra/providers/chat-conversations';
 import { QUEUES } from '../../infra/queue/queues';
-import { MESSAGE_SEND_JOB, messageSendJobSchema } from './message-dispatch.job';
+import { MESSAGE_SEND_JOB, messageSendJobSchema, sendBackoffStrategy } from './message-dispatch.job';
 import { IN_FLIGHT, MessageDispatchService } from './message-dispatch.service';
 
 /** How long a message whose send another worker holds waits before this one looks again (without using up an attempt). */
@@ -17,7 +17,10 @@ const IN_FLIGHT_RETRY_MS = 5_000;
  * service (`ChannelError.retryable`). A message another worker is sending right now is delayed, not retried, so waiting for a slow
  * provider call never burns the attempts that a real failure needs.
  */
-@Processor(QUEUES.MESSAGE_DISPATCH, { concurrency: 8 })
+@Processor(QUEUES.MESSAGE_DISPATCH, {
+  concurrency: 8,
+  settings: { backoffStrategy: sendBackoffStrategy },
+})
 export class MessageDispatchProcessor extends WorkerHost {
   private readonly logger = new Logger(MessageDispatchProcessor.name);
 

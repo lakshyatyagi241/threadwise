@@ -5,7 +5,9 @@
 export { ChatMediaModule, type ChatMediaModuleOptions } from './chat-media.module';
 export {
   ChatMediaStore,
+  MediaIntegrityError,
   MediaRangeError,
+  MediaTooLargeError,
   displayName,
   type OpenedMedia,
   type StoredMedia,

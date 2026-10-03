@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import type { IncomingHttpHeaders } from 'node:http';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
@@ -11,9 +11,13 @@ import { ChannelVault } from './channel-vault';
 import { ChannelsRepository } from './channels.repository';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-/** A provider's webhook is a few KB; anything past this is not one. */
-const MAX_BODY_BYTES = 1_000_000;
+/** Meta documents webhook payloads of up to 3 MB; anything past this is not one. */
+const MAX_BODY_BYTES = 3_000_000;
 const PER_MINUTE = 600;
+/** Every address together: a channel's whole inbound traffic. High enough for a busy number, low enough to stop a flood. */
+const PER_MINUTE_CHANNEL = 6000;
+/** What a provider's challenge looks like (Meta sends digits). Anything else is not echoed back into a response body. */
+const CHALLENGE = /^[A-Za-z0-9_-]{1,128}$/;
 
 const unauthorized = (): AppError =>
   new AppError(ERROR_CODES.SIGNATURE_INVALID, 'Invalid signature', HttpStatus.UNAUTHORIZED);
@@ -30,6 +34,8 @@ const unauthorized = (): AppError =>
  */
 @Injectable()
 export class ChannelWebhooksService {
+  private readonly logger = new Logger(ChannelWebhooksService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: ChannelsRepository,
@@ -50,7 +56,7 @@ export class ChannelWebhooksService {
     const found = await this.locate(channelUuid);
     const token = typeof query['hub.verify_token'] === 'string' ? query['hub.verify_token'] : '';
     const challenge = typeof query['hub.challenge'] === 'string' ? query['hub.challenge'] : '';
-    if (query['hub.mode'] !== 'subscribe' || !token || !challenge) throw unauthorized();
+    if (query['hub.mode'] !== 'subscribe' || !token || !CHALLENGE.test(challenge)) throw unauthorized();
 
     const stored = await this.db.txAs({ orgId: found.orgId }, async (tx) => {
       const row = await this.repo.byId(tx, found.orgId, found.id);
@@ -79,7 +85,7 @@ export class ChannelWebhooksService {
     const adapter = runtime ? this.adapters.find(runtime.kind) : undefined;
     // Fail closed: nothing to verify against means nothing is accepted.
     if (!runtime || !adapter) throw unauthorized();
-    if (!adapter.verifyInbound(runtime, rawBody, flatten(headers))) throw unauthorized();
+    if (!(await adapter.verifyInbound(runtime, rawBody, flatten(headers)))) throw unauthorized();
 
     // From here the sender is authenticated; its payload is still data.
     let payload: unknown;
@@ -93,11 +99,13 @@ export class ChannelWebhooksService {
       );
     }
     const parsed = adapter.parseInbound(runtime, payload);
-    for (const message of parsed.messages) {
-      await this.publisher.enqueueInbound(found.orgId, runtime.uuid, message);
-    }
-    for (const receipt of parsed.receipts) {
-      await this.publisher.enqueueReceipt(found.orgId, runtime.uuid, receipt);
+    // Enqueue everything or fail the whole delivery (the provider redelivers; the job ids and the ledger make that harmless).
+    await Promise.all([
+      ...parsed.messages.map((m) => this.publisher.enqueueInbound(found.orgId, runtime.uuid, m)),
+      ...parsed.receipts.map((r) => this.publisher.enqueueReceipt(found.orgId, runtime.uuid, r)),
+    ]);
+    if (parsed.ignored?.length) {
+      this.logger.debug({ channel: runtime.uuid, ignored: parsed.ignored.slice(0, 20) }, 'webhook parts not stored');
     }
     return { received: true };
   }
@@ -110,11 +118,10 @@ export class ChannelWebhooksService {
   }
 
   private async limit(channelUuid: string, ip: string | undefined): Promise<void> {
-    const allowed = await this.rate.allow(
-      `chat:webhook:${channelUuid.slice(0, 36)}:${ip ?? 'unknown'}`,
-      PER_MINUTE,
-      60,
-    );
+    const key = channelUuid.slice(0, 36);
+    const allowed =
+      (await this.rate.allow(`chat:webhook:${key}:${ip ?? 'unknown'}`, PER_MINUTE, 60)) &&
+      (await this.rate.allow(`chat:webhook:${key}`, PER_MINUTE_CHANNEL, 60));
     if (!allowed) {
       throw new AppError(
         ERROR_CODES.RATE_LIMITED,

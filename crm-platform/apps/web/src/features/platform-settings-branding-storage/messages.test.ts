@@ -72,6 +72,19 @@ describe('platform settings messages', () => {
     }
   });
 
+  it('no message holds an angle bracket (next-intl would read it as a rich-text tag and fail the page)', () => {
+    const bad: string[] = [];
+    const walk = (t: Tree, p: string) => {
+      for (const [k, v] of Object.entries(t)) {
+        if (typeof v === 'string') {
+          if (/<[A-Za-z/]/.test(v)) bad.push(`${p}.${k}`);
+        } else walk(v, `${p}.${k}`);
+      }
+    };
+    walk(root, '');
+    expect(bad).toEqual([]);
+  });
+
   it('every ICU plural has an other branch', () => {
     const bad: string[] = [];
     const walk = (t: Tree, p: string) => {

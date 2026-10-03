@@ -147,3 +147,10 @@ Everything below is set from the console; nothing is code-only.
 `PUT /platform/plan-settings` body `{ yearlyToggleEnabled, yearlyDiscountPct (0..90) }` (super admin; every role reads; audited as
 `platform.plan.settings_updated`). `PUT /platform/workspace-plans/:id` also takes `trialEndsAt` (datetime, null = end now; omitted = unchanged, a
 changed plan clears it unless given) and `overrides.dataRetentionDays` (0..3650 or null).
+
+## Gates, rate limit and reports
+
+- `@RequirePlanFeature(...keys)` (typed `PlanFeatureKey`) refuses with 422 `PLAN_FEATURE_LOCKED` (`feature`, `reason: feature_disabled`, upgrade link) on reads and writes.
+- `GET /v2/billing/entitlements` returns `{ features: [...] }`; `GET /v2/billing/plans?unlocks=<feature>` returns only plans that include it.
+- Public API keys are held to the plan's `api_rate_limit_per_minute` (0 = platform default; a workspace override of -1 = unlimited); responses carry `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and a 429 adds `Retry-After`.
+- Super admin only: `GET /v2/platform/plan-analytics?days=30|90|365&package=`, `/plan-analytics/export` (CSV), `/financial?window=7d|30d|90d|1y`, `/premium`. Money is in the platform default currency.

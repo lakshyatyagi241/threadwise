@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
-import { AnalyticsPlanGuard } from './dash-plan';
 import { AnalyticsController, DashboardController } from './dash.controller';
 import { DashRepository } from './dash.repository';
 import { DashService } from './dash.service';
@@ -12,6 +11,6 @@ import { HealthService } from './health.service';
 @Module({
   imports: [PlansCoreModule, NodeBridgeRuntimeModule],
   controllers: [DashboardController, AnalyticsController, HealthController],
-  providers: [DashService, DashRepository, AnalyticsPlanGuard, HealthService],
+  providers: [DashService, DashRepository, HealthService],
 })
 export class DashboardsAnalyticsChartsModule {}

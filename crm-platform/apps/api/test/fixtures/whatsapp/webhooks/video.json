@@ -1,0 +1,43 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "102345678901234",
+      "changes": [
+        {
+          "field": "messages",
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "messaging_product": "whatsapp",
+              "display_phone_number": "15550001111",
+              "phone_number_id": "109876543210001"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "Asha Rao"
+                },
+                "wa_id": "919876543210"
+              }
+            ],
+            "messages": [
+              {
+                "from": "919876543210",
+                "id": "wamid.VID1",
+                "timestamp": "1760000000",
+                "type": "video",
+                "video": {
+                  "caption": "Campus",
+                  "mime_type": "video/mp4",
+                  "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                  "id": "4166733224118044"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

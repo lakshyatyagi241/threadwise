@@ -1,0 +1,9 @@
+{
+  "error": {
+    "message": "Service temporarily unavailable",
+    "type": "OAuthException",
+    "code": 2,
+    "fbtrace_id": "AbCdEfGhIj12345",
+    "is_transient": true
+  }
+}

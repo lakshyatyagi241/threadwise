@@ -2,11 +2,14 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
+  PLAN_FEATURE_KEYS,
   type BillingPlan,
   type BillingPlansResponse,
   type BillingStatus,
   type BillingUsageResponse,
   type ChangePlanResponse,
+  type EntitlementsResponse,
+  type PlanFeatureKey,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -15,7 +18,11 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { PlatformSettingsService } from '../auth';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlanCatalogService } from './plan-catalog.service';
-import { PlanEntitlementService, type Entitlements } from './plan-entitlement.service';
+import {
+  PlanEntitlementService,
+  resolveFeature,
+  type Entitlements,
+} from './plan-entitlement.service';
 import { changeDirection, validityForState } from './plan-lifecycle';
 import { PLAN_COLUMNS, fullFeatures, fullLimits, toFacts, type PlanRow } from './plan-row';
 import {
@@ -57,7 +64,13 @@ export class BillingService {
    * the validity banner. A lapsed paid plan or an expired trial reads as the FREE plan being current (the badge follows the
    * entitlements, TW-PLAN-011 criterion 2), so every paid card becomes an upgrade and the recovery path is one click.
    */
-  async plans(canManage: boolean): Promise<BillingPlansResponse> {
+  /** The feature keys the workspace's plan includes: the web app draws locks, crowns and paywalls from this (TW-PLAN-020, 021). */
+  async entitlementKeys(): Promise<EntitlementsResponse> {
+    const e = await this.mustResolve(RequestContextStore.require().orgId);
+    return { features: PLAN_FEATURE_KEYS.filter((k) => resolveFeature(e, k)) };
+  }
+
+  async plans(canManage: boolean, unlocks?: PlanFeatureKey): Promise<BillingPlansResponse> {
     const orgId = RequestContextStore.require().orgId;
     const e = await this.mustResolve(orgId);
     const rows = await this.db.txAs({ orgId, userId: null }, (tx) => this.catalog.listPlans(tx));
@@ -82,7 +95,9 @@ export class BillingService {
         ? (pctSetting as number)
         : 20;
 
-    const data: BillingPlan[] = active.map(({ row, facts: f }) => {
+    // The paywall sheet lists only the plans that include the locked feature (TW-PLAN-020).
+    const offered = unlocks ? active.filter((p) => fullFeatures(p.row.features)[unlocks]) : active;
+    const data: BillingPlan[] = offered.map(({ row, facts: f }) => {
       const card = buildPlanCard(f, effectiveSlug, effective, true);
       return {
         ...card,
