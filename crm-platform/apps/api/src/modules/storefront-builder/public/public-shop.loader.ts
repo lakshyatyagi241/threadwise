@@ -34,7 +34,10 @@ export class PublicShopLoader {
 
   async resolve(slug: string): Promise<ShopHandle> {
     if (!slug || slug.length > STORE_SLUG_MAX) throw notAvailable();
-    const res = await this.db.primary.execute(sql`SELECT * FROM store_public_lookup_slug(${slug})`);
+    // Reference matched slugs through a case-insensitive MySQL collation, so /s/STP-AURORA opened the shop; slugs are stored lower case.
+    const res = await this.db.primary.execute(
+      sql`SELECT * FROM store_public_lookup_slug(${slug.toLowerCase()})`,
+    );
     const row = res.rows[0] as
       | { storefront_id: number | string; store_org_id: number | string; enabled: boolean }
       | undefined;
