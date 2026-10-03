@@ -54,6 +54,7 @@ const stored: PlanAdminItem = {
     templates: 0,
     flows: 0,
     autoreplies: 0,
+    api_rate_limit_per_minute: 0,
   },
   features: {
     automation: true,
