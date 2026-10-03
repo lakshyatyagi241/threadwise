@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import type { HistoryItem } from './waba-coexistence-rules';
 import type {
   NormalisedDeliveryEvent,
   NormalisedInboundMessage,
@@ -23,7 +24,27 @@ export interface InboundContext {
  *
  * `onStatus` receives delivery reports the broadcast domain did not claim (a message sent from the inbox, a flow, an auto-reply).
  */
+/** A message the business typed on the WhatsApp Business app (coexistence, WD-WABA-044): outbound, from the phone, not a customer's. */
+export interface BusinessAppEcho {
+  providerMessageId: string;
+  /** The customer's number as digits. */
+  to: string;
+  /** What the thread shows: the text or caption, or a placeholder naming the kind of file. */
+  text: string;
+  occurredAt: Date;
+}
+
 export interface WabaInboundSink {
+  /** Imported coexistence history (WD-WABA-046): stored backdated and quiet, deduplicated by message id. */
+  onHistory?(ctx: InboundContext, items: HistoryItem[]): Promise<void>;
+  /** A message in a Cloud API group (WD-WABA-039): storage only, on the group's own thread, no contact, no automation. */
+  onGroupMessage?(
+    ctx: InboundContext,
+    message: NormalisedInboundMessage,
+    group: { groupId: string; title: string | null },
+  ): Promise<void>;
+  /** Mirrors a business-app message onto its thread as outbound, without unread, routing or automation. */
+  onEcho?(ctx: InboundContext, echo: BusinessAppEcho): Promise<void>;
   onMessage(ctx: InboundContext, message: NormalisedInboundMessage): Promise<void>;
   onStatus(ctx: InboundContext, event: NormalisedDeliveryEvent): Promise<void>;
 }

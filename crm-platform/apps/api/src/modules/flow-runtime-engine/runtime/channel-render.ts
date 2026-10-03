@@ -6,11 +6,20 @@ export interface ChannelProfile {
   list: boolean;
   ctaUrl: boolean;
   location: boolean;
+  /** Approved templates (WD-FLR-026): only the WhatsApp Cloud API and the simulator have them; the rest get the template as text. */
+  templates?: boolean;
   /** Pause between nodes (ms): the unofficial engine looks less like a bot with one (WD-FLR-016 rule 3). */
   paceMs: number;
 }
 
-const FULL: ChannelProfile = { buttons: true, list: true, ctaUrl: true, location: true, paceMs: 0 };
+const FULL: ChannelProfile = {
+  buttons: true,
+  list: true,
+  ctaUrl: true,
+  location: true,
+  templates: true,
+  paceMs: 0,
+};
 const PLAIN: ChannelProfile = {
   buttons: false,
   list: false,
@@ -26,7 +35,13 @@ export function profileOf(kind: string): ChannelProfile {
       return FULL;
     case 'whatsapp_qr':
       return { ...PLAIN, paceMs: 1500 };
+    // Facebook Messenger and Instagram carry up to three reply buttons and a link button but no list and no location pin
+    // (WD-FLR-061, 062). Their channel adapters join the runtime by registering a `ChannelAdapter` for the kind; nothing else changes.
+    case 'facebook':
+    case 'instagram':
+      return { buttons: true, list: false, ctaUrl: true, location: false, paceMs: 0 };
     default:
+      // TikTok, LINE, Viber, WeChat and email (WD-FLR-063, 065 to 068) are text with numbered options, like Telegram.
       return { ...PLAIN, location: false };
   }
 }
@@ -66,7 +81,19 @@ export type Rendered =
             footer?: string;
             text: string;
             url: string;
-          };
+          }
+        | { type: 'flow'; body: string; flowId: string; flowToken: string; cta: string };
+    }
+  | {
+      kind: 'template';
+      template: {
+        name: string;
+        language: string;
+        variables: Record<string, string>;
+        components?: Array<Record<string, unknown>>;
+      };
+      /** What the thread shows for it. */
+      text: string;
     }
   | {
       kind: 'media';
@@ -220,6 +247,44 @@ export function renderForChannel(m: OutboundMessage, profile: ChannelProfile): R
           .filter(Boolean)
           .join('\n\n'),
       };
+    case 'template': {
+      if (profile.templates) {
+        return {
+          kind: 'template',
+          template: {
+            name: m.name,
+            language: m.language,
+            variables: m.variables,
+            ...(m.components ? { components: m.components } : {}),
+          },
+          text: m.text,
+        };
+      }
+      // No templates on this channel: the message as text, its quick replies numbered like any other menu.
+      const n = m.buttons?.length ?? 0;
+      return {
+        kind: 'text',
+        body:
+          n > 0
+            ? `${m.text}\n\n${numbered(m.buttons!.map((b) => b.text))}\n\nReply with the number (1-${n}):`
+            : m.text,
+      };
+    }
+    case 'form':
+      // A form opens only inside WhatsApp; elsewhere the customer is told what was meant (the node skips these channels first).
+      if (profile.templates) {
+        return {
+          kind: 'interactive',
+          interactive: {
+            type: 'flow',
+            body: cut(m.body, 1024),
+            flowId: m.flowId,
+            flowToken: m.flowToken,
+            cta: cut(m.cta, 20),
+          },
+        };
+      }
+      return { kind: 'text', body: m.body };
   }
 }
 
@@ -228,6 +293,8 @@ export function threadTextOf(r: Rendered): string {
   switch (r.kind) {
     case 'text':
       return r.body;
+    case 'template':
+      return r.text;
     case 'media':
       return r.caption ?? `[${r.mediaKind}] ${r.filename ?? r.url}`;
     case 'location':
@@ -238,6 +305,7 @@ export function threadTextOf(r: Rendered): string {
       if (i.type === 'list') {
         return `${i.body}\n[${i.sections.flatMap((s) => s.rows.map((x) => x.title)).join(' | ')}]`;
       }
+      if (i.type === 'flow') return `${i.body}\n[${i.cta}]`;
       return `${i.body}\n[${i.text}: ${i.url}]`;
     }
   }

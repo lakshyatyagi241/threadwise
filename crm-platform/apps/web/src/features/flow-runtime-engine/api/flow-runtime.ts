@@ -6,15 +6,27 @@ import {
   contactResponseSchema,
   enrollResultSchema,
   flowAnalyticsSchema,
+  flowErrorGroupsSchema,
+  flowHistoryListSchema,
+  flowRetryListSchema,
   flowRunDetailSchema,
   flowRunListSchema,
   flowSubscriberListSchema,
   pageResponseSchema,
+  retryManyResultSchema,
+  retryOneResultSchema,
   retryResultSchema,
   type EnrollContactsInput,
   type FlowSubscriberStatus,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import {
+  errorsQuery,
+  failedRowsQuery,
+  historyQuery,
+  retriesQuery,
+  type AnalyticsState,
+} from '../lib/history-model';
 import {
   SUBSCRIBERS_PAGE_SIZE,
   flattenPages,
@@ -102,7 +114,14 @@ export const pauseSubscriber = (id: string) =>
 export const resumeSubscriber = (id: string) =>
   apiFetch(`${BASE}/subscribers/${id}/resume`, { method: 'POST' });
 export const retrySubscriber = (id: string) =>
-  apiFetch(`${BASE}/subscribers/${id}/retry`, { method: 'POST' });
+  apiFetch(`${BASE}/subscribers/${id}/retry`, { method: 'POST', schema: retryOneResultSchema });
+/** Retry the named failed runs (their subscriber ids), at most one batch (WD-FLR-058). */
+export const retryMany = (subscriberIds: string[]) =>
+  apiFetch(`${BASE}/retry`, {
+    method: 'POST',
+    body: { subscriberIds },
+    schema: retryManyResultSchema,
+  });
 export const retryFailed = (flowId: string) =>
   apiFetch(`${BASE}/flows/${flowId}/retry-failed`, { method: 'POST', schema: retryResultSchema });
 export const enrollContacts = (flowId: string, body: EnrollContactsInput) =>
@@ -123,16 +142,83 @@ export function useAnalytics(days: number, flowId: string) {
 
 /**
  * Flows to pick from in the runs filter and the analytics scope. There is no session-authenticated "list flows" endpoint yet (the
- * editor is not ported; `/public/v1/flows` takes an API key), so these are the flows that have runs in the last 180 days.
+ * editor is not ported; `/public/v1/flows` takes an API key), so these are the flows that have runs (all time, the 50 busiest).
  */
 export function useFlowOptions() {
   return useQuery({
     queryKey: [...KEYS.analytics, 'flow-options'],
     queryFn: ({ signal }) =>
-      apiFetch(`${BASE}/analytics`, { query: { days: 180 }, schema: flowAnalyticsSchema, signal }),
+      apiFetch(`${BASE}/analytics`, { query: { days: 0 }, schema: flowAnalyticsSchema, signal }),
     select: (a) => a.leaderboard.map((f) => ({ id: f.flowId, name: f.flowName })),
     staleTime: 60_000,
   });
+}
+
+// --- the analytics tabs (WD-FLR-054 to 056) -------------------------------------------------------------------------------
+
+/** The execution history: one pass of a contact through a flow, filtered, with status counts and a cursor. */
+export function useHistory(state: AnalyticsState, enabled = true) {
+  const q = useInfiniteQuery({
+    queryKey: [...KEYS.analytics, 'history', historyQuery(state)],
+    enabled,
+    initialPageParam: undefined as string | undefined,
+    queryFn: ({ pageParam, signal }) =>
+      apiFetch(`${BASE}/history`, {
+        query: historyQuery(state, pageParam),
+        schema: flowHistoryListSchema,
+        signal,
+      }),
+    getNextPageParam: (last) => nextCursor(last),
+    placeholderData: (prev) => prev,
+  });
+  return { ...q, items: flattenPages(q.data?.pages ?? []), counts: q.data?.pages[0]?.counts };
+}
+
+/** The failed runs listed under the error groups. */
+export function useFailedRows(state: AnalyticsState, enabled = true) {
+  const q = useInfiniteQuery({
+    queryKey: [...KEYS.analytics, 'failed-rows', failedRowsQuery(state)],
+    enabled,
+    initialPageParam: undefined as string | undefined,
+    queryFn: ({ pageParam, signal }) =>
+      apiFetch(`${BASE}/history`, {
+        query: failedRowsQuery(state, pageParam),
+        schema: flowHistoryListSchema,
+        signal,
+      }),
+    getNextPageParam: (last) => nextCursor(last),
+  });
+  return { ...q, items: flattenPages(q.data?.pages ?? []) };
+}
+
+export function useErrorGroups(state: AnalyticsState, enabled = true) {
+  return useQuery({
+    queryKey: [...KEYS.analytics, 'errors', errorsQuery(state)],
+    enabled,
+    queryFn: ({ signal }) =>
+      apiFetch(`${BASE}/errors`, {
+        query: errorsQuery(state),
+        schema: flowErrorGroupsSchema,
+        signal,
+      }),
+  });
+}
+
+export function useRetryRecords(state: AnalyticsState, enabled = true) {
+  const q = useInfiniteQuery({
+    queryKey: [...KEYS.analytics, 'retries', retriesQuery(state)],
+    enabled,
+    initialPageParam: undefined as string | undefined,
+    queryFn: ({ pageParam, signal }) =>
+      apiFetch(`${BASE}/retries`, {
+        query: retriesQuery(state, pageParam),
+        schema: flowRetryListSchema,
+        signal,
+      }),
+    getNextPageParam: (last) => nextCursor(last),
+    placeholderData: (prev) => prev,
+  });
+  return { ...q, items: flattenPages(q.data?.pages ?? []), totals: q.data?.pages[0]?.totals };
 }
 
 export const startFlowOnConversation = (conversationId: string, flowId: string) =>

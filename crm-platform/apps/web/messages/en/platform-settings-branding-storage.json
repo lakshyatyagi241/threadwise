@@ -1660,7 +1660,17 @@
       "verifyHint": "Paste into the same screen as the Verify token.",
       "copy": "Copy",
       "copied": "Copied",
-      "connected": "Connected WABAs (all workspaces)"
+      "connected": "Connected WABAs (all workspaces)",
+      "fieldsTitle": "Webhook fields (coexistence)",
+      "fieldsHint": "Coexistence needs the Meta app subscribed to messages, smb_message_echoes, smb_app_state_sync and history.",
+      "fieldsCheck": "Check webhook fields",
+      "fieldsChecking": "Asking Meta…",
+      "fieldsOk": "All four fields are subscribed: replies typed on the phone will sync.",
+      "fieldsMissing": "Some fields are not subscribed yet.",
+      "fieldsSubscribed": "Subscribed. Replies typed on the phone will now sync.",
+      "fieldsMissingTag": "MISSING",
+      "fieldsSubscribe": "Subscribe missing fields",
+      "fieldsSubscribing": "Subscribing…"
     }
   }
 }
