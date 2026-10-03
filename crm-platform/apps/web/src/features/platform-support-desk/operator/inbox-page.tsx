@@ -109,7 +109,7 @@ export function InboxPage() {
           onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
         >
           <option value="">{t('filters.allPriority')}</option>
-          {SUPP_TICKET_PRIORITIES.map((p) => (
+          {[...SUPP_TICKET_PRIORITIES].reverse().map((p) => (
             <option key={p} value={p}>
               {tp(p)}
             </option>

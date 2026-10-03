@@ -18,6 +18,6 @@ describe('support desk formatting', () => {
   it('splits a timestamp into the day and the time WaDesk stacks in the When column', () => {
     const d = shortDate('2026-10-05T14:05:00Z', 'en');
     expect(d.day).toMatch(/Oct/);
-    expect(d.time).toMatch(/\d{2}:\d{2}|\d{1,2}:\d{2}/);
+    expect(d.time).toMatch(/^\d{2}:\d{2}$/);
   });
 });
