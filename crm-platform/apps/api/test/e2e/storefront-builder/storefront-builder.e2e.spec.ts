@@ -1,25 +1,34 @@
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+// The harness first: it loads the app graph in the order the application itself does (a domain barrel first hits an import cycle).
+import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { fixtureCnames } from '../../../src/infra/providers/storefront-builder/dns-resolver.adapters';
 import { signRazorpayBody } from '../../../src/infra/providers/storefront-builder/razorpay-payloads';
-import { ShopsService } from '../../../src/modules/storefront-builder';
-import { CartRecoveryRepository } from '../../../src/modules/storefront-builder/recovery/cart-recovery.repository';
-import { CartRecoverySweepService } from '../../../src/modules/storefront-builder/recovery/cart-recovery-sweep.service';
-import { ShopsRepository } from '../../../src/modules/storefront-builder/shops/shops.repository';
-import {
-  RECOVERY_NUDGE_SENDER,
-  SENDER_DIRECTORY,
-} from '../../../src/modules/storefront-builder/_shims/tokens';
-import { STOREFRONT_ENV } from '../../../src/config/domains/storefront-builder.env';
-import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 
 /**
  * The storefront end to end (WD-STORE-001..031, backend): wizard, settings, public shop, checkout, coupons, reviews, tracking,
  * the Razorpay webhook and the cart-recovery sweep, through the real app with real Postgres and Redis. Razorpay and DNS are
  * the fixture adapters (STORE_PROVIDER_MODE=fixture) and the Node bridge is a local HTTP stub.
  */
+/** Loaded after the harness has started the app: importing the module graph before it hits an import cycle in the node-bridge module. */
+const storeModules = () => ({
+  shops: import('../../../src/modules/storefront-builder/shops/shops.service'),
+  recoveryRepo: import('../../../src/modules/storefront-builder/recovery/cart-recovery.repository'),
+  sweep: import('../../../src/modules/storefront-builder/recovery/cart-recovery-sweep.service'),
+  shopsRepo: import('../../../src/modules/storefront-builder/shops/shops.repository'),
+  tokens: import('../../../src/modules/storefront-builder/_shims/tokens'),
+  env: import('../../../src/config/domains/storefront-builder.env'),
+});
+let mods: {
+  ShopsService: typeof import('../../../src/modules/storefront-builder/shops/shops.service').ShopsService;
+  CartRecoveryRepository: typeof import('../../../src/modules/storefront-builder/recovery/cart-recovery.repository').CartRecoveryRepository;
+  CartRecoverySweepService: typeof import('../../../src/modules/storefront-builder/recovery/cart-recovery-sweep.service').CartRecoverySweepService;
+  ShopsRepository: typeof import('../../../src/modules/storefront-builder/shops/shops.repository').ShopsRepository;
+  tokens: typeof import('../../../src/modules/storefront-builder/_shims/tokens');
+  STOREFRONT_ENV: typeof import('../../../src/config/domains/storefront-builder.env').STOREFRONT_ENV;
+};
 let h: Harness;
 let api: Api;
 let bridge: Server;
@@ -53,6 +62,15 @@ beforeAll(async () => {
   process.env.BAILEYS_SERVER_URL = `http://127.0.0.1:${(bridge.address() as AddressInfo).port}`;
   h = await startHarness();
   api = new Api(h);
+  const m = storeModules();
+  mods = {
+    ShopsService: (await m.shops).ShopsService,
+    CartRecoveryRepository: (await m.recoveryRepo).CartRecoveryRepository,
+    CartRecoverySweepService: (await m.sweep).CartRecoverySweepService,
+    ShopsRepository: (await m.shopsRepo).ShopsRepository,
+    tokens: await m.tokens,
+    STOREFRONT_ENV: (await m.env).STOREFRONT_ENV,
+  };
 }, 240_000);
 
 afterAll(async () => {
@@ -332,7 +350,7 @@ describe('shops and the wizard', () => {
 
   it('ensureDefaultShop creates one named after the workspace only when there is none', async () => {
     const t = await api.signup('acmetraders');
-    const svc = h.app.get(ShopsService);
+    const svc = h.app.get(mods.ShopsService);
     const first = await svc.ensureDefaultShop(t.orgId);
     expect(first).toBeTruthy();
     expect(await svc.ensureDefaultShop(t.orgId)).toBeNull();
@@ -1219,13 +1237,13 @@ describe('razorpay webhook', () => {
 describe('abandoned-cart recovery', () => {
   function sweeper() {
     const get = <T>(t: unknown) => h.app.get<T>(t as never, { strict: false });
-    return new CartRecoverySweepService(
+    return new mods.CartRecoverySweepService(
       get(DatabaseService),
-      get(CartRecoveryRepository),
-      get(ShopsRepository),
-      get(SENDER_DIRECTORY),
-      get(RECOVERY_NUDGE_SENDER),
-      get(STOREFRONT_ENV),
+      get(mods.CartRecoveryRepository),
+      get(mods.ShopsRepository),
+      get(mods.tokens.SENDER_DIRECTORY),
+      get(mods.tokens.RECOVERY_NUDGE_SENDER),
+      get(mods.STOREFRONT_ENV),
     );
   }
   async function enableRecovery(m: { t: Tenant; s: any }, extra: Record<string, unknown> = {}) {
