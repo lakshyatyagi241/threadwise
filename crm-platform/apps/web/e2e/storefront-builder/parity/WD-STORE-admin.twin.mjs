@@ -108,6 +108,10 @@ export default (h) => {
       // same name and slug as the reference demo shop, so stored values compare equal
       if (row.shop_name !== REF.name || row.slug !== REF.slug)
         try {
+          // an earlier throw-away organisation of this twin may still hold the slug
+          psql(
+            `update wa_storefronts set slug = 'stw-old-' || id where slug = '${REF.slug}' and shop_name = '${REF.name}' and org_id <> ${orgSql}`,
+          );
           psql(
             `update wa_storefronts set shop_name='${REF.name}', slug='${REF.slug}' where org_id = ${orgSql} and id = ${row.id}`,
           );
@@ -644,6 +648,7 @@ export default (h) => {
   const asideText = (c) =>
     c.page
       .locator('aside')
+      .filter({ hasText: /public url/i })
       .first()
       .innerText()
       .catch(() => '');
@@ -757,10 +762,14 @@ export default (h) => {
     const ri = ls.findLastIndex((l) => /^recent orders$/i.test(l));
     c.obs.seq(`${key}.bestsellers`, bi >= 0 ? ls.slice(bi + 1, ri > bi ? ri : bi + 12) : []);
     const rows = await c.page
-      .locator('table', { has: c.page.locator('th', { hasText: /^when$/i }) })
+      .locator('table', { has: c.page.locator('th', { hasText: /^\s*when\s*$/i }) })
       .first()
       .locator('tbody tr')
-      .evaluateAll((trs) => trs.map((tr) => tr.innerText.replace(/\s+/g, ' ').trim()))
+      .evaluateAll((trs) =>
+        trs
+          .filter((tr) => tr.querySelectorAll('td').length >= 6)
+          .map((tr) => tr.innerText.replace(/\s+/g, ' ').trim()),
+      )
       .catch(() => []);
     c.obs.seq(`${key}.recentOrders`, rows);
     c.obs.info(
@@ -866,6 +875,112 @@ export default (h) => {
     for (const [k, spec] of Object.entries(SET)) if (k !== 'save') out[k] = await val(spec);
     return out;
   };
+
+  // ---------------------------------------------------------------------------------------------------------------
+  // the per-field value matrix, judged on what was STORED (the database), not on how the screen reported it. WaDesk shows its
+  // validation errors in a plain box without alert semantics, which the harness' recognisers read as "silent", so the generated
+  // matrix would report every rejected value as a difference. These scenarios compare the same thing the user cares about:
+  // was it saved, with which stored value, and did the page tell the user something.
+  // ---------------------------------------------------------------------------------------------------------------
+  const settingsMatrixFields = settingsForm.fields.filter((f) => !f.skipMatrix);
+  settingsForm.fields = settingsForm.fields.map((f) => ({ ...f, skipMatrix: true }));
+  const wizardMatrixFields = wizardCreate.fields.filter((f) => !f.skipMatrix);
+  wizardCreate.fields = wizardCreate.fields.map((f) => ({ ...f, skipMatrix: true }));
+
+  const FEEDBACK_RX =
+    /invalid|must|required|format|too long|too large|big|at most|at least|enter |use |only|not a valid|exceed|fix |error|failed|already|taken|greater|less than|characters|updated|saved|created/i;
+  const newLines = (before, after) =>
+    after.filter((l) => !before.includes(l) && l.length > 2 && !/^\d+$/.test(l));
+  async function fillValue(c, f, value) {
+    const l = c.loc(f.loc).first();
+    c.obs.actions.fills += 1;
+    const t = f.type || 'text';
+    if (t === 'select') {
+      const opts = await l.evaluate((el) =>
+        [...el.options].map((o) => ({ value: o.value, disabled: o.disabled })),
+      );
+      const usable = opts.filter((o) => !o.disabled);
+      const withValue = usable.filter((o) => o.value !== '');
+      const target =
+        value.option === 'first'
+          ? withValue[0]
+          : value.option === 'last'
+            ? withValue[withValue.length - 1]
+            : usable.find((o) => o.value === '') || usable[0];
+      if (target) await l.selectOption({ value: target.value });
+      return;
+    }
+    if (t === 'checkbox' || t === 'switch') return l.setChecked(!!value);
+    if (t === 'number' || t === 'integer') return typeLike(f.loc)(c, value);
+    await l.fill(String(value));
+  }
+  const matrixCase = (prefix, f, k, open, submit, read, cleanup) => ({
+    id: `${prefix}.${f.id}.${k.id}`,
+    title: `${prefix}: ${f.id} = ${k.id} (${k.why})`,
+    tags: ['form', 'edge', `field:${f.id}`, `case:${k.id}`, ...(k.xss ? ['xss'] : [])],
+    run: async (c) => {
+      c.onCleanup(() => cleanup(c));
+      await open(c);
+      await fillValue(c, f, k.value);
+      const before = lines(await mainText(c));
+      const mark = c.rec.mark();
+      await submit(c);
+      await c.afterAction({ quiet: 900, timeout: 6000 });
+      await c.page.waitForTimeout(500);
+      const after = lines(await mainText(c));
+      const fresh = newLines(before, after);
+      c.obs.set('map.stored', read(c));
+      c.obs.flag(
+        'feedbackShown',
+        fresh.some((l) => FEEDBACK_RX.test(l)) || (await c.visible({ role: 'alert' })),
+      );
+      c.obs.num(
+        'requests',
+        c.rec.since(mark).http.filter((h2) => h2.method !== 'GET').length > 0 ? 1 : 0,
+      );
+      c.obs.info(
+        'feedbackText',
+        fresh.filter((l) => FEEDBACK_RX.test(l)),
+      );
+      c.obs.set(
+        'sec.xssExecuted',
+        (await c.page.evaluate(() => !!window.__xss).catch(() => false)) ||
+          c.rec.events.dialogs.length > 0,
+      );
+    },
+  });
+  const settingsMatrix = settingsMatrixFields.flatMap((f) =>
+    h
+      .casesFor(f, 'full')
+      .filter((k) => !(k.id === 'empty' && f.required && false))
+      .map((k) =>
+        matrixCase(
+          'settings-db',
+          f,
+          k,
+          openSettings,
+          (c) => c.click(SET.save),
+          (c) => readDemo(c),
+          (c) => resetDemo(c),
+        ),
+      ),
+  );
+  const wizardMatrix = wizardMatrixFields.flatMap((f) =>
+    h.casesFor(f, 'full').map((k) =>
+      matrixCase(
+        'wizard-db',
+        f,
+        k,
+        async (c) => {
+          await go(c, wizAdd, { ready: shopNameInput });
+          if (f.id !== 'shop_name') await c.fill(shopNameInput, `stw-${c.tag('f')}`);
+        },
+        (c) => c.click({ role: 'button', name: /create shop/i }),
+        (c) => ({ ...readNewest(c), shops: String(shopCount(c) - 1) }),
+        (c) => dropMadeShops(c),
+      ),
+    ),
+  );
 
   const scenarios = [
     // ============================ wizard =============================================================================
@@ -1349,6 +1464,99 @@ export default (h) => {
         }
       },
     },
+    {
+      id: 'wizard.duplicate-domain',
+      title: 'Wizard: the same custom domain on a second shop',
+      tags: ['wizard', 'edge', 'unique'],
+      run: async (c) => {
+        const domain = `stw-${c.digits(8)}.example.com`;
+        c.onCleanup(() => dropMadeShops(c));
+        await createViaUi(c, `stw-${c.tag('d1')}`, { domain });
+        const first = await shopCount(c);
+        const mark = c.rec.mark();
+        await createViaUi(c, `stw-${c.tag('d2')}`, { domain });
+        const second = await shopCount(c);
+        c.obs.num('shops.afterFirst', first - 1);
+        c.obs.num('shops.afterSecond', second - 1);
+        c.obs.flag('secondRejected', second === first);
+        const sent = c.rec.since(mark).http.filter((h2) => h2.method !== 'GET');
+        c.obs.enum(
+          'second.status',
+          sent[0]
+            ? sent[0].status >= 500
+              ? 'crash'
+              : sent[0].status >= 400
+                ? 'rejected'
+                : 'ok'
+            : 'none',
+        );
+        c.obs.flag('second.formStillShown', await c.visible(shopNameInput));
+        c.obs.flag(
+          'second.feedbackShown',
+          (await c.visible({ role: 'alert' })) ||
+            /domain|already|taken|error/i.test(await mainText(c)),
+        );
+        c.obs.info(
+          'second.text',
+          lines(await mainText(c)).filter((l) => /domain|already|taken|error|wrong/i.test(l)),
+        );
+        await c.shot('duplicate-domain');
+      },
+    },
+    {
+      id: 'wizard.save-reenables',
+      title: 'Wizard: saving a disabled shop switches it live again (WaDesk quirk kept)',
+      tags: ['wizard', 'quirk'],
+      run: async (c) => {
+        resetDemo(c);
+        if (c.side === 'wadesk') mysql(`update wa_storefronts set enabled=0 where id=${REF.id}`);
+        else
+          psql(
+            `update wa_storefronts set enabled=false where org_id = ${orgSql} and id = ${OURS.id}`,
+          );
+        c.onCleanup(() => resetDemo(c));
+        c.obs.enum('before', readDemo(c).enabled);
+        await go(c, wizEdit[c.side], { ready: shopNameInput[c.side] });
+        await c.fill(shopNameInput, `stw-${c.tag('re')}`);
+        await c.click({ role: 'button', name: /save changes/i });
+        await c.afterAction({ quiet: 900 });
+        await c.page.waitForTimeout(500);
+        const after = readDemo(c);
+        c.obs.enum('after', after.enabled);
+        c.obs.enum('slugKept', after.slug === REF.slug ? 'kept' : 'changed');
+        c.obs.enum('themeKept', after.theme);
+        c.obs.enum('landing', landing(c));
+      },
+    },
+    {
+      id: 'settings.unowned-keys',
+      title: 'Settings: stored extras the form does not own are kept or erased on save',
+      tags: ['settings', 'quirk'],
+      run: async (c) => {
+        resetDemo(c);
+        if (c.side === 'wadesk')
+          mysql(
+            `update wa_storefronts set settings_json='{"top_strip":"stw strip","hero_sub":"stw sub","hero_text":"seed"}' where id=${REF.id}`,
+          );
+        else
+          psql(
+            `update wa_storefronts set settings_json='{"top_strip":"stw strip","hero_sub":"stw sub","hero_text":"seed"}'::jsonb where org_id = ${orgSql} and id = ${OURS.id}`,
+          );
+        c.onCleanup(() => resetDemo(c));
+        await go(c, settingsPath[c.side], { ready: SET.slug[c.side] });
+        c.obs.enum('heroPrefilled', await c.loc(SET.hero).first().inputValue());
+        await c.fill(SET.footer, `stw-${c.tag('f')}`);
+        await saveSettings(c);
+        const raw =
+          c.side === 'wadesk'
+            ? mysql(`select json_keys(settings_json) from wa_storefronts where id=${REF.id}`)
+            : psql(
+                `select (select jsonb_agg(k order by k) from jsonb_object_keys(settings_json) k)::text from wa_storefronts where org_id = ${orgSql} and id = ${OURS.id}`,
+              );
+        const keys = (json(raw) || []).filter((k) => !/^cart_recovery/.test(k));
+        c.obs.list('keysAfterSave', keys);
+      },
+    },
     // ============================ dashboard and sidebar ==============================================================
     {
       id: 'dashboard.empty',
@@ -1417,15 +1625,6 @@ export default (h) => {
           c.obs.flag(
             'switcher.titleFollows',
             (await mainText(c)).includes(second.name) || (await asideText(c)).includes(second.name),
-          );
-          await go(c, '/store/storefront', { ready: SET.slug[c.side] });
-          c.obs.flag(
-            'settingsAfterSwitch.isSecondShop',
-            (await c
-              .loc(SET.slug)
-              .first()
-              .inputValue()
-              .catch(() => '')) !== REF.slug && c.side === 'ours',
           );
         }
         await c.shot('switcher');
@@ -1906,8 +2105,97 @@ export default (h) => {
     pages,
     forms: [wizardCreate, wizardEdit, settingsForm],
     deletes,
-    scenarios,
-    intended: [],
+    scenarios: [...scenarios, ...settingsMatrix, ...wizardMatrix],
+    intended: [
+      {
+        scenario: /^(dashboard\.(empty|with-data)|rail\.catalog-pages|sidebar\.shop-card)$/,
+        key: /^map\.(sidebar|rail)[\w.]*\.kinds$/,
+        quirk:
+          'WaDesk sidebar links to the sibling store screens (orders, groups, coupons, payments, gateways, customers, invoices)',
+        reason:
+          'blocked: those screens belong to checkout-orders-merchant-payments and are not ported yet; the sidebar shows them disabled with a "Coming soon" note until that domain lands (inventory WD-STORE-023)',
+      },
+      {
+        scenario: /^(dashboard\.(empty|with-data)|rail\.catalog-pages|sidebar\.shop-card)$/,
+        key: /^map\.(sidebar|rail)[\w.]*\.hrefs$/,
+        quirk:
+          'WaDesk sidebar links carry no shop id and always act on the first shop of the workspace',
+        reason:
+          'decision D-02: the Overview and Storefront links carry ?shop=<id> so the sidebar of shop B opens shop B (WaDesk edits the first shop whatever the switcher says); the sibling links are blocked (see the kinds entry)',
+      },
+      {
+        scenario: /^(wizard-create|wizard-edit|settings)\.session-expired$/,
+        key: 'enum.sessionExpiry',
+        reason:
+          "When the session is gone the shared API client of the web app shows the error and keeps what was typed (only an idle timeout redirects to sign-in, WD-AUTH-033); the reference redirects. Owned by the auth domain's client, not by the store screens.",
+      },
+      {
+        scenario:
+          /^(wizard-list|wizard-add|wizard-edit|store-dashboard|store-settings|store-products|store-reviews)\.keyboard$/,
+        key: 'abs.keyboard.focusVisible',
+        reason:
+          'After the last real stop, Tab lands on the Next.js development-tools portal element, which has no focus ring; that element exists only under `next dev` and is absent from a production build (every real stop shows focus).',
+      },
+      {
+        scenario: 'wizard-create.all-empty',
+        key: 'num.submitRequests',
+        reason:
+          'The extra non-GET request is the CRM shell asking for a realtime ticket (POST /realtime/ticket, answered 429 when rate limited), not a store request: both apps send exactly one save.',
+      },
+      {
+        scenario: /^wizard-db\.shop_name\.(max|max\+1|very-long)$/,
+        quirk:
+          'WaDesk does not cut the slug to 64 characters; a long shop name (up to 191) makes the save fail in the database (HTTP 500)',
+        reason:
+          'deliberate fix (inventory WD-STORE-003 rule 4): the slug is cut to 64 before a numbered suffix is added, so a long name saves',
+      },
+      {
+        scenario:
+          /^(wizard-db\.(shop_name|custom_domain)|settings-db\.(hero_text|slug|custom_domain|logo_url|brand_color))\.null-byte$/,
+        quirk:
+          'WaDesk stores a NUL byte typed into a text box (or rejects it where a pattern fails)',
+        reason:
+          'deliberate hardening: a NUL character is refused with a field message (problem+json 422) instead of being stored; the shared input rule of the platform',
+      },
+      {
+        scenario: 'wizard-db.shop_name.zero-width',
+        key: 'map.stored',
+        quirk:
+          'WaDesk trims zero-width characters at the ends of an input (Laravel TrimStrings); the platform trims whitespace only',
+        reason:
+          'platform-wide input normalisation (zod trim), not store specific: a trailing zero-width joiner stays in the stored name; the slug is identical (zero-width characters are a word break in both)',
+      },
+      {
+        scenario: 'settings.unowned-keys',
+        key: 'set.keysAfterSave',
+        quirk:
+          'WaDesk rebuilds settings_json from the form keys only and erases top_strip and hero_sub',
+        reason:
+          'deliberate fix (inventory D-05 area): keys the form does not own are kept on save so a hero sub line or top strip set elsewhere is not lost',
+      },
+      {
+        scenario: 'wizard.duplicate-domain',
+        key: /^(num\.shops\.afterSecond|flag\.secondRejected|enum\.second\.status|flag\.second\.(formStillShown|feedbackShown))$/,
+        quirk:
+          'WaDesk has no uniqueness validation on the custom domain; the unique column makes the second save a database error (HTTP 500)',
+        reason: 'deliberate fix: a taken domain is a field error on the form and nothing is saved',
+      },
+      {
+        scenario: 'settings.second-shop',
+        key: 'enum.editedShop',
+        quirk: 'WaDesk settings page edits the first shop of the workspace only',
+        reason:
+          "decision D-02: settings are shop-scoped through ?shop=; a second shop opens its own settings instead of the first shop's",
+      },
+      {
+        scenario: 'wizard.first-run-no-shop',
+        key: /^(status|flag)\.noshop\.(products|reviews|productCreate)(\.hasMainText)?$/,
+        quirk:
+          'WaDesk answers HTTP 500 on the catalog pages of a workspace without a shop (shop_name read on null)',
+        reason:
+          'deliberate fix: the catalog pages render with a "No shop yet / Set up your store" card in the rail; /store and /store/storefront still redirect to the wizard as in WaDesk',
+      },
+    ],
     skip: [
       {
         scenario: 'reset-all.ours-only',

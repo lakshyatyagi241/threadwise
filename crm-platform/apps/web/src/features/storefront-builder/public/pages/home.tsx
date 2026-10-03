@@ -18,7 +18,7 @@ export async function ShopHome({ slug, page = 1 }: { slug: string; page?: number
   const home = await getPublicHome(slug, page);
   if (!home) notFound();
   return (
-    <ShopFrame shop={home.shop} products={home.products}>
+    <ShopFrame shop={home.shop} products={home.products} page="home">
       <Hero shop={home.shop} />
       <Catalog key={home.page} home={home} />
     </ShopFrame>

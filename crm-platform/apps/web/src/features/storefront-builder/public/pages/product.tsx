@@ -17,7 +17,11 @@ export async function ShopProduct({ slug, productSlug }: { slug: string; product
   const origin = await requestOrigin();
   const url = `${origin}${productPath(slug, page.product.slug)}`;
   return (
-    <ShopFrame shop={page.shop} products={[{ ...page.product, stockQty: null }, ...page.related]}>
+    <ShopFrame
+      shop={page.shop}
+      page="product"
+      products={[{ ...page.product, stockQty: null }, ...page.related]}
+    >
       {/* React hoists these into <head>. `og:type` is `product` here, which the typed metadata API does not offer. */}
       <meta property="og:type" content="product" />
       <script

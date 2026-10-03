@@ -12,6 +12,52 @@ const FOLD: Record<string, string> = {
   ı: 'i',
 };
 
+/** The Arabic letters Laravel's ASCII folding turns into Latin ones (a shop called "مرحبا" gets the slug "mrhba"). */
+const ARABIC: Record<string, string> = {
+  ا: 'a',
+  ب: 'b',
+  ت: 't',
+  ث: 'th',
+  ج: 'g',
+  ح: 'h',
+  خ: 'kh',
+  د: 'd',
+  ذ: 'th',
+  ر: 'r',
+  ز: 'z',
+  س: 's',
+  ش: 'sh',
+  ص: 's',
+  ض: 'd',
+  ط: 't',
+  ظ: 'th',
+  ع: 'aa',
+  غ: 'gh',
+  ف: 'f',
+  ق: 'k',
+  ك: 'k',
+  ل: 'l',
+  م: 'm',
+  ن: 'n',
+  ه: 'h',
+  و: 'o',
+  ي: 'y',
+  ء: 'aa',
+  '٠': '0',
+  '١': '1',
+  '٢': '2',
+  '٣': '3',
+  '٤': '4',
+  '٥': '5',
+  '٦': '6',
+  '٧': '7',
+  '٨': '8',
+  '٩': '9',
+};
+
+/** Zero-width characters count as a word break, as they did in WaDesk's slug. */
+const INVISIBLE = /[\u200b-\u200d\u2060\ufeff]/g;
+
 /**
  * What Laravel's `Str::slug` produced for the names WaDesk shops have: accents folded to ASCII, `_` and spaces to a hyphen,
  * `@` to "at", anything else that is not a letter or digit dropped, hyphen runs collapsed, no hyphen at either end. Letters
@@ -21,6 +67,8 @@ export function slugify(text: string): string {
   const folded = text
     .normalize('NFKD')
     .replace(/\p{M}+/gu, '')
+    .replace(INVISIBLE, ' ')
+    .replace(/[\u0600-\u06ff]/g, (c) => ARABIC[c] ?? c)
     .toLowerCase()
     .replace(/[ßæœøđðþłı]/g, (c) => FOLD[c] ?? c)
     .replace(/_+/g, '-')

@@ -8,6 +8,11 @@ describe('slugify', () => {
     expect(slugify('Shop #1 & Co.')).toBe('shop-1-co');
   });
 
+  it('turns Arabic letters into Latin ones and zero-width characters into a break, like the server', () => {
+    expect(slugify('مرحبا بالعالم שלום')).toBe('mrhba-balaaalm');
+    expect(slugify('ab\u200bcd\u200d')).toBe('ab-cd');
+  });
+
   it('cuts at 64 characters', () => {
     expect(slugify('a'.repeat(100))).toHaveLength(64);
   });

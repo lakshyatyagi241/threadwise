@@ -2211,31 +2211,33 @@
 
 /* ───────── The eight themes: tokens come from lib/themes.ts, these are the overrides ─────────
    A literal translation of each WaDesk theme's `extra-styles`. The theme prefix is :where() so a theme rule has the same
-   specificity as the rule it overrides in WaDesk (e.g. a theme's `.add {...}` still loses to the base `.card .add`). */
+   specificity as the rule it overrides in WaDesk (e.g. a theme's `.add {...}` still loses to the base `.card .add`). WaDesk's
+   product pages only carry a few of them (Noir and Mercato headers, Kraft's paper); every other theme rule belongs to the home
+   page alone, hence `data-sf-page='home'`. */
 
 /* meridian: magazine */
-:where([data-sf-theme='meridian']) .sf-hero h1 em {
+:where([data-sf-theme='meridian'][data-sf-page='home']) .sf-hero h1 em {
   font-style: italic;
   font-weight: 400;
 }
-:where([data-sf-theme='meridian']) .sf-card {
+:where([data-sf-theme='meridian'][data-sf-page='home']) .sf-card {
   border: none;
   border-bottom: 1px solid var(--sf-border);
   border-radius: 0;
 }
-:where([data-sf-theme='meridian']) .sf-card .sf-card-body {
+:where([data-sf-theme='meridian'][data-sf-page='home']) .sf-card .sf-card-body {
   padding: 14px 0;
 }
-:where([data-sf-theme='meridian']) .sf-grid {
+:where([data-sf-theme='meridian'][data-sf-page='home']) .sf-grid {
   gap: 64px 24px;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
 /* verdure: organic */
-:where([data-sf-theme='verdure']) .sf-hero {
+:where([data-sf-theme='verdure'][data-sf-page='home']) .sf-hero {
   position: relative;
 }
-:where([data-sf-theme='verdure']) .sf-hero::before {
+:where([data-sf-theme='verdure'][data-sf-page='home']) .sf-hero::before {
   content: '';
   position: absolute;
   top: 20px;
@@ -2246,30 +2248,30 @@
   background: var(--sf-accent);
   transform: translateX(-50%);
 }
-:where([data-sf-theme='verdure']) .sf-card .sf-card-img {
+:where([data-sf-theme='verdure'][data-sf-page='home']) .sf-card .sf-card-img {
   aspect-ratio: 4 / 5;
   background: linear-gradient(135deg, #e8e2d0, #d5dcc4);
 }
 
 /* bazaar: dense colourful grid */
-:where([data-sf-theme='bazaar']) .sf-grid {
+:where([data-sf-theme='bazaar'][data-sf-page='home']) .sf-grid {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 14px;
 }
-:where([data-sf-theme='bazaar']) .sf-card .sf-card-body {
+:where([data-sf-theme='bazaar'][data-sf-page='home']) .sf-card .sf-card-body {
   padding: 10px;
 }
-:where([data-sf-theme='bazaar']) .sf-card h3 {
+:where([data-sf-theme='bazaar'][data-sf-page='home']) .sf-card h3 {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 15px;
   font-weight: 600;
 }
-:where([data-sf-theme='bazaar']) .sf-card .sf-card-price {
+:where([data-sf-theme='bazaar'][data-sf-page='home']) .sf-card .sf-card-price {
   font-size: 13px;
   font-weight: 700;
   color: #e76f51;
 }
-:where([data-sf-theme='bazaar']) .sf-card .sf-add {
+:where([data-sf-theme='bazaar'][data-sf-page='home']) .sf-card .sf-add {
   padding: 6px 10px;
   border: none;
   border-radius: 6px;
@@ -2277,7 +2279,7 @@
   color: #fff;
   font-size: 11px;
 }
-:where([data-sf-theme='bazaar']) .sf-card .sf-add:hover {
+:where([data-sf-theme='bazaar'][data-sf-page='home']) .sf-card .sf-add:hover {
   filter: brightness(1.05);
 }
 
@@ -2286,24 +2288,24 @@
   border-bottom: 1px solid #2a2a2a;
   background: #0a0a0a;
 }
-:where([data-sf-theme='noir']) .sf-hero h1 {
+:where([data-sf-theme='noir'][data-sf-page='home']) .sf-hero h1 {
   font-weight: 300;
   letter-spacing: 0.02em;
 }
-:where([data-sf-theme='noir']) .sf-card {
+:where([data-sf-theme='noir'][data-sf-page='home']) .sf-card {
   border: 1px solid #2a2a2a;
   background: #141414;
 }
-:where([data-sf-theme='noir']) .sf-card:hover {
+:where([data-sf-theme='noir'][data-sf-page='home']) .sf-card:hover {
   border-color: #d4af37;
 }
-:where([data-sf-theme='noir']) .sf-card .sf-card-img {
+:where([data-sf-theme='noir'][data-sf-page='home']) .sf-card .sf-card-img {
   background: #0a0a0a;
 }
-:where([data-sf-theme='noir']) .sf-card h3 {
+:where([data-sf-theme='noir'][data-sf-page='home']) .sf-card h3 {
   font-weight: 300;
 }
-:where([data-sf-theme='noir']) .sf-add:hover {
+:where([data-sf-theme='noir'][data-sf-page='home']) .sf-add:hover {
   background: var(--sf-accent);
   color: #000;
 }
@@ -2313,14 +2315,14 @@
   background-image: radial-gradient(rgba(166, 132, 90, 0.08) 1px, transparent 1px);
   background-size: 8px 8px;
 }
-:where([data-sf-theme='kraft']) .sf-head {
+:where([data-sf-theme='kraft'][data-sf-page='home']) .sf-head {
   background: rgba(245, 239, 224, 0.95);
   backdrop-filter: blur(6px);
 }
-:where([data-sf-theme='kraft']) .sf-card {
+:where([data-sf-theme='kraft'][data-sf-page='home']) .sf-card {
   box-shadow: 2px 2px 0 #c9b894;
 }
-:where([data-sf-theme='kraft']) .sf-card .sf-card-img {
+:where([data-sf-theme='kraft'][data-sf-page='home']) .sf-card .sf-card-img {
   background: #e5d8b7;
 }
 
@@ -2335,53 +2337,53 @@
   font-style: italic;
   color: #fff8e7;
 }
-:where([data-sf-theme='mercato']) .sf-hero {
+:where([data-sf-theme='mercato'][data-sf-page='home']) .sf-hero {
   padding-bottom: 60px;
   border-bottom: 4px dashed #f4d35e;
   background: repeating-linear-gradient(90deg, #fff8e7 0, #fff8e7 24px, #fffef8 24px, #fffef8 48px);
 }
-:where([data-sf-theme='mercato']) .sf-hero h1 {
+:where([data-sf-theme='mercato'][data-sf-page='home']) .sf-hero h1 {
   font-style: italic;
 }
-:where([data-sf-theme='mercato']) .sf-card {
+:where([data-sf-theme='mercato'][data-sf-page='home']) .sf-card {
   border: 2px solid #f4d35e;
 }
-:where([data-sf-theme='mercato']) .sf-card .sf-card-img {
+:where([data-sf-theme='mercato'][data-sf-page='home']) .sf-card .sf-card-img {
   background: #fff8e7;
 }
-:where([data-sf-theme='mercato']) .sf-add:hover {
+:where([data-sf-theme='mercato'][data-sf-page='home']) .sf-add:hover {
   background: #c8553d;
   color: #fff;
 }
 
 /* studio: portfolio */
-:where([data-sf-theme='studio']) .sf-hero {
+:where([data-sf-theme='studio'][data-sf-page='home']) .sf-hero {
   max-width: 900px;
   margin: 0 auto;
   padding: 96px 24px 32px;
   text-align: left;
 }
-:where([data-sf-theme='studio']) .sf-hero h1 {
+:where([data-sf-theme='studio'][data-sf-page='home']) .sf-hero h1 {
   font-weight: 500;
 }
-:where([data-sf-theme='studio']) .sf-grid {
+:where([data-sf-theme='studio'][data-sf-page='home']) .sf-grid {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   max-width: 1100px;
   margin: 0 auto;
   gap: 32px;
 }
-:where([data-sf-theme='studio']) .sf-card {
+:where([data-sf-theme='studio'][data-sf-page='home']) .sf-card {
   border: none;
   box-shadow: 0 12px 32px rgba(38, 70, 83, 0.06);
 }
-:where([data-sf-theme='studio']) .sf-card:hover {
+:where([data-sf-theme='studio'][data-sf-page='home']) .sf-card:hover {
   box-shadow: 0 20px 48px rgba(38, 70, 83, 0.1);
 }
-:where([data-sf-theme='studio']) .sf-card .sf-card-img {
+:where([data-sf-theme='studio'][data-sf-page='home']) .sf-card .sf-card-img {
   aspect-ratio: 5 / 4;
 }
 /* WaDesk's studio `.add { teal pill }` has the specificity of one class and loses to the base `.card .add`: only its hover applies. */
-:where([data-sf-theme='studio']) .sf-add:hover {
+:where([data-sf-theme='studio'][data-sf-page='home']) .sf-add:hover {
   background: #264653;
 }
 
