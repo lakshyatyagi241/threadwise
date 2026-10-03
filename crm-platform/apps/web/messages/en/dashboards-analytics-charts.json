@@ -462,8 +462,8 @@
       },
       "analytics": {
         "title": "Admin analytics.",
-        "kicker": "Admin / Analytics",
-        "subtitle": "Growth, revenue, usage and support load across the platform.",
+        "kicker": "Admin - Platform",
+        "subtitle": "A complete control-room view of revenue, workspace growth, WhatsApp usage, campaign delivery, device health, and support pressure.",
         "days": {
           "7": "Last 7 days",
           "30": "Last 30 days",
