@@ -3,40 +3,75 @@
 Reference 1.7.0 vs this port. API reference: [docs/api/dashboards-analytics-charts.md](../../api/dashboards-analytics-charts.md); plan:
 [port-map](../port-map/dashboards-analytics-charts.md).
 
-Evidence is automated: `apps/api/test/e2e/dashboards-analytics-charts/{dash,health}.e2e.spec.ts` (HTTP, real Postgres, Redis and
-BullMQ), `apps/api/test/unit/dashboards-analytics-charts/*`, and the web unit tests under
-`apps/web/src/features/dashboards-analytics-charts/`. The running reference was not opened for a screen pass in this run, so layout
-parity rests on the inventory only (see Not verified).
+Evidence is automated: `apps/api/test/e2e/dashboards-analytics-charts/{dash,health,admin-dash,widgets,panels}.e2e.spec.ts` (HTTP, real
+Postgres, Redis and BullMQ), `apps/api/test/unit/dashboards-analytics-charts/*`, and the web unit tests under
+`apps/web/src/features/dashboards-analytics-charts/`. Round 2 opened the running Reference once per screen (admin overview, admin
+analytics, workspace dashboard, workspace analytics) and compared them with this port's screens side by side.
+
+tier P0 done: TW-DASH-002, 003, 004, 005, 012, 022, 023, 024, 034, 035, 045, 048, 052 (045 is delivered by the PLAN domain, see below).
+tier P1 done: TW-DASH-006, 013, 014, 015, 016, 018, 025, 026 (device counters), 030, 036, 039, 040, 041, 042, 043, 046, 047, 049 (bars), 053.
+tier P2 done: TW-DASH-007, 011, 019, 021, 024, 027, 028, 031, 032, 038, 044, 051.
 
 ## Built
 
-TW-DASH-002..005, 012, 018, 022..025, 027, 031, 032 (workspace dashboard and analytics), 048 (system health core), 049 (response-time
-bars), 050 (host vitals only), 051 (clear jobs).
+- Workspace dashboard `/dashboard` in Reference's card order: greeting with the "Workspace is calm" or running-broadcasts accent, Export
+  (client CSV, 021), range dropdown, New campaign; Messages sent (with the last-20-hours bars), Read rate (sent/deliv/read mini tiles),
+  Active contacts (006), wallet balance or the "Put replies on autopilot" prompt (007), sales-pipeline strip (011, plan-gated), throughput
+  chart, live inbox (016), active campaigns (013), connected devices (014), top templates (015), engagement funnel, activity log (019).
+- Workspace analytics `/analytics`: adds By device (026), Templates and Top contacts (028) and Team performance (030).
+- Operator `/admin` is now the overview (034..040) and `/admin/analytics` the tabbed analytics (041..044). `/admin/financial`
+  (045..047) is the PLAN domain's TW-PLAN-026 and covers the same KPIs, charts and tables; it is not rebuilt here.
+- Operator system health `/admin/health` (048, 049 bars, 050 vitals, 051).
+
+## Conformance pass (round 2)
+
+Compared against the running Reference. Fixed: serif page titles with an italic accent word, mono kicker lines, the dashboard card order
+and contents (Reference has no Deliverability or Replies tiles: they moved into the Read-rate mini tiles and the throughput footer), range
+as a dropdown, KPI pills, the pipeline strip, empty states with their call-to-action buttons, the admin overview's section order and the
+admin analytics tab map (panel visibility per tab, as Reference's `data-wa-tab-panel`).
 
 ## Deliberate deviations (intended)
 
-| Id          | Reference                                                       | Port                                                                                                        | Reason                                                                        |
-| ----------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| TW-DASH-048 | the polled repaint leaves the overall banner stale           | the banner is repainted with the cards                                                                      | the inventory port note calls the stale banner a defect                       |
-| TW-DASH-048 | probes `jobs`/`failed_jobs` tables, cache driver, media disk | Postgres, Redis, BullMQ, `NODE_BRIDGE_URL`, `S3_ENDPOINT`                                                   | different engine; same five cards in the same order                           |
-| TW-DASH-048 | media storage writes, reads back and deletes a probe file    | reachability of the S3 endpoint only; `idle` when none is configured                                        | no storage adapter or S3 client exists yet; upgrade with the media domain     |
-| TW-DASH-048 | no result cache                                              | one probe run shared for 3 seconds                                                                          | protects against poll storms (inventory port note)                            |
-| TW-DASH-050 | PHP and Laravel versions                                     | Node and app version, uptime, memory                                                                        | the runtime differs                                                           |
-| TW-DASH-051 | deletes every row of `jobs` and `failed_jobs`, no audit      | drains waiting and delayed jobs, removes failed ones, never touches running jobs, audited, super admin only | the inventory marks the blanket delete as dangerous and asks for these guards |
+| Id          | Reference                                                       | Port                                                                                                   | Reason                                                                        |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| TW-DASH-001 | "Live synced 4s ago" label that never updates                | dropped                                                                                                | static text that lies                                                         |
+| TW-DASH-006 | Subscribed and Opted-in are one column                       | same, two bars with equal values                                                                       | parity; the schema has one flag                                               |
+| TW-DASH-014 | `sent_24h` never written, slots fixed at 6                   | slots follow the plan device limit (6 when unlimited, never below the count); counters read as stored  | port note; per-device live counts need a sender id on messages                |
+| TW-DASH-015 | Column "CTR" is really the read rate                         | column named "Read rate"                                                                               | inventory port note                                                           |
+| TW-DASH-026 | counts messages by an encrypted number, always 0             | the bridge's 24-hour counter, busiest first                                                            | messages carry no sender device here                                          |
+| TW-DASH-028 | top contacts scanned the 20 newest conversations             | a true top 5 over the window                                                                           | inventory port note                                                           |
+| TW-DASH-030 | credit to the current assignee, wall-clock minutes           | same                                                                                                   | parity                                                                        |
+| TW-DASH-034 | "24h" is two days, "7d" is eight (calendar snapping)         | exact N-day spans ending today (UTC)                                                                   | inventory port note                                                           |
+| TW-DASH-035 | raw sum across currencies, profit is 32% of income           | converted to the platform currency; profit kept as a labelled 32% estimate                             | port note; Reference's own docs say it is not an accounting figure               |
+| TW-DASH-036 | 12 buckets stop short of the window end                      | buckets cover the whole window, the header total equals the income card; target kept (+10%, floor 100) | inventory acceptance criterion marks it a deliberate fix                      |
+| TW-DASH-038 | only the top 3 gateways                                      | top 3 plus an "Other" slice; premium counted by plan slug, not by a numeric id                         | port note                                                                     |
+| TW-DASH-039 | MRR is the list price, not normalised                        | monthly-normalised, offer-aware                                                                        | port note                                                                     |
+| TW-DASH-042 | Messages shows "-" always (missing table)                    | real outbound count; devices online over every device                                                  | inventory acceptance criterion                                                |
+| TW-DASH-043 | days without signups absent from the chart                   | zero-filled                                                                                            | port note                                                                     |
+| TW-DASH-044 | export not audited                                           | one audit row per export                                                                               | port note                                                                     |
+| TW-DASH-034 | all platform admins                                          | super admin and the read-only auditor; support operators are refused                                   | the numbers are every workspace's money (same rule as the PLAN reports)       |
+| TW-DASH-048 | the polled repaint leaves the overall banner stale           | the banner is repainted with the cards                                                                 | the inventory port note calls the stale banner a defect                       |
+| TW-DASH-048 | probes `jobs`/`failed_jobs` tables, cache driver, media disk | Postgres, Redis, BullMQ, `NODE_BRIDGE_URL`, `S3_ENDPOINT`                                              | different engine; same five cards in the same order                           |
+| TW-DASH-051 | deletes every row of `jobs` and `failed_jobs`, no audit      | drains waiting and delayed jobs, removes failed ones, never touches running jobs, audited, super admin | the inventory marks the blanket delete as dangerous and asks for these guards |
 
-## Blocked (recorded, not dropped)
+## Blocked or not built (recorded, not dropped)
 
-| Id                                                            | Blocked on                                                                                                                                                                                                                     |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| TW-DASH-034..044                                              | admin overview and admin analytics: platform-wide aggregates over orders, workspaces and sign-ups need a sanctioned cross-tenant read door (PlatformStore does not touch tenant tables; no new `.privileged(` call is allowed) |
-| TW-DASH-045..047                                              | admin financial dashboard: the same door, plus the orders and refunds tables no domain writes yet (PAYGW, checkout)                                                                                                            |
-| TW-DASH-049 (counters, 14-day line)                           | platform-wide counts of messages, AI calls, conversations and webhooks need the same door                                                                                                                                      |
-| TW-DASH-050 (engine cards)                                    | devices and provider configs are tenant tables; same door, plus TW-WADEV and TW-WABA                                                                                                                                           |
-| TW-DASH-001, 006..011, 013..017, 019, 020, 026, 029, 030, 033 | other domains (CHAT, CON, WALLET, BCAST, WADEV, TPL, TIB1/2, FLR, NOTIF, SCHED) and the shell's landing and quick-access preferences; see the port map                                                                         |
-| TW-DASH-052..054                                              | 052 is delivered as hand-drawn SVG (no chart dependency may be added); 053 is applied on the built screens; 054 is dead code and is not ported                                                                                 |
+| Id                  | Why                                                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| TW-DASH-001         | the home router (admin to `/admin`, agents to the inbox) lives in the web shell's landing logic, not this zone                                         |
+| TW-DASH-008         | Instagram band: no Instagram channel domain                                                                                                            |
+| TW-DASH-009, 010    | Quick access tiles and drawer: need a per-user preference store and the customer shell's drawer slot (ASHELL)                                          |
+| TW-DASH-017         | Flow Copilot card and Automation flows list: the flow builder and runtime domains are not built                                                        |
+| TW-DASH-020         | quick-action tiles and integrations health: the integrations domains are not built (partial in Reference too)                                             |
+| TW-DASH-029         | geography by device region and the event stream: no live message feed endpoint; Reference's own panels are static and always 0                            |
+| TW-DASH-037         | countries and region radar render their Reference empty state: the users table keeps no country (Reference stored a dial prefix, so its panel was empty too) |
+| TW-DASH-050         | WhatsApp engine cards (devices and provider configs are tenant tables; needs the WADEV/WABA sender registry)                                           |
+| TW-DASH-033         | docs-only in Reference (scheduled analytics report), not ported on purpose                                                                                |
+| TW-DASH-054         | dead code, not ported on purpose                                                                                                                       |
+| Add workspace, rows | the admin overview's "Add workspace" button and row links need the operator workspace screens (WSP admin), not built; "View all" opens workspace plans |
 
 ## Not verified
 
-- Screen layout against the running reference (not opened).
-- A browser smoke spec for the console health page.
+- Charts with real traffic: all screenshots ran on a database with almost no messages, orders or devices.
+- A browser smoke spec for the console pages (none written; the screens were compared by hand once).
 - The bridge probe against a real Node bridge (tested against a local HTTP server and the harness stub).

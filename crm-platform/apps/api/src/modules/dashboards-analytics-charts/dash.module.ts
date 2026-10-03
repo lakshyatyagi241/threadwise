@@ -4,6 +4,7 @@ import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AnalyticsController, DashboardController } from './dash.controller';
 import { DashRepository } from './dash.repository';
 import { DashWidgetsRepository } from './dash-widgets.repository';
+import { DashPanelsRepository } from './dash-panels.repository';
 import { DashService } from './dash.service';
 import { AdminDashController } from './admin-dash.controller';
 import { HealthController } from './health.controller';
@@ -18,6 +19,7 @@ import { HealthService } from './health.service';
     DashService,
     DashRepository,
     DashWidgetsRepository,
+    DashPanelsRepository,
     HealthService,
     PlatformMetricsService,
   ],

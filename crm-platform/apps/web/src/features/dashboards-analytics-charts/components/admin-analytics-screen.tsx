@@ -49,7 +49,9 @@ export function AdminAnalyticsScreen({ days }: { days: number }) {
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             {t('kicker')}
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('title')}</h1>
+          <h1 className="font-serif text-3xl leading-tight sm:text-4xl">
+            {t('titleLead')} <em className="text-primary">{t('titleAccent')}</em>.
+          </h1>
           <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">

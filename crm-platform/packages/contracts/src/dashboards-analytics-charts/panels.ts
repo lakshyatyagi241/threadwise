@@ -1,0 +1,53 @@
+import { z } from 'zod';
+
+/** The analytics page's list panels (TW-DASH-026, 028, 030) for one window; same window rules as the overview. */
+export const analyticsPanelsSchema = z.object({
+  /** Senders with their 24-hour counters, busiest first, at most 8 (TW-DASH-026). */
+  devices: z.object({
+    total: z.number().int(),
+    online: z.number().int(),
+    rows: z.array(
+      z.object({
+        uuid: z.string().uuid(),
+        label: z.string(),
+        sent: z.number().int(),
+        online: z.boolean(),
+      }),
+    ),
+  }),
+  /** The 8 most recently edited templates with their window sends, busiest first (TW-DASH-028). */
+  templates: z.array(
+    z.object({
+      uuid: z.string().uuid(),
+      name: z.string(),
+      category: z.string().nullable(),
+      language: z.string().nullable(),
+      sends: z.number().int(),
+    }),
+  ),
+  /** The five busiest conversations of the window (TW-DASH-028). */
+  contacts: z.array(
+    z.object({
+      uuid: z.string().uuid(),
+      title: z.string(),
+      phone: z.string().nullable(),
+      lastAt: z.string().nullable(),
+      messages: z.number().int(),
+    }),
+  ),
+  /** One row per assignee of a conversation created in the window; empty hides the section (TW-DASH-030). */
+  team: z.array(
+    z.object({
+      userUuid: z.string().uuid(),
+      name: z.string(),
+      email: z.string(),
+      conversations: z.number().int(),
+      resolved: z.number().int(),
+      avgFirstResponseMin: z.number().nullable(),
+      avgResolutionMin: z.number().nullable(),
+      csatAvg: z.number().nullable(),
+      csatCount: z.number().int(),
+    }),
+  ),
+});
+export type AnalyticsPanels = z.infer<typeof analyticsPanelsSchema>;

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   deltaOf,
   formatMoney,
+  minutesLabel,
   pickOption,
   relativeSpan,
   throughputCsv,
@@ -86,6 +87,11 @@ describe('admin helpers', () => {
 });
 
 describe('dashboard helpers', () => {
+  it('durations: under an hour as minutes (12.5 rounds up), else hours and minutes, null is a dash', () => {
+    expect(minutesLabel(12.5)).toBe('13m');
+    expect(minutesLabel(125)).toBe('2h 5m');
+    expect(minutesLabel(null)).toBe('-');
+  });
   it('relative spans pick minutes, hours or days', () => {
     const now = new Date('2026-10-14T12:00:00Z');
     expect(relativeSpan('2026-10-14T11:30:00Z', now, 'en')).toBe('30 minutes ago');

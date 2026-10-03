@@ -35,3 +35,11 @@ export const useWidgets = (range: DashRange) =>
     placeholderData: keepPreviousData,
     retry: false,
   });
+
+export const usePanels = (p: AnalyticsParams) =>
+  useQuery({
+    queryKey: ['dash', 'panels', p.range, p.from ?? '', p.to ?? ''],
+    queryFn: ({ signal }) => dashApi.panels(p, signal),
+    placeholderData: keepPreviousData,
+    retry: false,
+  });

@@ -62,6 +62,15 @@ export class AnalyticsController {
     return this.dash.analytics(q);
   }
 
+  @Get('panels')
+  @RequirePermission('dash.analytics.read')
+  @ApiOperation({
+    summary: 'Per-device sends, top templates, top conversations and team performance',
+  })
+  panels(@Query(zodPipe(analyticsQuerySchema)) q: AnalyticsQuery) {
+    return this.dash.panels(q);
+  }
+
   @Get('export')
   @RequirePermission('dash.analytics.read')
   @Header('Content-Type', 'text/csv; charset=utf-8')
