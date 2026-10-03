@@ -1,0 +1,637 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Marketplace",
+        "catalogue": "Catalogue",
+        "categories": "Categories",
+        "requests": "Requests",
+        "usage": "Usage"
+      },
+      "common": {
+        "loading": "Loading...",
+        "requestId": "Request id",
+        "retry": "Try again",
+        "noPermissions": "No permissions"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Mini app",
+          "integration": "Integration"
+        },
+        "appStatus": {
+          "draft": "Draft",
+          "in_review": "In review",
+          "published": "Published",
+          "hidden": "Hidden",
+          "killed": "Killed"
+        },
+        "versionStatus": {
+          "draft": "Draft",
+          "in_review": "In review",
+          "approved": "Approved",
+          "rejected": "Rejected",
+          "published": "Published",
+          "retired": "Retired"
+        },
+        "requestStatus": {
+          "open": "Open",
+          "planned": "Planned",
+          "building": "Building",
+          "shipped": "Shipped",
+          "declined": "Declined"
+        },
+        "connector": {
+          "oauth": "OAuth sign-in",
+          "push": "Push (the portal posts to us)",
+          "pull": "Pull (we poll the portal)",
+          "email_parse": "Email parsing",
+          "webhook_relay": "Webhook relay"
+        },
+        "risk": {
+          "low": "Low risk",
+          "medium": "Medium risk",
+          "high": "High risk"
+        }
+      },
+      "errors": {
+        "conflict": "Someone else changed this while you were looking at it. Reload to see their version, then make your change again.",
+        "noAccess": "You need the platform permission {permission} for this.",
+        "manifestInvalid": "The manifest does not follow manifest v1. Each problem is listed with its path.",
+        "recipeInvalid": "The recipe does not follow the recipe format, or it does not match the manifest. Each problem is listed with its path.",
+        "urlRefused": "An address in the recipe is refused: {detail}.",
+        "urlRefusedPlain": "An address in the recipe is refused. Addresses must be https, a public DNS name, on the default port and without credentials.",
+        "connectorNotAvailable": "The {type} connector type is not implemented yet, so this listing cannot be published. Nothing that does not work reaches a workspace.",
+        "slugTaken": "Another listing or category already uses that id. Pick a different one.",
+        "categoryGone": "That category no longer exists. Reload the list.",
+        "categoryUnknown": "The category named in the manifest does not exist for this kind of app, or it is switched off. Pick one from the Categories page.",
+        "categoryInUse": "Apps are listed in this category. Move them to another category first, or switch the category off to hide it from workspaces.",
+        "versionState": "This is not allowed while the listing or version is {status}. Reload to see its current state.",
+        "versionStatePlain": "This is not allowed in the current state of the listing or version. Reload to see its current state.",
+        "versionExists": "The version number must be higher than {newest}, the highest version so far.",
+        "versionExistsPlain": "That version number already exists. Use a higher one.",
+        "appUnavailable": "A killed listing cannot be published. Restore it first, then publish.",
+        "appNotFound": "This listing does not exist. It may have been deleted.",
+        "notFound": "That item was not found. It may have been deleted.",
+        "rateLimited": "Too many requests. Wait {seconds} seconds and try again.",
+        "rateLimitedPlain": "Too many requests. Wait a moment and try again.",
+        "validationFields": "Some fields are not valid. Each problem is listed with its field.",
+        "validation": "The request was not valid.",
+        "request": "The request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again; if it keeps happening, quote the request id."
+      },
+      "list": {
+        "title": "Marketplace catalogue",
+        "description": "Every listing in any status: mini apps and integrations, their versions and how many workspaces have them installed.",
+        "new": "New listing",
+        "kpi": {
+          "label": "Listings by status",
+          "loaded": "Loaded",
+          "published": "Published",
+          "inReview": "In review",
+          "hidden": "Hidden",
+          "killed": "Killed",
+          "note": "Counts cover the {count} listings loaded so far, not the whole catalogue.",
+          "noteMore": "More are available: use Load more."
+        },
+        "filters": {
+          "label": "Filters",
+          "search": "Search",
+          "searchPlaceholder": "Name or id",
+          "kind": "Kind",
+          "allKinds": "All kinds",
+          "status": "Status",
+          "allStatuses": "All statuses",
+          "category": "Category",
+          "allCategories": "All categories",
+          "categoryNote": "Filters the listings already loaded: the API has no category filter."
+        },
+        "cols": {
+          "app": "App",
+          "kind": "Kind",
+          "category": "Category",
+          "status": "Status",
+          "versions": "Versions",
+          "installs": "Installs",
+          "planFeature": "Plan feature"
+        },
+        "badges": {
+          "firstParty": "First-party",
+          "featured": "Featured"
+        },
+        "versionPublished": "Published",
+        "versionLatest": "Latest",
+        "dash": "-",
+        "everyPlan": "Every plan",
+        "killedReason": "Killed: {reason}",
+        "loadMore": "Load more",
+        "clearFilters": "Clear filters",
+        "emptyTitle": "No listings yet",
+        "emptyMessage": "Create the first listing to start the catalogue.",
+        "noMatchTitle": "No listing matches",
+        "noMatchMessage": "Nothing matches these filters. Try different ones.",
+        "noMatchMoreMessage": "None of the listings loaded so far match. More are available: load them, or change the filters.",
+        "tableCaption": "Marketplace listings"
+      },
+      "new": {
+        "title": "New listing",
+        "description": "Create a draft listing with its first version. Nothing reaches a workspace until a reviewer approves and publishes it.",
+        "back": "Back to the catalogue",
+        "sections": {
+          "docs": "Manifest and recipe",
+          "docsHelp": "The manifest says who the app is, what it may do and which connector it uses. An integration also needs a recipe. Both are checked as you type, with the rules the server applies.",
+          "changelog": "First version notes",
+          "changelogHelp": "Shown to admins as what the first version contains."
+        },
+        "changelog": "Changelog",
+        "changelogHint": "Optional, up to {max} characters. Left empty, it reads First version.",
+        "save": "Create listing",
+        "saving": "Creating...",
+        "cancel": "Cancel",
+        "created": "Listing {name} created as a draft.",
+        "draftNote": "The listing starts as a draft. Submit its version for review from the listing page."
+      },
+      "editor": {
+        "cancel": "Cancel",
+        "format": "Format",
+        "problemCount": "{count, plural, one {# problem to fix} other {# problems to fix}}",
+        "valid": {
+          "manifest": "Valid manifest v1.",
+          "recipe": "Valid recipe."
+        },
+        "manifest": {
+          "label": "Manifest (JSON)",
+          "hint": "Manifest v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Recipe (JSON)",
+          "hint": "The connector recipe of an integration: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Insert starter recipe"
+        },
+        "scopes": {
+          "title": "Permissions this version asks for",
+          "help": "What an admin is asked to accept, in plain words. Ask for the fewest that work."
+        },
+        "templates": {
+          "title": "Start from a template",
+          "help": "Fills both editors with a valid starting point that you then edit.",
+          "mini_app": "Mini app",
+          "webhook_relay": "Integration: webhook relay",
+          "push": "Integration: push",
+          "replaceTitle": "Replace what is in the editors?",
+          "replaceBody": "The manifest and recipe you typed will be replaced by the template.",
+          "replaceAction": "Replace"
+        },
+        "problems": {
+          "listLabel": "Problems",
+          "errorLabel": "Error:",
+          "warningLabel": "Warning:",
+          "syntax": "Not valid JSON.",
+          "syntaxAt": "Not valid JSON, near line {line}, column {column}.",
+          "empty": "This document is empty.",
+          "recipeNotAllowed": "A mini app has no recipe: clear this editor.",
+          "recipeMissing": "An integration needs a recipe before it can be submitted for review.",
+          "recipeKeyMismatch": "Must equal the manifest id: {expected}.",
+          "recipeCategoryMismatch": "Must equal the manifest category: {expected}.",
+          "recipeConnectorMismatch": "Must equal the manifest connector type: {expected}.",
+          "idChanged": "The id of an existing listing cannot change: it must stay {expected}.",
+          "kindChanged": "The kind of an existing listing cannot change: it must stay {expected}.",
+          "versionNotHigher": "The version must be higher than {newest}, the highest version so far.",
+          "versionTaken": "Another version of this listing already uses {version}.",
+          "categoryUnknown": "There is no active {kind} category {category}. Check the Categories page.",
+          "categoryRefused": "The server refused this category: it does not exist for this kind, or it is switched off.",
+          "recipeRequired": "An integration needs its recipe.",
+          "slugTaken": "Another listing already uses this id."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Listing page",
+          "pageHelp": "What an admin reads on the app page.",
+          "screenshots": "Screenshots",
+          "screenshotsHelp": "Up to {max} images shown on the app page. https links only.",
+          "data": "Data processing disclosure",
+          "dataHelp": "What the app stores, where, and how it is deleted: the statement shown on the app page.",
+          "placement": "Placement and access",
+          "placementHelp": "How it is ranked, and which plan can install it."
+        },
+        "tagline": "Tagline",
+        "taglineHint": "{count} of {max} characters (at least 5).",
+        "logo": "Logo address",
+        "logoHint": "An https image link. An integration without one falls back to the logo in its recipe.",
+        "longDescription": "Long description",
+        "longDescriptionHint": "Plain text; blank lines separate paragraphs. Up to {max} characters.",
+        "highlights": "Highlights",
+        "highlightsHint": "One per line: up to {max}, each up to {length} characters.",
+        "screenshotUrl": "Screenshot {n} address",
+        "screenshotCaption": "Screenshot {n} caption",
+        "screenshotRemove": "Remove screenshot {n}",
+        "screenshotAdd": "Add a screenshot",
+        "screenshotsNone": "No screenshots.",
+        "dataSummary": "What it stores",
+        "dataSummaryHint": "Up to {max} characters.",
+        "dataRegions": "Regions",
+        "dataRegionsHint": "Comma separated, up to {max}, for example India, EU.",
+        "dataDeletion": "How data is deleted",
+        "dataDeletionHint": "Up to {max} characters.",
+        "firstParty": "First-party",
+        "firstPartyHint": "Built and run by us: shown with a first-party badge.",
+        "featured": "Featured",
+        "featuredHint": "Shown on the featured shelf.",
+        "planFeature": "Plan feature",
+        "planFeatureHint": "A workspace needs this feature on its plan, or through an add-on, to install the app. Labels come from the plans catalogue.",
+        "planFeatureNone": "Every plan",
+        "sortOrder": "Sort order",
+        "sortOrderHint": "A whole number from 0 to {max}; lower shows first.",
+        "problems": {
+          "required": "This is required.",
+          "tooShort": "At least {min} characters.",
+          "tooLong": "At most {max} characters.",
+          "https": "Use a full https:// address.",
+          "tooMany": "At most {max} entries.",
+          "number": "Use a whole number from 0 to {max}.",
+          "unknownFeature": "Use lowercase letters, digits and underscores, starting with a letter.",
+          "slug": "Use 2 to 48 lowercase letters, digits or dashes, starting with a letter.",
+          "icon": "Use 1 to 32 lowercase letters, digits or dashes."
+        }
+      },
+      "summary": {
+        "title": "Fix these before saving",
+        "sentTitle": "The server did not save this",
+        "manifest": "{count, plural, one {# problem in the manifest} other {# problems in the manifest}}",
+        "recipe": "{count, plural, one {# problem in the recipe} other {# problems in the recipe}}",
+        "fields": "{count, plural, one {# problem in the listing fields} other {# problems in the listing fields}}"
+      },
+      "detail": {
+        "title": "Listing",
+        "back": "Back to the catalogue",
+        "firstParty": "First-party",
+        "featured": "Featured",
+        "none": "None",
+        "everyPlan": "Every plan",
+        "kpi": {
+          "installs": "Installations",
+          "published": "Published version",
+          "latest": "Latest version",
+          "versions": "Versions"
+        },
+        "facts": {
+          "kind": "Kind",
+          "category": "Category",
+          "connector": "Connector",
+          "planFeature": "Plan feature"
+        },
+        "tabs": {
+          "overview": "Listing",
+          "versions": "Versions ({count})"
+        },
+        "operate": {
+          "title": "Operate",
+          "description": "Hide, kill, restore or delete the listing. Each one asks for confirmation.",
+          "lacking": "Some actions are hidden because your roles do not include {permission}."
+        },
+        "killed": {
+          "title": "This listing is killed",
+          "reason": "Reason",
+          "effect": "Every installation is stopped and every delivery address answers 410. Workspaces can only uninstall."
+        },
+        "notice": {
+          "killedTitle": "{name} was killed",
+          "killedBody": "{count, plural, one {# installation was switched off.} other {# installations were switched off.}}",
+          "publishedTitle": "{name} {version} is published",
+          "publishedUpgraded": "{count, plural, one {# installation moved to it at once.} other {# installations moved to it at once.}}",
+          "publishedWaiting": "{count, plural, one {# installation keeps its current version until its admin accepts the new permissions.} other {# installations keep their current version until their admins accept the new permissions.}}",
+          "dismiss": "Dismiss"
+        }
+      },
+      "edit": {
+        "readOnly": "Read only. Editing the listing needs the platform permission {permission}.",
+        "conflict": "Someone else saved this listing while you were editing it. Reload to see their version, then make your change again.",
+        "reload": "Reload",
+        "save": "Save changes",
+        "saving": "Saving...",
+        "discard": "Discard changes",
+        "nothingToSave": "No changes yet.",
+        "saved": "Saved {name}."
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "hide": "Hide",
+        "unhide": "Show again",
+        "unkill": "Restore",
+        "delete": "Delete",
+        "kill": "Kill switch",
+        "confirm": {
+          "hide": {
+            "title": "Hide {name}?",
+            "body": "{name} leaves browse and search, so no new workspace finds it. Existing installations keep working.",
+            "action": "Hide"
+          },
+          "unhide": {
+            "title": "Show {name} again?",
+            "body": "{name} appears again in browse and search with its published version.",
+            "action": "Show again"
+          },
+          "unkill": {
+            "title": "Restore {name}?",
+            "body": "{name} becomes hidden so it can be fixed and published again. Installations that were killed stay off: workspaces must install it again.",
+            "action": "Restore"
+          },
+          "delete": {
+            "title": "Delete {name}?",
+            "body": "This permanently deletes the draft listing and its versions. A listing that was published or installed cannot be deleted: hide it instead.",
+            "action": "Delete listing"
+          }
+        },
+        "done": {
+          "hide": "{name} is hidden.",
+          "unhide": "{name} is visible again.",
+          "unkill": "{name} is restored as hidden.",
+          "kill": "{name} was killed.",
+          "delete": "{name} was deleted."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Kill switch",
+        "title": "Kill {name}?",
+        "close": "Close",
+        "cancel": "Cancel",
+        "confirm": "Kill {name}",
+        "installs": "{name} is installed in {count, plural, one {# workspace} other {# workspaces}}.",
+        "effects": {
+          "stop": "Every installation stops working at once.",
+          "connections": "Every connection is disabled.",
+          "address": "The delivery address answers 410 Gone from the next request on.",
+          "uninstall": "Workspaces can only uninstall it."
+        },
+        "undo": "Restoring the listing later makes it hidden. Killed installations stay off and workspaces must install it again.",
+        "reason": "Reason",
+        "reasonHint": "Between {min} and {max} characters. It is kept in the audit trail and shown to each workspace.",
+        "count": "{count} of {max} characters (at least {min}).",
+        "typeSlug": "Type {slug} to confirm",
+        "typeSlugHint": "The id of the listing, exactly as shown."
+      },
+      "versions": {
+        "title": "Versions",
+        "description": "Every version of this listing. Select one to see its manifest, recipe and actions.",
+        "newVersion": "New version",
+        "newVersionHint": "A new version starts from the version you are viewing ({version}) with the number raised. It must be higher than every earlier version.",
+        "tableCaption": "Versions of this listing",
+        "cols": {
+          "version": "Version",
+          "status": "Status",
+          "changelog": "Changelog",
+          "scopes": "Permissions",
+          "reviewNote": "Review note",
+          "dates": "Dates"
+        },
+        "viewing": "Viewing",
+        "none": "-",
+        "dates": {
+          "created": "Created",
+          "submitted": "Submitted",
+          "reviewed": "Reviewed",
+          "published": "Published"
+        },
+        "selectedTitle": "Version {version}",
+        "selectedHelp": "Its permissions, manifest and recipe as stored. The actions follow the version's state and your permissions.",
+        "edit": "Edit",
+        "newFrom": "New version from this one",
+        "submit": "Submit for review",
+        "approve": "Approve",
+        "reject": "Reject",
+        "publish": "Publish",
+        "rejectedNote": "Reviewer's reason (shown to the developer)",
+        "recipeMissing": "This integration has no recipe yet. Add one before submitting for review.",
+        "permissions": "Permissions",
+        "manifest": "Manifest",
+        "recipe": "Recipe",
+        "noRecipeIntegration": "No recipe is stored for this version.",
+        "noRecipeMiniApp": "A mini app has no recipe.",
+        "done": {
+          "submit": "Version {version} submitted for review.",
+          "approve": "Version {version} approved.",
+          "reject": "Version {version} rejected.",
+          "publish": "Version {version} published.",
+          "created": "Version {version} saved as a draft.",
+          "updated": "Version {version} updated."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "New version",
+        "newHelp": "Starts from the version you were viewing, with the number raised. Change the manifest and recipe, then describe what changed.",
+        "editTitle": "Edit version",
+        "editHelp": "Replaces the manifest and recipe of this version. A rejected version goes back to draft when saved.",
+        "changelog": "Changelog",
+        "changelogHint": "What changed in this version. Admins read it. Up to {max} characters.",
+        "saveNew": "Save new version",
+        "saveEdit": "Save changes",
+        "saving": "Saving...",
+        "cancel": "Cancel"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "Approve {name} {version}?",
+          "close": "Close",
+          "cancel": "Cancel",
+          "confirm": "Approve",
+          "body": "An approved version can then be published. Approving does not change what workspaces see.",
+          "note": "Note (optional)",
+          "noteHint": "Kept with the version. Up to {max} characters."
+        },
+        "reject": {
+          "title": "Reject {name} {version}?",
+          "close": "Close",
+          "cancel": "Cancel",
+          "confirm": "Reject version",
+          "body": "The reason is shown to the developer. They edit the version and submit it again.",
+          "note": "Reason",
+          "noteHint": "At least {min} and at most {max} characters.",
+          "count": "{count} of {max} characters (at least {min})."
+        },
+        "publish": {
+          "title": "Publish {name} {version}?",
+          "cancel": "Cancel",
+          "confirm": "Publish {version}",
+          "body": "{name} {version} becomes the version every new installation gets.",
+          "effects": {
+            "retire": "The version published before is retired.",
+            "moveSame": "Installations whose granted permissions already cover this version move to it at once.",
+            "moveMore": "Installations it asks more of keep running on their current version until their admin accepts the new permission list.",
+            "killed": "Killed installations are not touched."
+          },
+          "installs": "{count, plural, one {# installation is affected.} other {# installations are affected.}}",
+          "first": "This is the first published version.",
+          "addedScopes": "{count, plural, one {It asks for # permission the published version does not:} other {It asks for # permissions the published version does not:}}"
+        }
+      },
+      "categories": {
+        "title": "Categories",
+        "description": "The categories of both Marketplace tabs. A category switched off is hidden from workspaces; one with apps in it cannot be deleted.",
+        "new": "New category",
+        "emptyTitle": "No categories",
+        "emptyMessage": "Add a category before creating listings: every listing belongs to one.",
+        "groupCount": "{count, plural, one {# category} other {# categories}}",
+        "groupEmpty": "No categories for this kind yet.",
+        "tableCaption": "Categories",
+        "cols": {
+          "name": "Name",
+          "slug": "Id",
+          "icon": "Icon",
+          "order": "Order",
+          "apps": "Apps",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "dash": "-",
+        "active": "Active",
+        "inactive": "Hidden from workspaces",
+        "edit": "Edit",
+        "delete": "Delete",
+        "inUse": "Has apps",
+        "form": {
+          "createTitle": "New category",
+          "editTitle": "Edit {name}",
+          "close": "Close",
+          "cancel": "Cancel",
+          "create": "Create category",
+          "save": "Save changes",
+          "kind": "Kind",
+          "kinds": {
+            "mini_app": "Mini app",
+            "integration": "Integration"
+          },
+          "kindLocked": "The kind cannot be changed.",
+          "slug": "Id (slug)",
+          "slugHint": "2 to 48 lowercase letters, digits or dashes, starting with a letter. It cannot be changed later.",
+          "slugLocked": "The id cannot be changed after creation.",
+          "name": "Name",
+          "nameHint": "{min} to {max} characters.",
+          "descriptionField": "Description",
+          "descriptionHint": "Optional, up to {max} characters.",
+          "icon": "Icon",
+          "iconHint": "Optional icon name: lowercase letters, digits and dashes.",
+          "sortOrder": "Sort order",
+          "sortOrderHint": "A whole number from 0 to {max}; lower shows first.",
+          "active": "Active",
+          "activeHint": "Switched off, the category is hidden from workspaces. Its apps keep it.",
+          "conflict": "Someone else changed this category. Reload to see their version, then make your change again.",
+          "reload": "Reload",
+          "created": "Category {name} created.",
+          "saved": "Category {name} saved."
+        },
+        "deleteDialog": {
+          "title": "Delete {name}?",
+          "body": "{name} has no apps. Deleting it removes it for good.",
+          "action": "Delete category",
+          "cancel": "Cancel",
+          "done": "Category {name} deleted."
+        }
+      },
+      "requests": {
+        "title": "Requests",
+        "description": "What workspaces asked for, most voted first. The build order follows this list.",
+        "readOnly": "Read only. Triage needs the platform permission {permission}.",
+        "filters": {
+          "label": "Filters",
+          "search": "Search",
+          "searchPlaceholder": "Name",
+          "kind": "Kind",
+          "allKinds": "All kinds",
+          "status": "Status",
+          "allStatuses": "All statuses"
+        },
+        "clearFilters": "Clear filters",
+        "emptyTitle": "No requests yet",
+        "emptyMessage": "When a workspace asks for an integration it appears here with its votes.",
+        "noMatchTitle": "No request matches",
+        "noMatchMessage": "Nothing matches these filters.",
+        "loadMore": "Load more",
+        "tableCaption": "Requests by votes",
+        "cols": {
+          "votes": "Votes",
+          "request": "Request",
+          "notes": "Workspace notes",
+          "firstWorkspace": "First asked by",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "votes": "{count, plural, one {# vote} other {# votes}}",
+        "noNotes": "No notes.",
+        "dash": "-",
+        "operatorNote": "Your note: {note}",
+        "triageAction": "Triage",
+        "triage": {
+          "title": "Triage {name}",
+          "close": "Close",
+          "cancel": "Cancel",
+          "save": "Save",
+          "saved": "Saved {name}.",
+          "votes": "{count, plural, one {# vote} other {# votes}}",
+          "status": "Status",
+          "note": "Operator note",
+          "noteHint": "Optional, up to {max} characters. Only operators see it.",
+          "noteTooLong": "At most {max} characters.",
+          "conflict": "Someone else updated this request. Reload to see their version, then make your change again.",
+          "reload": "Reload"
+        }
+      },
+      "usage": {
+        "title": "Usage and health",
+        "description": "Per app: installations by status and health, and deliveries accepted, repeated, rejected and failed in the last 24 hours and 7 days.",
+        "kpi": {
+          "apps": "Apps",
+          "installs": "Installations",
+          "activeHint": "{count} active",
+          "needsLook": "Need a look",
+          "failed7d": "Failed deliveries (7 days)"
+        },
+        "sort": {
+          "label": "Sort by",
+          "failed": "Most failed deliveries",
+          "installs": "Most installations",
+          "name": "Name"
+        },
+        "emptyTitle": "No usage yet",
+        "emptyMessage": "Apps appear here once they exist in the catalogue.",
+        "tableCaption": "Usage per app",
+        "cols": {
+          "app": "App",
+          "installs": "Installations",
+          "health": "Health",
+          "events24h": "Deliveries, 24 hours",
+          "events7d": "Deliveries, 7 days",
+          "attention": "Attention"
+        },
+        "installs": {
+          "active": "{count} active",
+          "disabled": "{count} paused",
+          "killed": "{count} killed"
+        },
+        "health": {
+          "healthy": "{count} healthy",
+          "degraded": "{count} degraded",
+          "error": "{count} in error",
+          "needsReauth": "{count} need to sign in again",
+          "unknown": "{count} unknown"
+        },
+        "events": {
+          "accepted": "{count} accepted",
+          "duplicate": "{count} repeated",
+          "rejected": "{count} rejected",
+          "failed": "{count} failed"
+        },
+        "needsLook": "Needs a look",
+        "reasons": {
+          "installErrors": "Installations in error",
+          "needsReauth": "Installations that need to sign in again",
+          "failed24h": "Failed deliveries in the last 24 hours",
+          "failed7d": "Failed deliveries in the last 7 days"
+        },
+        "recipeHint": "The recipe may be breaking: a portal changed its format or a key expired. Fix it with a new version of the recipe.",
+        "fine": "No problems seen",
+        "runbookNote": "An integration with many installations in error or needing to sign in again, or a rising failed count, is breaking. Patch its recipe in a new version (runbook, section 8)."
+      }
+    }
+  }
+}

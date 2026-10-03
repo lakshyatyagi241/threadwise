@@ -1,0 +1,662 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Marketplace"
+    },
+    "meta": {
+      "apps": "Mini apps · Marketplace",
+      "integrations": "Integrations · Marketplace",
+      "app": "App · Marketplace",
+      "install": "Install · Marketplace",
+      "installed": "Installed · Marketplace",
+      "manage": "Manage app · Marketplace",
+      "requests": "Requests · Marketplace"
+    },
+    "common": {
+      "dismiss": "Dismiss",
+      "loading": "Loading",
+      "errorTitle": "Could not load this",
+      "requestId": "Request ID",
+      "retry": "Try again",
+      "upgrade": "See plans and upgrade",
+      "opensNewTab": "(opens in a new tab)",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Select the text and copy it by hand.",
+      "needsPermission": "You need the permission {permission} to do this. Ask a workspace admin."
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do this.",
+      "signedOut": "Your session ended. Sign in again.",
+      "conflict": "Someone else changed this first. Reload to see the latest version.",
+      "validation": "Some values are not valid. Check the fields and try again.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "rateLimitedWait": "Too many requests. Try again in {seconds, plural, one {# second} other {# seconds}}.",
+      "unavailable": "The Marketplace is not available on this server yet.",
+      "notFound": "That item no longer exists.",
+      "appNotFound": "This app does not exist or is not available to your workspace.",
+      "notInstalled": "This app is not installed in your workspace.",
+      "alreadyInstalled": "This app is already installed in your workspace.",
+      "appUnavailable": "This app is not offered right now.",
+      "appLockedPlan": "Your plan does not include this app. Upgrade to unlock it.",
+      "appLockedModule": "This app is not available on this installation of the product.",
+      "planLocked": "The Marketplace is not part of your plan. Upgrade to use it.",
+      "planLimitInstalled": "You have reached your plan's limit of installed apps, so nothing was installed. Uninstall one or upgrade your plan.",
+      "planLimitInstalledCounts": "You have installed {used} of the {cap} apps your plan allows, so nothing was installed. Uninstall one or upgrade your plan.",
+      "planLimitLeadSources": "You have reached your plan's limit of lead sources, so nothing was installed. Remove a lead source or upgrade your plan.",
+      "planLimitLeadSourcesCounts": "You have {used} of the {cap} lead sources your plan allows, so nothing was installed. Remove one or upgrade your plan.",
+      "planLimit": "You have reached a limit of your plan, so nothing was installed. Upgrade your plan to continue.",
+      "planLimitCounts": "You have used {used} of the {cap} your plan allows, so nothing was installed. Upgrade your plan to continue.",
+      "consentRequired": "The permissions changed. Review them again before installing.",
+      "reconsentRequired": "The new version asks for more permissions. Review and accept them first.",
+      "scopeExceeds": "You cannot grant permissions you do not hold yourself. Missing: {permissions}.",
+      "installationKilled": "The platform stopped this app. It can only be uninstalled.",
+      "installationDisabled": "This app is paused. Resume it first.",
+      "credentialMissing": "Fill in the required fields.",
+      "noConnection": "This installation has no connection that can do that.",
+      "leadPipeline": "The lead service is not available right now. Nothing was saved. Try again in a moment.",
+      "unexpected": "Something went wrong. Try again."
+    },
+    "chips": {
+      "installed": "Installed",
+      "paused": "Paused",
+      "killed": "Stopped by platform",
+      "healthy": "Healthy",
+      "degraded": "Degraded",
+      "error": "Error",
+      "needs_reauth": "Needs sign-in again",
+      "unknown": "Not checked yet",
+      "needsConsent": "New permissions to review"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Not in your plan",
+        "message": "Your plan does not include this app. You can read about it here, but installing needs an upgrade."
+      },
+      "moduleDisabled": {
+        "chip": "Not available",
+        "message": "This app depends on a module that is switched off on this installation of the product."
+      },
+      "limitReached": {
+        "chip": "Plan limit reached",
+        "message": "You have installed as many apps as your plan allows. Uninstall one or upgrade your plan."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Low risk",
+        "medium": "Medium risk",
+        "high": "High risk"
+      },
+      "none": "This app asks for no permissions.",
+      "new": "New",
+      "overall": {
+        "low": {
+          "title": "Low risk overall",
+          "message": "This app only asks to read things."
+        },
+        "medium": {
+          "title": "Medium risk overall",
+          "message": "This app can read and change data in your workspace."
+        },
+        "high": {
+          "title": "High risk overall",
+          "message": "This app can act on your behalf, for example send messages or manage integrations. Install it only if you trust the developer."
+        }
+      },
+      "counts": "{high} high, {medium} medium, {low} low"
+    },
+    "header": {
+      "title": "Marketplace",
+      "subtitle": "Add mini apps and connect outside services to your workspace.",
+      "tabsLabel": "Marketplace sections",
+      "moreLabel": "Installed and requests",
+      "tabs": {
+        "mini_app": "Mini apps",
+        "integration": "Integrations"
+      },
+      "installed": "Installed",
+      "installedLimit": "Installed ({installed} of {limit})",
+      "installedUnlimited": "Installed ({installed})",
+      "request": "Request an integration"
+    },
+    "card": {
+      "firstParty": "Built by us",
+      "pricing": {
+        "free": "Free",
+        "included": "Included in your plan",
+        "addon": "Paid add-on"
+      },
+      "installs": "{count, plural, one {# install} other {# installs}}",
+      "version": "Version {version}",
+      "cta": {
+        "install": "Install",
+        "manage": "Manage",
+        "review": "Review permissions",
+        "killed": "Manage",
+        "locked": "View details",
+        "view": "View details"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Categories",
+      "all": "All",
+      "shelves": {
+        "featured": "Featured",
+        "popular": "Popular",
+        "new": "New"
+      },
+      "searchLabel": "Search the Marketplace",
+      "searchPlaceholder": {
+        "mini_app": "Search mini apps",
+        "integration": "Search integrations"
+      },
+      "installedOnly": "Installed only",
+      "sortLabel": "Sort by",
+      "sort": {
+        "featured": "Featured",
+        "popular": "Most installed",
+        "new": "Newest",
+        "name": "Name"
+      },
+      "unknownCategory": "That category does not exist in this tab.",
+      "showAll": "Show everything",
+      "resultsAll": "All apps",
+      "resultsFiltered": "Results",
+      "loadedCount": "{count, plural, one {# app shown} other {# apps shown}}",
+      "loadMore": "Load more",
+      "clearFilters": "Clear filters",
+      "empty": {
+        "search": {
+          "title": "Nothing matches your search",
+          "message": "Try a shorter name, or clear the filters. If it is not listed, you can ask for it below."
+        },
+        "installed": {
+          "title": "Nothing installed here yet",
+          "message": "Apps you install show up here. Turn off the Installed filter to browse everything."
+        },
+        "category": {
+          "title": "Nothing in this category yet",
+          "message": "Pick another category, or ask for what you need below."
+        },
+        "none": {
+          "title": "Nothing is listed here yet",
+          "message": "New apps appear here when they are published. You can ask for one below."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Missing a mini app?",
+        "integration": "Missing an integration?"
+      },
+      "message": "Tell us what you need. Requests are counted, and the most asked for are built first.",
+      "action": {
+        "mini_app": "Request a mini app",
+        "integration": "Request an integration"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Back to the Marketplace",
+      "backToApps": "Back to Mini apps",
+      "backToIntegrations": "Back to Integrations",
+      "notFound": {
+        "title": "App not found",
+        "message": "This app does not exist, or it is not available to your workspace.",
+        "integrations": "Browse integrations",
+        "apps": "Browse mini apps"
+      },
+      "kind": {
+        "mini_app": "Mini app",
+        "integration": "Integration"
+      },
+      "firstParty": "Built by us",
+      "install": "Install",
+      "manage": "Manage",
+      "killed": "The platform stopped this app. It can only be uninstalled.",
+      "about": "About this app",
+      "screenshots": "Screenshots",
+      "screenshotAlt": "Screenshot {n} of {name}",
+      "permissions": {
+        "title": "What it can access",
+        "intro": "You see these again, and confirm them, before anything is installed."
+      },
+      "setup": {
+        "title": "What you will need to set up",
+        "intro": {
+          "oauth": "You sign in to the service to connect it.",
+          "push": "The service sends data to your workspace using a key you enter here.",
+          "pull": "We fetch data from the service using a key you enter here.",
+          "email_parse": "We read alert emails sent by the service.",
+          "webhook_relay": "You get a web address and a secret to paste into the tool that sends the data."
+        },
+        "required": "Required",
+        "optional": "Optional",
+        "kind": {
+          "secret": "kept secret",
+          "text": "text",
+          "select": "choice"
+        },
+        "noFields": "Nothing to fill in. You get the connection details after installing.",
+        "hasSample": "After installing you can send a sample lead to check the connection."
+      },
+      "data": {
+        "title": "Your data",
+        "intro": "What this app stores, where, and how it is deleted.",
+        "summary": "What it stores",
+        "regions": "Where",
+        "deletion": "How it is deleted"
+      },
+      "changelog": {
+        "title": "What changed",
+        "version": "Version {version}"
+      },
+      "facts": {
+        "title": "Details",
+        "pricing": "Price",
+        "version": "Version",
+        "connector": "How it connects",
+        "connectors": {
+          "oauth": "Sign in",
+          "push": "It sends data to you",
+          "pull": "We fetch its data",
+          "email_parse": "Alert emails",
+          "webhook_relay": "Web address and secret"
+        },
+        "installs": "Installs",
+        "developer": "Developer"
+      },
+      "support": {
+        "title": "Support and legal",
+        "website": "Website",
+        "docs": "Documentation",
+        "privacy": "Privacy policy",
+        "terms": "Terms",
+        "status": "Status page",
+        "email": "Email support"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Back to the Marketplace",
+      "backToApp": "Back to {name}",
+      "notFound": {
+        "title": "App not found",
+        "message": "This app does not exist, or it is not available to your workspace."
+      },
+      "alreadyTitle": "Already installed",
+      "alreadyMessage": "{name} is already installed in your workspace.",
+      "openManage": "Open it",
+      "lockedTitle": "{name} is locked",
+      "noPermissionTitle": "You cannot install apps",
+      "noPermissionMessage": "Installing apps needs a permission your role does not have.",
+      "title": "Install {name}",
+      "stepsLabel": "Install steps",
+      "steps": {
+        "permissions": "Permissions",
+        "setup": "Set up",
+        "done": "Done"
+      },
+      "permissions": {
+        "title": "Review permissions",
+        "intro": "{name} asks for the permissions below. Installing gives it exactly these, until you uninstall it.",
+        "diffSummary": "{missing, plural, one {# permission} other {# permissions}} left out and {unexpected, plural, one {# permission} other {# permissions}} not shown.",
+        "consent": "I understand and allow this app to use these permissions in my workspace.",
+        "consentNone": "I understand that {name} asks for no permissions and want to install it.",
+        "continue": "Continue"
+      },
+      "cancel": "Cancel",
+      "install": "Install",
+      "back": "Back",
+      "setup": {
+        "title": "Set up",
+        "intro": "Fill in what this app needs to connect. Keys are stored sealed and cannot be read back."
+      },
+      "installing": "Installing",
+      "missingPermissions": "You are missing these permissions:",
+      "seeInstalled": "See what is installed",
+      "changed": {
+        "title": "The permissions changed while you were looking",
+        "message": "Review the list below again. Nothing was installed.",
+        "added": "Now also asks for:",
+        "removed": "No longer asks for:",
+        "edited": "The wording or risk of some permissions changed."
+      },
+      "gaps": {
+        "title": "You may not be able to grant all of these",
+        "message": "Installing never gives anyone more access than the person installing holds. You seem to lack:"
+      },
+      "done": {
+        "title": "{name} is installed",
+        "message": "Version {version} is now active in your workspace.",
+        "saved": "I have saved it, continue",
+        "manage": "Open settings",
+        "browse": "Back to the Marketplace"
+      }
+    },
+    "setup": {
+      "optionalLabel": "{label} (optional)",
+      "stored": {
+        "notSet": "Not set",
+        "endsIn": "Saved, ends in {last}",
+        "value": "A value is saved",
+        "set": "Saved"
+      },
+      "keepBlank": "Leave blank to keep the saved value. Type to replace it.",
+      "show": "Show value",
+      "hide": "Hide value",
+      "choose": "Choose",
+      "clear": "Clear {label}",
+      "problems": {
+        "required": "{label} is required.",
+        "pattern": "{label} does not look right.",
+        "option": "Choose one of the options for {label}.",
+        "server": "{label} was not accepted. Check the value."
+      }
+    },
+    "reveal": {
+      "title": "Save your connection secret",
+      "warning": "You will not see this secret again. Copy it now and keep it somewhere safe. If you lose it, rotate the secret to get a new one.",
+      "address": "Web address to send to",
+      "secret": "Secret",
+      "copyAddress": "Copy the web address",
+      "copySecret": "Copy the secret",
+      "saved": "I have saved the secret and the address.",
+      "doneHint": "Tick the box to continue.",
+      "send": {
+        "title": "How to send",
+        "post": "Send a POST request with a JSON body to the address.",
+        "token": "Put the secret in the header {header}.",
+        "signature": "Or sign the body with HMAC-SHA256 using the secret and send sha256= followed by the hex digest in the header {header}."
+      },
+      "leaveConfirm": "You have not confirmed that you saved the secret. If you leave now, you will not see it again. Leave anyway?"
+    },
+    "installed": {
+      "title": "Installed",
+      "filters": {
+        "kind": "Type",
+        "status": "Status",
+        "all": "All"
+      },
+      "kind": {
+        "mini_app": "Mini app",
+        "integration": "Integration"
+      },
+      "status": {
+        "active": "Installed",
+        "disabled": "Paused",
+        "killed": "Stopped by platform"
+      },
+      "listLabel": "Installed apps",
+      "emptyFiltered": {
+        "title": "Nothing matches these filters",
+        "message": "Change the filters to see your other installed apps."
+      },
+      "empty": {
+        "title": "Nothing installed yet",
+        "message": "Browse the Marketplace to add a mini app or connect a service.",
+        "integrations": "Browse integrations",
+        "apps": "Browse mini apps"
+      },
+      "usage": {
+        "unlimited": "{installed} installed. Your plan has no limit.",
+        "of": "{installed} of {limit} installed",
+        "remaining": "{count, plural, one {# place left} other {# places left}}",
+        "atCap": "You have reached your plan's limit. Uninstall an app or upgrade your plan to install another.",
+        "upgrade": "See plans and upgrade",
+        "nearCap": "You are close to your plan's limit."
+      },
+      "version": "Version {version}",
+      "killReason": "Reason: {reason}",
+      "lastError": "Last error: {error}",
+      "pending": "Version {version} waits for you to accept its new permissions.",
+      "installedOn": "Installed {date}",
+      "review": "Review",
+      "manage": "Manage"
+    },
+    "manage": {
+      "backToInstalled": "Back to Installed",
+      "notFound": {
+        "title": "Installation not found",
+        "message": "This app is not installed in your workspace, or it was uninstalled."
+      },
+      "version": "Version {version}",
+      "checkedAt": "Last checked {date}",
+      "notChecked": "Not checked yet. Use Test connection to check.",
+      "lastError": "Last error: {error}",
+      "viewListing": "View listing",
+      "resume": "Resume",
+      "pause": "Pause",
+      "toast": {
+        "resumed": "App resumed.",
+        "paused": "App paused.",
+        "consented": "New permissions accepted. Now on version {version}.",
+        "uninstalled": "{name} was uninstalled."
+      },
+      "killed": {
+        "title": "Stopped by the platform",
+        "message": "This app was switched off for everyone. You can only uninstall it.",
+        "reason": "Reason: {reason}"
+      },
+      "paused": {
+        "title": "Paused",
+        "message": "A paused app does nothing, and its web address refuses deliveries until you resume it."
+      },
+      "permissions": {
+        "title": "Permissions granted",
+        "intro": "What this app can do in your workspace right now."
+      },
+      "reconsent": {
+        "title": "Version {version} asks for new permissions",
+        "message": "This app keeps running on version {current} until you accept the permissions of version {version}.",
+        "newScopes": "New permissions",
+        "fullList": "The full list for the new version",
+        "accept": "Accept new permissions"
+      },
+      "problem": {
+        "conflictTitle": "Changed in the meantime",
+        "conflictMessage": "Someone else changed this app. Reload to see the latest state, then make your change again.",
+        "reload": "Reload",
+        "consentTitle": "The permissions moved on",
+        "consentMessage": "The permission list changed since you opened this page. Reload to see the current list."
+      },
+      "credentials": {
+        "title": "Credentials and settings",
+        "intro": "Typing replaces a saved value. Leave a field blank to keep what is saved. Saved keys are never shown again.",
+        "readOnly": "What is saved for this app. Keys are never shown.",
+        "saved": "Settings saved.",
+        "nothingToSave": "Nothing to save yet.",
+        "save": "Save changes",
+        "missing": "Fill in the required fields.",
+        "invalid": "Some values were not accepted."
+      },
+      "connection": {
+        "title": "Connection",
+        "intro": "How this app talks to your workspace, and how it is doing.",
+        "type": "Type",
+        "types": {
+          "oauth": "Sign in",
+          "push": "Sends data to you",
+          "pull": "We fetch its data",
+          "email_parse": "Alert emails",
+          "webhook_relay": "Web address and secret"
+        },
+        "status": "Connection status",
+        "statuses": {
+          "active": "Active",
+          "paused": "Paused",
+          "error": "Error",
+          "disabled": "Switched off"
+        },
+        "pollEvery": "Checks every",
+        "seconds": "{count, plural, one {# second} other {# seconds}}",
+        "lastEvent": "Last delivery",
+        "lastSuccess": "Last success",
+        "lastError": "Last error",
+        "never": "Never",
+        "counters": {
+          "received": "Received",
+          "accepted": "Accepted",
+          "duplicates": "Duplicates",
+          "failed": "Failed"
+        },
+        "inbound": {
+          "address": "Web address to send to",
+          "copyAddress": "Copy the web address",
+          "method": "Send a POST request with a JSON body.",
+          "token": "Put the secret in the header {header}.",
+          "signature": "Or sign the body with HMAC-SHA256 and send sha256= followed by the hex digest in the header {header}.",
+          "secretEndsIn": "The secret ends in {last}. It cannot be shown again.",
+          "secretSet": "A secret is set. It cannot be shown again."
+        },
+        "actions": {
+          "test": "Test connection",
+          "sample": "Send sample lead",
+          "rotate": "Rotate secret",
+          "sampleNeedsActive": "Resume the app to send a sample lead.",
+          "testOk": "The connection works.",
+          "testFailed": "The connection test failed.",
+          "latency": "{ms} ms",
+          "sampleAccepted": "Sample lead accepted. It now exists as a real lead.",
+          "sampleDuplicate": "That sample lead was already received.",
+          "rotatedDone": "I have saved it, continue",
+          "rotateNotApplicable": "This connection's secret is a key from the other service. Change it in Credentials and settings instead.",
+          "rotateConfirm": {
+            "title": "Rotate the connection secret?",
+            "message": "A new secret is created and the old one stops working immediately. Anything still sending with the old secret will be refused until you give it the new one. You will see the new secret once.",
+            "confirm": "Rotate secret",
+            "cancel": "Cancel"
+          }
+        }
+      },
+      "events": {
+        "title": "Recent deliveries",
+        "intro": "The latest things this connection received, newest first.",
+        "refresh": "Refresh",
+        "empty": {
+          "title": "No deliveries yet",
+          "message": "When the other service sends something, or you send a sample lead, it shows up here."
+        },
+        "columns": {
+          "received": "Received",
+          "status": "Outcome",
+          "externalId": "Delivery ID",
+          "error": "Reason"
+        },
+        "status": {
+          "accepted": "Accepted",
+          "duplicate": "Duplicate",
+          "rejected": "Rejected",
+          "failed": "Failed"
+        },
+        "loadMore": "Load more"
+      },
+      "pauseConfirm": {
+        "title": "Pause {name}?",
+        "message": "It stops working until you resume it. Its web address refuses deliveries meanwhile.",
+        "confirm": "Pause",
+        "cancel": "Cancel"
+      },
+      "uninstall": {
+        "section": "Uninstall",
+        "sectionIntro": "Remove this app from your workspace.",
+        "open": "Uninstall",
+        "title": "Uninstall {name}?",
+        "confirm": "Uninstall",
+        "cancel": "Cancel",
+        "effect": "Its access ends immediately.",
+        "effectConnection": "Its access ends immediately, and its web address stops answering.",
+        "dataLegend": "What should happen to the data it created?",
+        "choices": {
+          "keep": {
+            "label": "Keep the data it created",
+            "help": "Contacts and records it added stay in your workspace."
+          },
+          "delete": {
+            "label": "Delete the data it created",
+            "help": "We record your request and tell the parts of the product that own that data."
+          }
+        },
+        "honestNote": "Today, contacts that this app already created stay in your workspace whichever you choose. Your choice is recorded for the areas that will delete data.",
+        "irreversible": "This cannot be undone. To use the app again, install it again."
+      }
+    },
+    "requests": {
+      "title": "Requests",
+      "form": {
+        "title": "Ask for something",
+        "intro": "Not listed? Tell us what you need. If somebody already asked, your request counts as a vote.",
+        "name": "Name",
+        "namePlaceholder": "For example, the name of a service",
+        "kind": "Type",
+        "kinds": {
+          "mini_app": "Mini app",
+          "integration": "Integration"
+        },
+        "category": "Category",
+        "categoryHint": "Optional.",
+        "anyCategory": "Not sure",
+        "website": "Website",
+        "websiteHint": "Optional. A full https:// address.",
+        "note": "What do you need it for?",
+        "noteHint": "Visible to the platform team only",
+        "problems": {
+          "nameShort": "Enter at least 2 characters.",
+          "nameLong": "Use at most 80 characters.",
+          "websiteInvalid": "Enter a full https:// address.",
+          "noteLong": "Use at most 500 characters.",
+          "server": "This was not accepted. Check the value."
+        },
+        "result": {
+          "created": {
+            "title": "Request added: {name}",
+            "message": "Thank you. Other workspaces can now vote for it."
+          },
+          "counted": {
+            "title": "Someone already asked for {name}",
+            "message": "Your request was counted as a vote for it."
+          }
+        },
+        "submit": "Send request"
+      },
+      "list": {
+        "title": "What others asked for",
+        "intro": "Vote for what you want. The most asked for are built first.",
+        "searchLabel": "Search requests",
+        "searchPlaceholder": "Search requests",
+        "kind": "Type",
+        "allKinds": "All types",
+        "kinds": {
+          "mini_app": "Mini app",
+          "integration": "Integration"
+        },
+        "status": "Status",
+        "allStatuses": "All statuses",
+        "statuses": {
+          "open": "Open",
+          "planned": "Planned",
+          "building": "Building",
+          "shipped": "Shipped",
+          "declined": "Declined"
+        },
+        "sort": "Sort by",
+        "sorts": {
+          "votes": "Most votes",
+          "new": "Newest"
+        },
+        "emptyFiltered": {
+          "title": "No requests match",
+          "message": "Change the filters, or ask for it yourself."
+        },
+        "empty": {
+          "title": "No requests yet",
+          "message": "Be the first to ask for something."
+        },
+        "loadMore": "Load more",
+        "votes": "{count, plural, one {# vote} other {# votes}}",
+        "voted": "Voted",
+        "vote": "Vote"
+      }
+    }
+  }
+}
