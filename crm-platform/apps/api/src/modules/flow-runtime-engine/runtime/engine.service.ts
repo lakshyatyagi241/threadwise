@@ -1,10 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import type { Tx } from '@crm/db';
 import type { FlowRunEndReason } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { profileOf } from './channel-render';
 import {
+  applyCustomReply,
   applyReply,
+  advanceFrom,
   executeCurrent,
   wakeFromSleep,
   type StepDeps,
@@ -15,7 +17,8 @@ import { FlowRunPublisher } from './flow-run.publisher';
 import { FlowSender, HALT_RETRY_MS } from './flow-sender.service';
 import { RunRepository, type RunPatch } from './run.repository';
 import { SubscriberRepository } from './subscriber.repository';
-import type { InboundReply, RunState } from './types';
+import type { InboundReply, NodeExecutor, RunState } from './types';
+import { FLOW_NODE_EXECUTORS } from './node-executors';
 
 const DAY_MS = 86_400_000;
 
@@ -56,10 +59,12 @@ export class FlowEngine {
     private readonly subscribers: SubscriberRepository,
     private readonly publisher: FlowRunPublisher,
     private readonly sender: FlowSender,
+    @Optional() @Inject(FLOW_NODE_EXECUTORS) private readonly executors: readonly NodeExecutor[] = [],
   ) {}
 
   private deps(): StepDeps {
     return {
+      executors: this.executors,
       send: (run, message, index) => this.sender.send(run, message, index),
       paceMs: (run) => profileOf(run.channelKind ?? '').paceMs,
       now: this.now,
@@ -111,9 +116,16 @@ export class FlowEngine {
     const result = await this.db.txAs({ orgId }, async (tx) => {
       const state = await this.runs.byId(tx, orgId, runId, true);
       if (!state || state.status !== 'waiting' || !state.wait) return 'not_waiting' as const;
-      const outcome = applyReply(state, reply);
+      const outcome =
+        state.wait.kind === 'Custom'
+          ? await applyCustomReply(state, reply, this.deps())
+          : applyReply(state, reply);
       if (outcome.transition.t === 'none') return 'ignored' as const;
-      const detail = { text: reply.text.slice(0, 200), ...(reply.id ? { tap: reply.id } : {}) };
+      const detail = {
+        text: reply.text.slice(0, 200),
+        ...(reply.id ? { tap: reply.id } : {}),
+        ...(reply.kind === 'external' ? { external: true } : {}),
+      };
       const committed = await this.commit(tx, state, outcome, state.stepSeq, 'reply', detail);
       return committed;
     });
@@ -148,6 +160,18 @@ export class FlowEngine {
       )
         return false;
       if (!idle && state.maxExpiresAt.getTime() > now) return false;
+      if (idle && state.wait?.timeoutPort !== undefined) {
+        // A wait that has a timeout branch (a form not filled in, a cart abandoned) leaves by it instead of ending the run.
+        state.currentNodeId = state.wait.nodeId;
+        const outcome: StepOutcome = {
+          transition: advanceFrom(state, state.wait.nodeId, state.wait.timeoutPort, true, 0),
+          nodeId: state.wait.nodeId,
+          nodeType: null,
+          notes: ['the wait timed out: left by the timeout branch'],
+        };
+        const c = await this.commit(tx, state, outcome, state.stepSeq, 'step');
+        return c === 'lost' ? false : c;
+      }
       const done = await this.runs.endLive(tx, orgId, runId, 'expired', reason);
       if (done) {
         await this.runs.appendStep(tx, orgId, runId, {
@@ -160,7 +184,30 @@ export class FlowEngine {
       }
       return done;
     });
+    if (ended && typeof ended === 'object') {
+      if (ended.next)
+        await this.publisher.schedule(orgId, runId, ended.next.seq, ended.next.delayMs);
+      return 'stepped';
+    }
     return ended ? 'ended' : 'stale';
+  }
+
+  /**
+   * An outside event answers a `Custom` wait (a form submission, a payment, a webhook): the node that parked decodes it like a
+   * reply. Returns not_waiting when the run moved on or waits for something else (`handler` guards a stale event).
+   */
+  async deliverExternal(
+    orgId: number,
+    runId: number,
+    handler: string,
+    data: Record<string, unknown>,
+  ): Promise<ReplyResult> {
+    const wanted = await this.db.txAs({ orgId }, async (tx) => {
+      const s = await this.runs.byId(tx, orgId, runId);
+      return s?.status === 'waiting' && s.wait?.kind === 'Custom' && s.wait.handler === handler;
+    });
+    if (!wanted) return 'not_waiting';
+    return this.deliverReply(orgId, runId, { kind: 'external', id: '', text: '', data });
   }
 
   /** Ends a live run from outside: a new start replaced it, an operator took over, someone cancelled it. */
@@ -306,7 +353,9 @@ export class FlowEngine {
           status: 'waiting',
           currentNodeId: t.wait.nodeId,
           wait: t.wait,
-          expiresAt: new Date(now.getTime() + state.timeoutSeconds * 1000),
+          expiresAt: new Date(
+            now.getTime() + (t.wait.timeoutSeconds ?? state.timeoutSeconds) * 1000,
+          ),
         };
       case 'sleep': {
         const wake = new Date(now.getTime() + t.seconds * 1000);
