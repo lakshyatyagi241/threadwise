@@ -7,3 +7,4 @@ export * from './catalog';
 export * from './collection';
 export * from './review';
 export * from './settings';
+export * from './text';

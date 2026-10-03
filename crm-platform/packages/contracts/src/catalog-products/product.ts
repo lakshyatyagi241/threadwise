@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
+import { waString, waTag } from './text';
 
 /**
  * Products (TW-CAT-019..026). Reference kept the money of a product in `price_minor`, always the major amount times 100 whatever
@@ -98,6 +99,8 @@ export const META_SYNC_STATUSES = ['pending', 'synced', 'failed', 'error'] as co
 
 export const PRODUCT_NAME_MAX = 191;
 export const PRODUCT_SKU_MAX = 96;
+/** The tags box takes 1024 characters in all; one tag may use them all (Reference keeps what the box holds). */
+export const PRODUCT_TAGS_MAX = 1024;
 export const PRODUCT_DESCRIPTION_MAX = 2000;
 export const PRODUCT_BODY_HTML_MAX = 65535;
 export const PRODUCT_PRICE_MAX = 1_000_000;
@@ -167,10 +170,10 @@ const optionalUrl = z.string().trim().url().max(1024);
 
 /** A product as the form sends it (create and update share the fields). */
 export const productFieldsSchema = z.object({
-  name: z.string().trim().min(1).max(PRODUCT_NAME_MAX),
-  sku: z.string().trim().max(PRODUCT_SKU_MAX).nullish(),
-  description: z.string().max(PRODUCT_DESCRIPTION_MAX).nullish(),
-  bodyHtml: z.string().max(PRODUCT_BODY_HTML_MAX).nullish(),
+  name: waString(PRODUCT_NAME_MAX, 1),
+  sku: waString(PRODUCT_SKU_MAX).nullish(),
+  description: waString(PRODUCT_DESCRIPTION_MAX).nullish(),
+  bodyHtml: waString(PRODUCT_BODY_HTML_MAX).nullish(),
   priceMajor: majorAmount,
   comparePriceMajor: majorAmount.nullish(),
   currencyCode: productCurrencySchema,
@@ -179,9 +182,9 @@ export const productFieldsSchema = z.object({
   sortOrder: z.number().int().min(0).max(9999).nullish(),
   status: productStatusSchema.default('active'),
   weightGrams: z.number().int().min(0).max(1_000_000).nullish(),
-  category: z.string().trim().max(96).nullish(),
-  /** Free tags; trimmed, de-duplicated, blanks dropped by the server. */
-  tags: z.array(z.string().trim().max(60)).max(100).default([]),
+  category: waString(96).nullish(),
+  /** Free tags; trimmed, de-duplicated, blanks dropped by the server. A tag may be as long as the whole tags box (1024). */
+  tags: z.array(waTag(PRODUCT_TAGS_MAX)).max(512).default([]),
   /** Other names the order-text matcher knows the product by (TW-CAT-032); absent keeps what is stored. */
   aliases: z.array(z.string().trim().max(120)).max(50).optional(),
   imageUrl: optionalUrl.nullish(),
