@@ -48,3 +48,14 @@ export function formatIn(minor: number, code: string): string {
  * so they always say "free above 999.00" in the shop's currency whatever the real free-above rule is.
  */
 export const LEGACY_FREE_THRESHOLD_MINOR = 99900;
+
+/** Reference's `WaOrder::total_display`: INR, USD, EUR and GBP have a symbol, any other currency shows its code; always two decimals. */
+export function totalDisplay(minor: number, code: string): string {
+  const symbol =
+    ({ INR: '₹', USD: '$', EUR: '€', GBP: '£' } as Record<string, string>)[code] ?? code;
+  const text = (minor / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return `${symbol} ${text}`;
+}

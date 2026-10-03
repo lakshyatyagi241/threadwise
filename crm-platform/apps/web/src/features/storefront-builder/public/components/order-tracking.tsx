@@ -5,7 +5,7 @@ import { orderQuestionUrl, safeHttpUrl } from '../lib/links';
 import { footerParts } from '../lib/footer';
 import { DEFAULT_BRAND, isHexColor } from '../lib/themes';
 import { TRACK_STEPS, isCancelled, statusLabel, trackerIndex } from '../lib/tracker';
-import { formatMinor } from '../lib/money';
+import { formatMinor, totalDisplay } from '../lib/money';
 import '../styles/storefront.css';
 import { CardIcon, CheckIcon, PackageIcon, WhatsAppIcon } from './icons';
 
@@ -99,7 +99,7 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
             </div>
             <div className="is-grand">
               <dt>{t('cart.total')}</dt>
-              <dd>{money(order.totalMinor)}</dd>
+              <dd>{totalDisplay(order.totalMinor, order.currencyCode)}</dd>
             </div>
           </dl>
         </section>

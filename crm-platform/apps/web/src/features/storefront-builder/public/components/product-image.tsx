@@ -21,11 +21,7 @@ export function ProductImage({
   const [failed, setFailed] = useState<string | null>(null);
   if (!src || failed === src) {
     return (
-      <span
-        className={emoji ? undefined : 'sf-img-fallback'}
-        role="img"
-        aria-label={alt}
-      >
+      <span className={emoji ? undefined : 'sf-img-fallback'} role="img" aria-label={alt}>
         {emoji ? '📦' : <PackageIcon />}
       </span>
     );

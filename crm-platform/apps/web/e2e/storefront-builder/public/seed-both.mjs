@@ -6,7 +6,16 @@
 // product code; these are test rows that `clean ref` deletes again (hard delete, soft-deleted products keep their slugs).
 import { execFileSync } from 'node:child_process';
 
-export const THEMES = ['aurora', 'meridian', 'verdure', 'bazaar', 'noir', 'kraft', 'mercato', 'studio'];
+export const THEMES = [
+  'aurora',
+  'meridian',
+  'verdure',
+  'bazaar',
+  'noir',
+  'kraft',
+  'mercato',
+  'studio',
+];
 const PRODUCT_COUNT = 60;
 const WS = 9001; // reference workspace id
 const P0 = 910000; // product id base (same ids on both sides)
@@ -31,7 +40,10 @@ export function shops() {
     enabled: true,
     settings:
       t === 'meridian'
-        ? { hero_text: 'Objects for a <em>slower</em> day', footer_text: 'Made by hand in small batches' }
+        ? {
+            hero_text: 'Objects for a <em>slower</em> day',
+            footer_text: 'Made by hand in small batches',
+          }
         : t === 'noir'
           ? {
               hero_text: 'After dark',
@@ -48,13 +60,30 @@ export function shops() {
     shipping: { flat_minor: 5000, free_above_minor: 50000, note: '2-5 business days · Tracked' },
     payment: t === 'bazaar' ? { provider: 'upi', config: { handle: 'shop@upi' } } : null,
   })).concat([
-    { slug: 'stp-off', theme: 'aurora', name: 'Closed Goods', enabled: false, settings: {}, shipping: null, payment: null },
+    {
+      slug: 'stp-off',
+      theme: 'aurora',
+      name: 'Closed Goods',
+      enabled: false,
+      settings: {},
+      shipping: null,
+      payment: null,
+    },
     // empty catalog is not possible (catalog is workspace wide), so no empty shop here.
   ]);
 }
 
 export function products() {
-  const base = ['Linen Shirt', 'Clay Mug', 'Canvas Tote', 'Soy Candle', 'Wool Scarf', 'Brass Lamp', 'Oak Tray', 'Silk Cap'];
+  const base = [
+    'Linen Shirt',
+    'Clay Mug',
+    'Canvas Tote',
+    'Soy Candle',
+    'Wool Scarf',
+    'Brass Lamp',
+    'Oak Tray',
+    'Silk Cap',
+  ];
   const cats = ['Tops', 'Home', 'Bags', 'Decor'];
   const out = [];
   for (let g = 1; g <= PRODUCT_COUNT; g++) {
@@ -76,10 +105,7 @@ export function products() {
       stock_qty: g === 2 || g === 3 ? 3 : g === 4 ? 1 : g % 7 === 0 ? 10 : g === 12 ? 0 : null,
       sort_order: g,
       image: g === 11 ? null : svg(g),
-      gallery:
-        g === 1
-          ? [svg(101), svg(102), svg(1)]
-          : null,
+      gallery: g === 1 ? [svg(101), svg(102), svg(1)] : null,
       sku: `SKU-${g}`,
       tags: g === 1 ? ['linen', 'summer'] : null,
       weight: g === 1 ? 250 : null,
@@ -91,14 +117,49 @@ export function products() {
 }
 
 const reviews = [
-  { product: 1, name: 'Asha', rating: 5, body: 'Lovely fabric, fits perfectly.', status: 'approved', ageHours: 5 },
-  { product: 1, name: 'Ravi', rating: 4, body: 'Good value. <b>bold</b> test', status: 'approved', ageHours: 30 },
-  { product: 1, name: 'Pending Pat', rating: 1, body: 'Should never show', status: 'pending', ageHours: 1 },
+  {
+    product: 1,
+    name: 'Asha',
+    rating: 5,
+    body: 'Lovely fabric, fits perfectly.',
+    status: 'approved',
+    ageHours: 5,
+  },
+  {
+    product: 1,
+    name: 'Ravi',
+    rating: 4,
+    body: 'Good value. <b>bold</b> test',
+    status: 'approved',
+    ageHours: 30,
+  },
+  {
+    product: 1,
+    name: 'Pending Pat',
+    rating: 1,
+    body: 'Should never show',
+    status: 'pending',
+    ageHours: 1,
+  },
   { product: 2, name: 'Mira', rating: 3, body: null, status: 'approved', ageHours: 10 },
 ];
 const coupons = [
-  { code: 'SAVE10', type: 'percent', amount: 10, max_discount: 50000, free_shipping: false, active: true },
-  { code: 'FLAT100', type: 'flat', amount: 10000, min_subtotal: 30000, free_shipping: false, active: true },
+  {
+    code: 'SAVE10',
+    type: 'percent',
+    amount: 10,
+    max_discount: 50000,
+    free_shipping: false,
+    active: true,
+  },
+  {
+    code: 'FLAT100',
+    type: 'flat',
+    amount: 10000,
+    min_subtotal: 30000,
+    free_shipping: false,
+    active: true,
+  },
   { code: 'SHIPFREE', type: 'flat', amount: 0, free_shipping: true, active: true },
   { code: 'OFF', type: 'percent', amount: 50, free_shipping: false, active: false },
   { code: 'OLD', type: 'percent', amount: 50, free_shipping: false, active: true, expired: true },
@@ -125,17 +186,31 @@ const WA = { country: '91', phone: '9876543210' };
 
 // ---------- SQL builders ----------
 const q = (s) => (s === null || s === undefined ? 'NULL' : `'${String(s).replace(/'/g, "''")}'`);
-const qm = (s) => (s === null || s === undefined ? 'NULL' : `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "''")}'`);
+const qm = (s) =>
+  s === null || s === undefined
+    ? 'NULL'
+    : `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "''")}'`;
 const j = (o) => (o === null || o === undefined ? 'NULL' : JSON.stringify(o));
 
 export function oursSql() {
   const out = [];
-  out.push(`INSERT INTO organizations (slug, name) VALUES ('pubshop-e2e', 'Public Shop E2E') ON CONFLICT (slug) DO NOTHING;`);
-  out.push(`DO $$ DECLARE oid bigint := (SELECT id FROM organizations WHERE slug = 'pubshop-e2e'); dev bigint; BEGIN`);
+  out.push(
+    `INSERT INTO organizations (slug, name) VALUES ('pubshop-e2e', 'Public Shop E2E') ON CONFLICT (slug) DO NOTHING;`,
+  );
+  out.push(
+    `DO $$ DECLARE oid bigint := (SELECT id FROM organizations WHERE slug = 'pubshop-e2e'); dev bigint; BEGIN`,
+  );
   out.push(`PERFORM set_config('app.org_id', oid::text, true);`);
-  for (const t of ['wa_orders', 'wa_coupons', 'wa_product_reviews', 'wa_storefront_views', 'storefront_cart_recoveries'])
+  for (const t of [
+    'wa_orders',
+    'wa_coupons',
+    'wa_product_reviews',
+    'wa_storefront_views',
+    'storefront_cart_recoveries',
+  ])
     out.push(`DELETE FROM ${t} WHERE org_id = oid;`);
-  for (const t of ['wa_products', 'wa_storefronts', 'devices']) out.push(`DELETE FROM ${t} WHERE org_id = oid;`);
+  for (const t of ['wa_products', 'wa_storefronts', 'devices'])
+    out.push(`DELETE FROM ${t} WHERE org_id = oid;`);
   out.push(
     `INSERT INTO devices (org_id, device_name, country_code, phone_number, status, active) VALUES (oid, 'stp device', ${q(WA.country)}, ${q(WA.phone)}, 'connected', true) RETURNING id INTO dev;`,
   );
@@ -166,8 +241,16 @@ export function oursSql() {
 }
 
 export function cleanOursSql() {
-  return oursSql().split('\n').slice(0, 11).join('\n').replace("INSERT INTO organizations (slug, name) VALUES ('pubshop-e2e', 'Public Shop E2E') ON CONFLICT (slug) DO NOTHING;", '') +
-    '\nEND $$;';
+  return (
+    oursSql()
+      .split('\n')
+      .slice(0, 11)
+      .join('\n')
+      .replace(
+        "INSERT INTO organizations (slug, name) VALUES ('pubshop-e2e', 'Public Shop E2E') ON CONFLICT (slug) DO NOTHING;",
+        '',
+      ) + '\nEND $$;'
+  );
 }
 
 export function refSql() {
@@ -212,22 +295,36 @@ function refCleanStatements() {
 }
 
 const psql = (sql) =>
-  execFileSync('docker', ['exec', '-i', 'crm-postgres', 'psql', '-U', 'crm', '-d', 'crm_store', '-v', 'ON_ERROR_STOP=1'], {
-    input: sql,
-    encoding: 'utf8',
-  });
+  execFileSync(
+    'docker',
+    ['exec', '-i', 'crm-postgres', 'psql', '-U', 'crm', '-d', 'crm_store', '-v', 'ON_ERROR_STOP=1'],
+    {
+      input: sql,
+      encoding: 'utf8',
+    },
+  );
 // Reference encrypts device columns with the app key: ask the reference container to encrypt (no reference code is touched).
 const enc = (v) =>
   execFileSync(
     'docker',
-    ['exec', 'threadwise-app', 'php', '-r', `require "/app/vendor/autoload.php"; $app=require "/app/bootstrap/app.php"; $app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap(); echo Crypt::encryptString("${v}");`],
+    [
+      'exec',
+      'threadwise-app',
+      'php',
+      '-r',
+      `require "/app/vendor/autoload.php"; $app=require "/app/bootstrap/app.php"; $app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap(); echo Crypt::encryptString("${v}");`,
+    ],
     { encoding: 'utf8' },
   ).trim();
 const maria = (sql) =>
-  execFileSync('docker', ['exec', '-i', 'threadwise-db', 'mariadb', '-uthreadwise', '-pthreadwise_local_pw', 'threadwise'], {
-    input: sql,
-    encoding: 'utf8',
-  });
+  execFileSync(
+    'docker',
+    ['exec', '-i', 'threadwise-db', 'mariadb', '-uthreadwise', '-pthreadwise_local_pw', 'threadwise'],
+    {
+      input: sql,
+      encoding: 'utf8',
+    },
+  );
 
 function cleanRef() {
   const tables = maria(

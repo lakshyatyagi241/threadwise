@@ -152,6 +152,7 @@ export class PublicCatalogService {
           status: order.status,
           paymentMethod: order.paymentMethod,
           customerName: order.customerName,
+          customerAddress: order.customerAddress,
           items: order.items.map((i) => ({
             name: String(i.name ?? ''),
             qty: Number(i.qty ?? 1),

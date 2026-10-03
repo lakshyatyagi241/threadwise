@@ -140,7 +140,11 @@ export function Catalog({ home }: { home: PublicHome }) {
         <aside className="sf-filters" aria-label={t('catalog.filters.title')}>
           <h3>{t('catalog.filters.title')}</h3>
           {categories.length > 0 ? (
-            <div className="sf-filter-group" role="group" aria-label={t('catalog.filters.category')}>
+            <div
+              className="sf-filter-group"
+              role="group"
+              aria-label={t('catalog.filters.category')}
+            >
               <h3>{t('catalog.filters.category')}</h3>
               {categories.map((c) => (
                 <label key={c}>
@@ -186,7 +190,11 @@ export function Catalog({ home }: { home: PublicHome }) {
               </div>
             </div>
           ) : null}
-          <div className="sf-filter-group" role="group" aria-label={t('catalog.filters.availability')}>
+          <div
+            className="sf-filter-group"
+            role="group"
+            aria-label={t('catalog.filters.availability')}
+          >
             <h3>{t('catalog.filters.availability')}</h3>
             <label>
               <input
