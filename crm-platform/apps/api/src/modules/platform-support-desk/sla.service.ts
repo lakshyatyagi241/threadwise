@@ -10,6 +10,7 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { AuthAuditService } from '../auth';
 import { SupportStore } from './support-store';
 import {
@@ -63,6 +64,7 @@ export class SlaService {
   constructor(
     private readonly store: SupportStore,
     private readonly audit: AuthAuditService,
+    private readonly outbox: OutboxService,
   ) {}
 
   // --- engine ---------------------------------------------------------------------------------------------------------------------
@@ -145,7 +147,25 @@ export class SlaService {
         ON CONFLICT (org_id, ticket_id, breach_type) DO NOTHING
         RETURNING id
       `);
-      inserted += res.rows.length;
+      if (res.rows.length === 0) continue;
+      inserted += 1;
+      const tk = (
+        await tx.execute(
+          sql`SELECT uuid, ticket_number FROM support_tickets WHERE org_id = ${t.org_id} AND id = ${t.id}`,
+        )
+      ).rows[0] as unknown as { uuid: string; ticket_number: string };
+      await this.outbox.emit(tx, {
+        orgId: t.org_id,
+        aggregateModule: 'support_tickets',
+        aggregateId: t.id,
+        eventType: 'support.sla.breached',
+        payload: {
+          ticketId: tk.uuid,
+          ticketNumber: tk.ticket_number,
+          breachType: type,
+          overByMinutes: timer.minutesOver ?? 0,
+        },
+      });
     }
     return inserted;
   }
