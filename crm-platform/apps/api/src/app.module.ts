@@ -51,6 +51,7 @@ import { AddonsExtensionRegistryModule } from './modules/addons-extension-regist
 import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
+import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
@@ -142,6 +143,7 @@ import { HealthModule } from './health/health.module';
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
+    CouponsCreditsReferralCurrencyModule,
     BspBillingEngineModule,
     WalletMessageBillingModule,
     SendGuardModule,

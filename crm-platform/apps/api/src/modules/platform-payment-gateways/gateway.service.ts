@@ -82,6 +82,8 @@ export class GatewayService {
       credentials: this.decryptCredentials(row),
       mode: row.mode,
       http,
+      // Square signs the exact URL the provider calls; it is the same one the admin screen tells the operator to paste.
+      webhookUrl: `${this.config.get('APP_URL', { infer: true })}/v2/payments/webhook/${row.slug}`,
     });
   }
 

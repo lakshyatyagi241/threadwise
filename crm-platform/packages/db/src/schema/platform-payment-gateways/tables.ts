@@ -5,6 +5,8 @@
 import {
   bigint,
   boolean,
+  customType,
+  integer,
   foreignKey,
   index,
   jsonb,
@@ -17,6 +19,7 @@ import {
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { coupons, creditPackages } from '../coupons-credits-referral-currency/tables';
 import { companies, contacts } from '../crm';
@@ -24,6 +27,8 @@ import { deals } from '../deals-pipelines/tables';
 import { organizations, users } from '../foundation';
 import { invoices } from '../invoicing/tables';
 import { packages } from '../plans-subscriptions-trials/tables';
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
 
 export const payments = pgTable(
   'payments',
@@ -185,6 +190,8 @@ export const orders = pgTable(
     returnToken: text('return_token').notNull(),
     walletTopupMinor: bigint('wallet_topup_minor', { mode: 'number' }),
     idempotencyKey: text('idempotency_key'),
+    // 20261017090000_paygw_admin_billing.sql: the line printed on a manual invoice.
+    description: text('description'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -235,8 +242,46 @@ export const orders = pgTable(
     index('idx_orders_gateway_order_id').on(t.orgId, t.gatewayOrderId),
     index('idx_orders_package_id').on(t.orgId, t.packageId),
     index('idx_orders_status').on(t.orgId, t.status),
+    // 20261017090000_paygw_admin_billing.sql
+    index('idx_orders_created_all').on(t.createdAt.desc(), t.id.desc()),
+    index('idx_orders_paid_at_paid')
+      .on(t.paidAt)
+      .where(sql`status = 'paid'`),
+    index('idx_orders_proof_queue')
+      .on(t.proofSubmittedAt.desc())
+      .where(sql`proof_submitted_at IS NOT NULL AND status IN ('pending', 'awaiting_approval')`),
   ],
 );
 
 export type OrdersRow = typeof orders.$inferSelect;
 export type NewOrdersRow = typeof orders.$inferInsert;
+
+/** 20261018090000_paygw_proof_and_subscriptions.sql: the bytes of an offline-payment proof, one per order. */
+export const orderProofBlobs = pgTable(
+  'order_proof_blobs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    orderId: idColumn('order_id').notNull(),
+    mime: text('mime').notNull(),
+    byteSize: integer('byte_size').notNull(),
+    bytes: bytea('bytes').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_order_proof_blobs_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_order_proof_blobs_order_id').on(t.orgId, t.orderId),
+    foreignKey({
+      name: 'fk_order_proof_blobs_order_id',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type OrderProofBlobsRow = typeof orderProofBlobs.$inferSelect;
+export type NewOrderProofBlobsRow = typeof orderProofBlobs.$inferInsert;
