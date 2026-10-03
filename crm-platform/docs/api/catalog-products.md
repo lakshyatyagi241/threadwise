@@ -11,7 +11,7 @@ Module: `apps/api/src/modules/catalog-products`; Meta Graph, 360dialog and the N
   integer, for every currency) plus `priceMajor` (plain decimal string) and `priceDisplay` (symbol and grouping); requests send `priceMajor`.
 - Every mutation takes an `Idempotency-Key` header (a repeat replays the first answer). Updates of a product take the `rowVersion` read
   (409 `ROW_VERSION_CONFLICT` otherwise); a collection takes it optionally (WaDesk had no concurrency check; a client that sends it gets one).
-- Permission keys (seeded by `20261016100000_cat_permissions`, all `cat.*`, workspace-level, no record scope). The Owner and the Admin preset
+- Permission keys (seeded by `20261017090000_cat_permissions`, all `cat.*`, workspace-level, no record scope). The Owner and the Admin preset
   hold all ten; Manager, Agent and Viewer hold none (WaDesk gates every catalog route to role admin or above, checked in
   `catalog-inbox-settings.e2e.spec.ts`). A custom role can be given any subset.
 - Plan flag `wa_storefront` (WaDesk `access_wa_storefront`, off by default) gates every `/catalog/*` route except `catalog/products*` and
