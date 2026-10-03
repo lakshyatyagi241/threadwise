@@ -30,9 +30,17 @@ async function currentResidency() {
 }
 
 const PROVIDERS = [
-  { id: 'mymemory', link: 'https://translatedlabs.com/legal', linkText: 'translatedlabs.com/legal' },
+  {
+    id: 'mymemory',
+    link: 'https://translatedlabs.com/legal',
+    linkText: 'translatedlabs.com/legal',
+  },
   { id: 'google_free', link: null, linkText: null },
-  { id: 'deepl', link: 'https://www.deepl.com/en/pro-data-security', linkText: 'deepl.com/pro-data-security' },
+  {
+    id: 'deepl',
+    link: 'https://www.deepl.com/en/pro-data-security',
+    linkText: 'deepl.com/pro-data-security',
+  },
   {
     id: 'google_cloud',
     link: 'https://cloud.google.com/terms/data-processing-addendum',
@@ -65,7 +73,10 @@ export default async function DataProcessingPage() {
             <thead className="border-y border-border text-start text-muted-foreground">
               <tr>
                 {(['provider', 'region', 'dataSent', 'providerDpa'] as const).map((c) => (
-                  <th key={c} className="px-3 py-2 text-start font-mono text-[10px] uppercase tracking-[0.14em]">
+                  <th
+                    key={c}
+                    className="px-3 py-2 text-start font-mono text-[10px] uppercase tracking-[0.14em]"
+                  >
                     {t(`cols.${c}`)}
                   </th>
                 ))}
@@ -79,7 +90,12 @@ export default async function DataProcessingPage() {
                   <td className="px-3 py-2.5">{t(`providers.${p.id}.data`)}</td>
                   <td className="px-3 py-2.5">
                     {p.link ? (
-                      <a href={p.link} target="_blank" rel="noopener noreferrer" className="underline">
+                      <a
+                        href={p.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                      >
                         {p.linkText}
                       </a>
                     ) : (
