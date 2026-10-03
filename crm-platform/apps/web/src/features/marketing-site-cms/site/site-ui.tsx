@@ -13,7 +13,17 @@ import {
 import type { CaptchaConfig } from '@/features/auth-registration-security/guest/captcha';
 import type { Fc } from './content';
 import { ContactForm, type ContactLabels } from '../public/contact-form';
-import { PricingStrip } from './pricing-strip';
+import { UseCases, Testimonials } from './tw-more';
+import { FeatureBento, HeroFeatures, PillarsThree, PullQuote } from './tw-features-page';
+import {
+  FeatureBroadcasts,
+  FeatureConnectivity,
+  FeatureFlows,
+  FeatureInbox,
+  FeatureTemplates,
+} from './tw-features-home';
+import { HeroHome, LogoStrip, Manifesto, TwoDeviceStage } from './tw-home';
+import { CtaFinal, FaqSection, FaqSlider, PageHero, PricingSection } from './tw-common';
 
 /** What a page needs next to its own content: data other domains own (plans, FAQs, company details, captcha). */
 export interface SiteExtras {
@@ -24,6 +34,9 @@ export interface SiteExtras {
   homeFaqs?: PublicFaqListResponse['data'];
   siteInfo?: PublicSiteInfo | null;
   captcha?: CaptchaConfig | null;
+  /** The site's brand name and host, for the sample windows of the homepage. */
+  brand?: string;
+  host?: string;
 }
 
 export interface SiteCtx {
@@ -300,86 +313,6 @@ export function GenericSection({
 
 // --- specialised sections -------------------------------------------------------------------------------------------
 
-/** The page's own questions (`faqN_q` / `faqN_a`), or the pricing FAQ table when it has rows for this page. */
-function FaqSection({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
-  const slug = def.slug;
-  const n = def.fields.filter((f) => /^faq\d+_q$/.test(f.key)).length;
-  const table = ctx.extras.tableFaqs ?? [];
-  const own = Array.from({ length: n }, (_, i) => i + 1).filter(
-    (i) => ctx.edit || ctx.fc(keyOf(ctx, slug, `faq${i}_q`)) !== '',
-  );
-  return (
-    <section className="cms-section" data-section={slug} id={slug}>
-      <div className="cms-wrap">
-        <p className="cms-eyebrow">
-          <T ctx={ctx} k={keyOf(ctx, slug, 'kicker')} />
-        </p>
-        <T ctx={ctx} k={keyOf(ctx, slug, 'headline')} as="h2" className="cms-h2" />
-        <T ctx={ctx} k={keyOf(ctx, slug, 'subtitle')} as="p" className="cms-lead" />
-        <div className="cms-faq">
-          {table.length > 0 && !ctx.edit
-            ? table.map((f, i) => (
-                <details key={f.id} open={i === 0}>
-                  <summary>{f.question}</summary>
-                  <p className="cms-small">{f.answer}</p>
-                </details>
-              ))
-            : own.map((i, idx) => (
-                <details key={i} open={idx === 0}>
-                  <summary>
-                    <T ctx={ctx} k={keyOf(ctx, slug, `faq${i}_q`)} />
-                  </summary>
-                  <T ctx={ctx} k={keyOf(ctx, slug, `faq${i}_a`)} as="p" className="cms-small" />
-                </details>
-              ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/** The homepage FAQ marquee (TW-CMS-010): the FAQ table's home rows scrolling; nothing when there are none. */
-function FaqSlider({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
-  const faqs = ctx.extras.homeFaqs ?? [];
-  const slug = def.slug;
-  if (faqs.length === 0 && !ctx.edit) return null;
-  const track = [...faqs, ...faqs];
-  return (
-    <section className="cms-section" data-tone="alt" data-section={slug} id={slug}>
-      <div className="cms-wrap">
-        <p className="cms-eyebrow">
-          <T ctx={ctx} k={keyOf(ctx, slug, 'kicker')} />
-        </p>
-        <T ctx={ctx} k={keyOf(ctx, slug, 'headline')} as="h2" className="cms-h2" />
-        <T ctx={ctx} k={keyOf(ctx, slug, 'subtitle')} as="p" className="cms-lead" />
-      </div>
-      {faqs.length > 0 && (
-        <div
-          className="cms-marquee"
-          style={{
-            marginTop: '2rem',
-            ['--cms-marquee-s' as string]: `${Math.max(20, faqs.length * 8)}s`,
-          }}
-        >
-          <div className="cms-marquee-track">
-            {track.map((f, i) => (
-              <div
-                key={`${f.id}-${i}`}
-                className="cms-card"
-                style={{ width: '20rem', whiteSpace: 'normal' }}
-                aria-hidden={i >= faqs.length ? true : undefined}
-              >
-                <h3>{f.question}</h3>
-                <p className="cms-small">{f.answer}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}
-
 function ChannelsSection({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
   const slug = def.slug;
   const info = ctx.extras.siteInfo;
@@ -484,40 +417,6 @@ function FormSection({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
   );
 }
 
-function PricingSection({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
-  const slug = def.slug;
-  const k = (f: string) => keyOf(ctx, slug, f);
-  const tiers = [1, 2, 3].map((i) => ({
-    name: ctx.fc(k(`tier${i}_name`)),
-    badge: ctx.fc(k(`tier${i}_badge`)),
-    tagline: ctx.fc(k(`tier${i}_tagline`)),
-    price: ctx.fc(k(`tier${i}_price`)),
-    period: ctx.fc(k(`tier${i}_period`)),
-    ctaLabel: ctx.fc(k(`tier${i}_cta_label`)),
-  }));
-  return (
-    <section className="cms-section" data-section={slug} id={slug}>
-      <div className="cms-wrap">
-        <p className="cms-eyebrow">
-          <T ctx={ctx} k={k('eyebrow')} />
-        </p>
-        <T ctx={ctx} k={k('headline')} as="h2" className="cms-h2" />
-        <T ctx={ctx} k={k('subtitle')} as="p" className="cms-lead" />
-        <PricingStrip
-          pricing={ctx.extras.pricing ?? null}
-          tiers={tiers}
-          labels={{
-            monthly: ctx.fc(k('monthly_label')),
-            yearly: ctx.fc(k('yearly_label')),
-            save: ctx.fc(k('save_label')),
-          }}
-        />
-        <T ctx={ctx} k={k('footnote')} as="p" className="cms-small" />
-      </div>
-    </section>
-  );
-}
-
 const TONES: Record<string, 'alt' | 'deep' | undefined> = {
   manifesto: 'alt',
   'feature-inbox': 'alt',
@@ -534,7 +433,44 @@ export function SectionView({ ctx, slug }: { ctx: SiteCtx; slug: string }) {
   if (!def) return null;
   switch (slug) {
     case 'hero':
-      return <GenericSection ctx={ctx} def={def} hero />;
+      if (ctx.page === 'home')
+        return (
+          <HeroHome ctx={ctx} def={def}>
+            <TwoDeviceStage ctx={ctx} def={def} />
+          </HeroHome>
+        );
+      if (ctx.page === 'features') return <HeroFeatures ctx={ctx} def={def} />;
+      return ctx.page === 'pricing' ? (
+        <PageHero ctx={ctx} def={def} />
+      ) : (
+        <GenericSection ctx={ctx} def={def} hero />
+      );
+    case 'logo-strip':
+      return <LogoStrip ctx={ctx} def={def} />;
+    case 'manifesto':
+      return <Manifesto ctx={ctx} def={def} />;
+    case 'feature-broadcasts':
+      return <FeatureBroadcasts ctx={ctx} def={def} />;
+    case 'feature-flows':
+      return <FeatureFlows ctx={ctx} def={def} />;
+    case 'feature-inbox':
+      return <FeatureInbox ctx={ctx} def={def} />;
+    case 'feature-templates':
+      return <FeatureTemplates ctx={ctx} def={def} />;
+    case 'feature-connectivity':
+      return <FeatureConnectivity ctx={ctx} def={def} />;
+    case 'use-cases':
+      return <UseCases ctx={ctx} def={def} />;
+    case 'testimonials':
+      return <Testimonials ctx={ctx} def={def} />;
+    case 'feature-bento':
+      return <FeatureBento ctx={ctx} def={def} />;
+    case 'pillars-three':
+      return <PillarsThree ctx={ctx} def={def} />;
+    case 'pull-quote':
+      return <PullQuote ctx={ctx} def={def} />;
+    case 'cta-final':
+      return <CtaFinal ctx={ctx} def={def} />;
     case 'faq':
       return <FaqSection ctx={ctx} def={def} />;
     case 'faq-slider':

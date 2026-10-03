@@ -2,6 +2,34 @@
 @import '@crm/ui/tokens.css';
 @source '../../../../packages/ui/src';
 
+/* The public marketing site's palette (TW-CMS-021): colour utilities (bg-ink-950, text-wa-deep, border-paper-200) that follow the editable --site-* tokens set on .cms-site. */
+@theme inline {
+  --color-wa-deep: var(--site-wa-deep, #075E54);
+  --color-wa-teal: var(--site-wa-teal, #128C7E);
+  --color-wa-green: var(--site-wa-green, #25D366);
+  --color-wa-mint: var(--site-wa-mint, #DCF8C6);
+  --color-wa-bubble: var(--site-wa-bubble, #E7FFDB);
+  --color-wa-chat: var(--site-wa-chat, #ECE5DD);
+  --color-ink-950: var(--site-ink-950, #070D0C);
+  --color-ink-900: var(--site-ink-900, #0B1F1C);
+  --color-ink-800: var(--site-ink-800, #13312D);
+  --color-ink-700: var(--site-ink-700, #1F4540);
+  --color-ink-600: var(--site-ink-600, #3A5A55);
+  --color-ink-500: var(--site-ink-500, #6B807C);
+  --color-ink-400: var(--site-ink-400, #9AA8A4);
+  --color-ink-300: var(--site-ink-300, #C3CCC9);
+  --color-paper-0: var(--site-paper-0, #FBFAF6);
+  --color-paper-50: var(--site-paper-50, #F5F3EC);
+  --color-paper-100: var(--site-paper-100, #EFEBE0);
+  --color-paper-200: var(--site-paper-200, #E5DFD0);
+  --color-paper-300: var(--site-paper-300, #D4CCB6);
+  --color-accent-coral: var(--site-accent-coral, #E87A5D);
+  --color-accent-amber: var(--site-accent-amber, #E5A04E);
+  --color-accent-sand: var(--site-accent-sand, #D9C9A3);
+  --color-accent-plum: var(--site-accent-plum, #5B3D8A);
+  --color-accent-sky: var(--site-accent-sky, #3E7AA1);
+}
+
 /* The announcement strip's marquee (TW-ASHELL-026): two copies side by side, shifted by exactly one copy. */
 @keyframes ann-scroll {
   from {
