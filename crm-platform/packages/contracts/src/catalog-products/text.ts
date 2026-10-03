@@ -26,6 +26,7 @@ export function waString(max: number, min = 0) {
  * into parts and trims each part with it, so a zero-width character inside the box survives next to a comma.
  */
 export function trimLikePhp(value: string): string {
+  // eslint-disable-next-line no-control-regex -- NUL and vertical tab are exactly what PHP's trim() strips
   return value.replace(/^[ \t\n\r\0\x0B]+|[ \t\n\r\0\x0B]+$/g, '');
 }
 
