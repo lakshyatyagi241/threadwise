@@ -76,8 +76,15 @@ is applied only to an order of that shop whose amount and currency match and tha
 
 ## Exports for other domains (barrel `modules/storefront-builder`)
 
-`ShopsService.ensureDefaultShop(orgId, tx?)` (channel domains, on connect), `ShopUrlService.publicUrl(shop)` / `trackUrl(shop, token)`,
+`ShopsService.ensureDefaultShop(orgId, tx?)` (also run by the worker consumer on `whatsapp.connection.connected`), `ShopUrlService.publicUrl(shop)` / `trackUrl(shop, token)`,
 `StorefrontPaymentService.mintLink(shop, order, callbackUrl)` (CHK, order page "generate payment link").
+
+## Web routes next to the API
+
+`GET /s/<slug>`, `/s/<slug>/p/<productSlug>`, `/s/<slug>/order/<token>` are rendered by the web app from the public endpoints above; the
+browser's own posts (`/s/<slug>/checkout|coupon|review|abandon|more`) are same-origin route handlers that forward to the API. `GET /` on
+a shop's verified custom domain renders the shop. `POST /webhooks/storefront-pay` (WaDesk's URL for Razorpay) forwards the raw body and
+signature to `POST /v2/store-public/webhooks/razorpay`.
 
 ## Environment
 
