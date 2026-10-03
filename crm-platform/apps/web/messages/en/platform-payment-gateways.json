@@ -338,7 +338,7 @@
         "eyebrow": "Admin · Billing & plans · Billing history",
         "titleFirst": "Billing",
         "titleSecond": "history",
-        "description": "Every payment event the platform has processed: charges, failures and refunds across every workspace.",
+        "description": "Every payment event the platform has processed — charges, refunds, and retries across every workspace.",
         "window": "Time window",
         "kpi": {
           "gross": "Gross revenue",
@@ -354,7 +354,7 @@
         },
         "trend": {
           "kicker": "Trend",
-          "title": "Charges & refunds over time",
+          "title": "Daily charges & refunds",
           "charges": "Charges",
           "refunds": "Refunds"
         },

@@ -493,7 +493,7 @@ describe('invoices (WD-PAYGW-043..046)', () => {
   it('badges: paid, outstanding, overdue after 15 days (counting days past the due date), refunded, void; the default window is all time', async () => {
     await mkOrder(acme.orgId, { status: 'paid', daysAgo: 100 });
     await mkOrder(acme.orgId, { status: 'pending', daysAgo: 2 });
-    await mkOrder(acme.orgId, { status: 'pending', daysAgo: 20 });
+    await mkOrder(acme.orgId, { status: 'pending', daysAgo: 20.5 }); // half a day of slack so DB and API clock skew cannot flip the floor
     await mkOrder(acme.orgId, { status: 'refunded', daysAgo: 5 });
     await mkOrder(acme.orgId, { status: 'failed', daysAgo: 5 });
     await mkOrder(acme.orgId, { status: 'cancelled', daysAgo: 5 });
