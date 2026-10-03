@@ -1734,7 +1734,7 @@ export function PullQuote({ ctx, def }: P) {
                   <T ctx={ctx} k={k('author_role')} as="div" className="text-[12px] text-ink-500" />
                 </div>
                 {[1, 2].map((i) => (
-                  <div className="text-right">
+                  <div key={i} className="text-right">
                     <T
                       ctx={ctx}
                       k={k(`stat${i}_label`)}

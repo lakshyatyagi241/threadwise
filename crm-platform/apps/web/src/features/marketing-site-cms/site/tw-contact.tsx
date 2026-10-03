@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { CmsSection } from '@crm/contracts';
 import { ContactForm, type ContactLabels } from '../public/contact-form';
 import { T, type SiteCtx } from './site-ui';
-import { mk, vd } from './tw-common';
+import { keyOf, mk, vd } from './tw-common';
 
 interface P {
   ctx: SiteCtx;
@@ -268,7 +268,7 @@ export function ContactFormSection({ ctx, def }: P) {
                 <div className="mb-3 flex items-center justify-between">
                   <T
                     ctx={ctx}
-                    k={k('office_label')}
+                    k={keyOf(ctx, 'channels', 'office_label')}
                     as="div"
                     className="mono text-[10px] uppercase tracking-widest text-ink-500"
                   />
