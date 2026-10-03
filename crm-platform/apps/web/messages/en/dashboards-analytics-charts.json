@@ -575,6 +575,28 @@
         "titleLead": "Admin",
         "titleAccent": "analytics"
       }
+    },
+    "quickAccess": {
+      "title": "Quick access",
+      "kicker": "Shortcuts",
+      "edit": "Edit shortcuts",
+      "empty": "Add quick-access shortcuts",
+      "open": "Open {label}",
+      "modalTitle": "Quick access",
+      "modalEyebrow": "Pin up to 10 shortcuts",
+      "pages": "App pages (max 10)",
+      "custom": "Custom links",
+      "labelPlaceholder": "Label",
+      "urlPlaceholder": "https://... or /path",
+      "addCustom": "+ Add a custom link",
+      "removeCustom": "Remove this link",
+      "counter": "{n} / 10 pinned",
+      "cancel": "Cancel",
+      "save": "Save shortcuts",
+      "saving": "Saving...",
+      "limit": "You can pin up to 10 shortcuts.",
+      "saved": "Quick access updated.",
+      "failed": "Could not save your shortcuts."
     }
   }
 }

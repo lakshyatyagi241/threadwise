@@ -158,3 +158,4 @@ export * from './health';
 export * from './admin';
 export * from './widgets';
 export * from './panels';
+export * from './quick-access';

@@ -11,6 +11,11 @@ import {
   type DashSummaryResponse,
   type DashThroughputResponse,
 } from '@crm/contracts';
+import {
+  quickAccessResponseSchema,
+  type QuickAccessItem,
+  type QuickAccessResponse,
+} from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 
 export interface AnalyticsParams {
@@ -62,6 +67,16 @@ export const dashApi = {
       },
       schema: analyticsPanelsSchema,
       signal,
+    });
+  },
+  quickAccess(signal?: AbortSignal): Promise<QuickAccessResponse> {
+    return apiFetch('/quick-access', { schema: quickAccessResponseSchema, signal });
+  },
+  saveQuickAccess(items: QuickAccessItem[]): Promise<QuickAccessResponse> {
+    return apiFetch('/quick-access', {
+      method: 'PUT',
+      body: { items },
+      schema: quickAccessResponseSchema,
     });
   },
   /** The CSV download address; the browser fetches it with the session cookie through the same-origin proxy. */
