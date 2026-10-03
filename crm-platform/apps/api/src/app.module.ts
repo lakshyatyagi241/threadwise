@@ -35,6 +35,7 @@ import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
+import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -143,6 +144,7 @@ import { HealthModule } from './health/health.module';
     AiKeysUsageAdminModule,
     NodeBridgeRuntimeModule,
     ScheduledQueueWarmerModule,
+    FlowRuntimeEngineModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
