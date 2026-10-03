@@ -242,8 +242,8 @@ describe('offline gateways, proof, invoice and in-app confirmation (TW-PAYGW-013
       currency: 'USD',
     });
     expect((body.next as { rows: unknown }).rows).toEqual([
-      { label: 'Beneficiary name', value: 'Acme Ltd' },
-      { label: 'Bank name', value: 'First Bank' },
+      { label: 'Beneficiary', value: 'Acme Ltd' },
+      { label: 'Bank', value: 'First Bank' },
       { label: 'Account number', value: '1234567890' },
       { label: 'IFSC / SWIFT', value: 'FIRSUS33' },
     ]);

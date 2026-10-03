@@ -24,6 +24,8 @@ export interface DriverOrder {
   planName?: string;
   /** Renewal cadence for `createSubscription` (TW-PAYGW-012). */
   recurring?: { interval: 'day' | 'week' | 'month' | 'year'; count: number };
+  /** The order is an auto-renew checkout (the driver then sets up the subscription when the buyer returns). */
+  isRecurring?: boolean;
   /** A support reference (never an internal id) some providers want in their metadata, e.g. the workspace slug. */
   workspaceRef?: string;
 }
@@ -39,7 +41,7 @@ export type PaymentStatus = 'pending' | 'paid' | 'failed';
 
 /** A widget the browser runs with these parameters. No server-rendered HTML ever reaches the buyer. */
 export interface ClientAction {
-  provider: 'razorpay' | 'paddle' | 'cashfree';
+  provider: 'razorpay' | 'paddle' | 'cashfree' | 'hyperpay' | 'braintree';
   params: Record<string, string | number | boolean>;
 }
 
@@ -187,6 +189,8 @@ export interface DriverContext {
   credentials: Record<string, string>;
   mode: 'sandbox' | 'live';
   http: HttpFetch;
+  /** The URL a provider posts notifications to (Square signs it into its notification signature). */
+  webhookUrl?: string;
 }
 
 export const basicAuth = (user: string, pass: string): string =>
@@ -299,4 +303,14 @@ export function parseForm(raw: Buffer | string): Record<string, string> {
 export function withQuery(url: string, params: Record<string, string>): string {
   const sep = url.includes('?') ? '&' : '?';
   return `${url}${sep}${new URLSearchParams(params).toString()}`;
+}
+
+/** A notification body as a flat record: JSON object, else form-encoded, else empty (callers then reject it). */
+export function notificationFields(raw: Buffer | string): Record<string, unknown> {
+  const text = raw.toString('utf8');
+  try {
+    return asRecord(JSON.parse(text));
+  } catch {
+    return /^[^=&\s]+=/.test(text) ? parseForm(text) : {};
+  }
 }

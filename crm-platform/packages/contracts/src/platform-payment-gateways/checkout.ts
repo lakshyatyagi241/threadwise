@@ -124,7 +124,7 @@ export const placeOrderResponseSchema = z.object({
     z.object({ type: z.literal('redirect'), url: z.string().url() }),
     z.object({
       type: z.literal('client_action'),
-      provider: z.enum(['razorpay', 'paddle', 'cashfree']),
+      provider: z.enum(['razorpay', 'paddle', 'cashfree', 'hyperpay', 'braintree']),
       params: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
     }),
     /** The browser POSTs these fields to the provider's page (PayU): built from plain data, never from server HTML. */

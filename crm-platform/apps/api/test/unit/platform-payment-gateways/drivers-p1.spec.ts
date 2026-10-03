@@ -98,8 +98,8 @@ describe('bank transfer and offline (TW-PAYGW-013)', () => {
     expect(r.instructions).toEqual({
       kind: 'bank_transfer',
       rows: [
-        { label: 'Beneficiary name', value: 'Acme Ltd' },
-        { label: 'Bank name', value: 'First Bank' },
+        { label: 'Beneficiary', value: 'Acme Ltd' },
+        { label: 'Bank', value: 'First Bank' },
         { label: 'Account number', value: '123456' },
         { label: 'IFSC / SWIFT', value: 'FBNKINBB' },
       ],
@@ -153,7 +153,12 @@ describe('paddle (TW-PAYGW-017)', () => {
     expect(b.items[0].price.billing_cycle).toBeNull();
     expect(r.clientAction).toEqual({
       provider: 'paddle',
-      params: { clientToken: 'test_tok', environment: 'sandbox', transactionId: 'txn_1' },
+      params: {
+        clientToken: 'test_tok',
+        environment: 'sandbox',
+        transactionId: 'txn_1',
+        returnUrl: 'https://api.test/v2/payments/return/x?o=tok&transaction_id=txn_1',
+      },
     });
     expect(r.gatewayOrderId).toBe('txn_1');
   });
@@ -861,7 +866,10 @@ describe('cashfree (TW-PAYGW-022)', () => {
     expect(b.order_meta.return_url).toBe(`${urls.returnUrl}&order_id={order_id}`);
     expect(r.clientAction).toEqual({
       provider: 'cashfree',
-      params: { sessionId: 'sess_1', mode: 'sandbox' },
+      params: {
+        sessionId: 'sess_1',
+        mode: 'sandbox',
+      },
     });
     expect(r.gatewayOrderId).toContain(`CF_${order.orderNumber}_`);
   });

@@ -29,6 +29,7 @@ export function toDriverOrder(o: OrderRow, planName?: string): DriverOrder {
     customerName: o.customerName,
     customerEmail: o.customerEmail,
     gatewayOrderId: o.gatewayOrderId,
+    isRecurring: o.autoRenew,
   };
 }
 

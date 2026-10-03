@@ -29,6 +29,7 @@ export interface OrderRow {
   failureReason: string | null;
   walletTopupMinor: number | null;
   returnToken: string;
+  autoRenew: boolean;
   customerName: string | null;
   customerEmail: string | null;
   description: string | null;
@@ -43,7 +44,7 @@ const COLS = sql.raw(`
   o.amount::text AS amount, o.discount_amount::text AS discount_amount, o.tax_rate::text AS tax_rate,
   o.tax_amount::text AS tax_amount, o.total_amount::text AS total_amount, o.coupon_code, o.coupon_id, o.gateway_id,
   o.gateway_slug, o.status, o.gateway_order_id, o.gateway_payment_id, o.failure_reason, o.wallet_topup_minor,
-  o.return_token, o.customer_name, o.customer_email, o.description, o.created_at, o.paid_at, o.row_version,
+  o.return_token, o.customer_name, o.customer_email, o.description, o.created_at, o.paid_at, o.row_version, o.auto_renew,
   to_char(o.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
 
 type Raw = Record<string, unknown>;
@@ -75,6 +76,7 @@ function toRow(r: Raw): OrderRow {
     failureReason: (r.failure_reason as string | null) ?? null,
     walletTopupMinor: num(r.wallet_topup_minor),
     returnToken: r.return_token as string,
+    autoRenew: r.auto_renew === true,
     customerName: (r.customer_name as string | null) ?? null,
     customerEmail: (r.customer_email as string | null) ?? null,
     description: (r.description as string | null) ?? null,

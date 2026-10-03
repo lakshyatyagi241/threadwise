@@ -60,7 +60,15 @@ export function OrdersPage() {
       </header>
 
       {outcome && (
-        <Alert tone={outcome === 'success' ? 'success' : outcome === 'pending' ? 'info' : 'danger'}>
+        <Alert
+          tone={
+            outcome === 'success' || outcome === 'proof'
+              ? 'success'
+              : outcome === 'pending'
+                ? 'info'
+                : 'danger'
+          }
+        >
           {t(`outcome.${outcome}`, { order: justPaid ?? '' })}
         </Alert>
       )}

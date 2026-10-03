@@ -303,9 +303,7 @@ export class PhonePeDriver implements PaymentDriver {
   }
 
   /** What PhonePe says about one transaction. The id comes from OUR stored order or a notification, never trusted on its own. */
-  private async remote(
-    id: string,
-  ): Promise<{
+  private async remote(id: string): Promise<{
     state: 'paid' | 'pending' | 'other';
     code: string;
     amount?: number;
@@ -493,7 +491,6 @@ export class CashfreeDriver implements PaymentDriver {
               params: {
                 sessionId: session,
                 mode: sandbox(this.ctx) ? 'sandbox' : 'production',
-                returnUrl: `${urls.returnUrl}${sep}order_id=${encodeURIComponent(orderId)}`,
               },
             },
           })
