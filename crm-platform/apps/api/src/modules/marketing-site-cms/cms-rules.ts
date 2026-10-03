@@ -9,6 +9,7 @@ import {
   type CmsPage,
   type LegalSection,
 } from '@crm/contracts';
+import { AppError } from '../../common/errors/app-error';
 
 /**
  * The pure rules of the marketing-site domain: no database, no clock of its own, no framework. Everything the
@@ -220,4 +221,31 @@ export function checkLayout(
     out.order = [...new Set(order.filter((s) => removable.includes(s)))];
   }
   return { ok: true, ...out };
+}
+
+// --- keyset cursor over a sort tuple ---------------------------------------------------------------------------------
+
+/**
+ * A cursor for lists that sort by something other than (created_at, id): the sort tuple as opaque base64url JSON. Like
+ * the shared cursor it is only ever a WHERE bound, never an authorisation input.
+ */
+export const encodeTupleCursor = (parts: ReadonlyArray<string | number>): string =>
+  Buffer.from(JSON.stringify(parts), 'utf8').toString('base64url');
+
+export function decodeTupleCursor(raw: string, length: number): Array<string | number> {
+  try {
+    const parts: unknown = JSON.parse(Buffer.from(raw, 'base64url').toString('utf8'));
+    if (
+      !Array.isArray(parts) ||
+      parts.length !== length ||
+      !parts.every((p) => typeof p === 'string' || (typeof p === 'number' && Number.isFinite(p)))
+    ) {
+      throw new Error('malformed');
+    }
+    return parts as Array<string | number>;
+  } catch {
+    throw AppError.validation('Invalid pagination cursor', [
+      { path: 'cursor', message: 'Invalid pagination cursor' },
+    ]);
+  }
 }

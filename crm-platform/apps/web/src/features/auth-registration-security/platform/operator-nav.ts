@@ -145,6 +145,18 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: 'marketing-site-cms.nav.group',
   },
   {
+    id: 'cms-announcements',
+    href: '/admin/announcements',
+    labelKey: 'marketing-site-cms.nav.announcements',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-guidebook',
+    href: '/admin/guidebook',
+    labelKey: 'marketing-site-cms.nav.guidebook',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
     id: 'cms-contact',
     href: '/admin/contact-messages',
     labelKey: 'marketing-site-cms.nav.contact',

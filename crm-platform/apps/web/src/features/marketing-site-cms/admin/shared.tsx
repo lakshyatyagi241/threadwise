@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Alert } from '@crm/ui';
+import { useCanEdit } from '@/features/auth-registration-security/platform/operator-context';
 import { ApiError } from '@/lib/api/errors';
 
 export { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
@@ -43,3 +44,6 @@ export const fromLocalInput = (v: string): string | null => {
   const d = new Date(v);
   return Number.isNaN(d.getTime()) ? null : d.toISOString();
 };
+
+/** Only a super admin changes the site (the API refuses everyone else); this decides what the screens offer. */
+export const useCmsCanWrite = (): boolean => useCanEdit('plans');

@@ -148,20 +148,20 @@ describe('content values (WD-CMS-019, 020)', () => {
 
   it('empty means "use the default" for every type', () => {
     expect(checkContentValue('home.hero.headline', '   ', keep)).toEqual({ ok: true, value: '' });
-    expect(checkContentValue('theme.brand.deep', '', keep)).toEqual({ ok: true, value: '' });
+    expect(checkContentValue('theme.wa.deep', '', keep)).toEqual({ ok: true, value: '' });
   });
 
   it('colours must be #RGB or #RRGGBB', () => {
-    expect(checkContentValue('theme.brand.deep', '#12', keep)).toEqual({
+    expect(checkContentValue('theme.wa.deep', '#12', keep)).toEqual({
       ok: false,
       message: 'Invalid colour',
     });
-    expect(checkContentValue('theme.brand.deep', 'red', keep)).toMatchObject({ ok: false });
-    expect(checkContentValue('theme.brand.deep', ' #1A2b3C ', keep)).toEqual({
+    expect(checkContentValue('theme.wa.deep', 'red', keep)).toMatchObject({ ok: false });
+    expect(checkContentValue('theme.wa.deep', ' #1A2b3C ', keep)).toEqual({
       ok: true,
       value: '#1A2b3C',
     });
-    expect(checkContentValue('theme.brand.deep', '#abc', keep)).toEqual({
+    expect(checkContentValue('theme.wa.deep', '#abc', keep)).toEqual({
       ok: true,
       value: '#abc',
     });
@@ -214,7 +214,7 @@ describe('layout (WD-CMS-022, 023)', () => {
   });
 
   it('hiding refuses a slug that is not on that page', () => {
-    expect(checkLayout('home', ['pillars'], undefined)).toEqual({
+    expect(checkLayout('home', ['feature-bento'], undefined)).toEqual({
       ok: false,
       message: 'Unknown section',
     });
@@ -229,10 +229,10 @@ describe('layout (WD-CMS-022, 023)', () => {
   });
 
   it('reordering silently drops pinned, foreign and repeated slugs, keeping the submitted order', () => {
-    expect(checkLayout('home', undefined, ['hero', 'faq', 'pillars', 'highlights', 'faq'])).toEqual(
+    expect(checkLayout('home', undefined, ['hero', 'faq', 'feature-bento', 'logo-strip', 'faq'])).toEqual(
       {
         ok: true,
-        order: ['faq', 'highlights'],
+        order: ['faq', 'logo-strip'],
       },
     );
   });
