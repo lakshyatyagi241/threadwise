@@ -57,6 +57,8 @@ export function useFlowsPage(state: ListState) {
     queryKey: pageKey(q, index),
     queryFn: ({ signal }) => loadPage(qc, q, index, signal),
     placeholderData: keepPreviousData,
+    // WaDesk toasts a failed refresh at once ("Could not refresh"); the shared two retries would show it only after seconds.
+    retry: false,
   });
   const hasMore = res.data?.response.page.hasMore ?? false;
   const identity = JSON.stringify(q);
