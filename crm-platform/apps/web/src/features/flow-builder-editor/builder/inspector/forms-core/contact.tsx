@@ -1,6 +1,6 @@
 'use client';
 
-import { controlClass, Field, SelectInput, TextArea } from '../kit';
+import { Field, SelectInput, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import { str, withCurrent } from './helpers';
 import { Link } from './parts';
@@ -39,13 +39,10 @@ export function TagForm({ data: d, set, setMany, env }: FormProps) {
         <div className="mb-2">
           <SelectInput value={d.tagId} options={opts} onChange={pickExisting} />
         </div>
-        <input
-          type="text"
-          value={str(d.tag)}
-          onChange={(e) => setMany({ tag: e.target.value, tagId: '' })}
+        <TextInput
+          value={d.tag}
+          onChange={(v) => setMany({ tag: v, tagId: '' })}
           placeholder="…or type a new tag"
-          data-attr-input="true"
-          className={controlClass}
         />
       </Field>
     </>
