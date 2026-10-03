@@ -11,13 +11,14 @@ import {
   jsonb,
   numeric,
   pgTable,
+  primaryKey,
   smallint,
   text,
   timestamp,
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { createdAt, idColumn, rowVersion, updatedAt } from '../columns';
+import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations } from '../foundation';
 
 export const coupons = pgTable(
@@ -157,3 +158,43 @@ export const referralCodes = pgTable(
 
 export type ReferralCodesRow = typeof referralCodes.$inferSelect;
 export type NewReferralCodesRow = typeof referralCodes.$inferInsert;
+
+/**
+ * One row per redeemed order: the guard that makes counting a redemption idempotent (migration 20261017090100). The composite
+ * foreign key to `orders` lives in the SQL only: the paygw schema already imports this file (orders.coupon_id), so mirroring it
+ * here would be a circular import.
+ */
+export const couponRedemptions = pgTable(
+  'coupon_redemptions',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    orderId: idColumn('order_id').notNull(),
+    couponId: idColumn('coupon_id'),
+    couponCode: text('coupon_code').notNull(),
+    userId: idColumn('user_id'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('coupon_redemptions_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_coupon_redemptions_order').on(t.orgId, t.orderId),
+    index('idx_coupon_redemptions_coupon').on(t.couponId),
+    foreignKey({
+      name: 'coupon_redemptions_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'coupon_redemptions_coupon_id_fkey',
+      columns: [t.couponId],
+      foreignColumns: [coupons.id],
+    }).onDelete('set null'),
+  ],
+);
+
+export type CouponRedemptionsRow = typeof couponRedemptions.$inferSelect;
+export type NewCouponRedemptionsRow = typeof couponRedemptions.$inferInsert;

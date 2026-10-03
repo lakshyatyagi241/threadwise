@@ -10,6 +10,8 @@ export const waKeys = {
   code: (org: number, device: number) => `wa:code:${org}:${device}`,
   status: (org: number, device: number) => `wa:status:${org}:${device}`,
   initLock: (org: number, device: number) => `wa:init:${org}:${device}`,
+  /** One per running worker: proof the runtime is alive (TW-NODE-004). */
+  worker: (id: string) => `wa:worker:${id}`,
   commandChannel: 'wa:cmd',
   commandResult: (id: string) => `wa:cmd:res:${id}`,
 } as const;

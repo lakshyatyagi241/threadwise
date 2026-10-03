@@ -159,3 +159,48 @@ describe('money display', () => {
     expect(formatMoney('1', 'NOPE!', 'en-US')).toBe('1 NOPE!');
   });
 });
+
+describe('what the browser does next, P1 providers (TW-PAYGW-013, 017, 022)', () => {
+  const base = { orderNumber: 'WSN-1', orderId: '00000000-0000-4000-8000-000000000009' };
+  it('instructions, a form post and the Paddle and Cashfree widgets map to their own steps', () => {
+    expect(
+      nextStep({
+        ...base,
+        next: {
+          type: 'instructions',
+          kind: 'bank_transfer',
+          rows: [{ label: 'Bank name', value: 'First Bank' }],
+          notes: null,
+          amount: '57.82',
+          currency: 'USD',
+        },
+      } as PlaceOrderResponse),
+    ).toEqual({
+      kind: 'instructions',
+      method: 'bank_transfer',
+      rows: [{ label: 'Bank name', value: 'First Bank' }],
+      notes: null,
+      amount: '57.82',
+      currency: 'USD',
+    });
+    expect(
+      nextStep({
+        ...base,
+        next: { type: 'form_post', url: 'https://secure.payu.in/_payment', fields: { key: 'k' } },
+      } as PlaceOrderResponse),
+    ).toEqual({ kind: 'form_post', url: 'https://secure.payu.in/_payment', fields: { key: 'k' } });
+    const params = { sessionId: 's', mode: 'sandbox', returnUrl: 'https://api.test/r' };
+    expect(
+      nextStep({
+        ...base,
+        next: { type: 'client_action', provider: 'cashfree', params },
+      } as PlaceOrderResponse),
+    ).toEqual({ kind: 'cashfree', params });
+    expect(
+      nextStep({
+        ...base,
+        next: { type: 'client_action', provider: 'paddle', params },
+      } as PlaceOrderResponse),
+    ).toEqual({ kind: 'paddle', params });
+  });
+});

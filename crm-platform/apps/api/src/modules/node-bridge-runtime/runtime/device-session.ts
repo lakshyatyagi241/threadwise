@@ -54,7 +54,7 @@ export interface SessionHost {
   /** This session has ended for good (logout, failed pairing, mismatch): the runtime drops it and releases the device. */
   ended(): void;
   /** What the socket delivered (TW-NODE-016, 018, 020, 021). The runtime hands each to whoever consumes it. */
-  inbound?(message: Normalized): Promise<void>;
+  inbound?(message: Normalized, media?: Buffer): Promise<void>;
   receipt?(receipt: ReceiptUpdate): Promise<void>;
   groups?(groups: GroupSnapshot[]): Promise<void>;
 }
@@ -259,7 +259,7 @@ export class DeviceSession {
       case 'close':
         return this.onClose(e.code, e.message);
       case 'message':
-        return this.host.inbound?.(e.normalized);
+        return this.host.inbound?.(e.normalized, e.media);
       case 'receipt':
         return this.host.receipt?.(e.receipt);
       case 'groups':

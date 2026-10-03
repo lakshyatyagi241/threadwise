@@ -12,6 +12,11 @@ export class ChannelAdapterRegistry {
     this.byKind = new Map(adapters.map((a) => [a.kind, a]));
   }
 
+  /** Binds an adapter another domain owns (the unofficial WhatsApp engine, which needs the NODE runtime). Replaces one of the same kind. */
+  register(adapter: ChannelAdapter): void {
+    this.byKind.set(adapter.kind, adapter);
+  }
+
   find(kind: string): ChannelAdapter | undefined {
     return this.byKind.get(kind);
   }

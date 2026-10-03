@@ -53,7 +53,7 @@ export function ChannelTag({
   decorative?: boolean;
 }) {
   const whatsapp = kind === 'whatsapp_cloud';
-  const label = kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
+  const label = kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
   return (
     <span
       title={name}
@@ -63,7 +63,7 @@ export function ChannelTag({
       data-channel-kind={kind}
       className={cn(
         'inline-flex h-4 items-center rounded px-1 text-[9px] font-semibold uppercase tracking-wide',
-        whatsapp
+        whatsapp || kind === 'whatsapp_qr'
           ? 'bg-success/15 text-success'
           : kind === 'simulator'
             ? 'bg-warning/15 text-warning'
