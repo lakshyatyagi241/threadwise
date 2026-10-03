@@ -41,6 +41,6 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 ## Shims, owners and blocked consumers
 
 - Sender and template directories, wallet gate, pacing: `_shims/` (SQL stand-ins; the pacing reads the Node bridge settings, the wallet gate is the real `BillingWalletGate`).
-- `OpenWarmerGate`: nothing is held until `scheduled-queue-warmer` exposes a hold.
+- `OpenWarmerGate`: nothing is held. WaDesk's WhatsApp Warmer (number warm-up) is a separate feature that is not in the port; `scheduled-queue-warmer` is the scheduled-send queue, not that. Blocked on a warmer domain.
 - `OpenBroadcastPlanGate`: no `broadcast` flag in the plan catalogue (the numeric cap `broadcasts` is enforced).
 - Marketing media upload (`POST /v2/media/marketing`) lives here and serves campaigns, Telegram and Facebook as well.
