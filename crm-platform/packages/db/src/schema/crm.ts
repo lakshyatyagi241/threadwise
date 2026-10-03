@@ -28,7 +28,9 @@ export const companies = pgTable(
     orgId: orgIdColumn(),
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull(),
-    name: text('name'),
+    /** Required, at most 191 characters (CHECK). */
+    name: text('name').notNull(),
+    /** WaDesk's `website`: free text, not a URL (CHECK on length only). */
     domain: text('domain'),
     /** WaDesk company fields (ctp overlay). */
     email: citext('email'),
@@ -43,6 +45,8 @@ export const companies = pgTable(
     data: dataJsonb(),
     displayId: text('display_id'),
     isArchived: boolean('is_archived').notNull().default(false),
+    /** WaDesk's `user_id`; SET NULL when the person is deleted. Part of the `own` record scope. */
+    createdBy: idColumn('created_by'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
