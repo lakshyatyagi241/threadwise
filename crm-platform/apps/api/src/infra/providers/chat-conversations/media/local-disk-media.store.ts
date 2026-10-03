@@ -1,5 +1,5 @@
 import { createReadStream } from 'node:fs';
-import { lstat, mkdir, realpath, rename, rm, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readdir, realpath, rename, rm, writeFile } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import { dirname, resolve, sep } from 'node:path';
 import type { Readable } from 'node:stream';
@@ -12,6 +12,8 @@ import type { Readable } from 'node:stream';
 const SEGMENT = '[a-z0-9][a-z0-9._-]{0,127}';
 const KEY_RE = new RegExp(`^${SEGMENT}(?:/${SEGMENT}){0,7}$`);
 const KEY_MAX = 512;
+/** Where downloads are spooled inside the root. The leading dot keeps it out of the key space. */
+const SPOOL_DIR = '.spool';
 
 export function isSafeMediaKey(key: string): boolean {
   return key.length <= KEY_MAX && KEY_RE.test(key);
@@ -49,6 +51,53 @@ export class LocalDiskMediaStore {
       await rm(temp, { force: true });
       throw err;
     }
+  }
+
+  /**
+   * A fresh file path for a download that is still arriving (the bytes of a customer's 80 MB document are never held in memory).
+   * It lives in `<root>/.spool`: inside the store, so moving the finished file to its key is one atomic rename on the same disk,
+   * and never reachable as a key (a key segment cannot start with a dot). A worker killed mid-download leaves one behind;
+   * `sweepSpool` removes those.
+   */
+  async createSpool(): Promise<{ path: string; remove(): Promise<void> }> {
+    const dir = resolve(await this.rootPath(), SPOOL_DIR);
+    await mkdir(dir, { recursive: true, mode: 0o700 });
+    const path = resolve(dir, `${randomBytes(12).toString('hex')}.part`);
+    return { path, remove: () => rm(path, { force: true }) };
+  }
+
+  /** Moves a finished spool file to its key (atomic). Only a file this store spooled can be adopted. */
+  async adopt(key: string, spoolPath: string): Promise<void> {
+    const dir = resolve(await this.rootPath(), SPOOL_DIR);
+    if (resolve(spoolPath).startsWith(dir + sep) === false) throw new Error('not a spool file');
+    const target = await this.pathFor(key, { create: true });
+    await rename(spoolPath, target);
+  }
+
+  /** Deletes spool files older than `olderThanMs` (the leftovers of killed workers). Returns how many. */
+  async sweepSpool(olderThanMs: number): Promise<number> {
+    const dir = resolve(await this.rootPath(), SPOOL_DIR);
+    let names: string[];
+    try {
+      names = await readdir(dir);
+    } catch {
+      return 0;
+    }
+    let removed = 0;
+    for (const name of names) {
+      if (!name.endsWith('.part')) continue;
+      const path = resolve(dir, name);
+      try {
+        const info = await lstat(path);
+        if (info.isFile() && Date.now() - info.mtimeMs > olderThanMs) {
+          await rm(path, { force: true });
+          removed += 1;
+        }
+      } catch {
+        // gone already
+      }
+    }
+    return removed;
   }
 
   /** The size of a stored file, or null when there is none under this key. */

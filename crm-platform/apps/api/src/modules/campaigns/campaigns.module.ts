@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
+import { ChatConversationsModule } from '../chat-conversations';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CrmModule } from '../crm';
 import { DefaultCampaignSettings, NoFlowStarter, OpenCampaignPlanGate } from './_shims/open-gates';
@@ -32,7 +33,7 @@ import { CampaignsService } from './campaigns.service';
  * same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [BroadcastsModule, CrmModule, WalletMessageBillingModule],
+  imports: [BroadcastsModule, ChatConversationsModule, CrmModule, WalletMessageBillingModule],
   controllers: [
     CampaignsController,
     CampaignsReadController,

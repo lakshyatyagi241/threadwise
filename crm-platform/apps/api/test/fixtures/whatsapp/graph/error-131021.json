@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Recipient cannot be sender",
+    "type": "OAuthException",
+    "code": 131021,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

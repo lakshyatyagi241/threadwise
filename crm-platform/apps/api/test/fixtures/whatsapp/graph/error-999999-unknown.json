@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Some new error Meta invented",
+    "type": "OAuthException",
+    "code": 999999,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

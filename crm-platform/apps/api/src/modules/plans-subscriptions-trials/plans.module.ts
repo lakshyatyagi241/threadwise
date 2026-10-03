@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PlatformPaymentGatewaysModule } from '../platform-payment-gateways';
+import { PlatformPlanAnalyticsController } from './plan-analytics.controller';
+import { PlanAnalyticsService } from './plan-analytics.service';
+import { PlanFeatureGuard } from './plan-feature.guard';
 import { PlanRetentionService } from './plan-retention.service';
 import { SubscriptionService } from './subscription.service';
 import { BillingController } from './billing.controller';
@@ -38,6 +41,7 @@ import { PlansController } from './plans.controller';
     BillingFaqsController,
     PublicPricingFaqsController,
     PlatformPlanSettingsController,
+    PlatformPlanAnalyticsController,
   ],
   providers: [
     PlanAdminService,
@@ -49,9 +53,11 @@ import { PlansController } from './plans.controller';
     PlanSettingsService,
     SubscriptionService,
     PlanRetentionService,
+    PlanAnalyticsService,
+    PlanFeatureGuard,
   ],
   // The trial gate is registered as an app-wide guard in app.module.ts: it must run after JwtAuthGuard has set the request context,
   // and guards declared by imported modules run before the app's own. Exported so app.module can reference this one instance.
-  exports: [TrialGateGuard],
+  exports: [TrialGateGuard, PlanFeatureGuard],
 })
 export class PlansModule {}

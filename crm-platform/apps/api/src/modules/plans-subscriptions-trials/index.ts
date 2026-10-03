@@ -34,3 +34,4 @@ export {
 } from './plan-rules';
 export { PlansWorkerModule } from './plans-worker.module';
 export { PlanRetentionService } from './plan-retention.service';
+export { RequirePlanFeature, planFeatureLabel } from './plan-feature.guard';

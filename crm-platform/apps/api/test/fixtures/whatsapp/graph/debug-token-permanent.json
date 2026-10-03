@@ -1,0 +1,14 @@
+{
+  "data": {
+    "app_id": "4000000000001",
+    "type": "SYSTEM_USER",
+    "application": "Geta CRM",
+    "expires_at": 0,
+    "is_valid": true,
+    "scopes": [
+      "whatsapp_business_management",
+      "whatsapp_business_messaging",
+      "business_management"
+    ]
+  }
+}

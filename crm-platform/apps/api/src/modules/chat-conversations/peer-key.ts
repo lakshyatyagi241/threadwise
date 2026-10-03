@@ -1,7 +1,7 @@
 import { canonicalizePhone } from '@crm/contracts';
 
 /** Channel kinds whose peer is a phone number. The thread key is then the digits, so "+91 98765-43210" and "919876543210" are one thread. */
-const PHONE_KINDS = new Set(['simulator', 'whatsapp_cloud']);
+const PHONE_KINDS = new Set(['simulator', 'whatsapp_cloud', 'whatsapp_qr']);
 
 const PEER_KEY_MAX = 128;
 

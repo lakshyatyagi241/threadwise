@@ -655,3 +655,57 @@ describe('TW-CAMP-014: the sweeper', () => {
     expect((await rows(c.id))[0]!.status).toBe('queued');
   });
 });
+
+describe('TW-CAMP-023: the inbox mirror', () => {
+  it('writes one bubble into the recipient’s existing thread (found by phone) and none for a cold recipient; a repeat report adds nothing', async () => {
+    const t = await api.signup('cm1');
+    const c = await campaign(t, { count: 2 });
+    const people = (
+      await h.owner.query(
+        `SELECT id, phone FROM contacts WHERE org_id = $1 AND uuid = ANY($2::uuid[]) ORDER BY id`,
+        [t.orgId, c.contactIds],
+      )
+    ).rows as Array<{ id: string; phone: string }>;
+    const channel = (
+      await h.owner.query(
+        `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1,'simulator','Sim','connected','m1') RETURNING id`,
+        [t.orgId],
+      )
+    ).rows[0];
+    const digits = people[0]!.phone.replace(/\D+/g, '');
+    const thread = (
+      await h.owner.query(
+        `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1,$2,$3,'Asha') RETURNING id`,
+        [t.orgId, channel.id, digits],
+      )
+    ).rows[0];
+
+    const mirror = h.app.get(CampaignMirrorService, { strict: false });
+    expect(await mirror.mirror(t.orgId, c.id, Number(people[0]!.id), 'sent', 'wamid.1')).toBe(true);
+    // A later `delivered` for the same recipient is the same bubble.
+    expect(await mirror.mirror(t.orgId, c.id, Number(people[0]!.id), 'delivered', 'wamid.1')).toBe(
+      true,
+    );
+    const bubbles = (
+      await h.owner.query(
+        `SELECT direction, sender_kind, body FROM messages WHERE org_id = $1 AND conversation_id = $2`,
+        [t.orgId, thread.id],
+      )
+    ).rows;
+    expect(bubbles).toHaveLength(1);
+    expect(bubbles[0]).toMatchObject({ direction: 'out' });
+    expect(bubbles[0].body).toContain('Hi');
+
+    // A recipient with no thread gets no new one.
+    expect(await mirror.mirror(t.orgId, c.id, Number(people[1]!.id), 'sent', 'wamid.2')).toBe(
+      false,
+    );
+    expect(
+      (
+        await h.owner.query(`SELECT count(*)::int AS n FROM conversations WHERE org_id = $1`, [
+          t.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(1);
+  });
+});

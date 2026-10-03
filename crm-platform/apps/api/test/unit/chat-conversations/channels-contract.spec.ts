@@ -1,38 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
-  createChannelSchema,
   createSimulatorChannelSchema,
   simulatorInboundSchema,
   simulatorReceiptSchema,
   updateChannelSchema,
 } from '@crm/contracts';
 
-const creds = {
-  phoneNumberId: '1234567890',
-  accessToken: 'EAAB-token-12345',
-  appSecret: 'sekret-12345',
-};
-
 describe('channel contracts', () => {
-  it('createChannelSchema takes a WhatsApp Cloud channel with strict credentials', () => {
-    expect(
-      createChannelSchema.safeParse({ kind: 'whatsapp_cloud', name: ' Main ', credentials: creds })
-        .success,
-    ).toBe(true);
-    expect(createChannelSchema.safeParse({ kind: 'simulator', name: 'x' }).success).toBe(false);
-    expect(
-      createChannelSchema.safeParse({
-        kind: 'whatsapp_cloud',
-        name: 'x',
-        credentials: { ...creds, extra: 1 },
-      }).success,
-    ).toBe(false);
-    expect(
-      createChannelSchema.safeParse({ kind: 'whatsapp_cloud', name: '', credentials: creds })
-        .success,
-    ).toBe(false);
-  });
-
   it('createSimulatorChannelSchema defaults the name and rejects unknown settings', () => {
     expect(createSimulatorChannelSchema.parse({}).name).toBe('Simulator');
     expect(createSimulatorChannelSchema.safeParse({ settings: { nope: 1 } }).success).toBe(false);
@@ -48,12 +22,18 @@ describe('channel contracts', () => {
     expect(updateChannelSchema.safeParse({ name: 'x' }).success).toBe(false);
     expect(updateChannelSchema.safeParse({ rowVersion: 1, name: 'x' }).success).toBe(true);
     expect(updateChannelSchema.safeParse({ rowVersion: 1, status: 'error' }).success).toBe(false);
+  });
+
+  it('a channel holds no credentials of its own: WhatsApp numbers are connected in the WABA domain, so an update names none', () => {
+    const parsed = updateChannelSchema.safeParse({
+      rowVersion: 1,
+      credentials: { accessToken: 'EAAB-new-token-1' },
+    });
+    // Unknown keys are dropped, and nothing is left to change.
+    expect(parsed.success).toBe(false);
     expect(
-      updateChannelSchema.safeParse({
-        rowVersion: 1,
-        credentials: { accessToken: 'EAAB-new-token-1' },
-      }).success,
-    ).toBe(true);
+      updateChannelSchema.parse({ rowVersion: 1, name: 'x', credentials: { accessToken: 't' } }),
+    ).toEqual({ rowVersion: 1, name: 'x' });
   });
 
   it('simulatorInboundSchema: digits for the number, and each kind needs its content', () => {

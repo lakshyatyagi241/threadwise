@@ -1,5 +1,6 @@
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { Client } from 'pg';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { runMigrations } from '@crm/db';
@@ -82,7 +83,7 @@ describe('channels: schema, constraints and isolation', () => {
     chanA = Number(a.id);
     uuidA = a.uuid as string;
     const b = await one(
-      `INSERT INTO channels (org_id, kind, name, status, external_id, credentials_enc) VALUES ($1,'whatsapp_cloud','Org B number','disconnected','111',$2) RETURNING id, uuid`,
+      `INSERT INTO channels (org_id, kind, name, status, external_id, credentials_enc) VALUES ($1,'whatsapp_cloud','Org B number','disconnected','222',$2) RETURNING id, uuid`,
       [orgB, SEALED],
     );
     chanB = Number(b.id);
@@ -263,18 +264,26 @@ describe('channels: schema, constraints and isolation', () => {
       );
     });
 
-    it('a provider account is connected once per workspace and once per kind, but another workspace may hold the same number', async () => {
+    it('a provider account is connected once per workspace and once per kind, and a WhatsApp number once on the platform', async () => {
       await expect(
         owner.query(
           `INSERT INTO channels (org_id, kind, name, external_id) VALUES ($1,'whatsapp_cloud','dup','111')`,
           [orgA],
         ),
-      ).rejects.toThrow(/channels_org_id_kind_external_id_key/);
-      // org B already holds external id 111 on the same kind (see beforeAll): legal.
-      expect(
-        (await owner.query(`SELECT count(*)::int AS n FROM channels WHERE external_id = '111'`))
-          .rows[0].n,
-      ).toBe(2);
+      ).rejects.toThrow(/channels_org_id_kind_external_id_key|uq_channels_whatsapp_number/);
+      // A number id leads to exactly one channel, whichever workspace holds it: the first to connect it does.
+      await expect(
+        owner.query(
+          `INSERT INTO channels (org_id, kind, name, external_id) VALUES ($1,'whatsapp_cloud','stolen','111')`,
+          [orgB],
+        ),
+      ).rejects.toThrow(/uq_channels_whatsapp_number/);
+      // Other kinds keep the per-workspace rule only.
+      await owner.query(
+        `INSERT INTO channels (org_id, kind, name, external_id) VALUES ($1,'webchat','w-a','111'),($2,'webchat','w-b','111')`,
+        [orgA, orgB],
+      );
+      await owner.query(`DELETE FROM channels WHERE kind = 'webchat' AND external_id = '111'`);
     });
 
     it('simulators have no external id and never collide', async () => {
@@ -374,6 +383,181 @@ describe('channels: schema, constraints and isolation', () => {
         [org],
       );
       expect(roles.rows.map((r) => r.system_key)).toEqual(['admin', 'workspace_admin']);
+    });
+  });
+
+  describe('the WABA link (20261017090000_chat_channels_waba_link.sql)', () => {
+    const migration = readFileSync(
+      resolve(
+        __dirname,
+        '../../../../../packages/db/migrations/20261017090000_chat_channels_waba_link.sql',
+      ),
+      'utf8',
+    );
+    /** The backfill, exactly as the migration runs it: from its privileged switch to the end of the last INSERT. */
+    const backfill = migration.slice(
+      migration.indexOf("SELECT set_config('app.privileged'"),
+      migration.indexOf('-- --- the removed'),
+    );
+
+    let org: number;
+    let other: number;
+    const one = async (sql: string, p: unknown[] = []) =>
+      (await owner.query(sql, p)).rows[0] as Record<string, unknown>;
+    const config = async (
+      orgId: number,
+      o: {
+        phone?: string | null;
+        waba?: string;
+        status?: string;
+        label?: string | null;
+        number?: string | null;
+      },
+    ) =>
+      Number(
+        (
+          await one(
+            `INSERT INTO wa_provider_configs (org_id, provider, status, phone_number, display_label, meta_json)
+             VALUES ($1,'waba',$2,$3,$4,$5::jsonb) RETURNING id`,
+            [
+              orgId,
+              o.status ?? 'connected',
+              o.number === undefined ? '+1 555 000 9999' : o.number,
+              o.label === undefined ? null : o.label,
+              JSON.stringify({
+                waba_id: o.waba ?? '12345678901',
+                ...(o.phone === null ? {} : { phone_number_id: o.phone }),
+              }),
+            ],
+          )
+        ).id,
+      );
+
+    beforeAll(async () => {
+      org = Number(
+        (
+          await one(
+            `INSERT INTO organizations (slug, name, plan) VALUES ('ch-link','L','starter') RETURNING id`,
+          )
+        ).id,
+      );
+      other = Number(
+        (
+          await one(
+            `INSERT INTO organizations (slug, name, plan) VALUES ('ch-link2','L2','starter') RETURNING id`,
+          )
+        ).id,
+      );
+    });
+
+    it("a channel can only point at its own workspace's connection (composite key), and one connection has one channel", async () => {
+      const mine = await config(org, { phone: '70000000001' });
+      const theirs = await config(other, { phone: '70000000002' });
+      await expect(
+        owner.query(
+          `INSERT INTO channels (org_id, kind, name, waba_config_id) VALUES ($1,'whatsapp_cloud','x',$2)`,
+          [org, theirs],
+        ),
+      ).rejects.toThrow(/fk_channels_waba_config/);
+      await owner.query(
+        `INSERT INTO channels (org_id, kind, name, waba_config_id) VALUES ($1,'whatsapp_cloud','ok',$2)`,
+        [org, mine],
+      );
+      await expect(
+        owner.query(
+          `INSERT INTO channels (org_id, kind, name, waba_config_id) VALUES ($1,'whatsapp_cloud','again',$2)`,
+          [org, mine],
+        ),
+      ).rejects.toThrow(/uq_channels_waba_config/);
+    });
+
+    it('removing the connection detaches the channel (the link goes null; the row, its org and its threads stay)', async () => {
+      const cfg = await config(org, { phone: '70000000003' });
+      const ch = await one(
+        `INSERT INTO channels (org_id, kind, name, status, waba_config_id) VALUES ($1,'whatsapp_cloud','detach','connected',$2) RETURNING id`,
+        [org, cfg],
+      );
+      await owner.query(`DELETE FROM wa_provider_configs WHERE org_id = $1 AND id = $2`, [
+        org,
+        cfg,
+      ]);
+      const row = await one(`SELECT org_id, waba_config_id, status FROM channels WHERE id = $1`, [
+        ch.id,
+      ]);
+      expect(Number(row.org_id)).toBe(org);
+      expect(row.waba_config_id).toBeNull();
+      expect(row.status).toBe('connected');
+    });
+
+    it('the lookup of the removed provider-level webhook is gone', async () => {
+      const r = await one(`SELECT to_regprocedure('chat_channel_by_external(text, text)') AS fn`);
+      expect(r.fn).toBeNull();
+    });
+
+    it('backfill: links the channel that already has the number, makes one for a connected number without it, and skips what cannot be a channel', async () => {
+      const c = Number(
+        (
+          await one(
+            `INSERT INTO organizations (slug, name, plan) VALUES ('ch-fill','F','starter') RETURNING id`,
+          )
+        ).id,
+      );
+      const holder = Number(
+        (
+          await one(
+            `INSERT INTO organizations (slug, name, plan) VALUES ('ch-fill-held','H','starter') RETURNING id`,
+          )
+        ).id,
+      );
+
+      const fresh = await config(c, {
+        phone: '71000000001',
+        label: 'Sales',
+        number: '+1 555 111 0001',
+      });
+      const adopted = await config(c, { phone: '71000000002', label: 'Support' });
+      const early = await one(
+        `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1,'whatsapp_cloud','Pasted earlier','disconnected','71000000002') RETURNING id`,
+        [c],
+      );
+      const off = await config(c, { phone: '71000000003', status: 'disconnected' });
+      const noPhone = await config(c, { phone: null });
+      const shortId = await config(c, { phone: '123' });
+      const heldElsewhere = await config(c, { phone: '71000000004' });
+      await owner.query(
+        `INSERT INTO channels (org_id, kind, name, external_id) VALUES ($1,'whatsapp_cloud','Held by another workspace','71000000004')`,
+        [holder],
+      );
+      const blankLabel = await config(c, { phone: '71000000005', label: '  ', number: null });
+
+      await owner.query(backfill);
+      await owner.query(backfill); // idempotent: a second run changes nothing
+
+      const rows = (
+        await owner.query(
+          `SELECT id, name, status, external_id, display_address, business_account_id, waba_config_id FROM channels WHERE org_id = $1 ORDER BY id`,
+          [c],
+        )
+      ).rows;
+      const byConfig = (id: number) => rows.find((r) => Number(r.waba_config_id) === id);
+      expect(byConfig(fresh)).toMatchObject({
+        name: 'Sales',
+        status: 'connected',
+        external_id: '71000000001',
+        display_address: '+1 555 111 0001',
+        business_account_id: '12345678901',
+      });
+      // The channel that already existed for the number is the one linked: same row, same name, nothing duplicated.
+      expect(byConfig(adopted)).toMatchObject({
+        name: 'Pasted earlier',
+        external_id: '71000000002',
+        business_account_id: '12345678901',
+      });
+      expect(Number(byConfig(adopted)!.id)).toBe(Number(early.id));
+      expect(byConfig(blankLabel)).toMatchObject({ name: 'WhatsApp', display_address: null });
+      for (const skipped of [off, noPhone, shortId, heldElsewhere])
+        expect(byConfig(skipped)).toBeUndefined();
+      expect(rows).toHaveLength(3);
     });
   });
 });

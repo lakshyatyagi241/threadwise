@@ -16,7 +16,9 @@ import {
   type PaymentDriver,
   type CancelResult,
   type PaymentResult,
+  type SubscriptionEvent,
   type SubscriptionRef,
+  type SubscriptionState,
   type WebhookPayment,
 } from './payment-driver';
 
@@ -92,6 +94,18 @@ export class RazorpayDriver implements PaymentDriver {
    */
   async confirmReturn(params: Record<string, string>, order: DriverOrder): Promise<PaymentResult> {
     if (params.cancelled) return failed(CANCELLED_BY_USER);
+    // A subscription checkout returns a subscription id and signs `payment_id|subscription_id` (the reverse of a one-time order).
+    if (params.razorpay_subscription_id) {
+      const subId = params.razorpay_subscription_id;
+      const pay = params.razorpay_payment_id;
+      const sig = params.razorpay_signature;
+      if (!pay || !sig) return failed('missing_razorpay_sub_params');
+      if (order.gatewayOrderId && order.gatewayOrderId !== subId)
+        return failed('razorpay_order_mismatch');
+      const want = hmacHex('sha256', this.ctx.credentials.key_secret ?? '', `${pay}|${subId}`);
+      if (!safeEqual(sig, want)) return failed('razorpay_sub_signature_mismatch');
+      return paid(pay, { gateway_subscription_id: subId, razorpay_payment_id: pay });
+    }
     const orderId = params.razorpay_order_id;
     const paymentId = params.razorpay_payment_id;
     const signature = params.razorpay_signature;
@@ -131,6 +145,126 @@ export class RazorpayDriver implements PaymentDriver {
       currency: str(payment.currency)?.toUpperCase(),
       payload: { razorpay_payment: payment },
     };
+  }
+
+  supportsRecurring(): boolean {
+    return true;
+  }
+
+  /** A plan plus a subscription; the browser opens Razorpay checkout with the subscription id instead of an order id. */
+  async createSubscription(order: DriverOrder, urls: DriverUrls): Promise<PaymentResult> {
+    const { key_id: keyId, key_secret: secret } = this.ctx.credentials;
+    if (!keyId || !secret) return failed('razorpay_credentials_missing');
+    const rec = order.recurring ?? { interval: 'month' as const, count: 1 };
+    const period = { day: 'daily', week: 'weekly', year: 'yearly', month: 'monthly' }[rec.interval];
+    const totalCount = { yearly: 10, weekly: 520, daily: 3650, monthly: 120 }[period];
+    const err = (j: unknown, status: number): string =>
+      str(asRecord(asRecord(j).error).description) ?? `HTTP ${status}`;
+    try {
+      const planRes = await this.ctx.http(`${API}/plans`, {
+        method: 'POST',
+        headers: this.auth,
+        body: JSON.stringify({
+          period,
+          interval: rec.count,
+          item: {
+            name: order.planName ?? order.description,
+            amount: Number(order.amountMinor),
+            currency: order.currency,
+          },
+          notes: { order_number: order.orderNumber },
+        }),
+      });
+      const planId = str(asRecord(planRes.json).id);
+      if (!isOk(planRes) || !planId)
+        return failed(`razorpay_plan: ${err(planRes.json, planRes.status)}`);
+      const subRes = await this.ctx.http(`${API}/subscriptions`, {
+        method: 'POST',
+        headers: this.auth,
+        body: JSON.stringify({
+          plan_id: planId,
+          total_count: totalCount,
+          customer_notify: 1,
+          notes: { order_number: order.orderNumber },
+        }),
+      });
+      const subId = str(asRecord(subRes.json).id);
+      if (!isOk(subRes) || !subId)
+        return failed(`razorpay_subscription: ${err(subRes.json, subRes.status)}`);
+      return pending({
+        gatewayOrderId: subId,
+        payload: { gateway_subscription_id: subId, gateway_plan_id: planId },
+        clientAction: {
+          provider: 'razorpay',
+          params: {
+            keyId,
+            subscriptionId: subId,
+            name: order.planName ?? order.description,
+            description: order.orderNumber,
+            callbackUrl: urls.returnUrl,
+          },
+        },
+      });
+    } catch (e) {
+      return failed(`razorpay_subscription_exception: ${brief(e)}`);
+    }
+  }
+
+  parseSubscriptionWebhook(body: unknown): SubscriptionEvent | null {
+    const evt = asRecord(body);
+    const payload = asRecord(evt.payload);
+    const sub = asRecord(asRecord(payload.subscription).entity);
+    const id = str(sub.id);
+    if (!id) return null;
+    switch (evt.event) {
+      case 'subscription.charged':
+        return {
+          type: 'renewed',
+          subscriptionId: id,
+          paymentId: str(asRecord(asRecord(payload.payment).entity).id),
+          periodEnd: (sub.current_end as number | undefined) ?? null,
+          orderNumber: str(asRecord(sub.notes).order_number) ?? null,
+        };
+      case 'subscription.cancelled':
+      case 'subscription.completed':
+        return { type: 'canceled', subscriptionId: id };
+      case 'subscription.halted':
+      case 'subscription.pending':
+        return { type: 'payment_failed', subscriptionId: id };
+      default:
+        return null;
+    }
+  }
+
+  /** The reconciler's poll: the only driver Reference could ask (TW-PAYGW-030). */
+  async fetchSubscription(ref: SubscriptionRef): Promise<SubscriptionState | null> {
+    if (
+      !this.ctx.credentials.key_id ||
+      !this.ctx.credentials.key_secret ||
+      !ref.gatewaySubscriptionId
+    )
+      return null;
+    try {
+      const res = await this.ctx.http(
+        `${API}/subscriptions/${encodeURIComponent(ref.gatewaySubscriptionId)}`,
+        { method: 'GET', headers: this.auth },
+      );
+      if (!isOk(res)) return null;
+      const s = asRecord(res.json);
+      const map: Record<string, SubscriptionState['status']> = {
+        active: 'active',
+        authenticated: 'active',
+        completed: 'active',
+        pending: 'past_due',
+        halted: 'past_due',
+        cancelled: 'canceled',
+        expired: 'expired',
+      };
+      const status = map[String(s.status)];
+      return status ? { status, periodEnd: (s.current_end as number | undefined) ?? null } : null;
+    } catch {
+      return null;
+    }
   }
 
   /** Razorpay: `cancel_at_cycle_end: 1` keeps the cycle already paid and stops the next charge. */

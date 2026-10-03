@@ -123,7 +123,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-001 | blocked |  | no bridge process in this repo until decision E |
 | TW-NODE-002 | backend-done |  | NodeTokenGuard on the one bridge-facing route; the bridge's other routes became in-process commands (Redis), so no other route needs it |
 | TW-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
-| TW-NODE-004 | in-progress |  | health card reads saved address; bridge-side endpoints wait for the bridge runtime |
+| TW-NODE-004 | backend-done |  | worker heartbeat in Redis (one key per running worker, 90 s); the console health card's Node check reads it (workers and devices held), falling back to the saved-address probe when no worker reports; no HTTP surface on the worker by design |
 | TW-NODE-005 | backend-done |  | registry is a per-worker map plus a Redis lease per device; no in-memory schedules or boot sync; shutdown releases leases |
 | TW-NODE-006 | backend-done |  | shutdown closes connections and releases leases, keeps sessions, never unlinks; enableShutdownHooks already on |
 | TW-NODE-007 | backend-done |  | restore at boot and every pass: devices with a saved session (3+ rows) and no owner are opened, staggered; thin sessions reported Disconnected; also the failover when a worker dies |
@@ -134,12 +134,12 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-012 | backend-done |  | status goes to devices.status (same buckets as Reference), an outbox event device.status_changed and Redis for the QR and progress |
 | TW-NODE-013 | backend-done |  | per-device proxy (http, socks5) read at every connect, probed through the proxy, fail-closed, result kept on the device; NOT verified against a real proxy |
 | TW-NODE-014 | backend-done |  | liveness: owner touches last_seen_at, a device untouched for 90 s flips to disconnected; the other sweeps belong to their own domains as BullMQ jobs |
-| TW-NODE-015 | blocked |  | campaign drain loop belongs to CAMP (Punya's campaigns run on BullMQ) |
+| TW-NODE-015 | backend-done |  | CAMP's dispatcher sends custom campaigns on the unofficial engine and Twilio through the registry adapter; e2e: real dispatcher, real adapter, fake socket; template-kind content stays Cloud API only |
 | TW-NODE-016 | backend-done |  | capture and normalization of every message (filters, 10-minute replay guard, sender and LID resolution, text priority, media, location, contact, reaction, forwarded) with per-device dedup, delivered to registered consumers; media bytes wait for storage (F5) |
-| TW-NODE-017 | blocked |  | the inbox that stores messages (CHAT, TIB1) is not built; InboundRouter is the seam it registers into (replaces the inbound-message HTTP endpoint) |
-| TW-NODE-018 | backend-done |  | echo of the business's own messages and group messages normalized and delivered (a LID-only group speaker keeps the LID instead of being lost); mirroring the bridge's own auto-replies belongs with auto-reply (019) |
+| TW-NODE-017 | backend-done |  | unofficial engine is an inbox channel kind (whatsapp_qr), one channel per device; customer messages go through the inbox ingest queue (replaces the inbound-message HTTP endpoint); small files kept, large or failed ones arrive as text saying so; groups are not threads; not run against a live number |
+| TW-NODE-018 | backend-done |  | phone-typed echoes are recorded on the thread as outbound once (ledger); group messages stay in the group directory; echo files and places are described, not copied; mirroring auto-replies belongs with 019 |
 | TW-NODE-019 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
-| TW-NODE-020 | backend-done |  | receipts from the socket go to the broadcast recipient or the scheduled recipient that owns the message id, upward only; the chat message status waits for CHAT |
+| TW-NODE-020 | backend-done |  | receipts go to the broadcast recipient, the scheduled recipient or the inbox message that owns the id (marker per inbox send), upward only |
 | TW-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
 | TW-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
 | TW-NODE-023 | backend-done |  | media on the unofficial engine, Twilio and the Cloud API (public https link, caption with footer, document file name, no caption on audio); inline attachment_base64 not ported: media comes from a URL or storage, never from a request body |
@@ -159,7 +159,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-037 | backend-done |  | broadcasts reach the unofficial engine and Twilio through TransportEngineSender (rendered text, media as link, header/footer); pacing, cap, lease already in BCAST |
 | TW-NODE-038 | backend-done |  | same adapter as 037; per-number daily cap and gaps in BCAST |
 | TW-NODE-039 | wontfix |  | dead code in Reference (campaign engine in Node is never reached and throws a ReferenceError) |
-| TW-NODE-040 | blocked |  | campaign callbacks and receipts belong to CAMP (campaign drain); ReceiptRouter is the seam it registers into |
+| TW-NODE-040 | backend-done |  | campaign delivery and read reports reach CampaignReceiptsService through the receipt router; proven in the campaign e2e on the unofficial engine |
 | TW-NODE-041 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | TW-NODE-042 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | TW-NODE-043 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |

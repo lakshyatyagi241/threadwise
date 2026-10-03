@@ -4,6 +4,13 @@ import { useLocale, useTranslations } from 'next-intl';
 import { memo, useState } from 'react';
 import { cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
+import {
+  ContactCards,
+  FailureNote,
+  InteractiveChip,
+  MediaStateNote,
+  mediaView,
+} from '@/features/channel-whatsapp-cloud';
 import { isRetryableSend } from '../lib/errors';
 import type { PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
@@ -21,7 +28,13 @@ import { Ticks, useErrorText } from './parts';
 const BUBBLE = 'relative max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[70%]';
 
 /** What the body of a message shows: its media, a location, a template, or text, whichever it has. */
-function MessageBody({ message: m }: { message: MessageResponse }) {
+function MessageBody({
+  message: m,
+  onRetry,
+}: {
+  message: MessageResponse;
+  onRetry: (messageId: string) => Promise<void>;
+}) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const locale = useLocale();
   const [showOriginal, setShowOriginal] = useState(false);
@@ -32,9 +45,16 @@ function MessageBody({ message: m }: { message: MessageResponse }) {
   const alt = m.media?.name ?? caption ?? t('kind.image');
 
   const media = m.media;
+  const view = mediaView({ kind: m.kind, media, mediaState: m.mediaState });
   let visual: React.ReactNode = null;
   if (m.location) visual = <LocationCard location={m.location} />;
-  else if (media) {
+  else if (view === 'pending' || view === 'failed') {
+    // The provider's file is still being fetched, or could not be: say so where the file would be. Retry is the same route as a
+    // failed send's (the API tells an inbound file from an outbound message).
+    visual = (
+      <MediaStateNote state={view} failureCode={m.mediaFailure?.code ?? null} onRetry={() => onRetry(m.id)} />
+    );
+  } else if (media) {
     switch (m.kind) {
       case 'image':
         visual = <ImageMedia media={media} alt={alt} />;
@@ -56,6 +76,14 @@ function MessageBody({ message: m }: { message: MessageResponse }) {
 
   if (m.kind === 'reaction') {
     return <span className="text-2xl leading-none">{m.reaction ?? m.body}</span>;
+  }
+
+  if (m.kind === 'interactive' && (m.interactive || caption)) {
+    return <InteractiveChip kind={m.kind} body={m.body} interactive={m.interactive} />;
+  }
+
+  if (m.kind === 'contact' && (m.contacts?.length || caption)) {
+    return <ContactCards kind={m.kind} body={m.body} contacts={m.contacts} />;
   }
 
   if (m.kind === 'template' && m.template) {
@@ -108,13 +136,20 @@ export interface MessageBubbleProps {
   message: MessageResponse;
   quoted: MessageResponse | null;
   onRetry: (messageId: string) => Promise<void>;
+  /** The person may open the channel settings, so a failure that the channel causes links there. */
+  canManageChannel?: boolean;
 }
 
 /**
  * One stored message. Inbound sits at the start, outbound at the end in the brand tint, a system line is centred. An outbound
  * message shows who sent it (a person, a bot, a broadcast), its ticks, and, when the provider refused it, why, with Retry.
  */
-export const MessageBubble = memo(function MessageBubble({ message: m, quoted, onRetry }: MessageBubbleProps) {
+export const MessageBubble = memo(function MessageBubble({
+  message: m,
+  quoted,
+  onRetry,
+  canManageChannel = false,
+}: MessageBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const locale = useLocale();
   const [retrying, setRetrying] = useState(false);
@@ -167,7 +202,7 @@ export const MessageBubble = memo(function MessageBubble({ message: m, quoted, o
               {quoted.body ?? t(`kind.${quoted.kind === 'text' ? 'text' : 'attachment'}`)}
             </p>
           )}
-          <MessageBody message={m} />
+          <MessageBody message={m} onRetry={onRetry} />
           {m.reaction && m.kind !== 'reaction' && (
             <span
               className={cn(
@@ -191,7 +226,7 @@ export const MessageBubble = memo(function MessageBubble({ message: m, quoted, o
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
             <AlertIcon width={12} height={12} />
-            <span data-testid="inbox-failure">{m.failure?.reason ?? t('failed')}</span>
+            <FailureNote failure={m.failure} fallback={t('failed')} canManage={canManageChannel} />
             <button
               type="button"
               data-testid="inbox-retry"
