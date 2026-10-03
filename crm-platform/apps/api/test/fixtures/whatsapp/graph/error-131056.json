@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "(#131056) Pair rate limit hit",
+    "type": "OAuthException",
+    "code": 131056,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

@@ -193,10 +193,6 @@
         "title": "The 24-hour reply window has closed.",
         "message": "This channel only allows an approved template message more than 24 hours after the customer's last message. You can still add internal notes. A new message from the customer reopens the window."
       },
-      "channelBanner": {
-        "title": "This channel is disconnected.",
-        "message": "{name} is not connected, so replies cannot be sent. Reconnect the channel to send messages. Internal notes still work."
-      },
       "readOnly": "You can read this conversation but you do not have permission to reply.",
       "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
       "messagesLabel": "Messages",

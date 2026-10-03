@@ -14,9 +14,11 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createChannelSchema,
   createSimulatorChannelSchema,
+  subscribeChannelSchema,
   updateChannelSchema,
   type CreateChannelInput,
   type CreateSimulatorChannelInput,
+  type SubscribeChannelInput,
   type UpdateChannelInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
@@ -65,6 +67,17 @@ export class ChannelsController {
     return this.channels.createSimulator(body);
   }
 
+  @Get('requirements/:kind')
+  @RequirePermission('inbox.channel.manage')
+  @ApiOperation({
+    summary: 'What a connection of this kind needs in this workspace',
+    description:
+      "Which credential keys the connection form must ask for: the customer's own token (`channel_token`) or only the number and account ids because the platform's provider credential does the sending (`platform_token`).",
+  })
+  async requirements(@Param('kind') kind: string) {
+    return this.channels.requirements(kind);
+  }
+
   @Get(':id')
   @RequirePermission('inbox.conversation.read')
   @ApiOperation({ summary: 'One channel' })
@@ -80,6 +93,33 @@ export class ChannelsController {
     @Body(zodPipe(updateChannelSchema)) body: UpdateChannelInput,
   ) {
     return this.channels.update(id, body);
+  }
+
+  @Post(':id/health')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.channel.manage')
+  @ApiOperation({
+    summary: 'Live health check of the provider account',
+    description:
+      'Reads the number (name, quality, messaging limit, status), the account and the webhook subscription from the provider with the stored credentials, stores the snapshot on the channel and answers with it. A refused token moves the channel to `needs_reauth`. A failed check is an answer with `ok: false`, not an error.',
+  })
+  async health(@Param('id', ParseUUIDPipe) id: string) {
+    return this.channels.checkHealth(id);
+  }
+
+  @Post(':id/subscribe')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.channel.manage')
+  @ApiOperation({
+    summary: "Point the provider's webhooks for this channel at this platform",
+    description:
+      'Subscribes the app to the account or, where the provider needs it (always for a BSP proxy), overrides the callback URL and verify token per number. An override issues a new verify token, shown once in the answer.',
+  })
+  async subscribe(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(subscribeChannelSchema)) body: SubscribeChannelInput,
+  ) {
+    return this.channels.configureWebhook(id, body);
   }
 
   @Post(':id/webhook-token')

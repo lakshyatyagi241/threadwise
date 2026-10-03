@@ -13,6 +13,7 @@ export interface OperatorNavItem {
 
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
+import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -151,6 +152,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: 'platform-payment-gateways.nav.group',
   },
   // BSP domain (seam edit): the two reseller pages, in Reference's Billing group.
+  // WhatsApp provider registry (WAP): Providers, Workspace assignments, Switch provider.
+  ...WAP_OPERATOR_NAV,
   {
     id: 'bsp-income',
     href: '/admin/bsp',

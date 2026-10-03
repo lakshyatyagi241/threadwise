@@ -1,0 +1,16 @@
+{
+  "name": "Geta Academy WABA",
+  "account_review_status": "APPROVED",
+  "business_verification_status": "verified",
+  "id": "102345678901234",
+  "health_status": {
+    "can_send_message": "AVAILABLE",
+    "entities": [
+      {
+        "entity_type": "WABA",
+        "id": "102345678901234",
+        "can_send_message": "AVAILABLE"
+      }
+    ]
+  }
+}

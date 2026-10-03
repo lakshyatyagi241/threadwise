@@ -38,6 +38,7 @@ export interface MessageRow {
   mediaMime: string | null;
   mediaSize: number | null;
   mediaName: string | null;
+  mediaSha256: string | null;
   latitude: number | null;
   longitude: number | null;
   status: MessageStatus;
@@ -67,7 +68,7 @@ export interface MessageRow {
 const SELECT = sql`
   m.id, m.created_at::text AS created_at_text, m.created_at, m.uuid, m.conversation_id, c.uuid AS conversation_uuid, m.seq,
   m.direction, m.kind, m.sender_kind, m.sender_user_id, u.uuid AS sender_user_uuid, u.full_name AS sender_name, m.body,
-  m.media_key, m.media_mime, m.media_size, m.media_name, m.latitude, m.longitude, m.status, m.failure_code, m.failure_reason,
+  m.media_key, m.media_mime, m.media_size, m.media_name, m.media_sha256, m.latitude, m.longitude, m.status, m.failure_code, m.failure_reason,
   m.client_message_id, m.provider_message_id, m.reply_to_message_uuid, m.reaction, m.is_translated, m.translated_body,
   m.detected_language, m.starred, m.pinned, m.edited_at, m.deleted_at, m.template_id, wt.uuid AS template_uuid, m.meta, m.provider_ts, m.sent_at,
   m.delivered_at, m.read_at`;
@@ -97,6 +98,7 @@ const toRow = (r: Raw): MessageRow => ({
   mediaMime: (r.media_mime as string | null) ?? null,
   mediaSize: num(r.media_size),
   mediaName: (r.media_name as string | null) ?? null,
+  mediaSha256: (r.media_sha256 as string | null) ?? null,
   latitude: num(r.latitude),
   longitude: num(r.longitude),
   status: r.status as MessageStatus,
@@ -419,6 +421,83 @@ export class MessagesRepository {
       RETURNING (meta ->> 'dispatchGeneration')::int AS generation`);
     const r = rowsOf(res)[0];
     return r ? { generation: Number(r.generation) } : null;
+  }
+
+  // --- inbound files copied in the background ----------------------------------------------------------------------------------
+  //
+  // State lives in `meta` (no column): `mediaStatus` is 'pending' while the `media-fetch` job has not stored the file and 'failed' after
+  // it gave up; `mediaFetch` holds what the job needs to ask the provider again; `mediaGen` is the generation of the current job (a
+  // Retry makes a new one, so a late job of an earlier generation does nothing); `mediaFailure` is the reason shown to the agent.
+  // Every transition is one conditional UPDATE, so two workers on one message cannot both win.
+
+  /** pending -> ready: the file is stored. False when another worker finished first (the caller removes its own copy). */
+  async markMediaStored(
+    tx: Tx,
+    orgId: number,
+    ref: { id: number; createdAt: string },
+    media: { key: string; mime: string; size: number; name: string; sha256: string },
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE messages SET media_key = ${media.key}, media_mime = ${media.mime}, media_size = ${media.size},
+        media_name = ${media.name}, media_sha256 = ${media.sha256},
+        meta = meta - 'mediaStatus' - 'mediaFetch' - 'mediaFailure' - 'mediaGen' - 'mediaError' - 'mediaName'
+      WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz
+        AND direction = 'in' AND media_key IS NULL AND meta ->> 'mediaStatus' = 'pending'
+      RETURNING id`);
+    return rowsOf(res).length > 0;
+  }
+
+  /** pending -> failed with the reason (the request to fetch stays on the row, for a Retry). False when it was not pending. */
+  async markMediaFailed(
+    tx: Tx,
+    orgId: number,
+    ref: { id: number; createdAt: string },
+    f: { code: string; reason: string; attempts: number },
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE messages SET meta = meta || jsonb_build_object('mediaStatus', 'failed',
+        'mediaFailure', jsonb_build_object('code', ${f.code}::text, 'reason', ${f.reason}::text, 'attempts', ${f.attempts}::int, 'at', now()))
+      WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz
+        AND direction = 'in' AND media_key IS NULL AND meta ->> 'mediaStatus' = 'pending'
+      RETURNING id`);
+    return rowsOf(res).length > 0;
+  }
+
+  /** The agent's Retry of a file that failed: failed -> pending with a new generation. Null when the message has no failed file. */
+  async requeueMedia(
+    tx: Tx,
+    orgId: number,
+    ref: { id: number; createdAt: string },
+  ): Promise<{ generation: number } | null> {
+    const res = await tx.execute(sql`
+      UPDATE messages SET meta = (meta - 'mediaFailure') || jsonb_build_object('mediaStatus', 'pending',
+        'mediaGen', COALESCE((meta ->> 'mediaGen')::int, 1) + 1)
+      WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz
+        AND direction = 'in' AND media_key IS NULL AND meta ->> 'mediaStatus' = 'failed' AND meta ? 'mediaFetch'
+      RETURNING (meta ->> 'mediaGen')::int AS generation`);
+    const r = rowsOf(res)[0];
+    return r ? { generation: Number(r.generation) } : null;
+  }
+
+  /** Files still pending after `olderThanSeconds` (a job lost with the process that held it, or never enqueued): the recovery sweep's list. */
+  async stalePendingMedia(
+    tx: Tx,
+    olderThanSeconds: number,
+    maxAgeHours: number,
+    limit: number,
+  ): Promise<Array<{ orgId: number; uuid: string; generation: number }>> {
+    const res = await tx.execute(sql`
+      SELECT org_id, uuid, COALESCE((meta ->> 'mediaGen')::int, 1) AS generation
+      FROM messages
+      WHERE meta ->> 'mediaStatus' = 'pending' AND direction = 'in'
+        AND created_at < now() - make_interval(secs => ${olderThanSeconds})
+        AND created_at > now() - make_interval(hours => ${maxAgeHours})
+      ORDER BY created_at LIMIT ${limit}`);
+    return rowsOf(res).map((r) => ({
+      orgId: Number(r.org_id),
+      uuid: r.uuid as string,
+      generation: Number(r.generation),
+    }));
   }
 
   // --- the event log -----------------------------------------------------------------------------------------------------------

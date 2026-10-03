@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createHmac, timingSafeEqual } from 'node:crypto';
 import type { Env } from '../../../config/env.schema';
 import type {
   ChannelCredentials,
@@ -13,6 +12,7 @@ import type {
 } from './whatsapp.port';
 import { OUTBOUND_SEND_GUARD, type OutboundSendGuard } from './send-guard.port';
 import { buildTemplateMessage } from './meta-template-payload';
+import { verifyMetaSignature } from './meta-signature';
 
 /** The Graph API normally answers in well under a second; a hung connection must not hold a broadcast worker. */
 const SEND_TIMEOUT_MS = 15_000;
@@ -114,18 +114,7 @@ export class MetaCloudProvider implements WhatsAppProvider {
    *     oracle to guess the signature byte by byte
    */
   verifyWebhookSignature(rawBody: Buffer, signatureHeader: string, appSecret: string): boolean {
-    if (!signatureHeader?.startsWith('sha256=')) return false;
-
-    const expected = createHmac('sha256', appSecret).update(rawBody).digest();
-    let received: Buffer;
-    try {
-      received = Buffer.from(signatureHeader.slice('sha256='.length), 'hex');
-    } catch {
-      return false;
-    }
-
-    if (received.length !== expected.length) return false;
-    return timingSafeEqual(received, expected);
+    return verifyMetaSignature(rawBody, signatureHeader, appSecret);
   }
 
   parseWebhook(payload: unknown): {

@@ -32,6 +32,8 @@ export const QUEUES = {
   TG_BROADCAST: 'tg-broadcast',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
+  /** Copies a customer's WhatsApp file from the provider into the media store: downloads can be large and slow, and a provider outage must not hold message ingest. */
+  MEDIA_FETCH: 'media-fetch',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

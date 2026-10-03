@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
+import { WhatsappProviderResolverModule } from '../../infra/providers/whatsapp';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
@@ -16,12 +17,16 @@ import { CONVERSATIONS_FACADE } from './conversations.facade';
 import { ConversationsRepository } from './conversations.repository';
 import { ConversationsService } from './conversations.service';
 import { InboundIngestService } from './inbound-ingest.service';
+import { MediaFetchPublisher } from './media-fetch.publisher';
+import { MediaFetchService } from './media-fetch.service';
 import { MessageDispatchService } from './message-dispatch.service';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository } from './messages.repository';
 import { OutboundService } from './outbound.service';
 import { ReceiptsService } from './receipts.service';
 import { ChannelsController } from './channels.controller';
+import { ProviderWebhooksController } from './provider-webhooks.controller';
+import { ProviderWebhooksService } from './provider-webhooks.service';
 import { ChannelsFacade } from './channels.facade';
 import { ChannelsRepository } from './channels.repository';
 import { SimulatorController } from './simulator.controller';
@@ -38,12 +43,20 @@ import { SimulatorService } from './simulator.service';
  * door are global.
  */
 @Module({
-  imports: [ChatChannelProvidersModule, PlansCoreModule, CrmModule],
+  imports: [
+    // Which WhatsApp provider a channel talks through. The default is Meta directly with the channel's own token; the WhatsApp
+    // provider registry replaces it by passing its resolver here (`register({ imports: [...], resolver: { useExisting: ... } })`).
+    WhatsappProviderResolverModule.register(),
+    ChatChannelProvidersModule,
+    PlansCoreModule,
+    CrmModule,
+  ],
   controllers: [
     ChannelsController,
     SimulatorController,
     // Public: the signature is the authentication.
     ChannelWebhooksController,
+    ProviderWebhooksController,
   ],
   providers: [
     CryptoService,
@@ -55,6 +68,7 @@ import { SimulatorService } from './simulator.service';
     ChannelIngestPublisher,
     ChannelDispatcher,
     ChannelWebhooksService,
+    ProviderWebhooksService,
     SimulatorService,
     ChannelsFacade,
     ConversationsRepository,
@@ -62,10 +76,12 @@ import { SimulatorService } from './simulator.service';
     ConversationLifecycleService,
     ChatRealtimePublisher,
     MessageViewService,
+    MediaFetchPublisher,
     InboundIngestService,
     ReceiptsService,
     OutboundService,
     MessageDispatchService,
+    MediaFetchService,
     ConversationsService,
     { provide: CONVERSATIONS_FACADE, useExisting: ConversationsService },
   ],
@@ -80,6 +96,8 @@ import { SimulatorService } from './simulator.service';
     ReceiptsService,
     OutboundService,
     MessageDispatchService,
+    MediaFetchService,
+    MediaFetchPublisher,
   ],
 })
 export class ChatConversationsModule {}

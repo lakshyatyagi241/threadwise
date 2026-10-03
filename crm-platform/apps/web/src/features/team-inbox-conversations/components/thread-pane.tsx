@@ -8,6 +8,8 @@ import type {
   ConversationNote,
   InboxConversationDetail,
 } from '@crm/contracts';
+import { ReconnectBanner, TemplatesSoon } from '@/features/channel-whatsapp-cloud';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
@@ -54,6 +56,7 @@ export interface ThreadPaneProps {
  */
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
+  const canManageChannels = useCan('inbox.channel.manage');
   const { detail, thread } = props;
 
   if (props.notFound) {
@@ -113,7 +116,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                 <span dir="ltr" className="font-mono">
                   {detail.peerKey}
                 </span>
-                <ChannelTag kind={detail.channel.kind} name={detail.channel.name} />
+                <ChannelTag decorative kind={detail.channel.kind} name={detail.channel.name} />
                 <span className="truncate">{detail.channel.name}</span>
                 <TypingLine conversationId={detail.id} />
               </p>
@@ -188,13 +191,17 @@ export function ThreadPane(props: ThreadPaneProps) {
         onSeenLatest={props.onSeenLatest}
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
+        canManageChannel={canManageChannels}
         onRetryPending={thread.retryPending}
         onDismissPending={thread.dismissPending}
         onDeleteNote={props.onDeleteNote}
         onReload={() => void thread.sync()}
       />
 
-      {win && windowClosed && props.can.reply && props.mode === 'reply' && (
+      {channelDown && props.channel && props.can.reply && props.mode === 'reply' && (
+        <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
+      )}
+      {win && windowClosed && !channelDown && props.can.reply && props.mode === 'reply' && (
         <div
           role="status"
           data-testid="inbox-window-banner"
@@ -204,19 +211,7 @@ export function ThreadPane(props: ThreadPaneProps) {
           <div>
             <p className="font-medium">{t('windowBanner.title')}</p>
             <p className="text-xs">{t('windowBanner.message')}</p>
-          </div>
-        </div>
-      )}
-      {channelDown && !windowClosed && props.can.reply && props.mode === 'reply' && (
-        <div
-          role="status"
-          data-testid="inbox-channel-banner"
-          className="flex items-start gap-2 border-t border-warning/30 bg-warning/10 px-4 py-2.5 text-sm text-warning"
-        >
-          <AlertIcon className="mt-0.5 shrink-0" />
-          <div>
-            <p className="font-medium">{t('channelBanner.title')}</p>
-            <p className="text-xs">{t('channelBanner.message', { name: props.channel?.name ?? '' })}</p>
+            {detail?.capabilities.templates && <TemplatesSoon />}
           </div>
         </div>
       )}
@@ -234,6 +229,9 @@ export function ThreadPane(props: ThreadPaneProps) {
         canReply={props.can.reply}
         canNote={props.can.note}
         canAttach={(detail?.capabilities.media.length ?? 0) > 0}
+        attachments={
+          detail ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media } : undefined
+        }
         onSend={props.onSend}
         onNote={props.onNote}
         handleRef={props.composerRef}
