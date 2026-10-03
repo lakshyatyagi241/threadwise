@@ -63,6 +63,16 @@ export function decodeFlowCursor(raw: string): { updatedAtIso: string; id: numbe
 }
 
 
+/**
+ * `name + suffix` within `max` characters (code points; the flows table caps a name at 255): a long name is cut and the suffix
+ * stays, so a copy still reads "... (Copy)". Reference's column had no such cap.
+ */
+export function nameWithSuffix(name: string, suffix: string, max = 255): string {
+  const chars = [...name];
+  const room = max - [...suffix].length;
+  return (chars.length > room ? chars.slice(0, room).join('') : name) + suffix;
+}
+
 export interface ParsedImport {
   name: string;
   flowType: FlowType;
@@ -94,7 +104,7 @@ export function parseImportPayload(raw: unknown, opts: { suffix?: string; brand?
   const flowType = wrapped && flbIsFlowType(raw.flow_type) ? raw.flow_type : 'chat';
   const rawCategory = wrapped && typeof raw.category === 'string' ? raw.category.trim() : '';
 
-  const name = `${rawName || 'Imported flow'}${opts.suffix ?? ''}`.slice(0, 255);
+  const name = nameWithSuffix(rawName || 'Imported flow', opts.suffix ?? '');
   return {
     name,
     flowType,
@@ -121,13 +131,19 @@ export function triggerLabel(kind: string): string {
   }
 }
 
-/** `<slug>.threadwise-flow.json`, the download name Reference's export uses (a name with no letters or digits falls back to `flow-<id>`). */
+/**
+ * `<slug>.threadwise-flow.json`, the download name Reference's export uses: Laravel's `Str::slug` (accents folded, `_` is a separator,
+ * `@` reads "at", every other punctuation mark is dropped, not turned into a dash) and `flow-<id>` when nothing is left.
+ */
 export function flowExportFileName(name: string, fallbackId: string): string {
   const slug = name
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/_+/g, '-')
+    .replace(/@/g, '-at-')
+    .replace(/[^-a-z0-9\s]+/g, '')
+    .replace(/[-\s]+/g, '-')
     .replace(/^-+|-+$/g, '');
   return `${slug || `flow-${fallbackId}`}.threadwise-flow.json`;
 }

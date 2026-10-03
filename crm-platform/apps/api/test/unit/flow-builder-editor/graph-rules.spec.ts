@@ -324,6 +324,23 @@ describe('export file name (TW-FLB-008)', () => {
     expect(flowExportFileName('Welcome Flow!', 'abc')).toBe('welcome-flow.threadwise-flow.json');
     expect(flowExportFileName('Café ñandú', 'abc')).toBe('cafe-nandu.threadwise-flow.json');
     expect(flowExportFileName('★★★', 'abc')).toBe('flow-abc.threadwise-flow.json');
+    // Laravel's Str::slug drops punctuation instead of turning it into a dash, reads "@" as "at" and treats "_" as a separator
+    expect(flowExportFileName('a/b\\c:d*e?f"g<h>i|j', 'abc')).toBe('abcdefghij.threadwise-flow.json');
+    expect(flowExportFileName("Q&A v1.2 it's", 'abc')).toBe('qa-v12-its.threadwise-flow.json');
+    expect(flowExportFileName('sale_2024 @ shop', 'abc')).toBe('sale-2024-at-shop.threadwise-flow.json');
+  });
+});
+
+describe('name with a suffix (TW-FLB-006 / 009)', () => {
+  it('keeps the suffix and cuts the name when the result would pass the 255-character cap', async () => {
+    const { nameWithSuffix } = await import('../../../src/modules/flow-builder-editor/flow-rules');
+    expect(nameWithSuffix('Welcome', ' (Copy)')).toBe('Welcome (Copy)');
+    const long = nameWithSuffix('x'.repeat(250), ' (Copy)');
+    expect([...long]).toHaveLength(255);
+    expect(long.endsWith('xx (Copy)')).toBe(true);
+    const emoji = nameWithSuffix('😀'.repeat(255), ' (imported)');
+    expect([...emoji]).toHaveLength(255);
+    expect(emoji.endsWith('😀 (imported)')).toBe(true);
   });
 });
 
