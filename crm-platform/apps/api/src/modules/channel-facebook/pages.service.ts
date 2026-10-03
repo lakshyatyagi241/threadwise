@@ -37,6 +37,7 @@ import {
   readState,
   webhookAddress,
 } from './page-rules';
+import { ChatInboxIngest } from './_shims/chat-inbox-ingest';
 import { PagesRepository, type PageRow } from './pages.repository';
 
 export const MODULE_KEY = 'facebook_pages';
@@ -83,7 +84,21 @@ export class PagesService {
     @Inject(FACEBOOK_GRAPH) private readonly graph: FacebookGraphFactory,
     @Inject(FACEBOOK_PLAN_GATE) private readonly plan: FacebookPlanGate,
     @InjectQueue(QUEUES.FB_BACKFILL) private readonly backfill: Queue<BackfillJob>,
+    private readonly inbox: ChatInboxIngest,
   ) {}
+
+  /** Keeps the Page's inbox channel (connected or not) in step. Best effort: the Page itself is already saved. */
+  private async syncChannel(orgId: number, page: PageRow, connected: boolean): Promise<void> {
+    try {
+      await this.inbox.syncPage(orgId, {
+        pageId: page.pageId,
+        name: page.name ?? page.pageId,
+        connected,
+      });
+    } catch (err) {
+      this.logger.warn({ err, orgId, page: page.pageId }, 'facebook inbox channel not synced');
+    }
+  }
 
   /** What the API shows of a Page: never a token. */
   toResponse(row: PageRow): FacebookPage {
@@ -338,6 +353,8 @@ export class PagesService {
       return saved;
     });
 
+    await this.syncChannel(ctx.orgId, row, true);
+
     // Without this subscription Meta never delivers this Page's messages or comments; a failure leaves the Page connected and
     // "Fix inbound" repeats it.
     const sub = await this.graph.forPage(token, p.id).subscribeWebhooks();
@@ -376,6 +393,7 @@ export class PagesService {
         await this.db.tx((tx) =>
           this.repo.markExpired(tx, orgId, page.id, clipError(res.error) ?? TOKEN_INVALID_MESSAGE),
         );
+        await this.syncChannel(orgId, page, false);
       }
       throw refuse('FB_REFRESH_FAILED', 'Could not refresh (the Page token may need re-auth).');
     }
@@ -401,6 +419,7 @@ export class PagesService {
       await this.db.tx((tx) =>
         this.repo.markExpired(tx, orgId, page.id, clipError(res.error) ?? TOKEN_INVALID_MESSAGE),
       );
+      await this.syncChannel(orgId, page, false);
     }
     const row = (await this.db.tx((tx) => this.repo.findById(tx, orgId, page.id))) ?? page;
     return {
@@ -426,6 +445,7 @@ export class PagesService {
         payload: { uuid: page.uuid, pageId: page.pageId, name: page.name },
       });
     });
+    await this.syncChannel(orgId, page, false);
   }
 
   /**
@@ -449,6 +469,8 @@ export class PagesService {
       await this.db.txAs({ orgId }, (tx) =>
         this.repo.setHealth(tx, orgId, page.id, { ...next, dataAccessExpiresAt: exp }),
       );
+      if (next.status !== page.status)
+        await this.syncChannel(orgId, page, next.status === 'connected');
       changed += 1;
     }
     return changed;

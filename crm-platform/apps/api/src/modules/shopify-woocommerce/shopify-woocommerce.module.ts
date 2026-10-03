@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastsModule } from '../broadcasts';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { SHOPIFY, WOOCOMMERCE } from '../../infra/providers/ecom/ecom.port';
 import { HttpShopifyFactory } from '../../infra/providers/ecom/shopify-admin.client';
 import { HttpWooFactory } from '../../infra/providers/ecom/woocommerce-rest.client';
-import { OpenEcomPlanGate } from './_shims/open-gates';
+import { PlanEcomGate } from './_shims/plan-gate';
 import { SqlStoreMirror } from './_shims/sql-store-mirror';
 import { SqlEcomTemplates } from './_shims/sql-ecom-templates';
 import { COMMERCE_SENDER, ECOM_PLAN_GATE, ECOM_TEMPLATES, STORE_MIRROR } from './_shims/tokens';
@@ -48,7 +49,7 @@ import { WoocommerceService } from './woocommerce.service';
  * binding the real one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [BroadcastsModule, NodeBridgeRuntimeModule],
+  imports: [BroadcastsModule, NodeBridgeRuntimeModule, PlansCoreModule],
   controllers: [
     EcomPlatformSettingsController,
     ShopifyController,
@@ -89,12 +90,16 @@ import { WoocommerceService } from './woocommerce.service';
     HttpWooFactory,
     { provide: SHOPIFY, useExisting: HttpShopifyFactory },
     { provide: WOOCOMMERCE, useExisting: HttpWooFactory },
-    { provide: ECOM_PLAN_GATE, useClass: OpenEcomPlanGate },
+    { provide: ECOM_PLAN_GATE, useClass: PlanEcomGate },
     { provide: STORE_MIRROR, useClass: SqlStoreMirror },
     { provide: ECOM_TEMPLATES, useClass: SqlEcomTemplates },
     { provide: COMMERCE_SENDER, useClass: EngineCommerceSender },
   ],
   exports: [
+    // Pipeline, cart and broadcast services: the worker's EcomWebhookProcessor (ShopifyWoocommerceWorkerModule) injects them.
+    WebhookPipelineService,
+    CartService,
+    BroadcastService,
     EcomSettingsService,
     StoresRepository,
     ShopifyService,

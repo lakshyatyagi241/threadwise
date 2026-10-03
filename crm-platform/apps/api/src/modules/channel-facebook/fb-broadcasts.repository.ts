@@ -98,7 +98,7 @@ const toRow = (r: Raw): FbBroadcastRow => ({
 export class FbBroadcastsRepository {
   /**
    * The Messenger threads of a Page that wrote in since `cutoff`, newest first: its reachable audience. A comment thread
-   * (`fb:<page>:post:...`) is not a conversation Meta lets a Page start a message in, so it is left out.
+   * (`fb:<page>:post:...`) is not a conversation Meta lets a Page start a message in, so it is left out. Thread keys are stored lower-cased.
    */
   async audience(
     tx: Tx,
@@ -108,10 +108,11 @@ export class FbBroadcastsRepository {
     limit: number,
   ): Promise<ThreadRow[]> {
     const res = await tx.execute(sql`
-      SELECT id, raw_jid, title, last_inbound_at FROM conversations
-      WHERE org_id = ${orgId} AND channel = 'facebook' AND raw_jid LIKE ${`fb:${pageId}:%`}
-        AND raw_jid NOT LIKE ${`fb:${pageId}:post:%`} AND last_inbound_at >= ${cutoff}
-      ORDER BY last_inbound_at DESC, id DESC
+      SELECT c.id, c.peer_key AS raw_jid, coalesce(c.peer_name, c.title) AS title, c.last_inbound_at
+      FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND ch.external_id = ${pageId}
+        AND c.peer_key NOT LIKE ${`fb:${pageId.toLowerCase()}:post:%`} AND c.last_inbound_at >= ${cutoff}
+      ORDER BY c.last_inbound_at DESC, c.id DESC
       LIMIT ${limit}`);
     const out: ThreadRow[] = [];
     for (const r of res.rows as Array<{

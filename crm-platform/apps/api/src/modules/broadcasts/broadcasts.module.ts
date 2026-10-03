@@ -3,12 +3,15 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { BroadcastDispatchService } from './broadcast-dispatch.service';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, TransportEngineSender, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
+import { MarketingMediaController } from './marketing-media.controller';
+import { MarketingMediaService } from './marketing-media.service';
 import { LinkRedirectController } from './tracking/link-redirect.controller';
 import { LinkRedirectService } from './tracking/link-redirect.service';
 import { LinkTracker } from './tracking/link-tracker';
@@ -51,12 +54,14 @@ import {
     CrmModule,
     forwardRef(() => NodeBridgeRuntimeModule),
     WalletMessageBillingModule,
+    PlatformSettingsModule,
   ],
   controllers: [
     BroadcastsController,
     BroadcastsReadController,
     BroadcastsActionsController,
     LinkRedirectController,
+    MarketingMediaController,
   ],
   exports: [
     BroadcastReceiptsService,
@@ -77,6 +82,7 @@ import {
     BroadcastReceiptsService,
   ],
   providers: [
+    MarketingMediaService,
     CryptoService,
     BroadcastsService,
     BroadcastsRepository,

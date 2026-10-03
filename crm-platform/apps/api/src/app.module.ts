@@ -27,6 +27,7 @@ import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
 import { BroadcastsModule } from './modules/broadcasts';
+import { CallingVoiceModule } from './modules/calling-voice';
 import { CampaignsModule } from './modules/campaigns';
 import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
@@ -35,6 +36,7 @@ import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
+import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -144,6 +146,7 @@ import { HealthModule } from './health/health.module';
     AiKeysUsageAdminModule,
     NodeBridgeRuntimeModule,
     ScheduledQueueWarmerModule,
+    FlowRuntimeEngineModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
@@ -171,6 +174,7 @@ import { HealthModule } from './health/health.module';
     NotificationsModule,
     BroadcastsModule,
     CampaignsModule,
+    CallingVoiceModule,
     ChannelTelegramModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
