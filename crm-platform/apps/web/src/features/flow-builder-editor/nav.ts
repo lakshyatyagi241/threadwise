@@ -9,6 +9,6 @@ export const nav: NavItem[] = [
     href: '/flows',
     order: 0,
     icon: 'flow',
-    gates: { permission: 'flb.flows.read' },
+    gates: { permission: 'flb.flows.read', planFeature: 'automation' },
   },
 ];
