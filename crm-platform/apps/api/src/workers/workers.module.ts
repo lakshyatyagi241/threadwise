@@ -16,6 +16,7 @@ import {
   TasksWorkerModule,
 } from '../modules/crm';
 import { PaygwWorkerModule } from '../modules/platform-payment-gateways';
+import { PlatformSupportDeskWorkerModule } from '../modules/platform-support-desk';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
 import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
@@ -60,6 +61,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChannelTelegramWorkerModule,
     ScheduledQueueWarmerWorkerModule,
     NodeBridgeRuntimeWorkerModule,
+    PlatformSupportDeskWorkerModule,
   ],
   providers: [
     OutboxDrainService,

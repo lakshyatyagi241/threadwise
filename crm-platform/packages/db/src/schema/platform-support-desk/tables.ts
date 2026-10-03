@@ -13,11 +13,14 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { platformOperators } from '../auth-registration-security/core';
 import { organizations, users } from '../foundation';
+import { conversations } from '../chat-conversations/tables';
 import { slaPolicies } from '../team-inbox-routing-sla/tables';
 
 export const platformNotes = pgTable(
@@ -28,6 +31,8 @@ export const platformNotes = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     conversationId: idColumn('conversation_id'),
     adminUserId: idColumn('admin_user_id'),
+    /** The platform operator who wrote the note (admin_user_id references tenant users and stays empty for operators). */
+    adminOperatorId: idColumn('admin_operator_id'),
     body: text('body').notNull(),
     severity: text('severity').notNull().default('info'),
     createdAt: createdAt(),
@@ -47,7 +52,18 @@ export const platformNotes = pgTable(
       columns: [t.orgId, t.adminUserId],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    foreignKey({
+      name: 'platform_notes_admin_operator_id_fkey',
+      columns: [t.adminOperatorId],
+      foreignColumns: [platformOperators.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_platform_notes_conversation_id',
+      columns: [t.orgId, t.conversationId],
+      foreignColumns: [conversations.orgId, conversations.id],
+    }).onDelete('set null'),
     index('idx_platform_notes_conversation_id').on(t.orgId, t.conversationId),
+    index('idx_platform_notes_created_at').on(t.orgId, t.createdAt.desc()),
   ],
 );
 
@@ -271,3 +287,114 @@ export const supportMessages = pgTable(
 
 export type SupportMessagesRow = typeof supportMessages.$inferSelect;
 export type NewSupportMessagesRow = typeof supportMessages.$inferInsert;
+
+// --- platform layer of the helpdesk (migration 20261019090000_supp_helpdesk_platform.sql) -----------------------------------------
+
+/** Who may be assigned tickets: the roster of platform operators working the helpdesk (Reference `support_agents`). */
+export const supportAgentRoster = pgTable(
+  'support_agent_roster',
+  {
+    id: idColumn('id').primaryKey().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom().unique(),
+    operatorId: idColumn('operator_id')
+      .notNull()
+      .unique()
+      .references(() => platformOperators.id, { onDelete: 'cascade' }),
+    isActive: boolean('is_active').notNull().default(true),
+    specialty: text('specialty'),
+    currentLoad: integer('current_load').notNull().default(0),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  () => [],
+);
+
+export type SupportAgentRosterRow = typeof supportAgentRoster.$inferSelect;
+
+export const supportPlaybooks = pgTable(
+  'support_playbooks',
+  {
+    id: idColumn('id').primaryKey().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom().unique(),
+    name: text('name').notNull(),
+    slug: text('slug').notNull().unique(),
+    triggerType: text('trigger_type').notNull().default('manual'),
+    triggerValue: text('trigger_value'),
+    steps: jsonb('steps').notNull().default([]),
+    isActive: boolean('is_active').notNull().default(true),
+    useCount: integer('use_count').notNull().default(0),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  () => [],
+);
+
+export type SupportPlaybooksRow = typeof supportPlaybooks.$inferSelect;
+
+export const supportSlaPolicies = pgTable(
+  'support_sla_policies',
+  {
+    id: idColumn('id').primaryKey().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom().unique(),
+    name: text('name').notNull(),
+    firstResponseMinutes: integer('first_response_minutes').notNull(),
+    resolutionMinutes: integer('resolution_minutes').notNull(),
+    pauseWhenWaitingOnCustomer: boolean('pause_when_waiting_on_customer').notNull().default(false),
+    respectBusinessHours: boolean('respect_business_hours').notNull().default(true),
+    isDefault: boolean('is_default').notNull().default(false),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    uniqueIndex('uq_support_sla_policies_default')
+      .on(t.isDefault)
+      .where(sql`is_default`),
+  ],
+);
+
+export type SupportSlaPoliciesRow = typeof supportSlaPolicies.$inferSelect;
+
+export const supportSlaBreaches = pgTable(
+  'support_sla_breaches',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    ticketId: idColumn('ticket_id').notNull(),
+    policyId: idColumn('policy_id'),
+    breachType: text('breach_type').notNull(),
+    breachedAt: timestamp('breached_at', { withTimezone: true }).notNull().defaultNow(),
+    severity: text('severity').notNull().default('breach'),
+    overByMinutes: integer('over_by_minutes').notNull().default(0),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('support_sla_breaches_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_support_sla_breaches_ticket_type').on(t.orgId, t.ticketId, t.breachType),
+    foreignKey({
+      name: 'support_sla_breaches_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_support_sla_breaches_ticket',
+      columns: [t.orgId, t.ticketId],
+      foreignColumns: [supportTickets.orgId, supportTickets.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'support_sla_breaches_policy_id_fkey',
+      columns: [t.policyId],
+      foreignColumns: [supportSlaPolicies.id],
+    }).onDelete('set null'),
+    index('idx_support_sla_breaches_breached_at').on(t.breachedAt.desc()),
+    index('idx_support_sla_breaches_policy').on(t.policyId),
+  ],
+);
+
+export type SupportSlaBreachesRow = typeof supportSlaBreaches.$inferSelect;
