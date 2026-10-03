@@ -116,161 +116,159 @@ function Editor({ post }: { post: BlogPostAdmin | undefined }) {
   return (
     <form onSubmit={submit} className="space-y-5">
       <PageHeader
+        eyebrow={post ? t('eyebrowEdit') : t('eyebrowNew')}
         title={post ? t('titleEdit') : t('titleNew')}
+        description={t('intro')}
         actions={
           <>
             <Link href="/admin/blog" className="text-sm underline">
-              {t('back')}
+              {tc('cancel')}
             </Link>
             <Button type="submit" disabled={save.isPending || f.title.trim() === ''}>
-              {tc('save')}
+              {post ? t('saveChanges') : t('create')}
             </Button>
           </>
         }
       />
       {saved && <Alert tone="success">{t('saved')}</Alert>}
       <ActionError error={save.error} />
-      <Card className="space-y-4">
-        <Field label={t('title')} htmlFor="b-title">
-          <Input
-            id="b-title"
-            value={f.title}
-            onChange={(e) => set('title', e.target.value)}
-            required
-            maxLength={200}
-          />
-        </Field>
-        <Field label={t('slug')} htmlFor="b-slug" hint={t('slugHint')}>
-          <Input
-            id="b-slug"
-            value={f.slug}
-            onChange={(e) => set('slug', e.target.value)}
-            dir="ltr"
-            maxLength={200}
-          />
-        </Field>
-        <Field label={t('excerpt')} htmlFor="b-excerpt">
-          <Textarea
-            id="b-excerpt"
-            rows={3}
-            value={f.excerpt}
-            onChange={(e) => set('excerpt', e.target.value)}
-            maxLength={500}
-          />
-        </Field>
-        <Field label={t('body')} htmlFor="b-body">
-          <Textarea
-            id="b-body"
-            rows={14}
-            className="font-mono"
-            dir="ltr"
-            value={f.body}
-            onChange={(e) => set('body', e.target.value)}
-          />
-        </Field>
-        <Field label={t('image')} htmlFor="b-image">
-          <Input
-            id="b-image"
-            value={f.featuredImage}
-            onChange={(e) => set('featuredImage', e.target.value)}
-            dir="ltr"
-            placeholder="https://"
-          />
-        </Field>
-      </Card>
-      <Card className="grid gap-4 sm:grid-cols-2">
-        <Field label={t('category')} htmlFor="b-cat">
-          <Select
-            id="b-cat"
-            value={f.categoryId}
-            onChange={(e) => set('categoryId', e.target.value)}
-          >
-            <option value="">{t('noCategory')}</option>
-            {categories.data?.data.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t('newCategory')} htmlFor="b-newcat">
-          <Input
-            id="b-newcat"
-            value={f.newCategory}
-            onChange={(e) => set('newCategory', e.target.value)}
-            maxLength={120}
-          />
-        </Field>
-        <Field label={t('tags')} htmlFor="b-tags">
-          <Input id="b-tags" value={f.tags} onChange={(e) => set('tags', e.target.value)} />
-        </Field>
-        <Field label={t('author')} htmlFor="b-author">
-          <Input
-            id="b-author"
-            value={f.authorName}
-            onChange={(e) => set('authorName', e.target.value)}
-            maxLength={120}
-          />
-        </Field>
-        <Field label={t('status')} htmlFor="b-status">
-          <Select
-            id="b-status"
-            value={f.status}
-            onChange={(e) => set('status', e.target.value as 'draft' | 'published')}
-          >
-            <option value="draft">draft</option>
-            <option value="published">published</option>
-          </Select>
-        </Field>
-        <Field label={t('publishedAt')} htmlFor="b-date" hint={t('publishedAtHint')}>
-          <Input
-            id="b-date"
-            type="datetime-local"
-            value={f.publishedAt}
-            onChange={(e) => set('publishedAt', e.target.value)}
-          />
-        </Field>
-        <Checkbox
-          className="sm:col-span-2"
-          label={t('featured')}
-          checked={f.isFeatured}
-          onChange={(e) => set('isFeatured', e.target.checked)}
-        />
-      </Card>
-      <Card className="space-y-4">
-        <h2 className="text-sm font-semibold">{t('seo')}</h2>
-        <Field label={t('metaTitle')} htmlFor="b-mt">
-          <Input
-            id="b-mt"
-            value={f.metaTitle}
-            onChange={(e) => set('metaTitle', e.target.value)}
-            maxLength={200}
-          />
-        </Field>
-        <Field label={t('metaDescription')} htmlFor="b-md">
-          <Textarea
-            id="b-md"
-            rows={2}
-            value={f.metaDescription}
-            onChange={(e) => set('metaDescription', e.target.value)}
-            maxLength={320}
-          />
-        </Field>
-        <Field label={t('canonical')} htmlFor="b-canon">
-          <Input
-            id="b-canon"
-            value={f.canonicalUrl}
-            onChange={(e) => set('canonicalUrl', e.target.value)}
-            dir="ltr"
-            placeholder="https://"
-          />
-        </Field>
-        <Checkbox
-          label={t('noindex')}
-          checked={f.noindex}
-          onChange={(e) => set('noindex', e.target.checked)}
-        />
-      </Card>
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="space-y-5">
+          <Card className="space-y-4">
+            <h2 className="text-sm font-semibold">{t('article')}</h2>
+            <Field label={t('title')} htmlFor="b-title">
+              <Input
+                id="b-title"
+                value={f.title}
+                onChange={(e) => set('title', e.target.value)}
+                required
+                maxLength={200}
+              />
+            </Field>
+            <Field label={t('slug')} htmlFor="b-slug" hint={t('slugHint')}>
+              <Input
+                id="b-slug"
+                value={f.slug}
+                onChange={(e) => set('slug', e.target.value)}
+                dir="ltr"
+                maxLength={200}
+                placeholder={t('slugPlaceholder')}
+              />
+            </Field>
+            <Field label={t('excerpt')} htmlFor="b-excerpt">
+              <Textarea
+                id="b-excerpt"
+                rows={2}
+                value={f.excerpt}
+                onChange={(e) => set('excerpt', e.target.value)}
+                maxLength={500}
+                placeholder={t('excerptPlaceholder')}
+              />
+            </Field>
+            <Field label={t('body')} htmlFor="b-body" hint={t('bodyHint')}>
+              <Textarea
+                id="b-body"
+                rows={18}
+                className="font-mono"
+                dir="ltr"
+                value={f.body}
+                onChange={(e) => set('body', e.target.value)}
+                placeholder={t('bodyPlaceholder')}
+              />
+            </Field>
+          </Card>
+          <Card className="space-y-4">
+            <h2 className="text-sm font-semibold">{t('media')}</h2>
+            <Field label={t('image')} htmlFor="b-image" hint={t('imageHint')}>
+              <Input
+                id="b-image"
+                value={f.featuredImage}
+                onChange={(e) => set('featuredImage', e.target.value)}
+                dir="ltr"
+                placeholder="https://"
+              />
+            </Field>
+            <Field label={t('tags')} htmlFor="b-tags">
+              <Input
+                id="b-tags"
+                value={f.tags}
+                onChange={(e) => set('tags', e.target.value)}
+                placeholder={t('tagsPlaceholder')}
+              />
+            </Field>
+            <Field label={t('author')} htmlFor="b-author">
+              <Input
+                id="b-author"
+                value={f.authorName}
+                onChange={(e) => set('authorName', e.target.value)}
+                maxLength={120}
+              />
+            </Field>
+          </Card>
+        </div>
+        <aside className="space-y-5">
+          <Card className="space-y-4">
+            <h2 className="text-sm font-semibold">{t('visibility')}</h2>
+            <Field label={t('status')} htmlFor="b-status">
+              <Select
+                id="b-status"
+                value={f.status}
+                onChange={(e) => set('status', e.target.value as 'draft' | 'published')}
+              >
+                <option value="draft">{t('statusDraft')}</option>
+                <option value="published">{t('statusPublished')}</option>
+              </Select>
+            </Field>
+            <Field label={t('publishedAt')} htmlFor="b-date" hint={t('publishedAtHint')}>
+              <Input
+                id="b-date"
+                type="datetime-local"
+                value={f.publishedAt}
+                onChange={(e) => set('publishedAt', e.target.value)}
+              />
+            </Field>
+            <Checkbox
+              label={t('featured')}
+              checked={f.isFeatured}
+              onChange={(e) => set('isFeatured', e.target.checked)}
+            />
+            <p className="-mt-2 text-xs text-muted-foreground">{t('featuredHint')}</p>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={save.isPending || f.title.trim() === ''}
+            >
+              {post ? t('saveChanges') : t('create')}
+            </Button>
+          </Card>
+          <Card className="space-y-4">
+            <h2 className="text-sm font-semibold">{t('filing')}</h2>
+            <Field label={t('category')} htmlFor="b-cat">
+              <Select
+                id="b-cat"
+                value={f.categoryId}
+                onChange={(e) => set('categoryId', e.target.value)}
+              >
+                <option value="">{t('noCategory')}</option>
+                {categories.data?.data.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label={t('newCategory')} htmlFor="b-newcat" hint={t('newCategoryHint')}>
+              <Input
+                id="b-newcat"
+                value={f.newCategory}
+                onChange={(e) => set('newCategory', e.target.value)}
+                maxLength={120}
+                placeholder={t('newCategoryPlaceholder')}
+              />
+            </Field>
+          </Card>
+        </aside>
+      </div>
     </form>
   );
 }

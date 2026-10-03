@@ -33,9 +33,20 @@ export async function GuidebookSidebar({
       <ul className="space-y-0.5">
         {row('/guidebook', t('allArticles'), total, !active)}
         {categories.map((c) =>
-          row(`/guidebook?category=${encodeURIComponent(c.name)}`, c.name, c.count, active === c.name),
+          row(
+            `/guidebook?category=${encodeURIComponent(c.name)}`,
+            c.name,
+            c.count,
+            active === c.name,
+          ),
         )}
       </ul>
+      <div className="mt-4 space-y-1 rounded-md border border-border p-3 text-sm">
+        <p className="font-medium">{t('needHuman')}</p>
+        <Link href="/support" className="text-primary underline">
+          {t('contactSupport')}
+        </Link>
+      </div>
     </nav>
   );
 }

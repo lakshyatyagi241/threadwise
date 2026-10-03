@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, type OnApplicationBootstrap } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { sql, type SQL } from 'drizzle-orm';
 import {
   type CreateGuidebookArticleRequest,
@@ -15,12 +16,14 @@ import {
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuthAuditService, HtmlSanitizerService } from '../auth';
 import { CMS_EVENTS, iso, num, operatorId } from './cms-context';
 import { decodeTupleCursor, encodeTupleCursor, escapeLike, slugify, uniqueSlug } from './cms-rules';
 import { CmsStore } from './cms-store';
 import { fallbackArticleSlug, guidebookReadMinutes, renderMarkdown } from './guidebook-rules';
+import { GUIDEBOOK_SEED } from './guidebook-seed';
 
 interface Row {
   id: string | number;
@@ -85,13 +88,50 @@ const toCard = (
  * vote no longer refreshes "updated", the toggle writes an audit row too, and search escapes `%` and `_`.
  */
 @Injectable()
-export class GuidebookService {
+export class GuidebookService implements OnApplicationBootstrap {
+  private readonly logger = new Logger(GuidebookService.name);
+  private readonly brand: string;
+
   constructor(
     private readonly db: DatabaseService,
     private readonly store: CmsStore,
     private readonly audit: AuthAuditService,
     private readonly html: HtmlSanitizerService,
-  ) {}
+    config: ConfigService<Env, true>,
+  ) {
+    this.brand = config.get('APP_NAME', { infer: true });
+  }
+
+  async onApplicationBootstrap(): Promise<void> {
+    try {
+      await this.seed();
+    } catch (err) {
+      // An unreachable database must not stop the API starting; the help centre is simply empty until the next boot.
+      this.logger.warn({ err }, 'could not seed the guidebook');
+    }
+  }
+
+  /**
+   * The starter articles (WD-CMS-050), only into an empty help centre: an article an operator edited or deleted is never
+   * put back. `ON CONFLICT DO NOTHING` keeps two instances booting together from colliding. Returns how many were added.
+   */
+  async seed(): Promise<number> {
+    return this.store.tx(async (tx) => {
+      const existing = await tx.execute(sql`SELECT 1 FROM guidebook_articles LIMIT 1`);
+      if (existing.rows.length > 0) return 0;
+      let created = 0;
+      for (const [i, a] of GUIDEBOOK_SEED.entries()) {
+        const res = await tx.execute(sql`
+          INSERT INTO guidebook_articles (slug, title, category, excerpt, body, is_published, sort_order, published_at)
+          VALUES (${slugify(a.title, fallbackArticleSlug())}, ${a.title}, ${a.category}, ${a.excerpt.replaceAll('{{app}}', this.brand)},
+                  ${a.body.replaceAll('{{app}}', this.brand)}, true, ${i}, now())
+          ON CONFLICT (slug) DO NOTHING
+          RETURNING 1`);
+        created += res.rows.length;
+      }
+      return created;
+    });
+  }
 
   // --- operator -------------------------------------------------------------------------------------------------------
 

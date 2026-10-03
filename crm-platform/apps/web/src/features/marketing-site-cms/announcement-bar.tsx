@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -53,7 +53,13 @@ export function AnnouncementBar() {
   return (
     <div data-testid="announcement-bars">
       {groups.map((g) => (
-        <Bar key={g.tone} tone={g.tone} items={g.items} closeLabel={t('dismiss')} region={t('region')} />
+        <Bar
+          key={g.tone}
+          tone={g.tone}
+          items={g.items}
+          closeLabel={t('dismiss')}
+          region={t('region')}
+        />
       ))}
     </div>
   );
@@ -71,9 +77,17 @@ function Bar({
   region: string;
 }) {
   const key = storageKey(items.map((i) => i.id));
-  const [dismissed, setDismissed] = useState(false);
-  useEffect(() => setDismissed(read(key)), [key]);
-  if (dismissed) return null;
+  const [closed, setClosed] = useState(false);
+  // Read from storage after hydration (the server never knows), without an effect that sets state.
+  const stored = useSyncExternalStore(
+    (notify) => {
+      window.addEventListener('storage', notify);
+      return () => window.removeEventListener('storage', notify);
+    },
+    () => read(key),
+    () => false,
+  );
+  if (closed || stored) return null;
   const style = TONE_STYLE[tone];
   const chars = items.reduce((n, i) => n + i.text.length + (i.linkLabel?.length ?? 0), 0);
   const seconds = Math.max(20, Math.round(chars / 5));
@@ -117,7 +131,7 @@ function Bar({
             } catch {
               // storage blocked: the bar simply returns on the next visit
             }
-            setDismissed(true);
+            setClosed(true);
           }}
         >
           ×
