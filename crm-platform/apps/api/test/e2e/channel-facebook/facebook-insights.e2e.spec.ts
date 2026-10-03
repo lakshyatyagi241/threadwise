@@ -69,19 +69,33 @@ async function connectPage(
 }
 type Page = Awaited<ReturnType<typeof connectPage>>;
 
-async function thread(t: Tenant, jid: string, inboxStatus: string | null) {
+/** A Messenger thread: it lives on its Page's `facebook` channel, keyed by the thread key (`fb:<page>:...`). */
+async function thread(t: Tenant, jid: string, status: string) {
+  const pageId = jid.split(':')[1]!;
+  const ch = await h.owner.query(
+    `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1, 'facebook', $2, 'connected', $3)
+     ON CONFLICT (org_id, kind, external_id) DO UPDATE SET name = EXCLUDED.name RETURNING id`,
+    [t.orgId, `Page ${pageId}`, pageId],
+  );
   const r = await h.owner.query(
-    `INSERT INTO conversations (org_id, title, channel, provider, origin, status, inbox_status, raw_jid)
-     VALUES ($1, 'T', 'facebook', 'facebook', 'facebook', 'pending', $2, $3) RETURNING id`,
-    [t.orgId, inboxStatus, jid],
+    `INSERT INTO conversations (org_id, channel_id, peer_key, title, status) VALUES ($1, $2, $3, 'T', $4) RETURNING id`,
+    [t.orgId, ch.rows[0].id, jid, status],
   );
   return Number(r.rows[0].id);
 }
 async function message(t: Tenant, conv: number, direction: 'in' | 'out', daysAgo: number) {
   await h.owner.query(
-    `INSERT INTO messages (org_id, conversation_id, direction, body, status, provider, created_at)
-     VALUES ($1, $2, $3, 'x', 'sent', 'facebook', now() - ($4 || ' days')::interval)`,
-    [t.orgId, conv, direction, String(daysAgo)],
+    `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, body, status, created_at)
+     VALUES ($1, $2, (SELECT coalesce(max(seq), 0) + 1 FROM messages WHERE org_id = $1 AND conversation_id = $2),
+             $3, $4, 'x', $5, now() - ($6 || ' days')::interval)`,
+    [
+      t.orgId,
+      conv,
+      direction,
+      direction === 'in' ? 'customer' : 'agent',
+      direction === 'in' ? 'received' : 'sent',
+      String(daysAgo),
+    ],
   );
 }
 async function post(

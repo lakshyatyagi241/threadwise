@@ -47,11 +47,11 @@ export class TelegramSenderService {
   ) {}
 
   async reply(orgId: number, r: ThreadReply): Promise<Outcome> {
-    // The bot that carried the thread must still be there and switched on.
+    // The bot that carried the thread must still be connected.
     const bot: BotRow | undefined = await this.db.txAs({ orgId }, (tx) =>
       this.repo.findById(tx, orgId, r.botRowId),
     );
-    if (!bot?.active) return failed(BOT_NOT_CONNECTED);
+    if (!bot) return failed(BOT_NOT_CONNECTED);
 
     let text = r.text;
     let markup: object | null = null;

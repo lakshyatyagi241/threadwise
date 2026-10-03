@@ -98,6 +98,22 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
     const account = accountOf(n);
     const providerMessageId = messageIdOf(n);
 
+    // Seen already (the push and the pull both deliver it, and our own send comes back): nothing is stored. A row stored before its
+    // buttons were known, or one of our own sends, shows as plain text; the card is added to it.
+    const prior = await this.db.txAs({ orgId }, (tx) =>
+      this.ledgerEntry(tx, orgId, providerMessageId),
+    );
+    if (prior) {
+      if (n.buttons) await this.graftButtons(orgId, prior, n.buttons);
+      return {
+        stored: false,
+        conversationId: prior.conversationId,
+        messageId: prior.messageId,
+        contactId: null,
+        newThread: false,
+      };
+    }
+
     let conversationUuid: string;
     let stored: boolean;
     let newThread = false;
@@ -105,7 +121,7 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
       const message: NormalisedInbound = {
         providerMessageId,
         peerKey: n.rawJid,
-        ...(n.resolvedHuman ? { peerName: n.title } : {}),
+        peerName: n.title,
         kind: n.mediaUrl ? 'media' : 'text',
         ...(n.text !== '' ? { body: n.text } : {}),
         ...(n.mediaUrl
@@ -152,6 +168,7 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
         | undefined;
       if (!conv) return { stored, conversationId: 0, messageId: null, contactId: null, newThread };
       const conversationId = Number(conv.id);
+      const messageId = (await this.ledgerEntry(tx, orgId, providerMessageId))?.messageId ?? null;
 
       // The first message often carries only the sender's numeric id. A real name replaces that placeholder, never a title an
       // operator typed.
@@ -179,8 +196,44 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
           );
         }
       }
-      return { stored, conversationId, messageId: null, contactId, newThread };
+      return { stored, conversationId, messageId, contactId, newThread };
     });
+  }
+
+  /** The ledger entry of an engine message id: the authority on whether it was stored (the key is unique per channel). */
+  private async ledgerEntry(
+    tx: Tx,
+    orgId: number,
+    key: string,
+  ): Promise<{ messageId: number; createdAt: string; conversationId: number } | null> {
+    const res = await tx.execute(sql`
+      SELECT l.message_id, l.message_created_at::text AS created_at, l.conversation_id
+      FROM message_ledger l JOIN channels ch ON ch.org_id = l.org_id AND ch.id = l.channel_id
+      WHERE l.org_id = ${orgId} AND ch.kind = ${INSTAGRAM_KIND} AND l.kind = 'provider_id' AND l.key = ${key}
+      LIMIT 1`);
+    const r = res.rows[0] as
+      | { message_id: number | string; created_at: string; conversation_id: number | string }
+      | undefined;
+    return r
+      ? {
+          messageId: Number(r.message_id),
+          createdAt: r.created_at,
+          conversationId: Number(r.conversation_id),
+        }
+      : null;
+  }
+
+  private async graftButtons(
+    orgId: number,
+    entry: { messageId: number; createdAt: string },
+    buttons: unknown,
+  ): Promise<void> {
+    await this.db.txAs({ orgId }, (tx) =>
+      tx.execute(sql`
+        UPDATE messages SET meta = meta || ${JSON.stringify({ buttons })}::jsonb
+        WHERE org_id = ${orgId} AND id = ${entry.messageId} AND created_at = ${entry.createdAt}::timestamptz
+          AND coalesce(jsonb_array_length(CASE WHEN jsonb_typeof(meta -> 'buttons') = 'array' THEN meta -> 'buttons' END), 0) = 0`),
+    );
   }
 
   async threadClock(tx: Tx, orgId: number): Promise<Map<string, Date | null>> {
@@ -277,9 +330,10 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
       this.conversations.recordOutbound({
         channelId: row.channel_uuid,
         peerKey: row.peer_key,
-        source: 'instagram',
+        source: 'broadcast',
         body: m.body,
         ...(m.providerMessageId ? { providerMessageId: m.providerMessageId } : {}),
+        senderUserId: m.userId,
       }),
     );
   }

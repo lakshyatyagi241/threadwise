@@ -46,7 +46,7 @@ export interface InboundRecorded {
   stored: boolean;
   /** `conversations.id`, 0 when nothing was stored. */
   conversationId: number;
-  /** Always null: the inbox does not create a contact for a Messenger sender (it has no phone or email to match on). */
+  /** The lead made for a DM sender (keyed by the Messenger id); null for a comment. */
   contactId: number | null;
   newThread: boolean;
 }
