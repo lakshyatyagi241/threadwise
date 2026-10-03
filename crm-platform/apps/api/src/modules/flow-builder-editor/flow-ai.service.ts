@@ -39,7 +39,7 @@ export class FlowAiService {
     if (!apiKey) {
       throw new AppError(
         ERROR_CODES.FLB_AI_NO_KEY,
-        'No API key is available for this provider. Pick another provider, add your own key in AI keys, or ask your admin to enable it.',
+        'Admin has not enabled this provider in /admin/api-keys. Pick another provider or contact your admin.',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
