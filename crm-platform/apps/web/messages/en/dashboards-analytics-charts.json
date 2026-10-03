@@ -207,6 +207,207 @@
         "noDisk": "Not available"
       },
       "error": "The health checks could not be loaded. Try again in a moment."
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Analytics"
+      },
+      "window": {
+        "label": "Time window",
+        "24h": "Last 24 hours",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days",
+        "1y": "Last year"
+      },
+      "error": "The platform numbers could not be loaded.",
+      "retry": "Try again",
+      "vsPrevious": "vs previous period",
+      "overview": {
+        "title": "Admin dashboard.",
+        "kicker": "Admin / Overview",
+        "subtitle": "Revenue, signups and workspace health across the whole platform.",
+        "addWorkspace": "Add workspace",
+        "kpi": {
+          "income": "Total income",
+          "profit": "Profit",
+          "profitHint": "Estimate at a 32% margin, not an accounting figure",
+          "views": "Total views",
+          "viewsHint": "Messages sent by every workspace",
+          "conversion": "Conversion rate"
+        },
+        "revenue": {
+          "title": "Revenue over time",
+          "total": "Total revenue",
+          "target": "Total target",
+          "targetHint": "The target is a growth benchmark of 10% over the previous period, not a stored goal.",
+          "revenue": "Revenue",
+          "aria": "Revenue per period against the target"
+        },
+        "countries": {
+          "title": "Session by country",
+          "subtitle": "New users by country in the window",
+          "empty": "No country data yet - users haven't shared their region."
+        },
+        "regions": {
+          "title": "Sales by region",
+          "subtitle": "New users by region",
+          "aria": "New users per region"
+        },
+        "platform": {
+          "title": "Sales by platform",
+          "subtitle": "Paid revenue by payment gateway",
+          "empty": "No paid orders in this window.",
+          "aria": "Paid revenue by payment gateway"
+        },
+        "users": {
+          "title": "Registered users",
+          "subtitle": "Overview of user seats",
+          "total": "Total users",
+          "premium": "Premium plan",
+          "basic": "Basic plan",
+          "aria": "{pct}% of users are on a paid plan"
+        },
+        "workspaces": {
+          "title": "Workspace activity",
+          "subtitle": "Most recently active workspaces",
+          "viewAll": "View all",
+          "empty": "No workspaces yet.",
+          "col": {
+            "workspace": "Workspace",
+            "owner": "Owner",
+            "plan": "Plan",
+            "messages": "Messages",
+            "health": "Health",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "Good",
+            "active": "Active",
+            "low": "Low",
+            "idle": "Idle"
+          }
+        },
+        "alerts": {
+          "title": "Admin alerts",
+          "subtitle": "Priority queue",
+          "open": "{n} open",
+          "empty": "All systems healthy - no alerts."
+        }
+      },
+      "analytics": {
+        "title": "Admin analytics.",
+        "kicker": "Admin / Analytics",
+        "subtitle": "Growth, revenue, usage and support load across the platform.",
+        "days": {
+          "7": "Last 7 days",
+          "30": "Last 30 days",
+          "90": "Last 90 days",
+          "365": "This year",
+          "custom": "Last {n} days"
+        },
+        "daysLabel": "Days",
+        "export": "Export",
+        "tabs": {
+          "overview": "Overview",
+          "revenue": "Revenue",
+          "usage": "Usage",
+          "workspaces": "Workspaces",
+          "campaigns": "Campaigns",
+          "support": "Support"
+        },
+        "kpi": {
+          "revenue": "Revenue",
+          "revenueSub": "{n, plural, one {# new workspace} other {# new workspaces}}",
+          "workspaces": "Workspaces",
+          "workspacesSub": "{n, plural, one {# total user} other {# total users}}",
+          "messages": "Messages",
+          "messagesSub": "{n} / day avg",
+          "devices": "Devices online",
+          "newUsers": "New users",
+          "newUsersSub": "{n} total",
+          "tickets": "Open tickets",
+          "watch": "watch",
+          "clear": "clear"
+        },
+        "pulse": {
+          "title": "Platform pulse",
+          "subtitle": "Live saturation of the control room",
+          "workspaces": "Workspaces",
+          "devices": "Devices connected",
+          "tickets": "Open tickets",
+          "signups": "New signups",
+          "normal": "normal"
+        },
+        "growth": {
+          "title": "Growth command center",
+          "subtitle": "User signups, last {days} days",
+          "aria": "Signups per day",
+          "series": "Signups"
+        },
+        "plans": {
+          "title": "Plan distribution",
+          "subtitle": "Workspaces by plan",
+          "empty": "No data yet - plan distribution shows once at least one workspace has been assigned a plan.",
+          "aria": "Workspaces by plan"
+        },
+        "acquisition": {
+          "title": "Acquisition",
+          "subtitle": "Users to workspace",
+          "users": "Total users",
+          "newUsers": "New users",
+          "workspaces": "Workspaces created",
+          "newWorkspaces": "New workspaces",
+          "devices": "Devices connected"
+        },
+        "devices": {
+          "title": "Top devices - 24h",
+          "subtitle": "Send volume",
+          "empty": "No sends yet",
+          "devices": "Devices",
+          "online": "Online",
+          "sends": "24h sends",
+          "aria": "Sends in the last 24 hours per device"
+        },
+        "leaderboard": {
+          "title": "Top workspaces by paid revenue",
+          "subtitle": "Last {days} days",
+          "workspace": "Workspace",
+          "orders": "Orders",
+          "revenue": "Paid revenue",
+          "open": "Open",
+          "empty": "No paid orders in this window."
+        },
+        "cohort": {
+          "title": "Signup cohorts",
+          "subtitle": "Recent {days} days",
+          "aria": "Daily signups"
+        },
+        "composition": {
+          "title": "Revenue composition",
+          "subtitle": "Top contributors",
+          "empty": "No paid revenue yet."
+        },
+        "support": {
+          "title": "Support load",
+          "subtitle": "Tickets state",
+          "empty": "No tickets yet.",
+          "open": "Open",
+          "resolved": "Resolved",
+          "inbox": "Open inbox"
+        },
+        "queue": {
+          "title": "Admin attention",
+          "subtitle": "Action queue",
+          "tickets": "{n, plural, one {# open ticket} other {# open tickets}}",
+          "ticketsHint": "Triage in support before SLA breach",
+          "offline": "{n, plural, one {# device offline} other {# devices offline}}",
+          "offlineHint": "Fewer than half of the devices are online",
+          "users": "{n, plural, one {# new user} other {# new users}}",
+          "usersHint": "Review the latest signups",
+          "clear": "All clear"
+        }
+      }
     }
   }
 }
