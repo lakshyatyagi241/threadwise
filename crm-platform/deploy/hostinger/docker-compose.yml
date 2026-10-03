@@ -156,6 +156,9 @@ services:
     command: ['node', 'dist/src/worker.js']
     restart: unless-stopped
     mem_limit: 1g
+    # The image's HEALTHCHECK probes the API's HTTP port; the worker serves none.
+    healthcheck:
+      disable: true
     environment:
       <<: *api-env
       WORKER_MODE: 'true'
