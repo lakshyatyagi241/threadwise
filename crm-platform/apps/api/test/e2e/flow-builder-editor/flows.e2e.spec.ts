@@ -185,10 +185,16 @@ describe('permissions and tenant isolation (WD-FLB-028)', () => {
       (await api.as(creator.token).patch(`/v2/flows/${f.id}/rename`).send({ name: 'z' })).status,
     ).toBe(403);
     expect(
-      (await api.as(creator.token).post('/v2/flows/test-webhook').send({ url: '' })).status,
+      (
+        await api
+          .as(creator.token)
+          .post('/v2/flows/test-webhook')
+          .send({ url: 'http://127.0.0.1/' })
+      ).status,
     ).toBe(403);
     expect(
-      (await api.as(editor.token).post('/v2/flows/test-webhook').send({ url: '' })).status,
+      (await api.as(editor.token).post('/v2/flows/test-webhook').send({ url: 'http://127.0.0.1/' }))
+        .status,
     ).toBe(200);
   });
 
