@@ -170,6 +170,18 @@ export interface WabaAdminPort {
   ): Promise<void>;
   /** Which apps a WABA is subscribed to and where each delivers (WD-WABA-015). */
   getSubscriptionDetails(conn: WabaConnection): Promise<SubscriptionDetail[]>;
+  /**
+   * Button clicks Meta counted for these templates in the window (unix seconds), summed over every day and button (WD-WABA-053).
+   * Meta sends no click webhook, so this is the only source.
+   */
+  getTemplateClicks(
+    conn: WabaConnection,
+    templateIds: string[],
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<number>;
+  /** Turns template insights on for the WABA; Meta answers an analytics call with an error until it is. */
+  enableTemplateInsights(conn: WabaConnection): Promise<void>;
   /** Conversation analytics rows for the window (unix seconds), by conversation type; the free-allowance card (WD-WABA-023). */
   getConversationAnalytics(
     conn: WabaConnection,
