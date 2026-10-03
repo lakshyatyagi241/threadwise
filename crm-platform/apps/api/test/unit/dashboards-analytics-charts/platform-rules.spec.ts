@@ -3,6 +3,7 @@ import { monthlyOf } from '../../../src/modules/dashboards-analytics-charts/plat
 import {
   Fx,
   changePct,
+  countryOfPhone,
   countryRows,
   dateSpine,
   healthOf,
@@ -148,5 +149,16 @@ describe('country panels (TW-DASH-037)', () => {
       pct: '100.0',
     });
     expect(countryRows(new Map())).toEqual([]);
+  });
+});
+
+describe('countryOfPhone (TW-DASH-029)', () => {
+  it('takes the longest known dial prefix and refuses numbers that are too short or unknown', () => {
+    expect(countryOfPhone('919876543210')).toBe('IN');
+    expect(countryOfPhone('14155550100')).toBe('US');
+    expect(countryOfPhone('447700900123')).toBe('GB');
+    expect(countryOfPhone('2348012345678')).toBe('NG'); // three-digit prefix wins over nothing
+    expect(countryOfPhone('999999999')).toBeNull();
+    expect(countryOfPhone('9112')).toBeNull();
   });
 });

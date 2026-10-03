@@ -368,6 +368,20 @@
             "resolution": "Avg resolution",
             "csat": "CSAT"
           }
+        },
+        "geo": {
+          "title": "By country",
+          "subtitle": "Reach",
+          "markets": "{n, plural, one {# market} other {# markets}}",
+          "unspecified": "Unspecified",
+          "empty": "No conversations with a known country in this window."
+        },
+        "events": {
+          "title": "Event stream",
+          "subtitle": "Newest messages in this window",
+          "sent": "Sent → {peer}",
+          "received": "Received from {peer}",
+          "empty": "No recent activity in this window."
         }
       }
     },

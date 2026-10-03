@@ -135,7 +135,7 @@ export function regionCounts(
 }
 
 /** Dial prefixes of the countries the radar knows, so a signup that stored "91" instead of "IN" still lands (Reference stored the prefix). */
-const DIAL_TO_ISO: Record<string, string> = {
+export const DIAL_TO_ISO: Record<string, string> = {
   '1': 'US',
   '7': 'RU',
   '20': 'EG',
@@ -209,4 +209,13 @@ export function countryRows(
     count,
     pct: sum > 0 ? ((count / sum) * 100).toFixed(1) : '0.0',
   }));
+}
+
+/** TW-DASH-029: the country of a phone number by its longest known dial prefix (1 to 3 digits); null when none matches. */
+export function countryOfPhone(digits: string): string | null {
+  for (const n of [3, 2, 1]) {
+    const iso = DIAL_TO_ISO[digits.slice(0, n)];
+    if (iso && digits.length >= n + 4) return iso;
+  }
+  return null;
 }
