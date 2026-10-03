@@ -57,10 +57,23 @@ export const healthThroughputPointSchema = z.object({
   count: z.number().int().nonnegative(),
 });
 
+/** WD-DASH-050: one WhatsApp engine's numbers across every workspace (unofficial devices, WABA, Twilio). */
+export const healthEngineSchema = z.object({
+  key: z.enum(['baileys', 'waba', 'twilio']),
+  label: z.string(),
+  connected: z.number().int().nonnegative(),
+  total: z.number().int().nonnegative(),
+  /** idle with no numbers, up with a connected one, else down. Never affects the overall banner. */
+  state: z.enum(['up', 'down', 'idle']),
+  breakdown: z.array(z.object({ status: z.string(), count: z.number().int().nonnegative() })),
+});
+export type HealthEngine = z.infer<typeof healthEngineSchema>;
+
 export const healthResponseSchema = z.object({
   overall: z.enum(['up', 'warn', 'down']),
   checks: z.array(healthCheckSchema),
   queues: z.array(healthQueueRowSchema),
+  engines: z.array(healthEngineSchema),
   vitals: healthVitalsSchema,
   activity: healthActivitySchema,
   throughput: z.array(healthThroughputPointSchema),

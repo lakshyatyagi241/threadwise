@@ -10,6 +10,8 @@ import {
   healthOf,
   money2,
   overviewWindow,
+  countryRows,
+  isoCountry,
   regionCounts,
   revenueBuckets,
   revenueTargets,
@@ -169,6 +171,22 @@ export class PlatformMetricsService {
             WHERE ws.owner_user_id IS NOT NULL AND NOT p.is_free AND p.amount > 0`,
       );
 
+      // WD-DASH-037: signups in the window by country (the profile's ISO country, or the dial prefix WaDesk stored).
+      const geo = await tx.execute(sql`
+        SELECT us.country, us.country_code, count(*)::int AS n
+        FROM users u JOIN user_settings us ON us.org_id = u.org_id AND us.user_id = u.id
+        WHERE u.created_at >= ${iso(win.from)}::timestamptz AND u.created_at < ${iso(win.to)}::timestamptz
+        GROUP BY us.country, us.country_code`);
+      const byCountry = new Map<string, number>();
+      for (const r of geo.rows as Array<{
+        country: string | null;
+        country_code: string | null;
+        n: number;
+      }>) {
+        const iso2 = isoCountry(r.country, r.country_code);
+        if (iso2) byCountry.set(iso2, (byCountry.get(iso2) ?? 0) + r.n);
+      }
+
       const week = iso(new Date(now.getTime() - 7 * DAY));
       const ws = await tx.execute(sql`
         SELECT o.slug, o.name, u.full_name AS owner, coalesce(p.name, 'Free') AS plan,
@@ -237,9 +255,8 @@ export class PlatformMetricsService {
           total: money2(rounded.reduce((a, b) => a + b, 0)),
           totalTarget: money2(target.reduce((a, b) => a + b, 0)),
         },
-        // ponytail: the users table keeps no country, so the WaDesk panels show their empty state; fill in when signup stores it.
-        countries: [],
-        regions: regionCounts(new Map()),
+        countries: countryRows(byCountry),
+        regions: regionCounts(byCountry),
         gateways,
         users: {
           total,

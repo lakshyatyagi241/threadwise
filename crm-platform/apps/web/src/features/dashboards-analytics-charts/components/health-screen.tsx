@@ -184,6 +184,8 @@ function Health({
         </Card>
       </div>
 
+      <Engines engines={data.engines} />
+
       <Vitals v={data.vitals} />
 
       <QueueTable data={data} />
@@ -202,6 +204,53 @@ function CheckCard({ check }: { check: HealthCheck }) {
       <p className="font-mono text-lg">{check.value}</p>
       <p className="text-xs text-muted-foreground">{check.detail}</p>
     </Card>
+  );
+}
+
+/** WD-DASH-050: one card per WhatsApp engine; the dot never changes the banner. */
+function Engines({ engines }: { engines: HealthResponse['engines'] }) {
+  const t = useTranslations(NS);
+  return (
+    <section aria-label={t('engines.title')} className="space-y-3" data-testid="health-engines">
+      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+        {t('engines.title')}
+      </p>
+      {engines.length === 0 ? (
+        <p className="py-4 text-sm text-muted-foreground">{t('engines.empty')}</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {engines.map((e) => (
+            <Card key={e.key} className="space-y-1" data-testid={`engine-${e.key}`}>
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">{e.label}</p>
+                <span
+                  role="img"
+                  aria-label={t(`state.${e.state}`)}
+                  className={`size-2.5 rounded-full ${DOT[e.state]}`}
+                />
+              </div>
+              <p className="font-serif text-[26px] leading-none">
+                {e.connected}
+                <span className="text-sm text-muted-foreground"> / {e.total}</span>
+              </p>
+              <p className="text-xs text-muted-foreground">{t('engines.caption')}</p>
+              {e.breakdown.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {e.breakdown.map((b) => (
+                    <span
+                      key={b.status}
+                      className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10.5px]"
+                    >
+                      {b.status} {b.count}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </Card>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 

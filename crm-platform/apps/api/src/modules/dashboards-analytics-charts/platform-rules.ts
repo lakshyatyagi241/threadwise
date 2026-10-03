@@ -133,3 +133,80 @@ export function regionCounts(
     count: codes.reduce((a, c) => a + (byCode.get(c) ?? 0), 0),
   }));
 }
+
+/** Dial prefixes of the countries the radar knows, so a signup that stored "91" instead of "IN" still lands (WaDesk stored the prefix). */
+const DIAL_TO_ISO: Record<string, string> = {
+  '1': 'US',
+  '7': 'RU',
+  '20': 'EG',
+  '27': 'ZA',
+  '30': 'GR',
+  '31': 'NL',
+  '33': 'FR',
+  '34': 'ES',
+  '39': 'IT',
+  '41': 'CH',
+  '44': 'GB',
+  '46': 'SE',
+  '47': 'NO',
+  '48': 'PL',
+  '49': 'DE',
+  '52': 'MX',
+  '54': 'AR',
+  '55': 'BR',
+  '56': 'CL',
+  '57': 'CO',
+  '60': 'MY',
+  '61': 'AU',
+  '62': 'ID',
+  '63': 'PH',
+  '64': 'NZ',
+  '65': 'SG',
+  '66': 'TH',
+  '81': 'JP',
+  '82': 'KR',
+  '84': 'VN',
+  '86': 'CN',
+  '90': 'TR',
+  '91': 'IN',
+  '92': 'PK',
+  '94': 'LK',
+  '98': 'IR',
+  '212': 'MA',
+  '233': 'GH',
+  '234': 'NG',
+  '254': 'KE',
+  '880': 'BD',
+  '965': 'KW',
+  '971': 'AE',
+  '972': 'IL',
+  '974': 'QA',
+  '966': 'SA',
+  '679': 'FJ',
+};
+
+/** An ISO alpha-2 code from what a profile stored: the ISO country if it is one, else the dial prefix mapped, else null. */
+export function isoCountry(country: string | null, code: string | null): string | null {
+  for (const v of [country, code]) {
+    const s = (v ?? '').trim().toUpperCase();
+    if (/^[A-Z]{2}$/.test(s)) return s;
+  }
+  const dial = (code ?? '').replace(/\D/g, '');
+  return DIAL_TO_ISO[dial] ?? null;
+}
+
+/** WD-DASH-037: the top four countries by signups; the share is of those four (WaDesk's rule), one decimal. */
+export function countryRows(
+  byCode: ReadonlyMap<string, number>,
+): Array<{ code: string; name: string; count: number; pct: string }> {
+  const top = [...byCode.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, 4);
+  const sum = top.reduce((a, [, n]) => a + n, 0);
+  return top.map(([code, count]) => ({
+    code,
+    name: COUNTRY_NAMES[code] ?? code,
+    count,
+    pct: sum > 0 ? ((count / sum) * 100).toFixed(1) : '0.0',
+  }));
+}

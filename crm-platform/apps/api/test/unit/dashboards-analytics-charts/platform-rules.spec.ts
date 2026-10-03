@@ -3,8 +3,10 @@ import { monthlyOf } from '../../../src/modules/dashboards-analytics-charts/plat
 import {
   Fx,
   changePct,
+  countryRows,
   dateSpine,
   healthOf,
+  isoCountry,
   overviewWindow,
   regionCounts,
   revenueBuckets,
@@ -112,5 +114,39 @@ describe('admin overview rules (WD-DASH-034..040)', () => {
     expect(monthlyOf({ ...p, amount: '29', offer_amount: '19', billing_unit: 'months' })).toBe(19);
     expect(monthlyOf({ ...p, is_free: true })).toBe(0);
     expect(monthlyOf({ ...p, amount: null })).toBe(0);
+  });
+});
+
+describe('country panels (WD-DASH-037)', () => {
+  it('takes an ISO country, else maps the dial prefix, else drops the profile', () => {
+    expect(isoCountry('in', null)).toBe('IN');
+    expect(isoCountry(null, 'DE')).toBe('DE');
+    expect(isoCountry(null, '+91')).toBe('IN');
+    expect(isoCountry('', '44')).toBe('GB');
+    expect(isoCountry(null, '999')).toBeNull();
+    expect(isoCountry(null, null)).toBeNull();
+  });
+
+  it('lists the top four; the share is of the four, one decimal; an unknown code keeps its code as the name', () => {
+    const rows = countryRows(
+      new Map([
+        ['IN', 5],
+        ['US', 3],
+        ['DE', 1],
+        ['GB', 1],
+        ['FR', 1],
+        ['ZA', 1],
+      ]),
+    );
+    expect(rows.map((r) => r.pct)).toEqual(['50.0', '30.0', '10.0', '10.0']);
+    // equal counts rank by code, so the cut falls between FR and GB
+    expect(rows.map((r) => r.code)).toEqual(['IN', 'US', 'DE', 'FR']);
+    expect(countryRows(new Map([['FR', 2]]))[0]).toEqual({
+      code: 'FR',
+      name: 'FR',
+      count: 2,
+      pct: '100.0',
+    });
+    expect(countryRows(new Map())).toEqual([]);
   });
 });
