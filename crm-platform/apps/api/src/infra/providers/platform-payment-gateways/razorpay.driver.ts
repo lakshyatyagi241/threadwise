@@ -14,7 +14,9 @@ import {
   type DriverOrder,
   type DriverUrls,
   type PaymentDriver,
+  type CancelResult,
   type PaymentResult,
+  type SubscriptionRef,
   type WebhookPayment,
 } from './payment-driver';
 
@@ -129,5 +131,20 @@ export class RazorpayDriver implements PaymentDriver {
       currency: str(payment.currency)?.toUpperCase(),
       payload: { razorpay_payment: payment },
     };
+  }
+
+  /** Razorpay: `cancel_at_cycle_end: 1` keeps the cycle already paid and stops the next charge. */
+  async cancelSubscription(ref: SubscriptionRef): Promise<CancelResult> {
+    if (!this.ctx.credentials.key_id || !this.ctx.credentials.key_secret)
+      return { ok: false, reason: 'razorpay_credentials_missing' };
+    try {
+      const res = await this.ctx.http(
+        `${API}/subscriptions/${encodeURIComponent(ref.gatewaySubscriptionId)}/cancel`,
+        { method: 'POST', headers: this.auth, body: JSON.stringify({ cancel_at_cycle_end: 1 }) },
+      );
+      return isOk(res) ? { ok: true } : { ok: false, reason: `razorpay_http_${res.status}` };
+    } catch (e) {
+      return { ok: false, reason: `razorpay_exception: ${brief(e)}` };
+    }
   }
 }

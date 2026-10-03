@@ -244,8 +244,8 @@ export class ResellerPlatformReader {
         FROM usage_charges
         WHERE created_at >= ${opts.from.toISOString()}::timestamptz AND created_at < ${opts.to.toISOString()}::timestamptz
       `);
-      // ponytail: wallets.balance is read as a major-unit amount in the base currency (the schema port's decision for the
-      // WaDesk `wallet_currency_minor` column). Confirm against WALLET when its engine lands.
+      // wallets.balance is a major-unit amount in the wallet's currency (one wallet per workspace, unit = the platform
+      // currency): confirmed against the WALLET engine (wallet-message-billing, WD-WALLET-001).
       const float = await tx.execute(sql`
         SELECT round(COALESCE(sum(balance), 0), ${exponent}::int)::text AS float FROM wallets WHERE unit = ${opts.currency}
       `);

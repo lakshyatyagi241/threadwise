@@ -30,7 +30,7 @@ export class WidgetsController {
   @ApiOperation({
     summary: 'List widgets (newest first) with the workspace stat numbers',
     description:
-      'Cursor pages of 20 by default, `status` filters by active or paused. `stats` ignores the filter. `planLocked` is true ' +
+      'Cursor pages of 20 by default. `planLocked` is true ' +
       'when the plan lacks the feature: reads still work, every change is refused with 422 PLAN_FEATURE_LOCKED.',
   })
   list(@Query() query: unknown) {
@@ -70,19 +70,10 @@ export class WidgetsController {
   @ApiOperation({
     summary: 'Save a widget (the whole form plus the row version it was read at)',
     description:
-      'A stale `rowVersion` is refused with 409 ROW_VERSION_CONFLICT. An unknown id is 404, never a new widget.',
+      'A stale `rowVersion` is refused with 409 ROW_VERSION_CONFLICT. QUIRK reproduced from WaDesk: an id that is not in this workspace creates a NEW widget instead of failing.',
   })
   update(@Param('id', ParseUUIDPipe) id: string, @Body() body: unknown) {
     return this.widgets.update(id, body);
-  }
-
-  @Patch(':id/status')
-  @RequirePermission('wgt.widgets.update')
-  @ApiOperation({
-    summary: 'Pause or resume a widget; a paused widget stops loading on the sites that embed it',
-  })
-  setStatus(@Param('id', ParseUUIDPipe) id: string, @Body() body: unknown) {
-    return this.widgets.setStatus(id, body);
   }
 
   @Post(':id/duplicate')

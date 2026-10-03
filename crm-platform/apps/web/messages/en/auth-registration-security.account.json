@@ -519,6 +519,7 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Sales pipeline",
             "appointment_booking": "Appointments",
+            "chatbot_widgets": "Chatbot widgets",
             "inbox_sla": "Inbox SLA",
             "inbox_routing": "Inbox routing",
             "inbox_kanban": "Inbox Kanban",

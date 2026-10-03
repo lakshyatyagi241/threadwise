@@ -50,6 +50,8 @@ export const REALTIME_EVENT = {
   assignment: 'inbox.assignment',
   typing: 'inbox.typing',
   presence: 'inbox.presence',
+  /** The workspace wallet's balance moved (a message charge, a refund, a top-up, an adjustment). */
+  walletUpdated: 'wallet.updated',
 } as const;
 
 const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
@@ -92,6 +94,11 @@ export const realtimeEventSchemas = {
   [REALTIME_EVENT.presence]: z.object({
     userId: uuidSchema,
     state: z.enum(['online', 'away', 'busy', 'offline']),
+  }),
+  /** A signal with the new figure; the client may also refetch `/wallet/summary` for the rest. Hundredths of the wallet currency. */
+  [REALTIME_EVENT.walletUpdated]: z.object({
+    balanceMinor: z.number().int(),
+    reason: z.enum(['charge', 'refund', 'topup', 'adjustment']),
   }),
 } as const;
 

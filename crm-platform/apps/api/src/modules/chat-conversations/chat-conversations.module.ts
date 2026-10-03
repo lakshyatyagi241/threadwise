@@ -20,6 +20,7 @@ import { MessageDispatchService } from './message-dispatch.service';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository } from './messages.repository';
 import { OutboundService } from './outbound.service';
+import { DeliveryReporter } from './delivery-reporter';
 import { ReceiptsService } from './receipts.service';
 import { ChannelsController } from './channels.controller';
 import { ChannelsFacade } from './channels.facade';
@@ -64,6 +65,7 @@ import { SimulatorService } from './simulator.service';
     MessageViewService,
     InboundIngestService,
     ReceiptsService,
+    DeliveryReporter,
     OutboundService,
     MessageDispatchService,
     ConversationsService,

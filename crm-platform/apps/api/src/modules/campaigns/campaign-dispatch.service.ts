@@ -529,6 +529,17 @@ export class CampaignDispatchService {
         await this.events.contactStatus(t, c.id, c.uuid, c.name, r.contactId, 'sent', {
           providerMessageId,
         });
+        // The unofficial engine cannot report delivery, so its send is what the wallet charges on.
+        await this.events.deliveryReported(
+          t,
+          orgId,
+          c.id,
+          r.contactId,
+          'pending',
+          'sent',
+          providerMessageId,
+          o.sender.engine,
+        );
       });
       // After the send is recorded, and never failing it: the inbox bubble is best effort.
       await this.mirror.mirror(orgId, c.id, r.contactId, 'sent', providerMessageId);

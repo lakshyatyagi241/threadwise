@@ -236,9 +236,13 @@ describe('WD-TG-007: manage a bot', () => {
   it('disconnect deletes the Telegram webhook and the bot, and leaves its threads', async () => {
     const t = await api.signup('tg9');
     const bot = (await connect(t, token(1001001))).body;
+    const channel = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1,'telegram','Bot','connected',$2) RETURNING id`,
+      [t.orgId, String(bot.id)],
+    );
     const conv = await h.owner.query(
-      `INSERT INTO conversations (org_id, title, channel, raw_jid) VALUES ($1,'Asha','telegram','tg:1:5') RETURNING id`,
-      [t.orgId],
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1,$2,'5','Asha') RETURNING id`,
+      [t.orgId, channel.rows[0].id],
     );
     calls.length = 0;
     const res = await api

@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
-import { CAMPAIGN_BILLING, type CampaignBilling } from './_shims/tokens';
 import { CampaignEvents, asSystem } from './campaign-events';
 import { CampaignMirrorService } from './campaign-mirror.service';
 import { CampaignsRepository } from './campaigns.repository';
@@ -24,7 +23,6 @@ export class CampaignCallbacksService {
     private readonly repo: CampaignsRepository,
     private readonly events: CampaignEvents,
     private readonly mirror: CampaignMirrorService,
-    @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
   ) {}
 
   /** A transaction for one tenant, run as the system: a report has no user, and the outbox takes its tenant from the context. */
@@ -90,24 +88,22 @@ export class CampaignCallbacksService {
         deliveredAt: input.deliveredAt,
         readAt: input.readAt,
       });
+      // The wallet hears of a real step forward only (the bridge may repeat or reorder its reports); the message must have an id.
+      await this.events.deliveryReported(
+        tx,
+        orgId,
+        at.id,
+        contactId,
+        row.status,
+        input.status,
+        input.providerMessageId ?? (await this.repo.providerMessageOf(tx, orgId, row.id)),
+      );
       const c = await this.repo.findById(tx, orgId, at.id);
       if (c) {
         await this.events.contactStatus(tx, at.id, c.uuid, c.name, contactId, input.status, {
           providerMessageId: input.providerMessageId,
           error: input.errorMessage,
         });
-      }
-      // Billing: charge on delivery, refund on failure, idempotent per message id.
-      if (input.providerMessageId) {
-        if (['sent', 'delivered', 'read'].includes(input.status)) {
-          await this.billing.settleDelivered(
-            orgId,
-            input.providerMessageId,
-            await this.repo.contactPhone(tx, orgId, contactId),
-          );
-        } else if (input.status === 'failed') {
-          await this.billing.settleFailed(orgId, input.providerMessageId);
-        }
       }
       await this.repo.recount(tx, orgId, at.id);
       return { contactId };

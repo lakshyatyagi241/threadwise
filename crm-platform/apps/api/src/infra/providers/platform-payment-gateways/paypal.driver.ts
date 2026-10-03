@@ -12,7 +12,9 @@ import {
   type DriverOrder,
   type DriverUrls,
   type PaymentDriver,
+  type CancelResult,
   type PaymentResult,
+  type SubscriptionRef,
   type WebhookPayment,
 } from './payment-driver';
 import { majorToMinor } from '@crm/contracts';
@@ -176,5 +178,21 @@ export class PayPalDriver implements PaymentDriver {
       currency,
       payload: { paypal_capture: cap },
     };
+  }
+
+  /** PayPal: cancelling a billing subscription ends renewal; the buyer keeps what they paid for. */
+  async cancelSubscription(ref: SubscriptionRef): Promise<CancelResult> {
+    if (!this.ctx.credentials.client_id || !this.ctx.credentials.client_secret)
+      return { ok: false, reason: 'paypal_credentials_missing' };
+    try {
+      const res = await this.api(
+        'POST',
+        `/v1/billing/subscriptions/${encodeURIComponent(ref.gatewaySubscriptionId)}/cancel`,
+        { reason: 'Customer cancelled auto-renew' },
+      );
+      return isOk(res) ? { ok: true } : { ok: false, reason: `paypal_http_${res.status}` };
+    } catch (e) {
+      return { ok: false, reason: `paypal_exception: ${brief(e)}` };
+    }
   }
 }

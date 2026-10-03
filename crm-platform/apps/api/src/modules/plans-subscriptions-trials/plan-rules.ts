@@ -1,4 +1,5 @@
 import {
+  centsToMoney,
   PLAN_CHIP_MAX,
   PLAN_CHIP_ORDER,
   moneyCents,
@@ -144,18 +145,28 @@ export function classifyPlanAction(
   current: Pick<PlanFacts, 'slug' | 'isFree' | 'isCustomQuote' | 'amount'> | null,
   currentSlug: string | null,
   target: Pick<PlanFacts, 'slug' | 'isFree' | 'isCustomQuote' | 'amount'>,
+  /**
+   * The workspace plans page lets an admin move to a cheaper plan (the owner's rule), so a cheaper paid plan, and any free
+   * plan below a paid current plan, read `downgrade` instead of `downgrade_unavailable`. The onboarding step keeps the
+   * WaDesk rule (default false).
+   */
+  allowDowngrade = false,
 ): PlanAction {
   if (currentSlug !== null && target.slug === currentSlug) return 'current';
   const kind = planKind(target);
   if (kind === 'custom_quote') return 'contact_sales';
-  if (kind === 'free') return 'continue_free';
+  const below = allowDowngrade ? 'downgrade' : 'downgrade_unavailable';
+  const currentKind = current ? planKind(current) : null;
+  if (kind === 'free') {
+    if (!allowDowngrade) return 'continue_free';
+    return currentKind === 'paid' || currentKind === 'custom_quote' ? 'downgrade' : 'choose';
+  }
   if (!current) return 'choose';
-  const currentKind = planKind(current);
-  if (currentKind === 'custom_quote') return 'downgrade_unavailable';
+  if (currentKind === 'custom_quote') return below;
   if (currentKind === 'free') return 'upgrade';
   const diff = moneyCents(target.amount) - moneyCents(current.amount);
   if (diff > 0) return 'upgrade';
-  if (diff < 0) return 'downgrade_unavailable';
+  if (diff < 0) return below;
   return 'choose';
 }
 
@@ -174,6 +185,7 @@ export function buildPlanCard(
   plan: PlanFacts,
   currentSlug: string | null,
   currentPlan: PlanFacts | null,
+  allowDowngrade = false,
 ): PlanCard {
   const kind = planKind(plan);
   const paid = kind === 'paid';
@@ -201,7 +213,7 @@ export function buildPlanCard(
     chips: pickChips(plan.features),
     highlighted: plan.isHighlighted,
     current: currentSlug !== null && plan.slug === currentSlug,
-    action: classifyPlanAction(currentPlan, currentSlug, plan),
+    action: classifyPlanAction(currentPlan, currentSlug, plan, allowDowngrade),
     ctaLabel: plan.ctaLabel,
   };
 }
@@ -232,4 +244,39 @@ export function uniquePlanSlug(base: string, taken: ReadonlySet<string>): string
     const candidate = `${/[a-z]/.test(trimmed) ? trimmed : 'plan'}${suffix}`;
     if (!taken.has(candidate)) return candidate;
   }
+}
+
+// --- yearly pricing (WD-PLAN-011 rule 3) -----------------------------------------------------------------------------------
+
+/** Round-half-up integer division, the same rounding checkout uses, so the card and the order agree to the cent. */
+const divRound = (n: number, d: number): number => Math.floor((n * 2 + d) / (d * 2));
+
+/**
+ * The yearly price of a plan billed once a month: `effective x 12 x (1 - pct/100)`, where effective is the offer when there is one.
+ * Free, lifetime, custom-quote plans and plans on any other period get none (a plan authored in years already is the yearly price).
+ * `perMonth` is the figure the card shows in Yearly mode.
+ */
+export function yearlyOffer(
+  plan: Pick<
+    PlanFacts,
+    | 'isFree'
+    | 'isCustomQuote'
+    | 'isLifetime'
+    | 'amount'
+    | 'offerAmount'
+    | 'billingUnit'
+    | 'billingDuration'
+  >,
+  discountPct: number,
+): { perMonth: string; perYear: string } | null {
+  if (planKind(plan) !== 'paid' || plan.isLifetime) return null;
+  if (plan.billingUnit !== 'months' || plan.billingDuration !== 1) return null;
+  const offer =
+    plan.offerAmount !== null && moneyCents(plan.offerAmount) > 0
+      ? moneyCents(plan.offerAmount)
+      : null;
+  const effective =
+    offer !== null && offer < moneyCents(plan.amount) ? offer : moneyCents(plan.amount);
+  const year = divRound(effective * 12 * (100 - discountPct), 100);
+  return { perMonth: centsToMoney(divRound(year, 12)), perYear: centsToMoney(year) };
 }

@@ -114,9 +114,10 @@ export class TgBroadcastsRepository {
    */
   async chats(tx: Tx, orgId: number, botRowId: number, limit: number): Promise<ChatRow[]> {
     const res = await tx.execute(sql`
-      SELECT c.id, c.title, c.raw_jid, c.last_message_at, c.unread_count,
+      SELECT c.id, c.title, c.peer_key, c.last_message_at, c.unread_count,
              coalesce(s.types, ARRAY[]::text[]) AS types, coalesce(s.any_sender, false) AS any_sender
       FROM conversations c
+      JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
       LEFT JOIN LATERAL (
         SELECT array_agg(m.meta -> 'telegram' ->> 'chat_type' ORDER BY m.id DESC)
                  FILTER (WHERE m.meta -> 'telegram' ->> 'chat_type' IS NOT NULL) AS types,
@@ -127,14 +128,14 @@ export class TgBroadcastsRepository {
           ORDER BY id DESC LIMIT 25
         ) m
       ) s ON true
-      WHERE c.org_id = ${orgId} AND c.channel = 'telegram' AND c.raw_jid LIKE ${`tg:${botRowId}:%`}
+      WHERE c.org_id = ${orgId} AND ch.kind = 'telegram' AND ch.external_id = ${String(botRowId)}
       ORDER BY c.last_message_at DESC NULLS LAST, c.id DESC
       LIMIT ${limit}`);
     return (
       res.rows as unknown as Array<{
         id: number | string;
         title: string | null;
-        raw_jid: string;
+        peer_key: string;
         last_message_at: Date | string | null;
         unread_count: number;
         types: string[];
@@ -142,7 +143,7 @@ export class TgBroadcastsRepository {
       }>
     ).map((r) => ({
       conversationId: Number(r.id),
-      chatId: r.raw_jid.slice(r.raw_jid.lastIndexOf(':') + 1),
+      chatId: r.peer_key,
       title: r.title || 'Telegram chat',
       seenTypes: r.types,
       anySender: r.any_sender,
