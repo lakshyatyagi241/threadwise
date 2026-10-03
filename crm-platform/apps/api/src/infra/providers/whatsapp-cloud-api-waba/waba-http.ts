@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-api-waba.env';
+import { assertPublicUrl } from './provider-url-guard';
 import { WabaApiError } from './waba-errors';
 
 /** Which API a number is reached through. Same Cloud API paths either way; only host, version and auth headers differ. */
@@ -20,7 +21,25 @@ export interface WabaInteraktAuth {
   phoneNumberId?: string;
 }
 
-export type WabaAuth = WabaMetaAuth | WabaInteraktAuth;
+/**
+ * A route that is a row of the platform's WhatsApp provider registry (not Meta, not the built-in Interakt): the resolved descriptor.
+ * Address and version are the provider's; the headers are already rendered with this call's credential and ids (see
+ * `WabaRegistryRoutes.authFor`), so WabaHttp only sends them. They hold a secret: never log this object.
+ */
+export interface WabaRegistryAuth {
+  provider: 'registry';
+  providerKey: string;
+  /** No version, no trailing slash. */
+  baseUrl: string;
+  apiVersion: string;
+  headers: Record<string, string>;
+  credentialMode: 'platform_token' | 'channel_token';
+  /** `number_level_override`: the platform also points the callback at itself per number through the provider. */
+  webhookMode: 'meta_app_level' | 'number_level_override';
+  capabilities: { mediaUpload: boolean };
+}
+
+export type WabaAuth = WabaMetaAuth | WabaInteraktAuth | WabaRegistryAuth;
 
 export type WabaQuery = Record<string, string | number | boolean | null | undefined>;
 
@@ -64,6 +83,7 @@ export class WabaHttp {
   }
 
   headers(auth: WabaAuth, extra?: Record<string, string>): Record<string, string> {
+    if (auth.provider === 'registry') return { ...auth.headers, ...extra };
     const base: Record<string, string> =
       auth.provider === 'interakt'
         ? { 'x-access-token': auth.authKey, 'x-waba-id': auth.wabaId }
@@ -73,11 +93,26 @@ export class WabaHttp {
     return { ...base, ...extra };
   }
 
+  /** `<baseUrl>/<version>` of any route, a registry provider's included. */
+  rootOf(auth: WabaAuth, apiVersion?: string): string {
+    return auth.provider === 'registry'
+      ? `${trimSlash(auth.baseUrl)}/${apiVersion ?? auth.apiVersion}`
+      : this.baseUrl(auth.provider, apiVersion);
+  }
+
   /** A Cloud API call through the number's own route. */
   async call<T = Record<string, unknown>>(auth: WabaAuth, req: WabaRequest): Promise<T> {
-    const url = this.url(this.baseUrl(auth.provider, req.apiVersion), req.path, req.query);
+    const url = this.url(this.rootOf(auth, req.apiVersion), req.path, req.query);
+    // The address of a registry provider was typed by an operator and may have been re-pointed since it was saved: it is checked at the
+    // moment of connection, every time (a built-in route's address is configuration, not data).
+    if (auth.provider === 'registry')
+      await this.assertProviderUrl(this.rootOf(auth, req.apiVersion));
     return this.send<T>(url, req, this.headers(auth, req.headers));
   }
+
+  /** Refuses an address that is not https on a public host. Replaced in tests; the real check resolves the name. */
+  assertProviderUrl: (url: string) => Promise<void> = (url) =>
+    assertPublicUrl(url, { allowDevHosts: this.env.WABA_PROVIDER_ALLOW_PRIVATE_HOSTS });
 
   /** A call to Meta Graph itself, whatever the number's route: the Embedded Signup exchange and platform lookups. */
   async graph<T = Record<string, unknown>>(bearer: string | null, req: WabaRequest): Promise<T> {

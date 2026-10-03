@@ -145,7 +145,7 @@ export class QrChannelAdapter implements ChannelAdapter {
         case 'interactive':
           throw new ChannelError(
             'CHANNEL_CAPABILITY_UNSUPPORTED',
-            'Contact cards and buttons are not sent through a number connected by QR code',
+            'Contact cards and interactive messages are WhatsApp Cloud API features; this number sends plain messages',
             false,
           );
       }
