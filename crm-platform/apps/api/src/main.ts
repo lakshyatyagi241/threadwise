@@ -37,7 +37,14 @@ async function bootstrap(): Promise<void> {
   app.enableCors({
     origin: origins.length > 0 ? origins : true,
     credentials: true,
-    exposedHeaders: ['x-request-id'],
+    // The throttle's headers (WD-INFRA-010): a browser client reads them only if they are exposed.
+    exposedHeaders: [
+      'x-request-id',
+      'retry-after',
+      'x-ratelimit-limit',
+      'x-ratelimit-remaining',
+      'x-ratelimit-reset',
+    ],
   });
 
   // Redis adapter for socket.io: without it, a message emitted on one pod
