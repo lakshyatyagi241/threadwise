@@ -61,3 +61,12 @@ tier P0 done: WD-INST-008, 012, 013, 014, 015. tier P1 done: 001, 004, 005, 006,
 tier P2 done: 002, 003, 016 (not ported, see above), 017, 019, 020, 025. Re-run on a freshly migrated `crm_inst`: API unit 50, API e2e + integration 66,
 web 32, all green; `pnpm arch:check` and `pnpm db:verify-schema` show 0 errors. Typecheck failures in `chat-conversations` and
 `auth-registration-security` specs belong to other domains (upstream).
+
+## Round 3 re-check
+
+Fresh `crm_inst` migrated (212 migrations). API unit 50, API e2e 53, integration 13, web 32 all green; `db:verify-schema` 0 errors;
+`arch:check` reports 7 errors, all in `chat-conversations` / `flow-runtime-engine` (other domains, none in this zone).
+Tiers P0, P1, P2 stay as recorded above. The nine features without code (011, 016, 018, 021, 022, 023, 024, 026, 028) remain
+"not ported on purpose" with the reasons in the table: each writes files into a PHP tree, shells out to composer/artisan/mysqldump,
+or is docs-only. A live pixel comparison of the installer and update screens was still not run (the installed reference redirects
+`/install` away, and only `/admin/update` could be compared).
