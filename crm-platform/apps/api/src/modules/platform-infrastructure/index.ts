@@ -31,3 +31,11 @@ export {
   type BodyLimitClass,
 } from './body-limits/body-limits';
 export { corsIsClosedInProduction, corsOriginFor, type CorsOrigin } from './cors/cors-policy';
+export {
+  isDone,
+  listColumns,
+  rotateKeys,
+  type ColumnReport,
+  type RotationOptions,
+} from './crypto-rotation/rotate-keys';
+export { looksSealed, mapSealed, collectSealed } from './crypto-rotation/envelope';

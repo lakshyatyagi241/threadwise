@@ -163,3 +163,25 @@ The API sends credentials-enabled CORS headers for the origins in `CORS_ORIGINS`
 
 The production deploy already sets `CORS_ORIGINS` (`deploy/hostinger/docker-compose.yml`), so it is unaffected. The socket.io
 gateway has its own `cors: { origin: true, credentials: true }` in `realtime/realtime.gateway.ts` and is not covered here (see the PR).
+
+## Encryption key rotation (WD-INFRA-023)
+
+`CryptoService` already supports a key ring (`CREDENTIALS_ENCRYPTION_KEY` seals, `CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS` only
+reads, every blob names its key). What was missing was a way to move **all** stored secrets to a new key. The AUTH domain's
+re-encrypt command knew only its own two or three tables, while about thirty other places store sealed values (channel and
+gateway credentials, OAuth tokens, sales-document and appointment data, lead and Telegram secrets, ...). Rotating by that
+command and then dropping the old key would have made all of those unreadable.
+
+`rotate-keys.cli.js` finds sealed blobs by scanning every text and jsonb column of every ordinary table (a partitioned table is
+read through its parent), so nothing has to be registered and a new domain is covered the day it ships. It reports blobs by the
+key that sealed them, moves them one row at a time with a compare-and-swap, skips and reports a row that changed while it ran,
+and reports (never changes) a blob that no key in the ring can open. Procedure, the backup caveat (old dumps still need the old
+key) and limits: [docs/runbooks/key-rotation.md](../runbooks/key-rotation.md).
+
+```bash
+node dist/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.cli.js [--dry-run] [--only=t1,t2] [--exclude=t3]
+```
+
+Exit 0: a real run moved everything it found, or a dry run found nothing to move. Exit 2: something is unreadable or changed
+under it (a dry run also exits 2 when it would move something). The deploy compose now passes
+`CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS` to the API and the worker; before, a rotation was impossible there.
