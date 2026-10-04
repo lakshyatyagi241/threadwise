@@ -13,9 +13,18 @@ import { useCursorList } from '@/lib/api/use-cursor-list';
 import { mktKeys, rotateSecret, sendSampleLead, testInstallation } from '../api';
 import type { ManageView } from '../lib/manage';
 import { mktError } from '../lib/errors';
+import { isPolled, revealExtras, waitingForFirstLead } from '../lib/portals';
 import { startReveal, type RevealState } from '../lib/secret-reveal';
 import { parseEndsIn } from '../lib/setup-form';
 import { ProblemNotice } from './manage-parts';
+import {
+  PathInboundBlock,
+  PullErrorHint,
+  SyncFeedback,
+  SyncNowButton,
+  WaitingForFirstLead,
+  useSyncNow,
+} from './portal-connection';
 import { SecretReveal } from './secret-reveal';
 import { CopyButton, ErrorLine, ErrorPanel, LoadingBlock, NeedsPermission, Section } from './ui';
 import { useAsyncAction } from './use-async-action';
@@ -44,6 +53,7 @@ export function ConnectionPanel({
   onReload: () => void;
 }) {
   const t = useTranslations('marketplace.manage.connection');
+  const tp = useTranslations('marketplace.portals.connection');
   const f = useFormatter();
   const c = installation.connection;
   if (!c) return null;
@@ -65,14 +75,26 @@ export function ConnectionPanel({
         )}
         <Fact label={t('lastEvent')}>{when(c.lastEventAt)}</Fact>
         <Fact label={t('lastSuccess')}>{when(c.lastSuccessAt)}</Fact>
+        {isPolled(c) && (
+          <>
+            <Fact label={tp('nextPoll')}>
+              {c.nextPollAt ? when(c.nextPollAt) : tp('notScheduled')}
+            </Fact>
+            <Fact label={tp('syncedThrough')}>
+              {c.syncedThrough ? when(c.syncedThrough) : tp('syncedNever')}
+            </Fact>
+          </>
+        )}
         {c.lastError && (
           <Fact label={t('lastError')}>
             <span className="text-danger">{c.lastError}</span>
           </Fact>
         )}
       </dl>
+      <PullErrorHint connection={c} canSync={view.canSync} />
 
       {c.inbound && <InboundBlock inbound={c.inbound} />}
+      {waitingForFirstLead(c) && <WaitingForFirstLead portal={installation.app.name} />}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" data-testid="counters">
         <StatTile label={t('counters.received')} value={c.counters.received} />
@@ -113,6 +135,8 @@ function InboundBlock({
 }) {
   const t = useTranslations('marketplace.manage.connection.inbound');
   const last = parseEndsIn(inbound.secretHint);
+  // The secret is the last segment of the address: no headers to explain, and only the end of the address is known here.
+  if (inbound.auth === 'path') return <PathInboundBlock inbound={inbound} />;
   return (
     <div className="space-y-3 rounded-md border border-border p-3 text-sm">
       <div className="space-y-1.5">
@@ -161,9 +185,13 @@ function Actions({
   onReload: () => void;
 }) {
   const t = useTranslations('marketplace.manage.connection.actions');
+  const tp = useTranslations('marketplace.portals');
   const test = useAsyncAction();
   const sample = useAsyncAction();
   const rotate = useAsyncAction();
+  const sync = useSyncNow(installation.id, onReload);
+  // A connection whose secret is the last part of its address: rotating makes a new address (and the portal's team needs it).
+  const pathAuth = installation.connection?.inbound?.auth === 'path';
   const [testResult, setTestResult] = useState<MarketTestResult | null>(null);
   const [sampleResult, setSampleResult] = useState<MarketSampleLeadResult | null>(null);
   const [confirmRotate, setConfirmRotate] = useState(false);
@@ -197,6 +225,7 @@ function Actions({
               tokenHeader: inbound?.tokenHeader ?? null,
               signatureHeader: inbound?.signatureHeader ?? null,
               auth: inbound?.auth ?? null,
+              ...revealExtras(inbound, installation.app.name),
             }
           : null,
       ),
@@ -217,6 +246,7 @@ function Actions({
             {t('test')}
           </Button>
         )}
+        {view.canSync && <SyncNowButton sync={sync} />}
         {view.canSample && (
           <Button variant="secondary" onClick={() => void runSample()} disabled={sample.pending}>
             {sample.pending && <Spinner />}
@@ -229,12 +259,15 @@ function Actions({
             onClick={() => setConfirmRotate(true)}
             disabled={rotate.pending}
           >
-            {t('rotate')}
+            {pathAuth ? tp('connection.rotatePath') : t('rotate')}
           </Button>
         )}
       </div>
       {installation.status === 'disabled' && view.canTest && !view.canSample && (
         <p className="text-xs text-muted-foreground">{t('sampleNeedsActive')}</p>
+      )}
+      {view.paused && view.canTest && isPolled(installation.connection) && (
+        <p className="text-xs text-muted-foreground">{tp('sync.needsActive')}</p>
       )}
 
       <div aria-live="polite" className="space-y-2">
@@ -266,8 +299,10 @@ function Actions({
             </p>
           </Alert>
         )}
+        <SyncFeedback note={sync.note} />
       </div>
       {test.error ? <ErrorLine error={test.error} /> : null}
+      {sync.error ? <ProblemNotice error={sync.error} onReload={onReload} /> : null}
       {sample.error ? <ProblemNotice error={sample.error} onReload={onReload} /> : null}
       {rotate.error ? <RotateProblem error={rotate.error} onReload={onReload} /> : null}
 
@@ -276,9 +311,11 @@ function Actions({
       <ConfirmDialog
         open={confirmRotate}
         tone="danger"
-        title={t('rotateConfirm.title')}
-        message={t('rotateConfirm.message')}
-        confirmLabel={t('rotateConfirm.confirm')}
+        title={pathAuth ? tp('connection.rotatePathConfirm.title') : t('rotateConfirm.title')}
+        message={pathAuth ? tp('connection.rotatePathConfirm.message') : t('rotateConfirm.message')}
+        confirmLabel={
+          pathAuth ? tp('connection.rotatePathConfirm.confirm') : t('rotateConfirm.confirm')
+        }
         cancelLabel={t('rotateConfirm.cancel')}
         busy={rotate.pending}
         onConfirm={() => void runRotate()}

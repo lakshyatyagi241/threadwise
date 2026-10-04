@@ -19,6 +19,7 @@ import { acceptedScopesFor } from '../lib/consent';
 import { mktError } from '../lib/errors';
 import { installationChips } from '../lib/install-state';
 import { manageView, uninstallBody } from '../lib/manage';
+import { uninstallRenewal } from '../lib/pricing';
 import { mktRoutes } from '../lib/routes';
 import type { SetupField } from '../lib/setup-form';
 import { CredentialsPanel } from './manage-credentials';
@@ -26,6 +27,7 @@ import { ConnectionPanel, EventsPanel } from './manage-connection';
 import { ProblemNotice } from './manage-parts';
 import { BackLink } from './marketplace-header';
 import { ScopeList } from './scope-list';
+import { SubscriptionEndedBanner, SubscriptionSectionView } from './subscription-panel';
 import { UninstallDialog } from './uninstall-dialog';
 import {
   AppLogo,
@@ -238,7 +240,17 @@ export function ManageScreen({
           )}
         </Alert>
       )}
-      {view.paused && (
+      {view.subscriptionPause && (
+        <SubscriptionEndedBanner
+          app={{ slug: installation.app.slug, name: installation.app.name }}
+          pause={view.subscriptionPause}
+          canResubscribe={view.canResubscribe}
+          canResume={view.canToggle}
+          onResume={() => void setEnabled(true)}
+          resuming={toggle.pending}
+        />
+      )}
+      {view.paused && !view.subscriptionPause && (
         <Alert tone="warning" data-testid="paused-banner">
           <p className="font-medium">{t('paused.title')}</p>
           <p>{t('paused.message')}</p>
@@ -252,6 +264,16 @@ export function ManageScreen({
           error={consent.error}
           onAccept={() => void acceptPermissions()}
           onReload={reload}
+        />
+      )}
+
+      {view.subscriptionSection && (
+        <SubscriptionSectionView
+          section={view.subscriptionSection}
+          app={{ slug: installation.app.slug, name: installation.app.name }}
+          subscription={installation.subscription}
+          pricing={installation.pricing}
+          canAct={access.install}
         />
       )}
 
@@ -318,6 +340,7 @@ export function ManageScreen({
           open={confirmUninstall}
           name={installation.app.name}
           hasConnection={installation.connection !== null}
+          renewal={uninstallRenewal(installation.subscription)}
           busy={uninstall.pending}
           error={uninstall.error}
           onConfirm={(choice) => void doUninstall(choice)}

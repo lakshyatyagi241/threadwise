@@ -56,7 +56,12 @@
       "credentialMissing": "Fill in the required fields.",
       "noConnection": "This installation has no connection that can do that.",
       "leadPipeline": "The lead service is not available right now. Nothing was saved. Try again in a moment.",
-      "unexpected": "Something went wrong. Try again."
+      "unexpected": "Something went wrong. Try again.",
+      "subscriptionRequired": "This is a paid app. Subscribe to install it.",
+      "notForSale": "This app is not being sold to new subscribers right now.",
+      "trialUnavailable": "The free trial is not available for this app in your workspace.",
+      "subscriptionNotFound": "Your workspace has no subscription to this app.",
+      "subscriptionState": "That does not fit the current state of the subscription. Reload to see the latest state."
     },
     "chips": {
       "installed": "Installed",
@@ -67,7 +72,12 @@
       "error": "Error",
       "needs_reauth": "Needs sign-in again",
       "unknown": "Not checked yet",
-      "needsConsent": "New permissions to review"
+      "needsConsent": "New permissions to review",
+      "subscribed": "Subscribed",
+      "trialing": "Free trial",
+      "comped": "Complimentary",
+      "canceling": "Not renewing",
+      "subscriptionEnded": "Subscription ended"
     },
     "lock": {
       "planFeature": {
@@ -126,7 +136,11 @@
       "pricing": {
         "free": "Free",
         "included": "Included in your plan",
-        "addon": "Paid add-on"
+        "monthly": "{price} / month",
+        "subscribed": "Subscribed",
+        "notForSale": "Not for sale",
+        "paid": "Paid app",
+        "trial": "{days}-day free trial"
       },
       "installs": "{count, plural, one {# install} other {# installs}}",
       "version": "Version {version}",
@@ -136,7 +150,8 @@
         "review": "Review permissions",
         "killed": "Manage",
         "locked": "View details",
-        "view": "View details"
+        "view": "View details",
+        "subscribe": "Subscribe"
       }
     },
     "browse": {
@@ -254,7 +269,6 @@
       },
       "facts": {
         "title": "Details",
-        "pricing": "Price",
         "version": "Version",
         "connector": "How it connects",
         "connectors": {
@@ -332,7 +346,11 @@
         "saved": "I have saved it, continue",
         "manage": "Open settings",
         "browse": "Back to the Marketplace"
-      }
+      },
+      "subscribeTitle": "{name} is a paid app",
+      "subscribeIntro": "Subscribe to install it. You go to checkout to pay for the first month, or you can try it free first when a trial is offered. You review and confirm its permissions before anything is installed.",
+      "notForSaleTitle": "{name} is not for sale",
+      "goToCheckout": "Go to checkout"
     },
     "setup": {
       "optionalLabel": "{label} (optional)",
@@ -370,6 +388,78 @@
         "signature": "Or sign the body with HMAC-SHA256 using the secret and send sha256= followed by the hex digest in the header {header}."
       },
       "leaveConfirm": "You have not confirmed that you saved the secret. If you leave now, you will not see it again. Leave anyway?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Beta",
+        "needsPortalSetup": "Needs portal setup",
+        "betaHint": "Built from the portal's partial documentation. It works, but may need an adjustment after the first real lead.",
+        "needsPortalSetupHint": "Nothing arrives until the portal's own team switches it on for you."
+      },
+      "reveal": {
+        "title": "Save your private address",
+        "warning": "You will not see this address again. It is also the connection's password: anyone who has it can send leads into your workspace. Copy it now and keep it somewhere safe. If you lose it, create a new address; the old one then stops working.",
+        "address": "Your private address",
+        "copyAddress": "Copy the private address",
+        "saved": "I have saved the address.",
+        "sendTitle": "What the sender needs",
+        "method": "Method: {methods}",
+        "formats": "Accepted formats: {formats}",
+        "noHeader": "Nothing else is needed: no header and no signature. The last part of the address is the password.",
+        "managerTitle": "Send it to the portal's account manager",
+        "managerIntro": "{portal}'s own team switches this on, not you. Copy a ready-made message and send it to your account manager there.",
+        "copyMessage": "Copy a message for your portal's account manager",
+        "messageCopied": "Message copied",
+        "portalFallback": "the portal"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "form fields",
+        "xml": "XML",
+        "query": "query-string parameters"
+      },
+      "message": {
+        "subjectLine": "Subject: Lead delivery address for our {portal} account",
+        "body": "Hello,\n\nPlease start sending the leads of our {portal} account to this private address:\n\n{address}\n\nPlease send each lead with {methods}. We accept the details as {formats}. The address already identifies our account, so no header, password or signature is needed. Please keep it private.\n\nPlease send us one test lead as soon as it is switched on, so we can confirm that it arrives.\n\nThank you."
+      },
+      "connection": {
+        "nextPoll": "Next check",
+        "notScheduled": "Not scheduled",
+        "syncedThrough": "Leads fetched up to",
+        "syncedNever": "Nothing fetched yet",
+        "errorHint": "Enter the key again in Credentials or press Sync now.",
+        "errorHintNoSync": "Enter the key again in Credentials.",
+        "rotatePath": "Create a new address",
+        "rotatePathConfirm": {
+          "title": "Create a new address?",
+          "message": "A new private address is created and the old one stops working immediately. Anything still sending to the old address will be refused until the portal's team is given the new one. You will see the new address once.",
+          "confirm": "Create new address"
+        },
+        "waiting": {
+          "title": "Waiting for the first lead from {portal}",
+          "message": "{portal}'s own team has to switch this on. Nothing arrives until it starts sending to your connection's address. Make sure your account manager there has the address, and ask for a test lead."
+        },
+        "path": {
+          "address": "Private address",
+          "maskedNote": "The last part of the address is its password. It is shown once, when you install or create a new address, so only its end is shown here.",
+          "method": "Method: {methods}",
+          "formats": "Accepted formats: {formats}",
+          "noHeader": "No header or signature is needed. The address is the password: keep it private.",
+          "newAddressHint": "Lost the address, or want to stop someone using it? Create a new address below. The old one stops working at once and the portal's team must be given the new one."
+        }
+      },
+      "sync": {
+        "button": "Sync now",
+        "needsActive": "Resume the app to sync now.",
+        "scheduledNow": "Sync scheduled. It starts right away.",
+        "scheduled": "Sync scheduled for {time}.",
+        "waits": "The portal allows one request every {interval}, so this sync has to wait until then.",
+        "duration": {
+          "seconds": "{count, plural, one {# second} other {# seconds}}",
+          "minutes": "{count, plural, one {# minute} other {# minutes}}",
+          "hours": "{count, plural, one {# hour} other {# hours}}"
+        }
+      }
     },
     "installed": {
       "title": "Installed",
@@ -412,7 +502,14 @@
       "pending": "Version {version} waits for you to accept its new permissions.",
       "installedOn": "Installed {date}",
       "review": "Review",
-      "manage": "Manage"
+      "manage": "Manage",
+      "subscriptions": {
+        "title": "Subscriptions",
+        "intro": "Your paid apps and trials, including uninstalled apps whose paid period is still running.",
+        "listLabel": "Subscriptions",
+        "manage": "Manage",
+        "viewApp": "View app"
+      }
     },
     "manage": {
       "backToInstalled": "Back to Installed",
@@ -578,7 +675,29 @@
           }
         },
         "honestNote": "Today, contacts that this app already created stay in your workspace whichever you choose. Your choice is recorded for the areas that will delete data.",
-        "irreversible": "This cannot be undone. To use the app again, install it again."
+        "irreversible": "This cannot be undone. To use the app again, install it again.",
+        "renewal": {
+          "title": "This app has a paid subscription",
+          "message": "Uninstalling stops it from renewing, so nothing more is charged. The period you already paid for stays yours, so you can install it again before it ends at no cost.",
+          "messageUntil": "Uninstalling stops it from renewing, so nothing more is charged. The period you already paid for stays yours until {date}, so you can install it again before then at no cost."
+        }
+      },
+      "subscription": {
+        "title": "Subscription",
+        "subscribeTitle": "Subscribe to keep using {name}",
+        "subscribeIntro": "This is a paid app and your workspace has no subscription to it yet.",
+        "included": "Your plan includes this app, so there is nothing to pay."
+      },
+      "subscriptionEnded": {
+        "title": "Subscription ended",
+        "message": {
+          "resubscribe": "{name} is paused because its subscription ended. Your data and settings are kept. Subscribe again to switch it back on.",
+          "notForSale": "{name} is paused because its subscription ended, and it is no longer sold, so it cannot be switched back on. Your data and settings are kept.",
+          "resumable": "{name} is paused because its subscription ended, but your workspace has access to it again. Resume it to switch it back on."
+        },
+        "resubscribe": "Resubscribe",
+        "resume": "Resume",
+        "noCheckout": "Checkout is not available right now. Try again in a moment."
       }
     },
     "requests": {
@@ -657,6 +776,81 @@
         "voted": "Voted",
         "vote": "Vote"
       }
+    },
+    "pricing": {
+      "title": "Pricing",
+      "freeNote": "No charge to install or use.",
+      "included": {
+        "planFeature": "Your plan includes this app, so there is nothing to pay.",
+        "minPlan": "Your plan, or a higher plan, includes this app, so there is nothing to pay.",
+        "plan": "Your plan includes this app, so there is nothing to pay."
+      },
+      "subscribedNote": "Your workspace has a subscription to this app.",
+      "trialOffer": "Try it free for {days, plural, one {# day} other {# days}}. Nothing is charged until you choose to subscribe.",
+      "prepaidNote": "Billed monthly through your workspace billing. Each payment covers one month and is not charged automatically: pay again before the date shown to keep the app running.",
+      "notForSale": {
+        "title": "Not for sale",
+        "message": "This app is not being sold to new subscribers right now."
+      }
+    },
+    "subscribe": {
+      "subscribe": "Subscribe",
+      "startTrial": "Start {days}-day free trial",
+      "hintPrice": "{price} per month, paid at checkout. Each payment covers one month.",
+      "hint": "You pay for one month at a time at checkout.",
+      "working": "Working",
+      "noCheckout": "Checkout is not available for this app right now. Try again in a moment.",
+      "toast": {
+        "trial_started": "Free trial of {name} started.",
+        "included": "{name} is included in your plan.",
+        "already_entitled": "Your workspace already has access to {name}.",
+        "free": "{name} is free."
+      }
+    },
+    "subscription": {
+      "title": "Subscription",
+      "status": {
+        "active": "Active",
+        "trialing": "Free trial",
+        "comped": "Complimentary",
+        "canceling": "Not renewing",
+        "ended": "Ended"
+      },
+      "date": {
+        "paidUntil": "Paid until {date}",
+        "trialEnds": "Free trial ends {date}",
+        "compUntil": "Complimentary access until {date}",
+        "compOpen": "Complimentary access, no end date",
+        "cancelingUntil": "Not renewing. Active until {date}",
+        "endedOn": "Subscription ended {date}",
+        "endedNoDate": "Subscription ended"
+      },
+      "lastPayment": "Last payment: {price} per month",
+      "nextPayment": "The price of this app changed. Your next payment will be {price} per month.",
+      "compNote": "The platform team gave you this access. It cannot be cancelled here.",
+      "renewHint": "A paid month is not renewed automatically. Renew before the date shown to keep the app running without a pause.",
+      "actions": {
+        "renew": "Renew now",
+        "resubscribe": "Resubscribe",
+        "subscribe": "Subscribe now",
+        "resume": "Resume subscription",
+        "cancel": "Cancel subscription"
+      },
+      "cancelConfirm": {
+        "title": "Cancel the subscription to {name}?",
+        "message": "{name} stays active until {date}, then it is paused. Your data and settings are kept.",
+        "messageNoDate": "{name} stays active until the period you paid for ends, then it is paused. Your data and settings are kept.",
+        "afterwards": "Nothing more will be charged, and you can subscribe again at any time.",
+        "confirm": "Cancel subscription",
+        "keep": "Keep subscription"
+      },
+      "toast": {
+        "canceled": "Subscription cancelled. It stays active until {date}.",
+        "canceledNoDate": "Subscription cancelled. It stays active until the paid period ends.",
+        "resumed": "Subscription resumed."
+      },
+      "working": "Working",
+      "noCheckout": "Checkout is not available for this app right now. Try again in a moment."
     }
   }
 }

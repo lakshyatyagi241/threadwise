@@ -17,10 +17,12 @@ import {
   statusCounts,
   type CatalogueFilters,
   type KindFilter,
+  type PricingFilter,
   type StatusFilter,
 } from '../lib/catalogue';
-import { listingHref } from '../lib/paths';
+import { listingHref, SUBSCRIPTIONS_PATH, subscriptionsHref } from '../lib/paths';
 import type { MarketAccess } from '../lib/permissions';
+import { PriceCell } from './price-cell';
 import { useDebounced } from './use-docs-check';
 import {
   AppStatusBadge,
@@ -74,6 +76,7 @@ function Catalogue({ access }: { access: MarketAccess }) {
   const filtered =
     filters.status !== 'all' ||
     filters.kind !== 'all' ||
+    filters.pricing !== 'all' ||
     filters.category !== ALL_CATEGORIES ||
     filters.search.trim() !== '';
 
@@ -84,11 +87,16 @@ function Catalogue({ access }: { access: MarketAccess }) {
       title={t('title')}
       description={t('description')}
       actions={
-        access.manage ? (
-          <Link href={NEW_PATH} className={primaryLink}>
-            {t('new')}
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href={SUBSCRIPTIONS_PATH} className={textLink}>
+            {t('subscriptionsLink')}
           </Link>
-        ) : undefined
+          {access.manage ? (
+            <Link href={NEW_PATH} className={primaryLink}>
+              {t('new')}
+            </Link>
+          ) : null}
+        </div>
       }
     />
   );
@@ -133,7 +141,7 @@ function Catalogue({ access }: { access: MarketAccess }) {
       </section>
 
       <div
-        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
         role="search"
         aria-label={t('filters.label')}
       >
@@ -172,6 +180,17 @@ function Catalogue({ access }: { access: MarketAccess }) {
                 {te(`appStatus.${s}`)}
               </option>
             ))}
+          </Select>
+        </Field>
+        <Field label={t('filters.pricing')} htmlFor="catalogue-pricing">
+          <Select
+            id="catalogue-pricing"
+            value={filters.pricing}
+            onChange={(e) => set({ pricing: e.target.value as PricingFilter })}
+          >
+            <option value="all">{t('filters.allPricing')}</option>
+            <option value="free">{t('filters.free')}</option>
+            <option value="paid">{t('filters.paid')}</option>
           </Select>
         </Field>
         <Field
@@ -258,7 +277,7 @@ export function CatalogueTable({ apps }: { apps: readonly MarketOperatorApp[] })
   const format = useFormatter();
   return (
     <div className="overflow-x-auto rounded-md border border-border">
-      <table className="w-full min-w-[64rem] text-sm">
+      <table className="w-full min-w-[76rem] text-sm">
         <caption className="sr-only">{t('tableCaption')}</caption>
         <thead className="bg-muted text-xs text-muted-foreground">
           <tr>
@@ -279,6 +298,12 @@ export function CatalogueTable({ apps }: { apps: readonly MarketOperatorApp[] })
             </th>
             <th scope="col" className="px-3 py-2 text-end font-medium">
               {t('cols.installs')}
+            </th>
+            <th scope="col" className="px-3 py-2 text-start font-medium">
+              {t('cols.pricing')}
+            </th>
+            <th scope="col" className="px-3 py-2 text-end font-medium">
+              {t('cols.subscriptions')}
             </th>
             <th scope="col" className="px-3 py-2 text-start font-medium">
               {t('cols.planFeature')}
@@ -339,6 +364,19 @@ export function CatalogueTable({ apps }: { apps: readonly MarketOperatorApp[] })
                 </div>
               </td>
               <td className="px-3 py-3 text-end align-top tabular-nums">{a.installCount}</td>
+              <td className="px-3 py-3 align-top">
+                <PriceCell pricing={a.pricing} />
+              </td>
+              <td className="px-3 py-3 text-end align-top tabular-nums">
+                {a.pricing.model === 'free' && a.activeSubscriptions === 0 ? (
+                  <span className="text-muted-foreground">{t('dash')}</span>
+                ) : (
+                  <Link href={subscriptionsHref(a.slug)} className={textLink}>
+                    {a.activeSubscriptions}
+                    <span className="sr-only"> {t('viewSubscriptions', { name: a.name })}</span>
+                  </Link>
+                )}
+              </td>
               <td className="px-3 py-3 align-top">
                 {a.planFeature ? (
                   <code className="font-mono text-xs" dir="ltr">

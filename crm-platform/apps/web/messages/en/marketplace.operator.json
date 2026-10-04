@@ -52,6 +52,18 @@
           "low": "Low risk",
           "medium": "Medium risk",
           "high": "High risk"
+        },
+        "subscriptionStatus": {
+          "active": "Paying",
+          "trialing": "On trial",
+          "comped": "Comped",
+          "canceling": "Ending",
+          "ended": "Ended"
+        },
+        "subscriptionSource": {
+          "purchase": "Purchase",
+          "trial": "Trial",
+          "comp": "Comp"
         }
       },
       "errors": {
@@ -78,12 +90,15 @@
         "validationFields": "Some fields are not valid. Each problem is listed with its field.",
         "validation": "The request was not valid.",
         "request": "The request could not be completed.",
-        "unexpected": "Something went wrong on our side. Try again; if it keeps happening, quote the request id."
+        "unexpected": "Something went wrong on our side. Try again; if it keeps happening, quote the request id.",
+        "subscriptionState": "That is not possible in the subscription's current state. A workspace that already pays cannot be comped (cancel its subscription first), a free app has nothing to comp, and an ended subscription cannot be cancelled again.",
+        "subscriptionNotFound": "That subscription was not found. It may have been removed. Reload the list."
       },
       "list": {
         "title": "Marketplace catalogue",
         "description": "Every listing in any status: mini apps and integrations, their versions and how many workspaces have them installed.",
         "new": "New listing",
+        "subscriptionsLink": "Subscriptions and revenue",
         "kpi": {
           "label": "Listings by status",
           "loaded": "Loaded",
@@ -104,7 +119,11 @@
           "allStatuses": "All statuses",
           "category": "Category",
           "allCategories": "All categories",
-          "categoryNote": "Filters the listings already loaded: the API has no category filter."
+          "categoryNote": "Filters the listings already loaded: the API has no category filter.",
+          "pricing": "Pricing",
+          "allPricing": "All pricing",
+          "free": "Free",
+          "paid": "Paid"
         },
         "cols": {
           "app": "App",
@@ -113,7 +132,9 @@
           "status": "Status",
           "versions": "Versions",
           "installs": "Installs",
-          "planFeature": "Plan feature"
+          "planFeature": "Plan feature",
+          "pricing": "Pricing",
+          "subscriptions": "Active subscriptions"
         },
         "badges": {
           "firstParty": "First-party",
@@ -131,7 +152,8 @@
         "noMatchTitle": "No listing matches",
         "noMatchMessage": "Nothing matches these filters. Try different ones.",
         "noMatchMoreMessage": "None of the listings loaded so far match. More are available: load them, or change the filters.",
-        "tableCaption": "Marketplace listings"
+        "tableCaption": "Marketplace listings",
+        "viewSubscriptions": "Subscriptions to {name}"
       },
       "new": {
         "title": "New listing",
@@ -631,6 +653,270 @@
         "recipeHint": "The recipe may be breaking: a portal changed its format or a key expired. Fix it with a new version of the recipe.",
         "fine": "No problems seen",
         "runbookNote": "An integration with many installations in error or needing to sign in again, or a rising failed count, is breaking. Patch its recipe in a new version (runbook, section 8)."
+      },
+      "price": {
+        "free": "Free",
+        "perMonth": "/ month",
+        "trial": "{count, plural, one {# day trial} other {# days trial}}",
+        "notOnSale": "Not on sale"
+      },
+      "pricing": {
+        "title": "Pricing",
+        "description": "Decide whether this app is free or paid and what it costs. Your pricing is the one that counts: the developer's manifest only proposes one.",
+        "billing": "A paid app is sold as a monthly prepaid term: a billing add-on bought through the normal checkout. There is no automatic card renewal yet, so a workspace pays again when its month is nearly over. A price change applies to new subscriptions and to each subscriber's next payment; a period already paid for is never touched.",
+        "readOnly": "Read only. Changing the pricing needs the platform permission {permission}.",
+        "visibility": {
+          "label": "Listing status",
+          "note": "Hide, show again or kill the listing under Operate above. This panel does not change it."
+        },
+        "subscribers": {
+          "label": "Subscriptions",
+          "count": "{count, plural, one {# active subscription} other {# active subscriptions}}",
+          "view": "View subscriptions",
+          "hint": "Paid, trial and comped subscriptions in force. Ones that are ending or have ended are not counted."
+        },
+        "changed": "Price last changed",
+        "conflict": "Someone else saved this listing while you were editing the pricing. Reload to see their version, then make your change again.",
+        "reload": "Reload",
+        "model": {
+          "legend": "Price",
+          "free": "Free",
+          "freeHint": "No charge. Every workspace can install it.",
+          "paid": "Paid, per month",
+          "paidHint": "Workspaces subscribe through checkout and pay month by month."
+        },
+        "fields": {
+          "amount": "Monthly price",
+          "amountHint": "Per workspace, per month: 9 or 9.99.",
+          "currency": "Currency",
+          "currencyHint": "A three-letter code such as USD. The platform refuses a currency it has not enabled.",
+          "trialDays": "Free trial (days)",
+          "trialDaysHint": "0 for no trial, at most {max}. A workspace gets one trial per app.",
+          "annualAmount": "Yearly price (optional)",
+          "annualAmountHint": "Stored for later. Annual billing is not built yet, so workspaces cannot pay yearly today.",
+          "purchasable": "On sale",
+          "purchasableHint": "When off, no new workspace can subscribe. Workspaces that already subscribe can still renew."
+        },
+        "included": {
+          "title": "Included in plans",
+          "help": "Optional. A workspace that matches either rule gets the app free. Leave both empty to charge every workspace.",
+          "feature": "Plan feature",
+          "featureHint": "Workspaces whose plan (counting its add-ons) has this feature. Pick a suggestion or type a feature key.",
+          "plan": "Minimum plan",
+          "planHint": "Workspaces on this plan or any plan above it. Plans are listed lowest first.",
+          "planNone": "No plan rule",
+          "planTyped": "The plan list could not be loaded. Type a plan id."
+        },
+        "grants": {
+          "title": "Grants plan features",
+          "help": "Optional. Plan features a subscription to this app switches on, so a feature can be sold as an app while its current gates keep working. Only features that are off by default can be granted.",
+          "thirdParty": "Only first-party apps can grant plan features. Mark the listing first-party on the Listing tab to use this.",
+          "grandfather": "Grandfather existing users",
+          "grandfatherHint": "Lets you comp the workspaces that already have a granted feature, so nobody loses it. Save, then use Comp existing users below. Do it before the feature is switched off on plans.",
+          "compExisting": "Comp existing users",
+          "compExistingHint": "Workspaces that already have a granted feature through their plan and have no subscription yet get this app free. You see who first.",
+          "compExistingAction": "Comp existing users..."
+        },
+        "proposal": {
+          "title": "Developer's proposal",
+          "intro": "From the manifest of version {version}. It is only a proposal and changes nothing: the pricing above is what workspaces see.",
+          "note": "Note: {note}",
+          "models": {
+            "free": "Free",
+            "included": "Included in the plan",
+            "addon": "Paid add-on"
+          }
+        },
+        "save": "Save pricing",
+        "saving": "Saving...",
+        "discard": "Discard changes",
+        "nothingToSave": "No changes yet.",
+        "saved": "Saved the pricing of {name}.",
+        "problems": {
+          "priceRequired": "Set a monthly price.",
+          "priceFormat": "Use a number like 9 or 9.99 (at most two decimals).",
+          "pricePositive": "The price must be above zero.",
+          "currencyRequired": "Choose a currency.",
+          "currencyFormat": "Use a three-letter currency code.",
+          "yearlyFormat": "Use a number like 90 or 89.99, or leave it empty.",
+          "yearlyPositive": "The yearly price must be above zero, or empty.",
+          "trialRange": "Use whole days from 0 to {max}.",
+          "featureFormat": "Use lowercase letters, digits and underscores, starting with a letter.",
+          "planFormat": "Use a plan id: lowercase letters, digits and underscores.",
+          "grantsInvalid": "Pick each plan feature once, at most 10 features.",
+          "grandfatherNeedsGrants": "Pick at least one plan feature the app grants first.",
+          "includedGranted": "A feature the app grants cannot also be what includes it."
+        },
+        "confirm": {
+          "cancel": "Keep editing",
+          "priceChange": {
+            "title": "Change the price of {name}?",
+            "body": "{count, plural, one {# workspace subscribes} other {# workspaces subscribe}} now. The monthly price goes from {from} to {to}.",
+            "next": "The new price applies to new subscriptions and to each subscriber's next payment.",
+            "paid": "A period a workspace has already paid for is never touched, refunded or re-priced.",
+            "action": "Change the price"
+          },
+          "toFree": {
+            "title": "Make {name} free?",
+            "body": "{count, plural, one {# workspace subscribes} other {# workspaces subscribe}} now.",
+            "free": "Every workspace can then use the app without paying, and nobody is billed for it again.",
+            "paid": "Subscribers keep the time they already paid for. It is not refunded.",
+            "action": "Make it free"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Existing users",
+        "title": "Comp existing users of {name}",
+        "close": "Close",
+        "cancel": "Cancel",
+        "change": "Change",
+        "run": "{count, plural, one {Comp # workspace} other {Comp # workspaces}}",
+        "preview": "Check who qualifies",
+        "intro": "Comp every workspace that already has a plan feature {name} grants, through its plan or its overrides, and has no subscription to it yet. First you see who would be comped; nothing changes until you confirm.",
+        "timing": "Do this before the feature is switched off on plans or its default changes: it reads what each workspace has right now.",
+        "note": "Note",
+        "matched": "{count, plural, =0 {No workspace qualifies} one {# workspace qualifies} other {# workspaces qualify}}",
+        "nobody": "Nobody has a granted feature without a subscription, so there is nothing to comp.",
+        "sample": "Some of them:",
+        "more": "and {count} more",
+        "confirm": "Check the list, then confirm to comp them. It is recorded in the audit trail and cannot be undone in one step: cancel each subscription to end a comp.",
+        "refused": "This is only possible for a paid listing that grants plan features and has Grandfather existing users saved on. Check its pricing.",
+        "done": "{count, plural, one {Comped # workspace on {name}.} other {Comped # workspaces on {name}.}}"
+      },
+      "compFields": {
+        "duration": "How long?",
+        "months": "For a number of months",
+        "monthsLabel": "Months",
+        "monthsHint": "Whole months, 1 to {max}.",
+        "monthsInvalid": "Use whole months from 1 to {max}.",
+        "open": "Until I end it",
+        "noteHint": "Between {min} and {max} characters. It is kept in the audit trail.",
+        "count": "{count} of {max} characters (at least {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Subscription",
+        "title": "Cancel the subscription of {workspace}?",
+        "close": "Close",
+        "back": "Keep it",
+        "summary": "{workspace} holds {app}.",
+        "when": "When should it end?",
+        "periodEnd": {
+          "label": "At the end of the paid period",
+          "detail": "Renewal stops. {workspace} keeps {app} until {date}, then the installation is paused and its data is kept."
+        },
+        "now": {
+          "label": "Right now",
+          "detail": "Access ends at once. The installation is paused and its data is kept. Time already paid for is not refunded."
+        },
+        "noEnd": "This subscription has no end date, so it can only be ended right now.",
+        "ending": "It is already set to end on {date}. You can still end it right now.",
+        "reason": "Reason",
+        "confirmPeriod": "Stop renewal",
+        "confirmNow": "End it now",
+        "done": {
+          "periodEnd": "Renewal stopped for {workspace}. Access runs to the end of the paid period.",
+          "now": "{workspace} no longer has {app}."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Comp",
+        "title": "Comp a workspace",
+        "close": "Close",
+        "cancel": "Cancel",
+        "submit": "Comp workspace",
+        "intro": "Give a workspace a paid app at no charge. It is recorded in the audit trail with your note. It is refused while the workspace pays for the app: cancel that subscription first.",
+        "app": "App",
+        "appPlaceholder": "Choose a paid app",
+        "noPaidApps": "There is no paid app to comp yet. Set a price on a listing first.",
+        "workspaceSearch": "Find a workspace",
+        "workspaceSearchPlaceholder": "Workspace name",
+        "workspaceHint": "Showing up to {count} matches. Type to narrow the list.",
+        "workspaceChosen": "Chosen: {name}",
+        "workspaceNone": "No workspace matches.",
+        "workspaceResults": "Matching workspaces",
+        "workspacePlan": "Plan: {plan}",
+        "workspaceLoading": "Loading workspaces...",
+        "note": "Note",
+        "effectMonths": "{count, plural, one {The workspace gets the app free for # month.} other {The workspace gets the app free for # months.}}",
+        "effectOpen": "The workspace gets the app free until you end it by cancelling its subscription.",
+        "done": "{workspace} now has {app} free."
+      },
+      "subscriptions": {
+        "title": "Subscriptions",
+        "description": "Who pays for which paid app, what each workspace holds and the monthly revenue it brings. Figures are list prices: no tax, coupons or trials.",
+        "readOnly": "Read only. Comping a workspace and cancelling a subscription need the platform permission {permission}.",
+        "comp": "Comp a workspace",
+        "kpi": {
+          "label": "Subscriptions by state",
+          "active": "Paying",
+          "trialing": "On trial",
+          "comped": "Comped",
+          "canceling": "Ending",
+          "ended": "Ended",
+          "mrr": "Monthly revenue",
+          "mrrNone": "No paying subscribers yet",
+          "mrrCurrency": "Monthly revenue, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "No paid apps yet",
+          "emptyMessage": "Set a price on a listing to start selling it. It appears here with its subscribers.",
+          "caption": "Subscriptions per app by state",
+          "cols": {
+            "app": "App",
+            "price": "Price",
+            "active": "Paying",
+            "trialing": "On trial",
+            "comped": "Comped",
+            "canceling": "Ending",
+            "ended": "Ended",
+            "total": "Total",
+            "mrr": "Monthly revenue"
+          },
+          "free": "Free",
+          "totals": "All apps",
+          "note": "Monthly revenue is the list price of every paying subscription, in its own currency. Trials, comps and ended subscriptions do not count, and currencies are never added together."
+        },
+        "filters": {
+          "label": "Filters",
+          "app": "App",
+          "allApps": "All apps",
+          "status": "State",
+          "allStatuses": "All states",
+          "source": "Source",
+          "allSources": "All sources",
+          "search": "Workspace",
+          "searchPlaceholder": "Workspace name"
+        },
+        "cols": {
+          "workspace": "Workspace",
+          "app": "App",
+          "status": "State",
+          "source": "Source",
+          "started": "Started",
+          "period": "Period",
+          "amount": "Amount",
+          "actions": "Actions"
+        },
+        "period": {
+          "paidUntil": "Paid until {date}",
+          "trialEnds": "Trial ends {date}",
+          "endsOn": "Ends {date}",
+          "compUntil": "Comp until {date}",
+          "compOpen": "Comp until you end it",
+          "endedOn": "Ended {date}",
+          "none": "No end date"
+        },
+        "noCharge": "No charge",
+        "compBy": "Comped by {operator}: {note}",
+        "cancel": "Cancel...",
+        "tableCaption": "Subscriptions",
+        "emptyTitle": "No subscriptions yet",
+        "emptyMessage": "A workspace appears here when it subscribes, starts a trial or is comped.",
+        "noMatchTitle": "No subscription matches",
+        "noMatchMessage": "Nothing matches these filters. Try different ones.",
+        "clearFilters": "Clear filters",
+        "loadMore": "Load more"
       }
     }
   }

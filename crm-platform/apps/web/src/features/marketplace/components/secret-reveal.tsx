@@ -12,6 +12,7 @@ import {
   type RevealState,
 } from '../lib/secret-reveal';
 import { WarningIcon } from './icons';
+import { PathReveal } from './path-reveal';
 import { CopyButton } from './ui';
 
 /**
@@ -30,6 +31,7 @@ export function SecretReveal({
   doneLabel: string;
 }) {
   const t = useTranslations('marketplace.reveal');
+  const tp = useTranslations('marketplace.portals.reveal');
   const id = useId();
   const blocking = isBlocking(state);
 
@@ -60,6 +62,8 @@ export function SecretReveal({
 
   if (state.phase !== 'shown') return null;
   const p = state.payload;
+  // `path`: the secret is the last part of the address, so there is one thing to save (the full address), not an address and a secret.
+  const path = p.auth === 'path';
   return (
     <section
       aria-labelledby={`${id}-title`}
@@ -68,34 +72,40 @@ export function SecretReveal({
     >
       <div>
         <h2 id={`${id}-title`} className="text-base font-semibold">
-          {t('title')}
+          {path ? tp('title') : t('title')}
         </h2>
         <Alert tone="warning" className="mt-2 flex items-start gap-2">
           <WarningIcon className="mt-0.5" />
-          <span>{t('warning')}</span>
+          <span>{path ? tp('warning') : t('warning')}</span>
         </Alert>
       </div>
 
-      {p.url && (
-        <ValueRow
-          id={`${id}-url`}
-          label={t('address')}
-          value={p.url}
-          copyLabel={t('copyAddress')}
-        />
+      {path ? (
+        <PathReveal payload={p} />
+      ) : (
+        <>
+          {p.url && (
+            <ValueRow
+              id={`${id}-url`}
+              label={t('address')}
+              value={p.url}
+              copyLabel={t('copyAddress')}
+            />
+          )}
+          <ValueRow
+            id={`${id}-secret`}
+            label={t('secret')}
+            value={p.secret}
+            copyLabel={t('copySecret')}
+          />
+          <SendHints payload={p} />
+        </>
       )}
-      <ValueRow
-        id={`${id}-secret`}
-        label={t('secret')}
-        value={p.secret}
-        copyLabel={t('copySecret')}
-      />
-      <SendHints payload={p} />
 
       <div className="space-y-3 border-t border-border pt-3">
         <Checkbox
           id={`${id}-saved`}
-          label={t('saved')}
+          label={path ? tp('saved') : t('saved')}
           checked={state.saved}
           onChange={(e) => onState(setSaved(state, e.target.checked))}
         />

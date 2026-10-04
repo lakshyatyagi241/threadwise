@@ -11,6 +11,7 @@ import { fetchApp, installApp, mktKeys } from '../api';
 import { acceptedScopesFor, installerGaps, scopeChanges, type ScopeChanges } from '../lib/consent';
 import { mktError, type MktError } from '../lib/errors';
 import { installGate } from '../lib/install-state';
+import { revealExtras } from '../lib/portals';
 import { mktRoutes } from '../lib/routes';
 import { startReveal, type RevealState } from '../lib/secret-reveal';
 import {
@@ -23,6 +24,8 @@ import {
 } from '../lib/setup-form';
 import { paragraphs } from '../lib/text';
 import { BackLink } from './marketplace-header';
+import { MaturityNotice } from './maturity';
+import { NotForSaleNote, SubscribePanel } from './pricing-parts';
 import { RiskCallout, ScopeList } from './scope-list';
 import { SecretReveal } from './secret-reveal';
 import { SetupFields } from './setup-fields';
@@ -150,6 +153,26 @@ export function InstallFlow({
       </Section>
     );
   }
+  if (gate.kind === 'notForSale') {
+    return (
+      <Section title={t('notForSaleTitle', { name: app.name })}>
+        <NotForSaleNote />
+      </Section>
+    );
+  }
+  if (gate.kind === 'subscribe') {
+    // A paid app the workspace has no subscription to: pay (or start the trial) first. Once it holds one, this page becomes the
+    // ordinary consent step below, unchanged.
+    return (
+      <div data-testid="install-subscribe">
+        <SubscribePanel
+          app={app}
+          title={t('subscribeTitle', { name: app.name })}
+          description={t('subscribeIntro')}
+        />
+      </div>
+    );
+  }
 
   const gaps = installerGaps(
     shown.map((s) => s.id),
@@ -189,6 +212,7 @@ export function InstallFlow({
               tokenHeader: inbound?.tokenHeader ?? null,
               signatureHeader: inbound?.signatureHeader ?? null,
               auth: inbound?.auth ?? null,
+              ...revealExtras(inbound, app.name),
             }
           : null,
       ),
@@ -216,6 +240,9 @@ export function InstallFlow({
     } else if (view.kind === 'alreadyInstalled') {
       const fresh = (await refetch?.()) ?? null;
       setAlreadyId(fresh?.install?.installationId ?? null);
+    } else if (view.kind === 'subscriptionRequired' || view.kind === 'notForSale') {
+      // The app became paid, or stopped selling, since the page loaded: read it again, and the flow turns into Subscribe (or the note).
+      await refetch?.();
     } else if (Object.keys(view.fields).length > 0) {
       setServerFields(view.fields);
       setStep('setup');
@@ -236,6 +263,7 @@ export function InstallFlow({
           <p className="text-sm text-muted-foreground">{app.tagline}</p>
         </div>
       </header>
+      <MaturityNotice source={app} badge />
 
       <ol aria-label={t('stepsLabel')} className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
         {steps.map((s, i) => (
@@ -403,6 +431,11 @@ export function FailureView({
       {(failed.kind === 'planLimitInstalled' || failed.kind === 'planLimit') && (
         <Link href={mktRoutes.installed} className={TEXT_LINK}>
           {t('seeInstalled')}
+        </Link>
+      )}
+      {failed.kind === 'subscriptionRequired' && failed.checkoutPath && (
+        <Link href={failed.checkoutPath} className={TEXT_LINK}>
+          {t('goToCheckout')}
         </Link>
       )}
     </div>

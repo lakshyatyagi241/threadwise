@@ -11,7 +11,10 @@ import { installChips, installGate, type InstallGate } from '../lib/install-stat
 import { mktRoutes } from '../lib/routes';
 import { isHttpsLink, paragraphs } from '../lib/text';
 import { BackLink } from './marketplace-header';
+import { MaturityBadge, MaturityNotice } from './maturity';
+import { NotForSaleNote, PricingBlock, SubscribeActions } from './pricing-parts';
 import { RiskCallout, ScopeList } from './scope-list';
+import { SubscriptionPanel } from './subscription-panel';
 import {
   AppLogo,
   ChipView,
@@ -99,14 +102,16 @@ export function AppDetail({ app }: { app: MarketAppDetail }) {
                 {app.category.name}
               </Link>
               {app.firstParty && <Badge tone="neutral">{t('firstParty')}</Badge>}
+              <MaturityBadge source={app} />
               {chips.map((c) => (
                 <ChipView key={c.key} chip={c} />
               ))}
             </div>
           </div>
         </div>
-        <InstallAction gate={gate} name={app.name} />
+        <InstallAction gate={gate} app={app} />
       </header>
+      <MaturityNotice source={app} />
 
       {gate.kind === 'locked' && (
         <Alert tone="warning">
@@ -147,6 +152,10 @@ export function AppDetail({ app }: { app: MarketAppDetail }) {
         </div>
 
         <aside className="min-w-0 space-y-5">
+          <PricingBlock pricing={app.pricing} />
+          {app.subscription && (
+            <SubscriptionPanel app={app} subscription={app.subscription} canAct={access.install} />
+          )}
           <Facts app={app} />
           <Support app={app} />
         </aside>
@@ -155,15 +164,24 @@ export function AppDetail({ app }: { app: MarketAppDetail }) {
   );
 }
 
-function InstallAction({ gate, name }: { gate: InstallGate; name: string }) {
+function InstallAction({ gate, app }: { gate: InstallGate; app: MarketAppDetail }) {
   const t = useTranslations('marketplace.detail');
   switch (gate.kind) {
     case 'allowed':
       return (
         <Link href={gate.href} className={LINK_BUTTON_PRIMARY}>
           {t('install')}
-          <span className="sr-only"> — {name}</span>
+          <span className="sr-only"> — {app.name}</span>
         </Link>
+      );
+    case 'subscribe':
+      // A paid app with no subscription: Subscribe (and the free trial) stand where Install would; the consent step follows later.
+      return <SubscribeActions app={app} />;
+    case 'notForSale':
+      return (
+        <div className="max-w-sm">
+          <NotForSaleNote />
+        </div>
       );
     case 'installed':
       return (
@@ -333,15 +351,9 @@ function Changelog({ app }: { app: MarketAppDetail }) {
 
 function Facts({ app }: { app: MarketAppDetail }) {
   const t = useTranslations('marketplace.detail.facts');
-  const tp = useTranslations('marketplace.card.pricing');
   return (
     <Section title={t('title')}>
       <dl className="space-y-3 text-sm">
-        <div>
-          <dt className="text-xs text-muted-foreground">{t('pricing')}</dt>
-          <dd className="font-medium">{tp(app.pricing.model)}</dd>
-          {app.pricing.note && <dd className="text-muted-foreground">{app.pricing.note}</dd>}
-        </div>
         <div>
           <dt className="text-xs text-muted-foreground">{t('version')}</dt>
           <dd className="font-medium">{app.version}</dd>

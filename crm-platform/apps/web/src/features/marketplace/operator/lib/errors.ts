@@ -117,6 +117,10 @@ export function marketError(err: unknown): MarketError {
       return { kind: 'general', key: 'appUnavailable', ...base };
     case ERROR_CODES.MKT_APP_NOT_FOUND:
       return { kind: 'general', key: 'appNotFound', ...base };
+    case ERROR_CODES.MKT_SUBSCRIPTION_STATE:
+      return { kind: 'general', key: 'subscriptionState', ...base };
+    case ERROR_CODES.MKT_SUBSCRIPTION_NOT_FOUND:
+      return { kind: 'general', key: 'subscriptionNotFound', ...base };
     case ERROR_CODES.NOT_FOUND:
       return { kind: 'general', key: 'notFound', ...base };
     case ERROR_CODES.RATE_LIMITED: {
@@ -167,6 +171,8 @@ export const MARKET_ERROR_KEYS = [
   'versionExistsPlain',
   'appUnavailable',
   'appNotFound',
+  'subscriptionState',
+  'subscriptionNotFound',
   'notFound',
   'rateLimited',
   'rateLimitedPlain',

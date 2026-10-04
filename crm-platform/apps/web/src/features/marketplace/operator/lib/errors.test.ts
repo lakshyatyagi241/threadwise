@@ -122,6 +122,20 @@ describe('marketError: branches on the code, never the message', () => {
     ['version exists plain', 409, ERROR_CODES.MKT_VERSION_EXISTS, [], 'versionExistsPlain'],
     ['app unavailable (killed)', 409, ERROR_CODES.MKT_APP_UNAVAILABLE, [], 'appUnavailable'],
     ['app not found', 404, ERROR_CODES.MKT_APP_NOT_FOUND, [], 'appNotFound'],
+    [
+      'subscription in the wrong state (a workspace that pays, a free app, an ended one)',
+      409,
+      ERROR_CODES.MKT_SUBSCRIPTION_STATE,
+      [],
+      'subscriptionState',
+    ],
+    [
+      'subscription not found',
+      404,
+      ERROR_CODES.MKT_SUBSCRIPTION_NOT_FOUND,
+      [],
+      'subscriptionNotFound',
+    ],
     ['not found', 404, ERROR_CODES.NOT_FOUND, [], 'notFound'],
     [
       'rate limited with a wait',
@@ -205,6 +219,8 @@ describe('marketError: branches on the code, never the message', () => {
       'MKT_VERSION_EXISTS',
       'MKT_APP_NOT_FOUND',
       'MKT_APP_UNAVAILABLE',
+      'MKT_SUBSCRIPTION_STATE',
+      'MKT_SUBSCRIPTION_NOT_FOUND',
     ] as const;
     for (const code of operatorCodes) {
       expect(marketError(api(409, ERROR_CODES[code])).key, code).not.toBe('request');

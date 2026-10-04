@@ -1,20 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import type { MarketDataChoice } from '@crm/contracts';
-import { ConfirmDialog } from '@crm/ui';
+import { Alert, ConfirmDialog } from '@crm/ui';
 import { DATA_CHOICES, DEFAULT_DATA_CHOICE, isDataChoice } from '../lib/manage';
+import type { UninstallRenewal } from '../lib/pricing';
 import { ErrorLine } from './ui';
 
 /**
  * Uninstall: access ends at once, and the person chooses what happens to the data the app created. The note is honest about the
  * current limit: the platform deletes no contact itself, so contacts stay either way until a data-deletion consumer exists.
+ * A paid app on a running subscription also says what uninstalling does to it: renewal stops, nothing more is charged, and the
+ * period already paid for stays the workspace's (`renewal` is null for a free app, a trial, a comp or one not renewing).
  */
 export function UninstallDialog({
   open,
   name,
   hasConnection,
+  renewal = null,
   busy,
   error,
   onConfirm,
@@ -23,13 +27,18 @@ export function UninstallDialog({
   open: boolean;
   name: string;
   hasConnection: boolean;
+  renewal?: UninstallRenewal | null;
   busy: boolean;
   error: unknown;
   onConfirm: (choice: MarketDataChoice) => void;
   onClose: () => void;
 }) {
   const t = useTranslations('marketplace.manage.uninstall');
+  const f = useFormatter();
   const [choice, setChoice] = useState<MarketDataChoice>(DEFAULT_DATA_CHOICE);
+  const paidUntil = renewal?.paidUntil
+    ? f.dateTime(new Date(renewal.paidUntil), { dateStyle: 'medium' })
+    : null;
   return (
     <ConfirmDialog
       open={open}
@@ -43,6 +52,14 @@ export function UninstallDialog({
       message={
         <div className="space-y-4">
           <p>{hasConnection ? t('effectConnection') : t('effect')}</p>
+          {renewal && (
+            <Alert tone="warning" data-testid="uninstall-renewal">
+              <p className="font-medium">{t('renewal.title')}</p>
+              <p>
+                {paidUntil ? t('renewal.messageUntil', { date: paidUntil }) : t('renewal.message')}
+              </p>
+            </Alert>
+          )}
           <fieldset className="space-y-2">
             <legend className="mb-1 font-medium text-foreground">{t('dataLegend')}</legend>
             {DATA_CHOICES.map((c) => (

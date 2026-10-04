@@ -1,4 +1,12 @@
-import type { MarketAppCard, MarketHealth, MarketInstallStatus, MarketLock } from '@crm/contracts';
+import type {
+  MarketAppCard,
+  MarketHealth,
+  MarketInstallStatus,
+  MarketInstallation,
+  MarketLock,
+  MarketSubscription,
+} from '@crm/contracts';
+import { subscriptionChip } from './pricing';
 import { mktRoutes, safeInternalPath } from './routes';
 
 /** What the person is told about an installation (chips) and what a card offers (call to action). Pure: the components only draw it. */
@@ -70,15 +78,26 @@ export function installChips(install: InstallLike, opts: { showUnknown?: boolean
   return chips;
 }
 
-/** The chips of a full installation (its health is an object there, a plain state on a card). */
+/**
+ * The chips of a full installation (its health is an object there, a plain state on a card). A paid app adds the state of its
+ * subscription last (Subscribed, Free trial, Not renewing, Subscription ended); a killed installation keeps only its own chip.
+ */
 export function installationChips(
-  i: { status: MarketInstallStatus; health: { status: MarketHealth }; needsReconsent: boolean },
+  i: {
+    status: MarketInstallStatus;
+    health: { status: MarketHealth };
+    needsReconsent: boolean;
+    pauseReason?: MarketInstallation['pauseReason'];
+    subscription?: Pick<MarketSubscription, 'status'> | null;
+  },
   opts: { showUnknown?: boolean } = {},
 ): Chip[] {
-  return installChips(
+  const chips = installChips(
     { status: i.status, health: i.health.status, needsReconsent: i.needsReconsent },
     opts,
   );
+  const subscription = i.status === 'killed' ? null : subscriptionChip(i);
+  return subscription ? [...chips, subscription] : chips;
 }
 
 // --- lock (plan, module, cap) ----------------------------------------------------------------------------------------------------
@@ -138,6 +157,8 @@ export const CTA_KINDS = [
   'killed',
   /** Not installed, can install: go to the install flow. */
   'install',
+  /** A paid app the workspace has no subscription to: the install page opens on Subscribe (and the free trial, when offered). */
+  'subscribe',
   /** Not installed, cannot install it now (plan, module, cap): details and an upgrade prompt. */
   'locked',
   /** Not installed and the person lacks `market.apps.install`: details only. */
@@ -153,7 +174,7 @@ export interface Cta {
 }
 
 export function cardCta(
-  card: Pick<MarketAppCard, 'slug' | 'install' | 'locked'>,
+  card: Pick<MarketAppCard, 'slug' | 'install' | 'locked' | 'pricing'>,
   can: { install: boolean },
 ): Cta {
   if (card.install) {
@@ -165,20 +186,29 @@ export function cardCta(
   const detail = mktRoutes.app(card.slug);
   const lock = lockView(card.locked);
   if (lock) return { kind: 'locked', href: detail, upgradeHref: lock.upgradeHref };
-  if (!can.install) return { kind: 'view', href: detail, upgradeHref: null };
-  return { kind: 'install', href: mktRoutes.install(card.slug), upgradeHref: null };
+  // Nothing can be bought of an app the platform stopped selling, and subscribing needs the same permission as installing.
+  if (card.pricing.access === 'not_for_sale' || !can.install)
+    return { kind: 'view', href: detail, upgradeHref: null };
+  const href = mktRoutes.install(card.slug);
+  if (card.pricing.access === 'subscription_required')
+    return { kind: 'subscribe', href, upgradeHref: null };
+  return { kind: 'install', href, upgradeHref: null };
 }
 
 /** The install button of the app page: whether it is offered, disabled with a reason, or replaced. */
 export type InstallGate =
   | { kind: 'allowed'; href: string }
+  /** A paid app with no subscription: Subscribe (and the free trial) stand where Install would. */
+  | { kind: 'subscribe'; href: string }
+  /** A paid app the platform stopped selling to newcomers: a note, no button. */
+  | { kind: 'notForSale' }
   | { kind: 'installed'; href: string }
   | { kind: 'killed'; href: string }
   | { kind: 'locked'; lock: LockView }
   | { kind: 'noPermission'; permission: 'market.apps.install' };
 
 export function installGate(
-  card: Pick<MarketAppCard, 'slug' | 'install' | 'locked'>,
+  card: Pick<MarketAppCard, 'slug' | 'install' | 'locked' | 'pricing'>,
   can: { install: boolean },
 ): InstallGate {
   if (card.install) {
@@ -189,6 +219,10 @@ export function installGate(
   }
   const lock = lockView(card.locked);
   if (lock) return { kind: 'locked', lock };
+  if (card.pricing.access === 'not_for_sale') return { kind: 'notForSale' };
   if (!can.install) return { kind: 'noPermission', permission: 'market.apps.install' };
-  return { kind: 'allowed', href: mktRoutes.install(card.slug) };
+  const href = mktRoutes.install(card.slug);
+  return card.pricing.access === 'subscription_required'
+    ? { kind: 'subscribe', href }
+    : { kind: 'allowed', href };
 }

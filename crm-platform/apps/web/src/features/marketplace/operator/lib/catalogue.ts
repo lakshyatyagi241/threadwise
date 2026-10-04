@@ -13,6 +13,10 @@ export type KindFilter = (typeof KIND_FILTERS)[number];
 export const STATUS_FILTERS = ['all', ...MARKET_APP_STATUSES] as const;
 export type StatusFilter = (typeof STATUS_FILTERS)[number];
 
+/** The API's `pricing` query: `paid` is the priced listings, `free` the rest. */
+export const PRICING_FILTERS = ['all', 'free', 'paid'] as const;
+export type PricingFilter = (typeof PRICING_FILTERS)[number];
+
 /** `kind:slug`: a category slug is only unique inside its kind (`automation` exists for mini apps and for integrations). */
 export const categoryKey = (kind: MarketAppKind, slug: string): string => `${kind}:${slug}`;
 export const ALL_CATEGORIES = 'all';
@@ -20,6 +24,7 @@ export const ALL_CATEGORIES = 'all';
 export interface CatalogueFilters {
   status: StatusFilter;
   kind: KindFilter;
+  pricing: PricingFilter;
   /** `kind:slug` of a category, or `all`. The API has no category query, so this filters the rows already loaded. */
   category: string;
   search: string;
@@ -28,23 +33,26 @@ export interface CatalogueFilters {
 export const NO_FILTERS: CatalogueFilters = {
   status: 'all',
   kind: 'all',
+  pricing: 'all',
   category: ALL_CATEGORIES,
   search: '',
 };
 
 /**
- * What goes on the wire: the API filters status, kind and name search itself (so a filter finds rows on pages not loaded yet).
+ * What goes on the wire: the API filters status, kind, pricing and name search itself (so a filter finds rows on pages not loaded yet).
  * The category is not a query parameter and stays on the client.
  */
 export function listQuery(f: CatalogueFilters): {
   status?: MarketAppStatus;
   kind?: MarketAppKind;
+  pricing?: 'free' | 'paid';
   q?: string;
 } {
   const q = f.search.trim();
   return {
     ...(f.status !== 'all' ? { status: f.status } : {}),
     ...(f.kind !== 'all' ? { kind: f.kind } : {}),
+    ...(f.pricing !== 'all' ? { pricing: f.pricing } : {}),
     ...(q ? { q: q.slice(0, 80) } : {}),
   };
 }
